@@ -11,30 +11,22 @@
     <%= alert :info do %>
       <% if @competition.registration_past? %>
         <% # i18n-tasks-use t('registrations.please_sign_in_past_html') %>
-        <%= please_sign_in('registrations.please_sign_in_past_html', @competition) %>
+        <%= please_sign_in('registrations.please_sign_in_past_html') %>
       <% elsif @competition.registration_not_yet_opened? %>
         <% # i18n-tasks-use t('registrations.please_sign_in_not_yet_open_html') %>
-        <%= please_sign_in('registrations.please_sign_in_not_yet_open_html', @competition) %>
+        <%= please_sign_in('registrations.please_sign_in_not_yet_open_html') %>
       <% else %>
         <% # i18n-tasks-use t('registrations.please_sign_in_html') %>
-        <%= please_sign_in('registrations.please_sign_in_html', @competition, comp: @competition.name) %>
+        <%= please_sign_in('registrations.please_sign_in_html', comp: @competition.name) %>
       <% end %>
     <% end %>
   <% else %>
-    <%= react_component('RegistrationsV2/Register', { competitionInfo: @competition.to_competition_info ,
-                                                      userInfo: @current_user,
-                                                      userCanPreRegister: @competition.user_can_pre_register?(@current_user),
-                                                      preferredEvents: @current_user.preferred_events.pluck(:id),
-                                                      stripePublishableKey: AppSecrets.STRIPE_PUBLISHABLE_KEY,
-                                                      connectedAccountId: @competition.payment_account_for(:stripe)&.account_id,
-                                                      qualifications: {
-                                                        wcif: @competition.qualification_wcif,
-                                                        personalRecords: {
-                                                          single: current_user.person&.ranksSingle&.map(&:to_wcif) || [],
-                                                          average: current_user.person&.ranksAverage&.map(&:to_wcif) || [],
-                                                        }
-                                                      },
-                                                      cannotRegisterReasons: current_user.cannot_register_for_competition_reasons(@competition)
+  <%= react_component('RegistrationsV2/Register', { competitionInfo: @competition.to_competition_info ,
+                                                    userInfo: @current_user,
+                                                    serverRegistration: @registration&.to_v2_json(admin: true),
+                                                    userCanPreRegister: @competition.user_can_pre_register?(@current_user),
+                                                    cannotRegisterReasons: current_user.cannot_register_for_competition_reasons(@competition),
+                                                    isProcessing: @is_processing,
     }) %>
   <% end %>
 <% end %>

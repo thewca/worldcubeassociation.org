@@ -46,7 +46,7 @@ export default function Competitors({
       switch (sortedColumn) {
         case 'country':
           orderBy = [
-            (item) => countries.byIso2[item.user.country.iso2].name,
+            (item) => countries.byIso2[item.user.country?.iso2]?.name,
           ];
           break;
         case 'total':
@@ -58,7 +58,7 @@ export default function Competitors({
           break;
       }
       // always sort by user name as a fallback
-      orderBy.push('user.name');
+      orderBy.push((item) => item.user.name.toLowerCase());
       const direction = sortedDirection === 'descending' ? 'desc' : 'asc';
 
       return _.orderBy(registrations, orderBy, [direction]);
@@ -96,25 +96,27 @@ export default function Competitors({
         returnerCount={returnerCount}
         onScrollToMeClick={onScrollToMeClick}
       />
-      <Table striped sortable unstackable compact singleLine textAlign="left">
-        <CompetitorsHeader
-          eventIds={eventIds}
-          sortedColumn={sortedColumn}
-          sortedDirection={sortedDirection}
-          onSortableColumnClick={changeSortColumn}
-          onEventColumnClick={onEventClick}
-        />
-        <CompetitorsBody
-          registrations={data}
-          eventIds={eventIds}
-          userId={userId}
-          userRowRef={userRowRef}
-        />
-        <CompetitorsFooter
-          registrations={registrations}
-          eventIds={eventIds}
-        />
-      </Table>
+      <div style={{ overflowX: 'auto' }}>
+        <Table striped sortable unstackable compact singleLine textAlign="left">
+          <CompetitorsHeader
+            eventIds={eventIds}
+            sortedColumn={sortedColumn}
+            sortedDirection={sortedDirection}
+            onSortableColumnClick={changeSortColumn}
+            onEventColumnClick={onEventClick}
+          />
+          <CompetitorsBody
+            registrations={data}
+            eventIds={eventIds}
+            userId={userId}
+            userRowRef={userRowRef}
+          />
+          <CompetitorsFooter
+            registrations={registrations}
+            eventIds={eventIds}
+          />
+        </Table>
+      </div>
     </>
   );
 }
@@ -192,9 +194,13 @@ function CompetitorsBody({
                 </div>
               </Table.Cell>
               <Table.Cell>
-                <RegionFlag iso2={registration.user.country.iso2} withoutTooltip />
-                {' '}
-                {countries.byIso2[registration.user.country.iso2].name}
+                {registration.user.country?.iso2 && (
+                  <>
+                    <RegionFlag iso2={registration.user.country.iso2} withoutTooltip />
+                    {' '}
+                    {countries.byIso2[registration.user.country.iso2].name}
+                  </>
+                )}
               </Table.Cell>
               {eventIds.map((id) => (
                 <Table.Cell

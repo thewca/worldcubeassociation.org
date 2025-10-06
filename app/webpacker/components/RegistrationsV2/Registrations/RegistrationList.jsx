@@ -32,7 +32,7 @@ export default function RegistrationList({ competitionInfo, userId }) {
   );
 
   return (
-    <Segment style={{ overflowX: 'scroll' }}>
+    <Segment>
       <PsychSheetEventSelector
         eventList={competitionInfo.event_ids}
         selectedEvent={psychSheetEventId}

@@ -126,7 +126,7 @@ export default function AvatarCard({
         </Card.Header>
         { user['staff_or_any_delegate?'] && (
           <Card.Meta>
-            <strong>Staff Member or Trainee Delegate</strong>
+            <strong>Volunteer or Trainee Delegate</strong>
             {' '}
             - see guidelines above
           </Card.Meta>

@@ -15,9 +15,9 @@ function getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, i
     return { name: I18n.t('results.table_elements.world') };
   }
   if (index >= firstContinentIndex && index < firstCountryIndex) {
-    return continents.real.find((c) => c.id === countries.byId[result.countryId].continentId);
+    return continents.real.find((c) => c.id === countries.byId[result.country_id].continentId);
   }
-  return countries.byId[result.countryId];
+  return countries.byId[result.country_id];
 }
 
 export function mapRankingsData(data, isByRegion) {
@@ -25,7 +25,7 @@ export function mapRankingsData(data, isByRegion) {
   const [rowsToMap, firstContinentIndex, firstCountryIndex] = isByRegion ? rows : [rows, 0, 0];
 
   return rowsToMap.reduce((acc, result, index) => {
-    const competition = competitionsById[result.competitionId];
+    const competition = competitionsById[result.competition_id];
     const { value } = result;
 
     const previousItem = acc[acc.length - 1];

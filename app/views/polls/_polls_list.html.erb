@@ -4,7 +4,7 @@
       <td><%=md poll.question %></td>
       <td>
         <% if poll.user_already_voted?(current_user) %>
-          <span class="icon check circle" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="You have already voted in this poll"></span>
+          <i class="icon check circle" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="You have already voted in this poll"></i>
         <% end %>
       </td>
       <td>

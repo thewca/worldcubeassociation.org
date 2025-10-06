@@ -2,18 +2,17 @@
 
 class SemiId
   include ActiveModel::Model
+
   attr_accessor :value
 
   SEMI_ID_RE = /\A[1-9][[:digit:]]{3}[[:upper:]]{4}\z/
   # This is the char the php scripts used for filling WCA IDs.
   PADDING_CHAR = "U"
-  validates_format_of :value, with: SEMI_ID_RE
+  validates :value, format: { with: SEMI_ID_RE }
 
   def generate_wca_id
     # Try finding an appropriate WCA ID for our semi ID
-    unless valid?
-      return ""
-    end
+    return "" unless valid?
 
     # From all persons with that semi id, take the last WCA ID, or default
     # to "AAAABBBB00".
@@ -21,7 +20,7 @@ class SemiId
     last_index = last_wca_id.last(2).to_i
 
     if last_index < 99
-      "#{value}#{(last_index+1).to_s.rjust(2, "0")}"
+      "#{value}#{(last_index + 1).to_s.rjust(2, '0')}"
     else
       # Sometimes we run out of indices (like for "2019ZHAO"), there is nothing
       # we can do but to return an empty one...
@@ -44,6 +43,7 @@ class SemiId
       # The given name has no usable parts, we can only generate an invalid SemiId
       return SemiId.new
     end
+
     # Take the first 4 chars of the last name
     semi_id_name = name_parts.pop.first(4)
     # If needed, take the first few chars of the first name.

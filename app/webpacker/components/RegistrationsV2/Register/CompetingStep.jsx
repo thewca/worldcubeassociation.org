@@ -1,5 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import _ from 'lodash';
+import { useMutation } from '@tanstack/react-query';
 import React, {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
@@ -13,7 +12,6 @@ import {
   Popup,
   Segment,
 } from 'semantic-ui-react';
-import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
 import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
@@ -23,11 +21,22 @@ import { showMessage } from './RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import { events } from '../../../lib/wca-data.js.erb';
+import { events, defaultGuestLimit, WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
-import useSet from '../../../lib/hooks/useSet';
+import { useRegistration } from '../lib/RegistrationProvider';
+import { useOrderedSetWrapper } from '../../../lib/hooks/useOrderedSet';
+import {
+  useFormInitialValue,
+  useFormObject,
+  useFormObjectState,
+  useFormSuccessHandler,
+  useHasFormValueChanged,
+} from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useInputUpdater } from '../../../lib/hooks/useInputState';
+import { useRegistrationMutationErrorHandler, useUpdateRegistrationMutation } from '../lib/mutations';
+import { useStepNavigation } from '../lib/StepNavigationProvider';
 
 const maxCommentLength = 240;
 
@@ -50,103 +59,112 @@ const potentialWarnings = (competitionInfo) => {
   return warnings;
 };
 
+const getName = (eventId) => events.byId[eventId].name;
+
+function getUpdateMessage(
+  hasCommentChanged,
+  comment,
+  originalEventIds,
+  selectedEventIds,
+  hasGuestsChanged,
+  guests,
+) {
+  const addedEventIds = selectedEventIds.filter((id) => !originalEventIds.includes(id));
+  const removedEventIds = originalEventIds.filter((id) => !selectedEventIds.includes(id));
+  const hasEventsChanged = (addedEventIds.length + removedEventIds.length) > 0;
+
+  return `\n${
+    hasCommentChanged ? `Updated Comment: ${comment}\n` : ''
+  }${
+    addedEventIds.length ? `Added Events: ${addedEventIds.map(getName).join(', ')}\n` : ''
+  }${
+    removedEventIds.length ? `Removed Events: ${removedEventIds.map(getName).join(', ')}\n` : ''
+  }${
+    hasEventsChanged ? `Updated Event List: ${selectedEventIds.map(getName).join(', ')}\n` : ''
+  }${
+    hasGuestsChanged ? `Updated Guests: ${guests}\n` : ''
+  }`;
+}
+
 export default function CompetingStep({
-  nextStep,
   competitionInfo,
   user,
-  preferredEvents,
-  registration,
-  refetchRegistration,
-  qualifications,
 }) {
-  const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
-  const isRegistered = Boolean(registration);
-  const hasPaid = registration?.payment?.has_paid;
-  const dispatch = useDispatch();
+  const {
+    nextStep,
+    jumpToSummary,
+    currentStep: { parameters: currentStepParameters },
+  } = useStepNavigation();
 
+  const maxEvents = currentStepParameters.events_per_registration_limit ?? Infinity;
+
+  const {
+    isRegistered, isPolling, isProcessing, startPolling, refetchRegistration,
+    isPending, isWaitingList, registration, registrationId,
+  } = useRegistration();
+
+  const dispatch = useDispatch();
   const confirm = useConfirm();
 
-  const [comment, setComment] = useState('');
-  const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
-    .filter((event) => {
-      const preferredEventHeld = competitionInfo.event_ids.includes(event);
-      if (competitionInfo['uses_qualification?']) {
-        return preferredEventHeld
-          && isQualifiedForEvent(event, qualifications.wcif, qualifications.personalRecords);
-      }
-      return preferredEventHeld;
-    });
-  const selectedEventIds = useSet(initialSelectedEvents);
+  const [comment, setCommentRaw] = useFormObjectState('comment', ['competing']);
+  const setComment = useInputUpdater(setCommentRaw);
+
+  const [nativeEventIds, setNativeEventIds] = useFormObjectState('event_ids', ['competing']);
+  const selectedEventIds = useOrderedSetWrapper(nativeEventIds, setNativeEventIds, WCA_EVENT_IDS);
+
+  const [guests, setGuestsRaw] = useFormObjectState('guests');
+  const setGuests = useInputUpdater(setGuestsRaw, true);
+
+  const initialRegistrationStatus = useFormInitialValue('status', ['competing']);
+
+  const formState = useFormObject();
+
   // Don't set an error state before the user has interacted with the eventPicker
   const [hasInteracted, setHasInteracted] = useState(false);
 
-  const [guests, setGuests] = useState(0);
+  const formSuccess = useFormSuccessHandler();
 
-  const [processing, setProcessing] = useState(false);
-
-  // using selectedEventIds.update in dependency array causes warnings
-  const { update: setSelectedEventIds } = selectedEventIds;
   useEffect(() => {
-    if (isRegistered && registration.competing.registration_status !== 'cancelled') {
-      setComment(registration.competing.comment ?? '');
-      setSelectedEventIds(registration.competing.event_ids);
-      setGuests(registration.guests);
+    if (isPolling && !isProcessing) {
+      refetchRegistration().then((serverRegistration) => {
+        formSuccess(serverRegistration, true);
+        nextStep();
+      });
     }
-  }, [isRegistered, registration, setSelectedEventIds]);
+  }, [
+    isPolling,
+    isProcessing,
+    refetchRegistration,
+    formSuccess,
+    nextStep,
+  ]);
 
-  const queryClient = useQueryClient();
-  const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
-    mutationFn: updateRegistration,
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(showMessage(
-        `competitions.registration_v2.errors.${error}`,
-        'negative',
-      ));
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(
-        ['registration', competitionInfo.id, user.id],
-        {
-          ...data.registration,
-          payment: registration.payment,
-        },
-      );
-      // Going from cancelled -> pending
-      if (registration.competing.registration_status === 'cancelled') {
-        // i18n-tasks-use t('registrations.flash.registered')
-        dispatch(showMessage('registrations.flash.registered', 'positive'));
-        // Not changing status
-      } else {
-        // i18n-tasks-use t('registrations.flash.updated')
-        dispatch(showMessage('registrations.flash.updated', 'positive'));
-      }
-      nextStep();
-    },
-  });
+  const {
+    mutate: updateRegistrationMutation,
+    isPending: isUpdating,
+  } = useUpdateRegistrationMutation(competitionInfo, user, 'basic');
+
+  const onUpdateSuccess = useCallback((data) => {
+    formSuccess(data.registration, true);
+    jumpToSummary();
+  }, [formSuccess, jumpToSummary]);
+
+  const onRegistrationError = useRegistrationMutationErrorHandler();
 
   const { mutate: createRegistrationMutation, isLoading: isCreating } = useMutation({
     mutationFn: submitEventRegistration,
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(showMessage(
-        `competitions.registration_v2.errors.${error}`,
-        'negative',
-      ));
-    },
+    onError: onRegistrationError,
     onSuccess: () => {
       // We can't update the registration yet, because there might be more steps needed
       // And the Registration might still be processing
       dispatch(showMessage('registrations.flash.registered', 'positive'));
-      setProcessing(true);
+      startPolling();
     },
   });
 
-  const hasEventsChanged = registration?.competing
-    && _.xor(registration.competing.event_ids, selectedEventIds.asArray).length > 0;
-  const hasCommentChanged = registration?.competing
-    && comment !== (registration.competing.comment ?? '');
-  const hasGuestsChanged = registration && guests !== registration.guests;
+  const hasEventsChanged = useHasFormValueChanged('event_ids', ['competing']);
+  const hasCommentChanged = useHasFormValueChanged('comment', ['competing']);
+  const hasGuestsChanged = useHasFormValueChanged('guests');
 
   const hasChanges = hasEventsChanged || hasCommentChanged || hasGuestsChanged;
 
@@ -176,40 +194,65 @@ export default function CompetingStep({
 
   const actionCreateRegistration = useCallback(() => {
     createRegistrationMutation({
-      user_id: user.id,
-      competition_id: competitionInfo.id,
-      competing: {
-        event_ids: selectedEventIds.asArray,
-        comment,
+      competitionId: competitionInfo.id,
+      payload: {
+        ...formState,
+        user_id: user.id,
+        competition_id: competitionInfo.id,
       },
-      guests,
     });
   }, [
     createRegistrationMutation,
+    formState,
     user.id,
     competitionInfo.id,
-    selectedEventIds.asArray,
-    comment,
-    guests,
   ]);
+
+  const canEditRegistration = useMemo(() => (
+    currentStepParameters.allow_registration_edits || isPending || isWaitingList
+  ), [currentStepParameters.allow_registration_edits, isPending, isWaitingList]);
 
   const actionUpdateRegistration = useCallback(() => {
     confirm({
-      content: I18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
+      content: I18n.t(canEditRegistration ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
-      if (competitionInfo.allow_registration_edits) {
-        dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic'));
+      if (canEditRegistration) {
         updateRegistrationMutation({
-          user_id: registration.user_id,
-          competition_id: competitionInfo.id,
-          competing: {
-            comment: hasCommentChanged ? comment : undefined,
-            event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
+          registrationId,
+          payload: {
+            competing: {
+              comment: hasCommentChanged ? comment : undefined,
+              event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
+            },
+            guests: hasGuestsChanged ? guests : undefined,
           },
-          guests,
+        }, {
+          onSuccess: (data, variables) => {
+            onUpdateSuccess(data);
+
+            const newCompetingStatus = variables.payload.competing?.registration_status
+              || data.registration.competing.registration_status;
+
+            if (initialRegistrationStatus === 'cancelled' && newCompetingStatus === 'pending') {
+              // Going from cancelled -> pending
+              // i18n-tasks-use t('registrations.flash.registered')
+              dispatch(showMessage('registrations.flash.registered', 'positive'));
+            } else {
+              // Not changing status
+              // i18n-tasks-use t('registrations.flash.updated')
+              dispatch(showMessage('registrations.flash.updated', 'positive'));
+            }
+          },
         });
       } else {
-        const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.asArray.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
+        const updateMessage = getUpdateMessage(
+          hasCommentChanged,
+          comment,
+          registration?.competing?.event_ids ?? [],
+          selectedEventIds.asArray,
+          hasGuestsChanged,
+          guests,
+        );
         window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
       }
     }).catch(() => {
@@ -218,36 +261,38 @@ export default function CompetingStep({
   }, [
     confirm,
     dispatch,
-    nextStep,
     updateRegistrationMutation,
     competitionInfo,
-    registration?.user_id,
+    registrationId,
     hasCommentChanged,
     comment,
     hasEventsChanged,
+    registration?.competing?.event_ids,
     selectedEventIds.asArray,
     hasGuestsChanged,
     guests,
+    initialRegistrationStatus,
+    onUpdateSuccess,
+    canEditRegistration,
+    nextStep,
   ]);
 
   const actionReRegister = useCallback(() => {
     updateRegistrationMutation({
-      user_id: registration.user_id,
-      competition_id: competitionInfo.id,
-      competing: {
-        comment,
-        event_ids: selectedEventIds.asArray,
-        status: 'pending',
+      registrationId,
+      payload: {
+        ...formState,
+        competing: {
+          ...formState.competing,
+          status: 'pending',
+        },
       },
-      guests,
-    });
+    }, { onSuccess: onUpdateSuccess });
   }, [
     updateRegistrationMutation,
-    registration?.user_id,
-    competitionInfo.id,
-    comment,
-    selectedEventIds.asArray,
-    guests,
+    formState,
+    registrationId,
+    onUpdateSuccess,
   ]);
 
   const onEventClick = (eventId) => {
@@ -256,16 +301,16 @@ export default function CompetingStep({
   };
 
   const onAllEventsClick = () => {
-    if (competitionInfo['uses_qualification?']) {
+    if (currentStepParameters['uses_qualification?']) {
       selectedEventIds.update(
-        competitionInfo.event_ids.filter((e) => isQualifiedForEvent(
+        currentStepParameters.event_ids.filter((e) => isQualifiedForEvent(
           e,
-          qualifications.wcif,
-          qualifications.personalRecords,
+          currentStepParameters.qualification_wcif,
+          currentStepParameters.personalRecords,
         )),
       );
     } else {
-      selectedEventIds.update(competitionInfo.event_ids);
+      selectedEventIds.update(currentStepParameters.event_ids);
     }
     setHasInteracted(true);
   };
@@ -275,10 +320,10 @@ export default function CompetingStep({
     setHasInteracted(true);
   };
 
-  const shouldShowUpdateButton = isRegistered
-    && registration.competing.registration_status !== 'cancelled';
+  const [competingStatus] = useFormObjectState('registration_status', ['competing']);
 
-  const shouldShowReRegisterButton = registration?.competing?.registration_status === 'cancelled';
+  const shouldShowReRegisterButton = competingStatus === 'cancelled';
+  const shouldShowUpdateButton = isRegistered && !shouldShowReRegisterButton;
 
   const handleSubmit = useCallback((event) => {
     event.preventDefault();
@@ -298,62 +343,54 @@ export default function CompetingStep({
     shouldShowUpdateButton,
   ]);
 
-  const guestsRestricted = competitionInfo.guest_entry_status === 'restricted';
+  const guestsRestricted = currentStepParameters.guest_entry_status === 'restricted';
+  const guestLimit = currentStepParameters.guests_per_registration_limit !== null
+  && guestsRestricted
+    ? currentStepParameters.guests_per_registration_limit
+    : defaultGuestLimit;
 
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
   return (
     <Segment basic loading={isUpdating}>
-      {processing && (
+      {isPolling && (
         <Processing
           competitionInfo={competitionInfo}
           user={user}
-          onProcessingComplete={async () => {
-            setProcessing(false);
-            await refetchRegistration();
-            nextStep();
-          }}
         />
       )}
 
-      <>
-        {hasPaid && (
-          <Message success>
-            {I18n.t('registrations.entry_fees_fully_paid', { paid: registration?.payment.payment_amount_human_readable })}
-          </Message>
-        )}
-
-        <Form onSubmit={handleSubmit} warning={formWarnings.length > 0} size="large">
-          <Message
-            warning
-            list={formWarnings}
-          />
-          <Form.Field required error={hasInteracted && selectedEventIds.size === 0}>
-            <EventSelector
-              id="event-selection"
-              eventList={competitionInfo.event_ids}
-              selectedEvents={selectedEventIds.asArray}
-              onEventClick={onEventClick}
-              onAllClick={onAllEventsClick}
-              onClearClick={onClearEventsClick}
-              maxEvents={maxEvents}
-              eventsDisabled={
-                competitionInfo.allow_registration_without_qualification
+      <Form onSubmit={handleSubmit} warning={formWarnings.length > 0} size="large">
+        <Message
+          warning
+          list={formWarnings}
+        />
+        <Form.Field required error={hasInteracted && selectedEventIds.size === 0}>
+          <EventSelector
+            id="event-selection"
+            eventList={currentStepParameters.event_ids}
+            selectedEvents={selectedEventIds.asArray}
+            onEventClick={onEventClick}
+            onAllClick={onAllEventsClick}
+            onClearClick={onClearEventsClick}
+            maxEvents={maxEvents}
+            eventsDisabled={
+                currentStepParameters.allow_registration_without_qualification
                   ? []
                   : eventsNotQualifiedFor(
-                    competitionInfo.event_ids,
-                    qualifications.wcif,
-                    qualifications.personalRecords,
+                    currentStepParameters.event_ids,
+                    currentStepParameters.qualification_wcif,
+                    currentStepParameters.personalRecords,
                   )
               }
-              disabledText={(event) => eventQualificationToString(
-                { id: event },
-                qualifications.wcif[event],
-                { short: true },
-              )}
+            disabledText={(event) => eventQualificationToString(
+              { id: event },
+              currentStepParameters.qualification_wcif[event],
+              { short: true },
+            )}
               // Don't error if the user hasn't interacted with the form yet
-              shouldErrorOnEmpty={hasInteracted}
-            />
-            {!competitionInfo.events_per_registration_limit
+            shouldErrorOnEmpty={hasInteracted}
+          />
+          {!currentStepParameters.events_per_registration_limit
               && (
                 <I18nHTMLTranslate
                   options={{
@@ -362,67 +399,63 @@ export default function CompetingStep({
                   i18nKey="registrations.preferred_events_prompt_html"
                 />
               )}
-          </Form.Field>
-          <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)}>
-            <label htmlFor="comment">
-              {I18n.t('competitions.registration_v2.register.comment')}
-              {' '}
-              <div style={{ float: 'right', fontSize: '0.8em' }}>
-                <i>
-                  (
-                  {comment.length}
-                  /
-                  {maxCommentLength}
-                  )
-                </i>
-              </div>
-            </label>
-            <Form.TextArea
-              required={Boolean(competitionInfo.force_comment_in_registration)}
-              maxLength={maxCommentLength}
-              onChange={(event, data) => setComment(data.value)}
-              value={comment}
-              id="comment"
-              error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && I18n.t('registrations.errors.cannot_register_without_comment')}
+        </Form.Field>
+        <Form.Field required={Boolean(currentStepParameters.force_comment_in_registration)}>
+          <label htmlFor="comment">
+            {I18n.t('competitions.registration_v2.register.comment')}
+            {' '}
+            <div style={{ float: 'right', fontSize: '0.8em' }}>
+              <i>
+                (
+                {comment.length}
+                /
+                {maxCommentLength}
+                )
+              </i>
+            </div>
+          </label>
+          <Form.TextArea
+            required={Boolean(currentStepParameters.force_comment_in_registration)}
+            maxLength={maxCommentLength}
+            onChange={setComment}
+            value={comment}
+            id="comment"
+            error={currentStepParameters.force_comment_in_registration && comment.trim().length === 0 && I18n.t('registrations.errors.cannot_register_without_comment')}
+          />
+        </Form.Field>
+        {currentStepParameters.guests_enabled && (
+          <Form.Field>
+            <label htmlFor="guest-dropdown">{I18n.t('activerecord.attributes.registration.guests')}</label>
+            <Form.Input
+              id="guest-dropdown"
+              type="number"
+              value={guests}
+              onChange={setGuests}
+              min="0"
+              max={guestLimit}
+              error={guestsRestricted && guests > guestLimit && I18n.t('competitions.competition_info.guest_limit', { count: guestLimit })}
             />
           </Form.Field>
-          {competitionInfo.guests_enabled && (
-            <Form.Field>
-              <label htmlFor="guest-dropdown">{I18n.t('activerecord.attributes.registration.guests')}</label>
-              <Form.Input
-                id="guest-dropdown"
-                type="number"
-                value={guests}
-                onChange={(event, data) => {
-                  setGuests(Number.parseInt(data.value, 10));
-                }}
-                min="0"
-                max={guestsRestricted && (competitionInfo.guests_per_registration_limit ?? 99)}
-                error={guestsRestricted && Number.isInteger(competitionInfo.guests_per_registration_limit) && guests > competitionInfo.guests_per_registration_limit && I18n.t('competitions.competition_info.guest_limit', { count: competitionInfo.guests_per_registration_limit })}
-              />
-            </Form.Field>
-          )}
-          {isRegistered ? (
-            <ButtonGroup widths={2}>
-              {shouldShowUpdateButton && (
+        )}
+        {isRegistered ? (
+          <ButtonGroup widths={2}>
+            {shouldShowUpdateButton && (
               <>
                 <Button
                   primary
-                  disabled={
-                        isUpdating || !hasChanges
-                      }
+                  disabled={isUpdating || !hasChanges}
                   type="submit"
                 >
                   {I18n.t('registrations.update')}
                 </Button>
                 <ButtonOr />
-                <Button secondary onClick={() => nextStep()}>
+                <Button secondary onClick={nextStep}>
                   {I18n.t('competitions.registration_v2.register.view_registration')}
                 </Button>
               </>
-              )}
+            )}
 
-              {shouldShowReRegisterButton && (
+            {shouldShowReRegisterButton && (
               <Button
                 primary
                 disabled={isUpdating}
@@ -430,35 +463,34 @@ export default function CompetingStep({
               >
                 {I18n.t('registrations.register')}
               </Button>
-              )}
-            </ButtonGroup>
-          ) : (
-            <>
-              <Message info icon floating>
-                <Popup
-                  content={I18n.t('registrations.mailer.new.awaits_approval')}
-                  position="top left"
-                  trigger={<Icon name="circle info" />}
-                />
-                <Message.Content>
-                  {I18n.t('competitions.registration_v2.register.disclaimer')}
-                </Message.Content>
-              </Message>
-              <Button
-                positive
-                fluid
-                icon
-                type="submit"
-                labelPosition="left"
-                disabled={isCreating}
-              >
-                <Icon name="paper plane" />
-                {I18n.t('registrations.register')}
-              </Button>
-            </>
-          )}
-        </Form>
-      </>
+            )}
+          </ButtonGroup>
+        ) : (
+          <>
+            <Message info icon floating>
+              <Popup
+                content={I18n.t('registrations.mailer.new.awaits_approval')}
+                position="top left"
+                trigger={<Icon name="circle info" />}
+              />
+              <Message.Content>
+                {I18n.t('competitions.registration_v2.register.disclaimer')}
+              </Message.Content>
+            </Message>
+            <Button
+              positive
+              fluid
+              icon
+              type="submit"
+              labelPosition="left"
+              disabled={isCreating}
+            >
+              <Icon name="paper plane" />
+              {I18n.t('registrations.register')}
+            </Button>
+          </>
+        )}
+      </Form>
     </Segment>
   );
 }

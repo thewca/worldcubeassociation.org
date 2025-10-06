@@ -1,0 +1,30 @@
+name: Javascript tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+    defaults:
+      run:
+        working-directory: next-frontend
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Corepack/Yarn
+        run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'yarn'
+      - name: Install fresh Yarn packages
+        run: yarn install
+      - name: Check types
+        run: yarn run check:types
+      - name: Run Lint
+        run: yarn run lint

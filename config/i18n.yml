@@ -79,3 +79,7 @@ translations:
       - "*.persons.index.*"
       - "*.results.*"
       - "*.validators.*"
+      - "*.cronjobs.*"
+      - "*.payments.*"
+      - "*.misc.*"
+      - "*.tickets.*"

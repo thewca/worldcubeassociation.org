@@ -3,6 +3,7 @@
 module ResultsValidators
   class ValidationIssue
     attr_reader :kind, :competition_id
+
     def initialize(id, kind, competition_id, **message_args)
       @id = id
       @kind = kind

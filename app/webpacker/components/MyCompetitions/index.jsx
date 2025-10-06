@@ -20,7 +20,16 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
   return (
     <>
       <Header>
-        <Button as="a" href={personUrl(wcaId)} secondary floated="right">{I18n.t('layouts.navigation.my_results')}</Button>
+        {wcaId && (
+          <Button
+            as="a"
+            href={personUrl(wcaId)}
+            secondary
+            floated="right"
+          >
+            {I18n.t('layouts.navigation.my_results')}
+          </Button>
+        )}
         {I18n.t('competitions.my_competitions.title')}
       </Header>
       <p>

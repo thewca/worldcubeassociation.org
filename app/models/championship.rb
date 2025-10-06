@@ -2,6 +2,7 @@
 
 class Championship < ApplicationRecord
   include Comparable
+
   CHAMPIONSHIP_TYPE_WORLD = "world"
   MAJOR_CHAMPIONSHIP_TYPES = [
     CHAMPIONSHIP_TYPE_WORLD,
@@ -31,7 +32,7 @@ class Championship < ApplicationRecord
   end
 
   def country
-    Country.find_by_iso2(championship_type)
+    Country.c_find_by_iso2(championship_type)
   end
 
   def greater_china?

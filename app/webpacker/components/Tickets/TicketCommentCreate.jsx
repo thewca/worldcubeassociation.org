@@ -15,7 +15,7 @@ export default function TicketCommentCreate({
   const queryClient = useQueryClient();
   const {
     mutate: createCommentMutation,
-    isLoading,
+    isPending,
     isError,
   } = useMutation({
     mutationFn: createComment,
@@ -29,7 +29,7 @@ export default function TicketCommentCreate({
     },
   });
 
-  if (isLoading) return <Loading />;
+  if (isPending) return <Loading />;
   if (isError) return <Errored />;
 
   return (
@@ -43,6 +43,7 @@ export default function TicketCommentCreate({
           id="new-comment"
           value={comment}
           onChange={setComment}
+          imageUploadEnabled={false}
         />
       </Modal.Content>
       <Modal.Actions>

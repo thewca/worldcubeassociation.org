@@ -3,10 +3,10 @@
 require "rails_helper"
 
 RSpec.describe "competitions/my_competitions" do
-  let(:competition) { FactoryBot.create(:competition, :registration_open, name: "Melbourne Open 2016") }
-  let(:registration) { FactoryBot.create(:registration, competition: competition) }
-  let(:competition2) { FactoryBot.create(:competition, :visible, name: "Cambridge Open 2020") }
-  let(:competition3) { FactoryBot.create(:competition, :visible, :world_championship, name: "World Open 2020") }
+  let(:competition) { create(:competition, :registration_open, name: "Melbourne Open 2016") }
+  let(:registration) { create(:registration, competition: competition) }
+  let(:competition2) { create(:competition, :visible, name: "Cambridge Open 2020") }
+  let(:competition3) { create(:competition, :visible, :world_championship, name: "World Open 2020") }
 
   before do
     allow(view).to receive(:current_user) { registration.user }

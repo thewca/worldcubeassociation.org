@@ -4,12 +4,12 @@ class DelegateReport < ApplicationRecord
   REPORTS_ENABLED_DATE = Date.new(2016, 6, 1)
   # Any potentially available section, regardless of versioning.
   #   Use with care, some sections may not be available for some versions!
-  AVAILABLE_SECTIONS = [
-    :summary,
-    :equipment,
-    :venue,
-    :organization,
-    :incidents,
+  AVAILABLE_SECTIONS = %i[
+    summary
+    equipment
+    venue
+    organization
+    incidents
   ].freeze
 
   belongs_to :competition
@@ -17,18 +17,13 @@ class DelegateReport < ApplicationRecord
   belongs_to :wrc_primary_user, class_name: "User", optional: true
   belongs_to :wrc_secondary_user, class_name: "User", optional: true
 
-  enum :version, [:legacy, :working_group_2024], suffix: true, default: :working_group_2024
+  enum :version, %i[legacy working_group_2024], suffix: true, default: :working_group_2024
 
   has_many_attached :setup_images do |attachable|
     attachable.variant :preview, resize_to_limit: [100, 100]
   end
 
   attr_accessor :current_user
-
-  before_create :set_discussion_url
-  def set_discussion_url
-    self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/" + URI.encode_www_form_component(competition.name)
-  end
 
   private def render_section_template(section)
     ActionController::Base.new.render_to_string(template: "delegate_reports/#{self.version}/_#{section}_default", formats: :md)
@@ -54,11 +49,9 @@ class DelegateReport < ApplicationRecord
   validates :wrc_incidents, presence: true, if: :wrc_feedback_requested
   validates :wic_incidents, presence: true, if: :wic_feedback_requested
 
-  validate :setup_image_count, if: [:posted?, :requires_setup_images?]
+  validate :setup_image_count, if: %i[posted? requires_setup_images?]
   private def setup_image_count
-    if self.setup_images.count < self.required_setup_images_count
-      errors.add(:setup_images, "Needs at least #{self.required_setup_images_count} images")
-    end
+    errors.add(:setup_images, "Needs at least #{self.required_setup_images_count} images") if self.setup_images.count < self.required_setup_images_count
   end
 
   validates :setup_images, blob: { content_type: :web_image }
@@ -87,7 +80,7 @@ class DelegateReport < ApplicationRecord
   end
 
   def requires_setup_images?
-    self.uses_section?(:venue) && self.required_setup_images_count > 0
+    self.uses_section?(:venue) && self.required_setup_images_count.positive?
   end
 
   def required_setup_images_count
@@ -106,6 +99,7 @@ class DelegateReport < ApplicationRecord
     new_posted = ActiveRecord::Type::Boolean.new.cast(new_posted)
     self.posted_at = (new_posted ? Time.now : nil)
     self.posted_by_user_id = current_user&.id
+    self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/#{URI.encode_www_form_component(competition.name)}"
   end
 
   GLOBAL_MAILING_LIST = "reports@worldcubeassociation.org"

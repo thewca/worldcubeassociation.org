@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 # See https://gist.github.com/tjh/1711329#gistcomment-2046518.

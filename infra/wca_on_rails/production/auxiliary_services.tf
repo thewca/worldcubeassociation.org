@@ -32,7 +32,7 @@ resource "aws_ecs_task_definition" "auxiliary" {
           awslogs-stream-prefix = var.name_prefix
         }
       }
-      environment = local.rails_environment
+      environment = concat(local.rails_environment, local.sidekiq_environment)
       healthCheck       = {
         command            = ["CMD-SHELL", "pgrep ruby || exit 1"]
         interval           = 30

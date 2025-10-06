@@ -2,19 +2,21 @@
 
 class PostsController < ApplicationController
   include TagsHelper
-  before_action :authenticate_user!, except: [:homepage, :index, :rss, :show]
-  before_action -> { redirect_to_root_unless_user(:can_create_posts?) }, except: [:homepage, :index, :rss, :show]
+
+  before_action :authenticate_user!, except: %i[homepage index rss show]
+  before_action -> { redirect_to_root_unless_user(:can_create_posts?) }, except: %i[homepage index rss show]
+  before_action -> { redirect_to_root_unless_user(:can_administrate_livestream?) }, only: %i[livestream_management update_test_link promote_test_link]
   POSTS_PER_PAGE = 10
 
   def index
     respond_to do |format|
       format.json do
         tag = params[:tag]
-        if tag
-          @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
-        else
-          @posts = Post.where(show_on_homepage: true)
-        end
+        @posts = if tag
+                   Post.joins(:post_tags).where(post_tags: { tag: tag })
+                 else
+                   Post.where(show_on_homepage: true)
+                 end
         @posts = @posts
                  .order(sticky: :desc, created_at: :desc)
                  .includes(:author)
@@ -37,15 +39,48 @@ class PostsController < ApplicationController
 
   def homepage
     @latest_post = Post.order(sticky: :desc, created_at: :desc).first
+    @preview = params[:preview] == "1" && current_user&.can_administrate_livestream?
+    @video_id = if @preview
+                  ServerSetting.find_by(name: ServerSetting::TEST_VIDEO_ID_NAME)&.value
+                else
+                  ServerSetting.find_by(name: ServerSetting::LIVE_VIDEO_ID_NAME)&.value
+                end
+  end
+
+  def livestream_management
+    @test_video_id = ServerSetting.find_or_create_by(name: ServerSetting::TEST_VIDEO_ID_NAME)&.value
+    @live_video_id = ServerSetting.find_or_create_by(name: ServerSetting::LIVE_VIDEO_ID_NAME)&.value
+  end
+
+  def update_test_link
+    new_value = params[:new_test_value]
+    test = ServerSetting.find(ServerSetting::TEST_VIDEO_ID_NAME)
+
+    if test.update(value: new_value)
+      render json: { data: test.value }
+    else
+      render json: { error: test.errors }
+    end
+  end
+
+  # Sets the live link to the value of the current test link
+  def promote_test_link
+    test = ServerSetting.find(ServerSetting::TEST_VIDEO_ID_NAME).value
+    live = ServerSetting.find(ServerSetting::LIVE_VIDEO_ID_NAME)
+    if live.update(value: test)
+      render json: { data: live.value }
+    else
+      render json: { error: live.errors }
+    end
   end
 
   def rss
     tag = params[:tag]
-    if tag
-      @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
-    else
-      @posts = Post
-    end
+    @posts = if tag
+               Post.joins(:post_tags).where(post_tags: { tag: tag })
+             else
+               Post
+             end
     @posts = @posts.order(created_at: :desc).includes(:author).page(params[:page])
 
     # Force responding with xml, regardless of the given HTTP_ACCEPT headers.
@@ -61,6 +96,10 @@ class PostsController < ApplicationController
     @post = Post.new(params[:post] ? post_params : {})
   end
 
+  def edit
+    @post = find_post
+  end
+
   def create
     @post = Post.new(post_params)
     @post.author = current_user
@@ -72,14 +111,9 @@ class PostsController < ApplicationController
     end
   end
 
-  def edit
-    @post = find_post
-  end
-
   def update
     @post = find_post
     if @post.update(post_params)
-      puts(post_params.inspect)
       flash[:success] = "Updated post"
       render json: { status: 'ok', post: @post }
     else
@@ -95,7 +129,7 @@ class PostsController < ApplicationController
   end
 
   private def editable_post_fields
-    [:title, :body, :sticky, :unstick_at, :tags, :show_on_homepage]
+    %i[title body sticky unstick_at tags show_on_homepage]
   end
   helper_method :editable_post_fields
 
@@ -113,10 +147,9 @@ class PostsController < ApplicationController
     #  | 2014 |
     #  +------+
     #  1 row in set, 1 warning (0.00 sec)
-    post = Post.find_by_slug(params[:id]) || Post.find_by_id(params[:id])
-    if !post
-      raise ActiveRecord::RecordNotFound.new("Couldn't find post")
-    end
+    post = Post.find_by(slug: params[:id]) || Post.find_by(id: params[:id])
+    raise ActiveRecord::RecordNotFound.new("Couldn't find post") unless post
+
     post
   end
 end

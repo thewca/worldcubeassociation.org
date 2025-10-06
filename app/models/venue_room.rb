@@ -5,9 +5,8 @@ class VenueRoom < ApplicationRecord
   DEFAULT_ROOM_COLOR = "#304a96"
   belongs_to :competition_venue
   has_one :competition, through: :competition_venue
-  delegate :start_time, to: :competition
-  delegate :end_time, to: :competition
-  has_many :schedule_activities, as: :holder, dependent: :destroy
+  delegate :start_time, :end_time, to: :competition, prefix: true
+  has_many :schedule_activities, -> { root_activities }, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   validates :color, format: { with: /\A#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\z/, message: "Please input a valid hexadecimal color code" }
@@ -16,8 +15,8 @@ class VenueRoom < ApplicationRecord
     self.color ||= DEFAULT_ROOM_COLOR
   end
 
-  validates_presence_of :name
-  validates_numericality_of :wcif_id, only_integer: true
+  validates :name, presence: true
+  validates :wcif_id, numericality: { only_integer: true }
 
   def all_activities
     schedule_activities.flat_map(&:all_activities)
@@ -49,7 +48,7 @@ class VenueRoom < ApplicationRecord
         "activities" => { "type" => "array", "items" => ScheduleActivity.wcif_json_schema },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
-      "required" => ["id", "name", "activities"],
+      "required" => %w[id name activities],
     }
   end
 
@@ -57,7 +56,7 @@ class VenueRoom < ApplicationRecord
     update!(VenueRoom.wcif_to_attributes(wcif))
     new_activities = wcif["activities"].map do |activity_wcif|
       activity = schedule_activities.find { |a| a.wcif_id == activity_wcif["id"] } || schedule_activities.build
-      activity.load_wcif!(activity_wcif)
+      activity.load_wcif!(activity_wcif, self)
     end
     self.schedule_activities = new_activities
     WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]

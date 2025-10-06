@@ -78,3 +78,64 @@ footer {
     }
   }
 }
+
+.wc2025 {
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.wc2025-header {
+  font-size: 3em;
+  text-align: center;
+  text-shadow: 0 0 5px white;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+
+@media (min-width: 1600px) { // Lets us take full advantage of screen space in larger displays
+  #wc2025-container {
+    width: 1600px;
+  }
+
+  #wc2025-jumbotron {
+    width: 1500px;
+  }
+}
+
+@media (max-width: 1600px) {
+  #wc2025-logo {
+    min-width: 140px; // Without this, it's too small in the ~320px range (smallest reasonable phone screen size)
+    max-width: 260px; // Without this, it's too big in xs and sm views, taking space away from player and lower elements
+    width: 100% // Without this, it will not go below the max-width even when the parent container is smaller
+  }
+}
+
+@media (min-width: 992px) { // This vertically centers the items in md and lg views
+  #outer-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 991px) { // This vertically centers the comp logo and buttons in sm and xs views
+  #inner-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .wc2025 {
+    padding: 1rem;
+    margin: 1rem auto;
+  }
+}
+
+.column-gap {
+  margin-bottom: 15px; // Otherwise col items are touching each other when vertically stacked
+}

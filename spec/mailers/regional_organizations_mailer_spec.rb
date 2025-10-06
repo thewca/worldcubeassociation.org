@@ -2,13 +2,14 @@
 
 require "rails_helper"
 
-RSpec.describe RegionalOrganizationsMailer, type: :mailer do
+RSpec.describe RegionalOrganizationsMailer do
   describe "notify_board_and_assistants_of_new_regional_organization_application" do
-    let(:user) { FactoryBot.create :user, name: "John Doe" }
-    let(:regional_organization) { FactoryBot.create :regional_organization }
+    let(:user) { create(:user, name: "John Doe") }
+    let(:regional_organization) { create(:regional_organization) }
     let(:mail) do
-      I18n.locale = :es
-      RegionalOrganizationsMailer.notify_board_and_assistants_of_new_regional_organization_application(user, regional_organization)
+      I18n.with_locale(:'es-ES') do
+        RegionalOrganizationsMailer.notify_board_and_assistants_of_new_regional_organization_application(user, regional_organization)
+      end
     end
 
     it "renders in English" do

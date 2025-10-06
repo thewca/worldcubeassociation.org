@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :live_result do
-    association :registration, factory: [:registration]
+    registration
     round { FactoryBot.create(:round, event_id: '333oh', format_id: 'a') } # Ensure the round exists
 
     best { 3000 }

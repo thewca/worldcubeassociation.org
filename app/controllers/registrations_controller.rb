@@ -3,7 +3,7 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :payment_denomination]
+  before_action :authenticate_user!, except: %i[index psych_sheet psych_sheet_event register stripe_webhook payment_denomination]
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
@@ -13,28 +13,25 @@ class RegistrationsController < ApplicationController
                   else
                     Registration.find(params[:id]).competition
                   end
-    unless competition.user_can_view?(current_user)
-      raise ActionController::RoutingError.new('Not Found')
-    end
+    raise ActionController::RoutingError.new('Not Found') unless competition.user_can_view?(current_user)
+
     competition
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: [:index, :psych_sheet, :psych_sheet_event, :register, :payment_completion, :load_payment_intent, :stripe_webhook, :payment_denomination, :capture_paypal_payment]
+                except: %i[index psych_sheet psych_sheet_event register payment_completion load_payment_intent stripe_webhook payment_denomination capture_paypal_payment]
 
-  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
+  before_action :competition_must_be_using_wca_registration!, except: %i[import do_import add do_add index psych_sheet psych_sheet_event stripe_webhook payment_denomination]
   private def competition_must_be_using_wca_registration!
-    if !competition_from_params.use_wca_registration?
-      flash[:danger] = I18n.t('registrations.flash.not_using_wca')
-      redirect_to competition_path(competition_from_params)
-    end
+    return if competition_from_params.use_wca_registration?
+
+    flash[:danger] = I18n.t('registrations.flash.not_using_wca')
+    redirect_to competition_path(competition_from_params)
   end
 
-  before_action :competition_must_not_be_using_wca_registration!, only: [:import, :do_import]
+  before_action :competition_must_not_be_using_wca_registration!, only: %i[import do_import]
   private def competition_must_not_be_using_wca_registration!
-    if competition_from_params.use_wca_registration?
-      redirect_to competition_path(competition_from_params)
-    end
+    redirect_to competition_path(competition_from_params) if competition_from_params.use_wca_registration?
   end
 
   def edit_registrations
@@ -66,8 +63,17 @@ class RegistrationsController < ApplicationController
   end
 
   def edit
-    @competition = Competition.find(params[:competition_id])
-    @user = User.find(params[:user_id])
+    @registration = registration_from_params
+
+    @competition = @registration.competition
+    @user = @registration.user
+  end
+
+  def redirect_v2_attendee
+    search_params = params.permit(:competition_id, :user_id)
+    registration = Registration.find_by!(**search_params)
+
+    redirect_to edit_registration_path(registration)
   end
 
   def import
@@ -76,14 +82,13 @@ class RegistrationsController < ApplicationController
 
   def do_import
     competition = competition_from_params
-    file = params[:registrations_import][:registrations_file]
+    file = params[:csv_registration_file]
     required_columns = ["status", "name", "country", "wca id", "birth date", "gender", "email"] + competition.events.map(&:id)
     # Ensure the CSV file includes all required columns.
     headers = CSV.read(file.path).first.compact.map(&:downcase)
     missing_headers = required_columns - headers
-    if missing_headers.any?
-      raise I18n.t("registrations.import.errors.missing_columns", columns: missing_headers.join(", "))
-    end
+    raise I18n.t("registrations.import.errors.missing_columns", columns: missing_headers.join(", ")) if missing_headers.any?
+
     registration_rows = CSV.read(file.path, headers: true, header_converters: :symbol, skip_blanks: true, converters: ->(string) { string&.strip })
                            .map(&:to_hash)
                            .select { |registration_row| registration_row[:status] == "a" }
@@ -92,35 +97,34 @@ class RegistrationsController < ApplicationController
                    accepted_count: registration_rows.length,
                    limit: competition.competitor_limit)
     end
-    emails = registration_rows.map { |registration_row| registration_row[:email] }
+    emails = registration_rows.pluck(:email)
     email_duplicates = emails.select { |email| emails.count(email) > 1 }.uniq
-    if email_duplicates.any?
-      raise I18n.t("registrations.import.errors.email_duplicates", emails: email_duplicates.join(", "))
-    end
-    wca_ids = registration_rows.map { |registration_row| registration_row[:wca_id] }
+    raise I18n.t("registrations.import.errors.email_duplicates", emails: email_duplicates.join(", ")) if email_duplicates.any?
+
+    wca_ids = registration_rows.pluck(:wca_id)
     wca_id_duplicates = wca_ids.select { |wca_id| wca_ids.count(wca_id) > 1 }.uniq
-    if wca_id_duplicates.any?
-      raise I18n.t("registrations.import.errors.wca_id_duplicates", wca_ids: wca_id_duplicates.join(", "))
-    end
-    raw_dobs = registration_rows.map { |registration_row| registration_row[:birth_date] }
-    wrong_format_dobs = raw_dobs.select { |raw_dob| Date.safe_parse(raw_dob)&.to_fs != raw_dob }
-    if wrong_format_dobs.any?
-      raise I18n.t("registrations.import.errors.wrong_dob_format", raw_dobs: wrong_format_dobs.join(", "))
-    end
+    raise I18n.t("registrations.import.errors.wca_id_duplicates", wca_ids: wca_id_duplicates.join(", ")) if wca_id_duplicates.any?
+
+    raw_dobs = registration_rows.pluck(:birth_date)
+    wrong_format_dobs = raw_dobs.reject { |raw_dob| Date.safe_parse(raw_dob)&.to_fs == raw_dob }
+    raise I18n.t("registrations.import.errors.wrong_dob_format", raw_dobs: wrong_format_dobs.join(", ")) if wrong_format_dobs.any?
+
     new_locked_users = []
+    # registered_at stores millisecond precision, but we want all registrations
+    #   from CSV import to be considered as one "batch". So we mark a timestamp
+    #   once, and then reuse it throughout the loop.
+    import_time = Time.now.utc
     ActiveRecord::Base.transaction do
       competition.registrations.accepted.each do |registration|
-        unless emails.include?(registration.user.email)
-          registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED)
-        end
+        registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED) unless emails.include?(registration.user.email)
       end
       registration_rows.each do |registration_row|
         user, locked_account_created = user_for_registration!(registration_row)
         new_locked_users << user if locked_account_created
-        registration = competition.registrations.find_or_initialize_by(user_id: user.id)
-        unless registration.accepted?
-          registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED)
+        registration = competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
+          reg.registered_at = import_time
         end
+        registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED) unless registration.accepted?
         registration.registration_competition_events = []
         competition.competition_events.map do |competition_event|
           value = registration_row[competition_event.event_id.to_sym]
@@ -139,11 +143,9 @@ class RegistrationsController < ApplicationController
     new_locked_users.each do |user|
       RegistrationsMailer.notify_registrant_of_locked_account_creation(user, competition).deliver_later
     end
-    flash[:success] = I18n.t("registrations.flash.imported")
-    redirect_to competition_registrations_import_url(competition)
+    render status: :ok, json: { success: true }
   rescue StandardError => e
-    flash[:danger] = e.to_s
-    redirect_to competition_registrations_import_url(competition)
+    render status: :unprocessable_entity, json: { error: e.to_s }
   end
 
   def add
@@ -152,15 +154,25 @@ class RegistrationsController < ApplicationController
 
   def do_add
     @competition = competition_from_params
+
     if @competition.registration_full?
       flash[:danger] = I18n.t("registrations.mailer.deleted.causes.registrations_full")
-      redirect_to competition_path(@competition)
-      return
+      return redirect_to competition_path(@competition)
+    elsif !@competition.registration_currently_open? && !@competition.on_the_spot_registration?
+      flash[:danger] = I18n.t("registrations.add.ots_not_enabled")
+      return redirect_to competition_path(@competition)
+    elsif @competition.probably_over?
+      flash[:danger] = I18n.t("registrations.add.competition_over")
+      return redirect_to competition_path(@competition)
     end
+
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
-      registration = @competition.registrations.find_or_initialize_by(user_id: user.id)
+      registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
+        reg.registered_at = Time.now.utc
+      end
       raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
+
       registration_comment = params.dig(:registration_data, :comments)
       registration.assign_attributes(comments: registration_comment) if registration_comment.present?
       registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED)
@@ -170,9 +182,7 @@ class RegistrationsController < ApplicationController
       end
       registration.save!
       registration.add_history_entry({ event_ids: registration.event_ids }, "user", current_user.id, "OTS Form")
-      if locked_account_created
-        RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later
-      end
+      RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later if locked_account_created
     end
     flash[:success] = I18n.t("registrations.flash.added")
     redirect_to competition_registrations_add_url(@competition)
@@ -191,9 +201,8 @@ class RegistrationsController < ApplicationController
       dob: registration_row[:birth_date],
     }
     if registration_row[:wca_id].present?
-      unless Person.exists?(wca_id: registration_row[:wca_id])
-        raise I18n.t("registrations.import.errors.non_existent_wca_id", wca_id: registration_row[:wca_id])
-      end
+      raise I18n.t("registrations.import.errors.non_existent_wca_id", wca_id: registration_row[:wca_id]) unless Person.exists?(wca_id: registration_row[:wca_id])
+
       user = User.find_by(wca_id: registration_row[:wca_id])
       if user
         if user.dummy_account?
@@ -236,7 +245,7 @@ class RegistrationsController < ApplicationController
       email_user = User.find_by(email: registration_row[:email])
       # Use the user if exists, otherwise create a locked account without WCA ID.
       if email_user
-        unless email_user.wca_id.present?
+        if email_user.wca_id.blank?
           # If this is just a user account with no WCA ID, update its data.
           # Given it's verified by organizers, it's more trustworthy/official data (if different at all).
           email_user.update!(person_details)
@@ -256,23 +265,27 @@ class RegistrationsController < ApplicationController
       country_iso2: Country.c_find(registration_row[:country]).iso2,
       gender: registration_row[:gender],
       dob: registration_row[:birth_date],
-    ).tap { |user| user.save! }
+    ).tap(&:save!)
   end
 
   def register
     @competition = competition_from_params
+    @registration = Registration.find_by(competition: @competition, user: current_user) if current_user.present?
+
+    @is_processing = current_user.present? && Rails.cache.read(CacheAccess.registration_processing_cache_key(@competition.id, current_user.id)).present?
   end
 
   def payment_denomination
-    ruby_denomination = params.require(:amount)
-    currency_iso = params.require(:currency_iso)
-
-    ruby_money = Money.new(ruby_denomination, currency_iso)
+    competition_id = params[:competition_id]
+    user_id = params[:user_id]
+    registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
+    iso_donation_amount = params[:iso_donation_amount].to_i
+    ruby_money = registration.entry_fee_with_donation(iso_donation_amount)
     human_amount = helpers.format_money(ruby_money)
 
     api_amounts = {
-      stripe: StripeRecord.amount_to_stripe(ruby_denomination, currency_iso),
-      paypal: PaypalRecord.amount_to_paypal(ruby_denomination, currency_iso),
+      stripe: StripeRecord.amount_to_stripe(ruby_money.cents, ruby_money.currency.iso_code),
+      paypal: PaypalRecord.amount_to_paypal(ruby_money.cents, ruby_money.currency.iso_code),
     }
 
     render json: { api_amounts: api_amounts, human_amount: human_amount }
@@ -292,10 +305,12 @@ class RegistrationsController < ApplicationController
       logger.warn "Stripe webhook error while parsing basic request. #{e.message}"
       return head :bad_request
     end
+
     # Check if webhook signing is configured.
     if AppSecrets.STRIPE_WEBHOOK_SECRET.present?
       # Retrieve the event by verifying the signature using the raw body and secret.
       signature = request.env['HTTP_STRIPE_SIGNATURE']
+
       begin
         event = Stripe::Webhook.construct_event(
           payload, signature, AppSecrets.STRIPE_WEBHOOK_SECRET
@@ -312,34 +327,36 @@ class RegistrationsController < ApplicationController
     # Create a default audit that marks the event as "unhandled".
     audit_event = StripeWebhookEvent.create_from_api(event)
     audit_remote_timestamp = audit_event.created_at_remote
+    connected_account = ConnectedStripeAccount.find_by(account_id: audit_event.account_id)
 
-    stripe_intent = event.data.object # contains a polymorphic type that depends on the event
-    stored_record = StripeRecord.find_by(stripe_id: stripe_intent.id)
-
-    if StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
-      if stored_record.nil?
-        logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching transaction."
-        return head :not_found
-      else
-        audit_event.update!(stripe_record: stored_record, handled: true)
-      end
-    end
-
-    connected_account = ConnectedStripeAccount.find_by(account_id: stored_record.account_id)
-
-    unless connected_account.present?
-      logger.error "Stripe webhook reported event for account '#{stored_record.account_id}' but we are not connected to that account."
+    if connected_account.nil?
+      logger.error "Stripe webhook reported event for account '#{audit_event.account_id}' but we are not connected to that account."
       return head :not_found
     end
+
+    event_data = event.data.object # contains a polymorphic type that depends on the event
+    stored_record = StripeRecord.find_by(stripe_id: event_data.id)
+
+    handling_event = StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
+    incoming_event = StripeWebhookEvent::INCOMING_EVENTS.include?(event.type)
+
+    stored_record ||= StripeRecord.create_or_update_from_api(event_data, {}, audit_event.account_id) if incoming_event
+
+    if stored_record.nil?
+      logger.error "Stripe webhook reported event on entity #{event_data.id} but we have no record with a matching `stripe_id`."
+      return head :not_found
+    end
+
+    audit_event.update!(stripe_record: stored_record, handled: handling_event)
 
     # Handle the event
     case event.type
     when StripeWebhookEvent::PAYMENT_INTENT_SUCCEEDED
-      # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
+      # event_data contains a Stripe::PaymentIntent as per Stripe documentation
 
       stored_intent = stored_record.payment_intent
 
-      stored_intent.update_status_and_charges(connected_account, stripe_intent, audit_event, audit_remote_timestamp) do |charge_transaction|
+      stored_intent.update_status_and_charges(connected_account, event_data, audit_event, audit_remote_timestamp) do |charge_transaction|
         ruby_money = charge_transaction.money_amount
         stored_holder = stored_intent.holder
 
@@ -359,10 +376,56 @@ class RegistrationsController < ApplicationController
         end
       end
     when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
-      # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
+      # event_data contains a Stripe::PaymentIntent as per Stripe documentation
 
       stored_intent = stored_record.payment_intent
-      stored_intent.update_status_and_charges(connected_account, stripe_intent, audit_event, audit_remote_timestamp)
+      stored_intent.update_status_and_charges(connected_account, event_data, audit_event, audit_remote_timestamp)
+    when StripeWebhookEvent::REFUND_CREATED, StripeWebhookEvent::REFUND_UPDATED
+      # event_data contains a Stripe::Refund as per Stripe documentation
+
+      original_charge = StripeRecord.charge.find_by(stripe_id: event_data.charge)
+
+      if original_charge.nil?
+        # We created a record because refund creation is an incoming event,
+        #   but now we figured out that we don't care about it after all.
+        stored_record.destroy
+
+        logger.error "Stripe webhook reported a refund on charge #{event_data.charge} but we never issued that one"
+        return head :not_found
+      else
+        stored_record.update!(parent_record: original_charge)
+      end
+
+      stored_record = StripeRecord.create_or_update_from_api(event_data) if event.type == StripeWebhookEvent::REFUND_UPDATED
+      stored_intent = stored_record.root_record.payment_intent
+      stored_holder = stored_intent.holder
+
+      if stored_holder.is_a? Registration
+        ruby_money = stored_record.money_amount
+
+        original_payment = RegistrationPayment.find_by(receipt: original_charge)
+
+        if original_payment.nil?
+          logger.error "Tried to record refund on charge #{event_data.charge} but we never issued that one"
+          return head :not_found
+        end
+
+        if stored_record.succeeded?
+          stored_holder.with_lock do
+            already_refunded = original_payment.refunding_registration_payments.where(receipt: stored_record).any?
+
+            unless already_refunded
+              stored_holder.record_refund(
+                ruby_money.cents,
+                ruby_money.currency.iso_code,
+                stored_record,
+                original_payment.id,
+                original_payment.user_id,
+              )
+            end
+          end
+        end
+      end
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
     end
@@ -378,21 +441,21 @@ class RegistrationsController < ApplicationController
     payment_integration = params[:payment_integration].to_sym
     payment_account = competition.payment_account_for(payment_integration)
 
-    unless payment_account.present?
+    if payment_account.blank?
       flash[:danger] = t("registrations.payment_form.errors.cpi_disconnected")
       return redirect_to competition_register_path(competition)
     end
 
     stored_record, secret_check = payment_account.find_payment_from_request(params)
 
-    unless stored_record.present?
+    if stored_record.blank?
       flash[:error] = t("registrations.payment_form.errors.generic.not_found", provider: t("payments.payment_providers.#{payment_integration}"))
       return redirect_to competition_register_path(competition)
     end
 
     stored_intent = stored_record.payment_intent
 
-    unless stored_intent.present?
+    if stored_intent.blank?
       flash[:error] = t("registrations.payment_form.errors.generic.intent_not_found", provider: t("payments.payment_providers.#{payment_integration}"))
       return redirect_to competition_register_path(competition)
     end
@@ -407,7 +470,7 @@ class RegistrationsController < ApplicationController
 
     remote_intent = stored_intent.retrieve_remote
 
-    unless remote_intent.present?
+    if remote_intent.blank?
       flash[:error] = t("registrations.payment_form.errors.generic.remote_not_found", provider: t("payments.payment_providers.#{payment_integration}"))
       return redirect_to competition_register_path(competition)
     end
@@ -457,19 +520,13 @@ class RegistrationsController < ApplicationController
   def load_payment_intent
     registration = Registration.includes(:competition).find(params[:id])
 
-    unless registration.user_id == current_user.id
-      return render status: :forbidden, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } }
-    end
+    return render status: :forbidden, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } } unless registration.user_id == current_user.id
 
     amount = params[:amount].to_i
 
-    if registration.outstanding_entry_fees.cents <= 0
-      return render status: :bad_request, json: { error: { message: t("registrations.payment_form.errors.already_paid") } }
-    end
+    return render status: :bad_request, json: { error: { message: t("registrations.payment_form.errors.already_paid") } } if registration.outstanding_entry_fees.cents <= 0
 
-    if amount < registration.outstanding_entry_fees.cents
-      return render status: :bad_request, json: { error: { message: t("registrations.payment_form.alerts.amount_too_low") } }
-    end
+    return render status: :bad_request, json: { error: { message: t("registrations.payment_form.alerts.amount_too_low") } } if amount < registration.outstanding_entry_fees.cents
 
     competition = registration.competition
 
@@ -489,47 +546,46 @@ class RegistrationsController < ApplicationController
     payment_integration = params[:payment_integration].to_sym
     payment_account = competition.payment_account_for(payment_integration)
 
-    unless payment_account.present?
-      flash[:danger] = "You cannot issue a refund for this competition anymore. Please use your payment provider's dashboard to do so."
-      return redirect_to competition_registrations_path(competition)
-    end
+    return render status: :not_found, json: { error: :provider_disconnected } if payment_account.blank?
 
     payment_record = payment_account.find_payment(params[:payment_id])
 
     registration = payment_record.root_record.payment_intent.holder
 
-    redirect_path = edit_registration_v2_path(competition_id, registration.user_id)
-
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
     amount_left = payment_record.ruby_amount_available_for_refund - refund_amount
 
-    if amount_left.negative?
-      flash[:danger] = "You are not allowed to refund more than the competitor has paid."
-      return redirect_to redirect_path
-    end
-
-    if refund_amount.negative?
-      flash[:danger] = "The refund amount must be greater than zero."
-      return redirect_to redirect_path
-    end
+    return render status: :bad_request, json: { error: :refund_amount_too_high } if amount_left.negative?
+    return render status: :bad_request, json: { error: :refund_amount_too_low } if refund_amount.negative?
 
     refund_receipt = payment_account.issue_refund(payment_record, refund_amount)
 
     # Should be the same as `refund_amount`, but by double-converting from the Payment Gateway object
     # we can also double-check that they're on the same page as we are (to be _really_ sure!)
     ruby_money = refund_receipt.money_amount
+    original_payment = payment_record.registration_payment
 
-    registration.record_refund(
-      ruby_money.cents,
-      ruby_money.currency.iso_code,
-      refund_receipt,
-      payment_record.registration_payment.id,
-      current_user.id,
-    )
+    registration.with_lock do
+      already_refunded = original_payment.refunding_registration_payments.where(receipt: refund_receipt).any?
 
-    flash[:success] = 'Payment was refunded'
-    redirect_to redirect_path
+      unless already_refunded
+        registration.record_refund(
+          ruby_money.cents,
+          ruby_money.currency.iso_code,
+          refund_receipt,
+          original_payment.id,
+          current_user.id,
+        )
+      end
+    end
+
+    # The `reload` is necessary here, because we just inserted a refund payment
+    #   through the original `registration`. So the parent payment doesn't know about it yet.
+    refunded_payment = payment_record.registration_payment.reload
+    refund_json = refunded_payment.to_v2_json(refunds: true)
+
+    render json: { status: :ok, message: :charge_refunded, refunded_charge: refund_json }
   end
 
   private def registration_from_params

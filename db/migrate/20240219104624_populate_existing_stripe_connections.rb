@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class PopulateExistingStripeConnections < ActiveRecord::Migration[7.1]
@@ -12,7 +13,7 @@ class PopulateExistingStripeConnections < ActiveRecord::Migration[7.1]
 
   def down
     # Write all Stripe account id's back to Competiiton.connected_stripe_account_id column
-    CompetitionPaymentIntegration.all.find_each do |integration|
+    CompetitionPaymentIntegration.find_each do |integration|
       next unless integration.connected_account_type == 'ConnectedStripeAccount'
       competition = integration.competition
       competition.connected_stripe_account_id = integration.connected_account.account_id

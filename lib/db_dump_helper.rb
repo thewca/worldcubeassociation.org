@@ -49,6 +49,31 @@ module DbDumpHelper
     "#{EnvConfig.DUMP_HOST}/#{file_name}"
   end
 
+  def self.public_s3_file_size(file_name)
+    return 123_456 unless Rails.env.production?
+
+    bucket = Aws::S3::Resource.new(
+      credentials: Aws::ECSCredentials.new,
+    ).bucket(DbDumpHelper::BUCKET_NAME)
+
+    bucket.object(file_name).content_length
+  end
+
+  def self.resolve_results_export(file_type, export_timestamp = DumpPublicResultsDatabase.successful_start_date)
+    base_name = DbDumpHelper.result_export_file_name(file_type, export_timestamp)
+
+    "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/#{base_name}"
+  end
+
+  def self.cached_results_export_info(file_type, export_timestamp = DumpPublicResultsDatabase.successful_start_date)
+    Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.day) do
+      file_name = DbDumpHelper.resolve_results_export(file_type, export_timestamp)
+
+      filesize_bytes = DbDumpHelper.public_s3_file_size(file_name)
+      [DbDumpHelper.public_s3_path(file_name), filesize_bytes]
+    end
+  end
+
   def self.dump_results_db(export_timestamp = DateTime.now)
     Dir.mktmpdir do |dir|
       FileUtils.cd dir do
@@ -96,7 +121,6 @@ module DbDumpHelper
 
     LogTask.log_task "Moving zipped file to 's3://#{s3_path}'" do
       bucket = Aws::S3::Resource.new(
-        region: EnvConfig.STORAGE_AWS_REGION,
         credentials: Aws::ECSCredentials.new,
       ).bucket(BUCKET_NAME)
       bucket.object(s3_path).upload_file(zip_filename)
@@ -106,8 +130,7 @@ module DbDumpHelper
 
       # Invalidate Export Route in Prod
       if EnvConfig.WCA_LIVE_SITE?
-        Aws::CloudFront::Client.new(region: EnvConfig.STORAGE_AWS_REGION,
-                                    credentials: Aws::ECSCredentials.new)
+        Aws::CloudFront::Client.new(credentials: Aws::ECSCredentials.new)
                                .create_invalidation({
                                                       distribution_id: EnvConfig.CDN_ASSETS_DISTRIBUTION_ID,
                                                       invalidation_batch: {

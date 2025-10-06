@@ -3,11 +3,11 @@
 require "rails_helper"
 
 RSpec.feature "Claim WCA ID" do
-  let!(:user) { FactoryBot.create(:user) }
-  let!(:person) { FactoryBot.create(:person_who_has_competed_once, dob: '1988-02-03') }
-  let!(:person_without_dob) { FactoryBot.create :person, :skip_validation, :missing_dob }
+  let!(:user) { create(:user) }
+  let!(:person) { create(:person_who_has_competed_once, dob: '1988-02-03') }
+  let!(:person_without_dob) { create(:person, :skip_validation, :missing_dob) }
 
-  context 'when signed in as user without wca id', js: true do
+  context 'when signed in as user without wca id', :js do
     before :each do
       sign_in user
     end
@@ -17,17 +17,17 @@ RSpec.feature "Claim WCA ID" do
 
       # They have not selected a valid WCA ID yet, so don't show the birthdate verification
       # field.
-      expect(page.find("div.user_dob_verification", visible: false).visible?).to eq false
+      expect(page.find("div.user_dob_verification", visible: false).visible?).to be false
 
       # Fill in WCA ID.
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
-      expect(page.find("div.user_dob_verification", visible: true).visible?).to eq true
+      expect(page.find("div.user_dob_verification", visible: true).visible?).to be true
 
       delegate = person.competitions.first.delegates.first
       choose("user_delegate_id_to_handle_wca_id_claim_#{delegate.id}")
@@ -56,7 +56,7 @@ RSpec.feature "Claim WCA ID" do
 
       fill_in_selectize "WCA ID", with: person_without_dob.wca_id
 
-      expect(page.find("#select-nearby-delegate-area")).to have_content "WCA ID #{person_without_dob.wca_id} does not have a birthdate assigned. Please contact with WCA Results Team using this dedicated form."
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "WCA ID #{person_without_dob.wca_id} does not have a birthdate assigned. Please contact with WCA Results Team using this dedicated form."
     end
 
     it 'tells you to contact Results team if you WCA ID has been incorrectly claimed too many times', skip: "because it is unstable in GitHub CI" do
@@ -66,7 +66,7 @@ RSpec.feature "Claim WCA ID" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax, then fill it in.
-      expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
       # Select a delegate.
       delegate = person.competitions.first.delegates.first
       choose("user_delegate_id_to_handle_wca_id_claim_#{delegate.id}")
@@ -91,8 +91,8 @@ RSpec.feature "Claim WCA ID" do
       # the expected message for this is users.errors.wca_id_no_birthdate_html
       expect(page.find(".alert.alert-danger")).to have_content("We do not have a birthdate recorded for this WCA ID. Please contact the WCA Results Team")
       user.reload
-      expect(user.unconfirmed_wca_id).to eq nil
-      expect(user.delegate_to_handle_wca_id_claim).to eq nil
+      expect(user.unconfirmed_wca_id).to be_nil
+      expect(user.delegate_to_handle_wca_id_claim).to be_nil
     end
   end
 end

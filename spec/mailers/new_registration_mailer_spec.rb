@@ -2,9 +2,9 @@
 
 require "rails_helper"
 
-RSpec.describe NewRegistrationMailer, type: :mailer do
+RSpec.describe NewRegistrationMailer do
   describe "send registration mail to new users" do
-    let(:user) { FactoryBot.create :user }
+    let(:user) { create(:user) }
     let(:mail) { NewRegistrationMailer.send_registration_mail(user) }
 
     it "renders the headers" do

@@ -47,9 +47,10 @@ class PaypalRecord < ApplicationRecord
     created: %w[created],
     pending: %w[payer_action_required],
     processing: %w[saved],
+    requires_capture: %w[approved],
     partial: %w[],
     failed: %w[],
-    succeeded: %w[approved completed], # TODO: In PayPal, WE are the ones who have to make the payment succeed, by "capturing" an already approved payment
+    succeeded: %w[completed],
     canceled: %w[voided],
   }.freeze
 
@@ -75,7 +76,7 @@ class PaypalRecord < ApplicationRecord
   end
 
   def determine_wca_status
-    result = WCA_TO_PAYPAL_STATUS_MAP.find { |key, values| values.include?(self.paypal_status) }
+    result = WCA_TO_PAYPAL_STATUS_MAP.find { |_key, values| values.include?(self.paypal_status) }
     result&.first || raise("No associated wca_status for paypal_status: #{self.paypal_status} - our tests should prevent this from happening!")
   end
 
@@ -113,7 +114,7 @@ class PaypalRecord < ApplicationRecord
     # PayPal communicates amounts as strings, so we need to first convert to Ruby amount
     #   (which uses integers) and THEN add/subtract
     paid_amount = self.money_amount
-    already_refunded = child_records.refund.map(&:money_amount).sum
+    already_refunded = child_records.refund.sum(&:money_amount)
 
     # `cents` is the "lowest denomination" method in RubyMoney
     (paid_amount - already_refunded).cents

@@ -2,7 +2,7 @@ import {
   Checkbox, Icon, Popup, Ref, Table,
 } from 'semantic-ui-react';
 import React from 'react';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable } from '@hello-pangea/dnd';
 import { showMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import {
@@ -22,23 +22,21 @@ import RegionFlag from '../../wca/RegionFlag';
 const truncateComment = (comment) => (comment?.length > 12 ? `${comment.slice(0, 12)}...` : comment);
 
 function RegistrationTime({
-  timestamp, registeredOn, paymentStatuses, hasPaid, paidOn, usesPaymentIntegration,
+  timestamp, registeredOn, paymentStatus, hasPaid, paidOn, usesPaymentIntegration,
 }) {
   if (timestamp) {
     return getRegistrationTimestamp(paidOn ?? registeredOn);
   }
 
-  const mostRecentPaymentStatus = paymentStatuses ? paymentStatuses[0] : 'unpaid';
-
   if (usesPaymentIntegration && !hasPaid) {
     let content = I18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
     let trigger = <span>{I18n.t('registrations.list.not_paid')}</span>;
 
-    if (mostRecentPaymentStatus === 'initialized') {
+    if (paymentStatus === 'initialized') {
       content = I18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
     }
 
-    if (mostRecentPaymentStatus === 'refund') {
+    if (paymentStatus === 'refund') {
       content = I18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
       trigger = <span>{I18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
     }
@@ -68,6 +66,8 @@ export default function TableRow({
   index,
   draggable = false,
   withPosition = false,
+  color,
+  distinguishPaidUnpaid = false,
 }) {
   const {
     dob: dobIsShown,
@@ -78,7 +78,7 @@ export default function TableRow({
     timestamp: timestampIsShown,
   } = columnsExpanded;
   const {
-    id, wca_id: wcaId, name, country, dob: dateOfBirth, email: emailAddress,
+    id: userId, wca_id: wcaId, name, country, dob: dateOfBirth, email: emailAddress,
   } = registration.user;
   const {
     registered_on: registeredOn,
@@ -88,11 +88,15 @@ export default function TableRow({
     waiting_list_position: position,
   } = registration.competing;
   const {
-    payment_amount_iso: paymentAmount,
+    paid_amount_iso: paymentAmount,
     updated_at: updatedAt,
-    payment_statuses: paymentStatuses,
+    payment_status: paymentStatus,
     has_paid: hasPaid,
   } = registration.payment ?? {};
+  const usingPayment = competitionInfo['using_payment_integrations?'];
+  const checkboxCellColor = !distinguishPaidUnpaid || !usingPayment || hasPaid
+    ? color
+    : undefined;
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);
@@ -110,12 +114,12 @@ export default function TableRow({
       {(provided) => (
         <Ref innerRef={provided.innerRef}>
           <Table.Row
-            key={id}
+            key={userId}
             active={isSelected}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <Table.Cell>
+            <Table.Cell className={checkboxCellColor}>
               { /* We manually set the margin to 0 here to fix the table row height */}
               {draggable ? (
                 <Icon name="bars" />
@@ -129,7 +133,7 @@ export default function TableRow({
             )}
 
             <Table.Cell>
-              <a href={editRegistrationUrl(id, competitionInfo.id)}>
+              <a href={editRegistrationUrl(registration.id)}>
                 {I18n.t('registrations.list.edit')}
               </a>
             </Table.Cell>
@@ -138,7 +142,7 @@ export default function TableRow({
               {wcaId ? (
                 <a href={personUrl(wcaId)}>{wcaId}</a>
               ) : (
-                <a href={editPersonUrl(id)}>
+                <a href={editPersonUrl(userId)}>
                   <Icon name="edit" />
                   {I18n.t('users.edit.profile')}
                 </a>
@@ -150,9 +154,13 @@ export default function TableRow({
             {dobIsShown && <Table.Cell>{dateOfBirth}</Table.Cell>}
 
             <Table.Cell>
-              <RegionFlag iso2={country.iso2} withoutTooltip={regionIsExpanded} />
-              {' '}
-              {regionIsExpanded && countries.byIso2[country.iso2].name}
+              {country?.iso2 && (
+                <>
+                  <RegionFlag iso2={country.iso2} withoutTooltip={regionIsExpanded} />
+                  {' '}
+                  {regionIsExpanded && countries.byIso2?.[country.iso2]?.name}
+                </>
+              )}
             </Table.Cell>
 
             <Table.Cell>
@@ -161,7 +169,7 @@ export default function TableRow({
                 paidOn={updatedAt}
                 hasPaid={hasPaid}
                 registeredOn={registeredOn}
-                paymentStatuses={paymentStatuses}
+                paymentStatus={paymentStatus}
                 usesPaymentIntegration={competitionInfo['using_payment_integrations?']}
               />
             </Table.Cell>

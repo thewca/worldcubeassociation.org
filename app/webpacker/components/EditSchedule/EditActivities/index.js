@@ -28,6 +28,7 @@ import useInputState from '../../../lib/hooks/useInputState';
 import ActivityPicker from './ActivityPicker';
 import {
   getMatchingActivities,
+  isActivityTimeValid,
   roomWcifFromId,
   venueWcifFromRoomId,
 } from '../../../lib/utils/wcif';
@@ -38,6 +39,7 @@ import {
   addActivity,
   editActivity,
   moveActivity,
+  removeActivities,
   removeActivity,
   scaleActivity,
 } from '../store/actions';
@@ -52,7 +54,7 @@ import {
 import EditActivityModal from './EditActivityModal';
 import ActionsHeader from './ActionsHeader';
 import { getTimeZoneDropdownLabel } from '../../../lib/utils/timezone';
-import { earliestTimeOfDayWithBuffer } from '../../../lib/utils/activities';
+import { earliestTimeOfDayWithBuffer, getHour, latestTimeOfDayWithBuffer } from '../../../lib/utils/activities';
 
 function EditActivities({
   wcifEvents,
@@ -71,6 +73,32 @@ function EditActivities({
   const [minutesPerRow, setMinutesPerRow] = useInputState(15);
   const [calendarStart, setCalendarStart] = useInputState(8);
   const [calendarEnd, setCalendarEnd] = useInputState(20);
+
+  const setReasonableCalendarBounds = (room) => {
+    const roomWcif = roomWcifFromId(wcifSchedule, room.id);
+    const activities = roomWcif?.activities;
+    const timezone = venueWcifFromRoomId(wcifSchedule, room.id)?.timezone;
+
+    if (activities?.length) {
+      setCalendarStart(
+        Math.max(
+          getHour(earliestTimeOfDayWithBuffer(activities, timezone)) - 1,
+          0,
+        ),
+      );
+      setCalendarEnd(
+        Math.min(
+          getHour(latestTimeOfDayWithBuffer(activities, timezone), { roundForward: true }) + 1,
+          24,
+        ),
+      );
+    }
+  };
+
+  const onSelectRoom = (room) => {
+    setReasonableCalendarBounds(room);
+    setSelectedRoomId(room.id);
+  };
 
   // This part is ugly because Semantic-UI and Fullcalendar disagree
   //   about how modals should be handled.
@@ -132,6 +160,21 @@ function EditActivities({
     })
   ), [wcifRoom?.activities, wcifSchedule, shouldUpdateMatches]);
 
+  // theoretically this should always be empty, but there have been back-end bugs
+  const activitiesWithInvalidTimes = wcifRoom?.activities?.filter(
+    (activity) => !isActivityTimeValid(activity, wcifVenue, wcifSchedule),
+  ) ?? [];
+
+  const deleteInvalidActivities = () => {
+    confirm({
+      content: `Are you sure you want to delete the following event(s): ${
+        activitiesWithInvalidTimes.map((a) => a.name).join(', ')
+      }? THIS ACTION CANNOT BE UNDONE!`,
+    }).then(() => {
+      dispatch(removeActivities(activitiesWithInvalidTimes.map((a) => a.id), false));
+    });
+  };
+
   // we 'fake' our own ref due to quirks in useRef + useEffect combinations.
   // See https://medium.com/@teh_builder/ref-objects-inside-useeffect-hooks-eb7c15198780
   const activityPickerRef = useCallback((node) => {
@@ -159,6 +202,24 @@ function EditActivities({
 
   const dropToDeleteRef = useRef(null);
 
+  const removeEvent = (fcEvent) => {
+    const {
+      [FC_ACTIVITY_ATTACHMENT]: {
+        id: activityId,
+        name: activityName,
+      },
+      matchCount,
+    } = fcEvent.extendedProps;
+
+    const matchText = `all ${matchCount + 1} copies of `;
+
+    confirm({
+      content: `Are you sure you want to delete ${shouldUpdateMatches && matchCount > 1 ? matchText : ''}the event ${activityName}? THIS ACTION CANNOT BE UNDONE!`,
+    }).then(() => {
+      dispatch(removeActivity(activityId, shouldUpdateMatches));
+    });
+  };
+
   const removeIfOverDropzone = ({ event: fcEvent, jsEvent }) => {
     if (!dropToDeleteRef.current) return;
 
@@ -179,21 +240,7 @@ function EditActivities({
         && jsEvent.pageY >= top
         && jsEvent.pageY <= bottom
     ) {
-      const {
-        [FC_ACTIVITY_ATTACHMENT]: {
-          id: activityId,
-          name: activityName,
-        },
-        matchCount,
-      } = fcEvent.extendedProps;
-
-      const matchText = `all ${matchCount + 1} copies of `;
-
-      confirm({
-        content: `Are you sure you want to delete ${shouldUpdateMatches && matchCount > 1 ? matchText : ''}the event ${activityName}? THIS ACTION CANNOT BE UNDONE!`,
-      }).then(() => {
-        dispatch(removeActivity(activityId, shouldUpdateMatches));
-      });
+      removeEvent(fcEvent);
     }
   };
 
@@ -306,6 +353,8 @@ function EditActivities({
     }
   };
 
+  const stickyRef = useRef();
+
   return (
     <div id="schedules-edit-panel-body">
       <Container textAlign="center">
@@ -320,7 +369,7 @@ function EditActivities({
                     <List.Item
                       key={room.id}
                       as="a"
-                      onClick={() => setSelectedRoomId(room.id)}
+                      onClick={() => onSelectRoom(room)}
                     >
                       {room.id === wcifRoom?.id ? <b>{room.name}</b> : room.name}
                     </List.Item>
@@ -336,169 +385,184 @@ function EditActivities({
         <Message info>Please select a room by clicking one of the labels above</Message>
       )}
       {selectedRoomId !== undefined && (
-        <Container fluid>
-          <EditActivityModal
-            isModalOpen={isActivityModalOpen}
-            activity={modalActivity}
-            startLuxon={modalLuxonStart}
-            endLuxon={modalLuxonEnd}
-            dateLocale={calendarLocale}
-            onModalClose={closeActivityModalAndCleanUp}
-            onModalSave={dispatchActivityModalUpdates}
-          />
-          <ActionsHeader
-            selectedRoomId={selectedRoomId}
-            shouldUpdateMatches={shouldUpdateMatches}
-            setShouldUpdateMatches={setShouldUpdateMatches}
-          />
-          <Grid>
-            <Grid.Row>
-              <Grid.Column width={4}>
-                <Sticky>
-                  <Segment>
-                    <ActivityPicker
-                      wcifEvents={wcifEvents}
-                      wcifRoom={wcifRoom}
-                      listRef={activityPickerRef}
-                    />
-                  </Segment>
-                </Sticky>
-              </Grid.Column>
-              <Grid.Column width={12}>
-                <Container text textAlign="center">
-                  The timezone for this room is
-                  {' '}
-                  <b>
-                    {getTimeZoneDropdownLabel(
-                      wcifVenue.timezone,
-                      earliestActivity || referenceTime,
-                      calendarLocale,
-                    )}
-                  </b>
-                </Container>
-                <Container fluid>
-                  <Grid textAlign="center" verticalAlign="middle">
-                    <Grid.Column width={1}>
-                      <Popup
-                        trigger={<Button secondary icon="cog" />}
-                        on="click"
-                        position="right center"
-                        pinned
-                        flowing
-                      >
-                        <Popup.Header>Calendar settings</Popup.Header>
-                        <Popup.Content>
-                          <Form>
-                            <Form.Input
-                              label="Minutes per row"
-                              name="row-mins"
-                              type="number"
-                              min={5}
-                              max={30}
-                              step={5}
-                              value={minutesPerRow}
-                              onChange={setMinutesPerRow}
-                            />
-                            <Form.Input
-                              label="Calendar starts at"
-                              name="cal-start"
-                              type="number"
-                              min={0}
-                              max={24}
-                              value={calendarStart}
-                              onChange={setCalendarStart}
-                            />
-                            <Form.Input
-                              label="Calendar ends at"
-                              name="cal-end"
-                              type="number"
-                              min={0}
-                              max={24}
-                              value={calendarEnd}
-                              onChange={setCalendarEnd}
-                            />
-                          </Form>
-                        </Popup.Content>
-                      </Popup>
-                    </Grid.Column>
-                    <Grid.Column width={15}>
+        <div ref={stickyRef}>
+          <Container fluid>
+            <EditActivityModal
+              isModalOpen={isActivityModalOpen}
+              activity={modalActivity}
+              startLuxon={modalLuxonStart}
+              endLuxon={modalLuxonEnd}
+              dateLocale={calendarLocale}
+              onModalClose={closeActivityModalAndCleanUp}
+              onModalSave={dispatchActivityModalUpdates}
+            />
+            <ActionsHeader
+              selectedRoomId={selectedRoomId}
+              shouldUpdateMatches={shouldUpdateMatches}
+              setShouldUpdateMatches={setShouldUpdateMatches}
+            />
+            <Grid>
+              <Grid.Row>
+                <Grid.Column width={4}>
+                  <Sticky context={stickyRef} offset={10}>
+                    <Segment>
                       <Ref innerRef={dropToDeleteRef}>
                         <Message negative floating>
                           <Icon name="trash" />
                           Drop an event here to remove it from the schedule.
-                          <Icon name="trash" />
                         </Message>
                       </Ref>
-                    </Grid.Column>
-                  </Grid>
-                </Container>
-                <FullCalendar
-                  // plugins for the basic FullCalendar implementation.
-                  //   - timeGridPlugin: Display days as vertical grid
-                  //   - luxonPlugin: Support timezones
-                  //   - interactionPlugin: Support dragging events from the sidebar
-                  plugins={[timeGridPlugin, luxonPlugin, interactionPlugin]}
-                  // define our "own" view (which is basically just saying how many days we want)
-                  initialView="agendaForComp"
-                  views={{
-                    agendaForComp: {
-                      type: 'timeGrid',
-                      duration: { days: wcifSchedule.numberOfDays },
-                    },
-                  }}
-                  initialDate={wcifSchedule.startDate}
-                  // by default, FC offers support for separate "whole-day" events
-                  allDaySlot={false}
-                  // by default, FC would show a "skip to next day" toolbar
-                  headerToolbar={false}
-                  // the next three values can be configured via a popup menu
-                  slotMinTime={fcSlotMin}
-                  slotMaxTime={fcSlotMax}
-                  slotDuration={fcSlotDuration}
-                  // force FC to automagically compute an event's "end" flag,
-                  //   if the event doesn't specify one itself
-                  forceEventDuration
-                  defaultTimedEventDuration="00:30:00"
-                  // no debuf when an event drag was cancelled
-                  dragRevertDuration={0}
-                  // make it so that the user's mouse must travel some non-zero distance
-                  //   until any "drag" event is triggered
-                  selectMinDistance={5}
-                  height="auto"
-                  // intervals in which the events "snap" to the calendar grid
-                  snapDuration="00:05:00"
-                  // display color for background + text
-                  eventColor={wcifRoom.color}
-                  eventTextColor={getTextColor(wcifRoom.color)}
-                  // localization settings
-                  locale={calendarLocale}
-                  timeZone={wcifVenue.timezone}
-                  // FIRE IN DA HOLE!
-                  events={fcActivities}
-                  // make the calendar editable
-                  editable
-                  eventDragStop={removeIfOverDropzone}
-                  // allow moving events as a whole around
-                  eventStartEditable
-                  eventDrop={changeActivityTimeslot}
-                  // allow resizing events, and explicitly allow resizing on both ends
-                  eventDurationEditable
-                  eventResizableFromStart
-                  eventResize={resizeActivity}
-                  // allow dropping external events onto the schedule
-                  droppable
-                  eventReceive={addActivityFromPicker}
-                  // allow highlighting an (empty) timeslot with your mouse to create a new event
-                  selectable
-                  dateClick={addActivityFromCalendarClick}
-                  select={addActivityFromCalendarDrag}
-                  // allow clicking on existing events to edit them
-                  eventClick={editCustomEvent}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Container>
+                      <ActivityPicker
+                        wcifEvents={wcifEvents}
+                        wcifRoom={wcifRoom}
+                        listRef={activityPickerRef}
+                      />
+                    </Segment>
+                  </Sticky>
+                </Grid.Column>
+                <Grid.Column width={12}>
+                  <Container text textAlign="center">
+                    <Popup
+                      trigger={<Button secondary icon="cog" />}
+                      on="click"
+                      position="right center"
+                      pinned
+                      flowing
+                    >
+                      <Popup.Header>Calendar settings</Popup.Header>
+                      <Popup.Content>
+                        <Form>
+                          <Form.Input
+                            label="Minutes per row"
+                            name="row-mins"
+                            type="number"
+                            min={5}
+                            max={30}
+                            step={5}
+                            value={minutesPerRow}
+                            onChange={setMinutesPerRow}
+                          />
+                          <Form.Input
+                            label="Calendar starts at"
+                            name="cal-start"
+                            type="number"
+                            min={0}
+                            max={24}
+                            value={calendarStart}
+                            onChange={setCalendarStart}
+                          />
+                          <Form.Input
+                            label="Calendar ends at"
+                            name="cal-end"
+                            type="number"
+                            min={0}
+                            max={24}
+                            value={calendarEnd}
+                            onChange={setCalendarEnd}
+                          />
+                        </Form>
+                      </Popup.Content>
+                    </Popup>
+                    {' '}
+                    The timezone for this room is
+                    {' '}
+                    <b>
+                      {getTimeZoneDropdownLabel(
+                        wcifVenue.timezone,
+                        earliestActivity || referenceTime,
+                        calendarLocale,
+                      )}
+                    </b>
+                    .
+                  </Container>
+                  {activitiesWithInvalidTimes.length > 0 && (
+                    <Message negative floating>
+                      <b>Warning:</b>
+                      {' '}
+                      You have activities outside the competition
+                      dates or with non-positive durations.
+                      {' '}
+                      <Button onClick={deleteInvalidActivities} size="tiny" compact negative>
+                        Delete them.
+                      </Button>
+                    </Message>
+                  )}
+                  <FullCalendar
+                    // plugins for the basic FullCalendar implementation.
+                    //   - timeGridPlugin: Display days as vertical grid
+                    //   - luxonPlugin: Support timezones
+                    //   - interactionPlugin: Support dragging events from the sidebar
+                    plugins={[timeGridPlugin, luxonPlugin, interactionPlugin]}
+                    // define our "own" view (which is basically just saying how many days we want)
+                    initialView="agendaForComp"
+                    views={{
+                      agendaForComp: {
+                        type: 'timeGrid',
+                        duration: { days: wcifSchedule.numberOfDays },
+                      },
+                    }}
+                    initialDate={wcifSchedule.startDate}
+                    // by default, FC offers support for separate "whole-day" events
+                    allDaySlot={false}
+                    // by default, FC would show a "skip to next day" toolbar
+                    headerToolbar={false}
+                    // the next three values can be configured via a popup menu
+                    slotMinTime={fcSlotMin}
+                    slotMaxTime={fcSlotMax}
+                    slotDuration={fcSlotDuration}
+                    // force FC to automagically compute an event's "end" flag,
+                    //   if the event doesn't specify one itself
+                    forceEventDuration
+                    defaultTimedEventDuration="00:30:00"
+                    // no debuf when an event drag was cancelled
+                    dragRevertDuration={0}
+                    // make it so that the user's mouse must travel some non-zero distance
+                    //   until any "drag" event is triggered
+                    selectMinDistance={5}
+                    height="auto"
+                    // intervals in which the events "snap" to the calendar grid
+                    snapDuration="00:05:00"
+                    // display color for background + text
+                    eventColor={wcifRoom.color}
+                    eventTextColor={getTextColor(wcifRoom.color)}
+                    // localization settings
+                    locale={calendarLocale}
+                    timeZone={wcifVenue.timezone}
+                    // FIRE IN DA HOLE!
+                    events={fcActivities}
+                    // make the calendar editable
+                    editable
+                    eventDragStop={removeIfOverDropzone}
+                    // allow moving events as a whole around
+                    eventStartEditable
+                    eventDrop={changeActivityTimeslot}
+                    // allow resizing events, and explicitly allow resizing on both ends
+                    eventDurationEditable
+                    eventResizableFromStart
+                    eventResize={resizeActivity}
+                    // allow dropping external events onto the schedule
+                    droppable
+                    eventReceive={addActivityFromPicker}
+                    // allow highlighting an (empty) timeslot with your mouse to create a new event
+                    selectable
+                    dateClick={addActivityFromCalendarClick}
+                    select={addActivityFromCalendarDrag}
+                    // allow clicking on existing (custom) events to edit them
+                    eventClick={editCustomEvent}
+                    // allow right-clicking on (any) existing events to delete them;
+                    //  no direct `eventContextMenu` prop or anything like that unfortunately
+                    eventDidMount={(arg) => {
+                      arg.el.addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        removeEvent(arg.event);
+                      });
+                    }}
+                  />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Container>
+        </div>
       )}
     </div>
   );

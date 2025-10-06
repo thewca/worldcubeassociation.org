@@ -1,0 +1,18 @@
+get:
+  summary: Get information for a person
+  tags:
+    - users
+  operationId: personByWCAId
+  parameters:
+    - name: wca_id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/users/PersonInfo.yaml'

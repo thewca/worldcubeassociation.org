@@ -45,7 +45,7 @@ publish_metrics:
 
 sync_mailing_lists:
   class: "SyncMailingListsJob"
-  cron: "0 * * * *"
+  cron: "15 4,16 * * *"
   queue: wca_jobs
 
 notify_translators:
@@ -66,4 +66,9 @@ weat_digest:
 delegates_metadata_sync:
   class: "DelegatesMetadataSyncJob"
   cron: "0 * * * *"
+  queue: wca_jobs
+
+late_cronjob_warnings:
+  class: "CronjobWarningJob"
+  cron: "40 */6 * * *"
   queue: wca_jobs

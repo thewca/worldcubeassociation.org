@@ -8,7 +8,7 @@ module ResultsValidators
       "For competition with a competitor limit, this validator checks that this limit is respected."
     end
 
-    def self.has_automated_fix?
+    def self.automatically_fixable?
       false
     end
 
@@ -23,12 +23,12 @@ module ResultsValidators
         competitor_limit = competition.competitor_limit
         total_competitors = competition_data.persons.count
 
-        if competition.competitor_limit_enabled && total_competitors > competitor_limit
-          @warnings << ValidationWarning.new(COMPETITOR_LIMIT_WARNING,
-                                             :persons, competition.id,
-                                             n_competitors: total_competitors,
-                                             competitor_limit: competitor_limit)
-        end
+        next unless competition.competitor_limit_enabled && total_competitors > competitor_limit
+
+        @warnings << ValidationWarning.new(COMPETITOR_LIMIT_WARNING,
+                                           :persons, competition.id,
+                                           n_competitors: total_competitors,
+                                           competitor_limit: competitor_limit)
       end
 
       self

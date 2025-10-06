@@ -4,7 +4,6 @@ module RegulationsS3Helper
   WCA_REGULATIONS_BUCKET = "wca-regulations"
   def self.fetch_regulations_from_s3(key, version_file)
     bucket = Aws::S3::Resource.new(
-      region: EnvConfig.STORAGE_AWS_REGION,
       credentials: Aws::ECSCredentials.new,
     ).bucket(WCA_REGULATIONS_BUCKET)
 

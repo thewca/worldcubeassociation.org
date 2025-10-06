@@ -33,7 +33,7 @@ namespace :delegate_reports do
 
     venue_section_template = template_report.venue
                                             .gsub("\r\n", "\n")
-                                            .gsub("\r", "\n")
+                                            .tr("\r", "\n")
 
     # Only consider reports that haven't been posted yet
     DelegateReport.where(posted_at: nil, version: :working_group_2024)

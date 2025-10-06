@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class CreateCompetitionVenues < ActiveRecord::Migration[5.1]

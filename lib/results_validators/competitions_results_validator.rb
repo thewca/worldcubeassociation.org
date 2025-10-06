@@ -6,7 +6,7 @@ module ResultsValidators
       "This validator is an aggregate of an arbitrary set of other validators, running on an arbitrary set of competitions."
     end
 
-    def self.has_automated_fix?
+    def self.automatically_fixable?
       false
     end
 
@@ -31,16 +31,12 @@ module ResultsValidators
       new(ResultsValidators::Utils::ALL_VALIDATORS)
     end
 
-    def check_real_results?
-      @check_real_results
-    end
-
-    def has_results?
+    def any_results?
       @results.any?
     end
 
     def persons_by_id
-      @persons_by_id ||= @persons.index_by { |person| person.ref_id }
+      @persons_by_id ||= @persons.index_by(&:ref_id)
     end
 
     def competition_associations
@@ -100,9 +96,7 @@ module ResultsValidators
       end
 
       def merge(other_validators)
-        unless other_validators.respond_to?(:each)
-          other_validators = [other_validators]
-        end
+        other_validators = [other_validators] unless other_validators.respond_to?(:each)
         other_validators.each do |v|
           @errors.concat(v.errors)
           @warnings.concat(v.warnings)

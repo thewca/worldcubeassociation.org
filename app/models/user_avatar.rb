@@ -174,7 +174,7 @@ class UserAvatar < ApplicationRecord
              # In the long run, the active_storage? check should disappear.
              #   The local-fs enum entry is only used for the dummy avatar, and that one is never deleted.
              #   The s3-legacy-cdn will be replaced/migrated in the future.
-             if: [:active_storage?, :status_previously_changed?],
+             if: %i[active_storage? status_previously_changed?],
              unless: :destroyed?
 
   def move_image_if_approved
@@ -182,7 +182,7 @@ class UserAvatar < ApplicationRecord
 
     # If there is no old_status, it means we just inserted the record.
     # In that case, there is nothing to reattach.
-    return unless old_status.present?
+    return if old_status.blank?
 
     if new_status == UserAvatar.statuses[:approved]
       # We approved a new avatar! Take the previously private file and upload it to public storage.
@@ -216,14 +216,14 @@ class UserAvatar < ApplicationRecord
   end
 
   after_save :invalidate_thumbnail_if_approved,
-             if: [:using_cdn?, :approved?],
+             if: %i[using_cdn? approved?],
              # If the thumbnail details changed, Rails will generate a new key anyways,
              #   and it is not necessary to manually invalidate
              #   because the new ActiveStorage key will result in a new, fresh URL
-             unless: [:destroyed?, :thumbnail_previously_changed?]
+             unless: %i[destroyed? thumbnail_previously_changed?]
 
   def invalidate_thumbnail_if_approved
-    return unless AppSecrets.CDN_AVATARS_DISTRIBUTION_ID.present?
+    return if AppSecrets.CDN_AVATARS_DISTRIBUTION_ID.blank?
 
     thumbnail_changed = self.thumbnail_crop_x_previously_changed? ||
                         self.thumbnail_crop_y_previously_changed? ||
@@ -233,7 +233,6 @@ class UserAvatar < ApplicationRecord
     return unless thumbnail_changed
 
     cloudfront_sdk = ::Aws::CloudFront::Client.new(
-      region: EnvConfig.S3_AVATARS_REGION,
       access_key_id: AppSecrets.AWS_ACCESS_KEY_ID,
       secret_access_key: AppSecrets.AWS_SECRET_ACCESS_KEY,
     )
@@ -278,7 +277,7 @@ class UserAvatar < ApplicationRecord
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => %w[object null],
       "properties" => {
         "url" => { "type" => "string" },
         "thumbUrl" => { "type" => "string" },
@@ -302,8 +301,8 @@ class UserAvatar < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "status", "thumbnail_crop_x", "thumbnail_crop_y", "thumbnail_crop_w", "thumbnail_crop_h"],
-    methods: ["url", "thumb_url", "is_default", "can_edit_thumbnail"],
+    only: %w[id status thumbnail_crop_x thumbnail_crop_y thumbnail_crop_w thumbnail_crop_h],
+    methods: %w[url thumb_url is_default can_edit_thumbnail],
   }.freeze
 
   def serializable_hash(options = nil)

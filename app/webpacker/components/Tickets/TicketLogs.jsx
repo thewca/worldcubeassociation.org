@@ -12,12 +12,18 @@ export default function TicketLogs({ ticketId }) {
     queryFn: () => getLogs({ ticketId }),
   });
 
-  function logText(actionType, actionValue) {
+  function logText(actionType, metadataAction) {
     switch (actionType) {
-      case ticketLogActionTypes.status_updated:
-        return `Status updated to ${actionValue}`;
+      case ticketLogActionTypes.create_ticket:
+        return 'Ticket created.';
+      case ticketLogActionTypes.update_status:
+        return 'Status updated.';
+      case ticketLogActionTypes.create_comment:
+        return 'Comment added.';
+      case ticketLogActionTypes.metadata_action:
+        return `Action ${metadataAction} performed.`;
       default:
-        return `[Unsupported log]: ${actionType}: ${actionValue}`;
+        return `[Unsupported log]: ${actionType}.`;
     }
   }
 
@@ -30,13 +36,13 @@ export default function TicketLogs({ ticketId }) {
       <List>
         {logs.map(({
           action_type: actionType,
-          action_value: actionValue,
+          metadata_action: metadataAction,
           created_at: createdAt,
         }) => (
           <List.Item>
             {createdAt}
             {': '}
-            {logText(actionType, actionValue)}
+            {logText(actionType, metadataAction)}
           </List.Item>
         ))}
       </List>
