@@ -1311,8 +1311,7 @@ module DatabaseDumper
 
   def self.mysql_cli_creds
     config = ActiveRecord::Base.connection_db_config.configuration_hash
-    ssl_config = Rails.env.production? ? "--ssl-ca=/rails/rds-cert.pem" : ""
-    "--user=#{config[:username]} --password=#{config[:password] || "''"} --port=#{config[:port]} --host=#{config[:host]} #{ssl_config}"
+    "--user=#{config[:username]} --password=#{config[:password] || "''"} --port=#{config[:port]} --host=#{config[:host]} #{"--ssl-ca=/rails/rds-cert.pem" if Rails.env.production?}"
   end
 
   def self.mysql(command, database = nil)
