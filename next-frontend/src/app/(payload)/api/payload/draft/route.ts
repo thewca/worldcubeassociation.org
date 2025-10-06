@@ -5,16 +5,9 @@ import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import configPromise from '@payload-config'
+import { NextRequest } from "next/server";
 
-export async function GET(
-  req: {
-    cookies: {
-      get: (name: string) => {
-        value: string
-      }
-    }
-  } & Request,
-): Promise<Response> {
+export async function GET(req: NextRequest): Promise<Response> {
   const payload = await getPayload({ config: configPromise })
 
   const { searchParams } = new URL(req.url)
