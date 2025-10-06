@@ -2051,7 +2051,7 @@ class Competition < ApplicationRecord
       # If no registration is found, and the Registration is marked as non-competing, add this person as a non-competing staff member.
       adding_non_competing = wcif_person["registration"].present? && wcif_person["registration"]["isCompeting"] == false
       if adding_non_competing
-        registration ||= registrations.create(
+        registration ||= registrations.create!(
           competition: self,
           user_id: wcif_person["wcaUserId"],
           is_competing: false,
