@@ -1,147 +1,8 @@
-import { Block, CheckboxField, GlobalConfig, SelectField } from "payload";
-import { markdownConvertedField } from "@/collections/helpers";
-
-const colorPaletteSelect: SelectField = {
-  name: "colorPalette",
-  type: "select",
-  required: true,
-  interfaceName: "ColorPaletteSelect",
-  options: ["blue", "red", "green", "orange", "yellow", "grey"],
-};
-
-const colorPaletteToneToggle: CheckboxField = {
-  name: "colorPaletteDarker",
-  type: "checkbox",
-  admin: {
-    description: "Use a slightly darker nuance of the color palette",
-  },
-};
-
-const TextCard: Block = {
-  slug: "TextCard",
-  interfaceName: "TextCardBlock",
-  imageURL: "/payload/text_card.png",
-  fields: [
-    {
-      name: "heading",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "body",
-      type: "richText",
-      required: true,
-    },
-    markdownConvertedField("body"),
-    {
-      name: "variant",
-      type: "select",
-      options: ["info", "hero"],
-      defaultValue: "info",
-      required: true,
-    },
-    {
-      name: "separatorAfterHeading",
-      type: "checkbox",
-      required: true,
-      defaultValue: false,
-    },
-    {
-      name: "buttonText",
-      type: "text",
-      required: false,
-    },
-    {
-      name: "buttonLink",
-      type: "text",
-      required: false,
-    },
-    {
-      name: "headerImage",
-      type: "upload",
-      relationTo: "media",
-    },
-    colorPaletteSelect,
-  ],
-};
-
-const ImageBanner: Block = {
-  slug: "ImageBanner",
-  interfaceName: "ImageBannerBlock",
-  imageURL: "/payload/image_banner.png",
-  fields: [
-    {
-      name: "heading",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "body",
-      type: "richText",
-      required: true,
-    },
-    markdownConvertedField("body"),
-    {
-      name: "mainImage",
-      type: "upload",
-      relationTo: "media",
-      required: true,
-    },
-    colorPaletteSelect,
-    colorPaletteToneToggle,
-    {
-      ...colorPaletteSelect,
-      name: "headingColor",
-      required: false,
-      admin: {
-        description:
-          "Color for the heading. Will follow the overall color palette by default, only use this field if you want to purposely override (for example, to achieve a more striking contrast that garners attention)",
-      },
-    },
-    {
-      name: "bgImage",
-      type: "upload",
-      relationTo: "media",
-    },
-    {
-      name: "bgSize",
-      type: "number",
-      min: 10,
-      max: 100,
-      defaultValue: 100,
-      required: true,
-      admin: {
-        description: "The size of the background image in percent (%)",
-      },
-    },
-    {
-      name: "bgPos",
-      type: "select",
-      options: ["right", "left"],
-      defaultValue: "right",
-      required: true,
-    },
-  ],
-};
-
-const ImageOnlyCard: Block = {
-  slug: "ImageOnlyCard",
-  interfaceName: "ImageOnlyCardBlock",
-  imageURL: "/payload/image_only_card.png",
-  fields: [
-    {
-      name: "mainImage",
-      type: "upload",
-      relationTo: "media",
-      required: true,
-    },
-    {
-      name: "heading",
-      type: "text",
-    },
-    colorPaletteSelect,
-  ],
-};
+import { Block, GlobalConfig } from "payload";
+import { colorPaletteSelect } from "@/blocks/utils";
+import { TextCardBlock } from "@/blocks/text/textCard";
+import { BannerImageBlock } from "@/blocks/image/bannerImage";
+import { ImageCardBlock } from "@/blocks/image/imageCard";
 
 const FeaturedCompetitions: Block = {
   slug: "FeaturedComps", // intentionally short to avoid Payload internally assigning a long table name
@@ -212,10 +73,10 @@ const TestimonialsSpinner: Block = {
 };
 
 const coreBlocks = [
-  TextCard,
+  TextCardBlock,
   AnnouncementsSection,
-  ImageBanner,
-  ImageOnlyCard,
+  BannerImageBlock,
+  ImageCardBlock,
   TestimonialsSpinner,
   FeaturedCompetitions,
 ];

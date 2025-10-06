@@ -1154,7 +1154,7 @@ export interface PrivacyPage {
     contentMarkdown?: string | null;
     id?: string | null;
     blockName?: string | null;
-    blockType: 'privacyItem';
+    blockType: 'paragraph';
   }[];
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1166,7 +1166,7 @@ export interface PrivacyPage {
 export interface DisclaimerPage {
   id: string;
   blocks: {
-    title?: string | null;
+    title: string;
     content: {
       root: {
         type: string;
@@ -1185,7 +1185,7 @@ export interface DisclaimerPage {
     contentMarkdown?: string | null;
     id?: string | null;
     blockName?: string | null;
-    blockType: 'disclaimerItem';
+    blockType: 'paragraph';
   }[];
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1198,6 +1198,7 @@ export interface SpeedcubingHistoryPage {
   id: string;
   blocks: (
     | {
+        title: string;
         content: {
           root: {
             type: string;
@@ -1685,7 +1686,7 @@ export interface PrivacyPageSelect<T extends boolean = true> {
   blocks?:
     | T
     | {
-        privacyItem?:
+        paragraph?:
           | T
           | {
               title?: T;
@@ -1707,7 +1708,7 @@ export interface DisclaimerPageSelect<T extends boolean = true> {
   blocks?:
     | T
     | {
-        disclaimerItem?:
+        paragraph?:
           | T
           | {
               title?: T;
@@ -1732,6 +1733,7 @@ export interface SpeedcubingHistoryPageSelect<T extends boolean = true> {
         paragraph?:
           | T
           | {
+              title?: T;
               content?: T;
               contentMarkdown?: T;
               id?: T;
