@@ -45,7 +45,6 @@ module CompetitionResultsImport
 
         person_id = inbox_person&.wca_id.presence || inbox_res.person_id
         person_country = inbox_person&.country
-        result_attempts = inbox_res.result_attempts_payload
 
         {
           pos: inbox_res.pos,
@@ -68,7 +67,9 @@ module CompetitionResultsImport
         }
       end
 
-      Result.insert_all!(result_rows)
+      new_results = Result.insert_all!(result_rows)
+      attempts = new_results.map { it.result_attempts_payload(result_id: it.id) }
+      ResultAttempt.insert_all!(attempts)
       competition.inbox_results.destroy_all
     end
   end
