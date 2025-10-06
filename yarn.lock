@@ -10304,7 +10304,7 @@ __metadata:
     stylelint-scss: "npm:^6.12.1"
     terser-webpack-plugin: "npm:^5.3.14"
     webpack: "npm:^5.102.0"
-    webpack-assets-manifest: "npm:^6.2.2"
+    webpack-assets-manifest: "npm:^6.3.0"
     webpack-bundle-analyzer: "npm:^4.10.2"
     webpack-cli: "npm:^6.0.1"
     webpack-dev-server: "npm:^5.2.2"
@@ -11315,7 +11315,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tapable@npm:^2.0.0, tapable@npm:^2.2.0, tapable@npm:^2.2.1, tapable@npm:^2.2.2":
+"tapable@npm:^2.0.0, tapable@npm:^2.2.0, tapable@npm:^2.2.1":
   version: 2.2.2
   resolution: "tapable@npm:2.2.2"
   checksum: 10c0/8ad130aa705cab6486ad89e42233569a1fb1ff21af115f59cebe9f2b45e9e7995efceaa9cc5062510cdb4ec673b527924b2ab812e3579c55ad659ae92117011e
@@ -11731,17 +11731,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-assets-manifest@npm:^6.2.2":
-  version: 6.2.2
-  resolution: "webpack-assets-manifest@npm:6.2.2"
+"webpack-assets-manifest@npm:^6.3.0":
+  version: 6.3.0
+  resolution: "webpack-assets-manifest@npm:6.3.0"
   dependencies:
     deepmerge: "npm:^4.3.1"
     lockfile: "npm:^1.0.4"
     schema-utils: "npm:^4.3.2"
-    tapable: "npm:^2.2.2"
+    tapable: "npm:^2.2.3"
   peerDependencies:
     webpack: ^5.61.0
-  checksum: 10c0/c183386f7422d6c8ed5da3ecaba7f99f618354c13ef64bc298dd03a4688fa81d73056185e0d805a5eaa3a8b897d803b766f95acdbec8c33a32f1d648b7f50822
+  checksum: 10c0/3f92bd50ede6b150577f5498e1d12020461d32d8bd026fbbdd49e1af0e0e75ce0a16e5daa875be5a45bcb1b0599847a25277ad30a4139ef8f7b0b0660f9cd241
   languageName: node
   linkType: hard
 
