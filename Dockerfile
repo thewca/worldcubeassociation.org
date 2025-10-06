@@ -116,6 +116,9 @@ COPY --chown=rails:rails --from=build /rails .
 #   but we also still need `sudo` privileges to be able to install runtime dependencies through apt
 RUN "$PLAYWRIGHT_BROWSERS_PATH/node_modules/playwright/cli.js" install-deps chromium
 
+# Get Certificate to connect to mysql via SSL
+RUN curl -o ./rds-cert.pem https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
+
 USER rails:rails
 
 FROM runtime AS sidekiq
