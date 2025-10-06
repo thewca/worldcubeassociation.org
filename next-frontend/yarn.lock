@@ -13061,7 +13061,7 @@ __metadata:
     next-themes: "npm:^0.4.6"
     nextjs-routes: "npm:^2.2.5"
     node-vault: "npm:^0.10.5"
-    openapi-fetch: "npm:^0.14.0"
+    openapi-fetch: "npm:^0.14.1"
     openapi-typescript: "npm:^7.9.1"
     payload: "npm:3.57.0"
     payload-authjs: "npm:^0.8.4"
@@ -13490,12 +13490,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openapi-fetch@npm:^0.14.0":
-  version: 0.14.0
-  resolution: "openapi-fetch@npm:0.14.0"
+"openapi-fetch@npm:^0.14.1":
+  version: 0.14.1
+  resolution: "openapi-fetch@npm:0.14.1"
   dependencies:
     openapi-typescript-helpers: "npm:^0.0.15"
-  checksum: 10c0/d23155edde61837a25896a2b201c890649ec8d16b37c3920dee940290ef6a66bd1b6f1df5ac68ec203f32d485ce16f7cf3557c13c183299e2e321d0a2eb62691
+  checksum: 10c0/e1b5375f0461969ff08e951b6308a115a582cca84ed3e0ecc2e41919d44a86038144a7a0b2e217ddb1bb7160a6779f459a2ca0224ff7634a9e89f19afe2a83db
   languageName: node
   linkType: hard
 
