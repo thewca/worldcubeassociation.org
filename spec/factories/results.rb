@@ -122,7 +122,7 @@ FactoryBot.define do
     end
 
     after(:build) do |result, _options|
-      result.result_attempts = result.result_attempts_payload.map(&ResultAttempt.method(:new))
+      result.result_attempts = result.result_attempts_attributes.map(&ResultAttempt.method(:new))
     end
 
     person_id { person.wca_id }

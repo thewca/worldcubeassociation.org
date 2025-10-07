@@ -184,16 +184,16 @@ module ResultsValidators
 
       def check_results_for_cutoff(context, cutoff)
         competition_id, result, round_id, round = context
-        number_of_attempts = cutoff.number_of_attempts
+        number_of_attempts_for_cutoff = cutoff.number_of_attempts
+        total_number_of_attempts = round.format.expected_solve_count
         cutoff_result = SolveTime.new(round.event.id, :single, cutoff.attempt_result)
         solve_times = result.solve_times
         # Compare through SolveTime so we don't need to care about DNF/DNS
-        maybe_qualifying_results = solve_times[0, number_of_attempts]
+        maybe_qualifying_results = solve_times[0, number_of_attempts_for_cutoff]
         # Get the remaining attempt according to the expected solve count given the format
-        other_results = solve_times[number_of_attempts, round.format.expected_solve_count - number_of_attempts]
-
-        if maybe_qualifying_results.any?(&:skipped?)
-          # There are at least one skipped results among those in the first phase.
+        other_results = solve_times[number_of_attempts_for_cutoff, total_number_of_attempts - number_of_attempts_for_cutoff]
+        if maybe_qualifying_results.length < number_of_attempts_for_cutoff
+          # There are not enough results for cutoff
           @errors << ValidationError.new(WRONG_ATTEMPTS_FOR_CUTOFF_ERROR,
                                          :results, competition_id,
                                          round_id: round_id,
@@ -201,18 +201,18 @@ module ResultsValidators
         end
 
         qualifying_results = maybe_qualifying_results.select { |solve_time| solve_time < cutoff_result }
-        skipped, unskipped = other_results.partition(&:skipped?)
+        total_solves = solve_times.length
         if qualifying_results.any?
-          # Meets the cutoff, no result should be SKIPPED
-          if skipped.any?
+          # Meets the cutoff, should have all attempts
+          if total_solves != total_number_of_attempts
             @errors << ValidationError.new(MET_CUTOFF_MISSING_RESULTS_ERROR,
                                            :results, competition_id,
                                            round_id: round_id,
                                            person_name: result.person_name,
                                            cutoff: cutoff.to_s(round))
           end
-        elsif unskipped.any?
-          # Doesn't meet the cutoff, all results should be SKIPPED
+        elsif other_results.present?
+          # Doesn't meet the cutoff, shouldn't have anymore attempts
           @errors << ValidationError.new(DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
                                          :results, competition_id,
                                          round_id: round_id,
