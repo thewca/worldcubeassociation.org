@@ -63,7 +63,6 @@ module CompetitionResultsImport
           value5: inbox_res.value5,
           best: inbox_res.best,
           average: inbox_res.average,
-          result_attempts: result_attempts,
         }
       end
 
