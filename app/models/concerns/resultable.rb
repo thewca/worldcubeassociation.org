@@ -213,12 +213,20 @@ module Resultable
                       SolveTime.new(event_id, :single, value5)].freeze
   end
 
-  def result_attempts_payload(**kwargs)
-    (1..5).filter_map do |n|
-      value = public_send(:"value#{n}")
+  private def valid_attempts_partition
+    self.attempts
+        .with_index(1)
+        .partition { |value, _n| value != SolveTime::SKIPPED_VALUE }
+  end
 
-      { value: value, attempt_number: n, **kwargs } unless value == SolveTime::SKIPPED_VALUE
+  def result_attempts_attributes(**kwargs)
+    valid_attempts_partition[0].map do |value, n|
+      { value: value, attempt_number: n, **kwargs }
     end
+  end
+
+  def skipped_attempt_numbers
+    self.valid_attempts_partition[1].map { |_value, n| n }
   end
 
   def worst_index

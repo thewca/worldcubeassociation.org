@@ -18,10 +18,10 @@ class Result < ApplicationRecord
   after_update_commit :create_or_update_attempts
 
   def create_or_update_attempts
-    attempts = result_attempts_payload(result_id: self.id)
+    attempts = self.result_attempts_attributes(result_id: self.id)
 
     # Delete attempts when the value was set to 0
-    zero_attempts = (1..5).select { |n| public_send(:"value#{n}") == SolveTime::SKIPPED_VALUE }
+    zero_attempts = self.skipped_attempt_numbers
     ResultAttempt.where(result_id: id, attempt_number: zero_attempts).delete_all if zero_attempts.any?
 
     ResultAttempt.upsert_all(attempts)

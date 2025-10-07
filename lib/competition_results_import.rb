@@ -67,7 +67,7 @@ module CompetitionResultsImport
       end
 
       new_results = Result.insert_all!(result_rows)
-      attempts = new_results.map { it.result_attempts_payload(result_id: it.id) }
+      attempts = new_results.map { it.result_attempts_attributes(result_id: it.id) }
       ResultAttempt.insert_all!(attempts)
       competition.inbox_results.destroy_all
     end
