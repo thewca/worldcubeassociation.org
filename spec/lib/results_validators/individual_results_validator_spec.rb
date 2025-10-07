@@ -72,9 +72,9 @@ RSpec.describe IRV do
                                        competition: competition1,
                                        cutoff: cutoff, event_id: "444")
         res_over_with_results.update(value3: res_over_with_results.value2,
-                                      value4: res_over_with_results.value2,
-                                      value5: res_over_with_results.value2,
-                                      average: res_over_with_results.value2)
+                                     value4: res_over_with_results.value2,
+                                     value5: res_over_with_results.value2,
+                                     average: res_over_with_results.value2)
         res_over_with_results.create_or_update_attempts if result_kind == :result
 
         errs << RV::ValidationError.new(IRV::DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
