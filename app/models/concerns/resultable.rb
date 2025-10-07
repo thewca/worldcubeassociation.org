@@ -217,7 +217,7 @@ module Resultable
     (1..5).filter_map do |n|
       value = public_send(:"value#{n}")
 
-      { value: value, attempt_number: n, **kwargs } unless value.zero?
+      { value: value, attempt_number: n, **kwargs } unless value == SolveTime::SKIPPED_VALUE
     end
   end
 

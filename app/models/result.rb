@@ -21,7 +21,7 @@ class Result < ApplicationRecord
     attempts = result_attempts_payload(result_id: self.id)
 
     # Delete attempts when the value was set to 0
-    zero_attempts = (1..5).select { |n| public_send(:"value#{n}").zero? }
+    zero_attempts = (1..5).select { |n| public_send(:"value#{n}") == SolveTime::SKIPPED_VALUE }
     ResultAttempt.where(result_id: id, attempt_number: zero_attempts).delete_all if zero_attempts.any?
 
     ResultAttempt.upsert_all(attempts)
