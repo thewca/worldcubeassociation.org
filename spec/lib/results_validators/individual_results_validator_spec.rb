@@ -52,7 +52,7 @@ RSpec.describe IRV do
       }
 
       # Here the positions will be messed up but this is fine, we don't run the PositionsValidator.
-      [Result].each do |model|
+      [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym
         errs = []
         # Creates a result which doesn't meet the cutoff and is missing values
@@ -75,7 +75,7 @@ RSpec.describe IRV do
                                       value4: res_over_with_results.value2,
                                       value5: res_over_with_results.value2,
                                       average: res_over_with_results.value2)
-        res_over_with_results.create_or_update_attempts
+        res_over_with_results.create_or_update_attempts if result_kind == :result
 
         errs << RV::ValidationError.new(IRV::DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
                                         :results, competition1.id,

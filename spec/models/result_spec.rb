@@ -431,7 +431,7 @@ RSpec.describe Result do
         (1..5).map do |i|
           result.send :"value#{i}=", i <= n ? 42 : 0
         end
-        result.result_attempts = result.result_attempts_payload.map(&ResultAttempt.method(:new))
+        result.result_attempts = result.result_attempts_attributes.map(&ResultAttempt.method(:new))
         result
       end
 
