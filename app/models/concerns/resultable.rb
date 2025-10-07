@@ -215,8 +215,9 @@ module Resultable
 
   private def valid_attempts_partition
     self.attempts
-        .partition { |value| value != SolveTime::SKIPPED_VALUE }
-        .map { |arr| arr.to_enum.with_index(1) }
+        .map
+        .with_index(1)
+        .partition { |value, _n| value != SolveTime::SKIPPED_VALUE }
   end
 
   def valid_attempts
