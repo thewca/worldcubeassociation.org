@@ -219,14 +219,22 @@ module Resultable
         .partition { |value, _n| value != SolveTime::SKIPPED_VALUE }
   end
 
+  def valid_attempts
+    self.valid_attempts_partition[0]
+  end
+
+  def skipped_attempts
+    self.valid_attempts_partition[1]
+  end
+
   def result_attempts_attributes(**kwargs)
-    valid_attempts_partition[0].map do |value, n|
+    self.valid_attempts.map do |value, n|
       { value: value, attempt_number: n, **kwargs }
     end
   end
 
   def skipped_attempt_numbers
-    self.valid_attempts_partition[1].map { |_value, n| n }
+    self.skipped_attempts.map { |_value, n| n }
   end
 
   def worst_index
