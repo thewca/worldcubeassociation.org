@@ -71,6 +71,8 @@ module CompetitionResultsImport
       ResultAttempt.insert_all!(attempts)
       competition.inbox_results.destroy_all
     end
+    attempts = competition.reload.results.map { it.result_attempts_attributes(result_id: it.id) }.flatten
+    ResultAttempt.insert_all!(attempts)
   end
 
   def self.post_results_error(comp)
