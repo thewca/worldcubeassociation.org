@@ -1084,8 +1084,8 @@ RSpec.describe CompetitionsController do
 
       it 'shows my upcoming and past competitions' do
         get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq []
-        expect(assigns(:past_competitions)).to eq [past_competition1]
+        expect(assigns(:my_competitions)[:not_past_competitions]).to eq []
+        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1]
       end
     end
 
@@ -1096,56 +1096,56 @@ RSpec.describe CompetitionsController do
 
       it 'shows my upcoming and past competitions' do
         get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1]
+        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [future_competition1, future_competition3]
+        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1]
       end
 
       it 'does not show past competitions they have a rejected registration for' do
         create(:registration, :rejected, competition: past_competition2, user: registered_user)
         get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1]
+        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [future_competition1, future_competition3]
+        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1]
       end
 
       it 'does not show upcoming competitions they have a rejected registration for' do
         create(:registration, :cancelled, competition: future_competition2, user: registered_user)
         get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1]
+        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [future_competition1, future_competition3]
+        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1]
       end
 
       it 'shows upcoming competition they have a pending registration for' do
         create(:registration, :pending, competition: future_competition2, user: registered_user)
         get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition2, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1]
+        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [future_competition1, future_competition2, future_competition3]
+        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1]
       end
 
       it 'does not show past competitions they have a pending registration for' do
         create(:registration, :pending, competition: past_competition2, user: registered_user)
         get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1]
+        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [future_competition1, future_competition3]
+        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1]
       end
 
       it 'does not show past competitions with results uploaded they have an accepted registration but not results for' do
         create(:registration, :accepted, competition: past_competition4, user: registered_user)
         get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1]
+        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [future_competition1, future_competition3]
+        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1]
       end
 
       it 'shows upcoming competitions they have bookmarked' do
         BookmarkedCompetition.create(competition: future_competition2, user: registered_user)
         BookmarkedCompetition.create(competition: future_competition4, user: registered_user)
         get :my_competitions
-        expect(assigns(:bookmarked_competitions)).to eq [future_competition4, future_competition2]
+        expect(assigns(:my_competitions)[:bookmarked_competitions]).to eq [future_competition4, future_competition2]
       end
 
       it 'does not show past competitions they have bookmarked' do
         BookmarkedCompetition.create(competition: past_competition1, user: registered_user)
         get :my_competitions
-        expect(assigns(:bookmarked_competitions)).to eq []
+        expect(assigns(:my_competitions)[:bookmarked_competitions]).to eq []
       end
     end
 
@@ -1156,8 +1156,8 @@ RSpec.describe CompetitionsController do
 
       it 'shows my upcoming and past competitions' do
         get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition2, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1, past_competition3]
+        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [future_competition1, future_competition2, future_competition3]
+        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1, past_competition3]
       end
     end
 
@@ -1168,8 +1168,8 @@ RSpec.describe CompetitionsController do
 
       it 'shows my upcoming and past competitions' do
         get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [unscheduled_competition1, future_competition1, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition2, past_competition3, past_competition4]
+        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [unscheduled_competition1, future_competition1, future_competition3]
+        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition2, past_competition3, past_competition4]
       end
     end
   end
