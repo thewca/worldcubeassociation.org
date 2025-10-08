@@ -14,6 +14,7 @@ get:
               - past_competitions
               - future_competitions
               - bookmarked_competitions
+              - registrations_by_competition
             properties:
               past_competitions:
                 type: array
@@ -27,3 +28,7 @@ get:
                 type: array
                 items:
                   $ref: "../../schemas/competitions/MyCompetition.yaml"
+              registrations_by_competition:
+                type: object
+                additionalProperties:
+                  $ref: "../../schemas/registrations/CompetingStatus.yaml"

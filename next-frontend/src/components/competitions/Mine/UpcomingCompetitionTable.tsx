@@ -118,11 +118,13 @@ const registrationStatusIcon = (registrationStatus: string) => {
 
 interface UpcomingCompetitionTableProps {
   competitions: components["schemas"]["MyCompetition"][];
+  registrationStatusByCompetition: Record<string, components["schemas"]["CompetingStatus"]>,
   fallbackMessage?: { key: string; options?: Record<string, string> };
 }
 
 export default function UpcomingCompetitionTable({
   competitions,
+  registrationStatusByCompetition,
   fallbackMessage = undefined,
 }: UpcomingCompetitionTableProps) {
   const { canViewDelegateReport, canAdministerCompetition } = usePermissions()!;
@@ -188,7 +190,7 @@ export default function UpcomingCompetitionTable({
                 content={competitionStatusText(
                   competition["confirmed?"],
                   competition["visible?"],
-                  competition.competing_status!,
+                  registrationStatusByCompetition[competition.id],
                   t,
                 )}
               >
@@ -216,7 +218,7 @@ export default function UpcomingCompetitionTable({
                   <LocationTableCell competition={competition} />
                   <DateTableCell competition={competition} />
                   <Table.Cell>
-                    {competingStatusIcon(competition.competing_status!)}
+                    {competingStatusIcon(registrationStatusByCompetition[competition.id])}
                   </Table.Cell>
                   {canAdminThisComp && (
                     <Table.Cell>

@@ -52,14 +52,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
                                                      methods: options[:methods] + %w[registration_status],
                                                    })
 
-      future_competitions = not_past_competitions.as_json(options_with_reg_status)
-
-      future_competitions_with_competing_status = future_competitions.map { |c| c.merge({ competing_status: registered_for_by_competition_id[c["id"]] }) }
-
       render json: {
         past_competitions: past_competitions.as_json(options),
-        future_competitions: future_competitions_with_competing_status,
+        future_competitions: not_past_competitions.as_json(options_with_reg_status),
         bookmarked_competitions: bookmarked_competitions.as_json(options_with_reg_status),
+        registrations_by_competition: registered_for_by_competition_id,
       }
     end
   end
