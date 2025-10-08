@@ -56,7 +56,9 @@ export default function MyCompetitions() {
         <p>{t("competitions.my_competitions.disclaimer")}</p>
         <UpcomingCompetitionTable
           competitions={myCompetitions.future_competitions}
-          registrationStatusByCompetition={myCompetitions.registrations_by_competition}
+          registrationStatusByCompetition={
+            myCompetitions.registrations_by_competition
+          }
           fallbackMessage={{
             key: "competitions.my_competitions_table.no_upcoming_competitions_html",
             options: {
@@ -88,7 +90,9 @@ export default function MyCompetitions() {
         <p>{t("competitions.my_competitions.bookmarked_explanation")}</p>
         <UpcomingCompetitionTable
           competitions={myCompetitions.bookmarked_competitions}
-          registrationStatusByCompetition={myCompetitions.registrations_by_competition}
+          registrationStatusByCompetition={
+            myCompetitions.registrations_by_competition
+          }
           fallbackMessage={{
             key: "competitions.my_competitions_table.no_bookmarked_competitions",
           }}
