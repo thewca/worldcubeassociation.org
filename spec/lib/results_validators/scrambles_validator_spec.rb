@@ -63,7 +63,6 @@ RSpec.describe SV do
       end
 
       it "matches the competition's data" do
-
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
           create(result_kind, competition: competition1, event_id: "333oh", round: round_333oh)
