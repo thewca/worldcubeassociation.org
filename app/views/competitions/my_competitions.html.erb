@@ -4,6 +4,6 @@
   <%= react_component("MyCompetitions", {
       wcaId: current_user.wca_id,
       permissions: current_user.permissions,
-      competitions: @my_competitions.transform_keys { it.underscore },
+      competitions: @my_competitions.transform_keys { it.to_s.camelize(:lower) },
   }) %>
 </div>

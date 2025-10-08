@@ -3069,7 +3069,7 @@ class Competition < ApplicationRecord
       competition_ids.concat(user.delegated_competition_ids)
 
       user_registrations = user.registrations.joins(:competition).select(:competition_id, :competing_status)
-      registrations = user_registrations.accepted.merge(Competition.results_posted.invert_where)
+      registrations = user_registrations.accepted.merge(Competition.results_posted.invert_where).to_a
       registrations.concat(user_registrations.waitlisted.merge(Competition.upcoming))
       registrations.concat(user_registrations.pending.merge(Competition.upcoming))
 
