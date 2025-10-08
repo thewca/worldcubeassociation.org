@@ -24,6 +24,10 @@ RSpec.describe SV do
     end
 
     context "Scramble" do
+      let(:round_333oh) { create(:round, competition: competition1, event_id: "333oh") }
+      let(:round_222) { create(:round, competition: competition2, event_id: "222") }
+      let(:round_333bf) { create(:round, competition: competition2, event_id: "333bf", format_id: "3") }
+
       # Triggers:
       # MISSING_SCRAMBLES_FOR_ROUND_ERROR
       # MISSING_SCRAMBLES_FOR_COMPETITION_ERROR
@@ -32,9 +36,9 @@ RSpec.describe SV do
       it "matches Result" do
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          create(result_kind, competition: competition1, event_id: "333oh")
-          create(result_kind, competition: competition2, event_id: "222")
-          create(result_kind, :blind_mo3, competition: competition2)
+          create(result_kind, competition: competition1, event_id: "333oh", round: round_333oh)
+          create(result_kind, competition: competition2, event_id: "222", round: round_222)
+          create(result_kind, :blind_mo3, competition: competition2, round: round_333bf)
         end
 
         expected_errors = [
@@ -59,10 +63,11 @@ RSpec.describe SV do
       end
 
       it "matches the competition's data" do
+
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          create(result_kind, competition: competition1, event_id: "333oh")
-          create(result_kind, :blind_mo3, competition: competition2)
+          create(result_kind, competition: competition1, event_id: "333oh", round: round_333oh)
+          create(result_kind, :blind_mo3, competition: competition2, round: round_333bf)
         end
 
         create_scramble_set(2, competition_id: competition2.id, event_id: "333bf")
@@ -85,11 +90,11 @@ RSpec.describe SV do
       end
 
       it "correctly (in)validates scramble sets not matching" do
-        create(:round, competition: competition1, event_id: "333oh", scramble_set_count: 2)
+        round_333oh = create(:round, competition: competition1, event_id: "333oh", scramble_set_count: 2)
 
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          create(result_kind, competition: competition1, event_id: "333oh")
+          create(result_kind, competition: competition1, event_id: "333oh", round: round_333oh)
         end
 
         # Create three groups of scrambles:
@@ -111,11 +116,11 @@ RSpec.describe SV do
       end
 
       it "correctly (in)validates multiple groups for 333fm" do
-        create(:round, competition: competition3, event_id: "333fm", format_id: "m", scramble_set_count: 2)
+        round = create(:round, competition: competition3, event_id: "333fm", format_id: "m", scramble_set_count: 2)
 
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          create(result_kind, :fm, competition: competition3)
+          create(result_kind, :fm, competition: competition3, round: round)
         end
 
         # Create two groups in fmc:
@@ -136,13 +141,13 @@ RSpec.describe SV do
       end
 
       it "correctly (in)validates multiple groups for 333mbf" do
-        create(:round, competition: competition1, event_id: "333mbf", format_id: "3", scramble_set_count: 2)
-        create(:round, competition: competition2, event_id: "333mbf", format_id: "3", scramble_set_count: 2)
+        round_333mbf_1 = create(:round, competition: competition1, event_id: "333mbf", format_id: "3", scramble_set_count: 2)
+        round_333mbf_2 = create(:round, competition: competition2, event_id: "333mbf", format_id: "3", scramble_set_count: 2)
 
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          create(result_kind, :mbf, competition: competition1)
-          create(result_kind, :mbf, competition: competition2)
+          create(result_kind, :mbf, competition: competition1, round: round_333mbf_1)
+          create(result_kind, :mbf, competition: competition2, round: round_333mbf_2)
         end
 
         # Create two groups in multi: for attempt 1 they did 2 groups,
