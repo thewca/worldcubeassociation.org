@@ -1,0 +1,10 @@
+oneOf:
+  - $ref: './WcifAdvancementConditionRanking.yaml'
+  - $ref: './WcifAdvancementConditionPercent.yaml'
+  - $ref: './WcifAdvancementConditionAttemptResult.yaml'
+discriminator:
+  propertyName: type
+  mapping:
+    ranking: './WcifAdvancementConditionRanking.yaml'
+    percent: './WcifAdvancementConditionPercent.yaml'
+    attemptResult: './WcifAdvancementConditionAttemptResult.yaml'

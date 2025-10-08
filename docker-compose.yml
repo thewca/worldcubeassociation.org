@@ -89,6 +89,22 @@ services:
     networks:
       - wca-main
 
+  wca_payload_db:
+    image: mongo:8
+    container_name: "payload_db"
+    command:
+      - --quiet
+      - --logpath
+      - /var/log/mongodb/mongod.log
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: payload
+    ports:
+      - "27017:27017"
+    networks:
+      - wca-main
+
   wca_webpacker:
     <<: *app
     container_name: "webpacker"
@@ -124,7 +140,7 @@ services:
       # Cronjobs are disabled in development by default. If you wish to run cronjobs,
       # set this env variable to any integer value greater than zero
       # CRONJOB_POLLING_MINUTES: 30
-    command: bin/bundle exec sidekiq
+    command: bin/sidekiq
     depends_on:
       wca_environment:
         condition: service_completed_successfully

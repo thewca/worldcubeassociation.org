@@ -383,6 +383,52 @@ class UsersController < ApplicationController
     render json: { ok: true }
   end
 
+  def registrations
+    user_id = params.require(:userId)
+
+    user = User.find(user_id)
+    registrations = user.registrations
+                        .joins(:competition)
+                        .merge(Competition.not_over)
+                        .order(start_date: :asc)
+
+    render json: registrations.as_json(
+      only: %w[competing_status],
+      include: {
+        competition: {
+          only: %w[id name city_name country_id start_date],
+          include: [],
+        },
+      },
+    )
+  end
+
+  def organized_competitions
+    user_id = params.require(:userId)
+
+    user = User.find(user_id)
+    competitions = user.organized_competitions
+                       .over.visible.not_cancelled
+                       .order(start_date: :desc)
+
+    render json: competitions.as_json(
+      only: %w[id name city_name country_id start_date],
+    )
+  end
+
+  def delegated_competitions
+    user_id = params.require(:userId)
+
+    user = User.find(user_id)
+    competitions = user.delegated_competitions
+                       .over.visible.not_cancelled
+                       .order(start_date: :desc)
+
+    render json: competitions.as_json(
+      only: %w[id name city_name country_id start_date],
+    )
+  end
+
   private def redirect_if_cannot_edit_user
     @user = user_to_edit
 

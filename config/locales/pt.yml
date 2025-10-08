@@ -770,16 +770,16 @@ pt:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 27c2251
+        #original_hash: c564b74
         receive_delegate_reports: >-
           Se for Delegado Sénior ou membro do WRC ou do WQAC, recebe Relatórios
-          de Delegados por defeito. Nota: a alteração pode levar até uma hora a
+          de Delegados por defeito. Nota: a alteração pode levar até 12 horas a
           tomar efeito.
-        #original_hash: 364624c
+        #original_hash: 0017d38
         delegate_reports_region: >-
           Se pretender receber todos os relatórios, deixe este campo em branco
-          (a opção pendente no topo). Nota: a alteração pode demorar até uma
-          hora para entrar em vigor.
+          (a opção pendente no topo). Nota: a alteração pode demorar até 12
+          horas para entrar em vigor.
         #original_hash: 0627e5c
         otp_attempt: >-
           Verifique a aplicação móvel configurada para uma password ou insira um
@@ -1191,6 +1191,22 @@ pt:
         400_contact_html: >-
           Se acha que isto é um erro, por favor <a href=%{contact_url}>clique
           aqui</a> para o reportar.
+        #original_hash: 508c106
+        comp_not_found: Competição Não Encontrada
+        #original_hash: c0e86d5
+        comp_not_found_action: >-
+          Não encontrámos a competição com o ID "%{comp_id}". Pesquise
+          utilizando a barra de pesquisa.
+        #original_hash: 695f7ba
+        comp_not_found_action_2: >-
+          Se seguiu um link de outro site para chegar aqui, por favor informe
+          esse site que o link está incorreto.
+        #original_hash: 7f8f419
+        session_expired: Sessão Expirou
+        #original_hash: f3e688a
+        session_expired_action: >-
+          A sua sessão expirou. Atualize a página, tente novamente ou inicie
+          sessão novamente para continuar.
     doorkeeper:
       applications:
         help:
@@ -2693,8 +2709,6 @@ pt:
         deverão estar disponíveis em breve.
       #original_hash: e205d73
       results_already_posted: Os resultados já foram publicados.
-      #original_hash: 376f461
-      results_posted: Resultados publicados com sucesso!
       #original_hash: afe3a23
       results_preview_alert: Está a visualizar resultados que ainda não foram publicados.
       #original_hash: 16dd227
@@ -2904,12 +2918,15 @@ pt:
         Encorajamos todos a se inscreverem nos eventos em que desejam competir
         através do registo online. No entanto, pode adicionar eventos ao seu
         registo até ao início do evento.
-      #original_hash: cf7be5d
+      #original_hash: 51ef4f3
       on_the_spot_registration_fee_html: >-
-        Registos no local da competição serão aceites com uma taxa base de
-        registo de %{on_the_spot_base_entry_fee}.
-      #original_hash: 1637bea
-      on_the_spot_registration_free: Registos no local serão aceites gratuitamente.
+        Registos no local da competição serão aceites se existirem vagas
+        disponíveis, com uma taxa base de registo de
+        %{on_the_spot_base_entry_fee}.
+      #original_hash: 2b4ea65
+      on_the_spot_registration_free: >-
+        Registos no local serão aceites gratuitamente se existirem vagas
+        disponíveis.
       #original_hash: f5f687d
       no_on_the_spot_registration: Não serão aceites registos no local da competição.
       #original_hash: 4df139d
@@ -4306,8 +4323,6 @@ pt:
     cancelled_by_html: 'Cancelado por %{name} em %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: Tem a certeza que pretende cancelar a competição?
-    #original_hash: 01de5ee
-    post_results: Submeter os resultados
     #original_hash: b6513f1
     results_posted_by_html: 'Colocado por %{poster_name} em %{date_time}'
     #original_hash: a6b5efe
@@ -4501,8 +4516,8 @@ pt:
         newcomer_checks: Verificações Novos Competidores
         #original_hash: f3d6278
         submit_results: Submeter resultados
-        #original_hash: e2d046b
-        match_scrambles: Submeter embaralhamentos
+        #original_hash: dd2e98f
+        upload_scrambles: Carregar embaralhamentos
         #original_hash: 4c9f914
         delegate_report: Relatório do Delegado
         #original_hash: b233e77
@@ -4686,6 +4701,8 @@ pt:
       paypal: PayPal
       #original_hash: 4d08ec5
       stripe: Stripe
+      #original_hash: 5cd5075
+      manual: Manual/Externo
     payment_setup:
       #original_hash: 0aa09ee
       external_dashboard: 'Painel %{provider}'
@@ -4705,6 +4722,8 @@ pt:
       confirm_account_disconnect: >-
         Tem a certeza de que deseja desconectar a conta %{provider}? Esta ação
         não pode ser desfeita.
+      #original_hash: a7bbd29
+      edit_account: Editar Conta
       #original_hash: ddea6cf
       supported_currency_warning: >-
         Certifique-se de que a moeda selecionada é suportada pela integração de
@@ -4716,8 +4735,10 @@ pt:
       provider_heading: 'Pagamentos %{provider}'
       #original_hash: 40a098a
       accept_payments_header: Aceitar Pagamentos de Registos
-      #original_hash: 7ebe178
-      connect_button: 'Conectar com %{provider}'
+      #original_hash: ebf1ae6
+      manual_payments_header: Configurar Pagamentos Manuais
+      #original_hash: 399052b
+      connect_button: 'Configurar %{provider}'
       connect_account_info:
         #original_hash: f3fdb64
         stripe: >-
@@ -4731,6 +4752,12 @@ pt:
           através da página da competição. Se ainda não possui uma conta PayPal
           Comercial, ainda pode clicar no botão abaixo e ele o guiará durante o
           processo.
+        #original_hash: d32cb06
+        manual: >-
+          Defina as instruções de pagamento para os competidores. Os
+          competidores poderão indicar quando efetuaram o pagamento e fornecer
+          uma referência de pagamento para que possa verificar com os seus
+          registos no serviço de pagamento externo que utiliza.
       connect_account_warning:
         #original_hash: 53adda3
         stripe: >-
@@ -4741,6 +4768,8 @@ pt:
           Conectar a sua conta PayPal dá ao site da WCA a capacidade de
           encaminhar pagamentos para si e emitir reembolsos diretamente na sua
           conta PayPal.
+        #original_hash: da39a3e
+        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         Esta competição está configurada para aceitar pagamentos através de
@@ -4772,6 +4801,14 @@ pt:
           display_name: Nome
           #original_hash: 84add5b
           primary_email: Email
+        manual:
+          #original_hash: e5f0dfd
+          payment_instructions: Instruções de pagamento (serão apresentadas na Página da Competição)
+          #original_hash: 5e7242c
+          payment_reference_label: >-
+            Que informações deve o competidor fornecer para que possa
+            identificar o pagamento? (por exemplo, número de referência do
+            pagamento/ID da conta/etc.)
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:

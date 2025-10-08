@@ -1,0 +1,70 @@
+type: object
+required:
+  - id
+  - title
+  - public_summary
+  - created_at
+  - updated_at
+  - resolved_at
+  - digest_worthy
+  - url
+  - tags
+  - competitions
+properties:
+  id:
+    type: string
+  title:
+    type: string
+  private_description:
+    type: string
+  public_summary:
+    type: string
+  created_at:
+    type: string
+    format: date-time
+  updated_at:
+    type: string
+    format: date-time
+  resolved_at:
+    type: string
+    format: date-time
+  digest_worthy:
+    type: boolean
+  digest_sent_at:
+    type: string
+    format: date-time
+  url:
+    type: string
+    format: uri
+  tags:
+    type: array
+    items:
+      type: object
+      required:
+        - name
+        - content_html
+        - url
+      properties:
+        name:
+          type: string
+        id:
+          type: number
+        url:
+          type: string
+          format: uri
+        content_html:
+          type: string
+  competitions:
+    type: array
+    items:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        comments:
+          type: string

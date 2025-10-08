@@ -9,6 +9,9 @@ class ResultsSubmissionController < ApplicationController
 
   def new
     @competition = competition_from_params
+
+    expected_feature_flag = ServerSetting.find_by(name: ServerSetting::WCA_LIVE_BETA_FEATURE_FLAG)
+    @show_wca_live_beta = expected_feature_flag.present? && params[:wcaLiveBeta] == expected_feature_flag.value
   end
 
   def newcomer_checks
@@ -59,6 +62,13 @@ class ResultsSubmissionController < ApplicationController
     ComputePotentialDuplicates.perform_later(job_run)
 
     render status: :ok, json: job_run
+  end
+
+  def upload_scrambles
+    @competition = Competition.includes(
+      scramble_file_uploads: ScrambleFileUpload::SERIALIZATION_INCLUDES,
+      **ScrambleFileUpload::SERIALIZATION_INCLUDES,
+    ).find(params[:competition_id])
   end
 
   def upload_json
@@ -136,9 +146,8 @@ class ResultsSubmissionController < ApplicationController
                                    .select { it.wcif_status == "accepted" && person_with_results.include?(it.registrant_id.to_s) }
                                    .map do |registration|
       InboxPerson.new({
-                        id: registration.registrant_id,
+                        id: [registration.registrant_id, competition.id],
                         wca_id: registration.wca_id || '',
-                        competition_id: competition.id,
                         name: registration.name,
                         country_iso2: registration.country.iso2,
                         gender: registration.gender,
@@ -154,7 +163,7 @@ class ResultsSubmissionController < ApplicationController
                        round_type_id: scramble_set.round_type_id,
                        round_id: scramble_set.matched_round_id,
                        group_id: scramble_set.alphabetic_group_index,
-                       is_extra: scramble.is_extra,
+                       is_extra: scramble.is_extra?,
                        scramble_num: scramble.ordered_index + 1,
                        scramble: scramble.scramble_string,
                      })

@@ -13,16 +13,17 @@ class Result < ApplicationRecord
   # we also need sure to query the correct competition as well through a composite key.
   belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
-  has_many :result_attempts
+  has_many :result_attempts, dependent: :destroy
 
-  after_commit :create_or_update_attempts
+  after_update_commit :create_or_update_attempts
 
   def create_or_update_attempts
-    attempts = (1..5).filter_map do |n|
-      value = public_send(:"value#{n}")
+    attempts = self.result_attempts_attributes(result_id: self.id)
 
-      { value: value, attempt_number: n, result_id: id } unless value.zero?
-    end
+    # Delete attempts when the value was set to 0
+    zero_attempts = self.skipped_attempt_numbers
+    ResultAttempt.where(result_id: id, attempt_number: zero_attempts).delete_all if zero_attempts.any?
+
     ResultAttempt.upsert_all(attempts)
   end
 
