@@ -743,7 +743,7 @@ class CompetitionsController < ApplicationController
   end
 
   def my_competitions
-    @my_competitions = Competition.my_competitions_for(current_user)
+    @my_competitions = current_user.my_competitions
   end
 
   def for_senior

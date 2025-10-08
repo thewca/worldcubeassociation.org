@@ -18,8 +18,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   def mine
-    user = require_user!
-    render json: Competition.my_competitions_for(user)
+    render json: require_user!.my_competitions
   end
 
   def competition_index

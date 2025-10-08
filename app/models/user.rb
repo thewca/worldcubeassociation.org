@@ -1555,4 +1555,55 @@ class User < ApplicationRecord
       new_user.potential_duplicate_persons.delete_all
     end
   end
+
+  MY_COMPETITIONS_SERIALIZATION_HASH = {
+    only: %w[id name website start_date end_date registration_open],
+    methods: %w[url city country_iso2 results_posted? visible? confirmed? cancelled? report_posted? short_display_name],
+    include: %w[championships],
+  }.freeze
+
+  def my_competitions
+    ActiveRecord::Base.connected_to(role: :read_replica) do
+      competition_ids = self.organized_competition_ids
+      competition_ids.concat(self.delegated_competition_ids)
+
+      user_registrations = self.registrations.joins(:competition).select(:competition_id, :competing_status)
+      registrations = user_registrations.accepted.merge(Competition.results_posted.invert_where).to_a
+      registrations.concat(user_registrations.waitlisted.merge(Competition.upcoming))
+      registrations.concat(user_registrations.pending.merge(Competition.upcoming))
+
+      registered_for_by_competition_id = registrations.uniq.to_h do |r|
+        [r.competition_id, r.competing_status]
+      end
+
+      competition_ids.concat(registered_for_by_competition_id.keys)
+      competition_ids.concat(self.person.competition_ids) if self.person.present?
+
+      # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
+      # For example, mailing all competitors about the cancellation.
+      # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
+      competitions = Competition.not_cancelled
+                                .or(Competition.over)
+                                .includes(:delegate_report, :championships)
+                                .find(competition_ids.uniq)
+                                .sort_by { it.start_date || 20.years.from_now }
+                                .reverse
+
+      past_competitions, not_past_competitions = competitions.partition(&:probably_over?)
+      bookmarked_competitions = self.competitions_bookmarked
+                                    .not_over
+                                    .sort_by(&:start_date)
+
+      options_with_reg_status = MY_COMPETITIONS_SERIALIZATION_HASH.deep_merge({
+                                                                                methods: MY_COMPETITIONS_SERIALIZATION_HASH[:methods] + %w[registration_status],
+                                                                              })
+
+      {
+        past_competitions: past_competitions.as_json(MY_COMPETITIONS_SERIALIZATION_HASH),
+        future_competitions: not_past_competitions.as_json(options_with_reg_status),
+        bookmarked_competitions: bookmarked_competitions.as_json(options_with_reg_status),
+        registrations_by_competition: registered_for_by_competition_id,
+      }
+    end
+  end
 end
