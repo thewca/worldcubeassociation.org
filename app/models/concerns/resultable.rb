@@ -209,6 +209,31 @@ module Resultable
     @solve_times ||= result_attempts.map { |r| SolveTime.new(event_id, :single, r.value) }.freeze
   end
 
+  private def valid_attempts_partition
+    self.attempts
+        .map
+        .with_index(1)
+        .partition { |value, _n| value != SolveTime::SKIPPED_VALUE }
+  end
+
+  def valid_attempts
+    self.valid_attempts_partition[0]
+  end
+
+  def skipped_attempts
+    self.valid_attempts_partition[1]
+  end
+
+  def result_attempts_attributes(**kwargs)
+    self.valid_attempts.map do |value, n|
+      { value: value, attempt_number: n, **kwargs }
+    end
+  end
+
+  def skipped_attempt_numbers
+    self.skipped_attempts.map { |_value, n| n }
+  end
+
   def worst_index
     sorted_solves_with_index.max[1]
   end

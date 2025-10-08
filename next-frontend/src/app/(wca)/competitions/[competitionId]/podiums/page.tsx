@@ -6,7 +6,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import ResultsTable from "@/components/results/ResultsTable";
+import { ResultsTable } from "@/components/results/ResultsTable";
 import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { getPodiums } from "@/lib/wca/competitions/getPodiums";
 import { Fragment } from "react";
@@ -70,7 +70,7 @@ export default async function PodiumsPage({
                   <Heading size="2xl">{events.byId[eventId].name}</Heading>
                   <ResultsTable
                     results={results.toSorted((a, b) => a.pos - b.pos)}
-                    competitionId={competitionId}
+                    t={t}
                     eventId={eventId}
                     isAdmin={false}
                   />

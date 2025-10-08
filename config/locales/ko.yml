@@ -750,13 +750,13 @@ ko:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 27c2251
+        #original_hash: c564b74
         receive_delegate_reports: >-
           귀하가 수석 파견위원 또는 WRC/WQAC의 회원인 경우 기본적으로 파견위원 보고서를 받게 됩니다. 참고: 변경 사항이
-          적용되기까지 최대 1시간이 걸릴 수 있습니다.
-        #original_hash: 364624c
+          적용되기까지 최대 12시간이 걸릴 수 있습니다.
+        #original_hash: 0017d38
         delegate_reports_region: >-
-          모든 보고서를 받으려면 이 필드를 비워두십시오(맨 위의 드롭다운 옵션). 참고: 변경 사항이 적용되기까지 최대 1시간이 걸릴
+          모든 보고서를 받으려면 이 필드를 비워두십시오(맨 위의 드롭다운 옵션). 참고: 변경 사항이 적용되기까지 최대 12시간이 걸릴
           수 있습니다.
         #original_hash: 0627e5c
         otp_attempt: 구성된 모바일 애플리케이션에서 일회용 비밀번호를 확인하거나 복구 코드 중 하나를 입력하십시오.
@@ -2521,10 +2521,12 @@ ko:
       event_change_deadline_default_html: >-
         참가 희망 종목은 온라인 참가 신청을 통해 등록하는 것을 권장하지만, 해당 종목의 경기가 시작되기 전까지 신청 내역에 참가 희망
         종목을 추가할 수 있습니다.
-      #original_hash: cf7be5d
-      on_the_spot_registration_fee_html: '현장 참가 신청시 기본 참가비는 %{on_the_spot_base_entry_fee}입니다.'
-      #original_hash: 1637bea
-      on_the_spot_registration_free: 현장 참가 신청은 무료로 가능합니다.
+      #original_hash: 51ef4f3
+      on_the_spot_registration_fee_html: >-
+        현장 참가 신청은 정원이 차지 않았을 시 승인될 수 있으며, 기본 참가비는
+        %{on_the_spot_base_entry_fee}입니다.
+      #original_hash: 2b4ea65
+      on_the_spot_registration_free: '현장 참가 신청은 정원이 차지 않았을 시에만 승인될 수 있으며, 참가 신청은 무료로 가능합니다.'
       #original_hash: f5f687d
       no_on_the_spot_registration: 현장 참가 신청은 허용되지 않습니다.
       #original_hash: 4df139d
