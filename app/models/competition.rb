@@ -62,6 +62,7 @@ class Competition < ApplicationRecord
   scope :not_visible, -> { where(show_at_all: false) }
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
+  scope :upcoming, -> { where(results_posted_at: nil).where.not(start_date: ..Date.today) }
   scope :between_dates, ->(start_date, end_date) { where("start_date <= ? AND end_date >= ?", end_date, start_date) }
   scope :end_date_passed_since, ->(num_days) { where(end_date: ...(num_days.days.ago)) }
   scope :belongs_to_region, lambda { |region_id|
@@ -96,6 +97,7 @@ class Competition < ApplicationRecord
   scope :not_confirmed, -> { where(confirmed_at: nil) }
   scope :pending_posting, -> { where.not(results_submitted_at: nil).where(results_posted_at: nil) }
   scope :pending_report_or_results_posting, -> { includes(:delegate_report).where(delegate_report: { posted_at: nil }).or(where(results_posted_at: nil)) }
+  scope :results_posted, -> { where.not(results_posted_at: nil).where.not(results_posted_by: nil) }
 
   enum :guest_entry_status, {
     unclear: 0,
@@ -3053,5 +3055,56 @@ class Competition < ApplicationRecord
 
     threshold_reached = fully_paid_registrations_count >= auto_close_threshold && auto_close_threshold.positive?
     threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
+  end
+
+  MY_COMPETITIONS_SERIALIZATION_HASH = {
+    only: %w[id name website start_date end_date registration_open],
+    methods: %w[url city country_iso2 results_posted? visible? confirmed? cancelled? report_posted? short_display_name],
+    include: %w[championships],
+  }.freeze
+
+  def self.my_competitions_for(user)
+    ActiveRecord::Base.connected_to(role: :read_replica) do
+      competition_ids = user.organized_competition_ids
+      competition_ids.concat(user.delegated_competition_ids)
+
+      user_registrations = user.registrations.joins(:competition).select(:competition_id, :competing_status)
+      registrations = user_registrations.accepted.merge(Competition.results_posted.invert_where)
+      registrations.concat(user_registrations.waitlisted.merge(Competition.upcoming))
+      registrations.concat(user_registrations.pending.merge(Competition.upcoming))
+
+      registered_for_by_competition_id = registrations.uniq.to_h do |r|
+        [r.competition_id, r.competing_status]
+      end
+
+      competition_ids.concat(registered_for_by_competition_id.keys)
+      competition_ids.concat(user.person.competition_ids) if user.person
+
+      # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
+      # For example, mailing all competitors about the cancellation.
+      # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
+      competitions = Competition.not_cancelled
+                                .or(Competition.over)
+                                .includes(:delegate_report, :championships)
+                                .find(competition_ids.uniq)
+                                .sort_by { it.start_date || 20.years.from_now }
+                                .reverse
+
+      past_competitions, not_past_competitions = competitions.partition(&:probably_over?)
+      bookmarked_competitions = user.competitions_bookmarked
+                                    .not_over
+                                    .sort_by(&:start_date)
+
+      options_with_reg_status = MY_COMPETITIONS_SERIALIZATION_HASH.deep_merge({
+                                                                                methods: MY_COMPETITIONS_SERIALIZATION_HASH[:methods] + %w[registration_status],
+                                                                              })
+
+      {
+        past_competitions: past_competitions.as_json(MY_COMPETITIONS_SERIALIZATION_HASH),
+        future_competitions: not_past_competitions.as_json(options_with_reg_status),
+        bookmarked_competitions: bookmarked_competitions.as_json(options_with_reg_status),
+        registrations_by_competition: registered_for_by_competition_id,
+      }
+    end
   end
 end

@@ -38,7 +38,7 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
       <UpcomingCompetitionTable
         competitions={competitions.futureCompetitions}
         permissions={permissions}
-        registrationStatuses={competitions.competingStatuses}
+        registrationStatuses={competitions.registrationsByCompetition}
         fallbackMessage={{
           key: 'competitions.my_competitions_table.no_upcoming_competitions_html',
           options: { link: `<a href="${competitionsUrl({})}">${I18n.t('competitions.my_competitions_table.competitions_list')}</a>` },
@@ -67,7 +67,7 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
       <p>{I18n.t('competitions.my_competitions.bookmarked_explanation')}</p>
       <UpcomingCompetitionTable
         competitions={competitions.bookmarkedCompetitions}
-        registrationStatuses={competitions.competingStatuses}
+        registrationStatuses={competitions.registrationsByCompetition}
         permissions={permissions}
         fallbackMessage={{ key: 'competitions.my_competitions_table.no_bookmarked_competitions' }}
       />
