@@ -31,20 +31,6 @@ module Resultable
       Format.c_find(format_id)
     end
 
-    def round
-      # This method is actually relatively expensive, it's definitely fine to
-      # use it if you're dealing with a single result, but if you're manipulating
-      # a bunch of them please don't use it as you likely have another mean
-      # to get a 'round' for your set of results.
-      # Using a 'find' here is intentional to pass the `includes(:rounds)` to
-      # avoid the n+1 query on competition_events if we were directly using
-      # competition.find_round_for.
-      super || Competition
-        .includes(:rounds)
-        .find_by(id: competition_id)
-        &.find_round_for(event_id, round_type_id, format_id)
-    end
-
     # Deliberately using `round_id` here instead of "simply" checking for `round`
     #   because the latter would try to fall back to `round_type_id`.
     validate :linked_round_consistent, if: :round_id?
