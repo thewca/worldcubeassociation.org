@@ -17,7 +17,6 @@ class Result < ApplicationRecord
 
   after_update :create_or_update_attempts
 
-
   def create_or_update_attempts
     attempts = self.result_attempts_attributes(result_id: self.id)
 
