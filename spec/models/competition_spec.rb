@@ -910,31 +910,28 @@ RSpec.describe Competition do
   describe "results" do
     let(:three_by_three) { Event.find "333" }
     let(:two_by_two) { Event.find "222" }
-    let!(:competition) do
-      c = create(:competition, events: [three_by_three, two_by_two])
-      # Create the results rounds right now so that we can use them later.
-      create(:round, competition: c, total_number_of_rounds: 2, number: 1, event_id: "333")
-      create(:round, competition: c, total_number_of_rounds: 2, number: 2, event_id: "333")
-      create(:round, competition: c, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100))
-      c
-    end
+    let!(:competition) { create(:competition, events: [three_by_three, two_by_two]) }
 
     let(:person_one) { create(:person, name: "One") }
     let(:person_two) { create(:person, name: "Two") }
     let(:person_three) { create(:person, name: "Three") }
     let(:person_four) { create(:person, name: "Four") }
 
-    let!(:r_333_1_first) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 1, person: person_one) }
-    let!(:r_333_1_second) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 2, person: person_two) }
-    let!(:r_333_1_third) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 3, person: person_three) }
-    let!(:r_333_1_fourth) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 4, person: person_four) }
+    let(:round_333_1) { create(:round, competition: competition, total_number_of_rounds: 2, number: 1, event_id: "333") }
+    let(:round_333_f) { create(:round, competition: competition, total_number_of_rounds: 2, number: 2, event_id: "333") }
+    let(:round_222_c) { create(:round, competition: competition, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100)) }
 
-    let!(:r_333_f_first) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 1, person: person_one) }
-    let!(:r_333_f_second) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 2, person: person_two) }
-    let!(:r_333_f_third) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 3, person: person_three) }
+    let!(:r_333_1_first) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 1, person: person_one) }
+    let!(:r_333_1_second) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 2, person: person_two) }
+    let!(:r_333_1_third) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 3, person: person_three) }
+    let!(:r_333_1_fourth) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 4, person: person_four) }
 
-    let!(:r_222_c_second_tied) { create(:result, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_two) }
-    let!(:r_222_c_first_tied) { create(:result, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_one) }
+    let!(:r_333_f_first) { create(:result, round: round_333_f, competition: competition, event_id: "333", round_type_id: "f", pos: 1, person: person_one) }
+    let!(:r_333_f_second) { create(:result, round: round_333_f, competition: competition, event_id: "333", round_type_id: "f", pos: 2, person: person_two) }
+    let!(:r_333_f_third) { create(:result, round: round_333_f, competition: competition, event_id: "333", round_type_id: "f", pos: 3, person: person_three) }
+
+    let!(:r_222_c_second_tied) { create(:result, round: round_222_c, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_two) }
+    let!(:r_222_c_first_tied) { create(:result, round: round_222_c, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_one) }
 
     it "events_with_podium_results" do
       result = competition.events_with_podium_results
