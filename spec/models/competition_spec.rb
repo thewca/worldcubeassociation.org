@@ -473,7 +473,8 @@ RSpec.describe Competition do
 
     it "warns if competition has results and haven't been posted" do
       competition = create(:competition, :confirmed, :announced, :visible, :past, results_posted_at: nil, results_posted_by: nil)
-      create(:result, person: create(:person), competition_id: competition.id)
+      round = create(:round, competition: competition, number: 2, event_id: "333oh")
+      create(:result, person: create(:person), competition_id: competition.id, round: round)
       wrt_member = create(:user, :wrt_member)
 
       expect(competition).to be_valid
@@ -698,8 +699,9 @@ RSpec.describe Competition do
     end
 
     it "changes the competition_id of results" do
-      r1 = create(:result, competition_id: competition.id)
-      r2 = create(:result, competition_id: competition.id)
+      round = create(:round, competition: competition, event_id: "333oh")
+      r1 = create(:result, competition_id: competition.id, round: round)
+      r2 = create(:result, competition_id: competition.id, round: round)
       competition.update_attribute(:id, "NewID2015")
       expect(r1.reload.competition_id).to eq "NewID2015"
       expect(r2.reload.competition_id).to eq "NewID2015"
@@ -1048,14 +1050,16 @@ RSpec.describe Competition do
     let!(:competition) { create(:competition) }
 
     it "works" do
-      create_list(:result, 2, competition: competition)
+      round = create(:round, competition: competition, event_id: "333oh")
+      create_list(:result, 2, competition: competition, round: round)
       expect(competition.competitors.count).to eq 2
     end
 
     it "handles competitors with multiple sub_ids" do
       person_with_sub_ids = create(:person_with_multiple_sub_ids)
-      create(:result, competition: competition, person: person_with_sub_ids)
-      create(:result, competition: competition)
+      round = create(:round, competition: competition, event_id: "333oh")
+      create(:result, competition: competition, person: person_with_sub_ids, round: round)
+      create(:result, competition: competition, round: round)
       expect(competition.competitors.count).to eq 2
     end
   end
