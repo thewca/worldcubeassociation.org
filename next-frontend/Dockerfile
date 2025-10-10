@@ -36,7 +36,7 @@ RUN corepack enable
 # Create the types and build
 RUN LOCALE_DIR="./src/lib/i18n/locales" yarn run build:translations
 RUN yarn types:openapi
-RUN NODE_ENV=production IS_COMPILING_ASSETS=1 NEXT_PUBLIC_WCA_FRONTEND_API_URL='https://www.worldcubeassociation.org/api/v0/' yarn run build
+RUN NODE_ENV=production IS_COMPILING_ASSETS=1 NEXT_PUBLIC_WCA_FRONTEND_API_URL='https://www.worldcubeassociation.org/api/' yarn run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
