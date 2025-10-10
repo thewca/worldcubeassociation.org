@@ -11,10 +11,10 @@ RSpec.describe "AuxiliaryDataComputation" do
     let(:competition_2017) { create(:competition, starts: Date.parse("2017-08-08")) }
 
     it "creates tables containing best results data for each person per event per year" do
-      create(:round, competition: competition_2016, total_number_of_rounds: 2)
-      create(:round, competition: competition_2016, total_number_of_rounds: 2, number: 2)
-      create(:result, event_id: "333", best: 750, average: 800, competition: competition_2016, person: person, round_type_id: "1")
-      create(:result, event_id: "333", best: 700, average: 850, competition: competition_2016, person: person, round_type_id: "f")
+      round_333 = create(:round, competition: competition_2016, total_number_of_rounds: 2)
+      round_333_f = create(:round, competition: competition_2016, total_number_of_rounds: 2, number: 2)
+      create(:result, event_id: "333", best: 750, average: 800, competition: competition_2016, person: person, round_type_id: "1", round: round_333)
+      create(:result, event_id: "333", best: 700, average: 850, competition: competition_2016, person: person, round_type_id: "f", round: round_333_f)
       create(:result, event_id: "333", best: 800, average: 900, competition: competition_2017, person: person)
       create(:result, event_id: "222", best: 100, average: 150, competition: competition_2017, person: person)
       AuxiliaryDataComputation.compute_concise_results

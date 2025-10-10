@@ -11,7 +11,7 @@ module Resultable
     belongs_to :round_type
     belongs_to :event
     belongs_to :format
-    belongs_to :round, optional: true
+    belongs_to :round
 
     # Forgetting to synchronize the results in WCA Live is a very common mistake,
     # so this error message is hinting the user to check that, even if it's
@@ -29,28 +29,6 @@ module Resultable
 
     def format
       Format.c_find(format_id)
-    end
-
-    def round
-      # This method is actually relatively expensive, it's definitely fine to
-      # use it if you're dealing with a single result, but if you're manipulating
-      # a bunch of them please don't use it as you likely have another mean
-      # to get a 'round' for your set of results.
-      # Using a 'find' here is intentional to pass the `includes(:rounds)` to
-      # avoid the n+1 query on competition_events if we were directly using
-      # competition.find_round_for.
-      super || Competition
-        .includes(:rounds)
-        .find_by(id: competition_id)
-        &.find_round_for(event_id, round_type_id, format_id)
-    end
-
-    validate :belongs_to_a_round
-    def belongs_to_a_round
-      return if round.present?
-
-      errors.add(:round_type,
-                 "Result must belong to a valid round. Please check that the tuple (competition_id, event_id, round_type_id, format_id) matches an existing round.")
     end
 
     # Deliberately using `round_id` here instead of "simply" checking for `round`

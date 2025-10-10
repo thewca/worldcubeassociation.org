@@ -13,11 +13,10 @@ module ResultsValidators
     MISMATCHED_RESULT_FORMAT_ERROR = :mismatched_result_format_error
     RESULT_OVER_TIME_LIMIT_ERROR = :result_over_time_limit_error
     RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = :results_over_cumulative_time_limit_error
-    NO_ROUND_INFORMATION_WARNING = :no_round_information_warning
     UNDEF_TL_WARNING = :undefined_time_limit_warning
     SUSPICIOUS_DNF_WARNING = :suspicious_dnf_warning
 
-    # Miscelaneous errors
+    # Miscellaneous errors
     MISSING_CUMULATIVE_ROUND_ID_ERROR = :missing_cumulative_round_id_error
 
     def self.description
@@ -52,14 +51,6 @@ module ResultsValidators
         results_by_round_id.each do |round_id, results_for_round|
           # get cutoff and time limit
           round_info = rounds_info_by_round_id[round_id]
-
-          unless round_info
-            # This situation may happen with "old" competitions
-            @warnings << ValidationWarning.new(NO_ROUND_INFORMATION_WARNING,
-                                               :results, competition.id,
-                                               round_id: round_id)
-            next
-          end
 
           time_limit_for_round = round_info.time_limit
 

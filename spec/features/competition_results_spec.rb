@@ -7,8 +7,10 @@ RSpec.feature "competition results" do
   let(:person_1) { create(:person, name: "Fast Cuber", country_id: "USA") }
   let(:person_2) { create(:person, name: "Slow Cuber", country_id: "USA") }
 
-  let!(:result_1) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 1, person: person_1) }
-  let!(:result_2) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 2, person: person_2) }
+  let!(:round) { create(:round, competition: competition, number: 2) }
+
+  let!(:result_1) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 1, person: person_1, round: round) }
+  let!(:result_2) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 2, person: person_2, round: round) }
 
   describe "winners" do
     it "displays the winners for each event" do
