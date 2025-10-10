@@ -68,15 +68,15 @@ RSpec.describe ERV do
       cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 50 * 100)
       # Add some rounds to trigger the rounds validation.
       round_333_oh_1 = create(:round,
-             competition: competition1, event_id: "333oh",
-             total_number_of_rounds: 2)
+                              competition: competition1, event_id: "333oh",
+                              total_number_of_rounds: 2)
       # This round is added to trigger the missing round error.
-      round_333_oh_f =  create(:round,
+      create(:round,
              competition: competition1, event_id: "333oh",
              number: 2, total_number_of_rounds: 2)
       round_333_f = create(:round, competition: competition1, event_id: "333")
       round_555_f = create(:round, competition: competition2, event_id: "555",
-                     cutoff: cutoff)
+                                   cutoff: cutoff)
 
       [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym

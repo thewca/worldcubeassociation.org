@@ -190,7 +190,7 @@ RSpec.describe IRV do
       round_333mbf = create(:round, competition: competition1, event_id: "333mbf", format_id: "3")
       tl = TimeLimit.new(centiseconds: 2.minutes.in_centiseconds, cumulative_round_ids: ["333bf-r1"])
       round_333bf = create(:round, competition: competition1, event_id: "333bf",
-                     format_id: "3", time_limit: tl)
+                                   format_id: "3", time_limit: tl)
       [Result, InboxResult].each do |model|
         warns = []
         result_kind = model.model_name.singular.to_sym
