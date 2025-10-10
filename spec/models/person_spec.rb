@@ -127,7 +127,7 @@ RSpec.describe Person do
   describe "#championship_podiums" do
     let!(:fr_nationals2016) { create(:competition, championship_types: ["FR"], starts: Date.new(2016, 1, 1)) }
     let!(:us_nationals2017) { create(:competition, championship_types: ["US"], starts: Date.new(2017, 1, 1)) }
-    let!(:us_nationals2017_333_round) { create(:round, competition: us_nationals2017)}
+    let!(:us_nationals2017_333_round) { create(:round, competition: us_nationals2017) }
     let!(:fr_competitor) do
       create(:person, country_id: "France").tap do |fr_competitor|
         create(:result, person: fr_competitor, competition: fr_nationals2016, pos: 1, event_id: "333")
