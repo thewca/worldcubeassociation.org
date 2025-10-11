@@ -8,6 +8,7 @@ class PaymentIntent < ApplicationRecord
   belongs_to :cancellation_source, polymorphic: true, optional: true
 
   validate :wca_status_consistency
+  validates :holder_id, uniqueness: { scope: %i[holder_type payment_record_type] }, if: -> { payment_record_type == 'ManualPaymentRecord' }
 
   scope :started, -> { where.not(wca_status: 'created') }
   scope :incomplete, -> { where.not(wca_status: %w[succeeded canceled]) }
@@ -75,7 +76,6 @@ class PaymentIntent < ApplicationRecord
         end
       when PaymentIntent.wca_statuses[:created],
         PaymentIntent.wca_statuses[:pending]
-        # Reset by the gateway
         self.update!(
           confirmed_at: nil,
           confirmation_source: nil,
@@ -83,6 +83,10 @@ class PaymentIntent < ApplicationRecord
           cancellation_source: nil,
           wca_status: updated_wca_status,
         )
+      when PaymentIntent.wca_statuses[:requires_capture]
+        payment_account.retrieve_payments(self) do |payment|
+          yield payment if block_given?
+        end
       end
 
       self.update_common_attributes!(api_intent, updated_wca_status)
@@ -101,16 +105,9 @@ class PaymentIntent < ApplicationRecord
     end
 
     def wca_status_consistency
-      # Check that payment_record's status is in sync with wca_status
-      if payment_record_type == 'StripeRecord'
-        errors.add(:wca_status, "#{wca_status} is not compatible with StripeRecord status: #{payment_record.stripe_status}") unless
-          StripeRecord::WCA_TO_STRIPE_STATUS_MAP[wca_status.to_sym].include?(payment_record.stripe_status)
-      elsif payment_record_type == 'PaypalRecord'
-        errors.add(:wca_status, "#{wca_status} is not compatible with PaypalRecord status: #{payment_record.paypal_status}") unless
-          PaypalRecord::WCA_TO_PAYPAL_STATUS_MAP[wca_status.to_sym].include?(payment_record.paypal_status)
-      else
-        raise "No status combination validation defined for: #{payment_record_type}"
-      end
+      status_map = payment_record_type.safe_constantize::WCA_TO_PROVIDER_STATUS_MAP
+      error_string = "#{wca_status} is not compatible with #{payment_record_type} status: #{payment_record.provider_status}"
+      errors.add(:wca_status, error_string) unless status_map[wca_status.to_sym].include?(payment_record.provider_status)
 
       # Succeeded/cancelled statuses require timestamps, and vice-versa
       errors.add(:confirmed_at, "should only be non-nil if wca_status is `succeeded`") if

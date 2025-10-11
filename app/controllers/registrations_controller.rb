@@ -434,7 +434,6 @@ class RegistrationsController < ApplicationController
   end
 
   def payment_completion
-    # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
     competition_id = params[:competition_id]
     competition = Competition.find(competition_id)
 
@@ -446,14 +445,7 @@ class RegistrationsController < ApplicationController
       return redirect_to competition_register_path(competition)
     end
 
-    stored_record, secret_check = payment_account.find_payment_from_request(params)
-
-    if stored_record.blank?
-      flash[:error] = t("registrations.payment_form.errors.generic.not_found", provider: t("payments.payment_providers.#{payment_integration}"))
-      return redirect_to competition_register_path(competition)
-    end
-
-    stored_intent = stored_record.payment_intent
+    stored_intent = payment_account.find_payment_intent_from_request(params)
 
     if stored_intent.blank?
       flash[:error] = t("registrations.payment_form.errors.generic.intent_not_found", provider: t("payments.payment_providers.#{payment_integration}"))
@@ -463,9 +455,13 @@ class RegistrationsController < ApplicationController
     # Some API gateways like Stripe provide the client_secret as a kind of "checksum" (or fraud protection)
     #   back to us upon redirect. Other providers (like PayPal…) unfortunately don't.
     #   So we only compare this secret value with our stored intent record if it's actually provided to us
-    if secret_check.present? && stored_intent.client_secret != secret_check
-      flash[:error] = t("registrations.payment_form.errors.generic.secret_invalid", provider: t("payments.payment_providers.#{payment_integration}"))
-      return redirect_to competition_register_path(competition)
+    # TODO: Refactor `secret_check` to `validate_token`, and consider making this a PaymentIntent method
+    if payment_integration == :stripe
+      secret_check = params[:payment_intent_client_secret]
+      unless secret_check.present? && stored_intent.client_secret == secret_check
+        flash[:error] = t("registrations.payment_form.errors.generic.secret_invalid", provider: t("payments.payment_providers.#{payment_integration}"))
+        return redirect_to competition_register_path(competition)
+      end
     end
 
     remote_intent = stored_intent.retrieve_remote
