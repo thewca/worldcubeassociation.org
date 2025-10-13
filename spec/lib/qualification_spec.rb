@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "rails_helper"
+
 RSpec.describe Qualification do
   let(:user) { create(:user_with_wca_id) }
   let(:first_competition) do
