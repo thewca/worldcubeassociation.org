@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe CompetitionsHelper do
   let(:competition) { create(:competition) }
+  let(:final_round) { create(:round, competition: competition) }
 
   describe "#winners" do
     context "333" do
@@ -32,7 +33,6 @@ RSpec.describe CompetitionsHelper do
       let!(:unrelated_podium_result) { add_result(1, "joe", event_id: "333oh", wca_id: "2006JOJO01") }
 
       it "announces top 3 in final" do
-        final_round = create(:round, competition: competition)
         add_result(1, "Jeremy", round: final_round)
         add_result(2, "Dan", round: final_round)
         add_result(3, "Steven", round: final_round)
@@ -44,7 +44,6 @@ RSpec.describe CompetitionsHelper do
       end
 
       it "handles only 2 people in final" do
-        final_round = create(:round, competition: competition)
         add_result(1, "Jeremy", round: final_round)
         add_result(2, "Dan", round: final_round)
 
@@ -61,7 +60,6 @@ RSpec.describe CompetitionsHelper do
       end
 
       it "handles DNF averages in the podium" do
-        final_round = create(:round, competition: competition)
         add_result(1, "Jeremy", round: final_round)
         add_result(2, "Dan", round: final_round)
         add_result(3, "Steven", dnf: true, round: final_round)
@@ -73,7 +71,6 @@ RSpec.describe CompetitionsHelper do
       end
 
       it "handles ties in the podium" do
-        final_round = create(:round, competition: competition)
         add_result(1, "Jeremy", round: final_round)
         add_result(1, "Dan", wca_id: "2006DADA01", round: final_round)
         add_result(3, "Steven", dnf: true, round: final_round)
@@ -84,7 +81,6 @@ RSpec.describe CompetitionsHelper do
       end
 
       it "handles tied third place" do
-        final_round = create(:round, competition: competition)
         add_result(1, "Jeremy", round: final_round)
         add_result(2, "Dan", round: final_round)
         add_result(3, "Steven", dnf: true, round: final_round)
@@ -120,8 +116,9 @@ RSpec.describe CompetitionsHelper do
                average: 60.seconds.in_centiseconds)
       end
 
+      let(:final_round) { create(:round, competition: competition, format_id: "3", event_id: "333bf") }
+
       it "announces top 3 in final" do
-        final_round = create(:round, competition: competition, format_id: "3", event_id: "333bf")
         add_result(1, "Jeremy", round: final_round)
         add_result(2, "Dan", round: final_round)
         add_result(3, "Steven", round: final_round)
@@ -156,8 +153,9 @@ RSpec.describe CompetitionsHelper do
                average: dnf ? SolveTime::DNF_VALUE : 2767)
       end
 
+      let(:final_round) { create(:round, competition: competition, format_id: "m", event_id: "333fm") }
+
       it "announces top 3 in final" do
-        final_round = create(:round, competition: competition, format_id: "m", event_id: "333fm")
         add_result(1, "Jeremy", round: final_round)
         add_result(2, "Dan", round: final_round)
         add_result(3, "Steven", round: final_round)
@@ -169,7 +167,6 @@ RSpec.describe CompetitionsHelper do
       end
 
       it "handles DNF averages in the podium" do
-        final_round = create(:round, competition: competition, format_id: "m", event_id: "333fm")
         add_result(1, "Jeremy", round: final_round)
         add_result(2, "Dan", round: final_round)
         add_result(3, "Steven", dnf: true, round: final_round)
@@ -208,8 +205,9 @@ RSpec.describe CompetitionsHelper do
                average: 0)
       end
 
+      let(:final_round) { create(:round, competition: competition, format_id: "3", event_id: "333mbf") }
+
       it "announces top 3 in final" do
-        final_round = create(:round, competition: competition, format_id: "3", event_id: "333mbf")
         add_result(1, "Jeremy", round: final_round)
         add_result(2, "Dan", round: final_round)
         add_result(3, "Steven", round: final_round)
