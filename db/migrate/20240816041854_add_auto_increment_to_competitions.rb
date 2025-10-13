@@ -27,6 +27,8 @@ class AddAutoIncrementToCompetitions < ActiveRecord::Migration[7.1]
     rename_column :competitions, :competition_id, :id
 
     execute "ALTER TABLE competitions ADD PRIMARY KEY(id)"
+
+    add_foreign_key :tickets_competition_result, :competitions
   end
 end
 # rubocop:enable all
