@@ -1,4 +1,5 @@
-# rubocop:disable all
+# rubocop:disable Rails/BulkChangeTable
+# rubocop:disable Rails/DangerousColumnNames
 # frozen_string_literal: true
 
 class AddAutoIncrementToCompetitions < ActiveRecord::Migration[7.1]
@@ -17,14 +18,15 @@ class AddAutoIncrementToCompetitions < ActiveRecord::Migration[7.1]
   end
 
   def down
-    change_column :Competitions, :id, :integer, auto_increment: false
-    execute "ALTER TABLE Competitions DROP PRIMARY KEY"
+    change_column :competitions, :id, :integer, auto_increment: false
+    execute "ALTER TABLE competitions DROP PRIMARY KEY"
 
-    remove_column :Competitions, :id, :primary_key
+    remove_column :competitions, :id, :primary_key
 
-    remove_index :Competitions, :competition_id
-    rename_column :Competitions, :competition_id, :id
+    remove_index :competitions, :competition_id
+    rename_column :competitions, :competition_id, :id
 
-    execute "ALTER TABLE Competitions ADD PRIMARY KEY(id)"
+    execute "ALTER TABLE competitions ADD PRIMARY KEY(id)"
   end
 end
+# rubocop:enable all
