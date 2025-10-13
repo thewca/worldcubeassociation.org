@@ -58,7 +58,7 @@ RSpec.describe Result do
 
   context "associations" do
     it "validates competition_id" do
-      result = build(:result, competition_id: "foo", skip_round_creation: true)
+      result = build(:result, competition_id: "foo")
       expect(result).to be_invalid_with_errors(competition: ["must exist"])
     end
 
@@ -68,18 +68,18 @@ RSpec.describe Result do
     end
 
     it "validates event_id" do
-      result = build(:result, event_id: "foo", skip_round_creation: true)
+      result = build(:result, event_id: "foo")
       expect(result).to be_invalid_with_errors(event: ["must exist"])
     end
 
     it "validates format_id" do
-      result = build(:result, format_id: "foo", skip_round_creation: true)
+      result = build(:result, format_id: "foo")
       expect(result).to be_invalid_with_errors(format: ["must exist"])
     end
 
-    it "validates round_id" do
-      result = build(:result, round_type_id: "foo", skip_round_creation: true)
-      expect(result).to be_invalid_with_errors(round: ["must exist"])
+    it "validates round_type_id" do
+      result = build(:result, round_type_id: "foo")
+      expect(result).to be_invalid_with_errors(round_type: ["must exist"])
     end
 
     it "person association always looks for sub_id 1" do
