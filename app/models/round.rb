@@ -8,7 +8,7 @@ class Round < ApplicationRecord
 
   has_one :event, through: :competition_event
   # CompetitionEvent uses the cached value
-  delegate :event, to: :competition_event
+  delegate :event_id, :event, to: :competition_event
 
   has_many :registrations, through: :competition_event
 
@@ -93,8 +93,6 @@ class Round < ApplicationRecord
       cutoff ? "g" : "3"
     end
   end
-
-  delegate :id, to: :event, prefix: true
 
   def formats_used
     cutoff_format = Format.c_find!(cutoff.number_of_attempts.to_s) if cutoff
