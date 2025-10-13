@@ -3566,17 +3566,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:15.5.5":
+"@next/env@npm:15.5.5, @next/env@npm:^15.1.5":
   version: 15.5.5
   resolution: "@next/env@npm:15.5.5"
   checksum: 10c0/82e87dea8d037c9d105b89f6246c21ba650e75506f979a1bffe6f81f0e740a3edb8a0c239804de0813361f19a4f1490f746919c1861607f8fcc351f81bee5140
-  languageName: node
-  linkType: hard
-
-"@next/env@npm:^15.1.5":
-  version: 15.5.4
-  resolution: "@next/env@npm:15.5.4"
-  checksum: 10c0/bcf043a353e601321e6d4fb190796d7f098a08007fe2039b6a6b384df641782abfaa8e1d1d9c85ab6987323979f4f75cd4fefd3fd17d2400b881541481bee474
   languageName: node
   linkType: hard
 
@@ -8401,19 +8394,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:^3.2.4":
-  version: 3.2.7
-  resolution: "dompurify@npm:3.2.7"
-  dependencies:
-    "@types/trusted-types": "npm:^2.0.7"
-  dependenciesMeta:
-    "@types/trusted-types":
-      optional: true
-  checksum: 10c0/d41bb31a72f1acdf9b84c56723c549924b05d92a39a15bd8c40bec9007ff80d5fccf844bc53ee12af5b69044f9a7ce24a1e71c267a4f49cf38711379ed8c1363
-  languageName: node
-  linkType: hard
-
-"dompurify@npm:^3.3.0":
+"dompurify@npm:^3.2.4, dompurify@npm:^3.3.0":
   version: 3.3.0
   resolution: "dompurify@npm:3.3.0"
   dependencies:
