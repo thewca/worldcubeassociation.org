@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Competition < ApplicationRecord
+  # Overwrite primary key to test non-destructive migration to stable id
+  self.primary_key = "competition_id"
+
   # We need this default order, tests rely on it.
   has_many :competition_events, -> { order(:event_id) }, dependent: :destroy
   has_many :events, through: :competition_events
