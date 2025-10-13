@@ -59,8 +59,8 @@ class Round < ApplicationRecord
   end
 
   # The event dictates which formats are even allowed in the first place, hence the prefix
-  delegate :format_ids, to: :event, prefix: :allowed
-  validates :format_id, inclusion: { in: :allowed_format_ids }
+  delegate :formats, :format_ids, to: :event, prefix: :allowed
+  validates :format, inclusion: { in: :allowed_formats, message: ->(round, data) { "'#{data[:value].id}' is not allowed for '#{round.event_id}'" } }
 
   validates :advancement_condition, absence: { if: :final_round? }
 
