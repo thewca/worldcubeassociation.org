@@ -30,7 +30,8 @@ RSpec.describe CompetitionsHelper do
                average: dnf ? SolveTime::DNF_VALUE : 999)
       end
 
-      let!(:unrelated_podium_result) { add_result(1, "joe", event_id: "333oh", wca_id: "2006JOJO01") }
+      let!(:unrelated_round) { create(:round, competition: competition, event_id: "333oh") }
+      let!(:unrelated_podium_result) { add_result(1, "joe", event_id: "333oh", wca_id: "2006JOJO01", round: unrelated_round) }
 
       it "announces top 3 in final" do
         add_result(1, "Jeremy", round: final_round)
@@ -53,7 +54,7 @@ RSpec.describe CompetitionsHelper do
       end
 
       it "handles only 1 person in final" do
-        add_result(1, "Jeremy")
+        add_result(1, "Jeremy", round: final_round)
 
         text = helper.winners(competition, Event.c_find("333"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with an average of 9.99 seconds in the 3x3x3 Cube event."

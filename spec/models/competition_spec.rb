@@ -990,7 +990,7 @@ RSpec.describe Competition do
 
   it "when id is changed, foreign keys are updated as well" do
     competition = create(:competition, :with_delegate, :with_organizer, :with_delegate_report, :registration_open)
-    create(:result, competition_id: competition.id)
+    create(:result, competition: competition)
     create(:competition_tab, competition: competition)
     create(:registration, competition: competition)
 

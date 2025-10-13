@@ -21,12 +21,12 @@ RSpec.describe Person do
       expect(person.likely_delegates).to eq [delegate]
 
       competition2 = create(:competition, delegates: [delegate], starts: 3.days.ago)
-      create(:result, person: person, competition_id: competition2.id)
+      create(:result, person: person, competition: competition2)
       expect(person.likely_delegates).to eq [delegate]
 
       new_delegate = create(:delegate)
       competition3 = create(:competition, delegates: [new_delegate], starts: 2.days.ago)
-      create(:result, person: person, competition_id: competition3.id)
+      create(:result, person: person, competition: competition3)
       expect(person.likely_delegates).to eq [delegate, new_delegate]
     end
   end
