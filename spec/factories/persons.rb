@@ -41,7 +41,7 @@ FactoryBot.define do
     factory :person_who_has_competed_once do
       after(:create) do |person|
         competition = FactoryBot.create(:competition, :with_delegate)
-        FactoryBot.create(:result, person: person, competition_id: competition.id)
+        FactoryBot.create(:result, person: person, competition: competition)
       end
     end
   end
