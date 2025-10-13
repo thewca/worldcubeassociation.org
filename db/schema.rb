@@ -1598,7 +1598,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
   add_foreign_key "ticket_comments", "users", column: "acting_user_id"
   add_foreign_key "ticket_logs", "ticket_stakeholders", column: "acting_stakeholder_id"
   add_foreign_key "ticket_logs", "users", column: "acting_user_id"
-  add_foreign_key "tickets_competition_result", "competitions"
   add_foreign_key "user_avatars", "users"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"
