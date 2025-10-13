@@ -28,7 +28,7 @@
     "@hello-pangea/dnd": "^18.0.1",
     "@rails/actioncable": "^8.0.300",
     "@rails/ujs": "^7.1.502",
-    "@stripe/react-stripe-js": "^5.0.0",
+    "@stripe/react-stripe-js": "^5.2.0",
     "@stripe/stripe-js": "^8.0.0",
     "@tanstack/react-query": "^5.90.2",
     "@tanstack/react-table": "^8.21.3",
