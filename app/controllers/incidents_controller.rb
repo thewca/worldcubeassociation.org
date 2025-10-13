@@ -6,18 +6,18 @@ class IncidentsController < ApplicationController
 
   # Incident should have a public summary when resolved, so not everything is
   # WRC/Delegates-only.
-  before_action -> { authenticate_user! && redirect_to_root_unless_user(:can_manage_incidents?) }, except: [
-    :index,
-    :show,
+  before_action -> { authenticate_user! && redirect_to_root_unless_user(:can_manage_incidents?) }, except: %i[
+    index
+    show
   ]
 
   def index
     base_model = Incident.includes(:competitions, :incident_tags)
-    if current_user&.can_view_delegate_matters?
-      @incidents = base_model.all
-    else
-      @incidents = base_model.resolved
-    end
+    @incidents = if current_user&.can_manage_incidents?
+                   base_model.all
+                 else
+                   base_model.resolved
+                 end
 
     respond_to do |format|
       format.html do
@@ -36,9 +36,7 @@ class IncidentsController < ApplicationController
 
   def show
     set_incident
-    unless @incident.resolved?
-      redirect_to_root_unless_user(:can_view_delegate_matters?)
-    end
+    redirect_to_root_unless_user(:can_manage_incidents?) unless @incident.resolved?
   end
 
   def new
@@ -68,6 +66,8 @@ class IncidentsController < ApplicationController
       updated_attrs[:digest_sent_at] = Time.now
     when "resolved"
       updated_attrs[:resolved_at] = Time.now
+    when "unresolve"
+      updated_attrs[:resolved_at] = nil
     else
       flash[:danger] = "Unrecognized action: '#{params[:kind]}'"
       return redirect_to @incident
@@ -118,7 +118,7 @@ class IncidentsController < ApplicationController
         :public_summary,
         :tags,
         :digest_worthy,
-        incident_competitions_attributes: [:id, :competition_id, :comments, :_destroy],
+        incident_competitions_attributes: %i[id competition_id comments _destroy],
       )
     end
 end

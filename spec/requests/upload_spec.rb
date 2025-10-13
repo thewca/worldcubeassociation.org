@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ResultsSubmissionController, type: :request do
+RSpec.describe ResultsSubmissionController do
   let(:image) { Rack::Test::UploadedFile.new('spec/support/logo.png', 'image/png') }
 
   context "not signed in" do
@@ -15,11 +15,11 @@ RSpec.describe ResultsSubmissionController, type: :request do
   end
 
   context "signed in as delegate" do
-    sign_in { FactoryBot.create :delegate }
+    before { sign_in create :delegate }
 
     it "can upload an image" do
       post upload_image_path, params: { image: image }
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json['filePath']).not_to be_nil
     end
   end

@@ -2,7 +2,9 @@
 
 class Api::V0::ApiController < ApplicationController
   include Rails::Pagination
+
   include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
+  rate_limit to: 60, within: 1.minute if Rails.env.production?
   protect_from_forgery with: :null_session
   before_action :doorkeeper_authorize!, only: [:me]
   rescue_from WcaExceptions::ApiException do |e|
@@ -24,37 +26,20 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def auth_results
-    if !current_user
-      return render status: :unauthorized, json: { error: "Please log in" }
-    end
-    if !current_user.can_admin_results?
-      return render status: :forbidden, json: { error: "Cannot adminster results" }
-    end
+    return render status: :unauthorized, json: { error: "Please log in" } unless current_user
+    return render status: :forbidden, json: { error: "Cannot adminster results" } unless current_user.can_admin_results?
 
     render json: { status: "ok" }
   end
 
   def user_qualification_data
     date = cutoff_date
-    return render json: { error: 'Invalid date format. Please provide an iso8601 date string.' }, status: :bad_request unless date.present?
+    return render json: { error: 'Invalid date format. Please provide an iso8601 date string.' }, status: :bad_request if date.blank?
     return render json: { error: 'You cannot request qualification data for a future date.' }, status: :bad_request if date > Date.current
 
     user = User.find(params.require(:user_id))
-    return render json: [] unless user.person.present?
 
-    # Compile singles
-    best_singles_by_cutoff = user.person.best_singles_by(date)
-    single_qualifications = best_singles_by_cutoff.map do |event, time|
-      qualification_data(event, :single, time, date)
-    end
-
-    # Compile averages
-    best_averages_by_cutoff = user.person&.best_averages_by(date)
-    average_qualifications = best_averages_by_cutoff.map do |event, time|
-      qualification_data(event, :average, time, date)
-    end
-
-    render json: single_qualifications + average_qualifications
+    render json: Registrations::Helper.user_qualification_data(user, date)
   end
 
   private def cutoff_date
@@ -63,16 +48,6 @@ class Api::V0::ApiController < ApplicationController
     else
       Date.current
     end
-  end
-
-  private def qualification_data(event, type, time, date)
-    raise ArgumentError.new("'type' may only contain the symbols `:single` or `:average`") unless [:single, :average].include?(type)
-    {
-      eventId: event,
-      type: type,
-      best: time,
-      on_or_before: date.iso8601,
-    }
   end
 
   def scramble_program
@@ -136,6 +111,10 @@ class Api::V0::ApiController < ApplicationController
     }
   end
 
+  def known_timezones
+    render json: Country::SUPPORTED_TIMEZONES
+  end
+
   def search(*models)
     query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
 
@@ -156,13 +135,13 @@ class Api::V0::ApiController < ApplicationController
       end
     end
 
-    if current_user && current_user.can_admin_results?
-      options = {
-        private_attributes: %w[incorrect_wca_id_claim_count dob],
-      }
-    else
-      options = {}
-    end
+    options = if current_user&.can_admin_results?
+                {
+                  private_attributes: %w[incorrect_wca_id_claim_count dob],
+                }
+              else
+                {}
+              end
 
     render status: :ok, json: { result: result.as_json(options) }
   end
@@ -205,10 +184,10 @@ class Api::V0::ApiController < ApplicationController
   def delegates_search_index
     # TODO: There is a `uniq` call at the end which I feel shouldn't be necessary?!
     #   Postponing investigation until the Roles system migration is complete.
-    all_delegates = UserGroup.includes(:active_users).delegate_regions.flat_map(&:active_users).uniq
+    all_delegates = UserGroup.includes(active_users: [:current_avatar]).delegate_regions.flat_map(&:active_users).uniq
 
     search_index = all_delegates.map do |delegate|
-      delegate.slice(:id, :name, :wca_id).merge({ thumb_url: delegate.avatar.url(:thumb) })
+      delegate.slice(:id, :name, :wca_id).merge({ thumb_url: delegate.avatar.thumbnail_url })
     end
 
     render json: search_index
@@ -218,19 +197,19 @@ class Api::V0::ApiController < ApplicationController
     concise_results_date = ComputeAuxiliaryData.end_date || Date.current
     cache_key = ["records", concise_results_date.iso8601]
     json = Rails.cache.fetch(cache_key) do
-      records = ActiveRecord::Base.connection.exec_query <<-SQL
-        SELECT 'single' type, MIN(best) value, countryId country_id, eventId event_id
-        FROM ConciseSingleResults
-        GROUP BY countryId, eventId
+      records = ActiveRecord::Base.connection.exec_query <<-SQL.squish
+        SELECT 'single' type, MIN(best) value, country_id, event_id
+        FROM concise_single_results
+        GROUP BY country_id, event_id
         UNION ALL
-        SELECT 'average' type, MIN(average) value, countryId country_id, eventId event_id
-        FROM ConciseAverageResults
-        GROUP BY countryId, eventId
+        SELECT 'average' type, MIN(average) value, country_id, event_id
+        FROM concise_average_results
+        GROUP BY country_id, event_id
       SQL
       records = records.to_a
       {
         world_records: records_by_event(records),
-        continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continentId }.transform_values!(&method(:records_by_event)),
+        continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continent_id }.transform_values!(&method(:records_by_event)),
         national_records: records.group_by { |record| record["country_id"] }.transform_values!(&method(:records_by_event)),
       }
     end
@@ -238,12 +217,19 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def export_public
-    timestamp = DumpPublicResultsDatabase.start_date
+    timestamp = DumpPublicResultsDatabase.successful_start_date
+
+    _, sql_filesize = DbDumpHelper.cached_results_export_info("sql", timestamp)
+    _, tsv_filesize = DbDumpHelper.cached_results_export_info("tsv", timestamp)
 
     render json: {
       export_date: timestamp&.iso8601,
       sql_url: "#{sql_permalink_url}.zip",
+      sql_filesize_bytes: sql_filesize,
       tsv_url: "#{tsv_permalink_url}.zip",
+      tsv_filesize_bytes: tsv_filesize,
+      developer_url: DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK),
+      readme: DatabaseController.render_readme(self, DateTime.now),
     }
   end
 
@@ -255,16 +241,19 @@ class Api::V0::ApiController < ApplicationController
     end
   end
 
+  def authenticated_user
+    current_api_user || current_user
+  end
+
   # Find the user that owns the access token.
   # From: https://github.com/doorkeeper-gem/doorkeeper#authenticated-resource-owner
   private def current_api_user
-    return @current_api_user if defined?(@current_api_user)
-
-    @current_api_user = User.find_by_id(doorkeeper_token&.resource_owner_id)
+    @current_api_user ||= User.find_by(id: doorkeeper_token&.resource_owner_id) if doorkeeper_token&.accessible?
   end
 
   private def require_user!
     raise WcaExceptions::MustLogIn.new if current_api_user.nil? && current_user.nil?
+
     current_api_user || current_user
   end
 
@@ -273,10 +262,9 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def competition_series
-    competition_series = CompetitionSeries.find_by_wcif_id(params[:id])
-    if !competition_series.present? || competition_series.public_competitions.empty?
-      raise WcaExceptions::NotFound.new("Competition series with ID #{params[:id]} not found")
-    end
+    competition_series = CompetitionSeries.find_by(wcif_id: params[:id])
+    raise WcaExceptions::NotFound.new("Competition series with ID #{params[:id]} not found") if competition_series.blank? || competition_series.public_competitions.empty?
+
     render json: competition_series.to_wcif
   end
 end

@@ -47,9 +47,10 @@ class PaypalRecord < ApplicationRecord
     created: %w[created],
     pending: %w[payer_action_required],
     processing: %w[saved],
+    requires_capture: %w[approved],
     partial: %w[],
     failed: %w[],
-    succeeded: %w[approved completed], # TODO: In PayPal, WE are the ones who have to make the payment succeed, by "capturing" an already approved payment
+    succeeded: %w[completed],
     canceled: %w[voided],
   }.freeze
 
@@ -75,9 +76,30 @@ class PaypalRecord < ApplicationRecord
   end
 
   def determine_wca_status
-    result = WCA_TO_PAYPAL_STATUS_MAP.find { |key, values| values.include?(self.paypal_status) }
+    result = WCA_TO_PAYPAL_STATUS_MAP.find { |_key, values| values.include?(self.paypal_status) }
     result&.first || raise("No associated wca_status for paypal_status: #{self.paypal_status} - our tests should prevent this from happening!")
   end
+
+  def update_status(api_transaction)
+    # TODO: Can we extract error information from a PayPal API Order object?
+
+    self.update!(
+      paypal_status: api_transaction['status'],
+    )
+  end
+
+  def retrieve_paypal
+    case self.paypal_record_type
+    when PaypalRecord.paypal_record_types[:paypal_order]
+      PaypalInterface.retrieve_order(self.merchant_id, self.paypal_id)
+    when PaypalRecord.paypal_record_types[:capture]
+      PaypalInterface.retrieve_capture(self.merchant_id, self.paypal_id)
+    when PaypalRecord.paypal_record_types[:refund]
+      PaypalInterface.retrieve_refund(self.merchant_id, self.paypal_id)
+    end
+  end
+
+  alias_method :retrieve_remote, :retrieve_paypal
 
   def money_amount
     ruby_amount = PaypalRecord.amount_to_ruby(
@@ -92,7 +114,7 @@ class PaypalRecord < ApplicationRecord
     # PayPal communicates amounts as strings, so we need to first convert to Ruby amount
     #   (which uses integers) and THEN add/subtract
     paid_amount = self.money_amount
-    already_refunded = child_records.refund.map(&:money_amount).sum
+    already_refunded = child_records.refund.sum(&:money_amount)
 
     # `cents` is the "lowest denomination" method in RubyMoney
     (paid_amount - already_refunded).cents

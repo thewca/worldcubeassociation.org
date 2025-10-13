@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 class Accounts::RegistrationsController < Devise::RegistrationsController
+  # We delegate the create method to the super class
+  # rubocop:disable Rails/LexicallyScopedActionFilter
   before_action :check_captcha, only: [:create]
-  protected def after_update_path_for(resource)
+  # rubocop:enable Rails/LexicallyScopedActionFilter
+  protected def after_update_path_for(_resource)
     edit_user_registration_path
   end
 

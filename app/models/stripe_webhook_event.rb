@@ -3,10 +3,21 @@
 class StripeWebhookEvent < ApplicationRecord
   PAYMENT_INTENT_SUCCEEDED = 'payment_intent.succeeded'
   PAYMENT_INTENT_CANCELED = 'payment_intent.canceled'
+  REFUND_CREATED = 'refund.created'
+  REFUND_UPDATED = 'refund.updated'
 
   HANDLED_EVENTS = [
     PAYMENT_INTENT_SUCCEEDED,
     PAYMENT_INTENT_CANCELED,
+    REFUND_CREATED,
+    REFUND_UPDATED,
+  ].freeze
+
+  # Events that when listening to, may contain new (incoming) payloads
+  #   that we did not yet know anything about
+  INCOMING_EVENTS = [
+    REFUND_CREATED,
+    REFUND_UPDATED,
   ].freeze
 
   default_scope -> { handled }
@@ -19,7 +30,7 @@ class StripeWebhookEvent < ApplicationRecord
   has_one :canceled_intent, class_name: "PaymentIntent", as: :cancellation_source
 
   def retrieve_event
-    Stripe::Event.retrieve(self.stripe_id, stripe_account: self.account_id)
+    stripe_client.v1.events.retrieve(self.stripe_id)
   end
 
   def self.create_from_api(api_event, handled: false)
@@ -32,5 +43,9 @@ class StripeWebhookEvent < ApplicationRecord
       created_at_remote: created_at_remote,
       handled: handled,
     )
+  end
+
+  private def stripe_client
+    Stripe::StripeClient.new(AppSecrets.STRIPE_API_KEY, stripe_account: self.account_id)
   end
 end

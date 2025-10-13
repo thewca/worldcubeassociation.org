@@ -4,10 +4,8 @@ class RoundType < ApplicationRecord
   include Cachable
   include StaticData
 
-  self.table_name = "RoundTypes"
-
-  has_many :results, foreign_key: :roundTypeId
-  has_many :scrambles, foreign_key: :roundTypeId
+  has_many :results
+  has_many :scrambles
 
   scope :final_rounds, -> { where("final = 1") }
 
@@ -15,18 +13,18 @@ class RoundType < ApplicationRecord
     I18n.t("rounds.#{id}.name")
   end
 
-  def cellName
-    I18n.t("rounds.#{id}.cellName")
+  def cell_name
+    I18n.t("rounds.#{id}.cell_name")
   end
 
   # TODO: move to database https://github.com/thewca/worldcubeassociation.org/issues/979
   def combined?
-    %w(c d e g h).include?(id)
+    %w[c d e g h].include?(id)
   end
 
   # Returns the equivalent round_type_id with cutoff (or without cutoff)
   def self.toggle_cutoff(round_type_id)
-    [%w(c f), %w(d 1), %w(e 2), %w(g 3), %w(h 0)]
+    [%w[c f], %w[d 1], %w[e 2], %w[g 3], %w[h 0]]
       .flat_map { |pair| [pair, pair.reverse] }
       .to_h[round_type_id]
   end

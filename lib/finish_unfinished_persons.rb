@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-require 'fuzzystringmatch'
-
 module FinishUnfinishedPersons
   WCA_ID_PADDING = 'U'
   WCA_QUARTER_ID_LENGTH = 4
+  GENERATIONAL_SUFFIXES = %w[JR JNR SR SNR II III IV].freeze
 
   WITH_ACCENT = 'ÀÁÂÃÄÅÆĂÇĆČÈÉÊËÌÍÎÏİÐĐÑÒÓÔÕÖØÙÚÛÜÝÞřßŞȘŠŚşșśšŢȚţțŻŽźżžəàáâãäåæăąắặảầấạậāằçćčèéêëęěễệếềēểğìíîïịĩіıðđķКкŁłļñńņňòóôõöøỗọơốờőợồộớùúûüưứữũụűūůựýýþÿỳỹ'
   WITHOUT_ACCENT = 'aaaaaaaaccceeeeiiiiiddnoooooouuuuybrsssssssssttttzzzzzaaaaaaaaaaaaaaaaaaaccceeeeeeeeeeeegiiiiiiiiddkKklllnnnnoooooooooooooooouuuuuuuuuuuuuyybyyy'
@@ -15,13 +14,13 @@ module FinishUnfinishedPersons
 
   def self.unfinished_results_scope(competition_ids = nil)
     results_scope = Result.includes(:competition, :inbox_person)
-                          .select(:personId, :personName, :competitionId, :countryId)
+                          .select(:person_id, :person_name, :competition_id, :country_id)
 
-    results_scope = results_scope.where(competitionId: competition_ids) if competition_ids.present?
+    results_scope = results_scope.where(competition_id: competition_ids) if competition_ids.present?
 
-    results_scope.where("(personId = '' OR personId REGEXP '^[0-9]+$')")
-                 .group(:personId, :personName, :competitionId, :countryId)
-                 .order(:personName)
+    results_scope.where("(person_id = '' OR person_id REGEXP '^[0-9]+$')")
+                 .group(:person_id, :person_name, :competition_id, :country_id)
+                 .order(:person_name)
   end
 
   def self.search_persons(competition_ids = nil)
@@ -30,7 +29,7 @@ module FinishUnfinishedPersons
     unfinished_persons = []
     available_id_spots = {} # to make sure that all of the newcomer IDs that we're creating in one batch are unique among each other
 
-    persons_cache = Person.select(:id, :wca_id, :name, :dob, :countryId)
+    persons_cache = Person.select(:id, :wca_id, :name, :dob, :country_id)
 
     unfinished_person_results.each do |res|
       next if unfinished_persons.length >= MAX_PER_BATCH
@@ -42,7 +41,7 @@ module FinishUnfinishedPersons
 
       inbox_dob = res.inbox_person&.dob
 
-      similar_persons = compute_similar_persons(res, persons_cache)
+      similar_persons = compute_similar_persons(res.person_name, res.country_id, persons_cache)
 
       unfinished_persons.push({
                                 person_id: res.person_id,
@@ -74,8 +73,8 @@ module FinishUnfinishedPersons
     end.join
   end
 
-  def self.compute_similar_persons(result, persons_cache, n = 5)
-    res_roman_name = self.extract_roman_name(result.person_name)
+  def self.compute_similar_persons(person_name, country_id, persons_cache, n = 5)
+    res_roman_name = self.extract_roman_name(person_name)
 
     only_probas = []
     persons_with_probas = []
@@ -85,13 +84,13 @@ module FinishUnfinishedPersons
       p_roman_name = self.extract_roman_name(p.name)
 
       name_similarity = self.string_similarity(res_roman_name, p_roman_name)
-      country_similarity = result.country_id == p.countryId ? 1 : 0
+      country_similarity = country_id == p.country_id ? 1 : 0
 
       only_probas.push name_similarity
       persons_with_probas.push [p, name_similarity, country_similarity]
     end
 
-    proba_threshold = only_probas.sort { |a, b| b <=> a }.take(2 * n).last
+    proba_threshold = only_probas.sort.reverse.take(2 * n).last
     sorting_candidates = persons_with_probas.filter { |_, np, _| np >= proba_threshold }
 
     # `sort_by` is _sinfully_ expensive, so we try to reduce the amount of comparisons as much as possible.
@@ -101,10 +100,8 @@ module FinishUnfinishedPersons
 
   # Original PHP implementation uses PHP stdlib `string_similarity` function, which is custom built
   # and "kinda like" Jaro-Winkler. I felt that the rewrite warrants a standardised matching algorithm.
-  JARO_WINKLER_ALGO = FuzzyStringMatch::JaroWinkler.create(:native)
-
-  def self.string_similarity(a, b)
-    JARO_WINKLER_ALGO.getDistance(a, b)
+  def self.string_similarity(string_a, string_b)
+    JaroWinkler.similarity(string_a, string_b, ignore_case: true)
   end
 
   def self.compute_semi_id(competition_year, person_name, available_per_semi = {})
@@ -112,8 +109,10 @@ module FinishUnfinishedPersons
     sanitized_roman_name = self.remove_accents roman_name
     name_parts = sanitized_roman_name.gsub(/[^a-zA-Z ]/, '').upcase.split
 
-    last_name = name_parts[-1]
-    rest_of_name = name_parts[...-1].join
+    last_name_index = name_parts.length > 1 && GENERATIONAL_SUFFIXES.include?(name_parts[-1]) ? -2 : -1
+
+    last_name = name_parts[last_name_index]
+    rest_of_name = name_parts[...last_name_index].join
 
     padded_rest_of_name = rest_of_name.ljust WCA_QUARTER_ID_LENGTH, WCA_ID_PADDING
     letters_to_shift = [0, WCA_QUARTER_ID_LENGTH - last_name.length].max
@@ -128,20 +127,19 @@ module FinishUnfinishedPersons
       unless available_per_semi.key?(semi_id)
         last_id_taken = Person.where('wca_id LIKE ?', "#{semi_id}__")
                               .order(wca_id: :desc)
-                              .pluck(:wca_id)
-                              .first
+                              .pick(:wca_id)
 
-        if last_id_taken.present?
-          # 4 because the year prefix is 4 digits long
-          counter = last_id_taken[(4 + WCA_QUARTER_ID_LENGTH)..].to_i
-        else
-          counter = 0
-        end
+        counter = if last_id_taken.present?
+                    # 4 because the year prefix is 4 digits long
+                    last_id_taken[(4 + WCA_QUARTER_ID_LENGTH)..].to_i
+                  else
+                    0
+                  end
 
         available_per_semi[semi_id] = 99 - counter
       end
 
-      if available_per_semi.key?(semi_id) && available_per_semi[semi_id] > 0
+      if available_per_semi.key?(semi_id) && available_per_semi[semi_id].positive?
         available_per_semi[semi_id] -= 1
         cleared_id = true
       else
@@ -149,9 +147,7 @@ module FinishUnfinishedPersons
       end
     end
 
-    unless cleared_id
-      raise "Could not compute a semi-id for #{person_name}"
-    end
+    raise "Could not compute a semi-id for #{person_name}" unless cleared_id
 
     [semi_id, available_per_semi]
   end
@@ -174,9 +170,9 @@ module FinishUnfinishedPersons
   def self.insert_person(inbox_person, new_name, new_country, new_wca_id)
     Person.create!(
       wca_id: new_wca_id,
-      subId: 1,
+      sub_id: 1,
       name: new_name,
-      countryId: new_country,
+      country_id: new_country,
       gender: inbox_person&.gender || :o,
       dob: inbox_person&.dob,
       comments: '',
@@ -196,21 +192,21 @@ module FinishUnfinishedPersons
     results_scope = Result
 
     if pending_id.present?
-      raise "Must supply a competition ID for updating newcomer results!" unless pending_comp_id.present?
+      raise "Must supply a competition ID for updating newcomer results!" if pending_comp_id.blank?
 
       results_scope = results_scope.where(
-        personId: pending_id,
+        person_id: pending_id,
         competition_id: pending_comp_id,
       )
     else
       results_scope = results_scope.where(
-        personName: pending_name,
-        countryId: pending_country,
-        personId: '', # personId is empty when splitting profiles
+        person_name: pending_name,
+        country_id: pending_country,
+        person_id: '', # personId is empty when splitting profiles
       )
     end
 
-    results_scope.update_all(personName: new_name, countryId: new_country, personId: new_wca_id)
+    results_scope.update_all(person_name: new_name, country_id: new_country, person_id: new_wca_id)
   end
 
   # rubocop:enable Metrics/ParameterLists

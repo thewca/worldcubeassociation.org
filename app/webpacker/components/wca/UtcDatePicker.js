@@ -39,6 +39,7 @@ function UtcDatePicker({
   isoMaxDate = null,
   dateFormatOverride = null,
   timeFormatOverride = null,
+  required = false,
 }) {
   const date = useIsoDate(isoDate);
 
@@ -71,6 +72,8 @@ function UtcDatePicker({
     <DatePicker
       id={id}
       name={name}
+      // Makes adjacent `label` tags align correctly within SemUI's CSS world
+      className="ui input"
       selected={date}
       onChange={onChangeInternal}
       shouldCloseOnSelect={shouldCloseOnSelect}
@@ -89,6 +92,7 @@ function UtcDatePicker({
       endDate={endDate}
       minDate={minDate}
       maxDate={maxDate}
+      required={required}
     />
   );
 }

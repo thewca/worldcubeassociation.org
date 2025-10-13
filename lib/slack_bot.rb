@@ -8,11 +8,19 @@ module SlackBot
   end
 
   def self.send_error_report(message, exception)
-    self.client.files_upload(
-      channels: ALARMS_CHANNEL_ID,
+    self.client.files_upload_v2(
+      channel: ALARMS_CHANNEL_ID,
+      filename: 'backtrace.txt',
       content: exception.backtrace.join("\n"),
       title: exception.message,
       initial_comment: message,
+    )
+  end
+
+  def self.send_alarm_message(message)
+    self.client.chat_postMessage(
+      channel: ALARMS_CHANNEL_ID,
+      text: message,
     )
   end
 end

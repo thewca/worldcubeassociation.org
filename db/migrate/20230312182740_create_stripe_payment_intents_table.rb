@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class CreateStripePaymentIntentsTable < ActiveRecord::Migration[7.0]

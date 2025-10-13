@@ -1,99 +1,42 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import React, {
-  useMemo, useReducer, useRef,
+  useMemo, useRef, useState,
 } from 'react';
 import {
-  Checkbox, Form, Header, Segment, Sticky,
+  Accordion, Button, Checkbox, Divider, Form, Header, Icon, List, Modal, Segment, Sticky,
 } from 'semantic-ui-react';
-import { DateTime } from 'luxon';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
-import createSortReducer from '../reducers/sortReducer';
+import RegistrationAdministrationSearch from './RegistrationAdministrationSearch';
 import RegistrationActions from './RegistrationActions';
-import { setMessage } from '../Register/RegistrationMessage';
+import { showMessage, showMessages } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import i18n from '../../../lib/i18n';
+import { autoAcceptPreferences } from '../../../lib/wca-data.js.erb';
+import I18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
-import useWithUserData from '../hooks/useWithUserData';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
+import bulkAutoAccept from '../api/registration/patch/bulk_auto_accept';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
-
-const selectedReducer = (state, action) => {
-  let newState = [...state];
-
-  const { type, attendee, attendees } = action;
-  const idList = attendees || [attendee];
-
-  switch (type) {
-    case 'add':
-      idList.forEach((id) => {
-        // Make sure no one adds an attendee twice
-        if (!newState.includes(id)) newState.push(id);
-      });
-      break;
-
-    case 'remove':
-      newState = newState.filter((id) => !idList.includes(id));
-      break;
-
-    case 'clear-selected':
-      return [];
-
-    default:
-      throw new Error('Unknown action.');
-  }
-
-  return newState;
-};
-
-const sortReducer = createSortReducer([
-  'name',
-  'wca_id',
-  'country',
-  'paid_on_with_registered_on_fallback',
-  'registered_on',
-  'events',
-  'guests',
-  'paid_on',
-  'comment',
-  'dob',
-]);
-
-const partitionRegistrations = (registrations) => registrations.reduce(
-  (result, registration) => {
-    switch (registration.competing.registration_status) {
-      case 'pending':
-        result.pending.push(registration);
-        break;
-      case 'waiting_list':
-        result.waiting.push(registration);
-        break;
-      case 'accepted':
-        result.accepted.push(registration);
-        break;
-      case 'cancelled':
-        result.cancelled.push(registration);
-        break;
-      case 'rejected':
-        result.rejected.push(registration);
-        break;
-      default:
-        break;
-    }
-    return result;
-  },
-  {
-    pending: [], waiting: [], accepted: [], cancelled: [], rejected: [],
-  },
-);
+import useOrderedSet from '../../../lib/hooks/useOrderedSet';
+import useStoredReducer from '../../../lib/hooks/useStoredReducer';
+import {
+  APPROVED_COLOR, APPROVED_ICON,
+  CANCELLED_COLOR, CANCELLED_ICON,
+  NON_COMPETING_COLOR,
+  NON_COMPETING_ICON,
+  partitionRegistrations,
+  PENDING_COLOR, PENDING_ICON,
+  REJECTED_COLOR, REJECTED_ICON,
+  WAITLIST_COLOR, WAITLIST_ICON,
+} from '../../../lib/utils/registrationAdmin';
 
 const expandableColumns = {
-  dob: i18n.t('activerecord.attributes.user.dob'),
-  region: i18n.t('activerecord.attributes.user.region'),
-  events: i18n.t('competitions.show.events'),
-  comments: i18n.t('competitions.registration_v2.list.comment_and_note'),
-  email: i18n.t('activerecord.attributes.user.email'),
-  timestamp: i18n.t('competitions.registration_v2.list.timestamp'),
+  dob: I18n.t('activerecord.attributes.user.dob'),
+  region: I18n.t('activerecord.attributes.user.region'),
+  events: I18n.t('competitions.show.events'),
+  comments: I18n.t('competitions.registration_v2.list.comment_and_note'),
+  email: I18n.t('activerecord.attributes.user.email'),
+  timestamp: I18n.t('competitions.registration_v2.list.timestamp'),
 };
 const initialExpandedColumns = {
   dob: false,
@@ -104,7 +47,7 @@ const initialExpandedColumns = {
   timestamp: false,
 };
 
-const columnReducer = (state, action) => {
+const expandedColumnsReducer = (state, action) => {
   if (action.type === 'reset') {
     return initialExpandedColumns;
   }
@@ -115,27 +58,17 @@ const columnReducer = (state, action) => {
 };
 
 export default function RegistrationAdministrationList({ competitionInfo }) {
-  const [expandedColumns, dispatchColumns] = useReducer(
-    columnReducer,
+  const [expandedColumns, dispatchExpandedColumns] = useStoredReducer(
+    expandedColumnsReducer,
     initialExpandedColumns,
+    'reg-admin-expanded-columns',
   );
 
-  const queryClient = useQueryClient();
-
-  const [editable, setEditable] = useCheckboxState(false);
+  const [waitlistEditModeEnabled, setWaitlistEditModeEnabled] = useCheckboxState(false);
 
   const dispatchStore = useDispatch();
 
   const actionsRef = useRef();
-
-  const [state, dispatchSort] = useReducer(sortReducer, {
-    sortColumn: competitionInfo['using_payment_integrations?']
-      ? 'paid_on_with_registered_on_fallback'
-      : 'registered_on',
-    sortDirection: 'ascending',
-  });
-  const { sortColumn, sortDirection } = state;
-  const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
 
   const {
     isLoading: isRegistrationsLoading,
@@ -143,7 +76,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     refetch,
   } = useQuery({
     queryKey: ['registrations-admin', competitionInfo.id],
-    queryFn: () => getAllRegistrations(competitionInfo.id),
+    queryFn: () => getAllRegistrations(competitionInfo),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: Infinity,
@@ -151,7 +84,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     retry: false,
     onError: (err) => {
       const { errorCode } = err;
-      dispatchStore(setMessage(
+      dispatchStore(showMessage(
         errorCode
           ? `competitions.registration_v2.errors.${errorCode}`
           : 'registrations.flash.failed',
@@ -160,18 +93,40 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
   });
 
-  const {
-    isLoading: infoLoading,
-    data: registrationsWithUser,
-  } = useWithUserData(registrations ?? []);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalData, setModalData] = useState(null);
+
+  const { mutate: bulkAutoAcceptMutation, isPending: isAutoAccepting } = useMutation({
+    mutationFn: bulkAutoAccept,
+    onError: () => {
+      dispatchStore(showMessage(
+        'competitions.registration_v2.auto_accept.cant_bulk_auto_accept',
+        'negative',
+      ));
+    },
+    onSuccess: (data) => {
+      if (Object.keys(data).length === 0) {
+        dispatchStore(showMessage('competitions.registration_v2.auto_accept.nothing_to_accept', 'info'));
+      } else {
+        setModalData(data);
+        setModalOpen(true);
+        dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
+      }
+      return refetch();
+    },
+  });
 
   const { mutate: updateRegistrationMutation, isPending: isMutating } = useMutation({
     mutationFn: bulkUpdateRegistrations,
     onError: (data) => {
       const { error } = data.json;
-      dispatchStore(setMessage(
-        Object.values(error).map((err) => `competitions.registration_v2.errors.${err}`),
-        'negative',
+      dispatchStore(showMessages(
+        Object.values(error).map((err) => (
+          {
+            key: `competitions.registration_v2.errors.${err}`,
+            type: 'negative',
+          }
+        )),
       ));
     },
     onSuccess: async () => {
@@ -183,282 +138,401 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
   });
 
-  const sortedRegistrationsWithUser = useMemo(() => {
-    if (registrationsWithUser) {
-      const sorted = registrationsWithUser.toSorted((a, b) => {
-        switch (sortColumn) {
-          case 'name':
-            return a.user.name.localeCompare(b.user.name);
-          case 'wca_id': {
-            const aHasAccount = a.user.wca_id !== null;
-            const bHasAccount = b.user.wca_id !== null;
-            if (aHasAccount && !bHasAccount) {
-              return 1;
-            }
-            if (!aHasAccount && bHasAccount) {
-              return -1;
-            }
-            if (!aHasAccount && !bHasAccount) {
-              return a.user.name.localeCompare(b.user.name);
-            }
-            return a.user.wca_id.localeCompare(b.user.wca_id);
-          }
-          case 'country':
-            return a.user.country.name.localeCompare(b.user.country.name);
-          case 'events':
-            return a.competing.event_ids.length - b.competing.event_ids.length;
-          case 'guests':
-            return a.guests - b.guests;
-          case 'dob':
-            return a.user.dob - b.user.dob;
-          case 'comment':
-            return a.competing.comment.localeCompare(b.competing.comment);
-          case 'registered_on':
-            return DateTime.fromISO(a.competing.registered_on).toMillis()
-              - DateTime.fromISO(b.competing.registered_on).toMillis();
-          case 'paid_on_with_registered_on_fallback':
-          {
-            const hasAPaid = a.payment.payment_status === 'succeeded';
-            const hasBPaid = b.payment.payment_status === 'succeeded';
-
-            if (hasAPaid && hasBPaid) {
-              return DateTime.fromISO(a.payment.updated_at).toMillis()
-                - DateTime.fromISO(b.payment.updated_at).toMillis();
-            }
-            if (hasAPaid && !hasBPaid) {
-              return -1;
-            }
-            if (!hasAPaid && hasBPaid) {
-              return 1;
-            }
-            return DateTime.fromISO(a.competing.registered_on).toMillis()
-              - DateTime.fromISO(b.competing.registered_on).toMillis();
-          }
-          case 'waiting_list_position':
-            return a.competing.waiting_list_position - b.competing.waiting_list_position;
-          default:
-            return 0;
-        }
-      });
-      if (sortDirection === 'descending') {
-        return sorted.toReversed();
-      }
-      return sorted;
-    }
-    return [];
-  }, [registrationsWithUser, sortColumn, sortDirection]);
-
+  const partitionedRegistrations = useMemo(
+    () => partitionRegistrations(registrations ?? []),
+    [registrations],
+  );
   const {
-    waiting, accepted, cancelled, pending, rejected,
-  } = useMemo(
-    () => partitionRegistrations(sortedRegistrationsWithUser ?? []),
-    [sortedRegistrationsWithUser],
-  );
+    waiting, accepted, cancelled, pending, rejected, nonCompeting,
+  } = partitionedRegistrations;
 
-  const [selected, dispatch] = useReducer(selectedReducer, []);
-  const partitionedSelected = useMemo(
+  const selectedIds = useOrderedSet();
+  const partitionedSelectedIds = useMemo(
     () => ({
-      pending: selected.filter((id) => pending.some((reg) => id === reg.user.id)),
-      waiting: selected.filter((id) => waiting.some((reg) => id === reg.user.id)),
-      accepted: selected.filter((id) => accepted.some((reg) => id === reg.user.id)),
-      cancelled: selected.filter((id) => cancelled.some((reg) => id === reg.user.id)),
-      rejected: selected.filter((id) => rejected.some((reg) => id === reg.user.id)),
+      pending: selectedIds.asArray.filter((id) => pending.some((reg) => id === reg.user.id)),
+      waiting: selectedIds.asArray.filter((id) => waiting.some((reg) => id === reg.user.id)),
+      accepted: selectedIds.asArray.filter((id) => accepted.some((reg) => id === reg.user.id)),
+      cancelled: selectedIds.asArray.filter((id) => cancelled.some((reg) => id === reg.user.id)),
+      rejected: selectedIds.asArray.filter((id) => rejected.some((reg) => id === reg.user.id)),
+      nonCompeting: selectedIds.asArray.filter(
+        (id) => nonCompeting.some((reg) => id === reg.user.id),
+      ),
     }),
-    [selected, pending, waiting, accepted, cancelled, rejected],
+    [selectedIds.asArray, pending, waiting, accepted, cancelled, rejected, nonCompeting],
   );
-
-  const select = (attendees) => dispatch({ type: 'add', attendees });
-  const unselect = (attendees) => dispatch({ type: 'remove', attendees });
 
   // some sticky/floating bar somewhere with totals/info would be better
   // than putting this in the table headers which scroll out of sight
-  const spotsRemaining = (competitionInfo.competitor_limit ?? Infinity) - accepted.length;
-  const spotsRemainingText = i18n.t(
+  const spotsRemaining = (competitionInfo.competitor_limit || Infinity) - accepted.length;
+  const spotsRemainingText = I18n.t(
     'competitions.registration_v2.list.spots_remaining_plural',
     { count: spotsRemaining },
   );
 
-  const userEmailMap = useMemo(
-    () => Object.fromEntries(
-      (registrationsWithUser ?? []).map((registration) => [
-        registration.user.id,
-        registration.email,
-      ]),
-    ),
-    [registrationsWithUser],
-  );
   const handleOnDragEnd = useMemo(() => async (result) => {
     if (!result.destination) return;
     if (result.destination.index === result.source.index) return;
-    const waitingSorted = waiting.toSorted((a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position);
+    const waitingSorted = waiting
+      .toSorted((a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position);
     updateRegistrationMutation({
-      competition_id: competitionInfo.id,
-      requests: [{
-        user_id: waitingSorted[result.source.index].user_id,
-        competing: {
-          waiting_list_position: waitingSorted[result.destination.index].competing.waiting_list_position,
-        },
-      }],
+      competitionId: competitionInfo.id,
+      payload: {
+        competition_id: competitionInfo.id,
+        requests: [{
+          competition_id: competitionInfo.id,
+          user_id: waitingSorted[result.source.index].user_id,
+          competing: {
+            waiting_list_position: waitingSorted[result.destination.index]
+              .competing.waiting_list_position,
+          },
+        }],
+      },
     }, {
       onSuccess: () => {
-        // We need to get the information for all Competitors if you change the waiting list position
+        // We need to get the info for all Competitors if you change the waiting list position
         refetch();
       },
     });
   }, [competitionInfo.id, refetch, updateRegistrationMutation, waiting]);
 
-  return isRegistrationsLoading || infoLoading ? (
-    <Loading />
-  ) : (
-    <Segment loading={isMutating} style={{ overflowX: 'scroll' }}>
+  if (isRegistrationsLoading) {
+    return <Loading />;
+  }
+
+  const panels = [
+    {
+      key: 'pending',
+      title: {
+        content: (
+          <SectionToggle
+            icon={PENDING_ICON}
+            title={I18n.t('competitions.registration_v2.list.pending.title')}
+            inParens={pending.length}
+            color={PENDING_COLOR}
+          />
+        ),
+      },
+      content: {
+        content: (
+          <>
+            <Header.Subheader>
+              {I18n.t('competitions.registration_v2.list.pending.information')}
+            </Header.Subheader>
+            <RegistrationAdministrationTable
+              columnsExpanded={expandedColumns}
+              registrations={pending}
+              selected={partitionedSelectedIds.pending}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
+              competitionInfo={competitionInfo}
+              color={PENDING_COLOR}
+              distinguishPaidUnpaid
+            />
+          </>
+        ),
+      },
+    },
+    {
+      key: 'waitlist',
+      title: {
+        content: (
+          <SectionToggle
+            icon={WAITLIST_ICON}
+            title={I18n.t('competitions.registration_v2.list.waitlist.title')}
+            inParens={waiting.length}
+            color={WAITLIST_COLOR}
+          />
+        ),
+      },
+      content: {
+        content: (
+          <>
+            <Header.Subheader>
+              {I18n.t('competitions.registration_v2.list.waitlist.information')}
+            </Header.Subheader>
+            <Checkbox
+              toggle
+              checked={waitlistEditModeEnabled}
+              onChange={setWaitlistEditModeEnabled}
+              label={I18n.t('competitions.registration_v2.list.edit_waiting_list')}
+            />
+            <RegistrationAdministrationTable
+              columnsExpanded={expandedColumns}
+              selected={partitionedSelectedIds.waiting}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
+              initialSortColumn="waiting_list_position"
+              competitionInfo={competitionInfo}
+              registrations={waiting.toSorted(
+                (a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position,
+              )}
+              handleOnDragEnd={handleOnDragEnd}
+              draggable={waitlistEditModeEnabled}
+              sortable={false}
+              withPosition
+              color={WAITLIST_COLOR}
+            />
+          </>
+        ),
+      },
+    },
+    {
+      key: 'accepted',
+      title: {
+        content: (
+          <SectionToggle
+            icon={APPROVED_ICON}
+            title={I18n.t('competitions.registration_v2.list.approved.title')}
+            inParens={
+              `${
+                accepted.length
+              }${
+                spotsRemaining !== Infinity
+                  ? `/${competitionInfo.competitor_limit}, ${spotsRemainingText}`
+                  : ''
+              }`
+            }
+            color={APPROVED_COLOR}
+          />
+        ),
+      },
+      content: {
+        content: (
+          <RegistrationAdministrationTable
+            columnsExpanded={expandedColumns}
+            registrations={accepted}
+            selected={partitionedSelectedIds.accepted}
+            onSelect={selectedIds.add}
+            onUnselect={selectedIds.remove}
+            onToggle={selectedIds.toggle}
+            competitionInfo={competitionInfo}
+            color={APPROVED_COLOR}
+          />
+        ),
+      },
+    },
+    {
+      key: 'cancelled',
+      title: {
+        content: (
+          <SectionToggle
+            icon={CANCELLED_ICON}
+            title={I18n.t('competitions.registration_v2.list.cancelled.title')}
+            inParens={cancelled.length}
+            color={CANCELLED_COLOR}
+          />
+        ),
+      },
+      content: {
+        content: (
+          <>
+            <Header.Subheader>
+              {I18n.t('competitions.registration_v2.list.cancelled.information')}
+            </Header.Subheader>
+            <RegistrationAdministrationTable
+              columnsExpanded={expandedColumns}
+              registrations={cancelled}
+              selected={partitionedSelectedIds.cancelled}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
+              competitionInfo={competitionInfo}
+              color={CANCELLED_COLOR}
+            />
+          </>
+        ),
+      },
+    },
+    {
+      key: 'rejected',
+      title: {
+        content: (
+          <SectionToggle
+            icon={REJECTED_ICON}
+            title={I18n.t('competitions.registration_v2.list.rejected.title')}
+            inParens={rejected.length}
+            color={REJECTED_COLOR}
+          />
+        ),
+      },
+      content: {
+        content: (
+          <>
+            <Header.Subheader>
+              {I18n.t('competitions.registration_v2.list.rejected.information')}
+            </Header.Subheader>
+            <RegistrationAdministrationTable
+              columnsExpanded={expandedColumns}
+              registrations={rejected}
+              selected={partitionedSelectedIds.rejected}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
+              competitionInfo={competitionInfo}
+              color={REJECTED_COLOR}
+            />
+          </>
+        ),
+      },
+    },
+    nonCompeting.length > 0 && {
+      key: 'nonCompeting',
+      title: {
+        content: (
+          <SectionToggle
+            icon={NON_COMPETING_ICON}
+            title={I18n.t('competitions.registration_v2.list.non_competing.title')}
+            inParens={nonCompeting.length}
+            color={NON_COMPETING_COLOR}
+          />
+        ),
+      },
+      content: {
+        content: (
+          <>
+            <Header.Subheader>
+              {I18n.t('competitions.registration_v2.list.non_competing.information')}
+            </Header.Subheader>
+            <RegistrationAdministrationTable
+              columnsExpanded={expandedColumns}
+              registrations={nonCompeting}
+              selected={partitionedSelectedIds.nonCompeting}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
+              competitionInfo={competitionInfo}
+              color={NON_COMPETING_COLOR}
+            />
+          </>
+        ),
+      },
+    },
+  ].filter(Boolean);
+
+  const nonEmptyTableIndices = [
+    ['pending', pending],
+    ['waitlist', waiting],
+    ['accepted', accepted],
+    ['cancelled', cancelled],
+    ['rejected', rejected],
+    ['nonCompeting', nonCompeting],
+  ].filter(
+    ([, list]) => list.length > 0,
+  ).map(
+    ([key]) => panels.findIndex((panel) => panel.key === key),
+  );
+
+  return (
+    <Segment loading={isMutating || isAutoAccepting}>
+      {competitionInfo.auto_accept_preference === autoAcceptPreferences.bulk && (
+        <>
+          <Button
+            disabled={isAutoAccepting}
+            color="green"
+            onClick={() => bulkAutoAcceptMutation(competitionInfo.id)}
+          >
+            <Icon name="check" />
+            {' '}
+            {I18n.t('competitions.registration_v2.auto_accept.bulk_auto_accept')}
+          </Button>
+
+          <Modal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+            size="small"
+          >
+            <Modal.Header>Bulk Auto-Accept Result</Modal.Header>
+            <Modal.Content>
+              {modalData !== null ? (
+                <List bulleted>
+                  {Object.entries(modalData).map(([key, value]) => (
+                    <List.Item key={key}>
+                      {registrations.find(
+                        (registration) => registration.id === Number(key),
+                      )?.user.name}
+                      {' - '}
+                      <b>Succeeded</b>
+                      {': '}
+                      {value.succeeded.toString()}
+                      {', '}
+                      <b>Info</b>
+                      {': '}
+                      {value.info}
+                    </List.Item>
+                  ))}
+                </List>
+              ) : (
+                <p>No data available.</p>
+              )}
+            </Modal.Content>
+            <Modal.Actions>
+              <Button onClick={() => setModalOpen(false)}>Close</Button>
+            </Modal.Actions>
+          </Modal>
+        </>
+      )}
+
       <Form>
-        <Form.Group widths="equal">
+        <Form.Group unstackable widths="2">
           {Object.entries(expandableColumns).map(([id, name]) => (
-            <Form.Field key={id}>
-              <Checkbox
-                name={id}
-                label={name}
-                toggle
-                checked={expandedColumns[id]}
-                onChange={() => dispatchColumns({ column: id })}
-              />
-            </Form.Field>
+            <Form.Checkbox
+              key={id}
+              name={id}
+              label={name}
+              toggle
+              checked={expandedColumns[id]}
+              onChange={() => dispatchExpandedColumns({ column: id })}
+            />
           ))}
         </Form.Group>
       </Form>
 
+      <Divider />
+
+      <RegistrationAdministrationSearch
+        partitionedRegistrations={partitionedRegistrations}
+        usingPayments={competitionInfo['using_payment_integrations?']}
+        currencyCode={competitionInfo.currency_code}
+      />
+
+      <Divider />
+
       <div ref={actionsRef}>
         <Sticky context={actionsRef} offset={20}>
           <RegistrationActions
-            partitionedSelected={partitionedSelected}
-            refresh={() => {
-              dispatch({ type: 'clear-selected' });
-            }}
+            partitionedSelectedIds={partitionedSelectedIds}
+            refresh={selectedIds.clear}
             registrations={registrations}
             spotsRemaining={spotsRemaining}
-            userEmailMap={userEmailMap}
             competitionInfo={competitionInfo}
             updateRegistrationMutation={updateRegistrationMutation}
           />
         </Sticky>
 
-        <Header>
-          Pending registrations (
-          {pending.length}
-          )
-        </Header>
-        <RegistrationAdministrationTable
-          columnsExpanded={expandedColumns}
-          registrations={pending}
-          selected={partitionedSelected.pending}
-          select={select}
-          unselect={unselect}
-          competition_id={competitionInfo.id}
-          changeSortColumn={changeSortColumn}
-          sortDirection={sortDirection}
-          sortColumn={sortColumn}
-          competitionInfo={competitionInfo}
+        <Divider />
+
+        <Accordion
+          defaultActiveIndex={nonEmptyTableIndices}
+          panels={panels}
+          exclusive={false}
+          fluid
         />
 
-        <Header>
-          {i18n.t('registrations.list.approved_registrations')}
-          {' '}
-          (
-          {accepted.length}
-          {competitionInfo.competitor_limit && (
-            <>
-              {`/${competitionInfo.competitor_limit}; `}
-              {spotsRemainingText}
-            </>
-          )}
-          )
-        </Header>
-        <RegistrationAdministrationTable
-          columnsExpanded={expandedColumns}
-          registrations={accepted}
-          selected={partitionedSelected.accepted}
-          select={select}
-          unselect={unselect}
-          competition_id={competitionInfo.id}
-          changeSortColumn={changeSortColumn}
-          sortDirection={sortDirection}
-          sortColumn={sortColumn}
-          competitionInfo={competitionInfo}
-        />
-        <Header>
-          {i18n.t('registrations.list.waiting_list')}
-          {' '}
-          (
-          {waiting.length}
-          )
-        </Header>
-
-        <Checkbox toggle value={editable} onChange={setEditable} label={i18n.t('competitions.registration_v2.list.edit_waiting_list')} />
-
-        <RegistrationAdministrationTable
-          columnsExpanded={expandedColumns}
-          selected={partitionedSelected.waiting}
-          select={select}
-          unselect={unselect}
-          competition_id={competitionInfo.id}
-          changeSortColumn={changeSortColumn}
-          sortDirection={sortDirection}
-          sortColumn={sortColumn}
-          competitionInfo={competitionInfo}
-          registrations={waiting.toSorted(
-            (a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position,
-          )}
-          handleOnDragEnd={handleOnDragEnd}
-          draggable={editable}
-          sortable={false}
-        />
-
-        <Header>
-          {i18n.t('competitions.registration_v2.list.cancelled.title')}
-          {' '}
-          (
-          {cancelled.length}
-          )
-        </Header>
-        <Header.Subheader>
-          {i18n.t('competitions.registration_v2.list.cancelled.information')}
-        </Header.Subheader>
-        <RegistrationAdministrationTable
-          columnsExpanded={expandedColumns}
-          registrations={cancelled}
-          selected={partitionedSelected.cancelled}
-          select={select}
-          unselect={unselect}
-          competition_id={competitionInfo.id}
-          changeSortColumn={changeSortColumn}
-          sortDirection={sortDirection}
-          sortColumn={sortColumn}
-          competitionInfo={competitionInfo}
-        />
-
-        <Header>
-          {i18n.t('competitions.registration_v2.list.rejected.title')}
-          {' '}
-          (
-          {rejected.length}
-          )
-        </Header>
-        <Header.Subheader>
-          {i18n.t('competitions.registration_v2.list.rejected.information')}
-        </Header.Subheader>
-        <RegistrationAdministrationTable
-          columnsExpanded={expandedColumns}
-          registrations={rejected}
-          selected={partitionedSelected.rejected}
-          select={select}
-          unselect={unselect}
-          competition_id={competitionInfo.id}
-          changeSortColumn={changeSortColumn}
-          sortDirection={sortDirection}
-          sortColumn={sortColumn}
-          competitionInfo={competitionInfo}
-        />
+        {/* i18n-tasks-use t('registrations.list.non_competing') */}
       </div>
     </Segment>
+  );
+}
+
+function SectionToggle({
+  icon, title, inParens, color,
+}) {
+  return (
+    <Header as="span" size="large">
+      <Icon name={icon} color={color} />
+      {`${title} (${inParens})`}
+    </Header>
   );
 }

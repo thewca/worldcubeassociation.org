@@ -4,13 +4,14 @@ class Qualification
   include ActiveModel::Validations
 
   attr_accessor :when_date, :level, :wcif_type, :result_type
+
   validates :when_date, presence: true
-  validates :result_type, presence: true, inclusion: { in: ["single", "average"] }
-  validates :wcif_type, presence: true, inclusion: { in: ["attemptResult", "ranking", "anyResult"] }
+  validates :result_type, presence: true, inclusion: { in: %w[single average] }
+  validates :wcif_type, presence: true, inclusion: { in: %w[attemptResult ranking anyResult] }
   validates :level, numericality: { only_integer: true, greater_than: 0 }, if: :result_or_ranking?
 
   def result_or_ranking?
-    self.wcif_type == 'attemptResult' || self.wcif_type == 'ranking'
+    %w[attemptResult ranking].include?(self.wcif_type)
   end
 
   def ==(other)
@@ -41,7 +42,8 @@ class Qualification
 
   def can_register?(user, event_id)
     return false if user.person.nil?
-    before_deadline_results = user.person.results.in_event(event_id).before(self.when_date)
+
+    before_deadline_results = user.person.results.in_event(event_id).on_or_before(self.when_date)
     # Allow any competitor with a result to register when type == "ranking" or type == "anyResult".
     # When type == "ranking", the results need to be manually cleared out later.
     case self.wcif_type
@@ -69,12 +71,12 @@ class Qualification
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => %w[object null],
       "properties" => {
         "whenDate" => { "type" => "string" },
-        "resultType" => { "type" => "string", "enum" => ["single", "average"] },
-        "type" => { "type" => "string", "enum" => ["attemptResult", "ranking", "anyResult"] },
-        "level" => { "type" => ["integer", "null"] },
+        "resultType" => { "type" => "string", "enum" => %w[single average] },
+        "type" => { "type" => "string", "enum" => %w[attemptResult ranking anyResult] },
+        "level" => { "type" => %w[integer null] },
       },
     }
   end
@@ -90,16 +92,16 @@ class Qualification
 
   def to_s(event)
     if self.wcif_type == "ranking"
-      I18n.t("qualification." + self.result_type + ".ranking", ranking: level)
+      I18n.t("qualification.#{self.result_type}.ranking", ranking: level)
     elsif self.wcif_type == "anyResult"
-      I18n.t("qualification." + self.result_type + ".any_result")
+      I18n.t("qualification.#{self.result_type}.any_result")
     elsif event.event.timed_event?
-      I18n.t("qualification." + self.result_type + ".time", time: SolveTime.centiseconds_to_clock_format(level))
+      I18n.t("qualification.#{self.result_type}.time", time: SolveTime.centiseconds_to_clock_format(level))
     elsif event.event.fewest_moves?
       moves = self.result_type == "average" ? (level.to_f / 100).round(2) : level
-      I18n.t("qualification." + self.result_type + ".moves", moves: moves)
+      I18n.t("qualification.#{self.result_type}.moves", moves: moves)
     elsif event.event.multiple_blindfolded?
-      I18n.t("qualification." + self.result_type + ".points", points: SolveTime.multibld_attempt_to_points(level))
+      I18n.t("qualification.#{self.result_type}.points", points: SolveTime.multibld_attempt_to_points(level))
     end
   end
 end

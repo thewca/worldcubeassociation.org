@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class SubmitReportNagJob < WcaCronjob
+  before_enqueue do
+    # We only need to do this in prod
+    throw :abort unless Rails.env.production?
+  end
+
   def nag_needed?(competition)
     (competition.delegate_report.nag_sent_at || competition.end_date) <= 8.days.ago
   end
@@ -15,7 +20,7 @@ class SubmitReportNagJob < WcaCronjob
       .visible
       .not_cancelled
       .includes(:delegate_report)
-      .where("start_date >= ?", DelegateReport::REPORTS_ENABLED_DATE) # Don't send nag emails for very old competitions without reports.
+      .where(start_date: DelegateReport::REPORTS_ENABLED_DATE..) # Don't send nag emails for very old competitions without reports.
       .where(delegate_reports: { posted_at: nil })
 
     competitions.each do |competition|

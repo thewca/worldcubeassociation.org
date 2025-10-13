@@ -19,6 +19,7 @@ export default function OtherQuery() {
       name="message"
       value={message}
       onChange={handleFormChange}
+      style={{ whiteSpace: 'pre-wrap' }}
     />
   );
 }

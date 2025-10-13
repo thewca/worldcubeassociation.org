@@ -1,9 +1,9 @@
 import React from 'react';
 import { Header, List, Icon } from 'semantic-ui-react';
-import { panelUrls } from '../../lib/requests/routes.js.erb';
+import { panelPageUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
-import { groupTypes, delegateRegionsStatus } from '../../lib/wca-data.js.erb';
+import { groupTypes, delegateRegionsStatus, PANEL_PAGES } from '../../lib/wca-data.js.erb';
 import { getRoleDescription, getRoleSubDescription } from '../../lib/helpers/roles-tab';
 
 function hyperlink(role) {
@@ -12,17 +12,17 @@ function hyperlink(role) {
       delegateRegionsStatus.senior_delegate,
       delegateRegionsStatus.regional_delegate,
     ].includes(role.metadata.status)) {
-      return panelUrls.board.regionsManager;
+      return panelPageUrl(PANEL_PAGES.regionsManager);
     }
-    return panelUrls.seniorDelegate.regions;
+    return panelPageUrl(PANEL_PAGES.regions);
   }
   if (role.group.group_type === groupTypes.teams_committees) {
     // FIXME: Redirect to correct dropdown in groupsManager. Currently it only goes to the
     // groupsManager page without selecting the group of the user.
-    return panelUrls.leader.groupsManager;
+    return panelPageUrl(PANEL_PAGES.groupsManager);
   }
   if (role.group.group_type === groupTypes.translators) {
-    return panelUrls.wst.translators;
+    return panelPageUrl(PANEL_PAGES.translators);
   }
   return null;
 }
@@ -36,27 +36,30 @@ export default function ActiveRoles({ activeRoles }) {
     <>
       <Header>Active Roles</Header>
       <List divided relaxed>
-        {activeRoles?.map((role) => (
-          <List.Item
-            key={role.id}
-            disabled={!loggedInUserPermissions.canEditGroup(role.group.id)}
-          >
-            <List.Content
-              floated="left"
-              href={hyperlink(role)}
+        {activeRoles?.map((role) => {
+          const editUrl = hyperlink(role);
+          return (
+            <List.Item
+              key={role.id}
+              disabled={!(loggedInUserPermissions.canEditGroup(role.group.id) && editUrl)}
             >
-              <Icon
-                name="edit"
-                size="large"
-                link
-              />
-            </List.Content>
-            <List.Content>
-              <List.Header>{getRoleDescription(role)}</List.Header>
-              <List.Description>{getRoleSubDescription(role)}</List.Description>
-            </List.Content>
-          </List.Item>
-        ))}
+              <List.Content
+                floated="left"
+                href={editUrl}
+              >
+                <Icon
+                  name="edit"
+                  size="large"
+                  link
+                />
+              </List.Content>
+              <List.Content>
+                <List.Header>{getRoleDescription(role)}</List.Header>
+                <List.Description>{getRoleSubDescription(role)}</List.Description>
+              </List.Content>
+            </List.Item>
+          );
+        })}
       </List>
     </>
   );

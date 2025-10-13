@@ -12,13 +12,11 @@ import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormBuilder/SubSection';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
-export default function EventRestrictions() {
-  const {
-    usesV2Registrations,
-    isCloning,
-    isPersisted,
-    storedEvents,
-  } = useStore();
+export default function EventRestrictions({
+  isCloning = false,
+  storedEvents = [],
+}) {
+  const { isPersisted } = useStore();
 
   const {
     eventRestrictions: {
@@ -30,11 +28,11 @@ export default function EventRestrictions() {
   } = useFormObject();
 
   const mainEventOptions = useMemo(() => {
-    const storedEventOptions = storedEvents.map((event) => ({
+    const storedEventOptions = storedEvents?.map((event) => ({
       key: event.id,
       value: event.id,
       text: event.name,
-    }));
+    })) || [];
 
     return [{
       key: '',
@@ -50,14 +48,12 @@ export default function EventRestrictions() {
 
   return (
     <SubSection section="eventRestrictions">
-      { usesV2Registrations && (
-        <SubSection section="forbidNewcomers">
-          <InputBoolean id="enabled" />
-          <ConditionalSection showIf={newcomers}>
-            <InputTextArea id="reason" />
-          </ConditionalSection>
-        </SubSection>
-      )}
+      <SubSection section="forbidNewcomers">
+        <InputBoolean id="enabled" />
+        <ConditionalSection showIf={newcomers}>
+          <InputTextArea id="reason" />
+        </ConditionalSection>
+      </SubSection>
       <SubSection section="earlyPuzzleSubmission">
         <InputBoolean id="enabled" />
         <ConditionalSection showIf={earlySubmission}>
@@ -75,14 +71,14 @@ export default function EventRestrictions() {
         <InputBoolean id="enabled" />
         <ConditionalSection showIf={restrictEvents}>
           <InputTextArea id="reason" />
-          <InputNumber id="perRegistrationLimit" />
+          <InputNumber id="perRegistrationLimit" min={1} nullable />
         </ConditionalSection>
       </SubSection>
 
       {!isCloning && isPersisted && (
         <>
           <Divider />
-          <InputSelect id="mainEventId" options={mainEventOptions} />
+          <InputSelect id="mainEventId" options={mainEventOptions} ignoreDisabled />
         </>
       )}
     </SubSection>

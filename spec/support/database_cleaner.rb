@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 RSpec.configure do |config|
-  config.before(:suite) do
-    DatabaseCleaner.clean_with :truncation
-    TestDbManager.fill_tables unless EnvConfig.SKIP_PRETEST_SETUP?
+  unless EnvConfig.SKIP_PRETEST_SETUP?
+    config.before(:suite) do
+      DatabaseCleaner.clean_with :truncation
+      TestDbManager.fill_tables
+    end
   end
 
   config.before(:each) do
@@ -14,11 +16,11 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :truncation, { except: TestDbManager::CONSTANT_TABLES }
   end
 
-  config.before(:each, clean_db_with_truncation: true) do
+  config.before(:each, :clean_db_with_truncation) do
     set_truncation_strategy
   end
 
-  config.before(:each, js: true) do
+  config.before(:each, :js) do
     set_truncation_strategy
   end
 

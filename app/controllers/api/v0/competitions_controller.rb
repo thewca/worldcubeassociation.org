@@ -17,22 +17,69 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     paginate json: competitions
   end
 
+  def mine
+    user = require_user!
+    ActiveRecord::Base.connected_to(role: :read_replica) do
+      competition_ids = user.organized_competitions.pluck(:competition_id)
+      competition_ids.concat(user.delegated_competitions.pluck(:competition_id))
+      registrations = user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
+      registrations.concat(user.registrations.includes(:competition).waitlisted.select { |r| r.competition.upcoming? })
+      registrations.concat(user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
+      registered_for_by_competition_id = registrations.uniq.to_h do |r|
+        [r.competition_id, r.competing_status]
+      end
+      competition_ids.concat(registered_for_by_competition_id.keys)
+      competition_ids.concat(user.person.competitions.pluck(:competition_id)) if user.person
+      # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
+      # For example, mailing all competitors about the cancellation.
+      # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
+      competitions = Competition.includes(:delegate_report, :championships)
+                                .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
+                                .sort_by { |comp| comp.start_date || (Date.today + 20.years) }.reverse
+      past_competitions, not_past_competitions = competitions.partition(&:probably_over?)
+      bookmarked_ids = user.competitions_bookmarked.pluck(:competition_id)
+      bookmarked_competitions = Competition.not_over
+                                           .where(id: bookmarked_ids.uniq)
+                                           .sort_by(&:start_date)
+
+      options = {
+        only: %w[id name website start_date end_date registration_open],
+        methods: %w[url city country_iso2 results_posted? visible? confirmed? cancelled? report_posted? short_display_name],
+        include: %w[championships],
+      }
+
+      options_with_reg_status = options.deep_merge({
+                                                     methods: options[:methods] + %w[registration_status],
+                                                   })
+
+      future_competitions = not_past_competitions.as_json(options_with_reg_status)
+
+      future_competitions_with_competing_status = future_competitions.map { |c| c.merge({ competing_status: registered_for_by_competition_id[c["id"]] }) }
+
+      render json: {
+        past_competitions: past_competitions.as_json(options),
+        future_competitions: future_competitions_with_competing_status,
+        bookmarked_competitions: bookmarked_competitions.as_json(options_with_reg_status),
+      }
+    end
+  end
+
   def competition_index
-    competitions = Competition.includes(:events)
-                              .search(params[:q], params: params)
-
-    serial_methods = ["short_display_name", "city", "country_iso2", "event_ids", "date_range", "latitude_degrees", "longitude_degrees"]
-    serial_includes = {}
-
     admin_mode = current_user&.can_see_admin_competitions?
 
-    competitions = competitions.includes(:delegate_report) if admin_mode
+    competitions_scope = Competition.includes(:events, :championships)
+    competitions_scope = competitions_scope.includes(:delegate_report, delegates: [:current_avatar]) if admin_mode
 
-    serial_includes["delegates"] = { only: ["id", "name"], include: ["avatar"] } if admin_mode
-    serial_methods |= ["announced_at", "results_submitted_at", "report_posted_at"] if admin_mode
+    competitions = competitions_scope.search(params[:q], params: params)
+
+    serial_methods = %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at championship_types]
+    serial_includes = {}
+
+    serial_includes["delegates"] = { only: %w[id name], methods: [], include: ["avatar"] } if admin_mode
+    serial_methods |= %w[results_submitted_at results_posted_at report_posted_at report_posted_by_user] if admin_mode
 
     paginate json: competitions,
-             only: ["id", "name", "start_date", "end_date", "registration_open", "registration_close", "venue"],
+             only: %w[id name start_date end_date registration_open registration_close venue competitor_limit main_event_id],
              methods: serial_methods,
              include: serial_includes
   end
@@ -40,15 +87,18 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def show
     competition = competition_from_params
 
-    if stale?(competition)
-      render json: competition.to_competition_info
-    end
+    render json: competition.to_competition_info if stale?(competition)
   end
 
   def qualifications
     competition = competition_from_params(associations: [:competition_events])
 
     render json: competition.qualification_wcif
+  end
+
+  def events
+    competition = competition_from_params
+    render json: competition.events_wcif
   end
 
   def schedule
@@ -61,11 +111,17 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.results
   end
 
+  def podiums
+    competition = Competition.find(params.require(:competition_id))
+
+    render json: competition.results.podium
+  end
+
   def event_results
     competition = competition_from_params(associations: [:rounds])
     event = Event.c_find!(params[:event_id])
     results_by_round = competition.results
-                                  .where(eventId: event.id)
+                                  .where(event_id: event.id)
                                   .group_by(&:round_type)
                                   .sort_by { |round_type, _| -round_type.rank }
     rounds = results_by_round.map do |round_type, results|
@@ -76,7 +132,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       {
         id: round&.id,
         roundTypeId: round_type.id,
-        results: results.sort_by { |r| [r.pos, r.personName] },
+        results: results.sort_by { |r| [r.pos, r.person_name] },
       }
     end
     render json: {
@@ -94,7 +150,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = competition_from_params
     event = Event.c_find!(params[:event_id])
     scrambles_by_round = competition.scrambles
-                                    .where(eventId: event.id)
+                                    .where(event_id: event.id)
                                     .group_by(&:round_type)
                                     .sort_by { |round_type, _| -round_type.rank }
     rounds = scrambles_by_round.map do |round_type, scrambles|
@@ -156,11 +212,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     cache_key = "wcif/#{id}"
     competition = competition_from_params
     expires_in 5.minutes, public: true
-    if stale?(competition, public: true)
-      render json: Rails.cache.fetch(cache_key, expires_in: 5.minutes) {
-        competition.to_wcif
-      }
-    end
+    return unless stale?(competition, public: true)
+
+    render json: Rails.cache.fetch(cache_key, expires_in: 5.minutes) {
+      competition.to_wcif
+    }
   end
 
   def update_wcif
@@ -173,12 +229,12 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       status: "Successfully saved WCIF",
     }
   rescue ActiveRecord::RecordInvalid => e
-    render status: 400, json: {
+    render status: :bad_request, json: {
       status: "Error while saving WCIF",
       error: e,
     }
   rescue JSON::Schema::ValidationError => e
-    render status: 400, json: {
+    render status: :bad_request, json: {
       status: "Error while saving WCIF",
       error: e.message,
     }
@@ -186,15 +242,14 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   private def competition_from_params(associations: {})
     id = params[:competition_id] || params[:id]
-    competition = Competition.includes(associations).find_by_id(id)
+    competition = Competition.includes(associations).find_by(id: id)
 
     # If this competition exists, but is not publicly visible, then only show it
     # to the user if they are able to manage the competition.
-    if competition && !competition.showAtAll && !can_manage?(competition)
-      competition = nil
-    end
+    competition = nil if competition && !competition.show_at_all && !can_manage?(competition)
 
     raise WcaExceptions::NotFound.new("Competition with id #{id} not found") unless competition
+
     competition
   end
 
@@ -205,9 +260,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   private def require_scope!(scope)
     require_user!
-    if current_api_user # If we deal with an OAuth user then check the scopes.
-      raise WcaExceptions::BadApiParameter.new("Missing required scope '#{scope}'") unless doorkeeper_token.scopes.include?(scope)
-    end
+    raise WcaExceptions::BadApiParameter.new("Missing required scope '#{scope}'") if current_api_user && doorkeeper_token.scopes.exclude?(scope) # If we deal with an OAuth user then check the scopes.
   end
 
   def require_can_manage!(competition)

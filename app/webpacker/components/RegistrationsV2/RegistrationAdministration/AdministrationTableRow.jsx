@@ -1,10 +1,10 @@
 import {
-  Checkbox, Flag, Icon, Popup, Ref, Table,
+  Checkbox, Icon, Popup, Ref, Table,
 } from 'semantic-ui-react';
 import React from 'react';
-import { Draggable } from 'react-beautiful-dnd';
-import { setMessage } from '../Register/RegistrationMessage';
-import i18n from '../../../lib/i18n';
+import { Draggable } from '@hello-pangea/dnd';
+import { showMessage } from '../Register/RegistrationMessage';
+import I18n from '../../../lib/i18n';
 import {
   getRegistrationTimestamp,
   getShortDateString,
@@ -12,6 +12,8 @@ import {
 import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
+import { countries } from '../../../lib/wca-data.js.erb';
+import RegionFlag from '../../wca/RegionFlag';
 
 // Semantic Table only allows truncating _all_ columns in a table in
 // single line fixed mode. As we only want to truncate the comment/admin notes
@@ -20,23 +22,23 @@ import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 const truncateComment = (comment) => (comment?.length > 12 ? `${comment.slice(0, 12)}...` : comment);
 
 function RegistrationTime({
-  timestamp, registeredOn, paymentStatus, paidOn, usesPaymentIntegration,
+  timestamp, registeredOn, paymentStatus, hasPaid, paidOn, usesPaymentIntegration,
 }) {
   if (timestamp) {
     return getRegistrationTimestamp(paidOn ?? registeredOn);
   }
 
-  if (usesPaymentIntegration && paymentStatus !== 'succeeded') {
-    let content = i18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
-    let trigger = <span>{i18n.t('registrations.list.not_paid')}</span>;
+  if (usesPaymentIntegration && !hasPaid) {
+    let content = I18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
+    let trigger = <span>{I18n.t('registrations.list.not_paid')}</span>;
 
     if (paymentStatus === 'initialized') {
-      content = i18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
+      content = I18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
     }
 
     if (paymentStatus === 'refund') {
-      content = i18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
-      trigger = <span>{i18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
+      content = I18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
+      trigger = <span>{I18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
     }
 
     return (
@@ -63,27 +65,44 @@ export default function TableRow({
   competitionInfo,
   index,
   draggable = false,
+  withPosition = false,
+  color,
+  distinguishPaidUnpaid = false,
 }) {
   const {
-    dob, region, events, comments, email, timestamp,
+    dob: dobIsShown,
+    region: regionIsExpanded,
+    events: eventsAreExpanded,
+    comments: commentsAreShown,
+    email: emailIsExpanded,
+    timestamp: timestampIsShown,
   } = columnsExpanded;
   const {
-    id, wca_id: wcaId, name, country,
+    id: userId, wca_id: wcaId, name, country, dob: dateOfBirth, email: emailAddress,
   } = registration.user;
   const {
-    registered_on: registeredOn, event_ids: eventIds, comment, admin_comment: adminComment,
+    registered_on: registeredOn,
+    event_ids: eventIds,
+    comment,
+    admin_comment: adminComment,
+    waiting_list_position: position,
   } = registration.competing;
-  const { dob: dateOfBirth, email: emailAddress } = registration;
   const {
-    payment_amount_iso: paymentAmount,
+    paid_amount_iso: paymentAmount,
     updated_at: updatedAt,
     payment_status: paymentStatus,
-  } = registration.payment;
+    has_paid: hasPaid,
+  } = registration.payment ?? {};
+  const usingPayment = competitionInfo['using_payment_integrations?'];
+  const checkboxCellColor = !distinguishPaidUnpaid || !usingPayment || hasPaid
+    ? color
+    : undefined;
 
   const copyEmail = () => {
     navigator.clipboard.writeText(emailAddress);
-    setMessage('Copied email address to clipboard.', 'positive');
+    showMessage('Copied email address to clipboard.', 'positive');
   };
+
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Draggable
@@ -95,19 +114,27 @@ export default function TableRow({
       {(provided) => (
         <Ref innerRef={provided.innerRef}>
           <Table.Row
-            key={id}
+            key={userId}
             active={isSelected}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <Table.Cell>
+            <Table.Cell className={checkboxCellColor}>
               { /* We manually set the margin to 0 here to fix the table row height */}
-              {draggable ? <Icon name="bars" /> : <Checkbox onChange={onCheckboxChange} checked={isSelected} style={{ margin: 0 }} />}
+              {draggable ? (
+                <Icon name="bars" />
+              ) : (
+                <Checkbox onChange={onCheckboxChange} checked={isSelected} style={{ margin: 0 }} />
+              )}
             </Table.Cell>
 
+            {withPosition && (
+              <Table.Cell>{position}</Table.Cell>
+            )}
+
             <Table.Cell>
-              <a href={editRegistrationUrl(id, competitionInfo.id)}>
-                {i18n.t('registrations.list.edit')}
+              <a href={editRegistrationUrl(registration.id)}>
+                {I18n.t('registrations.list.edit')}
               </a>
             </Table.Cell>
 
@@ -115,39 +142,32 @@ export default function TableRow({
               {wcaId ? (
                 <a href={personUrl(wcaId)}>{wcaId}</a>
               ) : (
-                <a href={editPersonUrl(id)}>
+                <a href={editPersonUrl(userId)}>
                   <Icon name="edit" />
-                  {i18n.t('users.edit.profile')}
+                  {I18n.t('users.edit.profile')}
                 </a>
               )}
             </Table.Cell>
 
             <Table.Cell>{name}</Table.Cell>
 
-            {dob && <Table.Cell>{dateOfBirth}</Table.Cell>}
+            {dobIsShown && <Table.Cell>{dateOfBirth}</Table.Cell>}
 
             <Table.Cell>
-              {region ? (
+              {country?.iso2 && (
                 <>
-                  <Flag name={country.iso2.toLowerCase()} />
-                  {region && country.name}
+                  <RegionFlag iso2={country.iso2} withoutTooltip={regionIsExpanded} />
+                  {' '}
+                  {regionIsExpanded && countries.byIso2?.[country.iso2]?.name}
                 </>
-              ) : (
-                <Popup
-                  content={country.name}
-                  trigger={(
-                    <span>
-                      <Flag name={country.iso2.toLowerCase()} />
-                    </span>
-            )}
-                />
               )}
             </Table.Cell>
 
             <Table.Cell>
               <RegistrationTime
-                timestamp={timestamp}
+                timestamp={timestampIsShown}
                 paidOn={updatedAt}
+                hasPaid={hasPaid}
                 registeredOn={registeredOn}
                 paymentStatus={paymentStatus}
                 usesPaymentIntegration={competitionInfo['using_payment_integrations?']}
@@ -156,17 +176,17 @@ export default function TableRow({
 
             {competitionInfo['using_payment_integrations?'] && (
             <Table.Cell>
-              {paymentStatus === 'succeeded'
+              {paymentAmount !== 0
                 ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
                 : ''}
             </Table.Cell>
             )}
 
-            {events ? (
+            {eventsAreExpanded ? (
               competitionInfo.event_ids.map((eventId) => (
                 <Table.Cell key={`event-${eventId}`}>
                   {eventIds.includes(eventId) && (
-                  <EventIcon id={eventId} size="1em" />
+                    <EventIcon id={eventId} size="1em" />
                   )}
                 </Table.Cell>
               ))
@@ -184,48 +204,44 @@ export default function TableRow({
                       <Icon name="magnify" />
                     </span>
                   </Table.Cell>
-          )}
+                 )}
               />
 
             )}
 
             <Table.Cell>{registration.guests}</Table.Cell>
 
-            {comments && (
-            <>
-              <Table.Cell>
-                <Popup
-                  content={comment}
-                  trigger={<span>{truncateComment(comment)}</span>}
-                />
-              </Table.Cell>
+            {commentsAreShown && (
+              <>
+                <Table.Cell>
+                  <Popup
+                    content={comment}
+                    trigger={<span>{truncateComment(comment)}</span>}
+                  />
+                </Table.Cell>
 
-              <Table.Cell>
-                <Popup
-                  content={adminComment}
-                  trigger={<span>{truncateComment(adminComment)}</span>}
-                />
-              </Table.Cell>
-            </>
+                <Table.Cell>
+                  <Popup
+                    content={adminComment}
+                    trigger={<span>{truncateComment(adminComment)}</span>}
+                  />
+                </Table.Cell>
+              </>
             )}
 
             <Table.Cell>
               <a href={`mailto:${emailAddress}`}>
-                {email ? (
+                {emailIsExpanded ? (
                   emailAddress
                 ) : (
                   <Popup
                     content={emailAddress}
-                    trigger={(
-                      <span>
-                        <Icon name="mail" />
-                      </span>
-              )}
+                    trigger={<span><Icon name="mail" /></span>}
                   />
                 )}
               </a>
               {' '}
-              <Icon link onClick={copyEmail} name="copy" title={i18n.t('competitions.registration_v2.update.email_copy')} />
+              <Icon link onClick={copyEmail} name="copy" title={I18n.t('competitions.registration_v2.update.email_copy')} />
             </Table.Cell>
           </Table.Row>
         </Ref>

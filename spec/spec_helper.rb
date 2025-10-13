@@ -1,12 +1,23 @@
 # frozen_string_literal: true
 
-# Enable SimpleCov as per https://github.com/fortissimo1997/simplecov-lcov#output-report-as-single-file
+# Enable SimpleCov for Coveralls reporting
+#   as per https://github.com/tagliala/coveralls-ruby-reborn?tab=readme-ov-file#github-actions
 require 'simplecov'
-require 'simplecov-lcov'
+
+SimpleCov.start 'rails' do
+  if ENV["CI"] # Cannot use `.present?` here because Rails isn't loaded yet
+    require 'simplecov-lcov'
+
+    SimpleCov::Formatter::LcovFormatter.config do |c|
+      c.report_with_single_file = true
+      c.single_report_path = 'coverage/lcov.info'
+    end
+
+    formatter SimpleCov::Formatter::LcovFormatter
+  end
+end
+
 require 'webmock/rspec'
-SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
-SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
-SimpleCov.start
 
 # Include rspec/retry for the few randomly failing tests
 require 'rspec/retry'

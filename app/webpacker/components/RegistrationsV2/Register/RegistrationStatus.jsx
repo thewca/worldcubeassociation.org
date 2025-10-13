@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon, Message } from 'semantic-ui-react';
-import i18n from '../../../lib/i18n';
+import I18n from '../../../lib/i18n';
 
 function registrationIconByStatus(registrationStatus) {
   switch (registrationStatus) {
@@ -21,63 +21,59 @@ function registrationIconByStatus(registrationStatus) {
 // If we add these strings to en.yml immediately, translators will get a notification asking them
 //   to translate these strings during our test mode deployment. But we aren't even sure whether
 //   we want to keep these strings. So we hard-code them "for now" (when did that ever go wrong?)
-function canIBookPlaneTickets(registrationStatus, paymentStatus, competitionInfo) {
+function canIBookPlaneTickets(registrationStatus, hasPaid, competitionInfo) {
   switch (registrationStatus) {
     case 'pending':
-      if (competitionInfo['using_payment_integrations?'] && paymentStatus !== 'succeeded') {
-        return i18n.t('competitions.registration_v2.info.payment_missing');
+      if (competitionInfo['using_payment_integrations?'] && !hasPaid) {
+        return I18n.t('competitions.registration_v2.info.payment_missing');
       }
-      return i18n.t('competitions.registration_v2.info.needs_approval');
+      return I18n.t('competitions.registration_v2.info.needs_approval');
     case 'accepted':
-      return i18n.t('competitions.registration_v2.info.is_accepted');
+      return I18n.t('competitions.registration_v2.info.is_accepted');
     case 'cancelled':
-      return i18n.t('competitions.registration_v2.info.is_cancelled');
+      return I18n.t('competitions.registration_v2.info.is_cancelled');
     case 'rejected':
-      return i18n.t('competitions.registration_v2.info.is_rejected');
+      return I18n.t('competitions.registration_v2.info.is_rejected');
     case 'waiting_list':
-      return i18n.t('competitions.registration_v2.info.is_waitlisted');
+      return I18n.t('competitions.registration_v2.info.is_waitlisted');
     default:
       return `[Testers: This should not happen. If you reached this message, please contact WST! Debug: '${registrationStatus}']`;
   }
 }
 
-function RegistrationStatusMessage({ registration, competitionInfo }) {
+export default function RegistrationStatus({ registration, hasPaid = false, competitionInfo }) {
+  const {
+    registration_status: registrationStatus,
+    waiting_list_position: waitingListPosition,
+  } = registration.competing;
+
   return (
     <Message
-      info={registration.competing.registration_status === 'pending'}
-      success={registration.competing.registration_status === 'accepted'}
-      negative={registration.competing.registration_status === 'cancelled'
-        || registration.competing.registration_status === 'rejected'}
-      warning={registration.competing.registration_status === 'waiting_list'}
+      info={registrationStatus === 'pending'}
+      success={registrationStatus === 'accepted'}
+      negative={registrationStatus === 'cancelled'
+        || registrationStatus === 'rejected'}
+      warning={registrationStatus === 'waiting_list'}
       icon
     >
-      <Icon name={registrationIconByStatus(registration.competing.registration_status)} />
+      <Icon name={registrationIconByStatus(registrationStatus)} />
       <Message.Content>
         <Message.Header>
-          {i18n.t(
-            `competitions.registration_v2.register.registration_status.${registration.competing.registration_status}`,
+          {I18n.t(
+            `competitions.registration_v2.register.registration_status.${registrationStatus}`,
             {
-              waiting_list_position: registration.competing.waiting_list_position,
+              waiting_list_position: waitingListPosition,
             },
           )}
         </Message.Header>
         <p>
           {canIBookPlaneTickets(
-            registration.competing.registration_status,
-            registration.payment?.payment_status,
+            registrationStatus,
+            hasPaid,
             competitionInfo,
           )}
         </p>
       </Message.Content>
     </Message>
-  );
-}
-
-export default function RegistrationStatus({ registration, competitionInfo }) {
-  return (
-    <RegistrationStatusMessage
-      registration={registration}
-      competitionInfo={competitionInfo}
-    />
   );
 }

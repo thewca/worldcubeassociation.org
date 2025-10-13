@@ -3,6 +3,8 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 locals {
+  sidekiq_environment = [
+  ]
   rails_environment = [
     {
       name  = "WCA_LIVE_SITE"
@@ -10,6 +12,10 @@ locals {
     },
     {
       name  = "ROOT_URL"
+      value = var.ROOT_URL
+    },
+    {
+      name  = "OIDC_ISSUER"
       value = var.ROOT_URL
     },
     {
@@ -23,6 +29,10 @@ locals {
     {
       name  = "SHAKAPACKER_ASSET_HOST"
       value = "https://assets.worldcubeassociation.org"
+    },
+    {
+      name = "WRC_WEBHOOK_URL",
+      value = var.WRC_WEBHOOK_URL
     },
     {
       name = "WCA_REGISTRATIONS_POLL_URL"
@@ -49,19 +59,7 @@ locals {
       value = aws_s3_bucket.storage-bucket.id
     },
     {
-      name = "STORAGE_AWS_REGION"
-      value = var.region
-    },
-    {
-      name = "VAULT_AWS_REGION"
-      value = var.region
-    },
-    {
-      name = "S3_AVATARS_REGION"
-      value = var.region
-    },
-    {
-      name = "DATABASE_AWS_REGION"
+      name = "AWS_REGION"
       value = var.region
     },
     {
@@ -73,8 +71,20 @@ locals {
       value = aws_s3_bucket.avatars.id
     },
     {
+      name = "S3_AVATARS_PRIVATE_BUCKET"
+      value = aws_s3_bucket.avatars_private.id
+    },
+    {
       name = "S3_AVATARS_ASSET_HOST"
       value = "https://avatars.worldcubeassociation.org"
+    },
+    {
+      name = "AVATARS_PUBLIC_STORAGE"
+      value = "s3_avatars_public"
+    },
+    {
+      name = "AVATARS_PRIVATE_STORAGE"
+      value = "s3_avatars_private"
     },
     {
       name = "CDN_AVATARS_DISTRIBUTION_ID"
@@ -99,6 +109,14 @@ locals {
     {
       name = "VAULT_ADDR"
       value = var.VAULT_ADDR
+    },
+    {
+      name = "REGISTRATION_QUEUE"
+      value = aws_sqs_queue.this.url
+    },
+    {
+      name = "LIVE_QUEUE"
+      value = aws_sqs_queue.results.url
     },
     {
       name = "VAULT_APPLICATION"
@@ -172,7 +190,9 @@ data "aws_iam_policy_document" "task_policy" {
                   aws_s3_bucket.regulations.arn,
                   "${aws_s3_bucket.regulations.arn}/*",
                   aws_s3_bucket.assets.arn,
-                  "${aws_s3_bucket.assets.arn}/*"]
+                  "${aws_s3_bucket.assets.arn}/*",
+                    aws_s3_bucket.avatars_private.arn,
+                  "${aws_s3_bucket.avatars_private.arn}/*",]
     }
   statement {
     actions = [
@@ -186,6 +206,17 @@ data "aws_iam_policy_document" "task_policy" {
       "rds-db:connect",
     ]
     resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "sqs:SendMessage",
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:GetQueueUrl"
+    ]
+    resources = [aws_sqs_queue.this.arn, aws_sqs_queue.results.arn]
   }
 }
 

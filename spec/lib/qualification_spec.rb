@@ -1,82 +1,82 @@
 # frozen_string_literal: true
 
 RSpec.describe Qualification do
-  let(:user) { FactoryBot.create(:user_with_wca_id) }
-  let(:first_competition) {
-    FactoryBot.create(
+  let(:user) { create(:user_with_wca_id) }
+  let(:first_competition) do
+    create(
       :competition,
       start_date: '2021-02-01',
       end_date: '2021-02-01',
     )
-  }
-  let(:second_competition) {
-    FactoryBot.create(
+  end
+  let(:second_competition) do
+    create(
       :competition,
       start_date: '2021-03-01',
       end_date: '2021-03-02',
     )
-  }
+  end
 
-  let!(:first_333_result) {
-    FactoryBot.create(
+  let!(:first_333_result) do
+    create(
       :result,
-      personId: user.wca_id,
-      competitionId: first_competition.id,
-      eventId: '333',
+      person_id: user.wca_id,
+      competition_id: first_competition.id,
+      event_id: '333',
       best: 1200,
       average: 1500,
     )
-  }
-  let!(:second_333_result) {
-    FactoryBot.create(
+  end
+  let!(:second_333_result) do
+    create(
       :result,
-      personId: user.wca_id,
-      competitionId: second_competition.id,
-      eventId: '333',
+      person_id: user.wca_id,
+      competition_id: second_competition.id,
+      event_id: '333',
       best: 1100,
       average: 1200,
     )
-  }
-  let!(:first_oh_result_no_single) {
-    FactoryBot.create(
+  end
+  let!(:first_oh_result_no_single) do
+    create(
       :result,
-      personId: user.wca_id,
-      competitionId: first_competition.id,
-      eventId: '333oh',
+      person_id: user.wca_id,
+      competition_id: first_competition.id,
+      event_id: '333oh',
       best: -1,
       average: -1,
     )
-  }
-  let!(:second_oh_result) {
-    FactoryBot.create(
+  end
+  let!(:second_oh_result) do
+    create(
       :result,
-      personId: user.wca_id,
-      competitionId: second_competition.id,
-      eventId: '333oh',
+      person_id: user.wca_id,
+      competition_id: second_competition.id,
+      event_id: '333oh',
       best: 1700,
       average: 2000,
     )
-  }
-  let!(:first_444_result_no_average) {
-    FactoryBot.create(
+  end
+  let!(:first_444_result_no_average) do
+    create(
       :result,
-      personId: user.wca_id,
-      competitionId: first_competition.id,
-      eventId: '444',
+      person_id: user.wca_id,
+      competition_id: first_competition.id,
+      event_id: '444',
       best: 4500,
       average: -1,
     )
-  }
-  let!(:second_444_result) {
-    FactoryBot.create(
+  end
+  let!(:second_444_result) do
+    create(
       :result,
-      personId: user.wca_id,
-      competitionId: second_competition.id,
-      eventId: '444',
+      person_id: user.wca_id,
+      competition_id: second_competition.id,
+      event_id: '444',
       best: 4500,
       average: 4800,
     )
-  }
+  end
 
   context "Single" do
     it "requires single" do
@@ -86,7 +86,7 @@ RSpec.describe Qualification do
         'whenDate' => '2021-06-01',
       }
       qualification = Qualification.load(input)
-      expect(qualification).to be_invalid
+      expect(qualification).not_to be_valid
     end
 
     it "requires date" do
@@ -96,7 +96,7 @@ RSpec.describe Qualification do
         'level' => 1000,
       }
       qualification = Qualification.load(input)
-      expect(qualification).to be_invalid
+      expect(qualification).not_to be_valid
     end
 
     it "requires type" do
@@ -106,7 +106,7 @@ RSpec.describe Qualification do
         'whenDate' => '2021-06-01',
       }
       qualification = Qualification.load(input)
-      expect(qualification).to be_invalid
+      expect(qualification).not_to be_valid
     end
 
     it "parses correctly" do
@@ -200,7 +200,9 @@ RSpec.describe Qualification do
       expect(qualification.can_register?(user, '333')).to be true
     end
 
+    # User's qualifying result was achieved on the 2nd
     it "requires end date before" do
+      # Result must be achieved by the 3rd - user qualifies because result achieved before whenDate
       input = {
         'resultType' => 'single',
         'type' => 'attemptResult',
@@ -211,10 +213,22 @@ RSpec.describe Qualification do
       expect(qualification).to be_valid
       expect(qualification.can_register?(user, '333')).to be true
 
+      # Result must be achieved by the 2nd - user qualifies because result achieved on whenDate
       input = {
         'resultType' => 'single',
         'type' => 'attemptResult',
         'whenDate' => '2021-03-02',
+        'level' => 1150,
+      }
+      qualification = Qualification.load(input)
+      expect(qualification).to be_valid
+      expect(qualification.can_register?(user, '333')).to be true
+
+      # Result must be achieved by the 1st - user does not qualify because result achieved after whenDate
+      input = {
+        'resultType' => 'single',
+        'type' => 'attemptResult',
+        'whenDate' => '2021-03-01',
         'level' => 1150,
       }
       qualification = Qualification.load(input)
@@ -231,7 +245,7 @@ RSpec.describe Qualification do
         'whenDate' => '2021-06-01',
       }
       qualification = Qualification.load(input)
-      expect(qualification).to be_invalid
+      expect(qualification).not_to be_valid
     end
 
     it "requires date" do
@@ -241,7 +255,7 @@ RSpec.describe Qualification do
         'level' => 1000,
       }
       qualification = Qualification.load(input)
-      expect(qualification).to be_invalid
+      expect(qualification).not_to be_valid
     end
 
     it "requires type" do
@@ -251,7 +265,7 @@ RSpec.describe Qualification do
         'whenDate' => '2021-06-01',
       }
       qualification = Qualification.load(input)
-      expect(qualification).to be_invalid
+      expect(qualification).not_to be_valid
     end
 
     it "parses correctly" do
@@ -331,7 +345,9 @@ RSpec.describe Qualification do
       expect(qualification.can_register?(user, '333')).to be true
     end
 
-    it "requires end date before" do
+    # User's qualifying result was achieved on the 2nd
+    it "supports achieving result on qualification date" do
+      # Result must be achieved by the 3rd - user qualifies because result achieved before whenDate
       input = {
         'resultType' => 'average',
         'type' => 'attemptResult',
@@ -342,11 +358,23 @@ RSpec.describe Qualification do
       expect(qualification).to be_valid
       expect(qualification.can_register?(user, '333oh')).to be true
 
+      # Result must be achieved by the 2nd - user qualifies because result achieved on whenDate
       input = {
         'resultType' => 'average',
         'type' => 'attemptResult',
         'whenDate' => '2021-03-02',
-        'level' => 2510,
+        'level' => 2500,
+      }
+      qualification = Qualification.load(input)
+      expect(qualification).to be_valid
+      expect(qualification.can_register?(user, '333oh')).to be true
+
+      # Result must be achieved by the 1st - user does not qualify because result achieved after whenDate
+      input = {
+        'resultType' => 'average',
+        'type' => 'attemptResult',
+        'whenDate' => '2021-03-01',
+        'level' => 2500,
       }
       qualification = Qualification.load(input)
       expect(qualification).to be_valid

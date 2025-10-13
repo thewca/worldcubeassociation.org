@@ -3,17 +3,17 @@
 class Regulation < SimpleDelegator
   REGULATIONS_JSON_PATH = "wca-regulations.json"
 
-  thread_mattr_accessor :regulations, instance_accessor: false, default: []
-  thread_mattr_accessor :regulations_load_error, instance_accessor: false
+  mattr_accessor :regulations, instance_accessor: false, default: []
+  mattr_accessor :regulations_load_error, instance_accessor: false
 
   def self.regulations_by_id
     self.regulations.index_by { |r| r["id"] }
   end
 
-  def self.reload_regulations(s3)
+  def self.reload_regulations(s3_client)
     reset_regulations
 
-    self.regulations = JSON.parse(s3.bucket(RegulationTranslationsHelper::BUCKET_NAME).object(REGULATIONS_JSON_PATH).get.body.read).freeze
+    self.regulations = JSON.parse(s3_client.bucket(RegulationTranslationsHelper::BUCKET_NAME).object(REGULATIONS_JSON_PATH).get.body.read).freeze
   rescue StandardError => e
     self.regulations_load_error = e
   end
@@ -25,7 +25,6 @@ class Regulation < SimpleDelegator
 
   if Rails.env.production? && !EnvConfig.ASSETS_COMPILATION?
     reload_regulations(Aws::S3::Resource.new(
-                         region: EnvConfig.STORAGE_AWS_REGION,
                          credentials: Aws::ECSCredentials.new,
                        ))
   end
@@ -42,7 +41,7 @@ class Regulation < SimpleDelegator
     matched_regulations = self.regulations.dup
     query.downcase.split.each do |part|
       matched_regulations.select! do |reg|
-        %w(content_html id).any? { |field| reg[field].downcase.include?(part) }
+        %w[content_html id].any? { |field| reg[field].downcase.include?(part) }
       end
     end
     Regulation.new(matched_regulations)

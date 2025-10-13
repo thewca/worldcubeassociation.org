@@ -5,30 +5,52 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react';
-import i18n from '../../../lib/i18n';
-import useCheckboxState from '../../../lib/hooks/useCheckboxState';
+import I18n from '../../../lib/i18n';
+import { useCheckboxUpdater } from '../../../lib/hooks/useCheckboxState';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
+import { useStepNavigation } from '../lib/StepNavigationProvider';
+import { useFormObjectState } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
-export default function RegistrationRequirements({ nextStep, competitionInfo }) {
-  const [infoAcknowledged, setInfoAcknowledged] = useCheckboxState(false);
+function RegistrationFullMessage({ competitionInfo }) {
+  if (competitionInfo['registration_full_and_accepted?']) {
+    return (
+      <Message warning>
+        <I18nHTMLTranslate i18nKey="registrations.registration_full" options={{ competitor_limit: competitionInfo.competitor_limit }} />
+      </Message>
+    );
+  }
+
+  if (competitionInfo['registration_full?']) {
+    return (
+      <Message warning>
+        <I18nHTMLTranslate i18nKey="registrations.registration_full_include_waiting_list" options={{ competitor_limit: competitionInfo.competitor_limit }} />
+      </Message>
+    );
+  }
+
+  return null;
+}
+
+export default function RegistrationRequirements({ competitionInfo }) {
+  const [infoAcknowledged, setInfoAcknowledgedRaw] = useFormObjectState('infoAcknowledged', ['regRequirements']);
+  const setInfoAcknowledged = useCheckboxUpdater(setInfoAcknowledgedRaw);
+  const { nextStep } = useStepNavigation();
+
   return (
     <Segment basic>
       <Form onSubmit={nextStep} warning={competitionInfo['registration_full?']}>
-        {competitionInfo['registration_full?'] && (
-        <Message warning>
-          <I18nHTMLTranslate i18nKey="registrations.registration_full" options={{ competitor_limit: competitionInfo.competitor_limit }} />
-        </Message>
-        ) }
+        <RegistrationFullMessage competitionInfo={competitionInfo} />
         <Message positive>
           <Form.Checkbox
+            id="regRequirementsCheckbox"
             checked={infoAcknowledged}
             onClick={setInfoAcknowledged}
-            label={i18n.t('competitions.registration_v2.requirements.acknowledgement')}
+            label={I18n.t('competitions.registration_v2.requirements.acknowledgement')}
             required
           />
         </Message>
         <Button disabled={!infoAcknowledged} type="submit" positive>
-          {i18n.t('competitions.registration_v2.requirements.next_step')}
+          {I18n.t('competitions.registration_v2.requirements.next_step')}
         </Button>
       </Form>
     </Segment>

@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables";
 
 .competition-results {
   .events-list {
@@ -6,22 +6,14 @@
     justify-content: center;
   }
   .results-data {
-    .table-cell-solves {
-      word-spacing: 0.5em;
-      vertical-align: middle;
-    }
-    .table-cell-solves-mbf {
-      word-spacing: 2em;
-      vertical-align: middle;
-    }
     .WR {
-      color : $wr-color;
+      color : variables.$wr-color;
     }
     .CR {
-      color : $cr-color;
+      color : variables.$cr-color;
     }
     .NR {
-      color : $nr-color;
+      color : variables.$nr-color;
     }
     .edit-link {
       margin-left: 1em;

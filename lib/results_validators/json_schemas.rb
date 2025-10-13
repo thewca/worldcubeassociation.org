@@ -6,7 +6,7 @@ module ResultsValidators
       "type" => "object",
       "properties" => {
         "personId" => { "type" => "number" },
-        "position" => { "type" => ["number", "null"] },
+        "position" => { "type" => %w[number null] },
         "results" => {
           "type" => "array",
           "items" => { "type" => "number" },
@@ -14,7 +14,7 @@ module ResultsValidators
         "best" => { "type" => "number" },
         "average" => { "type" => "number" },
       },
-      "required" => ["personId", "position", "results", "best", "average"],
+      "required" => %w[personId position results best average],
     }.freeze
 
     GROUP_JSON_SCHEMA = {
@@ -30,7 +30,7 @@ module ResultsValidators
           "items" => { "type" => "string" },
         },
       },
-      "required" => ["group", "scrambles"],
+      "required" => %w[group scrambles],
     }.freeze
 
     ROUND_JSON_SCHEMA = {
@@ -47,7 +47,7 @@ module ResultsValidators
           "items" => GROUP_JSON_SCHEMA,
         },
       },
-      "required" => ["roundId", "formatId", "results", "groups"],
+      "required" => %w[roundId formatId results groups],
     }.freeze
 
     PERSON_JSON_SCHEMA = {
@@ -62,7 +62,7 @@ module ResultsValidators
         "gender" => { "type" => "string" },
         "dob" => { "type" => "string" },
       },
-      "required" => ["id", "name", "wcaId", "countryId", "gender", "dob"],
+      "required" => %w[id name wcaId countryId gender dob],
     }.freeze
 
     EVENT_JSON_SCHEMA = {
@@ -74,7 +74,7 @@ module ResultsValidators
           "items" => ROUND_JSON_SCHEMA,
         },
       },
-      "required" => ["eventId", "rounds"],
+      "required" => %w[eventId rounds],
     }.freeze
 
     RESULT_JSON_SCHEMA = {
@@ -91,7 +91,7 @@ module ResultsValidators
           "items" => EVENT_JSON_SCHEMA,
         },
       },
-      "required" => ["formatVersion", "competitionId", "persons", "events"],
+      "required" => %w[formatVersion competitionId persons events],
     }.freeze
   end
 end

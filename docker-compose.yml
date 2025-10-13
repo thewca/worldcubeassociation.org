@@ -1,48 +1,109 @@
+x-environment: &env
+  RAILS_ENV: development
+  DATABASE_HOST: wca_db
+  BUNDLE_PATH: /usr/local/bundle/current
+
 x-app: &app
   build:
     dockerfile: Dockerfile.dev
     context: .
   working_dir: /app
+  entrypoint: ./entrypoint.dev.sh
+  environment:
+    <<: *env
   volumes:
     - .:/app
+    - gems_volume:/usr/local/bundle
+    - node_modules_volume:/app/node_modules
   networks:
     - wca-main
 
+x-app-environment: &appEnv
+  <<: *env
+  SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
+  MAILCATCHER_SMTP_HOST: wca_mailcatcher
+
 services:
+  wca_environment:
+    <<: *app
+    container_name: "environment"
+    environment:
+      <<: *env
+      DISABLE_SPRING: 1
+    command: >
+      bash -c './package-install.dev.sh packages.dev.txt &&
+      rm -f .db-inited &&
+      bin/setup &&
+      touch .db-inited'
+    healthcheck:
+      test: [ "CMD", "test", "-f", ".db-inited" ]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+      # Give the container some time to populate the database
+      start_period: 15m
+    # Tell Docker that it's okay and expected that this container terminates (with exit code 0)
+    #   after completing the script listed under `command` above
+    restart: no
+    depends_on:
+      wca_db:
+        condition: "service_healthy"
+      wca_redis:
+        condition: "service_started"
+
   wca_on_rails:
     <<: *app
     container_name: "rails"
     ports:
       - "3000:3000"
     environment:
-      RAILS_ENV: development
-      DATABASE_HOST: wca_db
+      <<: *appEnv
       SHAKAPACKER_DEV_SERVER_HOST: wca_webpacker
       CACHE_REDIS_URL: redis://wca_redis:6379/0
-      SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
-      MAILCATCHER_SMTP_HOST: wca_mailcatcher
+      RUNNING_IN_DOCKER: true
     tty: true
-    # First, install Ruby and Node dependencies
-    # Next, load the database if it does not exist yet
     # Start the server and bind to 0.0.0.0 (vs 127.0.0.1) so Docker's port mappings work correctly
-    command: >
-      bash -c 'corepack install &&
-      rm -f .db-inited &&
-      bin/setup &&
-      touch .db-inited &&
-      bin/rails server -b 0.0.0.0'
-    healthcheck:
-      test: ["CMD", "test", "-f", ".db-inited"]
-      interval: 5s
-      timeout: 2s
-      retries: 20
-      # Give the container some time to populate the database
-      start_period: 15m
+    command: bin/rails server -b 0.0.0.0
     depends_on:
-      wca_db:
-        condition: 'service_healthy'
-      wca_redis:
-        condition: 'service_started'
+      wca_environment:
+        condition: service_completed_successfully
+
+  wca_nextjs:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    container_name: "nextjs"
+    environment:
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    working_dir: /app
+    command: >
+      bash -c 'corepack install && yarn install &&
+      yarn run dev'
+    volumes:
+      - ./next-frontend:/app
+      - ./lib/static_data:/app/src/lib/staticData
+      - ./config/locales/available.json:/app/src/lib/i18n/locales/available.json
+      - next_yarn_volume:/app/node_modules
+    networks:
+      - wca-main
+
+  wca_payload_db:
+    image: mongo:8
+    container_name: "payload_db"
+    command:
+      - --quiet
+      - --logpath
+      - /var/log/mongodb/mongod.log
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: payload
+    ports:
+      - "27017:27017"
+    networks:
+      - wca-main
 
   wca_webpacker:
     <<: *app
@@ -50,19 +111,14 @@ services:
     ports:
       - "3035:3035"
     environment:
-      DATABASE_HOST: wca_db
+      <<: *appEnv
       SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
-      NODE_ENV: development
-    command: >
-      bash -c 'bundle install && yarn install &&
-      bin/shakapacker-dev-server'
+    command: bin/shakapacker-dev-server
     depends_on:
-      wca_db:
-        condition: 'service_healthy'
-      wca_on_rails:
+      wca_environment:
         # We need to make sure that the database is populated because our frontend code
         # pulls stuff like WCA Events and Round formats from the DB when compiling assets
-        condition: 'service_healthy'
+        condition: service_completed_successfully
 
   wca_mailcatcher:
     <<: *app
@@ -77,32 +133,26 @@ services:
 
   wca_sidekiq:
     <<: *app
-    container_name: 'sidekiq'
+    container_name: "sidekiq"
     environment:
-      RAILS_ENV: development
-      DATABASE_HOST: wca_db
-      SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
-      MAILCATCHER_SMTP_HOST: wca_mailcatcher
+      <<: *appEnv
       # Cronjobs are disabled in development by default. If you wish to run cronjobs,
       # set this env variable to any integer value greater than zero
       # CRONJOB_POLLING_MINUTES: 30
-    command: >
-      bash -c 'bundle install && yarn install &&
-      bundle exec sidekiq'
+    command: bin/sidekiq
     depends_on:
-      wca_on_rails:
-        condition: 'service_healthy'
-      wca_redis:
-        condition: 'service_started'
-      wca_db:
-        condition: 'service_healthy'
+      wca_environment:
+        condition: service_completed_successfully
 
   wca_db:
-    image: mysql:8.0
+    # You will have to run docker exec -it database mysql to connect to the database and then
+    # ALTER USER 'root'@'%' IDENTIFIED WITH caching_sha2_password BY '';
+    # To upgrade your DB from mysql8.0 to mysql8.4
+    image: mysql:8.4
     container_name: "database"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-    command: --authentication-policy=mysql_native_password
+    command: --mysql-native-password=ON
     ports:
       - "3306:3306"
     volumes:
@@ -130,10 +180,54 @@ services:
     networks:
       - wca-main
 
+  wca_playwright:
+    image: mcr.microsoft.com/playwright:v1.55.0
+    container_name: "playwright"
+    extra_hosts:
+      - "hostmachine:host-gateway"
+    # The following options `ipc`, `cap_add` and `init` are per Playwright's documentation: https://playwright.dev/docs/ci#docker
+    ipc: "host"
+    cap_add:
+      - SYS_ADMIN
+    init: true
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+      - DEBUG=pw:api
+      - DISPLAY=$DISPLAY
+    ports:
+      - "8089:8089"
+    working_dir: /app
+    command: >
+      bash -c 'corepack enable &&
+      ./package-install.dev.sh fonts.pdf.txt &&
+      fc-cache -f -v &&
+      yarn install &&
+      yarn playwright run-server --port 8089 --host=0.0.0.0'
+    volumes:
+      - .:/app
+      - node_modules_volume:/app/node_modules
+      - pdf_fonts_volume:/usr/share/fonts
+      # If you want to run tests in debug mode with a visible browser, you have to expose an X11 socket to Playwright
+      #   under `/tmp/.X11-unix` within the container. Chances are high that the original X11 socket on the host machine
+      #   lives in that exact same folder, but it's hard to be sure with all the different OSes that we want to support.
+      # Please enable the following mount at your own risk.
+      # You also have to make sure the owner's user ID matches the container's user ID to avoid X11 rendering glitches.
+      #  - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    networks:
+      - wca-main
+
 volumes:
+  gems_volume:
+    driver: local
+  node_modules_volume:
+    driver: local
   wca_db_volume:
     driver: local
   cache_volume:
+    driver: local
+  next_yarn_volume:
+    driver: local
+  pdf_fonts_volume:
     driver: local
 
 networks:

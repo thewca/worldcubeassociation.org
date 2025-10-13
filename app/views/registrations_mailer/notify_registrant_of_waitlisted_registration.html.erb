@@ -1,0 +1,11 @@
+<% @competition = @registration.competition %>
+
+<p>
+  <%= t 'registrations.mailer.waiting_list.waitlisted_html', here: link_to(t('common.here'), competition_register_url(@competition)) %>
+</p>
+
+<p>
+  <%= t 'registrations.mailer.waiting_list.email_if_error' %>
+</p>
+
+<%= render partial: 'organizers_or_delegates_signature' %>

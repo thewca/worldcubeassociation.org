@@ -9,13 +9,13 @@ import useLoadedData from '../../lib/hooks/useLoadedData';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
-import CountryFlag from '../wca/CountryFlag';
+import RegionFlag from '../wca/RegionFlag';
 import {
   adminCheckUploadedResults,
   adminPostingCompetitionsUrl,
-  adminImportResultsUrl,
   adminStartPostingUrl,
   competitionUrl,
+  viewUrls,
 } from '../../lib/requests/routes.js.erb';
 
 function stateReducer(accumulated, current) {
@@ -75,7 +75,7 @@ function PostingCompetitionsIndex({
               <Header.Subheader>
                 {c.city}
                 {' '}
-                <CountryFlag iso2={c.country_iso2} />
+                <RegionFlag iso2={c.country_iso2} />
               </Header.Subheader>
               <Header.Subheader>
                 {`Submission Timestamp: ${DateTime.fromISO(c.results_submitted_at).toRelative()}`}
@@ -99,13 +99,15 @@ function PostingCompetitionsIndex({
                   >
                     Check results page
                   </Button>
-                  <Button
-                    target="_blank"
-                    color="green"
-                    href={adminImportResultsUrl(c.id)}
-                  >
-                    Import results page
-                  </Button>
+                  {c.result_ticket && (
+                    <Button
+                      target="_blank"
+                      color="green"
+                      href={viewUrls.tickets.show(c.result_ticket.id)}
+                    >
+                      Post through Tickets page
+                    </Button>
+                  )}
                 </>
               )}
             </Button.Group>

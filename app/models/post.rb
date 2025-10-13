@@ -2,6 +2,7 @@
 
 class Post < ApplicationRecord
   include MarkdownHelper
+
   belongs_to :author, class_name: "User"
   has_many :post_tags, autosave: true, dependent: :destroy
   include Taggable
@@ -14,14 +15,17 @@ class Post < ApplicationRecord
 
   validate :unstick_at_must_be_in_the_future, if: :unstick_at
   private def unstick_at_must_be_in_the_future
-    if unstick_at <= Date.today
-      errors.add(:unstick_at, I18n.t('posts.errors.unstick_at_future'))
-    end
+    errors.add(:unstick_at, I18n.t('posts.errors.unstick_at_future')) if unstick_at <= Date.today
   end
 
   before_validation :clear_unstick_at, unless: :sticky?
   private def clear_unstick_at
     self.unstick_at = nil
+  end
+
+  before_validation :set_default_unstick_at, if: :sticky?
+  private def set_default_unstick_at
+    self.unstick_at ||= 2.weeks.from_now.to_date
   end
 
   BREAK_TAG_RE = /<!--\s*break\s*-->/
@@ -57,23 +61,19 @@ class Post < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "slug", "title", "sticky", "created_at"],
-    methods: ["url", "author_name"],
+    only: %w[id slug title sticky created_at],
+    methods: %w[url author_name],
   }.freeze
 
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
-    json.merge!(
-      class: self.class.to_s.downcase,
-    )
+    json[:class] = self.class.to_s.downcase
     if options[:teaser_only]
       json[:teaser] = md(body_teaser)
     else
       json[:body] = body
     end
-    if options[:can_manage]
-      json[:edit_url] = Rails.application.routes.url_helpers.edit_post_path(slug)
-    end
+    json[:edit_url] = Rails.application.routes.url_helpers.edit_post_path(slug) if options[:can_manage]
 
     json
   end

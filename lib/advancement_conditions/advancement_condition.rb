@@ -5,9 +5,8 @@ module AdvancementConditions
     include ActiveModel::Validations
 
     attr_accessor :level
-    validates :level, numericality: { only_integer: true }
 
-    @@advancement_conditions = [AttemptResultCondition, PercentCondition, RankingCondition].freeze
+    validates :level, numericality: { only_integer: true }
 
     def initialize(level)
       self.level = level
@@ -25,17 +24,13 @@ module AdvancementConditions
       self.to_wcif.hash
     end
 
-    def self.wcif_type_to_class
-      @@wcif_type_to_class ||= @@advancement_conditions.to_h { |cls| [cls.wcif_type, cls] }
-    end
-
     def self.load(json)
       if json.nil? || json.is_a?(self)
         json
       else
         json_obj = json.is_a?(Hash) ? json : JSON.parse(json)
         wcif_type = json_obj['type']
-        self.wcif_type_to_class[wcif_type].new(json_obj['level'])
+        Utils.advancement_condition_class_from_wcif_type(wcif_type).new(json_obj['level'])
       end
     end
 
@@ -45,9 +40,9 @@ module AdvancementConditions
 
     def self.wcif_json_schema
       {
-        "type" => ["object", "null"],
+        "type" => %w[object null],
         "properties" => {
-          "type" => { "type" => "string", "enum" => @@advancement_conditions.map(&:wcif_type) },
+          "type" => { "type" => "string", "enum" => Utils::ALL_ADVANCEMENT_CONDITIONS.map(&:wcif_type) },
           "level" => { "type" => "integer" },
         },
       }

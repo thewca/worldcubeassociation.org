@@ -152,57 +152,57 @@ id:
       #original_hash: 4d618bb
       name: Babak kualifikasi
       #original_hash: 4d618bb
-      cellName: Babak kualifikasi
+      cell_name: Babak kualifikasi
     '1':
       #original_hash: 1e725b6
       name: Babak pertama
       #original_hash: 1e725b6
-      cellName: Babak pertama
+      cell_name: Babak pertama
     '2':
       #original_hash: 985c8d0
       name: Babak kedua
       #original_hash: 985c8d0
-      cellName: Babak kedua
+      cell_name: Babak kedua
     '3':
       #original_hash: e2f74d2
       name: Semi Final
       #original_hash: e2f74d2
-      cellName: Semi Final
+      cell_name: Semi Final
     b:
       #original_hash: 327c999
       name: B Final
       #original_hash: 327c999
-      cellName: B Final
+      cell_name: B Final
     c:
       #original_hash: 672b22c
       name: Final
       #original_hash: 672b22c
-      cellName: Final
+      cell_name: Final
     d:
       #original_hash: 1e725b6
       name: Babak pertama
       #original_hash: 1e725b6
-      cellName: Babak pertama
+      cell_name: Babak pertama
     e:
       #original_hash: 985c8d0
       name: Babak kedua
       #original_hash: 985c8d0
-      cellName: Babak kedua
+      cell_name: Babak kedua
     f:
       #original_hash: 672b22c
       name: Final
       #original_hash: 672b22c
-      cellName: Final
+      cell_name: Final
     g:
       #original_hash: e2f74d2
       name: Semi Final
       #original_hash: e2f74d2
-      cellName: Semi Final
+      cell_name: Semi Final
     h:
       #original_hash: 4d618bb
       name: Babak kualifikasi
       #original_hash: 4d618bb
-      cellName: Babak kualifikasi
+      cell_name: Babak kualifikasi
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Attempt %{number}'
@@ -495,7 +495,7 @@ id:
         #original_hash: 8c41ae8
         wca_id: Orang
         #original_hash: fa4c045
-        countryId: Mewakili
+        country_id: Mewakili
         #original_hash: ab58155
         dob: Tanggal lahir
         #original_hash: 8a754c6
@@ -547,19 +547,19 @@ id:
         competition_id: Terjadi pada saat
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Kompetisi
+        competition_id: Kompetisi
         #original_hash: 3deb745
-        type: Tipe
+        media_type: Tipe
         #original_hash: c3328c3
         text: Teks
         #original_hash: d051707
         uri: Tautan
         #original_hash: 1be755a
-        submitterName: Nama pengirim
+        submitter_name: Nama pengirim
         #original_hash: 78cdfee
-        submitterEmail: Email pengirim
+        submitter_email: Email pengirim
         #original_hash: 0d31f23
-        submitterComment: Komentar pengirim
+        submitter_comment: Komentar pengirim
         #original_hash: bae7d5b
         status: Status
       regional_organization:
@@ -646,7 +646,7 @@ id:
         accepted: Diterima
         #original_hash: 96f608c
         pending: Menunggu
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Laporan
         #original_hash: 4360c2d
@@ -865,19 +865,19 @@ id:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
@@ -887,8 +887,6 @@ id:
         results_file: ''
         #original_hash: da39a3e
         message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1491,7 +1489,7 @@ id:
         yang Sering Diajukan</a> kami terlebih dahulu! Jika Anda ingin
         menghubungi komite atau tim spesifik yang tidak tertulis di sini, Anda
         dapat menemukan informasi kontak mereka pada <a
-        href="/teams-committees-councils">halaman ini</a>.
+        href="/teams-committees">halaman ini</a>.
       form:
         user_data:
           name:
@@ -1850,7 +1848,7 @@ id:
         msg: >-
           Anda tidak dapat mengubah nama, tanggal lahir, jenis kelamin, atau
           wilayah perwakilan Anda. Alasan: %{reason}. Kontak <a
-          href='mailto:results@worldcubeassociation.org' target='_blank'>Tim
+          href='%{wrt_contact_path}' target='_blank'>Tim
           Hasil WCA</a> atau <a href='%{delegate_url}'>Delegasi</a> Anda jika
           ingin mengubahnya.
         reason:
@@ -1975,17 +1973,17 @@ id:
       #original_hash: 51fa5a4
       wca_id_no_gender_html: >-
         Kami tidak memiliki catatan jenis kelamin untuk ID WCA ini. Kirim email
-        ke <a href='mailto:results@worldcubeassociation.org' target='_blank'>Tim
+        ke <a href='%{wrt_contact_path}' target='_blank'>Tim
         Hasil WCA</a> untuk memperbaikinya.
       #original_hash: 87ee245
       wca_id_no_citizenship_html: >-
         Kami tidak memiliki catatan kewarganegaraan untuk ID WCA ini. Kirim
-        email ke <a href='mailto:results@worldcubeassociation.org'
+        email ke <a href='%{wrt_contact_path}'
         target='_blank'>Tim Hasil WCA</a> untuk memperbaikinya.
       #original_hash: c3839bc
       wca_id_no_name_html: >-
         Kami tidak memiliki catatan nama untuk ID WCA ini. Kirim email ke <a
-        href='mailto:results@worldcubeassociation.org' target='_blank'>Tim Hasil
+        href='%{wrt_contact_path}' target='_blank'>Tim Hasil
         WCA</a> untuk memperbaikinya.
       #original_hash: d02c03b
       avatar_requires_wca_id: dibutuhkan penghubungan ID WCA

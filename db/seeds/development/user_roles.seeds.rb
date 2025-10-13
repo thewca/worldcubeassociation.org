@@ -58,8 +58,8 @@ after :user_groups do
   end
 
   # Board Roles
-  past_board_roles = 9.times.collect { |index| FactoryBot.create(:board_role, :inactive) }
-  current_board_roles = 4.times.collect { |index| FactoryBot.create(:board_role, :active) }
+  past_board_roles = Array.new(9) { |_index| FactoryBot.create(:board_role, :inactive) }
+  current_board_roles = Array.new(4) { |_index| FactoryBot.create(:board_role, :active) }
 
   # Officer Roles
   # Giving officer roles to all board users except past_board_roles[0] and current_board_roles[0]
@@ -81,7 +81,7 @@ after :user_groups do
   FactoryBot.create(:treasurer_role)
 
   # Banned competitors
-  5.times {
+  5.times do
     FactoryBot.create(
       :banned_competitor_role,
       metadata: FactoryBot.create(
@@ -90,5 +90,5 @@ after :user_groups do
         scope: RolesMetadataBannedCompetitors.scopes[:competing_and_attending],
       ),
     )
-  }
+  end
 end

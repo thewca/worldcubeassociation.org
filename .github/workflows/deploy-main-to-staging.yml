@@ -5,11 +5,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           aws-access-key-id: ${{ secrets.CI_CD_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.CI_CD_AWS_SECRET_ACCESS_KEY }}
@@ -30,5 +30,6 @@ jobs:
       - name: Deploy staging
         run: |
           aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging --force-new-deployment
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging-sqs-worker --force-new-deployment
           aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging-API --force-new-deployment
           aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging-auxiliary-services --force-new-deployment

@@ -27,7 +27,7 @@ export default function BannedCompetitorsPage() {
   } = useLoadedData(apiV0Urls.userRoles.list({
     isActive: false,
     groupType: groupTypes.banned_competitors,
-  }, 'startDate'));
+  }, 'startDate:desc'));
   const {
     data: bannedGroups,
     loading: bannedGroupLoading,
@@ -38,44 +38,40 @@ export default function BannedCompetitorsPage() {
   const [banModalParams, setBanModalParams] = useState(null);
 
   if (
-    bannedCompetitorRolesLoading ||
-    pastBannedCompetitorRolesLoading ||
-    bannedGroupLoading ||
-    permissionsLoading
+    bannedCompetitorRolesLoading
+    || pastBannedCompetitorRolesLoading
+    || bannedGroupLoading
+    || permissionsLoading
   ) {
     return <Loading />;
   }
   if (
-    bannedCompetitorRolesError ||
-    pastBannedCompetitorRolesError ||
-    bannedGroupError
+    bannedCompetitorRolesError
+    || pastBannedCompetitorRolesError
+    || bannedGroupError
   ) {
     return <Errored />;
   }
 
-  const canEditBannedCompetitors = bannedGroups.some((bannedGroup) =>
-    loggedInUserPermissions.canEditGroup(bannedGroup.id)
-  );
+  const canEditBannedCompetitors = bannedGroups
+    .some((bannedGroup) => loggedInUserPermissions.canEditGroup(bannedGroup.id));
 
   return (
     <>
-      {
-        <>
-          <Header>Banned Competitors</Header>
-          {canEditBannedCompetitors && (
-            <Button onClick={() => setBanModalParams({ action: "new" })}>
-              Ban new competitor
-            </Button>
-          )}
-          <BannedCompetitors
-            bannedCompetitorRoles={bannedCompetitorRoles}
-            canEditBannedCompetitors={canEditBannedCompetitors}
-            editBannedCompetitor={setBanModalParams}
-          />
-        </>
-      }
-      {
-        <>
+      <>
+        <Header>Banned Competitors</Header>
+        {canEditBannedCompetitors && (
+        <Button onClick={() => setBanModalParams({ action: 'new' })}>
+          Ban new competitor
+        </Button>
+        )}
+        <BannedCompetitors
+          bannedCompetitorRoles={bannedCompetitorRoles}
+          canEditBannedCompetitors={canEditBannedCompetitors}
+          editBannedCompetitor={setBanModalParams}
+        />
+      </>
+      <>
         <Header>Past Banned Competitors</Header>
         <BannedCompetitors
           bannedCompetitorRoles={pastBannedCompetitorRoles}
@@ -83,7 +79,6 @@ export default function BannedCompetitorsPage() {
           editBannedCompetitor={setBanModalParams}
         />
       </>
-      }
       <Modal open={!!banModalParams} onClose={() => setBanModalParams(null)}>
         <Modal.Header>Add/Edit Banned Competitor</Modal.Header>
         <Modal.Content>

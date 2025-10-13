@@ -4,6 +4,9 @@
         "es6": true,
         "jquery": true
     },
+  "ignorePatterns": [
+    "app/assets/javascripts/*"
+  ],
     "extends": [
         "plugin:react/recommended",
         "plugin:react-hooks/recommended",

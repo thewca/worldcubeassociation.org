@@ -27,6 +27,7 @@ production:
     database: results_dump
     database_tasks: false
     migrations_paths: db/results_migrate
+    use_metadata_table: false
 
 development:
   primary:
@@ -45,6 +46,7 @@ development:
     database: wca_dump_results
     database_tasks: false
     migrations_paths: db/results_migrate
+    use_metadata_table: false
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -68,3 +70,4 @@ test:
     database: wca_dump_results
     database_tasks: false
     migrations_paths: db/results_migrate
+    use_metadata_table: false

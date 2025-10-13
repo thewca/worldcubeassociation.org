@@ -3,15 +3,13 @@
 class TranslationsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
 
-  thread_mattr_accessor :bad_keys, instance_writer: false
+  def self.compute_bad_i18n_keys
+    base_locales = Locales::AVAILABLE.transform_values { it[:base_locale] || 'en' }
 
-  def self.bad_i18n_keys
-    self.bad_keys ||= begin
-      english = locale_to_translation('en')
-
-      (I18n.available_locales - [:en]).index_with do |locale|
-        locale_to_translation(locale).compare_to(english)
-      end
+    (I18n.available_locales - [:en]).index_with do |locale|
+      base_locale = base_locales[locale]
+      base_translation = locale_to_translation(base_locale)
+      locale_to_translation(locale).compare_to(base_translation)
     end
   end
 
@@ -21,8 +19,10 @@ class TranslationsController < ApplicationController
     WcaI18n::Translation.new(locale, File.read(filename))
   end
 
+  BAD_I18N_KEYS = self.compute_bad_i18n_keys
+
   def index
-    @bad_i18n_keys = self.class.bad_i18n_keys
+    @bad_i18n_keys = TranslationsController::BAD_I18N_KEYS
     bad_keys = @bad_i18n_keys.values.map(&:values).flatten
     @all_translations_perfect = bad_keys.empty?
   end

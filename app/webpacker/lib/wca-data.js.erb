@@ -25,6 +25,7 @@ const realCountryData = countryData.filter((c) => !fictionalCountryIds.includes(
 
 export const countries = {
   byIso2: _.mapValues(_.keyBy(countryData, 'iso2'), extendCountries),
+  byId: _.mapValues(_.keyBy(countryData, 'id'), extendCountries),
   real: _.map(realCountryData, extendCountries),
 };
 
@@ -100,6 +101,8 @@ export const events = {
   official: _.map(_.filter(eventsData, 'isOfficial'), extendEvents),
   byId: _.mapValues(_.keyBy(eventsData, 'id'), extendEvents),
 };
+
+export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 function extendEvents(rawEvent) {
   return {
@@ -177,6 +180,10 @@ export const nearbyCompetitionDistanceDanger = <%= Competition::NEARBY_DISTANCE_
 
 export const competitionMaxShortNameLength = <%= Competition::MAX_CELL_NAME_LENGTH.to_json.html_safe %>
 
+export const newcomerMonthEnabled = <%= Competition::NEWCOMER_MONTH_ENABLED.to_json.html_safe %>
+
+export const autoAcceptPreferences = <%= Competition.auto_accept_preferences.keys.index_with(&:itself).to_json.html_safe %>
+
 // ----- CHAMPIONSHIPS -----
 
 const eligibleCountryForChampionshipData = loadStaticData(<%= EligibleCountryIso2ForChampionship.all_raw.to_json.html_safe %>);
@@ -189,6 +196,10 @@ export const groupedChampionshipTypes = {
   "multi-national": _.uniq(_.map(eligibleCountryForChampionshipData, 'championshipType')),
   national: _.map(_.sortBy(countries.real, 'name'), 'iso2'),
 }
+
+// ----- REGISTRATIONS  -----
+
+export const defaultGuestLimit = '<%= Registration::DEFAULT_GUEST_LIMIT %>'
 
 // ----- ROLES & GROUPS -----
 
@@ -217,3 +228,23 @@ export const banScopes = <%= RolesMetadataBannedCompetitors.scopes.to_json %>
 
 // ----- PANEL PAGES -----
 export const PANEL_PAGES = <%= User.panel_pages.to_json.html_safe %>;
+
+// ----- AVATAR CONFIG -----
+export const avatarImageTypes = <%= Rails.application.config.active_storage.web_image_content_types.to_json.html_safe %>;
+
+// ----- TICKETS -----
+export const ticketTypes = <%= Ticket::TICKET_TYPES.to_json %>;
+export const ticketStatuses = <%= Ticket::TICKET_TYPES.transform_values { |value| value.safe_constantize&.statuses }.to_json %>;
+export const ticketLogActionTypes = <%= TicketLog.action_types.to_json %>;
+export const ticketStakeholderRoles = <%= TicketStakeholder.stakeholder_roles.to_json %>;
+export const ticketsCompetitionResultStatuses = <%= TicketsCompetitionResult.statuses.to_json %>
+
+// ----- VALIDATORS -----
+export const ALL_VALIDATORS = <%= ResultsValidators::Utils::ALL_VALIDATORS.map(&:class_name) %>;
+export const VALIDATORS_WITH_FIX = <%= ResultsValidators::Utils::VALIDATORS_WITH_FIX.map(&:class_name) %>;
+
+// ----- CRONJOBS -----
+export const cronjobs = <%= JobUtils::WCA_CRONJOBS.map(&:to_s).to_h { |item| [item, item] }.to_json.html_safe %>;
+
+// ----- RESULTS -----
+export const duplicateCheckerJobRunStatuses = <%= DuplicateCheckerJobRun.run_statuses.to_json %>

@@ -14,6 +14,7 @@ export const getContactFormInitialState = (params) => ({
     contactRecipient: params?.contactRecipient,
     competition: {
       competitionId: params?.competitionId,
+      message: params?.message,
     },
     wst: {
       requestId: params?.requestId,

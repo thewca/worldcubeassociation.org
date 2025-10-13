@@ -13,6 +13,10 @@ locals {
       value = var.ROOT_URL
     },
     {
+      name  = "OIDC_ISSUER"
+      value = var.ROOT_URL
+    },
+    {
       name = "DATABASE_HOST"
       value = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
@@ -42,7 +46,7 @@ locals {
     },
     {
       name = "SIDEKIQ_REDIS_URL"
-      value = "redis://redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
+      value = "redis://wca-staging-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
     },
     {
       name = "STAGING_OAUTH_URL"
@@ -53,19 +57,15 @@ locals {
       value = aws_s3_bucket.storage-bucket.id
     },
     {
-      name = "STORAGE_AWS_REGION"
-      value = var.region
+      name = "REGISTRATION_QUEUE"
+      value = aws_sqs_queue.this.url
     },
     {
-      name = "VAULT_AWS_REGION"
-      value = var.region
+      name = "LIVE_QUEUE"
+      value = aws_sqs_queue.results.url
     },
     {
-      name = "S3_AVATARS_REGION"
-      value = var.region
-    },
-    {
-      name = "DATABASE_AWS_REGION"
+      name = "AWS_REGION"
       value = var.region
     },
     {
@@ -77,8 +77,20 @@ locals {
       value = aws_s3_bucket.avatars.id
     },
     {
+      name = "S3_AVATARS_PRIVATE_BUCKET"
+      value = aws_s3_bucket.avatars_private.id
+    },
+    {
       name = "S3_AVATARS_ASSET_HOST"
       value = "https://avatars.worldcubeassociation.org"
+    },
+    {
+      name = "AVATARS_PUBLIC_STORAGE"
+      value = "s3_avatars_public"
+    },
+    {
+      name = "AVATARS_PRIVATE_STORAGE"
+      value = "s3_avatars_private"
     },
     {
       name = "CDN_AVATARS_DISTRIBUTION_ID"
@@ -91,6 +103,10 @@ locals {
     {
       name = "DATABASE_WRT_USER"
       value = var.DATABASE_WRT_USER
+    },
+    {
+      name = "WRC_WEBHOOK_URL",
+      value = var.WRC_WEBHOOK_URL
     },
     {
       name = "WCA_REGISTRATIONS_URL"
@@ -164,21 +180,45 @@ data "aws_iam_policy_document" "task_policy" {
 
     resources = ["*"]
   }
+
   statement {
       actions = [
         "s3:*",
       ]
 
-      resources = [aws_s3_bucket.avatars.arn,
-                "${aws_s3_bucket.avatars.arn}/*",
-                   aws_s3_bucket.storage-bucket.arn,
-                "${aws_s3_bucket.storage-bucket.arn}/*"]
+      resources = [aws_s3_bucket.storage-bucket.arn,
+                "${aws_s3_bucket.storage-bucket.arn}/*",
+                    aws_s3_bucket.avatars_private.arn,
+                  "${aws_s3_bucket.avatars_private.arn}/*"]
     }
+
+  statement {
+    actions = [
+      "s3:Get*",
+      "s3:List*",
+      "s3:Describe*"
+    ]
+
+    resources = [aws_s3_bucket.avatars.arn,
+      "${aws_s3_bucket.avatars.arn}/*"]
+  }
+
   statement {
     actions = [
       "rds-db:connect",
     ]
     resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "sqs:SendMessage",
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:GetQueueUrl"
+    ]
+    resources = [aws_sqs_queue.this.arn, aws_sqs_queue.results.arn]
   }
 }
 

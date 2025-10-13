@@ -1,0 +1,119 @@
+type: object
+required:
+  - can_access_panels
+  - can_administer_competitions
+  - can_attend_competitions
+  - can_create_groups
+  - can_edit_delegate_report
+  - can_edit_groups
+  - can_organize_competitions
+  - can_read_groups_current
+  - can_read_groups_past
+  - can_request_to_edit_others_profile
+  - can_view_delegate_admin_page
+  - can_view_delegate_report
+properties:
+  can_attend_competitions:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+      until:
+        type: string
+        format: date-time
+        nullable: true
+  can_organize_competitions:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+  can_administer_competitions:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+  can_view_delegate_admin_page:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+  can_view_delegate_report:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+  can_edit_delegate_report:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+  can_create_groups:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        type: array
+        items:
+          type: string
+  can_read_groups_current:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        type: array
+        items:
+          type: string
+  can_read_groups_past:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        type: array
+        items:
+          type: string
+  can_edit_groups:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        type: array
+        items:
+          type: string
+  can_access_panels:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        type: array
+        items:
+          type: string
+  can_request_to_edit_others_profile:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        oneOf:
+          - type: array
+            items:
+              type: string
+          - type: string
+            format: "Wildcard"
+            enum: "*"

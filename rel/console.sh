@@ -17,6 +17,8 @@ export AWS_DEFAULT_PROFILE=wca
 usage() {
   printf "${COLOR_DEFAULT}Usage: $0 -e <environment>\n"
   printf " -e <environment>  Specify the environment (production or staging)"
+  printf " -b: Run a bash shell instead of the default command"
+  printf " -n: Connect to Nextjs"
   exit 1
 }
 
@@ -52,11 +54,23 @@ else
 fi
 
 # Parse the environment argument
+nextjs=false
 environment=""
-while getopts ":e:" opt; do
+command="/rails/bin/rails c"
+while getopts ":e:bnh" opt; do
   case $opt in
     e)
       environment=$OPTARG
+      ;;
+    b)
+      command="/bin/bash"
+      ;;
+    n)
+      command="/bin/sh"
+      nextjs=true
+      ;;
+    h)
+      usage
       ;;
     \?)
       printf "${COLOR_RED}Invalid option: -$OPTARG \n" >&2
@@ -92,6 +106,11 @@ case "$environment" in
   ;;
 esac
 
+if [ "$nextjs" == "true" ]; then
+  service_name="wca-on-rails-prod-nextjs-production"
+  container_name="nextjs-production"
+fi
+
 task_arn="$(
   aws ecs list-tasks \
     --region us-west-2 \
@@ -106,5 +125,5 @@ aws ecs execute-command  \
   --cluster wca-on-rails \
   --task $task_arn \
   --container $container_name \
-  --command "/rails/bin/rails c" \
+  --command "$command" \
   --interactive

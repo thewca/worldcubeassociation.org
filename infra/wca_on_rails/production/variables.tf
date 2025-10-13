@@ -79,6 +79,7 @@ variable "shared" {
       name: string
       arn: string
     }),
+    next_repository_url: string,
     ecs_cluster: object({
       id: string
       name: string
@@ -98,13 +99,26 @@ variable "shared" {
     https_listener: object({
       arn: string
     })
+    nextjs-production: object({
+      arn: string
+    })
     pma_production: object({
       arn: string
     })
+    api_gateway: object({
+      id: string,
+      root_resource_id: string
+    })
+    next_url: string
     account_id: string
     # These are booth arrays
     private_subnets: any
     rails-production: any
   })
   description = "The shared resources between Environments"
+}
+
+variable "WRC_WEBHOOK_URL" {
+  description = "The URL to send delegate report webhook notifications for WRC to"
+  type = string
 }

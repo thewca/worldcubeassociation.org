@@ -2,7 +2,12 @@
 
 require "rails_helper"
 
-RSpec.feature "Stripe PaymentElement integration" do
+def give_donation_checkbox
+  # WARNING: Do not use Capybara "unckeck" on this, because it technically (in the HTML sense) isn't even a checkbox.
+  all(:css, "label[for='useDonationCheckbox']").last
+end
+
+RSpec.feature "Stripe PaymentElement integration", :js do
   before :each do
     # Enable CSRF protection just for these tests.
     # See https://blog.tomoyukikashiro.me/post/test-csrf-in-feature-test-using-capybara/
@@ -14,17 +19,17 @@ RSpec.feature "Stripe PaymentElement integration" do
   #   (as per https://stripe.com/docs/automated-testing)
   # We simply test that we can boot the interface, and we test that the PIs are processed in requests/registrations_spec.rb
   context "on the 'register' page of a visible competition" do
-    let(:competition) { FactoryBot.create(:competition, :stripe_connected, :accepts_donations, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
-    let!(:user) { FactoryBot.create(:user, :wca_id) }
-    let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+    let(:competition) { create(:competition, :stripe_connected, :accepts_donations, :visible, :registration_open, events: Event.where(id: %w[222 333])) }
+    let!(:user) { create(:user, :wca_id) }
+    let!(:registration) { create(:registration, competition: competition, user: user) }
 
     background do
       sign_in user
       visit competition_register_path(competition)
-      expect(page).to have_selector("#payment-element iframe")
+      expect(page).to have_css("#payment-element iframe")
     end
 
-    it "loads the PaymentElement", js: true do
+    it "loads the PaymentElement" do
       pending('Stripe frontend tests intermediate failure. Signed GB 22/Jul/2024')
 
       # In the beginning, the button to pay should be disabled
@@ -44,8 +49,8 @@ RSpec.feature "Stripe PaymentElement integration" do
       expect(page).to have_button('Pay now!', disabled: false)
     end
 
-    it "changes subtotal when using a donation", js: true do
-      subtotal_label = page.find('#money-subtotal')
+    it "changes subtotal when using a donation" do
+      subtotal_label = page.find_by_id('money-subtotal')
 
       format_money = format_money(registration.outstanding_entry_fees)
       expect(subtotal_label).to have_text(format_money)
@@ -53,17 +58,14 @@ RSpec.feature "Stripe PaymentElement integration" do
       # donate some arbitrary amount less than the actual entry fee
       donation_money = competition.base_entry_fee / 2
 
-      check 'toggle-show-donation'
-      fill_in with: donation_money.amount.to_s, id: 'donation_input_field'
-
-      # Trigger a blur event to incentivize JS to trigger the change event on the input field.
-      find("body").click
+      give_donation_checkbox.click
+      fill_in_autonumeric '#donationInputField', with: donation_money.amount.to_s
 
       format_money = format_money(registration.outstanding_entry_fees + donation_money)
       expect(subtotal_label).to have_text(format_money)
     end
 
-    it "warns when the subtotal is too high", js: true do
+    it "warns when the subtotal is too high" do
       pending('Stripe frontend tests intermediate failure. Signed GB 22/Jul/2024')
 
       # (accidentally?) donate a ridiculously high amount of money
@@ -86,7 +88,7 @@ RSpec.feature "Stripe PaymentElement integration" do
       end
 
       format_money = format_money(registration.outstanding_entry_fees + donation_money)
-      expect(page.find('#money-subtotal')).to have_text(format_money)
+      expect(page.find_by_id('money-subtotal')).to have_text(format_money)
     end
   end
 end

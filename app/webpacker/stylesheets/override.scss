@@ -104,4 +104,33 @@ body, html {
   .ui.radio.checkbox {
     margin: 1.5px 0px;
   }
+
+  // This overrides the Bootstrap table row color for the `active` property
+  // for the SemUI `active` property.
+  .ui.table > tbody > tr {
+    > td.active,
+    > th.active,
+    &.active > td,
+    &.active > th {
+      background-color: #e0e0e0 !important;
+    }
+  }
+
+  // This is to vertically align region flag and name in RegionSelector dropdown
+  .ui.dropdown {
+    .menu[role='listbox'] {
+      .item[role='option'] {
+        display: flex;
+        align-items: center;
+
+        .fi {
+          flex-shrink: 0;
+        }
+
+        .text {
+          margin-left: 4px;
+        }
+      }
+    }
+  }
 }

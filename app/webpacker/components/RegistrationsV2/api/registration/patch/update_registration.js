@@ -1,32 +1,33 @@
-import { wcaRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
 import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
+import { bulkUpdateRegistrationUrl, updateRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
 
-const updateRegistrationUrl = `${wcaRegistrationUrl}/api/v1/register`;
-const bulkUpdateRegistrationUrl = `${wcaRegistrationUrl}/api/v1/bulk_update`;
-
-export default async function updateRegistration(
-  body,
-) {
-  const { data } = await fetchWithJWTToken(updateRegistrationUrl, {
+export default async function updateRegistration({
+  registrationId,
+  payload,
+}) {
+  const route = updateRegistrationUrl(registrationId);
+  const { data } = await fetchWithJWTToken(route, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(payload),
   });
   return data;
 }
 
 // Bulk Update Route
-export async function bulkUpdateRegistrations(
-  body,
-) {
-  const { data } = await fetchWithJWTToken(bulkUpdateRegistrationUrl, {
+export async function bulkUpdateRegistrations({
+  competitionId,
+  payload,
+}) {
+  const route = bulkUpdateRegistrationUrl(competitionId);
+  const { data } = await fetchWithJWTToken(route, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(payload),
   });
   return data;
 }

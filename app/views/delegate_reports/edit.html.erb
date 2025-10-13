@@ -12,17 +12,40 @@
     <% if @delegate_report.posted? %>
       <%= f.input :discussion_url %>
     <% end %>
-    <% @competition.delegate_report.schedule_url = link_to_competition_schedule_tab(@competition) if @competition.has_schedule? %>
-    <%= f.input :schedule_url, readonly: @competition.has_schedule? %>
+    <% @competition.delegate_report.schedule_url = link_to_competition_schedule_tab(@competition) if @competition.any_venues? %>
+    <%= @competition.any_venues? ? f.hidden_field(:schedule_url) : f.input(:schedule_url) %>
 
-    <%= f.input :equipment, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
-    <%= f.input :venue, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
-    <%= f.input :organization, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
-    <%= f.input :incidents, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
+    <% @delegate_report.md_sections.each do |section| %>
+      <%= f.input section, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
+
+      <% if section == :venue && @delegate_report.requires_setup_images? %>
+        <% @delegate_report.setup_images.each do |image| %>
+          <%= f.hidden_field :setup_images, multiple: true, value: image.signed_id %>
+        <% end %>
+
+        <%= f.input :setup_images, multiple: true, hint: t('simple_form.hints.delegate_report.setup_images', image_count: @delegate_report.required_setup_images_count), input_html: { multiple: true, accept: ActiveStorage.web_image_content_types.join(", ") } %>
+
+        <% if @delegate_report.setup_images.attached? %>
+          <div class="row">
+            <% @delegate_report.setup_images.each do |image| %>
+              <div class="col-sm-1 thumb">
+                <%= image_tag image.variant(:preview).processed %>
+
+                <% if @delegate_report.setup_images.count > @delegate_report.required_setup_images_count %>
+                  <%= link_to 'Delete', delegate_report_delete_image_path(competition_id: @delegate_report.competition_id, image_id: image.id), method: :delete %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+
     <%= f.input :wrc_feedback_requested, as: :boolean %>
     <%= f.input :wrc_incidents %>
-    <%= f.input :wic_feedback_requested, as: :boolean %>
-    <%= f.input :wic_incidents %>
+    <%= f.input :wic_feedback_requested, as: :boolean, input_html: {id:"wic_feedback_checkbox", data: {confirm_message: I18n.t("simple_form.hints.delegate_report.wic_incident_alert")}} %>
+    <%= f.input :wic_incidents, hint: t("simple_form.hints.delegate_report.wic_incidents_html", wic_incident_alert: t("simple_form.hints.delegate_report.wic_incident_alert")) %>
+    <%# 'remarks' is the only Report section without a fixed template, so we include it irrespective of the version %>
     <%= f.input :remarks, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
 
     <%= f.button :submit, class: "btn-primary" %>
@@ -41,3 +64,22 @@
     <% end %>
   <% end %>
 <% end %>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const checkbox = document.getElementById("wic_feedback_checkbox");
+
+    if (checkbox) {
+      checkbox.addEventListener("change", function (e) {
+        if (checkbox.checked) {
+          const message = checkbox.dataset.confirmMessage;
+          if (!confirm(message)) {
+            e.preventDefault();
+            checkbox.checked = false;
+          }
+        }
+      });
+    }
+  });
+</script>

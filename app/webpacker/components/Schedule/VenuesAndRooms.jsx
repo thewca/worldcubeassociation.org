@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { getTextColor, TEXT_WHITE } from '../../lib/utils/calendar';
 import { toDegrees } from '../../lib/utils/edit-schedule';
-import i18n from '../../lib/i18n';
+import I18n from '../../lib/i18n';
 
 export default function VenuesAndRooms({
   venues,
@@ -15,7 +15,8 @@ export default function VenuesAndRooms({
   timeZoneCount,
   rooms,
   activeRoomIds,
-  dispatchRooms,
+  updateRooms,
+  toggleRoom,
   setActiveTimeZone,
 }) {
   const venueCount = venues.length;
@@ -23,7 +24,7 @@ export default function VenuesAndRooms({
   const setActiveVenueIndexAndResetRooms = (newVenueIndex) => {
     const newVenues = newVenueIndex > -1 ? [venues[newVenueIndex]] : venues;
     const ids = newVenues.flatMap((venue) => venue.rooms).map((room) => room.id);
-    dispatchRooms({ type: 'reset', ids });
+    updateRooms(ids);
 
     setActiveVenueIndex(newVenueIndex);
   };
@@ -50,7 +51,7 @@ export default function VenuesAndRooms({
           style={{ overflowX: 'auto', overflowY: 'hidden' }}
         >
           <Menu.Item
-            name={i18n.t('competitions.schedule.all_venues')}
+            name={I18n.t('competitions.schedule.all_venues')}
             active={activeVenueIndex === -1}
             onClick={() => setActiveVenueIndexAndResetRooms(-1)}
           />
@@ -74,23 +75,23 @@ export default function VenuesAndRooms({
       {rooms.length > 1 && (
         <Segment>
           <Header size="small">
-            {i18n.t('competitions.schedule.rooms_panel.title')}
+            {I18n.t('competitions.schedule.rooms_panel.title')}
             {' '}
             <Button
               primary
               size="mini"
-              content={i18n.t('competitions.schedule.rooms_panel.all')}
-              onClick={() => dispatchRooms({ type: 'reset', ids: rooms.map((room) => room.id) })}
+              content={I18n.t('competitions.schedule.rooms_panel.all')}
+              onClick={() => updateRooms(rooms.map((room) => room.id))}
             />
             <Button
               size="mini"
-              content={i18n.t('competitions.schedule.rooms_panel.none')}
-              onClick={() => dispatchRooms({ type: 'reset' })}
+              content={I18n.t('competitions.schedule.rooms_panel.none')}
+              onClick={() => updateRooms([])}
             />
             <Button
               toggle
               size="mini"
-              content={i18n.t('competitions.schedule.rooms_panel.show_buttons')}
+              content={I18n.t('competitions.schedule.rooms_panel.show_buttons')}
               active={showTimeZoneButton}
               onClick={() => setShowTimeZoneButton((buttonState) => !buttonState)}
             />
@@ -98,7 +99,7 @@ export default function VenuesAndRooms({
           <RoomSelector
             rooms={rooms}
             activeRoomIds={activeRoomIds}
-            toggleRoom={(id) => dispatchRooms({ type: 'toggle', id })}
+            toggleRoom={toggleRoom}
             setTimeZoneForRoom={setTimeZoneForRoom}
             showTimeZoneButton={showTimeZoneButton}
           />
@@ -149,7 +150,7 @@ function RoomSelector({
               size="small"
               compact
               icon="globe"
-              content={i18n.t('competitions.schedule.rooms_panel.use_time_zone')}
+              content={I18n.t('competitions.schedule.rooms_panel.use_time_zone')}
               onClick={() => setTimeZoneForRoom(id)}
               style={{ textAlign: 'right' }}
             />
@@ -173,7 +174,7 @@ function VenueInfo({ activeVenueOrNull, venueCount }) {
           <>
             {/* eslint-disable-next-line react/no-danger */}
             <p dangerouslySetInnerHTML={{
-              __html: i18n.t('competitions.schedule.venue_selection_html', {
+              __html: I18n.t('competitions.schedule.venue_selection_html', {
                 venue_name: `<a target="_blank" href=${mapLink} rel="noreferrer">
                   ${name}
                 </a>`,
@@ -181,11 +182,11 @@ function VenueInfo({ activeVenueOrNull, venueCount }) {
               }),
             }}
             />
-            {i18n.t('competitions.schedule.timezone_message', { timezone })}
+            {I18n.t('competitions.schedule.timezone_message', { timezone })}
           </>
         ) : (
           <p>
-            {i18n.t('competitions.schedule.venue_selection_all', { venueCount })}
+            {I18n.t('competitions.schedule.venue_selection_all', { venueCount })}
           </p>
 
         )}

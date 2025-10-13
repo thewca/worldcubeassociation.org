@@ -65,7 +65,10 @@ Rails.application.configure do
   config.log_level = :info
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [:request_id]
+  config.log_tags = [
+    :request_id,
+    ->(req) { LogTagging.user_log_tag(req) },
+  ]
 
   # Use a different logger for distributed setups.
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
@@ -99,9 +102,7 @@ Rails.application.configure do
   end
 
   # Setup for ActiveStorage.
-  unless EnvConfig.ASSETS_COMPILATION?
-    config.active_storage.service = :amazon
-  end
+  config.active_storage.service = :amazon unless EnvConfig.ASSETS_COMPILATION?
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -137,7 +138,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Error pages for production
-  config.exceptions_app = ->(env) {
+  config.exceptions_app = lambda { |env|
     if EnvConfig.API_ONLY?
       ApiErrorsController.action(:show).call(env)
     else

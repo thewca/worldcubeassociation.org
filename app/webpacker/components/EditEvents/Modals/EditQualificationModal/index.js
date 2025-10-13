@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
 import { Form, Label } from 'semantic-ui-react';
-import i18n from '../../../../lib/i18n';
+import I18n from '../../../../lib/i18n';
 import { events } from '../../../../lib/wca-data.js.erb';
 import { eventQualificationToString } from '../../../../lib/utils/wcif';
 import { useDispatch } from '../../../../lib/providers/StoreProvider';
@@ -35,7 +35,7 @@ function QualificationInput({
               eventId={eventId}
               value={level}
               onChange={(newLevel) => onChange(newLevel)}
-              label={<Label>{i18n.t(`common.${resultType}`)}</Label>}
+              label={<Label>{I18n.t(`common.${resultType}`)}</Label>}
             />
           )
           : (
@@ -43,7 +43,7 @@ function QualificationInput({
               eventId={eventId}
               value={level}
               onChange={(value) => onChange(value)}
-              label={<Label>{i18n.t(`common.${resultType}`)}</Label>}
+              label={<Label>{I18n.t(`common.${resultType}`)}</Label>}
               resultType={resultType}
             />
           )
@@ -57,7 +57,7 @@ function QualificationInput({
           onChange={(e) => onChange(parseInt(e.target.value, 10))}
           label={(
             <Label>
-              {i18n.t('qualification.type.ranking')}
+              {I18n.t('qualification.type.ranking')}
             </Label>
           )}
         />
@@ -108,7 +108,7 @@ export default function EditQualificationModal({
     }
   };
 
-  const title = i18n.t('qualification.for_event', { event: event.name });
+  const title = I18n.t('qualification.for_event', { event: event.name });
   const trigger = eventQualificationToString(wcifEvent, qualification, { short: true });
 
   return (
@@ -143,7 +143,7 @@ export default function EditQualificationModal({
             eventId={event.id}
           />
           <Form.Field>
-            <Label>{i18n.t('qualification.deadline.description')}</Label>
+            <Label>{I18n.t('qualification.deadline.description')}</Label>
             <UtcDatePicker
               onChange={setWhenDate}
               isoDate={whenDate}

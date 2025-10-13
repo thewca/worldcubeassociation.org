@@ -21,13 +21,19 @@ variable "availability_zones" {
 variable "VAULT_ADDR" {
   type = string
   description = "The Address that vault is running at"
-  default = "http://vault.worldcubeassociation.org:8200"
+  default = "http://vault.private.worldcubeassociation.org:8200"
 }
 
 variable "DATABASE_WRT_USER" {
   type        = string
   description = "The name of the user to access phpmyadmin"
   default     = "phpmyadmin"
+}
+
+variable "WRC_WEBHOOK_URL" {
+  description = "The URL to send delegate report webhook notifications for WRC to"
+  type = string
+  default = "https://joba.me/wca/reports_webhook"
 }
 
 variable "pma_auth_secret" {

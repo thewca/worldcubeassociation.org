@@ -3,7 +3,10 @@
 class CompetitionEvent < ApplicationRecord
   belongs_to :competition
   belongs_to :event
+
+  has_one :waiting_list, dependent: :destroy, as: :holder
   has_many :registration_competition_events, dependent: :destroy
+  has_many :registrations, through: :registration_competition_events
   has_many :rounds, -> { order(:number) }, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :formats, through: :rounds
@@ -11,7 +14,7 @@ class CompetitionEvent < ApplicationRecord
 
   accepts_nested_attributes_for :rounds, allow_destroy: true
 
-  validates_numericality_of :fee_lowest_denomination, greater_than_or_equal_to: 0
+  validates :fee_lowest_denomination, numericality: { greater_than_or_equal_to: 0 }
   monetize :fee_lowest_denomination,
            as: "fee",
            with_model_currency: :currency_code
@@ -22,16 +25,14 @@ class CompetitionEvent < ApplicationRecord
   validate do
     remaining_rounds = rounds.reject(&:marked_for_destruction?)
     numbers = remaining_rounds.map(&:number).sort
-    if numbers != (1..remaining_rounds.length).to_a
-      errors.add(:rounds, "#{numbers} is wrong")
-    end
+    errors.add(:rounds, "#{numbers} is wrong") if numbers != (1..remaining_rounds.length).to_a
   end
 
   def currency_code
     competition&.currency_code
   end
 
-  def has_fee?
+  def paid_entry?
     fee.nonzero?
   end
 
@@ -86,8 +87,8 @@ class CompetitionEvent < ApplicationRecord
       "type" => "object",
       "properties" => {
         "id" => { "type" => "string" },
-        "rounds" => { "type" => ["array", "null"], "items" => Round.wcif_json_schema },
-        "competitorLimit" => { "type" => ["integer", "null"] },
+        "rounds" => { "type" => %w[array null], "items" => Round.wcif_json_schema },
+        "competitorLimit" => { "type" => %w[integer null] },
         "qualification" => Qualification.wcif_json_schema,
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
