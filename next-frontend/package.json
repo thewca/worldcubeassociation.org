@@ -51,7 +51,7 @@
     "node-vault": "^0.10.9",
     "openapi-fetch": "^0.14.1",
     "payload": "3.59.1",
-    "payload-authjs": "^0.8.4",
+    "payload-authjs": "^0.9.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-i18next": "^16.0.1",
