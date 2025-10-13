@@ -137,7 +137,7 @@ GEM
     autoprefixer-rails (9.4.7)
       execjs
     aws-eventstream (1.4.0)
-    aws-partitions (1.1168.0)
+    aws-partitions (1.1172.0)
     aws-sdk-cloudfront (1.129.0)
       aws-sdk-core (~> 3, >= 3.231.0)
       aws-sigv4 (~> 1.5)
@@ -152,7 +152,7 @@ GEM
     aws-sdk-kms (1.113.0)
       aws-sdk-core (~> 3, >= 3.231.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-rds (1.294.0)
+    aws-sdk-rds (1.296.0)
       aws-sdk-core (~> 3, >= 3.231.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-s3 (1.199.1)
@@ -175,7 +175,7 @@ GEM
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
       rouge (>= 1.0.0)
-    bigdecimal (3.2.3)
+    bigdecimal (3.3.1)
     bindex (0.8.1)
     binding_of_caller (1.0.1)
       debug_inspector (>= 1.2.0)
@@ -1145,11 +1145,11 @@ CHECKSUMS
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   autoprefixer-rails (9.4.7) sha256=7104f54efa89e6390391bd894498a9db92bffaf74474942c4152e6dc0775ab3b
   aws-eventstream (1.4.0) sha256=116bf85c436200d1060811e6f5d2d40c88f65448f2125bc77ffce5121e6e183b
-  aws-partitions (1.1168.0) sha256=65efe7ccc6f5199640e6d8e278e3628d7bacd4684853d1924c5c6c08e180467b
+  aws-partitions (1.1172.0) sha256=62809c443c36260f8d6c2e978ea49adcac497ca63f67568aae3e0e51e8341246
   aws-sdk-cloudfront (1.129.0) sha256=ab55fb3e320b2d3376d9951f13bc8edc1dd80529b83c785fba8426ceeda6d159
   aws-sdk-core (3.233.0) sha256=798db4e867d15dceb6504317867fc8013042984988199600c78e310d0058018a
   aws-sdk-kms (1.113.0) sha256=deb1d129c3cc9785c7ad2e625926c6286334fce65a0813f6d61dc24c9dda6929
-  aws-sdk-rds (1.294.0) sha256=79882a51fa38853f25197f92b9a69d4e4c5daabd72c8eccd145bd775e4c9fec6
+  aws-sdk-rds (1.296.0) sha256=d3699d0f715fe32010f7fe8521bf1ed31336af3fbb3fc6b77011c0eb71e8378a
   aws-sdk-s3 (1.199.1) sha256=a36aba0e3a408e5c0822fff3be76676ec7e91e2c78cfb92db33c96596ecbcac6
   aws-sdk-sqs (1.104.0) sha256=5f4de801f826264b5b79be19a63be17f8d46fea9cd453c01ffa9926d85302ee9
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
@@ -1159,7 +1159,7 @@ CHECKSUMS
   bcrypt (3.1.20) sha256=8410f8c7b3ed54a3c00cd2456bf13917d695117f033218e2483b2e40b0784099
   benchmark (0.4.1) sha256=d4ef40037bba27f03b28013e219b950b82bace296549ec15a78016552f8d2cce
   better_errors (2.10.1) sha256=f798f1bac93f3e775925b7fcb24cffbcf0bb62ee2210f5350f161a6b75fc0a73
-  bigdecimal (3.2.3) sha256=ffd11d1ac67a0d3b2f44aec0a6487210b3f813f363dd11f1fcccf5ba00da4e1b
+  bigdecimal (3.3.1) sha256=eaa01e228be54c4f9f53bf3cc34fe3d5e845c31963e7fcc5bedb05a4e7d52218
   bindex (0.8.1) sha256=7b1ecc9dc539ed8bccfc8cb4d2732046227b09d6f37582ff12e50a5047ceb17e
   binding_of_caller (1.0.1) sha256=2b2902abff4246ddcfbc4da9b69bc4a019e22aeb300c2ff6289a173d4b90b29a
   blocks (4.0.1) sha256=c82ca06557254772dc49e63560769624c8063bcb51cac808ac7e508e39fe323f
