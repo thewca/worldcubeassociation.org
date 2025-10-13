@@ -10259,7 +10259,7 @@ __metadata:
     sass: "npm:^1.93.2"
     sass-loader: "npm:^16.0.5"
     semantic-ui-react: "npm:^2.1.5"
-    shakapacker: "npm:8.4.0"
+    shakapacker: "npm:9.2.0"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^16.25.0"
     stylelint-config-recommended-scss: "npm:^16.0.2"
@@ -10601,36 +10601,94 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shakapacker@npm:8.4.0":
-  version: 8.4.0
-  resolution: "shakapacker@npm:8.4.0"
+"shakapacker@npm:9.2.0":
+  version: 9.2.0
+  resolution: "shakapacker@npm:9.2.0"
   dependencies:
     js-yaml: "npm:^4.1.0"
     path-complete-extname: "npm:^1.0.0"
+    webpack-merge: "npm:^5.8.0"
   peerDependencies:
     "@babel/core": ^7.17.9
     "@babel/plugin-transform-runtime": ^7.17.0
     "@babel/preset-env": ^7.16.11
     "@babel/runtime": ^7.17.9
+    "@rspack/cli": ^1.0.0
+    "@rspack/core": ^1.0.0
+    "@rspack/plugin-react-refresh": ^1.0.0
+    "@swc/core": ^1.3.0
     "@types/babel__core": ^7.0.0
     "@types/webpack": ^5.0.0
     babel-loader: ^8.2.4 || ^9.0.0 || ^10.0.0
-    compression-webpack-plugin: ^9.0.0 || ^10.0.0|| ^11.0.0
+    compression-webpack-plugin: ^9.0.0 || ^10.0.0 || ^11.0.0
+    css-loader: ^6.8.1 || ^7.0.0
+    esbuild: ^0.14.0 || ^0.15.0 || ^0.16.0 || ^0.17.0 || ^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0
+    esbuild-loader: ^2.0.0 || ^3.0.0 || ^4.0.0
+    mini-css-extract-plugin: ^2.0.0
+    rspack-manifest-plugin: ^5.0.0
+    sass: ^1.50.0
+    sass-loader: ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    swc-loader: ^0.1.15 || ^0.2.0
     terser-webpack-plugin: ^5.3.1
     webpack: ^5.76.0
     webpack-assets-manifest: ^5.0.6 || ^6.0.0
     webpack-cli: ^4.9.2 || ^5.0.0 || ^6.0.0
     webpack-dev-server: ^4.15.2 || ^5.2.2
-    webpack-merge: ^5.8.0 || ^6.0.0
     webpack-subresource-integrity: ^5.1.0
   peerDependenciesMeta:
+    "@babel/core":
+      optional: true
+    "@babel/plugin-transform-runtime":
+      optional: true
+    "@babel/preset-env":
+      optional: true
+    "@babel/runtime":
+      optional: true
+    "@rspack/cli":
+      optional: true
+    "@rspack/core":
+      optional: true
+    "@rspack/plugin-react-refresh":
+      optional: true
+    "@swc/core":
+      optional: true
     "@types/babel__core":
       optional: true
     "@types/webpack":
       optional: true
+    babel-loader:
+      optional: true
+    compression-webpack-plugin:
+      optional: true
+    css-loader:
+      optional: true
+    esbuild:
+      optional: true
+    esbuild-loader:
+      optional: true
+    mini-css-extract-plugin:
+      optional: true
+    rspack-manifest-plugin:
+      optional: true
+    sass:
+      optional: true
+    sass-loader:
+      optional: true
+    swc-loader:
+      optional: true
+    terser-webpack-plugin:
+      optional: true
+    webpack:
+      optional: true
+    webpack-assets-manifest:
+      optional: true
+    webpack-cli:
+      optional: true
+    webpack-dev-server:
+      optional: true
     webpack-subresource-integrity:
       optional: true
-  checksum: 10c0/470135fcda066060547904dcf8646e9b39af3f79a5fbdd4fdafef324b3eff38f5603f0fe84622337518851285a725f31aee115685436c1858262d095643e70fd
+  checksum: 10c0/36c38df40c8a8d015981c6db39270e526a1a7200eacd49b1eea0bbc056625a060d6add3cc723b1da50385c245aad146e7f29e8a525f8a72c330b561698f40762
   languageName: node
   linkType: hard
 
@@ -11840,6 +11898,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"webpack-merge@npm:^5.8.0":
+  version: 5.10.0
+  resolution: "webpack-merge@npm:5.10.0"
+  dependencies:
+    clone-deep: "npm:^4.0.1"
+    flat: "npm:^5.0.2"
+    wildcard: "npm:^2.0.0"
+  checksum: 10c0/b607c84cabaf74689f965420051a55a08722d897bdd6c29cb0b2263b451c090f962d41ecf8c9bf56b0ab3de56e65476ace0a8ecda4f4a4663684243d90e0512b
+  languageName: node
+  linkType: hard
+
 "webpack-merge@npm:^6.0.1":
   version: 6.0.1
   resolution: "webpack-merge@npm:6.0.1"
@@ -12025,7 +12094,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wildcard@npm:^2.0.1":
+"wildcard@npm:^2.0.0, wildcard@npm:^2.0.1":
   version: 2.0.1
   resolution: "wildcard@npm:2.0.1"
   checksum: 10c0/08f70cd97dd9a20aea280847a1fe8148e17cae7d231640e41eb26d2388697cbe65b67fd9e68715251c39b080c5ae4f76d71a9a69fa101d897273efdfb1b58bf7
