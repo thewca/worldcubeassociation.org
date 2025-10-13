@@ -284,7 +284,7 @@ GEM
       zeitwerk (~> 2.6)
     enum_help (0.0.20)
       activesupport (>= 3.0.0)
-    erb (5.0.2)
+    erb (5.1.1)
     erubi (1.13.1)
     et-orbi (1.3.0)
       tzinfo
@@ -504,7 +504,7 @@ GEM
       logger
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (5.25.5)
+    minitest (5.26.0)
     monetize (1.11.0)
       money (~> 6.12)
     money (6.16.0)
@@ -591,7 +591,7 @@ GEM
     playwright-ruby-client (1.55.0)
       concurrent-ruby (>= 1.1.6)
       mime-types (>= 3.0)
-    pp (0.6.2)
+    pp (0.6.3)
       prettyprint
     premailer (1.22.0)
       addressable
@@ -671,9 +671,10 @@ GEM
       ffi (~> 1.0)
     rb_sys (0.9.117)
       rake-compiler-dock (= 1.9.1)
-    rdoc (6.14.2)
+    rdoc (6.15.0)
       erb
       psych (>= 4.0.0)
+      tsort
     react-rails (3.2.1)
       babel-transpiler (>= 0.7.0)
       connection_pool
@@ -837,7 +838,7 @@ GEM
     seedbank (0.5.0)
       rake (>= 10.0)
     semantic_range (3.1.0)
-    shakapacker (8.4.0)
+    shakapacker (9.2.0)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
@@ -1096,7 +1097,7 @@ DEPENDENCIES
   sdoc
   seedbank
   selectize-rails!
-  shakapacker (= 8.4.0)
+  shakapacker (= 9.2.0)
   shoryuken
   sidekiq
   sidekiq-cron
@@ -1212,7 +1213,7 @@ CHECKSUMS
   dry-configurable (1.2.0) sha256=3d3b6e2f5b96853f906de62a27307463d39cc4a2d2a1999b8f47fe34b8bee4fa
   dry-core (1.0.1) sha256=f32f4245e0f54e787f3708584ed8f7545aaf8dd99072e36f169312468ec5450d
   enum_help (0.0.20) sha256=c3cdac74971b84af5ecfc2de72d3a5f0ab08216156dae0d6976b9885d706b98a
-  erb (5.0.2) sha256=d30f258143d4300fb4ecf430042ac12970c9bb4b33c974a545b8f58c1ec26c0f
+  erb (5.1.1) sha256=b2c26e7924551d9efbae998e17ddbef220937b6422b1d2ec7ae71417b5a1f4ec
   erubi (1.13.1) sha256=a082103b0885dbc5ecf1172fede897f9ebdb745a4b97a5e8dc63953db1ee4ad9
   et-orbi (1.3.0) sha256=56716ce1c40f56412d6acb0721ebede6bd23b66525dab008a95d77df00c7d260
   eu_central_bank (1.7.0) sha256=d538ec627025261cf00c554095e60e818b3b7c87717ed4124e87f4fdd47a06f2
@@ -1310,7 +1311,7 @@ CHECKSUMS
   mini_magick (5.3.1) sha256=29395dfd76badcabb6403ee5aff6f681e867074f8f28ce08d78661e9e4a351c4
   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
   mini_portile2 (2.8.9) sha256=0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289
-  minitest (5.25.5) sha256=391b6c6cb43a4802bfb7c93af1ebe2ac66a210293f4a3fb7db36f2fc7dc2c756
+  minitest (5.26.0) sha256=f5817ad09f863a4f7eac917707c1ca5c09cdc4a35e17d91171760178324d2c30
   momentjs-rails (2.29.4.1)
   monetize (1.11.0) sha256=d6c506daf4da0f424caa74cad1283fb82133607e504c631fc08eafd67d15ca32
   money (6.16.0) sha256=cf476f5f19188e247ec20f6509cff64dc35d395ee018bad799b1a9ea8bd4754a
@@ -1351,7 +1352,7 @@ CHECKSUMS
   parallel (1.27.0) sha256=4ac151e1806b755fb4e2dc2332cbf0e54f2e24ba821ff2d3dcf86bf6dc4ae130
   parser (3.3.9.0) sha256=94d6929354b1a6e3e1f89d79d4d302cc8f5aa814431a6c9c7e0623335d7687f2
   playwright-ruby-client (1.55.0) sha256=60510791dbfbdda6d3ed6ce27ad1353961f77016c04cacbb2ade1d4da9633b0a
-  pp (0.6.2) sha256=947ec3120c6f92195f8ee8aa25a7b2c5297bb106d83b41baa02983686577b6ff
+  pp (0.6.3) sha256=2951d514450b93ccfeb1df7d021cae0da16e0a7f95ee1e2273719669d0ab9df6
   premailer (1.22.0) sha256=538935ebc4a75bfdd1aa624bd348e54986902b6caf08ceaaa6297fc7388227da
   premailer-rails (1.12.0) sha256=c13815d161b9bc7f7d3d81396b0bb0a61a90fa9bd89931548bf4e537c7710400
   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
@@ -1380,7 +1381,7 @@ CHECKSUMS
   rb-fsevent (0.11.0) sha256=3a02b6360c856cc16e7f62382573b238f5cfb61a48169dd4c83b842c094b5de3
   rb-inotify (0.10.1) sha256=050062d4f31d307cca52c3f6a7f4b946df8de25fc4bd373e1a5142e41034a7ca
   rb_sys (0.9.117) sha256=755feaf6c640baceca7a9362dfb0ae87ff4ff16e3566d9ef86533896eb85cb59
-  rdoc (6.14.2) sha256=9fdd44df130f856ae70cc9a264dfd659b9b40de369b16581f4ab746e42439226
+  rdoc (6.15.0) sha256=0f0e68864969e77c2acd4063a9585baa5216d362701d827a93feaa9cbae78b05
   react-rails (3.2.1) sha256=2235db0b240517596b1cb3e26177ab5bc64d3a56579b0415ee242b1691f81f64
   recaptcha (5.21.1) sha256=e003e9ceba9b993a9f0c6a828c192f2d46693cd2aa0b0beae94f936649507adb
   redcarpet (3.6.1) sha256=d444910e6aa55480c6bcdc0cdb057626e8a32c054c29e793fa642ba2f155f445
@@ -1443,7 +1444,7 @@ CHECKSUMS
   seedbank (0.5.0) sha256=9840c0bf3427ac9ac0815feceeceeeac76dc89039503d393a7e220184855f437
   selectize-rails (0.12.1)
   semantic_range (3.1.0) sha256=9fc01ee40f2e5f81042e95d421837f688177dd603753b5eab41ff9bba50a34a1
-  shakapacker (8.4.0) sha256=df234ed4a9173407adc288df0d7f156c485ada9214b23d8f0e2c734f11c1aca8
+  shakapacker (9.2.0) sha256=4224378a3b093cb29d0c5a084bca5af516206851d273d8121637c73d98ca8543
   shellany (0.0.1) sha256=0e127a9132698766d7e752e82cdac8250b6adbd09e6c0a7fbbb6f61964fedee7
   shoryuken (6.2.1) sha256=95ddc0a717624a54e799d25a0a05100cb5a0c3728a96211935c214faaf16b3b6
   sidekiq (8.0.8) sha256=67b5f0e008025ae87e479c22a41cad54381de51dbfb4e1cc864fb0ce2e9db606
