@@ -32,8 +32,6 @@ module Resultable
     end
 
     delegate :competition_id, :round_type_id, :event_id, :format_id, to: :round, prefix: true
-    # Deliberately using `round_id` here instead of "simply" checking for `round`
-    #   because the latter would try to fall back to `round_type_id`.
     validates :competition_id, comparison: { equal_to: :round_competition_id }
     validates :round_type_id, comparison: { equal_to: :round_round_type_id }
     validates :event_id, comparison: { equal_to: :round_event_id }
