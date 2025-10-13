@@ -33,6 +33,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/competitions/mine">
     | StaticRoute<"/dashboard">
     | StaticRoute<"/delegates">
+    | StaticRoute<"/disciplinary">
     | StaticRoute<"/disclaimer">
     | StaticRoute<"/documents">
     | StaticRoute<"/export/developer">
@@ -45,11 +46,13 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/payload/[[...segments]]", { "segments"?: string[] | undefined }>
     | DynamicRoute<"/persons/[wcaId]", { "wcaId": string }>
     | StaticRoute<"/privacy">
+    | StaticRoute<"/regulations">
     | StaticRoute<"/regulations/about">
     | StaticRoute<"/regulations/history">
     | DynamicRoute<"/regulations/history/official/[version]", { "version": string }>
     | StaticRoute<"/regulations/scrambles">
     | StaticRoute<"/regulations/translations">
+    | DynamicRoute<"/regulations/translations/[language]", { "language": string }>
     | StaticRoute<"/score-tools">
     | StaticRoute<"/speedcubing-history">
     | StaticRoute<"/teams-committees">
