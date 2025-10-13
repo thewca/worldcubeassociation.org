@@ -13210,7 +13210,7 @@ __metadata:
     next-auth: "npm:5.0.0-beta.29"
     next-themes: "npm:^0.4.6"
     nextjs-routes: "npm:^2.2.5"
-    node-vault: "npm:^0.10.5"
+    node-vault: "npm:^0.10.9"
     openapi-fetch: "npm:^0.14.1"
     openapi-typescript: "npm:^7.9.1"
     payload: "npm:3.58.0"
@@ -13416,15 +13416,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-vault@npm:^0.10.5":
-  version: 0.10.5
-  resolution: "node-vault@npm:0.10.5"
+"node-vault@npm:^0.10.9":
+  version: 0.10.9
+  resolution: "node-vault@npm:0.10.9"
   dependencies:
     debug: "npm:^4.3.4"
     mustache: "npm:^4.2.0"
     postman-request: "npm:^2.88.1-postman.42"
     tv4: "npm:^1.3.0"
-  checksum: 10c0/8323c42647be85b5677175c876ed12ec15b23541c2cf91f3052e1928c076db4061ee217b5b95a61b0e2d6a9a9f3dfca35053fd516227bf6abe55d6727f53e106
+  checksum: 10c0/5f1dc7433a321fd7ed6d28590d6924762a6b807e25c3068cbaa7ef2d52cc5c2b2186e776ca754f7c5a02b78ce81bab361a8a06ceeb12f722992c27ea2b63f4d9
   languageName: node
   linkType: hard
 
