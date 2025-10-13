@@ -48,23 +48,21 @@ class Round < ApplicationRecord
             numericality: { only_integer: true,
                             greater_than_or_equal_to: 1,
                             less_than_or_equal_to: MAX_NUMBER,
-                            unless: :old_type }
+                            unless: :old_type? }
 
   # Qualification rounds/b-final are handled weirdly, they have round number 0
   # and do not count towards the total amount of rounds.
   OLD_TYPES = %w[0 b].freeze
   validates :old_type, inclusion: { in: OLD_TYPES, allow_nil: true }
-  after_validation(if: :old_type) do
+  after_validation(if: :old_type?) do
     self.number = 0
   end
 
-  validate do
-    errors.add(:format, "'#{format_id}' is not allowed for '#{event.id}'") unless event.preferred_formats.find_by(format_id: format_id)
-  end
+  # The event dictates which formats are even allowed in the first place, hence the prefix
+  delegate :format_ids, to: :event, prefix: :allowed
+  validates :format_id, inclusion: { in: :allowed_format_ids }
 
-  validate do
-    errors.add(:advancement_condition, "cannot be set on a final round") if final_round? && advancement_condition
-  end
+  validates :advancement_condition, absence: { if: :final_round? }
 
   def initialize(attributes = nil)
     # Overrides the default constructor to setup the default time limit if not
