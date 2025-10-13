@@ -113,7 +113,6 @@ services:
     environment:
       <<: *appEnv
       SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
-      NODE_ENV: development
     command: bin/shakapacker-dev-server
     depends_on:
       wca_environment:
