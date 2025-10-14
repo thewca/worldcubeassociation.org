@@ -81,13 +81,13 @@ class Competition < ApplicationRecord
   }
   scope :has_event, lambda { |event_id|
     joins(
-      "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = competitions.id
+      "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = competitions.competition_id
       join events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id",
     ).where("e#{event_id}.id = :event_id", event_id: event_id)
   }
   scope :managed_by, lambda { |user_id|
-    joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = competitions.id")
-      .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = competitions.id")
+    joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = competitions.competition_id")
+      .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = competitions.competition_id")
       .where(
         "delegate_id = :user_id OR organizer_id = :user_id",
         user_id: user_id,
