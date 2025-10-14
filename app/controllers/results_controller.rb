@@ -92,14 +92,14 @@ class ResultsController < ApplicationController
             average value
           FROM results
           #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
-          #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
+          #{'JOIN competitions on competitions.competition_id = results.competition_id' if @years_condition_competition.present?}
           WHERE average > 0
             #{@event_condition}
             #{@years_condition_competition}
             #{@region_condition}
             #{@gender_condition}
           ORDER BY
-            average, person_name, competition_id, round_type_id
+            average, person_name, results.competition_id, round_type_id
           #{limit_condition}
         SQL
 
@@ -111,7 +111,7 @@ class ResultsController < ApplicationController
               value#{i} value
             FROM results
             #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
-            #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
+            #{'JOIN competitions on competitions.competition_id = results.competition_id' if @years_condition_competition.present?}
             WHERE value#{i} > 0
               #{@event_condition}
               #{@years_condition_competition}
@@ -125,7 +125,7 @@ class ResultsController < ApplicationController
         @query = <<-SQL.squish
           SELECT *
           FROM (#{subquery}) union_results
-          ORDER BY value, person_name, competition_id, round_type_id
+          ORDER BY value, person_name, results.competition_id, round_type_id
           #{limit_condition}
         SQL
       end
@@ -147,7 +147,7 @@ class ResultsController < ApplicationController
           GROUP BY results.country_id
         ) records
         JOIN results ON results.#{value} = record_value AND results.country_id = record_country_id
-        JOIN competitions on competitions.id = results.competition_id
+        JOIN competitions on competitions.competition_id = results.competition_id
         #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
         WHERE 1
           #{@event_condition}
@@ -215,7 +215,7 @@ class ResultsController < ApplicationController
           results.person_name     person_name,
           results.country_id      country_id,
           countries.name         country_name,
-          competitions.id        competition_id,
+          competitions.competition_id,
           competitions.cell_name competition_name,
           value1, value2, value3, value4, value5
         FROM
@@ -229,7 +229,7 @@ class ResultsController < ApplicationController
         WHERE events.id = event_id
           AND events.`rank` < 1000
           AND round_types.id = round_type_id
-          AND competitions.id = competition_id
+          AND competitions.competition_id = results.competition_id
           AND countries.id = results.country_id
           #{@region_condition}
           #{@event_condition}
@@ -295,7 +295,7 @@ class ResultsController < ApplicationController
         AND results.event_id = record_event_id
         AND events.id        = results.event_id
         AND countries.id     = results.country_id
-        AND competitions.id  = results.competition_id
+        AND competitions.competition_id  = results.competition_id
         AND events.`rank` < 990
     SQL
   end
