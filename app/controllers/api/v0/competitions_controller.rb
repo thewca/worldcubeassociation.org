@@ -18,7 +18,16 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   def mine
-    render json: require_user!.my_competitions
+    grouped_competitions, registration_statuses = require_user!.my_competitions
+
+    grouped_competitions
+      .transform_keys { :"#{it}_competitions" }
+      .transform_values { it.as_json(User::MY_COMPETITIONS_SERIALIZATION_HASH) }
+
+    render json: {
+      **grouped_competitions,
+      registrations_by_competition: registration_statuses,
+    }
   end
 
   def competition_index

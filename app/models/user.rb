@@ -1594,12 +1594,13 @@ class User < ApplicationRecord
                                     .not_over
                                     .sort_by(&:start_date)
 
-      {
-        past_competitions: past_competitions.as_json(MY_COMPETITIONS_SERIALIZATION_HASH),
-        future_competitions: not_past_competitions.as_json(MY_COMPETITIONS_SERIALIZATION_HASH),
-        bookmarked_competitions: bookmarked_competitions.as_json(MY_COMPETITIONS_SERIALIZATION_HASH),
-        registrations_by_competition: registered_for_by_competition_id,
+      grouped_competitions = {
+        past: past_competitions,
+        future: not_past_competitions,
+        bookmarked: bookmarked_competitions,
       }
+
+      [grouped_competitions, registered_for_by_competition_id]
     end
   end
 end
