@@ -1048,9 +1048,7 @@ RSpec.describe CompetitionsController do
 
   describe 'GET #my_competitions', :clean_db_with_truncation do
     context 'when not signed in' do
-      before do
-        sign_out
-      end
+      sign_out
 
       it 'redirects to the sign in page' do
         get :my_competitions
