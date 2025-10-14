@@ -1558,7 +1558,7 @@ class User < ApplicationRecord
 
   MY_COMPETITIONS_SERIALIZATION_HASH = {
     only: %w[id name website start_date end_date registration_open],
-    methods: %w[url city country_iso2 results_posted? visible? confirmed? cancelled? report_posted? short_display_name],
+    methods: %w[url city country_iso2 results_posted? visible? confirmed? cancelled? report_posted? short_display_name registration_status],
     include: %w[championships],
   }.freeze
 
@@ -1594,14 +1594,10 @@ class User < ApplicationRecord
                                     .not_over
                                     .sort_by(&:start_date)
 
-      options_with_reg_status = MY_COMPETITIONS_SERIALIZATION_HASH.deep_merge({
-                                                                                methods: MY_COMPETITIONS_SERIALIZATION_HASH[:methods] + %w[registration_status],
-                                                                              })
-
       {
         past_competitions: past_competitions.as_json(MY_COMPETITIONS_SERIALIZATION_HASH),
-        future_competitions: not_past_competitions.as_json(options_with_reg_status),
-        bookmarked_competitions: bookmarked_competitions.as_json(options_with_reg_status),
+        future_competitions: not_past_competitions.as_json(MY_COMPETITIONS_SERIALIZATION_HASH),
+        bookmarked_competitions: bookmarked_competitions.as_json(MY_COMPETITIONS_SERIALIZATION_HASH),
         registrations_by_competition: registered_for_by_competition_id,
       }
     end
