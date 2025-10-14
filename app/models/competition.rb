@@ -65,6 +65,7 @@ class Competition < ApplicationRecord
   scope :not_visible, -> { where(show_at_all: false) }
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
+  scope :upcoming, -> { where(results_posted_at: nil).where.not(start_date: ..Date.today) }
   scope :between_dates, ->(start_date, end_date) { where("start_date <= ? AND end_date >= ?", end_date, start_date) }
   scope :end_date_passed_since, ->(num_days) { where(end_date: ...(num_days.days.ago)) }
   scope :belongs_to_region, lambda { |region_id|
@@ -99,6 +100,7 @@ class Competition < ApplicationRecord
   scope :not_confirmed, -> { where(confirmed_at: nil) }
   scope :pending_posting, -> { where.not(results_submitted_at: nil).where(results_posted_at: nil) }
   scope :pending_report_or_results_posting, -> { includes(:delegate_report).where(delegate_report: { posted_at: nil }).or(where(results_posted_at: nil)) }
+  scope :results_posted, -> { where.not(results_posted_at: nil).where.not(results_posted_by: nil) }
 
   enum :guest_entry_status, {
     unclear: 0,
