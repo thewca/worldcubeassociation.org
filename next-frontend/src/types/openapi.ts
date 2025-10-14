@@ -841,15 +841,16 @@ export interface components {
             city: string;
             country_iso2: string;
             "results_posted?": boolean;
+            "report_posted?": boolean;
             "visible?": boolean;
             "confirmed?": boolean;
             "cancelled?": boolean;
-            "report_posted?": boolean;
             short_display_name: string;
-            championships?: string[];
+            championships: string[];
             registration_status?: string;
-            competing_status?: string;
         };
+        /** @enum {string} */
+        CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
         Results: components["schemas"]["Result"][];
         Scramble: {
             id: number;
@@ -1241,6 +1242,9 @@ export interface operations {
                         past_competitions: components["schemas"]["MyCompetition"][];
                         future_competitions: components["schemas"]["MyCompetition"][];
                         bookmarked_competitions: components["schemas"]["MyCompetition"][];
+                        registrations_by_competition: {
+                            [key: string]: components["schemas"]["CompetingStatus"];
+                        };
                     };
                 };
             };
