@@ -673,7 +673,7 @@ class Competition < ApplicationRecord
   end
 
   def being_cloned_from
-    @being_cloned_from ||= Competition.find_by(id: being_cloned_from_id)
+    @being_cloned_from ||= Competition.find_by(competition_id: being_cloned_from_id)
   end
 
   def build_clone
