@@ -148,6 +148,7 @@ class Competition < ApplicationRecord
   ].freeze
   UNCLONEABLE_ATTRIBUTES = %w[
     id
+    competition_id
     start_date
     end_date
     name
