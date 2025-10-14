@@ -2,15 +2,15 @@
 
 module DatabaseDumper
   WHERE_VISIBLE_COMP = "WHERE competitions.show_at_all = 1"
-  JOIN_WHERE_VISIBLE_COMP = "JOIN competitions ON competitions.id = competition_id #{WHERE_VISIBLE_COMP}".freeze
+  JOIN_WHERE_VISIBLE_COMP = "JOIN competitions ON competitions.competition_id = competition_id #{WHERE_VISIBLE_COMP}".freeze
   DEV_TIMESTAMP_NAME = "developer_dump_exported_at"
   RESULTS_TIMESTAMP_NAME = "public_results_exported_at"
-  PUBLIC_COMPETITION_JOIN = "LEFT JOIN competition_events ON competitions.id = competition_events.competition_id " \
-                            "LEFT JOIN competition_delegates ON competitions.id = competition_delegates.competition_id " \
+  PUBLIC_COMPETITION_JOIN = "LEFT JOIN competition_events ON competitions.competition_id = competition_events.competition_id " \
+                            "LEFT JOIN competition_delegates ON competitions.competition_id = competition_delegates.competition_id " \
                             "LEFT JOIN users AS users_delegates ON users_delegates.id = competition_delegates.delegate_id " \
-                            "LEFT JOIN competition_organizers ON competitions.id = competition_organizers.competition_id " \
+                            "LEFT JOIN competition_organizers ON competitions.competition_id = competition_organizers.competition_id " \
                             "LEFT JOIN users AS users_organizers ON users_organizers.id = competition_organizers.organizer_id #{WHERE_VISIBLE_COMP} " \
-                            "GROUP BY competitions.id".freeze
+                            "GROUP BY competitions.competition_id".freeze
 
   PUBLIC_RESULTS_VERSION = '1.0.0'
 
@@ -39,6 +39,7 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
+          competition_id
           name
           name_reason
           city_name
