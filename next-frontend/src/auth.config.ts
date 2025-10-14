@@ -1,9 +1,45 @@
 import type { NextAuthConfig } from "next-auth";
 import { Provider } from "@auth/core/providers";
+import createClient from "openapi-fetch";
 
 export const WCA_PROVIDER_ID = "WCA";
 export const WCA_CMS_PROVIDER_ID = `${WCA_PROVIDER_ID}-CMS`;
-export const TOKEN_ENDPOINT = `${process.env.OIDC_ISSUER}/oauth/token`;
+
+interface oauthClientSpec {
+  "/oauth/token": {
+    post: {
+      requestBody: {
+        content: {
+          "application/x-www-form-urlencoded": {
+            client_id: string;
+            client_secret: string;
+            grant_type: "refresh_token";
+            refresh_token: string;
+          };
+        };
+      };
+      responses: {
+        200: {
+          content: {
+            "application/json": {
+              access_token: string;
+              token_type: string;
+              expires_in: number;
+              refresh_token: string;
+              scope: string;
+              created_at: number;
+              id_token: string;
+            };
+          };
+        };
+      };
+    };
+  };
+}
+
+const refreshTokenClient = createClient<oauthClientSpec>({
+  baseUrl: process.env.OIDC_ISSUER,
+});
 
 const baseWcaProvider: Provider = {
   id: WCA_PROVIDER_ID,
@@ -61,36 +97,22 @@ export const authConfig: NextAuthConfig = {
         if (!token.refresh_token) throw new TypeError("Missing refresh_token");
 
         try {
-          const response = await fetch(TOKEN_ENDPOINT, {
-            method: "POST",
-            body: new URLSearchParams({
-              client_id: baseWcaProvider.clientId!,
-              client_secret: baseWcaProvider.clientSecret!,
-              grant_type: "refresh_token",
-              refresh_token: token.refresh_token! as string,
-            }),
-          });
+          const { data: newTokens, error } = await refreshTokenClient.POST(
+            "/oauth/token",
+            {
+              body: {
+                client_id: baseWcaProvider.clientId!,
+                client_secret: baseWcaProvider.clientSecret!,
+                grant_type: "refresh_token",
+                refresh_token: token.refresh_token! as string,
+              },
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+            },
+          );
 
-          const tokensOrError = await response.json();
-
-          if (!response.ok) throw tokensOrError;
-
-          // A response looks like this
-          // {
-          //  access_token: 'xx',
-          //  token_type: 'xx',
-          //  expires_in: 7199,
-          //  refresh_token: 'xx',
-          //  scope: 'xx',
-          //  created_at: 1758544723,
-          //  id_token: 'xx'
-          // }
-
-          const newTokens = tokensOrError as {
-            access_token: string;
-            expires_in: number;
-            refresh_token: string;
-          };
+          if (error) throw error;
 
           return {
             ...token,
