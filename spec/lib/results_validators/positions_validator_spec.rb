@@ -20,15 +20,17 @@ RSpec.describe ResultsValidators::PositionsValidator do
     end
 
     context "basic results" do
+      let!(:round_333oh) { create(:round, competition: competition1, event_id: "333oh") }
+      let!(:round_222) { create(:round, competition: competition2, event_id: "222") }
       let!(:results) do
         {
           "Result" => [
-            create_results(competition1, 5, "333oh"),
-            create_results(competition2, 5, "222"),
+            create_results(competition1, 5, "333oh", round_333oh),
+            create_results(competition2, 5, "222", round_222),
           ],
           "InboxResult" => [
-            create_results(competition1, 5, "333oh", kind: :inbox_result),
-            create_results(competition2, 5, "222", kind: :inbox_result),
+            create_results(competition1, 5, "333oh", round_333oh, kind: :inbox_result),
+            create_results(competition2, 5, "222", round_222, kind: :inbox_result),
           ],
         }
       end
@@ -97,16 +99,18 @@ RSpec.describe ResultsValidators::PositionsValidator do
 
     context "tied results" do
       it "validates correctly tied results" do
-        create_correct_tied_results(competition1, "333oh")
-        create_correct_tied_results(competition1, "333oh", kind: :inbox_result)
+        round = create(:round, competition: competition1, event_id: "333oh")
+        create_correct_tied_results(competition1, "333oh", round)
+        create_correct_tied_results(competition1, "333oh", round, kind: :inbox_result)
         validator_args.each do |arg|
           pv = ResultsValidators::PositionsValidator.new.validate(**arg)
           expect(pv.any_errors?).to be false
         end
       end
       it "invalidates incorrectly tied results" do
-        results1 = create_incorrect_tied_results(competition1, "222")
-        results2 = create_incorrect_tied_results(competition1, "222", kind: :inbox_result)
+        round = create(:round, competition: competition1, event_id: "222")
+        results1 = create_incorrect_tied_results(competition1, "222", round)
+        results2 = create_incorrect_tied_results(competition1, "222", round, kind: :inbox_result)
         expected_errors = {
           "Result" => create_result_error(competition1.id, "222-f", results1[1].person_name, 1, 2),
           "InboxResult" => create_result_error(competition1.id, "222-f", results2[1].person_name, 1, 2),
@@ -125,17 +129,19 @@ RSpec.describe ResultsValidators::PositionsValidator do
       it "validates correctly tied results" do
         # In a BoX format, results with the same best should have the same position,
         # even if one has a mean.
-        create(:result, :blind_dnf_mo3, competition: competition1, pos: 1, best: 1000)
-        create(:result, :blind_mo3, competition: competition1, pos: 1, best: 1000)
-        create(:result, :blind_mo3, competition: competition1, pos: 3, best: 2000)
+        round = create(:round, competition: competition1, event_id: "333bf", format_id: "3")
+        create(:result, :blind_dnf_mo3, competition: competition1, pos: 1, best: 1000, round: round)
+        create(:result, :blind_mo3, competition: competition1, pos: 1, best: 1000, round: round)
+        create(:result, :blind_mo3, competition: competition1, pos: 3, best: 2000, round: round)
         pv = ResultsValidators::PositionsValidator.new.validate(competition_ids: competition1.id, model: Result)
         expect(pv.any_errors?).to be false
       end
 
       it "invalidates incorrectly ordered results" do
         # In a BoX format, results should be ordered by best, not mean.
-        r1 = create(:result, :blind_mo3, competition: competition1, pos: 1, best: 2000)
-        r2 = create(:result, :blind_dnf_mo3, competition: competition1, pos: 2, best: 1000)
+        round = create(:round, competition: competition1, event_id: "333bf", format_id: "3")
+        r1 = create(:result, :blind_mo3, competition: competition1, pos: 1, best: 2000, round: round)
+        r2 = create(:result, :blind_dnf_mo3, competition: competition1, pos: 2, best: 1000, round: round)
         expected_errors = [
           create_result_error(competition1.id, "333bf-f", r1.person_name, 2, 1),
           create_result_error(competition1.id, "333bf-f", r2.person_name, 1, 2),
@@ -148,29 +154,29 @@ RSpec.describe ResultsValidators::PositionsValidator do
   end
 end
 
-def create_results(competition, number, event_id, kind: :result)
+def create_results(competition, number, event_id, round, kind: :result)
   results = []
   1.upto(number) do |i|
     # By default the factory creates a predefined best/average, to have increasing
     # time we need to provide some arbitrary times increasing with the position.
-    results << FactoryBot.create(kind, competition: competition, pos: i, best: i * 1000, average: i * 2000, event_id: event_id)
+    results << FactoryBot.create(kind, competition: competition, pos: i, best: i * 1000, average: i * 2000, event_id: event_id, round: round)
   end
   results
 end
 
-def create_correct_tied_results(competition, event_id, kind: :result)
+def create_correct_tied_results(competition, event_id, round, kind: :result)
   [
-    FactoryBot.create(kind, competition: competition, pos: 1, best: 1000, average: 2000, event_id: event_id),
-    FactoryBot.create(kind, competition: competition, pos: 1, best: 1000, average: 2000, event_id: event_id),
-    FactoryBot.create(kind, competition: competition, pos: 3, best: 2000, average: 2000, event_id: event_id),
+    FactoryBot.create(kind, competition: competition, pos: 1, best: 1000, average: 2000, event_id: event_id, round: round),
+    FactoryBot.create(kind, competition: competition, pos: 1, best: 1000, average: 2000, event_id: event_id, round: round),
+    FactoryBot.create(kind, competition: competition, pos: 3, best: 2000, average: 2000, event_id: event_id, round: round),
   ]
 end
 
-def create_incorrect_tied_results(competition, event_id, kind: :result)
+def create_incorrect_tied_results(competition, event_id, round, kind: :result)
   [
-    FactoryBot.create(kind, competition: competition, pos: 1, best: 1000, average: 2000, event_id: event_id),
-    FactoryBot.create(kind, competition: competition, pos: 2, best: 1000, average: 2000, event_id: event_id),
-    FactoryBot.create(kind, competition: competition, pos: 3, best: 2000, average: 2000, event_id: event_id),
+    FactoryBot.create(kind, competition: competition, pos: 1, best: 1000, average: 2000, event_id: event_id, round: round),
+    FactoryBot.create(kind, competition: competition, pos: 2, best: 1000, average: 2000, event_id: event_id, round: round),
+    FactoryBot.create(kind, competition: competition, pos: 3, best: 2000, average: 2000, event_id: event_id, round: round),
   ]
 end
 

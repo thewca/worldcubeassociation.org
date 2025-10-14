@@ -21,12 +21,12 @@ RSpec.describe Person do
       expect(person.likely_delegates).to eq [delegate]
 
       competition2 = create(:competition, delegates: [delegate], starts: 3.days.ago)
-      create(:result, person: person, competition_id: competition2.id)
+      create(:result, person: person, competition: competition2)
       expect(person.likely_delegates).to eq [delegate]
 
       new_delegate = create(:delegate)
       competition3 = create(:competition, delegates: [new_delegate], starts: 2.days.ago)
-      create(:result, person: person, competition_id: competition3.id)
+      create(:result, person: person, competition: competition3)
       expect(person.likely_delegates).to eq [delegate, new_delegate]
     end
   end
@@ -127,15 +127,16 @@ RSpec.describe Person do
   describe "#championship_podiums" do
     let!(:fr_nationals2016) { create(:competition, championship_types: ["FR"], starts: Date.new(2016, 1, 1)) }
     let!(:us_nationals2017) { create(:competition, championship_types: ["US"], starts: Date.new(2017, 1, 1)) }
+    let!(:us_nationals2017_333_round) { create(:round, competition: us_nationals2017) }
     let!(:fr_competitor) do
       create(:person, country_id: "France").tap do |fr_competitor|
         create(:result, person: fr_competitor, competition: fr_nationals2016, pos: 1, event_id: "333")
-        create(:result, person: fr_competitor, competition: us_nationals2017, pos: 1, event_id: "333")
+        create(:result, person: fr_competitor, competition: us_nationals2017, pos: 1, event_id: "333", round: us_nationals2017_333_round)
       end
     end
     let!(:us_competitor) do
       create(:person, country_id: "USA").tap do |us_competitor|
-        create(:result, person: us_competitor, competition: us_nationals2017, pos: 2, event_id: "333")
+        create(:result, person: us_competitor, competition: us_nationals2017, pos: 2, event_id: "333", round: us_nationals2017_333_round)
       end
     end
 
@@ -182,10 +183,11 @@ RSpec.describe Person do
       us_competitor1 = create(:person, country_id: "USA")
       us_competitor2 = create(:person, country_id: "USA")
       us_competitor3 = create(:person, country_id: "USA")
-      create(:result, person: fr_competitor, competition: us_nationals2017, pos: 1, event_id: "222")
-      create(:result, person: us_competitor1, competition: us_nationals2017, pos: 2, event_id: "222")
-      create(:result, person: us_competitor2, competition: us_nationals2017, pos: 2, event_id: "222")
-      create(:result, person: us_competitor3, competition: us_nationals2017, pos: 4, event_id: "222")
+      round = create(:round, competition: us_nationals2017, event_id: "222")
+      create(:result, person: fr_competitor, competition: us_nationals2017, pos: 1, event_id: "222", round: round)
+      create(:result, person: us_competitor1, competition: us_nationals2017, pos: 2, event_id: "222", round: round)
+      create(:result, person: us_competitor2, competition: us_nationals2017, pos: 2, event_id: "222", round: round)
+      create(:result, person: us_competitor3, competition: us_nationals2017, pos: 4, event_id: "222", round: round)
 
       expect(us_competitor1.championship_podiums[:national].first.pos).to eq 1
       expect(us_competitor2.championship_podiums[:national].first.pos).to eq 1

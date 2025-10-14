@@ -4,10 +4,11 @@ require 'rails_helper'
 
 RSpec.describe CompetitionsHelper do
   let(:competition) { create(:competition) }
+  let(:final_round) { create(:round, competition: competition) }
 
   describe "#winners" do
     context "333" do
-      def add_result(pos, name, event_id: "333", dnf: false, wca_id: nil)
+      def add_result(pos, name, event_id: "333", dnf: false, wca_id: nil, round: nil)
         person = create(:person,
                         wca_id: wca_id || "2006YOYO#{format('%.2d', pos)}",
                         name: name,
@@ -19,6 +20,7 @@ RSpec.describe CompetitionsHelper do
                event_id: event_id,
                round_type_id: "f",
                format_id: "a",
+               round: round,
                value1: dnf ? SolveTime::DNF_VALUE : 999,
                value2: 999,
                value3: 999,
@@ -28,12 +30,13 @@ RSpec.describe CompetitionsHelper do
                average: dnf ? SolveTime::DNF_VALUE : 999)
       end
 
-      let!(:unrelated_podium_result) { add_result(1, "joe", event_id: "333oh", wca_id: "2006JOJO01") }
+      let!(:unrelated_round) { create(:round, competition: competition, event_id: "333oh") }
+      let!(:unrelated_podium_result) { add_result(1, "joe", event_id: "333oh", wca_id: "2006JOJO01", round: unrelated_round) }
 
       it "announces top 3 in final" do
-        add_result(1, "Jeremy")
-        add_result(2, "Dan")
-        add_result(3, "Steven")
+        add_result(1, "Jeremy", round: final_round)
+        add_result(2, "Dan", round: final_round)
+        add_result(3, "Steven", round: final_round)
 
         text = helper.winners(competition, Event.c_find("333"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with an average of 9.99 seconds in the 3x3x3 Cube event. " \
@@ -42,8 +45,8 @@ RSpec.describe CompetitionsHelper do
       end
 
       it "handles only 2 people in final" do
-        add_result(1, "Jeremy")
-        add_result(2, "Dan")
+        add_result(1, "Jeremy", round: final_round)
+        add_result(2, "Dan", round: final_round)
 
         text = helper.winners(competition, Event.c_find("333"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with an average of 9.99 seconds in the 3x3x3 Cube event. " \
@@ -51,16 +54,16 @@ RSpec.describe CompetitionsHelper do
       end
 
       it "handles only 1 person in final" do
-        add_result(1, "Jeremy")
+        add_result(1, "Jeremy", round: final_round)
 
         text = helper.winners(competition, Event.c_find("333"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with an average of 9.99 seconds in the 3x3x3 Cube event."
       end
 
       it "handles DNF averages in the podium" do
-        add_result(1, "Jeremy")
-        add_result(2, "Dan")
-        add_result(3, "Steven", dnf: true)
+        add_result(1, "Jeremy", round: final_round)
+        add_result(2, "Dan", round: final_round)
+        add_result(3, "Steven", dnf: true, round: final_round)
 
         text = helper.winners(competition, Event.c_find("333"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with an average of 9.99 seconds in the 3x3x3 Cube event. " \
@@ -69,9 +72,9 @@ RSpec.describe CompetitionsHelper do
       end
 
       it "handles ties in the podium" do
-        add_result(1, "Jeremy")
-        add_result(1, "Dan", wca_id: "2006DADA01")
-        add_result(3, "Steven", dnf: true)
+        add_result(1, "Jeremy", round: final_round)
+        add_result(1, "Dan", wca_id: "2006DADA01", round: final_round)
+        add_result(3, "Steven", dnf: true, round: final_round)
 
         text = helper.winners(competition, Event.c_find("333"))
         expect(text).to eq "[Dan](#{person_url('2006DADA01')}) and [Jeremy](#{person_url('2006YOYO01')}) won with an average of 9.99 seconds in the 3x3x3 Cube event. " \
@@ -79,10 +82,10 @@ RSpec.describe CompetitionsHelper do
       end
 
       it "handles tied third place" do
-        add_result(1, "Jeremy")
-        add_result(2, "Dan")
-        add_result(3, "Steven", dnf: true)
-        add_result(3, "John", dnf: true, wca_id: "2006JOJO03")
+        add_result(1, "Jeremy", round: final_round)
+        add_result(2, "Dan", round: final_round)
+        add_result(3, "Steven", dnf: true, round: final_round)
+        add_result(3, "John", dnf: true, wca_id: "2006JOJO03", round: final_round)
 
         text = helper.winners(competition, Event.c_find("333"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with an average of 9.99 seconds in the 3x3x3 Cube event. " \
@@ -92,7 +95,7 @@ RSpec.describe CompetitionsHelper do
     end
 
     context "333bf" do
-      def add_result(pos, name)
+      def add_result(pos, name, round: nil)
         person = create(:person,
                         wca_id: "2006YOYO#{format('%.2d', pos)}",
                         name: name,
@@ -104,6 +107,7 @@ RSpec.describe CompetitionsHelper do
                event_id: "333bf",
                round_type_id: "f",
                format_id: "3",
+               round: round,
                value1: 60.seconds.in_centiseconds,
                value2: 60.seconds.in_centiseconds,
                value3: 60.seconds.in_centiseconds,
@@ -113,10 +117,12 @@ RSpec.describe CompetitionsHelper do
                average: 60.seconds.in_centiseconds)
       end
 
+      let(:final_round) { create(:round, competition: competition, format_id: "3", event_id: "333bf") }
+
       it "announces top 3 in final" do
-        add_result(1, "Jeremy")
-        add_result(2, "Dan")
-        add_result(3, "Steven")
+        add_result(1, "Jeremy", round: final_round)
+        add_result(2, "Dan", round: final_round)
+        add_result(3, "Steven", round: final_round)
 
         text = helper.winners(competition, Event.c_find("333bf"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with a single solve of 1:00.00 in the 3x3x3 Blindfolded event. " \
@@ -126,7 +132,7 @@ RSpec.describe CompetitionsHelper do
     end
 
     context "333fm" do
-      def add_result(pos, name, dnf: false)
+      def add_result(pos, name, dnf: false, round: nil)
         person = create(:person,
                         wca_id: "2006YOYO#{format('%.2d', pos)}",
                         name: name,
@@ -138,6 +144,7 @@ RSpec.describe CompetitionsHelper do
                event_id: "333fm",
                round_type_id: "f",
                format_id: "m",
+               round: round,
                value1: dnf ? SolveTime::DNF_VALUE : 29,
                value2: 24,
                value3: 30,
@@ -147,10 +154,12 @@ RSpec.describe CompetitionsHelper do
                average: dnf ? SolveTime::DNF_VALUE : 2767)
       end
 
+      let(:final_round) { create(:round, competition: competition, format_id: "m", event_id: "333fm") }
+
       it "announces top 3 in final" do
-        add_result(1, "Jeremy")
-        add_result(2, "Dan")
-        add_result(3, "Steven")
+        add_result(1, "Jeremy", round: final_round)
+        add_result(2, "Dan", round: final_round)
+        add_result(3, "Steven", round: final_round)
 
         text = helper.winners(competition, Event.c_find("333fm"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with a mean of 27.67 moves in the 3x3x3 Fewest Moves event. " \
@@ -159,9 +168,9 @@ RSpec.describe CompetitionsHelper do
       end
 
       it "handles DNF averages in the podium" do
-        add_result(1, "Jeremy")
-        add_result(2, "Dan")
-        add_result(3, "Steven", dnf: true)
+        add_result(1, "Jeremy", round: final_round)
+        add_result(2, "Dan", round: final_round)
+        add_result(3, "Steven", dnf: true, round: final_round)
 
         text = helper.winners(competition, Event.c_find("333fm"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with a mean of 27.67 moves in the 3x3x3 Fewest Moves event. " \
@@ -171,7 +180,7 @@ RSpec.describe CompetitionsHelper do
     end
 
     context "333mbf" do
-      def add_result(pos, name)
+      def add_result(pos, name, round: nil)
         solve_time = SolveTime.new("333mbf", :best, 0)
         solve_time.attempted = 9
         solve_time.solved = 8
@@ -187,6 +196,7 @@ RSpec.describe CompetitionsHelper do
                event_id: "333mbf",
                round_type_id: "f",
                format_id: "3",
+               round: round,
                value1: solve_time.wca_value,
                value2: solve_time.wca_value,
                value3: solve_time.wca_value,
@@ -196,10 +206,12 @@ RSpec.describe CompetitionsHelper do
                average: 0)
       end
 
+      let(:final_round) { create(:round, competition: competition, format_id: "3", event_id: "333mbf") }
+
       it "announces top 3 in final" do
-        add_result(1, "Jeremy")
-        add_result(2, "Dan")
-        add_result(3, "Steven")
+        add_result(1, "Jeremy", round: final_round)
+        add_result(2, "Dan", round: final_round)
+        add_result(3, "Steven", round: final_round)
 
         text = helper.winners(competition, Event.c_find("333mbf"))
         expect(text).to eq "[Jeremy](#{person_url('2006YOYO01')}) won with a result of 8/9 45:32 in the 3x3x3 Multi-Blind event. " \

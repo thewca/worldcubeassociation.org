@@ -128,6 +128,7 @@ export type StaticTargetLink =
   | '/'
   | '/faq'
   | '/competitions'
+  | '/competitions/mine'
   | '/delegates'
   | '/disclaimer'
   | '/documents'
@@ -416,7 +417,7 @@ export interface User {
     | {
         provider: string;
         providerAccountId: string;
-        type: string;
+        type: 'oidc' | 'oauth' | 'email' | 'webauthn';
         id?: string | null;
       }[]
     | null;

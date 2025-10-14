@@ -1066,7 +1066,7 @@ RSpec.describe CompetitionsController do
     let!(:registration5) { create(:registration, :accepted, competition: future_competition3, user: delegate) }
     let!(:results_person) { create(:person, wca_id: "2014PLUM01", name: "Jeff Plumb") }
     let!(:results_user) { create(:user, name: "Jeff Plumb", wca_id: "2014PLUM01") }
-    let!(:result) { create(:result, person: results_person, competition_id: past_competition1.id) }
+    let!(:result) { create(:result, person: results_person, competition: past_competition1) }
 
     context 'when not signed in' do
       sign_out
