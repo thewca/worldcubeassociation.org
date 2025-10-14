@@ -842,7 +842,7 @@ class Competition < ApplicationRecord
   def update_foreign_keys
     Competition.reflect_on_all_associations.uniq(&:klass).each do |association_reflection|
       foreign_key = association_reflection.foreign_key
-      association_reflection.klass.where(foreign_key => competition_id_before_last_save).update_all(foreign_key => competition_id) if 'competition_id' == foreign_key
+      association_reflection.klass.where(foreign_key => competition_id_before_last_save).update_all(foreign_key => competition_id) if foreign_key == 'competition_id'
     end
   end
 
