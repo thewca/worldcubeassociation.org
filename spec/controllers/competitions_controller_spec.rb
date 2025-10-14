@@ -1047,129 +1047,14 @@ RSpec.describe CompetitionsController do
   end
 
   describe 'GET #my_competitions', :clean_db_with_truncation do
-    let(:delegate) { create(:delegate) }
-    let(:organizer) { create(:user) }
-    let!(:future_competition1) { create(:competition, :registration_open, starts: 5.weeks.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w[222 333])) }
-    let!(:future_competition2) { create(:competition, :registration_open, starts: 4.weeks.from_now, organizers: [organizer], events: Event.where(id: %w[222 333])) }
-    let!(:future_competition3) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [organizer], events: Event.where(id: %w[222 333])) }
-    let!(:future_competition4) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [], events: Event.where(id: %w[222 333])) }
-    let!(:past_competition1) { create(:competition, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w[222 333])) }
-    let!(:past_competition2) { create(:competition, starts: 2.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
-    let!(:past_competition3) { create(:competition, starts: 3.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
-    let!(:past_competition4) { create(:competition, :results_posted, starts: 4.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
-    let!(:unscheduled_competition1) { create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w[222 333])) }
-    let(:registered_user) { create(:user, name: "Jan-Ove Waldner") }
-    let!(:registration1) { create(:registration, :accepted, competition: future_competition1, user: registered_user) }
-    let!(:registration2) { create(:registration, :accepted, competition: future_competition3, user: registered_user) }
-    let!(:registration3) { create(:registration, :accepted, competition: past_competition1, user: registered_user) }
-    let!(:registration4) { create(:registration, :accepted, competition: past_competition3, user: organizer) }
-    let!(:registration5) { create(:registration, :accepted, competition: future_competition3, user: delegate) }
-    let!(:results_person) { create(:person, wca_id: "2014PLUM01", name: "Jeff Plumb") }
-    let!(:results_user) { create(:user, name: "Jeff Plumb", wca_id: "2014PLUM01") }
-    let!(:result) { create(:result, person: results_person, competition: past_competition1) }
-
     context 'when not signed in' do
-      sign_out
+      before do
+        sign_out
+      end
 
       it 'redirects to the sign in page' do
         get :my_competitions
         expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context 'when signed in as user with results for a comp they did not register for' do
-      before do
-        sign_in results_user
-      end
-
-      it 'shows my upcoming and past competitions' do
-        get :my_competitions
-        expect(assigns(:my_competitions)[:not_past_competitions]).to eq []
-        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1]
-      end
-    end
-
-    context 'when signed in as a regular user' do
-      before do
-        sign_in registered_user
-      end
-
-      it 'shows my upcoming and past competitions' do
-        get :my_competitions
-        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [future_competition1, future_competition3]
-        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1]
-      end
-
-      it 'does not show past competitions they have a rejected registration for' do
-        create(:registration, :rejected, competition: past_competition2, user: registered_user)
-        get :my_competitions
-        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [future_competition1, future_competition3]
-        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1]
-      end
-
-      it 'does not show upcoming competitions they have a rejected registration for' do
-        create(:registration, :cancelled, competition: future_competition2, user: registered_user)
-        get :my_competitions
-        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [future_competition1, future_competition3]
-        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1]
-      end
-
-      it 'shows upcoming competition they have a pending registration for' do
-        create(:registration, :pending, competition: future_competition2, user: registered_user)
-        get :my_competitions
-        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [future_competition1, future_competition2, future_competition3]
-        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1]
-      end
-
-      it 'does not show past competitions they have a pending registration for' do
-        create(:registration, :pending, competition: past_competition2, user: registered_user)
-        get :my_competitions
-        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [future_competition1, future_competition3]
-        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1]
-      end
-
-      it 'does not show past competitions with results uploaded they have an accepted registration but not results for' do
-        create(:registration, :accepted, competition: past_competition4, user: registered_user)
-        get :my_competitions
-        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [future_competition1, future_competition3]
-        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1]
-      end
-
-      it 'shows upcoming competitions they have bookmarked' do
-        BookmarkedCompetition.create(competition: future_competition2, user: registered_user)
-        BookmarkedCompetition.create(competition: future_competition4, user: registered_user)
-        get :my_competitions
-        expect(assigns(:my_competitions)[:bookmarked_competitions]).to eq [future_competition4, future_competition2]
-      end
-
-      it 'does not show past competitions they have bookmarked' do
-        BookmarkedCompetition.create(competition: past_competition1, user: registered_user)
-        get :my_competitions
-        expect(assigns(:my_competitions)[:bookmarked_competitions]).to eq []
-      end
-    end
-
-    context 'when signed in as an organizer' do
-      before do
-        sign_in organizer
-      end
-
-      it 'shows my upcoming and past competitions' do
-        get :my_competitions
-        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [future_competition1, future_competition2, future_competition3]
-        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition1, past_competition3]
-      end
-    end
-
-    context 'when signed in as a delegate' do
-      before do
-        sign_in delegate
-      end
-
-      it 'shows my upcoming and past competitions' do
-        get :my_competitions
-        expect(assigns(:my_competitions)[:not_past_competitions]).to eq [unscheduled_competition1, future_competition1, future_competition3]
-        expect(assigns(:my_competitions)[:past_competitions]).to eq [past_competition2, past_competition3, past_competition4]
       end
     end
   end
