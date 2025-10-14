@@ -2224,7 +2224,7 @@ class Competition < ApplicationRecord
     return [] unless part_of_competition_series?
 
     series_competitions
-      .where.not(id: self.id)
+      .where.not(competition_id: self.competition_id)
   end
 
   def series_sibling_registrations
