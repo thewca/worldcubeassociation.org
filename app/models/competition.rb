@@ -1204,7 +1204,7 @@ class Competition < ApplicationRecord
   end
 
   def adjacent_competitions(days, distance)
-    Competition.where("ABS(DATEDIFF(?, start_date)) <= ? AND id <> ?", start_date, days, id)
+    Competition.where("ABS(DATEDIFF(?, start_date)) <= ? AND competition_id <> ?", start_date, days, id)
                .select { |c| kilometers_to(c) <= distance }
                .sort_by { |c| kilometers_to(c) }
   end
