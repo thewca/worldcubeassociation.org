@@ -96,36 +96,34 @@ export const authConfig: NextAuthConfig = {
         // as per https://authjs.dev/guides/refresh-token-rotation
         if (!token.refresh_token) throw new TypeError("Missing refresh_token");
 
-        try {
-          const { data: newTokens, error } = await refreshTokenClient.POST(
-            "/oauth/token",
-            {
-              body: {
-                client_id: baseWcaProvider.clientId!,
-                client_secret: baseWcaProvider.clientSecret!,
-                grant_type: "refresh_token",
-                refresh_token: token.refresh_token! as string,
-              },
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-              },
+        const { data: newTokens, error } = await refreshTokenClient.POST(
+          "/oauth/token",
+          {
+            body: {
+              client_id: baseWcaProvider.clientId!,
+              client_secret: baseWcaProvider.clientSecret!,
+              grant_type: "refresh_token",
+              refresh_token: token.refresh_token! as string,
             },
-          );
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          },
+        );
 
-          if (error) throw error;
-
+        if (error) {
           return {
             ...token,
-            access_token: newTokens.access_token,
-            expires_at: Math.floor(Date.now() / 1000 + newTokens.expires_in),
-            refresh_token: newTokens.refresh_token,
+            error: "RefreshTokenError",
           };
-        } catch (error) {
-          console.error("Error refreshing access_token", error);
-          // If we fail to refresh the token, return an error so we can handle it on the page
-          token.error = "RefreshTokenError";
-          return token;
         }
+
+        return {
+          ...token,
+          access_token: newTokens.access_token,
+          expires_at: Math.floor(Date.now() / 1000 + newTokens.expires_in),
+          refresh_token: newTokens.refresh_token,
+        };
       }
     },
     async session({ session, token }) {
