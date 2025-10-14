@@ -249,9 +249,9 @@ class Competition < ApplicationRecord
   validates :early_puzzle_submission_reason, presence: true, if: :early_puzzle_submission?
   # cannot validate `qualification_results IN [true, false]` because we historically have competitions
   # where we legitimately don't know whether or not they used qualification times so we have to set them to NULL.
-  validates :qualification_results_reason, presence: true, if: :persisted_uses_qualification?
+  validates :qualification_results_reason, presence: true, if: :uses_qualification?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
-  validates :main_event_id, inclusion: { in: ->(comp) { [nil].concat(comp.persisted_events_id) } }
+  validates :main_event_id, inclusion: { in: ->(comp) { [nil].concat(comp.event_ids) } }
 
   # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
   validates :name, length: { maximum: MAX_NAME_LENGTH }
@@ -283,20 +283,6 @@ class Competition < ApplicationRecord
     newcomer_month_reserved_spots - registrations.newcomer_month_eligible_competitors_count
   end
 
-  # Dirty old trick to deal with competition id changes (see other methods using
-  # 'with_old_id' for more details).
-  def persisted_events_id
-    with_old_id do
-      self.competition_events.map(&:event_id)
-    end
-  end
-
-  def persisted_uses_qualification?
-    with_old_id do
-      self.uses_qualification?
-    end
-  end
-
   def guests_per_registration_limit_enabled?
     some_guests_allowed? && guests_per_registration_limit.present?
   end
@@ -306,7 +292,7 @@ class Competition < ApplicationRecord
   end
 
   def number_of_events
-    persisted_events_id.length
+    event_ids.length
   end
 
   NEARBY_DISTANCE_KM_WARNING = 250
@@ -477,18 +463,8 @@ class Competition < ApplicationRecord
     uses_qualification? && !allow_registration_without_qualification
   end
 
-  def with_old_id
-    new_id = self.id
-    self.id = id_was
-    yield
-  ensure
-    self.id = new_id
-  end
-
   def no_events?
-    with_old_id do
-      competition_events.reject(&:marked_for_destruction?).empty?
-    end
+    competition_events.reject(&:marked_for_destruction?).empty?
   end
 
   validate :must_have_at_least_one_delegate, if: :confirmed_or_visible?
@@ -805,25 +781,23 @@ class Competition < ApplicationRecord
     # we restore it at the end. This means we'll preseve our existing
     # CompetitionOrganizer and CompetitionDelegate rows rather than creating new ones.
     # We'll fix their competition_id below in update_foreign_keys.
-    with_old_id do
-      if @staff_delegate_ids || @trainee_delegate_ids
-        self.delegates ||= []
+    if @staff_delegate_ids || @trainee_delegate_ids
+      self.delegates ||= []
 
-        if @staff_delegate_ids
-          unpacked_staff_delegates = @staff_delegate_ids.split(",").map { |id| User.find(id) }
+      if @staff_delegate_ids
+        unpacked_staff_delegates = @staff_delegate_ids.split(",").map { |id| User.find(id) }
 
-          # we overwrite staff_delegates, which means that we _keep_ existing trainee_delegates.
-          self.delegates = self.trainee_delegates | unpacked_staff_delegates
-        end
-        if @trainee_delegate_ids
-          unpacked_trainee_delegates = @trainee_delegate_ids.split(",").map { |id| User.find(id) }
-
-          # we overwrite trainee_delegates, which means that we _keep_ existing staff_delegates.
-          self.delegates = self.staff_delegates | unpacked_trainee_delegates
-        end
+        # we overwrite staff_delegates, which means that we _keep_ existing trainee_delegates.
+        self.delegates = self.trainee_delegates | unpacked_staff_delegates
       end
-      self.organizers = @organizer_ids.split(",").map { |id| User.find(id) } if @organizer_ids
+      if @trainee_delegate_ids
+        unpacked_trainee_delegates = @trainee_delegate_ids.split(",").map { |id| User.find(id) }
+
+        # we overwrite trainee_delegates, which means that we _keep_ existing staff_delegates.
+        self.delegates = self.staff_delegates | unpacked_trainee_delegates
+      end
     end
+    self.organizers = @organizer_ids.split(",").map { |id| User.find(id) } if @organizer_ids
   end
 
   def staff_delegates
@@ -841,16 +815,6 @@ class Competition < ApplicationRecord
     self.start_date.present? && self.end_date.present?
   end
 
-  old_competition_events_attributes = instance_method(:competition_events_attributes=)
-  define_method(:competition_events_attributes=) do |attributes|
-    # This is also a mess. We "overload" the competition_events_attributes= method
-    # so it won't be confused by the fact that our competition's id is changing.
-    # See similar hack and comment in unpack_delegate_organizer_ids.
-    with_old_id do
-      old_competition_events_attributes.bind_call(self, attributes)
-    end
-  end
-
   # We only do this after_update, because upon adding/removing a manager to a
   # competition the attribute is automatically set to that manager's preference.
   after_update :update_receive_registration_emails
@@ -864,15 +828,6 @@ class Competition < ApplicationRecord
     CompetitionDelegate.where(competition_id: id).where.not(delegate_id: delegates.map(&:id)).delete_all
   end
 
-  # We setup an alias here to be able to take advantage of `includes(:delegate_report)` on a competition,
-  # while still being able to use the 'with_old_id' trick.
-  alias_method :original_delegate_report, :delegate_report
-  def delegate_report
-    with_old_id do
-      original_delegate_report
-    end
-  end
-
   def report_posted_at
     delegate_report&.posted_at
   end
@@ -883,11 +838,11 @@ class Competition < ApplicationRecord
 
   # This callback updates all tables having the competition id, when the id changes.
   # This should be deleted after competition id is made immutable: https://github.com/thewca/worldcubeassociation.org/pull/381
-  after_save :update_foreign_keys, if: :saved_change_to_id?
+  after_save :update_foreign_keys, if: :saved_change_to_competition_id?
   def update_foreign_keys
     Competition.reflect_on_all_associations.uniq(&:klass).each do |association_reflection|
       foreign_key = association_reflection.foreign_key
-      association_reflection.klass.where(foreign_key => id_before_last_save).update_all(foreign_key => id) if %w[competition_id competitionId].include?(foreign_key)
+      association_reflection.klass.where(foreign_key => competition_id_before_last_save).update_all(foreign_key => competition_id) if 'competition_id' == foreign_key
     end
   end
 
