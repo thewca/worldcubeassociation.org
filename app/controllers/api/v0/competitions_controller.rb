@@ -242,7 +242,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   private def competition_from_params(associations: {})
     id = params[:competition_id] || params[:id]
-    competition = Competition.includes(associations).find(id)
+    competition = Competition.includes(associations).find_by(competition_id: id)
 
     # If this competition exists, but is not publicly visible, then only show it
     # to the user if they are able to manage the competition.
