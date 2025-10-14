@@ -1583,9 +1583,11 @@ class User < ApplicationRecord
       # For example, mailing all competitors about the cancellation.
       # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
       competitions = Competition.not_cancelled
-                                .or(Competition.over)
+                                .or(Competition.not_over)
                                 .includes(:delegate_report, :championships)
-                                .find(competition_ids.uniq)
+                                # cannot use `find` here, because `find` violently explodes when some records are not found,
+                                # and in case of cancelled competitions we might have a registration but the scope above hides the competition.
+                                .where(id: competition_ids.uniq)
                                 .sort_by { it.start_date || 20.years.from_now }
                                 .reverse
 
