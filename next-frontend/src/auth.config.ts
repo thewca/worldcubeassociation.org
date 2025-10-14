@@ -1,4 +1,5 @@
-import type { NextAuthConfig } from "next-auth";
+import { Session, DefaultSession, NextAuthConfig } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import { Provider } from "@auth/core/providers";
 import createClient from "openapi-fetch";
 
@@ -35,6 +36,27 @@ interface oauthClientSpec {
       };
     };
   };
+}
+
+declare module "next-auth" {
+  /**
+   * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   */
+  interface Session {
+    accessToken: string;
+    user: {} & DefaultSession["user"];
+    error?: "RefreshTokenError";
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    userId: string;
+    access_token: string;
+    expires_at: number;
+    refresh_token?: string;
+    error?: "RefreshTokenError";
+  }
 }
 
 const refreshTokenClient = createClient<oauthClientSpec>({
@@ -79,17 +101,17 @@ export const authConfig: NextAuthConfig = {
   secret: process.env.AUTH_SECRET,
   providers: [baseWcaProvider],
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account, user }) {
       if (account) {
         // First-time login, save the `access_token`, its expiry and the `refresh_token`
         return {
           ...token,
-          userId: account.userId,
-          access_token: account.access_token,
-          expires_at: account.expires_at,
+          userId: user.id!,
+          access_token: account.access_token!,
+          expires_at: account.expires_at!,
           refresh_token: account.refresh_token,
         };
-      } else if (Date.now() < (token.expires_at as number) * 1000) {
+      } else if (Date.now() < token.expires_at * 1000) {
         // Subsequent logins, but the `access_token` is still valid
         return token;
       } else {
@@ -103,7 +125,7 @@ export const authConfig: NextAuthConfig = {
               client_id: baseWcaProvider.clientId!,
               client_secret: baseWcaProvider.clientSecret!,
               grant_type: "refresh_token",
-              refresh_token: token.refresh_token! as string,
+              refresh_token: token.refresh_token,
             },
             headers: {
               "Content-Type": "application/x-www-form-urlencoded",
@@ -127,8 +149,8 @@ export const authConfig: NextAuthConfig = {
       }
     },
     async session({ session, token }) {
-      session.accessToken = token.access_token as string;
-      session.user.id = token.userId as string;
+      session.accessToken = token.access_token;
+      session.user.id = token.userId;
       return session;
     },
   },
