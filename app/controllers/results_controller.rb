@@ -431,7 +431,7 @@ class ResultsController < ApplicationController
 
           # First, extract unique competitions
           comp_ids = rows.map { |r| r["competition_id"] }.uniq
-          competitions_by_id = Competition.where(id: comp_ids)
+          competitions_by_id = Competition.where(competition_id: comp_ids)
                                           .index_by(&:id)
                                           .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cell_name id]) }
 

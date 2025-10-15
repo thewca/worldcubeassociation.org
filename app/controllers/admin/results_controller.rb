@@ -35,7 +35,7 @@ module Admin
       #   - intersect with the competitions in the parameters
       #   - either lock them and reply ok, or there is none to lock and reply
       #   it was a no-op.
-      @updated_competitions = Competition.pending_posting.where(posting_user: nil).where(id: params[:competition_ids])
+      @updated_competitions = Competition.pending_posting.where(posting_user: nil).where(competition_id: params[:competition_ids])
       return render json: { error: "No competitions to lock." } if @updated_competitions.empty?
 
       ActiveRecord::Base.transaction do
