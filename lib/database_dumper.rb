@@ -2,7 +2,6 @@
 
 module DatabaseDumper
   WHERE_VISIBLE_COMP = "WHERE competitions.show_at_all = 1"
-  JOIN_WHERE_VISIBLE_COMP = "JOIN competitions ON competitions.competition_id = source.competition_id #{WHERE_VISIBLE_COMP}".freeze
   DEV_TIMESTAMP_NAME = "developer_dump_exported_at"
   RESULTS_TIMESTAMP_NAME = "public_results_exported_at"
   PUBLIC_COMPETITION_JOIN = "LEFT JOIN competition_events ON competitions.competition_id = competition_events.competition_id " \
@@ -13,6 +12,10 @@ module DatabaseDumper
                             "GROUP BY competitions.competition_id".freeze
 
   PUBLIC_RESULTS_VERSION = '1.0.0'
+
+  def self.join_where_visible_comp(table_name)
+    "JOIN competitions ON competitions.competition_id = #{table_name}.competition_id #{WHERE_VISIBLE_COMP}"
+  end
 
   def self.actions_to_column_sanitizers(columns_by_action)
     {}.tap do |column_sanitizers|
@@ -298,7 +301,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "rounds" => {
-      where_clause: "JOIN competition_events ON competition_events.id = competition_event_id #{JOIN_WHERE_VISIBLE_COMP}",
+      where_clause: "JOIN competition_events ON competition_events.id = competition_event_id #{self.join_where_visible_comp('competition_events')}",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -360,7 +363,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_delegates" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("competition_delegates"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -373,7 +376,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_events" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("competition_events"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -385,7 +388,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_organizers" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("competition_organizers"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -412,7 +415,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_tabs" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("competition_tabs"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -424,7 +427,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_venues" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("competition_venues"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -441,7 +444,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "venue_rooms" => {
-      where_clause: "JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}",
+      where_clause: "JOIN competition_venues ON competition_venues.id = competition_venue_id #{self.join_where_visible_comp('competition_venues')}",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -458,7 +461,7 @@ module DatabaseDumper
     "live_attempts" => :skip_all_rows,
     "live_attempt_history_entries" => :skip_all_rows,
     "schedule_activities" => {
-      where_clause: "JOIN venue_rooms ON venue_rooms.id = venue_room_id JOIN competition_venues ON competition_venues.id = venue_rooms.competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}",
+      where_clause: "JOIN venue_rooms ON venue_rooms.id = venue_room_id JOIN competition_venues ON competition_venues.id = venue_rooms.competition_venue_id #{self.join_where_visible_comp('competition_venues')}",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -477,7 +480,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "delegate_reports" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp('delegate_reports'),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -589,7 +592,7 @@ module DatabaseDumper
     }.freeze,
     "registration_payments" => :skip_all_rows,
     "registrations" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp('registrations'),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -825,7 +828,7 @@ module DatabaseDumper
     }.freeze,
     "cronjob_statistics" => :skip_all_rows,
     "championships" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp('championships'),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -862,7 +865,7 @@ module DatabaseDumper
     "uploaded_jsons" => :skip_all_rows,
     "scramble_file_uploads" => :skip_all_rows,
     "bookmarked_competitions" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp('bookmarked_competitions'),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -1174,7 +1177,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "championships" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp('championships'),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -1254,7 +1257,7 @@ module DatabaseDumper
         where_clause_sql = table_sanitizer.fetch(:where_clause, "")
         order_by_clause_sql = table_sanitizer.fetch(:order_by_clause, "")
 
-        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} as source #{where_clause_sql} #{order_by_clause_sql}"
+        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} #{where_clause_sql} #{order_by_clause_sql}"
         ActiveRecord::Base.connection.execute(populate_table_sql.strip)
       end
 
