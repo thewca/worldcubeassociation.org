@@ -2,7 +2,7 @@
 
 module DatabaseDumper
   WHERE_VISIBLE_COMP = "WHERE competitions.show_at_all = 1"
-  JOIN_WHERE_VISIBLE_COMP = "JOIN competitions ON competitions.competition_id = competition_id #{WHERE_VISIBLE_COMP}".freeze
+  JOIN_WHERE_VISIBLE_COMP = "JOIN competitions ON competitions.competition_id = source.competition_id #{WHERE_VISIBLE_COMP}".freeze
   DEV_TIMESTAMP_NAME = "developer_dump_exported_at"
   RESULTS_TIMESTAMP_NAME = "public_results_exported_at"
   PUBLIC_COMPETITION_JOIN = "LEFT JOIN competition_events ON competitions.competition_id = competition_events.competition_id " \
@@ -1254,7 +1254,7 @@ module DatabaseDumper
         where_clause_sql = table_sanitizer.fetch(:where_clause, "")
         order_by_clause_sql = table_sanitizer.fetch(:order_by_clause, "")
 
-        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} #{where_clause_sql} #{order_by_clause_sql}"
+        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} as source #{where_clause_sql} #{order_by_clause_sql}"
         ActiveRecord::Base.connection.execute(populate_table_sql.strip)
       end
 
