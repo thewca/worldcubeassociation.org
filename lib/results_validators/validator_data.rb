@@ -16,7 +16,7 @@ module ResultsValidators
       associations.deep_merge!({ results_assoc => [] })
 
       competition_scope = self.load_competition_includes(validator, associations)
-                              .where(id: competition_ids)
+                              .where(competition_id: competition_ids)
 
       competition_scope = competition_scope.find_each(batch_size: batch_size) if batch_size.present?
 

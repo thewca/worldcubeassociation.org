@@ -529,15 +529,11 @@ class CompetitionsController < ApplicationController
       if !competition.confirmed? && competition_organizer_view && competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
         competition.create_id_and_cell_name(force_override: true)
 
-        # Save the newly computed cellName without breaking the ID associations
-        # (which in turn is handled by a hack in the next if-block below)
-        competition.with_old_id { competition.save! }
-
         # Try to update the ID only if it _actually_ changed
         new_id = competition.id unless competition.id == persisted_id
       end
 
-      if new_id && !competition.update(id: new_id)
+      if new_id && !competition.update(competition_id: new_id)
         # Changing the competition id breaks all our associations, and our view
         # code was not written to handle this. Rather than trying to update our view
         # code, just revert the attempted id change. The user will have to deal with
