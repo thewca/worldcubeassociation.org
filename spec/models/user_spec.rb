@@ -999,6 +999,15 @@ RSpec.describe User do
 
         expect(grouped_competitions[:bookmarked]).to eq []
       end
+
+      it 'does not list cancelled competitions under the past section' do
+        cancelled_competition = create(:competition, :cancelled, starts: 4.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333]))
+        create(:registration, :accepted, competition: cancelled_competition, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
     end
 
     context 'for an organizer' do
