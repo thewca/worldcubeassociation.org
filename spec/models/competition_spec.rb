@@ -713,23 +713,13 @@ RSpec.describe Competition do
       expect(scramble1.reload.competition_id).to eq "NewID2015"
     end
 
-    it "can set competition_events_attributes" do
+    it "changes the competition_id of competition events" do
       comp_events = competition.competition_events
-
-      # Force ActiveRecord to do database queries for the associated competition_events
-      # with the new competition id.
-      competition.reload
-
-      old_events = competition.events
       competition.update!(
         competition_id: "MyerComp2016",
-        competition_events_attributes: [
-          { "id" => comp_events[0].id, "event_id" => comp_events[0].event_id, "_destroy" => "0" },
-          { "id" => comp_events[1].id, "event_id" => comp_events[1].event_id, "_destroy" => "0" },
-        ],
       )
-      new_events = competition.events
-      expect(new_events).to eq old_events
+      comp_events.reload
+      expect(comp_events.pluck(:competition_id)).to eq Array.new(comp_events.count, "MyerComp2016")
     end
 
     it "updates the competition_id of competition_delegates and competition_organizers" do
