@@ -108,7 +108,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
         expected_errors << RV::ValidationError.new(ACV::COMPETED_NOT_QUALIFIED_ERROR,
                                                    :rounds, competition2.id,
                                                    round_id: "222-f",
-                                                   ids: fake_person.wca_id,
+                                                   ids: "#{fake_person.name} (#{fake_person.wca_id})",
                                                    condition: first_round.advancement_condition.to_s(first_round))
       end
       expected_errors << RV::ValidationError.new(ACV::ROUND_9P1_ERROR,
