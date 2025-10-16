@@ -7,7 +7,7 @@ class InboxResult < ApplicationRecord
   belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
   delegate :country_iso2, to: :inbox_person
-  delegate :wca_id, :name, to: :inbox_person
+  delegate :wca_id, to: :inbox_person
 
   alias_method :person, :inbox_person
 
