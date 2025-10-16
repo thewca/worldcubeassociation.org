@@ -63,6 +63,9 @@ Rails.application.routes.draw do
   delete 'users/:id/avatar' => 'users#delete_avatar'
   post 'users/update_user_data' => 'users#update_user_data'
   post 'users/merge' => 'users#merge'
+  get '/users/registrations' => 'users#registrations', as: :helpful_queries_registrations
+  get '/users/organized-competitions' => 'users#organized_competitions', as: :helpful_queries_organized_competitions
+  get '/users/delegated-competitions' => 'users#delegated_competitions', as: :helpful_queries_delegated_competitions
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -194,9 +197,6 @@ Rails.application.routes.draw do
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
   get '/persons/results' => 'admin/persons#results', as: :person_results
-  get '/persons/registrations' => 'admin/persons#registrations', as: :person_registrations
-  get '/persons/organized-competitions' => 'admin/persons#organized_competitions', as: :person_organized_competitions
-  get '/persons/delegated-competitions' => 'admin/persons#delegated_competitions', as: :person_delegated_competitions
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
@@ -428,6 +428,7 @@ Rails.application.routes.draw do
       get '/results/:user_id/qualification_data' => 'api#user_qualification_data', as: :user_qualification_data
       get '/competition_series/:id' => 'api#competition_series'
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
+      get '/competitions/mine' => 'competitions#mine', as: :my_competitions
 
       resources :incidents, only: %i[index]
       resources :regional_organizations, only: %i[index], path: '/regional-organizations'

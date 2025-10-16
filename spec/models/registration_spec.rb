@@ -277,7 +277,7 @@ RSpec.describe Registration do
       create(
         :result,
         person_id: user.wca_id,
-        competition_id: previous_competition.id,
+        competition: previous_competition,
         event_id: '333',
         best: 1200,
         average: 1500,

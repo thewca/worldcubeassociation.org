@@ -26,49 +26,48 @@ import { Privacy } from "@/globals/Privacy";
 import { Disclaimer } from "@/globals/Disclaimer";
 import { AboutUsPage } from "@/globals/About";
 import { languageConfig, fallbackLng } from "@/lib/i18n/settings";
+import { DocumentsPage } from "@/globals/Documents";
+import { FaqPage } from "@/globals/FaqPage";
+import { LogoPage } from "@/globals/LogoPage";
+import {
+  compatibilityOptions,
+  mongooseAdapter,
+  Args,
+} from "@payloadcms/db-mongodb";
+import { fromContainerMetadata } from "@aws-sdk/credential-providers";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-async function plugins() {
-  const defaultPlugins = [
+function plugins() {
+  const isProduction = process.env.NODE_ENV === "production";
+
+  return [
     authjsPlugin({
       authjsConfig: payloadAuthConfig,
     }),
-  ];
-  if (process.env.NODE_ENV === "production") {
-    const { fromContainerMetadata } = await import(
-      "@aws-sdk/credential-providers"
-    );
-    const credentials = fromContainerMetadata();
-    return [
-      ...defaultPlugins,
-      s3Storage({
-        collections: {
-          media: {
-            prefix: "media",
-            generateFileURL: ({ prefix, filename }) => {
-              return `${process.env.MEDIA_BUCKET_CDN!}/${prefix}/${filename}`;
-            },
+    s3Storage({
+      enabled: isProduction,
+      collections: {
+        media: {
+          prefix: "media",
+          generateFileURL: ({ prefix, filename }) => {
+            return `${process.env.MEDIA_BUCKET_CDN!}/${prefix}/${filename}`;
           },
         },
-        bucket: process.env.MEDIA_BUCKET!,
-        config: {
-          region: process.env.AWS_REGION,
-          credentials,
-        },
-      }),
-    ];
-  }
-  return defaultPlugins;
+      },
+      bucket: process.env.MEDIA_BUCKET!,
+      config: {
+        region: process.env.AWS_REGION,
+        credentials: isProduction ? fromContainerMetadata() : undefined,
+      },
+    }),
+  ];
 }
 
-async function dbAdapter() {
+function dbOptions(): Args {
   if (process.env.NODE_ENV === "production") {
-    const { mongooseAdapter, compatibilityOptions } = await import(
-      "@payloadcms/db-mongodb"
-    );
-    return mongooseAdapter({
+    return {
       url: process.env.DATABASE_URI || "",
       connectOptions: {
         authMechanism: "MONGODB-AWS",
@@ -77,14 +76,17 @@ async function dbAdapter() {
         tlsCAFile: "/app/global-bundle.pem",
       },
       ...compatibilityOptions.documentdb,
-    });
+    };
   } else {
-    const { sqliteAdapter } = await import("@payloadcms/db-sqlite");
-    return sqliteAdapter({
-      client: {
-        url: process.env.DATABASE_URI || "",
+    return {
+      url: process.env.DATABASE_URI || "",
+      connectOptions: {
+        authMechanism: "SCRAM-SHA-256",
+        authSource: "admin",
+        user: process.env.DATABASE_USER || "",
+        pass: process.env.DATABASE_PASSWORD || "",
       },
-    });
+    };
   }
 }
 
@@ -125,13 +127,16 @@ export default buildConfig({
     Disclaimer,
     SpeedCubingHistoryPage,
     AboutRegulations,
+    DocumentsPage,
+    FaqPage,
+    LogoPage,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
     outputFile: path.resolve(dirname, "types/payload.ts"),
   },
-  db: await dbAdapter(),
+  db: mongooseAdapter(dbOptions()),
   sharp,
-  plugins: await plugins(),
+  plugins: plugins(),
 });

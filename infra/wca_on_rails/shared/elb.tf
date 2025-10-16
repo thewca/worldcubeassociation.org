@@ -312,7 +312,7 @@ resource "aws_lb_listener" "http" {
 
 resource "aws_lb_listener_rule" "pma_forward_prod" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 3
+  priority     = 4
 
   action {
     authenticate_oidc {
@@ -352,7 +352,7 @@ locals {
 
 resource "aws_lb_listener_rule" "next_forward_prod" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 9
+  priority     = 10
 
   action {
     type             = "forward"
@@ -368,7 +368,7 @@ resource "aws_lb_listener_rule" "next_forward_prod" {
 
 resource "aws_lb_listener_rule" "rails_forward_staging" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 4
+  priority     = 5
 
   action {
     type             = "forward"
@@ -384,7 +384,7 @@ resource "aws_lb_listener_rule" "rails_forward_staging" {
 
 resource "aws_lb_listener_rule" "rails_forward_staging_api" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 2
+  priority     = 3
 
   action {
     type             = "forward"

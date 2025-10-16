@@ -120,10 +120,8 @@ module DbDumpHelper
     end
 
     LogTask.log_task "Moving zipped file to 's3://#{s3_path}'" do
-      bucket = Aws::S3::Resource.new(
-        credentials: Aws::ECSCredentials.new,
-      ).bucket(BUCKET_NAME)
-      bucket.object(s3_path).upload_file(zip_filename)
+      tm = Aws::S3::TransferManager.new
+      tm.upload_file(zip_filename, bucket: BUCKET_NAME, key: s3_path)
 
       # Delete the zipfile now that it's uploaded
       FileUtils.rm zip_filename

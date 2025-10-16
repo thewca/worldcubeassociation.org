@@ -1,5 +1,7 @@
 import type { NextAuthConfig } from "next-auth";
+import { EnrichedAuthConfig, PayloadAuthjsUser } from "payload-authjs";
 import { Provider } from "@auth/core/providers";
+import type { User as PayloadUser } from "@/types/payload";
 
 export const WCA_PROVIDER_ID = "WCA";
 export const WCA_CMS_PROVIDER_ID = `${WCA_PROVIDER_ID}-CMS`;
@@ -40,7 +42,7 @@ const cmsWcaProvider: Provider = {
 
 export const authConfig: NextAuthConfig = {
   secret: process.env.AUTH_SECRET,
-  providers: [baseWcaProvider, cmsWcaProvider],
+  providers: [baseWcaProvider],
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
@@ -69,7 +71,39 @@ export const authConfig: NextAuthConfig = {
   },
 };
 
-export const payloadAuthConfig: NextAuthConfig = {
+declare module "@auth/core/types" {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface User extends PayloadAuthjsUser<PayloadUser> {}
+}
+
+export const payloadAuthConfig: EnrichedAuthConfig = {
   ...authConfig,
   providers: [cmsWcaProvider],
+  basePath: "/api/auth/payload",
+  cookies: {
+    sessionToken: {
+      name: "authjs.admin.session-token",
+    },
+    csrfToken: {
+      name: "authjs.admin.csrf-token",
+    },
+    callbackUrl: {
+      name: "authjs.admin.callback-url",
+    },
+  },
+  events: {
+    signIn: async ({ user, payload }) => {
+      if (!user.id || !payload) {
+        return;
+      }
+
+      await payload.update({
+        collection: "users",
+        id: user.id,
+        data: {
+          roles: user.roles,
+        },
+      });
+    },
+  },
 };

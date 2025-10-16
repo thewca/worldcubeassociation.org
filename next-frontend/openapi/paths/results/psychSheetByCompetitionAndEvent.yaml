@@ -1,0 +1,28 @@
+get:
+  summary: Get competition registrations
+  tags:
+    - results
+    - competitions
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: eventId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: sort_by
+      in: query
+      required: false
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/results/PsychSheet.yaml'

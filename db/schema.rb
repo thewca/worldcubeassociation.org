@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_11_125658) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -665,7 +665,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_11_125658) do
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
-    t.integer "round_id"
+    t.integer "round_id", null: false
     t.string "format_id", limit: 1, default: "", null: false
     t.integer "value1", default: 0, null: false
     t.integer "value2", default: 0, null: false
@@ -837,6 +837,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_11_125658) do
     t.string "owner_type"
     t.boolean "dangerously_allow_any_redirect_uri", default: false, null: false
     t.boolean "confidential", default: true, null: false
+    t.boolean "superapp", default: false, null: false
     t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
@@ -1107,7 +1108,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_11_125658) do
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
-    t.integer "round_id"
+    t.integer "round_id", null: false
     t.string "format_id", limit: 1, default: "", null: false
     t.integer "value1", default: 0, null: false
     t.integer "value2", default: 0, null: false

@@ -14,7 +14,9 @@ declare module "nextjs-routes" {
     | StaticRoute<"/">
     | StaticRoute<"/about">
     | DynamicRoute<"/api/auth/[...nextauth]", { "nextauth": string[] }>
+    | DynamicRoute<"/api/auth/payload/[...nextauth]", { "nextauth": string[] }>
     | DynamicRoute<"/api/payload/[...slug]", { "slug": string[] }>
+    | StaticRoute<"/api/payload/draft">
     | StaticRoute<"/api/payload/graphql">
     | StaticRoute<"/api/payload/graphql-playground">
     | StaticRoute<"/competitions">
@@ -24,7 +26,11 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/competitions/[competitionId]/events", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/podiums", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/register", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/results/all", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/results/byPerson", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/schedule", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/scrambles", { "competitionId": string }>
+    | StaticRoute<"/competitions/mine">
     | StaticRoute<"/dashboard">
     | StaticRoute<"/delegates">
     | StaticRoute<"/disclaimer">
@@ -33,6 +39,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/export/results">
     | StaticRoute<"/faq">
     | StaticRoute<"/incidents">
+    | StaticRoute<"/logo">
     | StaticRoute<"/officers-and-board">
     | StaticRoute<"/organizations">
     | DynamicRoute<"/payload/[[...segments]]", { "segments"?: string[] | undefined }>

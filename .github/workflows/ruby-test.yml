@@ -4,7 +4,8 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+    branches:
+      - '**'
 
 jobs:
   test:
@@ -49,7 +50,7 @@ jobs:
         run: bin/rake db:reset
       - name: Pre-compile assets for frontend tests
         run: |
-          bin/bundle exec i18n export
+          bin/i18n export
           bin/rake assets:precompile
       - name: Cache Playwright runnables
         uses: actions/cache@v4

@@ -599,17 +599,20 @@ class Registration < ApplicationRecord
       return { succeeded: false, info: failure_reason }
     end
 
-    update_payload = build_auto_accept_payload
-    auto_accepted_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload, clone: false)
+    new_competing_status = eligible_for_accepted_status? ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_WAITING_LIST
+    # String keys because this is mimicing a params payload
+    update_payload = { 'user_id' => user_id, 'competing' => { 'status' => new_competing_status } }
 
-    if auto_accepted_registration.valid?
+    updated_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload, clone: false)
+
+    if updated_registration.valid?
       update_lanes!(
         update_payload,
         AUTO_ACCEPT_ENTITY_ID,
       )
-      { succeeded: true, info: auto_accepted_registration.competing_status }
+      { succeeded: true, info: updated_registration.competing_status }
     else
-      error = auto_accepted_registration.errors.messages.values.flatten
+      error = updated_registration.errors.messages.values.flatten
       log_auto_accept_failure(error)
       { succeeded: false, info: error }
     end
@@ -636,20 +639,19 @@ class Registration < ApplicationRecord
     )
   end
 
-  private def build_auto_accept_payload
-    # The default case should be that a user's status will be waiting list, unless specific criteria for acceptance are met
-    # We can only accept a registration in one of these cases:
-    # 1. There must be space on the Accepted list, and
-    # 2. They're first on the waiting list, or
-    # 3. The waiting list is empty and they're on the pending list
-    status = if !competition.registration_full_and_accepted? &&
-                (waiting_list_leader? || (competing_status_pending? && waiting_list.empty?))
-               Registrations::Helper::STATUS_ACCEPTED
-             else
-               Registrations::Helper::STATUS_WAITING_LIST
-             end
+  private def eligible_for_accepted_status?
+    return false if competition.registration_full_and_accepted?
 
-    # String keys because this is mimicing a params payload
-    { 'user_id' => user_id, 'competing' => { 'status' => status } }
+    case competing_status
+    when Registrations::Helper::STATUS_WAITING_LIST
+      waiting_list_leader?
+    when Registrations::Helper::STATUS_PENDING
+      # The Rails shorthand `blank?` specifically checks "nil or empty". This is exactly what we need because:
+      #   - Either a competition has no waiting list at all, in which case a pending registration can be accepted
+      #   - Or the waiting list exists and is empty, in which case a pending registration can proceed to accepted
+      waiting_list_blank?
+    else
+      false
+    end
   end
 end

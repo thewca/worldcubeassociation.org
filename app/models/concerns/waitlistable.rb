@@ -6,7 +6,7 @@ module Waitlistable
   extend ActiveSupport::Concern
 
   included do
-    delegate :empty?, :length, to: :waiting_list, prefix: true
+    delegate :empty?, :blank?, :length, to: :waiting_list, prefix: true
     delegate :present?, :persisted?, to: :waiting_list, prefix: true, allow_nil: true
 
     attr_accessor :tracked_waitlist_position
