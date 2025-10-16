@@ -97,8 +97,10 @@ module ResultsValidators
                   current_persons = results_by_round_type_id[round_type_id].map(&:person_id)
                   people_over_condition = previous_results.filter do |r|
                     sort_by_column = r.format.sort_by == "single" ? :best : :average
-                    current_persons.include?(r.wca_id) && r.send(sort_by_column) > condition.attempt_result
-                  end.map { it.wca_id.presence || it.name }
+                    current_persons.include?(r.person_id) && r.send(sort_by_column) > condition.attempt_result
+                  end.map do
+                    "#{it.name}#{" (#{it.wca_id})" if it.wca_id.present? }"
+                  end
                   if people_over_condition.any?
                     @errors << ValidationError.new(COMPETED_NOT_QUALIFIED_ERROR,
                                                    :rounds, competition.id,

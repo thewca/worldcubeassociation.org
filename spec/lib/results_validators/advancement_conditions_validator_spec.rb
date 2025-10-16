@@ -5,6 +5,8 @@ require 'rails_helper'
 RV = ResultsValidators
 ACV = RV::AdvancementConditionsValidator
 
+# TODO: Refactor these tests to be more atomic, and make better use of RSpec conventions
+# Once refactor is complete, refactor advancement_conditions_validator
 RSpec.describe ResultsValidators::AdvancementConditionsValidator do
   context "on InboxResult and Result" do
     let!(:competition1) { create(:competition, starts: Date.new(2010, 3, 1), event_ids: ["333oh"]) }
@@ -127,26 +129,73 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       expect(acv.errors).to match_array(expected_errors)
     end
 
-    # Previously a competitor without a WCA ID competing in a round which had a result-based advancement condition (eg, sub-20 AO5)
-    # would cause this validator to think that _all_ competitors without WCA IDs had competed in that round, and trigger the
-    # validator error for ALL competitors without WCA IDs who did not meet the qualification criterion, irrespective of whether they
-    # _actually_ participated in the round
-    it 'does not trigger competed_not_qualified error for non-WCA ID competitors' do
-      first_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 1)
-      first_round.update(advancement_condition: AdvancementConditions::AttemptResultCondition.new(150))
-      second_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2)
+    context 'competed_not_qualified' do
+      let(:first_round) { create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 1) }
+      let(:second_round) { create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2) }
 
-      # Adapted from the above test case - not the best code, but this whole file needs to be refactored
-      # This creates 8 competitors (to not trigger 9m3), only 1 of whom has a result in the second round, the other 4 of whom
-      # do not meet the advancement condition we have created
-      (1..8).each do |i|
-        value = i * 100
-        create(:inbox_result, competition: competition3, event_id: "333", round_type_id: "1", best: value, average: value, round: first_round)
-        create(:inbox_result, competition: competition3, event_id: "333", round_type_id: "f", best: value, average: value, round: second_round) if i == 1
+      before do
+        # Adapted from the above test case - not the best code, but this whole file needs to be refactored
+        # This creates 8 competitors (to not trigger 9m3), only 1 of whom has a result in the second round, the other 4 of whom
+        # do not meet the advancement condition we have created
+        (1..8).each do |i|
+          value = i * 100
+          first_round_inbox_result = create(
+            :inbox_result, competition: competition3, event_id: "333", round_type_id: "1", best: value, average: value, round: first_round
+          )
+
+          if i == 1
+            @finalist = first_round_inbox_result.inbox_person # Instance variable because we use it to check the exact error string
+            create(
+              :inbox_result,
+              competition: competition3,
+              event_id: "333",
+              round_type_id: "f",
+              best: value,
+              average: value,
+              round: second_round,
+              person: @finalist,
+            )
+          end
+        end
       end
 
-      acv = ACV.new.validate(competition_ids: [competition3.id], model: InboxResult)
-      expect(acv.errors).to be_empty
+      # Previously a competitor without a WCA ID competing in a round which had a result-based advancement condition (eg, sub-20 AO5)
+      # would cause this validator to think that _all_ competitors without WCA IDs had competed in that round, and trigger the
+      # validator error for ALL competitors without WCA IDs who did not meet the qualification criterion, irrespective of whether they
+      # _actually_ participated in the round
+      it 'recognizes that WCA_ID: nil users are distinct' do
+        # Only the first inbox_result created above will pass this
+        first_round.update(advancement_condition: AdvancementConditions::AttemptResultCondition.new(150))
+
+        acv = ACV.new.validate(competition_ids: [competition3.id], model: InboxResult)
+        expect(acv.errors).to be_empty
+      end
+
+      it "triggers when user achieves a results in 2nd round they shouldn't have advanced to" do
+        # Set an advancement condition that all inbox_results created above will fail
+        first_round.update(advancement_condition: AdvancementConditions::AttemptResultCondition.new(99))
+
+        acv = ACV.new.validate(competition_ids: [competition3.id], model: InboxResult)
+        expect(acv.errors.length).to be(1)
+        expect(acv.errors.first.instance_variable_get(:@id)).to eq(:competed_not_qualified_error)
+      end
+
+      it 'returns name, and WCA ID when available' do
+        first_round.update(advancement_condition: AdvancementConditions::AttemptResultCondition.new(99))
+
+        inbox_result = create(
+          :inbox_result, :for_existing_person, competition: competition3, event_id: "333", round_type_id: "1", best: 100, average: 100, round: first_round
+        )
+        person = inbox_result.inbox_person
+
+        create(
+          :inbox_result, competition: competition3, event_id: "333", round_type_id: "f", best: 100, average: 100, round: second_round, person: person,
+        )
+
+        acv = ACV.new.validate(competition_ids: [competition3.id], model: InboxResult)
+        expect(acv.errors.length).to be(1)
+        expect(acv.errors.first.instance_variable_get(:@args)[:ids]).to eq("#{@finalist.name},#{person.name} (#{person.wca_id})")
+      end
     end
 
     it "ignores incomplete results when computing qualified people" do
