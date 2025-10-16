@@ -570,8 +570,6 @@ class Registration < ApplicationRecord
       end
     end
 
-    return waitlisted_outcomes if competition.registration_full_and_accepted?
-
     pending_registrations = competition
                             .registrations
                             .competing_status_pending
