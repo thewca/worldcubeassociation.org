@@ -858,9 +858,9 @@ es-419:
           retroalimentación de WIC o WRC.
         #original_hash: 8af00aa
         setup_images: >-
-          Por favor elige al menos %{image_count} imágenes que ilustren la
-          disposición empleada en la competición (zona de mezclas, zona de
-          competición, etc.). Puedes elegir múltiples archivos a la vez. Puedes
+          DEBES agregar al menos %{image_count} imágenes/fotos que ilustren la
+          disposición de la zona de mezclas y la zona de
+          competición (otras imágenes también son bienvenidas). Puedes elegir múltiples archivos a la vez. Puedes
           eliminar imágenes solo cuando suficientes otras imágenes se hayan
           subido (si quieres reemplazar una imagen, necesitas subir la nueva
           primero, y luego eliminar la antigua).
