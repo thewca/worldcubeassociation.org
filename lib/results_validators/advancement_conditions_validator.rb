@@ -94,11 +94,11 @@ module ResultsValidators
 
                 # Check that no one proceeded if they shouldn't have
                 if condition.instance_of? AdvancementConditions::AttemptResultCondition
-                  current_persons = results_by_round_type_id[round_type_id].map(&:wca_id)
+                  current_persons = results_by_round_type_id[round_type_id].map(&:person_id)
                   people_over_condition = previous_results.filter do |r|
                     sort_by_column = r.format.sort_by == "single" ? :best : :average
                     current_persons.include?(r.wca_id) && r.send(sort_by_column) > condition.attempt_result
-                  end.map(&:wca_id)
+                  end.map { it.wca_id.presence || it.name }
                   if people_over_condition.any?
                     @errors << ValidationError.new(COMPETED_NOT_QUALIFIED_ERROR,
                                                    :rounds, competition.id,
