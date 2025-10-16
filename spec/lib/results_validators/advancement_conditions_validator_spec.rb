@@ -134,28 +134,26 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       let(:second_round) { create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2) }
 
       before do
-        # Adapted from the above test case - not the best code, but this whole file needs to be refactored
-        # This creates 8 competitors (to not trigger 9m3), only 1 of whom has a result in the second round, the other 4 of whom
-        # do not meet the advancement condition we have created
+        # This creates 8 competitors (to not trigger 9m3), only 1 of whom has a result in the second round
         (1..8).each do |i|
           value = i * 100
           first_round_inbox_result = create(
             :inbox_result, competition: competition3, event_id: "333", round_type_id: "1", best: value, average: value, round: first_round
           )
 
-          if i == 1
-            @finalist = first_round_inbox_result.inbox_person # Instance variable because we use it to check the exact error string
-            create(
-              :inbox_result,
-              competition: competition3,
-              event_id: "333",
-              round_type_id: "f",
-              best: value,
-              average: value,
-              round: second_round,
-              person: @finalist,
-            )
-          end
+          next unless i == 1
+
+          @finalist = first_round_inbox_result.inbox_person # Instance variable because we use it to check the exact error string
+          create(
+            :inbox_result,
+            competition: competition3,
+            event_id: "333",
+            round_type_id: "f",
+            best: value,
+            average: value,
+            round: second_round,
+            person: @finalist,
+          )
         end
       end
 
@@ -183,13 +181,14 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       it 'returns name, and WCA ID when available' do
         first_round.update(advancement_condition: AdvancementConditions::AttemptResultCondition.new(99))
 
+        # Create a second round result for an existing person, so that we see both output formats
         inbox_result = create(
           :inbox_result, :for_existing_person, competition: competition3, event_id: "333", round_type_id: "1", best: 100, average: 100, round: first_round
         )
         person = inbox_result.inbox_person
 
         create(
-          :inbox_result, competition: competition3, event_id: "333", round_type_id: "f", best: 100, average: 100, round: second_round, person: person,
+          :inbox_result, competition: competition3, event_id: "333", round_type_id: "f", best: 100, average: 100, round: second_round, person: person
         )
 
         acv = ACV.new.validate(competition_ids: [competition3.id], model: InboxResult)
