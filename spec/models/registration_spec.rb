@@ -1326,7 +1326,7 @@ RSpec.describe Registration do
         end
       end
 
-      ['pending', 'cancelled', 'rejected', 'waiting_list'].each do |status|
+      %w[pending cancelled rejected waiting_list].each do |status|
         it_behaves_like 'changing accepted status', status
       end
 

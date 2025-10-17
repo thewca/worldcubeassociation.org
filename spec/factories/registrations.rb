@@ -123,7 +123,7 @@ FactoryBot.define do
           registration: registration,
           user: registration.user,
           is_completed: false, # Set false so that the successful apyment hooks don't trigger
-          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
+          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination,
         )
         payment.update_column(:is_completed, true) # Directly update is_completed column to skip hooks
       end
