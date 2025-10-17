@@ -111,6 +111,10 @@ locals {
       value = var.DATABASE_WRT_USER
     },
     {
+      name = "DATABASE_WRT_SENIOR_USER"
+      value = var.DATABASE_WRT_SENIOR_USER
+    },
+    {
       name = "VAULT_ADDR"
       value = var.VAULT_ADDR
     },
