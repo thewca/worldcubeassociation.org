@@ -434,6 +434,8 @@ Rails.application.routes.draw do
       resources :regional_organizations, only: %i[index], path: '/regional-organizations'
 
       namespace :results do
+        get '/rankings/:event_id/:type' => 'rankings#index'
+
         resources :records, only: %i[index show] do
           get '/history' => 'results#history'
         end

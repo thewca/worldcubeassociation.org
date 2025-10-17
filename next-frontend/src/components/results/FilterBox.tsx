@@ -2,26 +2,142 @@ import { Box, VStack, HStack, Field, SegmentGroup } from "@chakra-ui/react";
 import EventSelector from "@/components/EventSelector";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
+import _ from "lodash";
+
+type FilterState = {
+  event: string;
+  region: string;
+  gender: string;
+  show: string;
+};
+
+type FilterActions = {
+  setEvent: (event: string) => void;
+  setRegion: (region: string) => void;
+  setGender: (gender: string) => void;
+  setShow: (show: string) => void;
+};
 
 interface FilterBoxProps {
-  filterState: {
-    event: string;
-    region: string;
-    gender: string;
-    show: string;
-  };
-  filterActions: {
-    setEvent: (event: string) => void;
-    setRegion: (region: string) => void;
-    setGender: (gender: string) => void;
-    setShow: (show: string) => void;
-  };
+  filterState: FilterState;
+  filterActions: FilterActions;
+  children: React.ReactElement;
 }
 
-export default function FilterBox({
+interface RecordsFilterBoxProps {
+  filterState: FilterState;
+  filterActions: FilterActions;
+}
+
+interface RankingsFilterBoxProps {
+  filterState: FilterState & { rankingType: string };
+  filterActions: FilterActions & { setType: (type: string) => void };
+  valueLabelMap: Record<string, string>;
+}
+
+export function RecordsFilterBox({
   filterState,
   filterActions,
-}: FilterBoxProps) {
+}: RecordsFilterBoxProps) {
+  return (
+    <FilterBox filterState={filterState} filterActions={filterActions}>
+      <HStack>
+        <Field.Root>
+          <Field.Label>Gender</Field.Label>
+          <SegmentGroup.Root
+            value={filterState.gender}
+            onValueChange={(e) => filterActions.setGender(e.value!)}
+            size="md"
+          >
+            <SegmentGroup.Indicator />
+            <SegmentGroup.Items items={["All", "Male", "Female"]} />
+          </SegmentGroup.Root>
+        </Field.Root>
+        <Field.Root>
+          <Field.Label>Show</Field.Label>
+          <SegmentGroup.Root
+            value={filterState.show}
+            onValueChange={(e) => filterActions.setShow(e.value!)}
+            size="md"
+          >
+            <SegmentGroup.Indicator />
+            <SegmentGroup.Items
+              items={["mixed", "slim", "separate", "history", "mixed history"]}
+            />
+          </SegmentGroup.Root>
+        </Field.Root>
+      </HStack>
+    </FilterBox>
+  );
+}
+
+export function RankingsFilterBox({
+  filterState,
+  filterActions,
+  valueLabelMap,
+}: RankingsFilterBoxProps) {
+  return (
+    <FilterBox filterState={filterState} filterActions={filterActions}>
+      <HStack>
+        <Field.Root>
+          <Field.Label>Type</Field.Label>
+          <SegmentGroup.Root
+            value={valueLabelMap[filterState.rankingType]}
+            onValueChange={(e) =>
+              filterActions.setType(_.invert(valueLabelMap)[e.value!])
+            }
+            size="md"
+          >
+            <SegmentGroup.Indicator />
+            <SegmentGroup.Items
+              items={[valueLabelMap["single"], valueLabelMap["average"]]}
+            />
+          </SegmentGroup.Root>
+        </Field.Root>
+        <Field.Root>
+          <Field.Label>Gender</Field.Label>
+          <SegmentGroup.Root
+            value={valueLabelMap[filterState.gender]}
+            onValueChange={(e) =>
+              filterActions.setGender(_.invert(valueLabelMap)[e.value!])
+            }
+            size="md"
+          >
+            <SegmentGroup.Indicator />
+            <SegmentGroup.Items
+              items={[
+                valueLabelMap["All"],
+                valueLabelMap["Male"],
+                valueLabelMap["Female"],
+              ]}
+            />
+          </SegmentGroup.Root>
+        </Field.Root>
+        <Field.Root>
+          <Field.Label>Show</Field.Label>
+          <SegmentGroup.Root
+            value={valueLabelMap[filterState.show]}
+            onValueChange={(e) =>
+              filterActions.setShow(_.invert(valueLabelMap)[e.value!])
+            }
+            size="md"
+          >
+            <SegmentGroup.Indicator />
+            <SegmentGroup.Items
+              items={[
+                valueLabelMap["100 persons"],
+                valueLabelMap["100 results"],
+                valueLabelMap["by region"],
+              ]}
+            />
+          </SegmentGroup.Root>
+        </Field.Root>
+      </HStack>
+    </FilterBox>
+  );
+}
+
+function FilterBox({ filterState, filterActions, children }: FilterBoxProps) {
   const { t } = useT();
 
   return (
@@ -52,38 +168,7 @@ export default function FilterBox({
           t={t}
           name={t("delegates_page.all_regions")}
         />
-        <HStack>
-          <Field.Root>
-            <Field.Label>Gender</Field.Label>
-            <SegmentGroup.Root
-              value={filterState.gender}
-              onValueChange={(e) => filterActions.setGender(e.value!)}
-              size="md"
-            >
-              <SegmentGroup.Indicator />
-              <SegmentGroup.Items items={["All", "Male", "Female"]} />
-            </SegmentGroup.Root>
-          </Field.Root>
-          <Field.Root>
-            <Field.Label>Show</Field.Label>
-            <SegmentGroup.Root
-              value={filterState.show}
-              onValueChange={(e) => filterActions.setShow(e.value!)}
-              size="md"
-            >
-              <SegmentGroup.Indicator />
-              <SegmentGroup.Items
-                items={[
-                  "mixed",
-                  "slim",
-                  "separate",
-                  "history",
-                  "mixed history",
-                ]}
-              />
-            </SegmentGroup.Root>
-          </Field.Root>
-        </HStack>
+        {children}
       </VStack>
     </Box>
   );

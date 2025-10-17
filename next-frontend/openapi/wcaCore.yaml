@@ -36,6 +36,9 @@ paths:
   /v0/competitions/{competitionId}/scrambles:
     $ref: 'paths/competitions/competitionScrambles.yaml'
 
+  /v0/results/rankings/{event_id}/{type}:
+    $ref: 'paths/results/rankingsByEventAndType.yaml'
+
   /v0/incidents:
     $ref: 'paths/regulations/incidentsList.yaml'
 
