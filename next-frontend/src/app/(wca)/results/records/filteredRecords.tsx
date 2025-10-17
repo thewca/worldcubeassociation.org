@@ -128,7 +128,10 @@ export default function FilteredRecords({
     <VStack align="left" gap={4}>
       <Heading size="5xl">{t("results.records.title")}</Heading>
       {t("results.last_updated_html", { timestamp: data!.timestamp })}
-      <RecordsFilterBox filterState={filterState} filterActions={filterActions} />
+      <RecordsFilterBox
+        filterState={filterState}
+        filterActions={filterActions}
+      />
       <RecordsTable records={data!.records!} show={show} />
     </VStack>
   );
