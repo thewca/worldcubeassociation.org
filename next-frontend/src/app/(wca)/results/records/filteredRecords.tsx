@@ -105,8 +105,7 @@ export default function FilteredRecords({
       return {
         timestamp: data.data!.timestamp,
         records: {
-          [event as EventId]:
-            data.data!.records[event],
+          [event as EventId]: data.data!.records[event],
         },
       };
     },

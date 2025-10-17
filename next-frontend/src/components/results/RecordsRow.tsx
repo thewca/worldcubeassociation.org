@@ -10,35 +10,7 @@ import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { components } from "@/types/openapi";
 import _ from "lodash";
 import { TFunction } from "i18next";
-
-function resultAttempts(result: components["schemas"]["Record"]) {
-  const definedAttempts = [
-    result?.value1,
-    result?.value2,
-    result?.value3,
-    result?.value4,
-    result?.value5,
-  ].filter((res) => res !== undefined);
-
-  const validAttempts = definedAttempts.filter((res) => res !== 0);
-  const completedAttempts = validAttempts.filter((res) => res > 0);
-  const uncompletedAttempts = validAttempts.filter((res) => res < 0);
-
-  // DNF/DNS values are very small. If all solves were successful,
-  //   then `uncompletedAttempts` is empty and the min is `undefined`,
-  //   which means we fall back to the actually slowest value.
-  const worstResult = _.min(uncompletedAttempts) || _.max(validAttempts);
-  const bestResult = _.min(completedAttempts);
-
-  const bestResultIndex = definedAttempts.indexOf(bestResult!);
-  const worstResultIndex = definedAttempts.indexOf(worstResult!);
-
-  return {
-    definedAttempts,
-    bestResultIndex,
-    worstResultIndex,
-  };
-}
+import { recordAttempts } from "@/lib/wca/results/attempts";
 
 interface MixedRecordsRowProp {
   record: components["schemas"]["Record"];
@@ -64,7 +36,7 @@ export function MixedRecordsRow({ record, t }: MixedRecordsRowProp) {
     definedAttempts: attempts,
     bestResultIndex,
     worstResultIndex,
-  } = resultAttempts(record);
+  } = recordAttempts(record);
 
   return (
     <Table.Row>
@@ -96,7 +68,7 @@ export function HistoryRow({ record, mixed = false }: HistoryRowProps) {
     definedAttempts: attempts,
     bestResultIndex,
     worstResultIndex,
-  } = resultAttempts(record);
+  } = recordAttempts(record);
 
   const formattedValue = formatAttemptResult(record.value, record.event_id);
 
@@ -136,7 +108,7 @@ export function SeparateRecordsRow({ record }: SeparateRecordsRowProp) {
     definedAttempts: attempts,
     bestResultIndex,
     worstResultIndex,
-  } = resultAttempts(record);
+  } = recordAttempts(record);
 
   return (
     <Table.Row>
@@ -174,7 +146,7 @@ export function SlimRecordsRow({ singles, averages }: SlimRecordsRowProp) {
       definedAttempts: attempts,
       bestResultIndex,
       worstResultIndex,
-    } = resultAttempts(average);
+    } = recordAttempts(average);
 
     return (
       <Table.Row key={`${single?.id}-${average?.id}`}>
