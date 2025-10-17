@@ -75,7 +75,7 @@ class Registration < ApplicationRecord
   validates :guests, numericality: { less_than_or_equal_to: DEFAULT_GUEST_LIMIT, if: :guests_unrestricted?, frontend_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT }
 
   after_save :mark_registration_processing_as_done
-  after_save :trigger_bulk_auto_accept, if: -> { competing_status_previously_changed?(from: 'accepted', to: 'cancelled') }
+  after_save :trigger_bulk_auto_accept, if: -> { competing_status_previously_changed?(from: 'accepted') }
 
   private def mark_registration_processing_as_done
     Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))

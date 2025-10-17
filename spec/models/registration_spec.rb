@@ -1314,6 +1314,22 @@ RSpec.describe Registration do
       # Ensure the waiting list is populated even if waitlisted_reg isn't explicitly called
       let!(:waitlisted_reg) { create(:registration, :waiting_list, :paid_no_hooks, competition: auto_accept_comp) }
 
+      RSpec.shared_examples 'changing accepted status' do |new_status|
+        it "triggers auto accept when accepted changes to #{new_status}" do
+          expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+
+          accepted_reg.update_lanes!(
+            { user_id: accepted_reg.user.id, competing: { status: new_status } }.with_indifferent_access,
+            accepted_reg.user.id,
+          )
+          expect(waitlisted_reg.reload.competing_status).to eq('accepted')
+        end
+      end
+
+      ['pending', 'cancelled', 'rejected', 'waiting_list'].each do |status|
+        it_behaves_like 'changing accepted status', status
+      end
+
       it 'triggers when accepted registration is cancelled' do
         expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
 
@@ -1324,7 +1340,17 @@ RSpec.describe Registration do
         expect(waitlisted_reg.reload.competing_status).to eq('accepted')
       end
 
-      it 'doesnt trigger if non-accepted registration is cancelled' do
+      it 'has no effect if accepted registration is re-accepted' do
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+
+        pending_reg.update_lanes!(
+          { user_id: pending_reg.user.id, competing: { status: 'accepted' } },
+          pending_reg.user.id,
+        )
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+      end
+
+      it 'has no effect if non-accepted registration is cancelled' do
         expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
 
         pending_reg.update_lanes!(
