@@ -40,21 +40,14 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
 
   return (
     <>
-      <SimpleGrid
-        gap="8"
-        columns={{ base: 1, md: 2 }}
-      >
+      <SimpleGrid gap="8" columns={{ base: 1, md: 2 }}>
         <VStack gap="8">
           <InfoCard competitionInfo={competitionInfo} t={t} />
           <RegistrationCard competitionInfo={competitionInfo} />
           <EventCard competitionInfo={competitionInfo} />
         </VStack>
         <VStack gap="8">
-          <Stack
-            gap="8"
-            width="100%"
-            direction={{ base: "column", sm: "row" }}
-          >
+          <Stack gap="8" width="100%" direction={{ base: "column", sm: "row" }}>
             <OrganizationTeamCard competitionInfo={competitionInfo} />
             <MarkdownFirstImage content={competitionInfo.information} />
           </Stack>
