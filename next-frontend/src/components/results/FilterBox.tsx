@@ -150,7 +150,11 @@ function FilterBox({ filterState, filterActions, children }: FilterBoxProps) {
         <EventSelector
           title={t("competitions.competition_form.events")}
           selectedEvents={[filterState.event]}
-          onEventClick={filterActions.setEvent}
+          onEventClick={(event) =>
+            event === filterState.event
+              ? filterActions.setEvent("all events")
+              : filterActions.setEvent(event)
+          }
           hideAllButton
           hideClearButton
         />

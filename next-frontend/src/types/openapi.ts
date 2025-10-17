@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+    "/v1/competitions/{competitionId}/registrations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get competition registrations */
+        get: operations["competitionRegistrationsV2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/competitions/{competitionId}/": {
         parameters: {
             query?: never;
@@ -89,6 +106,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v0/competitions/{competitionId}/psych-sheet/{eventId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get competition registrations */
+        get: {
+            parameters: {
+                query?: {
+                    sort_by?: string;
+                };
+                header?: never;
+                path: {
+                    competitionId: string;
+                    eventId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PsychSheet"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/competition_index": {
         parameters: {
             query?: never;
@@ -98,6 +156,57 @@ export interface paths {
         };
         /** Get a list of (upcoming) competitions for table display */
         get: operations["competitionList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/competitions/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a list of a users competition */
+        get: operations["getMyCompetitions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/competitions/{competitionId}/results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns all results */
+        get: operations["resultsByCompetition"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/competitions/{competitionId}/scrambles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns the competition scrambles */
+        get: operations["getScrambles"];
         put?: never;
         post?: never;
         delete?: never;
@@ -132,6 +241,23 @@ export interface paths {
         };
         /** Get a list of incidents */
         get: operations["regulationsList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/results/records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the current records for all regions */
+        get: operations["getRecords"];
         put?: never;
         post?: never;
         delete?: never;
@@ -297,6 +423,35 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        RegistrationDataV2: {
+            id: number;
+            registrant_id: number;
+            user_id: number;
+            guests?: number;
+            user: {
+                id: number;
+                name: string;
+                gender: string;
+                country_iso2: string;
+                wca_id: string;
+            };
+            competing: {
+                event_ids: string[];
+                registration_status?: string;
+                /** Format: datetime */
+                registered_on?: string;
+                comment?: string;
+                admin_comment?: string;
+            };
+            payment?: {
+                has_paid?: boolean;
+                payment_status?: string;
+                paid_amount_iso?: number;
+                currency_code?: string;
+                /** Format: datetime */
+                updated_at?: string;
+            };
+        };
         UserAvatar: {
             /**
              * Format: uri
@@ -651,6 +806,22 @@ export interface components {
             regional_single_record: string | null;
             regional_average_record: string | null;
         };
+        PsychSheet: {
+            sort_by: string;
+            sort_by_second: string;
+            sorted_rankings: {
+                name: string;
+                user_id: number;
+                wca_id: string;
+                country_iso2: string;
+                average_best: number;
+                average_rank: number;
+                single_best: number;
+                single_rank: number;
+                tied_previous: boolean;
+                pos: number;
+            }[];
+        };
         CompetitionIndex: {
             id: string;
             name: string;
@@ -688,6 +859,43 @@ export interface components {
                 name: string;
                 avatar: components["schemas"]["UserAvatar"];
             }[];
+        };
+        MyCompetition: {
+            id: string;
+            name: string;
+            website: string;
+            /** Format: date */
+            start_date: string;
+            /** Format: date */
+            end_date: string;
+            /** Format: date */
+            registration_open: string;
+            /** Format: uri */
+            url: string;
+            city: string;
+            country_iso2: string;
+            "results_posted?": boolean;
+            "report_posted?": boolean;
+            "visible?": boolean;
+            "confirmed?": boolean;
+            "cancelled?": boolean;
+            short_display_name: string;
+            championships: string[];
+            registration_status?: string;
+        };
+        /** @enum {string} */
+        CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
+        Results: components["schemas"]["Result"][];
+        Scramble: {
+            id: number;
+            competition_id: string;
+            event_id: string;
+            round_type_id: string;
+            round_id: number;
+            group_id: string;
+            is_extra: string;
+            scramble_num: number;
+            scramble: string;
         };
         ExtendedResult: {
             type?: string;
@@ -772,6 +980,63 @@ export interface components {
                 comments?: string;
             }[];
         };
+        Record: {
+            type?: string;
+            /** @example 6709306 */
+            id: number;
+            /** @example 1 */
+            pos: number;
+            /** @example 2019WANY36 */
+            person_id: string;
+            /** @example Yiheng Wang (王艺衡) */
+            person_name: string;
+            /** @example China */
+            country_id: string;
+            /** @example China */
+            competition_country_id: string;
+            /** @example HangzhouOpen2024 */
+            competition_id: string;
+            /** @example Hangzhou Open 2024 */
+            competition_name: string;
+            /** @example 222 */
+            event_id: string;
+            /** @example 2 */
+            round_type_id: string;
+            /** @example null */
+            round_id: string | null;
+            /** @example a */
+            format_id: string;
+            /** @example 126 */
+            value1: number;
+            /** @example 84 */
+            value2: number;
+            /** @example 91 */
+            value3: number;
+            /** @example 89 */
+            value4: number;
+            /** @example 85 */
+            value5: number;
+            /** @example 84 */
+            best: number;
+            /** @example 88 */
+            average: number;
+            /** @example null */
+            regional_single_record: string | null;
+            /** @example WR */
+            regional_average_record: string | null;
+            /**
+             * Format: date-time
+             * @example 2024-12-19T13:40:19.000Z
+             */
+            updated_at: string;
+            /** Format: date */
+            start_date: string;
+            /** @example 88 */
+            value: number;
+        };
+        RecordByEvent: {
+            [key: string]: components["schemas"]["Record"][];
+        };
         Rank: {
             id: number;
             person_id: string;
@@ -815,7 +1080,6 @@ export interface components {
             };
             competition_count: number;
         };
-        Results: components["schemas"]["Result"][];
         UserGroup: {
             id: number;
             name: string;
@@ -943,6 +1207,28 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    competitionRegistrationsV2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegistrationDataV2"][];
+                };
+            };
+        };
+    };
     competitionById: {
         parameters: {
             query?: never;
@@ -1055,7 +1341,16 @@ export interface operations {
     };
     competitionList: {
         parameters: {
-            query?: never;
+            query?: {
+                include_cancelled?: string;
+                continent?: string;
+                country_iso2?: string;
+                delegate?: string;
+                event_ids?: string[];
+                start?: string;
+                end?: string;
+                admin_status?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1069,6 +1364,77 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CompetitionIndex"][];
+                };
+            };
+        };
+    };
+    getMyCompetitions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        past_competitions: components["schemas"]["MyCompetition"][];
+                        future_competitions: components["schemas"]["MyCompetition"][];
+                        bookmarked_competitions: components["schemas"]["MyCompetition"][];
+                        registrations_by_competition: {
+                            [key: string]: components["schemas"]["CompetingStatus"];
+                        };
+                    };
+                };
+            };
+        };
+    };
+    resultsByCompetition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Results"];
+                };
+            };
+        };
+    };
+    getScrambles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Scramble"][];
                 };
             };
         };
@@ -1125,6 +1491,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Incident"][];
+                };
+            };
+        };
+    };
+    getRecords: {
+        parameters: {
+            query?: {
+                event_id?: string;
+                region?: string;
+                show?: string;
+                gender?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved records */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        records: components["schemas"]["RecordByEvent"];
+                        /** Format: date */
+                        timestamp: string;
+                    };
                 };
             };
         };

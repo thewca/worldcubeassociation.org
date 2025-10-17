@@ -11,6 +11,7 @@ const staticLinkOptions = [
   "/",
   "/faq",
   "/competitions",
+  "/competitions/mine",
   "/delegates",
   "/disclaimer",
   "/documents",

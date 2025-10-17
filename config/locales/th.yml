@@ -762,16 +762,16 @@ th:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 27c2251
+        #original_hash: c564b74
         receive_delegate_reports: >-
           ถ้าคุณเป็น Trainee Delegate, Junior Delegate, Senior Delegate, หรือ
           สมาชิกของ WRC หรือ WQAC คุณจะได้รับ Delegate Reports เป็นค่าตั้งต้น
-          หมายเหตุ: การแก้ไขอาจใช้เวลาประมาณ 1 ชั่วโมงเพื่อให้มีผล
-        #original_hash: 364624c
+          หมายเหตุ: การแก้ไขอาจใช้เวลาประมาณ 12 ชั่วโมงเพื่อให้มีผล
+        #original_hash: 0017d38
         delegate_reports_region: >-
           หากคุณต้องการรับ reports ทั้งหมด ให้เว้นช่องนี้ว่างไว้
           (ตัวเลือกแบบดร็อปดาวน์ที่ด้านบนสุด) หมายเหตุ:
-          การเปลี่ยนแปลงอาจใช้เวลานานถึงหนึ่งชั่วโมงจึงจะมีผล
+          การเปลี่ยนแปลงอาจใช้เวลานานถึง 12 ชั่วโมงจึงจะมีผล
         #original_hash: 0627e5c
         otp_attempt: >-
           ตรวจสอบโทรศัพท์มือถือของคุณสำหรับ one-time password หรือ ใส่ recovery
@@ -1157,6 +1157,20 @@ th:
         400_contact_html: >-
           หากคุณคิดว่านี่คือข้อผิดพลาด กรุณา<a
           href=%{contact_url}>กดที่นี่</a>เพื่อรายงาน
+        #original_hash: 508c106
+        comp_not_found: ไม่พบการแข่งขัน
+        #original_hash: c0e86d5
+        comp_not_found_action: 'เราไม่พบการแข่งขันที่มี ID "%{comp_id}" กรุณาค้นหาโดยใช้แถบค้นหา'
+        #original_hash: 695f7ba
+        comp_not_found_action_2: >-
+          หากคุณตามลิงก์จากเว็บไซต์อื่นเพื่อมาที่นี่
+          โปรดบอกเว็บไซต์นั้นว่าลิงก์นั้นไม่ถูกต้อง
+        #original_hash: 7f8f419
+        session_expired: เซสชั่นหมดอายุแล้ว
+        #original_hash: f3e688a
+        session_expired_action: >-
+          เซสชันของคุณหมดอายุแล้ว โปรดรีเฟรชหน้านี้แล้วลองใหม่อีกครั้ง
+          หรือเข้าสู่ระบบอีกครั้งเพื่อดำเนินการต่อ
     doorkeeper:
       applications:
         help:
@@ -2278,7 +2292,7 @@ th:
     #original_hash: c0063c3
     register: สมัคร
     #original_hash: f484f15
-    refund: การคืนค่าสมัคร
+    refund: คืนค่าสมัคร
     #original_hash: dc8d7d2
     refund_confirmation: คุณแน่ใจที่จะคืนค่าสมัครนี้?
     #original_hash: a9af643
@@ -2568,8 +2582,6 @@ th:
       results_still_processing: เรากำลังการประมวลผลการแข่งขันของการแข่งขันนี้ ซึ่งน่าจะทราบผลเร็ว ๆ นี้
       #original_hash: e205d73
       results_already_posted: ผลการแข่งขันได้รับการโพสต์แล้ว
-      #original_hash: 376f461
-      results_posted: โพสต์ผลการแข่งขันสำเร็จ!
       #original_hash: afe3a23
       results_preview_alert: คุณกำลังดูผลการแข่งขันที่ยังไม่ได้แสดง
       #original_hash: 16dd227
@@ -2772,12 +2784,14 @@ th:
       event_change_deadline_default_html: >-
         เราแนะนำให้ทุกท่านสมัครประเภทที่คุณต้องการแข่งขันผ่านการสมัครออนไลน์
         อย่างไรก็ตาม คุณสามารถเพิ่มประเภทการแข่งขันได้จนกว่าการแข่งขันจะเรื่ม
-      #original_hash: cf7be5d
+      #original_hash: 51ef4f3
       on_the_spot_registration_fee_html: >-
-        ยอมรับการสมัครที่การแข่งขัน ด้วยการชำระค่าสมัคร
-        %{on_the_spot_base_entry_fee}
-      #original_hash: 1637bea
-      on_the_spot_registration_free: ยอมการสมัครที่การแข่งขันโดยไม่เสียค่าใช้จ่าย
+        ยอมรับการสมัครที่การแข่งขัน ถ้าผู้เข้าแข่งขันยังไม่ถึงจำนวนจำกัด
+        ด้วยการชำระค่าสมัคร %{on_the_spot_base_entry_fee}
+      #original_hash: 2b4ea65
+      on_the_spot_registration_free: >-
+        ยอมการสมัครที่การแข่งขันโดยไม่เสียค่าใช้จ่าย
+        ถ้าจำนวนผู้เข้าแข่งขันยังไม่ถึงจำนวนจำกัด
       #original_hash: f5f687d
       no_on_the_spot_registration: ไม่รับสมัครที่การแข่งขัน
       #original_hash: 4df139d
@@ -4085,8 +4099,6 @@ th:
     cancelled_by_html: 'ยกเลิกโดย %{name} เมื่อ %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: คุณแน่ใจที่จะยกเลิกการแข่งขันใช่หรือไม่?
-    #original_hash: 01de5ee
-    post_results: โพสต์ผลการแข่งขัน
     #original_hash: b6513f1
     results_posted_by_html: 'โพสต์โดย %{poster_name} เมื่อ %{date_time}'
     #original_hash: a6b5efe
@@ -4270,8 +4282,8 @@ th:
         newcomer_checks: ตรวจสอบผู้เข้าแข่งขันใหม่
         #original_hash: f3d6278
         submit_results: ส่งผลการแข่งขัน
-        #original_hash: e2d046b
-        match_scrambles: ส่งโจทย์การแข่งขัน
+        #original_hash: dd2e98f
+        upload_scrambles: Upload scrambles
         #original_hash: 4c9f914
         delegate_report: Delegate report
         #original_hash: b233e77
@@ -4450,6 +4462,8 @@ th:
       paypal: PayPal
       #original_hash: 4d08ec5
       stripe: Stripe
+      #original_hash: 5cd5075
+      manual: Manual/External
     payment_setup:
       #original_hash: 0aa09ee
       external_dashboard: '%{provider} Dashboard'
@@ -4469,6 +4483,8 @@ th:
       confirm_account_disconnect: >-
         คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการเชื่อมต่อบัญชี %{provider}
         การดำเนินการนี้ไม่สามารถยกเลิกได้
+      #original_hash: a7bbd29
+      edit_account: แก้ไขบัญชี
       #original_hash: ddea6cf
       supported_currency_warning: >-
         โปรดตรวจสอบให้แน่ใจว่าสกุลเงินที่คุณเลือกรองรับโดยการชำระเงินที่คุณเลือก!
@@ -4480,8 +4496,10 @@ th:
       provider_heading: 'การชำระเงิน %{provider}'
       #original_hash: 40a098a
       accept_payments_header: Accept Registration Payments
-      #original_hash: 7ebe178
-      connect_button: 'เชื่อมต่อกับ %{provider}'
+      #original_hash: ebf1ae6
+      manual_payments_header: กำหนดค่าการชำระเงินด้วยตนเอง
+      #original_hash: 399052b
+      connect_button: 'Set up %{provider}'
       connect_account_info:
         #original_hash: f3fdb64
         stripe: >-
@@ -4494,6 +4512,12 @@ th:
           จำเป็นต้องมีบัญชี PayPal Business เพื่อรับการชำระเงินผ่าน PayPal
           ผ่านหน้าการแข่งขัน หากคุณยังไม่มีบัญชี PayPal Business
           คุณยังคงคลิกปุ่มด้านล่างได้ ระบบจะแนะนำคุณตลอดขั้นตอน
+        #original_hash: d32cb06
+        manual: >-
+          กำหนดวิธีการชำระเงินสำหรับผู้เข้าแข่งขัน
+          โดยผู้เข้าแข่งขันจะสามารถระบุได้ว่าชำระเงินเมื่อใด
+          และให้หมายเลขอ้างอิงการชำระเงินแก่คุณ
+          เพื่อตรวจสอบกับข้อมูลในบริการชำระเงินภายนอกที่คุณใช้
       connect_account_warning:
         #original_hash: 53adda3
         stripe: >-
@@ -4504,6 +4528,8 @@ th:
           การเชื่อมต่อบัญชี PayPal ของคุณทำให้เว็บไซต์ WCA
           สามารถกำหนดเส้นทางการชำระเงินให้กับคุณ และคืนเงืนได้โดยตรงในบัญชี
           PayPal ของคุณ
+        #original_hash: da39a3e
+        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         การแข่งขันนี้จัดทำขึ้นเพื่อรับการชำระเงินผ่าน %{provider} Delegate
@@ -4533,6 +4559,13 @@ th:
           display_name: ชื่อ
           #original_hash: 84add5b
           primary_email: Email
+        manual:
+          #original_hash: e5f0dfd
+          payment_instructions: คำแนะนำการชำระค่าสมัคร (จะแสดงในหน้าการแข่งขัน)
+          #original_hash: 5e7242c
+          payment_reference_label: >-
+            ผู้ใช้ควรให้ข้อมูลอะไรแก่คุณเพื่อระบุการชำระเงินของตน (เช่น
+            หมายเลขอ้างอิงการชำระเงิน / รหัสบัญชี / ฯลฯ)
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:
@@ -6092,3 +6125,9 @@ th:
       wrong_number_of_scramble_sets_error: >-
         [%{round_id}] รอบนี้มีจำนวนชุดของโจทย์แตกต่างจากที่ระบุไว้ในแท็บ event
         โปรดปรับจำนวนโจทย์ในแท็บ event ให้ตรงกับจำนวนชุดที่ใช้
+  tickets:
+    type:
+      #original_hash: e43f273
+      edit_person: แก้ไขบุคคล
+      #original_hash: 5fb2137
+      competition_result: ผลการแข่งขัน

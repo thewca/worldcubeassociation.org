@@ -92,6 +92,10 @@ services:
   wca_payload_db:
     image: mongo:8
     container_name: "payload_db"
+    command:
+      - --quiet
+      - --logpath
+      - /var/log/mongodb/mongod.log
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
@@ -109,7 +113,6 @@ services:
     environment:
       <<: *appEnv
       SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
-      NODE_ENV: development
     command: bin/shakapacker-dev-server
     depends_on:
       wca_environment:
@@ -136,7 +139,7 @@ services:
       # Cronjobs are disabled in development by default. If you wish to run cronjobs,
       # set this env variable to any integer value greater than zero
       # CRONJOB_POLLING_MINUTES: 30
-    command: bin/bundle exec sidekiq
+    command: bin/sidekiq
     depends_on:
       wca_environment:
         condition: service_completed_successfully

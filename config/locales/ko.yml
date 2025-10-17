@@ -750,13 +750,13 @@ ko:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 27c2251
+        #original_hash: c564b74
         receive_delegate_reports: >-
           귀하가 수석 파견위원 또는 WRC/WQAC의 회원인 경우 기본적으로 파견위원 보고서를 받게 됩니다. 참고: 변경 사항이
-          적용되기까지 최대 1시간이 걸릴 수 있습니다.
-        #original_hash: 364624c
+          적용되기까지 최대 12시간이 걸릴 수 있습니다.
+        #original_hash: 0017d38
         delegate_reports_region: >-
-          모든 보고서를 받으려면 이 필드를 비워두십시오(맨 위의 드롭다운 옵션). 참고: 변경 사항이 적용되기까지 최대 1시간이 걸릴
+          모든 보고서를 받으려면 이 필드를 비워두십시오(맨 위의 드롭다운 옵션). 참고: 변경 사항이 적용되기까지 최대 12시간이 걸릴
           수 있습니다.
         #original_hash: 0627e5c
         otp_attempt: 구성된 모바일 애플리케이션에서 일회용 비밀번호를 확인하거나 복구 코드 중 하나를 입력하십시오.
@@ -2521,10 +2521,12 @@ ko:
       event_change_deadline_default_html: >-
         참가 희망 종목은 온라인 참가 신청을 통해 등록하는 것을 권장하지만, 해당 종목의 경기가 시작되기 전까지 신청 내역에 참가 희망
         종목을 추가할 수 있습니다.
-      #original_hash: cf7be5d
-      on_the_spot_registration_fee_html: '현장 참가 신청시 기본 참가비는 %{on_the_spot_base_entry_fee}입니다.'
-      #original_hash: 1637bea
-      on_the_spot_registration_free: 현장 참가 신청은 무료로 가능합니다.
+      #original_hash: 51ef4f3
+      on_the_spot_registration_fee_html: >-
+        현장 참가 신청은 정원이 차지 않았을 시 승인될 수 있으며, 기본 참가비는
+        %{on_the_spot_base_entry_fee}입니다.
+      #original_hash: 2b4ea65
+      on_the_spot_registration_free: '현장 참가 신청은 정원이 차지 않았을 시에만 승인될 수 있으며, 참가 신청은 무료로 가능합니다.'
       #original_hash: f5f687d
       no_on_the_spot_registration: 현장 참가 신청은 허용되지 않습니다.
       #original_hash: 4df139d
@@ -4026,6 +4028,8 @@ ko:
       paypal: PayPal
       #original_hash: 4d08ec5
       stripe: Stripe
+      #original_hash: 5cd5075
+      manual: 수동/외부
     payment_setup:
       #original_hash: 0aa09ee
       external_dashboard: '%{provider} 대시보드'
@@ -4041,6 +4045,8 @@ ko:
       disconnect_account: '%{provider} 계정 연결 해제'
       #original_hash: 59c9c9c
       confirm_account_disconnect: '%{provider} 계정을 연결 해제하시겠습니까? 이 작업은 취소할 수 없습니다.'
+      #original_hash: a7bbd29
+      edit_account: 계정 수정
       #original_hash: ddea6cf
       supported_currency_warning: >-
         선택한 통화가 선택한 통합 결제에서 지원되는지 확인하십시오! 지원되는 통화는 계정이 기반을 둔 국가에 따라 달라지며, 아래에서
@@ -4051,8 +4057,10 @@ ko:
       provider_heading: '%{provider} 결제'
       #original_hash: 40a098a
       accept_payments_header: 참가 신청 결제 수락
-      #original_hash: 7ebe178
-      connect_button: '%{provider}에 연결'
+      #original_hash: ebf1ae6
+      manual_payments_header: 수동 결제 설정
+      #original_hash: 399052b
+      connect_button: '%{provider} 셋업'
       connect_account_info:
         #original_hash: f3fdb64
         stripe: >-
@@ -4062,6 +4070,10 @@ ko:
         paypal: >-
           대회 페이지를 통해 PayPal 결제를 받으려면 PayPal 비즈니스 계정이 필요합니다. 아직 PayPal 비즈니스 계정이
           없다면, 아래 버튼을 클릭하면 계정 생성 과정을 안내받을 수 있습니다.
+        #original_hash: d32cb06
+        manual: >-
+          참가자를 위한 결제 지침을 정의하세요. 참가자는 결제 시점을 표시할 수 있으며, 귀하가 사용하는 외부 결제 서비스에서 귀하의
+          기록과 비교할 수 있도록 결제 참조 정보를 제공할 수 있습니다.
       connect_account_warning:
         #original_hash: 53adda3
         stripe: Stripe 계정을 연결하면 WCA 웹사이트에서 Stripe 계정으로 직접 결제를 생성하고 환불을 처리할 수 있습니다.
@@ -4069,6 +4081,8 @@ ko:
         paypal: >-
           PayPal 계정을 연결하면 WCA 웹사이트에서 결제를 사용자 계정으로 전달하고, PayPal 계정에서 직접 환불을 처리할 수
           있습니다.
+        #original_hash: da39a3e
+        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         이 대회는 %{provider}를 통해 결제를 받도록 설정되었습니다. 대회의 파견위원은 연결된 계정을 변경하려면 WCAT에
@@ -4093,6 +4107,11 @@ ko:
           display_name: 이름
           #original_hash: 84add5b
           primary_email: 이메일
+        manual:
+          #original_hash: e5f0dfd
+          payment_instructions: 결제 지침(대회 페이지에 표시됨)
+          #original_hash: 5e7242c
+          payment_reference_label: '사용자는 결제를 식별하기 위해 어떤 정보를 제공해야 합니까? (예: 결제 참조 번호/계정 ID 등)'
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:
