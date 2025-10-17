@@ -126,7 +126,7 @@ export type IconName =
  */
 export type StaticTargetLink =
   | '/'
-  | '/faq'
+  | '/about'
   | '/competitions'
   | '/competitions/mine'
   | '/delegates'
@@ -134,13 +134,18 @@ export type StaticTargetLink =
   | '/documents'
   | '/export/developer'
   | '/export/results'
+  | '/faq'
   | '/incidents'
+  | '/logo'
   | '/officers-and-board'
   | '/organizations'
   | '/privacy'
   | '/regulations/about'
   | '/regulations/history'
   | '/regulations/scrambles'
+  | '/regulations/translations'
+  | '/results/rankings'
+  | '/results/records'
   | '/score-tools'
   | '/speedcubing-history'
   | '/teams-committees'
@@ -783,16 +788,34 @@ export interface Nav {
               blockType: 'LinkItem';
             }
           | {
+              displayText: string;
+              targetLink: string;
+              displayIcon?: IconName;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'ExternalLinkItem';
+            }
+          | {
               title: string;
               displayIcon?: IconName;
-              entries: {
-                displayText: string;
-                targetLink: StaticTargetLink;
-                displayIcon?: IconName;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: 'LinkItem';
-              }[];
+              entries: (
+                | {
+                    displayText: string;
+                    targetLink: StaticTargetLink;
+                    displayIcon?: IconName;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'LinkItem';
+                  }
+                | {
+                    displayText: string;
+                    targetLink: string;
+                    displayIcon?: IconName;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ExternalLinkItem';
+                  }
+              )[];
               id?: string | null;
               blockName?: string | null;
               blockType: 'NestedDropdown';
@@ -814,6 +837,14 @@ export interface Nav {
         id?: string | null;
         blockName?: string | null;
         blockType: 'LinkItem';
+      }
+    | {
+        displayText: string;
+        targetLink: string;
+        displayIcon?: IconName;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ExternalLinkItem';
       }
   )[];
   updatedAt?: string | null;
@@ -1402,6 +1433,15 @@ export interface NavSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    ExternalLinkItem?:
+                      | T
+                      | {
+                          displayText?: T;
+                          targetLink?: T;
+                          displayIcon?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     NestedDropdown?:
                       | T
                       | {
@@ -1411,6 +1451,15 @@ export interface NavSelect<T extends boolean = true> {
                             | T
                             | {
                                 LinkItem?:
+                                  | T
+                                  | {
+                                      displayText?: T;
+                                      targetLink?: T;
+                                      displayIcon?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                ExternalLinkItem?:
                                   | T
                                   | {
                                       displayText?: T;
@@ -1434,6 +1483,15 @@ export interface NavSelect<T extends boolean = true> {
               blockName?: T;
             };
         LinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              displayIcon?: T;
+              id?: T;
+              blockName?: T;
+            };
+        ExternalLinkItem?:
           | T
           | {
               displayText?: T;
