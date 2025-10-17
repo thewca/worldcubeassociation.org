@@ -1,4 +1,4 @@
-FROM ruby:3.4.2 AS base
+FROM ruby:3.4.6 AS base
 ARG BUILD_TAG=local
 ARG WCA_LIVE_SITE
 ARG SHAKAPACKER_ASSET_HOST
@@ -41,7 +41,6 @@ RUN corepack enable
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       build-essential \
-      software-properties-common \
       git \
       clang \
       pkg-config \
@@ -77,7 +76,7 @@ RUN --mount=type=cache,sharing=private,target=/rails/.cache/pw-browsers \
 
 COPY . .
 
-RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/bundle exec i18n export
+RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/i18n export
 RUN --mount=type=cache,uid=1000,target=/rails/tmp/cache ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/rake assets:precompile
 
 # Save the Playwright CLI from certain doom
@@ -116,6 +115,9 @@ COPY --chown=rails:rails --from=build /rails .
 # We already need the Playwright CLI which is part of the /rails folder,
 #   but we also still need `sudo` privileges to be able to install runtime dependencies through apt
 RUN "$PLAYWRIGHT_BROWSERS_PATH/node_modules/playwright/cli.js" install-deps chromium
+
+# Get Certificate to connect to mysql via SSL
+RUN curl -o ./rds-cert.pem https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
 
 USER rails:rails
 

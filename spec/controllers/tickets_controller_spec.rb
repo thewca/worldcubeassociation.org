@@ -101,8 +101,9 @@ RSpec.describe TicketsController do
 
       it "sends the notification emails to users that competed" do
         competition = results_ticket.competition
+        round = create(:round, competition: competition, number: 2)
         create_list(:user_with_wca_id, 4, results_notifications_enabled: true).each do |user|
-          create(:result, person: user.person, competition_id: competition.id, event_id: "333")
+          create(:result, person: user.person, competition_id: competition.id, event_id: "333", round: round)
         end
 
         expect(competition.results_posted_at).to be_nil
@@ -121,8 +122,9 @@ RSpec.describe TicketsController do
         create_list(:registration, 2, :accepted, :newcomer, competition: competition)
         create_list(:registration, 3, :pending, :newcomer, competition: competition)
         create_list(:registration, 4, :accepted, competition: competition)
+        round = create(:round, competition: competition, number: 2)
         create_list(:user_with_wca_id, 4).each do |user|
-          create(:result, person: user.person, competition_id: competition.id, event_id: "333")
+          create(:result, person: user.person, competition_id: competition.id, event_id: "333", round: round)
         end
 
         expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.twice
@@ -134,7 +136,8 @@ RSpec.describe TicketsController do
       it "assigns wca id when user matches one person in results" do
         competition = results_ticket.competition
         reg = create(:registration, :accepted, competition: competition)
-        create(:result, competition: competition, person: reg.person, event_id: "333")
+        round = create(:round, competition: competition, number: 2)
+        create(:result, competition: competition, person: reg.person, event_id: "333", round: round)
 
         wca_id = reg.user.wca_id
         reg.user.update(wca_id: nil)
@@ -149,9 +152,10 @@ RSpec.describe TicketsController do
         user = create(:user_with_wca_id)
         person = user.person
         create(:registration, :accepted, competition: competition, user: user)
-        create(:result, competition: competition, person: person, event_id: "333")
+        round = create(:round, competition: competition, number: 2)
+        create(:result, competition: competition, person: person, event_id: "333", round: round)
         another_person = create(:person, name: person.name, country_id: person.country_id, gender: person.gender, dob: person.dob)
-        create(:result, competition: competition, person: another_person, event_id: "333")
+        create(:result, competition: competition, person: another_person, event_id: "333", round: round)
 
         user.update(wca_id: nil)
 
@@ -164,8 +168,9 @@ RSpec.describe TicketsController do
         competition = results_ticket.competition
         user = create(:user_with_wca_id)
         user2 = create(:user_with_wca_id)
+        round = create(:round, competition: competition, number: 2)
         create(:registration, :accepted, competition: competition, user: user)
-        create(:result, competition: competition, person: user.person, event_id: "333")
+        create(:result, competition: competition, person: user.person, event_id: "333", round: round)
 
         wca_id = user.wca_id
         user.update(wca_id: nil)

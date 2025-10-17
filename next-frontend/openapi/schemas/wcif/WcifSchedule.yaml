@@ -1,0 +1,15 @@
+type: object
+properties:
+  startDate:
+    type: string
+    format: date
+  numberOfDays:
+    type: integer
+  venues:
+    type: array
+    items:
+      $ref: './WcifVenue.yaml'
+required:
+  - startDate
+  - numberOfDays
+  - venues

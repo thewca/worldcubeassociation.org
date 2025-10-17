@@ -1,14 +1,14 @@
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
 import { iconMap } from "@/components/icons/iconMap";
-import { CiCalendar } from "react-icons/ci";
+import { LuCalendar } from "react-icons/lu";
 
 export const beforeCompetitionTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
 ) => {
   return [
     {
-      i18nKey: "competitions.nav.menu.info",
+      i18nKey: "competitions.nav.menu.general",
       href: route({
         pathname: "/competitions/[competitionId]",
         query: { competitionId: competitionInfo.id },
@@ -50,7 +50,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "schedule",
-      icon: CiCalendar,
+      icon: LuCalendar,
     },
   ];
 };

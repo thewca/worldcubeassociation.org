@@ -62,6 +62,7 @@ class Competition < ApplicationRecord
   scope :not_visible, -> { where(show_at_all: false) }
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
+  scope :upcoming, -> { where(results_posted_at: nil).where.not(start_date: ..Date.today) }
   scope :between_dates, ->(start_date, end_date) { where("start_date <= ? AND end_date >= ?", end_date, start_date) }
   scope :end_date_passed_since, ->(num_days) { where(end_date: ...(num_days.days.ago)) }
   scope :belongs_to_region, lambda { |region_id|
@@ -96,6 +97,7 @@ class Competition < ApplicationRecord
   scope :not_confirmed, -> { where(confirmed_at: nil) }
   scope :pending_posting, -> { where.not(results_submitted_at: nil).where(results_posted_at: nil) }
   scope :pending_report_or_results_posting, -> { includes(:delegate_report).where(delegate_report: { posted_at: nil }).or(where(results_posted_at: nil)) }
+  scope :results_posted, -> { where.not(results_posted_at: nil).where.not(results_posted_by: nil) }
 
   enum :guest_entry_status, {
     unclear: 0,
@@ -181,7 +183,6 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
-    auto_accept_registrations
     auto_accept_preference
     auto_accept_disable_threshold
     newcomer_month_reserved_spots
@@ -2052,7 +2053,7 @@ class Competition < ApplicationRecord
       # If no registration is found, and the Registration is marked as non-competing, add this person as a non-competing staff member.
       adding_non_competing = wcif_person["registration"].present? && wcif_person["registration"]["isCompeting"] == false
       if adding_non_competing
-        registration ||= registrations.create(
+        registration ||= registrations.create!(
           competition: self,
           user_id: wcif_person["wcaUserId"],
           is_competing: false,
@@ -2300,7 +2301,7 @@ class Competition < ApplicationRecord
 
   private def xero_dues_payer
     self.country&.wfc_dues_redirect&.redirect_to ||
-    self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
+      self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
   end
 
   # WFC usually sends dues to the first staff delegate in alphabetical order if there are no redirects setup for the country or organizer.
@@ -2752,6 +2753,10 @@ class Competition < ApplicationRecord
 
   def paypal_connected?
     self.payment_integration_connected?(:paypal)
+  end
+
+  def manual_connected?
+    self.payment_integration_connected?(:manual)
   end
 
   def payment_account_for(integration_name)

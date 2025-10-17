@@ -10,8 +10,8 @@ type StaticRoute = Exclude<Route, { query: unknown }>["pathname"];
 const staticLinkOptions = [
   "/",
   "/faq",
-  "/api/swagger",
   "/competitions",
+  "/competitions/mine",
   "/delegates",
   "/disclaimer",
   "/documents",

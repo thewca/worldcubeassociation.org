@@ -473,7 +473,8 @@ RSpec.describe Competition do
 
     it "warns if competition has results and haven't been posted" do
       competition = create(:competition, :confirmed, :announced, :visible, :past, results_posted_at: nil, results_posted_by: nil)
-      create(:result, person: create(:person), competition_id: competition.id)
+      round = create(:round, competition: competition, number: 2, event_id: "333oh")
+      create(:result, person: create(:person), competition_id: competition.id, round: round)
       wrt_member = create(:user, :wrt_member)
 
       expect(competition).to be_valid
@@ -698,8 +699,9 @@ RSpec.describe Competition do
     end
 
     it "changes the competition_id of results" do
-      r1 = create(:result, competition_id: competition.id)
-      r2 = create(:result, competition_id: competition.id)
+      round = create(:round, competition: competition, event_id: "333oh")
+      r1 = create(:result, competition_id: competition.id, round: round)
+      r2 = create(:result, competition_id: competition.id, round: round)
       competition.update_attribute(:id, "NewID2015")
       expect(r1.reload.competition_id).to eq "NewID2015"
       expect(r2.reload.competition_id).to eq "NewID2015"
@@ -910,31 +912,28 @@ RSpec.describe Competition do
   describe "results" do
     let(:three_by_three) { Event.find "333" }
     let(:two_by_two) { Event.find "222" }
-    let!(:competition) do
-      c = create(:competition, events: [three_by_three, two_by_two])
-      # Create the results rounds right now so that we can use them later.
-      create(:round, competition: c, total_number_of_rounds: 2, number: 1, event_id: "333")
-      create(:round, competition: c, total_number_of_rounds: 2, number: 2, event_id: "333")
-      create(:round, competition: c, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100))
-      c
-    end
+    let!(:competition) { create(:competition, events: [three_by_three, two_by_two]) }
 
     let(:person_one) { create(:person, name: "One") }
     let(:person_two) { create(:person, name: "Two") }
     let(:person_three) { create(:person, name: "Three") }
     let(:person_four) { create(:person, name: "Four") }
 
-    let!(:r_333_1_first) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 1, person: person_one) }
-    let!(:r_333_1_second) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 2, person: person_two) }
-    let!(:r_333_1_third) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 3, person: person_three) }
-    let!(:r_333_1_fourth) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 4, person: person_four) }
+    let(:round_333_1) { create(:round, competition: competition, total_number_of_rounds: 2, number: 1, event_id: "333") }
+    let(:round_333_f) { create(:round, competition: competition, total_number_of_rounds: 2, number: 2, event_id: "333") }
+    let(:round_222_c) { create(:round, competition: competition, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100)) }
 
-    let!(:r_333_f_first) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 1, person: person_one) }
-    let!(:r_333_f_second) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 2, person: person_two) }
-    let!(:r_333_f_third) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 3, person: person_three) }
+    let!(:r_333_1_first) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 1, person: person_one) }
+    let!(:r_333_1_second) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 2, person: person_two) }
+    let!(:r_333_1_third) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 3, person: person_three) }
+    let!(:r_333_1_fourth) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 4, person: person_four) }
 
-    let!(:r_222_c_second_tied) { create(:result, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_two) }
-    let!(:r_222_c_first_tied) { create(:result, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_one) }
+    let!(:r_333_f_first) { create(:result, round: round_333_f, competition: competition, event_id: "333", round_type_id: "f", pos: 1, person: person_one) }
+    let!(:r_333_f_second) { create(:result, round: round_333_f, competition: competition, event_id: "333", round_type_id: "f", pos: 2, person: person_two) }
+    let!(:r_333_f_third) { create(:result, round: round_333_f, competition: competition, event_id: "333", round_type_id: "f", pos: 3, person: person_three) }
+
+    let!(:r_222_c_second_tied) { create(:result, round: round_222_c, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_two) }
+    let!(:r_222_c_first_tied) { create(:result, round: round_222_c, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_one) }
 
     it "events_with_podium_results" do
       result = competition.events_with_podium_results
@@ -991,7 +990,7 @@ RSpec.describe Competition do
 
   it "when id is changed, foreign keys are updated as well" do
     competition = create(:competition, :with_delegate, :with_organizer, :with_delegate_report, :registration_open)
-    create(:result, competition_id: competition.id)
+    create(:result, competition: competition)
     create(:competition_tab, competition: competition)
     create(:registration, competition: competition)
 
@@ -1051,14 +1050,16 @@ RSpec.describe Competition do
     let!(:competition) { create(:competition) }
 
     it "works" do
-      create_list(:result, 2, competition: competition)
+      round = create(:round, competition: competition, event_id: "333oh")
+      create_list(:result, 2, competition: competition, round: round)
       expect(competition.competitors.count).to eq 2
     end
 
     it "handles competitors with multiple sub_ids" do
       person_with_sub_ids = create(:person_with_multiple_sub_ids)
-      create(:result, competition: competition, person: person_with_sub_ids)
-      create(:result, competition: competition)
+      round = create(:round, competition: competition, event_id: "333oh")
+      create(:result, competition: competition, person: person_with_sub_ids, round: round)
+      create(:result, competition: competition, round: round)
       expect(competition.competitors.count).to eq 2
     end
   end
@@ -1438,19 +1439,23 @@ RSpec.describe Competition do
 
   context "payment integration methods" do
     describe "#payment_account_for" do
+      let(:competition) { create(:competition, :all_integrations_connected) }
+
       it 'returns the connected stripe account' do
-        competition = create(:competition, :stripe_connected, :paypal_connected)
         expect(competition.payment_account_for(:stripe).account_id).to eq('acct_19ZQVmE2qoiROdto')
       end
 
       it 'returns the connected paypal account' do
-        competition = create(:competition, :stripe_connected, :paypal_connected)
         expect(competition.payment_account_for(:paypal).paypal_merchant_id).to eq('95XC2UKUP2CFW')
       end
 
+      it 'returns the connected manual payment account' do
+        expect(competition.payment_account_for(:manual).payment_reference_label).to eq('Bench Location')
+      end
+
       it 'returns nil if no matching account is found' do
-        competition = create(:competition)
-        expect(competition.payment_account_for(:paypal)).to be_nil
+        paypal_not_connected = create(:competition, :stripe_connected, :manual_connected)
+        expect(paypal_not_connected.payment_account_for(:paypal)).to be_nil
       end
     end
 
@@ -1465,8 +1470,13 @@ RSpec.describe Competition do
         expect(competition.payments_enabled?).to be(true)
       end
 
+      it 'returns true when manual is connected' do
+        competition = create(:competition, :manual_connected)
+        expect(competition.payments_enabled?).to be(true)
+      end
+
       it 'returns true when multiple integrations are connected' do
-        competition = create(:competition, :stripe_connected, :paypal_connected)
+        competition = create(:competition, :all_integrations_connected)
         expect(competition.payments_enabled?).to be(true)
       end
 
@@ -1487,6 +1497,11 @@ RSpec.describe Competition do
         expect(competition.stripe_connected?).to be(false)
       end
 
+      it 'returns false when manual is connected' do
+        competition = create(:competition, :manual_connected)
+        expect(competition.stripe_connected?).to be(false)
+      end
+
       it 'returns false when no integrations are connected' do
         competition = create(:competition)
         expect(competition.stripe_connected?).to be(false)
@@ -1504,9 +1519,36 @@ RSpec.describe Competition do
         expect(competition.paypal_connected?).to be(true)
       end
 
+      it 'returns false when manual is connected' do
+        competition = create(:competition, :manual_connected)
+        expect(competition.paypal_connected?).to be(false)
+      end
+
       it 'returns false when no integrations are connected' do
         competition = create(:competition)
         expect(competition.paypal_connected?).to be(false)
+      end
+    end
+
+    describe '#manual_connected?' do
+      it 'returns false when stripe is connected' do
+        competition = create(:competition, :stripe_connected)
+        expect(competition.manual_connected?).to be(false)
+      end
+
+      it 'returns false when paypal is connected' do
+        competition = create(:competition, :paypal_connected)
+        expect(competition.manual_connected?).to be(false)
+      end
+
+      it 'returns true when manual is connected' do
+        competition = create(:competition, :manual_connected)
+        expect(competition.manual_connected?).to be(true)
+      end
+
+      it 'returns false when no integrations are connected' do
+        competition = create(:competition)
+        expect(competition.manual_connected?).to be(false)
       end
     end
 

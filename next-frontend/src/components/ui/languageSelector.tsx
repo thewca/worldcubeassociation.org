@@ -49,9 +49,6 @@ const LanguageSelector = () => {
                 key={lang}
                 onClick={() => handleChangeLocale(lang)}
               >
-                <Icon size="sm">
-                  <Flag code={config.flag_id} />
-                </Icon>
                 {config.name}
               </Menu.Item>
             ))}

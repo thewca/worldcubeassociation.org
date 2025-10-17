@@ -59,6 +59,33 @@ const potentialWarnings = (competitionInfo) => {
   return warnings;
 };
 
+const getName = (eventId) => events.byId[eventId].name;
+
+function getUpdateMessage(
+  hasCommentChanged,
+  comment,
+  originalEventIds,
+  selectedEventIds,
+  hasGuestsChanged,
+  guests,
+) {
+  const addedEventIds = selectedEventIds.filter((id) => !originalEventIds.includes(id));
+  const removedEventIds = originalEventIds.filter((id) => !selectedEventIds.includes(id));
+  const hasEventsChanged = (addedEventIds.length + removedEventIds.length) > 0;
+
+  return `\n${
+    hasCommentChanged ? `Updated Comment: ${comment}\n` : ''
+  }${
+    addedEventIds.length ? `Added Events: ${addedEventIds.map(getName).join(', ')}\n` : ''
+  }${
+    removedEventIds.length ? `Removed Events: ${removedEventIds.map(getName).join(', ')}\n` : ''
+  }${
+    hasEventsChanged ? `Updated Event List: ${selectedEventIds.map(getName).join(', ')}\n` : ''
+  }${
+    hasGuestsChanged ? `Updated Guests: ${guests}\n` : ''
+  }`;
+}
+
 export default function CompetingStep({
   competitionInfo,
   user,
@@ -73,7 +100,7 @@ export default function CompetingStep({
 
   const {
     isRegistered, isPolling, isProcessing, startPolling, refetchRegistration,
-    isPending, isWaitingList, registrationId,
+    isPending, isWaitingList, registration, registrationId,
   } = useRegistration();
 
   const dispatch = useDispatch();
@@ -218,7 +245,14 @@ export default function CompetingStep({
           },
         });
       } else {
-        const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.asArray.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
+        const updateMessage = getUpdateMessage(
+          hasCommentChanged,
+          comment,
+          registration?.competing?.event_ids ?? [],
+          selectedEventIds.asArray,
+          hasGuestsChanged,
+          guests,
+        );
         window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
       }
     }).catch(() => {
@@ -233,6 +267,7 @@ export default function CompetingStep({
     hasCommentChanged,
     comment,
     hasEventsChanged,
+    registration?.competing?.event_ids,
     selectedEventIds.asArray,
     hasGuestsChanged,
     guests,
@@ -270,7 +305,7 @@ export default function CompetingStep({
       selectedEventIds.update(
         currentStepParameters.event_ids.filter((e) => isQualifiedForEvent(
           e,
-          currentStepParameters.qualifications_wcif,
+          currentStepParameters.qualification_wcif,
           currentStepParameters.personalRecords,
         )),
       );
@@ -343,13 +378,13 @@ export default function CompetingStep({
                   ? []
                   : eventsNotQualifiedFor(
                     currentStepParameters.event_ids,
-                    currentStepParameters.qualifications_wcif,
+                    currentStepParameters.qualification_wcif,
                     currentStepParameters.personalRecords,
                   )
               }
             disabledText={(event) => eventQualificationToString(
               { id: event },
-              currentStepParameters.qualifications_wcif[event],
+              currentStepParameters.qualification_wcif[event],
               { short: true },
             )}
               // Don't error if the user hasn't interacted with the form yet

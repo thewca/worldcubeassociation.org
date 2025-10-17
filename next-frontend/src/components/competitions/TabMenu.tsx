@@ -51,7 +51,7 @@ export default function TabMenu({
       <Tabs.List height="fit-content" position="sticky" top="3">
         {tabs.map((tab) => (
           <Link href={tab.href} key={tab.i18nKey}>
-            <Tabs.Trigger value="general">{t(tab.i18nKey)}</Tabs.Trigger>
+            <Tabs.Trigger value={tab.menuKey}>{t(tab.i18nKey)}</Tabs.Trigger>
           </Link>
         ))}
         <Separator />

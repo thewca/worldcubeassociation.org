@@ -1,0 +1,8 @@
+<% provide(:title, @competition.name) %>
+
+<%= render layout: 'nav' do %>
+  <%= react_component("ManualPaymentSetup", {
+    competitionId: @competition.id,
+    accountDetails: @account_details,
+  }) %>
+<% end %>
