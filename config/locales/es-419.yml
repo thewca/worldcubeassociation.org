@@ -308,7 +308,7 @@ es-419:
       by_date: 'hasta el %{date}'
   activity:
     #original_hash: ad38ae8
-    registration: Registro in situ
+    registration: Registro <i>in situ</i>
     #original_hash: 48431e7
     checkin: Registro
     #original_hash: 40ba6a3
@@ -747,8 +747,8 @@ es-419:
           AAAA-MM-DD.
         #original_hash: ac908c9
         name: >-
-          Introduce el nombre completo del competidor con corrección, por
-          ejemplo <strong>Darío Méndez</strong> y no <strong>D Mendez</strong>.
+          Introduce el nombre completo del competidor correctamente, por ejemplo
+          <strong>Martín López</strong> y no <strong>martin lopez</strong>.
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
@@ -779,16 +779,16 @@ es-419:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 27c2251
+        #original_hash: c564b74
         receive_delegate_reports: >-
           Si eres un Delegado Senior o Miembro del WRC o WQAC, recibirás
           informes de delegados de Competiciones WCA de forma predeterminada.
-          Nota: el cambio puede demorar hasta una hora en hacer efecto.
-        #original_hash: 364624c
+          Nota: el cambio puede demorar hasta 12 horas en hacer efecto.
+        #original_hash: 0017d38
         delegate_reports_region: >-
           Si quieres recibir todos los informes de delegados de Competiciones
           WCA, deja este campo en blanco (la primera opción del menú
-          desplegable). Nota: el cambio puede demorar hasta una hora en hacer
+          desplegable). Nota: el cambio puede demorar hasta 12 horas en hacer
           efecto.
         #original_hash: 0627e5c
         otp_attempt: >-
@@ -856,14 +856,14 @@ es-419:
           Si todos los incidentes fueron genéricos, enumera al menos los casos
           más notorios. Marca los recuadros apropiados si estás buscando
           retroalimentación de WIC o WRC.
-        #original_hash: 8af00aa
+        #original_hash: f2309fc
         setup_images: >-
-          Por favor elige al menos %{image_count} imágenes que ilustren la
-          disposición empleada en la competición (zona de mezclas, zona de
-          competición, etc.). Puedes elegir múltiples archivos a la vez. Puedes
-          eliminar imágenes solo cuando suficientes otras imágenes se hayan
-          subido (si quieres reemplazar una imagen, necesitas subir la nueva
-          primero, y luego eliminar la antigua).
+          SE DEBEN incluir al menos %{image_count} imágenes que ilustren la zona
+          de mezclas y de competición (otras imágenes son bienvenidas también).
+          Puedes elegir múltiples archivos a la vez. Puedes eliminar imágenes
+          solo cuando suficientes otras se hayan subido (si quieres reemplazar
+          una imagen, necesitas subir la nueva primero, y luego eliminar la
+          antigua).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -2648,15 +2648,15 @@ es-419:
       #original_hash: b52b179
       info: >-
         Esto creará un registro aprobado. Usa este formulario para añadir
-        registros in situ durante la competición.
+        registros <i>in situ</i> durante la competición.
       #original_hash: a11edb8
       add: Añadir registro
       #original_hash: fd52980
       ots_not_enabled: >-
-        El registro ha cerrado y no se permiten registros in situ. Debes editar
-        la competición para habilitarlo primero.
+        El registro ha cerrado y no se permiten registros <i>in situ</i>. Debes
+        editar la competición para habilitarlo primero.
       #original_hash: 61125b5
-      competition_over: No puedes agregar registros in situ después de la competición.
+      competition_over: No puedes agregar registros <i>in situ</i> después de la competición.
       errors:
         #original_hash: d6dcf5c
         already_registered: Esta persona ya se ha registrado.
@@ -2961,14 +2961,16 @@ es-419:
         Sugerimos que te anotes a los eventos en los que desees competir al
         completar tu registro online. Sin embargo, podrás anotarte a nuevos
         eventos hasta el comienzo de los mismos según corresponda.
-      #original_hash: cf7be5d
+      #original_hash: 51ef4f3
       on_the_spot_registration_fee_html: >-
-        Se aceptarán registros in situ con una cuota base de registro de
-        %{on_the_spot_base_entry_fee}.
-      #original_hash: 1637bea
-      on_the_spot_registration_free: Se aceptarán registros in situ de forma gratuita.
+        Se aceptarán registros <i>in situ</i> si aún hay lugares, con una cuota
+        base de registro de %{on_the_spot_base_entry_fee}.
+      #original_hash: 2b4ea65
+      on_the_spot_registration_free: >-
+        Se aceptarán registros <i>in situ</i> de forma gratuita si aún hay
+        lugares.
       #original_hash: f5f687d
-      no_on_the_spot_registration: No se aceptarán registros in situ.
+      no_on_the_spot_registration: No se aceptarán registros <i>in situ</i>.
       #original_hash: 4df139d
       guests_pay: >-
         Los espectadores pueden asistir pagando una entrada de
@@ -3364,7 +3366,7 @@ es-419:
           #original_hash: 6cf623b
           base_entry_fee: Tarifa básica
           #original_hash: 69780b5
-          on_the_spot_entry_fee: Cuota básica de registro in situ
+          on_the_spot_entry_fee: Cuota básica de registro <i>in situ</i>
           #original_hash: 3542671
           guest_entry_fee: Precio de entrada de acompañantes
           #original_hash: 71c8461
@@ -3385,7 +3387,7 @@ es-419:
             Fecha límite para permitir a los competidores actualizar los eventos
             en los que participan
           #original_hash: 2529d04
-          allow_on_the_spot: Registros in situ
+          allow_on_the_spot: Registros <i>in situ</i>
           #original_hash: b6faf84
           competitor_can_cancel: Cuándo pueden los competidores eliminar su registro
           #original_hash: 7e53b96
@@ -3607,8 +3609,8 @@ es-419:
             jurídicamente vinculantes para el pago de las cuotas.</b>
           #original_hash: 8c4fdf8
           on_the_spot_entry_fee: >-
-            Si esto se pone a 0, se mostrará una frase indicando que se aceptan
-            los registros in situ de forma gratuita.
+            Si esto se pone en 0, se mostrará una frase indicando que se aceptan
+            los registros <i>in situ</i> de forma gratuita.
           #original_hash: 0419547
           guest_entry_fee: >-
             Por el momento esta cifra es informativa, los precios de entrada de
@@ -3643,8 +3645,8 @@ es-419:
             contacto con el equipo organizador. Esta fecha límite no debe ser
             anterior a la fecha de cierre del registro. Dejar este campo en
             blanco quiere decir que los competidores pueden añadir eventos hasta
-            que empiecen. Si hay registro in situ, se debe poner la fecha en la
-            que ocurra la competición.
+            que empiecen. Si hay registro <i>in situ</i>, se debe poner la fecha
+            en la que ocurra la competición.
           #original_hash: da39a3e
           allow_on_the_spot: ''
           #original_hash: da39a3e
@@ -3740,9 +3742,9 @@ es-419:
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
-            'true': Se aceptarán registros in situ
+            'true': Se aceptarán registros <i>in situ</i>
             #original_hash: 0f236df
-            'false': NO se aceptarán registros in situ
+            'false': NO se aceptarán registros <i>in situ</i>
           allow_self_edits:
             #original_hash: 52a2f4a
             'true': >-
@@ -4252,11 +4254,11 @@ es-419:
       #original_hash: a2e4fc9
       event_change_deadline_with_ots: >-
         La fecha límite para actualizar eventos debe ser durante la competición
-        si se aceptan los registros in situ.
+        si se aceptan registros <i>in situ</i>.
       #original_hash: e6400f7
       on_the_spot_with_past_event_change_deadline: >-
-        No se pueden tener registros in situ si la fecha límite para actualizar
-        registros está en el pasado.
+        No se pueden tener registros <i>in situ</i> si la fecha límite para
+        actualizar registros está en el pasado.
       #original_hash: 5ae2437
       series_distance_km: 'La competición se encuentra demasiado lejos de %{competition}.'
       #original_hash: 4a5d7c5
