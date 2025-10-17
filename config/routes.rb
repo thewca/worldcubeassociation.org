@@ -433,6 +433,12 @@ Rails.application.routes.draw do
       resources :incidents, only: %i[index]
       resources :regional_organizations, only: %i[index], path: '/regional-organizations'
 
+      namespace :results do
+        resources :records, only: %i[index show] do
+          get '/history' => 'results#history'
+        end
+      end
+
       resources :competitions, only: %i[index show] do
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'

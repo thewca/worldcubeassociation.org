@@ -39,6 +39,9 @@ paths:
   /v0/incidents:
     $ref: 'paths/regulations/incidentsList.yaml'
 
+  /v0/results/records:
+    $ref: 'paths/results/getRecords.yaml'
+
   /v0/persons/{wca_id}/:
     $ref: 'paths/users/personByWCAId.yaml'
   /v0/persons/{wca_id}/results:

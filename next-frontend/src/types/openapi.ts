@@ -232,6 +232,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v0/results/records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the current records for all regions */
+        get: operations["getRecords"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/persons/{wca_id}/": {
         parameters: {
             query?: never;
@@ -892,6 +909,63 @@ export interface components {
                 comments?: string;
             }[];
         };
+        Record: {
+            type?: string;
+            /** @example 6709306 */
+            id: number;
+            /** @example 1 */
+            pos: number;
+            /** @example 2019WANY36 */
+            person_id: string;
+            /** @example Yiheng Wang (王艺衡) */
+            person_name: string;
+            /** @example China */
+            country_id: string;
+            /** @example China */
+            competition_country_id: string;
+            /** @example HangzhouOpen2024 */
+            competition_id: string;
+            /** @example Hangzhou Open 2024 */
+            competition_name: string;
+            /** @example 222 */
+            event_id: string;
+            /** @example 2 */
+            round_type_id: string;
+            /** @example null */
+            round_id: string | null;
+            /** @example a */
+            format_id: string;
+            /** @example 126 */
+            value1: number;
+            /** @example 84 */
+            value2: number;
+            /** @example 91 */
+            value3: number;
+            /** @example 89 */
+            value4: number;
+            /** @example 85 */
+            value5: number;
+            /** @example 84 */
+            best: number;
+            /** @example 88 */
+            average: number;
+            /** @example null */
+            regional_single_record: string | null;
+            /** @example WR */
+            regional_average_record: string | null;
+            /**
+             * Format: date-time
+             * @example 2024-12-19T13:40:19.000Z
+             */
+            updated_at: string;
+            /** Format: date */
+            start_date: string;
+            /** @example 88 */
+            value: number;
+        };
+        RecordByEvent: {
+            [key: string]: components["schemas"]["Record"][];
+        };
         Rank: {
             id: number;
             person_id: string;
@@ -1315,6 +1389,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Incident"][];
+                };
+            };
+        };
+    };
+    getRecords: {
+        parameters: {
+            query?: {
+                event_id?: string;
+                region?: string;
+                show?: string;
+                gender?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved records */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        records: components["schemas"]["RecordByEvent"];
+                        /** Format: date */
+                        timestamp: string;
+                    };
                 };
             };
         };
