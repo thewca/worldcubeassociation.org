@@ -16,4 +16,10 @@ export PAYLOAD_SECRET
 export PREVIEW_SECRET
 export NEW_RELIC_LICENSE_KEY
 
+for f in encrypted/fonts/TTNormsPro/*.woff2.enc; do
+  cat "$f" |
+    vault write -field=plaintext transit/decrypt/nextjs-fonts ciphertext=- |
+    base64 -d > "src/styles/fonts/TTNormsPro/$(basename $f .enc)";
+done
+
 exec node server.js

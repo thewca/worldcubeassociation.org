@@ -15,6 +15,17 @@ export const metadata: Metadata = {
 };
 
 const devFont = Rubik({ subsets: ["latin"] });
+
+const computeFont = async () => {
+  if (process.env.PROPRIETARY_FONT === "TTNormsPro") {
+    const { ttNormsPro } = await import("@/styles/fonts");
+
+    return ttNormsPro;
+  }
+
+  return devFont;
+};
+
 export const dynamic = "force-dynamic";
 
 export default async function RootLayout({
@@ -22,9 +33,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const appFont = await computeFont();
+
   return (
     <html suppressHydrationWarning>
-      <body className={devFont.className}>
+      <body className={appFont.className}>
         <WCAQueryClientProvider>
           <AuthProvider>
             <UiProvider>
