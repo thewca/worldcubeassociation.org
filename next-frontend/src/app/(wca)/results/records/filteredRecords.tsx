@@ -7,7 +7,7 @@ import { EventId } from "@/lib/wca/data/events";
 import { Alert, Heading, VStack } from "@chakra-ui/react";
 import RecordsTable from "@/components/results/RecordsTable";
 import Loading from "@/components/ui/loading";
-import FilterBox from "@/components/results/FilterBox";
+import { RecordsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
 
 type ValidActions =
@@ -128,7 +128,7 @@ export default function FilteredRecords({
     <VStack align="left" gap={4}>
       <Heading size="5xl">{t("results.records.title")}</Heading>
       {t("results.last_updated_html", { timestamp: data!.timestamp })}
-      <FilterBox filterState={filterState} filterActions={filterActions} />
+      <RecordsFilterBox filterState={filterState} filterActions={filterActions} />
       <RecordsTable records={data!.records!} show={show} />
     </VStack>
   );

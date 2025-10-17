@@ -9,7 +9,6 @@ type FilterState = {
   region: string;
   gender: string;
   show: string;
-  rankingType: string;
 };
 
 type FilterActions = {
@@ -17,7 +16,6 @@ type FilterActions = {
   setRegion: (region: string) => void;
   setGender: (gender: string) => void;
   setShow: (show: string) => void;
-  setType: (type: string) => void;
 };
 
 interface FilterBoxProps {
@@ -29,6 +27,11 @@ interface FilterBoxProps {
 interface RecordsFilterBoxProps {
   filterState: FilterState;
   filterActions: FilterActions;
+}
+
+interface RankingsFilterBoxProps {
+  filterState: FilterState & { rankingType: string };
+  filterActions: FilterActions & { setType: (type: string) => void };
   valueLabelMap: Record<string, string>;
 }
 
@@ -72,7 +75,7 @@ export function RankingsFilterBox({
   filterState,
   filterActions,
   valueLabelMap,
-}: RecordsFilterBoxProps) {
+}: RankingsFilterBoxProps) {
   return (
     <FilterBox filterState={filterState} filterActions={filterActions}>
       <HStack>
