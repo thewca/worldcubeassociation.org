@@ -773,27 +773,7 @@ export interface components {
             value: number;
         };
         RecordByEvent: {
-            222?: components["schemas"]["Record"][];
-            333?: components["schemas"]["Record"][];
-            444?: components["schemas"]["Record"][];
-            555?: components["schemas"]["Record"][];
-            666?: components["schemas"]["Record"][];
-            777?: components["schemas"]["Record"][];
-            "333oh"?: components["schemas"]["Record"][];
-            clock?: components["schemas"]["Record"][];
-            minx?: components["schemas"]["Record"][];
-            pyram?: components["schemas"]["Record"][];
-            skewb?: components["schemas"]["Record"][];
-            sq1?: components["schemas"]["Record"][];
-            "333bf"?: components["schemas"]["Record"][];
-            "333ft"?: components["schemas"]["Record"][];
-            "333fm"?: components["schemas"]["Record"][];
-            "333mbf"?: components["schemas"]["Record"][];
-            "444bf"?: components["schemas"]["Record"][];
-            "555bf"?: components["schemas"]["Record"][];
-            magic?: components["schemas"]["Record"][];
-            mmagic?: components["schemas"]["Record"][];
-            "333mbo"?: components["schemas"]["Record"][];
+            [key: string]: components["schemas"]["Record"][];
         };
         Rank: {
             id: number;

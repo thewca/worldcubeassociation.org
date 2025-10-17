@@ -3,7 +3,7 @@
 import React, { useMemo, useReducer } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
-import { CurrentEventId } from "@wca/helpers";
+import { EventId } from "@/lib/wca/data/events";
 import { Alert, Heading, VStack } from "@chakra-ui/react";
 import RecordsTable from "@/components/results/RecordsTable";
 import Loading from "@/components/ui/loading";
@@ -31,7 +31,7 @@ type FilterAction = {
 };
 
 type FilterParams = {
-  event: string;
+  event: EventId | "all events";
   region: string;
   gender: string;
   show: string;
@@ -47,6 +47,7 @@ function filterReducer(state: FilterParams, action: FilterAction) {
       if (action.payload === "333mbf") {
         return { ...state, event: action.payload, rankingType: "single" };
       }
+
       return { ...state, event: action.payload };
     case ActionTypes.SET_REGION:
       return { ...state, region: action.payload };
@@ -100,11 +101,12 @@ export default function FilteredRecords({
       if (event === "all events") {
         return data.data;
       }
+
       return {
         timestamp: data.data!.timestamp,
         records: {
-          [event as CurrentEventId]:
-            data.data!.records[event as CurrentEventId],
+          [event as EventId]:
+            data.data!.records[event],
         },
       };
     },

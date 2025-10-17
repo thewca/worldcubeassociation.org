@@ -10,8 +10,7 @@ import {
   SlimRecordsRow,
 } from "@/components/results/RecordsRow";
 import { useT } from "@/lib/i18n/useI18n";
-import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
-import { CurrentEventId } from "@wca/helpers";
+import events, { EventId, WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import React from "react";
 import EventIcon from "@/components/EventIcon";
 
@@ -46,7 +45,7 @@ interface SeparateRecordsTableProps {
 export default function RecordsTable({ records, show }: WrapperTableProps) {
   if (show === "mixed") {
     return WCA_EVENT_IDS.map((event) => {
-      const recordsByEvent = records[event as CurrentEventId];
+      const recordsByEvent = records[event as EventId];
 
       return (
         recordsByEvent && (
@@ -70,7 +69,7 @@ export default function RecordsTable({ records, show }: WrapperTableProps) {
   if (show === "separate") {
     // Make sure we don't include any unofficial events and keep the right order
     const allRecords = WCA_EVENT_IDS.reduce(
-      (acc, event) => [...records[event as CurrentEventId]!, ...acc],
+      (acc, event) => [...records[event as EventId]!, ...acc],
       [] as components["schemas"]["Record"][],
     ).toReversed();
 
@@ -86,7 +85,7 @@ export default function RecordsTable({ records, show }: WrapperTableProps) {
 
   if (show === "mixed history") {
     const allRecords = WCA_EVENT_IDS.reduce(
-      (acc, event) => [...records[event as CurrentEventId]!, ...acc],
+      (acc, event) => [...records[event as EventId]!, ...acc],
       [] as components["schemas"]["Record"][],
     ).sort((a, b) => b.start_date.localeCompare(a.start_date));
 
@@ -140,10 +139,10 @@ function HistoryTable({ records }: HistoryTableProps) {
   const { t } = useT();
 
   return WCA_EVENT_IDS.map((eventId) => {
-    if (!records[eventId as CurrentEventId]) return;
+    if (!records[eventId as EventId]) return;
 
     const groupedByType = _.groupBy(
-      records[eventId as CurrentEventId],
+      records[eventId as EventId],
       (record) => record.type,
     );
     const single = groupedByType["single"];
@@ -223,7 +222,7 @@ function SlimRecordsTable({ records }: SlimRecordsTableProps) {
       </Table.Header>
       <Table.Body>
         {WCA_EVENT_IDS.map((eventId) => {
-          const eventRecords = records[eventId as CurrentEventId];
+          const eventRecords = records[eventId as EventId];
           if (!eventRecords) {
             return null;
           }

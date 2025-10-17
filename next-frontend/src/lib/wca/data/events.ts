@@ -3,6 +3,7 @@ import eventsDataRaw from "../../staticData/events.json";
 import formats from "@/lib/wca/data/formats";
 
 type Event = (typeof eventsDataRaw)[number];
+export type EventId = Event["id"];
 
 const events = {
   official: eventsDataRaw.map(extendEvents).filter((e) => e.is_official),

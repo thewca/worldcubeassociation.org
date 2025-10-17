@@ -6070,13 +6070,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wca/helpers@npm:^1.1.5":
-  version: 1.1.5
-  resolution: "@wca/helpers@npm:1.1.5"
-  checksum: 10c0/8a626f2213549586c4cfeb130f04dc8c63ea3f44e6804f29282e0aa973bb17b28cfb3b108b3758b2c677077413c8d9644546f97856abecab3045dc94c287c06f
-  languageName: node
-  linkType: hard
-
 "@zag-js/accordion@npm:1.24.1":
   version: 1.24.1
   resolution: "@zag-js/accordion@npm:1.24.1"
@@ -12815,7 +12808,6 @@ __metadata:
     "@types/react-world-flags": "npm:^1"
     "@types/swagger-ui-react": "npm:^5.18.0"
     "@vitejs/plugin-react": "npm:^5.0.3"
-    "@wca/helpers": "npm:^1.1.5"
     accept-language-parser: "npm:^1.5.0"
     aws4: "npm:^1.13.2"
     dompurify: "npm:^3.2.7"
