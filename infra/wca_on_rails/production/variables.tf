@@ -45,6 +45,11 @@ variable "DATABASE_WRT_USER" {
   description = "The name of the database user that WRT signs in with"
 }
 
+variable "DATABASE_WRT_SENIOR_USER" {
+  type        = string
+  description = "The name of the database user that WRT Senior Members signs in with"
+}
+
 variable "VAULT_ADDR" {
   type        = string
   description = "The address of the vault cluster that is running in our private subnet"
