@@ -19,9 +19,7 @@ export default async function CompetitionLayout({
 
   return (
     <Container minW="80vw" p="8">
-      <TabMenu competitionId={competitionId} competitionInfo={competitionInfo}>
-        {children}
-      </TabMenu>
+      <TabMenu competitionInfo={competitionInfo}>{children}</TabMenu>
     </Container>
   );
 }

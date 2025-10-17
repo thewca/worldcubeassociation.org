@@ -23,11 +23,14 @@ RSpec.describe CLV do
     end
 
     context "for competitions having a competitor limit" do
+      let(:round_333oh) { create(:round, competition: competition1, event_id: "333oh") }
+      let(:round_222) { create(:round, competition: competition2, event_id: "222") }
+
       before(:example) do
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          create_list(result_kind, 10, competition: competition1, event_id: "333oh")
-          create_list(result_kind, 10, competition: competition2, event_id: "222")
+          create_list(result_kind, 10, competition: competition1, event_id: "333oh", round: round_333oh)
+          create_list(result_kind, 10, competition: competition2, event_id: "222", round: round_222)
         end
       end
 
@@ -42,8 +45,8 @@ RSpec.describe CLV do
       # Triggers:
       # COMPETITOR_LIMIT_WARNING
       it "complains when it should" do
-        create(:result, competition: competition2, event_id: "222")
-        create(:inbox_result, competition: competition2, event_id: "222")
+        create(:result, competition: competition2, event_id: "222", round: round_222)
+        create(:inbox_result, competition: competition2, event_id: "222", round: round_222)
         expected_warnings = [
           RV::ValidationWarning.new(CLV::COMPETITOR_LIMIT_WARNING,
                                     :persons, competition2.id,
@@ -60,14 +63,17 @@ RSpec.describe CLV do
     end
 
     context "for competitions without competitor limit enabled" do
+      let(:round_333oh) { create(:round, competition: competition1, event_id: "333oh") }
+      let(:round_222) { create(:round, competition: competition2, event_id: "222") }
+
       it "doesn't complain" do
         competition1.update(competitor_limit_enabled: false)
         competition2.update(competitor_limit_enabled: false)
 
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          create_list(result_kind, 12, competition: competition1, event_id: "333oh")
-          create_list(result_kind, 12, competition: competition2, event_id: "222")
+          create_list(result_kind, 12, competition: competition1, event_id: "333oh", round: round_333oh)
+          create_list(result_kind, 12, competition: competition2, event_id: "222", round: round_222)
         end
 
         validator_args.each do |arg|

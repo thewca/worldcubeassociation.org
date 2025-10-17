@@ -128,6 +128,7 @@ export type StaticTargetLink =
   | '/'
   | '/faq'
   | '/competitions'
+  | '/competitions/mine'
   | '/delegates'
   | '/disclaimer'
   | '/documents'
@@ -248,6 +249,9 @@ export interface Config {
     'disclaimer-page': DisclaimerPage;
     'speedcubing-history-page': SpeedcubingHistoryPage;
     'about-regulations-page': AboutRegulationsPage;
+    'documents-page': DocumentsPage;
+    'faq-page': FaqPage;
+    'logo-page': LogoPage;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
@@ -257,6 +261,9 @@ export interface Config {
     'disclaimer-page': DisclaimerPageSelect<false> | DisclaimerPageSelect<true>;
     'speedcubing-history-page': SpeedcubingHistoryPageSelect<false> | SpeedcubingHistoryPageSelect<true>;
     'about-regulations-page': AboutRegulationsPageSelect<false> | AboutRegulationsPageSelect<true>;
+    'documents-page': DocumentsPageSelect<false> | DocumentsPageSelect<true>;
+    'faq-page': FaqPageSelect<false> | FaqPageSelect<true>;
+    'logo-page': LogoPageSelect<false> | LogoPageSelect<true>;
   };
   locale:
     | 'en'
@@ -350,7 +357,7 @@ export interface Testimonial {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -378,7 +385,7 @@ export interface Announcement {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -410,7 +417,7 @@ export interface User {
     | {
         provider: string;
         providerAccountId: string;
-        type: string;
+        type: 'oidc' | 'oauth' | 'email' | 'webauthn';
         id?: string | null;
       }[]
     | null;
@@ -442,6 +449,22 @@ export interface FaqQuestion {
   category: string | FaqCategory;
   question: string;
   answer: string;
+  answerRichtext?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  answerRichtextMarkdown?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -641,6 +664,8 @@ export interface FaqQuestionsSelect<T extends boolean = true> {
   category?: T;
   question?: T;
   answer?: T;
+  answerRichtext?: T;
+  answerRichtextMarkdown?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -801,6 +826,7 @@ export interface Nav {
 export interface Home {
   id: string;
   item: (TwoBlocksBlock | FullWidthBlock)[];
+  _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -834,7 +860,7 @@ export interface TextCardBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -878,7 +904,7 @@ export interface ImageBannerBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -1017,7 +1043,7 @@ export interface AboutUsPage {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1045,7 +1071,7 @@ export interface AboutUsPage {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1066,7 +1092,7 @@ export interface AboutUsPage {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1097,7 +1123,7 @@ export interface PrivacyPage {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -1115,7 +1141,7 @@ export interface PrivacyPage {
       root: {
         type: string;
         children: {
-          type: string;
+          type: any;
           version: number;
           [k: string]: unknown;
         }[];
@@ -1129,7 +1155,7 @@ export interface PrivacyPage {
     contentMarkdown?: string | null;
     id?: string | null;
     blockName?: string | null;
-    blockType: 'privacyItem';
+    blockType: 'paragraph';
   }[];
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1141,12 +1167,12 @@ export interface PrivacyPage {
 export interface DisclaimerPage {
   id: string;
   blocks: {
-    title?: string | null;
+    title: string;
     content: {
       root: {
         type: string;
         children: {
-          type: string;
+          type: any;
           version: number;
           [k: string]: unknown;
         }[];
@@ -1160,7 +1186,7 @@ export interface DisclaimerPage {
     contentMarkdown?: string | null;
     id?: string | null;
     blockName?: string | null;
-    blockType: 'disclaimerItem';
+    blockType: 'paragraph';
   }[];
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1173,11 +1199,12 @@ export interface SpeedcubingHistoryPage {
   id: string;
   blocks: (
     | {
+        title: string;
         content: {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1205,7 +1232,7 @@ export interface SpeedcubingHistoryPage {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1238,7 +1265,7 @@ export interface AboutRegulationsPage {
       root: {
         type: string;
         children: {
-          type: string;
+          type: any;
           version: number;
           [k: string]: unknown;
         }[];
@@ -1254,6 +1281,99 @@ export interface AboutRegulationsPage {
     blockName?: string | null;
     blockType: 'paragraph';
   }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents-page".
+ */
+export interface DocumentsPage {
+  id: string;
+  documents: {
+    document: string | Document;
+    id?: string | null;
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq-page".
+ */
+export interface FaqPage {
+  id: string;
+  introText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  introTextMarkdown?: string | null;
+  questions: {
+    faqQuestion: string | FaqQuestion;
+    id?: string | null;
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logo-page".
+ */
+export interface LogoPage {
+  id: string;
+  blocks: (
+    | {
+        title: string;
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        contentMarkdown?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'paragraph';
+      }
+    | {
+        title: string;
+        caption: string;
+        images: {
+          image: string | Media;
+          darkBackground?: boolean | null;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'logoVariant';
+      }
+    | {
+        url: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'logoDownload';
+      }
+  )[];
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1338,6 +1458,7 @@ export interface HomeSelect<T extends boolean = true> {
         twoBlocks?: T | TwoBlocksBlockSelect<T>;
         fullWidth?: T | FullWidthBlockSelect<T>;
       };
+  _status?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1566,7 +1687,7 @@ export interface PrivacyPageSelect<T extends boolean = true> {
   blocks?:
     | T
     | {
-        privacyItem?:
+        paragraph?:
           | T
           | {
               title?: T;
@@ -1588,7 +1709,7 @@ export interface DisclaimerPageSelect<T extends boolean = true> {
   blocks?:
     | T
     | {
-        disclaimerItem?:
+        paragraph?:
           | T
           | {
               title?: T;
@@ -1613,6 +1734,7 @@ export interface SpeedcubingHistoryPageSelect<T extends boolean = true> {
         paragraph?:
           | T
           | {
+              title?: T;
               content?: T;
               contentMarkdown?: T;
               id?: T;
@@ -1654,6 +1776,82 @@ export interface AboutRegulationsPageSelect<T extends boolean = true> {
               title?: T;
               content?: T;
               contentMarkdown?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents-page_select".
+ */
+export interface DocumentsPageSelect<T extends boolean = true> {
+  documents?:
+    | T
+    | {
+        document?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq-page_select".
+ */
+export interface FaqPageSelect<T extends boolean = true> {
+  introText?: T;
+  introTextMarkdown?: T;
+  questions?:
+    | T
+    | {
+        faqQuestion?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logo-page_select".
+ */
+export interface LogoPageSelect<T extends boolean = true> {
+  blocks?:
+    | T
+    | {
+        paragraph?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              contentMarkdown?: T;
+              id?: T;
+              blockName?: T;
+            };
+        logoVariant?:
+          | T
+          | {
+              title?: T;
+              caption?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    darkBackground?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoDownload?:
+          | T
+          | {
+              url?: T;
               id?: T;
               blockName?: T;
             };
