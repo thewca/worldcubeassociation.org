@@ -214,7 +214,7 @@ data "aws_iam_policy_document" "task_policy" {
     actions = [
       "rds-db:connect",
     ]
-    resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}"]
+    resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}","arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_SENIOR_USER}"]
   }
   statement {
     effect = "Allow"
