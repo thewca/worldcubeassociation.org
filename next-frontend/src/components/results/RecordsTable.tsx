@@ -121,7 +121,7 @@ function MixedHistoryTable({ records }: MixedHistoryTableProps) {
           <Table.ColumnHeader>
             {t("results.table_elements.competition")}
           </Table.ColumnHeader>
-          <Table.ColumnHeader>
+          <Table.ColumnHeader colSpan={5}>
             {t("results.table_elements.solves")}
           </Table.ColumnHeader>
         </Table.Row>
@@ -174,7 +174,7 @@ function HistoryTable({ records }: HistoryTableProps) {
               <Table.ColumnHeader>
                 {t("results.table_elements.competition")}
               </Table.ColumnHeader>
-              <Table.ColumnHeader>
+              <Table.ColumnHeader colSpan={5}>
                 {t("results.table_elements.solves")}
               </Table.ColumnHeader>
             </Table.Row>
@@ -215,7 +215,7 @@ function SlimRecordsTable({ records }: SlimRecordsTableProps) {
           <Table.ColumnHeader>
             {t("results.table_elements.competition")}
           </Table.ColumnHeader>
-          <Table.ColumnHeader>
+          <Table.ColumnHeader colSpan={5}>
             {t("results.table_elements.solves")}
           </Table.ColumnHeader>
         </Table.Row>
@@ -269,7 +269,7 @@ function SeparateRecordsTable({ recordsByType }: SeparateRecordsTableProps) {
               {t("results.table_elements.competition")}
             </Table.ColumnHeader>
             {type === "average" && (
-              <Table.ColumnHeader>
+              <Table.ColumnHeader colSpan={5}>
                 {t("results.table_elements.solves")}
               </Table.ColumnHeader>
             )}
@@ -311,7 +311,7 @@ function MixedRecordsTable({ records }: RecordsTableProps) {
           <Table.ColumnHeader>
             {t("results.table_elements.competition")}
           </Table.ColumnHeader>
-          <Table.ColumnHeader>
+          <Table.ColumnHeader colSpan={5}>
             {t("results.table_elements.solves")}
           </Table.ColumnHeader>
         </Table.Row>
