@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { cachedServerClient } from "@/lib/wca/wcaAPI";
+import { serverClient } from "@/lib/wca/wcaAPI";
 
 export const getRankings = cache(
   async (searchParams: {
@@ -9,7 +9,7 @@ export const getRankings = cache(
     eventId: string;
     type: string;
   }) => {
-    return await cachedServerClient.GET(
+    return await serverClient.GET(
       "/v0/results/rankings/{event_id}/{type}",
       {
         params: {

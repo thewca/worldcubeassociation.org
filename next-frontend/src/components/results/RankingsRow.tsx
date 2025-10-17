@@ -7,42 +7,13 @@ import {
   PersonCell,
 } from "@/components/results/ResultTableCells";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import _ from "lodash";
+import { recordAttempts } from "@/lib/wca/results/attempts";
 
 interface RankingsRowProps {
   ranking: components["schemas"]["ExtendedResult"];
   index: number;
   isAverage?: boolean;
   isByRegion?: boolean;
-}
-
-function resultAttempts(result: components["schemas"]["ExtendedResult"]) {
-  const definedAttempts = [
-    result?.value1,
-    result?.value2,
-    result?.value3,
-    result?.value4,
-    result?.value5,
-  ].filter((res) => res !== undefined);
-
-  const validAttempts = definedAttempts.filter((res) => res !== 0);
-  const completedAttempts = validAttempts.filter((res) => res > 0);
-  const uncompletedAttempts = validAttempts.filter((res) => res < 0);
-
-  // DNF/DNS values are very small. If all solves were successful,
-  //   then `uncompletedAttempts` is empty and the min is `undefined`,
-  //   which means we fall back to the actually slowest value.
-  const worstResult = _.min(uncompletedAttempts) || _.max(validAttempts);
-  const bestResult = _.min(completedAttempts);
-
-  const bestResultIndex = definedAttempts.indexOf(bestResult!);
-  const worstResultIndex = definedAttempts.indexOf(worstResult!);
-
-  return {
-    definedAttempts,
-    bestResultIndex,
-    worstResultIndex,
-  };
 }
 
 export function RankingsRow({
@@ -55,7 +26,7 @@ export function RankingsRow({
     definedAttempts: attempts,
     bestResultIndex,
     worstResultIndex,
-  } = resultAttempts(ranking);
+  } = recordAttempts(ranking);
 
   return (
     <Table.Row>

@@ -1,5 +1,4 @@
 import Flag from "react-world-flags";
-
 import EventIcon from "@/components/EventIcon";
 import events from "@/lib/wca/data/events";
 import { HStack, Icon, Link, Table } from "@chakra-ui/react";
