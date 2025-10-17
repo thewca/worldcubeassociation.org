@@ -40,7 +40,7 @@ export default function RankingsTable({
             {t("results.table_elements.competition")}
           </Table.ColumnHeader>
           {isAverage && (
-            <Table.ColumnHeader>
+            <Table.ColumnHeader colSpan={5}>
               {t("results.table_elements.solves")}
             </Table.ColumnHeader>
           )}
@@ -49,9 +49,10 @@ export default function RankingsTable({
       <Table.Body>
         {rankings.map((ranking, index) => (
           <RankingsRow
+            key={`${ranking.id}-${index}`}
             ranking={ranking}
             index={index}
-            key={`${ranking.id}-${index}`}
+            isAverage={isAverage}
             isByRegion={isByRegion}
           />
         ))}
