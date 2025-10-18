@@ -14,7 +14,7 @@ import {
   Badge,
   VStack,
   Link as ChakraLink,
-  Center,
+  Center, Icon,
 } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
@@ -63,12 +63,13 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
         <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
       )}
       <Card.Body>
-        <Card.Title>{block.heading}</Card.Title>
+        <Card.Title textStyle="h2" color="colorPalette.textBox.text">{block.heading}</Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
         <Card.Description>
           <MarkdownProse
             content={block.bodyMarkdown!}
-            color="colorPalette.fg"
+            color="colorPalette.textBox.text"
+            textStyle="body"
           />
         </Card.Description>
         {block.buttonText?.trim() && (
@@ -105,13 +106,16 @@ const AnnouncementsSection = ({
           title: announcement.title,
           href: `/articles/${announcement.id}`,
         }))}
+      colorPalette={block.colorPalette}
     />
   );
 };
 
 const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
-  const colorPaletteTone = block.colorPaletteDarker ? 100 : 50;
-  const headingColorPalette = block.headingColor ?? "colorPalette";
+  // TODO GB flip, this should become "brighter" instead of "darker"
+  const colorGradientMode = block.colorPaletteDarker ? ".brighter" : "";
+
+  const headingColor = block.headingColor ? `${block.headingColor}.solid` : `colorPalette.textBox.text${colorGradientMode}`;
 
   return (
     <Card.Root
@@ -127,7 +131,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           objectFit="cover"
           width="100%"
           height="40vh"
-          bg={`colorPalette.${colorPaletteTone}`}
+          bg={`colorPalette.textBox.bg${colorGradientMode}`}
         />
         {/* Gradient Overlay */}
         <Box
@@ -136,7 +140,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           right="0"
           bottom="0"
           left="50%"
-          bgImage={`linear-gradient(to right, transparent, {colors.colorPalette.${colorPaletteTone}})`}
+          bgImage={`linear-gradient(to right, transparent, {colors.colorPalette.textBox.bg${colorGradientMode}})`}
           zIndex="1"
         />
       </Box>
@@ -146,7 +150,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
         zIndex="2"
         color="white"
         p="8"
-        bg={`colorPalette.${colorPaletteTone}`}
+        bg={`colorPalette.textBox.bg${colorGradientMode}`}
         justifyContent="center"
         paddingRight="15%"
         backgroundImage={
@@ -160,16 +164,16 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       >
         <Heading
           size="4xl"
-          color={`${headingColorPalette}.emphasized`}
+          color={headingColor}
           marginBottom="4"
-          textTransform="uppercase"
+          textStyle="h1"
         >
           {block.heading}
         </Heading>
         <MarkdownProse
           content={block.bodyMarkdown!}
-          color="colorPalette.fg"
-          fontSize="md"
+          color={`colorPalette.textBox.text${colorGradientMode}`}
+          textStyle="bodyEmphasis"
         />
       </Card.Body>
     </Card.Root>
@@ -191,7 +195,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
       />
       {block.heading && (
         <Card.Body p={6}>
-          <Heading size="3xl" textTransform="uppercase">
+          <Heading textStyle="h2">
             {block.heading}
           </Heading>
         </Card.Body>
@@ -227,7 +231,9 @@ const FeaturedCompetitions = async ({
                     variant="information"
                     colorPalette={featuredComp.colorPalette}
                   >
-                    <Flag code="US" fallback="US" />
+                    <Icon size="lg">
+                      <Flag code="US" fallback="US" />
+                    </Icon>
                     <CountryMap code="US" bold t={t} /> Seattle
                   </Badge>
                   <Badge

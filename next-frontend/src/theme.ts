@@ -32,6 +32,27 @@ const compileColorScheme = (
     top: { value: `{colors.${baseColor}.1A}` },
     right: { value: `{colors.${baseColor}.darker}` },
   },
+  textBox: {
+    bg: {
+      DEFAULT: {
+        value: {
+          _light: `{colors.${baseColor}.1A}`,
+          _dark: `{colors.${baseColor}.2A}`
+        }, // solid
+      },
+      brighter: {
+        value: { _light: `{colors.${baseColor}.2C}`, _dark: `{colors.${baseColor}.1A}` },
+      }
+    },
+    text: {
+      DEFAULT: {
+        value: { _light: `{colors.${baseColor}.contrast}`, _dark: `{colors.${baseColor}.2B}` },
+      },
+      brighter: {
+        value: { _light: `{colors.${baseColor}.2A}`, _dark: `{colors.${baseColor}.contrast}` },
+      }
+    },
+  },
   gradient: {
     default: {
       value: {
@@ -234,63 +255,89 @@ const customConfig = defineConfig({
     },
     textStyles: {
       h1: {
-        fontSize: "3rem",
-        fontWeight: "extrabold",
-        textTransform: "uppercase",
+        value: {
+          fontSize: "3rem",
+          fontWeight: "extrabold",
+          textTransform: "uppercase",
+        }
       },
       h2: {
-        fontSize: "2.25rem",
-        fontWeight: "extrabold",
+        value: {
+          fontSize: "2.25rem",
+          fontWeight: "extrabold",
+        }
       },
       h3: {
-        fontSize: "1.6875rem",
-        fontWeight: "extrabold"
+        value: {
+          fontSize: "1.6875rem",
+          fontWeight: "extrabold"
+        }
       },
       s1: {
-        fontSize: "1.125rem",
-        fontWeight: "bold",
+        value: {
+          fontSize: "1.125rem",
+          fontWeight: "bold",
+        }
       },
       s2: {
-        fontSize: "1.125rem",
-        fontWeight: "medium",
+        value: {
+          fontSize: "1.125rem",
+          fontWeight: "medium",
+        }
       },
       s3: {
-        fontSize: "1.125rem",
-        fontWeight: "bold",
-        textTransform: "uppercase",
+        value: {
+          fontSize: "1.125rem",
+          fontWeight: "bold",
+          textTransform: "uppercase",
+        }
       },
       s4: {
-        fontSize: "1rem",
-        fontWeight: "medium",
-        textTransform: "uppercase",
-        letterSpacing: "10%",
+        value: {
+          fontSize: "1rem",
+          fontWeight: "medium",
+          textTransform: "uppercase",
+          letterSpacing: "10%",
+        }
       },
       body: {
-        fontSize: "0.875rem",
-        fontWeight: "light",
+        value: {
+          fontSize: "0.875rem",
+          fontWeight: "light",
+        }
       },
       bodyEmphasis: {
-        fontSize: "0.875rem",
-        fontWeight: "medium",
+        value: {
+          fontSize: "0.875rem",
+          fontWeight: "medium",
+        }
       },
       annotation: {
-        fontSize: "0.6875rem",
-        fontWeight: "light",
-        fontStyle: "italic",
+        value: {
+          fontSize: "0.6875rem",
+          fontWeight: "light",
+          fontStyle: "italic",
+        }
       },
       quote: {
-        fontSize: "1rem",
-        fontWeight: "light",
-        fontStyle: "italic",
+        value: {
+          fontSize: "1rem",
+          fontWeight: "light",
+          fontStyle: "italic",
+        }
       },
       hyperlink: {
-        fontSize: "0.875rem",
-        fontWeight: "medium",
-        color: "link",
+        value: {
+          fontSize: "0.875rem",
+          fontWeight: "medium",
+          color: "link",
+        }
       },
       headerLink: {
-        fontSize: "1rem",
-        fontWeight: "medium",
+        value: {
+          fontSize: "1rem",
+          fontWeight: "medium",
+        }
       },
     },
     recipes: {

@@ -529,7 +529,7 @@ export interface DataListVariant {
   /** @default "md" */
   size?: "sm" | "md" | "lg" | undefined
   /** @default "subtle" */
-  variant?: "subtle" | "bold" | "profileStat" | undefined
+  variant?: "subtle" | "bold" | undefined
 }
 
 export type DataListVariantProps = {
@@ -595,7 +595,6 @@ export interface DrawerVariant {
   /** @default "end" */
   placement?: "start" | "end" | "top" | "bottom" | undefined
   contained?: boolean | undefined
-  variant?: "competitionInfo" | undefined
 }
 
 export type DrawerVariantProps = {
@@ -1217,7 +1216,7 @@ export interface TableVariant {
   striped?: boolean | undefined
   showColumnBorder?: boolean | undefined
   /** @default "line" */
-  variant?: "line" | "outline" | "results" | "competitions" | undefined
+  variant?: "line" | "outline" | "competitions" | undefined
   /** @default "md" */
   size?: "sm" | "md" | "lg" | "xs" | undefined
 }

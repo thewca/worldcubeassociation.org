@@ -4,6 +4,7 @@ import { MarkdownProse } from "@/components/Markdown";
 export default function AnnouncementsCard({
   hero,
   others,
+  colorPalette,
 }: {
   hero: {
     title: string;
@@ -13,6 +14,7 @@ export default function AnnouncementsCard({
     fullLink: string;
   };
   others: { title: string; href: string }[];
+  colorPalette: string;
 }) {
   return (
     <Flex direction="column" gap={3} width="full">
@@ -21,15 +23,15 @@ export default function AnnouncementsCard({
         variant="info"
         flexDirection="column"
         overflow="hidden"
-        colorPalette="grey"
+        colorPalette={colorPalette}
         flex="2"
       >
-        <Card.Body bg="blue.100" color="blue.fg">
-          <Card.Title textStyle="4xl">{hero.title}</Card.Title>
-          <Text fontSize="sm" mt={1}>
+        <Card.Body bg="colorPalette.textBox.bg" color="colorPalette.textBox.text">
+          <Card.Title textStyle="h2">{hero.title}</Card.Title>
+          <Text textStyle="s2">
             Posted by {hero.postedBy} · {hero.postedAt}
           </Text>
-          <MarkdownProse content={hero.markdown} />
+          <MarkdownProse content={hero.markdown} textStyle="body" color="colorPalette.textBox.text" />
           <Button mt="auto" mr="auto" asChild>
             <Link href={hero.fullLink}>Read full article</Link>
           </Button>
@@ -42,6 +44,7 @@ export default function AnnouncementsCard({
           <Button
             key={i}
             asChild
+            colorPalette={colorPalette}
             variant="solid"
             width="full"
             justifyContent="flex-start"
