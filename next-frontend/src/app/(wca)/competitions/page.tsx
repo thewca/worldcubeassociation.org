@@ -321,23 +321,13 @@ export default function CompetitionsPage() {
                   competitions
                 </Text>
               </Flex>
-              <Card.Root
-                bg="bg.inverted"
-                color="fg.inverted"
-                shadow="md"
-                overflow="hidden"
-                width="full"
-              >
-                <Card.Body p={0}>
-                  <CompetitionTable
-                    competitions={competitionsDistanceFiltered}
-                    isLoading={competitionsIsFetching}
-                    hasMoreCompsToLoad={hasMoreCompsToLoad}
-                    bottomRef={bottomRef}
-                    t={t}
-                  />
-                </Card.Body>
-              </Card.Root>
+              <CompetitionTable
+                competitions={competitionsDistanceFiltered}
+                isLoading={competitionsIsFetching}
+                hasMoreCompsToLoad={hasMoreCompsToLoad}
+                bottomRef={bottomRef}
+                t={t}
+              />
             </VStack>
           </Card.Body>
         </Card.Root>
@@ -360,19 +350,19 @@ function CompetitionTable({
   bottomRef: (node?: Element | null) => void;
 }) {
   return (
-    <Table.Root size="xs" rounded="md" variant="competitions">
+    <Table.Root size="xs" striped rounded="md" colorPalette="blue" variant="competitions">
       <Table.Body>
         {competitions.map((comp) => (
           <CompetitionTableEntry comp={comp} key={comp.id} />
         ))}
+        <ListViewFooter
+          isLoading={isLoading}
+          hasMoreCompsToLoad={hasMoreCompsToLoad}
+          numCompetitions={competitions.length}
+          bottomRef={bottomRef}
+          t={t}
+        />
       </Table.Body>
-      <ListViewFooter
-        isLoading={isLoading}
-        hasMoreCompsToLoad={hasMoreCompsToLoad}
-        numCompetitions={competitions.length}
-        bottomRef={bottomRef}
-        t={t}
-      />
     </Table.Root>
   );
 }

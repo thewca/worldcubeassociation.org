@@ -9,10 +9,9 @@ import {
   CloseButton,
   Portal,
   List,
-  Button, Icon,
+  Button, Icon, DataList,
 } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
-import { DataListItem, DataListRoot } from "@/components/ui/data-list";
 import RoleBadge, { StaffColor } from "@/components/RoleBadge";
 import MyResultsIcon from "@/components/icons/MyResultsIcon";
 import RegulationsHistoryIcon from "@/components/icons/RegulationsHistoryIcon";
@@ -77,23 +76,33 @@ const ProfileCard: React.FC<ProfileData> = ({
             ))}
           </Flex>
         </Card.Title>
-        <DataListRoot variant="profileStat">
-          <DataListItem label="WCA ID" value={wcaId} />
-          {gender !== "o" && <DataListItem label="Gender" value={gender} />}
-          <DataListItem
-            label="Region"
-            value={
-              <>
-                <Flex gap="1">
-                  <Flag code={regionIso2} fallback="" height="20" width="28" />
-                  Representing {countries.byIso2[regionIso2].id}
-                </Flex>
-              </>
-            }
-          />
-          <DataListItem label="Competitions" value={competitions} />
-          <DataListItem label="Completed Solves" value={completedSolves} />
-        </DataListRoot>
+        <DataList.Root variant="bold">
+          <DataList.Item>
+            <DataList.ItemLabel>WCA ID</DataList.ItemLabel>
+            <DataList.ItemValue>{wcaId}</DataList.ItemValue>
+          </DataList.Item>
+          {gender !== "o" && (
+            <DataList.Item>
+              <DataList.ItemLabel>Gender</DataList.ItemLabel>
+              <DataList.ItemValue>{gender}</DataList.ItemValue>
+            </DataList.Item>
+          )}
+          <DataList.Item>
+            <DataList.ItemLabel>Region</DataList.ItemLabel>
+            <DataList.ItemValue>
+              <Flag code={regionIso2} fallback="" height="20" width="28" />
+              Representing {countries.byIso2[regionIso2].id}
+            </DataList.ItemValue>
+          </DataList.Item>
+          <DataList.Item>
+            <DataList.ItemLabel>Competitions</DataList.ItemLabel>
+            <DataList.ItemValue>{competitions}</DataList.ItemValue>
+          </DataList.Item>
+          <DataList.Item>
+            <DataList.ItemLabel>Completed Solves</DataList.ItemLabel>
+            <DataList.ItemValue>{completedSolves}</DataList.ItemValue>
+          </DataList.Item>
+        </DataList.Root>
       </Card.Body>
       <Card.Footer>
         <Flex flexDirection="row" alignItems="flex-end">

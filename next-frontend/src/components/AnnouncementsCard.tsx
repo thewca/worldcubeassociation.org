@@ -25,7 +25,7 @@ export default function AnnouncementsCard({
         flex="2"
       >
         <Card.Body bg="blue.100" color="blue.fg">
-          <Card.Title>{hero.title}</Card.Title>
+          <Card.Title textStyle="4xl">{hero.title}</Card.Title>
           <Text fontSize="sm" mt={1}>
             Posted by {hero.postedBy} · {hero.postedAt}
           </Text>

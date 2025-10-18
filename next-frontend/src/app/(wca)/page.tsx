@@ -207,9 +207,9 @@ const FeaturedCompetitions = async ({
 }) => {
   const { t } = await getT();
   return (
-    <Card.Root variant="info" colorPalette="grey" width="full">
+    <Card.Root variant="info" colorPalette="gray">
       <Card.Body justifyContent="space-around">
-        <Card.Title display="flex" justifyContent="space-between">
+        <Card.Title display="flex" justifyContent="space-between" textStyle="4xl">
           Featured Upcoming Competitions
           <Button variant="outline">View all Competitions</Button>
         </Card.Title>
@@ -323,7 +323,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                   objectFit="cover"
                 />
                 <Card.Body pr="3em">
-                  <Card.Title>{testimonial.punchline}</Card.Title>
+                  <Card.Title textStyle="4xl">{testimonial.punchline}</Card.Title>
                   <Separator size="md" />
                   <Card.Description>
                     <MarkdownProse

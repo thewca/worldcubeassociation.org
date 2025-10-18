@@ -136,19 +136,20 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
       </Table.Cell>
 
       <Table.Cell minWidth="4em">
-        <Flag code={comp.country_iso2} fallback={comp.country_iso2} />
+        <Icon size="lg">
+          <Flag code={comp.country_iso2} fallback={comp.country_iso2} />
+        </Icon>
       </Table.Cell>
 
       <Drawer.Root
         open={open}
         onOpenChange={(e) => setOpen(e.open)}
-        variant="competitionInfo"
         size="xl"
       >
         <Portal>
           <Drawer.Backdrop />
           <Drawer.Positioner padding="4">
-            <Drawer.Content overflow="hidden">
+            <Drawer.Content overflow="hidden" borderRadius="wca" height="max-content">
               {comp.championship_types.length > 0 && (
                 <Float
                   placement="middle-end"

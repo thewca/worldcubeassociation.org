@@ -423,8 +423,8 @@ const customConfig = defineConfig({
       card: {
         base: {
           root: {
-            colorPalette: "gray",
-            borderRadius: "xl",
+            colorPalette: "white",
+            borderRadius: "wca",
           },
         },
         defaultVariants: {
@@ -492,12 +492,6 @@ const customConfig = defineConfig({
           },
         },
         compoundVariants: [
-          {
-            variant: "info",
-            css: {
-              title: { textStyle: "4xl" }, // needed to supercede the default textStyle
-            },
-          },
           {
             variant: "infoSnippet",
             css: {
@@ -627,24 +621,12 @@ const customConfig = defineConfig({
         slots: [],
         variants: {
           variant: {
-            results: {
-              cell: {
-                p: "0",
-              },
-            },
             competitions: {
               root: {
                 tableLayout: "auto",
               },
               cell: {
-                width: "1%",
                 whiteSpace: "noWrap",
-                padding: "0",
-                "& img": {
-                  height: "1.1em",
-                  width: "2.8em",
-                  borderRadius: "3px",
-                },
               },
               row: {
                 "& td": {
@@ -653,17 +635,18 @@ const customConfig = defineConfig({
                   transitionDuration: "150ms",
                 },
                 cursor: "pointer",
-                width: "100%",
                 "&:nth-of-type(odd) td": {
                   bg: "bg.muted",
                 },
                 "&:hover td": {
-                  bg: "blue.400/60",
+                  bg: "colorPalette.fg/60",
                 },
               },
             },
           },
           size: {
+            // This is following the template of other `size` definitions
+            //   straight from the Chakra source code
             xs: {
               root: {
                 textStyle: "sm",
@@ -680,20 +663,6 @@ const customConfig = defineConfig({
           },
         },
       },
-      drawer: {
-        slots: [],
-        variants: {
-          variant: {
-            competitionInfo: {
-              content: {
-                borderRadius: "xl",
-                shadow: "{shadows.wca}",
-                height: "max-content",
-              },
-            },
-          },
-        },
-      },
       tabs: {
         slots: [],
         variants: {
@@ -701,7 +670,6 @@ const customConfig = defineConfig({
             enclosed: {
               list: {
                 bg: "bg",
-                shadow: "{shadows.wca}",
                 p: "3",
                 borderRadius: "xl",
                 gap: "3",
@@ -776,34 +744,6 @@ const customConfig = defineConfig({
                 "&[data-selected] + &::before": {
                   display: "none",
                 },
-              },
-            },
-          },
-        },
-      },
-      dataList: {
-        slots: [],
-        variants: {
-          variant: {
-            profileStat: {
-              root: {
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                columnGap: "2rem",
-                rowGap: "0.5rem",
-              },
-              item: {
-                flexDirection: "column-reverse",
-                alignItems: "flex-start", // default for left column
-                _even: {
-                  alignItems: "flex-end", // right column overrides
-                },
-              },
-              itemLabel: {
-                fontWeight: "regular",
-              },
-              itemValue: {
-                fontWeight: "semibold",
               },
             },
           },

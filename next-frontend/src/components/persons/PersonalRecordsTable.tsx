@@ -71,7 +71,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
             <LuShare2 /> {/* TODO SLATE - implement share functionality */}
           </Button>
         </Card.Header>
-        <Table.Root size="xs" striped rounded="md" variant="results">
+        <Table.Root size="xs" striped rounded="md">
           <Table.Header>
             <Table.Row bg="bg">
               <Table.ColumnHeader pl="3">
