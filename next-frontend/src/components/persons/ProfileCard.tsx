@@ -44,8 +44,8 @@ const ProfileCard: React.FC<ProfileData> = ({
 }) => {
   return (
     <Card.Root
-      bg="grey.solid"
-      color="wcawhite.contrast"
+      bg="gray.subtle"
+      color="white.contrast"
       h="85lvh"
       rounded="xl"
       size="sm"

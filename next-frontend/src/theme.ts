@@ -1,400 +1,234 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
 
-const customConfig = defineConfig({
-  globalCss: {
-    html: {
-      fontSize: "15px", // 1rem = 15px
+const compileColorScheme = (
+  baseColor: string,
+  textContrast: "light" | "dark" = "light",
+) => ({
+  contrast: { value: `{colors.supplementary.texts.${textContrast}}` },
+  fg: { value: `{colors.${baseColor}.2B}` },
+  subtle: { value: `{colors.${baseColor}.2A}` },
+  muted: { value: `{colors.${baseColor}.2A/90}` },
+  emphasized: { value: `{colors.${baseColor}.2C}` },
+  solid: {
+    value: {
+      _light: `{colors.${baseColor}.1A}`,
+      _dark: `{colors.${baseColor}.2A}`,
     },
   },
-  theme: {
-    keyframes: {
-      slideInGradient: {
-        "0%": { backgroundSize: "0% 100%" },
-        "100%": { backgroundSize: "100% 100%" },
-      },
-      slideOutGradient: {
-        "0%": { backgroundSize: "100% 100%" },
-        "100%": { backgroundSize: "0% 100%" },
-      },
-      dontSlideGradient: {
-        "0%": { backgroundSize: "100% 100%" },
-        "100%": { backgroundSize: "100% 100%" },
+  focusRing: {
+    value: {
+      _light: `{colors.${baseColor}.1A}`,
+      _dark: `{colors.${baseColor}.2A}`,
+    },
+  },
+  highContrast: {
+    value: {
+      _light: `{colors.${baseColor}.1A}`,
+      _dark: `{colors.${baseColor}.2C}`,
+    },
+  },
+  cubeShades: {
+    left: { value: `{colors.${baseColor}.lighter}` },
+    top: { value: `{colors.${baseColor}.1A}` },
+    right: { value: `{colors.${baseColor}.darker}` },
+  },
+  gradient: {
+    default: {
+      value: {
+        _light: `linear-gradient(90deg, {colors.${baseColor}.fg} 0%, {colors.bg} 100%)`,
+        _dark: `linear-gradient(90deg, {colors.${baseColor}.muted} 0%, {colors.bg} 100%)`,
       },
     },
+    hover: {
+      value: {
+        _light: `linear-gradient(90deg, {colors.${baseColor}.fg/80} 0%, {colors.bg} 100%)`,
+        _dark: `linear-gradient(90deg, {colors.${baseColor}.muted/80} 0%, {colors.bg} 100%)`,
+      },
+    },
+  },
+});
+
+const customConfig = defineConfig({
+  theme: {
     tokens: {
       colors: {
-        blue: {
-          50: { value: "#0051BA" }, // Pantone 293 C
-          100: { value: "#003366" },
-          200: { value: "#0153C1" },
-          300: { value: "#42D0FF" },
-          400: { value: "#99C7FF" },
-        },
         green: {
-          50: { value: "#029347" }, // Pantone 348 C
-          100: { value: "#1B4D3E" },
-          300: { value: "#00FF7F" },
-          400: { value: "#C1E6CD" },
+          "1A": { value: "#029347", description: "Pantone 348 C" },
+          "2A": { value: "#1B4D3E" },
+          "2B": { value: "#C1E6CD" },
+          "2C": { value: "#00FF7F" },
+          lighter: { value: "#1AB55C" },
+          darker: { value: "#04632D" },
         },
-        wcawhite: {
-          50: { value: "#FFFFFF" }, // Pantone White
-          100: { value: "#FCFCFC" },
-          200: { value: "#3B3B3B" },
-          300: { value: "#E0DDD5" },
-          400: { value: "#F4F1ED" },
-          500: { value: "#F9F9F9" },
+        white: {
+          DEFAULT: { value: "#FFFFFF" },
+          "1A": { value: "#EEEEEE", description: "Pantone Cool Gray 1C" },
+          "2A": { value: "#3B3B3B" },
+          "2B": { value: "#E0DDD5" },
+          "2C": { value: "#F4F1ED" },
+          lighter: { value: "#FFFFFF" },
+          darker: { value: "#CCCCCC" },
         },
         red: {
-          50: { value: "#C62535" }, // Pantone 1797 C
-          100: { value: "#7A1220" },
-          300: { value: "#FF6B6B" },
-          400: { value: "#F6C5C5" },
+          "1A": { value: "#C62535", description: "Pantone 1797 C" },
+          "2A": { value: "#7A1220" },
+          "2B": { value: "#F6C5C5" },
+          "2C": { value: "#FF6B6B" },
+          lighter: { value: "#E53841" },
+          darker: { value: "#A3131A" },
         },
         yellow: {
-          50: { value: "#FFD313" }, // Pantone 116 C
-          100: { value: "#664D00" },
-          300: { value: "#FFF5AA" },
-          400: { value: "#FFF5B8" },
+          "1A": { value: "#FFD313", description: "Pantone 116 C" },
+          "2A": { value: "#664D00" },
+          "2B": { value: "#FFF5B8" },
+          "2C": { value: "#FFF5AA" },
+          lighter: { value: "#FFDE55" },
+          darker: { value: "#CEA705" },
+        },
+        blue: {
+          "1A": { value: "#0051BA", description: "Pantone 293 C" },
+          "2A": { value: "#003366" },
+          "2B": { value: "#99C7FF" },
+          "2C": { value: "#42D0FF" },
+          lighter: { value: "#066AC4" },
+          darker: { value: "#03458C" },
         },
         orange: {
-          50: { value: "#FF5800" }, // Pantone Orange 021 C
-          100: { value: "#7A2B00" },
-          300: { value: "#FFD59E" },
-          400: { value: "#FFD5BD" },
+          "1A": { value: "#FF5800", description: "Pantone Orange 021 C" },
+          "2A": { value: "#7A2B00" },
+          "2B": { value: "#FFD5BD" },
+          "2C": { value: "#FFD59E" },
+          lighter: { value: "#F96E32" },
+          darker: { value: "#D34405" },
         },
         supplementary: {
-          texts: {
+          text: {
             light: { value: "#FCFCFC" },
             dark: { value: "#1E1E1E" },
-            gray1: { value: "#6B6B6B" },
-            gray2: { value: "#3B3B3B" },
+            lightgray: { value: "#6B6B6B" },
+            darkgray: { value: "#3B3B3B" },
           },
-          bgs: {
+          bg: {
             white: { value: "#FCFCFC" },
             light: { value: "#EDEDED" },
             medium: { value: "#DCDCDC" },
-            dark: { value: "#1E1E1E" },
-            mid: { value: "#B8B8B8" },
-            soft: { value: "#F9F9F9" },
-            transparent: { value: "rgba(0,0,0,0)" },
+            dark: { value: "#B8B8B8" },
+            // not in the styleguide, but necessary for dark mode
+            //   stolen from the text colors above, so texts on Light
+            //   become backgrounds on Dark. Shout if you have better ideas!
+            darker: { value: "#6B6B6B" },
+            darkest: { value: "#3B3B3B" },
+            black: { value: "#1E1E1E" },
           },
-          links: {
-            blue: { value: "#0051BA" },
-          },
+          link: { value: "#0051BA" },
         },
       },
     },
     semanticTokens: {
-      sizes: {
-        "table.xs.cellPadding": { value: "{sizes.table-xs.cellPadding}" },
-        "table.xs.fontSize": { value: "{sizes.table-xs.fontSize}" },
-      },
-      shadows: {
-        wca: {
-          value: {
-            _light: "rgba(17, 17, 26, 0.3) 0px 0px 16px",
-            _dark: "rgba(252, 252, 252, 0.4) 0px 0px 16px",
-          },
-        },
-      },
       colors: {
-        primary: { value: "{colors.blue.50}" },
-        secondary: { value: "{colors.green.50}" },
-        background: { value: "{colors.white.50}" },
-        transparent: { value: "{colors.supplementary.bgs.transparent}" },
-        whiteText: { value: "{colors.supplementary.texts.light}" },
-        textPrimary: { value: "{colors.supplementary.texts.dark}" },
-        textSecondary: { value: "{colors.supplementary.texts.gray1}" },
-        lightBackground: { value: "{colors.supplementary.bgs.light}" },
-        mediumBackground: { value: "{colors.supplementary.bgs.medium}" },
-        link: { value: "{colors.supplementary.links.blue}" },
-        danger: { value: "{colors.red.50}" },
-        warning: { value: "{colors.yellow.50}" },
-        success: { value: "{colors.green.100}" },
-        recordColors: {
-          personal: { value: "{colors.orange.50}" },
-          national: { value: "{colors.green.50}" },
-          continental: { value: "{colors.red.50}" },
-          world: { value: "{colors.blue.50}" },
-        },
-        grey: {
-          solid: {
-            value: {
-              _light: "colors.wcawhite.400",
-              _dark: "colors.wcawhite.200",
-            },
-          },
-          contrast: {
-            value: {
-              _light: "colors.supplementary.texts.dark",
-              _dark: "colors.supplementary.texts.light",
-            },
-          },
-          fg: { value: "{colors.wcawhite.300}" },
-          muted: { value: "{colors.wcawhite.200/90}" },
-          subtle: { value: "{colors.wcawhite.200}" },
-          emphasized: { value: "{colors.wcawhite.400}" },
-          focusRing: {
-            value: {
-              _light: "colors.wcawhite.50",
-              _dark: "colors.wcawhite.200",
-            },
-          },
-          spanBg: { value: "#3e3e3e" },
-          cls1: { value: "#3e3e3e" },
-          cls2: { value: "#7a7a7a" },
-          cls3: { value: "#dcdcdc" },
-          cls4: { value: "#525252" },
-        },
-        black: {
-          spanBg: { value: "#1e1e1e" },
-          cls1: { value: "#1e1e1e" },
-          cls2: { value: "#3b3b3b" },
-          cls3: { value: "#6b6b6b" },
-          cls4: { value: "#282828" },
-        },
-        yellow: {
-          solid: {
-            value: { _light: "colors.yellow.50", _dark: "colors.yellow.100" },
-          },
-          highContrast: {
-            value: { _light: "colors.yellow.50", _dark: "colors.yellow.300" },
-          },
-          contrast: {
-            value: {
-              _light: "colors.supplementary.texts.dark",
-              _dark: "colors.supplementary.texts.light",
-            },
-          },
-          fg: { value: "{colors.yellow.400}" },
-          muted: { value: "{colors.yellow.100/90}" },
-          subtle: { value: "{colors.yellow.100}" },
-          emphasized: { value: "{colors.yellow.300}" },
-          focusRing: {
-            value: { _light: "colors.yellow.50", _dark: "colors.yellow.100" },
-          },
-          gradient: {
-            default: {
-              value: {
-                _light:
-                  "linear-gradient(90deg, {colors.yellow.fg} 0%, {colors.bg} 100%)",
-                _dark:
-                  "linear-gradient(90deg, {colors.yellow.muted} 0%, {colors.bg} 100%)",
-              },
-            },
-            hover: {
-              value: {
-                _light:
-                  "linear-gradient(90deg, {colors.yellow.fg/80} 0%, {colors.bg} 100%)",
-                _dark:
-                  "linear-gradient(90deg, {colors.yellow.muted/80} 0%, {colors.bg} 100%)",
-              },
-            },
-          },
-          spanBg: { value: "#664d00" },
-          cls1: { value: "#664d00" },
-          cls2: { value: "#ffd313" },
-          cls3: { value: "#ffde55" },
-          cls4: { value: "#cea705" },
-        },
-        green: {
-          solid: {
-            value: { _light: "colors.green.50", _dark: "colors.green.100" },
-          },
-          highContrast: {
-            value: { _light: "colors.green.50", _dark: "colors.green.300" },
-          },
-          contrast: { value: "{colors.supplementary.texts.light}" },
-          fg: { value: "{colors.green.400}" },
-          muted: { value: "{colors.green.100/90}" },
-          subtle: { value: "{colors.green.100}" },
-          emphasized: { value: "{colors.green.300}" },
-          focusRing: {
-            value: { _light: "colors.green.50", _dark: "colors.green.100" },
-          },
-          gradient: {
-            default: {
-              value: {
-                _light:
-                  "linear-gradient(90deg, {colors.green.fg} 0%, {colors.bg} 100%)",
-                _dark:
-                  "linear-gradient(90deg, {colors.green.muted} 0%, {colors.bg} 100%)",
-              },
-            },
-            hover: {
-              value: {
-                _light:
-                  "linear-gradient(90deg, {colors.green.fg/80} 0%, {colors.bg} 100%)",
-                _dark:
-                  "linear-gradient(90deg, {colors.green.muted/80} 0%, {colors.bg} 100%)",
-              },
-            },
-          },
-          spanBg: { value: "#1B4D3E" },
-          cls1: { value: "#1B4D3E" },
-          cls2: { value: "#049347" },
-          cls3: { value: "#04632D" },
-          cls4: { value: "#1AB55C" },
-        },
-        blue: {
-          solid: {
-            value: { _light: "colors.blue.50", _dark: "colors.blue.100" },
-          },
-          highContrast: {
-            value: { _light: "colors.blue.50", _dark: "colors.blue.300" },
-          },
-          contrast: { value: "{colors.supplementary.texts.light}" },
-          fg: { value: "{colors.blue.400}" },
-          muted: { value: "{colors.blue.100/90}" },
-          subtle: { value: "{colors.blue.100}" },
-          emphasized: { value: "{colors.blue.300}" },
-          focusRing: {
-            value: { _light: "colors.blue.50", _dark: "colors.blue.100" },
-          },
-          gradient: {
-            default: {
-              value: {
-                _light:
-                  "linear-gradient(90deg, {colors.blue.fg} 0%, {colors.bg} 100%)",
-                _dark:
-                  "linear-gradient(90deg, {colors.blue.muted} 0%, {colors.bg} 100%)",
-              },
-            },
-            hover: {
-              value: {
-                _light:
-                  "linear-gradient(90deg, {colors.blue.fg/80} 0%, {colors.bg} 100%)",
-                _dark:
-                  "linear-gradient(90deg, {colors.blue.muted/80} 0%, {colors.bg} 100%)",
-              },
-            },
-          },
-          spanBg: { value: "#003366" },
-          cls1: { value: "#003366" },
-          cls2: { value: "#0051BA" },
-          cls3: { value: "#03458C" },
-          cls4: { value: "#066AC4" },
-        },
-        red: {
-          solid: {
-            value: { _light: "colors.red.50", _dark: "colors.red.100" },
-          },
-          highContrast: {
-            value: { _light: "colors.red.50", _dark: "colors.red.300" },
-          },
-          contrast: { value: "{colors.supplementary.texts.light}" },
-          fg: { value: "{colors.red.400}" },
-          muted: { value: "{colors.red.100/90}" },
-          subtle: { value: "{colors.red.100}" },
-          emphasized: { value: "{colors.red.300}" },
-          focusRing: {
-            value: { _light: "colors.red.50", _dark: "colors.red.100" },
-          },
-          gradient: {
-            default: {
-              value: {
-                _light:
-                  "linear-gradient(90deg, {colors.red.fg} 0%, {colors.bg} 100%)",
-                _dark:
-                  "linear-gradient(90deg, {colors.red.muted} 0%, {colors.bg} 100%)",
-              },
-            },
-            hover: {
-              value: {
-                _light:
-                  "linear-gradient(90deg, {colors.red.fg/80} 0%, {colors.bg} 100%)",
-                _dark:
-                  "linear-gradient(90deg, {colors.red.muted/80} 0%, {colors.bg} 100%)",
-              },
-            },
-          },
-          spanBg: { value: "#7A1220" },
-          cls1: { value: "#7A1220" },
-          cls2: { value: "#CF1A1B" },
-          cls3: { value: "#A3131A" },
-          cls4: { value: "#E53841" },
-        },
-        orange: {
-          solid: {
-            value: { _light: "colors.orange.50", _dark: "colors.orange.100" },
-          },
-          highContrast: {
-            value: { _light: "colors.orange.50", _dark: "colors.orange.300" },
-          },
-          contrast: {
-            value: {
-              _light: "colors.supplementary.texts.dark",
-              _dark: "colors.supplementary.texts.light",
-            },
-          },
-          fg: { value: "{colors.orange.400}" },
-          muted: { value: "{colors.orange.100/90}" },
-          subtle: { value: "{colors.orange.100}" },
-          emphasized: { value: "{colors.orange.300}" },
-          focusRing: {
-            value: { _light: "colors.orange.50", _dark: "colors.orange.100" },
-          },
-          gradient: {
-            default: {
-              value: {
-                _light:
-                  "linear-gradient(90deg, {colors.orange.fg} 0%, {colors.bg} 100%)",
-                _dark:
-                  "linear-gradient(90deg, {colors.orange.muted} 0%, {colors.bg} 100%)",
-              },
-            },
-            hover: {
-              value: {
-                _light:
-                  "linear-gradient(90deg, {colors.orange.fg/80} 0%, {colors.bg} 100%)",
-                _dark:
-                  "linear-gradient(90deg, {colors.orange.muted/80} 0%, {colors.bg} 100%)",
-              },
-            },
-          },
-          spanBg: { value: "#7A2B00" },
-          cls1: { value: "#7A2B00" },
-          cls2: { value: "#FF5800" },
-          cls3: { value: "#D34405" },
-          cls4: { value: "#F96E32" },
+        link: { value: "{colors.supplementary.link}" },
+        recordMarkers: {
+          personal: { value: "{colors.orange.1A}" },
+          national: { value: "{colors.green.1A}" },
+          continental: { value: "{colors.red.1A}" },
+          world: { value: "{colors.blue.1A}" },
         },
         bg: {
           DEFAULT: {
             value: {
-              _light: "colors.supplementary.bgs.white",
-              _dark: "colors.supplementary.bgs.dark",
+              _light: "{colors.supplementary.bg.white}",
+              _dark: "{colors.supplementary.bg.black}",
             },
           },
-          inverted: {
+          subtle: {
             value: {
-              _light: "colors.supplementary.bgs.white",
-              _dark: "colors.supplementary.bgs.dark",
+              _light: "{colors.supplementary.bg.light}",
+              _dark: "{colors.supplementary.bg.darkest}",
             },
           },
           muted: {
             value: {
-              _light: "colors.supplementary.bgs.medium",
-              _dark: "colors.supplementary.texts.gray2",
+              _light: "{colors.supplementary.bg.light}",
+              _dark: "{colors.supplementary.bg.darkest}",
+            },
+          },
+          emphasized: {
+            value: {
+              _light: "{colors.supplementary.bg.medium}",
+              _dark: "{colors.supplementary.bg.darker}",
+            },
+          },
+          inverted: {
+            value: {
+              _light: "{colors.supplementary.bg.black}",
+              _dark: "{colors.supplementary.bg.white}",
+            },
+          },
+          panel: {
+            value: {
+              _light: "{colors.supplementary.bg.white}",
+              _dark: "{colors.gray.950}",
             },
           },
         },
         fg: {
           DEFAULT: {
             value: {
-              _light: "colors.supplementary.texts.dark",
-              _dark: "colors.supplementary.texts.light",
+              _light: "{colors.supplementary.text.dark}",
+              _dark: "{colors.supplementary.text.light}",
+            },
+          },
+          muted: {
+            value: {
+              _light: "{colors.supplementary.text.darkgray}",
+              _dark: "{colors.supplementary.text.lightgray}",
+            },
+          },
+          subtle: {
+            value: {
+              _light: "{colors.supplementary.text.lightgray}",
+              _dark: "{colors.supplementary.text.darkgray}",
             },
           },
           inverted: {
             value: {
-              _light: "colors.supplementary.texts.dark",
-              _dark: "colors.supplementary.texts.light",
+              _light: "{colors.supplementary.text.light}",
+              _dark: "{colors.supplementary.text.dark}",
             },
+          },
+        },
+        green: compileColorScheme("green"),
+        white: {
+          ...compileColorScheme("white"),
+          // white has special behavior for contrast colors between light/dark modes
+          contrast: {
+            value: {
+              _light: "{colors.supplementary.text.dark}",
+              _dark: "{colors.supplementary.text.light}",
+            },
+          },
+          solid: {
+            value: {
+              _light: "colors.wcawhite.2C",
+              _dark: "colors.wcawhite.2A",
+            },
+          },
+        },
+        red: compileColorScheme("red"),
+        yellow: compileColorScheme("yellow"),
+        blue: compileColorScheme("blue"),
+        orange: compileColorScheme("orange"),
+        black: {
+          // not a full color scheme, only the necessary colors for badges
+          subtle: { value: "{colors.supplementary.text.dark}" },
+          cubeShades: {
+            left: { value: "#282828" },
+            top: { value: "#3B3B3B" },
+            right: { value: "#6B6B6B" },
           },
         },
       },
     },
-
     recipes: {
       button: {
         base: {
@@ -409,12 +243,10 @@ const customConfig = defineConfig({
             solid: {
               borderWidth: "2px",
               borderColor: "colorPalette.solid",
-              bg: "colorPalette.solid",
-              color: "colorPalette.contrast",
               _hover: {
                 bg: "colorPalette.muted",
                 borderColor: "colorPalette.muted",
-                color: "whiteText",
+                // TODO GB color: "whiteText",
               },
               _expanded: {
                 bg: "colorPalette.muted",
@@ -424,7 +256,7 @@ const customConfig = defineConfig({
             outline: {
               borderWidth: "2px",
               borderColor: "colorPalette.solid",
-              color: "fg.DEFAULT",
+              color: "fg",
               bg: "transparent",
               _hover: {
                 bg: "colorPalette.fg/30",
@@ -433,7 +265,7 @@ const customConfig = defineConfig({
             ghost: {
               borderWidth: "0px",
               bg: "transparent",
-              color: "fg.DEFAULT",
+              color: "fg",
               focusRing: "colorPalette.highContrast",
               _hover: {
                 color: "colorPalette.highContrast",
@@ -444,13 +276,13 @@ const customConfig = defineConfig({
               },
             },
             surface: {
-              color: "whiteText",
+              // TODO GB color: "whiteText",
             },
             plain: {
               color: "colorPalette.subtle",
-              bg: "lightBackground",
+              // TODO GB bg: "lightBackground",
               _hover: {
-                bg: "mediumBackground",
+                // TODO GB bg: "mediumBackground",
               },
             },
           },
@@ -467,7 +299,6 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
-          // @ts-expect-error TODO: Fix this
           variant: "solid",
           size: "lg",
         },
@@ -567,7 +398,6 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
-          // @ts-expect-error TODO: Fix this
           variant: "wcaLink",
           hoverArrow: "false",
         },
@@ -596,7 +426,6 @@ const customConfig = defineConfig({
             variant: "achievement",
             css: {
               textStyle: "lg", // needed to supercede the default textStyle
-              // @ts-expect-error TODO: Fix this
               svg: {
                 height: "1.25em",
                 width: "1.25em",
@@ -607,7 +436,6 @@ const customConfig = defineConfig({
             variant: "information",
             css: {
               textStyle: "md", // needed to supercede the default textStyle
-              // @ts-expect-error TODO: Fix this
               svg: {
                 height: "1.1em",
                 width: "1.1em",
@@ -643,7 +471,6 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
-          // @ts-expect-error TODO: Fix this
           size: "sm",
         },
         variants: {
@@ -718,7 +545,6 @@ const customConfig = defineConfig({
             variant: "infoSnippet",
             css: {
               header: {
-                // @ts-expect-error TODO: Fix this
                 svg: {
                   height: "1.15em",
                   width: "1.15em",
