@@ -38,8 +38,8 @@ export default async function FAQ() {
   return (
     <Container>
       <VStack gap="8" width="full" pt="8" alignItems="left">
-        <Heading size="5xl"> Frequently Asked Questions</Heading>
         <Card.Root maxW="40em">
+          <Card.Title textStyle="h1"> Frequently Asked Questions</Card.Title>
           <Card.Body>
             {faqPage.introTextMarkdown ? (
               <MarkdownProse content={faqPage.introTextMarkdown} />

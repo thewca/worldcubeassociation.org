@@ -30,6 +30,7 @@ export interface UtilityValues {
     | "cyan"
     | "purple"
     | "pink"
+    | "wcaWhite"
     | "supplementary"
     | "supplementary.text"
     | "supplementary.bg"

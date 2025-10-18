@@ -81,7 +81,7 @@ const customConfig = defineConfig({
           lighter: { value: "#1AB55C" },
           darker: { value: "#04632D" },
         },
-        white: {
+        wcaWhite: {
           DEFAULT: { value: "#FFFFFF" },
           "1A": { value: "#EEEEEE", description: "Pantone Cool Gray 1C" },
           "2A": { value: "#3B3B3B" },
@@ -220,7 +220,7 @@ const customConfig = defineConfig({
         },
         green: compileColorScheme("green"),
         white: {
-          ...compileColorScheme("white"),
+          ...compileColorScheme("wcaWhite"),
           // white has special behavior for contrast colors between light/dark modes
           contrast: {
             value: {
@@ -230,8 +230,8 @@ const customConfig = defineConfig({
           },
           solid: {
             value: {
-              _light: "colors.wcawhite.2C",
-              _dark: "colors.wcawhite.2A",
+              _light: "{colors.wcaWhite.2C}",
+              _dark: "{colors.wcaWhite.2A}",
             },
           },
         },
@@ -465,6 +465,11 @@ const customConfig = defineConfig({
           },
         },
       },
+      heading: {
+        base: {
+          fontFamily: "inherit",
+        }
+      }
     },
     slotRecipes: {
       card: {

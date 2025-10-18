@@ -62,7 +62,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       {block.headerImage && (
         <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
       )}
-      <Card.Body>
+      <Card.Body bg="colorPalette.textBox.bg">
         <Card.Title textStyle="h2" color="colorPalette.textBox.text">{block.heading}</Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
         <Card.Description>
@@ -162,14 +162,12 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
         backgroundPosition={block.bgPos}
         backgroundRepeat="no-repeat"
       >
-        <Heading
-          size="4xl"
+        <Card.Title
           color={headingColor}
-          marginBottom="4"
           textStyle="h1"
         >
           {block.heading}
-        </Heading>
+        </Card.Title>
         <MarkdownProse
           content={block.bodyMarkdown!}
           color={`colorPalette.textBox.text${colorGradientMode}`}
@@ -195,9 +193,9 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
       />
       {block.heading && (
         <Card.Body p={6}>
-          <Heading textStyle="h2">
+          <Card.Title textStyle="h2">
             {block.heading}
-          </Heading>
+          </Card.Title>
         </Card.Body>
       )}
     </Card.Root>
@@ -213,7 +211,7 @@ const FeaturedCompetitions = async ({
   return (
     <Card.Root variant="info" colorPalette="gray">
       <Card.Body justifyContent="space-around">
-        <Card.Title display="flex" justifyContent="space-between" textStyle="4xl">
+        <Card.Title display="flex" justifyContent="space-between" textStyle="h2">
           Featured Upcoming Competitions
           <Button variant="outline">View all Competitions</Button>
         </Card.Title>
@@ -225,7 +223,7 @@ const FeaturedCompetitions = async ({
               colorPalette={featuredComp.colorPalette}
             >
               <Card.Body>
-                <Heading size="3xl">{featuredComp.competitionId}</Heading>
+                <Card.Title textStyle="h2">{featuredComp.competitionId}</Card.Title>
                 <VStack alignItems="start">
                   <Badge
                     variant="information"
@@ -335,6 +333,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                     <MarkdownProse
                       content={testimonial.fullTestimonialMarkdown!}
                       color="colorPalette.fg"
+                      textStyle="quote"
                     />
                   </Card.Description>
                   <Text>{testimonial.whoDunnit}</Text>
