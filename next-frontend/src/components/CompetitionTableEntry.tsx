@@ -12,6 +12,7 @@ import {
   VStack,
   Heading,
   Float,
+  Icon,
 } from "@chakra-ui/react";
 
 import Flag from "react-world-flags";
@@ -106,7 +107,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
 
   const { t } = useT();
   return (
-    <Table.Row bg="bg.inverted" onClick={() => setOpen(true)} key={comp.id}>
+    <Table.Row bg="bg" onClick={() => setOpen(true)} key={comp.id}>
       <Table.Cell>{registrationStatusIcons[regoStatus] || null}</Table.Cell>
 
       <Table.Cell>
@@ -163,32 +164,34 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
               </Drawer.Header>
               <Drawer.Body>
                 <VStack alignItems="start">
-                  <Badge variant="information" colorPalette="grey">
-                    <Flag
-                      code={comp.country_iso2}
-                      fallback={comp.country_iso2}
-                    />
+                  <Badge variant="information" textStyle="md">
+                    <Icon size="xl">
+                      <Flag
+                        code={comp.country_iso2}
+                        fallback={comp.country_iso2}
+                      />
+                    </Icon>
                     <CountryMap code={comp.country_iso2} bold t={t} />{" "}
                     {comp.city}
                   </Badge>
-                  <Badge variant="information" colorPalette="grey">
-                    <CompRegoCloseDateIcon />
+                  <Badge variant="information" textStyle="md">
+                    <CompRegoCloseDateIcon size="2xl" />
                     {formatDateRange(comp.start_date, comp.end_date)}
                   </Badge>
-                  <Badge variant="information" colorPalette="grey">
+                  <Badge variant="information" textStyle="md">
                     <CompetitorsIcon />
                     {comp.competitor_limit} Competitor Limit
                   </Badge>
-                  <Badge variant="information" colorPalette="grey">
+                  <Badge variant="information" textStyle="md">
                     <RegisterIcon />
                     {comp.competitor_limit} Spots Left
                   </Badge>
-                  <Badge variant="information" colorPalette="grey">
+                  <Badge variant="information" textStyle="md">
                     <LocationIcon />
                     {comp.city}
                   </Badge>
                 </VStack>
-                <Text>Events:</Text>
+                <Text textStyle="md">Events:</Text>
                 {comp.event_ids.map((eventId) => (
                   <EventIcon
                     eventId={eventId}

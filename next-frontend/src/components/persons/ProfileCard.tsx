@@ -9,7 +9,7 @@ import {
   CloseButton,
   Portal,
   List,
-  Button,
+  Button, Icon,
 } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import { DataListItem, DataListRoot } from "@/components/ui/data-list";
@@ -100,18 +100,18 @@ const ProfileCard: React.FC<ProfileData> = ({
           <Flex flexWrap="wrap">
             {" "}
             {/* TODO SLATE - fill out these badges with real info */}
-            <Badge size="lg" variant="achievement">
+            <Badge size="lg" textStyle="lg">
               <NationalChampionshipIcon />
               147 Championship Titles
             </Badge>
-            <Badge size="lg" variant="achievement">
-              <LuStar />
+            <Badge size="lg" textStyle="lg">
+              <Icon><LuStar /></Icon>
               121 Time World Record Holder
             </Badge>
-            <Badge size="lg" variant="achievement">
+            <Badge size="lg" textStyle="lg">
               <RegulationsHistoryIcon />3 Year Career
             </Badge>
-            <Badge size="lg" variant="achievement">
+            <Badge size="lg" textStyle="lg">
               <MyResultsIcon />8 Gold Medals
             </Badge>
           </Flex>

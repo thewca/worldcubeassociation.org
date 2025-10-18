@@ -4,7 +4,7 @@ const compileColorScheme = (
   baseColor: string,
   textContrast: "light" | "dark" = "light",
 ) => ({
-  contrast: { value: `{colors.supplementary.texts.${textContrast}}` },
+  contrast: { value: `{colors.supplementary.text.${textContrast}}` },
   fg: { value: `{colors.${baseColor}.2B}` },
   subtle: { value: `{colors.${baseColor}.2A}` },
   muted: { value: `{colors.${baseColor}.2A/90}` },
@@ -215,7 +215,7 @@ const customConfig = defineConfig({
           },
         },
         red: compileColorScheme("red"),
-        yellow: compileColorScheme("yellow"),
+        yellow: compileColorScheme("yellow", "dark"),
         blue: compileColorScheme("blue"),
         orange: compileColorScheme("orange"),
         black: {
@@ -228,25 +228,84 @@ const customConfig = defineConfig({
           },
         },
       },
+      radii: {
+        wca: { value: "10px" }
+      }
+    },
+    textStyles: {
+      h1: {
+        fontSize: "3rem",
+        fontWeight: "extrabold",
+        textTransform: "uppercase",
+      },
+      h2: {
+        fontSize: "2.25rem",
+        fontWeight: "extrabold",
+      },
+      h3: {
+        fontSize: "1.6875rem",
+        fontWeight: "extrabold"
+      },
+      s1: {
+        fontSize: "1.125rem",
+        fontWeight: "bold",
+      },
+      s2: {
+        fontSize: "1.125rem",
+        fontWeight: "medium",
+      },
+      s3: {
+        fontSize: "1.125rem",
+        fontWeight: "bold",
+        textTransform: "uppercase",
+      },
+      s4: {
+        fontSize: "1rem",
+        fontWeight: "medium",
+        textTransform: "uppercase",
+        letterSpacing: "10%",
+      },
+      body: {
+        fontSize: "0.875rem",
+        fontWeight: "light",
+      },
+      bodyEmphasis: {
+        fontSize: "0.875rem",
+        fontWeight: "medium",
+      },
+      annotation: {
+        fontSize: "0.6875rem",
+        fontWeight: "light",
+        fontStyle: "italic",
+      },
+      quote: {
+        fontSize: "1rem",
+        fontWeight: "light",
+        fontStyle: "italic",
+      },
+      hyperlink: {
+        fontSize: "0.875rem",
+        fontWeight: "medium",
+        color: "link",
+      },
+      headerLink: {
+        fontSize: "1rem",
+        fontWeight: "medium",
+      },
     },
     recipes: {
       button: {
         base: {
-          transitionProperty: "background, border, color, borderColor",
           transitionTimingFunction: "ease",
           borderRadius: "l3",
-          lineHeight: "1.2",
           colorPalette: "blue",
         },
         variants: {
           variant: {
             solid: {
-              borderWidth: "2px",
-              borderColor: "colorPalette.solid",
               _hover: {
                 bg: "colorPalette.muted",
                 borderColor: "colorPalette.muted",
-                // TODO GB color: "whiteText",
               },
               _expanded: {
                 bg: "colorPalette.muted",
@@ -257,39 +316,30 @@ const customConfig = defineConfig({
               borderWidth: "2px",
               borderColor: "colorPalette.solid",
               color: "fg",
-              bg: "transparent",
               _hover: {
                 bg: "colorPalette.fg/30",
+                color: "colorPalette.solid",
               },
             },
             ghost: {
-              borderWidth: "0px",
-              bg: "transparent",
               color: "fg",
               focusRing: "colorPalette.highContrast",
               _hover: {
-                color: "colorPalette.highContrast",
-                bg: "transparent",
+                bg: "colorPalette.fg/30",
+                color: "colorPalette.solid",
               },
               _expanded: {
-                bg: "transparent",
+                bg: "colorPalette.fg/30",
+                color: "colorPalette.solid",
               },
-            },
-            surface: {
-              // TODO GB color: "whiteText",
             },
             plain: {
               color: "colorPalette.subtle",
-              // TODO GB bg: "lightBackground",
-              _hover: {
-                // TODO GB bg: "mediumBackground",
-              },
             },
           },
           size: {
             sm: {
               padding: "3",
-              textStyle: "sm",
             },
             lg: {
               px: "6",
@@ -303,70 +353,25 @@ const customConfig = defineConfig({
           size: "lg",
         },
       },
-      heading: {
-        base: {},
-        variants: {
-          size: {
-            sm: {
-              fontWeight: "medium", // Not used in styleguide
-            },
-            md: {
-              fontWeight: "medium", // Subheading 2
-              textStyle: "lg", // same size as lg, just thinner
-            },
-            lg: {
-              fontWeight: "bold", // Subheading 1
-            },
-            xl: {
-              fontWeight: "bold", // Not used in styleguide
-            },
-            "2xl": {
-              fontWeight: "extrabold", // H4
-            },
-            "3xl": {
-              fontWeight: "extrabold", // H3
-            },
-            "4xl": {
-              fontWeight: "extrabold", // H2
-            },
-            "5xl": {
-              fontWeight: "extrabold", // H1
-              textTransform: "uppercase",
-            },
-            "6xl": {
-              fontWeight: "extrabold", // Not used in styleguide
-            },
-          },
-        },
-      },
       link: {
         base: {
           transitionProperty: "color",
           transitionTimingFunction: "ease",
-          transitionDuration: "200ms",
+          transitionDuration: "moderate",
         },
         variants: {
           variant: {
-            wcaLink: {
-              color: "{colors.blue.highContrast}",
-              fontWeight: "medium",
+            wca: {
+              textStyle: "hyperlink",
               _hover: {
                 color: "{colors.blue.highContrast/80}",
               },
             },
-            plainLink: {
-              color: "{fg.inverse}",
-              fontWeight: "medium",
+            header: {
+              textStyle: "headerLink",
               _hover: {
                 color: "{colors.blue.highContrast}",
-              },
-            },
-            colouredLink: {
-              color: "{fg.inverse}",
-              fontWeight: "medium",
-              _hover: {
-                color: "colorPalette.highContrast",
-              },
+              }
             },
           },
           hoverArrow: {
@@ -398,64 +403,17 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
-          variant: "wcaLink",
-          hoverArrow: "false",
+          variant: "wca",
+          hoverArrow: false,
         },
       },
       badge: {
         variants: {
           variant: {
-            achievement: {
-              bg: "transparent",
-              color: "fg",
-              fontWeight: "medium",
-              gap: "2",
-              mr: "2.5",
-            },
             information: {
-              bg: "transparent",
-              color: "colorPalette.contrast",
+              background: "transparent",
               fontWeight: "light",
-              gap: "2",
-              mr: "2.5",
-            },
-          },
-        },
-        compoundVariants: [
-          {
-            variant: "achievement",
-            css: {
-              textStyle: "lg", // needed to supercede the default textStyle
-              svg: {
-                height: "1.25em",
-                width: "1.25em",
-              },
-            },
-          },
-          {
-            variant: "information",
-            css: {
-              textStyle: "md", // needed to supercede the default textStyle
-              svg: {
-                height: "1.1em",
-                width: "1.1em",
-              },
-              img: {
-                height: "1.1em",
-                width: "auto",
-                borderRadius: "3px",
-              },
-            },
-          },
-        ],
-      },
-      prose: {
-        base: {
-          "& a": {
-            color: "{colors.blue.highContrast}",
-            fontWeight: "medium",
-            _hover: {
-              color: "{colors.blue.highContrast/80}",
+              gap: 2,
             },
           },
         },
@@ -465,8 +423,7 @@ const customConfig = defineConfig({
       card: {
         base: {
           root: {
-            shadow: "{shadows.wca}",
-            colorPalette: "grey",
+            colorPalette: "gray",
             borderRadius: "xl",
           },
         },

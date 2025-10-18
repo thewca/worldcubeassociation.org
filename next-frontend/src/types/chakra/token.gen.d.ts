@@ -569,6 +569,7 @@ export type Token =
   | "radii.l1"
   | "radii.l2"
   | "radii.l3"
+  | "radii.wca"
   | "spacing.-1"
   | "spacing.-2"
   | "spacing.-3"
@@ -1126,7 +1127,7 @@ export type LetterSpacingsToken = "tighter" | "tight" | "wide" | "wider" | "wide
 
 export type LineHeightsToken = "shorter" | "short" | "moderate" | "tall" | "taller"
 
-export type RadiiToken = "none" | "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "full" | "l1" | "l2" | "l3"
+export type RadiiToken = "none" | "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "full" | "l1" | "l2" | "l3" | "wca"
 
 export type SpacingToken =
   | "1"

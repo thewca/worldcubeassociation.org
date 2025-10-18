@@ -3,7 +3,7 @@ import type { ConditionalValue } from "../css.types"
 
 export interface BadgeVariant {
   /** @default "subtle" */
-  variant?: "solid" | "subtle" | "outline" | "surface" | "plain" | "achievement" | "information" | undefined
+  variant?: "solid" | "subtle" | "outline" | "surface" | "plain" | "information" | undefined
   /** @default "sm" */
   size?: "xs" | "sm" | "md" | "lg" | undefined
 }
@@ -118,9 +118,9 @@ export type KbdVariantMap = {
 }
 
 export interface LinkVariant {
-  /** @default "wcaLink" */
-  variant?: "underline" | "plain" | "wcaLink" | "plainLink" | "colouredLink" | undefined
-  /** @default "false" */
+  /** @default "wca" */
+  variant?: "underline" | "plain" | "wca" | "header" | undefined
+  /** @default false */
   hoverArrow?: boolean | undefined
 }
 
@@ -274,16 +274,6 @@ export type ColorSwatchVariantMap = {
   [K in keyof ColorSwatchVariant]: Array<ColorSwatchVariant[K]>
 }
 
-export interface ProseVariant {}
-
-export type ProseVariantProps = {
-  [K in keyof ProseVariant]?: ConditionalValue<ProseVariant[K]> | undefined
-}
-
-export type ProseVariantMap = {
-  [K in keyof ProseVariant]: Array<ProseVariant[K]>
-}
-
 export interface ConfigRecipes {
   badge: SystemRecipeFn<BadgeVariantProps, BadgeVariantMap>
   button: SystemRecipeFn<ButtonVariantProps, ButtonVariantMap>
@@ -304,7 +294,6 @@ export interface ConfigRecipes {
   checkmark: SystemRecipeFn<CheckmarkVariantProps, CheckmarkVariantMap>
   radiomark: SystemRecipeFn<RadiomarkVariantProps, RadiomarkVariantMap>
   colorSwatch: SystemRecipeFn<ColorSwatchVariantProps, ColorSwatchVariantMap>
-  prose: SystemRecipeFn<ProseVariantProps, ProseVariantMap>
 }
 
 // Accordion

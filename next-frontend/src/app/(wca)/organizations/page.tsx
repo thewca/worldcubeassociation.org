@@ -78,7 +78,7 @@ export default async function RegionalOrganizations() {
                 <LinkOverlay asChild>
                   <Link
                     href={org.website}
-                    variant="plainLink"
+                    variant="header"
                     textStyle="2xl"
                     textAlign="center"
                   >
