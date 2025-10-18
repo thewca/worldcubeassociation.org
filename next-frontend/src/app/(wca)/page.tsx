@@ -65,7 +65,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       <Card.Body bg="colorPalette.textBox.bg">
         <Card.Title textStyle="h2" color="colorPalette.textBox.text">{block.heading}</Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
-        <Card.Description>
+        <Card.Description asChild>
           <MarkdownProse
             content={block.bodyMarkdown!}
             color="colorPalette.textBox.text"
