@@ -1,7 +1,5 @@
-"use client";
-
-import { useSession, signIn, signOut } from "next-auth/react";
-import { usePermissions } from "@/providers/PermissionProvider";
+import { auth } from "@/auth";
+import getPermissions from "@/lib/wca/permissions";
 import {
   Button,
   Code,
@@ -16,27 +14,21 @@ import {
 import Link from "next/link";
 
 import { iconMap } from "@/components/icons/iconMap";
-import { WCA_PROVIDER_ID } from "@/auth.config";
 import { route } from "nextjs-routes";
 
-export default function Dashboard() {
-  const { data: session } = useSession();
-  const permissions = usePermissions();
+export default async function Dashboard() {
+  const session = await auth();
+  const permissions = await getPermissions();
 
   return (
     <Container centerContent gap="3">
-      {session ? (
+      {session && (
         <>
           <Text>Welcome, {session.user?.name}</Text>
-          <Button onClick={() => signOut()}>Sign out</Button>
           {permissions && (
             <Code as="pre">{JSON.stringify(permissions, null, 2)}</Code>
           )}
         </>
-      ) : (
-        <Button onClick={() => signIn(WCA_PROVIDER_ID)} colorPalette="blue">
-          Sign in
-        </Button>
       )}
       <Text>Test Links:</Text>
       <HStack>
