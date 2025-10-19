@@ -13,6 +13,7 @@ import {
   Heading,
   Float,
   Icon,
+  HStack,
 } from "@chakra-ui/react";
 
 import Flag from "react-world-flags";
@@ -195,19 +196,21 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                     <LocationIcon />
                     {comp.city}
                   </Badge>
+                  <HStack paddingInline="1.5">
+                    {comp.event_ids.map((eventId) => (
+                      <EventIcon
+                        eventId={eventId}
+                        key={eventId}
+                        boxSize="7"
+                        color={
+                          eventId === comp.main_event_id && eventId !== "333"
+                            ? "green.1A"
+                            : "currentColor"
+                        }
+                      />
+                    ))}
+                  </HStack>
                 </VStack>
-                <Text textStyle="md">Events:</Text>
-                {comp.event_ids.map((eventId) => (
-                  <EventIcon
-                    eventId={eventId}
-                    key={eventId}
-                    color={
-                      eventId === comp.main_event_id
-                        ? "currentColor"
-                        : "supplementary.texts.gray1"
-                    }
-                  />
-                ))}
               </Drawer.Body>
               <Drawer.Footer justifyContent="space-between" width="full">
                 {/* TODO: Only Show register button/link if registration is not full */}

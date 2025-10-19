@@ -6,8 +6,7 @@ import {
   ButtonGroup,
   CheckboxCard,
   CheckboxGroup,
-  HStack,
-  Text,
+  Field,
   VisuallyHidden,
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
@@ -59,9 +58,9 @@ export default function EventSelector({
       contentProps={{ css: { "--tooltip-bg": "#9f3a38" } }}
       content={t("registrations.errors.must_register")}
     >
-      <CheckboxGroup disabled={disabled} alignItems="start">
-        <HStack>
-          <Text textStyle="label">{title}</Text>
+      <Field.Root>
+        <Field.Label textStyle="label">
+          {title}
           {showBreakBeforeButtons ? <br /> : " "}
           <ButtonGroup size="sm">
             {hideAllButton || (
@@ -87,62 +86,63 @@ export default function EventSelector({
               <Button
                 disabled={disabled}
                 onClick={onClearClick}
-                colorPalette="grey"
+                colorPalette="blue"
+                variant="outline"
               >
                 {t("competitions.index.clear")}
               </Button>
             )}
           </ButtonGroup>
-        </HStack>
-        <HStack>
-          {eventList.map((eventId) => {
-            const currentEventSelected = selectedEvents.includes(eventId);
-            const currentEventDisabled = eventsDisabled.includes(eventId);
+        </Field.Label>
+      </Field.Root>
+      <CheckboxGroup disabled={disabled} flexDirection="row">
+        {eventList.map((eventId) => {
+          const currentEventSelected = selectedEvents.includes(eventId);
+          const currentEventDisabled = eventsDisabled.includes(eventId);
 
-            const isDisabled =
-              disabled ||
-              (!currentEventSelected && selectedEvents.length >= maxEvents) ||
-              currentEventDisabled;
+          const isDisabled =
+            disabled ||
+            (!currentEventSelected && selectedEvents.length >= maxEvents) ||
+            currentEventDisabled;
 
-            return (
-              <CheckboxCard.Root
-                key={eventId}
-                variant="surface"
-                colorPalette="green"
-                align="center"
-                disabled={isDisabled}
-                size={eventButtonsCompact ? "sm" : undefined}
-                checked={currentEventSelected}
-                onCheckedChange={() => onEventClick(eventId)}
-              >
-                <CheckboxCard.HiddenInput />
-                <CheckboxCard.Control>
-                  <CheckboxCard.Content>
-                    <Tooltip
-                      content={
-                        currentEventDisabled
-                          ? disabledText(eventId)
-                          : t(`events.${eventId}`)
-                      }
-                      openDelay={200}
-                    >
-                      <EventIcon
-                        eventId={eventId}
-                        fontSize="2xl"
-                        color={currentEventDisabled ? "#FFBBBB" : undefined}
-                      />
-                    </Tooltip>
-                    <VisuallyHidden>
-                      <CheckboxCard.Label>
-                        {t(`events.${eventId}`)}
-                      </CheckboxCard.Label>
-                    </VisuallyHidden>
-                  </CheckboxCard.Content>
-                </CheckboxCard.Control>
-              </CheckboxCard.Root>
-            );
-          })}
-        </HStack>
+          return (
+            <CheckboxCard.Root
+              key={eventId}
+              variant="surface"
+              colorPalette="green"
+              align="center"
+              disabled={isDisabled}
+              size={eventButtonsCompact ? "sm" : undefined}
+              checked={currentEventSelected}
+              onCheckedChange={() => onEventClick(eventId)}
+            >
+              <CheckboxCard.HiddenInput />
+              <CheckboxCard.Control>
+                <CheckboxCard.Content>
+                  <Tooltip
+                    content={
+                      currentEventDisabled
+                        ? disabledText(eventId)
+                        : t(`events.${eventId}`)
+                    }
+                    openDelay={200}
+                  >
+                    <EventIcon
+                      eventId={eventId}
+                      fontSize="2xl"
+                      color={currentEventDisabled ? "#FFBBBB" : undefined}
+                    />
+                  </Tooltip>
+                  <VisuallyHidden>
+                    <CheckboxCard.Label>
+                      {t(`events.${eventId}`)}
+                    </CheckboxCard.Label>
+                  </VisuallyHidden>
+                </CheckboxCard.Content>
+              </CheckboxCard.Control>
+            </CheckboxCard.Root>
+          );
+        })}
       </CheckboxGroup>
     </Tooltip>
   );

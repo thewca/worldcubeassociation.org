@@ -3,19 +3,19 @@
 import {
   Container,
   VStack,
-  Heading,
-  Flex,
   Button,
-  Text,
   Table,
+  Text,
   Card,
   HStack,
   SegmentGroup,
   Slider,
-  Box,
   Input,
   CloseButton,
   InputGroup,
+  SimpleGrid,
+  Field,
+  ButtonGroup,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -165,7 +165,7 @@ export default function CompetitionsPage() {
 
   return (
     <Container>
-      <VStack gap="8" width="full" pt="8" alignItems="left">
+      <VStack gap="8" width="full" pt="8">
         {!session.data?.user && (
           <RemovableCard
             imageUrl="newcomer.png"
@@ -175,138 +175,139 @@ export default function CompetitionsPage() {
             buttonUrl="/"
           />
         )}
-        <Card.Root variant="hero" size="md" overflow="hidden">
-          <Card.Body bg="bg">
-            <VStack gap="8" width="full" alignItems="left">
-              <Heading size="5xl">
-                <AllCompsIcon boxSize="1em" /> All Competitions
-              </Heading>
-              <Flex gap="2" width="full" alignItems="flex-start">
-                <Flex gap="2" width="full" flexDirection="column">
-                  <HStack gap="2" width="full" alignItems="flex-start">
-                    <EventSelector
-                      selectedEvents={filterState.selectedEvents}
-                      title="Event"
-                      onEventClick={(eventId) =>
-                        dispatchFilter({ type: "toggle_event", eventId })
-                      }
-                      onClearClick={() =>
-                        dispatchFilter({ type: "clear_events" })
-                      }
-                      onAllClick={() =>
-                        dispatchFilter({ type: "select_all_events" })
-                      }
-                    />
-                  </HStack>
-                  <HStack>
-                    <Box flex={1}>
-                      <RegionSelector
-                        t={t}
-                        label={t("activerecord.attributes.user.region")}
-                        region={filterState.region}
-                        onRegionChange={(region) =>
-                          dispatchFilter({
-                            type: "set_region",
-                            region,
-                          })
-                        }
-                      />
-                    </Box>
-                    <InputGroup
-                      flex={1}
-                      endElement={
-                        <CloseButton
-                          size="xs"
-                          onClick={() => {
-                            dispatchFilter({
-                              type: "set_search",
-                              search: "",
-                            });
-                          }}
-                          me="-2"
-                        />
-                      }
-                    >
-                      <Input
-                        placeholder="Search"
-                        value={filterState.search}
-                        onChange={(e) => {
+        <Card.Root
+          variant="hero"
+          size="md"
+          overflow="hidden"
+          colorPalette="white"
+        >
+          <Card.Header asChild bg="colorPalette.textBox.bg">
+            <HStack justify="space-between">
+              <Card.Title textStyle="h1">
+                <AllCompsIcon /> All Competitions
+              </Card.Title>
+              <SegmentGroup.Root
+                defaultValue="list"
+                size="lg"
+                colorPalette="blue"
+                variant="inset"
+              >
+                <SegmentGroup.Indicator />
+                <SegmentGroup.Items
+                  items={[
+                    {
+                      value: "list",
+                      label: (
+                        <HStack>
+                          <ListIcon />
+                          List
+                        </HStack>
+                      ),
+                    },
+                    {
+                      value: "map",
+                      label: (
+                        <HStack>
+                          <MapIcon />
+                          Map
+                        </HStack>
+                      ),
+                    },
+                  ]}
+                />
+              </SegmentGroup.Root>
+            </HStack>
+          </Card.Header>
+          <Card.Body bg="colorPalette.textBox.bg" asChild>
+            <VStack gap="2" borderBottom="black">
+              <EventSelector
+                selectedEvents={filterState.selectedEvents}
+                title="Event"
+                onEventClick={(eventId) =>
+                  dispatchFilter({ type: "toggle_event", eventId })
+                }
+                onClearClick={() => dispatchFilter({ type: "clear_events" })}
+                onAllClick={() => dispatchFilter({ type: "select_all_events" })}
+              />
+              <SimpleGrid gap="2" width="full" columns={2}>
+                <RegionSelector
+                  t={t}
+                  label={t("activerecord.attributes.user.region")}
+                  region={filterState.region}
+                  onRegionChange={(region) =>
+                    dispatchFilter({
+                      type: "set_region",
+                      region,
+                    })
+                  }
+                />
+                <Field.Root>
+                  <Field.Label>Name</Field.Label>
+                  <InputGroup
+                    endElement={
+                      <CloseButton
+                        size="xs"
+                        onClick={() => {
                           dispatchFilter({
                             type: "set_search",
-                            search: e.target.value,
+                            search: "",
                           });
                         }}
                       />
-                    </InputGroup>
-                  </HStack>
-                  <HStack gap="2" width="full" alignItems="flex-start">
-                    <Slider.Root
-                      width="250px"
-                      colorPalette="blue"
-                      value={[distanceFilter]}
-                      onValueChange={(e) => setDistanceFilter(e.value[0])}
-                      step={25}
-                      disabled={location === null}
-                    >
-                      <Slider.Label>Distance</Slider.Label>
-                      <Slider.Control>
-                        <Slider.Track>
-                          <Slider.Range />
-                        </Slider.Track>
-                        <Slider.Thumbs />
-                        <Slider.Marks marks={marks} />
-                      </Slider.Control>
-                    </Slider.Root>
-                    {/* TODO: replace these buttons with DatePicker (Chakra does not have one by default) */}
-                    <Button variant="outline">
-                      <CompRegoOpenDateIcon />
-                      Date From
-                    </Button>
-                    <Button variant="outline">
-                      <CompRegoCloseDateIcon />
-                      Date To
-                    </Button>
-                    {/* TODO: add "accordion" functionality to this button */}
-                    <Button variant="outline" size="sm">
-                      Advanced Filters
-                    </Button>
-                  </HStack>
-                </Flex>
-
-                <Flex gap="2" ml="auto">
-                  <SegmentGroup.Root
-                    defaultValue="list"
-                    size="lg"
-                    colorPalette="blue"
-                    variant="inset"
+                    }
                   >
-                    <SegmentGroup.Indicator />
-                    <SegmentGroup.Items
-                      items={[
-                        {
-                          value: "list",
-                          label: (
-                            <HStack>
-                              <ListIcon />
-                              List
-                            </HStack>
-                          ),
-                        },
-                        {
-                          value: "map",
-                          label: (
-                            <HStack>
-                              <MapIcon />
-                              Map
-                            </HStack>
-                          ),
-                        },
-                      ]}
+                    <Input
+                      placeholder="Search"
+                      value={filterState.search}
+                      onChange={(e) => {
+                        dispatchFilter({
+                          type: "set_search",
+                          search: e.target.value,
+                        });
+                      }}
                     />
-                  </SegmentGroup.Root>
-                </Flex>
-              </Flex>
-              <Flex gap="2" width="full">
+                  </InputGroup>
+                </Field.Root>
+              </SimpleGrid>
+              <HStack gap="2" width="full" justify="space-between">
+                <Slider.Root
+                  width="250px"
+                  colorPalette="blue"
+                  value={[distanceFilter]}
+                  onValueChange={(e) => setDistanceFilter(e.value[0])}
+                  step={25}
+                  disabled={location === null}
+                >
+                  <Slider.Label>Distance</Slider.Label>
+                  <Slider.Control>
+                    <Slider.Track>
+                      <Slider.Range />
+                    </Slider.Track>
+                    <Slider.Thumbs />
+                    <Slider.Marks marks={marks} />
+                  </Slider.Control>
+                </Slider.Root>
+                <ButtonGroup variant="outline">
+                  {/* TODO: replace these buttons with DatePicker (Chakra does not have one by default) */}
+                  <Button>
+                    <CompRegoOpenDateIcon />
+                    Date From
+                  </Button>
+                  <Button>
+                    <CompRegoCloseDateIcon />
+                    Date To
+                  </Button>
+                </ButtonGroup>
+                {/* TODO: add "accordion" functionality to this button */}
+                <Button variant="outline" size="sm">
+                  Advanced Filters
+                </Button>
+              </HStack>
+            </VStack>
+          </Card.Body>
+          <Card.Body bg="colorPalette.textBox.bg">
+            <HStack gap="2" width="full" justify="space-between">
+              <HStack>
                 <Text>Registration Key:</Text>
                 <CompRegoFullButOpenOrangeIcon />
                 <Text>Full</Text>
@@ -316,19 +317,19 @@ export default function CompetitionsPage() {
                 <Text>Not Open</Text>
                 <CompRegoClosedRedIcon />
                 <Text>Closed</Text>
-                <Text ml="auto">
-                  Currently Displaying: {competitionsDistanceFiltered.length}{" "}
-                  competitions
-                </Text>
-              </Flex>
-              <CompetitionTable
-                competitions={competitionsDistanceFiltered}
-                isLoading={competitionsIsFetching}
-                hasMoreCompsToLoad={hasMoreCompsToLoad}
-                bottomRef={bottomRef}
-                t={t}
-              />
-            </VStack>
+              </HStack>
+              <Text>
+                Currently Displaying: {competitionsDistanceFiltered.length}{" "}
+                competitions
+              </Text>
+            </HStack>
+            <CompetitionTable
+              competitions={competitionsDistanceFiltered}
+              isLoading={competitionsIsFetching}
+              hasMoreCompsToLoad={hasMoreCompsToLoad}
+              bottomRef={bottomRef}
+              t={t}
+            />
           </Card.Body>
         </Card.Root>
       </VStack>
@@ -356,6 +357,8 @@ function CompetitionTable({
       rounded="md"
       colorPalette="blue"
       variant="competitions"
+      borderWidth="2px"
+      borderRadius="md"
     >
       <Table.Body>
         {competitions.map((comp) => (

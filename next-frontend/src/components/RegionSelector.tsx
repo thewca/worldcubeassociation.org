@@ -1,11 +1,10 @@
 import {
   Combobox,
+  Field,
   Heading,
   Portal,
-  Text,
   useFilter,
   useListCollection,
-  VStack,
 } from "@chakra-ui/react";
 import Flag from "react-world-flags";
 import countries from "@/lib/wca/data/countries";
@@ -118,8 +117,8 @@ export default function RegionSelector({
   });
 
   return (
-    <VStack alignItems="start">
-      <Text textStyle="label">{label}</Text>
+    <Field.Root alignItems="start">
+      <Field.Label textStyle="label">{label}</Field.Label>
       <Combobox.Root
         collection={collection}
         onInputValueChange={(e) => filter(e.inputValue)}
@@ -154,6 +153,6 @@ export default function RegionSelector({
           </Combobox.Positioner>
         </Portal>
       </Combobox.Root>
-    </VStack>
+    </Field.Root>
   );
 }
