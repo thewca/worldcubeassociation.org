@@ -17,6 +17,8 @@ export default function AvatarMenu({ session }: { session: Session | null }) {
     );
   }
 
+  console.log('sidebar', session);
+
   return (
     <Menu.Root positioning={{ placement: "bottom-end" }}>
       <Menu.Trigger rounded="full">
