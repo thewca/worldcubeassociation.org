@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import React from "react";
 import AuthProvider from "@/providers/SessionProvider";
 import WCAQueryClientProvider from "@/providers/WCAQueryClientProvider";
-import PermissionProvider from "@/providers/PermissionProvider";
 import { Provider as UiProvider } from "@/components/ui/provider";
 import Navbar from "./navbar";
 import Footer from "@/components/Footer";
@@ -43,7 +42,7 @@ export default async function RootLayout({
             <UiProvider>
               <Navbar />
               <RandomBackground numRows={8} numCols={18} />
-              <PermissionProvider>{children}</PermissionProvider>
+              {children}
               <Footer />
             </UiProvider>
           </AuthProvider>
