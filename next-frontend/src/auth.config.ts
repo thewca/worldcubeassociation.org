@@ -22,7 +22,7 @@ const baseWcaProvider: Provider = {
       //   but for unknown reasons AuthJS v5 calls it `image`
       image: profile.picture,
       roles: profile.roles,
-      wca_id: profile.preferred_username,
+      wcaId: profile.preferred_username,
     };
   },
 };
@@ -55,8 +55,7 @@ export const authConfig: NextAuthConfig = {
         return {
           ...token,
           wcaUserId: account.providerAccountId,
-          // @ts-expect-error TODO: Fix this
-          wcaId: user?.wca_id,
+          wcaId: user?.wcaId,
           access_token: account.access_token,
           expires_at: account.expires_at,
           refresh_token: account.refresh_token,
@@ -73,7 +72,6 @@ export const authConfig: NextAuthConfig = {
       // @ts-expect-error TODO: Fix this
       session.accessToken = token.access_token;
       session.user.id = token.wcaUserId as string;
-      // @ts-expect-error TODO: Fix this
       session.user.wcaId = token.wcaId as string;
       return session;
     },
@@ -81,8 +79,9 @@ export const authConfig: NextAuthConfig = {
 };
 
 declare module "@auth/core/types" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  interface User extends PayloadAuthjsUser<PayloadUser> {}
+  interface User extends PayloadAuthjsUser<PayloadUser> {
+    wcaId?: string;
+  }
 }
 
 export const payloadAuthConfig: EnrichedAuthConfig = {

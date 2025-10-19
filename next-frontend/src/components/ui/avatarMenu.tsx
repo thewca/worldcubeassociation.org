@@ -17,14 +17,12 @@ export default function AvatarMenu({ session }: { session: Session | null }) {
     );
   }
 
-  console.log('sidebar', session);
-
   return (
     <Menu.Root positioning={{ placement: "bottom-end" }}>
       <Menu.Trigger rounded="full">
         <Avatar.Root>
-          <Avatar.Fallback name="Hello World" />
-          <Avatar.Image src="https://picsum.photos/200" />
+          <Avatar.Fallback name={session.user?.name ?? undefined} />
+          <Avatar.Image src={session.user?.image ?? undefined} />
         </Avatar.Root>
       </Menu.Trigger>
       <Menu.Positioner>
@@ -41,6 +39,21 @@ export default function AvatarMenu({ session }: { session: Session | null }) {
           <Menu.Item value="dashboard" asChild>
             <Link href="/dashboard">Developer Dashboard</Link>
           </Menu.Item>
+          {session.user?.wcaId && (
+            <>
+              <Menu.Separator />
+              <Menu.Item value="myresults" asChild>
+                <Link
+                  href={route({
+                    pathname: "/persons/[wcaId]",
+                    query: { wcaId: session.user.wcaId },
+                  })}
+                >
+                  My Results
+                </Link>
+              </Menu.Item>
+            </>
+          )}
           <Menu.Separator />
           <Menu.Item value="logout" onSelect={() => signOut()}>
             Log Out
