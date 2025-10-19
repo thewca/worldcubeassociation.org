@@ -257,6 +257,7 @@ const customConfig = defineConfig({
       h1: {
         value: {
           fontSize: "3rem",
+          lineHeight: "3.75rem",
           fontWeight: "extrabold",
           textTransform: "uppercase",
         }
@@ -264,30 +265,35 @@ const customConfig = defineConfig({
       h2: {
         value: {
           fontSize: "2.25rem",
+          lineHeight: "2.75rem",
           fontWeight: "extrabold",
         }
       },
       h3: {
         value: {
           fontSize: "1.6875rem",
+          lineHeight: "2.25rem",
           fontWeight: "extrabold"
         }
       },
       s1: {
         value: {
           fontSize: "1.125rem",
+          lineHeight: "1.75rem",
           fontWeight: "bold",
         }
       },
       s2: {
         value: {
           fontSize: "1.125rem",
+          lineHeight: "1.75rem",
           fontWeight: "medium",
         }
       },
       s3: {
         value: {
           fontSize: "1.125rem",
+          lineHeight: "1.75rem",
           fontWeight: "bold",
           textTransform: "uppercase",
         }
@@ -295,6 +301,7 @@ const customConfig = defineConfig({
       s4: {
         value: {
           fontSize: "1rem",
+          lineHeight: "1.5rem",
           fontWeight: "medium",
           textTransform: "uppercase",
           letterSpacing: "10%",
@@ -303,18 +310,21 @@ const customConfig = defineConfig({
       body: {
         value: {
           fontSize: "0.875rem",
+          lineHeight: "1.25rem",
           fontWeight: "light",
         }
       },
       bodyEmphasis: {
         value: {
           fontSize: "0.875rem",
+          lineHeight: "1.25rem",
           fontWeight: "medium",
         }
       },
       annotation: {
         value: {
           fontSize: "0.6875rem",
+          lineHeight: "0.825rem",
           fontWeight: "light",
           fontStyle: "italic",
         }
@@ -322,6 +332,7 @@ const customConfig = defineConfig({
       quote: {
         value: {
           fontSize: "1rem",
+          lineHeight: "1.5rem",
           fontWeight: "light",
           fontStyle: "italic",
         }
@@ -329,6 +340,7 @@ const customConfig = defineConfig({
       hyperlink: {
         value: {
           fontSize: "0.875rem",
+          lineHeight: "1.25rem",
           fontWeight: "medium",
           color: "link",
         }
@@ -336,6 +348,7 @@ const customConfig = defineConfig({
       headerLink: {
         value: {
           fontSize: "1rem",
+          lineHeight: "1.5rem",
           fontWeight: "medium",
         }
       },
@@ -478,9 +491,6 @@ const customConfig = defineConfig({
             colorPalette: "white",
             borderRadius: "wca",
           },
-        },
-        defaultVariants: {
-          size: "sm",
         },
         variants: {
           variant: {

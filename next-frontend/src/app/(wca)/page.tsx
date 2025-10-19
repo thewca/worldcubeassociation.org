@@ -123,7 +123,6 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       flexDirection="row"
       overflow="hidden"
       colorPalette={block.colorPalette}
-      size="lg"
     >
       <Box position="relative" width="50%" overflow="hidden">
         <MediaImage
