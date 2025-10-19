@@ -14,7 +14,8 @@ import {
   VStack,
   Link as ChakraLink,
   Center,
-  Icon, HStack,
+  Icon,
+  HStack,
 } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
@@ -115,7 +116,9 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
   // TODO GB flip, this should become "brighter" instead of "darker"
   const colorGradientMode = block.colorPaletteDarker ? ".brighter" : "";
 
-  const headingColor = block.headingColor ? `${block.headingColor}.solid` : `colorPalette.textBox.text${colorGradientMode}`;
+  const headingColor = block.headingColor
+    ? `${block.headingColor}.solid`
+    : `colorPalette.textBox.text${colorGradientMode}`;
 
   return (
     <Card.Root
@@ -161,10 +164,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
         backgroundPosition={block.bgPos}
         backgroundRepeat="no-repeat"
       >
-        <Card.Title
-          color={headingColor}
-          textStyle="h1"
-        >
+        <Card.Title color={headingColor} textStyle="h1">
           {block.heading}
         </Card.Title>
         <MarkdownProse
@@ -193,9 +193,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
       />
       {block.heading && (
         <Card.Body p={6}>
-          <Card.Title textStyle="h2">
-            {block.heading}
-          </Card.Title>
+          <Card.Title textStyle="h2">{block.heading}</Card.Title>
         </Card.Body>
       )}
     </Card.Root>
@@ -226,7 +224,9 @@ const FeaturedCompetitions = async ({
               colorPalette={featuredComp.colorPalette}
             >
               <Card.Header bg="colorPalette.textBox.bg">
-                <Card.Title textStyle="h2" color="colorPalette.textBox.text">{featuredComp.competitionId}</Card.Title>
+                <Card.Title textStyle="h2" color="colorPalette.textBox.text">
+                  {featuredComp.competitionId}
+                </Card.Title>
                 <Card.Description>
                   <Badge
                     variant="information"
@@ -236,7 +236,12 @@ const FeaturedCompetitions = async ({
                     <Icon size="lg">
                       <Flag code="US" fallback="US" />
                     </Icon>
-                    <CountryMap code="US" t={t} color="colorPalette.textBox.text" /> Seattle
+                    <CountryMap
+                      code="US"
+                      t={t}
+                      color="colorPalette.textBox.text"
+                    />{" "}
+                    Seattle
                   </Badge>
                 </Card.Description>
               </Card.Header>
@@ -335,7 +340,9 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                   objectFit="cover"
                 />
                 <Card.Body pr="3em">
-                  <Card.Title textStyle="h1">{testimonial.punchline}</Card.Title>
+                  <Card.Title textStyle="h1">
+                    {testimonial.punchline}
+                  </Card.Title>
                   <Separator size="md" />
                   <MarkdownProse
                     as={Card.Description}
@@ -394,12 +401,7 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
   const RenderAs = isHorizontal ? SimpleGrid : VStack;
 
   return (
-    <RenderAs
-      key={keyPrefix}
-      columns={columnCount}
-      gap={8}
-      width="full"
-    >
+    <RenderAs key={keyPrefix} columns={columnCount} gap={8} width="full">
       {entry.blocks.map((subEntry, i) => {
         const key = `${keyPrefix}-${i}`;
 

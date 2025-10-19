@@ -50,12 +50,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
   };
 
   return (
-    <Card.Root
-      bg="bg"
-      shadow="wca"
-      overflow="hidden"
-      width="full"
-    >
+    <Card.Root bg="bg" shadow="wca" overflow="hidden" width="full">
       <Card.Body p={0}>
         <Card.Header display="flex" flexDirection="row" alignItems="center">
           <Card.Title
@@ -83,26 +78,16 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                 </Flex>
               </Table.ColumnHeader>
               <Tooltip content="National Ranking" showArrow openDelay={100}>
-                <Table.ColumnHeader textAlign="right">
-                  NR
-                </Table.ColumnHeader>
+                <Table.ColumnHeader textAlign="right">NR</Table.ColumnHeader>
               </Tooltip>
               <Tooltip content="Continental Ranking" showArrow openDelay={100}>
-                <Table.ColumnHeader textAlign="right">
-                  CR
-                </Table.ColumnHeader>
+                <Table.ColumnHeader textAlign="right">CR</Table.ColumnHeader>
               </Tooltip>
               <Tooltip content="World Ranking" showArrow openDelay={100}>
-                <Table.ColumnHeader textAlign="right">
-                  WR
-                </Table.ColumnHeader>
+                <Table.ColumnHeader textAlign="right">WR</Table.ColumnHeader>
               </Tooltip>
-              <Table.ColumnHeader textAlign="right">
-                Single
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                Average
-              </Table.ColumnHeader>
+              <Table.ColumnHeader textAlign="right">Single</Table.ColumnHeader>
+              <Table.ColumnHeader>Average</Table.ColumnHeader>
               <Tooltip content="World Ranking" showArrow openDelay={100}>
                 <Table.ColumnHeader>WR</Table.ColumnHeader>
               </Tooltip>
@@ -155,15 +140,10 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                   >
                     {record.swr}
                   </Table.Cell>
-                  <Table.Cell
-                    fontWeight="medium"
-                    textAlign="right"
-                  >
+                  <Table.Cell fontWeight="medium" textAlign="right">
                     {record.single}
                   </Table.Cell>
-                  <Table.Cell fontWeight="medium">
-                    {record.average}
-                  </Table.Cell>
+                  <Table.Cell fontWeight="medium">{record.average}</Table.Cell>
                   <Table.Cell
                     color={getColor(record.awr)}
                     fontWeight={

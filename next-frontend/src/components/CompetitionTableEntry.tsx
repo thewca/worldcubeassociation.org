@@ -141,15 +141,15 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
         </Icon>
       </Table.Cell>
 
-      <Drawer.Root
-        open={open}
-        onOpenChange={(e) => setOpen(e.open)}
-        size="xl"
-      >
+      <Drawer.Root open={open} onOpenChange={(e) => setOpen(e.open)} size="xl">
         <Portal>
           <Drawer.Backdrop />
           <Drawer.Positioner padding="4">
-            <Drawer.Content overflow="hidden" borderRadius="wca" height="max-content">
+            <Drawer.Content
+              overflow="hidden"
+              borderRadius="wca"
+              height="max-content"
+            >
               {comp.championship_types.length > 0 && (
                 <Float
                   placement="middle-end"
@@ -172,7 +172,11 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                         fallback={comp.country_iso2}
                       />
                     </Icon>
-                    <CountryMap code={comp.country_iso2} t={t} fontWeight="bold" />{" "}
+                    <CountryMap
+                      code={comp.country_iso2}
+                      t={t}
+                      fontWeight="bold"
+                    />{" "}
                     {comp.city}
                   </Badge>
                   <Badge variant="information" textStyle="md">

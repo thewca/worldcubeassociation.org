@@ -55,7 +55,11 @@ export default function PsychsheetTable({
                       <Icon asChild size="sm">
                         <Flag code={registration.country_iso2} />
                       </Icon>
-                      <CountryMap code={registration.country_iso2} t={t} fontWeight="bold" />
+                      <CountryMap
+                        code={registration.country_iso2}
+                        t={t}
+                        fontWeight="bold"
+                      />
                     </HStack>
                   </Table.Cell>
                   <Table.Cell>{registration.single_rank}</Table.Cell>

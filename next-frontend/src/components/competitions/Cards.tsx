@@ -463,7 +463,11 @@ export function InfoCard({
             </Card.Header>
             <Card.Body>
               <Text>{competitionInfo.city}, </Text>
-              <CountryMap code={competitionInfo.country_iso2} t={t} fontWeight="bold" />
+              <CountryMap
+                code={competitionInfo.country_iso2}
+                t={t}
+                fontWeight="bold"
+              />
             </Card.Body>
           </Card.Root>
 

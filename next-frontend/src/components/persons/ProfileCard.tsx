@@ -9,7 +9,9 @@ import {
   CloseButton,
   Portal,
   List,
-  Button, Icon, DataList,
+  Button,
+  Icon,
+  DataList,
 } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import RoleBadge, { StaffColor } from "@/components/RoleBadge";
@@ -114,7 +116,9 @@ const ProfileCard: React.FC<ProfileData> = ({
               147 Championship Titles
             </Badge>
             <Badge size="lg" textStyle="lg">
-              <Icon><LuStar /></Icon>
+              <Icon>
+                <LuStar />
+              </Icon>
               121 Time World Record Holder
             </Badge>
             <Badge size="lg" textStyle="lg">

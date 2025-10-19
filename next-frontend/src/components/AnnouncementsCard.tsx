@@ -1,4 +1,4 @@
-import { Button, Flex, Link, Text, VStack, Card } from "@chakra-ui/react";
+import { Button, Flex, Link, VStack, Card } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
 
 export default function AnnouncementsCard({
@@ -26,14 +26,22 @@ export default function AnnouncementsCard({
         colorPalette={colorPalette}
         flex="2"
       >
-        <Card.Header bg="colorPalette.textBox.bg" color="colorPalette.textBox.text">
+        <Card.Header
+          bg="colorPalette.textBox.bg"
+          color="colorPalette.textBox.text"
+        >
           <Card.Title textStyle="h2">{hero.title}</Card.Title>
           <Card.Description textStyle="s2">
             Posted by {hero.postedBy} · {hero.postedAt}
           </Card.Description>
         </Card.Header>
         <Card.Body bg="colorPalette.textBox.bg">
-          <MarkdownProse as={Card.Description} content={hero.markdown} textStyle="body" color="colorPalette.textBox.text" />
+          <MarkdownProse
+            as={Card.Description}
+            content={hero.markdown}
+            textStyle="body"
+            color="colorPalette.textBox.text"
+          />
         </Card.Body>
         <Card.Footer bg="colorPalette.textBox.bg">
           <Button mt="auto" mr="auto" asChild>
