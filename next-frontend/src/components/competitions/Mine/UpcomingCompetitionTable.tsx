@@ -5,7 +5,6 @@ import {
   NameTableCell,
   ReportTableCell,
 } from "./TableCells";
-import { usePermissions } from "@/providers/PermissionProvider";
 import { toRelativeOptions } from "@/lib/wca/dates";
 import { TFunction } from "i18next";
 import { SiCheckmarx, SiClockify } from "react-icons/si";
@@ -17,6 +16,8 @@ import { Alert, Table } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
 import { components } from "@/types/openapi";
+import Loading from "@/components/ui/loading";
+import { usePermissionsQuery } from "@/lib/hooks/usePermissionsQuery";
 
 const competingStatusIcon = (competingStatus: string) => {
   switch (competingStatus) {
@@ -130,11 +131,22 @@ export default function UpcomingCompetitionTable({
   registrationStatusByCompetition,
   fallbackMessage = undefined,
 }: UpcomingCompetitionTableProps) {
-  const { canViewDelegateReport, canAdministerCompetition } = usePermissions()!;
   const {
     t,
     i18n: { language: lng },
   } = useT();
+
+  const { data: permissions, isLoading } = usePermissionsQuery();
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (!permissions) {
+    return null;
+  }
+
+  const { canViewDelegateReport, canAdministerCompetition } = permissions;
 
   const canViewAnyReport = competitions.some((c) =>
     canViewDelegateReport(c.id),

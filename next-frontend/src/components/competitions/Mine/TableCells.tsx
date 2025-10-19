@@ -1,6 +1,5 @@
 import countries from "@/lib/wca/data/countries";
 import { HStack, IconButton, Table } from "@chakra-ui/react";
-import { usePermissions } from "@/providers/PermissionProvider";
 import { AiFillFileImage, AiFillTrophy } from "react-icons/ai";
 import { useT } from "@/lib/i18n/useI18n";
 import EditIcon from "@/components/icons/EditIcon";
@@ -8,6 +7,7 @@ import { WarningIcon } from "@payloadcms/ui";
 import { Tooltip } from "@/components/ui/tooltip";
 import { dateRange } from "@/lib/wca/dates";
 import { components } from "@/types/openapi";
+import { usePermissionsQuery } from "@/lib/hooks/usePermissionsQuery";
 
 interface TableCellProps {
   competition: components["schemas"]["MyCompetition"];
@@ -54,16 +54,24 @@ export function ReportTableCell({
   isReportPosted,
   isPastCompetition,
 }: ReportTableCellProps) {
+  const { t } = useT();
+
+  const { data: permissions, isLoading } = usePermissionsQuery();
+
+  if (isLoading || !permissions) {
+    return <Table.Cell />;
+  }
+
   const {
     canViewDelegateReport,
     canEditDelegateReport,
     canAdministerCompetition,
-  } = usePermissions()!;
+  } = permissions;
 
-  const { t } = useT();
   if (!canViewDelegateReport(competitionId)) {
     return <Table.Cell />;
   }
+
   return (
     <Table.Cell>
       <HStack>
