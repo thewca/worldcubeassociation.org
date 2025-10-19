@@ -14,7 +14,7 @@ import {
   VStack,
   Link as ChakraLink,
   Center,
-  Icon,
+  Icon, HStack,
 } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
@@ -62,22 +62,22 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       {block.headerImage && (
         <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
       )}
-      <Card.Body bg="colorPalette.textBox.bg">
-        <Card.Title textStyle="h2" color="colorPalette.textBox.text">{block.heading}</Card.Title>
+      <Card.Body bg="colorPalette.textBox.bg" color="colorPalette.textBox.text">
+        <Card.Title textStyle="h2">{block.heading}</Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
-        <Card.Description asChild>
-          <MarkdownProse
-            content={block.bodyMarkdown!}
-            color="colorPalette.textBox.text"
-            textStyle="body"
-          />
-        </Card.Description>
+        <MarkdownProse
+          as={Card.Description}
+          content={block.bodyMarkdown!}
+          textStyle="body"
+        />
+      </Card.Body>
+      <Card.Footer bg="colorPalette.textBox.bg">
         {block.buttonText?.trim() && (
           <Button mr="auto" asChild>
             <ChakraLink href={block.buttonLink!}>{block.buttonText}</ChakraLink>
           </Button>
         )}
-      </Card.Body>
+      </Card.Footer>
     </Card.Root>
   );
 };
@@ -208,12 +208,15 @@ const FeaturedCompetitions = async ({
   block: FeaturedCompetitionsBlock;
 }) => {
   const { t } = await getT();
+
   return (
-    <Card.Root variant="info" colorPalette="gray">
-      <Card.Body justifyContent="space-around">
-        <Card.Title display="flex" justifyContent="space-between" textStyle="h2">
-          Featured Upcoming Competitions
-          <Button variant="outline">View all Competitions</Button>
+    <Card.Root variant="info" colorPalette="white" width="full">
+      <Card.Body>
+        <Card.Title textStyle="h2" asChild>
+          <HStack justify="space-between">
+            <Text>Featured Upcoming Competitions</Text>
+            <Button variant="outline">View all Competitions</Button>
+          </HStack>
         </Card.Title>
         <SimpleGrid columns={block.competitions?.length} gap={4}>
           {block.competitions?.map((featuredComp) => (
@@ -222,18 +225,23 @@ const FeaturedCompetitions = async ({
               variant="info"
               colorPalette={featuredComp.colorPalette}
             >
-              <Card.Body>
-                <Card.Title textStyle="h2">{featuredComp.competitionId}</Card.Title>
-                <VStack alignItems="start">
+              <Card.Header bg="colorPalette.textBox.bg">
+                <Card.Title textStyle="h2" color="colorPalette.textBox.text">{featuredComp.competitionId}</Card.Title>
+                <Card.Description>
                   <Badge
                     variant="information"
                     colorPalette={featuredComp.colorPalette}
+                    textStyle="s3"
                   >
                     <Icon size="lg">
                       <Flag code="US" fallback="US" />
                     </Icon>
-                    <CountryMap code="US" bold t={t} /> Seattle
+                    <CountryMap code="US" t={t} color="colorPalette.textBox.text" /> Seattle
                   </Badge>
+                </Card.Description>
+              </Card.Header>
+              <Card.Body bg="colorPalette.textBox.bg">
+                <VStack alignItems="start">
                   <Badge
                     variant="information"
                     colorPalette={featuredComp.colorPalette}

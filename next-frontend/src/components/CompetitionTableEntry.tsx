@@ -132,7 +132,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
       </Table.Cell>
 
       <Table.Cell textAlign="right">
-        <CountryMap code={comp.country_iso2} bold t={t} />
+        <CountryMap code={comp.country_iso2} fontWeight="bold" t={t} />
       </Table.Cell>
 
       <Table.Cell minWidth="4em">
@@ -172,7 +172,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                         fallback={comp.country_iso2}
                       />
                     </Icon>
-                    <CountryMap code={comp.country_iso2} bold t={t} />{" "}
+                    <CountryMap code={comp.country_iso2} t={t} fontWeight="bold" />{" "}
                     {comp.city}
                   </Badge>
                   <Badge variant="information" textStyle="md">

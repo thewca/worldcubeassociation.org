@@ -62,8 +62,8 @@ export default function CompetitorTable({
                   </Icon>
                   <CountryMap
                     code={registration.user.country_iso2}
-                    bold
                     t={t}
+                    fontWeight="bold"
                   />
                 </HStack>
               </Table.Cell>

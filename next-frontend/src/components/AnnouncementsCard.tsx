@@ -26,16 +26,20 @@ export default function AnnouncementsCard({
         colorPalette={colorPalette}
         flex="2"
       >
-        <Card.Body bg="colorPalette.textBox.bg" color="colorPalette.textBox.text">
+        <Card.Header bg="colorPalette.textBox.bg" color="colorPalette.textBox.text">
           <Card.Title textStyle="h2">{hero.title}</Card.Title>
-          <Text textStyle="s2">
+          <Card.Description textStyle="s2">
             Posted by {hero.postedBy} · {hero.postedAt}
-          </Text>
-          <MarkdownProse content={hero.markdown} textStyle="body" color="colorPalette.textBox.text" />
+          </Card.Description>
+        </Card.Header>
+        <Card.Body bg="colorPalette.textBox.bg">
+          <MarkdownProse as={Card.Description} content={hero.markdown} textStyle="body" color="colorPalette.textBox.text" />
+        </Card.Body>
+        <Card.Footer bg="colorPalette.textBox.bg">
           <Button mt="auto" mr="auto" asChild>
             <Link href={hero.fullLink}>Read full article</Link>
           </Button>
-        </Card.Body>
+        </Card.Footer>
       </Card.Root>
 
       {/* OTHER ANNOUNCEMENTS */}
