@@ -7,6 +7,9 @@ import React from "react";
 import { Session } from "next-auth";
 import { signIn, signOut } from "next-auth/react";
 import { WCA_PROVIDER_ID } from "@/auth.config";
+import _ from "lodash";
+
+const AVATAR_COLORS = ["green", "white", "red", "yellow", "blue", "orange"];
 
 export default function AvatarMenu({ session }: { session: Session | null }) {
   if (!session) {
@@ -17,10 +20,12 @@ export default function AvatarMenu({ session }: { session: Session | null }) {
     );
   }
 
+  const colorPalette = _.sample(AVATAR_COLORS);
+
   return (
     <Menu.Root positioning={{ placement: "bottom-end" }}>
       <Menu.Trigger rounded="full">
-        <Avatar.Root>
+        <Avatar.Root colorPalette={colorPalette} variant="solid">
           <Avatar.Fallback name={session.user?.name ?? undefined} />
           <Avatar.Image src={session.user?.image ?? undefined} />
         </Avatar.Root>
