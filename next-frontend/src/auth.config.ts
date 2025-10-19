@@ -54,7 +54,6 @@ export const authConfig: NextAuthConfig = {
         // First-time login, save the `access_token`, its expiry and the `refresh_token`
         return {
           ...token,
-          wcaUserId: account.providerAccountId,
           wcaId: user?.wcaId,
           access_token: account.access_token,
           expires_at: account.expires_at,
@@ -71,7 +70,6 @@ export const authConfig: NextAuthConfig = {
     async session({ session, token }) {
       // @ts-expect-error TODO: Fix this
       session.accessToken = token.access_token;
-      session.user.id = token.wcaUserId as string;
       session.user.wcaId = token.wcaId as string;
       return session;
     },
