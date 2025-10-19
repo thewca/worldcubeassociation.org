@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Avatar, Button, Menu } from "@chakra-ui/react";
 import Link from "next/link";
@@ -36,8 +36,13 @@ export default function AvatarMenu({ session }: { session: Session | null }) {
               Payload CMS
             </Link>
           </Menu.Item>
+          <Menu.Item value="dashboard" asChild>
+            <Link href="/dashboard">Developer Dashboard</Link>
+          </Menu.Item>
           <Menu.Separator />
-          <Menu.Item value="logout" onSelect={() => signOut()}>Log Out</Menu.Item>
+          <Menu.Item value="logout" onSelect={() => signOut()}>
+            Log Out
+          </Menu.Item>
         </Menu.Content>
       </Menu.Positioner>
     </Menu.Root>

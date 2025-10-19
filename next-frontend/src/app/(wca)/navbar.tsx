@@ -14,7 +14,7 @@ import Image from "next/image";
 import { auth } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
-import { LuChevronDown, LuMonitorCheck } from "react-icons/lu";
+import { LuChevronDown } from "react-icons/lu";
 
 import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
@@ -68,11 +68,6 @@ export default async function Navbar() {
             <ChakraImage asChild maxW={10}>
               <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
             </ChakraImage>
-          </Link>
-        </IconButton>
-        <IconButton asChild variant="ghost">
-          <Link href="/dashboard">
-            <LuMonitorCheck />
           </Link>
         </IconButton>
         {navbar.entry.map((navbarEntry) => (
