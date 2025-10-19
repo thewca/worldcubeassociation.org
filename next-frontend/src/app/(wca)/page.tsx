@@ -171,7 +171,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           as={Card.Description}
           content={block.bodyMarkdown!}
           color={`colorPalette.textBox.text${colorGradientMode}`}
-          textStyle="bodyEmphasis"
+          textStyle="s2"
         />
       </Card.Body>
     </Card.Root>
@@ -327,7 +327,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                   objectFit="cover"
                 />
                 <Card.Body pr="3em">
-                  <Card.Title textStyle="4xl">{testimonial.punchline}</Card.Title>
+                  <Card.Title textStyle="h1">{testimonial.punchline}</Card.Title>
                   <Separator size="md" />
                   <MarkdownProse
                     as={Card.Description}
@@ -352,7 +352,6 @@ type TwoBlocksUnion =
   | TwoBlocksLeafBlock;
 
 const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
-  const isHorizontal = entry.alignment === "horizontal";
   let columnCount = 2;
   let col1 = 1;
   let col2 = 1;
@@ -383,19 +382,23 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
 
   const columns = [col1, col2];
 
+  const isHorizontal = entry.alignment === "horizontal";
+  const RenderAs = isHorizontal ? SimpleGrid : VStack;
+
   return (
-    <SimpleGrid
+    <RenderAs
       key={keyPrefix}
-      columns={isHorizontal ? columnCount : 1}
+      columns={columnCount}
       gap={8}
       width="full"
     >
       {entry.blocks.map((subEntry, i) => {
         const key = `${keyPrefix}-${i}`;
+
         switch (subEntry.blockType) {
           case "TextCard":
             return (
-              <GridItem key={key} colSpan={columns[i]} display="flex">
+              <GridItem key={key} colSpan={columns[i] || 1} display="flex">
                 <TextCard block={subEntry} />
               </GridItem>
             );
@@ -445,7 +448,7 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
             return null;
         }
       })}
-    </SimpleGrid>
+    </RenderAs>
   );
 };
 
@@ -454,6 +457,7 @@ const renderFullBlock = (entry: FullWidthBlock, keyPrefix = "") => {
     <Box key={keyPrefix} width="full">
       {entry.blocks.map((subEntry, i) => {
         const key = `${keyPrefix}-${i}`;
+
         switch (subEntry.blockType) {
           case "TextCard":
             return <TextCard key={key} block={subEntry} />;
