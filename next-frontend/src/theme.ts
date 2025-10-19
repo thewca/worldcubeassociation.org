@@ -37,20 +37,29 @@ const compileColorScheme = (
       DEFAULT: {
         value: {
           _light: `{colors.${baseColor}.1A}`,
-          _dark: `{colors.${baseColor}.2A}`
+          _dark: `{colors.${baseColor}.2A}`,
         }, // solid
       },
       brighter: {
-        value: { _light: `{colors.${baseColor}.2C}`, _dark: `{colors.${baseColor}.1A}` },
-      }
+        value: {
+          _light: `{colors.${baseColor}.2C}`,
+          _dark: `{colors.${baseColor}.1A}`,
+        },
+      },
     },
     text: {
       DEFAULT: {
-        value: { _light: `{colors.${baseColor}.contrast}`, _dark: `{colors.${baseColor}.2B}` },
+        value: {
+          _light: `{colors.${baseColor}.contrast}`,
+          _dark: `{colors.${baseColor}.2B}`,
+        },
       },
       brighter: {
-        value: { _light: `{colors.${baseColor}.2A}`, _dark: `{colors.${baseColor}.contrast}` },
-      }
+        value: {
+          _light: `{colors.${baseColor}.2A}`,
+          _dark: `{colors.${baseColor}.contrast}`,
+        },
+      },
     },
   },
   gradient: {
@@ -250,8 +259,8 @@ const customConfig = defineConfig({
         },
       },
       radii: {
-        wca: { value: "10px" }
-      }
+        wca: { value: "10px" },
+      },
     },
     textStyles: {
       h1: {
@@ -260,35 +269,35 @@ const customConfig = defineConfig({
           lineHeight: "3.75rem",
           fontWeight: "extrabold",
           textTransform: "uppercase",
-        }
+        },
       },
       h2: {
         value: {
           fontSize: "2.25rem",
           lineHeight: "2.75rem",
           fontWeight: "extrabold",
-        }
+        },
       },
       h3: {
         value: {
           fontSize: "1.6875rem",
           lineHeight: "2.25rem",
-          fontWeight: "extrabold"
-        }
+          fontWeight: "extrabold",
+        },
       },
       s1: {
         value: {
           fontSize: "1.125rem",
           lineHeight: "1.75rem",
           fontWeight: "bold",
-        }
+        },
       },
       s2: {
         value: {
           fontSize: "1.125rem",
           lineHeight: "1.75rem",
           fontWeight: "medium",
-        }
+        },
       },
       s3: {
         value: {
@@ -296,7 +305,7 @@ const customConfig = defineConfig({
           lineHeight: "1.75rem",
           fontWeight: "bold",
           textTransform: "uppercase",
-        }
+        },
       },
       s4: {
         value: {
@@ -305,21 +314,21 @@ const customConfig = defineConfig({
           fontWeight: "medium",
           textTransform: "uppercase",
           letterSpacing: "10%",
-        }
+        },
       },
       body: {
         value: {
           fontSize: "0.875rem",
           lineHeight: "1.25rem",
           fontWeight: "light",
-        }
+        },
       },
       bodyEmphasis: {
         value: {
           fontSize: "0.875rem",
           lineHeight: "1.25rem",
           fontWeight: "medium",
-        }
+        },
       },
       annotation: {
         value: {
@@ -327,7 +336,7 @@ const customConfig = defineConfig({
           lineHeight: "0.825rem",
           fontWeight: "light",
           fontStyle: "italic",
-        }
+        },
       },
       quote: {
         value: {
@@ -335,7 +344,7 @@ const customConfig = defineConfig({
           lineHeight: "1.5rem",
           fontWeight: "light",
           fontStyle: "italic",
-        }
+        },
       },
       hyperlink: {
         value: {
@@ -343,14 +352,14 @@ const customConfig = defineConfig({
           lineHeight: "1.25rem",
           fontWeight: "medium",
           color: "link",
-        }
+        },
       },
       headerLink: {
         value: {
           fontSize: "1rem",
           lineHeight: "1.5rem",
           fontWeight: "medium",
-        }
+        },
       },
     },
     recipes: {
@@ -431,7 +440,7 @@ const customConfig = defineConfig({
               textStyle: "headerLink",
               _hover: {
                 color: "{colors.blue.highContrast}",
-              }
+              },
             },
           },
           hoverArrow: {
@@ -481,8 +490,8 @@ const customConfig = defineConfig({
       heading: {
         base: {
           fontFamily: "inherit",
-        }
-      }
+        },
+      },
     },
     slotRecipes: {
       card: {

@@ -8,13 +8,13 @@ import {
   Card,
   Separator,
   Box,
-  Heading,
   Text,
   Tabs,
   Badge,
   VStack,
   Link as ChakraLink,
-  Center, Icon,
+  Center,
+  Icon,
 } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
@@ -168,6 +168,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           {block.heading}
         </Card.Title>
         <MarkdownProse
+          as={Card.Description}
           content={block.bodyMarkdown!}
           color={`colorPalette.textBox.text${colorGradientMode}`}
           textStyle="bodyEmphasis"
