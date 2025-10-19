@@ -27,7 +27,7 @@ import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
 import RegisterIcon from "@/components/icons/RegisterIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 import CountryMap from "@/components/CountryMap";
 
 import type {
@@ -234,7 +234,7 @@ const FeaturedCompetitions = async ({
                     textStyle="s3"
                   >
                     <Icon size="lg">
-                      <Flag code="US" fallback="US" />
+                      <WcaFlag code="US" fallback="US" />
                     </Icon>
                     <CountryMap
                       code="US"

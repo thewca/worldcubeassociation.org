@@ -20,7 +20,7 @@ import RegulationsHistoryIcon from "@/components/icons/RegulationsHistoryIcon";
 import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
 import { LuStar, LuCircleHelp } from "react-icons/lu";
 import countries from "@/lib/wca/data/countries";
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 
 interface ProfileData {
   name: string;
@@ -92,7 +92,7 @@ const ProfileCard: React.FC<ProfileData> = ({
           <DataList.Item>
             <DataList.ItemLabel>Region</DataList.ItemLabel>
             <DataList.ItemValue>
-              <Flag code={regionIso2} fallback="" height="20" width="28" />
+              <WcaFlag code={regionIso2} fallback="" height="20" width="28" />
               Representing {countries.byIso2[regionIso2].id}
             </DataList.ItemValue>
           </DataList.Item>

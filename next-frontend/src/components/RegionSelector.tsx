@@ -6,7 +6,7 @@ import {
   useFilter,
   useListCollection,
 } from "@chakra-ui/react";
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 import countries from "@/lib/wca/data/countries";
 import { TFunction } from "i18next";
 import continents from "@/lib/wca/data/continents";
@@ -56,7 +56,7 @@ const countryOptions = (t: TFunction) =>
       key: country.id,
       label: t(`countries.${country.iso2}`),
       flag: (
-        <Flag
+        <WcaFlag
           code={country.iso2}
           fallback={country.id}
           width={32}

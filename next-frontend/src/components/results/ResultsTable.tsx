@@ -5,7 +5,7 @@ import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { route } from "nextjs-routes";
 import { AttemptsCells, recordTagBadge } from "@/components/results/TableCells";
 import { resultAttempts } from "@/lib/wca/results/attempts";
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 import { TFunction } from "i18next";
 import CountryMap from "@/components/CountryMap";
 
@@ -69,7 +69,7 @@ export function ResultsTable({
               <Table.Cell>
                 <HStack>
                   <Icon asChild size="sm">
-                    <Flag code={competitorResult.country_iso2} />
+                    <WcaFlag code={competitorResult.country_iso2} />
                   </Icon>
                   <CountryMap code={competitorResult.country_iso2} t={t} />
                 </HStack>
@@ -139,7 +139,7 @@ export function ByPersonTable({
               <Table.Cell>
                 <HStack>
                   <Icon asChild size="sm">
-                    <Flag code={competitorResult.country_iso2} />
+                    <WcaFlag code={competitorResult.country_iso2} />
                   </Icon>
                   <CountryMap code={competitorResult.country_iso2} t={t} />
                 </HStack>

@@ -1,6 +1,6 @@
 import { HStack, Icon, Link, Table, Text } from "@chakra-ui/react";
 import { route } from "nextjs-routes";
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 import CountryMap from "@/components/CountryMap";
 import { components } from "@/types/openapi";
 import { TFunction } from "i18next";
@@ -53,7 +53,7 @@ export default function PsychsheetTable({
                   <Table.Cell>
                     <HStack>
                       <Icon asChild size="sm">
-                        <Flag code={registration.country_iso2} />
+                        <WcaFlag code={registration.country_iso2} />
                       </Icon>
                       <CountryMap
                         code={registration.country_iso2}

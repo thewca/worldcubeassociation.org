@@ -16,7 +16,7 @@ import {
   HStack,
 } from "@chakra-ui/react";
 
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 
 import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
@@ -138,7 +138,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
 
       <Table.Cell minWidth="4em">
         <Icon size="lg">
-          <Flag code={comp.country_iso2} fallback={comp.country_iso2} />
+          <WcaFlag code={comp.country_iso2} fallback={comp.country_iso2} />
         </Icon>
       </Table.Cell>
 
@@ -168,7 +168,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                 <VStack alignItems="start">
                   <Badge variant="information" textStyle="md">
                     <Icon size="xl">
-                      <Flag
+                      <WcaFlag
                         code={comp.country_iso2}
                         fallback={comp.country_iso2}
                       />

@@ -1,4 +1,4 @@
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 import EventIcon from "@/components/EventIcon";
 import events from "@/lib/wca/data/events";
 import { HStack, Icon, Link, Table } from "@chakra-ui/react";
@@ -15,7 +15,7 @@ export function CountryCell({ countryId }: CountryCellProps) {
     <Table.Cell>
       {country && (
         <Icon asChild size="sm">
-          <Flag code={country.iso2} />
+          <WcaFlag code={country.iso2} />
         </Icon>
       )}{" "}
       {country.name}
@@ -66,7 +66,7 @@ export function CompetitionCell({
     <Table.Cell>
       <HStack>
         <Icon asChild size="sm">
-          <Flag code={country.iso2} />
+          <WcaFlag code={country.iso2} />
         </Icon>
         <Link href={`/competitions/${competitionId}`}>{competitionName}</Link>
       </HStack>
