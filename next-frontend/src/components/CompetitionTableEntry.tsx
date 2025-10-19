@@ -215,7 +215,16 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
               <Drawer.Footer justifyContent="space-between" width="full">
                 {/* TODO: Only Show register button/link if registration is not full */}
                 <Button variant="outline">Register Now</Button>
-                <Button variant="solid">View Competition</Button>
+                <Button variant="solid" asChild>
+                  <Link
+                    href={route({
+                      pathname: "/competitions/[competitionId]",
+                      query: { competitionId: comp.id },
+                    })}
+                  >
+                    View Competition
+                  </Link>
+                </Button>
               </Drawer.Footer>
               <Drawer.CloseTrigger asChild>
                 <CloseButton size="sm" />
