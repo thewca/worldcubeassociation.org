@@ -11,14 +11,15 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
 import Image from "next/image";
-import { route } from "nextjs-routes";
+import { auth } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
-import { LuChevronDown, LuMonitorCheck } from "react-icons/lu";
+import { LuChevronDown } from "react-icons/lu";
 
 import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/types/payload";
+import AvatarMenu from "@/components/ui/avatarMenu";
 
 type NavbarEntry<T> = {
   targetLink: T;
@@ -51,6 +52,8 @@ export default async function Navbar() {
   const payload = await getPayload({ config });
   const navbar = await payload.findGlobal({ slug: "nav" });
 
+  const session = await auth();
+
   return (
     <HStack
       borderBottom="md"
@@ -65,11 +68,6 @@ export default async function Navbar() {
             <ChakraImage asChild maxW={10}>
               <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
             </ChakraImage>
-          </Link>
-        </IconButton>
-        <IconButton asChild variant="ghost">
-          <Link href="/dashboard">
-            <LuMonitorCheck />
           </Link>
         </IconButton>
         {navbar.entry.map((navbarEntry) => (
@@ -182,15 +180,9 @@ export default async function Navbar() {
         )}
       </HStack>
       <HStack>
-        <LanguageSelector />
         <ColorModeButton />
-        <Button asChild variant="ghost" size="sm">
-          <Link
-            href={route({ pathname: "/payload/[[...segments]]", query: {} })}
-          >
-            Payload CMS
-          </Link>
-        </Button>
+        <LanguageSelector />
+        <AvatarMenu session={session} />
       </HStack>
     </HStack>
   );
