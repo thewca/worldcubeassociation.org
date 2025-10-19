@@ -329,13 +329,12 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                 <Card.Body pr="3em">
                   <Card.Title textStyle="4xl">{testimonial.punchline}</Card.Title>
                   <Separator size="md" />
-                  <Card.Description>
-                    <MarkdownProse
-                      content={testimonial.fullTestimonialMarkdown!}
-                      color="colorPalette.fg"
-                      textStyle="quote"
-                    />
-                  </Card.Description>
+                  <MarkdownProse
+                    as={Card.Description}
+                    content={testimonial.fullTestimonialMarkdown!}
+                    color="colorPalette.fg"
+                    textStyle="quote"
+                  />
                   <Text>{testimonial.whoDunnit}</Text>
                 </Card.Body>
               </Card.Root>
