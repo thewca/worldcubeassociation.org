@@ -11,7 +11,7 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
 import Image from "next/image";
-import { route } from "nextjs-routes";
+import { auth } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuChevronDown, LuMonitorCheck } from "react-icons/lu";
@@ -19,6 +19,7 @@ import { LuChevronDown, LuMonitorCheck } from "react-icons/lu";
 import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/types/payload";
+import AvatarMenu from "@/components/ui/avatarMenu";
 
 type NavbarEntry<T> = {
   targetLink: T;
@@ -50,6 +51,8 @@ function LinkWrapper<T extends string>({
 export default async function Navbar() {
   const payload = await getPayload({ config });
   const navbar = await payload.findGlobal({ slug: "nav" });
+
+  const session = await auth();
 
   return (
     <HStack
@@ -182,15 +185,9 @@ export default async function Navbar() {
         )}
       </HStack>
       <HStack>
-        <LanguageSelector />
         <ColorModeButton />
-        <Button asChild variant="ghost" size="sm">
-          <Link
-            href={route({ pathname: "/payload/[[...segments]]", query: {} })}
-          >
-            Payload CMS
-          </Link>
-        </Button>
+        <LanguageSelector />
+        <AvatarMenu session={session} />
       </HStack>
     </HStack>
   );
