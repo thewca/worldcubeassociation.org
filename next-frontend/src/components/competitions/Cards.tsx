@@ -6,6 +6,7 @@ import {
   SimpleGrid,
   Text,
   Link as ChakraLink,
+  HStack,
 } from "@chakra-ui/react";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
 import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
@@ -76,17 +77,10 @@ export function VenueDetailsCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root variant="plain">
-      <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Venue Details
-          </Text>
+    <Card.Root variant="plain" colorPalette="white">
+      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca">
+        <Card.Title textStyle="s4">
+          Venue Details
         </Card.Title>
         <SimpleGrid columns={2} gap="4">
           <Card.Root variant="infoSnippet">
@@ -94,9 +88,7 @@ export function VenueDetailsCard({
               <VenueIcon />
               Venue
             </Card.Header>
-            <Card.Body>
-              <MarkdownProse content={competitionInfo.venue} />
-            </Card.Body>
+            <MarkdownProse as={Card.Body} content={competitionInfo.venue} textStyle="bodyEmphasis" color="colorPalette.contrast" />
           </Card.Root>
 
           <Card.Root variant="infoSnippet">
@@ -114,9 +106,7 @@ export function VenueDetailsCard({
               <DetailsIcon />
               Details
             </Card.Header>
-            <Card.Body>
-              <MarkdownProse content={competitionInfo.venue_details} />
-            </Card.Body>
+            <MarkdownProse as={Card.Body} content={competitionInfo.venue_details} textStyle="bodyEmphasis" color="colorPalette.contrast" />
           </Card.Root>
         </SimpleGrid>
       </Card.Body>
@@ -130,19 +120,12 @@ export function AdditionalInformationCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root variant="plain" mt="8">
-      <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Information
-          </Text>
+    <Card.Root variant="plain" colorPalette="white" mt="6">
+      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca">
+        <Card.Title textStyle="s4">
+          Information
         </Card.Title>
-        <MarkdownProse content={competitionInfo.information} />
+        <MarkdownProse as={Card.Body} content={competitionInfo.information} textStyle="body" color="colorPalette.contrast" />
       </Card.Body>
     </Card.Root>
   );
@@ -157,17 +140,10 @@ export function RefundPolicyCard({
   const formattedRefundDate = refundDate.toLocaleString("en-US", dateFormat);
 
   return (
-    <Card.Root variant="plain">
-      <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Refund Policy
-          </Text>
+    <Card.Root variant="plain" colorPalette="white">
+      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca">
+        <Card.Title textStyle="s4">
+          Refund Policy
         </Card.Title>
         <Text>
           If your registration is cancelled before {formattedRefundDate} you
@@ -204,17 +180,10 @@ export function RegistrationCard({
   );
 
   return (
-    <Card.Root variant="plain">
-      <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Registration
-          </Text>
+    <Card.Root variant="plain" colorPalette="white">
+      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca">
+        <Card.Title textStyle="s4">
+          Registration
         </Card.Title>
         <SimpleGrid columns={2} gap="4">
           <Card.Root variant="infoSnippet">
@@ -317,20 +286,13 @@ export function OrganizationTeamCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root variant="plain">
-      <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Organisation Team
-          </Text>
+    <Card.Root variant="plain" colorPalette="white">
+      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca">
+        <Card.Title textStyle="s4">
+          Organization Team
         </Card.Title>
         <Card.Root variant="infoSnippet">
-          <Card.Header>Organisers</Card.Header>
+          <Card.Header>Organizers</Card.Header>
           <Card.Body>
             <Text>
               {competitionInfo.organizers.map((organizer, index) => (
@@ -365,9 +327,7 @@ export function OrganizationTeamCard({
 
         <Card.Root variant="infoSnippet">
           <Card.Header>Contact</Card.Header>
-          <Card.Body>
-            <MarkdownProse content={competitionInfo.contact} />
-          </Card.Body>
+          <MarkdownProse as={Card.Body} textStyle="bodyEmphasis" content={competitionInfo.contact} color="colorPalette.contrast" />
         </Card.Root>
         <Button variant="outline" asChild>
           <ChakraLink
@@ -393,31 +353,25 @@ export function EventCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root variant="plain">
-      <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Events List
-          </Text>
+    <Card.Root variant="plain" colorPalette="white">
+      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca">
+        <Card.Title textStyle="s4">
+          Events List
         </Card.Title>
-        <Text>
+        <HStack gap="4">
           {competitionInfo.event_ids.map((event_id) => (
             <EventIcon
               key={event_id}
               eventId={event_id}
+              boxSize="8"
               color={
-                event_id === competitionInfo.main_event_id
-                  ? "currentColor"
-                  : "supplementary.texts.gray1"
+                (event_id === competitionInfo.main_event_id && event_id !== "333")
+                  ? "green.1A"
+                  : "currentColor"
               }
             />
           ))}
-        </Text>
+        </HStack>
       </Card.Body>
     </Card.Root>
   );
@@ -431,13 +385,13 @@ export function InfoCard({
   t: TFunction;
 }) {
   return (
-    <Card.Root variant="plain">
-      <Card.Body>
-        <Heading size="4xl" display="flex" alignItems="center">
-          <Button variant="ghost" p="0">
-            <BookmarkIcon />
-          </Button>
+    <Card.Root variant="plain" colorPalette="white">
+      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca">
+        <Heading textStyle="h2" display="flex" alignItems="center">
           {competitionInfo.name}
+          <Button variant="ghost">
+            <BookmarkIcon boxSize="6" />
+          </Button>
         </Heading>
 
         <SimpleGrid columns={2} gap="4">

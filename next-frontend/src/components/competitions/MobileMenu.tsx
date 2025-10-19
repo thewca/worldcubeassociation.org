@@ -47,7 +47,7 @@ export default function MobileMenu({
               return (
                 <List.Item
                   key={menuKey}
-                  color={currentPath === menuKey ? "teal" : "grey"}
+                  color={currentPath === menuKey ? "blue" : "gray"}
                   width="100%"
                 >
                   <List.Indicator asChild>

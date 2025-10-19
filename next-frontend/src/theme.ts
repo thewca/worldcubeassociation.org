@@ -335,7 +335,7 @@ const customConfig = defineConfig({
           fontSize: "0.6875rem",
           lineHeight: "0.825rem",
           fontWeight: "light",
-          fontStyle: "italic",
+          //fontStyle: "italic",
         },
       },
       quote: {
@@ -551,10 +551,11 @@ const customConfig = defineConfig({
               },
               body: {
                 p: "0px",
+                textStyle: "bodyEmphasis"
               },
               header: {
                 p: "0px",
-                fontWeight: "semibold",
+                textStyle: "annotation",
                 flexDirection: "row",
                 alignItems: "center",
                 gap: "1",
@@ -740,23 +741,20 @@ const customConfig = defineConfig({
           variant: {
             enclosed: {
               list: {
-                bg: "bg",
-                p: "3",
+                bg: "colorPalette.textBox.bg",
                 borderRadius: "xl",
                 gap: "3",
               },
               trigger: {
+                color: "colorPalette.contrast",
                 transitionProperty: "background-color",
                 transitionTimingFunction: "ease",
                 transitionDuration: "200ms",
                 _hover: {
-                  bg: "bg.muted/50",
+                  bg: "colorPalette.inverted",
                 },
                 _selected: {
-                  bg: "bg.muted",
-                },
-                _vertical: {
-                  justifyContent: "flex-start",
+                  bg: "colorPalette.inverted",
                 },
               },
               content: {

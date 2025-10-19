@@ -114,7 +114,7 @@ export default function Schedule({
         </Alert.Root>
       )}
 
-      <Alert.Root status="info" colorPalette="grey">
+      <Alert.Root status="info" colorPalette="gray">
         <Alert.Content>
           <Alert.Title>
             {t("competitions.schedule.schedule_change_warning")}

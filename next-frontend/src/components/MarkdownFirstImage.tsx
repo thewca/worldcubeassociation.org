@@ -16,8 +16,8 @@ export const MarkdownFirstImage = ({
   const imageUrl = match[1];
 
   return (
-    <Card.Root variant="plain">
-      <Card.Body justifyContent="center">
+    <Card.Root variant="plain" colorPalette="white">
+      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca" justifyContent="center">
         <Image src={imageUrl} alt={alt} maxW="100%" borderRadius="md" />
       </Card.Body>
     </Card.Root>

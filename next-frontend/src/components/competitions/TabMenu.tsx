@@ -47,6 +47,7 @@ export default function TabMenu({
       lazyMount
       unmountOnExit
       hideBelow="md"
+      colorPalette="white"
     >
       <Tabs.List height="fit-content" position="sticky" top="3">
         {tabs.map((tab) => (
