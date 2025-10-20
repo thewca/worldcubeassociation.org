@@ -118,7 +118,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           objectFit="cover"
           width="100%"
           height="40vh"
-          bg="currentColor"
+          bg="colorPalette.solid"
         />
         {/* Gradient Overlay */}
         <Box
@@ -127,7 +127,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           right="0"
           bottom="0"
           left="50%"
-          bgImage="linear-gradient(to right, transparent, {colors.current})"
+          bgImage="linear-gradient(to right, transparent, {colors.colorPalette.solid})"
           zIndex="1"
         />
       </Box>
@@ -137,6 +137,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
         zIndex="2"
         color="white"
         p="8"
+        bg="colorPalette.solid"
         justifyContent="center"
         paddingRight="15%"
         backgroundImage={
