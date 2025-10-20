@@ -28,5 +28,14 @@ jobs:
         run: yarn run check:types
       - name: Run Lint
         run: yarn run lint
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          aws-access-key-id: ${{ secrets.CI_CD_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.CI_CD_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Download proprietary assets from protected bucket for build
+        shell: bash
+        run: aws s3 cp s3://wca-fonts ./next-frontend/src/styles/fonts/ --recursive
       - name: Run build
         run: yarn run build
