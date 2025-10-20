@@ -10,7 +10,7 @@
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ColorPaletteSelect".
  */
-export type ColorPaletteSelect = 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey';
+export type ColorPaletteSelect = 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'white';
 /**
  * Icon name
  *
@@ -903,7 +903,6 @@ export interface TextCardBlock {
     [k: string]: unknown;
   };
   bodyMarkdown?: string | null;
-  variant: 'info' | 'hero';
   separatorAfterHeading: boolean;
   buttonText?: string | null;
   buttonLink?: string | null;
@@ -1550,7 +1549,6 @@ export interface TextCardBlockSelect<T extends boolean = true> {
   heading?: T;
   body?: T;
   bodyMarkdown?: T;
-  variant?: T;
   separatorAfterHeading?: T;
   buttonText?: T;
   buttonLink?: T;

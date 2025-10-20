@@ -19,13 +19,6 @@ export const TextCardBlock: Block = {
     },
     markdownConvertedField("body"),
     {
-      name: "variant",
-      type: "select",
-      options: ["info", "hero"],
-      defaultValue: "info",
-      required: true,
-    },
-    {
       name: "separatorAfterHeading",
       type: "checkbox",
       required: true,

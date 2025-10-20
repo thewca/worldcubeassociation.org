@@ -48,7 +48,7 @@ export default async function FAQ() {
             )}
           </Card.Body>
         </Card.Root>
-        <Card.Root variant="hero" overflow="hidden">
+        <Card.Root overflow="hidden">
           <Card.Body bg="bg">
             <Tabs.Root
               variant="subtle"

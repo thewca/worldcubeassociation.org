@@ -176,12 +176,12 @@ export default function CompetitionsPage() {
           />
         )}
         <Card.Root
-          variant="hero"
           size="md"
           overflow="hidden"
           colorPalette="white"
+          coloredBg
         >
-          <Card.Header asChild bg="colorPalette.textBox.bg">
+          <Card.Header asChild>
             <HStack justify="space-between">
               <Card.Title textStyle="h1">
                 <AllCompsIcon /> All Competitions
@@ -218,7 +218,7 @@ export default function CompetitionsPage() {
               </SegmentGroup.Root>
             </HStack>
           </Card.Header>
-          <Card.Body bg="colorPalette.textBox.bg" asChild>
+          <Card.Body asChild>
             <VStack gap="2" borderBottom="black">
               <EventSelector
                 selectedEvents={filterState.selectedEvents}
@@ -305,7 +305,7 @@ export default function CompetitionsPage() {
               </HStack>
             </VStack>
           </Card.Body>
-          <Card.Body bg="colorPalette.textBox.bg">
+          <Card.Body>
             <HStack gap="2" width="full" justify="space-between">
               <HStack>
                 <Text>Registration Key:</Text>

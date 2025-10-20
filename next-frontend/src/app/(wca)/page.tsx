@@ -55,15 +55,14 @@ import { MediaImage } from "@/components/MediaImage";
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
     <Card.Root
-      variant={block.variant}
-      size="lg"
       colorPalette={block.colorPalette}
+      coloredBg
       width="full"
     >
       {block.headerImage && (
         <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
       )}
-      <Card.Body bg="colorPalette.textBox.bg" color="colorPalette.textBox.text">
+      <Card.Body>
         <Card.Title textStyle="h2">{block.heading}</Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
         <MarkdownProse
@@ -72,7 +71,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
           textStyle="body"
         />
       </Card.Body>
-      <Card.Footer bg="colorPalette.textBox.bg">
+      <Card.Footer>
         {block.buttonText?.trim() && (
           <Button mr="auto" asChild>
             <ChakraLink href={block.buttonLink!}>{block.buttonText}</ChakraLink>
@@ -114,18 +113,17 @@ const AnnouncementsSection = ({
 
 const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
   // TODO GB flip, this should become "brighter" instead of "darker"
-  const colorGradientMode = block.colorPaletteDarker ? ".brighter" : "";
+  const colorGradientMode = block.colorPaletteDarker ? "neon" : true;
 
   const headingColor = block.headingColor
     ? `${block.headingColor}.solid`
-    : `colorPalette.textBox.text${colorGradientMode}`;
+    : undefined;
 
   return (
     <Card.Root
-      variant="info"
       flexDirection="row"
-      overflow="hidden"
       colorPalette={block.colorPalette}
+      coloredBg={colorGradientMode}
     >
       <Box position="relative" width="50%" overflow="hidden">
         <MediaImage
@@ -133,7 +131,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           objectFit="cover"
           width="100%"
           height="40vh"
-          bg={`colorPalette.textBox.bg${colorGradientMode}`}
+          bg="currentColor"
         />
         {/* Gradient Overlay */}
         <Box
@@ -142,7 +140,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           right="0"
           bottom="0"
           left="50%"
-          bgImage={`linear-gradient(to right, transparent, {colors.colorPalette.textBox.bg${colorGradientMode}})`}
+          bgImage={"linear-gradient(to right, transparent, {colors.current})"}
           zIndex="1"
         />
       </Box>
@@ -152,7 +150,6 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
         zIndex="2"
         color="white"
         p="8"
-        bg={`colorPalette.textBox.bg${colorGradientMode}`}
         justifyContent="center"
         paddingRight="15%"
         backgroundImage={
@@ -170,7 +167,6 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
         <MarkdownProse
           as={Card.Description}
           content={block.bodyMarkdown!}
-          color={`colorPalette.textBox.text${colorGradientMode}`}
           textStyle="s2"
         />
       </Card.Body>
@@ -182,8 +178,8 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
   return (
     <Card.Root
       overflow="hidden"
-      variant="hero"
       colorPalette={block.colorPalette}
+      coloredBg
       width="full"
     >
       <MediaImage
@@ -208,7 +204,7 @@ const FeaturedCompetitions = async ({
   const { t } = await getT();
 
   return (
-    <Card.Root variant="info" colorPalette="white" width="full">
+    <Card.Root colorPalette="white" width="full" coloredBg>
       <Card.Body>
         <Card.Title textStyle="h2" asChild>
           <HStack justify="space-between">
@@ -224,11 +220,11 @@ const FeaturedCompetitions = async ({
           {block.competitions?.map((featuredComp) => (
             <Card.Root
               key={featuredComp.competitionId}
-              variant="info"
               colorPalette={featuredComp.colorPalette}
+              coloredBg
             >
-              <Card.Header bg="colorPalette.textBox.bg">
-                <Card.Title textStyle="h2" color="colorPalette.textBox.text">
+              <Card.Header>
+                <Card.Title textStyle="h2">
                   {featuredComp.competitionId}
                 </Card.Title>
                 <Card.Description>
@@ -249,7 +245,7 @@ const FeaturedCompetitions = async ({
                   </Badge>
                 </Card.Description>
               </Card.Header>
-              <Card.Body bg="colorPalette.textBox.bg">
+              <Card.Body>
                 <VStack alignItems="start">
                   <Badge
                     variant="information"
@@ -298,69 +294,59 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
       orientation="vertical"
       width="full"
     >
-      <Card.Root
-        variant="info"
-        flexDirection="row"
-        overflow="hidden"
-        colorPalette={slides[0].colorPalette}
-        position="relative"
-        width="full"
-      >
-        {/* Dot Navigation */}
-        <Tabs.List asChild>
-          <Box
-            position="absolute"
-            right="6"
-            top="50%"
-            transform="translateY(-50%)"
-            display="flex"
-            flexDirection="column"
-            gap="2"
-            zIndex="10"
-          >
-            {slides.map((slide) => (
-              <Tabs.Trigger key={slide.id} value={slide.id!} />
-            ))}
-          </Box>
-        </Tabs.List>
+      {/* Dot Navigation */}
+      <Tabs.List asChild>
+        <Box
+          position="absolute"
+          right="6"
+          top="50%"
+          transform="translateY(-50%)"
+          display="flex"
+          flexDirection="column"
+          gap="2"
+          zIndex="10"
+        >
+          {slides.map((slide) => (
+            <Tabs.Trigger key={slide.id} value={slide.id!} />
+          ))}
+        </Box>
+      </Tabs.List>
 
-        {/* Slides */}
-        {slides.map((slide) => {
-          const testimonial = slide.testimonial as Testimonial;
+      {/* Slides */}
+      {slides.map((slide) => {
+        const testimonial = slide.testimonial as Testimonial;
 
-          return (
-            <Tabs.Content key={slide.id} value={slide.id!} asChild>
-              <Card.Root
-                variant="info"
-                flexDirection="row"
-                overflow="hidden"
-                colorPalette={slide.colorPalette}
-              >
-                <MediaImage
-                  media={testimonial.image as Media}
-                  srcFallback="/placeholder.png"
-                  altFallback={testimonial.punchline}
-                  maxW="1/3"
-                  objectFit="cover"
+        return (
+          <Tabs.Content key={slide.id} value={slide.id!} asChild>
+            <Card.Root
+              coloredBg
+              flexDirection="row"
+              overflow="hidden"
+              colorPalette={slide.colorPalette}
+            >
+              <MediaImage
+                media={testimonial.image as Media}
+                srcFallback="/placeholder.png"
+                altFallback={testimonial.punchline}
+                maxW="1/3"
+                objectFit="cover"
+              />
+              <Card.Body pr="3em">
+                <Card.Title textStyle="h1">
+                  {testimonial.punchline}
+                </Card.Title>
+                <Separator size="md" />
+                <MarkdownProse
+                  as={Card.Description}
+                  content={testimonial.fullTestimonialMarkdown!}
+                  textStyle="quote"
                 />
-                <Card.Body pr="3em">
-                  <Card.Title textStyle="h1">
-                    {testimonial.punchline}
-                  </Card.Title>
-                  <Separator size="md" />
-                  <MarkdownProse
-                    as={Card.Description}
-                    content={testimonial.fullTestimonialMarkdown!}
-                    color="colorPalette.fg"
-                    textStyle="quote"
-                  />
-                  <Text>{testimonial.whoDunnit}</Text>
-                </Card.Body>
-              </Card.Root>
-            </Tabs.Content>
-          );
-        })}
-      </Card.Root>
+                <Text>{testimonial.whoDunnit}</Text>
+              </Card.Body>
+            </Card.Root>
+          </Tabs.Content>
+        );
+      })}
     </Tabs.Root>
   );
 };

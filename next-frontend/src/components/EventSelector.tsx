@@ -94,56 +94,56 @@ export default function EventSelector({
             )}
           </ButtonGroup>
         </Field.Label>
+        <CheckboxGroup disabled={disabled} flexDirection="row">
+          {eventList.map((eventId) => {
+            const currentEventSelected = selectedEvents.includes(eventId);
+            const currentEventDisabled = eventsDisabled.includes(eventId);
+
+            const isDisabled =
+              disabled ||
+              (!currentEventSelected && selectedEvents.length >= maxEvents) ||
+              currentEventDisabled;
+
+            return (
+              <CheckboxCard.Root
+                key={eventId}
+                variant="surface"
+                colorPalette="green"
+                align="center"
+                disabled={isDisabled}
+                size={eventButtonsCompact ? "sm" : undefined}
+                checked={currentEventSelected}
+                onCheckedChange={() => onEventClick(eventId)}
+              >
+                <CheckboxCard.HiddenInput />
+                <CheckboxCard.Control>
+                  <CheckboxCard.Content>
+                    <Tooltip
+                      content={
+                        currentEventDisabled
+                          ? disabledText(eventId)
+                          : t(`events.${eventId}`)
+                      }
+                      openDelay={200}
+                    >
+                      <EventIcon
+                        eventId={eventId}
+                        fontSize="2xl"
+                        color={currentEventDisabled ? "#FFBBBB" : undefined}
+                      />
+                    </Tooltip>
+                    <VisuallyHidden>
+                      <CheckboxCard.Label>
+                        {t(`events.${eventId}`)}
+                      </CheckboxCard.Label>
+                    </VisuallyHidden>
+                  </CheckboxCard.Content>
+                </CheckboxCard.Control>
+              </CheckboxCard.Root>
+            );
+          })}
+        </CheckboxGroup>
       </Field.Root>
-      <CheckboxGroup disabled={disabled} flexDirection="row">
-        {eventList.map((eventId) => {
-          const currentEventSelected = selectedEvents.includes(eventId);
-          const currentEventDisabled = eventsDisabled.includes(eventId);
-
-          const isDisabled =
-            disabled ||
-            (!currentEventSelected && selectedEvents.length >= maxEvents) ||
-            currentEventDisabled;
-
-          return (
-            <CheckboxCard.Root
-              key={eventId}
-              variant="surface"
-              colorPalette="green"
-              align="center"
-              disabled={isDisabled}
-              size={eventButtonsCompact ? "sm" : undefined}
-              checked={currentEventSelected}
-              onCheckedChange={() => onEventClick(eventId)}
-            >
-              <CheckboxCard.HiddenInput />
-              <CheckboxCard.Control>
-                <CheckboxCard.Content>
-                  <Tooltip
-                    content={
-                      currentEventDisabled
-                        ? disabledText(eventId)
-                        : t(`events.${eventId}`)
-                    }
-                    openDelay={200}
-                  >
-                    <EventIcon
-                      eventId={eventId}
-                      fontSize="2xl"
-                      color={currentEventDisabled ? "#FFBBBB" : undefined}
-                    />
-                  </Tooltip>
-                  <VisuallyHidden>
-                    <CheckboxCard.Label>
-                      {t(`events.${eventId}`)}
-                    </CheckboxCard.Label>
-                  </VisuallyHidden>
-                </CheckboxCard.Content>
-              </CheckboxCard.Control>
-            </CheckboxCard.Root>
-          );
-        })}
-      </CheckboxGroup>
     </Tooltip>
   );
 }

@@ -39,7 +39,7 @@ export default function FilteredResults({
       />
       {_.map(results, (results, roundFormat) => (
         <Fragment key={`${activeEventId}-${roundFormat}`}>
-          <Heading size="2xl">
+          <Heading textStyle="h3">
             {events.byId[activeEventId].name} {t(`rounds.${roundFormat}.name`)}
           </Heading>
           <ResultsTable

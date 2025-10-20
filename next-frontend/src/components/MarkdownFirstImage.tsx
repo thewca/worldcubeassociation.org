@@ -1,13 +1,17 @@
+import { ComponentPropsWithoutRef } from "react";
 import { Image, Card } from "@chakra-ui/react";
 
-interface MarkdownFirstImageProps {
+type CardRootProps = ComponentPropsWithoutRef<typeof Card.Root>;
+
+type MarkdownFirstImageProps = {
   content: string;
   alt?: string;
-}
+} & CardRootProps;
 
 export const MarkdownFirstImage = ({
   content,
   alt = "Image",
+  ...cardRootProps
 }: MarkdownFirstImageProps) => {
   const match = content.match(/!\[.*?\]\((.*?)\)/);
 
@@ -16,8 +20,8 @@ export const MarkdownFirstImage = ({
   const imageUrl = match[1];
 
   return (
-    <Card.Root variant="plain" colorPalette="white">
-      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca" justifyContent="center">
+    <Card.Root colorPalette="white" coloredBg maxWidth="md" {...cardRootProps}>
+      <Card.Body justifyContent="center">
         <Image src={imageUrl} alt={alt} maxW="100%" borderRadius="md" />
       </Card.Body>
     </Card.Root>

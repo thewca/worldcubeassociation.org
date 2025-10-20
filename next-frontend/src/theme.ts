@@ -313,7 +313,7 @@ const customConfig = defineConfig({
           lineHeight: "1.5rem",
           fontWeight: "medium",
           textTransform: "uppercase",
-          letterSpacing: "10%",
+          letterSpacing: "wider",
         },
       },
       body: {
@@ -513,56 +513,36 @@ const customConfig = defineConfig({
       card: {
         base: {
           root: {
-            colorPalette: "white",
             borderRadius: "wca",
+          },
+          body: {
+            gap: "4",
           },
         },
         variants: {
-          variant: {
-            hero: {
-              body: {
-                bg: "colorPalette.solid",
-                color: "colorPalette.contrast",
-              },
-            },
-            summary: {
-              body: {
-                bg: "colorPalette.solid",
-                color: "colorPalette.contrast",
-                p: "7",
-                gap: "3",
-              },
-            },
-            info: {
+          coloredBg: {
+            true: {
               root: {
-                overflow: "hidden",
-              },
-              body: {
-                bg: "colorPalette.solid",
-                color: "colorPalette.contrast",
-                gap: "4",
-              },
-              title: {
-                fontWeight: "extrabold",
+                bg: "colorPalette.textBox.bg",
+                color: "colorPalette.textBox.text",
               },
               description: {
-                color: "colorPalette.contrast",
+                color: "colorPalette.textBox.text",
               },
             },
-            plain: {
+            neon: {
               root: {
-                overflow: "hidden",
-                bg: "bg",
-                p: "2",
-                w: "100%",
-                flexGrow: "1",
+                bg: "colorPalette.textBox.bg.brighter",
+                color: "colorPalette.textBox.text.brighter",
               },
-              body: {
-                gap: "4",
+              description: {
+                color: "colorPalette.textBox.text.brighter",
               },
-
             },
           },
+        },
+        defaultVariants: {
+          coloredBg: false,
         },
       },
       checkboxCard: {

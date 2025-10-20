@@ -15,24 +15,17 @@ const RecordSummaryCard: React.FC<RecordSummaryCardProps> = ({
   national,
 }) => {
   return (
-    <Card.Root variant="summary" colorPalette="green" overflow="hidden">
+    <Card.Root colorPalette="green" overflow="hidden" coloredBg>
       <Float placement="middle-end" offsetX="20">
-        <RecordsIcon boxSize="13rem" color="colorPallete.200" opacity="0.3" />
+        <RecordsIcon boxSize="13rem" color="colorPalette.fg" opacity="0.3" />
       </Float>
       <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Record Collection
-          </Text>
+        <Card.Title textStyle="s4">
+          Record Collection
         </Card.Title>
-        <StatGroup justifyContent="start" flexDirection="row" gap="5">
+        <StatGroup justifyContent="flex-start" gap="5">
           {world > 0 && (
-            <Stat.Root flex="0">
+            <Stat.Root>
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{world}</Heading>
                 <Stat.ValueUnit color="green.contrast">World</Stat.ValueUnit>
@@ -40,7 +33,7 @@ const RecordSummaryCard: React.FC<RecordSummaryCardProps> = ({
             </Stat.Root>
           )}
           {continental > 0 && (
-            <Stat.Root flex="0">
+            <Stat.Root>
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{continental}</Heading>
                 <Stat.ValueUnit color="green.contrast">
@@ -50,7 +43,7 @@ const RecordSummaryCard: React.FC<RecordSummaryCardProps> = ({
             </Stat.Root>
           )}
           {national > 0 && (
-            <Stat.Root flex="0">
+            <Stat.Root>
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{national}</Heading>
                 <Stat.ValueUnit color="green.contrast">National</Stat.ValueUnit>

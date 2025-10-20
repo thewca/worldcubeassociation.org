@@ -77,8 +77,8 @@ export function VenueDetailsCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root variant="plain" colorPalette="white">
-      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca">
+    <Card.Root colorPalette="white" coloredBg>
+      <Card.Body>
         <Card.Title textStyle="s4">
           Venue Details
         </Card.Title>
@@ -120,12 +120,12 @@ export function AdditionalInformationCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root variant="plain" colorPalette="white" mt="6">
-      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca">
+    <Card.Root colorPalette="white" coloredBg>
+      <Card.Body>
         <Card.Title textStyle="s4">
           Information
         </Card.Title>
-        <MarkdownProse as={Card.Body} content={competitionInfo.information} textStyle="body" color="colorPalette.contrast" />
+        <MarkdownProse as={Card.Description} content={competitionInfo.information} textStyle="body" />
       </Card.Body>
     </Card.Root>
   );
@@ -140,12 +140,12 @@ export function RefundPolicyCard({
   const formattedRefundDate = refundDate.toLocaleString("en-US", dateFormat);
 
   return (
-    <Card.Root variant="plain" colorPalette="white">
-      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca">
+    <Card.Root colorPalette="white" coloredBg>
+      <Card.Body>
         <Card.Title textStyle="s4">
           Refund Policy
         </Card.Title>
-        <Text>
+        <Card.Description>
           If your registration is cancelled before {formattedRefundDate} you
           will be refunded
           <Text as="span" fontWeight="bold">
@@ -156,7 +156,7 @@ export function RefundPolicyCard({
             />{" "}
           </Text>
           of your registration fee.
-        </Text>
+        </Card.Description>
       </Card.Body>
     </Card.Root>
   );
@@ -180,8 +180,8 @@ export function RegistrationCard({
   );
 
   return (
-    <Card.Root variant="plain" colorPalette="white">
-      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca">
+    <Card.Root colorPalette="white" coloredBg>
+      <Card.Body>
         <Card.Title textStyle="s4">
           Registration
         </Card.Title>
@@ -290,8 +290,8 @@ export function OrganizationTeamCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root variant="plain" colorPalette="white">
-      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca">
+    <Card.Root flexGrow="1" colorPalette="white" coloredBg>
+      <Card.Body>
         <Card.Title textStyle="s4">
           Organization Team
         </Card.Title>
@@ -354,8 +354,8 @@ export function EventCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root variant="plain" colorPalette="white">
-      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca">
+    <Card.Root colorPalette="white" coloredBg>
+      <Card.Body>
         <Card.Title textStyle="s4">
           Events List
         </Card.Title>
@@ -386,8 +386,8 @@ export function InfoCard({
   t: TFunction;
 }) {
   return (
-    <Card.Root variant="plain" colorPalette="white">
-      <Card.Body bg="colorPalette.textBox.bg" borderRadius="wca">
+    <Card.Root colorPalette="white" coloredBg>
+      <Card.Body>
         <Heading textStyle="h2" display="flex" alignItems="center">
           {competitionInfo.name}
           <Button variant="ghost">

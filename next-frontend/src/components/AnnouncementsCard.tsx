@@ -20,30 +20,26 @@ export default function AnnouncementsCard({
     <Flex direction="column" gap={3} width="full">
       {/* HERO ANNOUNCEMENT */}
       <Card.Root
-        variant="info"
         flexDirection="column"
         overflow="hidden"
         colorPalette={colorPalette}
+        coloredBg
         flex="2"
       >
-        <Card.Header
-          bg="colorPalette.textBox.bg"
-          color="colorPalette.textBox.text"
-        >
+        <Card.Header>
           <Card.Title textStyle="h2">{hero.title}</Card.Title>
-          <Card.Description textStyle="s2" color="colorPalette.textBox.text">
+          <Card.Description textStyle="s2">
             Posted by {hero.postedBy} · {hero.postedAt}
           </Card.Description>
         </Card.Header>
-        <Card.Body bg="colorPalette.textBox.bg">
+        <Card.Body>
           <MarkdownProse
             as={Card.Description}
             content={hero.markdown}
             textStyle="body"
-            color="colorPalette.textBox.text"
           />
         </Card.Body>
-        <Card.Footer bg="colorPalette.textBox.bg">
+        <Card.Footer>
           <Button mt="auto" mr="auto" asChild>
             <Link href={hero.fullLink}>Read full article</Link>
           </Button>
