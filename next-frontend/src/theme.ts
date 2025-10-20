@@ -547,14 +547,16 @@ const customConfig = defineConfig({
       },
       accordion: {
         slots: [],
+        base: {
+          root: {
+            "--accordion-radius": "{radii.wca}",
+          }
+        },
         variants: {
           variant: {
             subtle: {
-              root: {
-                "--accordion-radius": "radii.l3",
-              },
               item: {
-                borderColor: "{colors.supplementary.bgs.mid}",
+                borderColor: "{colors.supplementary.bg.dark}",
                 borderWidth: "1px",
                 marginBottom: "3",
                 _open: {
@@ -562,6 +564,7 @@ const customConfig = defineConfig({
                 },
               },
               itemTrigger: {
+                padding: "3",
                 bgImage: "var(--chakra-colors-color-palette-gradient-hover)",
                 backgroundSize: "0% 100%", // Ensures the gradient fills the element
                 backgroundRepeat: "no-repeat",
@@ -571,19 +574,20 @@ const customConfig = defineConfig({
                   animation: "slideInGradient 0.25s ease-in-out forwards",
                 },
                 _open: {
-                  bgImage:
-                    "var(--chakra-colors-color-palette-gradient-default)",
+                  bgImage: "var(--chakra-colors-color-palette-gradient-default)",
                   borderTopRadius: "var(--accordion-radius)",
                   borderBottomRadius: "0",
                   backgroundSize: "100% 100%",
                   animation: "dontSlideGradient 0.25s ease-in-out forwards",
                   _hover: {
-                    bgImage:
-                      "var(--chakra-colors-color-palette-gradient-hover)",
+                    bgImage: "var(--chakra-colors-color-palette-gradient-hover)",
                     animation: "dontSlideGradient 0.25s ease-in-out forwards",
                   },
                 },
               },
+              itemContent: {
+                padding: "3",
+              }
             },
           },
         },
