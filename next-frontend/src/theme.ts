@@ -494,6 +494,22 @@ const customConfig = defineConfig({
       },
     },
     slotRecipes: {
+      stat: {
+        variants: {
+          variant: {
+            competition: {
+              label: {
+                color: "colorPalette.textBox.text",
+                alignItems: "start",
+                textStyle: "annotation"
+              },
+              valueText: {
+                textStyle: "bodyEmphasis"
+              }
+            }
+          }
+        }
+      },
       card: {
         base: {
           root: {
@@ -544,38 +560,10 @@ const customConfig = defineConfig({
               body: {
                 gap: "4",
               },
-            },
-            infoSnippet: {
-              root: {
-                shadow: "none",
-              },
-              body: {
-                p: "0px",
-                textStyle: "bodyEmphasis"
-              },
-              header: {
-                p: "0px",
-                textStyle: "annotation",
-                flexDirection: "row",
-                alignItems: "flex-start",
-                gap: "1",
-              },
+
             },
           },
         },
-        compoundVariants: [
-          {
-            variant: "infoSnippet",
-            css: {
-              header: {
-                svg: {
-                  height: "1.15em",
-                  width: "1.15em",
-                },
-              },
-            },
-          },
-        ],
       },
       checkboxCard: {
         slots: [],
