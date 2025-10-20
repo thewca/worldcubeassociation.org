@@ -175,7 +175,7 @@ export default function CompetitionsPage() {
             buttonUrl="/"
           />
         )}
-        <Card.Root size="md" colorPalette="white" coloredBg>
+        <Card.Root size="md" coloredBg>
           <Tabs.Root variant="subtle" colorPalette="blue" defaultValue="list">
             <Card.Header asChild>
               <HStack justify="space-between">

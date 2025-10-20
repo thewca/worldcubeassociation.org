@@ -25,7 +25,7 @@ export default async function PodiumsPage({
   const resultsByEvent = _.groupBy(podiumResults, "event_id");
 
   return (
-    <Card.Root colorPalette="white" coloredBg>
+    <Card.Root coloredBg>
       <Card.Body>
         <Card.Title>
           <Text

@@ -503,6 +503,7 @@ const customConfig = defineConfig({
           coloredBg: {
             true: {
               root: {
+                colorPalette: "white",
                 bg: "colorPalette.solid",
                 color: "colorPalette.text",
               },

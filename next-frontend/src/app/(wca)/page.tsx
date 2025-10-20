@@ -192,7 +192,7 @@ const FeaturedCompetitions = async ({
   const { t } = await getT();
 
   return (
-    <Card.Root colorPalette="white" width="full" coloredBg>
+    <Card.Root width="full" coloredBg>
       <Card.Body>
         <Card.Title textStyle="h2" asChild>
           <HStack justify="space-between">

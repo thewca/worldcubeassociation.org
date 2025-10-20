@@ -38,7 +38,7 @@ export default async function FAQ() {
   return (
     <Container paddingTop="8">
       <VStack gap="8" width="full" alignItems="left">
-        <Card.Root maxW="40em" colorPalette="white" coloredBg>
+        <Card.Root maxW="40em" coloredBg>
           <Card.Body>
             <Card.Title textStyle="h1">Frequently Asked Questions</Card.Title>
             {faqPage.introTextMarkdown ? (
@@ -51,7 +51,7 @@ export default async function FAQ() {
             )}
           </Card.Body>
         </Card.Root>
-        <Card.Root colorPalette="white" borderWidth={0} bg="transparent">
+        <Card.Root borderWidth={0} bg="transparent">
           <Card.Body paddingX={0}>
             <Tabs.Root
               variant="subtle"
