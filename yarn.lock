@@ -9632,9 +9632,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-datepicker@npm:^8.7.0":
-  version: 8.7.0
-  resolution: "react-datepicker@npm:8.7.0"
+"react-datepicker@npm:^8.8.0":
+  version: 8.8.0
+  resolution: "react-datepicker@npm:8.8.0"
   dependencies:
     "@floating-ui/react": "npm:^0.27.15"
     clsx: "npm:^2.1.1"
@@ -9642,7 +9642,7 @@ __metadata:
   peerDependencies:
     react: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
     react-dom: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
-  checksum: 10c0/0a0ea89d922425b37d69a585eb1a392c87a3c99db91e79849c746d5b5a8280692df12f50b3e86d699ac1fc598888fdd4cbc83e6bf3de5465b010dc481045a9bc
+  checksum: 10c0/741c533a7b063df9291b195f24f4b54c3b95615cc5a2295c8608fc5ce4c8af19df3b03316e3653ab19cbc9145265796dfb1ab91cf357c450460ac850952853a8
   languageName: node
   linkType: hard
 
@@ -10243,7 +10243,7 @@ __metadata:
     rails-erb-loader: "npm:^5.5.2"
     react: "npm:^18.3.1"
     react-csv: "npm:^2.2.2"
-    react-datepicker: "npm:^8.7.0"
+    react-datepicker: "npm:^8.8.0"
     react-dom: "npm:^18.3.1"
     react-google-recaptcha: "npm:^3.1.0"
     react-image-crop: "npm:^11.0.10"
