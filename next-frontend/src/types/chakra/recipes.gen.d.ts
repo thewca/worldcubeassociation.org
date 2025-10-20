@@ -421,8 +421,7 @@ export interface CardVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "outline" */
   variant?: "elevated" | "outline" | "subtle" | undefined
-  /** @default false */
-  coloredBg?: "true" | "neon" | undefined
+  coloredBg?: boolean | undefined
 }
 
 export type CardVariantProps = {
@@ -1025,7 +1024,6 @@ export type SegmentGroupSlot = "root" | "label" | "item" | "itemText" | "itemCon
 export interface SegmentGroupVariant {
   /** @default "md" */
   size?: "xs" | "sm" | "md" | "lg" | undefined
-  variant?: "inset" | undefined
 }
 
 export type SegmentGroupVariantProps = {

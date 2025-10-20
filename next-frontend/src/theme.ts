@@ -32,34 +32,10 @@ const compileColorScheme = (
     top: { value: `{colors.${baseColor}.1A}` },
     right: { value: `{colors.${baseColor}.darker}` },
   },
-  textBox: {
-    bg: {
-      DEFAULT: {
-        value: {
-          _light: `{colors.${baseColor}.1A}`,
-          _dark: `{colors.${baseColor}.2A}`,
-        }, // solid
-      },
-      brighter: {
-        value: {
-          _light: `{colors.${baseColor}.2C}`,
-          _dark: `{colors.${baseColor}.1A}`,
-        },
-      },
-    },
-    text: {
-      DEFAULT: {
-        value: {
-          _light: `{colors.${baseColor}.contrast}`,
-          _dark: `{colors.${baseColor}.2B}`,
-        },
-      },
-      brighter: {
-        value: {
-          _light: `{colors.${baseColor}.2A}`,
-          _dark: `{colors.${baseColor}.contrast}`,
-        },
-      },
+  text: {
+    value: {
+      _light: `{colors.${baseColor}.contrast}`,
+      _dark: `{colors.${baseColor}.2B}`,
     },
   },
   gradient: {
@@ -418,6 +394,7 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
+          // @ts-expect-error This is a legitimate key, but the typing system doesn't see it before merge.
           variant: "solid",
           size: "lg",
         },
@@ -472,6 +449,7 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
+          // @ts-expect-error This is a legitimate key, but the typing system doesn't see it before merge.
           variant: "wca",
           hoverArrow: false,
         },
@@ -495,11 +473,12 @@ const customConfig = defineConfig({
     },
     slotRecipes: {
       stat: {
+        slots: [],
         variants: {
           variant: {
             competition: {
               label: {
-                color: "colorPalette.textBox.text",
+                color: "colorPalette.text",
                 alignItems: "start",
                 textStyle: "annotation",
               },
@@ -511,6 +490,7 @@ const customConfig = defineConfig({
         },
       },
       card: {
+        slots: [],
         base: {
           root: {
             borderRadius: "wca",
@@ -523,26 +503,14 @@ const customConfig = defineConfig({
           coloredBg: {
             true: {
               root: {
-                bg: "colorPalette.textBox.bg",
-                color: "colorPalette.textBox.text",
+                bg: "colorPalette.solid",
+                color: "colorPalette.text",
               },
               description: {
-                color: "colorPalette.textBox.text",
-              },
-            },
-            neon: {
-              root: {
-                bg: "colorPalette.textBox.bg.brighter",
-                color: "colorPalette.textBox.text.brighter",
-              },
-              description: {
-                color: "colorPalette.textBox.text.brighter",
+                color: "colorPalette.text",
               },
             },
           },
-        },
-        defaultVariants: {
-          coloredBg: false,
         },
       },
       accordion: {
@@ -646,21 +614,21 @@ const customConfig = defineConfig({
           variant: {
             enclosed: {
               list: {
-                bg: "colorPalette.textBox.bg",
+                bg: "colorPalette.solid",
                 borderRadius: "wca",
               },
               trigger: {
-                color: "colorPalette.textBox.text",
+                color: "colorPalette.text",
                 transitionProperty: "background-color",
                 transitionTimingFunction: "ease",
                 transitionDuration: "200ms",
                 _hover: {
-                  bg: "colorPalette.textBox.bg",
+                  bg: "colorPalette.solid",
                 },
                 _selected: {
                   color: "currentColor",
                   shadow: "sm",
-                  bg: "colorPalette.textBox.bg",
+                  bg: "colorPalette.solid",
                 },
               },
             },

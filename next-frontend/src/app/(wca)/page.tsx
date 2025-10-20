@@ -1,5 +1,3 @@
-"use server";
-
 import React from "react";
 import {
   SimpleGrid,
@@ -108,19 +106,12 @@ const AnnouncementsSection = ({
 };
 
 const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
-  // TODO GB flip, this should become "brighter" instead of "darker"
-  const colorGradientMode = block.colorPaletteDarker ? "neon" : true;
-
   const headingColor = block.headingColor
     ? `${block.headingColor}.solid`
     : undefined;
 
   return (
-    <Card.Root
-      flexDirection="row"
-      colorPalette={block.colorPalette}
-      coloredBg={colorGradientMode}
-    >
+    <Card.Root flexDirection="row" colorPalette={block.colorPalette} coloredBg>
       <Box position="relative" width="50%" overflow="hidden">
         <MediaImage
           media={block.mainImage as Media}
@@ -230,12 +221,7 @@ const FeaturedCompetitions = async ({
                     <Icon size="lg">
                       <WcaFlag code="US" fallback="US" />
                     </Icon>
-                    <CountryMap
-                      code="US"
-                      t={t}
-                      color="colorPalette.textBox.text"
-                    />{" "}
-                    Seattle
+                    <CountryMap code="US" t={t} /> Seattle
                   </Badge>
                 </Card.Description>
               </Card.Header>
