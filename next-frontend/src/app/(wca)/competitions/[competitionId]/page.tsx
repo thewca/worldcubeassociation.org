@@ -1,5 +1,5 @@
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
-import {GridItem, SimpleGrid, Stack, Text, VStack} from "@chakra-ui/react";
+import { GridItem, SimpleGrid, Stack, Text, VStack } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
 import { MarkdownFirstImage } from "@/components/MarkdownFirstImage";
 import {

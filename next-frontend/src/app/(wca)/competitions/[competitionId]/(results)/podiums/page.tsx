@@ -1,9 +1,4 @@
-import {
-  Card,
-  Heading,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Card, Heading, Text, VStack } from "@chakra-ui/react";
 import { ResultsTable } from "@/components/results/ResultsTable";
 import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { getPodiums } from "@/lib/wca/competitions/getPodiums";

@@ -54,11 +54,7 @@ import { MediaImage } from "@/components/MediaImage";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
-    <Card.Root
-      colorPalette={block.colorPalette}
-      coloredBg
-      width="full"
-    >
+    <Card.Root colorPalette={block.colorPalette} coloredBg width="full">
       {block.headerImage && (
         <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
       )}
@@ -140,7 +136,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           right="0"
           bottom="0"
           left="50%"
-          bgImage={"linear-gradient(to right, transparent, {colors.current})"}
+          bgImage="linear-gradient(to right, transparent, {colors.current})"
           zIndex="1"
         />
       </Box>
@@ -210,9 +206,7 @@ const FeaturedCompetitions = async ({
           <HStack justify="space-between">
             <Text>Featured Upcoming Competitions</Text>
             <Button variant="outline" asChild>
-              <Link href="/competitions">
-                View all Competitions
-              </Link>
+              <Link href="/competitions">View all Competitions</Link>
             </Button>
           </HStack>
         </Card.Title>
@@ -332,9 +326,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                 objectFit="cover"
               />
               <Card.Body pr="3em">
-                <Card.Title textStyle="h1">
-                  {testimonial.punchline}
-                </Card.Title>
+                <Card.Title textStyle="h1">{testimonial.punchline}</Card.Title>
                 <Separator size="md" />
                 <MarkdownProse
                   as={Card.Description}
@@ -398,49 +390,89 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
         switch (subEntry.blockType) {
           case "TextCard":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex" width="full">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 <TextCard block={subEntry} />
               </GridItem>
             );
           case "AnnouncementsSection":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex" width="full">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 <AnnouncementsSection block={subEntry} />
               </GridItem>
             );
           case "twoBlocksBranch":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex" width="full">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 {renderBlockGroup(subEntry, key)}
               </GridItem>
             );
           case "twoBlocksLeaf":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex" width="full">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 {renderBlockGroup(subEntry, key)}
               </GridItem>
             );
           case "ImageBanner":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex" width="full">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 <ImageBanner block={subEntry} />
               </GridItem>
             );
           case "ImageOnlyCard":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex" width="full">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 <ImageOnlyCard block={subEntry} />
               </GridItem>
             );
           case "FeaturedComps":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex" width="full">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 <FeaturedCompetitions block={subEntry} />
               </GridItem>
             );
           case "TestimonialsSpinner":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex" width="full">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 <TestimonialsSpinner block={subEntry} />
               </GridItem>
             );

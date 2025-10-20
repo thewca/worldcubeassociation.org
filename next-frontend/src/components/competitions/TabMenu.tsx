@@ -49,7 +49,12 @@ export default function TabMenu({
       hideBelow="md"
       colorPalette="white"
     >
-      <Tabs.List height="fit-content" position="sticky" minWidth="fit-content" gap="3">
+      <Tabs.List
+        height="fit-content"
+        position="sticky"
+        minWidth="fit-content"
+        gap="3"
+      >
         {tabs.map((tab) => (
           <Tabs.Trigger key={tab.i18nKey} value={tab.menuKey} asChild>
             <Link href={tab.href} key={tab.i18nKey}>

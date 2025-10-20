@@ -1,5 +1,5 @@
 import React from "react";
-import { Stat, Card, Heading, Text, Float, StatGroup } from "@chakra-ui/react";
+import { Stat, Card, Heading, Float, StatGroup } from "@chakra-ui/react";
 import MyResultsIcon from "@/components/icons/MyResultsIcon";
 
 interface MedalSummaryCardProps {
@@ -19,9 +19,7 @@ const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({
         <MyResultsIcon boxSize="13rem" color="colorPalette.fg" opacity="0.3" />
       </Float>
       <Card.Body>
-        <Card.Title textStyle="s4">
-          Medals
-        </Card.Title>
+        <Card.Title textStyle="s4">Medals</Card.Title>
         <StatGroup justifyContent="flex-start" gap="5">
           {gold > 0 && (
             <Stat.Root>

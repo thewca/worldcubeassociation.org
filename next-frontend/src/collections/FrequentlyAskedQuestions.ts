@@ -1,6 +1,6 @@
 import { CollectionConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
-import {colorPaletteSelect} from "@/blocks/utils";
+import { colorPaletteSelect } from "@/blocks/utils";
 
 export const FaqCategories: CollectionConfig = {
   slug: "faqCategories",

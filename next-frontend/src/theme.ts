@@ -335,7 +335,7 @@ const customConfig = defineConfig({
           fontSize: "0.6875rem",
           lineHeight: "0.825rem",
           fontWeight: "light",
-          //fontStyle: "italic",
+          // fontStyle: "italic",
         },
       },
       quote: {
@@ -501,14 +501,14 @@ const customConfig = defineConfig({
               label: {
                 color: "colorPalette.textBox.text",
                 alignItems: "start",
-                textStyle: "annotation"
+                textStyle: "annotation",
               },
               valueText: {
-                textStyle: "bodyEmphasis"
-              }
-            }
-          }
-        }
+                textStyle: "bodyEmphasis",
+              },
+            },
+          },
+        },
       },
       card: {
         base: {
@@ -550,7 +550,7 @@ const customConfig = defineConfig({
         base: {
           root: {
             "--accordion-radius": "{radii.wca}",
-          }
+          },
         },
         variants: {
           variant: {
@@ -574,20 +574,22 @@ const customConfig = defineConfig({
                   animation: "slideInGradient 0.25s ease-in-out forwards",
                 },
                 _open: {
-                  bgImage: "var(--chakra-colors-color-palette-gradient-default)",
+                  bgImage:
+                    "var(--chakra-colors-color-palette-gradient-default)",
                   borderTopRadius: "var(--accordion-radius)",
                   borderBottomRadius: "0",
                   backgroundSize: "100% 100%",
                   animation: "dontSlideGradient 0.25s ease-in-out forwards",
                   _hover: {
-                    bgImage: "var(--chakra-colors-color-palette-gradient-hover)",
+                    bgImage:
+                      "var(--chakra-colors-color-palette-gradient-hover)",
                     animation: "dontSlideGradient 0.25s ease-in-out forwards",
                   },
                 },
               },
               itemContent: {
                 padding: "3",
-              }
+              },
             },
           },
         },

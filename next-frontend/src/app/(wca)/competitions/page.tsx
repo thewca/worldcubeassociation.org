@@ -8,14 +8,14 @@ import {
   Text,
   Card,
   HStack,
-  SegmentGroup,
   Slider,
   Input,
   CloseButton,
   InputGroup,
   SimpleGrid,
   Field,
-  ButtonGroup, Tabs,
+  ButtonGroup,
+  Tabs,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -175,11 +175,7 @@ export default function CompetitionsPage() {
             buttonUrl="/"
           />
         )}
-        <Card.Root
-          size="md"
-          colorPalette="white"
-          coloredBg
-        >
+        <Card.Root size="md" colorPalette="white" coloredBg>
           <Tabs.Root variant="subtle" colorPalette="blue" defaultValue="list">
             <Card.Header asChild>
               <HStack justify="space-between">
@@ -207,7 +203,9 @@ export default function CompetitionsPage() {
                     dispatchFilter({ type: "toggle_event", eventId })
                   }
                   onClearClick={() => dispatchFilter({ type: "clear_events" })}
-                  onAllClick={() => dispatchFilter({ type: "select_all_events" })}
+                  onAllClick={() =>
+                    dispatchFilter({ type: "select_all_events" })
+                  }
                 />
                 <SimpleGrid gap="2" width="full" columns={2}>
                   <RegionSelector
@@ -312,9 +310,7 @@ export default function CompetitionsPage() {
                   t={t}
                 />
               </Tabs.Content>
-              <Tabs.Content value="map">
-                TBD
-              </Tabs.Content>
+              <Tabs.Content value="map">TBD</Tabs.Content>
             </Card.Body>
           </Tabs.Root>
         </Card.Root>

@@ -30,9 +30,7 @@ export default async function PodiumsPage({
   return (
     <Card.Root colorPalette="white" coloredBg>
       <Card.Body>
-        <Card.Title textStyle="s4">
-          Results
-        </Card.Title>
+        <Card.Title textStyle="s4">Results</Card.Title>
         {_.map(resultsByPerson, (results, wcaId) => (
           <Fragment key={wcaId}>
             <Heading size="2xl">

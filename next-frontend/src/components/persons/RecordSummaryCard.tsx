@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "@chakra-ui/react";
-import { Stat, Heading, Text, Float, StatGroup } from "@chakra-ui/react";
+import { Stat, Heading, Float, StatGroup } from "@chakra-ui/react";
 import RecordsIcon from "@/components/icons/RecordsIcon";
 
 interface RecordSummaryCardProps {
@@ -20,9 +20,7 @@ const RecordSummaryCard: React.FC<RecordSummaryCardProps> = ({
         <RecordsIcon boxSize="13rem" color="colorPalette.fg" opacity="0.3" />
       </Float>
       <Card.Body>
-        <Card.Title textStyle="s4">
-          Record Collection
-        </Card.Title>
+        <Card.Title textStyle="s4">Record Collection</Card.Title>
         <StatGroup justifyContent="flex-start" gap="5">
           {world > 0 && (
             <Stat.Root>

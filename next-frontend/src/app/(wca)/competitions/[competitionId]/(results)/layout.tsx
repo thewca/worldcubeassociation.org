@@ -28,9 +28,7 @@ export default async function CompetitionLayout({
         <InfoCard competitionInfo={competitionInfo} t={t} />
       </GridItem>
       <MarkdownFirstImage content={competitionInfo.information} />
-      <GridItem colSpan={3}>
-        {children}
-      </GridItem>
+      <GridItem colSpan={3}>{children}</GridItem>
     </SimpleGrid>
   );
 }

@@ -30,9 +30,7 @@ export default async function PodiumsPage({
   return (
     <Card.Root colorPalette="white" coloredBg>
       <Card.Body>
-        <Card.Title textStyle="s4">
-          Scrambles
-        </Card.Title>
+        <Card.Title textStyle="s4">Scrambles</Card.Title>
         <FilteredScrambles
           competitionInfo={competitionInfo}
           resultsByEvent={scramblesByEvent}
