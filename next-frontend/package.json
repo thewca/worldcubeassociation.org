@@ -86,7 +86,7 @@
     "eslint-plugin-prettier": "^5.5.4",
     "i18n-iso-countries": "^7.14.0",
     "jsdom": "^27.0.0",
-    "openapi-typescript": "^7.9.1",
+    "openapi-typescript": "^7.10.1",
     "prettier": "^3.6.2",
     "typescript": "^5",
     "vitest": "^3.2.4"
