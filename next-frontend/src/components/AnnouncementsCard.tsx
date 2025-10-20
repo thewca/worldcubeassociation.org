@@ -1,9 +1,10 @@
-import { Button, Flex, Link, Text, VStack, Card } from "@chakra-ui/react";
+import { Button, Flex, Link, VStack, Card } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
 
 export default function AnnouncementsCard({
   hero,
   others,
+  colorPalette,
 }: {
   hero: {
     title: string;
@@ -13,27 +14,36 @@ export default function AnnouncementsCard({
     fullLink: string;
   };
   others: { title: string; href: string }[];
+  colorPalette: string;
 }) {
   return (
     <Flex direction="column" gap={3} width="full">
       {/* HERO ANNOUNCEMENT */}
       <Card.Root
-        variant="info"
         flexDirection="column"
         overflow="hidden"
-        colorPalette="grey"
+        colorPalette={colorPalette}
+        coloredBg
         flex="2"
       >
-        <Card.Body bg="blue.100" color="blue.fg">
-          <Card.Title>{hero.title}</Card.Title>
-          <Text fontSize="sm" mt={1}>
+        <Card.Header>
+          <Card.Title textStyle="h2">{hero.title}</Card.Title>
+          <Card.Description textStyle="s2">
             Posted by {hero.postedBy} · {hero.postedAt}
-          </Text>
-          <MarkdownProse content={hero.markdown} />
+          </Card.Description>
+        </Card.Header>
+        <Card.Body>
+          <MarkdownProse
+            as={Card.Description}
+            content={hero.markdown}
+            textStyle="body"
+          />
+        </Card.Body>
+        <Card.Footer>
           <Button mt="auto" mr="auto" asChild>
             <Link href={hero.fullLink}>Read full article</Link>
           </Button>
-        </Card.Body>
+        </Card.Footer>
       </Card.Root>
 
       {/* OTHER ANNOUNCEMENTS */}
@@ -42,6 +52,7 @@ export default function AnnouncementsCard({
           <Button
             key={i}
             asChild
+            colorPalette={colorPalette}
             variant="solid"
             width="full"
             justifyContent="flex-start"

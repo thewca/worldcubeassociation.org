@@ -41,18 +41,26 @@ export default function TabMenu({
   return (
     <Tabs.Root
       variant="enclosed"
-      w="100%"
+      width="full"
       defaultValue={currentPath}
       orientation="vertical"
       lazyMount
       unmountOnExit
       hideBelow="md"
+      colorPalette="white"
     >
-      <Tabs.List height="fit-content" position="sticky" top="3">
+      <Tabs.List
+        height="fit-content"
+        position="sticky"
+        minWidth="fit-content"
+        gap="3"
+      >
         {tabs.map((tab) => (
-          <Link href={tab.href} key={tab.i18nKey}>
-            <Tabs.Trigger value={tab.menuKey}>{t(tab.i18nKey)}</Tabs.Trigger>
-          </Link>
+          <Tabs.Trigger key={tab.i18nKey} value={tab.menuKey} asChild>
+            <Link href={tab.href} key={tab.i18nKey}>
+              {t(tab.i18nKey)}
+            </Link>
+          </Tabs.Trigger>
         ))}
         <Separator />
         <Tabs.Trigger value="custom-1">Custom 1</Tabs.Trigger>

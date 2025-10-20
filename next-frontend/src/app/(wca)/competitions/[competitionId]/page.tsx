@@ -1,5 +1,5 @@
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
-import { SimpleGrid, Stack, Text, VStack } from "@chakra-ui/react";
+import { GridItem, SimpleGrid, Stack, Text, VStack } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
 import { MarkdownFirstImage } from "@/components/MarkdownFirstImage";
 import {
@@ -41,12 +41,12 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
   return (
     <>
       <SimpleGrid gap="8" columns={{ base: 1, md: 2 }}>
-        <VStack gap="8">
+        <VStack gap="8" alignItems="stretch">
           <InfoCard competitionInfo={competitionInfo} t={t} />
           <RegistrationCard competitionInfo={competitionInfo} />
           <EventCard competitionInfo={competitionInfo} />
         </VStack>
-        <VStack gap="8">
+        <VStack gap="8" alignItems="stretch">
           <Stack gap="8" width="100%" direction={{ base: "column", sm: "row" }}>
             <OrganizationTeamCard competitionInfo={competitionInfo} />
             <MarkdownFirstImage content={competitionInfo.information} />
@@ -54,8 +54,10 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
           <VenueDetailsCard competitionInfo={competitionInfo} />
           <RefundPolicyCard competitionInfo={competitionInfo} />
         </VStack>
+        <GridItem colSpan={{ base: 1, md: 2 }}>
+          <AdditionalInformationCard competitionInfo={competitionInfo} />
+        </GridItem>
       </SimpleGrid>
-      <AdditionalInformationCard competitionInfo={competitionInfo} />
     </>
   );
 }

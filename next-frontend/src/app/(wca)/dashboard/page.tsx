@@ -32,7 +32,7 @@ export default async function Dashboard() {
       )}
       <Text>Test Links:</Text>
       <HStack>
-        <ChakraLink asChild variant="colouredLink" colorPalette="blue">
+        <ChakraLink asChild colorPalette="blue">
           <Link
             href={route({
               pathname: "/competitions/[competitionId]",
@@ -42,7 +42,7 @@ export default async function Dashboard() {
             <Button variant="outline">OC2024</Button>
           </Link>
         </ChakraLink>
-        <ChakraLink asChild variant="colouredLink" colorPalette="red">
+        <ChakraLink asChild colorPalette="red">
           <Link
             href={route({
               pathname: "/competitions/[competitionId]",
@@ -54,7 +54,7 @@ export default async function Dashboard() {
             </Button>
           </Link>
         </ChakraLink>
-        <ChakraLink asChild variant="colouredLink" colorPalette="red">
+        <ChakraLink asChild colorPalette="red">
           <Link
             href={route({
               pathname: "/persons/[wcaId]",
