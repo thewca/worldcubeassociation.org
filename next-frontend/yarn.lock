@@ -12747,7 +12747,7 @@ __metadata:
     prettier: "npm:^3.6.2"
     react: "npm:^19.2.0"
     react-dom: "npm:^19.2.0"
-    react-i18next: "npm:^16.0.1"
+    react-i18next: "npm:^16.1.0"
     react-icons: "npm:^5.5.0"
     react-intersection-observer: "npm:^9.16.0"
     react-markdown: "npm:^10.1.0"
@@ -14071,9 +14071,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^16.0.1":
-  version: 16.0.1
-  resolution: "react-i18next@npm:16.0.1"
+"react-i18next@npm:^16.1.0":
+  version: 16.1.0
+  resolution: "react-i18next@npm:16.1.0"
   dependencies:
     "@babel/runtime": "npm:^7.27.6"
     html-parse-stringify: "npm:^3.0.1"
@@ -14088,7 +14088,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/8fcd8dea9bd083aac37acf569478872980216d2f2d85eff18444316a407832f1d3f589d1d0e587c6fe709d43423f5ec82c2a96f52cc2999ddd2180fa3de20ace
+  checksum: 10c0/fa64c933705651ef96e80a520ee0c96e946a78af6415f5a79c98938e551c6b4728a726c9d6632472689d6377c89e5b9f877d51088cc79ee2730f031e0743141c
   languageName: node
   linkType: hard
 
