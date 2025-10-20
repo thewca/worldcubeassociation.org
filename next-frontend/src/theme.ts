@@ -545,51 +545,6 @@ const customConfig = defineConfig({
           coloredBg: false,
         },
       },
-      segmentGroup: {
-        slots: [],
-        variants: {
-          variant: {
-            inset: {
-              root: {
-                bg: "transparent",
-              },
-              item: {
-                px: "5",
-                py: "2.5",
-                fontWeight: "600",
-                border: "2px solid",
-                borderColor: "colorPalette.solid",
-                color: "colorPalette.highContrast",
-                bg: "transparent",
-                borderRadius: "0",
-                transition: "all 250ms",
-                cursor: "pointer",
-                _first: {
-                  borderTopLeftRadius: "5px",
-                  borderBottomLeftRadius: "5px",
-                  borderRight: "0px",
-                },
-                _last: {
-                  borderTopRightRadius: "5px",
-                  borderBottomRightRadius: "5px",
-                  borderLeft: "0px",
-                },
-                _checked: {
-                  bg: "colorPalette.solid",
-                  color: "colorPalette.contrast",
-                  boxShadow: "inset rgba(0, 0, 0, 0.25) 0 0 5px 0",
-                },
-                "&:not([data-state=checked]):hover": {
-                  bg: "colorPalette.fg/30",
-                },
-              },
-              indicator: {
-                display: "none",
-              },
-            },
-          },
-        },
-      },
       accordion: {
         slots: [],
         variants: {

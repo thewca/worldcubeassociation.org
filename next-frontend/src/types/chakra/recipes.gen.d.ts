@@ -417,10 +417,12 @@ export type BreadcrumbVariantMap = {
 export type CardSlot = "root" | "header" | "body" | "footer" | "title" | "description"
 
 export interface CardVariant {
-  /** @default "sm" */
+  /** @default "md" */
   size?: "sm" | "md" | "lg" | undefined
   /** @default "outline" */
-  variant?: "elevated" | "outline" | "subtle" | "hero" | "summary" | "info" | "plain" | "infoSnippet" | undefined
+  variant?: "elevated" | "outline" | "subtle" | undefined
+  /** @default false */
+  coloredBg?: "true" | "neon" | undefined
 }
 
 export type CardVariantProps = {
@@ -456,7 +458,7 @@ export type CheckboxCardSlot = "root" | "control" | "label" | "description" | "a
 
 export interface CheckboxCardVariant {
   /** @default "md" */
-  size?: "sm" | "md" | "lg" | "xs" | undefined
+  size?: "sm" | "md" | "lg" | undefined
   /** @default "outline" */
   variant?: "surface" | "subtle" | "outline" | "solid" | undefined
   justify?: "start" | "end" | "center" | undefined
@@ -1144,6 +1146,7 @@ export type StatSlot = "root" | "label" | "helpText" | "valueText" | "valueUnit"
 export interface StatVariant {
   /** @default "md" */
   size?: "sm" | "md" | "lg" | undefined
+  variant?: "competition" | undefined
 }
 
 export type StatVariantProps = {
