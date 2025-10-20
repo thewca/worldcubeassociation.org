@@ -557,7 +557,7 @@ const customConfig = defineConfig({
                 p: "0px",
                 textStyle: "annotation",
                 flexDirection: "row",
-                alignItems: "center",
+                alignItems: "flex-start",
                 gap: "1",
               },
             },
@@ -754,6 +754,8 @@ const customConfig = defineConfig({
                   bg: "colorPalette.inverted",
                 },
                 _selected: {
+                  color: "inherit",
+                  shadow: "sm",
                   bg: "colorPalette.inverted",
                 },
               },

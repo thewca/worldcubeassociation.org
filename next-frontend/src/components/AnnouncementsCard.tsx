@@ -31,7 +31,7 @@ export default function AnnouncementsCard({
           color="colorPalette.textBox.text"
         >
           <Card.Title textStyle="h2">{hero.title}</Card.Title>
-          <Card.Description textStyle="s2">
+          <Card.Description textStyle="s2" color="colorPalette.textBox.text">
             Posted by {hero.postedBy} · {hero.postedAt}
           </Card.Description>
         </Card.Header>
