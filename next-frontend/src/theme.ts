@@ -545,30 +545,6 @@ const customConfig = defineConfig({
           coloredBg: false,
         },
       },
-      checkboxCard: {
-        slots: [],
-        variants: {
-          size: {
-            xs: {
-              root: {
-                textStyle: "xs",
-              },
-              control: {
-                padding: "1",
-                gap: "0.5",
-              },
-              addon: {
-                px: "1.5",
-                py: "0.5",
-                borderTopWidth: "1px",
-              },
-              indicator: {
-                boxSize: "2",
-              },
-            },
-          },
-        },
-      },
       segmentGroup: {
         slots: [],
         variants: {
