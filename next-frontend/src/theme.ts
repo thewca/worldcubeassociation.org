@@ -645,25 +645,21 @@ const customConfig = defineConfig({
             enclosed: {
               list: {
                 bg: "colorPalette.textBox.bg",
-                borderRadius: "xl",
-                gap: "3",
+                borderRadius: "wca",
               },
               trigger: {
-                color: "colorPalette.contrast",
+                color: "colorPalette.textBox.text",
                 transitionProperty: "background-color",
                 transitionTimingFunction: "ease",
                 transitionDuration: "200ms",
                 _hover: {
-                  bg: "colorPalette.inverted",
+                  bg: "colorPalette.textBox.bg",
                 },
                 _selected: {
-                  color: "inherit",
+                  color: "currentColor",
                   shadow: "sm",
-                  bg: "colorPalette.inverted",
+                  bg: "colorPalette.textBox.bg",
                 },
-              },
-              content: {
-                flexGrow: "1",
               },
             },
             slider: {
