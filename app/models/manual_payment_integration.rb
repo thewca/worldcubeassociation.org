@@ -7,22 +7,53 @@ class ManualPaymentIntegration < ApplicationRecord
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
   end
 
+  def prepare_intent(registration, amount_iso, currency_iso, paying_user, payment_reference = nil)
+    existing_intent = registration.manual_payment_intent
+    if existing_intent.present?
+      reference_to_write = payment_reference.presence || existing_intent.payment_record.payment_reference
+      existing_intent.payment_record.update(amount_iso_denomination: amount_iso, currency_code: currency_iso, payment_reference: reference_to_write)
+      return existing_intent
+    end
+
+    self.create_intent(registration, amount_iso, currency_iso, paying_user, payment_reference)
+  end
+
+  private def create_intent(registration, amount_iso, currency_iso, paying_user, payment_reference = nil)
+    manual_record = ManualPaymentRecord.create(
+      amount_iso_denomination: amount_iso,
+      currency_code: currency_iso,
+      manual_status: payment_reference.present? ? :user_submitted : :created,
+      payment_reference: payment_reference,
+    )
+
+    PaymentIntent.create!(
+      holder: registration,
+      initiated_by: paying_user,
+      client_secret: manual_record.id,
+      wca_status: manual_record.determine_wca_status,
+      payment_record: manual_record,
+    )
+  end
+
   def find_payment(record_id)
     ManualPaymentRecord.find(record_id)
   end
 
-  def find_payment_from_request(params)
-    # The client secret is just the id of the database model, but we override the payment_reference
-    # from the new one, so we can update it in update_status. This is simulating getting an updated version
-    # from a payment provider after paying
-    ManualPaymentRecord.find(params[:client_secret]).tap do |mpr|
-      mpr.payment_reference = params[:payment_reference_label]
-      mpr.manual_status = ManualPaymentRecord.manual_statuses[:user_submitted]
-    end
+  def find_payment_intent_from_request(params)
+    # Because there is no outgoing request to a payment provider, we did not create a PaymentIntent during the payment_ticket step
+    # Thus, we need to create the PaymentIntent and associated PaymentRecord now instead
+
+    registration = Registration.find(params[:registration_id])
+    entry_fee = registration.competition.base_entry_fee_lowest_denomination
+    currency_code = registration.competition.currency_code
+    user = registration.user
+    reference = params[:payment_reference]
+
+    self.prepare_intent(registration, entry_fee, currency_code, user, reference)
   end
 
   def retrieve_payments(payment_intent)
-    yield payment_intent.payment_record
+    yield payment_intent.payment_record if block_given?
   end
 
   def self.generate_onboarding_link(competition_id)
