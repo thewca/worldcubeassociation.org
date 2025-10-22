@@ -37,6 +37,7 @@
     "@tanstack/react-query": "^5.90.21",
     "accept-language-parser": "^1.5.0",
     "aws4": "^1.13.2",
+    "babel-plugin-react-compiler": "^1.0.0",
     "culori": "^4.0.2",
     "dompurify": "^3.3.3",
     "graphql": "^16.13.1",
