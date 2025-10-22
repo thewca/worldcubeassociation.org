@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_13_162643) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1103,8 +1103,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
   create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=1", force: :cascade do |t|
     t.integer "pos", limit: 2, default: 0, null: false
     t.string "person_id", limit: 10, default: "", null: false
-    t.string "person_name", limit: 80
-    t.string "country_id", limit: 50
+    t.string "person_name", limit: 80, default: "", null: false
+    t.string "country_id", limit: 50, default: "", null: false
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
@@ -1120,6 +1120,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
     t.string "regional_single_record", limit: 3
     t.string "regional_average_record", limit: 3
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
+    t.index ["competition_id", "round_id", "person_id"], name: "results_person_uniqueness_speedup", unique: true
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competition_id"], name: "Results_fk_tournament"
     t.index ["country_id"], name: "_tmp_index_Results_on_countryId"
