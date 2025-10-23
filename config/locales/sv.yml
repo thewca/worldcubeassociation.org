@@ -769,15 +769,15 @@ sv:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 27c2251
+        #original_hash: c564b74
         receive_delegate_reports: >-
           Om du är senior-delegat eller medlem i WRC eller WQAC, får du
-          delegatrapporter som standard. Obs: ändringen kan ta upp till en timme
-          att träda i kraft.
-        #original_hash: 364624c
+          delegatrapporter som standard. OBS: ändringen kan ta upp till 12
+          timmar att träda i kraft.
+        #original_hash: 0017d38
         delegate_reports_region: >-
           Om du vill få alla rapporter lämnar du detta fält tomt (dropdown-menyn
-          längst upp). OBS: det kan ta upp till en timme innan ändringen träder
+          längst upp). OBS: det kan ta upp till 12 timmar innan ändringen träder
           i kraft.
         #original_hash: 0627e5c
         otp_attempt: >-
@@ -845,13 +845,13 @@ sv:
           hänvisning till deras nummer. Även om allt verkade normalt, lista bara
           åtminstone de mest anmärkningsvärda fallen. Markera kryssrutorna nedan
           om du aktivt söker feedback.
-        #original_hash: 8af00aa
+        #original_hash: f2309fc
         setup_images: >-
-          Välj minst %{image_count} bilder som illustrerar tävlingens setup
-          (blandningsområde, tävlingsområde etc.). Du kan välja flera filer
-          samtidigt. Du kan ta bort bilder först när tillräckligt många andra
-          bilder har laddats upp (om du vill byta ut en bild måste du först
-          ladda upp den nya bilden och sedan ta bort den gamla).
+          Du MÅSTE välja minst %{image_count} bilder som illustrerar blandnings-
+          och tävlingsområdet (andra bilder är också välkomna). Du kan välja
+          flera filer samtidigt. Du kan ta bort bilder först när tillräckligt
+          många andra bilder har laddats upp (om du vill byta ut en bild måste
+          du först ladda upp den nya bilden och sedan ta bort den gamla).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -2882,12 +2882,12 @@ sv:
         Vi uppmuntrar alla att anmäla sig till de genar de vill tävla i via
         online-anmälan, men du kan lägga till grenar i din anmälan till dess att
         grenen har börjat.
-      #original_hash: cf7be5d
+      #original_hash: 51ef4f3
       on_the_spot_registration_fee_html: >-
-        Anmälan på plats accepteras med en basanmälningsavgift på
-        %{on_the_spot_base_entry_fee}.
-      #original_hash: 1637bea
-      on_the_spot_registration_free: Anmälan på plats accepteras gratis.
+        Anmälan på plats accepteras om det finns platser tillgängliga, med en
+        basanmälningsavgift på %{on_the_spot_base_entry_fee}.
+      #original_hash: 2b4ea65
+      on_the_spot_registration_free: Anmälan på plats accepteras gratis om det finns platser tillgängliga.
       #original_hash: f5f687d
       no_on_the_spot_registration: Inga anmälningar på plats accepteras.
       #original_hash: 4df139d
