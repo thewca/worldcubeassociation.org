@@ -28,3 +28,12 @@ jobs:
         run: yarn run check:types
       - name: Run Lint
         run: yarn run lint
+      - name: Create dummy fonts
+        shell: bash
+        run: |
+          mkdir ./src/styles/fonts/TTNormsPro
+          for style in Light Light_Italic Regular Medium Bold Condensed_ExtraBold; do
+            touch "./src/styles/fonts/TTNormsPro/TT_Norms_Pro_${style}.woff2"
+          done
+      - name: Run build
+        run: yarn run build
