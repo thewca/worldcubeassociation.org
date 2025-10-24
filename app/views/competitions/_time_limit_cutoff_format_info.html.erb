@@ -9,19 +9,19 @@
   <p>
     <%= t("competitions.events.time_limit_information.time_limit_html",
           regulation_link: link_to(t("competitions.events.time_limit_information.regulation_link_text", number: "A1a4"), regulations_path + "#A1a4", target: "_blank")) %>
-    <% if show_cumulative_one_round %>
+  <% if show_cumulative_across_rounds %>
+      <br/>
+      <% cumulative_across_rounds = content_tag :strong, t("competitions.events.time_limit_information.cumulative_time_limit"), id: "cumulative-across-rounds-time-limit" %>
+      <%= t("competitions.events.time_limit_information.cumulative_across_rounds_html",
+            cumulative_time_limit: cumulative_across_rounds,
+            regulation_link: link_to(t("competitions.events.time_limit_information.regulation_link_text", number: "A1a2"), regulations_path + "#A1a2", target: "_blank")) %>
+
+    <% elsif show_cumulative_one_round %>
       <br/>
       <% cumulative_one_round = content_tag :strong, t("competitions.events.time_limit_information.cumulative_time_limit"), id: "cumulative-time-limit" %>
       <%= t("competitions.events.time_limit_information.cumulative_one_round_html",
             cumulative_time_limit: cumulative_one_round,
             regulation_link: link_to(t("competitions.events.time_limit_information.regulation_link_text", number: "A1a2"), regulations_path + "#A1a2", target: "_blank")) %>
-    <% end %>
-    <% if show_cumulative_across_rounds %>
-      <br/>
-      <% cumulative_across_rounds = content_tag :strong, t("competitions.events.time_limit_information.cumulative_time_limit"), id: "cumulative-across-rounds-time-limit" %>
-      <%= t("competitions.events.time_limit_information.cumulative_across_rounds_html",
-            cumulative_time_limit: cumulative_across_rounds,
-            guideline_link: link_to(t("competitions.events.time_limit_information.guideline_link_text", number: "A1a2++"), regulations_path + "/guidelines.html#A1a2++", target: "_blank")) %>
     <% end %>
   </p>
 
