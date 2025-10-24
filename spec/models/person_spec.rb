@@ -193,5 +193,24 @@ RSpec.describe Person do
       expect(us_competitor2.championship_podiums[:national].first.pos).to eq 1
       expect(us_competitor3.championship_podiums[:national].first.pos).to eq 3
     end
+
+    context "when a competition has two championship types" do
+      before do
+        us_nationals2017.championships.create!(championship_type: "FR")
+        @fr_podiums = fr_competitor.championship_podiums[:national]
+        @us_podiums = us_competitor.championship_podiums[:national]
+        @finals_id = us_nationals2017_333_round.id
+      end
+
+      it 'assigns national podiums to both nationalities' do
+        expect(fr_competitor.championship_podiums[:national].pluck(:round_id)).to include(@finals_id)
+        expect(us_competitor.championship_podiums[:national].pluck(:round_id)).to include(@finals_id)
+      end
+
+      it 'both competitors are first in their respective national podiums' do
+        expect(@fr_podiums.find { it.round_id == @finals_id }.pos).to be(1)
+        expect(@us_podiums.find { it.round_id == @finals_id }.pos).to be(1)
+      end
+    end
   end
 end
