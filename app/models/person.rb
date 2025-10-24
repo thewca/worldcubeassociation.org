@@ -185,7 +185,7 @@ class Person < ApplicationRecord
             .joins(:event)
             .order("events.rank, pos")
             .includes(:format, :competition)
-            .group_by(&:event_id)
+            .group_by { { event_id: it.event_id, country_id: it.country_id} }
             .each_value do |final_results|
               previous_old_pos = nil
               previous_new_pos = nil
