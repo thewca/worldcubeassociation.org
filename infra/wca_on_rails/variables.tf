@@ -26,8 +26,14 @@ variable "VAULT_ADDR" {
 
 variable "DATABASE_WRT_USER" {
   type        = string
-  description = "The name of the user to access phpmyadmin"
-  default     = "phpmyadmin"
+  description = "The name of the user to access phpmyadmin for wrt users"
+  default     = "wrt"
+}
+
+variable "DATABASE_WRT_SENIOR_USER" {
+  type        = string
+  description = "The name of the user to access phpmyadmin for wrt senior users"
+  default     = "wrt_senior"
 }
 
 variable "WRC_WEBHOOK_URL" {
