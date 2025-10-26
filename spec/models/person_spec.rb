@@ -125,7 +125,7 @@ RSpec.describe Person do
   end
 
   describe "#continental_championship_podiums" do
-    let!(:nac2025) { create(:competition, championship_types: ["_North America"], starts: Date.new(2017, 1, 1)) }
+    let!(:nac2025) { create(:competition, championship_types: ["_North America", "CA"], starts: Date.new(2017, 1, 1)) }
     let!(:nac_333) { create(:round, competition: nac2025) }
 
     let!(:fr_competitor) do
@@ -166,6 +166,12 @@ RSpec.describe Person do
       expect(us_competitor.championship_podiums[:continental].first.pos).to be(1)
       expect(can_competitor.championship_podiums[:continental].first.pos).to be(2)
       expect(us_competitor_2.championship_podiums[:continental].first.pos).to be(3)
+    end
+
+    it 'also recognizes national podiums' do
+      expect(us_competitor.championship_podiums[:national]).to be_empty
+      expect(can_competitor.championship_podiums[:national].first.pos).to be(1)
+      expect(us_competitor_2.championship_podiums[:national]).to be_empty
     end
 
     it 'makes no assignment for 4th-place NA competitor' do
