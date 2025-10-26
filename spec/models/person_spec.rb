@@ -124,7 +124,62 @@ RSpec.describe Person do
     end
   end
 
-  describe "#championship_podiums" do
+  describe "#continental_championship_podiums" do
+    let!(:nac2025) { create(:competition, championship_types: ["_North America", "CA"], starts: Date.new(2017, 1, 1)) }
+    let!(:nac_333) { create(:round, competition: nac2025) }
+
+    let!(:fr_competitor) do
+      create(:person, country_id: "France").tap do |fr_competitor|
+        create(:result, person: fr_competitor, competition: nac2025, pos: 1, event_id: "333", round: nac_333)
+      end
+    end
+
+    let!(:us_competitor) do
+      create(:person, country_id: "USA").tap do |us_competitor|
+        create(:result, person: us_competitor, competition: nac2025, pos: 2, event_id: "333", round: nac_333)
+      end
+    end
+
+    let!(:can_competitor) do
+      create(:person, country_id: "Canada").tap do |can_competitor|
+        create(:result, person: can_competitor, competition: nac2025, pos: 3, event_id: "333", round: nac_333)
+      end
+    end
+
+    let!(:us_competitor_2) do
+      create(:person, country_id: "USA").tap do |us_2|
+        create(:result, person: us_2, competition: nac2025, pos: 4, event_id: "333", round: nac_333)
+      end
+    end
+
+    let!(:can_competitor_2) do
+      create(:person, country_id: "Canada").tap do |can_2|
+        create(:result, person: can_2, competition: nac2025, pos: 5, event_id: "333", round: nac_333)
+      end
+    end
+
+    it 'does not assign any podium to non-NA competitor' do
+      expect(fr_competitor.championship_podiums[:continental]).to be_empty
+    end
+
+    it 'assigns correct podium placements to competitors from different NA countries', :zxc do
+      expect(us_competitor.championship_podiums[:continental].first.pos).to be(1)
+      expect(can_competitor.championship_podiums[:continental].first.pos).to be(2)
+      expect(us_competitor_2.championship_podiums[:continental].first.pos).to be(3)
+    end
+
+    it 'also recognizes national podiums' do
+      expect(us_competitor.championship_podiums[:national]).to be_empty
+      expect(can_competitor.championship_podiums[:national].first.pos).to be(1)
+      expect(us_competitor_2.championship_podiums[:national]).to be_empty
+    end
+
+    it 'makes no assignment for 4th-place NA competitor' do
+      expect(can_competitor_2.championship_podiums[:continental]).to be_empty
+    end
+  end
+
+  describe "#national_championship_podiums" do
     let!(:fr_nationals2016) { create(:competition, championship_types: ["FR"], starts: Date.new(2016, 1, 1)) }
     let!(:us_nationals2017) { create(:competition, championship_types: ["US"], starts: Date.new(2017, 1, 1)) }
     let!(:us_nationals2017_333_round) { create(:round, competition: us_nationals2017) }
