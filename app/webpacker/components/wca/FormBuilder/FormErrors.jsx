@@ -1,5 +1,7 @@
-import React from 'react';
-import { List, Message } from 'semantic-ui-react';
+import React, { useState } from 'react';
+import {
+  Accordion, Icon, List, Message,
+} from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
 
 // https://stackoverflow.com/questions/28336104/humanize-a-string-in-javascript
@@ -57,16 +59,26 @@ function NestedErrorList({
 }
 
 export default function FormErrors({ errors }) {
+  const [accordionIsOpen, setAccordionIsOpen] = useState(true);
+
   if (!errors) return null;
 
   return (
     <Message negative>
-      <Message.Header>
-        {I18n.t('wca.errors.messages.form_error', { count: nestedErrorCount(errors) })}
-      </Message.Header>
-      <List bulleted>
-        <NestedErrorList errors={errors} />
-      </List>
+      <Accordion>
+        <Accordion.Title
+          active={accordionIsOpen}
+          onClick={() => setAccordionIsOpen((isOpen) => !isOpen)}
+        >
+          <Icon name="dropdown" />
+          {I18n.t('wca.errors.messages.form_error', { count: nestedErrorCount(errors) })}
+        </Accordion.Title>
+        <Accordion.Content active={accordionIsOpen}>
+          <List bulleted>
+            <NestedErrorList errors={errors} />
+          </List>
+        </Accordion.Content>
+      </Accordion>
     </Message>
   );
 }
