@@ -42,20 +42,26 @@ function NestedErrorList({
     );
   }
 
-  return Object.keys(errors).map((attribute) => {
-    const attrErrors = errors[attribute];
+  return (
+    <List.List>
+      {Object.keys(errors).map((attribute) => {
+        const attrErrors = errors[attribute];
 
-    if (nestedErrorCount(attrErrors) === 0) return null;
+        if (nestedErrorCount(attrErrors) === 0) return null;
 
-    return (
-      <List.Item key={`${nestingKey}.${attribute}`}>
-        <List.Content>
-          <List.Header>{humanize(attribute)}</List.Header>
-          <NestedErrorList errors={attrErrors} nestedKeys={nestedKeys.concat(attribute)} />
-        </List.Content>
-      </List.Item>
-    );
-  });
+        return (
+          <List.Item key={`${nestingKey}.${attribute}`}>
+            <List.Content>
+              <List.Header>{humanize(attribute)}</List.Header>
+              <List.Description>
+                <NestedErrorList errors={attrErrors} nestedKeys={nestedKeys.concat(attribute)} />
+              </List.Description>
+            </List.Content>
+          </List.Item>
+        );
+      })}
+    </List.List>
+  );
 }
 
 export default function FormErrors({ errors }) {
