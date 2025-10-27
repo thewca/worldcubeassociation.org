@@ -2021,7 +2021,6 @@ RSpec.describe Competition do
         create(:registration, :accepted, competition: competition)
         expect(competition.can_show_competitors_page?).to be(true)
       end
-
     end
   end
 end
