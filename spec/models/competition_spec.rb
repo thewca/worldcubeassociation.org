@@ -1611,6 +1611,12 @@ RSpec.describe Competition do
   context "new competition is invalid when" do
     let!(:new_competition) { build(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
 
+    it 'there is no start date' do
+      new_competition.start_date = nil
+      expect{new_competition.valid?}.not_to raise_error
+      expect(new_competition).not_to be_valid
+    end
+
     it "nameReason is too long" do
       new_competition.name_reason = "Veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long name reason"
       expect(new_competition).not_to be_valid
