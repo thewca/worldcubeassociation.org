@@ -12469,7 +12469,7 @@ __metadata:
     prettier: "npm:^3.6.2"
     react: "npm:^19.2.0"
     react-dom: "npm:^19.2.0"
-    react-i18next: "npm:^16.1.0"
+    react-i18next: "npm:^16.2.0"
     react-icons: "npm:^5.5.0"
     react-intersection-observer: "npm:^9.16.0"
     react-markdown: "npm:^10.1.0"
@@ -13782,12 +13782,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^16.1.0":
-  version: 16.1.0
-  resolution: "react-i18next@npm:16.1.0"
+"react-i18next@npm:^16.2.0":
+  version: 16.2.0
+  resolution: "react-i18next@npm:16.2.0"
   dependencies:
     "@babel/runtime": "npm:^7.27.6"
     html-parse-stringify: "npm:^3.0.1"
+    use-sync-external-store: "npm:^1.6.0"
   peerDependencies:
     i18next: ">= 25.5.2"
     react: ">= 16.8.0"
@@ -13799,7 +13800,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/fa64c933705651ef96e80a520ee0c96e946a78af6415f5a79c98938e551c6b4728a726c9d6632472689d6377c89e5b9f877d51088cc79ee2730f031e0743141c
+  checksum: 10c0/d10d733a64e691cf1924aee4e6c6a7b938eede33e3f34867491d97512a8e35efa8f427b7161e3e3c46191eead378832c023008cf75785ae7f8840cb27f7b3bc1
   languageName: node
   linkType: hard
 
@@ -16175,6 +16176,15 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   checksum: 10c0/1b8663515c0be34fa653feb724fdcce3984037c78dd4a18f68b2c8be55cc1a1084c578d5b75f158d41b5ddffc2bf5600766d1af3c19c8e329bb20af2ec6f52f4
+  languageName: node
+  linkType: hard
+
+"use-sync-external-store@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "use-sync-external-store@npm:1.6.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/35e1179f872a53227bdf8a827f7911da4c37c0f4091c29b76b1e32473d1670ebe7bcd880b808b7549ba9a5605c233350f800ffab963ee4a4ee346ee983b6019b
   languageName: node
   linkType: hard
 
