@@ -1125,9 +1125,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-runtime@npm:^7.28.3":
-  version: 7.28.3
-  resolution: "@babel/plugin-transform-runtime@npm:7.28.3"
+"@babel/plugin-transform-runtime@npm:^7.28.5":
+  version: 7.28.5
+  resolution: "@babel/plugin-transform-runtime@npm:7.28.5"
   dependencies:
     "@babel/helper-module-imports": "npm:^7.27.1"
     "@babel/helper-plugin-utils": "npm:^7.27.1"
@@ -1137,7 +1137,7 @@ __metadata:
     semver: "npm:^6.3.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10c0/561629bb6c53561b5ad470df2e76bdd15e177fc518d91087bd7dc64a1025e42303ce333281875c6f0c7bf29b2edc7d99945343a09caf0ed6738d25fe34473254
+  checksum: 10c0/d20901d179a7044327dec7b37dd4fadbc4c1c0dc1cb6a3dd69e67166b43b06c262dd0f2e70aedf1c0dab42044c0c063468d99019ae1c9290312b6b8802c502f9
   languageName: node
   linkType: hard
 
@@ -10173,7 +10173,7 @@ __metadata:
     "@babel/plugin-transform-destructuring": "npm:^7.28.0"
     "@babel/plugin-transform-object-rest-spread": "npm:^7.28.4"
     "@babel/plugin-transform-regenerator": "npm:^7.28.4"
-    "@babel/plugin-transform-runtime": "npm:^7.28.3"
+    "@babel/plugin-transform-runtime": "npm:^7.28.5"
     "@babel/preset-env": "npm:^7.28.3"
     "@babel/preset-react": "npm:^7.27.1"
     "@babel/runtime": "npm:^7.28.4"
