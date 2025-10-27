@@ -1206,10 +1206,10 @@ class Competition < ApplicationRecord
   private def registration_dates_must_be_valid
     errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start')) if refund_policy_limit_date? && refund_policy_limit_date > start_date
 
-    if registration_period_required? && [registration_open, registration_close, start_date].all?(&:present?)
-       (registration_open >= start_date || registration_close >= start_date)
-      errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start'))
-    end
+    return unless registration_period_required? && [registration_open, registration_close, start_date].all?(&:present?)
+
+    errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start')) if
+      registration_open >= start_date || registration_close >= start_date
   end
 
   validate :waiting_list_dates_must_be_valid
