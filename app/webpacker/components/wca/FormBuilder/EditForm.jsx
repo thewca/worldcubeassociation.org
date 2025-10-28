@@ -118,7 +118,12 @@ function EditForm({
   return (
     <>
       <div ref={stickyRef}>
-        <FormErrors errors={errors} />
+        {(unsavedChanges || errors) && (
+          <Sticky context={stickyRef} offset={20} styleElement={{ zIndex: 2000 }}>
+            {unsavedChanges && renderUnsavedChangesAlert()}
+            {errors && <FormErrors errors={errors} />}
+          </Sticky>
+        )}
         {CustomHeader && (
           <Dimmer.Dimmable as={Segment} blurring dimmed={unsavedChanges}>
             <Dimmer active={unsavedChanges}>
@@ -127,11 +132,6 @@ function EditForm({
 
             <CustomHeader />
           </Dimmer.Dimmable>
-        )}
-        {unsavedChanges && (
-          <Sticky context={stickyRef} offset={20} styleElement={{ zIndex: 2000 }}>
-            {renderUnsavedChangesAlert()}
-          </Sticky>
         )}
         <Form>
           {children}

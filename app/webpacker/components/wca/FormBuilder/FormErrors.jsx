@@ -1,5 +1,7 @@
-import React from 'react';
-import { List, Message } from 'semantic-ui-react';
+import React, { useState } from 'react';
+import {
+  Accordion, Icon, List, Message,
+} from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
 
 // https://stackoverflow.com/questions/28336104/humanize-a-string-in-javascript
@@ -40,33 +42,49 @@ function NestedErrorList({
     );
   }
 
-  return Object.keys(errors).map((attribute) => {
-    const attrErrors = errors[attribute];
+  return (
+    <List.List>
+      {Object.keys(errors).map((attribute) => {
+        const attrErrors = errors[attribute];
 
-    if (nestedErrorCount(attrErrors) === 0) return null;
+        if (nestedErrorCount(attrErrors) === 0) return null;
 
-    return (
-      <List.Item key={`${nestingKey}.${attribute}`}>
-        <List.Content>
-          <List.Header>{humanize(attribute)}</List.Header>
-          <NestedErrorList errors={attrErrors} nestedKeys={nestedKeys.concat(attribute)} />
-        </List.Content>
-      </List.Item>
-    );
-  });
+        return (
+          <List.Item key={`${nestingKey}.${attribute}`}>
+            <List.Content>
+              <List.Header>{humanize(attribute)}</List.Header>
+              <List.Description>
+                <NestedErrorList errors={attrErrors} nestedKeys={nestedKeys.concat(attribute)} />
+              </List.Description>
+            </List.Content>
+          </List.Item>
+        );
+      })}
+    </List.List>
+  );
 }
 
 export default function FormErrors({ errors }) {
+  const [accordionIsOpen, setAccordionIsOpen] = useState(true);
+
   if (!errors) return null;
 
   return (
     <Message negative>
-      <Message.Header>
-        {I18n.t('wca.errors.messages.form_error', { count: nestedErrorCount(errors) })}
-      </Message.Header>
-      <List bulleted>
-        <NestedErrorList errors={errors} />
-      </List>
+      <Accordion>
+        <Accordion.Title
+          active={accordionIsOpen}
+          onClick={() => setAccordionIsOpen((isOpen) => !isOpen)}
+        >
+          <Icon name="dropdown" />
+          {I18n.t('wca.errors.messages.form_error', { count: nestedErrorCount(errors) })}
+        </Accordion.Title>
+        <Accordion.Content active={accordionIsOpen}>
+          <List bulleted>
+            <NestedErrorList errors={errors} />
+          </List>
+        </Accordion.Content>
+      </Accordion>
     </Message>
   );
 }
