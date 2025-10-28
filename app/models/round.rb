@@ -62,7 +62,8 @@ class Round < ApplicationRecord
   private def uses_wrong_333bf_format?
     new_regulations_start_date = Date.new(2026, 1, 1)
     return false if event.id != "333bf"
-    return format_id != "a" if competition.start_date >= new_regulations_start_date
+    return format_id != "5" if competition.start_date >= new_regulations_start_date
+
     format_id != "3"
   end
 
