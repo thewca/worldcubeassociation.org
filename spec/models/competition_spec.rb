@@ -1613,7 +1613,6 @@ RSpec.describe Competition do
 
     it 'there is no start date' do
       new_competition.start_date = nil
-      expect { new_competition.valid? }.not_to raise_error
       expect(new_competition).not_to be_valid
     end
 
