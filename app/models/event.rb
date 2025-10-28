@@ -61,7 +61,7 @@ class Event < ApplicationRecord
   end
 
   def can_have_cutoff?
-    self.id != "333bf" && self.id != "444bf" && self.id != "555bf"
+    self.id != "444bf" && self.id != "555bf"
   end
 
   # Events that are generally fast enough to never need to go over the default 10 minute time limit
