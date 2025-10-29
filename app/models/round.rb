@@ -59,10 +59,10 @@ class Round < ApplicationRecord
   end
 
   # Competitions before 2026 have to use Mo3 for 333bf, but after 2026 they need to use Ao5
+  NEW_REGULATIONS_START_DATE = Date.new(2026, 1, 1)
   private def uses_wrong_333bf_format?
-    new_regulations_start_date = Date.new(2026, 1, 1)
     return false if event.id != "333bf"
-    return format_id != "5" if competition.start_date >= new_regulations_start_date
+    return format_id != "5" if competition.start_date >= NEW_REGULATIONS_START_DATE
 
     format_id != "3"
   end
