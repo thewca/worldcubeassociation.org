@@ -846,14 +846,14 @@ pt:
           usando os números como referência. Mesmo que tudo pareça genérico,
           liste pelo menos os mais relevantes. Por favor assinale as caixas
           apropriadas se precisar de obter feedback.
-        #original_hash: 8af00aa
+        #original_hash: f2309fc
         setup_images: >-
-          Escolha pelo menos %{image_count} imagens que ilustrem a configuração
-          do espaço da competição (área de embaralhamento, área de competição,
-          etc). Pode selecionar vários ficheiros de uma só vez. Só pode eliminar
-          imagens quando tiverem sido carregadas outras imagens suficientes (se
-          quiser substituir uma imagem, precisa de carregar a nova primeiro e
-          depois eliminar a antiga).
+          TEM de incluir pelo menos %{image_count} imagens que ilustrem a
+          configuração das áreas de embaralhamento e da competição (outras
+          imagens também são bem-vindas). Pode selecionar vários ficheiros de
+          uma só vez. Só pode eliminar imagens quando tiverem sido carregadas
+          outras imagens suficientes (se quiser substituir uma imagem, precisa
+          de carregar a nova primeiro e depois eliminar a antiga).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
