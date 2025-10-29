@@ -65,7 +65,7 @@ class Result < ApplicationRecord
   alias_attribute :wca_id, :person_id
 
   def attempts
-    [value1, value2, value3, value4, value5]
+    result_attempts.pluck(:value)
   end
 
   delegate :iso2, to: :country, prefix: true
