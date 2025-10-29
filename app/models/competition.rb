@@ -60,7 +60,7 @@ class Competition < ApplicationRecord
   validates :start_date, :cant_change_across_regulation_boundaries
 
   private def cant_change_across_regulation_boundaries
-    errors.add(:start_date, "You can't change the start date across Regulation boundaries.") if start_date_was.year == 2025 && start_date.year == 2026 || start_date_was.year == 2026 && start_date.year == 2025
+    errors.add(:start_date, "You can't change the start date across Regulation boundaries.") if (start_date_was.year == 2025 && start_date.year == 2026) || (start_date_was.year == 2026 && start_date.year == 2025)
   end
 
   scope :not_cancelled, -> { where(cancelled_at: nil) }
@@ -2307,7 +2307,7 @@ class Competition < ApplicationRecord
 
   private def xero_dues_payer
     self.country&.wfc_dues_redirect&.redirect_to ||
-      self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
+    self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
   end
 
   # WFC usually sends dues to the first staff delegate in alphabetical order if there are no redirects setup for the country or organizer.
