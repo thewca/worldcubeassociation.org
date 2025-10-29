@@ -866,7 +866,7 @@ class User < ApplicationRecord
   end
 
   def can_manage_regional_organizations?
-    admin? || board_member?
+    admin? || board_member? || weat_team?
   end
 
   def can_create_competitions?
