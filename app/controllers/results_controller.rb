@@ -104,29 +104,25 @@ class ResultsController < ApplicationController
         SQL
 
       else
-        subqueries = (1..5).map do |i|
-          <<-SQL.squish
-            SELECT
-              results.*,
-              value#{i} value
-            FROM results
-            #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
-            #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
-            WHERE value#{i} > 0
+        @query = <<-SQL.squish
+        SELECT r.*, ra.value
+        FROM (
+          SELECT *
+          FROM results
+          #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+          #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
+          WHERE
+              1=1
               #{@event_condition}
               #{@years_condition_competition}
               #{@region_condition}
               #{@gender_condition}
-            ORDER BY value
-            #{limit_condition}
-          SQL
-        end
-        subquery = "(#{subqueries.join(') UNION ALL (')})"
-        @query = <<-SQL.squish
-          SELECT *
-          FROM (#{subquery}) union_results
-          ORDER BY value, person_name, competition_id, round_type_id
-          #{limit_condition}
+        ) AS r
+        JOIN result_attempts AS ra
+          ON ra.result_id = r.id
+        WHERE ra.value > 0
+        ORDER BY ra.value, r.person_name, r.competition_id, r.round_type_id
+        #{limit_condition}
         SQL
       end
     elsif @is_by_region
