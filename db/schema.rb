@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_29_153518) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_30_105922) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1098,6 +1098,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_29_153518) do
     t.datetime "updated_at", null: false
     t.index ["result_id", "attempt_number"], name: "index_result_attempts_on_result_id_and_attempt_number", unique: true
     t.index ["result_id"], name: "index_result_attempts_on_result_id"
+    t.index ["value", "result_id"], name: "index_result_attempts_on_value_and_result_id"
+    t.index ["value"], name: "index_result_attempts_on_value"
   end
 
   create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=1", force: :cascade do |t|
@@ -1122,6 +1124,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_29_153518) do
     t.index ["event_id", "best"], name: "Results_eventAndBest"
     t.index ["event_id", "competition_id", "round_type_id", "country_id", "average"], name: "Results_regionalAverageRecordCheckSpeedup"
     t.index ["event_id", "competition_id", "round_type_id", "country_id", "best"], name: "Results_regionalSingleRecordCheckSpeedup"
+    t.index ["event_id", "id"], name: "idx_results_event_id_id"
     t.index ["event_id"], name: "Results_fk_event"
     t.index ["event_id"], name: "index_Results_on_eventId_and_value1"
     t.index ["event_id"], name: "index_Results_on_eventId_and_value2"
