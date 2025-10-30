@@ -15,18 +15,6 @@ class Result < ApplicationRecord
 
   has_many :result_attempts, dependent: :destroy
 
-  after_update_commit :create_or_update_attempts
-
-  def create_or_update_attempts
-    attempts = self.result_attempts_attributes(result_id: self.id)
-
-    # Delete attempts when the value was set to 0
-    zero_attempts = self.skipped_attempt_numbers
-    ResultAttempt.where(result_id: id, attempt_number: zero_attempts).delete_all if zero_attempts.any?
-
-    ResultAttempt.upsert_all(attempts)
-  end
-
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
 
   validates :regional_single_record, inclusion: { in: MARKERS }
@@ -63,10 +51,6 @@ class Result < ApplicationRecord
 
   alias_attribute :name, :person_name
   alias_attribute :wca_id, :person_id
-
-  def attempts
-    [value1, value2, value3, value4, value5]
-  end
 
   delegate :iso2, to: :country, prefix: true
 
