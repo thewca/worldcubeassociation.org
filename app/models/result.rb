@@ -52,6 +52,10 @@ class Result < ApplicationRecord
   alias_attribute :name, :person_name
   alias_attribute :wca_id, :person_id
 
+  def attempts
+    result_attempts.pluck(:value)
+  end
+
   delegate :iso2, to: :country, prefix: true
 
   DEFAULT_SERIALIZE_OPTIONS = {

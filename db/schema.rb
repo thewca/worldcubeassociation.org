@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_29_153518) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1110,11 +1110,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
     t.string "round_type_id", limit: 1, default: "", null: false
     t.integer "round_id", null: false
     t.string "format_id", limit: 1, default: "", null: false
-    t.integer "value1", default: 0, null: false
-    t.integer "value2", default: 0, null: false
-    t.integer "value3", default: 0, null: false
-    t.integer "value4", default: 0, null: false
-    t.integer "value5", default: 0, null: false
     t.integer "best", default: 0, null: false
     t.integer "average", default: 0, null: false
     t.string "regional_single_record", limit: 3
@@ -1127,12 +1122,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
     t.index ["event_id", "best"], name: "Results_eventAndBest"
     t.index ["event_id", "competition_id", "round_type_id", "country_id", "average"], name: "Results_regionalAverageRecordCheckSpeedup"
     t.index ["event_id", "competition_id", "round_type_id", "country_id", "best"], name: "Results_regionalSingleRecordCheckSpeedup"
-    t.index ["event_id", "value1"], name: "index_Results_on_eventId_and_value1"
-    t.index ["event_id", "value2"], name: "index_Results_on_eventId_and_value2"
-    t.index ["event_id", "value3"], name: "index_Results_on_eventId_and_value3"
-    t.index ["event_id", "value4"], name: "index_Results_on_eventId_and_value4"
-    t.index ["event_id", "value5"], name: "index_Results_on_eventId_and_value5"
     t.index ["event_id"], name: "Results_fk_event"
+    t.index ["event_id"], name: "index_Results_on_eventId_and_value1"
+    t.index ["event_id"], name: "index_Results_on_eventId_and_value2"
+    t.index ["event_id"], name: "index_Results_on_eventId_and_value3"
+    t.index ["event_id"], name: "index_Results_on_eventId_and_value4"
+    t.index ["event_id"], name: "index_Results_on_eventId_and_value5"
     t.index ["format_id"], name: "Results_fk_format"
     t.index ["person_id"], name: "Results_fk_competitor"
     t.index ["regional_average_record", "event_id"], name: "index_Results_on_regionalAverageRecord_and_eventId"
