@@ -184,11 +184,7 @@ module Resultable
   end
 
   def solve_times
-    @solve_times ||= [SolveTime.new(event_id, :single, value1),
-                      SolveTime.new(event_id, :single, value2),
-                      SolveTime.new(event_id, :single, value3),
-                      SolveTime.new(event_id, :single, value4),
-                      SolveTime.new(event_id, :single, value5)].freeze
+    @solve_times ||= result_attempts.map { |r| SolveTime.new(event_id, :single, r.value) }.freeze
   end
 
   private def valid_attempts_partition

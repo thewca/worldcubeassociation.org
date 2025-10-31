@@ -111,8 +111,7 @@ class ResultsController < ApplicationController
           FROM results
           #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
           #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
-          WHERE
-              1=1
+          WHERE 1
               #{@event_condition}
               #{@years_condition_competition}
               #{@region_condition}
@@ -431,11 +430,14 @@ class ResultsController < ApplicationController
                                           .index_by(&:id)
                                           .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cell_name id]) }
 
+          result_ids = rows.map { |r| r["id"] }.uniq
+          result_with_attempts = Result.includes(:result_attempts).where(id: result_ids)
+
           # Now that we've remembered all competitions, we can safely transform the rows
-          rows = yield rows if block_given?
+          result_with_attempts = yield result_with_attempts if block_given?
 
           {
-            rows: rows.as_json, competitionsById: competitions_by_id
+            rows: result_with_attempts.as_json, competitionsById: competitions_by_id
           }
         end
         render json: cached_data

@@ -23,7 +23,7 @@ function augmentResults(results, competitionsById) {
     if (result === null) return null;
 
     const competition = competitionsById[result.competition_id];
-    const country = countries.real.find((c) => c.id === result.country_id);
+    const country = countries.byIso2[result.country_iso2];
 
     return {
       result,
