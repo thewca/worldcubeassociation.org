@@ -170,65 +170,65 @@ RSpec.describe Person do
 
     it 'assigns correct 333 podium placements to competitors from different NA countries' do
       expect(
-        us_competitor.championship_podiums[:continental].find { it.event_id == '333' }.pos
+        us_competitor.championship_podiums[:continental].find { it.event_id == '333' }.pos,
       ).to be(1)
       expect(
-        can_competitor.championship_podiums[:continental].find { it.event_id == '333' }.pos
+        can_competitor.championship_podiums[:continental].find { it.event_id == '333' }.pos,
       ).to be(2)
       expect(
-        us_competitor_2.championship_podiums[:continental].find { it.event_id == '333' }.pos
+        us_competitor_2.championship_podiums[:continental].find { it.event_id == '333' }.pos,
       ).to be(3)
     end
 
     it 'assigns correct 444 podium placements to competitors from different NA countries' do
       expect(
-        can_competitor_2.championship_podiums[:continental].find { it.event_id == '444' }.pos
+        can_competitor_2.championship_podiums[:continental].find { it.event_id == '444' }.pos,
       ).to be(1)
       expect(
-        us_competitor_2.championship_podiums[:continental].find { it.event_id == '444' }.pos
+        us_competitor_2.championship_podiums[:continental].find { it.event_id == '444' }.pos,
       ).to be(2)
       expect(
-        can_competitor.championship_podiums[:continental].find { it.event_id == '444' }.pos
+        can_competitor.championship_podiums[:continental].find { it.event_id == '444' }.pos,
       ).to be(3)
     end
 
     it 'also recognizes 333 national podiums' do
       expect(
-        us_competitor.championship_podiums[:national].find { it.event_id == '333' }
+        us_competitor.championship_podiums[:national].find { it.event_id == '333' },
       ).to be_nil
       expect(
-        us_competitor_2.championship_podiums[:national].find { it.event_id == '333' }
+        us_competitor_2.championship_podiums[:national].find { it.event_id == '333' },
       ).to be_nil
       expect(
-        can_competitor.championship_podiums[:national].find { it.event_id == '333' }.pos
+        can_competitor.championship_podiums[:national].find { it.event_id == '333' }.pos,
       ).to be(1)
       expect(
-        can_competitor_2.championship_podiums[:national].find { it.event_id == '333' }.pos
+        can_competitor_2.championship_podiums[:national].find { it.event_id == '333' }.pos,
       ).to be(2)
     end
 
     it 'also recognizes 444 national podiums' do
       expect(
-        us_competitor.championship_podiums[:national].find { it.event_id == '444' }
+        us_competitor.championship_podiums[:national].find { it.event_id == '444' },
       ).to be_nil
       expect(
-        us_competitor_2.championship_podiums[:national].find { it.event_id == '444' }
+        us_competitor_2.championship_podiums[:national].find { it.event_id == '444' },
       ).to be_nil
       expect(
-        can_competitor.championship_podiums[:national].find { it.event_id == '444' }.pos
+        can_competitor.championship_podiums[:national].find { it.event_id == '444' }.pos,
       ).to be(2)
       expect(
-        can_competitor_2.championship_podiums[:national].find { it.event_id == '444' }.pos
+        can_competitor_2.championship_podiums[:national].find { it.event_id == '444' }.pos,
       ).to be(1)
     end
 
     it 'makes no assignment for 4th-place NA competitors' do
       expect(
-        can_competitor_2.championship_podiums[:continental].find { it.event_id == '333' }
+        can_competitor_2.championship_podiums[:continental].find { it.event_id == '333' },
       ).to be_nil
 
       expect(
-        us_competitor.championship_podiums[:continental].find { it.event_id == '444' }
+        us_competitor.championship_podiums[:continental].find { it.event_id == '444' },
       ).to be_nil
     end
   end
