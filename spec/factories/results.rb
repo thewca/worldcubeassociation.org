@@ -15,11 +15,15 @@ FactoryBot.define do
     event_id { "333oh" }
     round_type_id { "f" }
     format_id { "a" }
-    value1 { best }
-    value2 { average }
-    value3 { average }
-    value4 { average }
-    value5 { average }
+
+    transient do
+      value1 { best }
+      value2 { average }
+      value3 { average }
+      value4 { average }
+      value5 { average }
+    end
+
     best { 3000 }
     average { 5000 }
     round { association(:round, competition: competition, event_id: event_id, format_id: format_id) }
@@ -113,6 +117,10 @@ FactoryBot.define do
     instance_eval(&resultable_instance_members)
     transient do
       person { FactoryBot.create(:person) }
+    end
+
+    after(:build) do |result, _options|
+      result.result_attempts = result.result_attempts_attributes.map(&ResultAttempt.method(:new))
     end
 
     person_id { person.wca_id }
