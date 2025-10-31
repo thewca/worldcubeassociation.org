@@ -85,8 +85,8 @@ class ResultsController < ApplicationController
       SQL
 
     elsif @is_results
-      if @is_average
-        @query = <<-SQL.squish
+      @query = if @is_average
+                 <<-SQL.squish
           SELECT
             results.*,
             average value
@@ -101,10 +101,10 @@ class ResultsController < ApplicationController
           ORDER BY
             average, person_name, competition_id, round_type_id
           #{limit_condition}
-        SQL
+                 SQL
 
-      else
-        @query = <<-SQL.squish
+               else
+                 <<-SQL.squish
         SELECT r.*, ra.value
         FROM (
           SELECT *
@@ -122,8 +122,8 @@ class ResultsController < ApplicationController
         WHERE ra.value > 0
         ORDER BY ra.value, r.person_name, r.competition_id, r.round_type_id
         #{limit_condition}
-        SQL
-      end
+                 SQL
+               end
     elsif @is_by_region
       @query = <<-SQL.squish
         SELECT
@@ -432,7 +432,7 @@ class ResultsController < ApplicationController
 
           result_ids = rows.map { |r| r["id"] }.uniq
           result_attempts = ResultAttempt.where(result_id: result_ids).group_by(&:result_id)
-          rows = rows.map { |r| r.merge({"attempts": result_attempts[r["id"]].map(&:value) }) }
+          rows = rows.map { |r| r.merge({ attempts: result_attempts[r["id"]].map(&:value) }) }
 
           # Now that we've remembered all competitions, we can safely transform the rows
           rows = yield rows if block_given?

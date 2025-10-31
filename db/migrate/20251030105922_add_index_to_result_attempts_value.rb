@@ -2,7 +2,9 @@
 
 class AddIndexToResultAttemptsValue < ActiveRecord::Migration[7.2]
   def change
-    add_index :result_attempts, :value
-    add_index :result_attempts, [:value, :result_id]
+    change_table :result_attempts, bulk: true do |t|
+      t.index :value
+      t.index %i[value result_id]
+    end
   end
 end
