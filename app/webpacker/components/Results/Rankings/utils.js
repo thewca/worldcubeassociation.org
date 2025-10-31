@@ -50,7 +50,7 @@ export function mapRankingsData(data, isByRegion) {
 export const rankingsConfig = (show, isAverage) => [
   show === 'by region' ? regionColumn : rankColumn,
   personColumn,
-  attemptResultColumn,
+  attemptResultColumn(isAverage),
   show !== 'by region' && representingColumn,
   competitionColumn,
   isAverage && resultsFiveWideColumn,

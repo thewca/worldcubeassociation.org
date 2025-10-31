@@ -431,7 +431,7 @@ class ResultsController < ApplicationController
                                           .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cell_name id]) }
 
           result_ids = rows.map { |r| r["id"] }.uniq
-          result_with_attempts = Result.includes(:result_attempts).where(id: result_ids)
+          result_with_attempts = Result.includes(:result_attempts).find(result_ids)
 
           # Now that we've remembered all competitions, we can safely transform the rows
           result_with_attempts = yield result_with_attempts if block_given?

@@ -100,7 +100,7 @@ export const slimConfig = [
 
 export const separateRecordsConfig = (rankingType) => [
   eventColumn,
-  attemptResultColumn,
+  attemptResultColumn(rankingType === 'average'),
   personColumn,
   regionColumn,
   competitionColumn,
