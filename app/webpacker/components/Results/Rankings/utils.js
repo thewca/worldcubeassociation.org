@@ -15,9 +15,9 @@ function getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, i
     return { name: I18n.t('results.table_elements.world') };
   }
   if (index >= firstContinentIndex && index < firstCountryIndex) {
-    return continents.real.find((c) => c.id === countries.byIso2[result.country_iso2].continentId);
+    return continents.real.find((c) => c.id === countries.byId[result.country_id].continentId);
   }
-  return countries.byIso2[result.country_iso2];
+  return countries.byId[result.country_id];
 }
 
 export function mapRankingsData(data, isByRegion) {
@@ -50,7 +50,7 @@ export function mapRankingsData(data, isByRegion) {
 export const rankingsConfig = (show, isAverage) => [
   show === 'by region' ? regionColumn : rankColumn,
   personColumn,
-  attemptResultColumn(isAverage),
+  attemptResultColumn,
   show !== 'by region' && representingColumn,
   competitionColumn,
   isAverage && resultsFiveWideColumn,

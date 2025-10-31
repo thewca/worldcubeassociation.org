@@ -431,13 +431,14 @@ class ResultsController < ApplicationController
                                           .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cell_name id]) }
 
           result_ids = rows.map { |r| r["id"] }.uniq
-          result_with_attempts = Result.includes(:result_attempts).find(result_ids)
+          result_attempts = ResultAttempt.where(result_id: result_ids).group_by(&:result_id)
+          rows = rows.map { |r| r.merge({"attempts": result_attempts[r["id"]].map(&:value) }) }
 
           # Now that we've remembered all competitions, we can safely transform the rows
-          result_with_attempts = yield result_with_attempts if block_given?
+          rows = yield rows if block_given?
 
           {
-            rows: result_with_attempts.as_json, competitionsById: competitions_by_id
+            rows: rows.as_json, competitionsById: competitions_by_id
           }
         end
         render json: cached_data

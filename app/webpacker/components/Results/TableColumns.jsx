@@ -83,14 +83,14 @@ export const representingColumn = {
   ),
 };
 
-export const attemptResultColumn = (isAverage) => ({
-  accessorKey: isAverage ? 'result.average' : 'result.best',
+export const attemptResultColumn = {
+  accessorKey: 'result.value',
   header: I18n.t('results.table_elements.result'),
   cell: ({ row, getValue }) => formatAttemptResult(getValue(), row.original.result.event_id),
-});
+};
 
 export const personColumn = {
-  accessorKey: 'result.name',
+  accessorKey: 'result.person_name',
   header: I18n.t('results.table_elements.name'),
   cell: ({ row, getValue }) => (
     <PersonCell
