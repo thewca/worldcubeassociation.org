@@ -1,0 +1,10 @@
+oneOf:
+  - $ref: './config/RequirementsStepConfig.yaml'
+  - $ref: './config/CompetingStepConfig.yaml'
+  - $ref: './config/PaymentStepConfig.yaml'
+discriminator:
+  propertyName: key
+  mapping:
+    requirements: './config/RequirementsStepConfig.yaml'
+    competing: './config/CompetingStepConfig.yaml'
+    payment: './config/PaymentStepConfig.yaml'

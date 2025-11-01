@@ -1,0 +1,16 @@
+allOf:
+  - $ref: './BaseRegistrationConfig.yaml'
+  - type: object
+    properties:
+      parameters:
+        type: object
+        properties:
+          stripePublishableKey:
+            type: string
+          connectedAccountId:
+            type: string
+        required:
+          - stripePublishableKey
+          - connectedAccountId
+    required:
+      - parameters

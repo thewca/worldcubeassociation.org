@@ -1,0 +1,9 @@
+type: object
+properties:
+  key:
+    type: string
+  isEditable:
+    type: boolean
+required:
+  - key
+  - isEditable

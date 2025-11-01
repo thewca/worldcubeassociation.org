@@ -383,7 +383,6 @@ Rails.application.routes.draw do
 
           member do
             get 'payment_ticket', to: 'registrations#payment_ticket'
-            get 'config', to: 'registrations#registration_config', as: :registration_config
           end
 
           collection do
@@ -392,6 +391,10 @@ Rails.application.routes.draw do
             get 'admin', to: 'registrations#index_admin'
             get ':user_id', to: 'registrations#show_by_user', as: :show_by_user
           end
+        end
+
+        member do
+          get 'registration_config', to: 'registrations#registration_config', as: :registration_config
         end
       end
     end
