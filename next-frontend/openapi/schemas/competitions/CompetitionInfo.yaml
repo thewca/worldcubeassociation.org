@@ -47,6 +47,7 @@ required:
   - uses_cutoff?
   - competition_series_ids
   - registration_full?
+  - registration_full_and_accepted?
   - part_of_competition_series?
   - registration_full_and_accepted?
   - delegates
@@ -186,6 +187,9 @@ properties:
   uses_qualification?:
     type: boolean
   registration_full?:
+    type: boolean
+    example: true
+  registration_full_and_accepted?:
     type: boolean
     example: true
   tab_names:

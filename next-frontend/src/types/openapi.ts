@@ -1005,6 +1005,8 @@ export interface components {
             "uses_qualification?": boolean;
             /** @example true */
             "registration_full?": boolean;
+            /** @example true */
+            "registration_full_and_accepted?": boolean;
             tab_names: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
