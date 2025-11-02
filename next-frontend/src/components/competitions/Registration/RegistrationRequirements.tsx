@@ -36,7 +36,7 @@ export default async function RegistrationRequirements({ competitionInfo }: Pane
   return (
     <Box>
       <RegistrationFullMessage competitionInfo={competitionInfo} />
-      <Checkbox.Root variant="solid">
+      <Checkbox.Root variant="solid" width="full">
         <Checkbox.HiddenInput />
         <Alert.Root status="success">
           <Alert.Indicator>

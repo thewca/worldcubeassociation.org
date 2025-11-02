@@ -76,11 +76,13 @@ export default async function RegisterPage({
 
           return (
             <Steps.Item key={step.key} index={idx} title={stepTitle}>
-              <Steps.Indicator/>
-              <Box>
-                <Steps.Title>{stepTitle}</Steps.Title>
-                <Steps.Description>{t(`${stepTranslationLookup}.description`)}</Steps.Description>
-              </Box>
+              <Steps.Trigger disabled={!step.isEditable}>
+                <Steps.Indicator/>
+                <Box>
+                  <Steps.Title>{stepTitle}</Steps.Title>
+                  <Steps.Description>{t(`${stepTranslationLookup}.description`)}</Steps.Description>
+                </Box>
+              </Steps.Trigger>
               <Steps.Separator/>
             </Steps.Item>
           );
