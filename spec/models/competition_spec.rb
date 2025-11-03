@@ -1668,7 +1668,7 @@ RSpec.describe Competition do
         end
       end
 
-      it 'is valid after end_date even with no connected payment integration' :do
+      it 'is valid after end_date even with no connected payment integration' do
         auto_accept_comp.disconnect_all_payment_integrations
         expect(auto_accept_comp).to be_valid
       end
