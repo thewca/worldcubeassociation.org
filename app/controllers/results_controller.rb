@@ -211,8 +211,7 @@ class ResultsController < ApplicationController
           results.country_id      country_id,
           countries.name         country_name,
           competitions.id        competition_id,
-          competitions.cell_name competition_name,
-          value1, value2, value3, value4, value5
+          competitions.cell_name competition_name
         FROM
           (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
             SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') results

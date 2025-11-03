@@ -96,6 +96,19 @@ module Admin
       # Build a brand new result, validations will make sure the specified round
       # data are valid.
       result = Result.new(result_params)
+
+      # Extract attempt values if present
+      attempt_values = (1..5).map { |i| params[:result].delete("value#{i}") }
+
+      # Create attempts
+      if attempt_values.compact.any?
+        result.result_attempts.destroy_all
+        attempt_values.each_with_index do |v, i|
+          next if v.blank?
+          result.result_attempts.new(attempt_number: i + 1, value: v)
+        end
+      end
+
       if result.save
         # We just inserted a new result, make sure we at least give it the
         # correct position.
@@ -113,6 +126,19 @@ module Admin
       # Since we may move the result to another competition, we want to validate
       # both competitions if needed.
       competitions_to_validate = [result.competition_id]
+
+      # Extract attempt values if present
+      attempt_values = (1..5).map { |i| params[:result].delete("value#{i}") }
+
+      # Update attempts
+      if attempt_values.compact.any?
+        result.result_attempts.destroy_all
+        attempt_values.each_with_index do |v, i|
+          next if v.blank?
+          result.result_attempts.create!(attempt_number: i + 1, value: v)
+        end
+      end
+
       if result.update(result_params)
         competitions_to_validate << result.competition_id
         competitions_to_validate.uniq!
