@@ -105,6 +105,7 @@ module Admin
         result.result_attempts.destroy_all
         attempt_values.each_with_index do |v, i|
           next if v.blank?
+
           result.result_attempts.new(attempt_number: i + 1, value: v)
         end
       end
@@ -135,6 +136,7 @@ module Admin
         result.result_attempts.destroy_all
         attempt_values.each_with_index do |v, i|
           next if v.blank?
+
           result.result_attempts.create!(attempt_number: i + 1, value: v)
         end
       end
