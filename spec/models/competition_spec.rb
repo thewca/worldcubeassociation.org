@@ -1635,6 +1635,7 @@ RSpec.describe Competition do
   describe "validate auto accept fields" do
     let(:competition) { create(:competition, use_wca_registration: true) }
 
+
     context 'preference: bulk' do
       let(:auto_accept_comp) { build(:competition, :bulk_auto_accept) }
 
@@ -1651,6 +1652,7 @@ RSpec.describe Competition do
           expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
         end
 
+
         it 'any paid-pending registrations exist' do
           create(:registration, :paid, :pending, competition: competition)
           competition.auto_accept_preference = :bulk
@@ -1666,6 +1668,11 @@ RSpec.describe Competition do
           expect(competition).not_to be_valid
           expect(competition.errors[:auto_accept_preference]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
         end
+      end
+
+      it 'is valid after end_date even with no connected payment integration' :do
+        auto_accept_comp.disconnect_all_payment_integrations
+        expect(auto_accept_comp).to be_valid
       end
 
       it 'disable threshold cant exceed competitor limit' do
@@ -1725,6 +1732,11 @@ RSpec.describe Competition do
           expect(competition).not_to be_valid
           expect(competition.errors[:auto_accept_preference]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
         end
+      end
+
+      it 'is valid after end_date even with no connected payment integration' do
+        auto_accept_comp.disconnect_all_payment_integrations
+        expect(auto_accept_comp).to be_valid
       end
 
       it 'disable threshold cant exceed competitor limit' do
