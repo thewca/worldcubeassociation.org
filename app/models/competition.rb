@@ -1202,9 +1202,8 @@ class Competition < ApplicationRecord
     errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS)) if number_of_days > MAX_SPAN_DAYS
   end
 
-  validate :registration_dates_must_be_valid
-  private def registration_dates_must_be_valid
-    return unless start_date.present?
+validate :registration_dates_must_be_valid, if: :start_date?
+private def registration_dates_must_be_valid
 
     errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start')) if refund_policy_limit_date? && refund_policy_limit_date > start_date
 
