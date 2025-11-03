@@ -1646,7 +1646,7 @@ RSpec.describe Competition do
         end
 
         it 'integrated payment not enabled when competition is confirmed' do
-          confirmed_comp = build(:competition, :confirmed, :bulk_auto_accept)
+          confirmed_comp = build(:competition, :confirmed, :bulk_auto_accept, :future)
           expect(confirmed_comp).not_to be_valid
           expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
         end
@@ -1666,6 +1666,11 @@ RSpec.describe Competition do
           expect(competition).not_to be_valid
           expect(competition.errors[:auto_accept_preference]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
         end
+      end
+
+      it 'is valid after end_date even with no connected payment integration' do
+        auto_accept_comp.disconnect_all_payment_integrations
+        expect(auto_accept_comp).to be_valid
       end
 
       it 'disable threshold cant exceed competitor limit' do
@@ -1705,7 +1710,7 @@ RSpec.describe Competition do
         end
 
         it 'integrated payment not enabled when competition is confirmed' do
-          confirmed_comp = build(:competition, :confirmed, :live_auto_accept)
+          confirmed_comp = build(:competition, :confirmed, :live_auto_accept, :future)
           expect(confirmed_comp).not_to be_valid
           expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
         end
@@ -1725,6 +1730,11 @@ RSpec.describe Competition do
           expect(competition).not_to be_valid
           expect(competition.errors[:auto_accept_preference]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
         end
+      end
+
+      it 'is valid after end_date even with no connected payment integration' do
+        auto_accept_comp.disconnect_all_payment_integrations
+        expect(auto_accept_comp).to be_valid
       end
 
       it 'disable threshold cant exceed competitor limit' do
