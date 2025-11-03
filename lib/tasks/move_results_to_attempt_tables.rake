@@ -4,16 +4,16 @@ namespace :results do
   desc "Migrates all results to attempts"
   task migrate_attempts: [:environment] do
     ActiveRecord::Base.connection.execute <<-SQL.squish
-    INSERT IGNORE INTO result_attempts (value, attempt_number, result_id)
-    SELECT value1, 1, id FROM results WHERE value1 != 0
+    INSERT IGNORE INTO result_attempts (value, attempt_number, result_id, created_at, updated_at)
+    SELECT value1, 1, id, created_at, NOW() FROM results WHERE value1 != 0
     UNION ALL
-    SELECT value2, 2, id FROM results WHERE value2 != 0
+    SELECT value2, 2, id, created_at, NOW() FROM results WHERE value2 != 0
     UNION ALL
-    SELECT value3, 3, id FROM results WHERE value3 != 0
+    SELECT value3, 3, id, created_at, NOW() FROM results WHERE value3 != 0
     UNION ALL
-    SELECT value4, 4, id FROM results WHERE value4 != 0
+    SELECT value4, 4, id, created_at, NOW() FROM results WHERE value4 != 0
     UNION ALL
-    SELECT value5, 5, id FROM results WHERE value5 != 0
+    SELECT value5, 5, id, created_at, NOW() FROM results WHERE value5 != 0
     SQL
   end
 
