@@ -1635,7 +1635,6 @@ RSpec.describe Competition do
   describe "validate auto accept fields" do
     let(:competition) { create(:competition, use_wca_registration: true) }
 
-
     context 'preference: bulk' do
       let(:auto_accept_comp) { build(:competition, :bulk_auto_accept) }
 
@@ -1651,7 +1650,6 @@ RSpec.describe Competition do
           expect(confirmed_comp).not_to be_valid
           expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
         end
-
 
         it 'any paid-pending registrations exist' do
           create(:registration, :paid, :pending, competition: competition)

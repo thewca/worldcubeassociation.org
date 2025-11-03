@@ -396,7 +396,7 @@ class Competition < ApplicationRecord
       !auto_accept_preference_disabled? && !use_wca_registration
 
     errors.add(:auto_accept_preference, I18n.t('competitions.errors.must_use_payment_integration')) if
-      !auto_accept_preference_disabled? && confirmed_or_visible? && !probably_over?
+      !auto_accept_preference_disabled? && confirmed_or_visible? && !probably_over? &&
       competition_payment_integrations.where(connected_account_type: "ConnectedStripeAccount").none?
 
     errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_limit')) if
