@@ -1646,7 +1646,7 @@ RSpec.describe Competition do
         end
 
         it 'integrated payment not enabled when competition is confirmed' do
-          confirmed_comp = build(:competition, :confirmed, :bulk_auto_accept)
+          confirmed_comp = build(:competition, :confirmed, :bulk_auto_accept, :future)
           expect(confirmed_comp).not_to be_valid
           expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
         end
@@ -1710,7 +1710,7 @@ RSpec.describe Competition do
         end
 
         it 'integrated payment not enabled when competition is confirmed' do
-          confirmed_comp = build(:competition, :confirmed, :live_auto_accept)
+          confirmed_comp = build(:competition, :confirmed, :live_auto_accept, :future)
           expect(confirmed_comp).not_to be_valid
           expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
         end
