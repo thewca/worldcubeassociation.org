@@ -139,11 +139,11 @@ GEM
     autoprefixer-rails (9.4.7)
       execjs
     aws-eventstream (1.4.0)
-    aws-partitions (1.1177.0)
+    aws-partitions (1.1179.0)
     aws-sdk-cloudfront (1.132.0)
       aws-sdk-core (~> 3, >= 3.234.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-core (3.235.0)
+    aws-sdk-core (3.236.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -161,7 +161,7 @@ GEM
       aws-sdk-core (~> 3, >= 3.234.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
-    aws-sdk-sqs (1.105.0)
+    aws-sdk-sqs (1.106.0)
       aws-sdk-core (~> 3, >= 3.234.0)
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.12.1)
@@ -1151,13 +1151,13 @@ CHECKSUMS
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   autoprefixer-rails (9.4.7) sha256=7104f54efa89e6390391bd894498a9db92bffaf74474942c4152e6dc0775ab3b
   aws-eventstream (1.4.0) sha256=116bf85c436200d1060811e6f5d2d40c88f65448f2125bc77ffce5121e6e183b
-  aws-partitions (1.1177.0) sha256=1c8f682aad50efc86e71bac145179cfb5dc0c250146888b93b01cc06f2ef743d
+  aws-partitions (1.1179.0) sha256=e1e13eeadf39e262e79b6d9b5f47f7c5e460a008cb8837aa68374f575507de5a
   aws-sdk-cloudfront (1.132.0) sha256=c88329ff58bd1cd6577d9fbb3fb1dcfeac492ffa7b8ffac78dbcc865eb572ec7
-  aws-sdk-core (3.235.0) sha256=75af52bd96259f286bfcc67959210f0091aaba1d595ceaed2c8bd1435b86cf90
+  aws-sdk-core (3.236.0) sha256=a1a33696fb1fd8723893fa70dbbdc4c4801ac76a1a969cf28482fd4136bc43d5
   aws-sdk-kms (1.115.0) sha256=b7317ac68fed589a4147fcae606d51881f400f6a06d2ea5abd03626ccb59190b
   aws-sdk-rds (1.297.0) sha256=1b9e6620fde85bdcb535538544e0ae447aeedb2c4a20b059c41c049253d48a77
   aws-sdk-s3 (1.201.0) sha256=2f38f8f78b3b15178e9f7a15362dc2073d18af2a3266ad5c28957091d9a5eec8
-  aws-sdk-sqs (1.105.0) sha256=5cdac4b2ea60be277c4d3e1001142c9921f0274f763d3b1a0f990275acf64869
+  aws-sdk-sqs (1.106.0) sha256=8e79bb3795e2570f60fc280f3ed73d666ffb21156fd1ee84eaedac92465a69df
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
   babel-source (5.8.35) sha256=79ef222a9dcb867ac2efa3b0da35b4bcb15a4bfa67b6b2dcbf1e9a29104498d9
   babel-transpiler (0.7.0) sha256=4c06f4ad9e8e1cabe94f99e11df2f140bb72aca9ba067dbb49dc14d9b98d1570
