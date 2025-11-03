@@ -187,7 +187,7 @@ class Person < ApplicationRecord
             .includes(:format, :competition)
             .group_by do |results|
               # Group by country_id in the case of a national championship to cover the case of a comp acting as multiple national championships
-              championship_type == :national ? { event_id: results.event_id, country_id: results.country_id } : :event_id
+              championship_type == :national ? { event_id: results.event_id, country_id: results.country_id } : { event_id: results.event_id }
             end
             .each_value do |final_results|
               previous_old_pos = nil
