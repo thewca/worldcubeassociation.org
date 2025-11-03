@@ -43,7 +43,7 @@ class PaypalRecord < ApplicationRecord
     voided: "VOIDED",
   }
 
-  WCA_TO_PAYPAL_STATUS_MAP = {
+  WCA_TO_PROVIDER_STATUS_MAP = {
     created: %w[created],
     pending: %w[payer_action_required],
     processing: %w[saved],
@@ -71,12 +71,14 @@ class PaypalRecord < ApplicationRecord
   belongs_to :parent_record, class_name: "PaypalRecord", inverse_of: :child_records, optional: true
   has_many :child_records, class_name: "PaypalRecord", inverse_of: :parent_record, foreign_key: :parent_record_id
 
+  alias_attribute :provider_status, :paypal_status
+
   def root_record
     parent_record&.root_record || self
   end
 
   def determine_wca_status
-    result = WCA_TO_PAYPAL_STATUS_MAP.find { |_key, values| values.include?(self.paypal_status) }
+    result = WCA_TO_PROVIDER_STATUS_MAP.find { |_key, values| values.include?(self.paypal_status) }
     result&.first || raise("No associated wca_status for paypal_status: #{self.paypal_status} - our tests should prevent this from happening!")
   end
 

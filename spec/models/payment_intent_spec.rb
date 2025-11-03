@@ -104,4 +104,81 @@ RSpec.describe PaymentIntent do
       expect(intent.reload.wca_status).to eq('requires_capture')
     end
   end
+
+  describe 'validations' do
+    context 'manual payment uniqueness' do
+      let(:manual_comp) { create(:competition, :manual_connected) }
+      let(:stripe_comp) { create(:competition, :stripe_connected) }
+      let(:reg) { create(:registration, competition: manual_comp) }
+      let(:stripe_reg) { create(:registration, competition: stripe_comp) }
+      let!(:manual_pi) { create(:payment_intent, :manual, holder: reg) }
+      let!(:stripe_pi) { create(:payment_intent, holder: stripe_reg) }
+
+      it 'only allows 1 payment intent for a manual payment per registration' do
+        manual_record = ManualPaymentRecord.create(
+          amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :user_submitted, payment_reference: "ref",
+        )
+
+        expect do
+          PaymentIntent.create!(
+            holder: reg,
+            payment_record: manual_record,
+            client_secret: manual_record.id,
+            initiated_by: reg.user,
+            wca_status: manual_record.determine_wca_status,
+          )
+        end.to raise_error(ActiveRecord::RecordInvalid) do |error|
+          expect(error.message).to eq('Validation failed: Holder has already been taken')
+        end
+      end
+
+      it 'allows manual payment intents for different registrations' do
+        reg2 = create(:registration, competition: manual_comp)
+
+        manual_record = ManualPaymentRecord.create(
+          amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :user_submitted, payment_reference: "ref",
+        )
+
+        expect do
+          PaymentIntent.create!(
+            holder: reg2,
+            payment_record: manual_record,
+            client_secret: manual_record.id,
+            initiated_by: reg2.user,
+            wca_status: manual_record.determine_wca_status,
+          )
+        end.not_to raise_error
+      end
+
+      it 'allows multiple payment intents for the same registration with Stripe' do
+        stripe_record = create(:stripe_record)
+
+        expect do
+          PaymentIntent.create!(
+            holder: stripe_reg,
+            payment_record: stripe_record,
+            client_secret: 'test_secret',
+            initiated_by: stripe_reg.user,
+            wca_status: stripe_record.determine_wca_status,
+          )
+        end.not_to raise_error
+      end
+
+      it 'allows multiple payment intents with different payment record types' do
+        manual_record = ManualPaymentRecord.create(
+          amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :user_submitted, payment_reference: "ref",
+        )
+
+        expect do
+          PaymentIntent.create!(
+            holder: stripe_reg,
+            payment_record: manual_record,
+            client_secret: manual_record.id,
+            initiated_by: stripe_reg.user,
+            wca_status: manual_record.determine_wca_status,
+          )
+        end.not_to raise_error
+      end
+    end
+  end
 end

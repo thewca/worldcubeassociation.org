@@ -54,16 +54,13 @@ class ConnectedPaypalAccount < ApplicationRecord
     PaypalRecord.capture.find(record_id)
   end
 
-  def find_payment_from_request(params)
+  def find_payment_intent_from_request(params)
     # Provided by ourselves when we pass the order body from the PayPal frontend SDK
     #   to our own backend redirect route
     order_id = params[:orderID]
 
     # We expect that the record here is a top-level `order` object in PayPal's API model
-    stored_order = PaypalRecord.paypal_order.find_by(paypal_id: order_id)
-
-    # PayPal doesn't have nice checksums with orders unfortunately :/
-    [stored_order, nil]
+    PaypalRecord.paypal_order.find_by(paypal_id: order_id).payment_intent
   end
 
   def issue_refund(capture_record, amount_iso)
