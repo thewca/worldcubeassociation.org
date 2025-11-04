@@ -1,10 +1,11 @@
 "use client"
 
-import { Code, Steps } from "@chakra-ui/react";
+import { Steps } from "@chakra-ui/react";
 import RegistrationRequirements from "@/components/competitions/Registration/RegistrationRequirements";
 import type { components } from "@/types/openapi";
 import { createFormHook, createFormHookContexts, formOptions } from "@tanstack/react-form";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
+import ApprovalStep from "@/components/competitions/Registration/ApprovalStep";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepKey = components["schemas"]["RegistrationConfig"]["key"] | "approval";
@@ -49,7 +50,7 @@ const stepsFrontend = {
   requirements: RegistrationRequirements,
   competing: CompetingStep,
   payment: RegistrationRequirements,
-  approval: RegistrationRequirements,
+  approval: ApprovalStep,
 } satisfies Record<StepKey, React.ComponentType<PanelProps>>
 
 const StepPanelContents = ({
@@ -61,34 +62,21 @@ const StepPanelContents = ({
 }) => {
   const registrationForm = useRegistrationForm();
 
-  return (
-    <>
-      {steps.map((step, idx) => {
-        const StepPanel = withForm({
-          ...regFormOptions,
-          props: {
-            competitionInfo,
-          },
-          render: stepsFrontend[step.key],
-        })
+  return steps.map((step, idx) => {
+    const StepPanel = withForm({
+      ...regFormOptions,
+      props: {
+        competitionInfo,
+      },
+      render: stepsFrontend[step.key],
+    })
 
-        return (
-          <Steps.Content key={step.key} index={idx}>
-            <StepPanel form={registrationForm} competitionInfo={competitionInfo} />
-          </Steps.Content>
-        );
-      })}
-      <registrationForm.Subscribe selector={(state) => state.values.hasAcceptedTerms}>
-        {(hasAccepted) => <Code>{hasAccepted.toString()}</Code>}
-      </registrationForm.Subscribe>
-      <registrationForm.Subscribe selector={(state) => state.values.comment}>
-        {(comment) => <Code>{comment}</Code>}
-      </registrationForm.Subscribe>
-      <registrationForm.Subscribe selector={(state) => state.values.numberOfGuests}>
-        {(numOfGuests) => <Code>{numOfGuests}</Code>}
-      </registrationForm.Subscribe>
-    </>
-  );
+    return (
+      <Steps.Content key={step.key} index={idx}>
+        <StepPanel form={registrationForm} competitionInfo={competitionInfo} />
+      </Steps.Content>
+    );
+  });
 }
 
 export default StepPanelContents;

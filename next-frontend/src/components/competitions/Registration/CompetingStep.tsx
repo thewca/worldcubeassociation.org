@@ -1,7 +1,7 @@
 import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanelContents";
 import { Field, Fieldset, NumberInput, Textarea } from "@chakra-ui/react";
 
-export default function CompetingStep({ form, competitionInfo }: PanelProps) {
+export default function CompetingStep({ form }: PanelProps) {
   return (
     <Fieldset.Root>
       <form.Field name="comment">
