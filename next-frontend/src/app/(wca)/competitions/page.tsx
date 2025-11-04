@@ -46,7 +46,7 @@ import useDebounce from "@/lib/hooks/useDebounce";
 import { WCA_API_PAGINATION } from "@/lib/wca/data/wca";
 import Loading from "@/components/ui/loading";
 import { useSearchParams } from "next/navigation";
-import { useInView } from "react-intersection-observer";
+import { useOnInView } from "react-intersection-observer";
 import { TFunction } from "i18next";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
@@ -70,8 +70,6 @@ export default function CompetitionsPage() {
     searchParams,
     createFilterState,
   );
-
-  const { ref: bottomRef, inView: bottomInView } = useInView();
 
   const { t } = useT();
 
@@ -115,6 +113,12 @@ export default function CompetitionsPage() {
     initialPageParam: 1,
   });
 
+  const bottomRef = useOnInView(() => {
+    if (hasMoreCompsToLoad && !competitionsIsFetching) {
+      competitionsFetchNextPage();
+    }
+  });
+
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -147,17 +151,6 @@ export default function CompetitionsPage() {
           }) <= distanceFilter,
       );
   }, [location, distanceFilter, rawCompetitionData]);
-
-  useEffect(() => {
-    if (hasMoreCompsToLoad && bottomInView && !competitionsIsFetching) {
-      competitionsFetchNextPage();
-    }
-  }, [
-    hasMoreCompsToLoad,
-    bottomInView,
-    competitionsFetchNextPage,
-    competitionsIsFetching,
-  ]);
 
   if (!competitionsDistanceFiltered) {
     return "Error";
