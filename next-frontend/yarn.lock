@@ -1448,6 +1448,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/helper-validator-identifier@npm:^7.28.5":
+  version: 7.28.5
+  resolution: "@babel/helper-validator-identifier@npm:7.28.5"
+  checksum: 10c0/42aaebed91f739a41f3d80b72752d1f95fd7c72394e8e4bd7cdd88817e0774d80a432451bcba17c2c642c257c483bf1d409dd4548883429ea9493a3bc4ab0847
+  languageName: node
+  linkType: hard
+
 "@babel/helper-validator-option@npm:^7.27.1":
   version: 7.27.1
   resolution: "@babel/helper-validator-option@npm:7.27.1"
@@ -1538,6 +1545,16 @@ __metadata:
     "@babel/helper-string-parser": "npm:^7.27.1"
     "@babel/helper-validator-identifier": "npm:^7.27.1"
   checksum: 10c0/ac6f909d6191319e08c80efbfac7bd9a25f80cc83b43cd6d82e7233f7a6b9d6e7b90236f3af7400a3f83b576895bcab9188a22b584eb0f224e80e6d4e95f4517
+  languageName: node
+  linkType: hard
+
+"@babel/types@npm:^7.26.0":
+  version: 7.28.5
+  resolution: "@babel/types@npm:7.28.5"
+  dependencies:
+    "@babel/helper-string-parser": "npm:^7.27.1"
+    "@babel/helper-validator-identifier": "npm:^7.28.5"
+  checksum: 10c0/a5a483d2100befbf125793640dec26b90b95fd233a94c19573325898a5ce1e52cdfa96e495c7dcc31b5eca5b66ce3e6d4a0f5a4a62daec271455959f208ab08a
   languageName: node
   linkType: hard
 
@@ -7119,6 +7136,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-plugin-react-compiler@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "babel-plugin-react-compiler@npm:1.0.0"
+  dependencies:
+    "@babel/types": "npm:^7.26.0"
+  checksum: 10c0/9406267ada8d7dbdfe8906b40ecadb816a5f4cee2922bee23f7729293b369624ee135b5a9b0f263851c263c9787522ac5d97016c9a2b82d1668300e42b18aff8
+  languageName: node
+  linkType: hard
+
 "bail@npm:^2.0.0":
   version: 2.0.2
   resolution: "bail@npm:2.0.2"
@@ -12418,6 +12444,7 @@ __metadata:
     "@vitejs/plugin-react": "npm:^5.1.0"
     accept-language-parser: "npm:^1.5.0"
     aws4: "npm:^1.13.2"
+    babel-plugin-react-compiler: "npm:^1.0.0"
     dompurify: "npm:^3.3.0"
     eslint: "npm:^9"
     eslint-config-next: "npm:15.5.6"
