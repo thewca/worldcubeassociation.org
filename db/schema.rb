@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_04_105811) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -738,12 +738,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
     t.datetime "resolved_at", precision: nil
     t.boolean "digest_worthy", default: false
     t.datetime "digest_sent_at", precision: nil
-  end
-
-  create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "jti", null: false
-    t.datetime "exp", null: false
-    t.index ["jti"], name: "index_jwt_denylist_on_jti"
   end
 
   create_table "live_attempt_history_entries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
