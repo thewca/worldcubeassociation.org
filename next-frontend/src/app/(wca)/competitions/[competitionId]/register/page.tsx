@@ -4,7 +4,7 @@ import { cache } from "react";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 import { getT } from "@/lib/i18n/get18n";
 import type { components } from "@/types/openapi";
-import RegistrationRequirements from "@/components/competitions/Registration/RegistrationRequirements";
+import StepPanelContents from "@/app/(wca)/competitions/[competitionId]/register/StepPanelContents";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 
 const fetchConfig = cache(async (authToken: string, competitionId: string) => {
@@ -15,19 +15,9 @@ const fetchConfig = cache(async (authToken: string, competitionId: string) => {
   })
 });
 
-type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepKey = components["schemas"]["RegistrationConfig"]["key"] | "approval";
 
 type Step = { key: StepKey, isEditable: boolean };
-
-export type PanelProps = { competitionInfo: CompetitionInfo };
-
-const stepsFrontend = {
-  requirements: RegistrationRequirements,
-  competing: RegistrationRequirements,
-  payment: RegistrationRequirements,
-  approval: RegistrationRequirements,
-} satisfies Record<StepKey, React.ComponentType<PanelProps>>
 
 export default async function RegisterPage({
   params
@@ -89,15 +79,7 @@ export default async function RegisterPage({
         })}
       </Steps.List>
 
-      {steps.map((step, idx) => {
-        const StepFrontend = stepsFrontend[step.key];
-
-        return (
-          <Steps.Content key={step.key} index={idx}>
-            {StepFrontend && <StepFrontend competitionInfo={competitionInfo} />}
-          </Steps.Content>
-        );
-      })}
+      <StepPanelContents steps={steps} competitionInfo={competitionInfo} />
 
       <ButtonGroup size="sm" variant="outline">
         <Steps.PrevTrigger asChild>
