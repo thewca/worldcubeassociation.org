@@ -1,9 +1,23 @@
 import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanelContents";
 import { Field, Fieldset, NumberInput, Textarea } from "@chakra-ui/react";
+import EventSelector from "@/components/EventSelector";
 
 export default function CompetingStep({ form }: PanelProps) {
   return (
     <Fieldset.Root>
+      <form.Field name="eventIds" mode="array">
+        {(field) => (
+          <Field.Root invalid={!field.state.meta.isValid}>
+            <Field.Label>Events</Field.Label>
+            <EventSelector
+              title="Hello"
+              selectedEvents={field.state.value}
+              onEventClick={(eventId) => console.log(eventId)}
+            />
+            <Field.ErrorText>{field.state.meta.errors.join(", ")}</Field.ErrorText>
+          </Field.Root>
+        )}
+      </form.Field>
       <form.Field name="comment">
         {(field) => (
           <Field.Root invalid={!field.state.meta.isValid}>

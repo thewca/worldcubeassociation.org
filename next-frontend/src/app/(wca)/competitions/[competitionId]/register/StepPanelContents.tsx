@@ -26,11 +26,13 @@ interface RegistrationDummy {
   hasAcceptedTerms: boolean;
   comment?: string;
   numberOfGuests: number;
+  eventIds: string[];
 }
 
 const defaultRegistration: RegistrationDummy = {
   hasAcceptedTerms: false,
   numberOfGuests: 0,
+  eventIds: [],
 }
 
 const regFormOptions = formOptions({
