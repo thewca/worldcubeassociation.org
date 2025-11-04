@@ -1,9 +1,10 @@
 "use client"
 
-import {Code, Steps} from "@chakra-ui/react";
+import { Code, Steps } from "@chakra-ui/react";
 import RegistrationRequirements from "@/components/competitions/Registration/RegistrationRequirements";
 import type { components } from "@/types/openapi";
 import { createFormHook, createFormHookContexts, formOptions } from "@tanstack/react-form";
+import CompetingStep from "@/components/competitions/Registration/CompetingStep";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepKey = components["schemas"]["RegistrationConfig"]["key"] | "approval";
@@ -22,16 +23,23 @@ const { useAppForm, withForm } = createFormHook({
 
 interface RegistrationDummy {
   hasAcceptedTerms: boolean;
+  comment?: string;
+  numberOfGuests: number;
 }
 
 const defaultRegistration: RegistrationDummy = {
   hasAcceptedTerms: false,
+  numberOfGuests: 0,
 }
 
 const regFormOptions = formOptions({
   defaultValues: defaultRegistration,
 });
 
+// The only reason why we have this custom hook is that we can infer its return type.
+// Tanstack-Form is pretty powerful, but the price for this power is a nightmare in generics,
+//   so type-casting the `form` component prop by ourselves is not an option.
+// See also https://github.com/TanStack/form/discussions/1804 for reference.
 const useRegistrationForm = () => useAppForm({ ...regFormOptions })
 type RegistrationForm = ReturnType<typeof useRegistrationForm>;
 
@@ -39,7 +47,7 @@ export type PanelProps = { competitionInfo: CompetitionInfo, form: RegistrationF
 
 const stepsFrontend = {
   requirements: RegistrationRequirements,
-  competing: RegistrationRequirements,
+  competing: CompetingStep,
   payment: RegistrationRequirements,
   approval: RegistrationRequirements,
 } satisfies Record<StepKey, React.ComponentType<PanelProps>>
@@ -72,6 +80,12 @@ const StepPanelContents = ({
       })}
       <registrationForm.Subscribe selector={(state) => state.values.hasAcceptedTerms}>
         {(hasAccepted) => <Code>{hasAccepted.toString()}</Code>}
+      </registrationForm.Subscribe>
+      <registrationForm.Subscribe selector={(state) => state.values.comment}>
+        {(comment) => <Code>{comment}</Code>}
+      </registrationForm.Subscribe>
+      <registrationForm.Subscribe selector={(state) => state.values.numberOfGuests}>
+        {(numOfGuests) => <Code>{numOfGuests}</Code>}
       </registrationForm.Subscribe>
     </>
   );
