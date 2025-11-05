@@ -1330,21 +1330,11 @@ RSpec.describe Registration do
         it_behaves_like 'changing accepted status', status
       end
 
-      it 'triggers when accepted registration is cancelled' do
-        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
-
-        accepted_reg.update_lanes!(
-          { user_id: accepted_reg.user.id, competing: { status: 'cancelled' } }.with_indifferent_access,
-          accepted_reg.user.id,
-        )
-        expect(waitlisted_reg.reload.competing_status).to eq('accepted')
-      end
-
       it 'has no effect if accepted registration is re-accepted' do
         expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
 
         pending_reg.update_lanes!(
-          { user_id: pending_reg.user.id, competing: { status: 'accepted' } },
+          { user_id: pending_reg.user.id, competing: { status: 'accepted' } }.with_indifferent_access,
           pending_reg.user.id,
         )
         expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
@@ -1354,8 +1344,20 @@ RSpec.describe Registration do
         expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
 
         pending_reg.update_lanes!(
-          { user_id: pending_reg.user.id, competing: { status: 'cancelled' } },
+          { user_id: pending_reg.user.id, competing: { status: 'cancelled' } }.with_indifferent_access,
           pending_reg.user.id,
+        )
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+      end
+
+      it 'has no effect if comeptition doesnt use auto accept' do
+        expect(Registration).not_to receive(:bulk_auto_accept)
+
+        auto_accept_comp.auto_accept_preference = :disabled
+
+        accepted_reg.update_lanes!(
+          { user_id: accepted_reg.user.id, competing: { status: 'cancelled' } }.with_indifferent_access,
+          accepted_reg.user.id,
         )
         expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
       end
