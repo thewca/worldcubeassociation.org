@@ -594,8 +594,8 @@ class Registration < ApplicationRecord
 
   delegate :auto_accept_preference, :auto_accept_preference_disabled?, :auto_accept_preference_bulk?, :auto_accept_preference_live?, to: :competition
 
-  def attempt_auto_accept(mode)
-    failure_reason = auto_accept_failure_reason(mode)
+  def attempt_auto_accept
+    failure_reason = auto_accept_failure_reason
     if failure_reason.present?
       log_auto_accept_failure(failure_reason)
       return { succeeded: false, info: failure_reason }
@@ -620,7 +620,7 @@ class Registration < ApplicationRecord
     end
   end
 
-  private def auto_accept_failure_reason(mode)
+  private def auto_accept_failure_reason
     return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
     return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if auto_accept_preference_disabled?
     return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
