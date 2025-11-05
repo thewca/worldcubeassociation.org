@@ -1028,7 +1028,9 @@ class Competition < ApplicationRecord
   end
 
   def can_show_competitors_page?
-    after_registration_open? && registrations.competing_status_accepted.competing.any?
+    organizer_delegate_ids = organizers.pluck(:id) + delegates.pluck(:id)
+    normal_competitor_ids = registrations.competing_status_accepted.competing.pluck(:user_id) - organizer_delegate_ids
+    after_registration_open? || normal_competitor_ids.any?
   end
 
   def registration_status

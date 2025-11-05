@@ -1987,4 +1987,48 @@ RSpec.describe Competition do
       expect(comp.fully_paid_registrations_count).to eq(5)
     end
   end
+
+  describe '#can_show_competitors_page?' do
+    let(:competition) { create(:competition, :registration_open, :with_organizer, :with_delegate) }
+
+    context 'after registration has opened' do
+      it 'is true after registration has opened' do
+        expect(competition.can_show_competitors_page?).to be(true)
+      end
+
+      it 'is true even if no registrations are accepted' do
+        expect(competition.registrations.competing_status_accepted.competing.count).to be(0)
+        expect(competition.can_show_competitors_page?).to be(true)
+      end
+    end
+
+    it 'is true after registration has closed irrespective of registrations' do
+      competition.registration_close = 1.day.ago
+      expect(competition.registrations.competing_status_accepted.competing.count).to be(0)
+      expect(competition.can_show_competitors_page?).to be(true)
+    end
+
+    context 'before registration opens', :zxc do
+      let(:not_open) { create(:competition, :registration_not_opened, :with_organizer, :with_delegate) }
+
+      it 'is false with no accepted registrations' do
+        expect(not_open.can_show_competitors_page?).to be(false)
+      end
+
+      it 'is false if the only accepted registrations are for organizers/delegates' do
+        delegate = not_open.delegates.first
+        organizer = not_open.organizers.first
+
+        create(:registration, :accepted, competition: not_open, user: delegate)
+        create(:registration, :accepted, competition: not_open, user: organizer)
+
+        expect(not_open.can_show_competitors_page?).to be(false)
+      end
+
+      it 'is true if there are accepted non-delegate/organizer registrations' do
+        create(:registration, :accepted, competition: not_open)
+        expect(not_open.can_show_competitors_page?).to be(true)
+      end
+    end
+  end
 end
