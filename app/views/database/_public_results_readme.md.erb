@@ -129,15 +129,11 @@ Values of the `Results` table can be interpreted as follows:
   - The format "number" means the value is a raw number, currently only used by
     "fewest moves" for number of moves.
     - Fewest moves averages are stored as 100 times the average, rounded.
-  - The format "multi" is for old and new multi-blind, encoding the time as well
+  - The format "multi" is for multi-blind, encoding the time as well
     as the number of cubes attempted and solved. This is a decimal value,
     which can be interpreted ("decoded") as follows:
 
-        old: 1SSAATTTTT
-             solved        = 99 - SS
-             attempted     = AA
-             timeInSeconds = TTTTT (99999 means unknown)
-        new: 0DDTTTTTMM
+             0DDTTTTTMM
              difference    = 99 - DD
              timeInSeconds = TTTTT (99999 means unknown)
              missed        = MM
