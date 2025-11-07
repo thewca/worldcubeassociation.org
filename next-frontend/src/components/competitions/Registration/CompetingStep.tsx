@@ -1,10 +1,10 @@
 "use client"
 
 import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanelContents";
-import { Field, Fieldset, NumberInput, Textarea, Text } from "@chakra-ui/react";
-import EventSelector from "@/components/EventSelector";
-import {WCA_EVENT_IDS} from "@/lib/wca/data/events";
-import {useT} from "@/lib/i18n/useI18n";
+import { Field, Fieldset, HStack, NumberInput, Text, Textarea } from "@chakra-ui/react";
+import { EventCheckboxGroup } from "@/components/EventSelector";
+import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
+import { useT } from "@/lib/i18n/useI18n";
 
 const toggleEvent = (eventId: string, selectedEventIds: string[]) => {
   if (selectedEventIds.includes(eventId)) {
@@ -24,18 +24,26 @@ export default function CompetingStep({ form, competitionInfo }: PanelProps) {
         onChange: ({ value, fieldApi }) => value.length == 0 && fieldApi.state.meta.isDirty ? t('registrations.errors.must_register') : undefined,
       }}>
         {(field) => (
-          <EventSelector
-            title="Hello"
-            eventList={competitionInfo.event_ids}
-            selectedEvents={field.state.value}
-            onEventClick={(eventId) => field.handleChange((prevSelected) => toggleEvent(eventId, prevSelected))}
-          />
+          <Fieldset.Root invalid={!field.state.meta.isValid}>
+            <Fieldset.Legend>Events</Fieldset.Legend>
+            <EventCheckboxGroup
+              eventList={competitionInfo.event_ids}
+              selectedEvents={field.state.value}
+              onEventClick={(eventId) => field.handleChange((prevSelected) => toggleEvent(eventId, prevSelected))}
+            />
+            <Fieldset.ErrorText>{field.state.meta.errors.join(", ")}</Fieldset.ErrorText>
+          </Fieldset.Root>
         )}
       </form.Field>
       <form.Field name="comment">
         {(field) => (
           <Field.Root invalid={!field.state.meta.isValid}>
-            <Field.Label>Additional comments to the organizers</Field.Label>
+            <Field.Label width="full" asChild>
+              <HStack justify="space-between">
+                <Text>Additional comments to the organizers</Text>
+                <Text fontStyle="italic">({field.state.value?.length ?? 0}/240)</Text>
+              </HStack>
+            </Field.Label>
             <Textarea
               autoresize
               maxLength={240}
@@ -55,6 +63,7 @@ export default function CompetingStep({ form, competitionInfo }: PanelProps) {
               onValueChange={(e) => field.handleChange(e.valueAsNumber)}
               min={0}
               max={99}
+              width="full"
             >
               <NumberInput.Input />
               <NumberInput.Control />
