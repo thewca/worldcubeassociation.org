@@ -313,7 +313,7 @@ module DatabaseDumper
           created_at
           updated_at
           old_type
-          linked_rounds_id
+          linked_round_id
         ],
       ),
     }.freeze,
