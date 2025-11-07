@@ -322,7 +322,7 @@ module DatabaseDumper
         copy: %w[
           wcif_id
         ],
-        ),
+      ),
     }.freeze,
     "round_types" => {
       column_sanitizers: actions_to_column_sanitizers(

@@ -12,20 +12,16 @@ class LinkedRounds < ApplicationRecord
     event_ids       = rounds.map(&:event_id).uniq
     round_numbers   = rounds.map(&:number).uniq
 
-    if competition_ids.size > 1
-      errors.add(:rounds, "must all belong to the same competition")
-    end
+    errors.add(:rounds, "must all belong to the same competition") if competition_ids.size > 1
 
-    if event_ids.size > 1
-      errors.add(:rounds, "must all belong to the same event")
-    end
+    errors.add(:rounds, "must all belong to the same event") if event_ids.size > 1
 
-    if round_numbers.size > 1
-      errors.add(:rounds, "must all belong to the same round number")
-    end
+    return unless round_numbers.size > 1
+
+    errors.add(:rounds, "must all belong to the same round number")
   end
 
   def results
-    rounds.flat_map { it.results }
+    rounds.flat_map(&:results)
   end
 end
