@@ -7,6 +7,6 @@ class AddLinkedRoundsModel < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    add_reference :rounds, :linked_rounds, index: true
+    add_reference :rounds, :linked_round, foreign_key: true
   end
 end
