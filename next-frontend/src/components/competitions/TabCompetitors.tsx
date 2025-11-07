@@ -5,7 +5,7 @@ import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import CompetitorTable from "@/components/competitions/CompetitorTable";
 import PsychsheetTable from "@/components/competitions/PsychsheetTable";
-import { MultiEventSelector } from "@/components/EventSelector";
+import { FormEventSelector } from "@/components/EventSelector";
 
 interface CompetitorData {
   id: string;
@@ -66,14 +66,12 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
     <Card.Root>
       <Card.Body>
         <Card.Title>
-          <MultiEventSelector
+          <FormEventSelector
             title="Events"
             selectedEvents={psychSheetEvent ? [psychSheetEvent] : []}
             eventList={eventIds}
-            hideAllButton
-            hideClearButton={psychSheetEvent === null}
             onEventClick={(event) => setPsychSheetEvent(event)}
-            onClearClick={() => setPsychSheetEvent(null)}
+            onClearClick={psychSheetEvent === null ? undefined : () => setPsychSheetEvent(null)}
           />
         </Card.Title>
         <Table.ScrollArea borderWidth="1px" maxW="full">

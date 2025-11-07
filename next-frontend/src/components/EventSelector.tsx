@@ -16,25 +16,6 @@ import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
 import EventIcon from "@/components/EventIcon";
 
-interface MultiEventSelectorProps {
-  title: string;
-  eventList?: string[];
-  selectedEvents: string[];
-  onEventClick?: (eventId: string) => void;
-  hideAllButton?: boolean;
-  onAllClick?: () => void;
-  hideClearButton?: boolean;
-  onClearClick?: () => void;
-  disabled?: boolean;
-  shouldErrorOnEmpty?: boolean;
-  showBreakBeforeButtons?: boolean;
-  wrap?: boolean;
-  eventButtonsCompact?: boolean;
-  maxEvents?: number;
-  eventsDisabled?: string[];
-  disabledText?: (eventId: string) => string;
-}
-
 interface SingleEventSelectorProps {
   title: string;
   eventList?: string[];
@@ -88,7 +69,100 @@ export function SingleEventSelector({
   );
 }
 
+interface MultiEventSelectorProps {
+  eventList?: string[];
+  selectedEvents: string[];
+  onEventClick?: (eventId: string) => void;
+  disabled?: boolean;
+  eventButtonsCompact?: boolean;
+  maxEvents?: number;
+  eventsDisabled?: string[];
+  disabledText?: (eventId: string) => string;
+  wrap?: boolean;
+}
+
 export function MultiEventSelector({
+  eventList = WCA_EVENT_IDS,
+  selectedEvents,
+  onEventClick = () => {},
+  disabled = false,
+  eventButtonsCompact = false,
+  maxEvents = Infinity,
+  eventsDisabled = [],
+  disabledText = () => "",
+  wrap = false,
+}: MultiEventSelectorProps) {
+  const { t } = useT();
+
+  return (
+    <CheckboxGroup
+      disabled={disabled}
+      flexDirection="row"
+      flexWrap={wrap ? "wrap" : undefined}
+    >
+      {eventList.map((eventId) => {
+        const currentEventSelected = selectedEvents.includes(eventId);
+        const currentEventDisabled = eventsDisabled.includes(eventId);
+
+        const isDisabled =
+          disabled ||
+          (!currentEventSelected && selectedEvents.length >= maxEvents) ||
+          currentEventDisabled;
+
+        return (
+          <CheckboxCard.Root
+            key={eventId}
+            variant="surface"
+            colorPalette="green"
+            align="center"
+            disabled={isDisabled}
+            size={eventButtonsCompact ? "sm" : undefined}
+            checked={currentEventSelected}
+            onCheckedChange={() => onEventClick(eventId)}
+            maxW="16"
+          >
+            <CheckboxCard.HiddenInput />
+            <CheckboxCard.Control>
+              <CheckboxCard.Content>
+                <Tooltip
+                  content={
+                    currentEventDisabled
+                      ? disabledText(eventId)
+                      : t(`events.${eventId}`)
+                  }
+                  openDelay={200}
+                >
+                  <EventIcon
+                    eventId={eventId}
+                    fontSize="2xl"
+                    color={currentEventDisabled ? "#FFBBBB" : undefined}
+                  />
+                </Tooltip>
+                <VisuallyHidden>
+                  <CheckboxCard.Label>
+                    {t(`events.${eventId}`)}
+                  </CheckboxCard.Label>
+                </VisuallyHidden>
+              </CheckboxCard.Content>
+            </CheckboxCard.Control>
+          </CheckboxCard.Root>
+        );
+      })}
+    </CheckboxGroup>
+  );
+}
+
+interface FormEventSelectorProps extends MultiEventSelectorProps {
+  title: string;
+  hideAllButton?: boolean;
+  onAllClick?: () => void;
+  hideClearButton?: boolean;
+  onClearClick?: () => void;
+  shouldErrorOnEmpty?: boolean;
+  showBreakBeforeButtons?: boolean;
+}
+
+export function FormEventSelector({
   title,
   eventList = WCA_EVENT_IDS,
   selectedEvents,
@@ -105,7 +179,7 @@ export function MultiEventSelector({
   eventsDisabled = [],
   disabledText = () => "",
   wrap = false,
-}: MultiEventSelectorProps) {
+}: FormEventSelectorProps) {
   const { t } = useT();
 
   return (
@@ -152,60 +226,17 @@ export function MultiEventSelector({
             )}
           </ButtonGroup>
         </Fieldset.Legend>
-        <CheckboxGroup
+        <MultiEventSelector
+          eventList={eventList}
+          selectedEvents={selectedEvents}
+          onEventClick={onEventClick}
           disabled={disabled}
-          flexDirection="row"
-          flexWrap={wrap ? "wrap" : undefined}
-        >
-          {eventList.map((eventId) => {
-            const currentEventSelected = selectedEvents.includes(eventId);
-            const currentEventDisabled = eventsDisabled.includes(eventId);
-
-            const isDisabled =
-              disabled ||
-              (!currentEventSelected && selectedEvents.length >= maxEvents) ||
-              currentEventDisabled;
-
-            return (
-              <CheckboxCard.Root
-                key={eventId}
-                variant="surface"
-                colorPalette="green"
-                align="center"
-                disabled={isDisabled}
-                size={eventButtonsCompact ? "sm" : undefined}
-                checked={currentEventSelected}
-                onCheckedChange={() => onEventClick(eventId)}
-                maxW="16"
-              >
-                <CheckboxCard.HiddenInput />
-                <CheckboxCard.Control>
-                  <CheckboxCard.Content>
-                    <Tooltip
-                      content={
-                        currentEventDisabled
-                          ? disabledText(eventId)
-                          : t(`events.${eventId}`)
-                      }
-                      openDelay={200}
-                    >
-                      <EventIcon
-                        eventId={eventId}
-                        fontSize="2xl"
-                        color={currentEventDisabled ? "#FFBBBB" : undefined}
-                      />
-                    </Tooltip>
-                    <VisuallyHidden>
-                      <CheckboxCard.Label>
-                        {t(`events.${eventId}`)}
-                      </CheckboxCard.Label>
-                    </VisuallyHidden>
-                  </CheckboxCard.Content>
-                </CheckboxCard.Control>
-              </CheckboxCard.Root>
-            );
-          })}
-        </CheckboxGroup>
+          eventButtonsCompact={eventButtonsCompact}
+          maxEvents={maxEvents}
+          eventsDisabled={eventsDisabled}
+          disabledText={disabledText}
+          wrap={wrap}
+        />
       </Fieldset.Root>
     </Tooltip>
   );

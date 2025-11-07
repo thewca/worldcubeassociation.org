@@ -1,7 +1,10 @@
+"use client"
+
 import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanelContents";
-import { Field, Fieldset, NumberInput, Textarea } from "@chakra-ui/react";
+import { Field, Fieldset, NumberInput, Textarea, Text } from "@chakra-ui/react";
 import EventSelector from "@/components/EventSelector";
 import {WCA_EVENT_IDS} from "@/lib/wca/data/events";
+import {useT} from "@/lib/i18n/useI18n";
 
 const toggleEvent = (eventId: string, selectedEventIds: string[]) => {
   if (selectedEventIds.includes(eventId)) {
@@ -13,9 +16,13 @@ const toggleEvent = (eventId: string, selectedEventIds: string[]) => {
 }
 
 export default function CompetingStep({ form, competitionInfo }: PanelProps) {
+  const { t } = useT();
+
   return (
     <Fieldset.Root>
-      <form.Field name="eventIds">
+      <form.Field name="eventIds" validators={{
+        onChange: ({ value, fieldApi }) => value.length == 0 && fieldApi.state.meta.isDirty ? t('registrations.errors.must_register') : undefined,
+      }}>
         {(field) => (
           <EventSelector
             title="Hello"
