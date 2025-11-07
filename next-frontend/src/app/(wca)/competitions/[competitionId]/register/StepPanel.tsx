@@ -1,11 +1,12 @@
 "use client"
 
-import { Steps } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Steps } from "@chakra-ui/react";
 import RegistrationRequirements from "@/components/competitions/Registration/RegistrationRequirements";
 import type { components } from "@/types/openapi";
 import { createFormHook, createFormHookContexts, formOptions } from "@tanstack/react-form";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
 import ApprovalStep from "@/components/competitions/Registration/ApprovalStep";
+import { useT } from "@/lib/i18n/useI18n";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepKey = components["schemas"]["RegistrationConfig"]["key"] | "approval";
@@ -55,15 +56,22 @@ const stepsFrontend = {
   approval: ApprovalStep,
 } satisfies Record<StepKey, React.ComponentType<PanelProps>>
 
+const stepsCompleteness = {
+  requirements: (reg) => reg.hasAcceptedTerms,
+  competing: (reg) => reg.eventIds.length > 0,
+  payment: (reg) => reg.hasAcceptedTerms,
+  approval: (reg) => reg.hasAcceptedTerms,
+} satisfies Record<StepKey, ((reg: RegistrationDummy) => boolean)>
+
 const StepPanelContents = ({
   steps,
+  form,
   competitionInfo,
 }: {
   steps: Step[];
+  form: RegistrationForm;
   competitionInfo: CompetitionInfo;
 }) => {
-  const registrationForm = useRegistrationForm();
-
   return steps.map((step, idx) => {
     const StepPanel = withForm({
       ...regFormOptions,
@@ -75,10 +83,65 @@ const StepPanelContents = ({
 
     return (
       <Steps.Content key={step.key} index={idx}>
-        <StepPanel form={registrationForm} competitionInfo={competitionInfo} />
+        <StepPanel form={form} competitionInfo={competitionInfo} />
       </Steps.Content>
     );
   });
 }
 
-export default StepPanelContents;
+const StepPanel = ({
+ steps,
+ competitionInfo,
+}: {
+  steps: Step[];
+  competitionInfo: CompetitionInfo;
+}) => {
+  const { t } = useT();
+
+  const registrationForm = useRegistrationForm();
+
+  return (
+    <Steps.Root count={steps.length}>
+      <Steps.List>
+        {steps.map((step, idx) => {
+          const stepTranslationLookup = `competitions.registration_v2.register.panel.${step.key}`;
+          const stepTitle = t(`${stepTranslationLookup}.title`)
+
+          return (
+            <Steps.Item key={step.key} index={idx} title={stepTitle}>
+              <Steps.Trigger disabled={!step.isEditable}>
+                <Steps.Indicator/>
+                <Box>
+                  <Steps.Title>{stepTitle}</Steps.Title>
+                  <Steps.Description>{t(`${stepTranslationLookup}.description`)}</Steps.Description>
+                </Box>
+              </Steps.Trigger>
+              <Steps.Separator/>
+            </Steps.Item>
+          );
+        })}
+      </Steps.List>
+
+      <StepPanelContents steps={steps} form={registrationForm} competitionInfo={competitionInfo} />
+
+      <ButtonGroup size="sm" variant="outline">
+        <Steps.PrevTrigger asChild>
+          <Button>Prev</Button>
+        </Steps.PrevTrigger>
+        <Steps.Context>
+          {(ctx) => (
+            <registrationForm.Subscribe selector={(state) => stepsCompleteness[steps[ctx.value].key](state.values)}>
+              {(isComplete) => (
+                <Steps.NextTrigger asChild>
+                  <Button disabled={!isComplete}>Next</Button>
+                </Steps.NextTrigger>
+              )}
+            </registrationForm.Subscribe>
+          )}
+        </Steps.Context>
+      </ButtonGroup>
+    </Steps.Root>
+  );
+}
+
+export default StepPanel;

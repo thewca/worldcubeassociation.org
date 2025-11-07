@@ -2,7 +2,7 @@
 
 import { Alert, Box, Checkbox } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
-import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanelContents";
+import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanel";
 
 function RegistrationFullMessage({ competitionInfo }: Pick<PanelProps, "competitionInfo">) {
   const { t } = useT();

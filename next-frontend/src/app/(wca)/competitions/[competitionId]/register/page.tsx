@@ -1,12 +1,10 @@
 import { auth } from "@/auth";
-import {Alert, Box, Button, ButtonGroup, Card, HStack, Steps, VStack} from "@chakra-ui/react";
+import { Alert, Box, Card, VStack } from "@chakra-ui/react";
 import { cache } from "react";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
-import { getT } from "@/lib/i18n/get18n";
 import type { components } from "@/types/openapi";
-import StepPanelContents from "@/app/(wca)/competitions/[competitionId]/register/StepPanelContents";
+import StepPanel from "@/app/(wca)/competitions/[competitionId]/register/StepPanel";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
-import {RegistrationCard} from "@/components/competitions/Cards";
 import RegistrationRequirementsCard
   from "@/app/(wca)/competitions/[competitionId]/register/RegistrationRequirementsCard";
 
@@ -27,7 +25,6 @@ export default async function RegisterPage({
 }: {
   params: Promise<{ competitionId: string }>
 }) {
-  const { t } = await getT();
   const session = await auth();
 
   if (session === null) {
@@ -68,38 +65,7 @@ export default async function RegisterPage({
       </Box>
       <Card.Root coloredBg width="full">
         <Card.Body>
-          <Steps.Root count={steps.length}>
-            <Steps.List>
-              {steps.map((step, idx) => {
-                const stepTranslationLookup = `competitions.registration_v2.register.panel.${step.key}`;
-                const stepTitle = t(`${stepTranslationLookup}.title`)
-
-                return (
-                  <Steps.Item key={step.key} index={idx} title={stepTitle}>
-                    <Steps.Trigger disabled={!step.isEditable}>
-                      <Steps.Indicator/>
-                      <Box>
-                        <Steps.Title>{stepTitle}</Steps.Title>
-                        <Steps.Description>{t(`${stepTranslationLookup}.description`)}</Steps.Description>
-                      </Box>
-                    </Steps.Trigger>
-                    <Steps.Separator/>
-                  </Steps.Item>
-                );
-              })}
-            </Steps.List>
-
-            <StepPanelContents steps={steps} competitionInfo={competitionInfo} />
-
-            <ButtonGroup size="sm" variant="outline">
-              <Steps.PrevTrigger asChild>
-                <Button>Prev</Button>
-              </Steps.PrevTrigger>
-              <Steps.NextTrigger asChild>
-                <Button>Next</Button>
-              </Steps.NextTrigger>
-            </ButtonGroup>
-          </Steps.Root>
+          <StepPanel steps={steps} competitionInfo={competitionInfo} />
         </Card.Body>
       </Card.Root>
     </VStack>

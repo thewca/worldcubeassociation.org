@@ -1,6 +1,6 @@
 "use client"
 
-import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanelContents";
+import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanel";
 import { Field, Fieldset, HStack, NumberInput, Text, Textarea } from "@chakra-ui/react";
 import { EventCheckboxGroup } from "@/components/EventSelector";
 import { WCA_EVENT_IDS } from "@/lib/wca/data/events";

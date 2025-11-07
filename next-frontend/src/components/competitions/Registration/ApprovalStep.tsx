@@ -1,4 +1,4 @@
-import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanelContents";
+import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanel";
 import { DataList } from "@chakra-ui/react";
 import EventIcon from "@/components/EventIcon";
 
