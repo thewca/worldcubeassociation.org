@@ -320,7 +320,10 @@ module DatabaseDumper
     "linked_rounds" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
+          id
           wcif_id
+          created_at
+          updated_at
         ],
       ),
     }.freeze,
