@@ -313,8 +313,16 @@ module DatabaseDumper
           created_at
           updated_at
           old_type
+          linked_rounds_id
         ],
       ),
+    }.freeze,
+    "linked_rounds" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          wcif_id
+        ],
+        ),
     }.freeze,
     "round_types" => {
       column_sanitizers: actions_to_column_sanitizers(
