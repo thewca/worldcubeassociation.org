@@ -1,29 +1,37 @@
 import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanelContents";
 import { Field, Fieldset, NumberInput, Textarea } from "@chakra-ui/react";
 import EventSelector from "@/components/EventSelector";
+import {WCA_EVENT_IDS} from "@/lib/wca/data/events";
 
-export default function CompetingStep({ form }: PanelProps) {
+const toggleEvent = (eventId: string, selectedEventIds: string[]) => {
+  if (selectedEventIds.includes(eventId)) {
+    return selectedEventIds.filter((evt) => evt != eventId);
+  }
+
+  const addedEvent = [...selectedEventIds, eventId];
+  return WCA_EVENT_IDS.filter((evt) => addedEvent.includes(evt));
+}
+
+export default function CompetingStep({ form, competitionInfo }: PanelProps) {
   return (
     <Fieldset.Root>
-      <form.Field name="eventIds" mode="array">
+      <form.Field name="eventIds">
         {(field) => (
-          <Field.Root invalid={!field.state.meta.isValid}>
-            <Field.Label>Events</Field.Label>
-            <EventSelector
-              title="Hello"
-              selectedEvents={field.state.value}
-              onEventClick={(eventId) => console.log(eventId)}
-            />
-            <Field.ErrorText>{field.state.meta.errors.join(", ")}</Field.ErrorText>
-          </Field.Root>
+          <EventSelector
+            title="Hello"
+            eventList={competitionInfo.event_ids}
+            selectedEvents={field.state.value}
+            onEventClick={(eventId) => field.handleChange((prevSelected) => toggleEvent(eventId, prevSelected))}
+          />
         )}
       </form.Field>
       <form.Field name="comment">
         {(field) => (
           <Field.Root invalid={!field.state.meta.isValid}>
-            <Field.Label>Additional comment to the organizers</Field.Label>
+            <Field.Label>Additional comments to the organizers</Field.Label>
             <Textarea
               autoresize
+              maxLength={240}
               value={field.state.value}
               onChange={(e) => field.handleChange(e.target.value)}
             />
@@ -39,6 +47,7 @@ export default function CompetingStep({ form }: PanelProps) {
               value={field.state.value.toString()}
               onValueChange={(e) => field.handleChange(e.valueAsNumber)}
               min={0}
+              max={99}
             >
               <NumberInput.Input />
               <NumberInput.Control />
