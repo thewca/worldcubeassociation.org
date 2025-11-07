@@ -601,6 +601,7 @@ export interface components {
         BaseRegistrationConfig: {
             key: string;
             isEditable: boolean;
+            parameters?: Record<string, never>;
         };
         RequirementsStepConfig: components["schemas"]["BaseRegistrationConfig"] & {
             /**

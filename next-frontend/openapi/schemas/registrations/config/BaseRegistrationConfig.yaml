@@ -4,6 +4,8 @@ properties:
     type: string
   isEditable:
     type: boolean
+  parameters:
+    type: object
 required:
   - key
   - isEditable
