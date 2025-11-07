@@ -44,19 +44,13 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
 
   const getColor = (pr: number) => {
     if (pr === 0) return undefined;
-    if (pr === 1) return "recordColors.personal";
-    if (pr < 11) return "recordColors.national";
-    return "fg.inverted";
+    if (pr === 1) return "recordMarkers.personal";
+    if (pr < 11) return "recordMarkers.national";
+    return undefined;
   };
 
   return (
-    <Card.Root
-      bg="bg.inverted"
-      color="fg.inverted"
-      shadow="wca"
-      overflow="hidden"
-      width="full"
-    >
+    <Card.Root bg="bg" shadow="wca" overflow="hidden" width="full">
       <Card.Body p={0}>
         <Card.Header display="flex" flexDirection="row" alignItems="center">
           <Card.Title
@@ -72,11 +66,10 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
             <LuShare2 /> {/* TODO SLATE - implement share functionality */}
           </Button>
         </Card.Header>
-        {/* Tables don't seem to inherit styles correctly, normally all the extra bg and fg shouldn't be necessary */}
-        <Table.Root size="xs" striped rounded="md" variant="results">
+        <Table.Root size="xs" striped rounded="md">
           <Table.Header>
-            <Table.Row bg="bg.inverted">
-              <Table.ColumnHeader color="fg.inverted" pl="3">
+            <Table.Row bg="bg">
+              <Table.ColumnHeader pl="3">
                 <Flex direction="row">
                   <Box fontSize="18px" pr="5px">
                     <SpeedcubingHistoryIcon />
@@ -85,34 +78,24 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                 </Flex>
               </Table.ColumnHeader>
               <Tooltip content="National Ranking" showArrow openDelay={100}>
-                <Table.ColumnHeader color="fg.inverted" textAlign="right">
-                  NR
-                </Table.ColumnHeader>
+                <Table.ColumnHeader textAlign="right">NR</Table.ColumnHeader>
               </Tooltip>
               <Tooltip content="Continental Ranking" showArrow openDelay={100}>
-                <Table.ColumnHeader color="fg.inverted" textAlign="right">
-                  CR
-                </Table.ColumnHeader>
+                <Table.ColumnHeader textAlign="right">CR</Table.ColumnHeader>
               </Tooltip>
               <Tooltip content="World Ranking" showArrow openDelay={100}>
-                <Table.ColumnHeader color="fg.inverted" textAlign="right">
-                  WR
-                </Table.ColumnHeader>
+                <Table.ColumnHeader textAlign="right">WR</Table.ColumnHeader>
               </Tooltip>
-              <Table.ColumnHeader color="fg.inverted" textAlign="right">
-                Single
-              </Table.ColumnHeader>
-              <Table.ColumnHeader color="fg.inverted">
-                Average
-              </Table.ColumnHeader>
+              <Table.ColumnHeader textAlign="right">Single</Table.ColumnHeader>
+              <Table.ColumnHeader>Average</Table.ColumnHeader>
               <Tooltip content="World Ranking" showArrow openDelay={100}>
-                <Table.ColumnHeader color="fg.inverted">WR</Table.ColumnHeader>
+                <Table.ColumnHeader>WR</Table.ColumnHeader>
               </Tooltip>
               <Tooltip content="Continental Ranking" showArrow openDelay={100}>
-                <Table.ColumnHeader color="fg.inverted">CR</Table.ColumnHeader>
+                <Table.ColumnHeader>CR</Table.ColumnHeader>
               </Tooltip>
               <Tooltip content="National Ranking" showArrow openDelay={100}>
-                <Table.ColumnHeader color="fg.inverted">NR</Table.ColumnHeader>
+                <Table.ColumnHeader>NR</Table.ColumnHeader>
               </Tooltip>
             </Table.Row>
           </Table.Header>
@@ -127,8 +110,8 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                 return null;
               }
               return (
-                <Table.Row key={index} bg="bg.inverted">
-                  <Table.Cell color="fg.inverted" pl="3">
+                <Table.Row key={index} bg="bg">
+                  <Table.Cell pl="3">
                     <Flex direction="row" alignItems="center">
                       <Icon width="1.6em" height="1.6em" fontSize="md" pr="5px">
                         <IconComponent />
@@ -157,16 +140,10 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                   >
                     {record.swr}
                   </Table.Cell>
-                  <Table.Cell
-                    color="fg.inverted"
-                    fontWeight="medium"
-                    textAlign="right"
-                  >
+                  <Table.Cell fontWeight="medium" textAlign="right">
                     {record.single}
                   </Table.Cell>
-                  <Table.Cell color="fg.inverted" fontWeight="medium">
-                    {record.average}
-                  </Table.Cell>
+                  <Table.Cell fontWeight="medium">{record.average}</Table.Cell>
                   <Table.Cell
                     color={getColor(record.awr)}
                     fontWeight={

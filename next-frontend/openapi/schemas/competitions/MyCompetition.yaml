@@ -2,20 +2,20 @@ type: object
 required:
   - id
   - name
-  - short_display_name
+  - website
   - start_date
   - end_date
   - registration_open
-  - report_posted?
-  - results_posted?
-  - cancelled?
-  - confirmed?
+  - url
   - city
   - country_iso2
-  - url
-  - website
-  - visible?
+  - results_posted?
   - report_posted?
+  - visible?
+  - confirmed?
+  - cancelled?
+  - short_display_name
+  - championships
 properties:
   id:
     type: string
@@ -41,13 +41,13 @@ properties:
     type: string
   results_posted?:
     type: boolean
+  report_posted?:
+    type: boolean
   visible?:
     type: boolean
   confirmed?:
     type: boolean
   cancelled?:
-    type: boolean
-  report_posted?:
     type: boolean
   short_display_name:
     type: string
@@ -56,6 +56,4 @@ properties:
     items:
       type: string
   registration_status:
-    type: string
-  competing_status:
     type: string

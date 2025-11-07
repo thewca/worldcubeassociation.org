@@ -46,6 +46,10 @@ locals {
       value = "https://www.worldcubeassociation.org/api/"
     },
     {
+      name  = "PROPRIETARY_FONT"
+      value = "TTNormsPro"
+    },
+    {
       name = "NEXTAUTH_URL"
       value = "https://${var.shared.next_url}"
     },

@@ -215,6 +215,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v0/results/rankings/{event_id}/{type}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the current rankings */
+        get: operations["getRankings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/incidents": {
         parameters: {
             query?: never;
@@ -224,6 +241,23 @@ export interface paths {
         };
         /** Get a list of incidents */
         get: operations["regulationsList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/results/records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the current records for all regions */
+        get: operations["getRecords"];
         put?: never;
         post?: never;
         delete?: never;
@@ -841,15 +875,16 @@ export interface components {
             city: string;
             country_iso2: string;
             "results_posted?": boolean;
+            "report_posted?": boolean;
             "visible?": boolean;
             "confirmed?": boolean;
             "cancelled?": boolean;
-            "report_posted?": boolean;
             short_display_name: string;
-            championships?: string[];
+            championships: string[];
             registration_status?: string;
-            competing_status?: string;
         };
+        /** @enum {string} */
+        CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
         Results: components["schemas"]["Result"][];
         Scramble: {
             id: number;
@@ -861,6 +896,60 @@ export interface components {
             is_extra: string;
             scramble_num: number;
             scramble: string;
+        };
+        ExtendedResult: {
+            type?: string;
+            /** @example 6709306 */
+            id: number;
+            /** @example 1 */
+            pos: number;
+            /** @example 2019WANY36 */
+            person_id: string;
+            /** @example Yiheng Wang (王艺衡) */
+            person_name: string;
+            /** @example China */
+            country_id: string;
+            /** @example China */
+            competition_country_id: string;
+            /** @example HangzhouOpen2024 */
+            competition_id: string;
+            /** @example Hangzhou Open 2024 */
+            competition_name: string;
+            /** @example 222 */
+            event_id: string;
+            /** @example 2 */
+            round_type_id: string;
+            /** @example null */
+            round_id: string | null;
+            /** @example a */
+            format_id: string;
+            /** @example 126 */
+            value1: number;
+            /** @example 84 */
+            value2: number;
+            /** @example 91 */
+            value3: number;
+            /** @example 89 */
+            value4: number;
+            /** @example 85 */
+            value5: number;
+            /** @example 84 */
+            best: number;
+            /** @example 88 */
+            average: number;
+            /** @example null */
+            regional_single_record: string | null;
+            /** @example WR */
+            regional_average_record: string | null;
+            /**
+             * Format: date-time
+             * @example 2024-12-19T13:40:19.000Z
+             */
+            updated_at: string;
+            /** Format: date */
+            start_date: string;
+            /** @example 88 */
+            value: number;
         };
         Incident: {
             id: string;
@@ -890,6 +979,63 @@ export interface components {
                 name: string;
                 comments?: string;
             }[];
+        };
+        Record: {
+            type?: string;
+            /** @example 6709306 */
+            id: number;
+            /** @example 1 */
+            pos: number;
+            /** @example 2019WANY36 */
+            person_id: string;
+            /** @example Yiheng Wang (王艺衡) */
+            person_name: string;
+            /** @example China */
+            country_id: string;
+            /** @example China */
+            competition_country_id: string;
+            /** @example HangzhouOpen2024 */
+            competition_id: string;
+            /** @example Hangzhou Open 2024 */
+            competition_name: string;
+            /** @example 222 */
+            event_id: string;
+            /** @example 2 */
+            round_type_id: string;
+            /** @example null */
+            round_id: string | null;
+            /** @example a */
+            format_id: string;
+            /** @example 126 */
+            value1: number;
+            /** @example 84 */
+            value2: number;
+            /** @example 91 */
+            value3: number;
+            /** @example 89 */
+            value4: number;
+            /** @example 85 */
+            value5: number;
+            /** @example 84 */
+            best: number;
+            /** @example 88 */
+            average: number;
+            /** @example null */
+            regional_single_record: string | null;
+            /** @example WR */
+            regional_average_record: string | null;
+            /**
+             * Format: date-time
+             * @example 2024-12-19T13:40:19.000Z
+             */
+            updated_at: string;
+            /** Format: date */
+            start_date: string;
+            /** @example 88 */
+            value: number;
+        };
+        RecordByEvent: {
+            [key: string]: components["schemas"]["Record"][];
         };
         Rank: {
             id: number;
@@ -1241,6 +1387,9 @@ export interface operations {
                         past_competitions: components["schemas"]["MyCompetition"][];
                         future_competitions: components["schemas"]["MyCompetition"][];
                         bookmarked_competitions: components["schemas"]["MyCompetition"][];
+                        registrations_by_competition: {
+                            [key: string]: components["schemas"]["CompetingStatus"];
+                        };
                     };
                 };
             };
@@ -1290,6 +1439,37 @@ export interface operations {
             };
         };
     };
+    getRankings: {
+        parameters: {
+            query?: {
+                region?: string;
+                show?: string;
+                gender?: string;
+            };
+            header?: never;
+            path: {
+                type: string;
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved rankings */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        rankings: components["schemas"]["ExtendedResult"][];
+                        /** Format: date */
+                        timestamp: string;
+                    };
+                };
+            };
+        };
+    };
     regulationsList: {
         parameters: {
             query?: {
@@ -1311,6 +1491,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Incident"][];
+                };
+            };
+        };
+    };
+    getRecords: {
+        parameters: {
+            query?: {
+                event_id?: string;
+                region?: string;
+                show?: string;
+                gender?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved records */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        records: components["schemas"]["RecordByEvent"];
+                        /** Format: date */
+                        timestamp: string;
+                    };
                 };
             };
         };

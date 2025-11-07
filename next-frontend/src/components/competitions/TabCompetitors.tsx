@@ -1,6 +1,6 @@
 "use client";
 import React, { useMemo, useState } from "react";
-import { Card, Text, Center, Spinner } from "@chakra-ui/react";
+import { Card, Text, Center, Spinner, Table } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
@@ -76,21 +76,23 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
             onClearClick={() => setPsychSheetEvent(null)}
           />
         </Card.Title>
-        {psychSheetEvent && (
-          <PsychsheetTable
-            pychsheet={psychSheetQuery!.data!}
-            t={t}
-            setSortBy={setSortBy}
-          />
-        )}
-        {!psychSheetEvent && (
-          <CompetitorTable
-            eventIds={eventIds}
-            registrations={registrationsQuery.data}
-            setPsychSheetEvent={setPsychSheetEvent}
-            t={t}
-          />
-        )}
+        <Table.ScrollArea borderWidth="1px" maxW="xl">
+          {psychSheetEvent && (
+            <PsychsheetTable
+              pychsheet={psychSheetQuery!.data!}
+              t={t}
+              setSortBy={setSortBy}
+            />
+          )}
+          {!psychSheetEvent && (
+            <CompetitorTable
+              eventIds={eventIds}
+              registrations={registrationsQuery.data}
+              setPsychSheetEvent={setPsychSheetEvent}
+              t={t}
+            />
+          )}
+        </Table.ScrollArea>
       </Card.Body>
     </Card.Root>
   );

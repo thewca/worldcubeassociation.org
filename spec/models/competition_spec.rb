@@ -473,7 +473,8 @@ RSpec.describe Competition do
 
     it "warns if competition has results and haven't been posted" do
       competition = create(:competition, :confirmed, :announced, :visible, :past, results_posted_at: nil, results_posted_by: nil)
-      create(:result, person: create(:person), competition_id: competition.id)
+      round = create(:round, competition: competition, number: 2, event_id: "333oh")
+      create(:result, person: create(:person), competition_id: competition.id, round: round)
       wrt_member = create(:user, :wrt_member)
 
       expect(competition).to be_valid
@@ -698,8 +699,9 @@ RSpec.describe Competition do
     end
 
     it "changes the competition_id of results" do
-      r1 = create(:result, competition_id: competition.id)
-      r2 = create(:result, competition_id: competition.id)
+      round = create(:round, competition: competition, event_id: "333oh")
+      r1 = create(:result, competition_id: competition.id, round: round)
+      r2 = create(:result, competition_id: competition.id, round: round)
       competition.update_attribute(:id, "NewID2015")
       expect(r1.reload.competition_id).to eq "NewID2015"
       expect(r2.reload.competition_id).to eq "NewID2015"
@@ -910,31 +912,28 @@ RSpec.describe Competition do
   describe "results" do
     let(:three_by_three) { Event.find "333" }
     let(:two_by_two) { Event.find "222" }
-    let!(:competition) do
-      c = create(:competition, events: [three_by_three, two_by_two])
-      # Create the results rounds right now so that we can use them later.
-      create(:round, competition: c, total_number_of_rounds: 2, number: 1, event_id: "333")
-      create(:round, competition: c, total_number_of_rounds: 2, number: 2, event_id: "333")
-      create(:round, competition: c, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100))
-      c
-    end
+    let!(:competition) { create(:competition, events: [three_by_three, two_by_two]) }
 
     let(:person_one) { create(:person, name: "One") }
     let(:person_two) { create(:person, name: "Two") }
     let(:person_three) { create(:person, name: "Three") }
     let(:person_four) { create(:person, name: "Four") }
 
-    let!(:r_333_1_first) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 1, person: person_one) }
-    let!(:r_333_1_second) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 2, person: person_two) }
-    let!(:r_333_1_third) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 3, person: person_three) }
-    let!(:r_333_1_fourth) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 4, person: person_four) }
+    let(:round_333_1) { create(:round, competition: competition, total_number_of_rounds: 2, number: 1, event_id: "333") }
+    let(:round_333_f) { create(:round, competition: competition, total_number_of_rounds: 2, number: 2, event_id: "333") }
+    let(:round_222_c) { create(:round, competition: competition, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100)) }
 
-    let!(:r_333_f_first) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 1, person: person_one) }
-    let!(:r_333_f_second) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 2, person: person_two) }
-    let!(:r_333_f_third) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 3, person: person_three) }
+    let!(:r_333_1_first) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 1, person: person_one) }
+    let!(:r_333_1_second) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 2, person: person_two) }
+    let!(:r_333_1_third) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 3, person: person_three) }
+    let!(:r_333_1_fourth) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 4, person: person_four) }
 
-    let!(:r_222_c_second_tied) { create(:result, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_two) }
-    let!(:r_222_c_first_tied) { create(:result, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_one) }
+    let!(:r_333_f_first) { create(:result, round: round_333_f, competition: competition, event_id: "333", round_type_id: "f", pos: 1, person: person_one) }
+    let!(:r_333_f_second) { create(:result, round: round_333_f, competition: competition, event_id: "333", round_type_id: "f", pos: 2, person: person_two) }
+    let!(:r_333_f_third) { create(:result, round: round_333_f, competition: competition, event_id: "333", round_type_id: "f", pos: 3, person: person_three) }
+
+    let!(:r_222_c_second_tied) { create(:result, round: round_222_c, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_two) }
+    let!(:r_222_c_first_tied) { create(:result, round: round_222_c, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_one) }
 
     it "events_with_podium_results" do
       result = competition.events_with_podium_results
@@ -991,7 +990,7 @@ RSpec.describe Competition do
 
   it "when id is changed, foreign keys are updated as well" do
     competition = create(:competition, :with_delegate, :with_organizer, :with_delegate_report, :registration_open)
-    create(:result, competition_id: competition.id)
+    create(:result, competition: competition)
     create(:competition_tab, competition: competition)
     create(:registration, competition: competition)
 
@@ -1051,14 +1050,16 @@ RSpec.describe Competition do
     let!(:competition) { create(:competition) }
 
     it "works" do
-      create_list(:result, 2, competition: competition)
+      round = create(:round, competition: competition, event_id: "333oh")
+      create_list(:result, 2, competition: competition, round: round)
       expect(competition.competitors.count).to eq 2
     end
 
     it "handles competitors with multiple sub_ids" do
       person_with_sub_ids = create(:person_with_multiple_sub_ids)
-      create(:result, competition: competition, person: person_with_sub_ids)
-      create(:result, competition: competition)
+      round = create(:round, competition: competition, event_id: "333oh")
+      create(:result, competition: competition, person: person_with_sub_ids, round: round)
+      create(:result, competition: competition, round: round)
       expect(competition.competitors.count).to eq 2
     end
   end
@@ -1610,6 +1611,11 @@ RSpec.describe Competition do
   context "new competition is invalid when" do
     let!(:new_competition) { build(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
 
+    it 'there is no start date' do
+      new_competition.start_date = nil
+      expect(new_competition).not_to be_valid
+    end
+
     it "nameReason is too long" do
       new_competition.name_reason = "Veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long name reason"
       expect(new_competition).not_to be_valid
@@ -1645,7 +1651,7 @@ RSpec.describe Competition do
         end
 
         it 'integrated payment not enabled when competition is confirmed' do
-          confirmed_comp = build(:competition, :confirmed, :bulk_auto_accept)
+          confirmed_comp = build(:competition, :confirmed, :bulk_auto_accept, :future)
           expect(confirmed_comp).not_to be_valid
           expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
         end
@@ -1665,6 +1671,11 @@ RSpec.describe Competition do
           expect(competition).not_to be_valid
           expect(competition.errors[:auto_accept_preference]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
         end
+      end
+
+      it 'is valid after end_date even with no connected payment integration' do
+        auto_accept_comp.disconnect_all_payment_integrations
+        expect(auto_accept_comp).to be_valid
       end
 
       it 'disable threshold cant exceed competitor limit' do
@@ -1704,7 +1715,7 @@ RSpec.describe Competition do
         end
 
         it 'integrated payment not enabled when competition is confirmed' do
-          confirmed_comp = build(:competition, :confirmed, :live_auto_accept)
+          confirmed_comp = build(:competition, :confirmed, :live_auto_accept, :future)
           expect(confirmed_comp).not_to be_valid
           expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
         end
@@ -1724,6 +1735,11 @@ RSpec.describe Competition do
           expect(competition).not_to be_valid
           expect(competition.errors[:auto_accept_preference]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
         end
+      end
+
+      it 'is valid after end_date even with no connected payment integration' do
+        auto_accept_comp.disconnect_all_payment_integrations
+        expect(auto_accept_comp).to be_valid
       end
 
       it 'disable threshold cant exceed competitor limit' do
@@ -1974,6 +1990,50 @@ RSpec.describe Competition do
       create_list(:registration, 5, :paid, competition: comp)
       create_list(:registration, 3, :refunded, competition: comp)
       expect(comp.fully_paid_registrations_count).to eq(5)
+    end
+  end
+
+  describe '#can_show_competitors_page?' do
+    let(:competition) { create(:competition, :registration_open, :with_organizer, :with_delegate) }
+
+    context 'after registration has opened' do
+      it 'is true after registration has opened' do
+        expect(competition.can_show_competitors_page?).to be(true)
+      end
+
+      it 'is true even if no registrations are accepted' do
+        expect(competition.registrations.competing_status_accepted.competing.count).to be(0)
+        expect(competition.can_show_competitors_page?).to be(true)
+      end
+    end
+
+    it 'is true after registration has closed irrespective of registrations' do
+      competition.registration_close = 1.day.ago
+      expect(competition.registrations.competing_status_accepted.competing.count).to be(0)
+      expect(competition.can_show_competitors_page?).to be(true)
+    end
+
+    context 'before registration opens', :zxc do
+      let(:not_open) { create(:competition, :registration_not_opened, :with_organizer, :with_delegate) }
+
+      it 'is false with no accepted registrations' do
+        expect(not_open.can_show_competitors_page?).to be(false)
+      end
+
+      it 'is false if the only accepted registrations are for organizers/delegates' do
+        delegate = not_open.delegates.first
+        organizer = not_open.organizers.first
+
+        create(:registration, :accepted, competition: not_open, user: delegate)
+        create(:registration, :accepted, competition: not_open, user: organizer)
+
+        expect(not_open.can_show_competitors_page?).to be(false)
+      end
+
+      it 'is true if there are accepted non-delegate/organizer registrations' do
+        create(:registration, :accepted, competition: not_open)
+        expect(not_open.can_show_competitors_page?).to be(true)
+      end
     end
   end
 end

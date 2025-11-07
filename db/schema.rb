@@ -665,7 +665,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
-    t.integer "round_id"
+    t.integer "round_id", null: false
     t.string "format_id", limit: 1, default: "", null: false
     t.integer "value1", default: 0, null: false
     t.integer "value2", default: 0, null: false
@@ -1108,7 +1108,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
-    t.integer "round_id"
+    t.integer "round_id", null: false
     t.string "format_id", limit: 1, default: "", null: false
     t.integer "value1", default: 0, null: false
     t.integer "value2", default: 0, null: false

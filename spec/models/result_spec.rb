@@ -50,7 +50,7 @@ RSpec.describe Result do
 
   context "associations" do
     it "validates competition_id" do
-      result = build(:result, competition_id: "foo", skip_round_creation: true)
+      result = build(:result, competition_id: "foo")
       expect(result).to be_invalid_with_errors(competition: ["must exist"])
     end
 
@@ -60,24 +60,18 @@ RSpec.describe Result do
     end
 
     it "validates event_id" do
-      result = build(:result, event_id: "foo", skip_round_creation: true)
+      result = build(:result, event_id: "foo")
       expect(result).to be_invalid_with_errors(event: ["must exist"])
     end
 
     it "validates format_id" do
-      result = build(:result, format_id: "foo", skip_round_creation: true)
+      result = build(:result, format_id: "foo")
       expect(result).to be_invalid_with_errors(format: ["must exist"])
     end
 
     it "validates round_type_id" do
-      result = build(:result, round_type_id: "foo", skip_round_creation: true)
-      # Skipping the round creation also creates a round validation error which
-      # is reported on :round_type.
-      expect(result).to be_invalid_with_errors(round_type:
-      [
-        "must exist",
-        "Result must belong to a valid round. Please check that the tuple (competition_id, event_id, round_type_id, format_id) matches an existing round.",
-      ])
+      result = build(:result, round_type_id: "foo")
+      expect(result).to be_invalid_with_errors(round_type: ["must exist"])
     end
 
     it "person association always looks for sub_id 1" do
@@ -130,7 +124,7 @@ RSpec.describe Result do
           let!(:round) { create(:round, competition: competition, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100)) }
 
           it "all solves" do
-            result = build_result(value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44)
+            result = build_result(value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44, round: round)
             expect(result).to be_valid
 
             result.average = 33
@@ -139,7 +133,7 @@ RSpec.describe Result do
           end
 
           it "missing solves" do
-            result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44)
+            result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44, round: round)
             expect(result.average_is_not_computable_reason).to be_nil
             expect(result.compute_correct_average).to eq 0
             expect(result).not_to be_valid(average: ["should be 0"])
@@ -152,7 +146,7 @@ RSpec.describe Result do
 
           it "all solves with average below 10 minutes" do
             # This average computes to 44.0066... and should be rounded to 44.01
-            result = build_result(value1: 4200, value2: 4300, value3: 4400, value4: 4502, value5: 4600, best: 4200, average: 4401)
+            result = build_result(value1: 4200, value2: 4300, value3: 4400, value4: 4502, value5: 4600, best: 4200, average: 4401, round: round)
             expect(result).to be_valid
 
             result.average = 33
@@ -162,7 +156,7 @@ RSpec.describe Result do
 
           it "all solves with average above 10 minutes" do
             # This average computes to 600.66... and should be rounded to 601
-            result = build_result(value1: 1001, value2: 60_100, value3: 60_100, value4: 60_000, value5: 70_000, best: 1001, average: 60_100)
+            result = build_result(value1: 1001, value2: 60_100, value3: 60_100, value4: 60_000, value5: 70_000, best: 1001, average: 60_100, round: round)
             expect(result).to be_valid
 
             result.average = 33
@@ -171,7 +165,7 @@ RSpec.describe Result do
           end
 
           it "DNF average" do
-            result = build_result(value1: SolveTime::DNF_VALUE, value2: 43, value3: SolveTime::DNF_VALUE, value4: 45, value5: 46, best: 43, average: SolveTime::DNF_VALUE)
+            result = build_result(value1: SolveTime::DNF_VALUE, value2: 43, value3: SolveTime::DNF_VALUE, value4: 45, value5: 46, best: 43, average: SolveTime::DNF_VALUE, round: round)
             expect(result).to be_valid
 
             result.average = 33
@@ -180,7 +174,7 @@ RSpec.describe Result do
           end
 
           it "missing solves" do
-            result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44)
+            result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44, round: round)
             expect(result.average_is_not_computable_reason).to be_truthy
           end
         end
@@ -198,7 +192,7 @@ RSpec.describe Result do
             let!(:round) { create(:round, competition: competition, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100), format_id: "m", event_id: "777") }
 
             it "all solves" do
-              result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 43)
+              result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 43, round: round)
               expect(result).to be_valid
 
               result.average = 33
@@ -207,7 +201,7 @@ RSpec.describe Result do
             end
 
             it "missing solves" do
-              result = build_result(value1: 42, value2: 0, value3: 0, value4: 0, value5: 0, best: 42, average: 0)
+              result = build_result(value1: 42, value2: 0, value3: 0, value4: 0, value5: 0, best: 42, average: 0, round: round)
               expect(result).to be_valid
 
               result.average = 33
@@ -216,7 +210,7 @@ RSpec.describe Result do
             end
 
             it "too many solves" do
-              result = build_result(value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 43)
+              result = build_result(value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 43, round: round)
               expect(result.average_is_not_computable_reason).to be_truthy
               expect(result).to be_invalid_with_errors(base: ["Expected at most 3 solves, but found 5."])
             end
@@ -228,7 +222,7 @@ RSpec.describe Result do
 
             it "all solves with average below 10 minutes" do
               # This average computes to 44.0066... and should be rounded to 44.01
-              result = build_result(value1: 4300, value2: 4502, value3: 4400, value4: 0, value5: 0, best: 4300, average: 4401)
+              result = build_result(value1: 4300, value2: 4502, value3: 4400, value4: 0, value5: 0, best: 4300, average: 4401, round: round)
               expect(result).to be_valid
 
               result.average = 33
@@ -238,7 +232,7 @@ RSpec.describe Result do
 
             it "all solves with average above 10 minutes" do
               # This average computes to 600.66... and should be rounded to 601
-              result = build_result(value1: 60_100, value2: 60_100, value3: 60_000, value4: 0, value5: 0, best: 60_000, average: 60_100)
+              result = build_result(value1: 60_100, value2: 60_100, value3: 60_000, value4: 0, value5: 0, best: 60_000, average: 60_100, round: round)
               expect(result).to be_valid
 
               result.average = 33
@@ -247,7 +241,7 @@ RSpec.describe Result do
             end
 
             it "rounds instead of truncates" do
-              result = build_result(value1: 4, value2: 4, value3: 3, value4: 0, value5: 0, best: 3, average: 4)
+              result = build_result(value1: 4, value2: 4, value3: 3, value4: 0, value5: 0, best: 3, average: 4, round: round)
               expect(result).to be_valid
 
               result.average = 33
@@ -256,13 +250,13 @@ RSpec.describe Result do
             end
 
             it "missing solves" do
-              result = build_result(value1: 42, value2: 0, value3: 0, value4: 0, value5: 0, best: 42, average: 0)
+              result = build_result(value1: 42, value2: 0, value3: 0, value4: 0, value5: 0, best: 42, average: 0, round: round)
               expect(result.average_is_not_computable_reason).to be_truthy
               expect(result).to be_invalid_with_errors(base: ["Expected 3 solves, but found 1."])
             end
 
             it "too many solves" do
-              result = build_result(value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 43)
+              result = build_result(value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 43, round: round)
               expect(result.average_is_not_computable_reason).to be_truthy
               expect(result).to be_invalid_with_errors(base: ["Expected 3 solves, but found 5."])
             end
@@ -276,7 +270,7 @@ RSpec.describe Result do
           let!(:round) { create(:round, competition: competition, format_id: "m", event_id: "333fm") }
 
           it "correctly computes average" do
-            result = build_result(value1: 42, value2: 42, value3: 43, value4: 0, value5: 0, best: 42, average: 4233)
+            result = build_result(value1: 42, value2: 42, value3: 43, value4: 0, value5: 0, best: 42, average: 4233, round: round)
             expect(result).to be_valid
 
             result.average = 4200
@@ -285,7 +279,7 @@ RSpec.describe Result do
           end
 
           it "correctly computes DNF average" do
-            result = build_result(value1: 42, value2: SolveTime::DNF_VALUE, value3: 44, value4: 0, value5: 0, best: 42, average: SolveTime::DNF_VALUE)
+            result = build_result(value1: 42, value2: SolveTime::DNF_VALUE, value3: 44, value4: 0, value5: 0, best: 42, average: SolveTime::DNF_VALUE, round: round)
             expect(result).to be_valid
 
             result.average = 33
@@ -305,7 +299,7 @@ RSpec.describe Result do
           let!(:round) { create(:round, competition: competition, event_id: "333bf", format_id: "3") }
 
           it "does compute average" do
-            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000)
+            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000, round: round)
             expect(result).to be_valid
 
             result.average = 33
@@ -317,7 +311,8 @@ RSpec.describe Result do
             result = build_result(value1: 3000, value2: 3000,
                                   value3: SolveTime::SKIPPED_VALUE,
                                   value4: SolveTime::SKIPPED_VALUE,
-                                  value5: SolveTime::SKIPPED_VALUE)
+                                  value5: SolveTime::SKIPPED_VALUE,
+                                  round: round)
             expect(result.compute_correct_average).to eq SolveTime::SKIPPED_VALUE
           end
 
@@ -325,11 +320,11 @@ RSpec.describe Result do
             result_dns = build_result(value1: 3000, value2: 3000,
                                       value3: SolveTime::DNS_VALUE,
                                       value4: SolveTime::SKIPPED_VALUE,
-                                      value5: SolveTime::SKIPPED_VALUE)
+                                      value5: SolveTime::SKIPPED_VALUE, round: round)
             result_dnf = build_result(value1: 3000, value2: 3000,
                                       value3: SolveTime::DNF_VALUE,
                                       value4: SolveTime::SKIPPED_VALUE,
-                                      value5: SolveTime::SKIPPED_VALUE)
+                                      value5: SolveTime::SKIPPED_VALUE, round: round)
             expect(result_dnf.compute_correct_average).to eq SolveTime::DNF_VALUE
             expect(result_dns.compute_correct_average).to eq SolveTime::DNF_VALUE
           end
@@ -341,7 +336,7 @@ RSpec.describe Result do
                                   value2: over10,
                                   value3: over10,
                                   value4: SolveTime::SKIPPED_VALUE,
-                                  value5: SolveTime::SKIPPED_VALUE)
+                                  value5: SolveTime::SKIPPED_VALUE, round: round)
             expect(result.compute_correct_average).to eq((10.minutes + 10.seconds) * 100)
           end
 
@@ -352,7 +347,7 @@ RSpec.describe Result do
                                   value2: over10,
                                   value3: over10,
                                   value4: SolveTime::SKIPPED_VALUE,
-                                  value5: SolveTime::SKIPPED_VALUE)
+                                  value5: SolveTime::SKIPPED_VALUE, round: round)
             expect(result.compute_correct_average).to eq((10.minutes + 11.seconds) * 100)
           end
         end
@@ -363,7 +358,7 @@ RSpec.describe Result do
           let!(:round) { create(:round, competition: competition, event_id: "444bf", format_id: "3") }
 
           it "sets a valid average for 444bf if all three solves are completed" do
-            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000)
+            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000, round: round)
             expect(result).to be_valid
 
             result.average = 33
@@ -378,7 +373,7 @@ RSpec.describe Result do
           let!(:round) { create(:round, competition: competition, event_id: "555bf", format_id: "3") }
 
           it "sets a valid average for 555bf if all three solves are completed" do
-            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000)
+            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000, round: round)
             expect(result).to be_valid
 
             result.average = 33
@@ -393,7 +388,7 @@ RSpec.describe Result do
           let!(:round) { create(:round, competition: competition, event_id: "333fm", format_id: "m") }
 
           it "does compute average" do
-            result = build_result(value1: 24, value2: 25, value3: 26, value4: 0, value5: 0, best: 24, average: 2500)
+            result = build_result(value1: 24, value2: 25, value3: 26, value4: 0, value5: 0, best: 24, average: 2500, round: round)
             expect(result).to be_valid
 
             result.average = 33
@@ -414,7 +409,7 @@ RSpec.describe Result do
             solve_time.time_centiseconds = (45.minutes + 32.seconds).in_centiseconds
             val = solve_time.wca_value
 
-            result = build_result(value1: val, value2: val, value3: val, value4: 0, value5: 0, best: val, average: 0)
+            result = build_result(value1: val, value2: val, value3: val, value4: 0, value5: 0, best: val, average: 0, round: round)
             expect(result).to be_valid
 
             result.average = 33

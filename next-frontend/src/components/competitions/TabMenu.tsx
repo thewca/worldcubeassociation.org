@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { route } from "nextjs-routes";
 import { Separator, Tabs } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import _ from "lodash";
@@ -9,101 +8,10 @@ import { components } from "@/types/openapi";
 import { useMemo } from "react";
 import { hasPassed } from "@/lib/wca/dates";
 import { useT } from "@/lib/i18n/useI18n";
-
-const beforeCompetitionTabs = (
-  competitionInfo: components["schemas"]["CompetitionInfo"],
-) => {
-  return [
-    {
-      i18nKey: "competitions.nav.menu.general",
-      href: route({
-        pathname: "/competitions/[competitionId]",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "general",
-    },
-    {
-      i18nKey: "competitions.nav.menu.register",
-      href: route({
-        pathname: "/competitions/[competitionId]/register",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "register",
-    },
-    {
-      i18nKey: "competitions.nav.menu.competitors",
-      href: route({
-        pathname: "/competitions/[competitionId]/competitors",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "competitors",
-    },
-    {
-      i18nKey: "competitions.nav.menu.events",
-      href: route({
-        pathname: "/competitions/[competitionId]/events",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "events",
-    },
-    {
-      i18nKey: "competitions.nav.menu.schedule",
-      href: route({
-        pathname: "/competitions/[competitionId]/schedule",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "schedule",
-    },
-  ];
-};
-// TODO: Later for WCA Live Integration
-const duringCompetitionTabs = [];
-const afterCompetitionTabs = (
-  competitionInfo: components["schemas"]["CompetitionInfo"],
-) => {
-  return [
-    {
-      i18nKey: "competitions.nav.menu.info",
-      href: route({
-        pathname: "/competitions/[competitionId]",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "general",
-    },
-    {
-      i18nKey: "competitions.nav.menu.podiums",
-      href: route({
-        pathname: "/competitions/[competitionId]/podiums",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "podiums",
-    },
-    {
-      i18nKey: "competitions.nav.menu.results",
-      href: route({
-        pathname: "/competitions/[competitionId]/results/all",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "all",
-    },
-    {
-      i18nKey: "competitions.nav.menu.by_person",
-      href: route({
-        pathname: "/competitions/[competitionId]/results/byPerson",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "byPerson",
-    },
-    {
-      i18nKey: "competitions.nav.menu.scrambles",
-      href: route({
-        pathname: "/competitions/[competitionId]/scrambles",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "scrambles",
-    },
-  ];
-};
+import {
+  afterCompetitionTabs,
+  beforeCompetitionTabs,
+} from "@/lib/wca/competitions/tabs";
 
 export default function TabMenu({
   competitionInfo,
@@ -133,17 +41,26 @@ export default function TabMenu({
   return (
     <Tabs.Root
       variant="enclosed"
-      w="100%"
+      width="full"
       defaultValue={currentPath}
       orientation="vertical"
       lazyMount
       unmountOnExit
+      hideBelow="md"
+      colorPalette="white"
     >
-      <Tabs.List height="fit-content" position="sticky" top="3">
+      <Tabs.List
+        height="fit-content"
+        position="sticky"
+        minWidth="fit-content"
+        gap="3"
+      >
         {tabs.map((tab) => (
-          <Link href={tab.href} key={tab.i18nKey}>
-            <Tabs.Trigger value={tab.menuKey}>{t(tab.i18nKey)}</Tabs.Trigger>
-          </Link>
+          <Tabs.Trigger key={tab.i18nKey} value={tab.menuKey} asChild>
+            <Link href={tab.href} key={tab.i18nKey}>
+              {t(tab.i18nKey)}
+            </Link>
+          </Tabs.Trigger>
         ))}
         <Separator />
         <Tabs.Trigger value="custom-1">Custom 1</Tabs.Trigger>
