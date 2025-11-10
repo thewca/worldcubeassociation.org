@@ -10291,7 +10291,7 @@ __metadata:
     stylelint-scss: "npm:^6.12.1"
     terser-webpack-plugin: "npm:^5.3.14"
     webpack: "npm:^5.102.1"
-    webpack-assets-manifest: "npm:^6.3.0"
+    webpack-assets-manifest: "npm:^6.4.0"
     webpack-bundle-analyzer: "npm:^4.10.2"
     webpack-cli: "npm:^6.0.1"
     webpack-dev-server: "npm:^5.2.2"
@@ -10435,7 +10435,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"schema-utils@npm:^4.0.0, schema-utils@npm:^4.0.1, schema-utils@npm:^4.2.0, schema-utils@npm:^4.3.0, schema-utils@npm:^4.3.2, schema-utils@npm:^4.3.3":
+"schema-utils@npm:^4.0.0, schema-utils@npm:^4.0.1, schema-utils@npm:^4.2.0, schema-utils@npm:^4.3.0, schema-utils@npm:^4.3.3":
   version: 4.3.3
   resolution: "schema-utils@npm:4.3.3"
   dependencies:
@@ -11354,7 +11354,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tapable@npm:^2.0.0, tapable@npm:^2.2.0, tapable@npm:^2.2.1, tapable@npm:^2.2.3, tapable@npm:^2.3.0":
+"tapable@npm:^2.0.0, tapable@npm:^2.2.0, tapable@npm:^2.2.1, tapable@npm:^2.3.0":
   version: 2.3.0
   resolution: "tapable@npm:2.3.0"
   checksum: 10c0/cb9d67cc2c6a74dedc812ef3085d9d681edd2c1fa18e4aef57a3c0605fdbe44e6b8ea00bd9ef21bc74dd45314e39d31227aa031ebf2f5e38164df514136f2681
@@ -11763,17 +11763,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-assets-manifest@npm:^6.3.0":
-  version: 6.3.0
-  resolution: "webpack-assets-manifest@npm:6.3.0"
+"webpack-assets-manifest@npm:^6.4.0":
+  version: 6.4.0
+  resolution: "webpack-assets-manifest@npm:6.4.0"
   dependencies:
     deepmerge: "npm:^4.3.1"
     lockfile: "npm:^1.0.4"
-    schema-utils: "npm:^4.3.2"
-    tapable: "npm:^2.2.3"
+    schema-utils: "npm:^4.3.3"
+    tapable: "npm:^2.3.0"
   peerDependencies:
     webpack: ^5.61.0
-  checksum: 10c0/3f92bd50ede6b150577f5498e1d12020461d32d8bd026fbbdd49e1af0e0e75ce0a16e5daa875be5a45bcb1b0599847a25277ad30a4139ef8f7b0b0660f9cd241
+  checksum: 10c0/c8c0aa6b35aaec388d85c730b23bef80a00bfb0a7e4178999274ea026979f13600829e90bc14e73c089fc9e3bd1d724e0a82563f356bb2c4be357767d3c0c9bc
   languageName: node
   linkType: hard
 
