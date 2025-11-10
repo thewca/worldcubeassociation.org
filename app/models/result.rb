@@ -36,7 +36,7 @@ class Result < ApplicationRecord
     Country.c_find(self.country_id)
   end
 
-  validates :person_id, uniqueness: { scope: %i[competition_id round_id], message: "this WCA ID already has a result for that round" }
+  validates :person_id, uniqueness: { scope: :round_id, message: "this WCA ID already has a result for that round" }
 
   scope :final, -> { where(round_type_id: RoundType.final_rounds.select(:id)) }
   scope :succeeded, -> { where("best > 0") }

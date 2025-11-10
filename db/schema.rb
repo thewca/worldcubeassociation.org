@@ -1120,7 +1120,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_13_162643) do
     t.string "regional_single_record", limit: 3
     t.string "regional_average_record", limit: 3
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
-    t.index ["competition_id", "round_id", "person_id"], name: "results_person_uniqueness_speedup", unique: true
+    t.index ["round_id", "person_id"], name: "results_person_uniqueness_speedup"
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competition_id"], name: "Results_fk_tournament"
     t.index ["country_id"], name: "_tmp_index_Results_on_countryId"
