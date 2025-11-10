@@ -1,6 +1,3 @@
-"use client";
-
-import { useMemo } from "react";
 import {
   Accordion,
   Button,
@@ -8,37 +5,31 @@ import {
   Heading,
   VStack,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
-import { useT } from "@/lib/i18n/useI18n";
+import { auth } from "@/auth";
+import { getT } from "@/lib/i18n/get18n";
 import UpcomingCompetitionTable from "@/components/competitions/Mine/UpcomingCompetitionTable";
 import PastCompetitionsTable from "@/components/competitions/Mine/PastCompetitionTable";
-import { useQuery } from "@tanstack/react-query";
-import useAPI from "@/lib/wca/useAPI";
-import Loading from "@/components/ui/loading";
+import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
 
-export default function MyCompetitions() {
-  const { data: session } = useSession();
-  const { t } = useT();
-  const api = useAPI();
-
-  const { data: myCompetitionsRequest, isLoading } = useQuery({
-    queryKey: ["my-competitions"],
-    queryFn: () => api.GET("/v0/competitions/mine", {}),
-  });
-
-  const myCompetitions = useMemo(
-    () => myCompetitionsRequest?.data,
-    [myCompetitionsRequest],
-  );
-
-  if (isLoading || !myCompetitions) {
-    return <Loading />;
-  }
+export default async function MyCompetitions() {
+  const session = await auth();
+  const { t } = await getT();
 
   if (!session) {
     return <p>Please Log in</p>;
   }
+
+  // @ts-expect-error TODO: Fix this
+  const client = serverClientWithToken(session.accessToken);
+
+  const myCompetitionsRequest = await client.GET("/v0/competitions/mine");
+
+  if (myCompetitionsRequest.error) {
+    return <p>Something went wrong while fetching your competitions</p>;
+  }
+
+  const myCompetitions = myCompetitionsRequest.data;
 
   return (
     <Container bg="bg">
