@@ -10310,10 +10310,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:^16.11.0":
-  version: 16.11.0
-  resolution: "graphql@npm:16.11.0"
-  checksum: 10c0/124da7860a2292e9acf2fed0c71fc0f6a9b9ca865d390d112bdd563c1f474357141501c12891f4164fe984315764736ad67f705219c62f7580681d431a85db88
+"graphql@npm:^16.12.0":
+  version: 16.12.0
+  resolution: "graphql@npm:16.12.0"
+  checksum: 10c0/b6fffa4e8a4e4a9933ebe85e7470b346dbf49050c1a482fac5e03e4a1a7bed2ecd3a4c97e29f04457af929464bc5e4f2aac991090c2f320111eef26e902a5c75
   languageName: node
   linkType: hard
 
@@ -12813,7 +12813,7 @@ __metadata:
     eslint-config-next: "npm:15.5.6"
     eslint-config-prettier: "npm:^10.1.8"
     eslint-plugin-prettier: "npm:^5.5.4"
-    graphql: "npm:^16.11.0"
+    graphql: "npm:^16.12.0"
     i18n-iso-countries: "npm:^7.14.0"
     i18next: "npm:^25.6.1"
     i18next-browser-languagedetector: "npm:^8.2.0"
