@@ -1,9 +1,9 @@
-import { DefaultSession } from "next-auth";
-import { JWT } from "next-auth/jwt";
-import { Provider } from "@auth/core/providers";
 import createClient from "openapi-fetch";
+import type { JWT } from "next-auth/jwt";
+import type { DefaultSession } from "next-auth";
 import type { NextAuthConfig } from "next-auth";
-import { EnrichedAuthConfig, PayloadAuthjsUser } from "payload-authjs";
+import type { EnrichedAuthConfig, PayloadAuthjsUser } from "payload-authjs";
+import type { Provider } from "@auth/core/providers";
 import type { User as PayloadUser } from "@/types/payload";
 
 export const WCA_PROVIDER_ID = "WCA";
@@ -156,7 +156,6 @@ export const authConfig: NextAuthConfig = {
 
         return {
           ...token,
-          wcaId: "foo",
           access_token: newTokens.access_token,
           expires_at: Math.floor(Date.now() / 1000 + newTokens.expires_in),
           refresh_token: newTokens.refresh_token,
