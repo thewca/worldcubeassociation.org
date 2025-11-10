@@ -1,88 +1,24 @@
-import { cache } from "react";
-import createClient from "openapi-fetch";
-import type { DefaultSession } from "next-auth";
 import type { NextAuthConfig } from "next-auth";
-import type { EnrichedAuthConfig, PayloadAuthjsUser } from "payload-authjs";
+import type { EnrichedAuthConfig } from "payload-authjs";
 import type { Provider } from "@auth/core/providers";
-import type { User as PayloadUser } from "@/types/payload";
 
-// This import is necessary to trigger module augmentation
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { JWT } from "next-auth/jwt";
+import { refreshToken } from "@/lib/wca/oauth/tokenRefresh";
+import {
+  WCA_OIDC_CLIENT_ID,
+  WCA_OIDC_CLIENT_SECRET,
+  WCA_OIDC_ISSUER,
+} from "@/lib/wca/oauth/config";
 
 export const WCA_PROVIDER_ID = "WCA";
 export const WCA_CMS_PROVIDER_ID = `${WCA_PROVIDER_ID}-CMS`;
-
-interface oauthClientSpec {
-  "/oauth/token": {
-    post: {
-      requestBody: {
-        content: {
-          "application/x-www-form-urlencoded": {
-            client_id: string;
-            client_secret: string;
-            grant_type: "refresh_token";
-            refresh_token: string;
-          };
-        };
-      };
-      responses: {
-        200: {
-          content: {
-            "application/json": {
-              access_token: string;
-              token_type: string;
-              expires_in: number;
-              refresh_token: string;
-              scope: string;
-              created_at: number;
-              id_token: string;
-            };
-          };
-        };
-      };
-    };
-  };
-}
-
-declare module "@auth/core/types" {
-  interface User extends PayloadAuthjsUser<PayloadUser> {
-    wcaId?: string;
-  }
-}
-
-declare module "next-auth" {
-  /**
-   * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-   */
-  interface Session {
-    accessToken: string;
-    user: {} & DefaultSession["user"];
-    error?: "RefreshTokenError";
-  }
-}
-
-declare module "next-auth/jwt" {
-  interface JWT {
-    wcaId?: string;
-    access_token: string;
-    expires_at: number;
-    refresh_token?: string;
-    error?: "RefreshTokenError";
-  }
-}
-
-const refreshTokenClient = createClient<oauthClientSpec>({
-  baseUrl: process.env.OIDC_ISSUER,
-});
 
 const baseWcaProvider: Provider = {
   id: WCA_PROVIDER_ID,
   name: "WCA-OIDC-Provider",
   type: "oidc",
-  issuer: process.env.OIDC_ISSUER,
-  clientId: process.env.OIDC_CLIENT_ID,
-  clientSecret: process.env.OIDC_CLIENT_SECRET,
+  issuer: WCA_OIDC_ISSUER,
+  clientId: WCA_OIDC_CLIENT_ID,
+  clientSecret: WCA_OIDC_CLIENT_SECRET,
   profile: (profile) => {
     return {
       id: profile.sub,
@@ -115,23 +51,6 @@ const cmsWcaProvider: Provider = {
   allowDangerousEmailAccountLinking: true,
 };
 
-const refreshToken = cache(async (refreshToken: string) => {
-  return await refreshTokenClient.POST(
-    "/oauth/token",
-    {
-      body: {
-        client_id: baseWcaProvider.clientId!,
-        client_secret: baseWcaProvider.clientSecret!,
-        grant_type: "refresh_token",
-        refresh_token: refreshToken,
-      },
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    },
-  );
-});
-
 export const authConfig: NextAuthConfig = {
   secret: process.env.AUTH_SECRET,
   providers: [baseWcaProvider],
@@ -153,7 +72,9 @@ export const authConfig: NextAuthConfig = {
         // as per https://authjs.dev/guides/refresh-token-rotation
         if (!token.refresh_token) throw new TypeError("Missing refresh_token");
 
-        const { data: newTokens, error } = await refreshToken(token.refresh_token);
+        const { data: newTokens, error } = await refreshToken(
+          token.refresh_token,
+        );
 
         if (error) {
           return {
