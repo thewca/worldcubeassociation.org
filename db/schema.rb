@@ -740,12 +740,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_07_120000) do
     t.datetime "digest_sent_at", precision: nil
   end
 
-  create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "jti", null: false
-    t.datetime "exp", null: false
-    t.index ["jti"], name: "index_jwt_denylist_on_jti"
-  end
-
   create_table "linked_rounds", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "wcif_id"
     t.datetime "created_at", null: false
