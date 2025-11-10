@@ -1839,7 +1839,7 @@ class Competition < ApplicationRecord
     steps << { key: 'requirements', isEditable: false }
     steps << { key: 'competing', parameters: competing_step_parameters(current_user), isEditable: true }
     steps << { key: 'payment', parameters: payment_step_parameters, isEditable: true, deadline: self.registration_close } if using_payment_integrations?
-    steps << { key: 'approval', parameters: payment_step_parameters, isEditable: false }
+    steps << { key: 'approval', parameters: approval_step_parameters, isEditable: false }
 
     steps
   end
