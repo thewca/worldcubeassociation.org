@@ -1822,6 +1822,13 @@ class Competition < ApplicationRecord
     }
   end
 
+  def approval_step_parameters
+    {
+      auto_accept_enabled?: self.auto_accept_preference_disabled?,
+      auto_accept_preference: self.auto_accept_preference,
+    }
+  end
+
   def tab_names
     tabs.pluck(:name)
   end
@@ -1832,6 +1839,7 @@ class Competition < ApplicationRecord
     steps << { key: 'requirements', isEditable: false }
     steps << { key: 'competing', parameters: competing_step_parameters(current_user), isEditable: true }
     steps << { key: 'payment', parameters: payment_step_parameters, isEditable: true, deadline: self.registration_close } if using_payment_integrations?
+    steps << { key: 'approval', parameters: payment_step_parameters, isEditable: false }
 
     steps
   end

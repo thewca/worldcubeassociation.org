@@ -698,7 +698,20 @@ export interface components {
              */
             key: "payment";
         };
-        RegistrationConfig: components["schemas"]["RequirementsStepConfig"] | components["schemas"]["CompetingStepConfig"] | components["schemas"]["PaymentStepConfig"];
+        ApprovalStepConfig: components["schemas"]["BaseRegistrationConfig"] & {
+            parameters: {
+                "auto_accept_enabled?": boolean;
+                /** @enum {string} */
+                auto_accept_preference?: "disabled" | "bulk" | "live";
+            };
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            key: "approval";
+        };
+        RegistrationConfig: components["schemas"]["RequirementsStepConfig"] | components["schemas"]["CompetingStepConfig"] | components["schemas"]["PaymentStepConfig"] | components["schemas"]["ApprovalStepConfig"];
         WcifTimeLimit: {
             /** @example 18000 */
             centiseconds: number;

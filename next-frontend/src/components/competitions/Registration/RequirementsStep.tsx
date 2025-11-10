@@ -32,7 +32,7 @@ function RegistrationFullMessage({ competitionInfo }: Pick<PanelProps, "competit
   return null;
 }
 
-export default function RegistrationRequirements({ form, competitionInfo }: PanelProps) {
+export default function RequirementsStep({ form, competitionInfo }: PanelProps) {
   const { t } = useT();
 
   return (

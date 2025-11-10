@@ -2,7 +2,6 @@ import { auth } from "@/auth";
 import { Alert, Box, Card, VStack } from "@chakra-ui/react";
 import { cache } from "react";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
-import type { components } from "@/types/openapi";
 import StepPanel from "@/app/(wca)/competitions/[competitionId]/register/StepPanel";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import RegistrationRequirementsCard
@@ -15,10 +14,6 @@ const fetchConfig = cache(async (authToken: string, competitionId: string) => {
     params: { path: { competitionId } }
   })
 });
-
-type StepKey = components["schemas"]["RegistrationConfig"]["key"] | "approval";
-
-type Step = { key: StepKey, isEditable: boolean };
 
 export default async function RegisterPage({
   params
@@ -53,11 +48,6 @@ export default async function RegisterPage({
     return "Something went wrong while fetching"
   }
 
-  const steps = [
-    ...stepConfig.data,
-    { key: 'approval', isEditable: false }
-  ] satisfies Step[];
-
   return (
     <VStack>
       <Box width="full">
@@ -65,7 +55,7 @@ export default async function RegisterPage({
       </Box>
       <Card.Root coloredBg width="full">
         <Card.Body>
-          <StepPanel steps={steps} competitionInfo={competitionInfo} />
+          <StepPanel steps={stepConfig.data} competitionInfo={competitionInfo} />
         </Card.Body>
       </Card.Root>
     </VStack>

@@ -1,17 +1,19 @@
 "use client"
 
-import {Box, Button, ButtonGroup, Group, HStack, Steps} from "@chakra-ui/react";
-import RegistrationRequirements from "@/components/competitions/Registration/RegistrationRequirements";
+import { Box, Button, ButtonGroup, Group, Steps } from "@chakra-ui/react";
+import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
 import type { components } from "@/types/openapi";
 import { createFormHook, createFormHookContexts, formOptions } from "@tanstack/react-form";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
-import ApprovalStep from "@/components/competitions/Registration/ApprovalStep";
 import { useT } from "@/lib/i18n/useI18n";
+import StepSummary from "@/components/competitions/Registration/StepSummary";
+import ApprovalStep from "@/components/competitions/Registration/ApprovalStep";
+import { LuSend } from "react-icons/lu";
+import type { UtilityValues } from "@/types/chakra/prop-types.gen";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
-type StepKey = components["schemas"]["RegistrationConfig"]["key"] | "approval";
-
-type Step = { key: StepKey, isEditable: boolean };
+type StepConfig = components["schemas"]["RegistrationConfig"];
+type StepKey = StepConfig["key"];
 
 export const { fieldContext, formContext } =
   createFormHookContexts();
@@ -50,9 +52,9 @@ type RegistrationForm = ReturnType<typeof useRegistrationForm>;
 export type PanelProps = { competitionInfo: CompetitionInfo, form: RegistrationForm };
 
 const stepsFrontend = {
-  requirements: RegistrationRequirements,
+  requirements: RequirementsStep,
   competing: CompetingStep,
-  payment: RegistrationRequirements,
+  payment: RequirementsStep,
   approval: ApprovalStep,
 } satisfies Record<StepKey, React.ComponentType<PanelProps>>
 
@@ -63,12 +65,27 @@ const stepsCompleteness = {
   approval: (reg) => reg.hasAcceptedTerms,
 } satisfies Record<StepKey, ((reg: RegistrationDummy) => boolean)>
 
+type ColorPalette = UtilityValues["colorPalette"];
+type NavButtonOverride = Partial<{
+  colorPalette: ColorPalette,
+  title: string,
+  icon: React.ReactNode,
+}>
+
+const buttonOverrides: Partial<Record<StepKey, NavButtonOverride>> = {
+  competing: {
+    colorPalette: "green",
+    title: "Submit",
+    icon: <LuSend />,
+  },
+}
+
 const StepPanelContents = ({
   steps,
   form,
   competitionInfo,
 }: {
-  steps: Step[];
+  steps: StepConfig[];
   form: RegistrationForm;
   competitionInfo: CompetitionInfo;
 }) => {
@@ -93,7 +110,7 @@ const StepPanel = ({
  steps,
  competitionInfo,
 }: {
-  steps: Step[];
+  steps: StepConfig[];
   competitionInfo: CompetitionInfo;
 }) => {
   const { t } = useT();
@@ -124,7 +141,11 @@ const StepPanel = ({
 
       <StepPanelContents steps={steps} form={registrationForm} competitionInfo={competitionInfo} />
 
-      <ButtonGroup size="sm" variant="outline" asChild>
+      <Steps.CompletedContent>
+        <StepSummary form={registrationForm} competitionInfo={competitionInfo} />
+      </Steps.CompletedContent>
+
+      <ButtonGroup size="sm" variant="surface" asChild>
         <Group grow>
           {/*
             <Steps.PrevTrigger asChild>
@@ -133,16 +154,28 @@ const StepPanel = ({
           */}
           <Steps.Context>
             {(ctx) => {
+              if (ctx.isCompleted) return null;
+
               const currentStepKey = steps[ctx.value].key;
               const completionFn = stepsCompleteness[currentStepKey];
 
               return (
                 <registrationForm.Subscribe selector={(state) => completionFn(state.values)}>
-                  {(isComplete) => (
-                    <Steps.NextTrigger asChild>
-                      <Button disabled={!isComplete}>Next</Button>
-                    </Steps.NextTrigger>
-                  )}
+                  {(isComplete) => {
+                    const buttonConfig = buttonOverrides[currentStepKey];
+
+                    return (
+                      <Steps.NextTrigger asChild>
+                        <Button
+                          disabled={!isComplete}
+                          colorPalette={buttonConfig?.colorPalette}
+                        >
+                          {buttonConfig?.icon}
+                          {buttonConfig?.title ?? "Next"}
+                        </Button>
+                      </Steps.NextTrigger>
+                    );
+                  }}
                 </registrationForm.Subscribe>
               );
             }}
