@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Button, ButtonGroup, Steps } from "@chakra-ui/react";
+import {Box, Button, ButtonGroup, Group, HStack, Steps} from "@chakra-ui/react";
 import RegistrationRequirements from "@/components/competitions/Registration/RegistrationRequirements";
 import type { components } from "@/types/openapi";
 import { createFormHook, createFormHookContexts, formOptions } from "@tanstack/react-form";
@@ -124,21 +124,30 @@ const StepPanel = ({
 
       <StepPanelContents steps={steps} form={registrationForm} competitionInfo={competitionInfo} />
 
-      <ButtonGroup size="sm" variant="outline">
-        <Steps.PrevTrigger asChild>
-          <Button>Prev</Button>
-        </Steps.PrevTrigger>
-        <Steps.Context>
-          {(ctx) => (
-            <registrationForm.Subscribe selector={(state) => stepsCompleteness[steps[ctx.value].key](state.values)}>
-              {(isComplete) => (
-                <Steps.NextTrigger asChild>
-                  <Button disabled={!isComplete}>Next</Button>
-                </Steps.NextTrigger>
-              )}
-            </registrationForm.Subscribe>
-          )}
-        </Steps.Context>
+      <ButtonGroup size="sm" variant="outline" asChild>
+        <Group grow>
+          {/*
+            <Steps.PrevTrigger asChild>
+              <Button>Prev</Button>
+            </Steps.PrevTrigger>
+          */}
+          <Steps.Context>
+            {(ctx) => {
+              const currentStepKey = steps[ctx.value].key;
+              const completionFn = stepsCompleteness[currentStepKey];
+
+              return (
+                <registrationForm.Subscribe selector={(state) => completionFn(state.values)}>
+                  {(isComplete) => (
+                    <Steps.NextTrigger asChild>
+                      <Button disabled={!isComplete}>Next</Button>
+                    </Steps.NextTrigger>
+                  )}
+                </registrationForm.Subscribe>
+              );
+            }}
+          </Steps.Context>
+        </Group>
       </ButtonGroup>
     </Steps.Root>
   );

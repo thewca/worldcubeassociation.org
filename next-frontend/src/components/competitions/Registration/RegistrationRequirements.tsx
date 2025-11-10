@@ -1,6 +1,6 @@
 "use client"
 
-import { Alert, Box, Checkbox } from "@chakra-ui/react";
+import {Alert, Box, Checkbox, VStack} from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanel";
 
@@ -36,7 +36,7 @@ export default function RegistrationRequirements({ form, competitionInfo }: Pane
   const { t } = useT();
 
   return (
-    <Box>
+    <VStack gap={3}>
       <RegistrationFullMessage competitionInfo={competitionInfo} />
       <form.Field name="hasAcceptedTerms">
         {(field) => (
@@ -58,6 +58,6 @@ export default function RegistrationRequirements({ form, competitionInfo }: Pane
           </Checkbox.Root>
         )}
       </form.Field>
-    </Box>
+    </VStack>
   );
 }
