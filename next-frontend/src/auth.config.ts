@@ -1,3 +1,4 @@
+import { cache } from "react";
 import createClient from "openapi-fetch";
 import type { DefaultSession } from "next-auth";
 import type { NextAuthConfig } from "next-auth";
@@ -114,6 +115,23 @@ const cmsWcaProvider: Provider = {
   allowDangerousEmailAccountLinking: true,
 };
 
+const refreshToken = cache(async (refreshToken: string) => {
+  return await refreshTokenClient.POST(
+    "/oauth/token",
+    {
+      body: {
+        client_id: baseWcaProvider.clientId!,
+        client_secret: baseWcaProvider.clientSecret!,
+        grant_type: "refresh_token",
+        refresh_token: refreshToken,
+      },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    },
+  );
+});
+
 export const authConfig: NextAuthConfig = {
   secret: process.env.AUTH_SECRET,
   providers: [baseWcaProvider],
@@ -135,20 +153,7 @@ export const authConfig: NextAuthConfig = {
         // as per https://authjs.dev/guides/refresh-token-rotation
         if (!token.refresh_token) throw new TypeError("Missing refresh_token");
 
-        const { data: newTokens, error } = await refreshTokenClient.POST(
-          "/oauth/token",
-          {
-            body: {
-              client_id: baseWcaProvider.clientId!,
-              client_secret: baseWcaProvider.clientSecret!,
-              grant_type: "refresh_token",
-              refresh_token: token.refresh_token,
-            },
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-          },
-        );
+        const { data: newTokens, error } = await refreshToken(token.refresh_token);
 
         if (error) {
           return {
