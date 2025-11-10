@@ -50,7 +50,7 @@ module ResultsValidators
 
           number_of_people_in_round = round.results.size
 
-          if number_of_people_in_round <= 7 && !round.final?
+          if number_of_people_in_round <= 7 && !round.final_round?
             # https://www.worldcubeassociation.org/regulations/#9m3: Rounds with 7 or fewer competitors must not have subsequent rounds.
             @errors << ValidationError.new(REGULATION_9M3_ERROR,
                                            :rounds, competition.id,
