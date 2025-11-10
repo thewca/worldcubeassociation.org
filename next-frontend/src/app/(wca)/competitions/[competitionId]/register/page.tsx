@@ -6,6 +6,7 @@ import StepPanel from "@/app/(wca)/competitions/[competitionId]/register/StepPan
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import RegistrationRequirementsCard
   from "@/app/(wca)/competitions/[competitionId]/register/RegistrationRequirementsCard";
+import {MarkdownProse} from "@/components/Markdown";
 
 const fetchConfig = cache(async (authToken: string, competitionId: string) => {
   const client = serverClientWithToken(authToken);
@@ -53,6 +54,11 @@ export default async function RegisterPage({
       <Box width="full">
         <RegistrationRequirementsCard competitionInfo={competitionInfo} />
       </Box>
+      {competitionInfo.extra_registration_requirements && (
+        <Card.Root width="full" coloredBg>
+          <MarkdownProse as={Card.Body} content={competitionInfo.extra_registration_requirements} />
+        </Card.Root>
+      )}
       <Card.Root coloredBg width="full">
         <Card.Body>
           <StepPanel steps={stepConfig.data} competitionInfo={competitionInfo} />

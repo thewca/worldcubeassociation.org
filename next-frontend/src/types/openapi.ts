@@ -949,7 +949,7 @@ export interface components {
             /** @example 2000 */
             competitor_limit: number;
             /** @example  */
-            extra_registration_requirements: string;
+            extra_registration_requirements?: string;
             /** @example false */
             on_the_spot_registration: boolean;
             /** @example 50 */

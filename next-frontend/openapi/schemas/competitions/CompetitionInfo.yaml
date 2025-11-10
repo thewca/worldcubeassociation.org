@@ -16,7 +16,6 @@ required:
   - end_date
   - enable_donations
   - competitor_limit
-  - extra_registration_requirements
   - on_the_spot_registration
   - refund_policy_percent
   - refund_policy_limit_date
