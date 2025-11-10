@@ -1,26 +1,6 @@
-import type { GlobalConfig, Block } from "payload";
+import type { GlobalConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
-
-const privacyItem: Block = {
-  slug: "privacyItem",
-  labels: {
-    singular: "Item",
-    plural: "Items",
-  },
-  fields: [
-    {
-      name: "title",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "content",
-      type: "richText",
-      required: true,
-    },
-    markdownConvertedField("content"),
-  ],
-};
+import { ParagraphBlock } from "@/blocks/text/paragraph";
 
 export const Privacy: GlobalConfig = {
   slug: "privacy-page",
@@ -36,7 +16,7 @@ export const Privacy: GlobalConfig = {
       name: "blocks",
       type: "blocks",
       required: true,
-      blocks: [privacyItem],
+      blocks: [ParagraphBlock],
     },
   ],
 };

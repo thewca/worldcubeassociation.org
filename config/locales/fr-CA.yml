@@ -774,16 +774,16 @@ fr-CA:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: a2c83f6
+        #original_hash: 68da290
         receive_delegate_reports: >-
           Si vous êtes un Délégué Senior, membre du WRC ou du WQAC, vous recevez
-          les rapports par défaut. Note : le changement peut prendre jusqu'à une
-          heure pour être pris en compte.
-        #original_hash: 7e12f49
+          les rapports par défaut. Note : le changement peut prendre jusqu'à 12
+          heures pour être pris en compte.
+        #original_hash: 6043925
         delegate_reports_region: >-
           Si vous souhaitez recevoir tous les rapports, laissez ce champ vide
           (l'option du menu déroulant se trouve tout en haut). Remarque : la
-          modification peut prendre jusqu'à une heure pour être prise en compte.
+          modification peut prendre jusqu'à 12 heures pour être prise en compte.
         #original_hash: 5fd4322
         otp_attempt: >-
           Consultez l'application mobile que vous avez configuré pour obtenir un
@@ -851,14 +851,14 @@ fr-CA:
           Délégués puissent les référencer dans leurs commentaires. Même s'ils
           semblent courants, listez au moins les incidents principaux. Merci de
           cocher les cases ci-dessous si vous avez besoin d'un avis.
-        #original_hash: dcd01b6
+        #original_hash: 1d57288
         setup_images: >-
-          Veuillez choisir au moins %{image_count} d'images qui illustrent la
-          configuration de la salle (zone de mélange, zone de compétition,
-          etc.). Vous pouvez sélectionner plusieurs fichiers à la fois. Vous ne
-          pouvez supprimer des images que lorsque suffisamment d'autres images
-          ont été téléchargées (si vous souhaitez remplacer une image, vous
-          devez d'abord télécharger la nouvelle image, puis supprimer
+          Vous DEVEZ choisir au moins %{image_count} d'images qui illustrent la
+          zone de mélange et celle de compétition (d'autres images sont les
+          bienvenues). Vous pouvez sélectionner plusieurs fichiers à la fois.
+          Vous ne pouvez supprimer des images que lorsque suffisamment d'autres
+          images ont été téléchargées (si vous souhaitez remplacer une image,
+          vous devez d'abord télécharger la nouvelle image, puis supprimer
           l'ancienne).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
@@ -3031,12 +3031,14 @@ fr-CA:
         voulez participer lors de votre inscription en ligne, cependant vous
         pouvez ajouter des épreuves à votre inscription jusqu'à ce que l'épreuve
         commence.
-      #original_hash: 1707b32
+      #original_hash: 121b55b
       on_the_spot_registration_fee_html: >-
-        Les inscriptions sur place seront acceptées pour un montant de
-        %{on_the_spot_base_entry_fee}.
-      #original_hash: 3be338e
-      on_the_spot_registration_free: Les inscriptions sur place seront acceptées gratuitement.
+        Les inscriptions sur place seront acceptées s'il reste des places
+        disponibles pour un montant de %{on_the_spot_base_entry_fee}.
+      #original_hash: 9c63a10
+      on_the_spot_registration_free: >-
+        Les inscriptions sur place seront acceptées gratuitement s'il reste des
+        places disponibles.
       #original_hash: ed6aa11
       no_on_the_spot_registration: Aucune inscription sur place ne sera acceptée.
       #original_hash: 2f2ffa2
@@ -4880,6 +4882,8 @@ fr-CA:
       paypal: PayPal
       #original_hash: 4d08ec5
       stripe: Stripe
+      #original_hash: 7209be5
+      manual: Manuel/Externe
     payment_setup:
       #original_hash: 50d8ee0
       external_dashboard: 'Tableau de bord %{provider}'
@@ -4903,6 +4907,8 @@ fr-CA:
       confirm_account_disconnect: >-
         Êtes-vous sûr·e de vouloir déconnecter le compte %{provider} ? Cette
         action est irréversible.
+      #original_hash: 7261fb9
+      edit_account: Modifier le compte
       #original_hash: ffee885
       supported_currency_warning: "Veuillez vous assurer que la devise que vous avez sélectionnée est prise en charge par votre intégration de paiement choisie ! Les devises prises en charge dépendront du pays où le compte est basé, vous pouvez les vérifier ci-dessous\_:"
       #original_hash: ea493e6
@@ -4911,8 +4917,10 @@ fr-CA:
       provider_heading: 'Paiements %{provider}'
       #original_hash: d907ad7
       accept_payments_header: Accepter les paiements d’inscription
-      #original_hash: afcfefc
-      connect_button: 'Se connecter avec %{provider}'
+      #original_hash: 5100703
+      manual_payments_header: Configurer les paiements manuels
+      #original_hash: 2e39846
+      connect_button: 'Configurer %{provider}'
       connect_account_info:
         #original_hash: 3e298a2
         stripe: >-
@@ -4927,6 +4935,12 @@ fr-CA:
           PayPal via la page de la compétition. Si vous n’avez pas encore de
           compte PayPal Business, vous pouvez toujours cliquer sur le bouton
           ci-dessous et il vous guidera tout au long du processus de création.
+        #original_hash: f8b9924
+        manual: >-
+          Définissez les instructions de paiement pour les compétiteurs. Les
+          compétiteurs pourront indiquer quand ils ont effectué leur paiement et
+          fournir une référence de paiement que vous pourrez vérifier dans vos
+          registres dans le service de paiement externe que vous utilisez.
       connect_account_warning:
         #original_hash: 025b561
         stripe: >-
@@ -4938,6 +4952,8 @@ fr-CA:
           La connexion de votre compte PayPal permet au site WCA d’acheminer les
           paiements vers vous et d’émettre des remboursements directement sur
           votre compte PayPal.
+        #original_hash: da39a3e
+        manual: ''
       #original_hash: f7842cb
       currently_connected_info: >-
         Cette compétition est configurée pour accepter les paiements par
@@ -4971,6 +4987,14 @@ fr-CA:
           display_name: Nom
           #original_hash: e0edc01
           primary_email: Adresse courriel
+        manual:
+          #original_hash: d30593f
+          payment_instructions: Instructions de paiement (affichées sur la page de la compétition)
+          #original_hash: 2b35dac
+          payment_reference_label: >-
+            Quelles informations l'utilisateur doit-il vous fournir pour que
+            vous puissiez identifier son paiement ? (par exemple, numéro de
+            référence du paiement / identifiant du compte / etc.)
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:

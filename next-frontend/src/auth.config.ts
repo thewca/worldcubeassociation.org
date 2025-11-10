@@ -1,7 +1,10 @@
-import { Session, DefaultSession, NextAuthConfig } from "next-auth";
+import { DefaultSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import { Provider } from "@auth/core/providers";
 import createClient from "openapi-fetch";
+import type { NextAuthConfig } from "next-auth";
+import { EnrichedAuthConfig, PayloadAuthjsUser } from "payload-authjs";
+import type { User as PayloadUser } from "@/types/payload";
 
 export const WCA_PROVIDER_ID = "WCA";
 export const WCA_CMS_PROVIDER_ID = `${WCA_PROVIDER_ID}-CMS`;
@@ -38,6 +41,12 @@ interface oauthClientSpec {
   };
 }
 
+declare module "@auth/core/types" {
+  interface User extends PayloadAuthjsUser<PayloadUser> {
+    wcaId?: string;
+  }
+}
+
 declare module "next-auth" {
   /**
    * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
@@ -51,7 +60,7 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
   interface JWT {
-    userId: string;
+    wcaId?: string;
     access_token: string;
     expires_at: number;
     refresh_token?: string;
@@ -70,6 +79,18 @@ const baseWcaProvider: Provider = {
   issuer: process.env.OIDC_ISSUER,
   clientId: process.env.OIDC_CLIENT_ID,
   clientSecret: process.env.OIDC_CLIENT_SECRET,
+  profile: (profile) => {
+    return {
+      id: profile.sub,
+      name: profile.name,
+      email: profile.email,
+      // The OIDC claim standard calls it `picture`,
+      //   but for unknown reasons AuthJS v5 calls it `image`
+      image: profile.picture,
+      roles: profile.roles,
+      wcaId: profile.preferred_username,
+    };
+  },
 };
 
 const cmsWcaProvider: Provider = {
@@ -79,15 +100,8 @@ const cmsWcaProvider: Provider = {
   authorization: {
     params: { scope: "openid profile email cms" },
   },
+  // Hit the user_info endpoint separately for roles computation
   idToken: false,
-  profile: (profile) => {
-    return {
-      id: profile.sub,
-      name: profile.name,
-      email: profile.email,
-      roles: profile.roles,
-    };
-  },
   // allow re-linking of accounts that have the same email.
   //   This happens when a user who is allowed to use Payload
   //   First logs in via the "normal" provider, and later wants to "switch"
@@ -106,7 +120,7 @@ export const authConfig: NextAuthConfig = {
         // First-time login, save the `access_token`, its expiry and the `refresh_token`
         return {
           ...token,
-          userId: user.id!,
+          wcaId: user?.wcaId,
           access_token: account.access_token!,
           expires_at: account.expires_at!,
           refresh_token: account.refresh_token,
@@ -142,6 +156,7 @@ export const authConfig: NextAuthConfig = {
 
         return {
           ...token,
+          wcaId: "foo",
           access_token: newTokens.access_token,
           expires_at: Math.floor(Date.now() / 1000 + newTokens.expires_in),
           refresh_token: newTokens.refresh_token,
@@ -150,13 +165,13 @@ export const authConfig: NextAuthConfig = {
     },
     async session({ session, token }) {
       session.accessToken = token.access_token;
-      session.user.id = token.userId;
+      session.user.wcaId = token.wcaId;
       return session;
     },
   },
 };
 
-export const payloadAuthConfig: NextAuthConfig = {
+export const payloadAuthConfig: EnrichedAuthConfig = {
   ...authConfig,
   providers: [cmsWcaProvider],
   basePath: "/api/auth/payload",
@@ -169,6 +184,22 @@ export const payloadAuthConfig: NextAuthConfig = {
     },
     callbackUrl: {
       name: "authjs.admin.callback-url",
+    },
+  },
+  events: {
+    signIn: async ({ user, payload }) => {
+      if (!user.id || !payload) {
+        return;
+      }
+
+      await payload.update({
+        collection: "users",
+        id: user.id,
+        data: {
+          roles: user.roles,
+          image: user.image,
+        },
+      });
     },
   },
 };

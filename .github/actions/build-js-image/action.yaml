@@ -22,6 +22,9 @@ runs:
         rm ./next-frontend/src/lib/i18n/locales/available.json
         cp ./config/locales/available.json ./next-frontend/src/lib/i18n/locales/available.json
         cp ./config/locales/*.yml ./next-frontend/src/lib/i18n/locales
+    - name: Download proprietary assets from protected bucket
+      shell: bash
+      run: aws s3 cp s3://wca-fonts ./next-frontend/src/styles/fonts/ --recursive
     - name: Build and push JS Docker image
       uses: docker/build-push-action@v6
       id: build-js-image

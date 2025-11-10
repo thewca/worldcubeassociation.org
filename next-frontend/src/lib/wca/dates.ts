@@ -1,4 +1,4 @@
-import { DateTime, Interval, Zone } from "luxon";
+import { DateTime, Interval, ToRelativeUnit, Zone } from "luxon";
 
 // parameter name conventions:
 // - `luxonDate` for luxon DateTime objects
@@ -12,7 +12,7 @@ export const toRelativeOptions = (locale: string) => ({
   roundUpAndAtBestDayPrecision: {
     locale,
     // don't be more precise than "days" (i.e. no hours/minutes/seconds)
-    unit: ["years", "months", "weeks", "days"],
+    unit: ["years", "months", "weeks", "days"] as ToRelativeUnit[],
     // round up, e.g. in 8 hours -> pads to 1 day 8 hours -> rounds to "in 1 day"
     padding: 24 * 60 * 60 * 1000,
   },

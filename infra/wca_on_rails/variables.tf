@@ -21,7 +21,7 @@ variable "availability_zones" {
 variable "VAULT_ADDR" {
   type = string
   description = "The Address that vault is running at"
-  default = "http://vault.worldcubeassociation.org:8200"
+  default = "http://vault.private.worldcubeassociation.org:8200"
 }
 
 variable "DATABASE_WRT_USER" {

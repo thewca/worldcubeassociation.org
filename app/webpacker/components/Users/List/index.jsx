@@ -32,62 +32,55 @@ function PersonList() {
     queryFn: () => getPersons(page, countries.byIso2[region]?.id ?? region, debouncedSearch),
   });
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
     <>
-      <Header>
-        Users
-      </Header>
+      <Header>Users</Header>
       <RegionSelector region={region} onRegionChange={setRegion} />
-      <Input type="text" placeholder="Type name, WCA ID, or email. Use a space to separate them." value={query} onChange={(d) => setQuery(d.target.value)} />
-      <Table striped>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>
-              WCA ID
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              Name
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              Country
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              Email
-            </Table.HeaderCell>
-            <Table.HeaderCell />
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {data.rows.map((row) => (
-            <Table.Row key={row.user_id}>
-              <Table.Cell>
-                {row.wca_id && <a href={personUrl(row.wca_id)}>{row.wca_id}</a>}
-              </Table.Cell>
-              <Table.Cell>
-                {row.name}
-              </Table.Cell>
-              <Table.Cell>
-                {countries.byIso2[row.country]?.name}
-              </Table.Cell>
-              <Table.Cell>
-                {row.email}
-              </Table.Cell>
-              <Table.Cell>
-                <a href={editPersonUrl(row.user_id)}>Edit</a>
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
-      <Pagination
-        defaultActivePage={page}
-        totalPages={Math.ceil(data.total / 10)}
-        onPageChange={(e, p) => setPage(p.activePage)}
+      <Input
+        type="text"
+        placeholder="Type name, WCA ID, or email. Use a space to separate them."
+        value={query}
+        onChange={(d) => setQuery(d.target.value)}
       />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <Table striped>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>WCA ID</Table.HeaderCell>
+                <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>Country</Table.HeaderCell>
+                <Table.HeaderCell>Email</Table.HeaderCell>
+                <Table.HeaderCell />
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {data.rows.map((row) => (
+                <Table.Row key={row.user_id}>
+                  <Table.Cell>
+                    {row.wca_id && (
+                      <a href={personUrl(row.wca_id)}>{row.wca_id}</a>
+                    )}
+                  </Table.Cell>
+                  <Table.Cell>{row.name}</Table.Cell>
+                  <Table.Cell>{countries.byIso2[row.country]?.name}</Table.Cell>
+                  <Table.Cell>{row.email}</Table.Cell>
+                  <Table.Cell>
+                    <a href={editPersonUrl(row.user_id)}>Edit</a>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+          <Pagination
+            defaultActivePage={page}
+            totalPages={Math.ceil(data.total / 10)}
+            onPageChange={(e, p) => setPage(p.activePage)}
+          />
+        </>
+      )}
     </>
   );
 }

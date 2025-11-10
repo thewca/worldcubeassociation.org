@@ -1,0 +1,59 @@
+type: object
+required:
+  - id
+  - name
+  - website
+  - start_date
+  - end_date
+  - registration_open
+  - url
+  - city
+  - country_iso2
+  - results_posted?
+  - report_posted?
+  - visible?
+  - confirmed?
+  - cancelled?
+  - short_display_name
+  - championships
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  website:
+    type: string
+  start_date:
+    type: string
+    format: date
+  end_date:
+    type: string
+    format: date
+  registration_open:
+    type: string
+    format: date
+  url:
+    type: string
+    format: uri
+  city:
+    type: string
+  country_iso2:
+    type: string
+  results_posted?:
+    type: boolean
+  report_posted?:
+    type: boolean
+  visible?:
+    type: boolean
+  confirmed?:
+    type: boolean
+  cancelled?:
+    type: boolean
+  short_display_name:
+    type: string
+  championships:
+    type: array
+    items:
+      type: string
+  registration_status:
+    type: string

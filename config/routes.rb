@@ -428,9 +428,18 @@ Rails.application.routes.draw do
       get '/results/:user_id/qualification_data' => 'api#user_qualification_data', as: :user_qualification_data
       get '/competition_series/:id' => 'api#competition_series'
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
+      get '/competitions/mine' => 'competitions#mine', as: :my_competitions
 
       resources :incidents, only: %i[index]
       resources :regional_organizations, only: %i[index], path: '/regional-organizations'
+
+      namespace :results do
+        get '/rankings/:event_id/:type' => 'rankings#index'
+
+        resources :records, only: %i[index show] do
+          get '/history' => 'results#history'
+        end
+      end
 
       resources :competitions, only: %i[index show] do
         get '/wcif' => 'competitions#show_wcif'
