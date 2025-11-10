@@ -1028,7 +1028,9 @@ class Competition < ApplicationRecord
   end
 
   def can_show_competitors_page?
-    after_registration_open? && registrations.competing_status_accepted.competing.any?
+    organizer_delegate_ids = organizers.pluck(:id) + delegates.pluck(:id)
+    normal_competitor_ids = registrations.competing_status_accepted.competing.pluck(:user_id) - organizer_delegate_ids
+    after_registration_open? || normal_competitor_ids.any?
   end
 
   def registration_status
@@ -1203,14 +1205,14 @@ class Competition < ApplicationRecord
     errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS)) if number_of_days > MAX_SPAN_DAYS
   end
 
-  validate :registration_dates_must_be_valid
+  validate :registration_dates_must_be_valid, if: :start_date?
   private def registration_dates_must_be_valid
     errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start')) if refund_policy_limit_date? && refund_policy_limit_date > start_date
 
-    if registration_period_required? && registration_open.present? && registration_close.present? &&
-       (registration_open >= start_date || registration_close >= start_date)
-      errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start'))
-    end
+    return unless registration_period_required? && [registration_open, registration_close].all?(&:present?)
+
+    errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start')) if
+      registration_open >= start_date || registration_close >= start_date
   end
 
   validate :waiting_list_dates_must_be_valid
