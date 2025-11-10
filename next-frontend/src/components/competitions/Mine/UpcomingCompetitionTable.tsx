@@ -1,3 +1,5 @@
+"use client";
+
 import { DateTime } from "luxon";
 import {
   DateTableCell,
