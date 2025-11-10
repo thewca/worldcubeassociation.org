@@ -1,10 +1,13 @@
 import createClient from "openapi-fetch";
-import type { JWT } from "next-auth/jwt";
 import type { DefaultSession } from "next-auth";
 import type { NextAuthConfig } from "next-auth";
 import type { EnrichedAuthConfig, PayloadAuthjsUser } from "payload-authjs";
 import type { Provider } from "@auth/core/providers";
 import type { User as PayloadUser } from "@/types/payload";
+
+// This import is necessary to trigger module augmentation
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { JWT } from "next-auth/jwt";
 
 export const WCA_PROVIDER_ID = "WCA";
 export const WCA_CMS_PROVIDER_ID = `${WCA_PROVIDER_ID}-CMS`;
