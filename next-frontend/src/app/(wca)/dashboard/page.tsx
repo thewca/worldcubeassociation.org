@@ -15,6 +15,7 @@ import Link from "next/link";
 
 import { iconMap } from "@/components/icons/iconMap";
 import { route } from "nextjs-routes";
+import WcaLiveInput from "@/app/(wca)/dashboard/WcaLiveInput";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -67,6 +68,7 @@ export default async function Dashboard() {
           </Link>
         </ChakraLink>
       </HStack>
+      <WcaLiveInput />
       <Card.Root>
         <Card.Body>
           <Box mb="4">
