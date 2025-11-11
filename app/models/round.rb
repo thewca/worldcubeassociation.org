@@ -42,7 +42,6 @@ class Round < ApplicationRecord
 
   has_many :live_results
   has_many :results
-  has_many :inbox_results
   has_many :scrambles
 
   MAX_NUMBER = 4
