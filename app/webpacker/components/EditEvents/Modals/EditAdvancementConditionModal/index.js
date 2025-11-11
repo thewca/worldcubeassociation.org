@@ -27,6 +27,8 @@ function advanceReqToStrShort(eventId, advancementCondition) {
   switch (advancementCondition.type) {
     case 'ranking':
       return `Top ${advancementCondition.level}`;
+    case 'dual':
+      return 'Dual Round';
     case 'percent':
       return `Top ${advancementCondition.level}%`;
     case 'attemptResult':
