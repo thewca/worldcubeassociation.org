@@ -61,6 +61,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       results += build_list(:result, 8, competition: competition1, event_id: "333oh", round_type_id: "b", person: fake_person, round: round_333oh_b_final)
       results += build_list(:result, 32, competition: competition1, event_id: "333oh", round_type_id: "f", person: fake_person, round: round_33_oh_f)
       Result.import(results, validate: false)
+      InboxResult.import(results, validate: false)
 
       validator_args.each do |arg|
         acv = ACV.new.validate(**arg)
