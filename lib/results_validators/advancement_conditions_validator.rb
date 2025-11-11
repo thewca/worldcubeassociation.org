@@ -54,21 +54,21 @@ module ResultsValidators
             # https://www.worldcubeassociation.org/regulations/#9m3: Rounds with 7 or fewer competitors must not have subsequent rounds.
             @errors << ValidationError.new(REGULATION_9M3_ERROR,
                                            :rounds, competition.id,
-                                           round_id: round_id)
+                                           round_id: round.name)
           end
 
           if number_of_people_in_round <= 15 && number_of_rounds_per_event[round.event_id] > 2
             # https://www.worldcubeassociation.org/regulations/#9m2: Rounds with 15 or fewer competitors must have at most one subsequent round.
             @errors << ValidationError.new(REGULATION_9M2_ERROR,
                                            :rounds, competition.id,
-                                           round_id: round_id)
+                                           round_id: round.name)
           end
 
           if number_of_people_in_round <= 99 && number_of_rounds_per_event[round.event_id] > 3
             # https://www.worldcubeassociation.org/regulations/#9m1: Rounds with 99 or fewer competitors must have at most one subsequent round.
             @errors << ValidationError.new(REGULATION_9M1_ERROR,
                                            :rounds, competition.id,
-                                           round_id: round_id)
+                                           round_id: round.name)
           end
 
           # It can happen that the WCIF contains rounds which have been deleted on the WCA website.
