@@ -10,6 +10,7 @@ export const DNF_VALUE = -1;
 export const DNS_VALUE = -2;
 
 function attemptResultToInput(attemptResult: number) {
+  console.log("number to string fired", attemptResult);
   if (attemptResult === SKIPPED_VALUE) return '';
   if (attemptResult === DNF_VALUE) return 'DNF';
   if (attemptResult === DNS_VALUE) return 'DNS';
@@ -20,6 +21,7 @@ function attemptResultToInput(attemptResult: number) {
 }
 
 function inputToAttemptResult(input: string) {
+  console.log("string to number fired", input);
   if (input === '') return SKIPPED_VALUE;
   if (input === 'DNF') return DNF_VALUE;
   if (input === 'DNS') return DNS_VALUE;
@@ -36,16 +38,11 @@ export default function WcaLiveInput() {
   const { ref, value, typedValue, unmaskedValue } = useIMask<HTMLInputElement>({
     mask: [
       {
-        mask: Number,
-        scale: 0,
-        format: attemptResultToInput, // "162" -> "0:01.62"
-        parse: inputToAttemptResult,  // "0:01.62" -> 162
-        min: SKIPPED_VALUE,
-        lazy: false,
+        mask: '[[[00:]00:]00.]00',
+        eager: "remove",
       },
       {
         mask: MaskedEnum,
-        typedValue: Number,
         enum: ["DNF", "DNS"],
         autofix: "pad",
         matchValue(enumString: string, inputString: string) {
@@ -60,16 +57,6 @@ export default function WcaLiveInput() {
           }
 
           return option.startsWith(input);
-        },
-        format(typed) {
-          if (typed === DNF_VALUE) return 'DNF';
-          if (typed === DNS_VALUE) return 'DNS';
-          return 'DNF'; // TODO
-        },
-        parse(unmasked) {
-          if (unmasked === 'DNF') return '-1';
-          if (unmasked === 'DNS') return '-2';
-          return '0';
         },
       },
     ],
@@ -106,6 +93,8 @@ export default function WcaLiveInput() {
 
       return masked.compiledMasks[0];
     },
+    format: attemptResultToInput,
+    parse: inputToAttemptResult,
   });
 
   return (
