@@ -3330,6 +3330,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@maskito/core@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@maskito/core@npm:4.0.0"
+  checksum: 10c0/d20f30c2e14ed50867b7a08b50855aabeada41a0e9f51a037a627cbb0b0b32c43cfba9fd70b3c391ec9fc05dbcfe71fc9c84da61ca9554c85915fa34afa70cbf
+  languageName: node
+  linkType: hard
+
+"@maskito/react@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@maskito/react@npm:4.0.0"
+  peerDependencies:
+    "@maskito/core": ^4.0.0
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: 10c0/89fe443eb0b494e54b9ac85211c623f20d2bdabf402bb41bd07980e7082ef44e2a3aeec78d494d5898b7a833933164802bb95bd581923760af4ae27986bb7e98
+  languageName: node
+  linkType: hard
+
 "@monaco-editor/loader@npm:^1.5.0":
   version: 1.5.0
   resolution: "@monaco-editor/loader@npm:1.5.0"
@@ -12469,6 +12487,8 @@ __metadata:
     "@fullcalendar/luxon3": "npm:^6.1.19"
     "@fullcalendar/react": "npm:^6.1.19"
     "@fullcalendar/timegrid": "npm:^6.1.19"
+    "@maskito/core": "npm:^4.0.0"
+    "@maskito/react": "npm:^4.0.0"
     "@payloadcms/db-mongodb": "npm:3.63.0"
     "@payloadcms/db-sqlite": "npm:3.63.0"
     "@payloadcms/live-preview-react": "npm:3.63.0"

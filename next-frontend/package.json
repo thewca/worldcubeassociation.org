@@ -26,6 +26,8 @@
     "@fullcalendar/luxon3": "^6.1.19",
     "@fullcalendar/react": "^6.1.19",
     "@fullcalendar/timegrid": "^6.1.19",
+    "@maskito/core": "^4.0.0",
+    "@maskito/react": "^4.0.0",
     "@payloadcms/db-mongodb": "3.63.0",
     "@payloadcms/db-sqlite": "3.63.0",
     "@payloadcms/live-preview-react": "3.63.0",
