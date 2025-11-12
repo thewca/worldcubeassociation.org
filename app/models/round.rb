@@ -2,7 +2,7 @@
 
 class Round < ApplicationRecord
   belongs_to :competition_event
-  belongs_to :linked_rounds, optional: true
+  belongs_to :linked_round, optional: true
 
   has_one :competition, through: :competition_event
   delegate :competition_id, to: :competition_event
@@ -118,6 +118,10 @@ class Round < ApplicationRecord
       end
     end
     safe_join(phase_formats, " / ")
+  end
+
+  def linked_results
+    linked_round.present? && advancement_condition != "dual" ? linked_round.results : results
   end
 
   def round_type
