@@ -7,7 +7,7 @@ module AdvancementConditions
     end
 
     def to_s(_round, short: false)
-      I18n.t("advancement_condition#{'.short' if short}.dual", percent: percent)
+      I18n.t("advancement_condition#{'.short' if short}.dual")
     end
 
     def max_advancing(results)
