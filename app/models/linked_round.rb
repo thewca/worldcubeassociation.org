@@ -8,6 +8,10 @@ class LinkedRound < ApplicationRecord
   validates :competition_event_ids, length: { maximum: 1, message: "must all belong to the same competition" }
 
   def results
+    LinkedRound.combine_results(round_results)
+  end
+
+  def self.combine_results(round_results)
     results_by_person_id = round_results.group_by(&:person_id)
     persons = results_by_person_id.keys
     best_result_per_person = persons.map do |person|
