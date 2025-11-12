@@ -15,7 +15,7 @@ module AdvancementConditions
     # instead the results of all linked rounds are merged
     # and the advancement condition of the last round is applied
     def max_advancing(_results)
-      nil
+      0
     end
   end
 end

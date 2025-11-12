@@ -161,23 +161,11 @@ class Round < ApplicationRecord
   def accepted_registrations
     if number == 1
       registrations.accepted
+    elsif linked_round.present?
+      previous_round.accepted_registrations
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
       Registration.find(advancing)
-    end
-  end
-
-  def accepted_registrations_with_wcif_id
-    if number == 1
-      registrations.includes(:user)
-                   .accepted
-                   .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
-    else
-      advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
-
-      Registration.includes(:user)
-                  .find(advancing)
-                  .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
     end
   end
 
