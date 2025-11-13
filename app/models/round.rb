@@ -167,13 +167,13 @@ class Round < ApplicationRecord
     if number == 1
       registrations.includes(:user)
                    .accepted
-                   .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
+                   .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => it.registrant_id) }
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
 
       Registration.includes(:user)
                   .find(advancing)
-                  .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
+                  .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => it.registrant_id) }
     end
   end
 
@@ -266,6 +266,21 @@ class Round < ApplicationRecord
       "advancementCondition" => advancement_condition&.to_wcif,
       "scrambleSetCount" => self.scramble_set_count,
       "results" => round_results.map(&:to_wcif),
+      "extensions" => wcif_extensions.map(&:to_wcif),
+    }
+  end
+
+  def to_live_json(only_podiums: false)
+    {
+      "id" => wcif_id,
+      "round_id" => id,
+      "format" => self.format_id,
+      "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
+      "cutoff" => cutoff&.to_wcif,
+      "advancementCondition" => advancement_condition&.to_wcif,
+      "scrambleSetCount" => self.scramble_set_count,
+      "competitors" => accepted_registrations_with_wcif_id,
+      "results" => only_podiums ? live_podium : live_results,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
