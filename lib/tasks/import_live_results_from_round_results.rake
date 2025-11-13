@@ -12,7 +12,10 @@ namespace :live_results do
 
     abort "Competition #{competition_id} not found" if competition.nil?
 
-    competition.rounds.each do |round|
+    # Sort rounds first so advancing can be correctly calculated
+    sorted_rounds = competition.rounds.sort_by { |round| round.round_type.rank }
+
+    sorted_rounds.each do |round|
       round.round_results.each do |round_result|
         event = round.event
         format = round.format
