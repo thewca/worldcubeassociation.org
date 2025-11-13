@@ -1,0 +1,84 @@
+import { Container, Heading, Link, Table } from "@chakra-ui/react";
+import { getResultByPerson } from "@/lib/wca/live/getResultByPerson";
+import _ from "lodash";
+import events from "@/lib/wca/data/events";
+import { rankingCellStyle } from "@/components/live/LiveResultsTable";
+import { centisecondsToClockFormat } from "@/lib/wca/wcif/attempts";
+
+export default async function PersonResults({
+  params,
+}: {
+  params: Promise<{ registrationId: string; competitionId: string }>;
+}) {
+  const { competitionId, registrationId } = await params;
+
+  const personResultRequest = await getResultByPerson(
+    competitionId,
+    registrationId,
+  );
+
+  const { name, results } = personResultRequest.data!;
+
+  const resultsByEvent = _.groupBy(results, "event_id");
+
+  return (
+    <Container>
+      <Heading size="5xl">{name}</Heading>
+      {_.map(resultsByEvent, (eventResults, key) => (
+        <>
+          <Heading size="2xl">{events.byId[key].name}</Heading>
+          <Table.Root>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeader>Round</Table.ColumnHeader>
+                <Table.ColumnHeader>Rank</Table.ColumnHeader>
+                {_.times(
+                  events.byId[key].recommendedFormat.expected_solve_count,
+                ).map((num) => (
+                  <Table.ColumnHeader key={num}>{num + 1}</Table.ColumnHeader>
+                ))}
+                <Table.ColumnHeader>Average</Table.ColumnHeader>
+                <Table.ColumnHeader>Best</Table.ColumnHeader>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {eventResults.map((result) => {
+                const {
+                  round_id: roundId,
+                  attempts,
+                  ranking,
+                  average,
+                  best,
+                } = result;
+
+                return (
+                  <Table.Row key={`${roundId}-${key}`}>
+                    <Table.Cell>
+                      <Link
+                        href={`/competitions/${competitionId}/live/rounds/${roundId}`}
+                      >
+                        Round {roundId}
+                      </Link>
+                    </Table.Cell>
+                    <Table.Cell width={1} style={rankingCellStyle(result)}>
+                      {ranking}
+                    </Table.Cell>
+                    {attempts.map((a) => (
+                      <Table.Cell key={`${roundId}-${key}-${a.attempt_number}`}>
+                        {centisecondsToClockFormat(a.result)}
+                      </Table.Cell>
+                    ))}
+                    <Table.Cell>
+                      {centisecondsToClockFormat(average)}
+                    </Table.Cell>
+                    <Table.Cell>{centisecondsToClockFormat(best)}</Table.Cell>
+                  </Table.Row>
+                );
+              })}
+            </Table.Body>
+          </Table.Root>
+        </>
+      ))}
+    </Container>
+  );
+}

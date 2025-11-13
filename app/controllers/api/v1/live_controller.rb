@@ -6,7 +6,7 @@ class LiveController < ApplicationController
     @competition = Competition.find(@competition_id)
     @round = Round.find(params[:round_id])
     @event_id = @round.event.id
-    @competitors = @round.accepted_registrations_with_wcif_id
+    @competitors = @round.accepted_registrations
   end
 
   def add_result
@@ -46,7 +46,6 @@ class LiveController < ApplicationController
       end
     end
 
-    # TODO: What is the best way to do this?
     r = Result.new(
       value1: results[0],
       value2: results[1],
@@ -57,33 +56,26 @@ class LiveController < ApplicationController
       round_type_id: round.round_type_id,
       round_id: round.id,
       format_id: round.format_id,
-    )
+      )
 
     result.update(average: r.compute_correct_average, best: r.compute_correct_best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)
 
     render json: { status: "ok" }
   end
 
-  def round_results
-    @competition_id = params[:competition_id]
-    @competition = Competition.find(@competition_id)
-    @round = Round.find(params[:round_id])
-    @event_id = @round.event.id
-    @competitors = @round.registrations
+  def rounds
+    competition = Competition.find(params.require(:competition_id))
+    rounds = competition.rounds.includes(live_results: %i[live_attempts round event])
+
+    render json: rounds.map { |r| r.to_live_json }
   end
 
-  def round_results_api
+  def round_results
     round_id = params.require(:round_id)
 
-    # TODO: Figure out why this fires a query for every live_attempt
-    # LiveAttempt Load (0.6ms)  SELECT `live_attempts`.* FROM `live_attempts` WHERE `live_attempts`.`live_result_id` = 39 AND `live_attempts`.`replaced_by_id` IS NULL ORDER BY `live_attempts`.`attempt_number` ASC
-    render json: Round.includes(live_results: %i[live_attempts round event]).find(round_id).live_results
-  end
+    round = Round.includes(live_results: %i[live_attempts round event]).find(round_id)
 
-  def double_check
-    @round = Round.find(params.require(:round_id))
-    @competition = Competition.find(params.require(:competition_id))
-
+    render json: round.to_live_json
     @competitors = @round.accepted_registrations_with_wcif_id
   end
 
@@ -95,24 +87,22 @@ class LiveController < ApplicationController
   end
 
   def podiums
-    @competition = Competition.find(params[:competition_id])
-    @competitors = @competition.registrations.includes(:user).accepted
-    @final_rounds = @competition.rounds.select(&:final_round?)
-  end
+    competition = Competition.find(params.require(:competition_id))
+    final_rounds = competition.rounds.includes(live_results: %i[live_attempts round event]).select(&:final_round?)
 
-  def competitors
-    @competition = Competition.find(params[:competition_id])
-    @competitors = @competition.registrations.includes(:user).accepted
+    render json: final_rounds.map { |r| r.to_live_json(only_podiums: true)}
   end
 
   def by_person
     registration_id = params.require(:registration_id)
     registration = Registration.find(registration_id)
+    competition = Competition.find(params.require(:competition_id))
 
-    @competition_id = params[:competition_id]
-    @competition = Competition.find(@competition_id)
+    results = registration.live_results.includes(:live_attempts)
 
-    @user = registration.user
-    @results = registration.live_results.includes(:live_attempts)
+    user_wcif = registration.user.to_wcif(competition, registration)
+    user_wcif["results"] = results
+
+    render json: user_wcif
   end
 end
