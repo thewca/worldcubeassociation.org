@@ -1,14 +1,6 @@
 # frozen_string_literal: true
 
-class LiveController < ApplicationController
-  def admin
-    @competition_id = params[:competition_id]
-    @competition = Competition.find(@competition_id)
-    @round = Round.find(params[:round_id])
-    @event_id = @round.event.id
-    @competitors = @round.accepted_registrations
-  end
-
+class Api::V1::Live::LiveController < Api::V1::ApiController
   def add_result
     results = params.require(:attempts)
     round_id = params.require(:round_id)

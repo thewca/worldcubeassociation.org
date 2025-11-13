@@ -21,7 +21,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/competitions/live/{competitionId}/registrations/{registrationId}": {
+    "/v1/competitions/{competitionId}/live/registrations/{registrationId}": {
         parameters: {
             query?: never;
             header?: never;

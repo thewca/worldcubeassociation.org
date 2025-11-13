@@ -17,7 +17,11 @@ export default async function PersonResults({
     registrationId,
   );
 
-  const { name, results } = personResultRequest.data!;
+  if (!personResultRequest.data) {
+    return <p>Something went wrong while trying to fetch results</p>;
+  }
+
+  const { name, results } = personResultRequest.data;
 
   const resultsByEvent = _.groupBy(results, "event_id");
 
