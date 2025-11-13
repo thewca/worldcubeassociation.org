@@ -1,5 +1,0 @@
-<% provide(:title, 'WCA Live Integration Test Page') %>
-
-<%= render layout: 'competitions/nav' do %>
-  <%= react_component('Live/ByPerson', { allResults: @results, user: @user, competitionId: @competition_id, }) %>
-<% end %>
