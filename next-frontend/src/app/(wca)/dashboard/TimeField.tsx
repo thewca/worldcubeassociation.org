@@ -68,17 +68,13 @@ interface TimeFieldProps {
   value?: number; // Zentisekunden
   onChange?: (centiseconds: number) => void;
   defaultValue?: number;
-  placeholder?: string;
-  [key: string]: any;
 }
 
 export function TimeField({
-                            value: valueProp,
-                            onChange: onChangeProp,
-                            defaultValue = SKIPPED_VALUE,
-                            placeholder = "--.--",
-                            ...rest
-                          }: TimeFieldProps) {
+  value: valueProp,
+  onChange: onChangeProp,
+  defaultValue = SKIPPED_VALUE,
+}: TimeFieldProps) {
   const [value, setValue] = useControllableState({
     value: valueProp,
     defaultValue,
@@ -102,23 +98,14 @@ export function TimeField({
       const parsed = parseTimeInput(e.target.value);
       setValue(parsed);
     },
-    [setValue]
+    [setValue],
   );
 
   return (
     <Field.Root>
-      <Input
-        spellCheck={false}
-        textAlign="right"
-        fontFamily="mono"
-        placeholder={placeholder}
-        value={display}
-        onChange={handleChange}
-        {...rest}
-      />
-      <Field.HelperText fontFamily="mono">
-        {value === SKIPPED_VALUE ? "–" : `${value} cs`}
-      </Field.HelperText>
+      <Field.Label>I am the cool new kid on the block!</Field.Label>
+      <Input spellCheck={false} value={display} onChange={handleChange} />
+      <Field.HelperText>{value}</Field.HelperText>
     </Field.Root>
   );
 }
