@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :live_results do
-  desc "Migrates all results to attempts"
+  desc "Moves RoundResults to Live Results"
   task :migrate_competition_round_results, [:competition_id] => [:environment] do |_, args|
     competition_id = args[:competition_id]
 
