@@ -16,7 +16,6 @@ import Link from "next/link";
 import { iconMap } from "@/components/icons/iconMap";
 import { route } from "nextjs-routes";
 import TimeField from "./TimeField";
-import LegacyTimeField from "./LegacyTimeField";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -70,7 +69,6 @@ export default async function Dashboard() {
         </ChakraLink>
       </HStack>
       <TimeField />
-      <LegacyTimeField />
       <Card.Root>
         <Card.Body>
           <Box mb="4">
