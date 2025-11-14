@@ -125,7 +125,7 @@ class Round < ApplicationRecord
   end
 
   def linked_live_results
-    linked_round.present? && advancement_condition != "dual" ? linked_round.results : results
+    linked_round.present? ? LinkedRound.combine_results(linked_round.live_results) : live_results
   end
 
   def round_type
