@@ -1,110 +1,83 @@
 "use client";
 
-import { useCallback } from "react";
-import { Field, Input, useControllableState } from "@chakra-ui/react";
+import { type ChangeEvent, useState } from "react";
+import { Field, Input } from "@chakra-ui/react";
+import { useDraftedInputMask } from "@/lib/hooks/useInputMask";
+import _ from "lodash";
+import {
+  DNF_VALUE,
+  DNS_VALUE,
+  formatAttemptResult,
+  SKIPPED_VALUE,
+} from "@/lib/wca/wcif/attempts";
 
-export const SKIPPED_VALUE = 0;
-export const DNF_VALUE = -1;
-export const DNS_VALUE = -2;
-export const DNF_KEYS = ["d", "D", "/"] as const;
-export const DNS_KEYS = ["s", "S", "*"] as const;
+export const DNF_KEYS = ["d", "D", "/"];
+export const DNS_KEYS = ["s", "S", "*"];
 
-// ----------------------------------------------------
-// 1️⃣ Parsing: Eingabetext -> Zentisekunden
-// ----------------------------------------------------
-function parseTimeInput(input: string): number {
-  if (!input) return SKIPPED_VALUE;
+function inputToAttemptResult(input: string) {
+  if (input === "") return SKIPPED_VALUE;
   if (input === "DNF") return DNF_VALUE;
   if (input === "DNS") return DNS_VALUE;
 
-  // Nur Ziffern, maximal 8
-  const digits = input.replace(/\D/g, "").slice(-8);
-  if (!digits) return SKIPPED_VALUE;
-
-  const padded = digits.padStart(8, "0");
-  const hh = Number(padded.slice(0, 2));
-  const mm = Number(padded.slice(2, 4));
-  const ss = Number(padded.slice(4, 6));
-  const cc = Number(padded.slice(6, 8));
-
-  return hh * 360_000 + mm * 6_000 + ss * 100 + cc;
-}
-
-// ----------------------------------------------------
-// 2️⃣ Formatierung: Zentisekunden -> formatiertes Display
-// ----------------------------------------------------
-function formatTimeValue(value: number): string {
-  if (value === SKIPPED_VALUE) return "";
-  if (value === DNF_VALUE) return "DNF";
-  if (value === DNS_VALUE) return "DNS";
-
-  const hours = Math.floor(value / 360_000);
-  const remainderH = value % 360_000;
-  const minutes = Math.floor(remainderH / 6_000);
-  const remainderM = remainderH % 6_000;
-  const seconds = Math.floor(remainderM / 100);
-  const centis = remainderM % 100;
-
-  const cc = String(centis).padStart(2, "0");
-
-  if (hours > 0) {
-    // Format: H:MM:SS.CC  (hours not zero — show hours and always pad minutes/seconds)
-    return `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}.${cc}`;
-  }
-
-  if (minutes > 0) {
-    // Format: M:SS.CC  (no hours, show minutes as-is then seconds padded)
-    return `${minutes}:${String(seconds).padStart(2, "0")}.${cc}`;
-  }
-
-  // Less than a minute: SS.CC or S.CC (seconds as number, centis padded)
-  return `${seconds}.${cc}`;
-}
-
-// ----------------------------------------------------
-// 3️⃣ Komponente (controllable/uncontrolled hybrid)
-// ----------------------------------------------------
-interface TimeFieldProps {
-  value?: number; // Zentisekunden
-  onChange?: (centiseconds: number) => void;
-  defaultValue?: number;
-}
-
-export function TimeField({
-  value: valueProp,
-  onChange: onChangeProp,
-  defaultValue = SKIPPED_VALUE,
-}: TimeFieldProps) {
-  const [value, setValue] = useControllableState({
-    value: valueProp,
-    defaultValue,
-    onChange: onChangeProp,
-  });
-
-  const display = formatTimeValue(value);
-
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const key = ((e.nativeEvent as InputEvent).data ?? "") as string;
-
-      // Sonderkürzel zuerst prüfen
-      if (DNF_KEYS.includes(key as any)) return setValue(DNF_VALUE);
-      if (DNS_KEYS.includes(key as any)) return setValue(DNS_VALUE);
-
-      // Overflow verhindern
-      const digits = e.target.value.replace(/\D/g, "");
-      if (digits.length > 8) return; // ignorieren
-
-      const parsed = parseTimeInput(e.target.value);
-      setValue(parsed);
-    },
-    [setValue],
-  );
+  const num = _.toInteger(input.replace(/\D/g, "")) || 0;
 
   return (
-    <Field.Root>
+    Math.floor(num / 1000000) * 360000 +
+    Math.floor((num % 1000000) / 10000) * 6000 +
+    Math.floor((num % 10000) / 100) * 100 +
+    (num % 100)
+  );
+}
+
+function reformatInput(input: string) {
+  if (input === "DNF" || input === "DNS") {
+    return input;
+  }
+
+  const number = _.toInteger(input.replace(/\D/g, "")) || 0;
+  if (number === 0) return "";
+
+  const str = `00000000${number.toString().slice(0, 8)}`;
+  const [, hh, mm, ss, cc] = str.match(/(\d\d)(\d\d)(\d\d)(\d\d)$/)!;
+  return `${hh}:${mm}:${ss}.${cc}`.replace(/^[0:]*(?!\.)/g, "");
+}
+
+function preprocessShortcuts(
+  input: string,
+  event: ChangeEvent<HTMLInputElement>,
+) {
+  const nativeEvent = event.nativeEvent;
+
+  if (nativeEvent instanceof InputEvent) {
+    const key = nativeEvent.data || "";
+
+    if (DNF_KEYS.includes(key)) {
+      return "DNF";
+    } else if (DNS_KEYS.includes(key)) {
+      return "DNS";
+    }
+  }
+
+  return input;
+}
+
+export function TimeField() {
+  const [value, setValue] = useState(0);
+
+  const { isValid, binding } = useDraftedInputMask({
+    value,
+    onChange: setValue,
+    defaultValue: 0,
+    parse: inputToAttemptResult,
+    format: (centis) => formatAttemptResult(centis, "333"),
+    preprocess: preprocessShortcuts,
+    realign: reformatInput,
+  });
+
+  return (
+    <Field.Root invalid={!isValid}>
       <Field.Label>I am the cool new kid on the block!</Field.Label>
-      <Input spellCheck={false} value={display} onChange={handleChange} />
+      <Input spellCheck={false} {...binding} />
       <Field.HelperText>{value}</Field.HelperText>
     </Field.Root>
   );
