@@ -53,14 +53,17 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
     it "ignores b-final" do
       round_333oh_b_final = create(:round, competition: competition1, event_id: "333oh", total_number_of_rounds: 2, number: 0, old_type: "b")
       round_33_oh_1, round_33_oh_f = (1..2).map { |i| create(:round, competition: competition1, event_id: "333oh", total_number_of_rounds: 2, number: i) }
-      # Using a single fake person for all the results for better performance.
-      fake_person = build_person(:result, competition1)
-      # Collecting all the results and using bulk import for better performance.
-      results = []
-      results += build_list(:result, 100, competition: competition1, event_id: "333oh", round_type_id: "1", person: fake_person, round: round_33_oh_1)
-      results += build_list(:result, 8, competition: competition1, event_id: "333oh", round_type_id: "b", person: fake_person, round: round_333oh_b_final)
-      results += build_list(:result, 32, competition: competition1, event_id: "333oh", round_type_id: "f", person: fake_person, round: round_33_oh_f)
-      Result.import(results, validate: false)
+      [Result, InboxResult].each do |model|
+        result_kind = model.model_name.singular.to_sym
+        # Using a single fake person for all the results for better performance.
+        fake_person = build_person(result_kind, competition1)
+        # Collecting all the results and using bulk import for better performance.
+        results = []
+        results += build_list(result_kind, 100, competition: competition1, event_id: "333oh", round_type_id: "1", person: fake_person, round: round_33_oh_1)
+        results += build_list(result_kind, 8, competition: competition1, event_id: "333oh", round_type_id: "b", person: fake_person, round: round_333oh_b_final)
+        results += build_list(result_kind, 32, competition: competition1, event_id: "333oh", round_type_id: "f", person: fake_person, round: round_33_oh_f)
+        model.import(results, validate: false)
+      end
 
       validator_args.each do |arg|
         acv = ACV.new.validate(**arg)
