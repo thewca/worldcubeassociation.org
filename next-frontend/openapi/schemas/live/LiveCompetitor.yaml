@@ -1,0 +1,24 @@
+
+type: object
+required:
+  - id
+  - registrant_id
+  - user
+properties:
+  id:
+    type: number
+  registrant_id:
+    type: number
+  user:
+    type: object
+    required:
+      - name
+      - id
+      - wca_id
+    properties:
+      id:
+        type: number
+      wca_id:
+        type: string
+      name:
+        type: string
