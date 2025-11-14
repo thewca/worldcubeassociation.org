@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module AdvancementConditions
-  class DualRoundCondition < AdvancementCondition
+  class LinkedRoundCondition < AdvancementCondition
     def self.wcif_type
       "dual"
     end
