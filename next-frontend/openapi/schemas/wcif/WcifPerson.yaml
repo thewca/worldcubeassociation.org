@@ -1,0 +1,47 @@
+type: object
+required:
+  - registrantId
+  - name
+  - wcaUserId
+  - countryIso2
+  - gender
+  - roles
+  - assignments
+  - personalBests
+  - extensions
+properties:
+  registrantId:
+    type: number
+  name:
+    type: string
+  wcaUserId:
+    type: number
+  countryIso2:
+    type: string
+  gender:
+    type: string
+  birthdate:
+    type: string
+    format: date
+  email:
+    type: string
+    format: email
+  avatar:
+    $ref: "../users/UserAvatar.yaml"
+  roles:
+    type: array
+    items:
+      type: string
+      enum: ["delegate", "trainee-delegate", "organizer"]
+  registration:
+    $ref: "./WcifRegistration.yaml"
+  assignments:
+    type: array
+    items:
+      $ref: "./WcifAssignment.yaml"
+  personalBests:
+    type: array
+    items:
+      $ref: "./WcifPersonalBest.yaml"
+  extensions:
+    type: array
