@@ -4145,6 +4145,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rails/actioncable@npm:^8.1.100":
+  version: 8.1.100
+  resolution: "@rails/actioncable@npm:8.1.100"
+  checksum: 10c0/a9c1f1b62bf3d73408997036f92b9264b33fc6211f7fcfb79d8e2421dc277f80182df835a9525f1f77ed2043da8ea2af345fb428fa0f3fe7b52da12c9600b35d
+  languageName: node
+  linkType: hard
+
 "@redocly/ajv@npm:8.11.4, @redocly/ajv@npm:^8.11.4":
   version: 8.11.4
   resolution: "@redocly/ajv@npm:8.11.4"
@@ -5480,6 +5487,13 @@ __metadata:
   version: 6.14.0
   resolution: "@types/qs@npm:6.14.0"
   checksum: 10c0/5b3036df6e507483869cdb3858201b2e0b64b4793dc4974f188caa5b5732f2333ab9db45c08157975054d3b070788b35088b4bc60257ae263885016ee2131310
+  languageName: node
+  linkType: hard
+
+"@types/rails__actioncable@npm:^8":
+  version: 8.0.3
+  resolution: "@types/rails__actioncable@npm:8.0.3"
+  checksum: 10c0/088ed3180b4b7544c246f654d52ab9b8d27f35f0c015e959f1d702eb3703276339f9646fb2f0b752debf33218affb826dd2cae5ebe48e92b994e68ec03eecdc1
   languageName: node
   linkType: hard
 
@@ -10960,13 +10974,13 @@ __metadata:
   linkType: hard
 
 "js-yaml@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "js-yaml@npm:4.1.0"
+  version: 4.1.1
+  resolution: "js-yaml@npm:4.1.1"
   dependencies:
     argparse: "npm:^2.0.1"
   bin:
     js-yaml: bin/js-yaml.js
-  checksum: 10c0/184a24b4eaacfce40ad9074c64fd42ac83cf74d8c8cd137718d456ced75051229e5061b8633c3366b8aada17945a7a356b337828c19da92b51ae62126575018f
+  checksum: 10c0/561c7d7088c40a9bb53cc75becbfb1df6ae49b34b5e6e5a81744b14ae8667ec564ad2527709d1a6e7d5e5fa6d483aa0f373a50ad98d42fde368ec4a190d4fae7
   languageName: node
   linkType: hard
 
@@ -12450,6 +12464,7 @@ __metadata:
     "@payloadcms/next": "npm:3.63.0"
     "@payloadcms/richtext-lexical": "npm:3.63.0"
     "@payloadcms/storage-s3": "npm:3.63.0"
+    "@rails/actioncable": "npm:^8.1.100"
     "@redocly/cli": "npm:2.11.1"
     "@stylistic/eslint-plugin": "npm:^5.5.0"
     "@tanstack/eslint-plugin-query": "npm:^5.91.2"
@@ -12463,6 +12478,7 @@ __metadata:
     "@types/js-cookie": "npm:^3"
     "@types/newrelic": "npm:^9.14.8"
     "@types/node": "npm:^24"
+    "@types/rails__actioncable": "npm:^8"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
     "@types/react-world-flags": "npm:^1"
