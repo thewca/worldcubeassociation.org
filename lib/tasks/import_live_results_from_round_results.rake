@@ -37,7 +37,7 @@ namespace :live_results do
           round_type_id: round.round_type_id,
           round_id: round.id,
           format_id: format.id,
-          )
+        )
 
         live_results << {
           registration_id: registrations_by_wcif_id[round_result.person_id].id,
