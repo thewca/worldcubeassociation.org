@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Button, Menu } from "@chakra-ui/react";
+import { Avatar, Button, ClientOnly, Menu, Skeleton } from "@chakra-ui/react";
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import React from "react";
@@ -11,7 +11,15 @@ import _ from "lodash";
 
 const AVATAR_COLORS = ["green", "white", "red", "yellow", "blue", "orange"];
 
-export default function AvatarMenu({ session }: { session: Session | null }) {
+export default function Wrapper({ session }: { session: Session | null }) {
+  return (
+    <ClientOnly fallback={<Skeleton boxSize={8} />}>
+      <AvatarMenu session={session} />
+    </ClientOnly>
+  );
+}
+
+function AvatarMenu({ session }: { session: Session | null }) {
   if (!session) {
     return (
       <Button onClick={() => signIn(WCA_PROVIDER_ID)} variant="ghost" size="sm">

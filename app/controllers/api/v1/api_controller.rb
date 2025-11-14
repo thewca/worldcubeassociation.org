@@ -1,25 +1,15 @@
 # frozen_string_literal: true
 
-class Api::V1::ApiController < ActionController::API
-  prepend_before_action :validate_jwt_token
+class Api::V1::ApiController < ApplicationController
+  prepend_before_action :require_user
 
-  # Manually include new Relic because we don't derive from ActionController::Base
-  include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
+  def require_user
+    @current_user = current_user || api_user
+    raise WcaExceptions::MustLogIn.new if @current_user.nil?
+  end
 
-  def validate_jwt_token
-    auth_header = request.headers['Authorization']
-    return render json: { error: Registrations::ErrorCodes::MISSING_AUTHENTICATION }, status: :unauthorized if auth_header.blank?
-
-    token = auth_header.split[1]
-    begin
-      decode_result = JWT.decode token, AppSecrets.JWT_KEY, true, { algorithm: 'HS256' }
-      decoded_token = decode_result[0]
-      @current_user = User.find(decoded_token['user_id'].to_i)
-    rescue JWT::VerificationError, JWT::InvalidJtiError
-      render json: { error: Registrations::ErrorCodes::INVALID_TOKEN }, status: :unauthorized
-    rescue JWT::ExpiredSignature
-      render json: { error: Registrations::ErrorCodes::EXPIRED_TOKEN }, status: :unauthorized
-    end
+  def api_user
+    User.find_by(id: doorkeeper_token&.resource_owner_id) if doorkeeper_token&.accessible?
   end
 
   def render_error(http_status, error, data = nil)

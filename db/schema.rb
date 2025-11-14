@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_13_162643) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_07_120000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -740,10 +740,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_13_162643) do
     t.datetime "digest_sent_at", precision: nil
   end
 
-  create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "jti", null: false
-    t.datetime "exp", null: false
-    t.index ["jti"], name: "index_jwt_denylist_on_jti"
+  create_table "linked_rounds", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "wcif_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "live_attempt_history_entries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1197,7 +1197,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_13_162643) do
     t.text "round_results", size: :medium
     t.integer "total_number_of_rounds", null: false
     t.string "old_type", limit: 1
+    t.bigint "linked_round_id"
     t.index ["competition_event_id", "number"], name: "index_rounds_on_competition_event_id_and_number", unique: true
+    t.index ["linked_round_id"], name: "index_rounds_on_linked_round_id"
   end
 
   create_table "sanity_check_categories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1584,6 +1586,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_13_162643) do
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "results", "rounds"
+  add_foreign_key "rounds", "linked_rounds"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "schedule_activities", "rounds"

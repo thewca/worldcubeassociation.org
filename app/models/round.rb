@@ -2,6 +2,7 @@
 
 class Round < ApplicationRecord
   belongs_to :competition_event
+  belongs_to :linked_rounds, optional: true
 
   has_one :competition, through: :competition_event
   delegate :competition_id, to: :competition_event
