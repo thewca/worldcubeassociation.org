@@ -124,6 +124,10 @@ class Round < ApplicationRecord
     linked_round.present? && advancement_condition != "dual" ? linked_round.results : results
   end
 
+  def linked_live_results
+    linked_round.present? && advancement_condition != "dual" ? linked_round.results : results
+  end
+
   def round_type
     RoundType.c_find(round_type_id)
   end
@@ -166,6 +170,20 @@ class Round < ApplicationRecord
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
       Registration.find(advancing)
+    end
+  end
+
+  def accepted_registrations_with_wcif_id
+    if number == 1
+      registrations.includes(:user)
+                   .accepted
+                   .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
+    else
+      advancing = previous_round.linked_live_results.where(advancing: true).pluck(:registration_id)
+
+      Registration.includes(:user)
+                  .find(advancing)
+                  .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
     end
   end
 
