@@ -21,45 +21,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/competitions/{competitionId}/live/registrations/{registrationId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Gets Information about the Competitors's live result */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    competitionId: string;
-                    registrationId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Returns a person and their results */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["LivePerson"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/v1/competitions/{competitionId}/live/rounds/{roundId}": {
         parameters: {
             query?: never;
@@ -530,53 +491,75 @@ export interface components {
                 updated_at?: string;
             };
         };
-        UserAvatar: {
+        WcifTimeLimit: {
+            /** @example 18000 */
+            centiseconds: number;
+            cumulativeRoundIds: string[];
+        };
+        WcifAttemptResult: number;
+        WcifCutoff: {
+            /** @example 2 */
+            numberOfAttempts: number;
+            attemptResult: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifRanking: number;
+        WcifAdvancementConditionRanking: {
             /**
-             * Format: uri
-             * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
              */
-            url: string;
+            type: "ranking";
+            level: components["schemas"]["WcifRanking"];
+        };
+        WcifPercent: number;
+        WcifAdvancementConditionPercent: {
             /**
-             * Format: uri
-             * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
              */
-            thumb_url?: string;
+            type: "percent";
+            level: components["schemas"]["WcifPercent"];
         };
-        WcifRegistration: {
-            wcaRegistrationId: number;
-            eventIds: string[];
-            status: string;
-            isCompeting: boolean;
+        WcifAdvancementConditionAttemptResult: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "attemptResult";
+            level: components["schemas"]["WcifAttemptResult"];
         };
-        WcifAssignment: {
-            activityId: number;
-            stationNumber: number;
-            assignmentCode: string;
+        WcifAdvancementCondition: components["schemas"]["WcifAdvancementConditionRanking"] | components["schemas"]["WcifAdvancementConditionPercent"] | components["schemas"]["WcifAdvancementConditionAttemptResult"];
+        WcifAttempt: {
+            result: components["schemas"]["WcifAttemptResult"];
+            reconstruction?: string;
         };
-        WcifPersonalBest: {
-            eventId: string;
-            best: number;
-            worldRanking: number;
-            continentalRanking: number;
-            nationalRanking: number;
+        WcifResult: {
+            /** @example 1 */
+            personId: number;
+            /** @example 10 */
+            ranking?: number;
+            attempts: components["schemas"]["WcifAttempt"][];
+            best: components["schemas"]["WcifAttemptResult"];
+            average: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifScramble: string;
+        WcifScrambleSet: {
+            /** @example 1 */
+            id: number;
+            scrambles: components["schemas"]["WcifScramble"][];
+            extraScrambles: components["schemas"]["WcifScramble"][];
+        };
+        WcifRound: {
+            /** @example 333-r1 */
+            id: string;
             /** @enum {string} */
-            type: "single" | "average";
-        };
-        WcifPerson: {
-            registrantId: number;
-            name: string;
-            wcaUserId: number;
-            countryIso2: string;
-            gender: string;
-            /** Format: date */
-            birthdate?: string;
-            /** Format: email */
-            email?: string;
-            avatar?: components["schemas"]["UserAvatar"];
-            roles: ("delegate" | "trainee-delegate" | "organizer")[];
-            registration?: components["schemas"]["WcifRegistration"];
-            assignments: components["schemas"]["WcifAssignment"][];
-            personalBests: components["schemas"]["WcifPersonalBest"][];
+            format: "1" | "2" | "3" | "a" | "m";
+            timeLimit?: components["schemas"]["WcifTimeLimit"];
+            cutoff?: components["schemas"]["WcifCutoff"];
+            advancementCondition?: components["schemas"]["WcifAdvancementCondition"];
+            results: components["schemas"]["WcifResult"][];
+            scrambleSetCount: number;
+            scrambleSets: components["schemas"]["WcifScrambleSet"][];
             extensions: unknown[];
         };
         LiveAttempt: {
@@ -596,8 +579,31 @@ export interface components {
             event_id: string;
             attempts: components["schemas"]["LiveAttempt"][];
         };
-        LivePerson: components["schemas"]["WcifPerson"] & {
+        LiveCompetitor: {
+            id: number;
+            registrant_id: number;
+            user: {
+                id: number;
+                wca_id: string;
+                name: string;
+            };
+        };
+        LiveRound: components["schemas"]["WcifRound"] & {
             results: components["schemas"]["LiveResult"][];
+            competitors: components["schemas"]["LiveCompetitor"][];
+            round_id: number;
+        };
+        UserAvatar: {
+            /**
+             * Format: uri
+             * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
+             */
+            url: string;
+            /**
+             * Format: uri
+             * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
+             */
+            thumb_url?: string;
         };
         TeamMembership: {
             id: number;
@@ -749,9 +755,11 @@ export interface components {
             longitude_degrees: number;
             /** @example US */
             country_iso2: string;
-            /** @example [
+            /**
+             * @example [
              *       "333"
-             *     ] */
+             *     ]
+             */
             event_ids: string[];
             /** @example 333 */
             main_event_id: string;
