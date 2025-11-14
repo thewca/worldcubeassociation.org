@@ -1507,15 +1507,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime-corejs3@npm:^7.24.4":
-  version: 7.28.4
-  resolution: "@babel/runtime-corejs3@npm:7.28.4"
-  dependencies:
-    core-js-pure: "npm:^3.43.0"
-  checksum: 10c0/0a7fe2d4e36d345acf090dd685b5c6ed55af3ead69a84e2cfca56631815dd757f3a362031b376cc746f63f0fd856e7a5280807833f7fa9a5b7f1febd97f8c0da
-  languageName: node
-  linkType: hard
-
 "@babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.27.6, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
   version: 7.28.4
   resolution: "@babel/runtime@npm:7.28.4"
@@ -3327,24 +3318,6 @@ __metadata:
   version: 0.4.7
   resolution: "@libsql/win32-x64-msvc@npm:0.4.7"
   conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@maskito/core@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@maskito/core@npm:4.0.0"
-  checksum: 10c0/d20f30c2e14ed50867b7a08b50855aabeada41a0e9f51a037a627cbb0b0b32c43cfba9fd70b3c391ec9fc05dbcfe71fc9c84da61ca9554c85915fa34afa70cbf
-  languageName: node
-  linkType: hard
-
-"@maskito/react@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@maskito/react@npm:4.0.0"
-  peerDependencies:
-    "@maskito/core": ^4.0.0
-    react: ">=16.8"
-    react-dom: ">=16.8"
-  checksum: 10c0/89fe443eb0b494e54b9ac85211c623f20d2bdabf402bb41bd07980e7082ef44e2a3aeec78d494d5898b7a833933164802bb95bd581923760af4ae27986bb7e98
   languageName: node
   linkType: hard
 
@@ -7844,13 +7817,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-pure@npm:^3.43.0":
-  version: 3.46.0
-  resolution: "core-js-pure@npm:3.46.0"
-  checksum: 10c0/8cf5016f92af5d23c6440649f46fc793ba0201e1687e696cee0341af8e8c6a2e9958b078f23af3a7440edf1ced63ce23a511f7b1357e4793c1101b907bf6ff87
-  languageName: node
-  linkType: hard
-
 "core-util-is@npm:1.0.2":
   version: 1.0.2
   resolution: "core-util-is@npm:1.0.2"
@@ -10357,15 +10323,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"imask@npm:^7.6.1":
-  version: 7.6.1
-  resolution: "imask@npm:7.6.1"
-  dependencies:
-    "@babel/runtime-corejs3": "npm:^7.24.4"
-  checksum: 10c0/cda75bb5036bf65b1028a39ee5fe7bb1a654838213e8f85288c5899a9e5eb84ce7d2b37ae2d9d600f553b7b0e9fd2f4ba2cbdb03a2c46cf0fa60075bc0c21f0c
-  languageName: node
-  linkType: hard
-
 "immutable@npm:^4.0.0":
   version: 4.3.7
   resolution: "immutable@npm:4.3.7"
@@ -12487,8 +12444,6 @@ __metadata:
     "@fullcalendar/luxon3": "npm:^6.1.19"
     "@fullcalendar/react": "npm:^6.1.19"
     "@fullcalendar/timegrid": "npm:^6.1.19"
-    "@maskito/core": "npm:^4.0.0"
-    "@maskito/react": "npm:^4.0.0"
     "@payloadcms/db-mongodb": "npm:3.63.0"
     "@payloadcms/db-sqlite": "npm:3.63.0"
     "@payloadcms/live-preview-react": "npm:3.63.0"
@@ -12545,7 +12500,6 @@ __metadata:
     react-dom: "npm:^19.2.0"
     react-i18next: "npm:^16.2.4"
     react-icons: "npm:^5.5.0"
-    react-imask: "npm:^7.6.1"
     react-intersection-observer: "npm:^10.0.0"
     react-markdown: "npm:^10.1.0"
     react-world-flags: "npm:^1.6.0"
@@ -13887,18 +13841,6 @@ __metadata:
   peerDependencies:
     react: ">=16.13.1"
   checksum: 10c0/7d5da917b95951490041f8e7567d7e7d4cd4ce24a24626edc4893fd3d5d6c4c72572ddbb994fcee78dec6e6f608f6a65d4c9675e484e5f868671ce33856e182e
-  languageName: node
-  linkType: hard
-
-"react-imask@npm:^7.6.1":
-  version: 7.6.1
-  resolution: "react-imask@npm:7.6.1"
-  dependencies:
-    imask: "npm:^7.6.1"
-    prop-types: "npm:^15.8.1"
-  peerDependencies:
-    react: ">=0.14.0"
-  checksum: 10c0/48b8c234fb77e4d8b8446712695c63f2b0351a896b17623510a648408dd1b7ab506496124453a821528781b05fe2f5b04514f902e260f8b7f4486c972061da88
   languageName: node
   linkType: hard
 

@@ -26,8 +26,6 @@
     "@fullcalendar/luxon3": "^6.1.19",
     "@fullcalendar/react": "^6.1.19",
     "@fullcalendar/timegrid": "^6.1.19",
-    "@maskito/core": "^4.0.0",
-    "@maskito/react": "^4.0.0",
     "@payloadcms/db-mongodb": "3.63.0",
     "@payloadcms/db-sqlite": "3.63.0",
     "@payloadcms/live-preview-react": "3.63.0",
@@ -58,7 +56,6 @@
     "react-dom": "^19.2.0",
     "react-i18next": "^16.2.4",
     "react-icons": "^5.5.0",
-    "react-imask": "^7.6.1",
     "react-intersection-observer": "^10.0.0",
     "react-markdown": "^10.1.0",
     "react-world-flags": "^1.6.0"
