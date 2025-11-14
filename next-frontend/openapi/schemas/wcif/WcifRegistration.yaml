@@ -1,0 +1,17 @@
+type: object
+required:
+  - wcaRegistrationId
+  - eventIds
+  - status
+  - isCompeting
+properties:
+  wcaRegistrationId:
+    type: number
+  eventIds:
+    type: array
+    items:
+      type: string
+  status:
+    type: string
+  isCompeting:
+    type: boolean
