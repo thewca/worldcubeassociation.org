@@ -12,6 +12,8 @@ namespace :live_results do
 
     abort "Competition #{competition_id} not found" if competition.nil?
 
+    live_results = []
+
     # Sort rounds first so advancing can be correctly calculated
     sorted_rounds = competition.rounds.sort_by { |round| round.round_type.rank }
 
@@ -37,13 +39,16 @@ namespace :live_results do
           format_id: format.id,
         )
 
-        LiveResult.create!(registration_id: registrations_by_wcif_id[round_result.person_id].id,
-                           round: round,
-                           live_attempts: attempts,
-                           last_attempt_entered_at: Time.now.utc,
-                           best: r.compute_correct_best,
-                           average: r.compute_correct_average)
+        live_results << {
+          registration_id: registrations_by_wcif_id[round_result.person_id].id,
+          round: round,
+          live_attempts: attempts,
+          last_attempt_entered_at: Time.now.utc,
+          best: r.compute_correct_best,
+          average: r.compute_correct_average,
+        }
       end
     end
+    LiveResult.create(live_results)
   end
 end
