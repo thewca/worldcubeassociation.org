@@ -32,28 +32,27 @@ interface MbldInternal {
   timeSeconds: number;
 }
 
-function parseMbldInternal(value: number): MbldInternal {
-  const isOldFormat = Math.floor(value / 1_000_000_000) !== 0;
+export function parseMbldInternal(value: number): MbldInternal {
+  // Old-style results, written as a 10-digit number, start with a '1'.
+  // New-style results start with a '0'.
+  const isOldStyleResult = value.toString().padStart(10, '0').startsWith('1');
 
-  if (isOldFormat) {
-    const timeSeconds = value % 100_000;
-    const valAfterTime = Math.floor(value / 100_000);
-    const attempted = valAfterTime % 100;
-    const valAfterAttempted = Math.floor(valAfterTime / 100);
-    const solved = 99 - (valAfterAttempted % 100);
-
-    return { solved, attempted, timeSeconds };
-  } else {
-    const missed = value % 100;
-    const valAfterMissed = Math.floor(value / 100);
-    const timeSeconds = valAfterMissed % 100_000;
-    const valAfterTime = Math.floor(valAfterMissed / 100_000);
-    const difference = 99 - (valAfterTime % 100);
-    const solved = difference + missed;
-    const attempted = solved + missed;
+  if (isOldStyleResult) {
+    const timeSeconds = value % 1e5;
+    const attempted = Math.floor(value / 1e5) % 100;
+    const solved = 99 - (Math.floor(value / 1e7) % 100);
 
     return { solved, attempted, timeSeconds };
   }
+
+  const missed = value % 1e2;
+  const timeSeconds = Math.floor(value / 100) % 1e5;
+  const points = 99 - (Math.floor(value / 1e7) % 100);
+
+  const solved = points + missed;
+  const attempted = solved + missed;
+
+  return { solved, attempted, timeSeconds };
 }
 
 export interface MultiBldResult {
