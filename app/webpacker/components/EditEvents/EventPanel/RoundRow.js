@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Dropdown, Input, Table,
+  Dropdown, Input, Popup, Table, Icon,
 } from 'semantic-ui-react';
 import { events, formats } from '../../../lib/wca-data.js.erb';
 import { roundIdToString } from '../../../lib/utils/wcif';
@@ -73,6 +73,8 @@ export default function RoundRow({
           compact
           className="tiny"
         />
+        { event.id === '333bf'
+          && <Popup content="If the competition is in 2026 you need to choose Bo5, otherwise Bo3" trigger={<Icon name="question circle" />} />}
       </Table.Cell>
 
       <Table.Cell>
