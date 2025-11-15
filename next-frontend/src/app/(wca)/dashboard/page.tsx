@@ -15,7 +15,8 @@ import Link from "next/link";
 
 import { iconMap } from "@/components/icons/iconMap";
 import { route } from "nextjs-routes";
-import { TimeField, FmMovesField, MbldCubesField } from "./AttemptResultField";
+import AttemptResultField, {TimeField, FmMovesField, MbldCubesField, MbldField} from "./AttemptResultField";
+import {encodeMbldResult} from "@/lib/wca/wcif/attempts";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -68,10 +69,7 @@ export default async function Dashboard() {
           </Link>
         </ChakraLink>
       </HStack>
-      <TimeField eventId="333" />
-      <FmMovesField resultType="single" />
-      <FmMovesField resultType="average" />
-      <MbldCubesField />
+      <AttemptResultField eventId="333mbf" resultType="single" />
       <Card.Root>
         <Card.Body>
           <Box mb="4">

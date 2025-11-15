@@ -9,7 +9,7 @@ export const DNS_VALUE = -2;
 /**
  * Converts centiseconds to a human-friendly string.
  */
-export function centisecondsToClockFormat(centiseconds: number): string {
+export function centisecondsToClockFormat(centiseconds?: number): string {
   if (centiseconds == null) {
     return "?:??:??";
   }
@@ -32,18 +32,20 @@ interface MbldInternal {
   timeSeconds: number;
 }
 
-function parseMbldInternal(val: number, isOldFormat: boolean): MbldInternal {
+function parseMbldInternal(value: number): MbldInternal {
+  const isOldFormat = Math.floor(value / 1_000_000_000) !== 0;
+
   if (isOldFormat) {
-    const timeSeconds = val % 100_000;
-    const valAfterTime = Math.floor(val / 100_000);
+    const timeSeconds = value % 100_000;
+    const valAfterTime = Math.floor(value / 100_000);
     const attempted = valAfterTime % 100;
     const valAfterAttempted = Math.floor(valAfterTime / 100);
     const solved = 99 - (valAfterAttempted % 100);
 
     return { solved, attempted, timeSeconds };
   } else {
-    const missed = val % 100;
-    const valAfterMissed = Math.floor(val / 100);
+    const missed = value % 100;
+    const valAfterMissed = Math.floor(value / 100);
     const timeSeconds = valAfterMissed % 100_000;
     const valAfterTime = Math.floor(valAfterMissed / 100_000);
     const difference = 99 - (valAfterTime % 100);
@@ -60,10 +62,10 @@ export interface MultiBldResult {
   timeCentiseconds?: number;
 }
 
-export function parseMbldResult(val: number): MultiBldResult {
-  const isOldFormat = Math.floor(val / 1_000_000_000) !== 0;
+export function decodeMbldResult(value: number): MultiBldResult {
+  if (value <= 0) return { solved: 0, attempted: 0, timeCentiseconds: value };
 
-  const extractedValues = parseMbldInternal(val, isOldFormat);
+  const extractedValues = parseMbldInternal(value);
 
   const timeCentiseconds =
     extractedValues.timeSeconds === 99_999
@@ -77,38 +79,34 @@ export function parseMbldResult(val: number): MultiBldResult {
   };
 }
 
-export function decodeMbldAttemptResult(value: number) {
-  if (value <= 0) return { solved: 0, attempted: 0, centiseconds: value };
-  // Old-style results, written as a 10-digit number, start with a '1'.
-  // New-style results start with a '0'.
-  const isOldStyleResult = value.toString().padStart(10, "0").startsWith("1");
-  if (isOldStyleResult) {
-    const seconds = value % 1e5;
-    const attempted = Math.floor(value / 1e5) % 100;
-    const solved = 99 - (Math.floor(value / 1e7) % 100);
-    const centiseconds = seconds === 99999 ? null : seconds * 100;
-    return { solved, attempted, centiseconds };
+export function encodeMbldResult({ solved, attempted, timeCentiseconds }: MultiBldResult) {
+  const missed = attempted - solved;
+  const points = solved - missed;
+
+  if (timeCentiseconds === undefined) {
+    /* 99999 seconds is used for unknown time. */
+    return (99 - points) * 1e7 + 99999 * 1e2 + missed;
   }
-  const missed = value % 100;
-  const seconds = Math.floor(value / 100) % 1e5;
-  const points = 99 - (Math.floor(value / 1e7) % 100);
-  const solved = points + missed;
-  const attempted = solved + missed;
-  const centiseconds = seconds === 99999 ? null : seconds * 100;
-  return { solved, attempted, centiseconds };
+
+  if (timeCentiseconds <= 0) {
+    return timeCentiseconds;
+  }
+
+  const seconds = Math.round(timeCentiseconds / 100);
+  return (99 - points) * 1e7 + seconds * 1e2 + missed;
 }
 
 // See https://www.worldcubeassociation.org/regulations/#9f12c
 export function attemptResultToMbldPoints(attemptResult: AttemptResult) {
-  const { solved, attempted } = parseMbldResult(attemptResult);
+  const { solved, attempted } = decodeMbldResult(attemptResult);
   const missed = attempted - solved;
   return solved - missed;
 }
 
 function formatMbldAttemptResult(attemptResult: number) {
-  const { solved, attempted, centiseconds } =
-    decodeMbldAttemptResult(attemptResult);
-  const clockFormat = centisecondsToClockFormat(centiseconds!);
+  const { solved, attempted, timeCentiseconds } =
+    decodeMbldResult(attemptResult);
+  const clockFormat = centisecondsToClockFormat(timeCentiseconds!);
   const shortClockFormat = clockFormat.replace(/\.00$/, "");
   // u2002 is a special space character
   // using it here allows us to expand space between mbf results without

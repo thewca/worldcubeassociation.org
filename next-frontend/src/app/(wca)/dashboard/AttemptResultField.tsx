@@ -1,14 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import {Box, Button, Field, Input} from "@chakra-ui/react";
+import {Field, Fieldset, GridItem, Group, Input, SimpleGrid, useControllableState} from "@chakra-ui/react";
 import useInputMask from "@/lib/hooks/useInputMask";
 import _ from "lodash";
 import {
   DNF_VALUE,
   DNS_VALUE,
-  formatAttemptResult,
-  SKIPPED_VALUE,
+  formatAttemptResult, MultiBldResult, decodeMbldResult,
+  SKIPPED_VALUE, encodeMbldResult,
 } from "@/lib/wca/wcif/attempts";
 import type { ChangeEvent } from "react";
 import type { EventId } from "@/lib/wca/data/events";
@@ -105,13 +104,16 @@ function preprocessShortcuts(
   return input;
 }
 
-export function TimeField({ eventId }: { eventId: EventId }) {
-  const [value, setValue] = useState(0);
+export interface AttemptResultProps {
+  value: number;
+  onChange: (value: number) => void;
+}
 
+export function TimeField({ value, onChange, eventId }: { eventId: EventId } & AttemptResultProps) {
   const { isValid, binding } = useInputMask({
     value,
-    onChange: setValue,
-    defaultValue: 0,
+    onChange,
+    defaultValue: SKIPPED_VALUE,
     parse: inputToAttemptResult,
     format: (centis) => formatAttemptResult(centis, eventId),
     preprocess: preprocessShortcuts,
@@ -127,19 +129,17 @@ export function TimeField({ eventId }: { eventId: EventId }) {
   );
 }
 
-export function FmMovesField({ resultType }: {
+export function FmMovesField({ value, onChange, resultType }: {
   resultType: "single" | "average";
-}) {
-  const [rawValue, setRawValue] = useState(0);
-
+} & AttemptResultProps) {
   const isAverage = resultType === 'average';
 
-  const value = isAverage ? rawValue / 100 : rawValue;
-  const setValue = (value: number) => setRawValue(isAverage ? value * 100 : value);
+  const maskedValue = isAverage ? value / 100 : value;
+  const onMaskedChange = (value: number) => onChange(isAverage ? value * 100 : value);
 
   const { isValid, binding } = useInputMask({
-    value,
-    onChange: setValue,
+    value: maskedValue,
+    onChange: onMaskedChange,
     defaultValue: 0,
     parse: inputToPoints,
     format: numberToInput,
@@ -151,17 +151,15 @@ export function FmMovesField({ resultType }: {
     <Field.Root invalid={!isValid}>
       <Field.Label>PointsField (isAverage: {isAverage.toString()})</Field.Label>
       <Input spellCheck={false} {...binding} />
-      <Field.HelperText>{rawValue}</Field.HelperText>
+      <Field.HelperText>{value}</Field.HelperText>
     </Field.Root>
   );
 }
 
-export function MbldCubesField() {
-  const [value, setValue] = useState(0);
-
+export function MbldCubesField({ value, onChange }: AttemptResultProps) {
   const { isValid, binding } = useInputMask({
     value,
-    onChange: setValue,
+    onChange,
     defaultValue: 0,
     parse: inputToPoints,
     format: numberToInput,
@@ -171,23 +169,85 @@ export function MbldCubesField() {
 
   return (
     <Field.Root invalid={!isValid}>
-      <Field.Label asChild>
-        <Box gap={4}>
-          CubesField
-          <Button onClick={() => setValue(42)}>Set to 42</Button>
-        </Box>
-      </Field.Label>
+      <Field.Label>CubesField</Field.Label>
       <Input spellCheck={false} {...binding} />
       <Field.HelperText>{value}</Field.HelperText>
     </Field.Root>
   );
 }
 
-function AttemptResultField({ eventId, resultType }: {
+export function MbldField({ value, onChange }: AttemptResultProps) {
+  const parsedResult = decodeMbldResult(value);
+
+  const handleChange = (payload: Partial<MultiBldResult>) => {
+    const patchedResult = {
+      ...parsedResult,
+      ...payload,
+    }
+
+    const encodedResult = encodeMbldResult(patchedResult);
+    onChange(encodedResult);
+  }
+
+  return (
+    <Fieldset.Root>
+      <Fieldset.Legend>MbldField</Fieldset.Legend>
+      <Fieldset.Content>
+        <SimpleGrid columns={16} asChild>
+          <Group attached>
+            <GridItem colSpan={3}>
+              <MbldCubesField
+                value={parsedResult.solved}
+                onChange={(solved) => handleChange({ solved })}
+              />
+            </GridItem>
+            <GridItem colSpan={3}>
+              <MbldCubesField
+                value={parsedResult.attempted}
+                onChange={(attempted) => handleChange({ attempted })}
+              />
+            </GridItem>
+            <GridItem colSpan={10}>
+              <TimeField
+                eventId="333bf"
+                value={parsedResult.timeCentiseconds!}
+                onChange={(timeCentiseconds) => handleChange({ timeCentiseconds })}
+              />
+            </GridItem>
+          </Group>
+        </SimpleGrid>
+      </Fieldset.Content>
+      <Fieldset.HelperText>{JSON.stringify(parsedResult)}</Fieldset.HelperText>
+    </Fieldset.Root>
+  );
+}
+
+export interface AttemptResultFieldProps extends Partial<AttemptResultProps> {
   eventId: EventId;
   resultType: "single" | "average";
-}) {
+}
 
+function AttemptResultField({
+  value,
+  onChange,
+  eventId,
+  resultType,
+}: AttemptResultFieldProps) {
+  const [componentValue, setComponentValue] = useControllableState({
+    value,
+    onChange,
+    defaultValue: SKIPPED_VALUE,
+  });
+
+  if (eventId === '333fm') {
+    return <FmMovesField value={componentValue} onChange={setComponentValue} resultType={resultType} />;
+  }
+
+  if (eventId === '333mbf' || eventId === '333mbo') {
+    return <MbldField value={componentValue} onChange={setComponentValue} />;
+  }
+
+  return <TimeField value={componentValue} onChange={setComponentValue} eventId={eventId} />;
 }
 
 export default AttemptResultField;

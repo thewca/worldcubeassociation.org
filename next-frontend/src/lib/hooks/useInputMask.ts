@@ -61,7 +61,11 @@ export default function useInputMask<T, M extends string = string>({
 
   if (dataValue !== prevDataValue) {
     setPrevDataValue(dataValue);
-    setDraft(format(dataValue));
+    const formatted = format(dataValue);
+
+    if (draft != formatted) {
+      setDraft(formatted);
+    }
   }
 
   const handleChange = useCallback(
