@@ -79,7 +79,11 @@ export function decodeMbldResult(value: number): MultiBldResult {
   };
 }
 
-export function encodeMbldResult({ solved, attempted, timeCentiseconds }: MultiBldResult) {
+export function encodeMbldResult({
+  solved,
+  attempted,
+  timeCentiseconds,
+}: MultiBldResult) {
   const missed = attempted - solved;
   const points = solved - missed;
 

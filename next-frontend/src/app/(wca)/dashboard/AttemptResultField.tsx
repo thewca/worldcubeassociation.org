@@ -1,13 +1,24 @@
 "use client";
 
-import {Field, Fieldset, GridItem, Group, Input, SimpleGrid, useControllableState} from "@chakra-ui/react";
+import {
+  Field,
+  Fieldset,
+  GridItem,
+  Group,
+  Input,
+  SimpleGrid,
+  useControllableState,
+} from "@chakra-ui/react";
 import useInputMask from "@/lib/hooks/useInputMask";
 import _ from "lodash";
 import {
   DNF_VALUE,
   DNS_VALUE,
-  formatAttemptResult, MultiBldResult, decodeMbldResult,
-  SKIPPED_VALUE, encodeMbldResult,
+  formatAttemptResult,
+  MultiBldResult,
+  decodeMbldResult,
+  SKIPPED_VALUE,
+  encodeMbldResult,
 } from "@/lib/wca/wcif/attempts";
 import type { ChangeEvent } from "react";
 import type { EventId } from "@/lib/wca/data/events";
@@ -43,9 +54,9 @@ function inputToPoints(input: string): number {
 }
 
 function numberToInput(number: number) {
-  if (number === SKIPPED_VALUE) return '';
-  if (number === DNF_VALUE) return 'DNF';
-  if (number === DNS_VALUE) return 'DNS';
+  if (number === SKIPPED_VALUE) return "";
+  if (number === DNF_VALUE) return "DNF";
+  if (number === DNS_VALUE) return "DNS";
 
   return number.toString();
 }
@@ -109,7 +120,11 @@ export interface AttemptResultProps {
   onChange: (value: number) => void;
 }
 
-export function TimeField({ value, onChange, eventId }: { eventId: EventId } & AttemptResultProps) {
+export function TimeField({
+  value,
+  onChange,
+  eventId,
+}: { eventId: EventId } & AttemptResultProps) {
   const { isValid, binding } = useInputMask({
     value,
     onChange,
@@ -129,13 +144,18 @@ export function TimeField({ value, onChange, eventId }: { eventId: EventId } & A
   );
 }
 
-export function FmMovesField({ value, onChange, resultType }: {
+export function FmMovesField({
+  value,
+  onChange,
+  resultType,
+}: {
   resultType: "single" | "average";
 } & AttemptResultProps) {
-  const isAverage = resultType === 'average';
+  const isAverage = resultType === "average";
 
   const maskedValue = isAverage ? value / 100 : value;
-  const onMaskedChange = (value: number) => onChange(isAverage ? value * 100 : value);
+  const onMaskedChange = (value: number) =>
+    onChange(isAverage ? value * 100 : value);
 
   const { isValid, binding } = useInputMask({
     value: maskedValue,
@@ -183,11 +203,11 @@ export function MbldField({ value, onChange }: AttemptResultProps) {
     const patchedResult = {
       ...parsedResult,
       ...payload,
-    }
+    };
 
     const encodedResult = encodeMbldResult(patchedResult);
     onChange(encodedResult);
-  }
+  };
 
   return (
     <Fieldset.Root>
@@ -211,7 +231,9 @@ export function MbldField({ value, onChange }: AttemptResultProps) {
               <TimeField
                 eventId="333bf"
                 value={parsedResult.timeCentiseconds!}
-                onChange={(timeCentiseconds) => handleChange({ timeCentiseconds })}
+                onChange={(timeCentiseconds) =>
+                  handleChange({ timeCentiseconds })
+                }
               />
             </GridItem>
           </Group>
@@ -239,15 +261,27 @@ function AttemptResultField({
     defaultValue: SKIPPED_VALUE,
   });
 
-  if (eventId === '333fm') {
-    return <FmMovesField value={componentValue} onChange={setComponentValue} resultType={resultType} />;
+  if (eventId === "333fm") {
+    return (
+      <FmMovesField
+        value={componentValue}
+        onChange={setComponentValue}
+        resultType={resultType}
+      />
+    );
   }
 
-  if (eventId === '333mbf' || eventId === '333mbo') {
+  if (eventId === "333mbf" || eventId === "333mbo") {
     return <MbldField value={componentValue} onChange={setComponentValue} />;
   }
 
-  return <TimeField value={componentValue} onChange={setComponentValue} eventId={eventId} />;
+  return (
+    <TimeField
+      value={componentValue}
+      onChange={setComponentValue}
+      eventId={eventId}
+    />
+  );
 }
 
 export default AttemptResultField;

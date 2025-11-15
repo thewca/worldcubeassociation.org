@@ -15,8 +15,7 @@ import Link from "next/link";
 
 import { iconMap } from "@/components/icons/iconMap";
 import { route } from "nextjs-routes";
-import AttemptResultField, {TimeField, FmMovesField, MbldCubesField, MbldField} from "./AttemptResultField";
-import {encodeMbldResult} from "@/lib/wca/wcif/attempts";
+import AttemptResultField from "./AttemptResultField";
 
 export default async function Dashboard() {
   const session = await auth();
