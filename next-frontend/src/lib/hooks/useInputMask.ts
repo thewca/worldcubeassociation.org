@@ -3,99 +3,40 @@ import { useControllableState } from "@chakra-ui/react";
 
 import type { ChangeEvent, ChangeEventHandler, FocusEventHandler } from "react";
 
-type InputMaskFormatter<T> = {
-  parse: (input: string) => T;
-  format: (value: T) => string;
-  preprocess?: (input: string, event: ChangeEvent<HTMLInputElement>) => string;
-};
-
-type InputMaskControlled<T> = {
-  value: T;
-  onChange: (value: T) => void;
-  defaultValue?: T;
-};
-
-type InputMaskUncontrolled<T> = {
-  value: never;
-  onChange: never;
+interface InputMaskOptions<T, M extends string = string> {
+  value?: T;
+  onChange?: (value: T) => void;
   defaultValue: T;
-};
-
-type InputMaskOptions<T> = (InputMaskControlled<T> | InputMaskUncontrolled<T>) &
-  InputMaskFormatter<T>;
-
-type InputChangeHandler = ChangeEventHandler<HTMLInputElement>;
-
-type InputMaskBinding = {
-  value: string;
-  onChange: InputChangeHandler;
-};
-
-type InputMaskReturn<B extends InputMaskBinding> = {
-  displayValue: string;
-  binding: B;
-};
-
-export default function useInputMask<T>({
-  value: controlledValue,
-  onChange,
-  defaultValue,
-  parse,
-  format,
-  preprocess,
-}: InputMaskOptions<T>): InputMaskReturn<InputMaskBinding> {
-  const [dataValue, setDataValue] = useControllableState({
-    value: controlledValue,
-    defaultValue,
-    onChange,
-  });
-
-  const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const raw = e.target.value;
-
-      const preprocessed = preprocess?.(raw, e) ?? raw;
-      const parsed = parse(preprocessed);
-
-      setDataValue(parsed);
-    },
-    [parse, preprocess, setDataValue],
-  );
-
-  const displayValue = useMemo(() => format(dataValue), [dataValue, format]);
-
-  const binding = useMemo(
-    () => ({ value: displayValue, onChange: handleChange }),
-    [displayValue, handleChange],
-  );
-
-  return { displayValue, binding };
+  parse: (input: M) => T;
+  format: (value: T) => M;
+  preprocess?: (input: string, event: ChangeEvent<HTMLInputElement>) => string;
+  applyMask: (input: string) => M;
 }
 
-type InputMaskDraftOptions<T> = InputMaskOptions<T> & {
-  defaultValue: T;
-  realign: (input: string) => string;
-};
-
+type InputChangeHandler = ChangeEventHandler<HTMLInputElement>;
 type InputBlurHandler = FocusEventHandler<HTMLInputElement>;
 
-type InputMaskDraftBinding = InputMaskBinding & {
+interface InputMaskBinding {
+  value: string;
+  onChange: InputChangeHandler;
   onBlur: InputBlurHandler;
-};
+}
 
-type InputMaskDraftReturn = InputMaskReturn<InputMaskDraftBinding> & {
+interface InputMaskReturn {
+  displayValue: string;
   isValid: boolean;
-};
+  binding: InputMaskBinding;
+}
 
-export function useDraftedInputMask<T>({
+export default function useInputMask<T, M extends string = string>({
   value: controlledValue,
   onChange,
   defaultValue,
   parse,
   format,
   preprocess,
-  realign,
-}: InputMaskDraftOptions<T>): InputMaskDraftReturn {
+  applyMask,
+}: InputMaskOptions<T, M>): InputMaskReturn {
   const [dataValue, setDataValue] = useControllableState({
     value: controlledValue,
     defaultValue,
@@ -107,16 +48,32 @@ export function useDraftedInputMask<T>({
   const [draft, setDraft] = useState(displayValue);
   const [isValid, setIsValid] = useState(true);
 
+  // This state exists only for tracking external prop changes to `dataValue`.
+  // Consider the following scenario:
+  //   1. The user enters a (valid) input. It gets saved in the `draft` state.
+  //   2. The user leaves the field. The `draft` is communicated to `dataValue` via `onBlur`.
+  //   3. An external system sets `dataValue` to a new state.
+  // Problem in this scenario: The internal `draft` state is not affected by the change from (3)
+  //   The solution is to track external changes via a "buffer state".
+  // This avoids `useEffect` as per the official instructions by the React folks themselves:
+  //   https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+  const [prevDataValue, setPrevDataValue] = useState(dataValue);
+
+  if (dataValue !== prevDataValue) {
+    setPrevDataValue(dataValue);
+    setDraft(format(dataValue));
+  }
+
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const raw = e.target.value;
 
       const preprocessed = preprocess?.(raw, e) ?? raw;
-      const aligned = realign(preprocessed);
+      const aligned = applyMask(preprocessed);
 
       setDraft(aligned);
     },
-    [preprocess, realign, setDraft],
+    [preprocess, applyMask, setDraft],
   );
 
   const handleBlur = useCallback(() => {
