@@ -9,7 +9,11 @@ import {
   SimpleGrid,
   useControllableState,
 } from "@chakra-ui/react";
-import useInputMask, { useDraftState } from "@/lib/hooks/useInputMask";
+import useInputMask, {
+  KeyShortcut,
+  useDraftState,
+  useKeyShortcutHandler,
+} from "@/lib/hooks/useInputMask";
 import _ from "lodash";
 import {
   DNF_VALUE,
@@ -20,7 +24,7 @@ import {
   SKIPPED_VALUE,
   encodeMbldResult,
 } from "@/lib/wca/wcif/attempts";
-import type { ChangeEvent, FormEvent } from "react";
+import type { FormEvent } from "react";
 import type { EventId } from "@/lib/wca/data/events";
 
 export const DNF_KEYS = ["d", "D", "/"];
@@ -96,22 +100,10 @@ function reformatAndClampNumberInput(input: string, maxValue: number) {
   return Math.min(parsedNumber, maxValue).toString();
 }
 
-function preprocessShortcuts(
-  input: string,
-  nativeEvent: Event,
-) {
-  if (nativeEvent instanceof InputEvent) {
-    const key = nativeEvent.data || "";
-
-    if (DNF_KEYS.includes(key)) {
-      return "DNF";
-    } else if (DNS_KEYS.includes(key)) {
-      return "DNS";
-    }
-  }
-
-  return input;
-}
+const resultShortcuts: KeyShortcut<string>[] = [
+  { keyTriggers: DNF_KEYS, draftValue: "DNF" },
+  { keyTriggers: DNS_KEYS, draftValue: "DNS" },
+];
 
 export interface AttemptResultProps {
   value: number;
@@ -129,8 +121,8 @@ export function TimeField({
     defaultValue: SKIPPED_VALUE,
     parse: inputToAttemptResult,
     format: (centis) => formatAttemptResult(centis, eventId),
-    preprocess: preprocessShortcuts,
     applyMask: reformatTimeInput,
+    shortcuts: resultShortcuts,
   });
 
   return (
@@ -161,8 +153,8 @@ export function FmMovesField({
     defaultValue: 0,
     parse: inputToPoints,
     format: numberToInput,
-    preprocess: preprocessShortcuts,
     applyMask: reformatNumberInput,
+    shortcuts: resultShortcuts,
   });
 
   return (
@@ -181,7 +173,6 @@ export function MbldCubesField({ value, onChange }: AttemptResultProps) {
     defaultValue: 0,
     parse: inputToPoints,
     format: numberToInput,
-    preprocess: preprocessShortcuts,
     applyMask: (input) => reformatAndClampNumberInput(input, 99),
   });
 
@@ -211,21 +202,22 @@ export function MbldField({ value, onChange }: AttemptResultProps) {
     }
   };
 
-  const handleShortcuts = (e: FormEvent<HTMLFieldSetElement>) => {
-    const targetValue = e.target.value;
-    const preprocessed = preprocessShortcuts(targetValue, e.nativeEvent);
+  const shortcutHandler = useKeyShortcutHandler(resultShortcuts);
 
-    if (preprocessed !== targetValue) {
-      const shortcutTime = inputToAttemptResult(preprocessed);
+  const captureShortcuts = (e: FormEvent<HTMLFieldSetElement>) => {
+    const usedShortcut = shortcutHandler(e.nativeEvent);
+
+    if (usedShortcut) {
+      const shortcutTime = inputToAttemptResult(usedShortcut.draftValue);
       onChange(shortcutTime);
 
       e.stopPropagation();
       e.preventDefault();
     }
-  }
+  };
 
   return (
-    <Fieldset.Root onChangeCapture={handleShortcuts}>
+    <Fieldset.Root onChangeCapture={captureShortcuts}>
       <Fieldset.Legend>MbldField</Fieldset.Legend>
       <Fieldset.Content>
         <SimpleGrid columns={16} asChild>
@@ -254,7 +246,9 @@ export function MbldField({ value, onChange }: AttemptResultProps) {
           </Group>
         </SimpleGrid>
       </Fieldset.Content>
-      <Fieldset.HelperText>{JSON.stringify(decodeMbldResult(value))}</Fieldset.HelperText>
+      <Fieldset.HelperText>
+        {JSON.stringify(decodeMbldResult(value))}
+      </Fieldset.HelperText>
     </Fieldset.Root>
   );
 }

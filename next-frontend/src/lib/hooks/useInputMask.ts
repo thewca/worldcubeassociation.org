@@ -9,14 +9,19 @@ import type {
   SetStateAction,
 } from "react";
 
+export interface KeyShortcut<T> {
+  keyTriggers: string[];
+  draftValue: T;
+}
+
 interface InputMaskOptions<T, M extends string = string> {
   value?: T;
   onChange?: (value: T) => void;
   defaultValue: T;
   parse: (input: M) => T;
   format: (value: T) => M;
-  preprocess?: (input: string, event: Event) => string;
   applyMask: (input: string) => M;
+  shortcuts?: KeyShortcut<M>[];
 }
 
 type InputChangeHandler = ChangeEventHandler<HTMLInputElement>;
@@ -66,14 +71,33 @@ export function useDraftState<T, D>(
   return [draft, setDraft];
 }
 
+export function useKeyShortcutHandler<T>(shortcuts: KeyShortcut<T>[]) {
+  return useCallback(
+    (nativeEvent: Event) => {
+      if (nativeEvent instanceof InputEvent) {
+        const key = nativeEvent.data || "";
+
+        for (const shortcut of shortcuts) {
+          if (shortcut.keyTriggers.includes(key)) {
+            return shortcut;
+          }
+        }
+      }
+
+      return undefined;
+    },
+    [shortcuts],
+  );
+}
+
 export default function useInputMask<T, M extends string = string>({
   value: controlledValue,
   onChange,
   defaultValue,
   parse,
   format,
-  preprocess,
   applyMask,
+  shortcuts = [],
 }: InputMaskOptions<T, M>): InputMaskReturn {
   const [dataValue, setDataValue] = useControllableState({
     value: controlledValue,
@@ -84,16 +108,22 @@ export default function useInputMask<T, M extends string = string>({
   const [draft, setDraft] = useDraftState(dataValue, format);
   const [isValid, setIsValid] = useState(true);
 
+  const shortcutHandler = useKeyShortcutHandler(shortcuts);
+
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      const raw = e.target.value;
+      const usedShortcut = shortcutHandler(e.nativeEvent);
 
-      const preprocessed = preprocess?.(raw, e.nativeEvent) ?? raw;
-      const aligned = applyMask(preprocessed);
+      if (usedShortcut) {
+        setDraft(usedShortcut.draftValue);
+      } else {
+        const raw = e.target.value;
+        const aligned = applyMask(raw);
 
-      setDraft(aligned);
+        setDraft(aligned);
+      }
     },
-    [preprocess, applyMask, setDraft],
+    [shortcutHandler, applyMask, setDraft],
   );
 
   const handleBlur = useCallback(() => {

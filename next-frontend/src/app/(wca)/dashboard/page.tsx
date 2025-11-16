@@ -68,7 +68,7 @@ export default async function Dashboard() {
           </Link>
         </ChakraLink>
       </HStack>
-      <AttemptResultField eventId="333mbf" resultType="single" />
+      <AttemptResultField eventId="333" resultType="single" />
       <Card.Root>
         <Card.Body>
           <Box mb="4">
