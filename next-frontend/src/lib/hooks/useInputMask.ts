@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { useControllableState } from "@chakra-ui/react";
 
-import type { ChangeEvent, ChangeEventHandler, FocusEventHandler } from "react";
+import type { ChangeEvent, ChangeEventHandler, FocusEventHandler, Dispatch, SetStateAction } from "react";
 
 interface InputMaskOptions<T, M extends string = string> {
   value?: T;
@@ -28,25 +28,15 @@ interface InputMaskReturn {
   binding: InputMaskBinding;
 }
 
-export default function useInputMask<T, M extends string = string>({
-  value: controlledValue,
-  onChange,
-  defaultValue,
-  parse,
-  format,
-  preprocess,
-  applyMask,
-}: InputMaskOptions<T, M>): InputMaskReturn {
-  const [dataValue, setDataValue] = useControllableState({
-    value: controlledValue,
-    defaultValue,
-    onChange,
-  });
+type ReactState<T> = [T, Dispatch<SetStateAction<T>>];
 
+export function useDraftState<T, D>(
+  dataValue: T,
+  format: (value: T) => D,
+): ReactState<D> {
   const displayValue = useMemo(() => format(dataValue), [dataValue, format]);
 
   const [draft, setDraft] = useState(displayValue);
-  const [isValid, setIsValid] = useState(true);
 
   // This state exists only for tracking external prop changes to `controlledValue`.
   // Consider the following scenario:
@@ -66,6 +56,27 @@ export default function useInputMask<T, M extends string = string>({
       setDraft(displayValue);
     }
   }
+
+  return [draft, setDraft];
+}
+
+export default function useInputMask<T, M extends string = string>({
+  value: controlledValue,
+  onChange,
+  defaultValue,
+  parse,
+  format,
+  preprocess,
+  applyMask,
+}: InputMaskOptions<T, M>): InputMaskReturn {
+  const [dataValue, setDataValue] = useControllableState({
+    value: controlledValue,
+    defaultValue,
+    onChange,
+  });
+
+  const [draft, setDraft] = useDraftState(dataValue, format);
+  const [isValid, setIsValid] = useState(true);
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {

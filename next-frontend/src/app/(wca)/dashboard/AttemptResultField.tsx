@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import {
+  Button,
   Field,
   Fieldset,
   GridItem,
@@ -10,7 +10,7 @@ import {
   SimpleGrid,
   useControllableState,
 } from "@chakra-ui/react";
-import useInputMask from "@/lib/hooks/useInputMask";
+import useInputMask, { useDraftState } from "@/lib/hooks/useInputMask";
 import _ from "lodash";
 import {
   DNF_VALUE,
@@ -200,7 +200,7 @@ export function MbldCubesField({ value, onChange }: AttemptResultProps) {
 export function MbldField({ value, onChange }: AttemptResultProps) {
   const parsedResult = decodeMbldResult(value);
 
-  const [draft, setDraft] = useState(parsedResult);
+  const [draft, setDraft] = useDraftState(value, decodeMbldResult);
 
   const handleChange = (payload: Partial<MultiBldResult>) => {
     const patchedResult = {
@@ -209,11 +209,9 @@ export function MbldField({ value, onChange }: AttemptResultProps) {
     };
 
     setDraft(patchedResult);
-
     const encodedResult = encodeMbldResult(patchedResult);
-    const recodedResult = decodeMbldResult(encodedResult);
 
-    if (!_.isEqual(recodedResult, parsedResult)) {
+    if (encodedResult !== value) {
       onChange(encodedResult);
     }
   };
