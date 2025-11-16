@@ -48,7 +48,7 @@ export default function useInputMask<T, M extends string = string>({
   const [draft, setDraft] = useState(displayValue);
   const [isValid, setIsValid] = useState(true);
 
-  // This state exists only for tracking external prop changes to `dataValue`.
+  // This state exists only for tracking external prop changes to `controlledValue`.
   // Consider the following scenario:
   //   1. The user enters a (valid) input. It gets saved in the `draft` state.
   //   2. The user leaves the field. The `draft` is communicated to `dataValue` via `onBlur`.
@@ -61,10 +61,9 @@ export default function useInputMask<T, M extends string = string>({
 
   if (dataValue !== prevDataValue) {
     setPrevDataValue(dataValue);
-    const formatted = format(dataValue);
 
-    if (draft != formatted) {
-      setDraft(formatted);
+    if (draft != displayValue) {
+      setDraft(displayValue);
     }
   }
 

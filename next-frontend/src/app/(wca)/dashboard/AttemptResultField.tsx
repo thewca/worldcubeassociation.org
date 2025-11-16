@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Field,
   Fieldset,
@@ -199,14 +200,22 @@ export function MbldCubesField({ value, onChange }: AttemptResultProps) {
 export function MbldField({ value, onChange }: AttemptResultProps) {
   const parsedResult = decodeMbldResult(value);
 
+  const [draft, setDraft] = useState(parsedResult);
+
   const handleChange = (payload: Partial<MultiBldResult>) => {
     const patchedResult = {
-      ...parsedResult,
+      ...draft,
       ...payload,
     };
 
+    setDraft(patchedResult);
+
     const encodedResult = encodeMbldResult(patchedResult);
-    onChange(encodedResult);
+    const recodedResult = decodeMbldResult(encodedResult);
+
+    if (!_.isEqual(recodedResult, parsedResult)) {
+      onChange(encodedResult);
+    }
   };
 
   return (
@@ -217,20 +226,20 @@ export function MbldField({ value, onChange }: AttemptResultProps) {
           <Group attached>
             <GridItem colSpan={3}>
               <MbldCubesField
-                value={parsedResult.solved}
+                value={draft.solved}
                 onChange={(solved) => handleChange({ solved })}
               />
             </GridItem>
             <GridItem colSpan={3}>
               <MbldCubesField
-                value={parsedResult.attempted}
+                value={draft.attempted}
                 onChange={(attempted) => handleChange({ attempted })}
               />
             </GridItem>
             <GridItem colSpan={10}>
               <TimeField
                 eventId="333bf"
-                value={parsedResult.timeCentiseconds!}
+                value={draft.timeCentiseconds!}
                 onChange={(timeCentiseconds) =>
                   handleChange({ timeCentiseconds })
                 }
