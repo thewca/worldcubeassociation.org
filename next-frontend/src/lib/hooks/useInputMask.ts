@@ -15,7 +15,7 @@ interface InputMaskOptions<T, M extends string = string> {
   defaultValue: T;
   parse: (input: M) => T;
   format: (value: T) => M;
-  preprocess?: (input: string, event: ChangeEvent<HTMLInputElement>) => string;
+  preprocess?: (input: string, event: Event) => string;
   applyMask: (input: string) => M;
 }
 
@@ -88,7 +88,7 @@ export default function useInputMask<T, M extends string = string>({
     (e: ChangeEvent<HTMLInputElement>) => {
       const raw = e.target.value;
 
-      const preprocessed = preprocess?.(raw, e) ?? raw;
+      const preprocessed = preprocess?.(raw, e.nativeEvent) ?? raw;
       const aligned = applyMask(preprocessed);
 
       setDraft(aligned);

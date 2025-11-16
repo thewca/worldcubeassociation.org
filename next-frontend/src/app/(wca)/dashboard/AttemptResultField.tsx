@@ -20,7 +20,7 @@ import {
   SKIPPED_VALUE,
   encodeMbldResult,
 } from "@/lib/wca/wcif/attempts";
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import type { EventId } from "@/lib/wca/data/events";
 
 export const DNF_KEYS = ["d", "D", "/"];
@@ -98,10 +98,8 @@ function reformatAndClampNumberInput(input: string, maxValue: number) {
 
 function preprocessShortcuts(
   input: string,
-  event: ChangeEvent<HTMLInputElement>,
+  nativeEvent: Event,
 ) {
-  const nativeEvent = event.nativeEvent;
-
   if (nativeEvent instanceof InputEvent) {
     const key = nativeEvent.data || "";
 
@@ -197,8 +195,6 @@ export function MbldCubesField({ value, onChange }: AttemptResultProps) {
 }
 
 export function MbldField({ value, onChange }: AttemptResultProps) {
-  const parsedResult = decodeMbldResult(value);
-
   const [draft, setDraft] = useDraftState(value, decodeMbldResult);
 
   const handleChange = (payload: Partial<MultiBldResult>) => {
@@ -215,8 +211,21 @@ export function MbldField({ value, onChange }: AttemptResultProps) {
     }
   };
 
+  const handleShortcuts = (e: FormEvent<HTMLFieldSetElement>) => {
+    const targetValue = e.target.value;
+    const preprocessed = preprocessShortcuts(targetValue, e.nativeEvent);
+
+    if (preprocessed !== targetValue) {
+      const shortcutTime = inputToAttemptResult(preprocessed);
+      onChange(shortcutTime);
+
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }
+
   return (
-    <Fieldset.Root>
+    <Fieldset.Root onChangeCapture={handleShortcuts}>
       <Fieldset.Legend>MbldField</Fieldset.Legend>
       <Fieldset.Content>
         <SimpleGrid columns={16} asChild>
@@ -245,7 +254,7 @@ export function MbldField({ value, onChange }: AttemptResultProps) {
           </Group>
         </SimpleGrid>
       </Fieldset.Content>
-      <Fieldset.HelperText>{JSON.stringify(parsedResult)}</Fieldset.HelperText>
+      <Fieldset.HelperText>{JSON.stringify(decodeMbldResult(value))}</Fieldset.HelperText>
     </Fieldset.Root>
   );
 }
