@@ -54,7 +54,7 @@ export interface MultiBldResult {
 export function decodeMbldResult(value: number): MultiBldResult {
   if (value <= 0) return { solved: 0, attempted: 0, timeCentiseconds: value };
 
-  const isOldStyleResult = value.toString().padStart(10, '0').startsWith('1');
+  const isOldStyleResult = value.toString().padStart(10, "0").startsWith("1");
 
   if (isOldStyleResult) {
     const seconds = value % 1e5;

@@ -1,7 +1,13 @@
 import { useCallback, useMemo, useState } from "react";
 import { useControllableState } from "@chakra-ui/react";
 
-import type { ChangeEvent, ChangeEventHandler, FocusEventHandler, Dispatch, SetStateAction } from "react";
+import type {
+  ChangeEvent,
+  ChangeEventHandler,
+  FocusEventHandler,
+  Dispatch,
+  SetStateAction,
+} from "react";
 
 interface InputMaskOptions<T, M extends string = string> {
   value?: T;
@@ -103,7 +109,7 @@ export default function useInputMask<T, M extends string = string>({
       const defaultDraft = format(defaultValue);
       setDraft(defaultDraft);
     }
-  }, [draft, parse, format, defaultValue, setDataValue]);
+  }, [draft, parse, format, defaultValue, setDataValue, setDraft]);
 
   const bindDraft = useMemo(
     () => ({
