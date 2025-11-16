@@ -26,33 +26,23 @@ export function centisecondsToClockFormat(centiseconds?: number): string {
     .replace(/^[0:]*(?!\.)/g, "");
 }
 
-interface MbldInternal {
-  solved: number;
-  attempted: number;
-  timeSeconds: number;
-}
+const MBLD_POINTS_BASE = 99;
+const MBLD_UNKNOWN_SECONDS_MARKER = 99999;
 
-export function parseMbldInternal(value: number): MbldInternal {
-  // Old-style results, written as a 10-digit number, start with a '1'.
-  // New-style results start with a '0'.
-  const isOldStyleResult = value.toString().padStart(10, '0').startsWith('1');
-
-  if (isOldStyleResult) {
-    const timeSeconds = value % 1e5;
-    const attempted = Math.floor(value / 1e5) % 100;
-    const solved = 99 - (Math.floor(value / 1e7) % 100);
-
-    return { solved, attempted, timeSeconds };
+function mbldSecondsToCentiseconds(seconds: number) {
+  if (seconds === MBLD_UNKNOWN_SECONDS_MARKER) {
+    return undefined;
   }
 
-  const missed = value % 1e2;
-  const timeSeconds = Math.floor(value / 100) % 1e5;
-  const points = 99 - (Math.floor(value / 1e7) % 100);
+  return seconds * 100;
+}
 
-  const solved = points + missed;
-  const attempted = solved + missed;
+function centisecondsToMbldSeconds(centiseconds?: number): number {
+  if (centiseconds === undefined) {
+    return MBLD_UNKNOWN_SECONDS_MARKER;
+  }
 
-  return { solved, attempted, timeSeconds };
+  return Math.round(centiseconds / 100);
 }
 
 export interface MultiBldResult {
@@ -64,39 +54,43 @@ export interface MultiBldResult {
 export function decodeMbldResult(value: number): MultiBldResult {
   if (value <= 0) return { solved: 0, attempted: 0, timeCentiseconds: value };
 
-  const extractedValues = parseMbldInternal(value);
+  const isOldStyleResult = value.toString().padStart(10, '0').startsWith('1');
 
-  const timeCentiseconds =
-    extractedValues.timeSeconds === 99_999
-      ? undefined
-      : extractedValues.timeSeconds * 100;
+  if (isOldStyleResult) {
+    const seconds = value % 1e5;
+    const attempted = Math.floor(value / 1e5) % 100;
+    const solved = MBLD_POINTS_BASE - (Math.floor(value / 1e7) % 100);
+    const timeCentiseconds = mbldSecondsToCentiseconds(seconds); // Refactored
 
-  return {
-    solved: extractedValues.solved,
-    attempted: extractedValues.attempted,
-    timeCentiseconds,
-  };
+    return { solved, attempted, timeCentiseconds };
+  }
+
+  // New-style results
+  const missed = value % 100;
+  const seconds = Math.floor(value / 100) % 1e5;
+  const points = MBLD_POINTS_BASE - (Math.floor(value / 1e7) % 100);
+  const solved = points + missed;
+  const attempted = solved + missed;
+  const timeCentiseconds = mbldSecondsToCentiseconds(seconds); // Refactored
+
+  return { solved, attempted, timeCentiseconds };
 }
 
 export function encodeMbldResult({
   solved,
   attempted,
   timeCentiseconds,
-}: MultiBldResult) {
-  const missed = attempted - solved;
-  const points = solved - missed;
-
-  if (timeCentiseconds === undefined) {
-    /* 99999 seconds is used for unknown time. */
-    return (99 - points) * 1e7 + 99999 * 1e2 + missed;
-  }
-
-  if (timeCentiseconds <= 0) {
+}: MultiBldResult): number {
+  if (timeCentiseconds !== undefined && timeCentiseconds <= 0) {
     return timeCentiseconds;
   }
 
-  const seconds = Math.round(timeCentiseconds / 100);
-  return (99 - points) * 1e7 + seconds * 1e2 + missed;
+  const missed = attempted - solved;
+  const points = solved - missed;
+
+  const seconds = centisecondsToMbldSeconds(timeCentiseconds);
+
+  return (MBLD_POINTS_BASE - points) * 1e7 + seconds * 1e2 + missed;
 }
 
 // See https://www.worldcubeassociation.org/regulations/#9f12c
