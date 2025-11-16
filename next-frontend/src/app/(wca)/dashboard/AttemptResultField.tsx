@@ -18,7 +18,7 @@ import _ from "lodash";
 import {
   DNF_VALUE,
   DNS_VALUE,
-  formatAttemptResult,
+  centisecondsToClockFormat,
   MultiBldResult,
   decodeMbldResult,
   SKIPPED_VALUE,
@@ -49,7 +49,15 @@ function inputToAttemptResult(input: string) {
   );
 }
 
-function inputToPoints(input: string): number {
+function attemptResultToInput(number: number) {
+  if (number === SKIPPED_VALUE) return "";
+  if (number === DNF_VALUE) return "DNF";
+  if (number === DNS_VALUE) return "DNS";
+
+  return centisecondsToClockFormat(number);
+}
+
+function inputToNumber(input: string): number {
   if (input === "") return SKIPPED_VALUE;
   if (input === "DNF") return DNF_VALUE;
   if (input === "DNS") return DNS_VALUE;
@@ -66,10 +74,6 @@ function numberToInput(number: number) {
 }
 
 function reformatTimeInput(input: string) {
-  if (input === "DNF" || input === "DNS") {
-    return input;
-  }
-
   const number = stringToInt(input);
   if (number === SKIPPED_VALUE) return "";
 
@@ -78,26 +82,11 @@ function reformatTimeInput(input: string) {
   return `${hh}:${mm}:${ss}.${cc}`.replace(/^[0:]*(?!\.)/g, "");
 }
 
-function reformatNumberInput(input: string) {
-  if (input === "DNF" || input === "DNS") {
-    return input;
-  }
-
+function reformatNumberInput(input: string, maxClamp: number = Infinity) {
   const parsedNumber = stringToInt(input);
-
   if (parsedNumber === SKIPPED_VALUE) return "";
-  return parsedNumber.toString();
-}
 
-function reformatAndClampNumberInput(input: string, maxValue: number) {
-  if (input === "DNF" || input === "DNS") {
-    return input;
-  }
-
-  const parsedNumber = stringToInt(input);
-
-  if (parsedNumber === SKIPPED_VALUE) return "";
-  return Math.min(parsedNumber, maxValue).toString();
+  return Math.min(parsedNumber, maxClamp).toString();
 }
 
 const resultShortcuts: KeyShortcut<string>[] = [
@@ -110,17 +99,13 @@ export interface AttemptResultProps {
   onChange: (value: number) => void;
 }
 
-export function TimeField({
-  value,
-  onChange,
-  eventId,
-}: { eventId: EventId } & AttemptResultProps) {
+export function TimeField({ value, onChange }: AttemptResultProps) {
   const { isValid, binding } = useInputMask({
     value,
     onChange,
     defaultValue: SKIPPED_VALUE,
     parse: inputToAttemptResult,
-    format: (centis) => formatAttemptResult(centis, eventId),
+    format: attemptResultToInput,
     applyMask: reformatTimeInput,
     shortcuts: resultShortcuts,
   });
@@ -151,7 +136,7 @@ export function FmMovesField({
     value: maskedValue,
     onChange: onMaskedChange,
     defaultValue: 0,
-    parse: inputToPoints,
+    parse: inputToNumber,
     format: numberToInput,
     applyMask: reformatNumberInput,
     shortcuts: resultShortcuts,
@@ -171,9 +156,9 @@ export function MbldCubesField({ value, onChange }: AttemptResultProps) {
     value,
     onChange,
     defaultValue: 0,
-    parse: inputToPoints,
+    parse: inputToNumber,
     format: numberToInput,
-    applyMask: (input) => reformatAndClampNumberInput(input, 99),
+    applyMask: (input) => reformatNumberInput(input, 99),
   });
 
   return (
@@ -236,7 +221,6 @@ export function MbldField({ value, onChange }: AttemptResultProps) {
             </GridItem>
             <GridItem colSpan={10}>
               <TimeField
-                eventId="333bf"
                 value={draft.timeCentiseconds!}
                 onChange={(timeCentiseconds) =>
                   handleChange({ timeCentiseconds })
@@ -284,13 +268,7 @@ function AttemptResultField({
     return <MbldField value={componentValue} onChange={setComponentValue} />;
   }
 
-  return (
-    <TimeField
-      value={componentValue}
-      onChange={setComponentValue}
-      eventId={eventId}
-    />
-  );
+  return <TimeField value={componentValue} onChange={setComponentValue} />;
 }
 
 export default AttemptResultField;
