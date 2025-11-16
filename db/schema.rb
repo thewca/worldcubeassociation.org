@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_07_120000) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_16_065802) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -665,7 +665,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_07_120000) do
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
-    t.integer "round_id", null: false
+    t.integer "round_id"
     t.string "format_id", limit: 1, default: "", null: false
     t.integer "value1", default: 0, null: false
     t.integer "value2", default: 0, null: false
@@ -1491,6 +1491,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_07_120000) do
     t.boolean "results_notifications_enabled", default: false
     t.string "preferred_locale", limit: 255
     t.boolean "competition_notifications_enabled"
+    t.boolean "receive_developer_mails", default: false, null: false
     t.boolean "receive_delegate_reports", default: false, null: false
     t.string "delegate_reports_region_id"
     t.string "delegate_reports_region_type"

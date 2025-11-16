@@ -1089,6 +1089,7 @@ class User < ApplicationRecord
         password password_confirmation
         email preferred_events results_notifications_enabled
         registration_notifications_enabled
+        receive_developer_mails
       ]
       fields << { user_preferred_events_attributes: %i[id event_id _destroy] }
       fields += %i[receive_delegate_reports delegate_reports_region] if user.staff_or_any_delegate?
