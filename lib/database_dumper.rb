@@ -763,6 +763,7 @@ module DatabaseDumper
           otp_required_for_login
           pending_avatar_id
           preferred_locale
+          receive_developer_mails
           remember_created_at
           reset_password_sent_at
           reset_password_token
