@@ -26,6 +26,10 @@ locals {
       value = aws_s3_bucket.next-media.id
     },
     {
+      name = "MEDIA_BUCKET_CDN"
+      value = "https://assets-nextjs.worldcubeassociation.org"
+    },
+    {
       name  = "OIDC_ISSUER"
       value = "https://www.worldcubeassociation.org/"
     },
@@ -35,11 +39,15 @@ locals {
     },
     {
       name  = "WCA_BACKEND_API_URL"
-      value = "https://www.worldcubeassociation.org/api/v0/"
+      value = "https://www.worldcubeassociation.org/api/"
     },
     {
       name  = "WCA_FRONTEND_API_URL"
-      value = "https://www.worldcubeassociation.org/api/v0/"
+      value = "https://www.worldcubeassociation.org/api/"
+    },
+    {
+      name  = "PROPRIETARY_FONT"
+      value = "TTNormsPro"
     },
     {
       name = "NEXTAUTH_URL"

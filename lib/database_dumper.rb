@@ -106,13 +106,12 @@ module DatabaseDumper
           forbid_newcomers
           forbid_newcomers_reason
           auto_close_threshold
-          auto_accept_registrations
-          auto_accept_preference
           auto_accept_disable_threshold
           newcomer_month_reserved_spots
           competitor_can_cancel
         ],
         db_default: %w[
+          auto_accept_preference
           connected_stripe_account_id
         ],
         fake_values: {
@@ -175,6 +174,7 @@ module DatabaseDumper
     }.freeze,
     "connected_paypal_accounts" => :skip_all_rows,
     "connected_stripe_accounts" => :skip_all_rows,
+    "manual_payment_integrations" => :skip_all_rows,
     "continents" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -313,6 +313,17 @@ module DatabaseDumper
           created_at
           updated_at
           old_type
+          linked_round_id
+        ],
+      ),
+    }.freeze,
+    "linked_rounds" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          wcif_id
+          created_at
+          updated_at
         ],
       ),
     }.freeze,
@@ -812,6 +823,7 @@ module DatabaseDumper
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
     "server_settings" => {
+      where_clause: "WHERE name NOT IN (#{ServerSetting::HIDDEN_SETTINGS.map { "'#{it}'" }.join(',')})",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           name
@@ -953,7 +965,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "roles_metadata_banned_competitors" => :skip_all_rows,
-    "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
     "ticket_logs" => :skip_all_rows,
@@ -1310,7 +1321,7 @@ module DatabaseDumper
 
   def self.mysql_cli_creds
     config = ActiveRecord::Base.connection_db_config.configuration_hash
-    "--user=#{config[:username]} --password=#{config[:password] || "''"} --port=#{config[:port]} --host=#{config[:host]}"
+    "--user=#{config[:username]} --password=#{config[:password] || "''"} --port=#{config[:port]} --host=#{config[:host]} #{'--ssl-ca=/rails/rds-cert.pem' if Rails.env.production?}"
   end
 
   def self.mysql(command, database = nil)

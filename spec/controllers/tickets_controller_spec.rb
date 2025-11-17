@@ -89,4 +89,97 @@ RSpec.describe TicketsController do
       expect(user.gender).to eq User::ANONYMOUS_GENDER
     end
   end
+
+  describe 'POST #post_results' do
+    context 'when signed in as results team member' do
+      let(:results_ticket) { create(:competition_result_ticket) }
+      let(:wrt_member) { create(:user, :wrt_member) }
+
+      before :each do
+        sign_in wrt_member
+      end
+
+      it "sends the notification emails to users that competed" do
+        competition = results_ticket.competition
+        round = create(:round, competition: competition, number: 2)
+        create_list(:user_with_wca_id, 4, results_notifications_enabled: true).each do |user|
+          create(:result, person: user.person, competition_id: competition.id, event_id: "333", round: round)
+        end
+
+        expect(competition.results_posted_at).to be_nil
+        expect(competition.results_posted_by).to be_nil
+        expect(CompetitionsMailer).to receive(:notify_users_of_results_presence).and_call_original.exactly(4).times
+        expect do
+          post :post_results, params: { ticket_id: results_ticket.ticket.id }
+        end.to change(enqueued_jobs, :size).by(4)
+        competition.reload
+        expect(competition.results_posted_at.to_f).to be < Time.now.to_f
+        expect(competition.results_posted_by).to eq wrt_member.id
+      end
+
+      it "sends notifications of id claim possibility to newcomers" do
+        competition = results_ticket.competition
+        create_list(:registration, 2, :accepted, :newcomer, competition: competition)
+        create_list(:registration, 3, :pending, :newcomer, competition: competition)
+        create_list(:registration, 4, :accepted, competition: competition)
+        round = create(:round, competition: competition, number: 2)
+        create_list(:user_with_wca_id, 4).each do |user|
+          create(:result, person: user.person, competition_id: competition.id, event_id: "333", round: round)
+        end
+
+        expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.twice
+        expect do
+          post :post_results, params: { ticket_id: results_ticket.ticket.id }
+        end.to change(enqueued_jobs, :size).by(2)
+      end
+
+      it "assigns wca id when user matches one person in results" do
+        competition = results_ticket.competition
+        reg = create(:registration, :accepted, competition: competition)
+        round = create(:round, competition: competition, number: 2)
+        create(:result, competition: competition, person: reg.person, event_id: "333", round: round)
+
+        wca_id = reg.user.wca_id
+        reg.user.update(wca_id: nil)
+
+        post :post_results, params: { ticket_id: results_ticket.ticket.id }
+
+        expect(reg.user.reload.wca_id).to eq wca_id
+      end
+
+      it "does not assign wca id when user matches several persons in results" do
+        competition = results_ticket.competition
+        user = create(:user_with_wca_id)
+        person = user.person
+        create(:registration, :accepted, competition: competition, user: user)
+        round = create(:round, competition: competition, number: 2)
+        create(:result, competition: competition, person: person, event_id: "333", round: round)
+        another_person = create(:person, name: person.name, country_id: person.country_id, gender: person.gender, dob: person.dob)
+        create(:result, competition: competition, person: another_person, event_id: "333", round: round)
+
+        user.update(wca_id: nil)
+
+        post :post_results, params: { ticket_id: results_ticket.ticket.id }
+
+        expect(user.reload.wca_id).to be_nil
+      end
+
+      it "does not assign wca id when user matches results but wca id is already assigned" do
+        competition = results_ticket.competition
+        user = create(:user_with_wca_id)
+        user2 = create(:user_with_wca_id)
+        round = create(:round, competition: competition, number: 2)
+        create(:registration, :accepted, competition: competition, user: user)
+        create(:result, competition: competition, person: user.person, event_id: "333", round: round)
+
+        wca_id = user.wca_id
+        user.update(wca_id: nil)
+        user2.update(wca_id: wca_id)
+
+        post :post_results, params: { ticket_id: results_ticket.ticket.id }
+
+        expect(user.reload.wca_id).to be_nil
+      end
+    end
+  end
 end

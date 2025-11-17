@@ -5,7 +5,6 @@ module ResultsValidators
     NOT_333_MAIN_EVENT_WARNING = :not_333_main_event_warning
     NO_MAIN_EVENT_WARNING = :no_main_event_warning
     UNEXPECTED_RESULTS_ERROR = :unexpected_results_error
-    UNEXPECTED_ROUND_RESULTS_ERROR = :unexpected_round_results_error
     MISSING_RESULTS_WARNING = :missing_results_warning
     MISSING_ROUND_RESULTS_ERROR = :missing_round_results_error
     UNEXPECTED_COMBINED_ROUND_ERROR = :unexpected_combined_round_error
@@ -101,11 +100,6 @@ module ResultsValidators
                                            :rounds, competition.id,
                                            round_id: round_id)
           end
-        end
-        unexpected.each do |round_id|
-          @errors << ValidationError.new(UNEXPECTED_ROUND_RESULTS_ERROR,
-                                         :rounds, competition.id,
-                                         round_id: round_id)
         end
       end
   end

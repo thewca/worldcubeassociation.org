@@ -774,16 +774,16 @@ fr-CA:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: a2c83f6
+        #original_hash: 68da290
         receive_delegate_reports: >-
           Si vous êtes un Délégué Senior, membre du WRC ou du WQAC, vous recevez
-          les rapports par défaut. Note : le changement peut prendre jusqu'à une
-          heure pour être pris en compte.
-        #original_hash: 7e12f49
+          les rapports par défaut. Note : le changement peut prendre jusqu'à 12
+          heures pour être pris en compte.
+        #original_hash: 6043925
         delegate_reports_region: >-
           Si vous souhaitez recevoir tous les rapports, laissez ce champ vide
           (l'option du menu déroulant se trouve tout en haut). Remarque : la
-          modification peut prendre jusqu'à une heure pour être prise en compte.
+          modification peut prendre jusqu'à 12 heures pour être prise en compte.
         #original_hash: 5fd4322
         otp_attempt: >-
           Consultez l'application mobile que vous avez configuré pour obtenir un
@@ -851,14 +851,14 @@ fr-CA:
           Délégués puissent les référencer dans leurs commentaires. Même s'ils
           semblent courants, listez au moins les incidents principaux. Merci de
           cocher les cases ci-dessous si vous avez besoin d'un avis.
-        #original_hash: dcd01b6
+        #original_hash: 1d57288
         setup_images: >-
-          Veuillez choisir au moins %{image_count} d'images qui illustrent la
-          configuration de la salle (zone de mélange, zone de compétition,
-          etc.). Vous pouvez sélectionner plusieurs fichiers à la fois. Vous ne
-          pouvez supprimer des images que lorsque suffisamment d'autres images
-          ont été téléchargées (si vous souhaitez remplacer une image, vous
-          devez d'abord télécharger la nouvelle image, puis supprimer
+          Vous DEVEZ choisir au moins %{image_count} d'images qui illustrent la
+          zone de mélange et celle de compétition (d'autres images sont les
+          bienvenues). Vous pouvez sélectionner plusieurs fichiers à la fois.
+          Vous ne pouvez supprimer des images que lorsque suffisamment d'autres
+          images ont été téléchargées (si vous souhaitez remplacer une image,
+          vous devez d'abord télécharger la nouvelle image, puis supprimer
           l'ancienne).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
@@ -1061,7 +1061,7 @@ fr-CA:
           otp_email:
             #original_hash: a238ac2
             subject: Votre code à usage unique pour le site internet de la WCA
-            #original_hash: 7ccea57
+            #original_hash: b235c68
             2fa_attempt: >-
               Vous être en train de vous connecter sur le site de la WCA.
               L'authentification à deux facteur est activée pour votre compte,
@@ -1215,6 +1215,22 @@ fr-CA:
         400_contact_html: >-
           Si vous pensez qu'il s'agit d'une erreur, merci de <a
           href=%{contact_url}>cliquer ici</a> pour le signaler.
+        #original_hash: 8fec548
+        comp_not_found: Compétition introuvable
+        #original_hash: 8342dcb
+        comp_not_found_action: >-
+          Nous n'avons pas trouvé de compétition avec l'identifiant « %{comp_id}
+          ». Veuillez effectuer une recherche à l'aide de la barre de recherche.
+        #original_hash: 616d097
+        comp_not_found_action_2: >-
+          Si vous avez suivi un lien depuis un autre site web pour arriver ici,
+          veuillez signaler à ce site web que son lien est incorrect.
+        #original_hash: 6344d1b
+        session_expired: Session expirée
+        #original_hash: 7114c05
+        session_expired_action: >-
+          Votre session a expiré. Veuillez actualiser la page, réessayer
+          l'action ou vous reconnecter pour continuer.
     doorkeeper:
       applications:
         help:
@@ -1696,7 +1712,7 @@ fr-CA:
       form:
         contact_email:
           #original_hash: 25e3a06
-          label: Email de contact
+          label: Courriel de contact
         wca_id:
           #original_hash: 7951ca7
           label: Saisir l'identifiant WCA
@@ -2013,7 +2029,7 @@ fr-CA:
         qu'elle puisse être effective.
       #original_hash: f572e4a
       pending_mail_confirmation: >-
-        Ce compte est en attente de confirmation de la nouvelle adresse email
+        Ce compte est en attente de confirmation de la nouvelle adresse courriel
         %{email}.
       #original_hash: a96e012
       pending_avatar_confirmation: Ce compte est en attente de confirmation d'une nouvelle photo de profil.
@@ -2377,7 +2393,7 @@ fr-CA:
         #original_hash: 68512ca
         waitlisted_html: >-
           La compétition est pleine, mais vous avez été placé sur une liste
-          d'attente, et vous recevrez un email si suffisamment de places se
+          d'attente, et vous recevrez un courriel si suffisamment de places se
           libèrent pour que vous puissiez y participer. Vérifiez votre position
           sur la liste d'attente %{here}.
         #original_hash: f8da4c2
@@ -2794,8 +2810,6 @@ fr-CA:
         devraient être disponibles sous peu.
       #original_hash: 6c46989
       results_already_posted: Les résultats ont déjà été postés.
-      #original_hash: 360971e
-      results_posted: Résultats postés avec succès !
       #original_hash: 9a15889
       results_preview_alert: Vous visualisez des résultats qui n'ont pas encore été postés.
       #original_hash: 52f0c1d
@@ -3017,12 +3031,14 @@ fr-CA:
         voulez participer lors de votre inscription en ligne, cependant vous
         pouvez ajouter des épreuves à votre inscription jusqu'à ce que l'épreuve
         commence.
-      #original_hash: 1707b32
+      #original_hash: 121b55b
       on_the_spot_registration_fee_html: >-
-        Les inscriptions sur place seront acceptées pour un montant de
-        %{on_the_spot_base_entry_fee}.
-      #original_hash: 3be338e
-      on_the_spot_registration_free: Les inscriptions sur place seront acceptées gratuitement.
+        Les inscriptions sur place seront acceptées s'il reste des places
+        disponibles pour un montant de %{on_the_spot_base_entry_fee}.
+      #original_hash: 9c63a10
+      on_the_spot_registration_free: >-
+        Les inscriptions sur place seront acceptées gratuitement s'il reste des
+        places disponibles.
       #original_hash: ed6aa11
       no_on_the_spot_registration: Aucune inscription sur place ne sera acceptée.
       #original_hash: 2f2ffa2
@@ -3554,7 +3570,7 @@ fr-CA:
             Nom de la ville où la compétition a lieu ainsi que la province /
             état (dans les pays où c'est l'usage). Ne pas mettre le pays.
             Exemple d'entrée valide : Montréal, Quebec
-          #original_hash: a6acbaa
+          #original_hash: aa8ebf8
           name_html: >-
             La salle où la compétition à lieu. %{md}. Par exemple : [École de
             Technologie Supérieure](https://www.etsmtl.ca/)
@@ -3914,8 +3930,8 @@ fr-CA:
           d’attente et vous recevrez un courriel si suffisamment de places sont
           disponibles pour que vous puissiez y assister.
       list:
-        #original_hash: e8f8827
-        empty: Aucune
+        #original_hash: b2ed82f
+        empty: Aucun
         #original_hash: c15d545
         spots_remaining_plural:
           zero: Aucune place disponible
@@ -4486,8 +4502,6 @@ fr-CA:
     cancelled_by_html: 'Annulée par %{name} le %{date_time}'
     #original_hash: 6851f7a
     cancel_confirm: Êtes-vous sûr·e de vouloir annuler cette compétition ?
-    #original_hash: 99120ff
-    post_results: Poster les résultats
     #original_hash: e8714ac
     results_posted_by_html: 'Postés par %{poster_name} le %{date_time}'
     #original_hash: 039ddbf
@@ -4680,8 +4694,8 @@ fr-CA:
         newcomer_checks: Vérifications des nouveaux compétiteurs
         #original_hash: 678d15b
         submit_results: Envoyer les résultats
-        #original_hash: d8bb428
-        match_scrambles: Soumettre les mélanges
+        #original_hash: 1d0b625
+        upload_scrambles: Mettre en ligne les mélanges
         #original_hash: 21f47fb
         delegate_report: Rapport des Délégués
         #original_hash: 3e69f54
@@ -4868,6 +4882,8 @@ fr-CA:
       paypal: PayPal
       #original_hash: 4d08ec5
       stripe: Stripe
+      #original_hash: 7209be5
+      manual: Manuel/Externe
     payment_setup:
       #original_hash: 50d8ee0
       external_dashboard: 'Tableau de bord %{provider}'
@@ -4891,6 +4907,8 @@ fr-CA:
       confirm_account_disconnect: >-
         Êtes-vous sûr·e de vouloir déconnecter le compte %{provider} ? Cette
         action est irréversible.
+      #original_hash: 7261fb9
+      edit_account: Modifier le compte
       #original_hash: ffee885
       supported_currency_warning: "Veuillez vous assurer que la devise que vous avez sélectionnée est prise en charge par votre intégration de paiement choisie ! Les devises prises en charge dépendront du pays où le compte est basé, vous pouvez les vérifier ci-dessous\_:"
       #original_hash: ea493e6
@@ -4899,8 +4917,10 @@ fr-CA:
       provider_heading: 'Paiements %{provider}'
       #original_hash: d907ad7
       accept_payments_header: Accepter les paiements d’inscription
-      #original_hash: afcfefc
-      connect_button: 'Se connecter avec %{provider}'
+      #original_hash: 5100703
+      manual_payments_header: Configurer les paiements manuels
+      #original_hash: 2e39846
+      connect_button: 'Configurer %{provider}'
       connect_account_info:
         #original_hash: 3e298a2
         stripe: >-
@@ -4915,6 +4935,12 @@ fr-CA:
           PayPal via la page de la compétition. Si vous n’avez pas encore de
           compte PayPal Business, vous pouvez toujours cliquer sur le bouton
           ci-dessous et il vous guidera tout au long du processus de création.
+        #original_hash: f8b9924
+        manual: >-
+          Définissez les instructions de paiement pour les compétiteurs. Les
+          compétiteurs pourront indiquer quand ils ont effectué leur paiement et
+          fournir une référence de paiement que vous pourrez vérifier dans vos
+          registres dans le service de paiement externe que vous utilisez.
       connect_account_warning:
         #original_hash: 025b561
         stripe: >-
@@ -4926,6 +4952,8 @@ fr-CA:
           La connexion de votre compte PayPal permet au site WCA d’acheminer les
           paiements vers vous et d’émettre des remboursements directement sur
           votre compte PayPal.
+        #original_hash: da39a3e
+        manual: ''
       #original_hash: f7842cb
       currently_connected_info: >-
         Cette compétition est configurée pour accepter les paiements par
@@ -4959,6 +4987,14 @@ fr-CA:
           display_name: Nom
           #original_hash: e0edc01
           primary_email: Adresse courriel
+        manual:
+          #original_hash: d30593f
+          payment_instructions: Instructions de paiement (affichées sur la page de la compétition)
+          #original_hash: 2b35dac
+          payment_reference_label: >-
+            Quelles informations l'utilisateur doit-il vous fournir pour que
+            vous puissiez identifier son paiement ? (par exemple, numéro de
+            référence du paiement / identifiant du compte / etc.)
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:
@@ -5336,7 +5372,7 @@ fr-CA:
       casse-têtes à de nouveaux groupes de personnes permet à notre communauté
       de se renforcer. Un document présentant la vision du Bureau des Directeurs
       et sa stratégie pour la WCA est disponible <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">ici</a>.</p>
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">ici</a>.</p>
     #original_hash: 3d2c988
     whats_next_title: Le futur pour la WCA ?
     #original_hash: 5b712be

@@ -119,11 +119,6 @@ class User < ApplicationRecord
          #   In order to achieve alphanumeric strings of length n, we need to generate n/2 random bytes.
          otp_backup_code_length: (BACKUP_CODES_LENGTH / 2),
          otp_number_of_backup_codes: NUMBER_OF_BACKUP_CODES
-  devise :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
-
-  def jwt_payload
-    { 'user_id' => id }
-  end
 
   # Backup OTP are stored as a string array in the db
   serialize :otp_backup_codes, coder: YAML
@@ -647,6 +642,7 @@ class User < ApplicationRecord
       fixResults
       mergeProfiles
       mergeUsers
+      helpfulQueries
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -753,6 +749,7 @@ class User < ApplicationRecord
           panel_pages[:downloadVoters],
           panel_pages[:bannedCompetitors],
           panel_pages[:delegateProbations],
+          panel_pages[:helpfulQueries],
         ],
       },
       weat: {
@@ -864,7 +861,7 @@ class User < ApplicationRecord
   end
 
   def can_manage_regional_organizations?
-    admin? || board_member?
+    admin? || board_member? || weat_team?
   end
 
   def can_create_competitions?
@@ -1551,6 +1548,56 @@ class User < ApplicationRecord
       # confusing, so removing the potential duplicates of new_user as well.
       self.potential_duplicate_persons.delete_all
       new_user.potential_duplicate_persons.delete_all
+    end
+  end
+
+  MY_COMPETITIONS_SERIALIZATION_HASH = {
+    only: %w[id name website start_date end_date registration_open],
+    methods: %w[url city country_iso2 results_posted? visible? confirmed? cancelled? report_posted? short_display_name registration_status],
+    include: %w[championships],
+  }.freeze
+
+  def my_competitions
+    ActiveRecord::Base.connected_to(role: :read_replica) do
+      competition_ids = self.organized_competition_ids
+      competition_ids.concat(self.delegated_competition_ids)
+
+      user_registrations = self.registrations.joins(:competition).select(:competition_id, :competing_status)
+      registrations = user_registrations.accepted.merge(Competition.results_posted.invert_where).to_a
+      registrations.concat(user_registrations.waitlisted.merge(Competition.upcoming))
+      registrations.concat(user_registrations.pending.merge(Competition.upcoming))
+
+      registered_for_by_competition_id = registrations.uniq.to_h do |r|
+        [r.competition_id, r.competing_status]
+      end
+
+      competition_ids.concat(registered_for_by_competition_id.keys)
+      competition_ids.concat(self.person.competition_ids) if self.person.present?
+
+      # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
+      # For example, mailing all competitors about the cancellation.
+      # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
+      competitions = Competition.not_cancelled
+                                .or(Competition.not_over)
+                                .includes(:delegate_report, :championships)
+                                # cannot use `find` here, because `find` violently explodes when some records are not found,
+                                # and in case of cancelled competitions we might have a registration but the scope above hides the competition.
+                                .where(id: competition_ids.uniq)
+                                .sort_by { it.start_date || 20.years.from_now }
+                                .reverse
+
+      past_competitions, not_past_competitions = competitions.partition(&:probably_over?)
+      bookmarked_competitions = self.competitions_bookmarked
+                                    .not_over
+                                    .sort_by(&:start_date)
+
+      grouped_competitions = {
+        past: past_competitions,
+        future: not_past_competitions,
+        bookmarked: bookmarked_competitions,
+      }
+
+      [grouped_competitions, registered_for_by_competition_id]
     end
   end
 end

@@ -1,0 +1,22 @@
+type: object
+required:
+  - eventId
+  - best
+  - worldRanking
+  - continentalRanking
+  - nationalRanking
+  - type
+properties:
+  eventId:
+    type: string
+  best:
+    type: number
+  worldRanking:
+    type: number
+  continentalRanking:
+    type: number
+  nationalRanking:
+    type: number
+  type:
+    type: string
+    enum: ["single", "average"]

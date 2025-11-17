@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_07_120000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -459,7 +459,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
     t.integer "competitor_can_cancel", default: 0, null: false
     t.integer "newcomer_month_reserved_spots"
     t.integer "auto_close_threshold"
-    t.boolean "auto_accept_registrations", default: false, null: false
     t.integer "auto_accept_disable_threshold"
     t.integer "auto_accept_preference", default: 0, null: false
     t.index ["cancelled_at"], name: "index_competitions_on_cancelled_at"
@@ -666,7 +665,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
-    t.integer "round_id"
+    t.integer "round_id", null: false
     t.string "format_id", limit: 1, default: "", null: false
     t.integer "value1", default: 0, null: false
     t.integer "value2", default: 0, null: false
@@ -741,10 +740,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
     t.datetime "digest_sent_at", precision: nil
   end
 
-  create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "jti", null: false
-    t.datetime "exp", null: false
-    t.index ["jti"], name: "index_jwt_denylist_on_jti"
+  create_table "linked_rounds", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "wcif_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "live_attempt_history_entries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -793,6 +792,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
+  create_table "manual_payment_integrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "payment_reference_label", null: false
+    t.text "payment_instructions", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "oauth_access_grants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "resource_owner_id", null: false
     t.integer "application_id", null: false
@@ -831,6 +837,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
     t.string "owner_type"
     t.boolean "dangerously_allow_any_redirect_uri", default: false, null: false
     t.boolean "confidential", default: true, null: false
+    t.boolean "superapp", default: false, null: false
     t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
@@ -1050,6 +1057,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
     t.datetime "updated_at", precision: nil, null: false
     t.integer "refunded_registration_payment_id"
     t.integer "user_id"
+    t.boolean "is_completed", default: true, null: false
+    t.datetime "paid_at"
     t.index ["receipt_type", "receipt_id"], name: "index_registration_payments_on_receipt"
     t.index ["refunded_registration_payment_id"], name: "idx_reg_payments_on_refunded_registration_payment_id"
     t.index ["registration_id"], name: "index_registration_payments_on_registration_id"
@@ -1099,7 +1108,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
-    t.integer "round_id"
+    t.integer "round_id", null: false
     t.string "format_id", limit: 1, default: "", null: false
     t.integer "value1", default: 0, null: false
     t.integer "value2", default: 0, null: false
@@ -1187,7 +1196,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
     t.text "round_results", size: :medium
     t.integer "total_number_of_rounds", null: false
     t.string "old_type", limit: 1
+    t.bigint "linked_round_id"
     t.index ["competition_event_id", "number"], name: "index_rounds_on_competition_event_id_and_number", unique: true
+    t.index ["linked_round_id"], name: "index_rounds_on_linked_round_id"
   end
 
   create_table "sanity_check_categories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1574,6 +1585,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "results", "rounds"
+  add_foreign_key "rounds", "linked_rounds"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "schedule_activities", "rounds"

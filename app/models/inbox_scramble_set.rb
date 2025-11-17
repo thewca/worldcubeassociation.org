@@ -14,6 +14,7 @@ class InboxScrambleSet < ApplicationRecord
 
   validates :ordered_index, uniqueness: { scope: :matched_round_id }
 
+  delegate :round_type_id, to: :matched_round, allow_nil: true
   delegate :wcif_id, to: :matched_round, allow_nil: true, prefix: true
   delegate :original_filename, to: :scramble_file_upload, allow_nil: true
 

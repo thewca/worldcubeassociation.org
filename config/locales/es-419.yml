@@ -747,8 +747,8 @@ es-419:
           AAAA-MM-DD.
         #original_hash: ac908c9
         name: >-
-          Introduce el nombre completo del competidor con corrección, por
-          ejemplo <strong>Darío Méndez</strong> y no <strong>D Mendez</strong>.
+          Introduce el nombre completo del competidor correctamente, por ejemplo
+          <strong>Martín López</strong> y no <strong>martin lopez</strong>.
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
@@ -779,16 +779,16 @@ es-419:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 27c2251
+        #original_hash: c564b74
         receive_delegate_reports: >-
           Si eres un Delegado Senior o Miembro del WRC o WQAC, recibirás
           informes de delegados de Competiciones WCA de forma predeterminada.
-          Nota: el cambio puede demorar hasta una hora en hacer efecto.
-        #original_hash: 364624c
+          Nota: el cambio puede demorar hasta 12 horas en hacer efecto.
+        #original_hash: 0017d38
         delegate_reports_region: >-
           Si quieres recibir todos los informes de delegados de Competiciones
           WCA, deja este campo en blanco (la primera opción del menú
-          desplegable). Nota: el cambio puede demorar hasta una hora en hacer
+          desplegable). Nota: el cambio puede demorar hasta 12 horas en hacer
           efecto.
         #original_hash: 0627e5c
         otp_attempt: >-
@@ -856,14 +856,14 @@ es-419:
           Si todos los incidentes fueron genéricos, enumera al menos los casos
           más notorios. Marca los recuadros apropiados si estás buscando
           retroalimentación de WIC o WRC.
-        #original_hash: 8af00aa
+        #original_hash: f2309fc
         setup_images: >-
-          Por favor elige al menos %{image_count} imágenes que ilustren la
-          disposición empleada en la competición (zona de mezclas, zona de
-          competición, etc.). Puedes elegir múltiples archivos a la vez. Puedes
-          eliminar imágenes solo cuando suficientes otras imágenes se hayan
-          subido (si quieres reemplazar una imagen, necesitas subir la nueva
-          primero, y luego eliminar la antigua).
+          SE DEBEN incluir al menos %{image_count} imágenes que ilustren la zona
+          de mezclas y de competición (otras imágenes son bienvenidas también).
+          Puedes elegir múltiples archivos a la vez. Puedes eliminar imágenes
+          solo cuando suficientes otras se hayan subido (si quieres reemplazar
+          una imagen, necesitas subir la nueva primero, y luego eliminar la
+          antigua).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1211,6 +1211,22 @@ es-419:
         400_contact_html: >-
           Si crees que esto es un error por favor <a href=%{contact_url}>click
           aquí</a> para reportarlo.
+        #original_hash: 508c106
+        comp_not_found: Competición no encontrada
+        #original_hash: c0e86d5
+        comp_not_found_action: >-
+          No pudimos encontrar una competición con el ID "%{comp_id}". Por
+          favor, búscala de otra forma.
+        #original_hash: 695f7ba
+        comp_not_found_action_2: >-
+          Si vienes de otro sitio web, por favor avisa a los propietarios de ese
+          sitio que su enlace es incorrecto.
+        #original_hash: 7f8f419
+        session_expired: Sesión expirada
+        #original_hash: f3e688a
+        session_expired_action: >-
+          Tu sesión ha expirado. Por favor refresca la página y vuelve a
+          intentarlo, o inicia sesión nuevamente para continuar.
     doorkeeper:
       applications:
         help:
@@ -2727,8 +2743,6 @@ es-419:
         estarán disponibles en breve.
       #original_hash: e205d73
       results_already_posted: Los resultados ya han sido cargados.
-      #original_hash: 376f461
-      results_posted: ¡Resultados cargados con éxito!
       #original_hash: afe3a23
       results_preview_alert: Estás consultando resultados que no se han publicado aún.
       #original_hash: 16dd227
@@ -2947,12 +2961,12 @@ es-419:
         Sugerimos que te anotes a los eventos en los que desees competir al
         completar tu registro online. Sin embargo, podrás anotarte a nuevos
         eventos hasta el comienzo de los mismos según corresponda.
-      #original_hash: cf7be5d
+      #original_hash: 51ef4f3
       on_the_spot_registration_fee_html: >-
-        Se aceptarán registros in situ con una cuota base de registro de
-        %{on_the_spot_base_entry_fee}.
-      #original_hash: 1637bea
-      on_the_spot_registration_free: Se aceptarán registros in situ de forma gratuita.
+        Se aceptarán registros in situ si aún hay lugares, con una cuota base de
+        registro de %{on_the_spot_base_entry_fee}.
+      #original_hash: 2b4ea65
+      on_the_spot_registration_free: Se aceptarán registros in situ de forma gratuita si aún hay lugares.
       #original_hash: f5f687d
       no_on_the_spot_registration: No se aceptarán registros in situ.
       #original_hash: 4df139d
@@ -3278,7 +3292,7 @@ es-419:
         #original_hash: fdba578
         short_name: Nombre breve
         #original_hash: f91b080
-        name_reason: Razón para el nombre
+        name_reason: Razón para el nombre (¡completar en <b>inglés</b>!)
         venue:
           #original_hash: 0f21717
           country_id: Región
@@ -3593,7 +3607,7 @@ es-419:
             jurídicamente vinculantes para el pago de las cuotas.</b>
           #original_hash: 8c4fdf8
           on_the_spot_entry_fee: >-
-            Si esto se pone a 0, se mostrará una frase indicando que se aceptan
+            Si esto se pone en 0, se mostrará una frase indicando que se aceptan
             los registros in situ de forma gratuita.
           #original_hash: 0419547
           guest_entry_fee: >-
@@ -4238,7 +4252,7 @@ es-419:
       #original_hash: a2e4fc9
       event_change_deadline_with_ots: >-
         La fecha límite para actualizar eventos debe ser durante la competición
-        si se aceptan los registros in situ.
+        si se aceptan registros in situ.
       #original_hash: e6400f7
       on_the_spot_with_past_event_change_deadline: >-
         No se pueden tener registros in situ si la fecha límite para actualizar
@@ -4358,8 +4372,6 @@ es-419:
     cancelled_by_html: 'Cancelada por %{name} en %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: ¿Estás seguro de que quieres cancelar la competición?
-    #original_hash: 01de5ee
-    post_results: Publicar los resultados
     #original_hash: b6513f1
     results_posted_by_html: 'Publicado por %{poster_name} en %{date_time}'
     #original_hash: a6b5efe
@@ -4553,8 +4565,8 @@ es-419:
         newcomer_checks: Chequeos de primerizos
         #original_hash: f3d6278
         submit_results: Entregar resultados
-        #original_hash: e2d046b
-        match_scrambles: Enviar mezclas
+        #original_hash: dd2e98f
+        upload_scrambles: Subir mezclas
         #original_hash: 4c9f914
         delegate_report: Informe del Delegado
         #original_hash: b233e77
@@ -4738,6 +4750,8 @@ es-419:
       paypal: PayPal
       #original_hash: 4d08ec5
       stripe: Stripe
+      #original_hash: 5cd5075
+      manual: Manual/Externos
     payment_setup:
       #original_hash: 0aa09ee
       external_dashboard: 'Panel de control de %{provider}'
@@ -4757,6 +4771,8 @@ es-419:
       confirm_account_disconnect: >-
         ¿Seguro que deseas desvincular tu cuenta de %{provider}? Esta acción no
         puede deshacerse.
+      #original_hash: a7bbd29
+      edit_account: Editar cuenta
       #original_hash: ddea6cf
       supported_currency_warning: >-
         Por favor, asegúrate de que la moneda seleccionada es soportada por tu
@@ -4768,8 +4784,10 @@ es-419:
       provider_heading: 'Pagos de %{provider}'
       #original_hash: 40a098a
       accept_payments_header: Aceptar pagos de registro
-      #original_hash: 7ebe178
-      connect_button: 'Conectar con %{provider}'
+      #original_hash: ebf1ae6
+      manual_payments_header: Configurar pagos manuales
+      #original_hash: 399052b
+      connect_button: 'Configurar %{provider}'
       connect_account_info:
         #original_hash: f3fdb64
         stripe: >-
@@ -4782,6 +4800,11 @@ es-419:
           Se necesita una cuenta de PayPal Business para aceptar pagos via
           PayPal. Si no tienes una cuenta PayPal Business, puedes clickear el
           botón a continuación igualmente y se te guiará en el proceso.
+        #original_hash: d32cb06
+        manual: >-
+          Definir instrucciones de pago para los competidores. Podrán indicar
+          cuando han pagado, y proveer una referencia del pago para tu control
+          en el servicio de pago externo que uses.
       connect_account_warning:
         #original_hash: 53adda3
         stripe: >-
@@ -4791,6 +4814,8 @@ es-419:
         paypal: >-
           Conectar tu cuenta de PayPal permite al sitio web de la WCA rutear
           pagos a tí y emitir reembolsos directamente a tu cuenta.
+        #original_hash: da39a3e
+        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         Esta competición ha sido configurada para recibir pagos a través de
@@ -4823,6 +4848,13 @@ es-419:
           display_name: Nombre
           #original_hash: 84add5b
           primary_email: Correo
+        manual:
+          #original_hash: e5f0dfd
+          payment_instructions: Instrucciones de pago (se mostrará en la página de la competición)
+          #original_hash: 5e7242c
+          payment_reference_label: >-
+            ¿Qué información precisas para identificar el pago? (ej. número de
+            referencia, ID de cuenta, etc.)
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:
@@ -5193,7 +5225,7 @@ es-419:
       gente joven involucrada y que introducir estos eventos a nuevos grupos de
       gente permite a nuestra comunidad general fortalecerse. Se puede encontrar
       <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">aquí</a>
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">aquí</a>
       un documento que contiene la visión y estrategia de la Junta Directiva
       para la WCA .</p>
     #original_hash: f64ccc7
