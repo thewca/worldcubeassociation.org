@@ -50,9 +50,7 @@ class LiveResult < ApplicationRecord
 
   def recompute_positions
     # For linked rounds we need to merge the results and calculate a new global pos
-    if round.linked_round.present?
-      recompute_global_pos(round.linked_round.merged_live_results)
-    end
+    recompute_global_pos(round.linked_round.merged_live_results) if round.linked_round.present?
 
     rank_by = round.format.rank_by_column
     # We only want to decide ties by single in events decided by average

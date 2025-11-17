@@ -2,7 +2,7 @@
 
 class AddLocalPos < ActiveRecord::Migration[7.2]
   def change
-    change_table :live_results do |t|
+    change_table :live_results, bulk: true do |t|
       t.rename :ranking, :local_pos
       t.integer :global_pos
     end
