@@ -14,7 +14,7 @@ class LiveController < ApplicationController
     round_id = params.require(:round_id)
     registration_id = params.require(:registration_id)
 
-    return render json: { status: "result already exist" }, status: :unprocessable_entity if LiveResult.exists?(round_id: round_id, registration_id: registration_id)
+    return render json: { status: "result already exist" }, status: :unprocessable_content if LiveResult.exists?(round_id: round_id, registration_id: registration_id)
 
     AddLiveResultJob.perform_later(results, round_id, registration_id, current_user)
 
@@ -28,7 +28,7 @@ class LiveController < ApplicationController
 
     result = LiveResult.includes(:live_attempts).find_by(round: round, registration_id: registration_id)
 
-    return render json: { status: "result does not exist" }, status: :unprocessable_entity if result.blank?
+    return render json: { status: "result does not exist" }, status: :unprocessable_content if result.blank?
 
     previous_attempts = result.live_attempts.index_by(&:attempt_number)
 
