@@ -91,12 +91,12 @@ class LiveResult < ApplicationRecord
     end
 
     def recompute_advancing
+      has_linked_round = round.linked_round.present?
+      advancement_determining_column = has_linked_round ? 'global_pos' : 'local_pos'
+      advancement_determining_results = has_linked_round ? round.linked_round.live_results : round.live_results
+
       # Only ranked results can be considered for advancing.
-      round_results = if round.linked_round.present?
-                        round.linked_round.live_results.where.not(global_pos: nil)
-                      else
-                        round.live_results.where.not(local_pos: nil)
-                      end
+      round_results = advancement_determining_results.where("#{advancement_determining_column} != NULL")
       round_results.update_all(advancing: false, advancing_questionable: false)
 
       missing_attempts = round.total_accepted_registrations - round_results.count
@@ -110,11 +110,8 @@ class LiveResult < ApplicationRecord
                            max_qualifying = (round_results.count * 0.75).floor
                            [round.advancement_condition.max_advancing(round_results), max_qualifying].min
                          end
-      if round.linked_round.present?
-        round_results.update_all("advancing_questionable = global_pos BETWEEN 1 AND #{qualifying_index}")
-      else
-        round_results.update_all("advancing_questionable = local_pos BETWEEN 1 AND #{qualifying_index}")
-      end
+
+      round_results.update_all("advancing_questionable = #{advancement_determining_column} BETWEEN 1 AND #{qualifying_index}")
 
       # Determine which results would advance if everyone achieved their best possible attempt.
       advancing_ids = results_with_potential.take(qualifying_index).select(&:complete?).pluck(:id)
