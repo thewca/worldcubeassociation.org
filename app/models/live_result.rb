@@ -50,7 +50,7 @@ class LiveResult < ApplicationRecord
 
   def recompute_positions
     # For linked rounds we need to merge the results and calculate a new global pos
-    recompute_global_pos(round.linked_round.merged_live_results) if round.linked_round.present?
+    recompute_global_pos if round.linked_round.present?
 
     rank_by = round.format.rank_by_column
     # We only want to decide ties by single in events decided by average
@@ -122,23 +122,35 @@ class LiveResult < ApplicationRecord
       LiveResult.where(id: advancing_ids).update_all(advancing: true)
     end
 
-    def recompute_global_pos(sorted_results)
-      last_result = nil
-      last_pos = 0
-      tie_count = 0
+    def recompute_global_pos
+      rank_by = formats.first.rank_by_column
+      secondary_rank_by = formats.first.secondary_rank_by_column
 
-      sorted_results.each_with_index do |result, index|
-        tied = result.tied_with?(last_result)
-
-        if tied
-          result.update(global_pos: last_pos)
-          tie_count += 1
-        else
-          last_pos = index + 1 + tie_count
-          result.update(global_pos: last_pos)
-          last_result = result
-          tie_count = 0
-        end
-      end
+      ActiveRecord::Base.connection.exec_query <<-SQL.squish
+      UPDATE live_results r
+      LEFT JOIN (
+          SELECT id,
+                 RANK() OVER (
+                   ORDER BY person_best.#{rank_by} <= 0, person_best.#{rank_by} ASC
+                   #{", person_best.#{secondary_rank_by} <= 0, person_best.#{secondary_rank_by} ASC" if secondary_rank_by}
+                 ) AS rank
+          FROM (
+              SELECT lr.*
+              FROM live_results lr
+              INNER JOIN (
+                  SELECT person_id, MIN(#{rank_by}) AS best_value
+                  FROM live_results
+                  WHERE round_id IN #{round.linked_round.round_ids}
+                    AND best != 0
+                  GROUP BY person_id
+              ) b ON lr.person_id = b.person_id
+                 AND lr.#{rank_by} = b.best_value
+              WHERE lr.round_id IN #{round.linked_round.round_ids}
+          ) AS person_best
+      ) ranked
+      ON r.id = ranked.id
+      SET r.global_pos = ranked.rank
+      WHERE r.round_id IN #{round.linked_round.round_ids};
+    SQL
     end
 end
