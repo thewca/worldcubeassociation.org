@@ -174,7 +174,7 @@ export default function TableRow({
             </Table.Cell>
 
             <Table.Cell>
-              {competitionInfo['using_payment_integrations?']
+              {usingPayment
                 ? (
                   <PaidOn
                     withFullDate={dateIsExpanded}
@@ -188,7 +188,7 @@ export default function TableRow({
                 )}
             </Table.Cell>
 
-            {competitionInfo['using_payment_integrations?'] && (
+            {usingPayment && (
             <Table.Cell>
               {paymentAmount !== 0
                 ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
