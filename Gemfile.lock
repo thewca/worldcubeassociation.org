@@ -157,7 +157,7 @@ GEM
     aws-sdk-rds (1.298.0)
       aws-sdk-core (~> 3, >= 3.234.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.203.0)
+    aws-sdk-s3 (1.203.1)
       aws-sdk-core (~> 3, >= 3.234.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
@@ -1138,7 +1138,7 @@ CHECKSUMS
   aws-sdk-core (3.237.0) sha256=9a8b14167a75be07ba7cfd9d27075aa12f1ed897d6eaed808a1c6a20963af32b
   aws-sdk-kms (1.117.0) sha256=d3d655ae825ca0d6715555e2543e062fe14ccacf30bace04f3aefd6005b76c14
   aws-sdk-rds (1.298.0) sha256=1d1a5b29a3ae95f31f95c5b1541ad817cb4dc1af366442ff7a41287b2814f0e9
-  aws-sdk-s3 (1.203.0) sha256=6bbedb23ef260fcbd9564cacb8c3f4e3b07372da7fbb64e8d39d1bc0977fddf7
+  aws-sdk-s3 (1.203.1) sha256=edaa6ecc641ffa8564f38df237876876ac679b937ca8cd7873f6f9857d8f99b9
   aws-sdk-sqs (1.106.0) sha256=8e79bb3795e2570f60fc280f3ed73d666ffb21156fd1ee84eaedac92465a69df
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
   babel-source (5.8.35) sha256=79ef222a9dcb867ac2efa3b0da35b4bcb15a4bfa67b6b2dcbf1e9a29104498d9
