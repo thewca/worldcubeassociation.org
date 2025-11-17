@@ -6,8 +6,8 @@ class LiveResult < ApplicationRecord
   has_many :live_attempts
   alias_method :attempts, :live_attempts
 
-  after_create :recompute_ranks
-  after_update :recompute_ranks, if: :should_recompute?
+  after_create :recompute_positions
+  after_update :recompute_positions, if: :should_recompute?
 
   # This hook has to be executed _after_ computing the rankings
   after_save :recompute_advancing, if: :should_recompute?
@@ -48,7 +48,12 @@ class LiveResult < ApplicationRecord
     saved_change_to_best? || saved_change_to_average?
   end
 
-  def recompute_ranks
+  def recompute_positions
+    # For linked rounds we need to merge the results and calculate a new global pos
+    if round.linked_round.present?
+      recompute_global_pos(round.linked_round.merged_live_results)
+    end
+
     rank_by = round.format.sort_by == 'single' ? 'best' : 'average'
     # We only want to decide ties by single in events decided by average
     secondary_rank_by = round.format.sort_by == 'average' ? 'best' : nil
@@ -72,7 +77,7 @@ class LiveResult < ApplicationRecord
           WHERE round_id = #{round.id} AND best != 0
       ) ranked
       ON r.id = ranked.id
-      SET r.ranking = ranked.rank
+      SET r.local_pos = ranked.rank
       WHERE r.round_id = #{round.id};
     SQL
   end
@@ -89,7 +94,11 @@ class LiveResult < ApplicationRecord
 
     def recompute_advancing
       # Only ranked results can be considered for advancing.
-      round_results = round.live_results.where.not(ranking: nil)
+      round_results = if round.linked_round.present?
+                        round.linked_round.live_results.where.not(global_pos: nil)
+                      else
+                        round.live_results.where.not(local_pos: nil)
+                      end
       round_results.update_all(advancing: false, advancing_questionable: false)
 
       missing_attempts = round.total_accepted_registrations - round_results.count
@@ -103,12 +112,35 @@ class LiveResult < ApplicationRecord
                            max_qualifying = (round_results.count * 0.75).floor
                            [round.advancement_condition.max_advancing(round_results), max_qualifying].min
                          end
-
-      round_results.update_all("advancing_questionable = ranking BETWEEN 1 AND #{qualifying_index}")
+      if round.linked_round.present?
+        round_results.update_all("advancing_questionable = global_pos BETWEEN 1 AND #{qualifying_index}")
+      else
+        round_results.update_all("advancing_questionable = local_pos BETWEEN 1 AND #{qualifying_index}")
+      end
 
       # Determine which results would advance if everyone achieved their best possible attempt.
       advancing_ids = results_with_potential.take(qualifying_index).select(&:complete?).pluck(:id)
 
       LiveResult.where(id: advancing_ids).update_all(advancing: true)
+    end
+
+    def recompute_global_pos(sorted_results)
+      last_result = nil
+      last_pos = 0
+      tie_count = 0
+
+      sorted_results.each_with_index do |result, index|
+        tied = result.tied_with?(last_result)
+
+        if tied
+          result.update(global_pos: last_pos)
+          tie_count += 1
+        else
+          last_pos = index + 1 + tie_count
+          result.update(global_pos: last_pos)
+          last_result = result
+          tie_count = 0
+        end
+      end
     end
 end
