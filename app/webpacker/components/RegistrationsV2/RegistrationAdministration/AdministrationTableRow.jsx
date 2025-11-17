@@ -25,39 +25,45 @@ const formatDate = (date, withFullDate) => (
   withFullDate ? getRegistrationTimestamp(date) : getShortDateString(date)
 );
 
-function RegistrationTime({
-  timestamp, registeredOn, paymentStatus, hasPaid, paidOn, usesPaymentIntegration,
+function RegisteredOn({
+  withFullDate, registeredOn,
 }) {
-  if (timestamp) {
-    return getRegistrationTimestamp(paidOn ?? registeredOn);
-  }
-
-  if (usesPaymentIntegration && !hasPaid) {
-    let content = I18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
-    let trigger = <span>{I18n.t('registrations.list.not_paid')}</span>;
-
-    if (paymentStatus === 'initialized') {
-      content = I18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
-    }
-
-    if (paymentStatus === 'refund') {
-      content = I18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
-      trigger = <span>{I18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
-    }
-
-    return (
-      <Popup
-        content={content}
-        trigger={trigger}
-      />
-    );
-  }
-
   return (
     <Popup
-      content={getRegistrationTimestamp(paidOn ?? registeredOn)}
-      trigger={<span>{getShortDateString(paidOn ?? registeredOn)}</span>}
+      trigger={formatDate(registeredOn, withFullDate)}
+      content={getRegistrationTimestamp(registeredOn)}
     />
+  );
+}
+
+function PaidOn({
+  withFullDate, registeredOn, paymentStatus, hasPaid, updatedAt,
+}) {
+  const wasRefunded = paymentStatus === 'refund';
+  const trigger = (
+    <span>
+      {hasPaid
+        ? `${formatDate(updatedAt, withFullDate)}${wasRefunded ? '*' : ''}`
+        : I18n.t('registrations.list.not_paid')}
+    </span>
+  );
+
+  const content = (() => {
+    if (!hasPaid) {
+      return I18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
+    }
+    if (paymentStatus === 'initialized') {
+      return I18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(updatedAt) });
+    }
+    if (paymentStatus === 'refund') {
+      return I18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(updatedAt) });
+    }
+    // the above cases should be exhaustive
+    return getRegistrationTimestamp(updatedAt);
+  })();
+
+  return (
+    <Popup content={content} trigger={trigger} />
   );
 }
 
@@ -79,7 +85,7 @@ export default function TableRow({
     events: eventsAreExpanded,
     comments: commentsAreShown,
     email: emailIsExpanded,
-    timestamp: timestampIsShown,
+    timestamp: dateIsExpanded,
   } = columnsExpanded;
   const {
     id: userId, wca_id: wcaId, name, country, dob: dateOfBirth, email: emailAddress,
@@ -168,14 +174,18 @@ export default function TableRow({
             </Table.Cell>
 
             <Table.Cell>
-              <RegistrationTime
-                timestamp={timestampIsShown}
-                paidOn={updatedAt}
-                hasPaid={hasPaid}
-                registeredOn={registeredOn}
-                paymentStatus={paymentStatus}
-                usesPaymentIntegration={competitionInfo['using_payment_integrations?']}
-              />
+              {competitionInfo['using_payment_integrations?']
+                ? (
+                  <PaidOn
+                    withFullDate={dateIsExpanded}
+                    updatedAt={updatedAt}
+                    hasPaid={hasPaid}
+                    registeredOn={registeredOn}
+                    paymentStatus={paymentStatus}
+                  />
+                ) : (
+                  <RegisteredOn withFullDate={dateIsExpanded} registeredOn={registeredOn} />
+                )}
             </Table.Cell>
 
             {competitionInfo['using_payment_integrations?'] && (
