@@ -14,14 +14,13 @@ class LinkedRound < ApplicationRecord
   end
 
   def self.combine_results(round_results)
-    format = formats.first
-    should_sort_by_single = format.sort_by == 'single'
+    rank_by = formats.first.rank_by_column
     results_by_person_id = round_results.group_by(&:person_id)
     persons = results_by_person_id.keys
     best_result_per_person = persons.map do |person|
-      results_by_person_id[person].min_by { |result| should_sort_by_single ? result.to_solve_time(:best) : result.to_solve_time(:average) }
+      results_by_person_id[person].min_by { |result| result.to_solve_time(rank_by) }
     end
 
-    best_result_per_person.sort_by { |result| should_sort_by_single ? result.to_solve_time(:best) : result.to_solve_time(:average) }
+    best_result_per_person.sort_by { |result| result.to_solve_time(rank_by) }
   end
 end

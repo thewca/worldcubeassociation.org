@@ -25,6 +25,14 @@ class Format < ApplicationRecord
     }[self.id]
   end
 
+  def rank_by_column
+    sort_by == 'single' ? 'best' : "average"
+  end
+
+  def secondary_rank_by_column
+    sort_by == 'average' ? 'best' : nil
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[id sort_by sort_by_second expected_solve_count
              trim_fastest_n trim_slowest_n],
