@@ -151,6 +151,6 @@ class LiveResult < ApplicationRecord
       ON r.id = ranked.id
       SET r.global_pos = ranked.rank
       WHERE r.round_id IN #{round.linked_round.round_ids};
-    SQL
+      SQL
     end
 end
