@@ -21,6 +21,10 @@ import RegionFlag from '../../wca/RegionFlag';
 // TODO: We could fix this by building our own table component here
 const truncateComment = (comment) => (comment?.length > 12 ? `${comment.slice(0, 12)}...` : comment);
 
+const formatDate = (date, withFullDate) => (
+  withFullDate ? getRegistrationTimestamp(date) : getShortDateString(date)
+);
+
 function RegistrationTime({
   timestamp, registeredOn, paymentStatus, hasPaid, paidOn, usesPaymentIntegration,
 }) {
