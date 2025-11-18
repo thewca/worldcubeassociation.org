@@ -982,7 +982,7 @@ module DatabaseDumper
   RESULTS_SANITIZERS = {
     "Results" => {
       source_table: "results",
-      where_clause: "LEFT JOIN result_attempts ra ON ra.result_id = r.id GROUP by results.id",
+      where_clause: "LEFT JOIN result_attempts ra ON ra.result_id = results.id GROUP by results.id",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           pos
@@ -1000,10 +1000,10 @@ module DatabaseDumper
           "regionalAverageRecord" => "regional_average_record",
           "personCountryId" => "country_id",
           "value1" => "MAX(CASE WHEN ra.attempt_number = 1 THEN ra.value END)",
-          "value2" => "MAX(CASE WHEN ra.attempt_number = 2 THEN ra.value END)",
-          "value3" => "MAX(CASE WHEN ra.attempt_number = 3 THEN ra.value END)",
-          "value4" => "MAX(CASE WHEN ra.attempt_number = 4 THEN ra.value END)",
-          "value5" => "MAX(CASE WHEN ra.attempt_number = 5 THEN ra.value END)",
+          "value2" => "MAX(CASE WHEN ra.attempt_number = 2 THEN ra.value ELSE 0 END)",
+          "value3" => "MAX(CASE WHEN ra.attempt_number = 3 THEN ra.value ELSE 0 END)",
+          "value4" => "MAX(CASE WHEN ra.attempt_number = 4 THEN ra.value ELSE 0 END)",
+          "value5" => "MAX(CASE WHEN ra.attempt_number = 5 THEN ra.value ELSE 0 END)",
         }.freeze,
       ),
     }.freeze,

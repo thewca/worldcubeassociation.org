@@ -76,6 +76,10 @@ RSpec.describe "DatabaseDumper" do
   end
 
   context "Results Export" do
+    it "dumps the database according to sanitizers" do
+      expect(DatabaseDumper.dump_results_db).not_to raise_error
+    end
+
     it "defines sanitizers that match the expected output schema (backwards compatibility)" do
       with_database :results_dump do
         # Rails *always* includes a `schema_migrations` table when loading any pre-defined schema file.
