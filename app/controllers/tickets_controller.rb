@@ -145,11 +145,11 @@ class TicketsController < ApplicationController
     @user, @person = user_and_person_from_params
 
     if @user.present? && @person.present? && @person.user != @user
-      render status: :unprocessable_entity, json: {
+      render status: :unprocessable_content, json: {
         error: "Person and user not linked.",
       }
     elsif @user.nil? && @person.nil?
-      render status: :unprocessable_entity, json: {
+      render status: :unprocessable_content, json: {
         error: "User ID and WCA ID is not provided.",
       }
     end
@@ -179,7 +179,7 @@ class TicketsController < ApplicationController
 
   def anonymize
     if @user&.banned?
-      return render status: :unprocessable_entity, json: {
+      return render status: :unprocessable_content, json: {
         error: "Error anonymizing: This person is currently banned and cannot be anonymized.",
       }
     end
@@ -265,7 +265,7 @@ class TicketsController < ApplicationController
     competition = ticket.metadata.competition
 
     error = CompetitionResultsImport.post_results_error(competition)
-    return render status: :unprocessable_entity, json: { error: error } if error
+    return render status: :unprocessable_content, json: { error: error } if error
 
     CompetitionResultsImport.post_results(competition, current_user)
 
@@ -315,7 +315,7 @@ class TicketsController < ApplicationController
     end
 
     unless any_request_still_valid
-      return render status: :unprocessable_entity, json: {
+      return render status: :unprocessable_content, json: {
         error: "All requested changes have already been applied. If you think this is correct, please reject the request.",
       }
     end

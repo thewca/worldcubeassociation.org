@@ -117,9 +117,8 @@ export function reportAdminCellContent(comp) {
 }
 
 export function resultsSubmittedAtAdminCellContent(comp) {
-  if (comp.results_posted_at) {
-    const date = comp.results_submitted_at ? comp.results_submitted_at : comp.results_posted_at;
-    return timeDifferenceAfter(comp, date);
+  if (comp.results_submitted_at) {
+    return timeDifferenceAfter(comp, comp.results_submitted_at);
   }
 
   if (isProbablyOver(comp)) {

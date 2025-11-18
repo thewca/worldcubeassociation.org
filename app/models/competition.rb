@@ -223,6 +223,7 @@ class Competition < ApplicationRecord
                    format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
   validates :cell_name, length: { maximum: MAX_CELL_NAME_LENGTH },
                         format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
+  strip_attributes only: %i[name cell_name], collapse_spaces: true, allow_empty: true
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :external_website, format: { with: URL_RE }, allow_blank: true
   validates :external_registration_page, presence: true, format: { with: URL_RE }, if: :external_registration_page_required?
@@ -1205,14 +1206,14 @@ class Competition < ApplicationRecord
     errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS)) if number_of_days > MAX_SPAN_DAYS
   end
 
-  validate :registration_dates_must_be_valid
+  validate :registration_dates_must_be_valid, if: :start_date?
   private def registration_dates_must_be_valid
     errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start')) if refund_policy_limit_date? && refund_policy_limit_date > start_date
 
-    if registration_period_required? && registration_open.present? && registration_close.present? &&
-       (registration_open >= start_date || registration_close >= start_date)
-      errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start'))
-    end
+    return unless registration_period_required? && [registration_open, registration_close].all?(&:present?)
+
+    errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start')) if
+      registration_open >= start_date || registration_close >= start_date
   end
 
   validate :waiting_list_dates_must_be_valid

@@ -313,6 +313,17 @@ module DatabaseDumper
           created_at
           updated_at
           old_type
+          linked_round_id
+        ],
+      ),
+    }.freeze,
+    "linked_rounds" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          wcif_id
+          created_at
+          updated_at
         ],
       ),
     }.freeze,
@@ -954,7 +965,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "roles_metadata_banned_competitors" => :skip_all_rows,
-    "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
     "ticket_logs" => :skip_all_rows,
