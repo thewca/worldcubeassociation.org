@@ -52,9 +52,9 @@ class LiveResult < ApplicationRecord
     # For linked rounds we need to merge the results and calculate a new global pos
     recompute_global_pos if round.linked_round.present?
 
-    rank_by = round.format.rank_by_column
+    rank_by = format.rank_by_column
     # We only want to decide ties by single in events decided by average
-    secondary_rank_by = round.format.secondary_rank_by_column
+    secondary_rank_by = format.secondary_rank_by_column
     # The following query uses an `ORDER BY best <= 0, best ASC` trick. The idea is:
     #   1. The first part of the `ORDER BY` evaluates to a boolean. Booleans are just
     #     `TINYINT` in MySQL with TRUE=1 and FALSE=0, so that FALSE < TRUE.
@@ -120,34 +120,41 @@ class LiveResult < ApplicationRecord
     end
 
     def recompute_global_pos
-      rank_by = formats.first.rank_by_column
-      secondary_rank_by = formats.first.secondary_rank_by_column
+      rank_by = format.rank_by_column
+      secondary_rank_by = format.secondary_rank_by_column
+      round_ids = round.linked_round.round_ids.join(",")
 
-      ActiveRecord::Base.connection.exec_query <<-SQL.squish
+      query = <<-SQL.squish
       UPDATE live_results r
       LEFT JOIN (
           SELECT id,
                  RANK() OVER (
                    ORDER BY person_best.#{rank_by} <= 0, person_best.#{rank_by} ASC
                    #{", person_best.#{secondary_rank_by} <= 0, person_best.#{secondary_rank_by} ASC" if secondary_rank_by}
-                 ) AS rank
+                 ) AS ranking
           FROM (
-              SELECT lr.*
-              FROM live_results lr
-              INNER JOIN (
-                  SELECT person_id, MIN(#{rank_by}) AS best_value
-                  FROM live_results
-                  WHERE round_id IN #{round.linked_round.round_ids}
-                    AND best != 0
-                  GROUP BY person_id
-              ) b ON lr.person_id = b.person_id
-                 AND lr.#{rank_by} = b.best_value
-              WHERE lr.round_id IN #{round.linked_round.round_ids}
-          ) AS person_best
+        SELECT *
+        FROM (
+            SELECT
+              lr.*,
+              ROW_NUMBER() OVER (
+                PARTITION BY lr.registration_id
+                ORDER BY
+                  (lr.#{rank_by} <= 0) ASC,
+                  lr.#{rank_by} ASC
+              ) AS rownum
+            FROM live_results lr
+            WHERE lr.round_id IN (#{round_ids})
+              AND lr.best != 0
+        ) x
+        WHERE rownum = 1
+    ) AS person_best
       ) ranked
       ON r.id = ranked.id
-      SET r.global_pos = ranked.rank
-      WHERE r.round_id IN #{round.linked_round.round_ids};
+      SET r.global_pos = ranked.ranking
+      WHERE r.round_id IN (#{round_ids});
       SQL
+
+      ActiveRecord::Base.connection.exec_query query
     end
 end
