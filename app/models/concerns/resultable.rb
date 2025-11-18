@@ -182,12 +182,12 @@ module Resultable
   def tied_with?(other_result)
     return false if other_result.nil?
 
-    if result.format.sort_by == "average"
+    if format.sort_by == "average"
       # If the ranking is based on average, look at both average and best.
-      result.average == last_result.average && result.best == last_result.best
+      average == other_result.average && best == other_result.best
     else
       # else we just compare the bests
-      result.best == last_result.best
+      best == other_result.best
     end
   end
 
