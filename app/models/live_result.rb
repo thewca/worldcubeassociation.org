@@ -124,6 +124,9 @@ class LiveResult < ApplicationRecord
       secondary_rank_by = format.secondary_rank_by_column
       round_ids = round.linked_round.round_ids.join(",")
 
+      # Similar to the query that recomputes local_pos, but
+      # at first it computes the best result of a person over all linked rounds
+      # by using the same ORDER BY <=0 trick
       query = <<-SQL.squish
       UPDATE live_results r
       LEFT JOIN (
@@ -142,6 +145,7 @@ class LiveResult < ApplicationRecord
                 ORDER BY
                   (lr.#{rank_by} <= 0) ASC,
                   lr.#{rank_by} ASC
+                  #{", lr.#{secondary_rank_by} <= 0, lr.#{secondary_rank_by} ASC" if secondary_rank_by}
               ) AS rownum
             FROM live_results lr
             WHERE lr.round_id IN (#{round_ids})
