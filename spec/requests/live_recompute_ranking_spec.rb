@@ -143,7 +143,7 @@ RSpec.describe "WCA Live API" do
         registration = create(:registration, :accepted, competition: competition)
 
         create(:live_result, round: round1, registration: registration, average: (i + 1) * 100)
-        create(:live_result, round: round2, registration: registration, average: (i + 1) * 100 - 1)
+        create(:live_result, round: round2, registration: registration, average: ((i + 1) * 100) - 1)
       end
 
       round1.live_results.sort_by(&:average).each.with_index(1) do |r, i|
@@ -185,7 +185,7 @@ RSpec.describe "WCA Live API" do
       3.times do |i|
         registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
 
-        create(:live_result, round: round1, registration: registration, best: (i + 1) * 100 - 1)
+        create(:live_result, round: round1, registration: registration, best: ((i + 1) * 100) - 1)
         create(:live_result, round: round2, registration: registration, best: (i + 1) * 100)
       end
 
@@ -211,7 +211,7 @@ RSpec.describe "WCA Live API" do
       3.times do |i|
         registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
 
-        create(:live_result, round: round1, registration: registration, best: (i + 1) * 100 - 1)
+        create(:live_result, round: round1, registration: registration, best: ((i + 1) * 100) - 1)
       end
 
       round1.live_results.sort_by(&:best).each.with_index(1) do |r, i|
