@@ -153,6 +153,8 @@ class Round < ApplicationRecord
   def accepted_registrations
     if number == 1
       registrations.accepted
+    elsif linked_round.present? # A linked round can currently only be Rounds Number 1+2
+      previous_round.accepted_registrations
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
       Registration.find(advancing)
