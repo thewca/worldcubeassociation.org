@@ -12,5 +12,6 @@ FactoryBot.define do
     competition_event { competition&.competition_events&.find_or_create_by(event_id: event_id) || (association :competition_event, event_id: event_id) }
     number { 1 }
     total_number_of_rounds { number }
+    linked_round { nil }
   end
 end
