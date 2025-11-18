@@ -17,7 +17,7 @@ RSpec.describe "WCA Live API" do
       end
 
       round.live_results.sort_by(&:average).each.with_index(1) do |r, i|
-        expect(r.ranking).to eq i
+        expect(r.local_pos).to eq i
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe "WCA Live API" do
       end
 
       round.live_results.sort_by(&:best).each.with_index(1) do |r, i|
-        expect(r.ranking).to eq i
+        expect(r.local_pos).to eq i
       end
     end
 
@@ -47,7 +47,7 @@ RSpec.describe "WCA Live API" do
       end
 
       round.live_results.sort_by(&:average).each do |r|
-        expect(r.ranking).to eq 1
+        expect(r.local_pos).to eq 1
       end
     end
 
@@ -62,7 +62,7 @@ RSpec.describe "WCA Live API" do
       end
 
       round.live_results.sort_by(&:best).each.with_index(1) do |r, i|
-        expect(r.ranking).to eq i
+        expect(r.local_pos).to eq i
       end
     end
 
@@ -77,7 +77,7 @@ RSpec.describe "WCA Live API" do
       end
 
       round.live_results.each do |r|
-        expect(r.ranking).to eq 1
+        expect(r.local_pos).to eq 1
       end
     end
 
@@ -94,7 +94,7 @@ RSpec.describe "WCA Live API" do
       registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
       create(:live_result, round: round, registration: registration, best: -1)
 
-      expect(round.live_results.sort_by(&:best).pluck(:ranking)).to eq [4, 1, 2, 3]
+      expect(round.live_results.sort_by(&:best).pluck(:local_pos)).to eq [4, 1, 2, 3]
     end
 
     it "Ranks results correctly by single even with DNSs present" do
@@ -110,7 +110,7 @@ RSpec.describe "WCA Live API" do
       registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
       create(:live_result, round: round, registration: registration, best: -2)
 
-      expect(round.live_results.sort_by(&:best).pluck(:ranking)).to eq [4, 1, 2, 3]
+      expect(round.live_results.sort_by(&:best).pluck(:local_pos)).to eq [4, 1, 2, 3]
     end
 
     it "Ranks results correctly by single even with incomplete results present" do
@@ -126,7 +126,7 @@ RSpec.describe "WCA Live API" do
       registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
       create(:live_result, round: round, registration: registration, best: 0)
 
-      expect(round.live_results.sort_by(&:best).pluck(:ranking)).to eq [nil, 1, 2, 3]
+      expect(round.live_results.sort_by(&:best).pluck(:local_pos)).to eq [nil, 1, 2, 3]
     end
   end
 end
