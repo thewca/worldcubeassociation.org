@@ -84,6 +84,14 @@ class LiveResult < ApplicationRecord
     live_attempts.where.not(result: 0).count == round.format.expected_solve_count
   end
 
+  def values_for_sorting
+    rank_by = format.rank_by_column
+    secondary_rank_by = format.secondary_rank_by_column
+    values = [to_solve_time(rank_by)]
+    values << to_solve_time(secondary_rank_by) if secondary_rank_by.present?
+    values
+  end
+
   private
 
     def notify_users

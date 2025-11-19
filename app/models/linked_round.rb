@@ -10,21 +10,20 @@ class LinkedRound < ApplicationRecord
   validates :competition_event_ids, length: { maximum: 1, message: "must all belong to the same competition" }
 
   def merged_live_results
-    LinkedRound.combine_results(live_results, formats.first)
+    LinkedRound.combine_results(live_results)
   end
 
   def first_round_in_link
     rounds.ordered.first
   end
 
-  def self.combine_results(round_results, format)
-    rank_by = format.rank_by_column
+  def self.combine_results(round_results)
     results_by_registration_id = round_results.group_by(&:registration_id)
     persons = results_by_registration_id.keys
     best_result_per_person = persons.map do |person|
-      results_by_registration_id[person].min_by { |result| result.to_solve_time(rank_by) }
+      results_by_registration_id[person].min_by(&:values_for_sorting)
     end
 
-    best_result_per_person.sort_by { |result| result.to_solve_time(rank_by) }
+    best_result_per_person.sort_by(&:values_for_sorting)
   end
 end
