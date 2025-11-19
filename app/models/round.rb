@@ -150,7 +150,7 @@ class Round < ApplicationRecord
     Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
   end
 
-  def should_consider_previous_round_results?
+  def consider_previous_round_results?
     # All linked rounds except the first one in a chain of linked rounds
     linked_round.present? && linked_round.first_round_in_link.id != id
   end
@@ -158,8 +158,8 @@ class Round < ApplicationRecord
   def accepted_registrations
     if number == 1
       registrations.accepted
-    elsif should_consider_previous_round_results?
-      previous_round.accepted_registrations
+    elsif consider_previous_round_results?
+      linked_round.first_round_in_link.accepted_registrations
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
       Registration.find(advancing)
