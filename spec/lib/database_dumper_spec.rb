@@ -77,7 +77,9 @@ RSpec.describe "DatabaseDumper" do
 
   context "Results Export" do
     it "dumps the database according to sanitizers" do
-      expect(DbDumpHelper.dump_results_db).not_to raise_error
+      Dir.mktmpdir do |dir|
+        expect(DatabaseDumper.public_results_dump("result_test.sql", dir)).not_to raise_error
+      end
     end
 
     it "defines sanitizers that match the expected output schema (backwards compatibility)" do
