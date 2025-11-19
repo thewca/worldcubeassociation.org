@@ -13,6 +13,10 @@ class LinkedRound < ApplicationRecord
     LinkedRound.combine_results(live_results, formats.first)
   end
 
+  def first_round_in_link
+    rounds.min_by(&:number)
+  end
+
   def self.combine_results(round_results, format)
     rank_by = format.rank_by_column
     results_by_registration_id = round_results.group_by(&:registration_id)

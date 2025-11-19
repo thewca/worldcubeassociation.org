@@ -150,10 +150,15 @@ class Round < ApplicationRecord
     Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
   end
 
+  def should_consider_previous_round_results?
+    # All linked rounds except the first one in a chain of linked rounds
+    linked_round.present? && linked_round.first_round_in_link.id != id
+  end
+
   def accepted_registrations
     if number == 1
       registrations.accepted
-    elsif linked_round.present? # A linked round can currently only be Rounds Number 1+2
+    elsif should_consider_previous_round_results?
       previous_round.accepted_registrations
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
@@ -166,7 +171,7 @@ class Round < ApplicationRecord
       registrations.includes(:user)
                    .accepted
                    .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
-    elsif linked_round.present? # A linked round can currently only be Rounds Number 1+2
+    elsif should_consider_previous_round_results?
       previous_round.accepted_registrations_with_wcif_id
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
