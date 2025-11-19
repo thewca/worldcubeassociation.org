@@ -10,7 +10,7 @@ class InboxScrambleSet < ApplicationRecord
   belongs_to :matched_round, class_name: "Round", optional: true, inverse_of: :matched_scramble_sets
 
   has_many :inbox_scrambles, inverse_of: :inbox_scramble_set, dependent: :destroy
-  has_many :matched_inbox_scrambles, class_name: "InboxScramble", inverse_of: :matched_scramble_set, dependent: :nullify
+  has_many :matched_inbox_scrambles, -> { order(:ordered_index) }, class_name: "InboxScramble", inverse_of: :matched_scramble_set, dependent: :nullify
 
   validates :ordered_index, uniqueness: { scope: :matched_round_id, if: :matched_round_id? }
 
