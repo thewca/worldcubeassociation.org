@@ -27,10 +27,10 @@ export default async function PersonResults({
 
   return (
     <Container>
-      <Heading size="5xl">{name}</Heading>
+      <Heading textStyle="h1">{name}</Heading>
       {_.map(resultsByEvent, (eventResults, key) => (
         <>
-          <Heading size="2xl">{events.byId[key].name}</Heading>
+          <Heading textStyle="h2">{events.byId[key].name}</Heading>
           <Table.Root>
             <Table.Header>
               <Table.Row>
