@@ -2,7 +2,7 @@ import { Container, Heading, Link, Table } from "@chakra-ui/react";
 import { getResultByPerson } from "@/lib/wca/live/getResultByPerson";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
-import { rankingCellStyle } from "@/components/live/LiveResultsTable";
+import { rankingCellColour } from "@/components/live/LiveResultsTable";
 import { centisecondsToClockFormat } from "@/lib/wca/wcif/attempts";
 
 export default async function PersonResults({
@@ -64,7 +64,10 @@ export default async function PersonResults({
                         Round {roundId}
                       </Link>
                     </Table.Cell>
-                    <Table.Cell width={1} style={rankingCellStyle(result)}>
+                    <Table.Cell
+                      width={1}
+                      backgroundColor={rankingCellColour(result)}
+                    >
                       {ranking}
                     </Table.Cell>
                     {attempts.map((a) => (

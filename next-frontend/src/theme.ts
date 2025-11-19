@@ -133,6 +133,8 @@ const customConfig = defineConfig({
     semanticTokens: {
       colors: {
         link: { value: "{colors.supplementary.link}" },
+        advancing: { value: "{colors.green.500}" },
+        advancingQuestionable: { value: "{colors.yellow.500}" },
         recordMarkers: {
           personal: { value: "{colors.orange.1A}" },
           national: { value: "{colors.green.1A}" },
