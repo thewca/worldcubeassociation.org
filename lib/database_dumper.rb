@@ -1205,6 +1205,247 @@ module DatabaseDumper
     }.freeze,
   }.freeze
 
+  V2_RESULTS_SANITIZERS = {
+    "Results" => {
+      source_table: "results",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          pos
+          best
+          average
+        ],
+        db_default: %w[
+          value1
+          value2
+          value3
+          value4
+          value5
+        ],
+        fake_values: {
+          "competitionId" => "competition_id",
+          "eventId" => "event_id",
+          "roundTypeId" => "round_type_id",
+          "personName" => "person_name",
+          "personId" => "person_id",
+          "formatId" => "format_id",
+          "regionalSingleRecord" => "regional_single_record",
+          "regionalAverageRecord" => "regional_average_record",
+          "personCountryId" => "country_id",
+        }.freeze,
+      ),
+    }.freeze,
+    "ResultAttempts" => {
+      source_table: "result_attempts",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          value
+          attempt_number
+          result_id
+          created_at
+          updated_at
+        ]
+      )
+    }.freeze,
+    "RanksSingle" => {
+      source_table: "ranks_single",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          best
+        ],
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "personId" => "person_id",
+          "eventId" => "event_id",
+          "worldRank" => "world_rank",
+          "continentRank" => "continent_rank",
+          "countryRank" => "country_rank",
+        },
+      ),
+    }.freeze,
+    "RanksAverage" => {
+      source_table: "ranks_average",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          best
+        ],
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "personId" => "person_id",
+          "eventId" => "event_id",
+          "worldRank" => "world_rank",
+          "continentRank" => "continent_rank",
+          "countryRank" => "country_rank",
+        },
+      ),
+    }.freeze,
+    "RoundTypes" => {
+      source_table: "round_types",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          final
+          name
+          rank
+        ],
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "cellName" => "cell_name",
+        },
+      ),
+    }.freeze,
+    "Events" => {
+      source_table: "events",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          format
+          name
+          rank
+        ],
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "cellName" => "name",
+        },
+      ),
+    }.freeze,
+    "Formats" => {
+      source_table: "formats",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          expected_solve_count
+          name
+          sort_by
+          sort_by_second
+          trim_fastest_n
+          trim_slowest_n
+        ],
+      ),
+    }.freeze,
+    "Countries" => {
+      source_table: "countries",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          iso2
+          name
+        ],
+        fake_values: {
+          "continentId" => "continent_id",
+        }.freeze,
+      ),
+    }.freeze,
+    "Continents" => {
+      source_table: "continents",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          latitude
+          longitude
+          name
+          zoom
+        ],
+        fake_values: {
+          "recordName" => "record_name",
+        }.freeze,
+      ),
+    }.freeze,
+    "Persons" => {
+      source_table: "persons",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          name
+          gender
+        ],
+        fake_values: {
+          "id" => "wca_id",
+          "subid" => "sub_id",
+          "countryId" => "country_id",
+        },
+      ),
+    }.freeze,
+    "Competitions" => {
+      source_table: "competitions",
+      where_clause: PUBLIC_COMPETITION_JOIN,
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          name
+          information
+          external_website
+          venue
+          latitude
+          longitude
+        ],
+        fake_values: {
+          "cityName" => "city_name",
+          "countryId" => "country_id",
+          "venueAddress" => "venue_address",
+          "venueDetails" => "venue_details",
+          "cellName" => "cell_name",
+          "cancelled" => "(competitions.cancelled_at IS NOT NULL AND competitions.cancelled_by IS NOT NULL)",
+          "eventSpecs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
+          "wcaDelegate" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
+          "organiser" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_organizers.name, \"}{mailto:\", users_organizers.email, \"}]\")) SEPARATOR \" \")",
+          "year" => "YEAR(start_date)",
+          "month" => "MONTH(start_date)",
+          "day" => "DAY(start_date)",
+          "endMonth" => "MONTH(end_date)",
+          "endDay" => "DAY(end_date)",
+        }.freeze,
+      ),
+      tsv_sanitizers: actions_to_column_sanitizers(
+        fake_values: {
+          "information" => "REGEXP_REPLACE(information, '[[:space:]]+', ' ')",
+        },
+      ),
+    }.freeze,
+    "Scrambles" => {
+      source_table: "scrambles",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          scramble
+        ],
+        fake_values: {
+          "competitionId" => "competition_id",
+          "eventId" => "event_id",
+          "groupId" => "group_id",
+          "isExtra" => "is_extra",
+          "roundTypeId" => "round_type_id",
+          "scrambleId" => "id",
+          "scrambleNum" => "scramble_num",
+        },
+      ),
+      tsv_sanitizers: actions_to_column_sanitizers(
+        fake_values: {
+          "scramble" => "IF(eventId='333mbf', REPLACE(scramble, '\\n', '|'), scramble)",
+        },
+      ),
+    }.freeze,
+    "championships" => {
+      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          competition_id
+          championship_type
+        ],
+      ),
+    }.freeze,
+    "eligible_country_iso2s_for_championship" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          championship_type
+          eligible_country_iso2
+        ],
+        db_default: %w[
+          id
+        ],
+      ),
+    }.freeze,
+  }.freeze
+
   # NOTE: The parameter dump_config_name has to correspond exactly to the desired key in config/database.yml
   def self.with_dumped_db(dump_config_name, dump_sanitizers, dump_ts_name = nil, drop_db_after_dump: true)
     primary_db_config = ActiveRecord::Base.connection_db_config

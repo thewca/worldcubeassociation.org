@@ -109,7 +109,8 @@ module DbDumpHelper
   end
 
   def self.result_export_file_name(file_type, timestamp)
-    "WCA_export#{timestamp.strftime('%j')}_#{timestamp.strftime('%Y%m%dT%H%M%SZ')}.#{file_type}.zip"
+    "result_export"
+    # "WCA_export#{timestamp.strftime('%j')}_#{timestamp.strftime('%Y%m%dT%H%M%SZ')}.#{file_type}.zip"
   end
 
   def self.zip_and_upload_to_s3(zip_filename, s3_path, *zip_contents)
