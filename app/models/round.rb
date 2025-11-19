@@ -24,6 +24,8 @@ class Round < ApplicationRecord
 
   delegate :can_change_time_limit?, to: :event
 
+  scope :ordered, -> { order(:number) }
+
   serialize :time_limit, coder: TimeLimit
   validates_associated :time_limit
 
