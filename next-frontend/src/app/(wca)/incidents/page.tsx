@@ -15,7 +15,7 @@ import {
   createListCollection,
 } from "@chakra-ui/react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
-import useAPI from "@/lib/wca/useAPI";
+import { useAPIClient } from "@/lib/wca/useAPI";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useCallback, useMemo, useState } from "react";
 import Loading from "@/components/ui/loading";
@@ -33,12 +33,14 @@ const itemsPerPageChoices = createListCollection({
 });
 
 export default function IncidentsPage() {
-  const api = useAPI();
+  const api = useAPIClient();
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [query, setQuery] = useState<string | undefined>(undefined);
   const [searchTags, setSearchTags] = useState<string[]>([]);
 
+  // TODO GB: Use "proper" pagination for this endpoint (inifinite?) like in competition_index
+  //   or at least fall back to API-typed queryOptions
   const {
     data: incidentQuery,
     isLoading,
