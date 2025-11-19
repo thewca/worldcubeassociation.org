@@ -770,6 +770,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_17_124011) do
     t.bigint "round_id", null: false
     t.datetime "last_attempt_entered_at", null: false
     t.integer "local_pos"
+    t.integer "global_pos"
     t.integer "best", null: false
     t.integer "average", null: false
     t.string "single_record_tag", limit: 255
@@ -778,7 +779,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_17_124011) do
     t.boolean "advancing_questionable", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "global_pos"
     t.index ["registration_id", "round_id"], name: "index_live_results_on_registration_id_and_round_id", unique: true
     t.index ["registration_id"], name: "index_live_results_on_registration_id"
     t.index ["round_id"], name: "index_live_results_on_round_id"
