@@ -48,6 +48,8 @@ export interface UtilityValues {
     | "yellow.cubeShades"
     | "yellow.gradient"
     | "link"
+    | "advancing"
+    | "advancingQuestionable"
     | "recordMarkers"
     | "white.cubeShades"
     | "white.gradient"
