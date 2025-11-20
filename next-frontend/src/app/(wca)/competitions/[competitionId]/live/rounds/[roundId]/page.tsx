@@ -1,30 +1,25 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import useAPI from "@/lib/wca/useAPI";
 import Loading from "@/components/ui/loading";
-import { CurrentEventId, parseActivityCode } from "@wca/helpers";
 import { Container, Heading, VStack } from "@chakra-ui/react";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 
-function roundResultsKey(roundId: string, competitionId: string) {
-  return ["live-round", roundId, competitionId];
-}
 export default function ResultPage() {
   const { roundId, competitionId } =
     useParams<"/competitions/[competitionId]/live/rounds/[roundId]">();
 
   const api = useAPI();
 
-  const { data: resultsRequest, isLoading } = useQuery({
-    queryKey: roundResultsKey(roundId, competitionId),
-    queryFn: () =>
-      api.GET("/v1/competitions/{competitionId}/live/rounds/{roundId}", {
-        params: { path: { roundId, competitionId } },
-      }),
-    select: (data) => data.data,
-  });
+  const { data: resultsRequest, isLoading } = api.useQuery(
+    "get",
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}",
+    {
+      params: { path: { roundId, competitionId } },
+    },
+  );
 
   if (isLoading) {
     return <Loading />;
@@ -39,10 +34,10 @@ export default function ResultPage() {
   return (
     <Container bg="bg">
       <VStack align="left">
-        <Heading size="5xl">Live Results</Heading>
+        <Heading textStyle="h1">Live Results</Heading>
         <LiveResultsTable
           results={results}
-          eventId={parseActivityCode(id).eventId as CurrentEventId}
+          eventId={parseActivityCode(id).eventId}
           competitors={competitors}
           competitionId={competitionId}
         />

@@ -7,77 +7,33 @@ import {
   centisecondsToClockFormat,
   formatAttemptResult,
 } from "@/lib/wca/wcif/attempts";
-
-const advancingColor = "0, 230, 118";
+import { recordTagBadge } from "@/components/results/TableCells";
 
 const customOrderBy = (
   competitor: components["schemas"]["LiveCompetitor"],
   resultsByRegistrationId: Record<string, components["schemas"]["LiveResult"]>,
-  sortBy: "best" | "average",
 ) => {
   const competitorResult = resultsByRegistrationId[competitor.id];
 
   if (!competitorResult) {
-    return 100000000000 + competitor.id;
+    return competitor.id;
   }
 
-  const result = competitorResult[sortBy];
-
-  return result < 0 ? 100000000000 : result;
+  return competitorResult.ranking;
 };
 
-export const rankingCellStyle = (
+export const rankingCellColour = (
   result: components["schemas"]["LiveResult"],
 ) => {
   if (result?.advancing) {
-    return { backgroundColor: `rgb(${advancingColor})` };
+    return "advancing";
   }
 
   if (result?.advancing_questionable) {
-    return { backgroundColor: `rgba(${advancingColor}, 0.5)` };
+    return "advancingQuestionable";
   }
 
-  return {};
-};
-
-export const recordTagStyle = (tag: string) => {
-  const styles = {
-    display: "block",
-    lineHeight: 1,
-    padding: "0.3em 0.4em",
-    borderRadius: "4px",
-    fontWeight: 600,
-    fontSize: "0.6em",
-    position: "absolute",
-    top: "0px",
-    right: "0px",
-    transform: "translate(110%, -40%)",
-    color: "rgb(255, 255, 255)",
-    backgroundColor: "",
-  };
-
-  switch (tag) {
-    case "WR": {
-      styles.backgroundColor = "rgb(244, 67, 54)";
-      break;
-    }
-    case "CR": {
-      styles.backgroundColor = "rgb(255, 235, 59)";
-      break;
-    }
-    case "NR": {
-      styles.backgroundColor = "rgb(0, 230, 118)";
-      break;
-    }
-    case "PR": {
-      styles.backgroundColor = "rgb(66, 66, 66)";
-      break;
-    }
-    default: {
-      return {};
-    }
-  }
-  return styles;
+  return "";
 };
 
 export default function ResultsTable({
@@ -99,27 +55,15 @@ export default function ResultsTable({
   const event = events.byId[eventId];
 
   const sortedCompetitors = useMemo(() => {
-    const { sort_by: sortBy } = event.recommendedFormat;
-
     return _.orderBy(
       competitors,
       [
-        (competitor) =>
-          customOrderBy(
-            competitor,
-            resultsByRegistrationId,
-            sortBy === "single" ? "best" : "average",
-          ),
-        (competitor) =>
-          customOrderBy(
-            competitor,
-            resultsByRegistrationId,
-            sortBy === "single" ? "average" : "best",
-          ),
+        (competitor) => customOrderBy(competitor, resultsByRegistrationId),
+        (competitor) => customOrderBy(competitor, resultsByRegistrationId),
       ],
       ["asc", "asc"],
     );
-  }, [competitors, event, resultsByRegistrationId]);
+  }, [competitors, resultsByRegistrationId]);
 
   const solveCount = event.recommendedFormat.expected_solve_count;
   const attemptIndexes = [...Array(solveCount).keys()];
@@ -155,7 +99,7 @@ export default function ResultsTable({
               <Table.Cell
                 width={1}
                 textAlign="right"
-                style={rankingCellStyle(competitorResult)}
+                backgroundColor={rankingCellColour(competitorResult)}
               >
                 {index + 1}
               </Table.Cell>
@@ -187,30 +131,16 @@ export default function ResultsTable({
                     style={{ position: "relative" }}
                   >
                     {formatAttemptResult(competitorResult.average, eventId)}{" "}
-                    {!isAdmin && (
-                      <span
-                        style={recordTagStyle(
-                          competitorResult.average_record_tag,
-                        )}
-                      >
-                        {competitorResult.average_record_tag}
-                      </span>
-                    )}
+                    {!isAdmin &&
+                      recordTagBadge(competitorResult.average_record_tag)}
                   </Table.Cell>
                   <Table.Cell
                     textAlign="right"
                     style={{ position: "relative" }}
                   >
                     {centisecondsToClockFormat(competitorResult.best)}
-                    {!isAdmin && (
-                      <span
-                        style={recordTagStyle(
-                          competitorResult.single_record_tag,
-                        )}
-                      >
-                        {competitorResult.single_record_tag}
-                      </span>
-                    )}
+                    {!isAdmin &&
+                      recordTagBadge(competitorResult.single_record_tag)}
                   </Table.Cell>
                 </>
               )}
