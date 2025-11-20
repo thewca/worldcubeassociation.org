@@ -31,7 +31,7 @@ export default async function PersonResults({
       {_.map(resultsByEvent, (eventResults, key) => (
         <>
           <Heading textStyle="h2">{events.byId[key].name}</Heading>
-          <Table.Root>
+          <Table.Root mb="10">
             <Table.Header>
               <Table.Row>
                 <Table.ColumnHeader>Round</Table.ColumnHeader>
