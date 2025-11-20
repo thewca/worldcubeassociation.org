@@ -1058,7 +1058,7 @@ RSpec.describe 'API Registrations' do
       }.to_json
 
       expect(response.body).to eq(error_json)
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it 'returns an array user_ids:error codes - 2 validation failures' do
@@ -1090,7 +1090,7 @@ RSpec.describe 'API Registrations' do
       }.to_json
 
       expect(response.body).to eq(error_json)
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it 'returns an error if the registration isnt found' do
@@ -1114,7 +1114,7 @@ RSpec.describe 'API Registrations' do
       }.to_json
 
       expect(response.body).to eq(error_json)
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it 'returns errors array - validation failure and reg not found' do
@@ -1150,7 +1150,7 @@ RSpec.describe 'API Registrations' do
       }.to_json
 
       expect(response.body).to eq(error_json)
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     context 'when bulk accepting registrations' do

@@ -76,7 +76,7 @@ class ResultsSubmissionController < ApplicationController
 
     # Only admins can upload results for the competitions where results are already submitted.
     if competition.results_submitted? && !current_user.can_admin_results?
-      return render status: :unprocessable_entity, json: {
+      return render status: :unprocessable_content, json: {
         error: "Results have already been submitted for this competition.",
       }
     end
@@ -91,7 +91,7 @@ class ResultsSubmissionController < ApplicationController
     mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))
     store_uploaded_json = ActiveRecord::Type::Boolean.new.cast(params.require(:store_uploaded_json))
 
-    return render status: :unprocessable_entity, json: { error: upload_json.errors.full_messages } unless upload_json.valid?
+    return render status: :unprocessable_content, json: { error: upload_json.errors.full_messages } unless upload_json.valid?
 
     temporary_results_data = upload_json.temporary_results_data
 
@@ -103,7 +103,7 @@ class ResultsSubmissionController < ApplicationController
       results_json_str: upload_json.results_json_str,
     )
 
-    return render status: :unprocessable_entity, json: { error: errors } if errors.any?
+    return render status: :unprocessable_content, json: { error: errors } if errors.any?
 
     render status: :ok, json: { success: true }
   end
@@ -113,7 +113,7 @@ class ResultsSubmissionController < ApplicationController
 
     # Only admins can upload results for the competitions where results are already submitted.
     if competition.results_submitted? && !current_user.can_admin_results?
-      return render status: :unprocessable_entity, json: {
+      return render status: :unprocessable_content, json: {
         error: "Results have already been submitted for this competition.",
       }
     end
@@ -156,17 +156,21 @@ class ResultsSubmissionController < ApplicationController
     end
 
     scrambles_to_import = competition.matched_scramble_sets.flat_map do |scramble_set|
-      scramble_set.matched_inbox_scrambles.map do |scramble|
-        Scramble.new({
-                       competition_id: competition.id,
-                       event_id: scramble_set.event_id,
-                       round_type_id: scramble_set.round_type_id,
-                       round_id: scramble_set.matched_round_id,
-                       group_id: scramble_set.alphabetic_group_index,
-                       is_extra: scramble.is_extra?,
-                       scramble_num: scramble.ordered_index + 1,
-                       scramble: scramble.scramble_string,
-                     })
+      extra_scrambles, std_scrambles = scramble_set.matched_inbox_scrambles.partition(&:is_extra?)
+
+      [std_scrambles, extra_scrambles].flat_map do |scramble_family|
+        scramble_family.map.with_index do |scramble, idx|
+          Scramble.new({
+                         competition_id: competition.id,
+                         event_id: scramble_set.event_id,
+                         round_type_id: scramble_set.round_type_id,
+                         round_id: scramble_set.matched_round_id,
+                         group_id: scramble_set.alphabetic_group_index,
+                         is_extra: scramble.is_extra?,
+                         scramble_num: idx + 1,
+                         scramble: scramble.scramble_string,
+                       })
+        end
       end
     end
 
@@ -177,7 +181,7 @@ class ResultsSubmissionController < ApplicationController
     }
     errors = CompetitionResultsImport.import_temporary_results(competition, temporary_results_data)
 
-    return render status: :unprocessable_entity, json: { error: errors } if errors.any?
+    return render status: :unprocessable_content, json: { error: errors } if errors.any?
 
     render status: :ok, json: { success: true }
   end
@@ -187,10 +191,10 @@ class ResultsSubmissionController < ApplicationController
     message = params.require(:message)
     results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation.validate(competition.id)
 
-    return render status: :unprocessable_entity, json: { error: "Submitted results contain errors." } if results_validator.any_errors?
+    return render status: :unprocessable_content, json: { error: "Submitted results contain errors." } if results_validator.any_errors?
 
     if competition.tickets_competition_result.present? && !competition.tickets_competition_result.aborted?
-      return render status: :unprocessable_entity, json: {
+      return render status: :unprocessable_content, json: {
         error: "There is already a ticket associated with this, hence the results can be resubmitted only if the previous posting has been cancelled by WRT.",
       }
     end
