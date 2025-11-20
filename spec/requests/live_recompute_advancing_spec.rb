@@ -48,6 +48,52 @@ RSpec.describe "WCA Live API" do
         # 40% of 5 is exactly 2.
         expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
       end
+
+      it 'considers ties' do
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
+
+        5.times do |i|
+          create(:live_result, registration: registrations[i], round: round, best: (i + 1) * 100, average: 300)
+        end
+
+        expect(round.total_accepted_registrations).to eq 5
+        expect(round.competitors_live_results_entered).to eq 5
+
+        # 40% of 5 is exactly 2.
+        expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
+      end
+
+      it 'considers dnfs' do
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
+
+        4.times do |i|
+          create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
+        end
+
+        create(:live_result, registration: registrations[4], round: round, average: -1)
+
+        expect(round.total_accepted_registrations).to eq 5
+        expect(round.competitors_live_results_entered).to eq 5
+
+        # 40% of 5 is exactly 2.
+        expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
+      end
+
+      it 'considers dns' do
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
+
+        4.times do |i|
+          create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
+        end
+
+        create(:live_result, registration: registrations[4], round: round, average: -2)
+
+        expect(round.total_accepted_registrations).to eq 5
+        expect(round.competitors_live_results_entered).to eq 5
+
+        # 40% of 5 is exactly 2.
+        expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
+      end
     end
 
     context 'with an attempt_result advancement condition' do

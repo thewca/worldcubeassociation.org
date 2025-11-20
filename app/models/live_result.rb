@@ -42,9 +42,18 @@ class LiveResult < ApplicationRecord
     SolveTime.new(event_id, field, send(field))
   end
 
-  def potential_score
-    rank_by = round.format.sort_by == 'single' ? 'best' : 'average'
-    complete? ? self[rank_by.to_sym] : BEST_POSSIBLE_SCORE
+  def ranking_columns
+    [format.rank_by_column, format.secondary_rank_by_column].compact
+  end
+
+  def best_possible_solve_times
+    ranking_columns.map do |column|
+      SolveTime.new(event_id, column, BEST_POSSIBLE_SCORE)
+    end
+  end
+
+  def potential_solve_time
+    complete? ? values_for_sorting : best_possible_solve_times
   end
 
   def should_recompute?
@@ -85,11 +94,9 @@ class LiveResult < ApplicationRecord
   end
 
   def values_for_sorting
-    rank_by = format.rank_by_column
-    secondary_rank_by = format.secondary_rank_by_column
-    values = [to_solve_time(rank_by)]
-    values << to_solve_time(secondary_rank_by) if secondary_rank_by.present?
-    values
+    ranking_columns.map do |column|
+      to_solve_time(column)
+    end
   end
 
   private
@@ -108,7 +115,7 @@ class LiveResult < ApplicationRecord
 
       missing_attempts = round.total_accepted_registrations - round_results.count
       potential_results = Array.new(missing_attempts) { LiveResult.build(round: round) }
-      results_with_potential = (round_results.to_a + potential_results).sort_by(&:potential_score)
+      results_with_potential = (round_results.to_a + potential_results).sort_by(&:potential_solve_time)
 
       qualifying_index = if round.final_round?
                            3
