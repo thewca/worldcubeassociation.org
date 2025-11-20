@@ -6,6 +6,9 @@ import {
   SimpleGrid,
   Text,
   Link as ChakraLink,
+  HStack,
+  Stat,
+  Badge,
 } from "@chakra-ui/react";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
 import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
@@ -76,48 +79,39 @@ export function VenueDetailsCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root variant="plain">
+    <Card.Root coloredBg>
       <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Venue Details
-          </Text>
-        </Card.Title>
+        <Card.Title textStyle="s4">Venue Details</Card.Title>
         <SimpleGrid columns={2} gap="4">
-          <Card.Root variant="infoSnippet">
-            <Card.Header>
+          <Stat.Root variant="competition">
+            <Stat.Label>
               <VenueIcon />
               Venue
-            </Card.Header>
-            <Card.Body>
-              <MarkdownProse content={competitionInfo.venue} />
-            </Card.Body>
-          </Card.Root>
+            </Stat.Label>
+            <MarkdownProse
+              as={Stat.ValueText}
+              content={competitionInfo.venue}
+            />
+          </Stat.Root>
 
-          <Card.Root variant="infoSnippet">
-            <Card.Header>
+          <Stat.Root variant="competition">
+            <Stat.Label>
               <MapIcon />
               Address
-            </Card.Header>
-            <Card.Body>
-              <Text>{competitionInfo.venue_address}</Text>
-            </Card.Body>
-          </Card.Root>
+            </Stat.Label>
+            <Stat.ValueText>{competitionInfo.venue_address}</Stat.ValueText>
+          </Stat.Root>
 
-          <Card.Root variant="infoSnippet">
-            <Card.Header>
+          <Stat.Root variant="competition">
+            <Stat.Label>
               <DetailsIcon />
               Details
-            </Card.Header>
-            <Card.Body>
-              <MarkdownProse content={competitionInfo.venue_details} />
-            </Card.Body>
-          </Card.Root>
+            </Stat.Label>
+            <MarkdownProse
+              as={Stat.ValueText}
+              content={competitionInfo.venue_details}
+            />
+          </Stat.Root>
         </SimpleGrid>
       </Card.Body>
     </Card.Root>
@@ -130,19 +124,14 @@ export function AdditionalInformationCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root variant="plain" mt="8">
+    <Card.Root coloredBg>
       <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Information
-          </Text>
-        </Card.Title>
-        <MarkdownProse content={competitionInfo.information} />
+        <Card.Title textStyle="s4">Information</Card.Title>
+        <MarkdownProse
+          as={Card.Description}
+          content={competitionInfo.information}
+          textStyle="body"
+        />
       </Card.Body>
     </Card.Root>
   );
@@ -157,19 +146,10 @@ export function RefundPolicyCard({
   const formattedRefundDate = refundDate.toLocaleString("en-US", dateFormat);
 
   return (
-    <Card.Root variant="plain">
+    <Card.Root coloredBg>
       <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Refund Policy
-          </Text>
-        </Card.Title>
-        <Text>
+        <Card.Title textStyle="s4">Refund Policy</Card.Title>
+        <Card.Description>
           If your registration is cancelled before {formattedRefundDate} you
           will be refunded
           <Text as="span" fontWeight="bold">
@@ -180,7 +160,7 @@ export function RefundPolicyCard({
             />{" "}
           </Text>
           of your registration fee.
-        </Text>
+        </Card.Description>
       </Card.Body>
     </Card.Root>
   );
@@ -204,107 +184,96 @@ export function RegistrationCard({
   );
 
   return (
-    <Card.Root variant="plain">
+    <Card.Root coloredBg>
       <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Registration
-          </Text>
-        </Card.Title>
+        <Card.Title textStyle="s4">Registration</Card.Title>
         <SimpleGrid columns={2} gap="4">
-          <Card.Root variant="infoSnippet">
-            <Card.Header>
+          <Stat.Root variant="competition">
+            <Stat.Label>
               <PaymentIcon />
               Base Registration Fee
-            </Card.Header>
-            <Card.Body>
-              <FormatNumber
-                value={competitionInfo.base_entry_fee_lowest_denomination / 100}
-                style="currency"
-                currency={competitionInfo.currency_code}
-              />{" "}
-              {competitionInfo.currency_code}
-            </Card.Body>
-          </Card.Root>
+            </Stat.Label>
+            <HStack>
+              <Stat.ValueText>
+                <FormatNumber
+                  value={
+                    competitionInfo.base_entry_fee_lowest_denomination / 100
+                  }
+                  style="currency"
+                  currency={competitionInfo.currency_code}
+                />
+              </Stat.ValueText>
+              <Badge>{competitionInfo.currency_code}</Badge>
+            </HStack>
+          </Stat.Root>
 
-          <Card.Root variant="infoSnippet">
-            <Card.Header>
+          <Stat.Root variant="competition">
+            <Stat.Label>
               <SpotsLeftIcon />
               Number of Registrations
-            </Card.Header>
-            <Card.Body>
+            </Stat.Label>
+            <Stat.ValueText>
               <FormatNumber value={0} />/
               <FormatNumber value={competitionInfo.competitor_limit} />
-            </Card.Body>
-          </Card.Root>
+            </Stat.ValueText>
+          </Stat.Root>
 
-          <Card.Root variant="infoSnippet">
-            <Card.Header>
+          <Stat.Root variant="competition">
+            <Stat.Label>
               <SpectatorsIcon />
               Spectators
-            </Card.Header>
-            <Card.Body>
+            </Stat.Label>
+            <Stat.ValueText>
               {competitionInfo.guests_entry_fee_lowest_denomination === 0 ? (
                 "Free"
               ) : (
-                <>
+                <HStack>
                   <FormatNumber
                     value={
                       competitionInfo.guests_entry_fee_lowest_denomination / 100
                     }
                     style="currency"
                     currency={competitionInfo.currency_code}
-                  />{" "}
-                  {competitionInfo.currency_code}
-                </>
+                  />
+                  <Badge>{competitionInfo.currency_code}</Badge>
+                </HStack>
               )}
-            </Card.Body>
-          </Card.Root>
+            </Stat.ValueText>
+          </Stat.Root>
 
-          <Card.Root variant="infoSnippet">
-            <Card.Header>
+          <Stat.Root variant="competition">
+            <Stat.Label>
               <OnTheSpotRegistrationIcon />
               On the spot Registration
-            </Card.Header>
-            <Card.Body>
-              <Text>
-                {competitionInfo.on_the_spot_registration ? "Yes" : "No"}
-              </Text>
-            </Card.Body>
-          </Card.Root>
+            </Stat.Label>
+            <Stat.ValueText>
+              {competitionInfo.on_the_spot_registration ? "Yes" : "No"}
+            </Stat.ValueText>
+          </Stat.Root>
 
-          <Card.Root variant="infoSnippet">
-            <Card.Header>
+          <Stat.Root variant="competition">
+            <Stat.Label>
               <CompRegoOpenDateIcon />
               Registration Opens
-            </Card.Header>
-            <Card.Body>
-              <Text>{formattedRegoOpenDate}</Text>
-            </Card.Body>
-          </Card.Root>
+            </Stat.Label>
+            <Stat.ValueText>{formattedRegoOpenDate}</Stat.ValueText>
+          </Stat.Root>
 
-          <Card.Root variant="infoSnippet">
-            <Card.Header>
+          <Stat.Root variant="competition">
+            <Stat.Label>
               <CompRegoCloseDateIcon />
               Registration Closes
-            </Card.Header>
-            <Card.Body>
-              <Text>{formattedRegoClosedDate}</Text>
-            </Card.Body>
-          </Card.Root>
+            </Stat.Label>
+            <Stat.ValueText>{formattedRegoClosedDate}</Stat.ValueText>
+          </Stat.Root>
 
-          <Card.Root variant="infoSnippet">
-            <Card.Header>
+          <Stat.Root variant="competition">
+            <Stat.Label>
               <PaymentIcon />
               Payment
-            </Card.Header>
-            <Card.Body>API Needed</Card.Body>
-          </Card.Root>
+            </Stat.Label>
+            <Stat.ValueText>API Needed</Stat.ValueText>
+          </Stat.Root>
         </SimpleGrid>
       </Card.Body>
     </Card.Root>
@@ -317,61 +286,48 @@ export function OrganizationTeamCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root variant="plain">
+    <Card.Root flexGrow="1" coloredBg>
       <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Organisation Team
-          </Text>
-        </Card.Title>
-        <Card.Root variant="infoSnippet">
-          <Card.Header>Organisers</Card.Header>
-          <Card.Body>
-            <Text>
-              {competitionInfo.organizers.map((organizer, index) => (
-                <Text as="span" key={index}>
-                  {organizer.url != "" ? (
-                    <ChakraLink href={organizer.url}>
-                      {organizer.name}
-                    </ChakraLink>
-                  ) : (
-                    organizer.name
-                  )}
-                  {competitionInfo.organizers.length == index + 1 ? "" : ", "}
-                </Text>
-              ))}
-            </Text>
-          </Card.Body>
-        </Card.Root>
+        <Card.Title textStyle="s4">Organization Team</Card.Title>
+        <Stat.Root variant="competition">
+          <Stat.Label>Organizers</Stat.Label>
+          <Stat.ValueText>
+            {competitionInfo.organizers.map((organizer, index) => (
+              <Text as="span" key={index}>
+                {organizer.url != "" ? (
+                  <ChakraLink href={organizer.url}>{organizer.name}</ChakraLink>
+                ) : (
+                  organizer.name
+                )}
+                {competitionInfo.organizers.length == index + 1 ? "" : ", "}
+              </Text>
+            ))}
+          </Stat.ValueText>
+        </Stat.Root>
 
-        <Card.Root variant="infoSnippet">
-          <Card.Header>Delegates</Card.Header>
-          <Card.Body>
-            <Text>
-              {competitionInfo.delegates.map((delegate, index) => (
-                <Text as="span" key={index}>
-                  <ChakraLink href={delegate.url}>{delegate.name}</ChakraLink>
-                  {competitionInfo.delegates.length == index + 1 ? "" : ", "}
-                </Text>
-              ))}
-            </Text>
-          </Card.Body>
-        </Card.Root>
+        <Stat.Root variant="competition">
+          <Stat.Label>Delegates</Stat.Label>
+          <Stat.ValueText>
+            {competitionInfo.delegates.map((delegate, index) => (
+              <Text as="span" key={index}>
+                <ChakraLink href={delegate.url}>{delegate.name}</ChakraLink>
+                {competitionInfo.delegates.length == index + 1 ? "" : ", "}
+              </Text>
+            ))}
+          </Stat.ValueText>
+        </Stat.Root>
 
-        <Card.Root variant="infoSnippet">
-          <Card.Header>Contact</Card.Header>
-          <Card.Body>
-            <MarkdownProse content={competitionInfo.contact} />
-          </Card.Body>
-        </Card.Root>
+        <Stat.Root variant="competition">
+          <Stat.Label>Contact</Stat.Label>
+          <MarkdownProse
+            as={Stat.ValueText}
+            content={competitionInfo.contact}
+          />
+        </Stat.Root>
+
         <Button variant="outline" asChild>
           <ChakraLink
-            variant="plainLink"
+            variant="header"
             href={
               "https://www.worldcubeassociation.org/competitions/" +
               competitionInfo.id +
@@ -393,31 +349,23 @@ export function EventCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root variant="plain">
+    <Card.Root coloredBg>
       <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Events List
-          </Text>
-        </Card.Title>
-        <Text>
+        <Card.Title textStyle="s4">Events List</Card.Title>
+        <HStack gap="4">
           {competitionInfo.event_ids.map((event_id) => (
             <EventIcon
               key={event_id}
               eventId={event_id}
+              boxSize="8"
               color={
-                event_id === competitionInfo.main_event_id
-                  ? "currentColor"
-                  : "supplementary.texts.gray1"
+                event_id === competitionInfo.main_event_id && event_id !== "333"
+                  ? "green.1A"
+                  : "currentColor"
               }
             />
           ))}
-        </Text>
+        </HStack>
       </Card.Body>
     </Card.Root>
   );
@@ -431,61 +379,63 @@ export function InfoCard({
   t: TFunction;
 }) {
   return (
-    <Card.Root variant="plain">
+    <Card.Root coloredBg>
       <Card.Body>
-        <Heading size="4xl" display="flex" alignItems="center">
-          <Button variant="ghost" p="0">
-            <BookmarkIcon />
-          </Button>
+        <Heading textStyle="h2" display="flex" alignItems="center">
           {competitionInfo.name}
+          <Button variant="ghost">
+            <BookmarkIcon boxSize="6" />
+          </Button>
         </Heading>
 
         <SimpleGrid columns={2} gap="4">
-          <Card.Root variant="infoSnippet">
-            <Card.Header>
+          <Stat.Root variant="competition">
+            <Stat.Label>
               <CompRegoOpenDateIcon />
               Date
-            </Card.Header>
-            <Card.Body>
-              <Text>
-                {formatDateRange(
-                  new Date(competitionInfo.start_date),
-                  new Date(competitionInfo.end_date),
-                )}
-              </Text>
-            </Card.Body>
-          </Card.Root>
+            </Stat.Label>
+            <Stat.ValueText>
+              {formatDateRange(
+                new Date(competitionInfo.start_date),
+                new Date(competitionInfo.end_date),
+              )}
+            </Stat.ValueText>
+          </Stat.Root>
 
-          <Card.Root variant="infoSnippet">
-            <Card.Header>
+          <Stat.Root variant="competition">
+            <Stat.Label>
               <LocationIcon />
               {t("competitions.competition_info.location")}
-            </Card.Header>
-            <Card.Body>
+            </Stat.Label>
+            <Stat.ValueText>
               <Text>{competitionInfo.city}, </Text>
-              <CountryMap code={competitionInfo.country_iso2} bold t={t} />
-            </Card.Body>
-          </Card.Root>
+              <CountryMap
+                code={competitionInfo.country_iso2}
+                t={t}
+                fontWeight="bold"
+              />
+            </Stat.ValueText>
+          </Stat.Root>
 
-          <Card.Root variant="infoSnippet">
-            <Card.Header>
+          <Stat.Root variant="competition">
+            <Stat.Label>
               <CompetitorsIcon />
               Competitor Limit
-            </Card.Header>
-            <Card.Body>
+            </Stat.Label>
+            <Stat.ValueText>
               <FormatNumber value={competitionInfo.competitor_limit} />
-            </Card.Body>
-          </Card.Root>
+            </Stat.ValueText>
+          </Stat.Root>
 
-          <Card.Root variant="infoSnippet">
-            <Card.Header>
+          <Stat.Root variant="competition">
+            <Stat.Label>
               <BookmarkIcon />
               Bookmarked
-            </Card.Header>
-            <Card.Body>
+            </Stat.Label>
+            <Stat.ValueText>
               <FormatNumber value={competitionInfo.number_of_bookmarks} /> Times
-            </Card.Body>
-          </Card.Root>
+            </Stat.ValueText>
+          </Stat.Root>
         </SimpleGrid>
       </Card.Body>
     </Card.Root>

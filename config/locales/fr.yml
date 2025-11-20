@@ -774,16 +774,16 @@ fr:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 27c2251
+        #original_hash: c564b74
         receive_delegate_reports: >-
           Si vous êtes un Délégué Senior, membre du WRC ou du WQAC, vous recevez
-          les rapports par défaut. Note : le changement peut prendre jusqu'à une
-          heure pour être pris en compte.
-        #original_hash: 364624c
+          les rapports par défaut. Note : le changement peut prendre jusqu'à 12
+          heures pour être pris en compte.
+        #original_hash: 0017d38
         delegate_reports_region: >-
           Si vous souhaitez recevoir tous les rapports, laissez ce champ vide
           (l'option du menu déroulant se trouve tout en haut). Remarque : la
-          modification peut prendre jusqu'à une heure pour être prise en compte.
+          modification peut prendre jusqu'à 12 heures pour être prise en compte.
         #original_hash: 0627e5c
         otp_attempt: >-
           Consultez l'application mobile que vous avez configuré pour obtenir un
@@ -851,14 +851,14 @@ fr:
           Délégués puissent les référencer dans leurs commentaires. Même s'ils
           semblent courants, listez au moins les incidents principaux. Merci de
           cocher les cases ci-dessous si vous avez besoin d'un avis.
-        #original_hash: 8af00aa
+        #original_hash: f2309fc
         setup_images: >-
-          Veuillez choisir au moins %{image_count} d'images qui illustrent la
-          configuration de la salle (zone de mélange, zone de compétition,
-          etc.). Vous pouvez sélectionner plusieurs fichiers à la fois. Vous ne
-          pouvez supprimer des images que lorsque suffisamment d'autres images
-          ont été téléchargées (si vous souhaitez remplacer une image, vous
-          devez d'abord télécharger la nouvelle image, puis supprimer
+          Vous DEVEZ choisir au moins %{image_count} d'images qui illustrent la
+          zone de mélange et celle de compétition (d'autres images sont les
+          bienvenues). Vous pouvez sélectionner plusieurs fichiers à la fois.
+          Vous ne pouvez supprimer des images que lorsque suffisamment d'autres
+          images ont été téléchargées (si vous souhaitez remplacer une image,
+          vous devez d'abord télécharger la nouvelle image, puis supprimer
           l'ancienne).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
@@ -3031,12 +3031,14 @@ fr:
         voulez participer lors de votre inscription en ligne, cependant vous
         pouvez ajouter des épreuves à votre inscription jusqu'à ce que l'épreuve
         commence.
-      #original_hash: cf7be5d
+      #original_hash: 51ef4f3
       on_the_spot_registration_fee_html: >-
-        Les inscriptions sur place seront acceptées pour un montant de
-        %{on_the_spot_base_entry_fee}.
-      #original_hash: 1637bea
-      on_the_spot_registration_free: Les inscriptions sur place seront acceptées gratuitement.
+        Les inscriptions sur place seront acceptées s'il reste des places
+        disponibles pour un montant de %{on_the_spot_base_entry_fee}.
+      #original_hash: 2b4ea65
+      on_the_spot_registration_free: >-
+        Les inscriptions sur place seront acceptées gratuitement s'il reste des
+        places disponibles.
       #original_hash: f5f687d
       no_on_the_spot_registration: Aucune inscription sur place ne sera acceptée.
       #original_hash: 4df139d
@@ -5369,7 +5371,7 @@ fr:
       casse-têtes à de nouveaux groupes de personnes permet à notre communauté
       de se renforcer. Un document présentant la vision du Bureau des Directeurs
       et sa stratégie pour la WCA est disponible <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">ici</a>.</p>
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">ici</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Le futur pour la WCA ?
     #original_hash: 3312277

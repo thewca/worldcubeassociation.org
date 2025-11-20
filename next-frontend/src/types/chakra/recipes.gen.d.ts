@@ -3,7 +3,7 @@ import type { ConditionalValue } from "../css.types"
 
 export interface BadgeVariant {
   /** @default "subtle" */
-  variant?: "solid" | "subtle" | "outline" | "surface" | "plain" | "achievement" | "information" | undefined
+  variant?: "solid" | "subtle" | "outline" | "surface" | "plain" | "information" | undefined
   /** @default "sm" */
   size?: "xs" | "sm" | "md" | "lg" | undefined
 }
@@ -118,9 +118,9 @@ export type KbdVariantMap = {
 }
 
 export interface LinkVariant {
-  /** @default "wcaLink" */
-  variant?: "underline" | "plain" | "wcaLink" | "plainLink" | "colouredLink" | undefined
-  /** @default "false" */
+  /** @default "wca" */
+  variant?: "underline" | "plain" | "wca" | "header" | undefined
+  /** @default false */
   hoverArrow?: boolean | undefined
 }
 
@@ -232,6 +232,7 @@ export interface CheckmarkVariant {
   size?: "xs" | "sm" | "md" | "lg" | undefined
   /** @default "solid" */
   variant?: "solid" | "outline" | "subtle" | "plain" | "inverted" | undefined
+  filled?: boolean | undefined
 }
 
 export type CheckmarkVariantProps = {
@@ -247,6 +248,7 @@ export interface RadiomarkVariant {
   variant?: "solid" | "subtle" | "outline" | "inverted" | undefined
   /** @default "md" */
   size?: "xs" | "sm" | "md" | "lg" | undefined
+  filled?: boolean | undefined
 }
 
 export type RadiomarkVariantProps = {
@@ -272,16 +274,6 @@ export type ColorSwatchVariantMap = {
   [K in keyof ColorSwatchVariant]: Array<ColorSwatchVariant[K]>
 }
 
-export interface ProseVariant {}
-
-export type ProseVariantProps = {
-  [K in keyof ProseVariant]?: ConditionalValue<ProseVariant[K]> | undefined
-}
-
-export type ProseVariantMap = {
-  [K in keyof ProseVariant]: Array<ProseVariant[K]>
-}
-
 export interface ConfigRecipes {
   badge: SystemRecipeFn<BadgeVariantProps, BadgeVariantMap>
   button: SystemRecipeFn<ButtonVariantProps, ButtonVariantMap>
@@ -302,7 +294,6 @@ export interface ConfigRecipes {
   checkmark: SystemRecipeFn<CheckmarkVariantProps, CheckmarkVariantMap>
   radiomark: SystemRecipeFn<RadiomarkVariantProps, RadiomarkVariantMap>
   colorSwatch: SystemRecipeFn<ColorSwatchVariantProps, ColorSwatchVariantMap>
-  prose: SystemRecipeFn<ProseVariantProps, ProseVariantMap>
 }
 
 // Accordion
@@ -345,6 +336,7 @@ export type AlertSlot = "title" | "description" | "root" | "indicator" | "conten
 export interface AlertVariant {
   /** @default "info" */
   status?: "info" | "warning" | "success" | "error" | "neutral" | undefined
+  /** @default false */
   inline?: boolean | undefined
   /** @default "subtle" */
   variant?: "subtle" | "surface" | "outline" | "solid" | undefined
@@ -425,10 +417,11 @@ export type BreadcrumbVariantMap = {
 export type CardSlot = "root" | "header" | "body" | "footer" | "title" | "description"
 
 export interface CardVariant {
-  /** @default "sm" */
+  /** @default "md" */
   size?: "sm" | "md" | "lg" | undefined
   /** @default "outline" */
-  variant?: "elevated" | "outline" | "subtle" | "hero" | "summary" | "info" | "plain" | "infoSnippet" | undefined
+  variant?: "elevated" | "outline" | "subtle" | undefined
+  coloredBg?: boolean | undefined
 }
 
 export type CardVariantProps = {
@@ -464,7 +457,7 @@ export type CheckboxCardSlot = "root" | "control" | "label" | "description" | "a
 
 export interface CheckboxCardVariant {
   /** @default "md" */
-  size?: "sm" | "md" | "lg" | "xs" | undefined
+  size?: "sm" | "md" | "lg" | undefined
   /** @default "outline" */
   variant?: "surface" | "subtle" | "outline" | "solid" | undefined
   justify?: "start" | "end" | "center" | undefined
@@ -480,6 +473,37 @@ export type CheckboxCardVariantProps = {
 
 export type CheckboxCardVariantMap = {
   [K in keyof CheckboxCardVariant]: Array<CheckboxCardVariant[K]>
+}
+
+// CodeBlock
+
+export type CodeBlockSlot =
+  | "root"
+  | "content"
+  | "title"
+  | "header"
+  | "footer"
+  | "control"
+  | "overlay"
+  | "code"
+  | "codeText"
+  | "copyTrigger"
+  | "copyIndicator"
+  | "collapseTrigger"
+  | "collapseIndicator"
+  | "collapseText"
+
+export interface CodeBlockVariant {
+  /** @default "md" */
+  size?: "sm" | "md" | "lg" | undefined
+}
+
+export type CodeBlockVariantProps = {
+  [K in keyof CodeBlockVariant]?: ConditionalValue<CodeBlockVariant[K]> | undefined
+}
+
+export type CodeBlockVariantMap = {
+  [K in keyof CodeBlockVariant]: Array<CodeBlockVariant[K]>
 }
 
 // Collapsible
@@ -506,7 +530,7 @@ export interface DataListVariant {
   /** @default "md" */
   size?: "sm" | "md" | "lg" | undefined
   /** @default "subtle" */
-  variant?: "subtle" | "bold" | "profileStat" | undefined
+  variant?: "subtle" | "bold" | undefined
 }
 
 export type DataListVariantProps = {
@@ -572,7 +596,6 @@ export interface DrawerVariant {
   /** @default "end" */
   placement?: "start" | "end" | "top" | "bottom" | undefined
   contained?: boolean | undefined
-  variant?: "competitionInfo" | undefined
 }
 
 export type DrawerVariantProps = {
@@ -713,6 +736,34 @@ export type ListVariantProps = {
 
 export type ListVariantMap = {
   [K in keyof ListVariant]: Array<ListVariant[K]>
+}
+
+// Listbox
+
+export type ListboxSlot =
+  | "label"
+  | "input"
+  | "item"
+  | "itemText"
+  | "itemIndicator"
+  | "itemGroup"
+  | "itemGroupLabel"
+  | "content"
+  | "root"
+  | "valueText"
+  | "empty"
+
+export interface ListboxVariant {
+  /** @default "subtle" */
+  variant?: "subtle" | "solid" | "plain" | undefined
+}
+
+export type ListboxVariantProps = {
+  [K in keyof ListboxVariant]?: ConditionalValue<ListboxVariant[K]> | undefined
+}
+
+export type ListboxVariantMap = {
+  [K in keyof ListboxVariant]: Array<ListboxVariant[K]>
 }
 
 // Menu
@@ -947,6 +998,25 @@ export type RatingGroupVariantMap = {
   [K in keyof RatingGroupVariant]: Array<RatingGroupVariant[K]>
 }
 
+// ScrollArea
+
+export type ScrollAreaSlot = "root" | "viewport" | "content" | "scrollbar" | "thumb" | "corner"
+
+export interface ScrollAreaVariant {
+  /** @default "hover" */
+  variant?: "hover" | "always" | undefined
+  /** @default "md" */
+  size?: "xs" | "sm" | "md" | "lg" | undefined
+}
+
+export type ScrollAreaVariantProps = {
+  [K in keyof ScrollAreaVariant]?: ConditionalValue<ScrollAreaVariant[K]> | undefined
+}
+
+export type ScrollAreaVariantMap = {
+  [K in keyof ScrollAreaVariant]: Array<ScrollAreaVariant[K]>
+}
+
 // SegmentGroup
 
 export type SegmentGroupSlot = "root" | "label" | "item" | "itemText" | "itemControl" | "indicator"
@@ -954,7 +1024,6 @@ export type SegmentGroupSlot = "root" | "label" | "item" | "itemText" | "itemCon
 export interface SegmentGroupVariant {
   /** @default "md" */
   size?: "xs" | "sm" | "md" | "lg" | undefined
-  variant?: "inset" | undefined
 }
 
 export type SegmentGroupVariantProps = {
@@ -1017,6 +1086,7 @@ export type ComboboxSlot =
   | "list"
   | "positioner"
   | "trigger"
+  | "empty"
   | "indicatorGroup"
   | "empty"
 
@@ -1074,6 +1144,7 @@ export type StatSlot = "root" | "label" | "helpText" | "valueText" | "valueUnit"
 export interface StatVariant {
   /** @default "md" */
   size?: "sm" | "md" | "lg" | undefined
+  variant?: "competition" | undefined
 }
 
 export type StatVariantProps = {
@@ -1146,7 +1217,7 @@ export interface TableVariant {
   striped?: boolean | undefined
   showColumnBorder?: boolean | undefined
   /** @default "line" */
-  variant?: "line" | "outline" | "results" | "competitions" | undefined
+  variant?: "line" | "outline" | "competitions" | undefined
   /** @default "md" */
   size?: "sm" | "md" | "lg" | "xs" | undefined
 }
@@ -1251,6 +1322,8 @@ export type TimelineSlot = "root" | "item" | "content" | "separator" | "indicato
 export interface TimelineVariant {
   /** @default "solid" */
   variant?: "subtle" | "solid" | "outline" | "plain" | undefined
+  /** @default false */
+  showLastSeparator?: boolean | undefined
   /** @default "md" */
   size?: "sm" | "md" | "lg" | "xl" | undefined
 }
@@ -1325,6 +1398,40 @@ export type QrCodeVariantMap = {
   [K in keyof QrCodeVariant]: Array<QrCodeVariant[K]>
 }
 
+// TreeView
+
+export type TreeViewSlot =
+  | "branch"
+  | "branchContent"
+  | "branchControl"
+  | "branchIndentGuide"
+  | "branchIndicator"
+  | "branchText"
+  | "branchTrigger"
+  | "item"
+  | "itemIndicator"
+  | "itemText"
+  | "label"
+  | "nodeCheckbox"
+  | "root"
+  | "tree"
+
+export interface TreeViewVariant {
+  /** @default "md" */
+  size?: "md" | "sm" | "xs" | undefined
+  /** @default "subtle" */
+  variant?: "subtle" | "solid" | undefined
+  animateContent?: boolean | undefined
+}
+
+export type TreeViewVariantProps = {
+  [K in keyof TreeViewVariant]?: ConditionalValue<TreeViewVariant[K]> | undefined
+}
+
+export type TreeViewVariantMap = {
+  [K in keyof TreeViewVariant]: Array<TreeViewVariant[K]>
+}
+
 export interface ConfigSlotRecipes {
   accordion: SystemSlotRecipeFn<AccordionSlot, AccordionVariantProps, AccordionVariantMap>
   actionBar: SystemSlotRecipeFn<ActionBarSlot, ActionBarVariantProps, ActionBarVariantMap>
@@ -1335,6 +1442,7 @@ export interface ConfigSlotRecipes {
   card: SystemSlotRecipeFn<CardSlot, CardVariantProps, CardVariantMap>
   checkbox: SystemSlotRecipeFn<CheckboxSlot, CheckboxVariantProps, CheckboxVariantMap>
   checkboxCard: SystemSlotRecipeFn<CheckboxCardSlot, CheckboxCardVariantProps, CheckboxCardVariantMap>
+  codeBlock: SystemSlotRecipeFn<CodeBlockSlot, CodeBlockVariantProps, CodeBlockVariantMap>
   collapsible: SystemSlotRecipeFn<CollapsibleSlot, CollapsibleVariantProps, CollapsibleVariantMap>
   dataList: SystemSlotRecipeFn<DataListSlot, DataListVariantProps, DataListVariantMap>
   dialog: SystemSlotRecipeFn<DialogSlot, DialogVariantProps, DialogVariantMap>
@@ -1346,6 +1454,7 @@ export interface ConfigSlotRecipes {
   fileUpload: SystemSlotRecipeFn<FileUploadSlot, FileUploadVariantProps, FileUploadVariantMap>
   hoverCard: SystemSlotRecipeFn<HoverCardSlot, HoverCardVariantProps, HoverCardVariantMap>
   list: SystemSlotRecipeFn<ListSlot, ListVariantProps, ListVariantMap>
+  listbox: SystemSlotRecipeFn<ListboxSlot, ListboxVariantProps, ListboxVariantMap>
   menu: SystemSlotRecipeFn<MenuSlot, MenuVariantProps, MenuVariantMap>
   nativeSelect: SystemSlotRecipeFn<NativeSelectSlot, NativeSelectVariantProps, NativeSelectVariantMap>
   numberInput: SystemSlotRecipeFn<NumberInputSlot, NumberInputVariantProps, NumberInputVariantMap>
@@ -1356,6 +1465,7 @@ export interface ConfigSlotRecipes {
   radioCard: SystemSlotRecipeFn<RadioCardSlot, RadioCardVariantProps, RadioCardVariantMap>
   radioGroup: SystemSlotRecipeFn<RadioGroupSlot, RadioGroupVariantProps, RadioGroupVariantMap>
   ratingGroup: SystemSlotRecipeFn<RatingGroupSlot, RatingGroupVariantProps, RatingGroupVariantMap>
+  scrollArea: SystemSlotRecipeFn<ScrollAreaSlot, ScrollAreaVariantProps, ScrollAreaVariantMap>
   segmentGroup: SystemSlotRecipeFn<SegmentGroupSlot, SegmentGroupVariantProps, SegmentGroupVariantMap>
   select: SystemSlotRecipeFn<SelectSlot, SelectVariantProps, SelectVariantMap>
   combobox: SystemSlotRecipeFn<ComboboxSlot, ComboboxVariantProps, ComboboxVariantMap>
@@ -1372,6 +1482,7 @@ export interface ConfigSlotRecipes {
   timeline: SystemSlotRecipeFn<TimelineSlot, TimelineVariantProps, TimelineVariantMap>
   colorPicker: SystemSlotRecipeFn<ColorPickerSlot, ColorPickerVariantProps, ColorPickerVariantMap>
   qrCode: SystemSlotRecipeFn<QrCodeSlot, QrCodeVariantProps, QrCodeVariantMap>
+  treeView: SystemSlotRecipeFn<TreeViewSlot, TreeViewVariantProps, TreeViewVariantMap>
 }
 
 export interface ConfigRecipeSlots {
@@ -1384,6 +1495,7 @@ export interface ConfigRecipeSlots {
   card: CardSlot
   checkbox: CheckboxSlot
   checkboxCard: CheckboxCardSlot
+  codeBlock: CodeBlockSlot
   collapsible: CollapsibleSlot
   dataList: DataListSlot
   dialog: DialogSlot
@@ -1395,6 +1507,7 @@ export interface ConfigRecipeSlots {
   fileUpload: FileUploadSlot
   hoverCard: HoverCardSlot
   list: ListSlot
+  listbox: ListboxSlot
   menu: MenuSlot
   nativeSelect: NativeSelectSlot
   numberInput: NumberInputSlot
@@ -1405,6 +1518,7 @@ export interface ConfigRecipeSlots {
   radioCard: RadioCardSlot
   radioGroup: RadioGroupSlot
   ratingGroup: RatingGroupSlot
+  scrollArea: ScrollAreaSlot
   segmentGroup: SegmentGroupSlot
   select: SelectSlot
   combobox: ComboboxSlot
@@ -1421,6 +1535,7 @@ export interface ConfigRecipeSlots {
   timeline: TimelineSlot
   colorPicker: ColorPickerSlot
   qrCode: QrCodeSlot
+  treeView: TreeViewSlot
 }
 
 export type SlotRecipeRecord<T, K> = T extends keyof ConfigRecipeSlots ? Record<ConfigRecipeSlots[T], K> : Record<string, K>

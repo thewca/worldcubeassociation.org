@@ -13,6 +13,18 @@ const baseWcaProvider: Provider = {
   issuer: process.env.OIDC_ISSUER,
   clientId: process.env.OIDC_CLIENT_ID,
   clientSecret: process.env.OIDC_CLIENT_SECRET,
+  profile: (profile) => {
+    return {
+      id: profile.sub,
+      name: profile.name,
+      email: profile.email,
+      // The OIDC claim standard calls it `picture`,
+      //   but for unknown reasons AuthJS v5 calls it `image`
+      image: profile.picture,
+      roles: profile.roles,
+      wcaId: profile.preferred_username,
+    };
+  },
 };
 
 const cmsWcaProvider: Provider = {
@@ -22,15 +34,8 @@ const cmsWcaProvider: Provider = {
   authorization: {
     params: { scope: "openid profile email cms" },
   },
+  // Hit the user_info endpoint separately for roles computation
   idToken: false,
-  profile: (profile) => {
-    return {
-      id: profile.sub,
-      name: profile.name,
-      email: profile.email,
-      roles: profile.roles,
-    };
-  },
   // allow re-linking of accounts that have the same email.
   //   This happens when a user who is allowed to use Payload
   //   First logs in via the "normal" provider, and later wants to "switch"
@@ -44,12 +49,12 @@ export const authConfig: NextAuthConfig = {
   secret: process.env.AUTH_SECRET,
   providers: [baseWcaProvider],
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account, user }) {
       if (account) {
         // First-time login, save the `access_token`, its expiry and the `refresh_token`
         return {
           ...token,
-          userId: account.userId,
+          wcaId: user?.wcaId,
           access_token: account.access_token,
           expires_at: account.expires_at,
           refresh_token: account.refresh_token,
@@ -65,15 +70,16 @@ export const authConfig: NextAuthConfig = {
     async session({ session, token }) {
       // @ts-expect-error TODO: Fix this
       session.accessToken = token.access_token;
-      session.user.id = token.userId as string;
+      session.user.wcaId = token.wcaId as string;
       return session;
     },
   },
 };
 
 declare module "@auth/core/types" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  interface User extends PayloadAuthjsUser<PayloadUser> {}
+  interface User extends PayloadAuthjsUser<PayloadUser> {
+    wcaId?: string;
+  }
 }
 
 export const payloadAuthConfig: EnrichedAuthConfig = {
@@ -102,6 +108,7 @@ export const payloadAuthConfig: EnrichedAuthConfig = {
         id: user.id,
         data: {
           roles: user.roles,
+          image: user.image,
         },
       });
     },

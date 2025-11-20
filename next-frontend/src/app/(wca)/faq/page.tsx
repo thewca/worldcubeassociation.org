@@ -36,20 +36,23 @@ export default async function FAQ() {
   const faqCategories = uniqBy(allCategories, "id");
 
   return (
-    <Container>
-      <VStack gap="8" width="full" pt="8" alignItems="left">
-        <Heading size="5xl"> Frequently Asked Questions</Heading>
-        <Card.Root maxW="40em">
+    <Container paddingTop="8">
+      <VStack gap="8" width="full" alignItems="left">
+        <Card.Root maxW="40em" coloredBg>
           <Card.Body>
+            <Card.Title textStyle="h1">Frequently Asked Questions</Card.Title>
             {faqPage.introTextMarkdown ? (
-              <MarkdownProse content={faqPage.introTextMarkdown} />
+              <MarkdownProse
+                content={faqPage.introTextMarkdown}
+                textStyle="body"
+              />
             ) : (
               <Text>No Intro text, add it!</Text>
             )}
           </Card.Body>
         </Card.Root>
-        <Card.Root variant="hero" overflow="hidden">
-          <Card.Body bg="bg">
+        <Card.Root borderWidth={0} bg="transparent">
+          <Card.Body paddingX={0}>
             <Tabs.Root
               variant="subtle"
               fitted
@@ -61,6 +64,7 @@ export default async function FAQ() {
                   <Tabs.Trigger
                     key={category.id}
                     value={category.id.toString()}
+                    colorPalette={category.colorPalette}
                   >
                     {category.title}
                   </Tabs.Trigger>
@@ -79,6 +83,7 @@ export default async function FAQ() {
                     <Accordion.Root
                       multiple
                       collapsible
+                      colorPalette={category.colorPalette}
                       variant="subtle"
                       width="full"
                     >
@@ -87,12 +92,11 @@ export default async function FAQ() {
                           key={question.id}
                           value={question.id.toString()}
                         >
-                          <Accordion.ItemTrigger
-                            colorPalette={category.colorPalette}
-                          >
+                          <Accordion.ItemTrigger textStyle="s1">
                             {question.question}
+                            <Accordion.ItemIndicator />
                           </Accordion.ItemTrigger>
-                          <Accordion.ItemContent>
+                          <Accordion.ItemContent textStyle="body">
                             {question.answer}
                           </Accordion.ItemContent>
                         </Accordion.Item>

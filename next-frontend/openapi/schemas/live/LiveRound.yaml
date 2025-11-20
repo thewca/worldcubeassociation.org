@@ -1,0 +1,18 @@
+allOf:
+  - $ref: '../wcif/WcifRound.yaml'
+  - type: object
+    properties:
+      results:
+        type: array
+        items:
+          $ref: './LiveResult.yaml'
+      competitors:
+        type: array
+        items:
+          $ref: './LiveCompetitor.yaml'
+      round_id:
+        type: number
+    required:
+      - results
+      - competitors
+      - round_id

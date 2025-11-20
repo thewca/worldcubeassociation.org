@@ -19,13 +19,8 @@ class InboxPerson < ApplicationRecord
   alias_attribute :country_id, :country_iso2
 
   validates :name, presence: true
-  validates :dob, presence: true
+  validates :dob, presence: true, comparison: { less_than: Date.today, message: "must be in the past" }
   validates :country_iso2, presence: true
-
-  validate :dob_must_be_in_the_past
-  private def dob_must_be_in_the_past
-    errors.add(:dob, "must be in the past") if dob && dob >= Date.today
-  end
 
   def country
     Country.c_find_by_iso2(self.country_iso2)

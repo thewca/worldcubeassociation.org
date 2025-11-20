@@ -26,7 +26,7 @@ class Api::V0::Wfc::DuesRedirectsController < Api::V0::ApiController
     if wfc_dues_redirect.save
       render json: wfc_dues_redirect, status: :created
     else
-      render json: wfc_dues_redirect.errors, status: :unprocessable_entity
+      render json: wfc_dues_redirect.errors, status: :unprocessable_content
     end
   end
 

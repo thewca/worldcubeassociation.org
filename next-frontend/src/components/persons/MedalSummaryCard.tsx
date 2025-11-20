@@ -1,5 +1,5 @@
 import React from "react";
-import { Stat, Card, Heading, Text, Float, StatGroup } from "@chakra-ui/react";
+import { Stat, Card, Heading, Float, StatGroup } from "@chakra-ui/react";
 import MyResultsIcon from "@/components/icons/MyResultsIcon";
 
 interface MedalSummaryCardProps {
@@ -14,24 +14,15 @@ const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({
   bronze,
 }) => {
   return (
-    <Card.Root variant="summary" colorPalette="yellow" overflow="hidden">
+    <Card.Root colorPalette="yellow" overflow="hidden" coloredBg>
       <Float placement="middle-end" offsetX="20">
-        <MyResultsIcon boxSize="13rem" color="colorPallete.200" opacity="0.3" />
+        <MyResultsIcon boxSize="13rem" color="colorPalette.fg" opacity="0.3" />
       </Float>
       <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Medals
-          </Text>
-        </Card.Title>
-        <StatGroup justifyContent="start" flexDirection="row" gap="5">
+        <Card.Title textStyle="s4">Medals</Card.Title>
+        <StatGroup justifyContent="flex-start" gap="5">
           {gold > 0 && (
-            <Stat.Root flex="0">
+            <Stat.Root>
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{gold}</Heading>
                 <Stat.ValueUnit color="yellow.contrast">Gold</Stat.ValueUnit>
@@ -39,7 +30,7 @@ const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({
             </Stat.Root>
           )}
           {silver > 0 && (
-            <Stat.Root flex="0">
+            <Stat.Root>
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{silver}</Heading>
                 <Stat.ValueUnit color="yellow.contrast">Silver</Stat.ValueUnit>
@@ -47,7 +38,7 @@ const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({
             </Stat.Root>
           )}
           {bronze > 0 && (
-            <Stat.Root flex="0">
+            <Stat.Root>
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{bronze}</Heading>
                 <Stat.ValueUnit color="yellow.contrast">Bronze</Stat.ValueUnit>

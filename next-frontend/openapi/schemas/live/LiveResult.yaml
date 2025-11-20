@@ -1,0 +1,38 @@
+type: object
+required:
+  - registration_id
+  - round_id
+  - ranking
+  - best
+  - average
+  - single_record_tag
+  - average_record_tag
+  - advancing
+  - advancing_questionable
+  - event_id
+  - attempts
+properties:
+  registration_id:
+    type: number
+  round_id:
+    type: number
+  ranking:
+    type: number
+  best:
+    type: number
+  average:
+    type: number
+  single_record_tag:
+    type: string
+  average_record_tag:
+    type: string
+  advancing:
+    type: boolean
+  advancing_questionable:
+    type: boolean
+  event_id:
+    type: string
+  attempts:
+    type: array
+    items:
+      $ref: "./LiveAttempt.yaml"

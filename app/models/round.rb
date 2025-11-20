@@ -2,17 +2,18 @@
 
 class Round < ApplicationRecord
   belongs_to :competition_event
+  belongs_to :linked_rounds, optional: true
 
   has_one :competition, through: :competition_event
   delegate :competition_id, to: :competition_event
 
   has_one :event, through: :competition_event
   # CompetitionEvent uses the cached value
-  delegate :event, to: :competition_event
+  delegate :event_id, :event, to: :competition_event
 
   has_many :registrations, through: :competition_event
 
-  has_many :matched_scramble_sets, class_name: 'InboxScrambleSet', foreign_key: "matched_round_id", inverse_of: :matched_round, dependent: :nullify
+  has_many :matched_scramble_sets, -> { order(:ordered_index) }, class_name: 'InboxScrambleSet', foreign_key: "matched_round_id", inverse_of: :matched_round, dependent: :nullify
 
   # For the following association, we want to keep it to be able to do some joins,
   # but we definitely want to use cached values when directly using the method.
@@ -48,23 +49,21 @@ class Round < ApplicationRecord
             numericality: { only_integer: true,
                             greater_than_or_equal_to: 1,
                             less_than_or_equal_to: MAX_NUMBER,
-                            unless: :old_type }
+                            unless: :old_type? }
 
   # Qualification rounds/b-final are handled weirdly, they have round number 0
   # and do not count towards the total amount of rounds.
   OLD_TYPES = %w[0 b].freeze
   validates :old_type, inclusion: { in: OLD_TYPES, allow_nil: true }
-  after_validation(if: :old_type) do
+  after_validation(if: :old_type?) do
     self.number = 0
   end
 
-  validate do
-    errors.add(:format, "'#{format_id}' is not allowed for '#{event.id}'") unless event.preferred_formats.find_by(format_id: format_id)
-  end
+  # The event dictates which formats are even allowed in the first place, hence the prefix
+  delegate :formats, :format_ids, to: :event, prefix: :allowed
+  validates :format, inclusion: { in: :allowed_formats, message: ->(round, _args) { "'#{round.format_id}' is not allowed for '#{round.event_id}'" } }
 
-  validate do
-    errors.add(:advancement_condition, "cannot be set on a final round") if final_round? && advancement_condition
-  end
+  validates :advancement_condition, absence: { if: :final_round?, message: "cannot be set on a final round" }
 
   def initialize(attributes = nil)
     # Overrides the default constructor to setup the default time limit if not
@@ -95,8 +94,6 @@ class Round < ApplicationRecord
       cutoff ? "g" : "3"
     end
   end
-
-  delegate :id, to: :event, prefix: true
 
   def formats_used
     cutoff_format = Format.c_find!(cutoff.number_of_attempts.to_s) if cutoff

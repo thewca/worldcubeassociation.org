@@ -4,33 +4,10 @@ import { HStack, Icon, Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { route } from "nextjs-routes";
 import { AttemptsCells, recordTagBadge } from "@/components/results/TableCells";
-import _ from "lodash";
-import Flag from "react-world-flags";
+import { resultAttempts } from "@/lib/wca/results/attempts";
+import WcaFlag from "@/components/WcaFlag";
 import { TFunction } from "i18next";
 import CountryMap from "@/components/CountryMap";
-
-function resultAttempts(result: components["schemas"]["Result"]) {
-  const definedAttempts = result.attempts.filter((res) => res);
-
-  const validAttempts = definedAttempts.filter((res) => res !== 0);
-  const completedAttempts = validAttempts.filter((res) => res > 0);
-  const uncompletedAttempts = validAttempts.filter((res) => res < 0);
-
-  // DNF/DNS values are very small. If all solves were successful,
-  //   then `uncompletedAttempts` is empty and the min is `undefined`,
-  //   which means we fall back to the actually slowest value.
-  const worstResult = _.min(uncompletedAttempts) || _.max(validAttempts);
-  const bestResult = _.min(completedAttempts);
-
-  const bestResultIndex = definedAttempts.indexOf(bestResult!);
-  const worstResultIndex = definedAttempts.indexOf(worstResult!);
-
-  return {
-    definedAttempts,
-    bestResultIndex,
-    worstResultIndex,
-  };
-}
 
 export function ResultsTable({
   results,
@@ -92,7 +69,7 @@ export function ResultsTable({
               <Table.Cell>
                 <HStack>
                   <Icon asChild size="sm">
-                    <Flag code={competitorResult.country_iso2} />
+                    <WcaFlag code={competitorResult.country_iso2} />
                   </Icon>
                   <CountryMap code={competitorResult.country_iso2} t={t} />
                 </HStack>
@@ -162,7 +139,7 @@ export function ByPersonTable({
               <Table.Cell>
                 <HStack>
                   <Icon asChild size="sm">
-                    <Flag code={competitorResult.country_iso2} />
+                    <WcaFlag code={competitorResult.country_iso2} />
                   </Icon>
                   <CountryMap code={competitorResult.country_iso2} t={t} />
                 </HStack>

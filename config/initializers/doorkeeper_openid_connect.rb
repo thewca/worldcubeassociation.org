@@ -34,6 +34,14 @@ Doorkeeper::OpenidConnect.configure do
       resource_owner.name
     end
 
+    claim :preferred_username, response: %i[id_token user_info] do |resource_owner|
+      resource_owner.wca_id
+    end
+
+    claim :picture, response: %i[id_token user_info] do |resource_owner|
+      resource_owner.current_avatar&.strict_url
+    end
+
     claim :roles, response: :user_info, scope: :cms do |resource_owner|
       resource_owner.teams_committees.pluck(:friendly_id) |
         ["board"].select { resource_owner.board_member? }

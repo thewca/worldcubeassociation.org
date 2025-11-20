@@ -410,7 +410,6 @@ Rails.application.routes.draw do
       get '/users/me/preferred_events' => 'users#preferred_events'
       get '/users/me/permissions' => 'users#permissions'
       get '/users/me/bookmarks' => 'users#bookmarked_competitions'
-      get '/users/me/token' => 'users#token', as: :token
       get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'users#show_user_by_wca_id', as: :user
       get '/delegates' => 'api#delegates'
@@ -432,6 +431,14 @@ Rails.application.routes.draw do
 
       resources :incidents, only: %i[index]
       resources :regional_organizations, only: %i[index], path: '/regional-organizations'
+
+      namespace :results do
+        get '/rankings/:event_id/:type' => 'rankings#index'
+
+        resources :records, only: %i[index show] do
+          get '/history' => 'results#history'
+        end
+      end
 
       resources :competitions, only: %i[index show] do
         get '/wcif' => 'competitions#show_wcif'

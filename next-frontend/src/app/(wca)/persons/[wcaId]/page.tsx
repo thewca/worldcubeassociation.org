@@ -273,15 +273,15 @@ export default async function PersonOverview({
 
             {/* Tabs */}
             <GridItem colSpan={6}>
-              <Card.Root variant="plain" p={0}>
-                <Card.Body p={0}>
-                  <Tabs.Root
-                    defaultValue="results"
-                    fitted
-                    variant="results"
-                    lazyMount
-                    colorPalette="blue"
-                  >
+              <Card.Root coloredBg>
+                <Tabs.Root
+                  defaultValue="results"
+                  fitted
+                  variant="results"
+                  lazyMount
+                  colorPalette="blue"
+                >
+                  <Card.Header padding={0}>
                     <Tabs.List>
                       <Tabs.Trigger value="results">Results</Tabs.Trigger>
                       <Tabs.Trigger value="competitions">
@@ -293,6 +293,8 @@ export default async function PersonOverview({
                       </Tabs.Trigger>
                       <Tabs.Trigger value="map">Map</Tabs.Trigger>
                     </Tabs.List>
+                  </Card.Header>
+                  <Card.Body>
                     <Tabs.Content value="results">
                       <ResultsTab wcaId={wcaId} />
                     </Tabs.Content>
@@ -309,8 +311,8 @@ export default async function PersonOverview({
                     <Tabs.Content value="map">
                       <MapTab />
                     </Tabs.Content>
-                  </Tabs.Root>
-                </Card.Body>
+                  </Card.Body>
+                </Tabs.Root>
               </Card.Root>
             </GridItem>
           </SimpleGrid>

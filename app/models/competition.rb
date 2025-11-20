@@ -223,6 +223,7 @@ class Competition < ApplicationRecord
                    format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
   validates :cell_name, length: { maximum: MAX_CELL_NAME_LENGTH },
                         format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
+  strip_attributes only: %i[name cell_name], collapse_spaces: true, allow_empty: true
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :external_website, format: { with: URL_RE }, allow_blank: true
   validates :external_registration_page, presence: true, format: { with: URL_RE }, if: :external_registration_page_required?
@@ -396,7 +397,8 @@ class Competition < ApplicationRecord
       !auto_accept_preference_disabled? && !use_wca_registration
 
     errors.add(:auto_accept_preference, I18n.t('competitions.errors.must_use_payment_integration')) if
-      !auto_accept_preference_disabled? && confirmed_or_visible? && competition_payment_integrations.where(connected_account_type: "ConnectedStripeAccount").none?
+      !auto_accept_preference_disabled? && confirmed_or_visible? && !probably_over? &&
+      competition_payment_integrations.where(connected_account_type: "ConnectedStripeAccount").none?
 
     errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_limit')) if
       auto_accept_disable_threshold.present? &&
@@ -1027,7 +1029,9 @@ class Competition < ApplicationRecord
   end
 
   def can_show_competitors_page?
-    after_registration_open? && registrations.competing_status_accepted.competing.any?
+    organizer_delegate_ids = organizers.pluck(:id) + delegates.pluck(:id)
+    normal_competitor_ids = registrations.competing_status_accepted.competing.pluck(:user_id) - organizer_delegate_ids
+    after_registration_open? || normal_competitor_ids.any?
   end
 
   def registration_status
@@ -1202,14 +1206,14 @@ class Competition < ApplicationRecord
     errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS)) if number_of_days > MAX_SPAN_DAYS
   end
 
-  validate :registration_dates_must_be_valid
+  validate :registration_dates_must_be_valid, if: :start_date?
   private def registration_dates_must_be_valid
     errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start')) if refund_policy_limit_date? && refund_policy_limit_date > start_date
 
-    if registration_period_required? && registration_open.present? && registration_close.present? &&
-       (registration_open >= start_date || registration_close >= start_date)
-      errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start'))
-    end
+    return unless registration_period_required? && [registration_open, registration_close].all?(&:present?)
+
+    errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start')) if
+      registration_open >= start_date || registration_close >= start_date
   end
 
   validate :waiting_list_dates_must_be_valid

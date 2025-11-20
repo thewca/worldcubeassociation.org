@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
+import React from 'react';
+import { useOnInView } from 'react-intersection-observer';
 
 import { Container } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
@@ -18,18 +18,11 @@ function ListView({
   fetchMoreCompetitions,
   hasMoreCompsToLoad,
 }) {
-  const { ref: bottomRef, inView: bottomInView } = useInView();
-
-  useEffect(() => {
-    if (hasMoreCompsToLoad && bottomInView && !isLoading) {
+  const bottomRef = useOnInView(() => {
+    if (hasMoreCompsToLoad && !isLoading) {
       fetchMoreCompetitions();
     }
-  }, [
-    hasMoreCompsToLoad,
-    bottomInView,
-    isLoading,
-    fetchMoreCompetitions,
-  ]);
+  });
 
   switch (filterState.timeOrder) {
     case 'present': {

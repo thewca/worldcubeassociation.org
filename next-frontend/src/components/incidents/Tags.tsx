@@ -7,7 +7,8 @@ import {
   Separator,
   Button,
 } from "@chakra-ui/react";
-import { usePermissions } from "@/providers/PermissionProvider";
+
+import { usePermissionsQuery } from "@/lib/hooks/usePermissionsQuery";
 
 interface RegulationTagProps {
   id: string;
@@ -80,7 +81,8 @@ const competitionReportUrl = (id: string) =>
   `/competitions/${id}/delegate-report`;
 
 export function CompetitionTag({ id, name, comments }: CompetitionTagProps) {
-  const canViewDelegateMatters = usePermissions()?.canViewDelegateReport(id);
+  const { data: permissions } = usePermissionsQuery();
+  const canViewDelegateMatters = permissions?.canViewDelegateReport(id);
 
   const links = canViewDelegateMatters ? (
     <>

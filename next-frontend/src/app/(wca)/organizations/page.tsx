@@ -20,7 +20,7 @@ import { getT } from "@/lib/i18n/get18n";
 import Errored from "@/components/ui/errored";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import _ from "lodash";
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 
 export default async function RegionalOrganizations() {
   const I18n = await getT();
@@ -47,7 +47,7 @@ export default async function RegionalOrganizations() {
             >
               <Float offsetX={6}>
                 <Icon asChild size="sm">
-                  <Flag code={org.country_iso2} />
+                  <WcaFlag code={org.country_iso2} />
                 </Icon>
               </Float>
               {org.logo_url && (
@@ -78,7 +78,7 @@ export default async function RegionalOrganizations() {
                 <LinkOverlay asChild>
                   <Link
                     href={org.website}
-                    variant="plainLink"
+                    variant="header"
                     textStyle="2xl"
                     textAlign="center"
                   >

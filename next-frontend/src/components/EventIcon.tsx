@@ -20,7 +20,7 @@ import _333ohIcon from "@/components/icons/events/_333ohIcon";
 import _444bfIcon from "@/components/icons/events/_444bfIcon";
 import _555bfIcon from "@/components/icons/events/_555bfIcon";
 
-import type { ComponentProps } from "react";
+import type { ComponentPropsWithoutRef } from "react";
 
 const eventIconMap = {
   "333": _333Icon,
@@ -49,7 +49,7 @@ const eventIconMap = {
 type EventIconId = keyof typeof eventIconMap;
 
 type EventIconIntrinsic = (typeof eventIconMap)[EventIconId];
-type EventIconIntrinsicProps = ComponentProps<EventIconIntrinsic>;
+type EventIconIntrinsicProps = ComponentPropsWithoutRef<EventIconIntrinsic>;
 
 type EventIconProps = {
   eventId: string;

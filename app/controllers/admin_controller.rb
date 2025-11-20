@@ -48,7 +48,7 @@ class AdminController < ApplicationController
       end
       render status: :ok, json: { success: true }
     else
-      render status: :unprocessable_entity, json: {
+      render status: :unprocessable_content, json: {
         error: "Could not clear the results submission. Maybe results are already posted, or there is no submission.",
       }
     end

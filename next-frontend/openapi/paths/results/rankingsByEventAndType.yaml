@@ -1,0 +1,44 @@
+get:
+  summary: Get the current rankings
+  parameters:
+    - name: type
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: event_id
+      in: path
+      required: true
+      schema:
+        type: string
+    - in: query
+      name: region
+      schema:
+        type: string
+    - in: query
+      name: show
+      schema:
+        type: string
+    - in: query
+      name: gender
+      schema:
+        type: string
+  operationId: getRankings
+  responses:
+    "200":
+      description: Successfully retrieved rankings
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - rankings
+              - timestamp
+            properties:
+              rankings:
+                type: array
+                items:
+                  $ref: '../../schemas/results/ExtendedResult.yaml'
+              timestamp:
+                type: string
+                format: date

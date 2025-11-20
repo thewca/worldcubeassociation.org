@@ -769,15 +769,15 @@ sv:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 27c2251
+        #original_hash: c564b74
         receive_delegate_reports: >-
           Om du är senior-delegat eller medlem i WRC eller WQAC, får du
-          delegatrapporter som standard. Obs: ändringen kan ta upp till en timme
-          att träda i kraft.
-        #original_hash: 364624c
+          delegatrapporter som standard. OBS: ändringen kan ta upp till 12
+          timmar att träda i kraft.
+        #original_hash: 0017d38
         delegate_reports_region: >-
           Om du vill få alla rapporter lämnar du detta fält tomt (dropdown-menyn
-          längst upp). OBS: det kan ta upp till en timme innan ändringen träder
+          längst upp). OBS: det kan ta upp till 12 timmar innan ändringen träder
           i kraft.
         #original_hash: 0627e5c
         otp_attempt: >-
@@ -845,13 +845,13 @@ sv:
           hänvisning till deras nummer. Även om allt verkade normalt, lista bara
           åtminstone de mest anmärkningsvärda fallen. Markera kryssrutorna nedan
           om du aktivt söker feedback.
-        #original_hash: 8af00aa
+        #original_hash: f2309fc
         setup_images: >-
-          Välj minst %{image_count} bilder som illustrerar tävlingens setup
-          (blandningsområde, tävlingsområde etc.). Du kan välja flera filer
-          samtidigt. Du kan ta bort bilder först när tillräckligt många andra
-          bilder har laddats upp (om du vill byta ut en bild måste du först
-          ladda upp den nya bilden och sedan ta bort den gamla).
+          Du MÅSTE välja minst %{image_count} bilder som illustrerar blandnings-
+          och tävlingsområdet (andra bilder är också välkomna). Du kan välja
+          flera filer samtidigt. Du kan ta bort bilder först när tillräckligt
+          många andra bilder har laddats upp (om du vill byta ut en bild måste
+          du först ladda upp den nya bilden och sedan ta bort den gamla).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1649,6 +1649,8 @@ sv:
         deltagit i några tävlingar. För alla andra frågor, vänligen <a
         href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">kontakta
         oss</a>.
+      #original_hash: 43f15fd
+      no_permission_error: Du har inte behörighet att redigera andras profiler.
       form:
         contact_email:
           #original_hash: 3142970
@@ -1737,12 +1739,13 @@ sv:
     support:
       #original_hash: 610edba
       title: Stötta WCA
-      #original_hash: 1aaf818
+      #original_hash: c254335
       text: >-
         World Cube Association är en skattebefriad organisation (501(c)(3)). Som
         en 100% ideellt ledd, icke-vinstdrivande organisation välkomnar vi dina
-        donationer för att hjälpa oss att främja vår vision om att ha fler
-        roliga tävlingar över hela världen.
+        donationer för att hjälpa oss att främja vårt syfte att stärka det
+        globala speedcubing-communityt och upprätthålla en rolig och rättvis
+        tävlingsmiljö för alla.
       #original_hash: 65c84ec
       button: Läs mer om hur du kan stötta WCA
   users:
@@ -2882,12 +2885,12 @@ sv:
         Vi uppmuntrar alla att anmäla sig till de genar de vill tävla i via
         online-anmälan, men du kan lägga till grenar i din anmälan till dess att
         grenen har börjat.
-      #original_hash: cf7be5d
+      #original_hash: 51ef4f3
       on_the_spot_registration_fee_html: >-
-        Anmälan på plats accepteras med en basanmälningsavgift på
-        %{on_the_spot_base_entry_fee}.
-      #original_hash: 1637bea
-      on_the_spot_registration_free: Anmälan på plats accepteras gratis.
+        Anmälan på plats accepteras om det finns platser tillgängliga, med en
+        basanmälningsavgift på %{on_the_spot_base_entry_fee}.
+      #original_hash: 2b4ea65
+      on_the_spot_registration_free: Anmälan på plats accepteras gratis om det finns platser tillgängliga.
       #original_hash: f5f687d
       no_on_the_spot_registration: Inga anmälningar på plats accepteras.
       #original_hash: 4df139d
@@ -3348,6 +3351,8 @@ sv:
               kombinationer av grenar
             #original_hash: 4bf194c
             reason: Anledning och detaljer för begränsning av grenar
+            #original_hash: 22516e1
+            per_registration_limit: Grenar per anmälningsgräns
           #original_hash: 3c24bd2
           main_event_id: Huvudgren
         #original_hash: d7020f4
@@ -3857,6 +3862,8 @@ sv:
         cancelled: Borttagna
         #original_hash: 27eeb7a
         rejected: Avslagna
+        #original_hash: 43dc853
+        amount: Antal
         #original_hash: d7e4497
         too_many: >-
           Att acceptera alla dessa registreringar skulle överskrida
@@ -5063,7 +5070,7 @@ sv:
     spirit_footer: 'WCA:s Anda'
     #original_hash: c1781ee
     our_goals_title: Våra mål
-    #original_hash: 375db0f
+    #original_hash: c1144d4
     our_goals_content_html: >-
       <p>World Cube Association vill ge möjligheter till delaktighet och
       ledarskap för ungdomar runt om i världen genom att öka tillgängligheten
@@ -5071,8 +5078,8 @@ sv:
       och inom vårt community skapar möjligheter till tillväxt för de
       involverade ungdomarna och att inkluderandet av nya grupper av människor
       gör det möjligt för vårt community att stärkas. Ett dokument som
-      innehåller styrelsens vision och strategi för WCA finns <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">här</a>.</p>
+      innehåller styrelsens strategiska plan för WCA finns <a
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">här</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Hur ser framtiden för WCA ut?
     #original_hash: 3312277
@@ -5182,8 +5189,8 @@ sv:
     codeofconduct: Uppförandekod
     #original_hash: 4f05e8f
     finances: Finanser
-    #original_hash: d1b1406
-    vision_and_strategy: Vision och Strategi
+    #original_hash: c1e8f94
+    strategic_plan: Strategisk Plan
   education:
     #original_hash: 746e863
     title: 'WCA:s Utbildningsresurser'

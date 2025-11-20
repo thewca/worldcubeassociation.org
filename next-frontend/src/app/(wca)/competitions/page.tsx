@@ -3,19 +3,19 @@
 import {
   Container,
   VStack,
-  Heading,
-  Flex,
   Button,
-  Text,
   Table,
+  Text,
   Card,
   HStack,
-  SegmentGroup,
   Slider,
-  Box,
   Input,
   CloseButton,
   InputGroup,
+  SimpleGrid,
+  Field,
+  ButtonGroup,
+  Tabs,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -31,22 +31,18 @@ import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 
 import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useReducer, useState } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   competitionFilterReducer,
   createFilterState,
 } from "@/lib/wca/competitions/filterUtils";
-import {
-  calculateQueryKey,
-  createSearchParams,
-} from "@/lib/wca/competitions/queryUtils";
+import { createSearchParams } from "@/lib/wca/competitions/queryUtils";
 import useAPI from "@/lib/wca/useAPI";
 import EventSelector from "@/components/EventSelector";
 import useDebounce from "@/lib/hooks/useDebounce";
 import { WCA_API_PAGINATION } from "@/lib/wca/data/wca";
 import Loading from "@/components/ui/loading";
 import { useSearchParams } from "next/navigation";
-import { useInView } from "react-intersection-observer";
+import { useOnInView } from "react-intersection-observer";
 import { TFunction } from "i18next";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
@@ -71,17 +67,15 @@ export default function CompetitionsPage() {
     createFilterState,
   );
 
-  const { ref: bottomRef, inView: bottomInView } = useInView();
-
   const { t } = useT();
 
   const canViewAdminDetails = false;
 
   const debouncedFilterState = useDebounce(filterState, DEBOUNCE_MS);
 
-  const competitionQueryKey = useMemo(
-    () => calculateQueryKey(debouncedFilterState, canViewAdminDetails),
-    [debouncedFilterState, canViewAdminDetails],
+  const querySearchParams = createSearchParams(
+    debouncedFilterState,
+    canViewAdminDetails,
   );
 
   const {
@@ -89,30 +83,30 @@ export default function CompetitionsPage() {
     fetchNextPage: competitionsFetchNextPage,
     isFetching: competitionsIsFetching,
     hasNextPage: hasMoreCompsToLoad,
-  } = useInfiniteQuery({
-    // We do have the deps covered in competitionQueryKey
-    // eslint-disable-next-line @tanstack/query/exhaustive-deps
-    queryKey: ["competitions", competitionQueryKey],
-    queryFn: ({ pageParam }) => {
-      const querySearchParams = createSearchParams(
-        debouncedFilterState,
-        pageParam.toString(),
-        canViewAdminDetails,
-      );
+  } = api.useInfiniteQuery(
+    "get",
+    "/v0/competition_index",
+    {
+      params: { query: Object.fromEntries(querySearchParams.entries()) },
+    },
+    {
+      pageParamName: "page",
+      getNextPageParam: (previousPage, allPages) => {
+        // Continue until less than a full page of data is fetched,
+        // which indicates the very last page.
+        if (previousPage.length < WCA_API_PAGINATION) {
+          return undefined;
+        }
+        return allPages.length + 1;
+      },
+      initialPageParam: 1,
+    },
+  );
 
-      return api.GET("/v0/competition_index", {
-        params: { query: Object.fromEntries(querySearchParams.entries()) },
-      });
-    },
-    getNextPageParam: (previousPage, allPages) => {
-      // Continue until less than a full page of data is fetched,
-      // which indicates the very last page.
-      if (previousPage.data!.length < WCA_API_PAGINATION) {
-        return undefined;
-      }
-      return allPages.length + 1;
-    },
-    initialPageParam: 1,
+  const bottomRef = useOnInView(() => {
+    if (hasMoreCompsToLoad && !competitionsIsFetching) {
+      competitionsFetchNextPage();
+    }
   });
 
   useEffect(() => {
@@ -134,30 +128,18 @@ export default function CompetitionsPage() {
   const competitionsDistanceFiltered = useMemo(() => {
     if (!rawCompetitionData) return [];
 
-    if (location === null || distanceFilter === 100)
-      return rawCompetitionData!.pages.flatMap(({ data }) => data!);
+    const flatPages = rawCompetitionData.pages.flatMap((page) => page);
 
-    return rawCompetitionData!.pages
-      .flatMap(({ data }) => data!)
-      .filter(
-        (competition) =>
-          getDistanceInKm(location, {
-            longitude: competition.longitude_degrees,
-            latitude: competition.latitude_degrees,
-          }) <= distanceFilter,
-      );
+    if (location === null || distanceFilter === 100) return flatPages;
+
+    return flatPages.filter(
+      (competition) =>
+        getDistanceInKm(location, {
+          longitude: competition.longitude_degrees,
+          latitude: competition.latitude_degrees,
+        }) <= distanceFilter,
+    );
   }, [location, distanceFilter, rawCompetitionData]);
-
-  useEffect(() => {
-    if (hasMoreCompsToLoad && bottomInView && !competitionsIsFetching) {
-      competitionsFetchNextPage();
-    }
-  }, [
-    hasMoreCompsToLoad,
-    bottomInView,
-    competitionsFetchNextPage,
-    competitionsIsFetching,
-  ]);
 
   if (!competitionsDistanceFiltered) {
     return "Error";
@@ -165,7 +147,7 @@ export default function CompetitionsPage() {
 
   return (
     <Container>
-      <VStack gap="8" width="full" pt="8" alignItems="left">
+      <VStack gap="8" width="full" pt="8">
         {!session.data?.user && (
           <RemovableCard
             imageUrl="newcomer.png"
@@ -175,45 +157,53 @@ export default function CompetitionsPage() {
             buttonUrl="/"
           />
         )}
-        <Card.Root variant="hero" size="md" overflow="hidden">
-          <Card.Body bg="bg">
-            <VStack gap="8" width="full" alignItems="left">
-              <Heading size="5xl">
-                <AllCompsIcon boxSize="1em" /> All Competitions
-              </Heading>
-              <Flex gap="2" width="full" alignItems="flex-start">
-                <Flex gap="2" width="full" flexDirection="column">
-                  <HStack gap="2" width="full" alignItems="flex-start">
-                    <EventSelector
-                      selectedEvents={filterState.selectedEvents}
-                      title="Event"
-                      onEventClick={(eventId) =>
-                        dispatchFilter({ type: "toggle_event", eventId })
-                      }
-                      onClearClick={() =>
-                        dispatchFilter({ type: "clear_events" })
-                      }
-                      onAllClick={() =>
-                        dispatchFilter({ type: "select_all_events" })
-                      }
-                    />
-                  </HStack>
-                  <HStack>
-                    <Box flex={1}>
-                      <RegionSelector
-                        t={t}
-                        label={t("activerecord.attributes.user.region")}
-                        region={filterState.region}
-                        onRegionChange={(region) =>
-                          dispatchFilter({
-                            type: "set_region",
-                            region,
-                          })
-                        }
-                      />
-                    </Box>
+        <Card.Root size="md" coloredBg>
+          <Tabs.Root variant="subtle" colorPalette="blue" defaultValue="list">
+            <Card.Header asChild>
+              <HStack justify="space-between">
+                <Card.Title textStyle="h1">
+                  <AllCompsIcon /> All Competitions
+                </Card.Title>
+                <Tabs.List>
+                  <Tabs.Trigger value="list">
+                    <ListIcon />
+                    List
+                  </Tabs.Trigger>
+                  <Tabs.Trigger value="map">
+                    <MapIcon />
+                    Map
+                  </Tabs.Trigger>
+                </Tabs.List>
+              </HStack>
+            </Card.Header>
+            <Card.Body asChild>
+              <VStack gap="2" borderBottom="black">
+                <EventSelector
+                  selectedEvents={filterState.selectedEvents}
+                  title="Event"
+                  onEventClick={(eventId) =>
+                    dispatchFilter({ type: "toggle_event", eventId })
+                  }
+                  onClearClick={() => dispatchFilter({ type: "clear_events" })}
+                  onAllClick={() =>
+                    dispatchFilter({ type: "select_all_events" })
+                  }
+                />
+                <SimpleGrid gap="2" width="full" columns={2}>
+                  <RegionSelector
+                    t={t}
+                    label={t("activerecord.attributes.user.region")}
+                    region={filterState.region}
+                    onRegionChange={(region) =>
+                      dispatchFilter({
+                        type: "set_region",
+                        region,
+                      })
+                    }
+                  />
+                  <Field.Root>
+                    <Field.Label>Name</Field.Label>
                     <InputGroup
-                      flex={1}
                       endElement={
                         <CloseButton
                           size="xs"
@@ -223,7 +213,6 @@ export default function CompetitionsPage() {
                               search: "",
                             });
                           }}
-                          me="-2"
                         />
                       }
                     >
@@ -238,108 +227,74 @@ export default function CompetitionsPage() {
                         }}
                       />
                     </InputGroup>
-                  </HStack>
-                  <HStack gap="2" width="full" alignItems="flex-start">
-                    <Slider.Root
-                      width="250px"
-                      colorPalette="blue"
-                      value={[distanceFilter]}
-                      onValueChange={(e) => setDistanceFilter(e.value[0])}
-                      step={25}
-                      disabled={location === null}
-                    >
-                      <Slider.Label>Distance</Slider.Label>
-                      <Slider.Control>
-                        <Slider.Track>
-                          <Slider.Range />
-                        </Slider.Track>
-                        <Slider.Thumbs />
-                        <Slider.Marks marks={marks} />
-                      </Slider.Control>
-                    </Slider.Root>
+                  </Field.Root>
+                </SimpleGrid>
+                <HStack gap="2" width="full" justify="space-between">
+                  <Slider.Root
+                    width="250px"
+                    colorPalette="blue"
+                    value={[distanceFilter]}
+                    onValueChange={(e) => setDistanceFilter(e.value[0])}
+                    step={25}
+                    disabled={location === null}
+                  >
+                    <Slider.Label>Distance</Slider.Label>
+                    <Slider.Control>
+                      <Slider.Track>
+                        <Slider.Range />
+                      </Slider.Track>
+                      <Slider.Thumbs />
+                      <Slider.Marks marks={marks} />
+                    </Slider.Control>
+                  </Slider.Root>
+                  <ButtonGroup variant="outline">
                     {/* TODO: replace these buttons with DatePicker (Chakra does not have one by default) */}
-                    <Button variant="outline">
+                    <Button>
                       <CompRegoOpenDateIcon />
                       Date From
                     </Button>
-                    <Button variant="outline">
+                    <Button>
                       <CompRegoCloseDateIcon />
                       Date To
                     </Button>
-                    {/* TODO: add "accordion" functionality to this button */}
-                    <Button variant="outline" size="sm">
-                      Advanced Filters
-                    </Button>
+                  </ButtonGroup>
+                  {/* TODO: add "accordion" functionality to this button */}
+                  <Button variant="outline" size="sm">
+                    Advanced Filters
+                  </Button>
+                </HStack>
+              </VStack>
+            </Card.Body>
+            <Card.Body>
+              <Tabs.Content value="list">
+                <HStack justify="space-between">
+                  <HStack>
+                    <Text>Registration Key:</Text>
+                    <CompRegoFullButOpenOrangeIcon />
+                    <Text>Full</Text>
+                    <CompRegoNotFullOpenGreenIcon />
+                    <Text>Open</Text>
+                    <CompRegoNotOpenYetGreyIcon />
+                    <Text>Not Open</Text>
+                    <CompRegoClosedRedIcon />
+                    <Text>Closed</Text>
                   </HStack>
-                </Flex>
-
-                <Flex gap="2" ml="auto">
-                  <SegmentGroup.Root
-                    defaultValue="list"
-                    size="lg"
-                    colorPalette="blue"
-                    variant="inset"
-                  >
-                    <SegmentGroup.Indicator />
-                    <SegmentGroup.Items
-                      items={[
-                        {
-                          value: "list",
-                          label: (
-                            <HStack>
-                              <ListIcon />
-                              List
-                            </HStack>
-                          ),
-                        },
-                        {
-                          value: "map",
-                          label: (
-                            <HStack>
-                              <MapIcon />
-                              Map
-                            </HStack>
-                          ),
-                        },
-                      ]}
-                    />
-                  </SegmentGroup.Root>
-                </Flex>
-              </Flex>
-              <Flex gap="2" width="full">
-                <Text>Registration Key:</Text>
-                <CompRegoFullButOpenOrangeIcon />
-                <Text>Full</Text>
-                <CompRegoNotFullOpenGreenIcon />
-                <Text>Open</Text>
-                <CompRegoNotOpenYetGreyIcon />
-                <Text>Not Open</Text>
-                <CompRegoClosedRedIcon />
-                <Text>Closed</Text>
-                <Text ml="auto">
-                  Currently Displaying: {competitionsDistanceFiltered.length}{" "}
-                  competitions
-                </Text>
-              </Flex>
-              <Card.Root
-                bg="bg.inverted"
-                color="fg.inverted"
-                shadow="md"
-                overflow="hidden"
-                width="full"
-              >
-                <Card.Body p={0}>
-                  <CompetitionTable
-                    competitions={competitionsDistanceFiltered}
-                    isLoading={competitionsIsFetching}
-                    hasMoreCompsToLoad={hasMoreCompsToLoad}
-                    bottomRef={bottomRef}
-                    t={t}
-                  />
-                </Card.Body>
-              </Card.Root>
-            </VStack>
-          </Card.Body>
+                  <Text>
+                    Currently Displaying: {competitionsDistanceFiltered.length}{" "}
+                    competitions
+                  </Text>
+                </HStack>
+                <CompetitionTable
+                  competitions={competitionsDistanceFiltered}
+                  isLoading={competitionsIsFetching}
+                  hasMoreCompsToLoad={hasMoreCompsToLoad}
+                  bottomRef={bottomRef}
+                  t={t}
+                />
+              </Tabs.Content>
+              <Tabs.Content value="map">TBD</Tabs.Content>
+            </Card.Body>
+          </Tabs.Root>
         </Card.Root>
       </VStack>
     </Container>
@@ -360,19 +315,27 @@ function CompetitionTable({
   bottomRef: (node?: Element | null) => void;
 }) {
   return (
-    <Table.Root size="xs" rounded="md" variant="competitions">
+    <Table.Root
+      size="xs"
+      striped
+      rounded="md"
+      colorPalette="blue"
+      variant="competitions"
+      borderWidth="2px"
+      borderRadius="md"
+    >
       <Table.Body>
         {competitions.map((comp) => (
           <CompetitionTableEntry comp={comp} key={comp.id} />
         ))}
+        <ListViewFooter
+          isLoading={isLoading}
+          hasMoreCompsToLoad={hasMoreCompsToLoad}
+          numCompetitions={competitions.length}
+          bottomRef={bottomRef}
+          t={t}
+        />
       </Table.Body>
-      <ListViewFooter
-        isLoading={isLoading}
-        hasMoreCompsToLoad={hasMoreCompsToLoad}
-        numCompetitions={competitions.length}
-        bottomRef={bottomRef}
-        t={t}
-      />
     </Table.Root>
   );
 }

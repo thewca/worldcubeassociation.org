@@ -10,16 +10,17 @@ import {
   Portal,
   List,
   Button,
+  Icon,
+  DataList,
 } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
-import { DataListItem, DataListRoot } from "@/components/ui/data-list";
 import RoleBadge, { StaffColor } from "@/components/RoleBadge";
 import MyResultsIcon from "@/components/icons/MyResultsIcon";
 import RegulationsHistoryIcon from "@/components/icons/RegulationsHistoryIcon";
 import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
 import { LuStar, LuCircleHelp } from "react-icons/lu";
 import countries from "@/lib/wca/data/countries";
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 
 interface ProfileData {
   name: string;
@@ -44,8 +45,8 @@ const ProfileCard: React.FC<ProfileData> = ({
 }) => {
   return (
     <Card.Root
-      bg="grey.solid"
-      color="wcawhite.contrast"
+      bg="gray.subtle"
+      color="white.contrast"
       h="85lvh"
       rounded="xl"
       size="sm"
@@ -77,41 +78,53 @@ const ProfileCard: React.FC<ProfileData> = ({
             ))}
           </Flex>
         </Card.Title>
-        <DataListRoot variant="profileStat">
-          <DataListItem label="WCA ID" value={wcaId} />
-          {gender !== "o" && <DataListItem label="Gender" value={gender} />}
-          <DataListItem
-            label="Region"
-            value={
-              <>
-                <Flex gap="1">
-                  <Flag code={regionIso2} fallback="" height="20" width="28" />
-                  Representing {countries.byIso2[regionIso2].id}
-                </Flex>
-              </>
-            }
-          />
-          <DataListItem label="Competitions" value={competitions} />
-          <DataListItem label="Completed Solves" value={completedSolves} />
-        </DataListRoot>
+        <DataList.Root variant="bold">
+          <DataList.Item>
+            <DataList.ItemLabel>WCA ID</DataList.ItemLabel>
+            <DataList.ItemValue>{wcaId}</DataList.ItemValue>
+          </DataList.Item>
+          {gender !== "o" && (
+            <DataList.Item>
+              <DataList.ItemLabel>Gender</DataList.ItemLabel>
+              <DataList.ItemValue>{gender}</DataList.ItemValue>
+            </DataList.Item>
+          )}
+          <DataList.Item>
+            <DataList.ItemLabel>Region</DataList.ItemLabel>
+            <DataList.ItemValue>
+              <WcaFlag code={regionIso2} fallback="" height="20" width="28" />
+              Representing {countries.byIso2[regionIso2].id}
+            </DataList.ItemValue>
+          </DataList.Item>
+          <DataList.Item>
+            <DataList.ItemLabel>Competitions</DataList.ItemLabel>
+            <DataList.ItemValue>{competitions}</DataList.ItemValue>
+          </DataList.Item>
+          <DataList.Item>
+            <DataList.ItemLabel>Completed Solves</DataList.ItemLabel>
+            <DataList.ItemValue>{completedSolves}</DataList.ItemValue>
+          </DataList.Item>
+        </DataList.Root>
       </Card.Body>
       <Card.Footer>
         <Flex flexDirection="row" alignItems="flex-end">
           <Flex flexWrap="wrap">
             {" "}
             {/* TODO SLATE - fill out these badges with real info */}
-            <Badge size="lg" variant="achievement">
+            <Badge size="lg" textStyle="lg">
               <NationalChampionshipIcon />
               147 Championship Titles
             </Badge>
-            <Badge size="lg" variant="achievement">
-              <LuStar />
+            <Badge size="lg" textStyle="lg">
+              <Icon>
+                <LuStar />
+              </Icon>
               121 Time World Record Holder
             </Badge>
-            <Badge size="lg" variant="achievement">
+            <Badge size="lg" textStyle="lg">
               <RegulationsHistoryIcon />3 Year Career
             </Badge>
-            <Badge size="lg" variant="achievement">
+            <Badge size="lg" textStyle="lg">
               <MyResultsIcon />8 Gold Medals
             </Badge>
           </Flex>
