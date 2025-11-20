@@ -41,7 +41,7 @@ class LiveResult < ApplicationRecord
 
   def potential_score
     rank_by = round.format.sort_by == 'single' ? 'best' : 'average'
-    complete? ? to_solve_time(rank_by) : SolveTime.new(event_id, rank_by, BEST_POSSIBLE_SCORE)
+    complete? ? self[rank_by.to_sym] : BEST_POSSIBLE_SCORE
   end
 
   def should_recompute?
