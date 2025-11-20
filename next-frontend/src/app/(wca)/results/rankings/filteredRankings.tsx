@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
 import { Alert, Heading, VStack } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
@@ -117,18 +116,19 @@ export default function FilteredRecords() {
 
   const api = useAPI();
 
-  const { data, isFetching, isError } = useQuery({
-    queryKey: ["rankings", region, gender, show, event, rankingType],
-    queryFn: () =>
-      api.GET("/v0/results/rankings/{event_id}/{type}", {
-        params: {
-          path: { event_id: event, type: rankingType },
-          query: { region, gender, show: show },
-        },
-      }),
-    select: (data) => data.data,
-    refetchOnMount: false,
-  });
+  const { data, isFetching, isError } = api.useQuery(
+    "get",
+    "/v0/results/rankings/{event_id}/{type}",
+    {
+      params: {
+        path: { event_id: event, type: rankingType },
+        query: { region, gender, show: show },
+      },
+    },
+    {
+      refetchOnMount: false,
+    },
+  );
 
   if (isError) {
     return (
