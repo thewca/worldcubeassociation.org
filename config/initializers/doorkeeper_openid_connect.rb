@@ -7,7 +7,7 @@ Doorkeeper::OpenidConnect.configure do
   end
   signing_key AppSecrets.OIDC_SECRET_KEY
   # This is an asymmetric encryption, meaning the clients validating the JWT Token use the Public key instead
-  signing_algorithm :rs256
+  signing_algorithm Rails.env.production? ? :rs256 : :HS256
 
   resource_owner_from_access_token do |access_token|
     User.find(access_token.resource_owner_id)
