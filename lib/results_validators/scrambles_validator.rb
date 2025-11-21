@@ -72,12 +72,12 @@ module ResultsValidators
                                                     :scrambles, competition.id,
                                                     round_id: round.human_id)
           end
-          if round_id.start_with?("333fm") && scrambles_by_group_id.size > 1
+          if round.event_id == "333fm" && scrambles_by_group_id.size > 1
             @warnings << ValidationWarning.new(MULTIPLE_FMC_GROUPS_WARNING,
                                                :scrambles, competition.id,
                                                round_id: round.human_id)
           end
-          if round_id.start_with?("333mbf")
+          if round.event_id == "333mbf"
             unless errors_for_round.size < scrambles_by_group_id.keys.size
               @errors << ValidationError.new(MISSING_SCRAMBLES_FOR_MULTI_ERROR,
                                              :scrambles, competition.id,

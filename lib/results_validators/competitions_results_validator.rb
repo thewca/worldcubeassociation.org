@@ -27,8 +27,8 @@ module ResultsValidators
       @persons = []
     end
 
-    def self.create_full_validation
-      new(ResultsValidators::Utils::ALL_VALIDATORS)
+    def self.create_full_validation(check_real_results: false)
+      new(ResultsValidators::Utils::ALL_VALIDATORS, check_real_results: check_real_results)
     end
 
     def any_results?
@@ -46,7 +46,13 @@ module ResultsValidators
     end
 
     def include_persons?
-      true
+      @validators.map { |v| self.load_validator v }
+                 .any?(&:include_persons?)
+    end
+
+    def include_scrambles?
+      @validators.map { |v| self.load_validator v }
+                 .any?(&:include_scrambles?)
     end
 
     protected def validate_competitions(competition_ids, check_real_results)
