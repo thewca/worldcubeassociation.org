@@ -41,7 +41,7 @@ module ResultsValidators
 
       def check_main_event(competition)
         if competition.main_event
-          if competition.main_event_id != "333" && competition.events.size > 1
+          if competition.main_event_id != "333" && competition.events.length > 1
             @warnings << ValidationWarning.new(NOT_333_MAIN_EVENT_WARNING,
                                                :events, competition.id,
                                                main_event_id: competition.main_event_id)
@@ -74,10 +74,10 @@ module ResultsValidators
       def check_rounds_match(competition, results)
         # Check that rounds match what was declared.
 
-        expected_rounds_by_ids = competition.rounds.index_by { |r| "#{r.event.id}-#{r.round_type_id}" }
+        expected_rounds_by_ids = competition.rounds.index_by(&:human_id)
 
         expected = expected_rounds_by_ids.keys
-        real = results.map { |r| "#{r.event_id}-#{r.round_type_id}" }.uniq
+        real = results.map(&:round_human_id).uniq
         unexpected = real - expected
         missing = expected - real
 

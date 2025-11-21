@@ -10,7 +10,7 @@ module ResultsValidators
       false
     end
 
-    attr_reader :results, :persons, :validators
+    attr_reader :results, :validators
 
     # Takes a list of validator classes, and if it should process real results or not.
     def initialize(validators = [], check_real_results: false, apply_fixes: false, sql_batch: nil, memory_batch: nil)
@@ -24,7 +24,6 @@ module ResultsValidators
       @memory_batch = memory_batch
 
       @results = []
-      @persons = []
     end
 
     def self.create_full_validation(check_real_results: false)
@@ -33,10 +32,6 @@ module ResultsValidators
 
     def any_results?
       @results.any?
-    end
-
-    def persons_by_id
-      @persons_by_id ||= @persons.index_by(&:ref_id)
     end
 
     def competition_associations
@@ -75,7 +70,6 @@ module ResultsValidators
     def run_validation(validator_data)
       validator_data.each do |competition_data|
         @results += competition_data.results
-        @persons += competition_data.persons
       end
 
       # Ensure any call to localizable name (eg: round names) is made in English,
