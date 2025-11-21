@@ -16,6 +16,7 @@ import Link from "next/link";
 import { iconMap } from "@/components/icons/iconMap";
 import { route } from "nextjs-routes";
 import AttemptResultField from "./AttemptResultField";
+import {ColorSemanticTokenDoc, ColorTokenDoc} from "@/app/(wca)/dashboard/ThemeExplorer";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -86,6 +87,15 @@ export default async function Dashboard() {
               </Box>
             ))}
           </SimpleGrid>
+        </Card.Body>
+      </Card.Root>
+      <Card.Root width="full">
+        <Card.Body>
+          <Card.Title>Theme Explorer</Card.Title>
+          <Box>
+            <ColorSemanticTokenDoc />
+            <ColorTokenDoc />
+          </Box>
         </Card.Body>
       </Card.Root>
     </Container>
