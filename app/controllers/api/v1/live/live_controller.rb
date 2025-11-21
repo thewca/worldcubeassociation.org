@@ -78,7 +78,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
       round_type_id: round.round_type_id,
       round_id: round.id,
       format_id: round.format_id,
-      )
+    )
 
     result.update(average: r.compute_correct_average, best: r.compute_correct_best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)
 
