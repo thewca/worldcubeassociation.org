@@ -3,7 +3,8 @@ import { getResultByPerson } from "@/lib/wca/live/getResultByPerson";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import { rankingCellColour } from "@/components/live/LiveResultsTable";
-import { centisecondsToClockFormat } from "@/lib/wca/wcif/attempts";
+import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
+import { Fragment } from "react";
 
 export default async function PersonResults({
   params,
@@ -29,7 +30,7 @@ export default async function PersonResults({
     <Container>
       <Heading textStyle="h1">{name}</Heading>
       {_.map(resultsByEvent, (eventResults, key) => (
-        <>
+        <Fragment key={key}>
           <Heading textStyle="h2">{events.byId[key].name}</Heading>
           <Table.Root mb="10">
             <Table.Header>
@@ -50,7 +51,7 @@ export default async function PersonResults({
                 const {
                   round_id: roundId,
                   attempts,
-                  ranking,
+                  global_pos,
                   average,
                   best,
                 } = result;
@@ -68,23 +69,21 @@ export default async function PersonResults({
                       width={1}
                       backgroundColor={rankingCellColour(result)}
                     >
-                      {ranking}
+                      {global_pos}
                     </Table.Cell>
                     {attempts.map((a) => (
                       <Table.Cell key={`${roundId}-${key}-${a.attempt_number}`}>
-                        {centisecondsToClockFormat(a.result)}
+                        {formatAttemptResult(a.result, key)}
                       </Table.Cell>
                     ))}
-                    <Table.Cell>
-                      {centisecondsToClockFormat(average)}
-                    </Table.Cell>
-                    <Table.Cell>{centisecondsToClockFormat(best)}</Table.Cell>
+                    <Table.Cell>{formatAttemptResult(average, key)}</Table.Cell>
+                    <Table.Cell>{formatAttemptResult(best, key)}</Table.Cell>
                   </Table.Row>
                 );
               })}
             </Table.Body>
           </Table.Root>
-        </>
+        </Fragment>
       ))}
     </Container>
   );

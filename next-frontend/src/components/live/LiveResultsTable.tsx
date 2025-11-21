@@ -1,10 +1,7 @@
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import { Link, Table } from "@chakra-ui/react";
-import {
-  centisecondsToClockFormat,
-  formatAttemptResult,
-} from "@/lib/wca/wcif/attempts";
+import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { components } from "@/types/openapi";
 import { recordTagBadge } from "@/components/results/TableCells";
 
@@ -18,7 +15,7 @@ const customOrderBy = (
     return competitor.id;
   }
 
-  return competitorResult.ranking;
+  return competitorResult.global_pos;
 };
 
 export const rankingCellColour = (
@@ -106,7 +103,7 @@ export default function ResultsTable({
                   href={
                     isAdmin
                       ? `/registrations/${competitor.id}/edit`
-                      : `/competitions/${competitionId}/live/${competitor.id}`
+                      : `/competitions/${competitionId}/live/competitors/${competitor.id}`
                   }
                 >
                   {competitor.user.name}
@@ -135,7 +132,7 @@ export default function ResultsTable({
                     textAlign="right"
                     style={{ position: "relative" }}
                   >
-                    {centisecondsToClockFormat(competitorResult.best)}
+                    {formatAttemptResult(competitorResult.best, eventId)}
                     {!isAdmin &&
                       recordTagBadge(competitorResult.single_record_tag)}
                   </Table.Cell>

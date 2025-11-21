@@ -42,7 +42,7 @@ class Round < ApplicationRecord
 
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
-  has_many :live_results, -> { order(:ranking) }
+  has_many :live_results, -> { order(:global_pos) }
   has_many :results
   has_many :scrambles
 
@@ -143,7 +143,7 @@ class Round < ApplicationRecord
   end
 
   def live_podium
-    live_results.where(ranking: 1..3)
+    live_results.where(global_pos: 1..3)
   end
 
   def previous_round
