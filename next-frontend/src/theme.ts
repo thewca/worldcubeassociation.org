@@ -361,7 +361,7 @@ const customConfig = defineConfig({
             },
             ghost: {
               color: "fg",
-              focusRing: "colorPalette.highContrast",
+              focusRing: "colorPalette.focusRing",
               _hover: {
                 bg: "colorPalette.fg/30",
                 color: "colorPalette.solid",
@@ -403,13 +403,13 @@ const customConfig = defineConfig({
             wca: {
               textStyle: "hyperlink",
               _hover: {
-                color: "{colors.blue.highContrast/80}",
+                color: "{colors.supplementary.link/80}",
               },
             },
             header: {
               textStyle: "headerLink",
               _hover: {
-                color: "{colors.blue.highContrast}",
+                color: "{colors.supplementary.link}",
               },
             },
           },
@@ -432,7 +432,7 @@ const customConfig = defineConfig({
                 opacity: 0,
               },
               _hover: {
-                color: "{colors.blue.highContrast/80}",
+                color: "{colors.supplementary.link/80}",
                 _after: {
                   transform: "translateY(-50%) translateX(0px)",
                   opacity: 1,
