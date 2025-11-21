@@ -509,7 +509,7 @@ es-ES:
         #original_hash: 36155d4
         equipment: Material
         #original_hash: 67cd406
-        venue: Local
+        venue: Recinto
         #original_hash: 519255a
         organization: Organización
         #original_hash: 5e326b1
@@ -1071,8 +1071,8 @@ es-ES:
             2fa_attempt: >-
               Estás intentando autenticarte en la web de la WCA. Tienes
               autenticación de dos factores habilitada y has solicitado que se
-              te envíe una contraseña de un solo uso por correo. La tienes a
-              continuación:
+              te envíe una contraseña de un solo uso por correo electrónico. La
+              tienes a continuación:
             #original_hash: 8aeccbf
             disclaimer: >-
               Si no has solicitado ese código de autenticación, por favor ponte
@@ -1688,12 +1688,14 @@ es-ES:
       not_logged_in_error: >-
         Parece que no has iniciado sesión. Por favor, inicia sesión para editar
         tu perfil. Para cualquier otra consulta, por favor <a
-        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">contáctanos</a>.
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">ponte
+        en contacto con nosotros</a>.
       #original_hash: 0afb595
       no_profile_error: >-
         Parece que aún no tienes un perfil de la WCA porque no has participado
         en ninguna competición. Para cualquier otra consulta, por favor <a
-        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">contáctanos</a>.
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">ponte
+        en contacto con nosotros</a>.
       #original_hash: 43f15fd
       no_permission_error: No tienes permiso para solicitar editar el perfil de otra persona.
       form:
@@ -2825,7 +2827,8 @@ es-ES:
       #original_hash: f97246a
       tooltip_deleted: >-
         Desafortunadamente tu registro ha sido eliminado. Por favor, comprueba
-        tu correo electrónico para detalles o contacta con los organizadores.
+        tu correo electrónico para detalles o ponte en contacto con los
+        organizadores.
       #original_hash: 1b6dc61
       confirmed_visible: Esta competición está confirmada y es visible.
       #original_hash: abc2f96
@@ -3451,7 +3454,7 @@ es-ES:
           #original_hash: 556fda0
           extra_requirements: Requisitos de registro adicionales
           #original_hash: 6c8e5bf
-          force_comment: Forzar a los competidores a hacer un comentario cuando se registran
+          force_comment: Forzar a los competidores a hacer un comentario cuando se registren
         event_restrictions:
           forbid_newcomers:
             #original_hash: d0a4ce9
@@ -4309,7 +4312,7 @@ es-ES:
         fecha de cierre de registro.
       #original_hash: bc1ca0f
       event_change_deadline_after_end_date: >-
-        La fecha límite para actualizar categorías no puede ser antes de la
+        La fecha límite para actualizar categorías no puede ser después de la
         competición.
       #original_hash: a2e4fc9
       event_change_deadline_with_ots: >-
@@ -5313,7 +5316,7 @@ es-ES:
       <p>Cada dos años, sancionamos la competición que determina al campeón del
       mundo. Estos eventos requieren una planificación extremadamente cuidada
       por un número de voluntarios, además de un gran compromiso económico para
-      reservar el local y hacer las preparaciones necesarias.</p>
+      reservar el recinto y hacer las preparaciones necesarias.</p>
     #original_hash: 1aa5344
     contributing_title: Contribuir
     #original_hash: 538a82f
@@ -5374,7 +5377,7 @@ es-ES:
         <strong>Delegados Senior</strong>, <strong>Delegados
         Regionales</strong>, <strong>Delegados</strong>, <strong>Delegados
         Junior</strong> y
-         <strong>Delegados en prácticas</strong>%{see_link}.</p> <p>Además de las responsabilidades de un Delegado de la WCA, un Delegado Senior o un Delegado Regional es responsable de gestionar los Delegados de la WCA de su área y puede ser contactado por cualquier miembro de la comunidad por cuestiones relacionadas con su región.</p> <p>Los nuevos Delegados figuran ostentan inicialmente el cargo título de Delegados Junior; posteriormente, se les pide que demuestren su competencia en la gestión de Competiciones de la WCA antes de ser ascendidos a Delegados de la WCA.</p> <p>Los Delegados en prácticas están siendo entrenados para ser Delegados de la WCA y solo pueden supervisar competiciones en las que un Delegado de la WCA está presente.</p>
+         <strong>Delegados en prácticas</strong> %{see_link}.</p> <p>Además de las responsabilidades de un Delegado de la WCA, un Delegado Senior o un Delegado Regional es responsable de gestionar los Delegados de la WCA de su área y puede ser contactado por cualquier miembro de la comunidad por cuestiones relacionadas con su región.</p> <p>Los nuevos Delegados figuran ostentan inicialmente el cargo título de Delegados Junior; posteriormente, se les pide que demuestren su competencia en la gestión de Competiciones de la WCA antes de ser ascendidos a Delegados de la WCA.</p> <p>Los Delegados en prácticas están siendo entrenados para ser Delegados de la WCA y solo pueden supervisar competiciones en las que un Delegado de la WCA está presente.</p>
       #original_hash: 27d18ac
       see_link_html: '(ver %{link})'
       #original_hash: 5b01fcc
@@ -6069,9 +6072,9 @@ es-ES:
   media:
     common:
       #original_hash: f9b7a97
-      view_media_page: Ver todas las fotos y videos
+      view_media_page: Ver todas las fotos y vídeos
       #original_hash: b251e98
-      confirm_delete: ¿Seguro que quieres borrar esta foto o video?
+      confirm_delete: ¿Seguro que quieres borrar esta foto o vídeo?
     new:
       #original_hash: 65cdb28
       title: Enviar contenido
@@ -6100,14 +6103,14 @@ es-ES:
       #original_hash: 32c7cc0
       title: Editar contenido
       #original_hash: 6f161d0
-      validate_media_page: Ver todas las fotos o videos pendientes
+      validate_media_page: Ver todas las fotos o vídeos pendientes
     index:
       #original_hash: 0c77aee
       title: Contenido
       #original_hash: df43670
       validate_media: Validar contenido
       #original_hash: 9f2158f
-      submit_media_html: Puede subir fotos o videos <a href="/media/new">aquí</a>.
+      submit_media_html: Puede subir fotos o vídeos <a href="/media/new">aquí</a>.
     validate:
       #original_hash: 1e0eee6
       title: Validar fotos o vídeos
@@ -6145,7 +6148,7 @@ es-ES:
         contenido que nos proponen cuberos de alrededor de todo el mundo.
       #original_hash: 9b6abcd
       paragraph2: >-
-        Si tienes fotos o videos de alta calidad que te gustaría publicar, por
+        Si tienes fotos o vídeos de alta calidad que te gustaría publicar, por
         favor, ¡pincha en el siguiente botón y rellena el formulario! Para que
         podamos publicar tu contenido, tiene que ser de tu propiedad y tienes
         que dar permiso a la WCA para que lo publique. Debido al gran número de
@@ -6153,7 +6156,7 @@ es-ES:
         algunos consejos para que tu contenido se publique.
       #original_hash: cf5c955
       photo_quality: >-
-        Asegúrate de que la calidad de la foto o video sea buena. No tiene que
+        Asegúrate de que la calidad de la foto o vídeo sea buena. No tiene que
         ser profesional pero la calidad no debía desmerecer la foto o el vídeo.
       #original_hash: 0742378
       photo_interest: >-
@@ -6192,7 +6195,7 @@ es-ES:
       short_intro: 'Haz una breve introducción, habla sobre ti y sobre la competición'
       #original_hash: a053b5a
       venue_feel: >-
-        Haz unos pequeños videos para hacernos una idea del recinto y de la
+        Haz unos pequeños vídeos para hacernos una idea del recinto y de la
         gente, esto puede ser simplemente una foto del área de competidores y el
         área de resolución
       #original_hash: d17fb2f

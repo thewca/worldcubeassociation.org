@@ -1493,6 +1493,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_17_124011) do
     t.boolean "results_notifications_enabled", default: false
     t.string "preferred_locale", limit: 255
     t.boolean "competition_notifications_enabled"
+    t.boolean "receive_developer_mails", default: false, null: false
     t.boolean "receive_delegate_reports", default: false, null: false
     t.string "delegate_reports_region_id"
     t.string "delegate_reports_region_type"

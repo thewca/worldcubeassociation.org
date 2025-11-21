@@ -145,7 +145,7 @@ class RegistrationsController < ApplicationController
     end
     render status: :ok, json: { success: true }
   rescue StandardError => e
-    render status: :unprocessable_entity, json: { error: e.to_s }
+    render status: :unprocessable_content, json: { error: e.to_s }
   end
 
   def add

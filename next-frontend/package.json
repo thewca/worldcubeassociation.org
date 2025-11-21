@@ -51,6 +51,7 @@
     "nextjs-routes": "^2.2.5",
     "node-vault": "^0.10.9",
     "openapi-fetch": "^0.15.0",
+    "openapi-react-query": "^0.5.1",
     "payload": "3.64.0",
     "payload-authjs": "^0.9.1",
     "react": "^19.2.0",
