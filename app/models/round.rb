@@ -2,7 +2,7 @@
 
 class Round < ApplicationRecord
   belongs_to :competition_event
-  belongs_to :linked_rounds, optional: true
+  belongs_to :linked_round, optional: true
 
   has_one :competition, through: :competition_event
   delegate :competition_id, to: :competition_event
@@ -116,6 +116,14 @@ class Round < ApplicationRecord
     safe_join(phase_formats, " / ")
   end
 
+  def linked_results
+    linked_round.present? && advancement_condition != "dual" ? linked_round.results : results
+  end
+
+  def linked_live_results
+    linked_round.present? ? LinkedRound.combine_results(linked_round.live_results) : live_results
+  end
+
   def round_type
     RoundType.c_find(round_type_id)
   end
@@ -153,6 +161,8 @@ class Round < ApplicationRecord
   def accepted_registrations
     if number == 1
       registrations.accepted
+    elsif linked_round.present?
+      previous_round.accepted_registrations
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
       Registration.find(advancing)
@@ -165,7 +175,7 @@ class Round < ApplicationRecord
                    .accepted
                    .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
     else
-      advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
+      advancing = previous_round.linked_live_results.where(advancing: true).pluck(:registration_id)
 
       Registration.includes(:user)
                   .find(advancing)

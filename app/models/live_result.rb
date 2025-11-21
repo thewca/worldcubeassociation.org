@@ -49,6 +49,15 @@ class LiveResult < ApplicationRecord
   end
 
   def recompute_ranks
+    # For linked rounds we need to merge the results
+    # a new pos is calculated for each merged result and can be used to compute the ranking.
+    # TODO: introduce global_pos/local_pos
+    if round.linked_round.present?
+      merged_results = round.linked_live_results
+      merged_results.each { |r| r.update!(ranking: r.pos) }
+      return
+    end
+
     rank_by = round.format.sort_by == 'single' ? 'best' : 'average'
     # We only want to decide ties by single in events decided by average
     secondary_rank_by = round.format.sort_by == 'average' ? 'best' : nil
