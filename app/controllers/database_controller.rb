@@ -25,8 +25,8 @@ class DatabaseController < ApplicationController
     @rel_download_path = DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK)
   end
 
-  def self.render_readme(rendering_engine, export_timestamp)
-    locals = { long_date: export_timestamp, export_version: DatabaseDumper::PUBLIC_RESULTS_VERSION }
+  def self.render_readme(rendering_engine, export_timestamp, export_version)
+    locals = { long_date: export_timestamp, export_version: export_version }
 
     if rendering_engine.respond_to?(:render_to_string)
       rendering_engine.render_to_string(partial: RESULTS_README_TEMPLATE, formats: :md, locals: locals)

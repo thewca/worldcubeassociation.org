@@ -83,12 +83,46 @@ module DbDumpHelper
         DatabaseDumper.public_results_dump(RESULTS_EXPORT_SQL, tsv_folder_name)
 
         metadata = {
-          'export_format_version' => DatabaseDumper::PUBLIC_RESULTS_VERSION,
+          'export_format_version' => DatabaseDumper::V1_RESULTS_VERSION,
           'export_date' => export_timestamp,
         }
         File.write(RESULTS_EXPORT_METADATA, JSON.dump(metadata))
 
-        readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp)
+        readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp, DatabaseDumper::V1_RESULTS_VERSION)
+        File.write(RESULTS_EXPORT_README, readme_template)
+
+        sql_zip_filename = self.result_export_file_name("sql", export_timestamp)
+        sql_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README, RESULTS_EXPORT_SQL]
+
+        self.zip_and_upload_to_s3(sql_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{sql_zip_filename}", *sql_zip_contents)
+
+        tsv_zip_filename = self.result_export_file_name("tsv", export_timestamp)
+        tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
+          FileUtils.mv(tsv, '.')
+          File.basename tsv
+        end
+
+        tsv_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README] | tsv_files
+        self.zip_and_upload_to_s3(tsv_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{tsv_zip_filename}", *tsv_zip_contents)
+      end
+    end
+  end
+
+  def self.dump_results_db_v2(export_timestamp = DateTime.now)
+    Dir.mktmpdir do |dir|
+      FileUtils.cd dir do
+        tsv_folder_name = "TSV_export"
+        FileUtils.mkpath tsv_folder_name
+
+        DatabaseDumper.public_results_dump(RESULTS_EXPORT_SQL, tsv_folder_name)
+
+        metadata = {
+          'export_format_version' => DatabaseDumper::V2_RESULTS_VERSION,
+          'export_date' => export_timestamp,
+        }
+        File.write(RESULTS_EXPORT_METADATA, JSON.dump(metadata))
+
+        readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp, DatabaseDumper::V2_RESULTS_VERSION)
         File.write(RESULTS_EXPORT_README, readme_template)
 
         sql_zip_filename = self.result_export_file_name("sql", export_timestamp)
@@ -109,8 +143,7 @@ module DbDumpHelper
   end
 
   def self.result_export_file_name(file_type, timestamp)
-    "result_export"
-    # "WCA_export#{timestamp.strftime('%j')}_#{timestamp.strftime('%Y%m%dT%H%M%SZ')}.#{file_type}.zip"
+    "WCA_export#{timestamp.strftime('%j')}_#{timestamp.strftime('%Y%m%dT%H%M%SZ')}.#{file_type}.zip"
   end
 
   def self.zip_and_upload_to_s3(zip_filename, s3_path, *zip_contents)

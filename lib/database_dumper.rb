@@ -12,7 +12,8 @@ module DatabaseDumper
                             "LEFT JOIN users AS users_organizers ON users_organizers.id = competition_organizers.organizer_id #{WHERE_VISIBLE_COMP} " \
                             "GROUP BY competitions.id".freeze
 
-  PUBLIC_RESULTS_VERSION = '1.0.0'
+  V1_RESULTS_VERSION = '1.0.0'
+  V2_RESULTS_VERSION = '2.0.0'
 
   def self.actions_to_column_sanitizers(columns_by_action)
     {}.tap do |column_sanitizers|
@@ -1486,6 +1487,7 @@ module DatabaseDumper
         table_sanitizer = dump_sanitizers[table_name]
 
         next if table_sanitizer == :skip_all_rows
+        puts "Populating #{table_name}"
 
         # Give an option to override source table name if schemas diverge
         source_table = table_sanitizer[:source_table] || table_name
@@ -1530,8 +1532,11 @@ module DatabaseDumper
     end
   end
 
-  def self.public_results_dump(dump_filename, tsv_folder)
-    self.with_dumped_db(:results_dump, RESULTS_SANITIZERS) do |dump_db|
+  def self.public_results_dump(dump_filename, tsv_folder, version = :v2)
+    sanitizers = version == :v2 ? V2_RESULTS_SANITIZERS : RESULTS_SANITIZERS
+    dump_config = version == :v2 ? :results_dump_v2 : :results_dump
+
+    self.with_dumped_db(dump_config, sanitizers) do |dump_db|
       LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
         self.mysqldump(dump_db, dump_filename)
       end
