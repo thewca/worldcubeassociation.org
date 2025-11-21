@@ -27,12 +27,6 @@ module ResultsValidators
       false
     end
 
-    def competition_associations
-      {
-        events: [],
-      }
-    end
-
     def run_validation(validator_data)
       validator_data.each do |competition_data|
         competition = competition_data.competition
@@ -186,7 +180,7 @@ module ResultsValidators
           # Meets the cutoff, no result should be SKIPPED
           if skipped.any?
             @errors << ValidationError.new(MET_CUTOFF_MISSING_RESULTS_ERROR,
-                                           :results, competition_id,
+                                           :results, competition.id,
                                            round_id: round_id,
                                            person_name: result.person_name,
                                            cutoff: cutoff.to_s(round))
@@ -194,7 +188,7 @@ module ResultsValidators
         elsif unskipped.any?
           # Doesn't meet the cutoff, all results should be SKIPPED
           @errors << ValidationError.new(DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
-                                         :results, competition_id,
+                                         :results, competition.id,
                                          round_id: round_id,
                                          person_name: result.person_name,
                                          cutoff: cutoff.to_s(round))

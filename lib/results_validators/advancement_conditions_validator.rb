@@ -30,7 +30,7 @@ module ResultsValidators
 
     def competition_associations
       {
-        rounds: [],
+        rounds: [:competition_event],
       }
     end
 

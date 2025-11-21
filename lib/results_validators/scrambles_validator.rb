@@ -57,7 +57,7 @@ module ResultsValidators
           errors_for_round = []
           scrambles_by_group_id.each do |group_id, scrambles_for_group|
             # filter out extra scrambles
-            actual_number_of_scrambles = scrambles_for_group.count { |element| !element.is_extra }
+            actual_number_of_scrambles = scrambles_for_group.count { |element| !element.is_extra? }
             next unless actual_number_of_scrambles < expected_number_of_scrambles
 
             errors_for_round << ValidationError.new(MISSING_SCRAMBLES_FOR_GROUP_ERROR,
