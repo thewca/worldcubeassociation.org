@@ -86,16 +86,16 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def event_results
     competition = competition_from_params(associations: [:rounds])
     event = Event.c_find!(params[:event_id])
-    rounds = competition.results
-                        .includes(:round)
-                        .where(event_id: event.id)
-                        .group_by(&:round)
-                        .sort_by { |round, _| -round.number }
-                        .map do |round, results|
+    rounds = competition.rounds
+                        .includes(:results)
+                        .where(competition_events: { event: event })
+                        .except(:order)
+                        .order(number: :desc)
+                        .map do |round|
       {
         id: round.id,
         roundTypeId: round.round_type_id,
-        results: results.sort_by { |r| [r.pos, r.person_name] },
+        results: round.results.sort_by { |r| [r.pos, r.person_name] },
       }
     end
     render json: {
@@ -112,16 +112,16 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def event_scrambles
     competition = competition_from_params
     event = Event.c_find!(params[:event_id])
-    rounds = competition.scrambles
-                        .includes(:round)
-                        .where(event_id: event.id)
-                        .group_by(&:round)
-                        .sort_by { |round, _| -round.number }
-                        .map do |round, scrambles|
+    rounds = competition.rounds
+                        .includes(:scrambles)
+                        .where(competition_events: { event: event })
+                        .except(:order)
+                        .order(number: :desc)
+                        .map do |round|
       {
         id: round.id,
         roundTypeId: round.round_type_id,
-        scrambles: scrambles,
+        scrambles: round.scrambles,
       }
     end
     render json: {
