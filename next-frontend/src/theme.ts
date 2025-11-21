@@ -1,42 +1,11 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
+import { blendHex } from "@/lib/math/colors";
 
-const compileColorScheme = (
-  baseColor: string,
-  textContrast: "light" | "dark" = "light",
-) => ({
-  contrast: { value: `{colors.supplementary.text.${textContrast}}` },
-  fg: { value: `{colors.${baseColor}.2B}` },
-  subtle: { value: `{colors.${baseColor}.2A}` },
-  muted: { value: `{colors.${baseColor}.2A/90}` },
-  emphasized: { value: `{colors.${baseColor}.2C}` },
-  solid: {
-    value: {
-      _light: `{colors.${baseColor}.1A}`,
-      _dark: `{colors.${baseColor}.2A}`,
-    },
-  },
-  focusRing: {
-    value: {
-      _light: `{colors.${baseColor}.1A}`,
-      _dark: `{colors.${baseColor}.2A}`,
-    },
-  },
-  highContrast: {
-    value: {
-      _light: `{colors.${baseColor}.1A}`,
-      _dark: `{colors.${baseColor}.2C}`,
-    },
-  },
+const compileColorScheme = (baseColor: string) => ({
   cubeShades: {
     left: { value: `{colors.${baseColor}.lighter}` },
     top: { value: `{colors.${baseColor}.1A}` },
     right: { value: `{colors.${baseColor}.darker}` },
-  },
-  text: {
-    value: {
-      _light: `{colors.${baseColor}.contrast}`,
-      _dark: `{colors.${baseColor}.2B}`,
-    },
   },
   gradient: {
     default: {
@@ -54,59 +23,96 @@ const compileColorScheme = (
   },
 });
 
+interface WcaPaletteInput {
+  primary: string;         // 1A (Solid / Top Face)
+  pantoneDescription: string;
+  secondaryLight: string;  // 2B (Pastel)
+  secondaryMedium: string; // 2C (Bright)
+  secondaryDark: string;   // 2A (Deep)
+  cubeLight: string;       // Left Face
+  cubeDark: string;        // Right Face
+}
+
+const compileColorScale = (wcaPalette: WcaPaletteInput) => {
+  return {
+    50: { value: blendHex('#FFFFFF', wcaPalette.secondaryLight, 0.3) },
+    100: { value: wcaPalette.secondaryLight, description: "Secondary Palette 2B" },
+    200: { value: blendHex(wcaPalette.secondaryLight, wcaPalette.secondaryMedium, 0.5) },
+    300: { value: wcaPalette.secondaryMedium, description: "Secondary Palette 2C" },
+    400: { value: blendHex(wcaPalette.secondaryMedium, wcaPalette.cubeLight, 0.5) },
+    500: { value: wcaPalette.cubeLight, description: "Cube Shades left (light)" },
+    600: { value: wcaPalette.primary, description: "Primary Palette 1A" },
+    700: { value: wcaPalette.cubeDark, description: "Cube Shades right (dark)" },
+    800: { value: blendHex(wcaPalette.cubeDark, wcaPalette.secondaryDark, 0.5) },
+    900: { value: wcaPalette.secondaryDark, description: "Secondary Palette 2A" },
+    950: { value: blendHex(wcaPalette.secondaryDark, '#000000', 0.4) },
+    '1A': { value: wcaPalette.primary },
+    '2A': { value: wcaPalette.secondaryDark },
+    '2B': { value: wcaPalette.secondaryLight },
+    '2C': { value: wcaPalette.secondaryMedium },
+    lighter: { value: wcaPalette.cubeLight },
+    darker: { value: wcaPalette.cubeDark },
+  };
+}
+
 const customConfig = defineConfig({
   theme: {
     tokens: {
       colors: {
-        green: {
-          "1A": { value: "#029347", description: "Pantone 348 C" },
-          "2A": { value: "#1B4D3E" },
-          "2B": { value: "#C1E6CD" },
-          "2C": { value: "#00FF7F" },
-          lighter: { value: "#1AB55C" },
-          darker: { value: "#04632D" },
-        },
-        wcaWhite: {
-          DEFAULT: { value: "#FFFFFF" },
-          "1A": { value: "#EEEEEE", description: "Pantone Cool Gray 1C" },
-          "2A": { value: "#3B3B3B" },
-          "2B": { value: "#E0DDD5" },
-          "2C": { value: "#F4F1ED" },
-          lighter: { value: "#FFFFFF" },
-          darker: { value: "#CCCCCC" },
-        },
-        red: {
-          "1A": { value: "#C62535", description: "Pantone 1797 C" },
-          "2A": { value: "#7A1220" },
-          "2B": { value: "#F6C5C5" },
-          "2C": { value: "#FF6B6B" },
-          lighter: { value: "#E53841" },
-          darker: { value: "#A3131A" },
-        },
-        yellow: {
-          "1A": { value: "#FFD313", description: "Pantone 116 C" },
-          "2A": { value: "#664D00" },
-          "2B": { value: "#FFF5B8" },
-          "2C": { value: "#FFF5AA" },
-          lighter: { value: "#FFDE55" },
-          darker: { value: "#CEA705" },
-        },
-        blue: {
-          "1A": { value: "#0051BA", description: "Pantone 293 C" },
-          "2A": { value: "#003366" },
-          "2B": { value: "#99C7FF" },
-          "2C": { value: "#42D0FF" },
-          lighter: { value: "#066AC4" },
-          darker: { value: "#03458C" },
-        },
-        orange: {
-          "1A": { value: "#FF5800", description: "Pantone Orange 021 C" },
-          "2A": { value: "#7A2B00" },
-          "2B": { value: "#FFD5BD" },
-          "2C": { value: "#FFD59E" },
-          lighter: { value: "#F96E32" },
-          darker: { value: "#D34405" },
-        },
+        "green": compileColorScale({
+          primary: "#029347",
+          pantoneDescription: "Pantone 348 C",
+          secondaryLight: "#C1E6CD",
+          secondaryMedium: "#00FF7F",
+          secondaryDark: "#1B4D3E",
+          cubeLight: "#1AB55C",
+          cubeDark: "#04632D",
+        }),
+        "wcaWhite": compileColorScale({
+          primary: "#EEEEEE",
+          pantoneDescription: "Pantone Cool Gray 1 C",
+          secondaryLight: "#E0DDD5",
+          secondaryMedium: "#F4F1ED",
+          secondaryDark: "#3B3B3B",
+          cubeLight: "#FFFFFF",
+          cubeDark: "#CCCCCC",
+        }),
+        "red": compileColorScale({
+          primary: "#C62535",
+          pantoneDescription: "Pantone 1797 C",
+          secondaryLight: "#F6C5C5",
+          secondaryMedium: "#FF6B6B",
+          secondaryDark: "#7A1220",
+          cubeLight: "#E53841",
+          cubeDark: "#A3131A",
+        }),
+        "yellow": compileColorScale({
+          primary: "#FFD313",
+          pantoneDescription: "Pantone 116 C",
+          secondaryLight: "#FFF5B8",
+          secondaryMedium: "#FFF5AA",
+          secondaryDark: "#664D00",
+          cubeLight: "#FFDE55",
+          cubeDark: "#CEA705",
+        }),
+        "blue": compileColorScale({
+          primary: "#0051BA",
+          pantoneDescription: "Pantone 293 C",
+          secondaryLight: "#99C7FF",
+          secondaryMedium: "#42D0FF",
+          secondaryDark: "#003366",
+          cubeLight: "#066AC4",
+          cubeDark: "#03458C",
+        }),
+        "orange": compileColorScale({
+          primary: "#FF5800",
+          pantoneDescription: "Pantone Orange 021 C",
+          secondaryLight: "#FFD5BD",
+          secondaryMedium: "#FFD59E",
+          secondaryDark: "#7A2B00",
+          cubeLight: "#F96E32",
+          cubeDark: "#D34405",
+        }),
         supplementary: {
           text: {
             light: { value: "#FCFCFC" },
@@ -206,24 +212,9 @@ const customConfig = defineConfig({
           },
         },
         green: compileColorScheme("green"),
-        white: {
-          ...compileColorScheme("wcaWhite"),
-          // white has special behavior for contrast colors between light/dark modes
-          contrast: {
-            value: {
-              _light: "{colors.supplementary.text.dark}",
-              _dark: "{colors.supplementary.text.light}",
-            },
-          },
-          solid: {
-            value: {
-              _light: "{colors.wcaWhite.2C}",
-              _dark: "{colors.wcaWhite.2A}",
-            },
-          },
-        },
+        white: compileColorScheme("wcaWhite"),
         red: compileColorScheme("red"),
-        yellow: compileColorScheme("yellow", "dark"),
+        yellow: compileColorScheme("yellow"),
         blue: compileColorScheme("blue"),
         orange: compileColorScheme("orange"),
         black: {
