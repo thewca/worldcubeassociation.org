@@ -372,6 +372,7 @@ Rails.application.routes.draw do
         if WcaLive.enabled?
           namespace :live do
             get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
+            get '/registrations/:registration_id' => 'live#by_person', as: :get_live_by_person
           end
         end
 

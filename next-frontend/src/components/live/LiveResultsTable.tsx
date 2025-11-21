@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 import _ from "lodash";
-import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
 import { Link, Table } from "@chakra-ui/react";
 import {
   centisecondsToClockFormat,
   formatAttemptResult,
 } from "@/lib/wca/wcif/attempts";
+import { components } from "@/types/openapi";
 import { recordTagBadge } from "@/components/results/TableCells";
 
 const customOrderBy = (
