@@ -15,6 +15,14 @@ paths:
   /v1/competitions/{competitionId}/registrations:
     $ref: 'paths/registrations/registrationsByCompetition.yaml'
 
+  /v1/competitions/{competitionId}/live/rounds/{roundId}:
+    post:
+      $ref: 'paths/competitions/live/SubmitLiveResults.yaml'
+    patch:
+      $ref: 'paths/competitions/live/UpdateLiveResults.yaml'
+    get:
+      $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
+
   /v0/competitions/{competitionId}/:
     $ref: 'paths/competitions/competitionById.yaml'
   /v0/competitions/{competitionId}/events:

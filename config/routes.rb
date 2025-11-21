@@ -369,6 +369,14 @@ Rails.application.routes.draw do
     # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
       resources :competitions, only: [] do
+        if WcaLive.enabled?
+          namespace :live do
+            get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
+            post '/rounds/:round_id' => 'live#add_result', as: :add_live_results
+            patch '/rounds/:round_id' => 'live#update_result', as: :update_live_results
+          end
+        end
+
         resources :registrations, only: %i[index show create update], shallow: true do
           resource :history, only: %i[show], controller: :registration_history
           resource :payments, only: %i[show], controller: :registration_payments
