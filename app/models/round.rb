@@ -253,6 +253,15 @@ class Round < ApplicationRecord
     }
   end
 
+  def to_live_json(only_podiums: false)
+    {
+      **self.to_wcif,
+      "round_id" => id,
+      "competitors" => accepted_registrations.map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registrant_id" => it.registrant_id) },
+      "results" => only_podiums ? live_podium : live_results,
+    }
+  end
+
   def to_wcif
     {
       "id" => wcif_id,
