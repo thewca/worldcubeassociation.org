@@ -173,9 +173,9 @@ class Round < ApplicationRecord
   end
 
   def recompute_live_columns
-    recompute_advancing
     recompute_local_pos
     recompute_global_pos
+    recompute_advancing
   end
 
   def quit_from_round(registration_ids)
@@ -184,7 +184,7 @@ class Round < ApplicationRecord
     elsif consider_previous_round_results?
       linked_round.first_round_in_link.quit_from_round(registration_ids)
     else
-      previous_round.live_result.where(registration_id: registration_ids).update_all(advancing: false)
+      previous_round.live_results.where(registration_id: registration_ids).update_all(advancing: false)
     end
     recompute_live_columns
   end
