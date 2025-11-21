@@ -22,6 +22,8 @@ paths:
       $ref: 'paths/competitions/live/UpdateLiveResults.yaml'
     get:
       $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
+  /v1/competitions/{competitionId}/live/registrations/{registrationId}:
+    $ref: 'paths/competitions/live/liveResultsByPerson.yaml'
 
   /v0/competitions/{competitionId}/:
     $ref: 'paths/competitions/competitionById.yaml'

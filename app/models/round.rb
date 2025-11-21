@@ -2,7 +2,7 @@
 
 class Round < ApplicationRecord
   belongs_to :competition_event
-  belongs_to :linked_rounds, optional: true
+  belongs_to :linked_round, optional: true
 
   has_one :competition, through: :competition_event
   delegate :competition_id, to: :competition_event
@@ -24,6 +24,8 @@ class Round < ApplicationRecord
 
   delegate :can_change_time_limit?, to: :event
 
+  scope :ordered, -> { order(:number) }
+
   serialize :time_limit, coder: TimeLimit
   validates_associated :time_limit
 
@@ -40,7 +42,7 @@ class Round < ApplicationRecord
 
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
-  has_many :live_results
+  has_many :live_results, -> { order(:global_pos) }
   has_many :results
   has_many :scrambles
 
@@ -141,7 +143,7 @@ class Round < ApplicationRecord
   end
 
   def live_podium
-    live_results.where(ranking: 1..3)
+    live_results.where(global_pos: 1..3)
   end
 
   def previous_round
@@ -150,26 +152,19 @@ class Round < ApplicationRecord
     Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
   end
 
+  def consider_previous_round_results?
+    # All linked rounds except the first one in a chain of linked rounds
+    linked_round.present? && linked_round.first_round_in_link.id != id
+  end
+
   def accepted_registrations
     if number == 1
       registrations.accepted
+    elsif consider_previous_round_results?
+      linked_round.first_round_in_link.accepted_registrations
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
       Registration.find(advancing)
-    end
-  end
-
-  def accepted_registrations_with_wcif_id
-    if number == 1
-      registrations.includes(:user)
-                   .accepted
-                   .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
-    else
-      advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
-
-      Registration.includes(:user)
-                  .find(advancing)
-                  .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
     end
   end
 
@@ -272,6 +267,15 @@ class Round < ApplicationRecord
       "scrambleSetCount" => self.scramble_set_count,
       "results" => round_results.map(&:to_wcif),
       "extensions" => wcif_extensions.map(&:to_wcif),
+    }
+  end
+
+  def to_live_json(only_podiums: false)
+    {
+      **self.to_wcif,
+      "round_id" => id,
+      "competitors" => accepted_registrations.map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => it.registrant_id) },
+      "results" => only_podiums ? live_podium : live_results,
     }
   end
 

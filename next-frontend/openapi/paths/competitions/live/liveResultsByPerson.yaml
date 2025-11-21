@@ -1,20 +1,20 @@
 get:
-  summary: Gets Information about the Round including the live Results
+  summary: Gets Information about the Competitors's live result
   parameters:
     - name: competitionId
       in: path
       required: true
       schema:
         type: string
-    - name: roundId
+    - name: registrationId
       in: path
       required: true
       schema:
         type: string
   responses:
     '200':
-      description: Returns results
+      description: Returns a person and their results
       content:
         application/json:
           schema:
-            $ref: "../../../schemas/live/LiveRound.yaml"
+            $ref: "../../../schemas/live/LivePerson.yaml"

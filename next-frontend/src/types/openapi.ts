@@ -53,69 +53,50 @@ export interface paths {
             };
         };
         put?: never;
-        /** Adds a live result for a given round */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    competitionId: string;
-                    roundId: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["SubmitLiveResult"];
-                };
-            };
-            responses: {
-                /** @description Result Accepted */
-                202: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            status?: string;
-                        };
-                    };
-                };
-            };
-        };
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        /** Updates a live result for a given round */
-        patch: {
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/registrations/{registrationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets Information about the Competitors's live result */
+        get: {
             parameters: {
                 query?: never;
                 header?: never;
                 path: {
                     competitionId: string;
-                    roundId: string;
+                    registrationId: string;
                 };
                 cookie?: never;
             };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["SubmitLiveResult"];
-                };
-            };
+            requestBody?: never;
             responses: {
-                /** @description Result Updated */
+                /** @description Returns a person and their results */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": {
-                            status?: string;
-                        };
+                        "application/json": components["schemas"]["LivePerson"];
                     };
                 };
             };
         };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/v0/competitions/{competitionId}/": {
@@ -627,7 +608,8 @@ export interface components {
         LiveResult: {
             registration_id: number;
             round_id: number;
-            ranking: number;
+            global_pos: number;
+            local_pos: number;
             best: number;
             average: number;
             single_record_tag: string;
@@ -651,7 +633,6 @@ export interface components {
             competitors: components["schemas"]["LiveCompetitor"][];
             round_id: number;
         };
-        SubmitLiveResult: unknown;
         UserAvatar: {
             /**
              * Format: uri
@@ -663,6 +644,46 @@ export interface components {
              * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
              */
             thumb_url?: string;
+        };
+        WcifRegistration: {
+            wcaRegistrationId: number;
+            eventIds: string[];
+            status: string;
+            isCompeting: boolean;
+        };
+        WcifAssignment: {
+            activityId: number;
+            stationNumber: number;
+            assignmentCode: string;
+        };
+        WcifPersonalBest: {
+            eventId: string;
+            best: number;
+            worldRanking: number;
+            continentalRanking: number;
+            nationalRanking: number;
+            /** @enum {string} */
+            type: "single" | "average";
+        };
+        WcifPerson: {
+            registrantId: number;
+            name: string;
+            wcaUserId: number;
+            countryIso2: string;
+            gender: string;
+            /** Format: date */
+            birthdate?: string;
+            /** Format: email */
+            email?: string;
+            avatar?: components["schemas"]["UserAvatar"];
+            roles: ("delegate" | "trainee-delegate" | "organizer")[];
+            registration?: components["schemas"]["WcifRegistration"];
+            assignments: components["schemas"]["WcifAssignment"][];
+            personalBests: components["schemas"]["WcifPersonalBest"][];
+            extensions: unknown[];
+        };
+        LivePerson: components["schemas"]["WcifPerson"] & {
+            results: components["schemas"]["LiveResult"][];
         };
         TeamMembership: {
             id: number;
