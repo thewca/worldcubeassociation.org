@@ -13,7 +13,7 @@ module ResultsValidators
 
       results_assoc = check_real_results ? :results : :inbox_results
       # Deliberately NOT sending :format and :event because those are cached values anyways
-      associations.deep_merge!({ results_assoc => [:round] })
+      associations.deep_merge!({ results_assoc => {round: [:competition_event]} })
 
       competition_scope = self.load_competition_includes(validator, associations, check_real_results: check_real_results)
                               .where(id: competition_ids)
@@ -49,7 +49,7 @@ module ResultsValidators
 
       if validator.include_scrambles?
         scrambles_assoc = check_real_results ? :scrambles : :matched_scrambles
-        assoc_models = check_real_results ? [] : [:matched_scramble_set]
+        assoc_models = check_real_results ? {round: [:competition_event]} : {matched_scramble_set: {matched_round: [:competition_event]}}
 
         associations.deep_merge!({ scrambles_assoc => assoc_models })
       end
