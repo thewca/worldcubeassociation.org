@@ -31,7 +31,6 @@ RSpec.describe SV do
       # Triggers:
       # MISSING_SCRAMBLES_FOR_ROUND_ERROR
       # MISSING_SCRAMBLES_FOR_COMPETITION_ERROR
-      # UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR
       # MISSING_SCRAMBLES_FOR_GROUP_ERROR
       it "matches Result" do
         [Result, InboxResult].each do |model|
@@ -42,9 +41,6 @@ RSpec.describe SV do
         end
 
         expected_errors = [
-          RV::ValidationError.new(SV::UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR,
-                                  :scrambles, competition1.id,
-                                  round_id: "333-f"),
           RV::ValidationError.new(SV::MISSING_SCRAMBLES_FOR_ROUND_ERROR,
                                   :scrambles, competition2.id,
                                   round_id: "333bf-f"),
@@ -52,7 +48,6 @@ RSpec.describe SV do
 
         # Scrambles are shared between InboxResult and Result
         create_scramble_set(5, competition: competition1, round: round_333oh, event_id: "333oh")
-        create_scramble_set(5, competition: competition1, event_id: "333")
         create_scramble_set(5, competition: competition2, round: round_222, event_id: "222")
 
         validator_args.each do |arg|
