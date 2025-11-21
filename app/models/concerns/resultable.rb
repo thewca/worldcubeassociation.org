@@ -180,11 +180,11 @@ module Resultable
   end
 
   def solve_times
-    @solve_times ||= [SolveTime.new(event_id, :single, value1),
-                      SolveTime.new(event_id, :single, value2),
-                      SolveTime.new(event_id, :single, value3),
-                      SolveTime.new(event_id, :single, value4),
-                      SolveTime.new(event_id, :single, value5)].freeze
+    @solve_times ||= result_attempts.map { |r| SolveTime.new(event_id, :single, r.value) }.freeze
+  end
+
+  def worst_index
+    sorted_solves_with_index.max[1]
   end
 
   private def valid_attempts_partition
@@ -210,10 +210,6 @@ module Resultable
 
   def skipped_attempt_numbers
     self.skipped_attempts.map { |_value, n| n }
-  end
-
-  def worst_index
-    sorted_solves_with_index.max[1]
   end
 
   def trimmed_indices

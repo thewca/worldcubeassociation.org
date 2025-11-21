@@ -42,15 +42,7 @@ RSpec.describe Result do
         result = build_result "event_id" => "333", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "format_id" => "a"
         expect(result.format.expected_solve_count).to eq 5
         expect(result.solve_times).to eq [
-          solve_time(20), solve_time(10), solve_time(60), solve_time(SolveTime::SKIPPED_VALUE), solve_time(SolveTime::SKIPPED_VALUE)
-        ]
-      end
-
-      it "returns 5 SolveTimes even for a round with 3 solves" do
-        result = build_result "event_id" => "333bf", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "format_id" => "3"
-        expect(result.format.expected_solve_count).to eq 3
-        expect(result.solve_times).to eq [
-          solve_time(20), solve_time(10), solve_time(60), solve_time(SolveTime::SKIPPED_VALUE), solve_time(SolveTime::SKIPPED_VALUE)
+          solve_time(20), solve_time(10), solve_time(60)
         ]
       end
     end
@@ -93,9 +85,9 @@ RSpec.describe Result do
   end
 
   context "valid" do
-    it "skipped solves must all come at the end" do
+    it "skipped solve in the middle causes error" do
       result = build(:result, value2: 0)
-      expect(result).to be_invalid_with_errors(base: ["Skipped solves must all come at the end."])
+      expect(result).to be_invalid_with_errors(base: ["Expected 5 solves, but found 4."])
     end
 
     it "cannot skip all solves" do
@@ -431,9 +423,10 @@ RSpec.describe Result do
     context "check number of non-zero solves" do
       def result_with_n_solves(n, options)
         result = build(:result, options)
-        (1..5).each do |i|
+        (1..5).map do |i|
           result.send :"value#{i}=", i <= n ? 42 : 0
         end
+        result.result_attempts = result.result_attempts_attributes.map(&ResultAttempt.method(:new))
         result
       end
 

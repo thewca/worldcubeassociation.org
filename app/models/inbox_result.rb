@@ -15,6 +15,10 @@ class InboxResult < ApplicationRecord
     inbox_person&.name || "<person_id=#{person_id}>"
   end
 
+  def solve_times
+    @solve_times ||= attempts.filter_map { |attempt| SolveTime.new(event_id, :single, attempt) if attempt != 0 }.freeze
+  end
+
   alias_method :name, :person_name
 
   def attempts
