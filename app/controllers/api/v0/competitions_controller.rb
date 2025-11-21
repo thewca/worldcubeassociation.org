@@ -86,18 +86,15 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def event_results
     competition = competition_from_params(associations: [:rounds])
     event = Event.c_find!(params[:event_id])
-    results_by_round = competition.results
-                                  .where(event_id: event.id)
-                                  .group_by(&:round_type)
-                                  .sort_by { |round_type, _| -round_type.rank }
-    rounds = results_by_round.map do |round_type, results|
-      # I think all competitions now have round data, but let's be cautious
-      # and assume they may not.
-      # round data.
-      round = competition.find_round_for(event.id, round_type.id)
+    rounds = competition.results
+                        .includes(:round)
+                        .where(event_id: event.id)
+                        .group_by(&:round)
+                        .sort_by { |round, _| -round.number }
+                        .map do |round, results|
       {
-        id: round&.id,
-        roundTypeId: round_type.id,
+        id: round.id,
+        roundTypeId: round.round_type_id,
         results: results.sort_by { |r| [r.pos, r.person_name] },
       }
     end
@@ -115,18 +112,15 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def event_scrambles
     competition = competition_from_params
     event = Event.c_find!(params[:event_id])
-    scrambles_by_round = competition.scrambles
-                                    .where(event_id: event.id)
-                                    .group_by(&:round_type)
-                                    .sort_by { |round_type, _| -round_type.rank }
-    rounds = scrambles_by_round.map do |round_type, scrambles|
-      # I think all competitions now have round data, but let's be cautious
-      # and assume they may not.
-      # round data.
-      round = competition.find_round_for(event.id, round_type.id)
+    rounds = competition.scrambles
+                        .includes(:round)
+                        .where(event_id: event.id)
+                        .group_by(&:round)
+                        .sort_by { |round, _| -round.number }
+                        .map do |round, scrambles|
       {
-        id: round&.id,
-        roundTypeId: round_type.id,
+        id: round.id,
+        roundTypeId: round.round_type_id,
         scrambles: scrambles,
       }
     end
