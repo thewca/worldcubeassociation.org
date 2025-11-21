@@ -27,16 +27,16 @@ module ResultsValidators
     def validate(competition_ids: [], model: Result, results: nil)
       self.reset_state
 
+      check_real_results = model == Result
+
       if results.present?
-        validator_data = ValidatorData.from_results(self, results)
+        validator_data = ValidatorData.from_results(self, results, check_real_results)
 
         run_validation(validator_data)
       end
 
       if competition_ids.present?
         competition_ids = [competition_ids] unless competition_ids.respond_to? :each
-
-        check_real_results = model == Result
 
         self.validate_competitions(competition_ids, check_real_results)
       end

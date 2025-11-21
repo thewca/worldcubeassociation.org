@@ -20,9 +20,7 @@ module ResultsValidators
     def competition_associations
       {
         events: [],
-        competition_events: {
-          rounds: [:competition_event],
-        },
+        rounds: [],
       }
     end
 
@@ -75,9 +73,8 @@ module ResultsValidators
 
       def check_rounds_match(competition, results)
         # Check that rounds match what was declared.
-        # This function automatically casts cutoff rounds to regular rounds if everyone has met the cutoff.
 
-        expected_rounds_by_ids = competition.competition_events.map(&:rounds).flatten.index_by { |r| "#{r.event.id}-#{r.round_type_id}" }
+        expected_rounds_by_ids = competition.rounds.index_by { |r| "#{r.event.id}-#{r.round_type_id}" }
 
         expected = expected_rounds_by_ids.keys
         real = results.map { |r| "#{r.event_id}-#{r.round_type_id}" }.uniq

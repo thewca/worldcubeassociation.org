@@ -30,13 +30,6 @@ module ResultsValidators
     def competition_associations
       {
         events: [],
-        competition_events: {
-          rounds: {
-            # That's a weird association, but that's needed for cumulative rounds...
-            competition: { rounds: [:competition_event] },
-            competition_event: [],
-          },
-        },
       }
     end
 
@@ -222,8 +215,8 @@ module ResultsValidators
           parsed_wcif_id = Round.parse_wcif_id(wcif_id)
           # Get the actual round_id from our expected rounds by id
 
-          actual_round = results_by_round.keys.find do |round|
-            round.event.id == parsed_wcif_id[:event_id] && round.number == parsed_wcif_id[:round_number]
+          actual_round = results_by_round.keys.find do |rd|
+            rd.event_id == parsed_wcif_id[:event_id] && rd.number == parsed_wcif_id[:round_number]
           end
           unless actual_round
             # FIXME: this may need to be removed per https://github.com/thewca/worldcubeassociation.org/issues/8656.
