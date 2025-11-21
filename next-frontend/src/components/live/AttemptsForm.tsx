@@ -46,7 +46,7 @@ export default function AttemptsForm({
       value: c.id,
     })),
     filter: (itemText, filterText, item) =>
-      filterText.includes(itemText) ||
+      itemText.includes(filterText) ||
       parseInt(filterText, 10) === item.registrant_id,
   });
 
@@ -57,7 +57,6 @@ export default function AttemptsForm({
       <Combobox.Root
         collection={collection}
         onInputValueChange={(e) => filter(e.inputValue)}
-        value={[registrationId?.toString() ?? ""]}
         onValueChange={(e) =>
           handleRegistrationIdChange(parseInt(e.value[0], 10))
         }
