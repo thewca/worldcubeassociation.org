@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import { Link, Table } from "@chakra-ui/react";
@@ -54,16 +53,14 @@ export default function ResultsTable({
   const resultsByRegistrationId = _.keyBy(results, "registration_id");
   const event = events.byId[eventId];
 
-  const sortedCompetitors = useMemo(() => {
-    return _.orderBy(
-      competitors,
-      [
-        (competitor) => customOrderBy(competitor, resultsByRegistrationId),
-        (competitor) => customOrderBy(competitor, resultsByRegistrationId),
-      ],
-      ["asc", "asc"],
-    );
-  }, [competitors, resultsByRegistrationId]);
+  const sortedCompetitors = _.orderBy(
+    competitors,
+    [
+      (competitor) => customOrderBy(competitor, resultsByRegistrationId),
+      (competitor) => customOrderBy(competitor, resultsByRegistrationId),
+    ],
+    ["asc", "asc"],
+  );
 
   const solveCount = event.recommendedFormat.expected_solve_count;
   const attemptIndexes = [...Array(solveCount).keys()];

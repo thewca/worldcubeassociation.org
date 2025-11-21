@@ -1,35 +1,24 @@
-"use client";
+"use server";
 
-import { useParams } from "next/navigation";
-import useAPI from "@/lib/wca/useAPI";
-import Loading from "@/components/ui/loading";
 import { Container, Heading, VStack } from "@chakra-ui/react";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 
-export default function ResultPage() {
-  const { roundId, competitionId } =
-    useParams<"/competitions/[competitionId]/live/rounds/[roundId]">();
+export default async function ResultPage({
+  params,
+}: {
+  params: Promise<{ roundId: string; competitionId: string }>;
+}) {
+  const { roundId, competitionId } = await params;
 
-  const api = useAPI();
+  const resultsRequest = await getResultByRound(competitionId, roundId);
 
-  const { data: resultsRequest, isLoading } = api.useQuery(
-    "get",
-    "/v1/competitions/{competitionId}/live/rounds/{roundId}",
-    {
-      params: { path: { roundId, competitionId } },
-    },
-  );
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  if (!resultsRequest) {
+  if (!resultsRequest.data) {
     return <p>Error loading Results</p>;
   }
 
-  const { results, id, competitors } = resultsRequest;
+  const { results, id, competitors } = resultsRequest.data;
 
   return (
     <Container bg="bg">
