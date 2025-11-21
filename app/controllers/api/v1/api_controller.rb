@@ -4,8 +4,10 @@ class Api::V1::ApiController < ApplicationController
   prepend_before_action :require_user
 
   def require_user
-    @current_user = current_user || api_user
-    raise WcaExceptions::MustLogIn.new if @current_user.nil?
+    user = current_user || api_user
+    raise WcaExceptions::MustLogIn.new if user.nil?
+
+    user
   end
 
   def api_user
