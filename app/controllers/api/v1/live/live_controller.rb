@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::Live::LiveController < Api::V1::ApiController
+  protect_from_forgery with: :null_session
   skip_before_action :require_user, only: %i[round_results by_person]
   def round_results
     round_id = params.require(:round_id)
@@ -24,8 +25,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
   end
 
   def add_result
+    user = require_user
     competition_id = params.require(:competition_id)
-    render_error(:unauthorized, LiveResults::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.can_manage_competition?(Competition.find(competition_id))
+    render_error(:unauthorized, LiveResults::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless user.can_manage_competition?(Competition.find(competition_id))
 
     results = params.permit(attempts: %i[result attempt_number])[:attempts]
     round_id = params.require(:round_id)
@@ -33,15 +35,16 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     render_error(:unprocessable_content, LiveResults::ErrorCodes::LIVE_RESULT_ALREADY_EXISTS) if LiveResult.exists?(round_id: round_id, registration_id: registration_id)
 
-    AddLiveResultJob.perform_later(results, round_id, registration_id, current_user)
+    AddLiveResultJob.perform_later(results, round_id, registration_id, user)
 
     render json: { status: "ok" }
   end
 
   def update_result
+    user = require_user
     results = params.require(:attempts)
     round = Round.find(params.require(:round_id))
-    render_error(:unauthorized, LiveResults::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.can_manage_competition?(round.competition)
+    render_error(:unauthorized, LiveResults::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless user.can_manage_competition?(round.competition)
 
     registration_id = params.require(:registration_id)
 
