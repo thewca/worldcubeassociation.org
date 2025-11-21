@@ -825,4 +825,42 @@ const customConfig = defineConfig({
   },
 });
 
-export const system = createSystem(defaultConfig, customConfig);
+const removeUnwantedPalettes = (sourceColors: Record<string, any> = {}) => {
+  const {
+    cyan,
+    purple,
+    pink,
+    teal,
+    // Add others here if you want to fully replace defaults (e.g., green, red)
+    // green,
+    // red,
+    ...keptColors
+  } = sourceColors;
+
+  return keptColors;
+};
+
+// 2. Sanitize the Raw Tokens (The 50-950 scales)
+const sanitizedTokens = {
+  ...defaultConfig.theme?.tokens,
+  colors: removeUnwantedPalettes(defaultConfig.theme?.tokens?.colors),
+};
+
+// 3. Sanitize the Semantic Tokens (The functional mappings)
+//    Chakra defaults often have entries like `cyan: { solid: ... }` here.
+const sanitizedSemanticTokens = {
+  ...defaultConfig.theme?.semanticTokens,
+  colors: removeUnwantedPalettes(defaultConfig.theme?.semanticTokens?.colors),
+};
+
+// 4. Create the clean base configuration
+const sanitizedDefaultConfig = defineConfig({
+  ...defaultConfig,
+  theme: {
+    ...defaultConfig.theme,
+    tokens: sanitizedTokens,
+    semanticTokens: sanitizedSemanticTokens,
+  },
+});
+
+export const system = createSystem(sanitizedDefaultConfig, customConfig);
