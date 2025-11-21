@@ -40,7 +40,7 @@ class Round < ApplicationRecord
 
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
-  has_many :live_results
+  has_many :live_results, -> { order(:ranking) }
   has_many :results
   has_many :scrambles
 
@@ -159,20 +159,6 @@ class Round < ApplicationRecord
     end
   end
 
-  def accepted_registrations_with_wcif_id
-    if number == 1
-      registrations.includes(:user)
-                   .accepted
-                   .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
-    else
-      advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
-
-      Registration.includes(:user)
-                  .find(advancing)
-                  .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
-    end
-  end
-
   def total_accepted_registrations
     accepted_registrations.count
   end
@@ -263,6 +249,15 @@ class Round < ApplicationRecord
       "scrambleSetCount" => self.scramble_set_count,
       "results" => round_results.map(&:to_wcif),
       "extensions" => wcif_extensions.map(&:to_wcif),
+    }
+  end
+
+  def to_live_json(only_podiums: false)
+    {
+      **self.to_wcif,
+      "round_id" => id,
+      "competitors" => accepted_registrations.map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => it.registrant_id) },
+      "results" => only_podiums ? live_podium : live_results,
     }
   end
 
