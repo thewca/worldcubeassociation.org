@@ -35,6 +35,7 @@ interface WcaPaletteInput {
 
 const compileColorScale = (wcaPalette: WcaPaletteInput) => {
   return {
+    'DEFAULT': { value: wcaPalette.primary },
     50: { value: blendHex('#FFFFFF', wcaPalette.secondaryLight, 0.3) },
     100: { value: wcaPalette.secondaryLight, description: "Secondary Palette 2B" },
     200: { value: blendHex(wcaPalette.secondaryLight, wcaPalette.secondaryMedium, 0.5) },
@@ -113,12 +114,25 @@ const customConfig = defineConfig({
           cubeLight: "#F96E32",
           cubeDark: "#D34405",
         }),
+        "gray": {
+          50: { "value": "#FCFCFC", description: "Supplementary BG 1 / Text White" },
+          100: { "value": "#EDEDED", description: "Supplementary BG 2" },
+          200: { "value": "#DCDCDC", description: "Supplementary BG 3" },
+          300: { "value": "#B8B8B8", description: "Supplementary BG 4" },
+          400: { "value": "#969696" },
+          500: { "value": "#7D7D7D" },
+          600: { "value": "#6B6B6B", description: "Supplementary Text 1" },
+          700: { "value": "#535353" },
+          800: { "value": "#3B3B3B", description: "Supplementary Text 2" },
+          900: { "value": "#1E1E1E", description: "Supplementary Text Black" },
+          950: { "value": "#111111" },
+        },
         supplementary: {
           text: {
-            light: { value: "#FCFCFC" },
-            dark: { value: "#1E1E1E" },
-            lightgray: { value: "#6B6B6B" },
-            darkgray: { value: "#3B3B3B" },
+            white: { value: "#FCFCFC" },
+            light: { value: "#6B6B6B" },
+            dark: { value: "#3B3B3B" },
+            black: { value: "#1E1E1E" },
           },
           bg: {
             white: { value: "#FCFCFC" },
@@ -162,14 +176,14 @@ const customConfig = defineConfig({
           },
           muted: {
             value: {
-              _light: "{colors.supplementary.bg.light}",
-              _dark: "{colors.supplementary.bg.darkest}",
+              _light: "{colors.supplementary.bg.medium}",
+              _dark: "{colors.supplementary.bg.darker}",
             },
           },
           emphasized: {
             value: {
-              _light: "{colors.supplementary.bg.medium}",
-              _dark: "{colors.supplementary.bg.darker}",
+              _light: "{colors.supplementary.bg.dark}",
+              _dark: "{colors.supplementary.bg.dark}",
             },
           },
           inverted: {
@@ -181,33 +195,81 @@ const customConfig = defineConfig({
           panel: {
             value: {
               _light: "{colors.supplementary.bg.white}",
-              _dark: "{colors.gray.950}",
+              _dark: "{colors.supplementary.bg.black}",
+            },
+          },
+          error: {
+            value: {
+              _light: "{colors.red.2B}",
+              _dark: "{colors.red.2A}",
+            },
+          },
+          warning: {
+            value: {
+              _light: "{colors.orange.2B}",
+              _dark: "{colors.orange.2A}",
+            },
+          },
+          success: {
+            value: {
+              _light: "{colors.green.2B}",
+              _dark: "{colors.green.2A}",
+            },
+          },
+          info: {
+            value: {
+              _light: "{colors.blue.2B}",
+              _dark: "{colors.blue.2A}",
             },
           },
         },
         fg: {
           DEFAULT: {
             value: {
-              _light: "{colors.supplementary.text.dark}",
-              _dark: "{colors.supplementary.text.light}",
+              _light: "{colors.supplementary.text.black}",
+              _dark: "{colors.supplementary.text.white}",
             },
           },
           muted: {
             value: {
-              _light: "{colors.supplementary.text.darkgray}",
-              _dark: "{colors.supplementary.text.lightgray}",
+              _light: "{colors.supplementary.text.dark}",
+              _dark: "{colors.supplementary.text.light}",
             },
           },
           subtle: {
             value: {
-              _light: "{colors.supplementary.text.lightgray}",
-              _dark: "{colors.supplementary.text.darkgray}",
+              _light: "{colors.supplementary.text.light}",
+              _dark: "{colors.supplementary.text.dark}",
             },
           },
           inverted: {
             value: {
-              _light: "{colors.supplementary.text.light}",
-              _dark: "{colors.supplementary.text.dark}",
+              _light: "{colors.supplementary.text.white}",
+              _dark: "{colors.supplementary.text.black}",
+            },
+          },
+          error: {
+            value: {
+              _light: "{colors.red.1A}",
+              _dark: "{colors.red.2C}",
+            },
+          },
+          warning: {
+            value: {
+              _light: "{colors.orange.1A}",
+              _dark: "{colors.orange.2C}",
+            },
+          },
+          success: {
+            value: {
+              _light: "{colors.green.1A}",
+              _dark: "{colors.green.2C}",
+            },
+          },
+          info: {
+            value: {
+              _light: "{colors.blue.1A}",
+              _dark: "{colors.blue.2C}",
             },
           },
         },
