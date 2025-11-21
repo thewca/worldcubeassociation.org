@@ -223,6 +223,62 @@ const customConfig = defineConfig({
             },
           },
         },
+        border: {
+          DEFAULT: {
+            value: {
+              _light: "{colors.supplementary.bg.medium}",
+              _dark: "{colors.supplementary.bg.darker}",
+            },
+          },
+          muted: {
+            value: {
+              _light: "{colors.supplementary.bg.light}",
+              _dark: "{colors.supplementary.bg.darkest}",
+            },
+          },
+          subtle: {
+            value: {
+              _light: "{colors.supplementary.bg.white}",
+              _dark: "{colors.supplementary.bg.black}",
+            },
+          },
+          emphasized: {
+            value: {
+              _light: "{colors.supplementary.bg.dark}",
+              _dark: "{colors.supplementary.bg.dark}",
+            },
+          },
+          inverted: {
+            value: {
+              _light: "{colors.supplementary.bg.darker}",
+              _dark: "{colors.supplementary.bg.medium}",
+            },
+          },
+          error: {
+            value: {
+              _light: "{colors.red.darker}",
+              _dark: "{colors.red.lighter}",
+            },
+          },
+          warning: {
+            value: {
+              _light: "{colors.orange.darker}",
+              _dark: "{colors.orange.lighter}",
+            },
+          },
+          success: {
+            value: {
+              _light: "{colors.green.darker}",
+              _dark: "{colors.green.lighter}",
+            },
+          },
+          info: {
+            value: {
+              _light: "{colors.blue.darker}",
+              _dark: "{colors.blue.lighter}",
+            },
+          },
+        },
         fg: {
           DEFAULT: {
             value: {
