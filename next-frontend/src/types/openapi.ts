@@ -608,7 +608,8 @@ export interface components {
         LiveResult: {
             registration_id: number;
             round_id: number;
-            ranking: number;
+            global_pos: number;
+            local_pos: number;
             best: number;
             average: number;
             single_record_tag: string;

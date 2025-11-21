@@ -769,7 +769,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_17_142333) do
     t.bigint "registration_id", null: false
     t.bigint "round_id", null: false
     t.datetime "last_attempt_entered_at", null: false
-    t.integer "ranking"
+    t.integer "local_pos"
+    t.integer "global_pos"
     t.integer "best", null: false
     t.integer "average", null: false
     t.string "single_record_tag", limit: 255
