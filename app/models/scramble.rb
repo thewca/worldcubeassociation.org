@@ -16,6 +16,8 @@ class Scramble < ApplicationRecord
   validates :round_type_id, comparison: { equal_to: :round_round_type_id }
   validates :event_id, comparison: { equal_to: :round_event_id }
 
+  alias_attribute :ref_round, :round
+
   def round_type
     RoundType.c_find(round_type_id)
   end
