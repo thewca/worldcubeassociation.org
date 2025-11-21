@@ -42,7 +42,7 @@ class Round < ApplicationRecord
 
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
-  has_many :live_results
+  has_many :live_results, -> { order(:ranking) }
   has_many :results
   has_many :scrambles
 
@@ -258,6 +258,15 @@ class Round < ApplicationRecord
       "scrambleSetCount" => self.scramble_set_count,
       "results" => round_results.map(&:to_wcif),
       "extensions" => wcif_extensions.map(&:to_wcif),
+    }
+  end
+
+  def to_live_json(only_podiums: false)
+    {
+      **self.to_wcif,
+      "round_id" => id,
+      "competitors" => accepted_registrations.map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => it.registrant_id) },
+      "results" => only_podiums ? live_podium : live_results,
     }
   end
 
