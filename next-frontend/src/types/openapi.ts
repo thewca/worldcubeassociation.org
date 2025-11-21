@@ -21,6 +21,45 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets Information about the Round including the live Results */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                    roundId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Returns results */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["LiveRound"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/registrations/{registrationId}": {
         parameters: {
             query?: never;
@@ -641,23 +680,6 @@ export interface components {
             assignments: components["schemas"]["WcifAssignment"][];
             personalBests: components["schemas"]["WcifPersonalBest"][];
             extensions: unknown[];
-        };
-        LiveAttempt: {
-            result: number;
-            attempt_number: number;
-        };
-        LiveResult: {
-            registration_id: number;
-            round_id: number;
-            ranking: number;
-            best: number;
-            average: number;
-            single_record_tag: string;
-            average_record_tag: string;
-            advancing: boolean;
-            advancing_questionable: boolean;
-            event_id: string;
-            attempts: components["schemas"]["LiveAttempt"][];
         };
         LivePerson: components["schemas"]["WcifPerson"] & {
             results: components["schemas"]["LiveResult"][];
