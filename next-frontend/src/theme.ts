@@ -331,6 +331,26 @@ const customConfig = defineConfig({
         },
       },
     },
+    layerStyles: {
+      'card.dark': {
+        value: {
+          background: "colorPalette.2A",
+          color: "colorPalette.2B",
+        },
+      },
+      'card.pastel': {
+        value: {
+          background: "colorPalette.1A",
+          color: "colorPalette.contrast",
+        },
+      },
+      'card.bright': {
+        value: {
+          background: "colorPalette.2C",
+          color: "colorPalette.2A"
+        },
+      },
+    },
     recipes: {
       button: {
         base: {
