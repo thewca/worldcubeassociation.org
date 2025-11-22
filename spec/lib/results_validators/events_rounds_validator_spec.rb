@@ -61,10 +61,11 @@ RSpec.describe ERV do
 
     it "triggers rounds-related errors and warnings" do
       # Triggers:
-      # NOT_333_MAIN_EVENT_WARNING
-      # NO_MAIN_EVENT_WARNING
-      # UNEXPECTED_ROUND_RESULTS_ERROR
+      # UNEXPECTED_COMBINED_ROUND_ERROR
       # MISSING_ROUND_RESULTS_ERROR
+      # NO_MAIN_EVENT_WARNING
+      # NOT_333_MAIN_EVENT_WARNING
+      # MISSING_RESULTS_WARNING
       cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 50 * 100)
       # Add some rounds to trigger the rounds validation.
       round_333_oh_1 = create(:round,
