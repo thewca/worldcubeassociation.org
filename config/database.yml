@@ -28,6 +28,13 @@ production:
     database_tasks: false
     migrations_paths: db/results_migrate
     use_metadata_table: false
+  results_dump_v2:
+    <<: *default
+    database: results_dump_v2
+    database_tasks: false
+    migrations_paths: db/results_migrate
+    use_metadata_table: false
+
 
 development:
   primary:
@@ -44,6 +51,12 @@ development:
   results_dump:
     <<: *default
     database: wca_dump_results
+    database_tasks: false
+    migrations_paths: db/results_migrate
+    use_metadata_table: false
+  results_dump_v2:
+    <<: *default
+    database: results_dump_v2
     database_tasks: false
     migrations_paths: db/results_migrate
     use_metadata_table: false
