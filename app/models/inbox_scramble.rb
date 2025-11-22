@@ -6,12 +6,4 @@ class InboxScramble < ApplicationRecord
 
   validates :scramble_number, uniqueness: { scope: %i[is_extra inbox_scramble_set_id] }
   validates :ordered_index, uniqueness: { scope: :matched_scramble_set_id }
-
-  def ref_round
-    self.matched_scramble_set.matched_round
-  end
-
-  def group_id
-    self.matched_scramble_set.alphabetic_group_index
-  end
 end

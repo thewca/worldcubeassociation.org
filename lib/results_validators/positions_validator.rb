@@ -18,7 +18,7 @@ module ResultsValidators
         competition = competition_data.competition
         results_for_comp = competition_data.results
 
-        results_for_comp.group_by { it.round.human_id }.each do |round_id, results_for_round|
+        results_for_comp.group_by(&:round_human_id).each do |round_id, results_for_round|
           expected_pos = 0
           last_result = nil
           # Number of tied competitors, *without* counting the first one

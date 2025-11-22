@@ -14,7 +14,6 @@ class Round < ApplicationRecord
   has_many :registrations, through: :competition_event
 
   has_many :matched_scramble_sets, -> { order(:ordered_index) }, class_name: 'InboxScrambleSet', foreign_key: "matched_round_id", inverse_of: :matched_round, dependent: :nullify
-  has_many :matched_scrambles, through: :matched_scramble_sets, source: :matched_inbox_scrambles
 
   # For the following association, we want to keep it to be able to do some joins,
   # but we definitely want to use cached values when directly using the method.
