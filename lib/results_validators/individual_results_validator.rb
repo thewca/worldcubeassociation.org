@@ -137,7 +137,7 @@ module ResultsValidators
         competition, result, round = context
         @warnings << ValidationWarning.new(RESULT_AFTER_DNS_WARNING,
                                            :results, competition.id,
-                                           round_id: round.id,
+                                           round_id: round.human_id,
                                            person_name: result.person_name)
       end
 
@@ -181,7 +181,7 @@ module ResultsValidators
           if skipped.any?
             @errors << ValidationError.new(MET_CUTOFF_MISSING_RESULTS_ERROR,
                                            :results, competition.id,
-                                           round_id: round_id,
+                                           round_id: round.human_id,
                                            person_name: result.person_name,
                                            cutoff: cutoff.to_s(round))
           end
@@ -189,7 +189,7 @@ module ResultsValidators
           # Doesn't meet the cutoff, all results should be SKIPPED
           @errors << ValidationError.new(DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
                                          :results, competition.id,
-                                         round_id: round_id,
+                                         round_id: round.human_id,
                                          person_name: result.person_name,
                                          cutoff: cutoff.to_s(round))
         end
