@@ -459,6 +459,10 @@ es-ES:
         region: Región
         #original_hash: e3fc6e9
         subRegion: Subregión
+        #original_hash: a1ba702
+        receive_developer_mails: >-
+          Me gustaría recibir notificaciones sobre cambios en los recursos de
+          software de WCA
         #original_hash: 730db33
         receive_delegate_reports: >-
           Me gustaría recibir los Informes de Delegados de Competiciones de la
@@ -779,6 +783,12 @@ es-ES:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          Esto se limita a notificaciones sobre cambios mayores de versión en
+          los recursos como exportaciones de datos, estructura del WCIF y APIs
+          públicas. Recomendado para desarrolladores que mantienen software que
+          depende de estas herramientas.
         #original_hash: c564b74
         receive_delegate_reports: >-
           Si eres Delegado Senior o Miembro del WRC o del WQAC, recibirás los
