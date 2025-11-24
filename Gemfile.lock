@@ -495,7 +495,7 @@ GEM
       logger
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (5.26.1)
+    minitest (5.26.2)
     monetize (1.11.0)
       money (~> 6.12)
     money (6.16.0)
@@ -831,7 +831,7 @@ GEM
     seedbank (0.5.0)
       rake (>= 10.0)
     semantic_range (3.1.0)
-    shakapacker (9.3.3)
+    shakapacker (9.4.0)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
@@ -1084,7 +1084,7 @@ DEPENDENCIES
   sdoc
   seedbank
   selectize-rails!
-  shakapacker (= 9.3.3)
+  shakapacker (= 9.4.0)
   shoryuken
   sidekiq
   sidekiq-cron
@@ -1295,7 +1295,7 @@ CHECKSUMS
   mini_magick (5.3.1) sha256=29395dfd76badcabb6403ee5aff6f681e867074f8f28ce08d78661e9e4a351c4
   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
   mini_portile2 (2.8.9) sha256=0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289
-  minitest (5.26.1) sha256=f16a63d4278e230bba342c3bda3006a69c5216d46461b77dd57f7c7c529b5a96
+  minitest (5.26.2) sha256=f021118a6185b9ba9f5af71f2ba103ad770c75afde9f2ab8da512677c550cde3
   momentjs-rails (2.29.4.1)
   monetize (1.11.0) sha256=d6c506daf4da0f424caa74cad1283fb82133607e504c631fc08eafd67d15ca32
   money (6.16.0) sha256=cf476f5f19188e247ec20f6509cff64dc35d395ee018bad799b1a9ea8bd4754a
@@ -1428,7 +1428,7 @@ CHECKSUMS
   seedbank (0.5.0) sha256=9840c0bf3427ac9ac0815feceeceeeac76dc89039503d393a7e220184855f437
   selectize-rails (0.12.1)
   semantic_range (3.1.0) sha256=9fc01ee40f2e5f81042e95d421837f688177dd603753b5eab41ff9bba50a34a1
-  shakapacker (9.3.3) sha256=1a7c8ec11bccbab27ac352a3188bfeeec5534130f37a86530b56fd74df7df021
+  shakapacker (9.4.0) sha256=b585462b4c7dd0111222aa2b73dafeb4a5aea2cfbbbbb35b9b0708e402c0539e
   shellany (0.0.1) sha256=0e127a9132698766d7e752e82cdac8250b6adbd09e6c0a7fbbb6f61964fedee7
   shoryuken (6.2.1) sha256=95ddc0a717624a54e799d25a0a05100cb5a0c3728a96211935c214faaf16b3b6
   sidekiq (8.0.9) sha256=da0e2fb8a511699abe195df93a3e96210c68067efb7668a061cbdbcdb024f2ee
