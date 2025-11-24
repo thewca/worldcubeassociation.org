@@ -1099,6 +1099,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_17_142333) do
     t.datetime "updated_at", null: false
     t.index ["result_id", "attempt_number"], name: "index_result_attempts_on_result_id_and_attempt_number", unique: true
     t.index ["result_id"], name: "index_result_attempts_on_result_id"
+    t.index ["value", "result_id"], name: "index_result_attempts_on_value_and_result_id"
+    t.index ["value"], name: "index_result_attempts_on_value"
   end
 
   create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=1", force: :cascade do |t|
@@ -1111,17 +1113,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_17_142333) do
     t.string "round_type_id", limit: 1, default: "", null: false
     t.integer "round_id", null: false
     t.string "format_id", limit: 1, default: "", null: false
-    t.integer "value1", default: 0, null: false
-    t.integer "value2", default: 0, null: false
-    t.integer "value3", default: 0, null: false
-    t.integer "value4", default: 0, null: false
-    t.integer "value5", default: 0, null: false
     t.integer "best", default: 0, null: false
     t.integer "average", default: 0, null: false
     t.string "regional_single_record", limit: 3
     t.string "regional_average_record", limit: 3
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
-    t.index ["round_id", "person_id"], name: "results_person_uniqueness_speedup"
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competition_id"], name: "Results_fk_tournament"
     t.index ["country_id"], name: "_tmp_index_Results_on_countryId"
@@ -1129,16 +1125,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_17_142333) do
     t.index ["event_id", "best"], name: "Results_eventAndBest"
     t.index ["event_id", "competition_id", "round_type_id", "country_id", "average"], name: "Results_regionalAverageRecordCheckSpeedup"
     t.index ["event_id", "competition_id", "round_type_id", "country_id", "best"], name: "Results_regionalSingleRecordCheckSpeedup"
-    t.index ["event_id", "value1"], name: "index_Results_on_eventId_and_value1"
-    t.index ["event_id", "value2"], name: "index_Results_on_eventId_and_value2"
-    t.index ["event_id", "value3"], name: "index_Results_on_eventId_and_value3"
-    t.index ["event_id", "value4"], name: "index_Results_on_eventId_and_value4"
-    t.index ["event_id", "value5"], name: "index_Results_on_eventId_and_value5"
+    t.index ["event_id", "id"], name: "idx_results_event_id_id"
     t.index ["event_id"], name: "Results_fk_event"
+    t.index ["event_id"], name: "index_Results_on_eventId_and_value1"
+    t.index ["event_id"], name: "index_Results_on_eventId_and_value2"
+    t.index ["event_id"], name: "index_Results_on_eventId_and_value3"
+    t.index ["event_id"], name: "index_Results_on_eventId_and_value4"
+    t.index ["event_id"], name: "index_Results_on_eventId_and_value5"
     t.index ["format_id"], name: "Results_fk_format"
     t.index ["person_id"], name: "Results_fk_competitor"
     t.index ["regional_average_record", "event_id"], name: "index_Results_on_regionalAverageRecord_and_eventId"
     t.index ["regional_single_record", "event_id"], name: "index_Results_on_regionalSingleRecord_and_eventId"
+    t.index ["round_id", "person_id"], name: "results_person_uniqueness_speedup"
     t.index ["round_id"], name: "index_results_on_round_id"
     t.index ["round_type_id"], name: "Results_fk_round"
   end

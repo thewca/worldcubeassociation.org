@@ -61,10 +61,10 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
         if previous_attempt.result == r
           previous_attempt
         else
-          previous_attempt.update_with_history_entry(r, current_user)
+          previous_attempt.update_with_history_entry(r, user)
         end
       else
-        LiveAttempt.build_with_history_entry(r, i, current_user)
+        LiveAttempt.build_with_history_entry(r, i, user)
       end
     end
 

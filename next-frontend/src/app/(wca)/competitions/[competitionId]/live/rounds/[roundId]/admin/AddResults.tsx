@@ -109,7 +109,7 @@ export default function AddResults({
             result: attempt,
             attempt_number: index + 1,
           })),
-          registration_id: registrationId!,
+          registration_id: registrationId,
         },
       });
     } else {
@@ -122,7 +122,7 @@ export default function AddResults({
             result: attempt,
             attempt_number: index + 1,
           })),
-          registration_id: registrationId!,
+          registration_id: registrationId,
         },
       });
     }
