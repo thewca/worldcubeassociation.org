@@ -93,7 +93,7 @@
     "openapi-typescript": "^7.10.1",
     "prettier": "^3.6.2",
     "typescript": "^5",
-    "vitest": "^4.0.9"
+    "vitest": "^4.0.13"
   },
   "scarfSettings": {
     "enabled": false
