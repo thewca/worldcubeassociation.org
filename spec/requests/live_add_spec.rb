@@ -14,7 +14,7 @@ RSpec.describe "WCA Live API" do
       registration = create(:registration, :accepted, competition: competition)
 
       live_request = {
-        attempts: [{ result: 111, attempt_number: 1 }, { result: 222, attempt_number: 2}, { result: 333, attempt_number: 3 }, { result: 444, attempt_number: 4 }, { result: 555, attempt_number: 5 }],
+        attempts: [{ result: 111, attempt_number: 1 }, { result: 222, attempt_number: 2 }, { result: 333, attempt_number: 3 }, { result: 444, attempt_number: 4 }, { result: 555, attempt_number: 5 }],
         registration_id: registration.id,
       }
 
@@ -42,7 +42,7 @@ RSpec.describe "WCA Live API" do
       registration = create(:registration, :accepted, competition: competition)
       create(:live_result, round: round, registration: registration)
       live_request = {
-        attempts: [{ result: 111, attempt_number: 1 }, { result: 222, attempt_number: 2}, { result: 333, attempt_number: 3 }, { result: 444, attempt_number: 4 }, { result: 555, attempt_number: 5 }],
+        attempts: [{ result: 111, attempt_number: 1 }, { result: 222, attempt_number: 2 }, { result: 333, attempt_number: 3 }, { result: 444, attempt_number: 4 }, { result: 555, attempt_number: 5 }],
         registration_id: registration.id,
       }
 
