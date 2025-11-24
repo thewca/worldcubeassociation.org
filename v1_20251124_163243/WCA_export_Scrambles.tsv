@@ -1,0 +1,101 @@
+scramble	competitionId	eventId	groupId	isExtra	roundTypeId	scrambleId	scrambleNum
+U R' L' B U B' R' B' L' U L' u' r' b'	GaleriesDorianOpen2014	pyram	A	0	1	1	1
+B' L' U' B U' L U' R B' R' L' u r	GaleriesDorianOpen2014	pyram	A	0	1	2	2
+R' U R' L' B' U L' B' R L' U l'	GaleriesDorianOpen2014	pyram	A	0	1	3	3
+L R' L U B R L R B R L' u' l	GaleriesDorianOpen2014	pyram	A	0	1	4	4
+B' U R L' R B L' U' B' R' U' l' r'	GaleriesDorianOpen2014	pyram	A	0	1	5	5
+L' B' U' B' R U R B' U' B L u r' b'	GaleriesDorianOpen2014	pyram	A	1	1	6	1
+U' B' U' R' L U' B U' L' U' B' r' b'	GaleriesDorianOpen2014	pyram	A	1	1	7	2
+U' R L U' L U' L' R U' B' R u' l b	GaleriesDorianOpen2014	pyram	B	0	1	8	1
+U R U' B U B L U R' U B' u l r' b'	GaleriesDorianOpen2014	pyram	B	0	1	9	2
+B' L' R' B' R L' U' R L B' L' u l' b	GaleriesDorianOpen2014	pyram	B	0	1	10	3
+U' B L B' L R L' R L B U' u' l b'	GaleriesDorianOpen2014	pyram	B	0	1	11	4
+B R' U B U R L U' R' L' U u' l' r'	GaleriesDorianOpen2014	pyram	B	0	1	12	5
+L B R' B L R B L U' L U' u l' r' b	GaleriesDorianOpen2014	pyram	B	1	1	13	1
+U' R L' B' U' L R' U B' R' L u l' r b	GaleriesDorianOpen2014	pyram	B	1	1	14	2
+L' B' R L' U B' L' R' U R' U' u' b'	GaleriesDorianOpen2014	pyram	A	0	f	15	1
+R' L U' L R' U R U' R' L' R' u' l' r b'	GaleriesDorianOpen2014	pyram	A	0	f	16	2
+R' L' U' L R' B' U' L R' L U u l b	GaleriesDorianOpen2014	pyram	A	0	f	17	3
+L R' L' R' U' R' B' U' R' U' B u' r	GaleriesDorianOpen2014	pyram	A	0	f	18	4
+U' B' L U L B' R L B' R' L' l r b	GaleriesDorianOpen2014	pyram	A	0	f	19	5
+L' R' U B' R U L' B' U L' B u l b'	GaleriesDorianOpen2014	pyram	A	1	f	20	1
+L U' B' R B U' R' L' B L' B l r	GaleriesDorianOpen2014	pyram	A	1	f	21	2
+B2 U' L2 U F2 L2 D2 L2 U F2 L F2 L D U L' D2 F' U2 Fw	GaleriesDorianOpen2014	333bf	A	0	c	22	1
+D2 U L2 B2 R2 F2 R2 U2 R2 D' R' D B2 U B' R B' D Fw' Uw'	GaleriesDorianOpen2014	333bf	A	0	c	23	2
+L2 D F2 D' B2 L2 R2 U2 F2 D L' U2 R2 B' R F R2 D' U F Rw' Uw'	GaleriesDorianOpen2014	333bf	A	0	c	24	3
+U' B2 U2 F2 L2 D' F2 L2 B' D2 B' L' F R D L' B2 L2 B2 D' Rw2 Uw	GaleriesDorianOpen2014	333bf	A	1	c	25	1
+U2 R2 U' F2 D' L2 F2 D L B2 F2 D' L' U2 L R F U2 B' D2 Fw Uw2	GaleriesDorianOpen2014	333bf	A	1	c	26	2
+U2 L2 U' L2 U2 B2 D L R' B D' F L2 D2 F' L D F' U' Rw Uw2	GaleriesDorianOpen2014	333bf	B	0	c	27	1
+D U B2 L2 D R2 U' L2 F L R D2 B' D B2 R D2 F L' Fw' Uw'	GaleriesDorianOpen2014	333bf	B	0	c	28	2
+R2 F R2 F2 D2 U2 F' U2 F' L2 D' L B2 F2 D F L F L2 R' F2 Rw'	GaleriesDorianOpen2014	333bf	B	0	c	29	3
+L F2 U2 L D2 R2 B2 D2 B2 R' B F' R' U' F' R F' L' F' U Rw2 Uw'	GaleriesDorianOpen2014	333bf	B	1	c	30	1
+U2 B2 R2 F2 U' L2 B2 U R2 U' L D' L2 F R B2 F' R Fw Uw'	GaleriesDorianOpen2014	333bf	B	1	c	31	2
+B2 R2 F2 L' U2 R D2 R D' U2 F2 L' R' D L' F L D L	GaleriesDorianOpen2014	333	A	0	1	32	1
+R U' D' R2 D' R D B2 L B2 D' F B2 D2 R2 F' D2 F' L2	GaleriesDorianOpen2014	333	A	0	1	33	2
+U R' U F2 R U F B2 U R' U2 F' L2 B2 R2 U2 B U2 B U2	GaleriesDorianOpen2014	333	A	0	1	34	3
+B D2 F' R2 D2 B U2 B' L' R' D U' L' B R F' R' U R'	GaleriesDorianOpen2014	333	A	0	1	35	4
+D2 L2 R F2 D2 F2 R' U2 L B' U F R2 B' D' F2 R U2 L2 R'	GaleriesDorianOpen2014	333	A	0	1	36	5
+F2 L' F2 R2 B2 F2 R D2 L' U2 F U2 R D U L D' B2 U2 F	GaleriesDorianOpen2014	333	A	1	1	37	1
+B2 D' L2 U' R2 B2 D' B2 F2 L' F D L2 F R' D L' B' D F'	GaleriesDorianOpen2014	333	A	1	1	38	2
+F2 D2 B U2 R2 D2 R2 U2 F L' F2 D' B' R' D' U R2 D' L'	GaleriesDorianOpen2014	333	B	0	1	39	1
+R2 B2 D' F2 U' L2 F2 D2 L' B2 R U' B' F2 L F2 L2 R2 U2 R'	GaleriesDorianOpen2014	333	B	0	1	40	2
+F' B' L' F2 L' U2 L B' L' U' B' D2 R B2 R2 L' D2 L	GaleriesDorianOpen2014	333	B	0	1	41	3
+L U L' D F2 L' U2 D' R L' B L' D2 L2 F2 D2 L2	GaleriesDorianOpen2014	333	B	0	1	42	4
+D L2 U2 B2 U L2 B2 D L2 U B R2 U' B' L' D' U' F' L' B' R'	GaleriesDorianOpen2014	333	B	0	1	43	5
+R U2 R2 F2 R' F2 L D2 F2 D' L' R2 B2 R F U' F2 U2	GaleriesDorianOpen2014	333	B	1	1	44	1
+R' D2 R' B2 R2 U2 B2 U2 F2 U' B' R' D' L' B D F' R' D U	GaleriesDorianOpen2014	333	B	1	1	45	2
+D R2 D2 L2 D L2 R2 F2 D B2 L B U L2 D2 R B F2 D' R'	GaleriesDorianOpen2014	333	C	0	1	46	1
+F2 U2 B2 R2 U2 B' U2 R B D' F' R' U' R F2 D F' D	GaleriesDorianOpen2014	333	C	0	1	47	2
+U F' R' F B2 R2 U B' R2 L' B' L F2 R2 L B2 L D2 F2	GaleriesDorianOpen2014	333	C	0	1	48	3
+B R2 B2 L' U' L' D R F L' B L D2 B2 L2 B2 L D2 R2 B2	GaleriesDorianOpen2014	333	C	0	1	49	4
+U F2 U' D' R B U2 R U2 D B' D F2 R2 U F2 R2 U	GaleriesDorianOpen2014	333	C	0	1	50	5
+R' L' B' D' R' F' B' R2 B2 D2 R B2 U F2 U2 L2 B2 D' F2 L2	GaleriesDorianOpen2014	333	C	1	1	51	1
+F2 U2 L2 R2 B2 L2 D B2 U2 B' R' F D2 U R' B2 L U L F2	GaleriesDorianOpen2014	333	C	1	1	52	2
+B' U' B R2 U' R2 U R D B' D B2 D2 R2 F2 L F2 L2	GaleriesDorianOpen2014	333	A	0	2	53	1
+U2 F2 D2 R F2 L B2 U2 F U2 F' R' U B U' B2 L F2 L2	GaleriesDorianOpen2014	333	A	0	2	54	2
+L2 U2 R2 B2 F2 D' B2 U2 R2 U L2 R' U' B2 U' L' F2 L F' R	GaleriesDorianOpen2014	333	A	0	2	55	3
+D2 U L2 D B2 U2 F2 R2 B D R F' L' B2 U' R2 U2 L	GaleriesDorianOpen2014	333	A	0	2	56	4
+B2 U2 B2 U B2 U2 R2 F2 L2 D R F2 U L' B' D' R D2 R F'	GaleriesDorianOpen2014	333	A	0	2	57	5
+R2 D' L2 R2 F2 U' L2 U2 B2 F U' F U' L F' U2 L2 D' B2 U2	GaleriesDorianOpen2014	333	A	1	2	58	1
+F U2 B2 F' D2 U2 F' R2 F2 L' D R2 D F2 U' R B' F' D' L2	GaleriesDorianOpen2014	333	A	1	2	59	2
+F2 R2 B D2 B2 U2 F' U F2 D R B2 L U2 F L F' R'	GaleriesDorianOpen2014	333	B	0	2	60	1
+B2 L2 F2 L' F2 R D2 B2 L2 D B' L U R2 F R2 D R B' F	GaleriesDorianOpen2014	333	B	0	2	61	2
+D2 L2 D' L2 B2 F2 D B2 D L' U2 R' B2 D F' D2 B U' F' D	GaleriesDorianOpen2014	333	B	0	2	62	3
+F2 B U2 R2 F' R' L' F2 D' R2 D2 F' B' D2 L2 F R2 B R2	GaleriesDorianOpen2014	333	B	0	2	63	4
+U2 L2 B R2 U2 B2 R2 F L2 U F L' U2 R U F' R2 D' U R	GaleriesDorianOpen2014	333	B	0	2	64	5
+F2 U2 L' R U2 L2 R D' R' U F R D2 B D L U' R'	GaleriesDorianOpen2014	333	B	1	2	65	1
+U' B' D' L2 U2 R' L D' R F D' B2 L2 D F2 B2 D' L2 F2 U2	GaleriesDorianOpen2014	333	B	1	2	66	2
+D2 L' R' B2 F2 R D2 R F L U' L D F' L B' D R' U2	GaleriesDorianOpen2014	333	A	0	f	67	1
+R2 B U2 R L B R' U2 D' L F' D2 B2 D2 B2 L F2 R L B2	GaleriesDorianOpen2014	333	A	0	f	68	2
+B' D2 F2 R2 F2 L2 F2 D L' B L R' B F2 R U2 F R	GaleriesDorianOpen2014	333	A	0	f	69	3
+U' F2 U2 L2 R2 B2 U2 L U2 F' D2 R D' U2 F U' L2 U2 F2	GaleriesDorianOpen2014	333	A	0	f	70	4
+L2 B' U2 L2 B F2 L2 D' U' F2 R' B D' L B2 D F L	GaleriesDorianOpen2014	333	A	0	f	71	5
+R2 L U' L U2 B R' F2 L F L2 F L2 D2 B D2 R2	GaleriesDorianOpen2014	333	A	1	f	72	1
+D F2 U2 R2 U F2 U' F2 U' R' D' U2 B U2 R' F2 D' F2 U F	GaleriesDorianOpen2014	333	A	1	f	73	2
+D' B2 R2 U' B2 F2 D B D' L2 U2 B R2 D R D L R' U	GaleriesDorianOpen2014	333oh	A	0	c	74	1
+B2 L2 F' R2 D2 B L2 F D' L R' D L D2 L D R' U R	GaleriesDorianOpen2014	333oh	A	0	c	75	2
+D2 L F L2 B U' D' R F L' U2 R2 U2 F2 L U2 D2 L' U2	GaleriesDorianOpen2014	333oh	A	0	c	76	3
+B R2 B' U2 R2 B' R2 B2 R2 D L' B R B2 D2 L F D L' F	GaleriesDorianOpen2014	333oh	A	0	c	77	4
+U' L2 U' F2 D2 U2 L2 F' U' B' D F2 D R U B2 L D2 U2	GaleriesDorianOpen2014	333oh	A	0	c	78	5
+F2 U L2 U2 B2 D F2 D R D2 B' R F2 L B F2 D L' D F2	GaleriesDorianOpen2014	333oh	A	1	c	79	1
+B F2 L2 F2 U2 L2 F' L2 F' L2 R U F' L' R2 U B2 L D2	GaleriesDorianOpen2014	333oh	A	1	c	80	2
+U L B' R L' F' L2 B2 U' F2 R2 L2 F2 L2 D2 F D2 F	GaleriesDorianOpen2014	333oh	B	0	c	81	1
+B2 L2 U F2 D2 R2 F2 L2 B R' D U2 R' U2 L2 D2 F U'	GaleriesDorianOpen2014	333oh	B	0	c	82	2
+F2 L2 F2 U L2 F2 U2 F2 R2 B D2 R2 F' R2 F2 L' U B' D' B'	GaleriesDorianOpen2014	333oh	B	0	c	83	3
+D2 L D2 R2 D2 R B2 F2 L' D2 U B L2 F D R' D L2 B2	GaleriesDorianOpen2014	333oh	B	0	c	84	4
+L2 U F2 L2 U2 R2 U2 R F2 U F2 U' R B2 R2 F' D2 L2	GaleriesDorianOpen2014	333oh	B	0	c	85	5
+D L2 F R2 B2 R2 L2 B U B R' D2 L D2 L2 D2 B2 R2 F2	GaleriesDorianOpen2014	333oh	B	1	c	86	1
+F2 L2 D2 B' L2 F2 U2 B L2 F R D' L R2 B' L2 D' L2 R2 U	GaleriesDorianOpen2014	333oh	B	1	c	87	2
+U2 R' D2 R U2 B2 L R D2 B' L2 D L R F' U2 F2 L' R2 Uw2 F' L2 Uw2 D Fw2 U' F L2 R2 Uw2 Fw2 U2 L' F Rw2 R2 U Fw Uw' U' L2 Fw U2 L2	GaleriesDorianOpen2014	444	A	0	d	88	1
+F B D' L D' F' B' R' L2 B' D' B2 U' F2 R2 U2 R2 F2 D L2 Rw2 Fw2 R Uw2 L2 F R' B' Uw2 R B' F' Uw F Rw2 B' R' F Fw' Uw' Rw' R2 D' Fw2	GaleriesDorianOpen2014	444	A	0	d	89	2
+R D L' B R' F B U' L2 F' R' B2 L D2 F2 B2 L D2 R' Rw2 Fw2 D' L R Fw2 U' Rw2 B2 U R D L' Fw' B2 U' R2 B F Uw R2 L' Fw' D R'	GaleriesDorianOpen2014	444	A	0	d	90	3
+D2 L2 R2 B2 L2 U2 L2 U2 B' D L U2 F2 D' L U R' F R2 F Rw2 F B2 L2 Fw2 U' Fw2 U Rw2 B Uw2 U' D Rw U F2 D F2 Fw B D2 R Fw Rw2 Uw R2	GaleriesDorianOpen2014	444	A	0	d	91	4
+L2 R2 D2 B' R2 F2 L2 B' R2 U2 F2 U' L' F2 R' U2 F2 D U2 B D Uw2 L Fw2 Rw2 B2 Rw2 B2 U2 L Fw2 U' Fw U' L2 F' Rw2 L Fw R Rw' Fw D Fw' F2	GaleriesDorianOpen2014	444	A	0	d	92	5
+L2 R2 F2 D2 R2 D' B2 U R' D' R D' R B R2 F' U' R U' Fw2 Rw2 F' Uw2 R2 U' B U' Rw2 B2 L2 B' D Rw Fw2 D B Uw2 Fw' Rw2 Uw' Rw2 U' L2 Fw2	GaleriesDorianOpen2014	444	A	1	d	93	1
+R U2 F2 R L2 D2 F2 R F2 R2 B2 D' F L2 D' B D' F' U' R' F Rw2 U' D Rw2 L U' Rw2 U2 R2 Uw2 U' R Fw' R2 D F2 Rw2 D' L' Uw' Rw2 L2 Uw' Fw' Rw	GaleriesDorianOpen2014	444	A	1	d	94	2
+L2 D2 L' U2 D2 F2 L F2 R2 F U' B' L' U B' F R2 B R' D' Uw2 Rw2 R' Uw2 Fw2 L' D L' Uw2 U F2 D L2 Fw' L2 Fw' F R Uw' L2 Fw Rw2 Fw' R2 Uw	GaleriesDorianOpen2014	444	B	0	d	95	1
+B U2 L B D' U' F' U' F' L' B R' B2 F2 R2 U2 R L2 B2 Rw2 U Fw2 Uw2 R Fw2 Rw2 F2 U D' L' U D' Fw' F2 L B2 D' Uw Rw2 D' R Fw2 R2	GaleriesDorianOpen2014	444	B	0	d	96	2
+R' B2 L2 D2 B2 D2 R' F2 L' B U B' U' F B L2 U2 L U D Uw2 F R' Uw2 R L2 Uw2 L U2 B2 R2 F' Uw R D B U' Fw2 L' U' Fw' L Uw Rw' R2 Uw	GaleriesDorianOpen2014	444	B	0	d	97	3
+L2 U' R2 U' F2 D' R2 D' L2 U B' U2 L B' L' R D B R2 F' Fw2 D' Rw2 L' Fw2 R L2 Uw2 R U R U' Fw' R B' R' U' Rw F Uw' R2 B F' Uw'	GaleriesDorianOpen2014	444	B	0	d	98	4
+L2 D2 B U2 F L2 D2 F2 U2 B D' L2 D' L' D U' F B' D' F2 Fw2 Uw2 B' R2 B' Uw2 L Uw2 F2 L2 B F' Rw2 Uw B Rw2 U2 F2 Fw' U' R' Fw2 R' Uw' R2 Fw	GaleriesDorianOpen2014	444	B	0	d	99	5
+F2 L2 D' L2 D L2 U F2 D2 L2 B U2 R U R2 D B R F' Rw2 Fw2 L Fw2 B' R' L2 Uw2 F' L2 R B R2 Uw B F' L' Fw' D' Rw U' R L' U2	GaleriesDorianOpen2014	444	B	1	d	100	1

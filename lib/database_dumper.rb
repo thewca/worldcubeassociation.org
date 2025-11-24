@@ -1462,8 +1462,17 @@ module DatabaseDumper
       },
       db_config: :results_dump_v2,
       db_sanitizers: V2_RESULTS_SANITIZERS,
-    }
+    },
   }
+
+  def self.results_export_live_versions
+    past_eol = RESULTS_EXPORT_VERSIONS.select do |_, v|
+      date = v[:metadata][:end_of_life_date]
+      date && Date.parse(date) <= Date.today
+    end.keys
+
+    RESULTS_EXPORT_VERSIONS.keys - past_eol
+  end
 
   def self.current_results_export_version # TODO: Add a test that ensures there is only one "current" version, and that this function doesnt return nil
     RESULTS_EXPORT_VERSIONS.find { |k, v| v[:metadata][:version_label] == "current" }&.first

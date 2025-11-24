@@ -1,0 +1,101 @@
+pos	best	average	value1	value2	value3	value4	value5	competitionId	eventId	roundTypeId	personName	personId	formatId	regionalSingleRecord	regionalAverageRecord	personCountryId
+15	1968	2128	0	0	0	0	0	LyonOpen2007	333	1	Etienne Amany	2007AMAN01	a	AfR	AfR	Cote d_Ivoire
+16	1731	2140	0	0	0	0	0	LyonOpen2007	333	1	Thomas Rouault	2004ROUA01	a	NULL	NULL	France
+17	2305	2637	0	0	0	0	0	LyonOpen2007	333	1	Antoine Simon-Chautemps	2005SIMO01	a	NULL	NULL	France
+18	2452	2637	0	0	0	0	0	LyonOpen2007	333	1	Irène Mallordy	2007MALL01	a	NULL	NULL	France
+19	2677	2906	0	0	0	0	0	LyonOpen2007	333	1	Marlène Desmaisons	2007DESM01	a	NULL	NULL	France
+20	1869	2910	0	0	0	0	0	LyonOpen2007	333	1	Ton Dennenbroek	2003DENN01	a	NULL	NULL	Netherlands
+21	2411	2910	0	0	0	0	0	LyonOpen2007	333	1	Arnaud van Galen	2006GALE01	a	NULL	NULL	Netherlands
+22	2385	3111	0	0	0	0	0	LyonOpen2007	333	1	Cyrille Cornu	2007CORN01	a	NULL	NULL	France
+23	2639	3111	0	0	0	0	0	LyonOpen2007	333	1	Christophe Woittequand	2005WOIT01	a	NULL	NULL	France
+24	2687	3265	0	0	0	0	0	LyonOpen2007	333	1	Georges Poinsot	2007POIN01	a	NULL	NULL	France
+25	2934	3337	0	0	0	0	0	LyonOpen2007	333	1	Laetitia Lemoine	2007LEMO01	a	NULL	NULL	France
+26	3062	3949	0	0	0	0	0	LyonOpen2007	333	1	Jean-Louis Mathieu	2006MATH01	a	NULL	NULL	France
+27	3609	4430	0	0	0	0	0	LyonOpen2007	333	1	Guillaume Terrancle	2007TERR01	a	NULL	NULL	France
+28	4416	4894	0	0	0	0	0	LyonOpen2007	333	1	Maria Oey	2007OEYM01	a	NULL	NR	Indonesia
+29	3727	5327	0	0	0	0	0	LyonOpen2007	333	1	Olivier Pibarot	2007PIBA01	a	NULL	NULL	France
+30	5484	8876	0	0	0	0	0	LyonOpen2007	333	1	Pierre-Baptiste Boccard	2007BOCC01	a	NULL	NULL	France
+1	1141	1242	0	0	0	0	0	LyonOpen2007	333	2	Edouard Chambon	2004CHAM01	a	NULL	NULL	France
+2	1168	1320	0	0	0	0	0	LyonOpen2007	333	2	Jean Pons	2004PONS01	a	NULL	NULL	France
+3	1078	1374	0	0	0	0	0	LyonOpen2007	333	2	Joël van Noort	2004NOOR01	a	NR	NULL	Netherlands
+4	1240	1427	0	0	0	0	0	LyonOpen2007	333	2	Thibaut Jacquinot	2006JACQ01	a	NULL	NULL	France
+5	1346	1624	0	0	0	0	0	LyonOpen2007	333	2	Rama Temmink	2006TEMM01	a	NULL	NULL	Netherlands
+6	1453	1626	0	0	0	0	0	LyonOpen2007	333	2	Lars Vandenbergh	2003VAND01	a	NULL	NULL	Belgium
+7	1522	1758	0	0	0	0	0	LyonOpen2007	333	2	Thomas Watiotienne	2007WATI01	a	NULL	NULL	France
+8	1630	1764	0	0	0	0	0	LyonOpen2007	333	2	Gilles van den Peereboom	2005PEER01	a	NULL	NULL	Belgium
+9	1466	1815	0	0	0	0	0	LyonOpen2007	333	2	Gilles Roux	2004ROUX01	a	NULL	NULL	France
+10	1621	1853	0	0	0	0	0	LyonOpen2007	333	2	Guillaume Meunier	2004MEUN01	a	NULL	NULL	France
+11	1650	1859	0	0	0	0	0	LyonOpen2007	333	2	Aurelien Souchet (高凡)	2006SOUC01	a	NULL	NULL	France
+12	1645	1899	0	0	0	0	0	LyonOpen2007	333	2	Thomas Rouault	2004ROUA01	a	NULL	NULL	France
+13	1655	1899	0	0	0	0	0	LyonOpen2007	333	2	Ton Dennenbroek	2003DENN01	a	NULL	NULL	Netherlands
+14	1684	1947	0	0	0	0	0	LyonOpen2007	333	2	Stefan Huber	2007HUBE01	a	NULL	NR	Austria
+15	1985	2124	0	0	0	0	0	LyonOpen2007	333	2	Frédérick Badie	2003BADI01	a	NULL	NULL	France
+16	1696	2233	0	0	0	0	0	LyonOpen2007	333	2	Antoine Simon-Chautemps	2005SIMO01	a	NULL	NULL	France
+17	2224	2640	0	0	0	0	0	LyonOpen2007	333	2	Etienne Amany	2007AMAN01	a	NULL	NULL	Cote d_Ivoire
+18	2390	2735	0	0	0	0	0	LyonOpen2007	333	2	Marlène Desmaisons	2007DESM01	a	NULL	NULL	France
+19	2506	2779	0	0	0	0	0	LyonOpen2007	333	2	Irène Mallordy	2007MALL01	a	NULL	NULL	France
+20	2628	2916	0	0	0	0	0	LyonOpen2007	333	2	Arnaud van Galen	2006GALE01	a	NULL	NULL	Netherlands
+21	1786	2933	0	0	0	0	0	LyonOpen2007	333	2	Clément Gallet	2004GALL02	a	NULL	NULL	France
+1	1059	1271	0	0	0	0	0	LyonOpen2007	333	f	Jean Pons	2004PONS01	a	NULL	NULL	France
+2	1205	1320	0	0	0	0	0	LyonOpen2007	333	f	Edouard Chambon	2004CHAM01	a	NULL	NULL	France
+3	1197	1395	0	0	0	0	0	LyonOpen2007	333	f	Joël van Noort	2004NOOR01	a	NULL	NULL	Netherlands
+4	1292	1424	0	0	0	0	0	LyonOpen2007	333	f	Thibaut Jacquinot	2006JACQ01	a	NULL	NULL	France
+5	1383	1603	0	0	0	0	0	LyonOpen2007	333	f	Gilles Roux	2004ROUX01	a	NULL	NULL	France
+6	1601	1615	0	0	0	0	0	LyonOpen2007	333	f	Rama Temmink	2006TEMM01	a	NULL	NULL	Netherlands
+7	1444	1616	0	0	0	0	0	LyonOpen2007	333	f	Lars Vandenbergh	2003VAND01	a	NULL	NULL	Belgium
+8	1575	1707	0	0	0	0	0	LyonOpen2007	333	f	Gilles van den Peereboom	2005PEER01	a	NULL	NULL	Belgium
+9	1811	2131	0	0	0	0	0	LyonOpen2007	333	f	Guillaume Meunier	2004MEUN01	a	NULL	NULL	France
+1	1858	2410	0	0	0	0	0	LyonOpen2007	333oh	d	Rama Temmink	2006TEMM01	a	NR	NR	Netherlands
+2	1865	2445	0	0	0	0	0	LyonOpen2007	333oh	d	Gilles van den Peereboom	2005PEER01	a	NR	NR	Belgium
+3	2269	2530	0	0	0	0	0	LyonOpen2007	333oh	d	Thibaut Jacquinot	2006JACQ01	a	NULL	NULL	France
+4	2492	2770	0	0	0	0	0	LyonOpen2007	333oh	d	Edouard Chambon	2004CHAM01	a	NULL	NULL	France
+5	2281	2894	0	0	0	0	0	LyonOpen2007	333oh	d	Aurelien Souchet (高凡)	2006SOUC01	a	NULL	NULL	France
+6	2669	3082	0	0	0	0	0	LyonOpen2007	333oh	d	Joël van Noort	2004NOOR01	a	NULL	NULL	Netherlands
+7	3303	4194	0	0	0	0	0	LyonOpen2007	333oh	d	Thomas Watiotienne	2007WATI01	a	NULL	NULL	France
+8	3544	4239	0	0	0	0	0	LyonOpen2007	333oh	d	Clément Gallet	2004GALL02	a	NULL	NULL	France
+9	4527	4764	0	0	0	0	0	LyonOpen2007	333oh	d	Arnaud van Galen	2006GALE01	a	NULL	NULL	Netherlands
+10	4494	4938	0	0	0	0	0	LyonOpen2007	333oh	d	Gilles Roux	2004ROUX01	a	NULL	NULL	France
+11	5388	5906	0	0	0	0	0	LyonOpen2007	333oh	d	Stefan Huber	2007HUBE01	a	NR	NR	Austria
+12	5704	6795	0	0	0	0	0	LyonOpen2007	333oh	d	Ton Dennenbroek	2003DENN01	a	NULL	NULL	Netherlands
+13	6084	0	0	0	0	0	0	LyonOpen2007	333oh	d	Antoine Simon-Chautemps	2005SIMO01	a	NULL	NULL	France
+14	6684	0	0	0	0	0	0	LyonOpen2007	333oh	d	Christophe Woittequand	2005WOIT01	a	NULL	NULL	France
+15	7259	0	0	0	0	0	0	LyonOpen2007	333oh	d	Etienne Amany	2007AMAN01	a	NR	NULL	Cote d_Ivoire
+16	8467	0	0	0	0	0	0	LyonOpen2007	333oh	d	Irène Mallordy	2007MALL01	a	NULL	NULL	France
+17	13775	0	0	0	0	0	0	LyonOpen2007	333oh	d	Laetitia Lemoine	2007LEMO01	a	NULL	NULL	France
+1	2094	2186	0	0	0	0	0	LyonOpen2007	333oh	f	Rama Temmink	2006TEMM01	a	NULL	ER	Netherlands
+2	2273	2507	0	0	0	0	0	LyonOpen2007	333oh	f	Edouard Chambon	2004CHAM01	a	NULL	NULL	France
+3	2414	2581	0	0	0	0	0	LyonOpen2007	333oh	f	Gilles van den Peereboom	2005PEER01	a	NULL	NULL	Belgium
+4	2457	2673	0	0	0	0	0	LyonOpen2007	333oh	f	Thibaut Jacquinot	2006JACQ01	a	NULL	NULL	France
+5	2672	2817	0	0	0	0	0	LyonOpen2007	333oh	f	Aurelien Souchet (高凡)	2006SOUC01	a	NULL	NULL	France
+6	3031	3334	0	0	0	0	0	LyonOpen2007	333oh	f	Joël van Noort	2004NOOR01	a	NULL	NULL	Netherlands
+7	3618	4012	0	0	0	0	0	LyonOpen2007	333oh	f	Clément Gallet	2004GALL02	a	NULL	NULL	France
+8	3571	4280	0	0	0	0	0	LyonOpen2007	333oh	f	Thomas Watiotienne	2007WATI01	a	NULL	NULL	France
+1	6249	6611	0	0	0	0	0	LyonOpen2007	444	c	Jean Pons	2004PONS01	a	NULL	NULL	France
+2	6696	7105	0	0	0	0	0	LyonOpen2007	444	c	Lars Vandenbergh	2003VAND01	a	NULL	NULL	Belgium
+3	5819	7269	0	0	0	0	0	LyonOpen2007	444	c	Thibaut Jacquinot	2006JACQ01	a	NULL	NULL	France
+4	6822	7605	0	0	0	0	0	LyonOpen2007	444	c	Frédérick Badie	2003BADI01	a	NULL	NULL	France
+5	7667	8703	0	0	0	0	0	LyonOpen2007	444	c	Rama Temmink	2006TEMM01	a	NULL	NULL	Netherlands
+6	7943	8726	0	0	0	0	0	LyonOpen2007	444	c	Clément Gallet	2004GALL02	a	NULL	NULL	France
+7	8490	8833	0	0	0	0	0	LyonOpen2007	444	c	Gilles van den Peereboom	2005PEER01	a	NULL	NULL	Belgium
+8	7131	9390	0	0	0	0	0	LyonOpen2007	444	c	Thomas Watiotienne	2007WATI01	a	NULL	NULL	France
+9	8516	9537	0	0	0	0	0	LyonOpen2007	444	c	Aurelien Souchet (高凡)	2006SOUC01	a	NULL	NULL	France
+10	8346	9641	0	0	0	0	0	LyonOpen2007	444	c	Gilles Roux	2004ROUX01	a	NULL	NULL	France
+11	8890	10391	0	0	0	0	0	LyonOpen2007	444	c	Arnaud van Galen	2006GALE01	a	NULL	NULL	Netherlands
+12	10171	11797	0	0	0	0	0	LyonOpen2007	444	c	Antoine Simon-Chautemps	2005SIMO01	a	NULL	NULL	France
+13	12331	0	0	0	0	0	0	LyonOpen2007	444	c	Cyrille Cornu	2007CORN01	a	NULL	NULL	France
+14	13936	0	0	0	0	0	0	LyonOpen2007	444	c	Ton Dennenbroek	2003DENN01	a	NULL	NULL	Netherlands
+15	18544	0	0	0	0	0	0	LyonOpen2007	444	c	Jean-Louis Mathieu	2006MATH01	a	NULL	NULL	France
+16	25774	0	0	0	0	0	0	LyonOpen2007	444	c	Maria Oey	2007OEYM01	a	NR	NULL	Indonesia
+1	11108	11731	0	0	0	0	0	LyonOpen2007	555	c	Frédérick Badie	2003BADI01	a	NULL	NULL	France
+2	12051	12294	0	0	0	0	0	LyonOpen2007	555	c	Rama Temmink	2006TEMM01	a	NULL	NULL	Netherlands
+3	12453	13688	0	0	0	0	0	LyonOpen2007	555	c	Lars Vandenbergh	2003VAND01	a	NULL	NULL	Belgium
+4	13281	14193	0	0	0	0	0	LyonOpen2007	555	c	Joël van Noort	2004NOOR01	a	NULL	NULL	Netherlands
+5	13795	16272	0	0	0	0	0	LyonOpen2007	555	c	Clément Gallet	2004GALL02	a	NULL	NULL	France
+6	15528	16968	0	0	0	0	0	LyonOpen2007	555	c	Arnaud van Galen	2006GALE01	a	NULL	NULL	Netherlands
+7	15560	18032	0	0	0	0	0	LyonOpen2007	555	c	Gilles van den Peereboom	2005PEER01	a	NULL	NULL	Belgium
+8	18853	19691	0	0	0	0	0	LyonOpen2007	555	c	Aurelien Souchet (高凡)	2006SOUC01	a	NULL	NULL	France
+9	27100	0	0	0	0	0	0	LyonOpen2007	555	c	Ton Dennenbroek	2003DENN01	a	NULL	NULL	Netherlands
+10	30156	0	0	0	0	0	0	LyonOpen2007	555	c	Gilles Roux	2004ROUX01	a	NULL	NULL	France
+1	16910	-1	0	0	0	0	0	LyonOpen2007	333bf	f	Clément Gallet	2004GALL02	3	NULL	NULL	France
+2	21930	-1	0	0	0	0	0	LyonOpen2007	333bf	f	Joël van Noort	2004NOOR01	3	NULL	NULL	Netherlands
+3	21969	-1	0	0	0	0	0	LyonOpen2007	333bf	f	Jean Pons	2004PONS01	3	NULL	NULL	France

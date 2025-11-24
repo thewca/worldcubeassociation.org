@@ -60,7 +60,6 @@ module DbDumpHelper
   end
 
   def self.resolve_results_export(file_type, version, export_timestamp = DumpPublicResultsDatabase.successful_start_date)
-    puts "=============== EXPORT_TIMESTAMP: #{export_timestamp} ============================"
     base_name = DbDumpHelper.result_export_file_name(file_type, version, export_timestamp)
 
     "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/#{base_name}"
@@ -94,12 +93,12 @@ module DbDumpHelper
       readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp, version)
       File.write(RESULTS_EXPORT_README, readme_template)
 
-      sql_zip_filename = self.result_export_file_name("sql", export_timestamp, version)
+      sql_zip_filename = self.result_export_file_name("sql", version, export_timestamp)
       sql_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README, RESULTS_EXPORT_SQL]
 
       self.zip_and_upload_to_s3(sql_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{sql_zip_filename}", *sql_zip_contents)
 
-      tsv_zip_filename = self.result_export_file_name("tsv", export_timestamp, version)
+      tsv_zip_filename = self.result_export_file_name("tsv", version, export_timestamp)
       tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
         FileUtils.mv(tsv, '.')
         File.basename tsv

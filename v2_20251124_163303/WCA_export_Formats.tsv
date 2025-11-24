@@ -1,0 +1,6 @@
+id	expected_solve_count	name	sort_by	sort_by_second	trim_fastest_n	trim_slowest_n
+1	1	Best of 1	single	average	0	0
+2	2	Best of 2	single	average	0	0
+3	3	Best of 3	single	average	0	0
+a	5	Average of 5	average	single	1	1
+m	3	Mean of 3	average	single	0	0

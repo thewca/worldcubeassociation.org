@@ -45,8 +45,8 @@ namespace :db do
     desc 'Generates a partial dump of our database containing only results and relevant stuff for statistics.'
     task public_results: :environment do
       puts "dumping results"
-      DatabaseDumper::RESULTS_EXPORT_VERSIONS.keys.each do |v| # TODO: Make an "active exports" method
-        puts v
+      DatabaseDumper.results_export_live_versions.each do |v|
+        puts "Dumping results for version: #{v}"
         DbDumpHelper.dump_results_db(v)
       end
     end

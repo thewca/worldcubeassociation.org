@@ -76,6 +76,61 @@ RSpec.describe "DatabaseDumper" do
   end
 
   context "Results Export" do
+    # This test may seem redundent, but its purpose is to blow up CI if a dev accidentally marks the incorrect version as 'current'
+    it 'has v2 marked as the current version' do
+      expect(DatabaseDumper.current_results_export_version).to eq(:v2)
+    end
+
+    it 'has at least, and only, one current version' do
+      expect((DatabaseDumper::RESULTS_EXPORT_VERSIONS.select { |k, v| v[:metadata][:version_label] == "current" }.keys).count).to be(1)
+    end
+
+    describe '#results_export_live_versions' do
+      it 'returns all version keys when multiple are live at the same time' do
+        all_live = {
+          v1: {
+            metadata: {
+              export_format_version: '1.0.0',
+              version_label: 'deprecated',
+              end_of_life_date: '3026-01-01',
+            },
+          },
+          v2: {
+            metadata: {
+              export_format_version: '2.0.0',
+              version_label: 'current',
+              end_of_life_date: nil,
+            },
+          },
+        }
+
+        stub_const("DatabaseDumper::RESULTS_EXPORT_VERSIONS", all_live)
+        expect(DatabaseDumper.results_export_live_versions).to eq([:v1, :v2])
+      end
+
+      it 'does not return keys for versions past their end_of_life_date' do
+        v1_dead = {
+          v1: {
+            metadata: {
+              export_format_version: '1.0.0',
+              version_label: 'deprecated',
+              end_of_life_date: '1026-01-01',
+            },
+          },
+          v2: {
+            metadata: {
+              export_format_version: '2.0.0',
+              version_label: 'current',
+              end_of_life_date: nil,
+            },
+          },
+        }
+
+        stub_const("DatabaseDumper::RESULTS_EXPORT_VERSIONS", v1_dead)
+        expect(DatabaseDumper.results_export_live_versions).to eq([:v2])
+      end
+    end
+
     context 'v1' do
       it "defines sanitizers that match the expected output schema (backwards compatibility)" do
         with_database :results_dump do
@@ -103,7 +158,7 @@ RSpec.describe "DatabaseDumper" do
       end
     end
 
-    context 'v2', :zxc do
+    context 'v2' do
       it "defines sanitizers that match the expected output schema (backwards compatibility)" do
         with_database :results_dump_v2 do
           # Rails *always* includes a `schema_migrations` table when loading any pre-defined schema file.
