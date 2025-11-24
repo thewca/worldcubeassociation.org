@@ -24,6 +24,13 @@ export const recordTagBadge = (tag?: string | null) => {
         </Badge>
       );
     }
+    case "PR": {
+      return (
+        <Badge variant="solid" colorPalette="blue">
+          PR
+        </Badge>
+      );
+    }
     default: {
       return null;
     }

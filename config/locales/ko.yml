@@ -451,6 +451,8 @@ ko:
         region: 지역
         #original_hash: e3fc6e9
         subRegion: 하위 지역
+        #original_hash: a1ba702
+        receive_developer_mails: WCA 소프트웨어 리소스 변경 사항에 대한 알림을 받고 싶습니다
         #original_hash: 730db33
         receive_delegate_reports: WCA 대회의 파견위원 보고서를 이메일로 받고 싶습니다
         #original_hash: 8667157
@@ -750,6 +752,10 @@ ko:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          이 기능은 데이터 내보내기, WCIF 스키마, 공개 API 등 리소스의 주요 버전 변경에 대한 알림으로만 제한됩니다. 이러한
+          도구를 사용하는 소프트웨어를 유지 관리하는 개발자에게 권장됩니다.
         #original_hash: c564b74
         receive_delegate_reports: >-
           귀하가 수석 파견위원 또는 WRC/WQAC의 회원인 경우 기본적으로 파견위원 보고서를 받게 됩니다. 참고: 변경 사항이

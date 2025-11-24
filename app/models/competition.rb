@@ -2281,13 +2281,6 @@ class Competition < ApplicationRecord
       .where.not(competition: self)
   end
 
-  def find_round_for(event_id, round_type_id, format_id = nil)
-    rounds.find do |r|
-      r.event.id == event_id && r.round_type_id == round_type_id &&
-        (format_id.nil? || format_id == r.format_id)
-    end
-  end
-
   def export_for_dues_generation
     error = DuesCalculator.error_in_dues_calculation(self.country_iso2, self.currency_code)
     dues_per_competitor_in_usd = error.nil? ? DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code) : 0

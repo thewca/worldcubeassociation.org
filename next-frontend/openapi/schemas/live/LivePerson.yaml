@@ -1,0 +1,10 @@
+allOf:
+  - $ref: "../wcif/WcifPerson.yaml"
+  - type: object
+    properties:
+      results:
+        type: array
+        items:
+          $ref: './LiveResult.yaml'
+    required:
+      - results
