@@ -1245,8 +1245,8 @@ module DatabaseDumper
           result_id
           created_at
           updated_at
-        ]
-      )
+        ],
+      ),
     }.freeze,
     "RanksSingle" => {
       source_table: "ranks_single",
@@ -1487,7 +1487,6 @@ module DatabaseDumper
         table_sanitizer = dump_sanitizers[table_name]
 
         next if table_sanitizer == :skip_all_rows
-        puts "Populating #{table_name}"
 
         # Give an option to override source table name if schemas diverge
         source_table = table_sanitizer[:source_table] || table_name
