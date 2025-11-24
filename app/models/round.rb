@@ -179,12 +179,14 @@ class Round < ApplicationRecord
   end
 
   def quit_from_round(registration_ids)
+    # Delete any results that ware already entered
+    live_results.where(registration_id: registration_ids).destroy_all
     if number == 1
       RegistrationCompetitionEvent.where(registration_id: registration_ids).destroy_all
     elsif consider_previous_round_results?
       linked_round.first_round_in_link.quit_from_round(registration_ids)
     else
-      previous_round.live_results.where(registration_id: registration_ids).update_all(advancing: false)
+      previous_round.live_results.where(registration_id: registration_ids).update_all(advancing: false, advancing_questionable: false)
     end
     recompute_live_columns
   end
