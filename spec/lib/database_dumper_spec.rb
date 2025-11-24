@@ -82,7 +82,7 @@ RSpec.describe "DatabaseDumper" do
     end
 
     it 'has at least, and only, one current version' do
-      expect((DatabaseDumper::RESULTS_EXPORT_VERSIONS.select { |k, v| v[:metadata][:version_label] == "current" }.keys).count).to be(1)
+      expect(DatabaseDumper::RESULTS_EXPORT_VERSIONS.select { |_k, v| v[:metadata][:version_label] == "current" }.keys.count).to be(1)
     end
 
     describe '#results_export_live_versions' do
@@ -105,7 +105,7 @@ RSpec.describe "DatabaseDumper" do
         }
 
         stub_const("DatabaseDumper::RESULTS_EXPORT_VERSIONS", all_live)
-        expect(DatabaseDumper.results_export_live_versions).to eq([:v1, :v2])
+        expect(DatabaseDumper.results_export_live_versions).to eq(%i[v1 v2])
       end
 
       it 'does not return keys for versions past their end_of_life_date' do

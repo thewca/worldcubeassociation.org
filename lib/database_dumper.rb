@@ -1463,7 +1463,7 @@ module DatabaseDumper
       db_config: :results_dump_v2,
       db_sanitizers: V2_RESULTS_SANITIZERS,
     },
-  }
+  }.freeze
 
   def self.results_export_live_versions
     past_eol = RESULTS_EXPORT_VERSIONS.select do |_, v|
@@ -1474,8 +1474,8 @@ module DatabaseDumper
     RESULTS_EXPORT_VERSIONS.keys - past_eol
   end
 
-  def self.current_results_export_version # TODO: Add a test that ensures there is only one "current" version, and that this function doesnt return nil
-    RESULTS_EXPORT_VERSIONS.find { |k, v| v[:metadata][:version_label] == "current" }&.first
+  def self.current_results_export_version
+    RESULTS_EXPORT_VERSIONS.find { |_k, v| v[:metadata][:version_label] == "current" }&.first
   end
 
   # NOTE: The parameter dump_config_name has to correspond exactly to the desired key in config/database.yml
@@ -1563,7 +1563,6 @@ module DatabaseDumper
   end
 
   def self.public_results_dump(dump_filename, tsv_folder, version)
-    puts "in public results dump"
     sanitizers = RESULTS_EXPORT_VERSIONS[version][:db_sanitizers]
     dump_config = RESULTS_EXPORT_VERSIONS[version][:db_config]
 

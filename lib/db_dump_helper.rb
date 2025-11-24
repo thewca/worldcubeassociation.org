@@ -79,7 +79,7 @@ module DbDumpHelper
     timestamp = Time.now.strftime("%Y%m%d_%H%M%S")
     dir_name = "#{version}_#{timestamp}"
     FileUtils.mkdir_p(dir_name)
-      # FileUtils.cd dir do
+    # FileUtils.cd dir do
     FileUtils.cd(dir_name) do
       tsv_folder_name = "TSV_export"
       FileUtils.mkpath tsv_folder_name
@@ -114,11 +114,10 @@ module DbDumpHelper
     "WCA_export_#{version}_#{timestamp.strftime('%j')}_#{timestamp.strftime('%Y%m%dT%H%M%SZ')}.#{file_type}.zip"
   end
 
-  def self.zip_and_upload_to_s3(zip_filename, s3_path, *zip_contents)
+  def self.zip_and_upload_to_s3(zip_filename, _s3_path, *zip_contents)
     zip_file_list = zip_contents.join(" ")
 
     LogTask.log_task "Zipping #{zip_contents.length} file entries to '#{zip_filename}'" do
-      puts Dir.pwd
       system("zip #{zip_filename} #{zip_file_list}", exception: true)
     end
 

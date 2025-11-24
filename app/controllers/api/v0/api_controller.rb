@@ -224,7 +224,7 @@ class Api::V0::ApiController < ApplicationController
 
     render json: {
       export_date: timestamp&.iso8601,
-      export_version:
+      export_version: DatabaseDumper.current_results_export_version,
       sql_url: "#{sql_permalink_url}.zip",
       sql_filesize_bytes: sql_filesize,
       tsv_url: "#{tsv_permalink_url}.zip",
