@@ -129,5 +129,5 @@
     "lint": "eslint -c .eslintrc.json app/webpacker/components/**/*.js app/webpacker/components/**/*.jsx app/webpacker/lib/**/*.js",
     "webpack:analyze": "mkdir -p public/packs && RACK_ENV=test NODE_ENV=production webpack --config config/webpack/webpack.config.js --profile --json > public/packs/stats.json && webpack-bundle-analyzer public/packs/stats.json"
   },
-  "packageManager": "yarn@4.10.3"
+  "packageManager": "yarn@4.12.0"
 }
