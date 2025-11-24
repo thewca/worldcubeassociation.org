@@ -76,27 +76,56 @@ RSpec.describe "DatabaseDumper" do
   end
 
   context "Results Export" do
-    it "defines sanitizers that match the expected output schema (backwards compatibility)" do
-      with_database :results_dump do
-        # Rails *always* includes a `schema_migrations` table when loading any pre-defined schema file.
-        #   You can _change_ the name in the database configuration file, but you cannot turn it off / disable the table entirely.
-        #   But since we don't care about Rails-ian specifics in our Results Export, we manually skip the table here.
-        actual_table_names = ActiveRecord::Base.connection.data_sources - ["schema_migrations"]
+    context 'v1' do
+      it "defines sanitizers that match the expected output schema (backwards compatibility)" do
+        with_database :results_dump do
+          # Rails *always* includes a `schema_migrations` table when loading any pre-defined schema file.
+          #   You can _change_ the name in the database configuration file, but you cannot turn it off / disable the table entirely.
+          #   But since we don't care about Rails-ian specifics in our Results Export, we manually skip the table here.
+          actual_table_names = ActiveRecord::Base.connection.data_sources - ["schema_migrations"]
 
-        expect(DatabaseDumper::RESULTS_SANITIZERS.keys).to match_array actual_table_names
+          expect(DatabaseDumper::RESULTS_SANITIZERS.keys).to match_array actual_table_names
+        end
+      end
+
+      DatabaseDumper::RESULTS_SANITIZERS.each do |table_name, table_sanitizer|
+        it "defines a sanitizer of table '#{table_name}'" do
+          unless table_sanitizer == :skip_all_rows
+            where_clause = table_sanitizer[:where_clause]
+            expect(where_clause).to be_nil.or(match(/WHERE/)).or(match(/JOIN/))
+            where_clause = table_sanitizer[:order_by_clause]
+            expect(where_clause).to be_nil.or(match(/ORDER BY/))
+            column_sanitizers = table_sanitizer[:column_sanitizers]
+            column_names = with_database(:results_dump) { ActiveRecord::Base.connection.columns(table_name).map(&:name) }
+            expect(column_sanitizers.keys).to match_array(column_names)
+          end
+        end
       end
     end
 
-    DatabaseDumper::RESULTS_SANITIZERS.each do |table_name, table_sanitizer|
-      it "defines a sanitizer of table '#{table_name}'" do
-        unless table_sanitizer == :skip_all_rows
-          where_clause = table_sanitizer[:where_clause]
-          expect(where_clause).to be_nil.or(match(/WHERE/)).or(match(/JOIN/))
-          where_clause = table_sanitizer[:order_by_clause]
-          expect(where_clause).to be_nil.or(match(/ORDER BY/))
-          column_sanitizers = table_sanitizer[:column_sanitizers]
-          column_names = with_database(:results_dump) { ActiveRecord::Base.connection.columns(table_name).map(&:name) }
-          expect(column_sanitizers.keys).to match_array(column_names)
+    context 'v2', :zxc do
+      it "defines sanitizers that match the expected output schema (backwards compatibility)" do
+        with_database :results_dump_v2 do
+          # Rails *always* includes a `schema_migrations` table when loading any pre-defined schema file.
+          #   You can _change_ the name in the database configuration file, but you cannot turn it off / disable the table entirely.
+          #   But since we don't care about Rails-ian specifics in our Results Export, we manually skip the table here.
+          actual_table_names = ActiveRecord::Base.connection.data_sources - ["schema_migrations"]
+
+          expect(DatabaseDumper::V2_RESULTS_SANITIZERS.keys).to match_array actual_table_names
+        end
+      end
+
+      DatabaseDumper::V2_RESULTS_SANITIZERS.each do |table_name, table_sanitizer|
+        it "defines a sanitizer of table '#{table_name}'" do
+          unless table_sanitizer == :skip_all_rows
+            where_clause = table_sanitizer[:where_clause]
+            expect(where_clause).to be_nil.or(match(/WHERE/)).or(match(/JOIN/))
+            where_clause = table_sanitizer[:order_by_clause]
+            expect(where_clause).to be_nil.or(match(/ORDER BY/))
+            column_sanitizers = table_sanitizer[:column_sanitizers]
+            column_names = with_database(:results_dump_v2) { ActiveRecord::Base.connection.columns(table_name).map(&:name) }
+            expect(column_sanitizers.keys).to match_array(column_names)
+          end
         end
       end
     end

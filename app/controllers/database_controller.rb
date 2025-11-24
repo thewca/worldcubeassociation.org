@@ -2,8 +2,10 @@
 
 class DatabaseController < ApplicationController
   def results_export
-    @sql_path, @sql_filesize = DbDumpHelper.cached_results_export_info("sql")
-    @tsv_path, @tsv_filesize = DbDumpHelper.cached_results_export_info("tsv")
+    flash[:warning] = I18n.t('database.results_export.deprecation_warning')
+    @export_version = DatabaseDumper.current_results_export_version
+    @sql_path, @sql_filesize = DbDumpHelper.cached_results_export_info("sql", :v2)
+    @tsv_path, @tsv_filesize = DbDumpHelper.cached_results_export_info("tsv", :v2)
 
     @sql_filename = File.basename(@sql_path)
     @tsv_filename = File.basename(@tsv_path)
@@ -16,6 +18,14 @@ class DatabaseController < ApplicationController
 
   def tsv_permalink
     url, = DbDumpHelper.cached_results_export_info("tsv")
+    redirect_to url, status: :moved_permanently, allow_other_host: true
+  end
+
+  def results_permalink
+    version = params.require(:version)
+    file_type = params.require(:file_type)
+
+    url, = DbDumpHelper.cached_results_export_info(file_type, version)
     redirect_to url, status: :moved_permanently, allow_other_host: true
   end
 

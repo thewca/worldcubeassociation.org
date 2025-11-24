@@ -59,15 +59,16 @@ module DbDumpHelper
     bucket.object(file_name).content_length
   end
 
-  def self.resolve_results_export(file_type, export_timestamp = DumpPublicResultsDatabase.successful_start_date)
-    base_name = DbDumpHelper.result_export_file_name(file_type, export_timestamp)
+  def self.resolve_results_export(file_type, version, export_timestamp = DumpPublicResultsDatabase.successful_start_date)
+    puts "=============== EXPORT_TIMESTAMP: #{export_timestamp} ============================"
+    base_name = DbDumpHelper.result_export_file_name(file_type, version, export_timestamp)
 
     "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/#{base_name}"
   end
 
-  def self.cached_results_export_info(file_type, export_timestamp = DumpPublicResultsDatabase.successful_start_date)
+  def self.cached_results_export_info(file_type, version, export_timestamp = DumpPublicResultsDatabase.successful_start_date)
     Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.day) do
-      file_name = DbDumpHelper.resolve_results_export(file_type, export_timestamp)
+      file_name = DbDumpHelper.resolve_results_export(file_type, version, DateTime.now)
 
       filesize_bytes = DbDumpHelper.public_s3_file_size(file_name)
       [DbDumpHelper.public_s3_path(file_name), filesize_bytes]
@@ -110,7 +111,7 @@ module DbDumpHelper
     # end
   end
 
-  def self.result_export_file_name(file_type, timestamp, version)
+  def self.result_export_file_name(file_type, version, timestamp)
     "WCA_export_#{version}_#{timestamp.strftime('%j')}_#{timestamp.strftime('%Y%m%dT%H%M%SZ')}.#{file_type}.zip"
   end
 

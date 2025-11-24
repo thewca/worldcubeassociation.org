@@ -1465,6 +1465,10 @@ module DatabaseDumper
     }
   }
 
+  def self.current_results_export_version # TODO: Add a test that ensures there is only one "current" version, and that this function doesnt return nil
+    RESULTS_EXPORT_VERSIONS.find { |k, v| v[:metadata][:version_label] == "current" }&.first
+  end
+
   # NOTE: The parameter dump_config_name has to correspond exactly to the desired key in config/database.yml
   def self.with_dumped_db(dump_config_name, dump_sanitizers, dump_ts_name = nil, drop_db_after_dump: true)
     primary_db_config = ActiveRecord::Base.connection_db_config
