@@ -18,7 +18,7 @@ RSpec.describe "WCA Live API" do
         registration_id: registration.id,
       }
 
-      post add_live_result_path(competition.id, round.id), params: live_request
+      post api_v1_competition_live_add_results_path(competition.id, round.id), params: live_request
       expect(response).to be_successful
       perform_enqueued_jobs
 
@@ -46,7 +46,7 @@ RSpec.describe "WCA Live API" do
         registration_id: registration.id,
       }
 
-      post add_live_result_path(competition.id, round.id), params: live_request
+      post api_v1_competition_live_add_results_path(competition.id, round.id), params: live_request
       expect(response).not_to be_successful
     end
   end
