@@ -12,9 +12,6 @@ module DatabaseDumper
                             "LEFT JOIN users AS users_organizers ON users_organizers.id = competition_organizers.organizer_id #{WHERE_VISIBLE_COMP} " \
                             "GROUP BY competitions.id".freeze
 
-  V1_RESULTS_VERSION = '1.0.0'
-  V2_RESULTS_VERSION = '2.0.0'
-
   def self.actions_to_column_sanitizers(columns_by_action)
     {}.tap do |column_sanitizers|
       columns_by_action.each do |action, columns|
@@ -1447,6 +1444,27 @@ module DatabaseDumper
     }.freeze,
   }.freeze
 
+  RESULTS_EXPORT_VERSIONS = {
+    v1: {
+      metadata: {
+        export_format_version: '1.0.0',
+        version_label: 'deprecated',
+        end_of_life_date: '2026-01-01',
+      },
+      db_config: :results_dump,
+      db_sanitizers: RESULTS_SANITIZERS,
+    },
+    v2: {
+      metadata: {
+        export_format_version: '2.0.0',
+        version_label: 'current',
+        end_of_life_date: nil,
+      },
+      db_config: :results_dump_v2,
+      db_sanitizers: V2_RESULTS_SANITIZERS,
+    }
+  }
+
   # NOTE: The parameter dump_config_name has to correspond exactly to the desired key in config/database.yml
   def self.with_dumped_db(dump_config_name, dump_sanitizers, dump_ts_name = nil, drop_db_after_dump: true)
     primary_db_config = ActiveRecord::Base.connection_db_config
@@ -1505,7 +1523,7 @@ module DatabaseDumper
         where_clause_sql = table_sanitizer.fetch(:where_clause, "")
         order_by_clause_sql = table_sanitizer.fetch(:order_by_clause, "")
 
-        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} #{where_clause_sql} #{order_by_clause_sql}"
+        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} #{where_clause_sql} #{order_by_clause_sql} LIMIT 100"
         ActiveRecord::Base.connection.execute(populate_table_sql.strip)
       end
 
@@ -1531,16 +1549,17 @@ module DatabaseDumper
     end
   end
 
-  def self.public_results_dump(dump_filename, tsv_folder, version = :v2)
-    sanitizers = version == :v2 ? V2_RESULTS_SANITIZERS : RESULTS_SANITIZERS
-    dump_config = version == :v2 ? :results_dump_v2 : :results_dump
+  def self.public_results_dump(dump_filename, tsv_folder, version)
+    puts "in public results dump"
+    sanitizers = RESULTS_EXPORT_VERSIONS[version][:db_sanitizers]
+    dump_config = RESULTS_EXPORT_VERSIONS[version][:db_config]
 
     self.with_dumped_db(dump_config, sanitizers) do |dump_db|
       LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
         self.mysqldump(dump_db, dump_filename)
       end
 
-      RESULTS_SANITIZERS.each do |table_name, table_sanitizer|
+      sanitizers.each do |table_name, table_sanitizer|
         next if table_sanitizer == :skip_all_rows
 
         column_expressions = table_sanitizer[:column_sanitizers].map do |column_name, _|

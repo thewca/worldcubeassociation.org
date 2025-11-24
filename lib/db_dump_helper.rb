@@ -74,107 +74,76 @@ module DbDumpHelper
     end
   end
 
-  def self.dump_results_db(export_timestamp = DateTime.now)
-    Dir.mktmpdir do |dir|
-      FileUtils.cd dir do
-        tsv_folder_name = "TSV_export"
-        FileUtils.mkpath tsv_folder_name
+  def self.dump_results_db(version, export_timestamp = DateTime.now)
+    # Dir.mktmpdir do |dir|
+    timestamp = Time.now.strftime("%Y%m%d_%H%M%S")
+    dir_name = "#{version}_#{timestamp}"
+    FileUtils.mkdir_p(dir_name)
+      # FileUtils.cd dir do
+    FileUtils.cd(dir_name) do
+      tsv_folder_name = "TSV_export"
+      FileUtils.mkpath tsv_folder_name
 
-        DatabaseDumper.public_results_dump(RESULTS_EXPORT_SQL, tsv_folder_name)
+      DatabaseDumper.public_results_dump(RESULTS_EXPORT_SQL, tsv_folder_name, version)
 
-        metadata = {
-          'export_format_version' => DatabaseDumper::V1_RESULTS_VERSION,
-          'export_date' => export_timestamp,
-        }
-        File.write(RESULTS_EXPORT_METADATA, JSON.dump(metadata))
+      metadata = DatabaseDumper::RESULTS_EXPORT_VERSIONS[version][:metadata]
+      metadata['export_date'] = export_timestamp
+      File.write(RESULTS_EXPORT_METADATA, JSON.dump(metadata))
 
-        readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp, DatabaseDumper::V1_RESULTS_VERSION)
-        File.write(RESULTS_EXPORT_README, readme_template)
+      readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp, version)
+      File.write(RESULTS_EXPORT_README, readme_template)
 
-        sql_zip_filename = self.result_export_file_name("sql", export_timestamp)
-        sql_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README, RESULTS_EXPORT_SQL]
+      sql_zip_filename = self.result_export_file_name("sql", export_timestamp, version)
+      sql_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README, RESULTS_EXPORT_SQL]
 
-        self.zip_and_upload_to_s3(sql_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{sql_zip_filename}", *sql_zip_contents)
+      self.zip_and_upload_to_s3(sql_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{sql_zip_filename}", *sql_zip_contents)
 
-        tsv_zip_filename = self.result_export_file_name("tsv", export_timestamp)
-        tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
-          FileUtils.mv(tsv, '.')
-          File.basename tsv
-        end
-
-        tsv_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README] | tsv_files
-        self.zip_and_upload_to_s3(tsv_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{tsv_zip_filename}", *tsv_zip_contents)
+      tsv_zip_filename = self.result_export_file_name("tsv", export_timestamp, version)
+      tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
+        FileUtils.mv(tsv, '.')
+        File.basename tsv
       end
+
+      tsv_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README] | tsv_files
+      self.zip_and_upload_to_s3(tsv_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{tsv_zip_filename}", *tsv_zip_contents)
     end
+    # end
   end
 
-  def self.dump_results_db_v2(export_timestamp = DateTime.now)
-    Dir.mktmpdir do |dir|
-      FileUtils.cd dir do
-        tsv_folder_name = "TSV_export"
-        FileUtils.mkpath tsv_folder_name
-
-        DatabaseDumper.public_results_dump(RESULTS_EXPORT_SQL, tsv_folder_name)
-
-        metadata = {
-          'export_format_version' => DatabaseDumper::V2_RESULTS_VERSION,
-          'export_date' => export_timestamp,
-        }
-        File.write(RESULTS_EXPORT_METADATA, JSON.dump(metadata))
-
-        readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp, DatabaseDumper::V2_RESULTS_VERSION)
-        File.write(RESULTS_EXPORT_README, readme_template)
-
-        sql_zip_filename = self.result_export_file_name("sql", export_timestamp)
-        sql_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README, RESULTS_EXPORT_SQL]
-
-        self.zip_and_upload_to_s3(sql_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{sql_zip_filename}", *sql_zip_contents)
-
-        tsv_zip_filename = self.result_export_file_name("tsv", export_timestamp)
-        tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
-          FileUtils.mv(tsv, '.')
-          File.basename tsv
-        end
-
-        tsv_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README] | tsv_files
-        self.zip_and_upload_to_s3(tsv_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{tsv_zip_filename}", *tsv_zip_contents)
-      end
-    end
-  end
-
-  def self.result_export_file_name(file_type, timestamp)
-    "WCA_export#{timestamp.strftime('%j')}_#{timestamp.strftime('%Y%m%dT%H%M%SZ')}.#{file_type}.zip"
+  def self.result_export_file_name(file_type, timestamp, version)
+    "WCA_export_#{version}_#{timestamp.strftime('%j')}_#{timestamp.strftime('%Y%m%dT%H%M%SZ')}.#{file_type}.zip"
   end
 
   def self.zip_and_upload_to_s3(zip_filename, s3_path, *zip_contents)
     zip_file_list = zip_contents.join(" ")
 
     LogTask.log_task "Zipping #{zip_contents.length} file entries to '#{zip_filename}'" do
+      puts Dir.pwd
       system("zip #{zip_filename} #{zip_file_list}", exception: true)
     end
 
-    LogTask.log_task "Moving zipped file to 's3://#{s3_path}'" do
-      tm = Aws::S3::TransferManager.new
-      tm.upload_file(zip_filename, bucket: BUCKET_NAME, key: s3_path)
+    # LogTask.log_task "Moving zipped file to 's3://#{s3_path}'" do
+    #   tm = Aws::S3::TransferManager.new
+    #   tm.upload_file(zip_filename, bucket: BUCKET_NAME, key: s3_path)
 
-      # Delete the zipfile now that it's uploaded
-      FileUtils.rm zip_filename
+    #   # Delete the zipfile now that it's uploaded
+    #   FileUtils.rm zip_filename
 
-      # Invalidate Export Route in Prod
-      if EnvConfig.WCA_LIVE_SITE?
-        Aws::CloudFront::Client.new(credentials: Aws::ECSCredentials.new)
-                               .create_invalidation({
-                                                      distribution_id: EnvConfig.CDN_ASSETS_DISTRIBUTION_ID,
-                                                      invalidation_batch: {
-                                                        paths: {
-                                                          quantity: 1,
-                                                          items: ["/#{s3_path}"], # AWS SDK throws an error if the path doesn't start with "/"
-                                                        },
-                                                        caller_reference: "DB Dump invalidation #{Time.now.utc}",
-                                                      },
-                                                    })
-      end
-    end
+    #   # Invalidate Export Route in Prod
+    #   if EnvConfig.WCA_LIVE_SITE?
+    #     Aws::CloudFront::Client.new(credentials: Aws::ECSCredentials.new)
+    #                            .create_invalidation({
+    #                                                   distribution_id: EnvConfig.CDN_ASSETS_DISTRIBUTION_ID,
+    #                                                   invalidation_batch: {
+    #                                                     paths: {
+    #                                                       quantity: 1,
+    #                                                       items: ["/#{s3_path}"], # AWS SDK throws an error if the path doesn't start with "/"
+    #                                                     },
+    #                                                     caller_reference: "DB Dump invalidation #{Time.now.utc}",
+    #                                                   },
+    #                                                 })
+    #   end
+    # end
   end
 
   def self.use_staging_password?

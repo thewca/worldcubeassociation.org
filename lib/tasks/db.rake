@@ -44,12 +44,11 @@ namespace :db do
 
     desc 'Generates a partial dump of our database containing only results and relevant stuff for statistics.'
     task public_results: :environment do
-      DbDumpHelper.dump_results_db
-    end
-
-    desc 'Generates v2 of a partial dump of our database containing only results and relevant stuff for statistics.'
-    task public_results_v2: :environment do
-      DbDumpHelper.dump_results_db_v2
+      puts "dumping results"
+      DatabaseDumper::RESULTS_EXPORT_VERSIONS.keys.each do |v| # TODO: Make an "active exports" method
+        puts v
+        DbDumpHelper.dump_results_db(v)
+      end
     end
   end
 
