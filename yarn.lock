@@ -10309,7 +10309,7 @@ __metadata:
     sass: "npm:^1.94.2"
     sass-loader: "npm:^16.0.6"
     semantic-ui-react: "npm:^2.1.5"
-    shakapacker: "npm:9.3.3"
+    shakapacker: "npm:9.4.0"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^16.26.0"
     stylelint-config-recommended-scss: "npm:^16.0.2"
@@ -10639,9 +10639,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shakapacker@npm:9.3.3":
-  version: 9.3.3
-  resolution: "shakapacker@npm:9.3.3"
+"shakapacker@npm:9.4.0":
+  version: 9.4.0
+  resolution: "shakapacker@npm:9.4.0"
   dependencies:
     js-yaml: "npm:^4.1.0"
     path-complete-extname: "npm:^1.0.0"
@@ -10727,7 +10727,7 @@ __metadata:
       optional: true
     webpack-subresource-integrity:
       optional: true
-  checksum: 10c0/ab5c356536894d77c463910e17ff114f8d42e02074f12bbb241c2e85430fc53bd815d5cb10beb928ee8306b98fde48138aeca3e5bc59e4fbf7ce7febbaaa14e5
+  checksum: 10c0/31435b56c48b93d942cb34e4e392231b2c98896ed64d653892ce4b5601fec580eb7119cc9118bdfd55f4e3d9a54f4c7ea30708c021b8f4cae7e6cfa80c366235
   languageName: node
   linkType: hard
 
