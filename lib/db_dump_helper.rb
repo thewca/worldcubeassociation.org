@@ -60,13 +60,15 @@ module DbDumpHelper
   end
 
   def self.resolve_results_export(file_type, version, export_timestamp = DumpPublicResultsDatabase.successful_start_date)
+    return self.result_export_file_name(file_type, version, Time.new(2025, 11, 25)) unless Rails.env.production?
+
     base_name = DbDumpHelper.result_export_file_name(file_type, version, export_timestamp)
 
     "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/#{base_name}"
   end
 
   def self.cached_results_export_info(file_type, version, export_timestamp = DumpPublicResultsDatabase.successful_start_date)
-    Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.day) do
+    Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}-#{version}", expires_in: 1.day) do
       file_name = DbDumpHelper.resolve_results_export(file_type, version, DateTime.now)
 
       filesize_bytes = DbDumpHelper.public_s3_file_size(file_name)
@@ -121,28 +123,28 @@ module DbDumpHelper
       system("zip #{zip_filename} #{zip_file_list}", exception: true)
     end
 
-    # LogTask.log_task "Moving zipped file to 's3://#{s3_path}'" do
-    #   tm = Aws::S3::TransferManager.new
-    #   tm.upload_file(zip_filename, bucket: BUCKET_NAME, key: s3_path)
+    LogTask.log_task "Moving zipped file to 's3://#{s3_path}'" do
+      tm = Aws::S3::TransferManager.new
+      tm.upload_file(zip_filename, bucket: BUCKET_NAME, key: s3_path)
 
-    #   # Delete the zipfile now that it's uploaded
-    #   FileUtils.rm zip_filename
+      # Delete the zipfile now that it's uploaded
+      FileUtils.rm zip_filename
 
-    #   # Invalidate Export Route in Prod
-    #   if EnvConfig.WCA_LIVE_SITE?
-    #     Aws::CloudFront::Client.new(credentials: Aws::ECSCredentials.new)
-    #                            .create_invalidation({
-    #                                                   distribution_id: EnvConfig.CDN_ASSETS_DISTRIBUTION_ID,
-    #                                                   invalidation_batch: {
-    #                                                     paths: {
-    #                                                       quantity: 1,
-    #                                                       items: ["/#{s3_path}"], # AWS SDK throws an error if the path doesn't start with "/"
-    #                                                     },
-    #                                                     caller_reference: "DB Dump invalidation #{Time.now.utc}",
-    #                                                   },
-    #                                                 })
-    #   end
-    # end
+      # Invalidate Export Route in Prod
+      if EnvConfig.WCA_LIVE_SITE?
+        Aws::CloudFront::Client.new(credentials: Aws::ECSCredentials.new)
+                               .create_invalidation({
+                                                      distribution_id: EnvConfig.CDN_ASSETS_DISTRIBUTION_ID,
+                                                      invalidation_batch: {
+                                                        paths: {
+                                                          quantity: 1,
+                                                          items: ["/#{s3_path}"], # AWS SDK throws an error if the path doesn't start with "/"
+                                                        },
+                                                        caller_reference: "DB Dump invalidation #{Time.now.utc}",
+                                                      },
+                                                    })
+      end
+    end
   end
 
   def self.use_staging_password?

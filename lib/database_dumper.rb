@@ -1447,7 +1447,7 @@ module DatabaseDumper
   RESULTS_EXPORT_VERSIONS = {
     v1: {
       metadata: {
-        export_format_version: '1.0.0',
+        export_format_version: 'v1.0.0',
         version_label: 'deprecated',
         end_of_life_date: '2026-01-01',
       },
@@ -1456,7 +1456,7 @@ module DatabaseDumper
     },
     v2: {
       metadata: {
-        export_format_version: '2.0.0',
+        export_format_version: 'v2.0.0',
         version_label: 'current',
         end_of_life_date: nil,
       },
