@@ -198,7 +198,6 @@ RSpec.describe IRV do
         res_mbf = create(result_kind, :mbf, competition: competition1, round: round_333mbf)
         # 8 points in 60:02 (ie: reached the time limit and got +2)
         res_mbf.update(value2: 910_360_200)
-        res_mbf.result_attempts.reload if result_kind == :result
         warns << RV::ValidationWarning.new(IRV::MBF_RESULT_OVER_TIME_LIMIT_WARNING,
                                            :results, competition1.id,
                                            round_id: "333mbf-f",

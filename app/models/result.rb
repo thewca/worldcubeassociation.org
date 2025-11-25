@@ -25,6 +25,7 @@ class Result < ApplicationRecord
     ResultAttempt.where(result_id: id, attempt_number: zero_attempts).delete_all if zero_attempts.any?
 
     ResultAttempt.upsert_all(attempts)
+    self.result_attempts.reset
   end
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
