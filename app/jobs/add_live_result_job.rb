@@ -17,7 +17,7 @@ class AddLiveResultJob < ApplicationJob
       round_type_id: round.round_type_id,
       round_id: round.id,
       format_id: format.id,
-      result_attempts: results.map.with_index(1) { |r, index| ResultAttempt.new({ attempt_number: index, value: r }) },
+      result_attempts: results.map.with_index(1) { |r, index| ResultAttempt.new(attempt_number: index, value: r) },
     )
 
     LiveResult.create!(registration_id: registration_id,
