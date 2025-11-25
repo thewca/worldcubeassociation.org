@@ -16,7 +16,7 @@ class InboxResult < ApplicationRecord
   end
 
   def solve_times
-    @solve_times ||= attempts.filter_map { |attempt| SolveTime.new(event_id, :single, attempt) if attempt != 0 }.freeze
+    @solve_times ||= attempts.filter_map { |attempt| SolveTime.new(event_id, :single, attempt) if attempt != SolveTime::SKIPPED_VALUE }.freeze
   end
 
   alias_method :name, :person_name
