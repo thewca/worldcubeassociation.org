@@ -37,44 +37,35 @@ export default async function PersonOverview({
     teamRole: string;
     teamText: string;
     staffColor: StaffColor;
-  }[] = personDetails.person.teams.map(
-    (team: {
-      friendly_id: string;
-      leader: boolean;
-      senior_member: boolean;
-    }) => {
-      const teamText = team.friendly_id.toUpperCase();
-      let teamRole = "";
-      let staffColour: StaffColor = "black";
+  }[] = personDetails.person.teams.map((team) => {
+    const teamText = team.friendly_id.toUpperCase();
 
-      if (teamText == "BOARD") {
-        staffColour = "black";
-      } else if (team.leader) {
-        teamRole = "LEADER";
-        staffColour = "blue";
-      } else {
-        if (team.senior_member) {
-          teamRole = "SENIOR MEMBER";
-          staffColour = "yellow";
-        } else {
-          staffColour = "green";
-          teamRole = "MEMBER";
-        }
-      }
+    // Default values
+    let teamRole = "";
+    let staffColor: StaffColor = "black";
 
-      return {
-        teamRole: teamRole,
-        teamText: teamText,
-        staffColor: staffColour,
-      };
-    },
-  );
+    if (teamText === "BOARD") {
+      staffColor = "black";
+    } else if (team.leader) {
+      teamRole = "LEADER";
+      staffColor = "blue";
+    } else if (team.senior_member) {
+      teamRole = "SENIOR MEMBER";
+      staffColor = "yellow";
+    } else {
+      teamRole = "MEMBER";
+      staffColor = "green";
+    }
 
-  if (personDetails.person.delegate_status != null) {
+    return { teamRole, teamText, staffColor };
+  });
+
+  if (personDetails.person.delegate_status) {
     const delegateText = personDetails.person.delegate_status
       .toUpperCase()
       .replace(/_/g, " ")
       .replace("DELEGATE", "");
+
     roles.push({
       teamRole: "DELEGATE",
       teamText: delegateText,
@@ -100,28 +91,24 @@ export default async function PersonOverview({
       components["schemas"]["SingleAndAverageRank"]
     >,
   ): RecordItem[] => {
-    // Transform the personalRecords object into an array
-    const recordsArray = Object.entries(personalRecords).map(
-      ([event, record]) => ({
-        event,
-        single: formatAttemptResult(record.single.best, event),
-        snr: record.single.country_rank,
-        scr: record.single.continent_rank,
-        swr: record.single.world_rank,
-        average:
-          record.average && record.average.best > 0
-            ? formatAttemptResult(record.average.best, event)
-            : "",
-        anr: record.average?.country_rank || 0,
-        acr: record.average?.continent_rank || 0,
-        awr: record.average?.world_rank || 0,
-      }),
-    );
+    const records = Object.entries(personalRecords).map(([event, record]) => ({
+      event,
+      single: formatAttemptResult(record.single.best, event),
+      snr: record.single.country_rank,
+      scr: record.single.continent_rank,
+      swr: record.single.world_rank,
+      average:
+        record.average?.best && record.average.best > 0
+          ? formatAttemptResult(record.average.best, event)
+          : "",
+      anr: record.average?.country_rank ?? 0,
+      acr: record.average?.continent_rank ?? 0,
+      awr: record.average?.world_rank ?? 0,
+    }));
 
-    // Reorder the array based on eventOrder
     return events.official
-      .map((event) => recordsArray.find((record) => record.event === event.id))
-      .filter((record) => !!record); // Remove undefined items
+      .map((ev) => records.find((r) => r.event === ev.id))
+      .filter((r): r is RecordItem => Boolean(r));
   };
 
   const hasRecords =
