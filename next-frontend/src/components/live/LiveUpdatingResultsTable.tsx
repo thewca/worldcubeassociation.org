@@ -1,11 +1,22 @@
 "use client";
 
 import { components } from "@/types/openapi";
-import { useCallback, useEffectEvent, useState } from "react";
+import { useCallback, useState } from "react";
 import useResultsSubscription from "@/lib/hooks/useResultsSubscription";
 import ResultsTable from "@/components/live/LiveResultsTable";
-import { VStack } from "@chakra-ui/react";
+import { Heading, HStack, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
+
+function updateOrAddResult(
+  previousResults: components["schemas"]["LiveResult"][],
+  newResult: components["schemas"]["LiveResult"],
+) {
+  const resultsWithoutNewResult = previousResults.filter(
+    (r) => r.registration_id !== newResult.registration_id,
+  );
+
+  return [...resultsWithoutNewResult, newResult];
+}
 
 export default function LiveUpdatingResultsTable({
   roundId,
@@ -13,6 +24,7 @@ export default function LiveUpdatingResultsTable({
   eventId,
   competitionId,
   competitors,
+  title,
   isAdmin = false,
   showEmpty = true,
 }: {
@@ -21,15 +33,17 @@ export default function LiveUpdatingResultsTable({
   eventId: string;
   competitionId: string;
   competitors: components["schemas"]["LiveCompetitor"][];
+  title: string;
   isAdmin?: boolean;
   showEmpty?: boolean;
 }) {
   const [liveResults, updateLiveResults] =
     useState<components["schemas"]["LiveResult"][]>(results);
 
+  // Move to onEffectEvent when we are on React 19
   const onReceived = useCallback(
     (result: components["schemas"]["LiveResult"]) => {
-      updateLiveResults((results) => [...results, result]);
+      updateLiveResults((results) => updateOrAddResult(results, result));
     },
     [updateLiveResults],
   );
@@ -37,8 +51,11 @@ export default function LiveUpdatingResultsTable({
   const connectionState = useResultsSubscription(roundId, onReceived);
 
   return (
-    <VStack>
-      <ConnectionPulse connectionState={connectionState} />
+    <VStack align="left">
+      <HStack>
+        <Heading textStyle="h1">{title}</Heading>
+        <ConnectionPulse connectionState={connectionState} />
+      </HStack>
       <ResultsTable
         results={liveResults}
         eventId={eventId}
