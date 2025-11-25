@@ -37,19 +37,7 @@ class Result < ApplicationRecord
     Country.c_find(self.country_id)
   end
 
-  # If saving changes to person_id, make sure that there is no results for
-  # that person yet for the round.
-  validate :unique_result_per_round, if: lambda {
-    will_save_change_to_person_id? || will_save_change_to_competition_id? || will_save_change_to_event_id? || will_save_change_to_round_type_id?
-  }
-
-  def unique_result_per_round
-    has_result = Result.where(competition_id: competition_id,
-                              person_id: person_id,
-                              event_id: event_id,
-                              round_type_id: round_type_id).any?
-    errors.add(:person_id, "this WCA ID already has a result for that round") if has_result
-  end
+  validates :person_id, uniqueness: { scope: :round_id, message: "this WCA ID already has a result for that round" }
 
   scope :final, -> { where(round_type_id: RoundType.final_rounds.select(:id)) }
   scope :succeeded, -> { where("best > 0") }

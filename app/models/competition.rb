@@ -223,6 +223,7 @@ class Competition < ApplicationRecord
                    format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
   validates :cell_name, length: { maximum: MAX_CELL_NAME_LENGTH },
                         format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
+  strip_attributes only: %i[name cell_name], collapse_spaces: true, allow_empty: true
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :external_website, format: { with: URL_RE }, allow_blank: true
   validates :external_registration_page, presence: true, format: { with: URL_RE }, if: :external_registration_page_required?
@@ -2278,13 +2279,6 @@ class Competition < ApplicationRecord
 
     series_registrations
       .where.not(competition: self)
-  end
-
-  def find_round_for(event_id, round_type_id, format_id = nil)
-    rounds.find do |r|
-      r.event.id == event_id && r.round_type_id == round_type_id &&
-        (format_id.nil? || format_id == r.format_id)
-    end
   end
 
   def export_for_dues_generation

@@ -119,11 +119,6 @@ class User < ApplicationRecord
          #   In order to achieve alphanumeric strings of length n, we need to generate n/2 random bytes.
          otp_backup_code_length: (BACKUP_CODES_LENGTH / 2),
          otp_number_of_backup_codes: NUMBER_OF_BACKUP_CODES
-  devise :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
-
-  def jwt_payload
-    { 'user_id' => id }
-  end
 
   # Backup OTP are stored as a string array in the db
   serialize :otp_backup_codes, coder: YAML
@@ -1094,6 +1089,7 @@ class User < ApplicationRecord
         password password_confirmation
         email preferred_events results_notifications_enabled
         registration_notifications_enabled
+        receive_developer_mails
       ]
       fields << { user_preferred_events_attributes: %i[id event_id _destroy] }
       fields += %i[receive_delegate_reports delegate_reports_region] if user.staff_or_any_delegate?

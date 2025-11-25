@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_17_142333) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -740,10 +740,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
     t.datetime "digest_sent_at", precision: nil
   end
 
-  create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "jti", null: false
-    t.datetime "exp", null: false
-    t.index ["jti"], name: "index_jwt_denylist_on_jti"
+  create_table "linked_rounds", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "wcif_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "live_attempt_history_entries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -769,7 +769,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
     t.bigint "registration_id", null: false
     t.bigint "round_id", null: false
     t.datetime "last_attempt_entered_at", null: false
-    t.integer "ranking"
+    t.integer "local_pos"
+    t.integer "global_pos"
     t.integer "best", null: false
     t.integer "average", null: false
     t.string "single_record_tag", limit: 255
@@ -1103,8 +1104,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
   create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=1", force: :cascade do |t|
     t.integer "pos", limit: 2, default: 0, null: false
     t.string "person_id", limit: 10, default: "", null: false
-    t.string "person_name", limit: 80
-    t.string "country_id", limit: 50
+    t.string "person_name", limit: 80, default: "", null: false
+    t.string "country_id", limit: 50, default: "", null: false
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
@@ -1120,6 +1121,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
     t.string "regional_single_record", limit: 3
     t.string "regional_average_record", limit: 3
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
+    t.index ["round_id", "person_id"], name: "results_person_uniqueness_speedup"
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competition_id"], name: "Results_fk_tournament"
     t.index ["country_id"], name: "_tmp_index_Results_on_countryId"
@@ -1196,7 +1198,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
     t.text "round_results", size: :medium
     t.integer "total_number_of_rounds", null: false
     t.string "old_type", limit: 1
+    t.bigint "linked_round_id"
     t.index ["competition_event_id", "number"], name: "index_rounds_on_competition_event_id_and_number", unique: true
+    t.index ["linked_round_id"], name: "index_rounds_on_linked_round_id"
   end
 
   create_table "sanity_check_categories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1257,7 +1261,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
     t.string "competition_id", limit: 32, null: false
     t.string "event_id", limit: 6, null: false
     t.string "round_type_id", limit: 1, null: false
-    t.integer "round_id"
+    t.integer "round_id", null: false
     t.string "group_id", limit: 3, null: false
     t.boolean "is_extra", null: false
     t.integer "scramble_num", null: false
@@ -1489,6 +1493,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
     t.boolean "results_notifications_enabled", default: false
     t.string "preferred_locale", limit: 255
     t.boolean "competition_notifications_enabled"
+    t.boolean "receive_developer_mails", default: false, null: false
     t.boolean "receive_delegate_reports", default: false, null: false
     t.string "delegate_reports_region_id"
     t.string "delegate_reports_region_type"
@@ -1583,6 +1588,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "results", "rounds"
+  add_foreign_key "rounds", "linked_rounds"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "schedule_activities", "rounds"

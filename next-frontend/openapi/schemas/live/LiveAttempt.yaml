@@ -1,0 +1,9 @@
+type: object
+required:
+  - result
+  - attempt_number
+properties:
+  result:
+    type: integer
+  attempt_number:
+    type: integer

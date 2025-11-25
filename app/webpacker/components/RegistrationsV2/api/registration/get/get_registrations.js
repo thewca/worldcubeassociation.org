@@ -6,7 +6,6 @@ import {
   singleRegistrationUrl,
   registrationHistoryUrl,
 } from '../../../../../lib/requests/routes.js.erb';
-import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
 import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthenticityToken';
 
 export async function getConfirmedRegistrations(competition) {
@@ -26,7 +25,7 @@ export async function getPsychSheetForEvent(
 
 export async function getAllRegistrations(competition) {
   const route = allRegistrationsUrl(competition.id);
-  const { data } = await fetchWithJWTToken(route);
+  const { data } = await fetchJsonOrError(route);
 
   return data;
 }
@@ -37,7 +36,7 @@ export async function getRegistrationByUser(
 ) {
   const route = registrationByUserUrl(competitionId, userId);
   try {
-    const { data } = await fetchWithJWTToken(route);
+    const { data } = await fetchJsonOrError(route);
     return data;
   } catch (e) {
     // 404 means that the registration doesn't exist
@@ -52,7 +51,7 @@ export async function getSingleRegistration(
   registrationId,
 ) {
   const route = singleRegistrationUrl(registrationId);
-  const { data } = await fetchWithJWTToken(route);
+  const { data } = await fetchJsonOrError(route);
 
   return data;
 }
@@ -60,6 +59,6 @@ export async function getSingleRegistration(
 export async function getRegistrationHistory(
   registrationId,
 ) {
-  const { data } = await fetchWithJWTToken(registrationHistoryUrl(registrationId));
+  const { data } = await fetchJsonOrError(registrationHistoryUrl(registrationId));
   return data;
 }

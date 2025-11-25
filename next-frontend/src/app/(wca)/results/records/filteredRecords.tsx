@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useMemo, useReducer } from "react";
-import { useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
 import { EventId } from "@/lib/wca/data/events";
 import { Alert, Heading, VStack } from "@chakra-ui/react";
@@ -89,28 +88,30 @@ export default function FilteredRecords({
 
   const isHistory = show === "history" || show === "mixed history";
 
-  const { data, isFetching, isError } = useQuery({
-    queryKey: ["records", region, gender, isHistory],
-    queryFn: () =>
-      api.GET("/v0/results/records", {
-        params: {
-          query: { region, gender, show: isHistory ? "history" : "mixed" },
-        },
-      }),
-    select: (data) => {
-      if (event === "all events") {
-        return data.data;
-      }
-
-      return {
-        timestamp: data.data!.timestamp,
-        records: {
-          [event as EventId]: data.data!.records[event],
-        },
-      };
+  const { data, isFetching, isError } = api.useQuery(
+    "get",
+    "/v0/results/records",
+    {
+      params: {
+        query: { region, gender, show: isHistory ? "history" : "mixed" },
+      },
     },
-    refetchOnMount: false,
-  });
+    {
+      select: (data) => {
+        if (event === "all events") {
+          return data;
+        }
+
+        return {
+          timestamp: data.timestamp,
+          records: {
+            [event as EventId]: data.records[event],
+          },
+        };
+      },
+      refetchOnMount: false,
+    },
+  );
 
   if (isFetching) {
     return <Loading />;
