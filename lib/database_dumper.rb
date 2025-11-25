@@ -1204,20 +1204,13 @@ module DatabaseDumper
   }.freeze
 
   V2_RESULTS_SANITIZERS = {
-    "Results" => {
+    "results" => {
       source_table: "results",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           pos
           best
           average
-        ],
-        db_default: %w[
-          value1
-          value2
-          value3
-          value4
-          value5
         ],
         fake_values: {
           "competitionId" => "competition_id",
@@ -1232,7 +1225,7 @@ module DatabaseDumper
         }.freeze,
       ),
     }.freeze,
-    "ResultAttempts" => {
+    "result_attempts" => {
       source_table: "result_attempts",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -1245,7 +1238,7 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
-    "RanksSingle" => {
+    "ranks_single" => {
       source_table: "ranks_single",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -1261,7 +1254,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "RanksAverage" => {
+    "ranks_average" => {
       source_table: "ranks_average",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -1277,7 +1270,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "RoundTypes" => {
+    "round_types" => {
       source_table: "round_types",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -1292,7 +1285,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "Events" => {
+    "events" => {
       source_table: "events",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -1307,7 +1300,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "Formats" => {
+    "formats" => {
       source_table: "formats",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -1321,7 +1314,7 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
-    "Countries" => {
+    "countries" => {
       source_table: "countries",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -1334,7 +1327,7 @@ module DatabaseDumper
         }.freeze,
       ),
     }.freeze,
-    "Continents" => {
+    "continents" => {
       source_table: "continents",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -1349,7 +1342,7 @@ module DatabaseDumper
         }.freeze,
       ),
     }.freeze,
-    "Persons" => {
+    "persons" => {
       source_table: "persons",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -1363,7 +1356,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "Competitions" => {
+    "competitions" => {
       source_table: "competitions",
       where_clause: PUBLIC_COMPETITION_JOIN,
       column_sanitizers: actions_to_column_sanitizers(
@@ -1399,7 +1392,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "Scrambles" => {
+    "scrambles" => {
       source_table: "scrambles",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
