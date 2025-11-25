@@ -15,7 +15,7 @@ module ResultsHelper
     # Currently there are always 5 solves in any results, even for mean of 3 or Bo1
     # That's why we always need to fill it up with 5 tds
     missing_solves = 5 - result.solve_times.length
-    return completed_solves + Array.new(missing_solves, (content_tag :td)).reduce(:+) if missing_solves != 0
+    return completed_solves + Array.new(missing_solves, content_tag(:td)).reduce(:+) if missing_solves != 0
 
     completed_solves
     # rubocop:enable Performance/Sum
