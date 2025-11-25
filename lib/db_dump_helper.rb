@@ -79,33 +79,31 @@ module DbDumpHelper
   def self.dump_results_db(version, export_timestamp = DateTime.now)
     Dir.mktmpdir do |dir|
       FileUtils.cd dir do
-        FileUtils.cd(dir_name) do
-          tsv_folder_name = "TSV_export"
-          FileUtils.mkpath tsv_folder_name
+        tsv_folder_name = "TSV_export"
+        FileUtils.mkpath tsv_folder_name
 
-          DatabaseDumper.public_results_dump(RESULTS_EXPORT_SQL, tsv_folder_name, version)
+        DatabaseDumper.public_results_dump(RESULTS_EXPORT_SQL, tsv_folder_name, version)
 
-          metadata = DatabaseDumper::RESULTS_EXPORT_VERSIONS[version][:metadata]
-          metadata['export_date'] = export_timestamp
-          File.write(RESULTS_EXPORT_METADATA, JSON.dump(metadata))
+        metadata = DatabaseDumper::RESULTS_EXPORT_VERSIONS[version][:metadata]
+        metadata['export_date'] = export_timestamp
+        File.write(RESULTS_EXPORT_METADATA, JSON.dump(metadata))
 
-          readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp, version)
-          File.write(RESULTS_EXPORT_README, readme_template)
+        readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp, version)
+        File.write(RESULTS_EXPORT_README, readme_template)
 
-          sql_zip_filename = self.result_export_file_name("sql", version, export_timestamp)
-          sql_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README, RESULTS_EXPORT_SQL]
+        sql_zip_filename = self.result_export_file_name("sql", version, export_timestamp)
+        sql_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README, RESULTS_EXPORT_SQL]
 
-          self.zip_and_upload_to_s3(sql_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{sql_zip_filename}", *sql_zip_contents)
+        self.zip_and_upload_to_s3(sql_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{sql_zip_filename}", *sql_zip_contents)
 
-          tsv_zip_filename = self.result_export_file_name("tsv", version, export_timestamp)
-          tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
-            FileUtils.mv(tsv, '.')
-            File.basename tsv
-          end
-
-          tsv_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README] | tsv_files
-          self.zip_and_upload_to_s3(tsv_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{tsv_zip_filename}", *tsv_zip_contents)
+        tsv_zip_filename = self.result_export_file_name("tsv", version, export_timestamp)
+        tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
+          FileUtils.mv(tsv, '.')
+          File.basename tsv
         end
+
+        tsv_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README] | tsv_files
+        self.zip_and_upload_to_s3(tsv_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{tsv_zip_filename}", *tsv_zip_contents)
       end
     end
   end
