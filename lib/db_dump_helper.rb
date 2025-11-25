@@ -114,7 +114,7 @@ module DbDumpHelper
     "WCA_export_#{version}_#{timestamp.strftime('%j')}_#{timestamp.strftime('%Y%m%dT%H%M%SZ')}.#{file_type}.zip"
   end
 
-  def self.zip_and_upload_to_s3(zip_filename, _s3_path, *zip_contents)
+  def self.zip_and_upload_to_s3(zip_filename, s3_path, *zip_contents)
     zip_file_list = zip_contents.join(" ")
 
     LogTask.log_task "Zipping #{zip_contents.length} file entries to '#{zip_filename}'" do
