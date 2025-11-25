@@ -10,13 +10,13 @@ RSpec.describe 'Database Endpoints' do
 
         it 'returns SQL link before 2026-01-01' do
           get sql_permalink_path
-          expect(response.status).to eq(301)
+          expect(response).to have_http_status(:moved_permanently)
           expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v1_329_20251125T000000Z.sql.zip")
         end
 
         it 'returns TSV link before 2026-01-01' do
           get tsv_permalink_path
-          expect(response.status).to eq(301)
+          expect(response).to have_http_status(:moved_permanently)
           expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v1_329_20251125T000000Z.tsv.zip")
         end
       end
@@ -26,14 +26,14 @@ RSpec.describe 'Database Endpoints' do
 
         it 'SQL link returns 410 on and after 2026-01-01' do
           get sql_permalink_path
-          expect(response.status).to eq(410)
-          expect(response.location).to be nil
+          expect(response).to have_http_status(:gone)
+          expect(response.location).to be_nil
         end
 
         it 'TSV link returns 410 on and after 2026-01-01' do
           get tsv_permalink_path
-          expect(response.status).to eq(410)
-          expect(response.location).to be nil
+          expect(response).to have_http_status(:gone)
+          expect(response.location).to be_nil
         end
       end
     end
@@ -44,25 +44,25 @@ RSpec.describe 'Database Endpoints' do
 
         it 'returns v1 SQL' do
           get results_permalink_path(:v1, "sql")
-          expect(response.status).to eq(301)
+          expect(response).to have_http_status(:moved_permanently)
           expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v1_329_20251125T000000Z.sql.zip")
         end
 
         it 'returns v1 TSV' do
           get results_permalink_path(:v1, "tsv")
-          expect(response.status).to eq(301)
+          expect(response).to have_http_status(:moved_permanently)
           expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v1_329_20251125T000000Z.tsv.zip")
         end
 
         it 'returns v2 SQL' do
           get results_permalink_path(:v2, "sql")
-          expect(response.status).to eq(301)
+          expect(response).to have_http_status(:moved_permanently)
           expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v2_329_20251125T000000Z.sql.zip")
         end
 
         it 'returns v2 TSV' do
           get results_permalink_path(:v2, "tsv")
-          expect(response.status).to eq(301)
+          expect(response).to have_http_status(:moved_permanently)
           expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v2_329_20251125T000000Z.tsv.zip")
         end
       end
@@ -72,25 +72,25 @@ RSpec.describe 'Database Endpoints' do
 
         it 'v1 SQL link returns 410 on and after 2026-01-01' do
           get results_permalink_path(:v1, "sql")
-          expect(response.status).to eq(410)
-          expect(response.location).to be nil
+          expect(response).to have_http_status(:gone)
+          expect(response.location).to be_nil
         end
 
         it 'v1 TSV link returns 410 on and after 2026-01-01' do
           get results_permalink_path(:v1, "tsv")
-          expect(response.status).to eq(410)
-          expect(response.location).to be nil
+          expect(response).to have_http_status(:gone)
+          expect(response.location).to be_nil
         end
 
         it 'returns v2 SQL' do
           get results_permalink_path(:v2, "sql")
-          expect(response.status).to eq(301)
+          expect(response).to have_http_status(:moved_permanently)
           expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v2_329_20251125T000000Z.sql.zip")
         end
 
         it 'returns v2 TSV' do
           get results_permalink_path(:v2, "tsv")
-          expect(response.status).to eq(301)
+          expect(response).to have_http_status(:moved_permanently)
           expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v2_329_20251125T000000Z.tsv.zip")
         end
       end

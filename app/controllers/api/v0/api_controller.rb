@@ -221,7 +221,8 @@ class Api::V0::ApiController < ApplicationController
 
     _, sql_filesize = DbDumpHelper.cached_results_export_info("sql", timestamp)
     _, tsv_filesize = DbDumpHelper.cached_results_export_info("tsv", timestamp)
-    current_version_number = DatabaseDumper::RESULTS_EXPORT_VERSIONS[DatabaseDumper.current_results_export_version][:metadata][:export_format_version]
+    current_version_key = DatabaseDumper.current_results_export_version
+    current_version_number = DatabaseDumper::RESULTS_EXPORT_VERSIONS[current_version_key][:metadata][:export_format_version]
 
     render json: {
       export_date: timestamp&.iso8601,
@@ -231,7 +232,7 @@ class Api::V0::ApiController < ApplicationController
       tsv_url: Rails.application.routes.url_helpers.results_permalink_url(:v2, 'tsv'),
       tsv_filesize_bytes: tsv_filesize,
       developer_url: DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK),
-      readme: DatabaseController.render_readme(self, DateTime.now, :v2),
+      readme: DatabaseController.render_readme(self, DateTime.now, current_version_key),
     }
   end
 
