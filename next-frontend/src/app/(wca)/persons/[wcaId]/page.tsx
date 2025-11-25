@@ -15,6 +15,19 @@ import { StaffColor } from "@/components/RoleBadge";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import events from "@/lib/wca/data/events";
 import { getT } from "@/lib/i18n/get18n";
+import _ from "lodash";
+
+interface RecordItem {
+  event: string;
+  snr: number;
+  scr: number;
+  swr: number;
+  single: string;
+  average: string;
+  anr: number;
+  acr: number;
+  awr: number;
+}
 
 export default async function PersonOverview({
   params,
@@ -40,24 +53,20 @@ export default async function PersonOverview({
   }[] = personDetails.person.teams.map((team) => {
     const teamText = team.friendly_id.toUpperCase();
 
-    // Default values
-    let teamRole = "";
-    let staffColor: StaffColor = "black";
+    const roleMap = [
+      { condition: teamText === "BOARD", teamRole: "", staffColor: "black" },
+      { condition: team.leader, teamRole: "LEADER", staffColor: "blue" },
+      {
+        condition: team.senior_member,
+        teamRole: "SENIOR MEMBER",
+        staffColor: "yellow",
+      },
+      { condition: true, teamRole: "MEMBER", staffColor: "green" },
+    ];
 
-    if (teamText === "BOARD") {
-      staffColor = "black";
-    } else if (team.leader) {
-      teamRole = "LEADER";
-      staffColor = "blue";
-    } else if (team.senior_member) {
-      teamRole = "SENIOR MEMBER";
-      staffColor = "yellow";
-    } else {
-      teamRole = "MEMBER";
-      staffColor = "green";
-    }
+    const { teamRole, staffColor } = roleMap.find((r) => r.condition)!;
 
-    return { teamRole, teamText, staffColor };
+    return { teamRole, teamText, staffColor: staffColor as StaffColor };
   });
 
   if (personDetails.person.delegate_status) {
@@ -73,42 +82,33 @@ export default async function PersonOverview({
     });
   }
 
-  interface RecordItem {
-    event: string;
-    snr: number;
-    scr: number;
-    swr: number;
-    single: string;
-    average: string;
-    anr: number;
-    acr: number;
-    awr: number;
-  }
-
   const transformPersonalRecords = (
     personalRecords: Record<
       string,
       components["schemas"]["SingleAndAverageRank"]
     >,
   ): RecordItem[] => {
-    const records = Object.entries(personalRecords).map(([event, record]) => ({
-      event,
-      single: formatAttemptResult(record.single.best, event),
-      snr: record.single.country_rank,
-      scr: record.single.continent_rank,
-      swr: record.single.world_rank,
-      average:
-        record.average?.best && record.average.best > 0
-          ? formatAttemptResult(record.average.best, event)
-          : "",
-      anr: record.average?.country_rank ?? 0,
-      acr: record.average?.continent_rank ?? 0,
-      awr: record.average?.world_rank ?? 0,
-    }));
+    const records = _.map(
+      personalRecords,
+      (record, event): RecordItem => ({
+        event,
+        single: formatAttemptResult(record.single.best, event),
+        snr: record.single.country_rank,
+        scr: record.single.continent_rank,
+        swr: record.single.world_rank,
+        average:
+          record.average?.best && record.average.best > 0
+            ? formatAttemptResult(record.average.best, event)
+            : "",
+        anr: record.average?.country_rank ?? 0,
+        acr: record.average?.continent_rank ?? 0,
+        awr: record.average?.world_rank ?? 0,
+      }),
+    );
 
-    return events.official
-      .map((ev) => records.find((r) => r.event === ev.id))
-      .filter((r): r is RecordItem => Boolean(r));
+    const byEvent = _.keyBy(records, "event");
+
+    return _.compact(events.official.map((e) => byEvent[e.id]));
   };
 
   const hasRecords =
@@ -130,7 +130,7 @@ export default async function PersonOverview({
             profilePicture={personDetails.person.avatar.url}
             roles={roles}
             wcaId={wcaId}
-            gender={t("enums.user.gender")}
+            gender={t(`enums.user.gender.${personDetails.person.gender}`)}
             regionIso2={personDetails.person.country_iso2}
             competitions={personDetails.competition_count}
             completedSolves={1659}
