@@ -1,4 +1,3 @@
-
 <h1 align="center">WorldCubeAssociation Website</h1>
 <div align="center">
   <img height="120" src="public/files/wca_icon_only.png" />
