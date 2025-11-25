@@ -27,13 +27,13 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
   def add_result
     user = require_user
     competition_id = params.require(:competition_id)
-    render_error(:unauthorized, LiveResults::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless user.can_manage_competition?(Competition.find(competition_id))
+    return render_error(:unauthorized, LiveResults::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless user.can_manage_competition?(Competition.find(competition_id))
 
     results = params.permit(attempts: %i[result attempt_number])[:attempts]
     round_id = params.require(:round_id)
     registration_id = params.require(:registration_id)
 
-    render_error(:unprocessable_content, LiveResults::ErrorCodes::LIVE_RESULT_ALREADY_EXISTS) if LiveResult.exists?(round_id: round_id, registration_id: registration_id)
+    return render_error(:unprocessable_content, LiveResults::ErrorCodes::LIVE_RESULT_ALREADY_EXISTS) if LiveResult.exists?(round_id: round_id, registration_id: registration_id)
 
     AddLiveResultJob.perform_later(results, round_id, registration_id, user)
 
@@ -42,45 +42,35 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
   def update_result
     user = require_user
-    results = params.require(:attempts)
+    attempts = params.permit(attempts: %i[result attempt_number])[:attempts]
     round = Round.find(params.require(:round_id))
-    render_error(:unauthorized, LiveResults::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless user.can_manage_competition?(round.competition)
+    return render_error(:unauthorized, LiveResults::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless user.can_manage_competition?(round.competition)
 
     registration_id = params.require(:registration_id)
 
     result = LiveResult.includes(:live_attempts).find_by(round: round, registration_id: registration_id)
 
-    render_error(:unprocessable_content, LiveResults::ErrorCodes::LIVE_RESULT_NOT_FOUND) if result.blank?
+    return render_error(:unprocessable_content, LiveResults::ErrorCodes::LIVE_RESULT_NOT_FOUND) if result.blank?
 
     previous_attempts = result.live_attempts.index_by(&:attempt_number)
 
-    new_attempts = results.map.with_index(1) do |r, i|
-      previous_attempt = previous_attempts[i]
+    new_attempts = attempts.map do |r|
+      previous_attempt = previous_attempts[r[:attempt_number]]
 
       if previous_attempt.present?
-        if previous_attempt.result == r
+        if previous_attempt.result == r[:result]
           previous_attempt
         else
-          previous_attempt.update_with_history_entry(r, user)
+          previous_attempt.update_with_history_entry(r[:result], user)
         end
       else
-        LiveAttempt.build_with_history_entry(r, i, user)
+        LiveAttempt.build_with_history_entry(r[:result], r[:attempt_number], user)
       end
     end
 
-    r = Result.new(
-      value1: results[0],
-      value2: results[1],
-      value3: results[2],
-      value4: results[3] || 0,
-      value5: results[4] || 0,
-      event_id: round.event.id,
-      round_type_id: round.round_type_id,
-      round_id: round.id,
-      format_id: round.format_id,
-    )
+    new_average, new_best = LiveResult.compute_average_and_best(new_attempts, round)
 
-    result.update(average: r.compute_correct_average, best: r.compute_correct_best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)
+    result.update(average: new_average, best: new_best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)
 
     render json: { status: "ok" }
   end

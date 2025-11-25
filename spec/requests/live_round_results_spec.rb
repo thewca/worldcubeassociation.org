@@ -6,7 +6,7 @@ RSpec.describe "WCA Live API" do
   describe "GET #round_results" do
     let!(:delegate) { create(:delegate) }
 
-    it "Returns the Live Reults correctly" do
+    it "Returns the Live Results correctly" do
       sign_in delegate
 
       competition = create(:competition, event_ids: ["333"], delegates: [delegate])
@@ -15,7 +15,7 @@ RSpec.describe "WCA Live API" do
 
       create(:live_result, round: round, registration: registration)
 
-      get live_round_results_api_path(competition.id, round.id)
+      get api_v1_competition_live_round_results_path(competition.id, round.id)
       expect(response).to be_successful
 
       json = response.parsed_body

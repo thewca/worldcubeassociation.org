@@ -371,10 +371,10 @@ Rails.application.routes.draw do
       resources :competitions, only: [] do
         if WcaLive.enabled?
           namespace :live do
-            get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
+            get '/rounds/:round_id' => 'live#round_results', as: :round_results
             post '/rounds/:round_id' => 'live#add_result', as: :add_results
-            patch '/rounds/:round_id' => 'live#update_result', as: :update_live_results
-            get '/registrations/:registration_id' => 'live#by_person', as: :get_live_by_person
+            patch '/rounds/:round_id' => 'live#update_result', as: :update_results
+            get '/registrations/:registration_id' => 'live#by_person', as: :by_person_results
           end
         end
 
