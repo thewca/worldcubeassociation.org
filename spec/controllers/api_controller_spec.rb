@@ -427,7 +427,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
   end
 
   describe 'GET #export_public' do
-    it 'returns information about latest public export', :cxz do
+    it 'returns information about latest public export' do
       export_timestamp = DateTime.current.utc
       DumpPublicResultsDatabase.cronjob_statistics.update!(successful_run_start: export_timestamp)
 
