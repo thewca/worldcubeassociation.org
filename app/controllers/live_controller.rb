@@ -52,7 +52,7 @@ class LiveController < ApplicationController
       round_type_id: round.round_type_id,
       round_id: round.id,
       format_id: round.format_id,
-      result_attempts: results.map.with_index(1) { |r, index| ResultAttempt.new({ attempt_number: index, value: r }) },
+      result_attempts: results.map.with_index(1) { |r, index| ResultAttempt.new(attempt_number: index, value: r) },
     )
 
     result.update(average: r.compute_correct_average, best: r.compute_correct_best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)
