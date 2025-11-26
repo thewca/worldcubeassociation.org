@@ -438,7 +438,7 @@ class UsersController < ApplicationController
 
     competitions = user.person.competitions
                        .over.visible.not_cancelled
-                       .where("start_date <= ?", Date.current)
+                       .where(start_date: ..Date.current)
                        .order(start_date: :desc)
 
     render json: competitions.as_json(
