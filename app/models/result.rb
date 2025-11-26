@@ -13,7 +13,29 @@ class Result < ApplicationRecord
   # we also need sure to query the correct competition as well through a composite key.
   belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
-  has_many :result_attempts, dependent: :destroy
+  # See the pre-validation hook `backlink_attempts` below for an explanation of `autosave: false`
+  has_many :result_attempts, dependent: :destroy, autosave: false
+
+  before_validation :backlink_attempts
+
+  # As of writing this comment, we are transitioning `value1..5` to a separate row-based table.
+  # The hooks for actually _writing_ the data are defined below (called `create_or_update_attempts`)
+  #   and are working well. However, we can only write once we have established that the data is valid.
+  # This means that the validations need to "think" that the result_attempts are already there, but
+  #   without actually writing them to the database. To solve this issue, we write them into memory
+  #   before validations happen, but also prevent Rails from saving them by using `autosave: false`
+  #   on the original associations. If validations pass, our efficient `upsert_all` from the backfilling hook
+  #   will take care of everything. If validations fail, the values will still be in memory
+  #   but won't be written to the DB, which is (surprisingly!) consistent with normal ActiveRecord properties.
+  def backlink_attempts
+    memory_attempts = self.result_attempts_attributes.map do |attempt_attributes|
+      attempt = self.result_attempts.find { it.attempt_number == attempt_attributes[:attempt_number] } || result_attempts.build(attempt_attributes)
+
+      attempt.tap { it.assign_attributes(**attempt_attributes) }
+    end
+
+    self.result_attempts.target = memory_attempts
+  end
 
   after_save :create_or_update_attempts
 
@@ -25,7 +47,6 @@ class Result < ApplicationRecord
     ResultAttempt.where(result_id: id, attempt_number: zero_attempts).delete_all if zero_attempts.any?
 
     ResultAttempt.upsert_all(attempts)
-    self.result_attempts.reset
   end
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
