@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback } from 'react';
 import {
   Table,
   TableBody,
@@ -18,20 +18,17 @@ import {
 } from '../../lib/utils/wcif';
 
 export default function EventsTable({ competitionInfo, wcifEvents }) {
-  const determineRoundLabel = useCallback(
-    (index, numRounds, round) => {
-      const cutoff = Boolean(round.cutoff)
-      const roundId = round.id
-      const roundTypeId = getRoundTypeId(index, numRounds, cutoff);
-      const roundTypeName = I18n.t(`rounds.${roundTypeId}.cell_name`)
+  const determineRoundLabel = useCallback((index, numRounds, round) => {
+    const cutoff = Boolean(round.cutoff);
+    const roundId = round.id;
+    const roundTypeId = getRoundTypeId(index, numRounds, cutoff);
+    const roundTypeName = I18n.t(`rounds.${roundTypeId}.cell_name`);
 
-      if (competitionInfo.h2h_rounds.includes(roundId) && roundTypeId === 'f') {
-        return `${I18n.t('formats.h')} ${roundTypeName}`;
-      } else {
-        return roundTypeName
-      }
-    }, [competitionInfo.h2h_rounds]
-  )
+    if (competitionInfo.h2h_rounds.includes(roundId) && roundTypeId === 'f') {
+      return `${I18n.t('formats.h')} ${roundTypeName}`;
+    }
+    return roundTypeName;
+  }, [competitionInfo.h2h_rounds]);
 
   return (
     <div style={{ overflowX: 'scroll' }}>
