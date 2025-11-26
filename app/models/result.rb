@@ -31,7 +31,7 @@ class Result < ApplicationRecord
     memory_attempts = self.result_attempts_attributes.map do |attempt_attributes|
       attempt = self.result_attempts.find { it.attempt_number == attempt_attributes[:attempt_number] } || result_attempts.build(attempt_attributes)
 
-      attempt.tap { it.assign_attributes(**attempt_attributes) }
+      attempt.tap { it.assign_attributes(**attempt_attributes, result: self) }
     end
 
     # Hack into Rails to only update the values in-memory.
