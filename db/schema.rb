@@ -1199,7 +1199,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_26_083044) do
     t.integer "total_number_of_rounds", null: false
     t.string "old_type", limit: 1
     t.bigint "linked_round_id"
-    t.boolean "mock_h2h", default: false, null: false
+    t.boolean "is_h2h_mock", default: false, null: false
     t.index ["competition_event_id", "number"], name: "index_rounds_on_competition_event_id_and_number", unique: true
     t.index ["linked_round_id"], name: "index_rounds_on_linked_round_id"
   end

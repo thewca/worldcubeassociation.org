@@ -18,11 +18,11 @@ import {
 } from '../../lib/utils/wcif';
 
 export default function EventsTable({ competitionInfo, wcifEvents }) {
-  function determineRoundLabel(index, numRounds, cutoff, eventId) {
+  function determineRoundLabel(index, numRounds, cutoff, roundId) {
     const roundLabel = getRoundTypeId(index, numRounds, cutoff);
 
-    if (competitionInfo.h2h_events.includes(eventId) && roundLabel === 'f') {
-      return I18n.t('rounds.h2h.cell_name');
+    if (competitionInfo.h2h_rounds.includes(roundId) && roundLabel === 'f') {
+      return `${I18n.t('formats.h')} ${I18n.t('rounds.f.cell_name')}`;
     }
     return I18n.t(`rounds.${roundLabel}.cell_name`);
   }
@@ -69,7 +69,7 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
                 </TableCell>
               )}
               <TableCell>
-                {determineRoundLabel(i + 1, event.rounds.length, Boolean(round.cutoff), event.id)}
+                {determineRoundLabel(i + 1, event.rounds.length, Boolean(round.cutoff), round.id)}
               </TableCell>
               <TableCell>
                 {round.cutoff && `${formats.byId[round.cutoff.numberOfAttempts].shortName} / `}

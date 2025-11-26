@@ -97,6 +97,7 @@ en:
     "3": "Best of 3"
     "a": "Average of 5"
     "m": "Mean of 3"
+    "h": "Head-to-Head"
     #context: short name alternative
     short:
       "1": "Bo1"
@@ -104,6 +105,7 @@ en:
       "3": "Bo3"
       "a": "Ao5"
       "m": "Mo3"
+      "h": "H2H"
   #context: Round name
   rounds:
     "0":
@@ -139,9 +141,6 @@ en:
     "h":
       name: "Qualification round"
       cell_name: "Qualification round"
-    "h2h":
-      name: "Head-to-Head Final"
-      cell_name: "Head-to-Head Final"
   #context: attempt name
   attempts:
     attempt_name: "Attempt %{number}"
