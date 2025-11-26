@@ -139,6 +139,9 @@ en:
     "h":
       name: "Qualification round"
       cell_name: "Qualification round"
+    "h2h":
+      name: "Head-to-Head Final"
+      cell_name: "Head-to-Head Final"
   #context: attempt name
   attempts:
     attempt_name: "Attempt %{number}"

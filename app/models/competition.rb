@@ -1868,7 +1868,7 @@ class Competition < ApplicationRecord
                information events_per_registration_limit guests_enabled auto_accept_preference auto_accept_disable_threshold],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series? registration_full_and_accepted?],
+                  part_of_competition_series? registration_full_and_accepted? h2h_events],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -3052,5 +3052,13 @@ class Competition < ApplicationRecord
 
     threshold_reached = fully_paid_registrations_count >= auto_close_threshold && auto_close_threshold.positive?
     threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
+  end
+
+  def h2h_events
+    competition_events
+      .joins(:rounds)
+      .merge(Round.h2h)
+      .distinct
+      .pluck(:event_id)
   end
 end

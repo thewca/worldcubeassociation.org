@@ -18,6 +18,17 @@ import {
 } from '../../lib/utils/wcif';
 
 export default function EventsTable({ competitionInfo, wcifEvents }) {
+
+  function determineRoundLabel(index, numRounds, cutoff, eventId) {
+    const roundLabel = getRoundTypeId(index, numRounds, cutoff)
+
+    if (competitionInfo.h2h_events.includes(eventId) && roundLabel === 'f') {
+      return I18n.t(`rounds.h2h.cell_name`)
+    } else {
+      return I18n.t(`rounds.${roundLabel}.cell_name`)
+    }
+  }
+
   return (
     <div style={{ overflowX: 'scroll' }}>
       <Table striped selectable compact unstackable singleLine>
@@ -59,7 +70,7 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
                   {events.byId[event.id].name}
                 </TableCell>
               )}
-              <TableCell>{I18n.t(`rounds.${getRoundTypeId(i + 1, event.rounds.length, Boolean(round.cutoff))}.cell_name`)}</TableCell>
+              <TableCell>{determineRoundLabel(i + 1, event.rounds.length, Boolean(round.cutoff), event.id)}</TableCell>
               <TableCell>
                 {round.cutoff && `${formats.byId[round.cutoff.numberOfAttempts].shortName} / `}
                 {formats.byId[round.format].shortName}
