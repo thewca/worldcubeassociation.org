@@ -196,7 +196,7 @@ RSpec.describe IRV do
         result_kind = model.model_name.singular.to_sym
         res_mbf = create(result_kind, :mbf, competition: competition1, round: round_333mbf)
         # 8 points in 60:02 (ie: reached the time limit and got +2)
-        res_mbf.update(value2: 910_360_200)
+        res_mbf.update!(value2: 910_360_200)
         warns << RV::ValidationWarning.new(IRV::MBF_RESULT_OVER_TIME_LIMIT_WARNING,
                                            :results, competition1.id,
                                            round_id: "333mbf-f",
@@ -204,7 +204,7 @@ RSpec.describe IRV do
                                            result: res_mbf.solve_times[1].clock_format)
 
         res22 = create(result_kind, competition: competition2, event_id: "222", round: round_222)
-        res22.update(value4: -2)
+        res22.update!(value4: -2)
         warns << RV::ValidationWarning.new(IRV::RESULT_AFTER_DNS_WARNING,
                                            :results, competition2.id,
                                            round_id: "222-f",

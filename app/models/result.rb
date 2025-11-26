@@ -14,7 +14,8 @@ class Result < ApplicationRecord
   belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
   # See the pre-validation hook `backlink_attempts` below for an explanation of `autosave: false`
-  has_many :result_attempts, dependent: :destroy, autosave: false
+  has_many :result_attempts, dependent: :destroy, autosave: false, index_errors: true
+  validates_associated :result_attempts
 
   before_validation :backlink_attempts
 
@@ -36,7 +37,7 @@ class Result < ApplicationRecord
 
     # Hack into Rails to only update the values in-memory.
     #   Calling `self.result_attempts = memory_attempts` would trigger a write operation!
-    self.association(:result_attempts).target = memory_attempts
+    self.result_attempts.proxy_association.target = memory_attempts
   end
 
   after_save :create_or_update_attempts
@@ -49,6 +50,11 @@ class Result < ApplicationRecord
     ResultAttempt.where(result_id: id, attempt_number: zero_attempts).delete_all if zero_attempts.any?
 
     ResultAttempt.upsert_all(attempts)
+
+    # Force reloading the now-persisted values upon next read.
+    # Note that this is necessary because in `before_validation`, we had written non-persisted phantom data
+    #   solely for the purpose of state validation and business logic.
+    self.result_attempts.reset
   end
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
