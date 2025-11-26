@@ -54,6 +54,8 @@ paths:
     $ref: 'paths/users/personByWCAId.yaml'
   /v0/persons/{wca_id}/results:
     $ref: 'paths/users/personResults.yaml'
+  /v0/persons/{wca_id}/records:
+    $ref: 'paths/users/personRecords.yaml'
   /v0/persons/{wca_id}/competitions:
     $ref: 'paths/users/personCompetitions.yaml'
 

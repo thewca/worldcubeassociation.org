@@ -378,6 +378,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v0/persons/{wca_id}/records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get records for a person */
+        get: operations["personRecords"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/persons/{wca_id}/competitions": {
         parameters: {
             query?: never;
@@ -1721,6 +1738,28 @@ export interface operations {
             query?: {
                 event_id?: string;
             };
+            header?: never;
+            path: {
+                wca_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Results"];
+                };
+            };
+        };
+    };
+    personRecords: {
+        parameters: {
+            query?: never;
             header?: never;
             path: {
                 wca_id: string;

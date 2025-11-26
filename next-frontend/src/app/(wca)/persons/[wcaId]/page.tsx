@@ -192,7 +192,7 @@ export default async function PersonOverview({
                       <CompetitionsTab wcaId={wcaId} />
                     </Tabs.Content>
                     <Tabs.Content value="records">
-                      <RecordsTab />
+                      <RecordsTab wcaId={wcaId} />
                     </Tabs.Content>
                     <Tabs.Content value="championship-podiums">
                       <ChampionshipPodiumsTab />
