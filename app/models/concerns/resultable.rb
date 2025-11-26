@@ -179,6 +179,18 @@ module Resultable
     @sorted_solves_with_index ||= solve_times.each_with_index.reject { |s, _| s.skipped? }.sort.freeze
   end
 
+  def tied_with?(other_result)
+    return false if other_result.nil?
+
+    if format.sort_by == "average"
+      # If the ranking is based on average, look at both average and best.
+      average == other_result.average && best == other_result.best
+    else
+      # else we just compare the bests
+      best == other_result.best
+    end
+  end
+
   def solve_times
     @solve_times ||= [SolveTime.new(event_id, :single, value1),
                       SolveTime.new(event_id, :single, value2),

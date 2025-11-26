@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_07_120000) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_17_142333) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -769,7 +769,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_07_120000) do
     t.bigint "registration_id", null: false
     t.bigint "round_id", null: false
     t.datetime "last_attempt_entered_at", null: false
-    t.integer "ranking"
+    t.integer "local_pos"
+    t.integer "global_pos"
     t.integer "best", null: false
     t.integer "average", null: false
     t.string "single_record_tag", limit: 255
@@ -1260,7 +1261,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_07_120000) do
     t.string "competition_id", limit: 32, null: false
     t.string "event_id", limit: 6, null: false
     t.string "round_type_id", limit: 1, null: false
-    t.integer "round_id"
+    t.integer "round_id", null: false
     t.string "group_id", limit: 3, null: false
     t.boolean "is_extra", null: false
     t.integer "scramble_num", null: false
@@ -1492,6 +1493,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_07_120000) do
     t.boolean "results_notifications_enabled", default: false
     t.string "preferred_locale", limit: 255
     t.boolean "competition_notifications_enabled"
+    t.boolean "receive_developer_mails", default: false, null: false
     t.boolean "receive_delegate_reports", default: false, null: false
     t.string "delegate_reports_region_id"
     t.string "delegate_reports_region_type"
