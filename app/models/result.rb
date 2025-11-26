@@ -15,7 +15,7 @@ class Result < ApplicationRecord
 
   has_many :result_attempts, dependent: :destroy
 
-  after_update :create_or_update_attempts
+  after_save :create_or_update_attempts
 
   def create_or_update_attempts
     attempts = self.result_attempts_attributes(result_id: self.id)
