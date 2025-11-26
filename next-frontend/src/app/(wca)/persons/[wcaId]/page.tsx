@@ -189,8 +189,7 @@ export default async function PersonOverview({
                       <ResultsTab wcaId={wcaId} />
                     </Tabs.Content>
                     <Tabs.Content value="competitions">
-                      <CompetitionsTab />
-                      <Text>{JSON.stringify(personDetails, null, 2)}</Text>
+                      <CompetitionsTab wcaId={wcaId} />
                     </Tabs.Content>
                     <Tabs.Content value="records">
                       <RecordsTab />
