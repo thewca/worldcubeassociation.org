@@ -429,6 +429,23 @@ class UsersController < ApplicationController
     )
   end
 
+  def past_competitions
+    user_id = params.require(:userId)
+
+    user = User.find(user_id)
+
+    return Competition.none unless user.person
+
+    competitions = user.person.competitions
+                       .over.visible.not_cancelled
+                       .where(start_date: ..Date.current)
+                       .order(start_date: :desc)
+
+    render json: competitions.as_json(
+      only: %w[id name city_name country_id start_date],
+    )
+  end
+
   private def redirect_if_cannot_edit_user
     @user = user_to_edit
 
