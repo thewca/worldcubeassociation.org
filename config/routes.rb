@@ -66,6 +66,7 @@ Rails.application.routes.draw do
   get '/users/registrations' => 'users#registrations', as: :helpful_queries_registrations
   get '/users/organized-competitions' => 'users#organized_competitions', as: :helpful_queries_organized_competitions
   get '/users/delegated-competitions' => 'users#delegated_competitions', as: :helpful_queries_delegated_competitions
+  get '/users/past-competitions' => 'users#past_competitions', as: :helpful_queries_past_competitions
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
