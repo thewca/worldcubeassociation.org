@@ -1,7 +1,16 @@
 import React from "react";
 import { Table, Heading } from "@chakra-ui/react";
 
-const ChampionshipPodiumsTab: React.FC = () => {
+interface ChampionshipPodiumProps {
+  championship_podiums: {
+    world?: Record<string, never>[];
+    continental?: Record<string, never>[];
+    greater_china?: Record<string, never>[];
+    national?: Record<string, never>[];
+  };
+}
+
+const ChampionshipPodiumsTab: React.FC<ChampionshipPodiumProps> = () => {
   const podiums = [
     { event: "3x3x3 Cube", place: "1st", competition: "Nationals 2022" },
     { event: "2x2x2 Cube", place: "2nd", competition: "Regionals 2023" },

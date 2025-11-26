@@ -119,6 +119,10 @@ export default async function PersonOverview({
     personDetails.medals.gold > 0 ||
     personDetails.medals.silver > 0 ||
     personDetails.medals.bronze > 0;
+  const hasChampionshipPodiums =
+    personDetails.championship_podiums?.continental?.length ||
+    personDetails.championship_podiums?.national?.length ||
+    personDetails.championship_podiums?.world?.length;
 
   return (
     <Container centerContent maxW="1800px">
@@ -177,10 +181,14 @@ export default async function PersonOverview({
                       <Tabs.Trigger value="competitions">
                         Competitions
                       </Tabs.Trigger>
-                      <Tabs.Trigger value="records">Records</Tabs.Trigger>
-                      <Tabs.Trigger value="championship-podiums">
-                        Championship Podiums
-                      </Tabs.Trigger>
+                      {hasRecords && (
+                        <Tabs.Trigger value="records">Records</Tabs.Trigger>
+                      )}
+                      {hasChampionshipPodiums && (
+                        <Tabs.Trigger value="championship-podiums">
+                          Championship Podiums
+                        </Tabs.Trigger>
+                      )}
                       <Tabs.Trigger value="map">Map</Tabs.Trigger>
                     </Tabs.List>
                   </Card.Header>
@@ -191,11 +199,19 @@ export default async function PersonOverview({
                     <Tabs.Content value="competitions">
                       <CompetitionsTab wcaId={wcaId} />
                     </Tabs.Content>
-                    <Tabs.Content value="records">
-                      <RecordsTab wcaId={wcaId} />
-                    </Tabs.Content>
+                    {hasRecords && (
+                      <Tabs.Content value="records">
+                        <RecordsTab wcaId={wcaId} />
+                      </Tabs.Content>
+                    )}
                     <Tabs.Content value="championship-podiums">
-                      <ChampionshipPodiumsTab />
+                      {hasChampionshipPodiums && (
+                        <ChampionshipPodiumsTab
+                          championship_podiums={
+                            personDetails.championship_podiums
+                          }
+                        />
+                      )}
                     </Tabs.Content>
                     <Tabs.Content value="map">
                       <MapTab />
