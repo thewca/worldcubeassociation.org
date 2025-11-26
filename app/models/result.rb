@@ -34,7 +34,9 @@ class Result < ApplicationRecord
       attempt.tap { it.assign_attributes(**attempt_attributes) }
     end
 
-    self.result_attempts.target = memory_attempts
+    # Hack into Rails to only update the values in-memory.
+    #   Calling `self.result_attempts = memory_attempts` would trigger a write operation!
+    self.association(:result_attempts).target = memory_attempts
   end
 
   after_save :create_or_update_attempts
