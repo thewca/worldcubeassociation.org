@@ -71,11 +71,10 @@ RSpec.describe IRV do
         res_over_with_results = create(result_kind, :over_cutoff,
                                        competition: competition1,
                                        cutoff: cutoff, event_id: "444", round: round44)
-        res_over_with_results.update(value3: res_over_with_results.value2,
-                                     value4: res_over_with_results.value2,
-                                     value5: res_over_with_results.value2,
-                                     average: res_over_with_results.value2)
-        res_over_with_results.create_or_update_attempts if result_kind == :result
+        res_over_with_results.update!(value3: res_over_with_results.value2,
+                                      value4: res_over_with_results.value2,
+                                      value5: res_over_with_results.value2,
+                                      average: res_over_with_results.value2)
 
         errs << RV::ValidationError.new(IRV::DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
                                         :results, competition1.id,
@@ -88,7 +87,7 @@ RSpec.describe IRV do
                                              event_id: "444",
                                              best: 4000, average: 4200,
                                              round_type_id: "c", round: round44)
-        res_over_limit.update(value5: 12_001)
+        res_over_limit.update!(value5: 12_001)
 
         errs << RV::ValidationError.new(IRV::RESULT_OVER_TIME_LIMIT_ERROR,
                                         :results, competition1.id,
@@ -100,7 +99,7 @@ RSpec.describe IRV do
         res_fm = create(result_kind, :over_cutoff,
                         competition: competition2, cutoff: cutoff_fm,
                         format_id: "m", event_id: "333fm", round: round_fm)
-        res_fm.update(value1: 30)
+        res_fm.update!(value1: 30)
 
         errs << RV::ValidationError.new(IRV::MET_CUTOFF_MISSING_RESULTS_ERROR,
                                         :results, competition2.id,
