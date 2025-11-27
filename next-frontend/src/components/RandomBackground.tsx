@@ -47,7 +47,7 @@ const RandomBackground = ({
                   width="2.5vw"
                   height="2.5vw"
                   colorPalette={randomColor}
-                  bg="colorPalette.1A"
+                  bg="colorPalette.solid"
                   key={keyVal}
                 />
               );
