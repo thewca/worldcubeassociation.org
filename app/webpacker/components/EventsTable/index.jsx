@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Table,
   TableBody,
@@ -18,6 +18,18 @@ import {
 } from '../../lib/utils/wcif';
 
 export default function EventsTable({ competitionInfo, wcifEvents }) {
+  const determineRoundLabel = useCallback((index, numRounds, round) => {
+    const cutoff = Boolean(round.cutoff);
+    const roundId = round.id;
+    const roundTypeId = getRoundTypeId(index, numRounds, cutoff);
+    const roundTypeName = I18n.t(`rounds.${roundTypeId}.cell_name`);
+
+    if (competitionInfo.h2h_rounds.includes(roundId) && roundTypeId === 'f') {
+      return `${I18n.t('formats.h')} ${roundTypeName}`;
+    }
+    return roundTypeName;
+  }, [competitionInfo.h2h_rounds]);
+
   return (
     <div style={{ overflowX: 'scroll' }}>
       <Table striped selectable compact unstackable singleLine>
@@ -59,7 +71,9 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
                   {events.byId[event.id].name}
                 </TableCell>
               )}
-              <TableCell>{I18n.t(`rounds.${getRoundTypeId(i + 1, event.rounds.length, Boolean(round.cutoff))}.cell_name`)}</TableCell>
+              <TableCell>
+                {determineRoundLabel(i + 1, event.rounds.length, round)}
+              </TableCell>
               <TableCell>
                 {round.cutoff && `${formats.byId[round.cutoff.numberOfAttempts].shortName} / `}
                 {formats.byId[round.format].shortName}
