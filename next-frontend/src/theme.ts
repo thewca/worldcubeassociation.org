@@ -1,30 +1,6 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
 
-const compileColorScheme = (baseColor: string, contrastColor: "white" | "black" = "white") => ({
-  contrast: {
-    value: { _light: `{colors.supplementary.text.${contrastColor}}`, _dark: `{colors.supplementary.text.${contrastColor}}` }
-  },
-  fg: {
-    value: { _light: `{colors.${baseColor}.800}`, _dark: `{colors.${baseColor}.300}` }
-  },
-  subtle: {
-    value: { _light: `{colors.${baseColor}.200}`, _dark: `{colors.${baseColor}.900}` }
-  },
-  muted: {
-    value: { _light: `{colors.${baseColor}.100}`, _dark: `{colors.${baseColor}.800}` }
-  },
-  emphasized: {
-    value: { _light: `{colors.${baseColor}.2C}`, _dark: `{colors.${baseColor}.300}` } // Tamed Neon for Dark Mode
-  },
-  solid: {
-    value: { _light: `{colors.${baseColor}.1A}`, _dark: `{colors.${baseColor}.600}` }
-  },
-  focusRing: {
-    value: { _light: `{colors.${baseColor}.600}`, _dark: `{colors.${baseColor}.500}` }
-  },
-  border: {
-    value: { _light: `{colors.${baseColor}.500}`, _dark: `{colors.${baseColor}.400}` }
-  },
+const compileColorScheme = (baseColor: string) => ({
   cubeShades: {
     left: { value: `{colors.${baseColor}.lighter}` },
     top: { value: `{colors.${baseColor}.1A}` },
@@ -126,22 +102,21 @@ const customConfig = defineConfig({
   theme: {
     tokens: {
       colors: {
-        white: {
-          DEFAULT: { value: "#FFFFFF", description: "Standard Chakra White" },
+        wcaWhite: {
           ...defineColorAliases(slateColors.white),
 
           // Smooth Luminance Scale (Anchored to Primary 1A Cool Gray)
-          50: { value: "#F9FAFB" },
-          100: { value: "#F3F4F6" },
+          50: { value: "#FAFAFA" },
+          100: { value: "#F5F5F5" },
           200: { value: "#EEEEEE" }, // Anchor: 1A
           300: { value: "#E0E0E0" },
           400: { value: "#BDBDBD" },
           500: { value: "#9E9E9E" },
           600: { value: "#757575" },
           700: { value: "#616161" },
-          800: { value: "#3B3B3B" }, // Anchor: 2A
+          800: { value: "#424242" },
           900: { value: "#212121" },
-          950: { value: "#0F0F0F" }
+          950: { value: "#1a1a1a" }
         },
         green: {
           ...defineColorAliases(slateColors.green),
@@ -155,9 +130,9 @@ const customConfig = defineConfig({
           500: { value: "#22C55E" },
           600: { value: "#029347" }, // Anchor: 1A
           700: { value: "#15803D" },
-          800: { value: "#1B4D3E" }, // Anchor: 2A
+          800: { value: "#166534" },
           900: { value: "#14532D" },
-          950: { value: "#052E16" }
+          950: { value: "#052e16" }
         },
         red: {
           ...defineColorAliases(slateColors.red),
@@ -170,10 +145,10 @@ const customConfig = defineConfig({
           400: { value: "#F87171" },
           500: { value: "#EF4444" },
           600: { value: "#C62535" }, // Anchor: 1A
-          700: { value: "#B91C1C" },
-          800: { value: "#7A1220" }, // Anchor: 2A
-          900: { value: "#7F1D1D" },
-          950: { value: "#450A0A" }
+          700: { value: "#9B1C1C" },
+          800: { value: "#771D1D" },
+          900: { value: "#450A0A" },
+          950: { value: "#2b0404" }
         },
         yellow: {
           ...defineColorAliases(slateColors.yellow),
@@ -187,9 +162,9 @@ const customConfig = defineConfig({
           500: { value: "#EAB308" },
           600: { value: "#CA8A04" },
           700: { value: "#A16207" },
-          800: { value: "#664D00" }, // Anchor: 2A
-          900: { value: "#422006" },
-          950: { value: "#3F2C05" }
+          800: { value: "#854D0E" },
+          900: { value: "#713F12" },
+          950: { value: "#422006" }
         },
         blue: {
           ...defineColorAliases(slateColors.blue),
@@ -203,7 +178,7 @@ const customConfig = defineConfig({
           500: { value: "#3B82F6" },
           600: { value: "#0051BA" }, // Anchor: 1A
           700: { value: "#1D4ED8" },
-          800: { value: "#003366" }, // Anchor: 2A
+          800: { value: "#1E40AF" },
           900: { value: "#1E3A8A" },
           950: { value: "#172554" }
         },
@@ -219,7 +194,7 @@ const customConfig = defineConfig({
           500: { value: "#FF5800" }, // Anchor: 1A
           600: { value: "#EA580C" },
           700: { value: "#C2410C" },
-          800: { value: "#7A2B00" }, // Anchor: 2A
+          800: { value: "#9A3412" },
           900: { value: "#7C2D12" },
           950: { value: "#431407" }
         },
@@ -273,7 +248,7 @@ const customConfig = defineConfig({
           world: { value: "{colors.blue.1A}" },
         },
         green: compileColorScheme("green"),
-        white: compileColorScheme("white"),
+        white: compileColorScheme("wcaWhite"),
         red: compileColorScheme("red"),
         yellow: compileColorScheme("yellow"),
         blue: compileColorScheme("blue"),
