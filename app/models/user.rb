@@ -1448,7 +1448,7 @@ class User < ApplicationRecord
 
   def rds_credentials
     if software_team_admin? || senior_results_team?
-      [EnvConfig.DATABASE_WRT_SENIOR_USER, {
+      return [EnvConfig.DATABASE_WRT_SENIOR_USER, {
         main: EnvConfig.DATABASE_HOST,
         replica: EnvConfig.READ_REPLICA_HOST,
         dev_dump: EnvConfig.DEV_DUMP_HOST,
