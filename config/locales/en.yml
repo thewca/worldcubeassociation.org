@@ -1600,7 +1600,7 @@ en:
       public_and_locked_html: "This competition is publicly visible and locked for editing. If you need to make a change, please reply to the email thread where the competition was confirmed."
       confirmed_but_not_visible_html: "You've confirmed this competition, but it is not yet visible to the public. Wait for the %{contact} to make it visible."
       is_visible: "This competition is publicly visible, any changes you make will show up to the public!"
-      pending_confirmation_html: "Fill in all the fields and make your Delegate click 'Confirm' when you're ready for the %{contact} to approve this competition."
+      pending_confirmation_html: "Fill in all the fields and ask your Delegate to click 'Confirm' when you're ready for the %{contact} to approve this competition."
       submit_create_value: "Create Competition"
       submit_update_value: "Update Competition"
       submit_confirm_value: "Confirm"
