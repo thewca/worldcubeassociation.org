@@ -226,17 +226,17 @@ const customConfig = defineConfig({
         // Auxiliary Gray Palette (Compressed between White #FCFCFC and Black #1E1E1E)
         // Goal: gray.50 is DARKER than bg.white, gray.950 is LIGHTER than bg.black
         gray: {
-          50: { value: "#F5F5F5", description: "Slightly darker than WCA White" },
+          50: { value: "#FCFCFC", description: "Brand White (Background)" },
           100: { value: "#EDEDED", description: "Supplementary Bg Light" },
           200: { value: "#DCDCDC", description: "Supplementary Bg Medium" },
           300: { value: "#B8B8B8", description: "Supplementary Bg Dark" },
-          400: { value: "#969696" },
-          500: { value: "#6B6B6B", description: "Supplementary Text Light / Bg Darker" },
-          600: { value: "#535353" },
-          700: { value: "#3B3B3B", description: "Supplementary Text Dark / Bg Darkest" },
-          800: { value: "#343434" },
-          900: { value: "#2C2C2C" },
-          950: { value: "#242424", description: "Slightly lighter than WCA Black" }
+          400: { value: "#9E9E9E" }, // Interpolated
+          500: { value: "#858585" }, // Interpolated
+          600: { value: "#6B6B6B", description: "Supplementary Text Light / Bg Darker" },
+          700: { value: "#535353" }, // Interpolated
+          800: { value: "#3B3B3B", description: "Supplementary Text Dark / Bg Darkest" },
+          900: { value: "#262626" }, // Interpolated (Close to black)
+          950: { value: "#1E1E1E", description: "Brand Black (Background)" }
         },
         supplementary: {
           text: {
@@ -271,57 +271,6 @@ const customConfig = defineConfig({
           national: { value: "{colors.green.1A}" },
           continental: { value: "{colors.red.1A}" },
           world: { value: "{colors.blue.1A}" },
-        },
-        bg: {
-          DEFAULT: {
-            value: { _light: "{colors.supplementary.bg.white}", _dark: "{colors.supplementary.bg.black}" }
-          },
-          subtle: {
-            value: { _light: "{colors.gray.50}", _dark: "{colors.gray.950}" }
-          },
-          muted: {
-            value: { _light: "{colors.gray.100}", _dark: "{colors.gray.900}" }
-          },
-          emphasized: {
-            value: { _light: "{colors.gray.200}", _dark: "{colors.gray.800}" }
-          },
-          inverted: {
-            value: { _light: "{colors.supplementary.bg.darkest}", _dark: "{colors.supplementary.bg.white}" }
-          },
-          panel: {
-            value: { _light: "{colors.white}", _dark: "{colors.gray.950}" }
-          },
-        },
-        border: {
-          DEFAULT: {
-            value: { _light: "{colors.gray.200}", _dark: "{colors.gray.800}" }
-          },
-          muted: {
-            value: { _light: "{colors.gray.200}", _dark: "{colors.gray.900}" }
-          },
-          subtle: {
-            value: { _light: "{colors.gray.100}", _dark: "{colors.gray.950}" }
-          },
-          emphasized: {
-            value: { _light: "{colors.gray.300}", _dark: "{colors.gray.700}" }
-          },
-          inverted: {
-            value: { _light: "{colors.gray.800}", _dark: "{colors.gray.200}" }
-          },
-        },
-        fg: {
-          DEFAULT: {
-            value: { _light: "{colors.supplementary.text.black}", _dark: "{colors.supplementary.text.white}" }
-          },
-          muted: {
-            value: { _light: "{colors.gray.600}", _dark: "{colors.gray.300}" }
-          },
-          subtle: {
-            value: { _light: "{colors.gray.500}", _dark: "{colors.gray.400}" }
-          },
-          inverted: {
-            value: { _light: "{colors.supplementary.text.white}", _dark: "{colors.supplementary.text.black}" }
-          },
         },
         green: compileColorScheme("green"),
         white: compileColorScheme("white"),
