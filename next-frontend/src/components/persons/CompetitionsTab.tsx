@@ -7,6 +7,7 @@ import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import { formatDateRange } from "@/lib/dates/format";
 import { route } from "nextjs-routes";
+import countries from "@/lib/wca/data/countries";
 
 interface CompetitionsTabProps {
   wcaId: string;
@@ -36,6 +37,7 @@ const CompetitionsTab: React.FC<CompetitionsTabProps> = ({ wcaId }) => {
     <Table.Root>
       <Table.Header>
         <Table.Row>
+          <Table.ColumnHeader>#</Table.ColumnHeader>
           <Table.ColumnHeader>
             {t("persons.show.competition")}
           </Table.ColumnHeader>
@@ -48,8 +50,9 @@ const CompetitionsTab: React.FC<CompetitionsTabProps> = ({ wcaId }) => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {competitionQuery.map((c) => (
+        {competitionQuery.map((c, index) => (
           <Table.Row key={c.id}>
+            <Table.Cell>{index + 1}</Table.Cell>
             <Table.Cell>
               <Link asChild>
                 <NextLink
@@ -62,7 +65,10 @@ const CompetitionsTab: React.FC<CompetitionsTabProps> = ({ wcaId }) => {
                 </NextLink>
               </Link>
             </Table.Cell>
-            <Table.Cell>{c.city}</Table.Cell>
+            <Table.Cell>
+              {c.city}
+              {`, ${countries.byIso2[c.country_iso2].name}`}
+            </Table.Cell>
             <Table.Cell>
               <Text>{formatDateRange(c.start_date, c.end_date)}</Text>
             </Table.Cell>
