@@ -1,10 +1,18 @@
+import {ColorTranslator} from "colortranslator";
+
 interface RgbColor {
   r: number;
   g: number;
   b: number;
 }
 
-const toRgbColor = (hexCode: string): RgbColor => {
+interface HslColor {
+  h: number;
+  s: number;
+  l: number;
+}
+
+export const parseRgbColor = (hexCode: string): RgbColor => {
   const cleanHex = hexCode.replace('#', '');
 
   return {
@@ -14,23 +22,56 @@ const toRgbColor = (hexCode: string): RgbColor => {
   };
 }
 
-const toHexadecimal = (rgb: RgbColor) => {
+export const toHexadecimal = (rgb: RgbColor) => {
   const toColorHex = (n: number) => n.toString(16).padStart(2, '0');
   return `#${toColorHex(rgb.r)}${toColorHex(rgb.g)}${toColorHex(rgb.b)}`.toUpperCase();
 };
 
 /**
  * Blends two hex colors together by a percentage.
- * weight = 0 returns color1, weight = 1 returns color2, 0.5 is midpoint.
+ * weight = 0 returns colorA, weight = 1 returns colorB, 0.5 is midpoint.
  */
-export const blendHex = (color1: string, color2: string, weight: number = 0.5): string => {
-  const rgb1 = toRgbColor(color1);
-  const rgb2 = toRgbColor(color2);
-
+export const blendHex = (colorA: RgbColor, colorB: RgbColor, weight: number = 0.5): string => {
   // Weighted Average
-  const r = Math.round(rgb1.r * (1 - weight) + rgb2.r * weight);
-  const g = Math.round(rgb1.g * (1 - weight) + rgb2.g * weight);
-  const b = Math.round(rgb1.b * (1 - weight) + rgb2.b * weight);
+  const r = Math.round(colorA.r * (1 - weight) + colorB.r * weight);
+  const g = Math.round(colorA.g * (1 - weight) + colorB.g * weight);
+  const b = Math.round(colorA.b * (1 - weight) + colorB.b * weight);
 
   return toHexadecimal({ r, g, b });
 };
+
+export const distanceVec = (colorA: RgbColor, colorB: RgbColor): RgbColor => ({
+  r: colorB.r - colorA.r,
+  g: colorB.g - colorA.g,
+  b: colorB.b - colorA.b,
+});
+
+export const norm = (color: RgbColor) =>
+  Math.sqrt(
+    Math.pow(color.r, 2) +
+    Math.pow(color.g, 2) +
+    Math.pow(color.b, 2)
+  );
+
+export const distance = (colorA: RgbColor, colorB: RgbColor) => norm(distanceVec(colorA, colorB))
+
+export const rgbToHsl = (rgb: RgbColor): HslColor => {
+  const converted = new ColorTranslator({
+    R: rgb.r,
+    G: rgb.g,
+    B: rgb.b,
+  }, { anglesUnit: "deg" }).HSLObject;
+
+  return { h: converted.H, s: converted.S, l: converted.L };
+}
+
+export const hslToRgb = (hsl: HslColor): RgbColor => {
+  const converted = new ColorTranslator({
+    H: hsl.h,
+    S: hsl.s,
+    L: hsl.l,
+  }, { decimals: 0, anglesUnit: "deg" }).RGBObject;
+
+  return { r: converted.R, g: converted.G, b: converted.B };
+}
+
