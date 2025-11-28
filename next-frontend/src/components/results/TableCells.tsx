@@ -10,7 +10,11 @@ export const recordTagBadge = (tag?: string | null) => {
         </Badge>
       );
     }
-    case "CR": {
+    case "ER":
+    case "NAR":
+    case "SAR":
+    case "ASR":
+    case "OCR": {
       return (
         <Badge variant="solid" colorPalette="yellow">
           CR

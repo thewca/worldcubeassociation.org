@@ -37,7 +37,15 @@ class Api::V0::PersonsController < Api::V0::ApiController
 
   def competitions
     person = Person.current.find_by!(wca_id: params[:wca_id])
-    render json: person.competitions
+    render json: person.competitions.as_json(include: [], methods: %w[url website short_name short_display_name city
+                                                                      venue_address venue_details latitude_degrees longitude_degrees
+                                                                      country_iso2 time_until_registration])
+  end
+
+  def records
+    person = Person.current.find_by!(wca_id: params[:wca_id])
+    render json: person.results
+                       .where("regional_single_record IS NOT NULL OR regional_average_record IS NOT NULL").as_json
   end
 
   def personal_records
