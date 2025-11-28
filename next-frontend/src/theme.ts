@@ -1,5 +1,10 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
-import { oklchToRgb, parseRgbColor, rgbToOklch, toHexadecimal } from "@/lib/math/colors";
+import {
+  adjustScale,
+  findNearestSlotKey,
+  parseRgbColor,
+  rgbToOklch,
+} from "@/lib/math/colors";
 import _ from "lodash";
 
 const compileColorScheme = (baseColor: string) => ({
@@ -43,7 +48,7 @@ interface WcaPaletteInput {
   cubeDark: string;        // Right Face
 }
 
-interface ChakraLuminanceScheme {
+interface ChakraColorScale {
   "50": { value: string };
   "100": { value: string };
   "200": { value: string };
@@ -114,50 +119,44 @@ const slateColors = {
   } satisfies WcaPaletteInput,
 } as const;
 
-const SIGMA = 3.0;
-const BASE_INFLUENCE = 0.2;
-
 const deriveLuminanceScale = (
   chakraRefScheme: string,
   colorScheme: WcaPaletteInput,
-  referencePoint: Exclude<keyof WcaPaletteInput, "pantoneDescription"> = "primary"
-): ChakraLuminanceScheme => {
+): ChakraColorScale => {
   // Chakra is not very friendly about exporting its pre-defined schemes and tokens…
-  const modelScheme = defaultConfig.theme?.tokens?.colors?.[chakraRefScheme]! as unknown as ChakraLuminanceScheme;
+  const modelScheme = defaultConfig.theme?.tokens?.colors?.[chakraRefScheme]! as unknown as ChakraColorScale;
+  const baseScale = _.mapValues(modelScheme, (chakraToken) => chakraToken.value);
 
-  const parsedScheme = _.mapValues(modelScheme, (chakraColor) => rgbToOklch(parseRgbColor(chakraColor.value)));
-  const stepKeys = Object.keys(parsedScheme).sort((a, b) => parseInt(a) - parseInt(b)).filter((k): k is keyof ChakraLuminanceScheme => k in parsedScheme);
+  const createAnchorMap = (colors: ReadonlyArray<string>): ReadonlyMap<string, string> => {
+    const entries = colors.map(color => {
+      const oklch = rgbToOklch(parseRgbColor(color));
+      const key = findNearestSlotKey(baseScale, oklch);
+      return [key, color] as const;
+    });
+    return new Map(entries);
+  };
 
-  const brandColor = parseRgbColor(colorScheme[referencePoint]);
-  const brandOklch = rgbToOklch(brandColor);
+  const secondaryAnchors = createAnchorMap([
+    colorScheme.secondaryDark,
+    colorScheme.secondaryMedium,
+    colorScheme.secondaryLight,
+  ]);
 
-  const anchorKey = _.minBy(stepKeys, (stepKey) => Math.abs(brandOklch.l - parsedScheme[stepKey].l))!;
+  const ambientScale = adjustScale(
+    baseScale,
+    secondaryAnchors,
+    { strength: 0.5, sigma: 1.8 }
+  );
 
-  const anchorOklch = parsedScheme[anchorKey];
-  const anchorIndex = stepKeys.indexOf(anchorKey);
+  const primaryAnchors = createAnchorMap([colorScheme.primary]);
 
-  const rawDeltaH = (brandOklch.h || 0) - (anchorOklch.h || 0);
-  const deltaH = ((rawDeltaH + 540) % 360) - 180;
+  const heroScale = adjustScale(
+    ambientScale,
+    primaryAnchors,
+    { sigma: 2.2 }
+  );
 
-  const deltaC = brandOklch.c - anchorOklch.c;
-  const deltaL = brandOklch.l - anchorOklch.l;
-
-  return _.mapValues(parsedScheme, (presetOklch, key) => {
-    const currentIndex = stepKeys.indexOf(key as keyof ChakraLuminanceScheme);
-
-    const dist = Math.abs(currentIndex - anchorIndex);
-    const gaussian = Math.exp(- (dist * dist) / (2 * SIGMA * SIGMA));
-    const weight = BASE_INFLUENCE + ((1 - BASE_INFLUENCE) * gaussian);
-
-    const newColor = {
-      mode: 'oklch',
-      h: (presetOklch.h || 0) + (deltaH * weight),
-      c: Math.max(0, presetOklch.c + (deltaC * weight)),
-      l: Math.max(0, Math.min(1, presetOklch.l + (deltaL * weight)))
-    } as const;
-
-    return ({ value: toHexadecimal(oklchToRgb(newColor)) });
-  });
+  return _.mapValues(heroScale, (rgbHex) => ({ value: rgbHex }))
 }
 
 const customConfig = defineConfig({
@@ -538,11 +537,10 @@ const customConfig = defineConfig({
             true: {
               root: {
                 colorPalette: "white",
-                bg: "colorPalette.solid",
-                color: "colorPalette.text",
+                layerStyle: "fill.solid"
               },
               description: {
-                color: "colorPalette.text",
+                layerStyle: "fill.solid",
               },
             },
           },
