@@ -10,24 +10,8 @@ import CompetitionsTab from "@/components/persons/CompetitionsTab";
 import RecordsTab from "@/components/persons/RecordsTab";
 import MapTab from "@/components/persons/MapTab";
 import ChampionshipPodiumsTab from "@/components/persons/ChampionshipPodiums";
-import type { components } from "@/types/openapi";
 import { StaffColor } from "@/components/RoleBadge";
-import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import events from "@/lib/wca/data/events";
 import { getT } from "@/lib/i18n/get18n";
-import _ from "lodash";
-
-interface RecordItem {
-  event: string;
-  snr: number;
-  scr: number;
-  swr: number;
-  single: string;
-  average: string;
-  anr: number;
-  acr: number;
-  awr: number;
-}
 
 export default async function PersonOverview({
   params,
@@ -82,35 +66,6 @@ export default async function PersonOverview({
     });
   }
 
-  const transformPersonalRecords = (
-    personalRecords: Record<
-      string,
-      components["schemas"]["SingleAndAverageRank"]
-    >,
-  ): RecordItem[] => {
-    const records = _.map(
-      personalRecords,
-      (record, event): RecordItem => ({
-        event,
-        single: formatAttemptResult(record.single.best, event),
-        snr: record.single.country_rank,
-        scr: record.single.continent_rank,
-        swr: record.single.world_rank,
-        average:
-          record.average?.best && record.average.best > 0
-            ? formatAttemptResult(record.average.best, event)
-            : "",
-        anr: record.average?.country_rank ?? 0,
-        acr: record.average?.continent_rank ?? 0,
-        awr: record.average?.world_rank ?? 0,
-      }),
-    );
-
-    const byEvent = _.keyBy(records, "event");
-
-    return _.compact(events.official.map((e) => byEvent[e.id]));
-  };
-
   const hasRecords =
     personDetails.records.national > 0 ||
     personDetails.records.continental > 0 ||
@@ -142,9 +97,7 @@ export default async function PersonOverview({
         </GridItem>
         {/* Records and Medals */}
         <GridItem colSpan={17} pt="20px">
-          <PersonalRecordsTable
-            records={transformPersonalRecords(personDetails.personal_records)}
-          />
+          <PersonalRecordsTable records={personDetails.personal_records} />
           <SimpleGrid gap={8} columns={6} padding={0} pt={8}>
             {hasMedals && (
               <GridItem colSpan={hasRecords ? 3 : 6}>
