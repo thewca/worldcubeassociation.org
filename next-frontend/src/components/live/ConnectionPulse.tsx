@@ -20,10 +20,11 @@ export default function ConnectionPulse({
   return (
     <Status.Root colorPalette={connectionColor}>
       <Status.Indicator
-        animationName="ping"
-        animationDuration="1s"
-        animationTimingFunction="cubic-bezier(0, 0, 0.2, 1)"
-        animationIterationCount="infinite"
+        animation={
+          connectionState === "connected"
+            ? "pulse 2s ease-in-out infinite alternate"
+            : ""
+        }
       />
       {t(`competitions.live.connection.${connectionState}`)}
     </Status.Root>
