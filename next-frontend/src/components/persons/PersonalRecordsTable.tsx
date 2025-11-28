@@ -72,11 +72,11 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {_.map(records, (record, event) => {
+            {events.official.map((eventObject) => {
+              const event = eventObject.id;
+              const record = records[event];
+              if (!record) return null;
               const IconComponent = eventIconMap[event];
-              if (event == "magic" || event == "mmagic" || event == "mbo") {
-                return null;
-              }
               return (
                 <Table.Row key={event} bg="bg">
                   <Table.Cell pl="3">
@@ -84,7 +84,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                       <Icon width="1.6em" height="1.6em" fontSize="md" pr="5px">
                         <IconComponent />
                       </Icon>
-                      <Text fontWeight="medium">{events.byId[event].name}</Text>
+                      <Text fontWeight="medium">{eventObject.name}</Text>
                     </Flex>
                   </Table.Cell>
                   <Table.Cell
