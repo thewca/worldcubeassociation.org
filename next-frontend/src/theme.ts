@@ -190,18 +190,19 @@ const customConfig = defineConfig({
         // Auxiliary Gray Palette (Compressed between White #FCFCFC and Black #1E1E1E)
         // Goal: gray.50 is DARKER than bg.white, gray.950 is LIGHTER than bg.black
         gray: {
-          50: { value: "#FCFCFC", description: "Brand White (Background)" },
+          50: { value: "#FCFCFC", description: "Supplementary Bg White" },
           100: { value: "#EDEDED", description: "Supplementary Bg Light" },
           200: { value: "#DCDCDC", description: "Supplementary Bg Medium" },
           300: { value: "#B8B8B8", description: "Supplementary Bg Dark" },
-          400: { value: "#9E9E9E" }, // Interpolated
-          500: { value: "#858585" }, // Interpolated
-          600: { value: "#6B6B6B", description: "Supplementary Text Light / Bg Darker" },
-          700: { value: "#535353" }, // Interpolated
+          400: { value: "#929292" }, // Interpolated (L ~64%)
+          500: { value: "#6B6B6B", description: "Supplementary Text Light / Bg Darker" },
+          600: { value: "#5B5B5B" }, // Interpolated (L ~45%)
+          700: { value: "#4B4B4B" }, // Interpolated (L ~39%)
           800: { value: "#3B3B3B", description: "Supplementary Text Dark / Bg Darkest" },
-          900: { value: "#262626" }, // Interpolated (Close to black)
-          950: { value: "#1E1E1E", description: "Brand Black (Background)" }
+          900: { value: "#2D2D2D" }, // Interpolated (L ~26%)
+          950: { value: "#1E1E1E", description: "Supplementary Bg Black" },
         },
+        black: { value: "#0A0A0A" }, // Chakra's default has a slight chromatic "nudge", which doesn't fit our branding
         supplementary: {
           text: {
             white: { value: "#FCFCFC" },
@@ -738,23 +739,17 @@ const removeUnwantedPalettes = (sourceColors: Record<string, any> = {}) => {
     purple,
     pink,
     teal,
-    // Add others here if you want to fully replace defaults (e.g., green, red)
-    // green,
-    // red,
     ...keptColors
   } = sourceColors;
 
   return keptColors;
 };
 
-// 2. Sanitize the Raw Tokens (The 50-950 scales)
 const sanitizedTokens = {
   ...defaultConfig.theme?.tokens,
   colors: removeUnwantedPalettes(defaultConfig.theme?.tokens?.colors),
 };
 
-// 3. Sanitize the Semantic Tokens (The functional mappings)
-//    Chakra defaults often have entries like `cyan: { solid: ... }` here.
 const sanitizedSemanticTokens = {
   ...defaultConfig.theme?.semanticTokens,
   colors: removeUnwantedPalettes(defaultConfig.theme?.semanticTokens?.colors),
