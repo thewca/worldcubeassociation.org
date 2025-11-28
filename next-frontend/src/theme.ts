@@ -117,17 +117,18 @@ const slateColors = {
 const SIGMA = 3.0;
 const BASE_INFLUENCE = 0.2;
 
-const deriveLuminanceScale = (colorScheme: keyof typeof slateColors, { chakraScheme = colorScheme, referencePoint = "primary" }: {
-  chakraScheme?: string;
-  referencePoint?: Exclude<keyof WcaPaletteInput, "pantoneDescription">;
-} = { chakraScheme: colorScheme, referencePoint: "primary" }): ChakraLuminanceScheme => {
+const deriveLuminanceScale = (
+  chakraRefScheme: string,
+  colorScheme: WcaPaletteInput,
+  referencePoint: Exclude<keyof WcaPaletteInput, "pantoneDescription"> = "primary"
+): ChakraLuminanceScheme => {
   // Chakra is not very friendly about exporting its pre-defined schemes and tokens…
-  const modelScheme = defaultConfig.theme?.tokens?.colors?.[chakraScheme]! as unknown as ChakraLuminanceScheme;
+  const modelScheme = defaultConfig.theme?.tokens?.colors?.[chakraRefScheme]! as unknown as ChakraLuminanceScheme;
 
   const parsedScheme = _.mapValues(modelScheme, (chakraColor) => rgbToOklch(parseRgbColor(chakraColor.value)));
   const stepKeys = Object.keys(parsedScheme).sort((a, b) => parseInt(a) - parseInt(b)).filter((k): k is keyof ChakraLuminanceScheme => k in parsedScheme);
 
-  const brandColor = parseRgbColor(slateColors[colorScheme][referencePoint]);
+  const brandColor = parseRgbColor(colorScheme[referencePoint]);
   const brandOklch = rgbToOklch(brandColor);
 
   const anchorKey = _.minBy(stepKeys, (stepKey) => Math.abs(brandOklch.l - parsedScheme[stepKey].l))!;
@@ -165,44 +166,44 @@ const customConfig = defineConfig({
       colors: {
         wcaWhite: {
           ...defineColorAliases(slateColors.white),
-          ...deriveLuminanceScale("white", { chakraScheme: "gray" })
+          ...deriveLuminanceScale("gray", slateColors.white)
         },
         green: {
           ...defineColorAliases(slateColors.green),
-          ...deriveLuminanceScale("green"),
+          ...deriveLuminanceScale("green", slateColors.green),
         },
         red: {
           ...defineColorAliases(slateColors.red),
-          ...deriveLuminanceScale("red"),
+          ...deriveLuminanceScale("red", slateColors.red),
         },
         yellow: {
           ...defineColorAliases(slateColors.yellow),
-          ...deriveLuminanceScale("yellow"),
+          ...deriveLuminanceScale("yellow", slateColors.yellow),
         },
         blue: {
           ...defineColorAliases(slateColors.blue),
-          ...deriveLuminanceScale("blue"),
+          ...deriveLuminanceScale("blue", slateColors.blue),
         },
         orange: {
           ...defineColorAliases(slateColors.orange),
-          ...deriveLuminanceScale("orange"),
+          ...deriveLuminanceScale("orange", slateColors.orange),
         },
-        // Auxiliary Gray Palette (Compressed between White #FCFCFC and Black #1E1E1E)
-        // Goal: gray.50 is DARKER than bg.white, gray.950 is LIGHTER than bg.black
+        // Interpolated gray scale, anchored at the `supplementary.bg` values.
+        // There is an additional added "zinc" nudge on the blue channel,
+        //   which it seems most modern UI frameworks do.
         gray: {
           50: { value: "#FCFCFC", description: "Supplementary Bg White" },
-          100: { value: "#EDEDED", description: "Supplementary Bg Light" },
-          200: { value: "#DCDCDC", description: "Supplementary Bg Medium" },
-          300: { value: "#B8B8B8", description: "Supplementary Bg Dark" },
-          400: { value: "#929292" }, // Interpolated (L ~64%)
-          500: { value: "#6B6B6B", description: "Supplementary Text Light / Bg Darker" },
-          600: { value: "#5B5B5B" }, // Interpolated (L ~45%)
-          700: { value: "#4B4B4B" }, // Interpolated (L ~39%)
-          800: { value: "#3B3B3B", description: "Supplementary Text Dark / Bg Darkest" },
-          900: { value: "#2D2D2D" }, // Interpolated (L ~26%)
-          950: { value: "#1E1E1E", description: "Supplementary Bg Black" },
+          100: { value: "#F4F4F5" },
+          200: { value: "#EDEDF0", description: "Supplementary Bg Light" },
+          300: { value: "#DCDCE0", description: "Supplementary Bg Medium" },
+          400: { value: "#B8B8C1", description: "Supplementary Bg Dark" },
+          500: { value: "#85858F" },
+          600: { value: "#5D5D66" },
+          700: { value: "#45454D" },
+          800: { value: "#27272A" },
+          900: { value: "#18181B" },
+          950: { value: "#111111" },
         },
-        black: { value: "#0A0A0A" }, // Chakra's default has a slight chromatic "nudge", which doesn't fit our branding
         supplementary: {
           text: {
             white: { value: "#FCFCFC" },
@@ -215,12 +216,6 @@ const customConfig = defineConfig({
             light: { value: "#EDEDED" },
             medium: { value: "#DCDCDC" },
             dark: { value: "#B8B8B8" },
-            // not in the styleguide, but necessary for dark mode
-            //   stolen from the text colors above, so texts on Light
-            //   become backgrounds on Dark. Shout if you have better ideas!
-            darker: { value: "#6B6B6B" },
-            darkest: { value: "#3B3B3B" },
-            black: { value: "#1E1E1E" },
           },
           link: { value: "#0051BA" },
         },
