@@ -136,6 +136,8 @@ es-ES:
     a: Media de 5
     #original_hash: 940c82d
     m: Media de 3
+    #original_hash: bc7ba15
+    h: Cara a cara
     short:
       #original_hash: c21bc2a
       '1': Bo1
@@ -3292,9 +3294,9 @@ es-ES:
       is_visible: >-
         Esta competición es visible públicamente, ¡cualquier cambio que hagas se
         mostrará al público!
-      #original_hash: 1039850
+      #original_hash: eb98c2c
       pending_confirmation_html: >-
-        Rellena todos los campos y haz que tu Delegado pinche en 'Confirmar'
+        Rellena todos los campos y pide a tu Delegado que pinche en 'Confirmar'
         cuando estés listo para que el %{contact} apruebe esta competición.
       #original_hash: 8966fd0
       submit_create_value: Crear competición
