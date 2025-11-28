@@ -19,7 +19,7 @@ const RandomBackground = ({
     if (probValue <= 3 / 6) return "blue"; // 0.334 - 0.5
     if (probValue <= 4 / 6) return "yellow"; // 0.501 - 0.666
     if (probValue <= 5 / 6) return "red"; // 0.667 - 0.833
-    return "white"; // 0.834 - 1
+    return "wcaWhite"; // 0.834 - 1
   };
 
   return (
@@ -47,7 +47,7 @@ const RandomBackground = ({
                   width="2.5vw"
                   height="2.5vw"
                   colorPalette={randomColor}
-                  bg="colorPalette.solid"
+                  bg="colorPalette.1A"
                   key={keyVal}
                 />
               );
