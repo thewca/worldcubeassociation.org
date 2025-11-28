@@ -227,9 +227,9 @@ class Api::V0::ApiController < ApplicationController
     render json: {
       export_date: timestamp&.iso8601,
       export_version: current_version_number,
-      sql_url: Rails.application.routes.url_helpers.results_permalink_url(:v2, 'sql'),
+      sql_url: results_permalink_url(:v2, 'sql'),
       sql_filesize_bytes: sql_filesize,
-      tsv_url: Rails.application.routes.url_helpers.results_permalink_url(:v2, 'tsv'),
+      tsv_url: results_permalink_url(:v2, 'tsv'),
       tsv_filesize_bytes: tsv_filesize,
       developer_url: DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK),
       readme: DatabaseController.render_readme(self, DateTime.now, current_version_key),
