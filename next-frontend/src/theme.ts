@@ -1,5 +1,5 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
-import { distance, hslToRgb, parseRgbColor, rgbToHsl, toHexadecimal } from "@/lib/math/colors";
+import { oklchToRgb, parseRgbColor, rgbToOklch, toHexadecimal } from "@/lib/math/colors";
 import _ from "lodash";
 
 const compileColorScheme = (baseColor: string) => ({
@@ -44,17 +44,17 @@ interface WcaPaletteInput {
 }
 
 interface ChakraLuminanceScheme {
-  50: { value: string };
-  100: { value: string };
-  200: { value: string };
-  300: { value: string };
-  400: { value: string };
-  500: { value: string };
-  600: { value: string };
-  700: { value: string };
-  800: { value: string };
-  900: { value: string };
-  950: { value: string };
+  "50": { value: string };
+  "100": { value: string };
+  "200": { value: string };
+  "300": { value: string };
+  "400": { value: string };
+  "500": { value: string };
+  "600": { value: string };
+  "700": { value: string };
+  "800": { value: string };
+  "900": { value: string };
+  "950": { value: string };
 }
 
 const slateColors = {
@@ -114,47 +114,50 @@ const slateColors = {
   } satisfies WcaPaletteInput,
 } as const;
 
-const deriveLuminanceScale = (colorScheme: keyof typeof slateColors, referencePoint: Exclude<keyof WcaPaletteInput, "pantoneDescription"> = "primary"): ChakraLuminanceScheme => {
+const SIGMA = 3.0;
+const BASE_INFLUENCE = 0.2;
+
+const deriveLuminanceScale = (colorScheme: keyof typeof slateColors, { chakraScheme = colorScheme, referencePoint = "primary" }: {
+  chakraScheme?: string;
+  referencePoint?: Exclude<keyof WcaPaletteInput, "pantoneDescription">;
+} = { chakraScheme: colorScheme, referencePoint: "primary" }): ChakraLuminanceScheme => {
   // Chakra is not very friendly about exporting its pre-defined schemes and tokens…
-  const modelScheme = defaultConfig.theme?.tokens?.colors?.[colorScheme]! as unknown as ChakraLuminanceScheme;
+  const modelScheme = defaultConfig.theme?.tokens?.colors?.[chakraScheme]! as unknown as ChakraLuminanceScheme;
 
-  const parsedScheme = _.mapValues(modelScheme, (chakraColor) => parseRgbColor(chakraColor.value));
+  const parsedScheme = _.mapValues(modelScheme, (chakraColor) => rgbToOklch(parseRgbColor(chakraColor.value)));
+  const stepKeys = Object.keys(parsedScheme).sort((a, b) => parseInt(a) - parseInt(b)).filter((k): k is keyof ChakraLuminanceScheme => k in parsedScheme);
 
-  const rootColor = parseRgbColor(slateColors[colorScheme][referencePoint]);
-  const anchorColor = _.minBy(Object.values(parsedScheme), (chakraRgb) => distance(rootColor, chakraRgb))!;
+  const brandColor = parseRgbColor(slateColors[colorScheme][referencePoint]);
+  const brandOklch = rgbToOklch(brandColor);
 
-  const rootHsl = rgbToHsl(rootColor);
-  const anchorHsl = rgbToHsl(anchorColor);
+  const anchorKey = _.minBy(stepKeys, (stepKey) => Math.abs(brandOklch.l - parsedScheme[stepKey].l))!;
 
-  const colorRotation = rootHsl.h - anchorHsl.h;
-  const saturationScale = anchorHsl.s === 0 ? 1 : rootHsl.s / anchorHsl.s;
+  const anchorOklch = parsedScheme[anchorKey];
+  const anchorIndex = stepKeys.indexOf(anchorKey);
 
-  return _.mapValues(parsedScheme, (presetColor) => {
-    const currentHsl = rgbToHsl(presetColor);
+  const rawDeltaH = (brandOklch.h || 0) - (anchorOklch.h || 0);
+  const deltaH = ((rawDeltaH + 540) % 360) - 180;
 
-    const rotatedHue = (((currentHsl.h + colorRotation) % 360) + 360) % 360;
-    const scaledSaturation = Math.min(currentHsl.s * saturationScale, 100);
+  const deltaC = brandOklch.c - anchorOklch.c;
+  const deltaL = brandOklch.l - anchorOklch.l;
 
-    let newLightness: number;
+  return _.mapValues(parsedScheme, (presetOklch, key) => {
+    const currentIndex = stepKeys.indexOf(key as keyof ChakraLuminanceScheme);
 
-    if (currentHsl.l < anchorHsl.l) {
-      newLightness = anchorHsl.l === 0
-        ? currentHsl.l
-        : currentHsl.l * (rootHsl.l / anchorHsl.l);
-    } else {
-      newLightness = anchorHsl.l === 100
-        ? currentHsl.l
-        : rootHsl.l + (currentHsl.l - anchorHsl.l) * ((100 - rootHsl.l) / (100 - anchorHsl.l));
-    }
+    const dist = Math.abs(currentIndex - anchorIndex);
+    const gaussian = Math.exp(- (dist * dist) / (2 * SIGMA * SIGMA));
+    const weight = BASE_INFLUENCE + ((1 - BASE_INFLUENCE) * gaussian);
 
-    const newHsl = { h: rotatedHue, s: scaledSaturation, l: newLightness };
+    const newColor = {
+      mode: 'oklch',
+      h: (presetOklch.h || 0) + (deltaH * weight),
+      c: Math.max(0, presetOklch.c + (deltaC * weight)),
+      l: Math.max(0, Math.min(1, presetOklch.l + (deltaL * weight)))
+    } as const;
 
-    return ({ value: toHexadecimal(hslToRgb(newHsl)) });
+    return ({ value: toHexadecimal(oklchToRgb(newColor)) });
   });
 }
-
-const mappedScheme = deriveLuminanceScale("green");
-console.log(mappedScheme);
 
 const customConfig = defineConfig({
   theme: {
@@ -162,99 +165,27 @@ const customConfig = defineConfig({
       colors: {
         wcaWhite: {
           ...defineColorAliases(slateColors.white),
-
-          // Smooth Luminance Scale (Anchored to Primary 1A Cool Gray)
-          50: { value: "#FAFAFA" },
-          100: { value: "#F5F5F5" },
-          200: { value: "#EEEEEE" }, // Anchor: 1A
-          300: { value: "#E0E0E0" },
-          400: { value: "#BDBDBD" },
-          500: { value: "#9E9E9E" },
-          600: { value: "#757575" },
-          700: { value: "#616161" },
-          800: { value: "#424242" },
-          900: { value: "#212121" },
-          950: { value: "#1A1A1A" }
+          ...deriveLuminanceScale("white", { chakraScheme: "gray" })
         },
         green: {
           ...defineColorAliases(slateColors.green),
-
-          // Smooth Luminance Scale (Green Primary #029347 is approx 600)
-          50: { value: "#F0FDF4" },
-          100: { value: "#DCFCE7" },
-          200: { value: "#BBF7D0" },
-          300: { value: "#86EFAC" },
-          400: { value: "#4ADE80" },
-          500: { value: "#22C55E" },
-          600: { value: "#029347" }, // Anchor: 1A
-          700: { value: "#15803D" },
-          800: { value: "#166534" },
-          900: { value: "#14532D" },
-          950: { value: "#052E16" }
+          ...deriveLuminanceScale("green"),
         },
         red: {
           ...defineColorAliases(slateColors.red),
-
-          // Smooth Luminance Scale (Red Primary #C62535 is approx 600)
-          50: { value: "#FEF2F2" },
-          100: { value: "#FEE2E2" },
-          200: { value: "#FECACA" },
-          300: { value: "#FCA5A5" },
-          400: { value: "#F87171" },
-          500: { value: "#EF4444" },
-          600: { value: "#C62535" }, // Anchor: 1A
-          700: { value: "#9B1C1C" },
-          800: { value: "#771D1D" },
-          900: { value: "#450A0A" },
-          950: { value: "#2B0404" }
+          ...deriveLuminanceScale("red"),
         },
         yellow: {
           ...defineColorAliases(slateColors.yellow),
-
-          // Smooth Luminance Scale (Yellow Primary #FFD313 is approx 400/500)
-          50: { value: "#FEFCE8" },
-          100: { value: "#FEF9C3" },
-          200: { value: "#FEF08A" },
-          300: { value: "#FDE047" },
-          400: { value: "#FFD313" }, // Anchor: 1A
-          500: { value: "#EAB308" },
-          600: { value: "#CA8A04" },
-          700: { value: "#A16207" },
-          800: { value: "#854D0E" },
-          900: { value: "#713F12" },
-          950: { value: "#422006" }
+          ...deriveLuminanceScale("yellow"),
         },
         blue: {
           ...defineColorAliases(slateColors.blue),
-
-          // Smooth Luminance Scale (Blue Primary #0051BA is approx 600)
-          50: { value: "#EFF6FF" },
-          100: { value: "#DBEAFE" },
-          200: { value: "#BFDBFE" },
-          300: { value: "#93C5FD" },
-          400: { value: "#60A5FA" },
-          500: { value: "#3B82F6" },
-          600: { value: "#0051BA" }, // Anchor: 1A
-          700: { value: "#1D4ED8" },
-          800: { value: "#1E40AF" },
-          900: { value: "#1E3A8A" },
-          950: { value: "#172554" }
+          ...deriveLuminanceScale("blue"),
         },
         orange: {
           ...defineColorAliases(slateColors.orange),
-
-          // Smooth Luminance Scale (Orange Primary #FF5800 is approx 500)
-          50: { value: "#FFF7ED" },
-          100: { value: "#FFEDD5" },
-          200: { value: "#FED7AA" },
-          300: { value: "#FDBA74" },
-          400: { value: "#FB923C" },
-          500: { value: "#FF5800" }, // Anchor: 1A
-          600: { value: "#EA580C" },
-          700: { value: "#C2410C" },
-          800: { value: "#9A3412" },
-          900: { value: "#7C2D12" },
-          950: { value: "#431407" }
+          ...deriveLuminanceScale("orange"),
         },
         // Auxiliary Gray Palette (Compressed between White #FCFCFC and Black #1E1E1E)
         // Goal: gray.50 is DARKER than bg.white, gray.950 is LIGHTER than bg.black
