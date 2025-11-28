@@ -20,12 +20,6 @@ import {
 export default function EventsTable({ competitionInfo, wcifEvents }) {
   const determineH2hfinal = useCallback((roundTypeId, roundId) => (competitionInfo.h2h_rounds.includes(roundId) && roundTypeId === 'f'), [competitionInfo.h2h_rounds]);
 
-  const determineRoundLabel = (roundTypeId, isH2hFinal) => {
-    const roundTypeName = I18n.t(`rounds.${roundTypeId}.cell_name`);
-
-    return isH2hFinal ? `${I18n.t('formats.h')} ${roundTypeName}` : roundTypeName;
-  };
-
   return (
     <div style={{ overflowX: 'scroll' }}>
       <Table striped selectable compact unstackable singleLine>
@@ -72,7 +66,7 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
                   </TableCell>
                 )}
                 <TableCell>
-                  {determineRoundLabel(roundTypeId, isH2hFinal)}
+                  <TableCell>{I18n.t(`rounds.${roundTypeId}.cell_name`)}</TableCell>
                 </TableCell>
                 <TableCell>
                   {round.cutoff && `${formats.byId[round.cutoff.numberOfAttempts].shortName} / `}

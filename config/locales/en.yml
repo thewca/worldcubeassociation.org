@@ -97,7 +97,6 @@ en:
     "3": "Best of 3"
     "a": "Average of 5"
     "m": "Mean of 3"
-    "h": "Head-to-Head"
     #context: short name alternative
     short:
       "1": "Bo1"
