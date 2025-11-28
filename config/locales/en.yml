@@ -1387,6 +1387,12 @@ en:
       orga_closed_reg_success: "Successfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
       no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
+    live:
+      title: "Live Results"
+      connection:
+        initialized: "Connection being initialized"
+        connected: "Connected, results are being updated"
+        disconnected: "Lost connection, results are not being updated"
     #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"
