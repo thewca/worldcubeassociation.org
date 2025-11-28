@@ -207,7 +207,7 @@ export default async function PersonOverview({
                     <Tabs.Content value="championship-podiums">
                       {hasChampionshipPodiums && (
                         <ChampionshipPodiumsTab
-                          championship_podiums={
+                          championshipPodiums={
                             personDetails.championship_podiums
                           }
                         />
