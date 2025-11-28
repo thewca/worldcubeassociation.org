@@ -1,10 +1,12 @@
 "use client";
 
 import React from "react";
-import { Table, Text } from "@chakra-ui/react";
+import { Link, Table, Text } from "@chakra-ui/react";
+import NextLink from "next/link";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import { formatDateRange } from "@/lib/dates/format";
+import { route } from "nextjs-routes";
 
 interface CompetitionsTabProps {
   wcaId: string;
@@ -48,7 +50,18 @@ const CompetitionsTab: React.FC<CompetitionsTabProps> = ({ wcaId }) => {
       <Table.Body>
         {competitionQuery.map((c) => (
           <Table.Row key={c.id}>
-            <Table.Cell>{c.name}</Table.Cell>
+            <Table.Cell>
+              <Link asChild>
+                <NextLink
+                  href={route({
+                    pathname: "/competitions/[competitionId]",
+                    query: { competitionId: c.id },
+                  })}
+                >
+                  {c.name}
+                </NextLink>
+              </Link>
+            </Table.Cell>
             <Table.Cell>{c.city}</Table.Cell>
             <Table.Cell>
               <Text>{formatDateRange(c.start_date, c.end_date)}</Text>
