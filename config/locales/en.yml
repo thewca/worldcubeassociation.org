@@ -105,6 +105,7 @@ en:
       "3": "Bo3"
       "a": "Ao5"
       "m": "Mo3"
+      "h": "H2H"
   #context: Round name
   rounds:
     "0":
