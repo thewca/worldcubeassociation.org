@@ -1,4 +1,6 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
+import { distance, hslToRgb, parseRgbColor, rgbToHsl, toHexadecimal } from "@/lib/math/colors";
+import _ from "lodash";
 
 const compileColorScheme = (baseColor: string) => ({
   cubeShades: {
@@ -29,7 +31,7 @@ const defineColorAliases = (colorPalette: WcaPaletteInput) => ({
   "2C": { value: colorPalette.secondaryMedium },
   "lighter": { value: colorPalette.cubeLight },
   "darker": { value: colorPalette.cubeDark },
-})
+});
 
 interface WcaPaletteInput {
   primary: string;         // 1A (Solid / Top Face)
@@ -39,6 +41,20 @@ interface WcaPaletteInput {
   secondaryDark: string;   // 2A (Deep)
   cubeLight: string;       // Left Face
   cubeDark: string;        // Right Face
+}
+
+interface ChakraLuminanceScheme {
+  50: { value: string };
+  100: { value: string };
+  200: { value: string };
+  300: { value: string };
+  400: { value: string };
+  500: { value: string };
+  600: { value: string };
+  700: { value: string };
+  800: { value: string };
+  900: { value: string };
+  950: { value: string };
 }
 
 const slateColors = {
@@ -98,6 +114,48 @@ const slateColors = {
   } satisfies WcaPaletteInput,
 } as const;
 
+const deriveLuminanceScale = (colorScheme: keyof typeof slateColors, referencePoint: Exclude<keyof WcaPaletteInput, "pantoneDescription"> = "primary"): ChakraLuminanceScheme => {
+  // Chakra is not very friendly about exporting its pre-defined schemes and tokens…
+  const modelScheme = defaultConfig.theme?.tokens?.colors?.[colorScheme]! as unknown as ChakraLuminanceScheme;
+
+  const parsedScheme = _.mapValues(modelScheme, (chakraColor) => parseRgbColor(chakraColor.value));
+
+  const rootColor = parseRgbColor(slateColors[colorScheme][referencePoint]);
+  const anchorColor = _.minBy(Object.values(parsedScheme), (chakraRgb) => distance(rootColor, chakraRgb))!;
+
+  const rootHsl = rgbToHsl(rootColor);
+  const anchorHsl = rgbToHsl(anchorColor);
+
+  const colorRotation = rootHsl.h - anchorHsl.h;
+  const saturationScale = anchorHsl.s === 0 ? 1 : rootHsl.s / anchorHsl.s;
+
+  return _.mapValues(parsedScheme, (presetColor) => {
+    const currentHsl = rgbToHsl(presetColor);
+
+    const rotatedHue = (((currentHsl.h + colorRotation) % 360) + 360) % 360;
+    const scaledSaturation = Math.min(currentHsl.s * saturationScale, 100);
+
+    let newLightness: number;
+
+    if (currentHsl.l < anchorHsl.l) {
+      newLightness = anchorHsl.l === 0
+        ? currentHsl.l
+        : currentHsl.l * (rootHsl.l / anchorHsl.l);
+    } else {
+      newLightness = anchorHsl.l === 100
+        ? currentHsl.l
+        : rootHsl.l + (currentHsl.l - anchorHsl.l) * ((100 - rootHsl.l) / (100 - anchorHsl.l));
+    }
+
+    const newHsl = { h: rotatedHue, s: scaledSaturation, l: newLightness };
+
+    return ({ value: toHexadecimal(hslToRgb(newHsl)) });
+  });
+}
+
+const mappedScheme = deriveLuminanceScale("green");
+console.log(mappedScheme);
+
 const customConfig = defineConfig({
   theme: {
     tokens: {
@@ -116,7 +174,7 @@ const customConfig = defineConfig({
           700: { value: "#616161" },
           800: { value: "#424242" },
           900: { value: "#212121" },
-          950: { value: "#1a1a1a" }
+          950: { value: "#1A1A1A" }
         },
         green: {
           ...defineColorAliases(slateColors.green),
@@ -132,7 +190,7 @@ const customConfig = defineConfig({
           700: { value: "#15803D" },
           800: { value: "#166534" },
           900: { value: "#14532D" },
-          950: { value: "#052e16" }
+          950: { value: "#052E16" }
         },
         red: {
           ...defineColorAliases(slateColors.red),
@@ -148,7 +206,7 @@ const customConfig = defineConfig({
           700: { value: "#9B1C1C" },
           800: { value: "#771D1D" },
           900: { value: "#450A0A" },
-          950: { value: "#2b0404" }
+          950: { value: "#2B0404" }
         },
         yellow: {
           ...defineColorAliases(slateColors.yellow),
