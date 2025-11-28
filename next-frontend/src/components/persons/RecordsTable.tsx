@@ -4,6 +4,7 @@ import { Heading, VStack } from "@chakra-ui/react";
 import _ from "lodash";
 import { ByCompetitionTable } from "@/components/results/ResultsTable";
 import events from "@/lib/wca/data/events";
+import { Fragment } from "react";
 
 export default function RecordsTable({
   recordResults,
@@ -28,12 +29,12 @@ export default function RecordsTable({
       {["ER", "NAR", "SAR", "ASR", "OCR"].map((region) => {
         return (
           region in recordsByType && (
-            <>
+            <Fragment key={region}>
               <Heading textStyle="h2">
                 {t("persons.show.continental_records")}
               </Heading>
               <RecordsByEvent recordResults={recordsByType[region]} t={t} />
-            </>
+            </Fragment>
           )
         );
       })}
