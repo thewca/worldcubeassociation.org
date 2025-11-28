@@ -65,9 +65,7 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
                     {events.byId[event.id].name}
                   </TableCell>
                 )}
-                <TableCell>
-                  <TableCell>{I18n.t(`rounds.${roundTypeId}.cell_name`)}</TableCell>
-                </TableCell>
+                <TableCell>{I18n.t(`rounds.${roundTypeId}.cell_name`)}</TableCell>
                 <TableCell>
                   {round.cutoff && `${formats.byId[round.cutoff.numberOfAttempts].shortName} / `}
                   {isH2hFinal ? I18n.t('formats.short.h') : formats.byId[round.format].shortName}
