@@ -661,26 +661,6 @@ const customConfig = defineConfig({
         slots: [],
         variants: {
           variant: {
-            enclosed: {
-              list: {
-                bg: "colorPalette.solid",
-                borderRadius: "wca",
-              },
-              trigger: {
-                color: "colorPalette.text",
-                transitionProperty: "background-color",
-                transitionTimingFunction: "ease",
-                transitionDuration: "200ms",
-                _hover: {
-                  bg: "colorPalette.solid",
-                },
-                _selected: {
-                  color: "currentColor",
-                  shadow: "sm",
-                  bg: "colorPalette.solid",
-                },
-              },
-            },
             results: {
               content: {
                 p: "8",
