@@ -82,24 +82,14 @@ const AnnouncementsSection = ({
   block: AnnouncementsSectionBlock;
 }) => {
   const mainAnnouncement = block.mainAnnouncement as Announcement;
+  const furtherAnnouncements = block.furtherAnnouncements!.map(
+    (announcement) => announcement as Announcement,
+  )
 
   return (
     <AnnouncementsCard
-      hero={{
-        title: mainAnnouncement.title,
-        postedBy: (mainAnnouncement.publishedBy as User).name!,
-        postedAt: mainAnnouncement.publishedAt,
-        markdown: mainAnnouncement.contentMarkdown!,
-        fullLink: `/articles/${mainAnnouncement.id}`,
-      }}
-      others={block
-        .furtherAnnouncements!.map(
-          (announcement) => announcement as Announcement,
-        )
-        .map((announcement) => ({
-          title: announcement.title,
-          href: `/articles/${announcement.id}`,
-        }))}
+      hero={mainAnnouncement}
+      others={furtherAnnouncements}
       colorPalette={block.colorPalette}
     />
   );
