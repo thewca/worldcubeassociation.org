@@ -136,8 +136,6 @@ es-ES:
     a: Media de 5
     #original_hash: 940c82d
     m: Media de 3
-    #original_hash: bc7ba15
-    h: Cara a cara
     short:
       #original_hash: c21bc2a
       '1': Bo1
@@ -149,6 +147,8 @@ es-ES:
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      #original_hash: 60827cb
+      h: H2H
   rounds:
     '0':
       #original_hash: 4d618bb
