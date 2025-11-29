@@ -354,66 +354,6 @@ const customConfig = defineConfig({
       },
     },
     recipes: {
-      button: {
-        base: {
-          transitionTimingFunction: "ease",
-          borderRadius: "l3",
-          colorPalette: "blue",
-        },
-        variants: {
-          variant: {
-            solid: {
-              _hover: {
-                bg: "colorPalette.muted",
-                borderColor: "colorPalette.muted",
-              },
-              _expanded: {
-                bg: "colorPalette.muted",
-                borderColor: "colorPalette.muted",
-              },
-            },
-            outline: {
-              borderWidth: "2px",
-              borderColor: "colorPalette.solid",
-              color: "fg",
-              _hover: {
-                bg: "colorPalette.fg/30",
-                color: "colorPalette.solid",
-              },
-            },
-            ghost: {
-              color: "fg",
-              focusRing: "colorPalette.focusRing",
-              _hover: {
-                bg: "colorPalette.fg/30",
-                color: "colorPalette.solid",
-              },
-              _expanded: {
-                bg: "colorPalette.fg/30",
-                color: "colorPalette.solid",
-              },
-            },
-            plain: {
-              color: "colorPalette.subtle",
-            },
-          },
-          size: {
-            sm: {
-              padding: "3",
-            },
-            lg: {
-              px: "6",
-              py: "2.5",
-              textStyle: "sm",
-            },
-          },
-        },
-        defaultVariants: {
-          // @ts-expect-error This is a legitimate key, but the typing system doesn't see it before merge.
-          variant: "solid",
-          size: "lg",
-        },
-      },
       link: {
         base: {
           transitionProperty: "color",
