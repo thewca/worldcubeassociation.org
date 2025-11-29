@@ -6,7 +6,7 @@ function AnnouncementItem({ announcement }: { announcement: Announcement }) {
   const publishedByUser = announcement.publishedBy as User;
 
   return (
-    <Accordion.Item value={announcement.id}>
+    <Accordion.Item value={announcement.id} layerStyle="fill.solid">
       <Accordion.ItemTrigger _open={{ textStyle: "h2" }}>
         {announcement.title}
       </Accordion.ItemTrigger>
@@ -34,7 +34,7 @@ export default function AnnouncementsCard({
   colorPalette: string;
 }) {
   return (
-    <Accordion.Root variant="enclosed" collapsible defaultValue={[hero.id]} colorPalette={colorPalette}>
+    <Accordion.Root variant="card" defaultValue={[hero.id]} colorPalette={colorPalette}>
       <AnnouncementItem announcement={hero} />
 
       {others.map((announcement) => (

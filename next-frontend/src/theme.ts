@@ -574,6 +574,23 @@ const customConfig = defineConfig({
                 padding: "3",
               },
             },
+            card: {
+              root: {
+                spaceY: "4",
+                overflow: "hidden",
+                "--accordion-padding-x": "spacing.6",
+                "--accordion-padding-y": "spacing.3",
+              },
+              itemTrigger: {
+                px: "var(--accordion-padding-x)",
+              },
+              itemContent: {
+                px: "var(--accordion-padding-x)"
+              },
+              item: {
+                borderRadius: "l3",
+              }
+            }
           },
         },
       },
