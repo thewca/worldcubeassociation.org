@@ -51,7 +51,7 @@ export const getSortedKeys = (scale: ColorScale): ReadonlyArray<LuminanceKey> =>
 export const findNearestSlotKey = (
   scale: ColorScale,
   targetOklch: Oklch,
-): string => {
+): LuminanceKey => {
   const keys = typedKeys(scale);
 
   const bestKey = _.minBy(keys, (key) => {
@@ -73,7 +73,7 @@ const generateSequence = (start: number, end: number): ReadonlyArray<number> => 
 export const createAnchorMap = (
   baseScale: ColorScale,
   colors: ReadonlyArray<string>,
-): ReadonlyMap<string, string> => {
+): ReadonlyMap<LuminanceKey, string> => {
   const sortedScaleKeys = getSortedKeys(baseScale);
   const maxIdx = sortedScaleKeys.length;
 
@@ -104,7 +104,7 @@ export const createAnchorMap = (
 
     const foundKey = sortedScaleKeys[foundIdx];
     return new Map(assignments).set(foundKey, color);
-  }, new Map<string, string>());
+  }, new Map<LuminanceKey, string>());
 };
 
 export const getInterpolatedDelta = (
@@ -164,7 +164,7 @@ type AdjustmentConfig = {
 
 export const adjustScale = (
   baseScale: ColorScale,
-  anchors: ReadonlyMap<string, string>,
+  anchors: ReadonlyMap<LuminanceKey, string>,
   config: AdjustmentConfig = {},
 ): ColorScale => {
   const sortedKeys = getSortedKeys(baseScale);
@@ -182,7 +182,6 @@ export const adjustScale = (
         delta: calculateDelta(src, tgt),
       };
     })
-    .filter((item): item is NonNullable<typeof item> => item !== null)
     .sort((a, b) => a.idx - b.idx);
 
   if (anchorData.length === 0) return baseScale;
@@ -191,7 +190,7 @@ export const adjustScale = (
   const anchorDeltas = new Map(anchorData.map(d => [d.key, d.delta]));
 
   return _.mapValues(baseScale, (hex, key) => {
-    const currentIdx = sortedKeys.indexOf(key);
+    const currentIdx = sortedKeys.indexOf(key as LuminanceKey);
     const sourceOklch = rgbToOklch(parseRgbColor(hex));
 
     const { delta: rawDelta, distanceToAnchor } = getInterpolatedDelta(
