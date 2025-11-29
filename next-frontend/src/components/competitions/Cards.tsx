@@ -325,7 +325,7 @@ export function OrganizationTeamCard({
           />
         </Stat.Root>
 
-        <Button variant="outline" asChild>
+        <Button variant="outline" colorPalette="blue" asChild>
           <ChakraLink
             variant="header"
             href={

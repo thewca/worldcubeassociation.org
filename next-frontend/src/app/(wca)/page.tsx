@@ -7,13 +7,15 @@ import {
   Separator,
   Box,
   Text,
-  Tabs,
   Badge,
   VStack,
   Link as ChakraLink,
   Center,
   Icon,
   HStack,
+  AbsoluteCenter,
+  Float,
+  Carousel,
 } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
@@ -42,7 +44,6 @@ import type {
   Testimonial,
   AnnouncementsSectionBlock,
   Announcement,
-  User,
 } from "@/types/payload";
 import Link from "next/link";
 import { route } from "nextjs-routes";
@@ -52,7 +53,11 @@ import { MediaImage } from "@/components/MediaImage";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
-    <Card.Root colorPalette={block.colorPalette} coloredBg width="full">
+    <Card.Root
+      colorPalette={block.colorPalette}
+      colorVariant="solid"
+      width="full"
+    >
       {block.headerImage && (
         <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
       )}
@@ -65,13 +70,13 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
           textStyle="body"
         />
       </Card.Body>
-      <Card.Footer>
-        {block.buttonText?.trim() && (
+      {block.buttonText?.trim() && (
+        <Card.Footer>
           <Button mr="auto" asChild>
             <ChakraLink href={block.buttonLink!}>{block.buttonText}</ChakraLink>
           </Button>
-        )}
-      </Card.Footer>
+        </Card.Footer>
+      )}
     </Card.Root>
   );
 };
@@ -82,74 +87,45 @@ const AnnouncementsSection = ({
   block: AnnouncementsSectionBlock;
 }) => {
   const mainAnnouncement = block.mainAnnouncement as Announcement;
+  const furtherAnnouncements = block.furtherAnnouncements!.map(
+    (announcement) => announcement as Announcement,
+  );
 
   return (
     <AnnouncementsCard
-      hero={{
-        title: mainAnnouncement.title,
-        postedBy: (mainAnnouncement.publishedBy as User).name!,
-        postedAt: mainAnnouncement.publishedAt,
-        markdown: mainAnnouncement.contentMarkdown!,
-        fullLink: `/articles/${mainAnnouncement.id}`,
-      }}
-      others={block
-        .furtherAnnouncements!.map(
-          (announcement) => announcement as Announcement,
-        )
-        .map((announcement) => ({
-          title: announcement.title,
-          href: `/articles/${announcement.id}`,
-        }))}
+      hero={mainAnnouncement}
+      others={furtherAnnouncements}
       colorPalette={block.colorPalette}
     />
   );
 };
 
 const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
-  const headingColor = block.headingColor
-    ? `${block.headingColor}.solid`
-    : undefined;
-
   return (
-    <Card.Root flexDirection="row" colorPalette={block.colorPalette} coloredBg>
-      <Box position="relative" width="50%" overflow="hidden">
+    <Card.Root
+      flexDirection="row"
+      colorPalette={block.colorPalette}
+      colorVariant="solid"
+      width="full"
+      maxHeight="lg"
+      overflow="hidden"
+    >
+      <Box position="relative" width="50%">
         <MediaImage
           media={block.mainImage as Media}
-          objectFit="cover"
-          width="100%"
-          height="40vh"
+          width="full"
+          maxHeight="lg"
           bg="colorPalette.solid"
         />
-        {/* Gradient Overlay */}
-        <Box
-          position="absolute"
-          top="0"
-          right="0"
-          bottom="0"
-          left="50%"
-          bgImage="linear-gradient(to right, transparent, {colors.colorPalette.solid})"
-          zIndex="1"
+        <AbsoluteCenter
+          width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
+          height="full"
+          bg="linear-gradient(to right, transparent, {colors.colorPalette.solid})"
         />
       </Box>
 
-      <Card.Body
-        flex="1"
-        zIndex="2"
-        color="white"
-        p="8"
-        bg="colorPalette.solid"
-        justifyContent="center"
-        paddingRight="15%"
-        backgroundImage={
-          block.bgImage != null
-            ? `url('${(block.bgImage as Media).url}')`
-            : undefined
-        }
-        backgroundSize={`${block.bgSize}%`}
-        backgroundPosition={block.bgPos}
-        backgroundRepeat="no-repeat"
-      >
-        <Card.Title color={headingColor} textStyle="h1">
+      <Card.Body justifyContent="center">
+        <Card.Title colorPalette={block.headingColor} textStyle="h1">
           {block.heading}
         </Card.Title>
         <MarkdownProse
@@ -157,6 +133,21 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           content={block.bodyMarkdown!}
           textStyle="s2"
         />
+        {block.bgImage && (
+          <Float
+            placement="bottom-end"
+            width={`${block.bgSize}%`}
+            height={`${block.bgSize}%`}
+            offset={28}
+          >
+            <MediaImage
+              media={block.bgImage as Media}
+              width="auto"
+              height="full"
+              fit="contain"
+            />
+          </Float>
+        )}
       </Card.Body>
     </Card.Root>
   );
@@ -167,7 +158,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
     <Card.Root
       overflow="hidden"
       colorPalette={block.colorPalette}
-      coloredBg
+      colorVariant="solid"
       width="full"
     >
       <MediaImage
@@ -176,7 +167,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
         aspectRatio="2/1"
       />
       {block.heading && (
-        <Card.Body p={6}>
+        <Card.Body>
           <Card.Title textStyle="h2">{block.heading}</Card.Title>
         </Card.Body>
       )}
@@ -269,64 +260,53 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
   const slides = block.slides;
 
   return (
-    <Tabs.Root
-      defaultValue={slides[0].id}
-      variant="slider"
+    <Carousel.Root
       orientation="vertical"
-      width="full"
+      slideCount={slides.length}
+      maxHeight="lg"
+      loop
+      position="relative"
     >
-      {/* Dot Navigation */}
-      <Tabs.List asChild>
-        <Box
-          position="absolute"
-          right="6"
-          top="50%"
-          transform="translateY(-50%)"
-          display="flex"
-          flexDirection="column"
-          gap="2"
-          zIndex="10"
-        >
-          {slides.map((slide) => (
-            <Tabs.Trigger key={slide.id} value={slide.id!} />
-          ))}
-        </Box>
-      </Tabs.List>
+      <Carousel.ItemGroup width="full">
+        {slides.map((slide, i) => {
+          const testimonial = slide.testimonial as Testimonial;
 
-      {/* Slides */}
-      {slides.map((slide) => {
-        const testimonial = slide.testimonial as Testimonial;
-
-        return (
-          <Tabs.Content key={slide.id} value={slide.id!} asChild>
-            <Card.Root
-              coloredBg
-              flexDirection="row"
-              overflow="hidden"
-              colorPalette={slide.colorPalette}
-            >
-              <MediaImage
-                media={testimonial.image as Media}
-                srcFallback="/placeholder.png"
-                altFallback={testimonial.punchline}
-                maxW="1/3"
-                objectFit="cover"
-              />
-              <Card.Body pr="3em">
-                <Card.Title textStyle="h1">{testimonial.punchline}</Card.Title>
-                <Separator size="md" />
-                <MarkdownProse
-                  as={Card.Description}
-                  content={testimonial.fullTestimonialMarkdown!}
-                  textStyle="quote"
+          return (
+            <Carousel.Item key={slide.id} index={i} asChild>
+              <Card.Root
+                colorVariant="solid"
+                flexDirection="row"
+                overflow="hidden"
+                colorPalette={slide.colorPalette}
+              >
+                <MediaImage
+                  media={testimonial.image as Media}
+                  altFallback={testimonial.punchline}
+                  maxW="1/3"
                 />
-                <Text>{testimonial.whoDunnit}</Text>
-              </Card.Body>
-            </Card.Root>
-          </Tabs.Content>
-        );
-      })}
-    </Tabs.Root>
+                <Card.Body>
+                  <Card.Title textStyle="h1">
+                    {testimonial.punchline}
+                  </Card.Title>
+                  <Separator size="md" />
+                  <MarkdownProse
+                    as={Card.Description}
+                    content={testimonial.fullTestimonialMarkdown!}
+                    textStyle="quote"
+                  />
+                  <Text>{testimonial.whoDunnit}</Text>
+                </Card.Body>
+              </Card.Root>
+            </Carousel.Item>
+          );
+        })}
+        <Float placement="middle-end" offset={8}>
+          <Carousel.Control>
+            <Carousel.Indicators />
+          </Carousel.Control>
+        </Float>
+      </Carousel.ItemGroup>
+    </Carousel.Root>
   );
 };
 
