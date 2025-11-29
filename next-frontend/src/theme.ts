@@ -29,18 +29,18 @@ const defineColorAliases = (colorPalette: WcaPaletteInput) => ({
   "2A": { value: colorPalette.secondaryDark },
   "2B": { value: colorPalette.secondaryLight },
   "2C": { value: colorPalette.secondaryMedium },
-  "lighter": { value: colorPalette.cubeLight },
-  "darker": { value: colorPalette.cubeDark },
+  lighter: { value: colorPalette.cubeLight },
+  darker: { value: colorPalette.cubeDark },
 });
 
 interface WcaPaletteInput {
-  primary: string;         // 1A (Solid / Top Face)
+  primary: string; // 1A (Solid / Top Face)
   pantoneDescription: string;
-  secondaryLight: string;  // 2B (Pastel)
+  secondaryLight: string; // 2B (Pastel)
   secondaryMedium: string; // 2C (Bright)
-  secondaryDark: string;   // 2A (Deep)
-  cubeLight: string;       // Left Face
-  cubeDark: string;        // Right Face
+  secondaryDark: string; // 2A (Deep)
+  cubeLight: string; // Left Face
+  cubeDark: string; // Right Face
 }
 
 interface ChakraColorScale {
@@ -58,7 +58,7 @@ interface ChakraColorScale {
 }
 
 const slateColors = {
-  "green": {
+  green: {
     primary: "#029347",
     pantoneDescription: "Pantone 348 C",
     secondaryLight: "#C1E6CD",
@@ -67,7 +67,7 @@ const slateColors = {
     cubeLight: "#1AB55C",
     cubeDark: "#04632D",
   } satisfies WcaPaletteInput,
-  "white": {
+  white: {
     primary: "#EEEEEE",
     pantoneDescription: "Pantone Cool Gray 1 C",
     secondaryLight: "#E0DDD5",
@@ -76,7 +76,7 @@ const slateColors = {
     cubeLight: "#FFFFFF",
     cubeDark: "#CCCCCC",
   } satisfies WcaPaletteInput,
-  "red": {
+  red: {
     primary: "#C62535",
     pantoneDescription: "Pantone 1797 C",
     secondaryLight: "#F6C5C5",
@@ -85,7 +85,7 @@ const slateColors = {
     cubeLight: "#E53841",
     cubeDark: "#A3131A",
   } satisfies WcaPaletteInput,
-  "yellow": {
+  yellow: {
     primary: "#FFD313",
     pantoneDescription: "Pantone 116 C",
     secondaryLight: "#FFF5B8",
@@ -94,7 +94,7 @@ const slateColors = {
     cubeLight: "#FFDE55",
     cubeDark: "#CEA705",
   } satisfies WcaPaletteInput,
-  "blue": {
+  blue: {
     primary: "#0051BA",
     pantoneDescription: "Pantone 293 C",
     secondaryLight: "#99C7FF",
@@ -103,7 +103,7 @@ const slateColors = {
     cubeLight: "#066AC4",
     cubeDark: "#03458C",
   } satisfies WcaPaletteInput,
-  "orange": {
+  orange: {
     primary: "#FF5800",
     pantoneDescription: "Pantone Orange 021 C",
     secondaryLight: "#FFD5BD",
@@ -119,8 +119,13 @@ const deriveLuminanceScale = (
   colorScheme: WcaPaletteInput,
 ): ChakraColorScale => {
   // Chakra is not very friendly about exporting its pre-defined schemes and tokens…
-  const modelScheme = defaultConfig.theme?.tokens?.colors?.[chakraRefScheme]! as unknown as ChakraColorScale;
-  const baseScale = _.mapValues(modelScheme, (chakraToken) => chakraToken.value);
+  const modelScheme = defaultConfig.theme?.tokens?.colors?.[
+    chakraRefScheme
+  ] as unknown as ChakraColorScale;
+  const baseScale = _.mapValues(
+    modelScheme,
+    (chakraToken) => chakraToken.value,
+  );
 
   const secondaryAnchors = createAnchorMap(baseScale, [
     colorScheme.secondaryDark,
@@ -128,22 +133,13 @@ const deriveLuminanceScale = (
     colorScheme.secondaryLight,
   ]);
 
-  const ambientScale = adjustScale(
-    baseScale,
-    secondaryAnchors,
-    { sigma: 2 }
-  );
+  const ambientScale = adjustScale(baseScale, secondaryAnchors, { sigma: 2 });
 
   const primaryAnchors = createAnchorMap(baseScale, [colorScheme.primary]);
+  const heroScale = adjustScale(ambientScale, primaryAnchors, { sigma: 2.5 });
 
-  const heroScale = adjustScale(
-    ambientScale,
-    primaryAnchors,
-    { sigma: 2.5 }
-  );
-
-  return _.mapValues(heroScale, (rgbHex) => ({ value: rgbHex }))
-}
+  return _.mapValues(heroScale, (rgbHex) => ({ value: rgbHex }));
+};
 
 const customConfig = defineConfig({
   theme: {
@@ -151,7 +147,7 @@ const customConfig = defineConfig({
       colors: {
         wcaWhite: {
           ...defineColorAliases(slateColors.white),
-          ...deriveLuminanceScale("gray", slateColors.white)
+          ...deriveLuminanceScale("gray", slateColors.white),
         },
         green: {
           ...defineColorAliases(slateColors.green),
@@ -338,22 +334,22 @@ const customConfig = defineConfig({
       },
     },
     layerStyles: {
-      'card.dark': {
+      "card.dark": {
         value: {
           background: "colorPalette.2A",
           color: "colorPalette.2B",
         },
       },
-      'card.pastel': {
+      "card.pastel": {
         value: {
           background: "colorPalette.1A",
           color: "colorPalette.contrast",
         },
       },
-      'card.bright': {
+      "card.bright": {
         value: {
           background: "colorPalette.2C",
-          color: "colorPalette.2A"
+          color: "colorPalette.2A",
         },
       },
     },
@@ -523,7 +519,7 @@ const customConfig = defineConfig({
             true: {
               root: {
                 colorPalette: "white",
-                layerStyle: "fill.solid"
+                layerStyle: "fill.solid",
               },
               description: {
                 layerStyle: "fill.solid",
@@ -712,36 +708,4 @@ const customConfig = defineConfig({
   },
 });
 
-const removeUnwantedPalettes = (sourceColors: Record<string, any> = {}) => {
-  const {
-    cyan,
-    purple,
-    pink,
-    teal,
-    ...keptColors
-  } = sourceColors;
-
-  return keptColors;
-};
-
-const sanitizedTokens = {
-  ...defaultConfig.theme?.tokens,
-  colors: removeUnwantedPalettes(defaultConfig.theme?.tokens?.colors),
-};
-
-const sanitizedSemanticTokens = {
-  ...defaultConfig.theme?.semanticTokens,
-  colors: removeUnwantedPalettes(defaultConfig.theme?.semanticTokens?.colors),
-};
-
-// 4. Create the clean base configuration
-const sanitizedDefaultConfig = defineConfig({
-  ...defaultConfig,
-  theme: {
-    ...defaultConfig.theme,
-    tokens: sanitizedTokens,
-    semanticTokens: sanitizedSemanticTokens,
-  },
-});
-
-export const system = createSystem(sanitizedDefaultConfig, customConfig);
+export const system = createSystem(defaultConfig, customConfig);

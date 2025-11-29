@@ -16,7 +16,10 @@ import Link from "next/link";
 import { iconMap } from "@/components/icons/iconMap";
 import { route } from "nextjs-routes";
 import AttemptResultField from "./AttemptResultField";
-import {ColorSemanticTokenDoc, ColorTokenDoc} from "@/app/(wca)/dashboard/ThemeExplorer";
+import {
+  ColorSemanticTokenDoc,
+  ColorTokenDoc,
+} from "@/app/(wca)/dashboard/ThemeExplorer";
 
 export default async function Dashboard() {
   const session = await auth();

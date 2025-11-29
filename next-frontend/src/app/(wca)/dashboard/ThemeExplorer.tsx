@@ -1,4 +1,4 @@
-"use client"
+"use client";
 // Utterly stolen from https://github.com/chakra-ui/chakra-ui/blob/main/apps/compositions/src/lib/color-token-doc.tsx
 
 import {
@@ -11,15 +11,15 @@ import {
   Text,
   type TokenInterface,
   VStack,
-} from "@chakra-ui/react"
+} from "@chakra-ui/react";
 import { system } from "@/theme";
 
 interface TokenDocProps extends BoxProps {
-  action?: React.ReactNode
+  action?: React.ReactNode;
 }
 
 export const TokenDoc = (props: TokenDocProps) => {
-  const { title, children, action, ...rest } = props
+  const { title, children, action, ...rest } = props;
   return (
     <Box bg="bg" rounded="lg" borderWidth="0.5px" {...rest}>
       <Box p="6" pb="0">
@@ -32,23 +32,15 @@ export const TokenDoc = (props: TokenDocProps) => {
       </Box>
       <Box p="6">{children}</Box>
     </Box>
-  )
-}
+  );
+};
 
-const { tokens } = system
+const { tokens } = system;
 
-const colors = tokens.categoryMap.get("colors")!
-const allColors = Array.from(colors.values())
+const colors = tokens.categoryMap.get("colors")!;
+const allColors = Array.from(colors.values());
 
-const keys = [
-  "gray",
-  "red",
-  "blue",
-  "green",
-  "yellow",
-  "orange",
-  "white",
-]
+const keys = ["gray", "red", "blue", "green", "yellow", "orange", "white"];
 
 export const ColorTokenDoc = () => {
   return (
@@ -65,8 +57,8 @@ export const ColorTokenDoc = () => {
         </TokenDoc>
       ))}
     </Stack>
-  )
-}
+  );
+};
 
 export const ColorSemanticTokenDoc = () => {
   return (
@@ -109,29 +101,29 @@ export const ColorSemanticTokenDoc = () => {
         </TokenDoc>
       ))}
     </Stack>
-  )
-}
+  );
+};
 
 interface VariantProps {
-  variant?: "border" | "background" | "text"
+  variant?: "border" | "background" | "text";
 }
 
 interface ColorGridItemProps extends VariantProps {
-  token: TokenInterface
+  token: TokenInterface;
 }
 
 const ColorGridItem = (props: ColorGridItemProps) => {
-  const { token, variant = "background" } = props
-  const value = token.extensions.cssVar!.ref
-  const conditions = token.extensions.conditions
+  const { token, variant = "background" } = props;
+  const value = token.extensions.cssVar!.ref;
+  const conditions = token.extensions.conditions;
   return (
     <VStack flex="1">
       <Center
         borderWidth="1px"
         bg={(() => {
           if (variant === "text" && token.name.includes("inverted"))
-            return "bg.inverted"
-          return variant === "background" ? value : undefined
+            return "bg.inverted";
+          return variant === "background" ? value : undefined;
         })()}
         w="full"
         h="20"
@@ -157,20 +149,20 @@ const ColorGridItem = (props: ColorGridItemProps) => {
         </Text>
       )}
     </VStack>
-  )
-}
+  );
+};
 
 interface ColorGridProps extends VariantProps, SimpleGridProps {
-  tokens: TokenInterface[]
+  tokens: TokenInterface[];
 }
 
 export const ColorGrid = (props: ColorGridProps) => {
-  const { tokens, variant = "background", ...rest } = props
+  const { tokens, variant = "background", ...rest } = props;
   return (
     <SimpleGrid minChildWidth="120px" gap="4" {...rest}>
       {tokens.map((token) => (
         <ColorGridItem key={token.name} token={token} variant={variant} />
       ))}
     </SimpleGrid>
-  )
-}
+  );
+};
