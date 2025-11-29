@@ -15,7 +15,7 @@ import {
   HStack,
   AbsoluteCenter,
   Float,
-  Carousel, IconButton,
+  Carousel,
 } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
@@ -50,7 +50,6 @@ import { route } from "nextjs-routes";
 import { getT } from "@/lib/i18n/get18n";
 import { draftMode } from "next/headers";
 import { MediaImage } from "@/components/MediaImage";
-import {LuGlobe, LuPause, LuPlay} from "react-icons/lu";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
