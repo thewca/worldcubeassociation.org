@@ -515,14 +515,31 @@ const customConfig = defineConfig({
           },
         },
         variants: {
-          coloredBg: {
-            true: {
+          colorVariant: {
+            solid: {
               root: {
                 colorPalette: "white",
                 layerStyle: "fill.solid",
               },
               description: {
                 layerStyle: "fill.solid",
+              },
+            },
+            muted: {
+              root: {
+                colorPalette: "white",
+                layerStyle: "fill.muted",
+              },
+              description: {
+                layerStyle: "fill.muted",
+              },
+            }
+          },
+          coloredBg: {
+            true: {
+              root: {
+                // @ts-expect-error We're transitioning away from coloredBg, so this is just a hack
+                colorVariant: "solid",
               },
             },
           },

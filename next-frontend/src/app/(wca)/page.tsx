@@ -13,7 +13,7 @@ import {
   Link as ChakraLink,
   Center,
   Icon,
-  HStack,
+  HStack, AbsoluteCenter, Float,
 } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
@@ -42,7 +42,6 @@ import type {
   Testimonial,
   AnnouncementsSectionBlock,
   Announcement,
-  User,
 } from "@/types/payload";
 import Link from "next/link";
 import { route } from "nextjs-routes";
@@ -52,7 +51,7 @@ import { MediaImage } from "@/components/MediaImage";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
-    <Card.Root colorPalette={block.colorPalette} coloredBg width="full">
+    <Card.Root colorPalette={block.colorPalette} colorVariant="solid" width="full">
       {block.headerImage && (
         <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
       )}
@@ -65,13 +64,13 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
           textStyle="body"
         />
       </Card.Body>
-      <Card.Footer>
-        {block.buttonText?.trim() && (
+      {block.buttonText?.trim() && (
+        <Card.Footer>
           <Button mr="auto" asChild>
             <ChakraLink href={block.buttonLink!}>{block.buttonText}</ChakraLink>
           </Button>
-        )}
-      </Card.Footer>
+        </Card.Footer>
+      )}
     </Card.Root>
   );
 };
@@ -96,50 +95,24 @@ const AnnouncementsSection = ({
 };
 
 const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
-  const headingColor = block.headingColor
-    ? `${block.headingColor}.solid`
-    : undefined;
-
   return (
-    <Card.Root flexDirection="row" colorPalette={block.colorPalette} coloredBg>
-      <Box position="relative" width="50%" overflow="hidden">
+    <Card.Root flexDirection="row" colorPalette={block.colorPalette} colorVariant="solid" width="full" maxHeight="lg" overflow="hidden">
+      <Box position="relative" width="50%">
         <MediaImage
           media={block.mainImage as Media}
-          objectFit="cover"
-          width="100%"
-          height="40vh"
+          width="full"
+          maxHeight="lg"
           bg="colorPalette.solid"
         />
-        {/* Gradient Overlay */}
-        <Box
-          position="absolute"
-          top="0"
-          right="0"
-          bottom="0"
-          left="50%"
-          bgImage="linear-gradient(to right, transparent, {colors.colorPalette.solid})"
-          zIndex="1"
+        <AbsoluteCenter
+          width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
+          height="full"
+          bg="linear-gradient(to right, transparent, {colors.colorPalette.solid})"
         />
       </Box>
 
-      <Card.Body
-        flex="1"
-        zIndex="2"
-        color="white"
-        p="8"
-        bg="colorPalette.solid"
-        justifyContent="center"
-        paddingRight="15%"
-        backgroundImage={
-          block.bgImage != null
-            ? `url('${(block.bgImage as Media).url}')`
-            : undefined
-        }
-        backgroundSize={`${block.bgSize}%`}
-        backgroundPosition={block.bgPos}
-        backgroundRepeat="no-repeat"
-      >
-        <Card.Title color={headingColor} textStyle="h1">
+      <Card.Body justifyContent="center">
+        <Card.Title colorPalette={block.headingColor} textStyle="h1">
           {block.heading}
         </Card.Title>
         <MarkdownProse
@@ -147,6 +120,11 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           content={block.bodyMarkdown!}
           textStyle="s2"
         />
+        {block.bgImage && (
+          <Float placement="bottom-end" width={`${block.bgSize}%`} height={`${block.bgSize}%`} offset={28}>
+            <MediaImage media={block.bgImage as Media} width="auto" height="full" fit="contain" />
+          </Float>
+        )}
       </Card.Body>
     </Card.Root>
   );
@@ -157,7 +135,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
     <Card.Root
       overflow="hidden"
       colorPalette={block.colorPalette}
-      coloredBg
+      colorVariant="solid"
       width="full"
     >
       <MediaImage
@@ -166,7 +144,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
         aspectRatio="2/1"
       />
       {block.heading && (
-        <Card.Body p={6}>
+        <Card.Body>
           <Card.Title textStyle="h2">{block.heading}</Card.Title>
         </Card.Body>
       )}
