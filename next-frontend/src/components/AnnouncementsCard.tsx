@@ -34,7 +34,11 @@ export default function AnnouncementsCard({
   colorPalette: string;
 }) {
   return (
-    <Accordion.Root variant="card" defaultValue={[hero.id]} colorPalette={colorPalette}>
+    <Accordion.Root
+      variant="card"
+      defaultValue={[hero.id]}
+      colorPalette={colorPalette}
+    >
       <AnnouncementItem announcement={hero} />
 
       {others.map((announcement) => (

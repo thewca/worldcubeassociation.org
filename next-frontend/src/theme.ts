@@ -533,7 +533,7 @@ const customConfig = defineConfig({
               description: {
                 layerStyle: "fill.muted",
               },
-            }
+            },
           },
           coloredBg: {
             true: {
@@ -602,12 +602,12 @@ const customConfig = defineConfig({
                 px: "var(--accordion-padding-x)",
               },
               itemContent: {
-                px: "var(--accordion-padding-x)"
+                px: "var(--accordion-padding-x)",
               },
               item: {
                 borderRadius: "l3",
-              }
-            }
+              },
+            },
           },
         },
       },
@@ -678,29 +678,6 @@ const customConfig = defineConfig({
                   color: "currentColor",
                   shadow: "sm",
                   bg: "colorPalette.solid",
-                },
-              },
-            },
-            slider: {
-              root: {
-                width: "100%",
-              },
-              content: {
-                _vertical: {
-                  ps: "0px",
-                },
-                width: "100%",
-              },
-              trigger: {
-                p: "0px",
-                width: "1rem",
-                height: "1rem",
-                bg: "white/50",
-                cursor: "pointer",
-                minWidth: "1rem",
-                borderRadius: "0.5rem",
-                _selected: {
-                  bg: "white",
                 },
               },
             },

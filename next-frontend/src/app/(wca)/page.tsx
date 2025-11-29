@@ -7,13 +7,15 @@ import {
   Separator,
   Box,
   Text,
-  Tabs,
   Badge,
   VStack,
   Link as ChakraLink,
   Center,
   Icon,
-  HStack, AbsoluteCenter, Float,
+  HStack,
+  AbsoluteCenter,
+  Float,
+  Carousel, IconButton,
 } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
@@ -48,10 +50,15 @@ import { route } from "nextjs-routes";
 import { getT } from "@/lib/i18n/get18n";
 import { draftMode } from "next/headers";
 import { MediaImage } from "@/components/MediaImage";
+import {LuGlobe, LuPause, LuPlay} from "react-icons/lu";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
-    <Card.Root colorPalette={block.colorPalette} colorVariant="solid" width="full">
+    <Card.Root
+      colorPalette={block.colorPalette}
+      colorVariant="solid"
+      width="full"
+    >
       {block.headerImage && (
         <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
       )}
@@ -83,7 +90,7 @@ const AnnouncementsSection = ({
   const mainAnnouncement = block.mainAnnouncement as Announcement;
   const furtherAnnouncements = block.furtherAnnouncements!.map(
     (announcement) => announcement as Announcement,
-  )
+  );
 
   return (
     <AnnouncementsCard
@@ -96,7 +103,14 @@ const AnnouncementsSection = ({
 
 const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
   return (
-    <Card.Root flexDirection="row" colorPalette={block.colorPalette} colorVariant="solid" width="full" maxHeight="lg" overflow="hidden">
+    <Card.Root
+      flexDirection="row"
+      colorPalette={block.colorPalette}
+      colorVariant="solid"
+      width="full"
+      maxHeight="lg"
+      overflow="hidden"
+    >
       <Box position="relative" width="50%">
         <MediaImage
           media={block.mainImage as Media}
@@ -121,8 +135,18 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           textStyle="s2"
         />
         {block.bgImage && (
-          <Float placement="bottom-end" width={`${block.bgSize}%`} height={`${block.bgSize}%`} offset={28}>
-            <MediaImage media={block.bgImage as Media} width="auto" height="full" fit="contain" />
+          <Float
+            placement="bottom-end"
+            width={`${block.bgSize}%`}
+            height={`${block.bgSize}%`}
+            offset={28}
+          >
+            <MediaImage
+              media={block.bgImage as Media}
+              width="auto"
+              height="full"
+              fit="contain"
+            />
           </Float>
         )}
       </Card.Body>
@@ -237,64 +261,53 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
   const slides = block.slides;
 
   return (
-    <Tabs.Root
-      defaultValue={slides[0].id}
-      variant="slider"
+    <Carousel.Root
       orientation="vertical"
-      width="full"
+      slideCount={slides.length}
+      maxHeight="lg"
+      loop
+      position="relative"
     >
-      {/* Dot Navigation */}
-      <Tabs.List asChild>
-        <Box
-          position="absolute"
-          right="6"
-          top="50%"
-          transform="translateY(-50%)"
-          display="flex"
-          flexDirection="column"
-          gap="2"
-          zIndex="10"
-        >
-          {slides.map((slide) => (
-            <Tabs.Trigger key={slide.id} value={slide.id!} />
-          ))}
-        </Box>
-      </Tabs.List>
+      <Carousel.ItemGroup width="full">
+        {slides.map((slide, i) => {
+          const testimonial = slide.testimonial as Testimonial;
 
-      {/* Slides */}
-      {slides.map((slide) => {
-        const testimonial = slide.testimonial as Testimonial;
-
-        return (
-          <Tabs.Content key={slide.id} value={slide.id!} asChild>
-            <Card.Root
-              coloredBg
-              flexDirection="row"
-              overflow="hidden"
-              colorPalette={slide.colorPalette}
-            >
-              <MediaImage
-                media={testimonial.image as Media}
-                srcFallback="/placeholder.png"
-                altFallback={testimonial.punchline}
-                maxW="1/3"
-                objectFit="cover"
-              />
-              <Card.Body pr="3em">
-                <Card.Title textStyle="h1">{testimonial.punchline}</Card.Title>
-                <Separator size="md" />
-                <MarkdownProse
-                  as={Card.Description}
-                  content={testimonial.fullTestimonialMarkdown!}
-                  textStyle="quote"
+          return (
+            <Carousel.Item key={slide.id} index={i} asChild>
+              <Card.Root
+                colorVariant="solid"
+                flexDirection="row"
+                overflow="hidden"
+                colorPalette={slide.colorPalette}
+              >
+                <MediaImage
+                  media={testimonial.image as Media}
+                  altFallback={testimonial.punchline}
+                  maxW="1/3"
                 />
-                <Text>{testimonial.whoDunnit}</Text>
-              </Card.Body>
-            </Card.Root>
-          </Tabs.Content>
-        );
-      })}
-    </Tabs.Root>
+                <Card.Body>
+                  <Card.Title textStyle="h1">
+                    {testimonial.punchline}
+                  </Card.Title>
+                  <Separator size="md" />
+                  <MarkdownProse
+                    as={Card.Description}
+                    content={testimonial.fullTestimonialMarkdown!}
+                    textStyle="quote"
+                  />
+                  <Text>{testimonial.whoDunnit}</Text>
+                </Card.Body>
+              </Card.Root>
+            </Carousel.Item>
+          );
+        })}
+        <Float placement="middle-end" offset={8}>
+          <Carousel.Control>
+            <Carousel.Indicators />
+          </Carousel.Control>
+        </Float>
+      </Carousel.ItemGroup>
+    </Carousel.Root>
   );
 };
 
