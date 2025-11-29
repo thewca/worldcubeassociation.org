@@ -46,7 +46,7 @@ export const typedKeys = <K extends string, V>(object: Record<K, V>): K[] => {
 }
 
 export const getSortedKeys = (scale: ColorScale): ReadonlyArray<LuminanceKey> =>
-  typedKeys(scale).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+  typedKeys(scale).toSorted((a, b) => parseInt(a, 10) - parseInt(b, 10));
 
 export const findNearestSlotKey = (
   scale: ColorScale,
@@ -61,6 +61,50 @@ export const findNearestSlotKey = (
 
   // ColorScale is never empty, so the `minBy` above is safe
   return bestKey!;
+};
+
+const generateSequence = (start: number, end: number): ReadonlyArray<number> => {
+  const length = Math.abs(end - start);
+  const step = end > start ? 1 : -1;
+
+  return Array.from({ length }, (_, i) => start + (i * step));
+};
+
+export const createAnchorMap = (
+  baseScale: ColorScale,
+  colors: ReadonlyArray<string>,
+): ReadonlyMap<string, string> => {
+  const sortedScaleKeys = getSortedKeys(baseScale);
+  const maxIdx = sortedScaleKeys.length;
+
+  const sortedInputs = colors.toSorted((a, b) => {
+    const lA = rgbToOklch(parseRgbColor(a)).l;
+    const lB = rgbToOklch(parseRgbColor(b)).l;
+
+    return lB - lA; // Descending Lightness
+  });
+
+  return sortedInputs.reduce((assignments, color) => {
+    const colorOklch = rgbToOklch(parseRgbColor(color));
+    const idealKey = findNearestSlotKey(baseScale, colorOklch);
+    const idealIdx = sortedScaleKeys.indexOf(idealKey);
+
+    const searchPath = [
+      idealIdx,
+      ...generateSequence(idealIdx + 1, maxIdx),
+      ...generateSequence(idealIdx - 1, -1)
+    ];
+
+    const foundIdx = searchPath.find(idx => {
+      const key = sortedScaleKeys[idx];
+      return !assignments.has(key);
+    });
+
+    if (foundIdx === undefined) return assignments;
+
+    const foundKey = sortedScaleKeys[foundIdx];
+    return new Map(assignments).set(foundKey, color);
+  }, new Map<string, string>());
 };
 
 export const getInterpolatedDelta = (

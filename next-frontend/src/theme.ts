@@ -1,10 +1,5 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
-import {
-  adjustScale,
-  findNearestSlotKey,
-  parseRgbColor,
-  rgbToOklch,
-} from "@/lib/math/colors";
+import { adjustScale, createAnchorMap } from "@/lib/math/colors";
 import _ from "lodash";
 
 const compileColorScheme = (baseColor: string) => ({
@@ -127,16 +122,7 @@ const deriveLuminanceScale = (
   const modelScheme = defaultConfig.theme?.tokens?.colors?.[chakraRefScheme]! as unknown as ChakraColorScale;
   const baseScale = _.mapValues(modelScheme, (chakraToken) => chakraToken.value);
 
-  const createAnchorMap = (colors: ReadonlyArray<string>): ReadonlyMap<string, string> => {
-    const entries = colors.map(color => {
-      const oklch = rgbToOklch(parseRgbColor(color));
-      const key = findNearestSlotKey(baseScale, oklch);
-      return [key, color] as const;
-    });
-    return new Map(entries);
-  };
-
-  const secondaryAnchors = createAnchorMap([
+  const secondaryAnchors = createAnchorMap(baseScale, [
     colorScheme.secondaryDark,
     colorScheme.secondaryMedium,
     colorScheme.secondaryLight,
@@ -145,15 +131,15 @@ const deriveLuminanceScale = (
   const ambientScale = adjustScale(
     baseScale,
     secondaryAnchors,
-    { strength: 0.5, sigma: 1.8 }
+    { sigma: 2 }
   );
 
-  const primaryAnchors = createAnchorMap([colorScheme.primary]);
+  const primaryAnchors = createAnchorMap(baseScale, [colorScheme.primary]);
 
   const heroScale = adjustScale(
     ambientScale,
     primaryAnchors,
-    { sigma: 2.2 }
+    { sigma: 2.5 }
   );
 
   return _.mapValues(heroScale, (rgbHex) => ({ value: rgbHex }))
