@@ -1,4 +1,12 @@
-import {differenceEuclidean, interpolate, oklch, toGamut, formatHex, parseHex, lerp} from "culori";
+import {
+  differenceEuclidean,
+  interpolate,
+  oklch,
+  toGamut,
+  formatHex,
+  parseHex,
+  lerp,
+} from "culori";
 import type { Rgb, Oklch } from "culori";
 import _ from "lodash";
 
@@ -14,19 +22,20 @@ export const blend = (colorA: Rgb, colorB: Rgb, weight: number = 0.5): Rgb => {
 
 const euclideanAlg = differenceEuclidean("rgb");
 
-export const distance = (colorA: Rgb, colorB: Rgb) => euclideanAlg(colorA, colorB);
+export const distance = (colorA: Rgb, colorB: Rgb) =>
+  euclideanAlg(colorA, colorB);
 
 export const rgbToOklch = (rgb: Rgb): Oklch => {
   return oklch(rgb);
-}
+};
 
-const toRgbGamut = toGamut('rgb', 'oklch');
+const toRgbGamut = toGamut("rgb", "oklch");
 
 export const oklchToRgb = (oklch: Oklch): Rgb => {
   return toRgbGamut(oklch);
-}
+};
 
-export type ColorDelta = Readonly<Oklch> & { h: number; };
+export type ColorDelta = Readonly<Oklch> & { h: number };
 
 const getHueDelta = (sourceH: number = 0, targetH: number = 0): number =>
   ((targetH - sourceH + 540) % 360) - 180;
@@ -35,15 +44,26 @@ export const calculateDelta = (source: Oklch, target: Oklch): ColorDelta => ({
   mode: "oklch",
   l: target.l - source.l,
   c: target.c - source.c,
-  h: getHueDelta(source.h, target.h)
+  h: getHueDelta(source.h, target.h),
 });
 
-export type LuminanceKey = "50" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900" | "950";
+export type LuminanceKey =
+  | "50"
+  | "100"
+  | "200"
+  | "300"
+  | "400"
+  | "500"
+  | "600"
+  | "700"
+  | "800"
+  | "900"
+  | "950";
 export type ColorScale = Readonly<Record<LuminanceKey, string>>;
 
 export const typedKeys = <K extends string, V>(object: Record<K, V>): K[] => {
   return Object.keys(object).filter((k): k is K => k in object);
-}
+};
 
 export const getSortedKeys = (scale: ColorScale): ReadonlyArray<LuminanceKey> =>
   typedKeys(scale).toSorted((a, b) => parseInt(a, 10) - parseInt(b, 10));
@@ -63,11 +83,14 @@ export const findNearestSlotKey = (
   return bestKey!;
 };
 
-const generateSequence = (start: number, end: number): ReadonlyArray<number> => {
+const generateSequence = (
+  start: number,
+  end: number,
+): ReadonlyArray<number> => {
   const length = Math.abs(end - start);
   const step = end > start ? 1 : -1;
 
-  return Array.from({ length }, (_, i) => start + (i * step));
+  return Array.from({ length }, (_, i) => start + i * step);
 };
 
 export const createAnchorMap = (
@@ -92,10 +115,10 @@ export const createAnchorMap = (
     const searchPath = [
       idealIdx,
       ...generateSequence(idealIdx + 1, maxIdx),
-      ...generateSequence(idealIdx - 1, -1)
+      ...generateSequence(idealIdx - 1, -1),
     ];
 
-    const foundIdx = searchPath.find(idx => {
+    const foundIdx = searchPath.find((idx) => {
       const key = sortedScaleKeys[idx];
       return !assignments.has(key);
     });
@@ -111,16 +134,16 @@ export const getInterpolatedDelta = (
   currentIdx: number,
   sortedKeys: ReadonlyArray<string>,
   anchorIndices: ReadonlyArray<number>,
-  anchorDeltas: ReadonlyMap<string, ColorDelta>
-): { delta: ColorDelta, distanceToAnchor: number } => {
-  const nextAnchorPtr = anchorIndices.findIndex(idx => idx >= currentIdx);
+  anchorDeltas: ReadonlyMap<string, ColorDelta>,
+): { delta: ColorDelta; distanceToAnchor: number } => {
+  const nextAnchorPtr = anchorIndices.findIndex((idx) => idx >= currentIdx);
 
   if (nextAnchorPtr === 0) {
     const anchorIdx = anchorIndices[0];
 
     return {
       delta: anchorDeltas.get(sortedKeys[anchorIdx])!,
-      distanceToAnchor: Math.abs(currentIdx - anchorIdx)
+      distanceToAnchor: Math.abs(currentIdx - anchorIdx),
     };
   }
 
@@ -129,7 +152,7 @@ export const getInterpolatedDelta = (
 
     return {
       delta: anchorDeltas.get(sortedKeys[anchorIdx])!,
-      distanceToAnchor: Math.abs(currentIdx - anchorIdx)
+      distanceToAnchor: Math.abs(currentIdx - anchorIdx),
     };
   }
 
@@ -142,15 +165,15 @@ export const getInterpolatedDelta = (
   const t = (currentIdx - idxPrev) / (idxNext - idxPrev);
 
   const interpolatedDelta = {
-    mode: 'oklch',
+    mode: "oklch",
     l: lerp(deltaPrev.l, deltaNext.l, t),
     c: lerp(deltaPrev.c, deltaNext.c, t),
-    h: lerp(deltaPrev.h, deltaNext.h, t)
+    h: lerp(deltaPrev.h, deltaNext.h, t),
   } as const;
 
   const distanceToAnchor = Math.min(
     Math.abs(currentIdx - idxPrev),
-    Math.abs(currentIdx - idxNext)
+    Math.abs(currentIdx - idxNext),
   );
 
   return { delta: interpolatedDelta, distanceToAnchor };
@@ -186,31 +209,36 @@ export const adjustScale = (
 
   if (anchorData.length === 0) return baseScale;
 
-  const anchorIndices = anchorData.map(d => d.idx);
-  const anchorDeltas = new Map(anchorData.map(d => [d.key, d.delta]));
+  const anchorIndices = anchorData.map((d) => d.idx);
+  const anchorDeltas = new Map(anchorData.map((d) => [d.key, d.delta]));
 
   return _.mapValues(baseScale, (hex, key) => {
     const currentIdx = sortedKeys.indexOf(key as LuminanceKey);
     const sourceOklch = rgbToOklch(parseRgbColor(hex));
 
     const { delta: rawDelta, distanceToAnchor } = getInterpolatedDelta(
-      currentIdx, sortedKeys, anchorIndices, anchorDeltas
+      currentIdx,
+      sortedKeys,
+      anchorIndices,
+      anchorDeltas,
     );
 
-    const {
-      strength = 1.0 / anchors.size,
-      baseInfluence = 0,
-      sigma,
-    } = config;
+    const { strength = 1.0 / anchors.size, baseInfluence = 0, sigma } = config;
 
-    const decayFactor = sigma !== undefined ? Math.exp(- (distanceToAnchor * distanceToAnchor) / (2 * sigma * sigma)) : 1.0;
-    const effectiveStrength = lerp(baseInfluence, strength, decayFactor)
+    const decayFactor =
+      sigma !== undefined
+        ? Math.exp(-(distanceToAnchor * distanceToAnchor) / (2 * sigma * sigma))
+        : 1.0;
+    const effectiveStrength = lerp(baseInfluence, strength, decayFactor);
 
     const newOklch = {
-      mode: 'oklch',
-      l: Math.max(0, Math.min(1, sourceOklch.l + (rawDelta.l * effectiveStrength))),
-      c: Math.max(0, sourceOklch.c + (rawDelta.c * effectiveStrength)),
-      h: (sourceOklch.h || 0) + (rawDelta.h * effectiveStrength)
+      mode: "oklch",
+      l: Math.max(
+        0,
+        Math.min(1, sourceOklch.l + rawDelta.l * effectiveStrength),
+      ),
+      c: Math.max(0, sourceOklch.c + rawDelta.c * effectiveStrength),
+      h: (sourceOklch.h || 0) + rawDelta.h * effectiveStrength,
     } as const;
 
     return toHexadecimal(oklchToRgb(newOklch));
