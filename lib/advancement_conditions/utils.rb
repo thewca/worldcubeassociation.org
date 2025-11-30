@@ -6,6 +6,7 @@ module AdvancementConditions
       AttemptResultCondition,
       PercentCondition,
       RankingCondition,
+      LinkedRoundCondition,
     ].freeze
 
     def self.advancement_condition_class_from_wcif_type(wcif_type)
