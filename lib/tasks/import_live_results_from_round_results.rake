@@ -15,13 +15,12 @@ namespace :live_results do
     live_results = []
 
     # Sort rounds first so advancing can be correctly calculated
-    sorted_rounds = competition.rounds.sort_by(&:number)
+    sorted_rounds = competition.rounds.sort_by { |round| round.round_type.rank }
 
     sorted_rounds.each do |round|
-      event = round.event
-      format = round.format
-      registrations = round.accepted_registrations
       round.round_results.each do |round_result|
+        event = round.event
+        format = round.format
         results = round_result.attempts
 
         attempts = results.map.with_index(1) do |r, i|
@@ -49,12 +48,7 @@ namespace :live_results do
           average: r.compute_correct_average,
         }
       end
-      LiveResult.create(live_results)
-      puts("Created #{live_results.size} live results for round #{round.event_id} #{round.number}")
-      missing_results = registrations.map(&:id) - live_results.map { |l| l[:registration_id] }
-      puts("Missing results for registrations #{missing_results.inspect}, quitting...")
-      round.quit_from_round(missing_results)
-      live_results = []
     end
+    LiveResult.create(live_results)
   end
 end
