@@ -509,7 +509,7 @@ RSpec.describe CompetitionsController do
         expect(competition.reload.confirmed?).to be false
       end
 
-      it "can confirm a competition that is having advancement conditions", :cxz do
+      it "can confirm a competition that is having advancement conditions" do
         competition.update(start_date: 29.days.from_now, end_date: 29.days.from_now)
         competition.competition_events[0].rounds.destroy_all!
         round_one = competition.competition_events[0].rounds.create!(
