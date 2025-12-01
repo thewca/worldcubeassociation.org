@@ -203,7 +203,7 @@ export function RegistrationCard({
                   currency={competitionInfo.currency_code}
                 />
               </Stat.ValueText>
-              <Badge>{competitionInfo.currency_code}</Badge>
+              <Badge variant="solid">{competitionInfo.currency_code}</Badge>
             </HStack>
           </Stat.Root>
 
@@ -235,7 +235,7 @@ export function RegistrationCard({
                     style="currency"
                     currency={competitionInfo.currency_code}
                   />
-                  <Badge>{competitionInfo.currency_code}</Badge>
+                  <Badge variant="solid">{competitionInfo.currency_code}</Badge>
                 </HStack>
               )}
             </Stat.ValueText>
