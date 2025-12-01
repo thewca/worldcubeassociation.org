@@ -67,7 +67,10 @@ export default function TabMenu({
             <Link
               href={route({
                 pathname: "/competitions/[competitionId]/tabs/[tabName]",
-                query: { competitionId: competitionInfo.id, tabName },
+                query: {
+                  competitionId: competitionInfo.id,
+                  tabName: encodeURIComponent(tabName),
+                },
               })}
             >
               <Text maxW="44">{tabName}</Text>

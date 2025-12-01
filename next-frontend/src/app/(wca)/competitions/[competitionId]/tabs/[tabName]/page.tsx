@@ -21,7 +21,7 @@ export default async function Tab({
     return <Text>Competition does not exist</Text>;
   }
 
-  const tab = tabs.find((t) => t.name === tabName);
+  const tab = tabs.find((t) => t.name === decodeURIComponent(tabName));
 
   if (!tab) {
     return <Text>Tab does not exist</Text>;

@@ -3,6 +3,7 @@ required:
   - id
   - competition_id
   - content
+  - name
   - display_order
 properties:
   id:
