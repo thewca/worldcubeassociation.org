@@ -68,7 +68,7 @@ class PollsController < ApplicationController
              :multiple,
              :deadline,
              :confirmed_at,
-             { poll_options_attributes: %i[id description _destroy] }],
+             { poll_options_attributes: [%i[id description _destroy]] }],
     ).tap do |poll_params|
       poll_params[:confirmed_at] = Time.now if params[:commit] == "Confirm" && current_user.can_create_poll?
     end

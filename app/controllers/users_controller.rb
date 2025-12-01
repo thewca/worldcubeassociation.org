@@ -460,7 +460,7 @@ class UsersController < ApplicationController
   end
 
   private def user_params
-    params.expect(user: [current_user.editable_fields_of_user(user_to_edit).to_a]).tap do |user_params|
+    params.expect(user: current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
       user_params[:wca_id] = user_params[:wca_id].upcase if user_params.key?(:wca_id)
       if user_params.key?(:delegate_reports_region)
         raw_region = user_params.delete(:delegate_reports_region)
