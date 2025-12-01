@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Separator, Tabs } from "@chakra-ui/react";
+import { Separator, Tabs, Text } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import _ from "lodash";
 import { components } from "@/types/openapi";
@@ -70,7 +70,7 @@ export default function TabMenu({
                 query: { competitionId: competitionInfo.id, tabName },
               })}
             >
-              {tabName}
+              <Text maxW="44">{tabName}</Text>
             </Link>
           </Tabs.Trigger>
         ))}
