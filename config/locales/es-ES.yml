@@ -147,6 +147,8 @@ es-ES:
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      #original_hash: 60827cb
+      h: H2H
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -459,6 +461,10 @@ es-ES:
         region: Región
         #original_hash: e3fc6e9
         subRegion: Subregión
+        #original_hash: a1ba702
+        receive_developer_mails: >-
+          Me gustaría recibir notificaciones sobre cambios en los recursos de
+          software de WCA
         #original_hash: 730db33
         receive_delegate_reports: >-
           Me gustaría recibir los Informes de Delegados de Competiciones de la
@@ -779,6 +785,12 @@ es-ES:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          Esto se limita a notificaciones sobre cambios mayores de versión en
+          los recursos como exportaciones de datos, estructura del WCIF y APIs
+          públicas. Recomendado para desarrolladores que mantienen software que
+          depende de estas herramientas.
         #original_hash: c564b74
         receive_delegate_reports: >-
           Si eres Delegado Senior o Miembro del WRC o del WQAC, recibirás los
@@ -3282,9 +3294,9 @@ es-ES:
       is_visible: >-
         Esta competición es visible públicamente, ¡cualquier cambio que hagas se
         mostrará al público!
-      #original_hash: 1039850
+      #original_hash: eb98c2c
       pending_confirmation_html: >-
-        Rellena todos los campos y haz que tu Delegado pinche en 'Confirmar'
+        Rellena todos los campos y pide a tu Delegado que pinche en 'Confirmar'
         cuando estés listo para que el %{contact} apruebe esta competición.
       #original_hash: 8966fd0
       submit_create_value: Crear competición

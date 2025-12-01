@@ -1446,6 +1446,21 @@ class User < ApplicationRecord
     end
   end
 
+  def rds_credentials
+    if software_team_admin? || senior_results_team?
+      return [EnvConfig.DATABASE_WRT_SENIOR_USER, {
+        main: EnvConfig.DATABASE_HOST,
+        replica: EnvConfig.READ_REPLICA_HOST,
+        dev_dump: EnvConfig.DEV_DUMP_HOST,
+      }]
+    end
+    return unless results_team? || software_team?
+
+    [EnvConfig.DATABASE_WRT_USER, {
+      dev_dump: EnvConfig.DEV_DUMP_HOST,
+    }]
+  end
+
   def subordinate_delegates
     delegate_roles
       .filter(&:lead?)

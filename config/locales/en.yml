@@ -104,6 +104,7 @@ en:
       "3": "Bo3"
       "a": "Ao5"
       "m": "Mo3"
+      "h": "H2H"
   #context: Round name
   rounds:
     "0":
@@ -1600,7 +1601,7 @@ en:
       public_and_locked_html: "This competition is publicly visible and locked for editing. If you need to make a change, please reply to the email thread where the competition was confirmed."
       confirmed_but_not_visible_html: "You've confirmed this competition, but it is not yet visible to the public. Wait for the %{contact} to make it visible."
       is_visible: "This competition is publicly visible, any changes you make will show up to the public!"
-      pending_confirmation_html: "Fill in all the fields and make your Delegate click 'Confirm' when you're ready for the %{contact} to approve this competition."
+      pending_confirmation_html: "Fill in all the fields and ask your Delegate to click 'Confirm' when you're ready for the %{contact} to approve this competition."
       submit_create_value: "Create Competition"
       submit_update_value: "Update Competition"
       submit_confirm_value: "Confirm"
@@ -1733,7 +1734,7 @@ en:
         information: "Important information that competitors should know. It will be displayed on the competition main page. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak."
         competitor_limit:
           enabled: "A Competitor Limit is required. Only simultaneous FMC competitions with multiple locations can have no Competitor Limit."
-          count: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
+          count: "The number of competitors allowed in this competition. This limit is enforced by the built-in registration system."
           reason: "What is the reason for the limit on competitors? Please fill this out in English!"
           auto_close_threshold: "Registration will automatically close when this number of paid registrations is received. Leave blank to disable, ignore if you aren't using integrated payments."
           newcomer_month_reserved_spots: "Only allowed during Newcomer Month - reserved spots can't be more than half of the Competitor Limit."
@@ -2096,12 +2097,10 @@ en:
         time_limit_html: "If you reach the time limit during your solve, the judge will stop you and your result will be DNF (see %{regulation_link})."
         #context: as used in "please see Regulation A1a4"
         regulation_link_text: "Regulation %{number}"
-        #context: as used in "please see Guideline A1a2++"
-        guideline_link_text: "Guideline %{number}"
         #context: used in the sentence "a cumulative time limit may be enforced [...]"
         cumulative_time_limit: "cumulative time limit"
         cumulative_one_round_html: "A %{cumulative_time_limit} may be enforced (see %{regulation_link})."
-        cumulative_across_rounds_html: "A %{cumulative_time_limit} may be enforced across rounds (see %{guideline_link})."
+        cumulative_across_rounds_html: "A %{cumulative_time_limit} may be enforced across rounds (see %{regulation_link})."
         cutoff_html: "The result to beat to proceed to the second phase of a cutoff round (see %{regulation_link})."
         format_html: "The format describes how to determine the ranking of competitors based on their results. The list of allowed formats per event is described in %{link_to_9b}. See %{link_to_9f} for a description of each format."
         qualification_html: "Qualification times must be set in other WCA competitions in order to compete."

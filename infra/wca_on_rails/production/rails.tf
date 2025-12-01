@@ -51,6 +51,10 @@ locals {
       value = "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
     {
+      name = "DEV_DUMP_HOST"
+      value = "dev-dump-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+    },
+    {
       name = "CACHE_REDIS_URL"
       value = "redis://wca-main-cache.iebvzt.ng.0001.usw2.cache.amazonaws.com:6379"
     },
@@ -111,6 +115,10 @@ locals {
       value = var.DATABASE_WRT_USER
     },
     {
+      name = "DATABASE_WRT_SENIOR_USER"
+      value = var.DATABASE_WRT_SENIOR_USER
+    },
+    {
       name = "VAULT_ADDR"
       value = var.VAULT_ADDR
     },
@@ -136,7 +144,8 @@ locals {
       name = "PMA_USER_CONFIG_BASE64"
       value = base64encode(templatefile("../templates/config.user.inc.php.tftpl",
         { rds_host: "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
-          rds_replica_host: "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com" }))
+          rds_replica_host: "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
+          dump_replica_host: "dev-dump-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"}))
     }
   ]
 }
@@ -209,7 +218,7 @@ data "aws_iam_policy_document" "task_policy" {
     actions = [
       "rds-db:connect",
     ]
-    resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}"]
+    resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}","arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_SENIOR_USER}"]
   }
   statement {
     effect = "Allow"

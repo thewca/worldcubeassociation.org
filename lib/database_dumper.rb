@@ -314,6 +314,7 @@ module DatabaseDumper
           updated_at
           old_type
           linked_round_id
+          is_h2h_mock
         ],
       ),
     }.freeze,
