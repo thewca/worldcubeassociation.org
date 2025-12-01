@@ -75,7 +75,7 @@ class Registration < ApplicationRecord
   validates :guests, numericality: { less_than_or_equal_to: DEFAULT_GUEST_LIMIT, if: :guests_unrestricted?, frontend_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT }
 
   after_save :mark_registration_processing_as_done
-  after_save :trigger_bulk_auto_accept, if: -> {
+  after_save :trigger_bulk_auto_accept, if: lambda {
     competition.auto_accept_preference_live? && competing_status_previously_changed?(from: 'accepted')
   }
 
@@ -579,7 +579,7 @@ class Registration < ApplicationRecord
                             .sort_by { |registration| registration.last_positive_payment.paid_at }
 
     # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
-    pending_outcomes = pending_registrations.index_by(&:id).transform_values { it.attempt_auto_accept }
+    pending_outcomes = pending_registrations.index_by(&:id).transform_values(&:attempt_auto_accept)
 
     waitlisted_outcomes.present? ? waitlisted_outcomes.merge(pending_outcomes) : pending_outcomes
   end
