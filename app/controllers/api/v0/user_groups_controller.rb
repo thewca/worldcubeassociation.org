@@ -63,7 +63,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
   end
 
   def update
-    user_group_params = params.require(:user_group).permit(:name, :is_active, :is_hidden)
+    user_group_params = params.expect(user_group: %i[name is_active is_hidden])
     user_group_id = params.require(:id)
     user_group = UserGroup.find(user_group_id)
 

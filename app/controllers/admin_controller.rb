@@ -15,7 +15,7 @@ class AdminController < ApplicationController
   end
 
   def do_merge_people
-    merge_params = params.require(:merge_people).permit(:person1_wca_id, :person2_wca_id)
+    merge_params = params.expect(merge_people: %i[person1_wca_id person2_wca_id])
     @merge_people = MergePeople.new(merge_params)
     if @merge_people.do_merge
       flash.now[:success] = "Successfully merged #{@merge_people.person2_wca_id} into #{@merge_people.person1_wca_id}!"
@@ -105,8 +105,8 @@ class AdminController < ApplicationController
   end
 
   def override_regional_records
-    action_params = params.require(:check_regional_records_form)
-                          .permit(:competition_id, :event_id, :refresh_index)
+    action_params = params
+                    .expect(check_regional_records_form: %i[competition_id event_id refresh_index])
 
     @check_records_request = CheckRegionalRecordsForm.new(action_params)
     @check_results = @check_records_request.run_check

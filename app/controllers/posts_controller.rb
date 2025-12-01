@@ -134,7 +134,7 @@ class PostsController < ApplicationController
   helper_method :editable_post_fields
 
   private def post_params
-    params.require(:post).permit(*editable_post_fields)
+    params.expect(post: [*editable_post_fields])
   end
 
   private def find_post
