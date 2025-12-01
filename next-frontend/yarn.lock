@@ -4264,16 +4264,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/cli@npm:2.11.1":
-  version: 2.11.1
-  resolution: "@redocly/cli@npm:2.11.1"
+"@redocly/cli@npm:2.12.0":
+  version: 2.12.0
+  resolution: "@redocly/cli@npm:2.12.0"
   dependencies:
     "@opentelemetry/exporter-trace-otlp-http": "npm:0.202.0"
     "@opentelemetry/resources": "npm:2.0.1"
     "@opentelemetry/sdk-trace-node": "npm:2.0.1"
     "@opentelemetry/semantic-conventions": "npm:1.34.0"
-    "@redocly/openapi-core": "npm:2.11.1"
-    "@redocly/respect-core": "npm:2.11.1"
+    "@redocly/openapi-core": "npm:2.12.0"
+    "@redocly/respect-core": "npm:2.12.0"
     abort-controller: "npm:^3.0.0"
     chokidar: "npm:^3.5.1"
     colorette: "npm:^1.2.0"
@@ -4297,7 +4297,7 @@ __metadata:
   bin:
     openapi: bin/cli.js
     redocly: bin/cli.js
-  checksum: 10c0/8eebc4941125cb3bc5b72324b1e6717e044d5346e1cae6ec17a046d5c85804d9657438b40ef7edc24ae581926f54d6249640671e0d3e0a09fa486f9d72b92f40
+  checksum: 10c0/61fc2bae2f5c806db9800badbda22a52a1b82afaf21d1fb6a1c805b3534383adc86a1b9eff7169bb183f21d8175e1a1e52aebb8a3ed3cf7380b45d5d6f862d83
   languageName: node
   linkType: hard
 
@@ -4308,21 +4308,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/config@npm:^0.38.0":
-  version: 0.38.0
-  resolution: "@redocly/config@npm:0.38.0"
+"@redocly/config@npm:^0.40.0":
+  version: 0.40.0
+  resolution: "@redocly/config@npm:0.40.0"
   dependencies:
     json-schema-to-ts: "npm:2.7.2"
-  checksum: 10c0/5d0a3f8e7c0ce4349c415460cd4ad2c7adf8688d936dad502519d428b8f3276f5fafd19951caa27df50d0608de171301ea68c72346b7ac4ba86673b0a2cec75e
+  checksum: 10c0/3191eb4616a83c37dd5abd659d168eb6b4e36dbe1b7c52ada90605a2a7c9b5632828f35f6580cf00b2c5ffd0d10406ae6647799e2dbb5b2d7fdddc73a2ac2d2b
   languageName: node
   linkType: hard
 
-"@redocly/openapi-core@npm:2.11.1":
-  version: 2.11.1
-  resolution: "@redocly/openapi-core@npm:2.11.1"
+"@redocly/openapi-core@npm:2.12.0":
+  version: 2.12.0
+  resolution: "@redocly/openapi-core@npm:2.12.0"
   dependencies:
     "@redocly/ajv": "npm:^8.11.4"
-    "@redocly/config": "npm:^0.38.0"
+    "@redocly/config": "npm:^0.40.0"
     ajv-formats: "npm:^2.1.1"
     colorette: "npm:^1.2.0"
     js-levenshtein: "npm:^1.1.6"
@@ -4330,7 +4330,7 @@ __metadata:
     picomatch: "npm:^4.0.3"
     pluralize: "npm:^8.0.0"
     yaml-ast-parser: "npm:0.0.43"
-  checksum: 10c0/c5d091e641f1a9c631d4fa9615c7bc0478f541a822cdd21ba4ec27c4aee375322e3c4b9c7be2e23424a434ff91de75e8d289dbf9a94639be701a5f80aa8598f5
+  checksum: 10c0/299db354aab6f18e4975381be5bbca5a6db39c13de359cabb874acee44bf79d5d4fa261623a7d78ff24941e56fa6dce4dc0d8eff7ff91dba40a1db31b5aab315
   languageName: node
   linkType: hard
 
@@ -4351,21 +4351,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/respect-core@npm:2.11.1":
-  version: 2.11.1
-  resolution: "@redocly/respect-core@npm:2.11.1"
+"@redocly/respect-core@npm:2.12.0":
+  version: 2.12.0
+  resolution: "@redocly/respect-core@npm:2.12.0"
   dependencies:
     "@faker-js/faker": "npm:^7.6.0"
     "@noble/hashes": "npm:^1.8.0"
     "@redocly/ajv": "npm:8.11.4"
-    "@redocly/openapi-core": "npm:2.11.1"
+    "@redocly/openapi-core": "npm:2.12.0"
     better-ajv-errors: "npm:^1.2.0"
     colorette: "npm:^2.0.20"
     json-pointer: "npm:^0.6.2"
     jsonpath-rfc9535: "npm:1.3.0"
     openapi-sampler: "npm:^1.6.1"
     outdent: "npm:^0.8.0"
-  checksum: 10c0/18333a377d35dddc57318ef3c6db2bec43ba846e1c797ca270a7ab21bf97b9228155e52c0289b1dcba26c2e95806ba9cef61d60feb485962b019b2e3db277ee5
+  checksum: 10c0/4b78263bbcf4d3376abea42375c590c54e253f6e51fb210e3b3eb26348cade3fbb133eef331271fda6b67991459750aa87adaf857ec2e7f036ef513218e37c92
   languageName: node
   linkType: hard
 
@@ -12567,7 +12567,7 @@ __metadata:
     "@payloadcms/richtext-lexical": "npm:3.64.0"
     "@payloadcms/storage-s3": "npm:3.64.0"
     "@rails/actioncable": "npm:^8.1.100"
-    "@redocly/cli": "npm:2.11.1"
+    "@redocly/cli": "npm:2.12.0"
     "@stylistic/eslint-plugin": "npm:^5.6.1"
     "@tanstack/eslint-plugin-query": "npm:^5.91.2"
     "@tanstack/react-query": "npm:^5.90.11"
