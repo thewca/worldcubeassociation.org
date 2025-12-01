@@ -7,7 +7,6 @@ import { LuShare2 } from "react-icons/lu";
 import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import _ from "lodash";
 
 interface RecordsProps {
   records: components["schemas"]["PersonInfo"]["personal_records"];

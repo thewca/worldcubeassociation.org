@@ -11,10 +11,28 @@ interface ResultsTabProps {
 }
 
 const ResultsTab: React.FC<ResultsTabProps> = ({ wcaId }) => {
+  const [eventId, setEventId] = useState("333");
+
+  return (
+    <VStack>
+      <EventSelector
+        title=""
+        selectedEvents={[eventId]}
+        onEventClick={(e) => setEventId(e)}
+        hideAllButton={true}
+        hideClearButton={true}
+      />
+      <Results wcaId={wcaId} eventId={eventId} />
+    </VStack>
+  );
+};
+
+const Results: React.FC<{ wcaId: string; eventId: string }> = ({
+  wcaId,
+  eventId,
+}) => {
   const api = useAPI();
   const { t } = useT();
-
-  const [eventId, setEventId] = useState("333");
 
   const { data: resultsQuery, isLoading } = api.useQuery(
     "get",
@@ -32,18 +50,7 @@ const ResultsTab: React.FC<ResultsTabProps> = ({ wcaId }) => {
     return <Text>Failed fetching results</Text>;
   }
 
-  return (
-    <VStack>
-      <EventSelector
-        title=""
-        selectedEvents={[eventId]}
-        onEventClick={(e) => setEventId(e)}
-        hideAllButton={true}
-        hideClearButton={true}
-      />
-      <ByCompetitionTable results={resultsQuery} t={t} />
-    </VStack>
-  );
+  return <ByCompetitionTable results={resultsQuery} t={t} />;
 };
 
 export default ResultsTab;
