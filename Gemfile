@@ -102,6 +102,7 @@ gem 'playwright-ruby-client', require: 'playwright'
 gem 'hash_diff'
 gem 'tsort'
 gem 'html_safe_flash'
+gem 'benchmark'
 
 group :development, :test do
   gem 'spring'
