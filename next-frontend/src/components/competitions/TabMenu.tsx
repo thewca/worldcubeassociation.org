@@ -12,6 +12,7 @@ import {
   afterCompetitionTabs,
   beforeCompetitionTabs,
 } from "@/lib/wca/competitions/tabs";
+import { route } from "nextjs-routes";
 
 export default function TabMenu({
   competitionInfo,
@@ -57,15 +58,22 @@ export default function TabMenu({
       >
         {tabs.map((tab) => (
           <Tabs.Trigger key={tab.i18nKey} value={tab.menuKey} asChild>
-            <Link href={tab.href} key={tab.i18nKey}>
-              {t(tab.i18nKey)}
-            </Link>
+            <Link href={tab.href}>{t(tab.i18nKey)}</Link>
           </Tabs.Trigger>
         ))}
         <Separator />
-        <Tabs.Trigger value="custom-1">Custom 1</Tabs.Trigger>
-        <Tabs.Trigger value="custom-2">Custom 2</Tabs.Trigger>
-        <Tabs.Trigger value="custom-3">Custom 3</Tabs.Trigger>
+        {competitionInfo.tab_names.map((tabName) => (
+          <Tabs.Trigger key={tabName} value={tabName} asChild>
+            <Link
+              href={route({
+                pathname: "/competitions/[competitionId]/tabs/[tabName]",
+                query: { competitionId: competitionInfo.id, tabName },
+              })}
+            >
+              {tabName}
+            </Link>
+          </Tabs.Trigger>
+        ))}
       </Tabs.List>
       <Tabs.Content value={currentPath!}>{children}</Tabs.Content>
     </Tabs.Root>
