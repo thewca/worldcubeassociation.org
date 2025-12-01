@@ -69,7 +69,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
 
   const { t } = useT();
   return (
-    <Table.Row bg="bg" onClick={() => setOpen(true)} key={comp.id}>
+    <Table.Row onClick={() => setOpen(true)} key={comp.id}>
       <Table.Cell>{registrationStatusIcons[regoStatus] || null}</Table.Cell>
 
       <Table.Cell>

@@ -453,12 +453,12 @@ const customConfig = defineConfig({
                 whiteSpace: "noWrap",
               },
               row: {
+                cursor: "pointer",
                 "& td": {
                   transitionProperty: "background-color",
                   transitionTimingFunction: "ease",
                   transitionDuration: "150ms",
                 },
-                cursor: "pointer",
                 "&:nth-of-type(odd) td": {
                   bg: "bg.muted",
                 },
@@ -490,39 +490,15 @@ const customConfig = defineConfig({
       tabs: {
         slots: [],
         variants: {
-          variant: {
-            results: {
-              content: {
-                p: "8",
-              },
+          highContrast: {
+            true: {
               trigger: {
-                borderRadius: "0",
-                color: "fg",
-                _notFirst: {
-                  _before: {
-                    content: '""',
-                    position: "absolute",
-                    left: 0,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    height: "1.5em",
-                    width: "1.5px",
-                    backgroundColor: "#D9D9D9",
-                  },
-                },
                 _selected: {
-                  bg: "colorPalette.solid",
-                  color: "colorPalette.contrast",
-                  _before: {
-                    display: "none", // Remove the line when selected
-                  },
-                },
-                "&[data-selected] + &::before": {
-                  display: "none",
-                },
-              },
-            },
-          },
+                  color: "colorPalette.contrast"
+                }
+              }
+            }
+          }
         },
       },
     },

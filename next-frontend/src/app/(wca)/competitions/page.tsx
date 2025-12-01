@@ -318,11 +318,8 @@ function CompetitionTable({
     <Table.Root
       size="xs"
       striped
-      rounded="md"
-      colorPalette="blue"
       variant="competitions"
       borderWidth="2px"
-      borderRadius="md"
     >
       <Table.Body>
         {competitions.map((comp) => (

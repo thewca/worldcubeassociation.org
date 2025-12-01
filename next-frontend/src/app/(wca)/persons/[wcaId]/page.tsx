@@ -124,9 +124,10 @@ export default async function PersonOverview({
                 <Tabs.Root
                   defaultValue="results"
                   fitted
-                  variant="results"
+                  variant="plain"
                   lazyMount
                   colorPalette="blue"
+                  highContrast
                 >
                   <Card.Header padding={0}>
                     <Tabs.List>
@@ -143,6 +144,7 @@ export default async function PersonOverview({
                         </Tabs.Trigger>
                       )}
                       <Tabs.Trigger value="map">Map</Tabs.Trigger>
+                      <Tabs.Indicator bg="colorPalette.solid" borderBottomRadius={0} />
                     </Tabs.List>
                   </Card.Header>
                   <Card.Body>
