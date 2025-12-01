@@ -82,6 +82,8 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
 
   mandatory :DUMP_HOST, :string
 
+  mandatory :OIDC_ALGORITHM, :string
+
   # ROOT_URL is used when generating full urls (rather than relative urls).
   # Trick to discover the port we're set to run on from
   # https://stackoverflow.com/a/48069920/1739415.
