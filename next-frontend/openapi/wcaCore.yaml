@@ -26,6 +26,8 @@ paths:
     $ref: 'paths/competitions/competitionEvents.yaml'
   /v0/competitions/{competitionId}/schedule:
     $ref: 'paths/competitions/competitionSchedule.yaml'
+  /v0/competitions/{competitionId}/tabs:
+    $ref: 'paths/competitions/competitionTabs.yaml'
   /v0/competitions/{competitionId}/registrations:
     $ref: 'paths/competitions/competitionRegistrations.yaml'
   /v0/competitions/{competitionId}/podiums:

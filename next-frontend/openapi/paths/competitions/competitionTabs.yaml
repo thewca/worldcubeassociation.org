@@ -1,0 +1,20 @@
+get:
+  summary: Get competition tabs
+  tags:
+    - competitions
+  operationId: competitionTabs
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../schemas/competitions/Tabs.yaml'

@@ -459,6 +459,7 @@ Rails.application.routes.draw do
         get '/registrations' => 'competitions#registrations'
         get '/events' => 'competitions#events'
         get '/schedule' => 'competitions#schedule'
+        get '/tabs' => 'competitions#tabs'
         get '/podiums' => 'competitions#podiums'
         get '/scrambles' => 'competitions#scrambles', as: :scrambles
         get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles
