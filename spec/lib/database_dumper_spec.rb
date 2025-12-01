@@ -158,7 +158,7 @@ RSpec.describe "DatabaseDumper" do
       end
     end
 
-    context 'v2' do
+    context 'v2', :zxc do
       it "defines sanitizers that match the expected output schema (backwards compatibility)" do
         with_database :results_dump_v2 do
           # Rails *always* includes a `schema_migrations` table when loading any pre-defined schema file.

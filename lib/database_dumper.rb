@@ -1205,7 +1205,6 @@ module DatabaseDumper
 
   V2_RESULTS_SANITIZERS = {
     "results" => {
-      source_table: "results",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           pos
@@ -1213,20 +1212,19 @@ module DatabaseDumper
           average
         ],
         fake_values: {
-          "competitionId" => "competition_id",
-          "eventId" => "event_id",
-          "roundTypeId" => "round_type_id",
-          "personName" => "person_name",
-          "personId" => "person_id",
-          "formatId" => "format_id",
-          "regionalSingleRecord" => "regional_single_record",
-          "regionalAverageRecord" => "regional_average_record",
-          "personCountryId" => "country_id",
+          "competition_id" => "competition_id",
+          "event_id" => "event_id",
+          "round_type_id" => "round_type_id",
+          "person_name" => "person_name",
+          "person_id" => "person_id",
+          "format_id" => "format_id",
+          "regional_single_record" => "regional_single_record",
+          "regional_average_record" => "regional_average_record",
+          "person_country_id" => "country_id",
         }.freeze,
       ),
     }.freeze,
     "result_attempts" => {
-      source_table: "result_attempts",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -1239,39 +1237,34 @@ module DatabaseDumper
       ),
     }.freeze,
     "ranks_single" => {
-      source_table: "ranks_single",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           best
         ],
-        fake_values: {
-          # Copy over column to keep backwards compatibility
-          "personId" => "person_id",
-          "eventId" => "event_id",
-          "worldRank" => "world_rank",
-          "continentRank" => "continent_rank",
-          "countryRank" => "country_rank",
-        },
+        fake_values: %w[
+          person_id
+          event_id
+          world_rank
+          continent_rank
+          country_rank
+        ],
       ),
     }.freeze,
     "ranks_average" => {
-      source_table: "ranks_average",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           best
         ],
-        fake_values: {
-          # Copy over column to keep backwards compatibility
-          "personId" => "person_id",
-          "eventId" => "event_id",
-          "worldRank" => "world_rank",
-          "continentRank" => "continent_rank",
-          "countryRank" => "country_rank",
-        },
+        fake_values: %w[
+          person_id
+          event_id
+          world_rank
+          continent_rank
+          country_rank
+        ],
       ),
     }.freeze,
     "round_types" => {
-      source_table: "round_types",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -1279,14 +1272,12 @@ module DatabaseDumper
           name
           rank
         ],
-        fake_values: {
-          # Copy over column to keep backwards compatibility
-          "cellName" => "cell_name",
-        },
+        fake_values: %w[
+          cell_name
+        ],
       ),
     }.freeze,
     "events" => {
-      source_table: "events",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -1296,12 +1287,11 @@ module DatabaseDumper
         ],
         fake_values: {
           # Copy over column to keep backwards compatibility
-          "cellName" => "name",
+          "cell_name" => "name",
         },
       ),
     }.freeze,
     "formats" => {
-      source_table: "formats",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -1315,20 +1305,18 @@ module DatabaseDumper
       ),
     }.freeze,
     "countries" => {
-      source_table: "countries",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
           iso2
           name
         ],
-        fake_values: {
-          "continentId" => "continent_id",
-        }.freeze,
+        fake_values: %w[
+          continent_id
+        ],
       ),
     }.freeze,
     "continents" => {
-      source_table: "continents",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -1337,13 +1325,12 @@ module DatabaseDumper
           name
           zoom
         ],
-        fake_values: {
-          "recordName" => "record_name",
-        }.freeze,
+        fake_values: %w[
+          record_name
+        ],
       ),
     }.freeze,
     "persons" => {
-      source_table: "persons",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           name
@@ -1352,12 +1339,11 @@ module DatabaseDumper
         fake_values: {
           "id" => "wca_id",
           "subid" => "sub_id",
-          "countryId" => "country_id",
+          "country_id" => "country_id",
         },
       ),
     }.freeze,
     "competitions" => {
-      source_table: "competitions",
       where_clause: PUBLIC_COMPETITION_JOIN,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -1370,20 +1356,20 @@ module DatabaseDumper
           longitude
         ],
         fake_values: {
-          "cityName" => "city_name",
-          "countryId" => "country_id",
-          "venueAddress" => "venue_address",
-          "venueDetails" => "venue_details",
-          "cellName" => "cell_name",
+          "city_name" => "city_name",
+          "country_id" => "country_id",
+          "venue_address" => "venue_address",
+          "venue_details" => "venue_details",
+          "cell_name" => "cell_name",
           "cancelled" => "(competitions.cancelled_at IS NOT NULL AND competitions.cancelled_by IS NOT NULL)",
-          "eventSpecs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
-          "wcaDelegate" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
+          "event_specs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
+          "wca_delegate" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
           "organiser" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_organizers.name, \"}{mailto:\", users_organizers.email, \"}]\")) SEPARATOR \" \")",
           "year" => "YEAR(start_date)",
           "month" => "MONTH(start_date)",
           "day" => "DAY(start_date)",
-          "endMonth" => "MONTH(end_date)",
-          "endDay" => "DAY(end_date)",
+          "end_month" => "MONTH(end_date)",
+          "end_day" => "DAY(end_date)",
         }.freeze,
       ),
       tsv_sanitizers: actions_to_column_sanitizers(
@@ -1393,20 +1379,19 @@ module DatabaseDumper
       ),
     }.freeze,
     "scrambles" => {
-      source_table: "scrambles",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           scramble
         ],
-        fake_values: {
-          "competitionId" => "competition_id",
-          "eventId" => "event_id",
-          "groupId" => "group_id",
-          "isExtra" => "is_extra",
-          "roundTypeId" => "round_type_id",
-          "scrambleId" => "id",
-          "scrambleNum" => "scramble_num",
-        },
+        fake_values: %w[
+          id
+          competition_id
+          event_id
+          group_id
+          is_extra
+          round_type_id
+          scramble_num
+        ],
       ),
       tsv_sanitizers: actions_to_column_sanitizers(
         fake_values: {
