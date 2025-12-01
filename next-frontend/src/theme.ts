@@ -190,7 +190,10 @@ const customConfig = defineConfig({
     },
     semanticTokens: {
       colors: {
-        link: { value: "{colors.supplementary.link}" },
+        link: {
+          DEFAULT: { value: "{colors.supplementary.link}" },
+          fg: { value: "{colors.supplementary.link}" },
+        },
         advancing: { value: "{colors.green.1A}" },
         advancingQuestionable: { value: "{colors.yellow.1A}" },
         recordMarkers: {
@@ -339,6 +342,13 @@ const customConfig = defineConfig({
         },
       },
     },
+    recipes: {
+      link: {
+        base: {
+          colorPalette: "link",
+        },
+      },
+    },
     slotRecipes: {
       dataList: {
         slots: [],
@@ -381,6 +391,15 @@ const customConfig = defineConfig({
           },
         },
         variants: {
+          variant: {
+            info: {
+              root: {
+                bg: "bg.muted",
+                borderWidth: "1px",
+                borderColor: "border",
+              },
+            },
+          },
           colorVariant: {
             solid: {
               root: {
@@ -412,8 +431,8 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
-          variant: "subtle",
-        }
+          variant: "info",
+        },
       },
       accordion: {
         slots: [],
