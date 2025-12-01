@@ -431,6 +431,7 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
+          // @ts-expect-error TypeScript does not know about the new variant before compiling the theme further down below
           variant: "info",
         },
       },
