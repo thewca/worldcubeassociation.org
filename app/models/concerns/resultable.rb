@@ -31,15 +31,11 @@ module Resultable
       Format.c_find(format_id)
     end
 
-    # Deliberately using `round_id` here instead of "simply" checking for `round`
-    #   because the latter would try to fall back to `round_type_id`.
-    validate :linked_round_consistent, if: :round_id?
-    def linked_round_consistent
-      errors.add(:competition, "Should match '#{round.competition_id}' of the linked round, but is '#{competition_id}'") unless competition_id == round.competition_id
-      errors.add(:round_type, "Should match '#{round.round_type_id}' of the linked round, but is '#{round_type_id}'") unless round_type_id == round.round_type_id
-      errors.add(:event, "Should match '#{round.event_id}' of the linked round, but is '#{event_id}'") unless event_id == round.event_id
-      errors.add(:format, "Should match '#{round.format_id}' of the linked round, but is '#{format_id}'") unless format_id == round.format_id
-    end
+    delegate :competition_id, :round_type_id, :event_id, :format_id, to: :round, prefix: true
+    validates :competition_id, comparison: { equal_to: :round_competition_id }
+    validates :round_type_id, comparison: { equal_to: :round_round_type_id }
+    validates :event_id, comparison: { equal_to: :round_event_id }
+    validates :format_id, comparison: { equal_to: :round_format_id }
 
     validate :validate_each_solve, if: :event
     def validate_each_solve
@@ -185,6 +181,18 @@ module Resultable
 
   private def sorted_solves_with_index
     @sorted_solves_with_index ||= solve_times.each_with_index.reject { |s, _| s.skipped? }.sort.freeze
+  end
+
+  def tied_with?(other_result)
+    return false if other_result.nil?
+
+    if format.sort_by == "average"
+      # If the ranking is based on average, look at both average and best.
+      average == other_result.average && best == other_result.best
+    else
+      # else we just compare the bests
+      best == other_result.best
+    end
   end
 
   def solve_times

@@ -14,7 +14,6 @@ FactoryBot.define do
     competition_id { nil }
     competing { { 'event_ids' => events, 'competing_status' => 'pending' } }
 
-    jwt_token { fetch_jwt_token(submitted_by) }
     guests { 0 }
 
     trait :comment do
@@ -47,7 +46,7 @@ FactoryBot.define do
   factory :update_request, class: Hash do
     user_id { nil }
     submitted_by { user_id }
-    jwt_token { fetch_jwt_token(submitted_by) }
+
     competition_id { nil }
 
     transient do
@@ -86,7 +85,6 @@ FactoryBot.define do
 
     submitted_by { nil }
     competition_id { nil }
-    jwt_token { fetch_jwt_token(submitted_by) }
 
     requests do
       user_ids.map do |user_id|

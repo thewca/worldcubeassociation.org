@@ -31,22 +31,18 @@ import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 
 import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useReducer, useState } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   competitionFilterReducer,
   createFilterState,
 } from "@/lib/wca/competitions/filterUtils";
-import {
-  calculateQueryKey,
-  createSearchParams,
-} from "@/lib/wca/competitions/queryUtils";
+import { createSearchParams } from "@/lib/wca/competitions/queryUtils";
 import useAPI from "@/lib/wca/useAPI";
 import EventSelector from "@/components/EventSelector";
 import useDebounce from "@/lib/hooks/useDebounce";
 import { WCA_API_PAGINATION } from "@/lib/wca/data/wca";
 import Loading from "@/components/ui/loading";
 import { useSearchParams } from "next/navigation";
-import { useInView } from "react-intersection-observer";
+import { useOnInView } from "react-intersection-observer";
 import { TFunction } from "i18next";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
@@ -71,17 +67,15 @@ export default function CompetitionsPage() {
     createFilterState,
   );
 
-  const { ref: bottomRef, inView: bottomInView } = useInView();
-
   const { t } = useT();
 
   const canViewAdminDetails = false;
 
   const debouncedFilterState = useDebounce(filterState, DEBOUNCE_MS);
 
-  const competitionQueryKey = useMemo(
-    () => calculateQueryKey(debouncedFilterState, canViewAdminDetails),
-    [debouncedFilterState, canViewAdminDetails],
+  const querySearchParams = createSearchParams(
+    debouncedFilterState,
+    canViewAdminDetails,
   );
 
   const {
@@ -89,30 +83,30 @@ export default function CompetitionsPage() {
     fetchNextPage: competitionsFetchNextPage,
     isFetching: competitionsIsFetching,
     hasNextPage: hasMoreCompsToLoad,
-  } = useInfiniteQuery({
-    // We do have the deps covered in competitionQueryKey
-    // eslint-disable-next-line @tanstack/query/exhaustive-deps
-    queryKey: ["competitions", competitionQueryKey],
-    queryFn: ({ pageParam }) => {
-      const querySearchParams = createSearchParams(
-        debouncedFilterState,
-        pageParam.toString(),
-        canViewAdminDetails,
-      );
+  } = api.useInfiniteQuery(
+    "get",
+    "/v0/competition_index",
+    {
+      params: { query: Object.fromEntries(querySearchParams.entries()) },
+    },
+    {
+      pageParamName: "page",
+      getNextPageParam: (previousPage, allPages) => {
+        // Continue until less than a full page of data is fetched,
+        // which indicates the very last page.
+        if (previousPage.length < WCA_API_PAGINATION) {
+          return undefined;
+        }
+        return allPages.length + 1;
+      },
+      initialPageParam: 1,
+    },
+  );
 
-      return api.GET("/v0/competition_index", {
-        params: { query: Object.fromEntries(querySearchParams.entries()) },
-      });
-    },
-    getNextPageParam: (previousPage, allPages) => {
-      // Continue until less than a full page of data is fetched,
-      // which indicates the very last page.
-      if (previousPage.data!.length < WCA_API_PAGINATION) {
-        return undefined;
-      }
-      return allPages.length + 1;
-    },
-    initialPageParam: 1,
+  const bottomRef = useOnInView(() => {
+    if (hasMoreCompsToLoad && !competitionsIsFetching) {
+      competitionsFetchNextPage();
+    }
   });
 
   useEffect(() => {
@@ -134,30 +128,18 @@ export default function CompetitionsPage() {
   const competitionsDistanceFiltered = useMemo(() => {
     if (!rawCompetitionData) return [];
 
-    if (location === null || distanceFilter === 100)
-      return rawCompetitionData!.pages.flatMap(({ data }) => data!);
+    const flatPages = rawCompetitionData.pages.flatMap((page) => page);
 
-    return rawCompetitionData!.pages
-      .flatMap(({ data }) => data!)
-      .filter(
-        (competition) =>
-          getDistanceInKm(location, {
-            longitude: competition.longitude_degrees,
-            latitude: competition.latitude_degrees,
-          }) <= distanceFilter,
-      );
+    if (location === null || distanceFilter === 100) return flatPages;
+
+    return flatPages.filter(
+      (competition) =>
+        getDistanceInKm(location, {
+          longitude: competition.longitude_degrees,
+          latitude: competition.latitude_degrees,
+        }) <= distanceFilter,
+    );
   }, [location, distanceFilter, rawCompetitionData]);
-
-  useEffect(() => {
-    if (hasMoreCompsToLoad && bottomInView && !competitionsIsFetching) {
-      competitionsFetchNextPage();
-    }
-  }, [
-    hasMoreCompsToLoad,
-    bottomInView,
-    competitionsFetchNextPage,
-    competitionsIsFetching,
-  ]);
 
   if (!competitionsDistanceFiltered) {
     return "Error";

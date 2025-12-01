@@ -12,7 +12,7 @@ class ErrorsController < ApplicationController
       @id = params['id']
       render 'competition_not_found', status: :not_found
     elsif @exception.instance_of?(ActionController::InvalidAuthenticityToken)
-      render 'session_expired', status: :unprocessable_entity
+      render 'session_expired', status: :unprocessable_content
     else
       render error_page(@status_code), status: @status_code
     end

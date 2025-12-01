@@ -313,6 +313,18 @@ module DatabaseDumper
           created_at
           updated_at
           old_type
+          linked_round_id
+          is_h2h_mock
+        ],
+      ),
+    }.freeze,
+    "linked_rounds" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          wcif_id
+          created_at
+          updated_at
         ],
       ),
     }.freeze,
@@ -752,6 +764,7 @@ module DatabaseDumper
           otp_required_for_login
           pending_avatar_id
           preferred_locale
+          receive_developer_mails
           remember_created_at
           reset_password_sent_at
           reset_password_token
@@ -954,7 +967,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "roles_metadata_banned_competitors" => :skip_all_rows,
-    "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
     "ticket_logs" => :skip_all_rows,

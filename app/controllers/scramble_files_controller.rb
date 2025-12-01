@@ -113,7 +113,7 @@ class ScrambleFilesController < ApplicationController
         updated_set_ids = updated_sets.pluck(:id)
         updated_sets_by_id = updated_sets.index_by { it[:id] }
 
-        round.inbox_scramble_sets.update_all(matched_round_id: nil)
+        round.matched_scramble_sets.update_all(matched_round_id: nil)
 
         # This avoids validation issues when reassigning the indices one by one in the `each` loop below
         InboxScrambleSet.where(id: updated_set_ids).update_all(ordered_index: -1)

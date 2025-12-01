@@ -74,7 +74,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     vault :SMTP_USERNAME
     vault :SMTP_PASSWORD
     vault_file :GOOGLE_APPLICATION_CREDENTIALS, "./tmp/application_default_credentials.json"
-    vault :JWT_KEY
     vault :OIDC_SECRET_KEY
     vault :SLACK_WST_BOT_TOKEN
     vault :TNOODLE_PUBLIC_KEY
@@ -101,7 +100,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     mandatory :ACTIVERECORD_KEY_DERIVATION_SALT, :string
     mandatory :SECRET_KEY_BASE, :string
     mandatory :STRIPE_PUBLISHABLE_KEY, :string
-    mandatory :JWT_KEY, :string
     mandatory :OIDC_SECRET_KEY, :string
     mandatory :STAGING_OAUTH_CLIENT, :string
     mandatory :STAGING_OAUTH_SECRET, :string

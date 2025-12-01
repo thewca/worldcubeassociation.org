@@ -459,6 +459,10 @@ es-419:
         region: Región
         #original_hash: e3fc6e9
         subRegion: Subregión
+        #original_hash: a1ba702
+        receive_developer_mails: >-
+          Me gustaría recibir notificaciones sobre cambios en los recursos de
+          software de la WCA
         #original_hash: 730db33
         receive_delegate_reports: >-
           Me gustaría recibir los informes de delegados de Competiciones WCA por
@@ -779,6 +783,12 @@ es-419:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          Esto se limita a notificaciones para cambios de versiones mayores de
+          recursos como exportaciones, esquema de WCIF, y APIs públicas. Se
+          recomienda para desarrolladores que mantengan software utilizando
+          estas herramientas.
         #original_hash: c564b74
         receive_delegate_reports: >-
           Si eres un Delegado Senior o Miembro del WRC o WQAC, recibirás
@@ -1779,12 +1789,13 @@ es-419:
     support:
       #original_hash: 610edba
       title: Apoya a la WCA
-      #original_hash: 1aaf818
+      #original_hash: c254335
       text: >-
         La World Cube Association es una organización 501(c)(3) exenta de
         impuestos. Al ser 100% mantenida por voluntarios y sin ánimo de lucro,
-        agradecemos sus donaciones para ayudarnos a que nuestra visión llegue
-        más lejos y a que se disfrute más en competiciones por todo el mundo.
+        agradecemos sus donaciones para ayudarnos a llevar más lejos nuestro
+        Propósito de empoderar a la comunidad cubera global y mantener un
+        ambiente divertido y justo de competencia para todos.
       #original_hash: 65c84ec
       button: Saber más sobre como puedes apoyar a la WCA
   users:
@@ -5215,7 +5226,7 @@ es-419:
     spirit_footer: Espíritu de la WCA
     #original_hash: c1781ee
     our_goals_title: Nuestros objetivos
-    #original_hash: 375db0f
+    #original_hash: c1144d4
     our_goals_content_html: >-
       <p>La Organización Mundial del Cubo quiere brindar oportunidades para
       pertenecer y liderar comunidades a gente joven alrededor del mundo
@@ -5225,9 +5236,9 @@ es-419:
       gente joven involucrada y que introducir estos eventos a nuevos grupos de
       gente permite a nuestra comunidad general fortalecerse. Se puede encontrar
       <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">aquí</a>
-      un documento que contiene la visión y estrategia de la Junta Directiva
-      para la WCA .</p>
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">aquí</a>
+      un documento que contiene el Plan Estratégico de la Junta Directiva para
+      la WCA .</p>
     #original_hash: f64ccc7
     whats_next_title: ¿Qué es lo próximo para la WCA?
     #original_hash: 3312277
@@ -5333,8 +5344,8 @@ es-419:
     codeofconduct: Código de Conducta
     #original_hash: 4f05e8f
     finances: Finanzas
-    #original_hash: d1b1406
-    vision_and_strategy: Visión y Estrategia
+    #original_hash: c1e8f94
+    strategic_plan: Plan Estratégico
   education:
     #original_hash: 746e863
     title: Recursos educativos de la WCA
@@ -6391,7 +6402,7 @@ es-419:
         tiempos de %{person_name} notamos que habría tenido muy poco tiempo
         disponible para al menos uno de sus DNFs. Por favor, asegúrate de que
         cada DNF y DNS es correcto. Si el competidor no comenzó un intento o se
-        quedó sin límite acumulativo, debe ser ingresado como DNS (A1a2+++++).
+        quedó sin límite acumulativo, debe ser ingresado como DNS.
       #original_hash: 8057a12
       missing_cumulative_round_id_error: >-
         [%{original_round_id}] No se puede encontrar la ronda %{wcif_id} para el

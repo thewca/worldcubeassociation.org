@@ -451,6 +451,8 @@ ko:
         region: 지역
         #original_hash: e3fc6e9
         subRegion: 하위 지역
+        #original_hash: a1ba702
+        receive_developer_mails: WCA 소프트웨어 리소스 변경 사항에 대한 알림을 받고 싶습니다
         #original_hash: 730db33
         receive_delegate_reports: WCA 대회의 파견위원 보고서를 이메일로 받고 싶습니다
         #original_hash: 8667157
@@ -750,6 +752,10 @@ ko:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          이 기능은 데이터 내보내기, WCIF 스키마, 공개 API 등 리소스의 주요 버전 변경에 대한 알림으로만 제한됩니다. 이러한
+          도구를 사용하는 소프트웨어를 유지 관리하는 개발자에게 권장됩니다.
         #original_hash: c564b74
         receive_delegate_reports: >-
           귀하가 수석 파견위원 또는 WRC/WQAC의 회원인 경우 기본적으로 파견위원 보고서를 받게 됩니다. 참고: 변경 사항이
@@ -1106,7 +1112,7 @@ ko:
         #original_hash: b61e305
         400_error: 찾으시는 페이지가 존재하지 않습니다.
         #original_hash: c9290b6
-        400_contact_html: '이것이 실수라고 생각되면 <a href=%{contact_url}>여기를 클릭</a>하여 신고해 주십시오.'
+        400_contact_html: '이것이 실수라고 생각되시면 <a href=%{contact_url}>여기를 클릭</a>하여 신고해 주세요.'
         #original_hash: 508c106
         comp_not_found: 대회를 찾을 수 없음
         #original_hash: c0e86d5
@@ -1576,10 +1582,11 @@ ko:
     support:
       #original_hash: 610edba
       title: WCA 후원하기
-      #original_hash: 1aaf818
+      #original_hash: c254335
       text: >-
-        세계 큐브 협회는 501(c)(3) 비과세법인입니다. 100% 자원 봉사로 운영되는 비영리 단체로서, 전 세계에서 더 즐거운
-        대회를 펼칠 수 있도록 비전을 더욱 발전시키는 데 도움이 되는 기부를 환영합니다.
+        세계 큐브 협회는 501(c)(3) 비과세법인입니다. 100% 자원봉사자로 운영되는 비영리 단체로서, 우리는 글로벌 스피드큐빙
+        커뮤니티에 힘을 실어주고 모든 사람을 위한 즐겁고 공정한 경쟁 환경을 유지하려는 우리의 목적을 달성하는 데 도움이 되는 기부를
+        환영합니다.
       #original_hash: 65c84ec
       button: WCA를 후원하는 방법에 대해 자세히 알아보세요
   users:
@@ -3242,7 +3249,7 @@ ko:
         #original_hash: 89448a8
         is_cancelled: '귀하의 등록은 취소되어 대회에 참가할 수 없지만, 다시 참가 신청할 수 있습니다.'
         #original_hash: 2a88d10
-        is_rejected: 주최 측에서 귀하의 참가 신청을 거절하였습니다. 이것이 실수라고 생각되면 주최팀에 문의하십시오.
+        is_rejected: 주최측에서 귀하의 참가 신청을 거부했습니다. 이 조치가 실수라고 생각되시면 주최측에 문의해 주세요.
         #original_hash: 719dea0
         is_waitlisted: >-
           여행 일정을 예약하지 마십시오. 하지만 희망도 포기하지 마십시오. 참가자 정원에 도달하였지만, 귀하께서는 대기 명단에 올랐고,
@@ -3456,7 +3463,7 @@ ko:
         #original_hash: 4dd79f2
         '-2003': 이 작업을 완료할 권한이 없습니다
         #original_hash: 374e1c7
-        '-2004': 주최자가 귀하의 참가 신청을 거절했으므로 참가 신청할 수 없습니다. 실수라고 생각되면 주최자에게 연락하십시오.
+        '-2004': 주최측에서 참가 신청을 거부했기 때문에 등록하실 수 없습니다. 오류가 있다고 생각되시면 주최측에 문의해 주세요.
         #original_hash: cb4093a
         '-3000': 참가 신청이 존재하지 않습니다
         #original_hash: 9bbefa9
@@ -4401,13 +4408,13 @@ ko:
     spirit_footer: WCA 정신
     #original_hash: c1781ee
     our_goals_title: 우리의 목표
-    #original_hash: 375db0f
+    #original_hash: c1144d4
     our_goals_content_html: >-
       <p>세계 큐브 협회는 '트위스티 퍼즐' 대회의 접근성을 높여 전 세계 청소년들에게 커뮤니티 멤버십과 리더십 기회를 제공하고자
       합니다. 우리는 대회와 커뮤니티 내에서의 경험이 참여하는 청소년들에게 성장 기회를 만들어내고, 새로운 집단에 퍼즐 행사를 소개함으로써
-      전체 커뮤니티가 강화될 수 있다고 믿습니다. WCA에 대한 이사회의 비전과 전략이 담긴 문서는 <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">여기</a>에서
-      볼 수 있습니다.</p>
+      전체 커뮤니티가 강화될 수 있다고 믿습니다. WCA에 대한 이사회의 전략 계획이 담긴 문서는 <a
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">여기</a>에서
+      확인할 수 있습니다.</p>
     #original_hash: f64ccc7
     whats_next_title: WCA의 다음 계획은 무엇인가요?
     #original_hash: 3312277
@@ -4497,8 +4504,8 @@ ko:
     codeofconduct: 행동강령
     #original_hash: 4f05e8f
     finances: 재정
-    #original_hash: d1b1406
-    vision_and_strategy: 비전과 전략
+    #original_hash: c1e8f94
+    strategic_plan: 전략 계획
   education:
     #original_hash: 746e863
     title: WCA 교육 자료

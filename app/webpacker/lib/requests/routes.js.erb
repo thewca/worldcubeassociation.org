@@ -220,7 +220,6 @@ export const apiV0Urls = {
     me: {
       userDetails: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_users_me_path) %>`,
       permissions: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_users_me_permissions_path) %>`,
-      token: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_token_path) %>`,
     },
     show: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_users_path) %>`
   },
@@ -309,6 +308,7 @@ export const viewUrls = {
     registrations: (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.helpful_queries_registrations_path) %>?${jsonToQueryString({ userId })}`,
     organizedCompetitions: (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.helpful_queries_organized_competitions_path) %>?${jsonToQueryString({ userId })}`,
     delegatedCompetitions: (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.helpful_queries_delegated_competitions_path) %>?${jsonToQueryString({ userId })}`,
+    pastCompetitions: (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.helpful_queries_past_competitions_path) %>?${jsonToQueryString({ userId })}`,
   },
 }
 

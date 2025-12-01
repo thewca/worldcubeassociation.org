@@ -8,6 +8,7 @@ const withRoutes = nextRoutes({ outDir: "src/types" });
 const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
+    reactCompiler: true,
   },
   logging: {
     fetches: {
