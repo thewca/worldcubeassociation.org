@@ -25,6 +25,7 @@ class Round < ApplicationRecord
   delegate :can_change_time_limit?, to: :event
 
   scope :ordered, -> { order(:number) }
+  scope :h2h, -> { where(is_h2h_mock: true) }
 
   serialize :time_limit, coder: TimeLimit
   validates_associated :time_limit

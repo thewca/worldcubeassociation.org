@@ -306,6 +306,29 @@ fi:
       description: Takaraja karsintarajan saavuttamiseen
       #original_hash: bed8220
       by_date: '%{date} mennessä'
+  activity:
+    #original_hash: ad38ae8
+    registration: Kilpailupaikalla rekisteröityminen
+    #original_hash: 48431e7
+    checkin: Ilmoittautuminen
+    #original_hash: 40ba6a3
+    tutorial: Ohjeet uusille kilpailijoille
+    #original_hash: ceab6ea
+    multi: 3x3x3 multisokko -kuutioiden toimittaminen
+    #original_hash: 364653c
+    breakfast: Aamiainen
+    #original_hash: 585ecb7
+    lunch: Lounas
+    #original_hash: 8cf98a5
+    dinner: Päivällinen
+    #original_hash: 75226d7
+    awards: Palkintojenjako
+    #original_hash: cdd7bb2
+    setup: Kilpailupaikan valmistelu
+    #original_hash: 0b28e08
+    teardown: Teardown
+    #original_hash: 6e6a6f2
+    misc: Muu
   common:
     #original_hash: 70c07ec
     world: Maailma
@@ -343,11 +366,6 @@ fi:
       zero: '%{count} päivää'
       one: 1 päivä
       other: '%{count} päivää'
-    #original_hash: 203e1b3
-    these_events:
-      zero: 'nämä %{count} lajia'
-      one: tämä laji
-      other: 'nämä %{count} lajia'
     #original_hash: 51ef7d4
     search_site: Hae sivulta
     #original_hash: d7decf1
@@ -439,8 +457,14 @@ fi:
         region: Alue
         #original_hash: e3fc6e9
         subRegion: Subregion
+        #original_hash: a1ba702
+        receive_developer_mails: >-
+          I would like to receive notifications about changes to WCA software
+          resources
         #original_hash: 730db33
         receive_delegate_reports: I would like to receive Delegate Reports of WCA Competitions by email
+        #original_hash: 8667157
+        delegate_reports_region: I only want to receive Delegate Reports for the following region
         #original_hash: 57eaf24
         user_preferred_events: Ensisijaiset lajit
         #original_hash: e632fbf
@@ -464,6 +488,12 @@ fi:
         registration_competition_events: Lajit
         #original_hash: 84add5b
         email: Sähköposti
+        #original_hash: 6d7a30a
+        search: Haku
+        #original_hash: dfd309d
+        too_few_chars: Merkkimäärä liian lyhyt
+        #original_hash: b993b0c
+        no_results: Ei tuloksia
       competition_tab:
         #original_hash: 4f9be05
         content: Sisältö
@@ -474,6 +504,8 @@ fi:
         discussion_url: Google Group -keskustelun url-osoite
         #original_hash: 65a9b28
         schedule_url: Aikataulun url-osoite
+        #original_hash: 12b71c3
+        summary: Summary
         #original_hash: 36155d4
         equipment: Välineistö
         #original_hash: 67cd406
@@ -482,6 +514,8 @@ fi:
         organization: Järjestäminen
         #original_hash: 5e326b1
         incidents: Poikkeustilanteet
+        #original_hash: 7106c2d
+        setup_images: Competition setup images
         #original_hash: 1362470
         wrc_feedback_requested: I would like feedback from the WRC on some of the incidents above.
         #original_hash: 0c7191d
@@ -646,6 +680,8 @@ fi:
         competing_only: Kilpailukielto
         #original_hash: 35a6012
         competing_and_attending: Kilpailu- ja osallistumiskielto
+        #original_hash: 4f30c10
+        competing_and_attending_and_forums: 'Competing, Attending & Forums'
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -735,11 +771,21 @@ fi:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 81a76a3
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          This is limited to notifications for major version changes to
+          resources like data exports, WCIF schema and public APIs. Recommended
+          for developers maintaing software that relies on these tools.
+        #original_hash: c564b74
         receive_delegate_reports: >-
-          If you are a Trainee Delegate, Junior Delegate, Senior Delegate, or
-          Member of the WRC or the WQAC, you receive Delegate Reports by
-          default. Note: the change may take up to an hour to take effect.
+          If you are a Senior Delegate or Member of the WRC or the WQAC, you
+          receive Delegate Reports by default. Note: the change may take up to
+          12 hours to take effect.
+        #original_hash: 0017d38
+        delegate_reports_region: >-
+          If you want to receive all reports, leave this field blank (the
+          dropdown option at the very top). Note: the change may take up to 12
+          hours to take effect.
         #original_hash: 0627e5c
         otp_attempt: >-
           Tarkista määritetty mobiilisovelluksesi saadaksesi kertakäyttöisen
@@ -768,14 +814,6 @@ fi:
           Käytä tunnistetta &lt;!-- break --&gt; näyttääksesi esikatselun
           etusivulla. Kaikki teksti ennen tätä jakajaa näkyy etusivulla. Koko
           teksti näkyy oikealla julkaisusivulla.
-        #original_hash: da39a3e
-        sticky: ''
-        #original_hash: da39a3e
-        unstick_at: ''
-        #original_hash: da39a3e
-        title: ''
-        #original_hash: da39a3e
-        tags: ''
         #original_hash: 0e3764f
         show_on_homepage: >-
           Varo! Tässä ei ole turvallista yksityisille tiedoille. Tavoitteena on
@@ -790,6 +828,11 @@ fi:
         equipment: >-
           Kilpailussa käytettyjen ajastimien ja näyttöjen lukumäärä ja mallit.
           Poista rivit, joilla on tarvikkeita, joita ei käytetty.
+        #original_hash: 2822e8d
+        summary: >-
+          The listed points above are just for guidance for a complete report.
+          Use them at your discretion for what you see fit. Please remove unused
+          parts!
         #original_hash: 2822e8d
         venue: >-
           The listed points above are just for guidance for a complete report.
@@ -807,6 +850,14 @@ fi:
           referring to them by their numbers. Even if everything seemed generic,
           just list at least the most noteworthy cases. Please check off the
           appropriate boxes below if you are actively seeking feedback.
+        #original_hash: f2309fc
+        setup_images: >-
+          You MUST include at least %{image_count} images which illustrate the
+          scrambling and competition areas (other images are also welcome). You
+          can select multiple files at once. You can delete images only when
+          enough other images have been uploaded (if you want to replace an
+          image, you need to upload the new one first, and then delete the old
+          one).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -815,10 +866,20 @@ fi:
           WRC's feedback on.
         #original_hash: da39a3e
         wic_feedback_requested: ''
-        #original_hash: 0aca3b0
-        wic_incidents: >-
+        #original_hash: 74a092e
+        wic_incidents_html: >-
           List of numbers referencing any incidents that you would like the
-          WIC's feedback on.
+          WIC's feedback on. <br> <strong>%{wic_incident_alert}</strong>
+        #original_hash: c4fd7a6
+        wic_incident_alert: >-
+          If the WIC incident is sensitive (including but not limited to crimes,
+          harassment, assault, etc.), please exclude this from your report and
+          email the WIC separately. For other WIC incidents, default to a brief,
+          anonymized version of the incident and follow-up with the WIC
+          privately with further details. The WIC will still provide feedback on
+          anonymized versions for general awareness. For all WIC incidents
+          involving a WCA Volunteer, please exclude all details from the report,
+          and contact the WIC privately.
         #original_hash: f30abdc
         remarks: >-
           Kerro muista yksityiskohdista, jotka haluat jakaa (esim.
@@ -837,8 +898,6 @@ fi:
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -846,17 +905,6 @@ fi:
         multiple: ''
         #original_hash: da39a3e
         question: ''
-      registration:
-        #original_hash: da39a3e
-        comments: ''
-        #original_hash: da39a3e
-        guests: ''
-        #original_hash: da39a3e
-        status: ''
-        #original_hash: 34ef763
-        administrative_notes: >-
-          Lisähuomioita, joita voi kirjoittaa tämän rekisteröitymisen
-          hallinnoimiseksi. Nämä eivät näy kilpailijalle.
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -877,13 +925,6 @@ fi:
         submitter_comment: ''
         #original_hash: da39a3e
         status: ''
-      results_submission:
-        #original_hash: da39a3e
-        schedule_url: ''
-        #original_hash: da39a3e
-        results_file: ''
-        #original_hash: da39a3e
-        message: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -949,6 +990,9 @@ fi:
         dob: Oikea syntymäaika
         #original_hash: e214b8a
         document: Asiakirja
+      contact_wrt:
+        #original_hash: 603a218
+        wca_id: WCA ID
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -961,6 +1005,8 @@ fi:
       size_too_small: 'on liian pieni (pitäisi olla ainakin %{file_size})'
       #original_hash: a2a43b3
       size_too_big: 'on liian suuri (pitäisi olla enintään %{file_size})'
+      #original_hash: de76004
+      no_permission: Sinulla ei ole pääsyoikeuksia tälle sivulle.
   devise:
     passwords:
       edit:
@@ -1011,7 +1057,7 @@ fi:
               Yrität suorittaa todennusta WCA-sivustolla. Olet asettanut
               kaksivaiheisen vahvistuksen käyttöön ja äskettäin pyysit
               kertakäyttöistä salasanaa sähköpostitse. Löydät sen alapuolelta:
-            #original_hash: e27e540
+            #original_hash: 8aeccbf
             disclaimer: >-
               Jos et pyytänyt vahvistuskoodia, otathan välittömästi yhteyttä
               WST:hen vastaamalla tähän viestiin (sinulla saattaa olla avoin
@@ -1021,10 +1067,10 @@ fi:
           #original_hash: d28c3b6
           support_desc_html: 'WCA-sivusto tukee kertakäyttöistä salasanaa (%{two_factor_link}):'
           options:
-            #original_hash: 4f9dcb8
+            #original_hash: a4b35b6
             app: >-
-              luodaan älypuhelimen 2FA-sovelluksella (kuten Authy tai Google
-              Authenticator).
+              luodaan älypuhelimen autentikointisovelluksella (esim. Authy,
+              Google Authenticator, iOS Passwords).
             #original_hash: 34a7572
             recovery: 'käytetään yhtä palautuskoodeista, jotka luodaan aktivoidessa 2FA.'
             #original_hash: eaee403
@@ -1056,10 +1102,10 @@ fi:
             on lueteltu alla.
           #original_hash: 4442f0e
           dedicated_app: Todennussovelluksen käyttäminen
-          #original_hash: a61c7d2
+          #original_hash: a87f79f
           dedicated_app_desc_html: >-
-            Kertakäyttöisen salasanan saamiseksi WST suosittelee %{authy}n
-            käyttöä omassa laitteessasi. <br/>Muita vaihtoehtoja ovat %{google}
+            WST suosittelee %{authy}-sovellusta kaksivaiheiseen
+            tunnistautumiseen. <br/>Muita vaihtoehtoja ovat %{google}, %{apple}
             ja %{microsoft}.
           #original_hash: f1b2ec2
           scan_qrcode_html: >-
@@ -1142,6 +1188,22 @@ fi:
         400_contact_html: >-
           If you think this is a mistake please <a href=%{contact_url}>click
           here</a> to report it.
+        #original_hash: 508c106
+        comp_not_found: Kilpailua ei löytynyt
+        #original_hash: c0e86d5
+        comp_not_found_action: >-
+          Kilpailua "%{comp_id}" ei löytynyt. Hae kilpailua nimellä (käyttäen
+          hakupalkkia).
+        #original_hash: 695f7ba
+        comp_not_found_action_2: >-
+          Jos päädyit tälle sivulle linkin kautta, ilmoitathan linkin
+          omistajalle, että linkki on väärä.
+        #original_hash: 7f8f419
+        session_expired: Session Expired
+        #original_hash: f3e688a
+        session_expired_action: >-
+          Your session has expired. Please refresh the page, retry your action,
+          or log in again to continue.
     doorkeeper:
       applications:
         help:
@@ -1192,7 +1254,7 @@ fi:
       #original_hash: ed97787
       documents: WCA-asiakirjat
       #original_hash: c9bae18
-      officers_and_board: 'WCA:n virkailijat ja hallitus'
+      officers_and_board: 'WCA:n hallitus'
       #original_hash: d8fd3e4
       delegates: WCA-delegaatit
       #original_hash: 37b8fdc
@@ -1203,7 +1265,7 @@ fi:
       faq: Usein kysytyt kysymykset
       #original_hash: cf1d2c9
       forum: Foorumi
-      #original_hash: 3ad28c0
+      #original_hash: 0e7a036
       teams: Toimikunnat
       #original_hash: 7981fb3
       education: Koulutusmateriaalit
@@ -1212,7 +1274,7 @@ fi:
       #original_hash: b37456c
       contact: Yhteystiedot
       #original_hash: 8e12c09
-      speedcubing_history: Speedcubingin historiaa
+      speedcubing_history: Speedcubing-historiaa
       #original_hash: 4fa8cc8
       tools: Työkalut
       #original_hash: 83fce83
@@ -1245,12 +1307,10 @@ fi:
       db_dev_export: Vie ohjelmistokehittäjän tietokanta
       #original_hash: 1fa73f3
       regulations: Säännöt
-      #original_hash: 3bb8751
-      regulations_full: Säännöt ja ohjesäännöt
+      #original_hash: 1fa73f3
+      regulations_full: Säännöt
       #original_hash: 6bce1b5
       about_regulations: Tietoa kilpailusäännöistä
-      #original_hash: 141d1d7
-      guidelines: Ohjesäännöt
       #original_hash: c4622c3
       scrambles: Sekoitussarjat
       #original_hash: 90ccd64
@@ -1273,8 +1333,6 @@ fi:
       polls: Kyselyt
       #original_hash: d3a928c
       results_team: Results ream
-      #original_hash: 4e7afeb
-      results_admin: Ylläpitäjä
       #original_hash: 61074f1
       results_database: Tietokanta
       #original_hash: 54e0548
@@ -1321,22 +1379,22 @@ fi:
         on vastuussa WCA:n toiminnasta, puheenjohtaja johtaa hallituksen
         kokouksia, sihteeri ylläpitää järjestön asiakirjoja ja rahastonhoitaja
         pitää huolta WCA:n talousasioista.
-      #original_hash: e0d37a2
+      #original_hash: 19d4bbb
       board_description: >-
         WCA:n hallitus on viime kädessä vastuussa järjestön johtamisesta, ja
         hoitaa toimikuntien vastuualueiden ulkopuolelle jääviä tehtäviä.
     teams_committees_councils:
-      #original_hash: 0d62207
-      title: 'WCA:n tiimit ja toimikunnat'
-      #original_hash: d54d953
+      #original_hash: 1d14e2f
+      title: 'WCA:n toimikunnat'
+      #original_hash: 9fdee8f
       description: >-
         WCA:n toimikunnat ovat keskeinen järjestön osa, ja ne hoitavat
         päivittäisiä tehtäviä, joita vaaditaan järjestön toiminnan
-        pyörittämiseen. Toimikunnat koostuvat WCA-yhteisön jäsenistä, eli
+        pyörittämiseen. Toimikunnat koostuvat WCA-yhteisöön kuuluvista
         WCA-delegaateista ja kilpailijoista. Jokaisella toimikunnalla on
-        vastaava, jonka rooliin kuuluu varmistaa toimikunnan toiminnot ja
-        kouluttaa sen jäsenet. Kun toimikuntaan haetaan uusia jäseniä,
-        hakuilmoitus julkaistaan WCA-sivuston etusivulla.
+        vastaava, joka varmistaa että toimikunta toimii tehtäviensä mukaan, ja
+        kouluttaa toimikunnan jäsenet. Kun toimikuntaan haetaan uusia jäseniä,
+        hakuilmoitus julkaistaan etusivulla.
       #original_hash: b37456c
       contact_button: Ota yhteyttä
       #original_hash: ae7928f
@@ -1356,6 +1414,8 @@ fi:
         wfc: WCA Financial Committee (Taloustoimikunta)
         #original_hash: 2035811
         wmt: WCA Marketing Team (Markkinointitoimikunta)
+        #original_hash: c90653c
+        wmct: WCA Major Championships Team (Mestaruuskilpailutoimikunta)
         #original_hash: 8f32116
         wqac: WCA Quality Assurance Committee (Laadunvarmistustoimikunta)
         #original_hash: 3da1e85
@@ -1369,91 +1429,104 @@ fi:
         #original_hash: 78949a7
         wapc: WCA Appeals Committee (Muutoksenhakutoimikunta)
       groups_description:
-        #original_hash: 5b1aade
+        #original_hash: d62001b
         wat: >-
-          WAT kehittää ja ylläpitää WCA:n arkistoa. Toimikunta dokumentoi
-          tärkeitä hetkiä speedcubing-yhteisön ja WCA:n historiassa
-          varmistaakseen WCA:n perinnön säilymisen.
-        #original_hash: 50fd091
+          Arkistotoimikunta (WAT) kehittää ja ylläpitää WCA:n arkistoa, sekä
+          dokumentoi speedcubing-yhteisön ja WCA:n merkittäviä historiallisia
+          hetkiä.
+        #original_hash: 7803faf
         wct: >-
           WCA Communication Team (WCT) valvoo ja tukee WCA:n viestintää yhteisön
           ja laajemman yleisön kanssa. WCA:n viestinnän pitäisi edistää WCA:n
           päämääriä ja pitää yllä ystävällistä, läpinäkyvää, inklusiivista,
           avointa ja vastaanottavaista kulttuuria.
-        #original_hash: 3e5570f
+        #original_hash: bd69012
         wcat: >-
           WCA Competition Announcement Team (WCAT) hyväksyy ja ilmoittaa
           delegaattien hakemat WCA-kilpailut, ja varmistaa, että ilmoitukset
           noudattavat WCA:n laatustandardeja. Toimikunta myös kehittää
-          kilpailujen hakemiseen liittyviä toimintatapoja esimerkiksi
-          kilpailujen vaatimuksia koskevin käytännöin. WCAT ei ole vastuussa
-          yksittäisten kilpailujen järjestämisestä tai delegoinnista.
+          kilpailujen hakemiseen liittyviä toimintatapoja ja kilpailujen
+          vaatimuksia. WCAT ei ole vastuussa yksittäisten kilpailujen
+          järjestämisestä tai delegoinnista.
         #original_hash: 5007698
         wic: >-
           WCA Integrity Committee (WIC) tekee riippumattomia tutkintoja
           kilpailijoista ja WCA-kilpailuissa tai WCA:n internet-alustoilla
           tapahtuneista sattumuksista. Tutkinnan alaiset sattumukset ovat
           epäiltyjä sääntö- tai käytösrikkeitä.
-        #original_hash: 889dd90
+        #original_hash: be491ec
         weat: >-
-          Tämä toimikunta on vastuussa hallinnollisten tehtävien
-          toimeenpanemisesta hallituksen puolesta.
-        #original_hash: 43e4e33
+          WCA Executive Assistants Team (WEAT) toimeenpanee hallinnollisia
+          tehtäviä WCA:n hallituksen puolesta.
+        #original_hash: fc67562
         wfc: >-
-          Tämä toimikunta on vastuussa WCA:n talouden hallinnoimisesta (kuten
-          budjetin ja tilinpäätöksen laatiminen, talouden analysointi,
-          kirjanpito ja veroilmoitukset). Toimikunta hallinnoi myös WCA:n
-          suurinta tulonlähdettä, WCA Dues -järjestelmää, sekä rahoitusohjelmia,
-          joilla tuetaan paikallisia yhteisöjä (Travel Funding, Equipment
-          Funding, Regional Organization Support).
-        #original_hash: f2a0140
+          WCA Financial Committee (WFC) hallinnoi WCA:n taloutta (sis. budjetin
+          ja tilinpäätöksen laatiminen, talouden analysointi, kirjanpito ja
+          veroilmoitukset). Toimikunta hallinnoi myös WCA:n suurinta
+          tulonlähdettä, WCA Dues -järjestelmää, sekä rahoitusohjelmia (sis.
+          Travel Funding, Equipment Funding, Regional Organization Support),
+          joilla tuetaan paikallisia kilpailuyhteisöjä.
+        #original_hash: 88a00fa
         wmt: >-
-          Tämä toimikunta kehittää ja ylläpitää WCA:n brändiä, hakee
-          sponsoreita, tukee WCA:n kilpailuvälineistön jakelua ja markkinoi
-          WCA-tuotteita.
-        #original_hash: 0171b3b
+          WCA Marketing Team (WMT) kehittää ja ylläpitää WCA:n brändiä, hakee
+          sponsoreita ja markkinoi WCA-tuotteita.
+        #original_hash: fcaa701
+        wmct: >-
+          WCA Major Championship Team (WMCT) valvoo maanosien
+          mestaruuskilpailujen ja maailmanmestaruuskilpailujen
+          suunnitteluprosessia. Toimikunta kehittää ohjeita, strategisia
+          suunnitelmia, järjestäjäkaupungin valintaprosessia, tukee
+          järjestäjäryhmiä ja pyrkii yhtenäistämään kilpailukokemusta eri
+          mestaruuskilpailuissa.
+        #original_hash: 010e628
         wqac: >-
-          Tämä toimikunta tukee ja edistää jatkuvaa WCA:n sisäistä laadun
-          parantamista sekä laatustandardien mukaista toimintaa
-          maailmanlaajuisesti, jotta WCA:n toimintatavat, henkilöstö,
-          alueelliset järjestöt, kilpailujen järjestäjät ja kilpailujen
-          toimihenkilöt ovat korkealaatuisia.
-        #original_hash: a1260bb
+          WCA Quality Assurance Committee (WQAC) tukee ja edistää WCA:n sisäistä
+          laadun parantamista, luoden esim. standardoituja prosesseja.
+          Tavoitteena on varmistaa, että WCA:n vapaaehtoiset, aluejärjestöt,
+          kilpailujen järjestäjät ja muut toimihenkilöt toimivat yhteisten
+          laatustandardien mukaan.
+        #original_hash: 355babe
         wrc: >-
-          WRC käsittelee WCA-sääntöjen soveltamiseen ja kehittämiseen liittyviä
-          asioita. Toimikunta tukee WCA-delegaatteja kilpailuissa tapahtuvissa
-          epäselvissä tilanteissa sekä tekee poikkeustilanteisiin liittyviä
-          päätöksiä silloin, kun säännöt eivät ole aiheesta selvät.
-        #original_hash: 7bc588b
+          WCA Regulations Committee (WRC) hoitaa WCA-sääntöjen soveltamiseen ja
+          kehittämiseen liittyviä tehtäviä. Toimikunta tukee WCA-delegaatteja
+          kilpailujen menettelytapoja koskevissa kysymyksissä ja tekee
+          poikkeustilanteisiin liittyviä päätöksiä silloin, kun säännöt eivät
+          ole aiheesta selvät.
+        #original_hash: 7ca3e6f
         wrt: >-
-          WRT hallinnoi kaikkea WCA:n tietokannoissa olevaa dataa, tärkeimpinä
-          kilpailutulokset ja henkilötiedot.
-        #original_hash: ec961e4
+          WCA Results Team (WRT) hallinnoi kaikkea WCA:n tietokannoissa olevaa
+          dataa, sisältäen kilpailutulokset ja jäsenten henkilötiedot.
+        #original_hash: f905744
         wst: >-
-          Tämä toimikunta on vastuussa WCA:n ohjelmistojen ylläpidosta
-          (nettisivusto, sekoitusohjelmisto, workbook, ylläpitotyökalut).
-        #original_hash: 8f888d6
+          WCA Software Team (WST) on vastuussa WCA:n ohjelmistojen ylläpidosta
+          (nettisivusto, sekoitusohjelma, workbook, ylläpitotyökalut).
+        #original_hash: 638652c
         wsot: >-
-          Tämä toimikunta edistää ja tukee WCA:n tunnustamista kansainvälisenä
-          lajiliittona.
-        #original_hash: 9f45bfa
+          WCA Sports Organization Team (WSOT) edistää ja tukee WCA:n
+          tunnustamista kansainvälisenä lajiliittona.
+        #original_hash: 30d6048
         wapc: >-
-          WCA Appeals Committee (WAC) on vastuussa muun WCA-henkilöstön tekemiin
-          päätöksiin liittyvien valitusten käsittelystä. WAC suorittaa
+          WCA Appeals Committee (WAC) käsittelee riitautuksia, jotka koskevat
+          muiden WCA:n vapaaehtoisten tekemiä päätöksiä. WAC suorittaa
           itsenäisen ja puolueettoman katsauksen, jolla varmistetaan, että
-          päätökset ovat reiluja, sopivia ja WCA:n käytäntöjen ja sääntöjen
-          mukaisia.
+          päätökset ovat reiluja, tarkoituksenmukaisia ja WCA:n käytäntöjen ja
+          sääntöjen mukaisia.
     contacts:
       #original_hash: 4ef2aad
       title: 'WCA:n yhteydenottolomake'
-      #original_hash: bddd3ea
+      #original_hash: ab97069
       faq_note_html: >-
         Ennen kysymyksen lähettämistä, luethan <a href="/faq">usein kysytyt
         kysymykset</a>! Jos haluat ottaa yhteyttä tiettyyn toimikuntaan, jota ei
-        ole lueteltu tässä, löydät tiedot <a
-        href="/teams-committees">tältä sivulta</a>.
+        ole lueteltu tässä, löydät tiedot <a href="/teams-committees">tältä
+        sivulta</a>.
       #original_hash: ea20be0
       success_message: Viesti lähetetty - palaamme asiaan pian.
+      #original_hash: 8fa6b95
+      prefilled: >-
+        Voit päivittää rekisteröitymistäsi ottamalla kilpailun järjestäjiin
+        yhteyttä. Yhteydenottolomake on täytetty automaattisesti pyytämiesi
+        muutosten pohjalta - sinun täytyy vain lähettää lomake.
       form:
         user_data:
           name:
@@ -1466,10 +1539,11 @@ fi:
           #original_hash: 54f0036
           label: Mihin tahoon haluat ottaa yhteyttä?
           competition:
-            #original_hash: baa2425
+            #original_hash: 5a280ab
             label: >-
-              Ota yhteyttä tietyn kilpailun järjestäjiin/delegaatteihin
-              (kyseiseen kilpailuun liittyvästä aiheesta)
+              Ota yhteyttä tietyn kilpailun järjestäjiin/delegaatteihin (jos
+              haluat kysyä kilpailuun liittyvästä aiheesta, sisältäen
+              kilpailutulokset, joita ei ole vielä julkaistu WCA:n sivuille)
           wct:
             #original_hash: b73e465
             label: >-
@@ -1477,13 +1551,15 @@ fi:
               monenlaisia aiheita, kuten WCA ID/profiili, kilpailujen
               järjestäminen, kilpailusäännöt, kilpailujen media jne.)
           wrt:
-            #original_hash: 0f6b96b
-            label: Ota yhteyttä Results Teamiin (kilpailutuloksiin liittyen)
-          wst:
-            #original_hash: 1d74033
+            #original_hash: 4dd66f7
             label: >-
-              Ota yhteyttä Software Teamiin (ilmoittaaksesi bugista tai API:in
-              liittyen)
+              Ota yhteyttä Results Teamiin (asia voi koskea kilpailutuloksia tai
+              oman WCA-profiilin tietoja)
+          wst:
+            #original_hash: 2be6d53
+            label: >-
+              Ota yhteyttä Software Teamiin (ilmoittaaksesi nettisivujen
+              ongelmasta, tai kysyäksesi jotakin WCA:n sovelluksiin liittyen)
         competition:
           competition:
             #original_hash: 1917f4f
@@ -1504,6 +1580,9 @@ fi:
               label: >-
                 Profiilini tietojen muuttaminen (nimi, edustusmaa, sukupuoli tai
                 syntymäaika)
+            edit_others_profile:
+              #original_hash: d08e8eb
+              label: Muokkaa jonkun toisen profiilitietoja
             report_result_issue:
               #original_hash: 2edbb52
               label: Virheellisestä tuloksesta ilmoittaminen
@@ -1550,8 +1629,49 @@ fi:
         captcha:
           #original_hash: 58c1271
           validation_error: 'Vahvista, ettet ole robotti.'
+        #original_hash: bc98198
+        next_button: Seuraava
         #original_hash: 2dacf65
         submit_button: Lähetä
+    contact_edit_profile:
+      #original_hash: 460577c
+      title: Muokkaa profiilia
+      #original_hash: f01c4c7
+      not_logged_in_error: >-
+        Et ole kirjautuneena sisään. Kirjaudu sisään muokataksesi profiiliasi.
+        Muissa kysymyksissä, ota yhteyttä <a
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">yhteydenottolomakkeella</a>.
+      #original_hash: 0afb595
+      no_profile_error: >-
+        Näyttää siltä, että sinulla ei ole WCA-profiilia, koska et ole vielä
+        osallistunut kilpailuun. Muissa kysymyksissä, ota yhteyttä <a
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">yhteydenottolomakkeella</a>.
+      #original_hash: 43f15fd
+      no_permission_error: You don't have permission to request edit others profile.
+      form:
+        contact_email:
+          #original_hash: 3142970
+          label: Contact Email
+        wca_id:
+          #original_hash: 6344c9e
+          label: Enter WCA ID
+        wca_id_search:
+          #original_hash: fbba19d
+          label: Search for the WCA ID that you want to edit.
+        edit_reason:
+          #original_hash: fdfcccf
+          label: Muutoksen syy
+        proof_attach:
+          #original_hash: a9645b1
+          label: Liitä todistus
+        submit_edit_request_button:
+          #original_hash: ab529a9
+          label: Lähetä muokkauspyyntö
+        captcha:
+          #original_hash: 58c1271
+          validation_error: 'Varmista, ettet ole robotti.'
+      #original_hash: 126541e
+      success_message: Pyyntö lähetetty. Palaamme asiaan pian!
   homepage:
     #original_hash: 824d76b
     learn_more: Lue lisää
@@ -1614,11 +1734,11 @@ fi:
     support:
       #original_hash: 610edba
       title: 'Tue WCA:ta'
-      #original_hash: 1aaf818
+      #original_hash: c254335
       text: >-
         World Cube Association toimii täysin vapaaehtoisten varassa; kaikki
-        lahjoitukset auttavat meitä kehittämään kilpailutoimintaamme ympäri
-        maailmaa!
+        lahjoitukset auttavat meitä kehittämään maailmanlaajuista
+        speedcubing-yhteisöä sekä kilpailutoimintaa.
       #original_hash: 65c84ec
       button: Lisätietoa tukemismahdollisuuksista
   users:
@@ -1789,6 +1909,8 @@ fi:
       new: 'Uusi pikkukuva:'
       #original_hash: efc007a
       save: Tallenna
+      #original_hash: 44c57ab
+      reset: Nollaa
     edit:
       #original_hash: 9239ee2
       general: Yleiset
@@ -1814,10 +1936,14 @@ fi:
       unconfirmed_email: 'Tämän tilin sähköpostiosoitetta (%{email}) ei ole vahvistettu.'
       #original_hash: 7069007
       confirm_new_email: Uusi sähköpostiosoite tulee vahvistaa astuakseen voimaan.
-      #original_hash: 8a770cf
+      #original_hash: ff43ee2
       pending_mail_confirmation: 'Tämä tili odottaa uuden sähköpostiosoitteen (%{email}) vahvistamista.'
       #original_hash: 0340b0b
       pending_avatar_confirmation: Tämä tili odottaa uuden profiilikuvan hyväksymistä.
+      #original_hash: 81fa5f9
+      pending_avatar_edit_action: 'Klikkaa tästä mikäli haluat sen sijaan muokata:'
+      #original_hash: 73cebb8
+      pending_avatar_edit_warning: Muokataan vireillä olevaa profiilikuvaa!
       #original_hash: 7b06f03
       pending_claim_confirmation_html: >-
         Tämä tili odottaa, että %{delegate} vahvistaa lunastetun WCA ID:n
@@ -1853,16 +1979,18 @@ fi:
           href='%{delegate_url}'>delegaattiisi</a>, jos sinun täytyy muuttaa
           mitään näistä.
         reason:
+          #original_hash: 2e22133
+          no_access: you don't have access to edit the user
           #original_hash: 370ff12
           assigned: sinulla on WCA ID liitettynä
           #original_hash: 1c4670f
           registered: olet rekisteröitynyt kilpailuun
       #original_hash: fe7122d
       guidelines_confirmation: 'Vahvistan, että profiilikuvani täyttää kaikki säädökset.'
-      #original_hash: d677ceb
+      #original_hash: 9a85f5e
       confirm_guidelines: >-
-        Lue profiilikuvan säädökset ja varmista, että lataat niiden mukaisen
-        kuvan.
+        Lue profiilikuvaa koskevat säädökset ja varmista, että lataat niiden
+        mukaisen kuvan.
       #original_hash: efc007a
       save: Tallenna
       #original_hash: c3cd636
@@ -1884,33 +2012,33 @@ fi:
         '1': Kaikkien profiilikuvien pitäisi olla kuvia oikeista henkilöistä.
         #original_hash: b12d293
         '2': Kuvassa näkyvän henkilön täytyy olla nykyinen itsesi.
-        #original_hash: de9b742
+        #original_hash: 8165cf0
         '3': >-
           Jos kuvassa on useampi kuin yksi henkilö, pitäisi olla selvää, kuka
           heistä olet.
         #original_hash: 4083c00
         '4': Pääsi (ei välttämättä koko kasvojen) pitäisi olla näkyvissä.
-        #original_hash: 7c0aab3
+        #original_hash: 14c72b2
         '5': >-
-          Kuvassa ei saa olla jälkikäteen lisättyä tekstiä, "filttereitä" tai
-          kehyksiä.
-        #original_hash: cc5f23a
+          Kuvassa ei saa olla jälkikäteen lisättyä tekstiä, tarroja,
+          "filttereitä" tai kehyksiä.
+        #original_hash: 7f9c9c6
         '6': Profiilikuva täytyy ladata oikein päin.
         #original_hash: 1a18831
         '7': >-
           Profiilikuvassa ei saa olla hyökkäävää sisältöä (kuten tällaista
           elekieltä).
       staff_avatar_guidelines:
-        #original_hash: 5d5a47a
+        #original_hash: f14a1fd
         title: >-
-          Lisäohjeita henkilöstöön (Staff) kuuluville ja
-          delegaattiharjoittelijoille (Trainee):
+          Lisäohjeita WCA:n vapaaehtoisille, sis. delegaattiharjoittelijat
+          (Trainee Delegate):
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
             Profiilikuvan täytyy esittää nykyistä ulkomuotoasi mahdollisimman
             hyvin.
-          #original_hash: 64ded69
+          #original_hash: f1f3854
           '2': >-
             Profiilikuvan täytyy olla rajattu, kierretty ja valaistu niin, että
             sen perusteella kaikki kilpailijat ja katsojat voivat tunnistaa
@@ -1921,20 +2049,20 @@ fi:
             profiilikuvaa. Pikkukuva tulee rajata niin, että sinut voi tunnistaa
             pelkästään sen perusteella (sen tulee sisältää kasvosi).
       sensitive:
-        #original_hash: 267ac87
+        #original_hash: 3f0a787
         info: >-
-          Tämä osio mahdollistaa henkilökohtaisten tietojen muuttamisen.
-          Todennathan henkilöllisyytesi alla.
+          Tässä osiossa voi muokata henkilötietoja. Todenna henkilöllisyytesi
+          alla päästäksesi muokkausnäkymään.
         #original_hash: f19af51
         success: Henkilöllisyys todennettu onnistuneesti
         #original_hash: 52ebf9c
         failure: Ei voitu todentaa henkilöllisyyttä
         #original_hash: 4324c73
         confirm_proceed: Vahvista ja jatka
-        #original_hash: d395f1f
+        #original_hash: 10a90b7
         identity_error: >-
-          Ei voitu muokata tietoja, todennathan henkilöllisyytesi alla ennen
-          kuin yrität uudelleen.
+          Ei voitu muokata tietoja. Todenna henkilöllisyytesi alla ennen kuin
+          yrität uudelleen.
     errors:
       #original_hash: 094b763
       not_found: ei löydetty
@@ -1981,14 +2109,12 @@ fi:
         Tälle WCA ID:lle ei ole tallennettu nimeä. Ota yhteyttä <a
         href='%{wrt_contact_path}' target='_blank'>WCA Results Teamiin</a>
         ratkaistaksesi tämän.
-      #original_hash: d02c03b
-      avatar_requires_wca_id: 'vaatii WCA ID:n liittämistä'
-      #original_hash: 8f785ea
+      #original_hash: d2f4856
       email_used_by_locked_account_html: >-
-        on jo käytössä toisella tilillä. Se on luotu automaattisesti
-        rekisteröidyttyäsi kilpailuun ulkoisen palvelun kautta. Jos tämä on
-        sinun sähköpostiosoitteesi, voit käyttää tiliä nollattuasi salasanan <a
-        href='/users/password/new'>täällä</a>.
+        on jo käytössä toisella tilillä. Tili on luotu automaattisesti, kun olet
+        rekisteröitynyt kilpailuun WCA:n ulkopuolisen palvelun kautta. Jos tämä
+        on sinun sähköpostiosoitteesi, voit käyttää tiliä nollattuasi salasanan
+        <a href='/users/password/new'>täällä</a>.
       #original_hash: 50897d4
       must_match_person: must match person details corresponding to the WCA ID
     successes:
@@ -2030,6 +2156,10 @@ fi:
         status: Tila
         #original_hash: 8970f0e
         locale: Kieli
+        #original_hash: 5d99dee
+        group_name: Toimikunnan nimi
+        #original_hash: 55e4f86
+        delegated_competitions_count: Kilpailuja delegaattina
   user_groups:
     group_types:
       #original_hash: abd2828
@@ -2040,6 +2170,12 @@ fi:
       translators: Kääntäjä
   registrations:
     errors:
+      #original_hash: 8c2f29b
+      exceeding_competitor_limit: Kilpailijaraja täynnä.
+      #original_hash: 51c7156
+      edit_deadline_passed: >-
+        Rekisteröinnin muokkauksen takaraja umpeutunut! Muutoksia pitäisi tehdä
+        vain erityisissä poikkeustapauksissa.
       #original_hash: 44ab952
       need_name: Nimi tarvitaan
       #original_hash: 6f64c57
@@ -2048,8 +2184,6 @@ fi:
       need_dob: Syntymäaika tarvitaan
       #original_hash: aab7355
       need_country: Need a region
-      #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: Rekisteröitymistä ei voi poistaa ja hyväksyä yhtä aikaa.
       #original_hash: 820bcf7
       must_register: Sinun täytyy rekisteröityä ainakin yhteen lajiin.
       #original_hash: ef9b4ad
@@ -2068,6 +2202,8 @@ fi:
       series_more_than_one_accepted: Sinut voidaan hyväksyä vain yhteen kilpailusarjaan kerrallaan.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: 'Et voi rekisteröityä lajeihin, joiden karsintavaatimusta et täytä.'
+      #original_hash: 93ed20e
+      cannot_change_events_when_cancelling: Et voi vaihtaa lajeja peruuttaessasi rekisteröitymistä.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Sinun täytyy jättää kommentti. Luethan yllä olevista
@@ -2092,31 +2228,8 @@ fi:
     flash:
       #original_hash: da7ec53
       not_using_wca: Tämä kilpailu ei käytä WCA-rekisteröitymistä
-      #original_hash: d528030
-      accepted_and_mailed:
-        zero: Rekisteröitymiset hyväksytty! Sähköposti-ilmoitukset lähetetty.
-        one: Rekisteröityminen hyväksytty! Sähköposti-ilmoitus lähetetty.
-        other: Rekisteröitymiset hyväksytty! Sähköposti-ilmoitukset lähetetty.
-      #original_hash: 42ea8de
-      rejected_and_mailed:
-        zero: Rekisteröitymiset siirretty jonotuslistalle
-        one: Rekisteröityminen siirretty jonotuslistalle
-        other: Rekisteröitymiset siirretty jonotuslistalle
-      #original_hash: a360b31
-      deleted_and_mailed:
-        zero: Rekisteröitymiset poistettu
-        one: Rekisteröityminen poistettu
-        other: Rekisteröitymiset poistettu
-      #original_hash: c3aa289
-      single_deletion_and_mail: 'Rekisteröityminen poistettu ja sähköposti lähetetty osoitteeseen %{mail}'
-      #original_hash: d8f067f
-      cannot_delete: Et voi poistaa rekisteröitymistäsi.
       #original_hash: 82b3899
       updated: Rekisteröityminen päivitetty
-      #original_hash: 856484a
-      failed: Ei voitu päivittää rekisteröitymistä
-      #original_hash: 016b4ae
-      deleted: 'Rekisteröitymisesi kilpailuun %{comp} poistettu onnistuneesti'
       #original_hash: 7707307
       registered: >-
         Rekisteröintilomake lähetetty - varmista, että noudatat kaikkia alla
@@ -2162,20 +2275,16 @@ fi:
           voit tarkistaa rekisteröitymisesi tilan %{here}.
         #original_hash: 1852cbf
         see_you_soon: 'Odotamme innolla saapumistasi kilpailuun %{comp_name}!'
-      pending:
-        #original_hash: 8d26297
-        mail_subject: 'Sinut on siirretty jonotuslistalle kilpailuun %{comp_name}'
-        #original_hash: 6fd0a8e
-        moved_html: >-
-          Rekisteröitymisesi kilpailuun %{comp_name} on siirretty
-          jonotuslistalle. Mahdollisia syitä ovat:
-        causes:
-          #original_hash: eadfc0d
-          accepted: Rekisteröitymisesi hyväksyttiin vahingossa
-          #original_hash: 2ac6d84
-          withdrawal: Pyysit vetäytymistä
+      waiting_list:
+        #original_hash: 54c2106
+        mail_subject: 'Olet jonotuslistalla: %{comp_name}'
+        #original_hash: 2a0c44f
+        waitlisted_html: >-
+          Kilpailu on täynnä, mutta olet jonotuslistalla. Sinulle ilmoitetaan
+          sähköpostitse, mikäli paikkoja vapautuu ja pääset osallistumaan
+          kilpailuun. Tarkista paikkasi jonotuslistalla %{here}.
         #original_hash: 8f7358f
-        email_if_error: 'Jos uskot kyseessä olevan virhe, vastaa tähän sähköpostiin.'
+        email_if_error: 'Jos uskot tämän olevan virhe, vastaa tähän sähköpostiin.'
       deleted:
         #original_hash: 8cbc6c0
         mail_subject: 'Rekisteröityminen kilpailuun %{comp_name} on poistettu'
@@ -2183,6 +2292,8 @@ fi:
         message_html: >-
           Rekisteröitymisesi kilpailuun %{comp_name} on poistettu. Mahdollisia
           syitä ovat:
+        #original_hash: 8f7358f
+        email_if_error: 'Jos uskot tämän olevan virhe, vastaa tähän sähköpostiin.'
         causes:
           #original_hash: 978944c
           missing_info: Et lähettänyt kaikkia vaadittuja tietoja
@@ -2193,10 +2304,21 @@ fi:
             karsintavaatimukset)
           #original_hash: 1e225f0
           registrations_full: 'Kilpailijaraja on saavutettu, eikä enempää paikkoja ole saatavilla'
-          #original_hash: 0d4cce9
+          #original_hash: 238f4ff
           multiple_registrations: Rekisteröidyit useamman kerran
           #original_hash: 70b1e2c
           competition_canceled: Kilpailu on peruttu
+      formerly_banned:
+        #original_hash: f2c70a9
+        ban_count: >-
+          Competitor has been banned %{ban_count} time(s), with the following
+          scopes and reasons:
+        #original_hash: 67e08fe
+        scope_and_reason: 'Scope: %{ban_scope}, Reason: %{ban_reason}'
+        #original_hash: 2a246da
+        wic_message: >-
+          If you have any questions regarding the competitor's disciplinary
+          history, please reach out to the WIC by replying to this email.
     list:
       #original_hash: 8b7631c
       title: 'Rekisteröitymiset kilpailuun %{comp}'
@@ -2211,18 +2333,6 @@ fi:
       export_csv: Vie CSV-tiedostona
       #original_hash: 84add5b
       email: Sähköposti
-      #original_hash: 7b2c7f1
-      approve: Hyväksy
-      #original_hash: 2b03b59
-      reject: Hylkää
-      #original_hash: f6fdbe4
-      delete: Poista
-      #original_hash: 92d40dc
-      waiting_list: Jonotuslista
-      #original_hash: 06f7d1a
-      approved_registrations: Hyväksytyt rekisteröitymiset
-      #original_hash: bff04e8
-      deleted_registrations: Poistetut rekisteröitymiset
       #original_hash: e86b1e1
       non_competing: Non-competing registrations
       #original_hash: ac5d958
@@ -2234,31 +2344,17 @@ fi:
         with_stripe: Maksoi
       #original_hash: ce53c71
       payment_requested_on: 'Maksua pyydetty %{date}'
-      #original_hash: f5b1b34
-      payment_completed_on: 'Maksettu: %{date}'
       #original_hash: 3141a14
       series_registrations: Kilpailusarjan rekisteröitymiset
-      #original_hash: 845bb47
-      series_registrations_hint_html: >-
-        Vinkki: Kilpailusarjan rekisteröitymiset näytetään muodossa
-        <i>%{description}</i>
       #original_hash: b25928c
       total: Yhteensä
-      #original_hash: df036fe
-      n_events: Lajien lukumäärä
     new_registration:
       #original_hash: 8b9f726
       title: 'Rekisteröidy kilpailuun %{comp}'
-    #original_hash: 7cae988
-    registered_with_account_html: >-
-      Tämä henkilö rekisteröityi WCA-tilillä. Voit muokata hänen tietojaan
-      %{here}.
     #original_hash: ada2e9e
     sign_in: Kirjaudu sisään
     #original_hash: 5d45a00
     profile: profiili
-    #original_hash: 801b3e9
-    panel_title: Rekisteröitymisen tiedot
     #original_hash: c0063c3
     register: Rekisteröidy!
     #original_hash: f484f15
@@ -2267,12 +2363,10 @@ fi:
     refund_confirmation: 'Oletko varma, että haluat palauttaa tämän maksun?'
     #original_hash: a9af643
     update: Päivitä rekisteröitymistä
-    #original_hash: f6fdbe4
-    delete: Poista
     #original_hash: b72119a
     delete_confirm: 'Oletko varma, että haluat poistaa rekisteröitymisesi?'
-    #original_hash: cfc4865
-    delete_registration: Poista rekisteröityminen.
+    #original_hash: bbcc3dc
+    delete_registration: Poista rekisteröityminen
     #original_hash: e9ddc6e
     will_open_html: 'Rekisteröitymisen avautumiseen <strong>%{days}</strong>. Avautuu %{time}.'
     #original_hash: 34eb009
@@ -2295,8 +2389,6 @@ fi:
     please_sign_in_html: >-
       %{sign_in} rekisteröityäksesi kilpailuun %{comp}. Jos sinulla ei vielä ole
       WCA-tiliä, voit luoda sellaisen %{here}.
-    #original_hash: 89b4e7f
-    greeting: 'Hei, %{name}!'
     #original_hash: 322f646
     please_fix_profile_html: >-
       Rekisteröityäksesi tähän %{comp}un, sinun täytyy korjata seuraavat
@@ -2311,61 +2403,46 @@ fi:
       Kilpailijaraja tähän kilpailuun on %{competitor_limit}, ja raja on lähellä
       täyttyä. Jos rekisteröidyt, sinut lisätään jonotuslistalle.
       Rekisteröitymistä ei välttämättä hyväksytä, ellei paikkoja vapaudu.
-    #original_hash: 855ca9c
-    can_register: 'Voit rekisteröityä kilpailuun %{comp} alla.'
-    #original_hash: 4167ed7
-    check_registration_information: >-
-      Tarkista rekisteröitymisohjeet siltä varalta, että sinun pitää tehdä
-      jotakin muuta, kuten maksaa osallistumismaksu.
-    #original_hash: 88ac7c3
-    have_registered: >-
-      Olet lähettänyt rekisteröitymisesi kilpailuun %{comp}. Näet
-      rekisteröitymisen tiedot alla.
-    #original_hash: 3c9141f
-    contact_organizer: 'Ota yhteyttä järjestäjään, jos haluat tehdä muutoksia.'
-    #original_hash: 59354fd
-    waiting_list: >-
-      Rekisteröitymisesi on vireillä. Saatat joutua maksamaan osallistumismaksun
-      ennen hyväksymistä. Tarkista lisätiedot kilpailun verkkosivulta.
-    #original_hash: 58b1a3c
-    accepted: Rekisteröitymisesi on hyväksytty!
     #original_hash: bcd7d70
     entry_fees_fully_paid: 'Olet maksanut %{paid}, mikä kattaa koko osallistumismaksun.'
+    #original_hash: e50b275
+    entry_fees_partially_paid: >-
+      Olet maksanut %{paid} kokonaissummasta %{total}. Varmista järjestäjiltä
+      maksujärjestelyt loppusumman osalta.
+    #original_hash: b9d0818
+    entry_fees_fully_refunded: >-
+      Osallistumismaksusi palautettiin kokonaisuudessaan. Jos haluat maksaa
+      uudestaan, suorita maksu alla
+    #original_hash: 0c9c8e7
+    entry_fees_pay_again: Haluan maksaa uudestaan
     #original_hash: 2e5d1b9
     will_pay_here: 'Maksat sen vasta, kun olet lähettänyt rekisteröitymisesi'
-    #original_hash: b7ef562
-    wont_pay_here: Tarkista maksamisohjeet kilpailun tiedoista
-    #original_hash: be4b39d
-    not_qualified: Ei täytä karsintavaatimusta
+    #original_hash: 86877d4
+    wont_pay_here: Tarkista maksuohjeet kilpailun tiedoista
     refund_form:
-      hints:
-        #original_hash: d97186d
-        refund_amount: >-
-          Kilpailijalle palautettava rahasumma, voi olla mikä tahansa summa,
-          mutta kuitenkin enintään kilpailijan jo maksama määrä.
       labels:
         #original_hash: 1cc5991
         refund_amount: Palautettava rahasumma
     payment_form:
-      #original_hash: 4de825f
-      title: Osallistumismaksu
-      #original_hash: d1569e6
+      #original_hash: 8897f02
       payment_successful: 'Maksoit onnistuneesti: alla pitäisi näkyä, että olet maksanut.'
       #original_hash: 92dde77
       payment_processing: 'Maksusi on vahvistettu, mutta maksutapahtuma on vireillä.'
+      #original_hash: a8f253d
+      payment_partial: >-
+        Maksusi on rekisteröitynyt, mutta se ei kata koko osallistumismaksua.
+        Maksathan jäljellä olevan summan.
       #original_hash: 62d7351
       button_text: Maksa nyt!
       hints:
         #original_hash: bf3a39e
         donation: 'Valinnainen lahjoitus, joka päätyy ainoastaan järjestäjäryhmälle'
-        #original_hash: f7fa263
+        #original_hash: 737c228
         payment_button: >-
           Maksutietosi eivät päädy WCA-sivustolle, vaan ne lähetetään
           tietoturvallisesti Stripelle, joka käsittelee maksutapahtuman ja
-          ilmoittaa meille tämän jälkeen.
+          ilmoittaa meille maksun suorittamisesta.
       labels:
-        #original_hash: 4de825f
-        entry_fees: Osallistumismaksu
         #original_hash: dc9d458
         fees_paid: Maksettu
         #original_hash: cc632b5
@@ -2376,8 +2453,6 @@ fi:
         show_donation: Haluan lisäksi tehdä vapaaehtoisen lahjoituksen järjestäjäryhmälle
         #original_hash: 4930c06
         payment_information: Maksutiedot
-        #original_hash: de0fc95
-        payment_button: Maksa osallistumismaksu Stripen kautta
         #original_hash: f94d00f
         ajax_error: Palvelinvirhe
         #original_hash: d9185e8
@@ -2385,47 +2460,54 @@ fi:
         #original_hash: 97f7359
         subtotal: Välisumma
       alerts:
-        #original_hash: a34940e
-        not_a_number: Syötäthän kelvollisen luvun.
         #original_hash: 707b9ca
         amount_too_low: >-
           Kokonaismäärän tulee olla ainakin osallistumismaksun verran tullakseen
           maksetuksi.
-        #original_hash: 5cf6ce2
+        #original_hash: b245028
         amount_rather_high: >-
           Olet maksamassa vähintään kaksinkertaisesti rekisteröitymiseen
-          vaadittavan summan. Vahvista maksu painamalla OK.
+          vaadittavan summan.
       errors:
+        #original_hash: c80ec45
+        registration_closed: Rekisteröityminen on sulkeutunut - maksuja ei enää oteta vastaan.
         #original_hash: 166d48c
         already_paid: 'Veloitusta ei tehty, sillä osallistumismaksu on jo maksettu.'
         #original_hash: f10c80c
         not_allowed: Et voi maksaa tätä rekisteröitymistä.
-        #original_hash: a073600
-        stripe_failed: Tarkista Stripe-maksutapahtuma
-        #original_hash: d571a4e
-        paypal_failed: Please check the PayPal order.
+        #original_hash: 967eaed
+        cpi_disconnected: >-
+          Maksua yritettiin vahvistaa, mutta yhteys maksupalveluun oli kiinni.
+          Ota yhteyttä kilpailun järjestäjiin.
+        generic:
+          #original_hash: 9896987
+          failed: 'Please check the %{provider} transaction.'
+          #original_hash: 715f918
+          not_found: '%{provider} reported back a transaction ID that couldn''t be found.'
+          #original_hash: d56a75d
+          intent_not_found: >-
+            %{provider} reported back a transaction ID for which we don't have
+            an attempted payment on file.
+          #original_hash: 187a402
+          remote_not_found: >-
+            %{provider} failed to provide API details for the transaction ID
+            that it reported.
+          #original_hash: 3e7e6fc
+          secret_invalid: >-
+            %{provider} reported back a transaction secret that doesn't match
+            our records.
         #original_hash: df1a70e
         paypal_canceled: >-
           PayPal reported that the order was manually canceled. Please try
           again.
-        #original_hash: a32e40f
-        stripe_not_found: 'Stripe ilmoitti tunnistamattoman maksutapahtuman ID:n'
-        #original_hash: aaa8ab7
-        stripe_secret_invalid: >-
-          Stripe reported back a transaction secret that doesn't match our
-          records.
-        #original_hash: f808249
-        stripe_not_an_intent: >-
-          Stripe reported back a transaction ID that is not actually a payment
-          intent.
         #original_hash: 8d1a199
         payment_reset: Stripe hylkäsi maksun
         #original_hash: bcf6a93
         payment_pending: Maksua ei ole vielä suoritettu loppuun.
-        #original_hash: c3f8d65
-        registration_unreachable: >-
-          Virhe rekisteröitymispalvelun saavuttamisessa, otathan Software
-          Teamiin yhteyttä.
+        #original_hash: 4c5ef13
+        payment_failed: Maksu epäonnistui. Tarkista maksutiedot ja yritä uudestaan.
+        #original_hash: 7fb8be2
+        payment_canceled: Maksu peruutettiin. Maksua ei peritä.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Nopeuttaaksesi rekisteröitymistäsi jatkossa, voit valita ensisijaiset
@@ -2436,13 +2518,22 @@ fi:
       muokata niitä %{link}.
     #original_hash: ee89a3e
     registration_requirements: 'Kilpailun rekisteröitymisohjeet:'
+    registration_history:
+      #original_hash: 342fa25
+      acting_user: Acting User
+      #original_hash: 97c89a4
+      action: Action
+      #original_hash: 8aa57de
+      changes: Changes
+      #original_hash: cec61a5
+      title: Registration History
     import:
       #original_hash: 5a394f3
       title: 'Tuo rekisteröitymiset kilpailuun %{comp}'
-      #original_hash: ccda564
+      #original_hash: 620f5ce
       info: >-
-        Voit tuoda rekisteröitymisiä useita kertoja, muutokset määritellään
-        automaattisesti ja tietokanta päivitetään sen mukaan.
+        Voit tuoda rekisteröitymisiä useita kertoja. Muutokset luetaan
+        automaattisesti ja tietokanta päivitetään vastaamaan uusia tietoja.
       #original_hash: 779b272
       registrations_file_label: Rekisteröitymistiedosto
       #original_hash: 224f3a6
@@ -2497,6 +2588,14 @@ fi:
         lisätäksesi kilpailussa paikan päällä rekisteröityviä.
       #original_hash: a11edb8
       add: Lisää kilpailija
+      #original_hash: fd52980
+      ots_not_enabled: >-
+        Registration is closed and on-the-spot registration is not enabled - you
+        must edit the competition to enable it first
+      #original_hash: 61125b5
+      competition_over: >-
+        You cannot add on-the-spot registrations after the competition has
+        ended.
       errors:
         #original_hash: d6dcf5c
         already_registered: Tämä henkilö on jo rekisteröitynyt.
@@ -2508,20 +2607,20 @@ fi:
       name_too_long: >-
         Kilpailun nimi on pidempi kuin 32 merkkiä. Kilpailun ID:tä ja lyhyttä
         nimeä täytyy lyhentää.
-      #original_hash: af27396
-      id_starts_with_lowercase: 'Kilpailun id:ssä pitäisi olla iso alkukirjain.'
+      #original_hash: 5882e05
+      id_starts_with_lowercase: 'Kilpailun ID:n pitäisi alkaa isolla alkukirjaimella.'
       #original_hash: 1a20fae
       must_have_events: Lisää vähintään yksi laji ennen kilpailun vahvistamista.
-      #original_hash: a3aea56
+      #original_hash: fd91320
       schedule_must_match_rounds: >-
         Varmistathan, että kilpailussa on vähintään yksi kierros jokaista lajia
         kohden, ja että luomasi aikataulu sisältää kaikki kierrokset, jotka
         ilmoitit ennen kilpailun vahvistamista.
-      #original_hash: aeb5f2a
+      #original_hash: 4fe4dee
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Varmista, että kaikille finaalia edeltäville kierroksille on määritetty
         jatkoonpääsyvaatimukset.
-      #original_hash: f50ffd8
+      #original_hash: a00f441
       cutoff_is_greater_than_time_limit: >-
         Kierroksella %{round_number} lajissa %{event} cutoff on korkeampi kuin
         aikaraja. Varmista, että cutoff ei ole aikarajaa korkeampi.
@@ -2543,7 +2642,7 @@ fi:
         10 minuuttia. Varmista, että se on oikein.
       #original_hash: e390250
       create_success: Uusi kilpailu luotu onnistuneesti!
-      #original_hash: bc3e673
+      #original_hash: 5e1ea86
       registration_payment_info: >-
         This competition has registration fees but no Stripe account is linked.
         If you are using Stripe through the WCA website, please remember to link
@@ -2572,13 +2671,11 @@ fi:
       results_still_processing: Kilpailun tuloksia käsitellään - niiden pitäisi olla pian saatavilla.
       #original_hash: e205d73
       results_already_posted: Tulokset on jo julkaistu.
-      #original_hash: 376f461
-      results_posted: Tulokset julkaistu onnistuneesti!
       #original_hash: afe3a23
       results_preview_alert: 'Tarkastelet tuloksia, joita ei ole vielä julkaistu.'
-      #original_hash: 07de612
+      #original_hash: 16dd227
       upload_results: >-
-        Tämä kilpailu on päättynyt, ja yritämme julkaista tulokset
+        Tämä kilpailu on päättynyt. Tulokset pyritään julkaisemaan
         mahdollisimman pian!
       #original_hash: 68dd436
       computing_auxiliary_data: Please wait until auxiliary data is computed.
@@ -2600,6 +2697,11 @@ fi:
       registration_already_closed: Rekisteröitymisen takaraja on menneisyydessä. Aseta se tulevaisuuteen.
       #original_hash: 3322400
       tooltip_registered: Olet rekisteröitynyt.
+      #original_hash: b10c8d6
+      tooltip_pending: >-
+        Rekisteröitymisesi odottaa järjestäjäryhmän hyväksyntää. Varmistathan,
+        että olet noudattanut kaikkia kilpailusivun rekisteröitymisohjeita
+        (esim. maksanut osallistumismaksun).
       #original_hash: f2d092f
       tooltip_waiting_list: Olet tällä hetkellä jonotuslistalla.
       #original_hash: f97246a
@@ -2618,12 +2720,10 @@ fi:
       championship_exists: >-
         Tämän tyyppinen mestaruuskilpailu (%{championship_type}) on jo olemassa
         vuonna %{year}.
-      #original_hash: 0644bdc
-      orga_closed_reg_success: Rekisteröitymisen sulkeminen onnistui.
+      #original_hash: e871f03
+      orga_closed_reg_success: Rekisteröityminen suljettu.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Ei voitu sulkea rekisteröitymistä.
-      #original_hash: b16bd13
-      cannot_activate_v2: You cannot activate the new registration system if registration is open.
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
         This competition does not have a deadline for accepting competitors on
@@ -2785,12 +2885,14 @@ fi:
         Kannustamme kaikkia valitsemaan haluamansa kilpailulajit
         online-rekisteröitymisen yhteydessä, mutta voit silti lisätä lajeja
         rekisteröitymiseesi lajin alkamiseen asti.
-      #original_hash: cf7be5d
+      #original_hash: 51ef4f3
       on_the_spot_registration_fee_html: >-
-        Paikan päällä voi rekisteröityä. Osallistumismaksu on tällöin
-        %{on_the_spot_base_entry_fee}.
-      #original_hash: 1637bea
-      on_the_spot_registration_free: Paikan päällä voi rekisteröityä ilmaiseksi.
+        Paikan päällä voi rekisteröityä, mikäli kilpailijaraja ei ole täyttynyt.
+        Osallistumismaksu on tällöin %{on_the_spot_base_entry_fee}.
+      #original_hash: 2b4ea65
+      on_the_spot_registration_free: >-
+        Paikan päällä voi rekisteröityä ilmaiseksi (mikäli kilpailijaraja ei ole
+        täyttynyt)
       #original_hash: f5f687d
       no_on_the_spot_registration: Paikan päällä ei voi rekisteröityä.
       #original_hash: 4df139d
@@ -2934,6 +3036,10 @@ fi:
       from_date: Mistä
       #original_hash: ae79ea1
       to_date: Mihin
+      #original_hash: 17fd5f4
+      show_filters: Näytä suodattimet
+      #original_hash: 0d781a3
+      hide_filters: Piilota suodattimet
       #original_hash: 5be6985
       reset_filters: Nollaa suodattimet
       #original_hash: 52c30f8
@@ -2969,8 +3075,6 @@ fi:
         custom: Kilpailut valitulla ajanjaksolla
         #original_hash: 0933739
         by_announcement: 'Kilpailut ilmoituspäivän mukaan järjestettynä, uusin ylimpänä'
-      #original_hash: 6684214
-      no_access: Sinulla ei ole oikeutta tälle sivulle pääsyyn!
       tooltips:
         hourglass:
           #original_hash: b5183e1
@@ -2988,22 +3092,20 @@ fi:
         #original_hash: 3bc8082
         recent: 'Viimeiset %{count} päivää'
         registration:
-          #original_hash: 49d8169
-          opens_in: '%{duration} rekisteröitymisen aukeamiseen'
-          #original_hash: 2d601fa
-          closed: 'Rekisteröityminen on sulkeutunut. Kilpailun alkuun on %{days}.'
+          #original_hash: fe28f94
+          opens_in: 'Rekisteröityminen aukeaa %{relativeDate}.'
+          #original_hash: f9f709e
+          closed: 'Rekisteröityminen on sulkeutunut. Kilpailu alkaa %{relativeDate}.'
           #original_hash: 2e17db8
           open: Rekisteröityminen on auki!
-          #original_hash: c098975
+          #original_hash: be2118d
           full: >-
-            Kilpailijaraja saavutettu, uudet rekisteröitymiset päätyvät
+            Kilpailijaraja saavutettu, rekisteröityvät kilpailijat lisätään
             jonotuslistalle.
       #original_hash: 28531af
       no_more_comps: Ei enempää kilpailuja.
       #original_hash: 8b09d74
       no_comp_found: Kilpailuja ei löytynyt.
-      #original_hash: 7008166
-      no_comp_match: 'Emme löytäneet kilpailuja, joissa on %{events}! Koeta vähentää lajeja.'
     my_competitions_table:
       #original_hash: 5301648
       edit: Muokkaa
@@ -3104,6 +3206,8 @@ fi:
           is_confirmed: Älä anna järjestäjien muokata tätä kilpailua
           #original_hash: d493e6a
           is_visible: Tee kilpailusta julkisesti näkyvä
+          #original_hash: e7daccb
+          uses_new_registration_system: Käytä uutta rekisteröitymisjärjestelmää
         #original_hash: 89f89c0
         competition_id: ID
         #original_hash: 709a232
@@ -3147,6 +3251,14 @@ fi:
           count: Kilpailijoiden enimmäismäärä
           #original_hash: 4a8b6f1
           reason: Kilpailijarajan peruste
+          #original_hash: e9e5b84
+          auto_close_threshold: Auto-close threshold
+          #original_hash: b1d5af4
+          newcomer_month_reserved_spots: Number of spots to reserve for newcomers
+          #original_hash: 26b48e3
+          auto_accept_preference: Automatically accept registrations
+          #original_hash: 1b8698d
+          auto_accept_disable_threshold: Limit for automatically accepting registrations
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: WCA-delegaatti/delegaatit
@@ -3197,8 +3309,8 @@ fi:
             päivittämiseen
           #original_hash: 2529d04
           allow_on_the_spot: Paikan päällä rekisteröityminen
-          #original_hash: 3d47eca
-          allow_self_delete_after_acceptance: Rekisteröitymisen peruuttaminen
+          #original_hash: b6faf84
+          competitor_can_cancel: When can competitors cancel their registrations
           #original_hash: 7e53b96
           allow_self_edits: Muutokset rekisteröitymisiin
           #original_hash: 3c23a67
@@ -3255,6 +3367,11 @@ fi:
           is_confirmed: ''
           #original_hash: da39a3e
           is_visible: ''
+          #original_hash: 68d3cc6
+          uses_new_registration_system: >-
+            If this is disabled, changing the registration system will cause
+            technical issues. Please contact WST for assistance if you still
+            need to change the registration system.
         #original_hash: da39a3e
         competition_id: ''
         #original_hash: 2c812a0
@@ -3322,10 +3439,10 @@ fi:
           <br/>Kirjoita tämä <b>englanniksi<b/> ja muilla kilpailijoiden
           todennäköisesti puhumilla kielillä.
         competitor_limit:
-          #original_hash: dc47c39
+          #original_hash: 945da5b
           enabled: >-
-            Vaikka säännöt eivät vaadi kilpailijarajan asettamista, se on
-            suositeltavaa.
+            Kilpailijaraja vaaditaan. Ainoa poikkeus tähän on useassa
+            sijainnissa käytävä FMC-kilpailu.
           #original_hash: b7b599b
           count: >-
             Kilpailuun osallistuvien sallittu määrä. Rajan asettaminen ei vielä
@@ -3333,6 +3450,26 @@ fi:
             manuaalisesti.
           #original_hash: 4bd7102
           reason: Mikä on peruste kilpailijarajalle? Täytä englanniksi!
+          #original_hash: 045d250
+          auto_close_threshold: >-
+            Registration will automatically close when this number of paid
+            registrations is received. Leave blank to disable, ignore if you
+            aren't using integrated payments.
+          #original_hash: e1cf4fc
+          newcomer_month_reserved_spots: >-
+            Only allowed during Newcomer Month - reserved spots can't be more
+            than half of the Competitor Limit.
+          #original_hash: 79dcafd
+          auto_accept_preference: >-
+            This will enable a 'Bulk Auto Accept' button in the Registrations
+            menu. This will accept all paid Waitlisted and Pending up to the
+            competitor limit, or the limit defined below. Use at your own risk.
+          #original_hash: b261026
+          auto_accept_disable_threshold: >-
+            When this number of accepted registrations is reached, auto-accept
+            will disable itself - allowing organizers to manually approve the
+            final registrations. Must be less than the competitor limit. Leave
+            blank if not desired.
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: Kilpailun WCA-delegaatit.
@@ -3420,7 +3557,7 @@ fi:
           #original_hash: da39a3e
           allow_on_the_spot: ''
           #original_hash: da39a3e
-          allow_self_delete_after_acceptance: ''
+          competitor_can_cancel: ''
           #original_hash: da39a3e
           allow_self_edits: ''
           #original_hash: da39a3e
@@ -3499,8 +3636,15 @@ fi:
           enabled:
             #original_hash: d9c05cc
             'true': Haluan asettaa kilpailijarajan
-            #original_hash: 5b581b5
-            'false': En halua asettaa kilpailijarajaa
+            #original_hash: 53397ec
+            'false': En halua määrittää kilpailijarajaa
+          auto_accept_preference:
+            #original_hash: 5996b1f
+            disabled: Disable 'Bulk Auto Accept' button
+            #original_hash: 1c0c289
+            bulk: Enable 'Bulk Auto Accept' button in Registrations menu
+            #original_hash: 490ed83
+            live: Automatically accept registrations when payment is made
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -3516,15 +3660,13 @@ fi:
             'false': >-
               Kilpailijat eivät voi muuttaa rekisteröitymistään sen hyväksymisen
               jälkeen.
-          allow_self_delete_after_acceptance:
-            #original_hash: 5c2e8c1
-            'true': >-
-              Kilpailijat voivat poistaa rekisteröitymisensä, vaikka se olisi jo
-              hyväksytty
-            #original_hash: 3b77604
-            'false': >-
-              Kilpailijat eivät voi poistaa rekisteröitymistään, kun se on
-              hyväksytty
+          competitor_can_cancel:
+            #original_hash: a91bcce
+            always: Always
+            #original_hash: b64ca70
+            not_accepted: Until they're accepted
+            #original_hash: 4435d55
+            unpaid: Until they pay
           guest_entry_status:
             #original_hash: 7e54323
             unclear: >-
@@ -3544,12 +3686,48 @@ fi:
               #original_hash: 6509041
               'false': Competitors MUST be qualified to register for an event
     registration_v2:
+      auto_accept:
+        #original_hash: eaf9960
+        bulk_auto_accept: Auto-Approve Competitors
+        #original_hash: 1a84d92
+        cant_bulk_auto_accept: >-
+          An error occurred while trying to bulk auto accept - contact WST for
+          assistance if needed
+        #original_hash: 1897ffb
+        bulk_auto_accepted: Bulk auto accept succeeded
+        #original_hash: 786d81b
+        nothing_to_accept: No registrations eligible for auto-accept
       pdf:
         #original_hash: 5c7d60f
         link: 'As a <0>%{pdfLink}</0>'
       info:
         #original_hash: eade5c7
-        download: Download all of the competitions details.
+        download: Lataa kilpailun tiedot.
+        #original_hash: 21891e5
+        payment_missing: >-
+          Rekisteröitymistäsi ei hyväksytä ennen kuin maksat osallistumismaksun,
+          paitsi jos olet sopinut järjestäjien kanssa muista järjestelyistä, tai
+          olet maksanut osallistumismaksun jotakin muuta kautta.
+        #original_hash: b15fddc
+        needs_approval: >-
+          Matkavarauksia ei kannata ihan vielä tehdä - järjestäjien pitää vielä
+          hyväksyä rekisteröityminen. Tässä voi kestää hetki.
+        #original_hash: 6071fd9
+        is_accepted: Varaa matka ja pakkaa laukut - olet mukana kilpailussa!
+        #original_hash: 89448a8
+        is_cancelled: >-
+          Rekisteröitymisesi on peruttu ja tällä hetkellä et ole osallistumassa.
+          Voit kuitenkin rekisteröityä uudestaan.
+        #original_hash: 2a88d10
+        is_rejected: >-
+          Järjestäjäryhmä on hylännyt rekisteröitymisesi. Ota järjestäjiin
+          yhteyttä, mikäli uskot, että tämä oli virhe.
+        #original_hash: 719dea0
+        is_waitlisted: >-
+          Älä varaa matkaasi ihan vielä, mutta toivoa ei kannata menettää.
+          Kilpailu on täynnä, mutta olet jonotuslistalla, ja sinulle ilmoitetaan
+          sähköpostitse, mikäli paikkoja vapautuu niin, että pääset mukaan
+          kilpailuun.
       list:
         #original_hash: 6eef664
         empty: None
@@ -3558,12 +3736,84 @@ fi:
           zero: ei paikkoja jäljellä
           one: '%{count} paikka jäljellä'
           other: '%{count} paikkaa jäljellä'
+        pending:
+          #original_hash: 4210670
+          title: Vireillä olevat rekisteröitymiset
+          #original_hash: 5e16c6d
+          information: >-
+            Pidäthän vireillä ainoastaan rekisteröitymisiä, joita ei ole
+            suoritettu loppuun (esim. osallistumismaksu maksamatta). Käytä
+            jonotuslistaa, mikäli kilpailu on täyttynyt.
+          #original_hash: 134e94f
+          waitlist_skipped_warning: >-
+            Vireillä on %{count} rekisteröitymistä, jotka on tehty aikaisemmin
+            kuin valitsemasi. Haluatko varmasti siirtää valitut jonotuslistalle?
+          #original_hash: c2875e1
+          approve_skipped_warning: >-
+            Vireillä on %{count} rekisteröitymistä, jotka on tehty aikaisemmin
+            kuin valitsemasi. Haluatko silti hyväksyä valitut rekisteröitymiset?
+        waitlist:
+          #original_hash: 3907ca4
+          title: Jonotuslista
+          #original_hash: de3f9d4
+          information: >-
+            Competitors are added to the end of the Waiting List. If you add
+            several at once, the paid competitors will be added to the end in
+            the order that they paid, followed by the rest in the order that
+            they registered. You can manually adjust the order in Edit Mode if
+            necessary.
+          #original_hash: dc16b6c
+          skipped_warning: >-
+            Jonotuslistalla on %{count} rekisteröitymistä, jotka on tehty
+            aikaisemmin kuin valitsemasi. Haluatko varmasti hyväksyä valitut
+            rekisteröitymiset?
+        approved:
+          #original_hash: a59612c
+          title: Hyväksytyt rekisteröitymiset
+          #original_hash: bbdee7d
+          pending_waitlist_combined_skipped_warning: >-
+            Vireillä/jonotuslistalla on %{count} rekisteröitymistä, jotka on
+            tehty aikaisemmin kuin valitsemasi. Haluatko varmasti hyväksyä
+            valitut rekisteröitymiset?
+        cancelled:
+          #original_hash: bd69c74
+          title: Peruutukset
+          #original_hash: bb5b570
+          information: Peruuttaneet kilpailijat saavat rekisteröityä uudestaan
+        rejected:
+          #original_hash: 9cef5ae
+          title: Hylätyt rekisteröitymiset
+          #original_hash: 3fd2e0c
+          information: Hylätyt kilpailijat eivät saa rekisteröityä uudelleen.
+        non_competing:
+          #original_hash: d4e453a
+          title: Muut kuin kilpailijat
+          #original_hash: 2ed9c67
+          information: For non-competitors that you can assign staff duties to in the WCIF.
+        payment:
+          #original_hash: d6fbc7a
+          refunded_status: Palautettu
+          #original_hash: 41248b1
+          initialized: >-
+            Maksutapahtuma aloitettiin %{date}, mutta sitä ei suoritettu
+            loppuun.
+          #original_hash: 3a16c0d
+          refunded: 'Maksu palautettiin %{date}.'
+        psychsheets:
+          #original_hash: ded0a5d
+          show_me: Näytä
+          #original_hash: a23dc2b
+          rank: 'Sijoitus: %{userPosition}'
+        #original_hash: 19eabc9
+        timestamp: Aikaleima
+        #original_hash: 5e0207a
+        comment_and_note: Kommentti / huomio
+        #original_hash: b651ae4
+        edit_waiting_list: Enable Waiting List Edit Mode
       bookmark:
         #original_hash: 7952a5c
         unbookmark: Olet poistanut kilpailun tallennuksen.
       requirements:
-        #original_hash: 09a428f
-        title: Vaatimukset
         #original_hash: 1255806
         acknowledgement: >-
           Olen lukenut ja ymmärtänyt kaikki 'Rekisteröidy'-välilehdeltä löytyvät
@@ -3578,6 +3828,22 @@ fi:
         being_deleted: Rekisteröitymistä poistetaan...
         #original_hash: cbf13af
         update_confirm: 'Oletko varma, että haluat päivittää rekisteröitymistä?'
+        #original_hash: 604da8b
+        organizer_update_confirm: Are you sure you want to update the user's registration?
+        #original_hash: 9b92912
+        update_confirm_contact: >-
+          Sinun täytyy ottaa järjestäjiin yhteyttä muokataksesi
+          rekisteröitymistä. Klikkaamalla "kyllä" pääset
+          yhteydenottolomakkeelle.
+        #original_hash: d54056b
+        delete_confirm_contact: >-
+          Sinuun täytyy ottaa järjestäjiin yhteyttä poistaaksesi
+          rekisteröitymisen. Klikkaamalla "kyllä" pääset
+          yhteydenottolomakkeelle.
+        #original_hash: 7fbb20c
+        update_contact_message: 'Haluaisin päivittää rekisteröitymistäni seuraavasti: %{update_params}'
+        #original_hash: 8bf02a9
+        delete_contact_message: Haluan poistaa rekisteröitymiseni
         #original_hash: 65bbb07
         no_changes: Ei muutoksia
         #original_hash: be4e8e2
@@ -3586,19 +3852,61 @@ fi:
         email_copy: Copy Emails
         #original_hash: b83b663
         email_message: Copied to clipboard. Remember to use bcc!
-        #original_hash: 71327f1
-        move_pending: Move to Pending
-        #original_hash: 9144dd6
-        move_waiting: Siirrä jonotuslistalle
-        #original_hash: 284b24f
-        cancel: Peru rekisteröityminen
-        #original_hash: 67b3c7d
+        #original_hash: beedd53
+        move_to:
+          zero: Move to
+          one: 'Move %{count} to'
+          other: 'Move %{count} to'
+        #original_hash: 96f608c
+        pending: Pending
+        #original_hash: 92d40dc
+        waitlist: Waiting List
+        #original_hash: 41b81eb
+        approved: Approved
+        #original_hash: a1bf92e
+        cancelled: Cancelled
+        #original_hash: 27eeb7a
+        rejected: Rejected
+        #original_hash: 43dc853
+        amount: Amount
+        #original_hash: d7e4497
         too_many: >-
-          Kaikkien näiden rekisteröitymisten hyväksyminen tarkoittaisi, että
-          kilpailijaraja ylittyy %{count} kilpailijalla
+          Accepting all these registrations would go over the competitor limit
+          by %{count}.
         #original_hash: 462376a
         no_self_update: Ota yhteyttä järjestäjäryhmään päivittääksesi rekisteröitymistäsi
       register:
+        #original_hash: e8cc296
+        will_open_countdown: >-
+          Rekisteröitymisen avautumiseen %{minutes} minuuttia ja %{seconds}
+          sekuntia. Tämä sivu päivittyy automaattisesti, kun rekisteröityminen
+          alkaa.
+        #original_hash: 604d27a
+        will_close_countdown: >-
+          Rekisteröitymisen päättymiseen %{minutes} minuuttia ja %{seconds}
+          sekuntia. Tämä sivu päivittyy automaattisesti, kun rekisteröityminen
+          päättyy.
+        panel:
+          approval:
+            #original_hash: 8cc047a
+            title: Hyväksyntä
+            #original_hash: 3bdafe5
+            description: Järjestäjien toimesta
+          payment:
+            #original_hash: 4930c06
+            title: Maksutiedot
+            #original_hash: 0d084a5
+            description: Syötä maksutiedot
+          competing:
+            #original_hash: d672995
+            title: Rekisteröidy
+            #original_hash: af0e6a0
+            description: Valitse kilpailulajit
+          requirements:
+            #original_hash: 09a428f
+            title: Vaatimukset
+            #original_hash: 46f4145
+            description: Hyväksy kilpailuehdot
         #original_hash: a38d5fa
         success: 'Olet rekisteröitynyt kilpailuun %{comp_name}'
         #original_hash: affea61
@@ -3613,8 +3921,6 @@ fi:
         until: 'Voit päivittää rekisteröitymistäsi %{date} asti'
         #original_hash: fc8bc84
         passed: Et voi enää päivittää rekisteröitymistäsi
-        #original_hash: 8cc047a
-        approval: Approval
         #original_hash: 05b9f17
         view_registration: View Registration
         #original_hash: 3c8d8b7
@@ -3626,14 +3932,18 @@ fi:
           pending: Rekisteröitymisesi odottaa järjestäjäryhmän hyväksyntää.
           #original_hash: dcc4906
           cancelled: Rekisteröitymisesi on poistettu.
+          #original_hash: 92dab83
+          rejected: Rekisteröitymisesi on hylätty.
           #original_hash: a02390c
           waiting_list: 'Olet jonotuslistalla sijalla %{waiting_list_position}.'
         #original_hash: 2d9f36c
         disclaimer: Rekisteröitymisen lähettäminen ei tarkoita oikeutta kilpailla
         #original_hash: 8fe68a1
         processing: Rekisteröitymistäsi käsitellään...
-        #original_hash: 897f272
-        processing_longer: 'Käsittely kestää tavallista pidempään, ethän poistu sivulta!'
+        #original_hash: c7f124a
+        processing_longer: >-
+          Rekisteröitymisesi on vastaanotettu, ja se käsitellään pian. Tämä voi
+          kestää hetken, riippuen palvelimen kuormitustilanteesta.
         #original_hash: 79ba42a
         processing_queue: >-
           Tällä hetkellä käsittelyssä on suuri määrä rekisteröitymisiä, jonossa
@@ -3651,6 +3961,10 @@ fi:
         '-2': 'Authentication Expired, please refresh the page'
         #original_hash: 2d63156
         '-3': 'Missing Authentication, please log in'
+        #original_hash: e631d99
+        '-4': >-
+          The registration service encountered an internal error. If this issue
+          persists contact WST
         #original_hash: e0b69a9
         '-1000': Kilpailua ei ole olemassa
         #original_hash: 2aa4aa1
@@ -3661,8 +3975,15 @@ fi:
         '-2002': Profiilistasi puuttuu tietoja
         #original_hash: 4dd79f2
         '-2003': You don't have the permissions to complete this action
+        #original_hash: 374e1c7
+        '-2004': >-
+          Et voi rekisteröityä, sillä järjestäjät ovat hylänneet
+          rekisteröitymisesi. Ota järjestäjiin yhteyttä, mikäli uskot, että tämä
+          oli virhe.
         #original_hash: cb4093a
         '-3000': Rekisteröitymistä ei ole olemassa
+        #original_hash: 9bbefa9
+        '-3001': Olet jo rekisteröitynyt toiseen tämän kilpailusarjan kilpailuun
         #original_hash: bc53fb6
         '-4000': The Request contains invalid data
         #original_hash: 35fddf4
@@ -3687,11 +4008,73 @@ fi:
         '-4010': Jonotuslistasija ei ole kelvollinen
         #original_hash: e489908
         '-4011': Voit hyväksyä vain jonotuslistan ensimmäisen kilpailijan
+        #original_hash: 8d089d6
+        '-4012': Et täytä valittujen lajien karsintavaatimuksia
+        #original_hash: fb1d742
+        '-4013': Cant accept non-newcomer when only reserved newcomer spots remain
+        #original_hash: a244fde
+        '-4014': Olet jo rekisteröitynyt tähän kilpailuun.
+        #original_hash: 369db78
+        '-4015': >-
+          Syötäthän kohtuullisen määrän vieraita. Ota erikseen yhteyttä
+          järjestäjiin, jos mukanasi tulee huomattavan suuri määrä vieraita.
         #original_hash: 0df821f
         '-6001': WCA Payment is not enabled for this competition
         #original_hash: 092da51
         '-6002': Sinun täytyy rekisteröityä loppuun ennen maksamista
+        #original_hash: ee2c9c4
+        '-6003': >-
+          No outstanding payment found - this is probably because you have
+          already paid for your registration.
+        #original_hash: 631576f
+        '-7001': Competitor still has outstanding registration fees
+        #original_hash: 2aa350b
+        '-7002': Auto-accept is not enabled for this competition.
+        #original_hash: d191d2d
+        '-7003': >-
+          Can only auto-accept pending registrations or first position on
+          waiting list
+        #original_hash: 30fd93d
+        '-7004': Competition has reached auto_accept_disable_threshold
+        #original_hash: f2bb661
+        '-7005': Cant auto-accept while registration is not open
     errors:
+      #original_hash: b14d060
+      must_use_wca_registration: >-
+        Auto-accept can only be used if you are using the WCA website for
+        registrations
+      #original_hash: 693d47d
+      must_use_payment_integration: >-
+        You must enable a payment integration (eg, Stripe) in order to use
+        auto-accept
+      #original_hash: 130c901
+      auto_accept_limit: >-
+        Limit for auto-accepted registrations must be less than the competitor
+        limit
+      #original_hash: 42cd8e6
+      auto_accept_not_negative: Limit for auto-accepted registrations cannot be less than 0.
+      #original_hash: 181d8d9
+      auto_accept_accept_paid_pending: >-
+        Can't enable auto-accept if there are paid-pending registrations -
+        either accept them or move them to the waiting list
+      #original_hash: 96db418
+      auto_accept_accept_waitlisted: >-
+        Can't enable auto-accept - please accept as many users from the Waiting
+        List as possible.
+      #original_hash: 6d11b4e
+      auto_close_exceed_paid: >-
+        Auto close threshold must be greater than the number of currently paid
+        registrations
+      #original_hash: abee516
+      auto_close_positive_nonzero: Auto-close threshold must be greater than 0
+      #original_hash: b81ee7e
+      must_exceed_competitor_limit: Auto-close threshold must be greater than the competitor limit
+      #original_hash: 148c1d4
+      use_wca_registration: Competition must use WCA registration
+      #original_hash: 2c41c57
+      newcomer_month_reservations_percentage: cant reserve more than 50% of spots for newcomers
+      #original_hash: 58d244e
+      newcomer_month_reservations_available: Desired newcomer month reserved spots exceeds number of spots reservable
       #original_hash: f7ef9f6
       invalid_name_message: >-
         täytyy päättyä vuosilukuun ja saa sisältää ainoastaan kirjaimia,
@@ -3711,6 +4094,8 @@ fi:
         sisällyttää aikatauluun.
       #original_hash: 6e228b7
       must_contain_delegate: täytyy sisältää vähintään yksi WCA-delegaatti
+      #original_hash: b5677c2
+      must_contain_organizer: must contain at least one organizer
       #original_hash: 8131fc2
       not_all_delegates: eivät kaikki ole delegaatteja
       #original_hash: 43a23c2
@@ -3731,8 +4116,8 @@ fi:
       advancement_condition_must_be_present_for_all_non_final_rounds: täytyy asettaa jatkoonpääsyvaatimus kaikille paitsi finaalikierroksille.
       #original_hash: da17c99
       registration_period_after_start: Rekisteröitymisaika ei voi olla kilpailun alkamispäivän jälkeen.
-      #original_hash: f6b244b
-      waiting_list_deadline_before_registration_close: Wailting list deadline cannot be before registration close date.
+      #original_hash: 2a26c1c
+      waiting_list_deadline_before_registration_close: Waiting list deadline cannot be before registration close date.
       #original_hash: ececa98
       waiting_list_deadline_before_refund_date: Waiting list deadline cannot be before limit date for refunds.
       #original_hash: 7324d19
@@ -3745,6 +4130,10 @@ fi:
       event_change_deadline_with_ots: >-
         Deadline for updating events must be during the competition if on the
         spot registrations are accepted.
+      #original_hash: e6400f7
+      on_the_spot_with_past_event_change_deadline: >-
+        Cannot enable on the spot registrations if the deadline for updating
+        events is in the past.
       #original_hash: 5ae2437
       series_distance_km: 'Kilpailu on liian kaukana kilpailusta %{competition}.'
       #original_hash: 4a5d7c5
@@ -3753,6 +4142,22 @@ fi:
         päivää.
       #original_hash: 7fc8fba
       must_ask_about_guests_if_specifying_limit: 'Vieraista täytyy kysyä, jos vieraiden määrälle on asetettu raja.'
+      #original_hash: 000564d
+      not_full_url: >-
+        You have a relative URL (%{url}) in the content. Please enter full URLs
+        with prefix http:// or https://.
+      #original_hash: e8ff0ef
+      editing_deadline_already_passed: >-
+        You're only allowed to change dates for deadlines that have not yet
+        passed, but the original value of %{timestamp} has already passed.
+      #original_hash: e12883e
+      edited_deadline_not_after_original: >-
+        You're only allowed to extend deadlines, but %{new_timestamp} is set
+        before the original value of %{timestamp}.
+      #original_hash: d79fbb4
+      edited_deadline_not_in_future: >-
+        You're only allowed to introduce future deadlines, but %{new_timestamp}
+        is not in the future.
     new:
       #original_hash: 1208df7
       create_competition: Luo kilpailu
@@ -3842,8 +4247,6 @@ fi:
     cancelled_by_html: 'Peruttu %{date_time} (%{name})'
     #original_hash: 25e68c3
     cancel_confirm: 'Oletko varma, että haluat perua tämän kilpailun?'
-    #original_hash: 01de5ee
-    post_results: Julkaise tulokset
     #original_hash: b6513f1
     results_posted_by_html: 'Julkaistu %{date_time} (julkaisija %{poster_name})'
     #original_hash: a6b5efe
@@ -3905,12 +4308,12 @@ fi:
         qualification_html: >-
           Karsintaraja täytyy saavuttaa muussa WCA-kilpailussa, kilpaillakseen
           lajissa tässä kilpailussa.
-        #original_hash: 51dfad5
-        qualification_all_events_html: 'Karsintaraja täytyy saavuttaa <b>%{date}</b> mennessä.'
-        #original_hash: 5eac9e5
+        #original_hash: 6ab548b
+        qualification_all_events_html: 'Karsintaraja täytyy saavuttaa viimeistään <b>%{date}</b>.'
+        #original_hash: b701c2a
         qualification_some_events_html: >-
-          Karsintaraja lajeissa %{events} täytyy saavuttaa <b>%{date}</b>
-          mennessä.
+          Karsintarajat lajeissa %{events} täytyy saavuttaa viimeistään
+          <b>%{date}</b>.
       #original_hash: 041a5de
       format: Kierrosformaatti
       #original_hash: 0d1fcc3
@@ -4023,8 +4426,12 @@ fi:
         admin_view: Ylläpitonäkymä
         #original_hash: a857eb4
         tabs: Hallitse välilehtiä
+        #original_hash: e42bf99
+        newcomer_checks: Newcomer Checks
         #original_hash: f3d6278
         submit_results: Lähetä tulokset
+        #original_hash: dd2e98f
+        upload_scrambles: Upload scrambles
         #original_hash: 4c9f914
         delegate_report: Delegaatin raportti
         #original_hash: b233e77
@@ -4037,8 +4444,6 @@ fi:
         competitors: Kilpailijat
         #original_hash: c4622c3
         scrambles: Sekoitussarjat
-        #original_hash: f632da3
-        enable_v2: Enable new Registration Service
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA-profiili
@@ -4121,18 +4526,10 @@ fi:
       Huomaa, että jotkin suodattimet (kuten vuodet) ovat tilapäisesti pois
       käytöstä. Software Team pyrkii saamaan suodattimet uudelleen käyttöön -
       pahoittelemme tästä aiheutuvaa haittaa.
-    #original_hash: e3710ed
-    tooltip_no_years: Tietokanta on liian suuri historiatietojen laskemiseksi.
-    #original_hash: 357094b
-    tooltip_no_quantities: Tietokanta on liian suuri pitkien ranking-listojen laskemiseksi.
     selector_elements:
       events_selector:
         #original_hash: ad8919a
         event: Laji
-        #original_hash: 3e83afa
-        all_events: Kaikki lajit
-      #original_hash: 0f21717
-      region: Alue
       type_selector:
         #original_hash: 3deb745
         type: Luokka
@@ -4140,30 +4537,13 @@ fi:
         single: Paras ratkaisu
         #original_hash: 15f86c0
         average: Keskiarvo
-      years_selector:
-        #original_hash: 96f997b
-        years: Vuodet
-        #original_hash: 0977c76
-        all_years: Kaikki vuodet
-        #original_hash: 8737f09
-        only: Tietty vuosi
-        #original_hash: b3c0fe7
-        only_html: 'Vain %{year}'
-        #original_hash: 96bdb66
-        until: Tiettyyn vuoteen asti
-        #original_hash: fa23930
-        until_html: 'Vuoteen %{year} asti'
       show_selector:
         #original_hash: d97d1ee
         show: Näytä
         #original_hash: f3cf96e
         persons: Henkilöitä
-        #original_hash: 16d3376
-        persons_html: '%{quantity} henkilöä'
         #original_hash: 612e12d
         results: Tuloksia
-        #original_hash: f3baa4a
-        results_html: '%{quantity} tulosta'
         #original_hash: d46d2ee
         by_region: Alueittain
         #original_hash: c0dcb86
@@ -4190,8 +4570,6 @@ fi:
       name: Nimi
       #original_hash: 5faa59d
       result: Tulos
-      #original_hash: fa4c045
-      representing: Edustusmaa
       #original_hash: 1917f4f
       competition: Kilpailu
       #original_hash: e7f6fc5
@@ -4200,28 +4578,45 @@ fi:
       region: Alue
       #original_hash: 70c07ec
       world: Maailma
-      type_options:
-        #original_hash: 3deb745
-        type: Luokka
-        #original_hash: dd11868
-        single: Paras ratkaisu
-        #original_hash: 15f86c0
-        average: Keskiarvo
       #original_hash: ad8919a
       event: Laji
       #original_hash: dcf8b56
       date_circa: Päivä suunnilleen
-      #original_hash: 1c54132
-      record: Ennätys
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: 'Yhdistä WCA ID:si tiliisi!'
   payments:
+    #original_hash: cfeba03
+    header: Maksuhistoria
+    messages:
+      #original_hash: 2eac1cb
+      charge_refunded: Maksu palautettu
+      #original_hash: 1e1d219
+      charges_refunded: Maksu palautettu kokonaisuudessaan
+      #original_hash: c677bd3
+      no_payments: Ei rekisteröitymiseen liittyviä maksuja.
+    errors:
+      refund:
+        #original_hash: 66475ae
+        provider_disconnected: >-
+          You cannot issue a refund for this competition anymore. Please use
+          your payment provider's dashboard to do so.
+        #original_hash: 73e93ee
+        refund_amount_too_high: You are not allowed to refund more than the competitor has paid.
+        #original_hash: 6368ffc
+        refund_amount_too_low: The refund amount must be greater than zero.
+    labels:
+      #original_hash: b6370d7
+      net_payment: Net Payment
+      #original_hash: ef3cd45
+      original_payment: Original Payment
     payment_providers:
       #original_hash: 559ef55
       paypal: PayPal
       #original_hash: 4d08ec5
       stripe: Stripe
+      #original_hash: 5cd5075
+      manual: Manual/External
     payment_setup:
       #original_hash: 0aa09ee
       external_dashboard: '%{provider} Dashboard'
@@ -4229,8 +4624,8 @@ fi:
       account_connected: >-
         You have successfully connected your %{provider} account and can now
         receive registration payments for this competition.
-      #original_hash: 18d1326
-      account_disconnected_success: 'Sucessfully disconnected your %{provider} account.'
+      #original_hash: b83891e
+      account_disconnected_success: 'Successfully disconnected your %{provider} account.'
       #original_hash: 6b934e2
       account_disconnected_failure: 'There was an error with disconnecting the %{provider} account.'
       #original_hash: 340bba4
@@ -4241,6 +4636,8 @@ fi:
       confirm_account_disconnect: >-
         Are you sure you want to disconnect the %{provider} account? This action
         cannot be undone.
+      #original_hash: a7bbd29
+      edit_account: Edit Account
       #original_hash: ddea6cf
       supported_currency_warning: >-
         Please make sure the currency you have selected is supported by your
@@ -4252,8 +4649,10 @@ fi:
       provider_heading: '%{provider} Payments'
       #original_hash: 40a098a
       accept_payments_header: Accept Registration Payments
-      #original_hash: 7ebe178
-      connect_button: 'Connect with %{provider}'
+      #original_hash: ebf1ae6
+      manual_payments_header: Configure Manual Payments
+      #original_hash: 399052b
+      connect_button: 'Set up %{provider}'
       connect_account_info:
         #original_hash: f3fdb64
         stripe: >-
@@ -4268,6 +4667,12 @@ fi:
           the competition page. If you don't already have a PayPal business
           account, you can still click on the button below and it will guide you
           through the process.
+        #original_hash: d32cb06
+        manual: >-
+          Define payment instructions for competitors. Competitors will be able
+          to indicate when they have paid, and provide a payment reference for
+          you to check against your records in the external payment service you
+          use.
       connect_account_warning:
         #original_hash: 53adda3
         stripe: >-
@@ -4278,6 +4683,8 @@ fi:
           Connecting your PayPal account gives the WCA website the ability to
           route payments to you, and issue refunds directly on your PayPal
           account.
+        #original_hash: da39a3e
+        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         This competition is set up to accept payments through %{provider}. The
@@ -4309,6 +4716,13 @@ fi:
           display_name: Name
           #original_hash: 84add5b
           primary_email: Email
+        manual:
+          #original_hash: e5f0dfd
+          payment_instructions: Payment instructions (will be displayed on Competition Page)
+          #original_hash: 5e7242c
+          payment_reference_label: >-
+            What information should the user provide for you to identify their
+            payment? (eg, payment reference number / account ID / etc)
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:
@@ -4404,6 +4818,15 @@ fi:
       success: Kiitos viestistäsi! Otamme sinuun pian yhteyttä!
       #original_hash: 8e3a9da
       delivery_error: Virhe lähetettäessä viestiä.
+  misc:
+    #original_hash: 9a0f1cc
+    forum_age_requirement: Sinun pitää olla vähintään 13-vuotias käyttääksesi WCA Forumia.
+    #original_hash: d1f3342
+    forum_enter_dob: >-
+      Foorumin käyttö edellyttää syntymäajan ilmoittamista. Syötä syntymäaikasi
+      ja yritä uudelleen.
+    #original_hash: 56e3bad
+    refresh: Päivitä
   faq:
     #original_hash: d790b40
     title: Usein kysytyt kysymykset
@@ -4613,19 +5036,19 @@ fi:
     mission_footer: WCA Mission Statement
     #original_hash: cdab446
     who_we_are_title: Keitä me olemme
-    #original_hash: c0d9a3e
+    #original_hash: 303f17a
     who_we_are_content_html: >-
-      <p>World Cube Association on kattojärjestö mekaanisten pulmapelien
-      kilpailutoiminnassa. Kuuluisin näistä on Rubikin kuutio, unkarilaisen
-      professori Rubikin keksintö. Valikoima pulmapelejä on valittu WCA:n
-      virallisiksi kilpailulajeiksi.</p> <p>Kuluneen vuosikymmenen aikana WCA on
-      kehittynyt merkittävästi: yli 200 000 kilpailijaa on kilpaillut
-      kilpailuissamme. Kasvusta huolimatta järjestö toimii edelleen lähes täysin
-      vapaaehtoistoiminnan varassa; kilpailujen järjestäjät, WCA-delegaatit sekä
-      WCA:n hallituksen ja toimikuntien jäsenet ovat kaikki elintärkeitä
-      järjestön toiminnan kannalta. Kasvavan taloudellisen tuen myötä toivomme,
-      että tulevaisuudessa myös entistä suurempi ammattimaisuus näkyy
-      kilpailuissamme.</p>
+      <p>World Cube Association on mekaanisten pulmapelien kilpailutoimintaa
+      ohjaava kattojärjestö. Kuuluisin tällainen pulmapeli on unkarilaisen
+      professori Rubikin keksimä Rubikin kuutio. Valikoima pulmapelejä on
+      valittu WCA:n virallisiksi kilpailulajeiksi.</p> <p>Kuluneen vuosikymmenen
+      aikana WCA on kehittynyt merkittävästi: yli 245 000 kilpailijaa on
+      kilpaillut kilpailuissamme. Kasvusta huolimatta järjestö toimii edelleen
+      lähes täysin vapaaehtoistoiminnan varassa; kilpailujen järjestäjät,
+      WCA-delegaatit sekä WCA:n hallituksen ja toimikuntien jäsenet ovat kaikki
+      elintärkeitä järjestön toiminnan kannalta. Kasvavan taloudellisen tuen
+      myötä toivomme, että jatkossa kilpailumme kehittyvät myös
+      ammattimaisempaan suuntaan.</p>
     #original_hash: bccd8c5
     spirit: >-
       Henkeemme kuuluu ystävällinen ilmapiiri, jossa ihmiset kaikkialta
@@ -4635,26 +5058,26 @@ fi:
     spirit_footer: WCA Spirit
     #original_hash: c1781ee
     our_goals_title: Päämäärämme
-    #original_hash: 375db0f
+    #original_hash: c1144d4
     our_goals_content_html: >-
       <p>World Cube Association haluaa tarjota erityisesti nuorille
       mahdollisuuden kuulua maailmanlaajuiseen yhteisöön kilpailujen
       saavutettavuutta lisäämällä. Uskomme, että kilpailumme ja yhteisömme
       jättävät jälkeensä kokemuksia, jotka vahvistavat erityisesti nuorten
       henkistä kasvua. Uskomme myös, että yhteisömme vahvistuu entisestään, kun
-      kilpailuja levitetään uusille alueille. WCA Boardin strategiasta löytyy
-      lisätietoa <a
+      kilpailuja levitetään uusille alueille. WCA:n hallituksen strategiasta
+      löytyy lisätietoa <a
       href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">tästä</a>
       asiakirjasta.</p>
     #original_hash: f64ccc7
     whats_next_title: Mitä seuraavaksi?
-    #original_hash: 487c6a1
+    #original_hash: 3312277
     whats_next_content_html: >-
-      <p>World Cube Associationin kilpailuissa on kilpaillut yli 200 000
+      <p>World Cube Associationin kilpailuissa on kilpaillut yli 245 000
       kilpailijaa 158:stä eri maasta, eikä tahtia olla hidastamassa!
-      Cubing-yhteisö on kasvanut tasaisesti WCA:n perustamisvuodesta 2004
-      lähtien ja haluamme rohkaista tätä kasvua lisäämällä kilpailujen
-      saatavuutta uusilla alueilla. Yhteistyökumppanien avulla toivomme, että
+      Speedcubing-yhteisö on kasvanut tasaisesti WCA:n perustamisvuodesta 2004
+      lähtien ja haluamme edistää tätä kasvua lisäämällä kilpailujen saatavuutta
+      uusille alueille. Yhteistyökumppanien avulla toivomme, että
       tulevaisuudessa voimme tukea yhteisöä entistä enemmän ja saavuttaa kaikki
       pulmapeliharrastajat.</p>
     #original_hash: dc71704
@@ -4663,8 +5086,8 @@ fi:
     world_championship_content_html: >-
       <p>Kahden vuoden välein panokseksi asetetaan maailmanmestaruus.
       MM-kilpailut vaativat erittäin huolellista suunnittelua, lukuisia
-      vapaaehtoisia sekä suuren taloudellisen panoksen kilpailupaikan varaamisen
-      ja muiden välttämättömien valmistelujen kattamiseksi.</p>
+      vapaaehtoisia sekä suurta taloudellista sitoutumista kilpailupaikan
+      varaamisen ja muiden välttämättömien valmistelujen kattamiseksi.</p>
     #original_hash: 1aa5344
     contributing_title: Anna oma panoksesi
     #original_hash: 538a82f
@@ -4697,7 +5120,7 @@ fi:
       #original_hash: 9482c5d
       title: Rakenne
       board:
-        #original_hash: e0d37a2
+        #original_hash: 19d4bbb
         description: >-
           WCA:n hallituksella on vastuu järjestön johtamisesta ja se toimittaa
           muiden toimikuntien toimialueiden ulkopuolella olevia tehtäviä.
@@ -4705,28 +5128,32 @@ fi:
         #original_hash: 57bbaad
         profile: 'Käyttäjän %{user_name} profiili'
       #original_hash: f8c3f3c
-      operations_html: 'Päivittäisiä toimia hoitavat WCA:n %{committees_and_teams}.'
+      operations_html: 'Päivittäisiä toimintaa pyörittävät WCA:n %{committees_and_teams}.'
       #original_hash: 0e7a036
       teams_committees: toimikunnat
       #original_hash: 7e849d2
       delegates_html: >-
-        <p><strong>WCA-delegaatti</strong> on WCA-säännöissä esitelty rooli,
-        joka määritellään tarkemmin WCA Motionsissa. Delegaattien pääasiallinen
+        <p><strong>WCA-delegaatti</strong> on rooli, joka on määritelty
+        virallisesti WCA Motionsissa (ks. <a
+        href="https://www.worldcubeassociation.org/documents">WCA-asiakirjat</a>)
+        ja jonka tehtäviä kuvataan WCA-säännöissä. Delegaattien pääasiallinen
         tehtävä on valvoa kilpailuja WCA:n edustajana. Heidän vastuullaan on
         varmistaa, että kaikki WCA-kilpailut sujuvat WCA:n päämäärien, sääntöjen
         ja hengen mukaan. WCA erottelee toisistaan
-        <strong>senior-delegaatit</strong>, <strong>alueelliset
-        delegaatit</strong>, <strong>delegaatit</strong>,
-        <strong>junior-delegaatit</strong> ja
-        <strong>delegaattiharjoittelijat</strong> %{see_link}.</p> <p>Delegaatin
-        tehtävien lisäksi senior-delegaatit ja alueelliset delegaatit ovat
-        vastuussa alueensa muista delegaateista, ja yhteisön jäsenet voivat
-        ottaa heihin yhteyttä alueellisissa seikoissa.</p> <p>Uudet delegaatit
-        nimetään aluksi junior-delegaateiksi, ja heidän tulee osoittaa olevansa
-        päteviä hallitsemaan kilpailuja onnistuneesti ennen WCA-delegaatiksi
-        nimeämistä.</p> <p>Delegaattiharjoittelijoita koulutetaan delegaatin
-        asemaan, ja he voivat valvoa vain kilpailuja, joissa on myös
-        WCA-delegaatti paikalla.</p>
+        <strong>senior-delegaatit</strong> (Senior Delegate),
+        <strong>alueelliset delegaatit</strong> (Regional Delegate),
+        <strong>delegaatit</strong> (Full Delegate),
+        <strong>junior-delegaatit</strong> (Junior Delegate) ja
+        <strong>delegaattiharjoittelijat</strong> (Trainee Delegate)
+        %{see_link}.</p> <p>Delegaatin tehtävien lisäksi senior-delegaatit ja
+        alueelliset delegaatit ovat vastuussa alueensa muista delegaateista, ja
+        yhteisön jäsenet voivat ottaa heihin yhteyttä alueellisissa
+        seikoissa.</p> <p>Uudet delegaatit nimetään aluksi junior-delegaateiksi,
+        ja heidän tulee osoittaa olevansa päteviä hallitsemaan kilpailuja
+        onnistuneesti ennen WCA-delegaatiksi nimeämistä.</p>
+        <p>Delegaattiharjoittelijoita koulutetaan delegaatin asemaan, ja he
+        voivat valvoa vain kilpailuja, joissa on myös WCA-delegaatti
+        paikalla.</p>
       #original_hash: 27d18ac
       see_link_html: '(ks. %{link})'
       #original_hash: 5b01fcc
@@ -4738,25 +5165,25 @@ fi:
     title: 'Speedcubing-yhteisön ja WCA:n historiaa (englanniksi)'
   documents:
     #original_hash: 687c828
-    title: Asiakirjat
+    title: Asiakirjat (englanniksi)
     #original_hash: 1b537dc
     determination_letter: IRS Determination Letter
     #original_hash: 9855f80
-    bylaws: Järjestön säännöt (Bylaws)
+    bylaws: Bylaws (Järjestön säännöt)
     #original_hash: fdceb44
-    motions: Motions
+    motions: Motions (Järjestön ohjesäännöt)
     #original_hash: 092f99e
-    minutes: Pöytäkirjat
+    minutes: Minutes (Kokouspöytäkirjat)
     #original_hash: 6db524a
-    policies: 'WCA:n käytännöt'
+    policies: Policies (Käytänneohjeet)
     #original_hash: 91ac873
-    codeofethics: Code of Ethics
+    codeofethics: Code of Ethics (Eettiset periaatteet)
     #original_hash: 2643980
-    codeofconduct: Code of Conduct
+    codeofconduct: Code of Conduct (Toimintaohjeet)
     #original_hash: 4f05e8f
-    finances: Talous
-    #original_hash: d1b1406
-    vision_and_strategy: Vision and Strategy
+    finances: Finances (Talousasiakirjat)
+    #original_hash: c1e8f94
+    strategic_plan: Strategic Plan (Strategiasuunnitelma)
   education:
     #original_hash: 746e863
     title: 'WCA:n koulutusmateriaalit (englanniksi)'
@@ -4765,7 +5192,7 @@ fi:
       WQAC on julkaissut materiaaleja yhteisön käyttöön, voit ladata niitä
       alapuolelta.
     #original_hash: d0a3812
-    competitor_tutorial: Kilpailuohjeet
+    competitor_tutorial: Uusien kilpailijoiden kilpailuohjeet
     #original_hash: 9561bfc
     judge_tutorial: Tuomarointiohje ensikertalaisille
     #original_hash: 12e47a3
@@ -4800,42 +5227,44 @@ fi:
       history: Historia
   regional_organizations:
     #original_hash: 37b8fdc
-    title: Alueelliset järjestöt
+    title: Aluejärjestöt
     #original_hash: 15a06d6
-    content: 'WCA tunnustaa seuraavat alueelliset järjestöt:'
+    content: 'WCA tunnustaa seuraavat aluejärjestöt:'
     #original_hash: e5b77eb
-    empty: WCA ei tällä hetkellä tunnusta alueellisia järjestöjä.
+    empty: WCA ei tällä hetkellä tunnusta aluejärjestöjä.
     how_to:
       #original_hash: b243b1f
-      title: 'Kuinka tulla tunnustetuksi WCA:n alueelliseksi järjestöksi'
+      title: 'Kuinka tulla tunnustetuksi WCA:n aluejärjestöksi'
       #original_hash: 9f31403
       description: >-
-        WCA tunnustaa useita alueellisia järjestöjä maailmanlaajuisesti.
-        Alueellisen järjestön tarkoitus on järjestää WCA-kilpailuja ja tukea
-        WCA:n toimia alueellaan. Alueita, jotka haluavat perustaa alueellisen
-        järjestön, kannustetaan tukemaan WCA:n toimintaa alueellaan ennen
-        hakemuksensa lähettämistä. Jos haluat apua kilpailun järjestämisessä,
-        ota lähimpään WCA-delegaattiisi yhteyttä.
+        WCA tunnustaa useita aluejärjestöjä maailmanlaajuisesti. Aluejärjestön
+        tarkoitus on järjestää WCA-kilpailuja ja tukea WCA:n toimia alueellaan.
+        Alueita, jotka haluavat perustaa aluejärjestön, kannustetaan tukemaan
+        WCA:n toimintaa alueellaan ennen hakemuksensa lähettämistä. Jos haluat
+        apua kilpailun järjestämisessä, ota lähimpään WCA-delegaattiisi
+        yhteyttä.
     requirements:
       #original_hash: 1e04fd7
-      title: 'WCA:n alueellisten järjestöjen vaatimukset'
+      title: 'WCA:n aluejärjestöjen vaatimukset'
       list:
         #original_hash: 22a9f26
         '1': Järjestää ja tukea aktiivisesti WCA-kilpailuja järjestön alueella
         #original_hash: 63714d1
         '2': >-
-          Tukea alueellisen järjestön alueella järjestettäviä maanosan
-          mestaruuskilpailuja, jos kilpailun järjestäjäryhmä toivoo niin
+          Tukea järjestön alueella järjestettäviä maanosan mestaruuskilpailuja,
+          jos järjestäjäryhmä niin haluaa
         #original_hash: 3c07dd6
-        '3': Kunnioittaa ja edistää WCA-asiakirjojen mukaisia päämääriä
+        '3': >-
+          Kunnioittaa ja edistää WCA:n virallisten sääntöjen (Bylaws) ja
+          ohjesääntöjen (Motions) mukaisia päämääriä
         #original_hash: 0c3576b
-        '4': Suostua kaikkiin asiaankuuluviin WCA-sääntöihin
-        #original_hash: 1a9e6c5
-        '5': Hyväksyä ja suostua kaikkiin WCA-toimihenkilöiden päätöksiin
+        '4': Noudattaa kaikkia relevantteja WCA-sääntöjä (Regulations)
+        #original_hash: 88cf548
+        '5': 'Hyväksyä ja suostua WCA:n vapaaehtoisten päätöksiin'
         #original_hash: d4ae7c1
         '6': >-
-          Jakaa WCA:n kanssa ajantasainen kopio järjestön omista säännöistä ja
-          jos mahdollista, kilpailusäännöistä sähköisessä muodossa
+          Jakaa WCA:lle ajantasainen kopio järjestön omista säännöistä
+          sähköisessä muodossa
     application_instructions:
       #original_hash: 4da829b
       title: Hakemusohjeet
@@ -4870,27 +5299,25 @@ fi:
     title: Ohjelmistotyökaluja WCA-kilpailuihin
     #original_hash: 6d2fe37
     wca_icon_text: 'WST:n kehittämä ja ylläpitämä'
-    #original_hash: 6520873
     intro:
       #original_hash: 0c5fab5
       desc: >-
-        Tälle sivulle on listattu työkaluja, joita käytetään apuna
-        WCA-kilpailujen järjestämisessä.
+        Tälle sivulle on listattu tunnettuja ohjelmistoja/sovelluksia, joita
+        käytetään apuna WCA-kilpailujen järjestämisessä.
       #original_hash: 479b542
       disclaimer: >-
-        Kaikki työkalut/sovellukset eivät ole WST:n hallinnoimia, mikä ei
-        haittaa ollenkaan! WST ei millään ehdi ylläpitämään kaikkia hyödyllisiä
-        WCA-sovelluksia.
+        Kaikki ohjelmistot eivät ole WST:n hallinnoimia; WST ei millään ehdi
+        ylläpitämään kaikkia hyödyllisiä sovelluksia.
       #original_hash: 80f97b9
       used: >-
-        Kaikkia listan ohjelmia on käytetty WCA-kilpailuissa ja ne ovat
+        Kaikkia listattuja ohjelmia on käytetty WCA-kilpailuissa ja ne ovat
         yhteydessä WCA-sivustoon siten, että voit kirjautua sisään WCA-tililläsi
-        ja tuoda ohjelmaan tietoja järjestämistäsi kilpailuista. Kaikkien
-        ohjelmien ylläpitäjä(t) on kirjattu.
+        ja saada ohjelmaan automaattisesti tiedot järjestämistäsi kilpailuista.
+        Kaikkien ohjelmien ylläpitäjä(t) on mainittu.
     before:
       #original_hash: 9850344
       title: Ennen kilpailua
-      #original_hash: 576e2f4
+      #original_hash: 6f64073
       desc: >-
         Kilpailun rekisteröitymisiä voi hallita suoraan WCA-sivuston kautta,
         mutta ryhmien jakoon voi käyttää alla olevia työkaluja.
@@ -4956,8 +5383,8 @@ fi:
         title: Tulostaulukko
         #original_hash: 466f4c2
         description: >-
-          Jos internetyhteyttä ei ole, voi olla, että täytyy turvautua vanhaan
-          kunnon laskentataulukkoon.
+          Jos internetyhteyttä ei ole, voi olla, että täytyy turvautua
+          laskentataulukkoon.
       matcher:
         #original_hash: cc59bc9
         title: Scrambles Matcher
@@ -4976,6 +5403,7 @@ fi:
   logo:
     #original_hash: c72c969
     title: 'WCA:n logo'
+    #original_hash: 6520873
     intro: >-
       WCA:n logon suunnitteli Justin Eastman suunnittelukilpailussa tammikuussa
       2005. Logossa miellytti sen muotoilu ja värit sekä se, että esillä ei ole
@@ -5047,8 +5475,8 @@ fi:
       incidents: Poikkeustilanteet
       #original_hash: a0ca0c3
       posts: Julkaisut
-      #original_hash: 9d7ea9c
-      regulations_and_guidelines: Säännöt ja ohjesäännöt
+      #original_hash: 1fa73f3
+      regulations_and_guidelines: Säännöt
       #original_hash: db683b3
       search_for: 'Etsi hakusanalla <b>%{search_string}</b>'
       not_found:
@@ -5062,13 +5490,13 @@ fi:
         posts: Ei löydetty julkaisuja hakusanalla
         #original_hash: 3499e7e
         incidents: Ei löydetty poikkeustilanteita hakusanalla
-        #original_hash: 76a6bf1
-        regulations_and_guidelines: Ei löydetty sääntöjä eikä ohjesääntöjä hakusanalla
+        #original_hash: 3909204
+        regulations_and_guidelines: Ei löydetty sääntöjä hakusanalla
   incidents_log:
     #original_hash: 61ab89f
-    i18n_disclaimer: 'Loki on ainoastaan englanniksi, allaolevaa sisältöä ei ole käännetty.'
+    i18n_disclaimer: Huom. tämän sivun sisältö on ainoastaan englanniksi.
     #original_hash: 2c23c1a
-    incident: 'Poikkeustilanne:'
+    incident: 'Incident:'
   about_regulations:
     #original_hash: 6bce1b5
     title: Tietoa kilpailusäännöistä
@@ -5080,14 +5508,11 @@ fi:
         Kaikkien kilpailujen täytyy noudattaa <a
         href="/regulations/">WCA-sääntöjä</a>. On tärkeää, että kilpailija lukee
         nämä säännöt ennen ensimmäiseen kilpailuunsa osallistumista.
-      #original_hash: 4296902
-      content2_html: >-
-        <a href="/regulations/guidelines.html">WCA-ohjesäännöt</a> täydentävät
-        WCA-sääntöjä ja sisältävät ylimääräisiä selvennyksiä ja selityksiä.
       #original_hash: c8e1783
-      content3_html: >-
-        WRC:n tekemiä päätöksiä koskien kilpailuissa tapahtuneita
-        poikkeustilanteita löytyy <a href="/incidents">Incidents Log:sta</a>.
+      content2_html: >-
+        WCA Regulations Committee:n ratkaisuja erinäisiin kilpailuissa
+        sattuneisiin poikkeustilanteisiin löytyy <a href="/incidents">Incidents
+        Log:sta</a>.
     panel2:
       #original_hash: 8ad8302
       title: Käännökset
@@ -5122,8 +5547,8 @@ fi:
         Tämä asiakirja sisältää tärkeää tietoa, ja jokaisen kilpailun
         järjestäjän tulisi lukea se.
   regulations_translations:
-    #original_hash: 9493b8d
-    title: 'WCA-säännöt ja ohjesäännöt: Käännökset'
+    #original_hash: a19a3f5
+    title: 'WCA-säännöt: Käännökset'
     #original_hash: 386ecc1
     paragraph1: >-
       Jos puhut muuta kieltä kuin englantia, näistä käännöksistä voi olla
@@ -5187,7 +5612,7 @@ fi:
     recommended:
       #original_hash: 6b843f3
       title: Suositellut asiakirjat
-      #original_hash: bfbd4bb
+      #original_hash: 6e4fb29
       staff: Kilpailun toimihenkilöt
       #original_hash: 4735583
       emails: Sähköpostiviestintä
@@ -5195,7 +5620,7 @@ fi:
       running-systems: Runnerien ja tuomareiden toiminta
       #original_hash: 2b31c89
       new-competitors: Uusien kilpailijoiden kohtelu
-      #original_hash: 3408054
+      #original_hash: 00c4f78
       enhancing-experience: Kilpailijoiden ja toimihenkilöiden viihtyvyys
       #original_hash: 2345aaa
       reflection: Palautteen kerääminen
@@ -5407,7 +5832,7 @@ fi:
       #original_hash: 32c7cc0
       title: Muokkaa mediaa
       #original_hash: 6f161d0
-      validate_media_page: Näytä kaikki vireillä oleva media
+      validate_media_page: Näytä kaikki hyväksyntää odottava media
     index:
       #original_hash: 0c77aee
       title: Media
@@ -5445,10 +5870,10 @@ fi:
       title: Instagram-julkaisut
       #original_hash: 1acd0d2
       paragraph1_html: >-
-        Olet saattanut huomata, että WCA:lla on <a
+        Ehkä olet huomannut, että WCA:lla on <a
         href="https://www.instagram.com/thewcaofficial/">aktiivinen
-        Instagram</a>! Paras tapa edustaa maailmanlaajuista yhteisöämme on
-        tietysti julkaista WCA-jäsenten ympäri maailmaa lähettämää sisältöä.
+        Instagram</a>! Pyrimme edustamaan maailmanlaajuista speedcubing-yhteisöä
+        julkaisemalla WCA-jäsenten ympäri maailmaa lähettämää sisältöä.
       #original_hash: 9b6abcd
       paragraph2: >-
         Jos sinulla on korkealaatuisia kuvia tai videoita, joita haluaisit
@@ -5459,17 +5884,17 @@ fi:
         mahdollisuuksiasi lähettämäsi sisällön julkaisuun:
       #original_hash: cf5c955
       photo_quality: >-
-        Varmista, että kuvan/videon laatu on korkea. Sen ei tarvitse olla
-        ammattimaisesti kuvattu, mutta laatu ei saa olla kuvaa/videota selkeästi
-        huonontava tekijä.
+        Varmista, että kuva/video on korkealaatuinen. Ammattikuvaaja ei tarvitse
+        olla, mutta laatu ei saa olla kuvaa/videota selkeästi huonontava tekijä.
       #original_hash: 0742378
       photo_interest: >-
         Yritä luoda sisältöä, joka kiinnostaa laajaa katselijakuntaa. Vain
-        pienelle ryhmälle tarkoitettu sisältö ei kuulu tänne.
+        pienelle piirille tarkoitettu sisältö ei kuulu tänne.
       #original_hash: 497bc27
       wca_related: >-
-        Lähetä kuvia ja videoita, jotka liittyvät WCA:han, sillä sitä varten
-        tilimme on olemassa. On mahtavaa nähdä, kun harrastajilla on hauskaa!
+        Lähetä WCA:han liittyviä kuvia tai videoita (sitä varten
+        Instagram-tilimme on olemassa!). Annamme mielellämme näkyä, että
+        harrastajat viihtyvät!
       #original_hash: af882f2
       submit_instagram_content: Lähetä Instagram-sisältöä
     instagram_hosting:
@@ -5478,7 +5903,7 @@ fi:
       #original_hash: 541106b
       paragraph1_html: >-
         Silloin tällöin annamme yhteisön jäsenten hostata WCA:n virallista
-        Instagram-tarinaa sisällöllä kilpailusta, jossa he ovat mukana! Jos olet
+        Instagram-tarinaa kilpailusta, johon he osallistuvat! Jos olet
         kiinnostunut, klikkaa alla olevaa linkkiä ja täytä aukeava lomake. WCA
         Communication Team ottaa sinuun yhteyttä, jos sinut hyväksytään
         hostaamaan. Jos sinulla on kysyttävää, <a
@@ -5487,8 +5912,8 @@ fi:
       #original_hash: aca6c32
       paragraph2: >-
         Tavoitteenamme on jakaa jokaisesta kilpailusta ja osallistujasta ripaus
-        yksilöllistä puolta. Tarinan päivittämisen ei tulisi olla erityisen
-        suuri työtaakka, toki olet ensisijaisesti nauttimassa itse kilpailusta.
+        yksilöllistä puolta. Tarinan päivittämisen ei kuulu olla kovin suuri
+        työtaakka; toki olet ensisijaisesti nauttimassa itse kilpailusta.
       #original_hash: af023ed
       paragraph3: 'Hostaajan rooli on suurinpiirtein seuraavanlainen:'
       #original_hash: 21efafe
@@ -5499,20 +5924,20 @@ fi:
         video kilpailijoiden alueesta ja ratkaisupaikoista)
       #original_hash: d17fb2f
       people_solving: >-
-        Yritä saada videoita kilpailijoista kilpailemassa (mieluiten nopeita
-        ratkaisijoita päälajeissaan)
+        Yritä saada jonkin verrran videota kilpailijoista kilpailemassa
+        (mieluiten nopeita ratkaisijoita bravuurilajeissaan)
       #original_hash: 76d2358
       mini_interviews: >-
-        Voit haastatella ihmisiä (esimerkiksi järjestäjiä tai delegaatteja)
-        heidän tunnelmistaan kilpailua koskien
+        Voit haastatella esimerkiksi kilpailun järjestäjiä tai delegaatteja
+        heidän kilpailutunnelmistaan
       #original_hash: 6003b20
       pictures_too: 'Kaiken ei tarvitse olla videota: voit jakaa myös kuvia'
       #original_hash: 8813619
       paragraph4: >-
         Yhteydenpito viikonlopun aikana tapahtuu tyypillisesti
-        WhatsApp-ryhmässä. Varmistathan siis, että osaat käyttää WhatsAppia tai
-        kerrot, jos tämä ei ole mahdollista (tällöin voidaan tehdä muu
-        suunnitelma).
+        WhatsApp-ryhmässä. Varmistathan siis, että WhatsApp on tuttu, tai
+        kerrot, jos et voi käyttää sitä (jolloin järjestetään yhteydenpito muuta
+        kautta).
       #original_hash: 38191c1
       apply_to_host: Hae mukaan
     other_suggestions:
@@ -5553,20 +5978,20 @@ fi:
     paragraphs:
       #original_hash: 8a23af2
       '1': >-
-        WCA myy erilaisia tuotteita yksinoikeudella! T-paitoja, huppareita,
-        tarroja, Stackmateja, reppuja ja muuta! Malleja päivitetään jatkuvasti,
-        ja löydätkin niin klassisella WCA:n logolla varustettuja tuotteita kuin
-        MM-kilpailujen tai maailmanennätysten inspiroimia malleja.
+        WCA myy erilaisia tuotteita, kuten T-paitoja, huppareita, tarroja,
+        Stackmateja ja reppuja. Valikoimaa päivitetään jatkuvasti, ja kaupasta
+        löytyy esimerkiksi WCA:n logotuotteita, virallisia MM-kisatuotteita tai
+        viimeaikaisiin maailmanennätyksiin liittyviä designeja.
       #original_hash: 2865e1d
       '2': >-
-        WCA-tuotteiden ostaminen on yksi parhaista tavoista tukea WCA:ta -
-        täysin vapaaehtoisvoimin pyörivää järjestöä. Kaikki tuotteista saadut
-        tuotot käytetään tulevien mestaruuskilpailujen, välineistön ja muun
-        WCA:n oheistoiminnan rahoittamiseen.
+        WCA-tuotteiden ostaminen on mainio tapa tukea WCA:ta, joka pyörii täysin
+        vapaaehtoisvoimin. Kaikki tuotteista saadut tuotot käytetään tulevien
+        mestaruuskilpailujen, välineistön ja muun WCA:n toiminnan
+        rahoittamiseen.
       #original_hash: 8e57552
       '3': >-
         Tuotteitamme voi ostaa maailmanlaajuisesti -- myymälöitä on Euroopassa,
-        Amerikassa ja Intiassa, ja tulossa on lisää!
+        Amerikassa ja Intiassa.
   database:
     results_export:
       #original_hash: 15d00e1
@@ -5600,3 +6025,293 @@ fi:
         osoitteesta %{github_link}.
       #original_hash: a479c9c
       download: Lataa
+  validators:
+    persons:
+      #original_hash: 847f614
+      dob_is_jan_one_warning: >-
+        Henkilön %{name} syntymäaika on 1. tammikuuta; varmista, että se on
+        oikein.
+      #original_hash: b4b736a
+      dob_is_too_young_warning: '%{name} on alle 3-vuotias; varmista, että syntymäaika on oikein.'
+      #original_hash: b7c88ef
+      dob_is_too_old_warning: '%{name} on 100-vuotias; varmista, että syntymäaika on oikein.'
+      #original_hash: 809f305
+      person_doesnt_have_any_results_error: 'Kilpailijan %{person_name} (%{person_id}) tulokset puuttuvat'
+      #original_hash: ebc1b15
+      results_not_associated_with_any_person_error: 'Tuloksissa on tunnistamaton kilpailija (id %{person_id})'
+      #original_hash: c29e35d
+      whitespace_in_name_error: 'Kilpailijan ''%{name}'' nimessä on ylimääräisiä välilyöntejä.'
+      #original_hash: 9b1ae5f
+      person_with_non_existing_wca_id_error: 'Kilpailijalla %{name} on WCA ID, jota ei ole olemassa: %{wca_id}'
+      #original_hash: 924d832
+      no_space_before_parenthesis_error: 'Sulkumerkkiä täytyy edeltää välilyönti (nimessä ''%{name}'').'
+      #original_hash: 6daf706
+      same_person_name_warning: >-
+        WCA:n tietokannassa on jo vähintään yksi kilpailija, jonka nimi on
+        '%{name}' (%{wca_ids}). Varmista, että tämän kilpailun %{name} on eri
+        henkilö. Jos ei, yhdistä kilpailijan WCA-tiliin oikea WCA ID, ja generoi
+        uusi JSON-tiedosto.
+      #original_hash: eeb688a
+      non_matching_dob_warning: >-
+        Kilpailijan %{name} (%{wca_id}) syntymäaika '%{dob}' ei täsmää
+        tietokannasta löytyvään syntymäaikaan ('%{expected_dob}'). Jos tämä on
+        virhe, korjaa se. Muussa tapauksessa jätä kommentti WRT:lle.
+      #original_hash: 6a81cc0
+      non_matching_gender_warning: >-
+        Kilpailijan %{name} (%{wca_id}) sukupuoli '%{gender}' ei täsmää
+        tietokannasta löytyvään tietoon ('%{expected_gender}'). Jos tämä on
+        virhe, korjaa se. Muussa tapauksessa jätä kommentti WRT:lle.
+      #original_hash: da398a2
+      empty_gender_warning: >-
+        Kilpailijan %{name} sukupuoli on jätetty tyhjäksi. Sukupuoleksi
+        hyväksytään vain nainen, mies tai muu. Jätä tästä kommentti WRT:lle.
+      #original_hash: 050c7e2
+      non_matching_name_warning: >-
+        Kilpailijan %{wca_id} nimi '%{name}' ei täsmää tietokannasta löytyvään
+        nimeen ('%{expected_name}').
+      #original_hash: 333a035
+      non_matching_country_warning: >-
+        Kilpailijan %{name} (%{wca_id}) maa '%{country}' ei täsmää tietokannasta
+        löytyvään tietoon ('%{expected_country}'). Jos tämä on virhe, korjaa se.
+        Muussa tapauksessa jätä kommentti WRT:lle.
+      #original_hash: e15e700
+      multiple_newcomers_with_same_name_warning: >-
+        Useammalla ensikertalaisella on täsmälleen sama nimi '%{name}'.
+        Varmista, että tulokset on varmasti tallennettu oikealle kilpailijalle
+        ja oikean id:n mukaan.
+      #original_hash: 7732038
+      wrong_parenthesis_type_error: >-
+        Nimessä '%{name}' käytetty sulkumerkki on erikoismerkki, jota ei tueta.
+        Korvaa se tavallisella sulkumerkillä '(' tai ')'.
+      #original_hash: 4b90583
+      successive_uppercase_name_warning: >-
+        Nimessä '%{name}' on isoja kirjaimia peräkkäin. Varmista, että nimi on
+        kirjoitettu oikein tai korjaa kirjoitusasu.
+      #original_hash: 654b60d
+      lowercase_name_warning: >-
+        Nimessä '%{name}' on pienellä kirjaimella alkava osa. Varmista, että
+        nimi on kirjoitettu oikein tai korjaa kirjoitusasu.
+      #original_hash: 4ea44b6
+      missing_period_in_single_letter_middle_name_warning: >-
+        Nimessä '%{name}' on yhdestä kirjaimesta koostuva osa ilman lyhennettä
+        kuvaavaa pistettä. Varmista, että nimi on kirjoitettu oikein tai korjaa
+        kirjoitusasu.
+      #original_hash: cbd3bd6
+      letter_after_period_warning: >-
+        Nimessä '%{name}' on piste, jonka jälkeen ei ole välilyöntiä. Varmista,
+        että nimi on kirjoitettu oikein tai korjaa kirjoitusasu.
+      #original_hash: d7803d4
+      single_letter_first_or_last_name_warning: >-
+        Nimessä '%{name}' on etunimenä yksittäinen kirjain. Korjaa kirjoitusasu
+        tai vahvista, että kyseessä on kilpailijan oikea nimi (virallisen
+        asiakirjan mukaan).
+      #original_hash: 9adb87f
+      single_name_warning: >-
+        Nimessä '%{name}' on vain yksi osa. Vahvista, että kyseessä on
+        kilpailijan koko nimi (virallisen asiakirjan mukaan).
+      #original_hash: 39c7f3d
+      competitor_limit_exceeded_warning: >-
+        Kilpailijoiden määrä (%{n_competitors}) ylittää kilpailijarajan
+        (%{competitor_limit}). Kilpailijoiden, jotka rekisteröityivät
+        kilpailijarajan täyttymisen jälkeen, tulokset on poistettava.
+    results:
+      #original_hash: 5685ae8
+      automatically_position_fixed_info: >-
+        [%{round_id}] Kilpailijan %{person_name} sijoitus korjattiin
+        automaattisesti (%{pos} -> %{expected_pos}).
+      #original_hash: e895bf5
+      mbf_result_over_time_limit_warning: >-
+        [%{round_id}] Kilpailijan %{person_name} tulos '%{result}' ylittää
+        aikarajan. Varmista, että aikaraja ylittyy ainoastaan aikarangaistusten
+        johdosta. Muussa tapauksessa korjaa tulos DNF:ksi.
+      #original_hash: c74c2c6
+      result_after_dns_warning: >-
+        [%{round_id}] Kilpailijalla %{person_name} on DNS-tulos, jota seuraa
+        hyväksytty tulos. Varmista, että DNS on oikein. Jätä WRT:lle kommentti,
+        jossa kerrot, miten DNS aiheutui.
+      #original_hash: a2032e9
+      similar_results_warning: >-
+        [%{round_id}] Kilpailijoiden %{person_name} ja %{similar_person_name}
+        tulokset ovat keskenään hyvin samankaltaiset. Varmista, että tulokset
+        ovat varmasti oikein.
+      #original_hash: ebbab6f
+      met_cutoff_but_missing_results_error: >-
+        [%{round_id}] Kilpailija %{person_name} pääsi cutoffista, mutta häneltä
+        puuttuu tulokset loppukierroksen ajalta. Cutoff oli %{cutoff}.
+      #original_hash: cc0b47b
+      didnt_meet_cutoff_but_has_results_error: >-
+        [%{round_id}] Kilpailija %{person_name} ei päässyt cutoffista, mutta
+        hänellä on vähintään yksi tulos loppukierrokselta. Cutoff oli %{cutoff}.
+      #original_hash: 4fc3fd7
+      wrong_attempts_for_cutoff_error: >-
+        [%{round_id}] Kilpailijalta %{person_name} puuttuu vähintään yksi
+        cutoff-vaiheen ratkaisuyrityksen tulos. Lisää puuttuva tulos tai päivitä
+        kierroksen tiedot kilpailusivulla.
+      #original_hash: 24c10d3
+      mismatched_result_format_error: >-
+        [%{round_id}] Results for %{person_name} are in the wrong format:
+        expected %{expected_format}, but got %{format}.
+      #original_hash: 32ea6be
+      result_over_time_limit_error: >-
+        [%{round_id}] Kilpailijalla %{person_name} on vähintään yksi tulos, joka
+        ylittää aikarajan %{time_limit}. Kaikki aikarajan yli menneet ratkaisut
+        täytyy muuttaa DNF:ksi.
+      #original_hash: 1678105
+      results_over_cumulative_time_limit_error: >-
+        [%{round_ids}] Kilpailijan %{person_name} ratkaisujen summa ylittää
+        kumulatiivisen aikarajan %{time_limit}.
+      #original_hash: 3fbb505
+      no_round_information_warning: >-
+        [%{round_id}] There is no information about the cutoff and time limit
+        for this round. These validations have been skipped. Please update the
+        round's information in the competition's Manage Events page.
+      #original_hash: 76dc4e7
+      undefined_time_limit_warning: >-
+        [%{round_id}] The time limit for this round is undefined, time limit
+        validations have been skipped. This is expected only for competitions
+        before 2013.
+      #original_hash: 10ad25f
+      suspicious_dnf_warning: >-
+        [%{round_ids}] Kierroksella on kumulatiivinen aikaraja, ja kilpailijan
+        %{person_name} hyväksyttyjen ratkaisujen perusteella hänellä olisi ollut
+        hyvin vähän aikaa jäljellä vähintään yhteen DNF-tulokseen. Varmista,
+        että kaikki DNF:t ja DNS:t on merkitty oikein. Jos kilpailija ei
+        aloittanut ratkaisuyritystä tai hänellä ei ollut aikaa jäljellä
+        ratkaisuyritykseen, tulokseksi täytyy merkitä DNS.
+      #original_hash: 8057a12
+      missing_cumulative_round_id_error: >-
+        [%{original_round_id}] Unable to find the round %{wcif_id} for the
+        cumulative time limit specified in the WCIF. Please go to the
+        competition's Manage Events page and remove %{wcif_id} from the
+        cumulative time limit for %{original_round_id}. WST knows about this bug
+        (GitHub issue #3254).
+      #original_hash: ad200c1
+      wrong_position_in_results_error: >-
+        [%{round_id}] Kilpailijan %{person_name} sijoitus on väärä: sijoituksen
+        pitäisi olla %{expected_pos}, mutta sijoitukseksi on merkitty %{pos}.
+    rounds:
+      #original_hash: 517fd54
+      too_many_qualified_warning: >-
+        [%{round_id}] Jatkoon pääsi enemmän kilpailijoita kuin kilpailusivulle
+        merkitty jatkoonpääsyvaatimus sallisi (jatkoon pääsi %{actual} eikä
+        %{expected}, jatkoonpääsyvaatimus oli %{condition}). Käy kilpailusivulla
+        päivittämässä kierroksen tiedot.
+      #original_hash: 09d3568
+      unexpected_round_results_error: >-
+        Tuloksissa on mukana kierros %{round_id}, jota ei ole lisätty
+        kilpailusivulle. Käy kilpailusivulla päivittämässä kierrosten tiedot
+        oikeaksi.
+      #original_hash: 5b5f9ee
+      regulation_9m1_error: >-
+        Kierroksella [%{round_id}] on alle 100 kilpailijaa, mutta yli kaksi
+        jatkokierrosta, mikä rikkoo sääntöä 9m1.
+      #original_hash: 892e0d5
+      regulation_9m2_error: >-
+        Kierroksella [%{round_id}] on alle 16 kilpailijaa, mutta yli yksi
+        jatkokierros, mikä rikkoo sääntöä 9m2.
+      #original_hash: cb8522e
+      regulation_9m3_error: >-
+        Kierroksella [%{round_id}] on alle 8 kilpailijaa, mutta vähintään yksi
+        jatkokierros, mikä rikkoo sääntöä 9m3.
+      #original_hash: 44fbfde
+      regulation_9p1_error: >-
+        Kierroksella [%{round_id}] jatkoon pääsi yli 75 % kilpailijoista, mikä
+        rikkoo sääntöä 9p1.
+      #original_hash: f5d8ae9
+      no_competitor_eliminated_error: >-
+        Round %{round_id}: There must be at least one competitor eliminated,
+        which is required as per Regulation 9p (competitions before April 2010).
+      #original_hash: b868019
+      less_than_twenty_five_percent_eliminated_error: >-
+        Round %{round_id}: according to the advancement condition
+        (%{condition}), fewer than 25%% of competitors would be eliminated,
+        which is not permitted as per Regulation 9p1. Please update the round
+        information in the manage events page.
+      #original_hash: d6fc805
+      not_enough_qualified_warning: >-
+        Round %{round_id}: according to the events data, at most %{expected}
+        could have proceed, but only %{actual} competed in the round. Please
+        leave a comment about that (or fix the events data if you applied a
+        different advancement condition).
+      #original_hash: 7915e13
+      competed_not_qualified_error: >-
+        Round %{round_id}: %{ids} competed but did not meet the attempt result
+        advancement condition (%{condition}). Please make sure the advancement
+        condition reflects what was used during the competition, and remove the
+        results if needed.
+      #original_hash: c4a7f11
+      round_not_found_error: >-
+        Round %{round_id} could not be found. Please make sure that the WCA
+        website Edit Events panel and WCA Live are in sync.
+      #original_hash: 3c739f3
+      missing_round_results_error: >-
+        There are no results for round %{round_id} but it is listed in the
+        events tab. If this round was not held, please remove the round in the
+        competition's manage events page.
+      #original_hash: dcf92d3
+      unexpected_combined_round_error: >-
+        No cutoff was announced for '%{round_name}', but it has been detected as
+        a cutoff round in the results. Please update the round's information in
+        the competition's manage events page.
+    events:
+      #original_hash: ef8709f
+      not_333_main_event_warning: >-
+        The selected main event is %{main_event_id}. Although this was approved
+        by WCAT BEFORE the competition, WRT is responsible for ensuring AFTER
+        the competition that the suitable main event guidelines from the WCA
+        Competition Requirements Policy were met. Please give one action that
+        was taken to treat %{main_event_id} as the main event DURING the
+        competition (valid examples: declared the winner of the competition,
+        most number of rounds, bigger prize).
+      #original_hash: 1d4e297
+      no_main_event_warning: >-
+        There is no selected main event for this competition. Please let WRT
+        know that this is correct.
+      #original_hash: 6fa46ad
+      unexpected_results_error: >-
+        Results are present for %{event_id}, however it is not listed as an
+        official event. Please remove the event from the results or contact the
+        WCAT to request the event to be added to the WCA website.
+      #original_hash: fde208d
+      missing_results_warning: >-
+        There are no results for %{event_id}, but it is listed as an official
+        event. If the event was held, please reupload your JSON with the results
+        included. If the event was not held, leave a comment for the WRT.
+    scrambles:
+      #original_hash: ff7e063
+      missing_scrambles_for_round_error: >-
+        [%{round_id}] Missing scrambles. Use Scrambles Matcher to add the
+        correct scrambles to the round.
+      #original_hash: 340d2f3
+      missing_scrambles_for_competition_error: >-
+        Missing scrambles for the competition. Use Scrambles Matcher to add
+        scrambles.
+      #original_hash: 0f334fd
+      unexpected_scrambles_for_round_error: >-
+        [%{round_id}] Too many scrambles. Use Scrambles Matcher to uncheck the
+        unused scrambles.
+      #original_hash: 22706c5
+      missing_scrambles_for_group_error: >-
+        [%{round_id}] Group %{group_id}: missing scrambles, detected only
+        %{actual} instead of %{expected}.
+      #original_hash: 665014c
+      missing_scrambles_for_multi_error: >-
+        [%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind,
+        at least one of the groups must contain scrambles for all attempts.
+      #original_hash: 3d5255d
+      multiple_fmc_groups_warning: >-
+        [%{round_id}] There are multiple groups of FMC used. If one group of FMC
+        was used, please use the Scrambles Matcher to uncheck the unused
+        scrambles. Otherwise, please include a comment to WRT explaining why
+        multiple groups of FMC were used.
+      #original_hash: d6830c0
+      wrong_number_of_scramble_sets_error: >-
+        [%{round_id}] This round has a different number of scramble sets than
+        specified on the Manage Events tab. Please adjust the number of scramble
+        sets in the Manage Events tab to the number of sets that were used.
+  tickets:
+    type:
+      #original_hash: e43f273
+      edit_person: Edit Person
+      #original_hash: 5fb2137
+      competition_result: Competition Result

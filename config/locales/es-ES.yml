@@ -147,6 +147,8 @@ es-ES:
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      #original_hash: 60827cb
+      h: H2H
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -459,6 +461,10 @@ es-ES:
         region: Región
         #original_hash: e3fc6e9
         subRegion: Subregión
+        #original_hash: a1ba702
+        receive_developer_mails: >-
+          Me gustaría recibir notificaciones sobre cambios en los recursos de
+          software de WCA
         #original_hash: 730db33
         receive_delegate_reports: >-
           Me gustaría recibir los Informes de Delegados de Competiciones de la
@@ -779,6 +785,12 @@ es-ES:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          Esto se limita a notificaciones sobre cambios mayores de versión en
+          los recursos como exportaciones de datos, estructura del WCIF y APIs
+          públicas. Recomendado para desarrolladores que mantienen software que
+          depende de estas herramientas.
         #original_hash: c564b74
         receive_delegate_reports: >-
           Si eres Delegado Senior o Miembro del WRC o del WQAC, recibirás los
@@ -2849,6 +2861,16 @@ es-ES:
         la lista de espera. Si estás usando una lista de espera, por favor
         especifica una fecha límite. Si no estás usando una lista de espera, por
         favor recuerda especificarlo en los requisitos de registro.
+    live:
+      #original_hash: 10d1a3c
+      title: Resultados en directo
+      connection:
+        #original_hash: f92b311
+        initialized: Se está inicializando la conexión
+        #original_hash: 66d44d4
+        connected: 'Conectado, los resultados se están actualizando'
+        #original_hash: 53abaa2
+        disconnected: 'Conexión perdida, los resultados no se están actualizando'
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mis competiciones
@@ -3282,9 +3304,9 @@ es-ES:
       is_visible: >-
         Esta competición es visible públicamente, ¡cualquier cambio que hagas se
         mostrará al público!
-      #original_hash: 1039850
+      #original_hash: eb98c2c
       pending_confirmation_html: >-
-        Rellena todos los campos y haz que tu Delegado pinche en 'Confirmar'
+        Rellena todos los campos y pide a tu Delegado que pinche en 'Confirmar'
         cuando estés listo para que el %{contact} apruebe esta competición.
       #original_hash: 8966fd0
       submit_create_value: Crear competición
@@ -3582,13 +3604,10 @@ es-ES:
             Se requiere un límite de competidores. Solo las competiciones
             simultáneas de FMC con varias ubicaciones pueden no tener límite de
             competidores.
-          #original_hash: b7b599b
+          #original_hash: 6127d47
           count: >-
-            El número de competidores permitidos en esta competición. Por ahora,
-            este número es únicamente informativo y aún no impide que se
-            registren más personas. Estamos trabajando para añadir soporte
-            explícito para esto al flujo de registro, pero primero hay que
-            realizar otras tareas.
+            El número de competidores permitidos en esta competición. Este
+            límite se aplica mediante el sistema de registro integrado.
           #original_hash: 4bd7102
           reason: >-
             ¿Cuál es el motivo para el límite de competidores? Por favor,
@@ -4474,18 +4493,16 @@ es-ES:
           detendrá y tu resultado será DNF (ver  %{regulation_link}).
         #original_hash: 83d204f
         regulation_link_text: 'Regla %{number}'
-        #original_hash: bd0e4a9
-        guideline_link_text: 'Directriz %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: tiempo límite acumulativo
         #original_hash: d47f11a
         cumulative_one_round_html: >-
           Un %{cumulative_time_limit} puede ser aplicado (ver
           %{regulation_link}).
-        #original_hash: c6190b6
+        #original_hash: 44f85f0
         cumulative_across_rounds_html: >-
           Un %{cumulative_time_limit} puede ser aplicado a través de varias
-          rondas (ver %{guideline_link}).
+          rondas (ver %{regulation_link}).
         #original_hash: e8d17df
         cutoff_html: >-
           El resultado que hay que batir para pasar a la segunda fase de una

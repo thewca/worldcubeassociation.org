@@ -1866,9 +1866,10 @@ class Competition < ApplicationRecord
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled auto_accept_preference auto_accept_disable_threshold],
+      # TODO: h2h_rounds is a temporary method, which should be removed when full-fledged H2H backend support is added - expected in Q1 2026
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series? registration_full_and_accepted?],
+                  part_of_competition_series? registration_full_and_accepted? h2h_rounds],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -2279,13 +2280,6 @@ class Competition < ApplicationRecord
 
     series_registrations
       .where.not(competition: self)
-  end
-
-  def find_round_for(event_id, round_type_id, format_id = nil)
-    rounds.find do |r|
-      r.event.id == event_id && r.round_type_id == round_type_id &&
-        (format_id.nil? || format_id == r.format_id)
-    end
   end
 
   def export_for_dues_generation
@@ -3059,5 +3053,9 @@ class Competition < ApplicationRecord
 
     threshold_reached = fully_paid_registrations_count >= auto_close_threshold && auto_close_threshold.positive?
     threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
+  end
+
+  def h2h_rounds
+    self.rounds.h2h.map(&:wcif_id)
   end
 end
