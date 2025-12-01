@@ -6,6 +6,7 @@ import useAPI from "@/lib/wca/useAPI";
 import { Button, ButtonGroup, Grid, GridItem, Link } from "@chakra-ui/react";
 import AttemptsForm from "@/components/live/AttemptsForm";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
+import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 
 function zeroedArrayOfSize(size: number) {
   return Array(size).fill(0);
@@ -176,11 +177,13 @@ export default function AddResults({
             </Link>
           </Button>
         </ButtonGroup>
-        <LiveResultsTable
+        <LiveUpdatingResultsTable
           results={results}
           eventId={eventId}
           competitors={competitors}
           competitionId={competitionId}
+          roundId={Number.parseInt(roundId, 10)}
+          title="Current Results"
           isAdmin
         />
       </GridItem>
