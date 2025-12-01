@@ -160,15 +160,15 @@ const customConfig = defineConfig({
         //   which it seems most modern UI frameworks do.
         gray: {
           50: { value: "#FCFCFC", description: "Supplementary Bg White" },
-          100: { value: "#F4F4F5" },
-          200: { value: "#EDEDF0", description: "Supplementary Bg Light" },
-          300: { value: "#DCDCE0", description: "Supplementary Bg Medium" },
-          400: { value: "#B8B8C1", description: "Supplementary Bg Dark" },
-          500: { value: "#85858F" },
-          600: { value: "#5D5D66" },
-          700: { value: "#45454D" },
-          800: { value: "#27272A" },
-          900: { value: "#18181B" },
+          100: { value: "#F4F4F3" },
+          200: { value: "#EDEDEA", description: "Supplementary Bg Light" },
+          300: { value: "#DCDCD1", description: "Supplementary Bg Medium" },
+          400: { value: "#B8B8AF", description: "Supplementary Bg Dark" },
+          500: { value: "#85857B" },
+          600: { value: "#5D5D56" },
+          700: { value: "#45453F" },
+          800: { value: "#272723" },
+          900: { value: "#181814" },
           950: { value: "#111111" },
         },
         supplementary: {
@@ -411,6 +411,9 @@ const customConfig = defineConfig({
             },
           },
         },
+        defaultVariants: {
+          variant: "subtle",
+        }
       },
       accordion: {
         slots: [],
