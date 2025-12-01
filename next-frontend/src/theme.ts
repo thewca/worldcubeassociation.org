@@ -160,15 +160,15 @@ const customConfig = defineConfig({
         //   which it seems most modern UI frameworks do.
         gray: {
           50: { value: "#FCFCFC", description: "Supplementary Bg White" },
-          100: { value: "#F4F4F3" },
-          200: { value: "#EDEDEA", description: "Supplementary Bg Light" },
-          300: { value: "#DCDCD1", description: "Supplementary Bg Medium" },
-          400: { value: "#B8B8AF", description: "Supplementary Bg Dark" },
-          500: { value: "#85857B" },
-          600: { value: "#5D5D56" },
-          700: { value: "#45453F" },
+          100: { value: "#F4F4F2" },
+          200: { value: "#EDEDE9", description: "Supplementary Bg Light" },
+          300: { value: "#DCDCD6", description: "Supplementary Bg Medium" },
+          400: { value: "#B8B8B0", description: "Supplementary Bg Dark" },
+          500: { value: "#85857D" },
+          600: { value: "#5D5D57" },
+          700: { value: "#454540" },
           800: { value: "#272723" },
-          900: { value: "#181814" },
+          900: { value: "#181816" },
           950: { value: "#111111" },
         },
         supplementary: {
