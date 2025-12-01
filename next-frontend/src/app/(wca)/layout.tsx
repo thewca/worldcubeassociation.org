@@ -16,11 +16,11 @@ export const metadata: Metadata = {
 const devFont = Rubik({ subsets: ["latin"] });
 
 const computeFont = async () => {
-  // if (process.env.PROPRIETARY_FONT === "TTNormsPro") {
-  //   const { ttNormsPro } = await import("@/styles/fonts");
-  //
-  //   return ttNormsPro;
-  // }
+  if (process.env.PROPRIETARY_FONT === "TTNormsPro") {
+    const { ttNormsPro } = await import("@/styles/fonts");
+
+    return ttNormsPro;
+  }
 
   return devFont;
 };
