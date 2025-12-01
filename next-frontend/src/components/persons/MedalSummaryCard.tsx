@@ -16,7 +16,11 @@ const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({
   return (
     <Card.Root colorVariant="solid" colorPalette="yellow" overflow="hidden">
       <Float placement="middle-end" offsetX="20">
-        <MyResultsIcon boxSize="13rem" color="colorPalette.fg" opacity="0.3" />
+        <MyResultsIcon
+          boxSize="13rem"
+          color="colorPalette.contrast"
+          opacity="0.3"
+        />
       </Float>
       <Card.Body>
         <Card.Title textStyle="s4">Medals</Card.Title>
