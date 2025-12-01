@@ -18,7 +18,7 @@ locals {
     },
     {
       name  = "OIDC_ALGORITHM"
-      value = "rs256"
+      value = "RS256"
     },
     {
       name = "DATABASE_HOST"
