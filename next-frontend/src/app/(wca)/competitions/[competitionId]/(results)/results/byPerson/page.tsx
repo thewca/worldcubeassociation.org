@@ -28,7 +28,7 @@ export default async function PodiumsPage({
   );
 
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Results</Card.Title>
         {_.map(resultsByPerson, (results, wcaId) => (

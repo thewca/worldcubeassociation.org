@@ -184,7 +184,7 @@ const FeaturedCompetition = async ({
   }
 
   return (
-    <Card.Root colorPalette={colorPalette} coloredBg>
+    <Card.Root colorPalette={colorPalette} colorVariant="solid">
       <Card.Body>
         <Card.Title textStyle="h2">{competition.name}</Card.Title>
         <CompetitionShortlist comp={competition} t={t} />
@@ -198,7 +198,7 @@ const FeaturedCompetitions = async ({
 }: {
   block: FeaturedCompetitionsBlock;
 }) => (
-  <Card.Root width="full" coloredBg>
+  <Card.Root width="full">
     <Card.Body>
       <Card.Title textStyle="h2" asChild>
         <HStack justify="space-between">

@@ -28,7 +28,7 @@ export default async function PodiumsPage({
   const scramblesByEvent = _.groupBy(scrambles, "event_id");
 
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Scrambles</Card.Title>
         <FilteredScrambles

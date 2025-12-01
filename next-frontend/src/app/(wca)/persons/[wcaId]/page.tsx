@@ -120,7 +120,7 @@ export default async function PersonOverview({
 
             {/* Tabs */}
             <GridItem colSpan={6}>
-              <Card.Root coloredBg>
+              <Card.Root>
                 <Tabs.Root
                   defaultValue="results"
                   fitted
