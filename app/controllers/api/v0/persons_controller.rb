@@ -44,8 +44,11 @@ class Api::V0::PersonsController < Api::V0::ApiController
 
   def records
     person = Person.current.find_by!(wca_id: params[:wca_id])
-    render json: person.results
-                       .where("regional_single_record IS NOT NULL OR regional_average_record IS NOT NULL").as_json
+    results = person.results
+    single_records = results.where.not(regional_single_record: nil)
+    average_records = results.where.not(regional_average_record: nil)
+
+    render json: single_records.or(average_records).as_json
   end
 
   def personal_records
