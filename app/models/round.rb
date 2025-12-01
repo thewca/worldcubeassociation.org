@@ -72,7 +72,6 @@ class Round < ApplicationRecord
   end
 
   validate do
-    errors.add(:format, "'#{format_id}' is not allowed for '#{event.id}'") unless event.preferred_formats.find_by(format_id: format_id)
     errors.add(:format, "#{format_id} is not allowed for 333bf for a competition taking place on #{competition.start_date} due to the 2026 regulations") if uses_wrong_333bf_format?
   end
 
