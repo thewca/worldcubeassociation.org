@@ -133,7 +133,7 @@ const deriveLuminanceScale = (
     colorScheme.secondaryLight,
   ]);
 
-  const ambientScale = adjustScale(baseScale, secondaryAnchors, { sigma: 2 });
+  const ambientScale = adjustScale(baseScale, secondaryAnchors, { sigma: 1.5 });
 
   const primaryAnchors = createAnchorMap(baseScale, [colorScheme.primary]);
   const heroScale = adjustScale(ambientScale, primaryAnchors, { sigma: 2.5 });
@@ -353,80 +353,21 @@ const customConfig = defineConfig({
         },
       },
     },
-    recipes: {
-      link: {
-        base: {
-          transitionProperty: "color",
-          transitionTimingFunction: "ease",
-          transitionDuration: "moderate",
-        },
-        variants: {
-          variant: {
-            wca: {
-              textStyle: "hyperlink",
-              _hover: {
-                color: "{colors.supplementary.link/80}",
-              },
-            },
-            header: {
-              textStyle: "headerLink",
-              _hover: {
-                color: "{colors.supplementary.link}",
-              },
-            },
-          },
-          hoverArrow: {
-            true: {
-              position: "relative",
-              paddingRight: "10px",
-              _after: {
-                content: '""',
-                position: "absolute",
-                top: "60%",
-                right: "0",
-                width: "7px",
-                height: "12px",
-                backgroundImage: "url('/linkArrow.svg')",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "contain",
-                transform: "translateY(-50%) translateX(-8px)",
-                transition: "all 0.3s ease-in-out",
-                opacity: 0,
-              },
-              _hover: {
-                color: "{colors.supplementary.link/80}",
-                _after: {
-                  transform: "translateY(-50%) translateX(0px)",
-                  opacity: 1,
-                },
-              },
-            },
-          },
-        },
-        defaultVariants: {
-          // @ts-expect-error This is a legitimate key, but the typing system doesn't see it before merge.
-          variant: "wca",
-          hoverArrow: false,
-        },
-      },
-      badge: {
-        variants: {
-          variant: {
-            information: {
-              background: "transparent",
-              fontWeight: "light",
-              gap: 2,
-            },
-          },
-        },
-      },
-      heading: {
-        base: {
-          fontFamily: "inherit",
-        },
-      },
-    },
     slotRecipes: {
+      dataList: {
+        slots: [],
+        variants: {
+          iconLabel: {
+            true: {
+              itemLabel: {
+                minWidth: "6",
+                justifyContent: "end",
+                color: "fg",
+              },
+            },
+          },
+        },
+      },
       stat: {
         slots: [],
         variants: {

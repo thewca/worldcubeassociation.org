@@ -327,7 +327,7 @@ export function OrganizationTeamCard({
 
         <Button variant="outline" colorPalette="blue" asChild>
           <ChakraLink
-            variant="header"
+            textStyle="headerLink"
             href={
               "https://www.worldcubeassociation.org/competitions/" +
               competitionInfo.id +

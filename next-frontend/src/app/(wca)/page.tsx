@@ -7,11 +7,9 @@ import {
   Separator,
   Box,
   Text,
-  Badge,
   VStack,
   Link as ChakraLink,
   Center,
-  Icon,
   HStack,
   AbsoluteCenter,
   Float,
@@ -21,14 +19,6 @@ import { MarkdownProse } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
-
-import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
-import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
-import RegisterIcon from "@/components/icons/RegisterIcon";
-import LocationIcon from "@/components/icons/LocationIcon";
-
-import WcaFlag from "@/components/WcaFlag";
-import CountryMap from "@/components/CountryMap";
 
 import type {
   TextCardBlock,
@@ -44,12 +34,15 @@ import type {
   Testimonial,
   AnnouncementsSectionBlock,
   Announcement,
+  ColorPaletteSelect,
 } from "@/types/payload";
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import { getT } from "@/lib/i18n/get18n";
 import { draftMode } from "next/headers";
 import { MediaImage } from "@/components/MediaImage";
+import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
+import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
@@ -175,86 +168,58 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
   );
 };
 
-const FeaturedCompetitions = async ({
-  block,
+const FeaturedCompetition = async ({
+  competitionId,
+  colorPalette,
 }: {
-  block: FeaturedCompetitionsBlock;
+  competitionId: string;
+  colorPalette: ColorPaletteSelect;
 }) => {
   const { t } = await getT();
 
+  const { data: competition, error } = await getCompetitionInfo(competitionId);
+
+  if (error) {
+    return "Something went wrong while loading the competition";
+  }
+
   return (
-    <Card.Root width="full" coloredBg>
+    <Card.Root colorPalette={colorPalette} coloredBg>
       <Card.Body>
-        <Card.Title textStyle="h2" asChild>
-          <HStack justify="space-between">
-            <Text>Featured Upcoming Competitions</Text>
-            <Button variant="outline" asChild>
-              <Link href="/competitions">View all Competitions</Link>
-            </Button>
-          </HStack>
-        </Card.Title>
-        <SimpleGrid columns={block.competitions?.length} gap={4}>
-          {block.competitions?.map((featuredComp) => (
-            <Card.Root
-              key={featuredComp.competitionId}
-              colorPalette={featuredComp.colorPalette}
-              coloredBg
-            >
-              <Card.Header>
-                <Card.Title textStyle="h2">
-                  {featuredComp.competitionId}
-                </Card.Title>
-                <Card.Description>
-                  <Badge
-                    variant="information"
-                    colorPalette={featuredComp.colorPalette}
-                    textStyle="s3"
-                  >
-                    <Icon size="lg">
-                      <WcaFlag code="US" fallback="US" />
-                    </Icon>
-                    <CountryMap code="US" t={t} /> Seattle
-                  </Badge>
-                </Card.Description>
-              </Card.Header>
-              <Card.Body>
-                <VStack alignItems="start">
-                  <Badge
-                    variant="information"
-                    colorPalette={featuredComp.colorPalette}
-                  >
-                    <CompRegoCloseDateIcon />
-                    <Text>Jul 3 - 6, 2025</Text>
-                  </Badge>
-                  <Badge
-                    variant="information"
-                    colorPalette={featuredComp.colorPalette}
-                  >
-                    <CompetitorsIcon />
-                    2000 Competitor Limit
-                  </Badge>
-                  <Badge
-                    variant="information"
-                    colorPalette={featuredComp.colorPalette}
-                  >
-                    <RegisterIcon />0 Spots Left
-                  </Badge>
-                  <Badge
-                    variant="information"
-                    colorPalette={featuredComp.colorPalette}
-                  >
-                    <LocationIcon />
-                    Seattle Convention Center
-                  </Badge>
-                </VStack>
-              </Card.Body>
-            </Card.Root>
-          ))}
-        </SimpleGrid>
+        <Card.Title textStyle="h2">{competition.name}</Card.Title>
+        <CompetitionShortlist comp={competition} t={t} />
       </Card.Body>
     </Card.Root>
   );
 };
+
+const FeaturedCompetitions = async ({
+  block,
+}: {
+  block: FeaturedCompetitionsBlock;
+}) => (
+  <Card.Root width="full" coloredBg>
+    <Card.Body>
+      <Card.Title textStyle="h2" asChild>
+        <HStack justify="space-between">
+          <Text>Featured Upcoming Competitions</Text>
+          <Button variant="outline" asChild>
+            <Link href="/competitions">View all Competitions</Link>
+          </Button>
+        </HStack>
+      </Card.Title>
+      <SimpleGrid columns={block.competitions?.length} gap={4}>
+        {block.competitions?.map((featuredComp) => (
+          <FeaturedCompetition
+            key={featuredComp.id}
+            competitionId={featuredComp.competitionId}
+            colorPalette={featuredComp.colorPalette}
+          />
+        ))}
+      </SimpleGrid>
+    </Card.Body>
+  </Card.Root>
+);
 
 const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
   const slides = block.slides;

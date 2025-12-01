@@ -8,12 +8,9 @@ import {
   CloseButton,
   Drawer,
   Portal,
-  Badge,
-  VStack,
   Heading,
   Float,
   Icon,
-  HStack,
 } from "@chakra-ui/react";
 
 import WcaFlag from "@/components/WcaFlag";
@@ -23,13 +20,8 @@ import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen
 import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
 import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
 
-import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
-import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
-import RegisterIcon from "@/components/icons/RegisterIcon";
-import LocationIcon from "@/components/icons/LocationIcon";
 import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
 
-import EventIcon from "@/components/EventIcon";
 import CountryMap from "@/components/CountryMap";
 
 import type { components } from "@/types/openapi";
@@ -37,6 +29,7 @@ import Link from "next/link";
 import { route } from "nextjs-routes";
 import { useT } from "@/lib/i18n/useI18n";
 import { formatDateRange } from "@/lib/dates/format";
+import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
 
 // Raw competition type from WCA API
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
@@ -84,7 +77,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
       </Table.Cell>
 
       <Table.Cell>
-        <ChakraLink asChild hoverArrow onClick={(e) => e.stopPropagation()}>
+        <ChakraLink asChild>
           <Link
             href={route({
               pathname: "/competitions/[competitionId]",
@@ -133,52 +126,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                 <Heading size="3xl">{comp.name}</Heading>
               </Drawer.Header>
               <Drawer.Body>
-                <VStack alignItems="start">
-                  <Badge variant="information" textStyle="md">
-                    <Icon size="xl">
-                      <WcaFlag
-                        code={comp.country_iso2}
-                        fallback={comp.country_iso2}
-                      />
-                    </Icon>
-                    <CountryMap
-                      code={comp.country_iso2}
-                      t={t}
-                      fontWeight="bold"
-                    />{" "}
-                    {comp.city}
-                  </Badge>
-                  <Badge variant="information" textStyle="md">
-                    <CompRegoCloseDateIcon size="2xl" />
-                    {formatDateRange(comp.start_date, comp.end_date)}
-                  </Badge>
-                  <Badge variant="information" textStyle="md">
-                    <CompetitorsIcon />
-                    {comp.competitor_limit} Competitor Limit
-                  </Badge>
-                  <Badge variant="information" textStyle="md">
-                    <RegisterIcon />
-                    {comp.competitor_limit} Spots Left
-                  </Badge>
-                  <Badge variant="information" textStyle="md">
-                    <LocationIcon />
-                    {comp.city}
-                  </Badge>
-                  <HStack paddingInline="1.5">
-                    {comp.event_ids.map((eventId) => (
-                      <EventIcon
-                        eventId={eventId}
-                        key={eventId}
-                        boxSize="7"
-                        color={
-                          eventId === comp.main_event_id && eventId !== "333"
-                            ? "green.1A"
-                            : "currentColor"
-                        }
-                      />
-                    ))}
-                  </HStack>
-                </VStack>
+                <CompetitionShortlist comp={comp} t={t} />
               </Drawer.Body>
               <Drawer.Footer justifyContent="space-between" width="full">
                 {/* TODO: Only Show register button/link if registration is not full */}

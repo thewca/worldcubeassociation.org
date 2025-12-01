@@ -71,29 +71,29 @@ export default function Footer() {
           <ChakraImage asChild>
             <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
           </ChakraImage>
-          <ChakraLink asChild variant="header">
+          <ChakraLink asChild textStyle="headerLink">
             <Link href="/about">About Us</Link>
           </ChakraLink>
-          <ChakraLink asChild variant="header">
+          <ChakraLink asChild textStyle="headerLink">
             <Link href="/faq">FAQs</Link>
           </ChakraLink>
           <ChakraLink
-            variant="header"
+            textStyle="headerLink"
             href="https://worldcubeassociation.org/contact"
           >
             Contact
           </ChakraLink>
           <ChakraLink
-            variant="header"
+            textStyle="headerLink"
             href="https://github.com/thewca"
             target="_blank"
           >
             GitHub
           </ChakraLink>
-          <ChakraLink asChild variant="header">
+          <ChakraLink asChild textStyle="headerLink">
             <Link href="/privacy">Privacy</Link>
           </ChakraLink>
-          <ChakraLink asChild variant="header">
+          <ChakraLink asChild textStyle="headerLink">
             <Link href="/disclaimer">Disclaimer</Link>
           </ChakraLink>
         </HStack>
