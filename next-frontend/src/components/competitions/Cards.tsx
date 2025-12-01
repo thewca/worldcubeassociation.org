@@ -79,7 +79,7 @@ export function VenueDetailsCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Venue Details</Card.Title>
         <SimpleGrid columns={2} gap="4">
@@ -124,7 +124,7 @@ export function AdditionalInformationCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Information</Card.Title>
         <MarkdownProse
@@ -146,7 +146,7 @@ export function RefundPolicyCard({
   const formattedRefundDate = refundDate.toLocaleString("en-US", dateFormat);
 
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Refund Policy</Card.Title>
         <Card.Description>
@@ -184,7 +184,7 @@ export function RegistrationCard({
   );
 
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Registration</Card.Title>
         <SimpleGrid columns={2} gap="4">
@@ -286,7 +286,7 @@ export function OrganizationTeamCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root flexGrow="1" coloredBg>
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Organization Team</Card.Title>
         <Stat.Root variant="competition">
@@ -349,7 +349,7 @@ export function EventCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Events List</Card.Title>
         <HStack gap="4">
@@ -379,7 +379,7 @@ export function InfoCard({
   t: TFunction;
 }) {
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Heading textStyle="h2" display="flex" alignItems="center">
           {competitionInfo.name}

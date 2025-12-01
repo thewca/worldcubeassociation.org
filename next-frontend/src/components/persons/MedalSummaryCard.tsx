@@ -14,7 +14,7 @@ const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({
   bronze,
 }) => {
   return (
-    <Card.Root colorPalette="yellow" overflow="hidden" coloredBg>
+    <Card.Root colorVariant="solid" colorPalette="yellow" overflow="hidden">
       <Float placement="middle-end" offsetX="20">
         <MyResultsIcon boxSize="13rem" color="colorPalette.fg" opacity="0.3" />
       </Float>

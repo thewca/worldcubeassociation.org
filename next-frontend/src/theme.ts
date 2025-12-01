@@ -374,7 +374,6 @@ const customConfig = defineConfig({
           variant: {
             competition: {
               label: {
-                color: "colorPalette.text",
                 alignItems: "start",
                 textStyle: "annotation",
               },
@@ -415,14 +414,15 @@ const customConfig = defineConfig({
                 layerStyle: "fill.muted",
               },
             },
-          },
-          coloredBg: {
-            true: {
+            surface: {
               root: {
-                // @ts-expect-error We're transitioning away from coloredBg, so this is just a hack
-                colorVariant: "solid",
+                colorPalette: "white",
+                layerStyle: "fill.surface",
               },
-            },
+              description: {
+                layerStyle: "fill.subtle"
+              }
+            }
           },
         },
       },

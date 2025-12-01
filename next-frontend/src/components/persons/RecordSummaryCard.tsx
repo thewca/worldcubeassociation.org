@@ -15,7 +15,7 @@ const RecordSummaryCard: React.FC<RecordSummaryCardProps> = ({
   national,
 }) => {
   return (
-    <Card.Root colorPalette="green" overflow="hidden" coloredBg>
+    <Card.Root colorVariant="solid" colorPalette="green" overflow="hidden">
       <Float placement="middle-end" offsetX="20">
         <RecordsIcon boxSize="13rem" color="colorPalette.fg" opacity="0.3" />
       </Float>
