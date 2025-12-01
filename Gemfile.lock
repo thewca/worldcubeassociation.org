@@ -912,7 +912,7 @@ GEM
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.1)
       tzinfo
-    tzf (1.4.0)
+    tzf (1.5.0)
       rb_sys (~> 0.9.89)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -1462,7 +1462,7 @@ CHECKSUMS
   translighterate (0.3.0) sha256=484ec67fab8c7ad5666aa9b1892b9c704446364805f576fabaefca553a4aff82
   tsort (0.2.0) sha256=9650a793f6859a43b6641671278f79cfead60ac714148aabe4e3f0060480089f
   twitter_cldr (6.14.0) sha256=5d18c23097008bcda542a260535766fdfc49d982d5eedf2486d19f368aa8c7a4
-  tzf (1.4.0) sha256=0990177c3b6e1450dacf42d86e455be788705d99918d788ab617868428297637
+  tzf (1.5.0) sha256=8cea88d57c1bb22b6a437b59eb7efcd89eb6d7cd3f8818750984dc336f1b204a
   tzinfo (2.0.6) sha256=8daf828cc77bcf7d63b0e3bdb6caa47e2272dcfaf4fbfe46f8c3a9df087a829b
   uber (0.1.0) sha256=5beeb407ff807b5db994f82fa9ee07cfceaa561dad8af20be880bc67eba935dc
   unf (0.1.4) sha256=4999517a531f2a955750f8831941891f6158498ec9b6cb1c81ce89388e63022e
