@@ -28,7 +28,7 @@ export default async function PodiumsPage({
   const resultsByEvent = _.groupBy(competitionResults, "event_id");
 
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Results</Card.Title>
         <FilteredResults
