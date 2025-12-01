@@ -406,9 +406,9 @@ const customConfig = defineConfig({
                 layerStyle: "fill.surface",
               },
               description: {
-                layerStyle: "fill.subtle"
-              }
-            }
+                layerStyle: "fill.subtle",
+              },
+            },
           },
         },
       },
@@ -494,11 +494,11 @@ const customConfig = defineConfig({
             true: {
               trigger: {
                 _selected: {
-                  color: "colorPalette.contrast"
-                }
-              }
-            }
-          }
+                  color: "colorPalette.contrast",
+                },
+              },
+            },
+          },
         },
       },
     },

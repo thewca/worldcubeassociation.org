@@ -315,12 +315,7 @@ function CompetitionTable({
   bottomRef: (node?: Element | null) => void;
 }) {
   return (
-    <Table.Root
-      size="xs"
-      striped
-      variant="competitions"
-      borderWidth="2px"
-    >
+    <Table.Root size="xs" striped variant="competitions" borderWidth="2px">
       <Table.Body>
         {competitions.map((comp) => (
           <CompetitionTableEntry comp={comp} key={comp.id} />

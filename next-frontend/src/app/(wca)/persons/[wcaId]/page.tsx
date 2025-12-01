@@ -144,7 +144,10 @@ export default async function PersonOverview({
                         </Tabs.Trigger>
                       )}
                       <Tabs.Trigger value="map">Map</Tabs.Trigger>
-                      <Tabs.Indicator bg="colorPalette.solid" borderBottomRadius={0} />
+                      <Tabs.Indicator
+                        bg="colorPalette.solid"
+                        borderBottomRadius={0}
+                      />
                     </Tabs.List>
                   </Card.Header>
                   <Card.Body>
