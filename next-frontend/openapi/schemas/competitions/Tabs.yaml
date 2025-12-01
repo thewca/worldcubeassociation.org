@@ -1,0 +1,17 @@
+type: object
+required:
+  - id
+  - competition_id
+  - content
+  - display_order
+properties:
+  id:
+    type: string
+  competition_id:
+    type: string
+  name:
+    type: string
+  content:
+    type: string
+  display_order:
+    type: integer
