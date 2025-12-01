@@ -19,6 +19,10 @@ locals {
       value = var.ROOT_URL
     },
     {
+      name  = "OIDC_ALGORITHM"
+      value = "rs256"
+    },
+    {
       name  = "ASSET_HOST"
       value = "https://assets.worldcubeassociation.org"
     },

@@ -17,6 +17,10 @@ locals {
       value = var.ROOT_URL
     },
     {
+      name  = "OIDC_ALGORITHM"
+      value = "rs256"
+    },
+    {
       name = "DATABASE_HOST"
       value = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
