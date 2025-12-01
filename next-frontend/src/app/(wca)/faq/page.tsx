@@ -83,21 +83,34 @@ export default async function FAQ() {
                     <Accordion.Root
                       multiple
                       collapsible
-                      colorPalette={category.colorPalette}
-                      variant="subtle"
+                      variant="card"
                       width="full"
                     >
                       {questions.map((question) => (
                         <Accordion.Item
                           key={question.id}
                           value={question.id.toString()}
+                          layerStyle="outline.solid"
+                          borderColor="border"
+                          bg="bg.panel"
                         >
-                          <Accordion.ItemTrigger textStyle="s1">
+                          <Accordion.ItemTrigger
+                            textStyle="s1"
+                            _open={{
+                              bgImage: `linear-gradient(90deg, {colors.${category.colorPalette}.subtle}, {colors.bg.panel})`,
+                              borderBottomRadius: 0,
+                            }}
+                            _hover={{
+                              bgImage: `linear-gradient(90deg, {colors.${category.colorPalette}.subtle}, {colors.bg.panel})`,
+                            }}
+                          >
                             {question.question}
                             <Accordion.ItemIndicator />
                           </Accordion.ItemTrigger>
                           <Accordion.ItemContent textStyle="body">
-                            {question.answer}
+                            <Accordion.ItemBody>
+                              {question.answer}
+                            </Accordion.ItemBody>
                           </Accordion.ItemContent>
                         </Accordion.Item>
                       ))}

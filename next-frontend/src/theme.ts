@@ -8,20 +8,6 @@ const compileColorScheme = (baseColor: string) => ({
     top: { value: `{colors.${baseColor}.1A}` },
     right: { value: `{colors.${baseColor}.darker}` },
   },
-  gradient: {
-    default: {
-      value: {
-        _light: `linear-gradient(90deg, {colors.${baseColor}.fg} 0%, {colors.bg} 100%)`,
-        _dark: `linear-gradient(90deg, {colors.${baseColor}.muted} 0%, {colors.bg} 100%)`,
-      },
-    },
-    hover: {
-      value: {
-        _light: `linear-gradient(90deg, {colors.${baseColor}.fg/80} 0%, {colors.bg} 100%)`,
-        _dark: `linear-gradient(90deg, {colors.${baseColor}.muted/80} 0%, {colors.bg} 100%)`,
-      },
-    },
-  },
 });
 
 const defineColorAliases = (colorPalette: WcaPaletteInput) => ({
@@ -435,43 +421,6 @@ const customConfig = defineConfig({
         },
         variants: {
           variant: {
-            subtle: {
-              item: {
-                borderColor: "{colors.supplementary.bg.dark}",
-                borderWidth: "1px",
-                marginBottom: "3",
-                _open: {
-                  bg: "bg",
-                },
-              },
-              itemTrigger: {
-                padding: "3",
-                bgImage: "var(--chakra-colors-color-palette-gradient-hover)",
-                backgroundSize: "0% 100%", // Ensures the gradient fills the element
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "-100% 0%",
-                animation: "slideOutGradient 0.25s ease-in-out forwards",
-                _hover: {
-                  animation: "slideInGradient 0.25s ease-in-out forwards",
-                },
-                _open: {
-                  bgImage:
-                    "var(--chakra-colors-color-palette-gradient-default)",
-                  borderTopRadius: "var(--accordion-radius)",
-                  borderBottomRadius: "0",
-                  backgroundSize: "100% 100%",
-                  animation: "dontSlideGradient 0.25s ease-in-out forwards",
-                  _hover: {
-                    bgImage:
-                      "var(--chakra-colors-color-palette-gradient-hover)",
-                    animation: "dontSlideGradient 0.25s ease-in-out forwards",
-                  },
-                },
-              },
-              itemContent: {
-                padding: "3",
-              },
-            },
             card: {
               root: {
                 spaceY: "4",
