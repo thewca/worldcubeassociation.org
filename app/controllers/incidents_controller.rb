@@ -118,7 +118,7 @@ class IncidentsController < ApplicationController
                    :public_summary,
                    :tags,
                    :digest_worthy,
-                   { incident_competitions_attributes: %i[id competition_id comments _destroy] }],
+                   { incident_competitions_attributes: [%i[id competition_id comments _destroy]] }],
       )
     end
 end
