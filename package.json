@@ -107,7 +107,7 @@
     "not dead"
   ],
   "devDependencies": {
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.6.1",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
