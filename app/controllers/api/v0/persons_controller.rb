@@ -74,6 +74,7 @@ class Api::V0::PersonsController < Api::V0::ApiController
       end,
       medals: person.medals,
       records: person.records,
+      total_solves: person.completed_solves_count
     }
   end
 
