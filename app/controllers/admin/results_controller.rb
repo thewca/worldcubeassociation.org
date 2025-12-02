@@ -62,6 +62,7 @@ module Admin
       @result = {
         competition_id: competition.id,
         round_type_id: round.round_type_id,
+        round_id: round.id
         format_id: round.format.id,
         event_id: round.event.id,
       }
