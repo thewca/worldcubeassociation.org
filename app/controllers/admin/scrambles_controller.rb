@@ -16,6 +16,7 @@ module Admin
       @scramble = {
         competition_id: competition.id,
         round_type_id: round.round_type_id,
+        round_id: round.id,
         event_id: round.event.id,
       }
     end
