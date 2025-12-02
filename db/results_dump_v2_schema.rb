@@ -24,8 +24,8 @@ ActiveRecord::Schema[7.1].define(version: 0) do
     t.integer "end_day", limit: 2, default: 0, null: false, unsigned: true
     t.integer "cancelled", default: 0, null: false
     t.text "event_specs", size: :long
-    t.text "wca_delegate", size: :medium
-    t.text "organiser", size: :medium
+    t.text "delegates", size: :medium
+    t.text "organizers", size: :medium
     t.string "venue", limit: 240, default: "", null: false
     t.string "venue_address"
     t.string "venue_details"
@@ -71,7 +71,7 @@ ActiveRecord::Schema[7.1].define(version: 0) do
 
   create_table "persons", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "id", limit: 10, default: "", null: false
-    t.integer "subid", limit: 1, default: 1, null: false
+    t.integer "sub_id", limit: 1, default: 1, null: false
     t.string "name", limit: 80
     t.string "country_id", limit: 50, default: "", null: false
     t.string "gender", limit: 1, default: ""
