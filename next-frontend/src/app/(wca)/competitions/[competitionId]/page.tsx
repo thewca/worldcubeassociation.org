@@ -6,11 +6,11 @@ import {
   AdditionalInformationCard,
   EventCard,
   InfoCard,
-  OrganizationTeamCard,
   RefundPolicyCard,
   RegistrationCard,
   VenueDetailsCard,
 } from "@/components/competitions/Cards";
+import OrganizationTeamCard from "@/components/competitions/OrganizerCard";
 
 export default async function CompetitionOverView({
   params,
