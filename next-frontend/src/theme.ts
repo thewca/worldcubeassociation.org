@@ -1,23 +1,7 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
-import { adjustScale, createAnchorMap } from "@/lib/math/colors";
+import { oklch, toGamut, formatHex, parseHex, lerp } from "culori";
 import _ from "lodash";
-
-const compileColorScheme = (baseColor: string) => ({
-  cubeShades: {
-    left: { value: `{colors.${baseColor}.lighter}` },
-    top: { value: `{colors.${baseColor}.1A}` },
-    right: { value: `{colors.${baseColor}.darker}` },
-  },
-});
-
-const defineColorAliases = (colorPalette: WcaPaletteInput) => ({
-  "1A": { value: colorPalette.primary },
-  "2A": { value: colorPalette.secondaryDark },
-  "2B": { value: colorPalette.secondaryLight },
-  "2C": { value: colorPalette.secondaryMedium },
-  lighter: { value: colorPalette.cubeLight },
-  darker: { value: colorPalette.cubeDark },
-});
+import type { Rgb, Oklch } from "culori";
 
 interface WcaPaletteInput {
   primary: string; // 1A (Solid / Top Face)
@@ -29,19 +13,23 @@ interface WcaPaletteInput {
   cubeDark: string; // Right Face
 }
 
-interface ChakraColorScale {
-  "50": { value: string };
-  "100": { value: string };
-  "200": { value: string };
-  "300": { value: string };
-  "400": { value: string };
-  "500": { value: string };
-  "600": { value: string };
-  "700": { value: string };
-  "800": { value: string };
-  "900": { value: string };
-  "950": { value: string };
-}
+type LuminanceKey =
+  | "50"
+  | "100"
+  | "200"
+  | "300"
+  | "400"
+  | "500"
+  | "600"
+  | "700"
+  | "800"
+  | "900"
+  | "950";
+
+type ColorScale = Readonly<Record<LuminanceKey, string>>;
+type ChakraColorScale = Readonly<Record<LuminanceKey, { value: string }>>;
+
+type ColorDelta = Readonly<Oklch> & { h: number };
 
 const slateColors = {
   green: {
@@ -100,6 +88,215 @@ const slateColors = {
   } satisfies WcaPaletteInput,
 } as const;
 
+// From within Chakra, we assume that the RGB codes are always "correct".
+const hexToRgb = (hexCode: string) => parseHex(hexCode)!;
+const rgbToHex = (rgb: Rgb) => formatHex(rgb).toUpperCase();
+
+const rgbToOklch = (rgb: Rgb): Oklch => oklch(rgb);
+const oklchToRgb = toGamut("rgb", "oklch");
+
+const getHueDelta = (sourceH: number = 0, targetH: number = 0): number =>
+  ((targetH - sourceH + 540) % 360) - 180;
+
+const calculateDelta = (source: Oklch, target: Oklch): ColorDelta => ({
+  mode: "oklch",
+  l: target.l - source.l,
+  c: target.c - source.c,
+  h: getHueDelta(source.h, target.h),
+});
+
+const typedKeys = <K extends string, V>(object: Record<K, V>): K[] =>
+  Object.keys(object).filter((k): k is K => k in object);
+
+const getSortedKeys = (scale: ColorScale): ReadonlyArray<LuminanceKey> =>
+  typedKeys(scale).toSorted((a, b) => parseInt(a) - parseInt(b));
+
+const findNearestSlotKey = (
+  scale: ColorScale,
+  targetOklch: Oklch,
+): LuminanceKey => {
+  const keys = typedKeys(scale);
+
+  const bestKey = _.minBy(keys, (key) => {
+    const currentOklch = rgbToOklch(hexToRgb(scale[key]));
+    return Math.abs(currentOklch.l - targetOklch.l);
+  });
+
+  // ColorScale is never empty, so the `minBy` above is safe
+  return bestKey!;
+};
+
+const generateSequence = (
+  start: number,
+  end: number,
+): ReadonlyArray<number> => {
+  const length = Math.abs(end - start);
+  const step = end > start ? 1 : -1;
+
+  return Array.from({ length }, (_, i) => start + i * step);
+};
+
+const createAnchorMap = (
+  baseScale: ColorScale,
+  colors: ReadonlyArray<string>,
+): Readonly<Record<LuminanceKey, string>> => {
+  const sortedScaleKeys = getSortedKeys(baseScale);
+  const maxIdx = sortedScaleKeys.length;
+
+  const sortedInputs = colors.toSorted((a, b) => {
+    const lA = rgbToOklch(hexToRgb(a)).l;
+    const lB = rgbToOklch(hexToRgb(b)).l;
+
+    return lB - lA; // Descending Lightness
+  });
+
+  return sortedInputs.reduce(
+    (assignments, color) => {
+      const colorOklch = rgbToOklch(hexToRgb(color));
+      const idealKey = findNearestSlotKey(baseScale, colorOklch);
+      const idealIdx = sortedScaleKeys.indexOf(idealKey);
+
+      const searchPath = [
+        idealIdx,
+        ...generateSequence(idealIdx + 1, maxIdx),
+        ...generateSequence(idealIdx - 1, -1),
+      ];
+
+      const foundIdx = searchPath.find((idx) => {
+        const key = sortedScaleKeys[idx];
+        return !(key in assignments);
+      });
+
+      if (foundIdx === undefined) return assignments;
+
+      const foundKey = sortedScaleKeys[foundIdx];
+      return { ...assignments, [foundKey]: color };
+    },
+    {} as Record<LuminanceKey, string>,
+  );
+};
+
+const getInterpolatedDelta = (
+  currentIdx: number,
+  sortedKeys: ReadonlyArray<string>,
+  anchorIndices: ReadonlyArray<number>,
+  anchorDeltas: Readonly<Record<string, ColorDelta>>,
+): { delta: ColorDelta; distanceToAnchor: number } => {
+  const nextAnchorPtr = anchorIndices.findIndex((idx) => idx >= currentIdx);
+
+  if (nextAnchorPtr === 0) {
+    const anchorIdx = anchorIndices[0];
+
+    return {
+      delta: anchorDeltas[sortedKeys[anchorIdx]],
+      distanceToAnchor: Math.abs(currentIdx - anchorIdx),
+    };
+  }
+
+  if (nextAnchorPtr === -1) {
+    const anchorIdx = anchorIndices[anchorIndices.length - 1];
+
+    return {
+      delta: anchorDeltas[sortedKeys[anchorIdx]],
+      distanceToAnchor: Math.abs(currentIdx - anchorIdx),
+    };
+  }
+
+  const idxPrev = anchorIndices[nextAnchorPtr - 1];
+  const idxNext = anchorIndices[nextAnchorPtr];
+
+  const deltaPrev = anchorDeltas[sortedKeys[idxPrev]];
+  const deltaNext = anchorDeltas[sortedKeys[idxNext]];
+
+  const t = (currentIdx - idxPrev) / (idxNext - idxPrev);
+
+  const interpolatedDelta = {
+    mode: "oklch",
+    l: lerp(deltaPrev.l, deltaNext.l, t),
+    c: lerp(deltaPrev.c, deltaNext.c, t),
+    h: lerp(deltaPrev.h, deltaNext.h, t),
+  } as const;
+
+  const distanceToAnchor = Math.min(
+    Math.abs(currentIdx - idxPrev),
+    Math.abs(currentIdx - idxNext),
+  );
+
+  return { delta: interpolatedDelta, distanceToAnchor };
+};
+
+type AdjustmentConfig = {
+  readonly strength?: number;
+  readonly baseInfluence?: number;
+  readonly sigma?: number;
+};
+
+const adjustScale = (
+  baseScale: ColorScale,
+  anchors: Readonly<Record<LuminanceKey, string>>,
+  config: AdjustmentConfig = {},
+): ColorScale => {
+  const sortedKeys = getSortedKeys(baseScale);
+
+  const anchorData = Object.entries(anchors)
+    .map(([key, targetHex]) => {
+      const sourceHex = baseScale[key as LuminanceKey];
+
+      const src = rgbToOklch(hexToRgb(sourceHex));
+      const tgt = rgbToOklch(hexToRgb(targetHex));
+
+      return {
+        key,
+        idx: sortedKeys.indexOf(key as LuminanceKey),
+        delta: calculateDelta(src, tgt),
+      };
+    })
+    .sort((a, b) => a.idx - b.idx);
+
+  if (anchorData.length === 0) return baseScale;
+
+  const anchorIndices = anchorData.map((d) => d.idx);
+  const anchorDeltas = Object.fromEntries(
+    anchorData.map((d) => [d.key, d.delta]),
+  );
+
+  return _.mapValues(baseScale, (hex, key) => {
+    const currentIdx = sortedKeys.indexOf(key as LuminanceKey);
+    const sourceOklch = rgbToOklch(hexToRgb(hex));
+
+    const { delta: rawDelta, distanceToAnchor } = getInterpolatedDelta(
+      currentIdx,
+      sortedKeys,
+      anchorIndices,
+      anchorDeltas,
+    );
+
+    const {
+      strength = 1.0 / Object.entries(anchors).length,
+      baseInfluence = 0,
+      sigma,
+    } = config;
+
+    const decayFactor =
+      sigma !== undefined
+        ? Math.exp(-(distanceToAnchor * distanceToAnchor) / (2 * sigma * sigma))
+        : 1.0;
+    const effectiveStrength = lerp(baseInfluence, strength, decayFactor);
+
+    const newOklch = {
+      mode: "oklch",
+      l: Math.max(
+        0,
+        Math.min(1, sourceOklch.l + rawDelta.l * effectiveStrength),
+      ),
+      c: Math.max(0, sourceOklch.c + rawDelta.c * effectiveStrength),
+      h: (sourceOklch.h || 0) + rawDelta.h * effectiveStrength,
+    } as const;
+
+    return rgbToHex(oklchToRgb(newOklch));
+  });
+};
+
 const deriveLuminanceScale = (
   chakraRefScheme: string,
   colorScheme: WcaPaletteInput,
@@ -126,6 +323,23 @@ const deriveLuminanceScale = (
 
   return _.mapValues(heroScale, (rgbHex) => ({ value: rgbHex }));
 };
+
+const compileColorScheme = (baseColor: string) => ({
+  cubeShades: {
+    left: { value: `{colors.${baseColor}.lighter}` },
+    top: { value: `{colors.${baseColor}.1A}` },
+    right: { value: `{colors.${baseColor}.darker}` },
+  },
+});
+
+const defineColorAliases = (colorPalette: WcaPaletteInput) => ({
+  "1A": { value: colorPalette.primary },
+  "2A": { value: colorPalette.secondaryDark },
+  "2B": { value: colorPalette.secondaryLight },
+  "2C": { value: colorPalette.secondaryMedium },
+  lighter: { value: colorPalette.cubeLight },
+  darker: { value: colorPalette.cubeDark },
+});
 
 const customConfig = defineConfig({
   theme: {
