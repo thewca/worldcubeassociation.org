@@ -57,7 +57,7 @@ class Competition < ApplicationRecord
            allow_nil: true,
            with_model_currency: :currency_code
 
-  validate :start_date, :cant_change_across_regulation_boundaries, if: -> { start_date_was.present? && events.pluck(:id).include?('333bf') }
+  validate :start_date, :cant_change_across_regulation_boundaries, if: -> { start_date_was.present? && event_ids.include?('333bf') }
   private def cant_change_across_regulation_boundaries
     errors.add(:start_date, "You can't change the start date across Regulation boundaries.") if
       (start_date_was.year == 2025 && start_date.year == 2026) ||
