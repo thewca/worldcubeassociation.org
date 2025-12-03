@@ -17,7 +17,7 @@ const LATEST_JARFILE =
 
 export default async function ScramblesPage() {
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left" gap="16px">
         <Heading size="5xl">WCA Scrambles</Heading>
         <Text>

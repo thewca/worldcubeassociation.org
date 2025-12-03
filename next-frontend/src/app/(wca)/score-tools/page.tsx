@@ -42,7 +42,7 @@ export default async function ScoreTools() {
   const toolsByCategory = _.groupBy(tools, "category");
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack gap="8" width="full" pt="8" alignItems="left">
         <Heading size="5xl">Software tools for WCA competitions</Heading>
         <Text>{t("score_tools.intro.desc")}</Text>

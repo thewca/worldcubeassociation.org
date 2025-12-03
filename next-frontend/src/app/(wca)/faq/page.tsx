@@ -36,7 +36,7 @@ export default async function FAQ() {
   const faqCategories = uniqBy(allCategories, "id");
 
   return (
-    <Container paddingTop="8">
+    <Container paddingTop="8" bg="bg">
       <VStack gap="8" width="full" alignItems="left">
         <Card.Root maxW="40em">
           <Card.Body>
