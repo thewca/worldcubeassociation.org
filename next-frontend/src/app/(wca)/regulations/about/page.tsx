@@ -22,7 +22,7 @@ export default async function AboutTheRegulations() {
   const { t } = await getT();
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack gap="8" width="full" pt="8" alignItems="left">
         <Heading size="5xl">{t("about_regulations.title")}</Heading>
         {aboutRegulationsItems.map((item) => (

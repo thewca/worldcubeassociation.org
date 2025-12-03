@@ -30,7 +30,7 @@ export default async function LogoPage() {
   const { t } = await getT();
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack alignItems="left">
         <Heading size="5xl">{t("logo.title")}</Heading>
         {logoItems.map((item) => {

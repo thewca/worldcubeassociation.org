@@ -31,7 +31,7 @@ export default async function RegionalOrganizations() {
   if (!organizations) return <Loading />;
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left">
         <Heading size="5xl">{I18n.t("regional_organizations.title")}</Heading>
         <Text>{I18n.t("regional_organizations.content")}</Text>
