@@ -5,12 +5,9 @@ import {
   Heading,
   SimpleGrid,
   Text,
-  Link as ChakraLink,
   HStack,
   Stat,
   Badge,
-  Listbox,
-  createListCollection,
 } from "@chakra-ui/react";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
 import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
@@ -26,7 +23,6 @@ import OnTheSpotRegistrationIcon from "@/components/icons/OnTheSpotRegistrationI
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import EventIcon from "@/components/EventIcon";
 import { MarkdownProse } from "@/components/Markdown";
-import WcaDocsIcon from "@/components/icons/WcaDocsIcon";
 import VenueIcon from "@/components/icons/VenueIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import DetailsIcon from "@/components/icons/DetailsIcon";
