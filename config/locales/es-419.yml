@@ -6402,7 +6402,7 @@ es-419:
         tiempos de %{person_name} notamos que habría tenido muy poco tiempo
         disponible para al menos uno de sus DNFs. Por favor, asegúrate de que
         cada DNF y DNS es correcto. Si el competidor no comenzó un intento o se
-        quedó sin límite acumulativo, debe ser ingresado como DNS (A1a2+++++).
+        quedó sin límite acumulativo, debe ser ingresado como DNS.
       #original_hash: 8057a12
       missing_cumulative_round_id_error: >-
         [%{original_round_id}] No se puede encontrar la ronda %{wcif_id} para el

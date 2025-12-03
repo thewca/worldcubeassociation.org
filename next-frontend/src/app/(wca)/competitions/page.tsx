@@ -157,7 +157,7 @@ export default function CompetitionsPage() {
             buttonUrl="/"
           />
         )}
-        <Card.Root size="md" coloredBg>
+        <Card.Root size="md">
           <Tabs.Root variant="subtle" colorPalette="blue" defaultValue="list">
             <Card.Header asChild>
               <HStack justify="space-between">
@@ -315,15 +315,7 @@ function CompetitionTable({
   bottomRef: (node?: Element | null) => void;
 }) {
   return (
-    <Table.Root
-      size="xs"
-      striped
-      rounded="md"
-      colorPalette="blue"
-      variant="competitions"
-      borderWidth="2px"
-      borderRadius="md"
-    >
+    <Table.Root size="xs" striped variant="competitions" borderWidth="2px">
       <Table.Body>
         {competitions.map((comp) => (
           <CompetitionTableEntry comp={comp} key={comp.id} />

@@ -150,6 +150,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v0/competitions/{competitionId}/tabs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get competition tabs */
+        get: operations["competitionTabs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/competitions/{competitionId}/registrations": {
         parameters: {
             query?: never;
@@ -370,6 +387,40 @@ export interface paths {
         };
         /** Get results for a person */
         get: operations["personResults"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/persons/{wca_id}/records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get records for a person */
+        get: operations["personRecords"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/persons/{wca_id}/competitions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get competitions for a person */
+        get: operations["personCompetitions"];
         put?: never;
         post?: never;
         delete?: never;
@@ -848,6 +899,7 @@ export interface components {
             "uses_qualification?": boolean;
             /** @example true */
             "registration_full?": boolean;
+            tab_names: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
         };
@@ -933,6 +985,13 @@ export interface components {
             startDate: string;
             numberOfDays: number;
             venues: components["schemas"]["WcifVenue"][];
+        };
+        Tabs: {
+            id: string;
+            competition_id: string;
+            name?: string;
+            content: string;
+            display_order: number;
         };
         RegistrationData: {
             id: number;
@@ -1232,6 +1291,7 @@ export interface components {
             };
             competition_count: number;
         };
+        Competitions: components["schemas"]["CompetitionInfo"][];
         UserGroup: {
             id: number;
             name: string;
@@ -1443,6 +1503,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WcifSchedule"];
+                };
+            };
+        };
+    };
+    competitionTabs: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Tabs"][];
                 };
             };
         };
@@ -1718,6 +1800,50 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Results"];
+                };
+            };
+        };
+    };
+    personRecords: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                wca_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Results"];
+                };
+            };
+        };
+    };
+    personCompetitions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                wca_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Competitions"];
                 };
             };
         };

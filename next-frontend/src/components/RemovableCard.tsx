@@ -32,7 +32,7 @@ export default function RemovableCard({
   if (!visible) return null;
 
   return (
-    <Card.Root flexDirection="row" size="lg" coloredBg>
+    <Card.Root flexDirection="row" size="lg" colorVariant="solid">
       <Image src={imageUrl} alt="removable card image" maxW="1/3" />
       <Card.Body>
         <HStack justifyContent="space-between">

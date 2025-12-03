@@ -51,6 +51,7 @@ required:
   - registration_full_and_accepted?
   - delegates
   - organizers
+  - tab_names
   - class
 properties:
   id:
@@ -187,6 +188,10 @@ properties:
   registration_full?:
     type: boolean
     example: true
+  tab_names:
+    type: array
+    items:
+      type: string
   delegates:
     type: array
     items:

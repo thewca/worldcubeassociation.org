@@ -322,3 +322,6 @@ RSpec/NamedSubject:
 
 RSpec/Be:
   Enabled: false
+
+RSpec/LeakyLocalVariable:
+  Enabled: false

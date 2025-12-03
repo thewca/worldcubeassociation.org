@@ -103,6 +103,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
 
   optional :ROOT_URL, :string, default_root_url
   optional :OIDC_ISSUER, :string, default_root_url
+  mandatory :OIDC_ALGORITHM, :string
 
   # For server status
   optional :BUILD_TAG, :string, "local"
