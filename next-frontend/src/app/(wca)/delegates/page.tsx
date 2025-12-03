@@ -31,7 +31,7 @@ export default async function DelegatesPage() {
   );
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left" gap="8" width="full" pt="8" alignItems="left">
         <Heading size="5xl">{t("delegates_page.title")}</Heading>
         <I18nHTMLTranslate

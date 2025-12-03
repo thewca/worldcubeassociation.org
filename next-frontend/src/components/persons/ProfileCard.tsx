@@ -12,6 +12,7 @@ import {
   Button,
   Icon,
   DataList,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import RoleBadge, { StaffColor } from "@/components/RoleBadge";
@@ -31,6 +32,9 @@ interface ProfileData {
   regionIso2: string;
   competitions: number;
   completedSolves: number;
+  medalCount: number;
+  recordCount: number;
+  championshipPodiumCount: number;
 }
 
 const ProfileCard: React.FC<ProfileData> = ({
@@ -42,7 +46,13 @@ const ProfileCard: React.FC<ProfileData> = ({
   regionIso2,
   competitions,
   completedSolves,
+  medalCount,
+  recordCount,
+  championshipPodiumCount,
 }) => {
+  const startYear = Number.parseInt(wcaId.slice(0, 4));
+  const currentYear = new Date().getFullYear();
+
   return (
     <Card.Root
       bg="gray.subtle"
@@ -56,15 +66,22 @@ const ProfileCard: React.FC<ProfileData> = ({
     >
       <Card.Header>
         <Center>
-          {/* Profile Picture */}
-          <Image src={profilePicture} rounded="md" alt="Profile Photo" />
+          <Image
+            src={profilePicture}
+            rounded="md"
+            alt="Profile Photo"
+            boxSize="sm"
+            objectFit="cover"
+          />
         </Center>
       </Card.Header>
 
       <Card.Body>
         <Card.Title marginBottom={2}>
           <Text textStyle="3xl">
-            {/* TODO SLATE - country flag here */}
+            <Icon asChild size="2xl">
+              <WcaFlag code={regionIso2} />
+            </Icon>
             {name}
           </Text>
           <Flex direction="row" wrap="wrap" align="start" gap="4px 8px">
@@ -78,55 +95,66 @@ const ProfileCard: React.FC<ProfileData> = ({
             ))}
           </Flex>
         </Card.Title>
-        <DataList.Root variant="bold">
-          <DataList.Item>
-            <DataList.ItemLabel>WCA ID</DataList.ItemLabel>
-            <DataList.ItemValue>{wcaId}</DataList.ItemValue>
-          </DataList.Item>
-          {gender !== "o" && (
+        <SimpleGrid columns={2} mb={4}>
+          <DataList.Root variant="bold">
             <DataList.Item>
-              <DataList.ItemLabel>Gender</DataList.ItemLabel>
-              <DataList.ItemValue>{gender}</DataList.ItemValue>
+              <DataList.ItemLabel>WCA ID</DataList.ItemLabel>
+              <DataList.ItemValue>{wcaId}</DataList.ItemValue>
             </DataList.Item>
-          )}
-          <DataList.Item>
-            <DataList.ItemLabel>Region</DataList.ItemLabel>
-            <DataList.ItemValue>
-              <WcaFlag code={regionIso2} fallback="" height="20" width="28" />
-              Representing {countries.byIso2[regionIso2].id}
-            </DataList.ItemValue>
-          </DataList.Item>
-          <DataList.Item>
-            <DataList.ItemLabel>Competitions</DataList.ItemLabel>
-            <DataList.ItemValue>{competitions}</DataList.ItemValue>
-          </DataList.Item>
-          <DataList.Item>
-            <DataList.ItemLabel>Completed Solves</DataList.ItemLabel>
-            <DataList.ItemValue>{completedSolves}</DataList.ItemValue>
-          </DataList.Item>
-        </DataList.Root>
+            {gender !== "o" && (
+              <DataList.Item>
+                <DataList.ItemLabel>Gender</DataList.ItemLabel>
+                <DataList.ItemValue>{gender}</DataList.ItemValue>
+              </DataList.Item>
+            )}
+            <DataList.Item>
+              <DataList.ItemLabel>Completed Solves</DataList.ItemLabel>
+              <DataList.ItemValue>{completedSolves}</DataList.ItemValue>
+            </DataList.Item>
+          </DataList.Root>
+          <DataList.Root variant="bold">
+            <DataList.Item>
+              <DataList.ItemLabel>Region</DataList.ItemLabel>
+              <DataList.ItemValue>
+                {countries.byIso2[regionIso2].id}
+              </DataList.ItemValue>
+            </DataList.Item>
+            <DataList.Item>
+              <DataList.ItemLabel>Competitions</DataList.ItemLabel>
+              <DataList.ItemValue>{competitions}</DataList.ItemValue>
+            </DataList.Item>
+          </DataList.Root>
+        </SimpleGrid>
       </Card.Body>
       <Card.Footer>
         <Flex flexDirection="row" alignItems="flex-end">
           <Flex flexWrap="wrap">
-            {" "}
-            {/* TODO SLATE - fill out these badges with real info */}
-            <Badge size="lg" textStyle="lg">
-              <NationalChampionshipIcon />
-              147 Championship Titles
-            </Badge>
-            <Badge size="lg" textStyle="lg">
-              <Icon>
-                <LuStar />
-              </Icon>
-              121 Time World Record Holder
-            </Badge>
-            <Badge size="lg" textStyle="lg">
-              <RegulationsHistoryIcon />3 Year Career
-            </Badge>
-            <Badge size="lg" textStyle="lg">
-              <MyResultsIcon />8 Gold Medals
-            </Badge>
+            {championshipPodiumCount > 0 && (
+              <Badge size="lg" textStyle="lg">
+                <NationalChampionshipIcon />
+                {championshipPodiumCount} Championship Podiums
+              </Badge>
+            )}
+            {recordCount > 0 && (
+              <Badge size="lg" textStyle="lg">
+                <Icon>
+                  <LuStar />
+                </Icon>
+                {recordCount} Time Record Holder
+              </Badge>
+            )}
+            {startYear !== currentYear && (
+              <Badge size="lg" textStyle="lg">
+                <RegulationsHistoryIcon />
+                {currentYear - startYear} Year Career
+              </Badge>
+            )}
+            {medalCount > 0 && (
+              <Badge size="lg" textStyle="lg">
+                <MyResultsIcon />
+                {medalCount} Medals
+              </Badge>
+            )}
           </Flex>
           <Dialog.Root placement="center" motionPreset="slide-in-bottom">
             <Dialog.Trigger asChild>

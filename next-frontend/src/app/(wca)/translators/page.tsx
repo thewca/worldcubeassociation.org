@@ -18,7 +18,7 @@ export default async function TranslatorsPage() {
     return <Errored error="Error Loading Translators" />;
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left">
         <Heading size="5xl">{t("page.translators.title")}</Heading>
         {_.map(translatorsByLanguage, (translators, language) => (
