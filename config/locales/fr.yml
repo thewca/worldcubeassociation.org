@@ -2885,6 +2885,16 @@ fr:
         veuillez préciser une date limite. Si vous n’utilisez pas de liste
         d’attente, n’oubliez pas de le préciser dans les conditions
         d’inscription.
+    live:
+      #original_hash: 10d1a3c
+      title: Résultats en direct
+      connection:
+        #original_hash: f92b311
+        initialized: Connexion en cours d'initialisation
+        #original_hash: 66d44d4
+        connected: 'Connecté, les résultats sont en cours de mise à jour'
+        #original_hash: 53abaa2
+        disconnected: 'Connexion perdue, les résultats ne sont pas mis à jour'
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mes compétitions
@@ -3631,13 +3641,10 @@ fr:
             Une limite de compétiteurs est requise. Seules les compétitions FMC
             simultanées avec plusieurs emplacements peuvent ne pas avoir de
             limite de compétiteurs.
-          #original_hash: b7b599b
+          #original_hash: 6127d47
           count: >-
-            Le nombre de compétiteurs autorisés dans cette compétition. Pour
-            l'instant ce nombre est informatif, et ne permet pas d'empêcher plus
-            de personnes de s'inscrire. Nous sommes en train de travailler sur
-            l'intégration de cette limite dans la procédure d'inscription, mais
-            cela demande un peu de travail.
+            Le nombre de compétiteurs autorisés dans cette compétition. Cette
+            limite est appliquée par le système d'inscriptions intégré au site.
           #original_hash: 4bd7102
           reason: >-
             Quelle est la raison pour la limite au nombre de compétiteurs ?
@@ -4554,18 +4561,16 @@ fr:
           %{regulation_link}).
         #original_hash: 83d204f
         regulation_link_text: 'Règle %{number}'
-        #original_hash: bd0e4a9
-        guideline_link_text: 'Recommandation %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: limite de temps cumulative
         #original_hash: d47f11a
         cumulative_one_round_html: >-
           Une %{cumulative_time_limit} peut être imposée (voir la
           %{regulation_link}).
-        #original_hash: c6190b6
+        #original_hash: 44f85f0
         cumulative_across_rounds_html: >-
           Une %{cumulative_time_limit} peut être imposée sur un ensemble de
-          tours (voir la %{guideline_link}).
+          tours (voir la %{regulation_link}).
         #original_hash: e8d17df
         cutoff_html: >-
           Le score à atteindre pour passer à la deuxième phase d'un tour avec
