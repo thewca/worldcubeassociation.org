@@ -30,7 +30,7 @@ const CompetitionsTab: React.FC<CompetitionsTabProps> = ({ wcaId }) => {
   }
 
   if (!competitionQuery) {
-    return <Text>Failed fetching results</Text>;
+    return <Text>Failed fetching competitions</Text>;
   }
 
   return (

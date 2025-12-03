@@ -1,3 +1,5 @@
+"use client";
+
 import { components } from "@/types/openapi";
 import Loading from "@/components/ui/loading";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
