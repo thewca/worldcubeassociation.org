@@ -6,7 +6,7 @@ import {
   ButtonGroup,
   CheckboxCard,
   CheckboxGroup,
-  Field,
+  Fieldset,
   VisuallyHidden,
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
@@ -58,8 +58,8 @@ export default function EventSelector({
       contentProps={{ css: { "--tooltip-bg": "#9f3a38" } }}
       content={t("registrations.errors.must_register")}
     >
-      <Field.Root>
-        <Field.Label textStyle="label">
+      <Fieldset.Root>
+        <Fieldset.Legend textStyle="label">
           {title}
           {showBreakBeforeButtons ? <br /> : " "}
           <ButtonGroup size="sm">
@@ -93,7 +93,7 @@ export default function EventSelector({
               </Button>
             )}
           </ButtonGroup>
-        </Field.Label>
+        </Fieldset.Legend>
         <CheckboxGroup disabled={disabled} flexDirection="row">
           {eventList.map((eventId) => {
             const currentEventSelected = selectedEvents.includes(eventId);
@@ -143,7 +143,7 @@ export default function EventSelector({
             );
           })}
         </CheckboxGroup>
-      </Field.Root>
+      </Fieldset.Root>
     </Tooltip>
   );
 }

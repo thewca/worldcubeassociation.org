@@ -3,7 +3,7 @@ import type { ConditionalValue } from "../css.types"
 
 export interface BadgeVariant {
   /** @default "subtle" */
-  variant?: "solid" | "subtle" | "outline" | "surface" | "plain" | "information" | undefined
+  variant?: "solid" | "subtle" | "outline" | "surface" | "plain" | undefined
   /** @default "sm" */
   size?: "xs" | "sm" | "md" | "lg" | undefined
 }
@@ -17,7 +17,7 @@ export type BadgeVariantMap = {
 }
 
 export interface ButtonVariant {
-  /** @default "lg" */
+  /** @default "md" */
   size?: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | undefined
   /** @default "solid" */
   variant?: "solid" | "subtle" | "surface" | "outline" | "ghost" | "plain" | undefined
@@ -118,10 +118,8 @@ export type KbdVariantMap = {
 }
 
 export interface LinkVariant {
-  /** @default "wca" */
-  variant?: "underline" | "plain" | "wca" | "header" | undefined
-  /** @default false */
-  hoverArrow?: boolean | undefined
+  /** @default "plain" */
+  variant?: "underline" | "plain" | undefined
 }
 
 export type LinkVariantProps = {
@@ -302,7 +300,7 @@ export type AccordionSlot = "root" | "item" | "itemTrigger" | "itemContent" | "i
 
 export interface AccordionVariant {
   /** @default "outline" */
-  variant?: "outline" | "subtle" | "enclosed" | "plain" | undefined
+  variant?: "outline" | "subtle" | "enclosed" | "plain" | "card" | undefined
   /** @default "md" */
   size?: "sm" | "md" | "lg" | undefined
 }
@@ -419,9 +417,9 @@ export type CardSlot = "root" | "header" | "body" | "footer" | "title" | "descri
 export interface CardVariant {
   /** @default "md" */
   size?: "sm" | "md" | "lg" | undefined
-  /** @default "outline" */
-  variant?: "elevated" | "outline" | "subtle" | undefined
-  coloredBg?: boolean | undefined
+  /** @default "info" */
+  variant?: "elevated" | "outline" | "subtle" | "info" | undefined
+  colorVariant?: "solid" | "muted" | "surface" | undefined
 }
 
 export type CardVariantProps = {
@@ -434,7 +432,19 @@ export type CardVariantMap = {
 
 // Carousel
 
-export type CarouselSlot = "root" | "itemGroup" | "item" | "control" | "nextTrigger" | "prevTrigger" | "indicatorGroup" | "indicator" | "autoplayTrigger"
+export type CarouselSlot =
+  | "root"
+  | "itemGroup"
+  | "item"
+  | "control"
+  | "nextTrigger"
+  | "prevTrigger"
+  | "indicatorGroup"
+  | "indicator"
+  | "autoplayTrigger"
+  | "progressText"
+  | "progressText"
+  | "autoplayIndicator"
 
 export interface CarouselVariant {}
 
@@ -545,6 +555,7 @@ export interface DataListVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "subtle" */
   variant?: "subtle" | "bold" | undefined
+  iconLabel?: boolean | undefined
 }
 
 export type DataListVariantProps = {
@@ -1151,6 +1162,20 @@ export type SliderVariantMap = {
   [K in keyof SliderVariant]: Array<SliderVariant[K]>
 }
 
+// Splitter
+
+export type SplitterSlot = "root" | "panel" | "resizeTrigger" | "resizeTriggerIndicator" | "resizeTriggerSeparator" | "resizeTriggerIndicator"
+
+export interface SplitterVariant {}
+
+export type SplitterVariantProps = {
+  [K in keyof SplitterVariant]?: ConditionalValue<SplitterVariant[K]> | undefined
+}
+
+export type SplitterVariantMap = {
+  [K in keyof SplitterVariant]: Array<SplitterVariant[K]>
+}
+
 // Stat
 
 export type StatSlot = "root" | "label" | "helpText" | "valueText" | "valueUnit" | "indicator"
@@ -1254,7 +1279,8 @@ export interface TabsVariant {
   /** @default "md" */
   size?: "sm" | "md" | "lg" | undefined
   /** @default "line" */
-  variant?: "line" | "subtle" | "enclosed" | "outline" | "plain" | "slider" | "results" | undefined
+  variant?: "line" | "subtle" | "enclosed" | "outline" | "plain" | undefined
+  highContrast?: boolean | undefined
 }
 
 export type TabsVariantProps = {
@@ -1505,6 +1531,7 @@ export interface ConfigSlotRecipes {
   select: SystemSlotRecipeFn<SelectSlot, SelectVariantProps, SelectVariantMap>
   combobox: SystemSlotRecipeFn<ComboboxSlot, ComboboxVariantProps, ComboboxVariantMap>
   slider: SystemSlotRecipeFn<SliderSlot, SliderVariantProps, SliderVariantMap>
+  splitter: SystemSlotRecipeFn<SplitterSlot, SplitterVariantProps, SplitterVariantMap>
   stat: SystemSlotRecipeFn<StatSlot, StatVariantProps, StatVariantMap>
   steps: SystemSlotRecipeFn<StepsSlot, StepsVariantProps, StepsVariantMap>
   switch: SystemSlotRecipeFn<SwitchSlot, SwitchVariantProps, SwitchVariantMap>
@@ -1560,6 +1587,7 @@ export interface ConfigRecipeSlots {
   select: SelectSlot
   combobox: ComboboxSlot
   slider: SliderSlot
+  splitter: SplitterSlot
   stat: StatSlot
   steps: StepsSlot
   switch: SwitchSlot

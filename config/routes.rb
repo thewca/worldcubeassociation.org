@@ -425,6 +425,7 @@ Rails.application.routes.draw do
       get '/persons' => "persons#index"
       get '/persons/:wca_id' => "persons#show", as: :person
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
+      get '/persons/:wca_id/records' => "persons#records", as: :person_records
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
       get '/persons/:wca_id/personal_records' => "persons#personal_records", as: :personal_records
       get '/regulations/translations' => 'regulations#translations', as: :regulations_translations
@@ -458,6 +459,7 @@ Rails.application.routes.draw do
         get '/registrations' => 'competitions#registrations'
         get '/events' => 'competitions#events'
         get '/schedule' => 'competitions#schedule'
+        get '/tabs' => 'competitions#tabs'
         get '/podiums' => 'competitions#podiums'
         get '/scrambles' => 'competitions#scrambles', as: :scrambles
         get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles

@@ -75,6 +75,9 @@ class Registration < ApplicationRecord
   validates :guests, numericality: { less_than_or_equal_to: DEFAULT_GUEST_LIMIT, if: :guests_unrestricted?, frontend_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT }
 
   after_save :mark_registration_processing_as_done
+  after_save :trigger_bulk_auto_accept, if: lambda {
+    competition.auto_accept_preference_live? && competing_status_previously_changed?(from: 'accepted')
+  }
 
   private def mark_registration_processing_as_done
     Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
@@ -553,12 +556,17 @@ class Registration < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
+  # Allows us to trigger bulk_auto_accept from within an instance of Registration
+  def trigger_bulk_auto_accept
+    self.class.bulk_auto_accept(self.competition)
+  end
+
   def self.bulk_auto_accept(competition)
     if competition.waiting_list.present?
       waitlisted_registrations = competition.registrations.find(competition.waiting_list.entries)
 
       waitlisted_outcomes = waitlisted_registrations.each_with_object({}) do |reg, hash|
-        result = reg.attempt_auto_accept(:bulk)
+        result = reg.attempt_auto_accept
         hash[reg.id] = result
         break hash unless result[:succeeded]
       end
@@ -571,7 +579,7 @@ class Registration < ApplicationRecord
                             .sort_by { |registration| registration.last_positive_payment.paid_at }
 
     # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
-    pending_outcomes = pending_registrations.index_by(&:id).transform_values { it.attempt_auto_accept(:bulk) }
+    pending_outcomes = pending_registrations.index_by(&:id).transform_values(&:attempt_auto_accept)
 
     waitlisted_outcomes.present? ? waitlisted_outcomes.merge(pending_outcomes) : pending_outcomes
   end
@@ -586,8 +594,8 @@ class Registration < ApplicationRecord
 
   delegate :auto_accept_preference, :auto_accept_preference_disabled?, :auto_accept_preference_bulk?, :auto_accept_preference_live?, to: :competition
 
-  def attempt_auto_accept(mode)
-    failure_reason = auto_accept_failure_reason(mode)
+  def attempt_auto_accept
+    failure_reason = auto_accept_failure_reason
     if failure_reason.present?
       log_auto_accept_failure(failure_reason)
       return { succeeded: false, info: failure_reason }
@@ -612,9 +620,9 @@ class Registration < ApplicationRecord
     end
   end
 
-  private def auto_accept_failure_reason(mode)
+  private def auto_accept_failure_reason
     return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
-    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if auto_accept_preference_disabled? || (auto_accept_preference.to_sym != mode)
+    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if auto_accept_preference_disabled?
     return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
     return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
     # Pending registrations can still be accepted onto the waiting list, so we only raise an error for already-waitlisted registrations
