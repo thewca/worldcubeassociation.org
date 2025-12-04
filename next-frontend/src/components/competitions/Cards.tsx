@@ -10,7 +10,6 @@ import {
   Stat,
   Badge,
   Wrap,
-  WrapItem,
 } from "@chakra-ui/react";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
 import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
