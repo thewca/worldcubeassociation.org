@@ -8,9 +8,13 @@ import EventSelector from "@/components/EventSelector";
 
 interface ResultsTabProps {
   wcaId: string;
+  eventsWithResults: string[];
 }
 
-const ResultsTab: React.FC<ResultsTabProps> = ({ wcaId }) => {
+const ResultsTab: React.FC<ResultsTabProps> = ({
+  wcaId,
+  eventsWithResults,
+}) => {
   const [eventId, setEventId] = useState("333");
 
   return (
@@ -20,6 +24,7 @@ const ResultsTab: React.FC<ResultsTabProps> = ({ wcaId }) => {
         selectedEvents={[eventId]}
         onEventClick={(e) => setEventId(e)}
         hideAllButton={true}
+        eventList={eventsWithResults}
         hideClearButton={true}
       />
       <Results wcaId={wcaId} eventId={eventId} />
