@@ -9,6 +9,8 @@ import {
   HStack,
   Stat,
   Badge,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
 import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
@@ -352,20 +354,21 @@ export function EventCard({
     <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Events List</Card.Title>
-        <HStack gap="4">
+        <Wrap gap="4">
           {competitionInfo.event_ids.map((event_id) => (
-            <EventIcon
-              key={event_id}
-              eventId={event_id}
-              boxSize="8"
-              color={
-                event_id === competitionInfo.main_event_id && event_id !== "333"
-                  ? "green.1A"
-                  : "currentColor"
-              }
-            />
+            <WrapItem key={event_id}>
+              <EventIcon
+                eventId={event_id}
+                boxSize="8"
+                color={
+                  event_id === competitionInfo.main_event_id
+                    ? "green.1A"
+                    : "currentColor"
+                }
+              />
+            </WrapItem>
           ))}
-        </HStack>
+        </Wrap>
       </Card.Body>
     </Card.Root>
   );
