@@ -2,6 +2,21 @@ import { Container, Text } from "@chakra-ui/react";
 import TabMenu from "@/components/competitions/TabMenu";
 import MobileMenu from "@/components/competitions/MobileMenu";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
+import { Metadata } from "next";
+
+type TitleProps = {
+  params: Promise<{ competitionId: string }>;
+};
+
+export async function generateMetadata({
+  params,
+}: TitleProps): Promise<Metadata> {
+  const { competitionId } = await params;
+
+  return {
+    title: `${competitionId}`,
+  };
+}
 
 export default async function CompetitionLayout({
   children,
