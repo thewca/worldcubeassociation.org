@@ -130,6 +130,7 @@ export function AdditionalInformationCard({
         <MarkdownProse
           as={Card.Description}
           content={competitionInfo.information}
+          imageProps={{ maxW: "sm" }}
           textStyle="body"
         />
       </Card.Body>
