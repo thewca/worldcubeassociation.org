@@ -2,6 +2,16 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import { Container, Heading, VStack, Box } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
+import { Metadata } from "next";
+import { getT } from "@/lib/i18n/get18n";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("layouts.navigation.privacy"),
+  };
+}
 
 export default async function Privacy() {
   const payload = await getPayload({ config });

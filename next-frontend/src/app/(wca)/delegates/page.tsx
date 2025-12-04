@@ -18,6 +18,15 @@ import UserBadge from "@/components/UserBadge";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import _ from "lodash";
 import Errored from "@/components/ui/errored";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("delegates_page.title"),
+  };
+}
 
 export default async function DelegatesPage() {
   const { t } = await getT();

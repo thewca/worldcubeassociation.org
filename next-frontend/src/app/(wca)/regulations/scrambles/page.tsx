@@ -10,10 +10,21 @@ import {
   List,
   Code,
 } from "@chakra-ui/react";
+import { Metadata } from "next";
+import { getT } from "@/lib/i18n/get18n";
 
 const LATEST_VERSION = "TNoodle-WCA-1.2.2";
 const LATEST_JARFILE =
   "https://github.com/thewca/tnoodle/releases/download/v1.2.2/TNoodle-WCA-1.2.2.jar";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    // This is currently hardcoded in Rails
+    title: t("WCA Scrambles"),
+  };
+}
 
 export default async function ScramblesPage() {
   return (

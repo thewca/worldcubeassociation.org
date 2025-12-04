@@ -15,6 +15,15 @@ import config from "@payload-config";
 import { Media } from "@/types/payload";
 import { MarkdownProse } from "@/components/Markdown";
 import { getT } from "@/lib/i18n/get18n";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("layouts.navigation.speedcubing_history"),
+  };
+}
 
 export default async function SpeedcubingHistory() {
   const payload = await getPayload({ config });

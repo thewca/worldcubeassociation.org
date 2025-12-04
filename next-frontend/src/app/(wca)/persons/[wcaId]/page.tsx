@@ -12,6 +12,25 @@ import MapTab from "@/components/persons/MapTab";
 import ChampionshipPodiumsTab from "@/components/persons/ChampionshipPodiums";
 import { StaffColor } from "@/components/RoleBadge";
 import { getT } from "@/lib/i18n/get18n";
+import { Metadata } from "next";
+
+type TitleProps = {
+  params: Promise<{ wcaId: string }>;
+};
+
+export async function generateMetadata({
+  params,
+}: TitleProps): Promise<Metadata> {
+  const { wcaId } = await params;
+
+  const { data: personDetails, error } = await getResultsByPerson(wcaId);
+
+  if (error || !personDetails) return { title: "Person Not Found" };
+
+  return {
+    title: `${personDetails.person.name}`,
+  };
+}
 
 export default async function PersonOverview({
   params,
