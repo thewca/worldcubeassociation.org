@@ -1,6 +1,6 @@
 import { Prose } from "@/components/ui/prose";
 import Markdown from "react-markdown";
-import { Link as ChakraLink } from "@chakra-ui/react";
+import { Link as ChakraLink, Image } from "@chakra-ui/react";
 
 import type { PolymorphicComponent } from "@/lib/types/components";
 
@@ -25,6 +25,7 @@ export const MarkdownProse: PolymorphicComponent<
               {children}
             </ChakraLink>
           ),
+          img: (img) => <Image src={img.src} maxW="sm" alt={img.alt} />,
         }}
       >
         {content}

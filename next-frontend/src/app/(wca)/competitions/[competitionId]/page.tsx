@@ -47,11 +47,11 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
           <EventCard competitionInfo={competitionInfo} />
         </VStack>
         <VStack gap="8" alignItems="stretch">
+          <OrganizationTeamCard competitionInfo={competitionInfo} />
           <Stack gap="8" width="100%" direction={{ base: "column", sm: "row" }}>
-            <OrganizationTeamCard competitionInfo={competitionInfo} />
+            <VenueDetailsCard competitionInfo={competitionInfo} />
             <MarkdownFirstImage content={competitionInfo.information} />
           </Stack>
-          <VenueDetailsCard competitionInfo={competitionInfo} />
           <RefundPolicyCard competitionInfo={competitionInfo} />
         </VStack>
         <GridItem colSpan={{ base: 1, md: 2 }}>
