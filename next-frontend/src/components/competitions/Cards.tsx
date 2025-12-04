@@ -356,17 +356,16 @@ export function EventCard({
         <Card.Title textStyle="s4">Events List</Card.Title>
         <Wrap gap="4">
           {competitionInfo.event_ids.map((event_id) => (
-            <WrapItem key={event_id}>
-              <EventIcon
-                eventId={event_id}
-                boxSize="8"
-                color={
-                  event_id === competitionInfo.main_event_id
-                    ? "green.1A"
-                    : "currentColor"
-                }
-              />
-            </WrapItem>
+            <EventIcon
+              key={event_id}
+              eventId={event_id}
+              boxSize="8"
+              color={
+                event_id === competitionInfo.main_event_id
+                  ? "green.1A"
+                  : "currentColor"
+              }
+            />
           ))}
         </Wrap>
       </Card.Body>
