@@ -76,7 +76,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
             onClearClick={() => setPsychSheetEvent(null)}
           />
         </Card.Title>
-        <Table.ScrollArea borderWidth="1px" maxW="xl">
+        <Table.ScrollArea borderWidth="1px" maxW="100%">
           {psychSheetEvent && (
             <PsychsheetTable
               pychsheet={psychSheetQuery!}
