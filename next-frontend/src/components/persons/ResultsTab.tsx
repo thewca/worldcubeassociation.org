@@ -8,9 +8,13 @@ import { SingleEventSelector } from "@/components/EventSelector";
 
 interface ResultsTabProps {
   wcaId: string;
+  eventsWithResults: string[];
 }
 
-const ResultsTab: React.FC<ResultsTabProps> = ({ wcaId }) => {
+const ResultsTab: React.FC<ResultsTabProps> = ({
+  wcaId,
+  eventsWithResults,
+}) => {
   const [eventId, setEventId] = useState("333");
 
   return (
@@ -19,6 +23,7 @@ const ResultsTab: React.FC<ResultsTabProps> = ({ wcaId }) => {
         title=""
         selectedEvent={eventId}
         onEventClick={setEventId}
+        eventList={eventsWithResults}
       />
       <Results wcaId={wcaId} eventId={eventId} />
     </VStack>
