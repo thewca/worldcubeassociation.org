@@ -228,6 +228,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
     <Carousel.Root
       orientation="vertical"
       slideCount={slides.length}
+      width="full"
       maxHeight="lg"
       loop
       position="relative"
