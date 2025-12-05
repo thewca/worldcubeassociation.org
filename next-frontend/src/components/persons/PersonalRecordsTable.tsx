@@ -1,5 +1,5 @@
 import React from "react";
-import {Card, Table, Text, IconButton, HStack} from "@chakra-ui/react";
+import { Card, Table, Text, IconButton, HStack } from "@chakra-ui/react";
 import { Tooltip } from "@/components/ui/tooltip";
 import SpeedcubingHistoryIcon from "@/components/icons/SpeedcubingHistoryIcon";
 import { LuShare2 } from "react-icons/lu";
@@ -24,9 +24,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
     <Card.Root overflow="hidden" width="full">
       <Card.Header>
         <HStack justify="space-between">
-          <Card.Title textStyle="s4">
-            Current Personal Records
-          </Card.Title>
+          <Card.Title textStyle="s4">Current Personal Records</Card.Title>
           <IconButton variant="ghost">
             <LuShare2 /> {/* TODO SLATE - implement share functionality */}
           </IconButton>

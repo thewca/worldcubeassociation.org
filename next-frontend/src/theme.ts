@@ -571,7 +571,7 @@ const customConfig = defineConfig({
               gap: 3,
               "& svg": {
                 fontSize: "4xl",
-              }
+              },
             },
           },
         },

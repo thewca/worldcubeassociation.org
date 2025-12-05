@@ -12,7 +12,7 @@ import MapTab from "@/components/persons/MapTab";
 import ChampionshipPodiumsTab from "@/components/persons/ChampionshipPodiums";
 import { StaffColor } from "@/components/RoleBadge";
 import _ from "lodash";
-import {FULL_EVENT_IDS} from "@/lib/wca/data/events";
+import { FULL_EVENT_IDS } from "@/lib/wca/data/events";
 import { Metadata } from "next";
 
 type TitleProps = {

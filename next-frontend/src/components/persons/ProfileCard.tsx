@@ -13,7 +13,9 @@ import {
   DataList,
   SimpleGrid,
   HStack,
-  Stat, Badge, Wrap, StatGroup,
+  Stat,
+  Badge,
+  StatGroup,
 } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import RoleBadge, { StaffColor } from "@/components/RoleBadge";
@@ -58,11 +60,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
   const { t } = await getT();
 
   return (
-    <Card.Root
-      size="sm"
-      position="sticky"
-      top={4}
-    >
+    <Card.Root size="sm" position="sticky" top={4}>
       <Card.Header>
         <Center>
           <Image
@@ -103,7 +101,9 @@ const ProfileCard: React.FC<ProfileData> = async ({
             {gender !== "o" && (
               <DataList.Item>
                 <DataList.ItemLabel>Gender</DataList.ItemLabel>
-                <DataList.ItemValue>{t(`enums.user.gender.${gender}`)}</DataList.ItemValue>
+                <DataList.ItemValue>
+                  {t(`enums.user.gender.${gender}`)}
+                </DataList.ItemValue>
               </DataList.Item>
             )}
             <DataList.Item>
@@ -140,7 +140,9 @@ const ProfileCard: React.FC<ProfileData> = async ({
                 <Dialog.Positioner>
                   <Dialog.Content>
                     <Dialog.Header>
-                      <Dialog.Title>Profile Achievements explained</Dialog.Title>
+                      <Dialog.Title>
+                        Profile Achievements explained
+                      </Dialog.Title>
                     </Dialog.Header>
                     <Dialog.Body>
                       <Text>
@@ -149,7 +151,8 @@ const ProfileCard: React.FC<ProfileData> = async ({
                         based achievements, but not exclusively.
                       </Text>
                       <Text>
-                        The badges that can be earned or displayed (right now) are:
+                        The badges that can be earned or displayed (right now)
+                        are:
                       </Text>
                       <List.Root>
                         <List.Item>Championship Podiums</List.Item>

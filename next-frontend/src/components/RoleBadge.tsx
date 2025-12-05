@@ -1,7 +1,7 @@
 "use client";
 
-import {chakra, Badge, createIcon, Float} from "@chakra-ui/react";
-import type {ComponentPropsWithoutRef, FC} from "react";
+import { chakra, Badge, createIcon, Float } from "@chakra-ui/react";
+import type { ComponentPropsWithoutRef, FC } from "react";
 
 type ChakraBadgeProps = ComponentPropsWithoutRef<typeof Badge>;
 
@@ -38,7 +38,7 @@ const StaffCubeIcon = createIcon({
   ),
   defaultProps: {
     boxSize: "1em",
-  }
+  },
 });
 
 const RoleBadge: FC<RoleBadgeProps> = ({
@@ -48,7 +48,15 @@ const RoleBadge: FC<RoleBadgeProps> = ({
   ...badgeProps
 }) => {
   return (
-    <Badge variant="subtle" colorPalette={colorPalette} position="relative" paddingLeft={4} marginY={2} marginLeft={3} {...badgeProps}>
+    <Badge
+      variant="subtle"
+      colorPalette={colorPalette}
+      position="relative"
+      paddingLeft={4}
+      marginY={2}
+      marginLeft={3}
+      {...badgeProps}
+    >
       <Float placement="middle-start">
         <StaffCubeIcon colorPalette={colorPalette} fontSize="3xl" />
       </Float>
