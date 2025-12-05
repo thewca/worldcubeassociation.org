@@ -25,6 +25,7 @@ export function ResultsTable({
   const event = events.byId[eventId];
 
   const solveCount = event.recommendedFormat.expected_solve_count;
+  const anyAverages = results.some((r) => r.average !== 0);
 
   return (
     <Table.ScrollArea rounded="md" maxW="full">
@@ -35,7 +36,7 @@ export function ResultsTable({
             {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
             <Table.ColumnHeader>Competitor</Table.ColumnHeader>
             <Table.ColumnHeader>Best</Table.ColumnHeader>
-            {solveCount > 2 && <Table.ColumnHeader>Average</Table.ColumnHeader>}
+            {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
             <Table.ColumnHeader>Representing</Table.ColumnHeader>
             <Table.ColumnHeader colSpan={solveCount} textAlign="left">
               Solves
@@ -65,7 +66,7 @@ export function ResultsTable({
                   {formatAttemptResult(competitorResult.best, eventId)}{" "}
                   {recordTagBadge(competitorResult.regional_single_record)}
                 </Table.Cell>
-                {solveCount > 2 && (
+                {anyAverages && (
                   <Table.Cell style={{ position: "relative" }}>
                     {formatAttemptResult(competitorResult.average, eventId)}{" "}
                     {recordTagBadge(competitorResult.regional_average_record)}
