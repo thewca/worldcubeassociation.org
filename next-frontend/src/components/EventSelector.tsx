@@ -10,6 +10,7 @@ import {
   HStack,
   RadioCard,
   VisuallyHidden,
+  Wrap,
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -47,7 +48,6 @@ export function SingleEventSelector({
   eventList = WCA_EVENT_IDS,
   selectedEvent,
   onEventClick,
-  eventButtonsCompact,
   disabled,
 }: SingleEventSelectorProps) {
   return (
@@ -59,7 +59,7 @@ export function SingleEventSelector({
       onValueChange={(e) => onEventClick(e.value ?? "")}
     >
       {title && <RadioCard.Label>{title}</RadioCard.Label>}
-      <HStack>
+      <Wrap>
         {eventList.map((eventId) => {
           return (
             <RadioCard.Item
@@ -75,12 +75,12 @@ export function SingleEventSelector({
             </RadioCard.Item>
           );
         })}
-      </HStack>
+      </Wrap>
     </RadioCard.Root>
   );
 }
 
-function EventSelectorMulti({
+export function MultiEventSelector({
   title,
   eventList = WCA_EVENT_IDS,
   selectedEvents,
