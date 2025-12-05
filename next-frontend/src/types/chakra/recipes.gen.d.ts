@@ -3,7 +3,7 @@ import type { ConditionalValue } from "../css.types"
 
 export interface BadgeVariant {
   /** @default "subtle" */
-  variant?: "solid" | "subtle" | "outline" | "surface" | "plain" | undefined
+  variant?: "solid" | "subtle" | "outline" | "surface" | "plain" | "achievement" | undefined
   /** @default "sm" */
   size?: "xs" | "sm" | "md" | "lg" | undefined
 }

@@ -562,6 +562,20 @@ const customConfig = defineConfig({
           colorPalette: "link",
         },
       },
+      badge: {
+        variants: {
+          variant: {
+            achievement: {
+              fontWeight: "inherit",
+              paddingX: 2.5,
+              gap: 3,
+              "& svg": {
+                fontSize: "4xl",
+              },
+            },
+          },
+        },
+      },
     },
     slotRecipes: {
       dataList: {
