@@ -7,13 +7,15 @@ import {
   CheckboxCard,
   CheckboxGroup,
   Fieldset,
+  HStack,
+  RadioCard,
   VisuallyHidden,
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
 import EventIcon from "@/components/EventIcon";
 
-interface EventSelectorProps {
+interface MultiEventSelectorProps {
   title: string;
   eventList?: string[];
   selectedEvents: string[];
@@ -31,7 +33,54 @@ interface EventSelectorProps {
   disabledText?: (eventId: string) => string;
 }
 
-export default function EventSelector({
+interface SingleEventSelectorProps {
+  title: string;
+  eventList?: string[];
+  selectedEvent: string;
+  onEventClick: (eventId: string) => void;
+  disabled?: boolean;
+  eventButtonsCompact?: boolean;
+}
+
+export function SingleEventSelector({
+  title,
+  eventList = WCA_EVENT_IDS,
+  selectedEvent,
+  onEventClick,
+  eventButtonsCompact,
+  disabled,
+}: SingleEventSelectorProps) {
+  return (
+    <RadioCard.Root
+      disabled={disabled}
+      orientation="vertical"
+      align="center"
+      value={selectedEvent}
+      onValueChange={(e) => onEventClick(e.value ?? "")}
+    >
+      {title && <RadioCard.Label>{title}</RadioCard.Label>}
+      <HStack>
+        {eventList.map((eventId) => {
+          return (
+            <RadioCard.Item
+              key={eventId}
+              colorPalette="green"
+              disabled={disabled}
+              value={eventId}
+            >
+              <RadioCard.ItemHiddenInput />
+              <RadioCard.ItemControl>
+                <EventIcon fontSize="2xl" eventId={eventId} />
+              </RadioCard.ItemControl>
+            </RadioCard.Item>
+          );
+        })}
+      </HStack>
+    </RadioCard.Root>
+  );
+}
+
+function EventSelectorMulti({
   title,
   eventList = WCA_EVENT_IDS,
   selectedEvents,
@@ -47,7 +96,7 @@ export default function EventSelector({
   maxEvents = Infinity,
   eventsDisabled = [],
   disabledText = () => "",
-}: EventSelectorProps) {
+}: MultiEventSelectorProps) {
   const { t } = useT();
 
   return (
