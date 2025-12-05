@@ -26,6 +26,7 @@ export default function Footer() {
         <HStack>
           <IconButton variant="ghost" asChild>
             <ChakraLink
+              textStyle="headerLink"
               href="https://www.instagram.com/thewcaofficial/"
               target="_blank"
             >
@@ -34,6 +35,7 @@ export default function Footer() {
           </IconButton>
           <IconButton variant="ghost" asChild>
             <ChakraLink
+              textStyle="headerLink"
               href="https://www.facebook.com/WorldCubeAssociation/"
               target="_blank"
             >
@@ -42,6 +44,7 @@ export default function Footer() {
           </IconButton>
           <IconButton variant="ghost" asChild>
             <ChakraLink
+              textStyle="headerLink"
               href="https://www.twitter.com/theWCAofficial/"
               target="_blank"
             >
@@ -50,6 +53,7 @@ export default function Footer() {
           </IconButton>
           <IconButton variant="ghost" asChild>
             <ChakraLink
+              textStyle="headerLink"
               href="https://github.com/thewca/worldcubeassociation.org"
               target="_blank"
             >
@@ -58,6 +62,7 @@ export default function Footer() {
           </IconButton>
           <IconButton variant="ghost" asChild>
             <ChakraLink
+              textStyle="headerLink"
               href="https://www.youtube.com/channel/UC5OUMUnS8PvY1RvtB1pQZ0g"
               target="_blank"
             >

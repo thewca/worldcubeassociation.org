@@ -398,15 +398,18 @@ const customConfig = defineConfig({
             medium: { value: "#DCDCDC" },
             dark: { value: "#B8B8B8" },
           },
-          link: { value: "#0051BA" },
+          link: {
+            DEFAULT: { value: "#0051BA" },
+            lighter: { value: "#6B93E0" },
+          },
         },
       },
     },
     semanticTokens: {
       colors: {
         link: {
-          DEFAULT: { value: "{colors.supplementary.link}" },
-          fg: { value: "{colors.supplementary.link}" },
+          DEFAULT: { value: { _light: "{colors.supplementary.link}", _dark: "{colors.supplementary.link.lighter}" } },
+          fg: { value: "{colors.link}" },
         },
         advancing: { value: "{colors.green.1A}" },
         advancingQuestionable: { value: "{colors.yellow.1A}" },
@@ -533,6 +536,7 @@ const customConfig = defineConfig({
           fontSize: "1rem",
           lineHeight: "1.5rem",
           fontWeight: "medium",
+          color: "currentColor",
         },
       },
     },
@@ -560,7 +564,13 @@ const customConfig = defineConfig({
       link: {
         base: {
           colorPalette: "link",
+          textStyle: "hyperlink",
         },
+      },
+      text: {
+        base: {
+          textStyle: "body",
+        }
       },
     },
     slotRecipes: {
@@ -697,7 +707,7 @@ const customConfig = defineConfig({
                   transitionDuration: "150ms",
                 },
                 "&:nth-of-type(odd) td": {
-                  bg: "bg.muted",
+                  bg: "bg.subtle",
                 },
                 "&:hover td": {
                   bg: "colorPalette.fg/60",
