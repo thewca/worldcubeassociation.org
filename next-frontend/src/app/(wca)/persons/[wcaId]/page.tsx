@@ -87,6 +87,8 @@ export default async function PersonOverview({
   const hasMedals = medalCount > 0;
   const hasChampionshipPodiums = championshipPodiumCount !== 0;
 
+  const eventsWithResults = Object.keys(personDetails.personal_records);
+
   return (
     <Container centerContent maxW="1800px">
       {/* Profile Section */}
@@ -163,7 +165,10 @@ export default async function PersonOverview({
                   </Card.Header>
                   <Card.Body>
                     <Tabs.Content value="results">
-                      <ResultsTab wcaId={wcaId} />
+                      <ResultsTab
+                        wcaId={wcaId}
+                        eventsWithResults={eventsWithResults}
+                      />
                     </Tabs.Content>
                     <Tabs.Content value="competitions">
                       <CompetitionsTab wcaId={wcaId} />
