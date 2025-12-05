@@ -1,5 +1,5 @@
 import { Container, Tabs, Text, Card } from "@chakra-ui/react";
-import { getResultsByPerson } from "@/lib/wca/persons/getResultsByPerson";
+import { getPersonInfo } from "@/lib/wca/persons/getPersonInfo";
 import ProfileCard from "@/components/persons/ProfileCard";
 import { GridItem, SimpleGrid } from "@chakra-ui/react";
 import PersonalRecordsTable from "@/components/persons/PersonalRecordsTable";
@@ -23,7 +23,7 @@ export async function generateMetadata({
 }: TitleProps): Promise<Metadata> {
   const { wcaId } = await params;
 
-  const { data: personDetails, error } = await getResultsByPerson(wcaId);
+  const { data: personDetails, error } = await getPersonInfo(wcaId);
 
   if (error || !personDetails) return { title: "Person Not Found" };
 
@@ -38,7 +38,7 @@ export default async function PersonOverview({
   params: Promise<{ wcaId: string }>;
 }) {
   const { wcaId } = await params;
-  const { data: personDetails, error } = await getResultsByPerson(wcaId);
+  const { data: personDetails, error } = await getPersonInfo(wcaId);
   const { t } = await getT();
 
   if (error) {
