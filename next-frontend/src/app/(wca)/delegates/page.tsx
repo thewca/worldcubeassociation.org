@@ -1,9 +1,8 @@
 import {
-  Center,
   Container,
   Heading,
   Link,
-  Table,
+  SimpleGrid,
   Tabs,
   VStack,
 } from "@chakra-ui/react";
@@ -71,16 +70,14 @@ function DelegateTab({ group }: { group: components["schemas"]["UserGroup"] }) {
 
   return (
     <VStack align="left">
-      <Heading size="2xl">{name}</Heading>
+      <Heading textStyle="h2">{name}</Heading>
       <Link href={`mailto:${email}`}>{email}</Link>
-      <Center>
-        <UserBadge
-          key={lead_user!.id}
-          profilePicture={lead_user!.avatar.url}
-          name={lead_user!.name}
-          wcaId={lead_user!.wca_id}
-        />
-      </Center>
+      <UserBadge
+        key={lead_user!.id}
+        profilePicture={lead_user!.avatar.url}
+        name={lead_user!.name}
+        wcaId={lead_user!.wca_id}
+      />
       <MemberTable id={id} />
     </VStack>
   );
@@ -96,39 +93,26 @@ async function MemberTable({ id }: { id: number }) {
   const roles = _.groupBy(delegateRoles, "group.name");
 
   return _.map(roles, (delegates, region) => (
-    <VStack>
+    <VStack align="left">
       <Heading size="xl">{region}</Heading>
-      <Table.Root>
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeader>
-              {t("delegates_page.table.name")}
-            </Table.ColumnHeader>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {delegates.map((role) => (
-            <Table.Row key={role.id}>
-              <Table.Cell>
-                <UserBadge
-                  key={role.id}
-                  profilePicture={role.user.avatar.url}
-                  name={role.user.name}
-                  wcaId={role.user.wca_id}
-                  roles={[
-                    {
-                      teamRole: t(
-                        `enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`,
-                      ),
-                      staffColor: "yellow",
-                    },
-                  ]}
-                />
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table.Root>
+      <SimpleGrid columns={2} gap={2}>
+        {delegates.map((role) => (
+          <UserBadge
+            key={role.id}
+            profilePicture={role.user.avatar.url}
+            name={role.user.name}
+            wcaId={role.user.wca_id}
+            roles={[
+              {
+                teamRole: t(
+                  `enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`,
+                ),
+                staffColor: "yellow",
+              },
+            ]}
+          />
+        ))}
+      </SimpleGrid>
     </VStack>
   ));
 }
