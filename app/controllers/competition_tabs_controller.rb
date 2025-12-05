@@ -59,6 +59,6 @@ class CompetitionTabsController < ApplicationController
   end
 
   private def competition_tab_params
-    params.require(:competition_tab).permit(:name, :content)
+    params.expect(competition_tab: %i[name content])
   end
 end

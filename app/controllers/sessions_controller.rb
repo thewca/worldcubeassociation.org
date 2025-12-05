@@ -134,7 +134,7 @@ class SessionsController < Devise::SessionsController
     end
 
     def user_params
-      params.require(:user).permit(:login, :password, :otp_attempt, :remember_me)
+      params.expect(user: %i[login password otp_attempt remember_me])
     end
 
     def find_user

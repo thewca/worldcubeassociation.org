@@ -32,6 +32,6 @@ class VotesController < ApplicationController
   end
 
   def vote_params
-    params.require(:vote).permit(:poll_id, :comment, poll_option_ids: [])
+    params.expect(vote: [:poll_id, :comment, { poll_option_ids: [] }])
   end
 end

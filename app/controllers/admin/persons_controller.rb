@@ -54,7 +54,7 @@ module Admin
     end
 
     private def person_params
-      params.require(:person).permit(:name, :wca_id, :dob, :gender, :country_id)
+      params.expect(person: %i[name wca_id dob gender country_id])
     end
   end
 end
