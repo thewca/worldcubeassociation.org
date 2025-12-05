@@ -13,6 +13,15 @@ import { MarkdownProse } from "@/components/Markdown";
 import { Media } from "@/types/payload";
 import LogoDownload from "@/app/(wca)/logo/download";
 import { Fragment } from "react";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("logo.title"),
+  };
+}
 
 export default async function LogoPage() {
   const payload = await getPayload({ config });

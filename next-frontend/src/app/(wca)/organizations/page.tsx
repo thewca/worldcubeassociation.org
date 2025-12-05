@@ -21,6 +21,15 @@ import Errored from "@/components/ui/errored";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import _ from "lodash";
 import WcaFlag from "@/components/WcaFlag";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("regional_organizations.title"),
+  };
+}
 
 export default async function RegionalOrganizations() {
   const I18n = await getT();

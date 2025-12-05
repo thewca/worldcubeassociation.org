@@ -17,6 +17,15 @@ import {
 } from "@/lib/wca/roles/teamsCommittees";
 import Errored from "@/components/ui/errored";
 import getPermissions from "@/lib/wca/permissions";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("page.teams_committees_councils.title"),
+  };
+}
 
 export default async function TeamsCommitteesPage() {
   const { t } = await getT();

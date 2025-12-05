@@ -1,5 +1,5 @@
 import { Container, Tabs, Text, Card } from "@chakra-ui/react";
-import { getResultsByPerson } from "@/lib/wca/persons/getResultsByPerson";
+import { getPersonInfo } from "@/lib/wca/persons/getPersonInfo";
 import ProfileCard from "@/components/persons/ProfileCard";
 import { GridItem, SimpleGrid } from "@chakra-ui/react";
 import PersonalRecordsTable from "@/components/persons/PersonalRecordsTable";
@@ -12,6 +12,25 @@ import MapTab from "@/components/persons/MapTab";
 import ChampionshipPodiumsTab from "@/components/persons/ChampionshipPodiums";
 import { StaffColor } from "@/components/RoleBadge";
 import { getT } from "@/lib/i18n/get18n";
+import { Metadata } from "next";
+
+type TitleProps = {
+  params: Promise<{ wcaId: string }>;
+};
+
+export async function generateMetadata({
+  params,
+}: TitleProps): Promise<Metadata> {
+  const { wcaId } = await params;
+
+  const { data: personDetails, error } = await getPersonInfo(wcaId);
+
+  if (error || !personDetails) return { title: "Person Not Found" };
+
+  return {
+    title: `${personDetails.person.name}`,
+  };
+}
 
 export default async function PersonOverview({
   params,
@@ -19,7 +38,7 @@ export default async function PersonOverview({
   params: Promise<{ wcaId: string }>;
 }) {
   const { wcaId } = await params;
-  const { data: personDetails, error } = await getResultsByPerson(wcaId);
+  const { data: personDetails, error } = await getPersonInfo(wcaId);
   const { t } = await getT();
 
   if (error) {

@@ -11,6 +11,15 @@ import { components } from "@/types/openapi";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import { getRegulationsTranslations } from "@/lib/wca/regulations/getRegulationsTranslations";
 import Errored from "@/components/ui/errored";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("regulations_translations.title"),
+  };
+}
 
 export default async function RegulationsTranslations() {
   const { t } = await getT();

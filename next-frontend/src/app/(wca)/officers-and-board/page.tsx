@@ -12,6 +12,15 @@ import { MdMarkEmailUnread } from "react-icons/md";
 import Errored from "@/components/ui/errored";
 import { getT } from "@/lib/i18n/get18n";
 import { getBoardRoles, getOfficersRoles } from "@/lib/wca/roles/activeRoles";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("logo.title"),
+  };
+}
 
 export default async function OfficersAndBoard() {
   const { t } = await getT();

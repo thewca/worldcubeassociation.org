@@ -4,12 +4,21 @@ import React from "react";
 import FilteredRecords from "@/app/(wca)/results/records/filteredRecords";
 import { HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { dehydrate } from "@tanstack/query-core";
+import { Metadata } from "next";
+import { getT } from "@/lib/i18n/get18n";
 
 const GENDER_ALL = "All";
 const EVENTS_ALL = "all events";
 const SHOW_MIXED = "mixed";
 const REGION_WORLD = "world";
 
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("results.records.title"),
+  };
+}
 export default async function RecordsPage({
   searchParams,
 }: {
