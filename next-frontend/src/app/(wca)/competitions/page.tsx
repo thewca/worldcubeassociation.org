@@ -161,8 +161,11 @@ export default function CompetitionsPage() {
           <Tabs.Root variant="subtle" colorPalette="blue" defaultValue="list">
             <Card.Header asChild>
               <HStack justify="space-between">
-                <Card.Title textStyle="h1">
-                  <AllCompsIcon /> All Competitions
+                <Card.Title>
+                  <HStack gap={3}>
+                    <AllCompsIcon fontSize="5xl" marginTop="-2" />
+                    <Text textStyle="h1">All Competitions</Text>
+                  </HStack>
                 </Card.Title>
                 <Tabs.List>
                   <Tabs.Trigger value="list">
