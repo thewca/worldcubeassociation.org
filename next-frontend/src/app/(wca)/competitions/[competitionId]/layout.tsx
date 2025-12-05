@@ -13,8 +13,13 @@ export async function generateMetadata({
 }: TitleProps): Promise<Metadata> {
   const { competitionId } = await params;
 
+  const { data: competitionInfo, error } =
+    await getCompetitionInfo(competitionId);
+
+  if (error || !competitionInfo) return { title: "Competition Not Found" };
+
   return {
-    title: `${competitionId}`,
+    title: `${competitionInfo.name}`,
   };
 }
 
