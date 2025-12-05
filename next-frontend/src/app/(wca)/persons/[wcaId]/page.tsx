@@ -11,7 +11,8 @@ import RecordsTab from "@/components/persons/RecordsTab";
 import MapTab from "@/components/persons/MapTab";
 import ChampionshipPodiumsTab from "@/components/persons/ChampionshipPodiums";
 import { StaffColor } from "@/components/RoleBadge";
-import { getT } from "@/lib/i18n/get18n";
+import _ from "lodash";
+import {FULL_EVENT_IDS} from "@/lib/wca/data/events";
 import { Metadata } from "next";
 
 type TitleProps = {
@@ -39,7 +40,6 @@ export default async function PersonOverview({
 }) {
   const { wcaId } = await params;
   const { data: personDetails, error } = await getPersonInfo(wcaId);
-  const { t } = await getT();
 
   if (error) {
     return <Text>Error fetching person</Text>;
@@ -106,19 +106,22 @@ export default async function PersonOverview({
   const hasMedals = medalCount > 0;
   const hasChampionshipPodiums = championshipPodiumCount !== 0;
 
-  const eventsWithResults = Object.keys(personDetails.personal_records);
+  const eventsWithResults = _.intersection(
+    FULL_EVENT_IDS,
+    Object.keys(personDetails.personal_records),
+  );
 
   return (
-    <Container centerContent maxW="1800px">
+    <Container centerContent>
       {/* Profile Section */}
-      <SimpleGrid gap={8} columns={24} padding={5}>
-        <GridItem colSpan={7} h="80lvh" position="sticky" top="0px" pt="20px">
+      <SimpleGrid gap={8} columns={24} paddingY={8}>
+        <GridItem colSpan={7}>
           <ProfileCard
             name={personDetails.person.name}
             profilePicture={personDetails.person.avatar.url}
             roles={roles}
             wcaId={wcaId}
-            gender={t(`enums.user.gender.${personDetails.person.gender}`)}
+            gender={personDetails.person.gender}
             regionIso2={personDetails.person.country_iso2}
             competitions={personDetails.competition_count}
             completedSolves={personDetails.total_solves}
@@ -128,7 +131,7 @@ export default async function PersonOverview({
           />
         </GridItem>
         {/* Records and Medals */}
-        <GridItem colSpan={17} pt="20px">
+        <GridItem colSpan={17}>
           <PersonalRecordsTable records={personDetails.personal_records} />
           <SimpleGrid gap={8} columns={6} padding={0} pt={8}>
             {hasMedals && (

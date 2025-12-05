@@ -1,12 +1,12 @@
 import React from "react";
-import { Card, Table, Flex, Icon, Text, Box, Button } from "@chakra-ui/react";
+import {Card, Table, Text, IconButton, HStack} from "@chakra-ui/react";
 import { Tooltip } from "@/components/ui/tooltip";
 import SpeedcubingHistoryIcon from "@/components/icons/SpeedcubingHistoryIcon";
-import { eventIconMap } from "@/components/icons/EventIconMap";
 import { LuShare2 } from "react-icons/lu";
 import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
+import EventIcon from "@/components/EventIcon";
 
 interface RecordsProps {
   records: components["schemas"]["PersonInfo"]["personal_records"];
@@ -21,32 +21,26 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
   };
 
   return (
-    <Card.Root bg="bg" shadow="wca" overflow="hidden" width="full">
-      <Card.Body p={0}>
-        <Card.Header display="flex" flexDirection="row" alignItems="center">
-          <Card.Title
-            p={5}
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
+    <Card.Root overflow="hidden" width="full">
+      <Card.Header>
+        <HStack justify="space-between">
+          <Card.Title textStyle="s4">
             Current Personal Records
           </Card.Title>
-          <Button variant="ghost" ml="auto" p="0">
+          <IconButton variant="ghost">
             <LuShare2 /> {/* TODO SLATE - implement share functionality */}
-          </Button>
-        </Card.Header>
-        <Table.Root size="xs" striped rounded="md">
+          </IconButton>
+        </HStack>
+      </Card.Header>
+      <Card.Body paddingX={0} paddingBottom={0}>
+        <Table.Root size="xs" striped>
           <Table.Header>
-            <Table.Row bg="bg">
-              <Table.ColumnHeader pl="3">
-                <Flex direction="row">
-                  <Box fontSize="18px" pr="5px">
-                    <SpeedcubingHistoryIcon />
-                  </Box>
+            <Table.Row>
+              <Table.ColumnHeader paddingStart={4}>
+                <HStack>
+                  <SpeedcubingHistoryIcon fontSize="md" />
                   <Text fontWeight="medium">Event</Text>
-                </Flex>
+                </HStack>
               </Table.ColumnHeader>
               <Tooltip content="National Ranking" showArrow openDelay={100}>
                 <Table.ColumnHeader textAlign="right">NR</Table.ColumnHeader>
@@ -75,21 +69,18 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
               const event = eventObject.id;
               const record = records[event];
               if (!record) return null;
-              const IconComponent = eventIconMap[event];
               return (
-                <Table.Row key={event} bg="bg">
-                  <Table.Cell pl="3">
-                    <Flex direction="row" alignItems="center">
-                      <Icon width="1.6em" height="1.6em" fontSize="md" pr="5px">
-                        <IconComponent />
-                      </Icon>
+                <Table.Row key={event}>
+                  <Table.Cell paddingStart={4}>
+                    <HStack>
+                      <EventIcon eventId={event} fontSize="2xl" />
                       <Text fontWeight="medium">{eventObject.name}</Text>
-                    </Flex>
+                    </HStack>
                   </Table.Cell>
                   <Table.Cell
                     color={getColor(record.single.country_rank)}
                     fontWeight={
-                      record.single.country_rank < 11 ? "bold" : "light"
+                      record.single.country_rank <= 10 ? "bold" : "light"
                     }
                     textAlign="right"
                   >
@@ -98,7 +89,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                   <Table.Cell
                     color={getColor(record.single.continent_rank)}
                     fontWeight={
-                      record.single.continent_rank < 11 ? "bold" : "light"
+                      record.single.continent_rank <= 10 ? "bold" : "light"
                     }
                     textAlign="right"
                   >
@@ -107,7 +98,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                   <Table.Cell
                     color={getColor(record.single.world_rank)}
                     fontWeight={
-                      record.single.world_rank < 11 ? "bold" : "light"
+                      record.single.world_rank <= 10 ? "bold" : "light"
                     }
                     textAlign="right"
                   >
@@ -124,7 +115,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                     color={getColor(record.average?.world_rank)}
                     fontWeight={
                       record.average?.world_rank &&
-                      record.average?.world_rank < 11
+                      record.average?.world_rank <= 10
                         ? "bold"
                         : "light"
                     }
@@ -136,7 +127,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                     color={getColor(record.average?.continent_rank)}
                     fontWeight={
                       record.average?.continent_rank &&
-                      record.average?.continent_rank < 11
+                      record.average?.continent_rank <= 10
                         ? "bold"
                         : "light"
                     }
@@ -148,7 +139,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                     color={getColor(record.average?.country_rank)}
                     fontWeight={
                       record.average?.country_rank &&
-                      record.average?.country_rank < 11
+                      record.average?.country_rank <= 10
                         ? "bold"
                         : "light"
                     }
