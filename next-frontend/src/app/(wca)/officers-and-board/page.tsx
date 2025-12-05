@@ -34,7 +34,7 @@ export default async function OfficersAndBoard() {
   const officers = _.uniqBy(officerRoles, "user.wca_id");
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left">
         <Heading size="5xl">{t("page.officers_and_board.title")}</Heading>
         <Heading size="2xl">{t("user_groups.group_types.officers")}</Heading>

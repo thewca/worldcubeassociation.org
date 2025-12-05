@@ -66,18 +66,26 @@ export default async function PersonOverview({
     });
   }
 
-  const hasRecords =
-    personDetails.records.national > 0 ||
-    personDetails.records.continental > 0 ||
-    personDetails.records.world > 0;
-  const hasMedals =
-    personDetails.medals.gold > 0 ||
-    personDetails.medals.silver > 0 ||
-    personDetails.medals.bronze > 0;
-  const hasChampionshipPodiums =
-    personDetails.championship_podiums?.continental?.length ||
-    personDetails.championship_podiums?.national?.length ||
-    personDetails.championship_podiums?.world?.length;
+  const medalCount =
+    personDetails.medals.gold +
+    personDetails.medals.silver +
+    personDetails.medals.bronze;
+
+  const recordCount =
+    personDetails.records.national +
+    personDetails.records.continental +
+    personDetails.records.world;
+
+  const podiums = personDetails.championship_podiums;
+
+  const championshipPodiumCount =
+    (podiums?.continental?.length ?? 0) +
+    (podiums?.national?.length ?? 0) +
+    (podiums?.world?.length ?? 0);
+
+  const hasRecords = recordCount > 0;
+  const hasMedals = medalCount > 0;
+  const hasChampionshipPodiums = championshipPodiumCount !== 0;
 
   return (
     <Container centerContent maxW="1800px">
@@ -92,7 +100,10 @@ export default async function PersonOverview({
             gender={t(`enums.user.gender.${personDetails.person.gender}`)}
             regionIso2={personDetails.person.country_iso2}
             competitions={personDetails.competition_count}
-            completedSolves={1659}
+            completedSolves={personDetails.total_solves}
+            medalCount={medalCount}
+            recordCount={recordCount}
+            championshipPodiumCount={championshipPodiumCount}
           />
         </GridItem>
         {/* Records and Medals */}

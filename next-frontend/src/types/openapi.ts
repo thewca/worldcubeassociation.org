@@ -989,7 +989,7 @@ export interface components {
         Tabs: {
             id: string;
             competition_id: string;
-            name?: string;
+            name: string;
             content: string;
             display_order: number;
         };
@@ -1290,6 +1290,7 @@ export interface components {
                 national?: Record<string, never>[];
             };
             competition_count: number;
+            total_solves: number;
         };
         Competitions: components["schemas"]["CompetitionInfo"][];
         UserGroup: {

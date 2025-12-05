@@ -23,7 +23,7 @@ export default async function RegulationsTranslations() {
   const { current, outdated } = translationRequest;
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left">
         <Heading size="5xl">{t("regulations_translations.title")}</Heading>
         <Text>{t("regulations_translations.paragraph1")}</Text>

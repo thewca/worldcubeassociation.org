@@ -15,7 +15,7 @@ export default async function ResultExportPage() {
   if (!exports) return <Loading />;
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left" gap="16px" as="span">
         <Heading size="5xl">{t("database.developer_export.heading")}</Heading>
         <I18nHTMLTranslate

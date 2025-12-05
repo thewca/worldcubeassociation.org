@@ -8,6 +8,7 @@ import {
   HStack,
   Stat,
   Badge,
+  Wrap,
 } from "@chakra-ui/react";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
 import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
@@ -128,6 +129,7 @@ export function AdditionalInformationCard({
         <MarkdownProse
           as={Card.Description}
           content={competitionInfo.information}
+          imageProps={{ maxW: "sm" }}
           textStyle="body"
         />
       </Card.Body>
@@ -287,7 +289,7 @@ export function EventCard({
     <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Events List</Card.Title>
-        <HStack gap="4">
+        <Wrap gap="4">
           {competitionInfo.event_ids.map((event_id) => (
             <EventIcon
               key={event_id}
@@ -300,7 +302,7 @@ export function EventCard({
               }
             />
           ))}
-        </HStack>
+        </Wrap>
       </Card.Body>
     </Card.Root>
   );
