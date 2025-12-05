@@ -89,7 +89,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
                 key={index}
                 teamRole={role.teamRole}
                 teamText={role.teamText}
-                staffColor={role.staffColor}
+                colorPalette={role.staffColor}
               />
             ))}
           </Flex>
