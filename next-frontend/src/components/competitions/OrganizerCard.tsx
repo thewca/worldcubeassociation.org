@@ -9,7 +9,6 @@ import {
   HStack,
   IconButton,
   Stat,
-  Text,
 } from "@chakra-ui/react";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
@@ -28,13 +27,17 @@ function OrganizerCarousel({
       orientation="horizontal"
       slideCount={organizers.length}
       autoSize
-      allowMouseDrag
-      slidesPerPage={1}
-      maxW="2xs"
+      spacing="30px"
+      maxW="full"
     >
       <Carousel.ItemGroup>
         {organizers.map((delegate, index) => (
-          <Carousel.Item key={index} index={index}>
+          <Carousel.Item
+            key={index}
+            index={index}
+            snapAlign="center"
+            width="auto"
+          >
             <HStack>
               <Avatar.Root>
                 <Avatar.Fallback name={delegate.name} />
@@ -45,14 +48,12 @@ function OrganizerCarousel({
           </Carousel.Item>
         ))}
       </Carousel.ItemGroup>
-      <Carousel.Control justifyContent="space-between" gap="4">
+      <Carousel.Control justifyContent="start" gap="4" width="full">
         <Carousel.PrevTrigger asChild>
           <IconButton size="xs" variant="ghost">
             <LuChevronLeft />
           </IconButton>
         </Carousel.PrevTrigger>
-
-        <Carousel.Indicators />
 
         <Carousel.NextTrigger asChild>
           <IconButton size="xs" variant="ghost">
