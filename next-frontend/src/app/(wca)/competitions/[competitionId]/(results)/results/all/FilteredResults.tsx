@@ -3,11 +3,11 @@
 import { Fragment, useMemo, useState } from "react";
 import { components } from "@/types/openapi";
 import { Heading, VStack } from "@chakra-ui/react";
-import EventSelector from "@/components/EventSelector";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import { ResultsTable } from "@/components/results/ResultsTable";
 import { useT } from "@/lib/i18n/useI18n";
+import { SingleEventSelector } from "@/components/EventSelector";
 
 export default function FilteredResults({
   competitionInfo,
@@ -29,13 +29,11 @@ export default function FilteredResults({
 
   return (
     <VStack align="left" gap={4}>
-      <EventSelector
+      <SingleEventSelector
         title=""
-        selectedEvents={[activeEventId]}
+        selectedEvent={activeEventId}
         onEventClick={setActiveEventId}
         eventList={competitionInfo.event_ids}
-        hideAllButton
-        hideClearButton
       />
       {_.map(results, (results, roundFormat) => (
         <Fragment key={`${activeEventId}-${roundFormat}`}>
