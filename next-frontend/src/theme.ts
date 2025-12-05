@@ -408,7 +408,12 @@ const customConfig = defineConfig({
     semanticTokens: {
       colors: {
         link: {
-          DEFAULT: { value: { _light: "{colors.supplementary.link}", _dark: "{colors.supplementary.link.lighter}" } },
+          DEFAULT: {
+            value: {
+              _light: "{colors.supplementary.link}",
+              _dark: "{colors.supplementary.link.lighter}",
+            },
+          },
           fg: { value: "{colors.link}" },
         },
         advancing: { value: "{colors.green.1A}" },
@@ -570,7 +575,7 @@ const customConfig = defineConfig({
       text: {
         base: {
           textStyle: "body",
-        }
+        },
       },
     },
     slotRecipes: {
