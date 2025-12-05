@@ -95,6 +95,7 @@ en:
     "1": "Best of 1"
     "2": "Best of 2"
     "3": "Best of 3"
+    "5": "Best of 5"
     "a": "Average of 5"
     "m": "Mean of 3"
     #context: short name alternative
@@ -102,6 +103,7 @@ en:
       "1": "Bo1"
       "2": "Bo2"
       "3": "Bo3"
+      "5": "Bo5"
       "a": "Ao5"
       "m": "Mo3"
       "h": "H2H"
