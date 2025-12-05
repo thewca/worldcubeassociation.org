@@ -16,6 +16,7 @@ import {
   Field,
   ButtonGroup,
   Tabs,
+  ClientOnly,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -49,8 +50,15 @@ import RegionSelector from "@/components/RegionSelector";
 import { components } from "@/types/openapi";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
+import dynamic from "next/dynamic";
 
 const DEBOUNCE_MS = 600;
+
+// Force nextjs to not ssr leaflet
+const TabMap = dynamic(
+  () => import("../../../components/competitions/TabMap"),
+  { ssr: false },
+);
 
 export default function CompetitionsPage() {
   const session = useSession();
@@ -292,7 +300,16 @@ export default function CompetitionsPage() {
                   t={t}
                 />
               </Tabs.Content>
-              <Tabs.Content value="map">TBD</Tabs.Content>
+              <Tabs.Content value="map">
+                <ClientOnly>
+                  <TabMap
+                    competitions={competitionsDistanceFiltered}
+                    isLoading={competitionsIsFetching}
+                    fetchMoreCompetitions={competitionsFetchNextPage}
+                    hasMoreCompsToLoad={hasMoreCompsToLoad}
+                  />
+                </ClientOnly>
+              </Tabs.Content>
             </Card.Body>
           </Tabs.Root>
         </Card.Root>

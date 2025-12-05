@@ -183,7 +183,7 @@ export default async function PersonOverview({
                       )}
                     </Tabs.Content>
                     <Tabs.Content value="map">
-                      <MapTab />
+                      <MapTab wcaId={wcaId} />
                     </Tabs.Content>
                   </Card.Body>
                 </Tabs.Root>
