@@ -1,7 +1,13 @@
 import type { NextAuthConfig } from "next-auth";
-import { EnrichedAuthConfig, PayloadAuthjsUser } from "payload-authjs";
-import { Provider } from "@auth/core/providers";
-import type { User as PayloadUser } from "@/types/payload";
+import type { EnrichedAuthConfig } from "payload-authjs";
+import type { Provider } from "@auth/core/providers";
+
+import { refreshToken } from "@/lib/wca/oauth/tokenRefresh";
+import {
+  WCA_OIDC_CLIENT_ID,
+  WCA_OIDC_CLIENT_SECRET,
+  WCA_OIDC_ISSUER,
+} from "@/lib/wca/oauth/config";
 
 export const WCA_PROVIDER_ID = "WCA";
 export const WCA_CMS_PROVIDER_ID = `${WCA_PROVIDER_ID}-CMS`;
@@ -10,9 +16,9 @@ const baseWcaProvider: Provider = {
   id: WCA_PROVIDER_ID,
   name: "WCA-OIDC-Provider",
   type: "oidc",
-  issuer: process.env.OIDC_ISSUER,
-  clientId: process.env.OIDC_CLIENT_ID,
-  clientSecret: process.env.OIDC_CLIENT_SECRET,
+  issuer: WCA_OIDC_ISSUER,
+  clientId: WCA_OIDC_CLIENT_ID,
+  clientSecret: WCA_OIDC_CLIENT_SECRET,
   profile: (profile) => {
     return {
       id: profile.sub,
@@ -55,32 +61,43 @@ export const authConfig: NextAuthConfig = {
         return {
           ...token,
           wcaId: user?.wcaId,
-          access_token: account.access_token,
-          expires_at: account.expires_at,
+          access_token: account.access_token!,
+          expires_at: account.expires_at!,
           refresh_token: account.refresh_token,
         };
-      } else if (Date.now() < (token.expires_at as number) * 1000) {
+      } else if (Date.now() < token.expires_at * 1000) {
         // Subsequent logins, but the `access_token` is still valid
         return token;
       } else {
-        // TODO Implement Refreshing
-        return token;
+        // as per https://authjs.dev/guides/refresh-token-rotation
+        if (!token.refresh_token) throw new TypeError("Missing refresh_token");
+
+        const { data: newTokens, error } = await refreshToken(
+          token.refresh_token,
+        );
+
+        if (error) {
+          return {
+            ...token,
+            error: "RefreshTokenError",
+          };
+        }
+
+        return {
+          ...token,
+          access_token: newTokens.access_token,
+          expires_at: Math.floor(Date.now() / 1000 + newTokens.expires_in),
+          refresh_token: newTokens.refresh_token,
+        };
       }
     },
     async session({ session, token }) {
-      // @ts-expect-error TODO: Fix this
       session.accessToken = token.access_token;
-      session.user.wcaId = token.wcaId as string;
+      session.user.wcaId = token.wcaId;
       return session;
     },
   },
 };
-
-declare module "@auth/core/types" {
-  interface User extends PayloadAuthjsUser<PayloadUser> {
-    wcaId?: string;
-  }
-}
 
 export const payloadAuthConfig: EnrichedAuthConfig = {
   ...authConfig,

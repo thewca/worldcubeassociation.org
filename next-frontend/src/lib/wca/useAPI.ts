@@ -8,7 +8,6 @@ export function useAPIClient() {
 
   return useMemo(() => {
     if (session) {
-      // @ts-expect-error TODO: Fix this
       return authenticatedClient(session.accessToken);
     } else {
       return unauthenticatedClient;

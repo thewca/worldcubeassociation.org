@@ -129,10 +129,7 @@ export const getPermissions = async () => {
     return null;
   }
 
-  const { data: rawPermissions } = await fetchPermissions(
-    // @ts-expect-error TODO: Fix this
-    session.accessToken,
-  );
+  const { data: rawPermissions } = await fetchPermissions(session.accessToken);
 
   return {
     permissions: rawPermissions,
