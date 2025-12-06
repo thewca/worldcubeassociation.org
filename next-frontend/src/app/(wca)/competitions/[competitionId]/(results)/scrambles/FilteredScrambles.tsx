@@ -3,10 +3,10 @@
 import { Fragment, useMemo, useState } from "react";
 import { components } from "@/types/openapi";
 import { Heading, Table, VStack } from "@chakra-ui/react";
-import EventSelector from "@/components/EventSelector";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import { useT } from "@/lib/i18n/useI18n";
+import { SingleEventSelector } from "@/components/EventSelector";
 
 export default function FilteredScrambles({
   competitionInfo,
@@ -30,13 +30,11 @@ export default function FilteredScrambles({
 
   return (
     <VStack align="left" gap={4}>
-      <EventSelector
+      <SingleEventSelector
         title=""
-        selectedEvents={[activeEventId]}
+        selectedEvent={activeEventId}
         onEventClick={setActiveEventId}
         eventList={competitionInfo.event_ids}
-        hideAllButton
-        hideClearButton
       />
       {_.map(scramblesByEvent, (scrambles, roundFormat) => {
         const scramblesByGroup = _.groupBy(scrambles, "group_id");
