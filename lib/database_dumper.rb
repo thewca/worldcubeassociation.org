@@ -12,8 +12,6 @@ module DatabaseDumper
                             "LEFT JOIN users AS users_organizers ON users_organizers.id = competition_organizers.organizer_id #{WHERE_VISIBLE_COMP} " \
                             "GROUP BY competitions.id".freeze
 
-  PUBLIC_RESULTS_VERSION = '1.0.0'
-
   def self.actions_to_column_sanitizers(columns_by_action)
     {}.tap do |column_sanitizers|
       columns_by_action.each do |action, columns|
@@ -1207,6 +1205,259 @@ module DatabaseDumper
     }.freeze,
   }.freeze
 
+  V2_RESULTS_SANITIZERS = {
+    "results" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          pos
+          best
+          average
+        ],
+        fake_values: {
+          "competition_id" => "competition_id",
+          "event_id" => "event_id",
+          "round_type_id" => "round_type_id",
+          "person_name" => "person_name",
+          "person_id" => "person_id",
+          "format_id" => "format_id",
+          "regional_single_record" => "regional_single_record",
+          "regional_average_record" => "regional_average_record",
+          "person_country_id" => "country_id",
+        }.freeze,
+      ),
+    }.freeze,
+    "result_attempts" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          value
+          attempt_number
+          result_id
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
+    "ranks_single" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          best
+        ],
+        fake_values: %w[
+          person_id
+          event_id
+          world_rank
+          continent_rank
+          country_rank
+        ],
+      ),
+    }.freeze,
+    "ranks_average" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          best
+        ],
+        fake_values: %w[
+          person_id
+          event_id
+          world_rank
+          continent_rank
+          country_rank
+        ],
+      ),
+    }.freeze,
+    "round_types" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          final
+          name
+          rank
+        ],
+        fake_values: %w[
+          cell_name
+        ],
+      ),
+    }.freeze,
+    "events" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          format
+          name
+          rank
+        ],
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "cell_name" => "name",
+        },
+      ),
+    }.freeze,
+    "formats" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          expected_solve_count
+          name
+          sort_by
+          sort_by_second
+          trim_fastest_n
+          trim_slowest_n
+        ],
+      ),
+    }.freeze,
+    "countries" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          iso2
+          name
+        ],
+        fake_values: %w[
+          continent_id
+        ],
+      ),
+    }.freeze,
+    "continents" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          latitude
+          longitude
+          name
+          zoom
+        ],
+        fake_values: %w[
+          record_name
+        ],
+      ),
+    }.freeze,
+    "persons" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          name
+          gender
+        ],
+        fake_values: {
+          "id" => "wca_id",
+          "sub_id" => "sub_id",
+          "country_id" => "country_id",
+        },
+      ),
+    }.freeze,
+    "competitions" => {
+      where_clause: PUBLIC_COMPETITION_JOIN,
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          name
+          information
+          external_website
+          venue
+          latitude
+          longitude
+        ],
+        fake_values: {
+          "city_name" => "city_name",
+          "country_id" => "country_id",
+          "venue_address" => "venue_address",
+          "venue_details" => "venue_details",
+          "cell_name" => "cell_name",
+          "cancelled" => "(competitions.cancelled_at IS NOT NULL AND competitions.cancelled_by IS NOT NULL)",
+          "event_specs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
+          "delegates" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
+          "organizers" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_organizers.name, \"}{mailto:\", users_organizers.email, \"}]\")) SEPARATOR \" \")",
+          "year" => "YEAR(start_date)",
+          "month" => "MONTH(start_date)",
+          "day" => "DAY(start_date)",
+          "end_month" => "MONTH(end_date)",
+          "end_day" => "DAY(end_date)",
+        }.freeze,
+      ),
+      tsv_sanitizers: actions_to_column_sanitizers(
+        fake_values: {
+          "information" => "REGEXP_REPLACE(information, '[[:space:]]+', ' ')",
+        },
+      ),
+    }.freeze,
+    "scrambles" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          scramble
+        ],
+        fake_values: %w[
+          id
+          competition_id
+          event_id
+          group_id
+          is_extra
+          round_type_id
+          scramble_num
+        ],
+      ),
+      tsv_sanitizers: actions_to_column_sanitizers(
+        fake_values: {
+          "scramble" => "IF(eventId='333mbf', REPLACE(scramble, '\\n', '|'), scramble)",
+        },
+      ),
+    }.freeze,
+    "championships" => {
+      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          competition_id
+          championship_type
+        ],
+      ),
+    }.freeze,
+    "eligible_country_iso2s_for_championship" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          championship_type
+          eligible_country_iso2
+        ],
+        db_default: %w[
+          id
+        ],
+      ),
+    }.freeze,
+  }.freeze
+
+  RESULTS_EXPORT_VERSIONS = {
+    v1: {
+      metadata: {
+        export_format_version: 'v1.0.0',
+        version_label: 'deprecated',
+        end_of_life_date: '2026-01-01',
+      },
+      db_config: :results_dump,
+      db_sanitizers: RESULTS_SANITIZERS,
+    },
+    v2: {
+      metadata: {
+        export_format_version: 'v2.0.0',
+        version_label: 'current',
+        end_of_life_date: nil,
+      },
+      db_config: :results_dump_v2,
+      db_sanitizers: V2_RESULTS_SANITIZERS,
+    },
+  }.freeze
+
+  def self.results_export_live_versions
+    past_eol = RESULTS_EXPORT_VERSIONS.select do |_, v|
+      date = v[:metadata][:end_of_life_date]
+      date && Date.parse(date) <= Date.today
+    end.keys
+
+    RESULTS_EXPORT_VERSIONS.keys - past_eol
+  end
+
+  def self.current_results_export_version
+    RESULTS_EXPORT_VERSIONS.find { |_k, v| v[:metadata][:version_label] == "current" }&.first
+  end
+
   # NOTE: The parameter dump_config_name has to correspond exactly to the desired key in config/database.yml
   def self.with_dumped_db(dump_config_name, dump_sanitizers, dump_ts_name = nil, drop_db_after_dump: true)
     primary_db_config = ActiveRecord::Base.connection_db_config
@@ -1291,13 +1542,16 @@ module DatabaseDumper
     end
   end
 
-  def self.public_results_dump(dump_filename, tsv_folder)
-    self.with_dumped_db(:results_dump, RESULTS_SANITIZERS) do |dump_db|
+  def self.public_results_dump(dump_filename, tsv_folder, version)
+    sanitizers = RESULTS_EXPORT_VERSIONS[version][:db_sanitizers]
+    dump_config = RESULTS_EXPORT_VERSIONS[version][:db_config]
+
+    self.with_dumped_db(dump_config, sanitizers) do |dump_db|
       LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
         self.mysqldump(dump_db, dump_filename)
       end
 
-      RESULTS_SANITIZERS.each do |table_name, table_sanitizer|
+      sanitizers.each do |table_name, table_sanitizer|
         next if table_sanitizer == :skip_all_rows
 
         column_expressions = table_sanitizer[:column_sanitizers].map do |column_name, _|
