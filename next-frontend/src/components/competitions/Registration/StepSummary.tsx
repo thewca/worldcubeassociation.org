@@ -1,32 +1,19 @@
 import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanel";
-import { DataList } from "@chakra-ui/react";
-import EventIcon from "@/components/EventIcon";
+import { Link, Text } from "@chakra-ui/react";
 
-export default function StepSummary({ form }: PanelProps) {
+export default function StepSummary({ competitionInfo }: PanelProps) {
   return (
-    <DataList.Root orientation="horizontal">
-      <DataList.Item>
-        <DataList.ItemLabel>Events</DataList.ItemLabel>
-        <form.Subscribe selector={(state) => state.values.eventIds}>
-          {(eventIds) => (
-            <DataList.ItemValue>
-              {eventIds.map((eventId) => <EventIcon key={eventId} eventId={eventId} />)}
-            </DataList.ItemValue>
-          )}
-        </form.Subscribe>
-      </DataList.Item>
-      <DataList.Item>
-        <DataList.ItemLabel>Comment</DataList.ItemLabel>
-        <form.Subscribe selector={(state) => state.values.comment}>
-          {(comment) => <DataList.ItemValue>{comment}</DataList.ItemValue>}
-        </form.Subscribe>
-      </DataList.Item>
-      <DataList.Item>
-        <DataList.ItemLabel>Guests</DataList.ItemLabel>
-        <form.Subscribe selector={(state) => state.values.numberOfGuests}>
-          {(guests) => <DataList.ItemValue>{guests}</DataList.ItemValue>}
-        </form.Subscribe>
-      </DataList.Item>
-    </DataList.Root>
+    <>
+      <Text>
+        Thank you for trying out this panel.
+        {" "}
+        <Text as="span" fontWeight="bold">Your registration has NOT been processed!!</Text>
+      </Text>
+      <Text>
+        If you actually want to register for real, please click
+        {" "}
+        <Link href={`https://worldcubeassociation.org/competitions/${competitionInfo.id}/register`} variant="underline" target="_blank">here</Link>
+      </Text>
+    </>
   );
 }
