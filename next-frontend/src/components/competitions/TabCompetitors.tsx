@@ -71,7 +71,11 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
             selectedEvents={psychSheetEvent ? [psychSheetEvent] : []}
             eventList={eventIds}
             onEventClick={(event) => setPsychSheetEvent(event)}
-            onClearClick={psychSheetEvent === null ? undefined : () => setPsychSheetEvent(null)}
+            onClearClick={
+              psychSheetEvent === null
+                ? undefined
+                : () => setPsychSheetEvent(null)
+            }
           />
         </Card.Title>
         <Table.ScrollArea borderWidth="1px" maxW="full">

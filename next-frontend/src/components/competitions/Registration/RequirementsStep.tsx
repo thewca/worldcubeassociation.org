@@ -1,29 +1,35 @@
-"use client"
+"use client";
 
-import {Alert, Box, Checkbox, VStack} from "@chakra-ui/react";
+import { Alert, Checkbox, VStack } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanel";
 
-function RegistrationFullMessage({ competitionInfo }: Pick<PanelProps, "competitionInfo">) {
+function RegistrationFullMessage({
+  competitionInfo,
+}: Pick<PanelProps, "competitionInfo">) {
   const { t } = useT();
 
-  if (competitionInfo['registration_full_and_accepted?']) {
+  if (competitionInfo["registration_full_and_accepted?"]) {
     return (
       <Alert.Root status="warning">
         <Alert.Indicator />
         <Alert.Title>
-          {t('registrations.registration_full', { competitor_limit: competitionInfo.competitor_limit })}
+          {t("registrations.registration_full", {
+            competitor_limit: competitionInfo.competitor_limit,
+          })}
         </Alert.Title>
       </Alert.Root>
     );
   }
 
-  if (competitionInfo['registration_full?']) {
+  if (competitionInfo["registration_full?"]) {
     return (
       <Alert.Root status="warning">
         <Alert.Indicator />
         <Alert.Title>
-          {t('registrations.registration_full_include_waiting_list', { competitor_limit: competitionInfo.competitor_limit })}
+          {t("registrations.registration_full_include_waiting_list", {
+            competitor_limit: competitionInfo.competitor_limit,
+          })}
         </Alert.Title>
       </Alert.Root>
     );
@@ -32,7 +38,10 @@ function RegistrationFullMessage({ competitionInfo }: Pick<PanelProps, "competit
   return null;
 }
 
-export default function RequirementsStep({ form, competitionInfo }: PanelProps) {
+export default function RequirementsStep({
+  form,
+  competitionInfo,
+}: PanelProps) {
   const { t } = useT();
 
   return (
@@ -52,7 +61,11 @@ export default function RequirementsStep({ form, competitionInfo }: PanelProps) 
                 <Checkbox.Control />
               </Alert.Indicator>
               <Alert.Title asChild>
-                <Checkbox.Label>{t('competitions.registration_v2.requirements.acknowledgement')}</Checkbox.Label>
+                <Checkbox.Label>
+                  {t(
+                    "competitions.registration_v2.requirements.acknowledgement",
+                  )}
+                </Checkbox.Label>
               </Alert.Title>
             </Alert.Root>
           </Checkbox.Root>

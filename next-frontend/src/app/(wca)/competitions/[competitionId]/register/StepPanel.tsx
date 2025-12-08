@@ -1,9 +1,13 @@
-"use client"
+"use client";
 
 import { Box, Button, ButtonGroup, Group, Steps } from "@chakra-ui/react";
 import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
 import type { components } from "@/types/openapi";
-import { createFormHook, createFormHookContexts, formOptions } from "@tanstack/react-form";
+import {
+  createFormHook,
+  createFormHookContexts,
+  formOptions,
+} from "@tanstack/react-form";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
 import { useT } from "@/lib/i18n/useI18n";
 import StepSummary from "@/components/competitions/Registration/StepSummary";
@@ -15,8 +19,7 @@ type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
 type StepKey = StepConfig["key"];
 
-export const { fieldContext, formContext } =
-  createFormHookContexts();
+export const { fieldContext, formContext } = createFormHookContexts();
 
 const { useAppForm, withForm } = createFormHook({
   fieldComponents: {},
@@ -36,7 +39,7 @@ const defaultRegistration: RegistrationDummy = {
   hasAcceptedTerms: false,
   numberOfGuests: 0,
   eventIds: [],
-}
+};
 
 const regFormOptions = formOptions({
   defaultValues: defaultRegistration,
@@ -46,31 +49,34 @@ const regFormOptions = formOptions({
 // Tanstack-Form is pretty powerful, but the price for this power is a nightmare in generics,
 //   so type-casting the `form` component prop by ourselves is not an option.
 // See also https://github.com/TanStack/form/discussions/1804 for reference.
-const useRegistrationForm = () => useAppForm({ ...regFormOptions })
+const useRegistrationForm = () => useAppForm({ ...regFormOptions });
 type RegistrationForm = ReturnType<typeof useRegistrationForm>;
 
-export type PanelProps = { competitionInfo: CompetitionInfo, form: RegistrationForm };
+export type PanelProps = {
+  competitionInfo: CompetitionInfo;
+  form: RegistrationForm;
+};
 
 const stepsFrontend = {
   requirements: RequirementsStep,
   competing: CompetingStep,
   payment: RequirementsStep,
   approval: ApprovalStep,
-} satisfies Record<StepKey, React.ComponentType<PanelProps>>
+} satisfies Record<StepKey, React.ComponentType<PanelProps>>;
 
 const stepsCompleteness = {
   requirements: (reg) => reg.hasAcceptedTerms,
   competing: (reg) => reg.eventIds.length > 0,
   payment: (reg) => reg.hasAcceptedTerms,
   approval: (reg) => reg.hasAcceptedTerms,
-} satisfies Record<StepKey, ((reg: RegistrationDummy) => boolean)>
+} satisfies Record<StepKey, (reg: RegistrationDummy) => boolean>;
 
 type ColorPalette = UtilityValues["colorPalette"];
 type NavButtonOverride = Partial<{
-  colorPalette: ColorPalette,
-  title: string,
-  icon: React.ReactNode,
-}>
+  colorPalette: ColorPalette;
+  title: string;
+  icon: React.ReactNode;
+}>;
 
 const buttonOverrides: Partial<Record<StepKey, NavButtonOverride>> = {
   approval: {
@@ -78,7 +84,7 @@ const buttonOverrides: Partial<Record<StepKey, NavButtonOverride>> = {
     title: "Submit",
     icon: <LuSend />,
   },
-}
+};
 
 const StepPanelContents = ({
   steps,
@@ -96,7 +102,7 @@ const StepPanelContents = ({
         competitionInfo,
       },
       render: stepsFrontend[step.key],
-    })
+    });
 
     return (
       <Steps.Content key={step.key} index={idx}>
@@ -104,11 +110,11 @@ const StepPanelContents = ({
       </Steps.Content>
     );
   });
-}
+};
 
 const StepPanel = ({
- steps,
- competitionInfo,
+  steps,
+  competitionInfo,
 }: {
   steps: StepConfig[];
   competitionInfo: CompetitionInfo;
@@ -122,7 +128,7 @@ const StepPanel = ({
       <Steps.List>
         {steps.map((step, idx) => {
           const stepTranslationLookup = `competitions.registration_v2.register.panel.${step.key}`;
-          const stepTitle = t(`${stepTranslationLookup}.title`)
+          const stepTitle = t(`${stepTranslationLookup}.title`);
 
           return (
             <Steps.Item key={step.key} index={idx} title={stepTitle}>
@@ -130,19 +136,28 @@ const StepPanel = ({
                 <Steps.Indicator />
                 <Box>
                   <Steps.Title>{stepTitle}</Steps.Title>
-                  <Steps.Description>{t(`${stepTranslationLookup}.description`)}</Steps.Description>
+                  <Steps.Description>
+                    {t(`${stepTranslationLookup}.description`)}
+                  </Steps.Description>
                 </Box>
               </Steps.Trigger>
-              <Steps.Separator/>
+              <Steps.Separator />
             </Steps.Item>
           );
         })}
       </Steps.List>
 
-      <StepPanelContents steps={steps} form={registrationForm} competitionInfo={competitionInfo} />
+      <StepPanelContents
+        steps={steps}
+        form={registrationForm}
+        competitionInfo={competitionInfo}
+      />
 
       <Steps.CompletedContent>
-        <StepSummary form={registrationForm} competitionInfo={competitionInfo} />
+        <StepSummary
+          form={registrationForm}
+          competitionInfo={competitionInfo}
+        />
       </Steps.CompletedContent>
 
       <ButtonGroup size="sm" variant="surface" asChild>
@@ -160,7 +175,9 @@ const StepPanel = ({
               const completionFn = stepsCompleteness[currentStepKey];
 
               return (
-                <registrationForm.Subscribe selector={(state) => completionFn(state.values)}>
+                <registrationForm.Subscribe
+                  selector={(state) => completionFn(state.values)}
+                >
                   {(isComplete) => {
                     const buttonConfig = buttonOverrides[currentStepKey];
 
@@ -184,6 +201,6 @@ const StepPanel = ({
       </ButtonGroup>
     </Steps.Root>
   );
-}
+};
 
 export default StepPanel;

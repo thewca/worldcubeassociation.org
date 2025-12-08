@@ -1,5 +1,12 @@
-import {components} from "@/types/openapi";
-import {Badge, Card, FormatNumber, HStack, SimpleGrid, Stat} from "@chakra-ui/react";
+import { components } from "@/types/openapi";
+import {
+  Badge,
+  Card,
+  FormatNumber,
+  HStack,
+  SimpleGrid,
+  Stat,
+} from "@chakra-ui/react";
 import PaymentIcon from "@/components/icons/PaymentIcon";
 import SpotsLeftIcon from "@/components/icons/SpotsLeftIcon";
 import SpectatorsIcon from "@/components/icons/SpectatorsIcon";
@@ -19,8 +26,8 @@ const dateFormat: Intl.DateTimeFormatOptions = {
 };
 
 export default function RegistrationRequirementsCard({
-                                   competitionInfo,
-                                 }: {
+  competitionInfo,
+}: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   const regoOpenDate = new Date(competitionInfo.registration_open);

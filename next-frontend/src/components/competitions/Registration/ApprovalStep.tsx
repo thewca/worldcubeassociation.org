@@ -7,7 +7,10 @@ export default function ApprovalStep({ form }: PanelProps) {
     <Stack>
       <Alert.Root status="info">
         <Alert.Indicator />
-        <Alert.Title>Please check the below details and hit "Submit" when you are ready</Alert.Title>
+        <Alert.Title>
+          Please check the below details and hit &quot;Submit&quot; when you are
+          ready
+        </Alert.Title>
       </Alert.Root>
       <DataList.Root orientation="horizontal">
         <DataList.Item>
@@ -15,7 +18,9 @@ export default function ApprovalStep({ form }: PanelProps) {
           <form.Subscribe selector={(state) => state.values.eventIds}>
             {(eventIds) => (
               <DataList.ItemValue>
-                {eventIds.map((eventId) => <EventIcon key={eventId} eventId={eventId} />)}
+                {eventIds.map((eventId) => (
+                  <EventIcon key={eventId} eventId={eventId} />
+                ))}
               </DataList.ItemValue>
             )}
           </form.Subscribe>
