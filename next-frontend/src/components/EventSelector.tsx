@@ -7,7 +7,6 @@ import {
   CheckboxCard,
   CheckboxGroup,
   Fieldset,
-  HStack,
   RadioCard,
   VisuallyHidden,
   Wrap,
@@ -15,6 +14,7 @@ import {
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
 import EventIcon from "@/components/EventIcon";
+import { Fragment } from "react";
 
 interface MultiEventSelectorProps {
   title: string;
@@ -41,6 +41,7 @@ interface SingleEventSelectorProps {
   onEventClick: (eventId: string) => void;
   disabled?: boolean;
   eventButtonsCompact?: boolean;
+  wrap?: boolean;
 }
 
 export function SingleEventSelector({
@@ -49,17 +50,22 @@ export function SingleEventSelector({
   selectedEvent,
   onEventClick,
   disabled,
+  eventButtonsCompact = false,
+  wrap = false,
 }: SingleEventSelectorProps) {
+  const Container = wrap ? Fragment : Wrap;
+
   return (
     <RadioCard.Root
       disabled={disabled}
+      size={eventButtonsCompact ? "sm" : undefined}
       orientation="vertical"
       align="center"
       value={selectedEvent}
       onValueChange={(e) => onEventClick(e.value ?? "")}
     >
       {title && <RadioCard.Label>{title}</RadioCard.Label>}
-      <Wrap>
+      <Container justify="center">
         {eventList.map((eventId) => {
           return (
             <RadioCard.Item
@@ -75,7 +81,7 @@ export function SingleEventSelector({
             </RadioCard.Item>
           );
         })}
-      </Wrap>
+      </Container>
     </RadioCard.Root>
   );
 }
