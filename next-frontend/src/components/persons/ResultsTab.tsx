@@ -24,6 +24,7 @@ const ResultsTab: React.FC<ResultsTabProps> = ({
         selectedEvent={eventId}
         onEventClick={setEventId}
         eventList={eventsWithResults}
+        eventButtonsCompact
       />
       <Results wcaId={wcaId} eventId={eventId} />
     </VStack>

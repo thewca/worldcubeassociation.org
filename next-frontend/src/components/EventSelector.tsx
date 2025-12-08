@@ -74,6 +74,7 @@ export function SingleEventSelector({
               colorPalette="green"
               disabled={disabled}
               value={eventId}
+              maxW="16"
             >
               <RadioCard.ItemHiddenInput />
               <RadioCard.ItemControl>
@@ -106,8 +107,6 @@ export function MultiEventSelector({
   wrap = false,
 }: MultiEventSelectorProps) {
   const { t } = useT();
-
-  const Container = wrap ? HStack : Wrap;
 
   return (
     <Tooltip
@@ -153,7 +152,11 @@ export function MultiEventSelector({
             )}
           </ButtonGroup>
         </Fieldset.Legend>
-        <Container>
+        <CheckboxGroup
+          disabled={disabled}
+          flexDirection="row"
+          flexWrap={wrap ? "wrap" : undefined}
+        >
           {eventList.map((eventId) => {
             const currentEventSelected = selectedEvents.includes(eventId);
             const currentEventDisabled = eventsDisabled.includes(eventId);
@@ -173,6 +176,7 @@ export function MultiEventSelector({
                 size={eventButtonsCompact ? "sm" : undefined}
                 checked={currentEventSelected}
                 onCheckedChange={() => onEventClick(eventId)}
+                maxW="16"
               >
                 <CheckboxCard.HiddenInput />
                 <CheckboxCard.Control>
@@ -201,7 +205,7 @@ export function MultiEventSelector({
               </CheckboxCard.Root>
             );
           })}
-        </Container>
+        </CheckboxGroup>
       </Fieldset.Root>
     </Tooltip>
   );
