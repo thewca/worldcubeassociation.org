@@ -48,7 +48,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
     <Card.Root
       colorPalette={block.colorPalette}
-      colorVariant="solid"
+      colorVariant="deep"
       width="full"
     >
       {block.headerImage && (
@@ -98,7 +98,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
     <Card.Root
       flexDirection="row"
       colorPalette={block.colorPalette}
-      colorVariant="solid"
+      colorVariant="deep"
       width="full"
       maxHeight="lg"
       overflow="hidden"
@@ -108,12 +108,12 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           media={block.mainImage as Media}
           width="full"
           maxHeight="lg"
-          bg="colorPalette.solid"
+          bg="colorPalette.deep"
         />
         <AbsoluteCenter
           width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
           height="full"
-          bg="linear-gradient(to right, transparent, {colors.colorPalette.solid})"
+          bg="linear-gradient(to right, transparent, transparent, {colors.colorPalette.deep})"
         />
       </Box>
 
@@ -151,7 +151,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
     <Card.Root
       overflow="hidden"
       colorPalette={block.colorPalette}
-      colorVariant="solid"
+      colorVariant="deep"
       width="full"
     >
       <MediaImage
@@ -184,7 +184,7 @@ const FeaturedCompetition = async ({
   }
 
   return (
-    <Card.Root colorPalette={colorPalette} colorVariant="solid">
+    <Card.Root colorPalette={colorPalette} colorVariant="deep">
       <Card.Body>
         <Card.Title textStyle="h2">{competition.name}</Card.Title>
         <CompetitionShortlist comp={competition} t={t} />
@@ -240,7 +240,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
           return (
             <Carousel.Item key={slide.id} index={i} asChild>
               <Card.Root
-                colorVariant="solid"
+                colorVariant="deep"
                 flexDirection="row"
                 overflow="hidden"
                 colorPalette={slide.colorPalette}
