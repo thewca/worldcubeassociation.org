@@ -30,7 +30,7 @@
     "@rails/ujs": "^7.1.600",
     "@stripe/react-stripe-js": "^5.4.1",
     "@stripe/stripe-js": "^8.5.3",
-    "@tanstack/react-query": "^5.90.11",
+    "@tanstack/react-query": "^5.90.12",
     "@tanstack/react-table": "^8.21.3",
     "@wca/helpers": "^1.1.5",
     "autonumeric": "^4.10.9",
