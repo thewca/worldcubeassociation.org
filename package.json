@@ -121,7 +121,7 @@
     "react-refresh": "^0.18.0",
     "stylelint": "^16.26.1",
     "stylelint-config-recommended-scss": "^16.0.2",
-    "stylelint-scss": "^6.12.1",
+    "stylelint-scss": "^6.13.0",
     "webpack-bundle-analyzer": "^5.0.1",
     "webpack-dev-server": "^5.2.2"
   },
