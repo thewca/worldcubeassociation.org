@@ -99,7 +99,7 @@ gem 'sidekiq-cron'
 gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
 gem 'puma'
-gem "tzf"
+gem 'tzf'
 gem 'playwright-ruby-client', require: 'playwright'
 gem 'hash_diff'
 gem 'tsort'
