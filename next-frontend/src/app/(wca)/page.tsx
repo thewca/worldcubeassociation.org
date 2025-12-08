@@ -65,7 +65,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       </Card.Body>
       {block.buttonText?.trim() && (
         <Card.Footer>
-          <Button mr="auto" asChild>
+          <Button asChild variant="outline" color="currentColor">
             <ChakraLink href={block.buttonLink!}>{block.buttonText}</ChakraLink>
           </Button>
         </Card.Footer>
@@ -203,7 +203,7 @@ const FeaturedCompetitions = async ({
       <Card.Title textStyle="h2" asChild>
         <HStack justify="space-between">
           <Text>Featured Upcoming Competitions</Text>
-          <Button variant="outline" asChild>
+          <Button asChild variant="outline" color="currentColor">
             <Link href="/competitions">View all Competitions</Link>
           </Button>
         </HStack>
