@@ -9,12 +9,12 @@ import {
   Fieldset,
   RadioCard,
   VisuallyHidden,
+  HStack,
   Wrap,
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
 import EventIcon from "@/components/EventIcon";
-import { Fragment } from "react";
 
 interface MultiEventSelectorProps {
   title: string;
@@ -28,6 +28,7 @@ interface MultiEventSelectorProps {
   disabled?: boolean;
   shouldErrorOnEmpty?: boolean;
   showBreakBeforeButtons?: boolean;
+  wrap?: boolean;
   eventButtonsCompact?: boolean;
   maxEvents?: number;
   eventsDisabled?: string[];
@@ -53,7 +54,7 @@ export function SingleEventSelector({
   eventButtonsCompact = false,
   wrap = false,
 }: SingleEventSelectorProps) {
-  const Container = wrap ? Fragment : Wrap;
+  const Container = wrap ? HStack : Wrap;
 
   return (
     <RadioCard.Root
@@ -102,8 +103,11 @@ export function MultiEventSelector({
   maxEvents = Infinity,
   eventsDisabled = [],
   disabledText = () => "",
+  wrap = false,
 }: MultiEventSelectorProps) {
   const { t } = useT();
+
+  const Container = wrap ? HStack : Wrap;
 
   return (
     <Tooltip
@@ -149,7 +153,7 @@ export function MultiEventSelector({
             )}
           </ButtonGroup>
         </Fieldset.Legend>
-        <CheckboxGroup disabled={disabled} flexDirection="row">
+        <Container>
           {eventList.map((eventId) => {
             const currentEventSelected = selectedEvents.includes(eventId);
             const currentEventDisabled = eventsDisabled.includes(eventId);
@@ -197,7 +201,7 @@ export function MultiEventSelector({
               </CheckboxCard.Root>
             );
           })}
-        </CheckboxGroup>
+        </Container>
       </Fieldset.Root>
     </Tooltip>
   );
