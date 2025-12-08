@@ -7461,15 +7461,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lockfile@npm:^1.0.4":
-  version: 1.0.4
-  resolution: "lockfile@npm:1.0.4"
-  dependencies:
-    signal-exit: "npm:^3.0.2"
-  checksum: 10c0/80b7777ceb43105d9e588733c3efc2514653a5e3a0dae3e61347a1f5381da34dcaa2caaa60c39ed5d4ad31c1735a4831e5639a0ba1c508bfea8dbc9c89777b37
-  languageName: node
-  linkType: hard
-
 "lodash-es@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash-es@npm:4.17.21"
@@ -9648,6 +9639,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"proper-lockfile@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "proper-lockfile@npm:4.1.2"
+  dependencies:
+    graceful-fs: "npm:^4.2.4"
+    retry: "npm:^0.12.0"
+    signal-exit: "npm:^3.0.2"
+  checksum: 10c0/2f265dbad15897a43110a02dae55105c04d356ec4ed560723dcb9f0d34bc4fb2f13f79bb930e7561be10278e2314db5aca2527d5d3dcbbdee5e6b331d1571f6d
+  languageName: node
+  linkType: hard
+
 "proxy-addr@npm:~2.0.7":
   version: 2.0.7
   resolution: "proxy-addr@npm:2.0.7"
@@ -10397,7 +10399,7 @@ __metadata:
     stylelint-scss: "npm:^6.12.1"
     terser-webpack-plugin: "npm:^5.3.14"
     webpack: "npm:^5.103.0"
-    webpack-assets-manifest: "npm:^6.4.0"
+    webpack-assets-manifest: "npm:^6.5.0"
     webpack-bundle-analyzer: "npm:^5.0.1"
     webpack-cli: "npm:^6.0.1"
     webpack-dev-server: "npm:^5.2.2"
@@ -11912,17 +11914,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-assets-manifest@npm:^6.4.0":
-  version: 6.4.0
-  resolution: "webpack-assets-manifest@npm:6.4.0"
+"webpack-assets-manifest@npm:^6.5.0":
+  version: 6.5.0
+  resolution: "webpack-assets-manifest@npm:6.5.0"
   dependencies:
     deepmerge: "npm:^4.3.1"
-    lockfile: "npm:^1.0.4"
+    proper-lockfile: "npm:^4.1.2"
     schema-utils: "npm:^4.3.3"
     tapable: "npm:^2.3.0"
   peerDependencies:
     webpack: ^5.61.0
-  checksum: 10c0/c8c0aa6b35aaec388d85c730b23bef80a00bfb0a7e4178999274ea026979f13600829e90bc14e73c089fc9e3bd1d724e0a82563f356bb2c4be357767d3c0c9bc
+  checksum: 10c0/3e5cb0a2d8c5ada9bdb8d5013863d11547c758d9476a1b231ed3f09c7f6c84b68aff795dfe81a15735914a0427ad6f8c24298a175d33f3a9fab820664e9704f9
   languageName: node
   linkType: hard
 
