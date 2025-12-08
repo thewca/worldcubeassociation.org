@@ -6,7 +6,7 @@ function AnnouncementItem({ announcement }: { announcement: Announcement }) {
   const publishedByUser = announcement.publishedBy as User;
 
   return (
-    <Accordion.Item value={announcement.id} layerStyle="fill.solid">
+    <Accordion.Item value={announcement.id} layerStyle="fill.deep">
       <Accordion.ItemTrigger _open={{ textStyle: "h2" }}>
         {announcement.title}
       </Accordion.ItemTrigger>

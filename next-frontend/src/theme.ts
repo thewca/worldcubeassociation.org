@@ -324,11 +324,22 @@ const deriveLuminanceScale = (
   return _.mapValues(heroScale, (rgbHex) => ({ value: rgbHex }));
 };
 
-const compileColorScheme = (baseColor: string) => ({
+const compileColorScheme = (
+  baseColor: string,
+  solidShade: number = 600,
+  darkDeep: number | string = solidShade + 100,
+  lightDeep: number | string = solidShade,
+) => ({
   cubeShades: {
     left: { value: `{colors.${baseColor}.lighter}` },
     top: { value: `{colors.${baseColor}.1A}` },
     right: { value: `{colors.${baseColor}.darker}` },
+  },
+  deep: {
+    value: {
+      _light: `{colors.${baseColor}.${lightDeep.toString()}}`,
+      _dark: `{colors.${baseColor}.${darkDeep.toString()}}`,
+    },
   },
 });
 
@@ -427,9 +438,9 @@ const customConfig = defineConfig({
         green: compileColorScheme("green"),
         white: compileColorScheme("wcaWhite"),
         red: compileColorScheme("red"),
-        yellow: compileColorScheme("yellow"),
+        yellow: compileColorScheme("yellow", 300),
         blue: compileColorScheme("blue"),
-        orange: compileColorScheme("orange"),
+        orange: compileColorScheme("orange", 600, 600),
         black: {
           // not a full color scheme, only the necessary colors for badges
           subtle: { value: "{colors.supplementary.text.dark}" },
@@ -546,6 +557,18 @@ const customConfig = defineConfig({
       },
     },
     layerStyles: {
+      "fill.emphasized": {
+        value: {
+          background: "colorPalette.emphasized",
+          color: "colorPalette.contrast",
+        },
+      },
+      "fill.deep": {
+        value: {
+          background: "colorPalette.deep",
+          color: "colorPalette.contrast",
+        },
+      },
       "card.dark": {
         value: {
           background: "colorPalette.2A",
@@ -662,13 +685,41 @@ const customConfig = defineConfig({
                 layerStyle: "fill.muted",
               },
             },
+            subtle: {
+              root: {
+                colorPalette: "white",
+                layerStyle: "fill.subtle",
+              },
+              description: {
+                layerStyle: "fill.subtle",
+              },
+            },
             surface: {
               root: {
                 colorPalette: "white",
                 layerStyle: "fill.surface",
               },
               description: {
+                // using fill.surface here would apply borders _within_ the card body
                 layerStyle: "fill.subtle",
+              },
+            },
+            emphasized: {
+              root: {
+                colorPalette: "white",
+                layerStyle: "fill.emphasized",
+              },
+              description: {
+                layerStyle: "fill.emphasized",
+              },
+            },
+            deep: {
+              root: {
+                colorPalette: "white",
+                layerStyle: "fill.deep",
+              },
+              description: {
+                layerStyle: "fill.deep",
               },
             },
           },
