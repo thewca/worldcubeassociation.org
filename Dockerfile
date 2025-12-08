@@ -24,7 +24,7 @@ RUN apt-get update -qq && \
       curl \
       gnupg
 
-ARG NODE_MAJOR=22
+ARG NODE_MAJOR=24
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
     apt-get install -y nodejs
 
