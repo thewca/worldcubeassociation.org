@@ -29,7 +29,6 @@ export default async function MyCompetitions() {
     return <p>Please Log in</p>;
   }
 
-  // @ts-expect-error TODO: Fix this
   const client = serverClientWithToken(session.accessToken);
 
   const myCompetitionsRequest = await client.GET("/v0/competitions/mine");
