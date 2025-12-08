@@ -62,7 +62,7 @@ export function SingleEventSelector({
       orientation="vertical"
       align="center"
       value={selectedEvent}
-      onValueChange={(e) => onEventClick(e.value ?? "")}
+      onValueChange={(e) => onEventClick(e.value!)}
     >
       {title && <RadioCard.Label>{title}</RadioCard.Label>}
       <Container justify="center">
