@@ -37,7 +37,6 @@ import {
 } from "@/lib/wca/competitions/filterUtils";
 import { createSearchParams } from "@/lib/wca/competitions/queryUtils";
 import useAPI from "@/lib/wca/useAPI";
-import EventSelector from "@/components/EventSelector";
 import useDebounce from "@/lib/hooks/useDebounce";
 import { WCA_API_PAGINATION } from "@/lib/wca/data/wca";
 import Loading from "@/components/ui/loading";
@@ -49,6 +48,7 @@ import RegionSelector from "@/components/RegionSelector";
 import { components } from "@/types/openapi";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
+import { MultiEventSelector } from "@/components/EventSelector";
 
 const DEBOUNCE_MS = 600;
 
@@ -181,7 +181,7 @@ export default function CompetitionsPage() {
             </Card.Header>
             <Card.Body asChild>
               <VStack gap="2" borderBottom="black">
-                <EventSelector
+                <MultiEventSelector
                   selectedEvents={filterState.selectedEvents}
                   title="Event"
                   onEventClick={(eventId) =>
