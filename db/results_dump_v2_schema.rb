@@ -20,6 +20,7 @@ ActiveRecord::Schema[7.1].define(version: 0) do
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
     t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.integer "day", limit: 2, default: 0, null: false, unsigned: true
+    t.integer "end_year", limit: 2, default: 0, null: false, unsigned: true
     t.integer "end_month", limit: 2, default: 0, null: false, unsigned: true
     t.integer "end_day", limit: 2, default: 0, null: false, unsigned: true
     t.integer "cancelled", default: 0, null: false
@@ -31,17 +32,14 @@ ActiveRecord::Schema[7.1].define(version: 0) do
     t.string "venue_details"
     t.string "external_website", limit: 200
     t.string "cell_name", limit: 45, default: "", null: false
-    t.integer "latitude"
-    t.integer "longitude"
+    t.integer "latitude_microdegrees"
+    t.integer "longitude_microdegrees"
   end
 
   create_table "continents", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "id", limit: 50, default: "", null: false
     t.string "name", limit: 50, default: "", null: false
     t.string "record_name", limit: 3, default: "", null: false
-    t.integer "latitude", default: 0, null: false
-    t.integer "longitude", default: 0, null: false
-    t.integer "zoom", limit: 1, default: 0, null: false
   end
 
   create_table "countries", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -56,7 +54,6 @@ ActiveRecord::Schema[7.1].define(version: 0) do
     t.string "name", limit: 54, default: "", null: false
     t.integer "rank", default: 0, null: false
     t.string "format", limit: 10, default: "", null: false
-    t.string "cell_name", limit: 45, default: "", null: false
   end
 
   create_table "formats", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -70,7 +67,7 @@ ActiveRecord::Schema[7.1].define(version: 0) do
   end
 
   create_table "persons", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "id", limit: 10, default: "", null: false
+    t.string "wca_id", limit: 10, default: "", null: false
     t.integer "sub_id", limit: 1, default: 1, null: false
     t.string "name", limit: 80
     t.string "country_id", limit: 50, default: "", null: false

@@ -1210,16 +1210,16 @@ module DatabaseDumper
           pos
           best
           average
+          competition_id
+          round_type_id
+          event_id
+          person_name
+          person_id
+          format_id
+          regional_single_record
+          regional_average_record
         ],
         fake_values: {
-          "competition_id" => "competition_id",
-          "event_id" => "event_id",
-          "round_type_id" => "round_type_id",
-          "person_name" => "person_name",
-          "person_id" => "person_id",
-          "format_id" => "format_id",
-          "regional_single_record" => "regional_single_record",
-          "regional_average_record" => "regional_average_record",
           "person_country_id" => "country_id",
         }.freeze,
       ),
@@ -1240,8 +1240,6 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           best
-        ],
-        fake_values: %w[
           person_id
           event_id
           world_rank
@@ -1254,8 +1252,6 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           best
-        ],
-        fake_values: %w[
           person_id
           event_id
           world_rank
@@ -1271,8 +1267,6 @@ module DatabaseDumper
           final
           name
           rank
-        ],
-        fake_values: %w[
           cell_name
         ],
       ),
@@ -1285,10 +1279,6 @@ module DatabaseDumper
           name
           rank
         ],
-        fake_values: {
-          # Copy over column to keep backwards compatibility
-          "cell_name" => "name",
-        },
       ),
     }.freeze,
     "formats" => {
@@ -1310,8 +1300,6 @@ module DatabaseDumper
           id
           iso2
           name
-        ],
-        fake_values: %w[
           continent_id
         ],
       ),
@@ -1320,12 +1308,7 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
-          latitude
-          longitude
           name
-          zoom
-        ],
-        fake_values: %w[
           record_name
         ],
       ),
@@ -1335,12 +1318,10 @@ module DatabaseDumper
         copy: %w[
           name
           gender
+          wca_id
+          sub_id
+          country_id
         ],
-        fake_values: {
-          "id" => "wca_id",
-          "sub_id" => "sub_id",
-          "country_id" => "country_id",
-        },
       ),
     }.freeze,
     "competitions" => {
@@ -1352,15 +1333,15 @@ module DatabaseDumper
           information
           external_website
           venue
-          latitude
-          longitude
+          latitude_microdegrees
+          longitude_microdegrees
+          city_name
+          country_id
+          venue_address
+          venue_details
+          cell_name
         ],
         fake_values: {
-          "city_name" => "city_name",
-          "country_id" => "country_id",
-          "venue_address" => "venue_address",
-          "venue_details" => "venue_details",
-          "cell_name" => "cell_name",
           "cancelled" => "(competitions.cancelled_at IS NOT NULL AND competitions.cancelled_by IS NOT NULL)",
           "event_specs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
           "delegates" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
@@ -1368,6 +1349,7 @@ module DatabaseDumper
           "year" => "YEAR(start_date)",
           "month" => "MONTH(start_date)",
           "day" => "DAY(start_date)",
+          "end_year" => "YEAR(end_date)",
           "end_month" => "MONTH(end_date)",
           "end_day" => "DAY(end_date)",
         }.freeze,
@@ -1382,8 +1364,6 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           scramble
-        ],
-        fake_values: %w[
           id
           competition_id
           event_id

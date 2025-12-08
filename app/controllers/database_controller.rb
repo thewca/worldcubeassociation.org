@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class DatabaseController < ApplicationController
+  REGULATIONS_ENDDATE_2025 = "2025-12-31"
   def results_export
     flash[:warning] = I18n.t('database.results_export.deprecation_warning')
     @export_version = DatabaseDumper.current_results_export_version
@@ -12,7 +13,7 @@ class DatabaseController < ApplicationController
   end
 
   def sql_permalink
-    if Date.today > Date.parse("2025-12-31")
+    if Date.today > Date.parse(REGULATIONS_ENDDATE_2025)
       return render json: {
         error: "gone",
         message: "v1 of the Results Export has been deprecated. Please update to v2 by referring to the README and links at: https://www.worldcubeassociation.org/export/results",
@@ -24,7 +25,7 @@ class DatabaseController < ApplicationController
   end
 
   def tsv_permalink
-    if Date.today > Date.parse("2025-12-31")
+    if Date.today > Date.parse(REGULATIONS_ENDDATE_2025)
       return render json: {
         error: "gone",
         message: "v1 of the Results Export has been deprecated. Please update to v2 by referring to the README and links at: https://www.worldcubeassociation.org/export/results",
@@ -39,7 +40,7 @@ class DatabaseController < ApplicationController
     version = params.require(:version).to_sym
     file_type = params.require(:file_type)
 
-    if Date.today > Date.parse("2025-12-31") && version == :v1
+    if Date.today > Date.parse(REGULATIONS_ENDDATE_2025) && version == :v1
       return render json: {
         error: "gone",
         message: "v1 of the Results Export has been deprecated. Please update to v2 by referring to the README and links at: https://www.worldcubeassociation.org/export/results",
