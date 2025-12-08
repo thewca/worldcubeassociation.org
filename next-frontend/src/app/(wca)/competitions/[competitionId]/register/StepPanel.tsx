@@ -73,7 +73,7 @@ type NavButtonOverride = Partial<{
 }>
 
 const buttonOverrides: Partial<Record<StepKey, NavButtonOverride>> = {
-  competing: {
+  approval: {
     colorPalette: "green",
     title: "Submit",
     icon: <LuSend />,
