@@ -60,6 +60,15 @@ export default async function RegisterPage({
         </Card.Root>
       )}
       <Card.Root width="full">
+        <Card.Header>
+          <Alert.Root status="error">
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title>This is NOT the real registration panel!!</Alert.Title>
+              <Alert.Description>You are currently viewing the demo of an upcoming website redesign. Any data submitted here will NOT allow you to actually compete!</Alert.Description>
+            </Alert.Content>
+          </Alert.Root>
+        </Card.Header>
         <Card.Body>
           <StepPanel steps={stepConfig.data} competitionInfo={competitionInfo} />
         </Card.Body>
