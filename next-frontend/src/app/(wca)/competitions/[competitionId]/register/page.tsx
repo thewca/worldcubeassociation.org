@@ -51,15 +51,15 @@ export default async function RegisterPage({
 
   return (
     <VStack>
-      <Box width="full">
+      <Box width="full" asChild>
         <RegistrationRequirementsCard competitionInfo={competitionInfo} />
       </Box>
       {competitionInfo.extra_registration_requirements && (
-        <Card.Root width="full" coloredBg>
+        <Card.Root width="full">
           <MarkdownProse as={Card.Body} content={competitionInfo.extra_registration_requirements} />
         </Card.Root>
       )}
-      <Card.Root coloredBg width="full">
+      <Card.Root width="full">
         <Card.Body>
           <StepPanel steps={stepConfig.data} competitionInfo={competitionInfo} />
         </Card.Body>

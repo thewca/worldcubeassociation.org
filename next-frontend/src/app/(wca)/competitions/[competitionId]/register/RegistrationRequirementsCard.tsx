@@ -45,7 +45,7 @@ export default function RegistrationRequirementsCard({
   // - only for qualified?
   // - maximum number of events per competitor
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Registration</Card.Title>
         <SimpleGrid columns={3} gap="4">

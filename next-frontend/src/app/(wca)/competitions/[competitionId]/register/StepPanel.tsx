@@ -118,7 +118,7 @@ const StepPanel = ({
   const registrationForm = useRegistrationForm();
 
   return (
-    <Steps.Root count={steps.length} colorPalette="blue">
+    <Steps.Root count={steps.length} colorPalette="blue" linear>
       <Steps.List>
         {steps.map((step, idx) => {
           const stepTranslationLookup = `competitions.registration_v2.register.panel.${step.key}`;
@@ -127,7 +127,7 @@ const StepPanel = ({
           return (
             <Steps.Item key={step.key} index={idx} title={stepTitle}>
               <Steps.Trigger disabled={!step.isEditable}>
-                <Steps.Indicator/>
+                <Steps.Indicator />
                 <Box>
                   <Steps.Title>{stepTitle}</Steps.Title>
                   <Steps.Description>{t(`${stepTranslationLookup}.description`)}</Steps.Description>
