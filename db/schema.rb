@@ -1121,7 +1121,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_26_083044) do
     t.string "regional_single_record", limit: 3
     t.string "regional_average_record", limit: 3
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
-    t.index ["round_id", "person_id"], name: "results_person_uniqueness_speedup"
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competition_id"], name: "Results_fk_tournament"
     t.index ["country_id"], name: "_tmp_index_Results_on_countryId"
@@ -1139,6 +1138,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_26_083044) do
     t.index ["person_id"], name: "Results_fk_competitor"
     t.index ["regional_average_record", "event_id"], name: "index_Results_on_regionalAverageRecord_and_eventId"
     t.index ["regional_single_record", "event_id"], name: "index_Results_on_regionalSingleRecord_and_eventId"
+    t.index ["round_id", "person_id"], name: "results_person_uniqueness_speedup"
     t.index ["round_id"], name: "index_results_on_round_id"
     t.index ["round_type_id"], name: "Results_fk_round"
   end

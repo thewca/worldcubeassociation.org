@@ -62,7 +62,7 @@ RSpec.describe "Competition WCIF" do
   describe "#to_wcif" do
     it "renders a valid WCIF" do
       expect(competition.to_wcif).to eq(
-        "formatVersion" => "1.0",
+        "formatVersion" => "1.1",
         "id" => "TestComp2014",
         "name" => "Test Comp 2014",
         "shortName" => "Test 2014",
