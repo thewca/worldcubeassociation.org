@@ -7,7 +7,7 @@ import NextLink from "next/link";
 import { route } from "nextjs-routes";
 import { dateRange } from "@/lib/wca/dates";
 import { isProbablyOver } from "@/lib/dates/competition";
-import MapContainer, { Marker, Popup } from "react-map-gl/maplibre";
+import MapContainer, { Marker } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { LuMapPinPlusInside } from "react-icons/lu";
 import { Tooltip } from "@/components/ui/tooltip";
