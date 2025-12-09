@@ -4,6 +4,15 @@ import { getExportDetails } from "@/lib/wca/exports/getExportDetails";
 import Loading from "@/components/ui/loading";
 import Errored from "@/components/ui/errored";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("page.officers_and_board.title"),
+  };
+}
 
 export default async function ResultExportPage() {
   const { t } = await getT();
@@ -15,7 +24,7 @@ export default async function ResultExportPage() {
   if (!exports) return <Loading />;
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left" gap="16px" as="span">
         <Heading size="5xl">{t("database.developer_export.heading")}</Heading>
         <I18nHTMLTranslate

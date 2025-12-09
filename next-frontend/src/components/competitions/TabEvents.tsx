@@ -42,7 +42,7 @@ export default async function TabEvents({
   return (
     <Card.Root>
       <Card.Body>
-        <Table.ScrollArea borderWidth="1px" maxW="xl">
+        <Table.ScrollArea borderWidth="1px" maxW="full">
           <Table.Root striped interactive>
             <Table.Header>
               <Table.Row>

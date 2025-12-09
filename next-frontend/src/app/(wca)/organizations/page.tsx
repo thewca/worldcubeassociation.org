@@ -21,6 +21,15 @@ import Errored from "@/components/ui/errored";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import _ from "lodash";
 import WcaFlag from "@/components/WcaFlag";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("regional_organizations.title"),
+  };
+}
 
 export default async function RegionalOrganizations() {
   const I18n = await getT();
@@ -31,7 +40,7 @@ export default async function RegionalOrganizations() {
   if (!organizations) return <Loading />;
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left">
         <Heading size="5xl">{I18n.t("regional_organizations.title")}</Heading>
         <Text>{I18n.t("regional_organizations.content")}</Text>

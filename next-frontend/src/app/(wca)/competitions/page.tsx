@@ -16,7 +16,6 @@ import {
   Field,
   ButtonGroup,
   Tabs,
-  ClientOnly,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -38,7 +37,6 @@ import {
 } from "@/lib/wca/competitions/filterUtils";
 import { createSearchParams } from "@/lib/wca/competitions/queryUtils";
 import useAPI from "@/lib/wca/useAPI";
-import EventSelector from "@/components/EventSelector";
 import useDebounce from "@/lib/hooks/useDebounce";
 import { WCA_API_PAGINATION } from "@/lib/wca/data/wca";
 import Loading from "@/components/ui/loading";
@@ -50,15 +48,9 @@ import RegionSelector from "@/components/RegionSelector";
 import { components } from "@/types/openapi";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
-import dynamic from "next/dynamic";
+import { MultiEventSelector } from "@/components/EventSelector";
 
 const DEBOUNCE_MS = 600;
-
-// Force nextjs to not ssr leaflet
-const TabMap = dynamic(
-  () => import("../../../components/competitions/TabMap"),
-  { ssr: false },
-);
 
 export default function CompetitionsPage() {
   const session = useSession();
@@ -169,8 +161,11 @@ export default function CompetitionsPage() {
           <Tabs.Root variant="subtle" colorPalette="blue" defaultValue="list">
             <Card.Header asChild>
               <HStack justify="space-between">
-                <Card.Title textStyle="h1">
-                  <AllCompsIcon /> All Competitions
+                <Card.Title>
+                  <HStack gap={3}>
+                    <AllCompsIcon fontSize="5xl" marginTop="-2" />
+                    <Text textStyle="h1">All Competitions</Text>
+                  </HStack>
                 </Card.Title>
                 <Tabs.List>
                   <Tabs.Trigger value="list">
@@ -186,7 +181,7 @@ export default function CompetitionsPage() {
             </Card.Header>
             <Card.Body asChild>
               <VStack gap="2" borderBottom="black">
-                <EventSelector
+                <MultiEventSelector
                   selectedEvents={filterState.selectedEvents}
                   title="Event"
                   onEventClick={(eventId) =>
@@ -300,16 +295,7 @@ export default function CompetitionsPage() {
                   t={t}
                 />
               </Tabs.Content>
-              <Tabs.Content value="map">
-                <ClientOnly>
-                  <TabMap
-                    competitions={competitionsDistanceFiltered}
-                    isLoading={competitionsIsFetching}
-                    fetchMoreCompetitions={competitionsFetchNextPage}
-                    hasMoreCompsToLoad={hasMoreCompsToLoad}
-                  />
-                </ClientOnly>
-              </Tabs.Content>
+              <Tabs.Content value="map">TBD</Tabs.Content>
             </Card.Body>
           </Tabs.Root>
         </Card.Root>
@@ -332,7 +318,7 @@ function CompetitionTable({
   bottomRef: (node?: Element | null) => void;
 }) {
   return (
-    <Table.Root size="xs" striped variant="competitions" borderWidth="2px">
+    <Table.Root size="xs" variant="competitions" borderWidth="2px">
       <Table.Body>
         {competitions.map((comp) => (
           <CompetitionTableEntry comp={comp} key={comp.id} />

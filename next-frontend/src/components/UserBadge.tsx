@@ -68,7 +68,7 @@ const UserBadge: React.FC<UserBadgeData> = ({
                     key={index}
                     teamRole={role.teamRole}
                     teamText={role.teamText ?? ""}
-                    staffColor={role.staffColor}
+                    colorPalette={role.staffColor}
                     fontSize="0.7em"
                   />
                 ))}

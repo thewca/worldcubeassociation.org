@@ -17,6 +17,15 @@ import {
 } from "@/lib/wca/roles/teamsCommittees";
 import Errored from "@/components/ui/errored";
 import getPermissions from "@/lib/wca/permissions";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("page.teams_committees_councils.title"),
+  };
+}
 
 export default async function TeamsCommitteesPage() {
   const { t } = await getT();
@@ -26,7 +35,7 @@ export default async function TeamsCommitteesPage() {
   if (error) return <Errored error={error} />;
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left" gap="8" width="full" pt="8" alignItems="left">
         <Heading size="5xl">
           {t("page.teams_committees_councils.title")}

@@ -5,10 +5,10 @@ import {
   Heading,
   SimpleGrid,
   Text,
-  Link as ChakraLink,
   HStack,
   Stat,
   Badge,
+  Wrap,
 } from "@chakra-ui/react";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
 import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
@@ -24,7 +24,6 @@ import OnTheSpotRegistrationIcon from "@/components/icons/OnTheSpotRegistrationI
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import EventIcon from "@/components/EventIcon";
 import { MarkdownProse } from "@/components/Markdown";
-import WcaDocsIcon from "@/components/icons/WcaDocsIcon";
 import VenueIcon from "@/components/icons/VenueIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import DetailsIcon from "@/components/icons/DetailsIcon";
@@ -130,6 +129,7 @@ export function AdditionalInformationCard({
         <MarkdownProse
           as={Card.Description}
           content={competitionInfo.information}
+          imageProps={{ maxW: "sm" }}
           textStyle="body"
         />
       </Card.Body>
@@ -280,69 +280,6 @@ export function RegistrationCard({
   );
 }
 
-export function OrganizationTeamCard({
-  competitionInfo,
-}: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
-}) {
-  return (
-    <Card.Root>
-      <Card.Body>
-        <Card.Title textStyle="s4">Organization Team</Card.Title>
-        <Stat.Root variant="competition">
-          <Stat.Label>Organizers</Stat.Label>
-          <Stat.ValueText>
-            {competitionInfo.organizers.map((organizer, index) => (
-              <Text as="span" key={index}>
-                {organizer.url != "" ? (
-                  <ChakraLink href={organizer.url}>{organizer.name}</ChakraLink>
-                ) : (
-                  organizer.name
-                )}
-                {competitionInfo.organizers.length == index + 1 ? "" : ", "}
-              </Text>
-            ))}
-          </Stat.ValueText>
-        </Stat.Root>
-
-        <Stat.Root variant="competition">
-          <Stat.Label>Delegates</Stat.Label>
-          <Stat.ValueText>
-            {competitionInfo.delegates.map((delegate, index) => (
-              <Text as="span" key={index}>
-                <ChakraLink href={delegate.url}>{delegate.name}</ChakraLink>
-                {competitionInfo.delegates.length == index + 1 ? "" : ", "}
-              </Text>
-            ))}
-          </Stat.ValueText>
-        </Stat.Root>
-
-        <Stat.Root variant="competition">
-          <Stat.Label>Contact</Stat.Label>
-          <MarkdownProse
-            as={Stat.ValueText}
-            content={competitionInfo.contact}
-          />
-        </Stat.Root>
-
-        <Button variant="outline" colorPalette="blue" asChild>
-          <ChakraLink
-            textStyle="headerLink"
-            href={
-              "https://www.worldcubeassociation.org/competitions/" +
-              competitionInfo.id +
-              ".pdf"
-            }
-          >
-            Download Competition PDF
-            <WcaDocsIcon />
-          </ChakraLink>
-        </Button>
-      </Card.Body>
-    </Card.Root>
-  );
-}
-
 export function EventCard({
   competitionInfo,
 }: {
@@ -352,7 +289,7 @@ export function EventCard({
     <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Events List</Card.Title>
-        <HStack gap="4">
+        <Wrap gap="4">
           {competitionInfo.event_ids.map((event_id) => (
             <EventIcon
               key={event_id}
@@ -365,7 +302,7 @@ export function EventCard({
               }
             />
           ))}
-        </HStack>
+        </Wrap>
       </Card.Body>
     </Card.Root>
   );

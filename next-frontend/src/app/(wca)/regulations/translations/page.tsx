@@ -11,6 +11,15 @@ import { components } from "@/types/openapi";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import { getRegulationsTranslations } from "@/lib/wca/regulations/getRegulationsTranslations";
 import Errored from "@/components/ui/errored";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("regulations_translations.title"),
+  };
+}
 
 export default async function RegulationsTranslations() {
   const { t } = await getT();
@@ -23,7 +32,7 @@ export default async function RegulationsTranslations() {
   const { current, outdated } = translationRequest;
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left">
         <Heading size="5xl">{t("regulations_translations.title")}</Heading>
         <Text>{t("regulations_translations.paragraph1")}</Text>

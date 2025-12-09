@@ -9,8 +9,10 @@ import RandomBackground from "@/components/RandomBackground";
 import { Rubik } from "next/font/google";
 
 export const metadata: Metadata = {
-  title: "WCA Website",
-  description: "WST x SLATE",
+  title: {
+    template: "%s | World Cube Association",
+    default: "",
+  },
 };
 
 const devFont = Rubik({ subsets: ["latin"] });
