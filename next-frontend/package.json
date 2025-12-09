@@ -46,6 +46,7 @@
     "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
     "luxon": "^3.7.2",
+    "maplibre-gl": "^5.14.0",
     "newrelic": "^13.6.6",
     "next": "15.5.7",
     "next-auth": "5.0.0-beta.30",
@@ -61,7 +62,7 @@
     "react-i18next": "^16.4.0",
     "react-icons": "^5.5.0",
     "react-intersection-observer": "^10.0.0",
-    "react-leaflet": "^5.0.0",
+    "react-map-gl": "^8.1.0",
     "react-markdown": "^10.1.0",
     "react-world-flags": "^1.6.0"
   },
