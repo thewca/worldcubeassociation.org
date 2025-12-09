@@ -1847,7 +1847,7 @@ class Competition < ApplicationRecord
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
   def to_wcif(authorized: false)
     {
-      "formatVersion" => "1.0",
+      "formatVersion" => "1.1",
       "id" => id,
       "name" => name,
       "shortName" => cell_name,
