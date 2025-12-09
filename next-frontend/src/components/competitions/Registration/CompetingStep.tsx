@@ -9,7 +9,7 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
-import { EventCheckboxGroup } from "@/components/EventSelector";
+import { MultiEventSelector } from "@/components/EventSelector";
 import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { useT } from "@/lib/i18n/useI18n";
 
@@ -39,7 +39,7 @@ export default function CompetingStep({ form, competitionInfo }: PanelProps) {
         {(field) => (
           <Fieldset.Root invalid={!field.state.meta.isValid}>
             <Fieldset.Legend>Events</Fieldset.Legend>
-            <EventCheckboxGroup
+            <MultiEventSelector
               eventList={competitionInfo.event_ids}
               selectedEvents={field.state.value}
               onEventClick={(eventId) =>

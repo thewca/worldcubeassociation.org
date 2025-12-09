@@ -44,7 +44,6 @@ export default async function RegisterPage({
 
   const competitionInfo = competitionInfoResponse.data;
 
-  // @ts-expect-error TODO: Fix this
   const stepConfig = await fetchConfig(session.accessToken, competitionId);
 
   if (stepConfig.error) {

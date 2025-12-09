@@ -11,6 +11,7 @@ import {
   VisuallyHidden,
   HStack,
   Wrap,
+  Stack,
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -72,7 +73,7 @@ export function SingleEventSelector({
 interface MultiEventSelectorProps {
   eventList?: string[];
   selectedEvents: string[];
-  onEventClick?: (eventId: string) => void;
+  onEventClick: (eventId: string) => void;
   disabled?: boolean;
   eventButtonsCompact?: boolean;
   maxEvents?: number;
@@ -154,11 +155,8 @@ export function MultiEventSelector({
 
 interface FormEventSelectorProps extends MultiEventSelectorProps {
   title: string;
-  hideAllButton?: boolean;
   onAllClick?: () => void;
-  hideClearButton?: boolean;
   onClearClick?: () => void;
-  shouldErrorOnEmpty?: boolean;
   showBreakBeforeButtons?: boolean;
 }
 
@@ -167,12 +165,9 @@ export function FormEventSelector({
   eventList = WCA_EVENT_IDS,
   selectedEvents,
   onEventClick = () => {},
-  hideAllButton = false,
-  onAllClick = () => {},
-  hideClearButton = false,
-  onClearClick = () => {},
+  onAllClick = undefined,
+  onClearClick = undefined,
   disabled = false,
-  shouldErrorOnEmpty = false,
   showBreakBeforeButtons = true,
   eventButtonsCompact = false,
   maxEvents = Infinity,
@@ -183,19 +178,15 @@ export function FormEventSelector({
   const { t } = useT();
 
   return (
-    <Tooltip
-      open={selectedEvents.length === 0}
-      disabled={!shouldErrorOnEmpty}
-      positioning={{ placement: "bottom-end" }}
-      contentProps={{ css: { "--tooltip-bg": "#9f3a38" } }}
-      content={t("registrations.errors.must_register")}
-    >
-      <Fieldset.Root>
-        <Fieldset.Legend textStyle="label">
+    <Fieldset.Root>
+      <Fieldset.Legend textStyle="label" asChild>
+        <Stack
+          align="baseline"
+          direction={showBreakBeforeButtons ? "column" : "row"}
+        >
           {title}
-          {showBreakBeforeButtons ? <br /> : " "}
           <ButtonGroup size="sm">
-            {hideAllButton || (
+            {onAllClick !== undefined && (
               <Tooltip
                 disabled={!Number.isFinite(maxEvents)}
                 content={t(
@@ -214,7 +205,7 @@ export function FormEventSelector({
                 </Button>
               </Tooltip>
             )}
-            {hideClearButton || (
+            {onClearClick !== undefined && (
               <Button
                 disabled={disabled}
                 onClick={onClearClick}
@@ -225,19 +216,19 @@ export function FormEventSelector({
               </Button>
             )}
           </ButtonGroup>
-        </Fieldset.Legend>
-        <MultiEventSelector
-          eventList={eventList}
-          selectedEvents={selectedEvents}
-          onEventClick={onEventClick}
-          disabled={disabled}
-          eventButtonsCompact={eventButtonsCompact}
-          maxEvents={maxEvents}
-          eventsDisabled={eventsDisabled}
-          disabledText={disabledText}
-          wrap={wrap}
-        />
-      </Fieldset.Root>
-    </Tooltip>
+        </Stack>
+      </Fieldset.Legend>
+      <MultiEventSelector
+        eventList={eventList}
+        selectedEvents={selectedEvents}
+        onEventClick={onEventClick}
+        disabled={disabled}
+        eventButtonsCompact={eventButtonsCompact}
+        maxEvents={maxEvents}
+        eventsDisabled={eventsDisabled}
+        disabledText={disabledText}
+        wrap={wrap}
+      />
+    </Fieldset.Root>
   );
 }
