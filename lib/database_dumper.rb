@@ -1215,13 +1215,11 @@ module DatabaseDumper
           event_id
           person_name
           person_id
+          person_country_id
           format_id
           regional_single_record
           regional_average_record
         ],
-        fake_values: {
-          "person_country_id" => "country_id",
-        }.freeze,
       ),
     }.freeze,
     "result_attempts" => {
@@ -1473,7 +1471,9 @@ module DatabaseDumper
 
     LogTask.log_task "Populating sanitized tables in '#{dump_db_name}'" do
       ordered_table_names.each do |table_name|
+        puts table_name
         table_sanitizer = dump_sanitizers[table_name]
+        puts table_sanitizer
 
         next if table_sanitizer == :skip_all_rows
 
@@ -1530,6 +1530,7 @@ module DatabaseDumper
       end
 
       sanitizers.each do |table_name, table_sanitizer|
+        puts table_name
         next if table_sanitizer == :skip_all_rows
 
         column_expressions = table_sanitizer[:column_sanitizers].map do |column_name, _|
