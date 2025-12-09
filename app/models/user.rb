@@ -702,6 +702,7 @@ class User < ApplicationRecord
           panel_pages[:fixResults],
           panel_pages[:mergeProfiles],
           panel_pages[:mergeUsers],
+          panel_pages[:helpfulQueries],
         ],
       },
       wst: {
