@@ -89,8 +89,6 @@ gem 'activestorage-validator'
 gem 'image_processing'
 gem 'rest-client'
 gem 'icalendar'
-# pointing to our fork which has Rails 7 support enabled (aka monkey-patched)
-gem 'starburst', github: 'thewca/starburst'
 gem 'react-rails'
 gem 'sprockets-rails'
 gem 'jaro_winkler'
@@ -104,6 +102,7 @@ gem 'playwright-ruby-client', require: 'playwright'
 gem 'hash_diff'
 gem 'tsort'
 gem 'html_safe_flash'
+gem 'benchmark'
 
 group :development, :test do
   gem 'spring'

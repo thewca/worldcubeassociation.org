@@ -11,7 +11,6 @@ updates:
     - dependency-name: iso
     - dependency-name: selectize-rails
     - dependency-name: i18n-country-translations
-    - dependency-name: starburst
     # This gem is not listed on RubyGems.com, causing the Dependabot parser to freak out
     #   and crash the whole update cycle. See https://github.com/dependabot/dependabot-core/issues/12110
     - dependency-name: datetimepicker-rails
