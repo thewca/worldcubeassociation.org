@@ -2,15 +2,15 @@
 
 import { components } from "@/types/openapi";
 import Loading from "@/components/ui/loading";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { AspectRatio, Link } from "@chakra-ui/react";
+import { Text, Icon, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
 import { dateRange } from "@/lib/wca/dates";
 import { isProbablyOver } from "@/lib/dates/competition";
-import ResizeMapIFrame from "@/components/map/ResizeMapIFrame";
-import { blueMarker, redMarker } from "@/components/map/Markers";
-import "leaflet/dist/leaflet.css";
+import MapContainer, { Marker, Popup } from "react-map-gl/maplibre";
+import "maplibre-gl/dist/maplibre-gl.css";
+import { LuMapPinPlusInside } from "react-icons/lu";
+import { Tooltip } from "@/components/ui/tooltip";
 
 interface MapProps {
   competitions:
@@ -23,47 +23,49 @@ interface MapProps {
 export const MAP_DISPLAY_LIMIT = 500;
 
 const tileProvider = {
-  url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  attribution:
-    "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>",
+  style: "https://tiles.openfreemap.org/styles/bright",
 };
 
 export default function Map({ competitions, isLoading = false }: MapProps) {
   return (
-    <AspectRatio ratio={16 / 9}>
-      <MapContainer center={[0, 0]} zoom={2} scrollWheelZoom>
-        {isLoading && <Loading />}
-        <ResizeMapIFrame />
-        <TileLayer
-          url={tileProvider.url}
-          attribution={tileProvider.attribution}
-        />
-        {competitions.slice(0, MAP_DISPLAY_LIMIT).map((comp) => (
-          <Marker
-            key={comp.id}
-            position={{
-              lat: comp.latitude_degrees,
-              lng: comp.longitude_degrees,
-            }}
-            icon={isProbablyOver(comp.end_date) ? blueMarker : redMarker}
+    <MapContainer
+      initialViewState={{ longitude: 0, latitude: 0, zoom: 2 }}
+      mapStyle={tileProvider.style}
+    >
+      {isLoading && <Loading />}
+      {competitions.slice(0, MAP_DISPLAY_LIMIT).map((comp) => (
+        <Marker
+          key={comp.id}
+          longitude={comp.longitude_degrees}
+          latitude={comp.latitude_degrees}
+        >
+          <Tooltip
+            showArrow
+            content={
+              <Text>
+                <Link asChild>
+                  <NextLink
+                    href={route({
+                      pathname: "/competitions/[competitionId]",
+                      query: { competitionId: comp.id },
+                    })}
+                  >
+                    {comp.name}
+                  </NextLink>
+                </Link>
+                <br />
+                {`${dateRange(comp.start_date, comp.end_date)} - ${comp.city}`}
+              </Text>
+            }
           >
-            <Popup>
-              <Link asChild>
-                <NextLink
-                  href={route({
-                    pathname: "/competitions/[competitionId]",
-                    query: { competitionId: comp.id },
-                  })}
-                >
-                  {comp.name}
-                </NextLink>
-              </Link>
-              <br />
-              {`${dateRange(comp.start_date, comp.end_date)} - ${comp.city}`}
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
-    </AspectRatio>
+            <Icon asChild size="sm">
+              <LuMapPinPlusInside
+                color={isProbablyOver(comp.end_date) ? "blue" : "red"}
+              />
+            </Icon>
+          </Tooltip>
+        </Marker>
+      ))}
+    </MapContainer>
   );
 }

@@ -49,6 +49,7 @@ import { components } from "@/types/openapi";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { MultiEventSelector } from "@/components/EventSelector";
+import TabMap from "@/components/competitions/TabMap";
 
 const DEBOUNCE_MS = 600;
 
@@ -295,7 +296,14 @@ export default function CompetitionsPage() {
                   t={t}
                 />
               </Tabs.Content>
-              <Tabs.Content value="map">TBD</Tabs.Content>
+              <Tabs.Content value="map" h="1024px">
+                <TabMap
+                  competitions={competitionsDistanceFiltered}
+                  isLoading={competitionsIsFetching}
+                  fetchMoreCompetitions={competitionsFetchNextPage}
+                  hasMoreCompsToLoad={hasMoreCompsToLoad}
+                />
+              </Tabs.Content>
             </Card.Body>
           </Tabs.Root>
         </Card.Root>
