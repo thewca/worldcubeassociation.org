@@ -2,7 +2,7 @@
 
 apt update && apt install -y unzip wget
 wget https://assets.worldcubeassociation.org/export/payload/dump.zip
-unzip dumo.zip -d .
+unzip dump.zip -d .
 cd dump
 for directory in *; do
     if [ -d "${directory}" ] ; then
