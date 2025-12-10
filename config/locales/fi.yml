@@ -132,6 +132,8 @@ fi:
     '2': 'Paras 2:sta'
     #original_hash: 21f623c
     '3': 'Paras 3:sta'
+    #original_hash: cca816d
+    '5': 'Paras 5:stä'
     #original_hash: 2342d2b
     a: 'Typistetty 5:n keskiarvo'
     #original_hash: 940c82d
@@ -143,10 +145,14 @@ fi:
       '2': Bo2
       #original_hash: b41f36f
       '3': Bo3
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      #original_hash: 60827cb
+      h: H2H
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -1688,8 +1694,8 @@ fi:
       title: Meistä
       #original_hash: ed77e4c
       text: >-
-        World Cube Association on maailman johtava toimija mekaanisten
-        pulmapelien (tunnetuimpana Rubikin kuutio) kilpailutoiminnassa.
+        World Cube Association on Rubikin kuution ja muiden samankaltaisten
+        pulmapelien kilpailutoimintaa hallinnoiva lajiliitto.
     competitions:
       #original_hash: db98a68
       title: Kilpailut
@@ -2730,6 +2736,16 @@ fi:
         the waiting list. If you are using a waiting list, please specify a
         deadline. If you are not using a waiting list, please remember to
         specify this in the registration requirements.
+    live:
+      #original_hash: 10d1a3c
+      title: Livetulokset
+      connection:
+        #original_hash: f92b311
+        initialized: Connection being initialized
+        #original_hash: 66d44d4
+        connected: 'Connected, results are being updated'
+        #original_hash: 53abaa2
+        disconnected: 'Lost connection, results are not being updated'
     my_competitions:
       #original_hash: 5c6d3ea
       title: Omat kilpailuni
@@ -3155,10 +3171,10 @@ fi:
       is_visible: >-
         Tämä kilpailu on julkisesti nähtävillä, ja kaikki tekemäsi muutokset
         näkyvät julkisesti!
-      #original_hash: 1039850
+      #original_hash: eb98c2c
       pending_confirmation_html: >-
-        Täytä kaikki kentät ja anna delegaatin painaa 'Vahvista', kun olet
-        valmis siihen, että %{contact} hyväksyy tämän kilpailun.
+        Fill in all the fields and ask your Delegate to click 'Confirm' when
+        you're ready for the %{contact} to approve this competition.
       #original_hash: 8966fd0
       submit_create_value: Luo kilpailu
       #original_hash: 40b0dfd
@@ -3443,11 +3459,10 @@ fi:
           enabled: >-
             Kilpailijaraja vaaditaan. Ainoa poikkeus tähän on useassa
             sijainnissa käytävä FMC-kilpailu.
-          #original_hash: b7b599b
+          #original_hash: 6127d47
           count: >-
-            Kilpailuun osallistuvien sallittu määrä. Rajan asettaminen ei vielä
-            estä enempää kilpailijoita rekisteröitymästä; siitä pitää huolehtia
-            manuaalisesti.
+            The number of competitors allowed in this competition. This limit is
+            enforced by the built-in registration system.
           #original_hash: 4bd7102
           reason: Mikä on peruste kilpailijarajalle? Täytä englanniksi!
           #original_hash: 045d250
@@ -4284,16 +4299,14 @@ fi:
           tulokseksi kirjataan DNF (ks. %{regulation_link}).
         #original_hash: 83d204f
         regulation_link_text: 'Sääntö %{number}'
-        #original_hash: bd0e4a9
-        guideline_link_text: 'Ohjesääntö %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: kumulatiivinen aikaraja
         #original_hash: d47f11a
         cumulative_one_round_html: 'Käytössä voi olla %{cumulative_time_limit} (ks. %{regulation_link}).'
-        #original_hash: c6190b6
+        #original_hash: 44f85f0
         cumulative_across_rounds_html: >-
           %{cumulative_time_limit} voidaan määrittää useamman kierroksen ajalle
-          (ks. %{guideline_link}).
+          (ks. %{regulation_link}).
         #original_hash: e8d17df
         cutoff_html: >-
           Cutoff-kierroksen toiseen vaiheeseen pääsyyn vaadittava tulos (ks.
