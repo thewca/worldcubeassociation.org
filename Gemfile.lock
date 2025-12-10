@@ -1,11 +1,4 @@
 GIT
-  remote: https://github.com/derekprior/momentjs-rails.git
-  revision: de473b81db40d0dc19e277895746c79b41a0607a
-  specs:
-    momentjs-rails (2.29.4.1)
-      railties (>= 3.1)
-
-GIT
   remote: https://github.com/jfly/selectize-rails.git
   revision: fe39d6e08934c0ebc602a166d88de3b22c3aaf49
   specs:
@@ -32,14 +25,6 @@ GIT
   specs:
     time_will_tell (0.1.0)
       railties (>= 3.2)
-
-GIT
-  remote: https://github.com/zpaulovics/datetimepicker-rails.git
-  revision: 7a4640cb932e55866500a86c4f78808a4fca46e6
-  submodules: true
-  specs:
-    datetimepicker-rails (4.7.16)
-      momentjs-rails (>= 2.9.0)
 
 GEM
   remote: https://rubygems.org/
@@ -181,6 +166,8 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
     bootstrap-table-rails (1.11.1.1)
+    bootstrap3-datetimepicker-rails (4.17.47)
+      momentjs-rails (>= 2.8.1)
     builder (3.3.0)
     bullet (8.1.0)
       activesupport (>= 3.0.0)
@@ -490,6 +477,8 @@ GEM
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
     minitest (5.26.2)
+    momentjs-rails (2.29.4.1)
+      railties (>= 3.1)
     monetize (1.11.0)
       money (~> 6.12)
     money (6.16.0)
@@ -993,6 +982,7 @@ DEPENDENCIES
   blocks
   bootstrap-sass
   bootstrap-table-rails
+  bootstrap3-datetimepicker-rails
   bullet
   byebug
   capybara
@@ -1003,7 +993,6 @@ DEPENDENCIES
   csv
   daemons
   database_cleaner
-  datetimepicker-rails!
   devise
   devise-bootstrap-views
   devise-i18n
@@ -1041,7 +1030,7 @@ DEPENDENCIES
   launchy
   mail_form
   mini_magick
-  momentjs-rails!
+  momentjs-rails
   money-currencylayer-bank
   money-rails
   mysql2
@@ -1152,6 +1141,7 @@ CHECKSUMS
   blocks (4.0.1) sha256=c82ca06557254772dc49e63560769624c8063bcb51cac808ac7e508e39fe323f
   bootstrap-sass (3.4.1) sha256=ba4673535eb0a8334a39a258ea8d81904832f47607069d0a1735b0937645c7df
   bootstrap-table-rails (1.11.1.1) sha256=444daf5ba9d8b642e377372beba2924ee2cbfa09559abb0ddf2e8bffb1bafc35
+  bootstrap3-datetimepicker-rails (4.17.47) sha256=ee87a9bad74c140729f6a1ea2a7f3f2d9aaefa7e9defbe31b4edd27ff64689a2
   builder (3.3.0) sha256=497918d2f9dca528fdca4b88d84e4ef4387256d984b8154e9d5d3fe5a9c8835f
   bullet (8.1.0) sha256=604b7e2636ec2137dcab3ba61a56248c39a0004a0c9405d58bad0686d23b98ff
   byebug (12.0.0) sha256=d4a150d291cca40b66ec9ca31f754e93fed8aa266a17335f71bb0afa7fca1a1e
@@ -1178,7 +1168,6 @@ CHECKSUMS
   database_cleaner-active_record (2.2.0) sha256=3228d6d8ec1f2103fd6ab468dae923424318bcfabcf5dd5b02e5fcb0c486e1c7
   database_cleaner-core (2.0.1) sha256=8646574c32162e59ed7b5258a97a208d3c44551b854e510994f24683865d846c
   date (3.5.0) sha256=5e74fd6c04b0e65d97ad4f3bb5cb2d8efb37f386cc848f46310b4593ffc46ee5
-  datetimepicker-rails (4.7.16)
   debug_inspector (1.2.0) sha256=9bdfa02eebc3da163833e6a89b154084232f5766087e59573b70521c77ea68a2
   declarative (0.0.20) sha256=8021dd6cb17ab2b61233c56903d3f5a259c5cf43c80ff332d447d395b17d9ff9
   devise (4.9.4) sha256=920042fe5e704c548aa4eb65ebdd65980b83ffae67feb32c697206bfd975a7f8
@@ -1294,7 +1283,7 @@ CHECKSUMS
   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
   mini_portile2 (2.8.9) sha256=0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289
   minitest (5.26.2) sha256=f021118a6185b9ba9f5af71f2ba103ad770c75afde9f2ab8da512677c550cde3
-  momentjs-rails (2.29.4.1)
+  momentjs-rails (2.29.4.1) sha256=c7f9bc583872b628f8723319f4ae12a646c858c1c3ddb352bc75d5a7aa0b9e01
   monetize (1.11.0) sha256=d6c506daf4da0f424caa74cad1283fb82133607e504c631fc08eafd67d15ca32
   money (6.16.0) sha256=cf476f5f19188e247ec20f6509cff64dc35d395ee018bad799b1a9ea8bd4754a
   money-currencylayer-bank (0.7.2) sha256=ba848e535ca21ef50386f1a535e1ac5fd9ee7cfd014ac30afcd4a6ebd8b9be4f
