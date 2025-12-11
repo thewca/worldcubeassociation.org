@@ -280,6 +280,8 @@ export function advancementConditionToString(wcifRound, { short } = {}) {
   const wcaEvent = events.byId[eventId];
 
   switch (condition.type) {
+    case 'dual':
+      return I18n.t(`advancement_condition${shortTag}.dual`);
     case 'ranking':
       return I18n.t(`advancement_condition${shortTag}.ranking`, { ranking: condition.level });
     case 'percent':
