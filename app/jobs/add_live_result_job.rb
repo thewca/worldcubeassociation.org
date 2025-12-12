@@ -13,15 +13,11 @@ class AddLiveResultJob < ApplicationJob
     format = round.format
 
     r = Result.new(
-      value1: results[0],
-      value2: results[1] || 0,
-      value3: results[2] || 0,
-      value4: results[3] || 0,
-      value5: results[4] || 0,
       event_id: event.id,
       round_type_id: round.round_type_id,
       round_id: round.id,
       format_id: format.id,
+      result_attempts: results.map.with_index(1) { |r, index| ResultAttempt.new(attempt_number: index, value: r) },
     )
 
     LiveResult.create!(registration_id: registration_id,
