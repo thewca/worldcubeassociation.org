@@ -132,6 +132,8 @@ pt:
     '2': Melhor de 2
     #original_hash: 21f623c
     '3': Melhor de 3
+    #original_hash: cca816d
+    '5': Melhor de 5
     #original_hash: 2342d2b
     a: Média de 5
     #original_hash: 940c82d
@@ -143,6 +145,8 @@ pt:
       '2': Bo2
       #original_hash: b41f36f
       '3': Bo3
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: Ao5
       #original_hash: 53ba088
