@@ -152,11 +152,11 @@ module Admin
     end
 
     private def result_params
-      params.require(:result).permit(:value1, :value2, :value3, :value4, :value5,
-                                     :competition_id, :round_type_id, :round_id, :event_id,
-                                     :format_id, :person_name, :person_id, :country_id,
-                                     :best, :average,
-                                     :regional_single_record, :regional_average_record)
+      params.expect(result: %i[value1 value2 value3 value4 value5
+                               competition_id round_type_id round_id event_id
+                               format_id person_name person_id country_id
+                               best average
+                               regional_single_record regional_average_record])
     end
   end
 end

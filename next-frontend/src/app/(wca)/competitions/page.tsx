@@ -48,7 +48,7 @@ import RegionSelector from "@/components/RegionSelector";
 import { components } from "@/types/openapi";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
-import { MultiEventSelector } from "@/components/EventSelector";
+import { FormEventSelector } from "@/components/EventSelector";
 
 const DEBOUNCE_MS = 600;
 
@@ -181,7 +181,7 @@ export default function CompetitionsPage() {
             </Card.Header>
             <Card.Body asChild>
               <VStack gap="2" borderBottom="black">
-                <MultiEventSelector
+                <FormEventSelector
                   selectedEvents={filterState.selectedEvents}
                   title="Event"
                   onEventClick={(eventId) =>

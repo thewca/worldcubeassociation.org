@@ -10504,7 +10504,7 @@ __metadata:
     react_ujs: "npm:^3.2.1"
     regenerator-runtime: "npm:^0.14.1"
     resolve-url-loader: "npm:^5.0.0"
-    sass: "npm:^1.94.2"
+    sass: "npm:^1.95.0"
     sass-loader: "npm:^16.0.6"
     semantic-ui-react: "npm:^2.1.5"
     shakapacker: "npm:9.4.0"
@@ -10515,7 +10515,7 @@ __metadata:
     terser-webpack-plugin: "npm:^5.3.15"
     webpack: "npm:^5.103.0"
     webpack-assets-manifest: "npm:^6.5.0"
-    webpack-bundle-analyzer: "npm:^5.0.1"
+    webpack-bundle-analyzer: "npm:^5.1.0"
     webpack-cli: "npm:^6.0.1"
     webpack-dev-server: "npm:^5.2.2"
     webpack-manifest-plugin: "npm:^6.0.1"
@@ -10621,9 +10621,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.94.2":
-  version: 1.94.2
-  resolution: "sass@npm:1.94.2"
+"sass@npm:^1.95.0":
+  version: 1.95.0
+  resolution: "sass@npm:1.95.0"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^4.0.0"
@@ -10634,7 +10634,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10c0/49a656dfab58299165ef94e71483a333972daee68c49fa542858d4912accdfb1707338226a165b1a2dfcdb2509fcda5a5b4f3780d14e49b6d38d93c8043475d3
+  checksum: 10c0/5f4093eb6fe569d65fbf30baf1fdd36b499ebc90a2f36fedf64aea2f5a72889a9df34cc96cd7cb640a10156708c9b8894b6f89953f26b57b44b96731e9c27fb5
   languageName: node
   linkType: hard
 
@@ -12001,9 +12001,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-bundle-analyzer@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "webpack-bundle-analyzer@npm:5.0.1"
+"webpack-bundle-analyzer@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "webpack-bundle-analyzer@npm:5.1.0"
   dependencies:
     "@discoveryjs/json-ext": "npm:0.5.7"
     acorn: "npm:^8.0.4"
@@ -12018,7 +12018,7 @@ __metadata:
     ws: "npm:^7.3.1"
   bin:
     webpack-bundle-analyzer: lib/bin/analyzer.js
-  checksum: 10c0/a2184a078b4c2bd8df1785efdfe08edf1ce820cfc7b512a324768a497d0175c8bacbd9ab1f1306d6b71e322607c9a741fb6c4af1593a96f957ab5b2ed39189d4
+  checksum: 10c0/3efd211d14f8b484a2ac295fec491820716c571368e8c5f7ca1bb7e0c4c8b5b08cc0a8d8fbb189aecbce9fa1b8e14e4a84638366839543b8c901917bbdfcf49c
   languageName: node
   linkType: hard
 

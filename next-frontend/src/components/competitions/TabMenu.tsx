@@ -78,7 +78,9 @@ export default function TabMenu({
           </Tabs.Trigger>
         ))}
       </Tabs.List>
-      <Tabs.Content value={currentPath!}>{children}</Tabs.Content>
+      <Tabs.Content width="full" value={currentPath!}>
+        {children}
+      </Tabs.Content>
     </Tabs.Root>
   );
 }
