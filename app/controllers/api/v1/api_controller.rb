@@ -6,6 +6,8 @@ class Api::V1::ApiController < ApplicationController
   def require_user
     @current_user = current_user || api_user
     raise WcaExceptions::MustLogIn.new if @current_user.nil?
+
+    @current_user
   end
 
   def api_user
