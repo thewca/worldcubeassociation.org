@@ -1333,8 +1333,6 @@ module DatabaseDumper
           information
           external_website
           venue
-          latitude_microdegrees
-          longitude_microdegrees
           city_name
           country_id
           venue_address
@@ -1352,6 +1350,8 @@ module DatabaseDumper
           "end_year" => "YEAR(end_date)",
           "end_month" => "MONTH(end_date)",
           "end_day" => "DAY(end_date)",
+          "latitude_microdegrees" => "latitude",
+          "longitude_microdegrees" => "longitude",
         }.freeze,
       ),
       tsv_sanitizers: actions_to_column_sanitizers(
