@@ -256,7 +256,7 @@ class Round < ApplicationRecord
       ON r.id = ranked.id
       SET r.global_pos = ranked.ranking
       WHERE r.round_id IN (#{round_ids});
-      SQL
+    SQL
 
     ActiveRecord::Base.connection.exec_query query
   end

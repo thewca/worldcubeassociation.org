@@ -56,7 +56,7 @@ class LiveResult < ApplicationRecord
       round_type_id: round.round_type_id,
       round_id: round.id,
       format_id: round.format_id,
-      )
+    )
     [r.compute_correct_average, r.compute_correct_best]
   end
 
