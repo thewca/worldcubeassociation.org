@@ -993,7 +993,7 @@ export interface components {
             /** @example 770 Don Mills Rd, North York, ON M3C IT3, Canada */
             venue_address: string;
             /** @example The big convention center */
-            venue_details: string;
+            venue_details?: string;
             /**
              * Format: float
              * @example 47.611387

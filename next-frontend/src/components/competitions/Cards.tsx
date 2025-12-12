@@ -78,7 +78,7 @@ export function VenueDetailsCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root>
+    <Card.Root width="inherit">
       <Card.Body>
         <Card.Title textStyle="s4">Venue Details</Card.Title>
         <SimpleGrid columns={2} gap="4">
@@ -101,16 +101,18 @@ export function VenueDetailsCard({
             <Stat.ValueText>{competitionInfo.venue_address}</Stat.ValueText>
           </Stat.Root>
 
-          <Stat.Root variant="competition">
-            <Stat.Label>
-              <DetailsIcon />
-              Details
-            </Stat.Label>
-            <MarkdownProse
-              as={Stat.ValueText}
-              content={competitionInfo.venue_details}
-            />
-          </Stat.Root>
+          {competitionInfo.venue_details && (
+            <Stat.Root variant="competition">
+              <Stat.Label>
+                <DetailsIcon />
+                Details
+              </Stat.Label>
+              <MarkdownProse
+                as={Stat.ValueText}
+                content={competitionInfo.venue_details}
+              />
+            </Stat.Root>
+          )}
         </SimpleGrid>
       </Card.Body>
     </Card.Root>
