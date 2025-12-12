@@ -1215,11 +1215,13 @@ module DatabaseDumper
           event_id
           person_name
           person_id
-          person_country_id
           format_id
           regional_single_record
           regional_average_record
         ],
+        fake_values: {
+          "person_country_id" => "country_id",
+        }.freeze,
       ),
     }.freeze,
     "result_attempts" => {
