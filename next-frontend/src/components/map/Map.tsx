@@ -2,15 +2,16 @@
 
 import { components } from "@/types/openapi";
 import Loading from "@/components/ui/loading";
-import { Text, Icon, Link } from "@chakra-ui/react";
+import { Text, Icon, Link, Heading } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
 import { dateRange } from "@/lib/wca/dates";
 import { isProbablyOver } from "@/lib/dates/competition";
 import MapContainer, { Marker } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { LuMapPinPlusInside } from "react-icons/lu";
+import { LuMapPin } from "react-icons/lu";
 import { Tooltip } from "@/components/ui/tooltip";
+import { useMemo } from "react";
 
 interface MapProps {
   competitions:
@@ -27,13 +28,9 @@ const tileProvider = {
 };
 
 export default function Map({ competitions, isLoading = false }: MapProps) {
-  return (
-    <MapContainer
-      initialViewState={{ longitude: 0, latitude: 0, zoom: 2 }}
-      mapStyle={tileProvider.style}
-    >
-      {isLoading && <Loading />}
-      {competitions.slice(0, MAP_DISPLAY_LIMIT).map((comp) => (
+  const markers = useMemo(
+    () =>
+      competitions.slice(0, MAP_DISPLAY_LIMIT).map((comp) => (
         <Marker
           key={comp.id}
           longitude={comp.longitude_degrees}
@@ -43,29 +40,41 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
             showArrow
             content={
               <Text>
-                <Link asChild>
-                  <NextLink
-                    href={route({
-                      pathname: "/competitions/[competitionId]",
-                      query: { competitionId: comp.id },
-                    })}
-                  >
-                    {comp.name}
-                  </NextLink>
-                </Link>
+                <Heading textStyle="headerLink">{comp.name}</Heading>
                 <br />
                 {`${dateRange(comp.start_date, comp.end_date)} - ${comp.city}`}
               </Text>
             }
           >
-            <Icon asChild size="sm">
-              <LuMapPinPlusInside
-                color={isProbablyOver(comp.end_date) ? "blue" : "red"}
-              />
+            <Icon asChild size="xl">
+              <Link asChild>
+                <NextLink
+                  href={route({
+                    pathname: "/competitions/[competitionId]",
+                    query: { competitionId: comp.id },
+                  })}
+                >
+                  <LuMapPin
+                    size="xl"
+                    fill="white"
+                    color={isProbablyOver(comp.end_date) ? "blue" : "red"}
+                  />
+                </NextLink>
+              </Link>
             </Icon>
           </Tooltip>
         </Marker>
-      ))}
+      )),
+    [competitions],
+  );
+
+  return (
+    <MapContainer
+      initialViewState={{ longitude: 0, latitude: 0, zoom: 2 }}
+      mapStyle={tileProvider.style}
+    >
+      {isLoading && <Loading />}
+      {markers}
     </MapContainer>
   );
 }
