@@ -9,9 +9,6 @@ Rails.application.routes.draw do
   end
   use_doorkeeper_openid_connect
 
-  # Starburst announcements, see https://github.com/starburstgem/starburst#installation
-  mount Starburst::Engine => '/starburst'
-
   # Sidekiq web UI, see https://github.com/sidekiq/sidekiq/wiki/Devise
   # Specifically referring to results because WRT needs access to this on top of regular admins.
   authenticate :user, ->(user) { user.can_admin_results? } do
@@ -201,7 +198,7 @@ Rails.application.routes.draw do
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
-  resources :polls, only: %i[edit new vote create update index destroy]
+  resources :polls, only: %i[edit new create update index destroy]
   get 'polls/:id/vote' => 'votes#vote', as: 'polls_vote'
   get 'polls/:id/results' => 'polls#results', as: 'polls_results'
 
@@ -383,7 +380,6 @@ Rails.application.routes.draw do
 
           member do
             get 'payment_ticket', to: 'registrations#payment_ticket'
-            get 'config', to: 'registrations#registration_config', as: :registration_config
           end
 
           collection do
@@ -392,6 +388,10 @@ Rails.application.routes.draw do
             get 'admin', to: 'registrations#index_admin'
             get ':user_id', to: 'registrations#show_by_user', as: :show_by_user
           end
+        end
+
+        member do
+          get 'registration_config', to: 'registrations#registration_config', as: :registration_config
         end
       end
     end

@@ -132,6 +132,8 @@ ko:
     '2': 2회 단일
     #original_hash: 21f623c
     '3': 3회 단일
+    #original_hash: cca816d
+    '5': 5회 단일
     #original_hash: 2342d2b
     a: 5회 평균
     #original_hash: 940c82d
@@ -143,6 +145,8 @@ ko:
       '2': 단일(2회)
       #original_hash: b41f36f
       '3': 단일(3회)
+      #original_hash: 03709b1
+      '5': 단일(5회)
       #original_hash: 4a34175
       a: 평균(5회)
       #original_hash: 53ba088

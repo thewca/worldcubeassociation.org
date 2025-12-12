@@ -64,6 +64,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=deps /app/global-bundle.pem /app/global-bundle.pem
 COPY --from=deps /usr/local/bin/vault /usr/local/bin/vault
 COPY --from=builder /app/docker-entrypoint.sh /app/docker-entrypoint.sh
+COPY --from=builder /app/export-dump.sh /app/export-dump.sh
 
 RUN apk add --no-cache jq
 

@@ -128,7 +128,6 @@ export type StaticTargetLink =
   | '/'
   | '/about'
   | '/competitions'
-  | '/competitions/mine'
   | '/delegates'
   | '/disclaimer'
   | '/documents'
