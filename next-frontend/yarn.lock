@@ -13068,6 +13068,7 @@ __metadata:
     i18next-resources-to-backend: "npm:^1.2.1"
     js-cookie: "npm:^3.0.5"
     jsdom: "npm:^27.3.0"
+    leaflet: "npm:^1.9.4"
     lodash: "npm:^4.17.21"
     luxon: "npm:^3.7.2"
     maplibre-gl: "npm:^5.14.0"
