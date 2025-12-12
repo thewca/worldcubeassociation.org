@@ -52,6 +52,21 @@ class LiveResult < ApplicationRecord
     end
   end
 
+  def self.compute_average_and_best(attempts)
+    r = Result.new(
+      value1: attempts[0].result,
+      value2: attempts[1]&.result || 0,
+      value3: attempts[2]&.result || 0,
+      value4: attempts[3]&.result || 0,
+      value5: attempts[4]&.result || 0,
+      event_id: round.event.id,
+      round_type_id: round.round_type_id,
+      round_id: round.id,
+      format_id: round.format_id,
+      )
+    [r.compute_correct_average, r.compute_correct_best]
+  end
+
   def potential_solve_time
     complete? ? values_for_sorting : best_possible_solve_times
   end
