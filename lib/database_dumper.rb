@@ -1443,10 +1443,25 @@ module DatabaseDumper
     config = ActiveRecord::Base.configurations.configs_for(name: dump_config_name.to_s, include_hidden: true)
     dump_db_name = config.configuration_hash[:database]
 
+    # By default, assume that we're running dumps in the order they're refined.
+    # This will be overridden in a deeper scope down below.
+    ordered_table_names = dump_sanitizers.keys
+
     LogTask.log_task "Creating temporary database '#{dump_db_name}'" do
       ActiveRecord::Tasks::DatabaseTasks.drop config
       ActiveRecord::Tasks::DatabaseTasks.create config
       ActiveRecord::Tasks::DatabaseTasks.load_schema config
+
+      # We need to make sure that the dump runs in the correct order, because of foreign key dependencies.
+      #   Normally, this would not be a problem for a "standard SQL dump", because tools like `mysqldump` or `mariadb-dump`
+      #   simply disable Foreign Keys altogether, then dump the data in one go, and then enable the foreign key checking again.
+      # However, since we're running manual dumps while foreign key checking is enabled, we need to make sure that our data
+      #   is being dumped in the "correct order". For example, we cannot run the `results` dumper before `rounds`,
+      #   because there is a Foreign Key pointing from the former to the latter, so inserting values into `results`
+      #   without the corresponding `rounds` row already existing, will make the DB throw errors.
+      ordered_table_names = ordered_table_names
+                            .index_with { ActiveRecord::Base.connection.foreign_keys(it).pluck(:to_table) }
+                            .tsort
     ensure
       # Need to connect to primary database again because the operations above redirect the entire ActiveRecord connection
       ActiveRecord::Base.establish_connection(primary_db_config) if primary_db_config
@@ -1456,26 +1471,12 @@ module DatabaseDumper
       ActiveRecord::Base.connection.execute("SET SESSION group_concat_max_len = 1048576")
     end
 
-    # We need to make sure that the dump runs in the correct order, because of foreign key dependencies.
-    #   Normally, this would not be a problem for a "standard SQL dump", because tools like `mysqldump` or `mariadb-dump`
-    #   simply disable Foreign Keys altogether, then dump the data in one go, and then enable the foreign key checking again.
-    # However, since we're running manual dumps while foreign key checking is enabled, we need to make sure that our data
-    #   is being dumped in the "correct order". For example, we cannot run the `results` dumper before `rounds`,
-    #   because there is a Foreign Key pointing from the former to the latter, so inserting values into `results`
-    #   without the corresponding `rounds` row already existing, will make the DB throw errors.
-    ordered_table_names = dump_sanitizers.keys
-                                         .index_with { ActiveRecord::Base.connection.foreign_keys(it).pluck(:to_table) }
-                                         .tsort
-
-    # Turn of foreign key checking to avoid errors when dumping data caused by foreign keys referencing not yet
-    # existing rows.
+    # Turn of foreign key checking to avoid errors when dumping data caused by foreign keys referencing not yet existing rows.
     ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
 
     LogTask.log_task "Populating sanitized tables in '#{dump_db_name}'" do
       ordered_table_names.each do |table_name|
-        puts table_name
         table_sanitizer = dump_sanitizers[table_name]
-        puts table_sanitizer
 
         next if table_sanitizer == :skip_all_rows
 
@@ -1532,7 +1533,6 @@ module DatabaseDumper
       end
 
       sanitizers.each do |table_name, table_sanitizer|
-        puts table_name
         next if table_sanitizer == :skip_all_rows
 
         column_expressions = table_sanitizer[:column_sanitizers].map do |column_name, _|

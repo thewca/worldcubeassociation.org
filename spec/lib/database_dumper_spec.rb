@@ -132,7 +132,7 @@ RSpec.describe "DatabaseDumper" do
     end
 
     context 'v1' do
-      it 'encounters no errors when dumping the database', :cxzz do
+      it 'encounters no errors when dumping the database' do
         Dir.mktmpdir do |dir|
           expect { DatabaseDumper.public_results_dump("result_test.sql", dir, :v1) }.not_to raise_error
         end
@@ -164,8 +164,8 @@ RSpec.describe "DatabaseDumper" do
       end
     end
 
-    context 'v2', :zxc do
-      it 'encounters no errors when dumping the database', :cxz do
+    context 'v2' do
+      it 'encounters no errors when dumping the database' do
         Dir.mktmpdir do |dir|
           expect { DatabaseDumper.public_results_dump("result_test.sql", dir, :v2) }.not_to raise_error
         end
