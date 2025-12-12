@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const MediaSubmissionIcon = createIcon({
@@ -13,10 +14,9 @@ const MediaSubmissionIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const MediaSubmissionIconPreview = () => {
-  return <MediaSubmissionIcon size="lg" />;
-};
-
-export default MediaSubmissionIconPreview;
+export default MediaSubmissionIcon;

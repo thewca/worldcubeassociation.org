@@ -1,5 +1,3 @@
-"use server";
-
 import React from "react";
 import {
   Button,
@@ -13,30 +11,48 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
 import Image from "next/image";
+import { auth } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
-import { LuChevronDown, LuMonitorCheck } from "react-icons/lu";
+import { LuChevronDown } from "react-icons/lu";
 
-import { iconMap, IconName } from "@/components/icons/iconMap";
+import LanguageSelector from "@/components/ui/languageSelector";
+import IconDisplay from "@/components/IconDisplay";
+import type { IconName } from "@/types/payload";
+import AvatarMenu from "@/components/ui/avatarMenu";
 
-interface IconDisplayProps {
-  name: IconName | undefined | null;
-  fallback?: boolean;
-}
-
-const IconDisplay = ({ name, fallback = false }: IconDisplayProps) => {
-  if (!name) {
-    return fallback ? <Text>No_Icon</Text> : null;
-  }
-
-  const IconComponent = iconMap[name];
-
-  return <IconComponent />;
+type NavbarEntry<T> = {
+  targetLink: T;
+  displayText: string;
+  displayIcon?: IconName;
 };
+
+function LinkWrapper<T extends string>({
+  navbarEntry,
+  linkComponent: LinkComponent,
+}: {
+  navbarEntry: NavbarEntry<T>;
+  linkComponent: React.ElementType<{ href: T }>;
+}) {
+  // Have to trick the JSX type checker because TS cannot verify
+  //   whether "primitive" components like `a` satisfy a generic `href: T`.
+  const RawLinkComponent = LinkComponent as React.ElementType;
+
+  return (
+    <RawLinkComponent href={navbarEntry.targetLink}>
+      {navbarEntry.displayIcon && (
+        <IconDisplay name={navbarEntry.displayIcon} />
+      )}
+      {navbarEntry.displayText}
+    </RawLinkComponent>
+  );
+}
 
 export default async function Navbar() {
   const payload = await getPayload({ config });
   const navbar = await payload.findGlobal({ slug: "nav" });
+
+  const session = await auth();
 
   return (
     <HStack
@@ -48,32 +64,31 @@ export default async function Navbar() {
       <RefreshRouteOnSave />
       <HStack>
         <IconButton asChild variant="ghost">
-          <Link href={"/"}>
+          <Link href="/">
             <ChakraImage asChild maxW={10}>
               <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
             </ChakraImage>
-          </Link>
-        </IconButton>
-        <IconButton asChild variant="ghost">
-          <Link href={"/dashboard"}>
-            <LuMonitorCheck />
           </Link>
         </IconButton>
         {navbar.entry.map((navbarEntry) => (
           <React.Fragment key={navbarEntry.id}>
             {navbarEntry.blockType === "LinkItem" && (
               <Button asChild variant="ghost" size="sm">
-                <Link href={navbarEntry.targetLink}>
-                  <IconDisplay name={navbarEntry.displayIcon} />
-                  {navbarEntry.displayText}
-                </Link>
+                <LinkWrapper navbarEntry={navbarEntry} linkComponent={Link} />
+              </Button>
+            )}
+            {navbarEntry.blockType === "ExternalLinkItem" && (
+              <Button asChild variant="ghost" size="sm">
+                <LinkWrapper navbarEntry={navbarEntry} linkComponent="a" />
               </Button>
             )}
             {navbarEntry.blockType === "NavDropdown" && (
               <Menu.Root>
                 <Menu.Trigger asChild>
                   <Button variant="ghost" size="sm">
-                    <IconDisplay name={navbarEntry.displayIcon} />
+                    {navbarEntry.displayIcon && (
+                      <IconDisplay name={navbarEntry.displayIcon} />
+                    )}
                     {navbarEntry.title}
                     <LuChevronDown />
                   </Button>
@@ -83,11 +98,25 @@ export default async function Navbar() {
                     {navbarEntry.entries.map((subEntry) => (
                       <React.Fragment key={subEntry.id}>
                         {subEntry.blockType === "LinkItem" && (
-                          <Menu.Item value={subEntry.id!} asChild>
-                            <Link href={subEntry.targetLink}>
-                              <IconDisplay name={subEntry.displayIcon} />
-                              {subEntry.displayText}
-                            </Link>
+                          <Menu.Item
+                            value={`${navbarEntry.id}/${subEntry.id}`}
+                            asChild
+                          >
+                            <LinkWrapper
+                              navbarEntry={subEntry}
+                              linkComponent={Link}
+                            />
+                          </Menu.Item>
+                        )}
+                        {subEntry.blockType === "ExternalLinkItem" && (
+                          <Menu.Item
+                            value={`${navbarEntry.id}/${subEntry.id}`}
+                            asChild
+                          >
+                            <LinkWrapper
+                              navbarEntry={subEntry}
+                              linkComponent="a"
+                            />
                           </Menu.Item>
                         )}
                         {subEntry.blockType === "VisualDivider" && (
@@ -108,13 +137,26 @@ export default async function Navbar() {
                                 {subEntry.entries.map((nestedEntry) => (
                                   <React.Fragment key={nestedEntry.id}>
                                     {nestedEntry.blockType === "LinkItem" && (
-                                      <Menu.Item value={nestedEntry.id!}>
-                                        <Link href={nestedEntry.targetLink}>
-                                          <IconDisplay
-                                            name={nestedEntry.displayIcon}
-                                          />
-                                          {nestedEntry.displayText}
-                                        </Link>
+                                      <Menu.Item
+                                        value={`${navbarEntry.id}/${subEntry.id}/${nestedEntry.id}`}
+                                        asChild
+                                      >
+                                        <LinkWrapper
+                                          navbarEntry={nestedEntry}
+                                          linkComponent={Link}
+                                        />
+                                      </Menu.Item>
+                                    )}
+                                    {nestedEntry.blockType ===
+                                      "ExternalLinkItem" && (
+                                      <Menu.Item
+                                        value={`${navbarEntry.id}/${subEntry.id}/${nestedEntry.id}`}
+                                        asChild
+                                      >
+                                        <LinkWrapper
+                                          navbarEntry={nestedEntry}
+                                          linkComponent="a"
+                                        />
                                       </Menu.Item>
                                     )}
                                   </React.Fragment>
@@ -139,9 +181,8 @@ export default async function Navbar() {
       </HStack>
       <HStack>
         <ColorModeButton />
-        <Button asChild variant="ghost" size="sm">
-          <Link href="/payload">Payload CMS</Link>
-        </Button>
+        <LanguageSelector />
+        <AvatarMenu session={session} />
       </HStack>
     </HStack>
   );

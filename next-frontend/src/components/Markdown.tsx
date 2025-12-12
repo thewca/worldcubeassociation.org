@@ -1,32 +1,45 @@
 import { Prose } from "@/components/ui/prose";
 import Markdown from "react-markdown";
-import { Link as ChakraLink } from "@chakra-ui/react";
-import Link from "next/link";
+import { Link as ChakraLink, Image as ChakraImage } from "@chakra-ui/react";
 
-interface MarkdownProseProps {
+import type { PolymorphicComponent } from "@/lib/types/components";
+import type { ComponentPropsWithoutRef } from "react";
+
+type MarkdownProseOwnProps = {
   content: string;
-}
+  linkProps?: ComponentPropsWithoutRef<typeof ChakraLink>;
+  imageProps?: ComponentPropsWithoutRef<typeof ChakraImage>;
+};
 
-export const MarkdownProse = ({ content }: MarkdownProseProps) => {
+export const MarkdownProse: PolymorphicComponent<
+  MarkdownProseOwnProps,
+  typeof Prose
+> = ({
+  content,
+  linkProps = {},
+  imageProps = {},
+  as: RenderAs = Prose,
+  ...restProps
+}) => {
   return (
-    <Prose>
+    <RenderAs {...restProps}>
       <Markdown
         components={{
-          a: ({ href, children }) => (
-            <ChakraLink asChild>
-              <Link
-                href={href || "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {children}
-              </Link>
+          a: ({ children, ...aTag }) => (
+            <ChakraLink
+              {...aTag}
+              {...linkProps}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {children}
             </ChakraLink>
           ),
+          img: (imgTag) => <ChakraImage {...imgTag} {...imageProps} />,
         }}
       >
         {content}
       </Markdown>
-    </Prose>
+    </RenderAs>
   );
 };

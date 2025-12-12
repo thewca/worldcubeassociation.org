@@ -277,7 +277,7 @@ RSpec.describe Registration do
       create(
         :result,
         person_id: user.wca_id,
-        competition_id: previous_competition.id,
+        competition: previous_competition,
         event_id: '333',
         best: 1200,
         average: 1500,
@@ -602,7 +602,7 @@ RSpec.describe Registration do
   end
 
   describe '#auto_accept' do
-    let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open) }
+    let(:auto_accept_comp) { create(:competition, :live_auto_accept, :registration_open) }
     let!(:reg) { create(:registration, competition: auto_accept_comp) }
 
     describe 'return values' do
@@ -636,14 +636,6 @@ RSpec.describe Registration do
       end
     end
 
-    it 'live auto accept is not triggered upon payment' do
-      expect(reg.competing_status).to eq('pending')
-
-      create(:registration_payment, registration: reg, competition: auto_accept_comp)
-
-      expect(reg.reload.competing_status).to eq('pending')
-    end
-
     it 'works for a paid pending registration' do
       expect(reg.competing_status).to eq('pending')
 
@@ -664,12 +656,29 @@ RSpec.describe Registration do
       expect(reg.reload.competing_status).to eq('accepted')
     end
 
+    it 'doesnt auto accept an unpaid pending competitor' do
+      expect(reg.competing_status).to eq('pending')
+
+      reg.attempt_auto_accept
+      expect(reg.reload.competing_status).to eq('pending')
+      expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7001")
+    end
+
+    it 'doesnt auto accept an unpaid waiting list competitor' do
+      reg.update(competing_status: 'waiting_list')
+
+      reg.attempt_auto_accept
+      expect(reg.reload.competing_status).to eq('waiting_list')
+      expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7001")
+    end
+
     it 'doesnt auto accept a competitor who gets refunded' do
       expect(reg.competing_status).to eq('pending')
 
+      create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
       create(:registration_payment, :refund, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
-      reg.attempt_auto_accept
+      reg.reload.attempt_auto_accept
       expect(reg.reload.competing_status).to eq('pending')
       expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7001")
     end
@@ -677,11 +686,12 @@ RSpec.describe Registration do
     it 'accepts the last competitor on the auto-accept disable threshold' do
       auto_accept_comp.auto_accept_disable_threshold = 5
       create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+      expect(reg.competing_status).to eq('pending')
+
       create_list(:registration, 4, :accepted, competition: auto_accept_comp)
 
       # Add some non-accepted registrations to make sure we're checking accepted registrations only
       create_list(:registration, 5, competition: auto_accept_comp)
-      expect(reg.competing_status).to eq('pending')
 
       create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
@@ -689,7 +699,6 @@ RSpec.describe Registration do
       expect(reg.reload.competing_status).to eq('accepted')
     end
 
-    # Fails because waiting_list_position persists when it shouldnt; #11173 should fix
     it 'can auto-accept the first user on the waiting list' do
       waiting_list_reg = create(:registration, :waiting_list, competition: auto_accept_comp)
 
@@ -699,7 +708,7 @@ RSpec.describe Registration do
       expect(waiting_list_reg.reload.competing_status).to eq('accepted')
     end
 
-    context 'auto-accept isnt triggered' do
+    context 'auto-accept does not succeed' do
       it 'if a waitlisted registration is not first in the waiting list' do
         create_list(:registration, 3, :waiting_list, competition: auto_accept_comp)
         waiting_list_reg = create(:registration, :waiting_list, competition: auto_accept_comp)
@@ -710,6 +719,22 @@ RSpec.describe Registration do
         waiting_list_reg.attempt_auto_accept
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
         expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7003")
+      end
+
+      it 'does not accept a pending registration ahead of a waitlisted one' do
+        create(:registration, :waiting_list, competition: auto_accept_comp)
+        create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        reg.attempt_auto_accept
+        expect(reg.reload.competing_status).to eq('waiting_list')
+      end
+
+      it 'if registration_payment.is_completed: false' do
+        create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp, is_completed: false)
+
+        reg.attempt_auto_accept
+        expect(reg.reload.competing_status).to eq('pending')
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7001")
       end
 
       it 'if status is cancelled' do
@@ -751,7 +776,7 @@ RSpec.describe Registration do
       end
 
       it 'before registration has opened' do
-        unopened_comp = create(:competition, :auto_accept, :registration_not_opened)
+        unopened_comp = create(:competition, :live_auto_accept, :registration_not_opened)
         unopened_reg = create(:registration, competition: unopened_comp)
 
         expect(unopened_reg.competing_status).to eq('pending')
@@ -764,7 +789,7 @@ RSpec.describe Registration do
       end
 
       it 'after registration has closed' do
-        closed_comp = create(:competition, :auto_accept)
+        closed_comp = create(:competition, :live_auto_accept)
         closed_reg = create(:registration, competition: closed_comp)
 
         expect(closed_reg.competing_status).to eq('pending')
@@ -817,12 +842,11 @@ RSpec.describe Registration do
     context 'log when auto accept is prevented by validations' do
       let(:limited_comp) do
         create(
-          :competition, :registration_open, :with_competitor_limit, :auto_accept, competitor_limit: 5, auto_accept_disable_threshold: nil
+          :competition, :registration_open, :with_competitor_limit, :live_auto_accept, competitor_limit: 5, auto_accept_disable_threshold: nil
         )
       end
       let!(:prevented_reg) { create(:registration, competition: limited_comp) }
 
-      # Fails because waiting_list_position persists when it shouldnt; #11173 should fix
       it 'if competitor limit is reached and first on waiting list' do
         create_list(:registration, 5, :accepted, competition: limited_comp)
 
@@ -831,7 +855,7 @@ RSpec.describe Registration do
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
 
         waiting_list_reg.attempt_auto_accept
-        expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq(['Competitor limit reached.'].to_s)
+        expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq('-4006')
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
       end
 
@@ -841,7 +865,7 @@ RSpec.describe Registration do
         series = create(:competition_series)
         competition_a = registration.competition
         competition_a.update!(competition_series: series)
-        competition_b = create(:competition, :registration_open, :auto_accept, competition_series: series, series_base: competition_a)
+        competition_b = create(:competition, :registration_open, :live_auto_accept, competition_series: series, series_base: competition_a)
         reg_b = create(:registration, user: registration.user, competition: competition_b)
 
         create(:registration_payment, :skip_create_hook, registration: reg_b, competition: competition_b)
@@ -886,7 +910,7 @@ RSpec.describe Registration do
 
   describe '#bulk_auto_accept' do
     context 'when competitor limit' do
-      let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 10, auto_accept_disable_threshold: nil) }
+      let(:auto_accept_comp) { create(:competition, :bulk_auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 10, auto_accept_disable_threshold: nil) }
 
       before do
         create_list(:registration, 5, :accepted, competition: auto_accept_comp)
@@ -925,7 +949,7 @@ RSpec.describe Registration do
         it 'non-accepted registration has reg_id, succeeded:false and info:{error_code}' do
           unsucceeded_response = @result[waitlisted2.id]
           expect(unsucceeded_response[:succeeded]).to be(false)
-          expect(unsucceeded_response[:info]).to eq(['Competitor limit reached.'])
+          expect(unsucceeded_response[:info]).to eq(-4006)
         end
 
         it 'waitlisted registration has info:waiting_list' do
@@ -1014,7 +1038,7 @@ RSpec.describe Registration do
 
     context 'when disable_threshold' do
       let(:threshold_auto_accept_comp) do
-        create(:competition, :auto_accept, :registration_open, :with_competitor_limit, auto_accept_disable_threshold: 9)
+        create(:competition, :bulk_auto_accept, :registration_open, :with_competitor_limit, auto_accept_disable_threshold: 9)
       end
 
       before do
@@ -1099,7 +1123,7 @@ RSpec.describe Registration do
     end
 
     context 'no limit' do
-      let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, auto_accept_disable_threshold: nil, competitor_limit: 20) }
+      let(:auto_accept_comp) { create(:competition, :bulk_auto_accept, :registration_open, auto_accept_disable_threshold: nil, competitor_limit: 20) }
 
       before do
         create_list(:registration, 5, :accepted, competition: auto_accept_comp)
@@ -1172,7 +1196,7 @@ RSpec.describe Registration do
     end
 
     context 'refunded registration' do
-      let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 2, auto_accept_disable_threshold: nil) }
+      let(:auto_accept_comp) { create(:competition, :bulk_auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 2, auto_accept_disable_threshold: nil) }
       let!(:reg1) { create(:registration, :pending, :paid, competition: auto_accept_comp) }
       let(:reg2) { create(:registration, :pending, competition: auto_accept_comp) }
 
@@ -1192,7 +1216,6 @@ RSpec.describe Registration do
 
       it 'gets accepted later if repaid after another registration' do
         create(:registration_payment, :skip_create_hook, registration: reg2, competition: reg2.competition)
-        sleep 1 # It appears we can only order payments to second-precision
         create(:registration_payment, :skip_create_hook, registration: reg1, competition: reg1.competition)
 
         Registration.bulk_auto_accept(auto_accept_comp)
@@ -1210,46 +1233,134 @@ RSpec.describe Registration do
   end
 
   describe 'hooks' do
-    it 'positive registration_payment calls registration.consider_auto_close' do
-      competition = create(:competition)
-      reg = create(:registration, competition: competition)
-      expect(reg).to receive(:consider_auto_close).once
+    context 'auto close' do
+      it 'positive, captured registration_payment calls registration.consider_auto_close' do
+        competition = create(:competition)
+        reg = create(:registration, competition: competition)
+        expect(reg).to receive(:consider_auto_close).once
 
-      create(
-        :registration_payment,
-        registration: reg,
-        user: reg.user,
-        amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
-      )
+        create(
+          :registration_payment,
+          registration: reg,
+          user: reg.user,
+          amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
+        )
+      end
+
+      it 'doesnt call registration.consider auto_close! for a non-captured registration_payment' do
+        competition = create(:competition)
+        reg = create(:registration, competition: competition)
+        expect(reg).to receive(:consider_auto_close).exactly(0).times
+
+        create(
+          :registration_payment,
+          registration: reg,
+          user: reg.user,
+          amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
+          is_completed: false,
+        )
+      end
+
+      it 'calls registration.consider_auto_close! if reg_payment gets marked as captured' do
+        competition = create(:competition)
+        reg = create(:registration, competition: competition)
+        expect(reg).to receive(:consider_auto_close).once
+
+        reg_payment = create(
+          :registration_payment,
+          registration: reg,
+          user: reg.user,
+          amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
+          is_completed: false,
+        )
+
+        reg_payment.update!(is_completed: true)
+      end
+
+      it 'doesnt call registration.auto_close! after a refund is created' do
+        competition = create(:competition)
+        reg = create(:registration, :paid, competition: competition)
+        expect(reg).to receive(:consider_auto_close).exactly(0).times
+
+        create(
+          :registration_payment,
+          registration: reg,
+          user: reg.user,
+          amount_lowest_denomination: -reg.competition.base_entry_fee_lowest_denomination,
+          refunded_registration_payment_id: reg.registration_payments.first.id,
+        )
+      end
+
+      it 'doesnt competition.attempt_auto_close! if reg is partially paid' do
+        competition = create(:competition)
+        expect(competition).to receive(:attempt_auto_close!).exactly(0).times
+
+        reg = create(:registration, :partially_paid, competition: competition)
+        reg.consider_auto_close
+      end
+
+      it 'calls competition.attempt_auto_close! if reg is fully paid' do
+        competition = create(:competition)
+        expect_any_instance_of(Competition).to receive(:attempt_auto_close!).once
+
+        create(:registration, :paid, competition: competition)
+      end
     end
 
-    it 'doesnt call registration.auto_close! after a refund is created' do
-      competition = create(:competition)
-      reg = create(:registration, :paid, competition: competition)
-      expect(reg).to receive(:consider_auto_close).exactly(0).times
+    context 'auto accept' do
+      let(:auto_accept_comp) { create(:competition, :live_auto_accept, :registration_open) }
+      let(:pending_reg) { create(:registration, competition: auto_accept_comp) }
+      let(:accepted_reg) { create(:registration, :accepted, competition: auto_accept_comp) }
+      # Ensure the waiting list is populated even if waitlisted_reg isn't explicitly called
+      let!(:waitlisted_reg) { create(:registration, :waiting_list, :paid_no_hooks, competition: auto_accept_comp) }
 
-      create(
-        :registration_payment,
-        registration: reg,
-        user: reg.user,
-        amount_lowest_denomination: -reg.competition.base_entry_fee_lowest_denomination,
-        refunded_registration_payment_id: reg.registration_payments.first.id,
-      )
-    end
+      RSpec.shared_examples 'changing accepted status' do |new_status|
+        it "triggers auto accept when accepted changes to #{new_status}" do
+          expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
 
-    it 'doesnt competition.attempt_auto_close! if reg is partially paid' do
-      competition = create(:competition)
-      expect(competition).to receive(:attempt_auto_close!).exactly(0).times
+          accepted_reg.update_lanes!(
+            { user_id: accepted_reg.user.id, competing: { status: new_status } }.with_indifferent_access,
+            accepted_reg.user.id,
+          )
+          expect(waitlisted_reg.reload.competing_status).to eq('accepted')
+        end
+      end
 
-      reg = create(:registration, :partially_paid, competition: competition)
-      reg.consider_auto_close
-    end
+      %w[pending cancelled rejected waiting_list].each do |status|
+        it_behaves_like 'changing accepted status', status
+      end
 
-    it 'calls competition.attempt_auto_close! if reg is fully paid' do
-      competition = create(:competition)
-      expect_any_instance_of(Competition).to receive(:attempt_auto_close!).once
+      it 'has no effect if accepted registration is re-accepted' do
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
 
-      create(:registration, :paid, competition: competition)
+        pending_reg.update_lanes!(
+          { user_id: pending_reg.user.id, competing: { status: 'accepted' } }.with_indifferent_access,
+          pending_reg.user.id,
+        )
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+      end
+
+      it 'has no effect if non-accepted registration is cancelled' do
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+
+        pending_reg.update_lanes!(
+          { user_id: pending_reg.user.id, competing: { status: 'cancelled' } }.with_indifferent_access,
+          pending_reg.user.id,
+        )
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+      end
+
+      it 'has no effect if comeptition doesnt use auto accept' do
+        expect(Registration).not_to receive(:bulk_auto_accept)
+
+        auto_accept_comp.auto_accept_preference = :disabled
+
+        accepted_reg.update_lanes!(
+          { user_id: accepted_reg.user.id, competing: { status: 'cancelled' } }.with_indifferent_access,
+          accepted_reg.user.id,
+        )
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+      end
     end
   end
 
@@ -1320,6 +1431,123 @@ RSpec.describe Registration do
 
       expect(second_reg).to be_valid
       expect(registration).to be_valid
+    end
+  end
+
+  describe '#paid_entry_fees' do
+    let(:comp) { create(:competition) }
+    let(:reg) { create(:registration, :paid, competition: comp) }
+
+    it 'correctly calculates a single payment' do
+      expect(reg.paid_entry_fees.cents).to eq(1000)
+    end
+
+    it 'correctly sums multiple payments' do
+      create(:registration_payment, registration: reg)
+      expect(reg.reload.paid_entry_fees.cents).to eq(2000)
+    end
+
+    it 'returns 0 for a refunded payment' do
+      create(:registration_payment, :refund, registration: reg)
+      expect(reg.reload.paid_entry_fees.cents).to eq(0)
+    end
+
+    it 'returns net amount of multiple payments/refunds' do
+      create_list(:registration_payment, 2, registration: reg)
+      create_list(:registration_payment, 2, :refund, registration: reg)
+      expect(reg.reload.paid_entry_fees.cents).to eq(1000)
+    end
+
+    it 'correctly calculates a partial refund' do
+      create(:registration_payment, :refund, registration: reg, amount_lowest_denomination: -500)
+      expect(reg.reload.paid_entry_fees.cents).to eq(500)
+    end
+
+    it 'only considers captured payments' do
+      create(:registration_payment, registration: reg, is_completed: false)
+      expect(reg.reload.paid_entry_fees.cents).to eq(1000)
+    end
+  end
+
+  describe 'last_payment methods' do
+    before do
+      @expected_pmt = create(
+        :registration_payment, registration: registration, created_at: Time.now.utc - 4, updated_at: Time.now.utc - 4, paid_at: Time.now.utc - 1
+      )
+      @other1 = create(
+        :registration_payment, registration: registration, created_at: Time.now.utc - 3, updated_at: Time.now.utc - 3, paid_at: Time.now.utc - 3
+      )
+      @other2 = create(
+        :registration_payment, registration: registration, created_at: Time.now.utc - 2, updated_at: Time.now.utc - 2, paid_at: Time.now.utc - 2
+      )
+    end
+
+    it 'paid_at for first payment is after all timestamps for other payments' do
+      expect(@expected_pmt.paid_at).to be > @other2.created_at
+      expect(@expected_pmt.paid_at).to be > @other2.updated_at
+      expect(@expected_pmt.paid_at).to be > @other2.paid_at
+      expect(@expected_pmt.paid_at).to be > @other1.created_at
+      expect(@expected_pmt.paid_at).to be > @other1.updated_at
+      expect(@expected_pmt.paid_at).to be > @other1.paid_at
+    end
+
+    it 'non-paid_at timestamps for first payment are before all timestamps for other payments' do
+      expect(@expected_pmt.created_at).to be < @other2.created_at
+      expect(@expected_pmt.updated_at).to be < @other2.created_at
+      expect(@expected_pmt.created_at).to be < @other2.updated_at
+      expect(@expected_pmt.updated_at).to be < @other2.updated_at
+      expect(@expected_pmt.created_at).to be < @other1.created_at
+      expect(@expected_pmt.updated_at).to be < @other1.created_at
+      expect(@expected_pmt.created_at).to be < @other1.updated_at
+      expect(@expected_pmt.updated_at).to be < @other1.updated_at
+    end
+
+    describe '#last_payment' do
+      context 'payments are loaded' do
+        before do
+          registration.registration_payments.load
+        end
+
+        it 'confirms that payments are loaded' do
+          expect(registration.registration_payments.loaded?).to be(true)
+        end
+
+        it 'returns last payment' do
+          expect(registration.last_payment).to eq(@expected_pmt)
+        end
+
+        it 'does not return un-succeeded payments' do
+          create(:registration_payment, is_completed: false, registration: registration)
+          registration.registration_payments.reload # We have to reload because we've already loaded the records
+          expect(registration.last_payment).to eq(@expected_pmt)
+        end
+      end
+
+      context 'payments are NOT loaded' do
+        it 'confirms payments arent loaded' do
+          expect(registration.registration_payments.loaded?).to be(false)
+        end
+
+        it 'returns last payment' do
+          expect(registration.last_payment).to eq(@expected_pmt)
+        end
+
+        it 'does not return un-succeeded payments' do
+          create(:registration_payment, is_completed: false, registration: registration)
+          expect(registration.last_payment).to eq(@expected_pmt)
+        end
+      end
+    end
+
+    describe '#last_positive_payment' do
+      it 'returns the latest payment based on paid_on, not created_at or updated_at' do
+        expect(registration.last_positive_payment).to eq(@expected_pmt)
+      end
+
+      it 'does not return uncaptured payments' do
+        create(:registration_payment, is_completed: false, registration: registration)
+        expect(registration.last_positive_payment).to eq(@expected_pmt)
+      end
     end
   end
 end

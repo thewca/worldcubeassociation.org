@@ -902,8 +902,6 @@ vi:
         results_file: ''
         #original_hash: da39a3e
         message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1491,7 +1489,7 @@ vi:
         Trước khi gửi đơn, bạn nên xem qua các <a href="/faq">Câu hỏi Thường
         gặp!</a>! Nếu bạn muốn liên hệ một ủy ban hoặc đội ngũ không có tên ở
         đây, vui lòng xem thông tin liên lạck tại <a
-        href="/teams-committees-councils">trang này</a>.
+        href="/teams-committees">trang này</a>.
       #original_hash: ea20be0
       success_message: Đã gửi email - chúng tôi sẽ sớm hồi âm lại đến bạn.
       #original_hash: 8fa6b95
@@ -4860,7 +4858,7 @@ vi:
       hình cho các đối tượng mới có thể thúc đẩy sự phát triển lớn mạnh của cộng
       đồng. Vui lòng xem bản tài liệu giới thiệu Tầm nhìn và Chiến lược đề ra
       cho WCA của Ban Quản trị <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">tại
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">tại
       đây</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Mục tiêu tiếp theo của WCA là gì?

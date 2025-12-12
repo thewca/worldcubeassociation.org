@@ -760,4 +760,272 @@ RSpec.describe User do
       expect(user.teams_committees_at_least_senior_roles).not_to include(wrt_role)
     end
   end
+
+  describe '#below_forum_age_requirement?' do
+    let(:user) { create(:user) }
+
+    it 'true when user under 13' do
+      user.dob = Date.today.advance(days: 1, years: -13)
+      expect(user.below_forum_age_requirement?).to be(true)
+    end
+
+    it 'false when user is exactly 13' do
+      user.dob = Date.today.advance(years: -13)
+      expect(user.below_forum_age_requirement?).to be(false)
+    end
+
+    it 'false when user older than 13' do
+      user.dob = Date.today.advance(days: -1, years: -13)
+      expect(user.below_forum_age_requirement?).to be(false)
+    end
+  end
+
+  describe '#can_check_newcomers_data?' do
+    it "returns true for WRT if competition is in future" do
+      wrt_user = create(:user, :wrt_member)
+      competition = create(:competition, starts: 1.month.from_now)
+
+      expect(wrt_user.can_check_newcomers_data?(competition)).to be true
+    end
+
+    it "returns false for WRT if competition is in past" do
+      wrt_user = create(:user, :wrt_member)
+      competition = create(:competition, starts: 1.month.ago)
+
+      expect(wrt_user.can_check_newcomers_data?(competition)).to be false
+    end
+
+    it "returns false for non-WRT user" do
+      user = create(:user)
+      competition = create(:competition, starts: 1.month.from_now)
+
+      expect(user.can_check_newcomers_data?(competition)).to be false
+    end
+
+    it "returns false for WRT if competition is happening now" do
+      wrt_user = create(:user, :wrt_member)
+      competition = create(:competition, starts: Time.current, ends: 1.hour.from_now)
+
+      expect(wrt_user.can_check_newcomers_data?(competition)).to be false
+    end
+  end
+
+  describe '#can_upload_competition_results?' do
+    let(:wrt_member) { create(:user, :wrt_member) }
+    let(:competition_delegate) { create(:delegate) }
+    let(:normal_user) { create(:user) }
+
+    context 'when competition is upcoming' do
+      let(:competition) { create(:competition, :announced, starts: 1.month.from_now, delegates: [competition_delegate]) }
+
+      it "returns false for WRT member" do
+        expect(wrt_member.can_upload_competition_results?(competition)).to be false
+      end
+
+      it "returns false for competition Delegate" do
+        expect(competition_delegate.can_upload_competition_results?(competition)).to be false
+      end
+
+      it "returns false for normal user" do
+        expect(normal_user.can_upload_competition_results?(competition)).to be false
+      end
+    end
+
+    context 'when competition is not announced' do
+      let(:competition) { create(:competition, :not_visible, starts: 1.month.ago, delegates: [competition_delegate]) }
+
+      it "returns false for WRT member" do
+        expect(wrt_member.can_upload_competition_results?(competition)).to be false
+      end
+
+      it "returns false for competition Delegate" do
+        expect(competition_delegate.can_upload_competition_results?(competition)).to be false
+      end
+
+      it "returns false for normal user" do
+        expect(normal_user.can_upload_competition_results?(competition)).to be false
+      end
+    end
+
+    context 'when competition results are posted' do
+      let(:competition) { create(:competition, :announced, :results_posted, starts: 1.month.ago, delegates: [competition_delegate]) }
+
+      it "returns true for WRT member" do
+        expect(wrt_member.can_upload_competition_results?(competition)).to be true
+      end
+
+      it "returns false for competition Delegate" do
+        expect(competition_delegate.can_upload_competition_results?(competition)).to be false
+      end
+
+      it "returns false for normal user" do
+        expect(normal_user.can_upload_competition_results?(competition)).to be false
+      end
+    end
+
+    context 'when competition results are not posted' do
+      let(:competition) { create(:competition, :announced, starts: 1.month.ago, delegates: [competition_delegate]) }
+
+      it "returns true for WRT member" do
+        expect(wrt_member.can_upload_competition_results?(competition)).to be true
+      end
+
+      it "returns true for competition Delegate" do
+        expect(competition_delegate.can_upload_competition_results?(competition)).to be true
+      end
+
+      it "returns false for normal user" do
+        expect(normal_user.can_upload_competition_results?(competition)).to be false
+      end
+    end
+  end
+
+  describe '#can_submit_competition_results?' do
+    let(:wrt_member) { create(:user, :wrt_member) }
+    let(:staff_delegate) { create(:delegate) }
+    let(:trainee_delegate) { create(:trainee_delegate) }
+    let(:competition) { create(:competition, :announced, starts: 1.month.ago, delegates: [staff_delegate, trainee_delegate]) }
+
+    it "returns true for WRT member" do
+      expect(wrt_member.can_submit_competition_results?(competition)).to be true
+    end
+
+    it "returns true for staff Delegate" do
+      expect(staff_delegate.can_submit_competition_results?(competition)).to be true
+    end
+
+    it "returns false for trainee Delegate" do
+      expect(trainee_delegate.can_submit_competition_results?(competition)).to be false
+    end
+  end
+
+  describe '#my_competitions', :clean_db_with_truncation do
+    let(:delegate) { create(:delegate) }
+    let(:organizer) { create(:user) }
+    let!(:future_competition1) { create(:competition, :registration_open, starts: 5.weeks.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:future_competition2) { create(:competition, :registration_open, starts: 4.weeks.from_now, organizers: [organizer], events: Event.where(id: %w[222 333])) }
+    let!(:future_competition3) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [organizer], events: Event.where(id: %w[222 333])) }
+    let!(:future_competition4) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition1) { create(:competition, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition2) { create(:competition, starts: 2.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition3) { create(:competition, starts: 3.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition4) { create(:competition, :results_posted, starts: 4.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:unscheduled_competition1) { create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let(:registered_user) { create(:user, name: "Jan-Ove Waldner") }
+    let!(:registration1) { create(:registration, :accepted, competition: future_competition1, user: registered_user) }
+    let!(:registration2) { create(:registration, :accepted, competition: future_competition3, user: registered_user) }
+    let!(:registration3) { create(:registration, :accepted, competition: past_competition1, user: registered_user) }
+    let!(:registration4) { create(:registration, :accepted, competition: past_competition3, user: organizer) }
+    let!(:registration5) { create(:registration, :accepted, competition: future_competition3, user: delegate) }
+    let!(:results_person) { create(:person, wca_id: "2014PLUM01", name: "Jeff Plumb") }
+    let!(:results_user) { create(:user, name: "Jeff Plumb", wca_id: "2014PLUM01") }
+    let!(:result) { create(:result, person: results_person, competition: past_competition1) }
+
+    context 'for a user with results for a comp they did not register for' do
+      it 'shows my upcoming and past competitions' do
+        grouped_competitions, = results_user.my_competitions
+
+        expect(grouped_competitions[:future]).to eq []
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+    end
+
+    context 'for a regular user' do
+      it 'shows my upcoming and past competitions' do
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [future_competition1, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+
+      it 'does not show past competitions they have a rejected registration for' do
+        create(:registration, :rejected, competition: past_competition2, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [future_competition1, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+
+      it 'does not show upcoming competitions they have a rejected registration for' do
+        create(:registration, :cancelled, competition: future_competition2, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [future_competition1, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+
+      it 'shows upcoming competition they have a pending registration for' do
+        create(:registration, :pending, competition: future_competition2, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [future_competition1, future_competition2, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+
+      it 'does not show past competitions they have a pending registration for' do
+        create(:registration, :pending, competition: past_competition2, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [future_competition1, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+
+      it 'does not show past competitions with results uploaded they have an accepted registration but not results for' do
+        create(:registration, :accepted, competition: past_competition4, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [future_competition1, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+
+      it 'shows upcoming competitions they have bookmarked' do
+        BookmarkedCompetition.create(competition: future_competition2, user: registered_user)
+        BookmarkedCompetition.create(competition: future_competition4, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:bookmarked]).to eq [future_competition4, future_competition2]
+      end
+
+      it 'does not show past competitions they have bookmarked' do
+        BookmarkedCompetition.create(competition: past_competition1, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:bookmarked]).to eq []
+      end
+
+      it 'does not list cancelled competitions under the past section' do
+        cancelled_competition = create(:competition, :cancelled, starts: 4.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333]))
+        create(:registration, :accepted, competition: cancelled_competition, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+    end
+
+    context 'for an organizer' do
+      it 'shows my upcoming and past competitions' do
+        grouped_competitions, = organizer.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [future_competition1, future_competition2, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition1, past_competition3]
+      end
+    end
+
+    context 'for a Delegate' do
+      it 'shows my upcoming and past competitions' do
+        grouped_competitions, = delegate.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [unscheduled_competition1, future_competition1, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition2, past_competition3, past_competition4]
+      end
+    end
+  end
 end

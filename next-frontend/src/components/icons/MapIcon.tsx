@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const MapIcon = createIcon({
@@ -13,10 +14,9 @@ const MapIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const MapIconPreview = () => {
-  return <MapIcon size="lg" />;
-};
-
-export default MapIconPreview;
+export default MapIcon;

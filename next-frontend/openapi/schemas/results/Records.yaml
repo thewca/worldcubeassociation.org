@@ -1,0 +1,15 @@
+type: object
+required:
+  - national
+  - continental
+  - world
+  - total
+properties:
+  national:
+    type: integer
+  continental:
+    type: integer
+  world:
+    type: integer
+  total:
+    type: integer

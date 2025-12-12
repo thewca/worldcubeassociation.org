@@ -6,6 +6,11 @@ class SyncMailingListsJob < WcaCronjob
     throw :abort unless EnvConfig.WCA_LIVE_SITE?
   end
 
+  # Google APIs have extremely strict quotas, but their Ruby SDK client offers no batching or request backoff...
+  #   And since I don't feel like building our own request queue with timed execution, we just let Sidekiq retry.
+  # However, the fail happens relatively fast, and we want to avoid Sidekiq retrying over and over again
+  sidekiq_options retry: 10
+
   def perform
     GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", UserGroup.teams_committees.filter_map(&:lead_user).map(&:email))
     GsuiteMailingLists.sync_group(GroupsMetadataBoard.email, UserGroup.board_group.active_users.map(&:email))

@@ -3,6 +3,7 @@ import { Message } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
 import StripePaymentStep from './StripePaymentStep';
 import { useRegistration } from '../lib/RegistrationProvider';
+import { useStepNavigation } from '../lib/StepNavigationProvider';
 import PaymentOverview from './PaymentOverview';
 import { hasPassed } from '../../../lib/utils/dates';
 import I18n from '../../../lib/i18n';
@@ -11,20 +12,21 @@ import Loading from '../../Requests/Loading';
 
 export default function PaymentStepWrapper({
   competitionInfo,
-  stripePublishableKey,
-  connectedAccountId,
   user,
-  nextStep,
 }) {
-  const { registration } = useRegistration();
+  const { registrationId } = useRegistration();
+
+  const { currentStep: { parameters: currentStepParameters } } = useStepNavigation();
+  const { stripePublishableKey, connectedAccountId } = currentStepParameters;
 
   const {
     data: payments,
     isLoading,
   } = useQuery({
-    queryKey: ['payments', registration.id],
-    queryFn: () => getRegistrationPayments(registration.id),
+    queryKey: ['payments', registrationId],
+    queryFn: () => getRegistrationPayments(registrationId),
     select: (data) => data.charges,
+    enabled: !!registrationId,
   });
 
   if (isLoading) {
@@ -37,7 +39,6 @@ export default function PaymentStepWrapper({
         payments={payments}
         competitionInfo={competitionInfo}
         connectedAccountId={connectedAccountId}
-        nextStep={nextStep}
         stripePublishableKey={stripePublishableKey}
         user={user}
       />
@@ -55,7 +56,6 @@ export default function PaymentStepWrapper({
     <StripePaymentStep
       competitionInfo={competitionInfo}
       connectedAccountId={connectedAccountId}
-      nextStep={nextStep}
       stripePublishableKey={stripePublishableKey}
       user={user}
     />

@@ -1,10 +1,15 @@
 # syntax=docker.io/docker/dockerfile:1
 
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 
 FROM base AS deps
+
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
+
+# NewRelic v12 does not bundle Alpine-compatible binaries anymore. So they have to be built from scratch.
+#   See https://github.com/newrelic/node-native-metrics?tab=readme-ov-file#musl-libc-systems for details.
+RUN apk add g++ make py3-pip
 
 RUN apk add --update --virtual .deps --no-cache unzip && \
      wget https://releases.hashicorp.com/vault/1.19.5/vault_1.19.5_linux_amd64.zip && \
@@ -16,6 +21,7 @@ RUN apk add --update --virtual .deps --no-cache unzip && \
 WORKDIR /app
 
 COPY package.json yarn.lock* .yarnrc.yml ./
+COPY src/theme.ts ./src/theme.ts
 RUN corepack enable
 RUN yarn install --immutable
 
@@ -33,7 +39,9 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN corepack enable
 # Create the types and build
-RUN yarn run chakra:types && NODE_ENV=production IS_COMPILING_ASSETS=1 NEXT_PUBLIC_WCA_FRONTEND_API_URL='https://www.worldcubeassociation.org/api/v0/' yarn run build
+RUN LOCALE_DIR="./src/lib/i18n/locales" yarn run build:translations
+RUN yarn types:openapi
+RUN NODE_ENV=production IS_COMPILING_ASSETS=1 NEXT_PUBLIC_WCA_FRONTEND_API_URL='https://www.worldcubeassociation.org/api/' yarn run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -64,8 +72,11 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT=3000
+ENV NEW_RELIC_APP_NAME='next-js-production'
+ENV NEW_RELIC_LOG='stdout'
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
+ENV NODE_OPTIONS='-r newrelic'
 ENTRYPOINT ["/app/docker-entrypoint.sh"]

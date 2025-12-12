@@ -57,7 +57,7 @@ fi
 nextjs=false
 environment=""
 command="/rails/bin/rails c"
-while getopts ":e:b:nh" opt; do
+while getopts ":e:bnh" opt; do
   case $opt in
     e)
       environment=$OPTARG

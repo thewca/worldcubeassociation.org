@@ -41,7 +41,7 @@ module FinishUnfinishedPersons
 
       inbox_dob = res.inbox_person&.dob
 
-      similar_persons = compute_similar_persons(res, persons_cache)
+      similar_persons = compute_similar_persons(res.person_name, res.country_id, persons_cache)
 
       unfinished_persons.push({
                                 person_id: res.person_id,
@@ -73,8 +73,8 @@ module FinishUnfinishedPersons
     end.join
   end
 
-  def self.compute_similar_persons(result, persons_cache, n = 5)
-    res_roman_name = self.extract_roman_name(result.person_name)
+  def self.compute_similar_persons(person_name, country_id, persons_cache, n = 5)
+    res_roman_name = self.extract_roman_name(person_name)
 
     only_probas = []
     persons_with_probas = []
@@ -84,7 +84,7 @@ module FinishUnfinishedPersons
       p_roman_name = self.extract_roman_name(p.name)
 
       name_similarity = self.string_similarity(res_roman_name, p_roman_name)
-      country_similarity = result.country_id == p.country_id ? 1 : 0
+      country_similarity = country_id == p.country_id ? 1 : 0
 
       only_probas.push name_similarity
       persons_with_probas.push [p, name_similarity, country_similarity]

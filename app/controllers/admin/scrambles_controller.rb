@@ -16,16 +16,13 @@ module Admin
       @scramble = {
         competition_id: competition.id,
         round_type_id: round.round_type_id,
+        round_id: round.id,
         event_id: round.event.id,
       }
     end
 
     def edit
       @scramble = Scramble.includes(:competition).find(params[:id])
-    end
-
-    def match_scrambles
-      @competition = Competition.find(params[:competition_id])
     end
 
     def create

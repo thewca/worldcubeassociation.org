@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const DisciplinaryLogIcon = createIcon({
@@ -13,10 +14,9 @@ const DisciplinaryLogIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const DisciplinaryLogIconPreview = () => {
-  return <DisciplinaryLogIcon size="lg" />;
-};
-
-export default DisciplinaryLogIconPreview;
+export default DisciplinaryLogIcon;

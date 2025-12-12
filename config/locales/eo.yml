@@ -915,15 +915,6 @@ eo:
         submitter_comment: ''
         #original_hash: da39a3e
         status: ''
-      results_submission:
-        #original_hash: da39a3e
-        schedule_url: ''
-        #original_hash: da39a3e
-        results_file: ''
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1067,10 +1058,10 @@ eo:
             La retejo de la WCA subtenas %{two_factor_link} uzante unufojan
             pasvorton.
           options:
-            #original_hash: 4f9dcb8
+            #original_hash: a4b35b6
             app: >-
-              generita per dediĉita 2FA poŝtelefona apo (ekzemple Authy aŭ
-              Google Authenticator).
+              generita per dediĉita 2FA poŝtelefona apo (ekzemple Authy, Google
+              Authenticator aŭ iOS Passwords).
             #original_hash: 34a7572
             recovery: >-
               elprenita de viaj savitaj kontrolkodoj generitaj kiam 2FA estis
@@ -1104,11 +1095,11 @@ eo:
             ensalutas, ili estas priskribataj malsupre.
           #original_hash: 4442f0e
           dedicated_app: Uzante dediĉita dufaza apo
-          #original_hash: a61c7d2
+          #original_hash: a87f79f
           dedicated_app_desc_html: >-
             La WST rekomendas uzi %{authy} en via(j)n privata(j)n aparato(j)n
             por akiri vian unufojan pasvorton kiam vi ensalutas.<br/>Aliaj
-            alternativoj inkluzivas %{google} kaj %{microsoft}.
+            alternativoj inkluzivas %{google}, %{apple} kaj %{microsoft}.
           #original_hash: f1b2ec2
           scan_qrcode_html: >-
             Skanu la QR-kodon malsupre kiam via 2FA-aplika programo invitas vin
@@ -1294,12 +1285,10 @@ eo:
       db_dev_export: Eksporto por programistoj
       #original_hash: 1fa73f3
       regulations: Regularo
-      #original_hash: 3bb8751
-      regulations_full: Regularo kaj Gvidlinioj
+      #original_hash: 1fa73f3
+      regulations_full: Regularo
       #original_hash: 6bce1b5
       about_regulations: Pri la Regularo
-      #original_hash: 141d1d7
-      guidelines: Gvidlinioj
       #original_hash: c4622c3
       scrambles: Miksoj
       #original_hash: 90ccd64
@@ -1507,12 +1496,12 @@ eo:
     contacts:
       #original_hash: 4ef2aad
       title: Kontaktformularo de la WCA
-      #original_hash: bddd3ea
+      #original_hash: ab97069
       faq_note_html: >-
-        Antaŭ ol peti informon, vi eble volas rigardi niajn <a href="/FAQ">Plej
+        Antaŭ ol peti informon, vi eble volas rigardi niajn <a href="/faq">Plej
         Oftajn Demandojn</a>! Se vi volas kontakti specifan komitaton aŭ teamon
         ne listigitan ĉi tie, vi povas kontroli iliajn detalojn en <a
-        href="/teamoj-komitatoj-kalkuliloj">ĉi tiu paĝo</a>.
+        href="/teams-committees">ĉi tiu paĝo</a>.
       #original_hash: ea20be0
       success_message: Retpoŝto sendita - ni respondos al vi baldaŭ.
       #original_hash: 8fa6b95
@@ -1976,6 +1965,8 @@ eo:
           href='%{delegate_url}'>Delegiton</a> se vi bezonas ŝanĝi iun ajn el
           tiuj datumoj.
         reason:
+          #original_hash: 2e22133
+          no_access: vi ne havas rajton por redakti la uzanton
           #original_hash: 370ff12
           assigned: vi havas atribuitan WCA-ID-n
           #original_hash: 1c4670f
@@ -2208,9 +2199,9 @@ eo:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: nova
-        one: nova
-        other: novaj
+        zero: novulo
+        one: novulo
+        other: novuloj
       #original_hash: bc010e3
       returner:
         zero: revenuloj
@@ -2335,8 +2326,6 @@ eo:
         with_stripe: Pagita
       #original_hash: ce53c71
       payment_requested_on: 'Pago petita la: %{date}'
-      #original_hash: f5b1b34
-      payment_completed_on: 'Pago efektivigita je: %{date}'
       #original_hash: 3141a14
       series_registrations: Registriĝoj en la Serio
       #original_hash: b25928c
@@ -2396,6 +2385,16 @@ eo:
       en atendolisto. Ĝi eble ne estos aprobita krom se loko liberiĝas.
     #original_hash: bcd7d70
     entry_fees_fully_paid: 'Vi pagis %{paid}, kio tute kovras la registriĝkoston.'
+    #original_hash: e50b275
+    entry_fees_partially_paid: >-
+      Vi pagis %{paid} el la petita %{total}. Bonvolu kontroli kun la
+      organizantoj ĉu vi devas pagi la reston.
+    #original_hash: b9d0818
+    entry_fees_fully_refunded: >-
+      Viaj registriĝkostoj estis tute repagitaj. Se vi bezonas pagi denove, vi
+      povas fari tion sube
+    #original_hash: 0c9c8e7
+    entry_fees_pay_again: Mi volas pagi denove
     #original_hash: 2e5d1b9
     will_pay_here: Vi pagos ilin tie post submetiĝo de via registriĝo.
     #original_hash: 86877d4
@@ -2459,7 +2458,7 @@ eo:
         not_allowed: Vi ne povas pagi por tiu registriĝo.
         #original_hash: 967eaed
         cpi_disconnected: >-
-          Provis konfirmi pagon, sed la paga integriĝo estis malebligita.
+          Provis konfirmi pagon, sed la paga integrado estis malebligita.
           Bonvolu kontakti la organizantojn de la konkurso.
         generic:
           #original_hash: 9896987
@@ -3229,6 +3228,10 @@ eo:
           auto_close_threshold: Sojlo por aŭtomate fermi
           #original_hash: b1d5af4
           newcomer_month_reserved_spots: Nombro de registriĝlokoj rezervitaj al novaj konkursantoj
+          #original_hash: 26b48e3
+          auto_accept_preference: Aŭtomate akcepti registriĝojn
+          #original_hash: 1b8698d
+          auto_accept_disable_threshold: Limo por aŭtomate akcepti registriĝojn
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: WCA-Delegito(j)
@@ -3428,6 +3431,18 @@ eo:
           newcomer_month_reserved_spots: >-
             Nur permesita dum monato de novuloj - rezervitaj registriĝlokoj ne
             povas esti pli ol duono de la limo de konkursantoj.
+          #original_hash: 79dcafd
+          auto_accept_preference: >-
+            Tiu ŝaltos butonon "Aŭtomate akcepti amase" en la registriĝ-menuo.
+            Per tio oni akceptos ĉiujn en la atendolisto kaj pritraktota listo
+            ĝis la limo de konkursantoj, aŭ la limo difinitaj sube. Uzu tion je
+            propra risko.
+          #original_hash: b261026
+          auto_accept_disable_threshold: >-
+            Kiam tiu nombro de akceptitaj registriĝoj estas atingita, aŭtomata
+            akcepto malŝaltos per si mem, t.e. lasi organizantojn permane
+            akcepti la lastajn registriĝojn. Devas esti malpli ol la limo de
+            konkursantoj. Lasu malplena se vi ne bezonas tion.
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: WCA-Delegitoj de la konkurso.
@@ -3595,6 +3610,13 @@ eo:
             'true': Mi volas difini limon de konkursantoj
             #original_hash: 53397ec
             'false': Mi NE volas difini limon de konkursantoj
+          auto_accept_preference:
+            #original_hash: 5996b1f
+            disabled: Malŝalti la butonon "Aŭtomate akcepti amase"
+            #original_hash: 1c0c289
+            bulk: Ŝalti la butonon "Aŭtomate akcepti amase" en la registriĝ-menuo
+            #original_hash: 490ed83
+            live: Aŭtomate akcepti registriĝojn kiam pago estas farita
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -3640,6 +3662,17 @@ eo:
                 Konkursantoj DEVAS esti kvalifikitaj por registriĝi por
                 konkursero
     registration_v2:
+      auto_accept:
+        #original_hash: eaf9960
+        bulk_auto_accept: Aŭtomate aprobi konkursantojn
+        #original_hash: 1a84d92
+        cant_bulk_auto_accept: >-
+          Eraro okazis provante aŭtomate akcepti amase - kontaktu la WST por
+          helpo se vi bezonas
+        #original_hash: 1897ffb
+        bulk_auto_accepted: Aŭtomata amasa akcepto sukcesis
+        #original_hash: 786d81b
+        nothing_to_accept: Neniu registriĝo elekteblas por aŭtomate akcepti
       pdf:
         #original_hash: 5c7d60f
         link: 'Kiel <0>%{pdfLink}</0>'
@@ -3689,6 +3722,16 @@ eo:
             nekompletaj registriĝoj (ekz. ne pagitaj) - bonvolu uzi la
             atendoliston se via konkurso estas tro plena por akcepti novajn
             konkursantojn.
+          #original_hash: 134e94f
+          waitlist_skipped_warning: >-
+            Vi ignoris aŭ preterpasis %{count} pli frua(j)n registriĝo(j)n en la
+            pritraktota listo. Ĉu vi certas ke vi volas movi la elektita(j)n
+            registriĝo(j)n al la atendolisto?
+          #original_hash: c2875e1
+          approve_skipped_warning: >-
+            Vi ignoris aŭ preterpasis %{count} pli frua(j)n registriĝo(j)n en la
+            pritraktota listo. Ĉu vi certas ke vi volas aprobi la elektita(j)n
+            registriĝo(j)n?
         waitlist:
           #original_hash: 3907ca4
           title: Registriĝoj en atendolisto
@@ -3699,13 +3742,18 @@ eo:
             aldonitaj laŭ ordo de pagdato, kaj poste sekvos la aliaj laŭ ordo de
             registriĝdato. Vi povas aranĝi la ordon permane uzante la redakta
             reĝimo laŭnecese.
-          #original_hash: a6c86ec
+          #original_hash: dc16b6c
           skipped_warning: >-
-            Vi ignoris %{count} registriĝo(j)n en la atendolisto. Ĉu vi certas
-            ke vi volas aprobi la aliajn(j) registriĝojn(j)?
+            Vi ignoris aŭ preterpasis %{count} registriĝo(j)n en la atendolisto.
+            Ĉu vi certas ke vi volas aprobi la elektita(j)n registriĝo(j)n?
         approved:
           #original_hash: a59612c
           title: Aprobitaj registriĝoj
+          #original_hash: bbdee7d
+          pending_waitlist_combined_skipped_warning: >-
+            Vi ignoris aŭ preterpasis %{count} pli frua(j)n registriĝo(j)n en la
+            pritraktota listo aŭ en la atendolisto. Ĉu vi certas ke vi volas
+            aprobi la elektita(j)n registriĝo(j)n?
         cancelled:
           #original_hash: bd69c74
           title: Nuligitaj registriĝoj
@@ -3796,10 +3844,10 @@ eo:
         rejected: Malakceptita
         #original_hash: 43dc853
         amount: Sumo
-        #original_hash: 67b3c7d
+        #original_hash: d7e4497
         too_many: >-
           Akcepti ĉiujn tiujn registriĝojn preterpasus la limon de konkursanto
-          je %{count}
+          je %{count}.
         #original_hash: 462376a
         no_self_update: Kontaktu la organizantan teamon por ĝisdatigi vian registriĝon.
       register:
@@ -3971,6 +4019,8 @@ eo:
       must_use_wca_registration: >-
         Vi povas aŭtomate akcepti nur se vi uzas la WCA-retejon por la
         registriĝoj
+      #original_hash: 693d47d
+      must_use_payment_integration: Vi devas ŝalti pagan integradon (ekz. Stripe) por povi aŭtomate akcepti
       #original_hash: 130c901
       auto_accept_limit: >-
         Limo por aŭtomate akcepti registriĝojn devas esti pli malgranda ol la
@@ -4364,8 +4414,12 @@ eo:
         admin_view: Administranta vido
         #original_hash: a857eb4
         tabs: Administri langetojn
+        #original_hash: e42bf99
+        newcomer_checks: Kontrolado de novaj konkursantoj
         #original_hash: f3d6278
         submit_results: Sendi rezultojn
+        #original_hash: e2d046b
+        match_scrambles: Sendi miksojn
         #original_hash: 4c9f914
         delegate_report: Delegitraporto
         #original_hash: b233e77
@@ -4520,11 +4574,15 @@ eo:
     #original_hash: 10bcdbd
     connect_wca_id: Ligu vian WCA-ID-n kun via konto!
   payments:
+    #original_hash: cfeba03
+    header: Pagohistorio
     messages:
       #original_hash: 2eac1cb
       charge_refunded: Pago estis repagita
       #original_hash: 1e1d219
       charges_refunded: Ĉiuj pagoj estis repagitaj
+      #original_hash: c677bd3
+      no_payments: Neniu pago estis farita por ĉi tiu registriĝo.
     errors:
       refund:
         #original_hash: 66475ae
@@ -4721,6 +4779,15 @@ eo:
       success: Dankon por via mesaĝo. Ni kontaktos vin baldaŭe!
       #original_hash: 8e3a9da
       delivery_error: Malsukcesis sendo de via mesaĝo.
+  misc:
+    #original_hash: 9a0f1cc
+    forum_age_requirement: Vi devas esti almenaŭ 13-jaraĝa por aliri la WCA-Forumon.
+    #original_hash: d1f3342
+    forum_enter_dob: >-
+      Naskiĝdato estas deviga antaŭ ol aliri la forumon. Bonvolu eniri vian
+      naskiĝdaton kaj sekve provi kaj aliri la forumon denove.
+    #original_hash: 56e3bad
+    refresh: Aktualigi
   faq:
     #original_hash: d790b40
     title: Plej Oftaj Demandoj
@@ -4973,7 +5040,7 @@ eo:
       enkonduko de puzlaj eventoj al novaj grupoj de homoj permesas al nia
       komunumo plifortigi. Dokumento enhavanta vido kaj strategio de la Estraro
       troviĝas <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">tie</a>.</p>
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">tie</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Kio okazos estontece por la WCA?
     #original_hash: 3312277
@@ -5201,7 +5268,6 @@ eo:
     title: Programaraj iloj por WCA-Konkursoj
     #original_hash: 6d2fe37
     wca_icon_text: Disvolvita kaj subtenita de la WST
-    #original_hash: 6520873
     intro:
       #original_hash: 0c5fab5
       desc: >-
@@ -5311,6 +5377,7 @@ eo:
   logo:
     #original_hash: c72c969
     title: Logotipo de la WCA
+    #original_hash: 6520873
     intro: >-
       La WCA-logotipo estis desegnita de Justin Eastman dum desegna konkurso en
       januaro 2005. Ni ŝatis ĉi tiun logotipon pro ĝia dezajno, la koloroj, kaj
@@ -5386,8 +5453,8 @@ eo:
       incidents: Incidentoj
       #original_hash: a0ca0c3
       posts: Afiŝoj
-      #original_hash: 9d7ea9c
-      regulations_and_guidelines: Reguloj kaj Gvidlinioj
+      #original_hash: 1fa73f3
+      regulations_and_guidelines: Regularo
       #original_hash: db683b3
       search_for: 'Serĉovortoj: <b>%{search_string}</b>'
       not_found:
@@ -5401,8 +5468,8 @@ eo:
         posts: Neniu afiŝo trovita por
         #original_hash: 3499e7e
         incidents: Neniu incidento trovita por
-        #original_hash: 76a6bf1
-        regulations_and_guidelines: Neniu Regulo aŭ Gvidlinio trovita por
+        #original_hash: 3909204
+        regulations_and_guidelines: Neniu Regulo trovita por
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: >-
@@ -5421,15 +5488,10 @@ eo:
         Ĉiuj konkursoj devas sekvi la <a href="/regulations/">Regularon de la
         WCA</a>. Gravas ke la konkursantoj legu tiujn regulojn antaŭ ol ĉeesti
         ilian unuan konkurson.
-      #original_hash: 4296902
-      content2_html: >-
-        La Regularo de la WCA estas suplementata per la <a
-        href="/regulations/guidelines.html">Gvidlinioj de la WCA</a>, kiuj
-        enhavas pluajn klarigojn kaj eksplikojn.
       #original_hash: c8e1783
-      content3_html: >-
-        Gravaj decidoj pri incidentoj kiuj okazis dum konkursoj kaj kiuj estis
-        solvitaj de la Regulara Komitato de la WCA troviĝas en la <a
+      content2_html: >-
+        Gravaj decidoj pri incidentoj kiuj okazis dum konkursoj kaj kiuj la
+        Regulara Komitato de la WCA (WRC) solvis troviĝas en la <a
         href="/incidents">Incidentaj protokoloj</a>.
     panel2:
       #original_hash: 8ad8302
@@ -5464,8 +5526,8 @@ eo:
         Tiu dokumento enhavas gravajn informojn kaj ĉiuj organizantoj de
         konkursoj devas legi ĝin.
   regulations_translations:
-    #original_hash: 9493b8d
-    title: 'Regularo kaj Gvidlinioj de la WCA: Tradukoj'
+    #original_hash: a19a3f5
+    title: 'WCA-Regularo: Tradukoj'
     #original_hash: 386ecc1
     paragraph1: >-
       Se vi parolas lingvon kiun ne estas la angla, vi eble trovos tiujn
@@ -6195,12 +6257,15 @@ eo:
         ĉestempon en la rezultoj. Bonvolu ĝisdatigi la raŭndajn informojn en la
         paĝo "Administri konkurserojn" de la konkurso.
     events:
-      #original_hash: e87f8a0
+      #original_hash: ef8709f
       not_333_main_event_warning: >-
-        La elektita ĉefa konkursero de tiu ĉi konkurso estas %{main_event_id}.
-        Kiel estis traktita tiu evento kiel ĉefa konkursero de la konkurso?
-        Bonvolu doni al la WRT mallongan klarigon (ekz. nombro da raŭndoj,
-        premioj, deklarita venkinto de la konkurso, ...).
+        La elektita ĉefa konkursero estas %{main_event_id}. Kvankam ĝi jam estis
+        aprobita de la WCAT ANTAŬ la konkurso, la WRT devas kontroli POST la
+        konkurso ke la gvidlinioj pri ĉefaj konkurseroj de la Politiko pri
+        Postuloj de Konkursoj de la WCA estis sekvitaj. Bonvolu doni unu agon
+        kiu montras ke la %{main_event_id} estis traktita kiel ĉefa konkursero
+        DUM la konkurso (jen validaj ekzemploj: deklarita venkinto de la
+        konkurso, pli granda nombro da raŭndoj, pli granda/grava premio).
       #original_hash: 1d4e297
       no_main_event_warning: >-
         Ĉi tiu konkurso ne havas ĉefan konkurseros. Bonvolu sciigi al la WRT ke

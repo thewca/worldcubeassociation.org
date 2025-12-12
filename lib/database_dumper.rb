@@ -106,12 +106,12 @@ module DatabaseDumper
           forbid_newcomers
           forbid_newcomers_reason
           auto_close_threshold
-          auto_accept_registrations
           auto_accept_disable_threshold
           newcomer_month_reserved_spots
           competitor_can_cancel
         ],
         db_default: %w[
+          auto_accept_preference
           connected_stripe_account_id
         ],
         fake_values: {
@@ -174,6 +174,7 @@ module DatabaseDumper
     }.freeze,
     "connected_paypal_accounts" => :skip_all_rows,
     "connected_stripe_accounts" => :skip_all_rows,
+    "manual_payment_integrations" => :skip_all_rows,
     "continents" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -312,6 +313,18 @@ module DatabaseDumper
           created_at
           updated_at
           old_type
+          linked_round_id
+          is_h2h_mock
+        ],
+      ),
+    }.freeze,
+    "linked_rounds" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          wcif_id
+          created_at
+          updated_at
         ],
       ),
     }.freeze,
@@ -751,6 +764,7 @@ module DatabaseDumper
           otp_required_for_login
           pending_avatar_id
           preferred_locale
+          receive_developer_mails
           remember_created_at
           reset_password_sent_at
           reset_password_token
@@ -811,6 +825,7 @@ module DatabaseDumper
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
     "server_settings" => {
+      where_clause: "WHERE name NOT IN (#{ServerSetting::HIDDEN_SETTINGS.map { "'#{it}'" }.join(',')})",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           name
@@ -952,15 +967,18 @@ module DatabaseDumper
       ),
     }.freeze,
     "roles_metadata_banned_competitors" => :skip_all_rows,
-    "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
     "ticket_logs" => :skip_all_rows,
+    "ticket_log_changes" => :skip_all_rows,
     "ticket_comments" => :skip_all_rows,
     "ticket_stakeholders" => :skip_all_rows,
     "tickets" => :skip_all_rows,
     "tickets_edit_person" => :skip_all_rows,
     "tickets_edit_person_fields" => :skip_all_rows,
+    "duplicate_checker_job_runs" => :skip_all_rows,
+    "potential_duplicate_persons" => :skip_all_rows,
+    "tickets_competition_result" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {
@@ -1220,6 +1238,10 @@ module DatabaseDumper
                                          .index_with { ActiveRecord::Base.connection.foreign_keys(it).pluck(:to_table) }
                                          .tsort
 
+    # Turn of foreign key checking to avoid errors when dumping data caused by foreign keys referencing not yet
+    # existing rows.
+    ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
+
     LogTask.log_task "Populating sanitized tables in '#{dump_db_name}'" do
       ordered_table_names.each do |table_name|
         table_sanitizer = dump_sanitizers[table_name]
@@ -1248,6 +1270,9 @@ module DatabaseDumper
       end
 
       ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.server_settings (name, value, created_at, updated_at) VALUES ('#{dump_ts_name}', UNIX_TIMESTAMP(), NOW(), NOW())") if dump_ts_name.present?
+
+      # Turn these back on. We do establish a new connection again in the ensure block, but just in case this carries over
+      ActiveRecord::Base.connection.execute("SET foreign_key_checks=1")
     end
 
     yield dump_db_name
@@ -1298,7 +1323,7 @@ module DatabaseDumper
 
   def self.mysql_cli_creds
     config = ActiveRecord::Base.connection_db_config.configuration_hash
-    "--user=#{config[:username]} --password=#{config[:password] || "''"} --port=#{config[:port]} --host=#{config[:host]}"
+    "--user=#{config[:username]} --password=#{config[:password] || "''"} --port=#{config[:port]} --host=#{config[:host]} #{'--ssl-ca=/rails/rds-cert.pem' if Rails.env.production?}"
   end
 
   def self.mysql(command, database = nil)
@@ -1306,7 +1331,7 @@ module DatabaseDumper
   end
 
   def self.mysqldump_tsv(database, command, dest_filename)
-    system_pipefail!("mysql #{self.mysql_cli_creds} #{database} --batch -e \"#{command}\" #{filter_out_mysql_warning dest_filename}")
+    system_pipefail!("mysql #{self.mysql_cli_creds} #{database} --batch --quick -e \"#{command}\" #{filter_out_mysql_warning dest_filename}")
   end
 
   def self.mysqldump(db_name, dest_filename)
@@ -1315,7 +1340,7 @@ module DatabaseDumper
   end
 
   def self.filter_out_mysql_warning(dest_filename = nil)
-    "2>&1 | grep -v \"\\[Warning\\] Using a password on the command line interface can be insecure.\"#{dest_filename.present? ? " > #{dest_filename}" : ''} || true"
+    "2>&1 | grep -v \"\\[Warning\\] Using a password on the command line interface can be insecure.\"#{" > #{dest_filename}" if dest_filename.present?} || true"
   end
 end
 

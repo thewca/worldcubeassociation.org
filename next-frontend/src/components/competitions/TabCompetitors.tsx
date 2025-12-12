@@ -1,36 +1,56 @@
 "use client";
-import React, { useMemo } from "react";
-import { Card, Text, Table, Center, Spinner } from "@chakra-ui/react";
-import EventIcon from "@/components/EventIcon";
-import CountryMap from "@/components/CountryMap";
-import { useQuery } from "@tanstack/react-query";
+import React, { useMemo, useState } from "react";
+import { Card, Text, Center, Spinner, Table } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
+import { useT } from "@/lib/i18n/useI18n";
+import CompetitorTable from "@/components/competitions/CompetitorTable";
+import PsychsheetTable from "@/components/competitions/PsychsheetTable";
+import { MultiEventSelector } from "@/components/EventSelector";
 
 interface CompetitorData {
   id: string;
 }
 
 const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
-  const api = useAPI();
+  const [psychSheetEvent, setPsychSheetEvent] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<string>("average");
 
-  const { data: registrationsQuery, isFetching } = useQuery({
-    queryKey: ["registrations", id],
-    queryFn: () =>
-      api.GET("/competitions/{competitionId}/registrations", {
-        params: { path: { competitionId: id } },
-      }),
-  });
+  const api = useAPI();
+  const { t } = useT();
+
+  const { data: registrationsQuery, isFetching } = api.useQuery(
+    "get",
+    "/v1/competitions/{competitionId}/registrations",
+    {
+      params: { path: { competitionId: id } },
+    },
+  );
+
+  const { data: psychSheetQuery, isFetching: isFetchingPsychsheets } =
+    api.useQuery(
+      "get",
+      "/v0/competitions/{competitionId}/psych-sheet/{eventId}",
+      {
+        params: {
+          path: { competitionId: id, eventId: psychSheetEvent! },
+          query: { sort_by: sortBy },
+        },
+      },
+      {
+        enabled: psychSheetEvent !== null,
+      },
+    );
 
   const eventIds = useMemo(() => {
-    const flatEventList = registrationsQuery?.data?.flatMap(
-      (reg) => reg.event_ids,
+    const flatEventList = registrationsQuery?.flatMap(
+      (reg) => reg.competing.event_ids,
     );
 
     const eventSet = new Set(flatEventList);
     return Array.from(eventSet);
-  }, [registrationsQuery?.data]);
+  }, [registrationsQuery]);
 
-  if (isFetching) {
+  if (isFetching || isFetchingPsychsheets) {
     return (
       <Center py={10}>
         <Spinner size="xl" />
@@ -38,47 +58,41 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
     );
   }
 
-  if (!registrationsQuery?.data) {
-    return <Text>Welp, that didn&apos;t work!</Text>;
+  if (!registrationsQuery) {
+    return <Text>{t("competitions.registration_v2.errors.-1001")}</Text>;
   }
 
   return (
     <Card.Root>
       <Card.Body>
-        <Table.Root width="100%">
-          <Table.Header>
-            <Table.Row>
-              <Table.Cell>Competitor</Table.Cell>
-              <Table.Cell>Country</Table.Cell>
-              {eventIds.map((eventId) => (
-                <Table.Cell key={eventId}>
-                  <EventIcon eventId={eventId} />
-                </Table.Cell>
-              ))}
-            </Table.Row>
-          </Table.Header>
-
-          <Table.Body>
-            {registrationsQuery.data.map((registration) => (
-              <Table.Row key={registration.id}>
-                <Table.Cell>
-                  <Text fontWeight="medium">{registration.user_id}</Text>
-                </Table.Cell>
-                <Table.Cell>
-                  <CountryMap code="AU" bold />
-                </Table.Cell>
-
-                {eventIds.map((eventId) => (
-                  <Table.Cell key={eventId}>
-                    {registration.event_ids.includes(eventId) ? (
-                      <EventIcon eventId={eventId} />
-                    ) : null}
-                  </Table.Cell>
-                ))}
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Root>
+        <Card.Title>
+          <MultiEventSelector
+            title="Events"
+            selectedEvents={psychSheetEvent ? [psychSheetEvent] : []}
+            eventList={eventIds}
+            hideAllButton
+            hideClearButton={psychSheetEvent === null}
+            onEventClick={(event) => setPsychSheetEvent(event)}
+            onClearClick={() => setPsychSheetEvent(null)}
+          />
+        </Card.Title>
+        <Table.ScrollArea borderWidth="1px" maxW="full">
+          {psychSheetEvent && (
+            <PsychsheetTable
+              pychsheet={psychSheetQuery!}
+              t={t}
+              setSortBy={setSortBy}
+            />
+          )}
+          {!psychSheetEvent && (
+            <CompetitorTable
+              eventIds={eventIds}
+              registrations={registrationsQuery}
+              setPsychSheetEvent={setPsychSheetEvent}
+              t={t}
+            />
+          )}
+        </Table.ScrollArea>
       </Card.Body>
     </Card.Root>
   );

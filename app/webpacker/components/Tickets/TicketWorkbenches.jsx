@@ -1,8 +1,14 @@
 import { ticketTypes, ticketStakeholderRoles } from '../../lib/wca-data.js.erb';
-import EditPersonTicketWorkbench from './TicketWorkbenches/EditPersonTicketWorkbench';
+import CompetitionResultActionerView from './TicketWorkbenches/CompetitionResultActionerView';
+import CompetitionResultRequesterView from './TicketWorkbenches/CompetitionResultRequesterView';
+import EditPersonActionerView from './TicketWorkbenches/EditPersonActionerView';
 
 export default {
   [ticketTypes.edit_person]: {
-    [ticketStakeholderRoles.actioner]: EditPersonTicketWorkbench,
+    [ticketStakeholderRoles.actioner]: EditPersonActionerView,
+  },
+  [ticketTypes.competition_result]: {
+    [ticketStakeholderRoles.actioner]: CompetitionResultActionerView,
+    [ticketStakeholderRoles.requester]: CompetitionResultRequesterView,
   },
 };

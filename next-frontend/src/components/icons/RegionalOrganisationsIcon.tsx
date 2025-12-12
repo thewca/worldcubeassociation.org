@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const RegionalOrganisationsIcon = createIcon({
@@ -13,10 +14,9 @@ const RegionalOrganisationsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const RegionalOrganisationsIconPreview = () => {
-  return <RegionalOrganisationsIcon size="lg" />;
-};
-
-export default RegionalOrganisationsIconPreview;
+export default RegionalOrganisationsIcon;

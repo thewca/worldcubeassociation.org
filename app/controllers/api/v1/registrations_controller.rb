@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::RegistrationsController < Api::V1::ApiController
-  skip_before_action :validate_jwt_token, only: [:index]
+  skip_before_action :require_user, only: [:index]
   # The order of the validations is important to not leak any non public info via the API
   # That's why we should always validate a request first, before taking any other before action
   # before_actions are triggered in the order they are defined
@@ -74,6 +74,11 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
   def show_by_user
     render json: @registration.to_v2_json(admin: true)
+  end
+
+  def registration_config
+    competition = Competition.find(params[:id])
+    render json: competition.available_registration_lanes(@current_user)
   end
 
   def create
@@ -258,7 +263,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def payment_ticket
-    iso_donation_amount = params[:iso_donation_amount].to_i || 0
+    iso_donation_amount = params[:iso_donation_amount].to_i
     # We could delegate this call to the prepare_intent function given that we're already giving it registration - however,
     # in the long-term we want to decouple registrations from payments, so I'm deliberately not introducing any more tight coupling
     ruby_money = @registration.entry_fee_with_donation(iso_donation_amount)

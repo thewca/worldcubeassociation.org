@@ -1,0 +1,29 @@
+type: object
+properties:
+  id:
+    type: integer
+  name:
+    type: string
+  latitudeMicrodegrees:
+    type: integer
+  longitudeMicrodegrees:
+    type: integer
+  countryIso2:
+    $ref: './WcifCountryCode.yaml'
+  timezone:
+    type: string
+  rooms:
+    type: array
+    items:
+      $ref: './WcifRoom.yaml'
+  extensions:
+    type: array
+required:
+  - id
+  - name
+  - latitudeMicrodegrees
+  - longitudeMicrodegrees
+  - countryIso2
+  - timezone
+  - rooms
+  - extensions

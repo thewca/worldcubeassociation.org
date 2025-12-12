@@ -2,6 +2,7 @@
 
 class Api::V0::ApiController < ApplicationController
   include Rails::Pagination
+
   include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
   rate_limit to: 60, within: 1.minute if Rails.env.production?
   protect_from_forgery with: :null_session
@@ -110,6 +111,10 @@ class Api::V0::ApiController < ApplicationController
     }
   end
 
+  def known_timezones
+    render json: Country::SUPPORTED_TIMEZONES
+  end
+
   def search(*models)
     query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
 
@@ -212,12 +217,19 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def export_public
-    timestamp = DumpPublicResultsDatabase.start_date
+    timestamp = DumpPublicResultsDatabase.successful_start_date
+
+    _, sql_filesize = DbDumpHelper.cached_results_export_info("sql", timestamp)
+    _, tsv_filesize = DbDumpHelper.cached_results_export_info("tsv", timestamp)
 
     render json: {
       export_date: timestamp&.iso8601,
       sql_url: "#{sql_permalink_url}.zip",
+      sql_filesize_bytes: sql_filesize,
       tsv_url: "#{tsv_permalink_url}.zip",
+      tsv_filesize_bytes: tsv_filesize,
+      developer_url: DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK),
+      readme: DatabaseController.render_readme(self, DateTime.now),
     }
   end
 

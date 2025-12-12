@@ -30,8 +30,8 @@ RSpec.describe "registrations" do
         file = csv_file [
           ["Status", "Name", "WCA ID", "Birth date", "Gender", "Email", "444"],
         ]
-        post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        follow_redirect!
+        post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Missing columns: country, 333."
       end
 
@@ -43,9 +43,9 @@ RSpec.describe "registrations" do
           ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "watson@example.com", "1", "1"],
         ]
         expect do
-          post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+          post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
         end.not_to(change { competition.registrations.count })
-        follow_redirect!
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "The given file includes 2 accepted registrations, which is more than the competitor limit of 1."
       end
 
@@ -66,9 +66,9 @@ RSpec.describe "registrations" do
           ["a", two_timer_dave.name, two_timer_dave.country.id, two_timer_dave.wca_id, two_timer_dave.dob, two_timer_dave.gender, two_timer_dave.email, "1", "1"],
         ]
         expect do
-          post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+          post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
         end.not_to(change { competition.registrations.count })
-        follow_redirect!
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Error importing #{two_timer_dave.name}: Validation failed: Competition You can only be accepted for one Series competition at a time."
       end
 
@@ -79,9 +79,9 @@ RSpec.describe "registrations" do
           ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "1"],
         ]
         expect do
-          post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+          post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
         end.not_to(change { competition.registrations.count })
-        follow_redirect!
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Email must be unique, found the following duplicates: sherlock@example.com."
       end
 
@@ -92,9 +92,9 @@ RSpec.describe "registrations" do
           ["a", "John Watson", "United Kingdom", "2019HOLM01", "2000-01-01", "m", "watson@example.com", "1", "1"],
         ]
         expect do
-          post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+          post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
         end.not_to(change { competition.registrations.count })
-        follow_redirect!
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "WCA ID must be unique, found the following duplicates: 2019HOLM01."
       end
 
@@ -106,9 +106,9 @@ RSpec.describe "registrations" do
           ["a", "James Moriarty", "United Kingdom", "2019MORI01", "Jan 01 2000", "m", "moriarty@example.com", "0", "1"],
         ]
         expect do
-          post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+          post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
         end.not_to(change { competition.registrations.count })
-        follow_redirect!
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: 01.01.2000, Jan 01 2000."
       end
 
@@ -121,9 +121,9 @@ RSpec.describe "registrations" do
               ["a", "Sherlock Holmes", "United Kingdom", "1000DARN99", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
             ]
             expect do
-              post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
             end.not_to(change { competition.registrations.count })
-            follow_redirect!
+            expect(response).to have_http_status(:unprocessable_content)
             expect(response.body).to match(/The WCA ID 1000DARN99 doesn.*t exist/)
           end
 
@@ -140,9 +140,9 @@ RSpec.describe "registrations" do
                       ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, user.email, "1", "0"],
                     ]
                     expect do
-                      post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+                      post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
                     end.not_to(change { competition.registrations.count })
-                    follow_redirect!
+                    expect(response).to have_http_status(:unprocessable_content)
                     expect(response.body).to include "There is already a user with email #{user.email}, but it has WCA ID of #{user.wca_id} instead of #{dummy_user.wca_id}."
                   end
                 end
@@ -155,7 +155,7 @@ RSpec.describe "registrations" do
                       ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, user.email, "1", "0"],
                     ]
                     expect do
-                      post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+                      post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
                     end.to change(User, :count).by(-1)
                     expect(User.exists?(dummy_user.id)).to be false
                     user.reload
@@ -174,7 +174,7 @@ RSpec.describe "registrations" do
                     ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, "sherlock@example.com", "1", "0"],
                   ]
                   expect do
-                    post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+                    post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
                   end.not_to change(User, :count)
                   user = dummy_user.reload
                   expect(user).not_to be_dummy_account
@@ -194,7 +194,7 @@ RSpec.describe "registrations" do
                   ["a", user.name, user.country.id, user.wca_id, user.dob, user.gender, "sherlock@example.com", "1", "0"],
                 ]
                 expect do
-                  post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+                  post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
                 end.not_to change(User, :count)
                 expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                 expect(competition.registrations.count).to eq 1
@@ -220,9 +220,9 @@ RSpec.describe "registrations" do
                     ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
                   ]
                   expect do
-                    post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+                    post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
                   end.not_to(change { competition.registrations.count })
-                  follow_redirect!
+                  expect(response).to have_http_status(:unprocessable_content)
                   expect(response.body).to include "There is already a user with email #{user.email}, but it has unconfirmed WCA ID of #{unconfirmed_person.wca_id} instead of #{person.wca_id}."
                 end
               end
@@ -242,7 +242,7 @@ RSpec.describe "registrations" do
                     ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
                   ]
                   expect do
-                    post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+                    post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
                   end.not_to change(User, :count)
                   expect(user.reload.wca_id).to eq person.wca_id
                   expect(user.reload.unconfirmed_wca_id).to be_nil
@@ -261,7 +261,7 @@ RSpec.describe "registrations" do
                     ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
                   ]
                   expect do
-                    post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+                    post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
                   end.not_to change(User, :count)
                   expect(user.reload.wca_id).to eq person.wca_id
                   expect(user.registrations.first.events.map(&:id)).to eq %w[333]
@@ -279,7 +279,7 @@ RSpec.describe "registrations" do
                   ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, "sherlock@example.com", "1", "0"],
                 ]
                 expect do
-                  post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+                  post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
                 end.to change(User, :count).by(1)
                 user = competition.registrations.first.user
                 expect(user.wca_id).to eq person.wca_id
@@ -298,7 +298,7 @@ RSpec.describe "registrations" do
                 ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", user.email, "1", "0"],
               ]
               expect do
-                post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+                post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
               end.not_to change(User, :count)
               expect(user.registrations.first.events.map(&:id)).to eq %w[333]
               expect(competition.registrations.count).to eq 1
@@ -311,7 +311,7 @@ RSpec.describe "registrations" do
                 ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", user.email, "1", "0"],
               ]
               expect do
-                post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+                post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
               end.not_to change(User, :count)
               expect(user.reload.name).to eq "Sherlock Holmes"
               expect(user.dob).to eq Date.new(2000, 1, 1)
@@ -327,7 +327,7 @@ RSpec.describe "registrations" do
                 ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
               ]
               expect do
-                post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+                post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
               end.to change(User, :count).by(1)
               user = competition.registrations.first.user
               expect(user.wca_id).to be_blank
@@ -347,7 +347,7 @@ RSpec.describe "registrations" do
               ["a", user.name, user.country.id, "", user.dob, user.gender, user.email, "1", "0"],
             ]
             expect do
-              post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
             end.to not_change { competition.registrations.count }
               .and(not_change { registration.reload.competing_status })
           end
@@ -362,7 +362,7 @@ RSpec.describe "registrations" do
               ["a", user.name, user.country.id, "", user.dob, user.gender, user.email, "1", "1"],
             ]
             expect do
-              post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
             end.to not_change { competition.registrations.count }
               .and not_change { registration.reload.competing_status }
               .and change { registration.reload.events.map(&:id) }.from(%w[333]).to(%w[333 444])
@@ -378,7 +378,7 @@ RSpec.describe "registrations" do
               ["a", user.name, user.country.id, "", user.dob, user.gender, user.email, "1", "0"],
             ]
             expect do
-              post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
             end.to not_change { competition.registrations.count }
               .and(change { registration.reload.competing_status })
             expect(registration.reload).to be_accepted
@@ -392,7 +392,7 @@ RSpec.describe "registrations" do
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
             ]
             expect do
-              post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
             end.to not_change { competition.registrations.count }
               .and(not_change { registration.reload.competing_status })
             expect(registration.reload).to be_cancelled
@@ -406,7 +406,7 @@ RSpec.describe "registrations" do
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
             ]
             expect do
-              post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
             end.to not_change { User.count }
               .and not_change { competition.registrations.count }
               .and change { competition.registrations.accepted.count }.by(-1)
@@ -421,7 +421,7 @@ RSpec.describe "registrations" do
               ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
             ]
             expect do
-              post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
+              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
             end.to change { competition.registrations.count }.by(1)
           end
         end

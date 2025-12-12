@@ -1,9 +1,14 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useRef,
+  useState,
+} from 'react';
 import { Button, Header, Message } from 'semantic-ui-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import ScrambleFileList from './ScrambleFileList';
+import UnusedScramblesPanel from './UnusedScramblesPanel';
 
 async function listScrambleFiles(competitionId) {
   const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId));
@@ -11,7 +16,7 @@ async function listScrambleFiles(competitionId) {
   return data;
 }
 
-async function uploadScrambleFile(competitionId, file) {
+async function uploadScrambleFile({ competitionId, file }) {
   const formData = new FormData();
   formData.append('tnoodle[json]', file);
 
@@ -26,8 +31,8 @@ async function uploadScrambleFile(competitionId, file) {
 export default function FileUpload({
   competitionId,
   initialScrambleFiles,
-  addScrambleFile,
-  removeScrambleFile,
+  matchState,
+  dispatchMatchState,
 }) {
   const inputRef = useRef();
   const queryClient = useQueryClient();
@@ -42,7 +47,7 @@ export default function FileUpload({
   });
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: (file) => uploadScrambleFile(competitionId, file),
+    mutationFn: uploadScrambleFile,
     onSuccess: (data) => {
       queryClient.setQueryData(
         ['scramble-files', competitionId],
@@ -52,7 +57,7 @@ export default function FileUpload({
         ],
       );
 
-      addScrambleFile(data);
+      dispatchMatchState({ type: 'addScrambleFile', scrambleFile: data });
     },
     onError: (responseError) => setError(responseError.message),
   });
@@ -65,11 +70,11 @@ export default function FileUpload({
 
   const uploadNewScramble = useCallback((ev) => {
     const filesArr = Array.from(ev.target.files);
-    const uploadPromises = filesArr.map((f) => mutateAsync(f));
+    const uploadPromises = filesArr.map((file) => mutateAsync({ competitionId, file }));
 
     return Promise.all(uploadPromises)
       .finally(resetFileUpload);
-  }, [mutateAsync, resetFileUpload]);
+  }, [competitionId, mutateAsync, resetFileUpload]);
 
   const clickOnInput = () => {
     inputRef.current?.click();
@@ -80,7 +85,7 @@ export default function FileUpload({
       <Header>
         Uploaded JSON files:
         {' '}
-        {uploadedJsonFiles?.length}
+        {uploadedJsonFiles.length}
         {' '}
         <Button.Group floated="right">
           <Button
@@ -118,7 +123,13 @@ export default function FileUpload({
       <ScrambleFileList
         scrambleFiles={uploadedJsonFiles}
         isFetching={isFetching}
-        removeScrambleFile={removeScrambleFile}
+        matchState={matchState}
+        dispatchMatchState={dispatchMatchState}
+      />
+      <UnusedScramblesPanel
+        scrambleFiles={uploadedJsonFiles}
+        matchState={matchState}
+        dispatchMatchState={dispatchMatchState}
       />
     </>
   );

@@ -1,0 +1,9 @@
+type: object
+required:
+  - average
+  - single
+properties:
+  average:
+    $ref: "./Rank.yaml"
+  single:
+    $ref: "./Rank.yaml"

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const XIcon = createIcon({
@@ -13,10 +14,9 @@ const XIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const XIconPreview = () => {
-  return <XIcon size="lg" />;
-};
-
-export default XIconPreview;
+export default XIcon;

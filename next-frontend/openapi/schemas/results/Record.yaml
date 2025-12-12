@@ -1,0 +1,105 @@
+type: object
+required:
+  - id
+  - pos
+  - person_id
+  - person_name
+  - country_id
+  - competition_country_id
+  - competition_id
+  - competition_name
+  - start_date
+  - event_id
+  - round_type_id
+  - round_id
+  - format_id
+  - value1
+  - value2
+  - value3
+  - value4
+  - value5
+  - best
+  - average
+  - regional_single_record
+  - regional_average_record
+  - updated_at
+  - value
+properties:
+  "type":
+    type: string
+  id:
+    type: integer
+    example: 6709306
+  pos:
+    type: integer
+    example: 1
+  person_id:
+    type: string
+    example: "2019WANY36"
+  person_name:
+    type: string
+    example: "Yiheng Wang (王艺衡)"
+  country_id:
+    type: string
+    example: "China"
+  competition_country_id:
+    type: string
+    example: "China"
+  competition_id:
+    type: string
+    example: "HangzhouOpen2024"
+  competition_name:
+    type: string
+    example: "Hangzhou Open 2024"
+  event_id:
+    type: string
+    example: "222"
+  round_type_id:
+    type: string
+    example: "2"
+  round_id:
+    type: string
+    nullable: true
+    example: null
+  format_id:
+    type: string
+    example: "a"
+  value1:
+    type: integer
+    example: 126
+  value2:
+    type: integer
+    example: 84
+  value3:
+    type: integer
+    example: 91
+  value4:
+    type: integer
+    example: 89
+  value5:
+    type: integer
+    example: 85
+  best:
+    type: integer
+    example: 84
+  average:
+    type: integer
+    example: 88
+  regional_single_record:
+    type: string
+    nullable: true
+    example: null
+  regional_average_record:
+    type: string
+    nullable: true
+    example: "WR"
+  updated_at:
+    type: string
+    format: date-time
+    example: "2024-12-19T13:40:19.000Z"
+  start_date:
+    type: string
+    format: date
+  value:
+    type: integer
+    example: 88

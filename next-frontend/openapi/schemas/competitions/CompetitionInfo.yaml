@@ -1,0 +1,202 @@
+type: object
+required:
+  - id
+  - name
+  - information
+  - venue
+  - contact
+  - registration_open
+  - registration_close
+  - use_wca_registration
+  - guests_enabled
+  - announced_at
+  - base_entry_fee_lowest_denomination
+  - currency_code
+  - start_date
+  - end_date
+  - enable_donations
+  - competitor_limit
+  - extra_registration_requirements
+  - on_the_spot_registration
+  - refund_policy_percent
+  - refund_policy_limit_date
+  - guests_entry_fee_lowest_denomination
+  - qualification_results
+  - external_registration_page
+  - event_restrictions
+  - waiting_list_deadline_date
+  - event_change_deadline_date
+  - guest_entry_status
+  - allow_registration_edits
+  - allow_registration_without_qualification
+  - competitor_can_cancel
+  - url
+  - website
+  - short_name
+  - city
+  - venue_address
+  - venue_details
+  - latitude_degrees
+  - longitude_degrees
+  - country_iso2
+  - event_ids
+  - main_event_id
+  - number_of_bookmarks
+  - using_payment_integrations?
+  - uses_qualification?
+  - uses_cutoff?
+  - competition_series_ids
+  - registration_full?
+  - part_of_competition_series?
+  - registration_full_and_accepted?
+  - delegates
+  - organizers
+  - tab_names
+  - class
+properties:
+  id:
+    type: string
+    example: "WC2003"
+  name:
+    type: string
+    example: "WCA World Championship 2003"
+  information:
+    type: string
+    example: "First WCA World Championship"
+  venue:
+    type: string
+    example: "Toronto"
+  contact:
+    type: string
+    format: uri
+    example: "https://www.example.com"
+  registration_open:
+    type: string
+    format: date-time
+    example: "2025-01-03T14:00:00.000Z"
+  registration_close:
+    type: string
+    format: date-time
+    example: "2025-01-10T14:00:00.000Z"
+  use_wca_registration:
+    type: boolean
+    example: true
+  guests_enabled:
+    type: boolean
+    example: false
+  announced_at:
+    type: string
+    format: date-time
+    example: "2024-10-08T22:00:00.000Z"
+  base_entry_fee_lowest_denomination:
+    type: integer
+    example: 12000
+  currency_code:
+    type: string
+    example: "USD"
+  start_date:
+    type: string
+    format: date
+    example: "2025-07-03"
+  end_date:
+    type: string
+    format: date
+    example: "2025-07-06"
+  enable_donations:
+    type: boolean
+    example: false
+  competitor_limit:
+    type: integer
+    example: 2000
+  extra_registration_requirements:
+    type: string
+    example: ""
+  on_the_spot_registration:
+    type: boolean
+    example: false
+  refund_policy_percent:
+    type: integer
+    example: 50
+  refund_policy_limit_date:
+    type: string
+    format: date-time
+    example: "2025-05-15T06:59:00.000Z"
+  guests_entry_fee_lowest_denomination:
+    type: integer
+    example: 1000
+  qualification_results:
+    type: boolean
+    example: true
+  event_restrictions:
+    type: boolean
+    example: false
+  cancelled_at:
+    type: string
+    nullable: true
+  waiting_list_deadline_date:
+    type: string
+    format: date-time
+    example: "2025-05-29T06:59:00.000Z"
+  event_change_deadline_date:
+    type: string
+    format: date-time
+    example: "2025-05-29T06:59:00.000Z"
+  competitor_can_cancel:
+    type: string
+    example: "not_accepted"
+  url:
+    type: string
+    format: uri
+    example: "https://www.worldcubeassociation.org/competitions/WC2003"
+  website:
+    type: string
+    format: uri
+    example: "https://cubingusa.org/worlds"
+  city:
+    type: string
+    example: "Seattle, Washington"
+  venue_address:
+    type: string
+    example: "770 Don Mills Rd, North York, ON M3C IT3, Canada"
+  venue_details:
+    type: string
+    example: "The big convention center"
+  latitude_degrees:
+    type: number
+    format: float
+    example: 47.611387
+  longitude_degrees:
+    type: number
+    format: float
+    example: -122.332554
+  country_iso2:
+    type: string
+    example: "US"
+  event_ids:
+    type: array
+    items:
+      type: string
+    example: [ "333" ]
+  main_event_id:
+    type: string
+    example: "333"
+  number_of_bookmarks:
+    type: integer
+    example: 123
+  uses_qualification?:
+    type: boolean
+  registration_full?:
+    type: boolean
+    example: true
+  tab_names:
+    type: array
+    items:
+      type: string
+  delegates:
+    type: array
+    items:
+      $ref: '../users/Person.yaml'
+  organizers:
+    type: array
+    items:
+      $ref: 'Organizer.yaml'

@@ -5,7 +5,5 @@ FactoryBot.define do
     competition_id { FactoryBot.create(:competition, :with_valid_submitted_results).id }
 
     message { "Here are the results.\nThey look good." }
-
-    confirm_information { true }
   end
 end

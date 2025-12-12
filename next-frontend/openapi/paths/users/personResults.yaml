@@ -1,0 +1,22 @@
+get:
+  summary: Get results for a person
+  tags:
+    - users
+  operationId: personResults
+  parameters:
+    - name: wca_id
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: event_id
+      in: query
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/results/Results.yaml'

@@ -126,66 +126,6 @@ module CompetitionsHelper
     text
   end
 
-  def announced_content(competition)
-    competition.announced_at ? "#{pluralize(days_announced_before_competition(competition), 'day')} before" : ""
-  end
-
-  def announced_class(competition)
-    if competition.announced_at
-      level = [Competition::ANNOUNCED_DAYS_WARNING, Competition::ANNOUNCED_DAYS_DANGER].count { |d| days_announced_before_competition(competition) > d }
-      %w[alert-danger alert-orange alert-green][level]
-    else
-      ""
-    end
-  end
-
-  private def report_and_results_days_to_class(days)
-    level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].count { |d| days > d }
-    %w[alert-green alert-success alert-orange alert-danger][level]
-  end
-
-  def report_content(competition)
-    days_report = days_after_competition(competition.delegate_report.posted_at, competition)
-    if days_report
-      submitted_by_competition_delegate = competition.delegates.include?(competition.delegate_report.posted_by_user)
-      submitted_by_competition_delegate ? "#{pluralize(days_report, 'day')} after" : "submitted by other"
-    else
-      competition.probably_over? ? "pending" : ""
-    end
-  end
-
-  def report_class(competition)
-    days_report = days_after_competition(competition.delegate_report.posted_at, competition)
-    if days_report
-      report_and_results_days_to_class(days_report)
-    elsif competition.probably_over?
-      days_report = days_after_competition(Date.today, competition)
-      report_and_results_days_to_class(days_report)
-    else
-      ""
-    end
-  end
-
-  def results_content(competition)
-    days_results = days_after_competition(competition.results_submitted_at, competition)
-    if days_results
-      "#{pluralize(days_results, 'day')} after"
-    else
-      competition.probably_over? ? "pending" : ""
-    end
-  end
-
-  def results_class(competition)
-    return "" unless competition.probably_over?
-
-    days_results = days_after_competition(competition.results_posted_at, competition)
-    days_results ? report_and_results_days_to_class(days_results) : ""
-  end
-
-  def year_is_a_number?(year)
-    year.is_a?(Integer) || year =~ /\A\d+\z/
-  end
-
   def competitions_json_for_markers(competitions)
     competitions.map do |c|
       {
@@ -201,32 +141,6 @@ module CompetitionsHelper
     end.to_json.html_safe
   end
 
-  def first_and_last_time_from_activities(activities, timezone)
-    # The goal of this function is to determine what should be the starting and ending points in the time axis of the calendar.
-    # Which means we need to find the earliest start_time (and latest end_time) for any activity occuring on all days, expressed in the local timezone.
-    # To do that we first convert the start_time to the local timezone, and keep only the "time of the day" component of the datetime.
-    # We can sort the activities based on this value to compute the extremum of the time axis.
-    sorted_activities = activities.sort_by { |a| a.start_time.in_time_zone(timezone).strftime("%H:%M") }
-    first_activity = sorted_activities.first
-    first_time = if first_activity
-                   first_activity.start_time.in_time_zone(timezone).strftime("%H:00:00")
-                 else
-                   "08:00:00"
-                 end
-    last_activity = sorted_activities.last
-    last_time = if last_activity
-                  last_timestamp = last_activity.end_time.in_time_zone(timezone)
-                  if last_timestamp.hour.zero? && last_timestamp.min.zero?
-                    "23:59:59"
-                  else
-                    last_timestamp.strftime("%H:59:59")
-                  end
-                else
-                  "20:00:00"
-                end
-    [first_time, last_time]
-  end
-
   def playwright_connection(&)
     if Rails.env.production? || EnvConfig.PLAYWRIGHT_RUN_LOCALLY?
       local_cli_path = "#{EnvConfig.PLAYWRIGHT_BROWSERS_PATH}/node_modules/playwright/cli.js"
@@ -235,11 +149,7 @@ module CompetitionsHelper
         playwright.chromium.launch(headless: true, channel: 'chromium', &)
       end
     else
-      endpoint_url = "#{EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL}?browser=chromium"
-
-      Playwright.connect_to_playwright_server(endpoint_url) do |playwright|
-        playwright.chromium.launch(headless: true, channel: 'chromium', &)
-      end
+      Playwright.connect_to_browser_server(EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL, browser_type: 'chromium', &)
     end
   end
 
@@ -288,40 +198,6 @@ module CompetitionsHelper
             data: { toggle: "tooltip" })
   end
 
-  def link_to_add_series_association(competition)
-    button = button_tag(t('competitions.competition_series_fields.add_series'), type: "button", class: "btn btn-default")
-    form = send(:instantiate_builder, "competition", competition, {
-                  builder: SimpleForm::FormBuilder,
-                  wrapper: :horizontal_form,
-                })
-
-    # force_non_association_create makes it so that the `series` association is not constantly deleted
-    # and re-created upon opening the form. See also https://github.com/nathanvda/cocoon/wiki/has_one-association
-    link_to_add_association button, form, :competition_series,
-                            data: { association_insertion_node: '.series', association_insertion_method: 'prepend' },
-                            render_options: { preload_competition_id: competition.id },
-                            force_non_association_create: true
-  end
-
-  def preload_competition_series(form_competition, preload_competition_id)
-    competition = Competition.find_by(id: preload_competition_id)
-
-    if (series = competition.competition_series)
-      form_competition.competition_series = series
-
-      # Hack around Rails reverse has_one associations
-      # because our form_competition is not the actual persisted competition
-      new_competitions = series.competitions | [form_competition]
-      competition_ids = new_competitions.map(&:id).join(',')
-
-      series.competition_ids = competition_ids
-
-      return series
-    end
-
-    CompetitionSeries.new(competitions: [form_competition, competition])
-  end
-
   def result_cache_key(competition, view, is_admin: false)
     [view, competition.id, competition.results || [], I18n.locale, is_admin]
   end
@@ -358,17 +234,5 @@ module CompetitionsHelper
       else
         visible ? t('competitions.messages.not_confirmed_visible') : t('competitions.messages.not_confirmed_not_visible')
       end
-    end
-
-    def days_before_competition(date, competition)
-      date ? (competition.start_date - date.to_date).to_i : nil
-    end
-
-    def days_after_competition(date, competition)
-      date ? (date.to_date - competition.end_date).to_i : nil
-    end
-
-    def days_announced_before_competition(competition)
-      days_before_competition(competition.announced_at, competition)
     end
 end

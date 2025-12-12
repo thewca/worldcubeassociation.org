@@ -429,7 +429,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
   describe 'GET #export_public' do
     it 'returns information about latest public export' do
       export_timestamp = DateTime.current.utc
-      DumpPublicResultsDatabase.cronjob_statistics.update!(run_start: export_timestamp)
+      DumpPublicResultsDatabase.cronjob_statistics.update!(successful_run_start: export_timestamp)
 
       get :export_public
       expect(response).to have_http_status :ok
@@ -437,7 +437,11 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
       expect(json).to eq(
         'export_date' => export_timestamp.iso8601,
         'sql_url' => "#{root_url}export/results/WCA_export.sql.zip",
+        'sql_filesize_bytes' => 123_456,
         'tsv_url' => "#{root_url}export/results/WCA_export.tsv.zip",
+        'tsv_filesize_bytes' => 123_456,
+        'developer_url' => "#{ENV.fetch('DUMP_HOST', nil)}/export/developer/wca-developer-database-dump.zip",
+        'readme' => "",
       )
     end
   end

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const WcaLiveIcon = createIcon({
@@ -10,10 +11,9 @@ const WcaLiveIcon = createIcon({
       <circle cx="22.5" cy="22.5" r="22.5" fill="currentColor" />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const WcaLiveIconPreview = () => {
-  return <WcaLiveIcon size="lg" />;
-};
-
-export default WcaLiveIconPreview;
+export default WcaLiveIcon;

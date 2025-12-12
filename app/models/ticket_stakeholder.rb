@@ -22,9 +22,9 @@ class TicketStakeholder < ApplicationRecord
     where(stakeholder_type: "UserGroup", stakeholder_id: group_ids)
   }
 
-  DEFAULT_SERIALIZE_OPTIONS = {
-    methods: %w[stakeholder],
-  }.freeze
+  scope :belongs_to_competitions, lambda { |competition_ids|
+    where(stakeholder_type: "Competition", stakeholder_id: competition_ids)
+  }
 
   def user_group_stakeholder?
     stakeholder_type == "UserGroup"
@@ -33,6 +33,26 @@ class TicketStakeholder < ApplicationRecord
   def user_stakeholder?
     stakeholder_type == "User"
   end
+
+  def competition_stakeholder?
+    stakeholder_type == "Competition"
+  end
+
+  def emails
+    if competition_stakeholder?
+      stakeholder.delegates.pluck(:email)
+    else
+      [stakeholder.email]
+    end
+  end
+
+  def metadata_actions_allowed
+    ticket.metadata.metadata_actions_allowed_for(self)
+  end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    include: %w[stakeholder],
+  }.freeze
 
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))

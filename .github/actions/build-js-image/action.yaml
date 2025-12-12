@@ -1,0 +1,37 @@
+name: 'Build and Push JS Docker Image'
+description: 'A custom action to build and push our Docker images with environment-specific configurations.'
+inputs:
+  registry:
+    description: 'Docker registry to push the image to'
+    required: true
+  tag:
+    description: 'The image tag in the registry'
+    required: true
+outputs:
+  imageid:
+    description: 'The Docker image id build'
+    value: ${{ steps.build-image.outputs.imageid }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Copy over symlinked data
+      shell: bash
+      run: |
+        rm -rf ./next-frontend/src/lib/staticData
+        cp -rT ./lib/static_data ./next-frontend/src/lib/staticData
+        rm ./next-frontend/src/lib/i18n/locales/available.json
+        cp ./config/locales/available.json ./next-frontend/src/lib/i18n/locales/available.json
+        cp ./config/locales/*.yml ./next-frontend/src/lib/i18n/locales
+    - name: Download proprietary assets from protected bucket
+      shell: bash
+      run: aws s3 cp s3://wca-fonts ./next-frontend/src/styles/fonts/ --recursive
+    - name: Build and push JS Docker image
+      uses: docker/build-push-action@v6
+      id: build-js-image
+      with:
+        push: true
+        context: ./next-frontend
+        tags: |
+          ${{ inputs.registry }}:${{ inputs.tag }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max

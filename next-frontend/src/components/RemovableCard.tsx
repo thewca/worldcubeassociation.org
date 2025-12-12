@@ -10,8 +10,6 @@ import {
   Separator,
   Button,
   Link,
-  CardBody,
-  CardDescription,
 } from "@chakra-ui/react";
 
 interface RemovableCardProps {
@@ -34,19 +32,19 @@ export default function RemovableCard({
   if (!visible) return null;
 
   return (
-    <Card.Root variant="info" flexDirection="row" overflow="hidden" size="lg">
+    <Card.Root flexDirection="row" size="lg" colorVariant="solid">
       <Image src={imageUrl} alt="removable card image" maxW="1/3" />
-      <CardBody>
+      <Card.Body>
         <HStack justifyContent="space-between">
           <Heading size="4xl">{heading}</Heading>
           <CloseButton onClick={() => setVisible(false)} />
         </HStack>
         <Separator size="md" />
-        <CardDescription>{description}</CardDescription>
+        <Card.Description>{description}</Card.Description>
         <Button asChild alignSelf="start">
           <Link href={buttonUrl}>{buttonText}</Link>
         </Button>
-      </CardBody>
+      </Card.Body>
     </Card.Root>
   );
 }

@@ -147,6 +147,8 @@ fr-CA:
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      #original_hash: d6db37e
+      h: 1v1
   rounds:
     '0':
       #original_hash: 9be00af
@@ -457,6 +459,10 @@ fr-CA:
         region: Région
         #original_hash: eb43e6f
         subRegion: Sous-région
+        #original_hash: dba636f
+        receive_developer_mails: >-
+          Je souhaite recevoir des notifications concernant les modifications
+          apportées aux ressources logicielles de la WCA.
         #original_hash: 5bd88eb
         receive_delegate_reports: Je souhaite recevoir les rapports des compétitions WCA par courriel
         #original_hash: 7997881
@@ -512,8 +518,8 @@ fr-CA:
         organization: Organisation
         #original_hash: 5e326b1
         incidents: Incidents
-        #original_hash: 55ae7b2
-        setup_images: Images de l'organisation de la compétition
+        #original_hash: 4d9a45f
+        setup_images: Images de la configuration de la salle
         #original_hash: 335af57
         wrc_feedback_requested: Je souhaite avoir l'avis du WRC sur certains incidents ci-dessus.
         #original_hash: a140447
@@ -653,15 +659,15 @@ fr-CA:
         teams_committees:
           #original_hash: bbc7e79
           member: Membre
-          #original_hash: 412cbf1
-          senior_member: Membre Senior
+          #original_hash: ab08372
+          senior_member: Membre expérimenté
           #original_hash: e26c936
           leader: Leader
         councils:
           #original_hash: bbc7e79
           member: Membre
-          #original_hash: 412cbf1
-          senior_member: Membre Senior
+          #original_hash: ab08372
+          senior_member: Membre expérimenté
           #original_hash: e26c936
           leader: Leader
         officers:
@@ -774,16 +780,22 @@ fr-CA:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: a2c83f6
+        #original_hash: ccb179b
+        receive_developer_mails: >-
+          Cela se limite aux notifications concernant les changements de version
+          majeurs apportés à des ressources telles que les exports de données,
+          le schéma WCIF et les API publiques. Recommandé pour les développeurs
+          qui assurent la maintenance de logiciels reposant sur ces outils.
+        #original_hash: 68da290
         receive_delegate_reports: >-
           Si vous êtes un Délégué Senior, membre du WRC ou du WQAC, vous recevez
-          les rapports par défaut. Note : le changement peut prendre jusqu'à une
-          heure pour être pris en compte.
-        #original_hash: 7e12f49
+          les rapports par défaut. Note : le changement peut prendre jusqu'à 12
+          heures pour être pris en compte.
+        #original_hash: 6043925
         delegate_reports_region: >-
           Si vous souhaitez recevoir tous les rapports, laissez ce champ vide
           (l'option du menu déroulant se trouve tout en haut). Remarque : la
-          modification peut prendre jusqu'à une heure pour être prise en compte.
+          modification peut prendre jusqu'à 12 heures pour être prise en compte.
         #original_hash: 5fd4322
         otp_attempt: >-
           Consultez l'application mobile que vous avez configuré pour obtenir un
@@ -851,15 +863,15 @@ fr-CA:
           Délégués puissent les référencer dans leurs commentaires. Même s'ils
           semblent courants, listez au moins les incidents principaux. Merci de
           cocher les cases ci-dessous si vous avez besoin d'un avis.
-        #original_hash: 7e9cfad
+        #original_hash: 1d57288
         setup_images: >-
-          Veuillez choisir au moins %{image_count} d'images qui illustrent
-          l'organisation de la compétition (zone de mélange, zone de
-          compétition, etc.). Vous pouvez sélectionner plusieurs fichiers à la
-          fois. Vous ne pouvez supprimer des images que lorsque suffisamment
-          d'autres images ont été téléchargées (si vous souhaitez remplacer une
-          image, vous devez d'abord télécharger la nouvelle image, puis
-          supprimer l'ancienne).
+          Vous DEVEZ choisir au moins %{image_count} d'images qui illustrent la
+          zone de mélange et celle de compétition (d'autres images sont les
+          bienvenues). Vous pouvez sélectionner plusieurs fichiers à la fois.
+          Vous ne pouvez supprimer des images que lorsque suffisamment d'autres
+          images ont été téléchargées (si vous souhaitez remplacer une image,
+          vous devez d'abord télécharger la nouvelle image, puis supprimer
+          l'ancienne).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: c1474f2
@@ -929,15 +941,6 @@ fr-CA:
         submitter_comment: ''
         #original_hash: da39a3e
         status: ''
-      results_submission:
-        #original_hash: da39a3e
-        schedule_url: ''
-        #original_hash: da39a3e
-        results_file: ''
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1070,12 +1073,12 @@ fr-CA:
           otp_email:
             #original_hash: a238ac2
             subject: Votre code à usage unique pour le site internet de la WCA
-            #original_hash: 7aa8fc0
+            #original_hash: b235c68
             2fa_attempt: >-
               Vous être en train de vous connecter sur le site de la WCA.
               L'authentification à deux facteur est activée pour votre compte,
               et vous venez de demander que l'on vous envoie un mot de passe à
-              usage unique par courriel. Vous le trouverez ci-dessous :
+              usage unique via courriel. Vous le trouverez ci-dessous :
             #original_hash: 9b44e16
             disclaimer: >-
               Si vous n'avez pas demandé ce code d'authentification, veuillez
@@ -1089,10 +1092,10 @@ fr-CA:
             Le site internet de la WCA supporte %{two_factor_link} avec un code
             à usage unique :
           options:
-            #original_hash: 271d18d
+            #original_hash: 1cd2e3e
             app: >-
               généré par une application 2FA dédiée sur votre téléphone (comme
-              Authy ou Google Authenticator par exemple).
+              Authy, Google Authenticator, ou iOS Passwords).
             #original_hash: ac81084
             recovery: >-
               pris dans la liste des codes de secours générés lors de
@@ -1130,11 +1133,11 @@ fr-CA:
           dedicated_app: >-
             En utilisant une application dédié pour l'authentification à deux
             facteurs
-          #original_hash: 548b280
+          #original_hash: 8d63319
           dedicated_app_desc_html: >-
             L'équipe logicielle de la WCA (WST) recommande d'utiliser %{authy}
             sur vos appareils pour obtenir un code à usage
-            unique.<br/>Autrement, vous pouvez utiliser %{google} ou
+            unique.<br/>Autrement, vous pouvez utiliser %{google}, %{apple}, ou
             %{microsoft}.
           #original_hash: 21ca92f
           scan_qrcode_html: >-
@@ -1224,6 +1227,22 @@ fr-CA:
         400_contact_html: >-
           Si vous pensez qu'il s'agit d'une erreur, merci de <a
           href=%{contact_url}>cliquer ici</a> pour le signaler.
+        #original_hash: 8fec548
+        comp_not_found: Compétition introuvable
+        #original_hash: 8342dcb
+        comp_not_found_action: >-
+          Nous n'avons pas trouvé de compétition avec l'identifiant « %{comp_id}
+          ». Veuillez effectuer une recherche à l'aide de la barre de recherche.
+        #original_hash: 616d097
+        comp_not_found_action_2: >-
+          Si vous avez suivi un lien depuis un autre site web pour arriver ici,
+          veuillez signaler à ce site web que son lien est incorrect.
+        #original_hash: 6344d1b
+        session_expired: Session expirée
+        #original_hash: 7114c05
+        session_expired_action: >-
+          Votre session a expiré. Veuillez actualiser la page, réessayer
+          l'action ou vous reconnecter pour continuer.
     doorkeeper:
       applications:
         help:
@@ -1331,12 +1350,10 @@ fr-CA:
       db_dev_export: Export pour Développeurs
       #original_hash: 3ceb6e0
       regulations: Règlement
-      #original_hash: f7d4572
-      regulations_full: Règlement et recommandations
+      #original_hash: 3ceb6e0
+      regulations_full: Règlement
       #original_hash: 9c79d91
       about_regulations: À propos du Règlement
-      #original_hash: 0589775
-      guidelines: Recommandations
       #original_hash: 5cc5142
       scrambles: Mélanges
       #original_hash: 34f3a06
@@ -1561,13 +1578,13 @@ fr-CA:
     contacts:
       #original_hash: 8a3721e
       title: Formulaire de contact WCA
-      #original_hash: a6fd8ce
+      #original_hash: 07b4648
       faq_note_html: >-
         Avant de faire une demande, vous pouvez consulter notre <a
         href="/faq">Foire Aux Questions</a> ! Si vous souhaitez contacter un
         comité ou une équipe spécifique qui ne figure pas dans la liste, vous
-        pouvez consulter ses coordonnées sur <a
-        href="/teams-committees-councils">cette page</a>.
+        pouvez consulter ses coordonnées sur <a href="/teams-committees">cette
+        page</a>.
       #original_hash: 597b791
       success_message: Courriel envoyé - nous vous répondrons sous peu.
       #original_hash: a38a97d
@@ -1707,7 +1724,7 @@ fr-CA:
       form:
         contact_email:
           #original_hash: 25e3a06
-          label: Email de contact
+          label: Courriel de contact
         wca_id:
           #original_hash: 7951ca7
           label: Saisir l'identifiant WCA
@@ -1795,12 +1812,13 @@ fr-CA:
     support:
       #original_hash: 989d83b
       title: Supporter la WCA
-      #original_hash: 2f4b32f
+      #original_hash: d36651c
       text: >-
         La World Cube Association est une organisation exonérée d’impôt
         501(c)(3). En tant qu’organisme à but non lucratif géré de façon 100%
-        bénévole, nous accueillons vos dons pour nous aider à poursuivre notre
-        vision d’avoir des compétitions partout dans le monde.
+        bénévole, nous apprécions vos dons qui nous aident à atteindre notre
+        objectif : soutenir la communauté mondiale des speedcubers et maintenir
+        un environnement compétitif amusant et équitable pour tous.
       #original_hash: 45ae712
       button: En savoir plus sur les moyens de supporter la WCA
   users:
@@ -2024,7 +2042,7 @@ fr-CA:
         qu'elle puisse être effective.
       #original_hash: f572e4a
       pending_mail_confirmation: >-
-        Ce compte est en attente de confirmation de la nouvelle adresse email
+        Ce compte est en attente de confirmation de la nouvelle adresse courriel
         %{email}.
       #original_hash: a96e012
       pending_avatar_confirmation: Ce compte est en attente de confirmation d'une nouvelle photo de profil.
@@ -2064,6 +2082,8 @@ fr-CA:
         #original_hash: 132deae
         msg: "Vous ne pouvez pas changer votre nom, votre date de naissance, votre sexe ou votre région. Raison\_: %{reason}. Contactez l'<a href='%{wrt_contact_path}' target='_blank'>équipe de résultats de la WCA (WRT)</a> ou votre <a href='%{delegate_url}'>Délégué·e</a> si vous devez modifier l’un de ces éléments."
         reason:
+          #original_hash: d527d9a
+          no_access: vous n'avez pas accès pour modifier l'utilisateur
           #original_hash: d936b01
           assigned: vous avez déjà un ID WCA qui vous est assigné
           #original_hash: ae41794
@@ -2386,7 +2406,7 @@ fr-CA:
         #original_hash: 68512ca
         waitlisted_html: >-
           La compétition est pleine, mais vous avez été placé sur une liste
-          d'attente, et vous recevrez un email si suffisamment de places se
+          d'attente, et vous recevrez un courriel si suffisamment de places se
           libèrent pour que vous puissiez y participer. Vérifiez votre position
           sur la liste d'attente %{here}.
         #original_hash: f8da4c2
@@ -2803,8 +2823,6 @@ fr-CA:
         devraient être disponibles sous peu.
       #original_hash: 6c46989
       results_already_posted: Les résultats ont déjà été postés.
-      #original_hash: 360971e
-      results_posted: Résultats postés avec succès !
       #original_hash: 9a15889
       results_preview_alert: Vous visualisez des résultats qui n'ont pas encore été postés.
       #original_hash: 52f0c1d
@@ -3026,12 +3044,14 @@ fr-CA:
         voulez participer lors de votre inscription en ligne, cependant vous
         pouvez ajouter des épreuves à votre inscription jusqu'à ce que l'épreuve
         commence.
-      #original_hash: 1707b32
+      #original_hash: 121b55b
       on_the_spot_registration_fee_html: >-
-        Les inscriptions sur place seront acceptées pour un montant de
-        %{on_the_spot_base_entry_fee}.
-      #original_hash: 3be338e
-      on_the_spot_registration_free: Les inscriptions sur place seront acceptées gratuitement.
+        Les inscriptions sur place seront acceptées s'il reste des places
+        disponibles pour un montant de %{on_the_spot_base_entry_fee}.
+      #original_hash: 9c63a10
+      on_the_spot_registration_free: >-
+        Les inscriptions sur place seront acceptées gratuitement s'il reste des
+        places disponibles.
       #original_hash: ed6aa11
       no_on_the_spot_registration: Aucune inscription sur place ne sera acceptée.
       #original_hash: 2f2ffa2
@@ -3409,8 +3429,8 @@ fr-CA:
           auto_close_threshold: Seuil de fermeture automatique
           #original_hash: 5b521f2
           newcomer_month_reserved_spots: Nombre de places à réserver aux nouveaux compétiteurs
-          #original_hash: fbba0e4
-          auto_accept_enabled: Acceptation d'inscriptions automatique
+          #original_hash: a8246a2
+          auto_accept_preference: Accepter automatiquement les inscriptions
           #original_hash: 0405b42
           auto_accept_disable_threshold: Limite pour l'acceptation automatique des inscriptions
         staff:
@@ -3563,10 +3583,10 @@ fr-CA:
             Nom de la ville où la compétition a lieu ainsi que la province /
             état (dans les pays où c'est l'usage). Ne pas mettre le pays.
             Exemple d'entrée valide : Montréal, Quebec
-          #original_hash: 84d365b
+          #original_hash: aa8ebf8
           name_html: >-
             La salle où la compétition à lieu. %{md}. Par exemple : [École de
-            Technologie Supérieure](https://www.etsmtl.ca)
+            Technologie Supérieure](https://www.etsmtl.ca/)
           #original_hash: 16adf37
           details_html: >-
             Détails concernant la salle (par exemple, au première étage au fond
@@ -3633,12 +3653,13 @@ fr-CA:
             Uniquement autorisé pendant le mois des nouveaux venus - les places
             réservées ne peuvent pas être supérieures à la moitié de la limite
             de compétiteurs.
-          #original_hash: 8dad65c
-          auto_accept_enabled: >-
-            Cela activera un bouton « Acceptation automatique » dans le menu «
-            Inscriptions ». Cela acceptera toutes les inscriptions payées sur la
-            liste d'attente et en suspens jusqu'à la limite de compétiteurs, ou
-            la limite définie ci-dessous. A utiliser à vos risques et périls.
+          #original_hash: aa6ae25
+          auto_accept_preference: >-
+            Cela activera le bouton « Acceptation automatique groupée » dans le
+            menu Inscriptions. Cela permettra d'accepter toutes les inscriptions
+            payées en attente et en suspens jusqu'à la limite du nombre de
+            compétiteurs ou jusqu'à la limite définie ci-dessous. À utiliser à
+            vos risques et périls.
           #original_hash: adb50c3
           auto_accept_disable_threshold: >-
             Lorsque ce nombre d'inscriptions acceptées est atteint,
@@ -3819,13 +3840,17 @@ fr-CA:
             'true': Je veux spécifier une limite au nombre de compétiteurs
             #original_hash: 9aca8d5
             'false': Je ne veux PAS spécifier de limite pour les compétiteurs.
-          auto_accept_enabled:
-            #original_hash: 162b7e9
-            'true': >-
-              Activer le bouton « Acceptation automatique » dans le menu «
-              Inscriptions ».
-            #original_hash: 45b854c
-            'false': Désactiver le bouton 'Acceptation automatique'
+          auto_accept_preference:
+            #original_hash: dece00f
+            disabled: Désactiver le bouton « Acceptation automatique groupée »
+            #original_hash: 3148996
+            bulk: >-
+              Activer le bouton « Acceptation automatique groupée » dans le menu
+              Inscriptions
+            #original_hash: 5b41fb5
+            live: >-
+              Accepter automatiquement les inscriptions lorsque le paiement est
+              effectué
         registration:
           allow_on_the_spot:
             #original_hash: eb483f3
@@ -3918,8 +3943,8 @@ fr-CA:
           d’attente et vous recevrez un courriel si suffisamment de places sont
           disponibles pour que vous puissiez y assister.
       list:
-        #original_hash: e8f8827
-        empty: Aucune
+        #original_hash: b2ed82f
+        empty: Aucun
         #original_hash: c15d545
         spots_remaining_plural:
           zero: Aucune place disponible
@@ -4490,8 +4515,6 @@ fr-CA:
     cancelled_by_html: 'Annulée par %{name} le %{date_time}'
     #original_hash: 6851f7a
     cancel_confirm: Êtes-vous sûr·e de vouloir annuler cette compétition ?
-    #original_hash: 99120ff
-    post_results: Poster les résultats
     #original_hash: e8714ac
     results_posted_by_html: 'Postés par %{poster_name} le %{date_time}'
     #original_hash: 039ddbf
@@ -4680,10 +4703,12 @@ fr-CA:
         admin_view: Page administrateur
         #original_hash: 6fb56f4
         tabs: Gérer les onglets
+        #original_hash: 0b0c158
+        newcomer_checks: Vérifications des nouveaux compétiteurs
         #original_hash: 678d15b
         submit_results: Envoyer les résultats
-        #original_hash: d8bb428
-        match_scrambles: Soumettre les mélanges
+        #original_hash: 1d0b625
+        upload_scrambles: Mettre en ligne les mélanges
         #original_hash: 21f47fb
         delegate_report: Rapport des Délégués
         #original_hash: 3e69f54
@@ -4838,11 +4863,15 @@ fr-CA:
     #original_hash: 3f641b6
     connect_wca_id: Associez votre ID WCA à votre compte !
   payments:
+    #original_hash: 38e1285
+    header: Historique des paiements
     messages:
       #original_hash: 0311575
       charge_refunded: Le paiement a été remboursé
       #original_hash: f22cac8
       charges_refunded: Tous les frais ont été remboursés
+      #original_hash: fa022d1
+      no_payments: Aucun paiement n'a été effectué pour cette inscription.
     errors:
       refund:
         #original_hash: af69c11
@@ -4866,6 +4895,8 @@ fr-CA:
       paypal: PayPal
       #original_hash: 4d08ec5
       stripe: Stripe
+      #original_hash: 7209be5
+      manual: Manuel/Externe
     payment_setup:
       #original_hash: 50d8ee0
       external_dashboard: 'Tableau de bord %{provider}'
@@ -4889,6 +4920,8 @@ fr-CA:
       confirm_account_disconnect: >-
         Êtes-vous sûr·e de vouloir déconnecter le compte %{provider} ? Cette
         action est irréversible.
+      #original_hash: 7261fb9
+      edit_account: Modifier le compte
       #original_hash: ffee885
       supported_currency_warning: "Veuillez vous assurer que la devise que vous avez sélectionnée est prise en charge par votre intégration de paiement choisie ! Les devises prises en charge dépendront du pays où le compte est basé, vous pouvez les vérifier ci-dessous\_:"
       #original_hash: ea493e6
@@ -4897,8 +4930,10 @@ fr-CA:
       provider_heading: 'Paiements %{provider}'
       #original_hash: d907ad7
       accept_payments_header: Accepter les paiements d’inscription
-      #original_hash: afcfefc
-      connect_button: 'Se connecter avec %{provider}'
+      #original_hash: 5100703
+      manual_payments_header: Configurer les paiements manuels
+      #original_hash: 2e39846
+      connect_button: 'Configurer %{provider}'
       connect_account_info:
         #original_hash: 3e298a2
         stripe: >-
@@ -4913,6 +4948,12 @@ fr-CA:
           PayPal via la page de la compétition. Si vous n’avez pas encore de
           compte PayPal Business, vous pouvez toujours cliquer sur le bouton
           ci-dessous et il vous guidera tout au long du processus de création.
+        #original_hash: f8b9924
+        manual: >-
+          Définissez les instructions de paiement pour les compétiteurs. Les
+          compétiteurs pourront indiquer quand ils ont effectué leur paiement et
+          fournir une référence de paiement que vous pourrez vérifier dans vos
+          registres dans le service de paiement externe que vous utilisez.
       connect_account_warning:
         #original_hash: 025b561
         stripe: >-
@@ -4924,6 +4965,8 @@ fr-CA:
           La connexion de votre compte PayPal permet au site WCA d’acheminer les
           paiements vers vous et d’émettre des remboursements directement sur
           votre compte PayPal.
+        #original_hash: da39a3e
+        manual: ''
       #original_hash: f7842cb
       currently_connected_info: >-
         Cette compétition est configurée pour accepter les paiements par
@@ -4957,6 +5000,14 @@ fr-CA:
           display_name: Nom
           #original_hash: e0edc01
           primary_email: Adresse courriel
+        manual:
+          #original_hash: d30593f
+          payment_instructions: Instructions de paiement (affichées sur la page de la compétition)
+          #original_hash: 2b35dac
+          payment_reference_label: >-
+            Quelles informations l'utilisateur doit-il vous fournir pour que
+            vous puissiez identifier son paiement ? (par exemple, numéro de
+            référence du paiement / identifiant du compte / etc.)
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:
@@ -5053,6 +5104,15 @@ fr-CA:
       success: Merci pour votre message. Nous vous contacterons bientôt !
       #original_hash: d4918d2
       delivery_error: Erreur lors de l'envoi du message.
+  misc:
+    #original_hash: 0d220a6
+    forum_age_requirement: Vous devez avoir au moins 13 ans pour accéder au Forum de la WCA.
+    #original_hash: 51320c6
+    forum_enter_dob: >-
+      Une date de naissance est requise pour accéder au forum. Veuillez saisir
+      votre date de naissance, puis essayez à nouveau d'accéder au forum.
+    #original_hash: 9d3b2a7
+    refresh: Actualiser
   faq:
     #original_hash: 541998a
     title: Foire Aux Questions
@@ -5314,7 +5374,7 @@ fr-CA:
     spirit_footer: Esprit de la WCA
     #original_hash: b02f298
     our_goals_title: Nos objectifs
-    #original_hash: f21f279
+    #original_hash: 08cac07
     our_goals_content_html: >-
       <p>La World Cube Association souhaite offrir des opportunités pour les
       membres de la communauté et un accompagnement pour les jeunes gens du
@@ -5323,9 +5383,9 @@ fr-CA:
       compétition et au sein de notre communauté créent des opportunités de
       progression pour les jeunes gens impliqués et que présenter les
       casse-têtes à de nouveaux groupes de personnes permet à notre communauté
-      de se renforcer. Un document présentant la vision du Bureau des Directeurs
-      et sa stratégie pour la WCA est disponible <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">ici</a>.</p>
+      de se renforcer. Un document contenant le plan stratégique du Bureau des
+      Directeurs pour la WCA est disponible <a
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">ici</a>.</p>
     #original_hash: 3d2c988
     whats_next_title: Le futur pour la WCA ?
     #original_hash: 5b712be
@@ -5444,8 +5504,8 @@ fr-CA:
     codeofconduct: Code de Conduite
     #original_hash: 4f05e8f
     finances: Finances
-    #original_hash: 626989f
-    vision_and_strategy: Vision et Stratégie
+    #original_hash: 0f00d40
+    strategic_plan: Plan stratégique
   education:
     #original_hash: 72c7157
     title: Ressources Éducatives de la WCA
@@ -5760,8 +5820,8 @@ fr-CA:
       incidents: Incidents
       #original_hash: 7c42284
       posts: Articles
-      #original_hash: bc22eaf
-      regulations_and_guidelines: Règles et Recommandations
+      #original_hash: 3ceb6e0
+      regulations_and_guidelines: Règlement
       #original_hash: be89802
       search_for: 'Recherche pour <b>%{search_string}</b>'
       not_found:
@@ -5775,8 +5835,8 @@ fr-CA:
         posts: Pas d'article trouvé pour
         #original_hash: 23198a2
         incidents: Aucun incident trouvé pour
-        #original_hash: 912f282
-        regulations_and_guidelines: Pas de Règle ou Recommandation trouvée pour
+        #original_hash: 7c887cc
+        regulations_and_guidelines: Pas de règle trouvée pour
   incidents_log:
     #original_hash: 379dc99
     i18n_disclaimer: >-
@@ -5796,17 +5856,11 @@ fr-CA:
         href="/regulations/">Règlement WCA</a>. Il est important que les
         compétiteurs lisent ce règlement avant de participer à leur première
         compétition.
-      #original_hash: 9745a9e
+      #original_hash: 32f9a21
       content2_html: >-
-        Le Règlement WCA est complémenté par les <a
-        href="/regulations/guidelines.html">Recommandations WCA</a>, qui
-        contient des explications et clarifications additionnelles.
-      #original_hash: 7242cc1
-      content3_html: >-
-        Les décisions importantes à propos des incidents qui surviennent aux
-        compétitions, et qui ont été validées par le Comité Réglementaire de la
-        WCA, peuvent être consultés dans le <a href="/incidents">journal des
-        incidents</a>.
+        Les décisions importantes concernant les incidents survenus lors de
+        compétitions et résolues par le comité des règlements de la WCA se
+        trouvent dans le <a href="/incidents">registre des incidents</a>.
     panel2:
       #original_hash: 25c63dc
       title: Traductions
@@ -5840,8 +5894,8 @@ fr-CA:
         Ce document contient des informations importantes et devrait être lu par
         tout organisateur de compétitions.
   regulations_translations:
-    #original_hash: fd77ef9
-    title: 'Règlement et Recommandations de la WCA : Traductions'
+    #original_hash: be859a4
+    title: 'Règlement de la WCA : Traductions'
     #original_hash: 8166f51
     paragraph1: >-
       Si votre langue maternelle n'est pas l'Anglais, vous pourriez trouver ces
@@ -6614,13 +6668,16 @@ fr-CA:
         informations relatives au tour dans la page de gestion des événements de
         la compétition.
     events:
-      #original_hash: 24e6f48
+      #original_hash: 81ed646
       not_333_main_event_warning: >-
-        L'événement principal sélectionné pour cette compétition est
-        %{main_event_id}. Comment cet événement a-t-il été traité comme
-        l'événement principal de la compétition ? Veuillez donner une brève
-        explication au WRT (par exemple, nombre de tours, prix, vainqueur
-        déclaré de la compétition, ...).
+        L'épreuve principale sélectionnée est %{main_event_id}. Bien que cela
+        ait été approuvé par le WCAT AVANT la compétition, le WRT est
+        responsable de s'assurer APRÈS la compétition que les directives
+        appropriées de la politique des exigences de compétition de la WCA ont
+        été respectées. Veuillez donner une mesure qui a été prise pour traiter
+        %{main_event_id} comme l'épreuve principale PENDANT la compétition
+        (exemples valables : déclaré vainqueur de la compétition, plus grand
+        nombre de rondes, plus gros prix).
       #original_hash: a9a2137
       no_main_event_warning: >-
         Il n'y a pas d'épreuve principale sélectionné pour cette compétition.
@@ -6671,3 +6728,9 @@ fr-CA:
         dans l'onglet Gérer les événements. Veuillez ajuster le nombre de sets
         de mélanges dans l'onglet Gérer les événements en fonction du nombre de
         sets utilisés.
+  tickets:
+    type:
+      #original_hash: 170f350
+      edit_person: Modifier la personne
+      #original_hash: aa4151c
+      competition_result: Résultat de la compétition

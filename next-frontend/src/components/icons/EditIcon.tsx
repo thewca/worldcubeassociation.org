@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const EditIcon = createIcon({
@@ -13,10 +14,9 @@ const EditIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const EditIconPreview = () => {
-  return <EditIcon size="lg" />;
-};
-
-export default EditIconPreview;
+export default EditIcon;

@@ -7,7 +7,7 @@ Doorkeeper.configure do
   # For more information go to
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
   default_scopes  :public
-  optional_scopes :dob, :email, :manage_competitions, :openid, :profile
+  optional_scopes :dob, :email, :manage_competitions, :openid, :profile, :cms
 
   base_controller 'ApplicationController'
   base_metal_controller 'ApplicationController'
@@ -114,9 +114,9 @@ Doorkeeper.configure do
   # Under some circumstances you might want to have applications auto-approved,
   # so that the user skips the authorization step.
   # For example if dealing with a trusted application.
-  # skip_authorization do |resource_owner, client|
-  #   client.superapp? or resource_owner.admin?
-  # end
+  skip_authorization do |_, client|
+    client.application.superapp?
+  end
 
   # WWW-Authenticate Realm (default "Doorkeeper").
   # realm "Doorkeeper"

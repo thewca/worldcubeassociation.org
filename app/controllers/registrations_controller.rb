@@ -82,7 +82,7 @@ class RegistrationsController < ApplicationController
 
   def do_import
     competition = competition_from_params
-    file = params[:registrations_import][:registrations_file]
+    file = params[:csv_registration_file]
     required_columns = ["status", "name", "country", "wca id", "birth date", "gender", "email"] + competition.events.map(&:id)
     # Ensure the CSV file includes all required columns.
     headers = CSV.read(file.path).first.compact.map(&:downcase)
@@ -143,11 +143,9 @@ class RegistrationsController < ApplicationController
     new_locked_users.each do |user|
       RegistrationsMailer.notify_registrant_of_locked_account_creation(user, competition).deliver_later
     end
-    flash[:success] = I18n.t("registrations.flash.imported")
-    redirect_to competition_registrations_import_url(competition)
+    render status: :ok, json: { success: true }
   rescue StandardError => e
-    flash[:danger] = e.to_s
-    redirect_to competition_registrations_import_url(competition)
+    render status: :unprocessable_content, json: { error: e.to_s }
   end
 
   def add
@@ -281,7 +279,7 @@ class RegistrationsController < ApplicationController
     competition_id = params[:competition_id]
     user_id = params[:user_id]
     registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
-    iso_donation_amount = params[:iso_donation_amount].to_i || 0
+    iso_donation_amount = params[:iso_donation_amount].to_i
     ruby_money = registration.entry_fee_with_donation(iso_donation_amount)
     human_amount = helpers.format_money(ruby_money)
 
@@ -307,10 +305,12 @@ class RegistrationsController < ApplicationController
       logger.warn "Stripe webhook error while parsing basic request. #{e.message}"
       return head :bad_request
     end
+
     # Check if webhook signing is configured.
     if AppSecrets.STRIPE_WEBHOOK_SECRET.present?
       # Retrieve the event by verifying the signature using the raw body and secret.
       signature = request.env['HTTP_STRIPE_SIGNATURE']
+
       begin
         event = Stripe::Webhook.construct_event(
           payload, signature, AppSecrets.STRIPE_WEBHOOK_SECRET
@@ -327,34 +327,36 @@ class RegistrationsController < ApplicationController
     # Create a default audit that marks the event as "unhandled".
     audit_event = StripeWebhookEvent.create_from_api(event)
     audit_remote_timestamp = audit_event.created_at_remote
-
-    stripe_intent = event.data.object # contains a polymorphic type that depends on the event
-    stored_record = StripeRecord.find_by(stripe_id: stripe_intent.id)
-
-    handling_event = StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
-
-    if stored_record.nil?
-      logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching transaction."
-      return head :not_found
-    else
-      audit_event.update!(stripe_record: stored_record, handled: handling_event)
-    end
-
-    connected_account = ConnectedStripeAccount.find_by(account_id: stored_record.account_id)
+    connected_account = ConnectedStripeAccount.find_by(account_id: audit_event.account_id)
 
     if connected_account.nil?
-      logger.error "Stripe webhook reported event for account '#{stored_record.account_id}' but we are not connected to that account."
+      logger.error "Stripe webhook reported event for account '#{audit_event.account_id}' but we are not connected to that account."
       return head :not_found
     end
+
+    event_data = event.data.object # contains a polymorphic type that depends on the event
+    stored_record = StripeRecord.find_by(stripe_id: event_data.id)
+
+    handling_event = StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
+    incoming_event = StripeWebhookEvent::INCOMING_EVENTS.include?(event.type)
+
+    stored_record ||= StripeRecord.create_or_update_from_api(event_data, {}, audit_event.account_id) if incoming_event
+
+    if stored_record.nil?
+      logger.error "Stripe webhook reported event on entity #{event_data.id} but we have no record with a matching `stripe_id`."
+      return head :not_found
+    end
+
+    audit_event.update!(stripe_record: stored_record, handled: handling_event)
 
     # Handle the event
     case event.type
     when StripeWebhookEvent::PAYMENT_INTENT_SUCCEEDED
-      # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
+      # event_data contains a Stripe::PaymentIntent as per Stripe documentation
 
       stored_intent = stored_record.payment_intent
 
-      stored_intent.update_status_and_charges(connected_account, stripe_intent, audit_event, audit_remote_timestamp) do |charge_transaction|
+      stored_intent.update_status_and_charges(connected_account, event_data, audit_event, audit_remote_timestamp) do |charge_transaction|
         ruby_money = charge_transaction.money_amount
         stored_holder = stored_intent.holder
 
@@ -374,10 +376,56 @@ class RegistrationsController < ApplicationController
         end
       end
     when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
-      # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
+      # event_data contains a Stripe::PaymentIntent as per Stripe documentation
 
       stored_intent = stored_record.payment_intent
-      stored_intent.update_status_and_charges(connected_account, stripe_intent, audit_event, audit_remote_timestamp)
+      stored_intent.update_status_and_charges(connected_account, event_data, audit_event, audit_remote_timestamp)
+    when StripeWebhookEvent::REFUND_CREATED, StripeWebhookEvent::REFUND_UPDATED
+      # event_data contains a Stripe::Refund as per Stripe documentation
+
+      original_charge = StripeRecord.charge.find_by(stripe_id: event_data.charge)
+
+      if original_charge.nil?
+        # We created a record because refund creation is an incoming event,
+        #   but now we figured out that we don't care about it after all.
+        stored_record.destroy
+
+        logger.error "Stripe webhook reported a refund on charge #{event_data.charge} but we never issued that one"
+        return head :not_found
+      else
+        stored_record.update!(parent_record: original_charge)
+      end
+
+      stored_record = StripeRecord.create_or_update_from_api(event_data) if event.type == StripeWebhookEvent::REFUND_UPDATED
+      stored_intent = stored_record.root_record.payment_intent
+      stored_holder = stored_intent.holder
+
+      if stored_holder.is_a? Registration
+        ruby_money = stored_record.money_amount
+
+        original_payment = RegistrationPayment.find_by(receipt: original_charge)
+
+        if original_payment.nil?
+          logger.error "Tried to record refund on charge #{event_data.charge} but we never issued that one"
+          return head :not_found
+        end
+
+        if stored_record.succeeded?
+          stored_holder.with_lock do
+            already_refunded = original_payment.refunding_registration_payments.where(receipt: stored_record).any?
+
+            unless already_refunded
+              stored_holder.record_refund(
+                ruby_money.cents,
+                ruby_money.currency.iso_code,
+                stored_record,
+                original_payment.id,
+                original_payment.user_id,
+              )
+            end
+          end
+        end
+      end
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
     end
@@ -516,14 +564,21 @@ class RegistrationsController < ApplicationController
     # Should be the same as `refund_amount`, but by double-converting from the Payment Gateway object
     # we can also double-check that they're on the same page as we are (to be _really_ sure!)
     ruby_money = refund_receipt.money_amount
+    original_payment = payment_record.registration_payment
 
-    registration.record_refund(
-      ruby_money.cents,
-      ruby_money.currency.iso_code,
-      refund_receipt,
-      payment_record.registration_payment.id,
-      current_user.id,
-    )
+    registration.with_lock do
+      already_refunded = original_payment.refunding_registration_payments.where(receipt: refund_receipt).any?
+
+      unless already_refunded
+        registration.record_refund(
+          ruby_money.cents,
+          ruby_money.currency.iso_code,
+          refund_receipt,
+          original_payment.id,
+          current_user.id,
+        )
+      end
+    end
 
     # The `reload` is necessary here, because we just inserted a refund payment
     #   through the original `registration`. So the parent payment doesn't know about it yet.

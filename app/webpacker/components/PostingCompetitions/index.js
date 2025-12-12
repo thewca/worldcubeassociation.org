@@ -13,9 +13,9 @@ import RegionFlag from '../wca/RegionFlag';
 import {
   adminCheckUploadedResults,
   adminPostingCompetitionsUrl,
-  adminImportResultsUrl,
   adminStartPostingUrl,
   competitionUrl,
+  viewUrls,
 } from '../../lib/requests/routes.js.erb';
 
 function stateReducer(accumulated, current) {
@@ -99,13 +99,15 @@ function PostingCompetitionsIndex({
                   >
                     Check results page
                   </Button>
-                  <Button
-                    target="_blank"
-                    color="green"
-                    href={adminImportResultsUrl(c.id)}
-                  >
-                    Import results page
-                  </Button>
+                  {c.result_ticket && (
+                    <Button
+                      target="_blank"
+                      color="green"
+                      href={viewUrls.tickets.show(c.result_ticket.id)}
+                    >
+                      Post through Tickets page
+                    </Button>
+                  )}
                 </>
               )}
             </Button.Group>

@@ -1,5 +1,3 @@
-"use server";
-
 import React from "react";
 import {
   SimpleGrid,
@@ -8,26 +6,19 @@ import {
   Card,
   Separator,
   Box,
-  Image,
-  Heading,
   Text,
-  Tabs,
-  Badge,
   VStack,
   Link as ChakraLink,
   Center,
+  HStack,
+  AbsoluteCenter,
+  Float,
+  Carousel,
 } from "@chakra-ui/react";
+import { MarkdownProse } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
-
-import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
-import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
-import RegisterIcon from "@/components/icons/RegisterIcon";
-import LocationIcon from "@/components/icons/LocationIcon";
-
-import Flag from "react-world-flags";
-import CountryMap from "@/components/CountryMap";
 
 import type {
   TextCardBlock,
@@ -40,71 +31,45 @@ import type {
   TwoBlocksBlock,
   TwoBlocksBranchBlock,
   TwoBlocksLeafBlock,
-  ColorSelect,
   Testimonial,
   AnnouncementsSectionBlock,
   Announcement,
-  User,
-} from "@/payload-types";
+  ColorPaletteSelect,
+} from "@/types/payload";
 import Link from "next/link";
-
-const colorMap: Record<ColorSelect, string> = {
-  blue: "blue.50",
-  red: "red.50",
-  green: "green.50",
-  orange: "orange.50",
-  yellow: "yellow.50",
-  darkBlue: "blue.100",
-  darkRed: "red.100",
-  darkGreen: "green.100",
-  darkOrange: "orange.100",
-  darkYellow: "yellow.100",
-  white: "supplementary.texts.light",
-  black: "supplementary.texts.dark",
-};
-
-const colorGradientMap: Record<ColorSelect, string> = {
-  blue: "blue-50",
-  red: "red-50",
-  green: "green-50",
-  orange: "orange-50",
-  yellow: "yellow-50",
-  darkBlue: "blue-100",
-  darkRed: "red-100",
-  darkGreen: "green-100",
-  darkOrange: "orange-100",
-  darkYellow: "yellow-100",
-  white: "white-100",
-  black: "black-100",
-};
+import { route } from "nextjs-routes";
+import { getT } from "@/lib/i18n/get18n";
+import { draftMode } from "next/headers";
+import { MediaImage } from "@/components/MediaImage";
+import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
+import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
     <Card.Root
-      variant={block.variant}
-      size="lg"
       colorPalette={block.colorPalette}
+      colorVariant="deep"
       width="full"
     >
       {block.headerImage && (
-        <Image
-          src={(block.headerImage as Media).url ?? undefined}
-          alt={(block.headerImage as Media).alt ?? undefined}
-          aspectRatio="3/1"
-        />
+        <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
       )}
       <Card.Body>
-        <Card.Title>{block.heading}</Card.Title>
+        <Card.Title textStyle="h2">{block.heading}</Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
-        <Card.Description>{block.body}</Card.Description>
-        {block.buttonText?.trim() && (
-          <Button mr="auto" asChild>
-            <ChakraLink asChild>
-              <Link href={block.buttonLink!}>{block.buttonText}</Link>
-            </ChakraLink>
-          </Button>
-        )}
+        <MarkdownProse
+          as={Card.Description}
+          content={block.bodyMarkdown!}
+          textStyle="body"
+        />
       </Card.Body>
+      {block.buttonText?.trim() && (
+        <Card.Footer>
+          <Button asChild variant="outline" color="currentColor">
+            <ChakraLink href={block.buttonLink!}>{block.buttonText}</ChakraLink>
+          </Button>
+        </Card.Footer>
+      )}
     </Card.Root>
   );
 };
@@ -115,24 +80,15 @@ const AnnouncementsSection = ({
   block: AnnouncementsSectionBlock;
 }) => {
   const mainAnnouncement = block.mainAnnouncement as Announcement;
+  const furtherAnnouncements = block.furtherAnnouncements!.map(
+    (announcement) => announcement as Announcement,
+  );
 
   return (
     <AnnouncementsCard
-      hero={{
-        title: mainAnnouncement.title,
-        postedBy: (mainAnnouncement.publishedBy as User).name!,
-        postedAt: mainAnnouncement.publishedAt,
-        markdown: mainAnnouncement.contentMarkdown!,
-        fullLink: `/articles/${mainAnnouncement.id}`,
-      }}
-      others={block
-        .furtherAnnouncements!.map(
-          (announcement) => announcement as Announcement,
-        )
-        .map((announcement) => ({
-          title: announcement.title,
-          href: `/articles/${announcement.id}`,
-        }))}
+      hero={mainAnnouncement}
+      others={furtherAnnouncements}
+      colorPalette={block.colorPalette}
     />
   );
 };
@@ -140,63 +96,51 @@ const AnnouncementsSection = ({
 const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
   return (
     <Card.Root
-      variant="info"
       flexDirection="row"
-      overflow="hidden"
       colorPalette={block.colorPalette}
-      size="lg"
+      colorVariant="deep"
+      width="full"
+      maxHeight="lg"
+      overflow="hidden"
     >
-      <Box position="relative" flex="1" minW="50%" maxW="50%" overflow="hidden">
-        <Image
-          src={(block.mainImage as Media).url ?? undefined}
-          alt={(block.mainImage as Media).alt ?? undefined}
-          objectFit="cover"
-          width="100%"
-          height="40vh"
-          bg={colorMap[block.bgColor]}
+      <Box position="relative" width="50%">
+        <MediaImage
+          media={block.mainImage as Media}
+          width="full"
+          maxHeight="lg"
+          bg="colorPalette.deep"
         />
-        {/* Blue Gradient Overlay */}
-        <Box
-          position="absolute"
-          top="0"
-          right="0"
-          bottom="0"
-          left="50%"
-          style={{
-            backgroundImage: `linear-gradient(to right, transparent, var(--chakra-colors-${colorGradientMap[block.bgColor]}))`,
-          }}
-          zIndex="1"
+        <AbsoluteCenter
+          width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
+          height="full"
+          bg="linear-gradient(to right, transparent, transparent, {colors.colorPalette.deep})"
         />
       </Box>
 
-      <Card.Body
-        flex="1"
-        zIndex="2"
-        color="white"
-        p="8"
-        bg={colorMap[block.bgColor]}
-        justifyContent="center"
-        pr="15%"
-        backgroundImage={
-          block.bgImage != null
-            ? `url('${(block.bgImage as Media).url}')`
-            : undefined
-        }
-        backgroundSize={block.bgSize != null ? `${block.bgSize}%` : undefined}
-        backgroundPosition={block.bgPos ?? undefined}
-        backgroundRepeat="no-repeat"
-      >
-        <Heading
-          size="4xl"
-          color={colorMap[block.headingColor]}
-          mb="4"
-          textTransform="uppercase"
-        >
+      <Card.Body justifyContent="center">
+        <Card.Title colorPalette={block.headingColor} textStyle="h1">
           {block.heading}
-        </Heading>
-        <Text fontSize="md" color={colorMap[block.textColor]}>
-          {block.body}
-        </Text>
+        </Card.Title>
+        <MarkdownProse
+          as={Card.Description}
+          content={block.bodyMarkdown!}
+          textStyle="s2"
+        />
+        {block.bgImage && (
+          <Float
+            placement="bottom-end"
+            width={`${block.bgSize}%`}
+            height={`${block.bgSize}%`}
+            offset={28}
+          >
+            <MediaImage
+              media={block.bgImage as Media}
+              width="auto"
+              height="full"
+              fit="contain"
+            />
+          </Float>
+        )}
       </Card.Body>
     </Card.Root>
   );
@@ -206,174 +150,129 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
   return (
     <Card.Root
       overflow="hidden"
-      variant="hero"
       colorPalette={block.colorPalette}
+      colorVariant="deep"
       width="full"
     >
-      <Image
-        src={(block.mainImage as Media).url ?? undefined}
-        alt={(block.mainImage as Media).alt ?? block.heading ?? undefined}
+      <MediaImage
+        media={block.mainImage as Media}
+        altFallback={block.heading}
         aspectRatio="2/1"
       />
       {block.heading && (
-        <Card.Body p={6}>
-          <Heading size="3xl" textTransform="uppercase">
-            {block.heading}
-          </Heading>
+        <Card.Body>
+          <Card.Title textStyle="h2">{block.heading}</Card.Title>
         </Card.Body>
       )}
     </Card.Root>
   );
 };
 
-const FeaturedCompetitions = ({
-  block,
+const FeaturedCompetition = async ({
+  competitionId,
+  colorPalette,
 }: {
-  block: FeaturedCompetitionsBlock;
+  competitionId: string;
+  colorPalette: ColorPaletteSelect;
 }) => {
-  return (
-    <Card.Root variant="info" colorPalette="grey" width="full">
-      <Card.Body justifyContent="space-around">
-        <Card.Title display="flex" justifyContent="space-between">
-          Featured Upcoming Competitions
-          <Button variant="outline">View all Competitions</Button>
-        </Card.Title>
-        <SimpleGrid columns={2} gap={4}>
-          <Card.Root variant="info" colorPalette={block.colorPalette1}>
-            <Card.Body>
-              <Heading size="3xl">{block.Competition1ID}</Heading>
-              <VStack alignItems="start">
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <Flag code={"US"} fallback={"US"} />
-                  <CountryMap code="US" bold /> Seattle
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <CompRegoCloseDateIcon />
-                  <Text>Jul 3 - 6, 2025</Text>
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <CompetitorsIcon />
-                  2000 Competitor Limit
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <RegisterIcon />0 Spots Left
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <LocationIcon />
-                  Seattle Convention Center
-                </Badge>
-              </VStack>
-            </Card.Body>
-          </Card.Root>
+  const { t } = await getT();
 
-          <Card.Root variant="info" colorPalette="yellow">
-            <Card.Body>
-              <Heading size="3xl">{block.Competition2ID}</Heading>
-              <VStack alignItems="start">
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <Flag code={"NZ"} fallback={"NZ"} />
-                  <CountryMap code="NZ" bold /> Auckland
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <CompRegoCloseDateIcon />
-                  <Text>Dec 12 - 14, 2025</Text>
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <CompetitorsIcon />
-                  300 Competitor Limit
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <RegisterIcon />
-                  300 Spots Left
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <LocationIcon />
-                  Auckland Netball Centre
-                </Badge>
-              </VStack>
-            </Card.Body>
-          </Card.Root>
-        </SimpleGrid>
+  const { data: competition, error } = await getCompetitionInfo(competitionId);
+
+  if (error) {
+    return "Something went wrong while loading the competition";
+  }
+
+  return (
+    <Card.Root colorPalette={colorPalette} colorVariant="deep">
+      <Card.Body>
+        <Card.Title textStyle="h2">{competition.name}</Card.Title>
+        <CompetitionShortlist comp={competition} t={t} />
       </Card.Body>
     </Card.Root>
   );
 };
 
-const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
-  const slides = block.blocks;
-  return (
-    <Tabs.Root
-      defaultValue={slides[0].id}
-      variant="slider"
-      orientation="vertical"
-      width="full"
-    >
-      <Card.Root
-        variant="info"
-        flexDirection="row"
-        overflow="hidden"
-        colorPalette={slides[0].colorPalette}
-        position="relative"
-        width="full"
-      >
-        {/* Dot Navigation */}
-        <Tabs.List asChild>
-          <Box
-            position="absolute"
-            right="6"
-            top="50%"
-            transform="translateY(-50%)"
-            display="flex"
-            flexDirection="column"
-            gap="2"
-            zIndex="10"
-          >
-            {slides.map((slide) => (
-              <Tabs.Trigger key={slide.id} value={slide.id!} />
-            ))}
-          </Box>
-        </Tabs.List>
+const FeaturedCompetitions = async ({
+  block,
+}: {
+  block: FeaturedCompetitionsBlock;
+}) => (
+  <Card.Root width="full">
+    <Card.Body>
+      <Card.Title textStyle="h2" asChild>
+        <HStack justify="space-between">
+          <Text>Featured Upcoming Competitions</Text>
+          <Button asChild variant="outline" color="currentColor">
+            <Link href="/competitions">View all Competitions</Link>
+          </Button>
+        </HStack>
+      </Card.Title>
+      <SimpleGrid columns={block.competitions?.length} gap={4}>
+        {block.competitions?.map((featuredComp) => (
+          <FeaturedCompetition
+            key={featuredComp.id}
+            competitionId={featuredComp.competitionId}
+            colorPalette={featuredComp.colorPalette}
+          />
+        ))}
+      </SimpleGrid>
+    </Card.Body>
+  </Card.Root>
+);
 
-        {/* Slides */}
-        {slides.map((slide) => {
+const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
+  const slides = block.slides;
+
+  return (
+    <Carousel.Root
+      orientation="vertical"
+      slideCount={slides.length}
+      width="full"
+      maxHeight="lg"
+      loop
+      position="relative"
+    >
+      <Carousel.ItemGroup width="full">
+        {slides.map((slide, i) => {
           const testimonial = slide.testimonial as Testimonial;
 
           return (
-            <Tabs.Content key={slide.id} value={slide.id!} asChild>
+            <Carousel.Item key={slide.id} index={i} asChild>
               <Card.Root
-                variant="info"
+                colorVariant="deep"
                 flexDirection="row"
                 overflow="hidden"
                 colorPalette={slide.colorPalette}
               >
-                <Image
-                  src={
-                    testimonial.image != null
-                      ? ((testimonial.image as Media).url ?? undefined)
-                      : "/placeholder.png"
-                  }
-                  alt={
-                    testimonial.image != null
-                      ? (testimonial.image as Media).alt
-                      : testimonial.punchline
-                  }
+                <MediaImage
+                  media={testimonial.image as Media}
+                  altFallback={testimonial.punchline}
                   maxW="1/3"
-                  objectFit="cover"
                 />
-                <Card.Body pr="3em">
-                  <Card.Title>{testimonial.punchline}</Card.Title>
+                <Card.Body>
+                  <Card.Title textStyle="h1">
+                    {testimonial.punchline}
+                  </Card.Title>
                   <Separator size="md" />
-                  <Card.Description>
-                    {testimonial.fullTestimonialMarkdown}
-                  </Card.Description>
+                  <MarkdownProse
+                    as={Card.Description}
+                    content={testimonial.fullTestimonialMarkdown!}
+                    textStyle="quote"
+                  />
                   <Text>{testimonial.whoDunnit}</Text>
                 </Card.Body>
               </Card.Root>
-            </Tabs.Content>
+            </Carousel.Item>
           );
         })}
-      </Card.Root>
-    </Tabs.Root>
+        <Float placement="middle-end" offset={8}>
+          <Carousel.Control>
+            <Carousel.Indicators />
+          </Carousel.Control>
+        </Float>
+      </Carousel.ItemGroup>
+    </Carousel.Root>
   );
 };
 
@@ -383,7 +282,6 @@ type TwoBlocksUnion =
   | TwoBlocksLeafBlock;
 
 const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
-  const isHorizontal = entry.alignment === "horizontal";
   let columnCount = 2;
   let col1 = 1;
   let col2 = 1;
@@ -414,61 +312,100 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
 
   const columns = [col1, col2];
 
+  const isHorizontal = entry.alignment === "horizontal";
+  const RenderAs = isHorizontal ? SimpleGrid : VStack;
+
   return (
-    <SimpleGrid
-      key={keyPrefix}
-      columns={isHorizontal ? columnCount : 1}
-      gap={8}
-      width="full"
-    >
+    <RenderAs key={keyPrefix} columns={columnCount} gap={8} width="full">
       {entry.blocks.map((subEntry, i) => {
         const key = `${keyPrefix}-${i}`;
+
         switch (subEntry.blockType) {
           case "TextCard":
             return (
-              <GridItem key={key} colSpan={columns[i]} display="flex">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 <TextCard block={subEntry} />
               </GridItem>
             );
           case "AnnouncementsSection":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 <AnnouncementsSection block={subEntry} />
               </GridItem>
             );
           case "twoBlocksBranch":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 {renderBlockGroup(subEntry, key)}
               </GridItem>
             );
           case "twoBlocksLeaf":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 {renderBlockGroup(subEntry, key)}
               </GridItem>
             );
           case "ImageBanner":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 <ImageBanner block={subEntry} />
               </GridItem>
             );
           case "ImageOnlyCard":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 <ImageOnlyCard block={subEntry} />
               </GridItem>
             );
-          case "FeaturedCompetitions":
+          case "FeaturedComps":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 <FeaturedCompetitions block={subEntry} />
               </GridItem>
             );
           case "TestimonialsSpinner":
             return (
-              <GridItem key={key} colSpan={columns[i] || 1} display="flex">
+              <GridItem
+                key={key}
+                colSpan={columns[i] || 1}
+                display="flex"
+                width="full"
+              >
                 <TestimonialsSpinner block={subEntry} />
               </GridItem>
             );
@@ -476,7 +413,7 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
             return null;
         }
       })}
-    </SimpleGrid>
+    </RenderAs>
   );
 };
 
@@ -485,6 +422,7 @@ const renderFullBlock = (entry: FullWidthBlock, keyPrefix = "") => {
     <Box key={keyPrefix} width="full">
       {entry.blocks.map((subEntry, i) => {
         const key = `${keyPrefix}-${i}`;
+
         switch (subEntry.blockType) {
           case "TextCard":
             return <TextCard key={key} block={subEntry} />;
@@ -494,7 +432,7 @@ const renderFullBlock = (entry: FullWidthBlock, keyPrefix = "") => {
             return <ImageBanner key={key} block={subEntry} />;
           case "ImageOnlyCard":
             return <ImageOnlyCard key={key} block={subEntry} />;
-          case "FeaturedCompetitions":
+          case "FeaturedComps":
             return <FeaturedCompetitions key={key} block={subEntry} />;
           case "TestimonialsSpinner":
             return <TestimonialsSpinner key={key} block={subEntry} />;
@@ -509,7 +447,11 @@ const renderFullBlock = (entry: FullWidthBlock, keyPrefix = "") => {
 
 export default async function Homepage() {
   const payload = await getPayload({ config });
-  const homepage = await payload.findGlobal({ slug: "home" });
+  const { isEnabled: isDraftMode } = await draftMode();
+  const homepage = await payload.findGlobal({
+    slug: "home",
+    draft: isDraftMode,
+  });
 
   const homepageEntries = homepage?.item || [];
 
@@ -519,7 +461,11 @@ export default async function Homepage() {
         <Text>
           No homepage content yet, go ahead and{" "}
           <ChakraLink asChild>
-            <Link href="/payload">add some!</Link>
+            <Link
+              href={route({ pathname: "/payload/[[...segments]]", query: {} })}
+            >
+              add some!
+            </Link>
           </ChakraLink>
         </Text>
       </Center>

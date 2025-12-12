@@ -1,0 +1,18 @@
+get:
+  summary: Get competition schedule in WCIF format
+  tags:
+    - competitions
+  operationId: competitionSchedule
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/wcif/WcifSchedule.yaml'

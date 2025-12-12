@@ -4,36 +4,21 @@ class DatabaseController < ApplicationController
   RESULTS_README_TEMPLATE = 'database/public_results_readme'
 
   def results_export
-    @sql_path, @sql_filesize = current_results_export("sql")
-    @tsv_path, @tsv_filesize = current_results_export("tsv")
+    @sql_path, @sql_filesize = DbDumpHelper.cached_results_export_info("sql")
+    @tsv_path, @tsv_filesize = DbDumpHelper.cached_results_export_info("tsv")
+
     @sql_filename = File.basename(@sql_path)
     @tsv_filename = File.basename(@tsv_path)
   end
 
   def sql_permalink
-    url, = current_results_export("sql")
+    url, = DbDumpHelper.cached_results_export_info("sql")
     redirect_to url, status: :moved_permanently, allow_other_host: true
   end
 
   def tsv_permalink
-    url, = current_results_export("tsv")
+    url, = DbDumpHelper.cached_results_export_info("tsv")
     redirect_to url, status: :moved_permanently, allow_other_host: true
-  end
-
-  def current_results_export(file_type)
-    export_timestamp = DumpPublicResultsDatabase.successful_start_date
-
-    Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.day) do
-      base_name = DbDumpHelper.result_export_file_name(file_type, export_timestamp)
-      file_name = "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/#{base_name}"
-
-      bucket = Aws::S3::Resource.new(
-        credentials: Aws::ECSCredentials.new,
-      ).bucket(DbDumpHelper::BUCKET_NAME)
-
-      filesize_bytes = bucket.object(file_name).content_length
-      [DbDumpHelper.public_s3_path(file_name), filesize_bytes]
-    end
   end
 
   def developer_export

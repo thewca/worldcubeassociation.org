@@ -1,0 +1,30 @@
+type: object
+properties:
+  id:
+    type: integer
+  name:
+    type: string
+  activityCode:
+    $ref: './WcifActivityCode.yaml'
+  startTime:
+    type: string
+    format: date-time
+  endTime:
+    type: string
+    format: date-time
+  childActivities:
+    type: array
+    items:
+      $ref: './WcifActivity.yaml'
+  scrambleSetId:
+    type: integer
+  extensions:
+    type: array
+required:
+  - id
+  - name
+  - activityCode
+  - startTime
+  - endTime
+  - childActivities
+  - extensions

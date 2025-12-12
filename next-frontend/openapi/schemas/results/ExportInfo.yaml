@@ -1,0 +1,27 @@
+type: object
+required:
+  - export_date
+  - sql_url
+  - sql_filesize_bytes
+  - tsv_url
+  - tsv_filesize_bytes
+  - readme
+properties:
+  export_date:
+    type: string
+    format: date
+  sql_url:
+    type: string
+    format: uri
+  sql_filesize_bytes:
+    type: number
+  tsv_url:
+    type: string
+    format: uri
+  tsv_filesize_bytes:
+    type: number
+  readme:
+    type: string
+  developer_url:
+    type: string
+    format: uri

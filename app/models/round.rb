@@ -2,17 +2,18 @@
 
 class Round < ApplicationRecord
   belongs_to :competition_event
+  belongs_to :linked_round, optional: true
 
   has_one :competition, through: :competition_event
   delegate :competition_id, to: :competition_event
 
   has_one :event, through: :competition_event
   # CompetitionEvent uses the cached value
-  delegate :event, to: :competition_event
+  delegate :event_id, :event, to: :competition_event
 
   has_many :registrations, through: :competition_event
 
-  has_many :inbox_scramble_sets, foreign_key: "matched_round_id", inverse_of: :matched_round, dependent: :nullify
+  has_many :matched_scramble_sets, -> { order(:ordered_index) }, class_name: 'InboxScrambleSet', foreign_key: "matched_round_id", inverse_of: :matched_round, dependent: :nullify
 
   # For the following association, we want to keep it to be able to do some joins,
   # but we definitely want to use cached values when directly using the method.
@@ -22,6 +23,9 @@ class Round < ApplicationRecord
   end
 
   delegate :can_change_time_limit?, to: :event
+
+  scope :ordered, -> { order(:number) }
+  scope :h2h, -> { where(is_h2h_mock: true) }
 
   serialize :time_limit, coder: TimeLimit
   validates_associated :time_limit
@@ -39,30 +43,42 @@ class Round < ApplicationRecord
 
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
-  has_many :live_results
+  has_many :live_results, -> { order(:global_pos) }
+  has_many :results
+  has_many :scrambles
 
   MAX_NUMBER = 4
   validates :number,
             numericality: { only_integer: true,
                             greater_than_or_equal_to: 1,
                             less_than_or_equal_to: MAX_NUMBER,
-                            unless: :old_type }
+                            unless: :old_type? }
 
   # Qualification rounds/b-final are handled weirdly, they have round number 0
   # and do not count towards the total amount of rounds.
   OLD_TYPES = %w[0 b].freeze
   validates :old_type, inclusion: { in: OLD_TYPES, allow_nil: true }
-  after_validation(if: :old_type) do
+  after_validation(if: :old_type?) do
     self.number = 0
   end
 
-  validate do
-    errors.add(:format, "'#{format_id}' is not allowed for '#{event.id}'") unless event.preferred_formats.find_by(format_id: format_id)
+  # Competitions before 2026 have to use Mo3 for 333bf, but after 2026 they need to use Ao5
+  REGULATIONS_2026_START_DATE = Date.new(2026, 1, 1)
+  private def expected_333bf_format
+    competition.start_date >= REGULATIONS_2026_START_DATE ? "5" : "3"
   end
 
-  validate do
-    errors.add(:advancement_condition, "cannot be set on a final round") if final_round? && advancement_condition
-  end
+  validates :format_id, comparison: {
+    equal_to: :expected_333bf_format,
+    if: ->(round) { round.format_id == "333bf" },
+    message: ->(round, _args) { "#{round.format_id} is not allowed for 333bf for a competition taking place on #{round.competition.start_date} due to the 2026 regulations" },
+  }
+
+  # The event dictates which formats are even allowed in the first place, hence the prefix
+  delegate :formats, :format_ids, to: :event, prefix: :allowed
+  validates :format, inclusion: { in: :allowed_formats, message: ->(round, _args) { "'#{round.format_id}' is not allowed for '#{round.event_id}'" } }
+
+  validates :advancement_condition, absence: { if: :final_round?, message: "cannot be set on a final round" }
 
   def initialize(attributes = nil)
     # Overrides the default constructor to setup the default time limit if not
@@ -93,8 +109,6 @@ class Round < ApplicationRecord
       cutoff ? "g" : "3"
     end
   end
-
-  delegate :id, to: :event, prefix: true
 
   def formats_used
     cutoff_format = Format.c_find!(cutoff.number_of_attempts.to_s) if cutoff
@@ -142,7 +156,7 @@ class Round < ApplicationRecord
   end
 
   def live_podium
-    live_results.where(ranking: 1..3)
+    live_results.where(global_pos: 1..3)
   end
 
   def previous_round
@@ -151,26 +165,19 @@ class Round < ApplicationRecord
     Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
   end
 
+  def consider_previous_round_results?
+    # All linked rounds except the first one in a chain of linked rounds
+    linked_round.present? && linked_round.first_round_in_link.id != id
+  end
+
   def accepted_registrations
     if number == 1
       registrations.accepted
+    elsif consider_previous_round_results?
+      linked_round.first_round_in_link.accepted_registrations
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
       Registration.find(advancing)
-    end
-  end
-
-  def accepted_registrations_with_wcif_id
-    if number == 1
-      registrations.includes(:user)
-                   .accepted
-                   .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
-    else
-      advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
-
-      Registration.includes(:user)
-                  .find(advancing)
-                  .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
     end
   end
 
@@ -264,6 +271,15 @@ class Round < ApplicationRecord
       "scrambleSetCount" => self.scramble_set_count,
       "results" => round_results.map(&:to_wcif),
       "extensions" => wcif_extensions.map(&:to_wcif),
+    }
+  end
+
+  def to_live_json(only_podiums: false)
+    {
+      **self.to_wcif,
+      "round_id" => id,
+      "competitors" => accepted_registrations.map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => it.registrant_id) },
+      "results" => only_podiums ? live_podium : live_results,
     }
   end
 

@@ -4,17 +4,10 @@ FactoryBot.define do
   resultable_instance_members = lambda { |*_args|
     transient do
       competition { FactoryBot.create(:competition, event_ids: ["333oh"]) }
-      skip_round_creation { false }
     end
 
     trait :skip_validation do
       to_create { |res| res.save(validate: false) }
-    end
-
-    after(:build) do |result, options|
-      # In order to be valid, a result must have a round.
-      # Make sure it exists before going through validations.
-      FactoryBot.create(:round, competition: result.competition, event_id: result.event_id, format_id: result.format_id) if !result.round && !options.skip_round_creation
     end
 
     competition_id { competition.id }
@@ -29,6 +22,7 @@ FactoryBot.define do
     value5 { average }
     best { 3000 }
     average { 5000 }
+    round { association(:round, competition: competition, event_id: event_id, format_id: format_id) }
 
     trait :mbf do
       event_id { "333mbf" }
@@ -95,6 +89,7 @@ FactoryBot.define do
 
   factory :inbox_result do
     instance_eval(&resultable_instance_members)
+
     transient do
       person { FactoryBot.create(:inbox_person, competition_id: competition.id) }
     end
@@ -103,16 +98,15 @@ FactoryBot.define do
       transient do
         real_person { FactoryBot.create(:person) }
       end
+
       person do
         FactoryBot.create(:inbox_person,
                           competition_id: competition.id,
-                          name: real_person.name, wca_id: real_person.wca_id,
-                          gender: real_person.gender, dob: real_person.dob,
-                          country_iso2: real_person.country.iso2)
+                          **real_person.slice(:name, :wca_id, :gender, :dob, :country_iso2))
       end
     end
 
-    person_id { person.id }
+    person_id { person.ref_id }
   end
 
   factory :result do

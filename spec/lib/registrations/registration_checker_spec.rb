@@ -327,19 +327,25 @@ RSpec.describe Registrations::RegistrationChecker do
       let(:dnfs_only) { create(:user, :wca_id) }
 
       before do
-        create(:result, competition: past_competition, person: user_with_results.person, event_id: '222', best: 400, average: 500)
-        create(:result, competition: past_competition, person: user_with_results.person, event_id: '333', best: 410, average: 510)
-        create(:result, competition: past_competition, person: user_with_results.person, event_id: '555', best: 420, average: 520)
-        create(:result, competition: past_competition, person: user_with_results.person, event_id: '444', best: 430, average: 530)
-        create(:result, competition: past_competition, person: user_with_results.person, event_id: 'pyram', best: 440, average: 540)
-        create(:result, competition: past_competition, person: user_with_results.person, event_id: 'minx', best: 450, average: 550)
+        round_222 = create(:round, competition: past_competition, event_id: "222")
+        round_333 = create(:round, competition: past_competition, event_id: "333")
+        round_555 = create(:round, competition: past_competition, event_id: "555")
+        round_444 = create(:round, competition: past_competition, event_id: "444")
+        round_pyram = create(:round, competition: past_competition, event_id: "pyram")
+        round_minx = create(:round, competition: past_competition, event_id: "minx")
+        create(:result, competition: past_competition, person: user_with_results.person, event_id: '222', best: 400, average: 500, round: round_222)
+        create(:result, competition: past_competition, person: user_with_results.person, event_id: '333', best: 410, average: 510, round: round_333)
+        create(:result, competition: past_competition, person: user_with_results.person, event_id: '555', best: 420, average: 520, round: round_555)
+        create(:result, competition: past_competition, person: user_with_results.person, event_id: '444', best: 430, average: 530, round: round_444)
+        create(:result, competition: past_competition, person: user_with_results.person, event_id: 'pyram', best: 440, average: 540, round: round_pyram)
+        create(:result, competition: past_competition, person: user_with_results.person, event_id: 'minx', best: 450, average: 550, round: round_minx)
 
-        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '222', best: -1, average: -1)
-        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '333', best: -1, average: -1)
-        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '555', best: -1, average: -1)
-        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '444', best: -1, average: -1)
-        create(:result, competition: past_competition, person: dnfs_only.person, event_id: 'pyram', best: -1, average: -1)
-        create(:result, competition: past_competition, person: dnfs_only.person, event_id: 'minx', best: -1, average: -1)
+        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '222', best: -1, average: -1, round: round_222)
+        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '333', best: -1, average: -1, round: round_333)
+        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '555', best: -1, average: -1, round: round_555)
+        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '444', best: -1, average: -1, round: round_444)
+        create(:result, competition: past_competition, person: dnfs_only.person, event_id: 'pyram', best: -1, average: -1, round: round_pyram)
+        create(:result, competition: past_competition, person: dnfs_only.person, event_id: 'minx', best: -1, average: -1, round: round_minx)
       end
 
       it 'smoketest - succeeds when all qualifications are met' do
@@ -524,7 +530,8 @@ RSpec.describe Registrations::RegistrationChecker do
       context 'fail: attemptResult not met' do
         it 'cant register when 333 slower than attemptResult-single' do
           slow_single = create(:user, :wca_id)
-          create(:result, competition: past_competition, person: slow_single.person, event_id: '333', best: 4000, average: 5000)
+          round = create(:round, event_id: "333", competition: past_competition, number: 2)
+          create(:result, competition: past_competition, person: slow_single.person, event_id: '333', best: 4000, average: 5000, round: round)
 
           registration_request = build(
             :registration_request,
@@ -544,7 +551,8 @@ RSpec.describe Registrations::RegistrationChecker do
 
         it 'cant register when 333 equal to attemptResult-single' do
           slow_single = create(:user, :wca_id)
-          create(:result, competition: past_competition, person: slow_single.person, event_id: '333', best: 1000, average: 1500)
+          round = create(:round, event_id: "333", competition: past_competition, number: 2)
+          create(:result, competition: past_competition, person: slow_single.person, event_id: '333', best: 1000, average: 1500, round: round)
 
           registration_request = build(
             :registration_request,
@@ -564,7 +572,8 @@ RSpec.describe Registrations::RegistrationChecker do
 
         it 'cant register when 555 slower than attemptResult-average' do
           slow_single = create(:user, :wca_id)
-          create(:result, competition: past_competition, person: slow_single.person, event_id: '555', best: 1000, average: 6001)
+          round = create(:round, event_id: "555", competition: past_competition, number: 2)
+          create(:result, competition: past_competition, person: slow_single.person, event_id: '555', best: 1000, average: 6001, round: round)
 
           registration_request = build(
             :registration_request,
@@ -584,7 +593,8 @@ RSpec.describe Registrations::RegistrationChecker do
 
         it 'cant register when 555 equal to attemptResult-average' do
           slow_single = create(:user, :wca_id)
-          create(:result, competition: past_competition, person: slow_single.person, event_id: '555', best: 1000, average: 6000)
+          round = create(:round, event_id: "555", competition: past_competition, number: 2)
+          create(:result, competition: past_competition, person: slow_single.person, event_id: '555', best: 1000, average: 6000, round: round)
 
           registration_request = build(
             :registration_request,
@@ -1670,19 +1680,25 @@ RSpec.describe Registrations::RegistrationChecker do
       end
 
       before do
-        create(:result, competition: past_competition, person: user_with_results.person, event_id: '222', best: 400, average: 500)
-        create(:result, competition: past_competition, person: user_with_results.person, event_id: '333', best: 410, average: 510)
-        create(:result, competition: past_competition, person: user_with_results.person, event_id: '555', best: 420, average: 520)
-        create(:result, competition: past_competition, person: user_with_results.person, event_id: '444', best: 430, average: 530)
-        create(:result, competition: past_competition, person: user_with_results.person, event_id: 'pyram', best: 440, average: 540)
-        create(:result, competition: past_competition, person: user_with_results.person, event_id: 'minx', best: 450, average: 550)
+        round_222 = create(:round, competition: past_competition, event_id: "222")
+        round_333 = create(:round, competition: past_competition, event_id: "333")
+        round_555 = create(:round, competition: past_competition, event_id: "555")
+        round_444 = create(:round, competition: past_competition, event_id: "444")
+        round_pyram = create(:round, competition: past_competition, event_id: "pyram")
+        round_minx = create(:round, competition: past_competition, event_id: "minx")
+        create(:result, competition: past_competition, person: user_with_results.person, event_id: '222', best: 400, average: 500, round: round_222)
+        create(:result, competition: past_competition, person: user_with_results.person, event_id: '333', best: 410, average: 510, round: round_333)
+        create(:result, competition: past_competition, person: user_with_results.person, event_id: '555', best: 420, average: 520, round: round_555)
+        create(:result, competition: past_competition, person: user_with_results.person, event_id: '444', best: 430, average: 530, round: round_444)
+        create(:result, competition: past_competition, person: user_with_results.person, event_id: 'pyram', best: 440, average: 540, round: round_pyram)
+        create(:result, competition: past_competition, person: user_with_results.person, event_id: 'minx', best: 450, average: 550, round: round_minx)
 
-        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '222', best: -1, average: -1)
-        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '333', best: -1, average: -1)
-        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '555', best: -1, average: -1)
-        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '444', best: -1, average: -1)
-        create(:result, competition: past_competition, person: dnfs_only.person, event_id: 'pyram', best: -1, average: -1)
-        create(:result, competition: past_competition, person: dnfs_only.person, event_id: 'minx', best: -1, average: -1)
+        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '222', best: -1, average: -1, round: round_222)
+        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '333', best: -1, average: -1, round: round_333)
+        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '555', best: -1, average: -1, round: round_555)
+        create(:result, competition: past_competition, person: dnfs_only.person, event_id: '444', best: -1, average: -1, round: round_444)
+        create(:result, competition: past_competition, person: dnfs_only.person, event_id: 'pyram', best: -1, average: -1, round: round_pyram)
+        create(:result, competition: past_competition, person: dnfs_only.person, event_id: 'minx', best: -1, average: -1, round: round_minx)
       end
 
       it 'smoketest - succeeds when all qualifications are met' do
@@ -1898,7 +1914,8 @@ RSpec.describe Registrations::RegistrationChecker do
       context 'fail: attemptResult not met' do
         it 'cant register when 333 slower than attemptResult-single' do
           slow_single = create(:user, :wca_id)
-          create(:result, competition: past_competition, person: slow_single.person, event_id: '333', best: 1001, average: 5000)
+          round = create(:round, event_id: "333", competition: past_competition, number: 2)
+          create(:result, competition: past_competition, person: slow_single.person, event_id: '333', best: 1001, average: 5000, round: round)
           slow_single_reg = create(:registration, :skip_validations, user: slow_single, competition: easy_qualifications)
 
           update_request = build(
@@ -1919,7 +1936,8 @@ RSpec.describe Registrations::RegistrationChecker do
 
         it 'cant register when 333 equal to attemptResult-single' do
           slow_single = create(:user, :wca_id)
-          create(:result, competition: past_competition, person: slow_single.person, event_id: '333', best: 1000, average: 1500)
+          round = create(:round, event_id: "333", competition: past_competition, number: 2)
+          create(:result, competition: past_competition, person: slow_single.person, event_id: '333', best: 1000, average: 1500, round: round)
           slow_single_reg = create(:registration, :skip_validations, user: slow_single, competition: easy_qualifications)
 
           update_request = build(
@@ -1940,7 +1958,8 @@ RSpec.describe Registrations::RegistrationChecker do
 
         it 'cant register when 555 slower than attemptResult-average' do
           slow_average = create(:user, :wca_id)
-          create(:result, competition: past_competition, person: slow_average.person, event_id: '555', best: 1000, average: 6001)
+          round = create(:round, event_id: "555", competition: past_competition, number: 2)
+          create(:result, competition: past_competition, person: slow_average.person, event_id: '555', best: 1000, average: 6001, round: round)
           slow_average_reg = create(:registration, :skip_validations, user: slow_average, competition: easy_qualifications)
 
           update_request = build(
@@ -1961,7 +1980,8 @@ RSpec.describe Registrations::RegistrationChecker do
 
         it 'cant register when 555 equal to attemptResult-average' do
           slow_average = create(:user, :wca_id)
-          create(:result, competition: past_competition, person: slow_average.person, event_id: '555', best: 1000, average: 6000)
+          round = create(:round, event_id: "555", competition: past_competition, number: 2)
+          create(:result, competition: past_competition, person: slow_average.person, event_id: '555', best: 1000, average: 6000, round: round)
           slow_average_reg = create(:registration, :skip_validations, user: slow_average, competition: easy_qualifications)
 
           update_request = build(

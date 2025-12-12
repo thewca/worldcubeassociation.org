@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const CompRegoNotOpenYetIcon = createIcon({
@@ -17,10 +18,9 @@ const CompRegoNotOpenYetIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const CompRegoNotOpenYetIconPreview = () => {
-  return <CompRegoNotOpenYetIcon size="lg" />;
-};
-
-export default CompRegoNotOpenYetIconPreview;
+export default CompRegoNotOpenYetIcon;

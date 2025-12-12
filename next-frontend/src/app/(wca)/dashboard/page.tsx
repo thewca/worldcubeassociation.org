@@ -1,7 +1,5 @@
-"use client";
-
-import { useSession, signIn, signOut } from "next-auth/react";
-import { usePermissions } from "@/providers/PermissionProvider";
+import { auth } from "@/auth";
+import getPermissions from "@/lib/wca/permissions";
 import {
   Button,
   Code,
@@ -16,48 +14,65 @@ import {
 import Link from "next/link";
 
 import { iconMap } from "@/components/icons/iconMap";
+import { route } from "nextjs-routes";
+import AttemptResultField from "./AttemptResultField";
+import {
+  ColorSemanticTokenDoc,
+  ColorTokenDoc,
+} from "@/app/(wca)/dashboard/ThemeExplorer";
 
-export default function Dashboard() {
-  const { data: session } = useSession();
-  const permissions = usePermissions();
+export default async function Dashboard() {
+  const session = await auth();
+  const permissions = await getPermissions();
 
   return (
     <Container centerContent gap="3">
-      {session ? (
+      {session && (
         <>
           <Text>Welcome, {session.user?.name}</Text>
-          <Button onClick={() => signOut()}>Sign out</Button>
           {permissions && (
             <Code as="pre">{JSON.stringify(permissions, null, 2)}</Code>
           )}
         </>
-      ) : (
-        <Button onClick={() => signIn("WCA")} colorPalette="blue">
-          Sign in
-        </Button>
       )}
       <Text>Test Links:</Text>
       <HStack>
-        <ChakraLink asChild variant="colouredLink" colorPalette="blue">
-          <Link href="competitions/OC2024">
+        <ChakraLink asChild colorPalette="blue">
+          <Link
+            href={route({
+              pathname: "/competitions/[competitionId]",
+              query: { competitionId: "OC2024" },
+            })}
+          >
             <Button variant="outline">OC2024</Button>
           </Link>
         </ChakraLink>
-        <ChakraLink asChild variant="colouredLink" colorPalette="red">
-          <Link href="competitions/WC2025">
+        <ChakraLink asChild colorPalette="red">
+          <Link
+            href={route({
+              pathname: "/competitions/[competitionId]",
+              query: { competitionId: "OC2024" },
+            })}
+          >
             <Button variant="outline" colorPalette="red">
               WC2025
             </Button>
           </Link>
         </ChakraLink>
-        <ChakraLink asChild variant="colouredLink" colorPalette="red">
-          <Link href="persons/2022ANDE01">
+        <ChakraLink asChild colorPalette="red">
+          <Link
+            href={route({
+              pathname: "/persons/[wcaId]",
+              query: { wcaId: "2022ANDE01" },
+            })}
+          >
             <Button variant="outline" colorPalette="red">
               2022ANDE01
             </Button>
           </Link>
         </ChakraLink>
       </HStack>
+      <AttemptResultField eventId="333" resultType="single" />
       <Card.Root>
         <Card.Body>
           <Box mb="4">
@@ -68,13 +83,22 @@ export default function Dashboard() {
           <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 6 }}>
             {Object.entries(iconMap).map(([iconName, IconComponent], index) => (
               <Box textAlign="center" key={index}>
-                <IconComponent w="6" h="6" />
+                <IconComponent fontSize="1.5em" />
                 <Text mt="2" fontSize="sm">
                   {iconName}
                 </Text>
               </Box>
             ))}
           </SimpleGrid>
+        </Card.Body>
+      </Card.Root>
+      <Card.Root width="full">
+        <Card.Body>
+          <Card.Title>Theme Explorer</Card.Title>
+          <Box>
+            <ColorSemanticTokenDoc />
+            <ColorTokenDoc />
+          </Box>
         </Card.Body>
       </Card.Root>
     </Container>

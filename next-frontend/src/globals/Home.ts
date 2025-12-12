@@ -1,174 +1,25 @@
-import { Block, GlobalConfig, SelectField } from "payload";
-
-const colorSelect: SelectField = {
-  name: "color",
-  type: "select",
-  required: true,
-  interfaceName: "ColorSelect",
-  options: [
-    "darkBlue",
-    "darkRed",
-    "darkGreen",
-    "darkOrange",
-    "darkYellow",
-    "blue",
-    "red",
-    "green",
-    "orange",
-    "yellow",
-    "white",
-    "black",
-  ],
-};
-
-const colorPaletteSelect: SelectField = {
-  name: "colorPalette",
-  type: "select",
-  required: true,
-  interfaceName: "ColorPaletteSelect",
-  options: ["blue", "red", "green", "orange", "yellow", "grey"],
-};
-
-const TextCard: Block = {
-  slug: "TextCard",
-  interfaceName: "TextCardBlock",
-  imageURL: "/payload/text_card.png",
-  fields: [
-    {
-      name: "heading",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "body",
-      type: "textarea",
-      required: true,
-    },
-    {
-      name: "variant",
-      type: "select",
-      options: ["info", "hero"],
-      defaultValue: "info",
-      required: true,
-    },
-    {
-      name: "separatorAfterHeading",
-      type: "checkbox",
-      required: true,
-      defaultValue: false,
-    },
-    {
-      name: "buttonText",
-      type: "text",
-      required: false,
-    },
-    {
-      name: "buttonLink",
-      type: "text",
-      required: false,
-    },
-    {
-      name: "headerImage",
-      type: "upload",
-      relationTo: "media",
-    },
-    colorPaletteSelect,
-  ],
-};
-
-const ImageBanner: Block = {
-  slug: "ImageBanner",
-  interfaceName: "ImageBannerBlock",
-  imageURL: "/payload/image_banner.png",
-  fields: [
-    {
-      name: "heading",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "body",
-      type: "textarea",
-      required: true,
-    },
-    {
-      name: "mainImage",
-      type: "upload",
-      relationTo: "media",
-      required: true,
-    },
-    colorPaletteSelect,
-    {
-      ...colorSelect,
-      name: "bgColor",
-    },
-    {
-      ...colorSelect,
-      name: "headingColor",
-    },
-    {
-      ...colorSelect,
-      name: "textColor",
-    },
-    {
-      name: "bgImage",
-      type: "upload",
-      relationTo: "media",
-    },
-    {
-      name: "bgSize",
-      type: "number",
-      defaultValue: 100,
-    },
-    {
-      name: "bgPos",
-      type: "text",
-      defaultValue: "right",
-    },
-  ],
-};
-
-const ImageOnlyCard: Block = {
-  slug: "ImageOnlyCard",
-  interfaceName: "ImageOnlyCardBlock",
-  imageURL: "/payload/image_only_card.png",
-  fields: [
-    {
-      name: "mainImage",
-      type: "upload",
-      relationTo: "media",
-      required: true,
-    },
-    {
-      name: "heading",
-      type: "text",
-    },
-    colorPaletteSelect,
-  ],
-};
+import { Block, GlobalConfig } from "payload";
+import { colorPaletteSelect } from "@/blocks/utils";
+import { TextCardBlock } from "@/blocks/text/textCard";
+import { BannerImageBlock } from "@/blocks/image/bannerImage";
+import { ImageCardBlock } from "@/blocks/image/imageCard";
 
 const FeaturedCompetitions: Block = {
-  slug: "FeaturedCompetitions",
+  slug: "FeaturedComps", // intentionally short to avoid Payload internally assigning a long table name
   interfaceName: "FeaturedCompetitionsBlock",
   imageURL: "/payload/featured_upcoming_competitions.png",
   fields: [
     {
-      name: "Competition1ID",
-      type: "text",
-      required: true,
-    },
-    {
-      ...colorPaletteSelect,
-      name: "colorPalette1",
-    },
-    {
-      name: "Competition2ID",
-      type: "text",
-      required: true,
-    },
-    {
-      ...colorPaletteSelect,
-      name: "colorPalette2",
+      name: "competitions",
+      type: "array",
+      fields: [
+        {
+          name: "competitionId",
+          type: "text",
+          required: true,
+        },
+        colorPaletteSelect,
+      ],
     },
   ],
 };
@@ -194,24 +45,6 @@ const AnnouncementsSection: Block = {
   ],
 };
 
-const TestimonialSlide: Block = {
-  slug: "TestimonialSlide",
-  interfaceName: "TestimonialSlideBlock",
-  labels: {
-    singular: "Testimonial",
-    plural: "Testimonials",
-  },
-  fields: [
-    {
-      name: "testimonial",
-      type: "relationship",
-      relationTo: "testimonials",
-      required: true,
-    },
-    colorPaletteSelect,
-  ],
-};
-
 const TestimonialsSpinner: Block = {
   slug: "TestimonialsSpinner",
   interfaceName: "TestimonialsBlock",
@@ -222,9 +55,17 @@ const TestimonialsSpinner: Block = {
   },
   fields: [
     {
-      name: "blocks",
-      type: "blocks",
-      blocks: [TestimonialSlide],
+      name: "slides",
+      type: "array",
+      fields: [
+        {
+          name: "testimonial",
+          type: "relationship",
+          relationTo: "testimonials",
+          required: true,
+        },
+        colorPaletteSelect,
+      ],
       required: true,
       minRows: 1,
     },
@@ -232,10 +73,10 @@ const TestimonialsSpinner: Block = {
 };
 
 const coreBlocks = [
-  TextCard,
+  TextCardBlock,
   AnnouncementsSection,
-  ImageBanner,
-  ImageOnlyCard,
+  BannerImageBlock,
+  ImageCardBlock,
   TestimonialsSpinner,
   FeaturedCompetitions,
 ];
@@ -364,9 +205,23 @@ export const Home: GlobalConfig = {
       minRows: 1,
     },
   ],
+  versions: {
+    drafts: {
+      autosave: true,
+    },
+    max: 5,
+  },
   admin: {
     livePreview: {
       url: "/",
+    },
+    preview: () => {
+      const encodedParams = new URLSearchParams({
+        path: "/",
+        previewSecret: process.env.PREVIEW_SECRET!,
+      });
+
+      return `/api/payload/draft?${encodedParams.toString()}`;
     },
   },
 };

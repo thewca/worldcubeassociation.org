@@ -7,7 +7,15 @@ class ErrorsController < ApplicationController
     @exception = request.env["action_dispatch.exception"]
     @status_code = ActionDispatch::ExceptionWrapper.new(request.env, @exception).status_code
     @request_id = request.env["action_dispatch.request_id"]
-    render error_page(@status_code), status: @status_code
+
+    if @exception.instance_of?(ActiveRecord::RecordNotFound) && @exception.model == "Competition"
+      @id = params['id']
+      render 'competition_not_found', status: :not_found
+    elsif @exception.instance_of?(ActionController::InvalidAuthenticityToken)
+      render 'session_expired', status: :unprocessable_content
+    else
+      render error_page(@status_code), status: @status_code
+    end
   end
 
   private

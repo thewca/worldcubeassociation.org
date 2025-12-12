@@ -8,20 +8,22 @@ class Result < ApplicationRecord
   belongs_to :country
   has_one :continent, through: :country
   delegate :continent_id, :continent, to: :country
+
   # InboxPerson IDs are only unique per competition. So in addition to querying the ID itself (which is guaranteed by :foreign_key)
-  # we also need sure to query the correct competition as well through a custom scope.
-  belongs_to :inbox_person, ->(res) { where(competition_id: res.competition_id) }, primary_key: :id, foreign_key: :person_id, optional: true
+  # we also need sure to query the correct competition as well through a composite key.
+  belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
-  has_many :result_attempts
+  has_many :result_attempts, dependent: :destroy
 
-  after_commit :create_or_update_attempts
+  after_update_commit :create_or_update_attempts
 
   def create_or_update_attempts
-    attempts = (1..5).filter_map do |n|
-      value = public_send(:"value#{n}")
+    attempts = self.result_attempts_attributes(result_id: self.id)
 
-      { value: value, attempt_number: n, result_id: id } unless value.zero?
-    end
+    # Delete attempts when the value was set to 0
+    zero_attempts = self.skipped_attempt_numbers
+    ResultAttempt.where(result_id: id, attempt_number: zero_attempts).delete_all if zero_attempts.any?
+
     ResultAttempt.upsert_all(attempts)
   end
 
@@ -34,19 +36,7 @@ class Result < ApplicationRecord
     Country.c_find(self.country_id)
   end
 
-  # If saving changes to person_id, make sure that there is no results for
-  # that person yet for the round.
-  validate :unique_result_per_round, if: lambda {
-    will_save_change_to_person_id? || will_save_change_to_competition_id? || will_save_change_to_event_id? || will_save_change_to_round_type_id?
-  }
-
-  def unique_result_per_round
-    has_result = Result.where(competition_id: competition_id,
-                              person_id: person_id,
-                              event_id: event_id,
-                              round_type_id: round_type_id).any?
-    errors.add(:person_id, "this WCA ID already has a result for that round") if has_result
-  end
+  validates :person_id, uniqueness: { scope: :round_id, message: "this WCA ID already has a result for that round" }
 
   scope :final, -> { where(round_type_id: RoundType.final_rounds.select(:id)) }
   scope :succeeded, -> { where("best > 0") }
