@@ -10,7 +10,7 @@ class AddLiveResultJob < ApplicationJob
     end
     round = Round.find(round_id)
 
-    average, best = LiveResult.compute_average_and_best(attempts)
+    average, best = LiveResult.compute_average_and_best(attempts, round)
 
     LiveResult.create!(registration_id: registration_id,
                        round: round,

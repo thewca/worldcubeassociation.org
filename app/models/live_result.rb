@@ -45,7 +45,7 @@ class LiveResult < ApplicationRecord
     end
   end
 
-  def self.compute_average_and_best(attempts)
+  def self.compute_average_and_best(attempts, round)
     r = Result.new(
       value1: attempts[0].result,
       value2: attempts[1]&.result || 0,
