@@ -17,6 +17,12 @@ module ResultsValidators
       false
     end
 
+    def competition_associations
+      {
+        scrambles: [],
+      }
+    end
+
     def run_validation(validator_data)
       validator_data.each do |competition_data|
         competition = competition_data.competition
