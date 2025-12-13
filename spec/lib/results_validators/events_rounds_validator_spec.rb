@@ -27,7 +27,6 @@ RSpec.describe ERV do
       # NOT_333_MAIN_EVENT_WARNING
       # NO_MAIN_EVENT_WARNING
       # MISSING_RESULTS_WARNING
-      # UNEXPECTED_COMBINED_ROUND_ERROR
       round_333oh = create(:round, event_id: "333oh", competition: competition1)
       round_222 = create(:round, event_id: "222", competition: competition2)
       [Result, InboxResult].each do |model|
