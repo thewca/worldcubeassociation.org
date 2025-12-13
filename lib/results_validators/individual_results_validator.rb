@@ -10,7 +10,6 @@ module ResultsValidators
     MET_CUTOFF_MISSING_RESULTS_ERROR = :met_cutoff_but_missing_results_error
     DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR = :didnt_meet_cutoff_but_has_results_error
     WRONG_ATTEMPTS_FOR_CUTOFF_ERROR = :wrong_attempts_for_cutoff_error
-    MISMATCHED_RESULT_FORMAT_ERROR = :mismatched_result_format_error
     RESULT_OVER_TIME_LIMIT_ERROR = :result_over_time_limit_error
     RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR = :results_over_cumulative_time_limit_error
     UNDEF_TL_WARNING = :undefined_time_limit_warning
@@ -56,9 +55,6 @@ module ResultsValidators
 
             # Check for possible similar results
             check_similar_results(context, index, results_for_round)
-
-            # Check that the result's format matches the expected one
-            check_format_matches(context)
 
             # Checks for cutoff
             check_results_for_cutoff(context, cutoff_for_round) if cutoff_for_round
@@ -139,21 +135,6 @@ module ResultsValidators
                                            :results, competition.id,
                                            round_id: round.human_id,
                                            person_name: result.person_name)
-      end
-
-      def check_format_matches(context)
-        competition, result, round = context
-        # FIXME: maybe that can be part of the separate
-        # "check consistency of round_type_ids and format_ids" across a given round
-        # Check that the result's format matches the round format
-        return if round.format.id == result.format_id
-
-        @errors << ValidationError.new(MISMATCHED_RESULT_FORMAT_ERROR,
-                                       :results, competition.id,
-                                       round_id: round.human_id,
-                                       person_name: result.person_name,
-                                       expected_format: round.format.name,
-                                       format: result.format.name)
       end
 
       def check_results_for_cutoff(context, cutoff)
