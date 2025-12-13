@@ -31,7 +31,7 @@ module Resultable
       Format.c_find(format_id)
     end
 
-    delegate :competition_id, :round_type_id, :event_id, :format_id, to: :round, prefix: true
+    delegate :competition_id, :round_type_id, :event_id, :format_id, :human_id, to: :round, prefix: true
     validates :competition_id, comparison: { equal_to: :round_competition_id }
     validates :round_type_id, comparison: { equal_to: :round_round_type_id }
     validates :event_id, comparison: { equal_to: :round_event_id }

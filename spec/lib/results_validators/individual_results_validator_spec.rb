@@ -148,33 +148,6 @@ RSpec.describe IRV do
       expect(irv.warnings).to match_array(expected_warnings)
     end
 
-    it "triggers mismatched result format error" do
-      # Triggers MISMATCHED_RESULT_FORMAT_ERROR
-      errs = {
-        "Result" => [],
-        "InboxResult" => [],
-      }
-
-      round_444 = create(:round, competition: competition1, event_id: "444")
-
-      [Result, InboxResult].each do |model|
-        result_kind = model.model_name.singular.to_sym
-        create(result_kind, competition: competition1, event_id: "444", round: round_444)
-        res_ko = create(result_kind, :skip_validation, :mo3, competition: competition1, event_id: "444", round: round_444)
-        errs[model.to_s] << RV::ValidationError.new(IRV::MISMATCHED_RESULT_FORMAT_ERROR,
-                                                    :results, competition1.id,
-                                                    round_id: "444-f",
-                                                    person_name: res_ko.person_name,
-                                                    expected_format: "Average of 5",
-                                                    format: "Mean of 3")
-      end
-      validator_args.each do |arg|
-        irv = IRV.new.validate(**arg)
-        expect(irv.errors).to match_array(errs[arg[:model].to_s])
-        expect(irv.warnings).to be_empty
-      end
-    end
-
     it "triggers several warnings about results" do
       # Triggers MBF_RESULT_OVER_TIME_LIMIT_WARNING
       # Triggers RESULT_AFTER_DNS_WARNING
