@@ -30,9 +30,10 @@ module ResultsValidators
 
         check_main_event(competition)
 
-        check_events_match(competition, results_for_comp)
-
-        check_rounds_match(competition, results_for_comp) if competition.any_rounds?
+        if competition.any_rounds?
+          check_events_match(competition, results_for_comp)
+          check_rounds_match(competition, results_for_comp)
+        end
       end
     end
 

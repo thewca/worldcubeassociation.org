@@ -61,11 +61,11 @@ RSpec.describe ERV do
 
     it "triggers rounds-related errors and warnings" do
       # Triggers:
+      # NOT_333_MAIN_EVENT_WARNING
+      # NO_MAIN_EVENT_WARNING
+      # MISSING_RESULTS_WARNING
       # UNEXPECTED_COMBINED_ROUND_ERROR
       # MISSING_ROUND_RESULTS_ERROR
-      # NO_MAIN_EVENT_WARNING
-      # NOT_333_MAIN_EVENT_WARNING
-      # MISSING_RESULTS_WARNING
       cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 50 * 100)
       # Add some rounds to trigger the rounds validation.
       round_333_oh_1 = create(:round,
@@ -95,6 +95,9 @@ RSpec.describe ERV do
         RV::ValidationError.new(ERV::UNEXPECTED_COMBINED_ROUND_ERROR,
                                 :rounds, competition1.id,
                                 round_name: "3x3x3 One-Handed Final"),
+        # You have declared that the competition has two rounds of 333oh,
+        # but your competition only contains results for the second round
+        # and not for the first.
         RV::ValidationError.new(ERV::MISSING_ROUND_RESULTS_ERROR,
                                 :rounds, competition1.id,
                                 round_id: "333oh-1"),
@@ -106,6 +109,8 @@ RSpec.describe ERV do
         RV::ValidationWarning.new(ERV::NOT_333_MAIN_EVENT_WARNING,
                                   :events, competition2.id,
                                   main_event_id: "222"),
+        # You have declared that the competition has 222 event,
+        # but in your uploaded data there are no results *at all* for 22
         RV::ValidationWarning.new(ERV::MISSING_RESULTS_WARNING,
                                   :events, competition2.id,
                                   event_id: "222"),
