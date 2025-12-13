@@ -55,7 +55,7 @@ module ResultsValidators
 
       competition_scope = Competition
 
-      # Rails has an error message that complains about "The method .includes() must not contain arguments."
+      # Rails has an error message that complains about "The method .includes() must contain arguments."
       competition_scope = competition_scope.includes(**associations) unless associations.empty?
 
       competition_scope
