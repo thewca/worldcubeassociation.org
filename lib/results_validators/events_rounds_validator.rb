@@ -6,7 +6,6 @@ module ResultsValidators
     NO_MAIN_EVENT_WARNING = :no_main_event_warning
     MISSING_RESULTS_WARNING = :missing_results_warning
     MISSING_ROUND_RESULTS_ERROR = :missing_round_results_error
-    UNEXPECTED_COMBINED_ROUND_ERROR = :unexpected_combined_round_error
 
     def self.description
       "This validator checks that all events and rounds match between what has been announced and what is present in the results. It also check for a main event and emit a warning if there is none (and if 3x3 is not in the results)."
@@ -53,8 +52,10 @@ module ResultsValidators
       end
 
       def check_events_match(competition, results)
-        # Check for missing/unexpected events.
-        # As events must be validated by WCAT, any missing or unexpected event should lead to an error.
+        # Check for events which are entirely missing results.
+        # This is treated as an error, because it should never happen that you forget to hold an entire event
+        #   at your competition. If there are legitimate reasons why an event couldn't take place, you *must*
+        #   contact WCAT first and fix the events data through their authority. That's why it's a hard error.
         expected = competition.events.map(&:id)
         real = results.map(&:event_id).uniq
 
@@ -66,8 +67,12 @@ module ResultsValidators
       end
 
       def check_rounds_match(competition, results)
-        # Check that rounds match what was declared.
-
+        # Check for rounds which are entirely missing results.
+        # This is treated as a warning because under certain circumstances, you can plan for a round but not hold it.
+        #   The most "popular" reason for this is Regulation 9m (https://www.worldcubeassociation.org/regulations/#9m)
+        #   which effectively means that you wanted to hold three rounds of 3BLD but not enough people showed up.
+        # This scenario happens often enough that we allow Delegates to fix it "by themselves"
+        #   without WCAT intervention. That's why it's only a soft warning (as opposed to events being a hard error).
         expected = competition.rounds.map(&:human_id)
         real = results.map(&:round_human_id).uniq
 
