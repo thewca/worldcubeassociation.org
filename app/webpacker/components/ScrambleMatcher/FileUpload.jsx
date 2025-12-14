@@ -155,9 +155,17 @@ export default function FileUpload({
           />
         </Button.Group>
         <Header.Subheader>
-          Scrambles are assigned automatically when you upload a TNoodle JSON file.
-          If there is a discrepancy between the number of scramble sets in the JSON file
-          and the number of groups in the round you can manually assign them below.
+          {matchOnUpload
+            ? 'Scrambles are assigned automatically when you upload a TNoodle JSON file.'
+            : 'Scrambles need to be assigned manually after you upload a TNoodle JSON file.'}
+        </Header.Subheader>
+        <Header.Subheader>
+          If there is a discrepancy between the number of scramble sets
+          in the JSON file and the number of groups in the round,
+          {' '}
+          {limitMatches
+            ? 'you need to manually assign the surplus scrambles below.'
+            : 'you can adjust the automatic assignments below.'}
         </Header.Subheader>
       </Header>
       {error && <Message negative onDismiss={() => setError(null)}>{error}</Message>}
