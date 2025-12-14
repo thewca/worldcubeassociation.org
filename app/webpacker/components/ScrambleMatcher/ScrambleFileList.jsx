@@ -302,6 +302,19 @@ function ScrambleFileBody({
 
   return (
     <>
+      <Button
+        negative
+        floated="right"
+        icon="trash"
+        content="Delete File Upload"
+        onClick={deleteAction}
+        disabled={isDeleting}
+        loading={isDeleting}
+      />
+      <Button.Group>
+        <Button positive icon="magic" content="Auto-Assign" />
+        <Button secondary icon="unlink" content="Clear Assignments" />
+      </Button.Group>
       <Table celled structured compact>
         <Table.Header>
           <Table.Row textAlign="center" verticalAlign="middle">
@@ -317,15 +330,6 @@ function ScrambleFileBody({
           />
         </Table.Body>
       </Table>
-      <Button
-        fluid
-        negative
-        icon="trash"
-        content="Delete"
-        onClick={deleteAction}
-        disabled={isDeleting}
-        loading={isDeleting}
-      />
     </>
   );
 }
