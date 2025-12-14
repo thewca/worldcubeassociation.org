@@ -53,6 +53,7 @@ export default function FileUpload({
     queryKey: ['scramble-files', competitionId],
     queryFn: () => listScrambleFiles(competitionId),
     initialData: initialScrambleFiles,
+    refetchOnMount: false,
   });
 
   const { mutateAsync, isPending } = useMutation({

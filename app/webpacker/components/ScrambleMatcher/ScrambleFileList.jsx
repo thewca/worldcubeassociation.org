@@ -235,7 +235,9 @@ function MatchingTableCellContent({
                 <Button
                   secondary
                   compact
+                  basic
                   icon="unlink"
+                  content="Clear"
                   size="tiny"
                   attached="right"
                   onClick={() => deleteEntityFromMatching(step.entity, localHistory)}

@@ -1,7 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   Accordion,
-  Button, Card, Divider, Header, Segment,
+  Button,
+  Card,
+  Divider,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import {
@@ -122,7 +124,7 @@ export function UnusedEntityButtonGroup({
         <Button
           primary
           basic
-          icon="pen"
+          icon="pencil"
           content="Manual"
           onClick={() => setModalPayload(entity)}
         />
