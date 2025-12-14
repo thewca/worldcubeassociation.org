@@ -62,9 +62,48 @@ function navToBreadcrumbContent(navigationStep) {
   }
 }
 
-function ScrambleFileHeader({ scrambleFile }) {
+function ScrambleFileHeader({ scrambleFile, dispatchMatchState }) {
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteMutation, isPending: isDeleting } = useMutation({
+    mutationFn: deleteScrambleFile,
+    onSuccess: (data) => {
+      queryClient.setQueryData(
+        ['scramble-files', data.competition_id],
+        (prev) => prev.filter((scrFile) => scrFile.id !== data.id),
+      );
+
+      dispatchMatchState({ type: 'removeScrambleFile', scrambleFile: data });
+    },
+  });
+
+  const deleteAction = useCallback(
+    () => deleteMutation({ fileId: scrambleFile.id }),
+    [deleteMutation, scrambleFile.id],
+  );
+
   return (
     <>
+      <Button.Group floated="right">
+        <Button
+          positive
+          icon="magic"
+          content="Auto-Assign"
+        />
+        <Button
+          secondary
+          icon="unlink"
+          content="Clear Assignments"
+        />
+        <Button
+          negative
+          icon="trash"
+          content="Delete Upload"
+          onClick={deleteAction}
+          disabled={isDeleting}
+          loading={isDeleting}
+        />
+      </Button.Group>
       {scrambleFile.original_filename}
       <Header.Subheader>
         Generated with
@@ -276,61 +315,27 @@ function ScrambleFileBody({
   matchState,
   dispatchMatchState,
 }) {
-  const queryClient = useQueryClient();
-
-  const { mutate: deleteMutation, isPending: isDeleting } = useMutation({
-    mutationFn: deleteScrambleFile,
-    onSuccess: (data) => {
-      queryClient.setQueryData(
-        ['scramble-files', data.competition_id],
-        (prev) => prev.filter((scrFile) => scrFile.id !== data.id),
-      );
-
-      dispatchMatchState({ type: 'removeScrambleFile', scrambleFile: data });
-    },
-  });
-
-  const deleteAction = useCallback(
-    () => deleteMutation({ fileId: scrambleFile.id }),
-    [deleteMutation, scrambleFile.id],
-  );
-
   const scrambleFileTree = useMemo(
     () => groupScrambleSetsIntoWcif(scrambleFile.inbox_scramble_sets),
     [scrambleFile.inbox_scramble_sets],
   );
 
   return (
-    <>
-      <Button
-        negative
-        floated="right"
-        icon="trash"
-        content="Delete File Upload"
-        onClick={deleteAction}
-        disabled={isDeleting}
-        loading={isDeleting}
-      />
-      <Button.Group>
-        <Button positive icon="magic" content="Auto-Assign" />
-        <Button secondary icon="unlink" content="Clear Assignments" />
-      </Button.Group>
-      <Table celled structured compact>
-        <Table.Header>
-          <Table.Row textAlign="center" verticalAlign="middle">
-            <HeadersForMatching matchingKey="events" />
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          <BodyForMatching
-            matchingKey="events"
-            matchEntity={scrambleFileTree}
-            matchState={matchState}
-            dispatchMatchState={dispatchMatchState}
-          />
-        </Table.Body>
-      </Table>
-    </>
+    <Table celled structured compact>
+      <Table.Header>
+        <Table.Row textAlign="center" verticalAlign="middle">
+          <HeadersForMatching matchingKey="events" />
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        <BodyForMatching
+          matchingKey="events"
+          matchEntity={scrambleFileTree}
+          matchState={matchState}
+          dispatchMatchState={dispatchMatchState}
+        />
+      </Table.Body>
+    </Table>
   );
 }
 
@@ -348,7 +353,10 @@ export default function ScrambleFileList({
     key: scrFile.id,
     title: {
       as: Header,
-      content: <ScrambleFileHeader scrambleFile={scrFile} />,
+      content: <ScrambleFileHeader
+        scrambleFile={scrFile}
+        dispatchMatchState={dispatchMatchState}
+      />,
     },
     content: {
       content: <ScrambleFileBody
