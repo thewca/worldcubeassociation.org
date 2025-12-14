@@ -59,10 +59,12 @@ export const pickerStepConfig = {
   rounds: {
     matchingConfigKey: 'scrambleSets',
     nestedPicker: 'scrambleSets',
+    pickFirstDefault: true,
   },
   scrambleSets: {
     enabledCondition: (history) => isForAttemptBasedEvent(history),
     matchingConfigKey: 'inbox_scrambles',
+    pickFirstDefault: true,
   },
 };
 
