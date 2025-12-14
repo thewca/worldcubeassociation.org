@@ -139,6 +139,12 @@ export default function scrambleMatchReducer(state, action) {
         ['initial', 'current'],
         (subState) => removeScrambleFile(subState, action.scrambleFile),
       );
+    case 'resetScrambleFile':
+      return applyAction(
+        state,
+        ['current'],
+        (subState) => removeScrambleFile(subState, action.scrambleFile),
+      );
     case 'resetAfterSave':
       return initializeState({
         wcifEvents: state.current.events,
