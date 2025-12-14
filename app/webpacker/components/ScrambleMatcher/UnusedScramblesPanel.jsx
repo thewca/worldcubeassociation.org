@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import {
+  Accordion,
   Button, Card, Divider, Header, Segment,
 } from 'semantic-ui-react';
 import _ from 'lodash';
@@ -153,8 +154,6 @@ function UnusedEntitiesPanel({
     cellDetailsAreData = false,
   } = matchingDndConfig[matchingKey];
 
-  const { headerLabel } = pickerLocalizationConfig[matchingKey];
-
   const addBackEntity = useCallback((entity, pickerHistory) => dispatchMatchState({
     type: 'addEntityToMatching',
     entity,
@@ -167,37 +166,28 @@ function UnusedEntitiesPanel({
   }
 
   return (
-    <>
-      <Header attached="top">
-        Unused
-        {' '}
-        {headerLabel}
-      </Header>
-      <Segment attached>
-        <Card.Group>
-          {unusedEntries.map(({ entity, pickerHistory }) => (
-            <Card key={entity.id}>
-              <Card.Content>
-                <Card.Header>{computeCellName(entity)}</Card.Header>
-                {computeCellDetails && !cellDetailsAreData && (
-                <Card.Meta>{computeCellDetails(entity)}</Card.Meta>
-                )}
-              </Card.Content>
-              <Card.Content extra>
-                <UnusedEntityButtonGroup
-                  entity={entity}
-                  pickerHistory={pickerHistory}
-                  matchingKey={matchingKey}
-                  referenceMatchState={rootMatchState}
-                  moveEntity={addBackEntity}
-                  fluid
-                />
-              </Card.Content>
-            </Card>
-          ))}
-        </Card.Group>
-      </Segment>
-    </>
+    <Card.Group>
+      {unusedEntries.map(({ entity, pickerHistory }) => (
+        <Card key={entity.id}>
+          <Card.Content>
+            <Card.Header>{computeCellName(entity)}</Card.Header>
+            {computeCellDetails && !cellDetailsAreData && (
+              <Card.Meta>{computeCellDetails(entity)}</Card.Meta>
+            )}
+          </Card.Content>
+          <Card.Content extra>
+            <UnusedEntityButtonGroup
+              entity={entity}
+              pickerHistory={pickerHistory}
+              matchingKey={matchingKey}
+              referenceMatchState={rootMatchState}
+              moveEntity={addBackEntity}
+              fluid
+            />
+          </Card.Content>
+        </Card>
+      ))}
+    </Card.Group>
   );
 }
 
@@ -219,18 +209,31 @@ export default function UnusedScramblesPanel({
 
   const anyUnusedEntries = unusedPickerEntities.some((step) => step.unused.length > 0);
 
-  return (
-    <>
-      {anyUnusedEntries && <Divider />}
-      {unusedPickerEntities.map((unusedStep) => (
-        <UnusedEntitiesPanel
-          key={unusedStep.key}
+  if (!anyUnusedEntries) {
+    return null;
+  }
+
+  const unusedEntityAccordionPanels = unusedPickerEntities.map((unusedStep) => {
+    const { headerLabel } = pickerLocalizationConfig[unusedStep.key];
+
+    return ({
+      key: unusedStep.key,
+      title: `Unused ${headerLabel}`,
+      content: {
+        content: <UnusedEntitiesPanel
           matchingKey={unusedStep.key}
           unusedEntries={unusedStep.unused}
           dispatchMatchState={dispatchMatchState}
           rootMatchState={matchState}
-        />
-      ))}
+        />,
+      },
+    });
+  });
+
+  return (
+    <>
+      <Divider />
+      <Accordion styled fluid panels={unusedEntityAccordionPanels} defaultActiveIndex={0} />
     </>
   );
 }
