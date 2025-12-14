@@ -23,9 +23,12 @@ async function listScrambleFiles(competitionId) {
   return data;
 }
 
-async function uploadScrambleFile({ competitionId, file }) {
+async function uploadScrambleFile({ competitionId, file, matchingSettings }) {
   const formData = new FormData();
   formData.append('tnoodle[json]', file);
+
+  formData.append('matching_settings[is_enabled]', matchingSettings.isEnabled);
+  formData.append('matching_settings[is_restricted]', matchingSettings.isRestricted);
 
   const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId), {
     method: 'POST',
@@ -80,11 +83,20 @@ export default function FileUpload({
 
   const uploadNewScramble = useCallback((ev) => {
     const filesArr = Array.from(ev.target.files);
-    const uploadPromises = filesArr.map((file) => mutateAsync({ competitionId, file }));
+    const uploadPromises = filesArr.map(
+      (file) => mutateAsync({
+        competitionId,
+        file,
+        matchingSettings: {
+          isEnabled: matchOnUpload,
+          isRestricted: limitMatches,
+        },
+      }),
+    );
 
     return Promise.all(uploadPromises)
       .finally(resetFileUpload);
-  }, [competitionId, mutateAsync, resetFileUpload]);
+  }, [competitionId, limitMatches, matchOnUpload, mutateAsync, resetFileUpload]);
 
   const clickOnInput = () => {
     inputRef.current?.click();

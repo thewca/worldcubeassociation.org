@@ -15,7 +15,13 @@ class ScrambleFilesController < ApplicationController
   def create
     competition = competition_from_params
 
-    uploaded_file = params.require(:tnoodle).require(:json)
+    tnoodle_params = params.expect(tnoodle: [:json])
+    uploaded_file = tnoodle_params[:json]
+
+    matching_settings_params = params.expect(matching_settings: %i[is_enabled is_restricted])
+
+    matching_enabled = ActiveRecord::Type::Boolean.new.cast(matching_settings_params[:is_enabled])
+    matching_restricted = ActiveRecord::Type::Boolean.new.cast(matching_settings_params[:is_restricted])
 
     raw_file_contents = uploaded_file.read
     tnoodle_json = JSON.parse(raw_file_contents, symbolize_names: true)
@@ -62,23 +68,30 @@ class ScrambleFilesController < ApplicationController
           ordered_index_offset = highest_ordered_index&.succ || 0
 
           wcif_round[:scrambleSets].each_with_index do |wcif_scramble_set, idx|
+            round_overmatched = competition_round.blank? || ordered_index_offset >= competition_round.scramble_set_count
+            matched_round = competition_round if matching_enabled && (!matching_restricted || !round_overmatched)
+
             scramble_set = scr_file_upload.inbox_scramble_sets.create!(
               scramble_set_number: idx + 1,
               ordered_index: ordered_index_offset + idx,
-              matched_round: competition_round,
+              matched_round: matched_round,
               **round_scope,
             )
 
             %i[scrambles extraScrambles].each do |scramble_kind|
               num_persisted_scrambles = scramble_set.inbox_scrambles.count
+              num_persisted_regular_scrambles = scramble_set.inbox_scrambles.not_extra.count
 
               wcif_scramble_set[scramble_kind].each_with_index do |wcif_scramble, n|
+                set_overmatched = competition_round.blank? || num_persisted_regular_scrambles >= competition_round.format.expected_solve_count
+                matched_scramble_set = scramble_set if matching_enabled && (!matching_restricted || !set_overmatched)
+
                 scramble_set.inbox_scrambles.create!(
                   scramble_string: wcif_scramble,
                   scramble_number: n + 1,
-                  ordered_index: n + num_persisted_scrambles,
+                  ordered_index: num_persisted_scrambles + n,
                   is_extra: scramble_kind == :extraScrambles,
-                  matched_scramble_set: scramble_set,
+                  matched_scramble_set: matched_scramble_set,
                 )
               end
             end
