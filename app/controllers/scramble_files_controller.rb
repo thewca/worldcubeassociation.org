@@ -83,7 +83,7 @@ class ScrambleFilesController < ApplicationController
               num_persisted_regular_scrambles = scramble_set.inbox_scrambles.not_extra.count
 
               wcif_scramble_set[scramble_kind].each_with_index do |wcif_scramble, n|
-                set_overmatched = competition_round.blank? || num_persisted_regular_scrambles >= competition_round.format.expected_solve_count
+                set_overmatched = competition_round.blank? || num_persisted_regular_scrambles > competition_round.format.expected_solve_count
                 matched_scramble_set = scramble_set if matching_enabled && (!matching_restricted || !set_overmatched)
 
                 scramble_set.inbox_scrambles.create!(
