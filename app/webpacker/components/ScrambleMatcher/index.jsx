@@ -9,7 +9,6 @@ import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.er
 import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
 import { computeMatchingProgress } from './util';
-import MatchingProgressMessage from './MatchingProgressMessage';
 import PickerWithMatching from './PickerWithMatching';
 
 export default function Wrapper({
@@ -121,14 +120,12 @@ function ScrambleMatcher({
 
   return (
     <>
-      <MatchingProgressMessage
-        roundMatchingProgress={roundMatchingProgress}
-      />
       <FileUpload
         competitionId={competitionId}
         initialScrambleFiles={initialScrambleFiles}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
+        matchingProgress={roundMatchingProgress}
       />
       <Divider />
       {hasUnsavedChanges && (
@@ -148,9 +145,6 @@ function ScrambleMatcher({
         <Message info content="You have unsaved changes. Don't forget to Save below!" />
       )}
       <Divider />
-      <MatchingProgressMessage
-        roundMatchingProgress={roundMatchingProgress}
-      />
       <Button.Group>
         {renderSubmitButton('Save Changes', !hasUnsavedChanges)}
         <Button secondary basic content="Reset" icon="refresh" onClick={() => dispatchMatchState({ type: 'resetToInitial' })} />
