@@ -52,7 +52,7 @@ export default function FileUpload({
   const [error, setError] = useState(null);
 
   const [matchOnUpload, setMatchOnUpload] = useCheckboxState(true);
-  const [limitMatches, setLimitMatches] = useCheckboxState(false);
+  const [limitMatches, setLimitMatches] = useCheckboxState(true);
 
   const { data: uploadedJsonFiles, isFetching, refetch } = useQuery({
     queryKey: ['scramble-files', competitionId],
