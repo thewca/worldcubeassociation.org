@@ -140,22 +140,29 @@ export const searchRecursive = (data, targetStep, currentKey = 'events', searchH
 export function groupScrambleSetsIntoWcif(scrambleSets) {
   const groupedMap = _.mapValues(
     _.groupBy(
-      _.sortBy(scrambleSets, (scrSet) => events.byId[scrSet.event_id].rank),
+      scrambleSets,
       'event_id',
     ),
     (eventItems) => _.groupBy(
-      _.sortBy(eventItems, (evt) => evt.round_number),
+      eventItems,
       'round_number',
     ),
   );
 
-  const wcifEvents = _.map(groupedMap, (roundsMap, eventId) => ({
-    id: eventId,
-    rounds: _.map(roundsMap, (sets, roundNum) => ({
-      id: `${eventId}-r${roundNum}`,
-      scrambleSets: sets,
+  const wcifEvents = _.sortBy(
+    _.map(groupedMap, (roundsMap, eventId) => ({
+      id: eventId,
+      rounds: _.sortBy(
+        _.map(roundsMap, (sets, roundNum) => ({
+          id: `${eventId}-r${roundNum}`,
+          roundNum,
+          scrambleSets: sets,
+        })),
+        'roundNum',
+      ),
     })),
-  }));
+    (event) => events.byId[event.id].rank,
+  );
 
   return { events: wcifEvents };
 }

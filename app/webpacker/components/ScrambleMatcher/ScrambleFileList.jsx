@@ -165,6 +165,15 @@ function MatchingTableCellContent({
     });
   }, [dispatchMatchState, step.key]);
 
+  const deleteEntityFromMatching = useCallback((entity, pickerHistory) => {
+    dispatchMatchState({
+      type: 'deleteEntityFromMatching',
+      entity,
+      pickerHistory,
+      matchingKey: step.key,
+    });
+  }, [dispatchMatchState, step.key]);
+
   if (!isDefCell) {
     return null;
   }
@@ -195,6 +204,8 @@ function MatchingTableCellContent({
     .filter((laterRow) => laterRow[stepIdx].id === step.id)
     .length;
 
+  const localHistory = allSteps.slice(0, stepIdx);
+
   return (
     <>
       <Table.Cell
@@ -212,19 +223,29 @@ function MatchingTableCellContent({
           rowSpan={defRowSpan}
         >
             {actualNavigation ? (
-              <Breadcrumb size="tiny">
-                {actualNavigation.map((nav, breadIdx) => (
-                  <React.Fragment key={nav.key}>
-                    {breadIdx > 0 && (<Breadcrumb.Divider icon="chevron right" />)}
-                    <Breadcrumb.Section>{navToBreadcrumbContent(nav)}</Breadcrumb.Section>
-                  </React.Fragment>
-                ))}
-              </Breadcrumb>
+              <>
+                <Breadcrumb size="tiny">
+                  {actualNavigation.map((nav, breadIdx) => (
+                    <React.Fragment key={nav.key}>
+                      {breadIdx > 0 && (<Breadcrumb.Divider icon="chevron right" />)}
+                      <Breadcrumb.Section>{navToBreadcrumbContent(nav)}</Breadcrumb.Section>
+                    </React.Fragment>
+                  ))}
+                </Breadcrumb>
+                <Button
+                  secondary
+                  compact
+                  icon="unlink"
+                  size="tiny"
+                  attached="right"
+                  onClick={() => deleteEntityFromMatching(step.entity, localHistory)}
+                />
+              </>
             ) : (
               <UnusedEntityButtonGroup
                 entity={step.entity}
                 matchingKey={step.key}
-                pickerHistory={allSteps.slice(0, stepIdx)}
+                pickerHistory={localHistory}
                 referenceMatchState={matchState}
                 moveEntity={addEntityBack}
               />
