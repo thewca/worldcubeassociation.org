@@ -74,6 +74,7 @@ export const matchingDndConfig = {
     computeTableName: scrambleSetToName,
     computeCellDetails: (scrSet) => scrSet.original_filename,
     computeExpectedRowCount: (round) => round.scrambleSetCount,
+    tableReferenceKey: 'scrambleSetCount',
   },
   inbox_scrambles: {
     computeCellName: scrambleToName,

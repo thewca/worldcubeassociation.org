@@ -36,6 +36,9 @@ function addScrambleSetsToEvents(wcifEvents, scrambleSets, keepExistingSets = tr
           })),
           'ordered_index',
         ),
+        // we don't care about results in this UI at all,
+        //   so deliberately un-setting them saves network bandwidth :)
+        results: undefined,
       })),
     })),
   };
@@ -108,7 +111,7 @@ export default function scrambleMatchReducer(state, action) {
       );
     case 'resetAfterSave':
       return initializeState({
-        wcifEvents: state.initial.events,
+        wcifEvents: state.current.events,
         scrambleSets: action.scrambleSets,
       });
     case 'resetToInitial':
@@ -149,6 +152,15 @@ export default function scrambleMatchReducer(state, action) {
         return _.chain(subState)
           .cloneDeep()
           .update(lodashPath, (arr = []) => addItemToArray(arr, action.entity, action.targetIndex))
+          .value();
+      });
+    case 'updateReferenceValue':
+      return applyAction(state, ['current'], (subState) => {
+        const lodashPath = navigationToLodash(action, 'pickerHistory');
+
+        return _.chain(subState)
+          .cloneDeep()
+          .set(lodashPath, action.value)
           .value();
       });
     default:

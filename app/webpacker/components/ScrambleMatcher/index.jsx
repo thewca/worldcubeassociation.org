@@ -38,10 +38,13 @@ async function submitMatchedScrambles({ competitionId, matchState }) {
 
   const matchStateIdsOnly = _.mapValues(
     roundsByWcifId,
-    (round) => round.scrambleSets.map((set) => ({
-      id: set.id,
-      inbox_scrambles: set.inbox_scrambles.map((scr) => scr.id),
-    })),
+    (round) => ({
+      scramble_set_count: round.scrambleSetCount,
+      scramble_sets: round.scrambleSets.map((set) => ({
+        id: set.id,
+        inbox_scrambles: set.inbox_scrambles.map((scr) => scr.id),
+      })),
+    }),
   );
 
   const { data } = await fetchJsonOrError(scramblesUpdateRoundMatchingUrl(competitionId), {

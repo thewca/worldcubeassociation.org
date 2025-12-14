@@ -106,9 +106,14 @@ class ScrambleFilesController < ApplicationController
 
     competition.transaction do
       competition.rounds.each do |round|
-        updated_sets = params[round.wcif_id]
+        updated_round = params[round.wcif_id]
 
-        next if updated_sets.blank?
+        next if updated_round.blank?
+
+        updated_set_count = updated_round[:scramble_set_count]
+        round.update!(scramble_set_count: updated_set_count)
+
+        updated_sets = updated_round[:scramble_sets]
 
         updated_set_ids = updated_sets.pluck(:id)
         updated_sets_by_id = updated_sets.index_by { it[:id] }
