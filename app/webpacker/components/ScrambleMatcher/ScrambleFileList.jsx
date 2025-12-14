@@ -194,7 +194,7 @@ function MatchingTableCellContent({
         colSpan={remainingColSpan}
         disabled
       >
-        (automatic)
+        (cannot be edited)
       </Table.Cell>
     );
   }
