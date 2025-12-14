@@ -99,7 +99,7 @@ export default function FileUpload({
           <Button
             primary
             icon="refresh"
-            content="Refresh"
+            content="Refresh files"
             onClick={refetch}
             loading={isFetching}
             disabled={isFetching}
