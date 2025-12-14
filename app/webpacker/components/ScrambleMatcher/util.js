@@ -5,6 +5,10 @@ import { EventsPickerCompat } from './ButtonGroupPicker';
 
 export const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 
+export const LEGAL_CROSS_MATCHES = [
+  ['333', '333oh'],
+];
+
 export const pickerLocalizationConfig = {
   events: {
     computeEntityName: (id) => events.byId[id].name,
