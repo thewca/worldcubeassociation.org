@@ -3,12 +3,19 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Button, Header, Message } from 'semantic-ui-react';
+import {
+  Button,
+  Form,
+  Header,
+  Message,
+  Modal,
+} from 'semantic-ui-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import ScrambleFileList from './ScrambleFileList';
 import UnusedScramblesPanel from './UnusedScramblesPanel';
+import useCheckboxState from '../../lib/hooks/useCheckboxState';
 
 async function listScrambleFiles(competitionId) {
   const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId));
@@ -38,6 +45,9 @@ export default function FileUpload({
   const queryClient = useQueryClient();
 
   const [error, setError] = useState(null);
+
+  const [matchOnUpload, setMatchOnUpload] = useCheckboxState(true);
+  const [limitMatches, setLimitMatches] = useCheckboxState(false);
 
   const { data: uploadedJsonFiles, isFetching, refetch } = useQuery({
     queryKey: ['scramble-files', competitionId],
@@ -88,6 +98,27 @@ export default function FileUpload({
         {uploadedJsonFiles.length}
         {' '}
         <Button.Group floated="right">
+          <Modal
+            closeIcon
+            trigger={<Button icon="settings" />}
+          >
+            <Modal.Header>File upload settings</Modal.Header>
+            <Modal.Content>
+              <Form>
+                <Form.Checkbox
+                  label="Automatically match scrambles when uploading a file"
+                  checked={matchOnUpload}
+                  onChange={setMatchOnUpload}
+                />
+                <Form.Checkbox
+                  label="Only match scrambles as long as there are still free, unmatched spots available"
+                  disabled={!matchOnUpload}
+                  checked={limitMatches}
+                  onChange={setLimitMatches}
+                />
+              </Form>
+            </Modal.Content>
+          </Modal>
           <Button
             positive
             icon="plus"
