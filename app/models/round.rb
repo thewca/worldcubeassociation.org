@@ -228,32 +228,21 @@ class Round < ApplicationRecord
     # by using the same ORDER BY <=0 trick
     query = <<-SQL.squish
       UPDATE live_results r
-      LEFT JOIN (
-          SELECT id,
-                 RANK() OVER (
-                   ORDER BY person_best.#{rank_by} <= 0, person_best.#{rank_by} ASC
-                   #{", person_best.#{secondary_rank_by} <= 0, person_best.#{secondary_rank_by} ASC" if secondary_rank_by}
-                 ) AS ranking
-          FROM (
-        SELECT *
-        FROM (
-            SELECT
-              lr.*,
-              ROW_NUMBER() OVER (
-                PARTITION BY lr.registration_id
-                ORDER BY
-                  (lr.#{rank_by} <= 0) ASC,
-                  lr.#{rank_by} ASC
-                  #{", lr.#{secondary_rank_by} <= 0, lr.#{secondary_rank_by} ASC" if secondary_rank_by}
-              ) AS rownum
-            FROM live_results lr
-            WHERE lr.round_id IN (#{round_ids})
-              AND lr.best != 0
-        ) x
-        WHERE rownum = 1
-    ) AS person_best
-      ) ranked
-      ON r.id = ranked.id
+      LEFT JOIN
+        (SELECT id,
+                RANK() OVER (ORDER BY person_best.#{rank_by} <= 0,
+                             person_best.#{rank_by} ASC #{", person_best.#{secondary_rank_by} <= 0, person_best.#{secondary_rank_by} ASC" if secondary_rank_by}) AS ranking
+         FROM
+           (SELECT *
+            FROM
+              (SELECT lr.*,
+                      ROW_NUMBER() OVER (PARTITION BY lr.registration_id
+                                         ORDER BY (lr.#{rank_by} <= 0) ASC,
+                                         lr.#{rank_by} ASC #{", lr.#{secondary_rank_by} <= 0, lr.#{secondary_rank_by} ASC" if secondary_rank_by}) AS rownum
+               FROM live_results lr
+               WHERE lr.round_id IN (#{round_ids})
+                 AND lr.best != 0) x
+            WHERE rownum = 1) AS person_best) ranked ON r.id = ranked.id
       SET r.global_pos = ranked.ranking
       WHERE r.round_id IN (#{round_ids});
     SQL
