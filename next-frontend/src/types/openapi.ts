@@ -824,6 +824,7 @@ export interface components {
              * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
              */
             thumb_url?: string;
+            is_default: boolean;
         };
         WcifRegistration: {
             wcaRegistrationId: number;

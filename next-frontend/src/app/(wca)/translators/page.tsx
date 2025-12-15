@@ -38,7 +38,7 @@ export default async function TranslatorsPage() {
               {translators.map((translator) => (
                 <UserBadge
                   key={translator.id}
-                  profilePicture={translator.user.avatar.url}
+                  profilePicture={translator.user.avatar}
                   name={translator.user.name}
                   wcaId={translator.user.wca_id}
                 />
