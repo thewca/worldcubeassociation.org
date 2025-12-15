@@ -1407,7 +1407,7 @@ module DatabaseDumper
       metadata: {
         export_format_version: 'v1.0.0',
         version_label: 'deprecated',
-        end_of_life_date: '2026-01-01',
+        end_of_life_date: '2026-01-15',
       },
       db_config: :results_dump,
       db_sanitizers: RESULTS_SANITIZERS,

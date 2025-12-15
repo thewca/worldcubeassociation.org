@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class DatabaseController < ApplicationController
-  REGULATIONS_ENDDATE_2025 = "2025-12-31"
+  RESULTS_EXPORT_FILE_TYPES = %w[sql tsv]
+
   def results_export
     flash[:warning] = I18n.t('database.results_export.deprecation_warning')
     @export_version = DatabaseDumper.current_results_export_version
@@ -13,7 +14,8 @@ class DatabaseController < ApplicationController
   end
 
   def sql_permalink
-    if Date.today > Date.parse(REGULATIONS_ENDDATE_2025)
+    v1_deprecation_date = DatabaseDumper::RESULTS_EXPORT_VERSIONS[:v1][:metadata][:end_of_life_date]
+    if Date.today > Date.parse(v1_deprecation_date)
       return render json: {
         error: "gone",
         message: "v1 of the Results Export has been deprecated. Please update to v2 by referring to the README and links at: https://www.worldcubeassociation.org/export/results",
@@ -25,7 +27,8 @@ class DatabaseController < ApplicationController
   end
 
   def tsv_permalink
-    if Date.today > Date.parse(REGULATIONS_ENDDATE_2025)
+    v1_deprecation_date = DatabaseDumper::RESULTS_EXPORT_VERSIONS[:v1][:metadata][:end_of_life_date]
+    if Date.today > Date.parse(v1_deprecation_date)
       return render json: {
         error: "gone",
         message: "v1 of the Results Export has been deprecated. Please update to v2 by referring to the README and links at: https://www.worldcubeassociation.org/export/results",
@@ -40,14 +43,19 @@ class DatabaseController < ApplicationController
     version = params.require(:version).to_sym
     file_type = params.require(:file_type)
 
-    if Date.today > Date.parse(REGULATIONS_ENDDATE_2025) && version == :v1
+    return head :not_found unless DatabaseDumper::RESULTS_EXPORT_VERSIONS.keys.include?(version) && RESULTS_EXPORT_FILE_TYPES.include?(file_type)
+
+    deprecation_date = DatabaseDumper::RESULTS_EXPORT_VERSIONS[version][:metadata][:end_of_life_date]
+
+    if deprecation_date && Date.today > Date.parse(deprecation_date)
       return render json: {
         error: "gone",
-        message: "v1 of the Results Export has been deprecated. Please update to v2 by referring to the README and links at: https://www.worldcubeassociation.org/export/results",
+        message: "#{version} of the Results Export has been deprecated. Please update to v2 by referring to the README and links at: https://www.worldcubeassociation.org/export/results",
       }, status: :gone
     end
 
     url, = DbDumpHelper.cached_results_export_info(file_type, version)
+    puts url
     redirect_to url, status: :moved_permanently, allow_other_host: true
   end
 
