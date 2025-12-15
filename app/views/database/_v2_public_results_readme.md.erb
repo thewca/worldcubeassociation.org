@@ -13,9 +13,25 @@ Opt in to the WCA Software Mailing List via [your profile preferences](https://w
 ## V2.0.0 Changelog
 
 - Solved snake_case/CamelCase inconsistency by changing all table names to snake_case (this matches the WCA codebase's convention)
-- Added `attempt_results` SQL table / TSV export file
-- `value1-5` in `results` will now be `NULL`
-- See [results and attempt_results](#results-and-attemptresults) for more information on how this data interacts
+- In addition to the above change in naming convention, the following column names have been changed:
+  - `competitions.wcaDelegate` -> `competitions.delegates`
+  - `competitions.organiser` -> `competitions.organizers`
+  - `competitions.latitude` -> `competitions.latitude_microdegrees`
+  - `competitions.longitude` -> `competitions.longitude_microdegrees`
+  - `persons.id` -> `persons.wca_id`
+  - `persons.subid` -> `persons.sub_id`
+  - `scrambles.scramble_id` -> `scrambles.id`
+  - ``
+- The following columns have been removed:
+  - `continents.latitude`
+  - `continents.longitude`
+  - `continents.zoom`
+  - `events.cellName`
+  - `results.value{1-5}`
+
+- Changes to recording of attempts
+  - Added `attempt_results` SQL table / TSV export file, and removed `value1-5` in `results` table
+  - See [results and attempt_results](#results-and-attemptresults) for more information on how this data interacts
 
 ## Description
 
