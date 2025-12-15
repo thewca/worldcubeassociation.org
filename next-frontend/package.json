@@ -79,7 +79,7 @@
     "@types/jest": "^30.0.0",
     "@types/js-cookie": "^3",
     "@types/newrelic": "^9.14.8",
-    "@types/node": "^24",
+    "@types/node": "^25",
     "@types/rails__actioncable": "^8",
     "@types/react": "^19",
     "@types/react-dom": "^19",
