@@ -43,7 +43,7 @@ class DatabaseController < ApplicationController
     version = params.require(:version).to_sym
     file_type = params.require(:file_type)
 
-    return head :not_found unless DatabaseDumper::RESULTS_EXPORT_VERSIONS.keys?(version) && RESULTS_EXPORT_FILE_TYPES.include?(file_type)
+    return head :not_found unless DatabaseDumper::RESULTS_EXPORT_VERSIONS.key?(version) && RESULTS_EXPORT_FILE_TYPES.include?(file_type)
 
     deprecation_date = DatabaseDumper::RESULTS_EXPORT_VERSIONS[version][:metadata][:end_of_life_date]
 
