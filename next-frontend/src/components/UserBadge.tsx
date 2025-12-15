@@ -11,10 +11,11 @@ import Image from "next/image";
 import RoleBadge, { StaffColor } from "@/components/RoleBadge";
 import Link from "next/link";
 import { route } from "nextjs-routes";
+import { components } from "@/types/openapi";
 
 interface UserBadgeData {
   name: string;
-  profilePicture?: string;
+  profilePicture?: components["schemas"]["UserAvatar"];
   roles?: { teamRole: string; teamText?: string; staffColor: StaffColor }[];
   wcaId: string;
 }
@@ -38,9 +39,13 @@ const UserBadge: React.FC<UserBadgeData> = ({
         maxW="xl"
       >
         {profilePicture && (
-          <Box objectFit="cover" width="75px" height="75px" position="relative">
+          <Box objectFit="cover" width="75px" minH="75px" position="relative">
             <Image
-              src={profilePicture}
+              src={
+                profilePicture.is_default
+                  ? "/missing_avatar_thumb.png"
+                  : profilePicture.url
+              }
               alt="Profile Picture"
               fill
               style={{ objectFit: "cover" }}
