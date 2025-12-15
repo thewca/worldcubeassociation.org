@@ -6161,6 +6161,11 @@ pt:
     results_export:
       #original_hash: 15d00e1
       heading: Exportação de Resultados WCA
+      #original_hash: cbdcfae
+      deprecation_warning: >-
+        AVISO DE OBSOLESCÊNCIA: A versão 1 da Exportação de Resultados foi
+        descontinuada e o suporte para a mesma será encerrado a partir de
+        01/01/2026. Por favor utilize a versão 2 antes dessa data.
       #original_hash: f9fe9df
       description: >-
         Nesta página oferecemos os resultados da WCA para download em diversos
@@ -6170,6 +6175,12 @@ pt:
         que possa ver se já possui a versão mais recente.
       #original_hash: 4f59283
       permalink: link permanente
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        Nota: os links permanentes fornecem a versão mais recente exportada
+        dentro de uma determinada versão; ou seja, o link permanente da versão 2
+        irá devolver a versão mais recente exportada da versão 2, mas
+        permanecerá na versão 2 mesmo quando a versão 3 for lançada.
       file_formats:
         #original_hash: b086d79
         sql: 'Instruções SQL, para importação em bases de dados SQL.'
