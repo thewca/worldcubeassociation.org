@@ -253,7 +253,7 @@ resource "aws_ecs_task_definition" "api" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   cpu = "1024"
-  memory = "3930"
+  memory = "2048"
 
   container_definitions = jsonencode([
     {
@@ -305,14 +305,14 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   cpu = "1024"
-  memory = "3930"
+  memory = "3900"
 
   container_definitions = jsonencode([
     {
       name              = "rails-staging"
       image             = "${var.shared.ecr_repository.repository_url}:staging"
       cpu    = 1024
-      memory = 3930
+      memory = 3900
 
       portMappings = [
         {

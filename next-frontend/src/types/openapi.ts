@@ -824,6 +824,7 @@ export interface components {
              * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
              */
             thumb_url?: string;
+            is_default: boolean;
         };
         WcifRegistration: {
             wcaRegistrationId: number;
@@ -993,7 +994,7 @@ export interface components {
             /** @example 770 Don Mills Rd, North York, ON M3C IT3, Canada */
             venue_address: string;
             /** @example The big convention center */
-            venue_details: string;
+            venue_details?: string;
             /**
              * Format: float
              * @example 47.611387

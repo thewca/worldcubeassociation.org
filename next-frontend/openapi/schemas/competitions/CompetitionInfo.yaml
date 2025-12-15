@@ -34,7 +34,6 @@ required:
   - short_name
   - city
   - venue_address
-  - venue_details
   - latitude_degrees
   - longitude_degrees
   - country_iso2

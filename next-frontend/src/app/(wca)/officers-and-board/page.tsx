@@ -52,7 +52,7 @@ export default async function OfficersAndBoard() {
           {officers.map((officer) => (
             <UserBadge
               key={officer.id}
-              profilePicture={officer.user.avatar.url}
+              profilePicture={officer.user.avatar}
               name={officer.user.name}
               roles={groupedOfficerRoles[officer.user.id].map((role) => ({
                 teamRole: t(
@@ -76,7 +76,7 @@ export default async function OfficersAndBoard() {
           {boardRoles.map((board) => (
             <UserBadge
               key={board.id}
-              profilePicture={board.user.avatar.url}
+              profilePicture={board.user.avatar}
               name={board.user.name}
               wcaId={board.user.wca_id}
             />

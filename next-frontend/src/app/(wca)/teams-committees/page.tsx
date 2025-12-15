@@ -115,7 +115,7 @@ async function MemberTable({
       {roles.map((role) => (
         <UserBadge
           key={role.id}
-          profilePicture={role.user.avatar.url}
+          profilePicture={role.user.avatar}
           name={role.user.name}
           wcaId={role.user.wca_id}
           roles={[

@@ -83,7 +83,7 @@ function DelegateTab({ group }: { group: components["schemas"]["UserGroup"] }) {
       <Link href={`mailto:${email}`}>{email}</Link>
       <UserBadge
         key={lead_user!.id}
-        profilePicture={lead_user!.avatar.url}
+        profilePicture={lead_user!.avatar}
         name={lead_user!.name}
         wcaId={lead_user!.wca_id}
       />
@@ -108,7 +108,7 @@ async function MemberTable({ id }: { id: number }) {
         {delegates.map((role) => (
           <UserBadge
             key={role.id}
-            profilePicture={role.user.avatar.url}
+            profilePicture={role.user.avatar}
             name={role.user.name}
             wcaId={role.user.wca_id}
             roles={[
