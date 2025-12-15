@@ -69,7 +69,7 @@ module DbDumpHelper
 
   def self.cached_results_export_info(file_type, version, export_timestamp = DumpPublicResultsDatabase.successful_start_date)
     Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}-#{version}", expires_in: 1.day) do
-      file_name = DbDumpHelper.resolve_results_export(file_type, version, DateTime.now)
+      file_name = DbDumpHelper.resolve_results_export(file_type, version)
 
       filesize_bytes = DbDumpHelper.public_s3_file_size(file_name)
       [DbDumpHelper.public_s3_path(file_name), filesize_bytes]
