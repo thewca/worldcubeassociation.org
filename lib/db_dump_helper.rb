@@ -59,44 +59,44 @@ module DbDumpHelper
     bucket.object(file_name).content_length
   end
 
-  def self.resolve_results_export(file_type, export_timestamp = DumpPublicResultsDatabase.successful_start_date)
-    base_name = DbDumpHelper.result_export_file_name(file_type, export_timestamp)
+  def self.resolve_results_export(file_type, version, export_timestamp = DumpPublicResultsDatabase.successful_start_date)
+    return self.result_export_file_name(file_type, version, Time.new(2025, 11, 25)) unless Rails.env.production?
+
+    base_name = DbDumpHelper.result_export_file_name(file_type, version, export_timestamp)
 
     "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/#{base_name}"
   end
 
-  def self.cached_results_export_info(file_type, export_timestamp = DumpPublicResultsDatabase.successful_start_date)
-    Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.day) do
-      file_name = DbDumpHelper.resolve_results_export(file_type, export_timestamp)
+  def self.cached_results_export_info(file_type, version, export_timestamp = DumpPublicResultsDatabase.successful_start_date)
+    Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}-#{version}", expires_in: 1.day) do
+      file_name = DbDumpHelper.resolve_results_export(file_type, version, DateTime.now)
 
       filesize_bytes = DbDumpHelper.public_s3_file_size(file_name)
       [DbDumpHelper.public_s3_path(file_name), filesize_bytes]
     end
   end
 
-  def self.dump_results_db(export_timestamp = DateTime.now)
+  def self.dump_results_db(version, export_timestamp = DateTime.now)
     Dir.mktmpdir do |dir|
       FileUtils.cd dir do
         tsv_folder_name = "TSV_export"
         FileUtils.mkpath tsv_folder_name
 
-        DatabaseDumper.public_results_dump(RESULTS_EXPORT_SQL, tsv_folder_name)
+        DatabaseDumper.public_results_dump(RESULTS_EXPORT_SQL, tsv_folder_name, version)
 
-        metadata = {
-          'export_format_version' => DatabaseDumper::PUBLIC_RESULTS_VERSION,
-          'export_date' => export_timestamp,
-        }
+        metadata = DatabaseDumper::RESULTS_EXPORT_VERSIONS[version][:metadata]
+        metadata['export_date'] = export_timestamp
         File.write(RESULTS_EXPORT_METADATA, JSON.dump(metadata))
 
-        readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp)
+        readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp, version)
         File.write(RESULTS_EXPORT_README, readme_template)
 
-        sql_zip_filename = self.result_export_file_name("sql", export_timestamp)
+        sql_zip_filename = self.result_export_file_name("sql", version, export_timestamp)
         sql_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README, RESULTS_EXPORT_SQL]
 
         self.zip_and_upload_to_s3(sql_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{sql_zip_filename}", *sql_zip_contents)
 
-        tsv_zip_filename = self.result_export_file_name("tsv", export_timestamp)
+        tsv_zip_filename = self.result_export_file_name("tsv", version, export_timestamp)
         tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
           FileUtils.mv(tsv, '.')
           File.basename tsv
@@ -108,8 +108,8 @@ module DbDumpHelper
     end
   end
 
-  def self.result_export_file_name(file_type, timestamp)
-    "WCA_export#{timestamp.strftime('%j')}_#{timestamp.strftime('%Y%m%dT%H%M%SZ')}.#{file_type}.zip"
+  def self.result_export_file_name(file_type, version, timestamp)
+    "WCA_export_#{version}_#{timestamp.strftime('%j')}_#{timestamp.strftime('%Y%m%dT%H%M%SZ')}.#{file_type}.zip"
   end
 
   def self.zip_and_upload_to_s3(zip_filename, s3_path, *zip_contents)
