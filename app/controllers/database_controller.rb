@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DatabaseController < ApplicationController
-  RESULTS_EXPORT_FILE_TYPES = %w[sql tsv]
+  RESULTS_EXPORT_FILE_TYPES = %w[sql tsv].freeze
 
   def results_export
     flash[:warning] = I18n.t('database.results_export.deprecation_warning')
@@ -43,7 +43,7 @@ class DatabaseController < ApplicationController
     version = params.require(:version).to_sym
     file_type = params.require(:file_type)
 
-    return head :not_found unless DatabaseDumper::RESULTS_EXPORT_VERSIONS.keys.include?(version) && RESULTS_EXPORT_FILE_TYPES.include?(file_type)
+    return head :not_found unless DatabaseDumper::RESULTS_EXPORT_VERSIONS.keys?(version) && RESULTS_EXPORT_FILE_TYPES.include?(file_type)
 
     deprecation_date = DatabaseDumper::RESULTS_EXPORT_VERSIONS[version][:metadata][:end_of_life_date]
 
@@ -55,7 +55,6 @@ class DatabaseController < ApplicationController
     end
 
     url, = DbDumpHelper.cached_results_export_info(file_type, version)
-    puts url
     redirect_to url, status: :moved_permanently, allow_other_host: true
   end
 
