@@ -181,10 +181,19 @@ class ResultsSubmissionController < ApplicationController
       persons_to_import: persons_to_import,
     }
 
+    mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))
+    store_uploaded_json = ActiveRecord::Type::Boolean.new.cast(params.require(:store_uploaded_json))
+
     errors = CompetitionResultsImport.import_temporary_results(
       competition,
       temporary_results_data,
       UploadedJson.upload_types[:wca_live],
+      mark_result_submitted: mark_result_submitted,
+      store_uploaded_json: store_uploaded_json,
+      # The "traditional" Results JSON also contains personal data like DOB,
+      #   so it is fine to hard-code the `authorized: true` here.
+      # It is intentional and desired that WRT (who have admin power to view DOBs anyway)
+      #   can reconstruct personal information from the moment the upload happened.
       results_json_str: competition.to_wcif(authorized: true).to_json,
     )
 
