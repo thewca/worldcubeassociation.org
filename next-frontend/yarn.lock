@@ -5217,14 +5217,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/form-core@npm:1.27.3":
-  version: 1.27.3
-  resolution: "@tanstack/form-core@npm:1.27.3"
+"@tanstack/form-core@npm:1.27.4":
+  version: 1.27.4
+  resolution: "@tanstack/form-core@npm:1.27.4"
   dependencies:
     "@tanstack/devtools-event-client": "npm:^0.3.5"
     "@tanstack/pacer-lite": "npm:^0.1.1"
     "@tanstack/store": "npm:^0.7.7"
-  checksum: 10c0/92aea31174df2f8aadbd7c9c63fa9354784d4dd013c2345b34a2e299294c10cbd6b116daf424bac6f9688b9c94fdc4e8b7ac19a8eb994e2d4bca0ed858b92f5d
+  checksum: 10c0/74c83045980593fd33db39024686177f4eb20d228e917a3b324dd5768e1c961d42fbb6c0e5119ff97034340c62bcc7361d8a80bdaa0052cbd66f493b9184f807
   languageName: node
   linkType: hard
 
@@ -5242,18 +5242,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-form@npm:^1.27.3":
-  version: 1.27.3
-  resolution: "@tanstack/react-form@npm:1.27.3"
+"@tanstack/react-form@npm:^1.27.4":
+  version: 1.27.4
+  resolution: "@tanstack/react-form@npm:1.27.4"
   dependencies:
-    "@tanstack/form-core": "npm:1.27.3"
+    "@tanstack/form-core": "npm:1.27.4"
     "@tanstack/react-store": "npm:^0.8.0"
   peerDependencies:
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     "@tanstack/react-start":
       optional: true
-  checksum: 10c0/aa3a94cb231f1f2158bd27d06826a8e4b3bb61752c23c08bf678be4f22e6d925efa3318337c89921ec572b711576c75cf9a827048349a7af21b2fcd4c35d5b08
+  checksum: 10c0/209cb6a506fcbbff5c5c70d3e8f3b03b3b636c751171283d655729c87cdf98f34c7a6690ddb04d40c1589af289febb6e240bdd8e4d821f1ca2d97d86560dea4a
   languageName: node
   linkType: hard
 
@@ -12652,7 +12652,7 @@ __metadata:
     "@redocly/cli": "npm:2.12.7"
     "@stylistic/eslint-plugin": "npm:^5.6.1"
     "@tanstack/eslint-plugin-query": "npm:^5.91.2"
-    "@tanstack/react-form": "npm:^1.27.3"
+    "@tanstack/react-form": "npm:^1.27.4"
     "@tanstack/react-query": "npm:^5.90.12"
     "@testing-library/dom": "npm:^10.4.1"
     "@testing-library/jest-dom": "npm:^6.9.1"
