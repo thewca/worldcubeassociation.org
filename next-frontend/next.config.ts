@@ -26,6 +26,13 @@ const nextConfig: NextConfig = {
   },
   output: "standalone",
   productionBrowserSourceMaps: true,
+  webpack(config) {
+    if (!process.env.PROPRIETARY_FONT) {
+      config.resolve.alias["@/styles/fonts"] =
+        require("path").resolve(__dirname, "src/styles/fonts/empty-font.ts");
+    }
+    return config;
+  },
   async rewrites() {
     return [
       {
