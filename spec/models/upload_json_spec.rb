@@ -64,6 +64,7 @@ RSpec.describe UploadJson do
     CompetitionResultsImport.import_temporary_results(
       competition,
       temporary_results_data,
+      UploadedJson.upload_types[:results_json],
       mark_result_submitted: false,
       store_uploaded_json: true,
       results_json_str: upload_json.results_json_str,
