@@ -1,6 +1,6 @@
 "use client";
 import React, { useMemo, useState } from "react";
-import { Card, Text, Center, Spinner, Table } from "@chakra-ui/react";
+import { Card, Text, Table } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import CompetitorTable from "@/components/competitions/CompetitorTable";
@@ -10,9 +10,10 @@ import Loading from "@/components/ui/loading";
 
 interface CompetitorData {
   id: string;
+  isLive?: boolean;
 }
 
-const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
+const TabCompetitors: React.FC<CompetitorData> = ({ id, isLive = false }) => {
   const [psychSheetEvent, setPsychSheetEvent] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<string>("average");
 
@@ -89,7 +90,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
               registrations={registrationsQuery}
               setPsychSheetEvent={setPsychSheetEvent}
               t={t}
-              linkToLive
+              linkToLive={isLive}
               competitionId={id}
             />
           )}
