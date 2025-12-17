@@ -1,5 +1,0 @@
---------------
-SELECT IF(eventId='333mbf', REPLACE(scramble, '\n', '|'), scramble) AS `scramble`, scrambles.id, scrambles.competition_id, scrambles.event_id, scrambles.group_id, scrambles.is_extra, scrambles.round_type_id, scrambles.scramble_num FROM scrambles
---------------
-
-ERROR 1054 (42S22) at line 1: Unknown column 'eventId' in 'field list'
