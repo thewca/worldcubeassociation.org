@@ -1207,6 +1207,7 @@ module DatabaseDumper
     "results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
+          id
           pos
           best
           average
@@ -1375,7 +1376,7 @@ module DatabaseDumper
       ),
       tsv_sanitizers: actions_to_column_sanitizers(
         fake_values: {
-          "scramble" => "IF(eventId='333mbf', REPLACE(scramble, '\\n', '|'), scramble)",
+          "scramble" => "IF(event_id='333mbf', REPLACE(scramble, '\\n', '|'), scramble)",
         },
       ),
     }.freeze,
