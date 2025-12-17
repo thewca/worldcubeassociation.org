@@ -53,9 +53,10 @@ class DatabaseController < ApplicationController
     deprecation_date = DatabaseDumper::RESULTS_EXPORT_VERSIONS[version][:metadata][:end_of_life_date]
 
     if deprecation_date.present? && Date.today > Date.parse(deprecation_date)
+      latest_version = DatabaseDumper.current_results_export_version
       return render json: {
         error: "gone",
-        message: "#{version} of the Results Export has been deprecated. Please update to v2 by referring to the README and links at: https://www.worldcubeassociation.org/export/results",
+        message: "#{version} of the Results Export has been deprecated. Please update to #{latest_version} by referring to the README and links at: https://www.worldcubeassociation.org/export/results",
       }, status: :gone
     end
 
