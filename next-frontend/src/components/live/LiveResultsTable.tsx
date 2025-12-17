@@ -32,7 +32,7 @@ export const rankingCellColour = (
   return "";
 };
 
-export default function ResultsTable({
+export default function LiveResultsTable({
   results,
   eventId,
   competitionId,
