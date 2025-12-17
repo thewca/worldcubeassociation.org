@@ -24,10 +24,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RegulationsTranslations() {
   const { t } = await getT();
 
-  const { data: translationRequest, error } =
-    await getRegulationsTranslations();
+  const {
+    data: translationRequest,
+    error,
+    response,
+  } = await getRegulationsTranslations();
 
-  if (error) return <Errored error={error} />;
+  if (error) return <Errored response={response} t={t} />;
 
   const { current, outdated } = translationRequest;
 

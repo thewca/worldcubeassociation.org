@@ -30,9 +30,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function DelegatesPage() {
   const { t } = await getT();
 
-  const { data: delegateGroups, error } = await getDelegateRegions();
+  const { data: delegateGroups, error, response } = await getDelegateRegions();
 
-  if (error) return <Errored error={error} />;
+  if (error) return <Errored response={response} t={t} />;
 
   const rootGroups = delegateGroups.filter(
     (group) => group.parent_group_id === null,
@@ -95,9 +95,13 @@ function DelegateTab({ group }: { group: components["schemas"]["UserGroup"] }) {
 async function MemberTable({ id }: { id: number }) {
   const { t } = await getT();
 
-  const { data: delegateRoles, error } = await getDelegatesInGroups(id);
+  const {
+    data: delegateRoles,
+    error,
+    response,
+  } = await getDelegatesInGroups(id);
 
-  if (error) return <Errored error={error} />;
+  if (error) return <Errored response={response} t={t} />;
 
   const roles = _.groupBy(delegateRoles, "group.name");
 

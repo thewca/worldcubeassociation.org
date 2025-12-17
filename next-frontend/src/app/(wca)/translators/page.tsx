@@ -16,14 +16,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function TranslatorsPage() {
   const { t } = await getT();
 
-  const { data: translatorRoles, error } = await getTranslatorRoles();
+  const { data: translatorRoles, error, response } = await getTranslatorRoles();
 
-  if (error) return <Errored error={error} />;
+  if (error) return <Errored response={response} t={t} />;
 
   const translatorsByLanguage = _.groupBy(translatorRoles, "group.name");
-
-  if (!translatorsByLanguage)
-    return <Errored error="Error Loading Translators" />;
 
   return (
     <Container bg="bg">

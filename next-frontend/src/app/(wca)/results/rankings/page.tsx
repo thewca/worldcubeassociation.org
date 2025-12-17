@@ -4,6 +4,7 @@ import React from "react";
 import FilteredRankings from "@/app/(wca)/results/rankings/filteredRankings";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
+import Errored from "@/components/ui/errored";
 
 const GENDER_ALL = "All";
 const SHOW_100_PERSONS = "100 persons";
@@ -30,7 +31,7 @@ export default async function RecordsPage({
     type = "single",
   } = await searchParams;
 
-  const rankingsRequest = await getRankings({
+  const { data, error, response } = await getRankings({
     gender,
     region,
     show,
@@ -38,13 +39,9 @@ export default async function RecordsPage({
     type,
   });
 
-  if (rankingsRequest.error) {
-    return (
-      <Alert.Root status="error">
-        <Alert.Title>Error fetching Records</Alert.Title>
-      </Alert.Root>
-    );
-  }
+  const { t } = await getT();
+
+  if (error) return <Errored response={response} t={t} />;
 
   return (
     <Container bg="bg">
@@ -56,8 +53,8 @@ export default async function RecordsPage({
           rankingType: type,
           show,
         }}
-        rankings={rankingsRequest.data.rankings}
-        timestamp={rankingsRequest.data.timestamp}
+        rankings={data.rankings}
+        timestamp={data.timestamp}
       />
     </Container>
   );

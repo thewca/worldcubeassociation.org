@@ -34,9 +34,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RegionalOrganizations() {
   const I18n = await getT();
 
-  const { data: organizations, error } = await getRegionalOrganizations();
+  const {
+    data: organizations,
+    error,
+    response,
+  } = await getRegionalOrganizations();
 
-  if (error) return <Errored error={error} />;
+  if (error) return <Errored response={response} t={I18n.t} />;
   if (!organizations) return <Loading />;
 
   return (

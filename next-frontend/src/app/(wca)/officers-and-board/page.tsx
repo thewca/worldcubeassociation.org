@@ -25,13 +25,21 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function OfficersAndBoard() {
   const { t } = await getT();
 
-  const { data: officerRoles, error: officerRolesError } =
-    await getOfficersRoles();
+  const {
+    data: officerRoles,
+    error: officerRolesError,
+    response: officerRolesResponse,
+  } = await getOfficersRoles();
 
-  const { data: boardRoles, error: boardRolesError } = await getBoardRoles();
+  const {
+    data: boardRoles,
+    error: boardRolesError,
+    response: boardRolesResponse,
+  } = await getBoardRoles();
 
-  if (officerRolesError) return <Errored error={officerRolesError} />;
-  if (boardRolesError) return <Errored error={boardRolesError} />;
+  if (officerRolesError)
+    return <Errored response={officerRolesResponse} t={t} />;
+  if (boardRolesError) return <Errored response={boardRolesResponse} t={t} />;
 
   // The same user can hold multiple officer positions, and it won't be good to show same user
   // multiple times.

@@ -28,9 +28,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ResultExportPage() {
   const { t } = await getT();
 
-  const { data: exports, error } = await getExportDetails();
+  const { data: exports, error, response } = await getExportDetails();
 
-  if (error) return <Errored error={error} />;
+  if (error) return <Errored response={response} t={t} />;
 
   if (!exports) return <Loading />;
 
