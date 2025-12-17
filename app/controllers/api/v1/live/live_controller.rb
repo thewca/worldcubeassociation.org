@@ -27,6 +27,6 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     competition = Competition.find(params.require(:competition_id))
     final_rounds = competition.rounds.includes(live_results: %i[live_attempts round event]).select(&:final_round?)
 
-    render json: final_rounds.map { |r| r.to_live_json(only_podiums: true)}
+    render json: final_rounds.map { |r| r.to_live_json(only_podiums: true) }
   end
 end
