@@ -76,6 +76,10 @@ ENV PORT=3000
 ENV NEW_RELIC_APP_NAME='next-js-production'
 ENV NEW_RELIC_LOG='stdout'
 
+# Even following the official new relic example not all the submodules are copied over
+# See https://github.com/newrelic/newrelic-node-examples/issues/307#issuecomment-3665368688
+COPY --from=builder /app/node_modules/newrelic /app/node_modules/newrelic
+
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
