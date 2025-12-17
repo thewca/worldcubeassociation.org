@@ -248,6 +248,10 @@ class Round < ApplicationRecord
     "#{event.id}-r#{self.number}"
   end
 
+  def schedule
+    ScheduleActivity.where(round_id: self.id)
+  end
+
   def to_string_map(short: false)
     {
       wcif_id: wcif_id,

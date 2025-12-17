@@ -918,6 +918,24 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
+    "regional_records" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          record_type
+          result_id
+          value
+          event_id
+          country_id
+          continent_id
+          record_timestamp
+          record_scope
+          created_at
+          updated_at
+        ],
+      ),
+    },
+    "result_timestamps" => :skip_all_rows,
     "roles_metadata_delegate_regions" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[

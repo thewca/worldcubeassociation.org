@@ -1007,6 +1007,27 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_01_115143) do
     t.index ["name"], name: "index_regional_organizations_on_name"
   end
 
+  create_table "regional_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "record_type", null: false
+    t.bigint "result_id", null: false
+    t.integer "value", null: false
+    t.string "event_id"
+    t.string "country_id"
+    t.string "continent_id"
+    t.date "record_timestamp", null: false
+    t.integer "record_scope", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["continent_id"], name: "index_regional_records_on_continent_id"
+    t.index ["country_id", "record_scope"], name: "index_regional_records_on_country_id_and_record_scope"
+    t.index ["country_id"], name: "index_regional_records_on_country_id"
+    t.index ["event_id", "record_scope"], name: "index_regional_records_on_event_id_and_record_scope"
+    t.index ["event_id", "record_type", "record_scope"], name: "idx_on_event_id_record_type_record_scope_bdec6938e0"
+    t.index ["event_id"], name: "index_regional_records_on_event_id"
+    t.index ["record_scope"], name: "index_regional_records_on_record_scope"
+    t.index ["result_id"], name: "index_regional_records_on_result_id"
+  end
+
   create_table "regional_records_lookup", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "average", default: 0, null: false
     t.integer "best", default: 0, null: false
@@ -1099,6 +1120,24 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_01_115143) do
     t.integer "value", null: false
     t.index ["result_id", "attempt_number"], name: "index_result_attempts_on_result_id_and_attempt_number", unique: true
     t.index ["result_id"], name: "index_result_attempts_on_result_id"
+  end
+
+  create_table "result_timestamps", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "result_id", null: false
+    t.string "event_id"
+    t.string "country_id"
+    t.string "continent_id"
+    t.integer "best"
+    t.integer "average"
+    t.date "round_timestamp", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["continent_id"], name: "index_result_timestamps_on_continent_id"
+    t.index ["country_id"], name: "index_result_timestamps_on_country_id"
+    t.index ["event_id", "round_timestamp", "average"], name: "idx_on_event_id_round_timestamp_average_f95aa75118"
+    t.index ["event_id", "round_timestamp", "best"], name: "idx_on_event_id_round_timestamp_best_bd9daf2056"
+    t.index ["event_id"], name: "index_result_timestamps_on_event_id"
+    t.index ["result_id"], name: "index_result_timestamps_on_result_id", unique: true
   end
 
   create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=1", force: :cascade do |t|
@@ -1567,8 +1606,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_01_115143) do
   add_foreign_key "potential_duplicate_persons", "duplicate_checker_job_runs"
   add_foreign_key "potential_duplicate_persons", "persons", column: "duplicate_person_id"
   add_foreign_key "potential_duplicate_persons", "users", column: "original_user_id"
+  add_foreign_key "regional_records", "continents"
+  add_foreign_key "regional_records", "countries"
+  add_foreign_key "regional_records", "events"
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
+  add_foreign_key "result_timestamps", "continents"
+  add_foreign_key "result_timestamps", "countries"
+  add_foreign_key "result_timestamps", "events"
   add_foreign_key "results", "rounds"
   add_foreign_key "rounds", "linked_rounds"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
