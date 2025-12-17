@@ -1,0 +1,22 @@
+id	format	name	rank
+222	time	2x2x2 Cube	20
+333	time	3x3x3 Cube	10
+333bf	time	3x3x3 Blindfolded	70
+333fm	number	3x3x3 Fewest Moves	80
+333ft	time	3x3x3 With Feet	996
+333mbf	multi	3x3x3 Multi-Blind	180
+333mbo	multi	3x3x3 Multi-Blind Old Style	999
+333oh	time	3x3x3 One-Handed	90
+444	time	4x4x4 Cube	30
+444bf	time	4x4x4 Blindfolded	160
+555	time	5x5x5 Cube	40
+555bf	time	5x5x5 Blindfolded	170
+666	time	6x6x6 Cube	50
+777	time	7x7x7 Cube	60
+clock	time	Clock	110
+magic	time	Magic	997
+minx	time	Megaminx	120
+mmagic	time	Master Magic	998
+pyram	time	Pyraminx	130
+skewb	time	Skewb	140
+sq1	time	Square-1	150
