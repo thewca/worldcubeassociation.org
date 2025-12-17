@@ -6,6 +6,7 @@ import { useT } from "@/lib/i18n/useI18n";
 import CompetitorTable from "@/components/competitions/CompetitorTable";
 import PsychsheetTable from "@/components/competitions/PsychsheetTable";
 import { FormEventSelector } from "@/components/EventSelector";
+import Loading from "@/components/ui/loading";
 
 interface CompetitorData {
   id: string;
@@ -51,11 +52,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
   }, [registrationsQuery]);
 
   if (isFetching || isFetchingPsychsheets) {
-    return (
-      <Center py={10}>
-        <Spinner size="xl" />
-      </Center>
-    );
+    return <Loading />;
   }
 
   if (!registrationsQuery) {
@@ -92,6 +89,8 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
               registrations={registrationsQuery}
               setPsychSheetEvent={setPsychSheetEvent}
               t={t}
+              linkToLive
+              competitionId={id}
             />
           )}
         </Table.ScrollArea>
