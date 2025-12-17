@@ -4,7 +4,12 @@ class DatabaseController < ApplicationController
   RESULTS_EXPORT_FILE_TYPES = %w[sql tsv].freeze
 
   def results_export
-    flash[:warning] = I18n.t('database.results_export.deprecation_warning')
+    flash[:warning] = I18n.t(
+      'database.results_export.deprecation_warning',
+      old_version: "Version 1",
+      deprecation_date: DatabaseDumper::RESULTS_EXPORT_VERSIONS[:v1][:metadata][:end_of_life_date],
+      new_version: "Version 2",
+    )
     @export_version = DatabaseDumper.current_results_export_version
     @sql_path, @sql_filesize = DbDumpHelper.cached_results_export_info("sql", :v2)
     @tsv_path, @tsv_filesize = DbDumpHelper.cached_results_export_info("tsv", :v2)
@@ -47,7 +52,7 @@ class DatabaseController < ApplicationController
 
     deprecation_date = DatabaseDumper::RESULTS_EXPORT_VERSIONS[version][:metadata][:end_of_life_date]
 
-    if deprecation_date && Date.today > Date.parse(deprecation_date)
+    if deprecation_date.present? && Date.today > Date.parse(deprecation_date)
       return render json: {
         error: "gone",
         message: "#{version} of the Results Export has been deprecated. Please update to v2 by referring to the README and links at: https://www.worldcubeassociation.org/export/results",
