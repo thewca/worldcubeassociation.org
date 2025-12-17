@@ -93,6 +93,7 @@ ActiveRecord::Schema[7.1].define(version: 0) do
   end
 
   create_table "result_attempts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "id", limit: 50, default: "", null: false
     t.integer "value", null: false
     t.integer "attempt_number", null: false
     t.bigint "result_id", null: false
@@ -103,6 +104,7 @@ ActiveRecord::Schema[7.1].define(version: 0) do
   end
 
   create_table "results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "id", limit: 50, default: "", null: false
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
