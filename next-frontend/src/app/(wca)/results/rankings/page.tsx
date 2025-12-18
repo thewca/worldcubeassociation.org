@@ -4,7 +4,7 @@ import React from "react";
 import FilteredRankings from "@/app/(wca)/results/rankings/filteredRankings";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 
 const GENDER_ALL = "All";
 const SHOW_100_PERSONS = "100 persons";
@@ -41,7 +41,7 @@ export default async function RecordsPage({
 
   const { t } = await getT();
 
-  if (error) return <Errored response={response} t={t} />;
+  if (error) return <OpenapiError response={response} t={t} />;
 
   return (
     <Container bg="bg">

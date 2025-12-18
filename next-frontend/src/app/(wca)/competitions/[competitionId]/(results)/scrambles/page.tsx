@@ -3,7 +3,7 @@ import _ from "lodash";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { getScrambles } from "@/lib/wca/competitions/getScrambles";
 import FilteredScrambles from "./FilteredScrambles";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 
 export default async function ScramblesPage({
@@ -20,7 +20,7 @@ export default async function ScramblesPage({
     response: competitionResponse,
   } = await getCompetitionInfo(competitionId);
 
-  if (error) return <Errored t={t} response={competitionResponse} />;
+  if (error) return <OpenapiError t={t} response={competitionResponse} />;
 
   const {
     error: scrambleError,
@@ -28,7 +28,7 @@ export default async function ScramblesPage({
     response: scrambleResponse,
   } = await getScrambles(competitionId);
 
-  if (scrambleError) return <Errored t={t} response={scrambleResponse} />;
+  if (scrambleError) return <OpenapiError t={t} response={scrambleResponse} />;
 
   const scramblesByEvent = _.groupBy(scrambles, "event_id");
 

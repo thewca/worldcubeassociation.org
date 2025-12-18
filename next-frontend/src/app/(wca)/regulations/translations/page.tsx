@@ -10,7 +10,7 @@ import {
 import { components } from "@/types/openapi";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import { getRegulationsTranslations } from "@/lib/wca/regulations/getRegulationsTranslations";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -30,7 +30,7 @@ export default async function RegulationsTranslations() {
     response,
   } = await getRegulationsTranslations();
 
-  if (error) return <Errored response={response} t={t} />;
+  if (error) return <OpenapiError response={response} t={t} />;
 
   const { current, outdated } = translationRequest;
 

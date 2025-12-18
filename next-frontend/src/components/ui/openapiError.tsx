@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { TFunction } from "i18next";
 
-export default function Errored({
+export default function OpenapiError({
   t,
   response,
 }: {
@@ -34,12 +34,16 @@ export default function Errored({
                   <Accordion.ItemBody>
                     <CodeBlock.Root
                       meta={{ wordWrap: true }}
-                      code={JSON.stringify({
-                        error_code: response.status,
-                        url: response.url,
-                        errorText: response.statusText,
-                        requestId: response.headers.get("x-request-id"),
-                      })}
+                      code={JSON.stringify(
+                        {
+                          error_code: response.status,
+                          url: response.url,
+                          errorText: response.statusText,
+                          requestId: response.headers.get("x-request-id"),
+                        },
+                        null,
+                        2,
+                      )}
                       language="json"
                     >
                       <CodeBlock.Code>

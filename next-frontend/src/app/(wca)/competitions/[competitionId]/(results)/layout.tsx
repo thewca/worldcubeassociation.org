@@ -3,7 +3,7 @@ import { InfoCard } from "@/components/competitions/Cards";
 import { MarkdownFirstImage } from "@/components/MarkdownFirstImage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { getT } from "@/lib/i18n/get18n";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 
 export default async function CompetitionLayout({
   children,
@@ -21,7 +21,7 @@ export default async function CompetitionLayout({
     response,
   } = await getCompetitionInfo(competitionId);
 
-  if (error) return <Errored t={t} response={response} />;
+  if (error) return <OpenapiError t={t} response={response} />;
 
   return (
     <SimpleGrid columns={3} gap="8">

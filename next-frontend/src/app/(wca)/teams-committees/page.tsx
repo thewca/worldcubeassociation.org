@@ -15,7 +15,7 @@ import {
   getTeamCommitteeMembers,
   getTeamsCommittees,
 } from "@/lib/wca/roles/teamsCommittees";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import getPermissions from "@/lib/wca/permissions";
 import { Metadata } from "next";
 
@@ -32,7 +32,7 @@ export default async function TeamsCommitteesPage() {
 
   const { data: teamsCommittees, error, response } = await getTeamsCommittees();
 
-  if (error) return <Errored response={response} t={t} />;
+  if (error) return <OpenapiError response={response} t={t} />;
 
   return (
     <Container bg="bg">
@@ -112,7 +112,7 @@ async function MemberTable({
     response,
   } = await getTeamCommitteeMembers(id, isActive);
 
-  if (error) return <Errored response={response} t={t} />;
+  if (error) return <OpenapiError response={response} t={t} />;
 
   return (
     <SimpleGrid columns={{ md: 1, sm: 1, lg: 2 }} gap="20px">

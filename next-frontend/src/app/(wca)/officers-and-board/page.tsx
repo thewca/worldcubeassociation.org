@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import UserBadge from "@/components/UserBadge";
 import { MdMarkEmailUnread } from "react-icons/md";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import { getBoardRoles, getOfficersRoles } from "@/lib/wca/roles/activeRoles";
 import { Metadata } from "next";
@@ -38,8 +38,9 @@ export default async function OfficersAndBoard() {
   } = await getBoardRoles();
 
   if (officerRolesError)
-    return <Errored response={officerRolesResponse} t={t} />;
-  if (boardRolesError) return <Errored response={boardRolesResponse} t={t} />;
+    return <OpenapiError response={officerRolesResponse} t={t} />;
+  if (boardRolesError)
+    return <OpenapiError response={boardRolesResponse} t={t} />;
 
   // The same user can hold multiple officer positions, and it won't be good to show same user
   // multiple times.

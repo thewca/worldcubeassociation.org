@@ -4,7 +4,7 @@ import Link from "next/link";
 import { route } from "nextjs-routes";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import PermissionCheck from "@/components/PermissionCheck";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 
 export default async function CompetitionOverview({
@@ -20,7 +20,7 @@ export default async function CompetitionOverview({
     response,
   } = await getCompetitionInfo(competitionId);
 
-  if (error) return <Errored t={t} response={response} />;
+  if (error) return <OpenapiError t={t} response={response} />;
 
   if (!competitionInfo) {
     return <p>Competition does not exist</p>;

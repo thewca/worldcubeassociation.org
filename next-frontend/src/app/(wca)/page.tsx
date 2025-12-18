@@ -43,7 +43,7 @@ import { draftMode } from "next/headers";
 import { MediaImage } from "@/components/MediaImage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
@@ -183,7 +183,7 @@ const FeaturedCompetition = async ({
     response,
   } = await getCompetitionInfo(competitionId);
 
-  if (error) return <Errored t={t} response={response} />;
+  if (error) return <OpenapiError t={t} response={response} />;
 
   return (
     <Card.Root colorPalette={colorPalette} colorVariant="deep">

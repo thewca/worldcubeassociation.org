@@ -4,7 +4,7 @@ import MobileMenu from "@/components/competitions/MobileMenu";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 
 type TitleProps = {
   params: Promise<{ competitionId: string }>;
@@ -40,7 +40,7 @@ export default async function CompetitionLayout({
     response,
   } = await getCompetitionInfo(competitionId);
 
-  if (error) return <Errored t={t} response={response} />;
+  if (error) return <OpenapiError t={t} response={response} />;
 
   return (
     <Container pt="8">

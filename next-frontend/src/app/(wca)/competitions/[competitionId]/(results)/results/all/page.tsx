@@ -3,7 +3,7 @@ import _ from "lodash";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { getCompetitionResults } from "@/lib/wca/competitions/getCompetitionResults";
 import FilteredResults from "@/app/(wca)/competitions/[competitionId]/(results)/results/all/FilteredResults";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 
 export default async function PodiumsPage({
@@ -21,7 +21,7 @@ export default async function PodiumsPage({
     response: competitionResponse,
   } = await getCompetitionInfo(competitionId);
 
-  if (error) return <Errored t={t} response={competitionResponse} />;
+  if (error) return <OpenapiError t={t} response={competitionResponse} />;
 
   const {
     error: resultsError,
@@ -29,7 +29,7 @@ export default async function PodiumsPage({
     response: resultsResponse,
   } = await getCompetitionResults(competitionId);
 
-  if (resultsError) return <Errored t={t} response={resultsResponse} />;
+  if (resultsError) return <OpenapiError t={t} response={resultsResponse} />;
 
   const resultsByEvent = _.groupBy(competitionResults, "event_id");
 

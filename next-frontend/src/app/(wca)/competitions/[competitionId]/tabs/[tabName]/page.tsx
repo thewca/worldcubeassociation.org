@@ -3,7 +3,7 @@ import { Card, Text } from "@chakra-ui/react";
 import { getTabs } from "@/lib/wca/competitions/getTabs";
 import React from "react";
 import { MarkdownProse } from "@/components/Markdown";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 
 export default async function Tab({
@@ -16,7 +16,7 @@ export default async function Tab({
 
   const { data: tabs, error, response } = await getTabs(competitionId);
 
-  if (error) return <Errored t={t} response={response} />;
+  if (error) return <OpenapiError t={t} response={response} />;
 
   if (!tabs) {
     return <Text>Competition does not exist</Text>;

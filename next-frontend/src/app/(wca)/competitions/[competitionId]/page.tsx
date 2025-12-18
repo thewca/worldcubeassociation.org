@@ -11,7 +11,7 @@ import {
   VenueDetailsCard,
 } from "@/components/competitions/Cards";
 import OrganizationTeamCard from "@/components/competitions/OrganizerCard";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 
 export default async function CompetitionOverView({
   params,
@@ -33,7 +33,7 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
     response,
   } = await getCompetitionInfo(competitionId);
 
-  if (error) return <Errored t={t} response={response} />;
+  if (error) return <OpenapiError t={t} response={response} />;
 
   if (!competitionInfo) {
     return <Text>Competition does not exist</Text>;

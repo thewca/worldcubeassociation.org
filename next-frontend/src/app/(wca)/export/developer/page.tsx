@@ -2,7 +2,7 @@ import { VStack, Container, Heading, Text, Link } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
 import { getExportDetails } from "@/lib/wca/exports/getExportDetails";
 import Loading from "@/components/ui/loading";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import { Metadata } from "next";
 
@@ -19,7 +19,7 @@ export default async function ResultExportPage() {
 
   const { data: exports, error, response } = await getExportDetails();
 
-  if (error) return <Errored response={response} t={t} />;
+  if (error) return <OpenapiError response={response} t={t} />;
 
   if (!exports) return <Loading />;
 

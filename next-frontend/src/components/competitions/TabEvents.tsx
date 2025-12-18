@@ -10,7 +10,7 @@ import {
   timeLimitToString,
 } from "@/lib/wca/wcif/rounds";
 import { getT } from "@/lib/i18n/get18n";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 
 interface TabEventsProps {
   competitionId: string;
@@ -24,7 +24,7 @@ export default async function TabEvents({
   const { t } = await getT();
   const { data: events, error, response } = await getEvents(competitionId);
 
-  if (error) return <Errored response={response} t={t} />;
+  if (error) return <OpenapiError response={response} t={t} />;
 
   if (!events) {
     return <Text>Competition does not exist</Text>;
