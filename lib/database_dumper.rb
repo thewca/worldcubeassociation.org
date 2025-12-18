@@ -1207,6 +1207,7 @@ module DatabaseDumper
     "results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
+          id
           pos
           best
           average
@@ -1375,7 +1376,7 @@ module DatabaseDumper
       ),
       tsv_sanitizers: actions_to_column_sanitizers(
         fake_values: {
-          "scramble" => "IF(eventId='333mbf', REPLACE(scramble, '\\n', '|'), scramble)",
+          "scramble" => "IF(event_id='333mbf', REPLACE(scramble, '\\n', '|'), scramble)",
         },
       ),
     }.freeze,
@@ -1395,9 +1396,6 @@ module DatabaseDumper
           championship_type
           eligible_country_iso2
         ],
-        db_default: %w[
-          id
-        ],
       ),
     }.freeze,
   }.freeze
@@ -1407,7 +1405,7 @@ module DatabaseDumper
       metadata: {
         export_format_version: 'v1.0.0',
         version_label: 'deprecated',
-        end_of_life_date: '2026-01-01',
+        end_of_life_date: '2026-01-15',
       },
       db_config: :results_dump,
       db_sanitizers: RESULTS_SANITIZERS,

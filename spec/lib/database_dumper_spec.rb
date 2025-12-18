@@ -171,7 +171,7 @@ RSpec.describe "DatabaseDumper" do
         end
       end
 
-      it "defines sanitizers that match the expected output schema (backwards compatibility)" do
+      it "defines sanitizers that match the expected output schema" do
         with_database :results_dump_v2 do
           # Rails *always* includes a `schema_migrations` table when loading any pre-defined schema file.
           #   You can _change_ the name in the database configuration file, but you cannot turn it off / disable the table entirely.

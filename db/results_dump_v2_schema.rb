@@ -11,8 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 0) do
-  create_table "competitions", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "id", limit: 32, default: "", null: false
+  create_table "competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "city_name", limit: 50, default: "", null: false
     t.string "country_id", limit: 50, default: "", null: false
@@ -36,28 +35,24 @@ ActiveRecord::Schema[7.1].define(version: 0) do
     t.integer "longitude_microdegrees"
   end
 
-  create_table "continents", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "id", limit: 50, default: "", null: false
+  create_table "continents", id: { type: :string, limit: 50, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "record_name", limit: 3, default: "", null: false
   end
 
-  create_table "countries", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "id", limit: 50, default: "", null: false
+  create_table "countries", id: { type: :string, limit: 50, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "continent_id", limit: 50, default: "", null: false
     t.string "iso2", limit: 2
   end
 
-  create_table "events", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "id", limit: 6, default: "", null: false
+  create_table "events", id: { type: :string, limit: 6, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 54, default: "", null: false
     t.integer "rank", default: 0, null: false
     t.string "format", limit: 10, default: "", null: false
   end
 
-  create_table "formats", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "id", limit: 1, default: "", null: false
+  create_table "formats", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "sort_by", limit: 255, null: false
     t.string "sort_by_second", limit: 255, null: false
@@ -98,11 +93,9 @@ ActiveRecord::Schema[7.1].define(version: 0) do
     t.bigint "result_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["result_id", "attempt_number"], name: "index_result_attempts_on_result_id_and_attempt_number", unique: true
-    t.index ["result_id"], name: "index_result_attempts_on_result_id"
   end
 
-  create_table "results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
@@ -117,16 +110,14 @@ ActiveRecord::Schema[7.1].define(version: 0) do
     t.string "regional_average_record", limit: 3
   end
 
-  create_table "round_types", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "id", limit: 1, default: "", null: false
+  create_table "round_types", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "rank", default: 0, null: false
     t.string "name", limit: 50, default: "", null: false
     t.string "cell_name", limit: 45, default: "", null: false
     t.boolean "final", null: false
   end
 
-  create_table "scrambles", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "id", default: 0, null: false, unsigned: true
+  create_table "scrambles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", limit: 32, null: false
     t.string "event_id", limit: 6, null: false
     t.string "round_type_id", limit: 1, null: false
@@ -136,13 +127,12 @@ ActiveRecord::Schema[7.1].define(version: 0) do
     t.text "scramble", null: false
   end
 
-  create_table "championships", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "id", default: 0, null: false
+  create_table "championships", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", null: false
     t.string "championship_type", null: false
   end
 
-  create_table "eligible_country_iso2s_for_championship", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "eligible_country_iso2s_for_championship", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "championship_type", null: false
     t.string "eligible_country_iso2", null: false
   end
