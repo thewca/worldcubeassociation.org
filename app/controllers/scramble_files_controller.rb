@@ -38,7 +38,13 @@ class ScrambleFilesController < ApplicationController
 
     return render json: existing_upload if existing_upload.present?
 
-    tnoodle_wcif = tnoodle_json[:wcif]
+    tnoodle_wcif = tnoodle_json[:wcif].slice(
+      :formatVersion,
+      :id,
+      :name,
+      :shortName,
+      :events,
+    )
 
     scr_file_upload = ScrambleFileUpload.for_serialization.create!(
       uploaded_by_user: current_user,
