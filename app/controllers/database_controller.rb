@@ -6,9 +6,9 @@ class DatabaseController < ApplicationController
   def results_export
     flash[:warning] = I18n.t(
       'database.results_export.deprecation_warning',
-      old_version: "Version 1",
+      old_version: "1",
       deprecation_date: DatabaseDumper::RESULTS_EXPORT_VERSIONS[:v1][:metadata][:end_of_life_date],
-      new_version: "Version 2",
+      new_version: "2",
     )
     @export_version = DatabaseDumper.current_results_export_version
     @sql_path, @sql_filesize = DbDumpHelper.cached_results_export_info("sql", :v2)
