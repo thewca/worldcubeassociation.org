@@ -6298,12 +6298,12 @@ es-ES:
     results_export:
       #original_hash: 15d00e1
       heading: Exportación de los Resultados de la WCA
-      #original_hash: cbdcfae
+      #original_hash: 733df42
       deprecation_warning: >-
-        AVISO DE DISCONTINUACIÓN: La Versión 1 de la Exportación de los
-        Resultados ha quedado obsoleta y su soporte técnico se interrumpirá a
-        partir del 1 de enero de 2026. Por favor, cambia a la Versión 2 antes de
-        esa fecha.
+        AVISO DE DISCONTINUACIÓN: La Versión %{old_version} de la Exportación de
+        los Resultados ha quedado obsoleta y su soporte técnico se interrumpirá
+        a partir del %{deprecation_date}. Por favor, cambia a la Versión
+        %{new_version} antes de esa fecha.
       #original_hash: f9fe9df
       description: >-
         En esta página ofrecemos los resultados de la WCA para descarga en
