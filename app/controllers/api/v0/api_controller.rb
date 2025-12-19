@@ -221,10 +221,10 @@ class Api::V0::ApiController < ApplicationController
   def export_public
     timestamp = DumpPublicResultsDatabase.successful_start_date
 
-    _, sql_filesize = DbDumpHelper.cached_results_export_info("sql", timestamp)
-    _, tsv_filesize = DbDumpHelper.cached_results_export_info("tsv", timestamp)
     current_version_key = DatabaseDumper.current_results_export_version
     current_version_number = DatabaseDumper::RESULTS_EXPORT_VERSIONS[current_version_key][:metadata][:export_format_version]
+    _, sql_filesize = DbDumpHelper.cached_results_export_info("sql", current_version_key, timestamp)
+    _, tsv_filesize = DbDumpHelper.cached_results_export_info("tsv", current_version_key, timestamp)
 
     render json: {
       export_date: timestamp&.iso8601,
