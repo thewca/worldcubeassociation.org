@@ -30,6 +30,11 @@ const eslintConfig = [
   stylistic.configs.recommended,
   eslintConfigPrettier,
   globalIgnores(["src/types"]),
+  {
+    rules: {
+      "@typescript-eslint/no-unused-vars": "error",
+    },
+  },
 ];
 
 export default eslintConfig;
