@@ -11,8 +11,9 @@ class Api::V0::ApiController < ApplicationController
     render status: e.status, json: { error: e.to_s }
   end
 
+  # Probably nicer to have some kind of errorcode/string depending on the model
   rescue_from ActiveRecord::RecordNotFound do |e|
-    render status: :not_found, json: { error: e.to_s }
+    render json: { error: e.to_s, data: { model: e.model, id: e.id } }, status: :not_found
   end
 
   DEFAULT_API_RESULT_LIMIT = 20

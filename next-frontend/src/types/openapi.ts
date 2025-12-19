@@ -1026,6 +1026,20 @@ export interface components {
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
         };
+        General404: {
+            error: string;
+            data: {
+                model: string;
+                id: string;
+            };
+        };
+        Competition404: components["schemas"]["General404"] & {
+            data?: {
+                /** @enum {string} */
+                model: "Competition";
+                id: string;
+            };
+        };
         WcifEvent: {
             /** @example 333 */
             id: string;
@@ -1499,7 +1513,17 @@ export interface components {
             logo_url?: string;
         };
     };
-    responses: never;
+    responses: {
+        /** @description Competition not found */
+        CompetitionNotFound: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["Competition404"];
+            };
+        };
+    };
     parameters: never;
     requestBodies: never;
     headers: never;
@@ -1571,6 +1595,7 @@ export interface operations {
                     "application/json": components["schemas"]["CompetitionInfo"];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionEvents: {
@@ -1593,6 +1618,7 @@ export interface operations {
                     "application/json": components["schemas"]["WcifEvent"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionSchedule: {
@@ -1615,6 +1641,7 @@ export interface operations {
                     "application/json": components["schemas"]["WcifSchedule"];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionTabs: {
@@ -1637,6 +1664,7 @@ export interface operations {
                     "application/json": components["schemas"]["Tabs"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionRegistrations: {
@@ -1659,6 +1687,7 @@ export interface operations {
                     "application/json": components["schemas"]["RegistrationData"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionPodiums: {
@@ -1681,6 +1710,7 @@ export interface operations {
                     "application/json": components["schemas"]["Result"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionList: {
@@ -1781,6 +1811,7 @@ export interface operations {
                     "application/json": components["schemas"]["Scramble"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     getRankings: {
