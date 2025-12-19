@@ -1,4 +1,4 @@
-import { Card, Text } from "@chakra-ui/react";
+import { Card } from "@chakra-ui/react";
 import _ from "lodash";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { getScrambles } from "@/lib/wca/competitions/getScrambles";

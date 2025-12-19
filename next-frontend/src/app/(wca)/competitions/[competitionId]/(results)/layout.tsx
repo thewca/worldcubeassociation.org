@@ -1,4 +1,4 @@
-import { GridItem, SimpleGrid, Text } from "@chakra-ui/react";
+import { GridItem, SimpleGrid } from "@chakra-ui/react";
 import { InfoCard } from "@/components/competitions/Cards";
 import { MarkdownFirstImage } from "@/components/MarkdownFirstImage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";

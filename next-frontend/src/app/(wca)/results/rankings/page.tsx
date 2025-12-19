@@ -1,5 +1,5 @@
 import { getRankings } from "@/lib/wca/results/rankings";
-import { Alert, Container } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 import React from "react";
 import FilteredRankings from "@/app/(wca)/results/rankings/filteredRankings";
 import { Metadata } from "next";

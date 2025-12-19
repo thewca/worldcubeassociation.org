@@ -1,4 +1,4 @@
-import { Container, Text } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 import TabMenu from "@/components/competitions/TabMenu";
 import MobileMenu from "@/components/competitions/MobileMenu";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";

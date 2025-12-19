@@ -10,13 +10,6 @@ import { components } from "@/types/openapi";
 import { useRouter } from "next/navigation";
 import { route } from "nextjs-routes";
 
-type ValidActions =
-  | "SET_EVENT"
-  | "SET_REGION"
-  | "SET_RANKING_TYPE"
-  | "SET_GENDER"
-  | "SET_SHOW";
-
 type FilterParams = {
   event: EventId | "all events";
   region: string;
