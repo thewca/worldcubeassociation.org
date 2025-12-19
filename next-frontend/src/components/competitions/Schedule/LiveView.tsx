@@ -7,7 +7,6 @@ import {
   localizeActivityName,
 } from "@/lib/wca/wcif/activities";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
-import { useT } from "@/lib/i18n/useI18n";
 import { components } from "@/types/openapi";
 import {
   getDatesBetweenInclusive,
@@ -42,6 +41,7 @@ export default function LiveView({
     timeZone,
   );
 
+  // Show the first date that has not passed, if all of them have, show the last date
   const defaultDate =
     dates.filter((d) => !hasPassed(d.toISO()!))[0] ?? dates[dates.length - 1];
 
