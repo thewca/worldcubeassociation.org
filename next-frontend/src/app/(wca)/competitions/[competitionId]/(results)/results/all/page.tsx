@@ -1,8 +1,10 @@
-import { Card, Text } from "@chakra-ui/react";
+import { Card } from "@chakra-ui/react";
 import _ from "lodash";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { getCompetitionResults } from "@/lib/wca/competitions/getCompetitionResults";
 import FilteredResults from "@/app/(wca)/competitions/[competitionId]/(results)/results/all/FilteredResults";
+import OpenapiError from "@/components/ui/openapiError";
+import { getT } from "@/lib/i18n/get18n";
 
 export default async function PodiumsPage({
   params,
@@ -11,19 +13,23 @@ export default async function PodiumsPage({
 }) {
   const { competitionId } = await params;
 
-  const { data: competitionInfo, error } =
-    await getCompetitionInfo(competitionId);
+  const { t } = await getT();
 
-  if (error) {
-    return <Text>Error fetching competition</Text>;
-  }
+  const {
+    data: competitionInfo,
+    error,
+    response: competitionResponse,
+  } = await getCompetitionInfo(competitionId);
 
-  const { error: resultsError, data: competitionResults } =
-    await getCompetitionResults(competitionId);
+  if (error) return <OpenapiError t={t} response={competitionResponse} />;
 
-  if (resultsError) {
-    return <Text>Error fetching Results</Text>;
-  }
+  const {
+    error: resultsError,
+    data: competitionResults,
+    response: resultsResponse,
+  } = await getCompetitionResults(competitionId);
+
+  if (resultsError) return <OpenapiError t={t} response={resultsResponse} />;
 
   const resultsByEvent = _.groupBy(competitionResults, "event_id");
 

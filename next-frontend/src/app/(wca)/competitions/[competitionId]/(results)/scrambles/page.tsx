@@ -1,29 +1,34 @@
-import { Card, Text } from "@chakra-ui/react";
+import { Card } from "@chakra-ui/react";
 import _ from "lodash";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { getScrambles } from "@/lib/wca/competitions/getScrambles";
 import FilteredScrambles from "./FilteredScrambles";
+import OpenapiError from "@/components/ui/openapiError";
+import { getT } from "@/lib/i18n/get18n";
 
-export default async function PodiumsPage({
+export default async function ScramblesPage({
   params,
 }: {
   params: Promise<{ competitionId: string }>;
 }) {
   const { competitionId } = await params;
+  const { t } = await getT();
 
-  const { data: competitionInfo, error } =
-    await getCompetitionInfo(competitionId);
+  const {
+    data: competitionInfo,
+    error,
+    response: competitionResponse,
+  } = await getCompetitionInfo(competitionId);
 
-  if (error) {
-    return <Text>Error fetching competition</Text>;
-  }
+  if (error) return <OpenapiError t={t} response={competitionResponse} />;
 
-  const { error: scrambleError, data: scrambles } =
-    await getScrambles(competitionId);
+  const {
+    error: scrambleError,
+    data: scrambles,
+    response: scrambleResponse,
+  } = await getScrambles(competitionId);
 
-  if (scrambleError) {
-    return <Text>Error fetching scrambles</Text>;
-  }
+  if (scrambleError) return <OpenapiError t={t} response={scrambleResponse} />;
 
   const scramblesByEvent = _.groupBy(scrambles, "event_id");
 
