@@ -3,8 +3,9 @@
 class CreateSanityCheckStatisticsTable < ActiveRecord::Migration[7.0]
   def change
     create_table :sanity_check_results do |t|
-      t.json :query_results, null: true
-      t.references :cronjob_statistics, null: true
+      t.json :query_results, null: false
+      t.references :cronjob_statistic, null: false
+      t.references :sanity_check_category, null: false
       t.timestamps
     end
   end

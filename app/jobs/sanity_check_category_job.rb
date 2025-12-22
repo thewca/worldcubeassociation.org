@@ -7,7 +7,8 @@ class SanityCheckCategoryJob < WcaCronjob
       query_info[:results] = query_results
       query_info
     end
-    SanityCheckResults.find_or_create_by(id: sanity_check_category::ID)
-                        .update(query_results: results.to_json, cronjob_statistics_id: self.class.cronjob_statistics.id)
+    SanityCheckResult.create!(sanity_check_category_id: sanity_check_category::ID,
+                               query_results: results.to_json,
+                               cronjob_statistic_id: self.class.cronjob_statistics.id)
   end
 end

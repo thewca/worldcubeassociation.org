@@ -2,10 +2,11 @@
   <h1>
     Sanity Check Results
   </h1>
-  <% @categories_statistics.each do |statistic| %>
-    <h3><%= statistic.category %></h3>
+  <% @categories.each do |category| %>
+    <% latest_results = category.latest_results %>
+    <h3>Category: <%= category.name %></h3>
     <code>
-      <%= statistic.result %>
+      <%= latest_results.query_results %>
     </code>
   <% end %>
 </div>
