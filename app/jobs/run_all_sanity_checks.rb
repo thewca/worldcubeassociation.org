@@ -2,6 +2,6 @@
 
 class RunAllSanityChecks < WcaCronjob
   def perform
-    SanityCheck::PersonDataIrregularities.perform_later
+    SanityCheckCategoryJob.perform_later(SanityCheckData::PersonDataIrregularities)
   end
 end

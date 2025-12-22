@@ -15,7 +15,7 @@ class AdminController < ApplicationController
   end
 
   def sanity_check
-    @categories_statistics = SanityCheckStatistic.all
+    @categories_statistics = SanityCheckResults.all
   end
 
   def do_merge_people

@@ -1217,14 +1217,12 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_22_101010) do
     t.index ["sanity_check_id"], name: "fk_rails_c9112973d2"
   end
 
-  create_table "sanity_check_statistics", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.bigint "average_runtime"
-    t.string "category"
-    t.datetime "enqueued_at"
-    t.json "result"
-    t.datetime "run_end"
-    t.datetime "run_start"
-    t.integer "times_completed", default: 0, null: false
+  create_table "sanity_check_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "cronjob_statistics_id"
+    t.json "query_results"
+    t.datetime "updated_at", null: false
+    t.index ["cronjob_statistics_id"], name: "index_sanity_check_results_on_cronjob_statistics_id"
   end
 
   create_table "sanity_checks", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
