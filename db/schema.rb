@@ -1224,6 +1224,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_22_101010) do
     t.json "result"
     t.datetime "run_end"
     t.datetime "run_start"
+    t.integer "times_completed", default: 0, null: false
   end
 
   create_table "sanity_checks", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

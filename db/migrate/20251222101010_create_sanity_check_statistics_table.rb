@@ -8,6 +8,7 @@ class CreateSanityCheckStatisticsTable < ActiveRecord::Migration[7.0]
       t.datetime :run_end
       t.json :result, null: true
       t.datetime :enqueued_at
+      t.integer :times_completed, null: false, default: 0
       t.bigint :average_runtime, null: true, default: nil
     end
   end
