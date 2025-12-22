@@ -8,7 +8,7 @@ class SanityCheckCategoryJob < WcaCronjob
       query_info
     end
     SanityCheckResult.create!(sanity_check_category_id: sanity_check_category::ID,
-                               query_results: results.to_json,
+                               query_results: results,
                                cronjob_statistic_id: self.class.cronjob_statistics.id)
   end
 end

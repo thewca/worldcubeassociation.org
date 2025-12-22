@@ -4,9 +4,14 @@
   </h1>
   <% @categories.each do |category| %>
     <% latest_results = category.latest_results %>
-    <h3>Category: <%= category.name %></h3>
+    <h2>Category: <%= category.name %></h2>
+      <% latest_results.query_results.each do |result| %>
+      <h3><%= result["topic"] %></h3>
+      <h4> Query results:</h4>
+      <code> <%= result["results"] %></code>
+    <% end %>
     <code>
-      <%= latest_results.query_results %>
+
     </code>
   <% end %>
 </div>
