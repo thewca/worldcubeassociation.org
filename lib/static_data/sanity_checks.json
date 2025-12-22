@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "category_id": 1,
+    "topic": "Names with numbers or non-desired special characters",
+    "query_file": "person_data_irregularities/name_special_characters.sql",
+    "comment": ""
+  },
+  {
+    "id": 2,
+    "category_id": 1,
+    "topic": "Lowercase first names",
+    "query_file": "person_data_irregularities/lower_case_first_name.sql",
+    "comment": ""
+  }
+]
