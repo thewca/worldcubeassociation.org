@@ -14,6 +14,10 @@ class AdminController < ApplicationController
     @merge_people = MergePeople.new
   end
 
+  def sanity_check
+    @categories_statistics = SanityCheckStatistic.all
+  end
+
   def do_merge_people
     merge_params = params.expect(merge_people: %i[person1_wca_id person2_wca_id])
     @merge_people = MergePeople.new(merge_params)
