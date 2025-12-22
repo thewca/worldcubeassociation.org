@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_17_122230) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_22_101010) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1215,6 +1215,15 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_17_122230) do
     t.text "exclusion", null: false
     t.bigint "sanity_check_id", null: false
     t.index ["sanity_check_id"], name: "fk_rails_c9112973d2"
+  end
+
+  create_table "sanity_check_statistics", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "average_runtime"
+    t.string "category"
+    t.datetime "enqueued_at"
+    t.json "result"
+    t.datetime "run_end"
+    t.datetime "run_start"
   end
 
   create_table "sanity_checks", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
