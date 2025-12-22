@@ -92,6 +92,7 @@ export default function LiveResultsTable({
             <Table.Row key={competitor.id}>
               <Table.Cell
                 width={1}
+                layerStyle="fill.deep"
                 textAlign="right"
                 backgroundColor={rankingCellColour(competitorResult)}
               >
