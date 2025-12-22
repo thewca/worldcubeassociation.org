@@ -1,0 +1,11 @@
+<div class="container">
+  <h1>
+    Sanity Check Results
+  </h1>
+  <% @categories_statistics.each do |statistic| %>
+    <h3><%= statistic.category %></h3>
+    <code>
+      <%= statistic.result %>
+    </code>
+  <% end %>
+</div>
