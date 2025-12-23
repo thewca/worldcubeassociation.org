@@ -5,13 +5,11 @@
   <% @categories.each do |category| %>
     <% latest_results = category.latest_results %>
     <h2>Category: <%= category.name %></h2>
-      <% latest_results.query_results.each do |result| %>
-      <h3><%= result["topic"] %></h3>
+      <% latest_results.each do |result| %>
+      <h3><%= result.topic %></h3>
+      <h5><%= result.comments %></h5>
       <h4> Query results:</h4>
-      <code> <%= result["results"] %></code>
+      <code> <%= result.query_results %></code>
     <% end %>
-    <code>
-
-    </code>
   <% end %>
 </div>
