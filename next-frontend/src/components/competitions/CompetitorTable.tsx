@@ -11,11 +11,15 @@ export default function CompetitorTable({
   registrations,
   t,
   setPsychSheetEvent,
+  linkToLive = false,
+  competitionId,
 }: {
   eventIds: string[];
   registrations: components["schemas"]["RegistrationDataV2"][];
   setPsychSheetEvent: (eventId: string) => void;
   t: TFunction;
+  linkToLive?: boolean;
+  competitionId: string;
 }) {
   return (
     <Table.Root width="100%">
@@ -41,20 +45,37 @@ export default function CompetitorTable({
           .toSorted((a, b) => a.user.name.localeCompare(b.user.name))
           .map((registration) => (
             <Table.Row key={registration.id}>
-              <Table.Cell>
-                {registration.user.wca_id ? (
+              {linkToLive ? (
+                <Table.Cell>
                   <Link
                     href={route({
-                      pathname: "/persons/[wcaId]",
-                      query: { wcaId: registration.user.wca_id },
+                      pathname:
+                        "/competitions/[competitionId]/live/competitors/[registrationId]",
+                      query: {
+                        registrationId: registration.id.toString(),
+                        competitionId: competitionId,
+                      },
                     })}
                   >
                     <Text fontWeight="medium">{registration.user.name}</Text>
                   </Link>
-                ) : (
-                  <Text fontWeight="medium">{registration.user.name}</Text>
-                )}
-              </Table.Cell>
+                </Table.Cell>
+              ) : (
+                <Table.Cell>
+                  {registration.user.wca_id ? (
+                    <Link
+                      href={route({
+                        pathname: "/persons/[wcaId]",
+                        query: { wcaId: registration.user.wca_id },
+                      })}
+                    >
+                      <Text fontWeight="medium">{registration.user.name}</Text>
+                    </Link>
+                  ) : (
+                    <Text fontWeight="medium">{registration.user.name}</Text>
+                  )}
+                </Table.Cell>
+              )}
               <Table.Cell>
                 <HStack>
                   <Icon asChild size="sm">
