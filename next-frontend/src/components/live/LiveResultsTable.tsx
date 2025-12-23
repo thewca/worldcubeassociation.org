@@ -32,7 +32,7 @@ export const rankingCellColour = (
   return "";
 };
 
-export default function ResultsTable({
+export default function LiveResultsTable({
   results,
   eventId,
   competitionId,
@@ -92,6 +92,7 @@ export default function ResultsTable({
             <Table.Row key={competitor.id}>
               <Table.Cell
                 width={1}
+                layerStyle="fill.deep"
                 textAlign="right"
                 backgroundColor={rankingCellColour(competitorResult)}
               >

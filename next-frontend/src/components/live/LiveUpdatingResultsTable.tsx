@@ -3,7 +3,7 @@
 import { components } from "@/types/openapi";
 import { useCallback, useState } from "react";
 import useResultsSubscription from "@/lib/hooks/useResultsSubscription";
-import ResultsTable from "@/components/live/LiveResultsTable";
+import LiveResultsTable from "@/components/live/LiveResultsTable";
 import { Heading, HStack, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 
@@ -56,7 +56,7 @@ export default function LiveUpdatingResultsTable({
         <Heading textStyle="h1">{title}</Heading>
         <ConnectionPulse connectionState={connectionState} />
       </HStack>
-      <ResultsTable
+      <LiveResultsTable
         results={liveResults}
         eventId={eventId}
         competitionId={competitionId}
