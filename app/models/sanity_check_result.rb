@@ -7,4 +7,10 @@ class SanityCheckResult < ApplicationRecord
   belongs_to :cronjob_statistic
 
   delegate :topic, :comments, to: :sanity_check
+
+  def results_without_exclusions
+    query_results.filter do |result|
+      !sanity_check_exclusions.where(exclusion: result.to_json).exists?
+    end
+  end
 end

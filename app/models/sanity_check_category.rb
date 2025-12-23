@@ -2,11 +2,12 @@
 
 class SanityCheckCategory < ApplicationRecord
   include StaticData
+
   has_many :sanity_checks
   has_many :sanity_check_results, through: :sanity_checks
 
   def self.data_file_handle
-    "#{self.name.pluralize.underscore}"
+    self.name.pluralize.underscore.to_s
   end
 
   # This is currently quite easy but inefficient.
@@ -22,6 +23,6 @@ class SanityCheckCategory < ApplicationRecord
   #              ) AS row_number')
   #     .where('row_number = 1')
   def latest_results
-    sanity_checks.map { |s | s.latest_results }.flatten.compact
+    sanity_checks.map(&:latest_results).flatten.compact
   end
 end

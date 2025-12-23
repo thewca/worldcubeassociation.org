@@ -2,6 +2,7 @@
 
 class SanityCheck < ApplicationRecord
   include StaticData
+
   belongs_to :sanity_check_category
   has_many :sanity_check_results
   has_many :sanity_check_exclusions
@@ -11,7 +12,7 @@ class SanityCheck < ApplicationRecord
   end
 
   def self.data_file_handle
-    "#{self.name.pluralize.underscore}"
+    self.name.pluralize.underscore.to_s
   end
 
   # Overwrite method to handle .sql files
@@ -20,7 +21,7 @@ class SanityCheck < ApplicationRecord
 
     all_raw.map do |attributes|
       attrs = attributes.symbolize_keys
-      attrs[:query] = File.read(Rails.root.join("lib","sanity_check_sql", attrs[:query_file]))
+      attrs[:query] = Rails.root.join("lib", "sanity_check_sql", attrs[:query_file]).read
       delete attrs[:query_file]
 
       attrs.slice(*column_symbols)

@@ -8,7 +8,7 @@ class WcaCronjob < ApplicationJob
   # Middleware: Check queue status of cronjob. Record timestamp if it's being enqueued,
   #   or reject it if it has already been enqueued previously
   before_enqueue do |job|
-    puts(job.arguments.inspect)
+    Rails.logger.debug(job.arguments.inspect)
     name = job.arguments.first&.dig(:name)
     statistics = job.class.cronjob_statistics(name)
 
