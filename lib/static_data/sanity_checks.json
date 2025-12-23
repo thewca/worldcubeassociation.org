@@ -16,8 +16,71 @@
   {
     "id": 3,
     "sanity_check_category_id": 1,
-    "topic": "Lowercase last names",
+    "topic": "Lowercase last names (without local name)",
     "query_file": "person_data_irregularities/lower_case_last_name.sql",
     "comment": ""
+  },
+  {
+    "id": 4,
+    "sanity_check_category_id": 1,
+    "topic": "Lowercase last names (with local name)",
+    "query_file": "person_data_irregularities/lower_case_last_name_with_local_name.sql",
+    "comment": ""
+  },
+  {
+    "id": 5,
+    "sanity_check_category_id": 1,
+    "topic": "Bad local names (roman characters in brackets)",
+    "query_file": "person_data_irregularities/bad_local_names.sql",
+    "comment": ""
+  },
+  {
+    "id": 6,
+    "sanity_check_category_id": 1,
+    "topic": "Missing one bracket for local names",
+    "query_file": "person_data_irregularities/missing_bracket_for_local_name.sql",
+    "comment": ""
+  },
+  {
+    "id": 7,
+    "sanity_check_category_id": 1,
+    "topic": "Trailing spaces in names or local names",
+    "query_file": "person_data_irregularities/trailing_spaces.sql",
+    "comment": ""
+  },
+  {
+    "id": 8,
+    "sanity_check_category_id": 1,
+    "topic": "Cyrillic/Greek alphabet used instead of Latin",
+    "query_file": "person_data_irregularities/cyrillic_or_greek.sql",
+    "comment": ""
+  },
+  {
+    "id": 9,
+    "sanity_check_category_id": 1,
+    "topic": "Person rows with empty string gender",
+    "query_file": "person_data_irregularities/empty_gender.sql",
+    "comment": "Valid gender values are 'm', 'f', 'o' and NULL. Empty strings as value always indicate a problem (e.g. 'o' not transfered correctly, missed entry of person data, etc.) to be investigated individually."
+  },
+  {
+    "id": 10,
+    "sanity_check_category_id": 1,
+    "topic": "Invalid countryIds",
+    "query_file": "person_data_irregularities/invalid_country_ids.sql",
+    "comment": ""
+  },
+  {
+    "id": 11,
+    "sanity_check_category_id": 1,
+    "topic": "Bogus DOBs (DOBs with year outside of reasonable range)",
+    "query_file": "person_data_irregularities/bogus_dobs.sql",
+    "comment": "DOB's other then 00-00-0000 that are clearly not valid. 0002-11-30 is the java error that can occur whenever 0 is entered as DOB."
+  },
+  {
+    "id": 12,
+    "sanity_check_category_id": 1,
+    "topic": "Missing DOBs at scale (competitions after 2018 with at least 3 missing DOBs)",
+    "query_file": "person_data_irregularities/invalid_country_ids.sql",
+    "comment": "Identification of competitions with many missing DOBs (indicating a systematic issue). Findings should be discussed in the competition's result thread."
   }
 ]

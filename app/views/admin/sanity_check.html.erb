@@ -9,7 +9,7 @@
       <h3><%= result.topic %></h3>
       <h5><%= result.comments %></h5>
       <h4> Query results:</h4>
-      <code> <%= result.query_results %></code>
+      <code> <%= result.results_without_exclusions %></code>
       <h4> Exclusions: <%= result.sanity_check_exclusions.count %></h4>
       <table></table>
     <% end %>

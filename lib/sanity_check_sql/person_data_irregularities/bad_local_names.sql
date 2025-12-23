@@ -1,0 +1,1 @@
+SELECT * FROM persons WHERE CAST(name AS BINARY) REGEXP BINARY '[(].*[A-Za-z]+'
