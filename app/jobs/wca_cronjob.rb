@@ -8,7 +8,9 @@ class WcaCronjob < ApplicationJob
   # Middleware: Check queue status of cronjob. Record timestamp if it's being enqueued,
   #   or reject it if it has already been enqueued previously
   before_enqueue do |job|
-    statistics = job.class.cronjob_statistics
+    puts(job.arguments.inspect)
+    name = job.arguments.first&.dig(:name)
+    statistics = job.class.cronjob_statistics(name)
 
     if statistics.scheduled? || statistics.in_progress? || statistics.recently_errored?
       statistics.increment! :recently_rejected
@@ -31,7 +33,8 @@ class WcaCronjob < ApplicationJob
   # Middleware: Record when and how long a cronjob was executed
   #   (or, if applicable, record that it was not executed)
   around_perform do |job, block|
-    statistics = job.class.cronjob_statistics
+    name = job.arguments.first&.dig(:name)
+    statistics = job.class.cronjob_statistics(name)
 
     statistics.touch :run_start
 
@@ -92,8 +95,9 @@ class WcaCronjob < ApplicationJob
   class << self
     delegate :in_progress?, :scheduled?, :enqueued_at, :finished?, :last_run_successful?, :last_error_message, :recently_errored?, to: :cronjob_statistics
 
-    def cronjob_statistics
-      CronjobStatistic.find_or_create_by!(name: self.name)
+    def cronjob_statistics(custom_name = nil)
+      name = custom_name || self.name
+      CronjobStatistic.find_or_create_by!(name: name)
     end
 
     def start_date

@@ -22,6 +22,6 @@ class SanityCheckCategory < ApplicationRecord
   #              ) AS row_number')
   #     .where('row_number = 1')
   def latest_results
-    sanity_checks.map { |s | s.latest_results }.flatten
+    sanity_checks.map { |s | s.latest_results }.flatten.compact
   end
 end
