@@ -126,6 +126,15 @@ function MatchingTableCellContent({
     });
   }, [dispatchMatchState, step.key]);
 
+  const deleteEntityFromMatching = useCallback((entity, pickerHistory) => {
+    dispatchMatchState({
+      type: 'deleteEntityFromMatching',
+      entity,
+      pickerHistory,
+      matchingKey: step.key,
+    });
+  }, [dispatchMatchState, step.key]);
+
   if (!isDefCell) {
     return null;
   }
@@ -146,7 +155,7 @@ function MatchingTableCellContent({
         colSpan={remainingColSpan}
         disabled
       >
-        (automatic)
+        (cannot be edited)
       </Table.Cell>
     );
   }
@@ -155,6 +164,8 @@ function MatchingTableCellContent({
     .slice(rowIdx)
     .filter((laterRow) => laterRow[stepIdx].id === step.id)
     .length;
+
+  const localHistory = allSteps.slice(0, stepIdx);
 
   return (
     <>
@@ -173,19 +184,31 @@ function MatchingTableCellContent({
           rowSpan={defRowSpan}
         >
             {actualNavigation ? (
-              <Breadcrumb size="tiny">
-                {actualNavigation.map((nav, breadIdx) => (
-                  <React.Fragment key={nav.key}>
-                    {breadIdx > 0 && (<Breadcrumb.Divider icon="chevron right" />)}
-                    <Breadcrumb.Section>{navToBreadcrumbContent(nav)}</Breadcrumb.Section>
-                  </React.Fragment>
-                ))}
-              </Breadcrumb>
+              <>
+                <Breadcrumb size="tiny">
+                  {actualNavigation.map((nav, breadIdx) => (
+                    <React.Fragment key={nav.key}>
+                      {breadIdx > 0 && (<Breadcrumb.Divider icon="chevron right" />)}
+                      <Breadcrumb.Section>{navToBreadcrumbContent(nav)}</Breadcrumb.Section>
+                    </React.Fragment>
+                  ))}
+                </Breadcrumb>
+                <Button
+                  secondary
+                  compact
+                  basic
+                  icon="unlink"
+                  content="Clear"
+                  size="tiny"
+                  attached="right"
+                  onClick={() => deleteEntityFromMatching(step.entity, localHistory)}
+                />
+              </>
             ) : (
               <UnusedEntityButtonGroup
                 entity={step.entity}
                 matchingKey={step.key}
-                pickerHistory={allSteps.slice(0, stepIdx)}
+                pickerHistory={localHistory}
                 referenceMatchState={matchState}
                 moveEntity={addEntityBack}
               />
@@ -295,6 +318,14 @@ function ScrambleFileBody({
     [deleteMutation, scrambleFile.id],
   );
 
+  const unlinkAction = useCallback(
+    () => dispatchMatchState({
+      type: 'resetScrambleFile',
+      scrambleFile,
+    }),
+    [dispatchMatchState, scrambleFile],
+  );
+
   const scrambleFileTree = useMemo(
     () => groupScrambleSetsIntoWcif(scrambleFile.inbox_scramble_sets),
     [scrambleFile.inbox_scramble_sets],
@@ -317,15 +348,22 @@ function ScrambleFileBody({
           />
         </Table.Body>
       </Table>
-      <Button
-        fluid
-        negative
-        icon="trash"
-        content="Delete"
-        onClick={deleteAction}
-        disabled={isDeleting}
-        loading={isDeleting}
-      />
+      <Button.Group widths={2}>
+        <Button
+          secondary
+          icon="unlink"
+          content="Clear Assignments"
+          onClick={unlinkAction}
+        />
+        <Button
+          negative
+          icon="trash"
+          content="Delete Upload"
+          onClick={deleteAction}
+          disabled={isDeleting}
+          loading={isDeleting}
+        />
+      </Button.Group>
     </>
   );
 }

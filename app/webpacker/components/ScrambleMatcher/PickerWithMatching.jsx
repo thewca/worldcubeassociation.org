@@ -43,8 +43,14 @@ export default function PickerWithMatching({
     );
   }
 
+  // Without this, React keeps the state of the 333 round picker when switching
+  //   to 222 (or any other event). So this is just an arbitrary "rendering tiebreaker".
+  const unrolledHistory = pickerHistory.map((hist) => `${hist.key}-${hist.id}`).join('_');
+  const tiebreakerKey = `${unrolledHistory}_${pickerKey}`;
+
   return (
     <EntityPicker
+      key={tiebreakerKey}
       entityChoices={entityChoices}
       rootMatchState={rootMatchState}
       dispatchMatchState={dispatchMatchState}
@@ -61,15 +67,21 @@ function EntityPicker({
   pickerHistory,
   pickerKey,
 }) {
-  const [selectedEntityId, setSelectedEntityId] = useState();
+  const {
+    pickerComponent: PickerComponent = ButtonGroupPicker,
+    pickFirstDefault = false,
+  } = pickerStepConfig[pickerKey];
+
+  const firstEntityId = entityChoices[0]?.id;
+  const defaultValue = pickFirstDefault ? firstEntityId : undefined;
+
+  const [selectedEntityId, setSelectedEntityId] = useState(defaultValue);
 
   const {
     computeEntityName,
     headerLabel,
     pickerLabel = headerLabel,
   } = pickerLocalizationConfig[pickerKey];
-
-  const { pickerComponent: PickerComponent = ButtonGroupPicker } = pickerStepConfig[pickerKey];
 
   const selectedEntity = useMemo(
     () => entityChoices.find((ent) => ent.id === selectedEntityId),

@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
 import {
   buildHistoryStep,
+  LEGAL_CROSS_MATCHES,
   matchingDndConfig,
   pickerLocalizationConfig,
   pickerStepConfig,
@@ -110,10 +111,21 @@ export default function MoveMatchingEntityModal({
       rootMatchState,
     )[currentKey];
 
-    return optionsInState.filter((opt, idx) => {
-      const mockHistory = [...previousHistory, buildHistoryStep(currentKey, opt, idx)];
-      return enabledCondition?.(mockHistory) ?? true;
-    });
+    return optionsInState
+      .filter((opt) => {
+        if (currentKey !== 'events') return true;
+
+        const currentEventId = descriptor[currentKey];
+
+        const crossMatchGroup = LEGAL_CROSS_MATCHES
+          .find((cmg) => cmg.includes(currentEventId)) ?? [currentEventId];
+
+        return crossMatchGroup.includes(opt.id);
+      })
+      .filter((opt, idx) => {
+        const mockHistory = [...previousHistory, buildHistoryStep(currentKey, opt, idx)];
+        return enabledCondition?.(mockHistory) ?? true;
+      });
   }, [rootMatchState, enabledCondition]);
 
   const fixSelectionPath = useCallback(

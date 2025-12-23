@@ -3,7 +3,7 @@ import type { ConditionalValue } from "../css.types"
 
 export interface BadgeVariant {
   /** @default "subtle" */
-  variant?: "solid" | "subtle" | "outline" | "surface" | "plain" | undefined
+  variant?: "solid" | "subtle" | "outline" | "surface" | "plain" | "achievement" | undefined
   /** @default "sm" */
   size?: "xs" | "sm" | "md" | "lg" | undefined
 }
@@ -272,6 +272,16 @@ export type ColorSwatchVariantMap = {
   [K in keyof ColorSwatchVariant]: Array<ColorSwatchVariant[K]>
 }
 
+export interface TextVariant {}
+
+export type TextVariantProps = {
+  [K in keyof TextVariant]?: ConditionalValue<TextVariant[K]> | undefined
+}
+
+export type TextVariantMap = {
+  [K in keyof TextVariant]: Array<TextVariant[K]>
+}
+
 export interface ConfigRecipes {
   badge: SystemRecipeFn<BadgeVariantProps, BadgeVariantMap>
   button: SystemRecipeFn<ButtonVariantProps, ButtonVariantMap>
@@ -292,6 +302,7 @@ export interface ConfigRecipes {
   checkmark: SystemRecipeFn<CheckmarkVariantProps, CheckmarkVariantMap>
   radiomark: SystemRecipeFn<RadiomarkVariantProps, RadiomarkVariantMap>
   colorSwatch: SystemRecipeFn<ColorSwatchVariantProps, ColorSwatchVariantMap>
+  text: SystemRecipeFn<TextVariantProps, TextVariantMap>
 }
 
 // Accordion
@@ -419,7 +430,7 @@ export interface CardVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "info" */
   variant?: "elevated" | "outline" | "subtle" | "info" | undefined
-  colorVariant?: "solid" | "muted" | "surface" | undefined
+  colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | "deep" | undefined
 }
 
 export type CardVariantProps = {

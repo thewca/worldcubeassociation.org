@@ -5,6 +5,15 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import { MarkdownProse } from "@/components/Markdown";
 import { getT } from "@/lib/i18n/get18n";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("about_regulations.title"),
+  };
+}
 
 export default async function AboutTheRegulations() {
   const payload = await getPayload({ config });

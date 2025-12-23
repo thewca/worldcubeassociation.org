@@ -13,7 +13,16 @@ import config from "@payload-config";
 import _ from "lodash";
 import IconDisplay from "@/components/IconDisplay";
 import { Document } from "@/types/payload";
+import { Metadata } from "next";
+import { getT } from "@/lib/i18n/get18n";
 
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("documents.title"),
+  };
+}
 export default async function Documents() {
   const payload = await getPayload({ config });
 

@@ -11,6 +11,9 @@ const events = {
 };
 
 export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
+export const FULL_EVENT_IDS = eventsDataRaw
+  .toSorted((a, b) => a.rank - b.rank)
+  .map((e) => e.id);
 
 function extendEvents(rawEvent: Event) {
   return {

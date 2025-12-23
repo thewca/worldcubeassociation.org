@@ -347,7 +347,7 @@ resource "aws_lb_listener_rule" "pma_forward_prod" {
 }
 
 locals {
-  next_url = "next70912409871254.worldcubeassociation.org"
+  next_url = "next.worldcubeassociation.org"
 }
 
 resource "aws_lb_listener_rule" "next_forward_prod" {
