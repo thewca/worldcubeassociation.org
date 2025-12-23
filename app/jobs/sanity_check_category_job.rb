@@ -2,7 +2,7 @@
 
 class SanityCheckCategoryJob < WcaCronjob
   def self.prepare_task(category_name)
-    self.set(tags: [category_name])
+    self.set(tag: category_name.underscore)
   end
 
   def perform(sanity_check_category_id)

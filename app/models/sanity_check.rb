@@ -2,7 +2,7 @@
 
 class SanityCheck < ApplicationRecord
   include StaticData
-  has_one :sanity_check_category
+  belongs_to :sanity_check_category
   has_many :sanity_check_results
 
   def latest_results
