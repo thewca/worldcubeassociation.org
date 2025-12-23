@@ -4,23 +4,27 @@ import { Text, VStack } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import { ByCompetitionTable } from "@/components/results/ResultsTable";
 import { useT } from "@/lib/i18n/useI18n";
-import EventSelector from "@/components/EventSelector";
+import { SingleEventSelector } from "@/components/EventSelector";
 
 interface ResultsTabProps {
   wcaId: string;
+  eventsWithResults: string[];
 }
 
-const ResultsTab: React.FC<ResultsTabProps> = ({ wcaId }) => {
+const ResultsTab: React.FC<ResultsTabProps> = ({
+  wcaId,
+  eventsWithResults,
+}) => {
   const [eventId, setEventId] = useState("333");
 
   return (
     <VStack>
-      <EventSelector
+      <SingleEventSelector
         title=""
-        selectedEvents={[eventId]}
-        onEventClick={(e) => setEventId(e)}
-        hideAllButton={true}
-        hideClearButton={true}
+        selectedEvent={eventId}
+        onEventClick={setEventId}
+        eventList={eventsWithResults}
+        eventButtonsCompact
       />
       <Results wcaId={wcaId} eventId={eventId} />
     </VStack>

@@ -3,9 +3,9 @@ import React, { useMemo, useState } from "react";
 import { Card, Text, Center, Spinner, Table } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
-import EventSelector from "@/components/EventSelector";
 import CompetitorTable from "@/components/competitions/CompetitorTable";
 import PsychsheetTable from "@/components/competitions/PsychsheetTable";
+import { FormEventSelector } from "@/components/EventSelector";
 
 interface CompetitorData {
   id: string;
@@ -66,17 +66,19 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
     <Card.Root>
       <Card.Body>
         <Card.Title>
-          <EventSelector
+          <FormEventSelector
             title="Events"
             selectedEvents={psychSheetEvent ? [psychSheetEvent] : []}
             eventList={eventIds}
-            hideAllButton
-            hideClearButton={psychSheetEvent === null}
             onEventClick={(event) => setPsychSheetEvent(event)}
-            onClearClick={() => setPsychSheetEvent(null)}
+            onClearClick={
+              psychSheetEvent === null
+                ? undefined
+                : () => setPsychSheetEvent(null)
+            }
           />
         </Card.Title>
-        <Table.ScrollArea borderWidth="1px" maxW="xl">
+        <Table.ScrollArea borderWidth="1px" maxW="full">
           {psychSheetEvent && (
             <PsychsheetTable
               pychsheet={psychSheetQuery!}

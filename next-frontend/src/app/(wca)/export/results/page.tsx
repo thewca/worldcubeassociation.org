@@ -13,15 +13,24 @@ import {
 } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
 import { getExportDetails } from "@/lib/wca/exports/getExportDetails";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import Loading from "@/components/ui/loading";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("database.developer_export.heading"),
+  };
+}
 
 export default async function ResultExportPage() {
   const { t } = await getT();
 
-  const { data: exports, error } = await getExportDetails();
+  const { data: exports, error, response } = await getExportDetails();
 
-  if (error) return <Errored error={error} />;
+  if (error) return <OpenapiError response={response} t={t} />;
 
   if (!exports) return <Loading />;
 

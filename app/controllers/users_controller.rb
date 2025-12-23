@@ -159,7 +159,7 @@ class UsersController < ApplicationController
   end
 
   def authenticate_user_for_sensitive_edit
-    action_params = params.require(:user).permit(:otp_attempt, :password)
+    action_params = params.expect(user: %i[otp_attempt password])
     # This methods store the current time in the "last_authenticated_at" session
     # variable, if password matches, or if 2FA check matches.
     on_success = lambda do
@@ -201,7 +201,7 @@ class UsersController < ApplicationController
 
   def select_nearby_delegate
     @user = current_user || User.new
-    user_params = params.require(:user).permit(:unconfirmed_wca_id, :delegate_id_to_handle_wca_id_claim, :dob_verification)
+    user_params = params.expect(user: %i[unconfirmed_wca_id delegate_id_to_handle_wca_id_claim dob_verification])
     @user.assign_attributes(user_params)
     render partial: 'select_nearby_delegate'
   end
@@ -460,7 +460,7 @@ class UsersController < ApplicationController
   end
 
   private def user_params
-    params.require(:user).permit(current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
+    params.expect(user: current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
       user_params[:wca_id] = user_params[:wca_id].upcase if user_params.key?(:wca_id)
       if user_params.key?(:delegate_reports_region)
         raw_region = user_params.delete(:delegate_reports_region)

@@ -43,12 +43,13 @@ import { draftMode } from "next/headers";
 import { MediaImage } from "@/components/MediaImage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
+import OpenapiError from "@/components/ui/openapiError";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
     <Card.Root
       colorPalette={block.colorPalette}
-      colorVariant="solid"
+      colorVariant="deep"
       width="full"
     >
       {block.headerImage && (
@@ -65,7 +66,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       </Card.Body>
       {block.buttonText?.trim() && (
         <Card.Footer>
-          <Button mr="auto" asChild>
+          <Button asChild variant="outline" color="currentColor">
             <ChakraLink href={block.buttonLink!}>{block.buttonText}</ChakraLink>
           </Button>
         </Card.Footer>
@@ -98,7 +99,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
     <Card.Root
       flexDirection="row"
       colorPalette={block.colorPalette}
-      colorVariant="solid"
+      colorVariant="deep"
       width="full"
       maxHeight="lg"
       overflow="hidden"
@@ -108,12 +109,12 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           media={block.mainImage as Media}
           width="full"
           maxHeight="lg"
-          bg="colorPalette.solid"
+          bg="colorPalette.deep"
         />
         <AbsoluteCenter
           width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
           height="full"
-          bg="linear-gradient(to right, transparent, {colors.colorPalette.solid})"
+          bg="linear-gradient(to right, transparent, transparent, {colors.colorPalette.deep})"
         />
       </Box>
 
@@ -151,7 +152,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
     <Card.Root
       overflow="hidden"
       colorPalette={block.colorPalette}
-      colorVariant="solid"
+      colorVariant="deep"
       width="full"
     >
       <MediaImage
@@ -176,15 +177,16 @@ const FeaturedCompetition = async ({
   colorPalette: ColorPaletteSelect;
 }) => {
   const { t } = await getT();
+  const {
+    data: competition,
+    error,
+    response,
+  } = await getCompetitionInfo(competitionId);
 
-  const { data: competition, error } = await getCompetitionInfo(competitionId);
-
-  if (error) {
-    return "Something went wrong while loading the competition";
-  }
+  if (error) return <OpenapiError t={t} response={response} />;
 
   return (
-    <Card.Root colorPalette={colorPalette} colorVariant="solid">
+    <Card.Root colorPalette={colorPalette} colorVariant="deep">
       <Card.Body>
         <Card.Title textStyle="h2">{competition.name}</Card.Title>
         <CompetitionShortlist comp={competition} t={t} />
@@ -203,7 +205,7 @@ const FeaturedCompetitions = async ({
       <Card.Title textStyle="h2" asChild>
         <HStack justify="space-between">
           <Text>Featured Upcoming Competitions</Text>
-          <Button variant="outline" asChild>
+          <Button asChild variant="outline" color="currentColor">
             <Link href="/competitions">View all Competitions</Link>
           </Button>
         </HStack>
@@ -228,6 +230,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
     <Carousel.Root
       orientation="vertical"
       slideCount={slides.length}
+      width="full"
       maxHeight="lg"
       loop
       position="relative"
@@ -239,7 +242,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
           return (
             <Carousel.Item key={slide.id} index={i} asChild>
               <Card.Root
-                colorVariant="solid"
+                colorVariant="deep"
                 flexDirection="row"
                 overflow="hidden"
                 colorPalette={slide.colorPalette}

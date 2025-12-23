@@ -7,7 +7,16 @@ import { CallToActionBlock } from "@/components/about/CallToAction";
 import Quote from "@/components/Quote";
 import AboutUsItem from "@/components/about/AboutUsItem";
 import { Media } from "@/types/payload";
+import { Metadata } from "next";
+import { getT } from "@/lib/i18n/get18n";
 
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("layouts.navigation.disclaimer"),
+  };
+}
 export default async function About() {
   const payload = await getPayload({ config });
 

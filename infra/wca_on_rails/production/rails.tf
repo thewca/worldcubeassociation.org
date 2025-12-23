@@ -218,7 +218,10 @@ data "aws_iam_policy_document" "task_policy" {
     actions = [
       "rds-db:connect",
     ]
-    resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}","arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_SENIOR_USER}"]
+    resources = [
+      "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_dev_dump_identifier}/${var.DATABASE_WRT_USER}",
+      "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_read_replica_identifier}/${var.DATABASE_WRT_SENIOR_USER}",
+      "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_SENIOR_USER}"]
   }
   statement {
     effect = "Allow"
@@ -250,14 +253,14 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   cpu = "1024"
-  memory = "3910"
+  memory = "3900"
 
   container_definitions = jsonencode([
     {
       name              = "rails-production"
       image             = "${var.shared.ecr_repository.repository_url}:latest"
       cpu    = 1024
-      memory = 3910
+      memory = 3900
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,

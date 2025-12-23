@@ -16,7 +16,6 @@ required:
   - end_date
   - enable_donations
   - competitor_limit
-  - extra_registration_requirements
   - on_the_spot_registration
   - refund_policy_percent
   - refund_policy_limit_date
@@ -35,7 +34,6 @@ required:
   - short_name
   - city
   - venue_address
-  - venue_details
   - latitude_degrees
   - longitude_degrees
   - country_iso2
@@ -47,6 +45,7 @@ required:
   - uses_cutoff?
   - competition_series_ids
   - registration_full?
+  - registration_full_and_accepted?
   - part_of_competition_series?
   - registration_full_and_accepted?
   - delegates
@@ -186,6 +185,9 @@ properties:
   uses_qualification?:
     type: boolean
   registration_full?:
+    type: boolean
+    example: true
+  registration_full_and_accepted?:
     type: boolean
     example: true
   tab_names:
