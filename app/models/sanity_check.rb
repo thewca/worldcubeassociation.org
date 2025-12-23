@@ -4,6 +4,7 @@ class SanityCheck < ApplicationRecord
   include StaticData
   belongs_to :sanity_check_category
   has_many :sanity_check_results
+  has_many :sanity_check_exclusions
 
   def latest_results
     sanity_check_results.order(created_at: :desc).first

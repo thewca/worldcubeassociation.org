@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 class SanityCheckExclusion < ApplicationRecord
-  has_one :sanity_check
+  belongs_to :sanity_check
 end
