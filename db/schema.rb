@@ -1221,10 +1221,10 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_22_101010) do
     t.datetime "created_at", null: false
     t.bigint "cronjob_statistic_id", null: false
     t.json "query_results", null: false
-    t.bigint "sanity_check_category_id", null: false
+    t.bigint "sanity_check_id", null: false
     t.datetime "updated_at", null: false
     t.index ["cronjob_statistic_id"], name: "index_sanity_check_results_on_cronjob_statistic_id"
-    t.index ["sanity_check_category_id"], name: "index_sanity_check_results_on_sanity_check_category_id"
+    t.index ["sanity_check_id"], name: "index_sanity_check_results_on_sanity_check_id"
   end
 
   create_table "sanity_checks", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

@@ -12,5 +12,12 @@
     "topic": "Lowercase first names",
     "query_file": "person_data_irregularities/lower_case_first_name.sql",
     "comment": ""
+  },
+  {
+    "id": 3,
+    "sanity_check_category_id": 1,
+    "topic": "Lowercase last names",
+    "query_file": "person_data_irregularities/lower_case_last_name.sql",
+    "comment": ""
   }
 ]

@@ -3,6 +3,11 @@
 class SanityCheck < ApplicationRecord
   include StaticData
   has_one :sanity_check_category
+  has_many :sanity_check_results
+
+  def latest_results
+    sanity_check_results.order(created_at: :desc).first
+  end
 
   def self.data_file_handle
     "#{self.name.pluralize.underscore}"
