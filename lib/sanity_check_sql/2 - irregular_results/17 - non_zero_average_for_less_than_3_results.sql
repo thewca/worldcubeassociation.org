@@ -1,6 +1,5 @@
-SELECT r.id, person_id, competition_id, round_type_id, average, COUNT(*) AS solves
-FROM results r
-       JOIN result_attempts ra ON ra.result_id = r.id
+SELECT *
+FROM Results
 WHERE average <> 0
-GROUP BY result_id
-HAVING COUNT(*) <= 2
+  AND IF(value1 <> 0, 1, 0) + IF(value2 <> 0, 1, 0) + IF(value3 <> 0, 1, 0) + IF(value4 <> 0, 1, 0) +
+      IF(value5 <> 0, 1, 0) <= 2

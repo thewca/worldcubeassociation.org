@@ -1,4 +1,7 @@
-SELECT result_id
-FROM result_attempts
-GROUP BY result_id
-HAVING MAX(value) = -2;
+SELECT *
+FROM Results
+WHERE ABS(1 + value1) = 1
+  AND ABS(1 + value2) = 1
+  AND ABS(1 + value3) = 1
+  AND ABS(1 + value4) = 1
+  AND ABS(1 + value5) = 1

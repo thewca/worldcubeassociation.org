@@ -1,4 +1,3 @@
-SELECT result_id
-FROM result_attempts
-GROUP BY result_id
-HAVING MIN(attempt_number) > 1;
+SELECT *
+FROM Results
+WHERE value1 = 0

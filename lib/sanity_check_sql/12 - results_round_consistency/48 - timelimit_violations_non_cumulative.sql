@@ -1,33 +1,17 @@
-WITH round_numbers AS (SELECT t0.*,
-                              ROW_NUMBER() OVER (
-                                PARTITION BY t0.competition_id, t0.event_id
-                                ORDER BY rt.`rank`
-                                ) AS round
-                       FROM (SELECT DISTINCT r.competition_id,
-                                             r.event_id,
-                                             r.round_type_id
-                             FROM results r) t0
-                              JOIN round_types rt ON t0.round_type_id = rt.id)
-
-SELECT r.person_id,
-       r.competition_id,
-       r.event_id,
-       rn.round,
-       r.round_type_id,
-       ra.value,
-       JSON_EXTRACT(time_limit, '$.centiseconds') AS time_limit
-FROM results r
-       JOIN result_attempts ra ON ra.result_id = r.id
-       JOIN competition_events ce
-            ON r.competition_id = ce.competition_id
-              AND r.event_id = ce.event_id
-       JOIN round_numbers rn
-            ON rn.competition_id = r.competition_id
-              AND rn.event_id = r.event_id
-              AND rn.round_type_id = r.round_type_id
-       JOIN rounds ro
-            ON ce.id = ro.competition_event_id
-              AND ro.number = rn.round
-WHERE JSON_LENGTH(JSON_EXTRACT(time_limit, '$.cumulativeRoundIds')) = 0
-  # only apply to rounds without a cumulative time limit
-  AND value > JSON_EXTRACT(time_limit, '$.centiseconds')
+SELECT ro.id, REVERSE(SUBSTRING_INDEX(REVERSE(SUBSTRING_INDEX(time_limit, ',', 1)), ':', 1)) AS timeLimit,
+       IF(time_limit LIKE '%[]%', false, true) AS cumulative,
+       IF(value1<0,0,value1)+IF(value2<0,0,value2)+IF(value3<0,0,value3)+IF(value4<0,0,value4)+IF(value5<0,0,value5) AS sumOfSolves,
+       ce.competition_id, ce.event_id, re.roundTypeId, ro.time_limit, r.formatId, r.pos, r.personId, r.personName,
+       r.value1, r.value2, r.value3, r.value4, r.value5, r.best, r.average
+FROM rounds ro
+       INNER JOIN competition_events ce ON ce.id = ro.competition_event_id
+       INNER JOIN (SELECT DISTINCT competitionId, eventId, roundTypeId FROM Results
+                   WHERE RIGHT(competitionId, 4) >= 2013) re
+                  ON re.competitionId = ce.competition_id AND re.eventId = ce.event_id AND
+                     (CASE ro.number WHEN ro.total_number_of_rounds THEN re.roundTypeId IN ('c', 'f')
+                                     WHEN 0 THEN re.roundTypeId IN ('0', 'b', 'h') WHEN 1 THEN re.roundTypeId IN ('1', 'd')
+                                     WHEN 2 THEN re.roundTypeId IN ('2', 'e') WHEN 3 THEN re.roundTypeId IN ('3', 'g') END)
+       JOIN Results r ON ce.competition_id=r.competitionId AND ce.event_id=r.eventId AND re.roundTypeId=r.roundTypeId
+WHERE time_limit IS NOT NULL AND time_limit NOT LIKE '%[%,%]%'
+HAVING IF(time_limit LIKE '%[]%', value1>=timeLimit OR value2>=timeLimit OR value3>=timeLimit OR value4>=timeLimit OR value5>=timeLimit,
+          sumOfSolves>=timeLimit)
