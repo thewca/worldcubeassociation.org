@@ -5,7 +5,7 @@ class SanityCheck < ApplicationRecord
   has_one :sanity_check_category
 
   def self.data_file_handle
-    "#{self.name.pluralize.underscore}.json"
+    "#{self.name.pluralize.underscore}"
   end
 
   # Overwrite method to handle .sql files

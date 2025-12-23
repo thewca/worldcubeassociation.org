@@ -10,6 +10,8 @@ namespace :static_data do
     Format.load_json_data!
     PreferredFormat.load_json_data!
     RoundType.load_json_data!
+    SanityCheckCategory.load_json_data!
+    SanityCheck.load_json_data!
   end
 
   desc 'Dump static data from the database into JSON files under lib/static_data'
@@ -21,6 +23,8 @@ namespace :static_data do
     Format.write_json_data!
     PreferredFormat.write_json_data!
     RoundType.write_json_data!
+    SanityCheckCategory.write_json_data!
+    SanityCheck.write_json_data!
   end
 end
 
