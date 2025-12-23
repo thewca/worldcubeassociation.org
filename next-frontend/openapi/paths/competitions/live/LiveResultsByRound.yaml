@@ -1,6 +1,5 @@
-get:
-  summary: Gets Information about the Round including the live Results
-  parameters:
+summary: Gets Information about the Round including the live Results
+parameters:
     - name: competitionId
       in: path
       required: true
@@ -11,10 +10,10 @@ get:
       required: true
       schema:
         type: string
-  responses:
-    '200':
-      description: Returns results
-      content:
-        application/json:
-          schema:
-            $ref: "../../../schemas/live/LiveRound.yaml"
+responses:
+  '200':
+    description: Returns results
+    content:
+      application/json:
+        schema:
+          $ref: "../../../schemas/live/LiveRound.yaml"

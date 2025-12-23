@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "WCA Live API" do
-  describe "POST #add_result" do
+  describe "PATCH #update_result" do
     let!(:delegate) { create(:delegate) }
 
     it "Updates a Live Result Correctly" do
@@ -14,11 +14,11 @@ RSpec.describe "WCA Live API" do
       registration = create(:registration, :accepted, competition: competition)
       create(:live_result, round: round, registration: registration)
       live_request = {
-        attempts: [111, 222, 333, 444, 555],
+        attempts: [{ result: 111, attempt_number: 1 }, { result: 222, attempt_number: 2 }, { result: 333, attempt_number: 3 }, { result: 444, attempt_number: 4 }, { result: 555, attempt_number: 5 }],
         registration_id: registration.id,
       }
 
-      patch update_live_result_path(competition.id, round.id), params: live_request
+      patch api_v1_competition_live_update_results_path(competition.id, round.id), params: live_request
       expect(response).to be_successful
 
       result = LiveResult.find_by(round_id: round.id, registration_id: registration.id)
@@ -41,11 +41,11 @@ RSpec.describe "WCA Live API" do
       registration = create(:registration, :accepted, competition: competition)
 
       live_request = {
-        attempts: [111, 222, 333, 444, 555],
+        attempts: [{ result: 111, attempt_number: 1 }, { result: 222, attempt_number: 2 }, { result: 333, attempt_number: 3 }, { result: 444, attempt_number: 4 }, { result: 555, attempt_number: 5 }],
         registration_id: registration.id,
       }
 
-      patch update_live_result_path(competition.id, round.id), params: live_request
+      patch api_v1_competition_live_update_results_path(competition.id, round.id), params: live_request
       expect(response).not_to be_successful
     end
   end
