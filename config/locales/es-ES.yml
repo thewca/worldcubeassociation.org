@@ -132,6 +132,8 @@ es-ES:
     '2': Mejor de 2
     #original_hash: 21f623c
     '3': Mejor de 3
+    #original_hash: cca816d
+    '5': Mejor de 5
     #original_hash: 2342d2b
     a: Media de 5
     #original_hash: 940c82d
@@ -143,6 +145,8 @@ es-ES:
       '2': Bo2
       #original_hash: b41f36f
       '3': Bo3
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: Ao5
       #original_hash: 53ba088
@@ -6294,6 +6298,12 @@ es-ES:
     results_export:
       #original_hash: 15d00e1
       heading: Exportación de los Resultados de la WCA
+      #original_hash: 733df42
+      deprecation_warning: >-
+        AVISO DE DISCONTINUACIÓN: La Versión %{old_version} de la Exportación de
+        los Resultados ha quedado obsoleta y su soporte técnico se interrumpirá
+        a partir del %{deprecation_date}. Por favor, cambia a la Versión
+        %{new_version} antes de esa fecha.
       #original_hash: f9fe9df
       description: >-
         En esta página ofrecemos los resultados de la WCA para descarga en
@@ -6303,6 +6313,12 @@ es-ES:
         comprobar si tienes ya la versión más reciente.
       #original_hash: 4f59283
       permalink: Enlace permanente
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        Nota: Los enlaces permanentes proporcionan la última exportación de
+        resultados dentro de una versión determinada, es decir, el enlace
+        permanente v2 devolverá la última exportación v2, pero permanecerá en v2
+        incluso cuando se lance la v3.
       file_formats:
         #original_hash: b086d79
         sql: 'Sentencias SQL, para importar en bases de datos SQL.'

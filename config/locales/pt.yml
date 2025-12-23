@@ -132,6 +132,8 @@ pt:
     '2': Melhor de 2
     #original_hash: 21f623c
     '3': Melhor de 3
+    #original_hash: cca816d
+    '5': Melhor de 5
     #original_hash: 2342d2b
     a: Média de 5
     #original_hash: 940c82d
@@ -143,10 +145,14 @@ pt:
       '2': Bo2
       #original_hash: b41f36f
       '3': Bo3
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      #original_hash: 60827cb
+      h: FaF
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -457,6 +463,10 @@ pt:
         region: Região
         #original_hash: e3fc6e9
         subRegion: Subregião
+        #original_hash: a1ba702
+        receive_developer_mails: >-
+          Gostaria de receber notificações sobre alterações nas funcionalidades
+          de software da WCA.
         #original_hash: 730db33
         receive_delegate_reports: Quero receber Relatórios de Competições da WCA de Delegados por email
         #original_hash: 8667157
@@ -770,6 +780,12 @@ pt:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          Isto limita-se a notificações de alterações de versão principais em
+          funcionalidades como exportações de dados, esquema WCIF e APIs
+          públicas. Recomendado para programadores que mantêm software que
+          depende destas ferramentas.
         #original_hash: c564b74
         receive_delegate_reports: >-
           Se for Delegado Sénior ou membro do WRC ou do WQAC, recebe Relatórios
@@ -2769,6 +2785,16 @@ pt:
         de espera. Se estiver a usar uma lista de espera, por favor especifique
         um prazo. Se não estiver a usar uma lista de espera, lembre-se de
         especificar isto nos requisitos de inscrição.
+    live:
+      #original_hash: 10d1a3c
+      title: Resultados em direto
+      connection:
+        #original_hash: f92b311
+        initialized: A inicializar ligação
+        #original_hash: 66d44d4
+        connected: 'Ligado, os resultados estão a ser atualizados.'
+        #original_hash: 53abaa2
+        disconnected: 'Ligação perdida, os resultados não estão a ser atualizados'
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
@@ -3192,9 +3218,9 @@ pt:
       is_visible: >-
         Esta competição está visível publicamente. Qualquer mudança que fizer
         será exibida ao público!
-      #original_hash: 1039850
+      #original_hash: eb98c2c
       pending_confirmation_html: >-
-        Preencha todos os campos e peça ao Delegado que clique em Confirmar
+        Preencha todos os campos e peça ao Delegado para clicar em Confirmar
         quando estiver pronto que %{contact} aprove esta competição.
       #original_hash: 8966fd0
       submit_create_value: Criar Competição
@@ -3487,13 +3513,10 @@ pt:
             É necessário estabelecer um Limite de Competidores. Apenas as
             competições FMC simultâneas com múltiplos locais podem não ter
             Limite de Competidores.
-          #original_hash: b7b599b
+          #original_hash: 6127d47
           count: >-
-            O número de competidores permitidos nesta competição. Por enquanto
-            este número é apenas informativo, e ainda não impede que mais
-            pessoas se registem. Estamos a trabalhar para adicionar suporte
-            explícito para isso ao fluxo de registo, mas isso requer algum outro
-            trabalho primeiro.
+            O número de competidores permitidos nesta competição. Este limite é
+            imposto pelo sistema de registo integrado.
           #original_hash: 4bd7102
           reason: >-
             Qual o motivo para o limite de competidores? Por favor preencha isto
@@ -4363,16 +4386,14 @@ pt:
           a resolução e o resultado será de DNF (ver %{regulation_link}).
         #original_hash: 83d204f
         regulation_link_text: 'Regra %{number}'
-        #original_hash: bd0e4a9
-        guideline_link_text: 'Orientação %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: tempo limite cumulativo
         #original_hash: d47f11a
         cumulative_one_round_html: 'Pode ser imposto um %{cumulative_time_limit} (ver %{regulation_link}).'
-        #original_hash: c6190b6
+        #original_hash: 44f85f0
         cumulative_across_rounds_html: >-
           Pode ser imposto um %{cumulative_time_limit} em todas as rondas (ver
-          %{guideline_link}).
+          %{regulation_link}).
         #original_hash: e8d17df
         cutoff_html: >-
           O resultado a bater para seguir para a segunda fase de uma ronda de
@@ -6140,6 +6161,12 @@ pt:
     results_export:
       #original_hash: 15d00e1
       heading: Exportação de Resultados WCA
+      #original_hash: 733df42
+      deprecation_warning: >-
+        AVISO DE OBSOLESCÊNCIA: A versão %{old_version} da Exportação de
+        Resultados foi descontinuada e o suporte para a mesma será encerrado a
+        partir de %{deprecation_date}. Por favor utilize a versão %{new_version}
+        antes dessa data.
       #original_hash: f9fe9df
       description: >-
         Nesta página oferecemos os resultados da WCA para download em diversos
@@ -6149,6 +6176,12 @@ pt:
         que possa ver se já possui a versão mais recente.
       #original_hash: 4f59283
       permalink: link permanente
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        Nota: os links permanentes fornecem a versão mais recente exportada
+        dentro de uma determinada versão; ou seja, o link permanente da versão 2
+        irá devolver a versão mais recente exportada da versão 2, mas
+        permanecerá na versão 2 mesmo quando a versão 3 for lançada.
       file_formats:
         #original_hash: b086d79
         sql: 'Instruções SQL, para importação em bases de dados SQL.'

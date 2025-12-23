@@ -57,6 +57,13 @@ class Competition < ApplicationRecord
            allow_nil: true,
            with_model_currency: :currency_code
 
+  validate :start_date, :cant_change_across_regulation_boundaries, if: -> { start_date_was.present? && event_ids.include?('333bf') }
+  private def cant_change_across_regulation_boundaries
+    errors.add(:start_date, "You can't change the start date across Regulation boundaries.") if
+      (start_date_was.year == 2025 && start_date.year == 2026) ||
+      (start_date_was.year == 2026 && start_date.year == 2025)
+  end
+
   scope :not_cancelled, -> { where(cancelled_at: nil) }
   scope :visible, -> { where(show_at_all: true) }
   scope :not_visible, -> { where(show_at_all: false) }
@@ -1815,6 +1822,13 @@ class Competition < ApplicationRecord
     }
   end
 
+  def approval_step_parameters
+    {
+      auto_accept_enabled?: self.auto_accept_preference_disabled?,
+      auto_accept_preference: self.auto_accept_preference,
+    }
+  end
+
   def tab_names
     tabs.pluck(:name)
   end
@@ -1825,6 +1839,7 @@ class Competition < ApplicationRecord
     steps << { key: 'requirements', isEditable: false }
     steps << { key: 'competing', parameters: competing_step_parameters(current_user), isEditable: true }
     steps << { key: 'payment', parameters: payment_step_parameters, isEditable: true, deadline: self.registration_close } if using_payment_integrations?
+    steps << { key: 'approval', parameters: approval_step_parameters, isEditable: false }
 
     steps
   end
@@ -1840,7 +1855,7 @@ class Competition < ApplicationRecord
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
   def to_wcif(authorized: false)
     {
-      "formatVersion" => "1.0",
+      "formatVersion" => "1.1",
       "id" => id,
       "name" => name,
       "shortName" => cell_name,

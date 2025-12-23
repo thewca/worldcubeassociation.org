@@ -95,9 +95,6 @@ class ApplicationController < ActionController::Base
     super
   end
 
-  # Starburst announcements, see https://github.com/starburstgem/starburst#installation
-  helper Starburst::AnnouncementsHelper
-
   private
 
     def redirect_to_root_unless_user(action, *)

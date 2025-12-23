@@ -1,6 +1,5 @@
 import { Table } from "@chakra-ui/react";
 import {
-  AttemptsCells,
   CompetitionCell,
   CountryCell,
   EventCell,
@@ -11,6 +10,7 @@ import { components } from "@/types/openapi";
 import _ from "lodash";
 import { TFunction } from "i18next";
 import { recordAttempts } from "@/lib/wca/results/attempts";
+import { AttemptsCells } from "@/components/results/TableCells";
 
 interface MixedRecordsRowProp {
   record: components["schemas"]["Record"];

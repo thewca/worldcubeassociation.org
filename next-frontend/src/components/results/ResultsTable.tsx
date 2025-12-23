@@ -25,69 +25,74 @@ export function ResultsTable({
   const event = events.byId[eventId];
 
   const solveCount = event.recommendedFormat.expected_solve_count;
+  const anyAverages = results.some((r) => r.average !== 0);
 
   return (
-    <Table.Root>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader>#</Table.ColumnHeader>
-          {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
-          <Table.ColumnHeader>Competitor</Table.ColumnHeader>
-          <Table.ColumnHeader>Best</Table.ColumnHeader>
-          <Table.ColumnHeader>Average</Table.ColumnHeader>
-          <Table.ColumnHeader>Representing</Table.ColumnHeader>
-          <Table.ColumnHeader colSpan={solveCount} textAlign="left">
-            Solves
-          </Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
+    <Table.ScrollArea rounded="md" maxW="full">
+      <Table.Root>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>#</Table.ColumnHeader>
+            {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
+            <Table.ColumnHeader>Competitor</Table.ColumnHeader>
+            <Table.ColumnHeader>Best</Table.ColumnHeader>
+            {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
+            <Table.ColumnHeader>Representing</Table.ColumnHeader>
+            <Table.ColumnHeader colSpan={solveCount} textAlign="left">
+              Solves
+            </Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
 
-      <Table.Body>
-        {results.map((competitorResult) => {
-          const { definedAttempts, bestResultIndex, worstResultIndex } =
-            resultAttempts(competitorResult);
-          return (
-            <Table.Row key={competitorResult.id}>
-              {isAdmin && <Table.Cell>EDIT</Table.Cell>}
-              <Table.Cell>{competitorResult.pos}</Table.Cell>
-              <Table.Cell>
-                <Link
-                  href={route({
-                    pathname: "/persons/[wcaId]",
-                    query: { wcaId: competitorResult.wca_id },
-                  })}
-                >
-                  {competitorResult.name}
-                </Link>
-              </Table.Cell>
-              <Table.Cell style={{ position: "relative" }}>
-                {formatAttemptResult(competitorResult.best, eventId)}{" "}
-                {recordTagBadge(competitorResult.regional_single_record)}
-              </Table.Cell>
-              <Table.Cell style={{ position: "relative" }}>
-                {formatAttemptResult(competitorResult.average, eventId)}{" "}
-                {recordTagBadge(competitorResult.regional_average_record)}
-              </Table.Cell>
-              <Table.Cell>
-                <HStack>
-                  <Icon asChild size="sm">
-                    <WcaFlag code={competitorResult.country_iso2} />
-                  </Icon>
-                  <CountryMap code={competitorResult.country_iso2} t={t} />
-                </HStack>
-              </Table.Cell>
-              <AttemptsCells
-                attempts={definedAttempts}
-                bestResultIndex={bestResultIndex}
-                worstResultIndex={worstResultIndex}
-                eventId={eventId}
-                recordTag={competitorResult.regional_single_record}
-              />
-            </Table.Row>
-          );
-        })}
-      </Table.Body>
-    </Table.Root>
+        <Table.Body>
+          {results.map((competitorResult) => {
+            const { definedAttempts, bestResultIndex, worstResultIndex } =
+              resultAttempts(competitorResult);
+            return (
+              <Table.Row key={competitorResult.id}>
+                {isAdmin && <Table.Cell>EDIT</Table.Cell>}
+                <Table.Cell>{competitorResult.pos}</Table.Cell>
+                <Table.Cell>
+                  <Link
+                    href={route({
+                      pathname: "/persons/[wcaId]",
+                      query: { wcaId: competitorResult.wca_id },
+                    })}
+                  >
+                    {competitorResult.name}
+                  </Link>
+                </Table.Cell>
+                <Table.Cell style={{ position: "relative" }}>
+                  {formatAttemptResult(competitorResult.best, eventId)}{" "}
+                  {recordTagBadge(competitorResult.regional_single_record)}
+                </Table.Cell>
+                {anyAverages && (
+                  <Table.Cell style={{ position: "relative" }}>
+                    {formatAttemptResult(competitorResult.average, eventId)}{" "}
+                    {recordTagBadge(competitorResult.regional_average_record)}
+                  </Table.Cell>
+                )}
+                <Table.Cell>
+                  <HStack>
+                    <Icon asChild size="sm">
+                      <WcaFlag code={competitorResult.country_iso2} />
+                    </Icon>
+                    <CountryMap code={competitorResult.country_iso2} t={t} />
+                  </HStack>
+                </Table.Cell>
+                <AttemptsCells
+                  attempts={definedAttempts}
+                  bestResultIndex={bestResultIndex}
+                  worstResultIndex={worstResultIndex}
+                  eventId={eventId}
+                  recordTag={competitorResult.regional_single_record}
+                />
+              </Table.Row>
+            );
+          })}
+        </Table.Body>
+      </Table.Root>
+    </Table.ScrollArea>
   );
 }
 

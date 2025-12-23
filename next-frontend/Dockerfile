@@ -1,6 +1,6 @@
 # syntax=docker.io/docker/dockerfile:1
 
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 
 FROM base AS deps
 
@@ -64,6 +64,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=deps /app/global-bundle.pem /app/global-bundle.pem
 COPY --from=deps /usr/local/bin/vault /usr/local/bin/vault
 COPY --from=builder /app/docker-entrypoint.sh /app/docker-entrypoint.sh
+COPY --from=builder /app/export-dump.sh /app/export-dump.sh
 
 RUN apk add --no-cache jq
 
@@ -74,6 +75,10 @@ EXPOSE 3000
 ENV PORT=3000
 ENV NEW_RELIC_APP_NAME='next-js-production'
 ENV NEW_RELIC_LOG='stdout'
+
+# Even following the official new relic example not all the submodules are copied over
+# See https://github.com/newrelic/newrelic-node-examples/issues/307#issuecomment-3665368688
+COPY --from=builder /app/node_modules/newrelic /app/node_modules/newrelic
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output

@@ -54,31 +54,38 @@ export default function TabMenu({
         height="fit-content"
         position="sticky"
         minWidth="fit-content"
+        textAlign="center"
         gap="3"
       >
         {tabs.map((tab) => (
           <Tabs.Trigger key={tab.i18nKey} value={tab.menuKey} asChild>
-            <Link href={tab.href}>{t(tab.i18nKey)}</Link>
+            <Text textStyle="bodyEmphasis" asChild maxW="44">
+              <Link href={tab.href}>{t(tab.i18nKey)}</Link>
+            </Text>
           </Tabs.Trigger>
         ))}
         <Separator />
         {competitionInfo.tab_names.map((tabName) => (
           <Tabs.Trigger key={tabName} value={tabName} asChild>
-            <Link
-              href={route({
-                pathname: "/competitions/[competitionId]/tabs/[tabName]",
-                query: {
-                  competitionId: competitionInfo.id,
-                  tabName: encodeURIComponent(tabName),
-                },
-              })}
-            >
-              <Text maxW="44">{tabName}</Text>
-            </Link>
+            <Text textStyle="bodyEmphasis" asChild maxW="44">
+              <Link
+                href={route({
+                  pathname: "/competitions/[competitionId]/tabs/[tabName]",
+                  query: {
+                    competitionId: competitionInfo.id,
+                    tabName: encodeURIComponent(tabName),
+                  },
+                })}
+              >
+                {tabName}
+              </Link>
+            </Text>
           </Tabs.Trigger>
         ))}
       </Tabs.List>
-      <Tabs.Content value={currentPath!}>{children}</Tabs.Content>
+      <Tabs.Content width="full" value={currentPath!}>
+        {children}
+      </Tabs.Content>
     </Tabs.Root>
   );
 }

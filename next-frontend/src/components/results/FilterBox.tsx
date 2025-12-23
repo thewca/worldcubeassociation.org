@@ -1,8 +1,8 @@
 import { Box, VStack, HStack, Field, SegmentGroup } from "@chakra-ui/react";
-import EventSelector from "@/components/EventSelector";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
 import _ from "lodash";
+import { SingleEventSelector } from "@/components/EventSelector";
 
 type FilterState = {
   event: string;
@@ -150,16 +150,14 @@ function FilterBox({ filterState, filterActions, children }: FilterBoxProps) {
       borderColor="gray.100"
     >
       <VStack align="left">
-        <EventSelector
+        <SingleEventSelector
           title={t("competitions.competition_form.events")}
-          selectedEvents={[filterState.event]}
+          selectedEvent={filterState.event}
           onEventClick={(event) =>
             event === filterState.event
               ? filterActions.setEvent("all events")
               : filterActions.setEvent(event)
           }
-          hideAllButton
-          hideClearButton
         />
         <RegionSelector
           region={filterState.region}

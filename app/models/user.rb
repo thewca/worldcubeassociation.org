@@ -702,6 +702,7 @@ class User < ApplicationRecord
           panel_pages[:fixResults],
           panel_pages[:mergeProfiles],
           panel_pages[:mergeUsers],
+          panel_pages[:helpfulQueries],
         ],
       },
       wst: {
@@ -1091,7 +1092,7 @@ class User < ApplicationRecord
         registration_notifications_enabled
         receive_developer_mails
       ]
-      fields << { user_preferred_events_attributes: %i[id event_id _destroy] }
+      fields << { user_preferred_events_attributes: [%i[id event_id _destroy]] }
       fields += %i[receive_delegate_reports delegate_reports_region] if user.staff_or_any_delegate?
     end
     fields

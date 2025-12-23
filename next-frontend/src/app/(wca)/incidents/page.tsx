@@ -104,7 +104,7 @@ export default function IncidentsPage() {
   }
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left">
         <Heading size="5xl">Incidents Log</Heading>
         <Input

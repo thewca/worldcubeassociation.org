@@ -76,6 +76,18 @@ variable "rds_iam_identifier" {
   default = "db-VFBCC2563NK74KYKEYEC32YXHA"
 }
 
+variable "rds_dev_dump_identifier" {
+  type = string
+  description = "The identifier of the dev dump"
+  default = "db-CLQZYYW5FGHVA6IGWTN64N24PI"
+}
+
+variable "rds_read_replica_identifier" {
+  type = string
+  description = "The identifier of the read replica"
+  default = "db-YF7CCUEQCJOJXD5KU3ASUPYBSE"
+}
+
 variable "shared" {
   type = object({
     vpc_id: string,

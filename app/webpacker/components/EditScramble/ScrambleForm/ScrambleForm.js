@@ -169,16 +169,26 @@ function ScrambleFormWrapper({ scramble, sync }) {
 
   if (created) {
     return (
-      <AfterActionMessage
-        eventId={scramble.event_id}
-        competitionId={scramble.competition_id}
-        response={created.response}
-      />
+      <>
+        <AfterActionMessage
+          eventId={scramble.event_id}
+          competitionId={scramble.competition_id}
+          response={created.response}
+        />
+        <Button
+          secondary
+          loading={saving}
+          disabled={saving}
+          onClick={() => setCreated(undefined)}
+        >
+          Add another entry for the same round
+        </Button>
+      </>
     );
   }
   if (edited) {
     return (
-      <div>
+      <>
         <AfterActionMessage
           eventId={scramble.event_id}
           competitionId={scramble.competition_id}
@@ -192,7 +202,7 @@ function ScrambleFormWrapper({ scramble, sync }) {
         >
           Go back for more edits
         </Button>
-      </div>
+      </>
     );
   }
   if (deleted) {

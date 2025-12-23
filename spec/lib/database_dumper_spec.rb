@@ -76,27 +76,123 @@ RSpec.describe "DatabaseDumper" do
   end
 
   context "Results Export" do
-    it "defines sanitizers that match the expected output schema (backwards compatibility)" do
-      with_database :results_dump do
-        # Rails *always* includes a `schema_migrations` table when loading any pre-defined schema file.
-        #   You can _change_ the name in the database configuration file, but you cannot turn it off / disable the table entirely.
-        #   But since we don't care about Rails-ian specifics in our Results Export, we manually skip the table here.
-        actual_table_names = ActiveRecord::Base.connection.data_sources - ["schema_migrations"]
+    # This test may seem redundent, but its purpose is to blow up CI if a dev accidentally marks the incorrect version as 'current'
+    it 'has v2 marked as the current version' do
+      expect(DatabaseDumper.current_results_export_version).to eq(:v2)
+    end
 
-        expect(DatabaseDumper::RESULTS_SANITIZERS.keys).to match_array actual_table_names
+    it 'has at least, and only, one current version' do
+      expect(DatabaseDumper::RESULTS_EXPORT_VERSIONS.select { |_k, v| v[:metadata][:version_label] == "current" }.keys.count).to be(1)
+    end
+
+    describe '#results_export_live_versions' do
+      it 'returns all version keys when multiple are live at the same time' do
+        all_live = {
+          v1: {
+            metadata: {
+              export_format_version: '1.0.0',
+              version_label: 'deprecated',
+              end_of_life_date: '3026-01-01',
+            },
+          },
+          v2: {
+            metadata: {
+              export_format_version: '2.0.0',
+              version_label: 'current',
+              end_of_life_date: nil,
+            },
+          },
+        }
+
+        stub_const("DatabaseDumper::RESULTS_EXPORT_VERSIONS", all_live)
+        expect(DatabaseDumper.results_export_live_versions).to eq(%i[v1 v2])
+      end
+
+      it 'does not return keys for versions past their end_of_life_date' do
+        v1_dead = {
+          v1: {
+            metadata: {
+              export_format_version: '1.0.0',
+              version_label: 'deprecated',
+              end_of_life_date: '1026-01-01',
+            },
+          },
+          v2: {
+            metadata: {
+              export_format_version: '2.0.0',
+              version_label: 'current',
+              end_of_life_date: nil,
+            },
+          },
+        }
+
+        stub_const("DatabaseDumper::RESULTS_EXPORT_VERSIONS", v1_dead)
+        expect(DatabaseDumper.results_export_live_versions).to eq([:v2])
       end
     end
 
-    DatabaseDumper::RESULTS_SANITIZERS.each do |table_name, table_sanitizer|
-      it "defines a sanitizer of table '#{table_name}'" do
-        unless table_sanitizer == :skip_all_rows
-          where_clause = table_sanitizer[:where_clause]
-          expect(where_clause).to be_nil.or(match(/WHERE/)).or(match(/JOIN/))
-          where_clause = table_sanitizer[:order_by_clause]
-          expect(where_clause).to be_nil.or(match(/ORDER BY/))
-          column_sanitizers = table_sanitizer[:column_sanitizers]
-          column_names = with_database(:results_dump) { ActiveRecord::Base.connection.columns(table_name).map(&:name) }
-          expect(column_sanitizers.keys).to match_array(column_names)
+    context 'v1' do
+      it 'encounters no errors when dumping the database' do
+        Dir.mktmpdir do |dir|
+          expect { DatabaseDumper.public_results_dump("result_test.sql", dir, :v1) }.not_to raise_error
+        end
+      end
+
+      it "defines sanitizers that match the expected output schema (backwards compatibility)" do
+        with_database :results_dump do
+          # Rails *always* includes a `schema_migrations` table when loading any pre-defined schema file.
+          #   You can _change_ the name in the database configuration file, but you cannot turn it off / disable the table entirely.
+          #   But since we don't care about Rails-ian specifics in our Results Export, we manually skip the table here.
+          actual_table_names = ActiveRecord::Base.connection.data_sources - ["schema_migrations"]
+
+          expect(DatabaseDumper::RESULTS_SANITIZERS.keys).to match_array actual_table_names
+        end
+      end
+
+      DatabaseDumper::RESULTS_SANITIZERS.each do |table_name, table_sanitizer|
+        it "defines a sanitizer of table '#{table_name}'" do
+          unless table_sanitizer == :skip_all_rows
+            where_clause = table_sanitizer[:where_clause]
+            expect(where_clause).to be_nil.or(match(/WHERE/)).or(match(/JOIN/))
+            where_clause = table_sanitizer[:order_by_clause]
+            expect(where_clause).to be_nil.or(match(/ORDER BY/))
+            column_sanitizers = table_sanitizer[:column_sanitizers]
+            column_names = with_database(:results_dump) { ActiveRecord::Base.connection.columns(table_name).map(&:name) }
+            expect(column_sanitizers.keys).to match_array(column_names)
+          end
+        end
+      end
+    end
+
+    context 'v2' do
+      it 'encounters no errors when dumping the database' do
+        Dir.mktmpdir do |dir|
+          expect { DatabaseDumper.public_results_dump("result_test.sql", dir, :v2) }.not_to raise_error
+        end
+      end
+
+      it "defines sanitizers that match the expected output schema" do
+        with_database :results_dump_v2 do
+          # Rails *always* includes a `schema_migrations` table when loading any pre-defined schema file.
+          #   You can _change_ the name in the database configuration file, but you cannot turn it off / disable the table entirely.
+          #   But since we don't care about Rails-ian specifics in our Results Export, we manually skip the table here.
+          actual_table_names = ActiveRecord::Base.connection.data_sources - ["schema_migrations"]
+
+          expect(DatabaseDumper::V2_RESULTS_SANITIZERS.keys).to match_array actual_table_names
+        end
+      end
+
+      DatabaseDumper::V2_RESULTS_SANITIZERS.each do |table_name, table_sanitizer|
+        it "defines a sanitizer of table '#{table_name}'" do
+          unless table_sanitizer == :skip_all_rows
+            where_clause = table_sanitizer[:where_clause]
+            expect(where_clause).to be_nil.or(match(/WHERE/)).or(match(/JOIN/))
+            where_clause = table_sanitizer[:order_by_clause]
+            expect(where_clause).to be_nil.or(match(/ORDER BY/))
+            column_sanitizers = table_sanitizer[:column_sanitizers]
+            column_names = with_database(:results_dump_v2) { ActiveRecord::Base.connection.columns(table_name).map(&:name) }
+            expect(column_sanitizers.keys).to match_array(column_names)
+          end
         end
       end
     end
