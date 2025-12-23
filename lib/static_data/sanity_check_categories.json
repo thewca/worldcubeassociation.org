@@ -1,0 +1,77 @@
+[
+  {
+    "id": 1,
+    "name": "Personal Data Irregularities",
+    "email_to": "wrt@worldcubeassociation.org"
+  },
+  {
+    "id": 2,
+    "name": "Irregular Results",
+    "email_to": "wrt@worldcubeassociation.org"
+  },
+  {
+    "id": 3,
+    "name": "Duplicate Results",
+    "email_to": "wrt@worldcubeassociation.org"
+  },
+  {
+    "id": 4,
+    "name": "WCA-ID Irregularities",
+    "email_to": "wrt@worldcubeassociation.org"
+  },
+  {
+    "id": 5,
+    "name": "Duplicate Scrambles",
+    "email_to": "wrt@worldcubeassociation.org"
+  },
+  {
+    "id": 6,
+    "name": "Invalid Scrambles",
+    "email_to": "wrt@worldcubeassociation.org"
+  },
+  {
+    "id": 7,
+    "name": "Irregularities",
+    "email_to": "wrt@worldcubeassociation.org"
+  },
+  {
+    "id": 8,
+    "name": "User Data Irregularities",
+    "email_to": "wrt@worldcubeassociation.org"
+  },
+  {
+    "id": 9,
+    "name": "Suspicious Rounds Data",
+    "email_to": "wrt@worldcubeassociation.org"
+  },
+  {
+    "id": 10,
+    "name": "Consistency of Results & Persons",
+    "email_to": "wrt@worldcubeassociation.org"
+  },
+  {
+    "id": 11,
+    "name": "Consistency of Results & Scrambles",
+    "email_to": "wrt@worldcubeassociation.org"
+  },
+  {
+    "id": 12,
+    "name": "Consistency of Results & Rounds Data",
+    "email_to": "wrt@worldcubeassociation.org"
+  },
+  {
+    "id": 13,
+    "name": "Banned Competitors",
+    "email_to": "wrt@worldcubeassociation.org"
+  },
+  {
+    "id": 14,
+    "name": "Email ID warnings",
+    "email_to": "assistants@worldcubeassociation.org"
+  },
+  {
+    "id": 15,
+    "name": "Incorrect Records Assignment",
+    "email_to": "wrt@worldcubeassociation.org"
+  }
+]
