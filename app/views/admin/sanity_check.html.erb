@@ -11,7 +11,7 @@
       <h4> Query results:</h4>
       <code> <%= result.results_without_exclusions %></code>
       <h4> Exclusions: <%= result.sanity_check_exclusions.count %></h4>
-      <table></table>
+      <h5> Last run: <%= result.cronjob_statistic.in_progress? ? "Running" : result.cronjob_statistic.run_end %> </h5>
     <% end %>
   <% end %>
 </div>

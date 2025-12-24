@@ -7,7 +7,7 @@ class SanityCheckCategoryJob < WcaCronjob
       query_result = ActiveRecord::Base.connection.exec_query sanity_check.query
       SanityCheckResult.create!(sanity_check_id: sanity_check.id,
                                 query_results: query_result,
-                                cronjob_statistic: CronjobStatistic.find(options[:name]))
+                                cronjob_statistic_name: options[:name])
     end
   end
 end
