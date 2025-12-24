@@ -334,10 +334,8 @@ export function isActivityTimeValid(activity, wcifVenue, wcifSchedule) {
   const competitionLocalEndTime = DateTime.fromISO(startDate).plus({ days })
     .setZone(wcifVenue?.timezone, { keepLocalTime: true });
 
-  const activityStartTime = DateTime.fromISO(startTime)
-    .setZone(wcifVenue?.timezone);
-  const activityEndTime = DateTime.fromISO(endTime)
-    .setZone(wcifVenue?.timezone);
+  const activityStartTime = DateTime.fromISO(startTime);
+  const activityEndTime = DateTime.fromISO(endTime);
 
   const hasPositiveDuration = activityStartTime < activityEndTime;
   const startsOnOrAfterStartDate = competitionLocalStartTime <= activityStartTime;
