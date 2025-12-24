@@ -329,12 +329,15 @@ export function isActivityTimeValid(activity, wcifVenue, wcifSchedule) {
   const { startDate, numberOfDays: days } = wcifSchedule;
   const { startTime, endTime } = activity;
 
-  const luxonStartDate = DateTime.fromISO(startDate).setZone(wcifVenue?.timezone);
-  const luxonEndDate = DateTime.fromISO(startDate).plus({ days }).setZone(wcifVenue?.timezone);
+  const competitionStartTime = DateTime.fromISO(startDate).setZone(wcifVenue?.timezone);
+  const competitionEndTime = DateTime.fromISO(startDate).plus({ days }).setZone(wcifVenue?.timezone);
 
-  const hasPositiveDuration = DateTime.fromISO(startTime) < DateTime.fromISO(endTime);
-  const startsOnOrAfterStartDate = luxonStartDate <= DateTime.fromISO(startTime);
-  const endsOnOrBeforeEndDate = DateTime.fromISO(endTime) <= luxonEndDate;
+  const activityStartTime = DateTime.fromISO(startTime);
+  const activityEndTime = DateTime.fromISO(endTime);
+
+  const hasPositiveDuration = activityStartTime < activityEndTime;
+  const startsOnOrAfterStartDate = competitionStartTime <= activityStartTime;
+  const endsOnOrBeforeEndDate = activityEndTime <= competitionEndTime;
 
   return hasPositiveDuration && startsOnOrAfterStartDate && endsOnOrBeforeEndDate;
 }
