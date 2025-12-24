@@ -1,4 +1,4 @@
- # frozen_string_literal: true
+# frozen_string_literal: true
 
 class SanityCheckResult < ApplicationRecord
   belongs_to :sanity_check
@@ -10,7 +10,7 @@ class SanityCheckResult < ApplicationRecord
 
   def results_without_exclusions
     query_results.filter do |result|
-      !sanity_check_exclusions.where(exclusion: result.to_json).exists?
+      !sanity_check_exclusions.exists?(exclusion: result.to_json)
     end
   end
 end
