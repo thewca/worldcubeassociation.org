@@ -4,7 +4,7 @@
   </h1>
   <% @categories.each do |category| %>
     <% latest_results = category.latest_results %>
-    <h2>Category: <%= category.name %></h2>
+    <h2>Category: <%= category.name %> <button><a href="<%= sanity_check_run_path(sanity_check_category_id: category.id) %>"> Run all Checks in Category</a></button></h2>
       <% latest_results.each do |result| %>
       <h3><%= result.topic %></h3>
       <h5><%= result.comments %></h5>

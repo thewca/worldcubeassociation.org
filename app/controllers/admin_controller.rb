@@ -18,6 +18,12 @@ class AdminController < ApplicationController
     @categories = SanityCheckCategory.all
   end
 
+  def run_sanity_check
+    sanity_check_category = SanityCheckCategory.find(params.require(:sanity_check_category_id))
+    SanityCheckCategoryJob.perform_later({ name: sanity_check_category.name, category_id: sanity_check_category.id })
+    redirect_to sanity_check_path
+  end
+
   def do_merge_people
     merge_params = params.expect(merge_people: %i[person1_wca_id person2_wca_id])
     @merge_people = MergePeople.new(merge_params)

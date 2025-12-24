@@ -180,7 +180,8 @@ Rails.application.routes.draw do
     resources :results, except: %i[index new], controller: 'admin/results'
     resources :scrambles, except: %i[index new], controller: 'admin/scrambles'
     get 'events_data/:competition_id' => 'admin/results#show_events_data', as: :competition_events_data
-    get 'sanity-check' => "admin#sanity_check", as: :admin_sanity_check
+    get 'sanity-check' => "admin#sanity_check", as: :sanity_check
+    get 'run-sanity-check' => "admin#run_sanity_check", as: :sanity_check_run
   end
 
   get "media/validate" => 'media#validate', as: :validate_media
