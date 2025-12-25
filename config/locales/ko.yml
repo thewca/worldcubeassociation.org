@@ -952,6 +952,13 @@ ko:
         #original_hash: 79ccfe2
         dob_invalid: 형식이 잘못 되었습니다.
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: 페이지를 렌더링하는 동안 오류가 발생했습니다.
+      #original_hash: 22dfe12
+      description: 이 오류가 계속 발생하면 아래에 나열된 세부 정보를 포함하여 WST에 보고하십시오.
+      #original_hash: 20be860
+      details: 오류 세부 정보
     messages:
       #original_hash: dc2367c
       wrong_size: '잘못된 크기입니다(%{file_size}이어야 함)'
@@ -5203,6 +5210,11 @@ ko:
     results_export:
       #original_hash: 15d00e1
       heading: WCA 결과 내보내기
+      #original_hash: 733df42
+      deprecation_warning: >-
+        사용 중단 알림: 결과 내보내기 기능의 %{old_version} 버전은 더 이상 사용되지 않으며,
+        %{deprecation_date}부터 지원이 중단될 예정입니다. 그 전에 %{new_version} 버전으로 전환하여
+        사용하십시오.
       #original_hash: f9fe9df
       description: >-
         이 페이지에서는 WCA 결과를 여러 형식으로 다운로드할 수 있도록 제공하므로, 이를 광범위하게 사용하거나 분석할 수 있습니다.
@@ -5210,6 +5222,10 @@ ko:
         확인할 수 있습니다.
       #original_hash: 4f59283
       permalink: 퍼머링크
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        참고: Permalink는 특정 버전 내에서 최신 결과 내보내기를 제공합니다. 즉, v2 Permalink는 최신 v2 내보내기를
+        반환하지만, v3이 출시되더라도 v2 상태를 유지합니다.
       file_formats:
         #original_hash: b086d79
         sql: SQL 데이터베이스로 가져오기 위한 SQL 문입니다.
