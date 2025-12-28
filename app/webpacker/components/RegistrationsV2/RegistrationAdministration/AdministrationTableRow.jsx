@@ -30,7 +30,8 @@ function RegisteredOn({
 }) {
   return (
     <Popup
-      trigger={formatDate(registeredOn, withFullDate)}
+      // trigger must be wrapped in a span, literal text causes a crash
+      trigger={<span>{formatDate(registeredOn, withFullDate)}</span>}
       content={getRegistrationTimestamp(registeredOn)}
     />
   );
