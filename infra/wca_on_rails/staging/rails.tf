@@ -17,6 +17,10 @@ locals {
       value = var.ROOT_URL
     },
     {
+      name  = "OIDC_ALGORITHM"
+      value = "RS256"
+    },
+    {
       name = "DATABASE_HOST"
       value = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
@@ -38,6 +42,10 @@ locals {
     },
     {
       name = "READ_REPLICA_HOST"
+      value = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+    },
+    {
+      name = "DEV_DUMP_HOST"
       value = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
     {
@@ -105,6 +113,10 @@ locals {
       value = var.DATABASE_WRT_USER
     },
     {
+      name = "DATABASE_WRT_SENIOR_USER"
+      value = var.DATABASE_WRT_SENIOR_USER
+    },
+    {
       name = "WRC_WEBHOOK_URL",
       value = var.WRC_WEBHOOK_URL
     },
@@ -138,7 +150,9 @@ locals {
       name = "PMA_USER_CONFIG_BASE64"
       value = base64encode(templatefile("../templates/config.user.inc.php.tftpl",
         { rds_host: "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
-          rds_replica_host: "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com" }))
+          rds_replica_host: "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
+          # There is no dump replica on staging
+          dump_replica_host: "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"}))
     }
   ]
 }
@@ -207,7 +221,7 @@ data "aws_iam_policy_document" "task_policy" {
     actions = [
       "rds-db:connect",
     ]
-    resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}"]
+    resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}", "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_SENIOR_USER}"]
   }
   statement {
     effect = "Allow"
@@ -239,7 +253,7 @@ resource "aws_ecs_task_definition" "api" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   cpu = "1024"
-  memory = "3930"
+  memory = "2048"
 
   container_definitions = jsonencode([
     {
@@ -291,14 +305,14 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   cpu = "1024"
-  memory = "3930"
+  memory = "3900"
 
   container_definitions = jsonencode([
     {
       name              = "rails-staging"
       image             = "${var.shared.ecr_repository.repository_url}:staging"
       cpu    = 1024
-      memory = 3930
+      memory = 3900
 
       portMappings = [
         {

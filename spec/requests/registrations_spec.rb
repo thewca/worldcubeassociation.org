@@ -31,7 +31,7 @@ RSpec.describe "registrations" do
           ["Status", "Name", "WCA ID", "Birth date", "Gender", "Email", "444"],
         ]
         post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Missing columns: country, 333."
       end
 
@@ -45,7 +45,7 @@ RSpec.describe "registrations" do
         expect do
           post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
         end.not_to(change { competition.registrations.count })
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "The given file includes 2 accepted registrations, which is more than the competitor limit of 1."
       end
 
@@ -68,7 +68,7 @@ RSpec.describe "registrations" do
         expect do
           post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
         end.not_to(change { competition.registrations.count })
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Error importing #{two_timer_dave.name}: Validation failed: Competition You can only be accepted for one Series competition at a time."
       end
 
@@ -81,7 +81,7 @@ RSpec.describe "registrations" do
         expect do
           post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
         end.not_to(change { competition.registrations.count })
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Email must be unique, found the following duplicates: sherlock@example.com."
       end
 
@@ -94,7 +94,7 @@ RSpec.describe "registrations" do
         expect do
           post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
         end.not_to(change { competition.registrations.count })
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "WCA ID must be unique, found the following duplicates: 2019HOLM01."
       end
 
@@ -108,7 +108,7 @@ RSpec.describe "registrations" do
         expect do
           post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
         end.not_to(change { competition.registrations.count })
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: 01.01.2000, Jan 01 2000."
       end
 
@@ -123,7 +123,7 @@ RSpec.describe "registrations" do
             expect do
               post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
             end.not_to(change { competition.registrations.count })
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(response.body).to match(/The WCA ID 1000DARN99 doesn.*t exist/)
           end
 
@@ -142,7 +142,7 @@ RSpec.describe "registrations" do
                     expect do
                       post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
                     end.not_to(change { competition.registrations.count })
-                    expect(response).to have_http_status(:unprocessable_entity)
+                    expect(response).to have_http_status(:unprocessable_content)
                     expect(response.body).to include "There is already a user with email #{user.email}, but it has WCA ID of #{user.wca_id} instead of #{dummy_user.wca_id}."
                   end
                 end
@@ -222,7 +222,7 @@ RSpec.describe "registrations" do
                   expect do
                     post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
                   end.not_to(change { competition.registrations.count })
-                  expect(response).to have_http_status(:unprocessable_entity)
+                  expect(response).to have_http_status(:unprocessable_content)
                   expect(response.body).to include "There is already a user with email #{user.email}, but it has unconfirmed WCA ID of #{unconfirmed_person.wca_id} instead of #{person.wca_id}."
                 end
               end

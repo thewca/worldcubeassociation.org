@@ -23,4 +23,9 @@ class Api::V1::ApiController < ApplicationController
   rescue_from ActionController::ParameterMissing do |_e|
     render json: { error: Registrations::ErrorCodes::INVALID_REQUEST_DATA }, status: :bad_request
   end
+
+  # Probably nicer to have some kind of errorcode/string depending on the model
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render json: { error: e.to_s, data: { model: e.model, id: e.id } }, status: :not_found
+  end
 end

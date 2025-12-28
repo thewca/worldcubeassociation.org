@@ -77,6 +77,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.results
   end
 
+  def tabs
+    competition = competition_from_params
+    render json: competition.tabs
+  end
+
   def podiums
     competition = Competition.find(params.require(:competition_id))
 
@@ -86,19 +91,16 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def event_results
     competition = competition_from_params(associations: [:rounds])
     event = Event.c_find!(params[:event_id])
-    results_by_round = competition.results
-                                  .where(event_id: event.id)
-                                  .group_by(&:round_type)
-                                  .sort_by { |round_type, _| -round_type.rank }
-    rounds = results_by_round.map do |round_type, results|
-      # I think all competitions now have round data, but let's be cautious
-      # and assume they may not.
-      # round data.
-      round = competition.find_round_for(event.id, round_type.id)
+    rounds = competition.rounds
+                        .includes(:results)
+                        .where(competition_events: { event: event })
+                        .except(:order)
+                        .order(number: :desc)
+                        .map do |round|
       {
-        id: round&.id,
-        roundTypeId: round_type.id,
-        results: results.sort_by { |r| [r.pos, r.person_name] },
+        id: round.id,
+        roundTypeId: round.round_type_id,
+        results: round.results.sort_by { |r| [r.pos, r.person_name] },
       }
     end
     render json: {
@@ -115,19 +117,16 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def event_scrambles
     competition = competition_from_params
     event = Event.c_find!(params[:event_id])
-    scrambles_by_round = competition.scrambles
-                                    .where(event_id: event.id)
-                                    .group_by(&:round_type)
-                                    .sort_by { |round_type, _| -round_type.rank }
-    rounds = scrambles_by_round.map do |round_type, scrambles|
-      # I think all competitions now have round data, but let's be cautious
-      # and assume they may not.
-      # round data.
-      round = competition.find_round_for(event.id, round_type.id)
+    rounds = competition.rounds
+                        .includes(:scrambles)
+                        .where(competition_events: { event: event })
+                        .except(:order)
+                        .order(number: :desc)
+                        .map do |round|
       {
-        id: round&.id,
-        roundTypeId: round_type.id,
-        scrambles: scrambles,
+        id: round.id,
+        roundTypeId: round.round_type_id,
+        scrambles: round.scrambles,
       }
     end
     render json: {

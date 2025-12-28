@@ -11,6 +11,15 @@ import UpcomingCompetitionTable from "@/components/competitions/Mine/UpcomingCom
 import PastCompetitionsTable from "@/components/competitions/Mine/PastCompetitionTable";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("competitions.my_competitions.title"),
+  };
+}
 
 export default async function MyCompetitions() {
   const session = await auth();
@@ -20,7 +29,6 @@ export default async function MyCompetitions() {
     return <p>Please Log in</p>;
   }
 
-  // @ts-expect-error TODO: Fix this
   const client = serverClientWithToken(session.accessToken);
 
   const myCompetitionsRequest = await client.GET("/v0/competitions/mine");

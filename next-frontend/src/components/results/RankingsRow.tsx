@@ -1,13 +1,13 @@
 import { components } from "@/types/openapi";
 import { Table } from "@chakra-ui/react";
 import {
-  AttemptsCells,
   CompetitionCell,
   CountryCell,
   PersonCell,
 } from "@/components/results/ResultTableCells";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { recordAttempts } from "@/lib/wca/results/attempts";
+import { AttemptsCells } from "@/components/results/TableCells";
 
 interface RankingsRowProps {
   ranking: components["schemas"]["ExtendedResult"];

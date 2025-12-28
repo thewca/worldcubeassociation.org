@@ -1,0 +1,5 @@
+description: Competition not found
+content:
+  application/json:
+    schema:
+      $ref: "../schemas/errors/Competition404.yaml"

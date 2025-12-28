@@ -36,6 +36,9 @@ function addScrambleSetsToEvents(wcifEvents, scrambleSets, keepExistingSets = tr
           })),
           'ordered_index',
         ),
+        // we don't care about results in this UI at all,
+        //   so deliberately un-setting them saves network bandwidth :)
+        results: undefined,
       })),
     })),
   };
@@ -85,7 +88,37 @@ function removeScrambleFile(state, oldScrambleFile) {
   };
 }
 
-function navigationToLodash(actionWithNav, selector) {
+function navigationToLodash(rootState, actionWithNav, selector) {
+  const history = actionWithNav[selector];
+
+  const navigation = history.reduce((navAccu, historyStep) => {
+    const searchSubject = navAccu.lookupState[historyStep.key];
+
+    if (searchSubject === undefined) {
+      return {
+        lookupState: {},
+        accu: undefined,
+      };
+    }
+
+    const targetIndex = searchSubject.findIndex((ent) => ent.id === historyStep.id);
+
+    return {
+      lookupState: searchSubject[targetIndex],
+      accu: [...navAccu.accu, historyStep.key, targetIndex],
+    };
+  }, {
+    lookupState: rootState,
+    accu: [],
+  });
+
+  if (navigation.accu !== undefined) {
+    return [
+      ...navigation.accu,
+      actionWithNav.matchingKey,
+    ];
+  }
+
   return [
     ...actionWithNav[selector].flatMap((step) => [step.key, step.index]),
     actionWithNav.matchingKey,
@@ -106,17 +139,23 @@ export default function scrambleMatchReducer(state, action) {
         ['initial', 'current'],
         (subState) => removeScrambleFile(subState, action.scrambleFile),
       );
+    case 'resetScrambleFile':
+      return applyAction(
+        state,
+        ['current'],
+        (subState) => removeScrambleFile(subState, action.scrambleFile),
+      );
     case 'resetAfterSave':
       return initializeState({
-        wcifEvents: state.initial.events,
+        wcifEvents: state.current.events,
         scrambleSets: action.scrambleSets,
       });
     case 'resetToInitial':
       return applyAction(state, ['current'], () => state.initial);
     case 'moveMatchingEntity':
       return applyAction(state, ['current'], (subState) => {
-        const oldPath = navigationToLodash(action, 'fromNavigation');
-        const newPath = navigationToLodash(action, 'toNavigation');
+        const oldPath = navigationToLodash(subState, action, 'fromNavigation');
+        const newPath = navigationToLodash(subState, action, 'toNavigation');
 
         return _.chain(subState)
           .cloneDeep()
@@ -126,7 +165,7 @@ export default function scrambleMatchReducer(state, action) {
       });
     case 'reorderMatchingEntities':
       return applyAction(state, ['current'], (subState) => {
-        const lodashPath = navigationToLodash(action, 'pickerHistory');
+        const lodashPath = navigationToLodash(subState, action, 'pickerHistory');
 
         return _.chain(subState)
           .cloneDeep()
@@ -135,7 +174,7 @@ export default function scrambleMatchReducer(state, action) {
       });
     case 'deleteEntityFromMatching':
       return applyAction(state, ['current'], (subState) => {
-        const lodashPath = navigationToLodash(action, 'pickerHistory');
+        const lodashPath = navigationToLodash(subState, action, 'pickerHistory');
 
         return _.chain(subState)
           .cloneDeep()
@@ -144,11 +183,20 @@ export default function scrambleMatchReducer(state, action) {
       });
     case 'addEntityToMatching':
       return applyAction(state, ['current'], (subState) => {
-        const lodashPath = navigationToLodash(action, 'pickerHistory');
+        const lodashPath = navigationToLodash(subState, action, 'pickerHistory');
 
         return _.chain(subState)
           .cloneDeep()
           .update(lodashPath, (arr = []) => addItemToArray(arr, action.entity, action.targetIndex))
+          .value();
+      });
+    case 'updateReferenceValue':
+      return applyAction(state, ['current'], (subState) => {
+        const lodashPath = navigationToLodash(subState, action, 'pickerHistory');
+
+        return _.chain(subState)
+          .cloneDeep()
+          .set(lodashPath, action.value)
           .value();
       });
     default:

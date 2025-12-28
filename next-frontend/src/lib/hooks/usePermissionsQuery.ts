@@ -1,11 +1,11 @@
 import { useSession } from "next-auth/react";
-import useAPI from "@/lib/wca/useAPI";
+import { useAPIClient } from "@/lib/wca/useAPI";
 import { useQuery } from "@tanstack/react-query";
 import { hydrateUserPermissions } from "@/lib/wca/permissions";
 
 export const usePermissionsQuery = () => {
   const { data: session } = useSession();
-  const api = useAPI();
+  const api = useAPIClient();
 
   return useQuery({
     enabled: Boolean(session),

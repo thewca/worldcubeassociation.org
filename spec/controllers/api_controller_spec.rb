@@ -207,8 +207,8 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
       get :scramble_program
       expect(response).to have_http_status :ok
       json = response.parsed_body
-      expect(json["current"]["name"]).to eq "TNoodle-WCA-1.2.2"
-      # the actual key resides in regulations-data, so in the test environment it will simply prompt "false"
+      expect(json["current"]["name"]).to eq "TNoodle-WCA-1.2.3"
+      # the actual key resides in Vault, so in the test environment it will simply prompt "false"
       expect(json["publicKeyBytes"]).to be false
     end
   end
@@ -436,9 +436,10 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
       json = response.parsed_body
       expect(json).to eq(
         'export_date' => export_timestamp.iso8601,
-        'sql_url' => "#{root_url}export/results/WCA_export.sql.zip",
+        'export_version' => 'v2.0.0',
+        'sql_url' => "#{root_url}export/results/v2/sql",
         'sql_filesize_bytes' => 123_456,
-        'tsv_url' => "#{root_url}export/results/WCA_export.tsv.zip",
+        'tsv_url' => "#{root_url}export/results/v2/tsv",
         'tsv_filesize_bytes' => 123_456,
         'developer_url' => "#{ENV.fetch('DUMP_HOST', nil)}/export/developer/wca-developer-database-dump.zip",
         'readme' => "",
