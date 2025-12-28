@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Separator, Tabs } from "@chakra-ui/react";
+import { Separator, Tabs, Text } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import _ from "lodash";
 import { components } from "@/types/openapi";
@@ -12,6 +12,7 @@ import {
   afterCompetitionTabs,
   beforeCompetitionTabs,
 } from "@/lib/wca/competitions/tabs";
+import { route } from "nextjs-routes";
 
 export default function TabMenu({
   competitionInfo,
@@ -53,21 +54,38 @@ export default function TabMenu({
         height="fit-content"
         position="sticky"
         minWidth="fit-content"
+        textAlign="center"
         gap="3"
       >
         {tabs.map((tab) => (
           <Tabs.Trigger key={tab.i18nKey} value={tab.menuKey} asChild>
-            <Link href={tab.href} key={tab.i18nKey}>
-              {t(tab.i18nKey)}
-            </Link>
+            <Text textStyle="bodyEmphasis" asChild maxW="44">
+              <Link href={tab.href}>{t(tab.i18nKey)}</Link>
+            </Text>
           </Tabs.Trigger>
         ))}
         <Separator />
-        <Tabs.Trigger value="custom-1">Custom 1</Tabs.Trigger>
-        <Tabs.Trigger value="custom-2">Custom 2</Tabs.Trigger>
-        <Tabs.Trigger value="custom-3">Custom 3</Tabs.Trigger>
+        {competitionInfo.tab_names.map((tabName) => (
+          <Tabs.Trigger key={tabName} value={tabName} asChild>
+            <Text textStyle="bodyEmphasis" asChild maxW="44">
+              <Link
+                href={route({
+                  pathname: "/competitions/[competitionId]/tabs/[tabName]",
+                  query: {
+                    competitionId: competitionInfo.id,
+                    tabName: encodeURIComponent(tabName),
+                  },
+                })}
+              >
+                {tabName}
+              </Link>
+            </Text>
+          </Tabs.Trigger>
+        ))}
       </Tabs.List>
-      <Tabs.Content value={currentPath!}>{children}</Tabs.Content>
+      <Tabs.Content width="full" value={currentPath!}>
+        {children}
+      </Tabs.Content>
     </Tabs.Root>
   );
 }

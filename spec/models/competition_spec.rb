@@ -708,7 +708,7 @@ RSpec.describe Competition do
     end
 
     it "changes the competitionId of scrambles" do
-      scramble1 = create(:scramble, competition_id: competition.id)
+      scramble1 = create(:scramble, competition: competition)
       competition.update_attribute(:id, "NewID2015")
       expect(scramble1.reload.competition_id).to eq "NewID2015"
     end

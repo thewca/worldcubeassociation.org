@@ -95,6 +95,7 @@ en:
     "1": "Best of 1"
     "2": "Best of 2"
     "3": "Best of 3"
+    "5": "Best of 5"
     "a": "Average of 5"
     "m": "Mean of 3"
     #context: short name alternative
@@ -102,8 +103,10 @@ en:
       "1": "Bo1"
       "2": "Bo2"
       "3": "Bo3"
+      "5": "Bo5"
       "a": "Ao5"
       "m": "Mo3"
+      "h": "H2H"
   #context: Round name
   rounds:
     "0":
@@ -300,6 +303,7 @@ en:
         location: "Location"
         region: "Region"
         subRegion: "Subregion"
+        receive_developer_mails: "I would like to receive notifications about changes to WCA software resources"
         receive_delegate_reports: "I would like to receive Delegate Reports of WCA Competitions by email"
         delegate_reports_region: "I only want to receive Delegate Reports for the following region"
         user_preferred_events: "Preferred events"
@@ -479,6 +483,7 @@ en:
         registration_notifications_enabled: "This only applies for competitions you organize or delegate, and can be overridden on a per-competition basis."
         unconfirmed_wca_id: ""
         wca_id: ""
+        receive_developer_mails: "This is limited to notifications for major version changes to resources like data exports, WCIF schema and public APIs. Recommended for developers maintaing software that relies on these tools."
         receive_delegate_reports: "If you are a Senior Delegate or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to 12 hours to take effect."
         delegate_reports_region: "If you want to receive all reports, leave this field blank (the dropdown option at the very top). Note: the change may take up to 12 hours to take effect."
         otp_attempt: "Check your configured mobile application for a one-time password, or input one of your recovery codes."
@@ -576,6 +581,10 @@ en:
       dob_contact:
         dob_invalid: "is misformatted"
   errors:
+    next_frontend:
+      title: "An error occurred when rendering the page"
+      description: "If this error persists, report it to WST with the details listed below"
+      details: "Error details"
     #These are locales used in lib/ (ignored by configuration)
     #context: Error message when submitting a profile picture
     messages:
@@ -1384,6 +1393,12 @@ en:
       orga_closed_reg_success: "Successfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
       no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
+    live:
+      title: "Live Results"
+      connection:
+        initialized: "Connection being initialized"
+        connected: "Connected, results are being updated"
+        disconnected: "Lost connection, results are not being updated"
     #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"
@@ -1598,7 +1613,7 @@ en:
       public_and_locked_html: "This competition is publicly visible and locked for editing. If you need to make a change, please reply to the email thread where the competition was confirmed."
       confirmed_but_not_visible_html: "You've confirmed this competition, but it is not yet visible to the public. Wait for the %{contact} to make it visible."
       is_visible: "This competition is publicly visible, any changes you make will show up to the public!"
-      pending_confirmation_html: "Fill in all the fields and make your Delegate click 'Confirm' when you're ready for the %{contact} to approve this competition."
+      pending_confirmation_html: "Fill in all the fields and ask your Delegate to click 'Confirm' when you're ready for the %{contact} to approve this competition."
       submit_create_value: "Create Competition"
       submit_update_value: "Update Competition"
       submit_confirm_value: "Confirm"
@@ -1731,7 +1746,7 @@ en:
         information: "Important information that competitors should know. It will be displayed on the competition main page. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak."
         competitor_limit:
           enabled: "A Competitor Limit is required. Only simultaneous FMC competitions with multiple locations can have no Competitor Limit."
-          count: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
+          count: "The number of competitors allowed in this competition. This limit is enforced by the built-in registration system."
           reason: "What is the reason for the limit on competitors? Please fill this out in English!"
           auto_close_threshold: "Registration will automatically close when this number of paid registrations is received. Leave blank to disable, ignore if you aren't using integrated payments."
           newcomer_month_reserved_spots: "Only allowed during Newcomer Month - reserved spots can't be more than half of the Competitor Limit."
@@ -2094,12 +2109,10 @@ en:
         time_limit_html: "If you reach the time limit during your solve, the judge will stop you and your result will be DNF (see %{regulation_link})."
         #context: as used in "please see Regulation A1a4"
         regulation_link_text: "Regulation %{number}"
-        #context: as used in "please see Guideline A1a2++"
-        guideline_link_text: "Guideline %{number}"
         #context: used in the sentence "a cumulative time limit may be enforced [...]"
         cumulative_time_limit: "cumulative time limit"
         cumulative_one_round_html: "A %{cumulative_time_limit} may be enforced (see %{regulation_link})."
-        cumulative_across_rounds_html: "A %{cumulative_time_limit} may be enforced across rounds (see %{guideline_link})."
+        cumulative_across_rounds_html: "A %{cumulative_time_limit} may be enforced across rounds (see %{regulation_link})."
         cutoff_html: "The result to beat to proceed to the second phase of a cutoff round (see %{regulation_link})."
         format_html: "The format describes how to determine the ranking of competitors based on their results. The list of allowed formats per event is described in %{link_to_9b}. See %{link_to_9f} for a description of each format."
         qualification_html: "Qualification times must be set in other WCA competitions in order to compete."
@@ -2867,8 +2880,10 @@ en:
   database:
     results_export:
       heading: "WCA Results Export"
+      deprecation_warning: "DEPRECATION NOTICE: Version %{old_version} of the Results Export has been deprecated, and support for it will be discontinued from %{deprecation_date}. Please switch to using Version %{new_version} before then."
       description: "On this page we offer the WCA results for download in several formats so you can use/analyze them at large. We will usually update after each competition weekend when the results are finalized. The files are numbered and dated so you can see whether you have the newest version already."
       permalink: "permalink"
+      permalink_note: "Note: Permalinks deliver the latest results export within a given version - ie, the v2 permalink will return the latest v2 export, but will stay on v2 even when v3 is released."
       file_formats:
         sql: "SQL statements, for import into SQL databases."
         tsv: "Tab-separated values, for spreadsheets in OpenOffice.org, Excel, etc."

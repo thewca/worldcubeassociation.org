@@ -702,6 +702,7 @@ class User < ApplicationRecord
           panel_pages[:fixResults],
           panel_pages[:mergeProfiles],
           panel_pages[:mergeUsers],
+          panel_pages[:helpfulQueries],
         ],
       },
       wst: {
@@ -1089,8 +1090,9 @@ class User < ApplicationRecord
         password password_confirmation
         email preferred_events results_notifications_enabled
         registration_notifications_enabled
+        receive_developer_mails
       ]
-      fields << { user_preferred_events_attributes: %i[id event_id _destroy] }
+      fields << { user_preferred_events_attributes: [%i[id event_id _destroy]] }
       fields += %i[receive_delegate_reports delegate_reports_region] if user.staff_or_any_delegate?
     end
     fields
@@ -1443,6 +1445,21 @@ class User < ApplicationRecord
     else
       false
     end
+  end
+
+  def rds_credentials
+    if software_team_admin? || senior_results_team?
+      return [EnvConfig.DATABASE_WRT_SENIOR_USER, {
+        main: EnvConfig.DATABASE_HOST,
+        replica: EnvConfig.READ_REPLICA_HOST,
+        dev_dump: EnvConfig.DEV_DUMP_HOST,
+      }]
+    end
+    return unless results_team? || software_team?
+
+    [EnvConfig.DATABASE_WRT_USER, {
+      dev_dump: EnvConfig.DEV_DUMP_HOST,
+    }]
   end
 
   def subordinate_delegates

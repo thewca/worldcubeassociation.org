@@ -1,34 +1,14 @@
 "use client";
 
-import React, { useMemo, useReducer } from "react";
-import { useQuery } from "@tanstack/react-query";
-import useAPI from "@/lib/wca/useAPI";
+import React, { useMemo, useState } from "react";
 import { EventId } from "@/lib/wca/data/events";
-import { Alert, Heading, VStack } from "@chakra-ui/react";
+import { Heading, VStack } from "@chakra-ui/react";
 import RecordsTable from "@/components/results/RecordsTable";
-import Loading from "@/components/ui/loading";
 import { RecordsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
-
-type ValidActions =
-  | "SET_EVENT"
-  | "SET_REGION"
-  | "SET_RANKING_TYPE"
-  | "SET_GENDER"
-  | "SET_SHOW";
-
-const ActionTypes: Record<ValidActions, ValidActions> = {
-  SET_EVENT: "SET_EVENT",
-  SET_REGION: "SET_REGION",
-  SET_RANKING_TYPE: "SET_RANKING_TYPE",
-  SET_GENDER: "SET_GENDER",
-  SET_SHOW: "SET_SHOW",
-};
-
-type FilterAction = {
-  type: ValidActions;
-  payload: string;
-};
+import { components } from "@/types/openapi";
+import { useRouter } from "next/navigation";
+import { route } from "nextjs-routes";
 
 type FilterParams = {
   event: EventId | "all events";
@@ -39,100 +19,67 @@ type FilterParams = {
 
 interface filteredRecordsProps {
   searchParams: FilterParams;
-}
-
-function filterReducer(state: FilterParams, action: FilterAction) {
-  switch (action.type) {
-    case ActionTypes.SET_EVENT:
-      if (action.payload === "333mbf") {
-        return { ...state, event: action.payload, rankingType: "single" };
-      }
-
-      return { ...state, event: action.payload };
-    case ActionTypes.SET_REGION:
-      return { ...state, region: action.payload };
-    case ActionTypes.SET_RANKING_TYPE:
-      return { ...state, rankingType: action.payload };
-    case ActionTypes.SET_GENDER:
-      return { ...state, gender: action.payload };
-    case ActionTypes.SET_SHOW:
-      return { ...state, show: action.payload };
-    default:
-      throw new Error(`Unhandled action type: ${action.type}`);
-  }
+  records: components["schemas"]["RecordByEvent"];
+  timestamp: string;
 }
 
 export default function FilteredRecords({
   searchParams,
+  timestamp,
+  records,
 }: filteredRecordsProps) {
-  const [filterState, dispatch] = useReducer(filterReducer, searchParams);
+  const router = useRouter();
+  // We are fetching all events at once so switching events doesn't fire another request
+  const [event, setEvent] = useState(searchParams.event);
 
   const filterActions = useMemo(
     () => ({
-      setEvent: (event: string) =>
-        dispatch({ type: ActionTypes.SET_EVENT, payload: event }),
+      setEvent: (event: string) => setEvent(event),
       setRegion: (region: string) =>
-        dispatch({ type: ActionTypes.SET_REGION, payload: region }),
+        router.push(
+          route({
+            pathname: "/results/records",
+            query: { ...searchParams, region },
+          }),
+        ),
       setGender: (gender: string) =>
-        dispatch({ type: ActionTypes.SET_GENDER, payload: gender }),
+        router.push(
+          route({
+            pathname: "/results/records",
+            query: { ...searchParams, gender },
+          }),
+        ),
       setShow: (show: string) =>
-        dispatch({ type: ActionTypes.SET_SHOW, payload: show }),
+        router.push(
+          route({
+            pathname: "/results/records",
+            query: { ...searchParams, show },
+          }),
+        ),
     }),
-    [dispatch],
+    [router, searchParams],
   );
 
-  const { event, region, gender, show } = filterState;
+  const { show } = searchParams;
 
   const { t } = useT();
 
-  const api = useAPI();
-
-  const isHistory = show === "history" || show === "mixed history";
-
-  const { data, isFetching, isError } = useQuery({
-    queryKey: ["records", region, gender, isHistory],
-    queryFn: () =>
-      api.GET("/v0/results/records", {
-        params: {
-          query: { region, gender, show: isHistory ? "history" : "mixed" },
-        },
-      }),
-    select: (data) => {
-      if (event === "all events") {
-        return data.data;
-      }
-
-      return {
-        timestamp: data.data!.timestamp,
-        records: {
-          [event as EventId]: data.data!.records[event],
-        },
-      };
-    },
-    refetchOnMount: false,
-  });
-
-  if (isFetching) {
-    return <Loading />;
-  }
-
-  if (isError) {
-    return (
-      <Alert.Root status="error">
-        <Alert.Title>Error fetching Records</Alert.Title>
-      </Alert.Root>
-    );
-  }
+  const filteredRecords =
+    event === "all events"
+      ? records
+      : {
+          [event as EventId]: records[event],
+        };
 
   return (
     <VStack align="left" gap={4}>
       <Heading size="5xl">{t("results.records.title")}</Heading>
-      {t("results.last_updated_html", { timestamp: data!.timestamp })}
+      {t("results.last_updated_html", { timestamp })}
       <RecordsFilterBox
-        filterState={filterState}
+        filterState={searchParams}
         filterActions={filterActions}
       />
-      <RecordsTable records={data!.records!} show={show} />
+      <RecordsTable records={filteredRecords} show={show} />
     </VStack>
   );
 }

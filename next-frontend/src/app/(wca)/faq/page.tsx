@@ -14,6 +14,16 @@ import config from "@payload-config";
 import { FaqCategory, FaqQuestion } from "@/types/payload";
 import { MarkdownProse } from "@/components/Markdown";
 import { uniqBy } from "lodash";
+import { Metadata } from "next";
+import { getT } from "@/lib/i18n/get18n";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("faq.title"),
+  };
+}
 
 export default async function FAQ() {
   const payload = await getPayload({ config });
@@ -36,9 +46,9 @@ export default async function FAQ() {
   const faqCategories = uniqBy(allCategories, "id");
 
   return (
-    <Container paddingTop="8">
+    <Container paddingTop="8" bg="bg">
       <VStack gap="8" width="full" alignItems="left">
-        <Card.Root maxW="40em" coloredBg>
+        <Card.Root maxW="40em">
           <Card.Body>
             <Card.Title textStyle="h1">Frequently Asked Questions</Card.Title>
             {faqPage.introTextMarkdown ? (
@@ -83,21 +93,34 @@ export default async function FAQ() {
                     <Accordion.Root
                       multiple
                       collapsible
-                      colorPalette={category.colorPalette}
-                      variant="subtle"
+                      variant="card"
                       width="full"
                     >
                       {questions.map((question) => (
                         <Accordion.Item
                           key={question.id}
                           value={question.id.toString()}
+                          layerStyle="outline.solid"
+                          borderColor="border"
+                          bg="bg.panel"
                         >
-                          <Accordion.ItemTrigger textStyle="s1">
+                          <Accordion.ItemTrigger
+                            textStyle="s1"
+                            _open={{
+                              bgImage: `linear-gradient(90deg, {colors.${category.colorPalette}.subtle}, {colors.bg.panel})`,
+                              borderBottomRadius: 0,
+                            }}
+                            _hover={{
+                              bgImage: `linear-gradient(90deg, {colors.${category.colorPalette}.subtle}, {colors.bg.panel})`,
+                            }}
+                          >
                             {question.question}
                             <Accordion.ItemIndicator />
                           </Accordion.ItemTrigger>
                           <Accordion.ItemContent textStyle="body">
-                            {question.answer}
+                            <Accordion.ItemBody>
+                              {question.answer}
+                            </Accordion.ItemBody>
                           </Accordion.ItemContent>
                         </Accordion.Item>
                       ))}

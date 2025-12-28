@@ -4,6 +4,6 @@ required:
   - attempt_number
 properties:
   result:
-    type: number
+    type: integer
   attempt_number:
-    type: number
+    type: integer

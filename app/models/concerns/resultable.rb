@@ -31,15 +31,11 @@ module Resultable
       Format.c_find(format_id)
     end
 
-    # Deliberately using `round_id` here instead of "simply" checking for `round`
-    #   because the latter would try to fall back to `round_type_id`.
-    validate :linked_round_consistent, if: :round_id?
-    def linked_round_consistent
-      errors.add(:competition, "Should match '#{round.competition_id}' of the linked round, but is '#{competition_id}'") unless competition_id == round.competition_id
-      errors.add(:round_type, "Should match '#{round.round_type_id}' of the linked round, but is '#{round_type_id}'") unless round_type_id == round.round_type_id
-      errors.add(:event, "Should match '#{round.event_id}' of the linked round, but is '#{event_id}'") unless event_id == round.event_id
-      errors.add(:format, "Should match '#{round.format_id}' of the linked round, but is '#{format_id}'") unless format_id == round.format_id
-    end
+    delegate :competition_id, :round_type_id, :event_id, :format_id, to: :round, prefix: true
+    validates :competition_id, comparison: { equal_to: :round_competition_id }
+    validates :round_type_id, comparison: { equal_to: :round_round_type_id }
+    validates :event_id, comparison: { equal_to: :round_event_id }
+    validates :format_id, comparison: { equal_to: :round_format_id }
 
     validate :validate_each_solve, if: :event
     def validate_each_solve
@@ -103,8 +99,10 @@ module Resultable
     #  - 333ft has a similar story to 333fm. It also changed from allowing best of 3
     #    (and disallowing mean of 3) to allowing mean of 3 (and disallowing best
     #    of 3). See "Relevant regulations changes" below.
-    #  - 333bf is quite a special case. At competitions, competitors are ranked according to best of 3, but
+    #  - 333bf is quite a special case. Before 2026 competitors were ranked according to best of 3, but
     #    the WCA awards records on both single and mean of 3.
+    #    After 2026, competitors are ranked according to best of 5
+    #    and the WCA awards records for single and average of 5
     #    See https://www.worldcubeassociation.org/regulations/#9b3b.
 
     # Relevant regulations changes:
@@ -118,7 +116,9 @@ module Resultable
     #    - All events that allow "mean of 3" no longer allow "best of 3".
     #  - May 1, 2019
     #    - 444bf and 555bf mean are officially recognized
-    format_id == "a" || format_id == "m" || (format_id == "3" && %(333ft 333fm 333bf 444bf 555bf).include?(event_id))
+    #  - January 1, 2026
+    #    - Bo5/Ao5 becomes the format for 333bld
+    format_id == "a" || format_id == "m" || (format_id == "5" && event_id == "333bf") || (format_id == "3" && %(333ft 333fm 333bf 444bf 555bf).include?(event_id))
   end
 
   def compute_correct_best
@@ -181,6 +181,18 @@ module Resultable
 
   private def sorted_solves_with_index
     @sorted_solves_with_index ||= solve_times.each_with_index.reject { |s, _| s.skipped? }.sort.freeze
+  end
+
+  def tied_with?(other_result)
+    return false if other_result.nil?
+
+    if format.sort_by == "average"
+      # If the ranking is based on average, look at both average and best.
+      average == other_result.average && best == other_result.best
+    else
+      # else we just compare the bests
+      best == other_result.best
+    end
   end
 
   def solve_times

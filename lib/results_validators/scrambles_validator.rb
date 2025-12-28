@@ -4,7 +4,6 @@ module ResultsValidators
   class ScramblesValidator < GenericValidator
     MISSING_SCRAMBLES_FOR_ROUND_ERROR = :missing_scrambles_for_round_error
     MISSING_SCRAMBLES_FOR_COMPETITION_ERROR = :missing_scrambles_for_competition_error
-    UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR = :unexpected_scrambles_for_round_error
     MISSING_SCRAMBLES_FOR_GROUP_ERROR = :missing_scrambles_for_group_error
     MISSING_SCRAMBLES_FOR_MULTI_ERROR = :missing_scrambles_for_multi_error
     MULTIPLE_FMC_GROUPS_WARNING = :multiple_fmc_groups_warning
@@ -50,12 +49,6 @@ module ResultsValidators
         detected_scrambles_rounds_ids = scrambles_by_round_id.keys
         (rounds_ids - detected_scrambles_rounds_ids).each do |round_id|
           @errors << ValidationError.new(MISSING_SCRAMBLES_FOR_ROUND_ERROR,
-                                         :scrambles, competition.id,
-                                         round_id: round_id)
-        end
-
-        (detected_scrambles_rounds_ids - rounds_ids).each do |round_id|
-          @errors << ValidationError.new(UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR,
                                          :scrambles, competition.id,
                                          round_id: round_id)
         end

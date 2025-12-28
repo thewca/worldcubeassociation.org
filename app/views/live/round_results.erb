@@ -1,5 +1,0 @@
-<% provide(:title, @round.name) %>
-
-<%= render layout: 'competitions/nav' do %>
-  <%= react_component('Live/RoundResults', { competitionId: @competition_id, competitors: @competitors.as_json({ include: [:user => { only: [:name], methods: [], include: []}]}), roundId: @round.id, eventId: @event_id, canAdminResults: current_user&.can_manage_competition?(@competition) }) %>
-<% end %>

@@ -6,11 +6,12 @@ import {
   AdditionalInformationCard,
   EventCard,
   InfoCard,
-  OrganizationTeamCard,
   RefundPolicyCard,
   RegistrationCard,
   VenueDetailsCard,
 } from "@/components/competitions/Cards";
+import OrganizationTeamCard from "@/components/competitions/OrganizerCard";
+import OpenapiError from "@/components/ui/openapiError";
 
 export default async function CompetitionOverView({
   params,
@@ -25,18 +26,18 @@ export default async function CompetitionOverView({
 }
 
 async function GeneralPage({ competitionId }: { competitionId: string }) {
-  const { data: competitionInfo, error } =
-    await getCompetitionInfo(competitionId);
+  const { t } = await getT();
+  const {
+    data: competitionInfo,
+    error,
+    response,
+  } = await getCompetitionInfo(competitionId);
 
-  if (error) {
-    return <Text>Error fetching competition</Text>;
-  }
+  if (error) return <OpenapiError t={t} response={response} />;
 
   if (!competitionInfo) {
     return <Text>Competition does not exist</Text>;
   }
-
-  const { t } = await getT();
 
   return (
     <>
@@ -47,11 +48,11 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
           <EventCard competitionInfo={competitionInfo} />
         </VStack>
         <VStack gap="8" alignItems="stretch">
+          <OrganizationTeamCard competitionInfo={competitionInfo} />
           <Stack gap="8" width="100%" direction={{ base: "column", sm: "row" }}>
-            <OrganizationTeamCard competitionInfo={competitionInfo} />
+            <VenueDetailsCard competitionInfo={competitionInfo} />
             <MarkdownFirstImage content={competitionInfo.information} />
           </Stack>
-          <VenueDetailsCard competitionInfo={competitionInfo} />
           <RefundPolicyCard competitionInfo={competitionInfo} />
         </VStack>
         <GridItem colSpan={{ base: 1, md: 2 }}>

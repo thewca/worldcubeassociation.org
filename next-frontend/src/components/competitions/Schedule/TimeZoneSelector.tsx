@@ -17,7 +17,6 @@ import { availableTimeZones, currentTimeZone } from "@/lib/wca/data/timezones";
 import { useTranslation } from "react-i18next";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { LuHouse } from "react-icons/lu";
-import { useQuery } from "@tanstack/react-query";
 import { DateTime } from "luxon";
 
 import useAPI from "@/lib/wca/useAPI";
@@ -47,11 +46,8 @@ export default function TimeZoneSelector({
 
   const api = useAPI();
 
-  const { data: apiTimeZones } = useQuery({
-    queryKey: ["backend-timezones"],
-    queryFn: () => api.GET("/v0/known-timezones"),
-    select: (data) => data.data,
-  });
+  // TODO GB: Load this on the server already and pass the list as prop to the client
+  const { data: apiTimeZones } = api.useQuery("get", "/v0/known-timezones");
 
   const backendTimeZones = apiTimeZones || [];
   // It literally doesn't matter what the exact value of this date is,

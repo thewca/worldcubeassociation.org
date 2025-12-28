@@ -10,6 +10,7 @@ import {
   timeLimitToString,
 } from "@/lib/wca/wcif/rounds";
 import { getT } from "@/lib/i18n/get18n";
+import OpenapiError from "@/components/ui/openapiError";
 
 interface TabEventsProps {
   competitionId: string;
@@ -20,11 +21,10 @@ export default async function TabEvents({
   competitionId,
   forceQualifications = false,
 }: TabEventsProps) {
-  const { data: events, error } = await getEvents(competitionId);
+  const { t } = await getT();
+  const { data: events, error, response } = await getEvents(competitionId);
 
-  if (error) {
-    return <Text>Error fetching competition events</Text>;
-  }
+  if (error) return <OpenapiError response={response} t={t} />;
 
   if (!events) {
     return <Text>Competition does not exist</Text>;
@@ -37,12 +37,10 @@ export default async function TabEvents({
   const showQualifications =
     forceQualifications || events.some((event) => Boolean(event.qualification));
 
-  const { t } = await getT();
-
   return (
     <Card.Root>
       <Card.Body>
-        <Table.ScrollArea borderWidth="1px" maxW="xl">
+        <Table.ScrollArea borderWidth="1px" maxW="full">
           <Table.Root striped interactive>
             <Table.Header>
               <Table.Row>

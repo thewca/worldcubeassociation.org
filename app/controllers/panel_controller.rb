@@ -27,10 +27,7 @@ class PanelController < ApplicationController
   end
 
   def generate_db_token
-    @db_endpoints = {
-      main: EnvConfig.DATABASE_HOST,
-      replica: EnvConfig.READ_REPLICA_HOST,
-    }
+    @user_name, @db_endpoints = current_user.rds_credentials
 
     role_credentials = Aws::ECSCredentials.new
     token_generator = Aws::RDS::AuthTokenGenerator.new credentials: role_credentials
@@ -38,7 +35,7 @@ class PanelController < ApplicationController
     @db_tokens = @db_endpoints.transform_values do |url|
       token_generator.auth_token({
                                    endpoint: "#{url}:3306",
-                                   user_name: EnvConfig.DATABASE_WRT_USER,
+                                   user_name: @user_name,
                                    region: EnvConfig.AWS_REGION,
                                  })
     end
@@ -46,6 +43,7 @@ class PanelController < ApplicationController
     @db_server_indices = {
       main: 1,
       replica: 2,
+      dev_dump: 3,
     }
   end
 
