@@ -2180,14 +2180,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/react@npm:^6.1.19":
-  version: 6.1.19
-  resolution: "@fullcalendar/react@npm:6.1.19"
+"@fullcalendar/react@npm:^6.1.20":
+  version: 6.1.20
+  resolution: "@fullcalendar/react@npm:6.1.20"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.19
+    "@fullcalendar/core": ~6.1.20
     react: ^16.7.0 || ^17 || ^18 || ^19
     react-dom: ^16.7.0 || ^17 || ^18 || ^19
-  checksum: 10c0/644b7e07a52fd0540a6e6b2d45c0eabc2885dc179687fb11dcdab6a8c6189c742c44900a11918b3d1035a58ea2d5bb69a417be4c9b605c27a6503be12141cc4f
+  checksum: 10c0/b23fb56d3c4f69d0e6161bc7872f77d5bd3e431f3c265c3b69710bb105a7e72aa4936e93b815602bc249c326d444e994e76139565e7c134dc87ae7fc6c34056a
   languageName: node
   linkType: hard
 
@@ -10350,7 +10350,7 @@ __metadata:
     "@fullcalendar/core": "npm:^6.1.19"
     "@fullcalendar/interaction": "npm:^6.1.19"
     "@fullcalendar/luxon3": "npm:^6.1.20"
-    "@fullcalendar/react": "npm:^6.1.19"
+    "@fullcalendar/react": "npm:^6.1.20"
     "@fullcalendar/timegrid": "npm:^6.1.19"
     "@hello-pangea/dnd": "npm:^18.0.1"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.2"
