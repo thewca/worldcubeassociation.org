@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
-import { Button, Dropdown } from 'semantic-ui-react';
+import {
+  Button, Dropdown, Grid, Icon, Popup,
+} from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { noop } from 'lodash';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -7,14 +9,13 @@ import { showMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import { countries } from '../../../lib/wca-data.js.erb';
 import {
-  APPROVED_COLOR, APPROVED_ICON,
-  CANCELLED_COLOR, CANCELLED_ICON,
   getSkippedPendingCount,
   getSkippedWaitlistCount,
-  PENDING_COLOR, PENDING_ICON,
-  REJECTED_COLOR, REJECTED_ICON,
+  getStatusColor,
+  getStatusIcon,
+  getStatusTranslationKey,
+  registrationStatusKeys,
   sortRegistrations,
-  WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
@@ -79,11 +80,13 @@ function csvExport(selected, registrations, competition) {
 
 export default function RegistrationActions({
   partitionedSelectedIds,
+  partitionedRegistrations,
   refresh,
   registrations,
   spotsRemaining,
   competitionInfo,
   updateRegistrationMutation,
+  tableRefs,
 }) {
   const confirm = useConfirm();
   const dispatch = useDispatch();
@@ -96,11 +99,6 @@ export default function RegistrationActions({
   const {
     pending, accepted, cancelled, waiting, rejected, nonCompeting,
   } = partitionedSelectedIds;
-  const anyPending = pending.length < selectedCount;
-  const anyApprovable = accepted.length < selectedCount;
-  const anyCancellable = cancelled.length < selectedCount;
-  const anyWaitlistable = waiting.length < selectedCount;
-  const anyRejectable = rejected.length < selectedCount;
 
   const userEmailMap = useMemo(
     () => Object.fromEntries(
@@ -237,112 +235,233 @@ export default function RegistrationActions({
     }
   };
 
+  const onMove = (status) => {
+    switch (status) {
+      case 'pending':
+        changeStatus(
+          [...accepted, ...cancelled, ...waiting, ...rejected],
+          'pending',
+        );
+        break;
+
+      case 'waiting':
+        onMoveSelectedToWaitlist();
+        break;
+
+      case 'accepted':
+        onMoveSelectedToApproved();
+        break;
+
+      case 'cancelled':
+        changeStatus(
+          [...pending, ...accepted, ...waiting, ...rejected],
+          'cancelled',
+        );
+        break;
+
+      case 'rejected':
+        changeStatus(
+          [...pending, ...accepted, ...waiting, ...cancelled],
+          'rejected',
+        );
+        break;
+
+      default:
+        break;
+    }
+  };
+
   const copyEmails = (emails) => {
     navigator.clipboard.writeText(emails);
     dispatch(showMessage('competitions.registration_v2.update.email_message', 'positive'));
   };
 
+  const scrollToRef = (ref) => ref.current.scrollIntoView(
+    { behavior: 'smooth', block: 'start' },
+  );
+
+  const hasCompetitorLimit = Boolean(competitionInfo.competitor_limit);
+
   return (
     <>
-      <Button
-        content={I18n.t('registrations.list.export_csv')}
-        icon="download"
-        labelPosition="left"
-        color="blue"
-        onClick={() => {
-          csvExport(
-            [...pending, ...accepted, ...cancelled, ...waiting, ...rejected],
-            registrations,
-            competitionInfo,
-          );
-        }}
+      <Popup
+        flowing
+        position="bottom left"
+        trigger={
+          <Button color="grey" icon="info" />
+        }
+        content={(
+          <SummaryTable
+            partitionedSelectedIds={partitionedSelectedIds}
+            partitionedRegistrations={partitionedRegistrations}
+            partitionedMaximums={{ accepted: competitionInfo.competitor_limit }}
+            selectedCount={selectedCount}
+            registrationCount={registrations.length}
+            withSelectedCounts={anySelected}
+            withMaximums={hasCompetitorLimit}
+          />
+        )}
       />
 
-      <Button
-        as="a"
-        content={I18n.t('competitions.registration_v2.update.email_send')}
-        href={`mailto:?bcc=${selectedEmails}`}
-        id="email-selected"
-        target="_blank"
-        rel="noreferrer"
-        icon="envelope"
-        labelPosition="left"
-        disabled={!anySelected}
+      <Popup
+        flowing
+        position="top center"
+        trigger={(
+          <Dropdown
+            pointing
+            className="icon black"
+            icon="th list"
+            button
+          >
+            <Dropdown.Menu>
+              {registrationStatusKeys(
+                { includeNonCompeting: partitionedRegistrations.nonCompeting.length > 0 },
+              ).map((status) => (
+                <DropdownAction
+                  text={
+                    I18n.t(
+                      `competitions.registration_v2.update.${getStatusTranslationKey(status)}`,
+                    )
+                  }
+                  icon={getStatusIcon(status)}
+                  color={getStatusColor(status)}
+                  onClick={() => scrollToRef(tableRefs[status])}
+                />
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        )}
+        content={I18n.t('competitions.registration_v2.update.scroll_to')}
       />
 
-      <Button
-        content={I18n.t('competitions.registration_v2.update.email_copy')}
-        icon="copy"
-        labelPosition="left"
-        onClick={() => copyEmails(selectedEmails)}
-        disabled={!anySelected}
+      <Popup
+        flowing
+        position="top center"
+        trigger={(
+          <Button
+            icon="download"
+            color="green"
+            onClick={() => {
+              csvExport(
+                [...pending, ...accepted, ...cancelled, ...waiting, ...rejected],
+                registrations,
+                competitionInfo,
+              );
+            }}
+          />
+        )}
+        content={I18n.t('registrations.list.export_csv', { count: selectedCount })}
       />
 
-      <Dropdown
-        pointing
-        className="icon brown"
-        labeled
-        text={I18n.t('competitions.registration_v2.update.move_to', { count: selectedCount })}
-        icon="arrow right"
-        button
-        disabled={!anySelected}
-      >
-        <Dropdown.Menu>
-          <MoveAction
-            text={I18n.t('competitions.registration_v2.update.pending')}
-            icon={PENDING_ICON}
-            color={PENDING_COLOR}
-            isDisabled={!anyPending}
-            onClick={() => changeStatus(
-              [...accepted, ...cancelled, ...waiting, ...rejected],
-              'pending',
-            )}
+      <Popup
+        flowing
+        position="top center"
+        trigger={(
+          <Button
+            icon="envelope"
+            color="blue"
+            href={`mailto:?bcc=${selectedEmails}`}
+            target="_blank"
+            rel="noreferrer"
+            disabled={!anySelected}
           />
+        )}
+        content={I18n.t('competitions.registration_v2.update.email_send', { count: selectedCount })}
+      />
 
-          <MoveAction
-            text={I18n.t('competitions.registration_v2.update.waitlist')}
-            icon={WAITLIST_ICON}
-            color={WAITLIST_COLOR}
-            isDisabled={!anyWaitlistable}
-            onClick={onMoveSelectedToWaitlist}
+      <Popup
+        flowing
+        position="top center"
+        trigger={(
+          <Button
+            icon="copy"
+            color="teal"
+            onClick={() => copyEmails(selectedEmails)}
+            disabled={!anySelected}
           />
+        )}
+        content={I18n.t('competitions.registration_v2.update.email_copy', { count: selectedCount })}
+      />
 
-          <MoveAction
-            text={I18n.t('competitions.registration_v2.update.approved')}
-            icon={APPROVED_ICON}
-            color={APPROVED_COLOR}
-            isDisabled={!anyApprovable}
-            onClick={onMoveSelectedToApproved}
-          />
-
-          <MoveAction
-            text={I18n.t('competitions.registration_v2.update.cancelled')}
-            icon={CANCELLED_ICON}
-            color={CANCELLED_COLOR}
-            isDisabled={!anyCancellable}
-            onClick={() => changeStatus(
-              [...pending, ...accepted, ...waiting, ...rejected],
-              'cancelled',
-            )}
-          />
-
-          <MoveAction
-            text={I18n.t('competitions.registration_v2.update.rejected')}
-            icon={REJECTED_ICON}
-            color={REJECTED_COLOR}
-            isDisabled={!anyRejectable}
-            onClick={() => changeStatus(
-              [...pending, ...accepted, ...waiting, ...cancelled],
-              'rejected',
-            )}
-          />
-        </Dropdown.Menu>
-      </Dropdown>
+      <Popup
+        flowing
+        position="top center"
+        trigger={(
+          <Dropdown
+            pointing
+            className="icon brown"
+            icon="arrow right"
+            button
+            disabled={!anySelected}
+          >
+            <Dropdown.Menu>
+              {registrationStatusKeys().map((status) => (
+                <DropdownAction
+                  text={
+                    I18n.t(`competitions.registration_v2.update.${getStatusTranslationKey(status)}`)
+                  }
+                  icon={getStatusIcon(status)}
+                  color={getStatusColor(status)}
+                  isDisabled={partitionedSelectedIds[status].length === selectedCount}
+                  onClick={() => onMove(status)}
+                />
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        )}
+        content={I18n.t('competitions.registration_v2.update.move_to', { count: selectedCount })}
+      />
     </>
   );
 }
 
-function MoveAction({
+function SummaryTable({
+  partitionedSelectedIds,
+  partitionedRegistrations,
+  partitionedMaximums,
+  selectedCount,
+  registrationCount,
+  withSelectedCounts,
+  withMaximums,
+}) {
+  const columnCount = (withMaximums ? 1 : 0) + (withSelectedCounts ? 1 : 0) + 2;
+  const width = columnCount * 5;
+
+  return (
+    <Grid celled columns={columnCount} textAlign="right" style={{ width: `${width}em` }}>
+      <Grid.Row>
+        <Grid.Column />
+        {withSelectedCounts && <Grid.Column>Selected</Grid.Column>}
+        <Grid.Column>Size</Grid.Column>
+        {withMaximums && <Grid.Column>Max</Grid.Column>}
+      </Grid.Row>
+
+      {registrationStatusKeys(
+        { includeNonCompeting: partitionedRegistrations.nonCompeting.length > 0 },
+      ).map((status) => (
+        <Grid.Row key={status}>
+          <Grid.Column>
+            <Icon color={getStatusColor(status)} name={getStatusIcon(status)} size="large" />
+          </Grid.Column>
+          {withSelectedCounts && (
+            <Grid.Column>{partitionedSelectedIds[status].length}</Grid.Column>
+          )}
+          <Grid.Column>{partitionedRegistrations[status].length}</Grid.Column>
+          {withMaximums && <Grid.Column>{partitionedMaximums[status] ?? '-'}</Grid.Column>}
+        </Grid.Row>
+      ))}
+
+      <Grid.Row>
+        <Grid.Column>Total</Grid.Column>
+        {withSelectedCounts && <Grid.Column>{selectedCount}</Grid.Column>}
+        <Grid.Column>{registrationCount}</Grid.Column>
+        {withMaximums && <Grid.Column>-</Grid.Column>}
+      </Grid.Row>
+    </Grid>
+  );
+}
+
+function DropdownAction({
   text, icon, color, isDisabled, onClick,
 }) {
   return (
