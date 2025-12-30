@@ -7636,14 +7636,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-plural@npm:*":
-  version: 7.4.0
-  resolution: "make-plural@npm:7.4.0"
-  checksum: 10c0/10f24e932865c88d4cdb14d4bb809ce8e615cae7d083c63ad008b3bcaf0d22941ca0bd76acd9cdd7ae4047563501104fff3c37ce8ad2bc5671facde1818fa57f
-  languageName: node
-  linkType: hard
-
-"make-plural@npm:^8.1.0":
+"make-plural@npm:*, make-plural@npm:^8.1.0":
   version: 8.1.0
   resolution: "make-plural@npm:8.1.0"
   checksum: 10c0/e3c346cc7a217072f2c5058f6b1cdf98ec71c68511ebce2d7480380c9abcc13ad37661152b54a4925996d9e590bd215fa26552497bcc6d3e435897eeacc59aeb
@@ -11413,25 +11406,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-scss@npm:^6.12.1":
-  version: 6.13.0
-  resolution: "stylelint-scss@npm:6.13.0"
-  dependencies:
-    css-tree: "npm:^3.0.1"
-    is-plain-object: "npm:^5.0.0"
-    known-css-properties: "npm:^0.37.0"
-    mdn-data: "npm:^2.25.0"
-    postcss-media-query-parser: "npm:^0.2.3"
-    postcss-resolve-nested-selector: "npm:^0.1.6"
-    postcss-selector-parser: "npm:^7.1.1"
-    postcss-value-parser: "npm:^4.2.0"
-  peerDependencies:
-    stylelint: ^16.8.2
-  checksum: 10c0/57647d3e6d433c276d4285bb2f504e7bf9254699926da22781a39be23e702db0bbc3cb2d7e587c9267bee4f11ffae03222f2d99f8c173a0a9567ac8f5c86c7c3
-  languageName: node
-  linkType: hard
-
-"stylelint-scss@npm:^6.14.0":
+"stylelint-scss@npm:^6.12.1, stylelint-scss@npm:^6.14.0":
   version: 6.14.0
   resolution: "stylelint-scss@npm:6.14.0"
   dependencies:
