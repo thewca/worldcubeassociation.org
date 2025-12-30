@@ -24,7 +24,7 @@
     "@fullcalendar/interaction": "^6.1.20",
     "@fullcalendar/luxon3": "^6.1.20",
     "@fullcalendar/react": "^6.1.20",
-    "@fullcalendar/timegrid": "^6.1.19",
+    "@fullcalendar/timegrid": "^6.1.20",
     "@hello-pangea/dnd": "^18.0.1",
     "@rails/actioncable": "^8.1.100",
     "@rails/ujs": "^7.1.600",
