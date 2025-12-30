@@ -2738,21 +2738,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.90.12":
-  version: 5.90.12
-  resolution: "@tanstack/query-core@npm:5.90.12"
-  checksum: 10c0/60d5dd23d7801118d6ef84a3d76e798aaf6eb851ee5227629a1dc798fa01ac9560580553413208fcc8a003fb12a89e83d6dd1f38ebc3bd9b6e8838cfaaa45fef
+"@tanstack/query-core@npm:5.90.15":
+  version: 5.90.15
+  resolution: "@tanstack/query-core@npm:5.90.15"
+  checksum: 10c0/8618a2002a25d0fbcfe4167918344aec1408a68dc641062b1045e3f47c46617bc0d5803758a49069ad46f8726802cb0a22f6cee4eb51838b8c4feb55e3fb8a05
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.90.12":
-  version: 5.90.12
-  resolution: "@tanstack/react-query@npm:5.90.12"
+"@tanstack/react-query@npm:^5.90.15":
+  version: 5.90.15
+  resolution: "@tanstack/react-query@npm:5.90.15"
   dependencies:
-    "@tanstack/query-core": "npm:5.90.12"
+    "@tanstack/query-core": "npm:5.90.15"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/da01ec2819d301e4be89731e82d3f091fa4f1ab2745be324e5166f9df77e2aaf1c362b0fa61aab226bb01634873f1a00562f7d7f405867fe23bdd47fe4d00fda
+  checksum: 10c0/b661307a624d8566dd3d9c952a85e2036f96dce19347b4eeb96fdd4b4e32cfb2ae7a0f6e765c526a72a5635cf28f60e7b7abad17ce143f05382f845e0c5adaf4
   languageName: node
   linkType: hard
 
@@ -10358,7 +10358,7 @@ __metadata:
     "@rails/ujs": "npm:^7.1.600"
     "@stripe/react-stripe-js": "npm:^5.4.1"
     "@stripe/stripe-js": "npm:^8.6.0"
-    "@tanstack/react-query": "npm:^5.90.12"
+    "@tanstack/react-query": "npm:^5.90.15"
     "@tanstack/react-table": "npm:^8.21.3"
     "@wca/helpers": "npm:^1.1.6"
     autonumeric: "npm:^4.10.9"
