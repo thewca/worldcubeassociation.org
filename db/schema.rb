@@ -1391,6 +1391,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_17_122230) do
   create_table "uploaded_jsons", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
     t.text "json_str", size: :long
+    t.string "upload_type", null: false
     t.index ["competition_id"], name: "index_uploaded_jsons_on_competition_id"
   end
 
