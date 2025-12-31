@@ -160,8 +160,10 @@ class CompetitionsMailer < ApplicationMailer
       # If the WCA Live sync was used, it means that scrambles were uploaded separately,
       #   so we have to add them as attachments for record keeping.
       if last_uploaded_json.wca_live?
-        @competition.scramble_file_uploads.each do |scr_file_upload|
-          attachments[scr_file_upload.original_filename] = {
+        @competition.scramble_file_uploads.each_with_index do |scr_file_upload, i|
+          deduplicated_filename = "[Scrambles #{i}] #{scr_file_upload.original_filename}"
+
+          attachments[deduplicated_filename] = {
             mime_type: "application/json",
             content: scr_file_upload.raw_wcif.to_json,
           }
