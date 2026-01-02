@@ -29,7 +29,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    action_text-trix (2.1.15)
+    action_text-trix (2.1.16)
       railties
     actioncable (8.1.1)
       actionpack (= 8.1.1)
@@ -381,7 +381,7 @@ GEM
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     http_accept_language (2.1.1)
-    i18n (1.14.7)
+    i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     i18n-js (4.2.4)
       glob (>= 0.4.0)
@@ -452,7 +452,7 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.7.0)
-    loofah (2.24.1)
+    loofah (2.25.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     lumberjack (1.2.8)
@@ -476,7 +476,8 @@ GEM
       logger
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (5.26.2)
+    minitest (6.0.1)
+      prism (~> 1.5)
     momentjs-rails (2.29.4.1)
       railties (>= 3.1)
     monetize (1.11.0)
@@ -649,7 +650,7 @@ GEM
       ffi (~> 1.0)
     rb_sys (0.9.123)
       rake-compiler-dock (= 1.10.0)
-    rdoc (7.0.2)
+    rdoc (7.0.3)
       erb
       psych (>= 4.0.0)
       tsort
@@ -945,7 +946,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.7.3)
+    zeitwerk (2.7.4)
 
 PLATFORMS
   aarch64-linux
@@ -1105,7 +1106,7 @@ DEPENDENCIES
   webmock
 
 CHECKSUMS
-  action_text-trix (2.1.15) sha256=4bf9bbd8fa95954de3f0022dae0d927bce22c1bb31d5dc9c3766f8c145c109c1
+  action_text-trix (2.1.16) sha256=f645a2c21821b8449fd1d6770708f4031c91a2eedf9ef476e9be93c64e703a8a
   actioncable (8.1.1) sha256=7262307e9693f09b299e281590110ce4b6ba7e4e4cee6da4b9d987eaf56f9139
   actionmailbox (8.1.1) sha256=aa99703a9b2fa32c5a4a93bb21fef79e2935d8db4d1fd5ef0772847be5d43205
   actionmailer (8.1.1) sha256=45755d7d4561363490ae82b17a5919bdef4dfe3bb400831819947c3a1d82afdf
@@ -1246,7 +1247,7 @@ CHECKSUMS
   http-accept (1.7.0) sha256=c626860682bfbb3b46462f8c39cd470fd7b0584f61b3cc9df5b2e9eb9972a126
   http-cookie (1.0.3) sha256=2f11269d817bc52ab2af2721e89a377660a961078de2a3a55fc696d7897e8c00
   http_accept_language (2.1.1) sha256=0043f0d55a148cf45b604dbdd197cb36437133e990016c68c892d49dbea31634
-  i18n (1.14.7) sha256=ceba573f8138ff2c0915427f1fc5bdf4aa3ab8ae88c8ce255eb3ecf0a11a5d0f
+  i18n (1.14.8) sha256=285778639134865c5e0f6269e0b818256017e8cde89993fdfcbfb64d088824a5
   i18n-country-translations (1.4.1)
   i18n-js (4.2.4) sha256=61390d372f8fa68c495c5907d577657e8cc3a7031f4945db1e91f935e1391355
   i18n-spec (0.6.0) sha256=38780cdded08582a2e8953e8574ab9e5a3fad2601fb5aa62d58295399b9956d0
@@ -1275,7 +1276,7 @@ CHECKSUMS
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
   listen (3.6.0) sha256=f095d31f66f8cef7142d0658697961900f3ee3d3223980a3bc8ca9a449f307b7
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
-  loofah (2.24.1) sha256=655a30842b70ec476410b347ab1cd2a5b92da46a19044357bbd9f401b009a337
+  loofah (2.25.0) sha256=df5ed7ac3bac6a4ec802df3877ee5cc86d027299f8952e6243b3dac446b060e6
   lumberjack (1.2.8) sha256=48ad39dd8869e8f16c18c4acdc90c14658d8684c035da1f74bec7a38c45afe1a
   mail (2.9.0) sha256=6fa6673ecd71c60c2d996260f9ee3dd387d4673b8169b502134659ece6d34941
   mail_form (1.11.0) sha256=54aaaf11b69e7e5bd4be220dfc80f2469bb809d6ed1f893b8d940f0b67232c5a
@@ -1287,7 +1288,7 @@ CHECKSUMS
   mini_magick (5.3.1) sha256=29395dfd76badcabb6403ee5aff6f681e867074f8f28ce08d78661e9e4a351c4
   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
   mini_portile2 (2.8.9) sha256=0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289
-  minitest (5.26.2) sha256=f021118a6185b9ba9f5af71f2ba103ad770c75afde9f2ab8da512677c550cde3
+  minitest (6.0.1) sha256=7854c74f48e2e975969062833adc4013f249a4b212f5e7b9d5c040bf838d54bb
   momentjs-rails (2.29.4.1) sha256=c7f9bc583872b628f8723319f4ae12a646c858c1c3ddb352bc75d5a7aa0b9e01
   monetize (1.11.0) sha256=d6c506daf4da0f424caa74cad1283fb82133607e504c631fc08eafd67d15ca32
   money (6.16.0) sha256=cf476f5f19188e247ec20f6509cff64dc35d395ee018bad799b1a9ea8bd4754a
@@ -1358,7 +1359,7 @@ CHECKSUMS
   rb-fsevent (0.11.0) sha256=3a02b6360c856cc16e7f62382573b238f5cfb61a48169dd4c83b842c094b5de3
   rb-inotify (0.10.1) sha256=050062d4f31d307cca52c3f6a7f4b946df8de25fc4bd373e1a5142e41034a7ca
   rb_sys (0.9.123) sha256=c22ae84d1bca3eec0f13a45ae4ca9ba6eace93d5be270a40a9c0a9a5b92a34e5
-  rdoc (7.0.2) sha256=0773452ac7735507f50f5c428c4f94e33da656ac4b0d58151105903ea91245ad
+  rdoc (7.0.3) sha256=dfe3d0981d19b7bba71d9dbaeb57c9f4e3a7a4103162148a559c4fc687ea81f9
   react-rails (3.2.1) sha256=2235db0b240517596b1cb3e26177ab5bc64d3a56579b0415ee242b1691f81f64
   recaptcha (5.21.1) sha256=e003e9ceba9b993a9f0c6a828c192f2d46693cd2aa0b0beae94f936649507adb
   redcarpet (3.6.1) sha256=d444910e6aa55480c6bcdc0cdb057626e8a32c054c29e793fa642ba2f155f445
@@ -1479,7 +1480,7 @@ CHECKSUMS
   websocket-driver (0.8.0) sha256=ed0dba4b943c22f17f9a734817e808bc84cdce6a7e22045f5315aa57676d4962
   websocket-extensions (0.1.5) sha256=1c6ba63092cda343eb53fc657110c71c754c56484aad42578495227d717a8241
   xpath (3.2.0) sha256=6dfda79d91bb3b949b947ecc5919f042ef2f399b904013eb3ef6d20dd3a4082e
-  zeitwerk (2.7.3) sha256=b2e86b4a9b57d26ba68a15230dcc7fe6f040f06831ce64417b0621ad96ba3e85
+  zeitwerk (2.7.4) sha256=2bef90f356bdafe9a6c2bd32bcd804f83a4f9b8bc27f3600fff051eb3edcec8b
 
 BUNDLED WITH
   4.0.1
