@@ -1004,6 +1004,15 @@ vi:
         #original_hash: 79ccfe2
         dob_invalid: bị sai định dạng
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: Có lỗi xảy ra khi hiển thị trang
+      #original_hash: 22dfe12
+      description: >-
+        Nếu tiếp tục có lỗi, xin vui lòng thông báo cho WST cùng với thông tin
+        chi tiết sau đây
+      #original_hash: 20be860
+      details: Thông tin lỗi
     messages:
       #original_hash: dc2367c
       wrong_size: 'sai kích thước (phải là %{file_size})'
@@ -2953,7 +2962,9 @@ vi:
         Nội dung chính là %{event_name}. Vì không có thí sinh nào hoàn thành
         thành công lượt thi, giải đấu không có người thắng cuộc.
       #original_hash: 6c3b236
-      winner: '%{winner} đạt %{result_sentence} trong nội dung %{event_name}.'
+      winner: >-
+        %{winner} dành chiến thắng %{result_sentence} trong nội dung
+        %{event_name}.
       #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} đạt vị trí thứ hai (%{first_runner_up_result})'
       #original_hash: cffa50a
