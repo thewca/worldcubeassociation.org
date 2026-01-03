@@ -40,7 +40,7 @@ export default async function ScramblesPage() {
           <VStack>
             <Text>Download the official scramble program:</Text>
             <Link href={LATEST_JARFILE}>{LATEST_VERSION}</Link>
-            <Text>Last official change: December 17th, 2025</Text>
+            <Text>Last official change: January 1st, 2026</Text>
           </VStack>
         </Center>
         <Heading size="2xl">Important Notes for Delegates</Heading>
