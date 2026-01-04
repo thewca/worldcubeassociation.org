@@ -1009,6 +1009,13 @@ pt:
         #original_hash: 79ccfe2
         dob_invalid: não está bem formatado
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: Ocorreu um erro ao renderizar a página
+      #original_hash: 22dfe12
+      description: 'Se o erro persistir, comunique-o à WST com os detalhes listados abaixo'
+      #original_hash: 20be860
+      details: Detalhes do erro
     messages:
       #original_hash: dc2367c
       wrong_size: 'tem o tamanho errado (deverá ser %{file_size})'
