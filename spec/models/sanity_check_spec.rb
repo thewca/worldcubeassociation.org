@@ -23,5 +23,17 @@ RSpec.describe SanityCheck do
         expect { ActiveRecord::Base.connection.execute explain_query }.not_to raise_error
       end
     end
+
+    it "references all SQL files that are in the sanity_check_sql folder" do
+      # `pluck` does not work here because `query` is not a DB column!
+      used_queries = SanityCheck.all.map(&:query)
+
+      sc_folder = Rails.root.join("lib/sanity_check_sql")
+      sql_files = sc_folder.glob('**/*.sql')
+
+      stored_queries = sql_files.map(&:read)
+
+      expect(stored_queries).to match_array(used_queries)
+    end
   end
 end
