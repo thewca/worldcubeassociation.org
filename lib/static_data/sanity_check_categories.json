@@ -16,7 +16,7 @@
   },
   {
     "id": 4,
-    "name": "WCA-ID Irregularities",
+    "name": "WCA ID Irregularities",
     "email_to": "wrt@worldcubeassociation.org"
   },
   {
@@ -46,17 +46,17 @@
   },
   {
     "id": 10,
-    "name": "Consistency of Results & Persons",
+    "name": "Consistency Of Results And Persons",
     "email_to": "wrt@worldcubeassociation.org"
   },
   {
     "id": 11,
-    "name": "Consistency of Results & Scrambles",
+    "name": "Consistency Of Results And Scrambles",
     "email_to": "wrt@worldcubeassociation.org"
   },
   {
     "id": 12,
-    "name": "Consistency of Results & Rounds Data",
+    "name": "Consistency Of Results And Rounds Data",
     "email_to": "wrt@worldcubeassociation.org"
   },
   {
@@ -66,7 +66,7 @@
   },
   {
     "id": 14,
-    "name": "Email ID warnings",
+    "name": "Email Id Warnings",
     "email_to": "assistants@worldcubeassociation.org"
   },
   {
