@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Card,
-  HStack,
-  SimpleGrid,
-  Link,
-  Tabs,
-  Button,
-  Stack,
-} from "@chakra-ui/react";
+import { Card, HStack, SimpleGrid, Link, Tabs, Button } from "@chakra-ui/react";
 import NextLink from "next/link";
 import {
   activitiesOnDate,
@@ -94,7 +86,7 @@ export default function LiveView({
                             })}
                           >
                             <HStack>
-                              <EventIcon eventId={eventId} />
+                              <EventIcon eventId={eventId} fontSize="2xl" />
                               {localizeActivityName(t, activity, wcifEvents)}
                             </HStack>
                           </NextLink>
