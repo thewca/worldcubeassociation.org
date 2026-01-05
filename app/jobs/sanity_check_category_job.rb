@@ -7,7 +7,6 @@ class SanityCheckCategoryJob < WcaCronjob
 
       sanity_check.sanity_check_results.create!(
         query_results: query_result,
-        cronjob_statistic_name: sanity_check_category.name,
       )
     end
   end
