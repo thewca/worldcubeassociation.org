@@ -3,8 +3,7 @@
 class RunAllSanityChecks < WcaCronjob
   def perform
     SanityCheckCategory.find_each do |sanity_check_category|
-      SanityCheckCategoryJob.perform_later({ name: sanity_check_category.name.gsub(/\s+/, "").underscore,
-                                             category_id: sanity_check_category.id })
+      SanityCheckCategoryJob.perform_later(sanity_check_category)
     end
   end
 end

@@ -20,7 +20,7 @@ class AdminController < ApplicationController
 
   def run_sanity_check
     sanity_check_category = SanityCheckCategory.find(params.require(:sanity_check_category_id))
-    SanityCheckCategoryJob.perform_later({ name: sanity_check_category.name, category_id: sanity_check_category.id })
+    SanityCheckCategoryJob.perform_later(sanity_check_category)
     redirect_to sanity_check_path
   end
 
