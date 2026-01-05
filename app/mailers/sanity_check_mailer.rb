@@ -2,7 +2,7 @@
 
 class SanityCheckMailer < ApplicationMailer
   def notify_of_sanity_check_results(email_to)
-    results = SanityCheckCategory.where(email_to: email_to).flat_map(:latest_results)
+    results = SanityCheckCategory.where(email_to: email_to).flat_map(&:latest_results)
     @non_empty_results = results.filter { |r| !r.results_without_exclusions.empty? }
 
     start_of_month = Time.now.change(day: 1)
