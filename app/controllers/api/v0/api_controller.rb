@@ -11,8 +11,9 @@ class Api::V0::ApiController < ApplicationController
     render status: e.status, json: { error: e.to_s }
   end
 
+  # Probably nicer to have some kind of errorcode/string depending on the model
   rescue_from ActiveRecord::RecordNotFound do |e|
-    render status: :not_found, json: { error: e.to_s }
+    render json: { error: e.to_s, data: { model: e.model, id: e.id } }, status: :not_found
   end
 
   DEFAULT_API_RESULT_LIMIT = 20
@@ -70,10 +71,6 @@ class Api::V0::ApiController < ApplicationController
         "download" => "https://github.com/thewca/tnoodle/releases/download/v1.2.3/TNoodle-WCA-1.2.3.jar",
       },
       "allowed" => [
-        "TNoodle-WCA-1.1.3.1",
-        "TNoodle-WCA-1.2.0",
-        "TNoodle-WCA-1.2.1",
-        "TNoodle-WCA-1.2.2",
         "TNoodle-WCA-1.2.3",
       ],
       "publicKeyBytes" => public_key,
@@ -221,10 +218,10 @@ class Api::V0::ApiController < ApplicationController
   def export_public
     timestamp = DumpPublicResultsDatabase.successful_start_date
 
-    _, sql_filesize = DbDumpHelper.cached_results_export_info("sql", timestamp)
-    _, tsv_filesize = DbDumpHelper.cached_results_export_info("tsv", timestamp)
     current_version_key = DatabaseDumper.current_results_export_version
     current_version_number = DatabaseDumper::RESULTS_EXPORT_VERSIONS[current_version_key][:metadata][:export_format_version]
+    _, sql_filesize = DbDumpHelper.cached_results_export_info("sql", current_version_key, timestamp)
+    _, tsv_filesize = DbDumpHelper.cached_results_export_info("tsv", current_version_key, timestamp)
 
     render json: {
       export_date: timestamp&.iso8601,

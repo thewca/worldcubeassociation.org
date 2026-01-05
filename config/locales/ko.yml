@@ -952,6 +952,13 @@ ko:
         #original_hash: 79ccfe2
         dob_invalid: 형식이 잘못 되었습니다.
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: 페이지를 렌더링하는 동안 오류가 발생했습니다.
+      #original_hash: 22dfe12
+      description: 이 오류가 계속 발생하면 아래에 나열된 세부 정보를 포함하여 WST에 보고하십시오.
+      #original_hash: 20be860
+      details: 오류 세부 정보
     messages:
       #original_hash: dc2367c
       wrong_size: '잘못된 크기입니다(%{file_size}이어야 함)'
@@ -2121,7 +2128,7 @@ ko:
     #original_hash: bbcc3dc
     delete_registration: 참가 신청 삭제
     #original_hash: e9ddc6e
-    will_open_html: '<strong>%{days}</strong> %{time}에 참가 신청 기간이 시작됩니다.'
+    will_open_html: '%{time}에 참가 신청 기간이 시작됩니다 (<strong>%{days}</strong>).'
     #original_hash: 34eb009
     will_close_html: '<strong>%{days}</strong> %{time}에 참가 신청 기간이 종료됩니다.'
     #original_hash: dc8a520
@@ -3256,7 +3263,7 @@ ko:
         #original_hash: 21891e5
         payment_missing: 주최측과 특별한 합의가 있거나 다른 방법으로 지불한 경우를 제외하고는 참가비를 지불하기 전까지 참가 신청은 승인되지 않습니다.
         #original_hash: b15fddc
-        needs_approval: 아직 여행 일정을 예약하지 마십시오. 주최자가 수동으로 등록을 승인해야 합니다. 시간이 걸릴 수 있습니다.
+        needs_approval: 아직 여행 일정을 잡지 마세요 - 운영진이 직접 등록을 승인해야 하므로 시간이 걸릴 수 있습니다.
         #original_hash: 6071fd9
         is_accepted: 여행 일정을 예약하고 짐을 챙기십시오. 대회에 참가할 자리가 생겼습니다!
         #original_hash: 89448a8
@@ -3401,7 +3408,7 @@ ko:
             #original_hash: 8cc047a
             title: 참가 신청 승인
             #original_hash: 3bdafe5
-            description: 주최 측에 의함
+            description: 운영진에 의함
           payment:
             #original_hash: 4930c06
             title: 결제 정보
@@ -3437,7 +3444,7 @@ ko:
           #original_hash: b1e97b8
           accepted: 귀하의 참가 신청이 승인되었습니다.
           #original_hash: 3d7aa97
-          pending: 귀하의 참가 신청은 주최측의 승인을 기다리고 있습니다.
+          pending: 참가 신청 승인 대기 중입니다.
           #original_hash: dcc4906
           cancelled: 귀하의 참가 신청이 삭제되었습니다.
           #original_hash: 92dab83
@@ -5203,6 +5210,11 @@ ko:
     results_export:
       #original_hash: 15d00e1
       heading: WCA 결과 내보내기
+      #original_hash: 733df42
+      deprecation_warning: >-
+        사용 중단 알림: 결과 내보내기 기능의 %{old_version} 버전은 더 이상 사용되지 않으며,
+        %{deprecation_date}부터 지원이 중단될 예정입니다. 그 전에 %{new_version} 버전으로 전환하여
+        사용하십시오.
       #original_hash: f9fe9df
       description: >-
         이 페이지에서는 WCA 결과를 여러 형식으로 다운로드할 수 있도록 제공하므로, 이를 광범위하게 사용하거나 분석할 수 있습니다.
@@ -5210,6 +5222,10 @@ ko:
         확인할 수 있습니다.
       #original_hash: 4f59283
       permalink: 퍼머링크
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        참고: Permalink는 특정 버전 내에서 최신 결과 내보내기를 제공합니다. 즉, v2 Permalink는 최신 v2 내보내기를
+        반환하지만, v3이 출시되더라도 v2 상태를 유지합니다.
       file_formats:
         #original_hash: b086d79
         sql: SQL 데이터베이스로 가져오기 위한 SQL 문입니다.

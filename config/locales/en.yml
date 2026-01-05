@@ -581,6 +581,10 @@ en:
       dob_contact:
         dob_invalid: "is misformatted"
   errors:
+    next_frontend:
+      title: "An error occurred when rendering the page"
+      description: "If this error persists, report it to WST with the details listed below"
+      details: "Error details"
     #These are locales used in lib/ (ignored by configuration)
     #context: Error message when submitting a profile picture
     messages:
@@ -2876,7 +2880,7 @@ en:
   database:
     results_export:
       heading: "WCA Results Export"
-      deprecation_warning: "DEPRECATION NOTICE: Version 1 of the Results Export has been deprecated, and support for it will be discontinued from 2026-01-01. Please switch to using Version 2 before then."
+      deprecation_warning: "DEPRECATION NOTICE: Version %{old_version} of the Results Export has been deprecated, and support for it will be discontinued from %{deprecation_date}. Please switch to using Version %{new_version} before then."
       description: "On this page we offer the WCA results for download in several formats so you can use/analyze them at large. We will usually update after each competition weekend when the results are finalized. The files are numbered and dated so you can see whether you have the newest version already."
       permalink: "permalink"
       permalink_note: "Note: Permalinks deliver the latest results export within a given version - ie, the v2 permalink will return the latest v2 export, but will stay on v2 even when v3 is released."
