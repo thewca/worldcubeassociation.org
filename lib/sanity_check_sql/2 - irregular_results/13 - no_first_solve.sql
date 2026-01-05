@@ -1,3 +1,3 @@
 SELECT *
-FROM Results
+FROM results
 WHERE value1 = 0

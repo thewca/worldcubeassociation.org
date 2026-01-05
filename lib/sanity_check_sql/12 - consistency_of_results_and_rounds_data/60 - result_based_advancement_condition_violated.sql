@@ -52,7 +52,7 @@ FROM (WITH comps AS (SELECT DISTINCT cevents.competition_id AS competition_id, c
              re.total_number_of_rounds,
              re.person_id,
              re.person_name,
-             "",
+             '',
              re.result,
              re.adv_type,
              re.adv_count,
@@ -62,4 +62,4 @@ FROM (WITH comps AS (SELECT DISTINCT cevents.competition_id AS competition_id, c
                         ON re.competition_id = re1.competition_id AND re.event_id = re1.event_id AND
                            re.person_id = re1.person_id AND re.number = re1.number - 1
       WHERE re.result >= re.adv_count
-        AND re.adv_type = "attemptResult") AS alls
+        AND re.adv_type = 'attemptResult') AS alls

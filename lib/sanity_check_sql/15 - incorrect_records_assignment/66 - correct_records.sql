@@ -86,8 +86,8 @@ WITH round_dates AS (SELECT cv.competition_id                                   
                      )                                                                  AS day_best_average,
                    r.best,
                    r.average,
-                   IF(r.regional_single_record IS NULL, "", r.regional_single_record)   AS stored_single,
-                   IF(r.regional_average_record IS NULL, "", r.regional_average_record) AS stored_average,
+                   IF(r.regional_single_record IS NULL, '', r.regional_single_record)   AS stored_single,
+                   IF(r.regional_average_record IS NULL, '', r.regional_average_record) AS stored_average,
                    ons.old_NR_single,
                    ona.old_NR_average
             FROM results r
@@ -117,7 +117,7 @@ WITH round_dates AS (SELECT cv.competition_id                                   
                   OR (r.average > 0 AND
                       (ona.old_NR_average IS NULL OR r.average <= ona.old_NR_average)
                   )
-                ) OR regional_single_record <> "" OR regional_average_record <> ""
+                ) OR regional_single_record <> '' OR regional_average_record <> ''
               )),
 -- Removes rows from t1 that are not the fastest result of that day. Calculates whether or not each result from remaining rows is NR single or average by whether the result is <= previous results from that year and <= the previous year's record (if there is one).
      t2 AS (SELECT t1.results_id,
@@ -156,17 +156,17 @@ WITH round_dates AS (SELECT cv.competition_id                                   
             FROM t1
             WHERE t1.day_best_single = 1
                OR t1.day_best_average = 1
-               OR t1.stored_single <> ""
-               OR t1.stored_average <> ""),
+               OR t1.stored_single <> ''
+               OR t1.stored_average <> ''),
 -- Joins t2 to continental and world records from previous year. Calculates whether or not each result is CR or WR single/average by whether the result is <= previous results from that year and <= last year's best results.
      t3 AS (SELECT c.continent_id,
                    CASE c.continent_id
-                     WHEN "_Africa" THEN "AfR"
-                     WHEN "_Asia" THEN "AsR"
-                     WHEN "_Europe" THEN "ER"
-                     WHEN "_Oceania" THEN "OcR"
-                     WHEN "_North America" THEN "NAR"
-                     WHEN "_South America" THEN "SAR"
+                     WHEN '_Africa' THEN 'AfR'
+                     WHEN '_Asia' THEN 'AsR'
+                     WHEN '_Europe' THEN 'ER'
+                     WHEN '_Oceania' THEN 'OcR'
+                     WHEN '_North America' THEN 'NAR'
+                     WHEN '_South America' THEN 'SAR'
                      END AS cr_id,
                    t2.*,
                    IF(
@@ -223,70 +223,70 @@ WITH round_dates AS (SELECT cv.competition_id                                   
                              ON t2.event_id = ows.event_id
                    LEFT JOIN old_wr_averages owa
                              ON t2.event_id = owa.event_id
-            WHERE t2.stored_single <> ""
-               OR t2.stored_average <> ""
+            WHERE t2.stored_single <> ''
+               OR t2.stored_average <> ''
                OR t2.NRaverage = 1
                OR t2.NRsingle = 1),
 -- combines NR, CR, and WR columns to assign a record id for each row.
      t4 AS (SELECT t3.*,
                    CASE
-                     WHEN t3.WRsingle = 1 THEN "WR"
+                     WHEN t3.WRsingle = 1 THEN 'WR'
                      WHEN t3.CRsingle = 1 THEN t3.cr_id
-                     WHEN t3.NRsingle = 1 THEN "NR"
-                     ELSE "" END AS calculated_single,
+                     WHEN t3.NRsingle = 1 THEN 'NR'
+                     ELSE '' END AS calculated_single,
                    CASE
-                     WHEN t3.WRaverage = 1 THEN "WR"
+                     WHEN t3.WRaverage = 1 THEN 'WR'
                      WHEN t3.CRaverage = 1 THEN t3.cr_id
-                     WHEN t3.NRaverage = 1 THEN "NR"
-                     ELSE "" END AS calculated_average
+                     WHEN t3.NRaverage = 1 THEN 'NR'
+                     ELSE '' END AS calculated_average
             FROM t3),
 -- Compares calculated records from t4 to assigned records and flags inconsistencies.
      records_assignment AS (SELECT t4.*,
                                    CASE
-                                     WHEN t4.stored_single <> ""
-                                       AND t4.calculated_single <> ""
+                                     WHEN t4.stored_single <> ''
+                                       AND t4.calculated_single <> ''
                                        AND t4.stored_single <> t4.calculated_single
-                                       THEN CONCAT("single: replace ", t4.stored_single, " with ", calculated_single)
-                                     WHEN t4.stored_single = ""
-                                       AND t4.calculated_single <> ""
-                                       THEN CONCAT("single: add ", t4.calculated_single)
-                                     WHEN t4.stored_single <> ""
-                                       AND t4.calculated_single = ""
-                                       THEN CONCAT("single: remove ", t4.stored_single)
+                                       THEN CONCAT('single: replace ', t4.stored_single, ' with ', calculated_single)
+                                     WHEN t4.stored_single = ''
+                                       AND t4.calculated_single <> ''
+                                       THEN CONCAT('single: add ', t4.calculated_single)
+                                     WHEN t4.stored_single <> ''
+                                       AND t4.calculated_single = ''
+                                       THEN CONCAT('single: remove ', t4.stored_single)
                                      ELSE NULL END AS single_action,
                                    CASE
-                                     WHEN t4.stored_average <> ""
-                                       AND t4.calculated_average <> ""
+                                     WHEN t4.stored_average <> ''
+                                       AND t4.calculated_average <> ''
                                        AND t4.stored_average <> t4.calculated_average
-                                       THEN CONCAT("average: replace ", t4.stored_average, " with ", calculated_average)
-                                     WHEN t4.stored_average = ""
-                                       AND t4.calculated_average <> ""
-                                       THEN CONCAT("average: add ", t4.calculated_average)
-                                     WHEN t4.stored_average <> ""
-                                       AND t4.calculated_average = ""
-                                       THEN CONCAT("average: remove ", t4.stored_average)
+                                       THEN CONCAT('average: replace ', t4.stored_average, ' with ', calculated_average)
+                                     WHEN t4.stored_average = ''
+                                       AND t4.calculated_average <> ''
+                                       THEN CONCAT('average: add ', t4.calculated_average)
+                                     WHEN t4.stored_average <> ''
+                                       AND t4.calculated_average = ''
+                                       THEN CONCAT('average: remove ', t4.stored_average)
                                      ELSE NULL END AS average_action,
                                    CONCAT(
                                      CASE
-                                       WHEN calculated_single <> ""
+                                       WHEN calculated_single <> ''
                                          AND stored_single <> calculated_single
-                                         THEN CONCAT("UPDATE results SET regional_single_record = '", calculated_single,
-                                                     "' WHERE id = ", results_id, "; ")
-                                       WHEN calculated_single = ""
-                                         AND stored_single <> ""
-                                         THEN CONCAT("UPDATE results SET regional_single_record = NULL WHERE id = ",
-                                                     results_id, "; ")
-                                       ELSE "" END,
+                                         THEN CONCAT('UPDATE results SET regional_single_record = \'', calculated_single,
+                                                     '\' WHERE id = ', results_id, '; ')
+                                       WHEN calculated_single = ''
+                                         AND stored_single <> ''
+                                         THEN CONCAT('UPDATE results SET regional_single_record = NULL WHERE id = ',
+                                                     results_id, '; ')
+                                       ELSE '' END,
                                      CASE
-                                       WHEN calculated_average <> ""
+                                       WHEN calculated_average <> ''
                                          AND stored_average <> calculated_average
-                                         THEN CONCAT("UPDATE results SET regional_average_record = '",
-                                                     calculated_average, "' WHERE id = ", results_id, "; ")
-                                       WHEN calculated_average = ""
-                                         AND stored_average <> ""
-                                         THEN CONCAT("UPDATE results SET regional_average_record = NULL WHERE id = ",
-                                                     results_id, "; ")
-                                       ELSE "" END
+                                         THEN CONCAT('UPDATE results SET regional_average_record = \'',
+                                                     calculated_average, '\' WHERE id = ', results_id, '; ')
+                                       WHEN calculated_average = ''
+                                         AND stored_average <> ''
+                                         THEN CONCAT('UPDATE results SET regional_average_record = NULL WHERE id = ',
+                                                     results_id, '; ')
+                                       ELSE '' END
                                    )               AS Query
                             FROM t4)
 SELECT person_id,
@@ -294,7 +294,7 @@ SELECT person_id,
        event_id,
        round,
        competition_id,
-       CONCAT_WS(", ", single_action, average_action) AS action
+       CONCAT_WS(', ', single_action, average_action) AS action
 FROM records_assignment
 WHERE single_action IS NOT NULL
    OR average_action IS NOT NULL;
