@@ -26,8 +26,7 @@ class ScrambleFilesController < ApplicationController
     raw_file_contents = uploaded_file.read
     tnoodle_json = JSON.parse(raw_file_contents, symbolize_names: true)
 
-    # The original Java `LocalDateTime` format is defined as `"MMM dd, yyyy h:m:s a"`.
-    generation_date = DateTime.strptime(tnoodle_json[:generationDate], "%b %d, %Y %l:%M:%S %p")
+    generation_date = DateTime.strptime(tnoodle_json[:generationDate], ScrambleFileUpload::TNOODLE_DATETIME_FORMAT)
     tnoodle_version = tnoodle_json[:version]
 
     existing_upload = ScrambleFileUpload.for_serialization.find_by(

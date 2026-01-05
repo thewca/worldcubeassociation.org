@@ -165,7 +165,7 @@ class CompetitionsMailer < ApplicationMailer
 
           attachments[deduplicated_filename] = {
             mime_type: "application/json",
-            content: scr_file_upload.raw_wcif.to_json,
+            content: scr_file_upload.tnoodle_interchange_data.to_json,
           }
         end
       end
