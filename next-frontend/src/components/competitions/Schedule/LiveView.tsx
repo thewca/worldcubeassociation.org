@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, HStack, SimpleGrid, Link, Tabs } from "@chakra-ui/react";
+import {Card, HStack, SimpleGrid, Link, Tabs, Button, Stack} from "@chakra-ui/react";
 import NextLink from "next/link";
 import {
   activitiesOnDate,
@@ -71,29 +71,31 @@ export default function LiveView({
 
                 return (
                   <Card.Root key={activity.id} rounded="md">
-                    <Card.Header>
-                      <Link asChild>
-                        <NextLink
-                          href={route({
-                            pathname:
-                              "/competitions/[competitionId]/live/rounds/[roundId]",
-                            query: {
-                              competitionId,
-                              roundId: activity.id.toString(),
-                            },
-                          })}
-                        >
-                          <HStack>
-                            <EventIcon eventId={eventId} />
-                            {localizeActivityName(t, activity, wcifEvents)}
-                          </HStack>
-                        </NextLink>
-                      </Link>
-                    </Card.Header>
-                    <Card.Body>
+                    <Card.Body asChild alignItems="baseline">
+                      <Button asChild variant="subtle">
+                        <Link asChild textStyle="headerLink">
+                          <NextLink
+                            href={route({
+                              pathname:
+                                "/competitions/[competitionId]/live/rounds/[roundId]",
+                              query: {
+                                competitionId,
+                                roundId: activity.id.toString(),
+                              },
+                            })}
+                          >
+                            <HStack>
+                              <EventIcon eventId={eventId} />
+                              {localizeActivityName(t, activity, wcifEvents)}
+                            </HStack>
+                          </NextLink>
+                        </Link>
+                      </Button>
+                    </Card.Body>
+                    <Card.Footer>
                       {getSimpleTimeString(activity.startTime)} -{" "}
                       {getSimpleTimeString(activity.endTime)}
-                    </Card.Body>
+                    </Card.Footer>
                   </Card.Root>
                 );
               })}
