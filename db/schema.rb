@@ -1219,7 +1219,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_22_101010) do
 
   create_table "sanity_check_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "cronjob_statistic_name", null: false
     t.json "query_results", null: false
     t.bigint "sanity_check_id", null: false
     t.datetime "updated_at", null: false
