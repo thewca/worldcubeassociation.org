@@ -1,9 +1,9 @@
 import { getSchedule } from "@/lib/wca/competitions/getSchedule";
-import Errored from "@/components/ui/errored";
 import { earliestWithLongestTieBreaker } from "@/lib/wca/wcif/activities";
 import LiveView from "@/components/competitions/Schedule/LiveView";
 import { getEvents } from "@/lib/wca/competitions/wcif/getEvents";
 import { getT } from "@/lib/i18n/get18n";
+import OpenapiError from "@/components/ui/openapiError";
 
 export default async function LiveOverview({
   params,
@@ -13,17 +13,24 @@ export default async function LiveOverview({
   const { competitionId } = await params;
   const { t } = await getT();
 
-  const { error, data: wcifSchedule } = await getSchedule(competitionId);
+  const {
+    error: scheduleError,
+    data: wcifSchedule,
+    response: scheduleResponse,
+  } = await getSchedule(competitionId);
 
-  if (error) {
-    return <Errored error={`${error.data.id} not found`} />;
+  if (scheduleError) {
+    return <OpenapiError t={t} response={scheduleResponse} />;
   }
 
-  const { error: wcifEventsError, data: wcifEvents } =
-    await getEvents(competitionId);
+  const {
+    error: wcifEventsError,
+    data: wcifEvents,
+    response: eventResponse,
+  } = await getEvents(competitionId);
 
   if (wcifEventsError) {
-    return <Errored error={`${wcifEventsError.data.id} not found`} />;
+    return <OpenapiError t={t} response={eventResponse} />;
   }
 
   const allActivitiesSorted = wcifSchedule.venues

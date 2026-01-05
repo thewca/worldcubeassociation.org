@@ -1,5 +1,13 @@
 import React from "react";
-import {Card, HStack, SimpleGrid, Link, Tabs, Button, Stack} from "@chakra-ui/react";
+import {
+  Card,
+  HStack,
+  SimpleGrid,
+  Link,
+  Tabs,
+  Button,
+  Stack,
+} from "@chakra-ui/react";
 import NextLink from "next/link";
 import {
   activitiesOnDate,
@@ -42,8 +50,9 @@ export default function LiveView({
   );
 
   // Show the first date that has not passed, if all of them have, show the last date
+  const lastDate = dates[dates.length - 1];
   const defaultDate =
-    dates.filter((d) => !hasPassed(d.toISO()!))[0] ?? dates[dates.length - 1];
+    dates.filter((d) => !hasPassed(d.toISO()!))[0] ?? lastDate;
 
   return (
     <Tabs.Root defaultValue={defaultDate.day.toString()}>
