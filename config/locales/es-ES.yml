@@ -1026,6 +1026,15 @@ es-ES:
         #original_hash: 79ccfe2
         dob_invalid: no tiene el formato correcto
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: Ha ocurrido un error renderizando la página
+      #original_hash: 22dfe12
+      description: >-
+        Si este error persiste, informa sobre ello al WST con los detalles que
+        se indican a continuación
+      #original_hash: 20be860
+      details: Detalles del error
     messages:
       #original_hash: dc2367c
       wrong_size: 'no tiene el tamaño correcto (debería ser %{file_size})'
