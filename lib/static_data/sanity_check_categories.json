@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "name": "Personal Data Irregularities",
+    "name": "Person Data Irregularities",
     "email_to": "wrt@worldcubeassociation.org"
   },
   {
@@ -31,7 +31,7 @@
   },
   {
     "id": 7,
-    "name": "Irregularities",
+    "name": "Competition Data Irregularities",
     "email_to": "wrt@worldcubeassociation.org"
   },
   {

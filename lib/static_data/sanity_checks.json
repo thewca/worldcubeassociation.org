@@ -4,56 +4,56 @@
     "sanity_check_category_id": 1,
     "topic": "Names with numbers or non-desired special characters",
     "query_file": "1 - person_data_irregularities/1 - name_special_characters.sql",
-    "comments": ""
+    "comments": null
   },
   {
     "id": 2,
     "sanity_check_category_id": 1,
     "topic": "Lowercase first names",
     "query_file": "1 - person_data_irregularities/2 - lower_case_first_name.sql",
-    "comments": ""
+    "comments": null
   },
   {
     "id": 3,
     "sanity_check_category_id": 1,
     "topic": "Lowercase last names (without local name)",
     "query_file": "1 - person_data_irregularities/3 - lower_case_last_name.sql",
-    "comments": ""
+    "comments": null
   },
   {
     "id": 4,
     "sanity_check_category_id": 1,
     "topic": "Lowercase last names (with local name)",
     "query_file": "1 - person_data_irregularities/4 - lower_case_last_name_with_local_name.sql",
-    "comments": ""
+    "comments": null
   },
   {
     "id": 5,
     "sanity_check_category_id": 1,
     "topic": "Bad local names (roman characters in brackets)",
     "query_file": "1 - person_data_irregularities/5 - bad_local_names.sql",
-    "comments": ""
+    "comments": null
   },
   {
     "id": 6,
     "sanity_check_category_id": 1,
     "topic": "Missing one bracket for local names",
     "query_file": "1 - person_data_irregularities/6 - missing_bracket_for_local_name.sql",
-    "comments": ""
+    "comments": null
   },
   {
     "id": 7,
     "sanity_check_category_id": 1,
     "topic": "Trailing spaces in names or local names",
     "query_file": "1 - person_data_irregularities/7 - trailing_spaces.sql",
-    "comments": ""
+    "comments": null
   },
   {
     "id": 8,
     "sanity_check_category_id": 1,
     "topic": "Cyrillic/Greek alphabet used instead of Latin",
     "query_file": "1 - person_data_irregularities/8 - cyrillic_or_greek.sql",
-    "comments": ""
+    "comments": null
   },
   {
     "id": 9,
@@ -67,7 +67,7 @@
     "sanity_check_category_id": 1,
     "topic": "Invalid countryIds",
     "query_file": "1 - person_data_irregularities/10 - invalid_country_ids.sql",
-    "comments": ""
+    "comments": null
   },
   {
     "id": 11,
@@ -94,28 +94,28 @@
     "id": "14",
     "sanity_check_category_id": "2",
     "topic": "Wrong number of results (for non-combined rounds)",
-    "comments": "",
+    "comments": null,
     "query_file": "2 - irregular_results/14 - wrong_number_of_results.sql"
   },
   {
     "id": "15",
     "sanity_check_category_id": "2",
     "topic": "Rounds with more than two (rounds with cutoff) \/ one (rounds without cutoff) different numbers of results (competitions with year >= 2013)",
-    "comments": "",
+    "comments": null,
     "query_file": "2 - irregular_results/15 - different_result_types.sql"
   },
   {
     "id": "16",
     "sanity_check_category_id": "2",
     "topic": "Only DNS or zero results",
-    "comments": "",
+    "comments": null,
     "query_file": "2 - irregular_results/16 - only_dns_results.sql"
   },
   {
     "id": "17",
     "sanity_check_category_id": "2",
     "topic": "Non-zero average for rows with <= 2 attempt",
-    "comments": "",
+    "comments": null,
     "query_file": "2 - irregular_results/17 - non_zero_average_for_less_than_3_results.sql"
   },
   {
@@ -136,7 +136,7 @@
     "id": "20",
     "sanity_check_category_id": "5",
     "topic": "Duplicates within scrambles for one competitionId",
-    "comments": "",
+    "comments": null,
     "query_file": "5 - duplicate_scrambles/20 - duplicate_within_competition_id.sql"
   },
   {
@@ -150,42 +150,42 @@
     "id": "22",
     "sanity_check_category_id": "6",
     "topic": "Invalid groupIds",
-    "comments": "",
+    "comments": null,
     "query_file": "6 - invalid_scrambles/22 - invalid_group_ids.sql"
   },
   {
     "id": "23",
     "sanity_check_category_id": "6",
     "topic": "Scrambles with leading or trailing spaces",
-    "comments": "",
+    "comments": null,
     "query_file": "6 - invalid_scrambles/23 - scrambles_with_leading_or_trailing_space.sql"
   },
   {
     "id": "24",
     "sanity_check_category_id": "6",
     "topic": "Wrong number of scrambles",
-    "comments": "",
+    "comments": null,
     "query_file": "6 - invalid_scrambles/24 - wrong_number_of_scrambles.sql"
   },
   {
     "id": "25",
     "sanity_check_category_id": "7",
     "topic": "Lowercase competitionIds",
-    "comments": "",
+    "comments": null,
     "query_file": "7 - general_irregularities/25 - lowercase_competitionids.sql"
   },
   {
     "id": "26",
     "sanity_check_category_id": "7",
     "topic": "competitionIds not ending with year (or endYear)",
-    "comments": "",
+    "comments": null,
     "query_file": "7 - general_irregularities/26 - competition_id_not_ending_in_year.sql"
   },
   {
     "id": "27",
     "sanity_check_category_id": "7",
     "topic": "Non-public Results (incomplete posting)",
-    "comments": "",
+    "comments": null,
     "query_file": "7 - general_irregularities/27 - non_public_results.sql"
   },
   {
@@ -199,14 +199,14 @@
     "id": "29",
     "sanity_check_category_id": "8",
     "topic": "Inconsistent name in users table",
-    "comments": "",
+    "comments": null,
     "query_file": "8 - user_data_irregularities/29 - inconsistent_name_in_user_table.sql"
   },
   {
     "id": "30",
     "sanity_check_category_id": "9",
     "topic": "Time limit < cutoff",
-    "comments": "",
+    "comments": null,
     "query_file": "9 - suspicious_rounds_data/30 - timelimit_less_than_cutoff.sql"
   },
   {
@@ -227,7 +227,7 @@
     "id": "33",
     "sanity_check_category_id": "9",
     "topic": "Time limit < 10 seconds",
-    "comments": "",
+    "comments": null,
     "query_file": "9 - suspicious_rounds_data/33 - timelimit_less_than_10_seconds.sql"
   },
   {
@@ -241,119 +241,119 @@
     "id": "35",
     "sanity_check_category_id": "10",
     "topic": "Persons table entries without Results table entry",
-    "comments": "",
+    "comments": null,
     "query_file": "10 - results_person_consistency/35 - person_without_results.sql"
   },
   {
     "id": "36",
     "sanity_check_category_id": "10",
     "topic": "Results table entries without Persons table entry",
-    "comments": "",
+    "comments": null,
     "query_file": "10 - results_person_consistency/36 - results_without_person.sql"
   },
   {
     "id": "37",
     "sanity_check_category_id": "11",
     "topic": "Round in Scrambles with no results (but with competitionId in Results)",
-    "comments": "",
+    "comments": null,
     "query_file": "11 - results_scramble_consistency/37 - round_in_scrambles_with_no_results.sql"
   },
   {
     "id": "38",
     "sanity_check_category_id": "11",
     "topic": "Rounds with results but no scrambles (but with competitionId in Scrambles)",
-    "comments": "",
+    "comments": null,
     "query_file": "11 - results_scramble_consistency/38 - rounds_with_results_but_no_scrambles.sql"
   },
   {
     "id": "39",
     "sanity_check_category_id": "12",
     "topic": "Events missing from competition_events",
-    "comments": "",
+    "comments": null,
     "query_file": "12 - results_round_consistency/39 - events_missing_from_competition_events.sql"
   },
   {
     "id": "40",
     "sanity_check_category_id": "12",
     "topic": "Unmatching number of events between Results and competition_events",
-    "comments": "",
+    "comments": null,
     "query_file": "12 - results_round_consistency/40 - number_of_competition_events_results_mismatch.sql"
   },
   {
     "id": "41",
     "sanity_check_category_id": "12",
     "topic": "No rounds marked for events",
-    "comments": "",
+    "comments": null,
     "query_file": "12 - results_round_consistency/41 - no_rounds_marked_for_events.sql"
   },
   {
     "id": "42",
     "sanity_check_category_id": "12",
     "topic": "Unmatching number of rounds between Results and rounds",
-    "comments": "",
+    "comments": null,
     "query_file": "12 - results_round_consistency/42 - number_of_rounds_results_mismatch.sql"
   },
   {
     "id": "43",
     "sanity_check_category_id": "12",
     "topic": "Format mismatches between Results and rounds",
-    "comments": "",
+    "comments": null,
     "query_file": "12 - results_round_consistency/43 - format_mismatch_results_rounds.sql"
   },
   {
     "id": "44",
     "sanity_check_category_id": "12",
     "topic": "Inconsistent scramble counts in Scrambles table and rounds table",
-    "comments": "",
+    "comments": null,
     "query_file": "12 - results_round_consistency/44 - inconsistent_scramble_count.sql"
   },
   {
     "id": "45",
     "sanity_check_category_id": "12",
     "topic": "Non-cutoff roundTypeIds with cutoffs in schedule",
-    "comments": "",
+    "comments": null,
     "query_file": "12 - results_round_consistency/45 - non_cutoff_round_type_ids_with_cutoff_in_schedule.sql"
   },
   {
     "id": "46",
     "sanity_check_category_id": "12",
     "topic": "Cutoff roundTypeIds with NULL cutoff",
-    "comments": "",
+    "comments": null,
     "query_file": "12 - results_round_consistency/46 - cutoff_round_types_with_null_cutoff.sql"
   },
   {
     "id": "47",
     "sanity_check_category_id": "12",
     "topic": "Cutoff violations",
-    "comments": "",
+    "comments": null,
     "query_file": "12 - results_round_consistency/47 - cutoff_violation.sql"
   },
   {
     "id": "48",
     "sanity_check_category_id": "12",
     "topic": "Time limit violations for non-cumulative time limit rounds",
-    "comments": "",
+    "comments": null,
     "query_file": "12 - results_round_consistency/48 - timelimit_violations_non_cumulative.sql"
   },
   {
     "id": "49",
     "sanity_check_category_id": "12",
     "topic": "Time limit violations for cumulative time limit rounds",
-    "comments": "",
+    "comments": null,
     "query_file": "12 - results_round_consistency/49 - timelimit_violations_cumulative.sql"
   },
   {
     "id": "50",
     "sanity_check_category_id": "13",
     "topic": "Banned competitors competing during their ban period",
-    "comments": "",
+    "comments": null,
     "query_file": "13 - banned_competitors/50 - banned_competitor_competing.sql"
   },
   {
     "id": "51",
     "sanity_check_category_id": "13",
     "topic": "Banned competitors registered for upcoming competitions during their ban period",
-    "comments": "",
+    "comments": null,
     "query_file": "13 - banned_competitors/51 - banned_competitor_registered.sql"
   },
   {
@@ -388,7 +388,7 @@
     "id": "56",
     "sanity_check_category_id": "8",
     "topic": "Potentially non-deleted dummy accounts",
-    "comments": "",
+    "comments": null,
     "query_file": "8 - user_data_irregularities/56 - potentially_not_deleted_dummy_accounts.sql"
   },
   {
@@ -409,21 +409,21 @@
     "id": "59",
     "sanity_check_category_id": "12",
     "topic": "Ranking-based advancement conditions in violation with <= 75% proceed",
-    "comments": "",
+    "comments": null,
     "query_file": "12 - results_round_consistency/59 - ranking_based_advanced_condition_violated.sql"
   },
   {
     "id": "60",
     "sanity_check_category_id": "12",
     "topic": "Result-based advancement conditions in violation with the given results",
-    "comments": "",
+    "comments": null,
     "query_file": "12 - results_round_consistency/60 - result_based_advancement_condition_violated.sql"
   },
   {
     "id": "61",
     "sanity_check_category_id": "1",
     "topic": "Names with abbreviation in first name",
-    "comments": "",
+    "comments": null,
     "query_file": "1 - person_data_irregularities/61 - first_names_with_abbreviation.sql"
   },
   {
@@ -437,28 +437,28 @@
     "id": "64",
     "sanity_check_category_id": "6",
     "topic": "Invalid new line characters in scrambles",
-    "comments": "",
+    "comments": null,
     "query_file": "6 - invalid_scrambles/64 - invalid_new_line_characters.sql"
   },
   {
     "id": "65",
     "sanity_check_category_id": "14",
     "topic": "Delegates who doesn't have GSuite email ID yet",
-    "comments": "",
+    "comments": null,
     "query_file": "14 - email_id_warnings/65 - delegates_without_gsuite_email.sql"
   },
   {
     "id": "66",
     "sanity_check_category_id": "15",
     "topic": "Checks all records since 2019 to ensure they have been assigned correctly",
-    "comments": "",
+    "comments": null,
     "query_file": "15 - incorrect_records_assignment/66 - correct_records.sql"
   },
   {
     "id": "67",
     "sanity_check_category_id": "1",
     "topic": "Names with dots followed by no space",
-    "comments": "",
+    "comments": null,
     "query_file": "1 - person_data_irregularities/67 - names_with_dots_but_no_space.sql"
   }
 ]
