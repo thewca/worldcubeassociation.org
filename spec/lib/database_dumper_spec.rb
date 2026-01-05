@@ -97,7 +97,7 @@ RSpec.describe "DatabaseDumper" do
           },
           v2: {
             metadata: {
-              export_format_version: '2.0.0',
+              export_format_version: '2.0.1',
               version_label: 'current',
               end_of_life_date: nil,
             },
@@ -119,7 +119,7 @@ RSpec.describe "DatabaseDumper" do
           },
           v2: {
             metadata: {
-              export_format_version: '2.0.0',
+              export_format_version: '2.0.1',
               version_label: 'current',
               end_of_life_date: nil,
             },

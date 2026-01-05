@@ -581,6 +581,10 @@ en:
       dob_contact:
         dob_invalid: "is misformatted"
   errors:
+    next_frontend:
+      title: "An error occurred when rendering the page"
+      description: "If this error persists, report it to WST with the details listed below"
+      details: "Error details"
     #These are locales used in lib/ (ignored by configuration)
     #context: Error message when submitting a profile picture
     messages:

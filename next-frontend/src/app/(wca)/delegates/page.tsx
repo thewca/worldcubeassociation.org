@@ -16,7 +16,7 @@ import { components } from "@/types/openapi";
 import UserBadge from "@/components/UserBadge";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import _ from "lodash";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -30,9 +30,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function DelegatesPage() {
   const { t } = await getT();
 
-  const { data: delegateGroups, error } = await getDelegateRegions();
+  const { data: delegateGroups, error, response } = await getDelegateRegions();
 
-  if (error) return <Errored error={error} />;
+  if (error) return <OpenapiError response={response} t={t} />;
 
   const rootGroups = delegateGroups.filter(
     (group) => group.parent_group_id === null,
@@ -95,9 +95,13 @@ function DelegateTab({ group }: { group: components["schemas"]["UserGroup"] }) {
 async function MemberTable({ id }: { id: number }) {
   const { t } = await getT();
 
-  const { data: delegateRoles, error } = await getDelegatesInGroups(id);
+  const {
+    data: delegateRoles,
+    error,
+    response,
+  } = await getDelegatesInGroups(id);
 
-  if (error) return <Errored error={error} />;
+  if (error) return <OpenapiError response={response} t={t} />;
 
   const roles = _.groupBy(delegateRoles, "group.name");
 

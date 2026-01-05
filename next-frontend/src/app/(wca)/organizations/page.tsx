@@ -17,7 +17,7 @@ import {
 import Loading from "@/components/ui/loading";
 import { getRegionalOrganizations } from "@/lib/wca/organizations/getRegionalOrganizations";
 import { getT } from "@/lib/i18n/get18n";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import _ from "lodash";
 import WcaFlag from "@/components/WcaFlag";
@@ -34,9 +34,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RegionalOrganizations() {
   const I18n = await getT();
 
-  const { data: organizations, error } = await getRegionalOrganizations();
+  const {
+    data: organizations,
+    error,
+    response,
+  } = await getRegionalOrganizations();
 
-  if (error) return <Errored error={error} />;
+  if (error) return <OpenapiError response={response} t={I18n.t} />;
   if (!organizations) return <Loading />;
 
   return (
