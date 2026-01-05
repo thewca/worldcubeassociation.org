@@ -1219,7 +1219,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_05_131200) do
 
   create_table "sanity_checks", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.text "comments"
-    t.text "query_file"
+    t.string "query_file"
     t.bigint "sanity_check_category_id", null: false
     t.string "topic", null: false
     t.index ["sanity_check_category_id"], name: "fk_rails_fddad5fbb5"
