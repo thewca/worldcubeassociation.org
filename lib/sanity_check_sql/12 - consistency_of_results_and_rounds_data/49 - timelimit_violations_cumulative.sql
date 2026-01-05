@@ -1,4 +1,4 @@
-SELECT ro.id, COUNT(*) AS noOfRounds, SUM(IF(value1<0,0,value1)+IF(value2<0,0,value2)+IF(value3<0,0,value3)+IF(value4<0,0,value4)+IF(value5<0,0,value5)) AS sumOfSolves,
+SELECT GROUP_CONCAT(ro.id), COUNT(*) AS noOfRounds, SUM(IF(value1<0,0,value1)+IF(value2<0,0,value2)+IF(value3<0,0,value3)+IF(value4<0,0,value4)+IF(value5<0,0,value5)) AS sumOfSolves,
        REVERSE(SUBSTRING_INDEX(REVERSE(SUBSTRING_INDEX(time_limit, ',', 1)), ':', 1)) AS timeLimit,
        ce.competition_id, ro.time_limit, r.person_id, r.person_name, r.country_id
 FROM rounds ro
@@ -11,5 +11,5 @@ FROM rounds ro
                                      WHEN 2 THEN re.round_type_id IN ('2', 'e') WHEN 3 THEN re.round_type_id IN ('3', 'g') END)
        JOIN results r ON ce.competition_id=r.competition_id AND ce.event_id=r.event_id AND re.round_type_id=r.round_type_id
 WHERE time_limit IS NOT NULL AND time_limit LIKE '%[%"",""%]%'
-GROUP BY person_id, competition_id, time_limit
+GROUP BY person_id, person_name, country_id, competition_id, time_limit
 HAVING sumOfSolves>=timeLimit
