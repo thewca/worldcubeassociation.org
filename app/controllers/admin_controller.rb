@@ -21,6 +21,7 @@ class AdminController < ApplicationController
   def run_sanity_check
     sanity_check_category = SanityCheckCategory.find(params.require(:sanity_check_category_id))
     SanityCheckCategoryJob.perform_later(sanity_check_category)
+    flash[:success] = "Sanity check job enqueued for category #{sanity_check_category.name}."
     redirect_to sanity_check_path
   end
 
