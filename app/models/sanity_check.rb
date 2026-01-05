@@ -5,9 +5,11 @@ class SanityCheck < ApplicationRecord
 
   belongs_to :sanity_check_category
 
+  def file_handle
+    "#{self.id} - #{self.query_file}"
+  end
+
   def query
-    category_folder = "#{sanity_check_category.id} - #{sanity_check_category.camel_case_name.underscore}"
-    file_name = "#{self.id} - #{self.query_file}"
-    @query ||= Rails.root.join("lib", "sanity_check_sql", category_folder, file_name).read
+    @query ||= Rails.root.join("lib", "sanity_check_sql", sanity_check_category.folder_handle, file_handle).read
   end
 end

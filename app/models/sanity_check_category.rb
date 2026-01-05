@@ -5,7 +5,7 @@ class SanityCheckCategory < ApplicationRecord
 
   has_many :sanity_checks
 
-  def camel_case_name
-    name.gsub(/\s+/, '')
+  def folder_handle
+    "#{self.id} - #{self.name.gsub(/\s+/, '').underscore}"
   end
 end
