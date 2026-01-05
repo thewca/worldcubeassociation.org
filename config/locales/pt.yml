@@ -1009,6 +1009,13 @@ pt:
         #original_hash: 79ccfe2
         dob_invalid: não está bem formatado
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: Ocorreu um erro ao renderizar a página
+      #original_hash: 22dfe12
+      description: 'Se o erro persistir, comunique-o à WST com os detalhes listados abaixo'
+      #original_hash: 20be860
+      details: Detalhes do erro
     messages:
       #original_hash: dc2367c
       wrong_size: 'tem o tamanho errado (deverá ser %{file_size})'
@@ -6161,11 +6168,12 @@ pt:
     results_export:
       #original_hash: 15d00e1
       heading: Exportação de Resultados WCA
-      #original_hash: cbdcfae
+      #original_hash: 733df42
       deprecation_warning: >-
-        AVISO DE OBSOLESCÊNCIA: A versão 1 da Exportação de Resultados foi
-        descontinuada e o suporte para a mesma será encerrado a partir de
-        01/01/2026. Por favor utilize a versão 2 antes dessa data.
+        AVISO DE OBSOLESCÊNCIA: A versão %{old_version} da Exportação de
+        Resultados foi descontinuada e o suporte para a mesma será encerrado a
+        partir de %{deprecation_date}. Por favor utilize a versão %{new_version}
+        antes dessa data.
       #original_hash: f9fe9df
       description: >-
         Nesta página oferecemos os resultados da WCA para download em diversos

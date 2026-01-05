@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_01_115143) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_17_122230) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -596,7 +596,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_01_115143) do
     t.index ["championship_type", "eligible_country_iso2"], name: "index_eligible_iso2s_for_championship_on_type_and_country_iso2", unique: true
   end
 
-  create_table "events", id: { type: :string, limit: 6, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=0", force: :cascade do |t|
+  create_table "events", id: { type: :string, limit: 6, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "format", limit: 10, default: "", null: false
     t.string "name", limit: 54, default: "", null: false
     t.integer "rank", default: 0, null: false
@@ -659,7 +659,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_01_115143) do
     t.index ["wca_id"], name: "InboxPersons_id"
   end
 
-  create_table "inbox_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=0", force: :cascade do |t|
+  create_table "inbox_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "average", default: 0, null: false
     t.integer "best", default: 0, null: false
     t.string "competition_id", limit: 32, default: "", null: false
@@ -1101,7 +1101,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_01_115143) do
     t.index ["result_id"], name: "index_result_attempts_on_result_id"
   end
 
-  create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=1", force: :cascade do |t|
+  create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "average", default: 0, null: false
     t.integer "best", default: 0, null: false
     t.string "competition_id", limit: 32, default: "", null: false
