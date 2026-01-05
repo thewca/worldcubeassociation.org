@@ -1,10 +1,12 @@
-import { Container, Heading, Text } from "@chakra-ui/react";
+import { Container, Heading } from "@chakra-ui/react";
 import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { Fragment } from "react";
 import { getLivePodiums } from "@/lib/wca/live/getLivePodiums";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
 import _ from "lodash";
+import OpenapiError from "@/components/ui/openapiError";
+import { getT } from "@/lib/i18n/get18n";
 
 export default async function PodiumsPage({
   params,
@@ -12,42 +14,44 @@ export default async function PodiumsPage({
   params: Promise<{ competitionId: string }>;
 }) {
   const { competitionId } = await params;
+  const { t } = await getT();
 
-  const { error: podiumError, data: rounds } =
-    await getLivePodiums(competitionId);
+  const {
+    error: podiumError,
+    data: rounds,
+    response,
+  } = await getLivePodiums(competitionId);
 
   if (podiumError) {
-    return <Text>Error fetching Podiums</Text>;
+    return <OpenapiError response={response} t={t} />;
   }
 
-  const roundsByEventId = _.groupBy(
+  const roundsByEventId = _.keyBy(
     rounds,
     (r) => parseActivityCode(r.id).eventId,
   );
 
   return (
     <Container>
-      <Heading textStyle="h1">Podiums</Heading>
+      <Heading textStyle="h1">{t("competitions.live.podiums.title")}</Heading>
       {WCA_EVENT_IDS.map((e) => {
-        const rounds = roundsByEventId[e];
-        if (!rounds) return;
-        const finalRound = rounds[0];
-        const eventId = parseActivityCode(finalRound.id).eventId;
+        const finalRound = roundsByEventId[e];
+        if (!finalRound) return;
         return (
           <Fragment key={finalRound.id}>
             <Heading textStyle="h3" p="2">
-              {events.byId[eventId].name}
+              {events.byId[e].name}
             </Heading>
             {finalRound.results.length > 0 ? (
               <LiveResultsTable
                 results={finalRound.results}
                 competitionId={competitionId}
                 competitors={finalRound.competitors}
-                eventId={eventId}
+                eventId={e}
                 showEmpty={false}
               />
             ) : (
-              "Podiums to be determined"
+              t("competitions.live.podiums.undetermined")
             )}
           </Fragment>
         );

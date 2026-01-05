@@ -18,15 +18,15 @@ const customOrderBy = (
   return competitorResult.global_pos;
 };
 
-export const rankingCellColour = (
+export const rankingCellColorPalette = (
   result: components["schemas"]["LiveResult"],
 ) => {
   if (result?.advancing) {
-    return "advancing";
+    return "green";
   }
 
   if (result?.advancing_questionable) {
-    return "advancingQuestionable";
+    return "yellow";
   }
 
   return "";
@@ -94,7 +94,7 @@ export default function LiveResultsTable({
                 width={1}
                 layerStyle="fill.deep"
                 textAlign="right"
-                backgroundColor={rankingCellColour(competitorResult)}
+                colorPalette={rankingCellColorPalette(competitorResult)}
               >
                 {index + 1}
               </Table.Cell>
