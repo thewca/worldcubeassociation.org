@@ -87,12 +87,10 @@ ActiveRecord::Schema[7.1].define(version: 0) do
     t.integer "country_rank", default: 0, null: false
   end
 
-  create_table "result_attempts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "result_attempts", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "value", null: false
-    t.integer "attempt_number", null: false
+    t.column "attempt_number", "tinyint unsigned", null: false
     t.bigint "result_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
