@@ -17,6 +17,7 @@ import {
   ButtonGroup,
   Tabs,
   IconButton,
+  ClientOnly,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -150,15 +151,17 @@ export default function CompetitionsPage() {
   return (
     <Container>
       <VStack gap="8" width="full" pt="8">
-        {!session.data?.user && (
-          <RemovableCard
-            imageUrl="newcomer.png"
-            heading="Why Compete?"
-            description="This section will only be visible to new visitors..."
-            buttonText="Learn More"
-            buttonUrl="/"
-          />
-        )}
+        <ClientOnly>
+          {session.status === "unauthenticated" && (
+            <RemovableCard
+              imageUrl="newcomer.png"
+              heading="Why Compete?"
+              description="This section will only be visible to new visitors..."
+              buttonText="Learn More"
+              buttonUrl="/"
+            />
+          )}
+        </ClientOnly>
         <Card.Root size="md">
           <Tabs.Root variant="subtle" colorPalette="blue" defaultValue="list">
             <Card.Header asChild>
