@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_17_122230) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_05_131200) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1219,7 +1219,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_17_122230) do
 
   create_table "sanity_checks", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.text "comments"
-    t.text "query", null: false
+    t.string "query_file"
     t.bigint "sanity_check_category_id", null: false
     t.string "topic", null: false
     t.index ["sanity_check_category_id"], name: "fk_rails_fddad5fbb5"
