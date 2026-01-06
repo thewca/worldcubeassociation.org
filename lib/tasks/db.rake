@@ -48,7 +48,7 @@ namespace :db do
       local = args[:local].present?
 
       DatabaseDumper.results_export_live_versions.each do |v|
-        puts "Dumping results #{local ? 'locally' : ''} for version: #{v}."
+        puts "Dumping results #{'locally' if local} for version: #{v}."
         DbDumpHelper.dump_results_db(v, local: local)
       end
     end
