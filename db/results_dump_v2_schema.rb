@@ -89,7 +89,7 @@ ActiveRecord::Schema[7.1].define(version: 0) do
 
   create_table "result_attempts", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "value", null: false
-    t.column "attempt_number", "tinyint unsigned", null: false
+    t.integer "attempt_number", limit: 1, unsigned: true, null: false
     t.bigint "result_id", null: false
   end
 

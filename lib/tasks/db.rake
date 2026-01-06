@@ -45,10 +45,10 @@ namespace :db do
     desc 'Generates a partial dump of our database containing only results and relevant stuff for statistics.'
     # task public_results: :environment do
     task :public_results, [:local] => [:environment] do |_, args|
-      local = args[:local].present? || false
+      local = args[:local].present?
 
       DatabaseDumper.results_export_live_versions.each do |v|
-        puts "Dumping results for version: #{v}. Dumping locally? #{local}"
+        puts "Dumping results #{local ? 'locally' : ''} for version: #{v}."
         DbDumpHelper.dump_results_db(v, local: local)
       end
     end

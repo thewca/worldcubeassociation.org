@@ -78,9 +78,7 @@ module DbDumpHelper
 
   def self.dump_results_db(version, export_timestamp = DateTime.now, local: false)
     target_dir =  if local
-                    path = "#{RESULTS_EXPORT_FILENAME}_#{version}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}"
-                    Dir.mkdir(path)
-                    path
+                    "#{RESULTS_EXPORT_FILENAME}_#{version}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}".tap { Dir.mkdir(it) }
                   else
                     Dir.mktmpdir
                   end
