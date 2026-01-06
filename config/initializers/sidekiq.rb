@@ -17,7 +17,7 @@ Sidekiq.configure_server do |config|
   end
 
   # We want our sanity checks to run FIFO
-  config.capsule("cronjobs") do |cap|
+  config.capsule("sanity_checks") do |cap|
     cap.concurrency = 1
     cap.queues = %w[sanity_checks]
   end
