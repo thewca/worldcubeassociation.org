@@ -12,10 +12,6 @@ class SanityCheckExclusion < ApplicationRecord
   # We have to do a partial equals here, as historically some of the exclusions have less
   # data than others
   def partially_equals?(exclusion_hash, query_result_hash)
-    exclusion_hash.each do |key, value|
-      return false unless value.to_s == query_result_hash[key].to_s
-    end
-
-    true
+    exclusion_hash.all? { |key, value| value == query_result_hash[key] }
   end
 end
