@@ -10,7 +10,7 @@ class SanityCheckResult < ApplicationRecord
   after_create :update_latest_result
 
   def update_latest_result
-    sanity_check.update(latest_result_id: self.id)
+    sanity_check.update_columns(latest_result_id: self.id)
   end
 
   def cronjob_statistic

@@ -6,7 +6,7 @@ class SanityCheck < ApplicationRecord
   belongs_to :sanity_check_category
   has_many :sanity_check_results
   has_many :sanity_check_exclusions
-  has_one :latest_result
+  belongs_to :latest_result, class_name: "SanityCheckResult"
 
   def file_handle
     "#{self.id} - #{self.query_file}"
