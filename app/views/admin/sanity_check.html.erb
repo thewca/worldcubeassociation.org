@@ -13,15 +13,16 @@
          No results
       <% else %>
         <div style="overflow-x: auto;">
-          <table style="border: 1px solid black;">
+          <table style="border: 1px solid black; padding: 2px;">
             <thead>
             <tr style="background-color: #f2f2f2;">
               <% headers = result.query_results.first.keys %>
               <% headers.each do |header| %>
-                <th scope="col" style="border: 1px solid black;">
+                <th scope="col" style="border: 1px solid black; padding: 2px;">
                   <%= header %>
                 </th>
               <% end %>
+              <th></th>
             </tr>
             </thead>
 
@@ -29,10 +30,13 @@
             <% result.results_without_exclusions.each do |item| %>
               <tr>
                 <% headers.each do |header| %>
-                  <td style="border: 1px solid black;">
+                  <td style="border: 1px solid black; padding: 2px">
                     <%= item.key?(header) ? item[header] : "-" %>
                   </td>
                 <% end %>
+                <td>
+                  <button><a href="<%= add_exclusion_path(sanity_check_id: result.sanity_check_id, exclusion_json: item) %>">Add exclusion</a></button>
+                </td>
               </tr>
             <% end %>
             </tbody>

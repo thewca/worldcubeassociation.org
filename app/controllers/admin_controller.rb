@@ -25,6 +25,15 @@ class AdminController < ApplicationController
     redirect_to sanity_check_path
   end
 
+  def add_exclusion
+    sanity_check_id = params.require(:sanity_check_id)
+    exclusion = params.require(:exclusion_json)
+
+    SanityCheckExclusion.create(exclusion: exclusion, sanity_check_id: sanity_check_id)
+    flash[:success] = "Added exclusion."
+    redirect_to sanity_check_path
+  end
+
   def do_merge_people
     merge_params = params.expect(merge_people: %i[person1_wca_id person2_wca_id])
     @merge_people = MergePeople.new(merge_params)
