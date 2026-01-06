@@ -8,7 +8,7 @@ class AllSanityChecksJob < WcaCronjob
       sanity_checks.each do |sanity_check_category|
         SanityCheckCategoryJob.perform_now(sanity_check_category)
       end
-      SanityCheckResultsJob.perform_now(email_to)
+      SanityCheckMailer.notify_of_sanity_check_results(email_to).deliver_later
     end
   end
 end

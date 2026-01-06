@@ -29,8 +29,12 @@ class AdminController < ApplicationController
     sanity_check_id = params.require(:sanity_check_id)
     exclusion = params.require(:exclusion_json)
 
-    SanityCheckExclusion.create(exclusion: exclusion, sanity_check_id: sanity_check_id)
-    flash[:success] = "Added exclusion."
+    created = SanityCheckExclusion.create(exclusion: exclusion, sanity_check_id: sanity_check_id)
+    if created
+      flash[:success] = "Added exclusion."
+    else
+      flash[:danger] = "Failed to add exclusion."
+    end
     redirect_to sanity_check_path
   end
 
