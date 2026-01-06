@@ -1,3 +1,0 @@
-SELECT *
-FROM persons
-WHERE CAST(name AS BINARY) REGEXP BINARY '^[a-z]'
