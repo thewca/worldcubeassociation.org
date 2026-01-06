@@ -14,7 +14,7 @@ class SanityCheckResult < ApplicationRecord
   end
 
   def cronjob_statistic
-    CronjobStatistic.find(sanity_check_category.name)
+    CronjobStatistic.find(sanity_check_category.snake_case_name)
   end
 
   def results_without_exclusions

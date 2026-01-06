@@ -14,7 +14,7 @@ class SanityCheckCategoryJob < WcaCronjob
   end
 
   def instance_cronjob_statistics
-    category_name = self.arguments.first.name
+    category_name = self.arguments.first.snake_case_name
     self.class.cronjob_statistics(category_name)
   end
 end
