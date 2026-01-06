@@ -8,12 +8,12 @@ class SanityCheckResult < ApplicationRecord
   delegate :topic, :comments, to: :sanity_check
 
   def cronjob_statistic
-    CronjobStatistic.find(sanity_check_category.id)
+    CronjobStatistic.find(sanity_check_category.name)
   end
 
   def results_without_exclusions
     query_results.filter do |result|
-      !sanity_check_exclusions.exists?(exclusion: result.to_json)
+      sanity_check_exclusions.any? { |exclusion| exclusion.is_excluded?(result) }
     end
   end
 end
