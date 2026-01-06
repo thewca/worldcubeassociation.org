@@ -1492,7 +1492,7 @@ module DatabaseDumper
         where_clause_sql = table_sanitizer.fetch(:where_clause, "")
         order_by_clause_sql = table_sanitizer.fetch(:order_by_clause, "")
 
-        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} #{where_clause_sql} #{order_by_clause_sql} LIMIT 100"
+        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} #{where_clause_sql} #{order_by_clause_sql}"
         ActiveRecord::Base.connection.execute(populate_table_sql.strip)
       end
 
