@@ -2,12 +2,13 @@
 
 class AllSanityChecksJob < WcaCronjob
   def perform
-    SanityCheckCategory.find_each do |sanity_check_category|
-      SanityCheckCategoryJob.perform_later(sanity_check_category)
-    end
-    # Enqueue Results job after, these are run on a single thread one after another
-    SanityCheckCategory.distinct.pluck(:email_to).each do |email_to|
-      SanityCheckResultsJob.perform_later(email_to)
+    grouped_by_email = SanityCheckCategory.all.group_by(&:email_to)
+
+    grouped_by_email.each do | email_to, sanity_checks |
+      sanity_checks.each do | sanity_check_category |
+        SanityCheckCategoryJob.perform_now(sanity_check_category)
+      end
+      SanityCheckResultsJob.perform_now(email_to)
     end
   end
 end
