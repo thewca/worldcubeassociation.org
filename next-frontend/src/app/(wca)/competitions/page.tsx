@@ -244,8 +244,7 @@ export default function CompetitionsPage() {
                     disabled={location === undefined}
                   >
                     <Slider.Label>
-                      Distance
-                      {" "}
+                      Distance{" "}
                       {geolocationSupported && location === undefined && (
                         <IconButton
                           size="xs"

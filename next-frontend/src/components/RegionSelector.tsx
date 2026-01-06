@@ -146,7 +146,11 @@ export default function RegionSelector({
             <Combobox.Content>
               <Combobox.Empty>No items found</Combobox.Empty>
               {collection.items.map((item) => (
-                <Combobox.Item item={item} key={item.key} justifyContent={item.centered ? "center" : "start"}>
+                <Combobox.Item
+                  item={item}
+                  key={item.key}
+                  justifyContent={item.centered ? "center" : "start"}
+                >
                   {item.flag}
                   {item.content ?? item.label}
                   <Combobox.ItemIndicator />
