@@ -16,6 +16,7 @@ import {
   Field,
   ButtonGroup,
   Tabs,
+  IconButton,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -30,7 +31,7 @@ import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 
 import { useSession } from "next-auth/react";
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { useMemo, useReducer, useState } from "react";
 import {
   competitionFilterReducer,
   createFilterState,
@@ -49,12 +50,13 @@ import { components } from "@/types/openapi";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { FormEventSelector } from "@/components/EventSelector";
+import { LuMapPin } from "react-icons/lu";
 
 const DEBOUNCE_MS = 600;
 
 export default function CompetitionsPage() {
   const session = useSession();
-  const [location, setLocation] = useState<GeoCoordinates | null>(null);
+  const [location, setLocation] = useState<GeoCoordinates>();
   const [distanceFilter, setDistanceFilter] = useState<number>(100);
 
   const api = useAPI();
@@ -109,13 +111,13 @@ export default function CompetitionsPage() {
     }
   });
 
-  useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        setLocation(position.coords);
-      });
-    }
-  });
+  const geolocationSupported = "geolocation" in navigator;
+
+  const requestGeolocationPermission = () => {
+    return navigator.geolocation.getCurrentPosition((position) => {
+      setLocation(position.coords);
+    });
+  };
 
   const marks = [
     { value: 0, label: "closest" },
@@ -130,7 +132,7 @@ export default function CompetitionsPage() {
 
     const flatPages = rawCompetitionData.pages.flatMap((page) => page);
 
-    if (location === null || distanceFilter === 100) return flatPages;
+    if (location === undefined || distanceFilter === 100) return flatPages;
 
     return flatPages.filter(
       (competition) =>
@@ -180,7 +182,7 @@ export default function CompetitionsPage() {
               </HStack>
             </Card.Header>
             <Card.Body asChild>
-              <VStack gap="2" borderBottom="black">
+              <VStack gap="3" borderBottom="black">
                 <FormEventSelector
                   selectedEvents={filterState.selectedEvents}
                   title="Event"
@@ -239,9 +241,22 @@ export default function CompetitionsPage() {
                     value={[distanceFilter]}
                     onValueChange={(e) => setDistanceFilter(e.value[0])}
                     step={25}
-                    disabled={location === null}
+                    disabled={location === undefined}
                   >
-                    <Slider.Label>Distance</Slider.Label>
+                    <Slider.Label>
+                      Distance
+                      {" "}
+                      {geolocationSupported && location === undefined && (
+                        <IconButton
+                          size="xs"
+                          variant="outline"
+                          colorPalette="blue"
+                          onClick={() => requestGeolocationPermission()}
+                        >
+                          <LuMapPin />
+                        </IconButton>
+                      )}
+                    </Slider.Label>
                     <Slider.Control>
                       <Slider.Track>
                         <Slider.Range />
