@@ -77,11 +77,7 @@ module DbDumpHelper
   end
 
   def self.dump_results_db(version, export_timestamp = DateTime.now, local: false)
-    target_dir = if local
-                   "#{RESULTS_EXPORT_FILENAME}_#{version}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}".tap { Dir.mkdir(it) }
-                 else
-                   Dir.mktmpdir
-                 end
+    target_dir = local ? "#{RESULTS_EXPORT_FILENAME}_#{version}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}".tap { Dir.mkdir(it) } : Dir.mktmpdir
 
     FileUtils.cd target_dir do
       tsv_folder_name = "TSV_export"
