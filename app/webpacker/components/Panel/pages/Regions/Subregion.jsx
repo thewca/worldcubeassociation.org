@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
-  Header, Table, Button, Modal, Form, Message,
+  Header, Table, Button, Modal, Form, Message, Icon,
+  Segment,
 } from 'semantic-ui-react';
 import { apiV0Urls, editUserAvatarUrl } from '../../../../lib/requests/routes.js.erb';
 import useLoadedData from '../../../../lib/hooks/useLoadedData';
@@ -14,6 +15,7 @@ import { useConfirm } from '../../../../lib/providers/ConfirmProvider';
 import { nextStatusOfGroupType, previousStatusOfGroupType, statusObjectOfGroupType } from '../../../../lib/helpers/status-objects';
 import { delegateRegionsStatus } from '../../../../lib/wca-data.js.erb';
 import LocationEditorModal from './LocationEditorModal';
+import CreateModal from '../../views/UserRoles/CreateModal';
 
 const delegateStatusOptions = [
   delegateRegionsStatus.trainee_delegate,
@@ -45,12 +47,12 @@ const canDemote = (role) => (
   ].includes(role.metadata.status)
 );
 
-export default function Subregion({ title, groupId }) {
+export default function Subregion({ group }) {
   const {
     data: delegates, loading, error: delegatesFetchError, sync,
   } = useLoadedData(apiV0Urls.userRoles.list(
     {
-      groupId,
+      groupId: group.id,
       isActive: true,
       isLead: false,
     },
@@ -77,7 +79,7 @@ export default function Subregion({ title, groupId }) {
       apiV0Urls.userRoles.create(),
       {
         userId: formValues.newDelegate.id,
-        groupId,
+        groupId: group.id,
         status: formValues.status,
         location: formValues.location || '',
       },
@@ -145,7 +147,17 @@ export default function Subregion({ title, groupId }) {
         )}
         />
       )}
-      <Header as="h4">{title}</Header>
+      <Header as="h4">{group.name}</Header>
+      {group.parent_group_id && (
+        <Segment>
+          Regional Delegate:
+          {' '}
+          <RegionalDelegate
+            group={group}
+            setOpenModalType={setOpenModalType}
+          />
+        </Segment>
+      )}
       <Button onClick={() => setOpenModalType('newDelegate')}>New Delegate</Button>
       <Table>
         <Table.Header>
@@ -177,6 +189,19 @@ export default function Subregion({ title, groupId }) {
           ))}
         </Table.Body>
       </Table>
+      <CreateModal
+        open={openModalType === 'newLeadDelegate'}
+        onClose={() => {
+          setOpenModalType(null);
+          sync();
+        }}
+        title="New Lead Delegate"
+        groupId={group.id}
+        status={(group.parent_group_id
+          ? delegateRegionsStatus.regional_delegate
+          : delegateRegionsStatus.senior_delegate)}
+        location={group.name}
+      />
       <Modal
         size="fullscreen"
         onClose={() => setOpenModalType(null)}
@@ -223,4 +248,26 @@ export default function Subregion({ title, groupId }) {
       )}
     </>
   );
+}
+
+function RegionalDelegate({ group, setOpenModalType }) {
+  return group.parent_group_id && group.lead_user
+    ? (
+      <>
+        <Icon
+          name="edit"
+          link
+          onClick={() => {
+            setOpenModalType('newLeadDelegate');
+          }}
+        />
+        {group.lead_user.name}
+      </>
+    ) : (
+      <Icon
+        name="plus"
+        link
+        onClick={() => setOpenModalType('newLeadDelegate')}
+      />
+    );
 }

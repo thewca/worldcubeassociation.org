@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SyncMailingListsJob < WcaCronjob
+  EXECUTIVE_DIRECTOR_EMAIL = 'rmurphy@worldcubeassociation.org'
+
   before_enqueue do
     # NOTE: we want to only do this on the actual "production" server, as we need the real users' emails.
     throw :abort unless EnvConfig.WCA_LIVE_SITE?
@@ -13,7 +15,8 @@ class SyncMailingListsJob < WcaCronjob
 
   def perform
     GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", UserGroup.teams_committees.filter_map(&:lead_user).map(&:email))
-    GsuiteMailingLists.sync_group(GroupsMetadataBoard.email, UserGroup.board_group.active_users.map(&:email))
+    board_users = UserGroup.board_group.active_users.map(&:email) | [EXECUTIVE_DIRECTOR_EMAIL]
+    GsuiteMailingLists.sync_group(GroupsMetadataBoard.email, board_users)
     translator_users = UserGroup.translators.flat_map(&:users)
     GsuiteMailingLists.sync_group("translators@worldcubeassociation.org", translator_users.map(&:email))
 

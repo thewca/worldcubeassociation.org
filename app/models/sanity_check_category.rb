@@ -6,8 +6,8 @@ class SanityCheckCategory < ApplicationRecord
   has_many :sanity_checks
   has_many :sanity_check_results, through: :sanity_checks
 
-  def self.data_file_handle
-    self.name.pluralize.underscore.to_s
+  def folder_handle
+    "#{self.id} - #{self.name.parameterize.underscore}"
   end
 
   # This is currently quite easy but inefficient.

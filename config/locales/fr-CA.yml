@@ -132,6 +132,8 @@ fr-CA:
     '2': Meilleur des 2
     #original_hash: d42dcce
     '3': Meilleur des 3
+    #original_hash: c0ca918
+    '5': Meilleur des 5
     #original_hash: 2c5f784
     a: Moyenne élaguée des 5
     #original_hash: 53bcf79
@@ -143,6 +145,8 @@ fr-CA:
       '2': Bo2
       #original_hash: b41f36f
       '3': Bo3
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: Ao5
       #original_hash: 53ba088
@@ -1014,6 +1018,15 @@ fr-CA:
         #original_hash: 6139e0a
         dob_invalid: est mal formatée
   errors:
+    next_frontend:
+      #original_hash: 1426bbd
+      title: Une erreur s'est produite lors du rendu de la page
+      #original_hash: 154e061
+      description: >-
+        Si cette erreur persiste, signalez-la à WST en fournissant les
+        informations détaillées ci-dessous.
+      #original_hash: 5909486
+      details: Détails de l'erreur
     messages:
       #original_hash: 55cd210
       wrong_size: 'n''est pas de la bonne taille (il devrait faire %{file_size})'
@@ -2885,6 +2898,16 @@ fr-CA:
         veuillez préciser une date limite. Si vous n’utilisez pas de liste
         d’attente, n’oubliez pas de le préciser dans les conditions
         d’inscription.
+    live:
+      #original_hash: 20bdee1
+      title: Résultats en direct
+      connection:
+        #original_hash: 3c983dc
+        initialized: Connexion en cours d'initialisation
+        #original_hash: 1c73306
+        connected: 'Connecté, les résultats sont en cours de mise à jour'
+        #original_hash: ca57820
+        disconnected: 'Connexion perdue, les résultats ne sont pas mis à jour'
     my_competitions:
       #original_hash: 592341e
       title: Mes compétitions
@@ -3632,13 +3655,10 @@ fr-CA:
             Une limite de compétiteurs est requise. Seules les compétitions FMC
             simultanées avec plusieurs emplacements peuvent ne pas avoir de
             limite de compétiteurs.
-          #original_hash: 1439981
+          #original_hash: 02643c2
           count: >-
-            Le nombre de compétiteurs autorisés dans cette compétition. Pour
-            l'instant ce nombre est informatif, et ne permet pas d'empêcher plus
-            de personnes de s'inscrire. Nous sommes en train de travailler sur
-            l'intégration de cette limite dans la procédure d'inscription, mais
-            cela demande un peu de travail.
+            Le nombre de compétiteurs autorisés dans cette compétition. Cette
+            limite est appliquée par le système d'inscriptions intégré au site.
           #original_hash: bef690e
           reason: >-
             Quelle est la raison pour la limite au nombre de compétiteurs ?
@@ -4555,18 +4575,16 @@ fr-CA:
           %{regulation_link}).
         #original_hash: cb6bb5e
         regulation_link_text: 'Règle %{number}'
-        #original_hash: 1575e8f
-        guideline_link_text: 'Recommandation %{number}'
         #original_hash: 818038d
         cumulative_time_limit: limite de temps cumulative
         #original_hash: 2bad42b
         cumulative_one_round_html: >-
           Une %{cumulative_time_limit} peut être imposée (voir la
           %{regulation_link}).
-        #original_hash: 325828d
+        #original_hash: e207cdd
         cumulative_across_rounds_html: >-
           Une %{cumulative_time_limit} peut être imposée sur un ensemble de
-          tours (voir la %{guideline_link}).
+          tours (voir la %{regulation_link}).
         #original_hash: d854629
         cutoff_html: >-
           Le score à atteindre pour passer à la deuxième phase d'un tour avec
@@ -6382,6 +6400,12 @@ fr-CA:
     results_export:
       #original_hash: cb37f41
       heading: Export de résultats WCA
+      #original_hash: 5e883cb
+      deprecation_warning: >-
+        AVIS DE DÉPRÉCIATION : La version %{old_version} de l'exportation des
+        résultats est désormais obsolète et ne sera plus prise en charge à
+        compter du %{deprecation_date}. Veuillez passer à la version
+        %{new_version} avant cette date.
       #original_hash: 832c977
       description: >-
         Sur cette page, nous proposons les résultats WCA à télécharger dans
@@ -6392,6 +6416,12 @@ fr-CA:
         version la plus récente.
       #original_hash: ba688bb
       permalink: permalien
+      #original_hash: 9bacb05
+      permalink_note: >-
+        Remarque : les permaliens fournissent les derniers résultats exportés
+        dans une version donnée. Par exemple, le permalien v2 renverra la
+        dernière exportation v2, mais restera sur la v2 même lorsque la v3 sera
+        disponible.
       file_formats:
         #original_hash: 5aefd7b
         sql: 'Requête SQL, pour l’importation dans les bases de données SQL.'

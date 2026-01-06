@@ -71,10 +71,6 @@ class Api::V0::ApiController < ApplicationController
         "download" => "https://github.com/thewca/tnoodle/releases/download/v1.2.3/TNoodle-WCA-1.2.3.jar",
       },
       "allowed" => [
-        "TNoodle-WCA-1.1.3.1",
-        "TNoodle-WCA-1.2.0",
-        "TNoodle-WCA-1.2.1",
-        "TNoodle-WCA-1.2.2",
         "TNoodle-WCA-1.2.3",
       ],
       "publicKeyBytes" => public_key,

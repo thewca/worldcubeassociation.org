@@ -11,20 +11,11 @@ class SanityCheck < ApplicationRecord
     sanity_check_results.order(created_at: :desc).first
   end
 
-  def self.data_file_handle
-    self.name.pluralize.underscore.to_s
+  def file_handle
+    "#{self.id} - #{self.query_file}"
   end
 
-  # Overwrite method to handle .sql files
-  def self.all_raw_sanitized
-    column_symbols = column_names.map(&:to_sym)
-
-    all_raw.map do |attributes|
-      attrs = attributes.symbolize_keys
-      attrs[:query] = Rails.root.join("lib", "sanity_check_sql", attrs[:query_file]).read
-      delete attrs[:query_file]
-
-      attrs.slice(*column_symbols)
-    end
+  def query
+    @query ||= Rails.root.join("lib", "sanity_check_sql", sanity_check_category.folder_handle, file_handle).read
   end
 end

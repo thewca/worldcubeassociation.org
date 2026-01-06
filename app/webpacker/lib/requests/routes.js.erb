@@ -1,7 +1,11 @@
-function jsonToQueryString(json) {
-  const jsonAfterRemovingUndefinedAndNull = Object.fromEntries(
+export function omitNullAndUndefined(json) {
+  return Object.fromEntries(
     Object.entries(json).filter(([key, value]) => value !== null && value !== undefined)
   );
+}
+
+function jsonToQueryString(json) {
+  const jsonAfterRemovingUndefinedAndNull = omitNullAndUndefined(json);
   return (new URLSearchParams(jsonAfterRemovingUndefinedAndNull)).toString();
 }
 
