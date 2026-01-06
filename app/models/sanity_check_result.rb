@@ -7,6 +7,12 @@ class SanityCheckResult < ApplicationRecord
 
   delegate :topic, :comments, to: :sanity_check
 
+  after_create :update_latest_result
+
+  def update_latest_result
+    sanity_check.update(latest_result_id: self.id)
+  end
+
   def cronjob_statistic
     CronjobStatistic.find(sanity_check_category.name)
   end
