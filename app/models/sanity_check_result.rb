@@ -18,7 +18,7 @@ class SanityCheckResult < ApplicationRecord
   end
 
   def results_without_exclusions
-    query_results.filter do |result|
+    query_results.reject do |result|
       sanity_check_exclusions.any? { |exclusion| exclusion.excludes?(result) }
     end
   end
