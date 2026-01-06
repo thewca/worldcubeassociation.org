@@ -9,7 +9,36 @@
       <h3><%= result.topic %></h3>
       <h5><%= result.comments %></h5>
       <h4> Query results:</h4>
-      <code> <%= result.results_without_exclusions %></code>
+      <% if result.results_without_exclusions.empty? %>
+         No results
+      <% else %>
+        <div style="overflow-x: auto;">
+          <table style="border: 1px solid black;">
+            <thead>
+            <tr style="background-color: #f2f2f2;">
+              <% headers = result.query_results.first.keys %>
+              <% headers.each do |header| %>
+                <th scope="col" style="border: 1px solid black;">
+                  <%= header %>
+                </th>
+              <% end %>
+            </tr>
+            </thead>
+
+            <tbody>
+            <% result.results_without_exclusions.each do |item| %>
+              <tr>
+                <% headers.each do |header| %>
+                  <td style="border: 1px solid black;">
+                    <%= item.key?(header) ? item[header] : "-" %>
+                  </td>
+                <% end %>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
       <h4> Exclusions: <%= result.sanity_check_exclusions.count %></h4>
       <h5> Last run: <%= result.cronjob_statistic.in_progress? ? "Running" : result.cronjob_statistic.run_end %> </h5>
     <% end %>
