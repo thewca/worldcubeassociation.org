@@ -5,7 +5,7 @@ class SanityCheckExclusion < ApplicationRecord
 
   serialize :exclusion, coder: JSON
 
-  def is_excluded?(query_result)
+  def excludes?(query_result)
     partially_equals?(exclusion, query_result)
   end
 
