@@ -36,4 +36,21 @@ RSpec.describe SanityCheck do
       expect(stored_queries).to match_array(used_queries)
     end
   end
+
+  context "Duplicate Results" do
+    it "Correctly finds duplicate results" do
+      sanity_check = SanityCheck.find(18)
+      competition = create(:competition)
+      round = create(:round, competition: competition)
+      create(:result, competition: competition, round: round, event_id: "333")
+      create(:result, competition: competition, round: round, event_id: "333")
+
+      result_ids = run_query(sanity_check.query).pluck("competitions")
+      expect(result_ids).to contain_exactly(competition.id)
+    end
+  end
+
+  def run_query(query)
+    ActiveRecord::Base.connection.exec_query(query)
+  end
 end
