@@ -1409,7 +1409,7 @@ module DatabaseDumper
     },
     v2: {
       metadata: {
-        export_format_version: 'v2.0.1',
+        export_format_version: 'v2.0.2',
         version_label: 'current',
         end_of_life_date: nil,
       },

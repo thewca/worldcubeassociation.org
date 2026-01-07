@@ -40,6 +40,13 @@ Opt in to the WCA Software Mailing List via [your profile preferences](https://w
 - Fixed missing `results.id` and `result_attempts.id` keys
 - Fixed SQL error rendering in `WCA_exports_scrambles.tsv`
 
+## V2.0.2 Changelog
+- Removed the following fields from `result_attempts` to reduce filesize:
+  - `id`
+  - `created_at`
+  - `updated_at`
+- Changed `result_attempts.attempt_number` to an unsigned tinyint, also to reduce filesize
+
 ## Description
 
 This database export contains public information about all official WCA
