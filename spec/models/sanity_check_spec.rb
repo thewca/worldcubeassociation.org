@@ -38,140 +38,94 @@ RSpec.describe SanityCheck do
   end
 
   context "Person Data Irregularities" do
-    context "Names with numbers or non-desired special characters" do
-      let(:query) { SanityCheck.find(1).query }
+    RSpec.shared_examples 'correct sanity check' do |sanity_check, irregular_people, valid_people|
+      context sanity_check.topic.to_s do
+        it "correctly finds all irregular names" do
+          irregular_people = irregular_people.map do |name|
+            create(:person, name: name)
+          end
+          result_ids = run_query(sanity_check.query).pluck("id")
 
-      def run_query
-        ActiveRecord::Base.connection.exec_query(query)
-      end
+          expect(result_ids).to match_array(irregular_people.map(&:id))
+        end
 
-      it "correctly finds all irregular names" do
-        irregular_people = [
-          create(:person, name: "0"),
-          create(:person, name: "John1"),
-          create(:person, name: "Jane_Doe"),
-          create(:person, name: "Alice@Wonderland"),
-          create(:person, name: "Bob#Builder"),
-          create(:person, name: "Back`Tick"),
-          create(:person, name: "Cash$Money"),
-          create(:person, name: "Caret^Top"),
-          create(:person, name: "Amp&Sand"),
-          create(:person, name: "Pipe|Name"),
-          create(:person, name: "Brace{Name}"),
-          create(:person, name: "Bracket[Name]"),
-          create(:person, name: "Plus+Minus"),
-          create(:person, name: "Equals=Name"),
-          create(:person, name: "Question?Mark"),
-          create(:person, name: "Greater>Less<"),
-          create(:person, name: "Comma,Name"),
-          create(:person, name: "Tilde~Name"),
-          create(:person, name: %q(Quote"Name)),
-          create(:person, name: "Back\\Slash")
-        ]
+        it "does not flag valid names" do
+          valid_people = valid_people.map do |name|
+            create(:person, name: name)
+          end
+          result_ids = run_query(sanity_check.query).to_a
 
-        result_ids = run_query.map { |r| r["id"] }
-
-        expect(result_ids).to match_array(irregular_people.map(&:id))
-      end
-
-      it "does not flag valid names" do
-        valid_people = [
-          create(:person, name: "John"),
-          create(:person, name: "Jane Doe"),
-          create(:person, name: "Mary-Jane"),
-          create(:person, name: "Jean Luc"),
-          create(:person, name: "OConnor"),
-          create(:person, name: "Anne-Marie")
-        ]
-
-        result_ids = run_query.to_a
-
-        expect(result_ids & valid_people.map(&:id)).to be_empty
+          expect(result_ids & valid_people.map(&:id)).to be_empty
+        end
       end
     end
 
-    context "Lower Case First Name" do
-      let(:query) { SanityCheck.find(2).query }
-
-      def run_query
-        ActiveRecord::Base.connection.exec_query(query)
-      end
-
-      it "correctly finds all irregular names" do
-        irregular_people = [
-          create(:person, name: "john Doe"),
-        ]
-
-        result_ids = run_query.map { |r| r["id"] }
-
-        expect(result_ids).to match_array(irregular_people.map(&:id))
-      end
-
-      it "does not flag valid names" do
-        valid_people = [
-          create(:person, name: "John Doe"),
-        ]
-
-        result_ids = run_query.to_a
-
-        expect(result_ids & valid_people.map(&:id)).to be_empty
-      end
+    [
+      { id: 1, irregular_people: [
+        "0",
+        "John1",
+        "Jane_Doe",
+        "Alice@Wonderland",
+        "Bob#Builder",
+        "Back`Tick",
+        "Cash$Money",
+        "Caret^Top",
+        "Amp&Sand",
+        "Pipe|Name",
+        "Brace{Name}",
+        "Bracket[Name]",
+        "Plus+Minus",
+        "Equals=Name",
+        "Question?Mark",
+        "Greater>Less<",
+        "Comma,Name",
+        "Tilde~Name",
+        'Quote"Name',
+        "Back\\Slash",
+      ], valid_people: [
+        "Jane Doe",
+      ] },
+      { id: 2, irregular_people: [
+        "john Doe",
+      ], valid_people: [
+        "Jane Doe",
+      ] },
+      { id: 3, irregular_people: [
+        "John doe",
+      ], valid_people: [
+        "Jane Doe",
+      ] },
+      { id: 4, irregular_people: [
+        "John doe (黄)",
+      ], valid_people: [
+        "John Doe (黄)",
+      ] },
+      { id: 5, irregular_people: [
+        "John doe (abc)",
+        "John doe (a黄)",
+      ], valid_people: [
+        "John Doe (黄)",
+      ] },
+      { id: 6, irregular_people: [
+        "John doe (黄",
+      ], valid_people: [
+        "John Doe (黄)",
+      ] },
+      { id: 7,  irregular_people: [], valid_people: [] },
+      { id: 8,  irregular_people: [], valid_people: [] },
+      { id: 9,  irregular_people: [], valid_people: [] },
+      { id: 10, irregular_people: [], valid_people: [] },
+      { id: 11, irregular_people: [], valid_people: [] },
+      { id: 12, irregular_people: [], valid_people: [] },
+      { id: 61, irregular_people: [], valid_people: [] },
+      { id: 62, irregular_people: [], valid_people: [] },
+      { id: 67, irregular_people: [], valid_people: [] },
+    ].each do |params|
+      it_behaves_like 'correct sanity check', SanityCheck.find(params[:id]), params[:irregular_people], params[:valid_people]
     end
+  end
 
-    context "Lower Case Last Name" do
-      let(:query) { SanityCheck.find(3).query }
-
-      def run_query
-        ActiveRecord::Base.connection.exec_query(query)
-      end
-
-      it "correctly finds all irregular names" do
-        irregular_people = [
-          create(:person, name: "John doe"),
-        ]
-
-        result_ids = run_query.map { |r| r["id"] }
-
-        expect(result_ids).to match_array(irregular_people.map(&:id))
-      end
-
-      it "does not flag valid names" do
-        valid_people = [
-          create(:person, name: "John Doe"),
-        ]
-
-        result_ids = run_query.to_a
-
-        expect(result_ids & valid_people.map(&:id)).to be_empty
-      end
-    end
-
-    context "Lower Case Last Name with Local Name" do
-      let(:query) { SanityCheck.find(4).query }
-
-      def run_query
-        ActiveRecord::Base.connection.exec_query(query)
-      end
-
-      it "correctly finds all irregular names" do
-        irregular_people = [
-          create(:person, name: "John doe (黄)"),
-        ]
-
-        result_ids = run_query.map { |r| r["id"] }
-
-        expect(result_ids).to match_array(irregular_people.map(&:id))
-      end
-
-      it "does not flag valid names" do
-        valid_people = [
-          create(:person, name: "John Doe (黄)"),
-        ]
-
-        result_ids = run_query.to_a
-
-        expect(result_ids & valid_people.map(&:id)).to be_empty
-      end
-    end
+  def run_query(query)
+    ActiveRecord::Base.connection.exec_query(query)
   end
 end
