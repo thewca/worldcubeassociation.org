@@ -110,12 +110,13 @@ RSpec.describe SanityCheck do
         let(:sanity_check) { SanityCheck.find(9) }
 
         it "correctly finds all missing genders" do
-          # This actually doesn't work, as it causes the gender to be nil instead
-          # So not sure if we even need this sanity check then TODO
-          # irregular_people = [create(:person, gender: '')]
-          # result_ids = run_query(sanity_check.query).pluck("id")
-          #
-          # expect(result_ids).to match_array(irregular_people.map(&:id))
+          # Use update_columns to force not using validations
+          person1 = create(:person)
+          person1.update_columns(gender: '')
+          irregular_people = [person1]
+          result_ids = run_query(sanity_check.query).pluck("id")
+
+          expect(result_ids).to match_array(irregular_people.map(&:id))
         end
 
         it "doesn't flag valid genders" do
