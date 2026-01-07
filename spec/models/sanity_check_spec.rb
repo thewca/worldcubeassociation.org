@@ -85,16 +85,16 @@ RSpec.describe SanityCheck do
           "Back\\Slash",
         ], valid_people: ["Jane Doe"] },
         { id: 2, irregular_people: ["john Doe"], valid_people: ["Jane Doe"] },
-        { id: 3, irregular_people: ["John doe",], valid_people: ["Jane Doe"] },
-        { id: 4, irregular_people: ["John doe (黄)",], valid_people: ["John Doe (黄)",] },
-        { id: 5, irregular_people: ["John Doe (abc)", "John doe (a黄)",], valid_people: ["John Doe (黄)"] },
+        { id: 3, irregular_people: ["John doe"], valid_people: ["Jane Doe"] },
+        { id: 4, irregular_people: ["John doe (黄)"], valid_people: ["John Doe (黄)"] },
+        { id: 5, irregular_people: ["John Doe (abc)", "John doe (a黄)"], valid_people: ["John Doe (黄)"] },
         { id: 6, irregular_people: ["John Doe (黄"], valid_people: ["John Doe (黄)"] },
-        { id: 7,  irregular_people: [
+        { id: 7, irregular_people: [
           "John Doe (黄) ",
           "John Doe ",
           " John Doe",
           "John Doe (黄 )",
-          "John Doe ( 黄)"
+          "John Doe ( 黄)",
         ], valid_people: ["Jane Doe"] },
         { id: 8,  irregular_people: ["д (John)", "β (Jane)"], valid_people: ["Ja Do (ณั)", "Ja Do (黄)", "Jo Do (文)", "Ja Do (혁)", "Jo Do (星)"] },
         { id: 61, irregular_people: ["J. Doe"], valid_people: ["Jane Doe"] },
@@ -162,14 +162,14 @@ RSpec.describe SanityCheck do
 
           result_ids = run_query(sanity_check_11.query).pluck("person_id")
 
-          expect(result_ids).to match_array([irregular_person_1.wca_id, irregular_person_2.wca_id])
+          expect(result_ids).to contain_exactly(irregular_person_1.wca_id, irregular_person_2.wca_id)
         end
 
         it "correctly finds all missing dobs" do
           # The sanity check only works on competition after 2018 and uses the year part of the id to check
           competition = create(:competition, id: "FooComp2025")
           round = create(:round, competition: competition)
-         [1,2,3,4].each do
+          [1, 2, 3, 4].each do
             person = create(:person)
             # Use update_columns to force not using validations
             person.update_columns(dob: nil)
@@ -177,7 +177,7 @@ RSpec.describe SanityCheck do
           end
           result_ids = run_query(sanity_check_12.query).pluck("competition_id")
 
-          expect(result_ids).to match_array([competition.id])
+          expect(result_ids).to contain_exactly(competition.id)
         end
       end
     end
