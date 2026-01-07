@@ -36,4 +36,20 @@ RSpec.describe SanityCheck do
       expect(stored_queries).to match_array(used_queries)
     end
   end
+
+  context "WCA Id Irregularities" do
+    it "Correctly finds year not matching to first competition year" do
+      sanity_check = SanityCheck.find(19)
+      person = create(:person)
+      person.update_columns(wca_id: "1982TEST01")
+      create(:result, person: person)
+      result_ids = run_query(sanity_check.query).pluck("person_id")
+
+      expect(result_ids).to contain_exactly(person.wca_id)
+    end
+  end
+
+  def run_query(query)
+    ActiveRecord::Base.connection.exec_query(query)
+  end
 end
