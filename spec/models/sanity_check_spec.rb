@@ -36,4 +36,23 @@ RSpec.describe SanityCheck do
       expect(stored_queries).to match_array(used_queries)
     end
   end
+
+  context "Irregular Results" do
+    let(:sanity_check) { SanityCheck.find(13) }
+
+    context "no first solve" do
+      it "Correctly find irregular results" do
+        r = create(:result)
+        r.update_columns(value1: 0)
+
+        result_ids = run_query(sanity_check.query).pluck("id")
+
+        expect(result_ids).to contain_exactly(r.id)
+      end
+    end
+  end
+
+  def run_query(query)
+    ActiveRecord::Base.connection.exec_query(query)
+  end
 end
