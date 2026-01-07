@@ -145,5 +145,33 @@ RSpec.describe SanityCheck do
         expect(result_ids & valid_people.map(&:id)).to be_empty
       end
     end
+
+    context "Lower Case Last Name with Local Name" do
+      let(:query) { SanityCheck.find(4).query }
+
+      def run_query
+        ActiveRecord::Base.connection.exec_query(query)
+      end
+
+      it "correctly finds all irregular names" do
+        irregular_people = [
+          create(:person, name: "John doe (黄)"),
+        ]
+
+        result_ids = run_query.map { |r| r["id"] }
+
+        expect(result_ids).to match_array(irregular_people.map(&:id))
+      end
+
+      it "does not flag valid names" do
+        valid_people = [
+          create(:person, name: "John Doe (黄)"),
+        ]
+
+        result_ids = run_query.to_a
+
+        expect(result_ids & valid_people.map(&:id)).to be_empty
+      end
+    end
   end
 end
