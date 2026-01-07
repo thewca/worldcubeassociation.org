@@ -97,9 +97,9 @@ RSpec.describe SanityCheck do
           "John Doe ( 黄)"
         ], valid_people: ["Jane Doe"] },
         { id: 8,  irregular_people: ["д (John)", "β (Jane)"], valid_people: ["Ja Do (ณั)", "Ja Do (黄)", "Jo Do (文)", "Ja Do (혁)", "Jo Do (星)"] },
-        { id: 61, irregular_people: [], valid_people: [] },
-        { id: 62, irregular_people: [], valid_people: [] },
-        { id: 67, irregular_people: [], valid_people: [] },
+        { id: 61, irregular_people: ["J. Doe"], valid_people: ["Jane Doe"] },
+        { id: 62, irregular_people: ["Jooon Doe"], valid_people: ["Jane Doe III."] },
+        { id: 67, irregular_people: ["J.Doe"], valid_people: ["Jane d. Doe"] },
       ].each do |params|
         it_behaves_like 'correct sanity check', SanityCheck.find(params[:id]), params[:irregular_people], params[:valid_people]
       end
