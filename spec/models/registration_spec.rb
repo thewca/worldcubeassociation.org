@@ -1441,6 +1441,19 @@ RSpec.describe Registration do
       expect(second_reg).to be_valid
       expect(registration).to be_valid
     end
+
+    it 'does not try to re-assign deleted registrant_ids' do
+      create_list(:registration, 4, competition: registration.competition)
+      Registration.find_by(registrant_id: 4).delete
+      expect(Registration.count).to be(4)
+      expect(Registration.maximum(:registrant_id)).to be(5)
+
+      expect {
+        @new_registration = create(:registration, competition: registration.competition)
+      }.not_to raise_error
+
+      expect(@new_registration.registrant_id).to eq(6)
+    end
   end
 
   describe '#paid_entry_fees' do
