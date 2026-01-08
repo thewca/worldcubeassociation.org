@@ -1448,9 +1448,9 @@ RSpec.describe Registration do
       expect(Registration.count).to be(4)
       expect(Registration.maximum(:registrant_id)).to be(5)
 
-      expect {
+      expect do
         @new_registration = create(:registration, competition: registration.competition)
-      }.not_to raise_error
+      end.not_to raise_error
 
       expect(@new_registration.registrant_id).to eq(6)
     end

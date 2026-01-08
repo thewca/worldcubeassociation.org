@@ -66,8 +66,9 @@ class Registration < ApplicationRecord
   before_create :ensure_registrant_id
 
   private def ensure_registrant_id
-    max_registrant_id = competition.registrations.maximum(:registrant_id) || 0
-    self.registrant_id ||= max_registrant_id + 1
+    self.registrant_id ||= competition.registrations.count + 1
+    # max_registrant_id = competition.registrations.maximum(:registrant_id) || 0
+    # self.registrant_id ||= max_registrant_id + 1
   end
 
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
