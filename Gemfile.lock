@@ -817,7 +817,7 @@ GEM
     seedbank (0.5.0)
       rake (>= 10.0)
     semantic_range (3.1.0)
-    shakapacker (9.4.0)
+    shakapacker (9.5.0)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
@@ -885,7 +885,7 @@ GEM
       unicode-display_width (>= 1.1.1, < 4)
     terser (1.2.6)
       execjs (>= 0.3.0, < 3)
-    thor (1.4.0)
+    thor (1.5.0)
     tilt (2.3.0)
     timecop (0.9.10)
     timeout (0.5.0)
@@ -1078,7 +1078,7 @@ DEPENDENCIES
   sdoc
   seedbank
   selectize-rails!
-  shakapacker (= 9.4.0)
+  shakapacker (= 9.5.0)
   shoryuken
   sidekiq
   sidekiq-cron
@@ -1422,7 +1422,7 @@ CHECKSUMS
   seedbank (0.5.0) sha256=9840c0bf3427ac9ac0815feceeceeeac76dc89039503d393a7e220184855f437
   selectize-rails (0.12.1)
   semantic_range (3.1.0) sha256=9fc01ee40f2e5f81042e95d421837f688177dd603753b5eab41ff9bba50a34a1
-  shakapacker (9.4.0) sha256=b585462b4c7dd0111222aa2b73dafeb4a5aea2cfbbbbb35b9b0708e402c0539e
+  shakapacker (9.5.0) sha256=6b589291210c52641d6881b05b4dbb2fed87dd3083caad2a6fb2af12dc3f39a8
   shellany (0.0.1) sha256=0e127a9132698766d7e752e82cdac8250b6adbd09e6c0a7fbbb6f61964fedee7
   shoryuken (6.2.1) sha256=95ddc0a717624a54e799d25a0a05100cb5a0c3728a96211935c214faaf16b3b6
   sidekiq (8.0.10) sha256=37ccd8da8d46f6779b8655cb30c1bfcb0decd57e890ff56d8b8252a5d9a84cd6
@@ -1446,7 +1446,7 @@ CHECKSUMS
   superconfig (3.0.0) sha256=2f89acd3635ecf8783fcc881b3768ec4b088987f1d4113351f1c9810bba22133
   terminal-table (4.0.0) sha256=f504793203f8251b2ea7c7068333053f0beeea26093ec9962e62ea79f94301d2
   terser (1.2.6) sha256=6ddf00b93df7015b07e2b9b149e74cd70fa7aa4f0f89a15d9922a6ebd13f37ab
-  thor (1.4.0) sha256=8763e822ccb0f1d7bee88cde131b19a65606657b847cc7b7b4b82e772bcd8a3d
+  thor (1.5.0) sha256=e3a9e55fe857e44859ce104a84675ab6e8cd59c650a49106a05f55f136425e73
   tilt (2.3.0) sha256=82dd903d61213c63679d28e404ee8e10d1b0fdf5270f1ad0898ec314cc3e745c
   time_will_tell (0.1.0)
   timecop (0.9.10) sha256=12ba45ce57cdcf6b1043cb6cdffa6381fd89ce10d369c28a7f6f04dc1b0cd8eb
