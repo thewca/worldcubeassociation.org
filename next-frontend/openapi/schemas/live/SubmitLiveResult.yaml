@@ -1,0 +1,12 @@
+SubmitLiveResult:
+  type: object
+  required:
+    - attempts
+    - registration_id
+  properties:
+    attempts:
+      type: array
+      items:
+        $ref: "./LiveAttempt.yaml"
+    registration_id:
+      type: number
