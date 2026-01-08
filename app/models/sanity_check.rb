@@ -12,4 +12,8 @@ class SanityCheck < ApplicationRecord
   def query
     @query ||= Rails.root.join("lib", "sanity_check_sql", sanity_check_category.folder_handle, file_handle).read
   end
+
+  def run_query
+    ActiveRecord::Base.connetion.exec_query self.query
+  end
 end
