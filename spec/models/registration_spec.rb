@@ -1432,6 +1432,15 @@ RSpec.describe Registration do
       expect(second_reg).to be_valid
       expect(registration).to be_valid
     end
+
+    it 'assigns registrant_id based on the max value of registrant_id' do
+      registration.update(registrant_id: 300)
+      second_reg = create(:registration, competition: registration.competition)
+      expect(second_reg.registrant_id).to eq(301)
+
+      expect(second_reg).to be_valid
+      expect(registration).to be_valid
+    end
   end
 
   describe '#paid_entry_fees' do
