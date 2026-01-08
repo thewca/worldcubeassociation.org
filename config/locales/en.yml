@@ -1399,6 +1399,9 @@ en:
         initialized: "Connection being initialized"
         connected: "Connected, results are being updated"
         disconnected: "Lost connection, results are not being updated"
+      podiums:
+        title: "Podiums"
+        undetermined: "Podiums to be determined"
     #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"

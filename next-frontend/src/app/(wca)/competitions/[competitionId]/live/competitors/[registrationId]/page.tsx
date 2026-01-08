@@ -2,7 +2,7 @@ import { Container, Heading, Link, Table } from "@chakra-ui/react";
 import { getResultByPerson } from "@/lib/wca/live/getResultByPerson";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
-import { rankingCellColour } from "@/components/live/LiveResultsTable";
+import { rankingCellColorPalette } from "@/components/live/LiveResultsTable";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { Fragment } from "react";
 
@@ -67,7 +67,8 @@ export default async function PersonResults({
                     </Table.Cell>
                     <Table.Cell
                       width={1}
-                      backgroundColor={rankingCellColour(result)}
+                      layerStyle="fill.deep"
+                      colorPalette={rankingCellColorPalette(result)}
                     >
                       {global_pos}
                     </Table.Cell>
