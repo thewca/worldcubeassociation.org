@@ -641,6 +641,7 @@ module DatabaseDumper
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,
+    "sanity_check_results" => :skip_all_rows,
     "cached_results" => :skip_all_rows,
     "schema_migrations" => :skip_all_rows, # This is populated when loading our schema dump
     "user_preferred_events" => {
