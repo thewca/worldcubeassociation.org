@@ -991,6 +991,15 @@ th:
         #original_hash: 79ccfe2
         dob_invalid: ผิดรูปแบบหรือไม่
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: เกิดข้อผิดพลาดขณะแสดงผลหน้าเว็บ
+      #original_hash: 22dfe12
+      description: >-
+        หากปัญหานี้ยังคงเกิดขึ้น โปรดแจ้งให้ WST
+        ทราบพร้อมรายละเอียดตามที่ระบุไว้ด้านล่าง
+      #original_hash: 20be860
+      details: รายละเอียดข้อผิดพลาด
     messages:
       #original_hash: dc2367c
       wrong_size: 'ขนาดไม่ถูกต้อง (ควรจะเป็น %{file_size})'
@@ -6002,10 +6011,6 @@ th:
         [%{round_id}] %{person_name} มีผลการแข่งขันอย่างน้อยหนึ่งครั้งใน cutoff
         phase หายไป
         โปรดแก้ไขผลการแข่งขันเพื่อรวมผลการแข่งขันที่หายไปหรืออัปเดตข้อมูลของรอบในหน้าจัดการกิจกรรมของการแข่งขัน
-      #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] ผลการแข่งขันของ %{person_name} อยู่ในรูปแบบที่ไม่ถูกต้อง:
-        คาดหวังเป็น %{expected_format} แต่กลับเป็น %{format}
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] ผลการแข่งขันอย่างน้อยหนึ่งครั้งของ %{person_name}
@@ -6015,11 +6020,6 @@ th:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] ผลรวมของผลการแข่งขันของ %{person_name}
         เกินขีดจำกัดเวลาสะสม ซึ่งอยู่ที่ %{time_limit}
-      #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] ไม่มีข้อมูลเกี่ยวกับ cutoff และขีดจำกัดเวลาสำหรับรอบนี้
-        การตรวจสอบเหล่านี้ถูกข้ามไป
-        โปรดอัปเดตข้อมูลของรอบในหน้าจัดการกิจกรรมของการแข่งขัน
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] ขีดจำกัดเวลาสำหรับรอบนี้ไม่ได้กำหนดไว้
@@ -6050,10 +6050,6 @@ th:
         รอบ %{round_id}: มีผู้เข้าแข่งขันมากกว่าที่เงื่อนไขการเข้ารอบที่ตั้งไว้
         (%{actual} คน แทนที่จะเป็น %{expected} คน เงื่อนไขคือ: %{condition})
         โปรดอัปเดตข้อมูลรอบในหน้าจัดการกิจกรรม
-      #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        รอบ %{round_id} ปรากฏอยู่ในผลการแข่งขันแต่ไม่ได้สร้างในแท็บ event
-        โปรดระบุข้อมูลของรอบในหน้าจัดการกิจกรรมของการแข่งขัน
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         รอบ %{round_id} มีผู้เข้าแข่งขัน 99 คนหรือน้อยกว่า แต่มีรอบถัดไปมากกว่า
@@ -6099,11 +6095,6 @@ th:
       missing_round_results_error: >-
         ไม่มีผลการแข่งขันสำหรับรอบ %{round_id} แต่จะแสดงอยู่ในแท็บ event
         หากรอบนี้ไม่ได้จัดขึ้น โปรดลบรอบดังกล่าวในหน้าจัดการกิจกรรมของการแข่งขัน
-      #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        ไม่มีการประกาศ cutoff สำหรับ '%{round_name}' แต่พบว่ามีการใช้ cutoff
-        ในผลการแข่งขัน
-        โปรดอัปเดตข้อมูลของรอบดังกล่าวในหน้าจัดการกิจกรรมของการแข่งขัน
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -6118,11 +6109,6 @@ th:
       no_main_event_warning: >-
         ไม่มีการเลือก event หลักสำหรับการแข่งขันนี้ โปรดแจ้งให้ WRT
         ทราบว่านี่ถูกต้องหรือไม่
-      #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        ผลการแข่งขันสำหรับ %{event_id} ปรากฏแล้ว อย่างไรก็ตาม ไม่ได้แสดงเป็น
-        event อย่างเป็นทางการ โปรดลบ event ดังกล่าวออกจากผลการแข่งขันหรือติดต่อ
-        WCAT เพื่อขอให้เพิ่ม event ดังกล่าวลงในเว็บไซต์ของ WCA
       #original_hash: fde208d
       missing_results_warning: >-
         ไม่มีผลการแข่งขันสำหรับ %{event_id} แต่มีแสดงเป็น event อย่างเป็นทางการ
@@ -6136,10 +6122,6 @@ th:
         เพื่อเพิ่มโจทย์ที่ถูกต้องให้กับรอบนั้น
       #original_hash: 340d2f3
       missing_scrambles_for_competition_error: โจทย์ของการแข่งขันหายไป โปรดใช้ Scrambles Matcher เพื่อเพิ่มโจทย์
-      #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] มีการโจทย์มากเกินไป ใช้ Scrambles Matcher
-        เพื่อลบโจทย์ที่ไม่ได้ใช้
       #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] โจทย์ของกลุ่ม %{group_id} หายไป ตรวจพบเฉพาะ %{actual}
