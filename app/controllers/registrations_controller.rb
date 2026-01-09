@@ -67,7 +67,7 @@ class RegistrationsController < ApplicationController
       competitor_limit_error(competition, filtered_rows.length),
     ].compact.flatten
 
-    return render status: :unprocessable_entity, json: { error: errors.compact.join(", ") } if errors.any?
+    return render status: :unprocessable_content, json: { error: errors.compact.join(", ") } if errors.any?
 
     filtered_rows.map do |row|
       event_ids = competition.competition_events.filter_map do |competition_event|

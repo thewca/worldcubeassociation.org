@@ -437,7 +437,7 @@ RSpec.describe "registrations" do
             expect do
               post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
             end.not_to(change { competition.registrations.count })
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(response.body).to include "The file is empty."
           end
         end
