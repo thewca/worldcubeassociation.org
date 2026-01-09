@@ -45,7 +45,7 @@ RSpec.describe SanityCheck do
             irregular_people = irregular_people.map do |name|
               create(:person, name: name)
             end
-            result_ids = run_query(sanity_check.query).pluck("id")
+            result_ids = sanity_check.run_query.pluck("id")
 
             expect(result_ids).to match_array(irregular_people.map(&:id))
           end
@@ -54,7 +54,7 @@ RSpec.describe SanityCheck do
             valid_people = valid_people.map do |name|
               create(:person, name: name)
             end
-            result_ids = run_query(sanity_check.query).to_a
+            result_ids = sanity_check.run_query.to_a
 
             expect(result_ids & valid_people.map(&:id)).to be_empty
           end
@@ -114,14 +114,14 @@ RSpec.describe SanityCheck do
           person1 = create(:person)
           person1.update_columns(gender: '')
           irregular_people = [person1]
-          result_ids = run_query(sanity_check.query).pluck("id")
+          result_ids = sanity_check.run_query.pluck("id")
 
           expect(result_ids).to match_array(irregular_people.map(&:id))
         end
 
         it "doesn't flag valid genders" do
           valid_people = [create(:user)]
-          result_ids = run_query(sanity_check.query).to_a
+          result_ids = sanity_check.run_query.to_a
 
           expect(result_ids & valid_people.map(&:id)).to be_empty
         end
@@ -135,14 +135,14 @@ RSpec.describe SanityCheck do
           person1 = create(:person)
           person1.update_columns(country_id: 'BLAH')
           irregular_people = [person1]
-          result_ids = run_query(sanity_check.query).pluck("wca_id")
+          result_ids = sanity_check.run_query.pluck("wca_id")
 
           expect(result_ids).to match_array(irregular_people.map(&:wca_id))
         end
 
         it "doesn't flag valid country ids" do
           valid_people = [create(:person)]
-          result_ids = run_query(sanity_check.query).to_a
+          result_ids = sanity_check.run_query.to_a
 
           expect(result_ids & valid_people.map(&:id)).to be_empty
         end
@@ -160,7 +160,7 @@ RSpec.describe SanityCheck do
           create(:result, person: irregular_person_1, competition: competition, round: round, event_id: "333")
           create(:result, person: irregular_person_2, competition: competition, round: round, event_id: "333")
 
-          result_ids = run_query(sanity_check_11.query).pluck("person_id")
+          result_ids = sanity_check_11.run_query.pluck("person_id")
 
           expect(result_ids).to contain_exactly(irregular_person_1.wca_id, irregular_person_2.wca_id)
         end
@@ -175,15 +175,11 @@ RSpec.describe SanityCheck do
             person.update_columns(dob: nil)
             create(:result, person: person, competition: competition, round: round, event_id: "333")
           end
-          result_ids = run_query(sanity_check_12.query).pluck("competition_id")
+          result_ids = sanity_check_12.run_query.pluck("competition_id")
 
           expect(result_ids).to contain_exactly(competition.id)
         end
       end
     end
-  end
-
-  def run_query(query)
-    ActiveRecord::Base.connection.exec_query(query)
   end
 end
