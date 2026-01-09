@@ -1,4 +1,4 @@
-SELECT *
+SELECT *, r.id as result_id
 FROM results as r
        INNER JOIN formats as f ON r.format_id = f.id
 WHERE r.round_type_id not in ('c', 'd', 'e', 'g', 'h')
