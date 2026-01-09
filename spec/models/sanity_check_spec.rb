@@ -54,7 +54,7 @@ RSpec.describe SanityCheck do
     context "wrong number of results" do
       let(:sanity_check) { SanityCheck.find(14) }
 
-      it "Correctly find irregular results" do
+      it "Correctly find less than needed attempts" do
         mo3_with_missing = create(:result, :mo3, event_id: "666")
         mo3_with_missing.update_columns(value3: 0)
 
@@ -64,6 +64,15 @@ RSpec.describe SanityCheck do
         result_ids = sanity_check.run_query.pluck("result_id")
 
         expect(result_ids).to match_array([mo3_with_missing, bo5_with_missing].map(&:id))
+      end
+
+      it "Correctly find more than needed attempts" do
+        mo3_with_additional = create(:result, :mo3, event_id: "666")
+        mo3_with_additional.update_columns(value4: 300)
+
+        result_ids = sanity_check.run_query.pluck("result_id")
+
+        expect(result_ids).to match_array([mo3_with_additional].map(&:id))
       end
     end
 
