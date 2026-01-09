@@ -57,9 +57,9 @@ RSpec.describe SanityCheck do
       create(:scramble, competition: competition_1)
       create(:scramble, competition: competition_2)
 
-      result_ids = sanity_check.run_query.pluck("competition_id")
+      result_ids = sanity_check.run_query.pluck("competitions")
 
-      expect(result_ids).to contain_exactly(competition_1.id, competition_2.id)
+      expect(result_ids).to contain_exactly([competition_1.id, competition_2.id].join(","))
     end
   end
 end
