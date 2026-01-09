@@ -305,7 +305,7 @@ class TicketsController < ApplicationController
 
     ticket_status = TicketsEditPerson.statuses[:closed]
 
-    if @ticket.metadata.out_of_sync
+    if @ticket.metadata.out_of_sync?
       return render status: :unprocessable_content, json: {
         error: "The person's data has changed since this request was created. Please sync the request before approving it.",
       }

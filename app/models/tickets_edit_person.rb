@@ -80,7 +80,7 @@ class TicketsEditPerson < ApplicationRecord
     end
   end
 
-  def out_of_sync
+  def out_of_sync?
     tickets_edit_person_fields.any? do |edit_person_field|
       person.send(edit_person_field.field_name).to_s != edit_person_field.old_value
     end
