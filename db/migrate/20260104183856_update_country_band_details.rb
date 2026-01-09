@@ -37,9 +37,9 @@ class UpdateCountryBandDetails < ActiveRecord::Migration[8.1]
     CountryBandDetail.where(number: 2).where(start_date: '2026-01-01').delete_all
     CountryBandDetail.where(number: 3).where(start_date: '2026-01-01').delete_all
     CountryBandDetail.where(number: 4).where(start_date: '2026-01-01').delete_all
-    CountryBandDetail.where(number: 1).where(start_date: '2018-01-01').update_all(end_date: nil)
-    CountryBandDetail.where(number: 2).where(start_date: '2018-01-01').update_all(end_date: nil)
-    CountryBandDetail.where(number: 3).where(start_date: '2018-01-01').update_all(end_date: nil)
-    CountryBandDetail.where(number: 4).where(start_date: '2018-01-01').update_all(end_date: nil)
+    CountryBandDetail.where(number: 1).where(end_date: '2025-12-31').update_all(end_date: nil)
+    CountryBandDetail.where(number: 2).where(end_date: '2025-12-31').update_all(end_date: nil)
+    CountryBandDetail.where(number: 3).where(end_date: '2025-12-31').update_all(end_date: nil)
+    CountryBandDetail.where(number: 4).where(end_date: '2025-12-31').update_all(end_date: nil)
   end
 end
