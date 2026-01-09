@@ -42,8 +42,8 @@ RSpec.describe SanityCheck do
       sanity_check = SanityCheck.find(20)
       competition = create(:competition)
       round = create(:round, competition: competition)
-      create(:scramble, competition: competition, round: round)
-      create(:scramble, competition: competition, round: round)
+      create(:scramble, competition: competition, round: round, scramble: "F2 B2")
+      create(:scramble, competition: competition, round: round, scramble: "F2 B2")
 
       result_ids = sanity_check.run_query.pluck("competition_id")
 
@@ -54,8 +54,8 @@ RSpec.describe SanityCheck do
       sanity_check = SanityCheck.find(21)
       competition_1 = create(:competition)
       competition_2 = create(:competition)
-      create(:scramble, competition: competition_1)
-      create(:scramble, competition: competition_2)
+      create(:scramble, competition: competition_1, scramble: "F2 B2")
+      create(:scramble, competition: competition_2, scramble: "F2 B2")
 
       result_ids = sanity_check.run_query.pluck("competitions")
 
