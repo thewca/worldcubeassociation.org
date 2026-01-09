@@ -14,6 +14,6 @@ class SanityCheck < ApplicationRecord
   end
 
   def run_query
-    ActiveRecord::Base.connetion.exec_query self.query
+    ActiveRecord::Base.connection.exec_query self.query
   end
 end

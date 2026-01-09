@@ -40,25 +40,26 @@ RSpec.describe SanityCheck do
   context "Duplicate_scrambles" do
     it "Duplicate Scrambles within competition id" do
       sanity_check = SanityCheck.find(20)
-      competition = FactoryBot.build(:competition)
-      create(:scramble, competition: competition)
-      create(:scramble, competition: competition)
+      competition = create(:competition)
+      round = create(:round, competition: competition)
+      create(:scramble, competition: competition, round: round)
+      create(:scramble, competition: competition, round: round)
 
-      result_ids = run_query(sanity_check.query).pluck("competition_id")
+      result_ids = sanity_check.run_query.pluck("competition_id")
 
       expect(result_ids).to match_array([competition.id])
     end
 
     it "Duplicate Scrambles across competition" do
       sanity_check = SanityCheck.find(21)
-      competition_1 = FactoryBot.build(:competition)
-      competition_2 = FactoryBot.build(:competition)
+      competition_1 = create(:competition)
+      competition_2 = create(:competition)
       create(:scramble, competition: competition_1)
       create(:scramble, competition: competition_2)
 
-      result_ids = run_query(sanity_check.query).pluck("competition_id")
+      result_ids = sanity_check.run_query.pluck("competition_id")
 
-      expect(result_ids).to match_array([competition_1.id, competition_2])
+      expect(result_ids).to match_array([competition_1.id, competition_2.id])
     end
   end
 end
