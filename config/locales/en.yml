@@ -1337,6 +1337,7 @@ en:
         email_duplicates: "Email must be unique, found the following duplicates: %{emails}."
         wca_id_duplicates: "WCA ID must be unique, found the following duplicates: %{wca_ids}."
         wrong_dob_format: "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: %{raw_dobs}."
+        empty_file: "The file is empty."
     add:
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
