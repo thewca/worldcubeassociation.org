@@ -41,9 +41,10 @@ RSpec.describe SanityCheck do
     it "Duplicate Scrambles within competition id" do
       sanity_check = SanityCheck.find(20)
       competition = create(:competition)
-      round = create(:round, competition: competition)
-      create(:scramble, competition: competition, round: round, scramble: "F2 B2")
-      create(:scramble, competition: competition, round: round, scramble: "F2 B2")
+      round1 = create(:round, competition: competition)
+      round2 = create(:round, competition: competition, number: 2)
+      create(:scramble, competition: competition, round: round1, scramble: "F2 B2")
+      create(:scramble, competition: competition, round: round2, scramble: "F2 B2")
 
       result_ids = sanity_check.run_query.pluck("competition_id")
 
