@@ -43,9 +43,9 @@ RSpec.describe SanityCheck do
       competition = create(:competition)
       round = create(:round, competition: competition)
       create(:result, competition: competition, round: round, event_id: "333",
-                      value1: 100, value2: 100, value3: 100, value4: 100, value5: 100, average: 100, best: 100)
+                      value1: 100, value2: 200, value3: 300, value4: 400, value5: 500, average: 300, best: 100)
       create(:result, competition: competition, round: round, event_id: "333",
-                      value1: 100, value2: 100, value3: 100, value4: 100, value5: 100, average: 100, best: 100)
+                      value1: 100, value2: 200, value3: 300, value4: 400, value5: 500, average: 300, best: 100)
 
       result_ids = sanity_check.run_query.pluck("competitions")
       expect(result_ids).to contain_exactly(competition.id)
