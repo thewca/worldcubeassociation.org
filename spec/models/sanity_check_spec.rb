@@ -45,7 +45,7 @@ RSpec.describe SanityCheck do
         r = create(:result)
         r.update_columns(value1: 0)
 
-        result_ids = run_query(sanity_check.query).pluck("id")
+        result_ids = sanity_check.run_query.pluck("id")
 
         expect(result_ids).to contain_exactly(r.id)
       end
@@ -61,7 +61,7 @@ RSpec.describe SanityCheck do
         bo5_with_missing = create(:result)
         bo5_with_missing.update_columns(value5: 0)
 
-        result_ids = run_query(sanity_check.query).pluck("result_id")
+        result_ids = sanity_check.run_query.pluck("result_id")
 
         expect(result_ids).to match_array([mo3_with_missing, bo5_with_missing].map(&:id))
       end
@@ -84,7 +84,7 @@ RSpec.describe SanityCheck do
         bo5_with_missing.update_columns(value5: 0)
         create(:result, round: round2, competition: competition2)
 
-        result_ids = run_query(sanity_check.query).pluck("competition_id")
+        result_ids = sanity_check.run_query.pluck("competition_id")
 
         expect(result_ids).to match_array([mo3_with_missing, bo5_with_missing].map(&:competition_id))
       end
@@ -97,7 +97,7 @@ RSpec.describe SanityCheck do
         r = create(:result)
         r.update_columns(value1: -2, value2: -2, value3: -2, value4: -2, value5: -2)
 
-        result_ids = run_query(sanity_check.query).pluck("id")
+        result_ids = sanity_check.run_query.pluck("id")
 
         expect(result_ids).to contain_exactly(r.id)
       end
@@ -110,14 +110,10 @@ RSpec.describe SanityCheck do
         r = create(:result)
         r.update_columns(value3: 0, value4: 0, value5: 0)
 
-        result_ids = run_query(sanity_check.query).pluck("id")
+        result_ids = sanity_check.run_query.pluck("id")
 
         expect(result_ids).to contain_exactly(r.id)
       end
     end
-  end
-
-  def run_query(query)
-    ActiveRecord::Base.connection.exec_query(query)
   end
 end
