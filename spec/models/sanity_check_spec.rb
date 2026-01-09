@@ -51,6 +51,18 @@ RSpec.describe SanityCheck do
       expect(result_ids).to contain_exactly(competition.id)
     end
 
+    it "Duplicate Scrambles within same round" do
+      sanity_check = SanityCheck.find(20)
+      competition = create(:competition)
+      round = create(:round, competition: competition)
+      create(:scramble, competition: competition, round: round, scramble: "F2 B2")
+      create(:scramble, competition: competition, round: round, scramble: "F2 B2")
+
+      result_ids = sanity_check.run_query.pluck("competition_id")
+
+      expect(result_ids).to contain_exactly(competition.id)
+    end
+
     it "Duplicate Scrambles across competition" do
       sanity_check = SanityCheck.find(21)
       competition_1 = create(:competition)
