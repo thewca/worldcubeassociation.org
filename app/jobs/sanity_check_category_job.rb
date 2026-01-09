@@ -5,7 +5,7 @@ class SanityCheckCategoryJob < WcaCronjob
 
   def perform(sanity_check_category)
     sanity_check_category.sanity_checks.find_each do |sanity_check|
-      query_result = ActiveRecord::Base.connection.exec_query sanity_check.query
+      query_result = sanity_check.run_query
 
       sanity_check.sanity_check_results.create!(
         query_results: query_result,
