@@ -47,7 +47,7 @@ RSpec.describe SanityCheck do
 
       result_ids = sanity_check.run_query.pluck("competition_id")
 
-      expect(result_ids).to match_array([competition.id])
+      expect(result_ids).to contain_exactly(competition.id)
     end
 
     it "Duplicate Scrambles across competition" do
@@ -59,7 +59,7 @@ RSpec.describe SanityCheck do
 
       result_ids = sanity_check.run_query.pluck("competition_id")
 
-      expect(result_ids).to match_array([competition_1.id, competition_2.id])
+      expect(result_ids).to contain_exactly(competition_1.id, competition_2.id)
     end
   end
 end
