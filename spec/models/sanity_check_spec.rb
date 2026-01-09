@@ -52,6 +52,95 @@ RSpec.describe SanityCheck do
     end
   end
 
+  context "Irregular Results" do
+    context "no first solve" do
+      let(:sanity_check) { SanityCheck.find(13) }
+
+      it "Correctly find irregular results" do
+        r = create(:result)
+        r.update_columns(value1: 0)
+
+        result_ids = sanity_check.run_query.pluck("id")
+
+        expect(result_ids).to contain_exactly(r.id)
+      end
+    end
+
+    context "wrong number of results" do
+      let(:sanity_check) { SanityCheck.find(14) }
+
+      it "Correctly find less than needed attempts" do
+        mo3_with_missing = create(:result, :mo3, event_id: "666")
+        mo3_with_missing.update_columns(value3: 0)
+
+        bo5_with_missing = create(:result)
+        bo5_with_missing.update_columns(value5: 0)
+
+        result_ids = sanity_check.run_query.pluck("result_id")
+
+        expect(result_ids).to match_array([mo3_with_missing, bo5_with_missing].map(&:id))
+      end
+
+      it "Correctly find more than needed attempts" do
+        mo3_with_additional = create(:result, :mo3, event_id: "666")
+        mo3_with_additional.update_columns(value4: 300)
+
+        result_ids = sanity_check.run_query.pluck("result_id")
+
+        expect(result_ids).to match_array([mo3_with_additional].map(&:id))
+      end
+    end
+
+    context "different result types" do
+      let(:sanity_check) { SanityCheck.find(15) }
+
+      it "Correctly find irregular results" do
+        competition1 = create(:competition, event_ids: ["666"])
+        round1 = create(:round, competition: competition1, event_id: "666", format_id: "m")
+        competition2 = create(:competition)
+        round2 = create(:round, competition: competition2, event_id: "333oh")
+
+        mo3_with_missing = create(:result, :mo3, event_id: "666", round: round1, competition: competition1)
+        mo3_with_missing.update_columns(value3: 0)
+        create(:result, :mo3, event_id: "666", round: round1, competition: competition1)
+
+        bo5_with_missing = create(:result, round: round2, competition: competition2)
+        bo5_with_missing.update_columns(value5: 0)
+        create(:result, round: round2, competition: competition2)
+
+        result_ids = sanity_check.run_query.pluck("competition_id")
+
+        expect(result_ids).to match_array([mo3_with_missing, bo5_with_missing].map(&:competition_id))
+      end
+    end
+
+    context "only dns results" do
+      let(:sanity_check) { SanityCheck.find(16) }
+
+      it "Correctly find irregular results" do
+        r = create(:result)
+        r.update_columns(value1: -2, value2: -2, value3: -2, value4: -2, value5: -2)
+
+        result_ids = sanity_check.run_query.pluck("id")
+
+        expect(result_ids).to contain_exactly(r.id)
+      end
+    end
+
+    context "non-zero average for less than 3 results" do
+      let(:sanity_check) { SanityCheck.find(17) }
+
+      it "Correctly find irregular results" do
+        r = create(:result)
+        r.update_columns(value3: 0, value4: 0, value5: 0)
+
+        result_ids = sanity_check.run_query.pluck("id")
+
+        expect(result_ids).to contain_exactly(r.id)
+      end
+    end
+  end
+
   context "Person Data Irregularities" do
     context "Wrong names" do
       RSpec.shared_examples 'correct sanity check' do |sanity_check, irregular_people, valid_people|
