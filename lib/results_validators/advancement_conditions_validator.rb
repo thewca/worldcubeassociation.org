@@ -30,7 +30,7 @@ module ResultsValidators
 
     def competition_associations
       {
-        rounds: [],
+        rounds: [:competition_event],
       }
     end
 
@@ -54,27 +54,25 @@ module ResultsValidators
             number_of_people_in_round = results.size
             remaining_number_of_rounds = round.total_number_of_rounds - round.number
 
-            round_id = "#{round.event_id}-#{round.round_type_id}"
-
             if number_of_people_in_round <= 7 && remaining_number_of_rounds.positive?
               # https://www.worldcubeassociation.org/regulations/#9m3: Rounds with 7 or fewer competitors must not have subsequent rounds.
               @errors << ValidationError.new(REGULATION_9M3_ERROR,
                                              :rounds, competition.id,
-                                             round_id: round_id)
+                                             round_id: round.human_id)
             end
 
             if number_of_people_in_round <= 15 && remaining_number_of_rounds > 1
               # https://www.worldcubeassociation.org/regulations/#9m2: Rounds with 15 or fewer competitors must have at most one subsequent round.
               @errors << ValidationError.new(REGULATION_9M2_ERROR,
                                              :rounds, competition.id,
-                                             round_id: round_id)
+                                             round_id: round.human_id)
             end
 
             if number_of_people_in_round <= 99 && remaining_number_of_rounds > 2
               # https://www.worldcubeassociation.org/regulations/#9m1: Rounds with 99 or fewer competitors must have at most two subsequent rounds.
               @errors << ValidationError.new(REGULATION_9M1_ERROR,
                                              :rounds, competition.id,
-                                             round_id: round_id)
+                                             round_id: round.human_id)
             end
 
             if previous_round.present?
@@ -94,7 +92,7 @@ module ResultsValidators
                 if people_over_condition.any?
                   @errors << ValidationError.new(COMPETED_NOT_QUALIFIED_ERROR,
                                                  :rounds, competition.id,
-                                                 round_id: round_id,
+                                                 round_id: round.human_id,
                                                  ids: people_over_condition.join(","),
                                                  condition: condition.to_s(previous_round))
                 end
@@ -105,7 +103,7 @@ module ResultsValidators
                 if number_of_people_in_round >= number_of_people_in_previous_round
                   @errors << ValidationError.new(OLD_REGULATION_9P_ERROR,
                                                  :rounds, competition.id,
-                                                 round_id: round_id)
+                                                 round_id: round.human_id)
                 end
               else
                 max_advancing = 3 * number_of_people_in_previous_round / 4
@@ -114,14 +112,14 @@ module ResultsValidators
                 if number_of_people_in_round > max_advancing
                   @errors << ValidationError.new(REGULATION_9P1_ERROR,
                                                  :rounds, competition.id,
-                                                 round_id: round_id)
+                                                 round_id: round.human_id)
                 end
                 if condition
                   theoretical_number_of_people = condition.max_advancing(previous_results)
                   if number_of_people_in_round > theoretical_number_of_people
                     @warnings << ValidationWarning.new(TOO_MANY_QUALIFIED_WARNING,
                                                        :rounds, competition.id,
-                                                       round_id: round_id,
+                                                       round_id: round.human_id,
                                                        actual: number_of_people_in_round,
                                                        expected: theoretical_number_of_people,
                                                        condition: condition.to_s(previous_round))
@@ -129,7 +127,7 @@ module ResultsValidators
                   if theoretical_number_of_people > max_advancing
                     @errors << ValidationError.new(ROUND_9P1_ERROR,
                                                    :rounds, competition.id,
-                                                   round_id: round_id,
+                                                   round_id: round.human_id,
                                                    condition: condition.to_s(previous_round))
                   end
                   # This comes from https://github.com/thewca/worldcubeassociation.org/issues/5587
@@ -137,7 +135,7 @@ module ResultsValidators
                      (number_of_people_in_round / theoretical_number_of_people) <= 0.8
                     @warnings << ValidationWarning.new(NOT_ENOUGH_QUALIFIED_WARNING,
                                                        :rounds, competition.id,
-                                                       round_id: round_id,
+                                                       round_id: round.human_id,
                                                        expected: theoretical_number_of_people,
                                                        actual: number_of_people_in_round)
                   end

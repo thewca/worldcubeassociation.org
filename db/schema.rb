@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_05_131200) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_06_131200) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1217,11 +1217,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_05_131200) do
     t.index ["sanity_check_id"], name: "fk_rails_c9112973d2"
   end
 
+  create_table "sanity_check_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.json "query_results", null: false
+    t.bigint "sanity_check_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sanity_check_id"], name: "index_sanity_check_results_on_sanity_check_id"
+  end
+
   create_table "sanity_checks", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.text "comments"
+    t.bigint "latest_result_id"
     t.string "query_file"
     t.bigint "sanity_check_category_id", null: false
     t.string "topic", null: false
+    t.index ["latest_result_id"], name: "index_sanity_checks_on_latest_result_id"
     t.index ["sanity_check_category_id"], name: "fk_rails_fddad5fbb5"
     t.index ["topic"], name: "index_sanity_checks_on_topic", unique: true
   end
@@ -1573,6 +1583,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_05_131200) do
   add_foreign_key "rounds", "linked_rounds"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
+  add_foreign_key "sanity_checks", "sanity_check_results", column: "latest_result_id"
   add_foreign_key "schedule_activities", "rounds"
   add_foreign_key "schedule_activities", "schedule_activities", column: "parent_activity_id"
   add_foreign_key "schedule_activities", "venue_rooms"
