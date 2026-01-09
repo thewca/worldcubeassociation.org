@@ -43,13 +43,9 @@ RSpec.describe SanityCheck do
       person = create(:person)
       person.update_columns(wca_id: "1982TEST01")
       create(:result, person: person)
-      result_ids = run_query(sanity_check.query).pluck("person_id")
+      result_ids = sanity_check.run_query.pluck("person_id")
 
       expect(result_ids).to contain_exactly(person.wca_id)
     end
-  end
-
-  def run_query(query)
-    ActiveRecord::Base.connection.exec_query(query)
   end
 end
