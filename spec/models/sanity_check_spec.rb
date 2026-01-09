@@ -43,7 +43,7 @@ RSpec.describe SanityCheck do
       person = create(:person)
       person.update_columns(wca_id: "1982TEST01")
       # This sanity check uses start_date, not competition_id to check for year
-      competition = create(:competition, start_date: Date.new(1983,1,1,), end_date: Date.new(1983,1,1,))
+      competition = create(:competition, start_date: Date.new(1983, 1, 1), end_date: Date.new(1983, 1, 1))
       create(:result, person: person, competition: competition)
       result_ids = sanity_check.run_query.pluck("person_id")
 
