@@ -45,12 +45,8 @@ RSpec.describe SanityCheck do
       create(:result, competition: competition, round: round, event_id: "333")
       create(:result, competition: competition, round: round, event_id: "333")
 
-      result_ids = run_query(sanity_check.query).pluck("competitions")
+      result_ids = sanity_check.run_query.pluck("competitions")
       expect(result_ids).to contain_exactly(competition.id)
     end
-  end
-
-  def run_query(query)
-    ActiveRecord::Base.connection.exec_query(query)
   end
 end
