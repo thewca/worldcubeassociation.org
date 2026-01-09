@@ -36,4 +36,24 @@ RSpec.describe SanityCheck do
       expect(stored_queries).to match_array(used_queries)
     end
   end
+
+  context "Consistency of Results and Rounds Data" do
+    it "Correctly identifies cutoff violations" do
+      sanity_check = SanityCheck.find(47)
+      competition = create(:competition, event_ids: ["666"])
+      cutoff = Cutoff.new(number_of_attempts: 1, attempt_result: 300)
+      round = create(:round, competition: competition, event_id: "666", cutoff: cutoff, format_id: "m")
+      result = create(:result, competition: competition, round: round,
+                      value1: 299, value2: 300, value3: 300, value4: 0, value5: 0,
+                      event_id: "666", format_id: "m", round_type_id: "c",
+                      average: 300, best: 299)
+
+      # Apply Cutoff violations
+      result.update_columns(value1: 300, best: 300)
+
+      result_ids = sanity_check.run_query.pluck("attemptResult")
+
+      expect(result_ids).to contain_exactly("300")
+    end
+  end
 end
