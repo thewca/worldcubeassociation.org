@@ -480,15 +480,8 @@ class Competition < ApplicationRecord
     competition_events.reject(&:marked_for_destruction?).empty?
   end
 
-  validate :must_have_at_least_one_delegate, if: :confirmed_or_visible?
-  def must_have_at_least_one_delegate
-    errors.add(:staff_delegate_ids, I18n.t('competitions.errors.must_contain_delegate')) if staff_delegate_ids.empty?
-  end
-
-  validate :must_have_at_least_one_organizer, if: :confirmed_or_visible?
-  def must_have_at_least_one_organizer
-    errors.add(:organizer_ids, I18n.t('competitions.errors.must_contain_organizer')) if organizer_ids.empty?
-  end
+  validates :staff_delegate_ids, length: { minimum: 1, message: I18n.t('competitions.errors.must_contain_delegate'), if: :confirmed_or_visible? }
+  validates :organizer_ids, length: { minimum: 1, message: I18n.t('competitions.errors.must_contain_organizer'), if: :confirmed_or_visible? }
 
   def confirmed_or_visible?
     self.confirmed? || self.show_at_all?
