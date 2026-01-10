@@ -71,8 +71,7 @@ class TicketsController < ApplicationController
       format.json do
         ticket = Ticket.find(params.require(:id))
 
-        # Currently only stakeholders can access the ticket.
-        return head :unauthorized unless ticket.can_user_access?(current_user)
+        return head :unauthorized unless ticket.can_user_access?(current_user) || ticket.create_bcc_roles_if_eligible?(current_user)
 
         render json: {
           ticket: ticket,
