@@ -490,7 +490,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "delegate_reports" => {
-      where_clause: self.join_where_visible_comp('delegate_reports'),
+      where_clause: self.join_where_visible_comp("delegate_reports"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -602,7 +602,7 @@ module DatabaseDumper
     }.freeze,
     "registration_payments" => :skip_all_rows,
     "registrations" => {
-      where_clause: self.join_where_visible_comp('registrations'),
+      where_clause: self.join_where_visible_comp("registrations"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -838,7 +838,7 @@ module DatabaseDumper
     }.freeze,
     "cronjob_statistics" => :skip_all_rows,
     "championships" => {
-      where_clause: self.join_where_visible_comp('championships'),
+      where_clause: self.join_where_visible_comp("championships"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -875,7 +875,7 @@ module DatabaseDumper
     "uploaded_jsons" => :skip_all_rows,
     "scramble_file_uploads" => :skip_all_rows,
     "bookmarked_competitions" => {
-      where_clause: self.join_where_visible_comp('bookmarked_competitions'),
+      where_clause: self.join_where_visible_comp("bookmarked_competitions"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -1186,7 +1186,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "championships" => {
-      where_clause: self.join_where_visible_comp('championships'),
+      where_clause: self.join_where_visible_comp("championships"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -1383,7 +1383,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "championships" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("championships"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
