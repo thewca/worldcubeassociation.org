@@ -181,7 +181,7 @@ services:
       - wca-main
 
   wca_playwright:
-    image: mcr.microsoft.com/playwright:v1.56.1
+    image: mcr.microsoft.com/playwright:v1.57.0
     container_name: "playwright"
     extra_hosts:
       - "hostmachine:host-gateway"
