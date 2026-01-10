@@ -755,12 +755,12 @@ class Competition < ApplicationRecord
 
     name_without_year = m[1]
     year = m[2]
-    if id.blank? || force_override
+    if competition_id.blank? || force_override
       # Generate competition id from name
       # By replacing accented chars with their ascii equivalents, and then
       # removing everything that isn't a digit or a character.
       safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year, locale: :en).gsub(/[^a-z0-9]+/i, '')
-      self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
+      self.competition_id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
     end
     return unless cell_name.blank? || force_override
 
