@@ -48,7 +48,9 @@ class CompetitionSeries < ApplicationRecord
     self.short_name = name_without_year.truncate(MAX_SHORT_NAME_LENGTH - year.length) + year
   end
 
-  def destroy_if_orphaned
+  # The _removed_competition argument is passed by Rails
+  # as part of the `has_many :competitions, after_remove: :destroy_if_orphaned` callback chain
+  def destroy_if_orphaned(_removed_competition)
     return unless persisted? && competitions.count <= 1
 
     self.destroy # NULL is handled by has_many#dependent set to :nullify above

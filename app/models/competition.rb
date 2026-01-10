@@ -811,6 +811,14 @@ class Competition < ApplicationRecord
   # competition the attribute is automatically set to that manager's preference.
   after_update :update_receive_registration_emails
   after_update :clean_series_when_leaving
+  # Workaround for PHP code that requires these tables to be clean.
+  # Once we're in all railsland, this can go, and we can add a script
+  # that checks our database sanity instead.
+  after_save :remove_non_existent_organizers_and_delegates
+  def remove_non_existent_organizers_and_delegates
+    competition_organizers.where.not(organizer_id: organizer_ids).delete_all
+    competition_delegates.where.not(delegate_id: delegate_ids).delete_all
+  end
 
   def report_posted_at
     delegate_report&.posted_at
@@ -2210,7 +2218,7 @@ class Competition < ApplicationRecord
     if competition_series_id.nil? && # if we just processed an update to remove the competition series
        (old_series_id = competition_series_id_previously_was) && # and we previously had an ID
        (old_series = CompetitionSeries.find_by(id: old_series_id)) # and that series still exists
-      old_series.reload.destroy_if_orphaned # prompt it to check for orphaned state.
+      old_series.reload.destroy_if_orphaned(self) # prompt it to check for orphaned state.
     end
   end
 

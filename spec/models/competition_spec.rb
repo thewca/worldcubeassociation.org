@@ -658,7 +658,7 @@ RSpec.describe Competition do
     delegate1 = create(:delegate, name: "Daniel", email: "daniel@d.com")
     delegate2 = create(:delegate, name: "Chris", email: "chris@c.com")
     delegates = [delegate1, delegate2]
-    staff_delegate_ids = delegates.map(&:id).join(",")
+    staff_delegate_ids = delegates.map(&:id)
     competition = create(:competition, staff_delegate_ids: staff_delegate_ids)
     expect(competition.delegates.sort_by(&:name)).to eq delegates.sort_by(&:name)
   end
@@ -667,7 +667,7 @@ RSpec.describe Competition do
     organizer1 = create(:user, name: "Bob", email: "bob@b.com")
     organizer2 = create(:user, name: "Jane", email: "jane@j.com")
     organizers = [organizer1, organizer2]
-    organizer_ids = organizers.map(&:id).join(",")
+    organizer_ids = organizers.map(&:id)
     competition = create(:competition, organizer_ids: organizer_ids)
     expect(competition.organizers.sort_by(&:name)).to eq organizers.sort_by(&:name)
   end
