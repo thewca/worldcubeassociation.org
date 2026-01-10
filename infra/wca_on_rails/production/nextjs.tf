@@ -46,6 +46,10 @@ locals {
       value = "https://www.worldcubeassociation.org/api/"
     },
     {
+      name  = "PROPRIETARY_FONT"
+      value = "TTNormsPro"
+    },
+    {
       name = "NEXTAUTH_URL"
       value = "https://${var.shared.next_url}"
     },
@@ -81,7 +85,9 @@ data "aws_iam_policy_document" "nextjs_task_policy" {
     ]
 
     resources = [aws_s3_bucket.next-media.arn,
-      "${aws_s3_bucket.next-media.arn}/*"]
+      "${aws_s3_bucket.next-media.arn}/*",
+      aws_s3_bucket.assets.arn,
+      "${aws_s3_bucket.assets.arn}/*",]
   }
 }
 

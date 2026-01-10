@@ -44,7 +44,7 @@ class CompetitionsController < ApplicationController
   end
 
   rescue_from JSON::Schema::ValidationError do |e|
-    render status: :unprocessable_entity, json: {
+    render status: :unprocessable_content, json: {
       error: e.to_s,
       jsonProperty: e.fragments.join('.'),
       schema: e.schema.schema, # yes, unfortunately the double invocation is necessary.

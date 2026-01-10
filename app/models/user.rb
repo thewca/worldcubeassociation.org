@@ -119,11 +119,6 @@ class User < ApplicationRecord
          #   In order to achieve alphanumeric strings of length n, we need to generate n/2 random bytes.
          otp_backup_code_length: (BACKUP_CODES_LENGTH / 2),
          otp_number_of_backup_codes: NUMBER_OF_BACKUP_CODES
-  devise :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
-
-  def jwt_payload
-    { 'user_id' => id }
-  end
 
   # Backup OTP are stored as a string array in the db
   serialize :otp_backup_codes, coder: YAML
@@ -707,6 +702,7 @@ class User < ApplicationRecord
           panel_pages[:fixResults],
           panel_pages[:mergeProfiles],
           panel_pages[:mergeUsers],
+          panel_pages[:helpfulQueries],
         ],
       },
       wst: {
@@ -866,7 +862,7 @@ class User < ApplicationRecord
   end
 
   def can_manage_regional_organizations?
-    admin? || board_member?
+    admin? || board_member? || weat_team?
   end
 
   def can_create_competitions?
@@ -1094,8 +1090,9 @@ class User < ApplicationRecord
         password password_confirmation
         email preferred_events results_notifications_enabled
         registration_notifications_enabled
+        receive_developer_mails
       ]
-      fields << { user_preferred_events_attributes: %i[id event_id _destroy] }
+      fields << { user_preferred_events_attributes: [%i[id event_id _destroy]] }
       fields += %i[receive_delegate_reports delegate_reports_region] if user.staff_or_any_delegate?
     end
     fields
@@ -1448,6 +1445,21 @@ class User < ApplicationRecord
     else
       false
     end
+  end
+
+  def rds_credentials
+    if software_team_admin? || senior_results_team?
+      return [EnvConfig.DATABASE_WRT_SENIOR_USER, {
+        main: EnvConfig.DATABASE_HOST,
+        replica: EnvConfig.READ_REPLICA_HOST,
+        dev_dump: EnvConfig.DEV_DUMP_HOST,
+      }]
+    end
+    return unless results_team? || software_team?
+
+    [EnvConfig.DATABASE_WRT_USER, {
+      dev_dump: EnvConfig.DEV_DUMP_HOST,
+    }]
   end
 
   def subordinate_delegates

@@ -15,18 +15,27 @@ import {
   getTeamCommitteeMembers,
   getTeamsCommittees,
 } from "@/lib/wca/roles/teamsCommittees";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import getPermissions from "@/lib/wca/permissions";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("page.teams_committees_councils.title"),
+  };
+}
 
 export default async function TeamsCommitteesPage() {
   const { t } = await getT();
 
-  const { data: teamsCommittees, error } = await getTeamsCommittees();
+  const { data: teamsCommittees, error, response } = await getTeamsCommittees();
 
-  if (error) return <Errored error={error} />;
+  if (error) return <OpenapiError response={response} t={t} />;
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left" gap="8" width="full" pt="8" alignItems="left">
         <Heading size="5xl">
           {t("page.teams_committees_councils.title")}
@@ -97,16 +106,20 @@ async function MemberTable({
 }) {
   const { t } = await getT();
 
-  const { data: roles, error } = await getTeamCommitteeMembers(id, isActive);
+  const {
+    data: roles,
+    error,
+    response,
+  } = await getTeamCommitteeMembers(id, isActive);
 
-  if (error) return <Errored error={error} />;
+  if (error) return <OpenapiError response={response} t={t} />;
 
   return (
     <SimpleGrid columns={{ md: 1, sm: 1, lg: 2 }} gap="20px">
       {roles.map((role) => (
         <UserBadge
           key={role.id}
-          profilePicture={role.user.avatar.url}
+          profilePicture={role.user.avatar}
           name={role.user.name}
           wcaId={role.user.wca_id}
           roles={[

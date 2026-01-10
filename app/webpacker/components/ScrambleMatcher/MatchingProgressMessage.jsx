@@ -27,15 +27,25 @@ function ProgressErrors({
 
 export default function MatchingProgressMessage({
   roundMatchingProgress,
+  availableScrambleFiles,
 }) {
-  const hasAnyScrambles = roundMatchingProgress.some((roundProgress) => roundProgress.actual > 0);
-
-  if (!hasAnyScrambles) {
+  if (availableScrambleFiles.length === 0) {
     return (
       <Message
         warning
         header="No scramble sets available"
         content="Upload some JSON files to get started!"
+      />
+    );
+  }
+
+  const hasAnyScrambles = roundMatchingProgress.some((roundProgress) => roundProgress.actual > 0);
+
+  if (!hasAnyScrambles) {
+    return (
+      <Message
+        error
+        header="No scramble sets matched at all"
       />
     );
   }

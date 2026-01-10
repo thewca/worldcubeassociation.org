@@ -1,13 +1,12 @@
 import {
   Combobox,
+  Field,
   Heading,
   Portal,
-  Text,
   useFilter,
   useListCollection,
-  VStack,
 } from "@chakra-ui/react";
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 import countries from "@/lib/wca/data/countries";
 import { TFunction } from "i18next";
 import continents from "@/lib/wca/data/continents";
@@ -34,6 +33,7 @@ type RegionSelectorOption = {
   disabled?: boolean;
   flag?: JSX.Element;
   content?: JSX.Element;
+  centered?: boolean;
 };
 
 const allRegionsOption = (t: TFunction) => ({
@@ -57,7 +57,7 @@ const countryOptions = (t: TFunction) =>
       key: country.id,
       label: t(`countries.${country.iso2}`),
       flag: (
-        <Flag
+        <WcaFlag
           code={country.iso2}
           fallback={country.id}
           width={32}
@@ -75,8 +75,9 @@ const regionsOptions = (t: TFunction) =>
       key: "continents_header",
       label: "",
       disabled: true,
+      centered: true,
       content: (
-        <Heading size="sm" textAlign="center">
+        <Heading textStyle="s4" fontSize="sm">
           {t("common.continent")}
         </Heading>
       ),
@@ -86,8 +87,9 @@ const regionsOptions = (t: TFunction) =>
       key: "countries_header",
       label: "",
       disabled: true,
+      centered: true,
       content: (
-        <Heading size="sm" textAlign="center">
+        <Heading textStyle="s4" fontSize="sm">
           {t("common.country")}
         </Heading>
       ),
@@ -118,8 +120,8 @@ export default function RegionSelector({
   });
 
   return (
-    <VStack alignItems="start">
-      <Text textStyle="label">{label}</Text>
+    <Field.Root alignItems="start">
+      <Field.Label textStyle="label">{label}</Field.Label>
       <Combobox.Root
         collection={collection}
         onInputValueChange={(e) => filter(e.inputValue)}
@@ -141,10 +143,14 @@ export default function RegionSelector({
         </Combobox.Control>
         <Portal>
           <Combobox.Positioner>
-            <Combobox.Content justifyContent="flex-start">
+            <Combobox.Content>
               <Combobox.Empty>No items found</Combobox.Empty>
               {collection.items.map((item) => (
-                <Combobox.Item item={item} key={item.key}>
+                <Combobox.Item
+                  item={item}
+                  key={item.key}
+                  justifyContent={item.centered ? "center" : "start"}
+                >
                   {item.flag}
                   {item.content ?? item.label}
                   <Combobox.ItemIndicator />
@@ -154,6 +160,6 @@ export default function RegionSelector({
           </Combobox.Positioner>
         </Portal>
       </Combobox.Root>
-    </VStack>
+    </Field.Root>
   );
 }

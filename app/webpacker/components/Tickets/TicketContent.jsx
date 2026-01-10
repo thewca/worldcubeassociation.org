@@ -19,7 +19,6 @@ export default function TicketContent({ ticketDetails, currentStakeholder, updat
       {TicketWorkbench && (
         <TicketWorkbench
           ticketDetails={ticketDetails}
-          updateStatus={updateStatus}
           currentStakeholder={currentStakeholder}
         />
       )}

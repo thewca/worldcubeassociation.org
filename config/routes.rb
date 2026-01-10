@@ -9,9 +9,6 @@ Rails.application.routes.draw do
   end
   use_doorkeeper_openid_connect
 
-  # Starburst announcements, see https://github.com/starburstgem/starburst#installation
-  mount Starburst::Engine => '/starburst'
-
   # Sidekiq web UI, see https://github.com/sidekiq/sidekiq/wiki/Devise
   # Specifically referring to results because WRT needs access to this on top of regular admins.
   authenticate :user, ->(user) { user.can_admin_results? } do
@@ -66,6 +63,7 @@ Rails.application.routes.draw do
   get '/users/registrations' => 'users#registrations', as: :helpful_queries_registrations
   get '/users/organized-competitions' => 'users#organized_competitions', as: :helpful_queries_organized_competitions
   get '/users/delegated-competitions' => 'users#delegated_competitions', as: :helpful_queries_delegated_competitions
+  get '/users/past-competitions' => 'users#past_competitions', as: :helpful_queries_past_competitions
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -182,6 +180,9 @@ Rails.application.routes.draw do
     resources :results, except: %i[index new], controller: 'admin/results'
     resources :scrambles, except: %i[index new], controller: 'admin/scrambles'
     get 'events_data/:competition_id' => 'admin/results#show_events_data', as: :competition_events_data
+    get 'sanity-check' => "admin#sanity_check", as: :sanity_check
+    get 'run-sanity-check' => "admin#run_sanity_check", as: :sanity_check_run
+    get 'add-exclusion' => "admin#add_exclusion", as: :add_exclusion
   end
 
   get "media/validate" => 'media#validate', as: :validate_media
@@ -190,6 +191,7 @@ Rails.application.routes.draw do
   get 'export/results' => 'database#results_export', as: :db_results_export
   get 'export/results/WCA_export.sql' => 'database#sql_permalink', as: :sql_permalink
   get 'export/results/WCA_export.tsv' => 'database#tsv_permalink', as: :tsv_permalink
+  get 'export/results/:version/:file_type' => 'database#results_permalink', as: :results_permalink
   get 'export/developer' => 'database#developer_export', as: :db_dev_export
   get 'export/developer/wca-developer-database-dump', to: redirect(DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK))
   # redirect from the old path that used to be linked on GitHub
@@ -200,7 +202,7 @@ Rails.application.routes.draw do
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
-  resources :polls, only: %i[edit new vote create update index destroy]
+  resources :polls, only: %i[edit new create update index destroy]
   get 'polls/:id/vote' => 'votes#vote', as: 'polls_vote'
   get 'polls/:id/results' => 'polls#results', as: 'polls_results'
 
@@ -237,6 +239,7 @@ Rails.application.routes.draw do
     get 'inbox_person_summary' => 'tickets#inbox_person_summary', as: :inbox_person_summary
     post 'delete_inbox_persons' => 'tickets#delete_inbox_persons', as: :delete_inbox_persons
     get 'events_merged_data' => 'tickets#events_merged_data', as: :events_merged_data
+    post 'approve_edit_person_request' => 'tickets#approve_edit_person_request', as: :approve_edit_person_request
     post 'reject_edit_person_request' => 'tickets#reject_edit_person_request', as: :reject_edit_person_request
     post 'sync_edit_person_request' => 'tickets#sync_edit_person_request', as: :sync_edit_person_request
     resources :ticket_comments, only: %i[index create], as: :comments
@@ -369,13 +372,19 @@ Rails.application.routes.draw do
     # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
       resources :competitions, only: [] do
+        if WcaLive.enabled?
+          namespace :live do
+            get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
+            get '/registrations/:registration_id' => 'live#by_person', as: :get_live_by_person
+          end
+        end
+
         resources :registrations, only: %i[index show create update], shallow: true do
           resource :history, only: %i[show], controller: :registration_history
           resource :payments, only: %i[show], controller: :registration_payments
 
           member do
             get 'payment_ticket', to: 'registrations#payment_ticket'
-            get 'config', to: 'registrations#registration_config', as: :registration_config
           end
 
           collection do
@@ -384,6 +393,10 @@ Rails.application.routes.draw do
             get 'admin', to: 'registrations#index_admin'
             get ':user_id', to: 'registrations#show_by_user', as: :show_by_user
           end
+        end
+
+        member do
+          get 'registration_config', to: 'registrations#registration_config', as: :registration_config
         end
       end
     end
@@ -410,7 +423,6 @@ Rails.application.routes.draw do
       get '/users/me/preferred_events' => 'users#preferred_events'
       get '/users/me/permissions' => 'users#permissions'
       get '/users/me/bookmarks' => 'users#bookmarked_competitions'
-      get '/users/me/token' => 'users#token', as: :token
       get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'users#show_user_by_wca_id', as: :user
       get '/delegates' => 'api#delegates'
@@ -418,6 +430,7 @@ Rails.application.routes.draw do
       get '/persons' => "persons#index"
       get '/persons/:wca_id' => "persons#show", as: :person
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
+      get '/persons/:wca_id/records' => "persons#records", as: :person_records
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
       get '/persons/:wca_id/personal_records' => "persons#personal_records", as: :personal_records
       get '/regulations/translations' => 'regulations#translations', as: :regulations_translations
@@ -433,6 +446,14 @@ Rails.application.routes.draw do
       resources :incidents, only: %i[index]
       resources :regional_organizations, only: %i[index], path: '/regional-organizations'
 
+      namespace :results do
+        get '/rankings/:event_id/:type' => 'rankings#index'
+
+        resources :records, only: %i[index show] do
+          get '/history' => 'results#history'
+        end
+      end
+
       resources :competitions, only: %i[index show] do
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'
@@ -443,6 +464,7 @@ Rails.application.routes.draw do
         get '/registrations' => 'competitions#registrations'
         get '/events' => 'competitions#events'
         get '/schedule' => 'competitions#schedule'
+        get '/tabs' => 'competitions#tabs'
         get '/podiums' => 'competitions#podiums'
         get '/scrambles' => 'competitions#scrambles', as: :scrambles
         get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles

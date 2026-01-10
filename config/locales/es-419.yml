@@ -132,6 +132,8 @@ es-419:
     '2': Mejor de 2
     #original_hash: 21f623c
     '3': Mejor de 3
+    #original_hash: cca816d
+    '5': Mejor de 5
     #original_hash: 2342d2b
     a: Promedio de 5
     #original_hash: 940c82d
@@ -143,10 +145,14 @@ es-419:
       '2': Bo2
       #original_hash: b41f36f
       '3': Bo3
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      #original_hash: 60827cb
+      h: H2H
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -459,6 +465,10 @@ es-419:
         region: Región
         #original_hash: e3fc6e9
         subRegion: Subregión
+        #original_hash: a1ba702
+        receive_developer_mails: >-
+          Me gustaría recibir notificaciones sobre cambios en los recursos de
+          software de la WCA
         #original_hash: 730db33
         receive_delegate_reports: >-
           Me gustaría recibir los informes de delegados de Competiciones WCA por
@@ -747,8 +757,8 @@ es-419:
           AAAA-MM-DD.
         #original_hash: ac908c9
         name: >-
-          Introduce el nombre completo del competidor con corrección, por
-          ejemplo <strong>Darío Méndez</strong> y no <strong>D Mendez</strong>.
+          Introduce el nombre completo del competidor correctamente, por ejemplo
+          <strong>Martín López</strong> y no <strong>martin lopez</strong>.
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
@@ -779,16 +789,22 @@ es-419:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 27c2251
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          Esto se limita a notificaciones para cambios de versiones mayores de
+          recursos como exportaciones, esquema de WCIF, y APIs públicas. Se
+          recomienda para desarrolladores que mantengan software utilizando
+          estas herramientas.
+        #original_hash: c564b74
         receive_delegate_reports: >-
           Si eres un Delegado Senior o Miembro del WRC o WQAC, recibirás
           informes de delegados de Competiciones WCA de forma predeterminada.
-          Nota: el cambio puede demorar hasta una hora en hacer efecto.
-        #original_hash: 364624c
+          Nota: el cambio puede demorar hasta 12 horas en hacer efecto.
+        #original_hash: 0017d38
         delegate_reports_region: >-
           Si quieres recibir todos los informes de delegados de Competiciones
           WCA, deja este campo en blanco (la primera opción del menú
-          desplegable). Nota: el cambio puede demorar hasta una hora en hacer
+          desplegable). Nota: el cambio puede demorar hasta 12 horas en hacer
           efecto.
         #original_hash: 0627e5c
         otp_attempt: >-
@@ -856,14 +872,14 @@ es-419:
           Si todos los incidentes fueron genéricos, enumera al menos los casos
           más notorios. Marca los recuadros apropiados si estás buscando
           retroalimentación de WIC o WRC.
-        #original_hash: 8af00aa
+        #original_hash: f2309fc
         setup_images: >-
-          Por favor elige al menos %{image_count} imágenes que ilustren la
-          disposición empleada en la competición (zona de mezclas, zona de
-          competición, etc.). Puedes elegir múltiples archivos a la vez. Puedes
-          eliminar imágenes solo cuando suficientes otras imágenes se hayan
-          subido (si quieres reemplazar una imagen, necesitas subir la nueva
-          primero, y luego eliminar la antigua).
+          SE DEBEN incluir al menos %{image_count} imágenes que ilustren la zona
+          de mezclas y de competición (otras imágenes son bienvenidas también).
+          Puedes elegir múltiples archivos a la vez. Puedes eliminar imágenes
+          solo cuando suficientes otras se hayan subido (si quieres reemplazar
+          una imagen, necesitas subir la nueva primero, y luego eliminar la
+          antigua).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1779,12 +1795,13 @@ es-419:
     support:
       #original_hash: 610edba
       title: Apoya a la WCA
-      #original_hash: 1aaf818
+      #original_hash: c254335
       text: >-
         La World Cube Association es una organización 501(c)(3) exenta de
         impuestos. Al ser 100% mantenida por voluntarios y sin ánimo de lucro,
-        agradecemos sus donaciones para ayudarnos a que nuestra visión llegue
-        más lejos y a que se disfrute más en competiciones por todo el mundo.
+        agradecemos sus donaciones para ayudarnos a llevar más lejos nuestro
+        Propósito de empoderar a la comunidad cubera global y mantener un
+        ambiente divertido y justo de competencia para todos.
       #original_hash: 65c84ec
       button: Saber más sobre como puedes apoyar a la WCA
   users:
@@ -2805,6 +2822,16 @@ es-419:
         la lista de espera. Si estás usando lista de espera, por favor
         especifica una fecha límite. Si no estás usando una lista de espera,
         recuerda especificar esto en los requisitos de las inscripciones.
+    live:
+      #original_hash: 10d1a3c
+      title: Resultados en vivo
+      connection:
+        #original_hash: f92b311
+        initialized: Inicializando conexión
+        #original_hash: 66d44d4
+        connected: 'Conectado, actualizando resultados'
+        #original_hash: 53abaa2
+        disconnected: 'Conexión perdida, resultados no actualizados'
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mis competiciones
@@ -2961,12 +2988,12 @@ es-419:
         Sugerimos que te anotes a los eventos en los que desees competir al
         completar tu registro online. Sin embargo, podrás anotarte a nuevos
         eventos hasta el comienzo de los mismos según corresponda.
-      #original_hash: cf7be5d
+      #original_hash: 51ef4f3
       on_the_spot_registration_fee_html: >-
-        Se aceptarán registros in situ con una cuota base de registro de
-        %{on_the_spot_base_entry_fee}.
-      #original_hash: 1637bea
-      on_the_spot_registration_free: Se aceptarán registros in situ de forma gratuita.
+        Se aceptarán registros in situ si aún hay lugares, con una cuota base de
+        registro de %{on_the_spot_base_entry_fee}.
+      #original_hash: 2b4ea65
+      on_the_spot_registration_free: Se aceptarán registros in situ de forma gratuita si aún hay lugares.
       #original_hash: f5f687d
       no_on_the_spot_registration: No se aceptarán registros in situ.
       #original_hash: 4df139d
@@ -3232,10 +3259,11 @@ es-419:
       is_visible: >-
         ¡Esta competición es visible! Cualquier cambio que hagas se mostrará
         públicamente.
-      #original_hash: 1039850
+      #original_hash: eb98c2c
       pending_confirmation_html: >-
-        Rellena todos los campos y haz que tu Delegado haga click en Confirmar
-        cuando estés listo para que el %{contact} apruebe esta competición .
+        Rellena todos los campos y pídele a tu Delegado que haga click en
+        "Confirmar" cuando estés listo para que el %{contact} apruebe esta
+        competición.
       #original_hash: 8966fd0
       submit_create_value: Crear competición
       #original_hash: 40b0dfd
@@ -3529,13 +3557,10 @@ es-419:
             Se requiere límite de competidores. Solo campeonatos simultáneos de
             3x3x3 Menos Movimientos con múltiples sedes pueden no tener límite
             de competidores especificado (se deberá especificar por sede).
-          #original_hash: b7b599b
+          #original_hash: 6127d47
           count: >-
-            El número de competidores permitido en esta competición. Por el
-            momento este número es meramente informativo y todavía no impide que
-            se registre más gente. Estamos trabajando en añadir soporte
-            explícito para este flujo de registro, pero es necesario finalizar
-            otras tareas previamente.
+            El número de competidores permitido en esta competición. El sistema
+            de registro controla este límite.
           #original_hash: 4bd7102
           reason: >-
             ¿Cuál es el motivo para el límite de competidores? Por favor,
@@ -3607,7 +3632,7 @@ es-419:
             jurídicamente vinculantes para el pago de las cuotas.</b>
           #original_hash: 8c4fdf8
           on_the_spot_entry_fee: >-
-            Si esto se pone a 0, se mostrará una frase indicando que se aceptan
+            Si esto se pone en 0, se mostrará una frase indicando que se aceptan
             los registros in situ de forma gratuita.
           #original_hash: 0419547
           guest_entry_fee: >-
@@ -4252,7 +4277,7 @@ es-419:
       #original_hash: a2e4fc9
       event_change_deadline_with_ots: >-
         La fecha límite para actualizar eventos debe ser durante la competición
-        si se aceptan los registros in situ.
+        si se aceptan registros in situ.
       #original_hash: e6400f7
       on_the_spot_with_past_event_change_deadline: >-
         No se pueden tener registros in situ si la fecha límite para actualizar
@@ -4411,18 +4436,16 @@ es-419:
           detendrá y tu resultado será DNF (ver  %{regulation_link}).
         #original_hash: 83d204f
         regulation_link_text: 'Regla %{number}'
-        #original_hash: bd0e4a9
-        guideline_link_text: 'Guía  %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: Tiempo límite acumulativo
         #original_hash: d47f11a
         cumulative_one_round_html: >-
           Un %{cumulative_time_limit}  puede ser aplicado (ver
           %{regulation_link}).
-        #original_hash: c6190b6
+        #original_hash: 44f85f0
         cumulative_across_rounds_html: >-
-          Un %{cumulative_time_limit} Puede ser aplicado a través de varias
-          rondas (ver %{guideline_link}).
+          Un %{cumulative_time_limit} puede ser aplicado a través de varias
+          rondas (ver %{regulation_link}).
         #original_hash: e8d17df
         cutoff_html: >-
           El resultado que hay que batir para pasar a la segunda fase de una
@@ -5215,7 +5238,7 @@ es-419:
     spirit_footer: Espíritu de la WCA
     #original_hash: c1781ee
     our_goals_title: Nuestros objetivos
-    #original_hash: 375db0f
+    #original_hash: c1144d4
     our_goals_content_html: >-
       <p>La Organización Mundial del Cubo quiere brindar oportunidades para
       pertenecer y liderar comunidades a gente joven alrededor del mundo
@@ -5225,9 +5248,9 @@ es-419:
       gente joven involucrada y que introducir estos eventos a nuevos grupos de
       gente permite a nuestra comunidad general fortalecerse. Se puede encontrar
       <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">aquí</a>
-      un documento que contiene la visión y estrategia de la Junta Directiva
-      para la WCA .</p>
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">aquí</a>
+      un documento que contiene el Plan Estratégico de la Junta Directiva para
+      la WCA .</p>
     #original_hash: f64ccc7
     whats_next_title: ¿Qué es lo próximo para la WCA?
     #original_hash: 3312277
@@ -5333,8 +5356,8 @@ es-419:
     codeofconduct: Código de Conducta
     #original_hash: 4f05e8f
     finances: Finanzas
-    #original_hash: d1b1406
-    vision_and_strategy: Visión y Estrategia
+    #original_hash: c1e8f94
+    strategic_plan: Plan Estratégico
   education:
     #original_hash: 746e863
     title: Recursos educativos de la WCA

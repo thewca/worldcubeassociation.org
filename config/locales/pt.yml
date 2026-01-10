@@ -132,6 +132,8 @@ pt:
     '2': Melhor de 2
     #original_hash: 21f623c
     '3': Melhor de 3
+    #original_hash: cca816d
+    '5': Melhor de 5
     #original_hash: 2342d2b
     a: Média de 5
     #original_hash: 940c82d
@@ -143,10 +145,14 @@ pt:
       '2': Bo2
       #original_hash: b41f36f
       '3': Bo3
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      #original_hash: 60827cb
+      h: FaF
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -457,6 +463,10 @@ pt:
         region: Região
         #original_hash: e3fc6e9
         subRegion: Subregião
+        #original_hash: a1ba702
+        receive_developer_mails: >-
+          Gostaria de receber notificações sobre alterações nas funcionalidades
+          de software da WCA.
         #original_hash: 730db33
         receive_delegate_reports: Quero receber Relatórios de Competições da WCA de Delegados por email
         #original_hash: 8667157
@@ -770,6 +780,12 @@ pt:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          Isto limita-se a notificações de alterações de versão principais em
+          funcionalidades como exportações de dados, esquema WCIF e APIs
+          públicas. Recomendado para programadores que mantêm software que
+          depende destas ferramentas.
         #original_hash: c564b74
         receive_delegate_reports: >-
           Se for Delegado Sénior ou membro do WRC ou do WQAC, recebe Relatórios
@@ -846,14 +862,14 @@ pt:
           usando os números como referência. Mesmo que tudo pareça genérico,
           liste pelo menos os mais relevantes. Por favor assinale as caixas
           apropriadas se precisar de obter feedback.
-        #original_hash: 8af00aa
+        #original_hash: f2309fc
         setup_images: >-
-          Escolha pelo menos %{image_count} imagens que ilustrem a configuração
-          do espaço da competição (área de embaralhamento, área de competição,
-          etc). Pode selecionar vários ficheiros de uma só vez. Só pode eliminar
-          imagens quando tiverem sido carregadas outras imagens suficientes (se
-          quiser substituir uma imagem, precisa de carregar a nova primeiro e
-          depois eliminar a antiga).
+          TEM de incluir pelo menos %{image_count} imagens que ilustrem a
+          configuração das áreas de embaralhamento e da competição (outras
+          imagens também são bem-vindas). Pode selecionar vários ficheiros de
+          uma só vez. Só pode eliminar imagens quando tiverem sido carregadas
+          outras imagens suficientes (se quiser substituir uma imagem, precisa
+          de carregar a nova primeiro e depois eliminar a antiga).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -993,6 +1009,13 @@ pt:
         #original_hash: 79ccfe2
         dob_invalid: não está bem formatado
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: Ocorreu um erro ao renderizar a página
+      #original_hash: 22dfe12
+      description: 'Se o erro persistir, comunique-o à WST com os detalhes listados abaixo'
+      #original_hash: 20be860
+      details: Detalhes do erro
     messages:
       #original_hash: dc2367c
       wrong_size: 'tem o tamanho errado (deverá ser %{file_size})'
@@ -1751,12 +1774,13 @@ pt:
     support:
       #original_hash: 610edba
       title: Ajude a WCA
-      #original_hash: 1aaf818
+      #original_hash: c254335
       text: >-
         A World Cube Association é uma organização 501(c)(3) isenta de impostos.
         Sendo uma organização sem fins lucrativos, 100% liderada por
-        voluntários, agradecemos donativos para nos ajudar a promover a nossa
-        visão de ter competições mais agradáveis em todo o mundo.
+        voluntários, agradecemos donativos para nos ajudar a promover o nosso
+        Propósito de fortalecer a comunidade global de speedcubing e manter um
+        ambiente competitivo, divertido e justo para todos.
       #original_hash: 65c84ec
       button: Saiba mais sobre como pode ajudar a WCA
   users:
@@ -2768,6 +2792,16 @@ pt:
         de espera. Se estiver a usar uma lista de espera, por favor especifique
         um prazo. Se não estiver a usar uma lista de espera, lembre-se de
         especificar isto nos requisitos de inscrição.
+    live:
+      #original_hash: 10d1a3c
+      title: Resultados em direto
+      connection:
+        #original_hash: f92b311
+        initialized: A inicializar ligação
+        #original_hash: 66d44d4
+        connected: 'Ligado, os resultados estão a ser atualizados.'
+        #original_hash: 53abaa2
+        disconnected: 'Ligação perdida, os resultados não estão a ser atualizados'
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
@@ -3191,9 +3225,9 @@ pt:
       is_visible: >-
         Esta competição está visível publicamente. Qualquer mudança que fizer
         será exibida ao público!
-      #original_hash: 1039850
+      #original_hash: eb98c2c
       pending_confirmation_html: >-
-        Preencha todos os campos e peça ao Delegado que clique em Confirmar
+        Preencha todos os campos e peça ao Delegado para clicar em Confirmar
         quando estiver pronto que %{contact} aprove esta competição.
       #original_hash: 8966fd0
       submit_create_value: Criar Competição
@@ -3486,13 +3520,10 @@ pt:
             É necessário estabelecer um Limite de Competidores. Apenas as
             competições FMC simultâneas com múltiplos locais podem não ter
             Limite de Competidores.
-          #original_hash: b7b599b
+          #original_hash: 6127d47
           count: >-
-            O número de competidores permitidos nesta competição. Por enquanto
-            este número é apenas informativo, e ainda não impede que mais
-            pessoas se registem. Estamos a trabalhar para adicionar suporte
-            explícito para isso ao fluxo de registo, mas isso requer algum outro
-            trabalho primeiro.
+            O número de competidores permitidos nesta competição. Este limite é
+            imposto pelo sistema de registo integrado.
           #original_hash: 4bd7102
           reason: >-
             Qual o motivo para o limite de competidores? Por favor preencha isto
@@ -4362,16 +4393,14 @@ pt:
           a resolução e o resultado será de DNF (ver %{regulation_link}).
         #original_hash: 83d204f
         regulation_link_text: 'Regra %{number}'
-        #original_hash: bd0e4a9
-        guideline_link_text: 'Orientação %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: tempo limite cumulativo
         #original_hash: d47f11a
         cumulative_one_round_html: 'Pode ser imposto um %{cumulative_time_limit} (ver %{regulation_link}).'
-        #original_hash: c6190b6
+        #original_hash: 44f85f0
         cumulative_across_rounds_html: >-
           Pode ser imposto um %{cumulative_time_limit} em todas as rondas (ver
-          %{guideline_link}).
+          %{regulation_link}).
         #original_hash: e8d17df
         cutoff_html: >-
           O resultado a bater para seguir para a segunda fase de uma ronda de
@@ -5158,7 +5187,7 @@ pt:
     spirit_footer: Espírito da WCA
     #original_hash: c1781ee
     our_goals_title: Os nossos objetivos
-    #original_hash: 375db0f
+    #original_hash: c1144d4
     our_goals_content_html: >-
       <p>A World Cube Association quer trazer oportunidades de participação da
       comunidade e de liderança para jovens de todo o mundo, através do aumento
@@ -5166,9 +5195,9 @@ pt:
       que experiências em competições e dentro de nossa comunidade criam
       oportunidades de crescimento para os jovens envolvidos e que a introdução
       de eventos de quebra-cabeças em novos grupos de pessoas permite que nossa
-      comunidade em geral se fortaleça. Um documento contendo a Visão e
-      Estratégia do Conselho da WCA pode ser encontrado <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">aqui</a>.</p>
+      comunidade em geral se fortaleça. Um documento contendo o Plano
+      Estratégico do Conselho da WCA pode ser encontrado <a
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">aqui</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: O que vem a seguir para a WCA?
     #original_hash: 3312277
@@ -5283,8 +5312,8 @@ pt:
     codeofconduct: Código de Conduta
     #original_hash: 4f05e8f
     finances: Finanças
-    #original_hash: d1b1406
-    vision_and_strategy: Visão e Estratégia
+    #original_hash: c1e8f94
+    strategic_plan: Plano Estratégico
   education:
     #original_hash: 746e863
     title: Recursos Educativos da WCA
@@ -6139,6 +6168,12 @@ pt:
     results_export:
       #original_hash: 15d00e1
       heading: Exportação de Resultados WCA
+      #original_hash: 733df42
+      deprecation_warning: >-
+        AVISO DE OBSOLESCÊNCIA: A versão %{old_version} da Exportação de
+        Resultados foi descontinuada e o suporte para a mesma será encerrado a
+        partir de %{deprecation_date}. Por favor utilize a versão %{new_version}
+        antes dessa data.
       #original_hash: f9fe9df
       description: >-
         Nesta página oferecemos os resultados da WCA para download em diversos
@@ -6148,6 +6183,12 @@ pt:
         que possa ver se já possui a versão mais recente.
       #original_hash: 4f59283
       permalink: link permanente
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        Nota: os links permanentes fornecem a versão mais recente exportada
+        dentro de uma determinada versão; ou seja, o link permanente da versão 2
+        irá devolver a versão mais recente exportada da versão 2, mas
+        permanecerá na versão 2 mesmo quando a versão 3 for lançada.
       file_formats:
         #original_hash: b086d79
         sql: 'Instruções SQL, para importação em bases de dados SQL.'
@@ -6304,10 +6345,6 @@ pt:
         fase de corte. Edite o resultado para incluir a(s) tentativa(s) em falta
         ou atualize as informações da ronda na página Gerir Eventos da
         competição.
-      #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] Os resultados para %{person_name} estão no formato errado:
-        esperado %{expected_format}, mas obtido %{format}.
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Pelo menos um resultado para %{person_name} excedeu o
@@ -6317,11 +6354,6 @@ pt:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] A soma de resultados para %{person_name} está acima do
         limite de tempo cumulativo, que era %{time_limit}.
-      #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] Não há informação sobre o tempo de corte e de tempo limite
-        para esta ronda. Estas validações foram ignoradas. Atualize as
-        informações da ronda na página Gerir Eventos da competição.
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] O limite de tempo para esta ronda é indefinido. As
@@ -6353,11 +6385,6 @@ pt:
         pela condição de avanço (%{actual} em vez de %{expected}, a condição
         era: %{condition}). Atualize as informações da ronda na página de gestão
         de eventos.
-      #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        A ronda %{round_id} está presente nos resultados, mas não foi criada no
-        separador eventos. Por favor inclua as informações da ronda na página de
-        gestão de eventos da competição.
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         A ronda %{round_id} tem 99 ou menos competidores, mas tem mais de duas
@@ -6408,11 +6435,6 @@ pt:
         Não existem resultados para a ronda %{round_id}, mas está listada no
         separador de eventos. Se esta ronda não tiver sido realizada, remova-a
         da página de gestão de eventos da competição.
-      #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        Nenhum tempo de corte foi anunciado para '%{round_name}', mas foi
-        detectado como tempo de corte nos resultados. Por favor atualize as
-        informações da ronda na página de gestão de eventos da competição.
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -6428,11 +6450,6 @@ pt:
       no_main_event_warning: >-
         Não há nenhum evento principal selecionado para esta competição. Por
         favor, informe a WRT que isto está correto.
-      #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        Resultados existem para %{event_id}, mas não está listado como evento
-        oficial. Remova o evento dos resultados ou contacte o WCAT para
-        solicitar que seja adicionado ao site do WCA.
       #original_hash: fde208d
       missing_results_warning: >-
         Não existem resultados para %{event_id}, mas está listado como um evento
@@ -6448,10 +6465,6 @@ pt:
       missing_scrambles_for_competition_error: >-
         Faltam embaralhamentos para a competição. Utilize o Scrambles Matcher
         para adicionar embaralhamentos.
-      #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Demasiados embaralhamentos. Utilize o Scrambles Matcher
-        para desmarcar os embaralhamentos não utilizados.
       #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] Grupo %{group_id}: embaralhamentos em falta, apenas

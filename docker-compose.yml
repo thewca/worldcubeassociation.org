@@ -63,7 +63,7 @@ services:
       RUNNING_IN_DOCKER: true
     tty: true
     # Start the server and bind to 0.0.0.0 (vs 127.0.0.1) so Docker's port mappings work correctly
-    command: bin/rails server -b 0.0.0.0
+    command: bin/dev -b 0.0.0.0
     depends_on:
       wca_environment:
         condition: service_completed_successfully
@@ -181,7 +181,7 @@ services:
       - wca-main
 
   wca_playwright:
-    image: mcr.microsoft.com/playwright:v1.55.0
+    image: mcr.microsoft.com/playwright:v1.56.1
     container_name: "playwright"
     extra_hosts:
       - "hostmachine:host-gateway"

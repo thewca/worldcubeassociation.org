@@ -14,6 +14,13 @@ servers:
 paths:
   /v1/competitions/{competitionId}/registrations:
     $ref: 'paths/registrations/registrationsByCompetition.yaml'
+  /v1/competitions/{competitionId}/registration_config:
+    $ref: 'paths/registrations/registrationConfigForCompetition.yaml'
+
+  /v1/competitions/{competitionId}/live/rounds/{roundId}:
+    $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
+  /v1/competitions/{competitionId}/live/registrations/{registrationId}:
+    $ref: 'paths/competitions/live/liveResultsByPerson.yaml'
 
   /v0/competitions/{competitionId}/:
     $ref: 'paths/competitions/competitionById.yaml'
@@ -21,6 +28,8 @@ paths:
     $ref: 'paths/competitions/competitionEvents.yaml'
   /v0/competitions/{competitionId}/schedule:
     $ref: 'paths/competitions/competitionSchedule.yaml'
+  /v0/competitions/{competitionId}/tabs:
+    $ref: 'paths/competitions/competitionTabs.yaml'
   /v0/competitions/{competitionId}/registrations:
     $ref: 'paths/competitions/competitionRegistrations.yaml'
   /v0/competitions/{competitionId}/podiums:
@@ -36,13 +45,23 @@ paths:
   /v0/competitions/{competitionId}/scrambles:
     $ref: 'paths/competitions/competitionScrambles.yaml'
 
+  /v0/results/rankings/{event_id}/{type}:
+    $ref: 'paths/results/rankingsByEventAndType.yaml'
+
   /v0/incidents:
     $ref: 'paths/regulations/incidentsList.yaml'
+
+  /v0/results/records:
+    $ref: 'paths/results/getRecords.yaml'
 
   /v0/persons/{wca_id}/:
     $ref: 'paths/users/personByWCAId.yaml'
   /v0/persons/{wca_id}/results:
     $ref: 'paths/users/personResults.yaml'
+  /v0/persons/{wca_id}/records:
+    $ref: 'paths/users/personRecords.yaml'
+  /v0/persons/{wca_id}/competitions:
+    $ref: 'paths/users/personCompetitions.yaml'
 
   /v0/user_groups:
     $ref: 'paths/users/userGroups.yaml'

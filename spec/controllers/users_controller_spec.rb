@@ -172,7 +172,9 @@ RSpec.describe UsersController do
       it "user cannot change name" do
         sign_in user
         old_name = user.name
-        patch :update, params: { id: user.id, user: { name: "Johnny 5" } }
+        expect do
+          patch :update, params: { id: user.id, user: { name: "Johnny 5" } }
+        end.to raise_error(ActionController::ParameterMissing, "param is missing or the value is empty or invalid: user")
         expect(user.reload.name).to eq old_name
       end
 

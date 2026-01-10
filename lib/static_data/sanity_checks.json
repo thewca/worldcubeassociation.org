@@ -1,0 +1,464 @@
+[
+  {
+    "id": 1,
+    "sanity_check_category_id": 1,
+    "topic": "Names with numbers or non-desired special characters",
+    "query_file": "name_special_characters.sql",
+    "comments": null
+  },
+  {
+    "id": 2,
+    "sanity_check_category_id": 1,
+    "topic": "Lowercase first names",
+    "query_file": "lower_case_first_name.sql",
+    "comments": null
+  },
+  {
+    "id": 3,
+    "sanity_check_category_id": 1,
+    "topic": "Lowercase last names (without local name)",
+    "query_file": "lower_case_last_name.sql",
+    "comments": null
+  },
+  {
+    "id": 4,
+    "sanity_check_category_id": 1,
+    "topic": "Lowercase last names (with local name)",
+    "query_file": "lower_case_last_name_with_local_name.sql",
+    "comments": null
+  },
+  {
+    "id": 5,
+    "sanity_check_category_id": 1,
+    "topic": "Bad local names (roman characters in brackets)",
+    "query_file": "bad_local_names.sql",
+    "comments": null
+  },
+  {
+    "id": 6,
+    "sanity_check_category_id": 1,
+    "topic": "Missing one bracket for local names",
+    "query_file": "missing_bracket_for_local_name.sql",
+    "comments": null
+  },
+  {
+    "id": 7,
+    "sanity_check_category_id": 1,
+    "topic": "Trailing spaces in names or local names",
+    "query_file": "trailing_spaces.sql",
+    "comments": null
+  },
+  {
+    "id": 8,
+    "sanity_check_category_id": 1,
+    "topic": "Cyrillic/Greek alphabet used instead of Latin",
+    "query_file": "cyrillic_or_greek.sql",
+    "comments": null
+  },
+  {
+    "id": 9,
+    "sanity_check_category_id": 1,
+    "topic": "Person rows with empty string gender",
+    "query_file": "empty_gender.sql",
+    "comments": "Valid gender values are 'm', 'f', 'o' and NULL. Empty strings as value always indicate a problem (e.g. 'o' not transfered correctly, missed entry of person data, etc.) to be investigated individually."
+  },
+  {
+    "id": 10,
+    "sanity_check_category_id": 1,
+    "topic": "Invalid countryIds",
+    "query_file": "invalid_country_ids.sql",
+    "comments": null
+  },
+  {
+    "id": 11,
+    "sanity_check_category_id": 1,
+    "topic": "Bogus DOBs (DOBs with year outside of reasonable range)",
+    "query_file": "bogus_dobs.sql",
+    "comments": "DOB's other then 00-00-0000 that are clearly not valid. 0002-11-30 is the java error that can occur whenever 0 is entered as DOB."
+  },
+  {
+    "id": 12,
+    "sanity_check_category_id": 1,
+    "topic": "Missing DOBs at scale (competitions after 2018 with at least 3 missing DOBs)",
+    "query_file": "missing_dobs.sql",
+    "comments": "Identification of competitions with many missing DOBs (indicating a systematic issue). Findings should be discussed in the competition's result thread."
+  },
+  {
+    "id": 13,
+    "sanity_check_category_id": 2,
+    "topic": "Results which don't have a first solve",
+    "query_file": "no_first_solve.sql",
+    "comments": "Identification of competitions with many missing DOBs (indicating a systematic issue). Findings should be discussed in the competition's result thread."
+  },
+  {
+    "id": "14",
+    "sanity_check_category_id": "2",
+    "topic": "Wrong number of results (for non-combined rounds)",
+    "comments": null,
+    "query_file": "wrong_number_of_results.sql"
+  },
+  {
+    "id": "15",
+    "sanity_check_category_id": "2",
+    "topic": "Rounds with more than two (rounds with cutoff) \/ one (rounds without cutoff) different numbers of results (competitions with year >= 2013)",
+    "comments": null,
+    "query_file": "different_result_types.sql"
+  },
+  {
+    "id": "16",
+    "sanity_check_category_id": "2",
+    "topic": "Only DNS or zero results",
+    "comments": null,
+    "query_file": "only_dns_results.sql"
+  },
+  {
+    "id": "17",
+    "sanity_check_category_id": "2",
+    "topic": "Non-zero average for rows with <= 2 attempt",
+    "comments": null,
+    "query_file": "non_zero_average_for_less_than_3_results.sql"
+  },
+  {
+    "id": "18",
+    "sanity_check_category_id": "3",
+    "topic": "Rows with at least two identical >0 results at one competition (ignoring 333fm, 333mbo)",
+    "comments": "An extended query to search for possible duplicate results that are not found by script 2a. 333fm is excluded for obvious reasons, 333mbo is excluded because there are many legit 333mbo\/333mbf duplicates in the database.",
+    "query_file": "at_least_two_duplicate_results.sql"
+  },
+  {
+    "id": "19",
+    "sanity_check_category_id": "4",
+    "topic": "WCA-ID year is not the start year of the profiles first competition",
+    "comments": "Note: Changing WCA-IDs is non-trivial, please refer to \"Queries \/ Procedures\" on the WRT Spreadsheet.",
+    "query_file": "year_not_matching_first_competition_year.sql"
+  },
+  {
+    "id": "20",
+    "sanity_check_category_id": "5",
+    "topic": "Duplicates within scrambles for one competitionId",
+    "comments": null,
+    "query_file": "duplicate_within_competition_id.sql"
+  },
+  {
+    "id": "21",
+    "sanity_check_category_id": "5",
+    "topic": "Duplicates across multiple competitions (ignoring 222 and skewb)",
+    "comments": "222 and skewb are excluded as there would be many duplicates otherwise (scramble space for these events is so small that duplicate across multiple competitions are expected, see discussion links for more detailed math). pyram may also have very few legit duplicates, but everything else should definitely be looked into further.",
+    "query_file": "duplicate_across_competitions.sql"
+  },
+  {
+    "id": "22",
+    "sanity_check_category_id": "6",
+    "topic": "Invalid groupIds",
+    "comments": null,
+    "query_file": "invalid_group_ids.sql"
+  },
+  {
+    "id": "23",
+    "sanity_check_category_id": "6",
+    "topic": "Scrambles with leading or trailing spaces",
+    "comments": null,
+    "query_file": "scrambles_with_leading_or_trailing_space.sql"
+  },
+  {
+    "id": "24",
+    "sanity_check_category_id": "6",
+    "topic": "Wrong number of scrambles",
+    "comments": null,
+    "query_file": "wrong_number_of_scrambles.sql"
+  },
+  {
+    "id": "25",
+    "sanity_check_category_id": "7",
+    "topic": "Lowercase competitionIds",
+    "comments": null,
+    "query_file": "lowercase_competitionids.sql"
+  },
+  {
+    "id": "26",
+    "sanity_check_category_id": "7",
+    "topic": "competitionIds not ending with year (or endYear)",
+    "comments": null,
+    "query_file": "competition_id_not_ending_in_year.sql"
+  },
+  {
+    "id": "27",
+    "sanity_check_category_id": "7",
+    "topic": "Non-public Results (incomplete posting)",
+    "comments": null,
+    "query_file": "non_public_results.sql"
+  },
+  {
+    "id": "28",
+    "sanity_check_category_id": "8",
+    "topic": "Non-existing claimed WCA-IDs",
+    "comments": "Finding and fixing claimed WCA-IDs that - for any reason - do no longer exist. This should technically not happen, so some research will be needed for each finding.",
+    "query_file": "non_existing_claimed_wca_ids.sql"
+  },
+  {
+    "id": "29",
+    "sanity_check_category_id": "8",
+    "topic": "Inconsistent name in users table",
+    "comments": null,
+    "query_file": "inconsistent_name_in_user_table.sql"
+  },
+  {
+    "id": "30",
+    "sanity_check_category_id": "9",
+    "topic": "Time limit < cutoff",
+    "comments": null,
+    "query_file": "timelimit_less_than_cutoff.sql"
+  },
+  {
+    "id": "31",
+    "sanity_check_category_id": "9",
+    "topic": "Cutoff < 5 seconds",
+    "comments": "omits 333fm as this would give many false positives",
+    "query_file": "cutoff_less_than_5_seconds.sql"
+  },
+  {
+    "id": "32",
+    "sanity_check_category_id": "9",
+    "topic": "Cutoff > 10 minutes",
+    "comments": "333mbf as this would give many false positives",
+    "query_file": "cutoff_over_10_minutes.sql"
+  },
+  {
+    "id": "33",
+    "sanity_check_category_id": "9",
+    "topic": "Time limit < 10 seconds",
+    "comments": null,
+    "query_file": "timelimit_less_than_10_seconds.sql"
+  },
+  {
+    "id": "34",
+    "sanity_check_category_id": "9",
+    "topic": "Time limit > 10 minutes for \"fast events\"",
+    "comments": "is restricted to a selection of \"fast events\" as there would be a huge number of false positives otherwise.",
+    "query_file": "timelimit_over_10_minutes_for_fast_events.sql"
+  },
+  {
+    "id": "35",
+    "sanity_check_category_id": "10",
+    "topic": "Persons table entries without Results table entry",
+    "comments": null,
+    "query_file": "person_without_results.sql"
+  },
+  {
+    "id": "36",
+    "sanity_check_category_id": "10",
+    "topic": "Results table entries without Persons table entry",
+    "comments": null,
+    "query_file": "results_without_person.sql"
+  },
+  {
+    "id": "37",
+    "sanity_check_category_id": "11",
+    "topic": "Round in Scrambles with no results (but with competitionId in Results)",
+    "comments": null,
+    "query_file": "round_in_scrambles_with_no_results.sql"
+  },
+  {
+    "id": "38",
+    "sanity_check_category_id": "11",
+    "topic": "Rounds with results but no scrambles (but with competitionId in Scrambles)",
+    "comments": null,
+    "query_file": "rounds_with_results_but_no_scrambles.sql"
+  },
+  {
+    "id": "39",
+    "sanity_check_category_id": "12",
+    "topic": "Events missing from competition_events",
+    "comments": null,
+    "query_file": "events_missing_from_competition_events.sql"
+  },
+  {
+    "id": "40",
+    "sanity_check_category_id": "12",
+    "topic": "Unmatching number of events between Results and competition_events",
+    "comments": null,
+    "query_file": "number_of_competition_events_results_mismatch.sql"
+  },
+  {
+    "id": "41",
+    "sanity_check_category_id": "12",
+    "topic": "No rounds marked for events",
+    "comments": null,
+    "query_file": "no_rounds_marked_for_events.sql"
+  },
+  {
+    "id": "42",
+    "sanity_check_category_id": "12",
+    "topic": "Unmatching number of rounds between Results and rounds",
+    "comments": null,
+    "query_file": "number_of_rounds_results_mismatch.sql"
+  },
+  {
+    "id": "43",
+    "sanity_check_category_id": "12",
+    "topic": "Format mismatches between Results and rounds",
+    "comments": null,
+    "query_file": "format_mismatch_results_rounds.sql"
+  },
+  {
+    "id": "44",
+    "sanity_check_category_id": "12",
+    "topic": "Inconsistent scramble counts in Scrambles table and rounds table",
+    "comments": null,
+    "query_file": "inconsistent_scramble_count.sql"
+  },
+  {
+    "id": "45",
+    "sanity_check_category_id": "12",
+    "topic": "Non-cutoff roundTypeIds with cutoffs in schedule",
+    "comments": null,
+    "query_file": "non_cutoff_round_type_ids_with_cutoff_in_schedule.sql"
+  },
+  {
+    "id": "46",
+    "sanity_check_category_id": "12",
+    "topic": "Cutoff roundTypeIds with NULL cutoff",
+    "comments": null,
+    "query_file": "cutoff_round_types_with_null_cutoff.sql"
+  },
+  {
+    "id": "47",
+    "sanity_check_category_id": "12",
+    "topic": "Cutoff violations",
+    "comments": null,
+    "query_file": "cutoff_violation.sql"
+  },
+  {
+    "id": "48",
+    "sanity_check_category_id": "12",
+    "topic": "Time limit violations for non-cumulative time limit rounds",
+    "comments": null,
+    "query_file": "timelimit_violations_non_cumulative.sql"
+  },
+  {
+    "id": "49",
+    "sanity_check_category_id": "12",
+    "topic": "Time limit violations for cumulative time limit rounds",
+    "comments": null,
+    "query_file": "timelimit_violations_cumulative.sql"
+  },
+  {
+    "id": "50",
+    "sanity_check_category_id": "13",
+    "topic": "Banned competitors competing during their ban period",
+    "comments": null,
+    "query_file": "banned_competitor_competing.sql"
+  },
+  {
+    "id": "51",
+    "sanity_check_category_id": "13",
+    "topic": "Banned competitors registered for upcoming competitions during their ban period",
+    "comments": null,
+    "query_file": "banned_competitor_registered.sql"
+  },
+  {
+    "id": "52",
+    "sanity_check_category_id": "13",
+    "topic": "Checking if a wdc dummy account was reassigned",
+    "comments": "These accounts were made for banned competitors without a WCA Account, if one was reassigned, the corresponding person in the banned competitors team should be modified to their new account.",
+    "query_file": "wdc_dummy_account_reassigned.sql"
+  },
+  {
+    "id": "53",
+    "sanity_check_category_id": "8",
+    "topic": "Check if user id exist in competition_organizers table",
+    "comments": "A failure would indicate that a user account has been deleted and it would need to be investigated what user_id those rows should point to.",
+    "query_file": "user_id_must_exist_in_organizer_table.sql"
+  },
+  {
+    "id": "54",
+    "sanity_check_category_id": "8",
+    "topic": "Check if user id exist in registrations table",
+    "comments": "A failure would indicate that a user account has been deleted. This will cause the registrations page to not load properly. We should replace the user_id with some obvious account like the board.",
+    "query_file": "user_id_must_exist_registrations.sql"
+  },
+  {
+    "id": "55",
+    "sanity_check_category_id": "8",
+    "topic": "Check if user id exist in user_preferred_events table",
+    "comments": "A failure would indicate that a user account has been deleted. These rows should be deleted as well.",
+    "query_file": "user_id_must_exist_event_preferences.sql"
+  },
+  {
+    "id": "56",
+    "sanity_check_category_id": "8",
+    "topic": "Potentially non-deleted dummy accounts",
+    "comments": null,
+    "query_file": "potentially_not_deleted_dummy_accounts.sql"
+  },
+  {
+    "id": "57",
+    "sanity_check_category_id": "8",
+    "topic": "Check if user id exist in competition_delegates table",
+    "comments": "A failure would indicate that a user account has been deleted and it would need to be investigated what user_id those rows should point to.",
+    "query_file": "user_id_must_exist_delegates.sql"
+  },
+  {
+    "id": "58",
+    "sanity_check_category_id": "8",
+    "topic": "Check if a dummy Delegate account had its WCAID reassinged",
+    "comments": "If it was reassigned, then the corresponding user_id in the competition_delegates table should be updated to the new reassigned account's user_id",
+    "query_file": "dummy_delegate_accounts_reassigned.sql"
+  },
+  {
+    "id": "59",
+    "sanity_check_category_id": "12",
+    "topic": "Ranking-based advancement conditions in violation with <= 75% proceed",
+    "comments": null,
+    "query_file": "ranking_based_advanced_condition_violated.sql"
+  },
+  {
+    "id": "60",
+    "sanity_check_category_id": "12",
+    "topic": "Result-based advancement conditions in violation with the given results",
+    "comments": null,
+    "query_file": "result_based_advancement_condition_violated.sql"
+  },
+  {
+    "id": "61",
+    "sanity_check_category_id": "1",
+    "topic": "Names with abbreviation in first name",
+    "comments": null,
+    "query_file": "first_names_with_abbreviation.sql"
+  },
+  {
+    "id": "62",
+    "sanity_check_category_id": "1",
+    "topic": "Names with triple letter repetition",
+    "comments": "Ignores the letter \"I\" because of lineal names using \"III\" at the end.",
+    "query_file": "names_with_triple_repetition.sql"
+  },
+  {
+    "id": "64",
+    "sanity_check_category_id": "6",
+    "topic": "Invalid new line characters in scrambles",
+    "comments": null,
+    "query_file": "invalid_new_line_characters.sql"
+  },
+  {
+    "id": "65",
+    "sanity_check_category_id": "14",
+    "topic": "Delegates who doesn't have GSuite email ID yet",
+    "comments": null,
+    "query_file": "delegates_without_gsuite_email.sql"
+  },
+  {
+    "id": "66",
+    "sanity_check_category_id": "15",
+    "topic": "Checks all records since 2019 to ensure they have been assigned correctly",
+    "comments": null,
+    "query_file": "correct_records.sql"
+  },
+  {
+    "id": "67",
+    "sanity_check_category_id": "1",
+    "topic": "Names with dots followed by no space",
+    "comments": null,
+    "query_file": "names_with_dots_but_no_space.sql"
+  }
+]

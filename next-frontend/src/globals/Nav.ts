@@ -9,9 +9,8 @@ type StaticRoute = Exclude<Route, { query: unknown }>["pathname"];
 
 const staticLinkOptions = [
   "/",
-  "/faq",
+  "/about",
   "/competitions",
-  "/competitions/mine",
   "/delegates",
   "/disclaimer",
   "/documents",
@@ -19,12 +18,16 @@ const staticLinkOptions = [
   "/export/results",
   "/faq",
   "/incidents",
+  "/logo",
   "/officers-and-board",
   "/organizations",
   "/privacy",
   "/regulations/about",
   "/regulations/history",
   "/regulations/scrambles",
+  "/regulations/translations",
+  "/results/rankings",
+  "/results/records",
   "/score-tools",
   "/speedcubing-history",
   "/teams-committees",
@@ -45,6 +48,29 @@ const LinkItem: Block = {
       type: "select",
       options: staticLinkOptions,
       interfaceName: "StaticTargetLink",
+      required: true,
+    },
+    {
+      name: "displayIcon",
+      type: "select",
+      options: iconOptions,
+      interfaceName: "IconName",
+    },
+  ],
+};
+
+const ExternalLinkItem: Block = {
+  slug: "ExternalLinkItem", // required
+  fields: [
+    // required
+    {
+      name: "displayText",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "targetLink",
+      type: "text",
       required: true,
     },
     {
@@ -78,7 +104,7 @@ const NestedDropdown: Block = {
     {
       name: "entries",
       type: "blocks",
-      blocks: [LinkItem],
+      blocks: [LinkItem, ExternalLinkItem],
       required: true,
       maxRows: 20,
     },
@@ -102,7 +128,7 @@ const Dropdown: Block = {
     {
       name: "entries",
       type: "blocks",
-      blocks: [LinkItem, NestedDropdown, VisualDivider],
+      blocks: [LinkItem, ExternalLinkItem, NestedDropdown, VisualDivider],
       required: true,
     },
   ],
@@ -114,7 +140,7 @@ export const Nav: GlobalConfig = {
     {
       name: "entry",
       type: "blocks",
-      blocks: [Dropdown, LinkItem],
+      blocks: [Dropdown, LinkItem, ExternalLinkItem],
       required: true,
       maxRows: 8,
     },
