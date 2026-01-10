@@ -723,7 +723,13 @@ class Competition < ApplicationRecord
 
   before_validation :compute_coordinates
   before_validation :create_id_and_cell_name
-  before_validation :unpack_delegate_organizer_ids
+  # This is a (small) mess. The UI handles "Full Delegates" and "Trainee Delegates"
+  #   as separate fields, but the backend just has one "competition_delegates" table
+  #   which handles both.
+  # So when an update comes in, it has separate attributes `staff_delegate_ids` and `trainee_delegate_ids`
+  #   but we need to map them down to just the general `competition_delegates` association.
+  before_validation :unpack_staff_delegate_ids
+  before_validation :unpack_trainee_delegate_ids
   # After the cloned competition is created, clone other associations which cannot just be copied.
   after_create :clone_associations
   private def clone_associations
@@ -762,48 +768,28 @@ class Competition < ApplicationRecord
     self.cell_name = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
   end
 
-  attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
+  attr_writer :staff_delegate_ids, :trainee_delegate_ids
 
   def staff_delegate_ids
-    @staff_delegate_ids || staff_delegates.map(&:id).join(",")
-  end
-
-  def organizer_ids
-    @organizer_ids || organizers.map(&:id).join(",")
+    @staff_delegate_ids || staff_delegates.pluck(:id)
   end
 
   def trainee_delegate_ids
-    @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
+    @trainee_delegate_ids || trainee_delegates.pluck(:id)
   end
 
-  def should_render_register_v2?(user)
-    user.cannot_register_for_competition_reasons(self).empty?
+  def unpack_staff_delegate_ids
+    return if @staff_delegate_ids.blank?
+
+    # we overwrite staff_delegates, which means that we _keep_ existing trainee_delegates.
+    self.delegate_ids = self.trainee_delegate_ids | @staff_delegate_ids
   end
 
-  def unpack_delegate_organizer_ids
-    # This is a mess. When changing competition ids, the calls to delegates=
-    # and organizers= below will cause database writes with a new competition_id.
-    # We hack around this by pretending our id actually didn't change, and then
-    # we restore it at the end. This means we'll preseve our existing
-    # CompetitionOrganizer and CompetitionDelegate rows rather than creating new ones.
-    # We'll fix their competition_id below in update_foreign_keys.
-    if @staff_delegate_ids || @trainee_delegate_ids
-      self.delegates ||= []
+  def unpack_trainee_delegate_ids
+    return if @trainee_delegate_ids.blank?
 
-      if @staff_delegate_ids
-        unpacked_staff_delegates = @staff_delegate_ids.split(",").map { |id| User.find(id) }
-
-        # we overwrite staff_delegates, which means that we _keep_ existing trainee_delegates.
-        self.delegates = self.trainee_delegates | unpacked_staff_delegates
-      end
-      if @trainee_delegate_ids
-        unpacked_trainee_delegates = @trainee_delegate_ids.split(",").map { |id| User.find(id) }
-
-        # we overwrite trainee_delegates, which means that we _keep_ existing staff_delegates.
-        self.delegates = self.staff_delegates | unpacked_trainee_delegates
-      end
-    end
-    self.organizers = @organizer_ids.split(",").map { |id| User.find(id) } if @organizer_ids
+    # we overwrite trainee_delegates, which means that we _keep_ existing staff_delegates.
+    self.delegate_ids = self.staff_delegate_ids | @trainee_delegate_ids
   end
 
   def staff_delegates
@@ -825,14 +811,6 @@ class Competition < ApplicationRecord
   # competition the attribute is automatically set to that manager's preference.
   after_update :update_receive_registration_emails
   after_update :clean_series_when_leaving
-  # Workaround for PHP code that requires these tables to be clean.
-  # Once we're in all railsland, this can go, and we can add a script
-  # that checks our database sanity instead.
-  after_save :remove_non_existent_organizers_and_delegates
-  def remove_non_existent_organizers_and_delegates
-    CompetitionOrganizer.where(competition_id: id).where.not(organizer_id: organizers.map(&:id)).delete_all
-    CompetitionDelegate.where(competition_id: id).where.not(delegate_id: delegates.map(&:id)).delete_all
-  end
 
   def report_posted_at
     delegate_report&.posted_at
@@ -2356,9 +2334,9 @@ class Competition < ApplicationRecord
         "autoAcceptDisableThreshold" => auto_accept_disable_threshold,
       },
       "staff" => {
-        "staffDelegateIds" => staff_delegates.to_a.pluck(:id),
-        "traineeDelegateIds" => trainee_delegates.to_a.pluck(:id),
-        "organizerIds" => organizers.to_a.pluck(:id),
+        "staffDelegateIds" => staff_delegate_ids,
+        "traineeDelegateIds" => trainee_delegate_ids,
+        "organizerIds" => organizer_ids,
         "contact" => contact,
       },
       "championships" => championship_types,
@@ -2637,9 +2615,9 @@ class Competition < ApplicationRecord
       cell_name: form_data['shortName'],
       latitude_degrees: form_data.dig('venue', 'coordinates', 'lat'),
       longitude_degrees: form_data.dig('venue', 'coordinates', 'long'),
-      staff_delegate_ids: form_data.dig('staff', 'staffDelegateIds')&.join(','),
-      trainee_delegate_ids: form_data.dig('staff', 'traineeDelegateIds')&.join(','),
-      organizer_ids: form_data.dig('staff', 'organizerIds')&.join(','),
+      staff_delegate_ids: form_data.dig('staff', 'staffDelegateIds'),
+      trainee_delegate_ids: form_data.dig('staff', 'traineeDelegateIds'),
+      organizer_ids: form_data.dig('staff', 'organizerIds'),
       contact: form_data.dig('staff', 'contact'),
       remarks: form_data['remarks'],
       registration_open: form_data.dig('registration', 'openingDateTime')&.presence,
