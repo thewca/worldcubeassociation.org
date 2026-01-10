@@ -503,48 +503,13 @@ class CompetitionsController < ApplicationController
 
     form_data = params_for_competition_form
 
-    #####
-    # HACK BECAUSE WE DON'T HAVE PERSISTENT COMPETITION IDS
-    #####
-
-    # Need to delete the ID in this first update pass because it's our primary key (yay legacy code!)
-    persisted_id = competition.id
-    new_id = nil # Initialize under the assumption that nothing changed.
-
-    form_id = form_data[:competitionId]
-    new_id = form_id unless form_id == persisted_id
-
-    # In the first update pass, we need to pretend like the ID never changed.
-    # Changing ID needs a special hack which we handle below.
-    form_data[:competitionId] = persisted_id
-
-    #####
-    # HACK END
-    #####
-
     competition.set_form_data(form_data, current_user)
 
+    # Automatically compute the cellName and ID for competitions with a short name.
+    force_automatic_name = !competition.confirmed? && competition_organizer_view && competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
+    competition.create_id_and_cell_name(force_override: true) if force_automatic_name
+
     if competition.save
-      # Automatically compute the cellName and ID for competitions with a short name.
-      if !competition.confirmed? && competition_organizer_view && competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
-        competition.create_id_and_cell_name(force_override: true)
-
-        # Try to update the ID only if it _actually_ changed
-        new_id = competition.id unless competition.id == persisted_id
-      end
-
-      if new_id && !competition.update(competition_id: new_id)
-        # Changing the competition id breaks all our associations, and our view
-        # code was not written to handle this. Rather than trying to update our view
-        # code, just revert the attempted id change. The user will have to deal with
-        # editing the ID text box manually. This will go away once we have proper
-        # immutable ids for competitions.
-        return render json: {
-          status: "ok",
-          redirect: competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition),
-        }
-      end
-
       new_organizers = competition.organizers - old_organizers
       removed_organizers = old_organizers - competition.organizers
 
@@ -558,7 +523,7 @@ class CompetitionsController < ApplicationController
 
       response_data = { status: "ok", message: t('.save_success') }
 
-      if persisted_id != competition.id
+      if competition.competition_id_previously_changed?
         response_data[:redirect] = competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition)
       end
 

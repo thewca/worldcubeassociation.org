@@ -2632,7 +2632,7 @@ class Competition < ApplicationRecord
 
   def self.form_data_to_attributes(form_data)
     {
-      id: form_data['competitionId'],
+      competition_id: form_data['competitionId'],
       name: form_data['name'],
       city_name: form_data.dig('venue', 'cityName'),
       country_id: form_data.dig('venue', 'countryId'),
