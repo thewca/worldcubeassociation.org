@@ -142,7 +142,7 @@ class ComputeAuxiliaryData < WcaCronjob
         AND results.event_id = record_event_id
         AND events.id        = results.event_id
         AND countries.id     = results.country_id
-        AND competitions.id  = results.competition_id
+        AND competitions.competition_id  = results.competition_id
         AND events.`rank` < 990
     SQL
   end
