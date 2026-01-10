@@ -48,13 +48,6 @@ class CompetitionSeries < ApplicationRecord
     self.short_name = name_without_year.truncate(MAX_SHORT_NAME_LENGTH - year.length) + year
   end
 
-  # The notion of circumventing model associations is stolen from competition.rb#delegate_ids et al.
-  attr_writer :competition_ids
-
-  def competition_ids
-    @competition_ids || self.competitions.map(&:id).join(',')
-  end
-
   def destroy_if_orphaned
     return unless persisted? && competitions.count <= 1
 
@@ -71,7 +64,7 @@ class CompetitionSeries < ApplicationRecord
     include_competitions = options[:include]&.delete("competitions")
     json = super
     json[:id] = wcif_id
-    json[:competitions] = competitions.ids if include_competitions
+    json[:competitions] = competition_ids if include_competitions
     json
   end
 
@@ -81,7 +74,7 @@ class CompetitionSeries < ApplicationRecord
       "seriesId" => wcif_id,
       "name" => name,
       "shortName" => short_name,
-      "competitionIds" => competitions.pluck(:id),
+      "competitionIds" => competition_ids,
     }
   end
 
@@ -103,7 +96,6 @@ class CompetitionSeries < ApplicationRecord
   def set_form_data(form_data_series)
     raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.") if form_data_series["competitionIds"].count <= 1
 
-    self.competition_ids = form_data_series["competitionIds"].join(",")
     assign_attributes(CompetitionSeries.form_data_to_attributes(form_data_series))
   end
   # rubocop:enable Naming/AccessorMethodName
@@ -113,6 +105,7 @@ class CompetitionSeries < ApplicationRecord
       wcif_id: form_data["seriesId"],
       name: form_data["name"],
       short_name: form_data["shortName"],
+      competition_ids: form_data["competitionIds"],
     }
   end
 
@@ -138,7 +131,7 @@ class CompetitionSeries < ApplicationRecord
       "id" => wcif_id,
       "name" => name,
       "shortName" => short_name,
-      "competitionIds" => (authorized ? competitions : public_competitions).map(&:id),
+      "competitionIds" => (authorized ? competitions : public_competitions).pluck(:id),
     }
   end
 
@@ -159,7 +152,6 @@ class CompetitionSeries < ApplicationRecord
 
     raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.") if wcif_series["competitionIds"].count <= 1
 
-    self.competition_ids = wcif_series["competitionIds"].join(",")
     update!(CompetitionSeries.wcif_to_attributes(wcif_series))
 
     self
@@ -170,21 +162,8 @@ class CompetitionSeries < ApplicationRecord
       wcif_id: wcif["id"],
       name: wcif["name"],
       short_name: wcif["shortName"],
+      competition_ids: wcif["competitionIds"],
     }
-  end
-
-  before_save :unpack_competition_ids
-  private def unpack_competition_ids
-    return unless @competition_ids
-
-    unpacked_competitions = @competition_ids.split(',').map { |id| Competition.find(id) }
-    self.competitions = unpacked_competitions
-  end
-
-  after_save :clear_competition_ids
-  private def clear_competition_ids
-    # reset them so that upon the next read they will be fetched based on what's just been written.
-    @competition_ids = nil
   end
 
   def public_competitions
