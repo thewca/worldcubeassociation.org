@@ -131,7 +131,7 @@ class CompetitionSeries < ApplicationRecord
       "id" => wcif_id,
       "name" => name,
       "shortName" => short_name,
-      "competitionIds" => (authorized ? competitions : public_competitions).pluck(:id),
+      "competitionIds" => (authorized ? competitions : public_competitions).pluck(:competition_id),
     }
   end
 
