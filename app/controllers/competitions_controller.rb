@@ -518,21 +518,25 @@ class CompetitionsController < ApplicationController
     # HACK END
     #####
 
-    competition.set_form_data(form_data, current_user)
+    saved_competition = competition.with_transaction_returning_status do
+      competition.set_form_data(form_data, current_user)
 
-    # Automatically compute the cellName and ID for competitions with a short name.
-    if !competition.confirmed? && competition_organizer_view && competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
-      competition.create_id_and_cell_name(force_override: true)
+      # Automatically compute the cellName and ID for competitions with a short name.
+      if !competition.confirmed? && competition_organizer_view && competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
+        competition.create_id_and_cell_name(force_override: true)
 
-      # Try to update the ID only if it _actually_ changed
-      new_id = competition.competition_id unless competition.competition_id == persisted_id
+        # Try to update the ID only if it _actually_ changed
+        new_id = competition.competition_id unless competition.competition_id == persisted_id
+      end
+
+      # In the first update pass, we need to pretend like the ID never changed.
+      # Changing ID needs a special hack, see above.
+      competition.competition_id = persisted_id
+
+      competition.save
     end
 
-    # In the first update pass, we need to pretend like the ID never changed.
-    # Changing ID needs a special hack, see above.
-    competition.competition_id = persisted_id
-
-    if competition.save
+    if saved_competition
       if new_id && !competition.update(competition_id: new_id)
         # Changing the competition id breaks all our associations, and our view
         # code was not written to handle this. Rather than trying to update our view
