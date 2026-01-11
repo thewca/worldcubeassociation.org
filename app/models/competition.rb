@@ -779,14 +779,14 @@ class Competition < ApplicationRecord
   end
 
   def unpack_staff_delegate_ids
-    return if @staff_delegate_ids.blank?
+    return if @staff_delegate_ids.nil?
 
     # we overwrite staff_delegates, which means that we _keep_ existing trainee_delegates.
     self.delegate_ids = self.trainee_delegate_ids | @staff_delegate_ids
   end
 
   def unpack_trainee_delegate_ids
-    return if @trainee_delegate_ids.blank?
+    return if @trainee_delegate_ids.nil?
 
     # we overwrite trainee_delegates, which means that we _keep_ existing staff_delegates.
     self.delegate_ids = self.staff_delegate_ids | @trainee_delegate_ids
