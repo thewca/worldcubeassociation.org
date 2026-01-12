@@ -33,6 +33,11 @@ const ttNormsPro = localFont({
       style: "normal",
     },
   ],
+  declarations: [
+    // Determined using https://fontdrop.info/
+    { prop: "ascent-override", value: "105%" },
+    { prop: "descent-override", value: "-33%" },
+  ],
 });
 
 export { ttNormsPro };
