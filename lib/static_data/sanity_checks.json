@@ -460,5 +460,12 @@
     "topic": "Names with dots followed by no space",
     "comments": null,
     "query_file": "names_with_dots_but_no_space.sql"
+  },
+  {
+    "id": "68",
+    "sanity_check_category_id": "2",
+    "topic": "Attempt Number Gaps",
+    "comments": null,
+    "query_file": "attempt_number_gaps.sql"
   }
 ]
