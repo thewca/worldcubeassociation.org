@@ -69,7 +69,7 @@ export default function TabMenu({
         ))}
         <Separator />
         {competitionInfo.tab_names.map((tabName) => (
-          <Tabs.Trigger key={tabName} value={tabName} asChild>
+          <Tabs.Trigger key={tabName} value={tabName} minHeight="fit-content" asChild>
             <Text textStyle="bodyEmphasis" asChild maxW="44">
               <Link
                 href={route({
