@@ -72,3 +72,8 @@ late_cronjob_warnings:
   class: "CronjobWarningJob"
   cron: "40 */6 * * *"
   queue: wca_jobs
+
+monthly_sanity_check:
+  class: "AllSanityChecksJob"
+  cron: "4 1 1 * *"
+  queue: sanity_checks
