@@ -121,6 +121,10 @@ FactoryBot.define do
     regional_single_record { nil }
     regional_average_record { nil }
 
-    after(:build, &:create_or_update_attempts)
+    after(:build) do |result|
+      result.result_attempts_attributes.each do |at|
+        result.result_attempts.build(attempt_number: at[:attempt_number], value: at[:value])
+      end
+    end
   end
 end
