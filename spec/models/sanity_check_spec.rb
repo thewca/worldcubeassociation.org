@@ -215,6 +215,22 @@ RSpec.describe SanityCheck do
       end
     end
 
+    context "invalid attempt result values" do
+      let(:sanity_check) { SanityCheck.find(69) }
+
+      it "Correctly find irregular results" do
+        r1 = create(:result)
+        r1.result_attempts.find_by!(attempt_number: 1).update_columns(value: -100)
+
+        r2 = create(:result)
+        r2.result_attempts.find_by!(attempt_number: 1).update_columns(value: 0)
+
+        result_ids = sanity_check.run_query.pluck("result_id")
+
+        expect(result_ids).to contain_exactly(r1.id, r2.id)
+      end
+    end
+
     context "wrong number of results" do
       let(:sanity_check) { SanityCheck.find(14) }
 
