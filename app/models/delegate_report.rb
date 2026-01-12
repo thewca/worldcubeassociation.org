@@ -23,23 +23,47 @@ class DelegateReport < ApplicationRecord
     attachable.variant :preview, resize_to_limit: [100, 100]
   end
 
+  strip_attributes only: %i[schedule_url remarks]
+
   attr_accessor :current_user
 
   private def render_section_template(section)
     ActionController::Base.new.render_to_string(template: "delegate_reports/#{self.version}/_#{section}_default", formats: :md)
   end
 
-  before_create :md_section_defaults!
-  def md_section_defaults!
+  after_initialize :load_md_templates, unless: :posted?
+  def load_md_templates
     # Make sure that sections which are NOT being used are explicitly set to `nil`
     #   by initializing an empty default map. Think of this as "default options".
     empty_sections = AVAILABLE_SECTIONS.index_with(nil)
 
     rendered_sections = self.md_sections
-                            .index_with { |section| render_section_template(section) }
+                            .index_with { self.report_section(it) || self.render_section_template(it) }
                             .reverse_merge(empty_sections)
 
     self.assign_attributes(**rendered_sections)
+  end
+
+  before_save :clean_untouched_sections, unless: :posted?
+  def clean_untouched_sections
+    # This is doing more sophisticated stuff than just a simple `==` comparison,
+    #   because different OSes use different line break characters
+    untouched_sections = self.md_sections.filter do |section|
+      normalized_section = self.report_section(section)&.encode(universal_newline: true)
+      normalized_template = self.render_section_template(section).encode(universal_newline: true)
+
+      normalized_section == normalized_template
+    end
+
+    # Those sections which exactly match their default template should not be stored in the DB
+    #   so we reset them to a blank `nil` value before persisting
+    section_reset_map = untouched_sections.index_with(nil)
+
+    self.assign_attributes(**section_reset_map) if section_reset_map.any?
+  end
+
+  def report_section(section_name)
+    self.attributes[section_name.to_s].presence
   end
 
   validates :schedule_url, presence: true, if: :schedule_and_discussion_urls_required?
@@ -76,7 +100,7 @@ class DelegateReport < ApplicationRecord
   end
 
   def md_sections
-    AVAILABLE_SECTIONS.filter { |section| self.uses_section?(section) }
+    AVAILABLE_SECTIONS.filter { self.uses_section?(it) }
   end
 
   def requires_setup_images?
