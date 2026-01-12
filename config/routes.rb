@@ -239,6 +239,7 @@ Rails.application.routes.draw do
     get 'inbox_person_summary' => 'tickets#inbox_person_summary', as: :inbox_person_summary
     post 'delete_inbox_persons' => 'tickets#delete_inbox_persons', as: :delete_inbox_persons
     get 'events_merged_data' => 'tickets#events_merged_data', as: :events_merged_data
+    post 'approve_edit_person_request' => 'tickets#approve_edit_person_request', as: :approve_edit_person_request
     post 'reject_edit_person_request' => 'tickets#reject_edit_person_request', as: :reject_edit_person_request
     post 'sync_edit_person_request' => 'tickets#sync_edit_person_request', as: :sync_edit_person_request
     resources :ticket_comments, only: %i[index create], as: :comments

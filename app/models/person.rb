@@ -362,6 +362,16 @@ class Person < ApplicationRecord
     new_wca_id
   end
 
+  def execute_edit_person_request(change_type, edit_params)
+    if change_type == "fix"
+      update!(edit_params)
+    elsif change_type == "update"
+      update_using_sub_id!(edit_params)
+    else
+      raise "Unknown change_type #{change_type}"
+    end
+  end
+
   def private_attributes_for_user(user)
     return [] if user.nil?
 
