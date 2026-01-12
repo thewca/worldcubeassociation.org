@@ -73,19 +73,15 @@ class DelegateReport < ApplicationRecord
   validates :wrc_incidents, presence: true, if: :wrc_feedback_requested
   validates :wic_incidents, presence: true, if: :wic_feedback_requested
 
-  validate :setup_image_count, if: %i[posted? requires_setup_images?]
-  private def setup_image_count
-    errors.add(:setup_images, "Needs at least #{self.required_setup_images_count} images") if self.setup_images.count < self.required_setup_images_count
-  end
-
-  validates :setup_images, blob: { content_type: :web_image }
+  validates :setup_images, blob: { content_type: :web_image },
+                           length: { minimum: :required_setup_images_count, if: %i[posted? requires_setup_images?] }
 
   def schedule_and_discussion_urls_required?
     posted? && created_at > Date.new(2019, 7, 21)
   end
 
   def posted?
-    !!posted_at
+    self.posted_at?
   end
 
   def uses_section?(section)
