@@ -141,6 +141,10 @@ export default {
     name: 'Generate DB Token',
     link: generateDbTokenUrl,
   },
+  [PANEL_PAGES.sanityCheckResults]: {
+    name: 'Sanity Check Results',
+    link: sanityCheckResultsUrl,
+  },
   [PANEL_PAGES.approveAvatars]: {
     name: 'Approve Avatars',
     component: ApprovePictures,
