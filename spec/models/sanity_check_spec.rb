@@ -44,9 +44,9 @@ RSpec.describe SanityCheck do
       cutoff = Cutoff.new(number_of_attempts: 1, attempt_result: 300)
       round = create(:round, competition: competition, event_id: "666", cutoff: cutoff, format_id: "m")
       result = create(:result, competition: competition, round: round,
-                      value1: 299, value2: 300, value3: 300, value4: 0, value5: 0,
-                      event_id: "666", format_id: "m", round_type_id: "c",
-                      average: 300, best: 299)
+                               value1: 299, value2: 300, value3: 300, value4: 0, value5: 0,
+                               event_id: "666", format_id: "m", round_type_id: "c",
+                               average: 300, best: 299)
 
       # Apply Cutoff violations
       result.update_columns(value1: 300, best: 300)
@@ -62,16 +62,16 @@ RSpec.describe SanityCheck do
       time_limit = TimeLimit.new(centiseconds: 301)
       round = create(:round, competition: competition, event_id: "666", time_limit: time_limit, format_id: "m")
       result = create(:result, competition: competition, round: round,
-                      value1: 300, value2: 300, value3: 300, value4: 0, value5: 0,
-                      event_id: "666", format_id: "m", round_type_id: "f",
-                      average: 300, best: 300)
+                               value1: 300, value2: 300, value3: 300, value4: 0, value5: 0,
+                               event_id: "666", format_id: "m", round_type_id: "f",
+                               average: 300, best: 300)
 
       # Apply Timelimit violations
       result.update_columns(value1: 302)
 
       result_ids = sanity_check.run_query.pluck("value1", "value2", "value3")
 
-      expect(result_ids).to contain_exactly([302,300,300])
+      expect(result_ids).to contain_exactly([302, 300, 300])
     end
 
     it "Correctly identifies timelimit violations (cumulative), single round" do
@@ -81,9 +81,9 @@ RSpec.describe SanityCheck do
       time_limit = TimeLimit.new(centiseconds: 901, cumulative_round_ids: [round.id])
       round.update(time_limit: time_limit)
       result = create(:result, competition: competition, round: round,
-                      value1: 300, value2: 300, value3: 300, value4: 0, value5: 0,
-                      event_id: "666", format_id: "m", round_type_id: "f",
-                      average: 300, best: 300)
+                               value1: 300, value2: 300, value3: 300, value4: 0, value5: 0,
+                               event_id: "666", format_id: "m", round_type_id: "f",
+                               average: 300, best: 300)
 
       # Apply Timelimit violations
       result.update_columns(value1: 302)
@@ -106,9 +106,9 @@ RSpec.describe SanityCheck do
                       event_id: "666", format_id: "m", round_type_id: "f",
                       average: 300, best: 300)
       result = create(:result, competition: competition, round: round1,
-                      value1: 300, value2: 300, value3: 300, value4: 0, value5: 0,
-                      event_id: "666", format_id: "m", round_type_id: "f",
-                      average: 300, best: 300)
+                               value1: 300, value2: 300, value3: 300, value4: 0, value5: 0,
+                               event_id: "666", format_id: "m", round_type_id: "f",
+                               average: 300, best: 300)
 
       # Apply Timelimit violations
       result.update_columns(value1: 302)
