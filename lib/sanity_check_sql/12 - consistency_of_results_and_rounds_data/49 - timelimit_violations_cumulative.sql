@@ -10,6 +10,6 @@ FROM rounds ro
                                      WHEN 0 THEN re.round_type_id IN ('0', 'b', 'h') WHEN 1 THEN re.round_type_id IN ('1', 'd')
                                      WHEN 2 THEN re.round_type_id IN ('2', 'e') WHEN 3 THEN re.round_type_id IN ('3', 'g') END)
        JOIN results r ON ce.competition_id=r.competition_id AND ce.event_id=r.event_id AND re.round_type_id=r.round_type_id
-WHERE time_limit IS NOT NULL AND time_limit LIKE '%[%"",""%]%'
+WHERE time_limit IS NOT NULL AND time_limit LIKE '%[%","%]%'
 GROUP BY person_id, person_name, country_id, competition_id, time_limit
 HAVING sumOfSolves>=timeLimit
