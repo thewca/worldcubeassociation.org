@@ -157,7 +157,8 @@ RSpec.describe SanityCheck do
 
   context "Person Data Irregularities" do
     context "Wrong names" do
-      RSpec.shared_examples 'correct sanity check' do |sanity_check, irregular_people, valid_people|
+      RSpec.shared_examples 'correct sanity check' do |sanity_check_id, irregular_people, valid_people|
+        sanity_check = SanityCheck.find(sanity_check_id)
         context sanity_check.topic.to_s do
           it "correctly finds all irregular names" do
             irregular_people = irregular_people.map do |name|
@@ -219,7 +220,7 @@ RSpec.describe SanityCheck do
         { id: 62, irregular_people: ["Jooon Doe"], valid_people: ["Jane Doe III."] },
         { id: 67, irregular_people: ["J.Doe"], valid_people: ["Jane d. Doe"] },
       ].each do |params|
-        it_behaves_like 'correct sanity check', SanityCheck.find(params[:id]), params[:irregular_people], params[:valid_people]
+        it_behaves_like 'correct sanity check', params[:id], params[:irregular_people], params[:valid_people]
       end
     end
 

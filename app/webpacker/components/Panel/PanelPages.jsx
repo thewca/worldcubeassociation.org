@@ -4,6 +4,7 @@ import {
   subordinateDelegateClaimsUrl,
   subordinateUpcomingCompetitionsUrl,
   generateDbTokenUrl,
+  sanityCheckResultsUrl,
   serverStatusPageUrl,
   mergeProfilesUrl,
 } from '../../lib/requests/routes.js.erb';
