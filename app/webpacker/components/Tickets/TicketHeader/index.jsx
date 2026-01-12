@@ -4,11 +4,12 @@ import _ from 'lodash';
 import StatusView from './StatusView';
 import { ticketTypes } from '../../../lib/wca-data.js.erb';
 import I18n from '../../../lib/i18n';
-import { personUrl, competitionUrl } from '../../../lib/requests/routes.js.erb';
+import { personUrl, competitionUrl, editPersonUrl } from '../../../lib/requests/routes.js.erb';
 
 // let i18n-tasks know the key is used
 // i18n-tasks-use t('tickets.type.edit_person')
 // i18n-tasks-use t('tickets.type.competition_result')
+// i18n-tasks-use t('tickets.type.claim_wca_id')
 
 export default function TicketHeader({ ticketDetails, currentStakeholder, updateStatus }) {
   const { ticket: { id, metadata_type: ticketType } } = ticketDetails;
@@ -63,6 +64,20 @@ function SubHeading({ ticketDetails }) {
             rel="noreferrer"
           >
             {metadata.competition.name}
+          </a>
+        </>
+      );
+    case ticketTypes.claim_wca_id:
+      return (
+        <>
+          Claim WCA ID for
+          {' '}
+          <a
+            href={editPersonUrl(metadata.user.id)}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {metadata.user.name}
           </a>
         </>
       );
