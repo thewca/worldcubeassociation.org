@@ -202,6 +202,19 @@ RSpec.describe SanityCheck do
       end
     end
 
+    context "attempt number gaps" do
+      let(:sanity_check) { SanityCheck.find(68) }
+
+      it "Correctly find irregular results" do
+        r = create(:result)
+        r.result_attempts.where(attempt_number: 3).delete_all
+
+        result_ids = sanity_check.run_query.pluck("result_id")
+
+        expect(result_ids).to contain_exactly(r.id)
+      end
+    end
+
     context "wrong number of results" do
       let(:sanity_check) { SanityCheck.find(14) }
 
