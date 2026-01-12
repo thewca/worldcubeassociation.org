@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_06_131200) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_12_140926) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -760,8 +760,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_131200) do
     t.integer "attempt_number", null: false
     t.datetime "created_at", null: false
     t.bigint "live_result_id"
-    t.integer "result", null: false
     t.datetime "updated_at", null: false
+    t.integer "value", null: false
     t.index ["live_result_id"], name: "index_live_attempts_on_live_result_id"
   end
 
