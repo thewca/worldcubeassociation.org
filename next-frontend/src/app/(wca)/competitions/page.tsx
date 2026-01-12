@@ -18,6 +18,7 @@ import {
   Tabs,
   IconButton,
   ClientOnly,
+  Icon,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -51,7 +52,7 @@ import { components } from "@/types/openapi";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { FormEventSelector } from "@/components/EventSelector";
-import { LuMapPin } from "react-icons/lu";
+import { LuMapPin, LuSettings2 } from "react-icons/lu";
 
 const DEBOUNCE_MS = 600;
 
@@ -246,18 +247,20 @@ export default function CompetitionsPage() {
                     step={25}
                     disabled={location === undefined}
                   >
-                    <Slider.Label>
-                      Distance{" "}
-                      {geolocationSupported && location === undefined && (
-                        <IconButton
-                          size="xs"
-                          variant="outline"
-                          colorPalette="blue"
-                          onClick={() => requestGeolocationPermission()}
-                        >
-                          <LuMapPin />
-                        </IconButton>
-                      )}
+                    <Slider.Label asChild>
+                      <HStack justifyContent="space-between">
+                        Distance
+                        {geolocationSupported && location === undefined && (
+                          <IconButton
+                            size="xs"
+                            variant="outline"
+                            colorPalette="blue"
+                            onClick={() => requestGeolocationPermission()}
+                          >
+                            <LuMapPin />
+                          </IconButton>
+                        )}
+                      </HStack>
                     </Slider.Label>
                     <Slider.Control>
                       <Slider.Track>
@@ -271,15 +274,19 @@ export default function CompetitionsPage() {
                     {/* TODO: replace these buttons with DatePicker (Chakra does not have one by default) */}
                     <Button>
                       <CompRegoOpenDateIcon />
+                      {" "}
                       Date From
                     </Button>
                     <Button>
                       <CompRegoCloseDateIcon />
                       Date To
+                      {" "}
                     </Button>
                   </ButtonGroup>
                   {/* TODO: add "accordion" functionality to this button */}
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline">
+                    <Icon><LuSettings2 /></Icon>
+                    {" "}
                     Advanced Filters
                   </Button>
                 </HStack>
