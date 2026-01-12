@@ -12,6 +12,7 @@ class SanityCheckMailer < ApplicationMailer
     mail(
       to: email_to,
       cc: "software@worldcubeassociation.org",
+      reply_to: email_to,
       subject: "Sanity Check #{month_name} #{year_name}",
     )
   end
