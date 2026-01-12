@@ -76,6 +76,35 @@ RSpec.describe SanityCheck do
     end
   end
 
+  context "Duplicate Results" do
+    it "Correctly finds duplicate results" do
+      sanity_check = SanityCheck.find(18)
+      competition = create(:competition)
+      round = create(:round, competition: competition)
+      create(:result, competition: competition, round: round, event_id: "333",
+                      value1: 100, value2: 200, value3: 300, value4: 400, value5: 500, average: 300, best: 100)
+      create(:result, competition: competition, round: round, event_id: "333",
+                      value1: 100, value2: 200, value3: 300, value4: 400, value5: 500, average: 300, best: 100)
+
+      result_ids = sanity_check.run_query.pluck("competitions")
+      expect(result_ids).to contain_exactly(competition.id)
+    end
+  end
+
+  context "WCA Id Irregularities" do
+    it "Correctly finds year not matching to first competition year" do
+      sanity_check = SanityCheck.find(19)
+      person = create(:person)
+      person.update_columns(wca_id: "1982TEST01")
+      # This sanity check uses start_date, not competition_id to check for year
+      competition = create(:competition, start_date: Date.new(1983, 1, 1), end_date: Date.new(1983, 1, 1))
+      create(:result, person: person, competition: competition)
+      result_ids = sanity_check.run_query.pluck("person_id")
+
+      expect(result_ids).to contain_exactly(person.wca_id)
+    end
+  end
+
   context "Irregular Results" do
     context "no first solve" do
       let(:sanity_check) { SanityCheck.find(13) }
