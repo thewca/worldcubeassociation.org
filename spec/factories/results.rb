@@ -120,5 +120,7 @@ FactoryBot.define do
     country_id { person.country_id }
     regional_single_record { nil }
     regional_average_record { nil }
+
+    after(:build, &:create_or_update_attempts)
   end
 end
