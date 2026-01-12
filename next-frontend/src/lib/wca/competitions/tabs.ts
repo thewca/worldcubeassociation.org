@@ -2,10 +2,20 @@ import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
 import { iconMap } from "@/components/icons/iconMap";
 import { LuCalendar } from "react-icons/lu";
+import type { RouteLiteral } from "nextjs-routes";
+import type { ComponentType } from "react";
+
+export interface CompetitionNavTab {
+  i18nKey: string,
+  href: RouteLiteral,
+  menuKey: string,
+  icon: ComponentType,
+  betaDisabled?: boolean,
+}
 
 export const beforeCompetitionTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
-) => {
+): CompetitionNavTab[] => {
   return [
     {
       i18nKey: "competitions.nav.menu.info",
@@ -24,6 +34,7 @@ export const beforeCompetitionTabs = (
       }),
       menuKey: "register",
       icon: iconMap["Register"],
+      betaDisabled: process.env.NODE_ENV === "production"
     },
     {
       i18nKey: "competitions.nav.menu.competitors",
@@ -55,10 +66,10 @@ export const beforeCompetitionTabs = (
   ];
 };
 // TODO: Later for WCA Live Integration
-export const duringCompetitionTabs = [];
+export const duringCompetitionTabs: CompetitionNavTab[] = [];
 export const afterCompetitionTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
-) => {
+): CompetitionNavTab[] => {
   return [
     {
       i18nKey: "competitions.nav.menu.info",

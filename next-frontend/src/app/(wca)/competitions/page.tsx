@@ -53,6 +53,7 @@ import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { FormEventSelector } from "@/components/EventSelector";
 import { LuMapPin, LuSettings2 } from "react-icons/lu";
+import BetaDisabledTooltip from "@/components/BetaDisabledTooltip";
 
 const DEBOUNCE_MS = 600;
 
@@ -178,10 +179,12 @@ export default function CompetitionsPage() {
                     <ListIcon />
                     List
                   </Tabs.Trigger>
-                  <Tabs.Trigger value="map">
-                    <MapIcon />
-                    Map
-                  </Tabs.Trigger>
+                  <BetaDisabledTooltip>
+                    <Tabs.Trigger value="map" disabled>
+                      <MapIcon />
+                      Map
+                    </Tabs.Trigger>
+                  </BetaDisabledTooltip>
                 </Tabs.List>
               </HStack>
             </Card.Header>
@@ -281,12 +284,14 @@ export default function CompetitionsPage() {
                     </Button>
                   </ButtonGroup>
                   {/* TODO: add "accordion" functionality to this button */}
-                  <Button variant="outline">
-                    <Icon>
-                      <LuSettings2 />
-                    </Icon>{" "}
-                    Advanced Filters
-                  </Button>
+                  <BetaDisabledTooltip>
+                    <Button variant="outline" disabled>
+                      <Icon>
+                        <LuSettings2 />
+                      </Icon>{" "}
+                      Advanced Filters
+                    </Button>
+                  </BetaDisabledTooltip>
                 </HStack>
               </VStack>
             </Card.Body>
