@@ -6,11 +6,11 @@ import type { RouteLiteral } from "nextjs-routes";
 import type { ComponentType } from "react";
 
 export interface CompetitionNavTab {
-  i18nKey: string,
-  href: RouteLiteral,
-  menuKey: string,
-  icon: ComponentType,
-  betaDisabled?: boolean,
+  i18nKey: string;
+  href: RouteLiteral;
+  menuKey: string;
+  icon: ComponentType;
+  betaDisabled?: boolean;
 }
 
 export const beforeCompetitionTabs = (
@@ -34,7 +34,7 @@ export const beforeCompetitionTabs = (
       }),
       menuKey: "register",
       icon: iconMap["Register"],
-      betaDisabled: process.env.NODE_ENV === "production"
+      betaDisabled: process.env.NODE_ENV === "production",
     },
     {
       i18nKey: "competitions.nav.menu.competitors",

@@ -59,8 +59,12 @@ export default function TabMenu({
         gap="3"
       >
         {tabs.map((tab) => (
-          <BetaDisabledTooltip disabled={!tab.betaDisabled}>
-            <Tabs.Trigger key={tab.i18nKey} value={tab.menuKey} disabled={tab.betaDisabled} asChild>
+          <BetaDisabledTooltip key={tab.i18nKey} disabled={!tab.betaDisabled}>
+            <Tabs.Trigger
+              value={tab.menuKey}
+              disabled={tab.betaDisabled}
+              asChild
+            >
               <Text textStyle="bodyEmphasis" asChild maxW="44">
                 <Link href={tab.href}>{t(tab.i18nKey)}</Link>
               </Text>
@@ -69,7 +73,12 @@ export default function TabMenu({
         ))}
         <Separator />
         {competitionInfo.tab_names.map((tabName) => (
-          <Tabs.Trigger key={tabName} value={tabName} minHeight="fit-content" asChild>
+          <Tabs.Trigger
+            key={tabName}
+            value={tabName}
+            minHeight="fit-content"
+            asChild
+          >
             <Text textStyle="bodyEmphasis" asChild maxW="44">
               <Link
                 href={route({
