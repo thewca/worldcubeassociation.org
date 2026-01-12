@@ -93,7 +93,7 @@ RSpec.describe SanityCheck do
       expect(result_ids).to contain_exactly(902)
     end
 
-    it "Correctly identifies timelimit violations (cumulative), across rounds", :clean_db_with_truncation do
+    it "Correctly identifies timelimit violations (cumulative), across rounds" do
       sanity_check = SanityCheck.find(49)
       competition = create(:competition, event_ids: ["666"])
       round1 = create(:round, competition: competition, event_id: "666", format_id: "m", total_number_of_rounds: 2)
