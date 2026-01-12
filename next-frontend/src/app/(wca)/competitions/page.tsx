@@ -91,7 +91,7 @@ export default function CompetitionsPage() {
     "get",
     "/v0/competition_index",
     {
-      params: { query: Object.fromEntries(querySearchParams.entries()) },
+      params: { query: querySearchParams },
     },
     {
       pageParamName: "page",
@@ -273,20 +273,18 @@ export default function CompetitionsPage() {
                   <ButtonGroup variant="outline">
                     {/* TODO: replace these buttons with DatePicker (Chakra does not have one by default) */}
                     <Button>
-                      <CompRegoOpenDateIcon />
-                      {" "}
-                      Date From
+                      <CompRegoOpenDateIcon /> Date From
                     </Button>
                     <Button>
                       <CompRegoCloseDateIcon />
-                      Date To
-                      {" "}
+                      Date To{" "}
                     </Button>
                   </ButtonGroup>
                   {/* TODO: add "accordion" functionality to this button */}
                   <Button variant="outline">
-                    <Icon><LuSettings2 /></Icon>
-                    {" "}
+                    <Icon>
+                      <LuSettings2 />
+                    </Icon>{" "}
                     Advanced Filters
                   </Button>
                 </HStack>
