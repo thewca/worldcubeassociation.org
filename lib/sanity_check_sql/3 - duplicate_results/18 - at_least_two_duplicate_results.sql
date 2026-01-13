@@ -15,6 +15,7 @@ SELECT t2.value1,
        t2.value4,
        t2.value5,
        count(*)                              as num_rows,
+       GROUP_CONCAT(t1.id ORDER BY t1.id)    as result_ids,
        GROUP_CONCAT(distinct person_id)      as people,
        GROUP_CONCAT(distinct event_id)       as events,
        GROUP_CONCAT(distinct competition_id) as competitions
