@@ -160,8 +160,9 @@ RSpec.describe SanityCheck do
   end
 
   context "Duplicate Results" do
+    let!(:sanity_check) { SanityCheck.find(18) }
+
     it "Correctly finds duplicate results" do
-      sanity_check = SanityCheck.find(18)
       competition = create(:competition)
       round = create(:round, competition: competition)
       create(:result, competition: competition, round: round, event_id: "333",
@@ -171,6 +172,27 @@ RSpec.describe SanityCheck do
 
       result_ids = sanity_check.run_query.pluck("competitions")
       expect(result_ids).to contain_exactly(competition.id)
+    end
+
+    it "Doesn't trigger for fmc or multiblind old style" do
+      competition = create(:competition, event_ids: ["333fm"])
+      round = create(:round, competition: competition, event_id: "333fm", format_id: "m")
+      create(:result, competition: competition, round: round, event_id: "333fm",
+                      value1: 21, value2: 22, value3: 23, value4: 0, value5: 0, best: 21, average: 2200, format_id: "m")
+      create(:result, competition: competition, round: round, event_id: "333fm",
+                      value1: 21, value2: 22, value3: 23, value4: 0, value5: 0, best: 21, average: 2200, format_id: "m")
+
+      # Currently getting the error: Validation failed: Format '1' is not allowed for '333mbo'
+      # But it should be allowed according to events.json?
+      # competition = create(:competition, event_ids: ["333mbo"])
+      # round = create(:round, competition: competition, event_id: "333mbo", format_id: "1")
+      # create(:result, competition: competition, round: round, event_id: "333mbo",
+      #                 value1: 21, value2: 0, value3: 0, value4: 0, value5: 0, best: 21, average: 2200, format_id: "1")
+      # create(:result, competition: competition, round: round, event_id: "333mbo",
+      #                 value1: 21, value2: 0, value3: 0, value4: 0, value5: 0, best: 21, average: 2200, format_id: "1")
+
+      result_ids = sanity_check.run_query.pluck("competitions")
+      expect(result_ids).to be_empty
     end
   end
 
