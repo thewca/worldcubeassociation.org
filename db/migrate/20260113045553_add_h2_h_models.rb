@@ -4,6 +4,7 @@ class AddH2HModels < ActiveRecord::Migration[8.1]
   def change
     create_table :h2h_matches do |t|
       t.references :round, type: :integer, null: false, foreign_key: true
+      t.integer :match_number, limit: 1, null: false
       t.timestamps
     end
 

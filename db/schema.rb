@@ -667,6 +667,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_13_045553) do
 
   create_table "h2h_matches", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.integer "match_number", limit: 1, null: false
     t.integer "round_id", null: false
     t.datetime "updated_at", null: false
     t.index ["round_id"], name: "index_h2h_matches_on_round_id"
