@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# rubocop:disable RSpec/Output
 class ExampleJob < WcaCronjob
   def perform
     puts "Doing stuff..."
@@ -25,6 +26,7 @@ class FailingJob < WcaCronjob
     raise "Failure!"
   end
 end
+# rubocop:enable RSpec/Output
 
 RSpec.describe WcaCronjob do
   it "doesn't enqueue the same job multiple times" do
