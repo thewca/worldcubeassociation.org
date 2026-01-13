@@ -25,7 +25,7 @@ RSpec.describe "WCA Live API" do
       result = LiveResult.find_by(round_id: round.id, registration_id: registration.id)
       expect(result).to be_present
 
-      expect(result.live_attempts.map { |l| { attempt_number: l.attempt_number, result: l.result } }).to contain_exactly({ attempt_number: 1, result: 111 },
+      expect(result.live_attempts.map { |l| { attempt_number: l.attempt_number, result: l.value } }).to contain_exactly({ attempt_number: 1, result: 111 },
                                                                                                                          { attempt_number: 2, result: 222 },
                                                                                                                          { attempt_number: 3, result: 333 },
                                                                                                                          { attempt_number: 4, result: 444 },
