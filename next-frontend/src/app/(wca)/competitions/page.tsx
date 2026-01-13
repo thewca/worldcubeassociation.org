@@ -18,6 +18,7 @@ import {
   Tabs,
   IconButton,
   ClientOnly,
+  Icon,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -51,7 +52,8 @@ import { components } from "@/types/openapi";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { FormEventSelector } from "@/components/EventSelector";
-import { LuMapPin } from "react-icons/lu";
+import { LuMapPin, LuSettings2 } from "react-icons/lu";
+import BetaDisabledTooltip from "@/components/BetaDisabledTooltip";
 
 const DEBOUNCE_MS = 600;
 
@@ -90,7 +92,7 @@ export default function CompetitionsPage() {
     "get",
     "/v0/competition_index",
     {
-      params: { query: Object.fromEntries(querySearchParams.entries()) },
+      params: { query: querySearchParams },
     },
     {
       pageParamName: "page",
@@ -177,10 +179,12 @@ export default function CompetitionsPage() {
                     <ListIcon />
                     List
                   </Tabs.Trigger>
-                  <Tabs.Trigger value="map">
-                    <MapIcon />
-                    Map
-                  </Tabs.Trigger>
+                  <BetaDisabledTooltip>
+                    <Tabs.Trigger value="map" disabled>
+                      <MapIcon />
+                      Map
+                    </Tabs.Trigger>
+                  </BetaDisabledTooltip>
                 </Tabs.List>
               </HStack>
             </Card.Header>
@@ -246,18 +250,20 @@ export default function CompetitionsPage() {
                     step={25}
                     disabled={location === undefined}
                   >
-                    <Slider.Label>
-                      Distance{" "}
-                      {geolocationSupported && location === undefined && (
-                        <IconButton
-                          size="xs"
-                          variant="outline"
-                          colorPalette="blue"
-                          onClick={() => requestGeolocationPermission()}
-                        >
-                          <LuMapPin />
-                        </IconButton>
-                      )}
+                    <Slider.Label asChild>
+                      <HStack justifyContent="space-between">
+                        Distance
+                        {geolocationSupported && location === undefined && (
+                          <IconButton
+                            size="xs"
+                            variant="outline"
+                            colorPalette="blue"
+                            onClick={() => requestGeolocationPermission()}
+                          >
+                            <LuMapPin />
+                          </IconButton>
+                        )}
+                      </HStack>
                     </Slider.Label>
                     <Slider.Control>
                       <Slider.Track>
@@ -270,18 +276,22 @@ export default function CompetitionsPage() {
                   <ButtonGroup variant="outline">
                     {/* TODO: replace these buttons with DatePicker (Chakra does not have one by default) */}
                     <Button>
-                      <CompRegoOpenDateIcon />
-                      Date From
+                      <CompRegoOpenDateIcon /> Date From
                     </Button>
                     <Button>
                       <CompRegoCloseDateIcon />
-                      Date To
+                      Date To{" "}
                     </Button>
                   </ButtonGroup>
                   {/* TODO: add "accordion" functionality to this button */}
-                  <Button variant="outline" size="sm">
-                    Advanced Filters
-                  </Button>
+                  <BetaDisabledTooltip>
+                    <Button variant="outline" disabled>
+                      <Icon>
+                        <LuSettings2 />
+                      </Icon>{" "}
+                      Advanced Filters
+                    </Button>
+                  </BetaDisabledTooltip>
                 </HStack>
               </VStack>
             </Card.Body>
