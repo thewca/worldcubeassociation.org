@@ -873,14 +873,17 @@ es-ES:
           a ellos por su número. Si todos los incidentes han sido genéricos,
           enumera al menos los casos más notorios. Marca las casillas apropiadas
           si deseas retroalimentación.
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
           Tienes que incluir al menos %{image_count} imágenes que muestren las
-          zonas de mezclas y de competición (también se aceptan otras imágenes).
-          Puedes seleccionar varios archivos a la vez. Puedes eliminar imágenes
-          solo cuando suficientes otras imágenes se hayan subido (si quieres
-          reemplazar una imagen, necesitas subir la nueva primero y luego
-          eliminar la antigua).
+          zonas de mezclas y de competición de la competición actual,
+          preferiblemente durante la competición (también se aceptan otras
+          imágenes). Puedes seleccionar varios archivos a la vez. Puedes
+          eliminar imágenes solo cuando suficientes otras imágenes se hayan
+          subido (si quieres reemplazar una imagen, necesitas subir la nueva
+          primero y luego eliminar la antigua). Si no dispones de fotografías
+          actuales de la zona de competición y/o de la zona de mezclas mientras
+          se utilizan, explica por qué.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
