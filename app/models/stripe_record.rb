@@ -184,7 +184,7 @@ class StripeRecord < ApplicationRecord
   end
 
   def self.create_or_update_from_api!(api_record, parameters = nil, account_id = nil, parent_record = nil)
-    StripeRecord.find_or_create_by!(stripe_id: api_record.id, stripe_record_type: api_record.object) do |new_record|
+    StripeRecord.create_or_find_by!(stripe_id: api_record.id, stripe_record_type: api_record.object) do |new_record|
       new_record.parameters = parameters
       new_record.account_id = account_id
       new_record.parent_record = parent_record
