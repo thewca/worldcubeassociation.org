@@ -73,7 +73,7 @@ export default async function PersonResults({
                     </Table.Cell>
                     {attempts.map((a) => (
                       <Table.Cell key={`${roundId}-${key}-${a.attempt_number}`}>
-                        {formatAttemptResult(a.result, key)}
+                        {formatAttemptResult(a.value, key)}
                       </Table.Cell>
                     ))}
                     <Table.Cell>{formatAttemptResult(average, key)}</Table.Cell>

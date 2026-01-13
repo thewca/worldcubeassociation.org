@@ -782,7 +782,7 @@ export interface components {
             extensions: unknown[];
         };
         LiveAttempt: {
-            result: number;
+            value: number;
             attempt_number: number;
         };
         LiveResult: {

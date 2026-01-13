@@ -115,7 +115,7 @@ export default function ResultsTable({
                     textAlign="right"
                     key={`${competitor.id}-${attempt.attempt_number}`}
                   >
-                    {formatAttemptResult(attempt.result, eventId)}
+                    {formatAttemptResult(attempt.value, eventId)}
                   </Table.Cell>
                 ))}
               {hasResult && (
