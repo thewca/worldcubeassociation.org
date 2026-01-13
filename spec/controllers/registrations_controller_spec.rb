@@ -141,6 +141,10 @@ RSpec.describe RegistrationsController, :clean_db_with_truncation do
           expect(response.parsed_body).to eq({ "error" => "provider_disconnected" })
           expect(@payment.reload.amount_available_for_refund).to eq competition.base_entry_fee.cents
         end
+
+        it "does not create a duplicate refund if the webhook arrives first" do
+
+        end
       end
     end
   end

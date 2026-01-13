@@ -5,44 +5,45 @@ namespace :import do
   task :h2h_data, [:file_path] => :environment do |_t, args|
     file_path = args[:file_path]
 
-    # VERY BAD AI GENERATED TEMPLATE
+    # TODO: Make this a transaction so that we don't get partial imports
+    # TODO: Add support for multiple rounds in one file
     CSV.foreach(file_path, headers: true) do |row|
+      puts "considering #{row}"
+
       round_id    = row['round_id'].to_i
-      match_num   = row['Match # '].to_i
-      set_num     = row['Set #'].to_i
-      attempt_num = row['Attempt number'].to_i
-      user_id     = row['user_id'].to_i
-      time_taken  = row['Time (seconds)'].to_f
+      match_number   = row['Match # '].to_i
+      set_number     = row['Set #'].to_i
+      attempt_number = row['Attempt number'].to_i
+      registration_id     = row['registration_id'].to_i
+      value  = row['Time (seconds)'].sub(".", "").to_i
 
-      result = Result.find_or_create_by(user_id: user_id, round_id: round_id) do |r|
-        # TODO
+      # First find/create the H2H infrastructure models
+      result = LiveResult.find_or_create_by!(registration_id: registration_id, round_id: round_id) do |lr|
+        lr.average = 0
+        lr.best = 0
+        lr.last_attempt_entered_at = DateTime.now
       end
 
-      h2h_match = H2HMatch.find_or_create_by(round_id: round_id, id: match_num)
+      match = H2hMatch.find_or_create_by!(round_id: round_id, match_number: match_number)
+      competitor = H2hCompetitor.find_or_create_by!(h2h_match_id: match.id, user_id: Registration.find(registration_id).user.id)
 
-      participant = h2h_match.h2h_match_participants.find_or_initialize_by(user_id: user_id)
-      if participant.new_record?
-        # Assign slot_number based on how many participants already exist (1 or 2)
-        participant.slot_number = h2h_match.h2h_match_participants.count + 1
-        participant.save!
-      end
+      set = H2hSet.find_or_create_by!(h2h_match_id: match.id, set_number: set_number)
 
-      # 4. Find or Create the H2HSet within the Match
-      h2h_set = h2h_match.h2h_sets.find_or_create_by(set_number: set_num)
-
-      # 5. Create the ResultAttempt
-      result_attempt = ResultAttempt.create!(
-        result: result,
-        # Fill in other details like time_taken here
+      # Now we can create the attempt-specific records
+      live_attempt = LiveAttempt.create!(
+        value: value,
+        attempt_number: H2hAttempt.where(h2h_competitor_id: competitor).count + 1,
+        live_result: result,
       )
+      puts live_attempt.errors unless live_attempt.valid?
 
-      # 6. Create the H2HAttempt
-      # Links the H2HSet to the specific ResultAttempt
-      H2HAttempt.find_or_create_by!(
-        h2h_set: h2h_set,
-        result_attempt: result_attempt,
-        set_attempt_number: attempt_num
+      h2h_attempt = H2hAttempt.create!(
+        h2h_set: set,
+        live_attempt: live_attempt,
+        h2h_competitor: competitor,
+        set_attempt_number: H2hAttempt.where(h2h_set_id: set, h2h_competitor_id: competitor).count + 1,
       )
+      puts h2h_attempt.errors unless h2h_attempt.valid?
     end
 
     puts "Import complete!"
