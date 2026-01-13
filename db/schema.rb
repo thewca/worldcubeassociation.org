@@ -751,8 +751,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_12_140926) do
     t.datetime "entered_at", null: false
     t.string "entered_by", null: false
     t.bigint "live_attempt_id", null: false
-    t.integer "result", null: false
     t.datetime "updated_at", null: false
+    t.integer "value", null: false
     t.index ["live_attempt_id"], name: "index_live_attempt_history_entries_on_live_attempt_id"
   end
 
