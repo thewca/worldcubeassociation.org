@@ -123,7 +123,7 @@
     "stylelint-config-recommended-scss": "^16.0.2",
     "stylelint-scss": "^6.14.0",
     "webpack-bundle-analyzer": "^5.1.1",
-    "webpack-dev-server": "^5.2.2"
+    "webpack-dev-server": "^5.2.3"
   },
   "scripts": {
     "lint": "eslint -c .eslintrc.json app/webpacker/components/**/*.js app/webpacker/components/**/*.jsx app/webpacker/lib/**/*.js",
