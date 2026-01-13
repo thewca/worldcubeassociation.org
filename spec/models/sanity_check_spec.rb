@@ -268,7 +268,7 @@ RSpec.describe SanityCheck do
 
       it "Correctly find irregular results" do
         r = create(:result)
-        r.update_columns(value3: 0, value4: 0, value5: 0)
+        r.result_attempts.where(attempt_number: 3..5).delete_all
 
         result_ids = sanity_check.run_query.pluck("id")
 
