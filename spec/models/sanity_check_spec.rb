@@ -207,10 +207,10 @@ RSpec.describe SanityCheck do
 
       it "Correctly find less than needed attempts" do
         mo3_with_missing = create(:result, :mo3, event_id: "666")
-        mo3_with_missing.result_attempts.where(attempt_number: 3).delete_all
+        mo3_with_missing.result_attempts.find_by!(attempt_number: 3).delete
 
         bo5_with_missing = create(:result)
-        bo5_with_missing.result_attempts.where(attempt_number: 5).delete_all
+        bo5_with_missing.result_attempts.find_by!(attempt_number: 5).delete
 
         result_ids = sanity_check.run_query.pluck("id")
 
