@@ -1,31 +1,37 @@
-SELECT RIGHT(ce.competition_id, 4) AS year,
-       TRIM(TRAILING '}' FROM (REVERSE(SUBSTRING_INDEX(REVERSE(cutoff), ':', 1)))) AS attemptResult,
-       RIGHT(SUBSTRING_INDEX(cutoff, ',', 1), 1) AS numberOfAttempts, ro.cutoff,
-       ce.competition_id, ce.event_id, re.round_type_id, r.format_id, r.pos, r.person_id, r.person_name,
-       r.value1, r.value2, r.value3, r.value4, r.value5, r.best, r.average
-FROM rounds ro
-       INNER JOIN competition_events ce ON ce.id = ro.competition_event_id
-       INNER JOIN (SELECT DISTINCT competition_id, event_id, round_type_id FROM results) re
-                  ON re.competition_id = ce.competition_id AND re.event_id = ce.event_id AND
-                     (CASE ro.number WHEN ro.total_number_of_rounds THEN re.round_type_id IN ('c', 'f')
-                                     WHEN 0 THEN re.round_type_id IN ('0', 'b', 'h') WHEN 1 THEN re.round_type_id IN ('1', 'd')
-                                     WHEN 2 THEN re.round_type_id IN ('2', 'e') WHEN 3 THEN re.round_type_id IN ('3', 'g') END)
-       JOIN results r ON ce.competition_id=r.competition_id AND ce.event_id=r.event_id
-  AND re.round_type_id=r.round_type_id
-HAVING
-  IF(cutoff IS NULL,
-     IF(format_id IN ('a', 'm'),
-        IF(format_id='m',
-           (value2=0 OR value3=0),
-           (value2=0 OR value3=0 OR value4=0 OR value5=0)),
-        (format_id=2 AND value2=0) OR (format_id=3 AND (value2=0 OR value3=0))),
-     CASE WHEN numberOfAttempts=1 THEN (value1<attemptResult AND value1>=0 AND value2=0) OR
-                                       ((value1>=attemptResult OR value1<0) AND (value2<>0 OR value3<>0 OR value4<>0 OR value5<>0))
-          WHEN numberOfAttempts=2 THEN (((value1<attemptResult AND value1>0) OR
-                                         (value2<attemptResult AND value2>0)) AND value3=0) OR ((value1>=attemptResult OR value1<0) AND
-                                                                                                (value2>=attemptResult OR value2<0) AND (value3<>0 OR value4<>0 OR value5<>0))
-          WHEN numberOfAttempts=3 THEN (((value1<attemptResult AND value1>0) OR
-                                         (value2<attemptResult AND value2>0) OR (value3<attemptResult AND value3>0)) AND value4=0) OR
-                                       ((value1>=attemptResult OR value1<0) AND (value2>=attemptResult OR value2<0) AND
-                                        (value3>=attemptResult OR value3<0) AND (value4<>0 OR value5<>0)) END
-       OR format_id=1)
+WITH round_numbers AS (
+  SELECT
+    t0.*,
+    ROW_NUMBER() OVER (
+      PARTITION BY t0.competition_id, t0.event_id
+      ORDER BY rt.`rank`
+      ) AS round
+  FROM (
+         SELECT DISTINCT
+           r.competition_id,
+           r.event_id,
+           r.round_type_id
+         FROM results r
+       ) t0
+         JOIN round_types rt ON t0.round_type_id = rt.id
+)
+
+SELECT r.id, r.competition_id, r.event_id, rn.round, r.round_type_id, r.person_id,
+       MIN(CASE WHEN ra.value > 0 AND attempt_number <= JSON_EXTRACT(cutoff, '$.numberOfAttempts') THEN value END) AS best_time_before_cutoff,
+       JSON_EXTRACT(ro.cutoff, '$.attemptResult') AS cutoff_time,
+       JSON_EXTRACT(ro.cutoff, '$.numberOfAttempts') AS attempts_at_cutoff,
+       COUNT(*) AS attempts
+FROM results r
+       JOIN result_attempts ra ON ra.result_id = r.id
+       JOIN competition_events ce
+            ON r.competition_id = ce.competition_id
+              AND r.event_id = ce.event_id
+       JOIN round_numbers rn
+            ON rn.competition_id = r.competition_id
+              AND rn.event_id = r.event_id
+              AND rn.round_type_id = r.round_type_id
+       JOIN rounds ro
+            ON ce.id = ro.competition_event_id
+              AND ro.number = rn.round
+              and cutoff IS NOT NULL
+GROUP BY r.id
+HAVING best_time_before_cutoff >= cutoff_time AND attempts > attempts_at_cutoff
