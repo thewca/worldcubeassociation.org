@@ -15,9 +15,13 @@ class AddAutoIncrementToCompetitions < ActiveRecord::Migration[7.1]
 
     execute "UPDATE competitions c, (SELECT competition_id, ROW_NUMBER() OVER (ORDER BY created_at, announced_at, start_date, competition_id) AS rn FROM competitions) h SET c.stable_id = h.rn WHERE c.competition_id = h.competition_id"
     change_column :competitions, :stable_id, :primary_key, auto_increment: true
+
+    add_foreign_key :tickets_competition_result, :competitions, primary_key: :competition_id
   end
 
   def down
+    remove_foreign_key :tickets_competition_result, :competitions
+
     change_column :competitions, :stable_id, :integer, auto_increment: false
     execute "ALTER TABLE competitions DROP PRIMARY KEY"
 
