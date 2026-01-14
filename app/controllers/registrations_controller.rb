@@ -410,7 +410,7 @@ class RegistrationsController < ApplicationController
     handling_event = StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
     incoming_event = StripeWebhookEvent::INCOMING_EVENTS.include?(event.type)
 
-    stored_record ||= StripeRecord.create_or_update_from_api(event_data, {}, audit_event.account_id) if incoming_event
+    stored_record ||= StripeRecord.create_or_update_from_api!(event_data, {}, audit_event.account_id) if incoming_event
 
     if stored_record.nil?
       logger.error "Stripe webhook reported event on entity #{event_data.id} but we have no record with a matching `stripe_id`."
@@ -466,7 +466,7 @@ class RegistrationsController < ApplicationController
         stored_record.update!(parent_record: original_charge)
       end
 
-      stored_record = StripeRecord.create_or_update_from_api(event_data) if event.type == StripeWebhookEvent::REFUND_UPDATED
+      stored_record = StripeRecord.create_or_update_from_api!(event_data) if event.type == StripeWebhookEvent::REFUND_UPDATED
       stored_intent = stored_record.root_record.payment_intent
       stored_holder = stored_intent.holder
 
