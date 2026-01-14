@@ -266,11 +266,11 @@ RSpec.describe SanityCheck do
         round2 = create(:round, competition: competition2, event_id: "333oh")
 
         mo3_with_missing = create(:result, :mo3, event_id: "666", round: round1, competition: competition1)
-        mo3_with_missing.update_columns(value3: 0)
+        mo3_with_missing.result_attempts.find_by!(attempt_number: 3).delete
         create(:result, :mo3, event_id: "666", round: round1, competition: competition1)
 
         bo5_with_missing = create(:result, round: round2, competition: competition2)
-        bo5_with_missing.update_columns(value5: 0)
+        bo5_with_missing.result_attempts.find_by!(attempt_number: 5).delete
         create(:result, round: round2, competition: competition2)
 
         result_ids = sanity_check.run_query.pluck("competition_id")
