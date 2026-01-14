@@ -1716,14 +1716,17 @@ export interface operations {
     competitionList: {
         parameters: {
             query?: {
-                include_cancelled?: string;
+                include_cancelled?: boolean;
                 continent?: string;
                 country_iso2?: string;
                 delegate?: string;
-                event_ids?: string[];
+                "event_ids[]"?: string[];
                 start?: string;
                 end?: string;
                 admin_status?: string;
+                q?: string;
+                sort?: string;
+                ongoing_and_future?: string;
             };
             header?: never;
             path?: never;
