@@ -52,3 +52,14 @@ module Registrations
     REGISTRATION_NOT_OPEN = -7005
   end
 end
+
+module LiveResults
+  module ErrorCodes
+    # User Errors
+    USER_INSUFFICIENT_PERMISSIONS = -2000
+
+    # Live Results Errors
+    LIVE_RESULT_NOT_FOUND = -3000
+    LIVE_RESULT_ALREADY_EXISTS = -3001
+  end
+end
