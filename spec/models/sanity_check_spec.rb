@@ -306,6 +306,24 @@ RSpec.describe SanityCheck do
     end
   end
 
+  context "Round Data Irregularities" do
+    context "Invalid Cumulative Limit" do
+      it "Correctly find irregular time limit" do
+        sanity_check = SanityCheck.find(70)
+        competition = create(:competition, :announced, event_ids: ["666"])
+        round1 = create(:round, competition: competition, event_id: "666", format_id: "m", total_number_of_rounds: 2)
+        round2 = create(:round, competition: competition, event_id: "666", format_id: "m", number: 2)
+        time_limit = TimeLimit.new(centiseconds: 1801, cumulative_round_ids: [round1.wcif_id])
+        round1.update!(time_limit: time_limit)
+        round2.update!(time_limit: time_limit)
+
+        result_ids = sanity_check.run_query.pluck("round_id")
+
+        expect(result_ids).to contain_exactly("666-r2")
+      end
+    end
+  end
+
   context "Person Data Irregularities" do
     context "Wrong names" do
       RSpec.shared_examples 'correct sanity check' do |sanity_check_id, irregular_people, valid_people|
