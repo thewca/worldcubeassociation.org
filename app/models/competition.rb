@@ -225,7 +225,7 @@ class Competition < ApplicationRecord
   validates :events_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions? }
   validates :guests_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_GUEST_LIMIT, allow_blank: true, if: :some_guests_allowed? }
   validates :events_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions? }
-  validates :id, presence: true
+  validates :stable_id, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   validates :competition_id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
                              format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
