@@ -39,7 +39,7 @@ module DatabaseDumper
       where_clause: WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
-          id
+          stable_id
           competition_id
           name
           name_reason
