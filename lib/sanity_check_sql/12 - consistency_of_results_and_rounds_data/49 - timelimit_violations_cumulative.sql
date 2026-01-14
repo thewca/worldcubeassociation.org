@@ -16,8 +16,8 @@ WITH round_numbers AS (
 )
 
 SELECT r.person_id, r.competition_id, JSON_EXTRACT(time_limit, '$.cumulativeRoundIds') AS rounds, r.round_type_id,
-       SUM(CASE WHEN value > 0 THEN value ELSE 0 END) AS total_time,
-       JSON_EXTRACT(time_limit, '$.centiseconds') AS time_limit
+       SUM(IF(value > 0, value, 0))                                                    AS total_time,
+       JSON_EXTRACT(time_limit, '$.centiseconds')                                      AS time_limit
 FROM results r
        JOIN result_attempts ra ON ra.result_id = r.id
        JOIN competition_events ce
