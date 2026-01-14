@@ -49,7 +49,7 @@ RSpec.describe SanityCheck do
                                average: 300, best: 299)
 
       # Apply Cutoff violations
-      result.result_attempts.find_by!(attempt_number: 1).update(value: 300)
+      result.result_attempts.find_by!(attempt_number: 1).update_columns(value: 300)
 
       result_ids = sanity_check.run_query.pluck("best_time_before_cutoff")
 
