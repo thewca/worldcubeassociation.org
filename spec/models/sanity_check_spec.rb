@@ -236,21 +236,21 @@ RSpec.describe SanityCheck do
 
       it "Correctly find less than needed attempts" do
         mo3_with_missing = create(:result, :mo3, event_id: "666")
-        mo3_with_missing.update_columns(value3: 0)
+        mo3_with_missing.result_attempts.find_by!(attempt_number: 3).delete
 
         bo5_with_missing = create(:result)
-        bo5_with_missing.update_columns(value5: 0)
+        bo5_with_missing.result_attempts.find_by!(attempt_number: 5).delete
 
-        result_ids = sanity_check.run_query.pluck("result_id")
+        result_ids = sanity_check.run_query.pluck("id")
 
         expect(result_ids).to match_array([mo3_with_missing, bo5_with_missing].map(&:id))
       end
 
       it "Correctly find more than needed attempts" do
         mo3_with_additional = create(:result, :mo3, event_id: "666")
-        mo3_with_additional.update_columns(value4: 300)
+        mo3_with_additional.result_attempts.create(attempt_number: 4, value: 300)
 
-        result_ids = sanity_check.run_query.pluck("result_id")
+        result_ids = sanity_check.run_query.pluck("id")
 
         expect(result_ids).to match_array([mo3_with_additional].map(&:id))
       end
@@ -266,11 +266,11 @@ RSpec.describe SanityCheck do
         round2 = create(:round, competition: competition2, event_id: "333oh")
 
         mo3_with_missing = create(:result, :mo3, event_id: "666", round: round1, competition: competition1)
-        mo3_with_missing.update_columns(value3: 0)
+        mo3_with_missing.result_attempts.find_by!(attempt_number: 3).delete
         create(:result, :mo3, event_id: "666", round: round1, competition: competition1)
 
         bo5_with_missing = create(:result, round: round2, competition: competition2)
-        bo5_with_missing.update_columns(value5: 0)
+        bo5_with_missing.result_attempts.find_by!(attempt_number: 5).delete
         create(:result, round: round2, competition: competition2)
 
         result_ids = sanity_check.run_query.pluck("competition_id")
@@ -284,9 +284,9 @@ RSpec.describe SanityCheck do
 
       it "Correctly find irregular results" do
         r = create(:result)
-        r.update_columns(value1: -2, value2: -2, value3: -2, value4: -2, value5: -2)
+        r.result_attempts.update_all(value: -2)
 
-        result_ids = sanity_check.run_query.pluck("id")
+        result_ids = sanity_check.run_query.pluck("result_id")
 
         expect(result_ids).to contain_exactly(r.id)
       end
