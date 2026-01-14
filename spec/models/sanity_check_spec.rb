@@ -112,7 +112,7 @@ RSpec.describe SanityCheck do
                                average: 300, best: 300, person: person)
 
       # Apply Timelimit violations
-      result.result_attempts.find_by!(attempt_number: 1).update(value: 302)
+      result.result_attempts.find_by!(attempt_number: 1).update_columns(value: 302)
 
       result_ids = sanity_check.run_query.pluck("total_time")
 
