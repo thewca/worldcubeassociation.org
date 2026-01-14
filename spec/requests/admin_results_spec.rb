@@ -19,7 +19,7 @@ RSpec.describe "Admin Results" do
       expect(response).to be_successful
       competitions = response.parsed_body["competitions"]
       expect(competitions.size).to eq 1
-      expect(competitions[0]["id"]).to eq competition.id
+      expect(competitions[0]["id"]).to eq competition.competition_id
       expect(competitions[0]["posting_user"]["id"]).to eq wrt_member.id
     end
   end

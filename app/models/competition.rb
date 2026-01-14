@@ -99,7 +99,7 @@ class Competition < ApplicationRecord
       .where(
         "delegate_id = :user_id OR organizer_id = :user_id",
         user_id: user_id,
-      ).group(:id)
+      ).group(:competition_id)
   }
   scope :order_by_date, -> { order(:start_date, :end_date) }
   scope :order_by_announcement_date, -> { where.not(announced_at: nil).order(announced_at: :desc) }
@@ -1197,7 +1197,7 @@ class Competition < ApplicationRecord
   end
 
   def adjacent_competitions(days, distance)
-    Competition.where("ABS(DATEDIFF(?, start_date)) <= ? AND competition_id <> ?", start_date, days, id)
+    Competition.where("ABS(DATEDIFF(?, start_date)) <= ? AND competition_id <> ?", start_date, days, competition_id)
                .select { |c| kilometers_to(c) <= distance }
                .sort_by { |c| kilometers_to(c) }
   end
@@ -1219,7 +1219,7 @@ class Competition < ApplicationRecord
   end
 
   def colliding_registration_start_competitions
-    Competition.where("ABS(TIMESTAMPDIFF(MINUTE, ?, registration_open)) <= ? AND id <> ?", registration_open, REGISTRATION_COLLISION_MINUTES_WARNING, id)
+    Competition.where("ABS(TIMESTAMPDIFF(MINUTE, ?, registration_open)) <= ? AND competition_id <> ?", registration_open, REGISTRATION_COLLISION_MINUTES_WARNING, competition_id)
                .order(:registration_open)
   end
 
@@ -1703,7 +1703,7 @@ class Competition < ApplicationRecord
     end
 
     query&.split&.each do |part|
-      like_query = %w[id name cell_name city_name country_id].map { |column| "competitions.#{column} LIKE :part" }.join(" OR ")
+      like_query = %w[competition_id name cell_name city_name country_id].map { |column| "competitions.#{column} LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
@@ -2139,10 +2139,10 @@ class Competition < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: %w[id name website start_date end_date
+    only: %w[name website start_date end_date
              registration_open registration_close announced_at
              cancelled_at results_posted_at competitor_limit venue],
-    methods: %w[url website short_name short_display_name city
+    methods: %w[id url website short_name short_display_name city
                 venue_address venue_details latitude_degrees longitude_degrees
                 country_iso2 event_ids time_until_registration date_range],
     include: %w[delegates organizers],
@@ -2244,7 +2244,7 @@ class Competition < ApplicationRecord
     dues_per_competitor_in_usd = error.nil? ? DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code) : 0
 
     [
-      id, name, country.iso2, continent.id,
+      competition_id, name, country.iso2, continent.id,
       start_date, end_date, announced_at, results_posted_at,
       Rails.application.routes.url_helpers.competition_url(id), num_competitors, delegates.reject(&:trainee_delegate?).map(&:name).sort.join(","),
       currency_code, base_entry_fee_lowest_denomination, Money::Currency.new(currency_code).subunit_to_unit,

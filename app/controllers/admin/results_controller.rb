@@ -14,8 +14,8 @@ module Admin
       render json: {
         current_user: current_user.as_json(user_attributes),
         competitions: @pending_competitions.as_json(
-          only: %w[id name results_submitted_at],
-          methods: %w[city country_iso2],
+          only: %w[name results_submitted_at],
+          methods: %w[id city country_iso2],
           include: {
             posting_user: user_attributes,
             result_ticket: {},
