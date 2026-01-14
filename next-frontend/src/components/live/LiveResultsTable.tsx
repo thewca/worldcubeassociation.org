@@ -18,21 +18,21 @@ const customOrderBy = (
   return competitorResult.global_pos;
 };
 
-export const rankingCellColour = (
+export const rankingCellColorPalette = (
   result: components["schemas"]["LiveResult"],
 ) => {
   if (result?.advancing) {
-    return "advancing";
+    return "green";
   }
 
   if (result?.advancing_questionable) {
-    return "advancingQuestionable";
+    return "yellow";
   }
 
   return "";
 };
 
-export default function ResultsTable({
+export default function LiveResultsTable({
   results,
   eventId,
   competitionId,
@@ -92,8 +92,9 @@ export default function ResultsTable({
             <Table.Row key={competitor.id}>
               <Table.Cell
                 width={1}
+                layerStyle="fill.deep"
                 textAlign="right"
-                backgroundColor={rankingCellColour(competitorResult)}
+                colorPalette={rankingCellColorPalette(competitorResult)}
               >
                 {index + 1}
               </Table.Cell>
@@ -115,7 +116,7 @@ export default function ResultsTable({
                     textAlign="right"
                     key={`${competitor.id}-${attempt.attempt_number}`}
                   >
-                    {formatAttemptResult(attempt.result, eventId)}
+                    {formatAttemptResult(attempt.value, eventId)}
                   </Table.Cell>
                 ))}
               {hasResult && (
