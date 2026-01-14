@@ -184,12 +184,16 @@ RSpec.describe SanityCheck do
 
       # Currently getting the error: Validation failed: Format '1' is not allowed for '333mbo'
       # But it should be allowed according to events.json?
-      # competition = create(:competition, event_ids: ["333mbo"])
-      # round = create(:round, competition: competition, event_id: "333mbo", format_id: "1")
-      # create(:result, competition: competition, round: round, event_id: "333mbo",
-      #                 value1: 21, value2: 0, value3: 0, value4: 0, value5: 0, best: 21, average: 2200, format_id: "1")
-      # create(:result, competition: competition, round: round, event_id: "333mbo",
-      #                 value1: 21, value2: 0, value3: 0, value4: 0, value5: 0, best: 21, average: 2200, format_id: "1")
+      competition = create(:competition, event_ids: %w[333mbo 333mbf])
+      round = create(:round, competition: competition, event_id: "333mbf", format_id: "1")
+
+      # Manually change the event_id to 333mbo because it's not supported anymore
+      round.update_column(:competition_event_id, competition.competition_events.find_by!(event_id: "333mbo").id)
+
+      create(:result, competition: competition, round: round, event_id: "333mbo",
+                      value1: 21, value2: 0, value3: 0, value4: 0, value5: 0, best: 21, average: 0, format_id: "1")
+      create(:result, competition: competition, round: round, event_id: "333mbo",
+                      value1: 21, value2: 0, value3: 0, value4: 0, value5: 0, best: 21, average: 0, format_id: "1")
 
       result_ids = sanity_check.run_query.pluck("competitions")
       expect(result_ids).to be_empty
