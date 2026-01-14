@@ -387,7 +387,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_131200) do
     t.index ["competition_id"], name: "index_competition_venues_on_competition_id"
   end
 
-  create_table "competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "competitions", primary_key: "stable_id", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.boolean "allow_registration_edits", default: false, null: false
     t.boolean "allow_registration_without_qualification", default: false
     t.datetime "announced_at", precision: nil
