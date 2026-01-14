@@ -13,13 +13,22 @@ WITH round_numbers AS (
          FROM results r
        ) t0
          JOIN round_types rt ON t0.round_type_id = rt.id
-)
+),
+     aggregated_attempts AS (
+       SELECT
+         result_id,
+         SUM(IF(value > 0, value, 0)) AS total_time
+       FROM result_attempts
+       GROUP BY result_id
+     )
 
-SELECT r.person_id, r.competition_id, JSON_EXTRACT(time_limit, '$.cumulativeRoundIds') AS rounds, r.round_type_id,
-       SUM(IF(value > 0, value, 0))                                                    AS total_time,
-       JSON_EXTRACT(time_limit, '$.centiseconds')                                      AS time_limit
+SELECT r.person_id,
+       r.competition_id,
+       JSON_EXTRACT(ro.time_limit, '$.cumulativeRoundIds') AS rounds,
+       SUM(aa.total_time) AS total_time,
+       JSON_EXTRACT(ro.time_limit, '$.centiseconds') AS time_limit
 FROM results r
-       JOIN result_attempts ra ON ra.result_id = r.id
+       JOIN aggregated_attempts aa ON aa.result_id = r.id
        JOIN competition_events ce
             ON r.competition_id = ce.competition_id
               AND r.event_id = ce.event_id
@@ -30,6 +39,6 @@ FROM results r
        JOIN rounds ro
             ON ce.id = ro.competition_event_id
               AND ro.number = rn.round
-WHERE JSON_LENGTH(JSON_EXTRACT(time_limit, '$.cumulativeRoundIds')) > 0 # only apply to rounds with a cumulative time limit
-GROUP BY r.competition_id, r.person_id, rounds
+WHERE JSON_LENGTH(JSON_EXTRACT(ro.time_limit, '$.cumulativeRoundIds')) > 0
+GROUP BY r.competition_id, r.person_id, JSON_EXTRACT(ro.time_limit, '$.cumulativeRoundIds'), JSON_EXTRACT(ro.time_limit, '$.centiseconds')
 HAVING total_time >= time_limit
