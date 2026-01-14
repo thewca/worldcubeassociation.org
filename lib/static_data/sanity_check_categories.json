@@ -73,5 +73,10 @@
     "id": 15,
     "name": "Incorrect Records Assignment",
     "email_to": "wrt@worldcubeassociation.org"
+  },
+  {
+    "id": 16,
+    "name": "Round Data Irregularities",
+    "email_to": "wrt@worldcubeassociation.org"
   }
 ]
