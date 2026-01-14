@@ -123,7 +123,7 @@ FactoryBot.define do
 
     after(:build) do |result|
       result.result_attempts_attributes.each do |at|
-        result.result_attempts.build(attempt_number: at[:attempt_number], value: at[:value])
+        result.result_attempts.build(**at)
       end
     end
   end
