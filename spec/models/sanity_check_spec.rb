@@ -297,11 +297,22 @@ RSpec.describe SanityCheck do
 
       it "Correctly find irregular results" do
         r = create(:result)
-        r.update_columns(value3: 0, value4: 0, value5: 0)
+        r.result_attempts.where(attempt_number: 3..5).delete_all
 
         result_ids = sanity_check.run_query.pluck("id")
 
         expect(result_ids).to contain_exactly(r.id)
+      end
+
+      it "Doesn't flag correct cutoff results" do
+        cutoff = Cutoff.new(attempt_result: 100, number_of_attempts: 2)
+        competition = create(:competition)
+        round = create(:round, cutoff: cutoff, competition: competition)
+        create(:result, :over_cutoff, cutoff: cutoff, round: round, competition: competition, event_id: "333")
+
+        result_ids = sanity_check.run_query.pluck("id")
+
+        expect(result_ids).to be_empty
       end
     end
   end
