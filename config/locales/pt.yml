@@ -862,14 +862,17 @@ pt:
           usando os números como referência. Mesmo que tudo pareça genérico,
           liste pelo menos os mais relevantes. Por favor assinale as caixas
           apropriadas se precisar de obter feedback.
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
           TEM de incluir pelo menos %{image_count} imagens que ilustrem a
-          configuração das áreas de embaralhamento e da competição (outras
-          imagens também são bem-vindas). Pode selecionar vários ficheiros de
-          uma só vez. Só pode eliminar imagens quando tiverem sido carregadas
-          outras imagens suficientes (se quiser substituir uma imagem, precisa
-          de carregar a nova primeiro e depois eliminar a antiga).
+          configuração das áreas de embaralhamento e da competição da competição
+          atual, preferencialmente durante a competição (outras imagens também
+          são bem-vindas). Pode selecionar vários ficheiros de uma só vez. Só
+          pode eliminar imagens quando tiverem sido carregadas outras imagens
+          suficientes (se quiser substituir uma imagem, precisa de carregar a
+          nova primeiro e depois eliminar a antiga). Caso não possua fotos
+          atuais da área de competição e/ou da área de embaralhamento em
+          utilização, por favor, explique o motivo.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -2634,6 +2637,8 @@ pt:
           por exemplo, 1944-07-13), Birthdate must follow the YYYY-mm-dd format
           (year-month-day, for example 1944-07-13), as seguintes datas
           submetidas não podem ser processadas: %{raw_dobs}.
+        #original_hash: 6d8e34b
+        empty_file: O ficheiro está vazio.
     add:
       #original_hash: 975275e
       title: 'Adicionar registo para %{comp}'

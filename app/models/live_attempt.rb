@@ -13,7 +13,7 @@ class LiveAttempt < ApplicationRecord
   validates :attempt_number, numericality: { only_integer: true }
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: %w[attempt_number result],
+    only: %w[attempt_number value],
   }.freeze
 
   def serializable_hash(options = nil)
