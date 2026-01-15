@@ -1,8 +1,8 @@
 require 'csv'
 
-namespace :import do
+namespace :h2h_results do
   desc "Import H2H data from CSV"
-  task :h2h_data, [:file_path] => :environment do |_t, args|
+  task :import, [:file_path] => :environment do |_t, args|
     file_path = args[:file_path]
 
     # TODO: Add support for multiple rounds in one file (I think I already have this?)
@@ -47,6 +47,15 @@ namespace :import do
       end
 
       puts "Import complete!"
+    end
+  end
+
+  desc "Graduate H2H data from live tables to results and result_attempts"
+  task :import, [:competition_id] => :environment do |_t, args|
+    competition = Competition.find(args[:competition_id])
+    h2h_rounds = competition.rounds.where(is_h2h_mock: true)
+
+    h2h_rounds.each do |r|
     end
   end
 end
