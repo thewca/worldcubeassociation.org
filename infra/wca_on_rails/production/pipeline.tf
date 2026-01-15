@@ -379,7 +379,61 @@ resource "aws_codepipeline" "this" {
       }
     }
   }
+
+  stage {
+    name = "Trigger Auxiliary Service Update"
+
+    action {
+      name     = "update-ecs-services"
+      category = "Build"
+      owner    = "AWS"
+      provider = "CodeBuild"
+      version  = "1"
+
+      input_artifacts = []
+
+      configuration = {
+        ProjectName = aws_codebuild_project.ecs_update_services.name
+      }
+    }
+  }
 }
+
+resource "aws_codebuild_project" "ecs_update_services" {
+  name          = "${var.name_prefix}-ecs-update-services"
+  service_role  = aws_iam_role.codepipeline_role.arn
+  build_timeout = "5"
+
+  artifacts {
+    type = "NO_ARTIFACTS"
+  }
+
+  environment {
+    compute_type                = "BUILD_GENERAL1_SMALL"
+    image                       = "aws/codebuild/standard:6.0"
+    type                        = "LINUX_CONTAINER"
+    privileged_mode             = false
+
+    environment_variable {
+      name  = "CLUSTER_NAME"
+      value = "wca-on-rails"
+    }
+  }
+
+  source {
+    type     = "NO_SOURCE"
+    buildspec = <<EOF
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - aws ecs update-service --cluster $CLUSTER_NAME --service wca-on-rails-prod-auxiliary-services --force-new-deployment
+      - aws ecs update-service --cluster $CLUSTER_NAME --service wca-on-rails-prod-sqs-worker --force-new-deployment
+EOF
+  }
+}
+
 
 resource "aws_cloudwatch_event_rule" "ecr_image_push" {
   name     = "${var.name_prefix}-ecr-image-push"
