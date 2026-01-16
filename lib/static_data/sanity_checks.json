@@ -478,7 +478,7 @@
   {
     "id": "70",
     "sanity_check_category_id": "9",
-    "topic": "Invalid Time Cumulative Limit",
+    "topic": "Invalid Cumulative Time Limit",
     "comments": null,
     "query_file": "invalid_cumulative_limit.sql"
   }
