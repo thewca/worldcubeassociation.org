@@ -25,7 +25,10 @@ export default async function Competitors({
   return (
     <TabCompetitors
       id={competitionId}
-      isLive={hasPassed(competitionInfo.start_date)}
+      isLive={
+        hasPassed(competitionInfo.start_date) &&
+        !hasPassed(competitionInfo.end_date)
+      }
     />
   );
 }
