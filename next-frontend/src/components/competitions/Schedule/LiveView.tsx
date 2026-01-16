@@ -1,7 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Card, HStack, SimpleGrid, Link, Tabs, Button } from "@chakra-ui/react";
+import {
+  Card,
+  HStack,
+  SimpleGrid,
+  Link,
+  Tabs,
+  Button,
+  VStack,
+  Select,
+  createListCollection,
+  Portal,
+} from "@chakra-ui/react";
 import NextLink from "next/link";
 import {
   activitiesOnDate,
@@ -18,13 +29,13 @@ import {
 import EventIcon from "@/components/EventIcon";
 import { route } from "nextjs-routes";
 import { TFunction } from "i18next";
+import { useT } from "@/lib/i18n/useI18n";
 
 interface LiveViewProps {
   timeZones: string[];
   competitionId: string;
   activities: components["schemas"]["WcifActivity"][];
   wcifEvents: components["schemas"]["WcifEvent"][];
-  t: TFunction;
 }
 
 export default function LiveView({
@@ -32,8 +43,8 @@ export default function LiveView({
   competitionId,
   activities,
   wcifEvents,
-  t,
 }: LiveViewProps) {
+  const { t } = useT();
   const firstStartTime = activities[0].startTime;
   const lastStartTime = activities[activities.length - 1].startTime;
   const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -51,63 +62,99 @@ export default function LiveView({
     dates.filter((d) => !hasPassed(d.toISO()!))[0] ?? lastDate;
 
   return (
-    <Tabs.Root defaultValue={defaultDate.day.toString()}>
-      <Tabs.List height="fit-content" position="sticky" top="3">
-        {dates.map((date) => (
-          <Tabs.Trigger value={date.day.toString()} key={date.day}>
-            {date.toLocaleString({ timeZone })}
-          </Tabs.Trigger>
-        ))}
-      </Tabs.List>
-      {dates.map((date) => {
-        const activitiesOnDay = activitiesOnDate(
-          activities,
-          date,
-          timeZone,
-        ).filter((a) => !a.activityCode.startsWith("other"));
-        const groupedActivities = groupActivities(activitiesOnDay);
+    <VStack align="left">
+      <Select.Root
+        collection={createListCollection({
+          items: [...timeZones, browserTimezone].map((t) => ({
+            value: t,
+            label: t,
+          })),
+        })}
+        width="320px"
+        value={[timeZone]}
+        onValueChange={(e) => setTimeZone(e.value[0])}
+      >
+        <Select.HiddenSelect />
+        <Select.Label>Select Timezone</Select.Label>
+        <Select.Control>
+          <Select.Trigger>
+            <Select.ValueText placeholder="Select Timezone" />
+          </Select.Trigger>
+          <Select.IndicatorGroup>
+            <Select.Indicator />
+          </Select.IndicatorGroup>
+        </Select.Control>
+        <Portal>
+          <Select.Positioner>
+            <Select.Content>
+              {timeZones.map((timezone) => (
+                <Select.Item item={timezone} key={timezone}>
+                  {timezone}
+                  <Select.ItemIndicator />
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Positioner>
+        </Portal>
+      </Select.Root>
+      <Tabs.Root defaultValue={defaultDate.day.toString()}>
+        <Tabs.List height="fit-content" position="sticky" top="3">
+          {dates.map((date) => (
+            <Tabs.Trigger value={date.day.toString()} key={date.day}>
+              {date.toLocaleString({ timeZone })}
+            </Tabs.Trigger>
+          ))}
+        </Tabs.List>
+        {dates.map((date) => {
+          const activitiesOnDay = activitiesOnDate(
+            activities,
+            date,
+            timeZone,
+          ).filter((a) => !a.activityCode.startsWith("other"));
+          const groupedActivities = groupActivities(activitiesOnDay);
 
-        return (
-          <Tabs.Content value={date.day.toString()} key={date.day}>
-            <SimpleGrid columns={3} gap={2}>
-              {groupedActivities.map((activityGroup) => {
-                const activity = activityGroup[0];
-                const { eventId } = parseActivityCode(activity.activityCode);
+          return (
+            <Tabs.Content value={date.day.toString()} key={date.day}>
+              <SimpleGrid columns={3} gap={2}>
+                {groupedActivities.map((activityGroup) => {
+                  const activity = activityGroup[0];
+                  const { eventId } = parseActivityCode(activity.activityCode);
 
-                return (
-                  <Card.Root key={activity.id} rounded="md">
-                    <Card.Body asChild alignItems="baseline">
-                      <Button asChild variant="subtle">
-                        <Link asChild textStyle="headerLink">
-                          <NextLink
-                            href={route({
-                              pathname:
-                                "/competitions/[competitionId]/live/rounds/[roundId]",
-                              query: {
-                                competitionId,
-                                roundId: activity.id.toString(),
-                              },
-                            })}
-                          >
-                            <HStack>
-                              <EventIcon eventId={eventId} fontSize="2xl" />
-                              {localizeActivityName(t, activity, wcifEvents)}
-                            </HStack>
-                          </NextLink>
-                        </Link>
-                      </Button>
-                    </Card.Body>
-                    <Card.Footer>
-                      {getSimpleTimeString(activity.startTime)} -{" "}
-                      {getSimpleTimeString(activity.endTime)}
-                    </Card.Footer>
-                  </Card.Root>
-                );
-              })}
-            </SimpleGrid>
-          </Tabs.Content>
-        );
-      })}
-    </Tabs.Root>
+                  return (
+                    <Card.Root key={activity.id} rounded="md">
+                      <Card.Body asChild alignItems="baseline">
+                        <Button asChild variant="subtle">
+                          <Link asChild textStyle="headerLink">
+                            <NextLink
+                              href={route({
+                                pathname:
+                                  "/competitions/[competitionId]/live/rounds/[roundId]",
+                                query: {
+                                  competitionId,
+                                  roundId: activity.id.toString(),
+                                },
+                              })}
+                            >
+                              <HStack>
+                                <EventIcon eventId={eventId} fontSize="2xl" />
+                                {localizeActivityName(t, activity, wcifEvents)}
+                              </HStack>
+                            </NextLink>
+                          </Link>
+                        </Button>
+                      </Card.Body>
+                      <Card.Footer>
+                        {getSimpleTimeString(activity.startTime)} -{" "}
+                        {getSimpleTimeString(activity.endTime)}
+                      </Card.Footer>
+                    </Card.Root>
+                  );
+                })}
+              </SimpleGrid>
+            </Tabs.Content>
+          );
+        })}
+      </Tabs.Root>
+    </VStack>
   );
 }

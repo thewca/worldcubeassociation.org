@@ -48,7 +48,6 @@ export default async function LiveOverview({
       activities={allActivitiesSorted}
       timeZones={uniqueTimeZones}
       wcifEvents={wcifEvents}
-      t={t}
     />
   );
 }
