@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import { useState } from "react";
 import { Card, HStack, SimpleGrid, Link, Tabs, Button } from "@chakra-ui/react";
 import NextLink from "next/link";
 import {
@@ -18,7 +20,7 @@ import { route } from "nextjs-routes";
 import { TFunction } from "i18next";
 
 interface LiveViewProps {
-  timeZone: string;
+  timeZones: string[];
   competitionId: string;
   activities: components["schemas"]["WcifActivity"][];
   wcifEvents: components["schemas"]["WcifEvent"][];
@@ -26,7 +28,7 @@ interface LiveViewProps {
 }
 
 export default function LiveView({
-  timeZone,
+  timeZones,
   competitionId,
   activities,
   wcifEvents,
@@ -34,6 +36,8 @@ export default function LiveView({
 }: LiveViewProps) {
   const firstStartTime = activities[0].startTime;
   const lastStartTime = activities[activities.length - 1].startTime;
+  const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const [timeZone, setTimeZone] = useState(browserTimezone);
 
   const dates = getDatesBetweenInclusive(
     firstStartTime,

@@ -46,7 +46,7 @@ export default async function LiveOverview({
     <LiveView
       competitionId={competitionId}
       activities={allActivitiesSorted}
-      timeZone={uniqueTimeZones[0]}
+      timeZones={uniqueTimeZones}
       wcifEvents={wcifEvents}
       t={t}
     />
