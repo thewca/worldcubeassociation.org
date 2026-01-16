@@ -489,4 +489,123 @@ RSpec.describe SanityCheck do
       end
     end
   end
+
+  context "incorrect record assignments", :clean_db_with_truncation do
+    let(:sanity_check) { SanityCheck.find(66) }
+
+    context "complains" do
+      it "about results that are marked as records when they actually should not be" do
+        comp_wc2023 = create(:competition, :with_valid_schedule, name: "World Championships 2023", start_date: '2023-08-12', end_date: '2023-08-15')
+        round_wc2023 = comp_wc2023.competition_events.find_by!(event_id: '333').rounds.first
+
+        comp_wc2025 = create(:competition, :with_valid_schedule, name: "World Championships 2025", start_date: '2025-07-03', end_date: '2025-07-06')
+        round_wc2025 = comp_wc2025.competition_events.find_by!(event_id: '333').rounds.first
+
+        # At the WC2023, the first ever 3x3 result is achieved. This counts as world record, hooray!
+        world_record_holder = create(:person, country_id: 'Australia')
+        create(:result, competition: comp_wc2023, person: world_record_holder, round: round_wc2023, event_id: "333", value1: 100, value2: 200, value3: 300, value4: 400, value5: 500, best: 100, average: 300, regional_single_record: 'WR', regional_average_record: 'WR')
+
+        # At the WC2025 two years later, the world record is unfortunately not beaten. But somehow, the marker still ended up in our database…
+        not_quite_there_yet = create(:person, country_id: 'Netherlands')
+        create(:result, competition: comp_wc2025, person: not_quite_there_yet, round: round_wc2025, event_id: "333", value1: 200, value2: 300, value3: 400, value4: 500, value5: 600, best: 200, average: 400, regional_single_record: 'WR', regional_average_record: 'WR')
+
+        AuxiliaryDataComputation.compute_concise_results
+
+        result_action = sanity_check.run_query.first.symbolize_keys
+
+        expect(result_action).to eq({
+                                      action: "single: replace WR with ER, average: replace WR with ER",
+                                      competition_id: comp_wc2025.id,
+                                      country_id: not_quite_there_yet.country_id,
+                                      event_id: round_wc2025.event_id,
+                                      person_id: not_quite_there_yet.wca_id,
+                                      round: round_wc2025.number,
+                                    })
+      end
+
+      it "about results that are not marked as records when they actually should be" do
+        comp_wc2023 = create(:competition, :with_valid_schedule, name: "World Championships 2023", start_date: '2023-08-12', end_date: '2023-08-15')
+        round_wc2023 = comp_wc2023.competition_events.find_by!(event_id: '333').rounds.first
+
+        comp_wc2025 = create(:competition, :with_valid_schedule, name: "World Championships 2025", start_date: '2025-07-03', end_date: '2025-07-06')
+        round_wc2025 = comp_wc2025.competition_events.find_by!(event_id: '333').rounds.first
+
+        # At the WC2023, the first ever 3x3 result is achieved. This counts as world record, hooray!
+        world_record_holder = create(:person, country_id: 'USA')
+        create(:result, competition: comp_wc2023, person: world_record_holder, round: round_wc2023, event_id: "333", value1: 200, value2: 300, value3: 400, value4: 500, value5: 600, best: 200, average: 400, regional_single_record: 'WR', regional_average_record: 'WR')
+
+        # At the WC2025 two years later, the world record is again broken. But for unknown reasons, the marker is missing in our DB :O
+        really_managed_to_break_it = create(:person, country_id: 'China')
+        create(:result, competition: comp_wc2025, person: really_managed_to_break_it, round: round_wc2025, event_id: "333", value1: 100, value2: 200, value3: 300, value4: 400, value5: 500, best: 100, average: 300)
+
+        AuxiliaryDataComputation.compute_concise_results
+
+        result_action = sanity_check.run_query.first.symbolize_keys
+
+        expect(result_action).to eq({
+                                      action: "single: add WR, average: add WR",
+                                      competition_id: comp_wc2025.id,
+                                      country_id: really_managed_to_break_it.country_id,
+                                      event_id: round_wc2025.event_id,
+                                      person_id: really_managed_to_break_it.wca_id,
+                                      round: round_wc2025.number,
+                                    })
+      end
+    end
+
+    context "does not complain" do
+      it "about results that are marked as records correctly" do
+        comp_wc2023 = create(:competition, :with_valid_schedule, name: "World Championships 2023", start_date: '2023-08-12', end_date: '2023-08-15')
+        round_wc2023 = comp_wc2023.competition_events.find_by!(event_id: '333').rounds.first
+
+        comp_wc2025 = create(:competition, :with_valid_schedule, name: "World Championships 2025", start_date: '2025-07-03', end_date: '2025-07-06')
+        round_wc2025 = comp_wc2025.competition_events.find_by!(event_id: '333').rounds.first
+
+        # At the WC2023, the first ever 3x3 result is achieved. This counts as world record, hooray!
+        world_record_holder = create(:person, country_id: 'USA')
+        create(:result, competition: comp_wc2023, person: world_record_holder, round: round_wc2023, event_id: "333", value1: 200, value2: 300, value3: 400, value4: 500, value5: 600, best: 200, average: 400, regional_single_record: 'WR', regional_average_record: 'WR')
+
+        # At the WC2025 two years later, the world record is again broken. This counts as WR in our database as well.
+        really_managed_to_break_it = create(:person, country_id: 'China')
+        create(:result, competition: comp_wc2025, person: really_managed_to_break_it, round: round_wc2025, event_id: "333", value1: 100, value2: 200, value3: 300, value4: 400, value5: 500, best: 100, average: 300, regional_single_record: 'WR', regional_average_record: 'WR')
+        # Another competitor practiced hard but didn't quite make WR. They will however be awared the continental record!
+        not_quite_there_yet = create(:person, country_id: 'Netherlands')
+        create(:result, competition: comp_wc2025, person: not_quite_there_yet, round: round_wc2025, event_id: "333", value1: 150, value2: 250, value3: 350, value4: 450, value5: 550, best: 150, average: 350, regional_single_record: 'ER', regional_average_record: 'ER')
+        # At the same competition, there is a random kiddo who's just attending for fun. But they're the only one representing their country so they get surprise NR!
+        just_for_fun_kiddo = create(:person, country_id: 'Germany')
+        create(:result, competition: comp_wc2025, person: just_for_fun_kiddo, round: round_wc2025, event_id: "333", value1: 1000, value2: 2000, value3: 3000, value4: 4000, value5: 5000, best: 1000, average: 3000, regional_single_record: 'NR', regional_average_record: 'NR')
+
+        AuxiliaryDataComputation.compute_concise_results
+
+        result_action = sanity_check.run_query
+
+        expect(result_action).to be_empty
+      end
+
+      it "about results if they happened before 2019, even when they are wrongfully marked as records" do
+        comp_wc1982 = create(:competition, :with_valid_schedule, name: "World Championships 1982", start_date: '1982-06-05', end_date: '1982-06-05')
+        round_wc1982 = comp_wc1982.competition_events.find_by!(event_id: '333').rounds.first
+
+        comp_wc2003 = create(:competition, :with_valid_schedule, name: "World Championships 2003", start_date: '2003-08-23', end_date: '2003-08-24')
+        round_wc2003 = comp_wc2003.competition_events.find_by!(event_id: '333').rounds.first
+
+        # At the WC1982, the first ever 3x3 result is achieved. This counts as world record, hooray!
+        world_record_holder = create(:person, country_id: 'USA')
+        create(:result, competition: comp_wc1982, person: world_record_holder, round: round_wc1982, event_id: "333", value1: 100, value2: 200, value3: 300, value4: 400, value5: 500, best: 100, average: 300, regional_single_record: 'WR', regional_average_record: 'WR')
+
+        # At the WC2003 despite years of practice and innovation, the world record is unfortunately not beaten. But somehow, the marker still ended up in our database…
+        not_quite_there_yet = create(:person, country_id: 'Belgium')
+        create(:result, competition: comp_wc2003, person: not_quite_there_yet, round: round_wc2003, event_id: "333", value1: 200, value2: 300, value3: 400, value4: 500, value5: 600, best: 200, average: 400, regional_single_record: 'WR', regional_average_record: 'WR')
+
+        AuxiliaryDataComputation.compute_concise_results
+
+        result_action = sanity_check.run_query
+
+        # Normally, we would expect a "Oh that second result should not be marked as WR" action.
+        #   But since the sanity check deliberately ignores results before 2019,
+        #   and all of our mock data comes from 1982 and 2003, we expect an empty result
+        expect(result_action).to be_empty
+      end
+    end
+  end
 end
