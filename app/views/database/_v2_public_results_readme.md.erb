@@ -1,5 +1,5 @@
 <% long_date ||= DateTime.now %>
-<% export_version ||= '2.0.1' %>
+<% export_version ||= '2.0.2' %>
 # World Cube Association – Results Database Export
 
 - Encoding: UTF-8
@@ -39,6 +39,13 @@ Opt in to the WCA Software Mailing List via [your profile preferences](https://w
 ## V2.0.1 Changelog
 - Fixed missing `results.id` and `result_attempts.id` keys
 - Fixed SQL error rendering in `WCA_exports_scrambles.tsv`
+
+## V2.0.2 Changelog
+- Removed the following fields from `result_attempts` to reduce filesize:
+  - `id`
+  - `created_at`
+  - `updated_at`
+- Changed `result_attempts.attempt_number` to an unsigned tinyint, also to reduce filesize
 
 ## Description
 
