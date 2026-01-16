@@ -67,15 +67,15 @@ RSpec.describe SanityCheck do
                                average: 300, best: 300)
 
       # Apply Timelimit violations
-      result.update_columns(value1: 302)
+      result.result_attempts.find_by!(attempt_number: 1).update_columns(value: 302)
 
-      result_ids = sanity_check.run_query.pluck("value1", "value2", "value3")
+      result_ids = sanity_check.run_query.pluck("value")
 
-      expect(result_ids).to contain_exactly([302, 300, 300])
+      expect(result_ids).to contain_exactly(302)
     end
 
     it "Correctly identifies timelimit violations (cumulative), single round" do
-      sanity_check = SanityCheck.find(48)
+      sanity_check = SanityCheck.find(49)
       competition = create(:competition, event_ids: ["666"])
       round = create(:round, competition: competition, event_id: "666", format_id: "m")
       time_limit = TimeLimit.new(centiseconds: 901, cumulative_round_ids: [round.wcif_id])
@@ -86,9 +86,9 @@ RSpec.describe SanityCheck do
                                average: 300, best: 300)
 
       # Apply Timelimit violations
-      result.update_columns(value1: 302)
+      result.result_attempts.find_by!(attempt_number: 1).update_columns(value: 302)
 
-      result_ids = sanity_check.run_query.pluck("sumOfSolves")
+      result_ids = sanity_check.run_query.pluck("total_time")
 
       expect(result_ids).to contain_exactly(902)
     end
@@ -112,9 +112,9 @@ RSpec.describe SanityCheck do
                                average: 300, best: 300, person: person)
 
       # Apply Timelimit violations
-      result.update_columns(value1: 302)
+      result.result_attempts.find_by!(attempt_number: 1).update_columns(value: 302)
 
-      result_ids = sanity_check.run_query.pluck("sumOfSolves")
+      result_ids = sanity_check.run_query.pluck("total_time")
 
       expect(result_ids).to contain_exactly(1802)
     end
