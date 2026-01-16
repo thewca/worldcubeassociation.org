@@ -30,25 +30,8 @@ class Ticket < ApplicationRecord
     return false if user.nil?
 
     ticket_stakeholders.belongs_to_user(user).any? ||
-      ticket_stakeholders.belongs_to_groups(user.active_groups).any?
-  end
-
-  def create_bcc_roles_if_eligible?(user)
-    # Currently we have only two ticket types: edit_person and competition_result.
-    # For both these ticket types, other than the existing stakeholders (which includes WRT),
-    # only admins need access. When we have more ticket types we will expand this to consider
-    # permissions based on ticket type. For example, when we have claim WCA ID tickets, that
-    # ticket type will be allowed to any delegates.
-    return false unless user.admin?
-
-    # Silently add the user as stakeholder so that the user can perform any actions if needed.
-    ticket_stakeholders.create!(
-      stakeholder: user,
-      connection: TicketStakeholder.connections[:bcc],
-      stakeholder_role: TicketStakeholder.stakeholder_roles[:actioner],
-      is_active: true,
-    )
-    true
+      ticket_stakeholders.belongs_to_groups(user.active_groups).any? ||
+      metadata.eligible_roles_for_bcc(user).any?
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

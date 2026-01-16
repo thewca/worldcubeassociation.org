@@ -243,6 +243,7 @@ Rails.application.routes.draw do
     post 'sync_edit_person_request' => 'tickets#sync_edit_person_request', as: :sync_edit_person_request
     resources :ticket_comments, only: %i[index create], as: :comments
     resources :ticket_logs, only: [:index], as: :logs
+    resources :ticket_stakeholders, only: [:create], as: :stakeholders
     resources :tickets_edit_person_fields, only: %i[create update destroy], as: :edit_person_fields
   end
   resources :notifications, only: [:index]
