@@ -49,11 +49,11 @@ RSpec.describe SanityCheck do
                                average: 300, best: 299)
 
       # Apply Cutoff violations
-      result.update_columns(value1: 300, best: 300)
+      result.result_attempts.find_by!(attempt_number: 1).update_columns(value: 300)
 
-      result_ids = sanity_check.run_query.pluck("attemptResult")
+      result_ids = sanity_check.run_query.pluck("best_time_before_cutoff")
 
-      expect(result_ids).to contain_exactly("300")
+      expect(result_ids).to contain_exactly(300)
     end
 
     it "Correctly identifies timelimit violations (non cumulative)" do
@@ -67,15 +67,15 @@ RSpec.describe SanityCheck do
                                average: 300, best: 300)
 
       # Apply Timelimit violations
-      result.update_columns(value1: 302)
+      result.result_attempts.find_by!(attempt_number: 1).update_columns(value: 302)
 
-      result_ids = sanity_check.run_query.pluck("value1", "value2", "value3")
+      result_ids = sanity_check.run_query.pluck("value")
 
-      expect(result_ids).to contain_exactly([302, 300, 300])
+      expect(result_ids).to contain_exactly(302)
     end
 
     it "Correctly identifies timelimit violations (cumulative), single round" do
-      sanity_check = SanityCheck.find(48)
+      sanity_check = SanityCheck.find(49)
       competition = create(:competition, event_ids: ["666"])
       round = create(:round, competition: competition, event_id: "666", format_id: "m")
       time_limit = TimeLimit.new(centiseconds: 901, cumulative_round_ids: [round.wcif_id])
@@ -86,9 +86,9 @@ RSpec.describe SanityCheck do
                                average: 300, best: 300)
 
       # Apply Timelimit violations
-      result.update_columns(value1: 302)
+      result.result_attempts.find_by!(attempt_number: 1).update_columns(value: 302)
 
-      result_ids = sanity_check.run_query.pluck("sumOfSolves")
+      result_ids = sanity_check.run_query.pluck("total_time")
 
       expect(result_ids).to contain_exactly(902)
     end
@@ -112,9 +112,9 @@ RSpec.describe SanityCheck do
                                average: 300, best: 300, person: person)
 
       # Apply Timelimit violations
-      result.update_columns(value1: 302)
+      result.result_attempts.find_by!(attempt_number: 1).update_columns(value: 302)
 
-      result_ids = sanity_check.run_query.pluck("sumOfSolves")
+      result_ids = sanity_check.run_query.pluck("total_time")
 
       expect(result_ids).to contain_exactly(1802)
     end
@@ -160,8 +160,9 @@ RSpec.describe SanityCheck do
   end
 
   context "Duplicate Results" do
+    let!(:sanity_check) { SanityCheck.find(18) }
+
     it "Correctly finds duplicate results" do
-      sanity_check = SanityCheck.find(18)
       competition = create(:competition)
       round = create(:round, competition: competition)
       create(:result, competition: competition, round: round, event_id: "333",
@@ -171,6 +172,31 @@ RSpec.describe SanityCheck do
 
       result_ids = sanity_check.run_query.pluck("competitions")
       expect(result_ids).to contain_exactly(competition.id)
+    end
+
+    it "Doesn't trigger for fmc or multiblind old style" do
+      competition = create(:competition, event_ids: ["333fm"])
+      round = create(:round, competition: competition, event_id: "333fm", format_id: "m")
+      create(:result, competition: competition, round: round, event_id: "333fm",
+                      value1: 21, value2: 22, value3: 23, value4: 0, value5: 0, best: 21, average: 2200, format_id: "m")
+      create(:result, competition: competition, round: round, event_id: "333fm",
+                      value1: 21, value2: 22, value3: 23, value4: 0, value5: 0, best: 21, average: 2200, format_id: "m")
+
+      # Currently getting the error: Validation failed: Format '1' is not allowed for '333mbo'
+      # But it should be allowed according to events.json?
+      competition = create(:competition, event_ids: %w[333mbo 333mbf])
+      round = create(:round, competition: competition, event_id: "333mbf", format_id: "1")
+
+      # Manually change the event_id to 333mbo because it's not supported anymore
+      round.update_column(:competition_event_id, competition.competition_events.find_by!(event_id: "333mbo").id)
+
+      create(:result, competition: competition, round: round, event_id: "333mbo",
+                      value1: 21, value2: 0, value3: 0, value4: 0, value5: 0, best: 21, average: 0, format_id: "1")
+      create(:result, competition: competition, round: round, event_id: "333mbo",
+                      value1: 21, value2: 0, value3: 0, value4: 0, value5: 0, best: 21, average: 0, format_id: "1")
+
+      result_ids = sanity_check.run_query.pluck("competitions")
+      expect(result_ids).to be_empty
     end
   end
 
@@ -266,11 +292,11 @@ RSpec.describe SanityCheck do
         round2 = create(:round, competition: competition2, event_id: "333oh")
 
         mo3_with_missing = create(:result, :mo3, event_id: "666", round: round1, competition: competition1)
-        mo3_with_missing.update_columns(value3: 0)
+        mo3_with_missing.result_attempts.find_by!(attempt_number: 3).delete
         create(:result, :mo3, event_id: "666", round: round1, competition: competition1)
 
         bo5_with_missing = create(:result, round: round2, competition: competition2)
-        bo5_with_missing.update_columns(value5: 0)
+        bo5_with_missing.result_attempts.find_by!(attempt_number: 5).delete
         create(:result, round: round2, competition: competition2)
 
         result_ids = sanity_check.run_query.pluck("competition_id")
@@ -297,11 +323,22 @@ RSpec.describe SanityCheck do
 
       it "Correctly find irregular results" do
         r = create(:result)
-        r.update_columns(value3: 0, value4: 0, value5: 0)
+        r.result_attempts.where(attempt_number: 3..5).delete_all
 
         result_ids = sanity_check.run_query.pluck("id")
 
         expect(result_ids).to contain_exactly(r.id)
+      end
+
+      it "Doesn't flag correct cutoff results" do
+        cutoff = Cutoff.new(attempt_result: 100, number_of_attempts: 2)
+        competition = create(:competition)
+        round = create(:round, cutoff: cutoff, competition: competition)
+        create(:result, :over_cutoff, cutoff: cutoff, round: round, competition: competition, event_id: "333")
+
+        result_ids = sanity_check.run_query.pluck("id")
+
+        expect(result_ids).to be_empty
       end
     end
   end

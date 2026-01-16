@@ -5,5 +5,5 @@ class LiveAttemptHistoryEntry < ApplicationRecord
 
   validates :entered_at, presence: true
   validates :entered_by, presence: true
-  validates :result, presence: true
+  validates :value, presence: true
 end
