@@ -1097,8 +1097,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_14_113003) do
     t.bigint "result_id", null: false
     t.datetime "updated_at", null: false
     t.integer "value", null: false
-    t.index ["result_id", "attempt_number", "value"], name: "idx_on_result_id_attempt_number_value_9242b6aa76"
     t.index ["result_id", "attempt_number"], name: "index_result_attempts_on_result_id_and_attempt_number", unique: true
+    t.index ["result_id", "value", "attempt_number"], name: "idx_on_result_id_value_attempt_number_710cd8e85d"
     t.index ["result_id"], name: "index_result_attempts_on_result_id"
   end
 
