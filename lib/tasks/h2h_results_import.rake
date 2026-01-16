@@ -54,7 +54,6 @@ namespace :h2h_results do
   task :post, [:competition_id] => :environment do |_t, args|
     competition = Competition.find(args[:competition_id])
     h2h_rounds = competition.rounds.where(is_h2h_mock: true)
-    byebug
 
     puts "Posting H2H results for #{competition.id}"
 
@@ -83,10 +82,12 @@ namespace :h2h_results do
               value: la.value,
             )
 
+            result.save!
+
+            h2h_attempt = la.h2h_attempt
+            h2h_attempt.update!(live_attempt: nil, result_attempt: result_attempt)
           end
 
-          byebug
-          result.save!
           lr.destroy!
         end
       end
