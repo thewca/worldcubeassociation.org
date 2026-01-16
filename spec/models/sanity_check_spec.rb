@@ -490,6 +490,7 @@ RSpec.describe SanityCheck do
     end
   end
 
+  # rubocop:disable Layout/LineLength
   context "incorrect record assignments", :clean_db_with_truncation do
     let(:sanity_check) { SanityCheck.find(66) }
 
@@ -608,4 +609,5 @@ RSpec.describe SanityCheck do
       end
     end
   end
+  # rubocop:enable Layout/LineLength
 end
