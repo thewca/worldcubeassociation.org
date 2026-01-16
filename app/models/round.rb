@@ -25,6 +25,7 @@ class Round < ApplicationRecord
   delegate :can_change_time_limit?, to: :event
 
   scope :ordered, -> { order(:number) }
+  scope :h2h, -> { where(is_h2h_mock: true) }
 
   serialize :time_limit, coder: TimeLimit
   validates_associated :time_limit
@@ -60,6 +61,18 @@ class Round < ApplicationRecord
   after_validation(if: :old_type?) do
     self.number = 0
   end
+
+  # Competitions before 2026 have to use Mo3 for 333bf, but after 2026 they need to use Ao5
+  REGULATIONS_2026_START_DATE = Date.new(2026, 1, 1)
+  private def expected_333bf_format
+    competition.start_date >= REGULATIONS_2026_START_DATE ? "5" : "3"
+  end
+
+  validates :format_id, comparison: {
+    equal_to: :expected_333bf_format,
+    if: ->(round) { round.format_id == "333bf" },
+    message: ->(round, _args) { "#{round.format_id} is not allowed for 333bf for a competition taking place on #{round.competition.start_date} due to the 2026 regulations" },
+  }
 
   # The event dictates which formats are even allowed in the first place, hence the prefix
   delegate :formats, :format_ids, to: :event, prefix: :allowed
@@ -232,14 +245,18 @@ class Round < ApplicationRecord
   end
 
   def wcif_id
-    "#{event.id}-r#{self.number}"
+    "#{self.event_id}-r#{self.number}"
+  end
+
+  def human_id
+    "#{self.event_id}-#{self.round_type_id}"
   end
 
   def to_string_map(short: false)
     {
       wcif_id: wcif_id,
       name: name,
-      event_id: event.id,
+      event_id: event_id,
       cumulative_round_ids: time_limit.cumulative_round_ids,
       format_name: full_format_name(with_short_names: true),
       time_limit: time_limit_to_s,

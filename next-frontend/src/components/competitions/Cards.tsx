@@ -5,10 +5,10 @@ import {
   Heading,
   SimpleGrid,
   Text,
-  Link as ChakraLink,
   HStack,
   Stat,
   Badge,
+  Wrap,
 } from "@chakra-ui/react";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
 import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
@@ -24,7 +24,6 @@ import OnTheSpotRegistrationIcon from "@/components/icons/OnTheSpotRegistrationI
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import EventIcon from "@/components/EventIcon";
 import { MarkdownProse } from "@/components/Markdown";
-import WcaDocsIcon from "@/components/icons/WcaDocsIcon";
 import VenueIcon from "@/components/icons/VenueIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import DetailsIcon from "@/components/icons/DetailsIcon";
@@ -79,7 +78,7 @@ export function VenueDetailsCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root coloredBg>
+    <Card.Root width="inherit">
       <Card.Body>
         <Card.Title textStyle="s4">Venue Details</Card.Title>
         <SimpleGrid columns={2} gap="4">
@@ -102,16 +101,18 @@ export function VenueDetailsCard({
             <Stat.ValueText>{competitionInfo.venue_address}</Stat.ValueText>
           </Stat.Root>
 
-          <Stat.Root variant="competition">
-            <Stat.Label>
-              <DetailsIcon />
-              Details
-            </Stat.Label>
-            <MarkdownProse
-              as={Stat.ValueText}
-              content={competitionInfo.venue_details}
-            />
-          </Stat.Root>
+          {competitionInfo.venue_details && (
+            <Stat.Root variant="competition">
+              <Stat.Label>
+                <DetailsIcon />
+                Details
+              </Stat.Label>
+              <MarkdownProse
+                as={Stat.ValueText}
+                content={competitionInfo.venue_details}
+              />
+            </Stat.Root>
+          )}
         </SimpleGrid>
       </Card.Body>
     </Card.Root>
@@ -124,12 +125,13 @@ export function AdditionalInformationCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Information</Card.Title>
         <MarkdownProse
           as={Card.Description}
           content={competitionInfo.information}
+          imageProps={{ maxW: "sm" }}
           textStyle="body"
         />
       </Card.Body>
@@ -146,7 +148,7 @@ export function RefundPolicyCard({
   const formattedRefundDate = refundDate.toLocaleString("en-US", dateFormat);
 
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Refund Policy</Card.Title>
         <Card.Description>
@@ -184,7 +186,7 @@ export function RegistrationCard({
   );
 
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Registration</Card.Title>
         <SimpleGrid columns={2} gap="4">
@@ -203,7 +205,7 @@ export function RegistrationCard({
                   currency={competitionInfo.currency_code}
                 />
               </Stat.ValueText>
-              <Badge>{competitionInfo.currency_code}</Badge>
+              <Badge variant="solid">{competitionInfo.currency_code}</Badge>
             </HStack>
           </Stat.Root>
 
@@ -235,7 +237,7 @@ export function RegistrationCard({
                     style="currency"
                     currency={competitionInfo.currency_code}
                   />
-                  <Badge>{competitionInfo.currency_code}</Badge>
+                  <Badge variant="solid">{competitionInfo.currency_code}</Badge>
                 </HStack>
               )}
             </Stat.ValueText>
@@ -280,79 +282,16 @@ export function RegistrationCard({
   );
 }
 
-export function OrganizationTeamCard({
-  competitionInfo,
-}: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
-}) {
-  return (
-    <Card.Root flexGrow="1" coloredBg>
-      <Card.Body>
-        <Card.Title textStyle="s4">Organization Team</Card.Title>
-        <Stat.Root variant="competition">
-          <Stat.Label>Organizers</Stat.Label>
-          <Stat.ValueText>
-            {competitionInfo.organizers.map((organizer, index) => (
-              <Text as="span" key={index}>
-                {organizer.url != "" ? (
-                  <ChakraLink href={organizer.url}>{organizer.name}</ChakraLink>
-                ) : (
-                  organizer.name
-                )}
-                {competitionInfo.organizers.length == index + 1 ? "" : ", "}
-              </Text>
-            ))}
-          </Stat.ValueText>
-        </Stat.Root>
-
-        <Stat.Root variant="competition">
-          <Stat.Label>Delegates</Stat.Label>
-          <Stat.ValueText>
-            {competitionInfo.delegates.map((delegate, index) => (
-              <Text as="span" key={index}>
-                <ChakraLink href={delegate.url}>{delegate.name}</ChakraLink>
-                {competitionInfo.delegates.length == index + 1 ? "" : ", "}
-              </Text>
-            ))}
-          </Stat.ValueText>
-        </Stat.Root>
-
-        <Stat.Root variant="competition">
-          <Stat.Label>Contact</Stat.Label>
-          <MarkdownProse
-            as={Stat.ValueText}
-            content={competitionInfo.contact}
-          />
-        </Stat.Root>
-
-        <Button variant="outline" asChild>
-          <ChakraLink
-            variant="header"
-            href={
-              "https://www.worldcubeassociation.org/competitions/" +
-              competitionInfo.id +
-              ".pdf"
-            }
-          >
-            Download Competition PDF
-            <WcaDocsIcon />
-          </ChakraLink>
-        </Button>
-      </Card.Body>
-    </Card.Root>
-  );
-}
-
 export function EventCard({
   competitionInfo,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Events List</Card.Title>
-        <HStack gap="4">
+        <Wrap gap="4">
           {competitionInfo.event_ids.map((event_id) => (
             <EventIcon
               key={event_id}
@@ -365,7 +304,7 @@ export function EventCard({
               }
             />
           ))}
-        </HStack>
+        </Wrap>
       </Card.Body>
     </Card.Root>
   );
@@ -379,7 +318,7 @@ export function InfoCard({
   t: TFunction;
 }) {
   return (
-    <Card.Root coloredBg>
+    <Card.Root>
       <Card.Body>
         <Heading textStyle="h2" display="flex" alignItems="center">
           {competitionInfo.name}

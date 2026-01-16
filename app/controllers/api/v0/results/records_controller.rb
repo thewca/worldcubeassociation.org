@@ -108,7 +108,7 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
     @types = %w[single average]
 
     @continent = Continent.c_find(params[:region])
-    @country = Country.c_find(params[:region])
+    @country = Country.c_find_by_iso2(params[:region])
     if @continent.present?
       @region_condition = "AND results.country_id IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
       @region_condition += " AND record_name IN ('WR', '#{@continent.record_name}')" if @is_history

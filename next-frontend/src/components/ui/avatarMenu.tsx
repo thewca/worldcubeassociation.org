@@ -52,20 +52,21 @@ function AvatarMenu({ session }: { session: Session | null }) {
           <Menu.Item value="dashboard" asChild>
             <Link href="/dashboard">Developer Dashboard</Link>
           </Menu.Item>
+          <Menu.Separator />
+          <Menu.Item value="mycompetitions" asChild>
+            <Link href="/competitions/mine">My Competitions</Link>
+          </Menu.Item>
           {session.user?.wcaId && (
-            <>
-              <Menu.Separator />
-              <Menu.Item value="myresults" asChild>
-                <Link
-                  href={route({
-                    pathname: "/persons/[wcaId]",
-                    query: { wcaId: session.user.wcaId },
-                  })}
-                >
-                  My Results
-                </Link>
-              </Menu.Item>
-            </>
+            <Menu.Item value="myresults" asChild>
+              <Link
+                href={route({
+                  pathname: "/persons/[wcaId]",
+                  query: { wcaId: session.user.wcaId },
+                })}
+              >
+                My Results
+              </Link>
+            </Menu.Item>
           )}
           <Menu.Separator />
           <Menu.Item value="logout" onSelect={() => signOut()}>

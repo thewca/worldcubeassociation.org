@@ -132,6 +132,8 @@ es-419:
     '2': Mejor de 2
     #original_hash: 21f623c
     '3': Mejor de 3
+    #original_hash: cca816d
+    '5': Mejor de 5
     #original_hash: 2342d2b
     a: Promedio de 5
     #original_hash: 940c82d
@@ -143,10 +145,14 @@ es-419:
       '2': Bo2
       #original_hash: b41f36f
       '3': Bo3
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      #original_hash: 60827cb
+      h: H2H
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -1018,6 +1024,15 @@ es-419:
         #original_hash: 79ccfe2
         dob_invalid: tiene un formato incorrecto
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: Ha ocurrido un error renderizando la página
+      #original_hash: 22dfe12
+      description: >-
+        Si el error persiste, repórtalo al WST con los detalles que se indican
+        debajo
+      #original_hash: 20be860
+      details: Detalles del error
     messages:
       #original_hash: dc2367c
       wrong_size: 'Tamaño erróneo (debe ser %{file_size})'
@@ -2653,6 +2668,8 @@ es-419:
           La fecha de nacimiento debe seguir el formato AAAA-mm-dd (año-mes-día,
           por ejemplo 2000-10-14), se encontraron las siguientes fechas que no
           pueden ser procesadas: %{raw_dobs}.
+        #original_hash: 6d8e34b
+        empty_file: El archivo está vacío.
     add:
       #original_hash: 975275e
       title: 'Añadir registros para %{comp}'
@@ -2816,6 +2833,16 @@ es-419:
         la lista de espera. Si estás usando lista de espera, por favor
         especifica una fecha límite. Si no estás usando una lista de espera,
         recuerda especificar esto en los requisitos de las inscripciones.
+    live:
+      #original_hash: 10d1a3c
+      title: Resultados en vivo
+      connection:
+        #original_hash: f92b311
+        initialized: Inicializando conexión
+        #original_hash: 66d44d4
+        connected: 'Conectado, actualizando resultados'
+        #original_hash: 53abaa2
+        disconnected: 'Conexión perdida, resultados no actualizados'
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mis competiciones
@@ -3243,10 +3270,11 @@ es-419:
       is_visible: >-
         ¡Esta competición es visible! Cualquier cambio que hagas se mostrará
         públicamente.
-      #original_hash: 1039850
+      #original_hash: eb98c2c
       pending_confirmation_html: >-
-        Rellena todos los campos y haz que tu Delegado haga click en Confirmar
-        cuando estés listo para que el %{contact} apruebe esta competición .
+        Rellena todos los campos y pídele a tu Delegado que haga click en
+        "Confirmar" cuando estés listo para que el %{contact} apruebe esta
+        competición.
       #original_hash: 8966fd0
       submit_create_value: Crear competición
       #original_hash: 40b0dfd
@@ -3540,13 +3568,10 @@ es-419:
             Se requiere límite de competidores. Solo campeonatos simultáneos de
             3x3x3 Menos Movimientos con múltiples sedes pueden no tener límite
             de competidores especificado (se deberá especificar por sede).
-          #original_hash: b7b599b
+          #original_hash: 6127d47
           count: >-
-            El número de competidores permitido en esta competición. Por el
-            momento este número es meramente informativo y todavía no impide que
-            se registre más gente. Estamos trabajando en añadir soporte
-            explícito para este flujo de registro, pero es necesario finalizar
-            otras tareas previamente.
+            El número de competidores permitido en esta competición. El sistema
+            de registro controla este límite.
           #original_hash: 4bd7102
           reason: >-
             ¿Cuál es el motivo para el límite de competidores? Por favor,
@@ -4422,18 +4447,16 @@ es-419:
           detendrá y tu resultado será DNF (ver  %{regulation_link}).
         #original_hash: 83d204f
         regulation_link_text: 'Regla %{number}'
-        #original_hash: bd0e4a9
-        guideline_link_text: 'Guía  %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: Tiempo límite acumulativo
         #original_hash: d47f11a
         cumulative_one_round_html: >-
           Un %{cumulative_time_limit}  puede ser aplicado (ver
           %{regulation_link}).
-        #original_hash: c6190b6
+        #original_hash: 44f85f0
         cumulative_across_rounds_html: >-
-          Un %{cumulative_time_limit} Puede ser aplicado a través de varias
-          rondas (ver %{guideline_link}).
+          Un %{cumulative_time_limit} puede ser aplicado a través de varias
+          rondas (ver %{regulation_link}).
         #original_hash: e8d17df
         cutoff_html: >-
           El resultado que hay que batir para pasar a la segunda fase de una
@@ -6208,6 +6231,12 @@ es-419:
     results_export:
       #original_hash: 15d00e1
       heading: Export de Resultados WCA
+      #original_hash: 733df42
+      deprecation_warning: >-
+        AVISO DE DESUSO: La versión %{old_version} de la Exportación de
+        Resultados ha sido marcada en desuso, y se descontinuará soporte a la
+        misma desde la fecha %{deprecation_date}. Por favor, cambia a la Versión
+        %{new_version} antes de esa fecha.
       #original_hash: f9fe9df
       description: >-
         En esta página ofrecemos los resultados WCA para descarga en varios
@@ -6217,6 +6246,12 @@ es-419:
         tienes ya la versión más reciente.
       #original_hash: 4f59283
       permalink: Enlace permanente
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        Los links permanentes entregan la exportación más reciente dentro de una
+        versión dada. Por ejemplo, el link permanente de la v2 retornará la
+        exportación de v2 más reciente, pero continuará retornando v2 incluso
+        cuando se lance la v3.
       file_formats:
         #original_hash: b086d79
         sql: 'Sentencias SQL, para importar en Bases de datos SQL.'
@@ -6372,10 +6407,6 @@ es-419:
         de la fase de corte. Por favor, edita los resultados para incluir el o
         los intentos faltantes, o actualiza la información de la ronda en la
         página de "Administrar eventos" (Manage Events).
-      #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] Los resultados de %{person_name} tienen el formato
-        incorrecto: se esperó %{expected_format} pero se encontró %{format}.
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Al menos un resultado de %{person_name} excede el tiempo
@@ -6385,12 +6416,6 @@ es-419:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] La suma de resultados de %{person_name} excede el límite
         acumulativo, que era %{time_limit}.
-      #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] No hay información sobre el corte y tiempo límite para
-        esta ronda. Se han omitido estos validadores. Por favor, actualiza la
-        información de la ronda en la página de "Administrar eventos" (Manage
-        Events).
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] El tiempo límite de esta ronda es indefinido, se han
@@ -6420,11 +6445,6 @@ es-419:
         [%{round_id}] Más competidores clasificaron de lo que se esperaba
         (%{actual} en vez de %{expected}). La condición era "%{condition}". Por
         favor, actualiza la información de la ronda en el menú de "Administrar
-        eventos" (Manage Events).
-      #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        [%{round_id}] La ronda está presente pero no se encuentra en la pestaña
-        de eventos. Por favor, crea la ronda en la pestaña de "Administrar
         eventos" (Manage Events).
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
@@ -6476,12 +6496,6 @@ es-419:
         [%{round_id}] No hay resultados para la ronda, pero se lista en la
         pestaña de eventos. Si esta ronda no sucedió, por favor elimínala en la
         pestaña de "Administrar eventos" (Manage Events).
-      #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        [%{round_name}] No se anunció ningún corte para la ronda, pero se
-        detectó como una ronda con corte (cutoff). Por favor, actualiza la
-        información de la ronda en la pestaña de "Administrar eventos" (Manage
-        Events).
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -6498,11 +6512,6 @@ es-419:
         Ningún evento ha sido seleccionado como evento principal. Por favor,
         indica al WRT que esto es lo correcto o corrígelo en caso de ser
         necesario.
-      #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        Se encontraron resultados para %{event_id}, pero no está listado como
-        evento oficial. Por favor, remueve el evento de los resultados o
-        contacta al WCAT para pedir su adición a la competición.
       #original_hash: fde208d
       missing_results_warning: >-
         No hay resultados para %{event_id}. Si el evento se celebró, por favor
@@ -6517,10 +6526,6 @@ es-419:
       missing_scrambles_for_competition_error: >-
         Faltan las mezclas para la competición. Utiliza "Scrambles Matcher" para
         agregar las mezclas.
-      #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Demasiadas mezclas. Utiliza "Scrambles Matcher" para
-        retirar las mezclas que no se utilizaron.
       #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] Grupo %{group_id}: faltan las mezclas. Se detectaron

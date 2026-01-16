@@ -36,7 +36,7 @@ class LiveController < ApplicationController
       previous_attempt = previous_attempts[i]
 
       if previous_attempt.present?
-        if previous_attempt.result == r
+        if previous_attempt.value == r
           previous_attempt
         else
           previous_attempt.update_with_history_entry(r, current_user)

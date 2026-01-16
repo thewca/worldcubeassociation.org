@@ -7,6 +7,8 @@ class DumpPublicResultsDatabase < WcaCronjob
   end
 
   def perform
-    DbDumpHelper.dump_results_db self.class.start_date
+    DatabaseDumper.results_export_live_versions.each do |v|
+      DbDumpHelper.dump_results_db(v, self.class.start_date)
+    end
   end
 end

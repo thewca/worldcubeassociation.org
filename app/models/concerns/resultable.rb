@@ -31,7 +31,7 @@ module Resultable
       Format.c_find(format_id)
     end
 
-    delegate :competition_id, :round_type_id, :event_id, :format_id, to: :round, prefix: true
+    delegate :competition_id, :round_type_id, :event_id, :format_id, :human_id, to: :round, prefix: true
     validates :competition_id, comparison: { equal_to: :round_competition_id }
     validates :round_type_id, comparison: { equal_to: :round_round_type_id }
     validates :event_id, comparison: { equal_to: :round_event_id }
@@ -99,8 +99,10 @@ module Resultable
     #  - 333ft has a similar story to 333fm. It also changed from allowing best of 3
     #    (and disallowing mean of 3) to allowing mean of 3 (and disallowing best
     #    of 3). See "Relevant regulations changes" below.
-    #  - 333bf is quite a special case. At competitions, competitors are ranked according to best of 3, but
+    #  - 333bf is quite a special case. Before 2026 competitors were ranked according to best of 3, but
     #    the WCA awards records on both single and mean of 3.
+    #    After 2026, competitors are ranked according to best of 5
+    #    and the WCA awards records for single and average of 5
     #    See https://www.worldcubeassociation.org/regulations/#9b3b.
 
     # Relevant regulations changes:
@@ -114,7 +116,9 @@ module Resultable
     #    - All events that allow "mean of 3" no longer allow "best of 3".
     #  - May 1, 2019
     #    - 444bf and 555bf mean are officially recognized
-    format_id == "a" || format_id == "m" || (format_id == "3" && %(333ft 333fm 333bf 444bf 555bf).include?(event_id))
+    #  - January 1, 2026
+    #    - Bo5/Ao5 becomes the format for 333bld
+    format_id == "a" || format_id == "m" || (format_id == "5" && event_id == "333bf") || (format_id == "3" && %(333ft 333fm 333bf 444bf 555bf).include?(event_id))
   end
 
   def compute_correct_best

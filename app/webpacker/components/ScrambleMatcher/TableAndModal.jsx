@@ -16,9 +16,10 @@ export default function TableAndModal({
     computeCellDetails,
     cellDetailsAreData,
     computeExpectedRowCount,
+    tableReferenceKey,
   } = matchingConfig;
 
-  const { computeEntityName } = pickerLocalizationConfig[matchingKey];
+  const { computeEntityName, headerLabel } = pickerLocalizationConfig[matchingKey];
 
   const computeDefinitionName = useCallback(
     (idx) => computeEntityName(matchState.id, idx),
@@ -68,6 +69,16 @@ export default function TableAndModal({
     [dispatchMatchState, pickerHistory, matchingKey],
   );
 
+  const updateReferenceValue = useCallback(
+    (value) => dispatchMatchState({
+      type: 'updateReferenceValue',
+      pickerHistory,
+      matchingKey: tableReferenceKey,
+      value,
+    }),
+    [dispatchMatchState, pickerHistory, tableReferenceKey],
+  );
+
   return (
     <>
       <MatchingTableDnd
@@ -80,6 +91,9 @@ export default function TableAndModal({
         cellDetailsAreData={cellDetailsAreData}
         onClickMoveAction={setModalPayload}
         onClickDeleteAction={deleteEntityFromMatching}
+        showFooterReference={tableReferenceKey !== undefined}
+        footerReferenceLabel={headerLabel}
+        adjustFooterReferenceAction={updateReferenceValue}
       />
       <MoveMatchingEntityModal
         key={modalPayload?.id}
