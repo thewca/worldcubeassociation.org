@@ -1,26 +1,10 @@
-WITH round_dates AS (SELECT cv.competition_id                                         AS competition_id,
-                            SUBSTRING_INDEX(sa.activity_code, '-', 1)                 AS event_id,
-                            LEFT(SUBSTRING_INDEX(sa.activity_code, '-r', -1), 1)      AS round,
+WITH round_dates AS (SELECT sa.round_id,
                             DATE(MAX(CONVERT_TZ(sa.end_time, 'UTC', cv.timezone_id))) AS round_date
                      FROM schedule_activities sa
                             JOIN venue_rooms vr ON sa.venue_room_id = vr.id
                             JOIN competition_venues cv ON vr.competition_venue_id = cv.id
-                     WHERE SUBSTRING_INDEX(sa.activity_code, '-', 1) IN (SELECT id FROM events)
-                     GROUP BY competition_id,
-                              event_id,
-                              round),
--- Assigns a numerical round number column to each round in the database corresponding to its round_type_id.
-     round_numbers AS (SELECT t0.*,
-                              ROW_NUMBER() OVER (
-                                PARTITION BY t0.competition_id, t0.event_id
-                                ORDER BY rt.`rank`
-                                ) AS round
-                       FROM (SELECT DISTINCT r.competition_id,
-                                             r.event_id,
-                                             r.round_type_id
-                             FROM results r
-                             WHERE RIGHT(r.competition_id, 4) >= 2019) t0
-                              JOIN round_types rt ON t0.round_type_id = rt.id),
+                     WHERE sa.round_id IS NOT NULL
+                     GROUP BY round_id),
 -- Fetches the NR singles of each country as of the end of the previous year.
      old_nr_singles AS (SELECT csr.country_id,
                                csr.event_id,
@@ -68,7 +52,7 @@ WITH round_dates AS (SELECT cv.competition_id                                   
                    r.country_id,
                    r.competition_id,
                    r.event_id,
-                   rn.round,
+                   rn.number AS round,
                    RANK() OVER (
                      PARTITION BY
                        r.country_id,
@@ -96,14 +80,10 @@ WITH round_dates AS (SELECT cv.competition_id                                   
                    JOIN competition_events ce
                         ON r.competition_id = ce.competition_id
                           AND r.event_id = ce.event_id
-                   JOIN round_numbers rn
-                        ON rn.competition_id = r.competition_id
-                          AND rn.event_id = r.event_id
-                          AND rn.round_type_id = r.round_type_id
+                   JOIN rounds rn
+                        ON rn.id = r.round_id
                    LEFT JOIN round_dates rd
-                             ON rd.competition_id = r.competition_id
-                               AND rd.event_id = r.event_id
-                               AND rd.round = rn.round
+                             ON rd.round_id = r.round_id
                    LEFT JOIN old_nr_singles ons
                              ON ons.country_id = r.country_id
                                AND ons.event_id = r.event_id
