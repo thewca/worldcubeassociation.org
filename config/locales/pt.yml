@@ -862,14 +862,17 @@ pt:
           usando os números como referência. Mesmo que tudo pareça genérico,
           liste pelo menos os mais relevantes. Por favor assinale as caixas
           apropriadas se precisar de obter feedback.
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
           TEM de incluir pelo menos %{image_count} imagens que ilustrem a
-          configuração das áreas de embaralhamento e da competição (outras
-          imagens também são bem-vindas). Pode selecionar vários ficheiros de
-          uma só vez. Só pode eliminar imagens quando tiverem sido carregadas
-          outras imagens suficientes (se quiser substituir uma imagem, precisa
-          de carregar a nova primeiro e depois eliminar a antiga).
+          configuração das áreas de embaralhamento e da competição da competição
+          atual, preferencialmente durante a competição (outras imagens também
+          são bem-vindas). Pode selecionar vários ficheiros de uma só vez. Só
+          pode eliminar imagens quando tiverem sido carregadas outras imagens
+          suficientes (se quiser substituir uma imagem, precisa de carregar a
+          nova primeiro e depois eliminar a antiga). Caso não possua fotos
+          atuais da área de competição e/ou da área de embaralhamento em
+          utilização, por favor, explique o motivo.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -2634,6 +2637,8 @@ pt:
           por exemplo, 1944-07-13), Birthdate must follow the YYYY-mm-dd format
           (year-month-day, for example 1944-07-13), as seguintes datas
           submetidas não podem ser processadas: %{raw_dobs}.
+        #original_hash: 6d8e34b
+        empty_file: O ficheiro está vazio.
     add:
       #original_hash: 975275e
       title: 'Adicionar registo para %{comp}'
@@ -6345,10 +6350,6 @@ pt:
         fase de corte. Edite o resultado para incluir a(s) tentativa(s) em falta
         ou atualize as informações da ronda na página Gerir Eventos da
         competição.
-      #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] Os resultados para %{person_name} estão no formato errado:
-        esperado %{expected_format}, mas obtido %{format}.
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Pelo menos um resultado para %{person_name} excedeu o
@@ -6358,11 +6359,6 @@ pt:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] A soma de resultados para %{person_name} está acima do
         limite de tempo cumulativo, que era %{time_limit}.
-      #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] Não há informação sobre o tempo de corte e de tempo limite
-        para esta ronda. Estas validações foram ignoradas. Atualize as
-        informações da ronda na página Gerir Eventos da competição.
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] O limite de tempo para esta ronda é indefinido. As
@@ -6394,11 +6390,6 @@ pt:
         pela condição de avanço (%{actual} em vez de %{expected}, a condição
         era: %{condition}). Atualize as informações da ronda na página de gestão
         de eventos.
-      #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        A ronda %{round_id} está presente nos resultados, mas não foi criada no
-        separador eventos. Por favor inclua as informações da ronda na página de
-        gestão de eventos da competição.
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         A ronda %{round_id} tem 99 ou menos competidores, mas tem mais de duas
@@ -6449,11 +6440,6 @@ pt:
         Não existem resultados para a ronda %{round_id}, mas está listada no
         separador de eventos. Se esta ronda não tiver sido realizada, remova-a
         da página de gestão de eventos da competição.
-      #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        Nenhum tempo de corte foi anunciado para '%{round_name}', mas foi
-        detectado como tempo de corte nos resultados. Por favor atualize as
-        informações da ronda na página de gestão de eventos da competição.
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -6469,11 +6455,6 @@ pt:
       no_main_event_warning: >-
         Não há nenhum evento principal selecionado para esta competição. Por
         favor, informe a WRT que isto está correto.
-      #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        Resultados existem para %{event_id}, mas não está listado como evento
-        oficial. Remova o evento dos resultados ou contacte o WCAT para
-        solicitar que seja adicionado ao site do WCA.
       #original_hash: fde208d
       missing_results_warning: >-
         Não existem resultados para %{event_id}, mas está listado como um evento
@@ -6489,10 +6470,6 @@ pt:
       missing_scrambles_for_competition_error: >-
         Faltam embaralhamentos para a competição. Utilize o Scrambles Matcher
         para adicionar embaralhamentos.
-      #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Demasiados embaralhamentos. Utilize o Scrambles Matcher
-        para desmarcar os embaralhamentos não utilizados.
       #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] Grupo %{group_id}: embaralhamentos em falta, apenas

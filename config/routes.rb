@@ -180,6 +180,9 @@ Rails.application.routes.draw do
     resources :results, except: %i[index new], controller: 'admin/results'
     resources :scrambles, except: %i[index new], controller: 'admin/scrambles'
     get 'events_data/:competition_id' => 'admin/results#show_events_data', as: :competition_events_data
+    get 'sanity-check' => "admin#sanity_check", as: :sanity_check
+    get 'run-sanity-check' => "admin#run_sanity_check", as: :sanity_check_run
+    get 'add-exclusion' => "admin#add_exclusion", as: :add_exclusion
   end
 
   get "media/validate" => 'media#validate', as: :validate_media
@@ -236,6 +239,7 @@ Rails.application.routes.draw do
     get 'inbox_person_summary' => 'tickets#inbox_person_summary', as: :inbox_person_summary
     post 'delete_inbox_persons' => 'tickets#delete_inbox_persons', as: :delete_inbox_persons
     get 'events_merged_data' => 'tickets#events_merged_data', as: :events_merged_data
+    post 'approve_edit_person_request' => 'tickets#approve_edit_person_request', as: :approve_edit_person_request
     post 'reject_edit_person_request' => 'tickets#reject_edit_person_request', as: :reject_edit_person_request
     post 'sync_edit_person_request' => 'tickets#sync_edit_person_request', as: :sync_edit_person_request
     resources :ticket_comments, only: %i[index create], as: :comments
@@ -371,6 +375,7 @@ Rails.application.routes.draw do
         if WcaLive.enabled?
           namespace :live do
             get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
+            get '/podiums' => 'live#podiums', as: :live_podiums
             get '/registrations/:registration_id' => 'live#by_person', as: :get_live_by_person
           end
         end

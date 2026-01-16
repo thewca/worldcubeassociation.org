@@ -77,6 +77,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/podiums": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets Information about the Podiums of the Live Results */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Returns podiums with round information */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["LiveRound"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/registrations/{registrationId}": {
         parameters: {
             query?: never;
@@ -782,7 +820,7 @@ export interface components {
             extensions: unknown[];
         };
         LiveAttempt: {
-            result: number;
+            value: number;
             attempt_number: number;
         };
         LiveResult: {
@@ -1716,14 +1754,17 @@ export interface operations {
     competitionList: {
         parameters: {
             query?: {
-                include_cancelled?: string;
+                include_cancelled?: boolean;
                 continent?: string;
                 country_iso2?: string;
                 delegate?: string;
-                event_ids?: string[];
+                "event_ids[]"?: string[];
                 start?: string;
                 end?: string;
                 admin_status?: string;
+                q?: string;
+                sort?: string;
+                ongoing_and_future?: string;
             };
             header?: never;
             path?: never;
