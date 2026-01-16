@@ -231,7 +231,6 @@ Rails.application.routes.draw do
     get 'imported_temporary_results' => 'tickets#imported_temporary_results', as: :imported_temporary_results
   end
   resources :tickets, only: %i[index show] do
-    post 'update_status' => 'tickets#update_status', as: :update_status
     post 'verify_warnings' => 'tickets#verify_warnings', as: :verify_warnings
     post 'merge_inbox_results' => 'tickets#merge_inbox_results', as: :merge_inbox_results
     post 'post_results' => 'tickets#post_results', as: :post_results

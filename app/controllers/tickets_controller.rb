@@ -4,7 +4,6 @@ class TicketsController < ApplicationController
   include Rails::Pagination
 
   before_action :authenticate_user!
-  before_action -> { check_ticket_errors(TicketLog.action_types[:update_status]) }, only: [:update_status]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:verify_warnings]) }, only: [:verify_warnings]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_results]) }, only: [:merge_inbox_results]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:approve_edit_person_request]) }, only: [:approve_edit_person_request]
@@ -81,24 +80,6 @@ class TicketsController < ApplicationController
         }
       end
     end
-  end
-
-  def update_status
-    ticket_status = params.require(:ticket_status)
-
-    ActiveRecord::Base.transaction do
-      @ticket.metadata.update!(status: ticket_status)
-      ticket_log = @ticket.ticket_logs.create!(
-        action_type: @action_type,
-        acting_user_id: current_user.id,
-        acting_stakeholder_id: @acting_stakeholder.id,
-      )
-      ticket_log.ticket_log_changes.create!(
-        field_name: TicketLogChange.field_names[:status],
-        field_value: ticket_status,
-      )
-    end
-    render json: { success: true }
   end
 
   def edit_person_validators

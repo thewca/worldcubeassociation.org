@@ -4,18 +4,14 @@ import TicketHeader from './TicketHeader';
 import TicketComments from './TicketComments';
 import TicketLogs from './TicketLogs';
 
-export default function TicketContent({ ticketDetails, currentStakeholder, updateStatus }) {
+export default function TicketContent({ ticketDetails, currentStakeholder }) {
   const { ticket: { metadata_type: ticketType } } = ticketDetails;
   const stakeholderRole = currentStakeholder.stakeholder_role;
   const TicketWorkbench = TicketWorkbenches[ticketType]?.[stakeholderRole];
 
   return (
     <>
-      <TicketHeader
-        ticketDetails={ticketDetails}
-        currentStakeholder={currentStakeholder}
-        updateStatus={updateStatus}
-      />
+      <TicketHeader ticketDetails={ticketDetails} />
       {TicketWorkbench && (
         <TicketWorkbench
           ticketDetails={ticketDetails}
