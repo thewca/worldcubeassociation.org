@@ -28,7 +28,6 @@ import {
 } from "@/lib/wca/dates";
 import EventIcon from "@/components/EventIcon";
 import { route } from "nextjs-routes";
-import { TFunction } from "i18next";
 import { useT } from "@/lib/i18n/useI18n";
 
 interface LiveViewProps {
@@ -50,6 +49,13 @@ export default function LiveView({
   const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const [timeZone, setTimeZone] = useState(browserTimezone);
 
+  const collection = createListCollection({
+    items: [...timeZones, browserTimezone].map((t) => ({
+      value: t,
+      label: t,
+    })),
+  });
+
   const dates = getDatesBetweenInclusive(
     firstStartTime,
     lastStartTime,
@@ -64,21 +70,18 @@ export default function LiveView({
   return (
     <VStack align="left">
       <Select.Root
-        collection={createListCollection({
-          items: [...timeZones, browserTimezone].map((t) => ({
-            value: t,
-            label: t,
-          })),
-        })}
-        width="320px"
+        collection={collection}
+        width="3/12"
         value={[timeZone]}
         onValueChange={(e) => setTimeZone(e.value[0])}
       >
         <Select.HiddenSelect />
-        <Select.Label>Select Timezone</Select.Label>
+        <Select.Label>{t("competitions.schedule.time_zone")}</Select.Label>
         <Select.Control>
           <Select.Trigger>
-            <Select.ValueText placeholder="Select Timezone" />
+            <Select.ValueText
+              placeholder={t("competitions.schedule.time_zone")}
+            />
           </Select.Trigger>
           <Select.IndicatorGroup>
             <Select.Indicator />
@@ -87,9 +90,9 @@ export default function LiveView({
         <Portal>
           <Select.Positioner>
             <Select.Content>
-              {timeZones.map((timezone) => (
-                <Select.Item item={timezone} key={timezone}>
-                  {timezone}
+              {collection.items.map((timezone) => (
+                <Select.Item item={timezone} key={timezone.label}>
+                  {timezone.value}
                   <Select.ItemIndicator />
                 </Select.Item>
               ))}
@@ -144,8 +147,8 @@ export default function LiveView({
                         </Button>
                       </Card.Body>
                       <Card.Footer>
-                        {getSimpleTimeString(activity.startTime)} -{" "}
-                        {getSimpleTimeString(activity.endTime)}
+                        {getSimpleTimeString(activity.startTime, timeZone)} -{" "}
+                        {getSimpleTimeString(activity.endTime, timeZone)}
                       </Card.Footer>
                     </Card.Root>
                   );
