@@ -115,10 +115,6 @@ FactoryBot.define do
       person { FactoryBot.create(:person) }
     end
 
-    after(:build) do |result, _options|
-      result.result_attempts = result.result_attempts_attributes.map(&ResultAttempt.method(:new))
-    end
-
     person_id { person.wca_id }
     person_name { person.name }
     country_id { person.country_id }
