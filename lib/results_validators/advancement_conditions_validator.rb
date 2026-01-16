@@ -46,6 +46,7 @@ module ResultsValidators
           rounds_without_deprecated_types = competition.rounds
                                                        .filter { it.event_id == event_id }
                                                        .reject { IGNORE_ROUND_TYPES.include?(it.round_type_id) }
+                                                       .reject { it.is_h2h_mock == true }
 
           previous_round = nil
 

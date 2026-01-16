@@ -23,7 +23,8 @@ class AddH2HModels < ActiveRecord::Migration[8.1]
 
     create_table :h2h_attempts do |t|
       t.references :h2h_set, null: false, foreign_key: true
-      t.references :live_attempt, null: false, foreign_key: true
+      t.references :live_attempt, foreign_key: true
+      t.references :result_attempt, foreign_key: true
       t.references :h2h_competitor, null: false, foreign_key: true
       t.integer :set_attempt_number, limit: 1, null: false
       t.timestamps

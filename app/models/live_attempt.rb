@@ -8,6 +8,8 @@ class LiveAttempt < ApplicationRecord
   belongs_to :live_result
   has_many :live_attempt_history_entries, dependent: :destroy
 
+  has_one :h2h_attempt
+
   validates :value, presence: true
   validates :value, numericality: { only_integer: true }
   validates :attempt_number, numericality: { only_integer: true }

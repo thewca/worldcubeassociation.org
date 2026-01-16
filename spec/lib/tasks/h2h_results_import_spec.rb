@@ -4,12 +4,12 @@ require 'rails_helper'
 require 'rake'
 
 RSpec.describe "import:h2h_data", type: :task do
-  before :all do
+  before(:all) do
     Rake.application.rake_require "tasks/h2h_results_import"
     Rake::Task.define_task(:environment)
   end
 
-  let!(:competition) { create(:competition, :with_valid_schedule) }
+  let!(:competition) { create(:competition, :with_valid_schedule, h2h_finals_event_ids: ['333']) }
   let!(:registrations) { create_list(:registration, 8, competition: competition)}
   let!(:round) { competition.competition_events.where(event_id: "333").first.rounds.first }
   let!(:registration_ids) { Registration.pluck(:id) }
@@ -151,13 +151,49 @@ RSpec.describe "import:h2h_data", type: :task do
     temp_csv.unlink
   end
 
-  it "creates the necessary non-attempt models " do
-    Rake::Task["import:h2h_data"].invoke(temp_csv.path)
-    expect(LiveResult.count).to be(8)
-    expect(H2hMatch.count).to be(8)
-    expect(H2hCompetitor.count).to be(16)
-    expect(H2hSet.count).to be(15)
-    expect(LiveAttempt.count).to be(120)
-    expect(H2hAttempt.count).to be(120)
+  context 'h2h results import' do
+    before do
+      Rake::Task["h2h_results:import"].reenable
+      Rake::Task["h2h_results:import"].invoke(temp_csv.path)
+    end
+
+    it 'creates the expected number of model objects', :cxzz do
+      expect(LiveResult.count).to be(8)
+      expect(Result.count).to be(0)
+      expect(H2hMatch.count).to be(8)
+      expect(H2hCompetitor.count).to be(16)
+      expect(H2hSet.count).to be(15)
+      expect(LiveAttempt.count).to be(120)
+      expect(ResultAttempt.count).to be(0)
+      expect(H2hAttempt.count).to be(120)
+      expect(H2hAttempt.where(live_attempt_id: nil).count).to be(0)
+      expect(H2hAttempt.where(result_attempt_id: nil).count).to be(120)
+    end
+
+    it 'has unique attempt_numbers for each live_result', :cxzx do
+      LiveResult.all.each do |lr|
+        expect(lr.live_attempts.count).to eq(lr.live_attempts.pluck(:attempt_number).uniq.count)
+      end
+    end
+  end
+
+  context 'h2h results posting' do
+    it 'creates/deletes the expected number of model objects', :cxz do
+      Rake::Task["h2h_results:import"].invoke(temp_csv.path)
+      Rake::Task["h2h_results:post"].invoke(competition.id)
+
+      byebug
+      expect(LiveResult.count).to be(0)
+      expect(Result.count).to be(8)
+      expect(H2hMatch.count).to be(8)
+      expect(H2hCompetitor.count).to be(16)
+      expect(H2hSet.count).to be(15)
+      expect(LiveAttempt.count).to be(0)
+      expect(ResultAttempt.count).to be(120)
+      expect(H2hAttempt.count).to be(120)
+      expect(H2hAttempt.where(live_attempt_id: nil).count).to be(120)
+      expect(H2hAttempt.where(result_attempt_id: nil).count).to be(0)
+    end
+
   end
 end

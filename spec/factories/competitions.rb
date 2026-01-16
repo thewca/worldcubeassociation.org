@@ -18,6 +18,7 @@ FactoryBot.define do
       starts { 1.year.ago }
       ends { starts }
       event_ids { %w[333 333oh 555 pyram minx 222 444] }
+      h2h_finals_event_ids { nil }
 
       today { Time.now.utc.iso8601 }
       next_month { 1.month.from_now.iso8601 }
@@ -430,12 +431,22 @@ FactoryBot.define do
           next if ce.rounds.any?
 
           evaluator.rounds_per_event.times do |i|
-            ce.rounds.create!(
-              format: ce.event.preferred_formats.first.format,
-              number: i + 1,
-              total_number_of_rounds: evaluator.rounds_per_event,
-              scramble_set_count: evaluator.groups_per_round,
-            )
+            if evaluator.h2h_finals_event_ids.include?(ce.event_id)
+              ce.rounds.create!(
+                format: ce.event.preferred_formats.first.format,
+                number: i + 1,
+                total_number_of_rounds: evaluator.rounds_per_event,
+                scramble_set_count: evaluator.groups_per_round,
+                is_h2h_mock: true,
+              )
+            else
+              ce.rounds.create!(
+                format: ce.event.preferred_formats.first.format,
+                number: i + 1,
+                total_number_of_rounds: evaluator.rounds_per_event,
+                scramble_set_count: evaluator.groups_per_round,
+              )
+            end
           end
         end
       end

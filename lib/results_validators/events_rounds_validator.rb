@@ -73,7 +73,7 @@ module ResultsValidators
         #   which effectively means that you wanted to hold three rounds of 3BLD but not enough people showed up.
         # This scenario happens often enough that we allow Delegates to fix it "by themselves"
         #   without WCAT intervention. That's why it's only a soft warning (as opposed to events being a hard error).
-        expected = competition.rounds.map(&:human_id)
+        expected = competition.rounds.reject { it.is_h2h_mock == true }.map(&:human_id)
         real = results.map(&:round_human_id).uniq
 
         (expected - real).each do |round_id|

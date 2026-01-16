@@ -32,7 +32,7 @@ namespace :h2h_results do
         # Now we can create the attempt-specific records
         live_attempt = LiveAttempt.create!(
           value: value,
-          attempt_number: H2hAttempt.where(h2h_competitor_id: competitor).count + 1,
+          attempt_number: result.live_attempts.count + 1,
           live_result: result,
         )
         puts live_attempt.errors unless live_attempt.valid?
@@ -51,11 +51,47 @@ namespace :h2h_results do
   end
 
   desc "Graduate H2H data from live tables to results and result_attempts"
-  task :import, [:competition_id] => :environment do |_t, args|
+  task :post, [:competition_id] => :environment do |_t, args|
     competition = Competition.find(args[:competition_id])
     h2h_rounds = competition.rounds.where(is_h2h_mock: true)
+    byebug
 
-    h2h_rounds.each do |r|
+    puts "Posting H2H results for #{competition.id}"
+
+    ActiveRecord::Base.transaction do
+      h2h_rounds.each do |r|
+        puts "handling round: #{r.inspect}"
+        r.live_results.each do |lr|
+          puts "> handling live_result: #{lr.inspect}"
+          result = Result.build(
+            average: 0,
+            best: lr.best,
+            competition: r.competition,
+            round_id: r.id,
+            round_type_id: lr.round.round_type_id,
+            format_id: lr.round.format.id,
+            event_id: lr.round.competition_event.event_id,
+            person: lr.registration.person,
+            person_name: lr.registration.name,
+            country_id: lr.registration.country.id,
+          )
+
+          lr.live_attempts.each do |la|
+            puts ">> handling live_attempt: #{la.inspect}"
+            result_attempt = result.result_attempts.build(
+              attempt_number: la.attempt_number,
+              value: la.value,
+            )
+
+          end
+
+          byebug
+          result.save!
+          lr.destroy!
+        end
+      end
     end
+
+    puts "Results posted for #{competition.id}"
   end
 end
