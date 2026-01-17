@@ -2274,7 +2274,12 @@ class Competition < ApplicationRecord
   end
 
   def exempt_from_wca_dues?
-    world_or_continental_championship? || multi_country_fmc_competition?
+    world_or_continental_championship? ||
+      multi_country_fmc_competition? ||
+      # Exempt the first 5 competitions in a country.
+      # The logic uses strict inequality (<) to ignore competitions starting on the same date.
+      # Therefore, if multiple competitions cross the threshold simultaneously, they are all exempt.
+      country.competitions.where(start_date: ...start_date).count < 5
   end
 
   validate :series_siblings_must_be_valid
