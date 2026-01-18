@@ -1,5 +1,6 @@
 import React from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Segment } from 'semantic-ui-react';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 import computePotentialDuplicates from './api/computePotentialDuplicates';
@@ -42,6 +43,9 @@ export default function DuplicateChecker({ competitionId, setUserIdToEdit }) {
         run={() => computePotentialDuplicatesMutate({ competitionId })}
         refetch={refetch}
       />
+      {lastDuplicateCheckerJobRun.potential_duplicate_persons.length === 0 && (
+        <Segment>No newcomers to show</Segment>
+      )}
       {lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.success
       && (
         <SimilarPersons

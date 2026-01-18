@@ -44,8 +44,8 @@
     "sort_by": "single",
     "sort_by_second": "average",
     "expected_solve_count": 5,
-    "trim_fastest_n": 0,
-    "trim_slowest_n": 0,
+    "trim_fastest_n": 1,
+    "trim_slowest_n": 1,
     "name": "Best of 5",
     "short_name": "Bo5",
     "allowed_first_phase_formats": [

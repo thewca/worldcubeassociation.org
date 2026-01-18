@@ -952,6 +952,13 @@ ko:
         #original_hash: 79ccfe2
         dob_invalid: 형식이 잘못 되었습니다.
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: 페이지를 렌더링하는 동안 오류가 발생했습니다.
+      #original_hash: 22dfe12
+      description: 이 오류가 계속 발생하면 아래에 나열된 세부 정보를 포함하여 WST에 보고하십시오.
+      #original_hash: 20be860
+      details: 오류 세부 정보
     messages:
       #original_hash: dc2367c
       wrong_size: '잘못된 크기입니다(%{file_size}이어야 함)'
@@ -2121,7 +2128,7 @@ ko:
     #original_hash: bbcc3dc
     delete_registration: 참가 신청 삭제
     #original_hash: e9ddc6e
-    will_open_html: '<strong>%{days}</strong> %{time}에 참가 신청 기간이 시작됩니다.'
+    will_open_html: '%{time}에 참가 신청 기간이 시작됩니다 (<strong>%{days}</strong>).'
     #original_hash: 34eb009
     will_close_html: '<strong>%{days}</strong> %{time}에 참가 신청 기간이 종료됩니다.'
     #original_hash: dc8a520
@@ -2285,6 +2292,8 @@ ko:
         wrong_dob_format: >-
           생년월일은 YYYY-mm-dd 형식(년-월-일, 예: 1944-07-13)을 따라야 합니다. 다음 생년월일은 구문을 분석할 수
           없습니다: %{raw_dobs}.
+        #original_hash: 6d8e34b
+        empty_file: 파일이 비어 있습니다.
     add:
       #original_hash: 975275e
       title: '%{comp}에 대한 참가 신청을 추가합니다'
@@ -3256,7 +3265,7 @@ ko:
         #original_hash: 21891e5
         payment_missing: 주최측과 특별한 합의가 있거나 다른 방법으로 지불한 경우를 제외하고는 참가비를 지불하기 전까지 참가 신청은 승인되지 않습니다.
         #original_hash: b15fddc
-        needs_approval: 아직 여행 일정을 예약하지 마십시오. 주최자가 수동으로 등록을 승인해야 합니다. 시간이 걸릴 수 있습니다.
+        needs_approval: 아직 여행 일정을 잡지 마세요 - 운영진이 직접 등록을 승인해야 하므로 시간이 걸릴 수 있습니다.
         #original_hash: 6071fd9
         is_accepted: 여행 일정을 예약하고 짐을 챙기십시오. 대회에 참가할 자리가 생겼습니다!
         #original_hash: 89448a8
@@ -3401,7 +3410,7 @@ ko:
             #original_hash: 8cc047a
             title: 참가 신청 승인
             #original_hash: 3bdafe5
-            description: 주최 측에 의함
+            description: 운영진에 의함
           payment:
             #original_hash: 4930c06
             title: 결제 정보
@@ -3437,7 +3446,7 @@ ko:
           #original_hash: b1e97b8
           accepted: 귀하의 참가 신청이 승인되었습니다.
           #original_hash: 3d7aa97
-          pending: 귀하의 참가 신청은 주최측의 승인을 기다리고 있습니다.
+          pending: 참가 신청 승인 대기 중입니다.
           #original_hash: dcc4906
           cancelled: 귀하의 참가 신청이 삭제되었습니다.
           #original_hash: 92dab83
@@ -5203,6 +5212,11 @@ ko:
     results_export:
       #original_hash: 15d00e1
       heading: WCA 결과 내보내기
+      #original_hash: 733df42
+      deprecation_warning: >-
+        사용 중단 알림: 결과 내보내기 기능의 %{old_version} 버전은 더 이상 사용되지 않으며,
+        %{deprecation_date}부터 지원이 중단될 예정입니다. 그 전에 %{new_version} 버전으로 전환하여
+        사용하십시오.
       #original_hash: f9fe9df
       description: >-
         이 페이지에서는 WCA 결과를 여러 형식으로 다운로드할 수 있도록 제공하므로, 이를 광범위하게 사용하거나 분석할 수 있습니다.
@@ -5210,6 +5224,10 @@ ko:
         확인할 수 있습니다.
       #original_hash: 4f59283
       permalink: 퍼머링크
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        참고: Permalink는 특정 버전 내에서 최신 결과 내보내기를 제공합니다. 즉, v2 Permalink는 최신 v2 내보내기를
+        반환하지만, v3이 출시되더라도 v2 상태를 유지합니다.
       file_formats:
         #original_hash: b086d79
         sql: SQL 데이터베이스로 가져오기 위한 SQL 문입니다.
@@ -5325,10 +5343,6 @@ ko:
       wrong_attempts_for_cutoff_error: >-
         [%{round_id}] %{person_name}은 컷오프 단계에 대한 시도가 하나 이상 없습니다. 누락된 시도를 포함하도록
         결과를 수정하거나 대회의 종목 관리 페이지에서 라운드 정보를 업데이트하십시오.
-      #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] %{person_name}에 대한 결과가 잘못된 형식입니다. %{expected_format}을(를)
-        예상했지만 %{format}을(를) 받았습니다.
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] %{person_name}에 대한 최소 1개의 결과가 라운드의 기록 제한을 초과했습니다. 이는 시도당
@@ -5337,10 +5351,6 @@ ko:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] %{person_name}에 대한 경과 기록의 합이 누적 기록 제한인 %{time_limit}을
         초과했습니다.
-      #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] 이 라운드의 기록 제한 및 컷오프에 대한 정보가 없습니다. 이러한 검증은 건너뛰었습니다. 대회의 종목
-        관리 페이지에서 라운드 정보를 업데이트하십시오.
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] 이 라운드의 기록 제한은 정의되지 않았으며 기록 제한 검증이 건너뛰어졌습니다. 이는 2013년 이전
@@ -5364,10 +5374,6 @@ ko:
       too_many_qualified_warning: >-
         라운드 %{round_id}: 계획된 진출 조건보다 더 많은 선수가 진출했습니다(%{expected} 대신 %{actual},
         조건은 %{condition}이었습니다). 종목 관리 페이지에서 라운드 정보를 업데이트하십시오.
-      #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        라운드 %{round_id}가 결과에 있지만 종목 탭에서 생성되지 않았습니다. 대회의 종목 관리 페이지에 라운드 정보를
-        포함하십시오.
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         라운드 %{round_id}에는 경쟁자가 99명 이하이지만 후속 라운드가 3개 이상 있습니다 - 이는 규정 9m1에 따라 허용되지
@@ -5405,10 +5411,6 @@ ko:
       missing_round_results_error: >-
         라운드 %{round_id}에 대한 결과는 없지만 종목 탭에 나열되어 있습니다. 이 라운드가 개최되지 않은 경우 대회의 종목 관리
         페이지에서 라운드를 제거하십시오.
-      #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        '%{round_name}'에 대한 컷오프는 발표되지 않았지만 결과에서 컷오프 라운드로 감지되었습니다. 대회의 종목 관리
-        페이지에서 라운드 정보를 업데이트하십시오.
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -5418,10 +5420,6 @@ ko:
         것으로 선언, 최대 라운드 수, 최대 상금 금액).
       #original_hash: 1d4e297
       no_main_event_warning: 이 대회에는 선택된 주 종목이 없습니다. 이것이 맞다는 것을 WRT에 알려주십시오.
-      #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        %{event_id}에 대한 결과가 있지만 공식 종목으로 등재되어 있지 않습니다. 결과에서 종목을 제거하거나 WCAT에 연락하여
-        WCA 웹사이트에 이벤트를 추가해 달라고 요청하십시오.
       #original_hash: fde208d
       missing_results_warning: >-
         %{event_id}에 대한 결과는 없지만 공식 종목으로 등재되어 있습니다. 종목이 열렸다면 결과를 포함하여 JSON을 다시
@@ -5433,10 +5431,6 @@ ko:
         추가하십시오.
       #original_hash: 340d2f3
       missing_scrambles_for_competition_error: 대회를 위한 스크램블이 누락되었습니다. Scrambles Matcher를 사용하여 스크램블을 추가하십시오.
-      #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] 스크램블이 너무 많습니다. Scrambles Matcher를 사용하여 사용하지 않는 스크램블의 선택을
-        취소하십시오.
       #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] 그룹 %{group_id}: 스크램블이 누락되었습니다. %{expected} 대신 %{actual}만

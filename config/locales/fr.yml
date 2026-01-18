@@ -132,6 +132,8 @@ fr:
     '2': Meilleur des 2
     #original_hash: 21f623c
     '3': Meilleur des 3
+    #original_hash: cca816d
+    '5': Meilleur des 5
     #original_hash: 2342d2b
     a: Moyenne élaguée des 5
     #original_hash: 940c82d
@@ -143,6 +145,8 @@ fr:
       '2': Bo2
       #original_hash: b41f36f
       '3': Bo3
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: Ao5
       #original_hash: 53ba088
@@ -1014,6 +1018,15 @@ fr:
         #original_hash: 79ccfe2
         dob_invalid: est mal formatée
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: Une erreur s'est produite lors du rendu de la page
+      #original_hash: 22dfe12
+      description: >-
+        Si cette erreur persiste, signalez-la à WST en fournissant les
+        informations détaillées ci-dessous.
+      #original_hash: 20be860
+      details: Détails de l'erreur
     messages:
       #original_hash: dc2367c
       wrong_size: 'n''est pas de la bonne taille (il devrait faire %{file_size})'
@@ -6386,6 +6399,12 @@ fr:
     results_export:
       #original_hash: 15d00e1
       heading: Export de résultats WCA
+      #original_hash: 733df42
+      deprecation_warning: >-
+        AVIS DE DÉPRÉCIATION : La version %{old_version} de l'exportation des
+        résultats est désormais obsolète et ne sera plus prise en charge à
+        compter du %{deprecation_date}. Veuillez passer à la version
+        %{new_version} avant cette date.
       #original_hash: f9fe9df
       description: >-
         Sur cette page, nous proposons les résultats WCA à télécharger dans
@@ -6396,6 +6415,12 @@ fr:
         version la plus récente.
       #original_hash: 4f59283
       permalink: permalien
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        Remarque : les permaliens fournissent les derniers résultats exportés
+        dans une version donnée. Par exemple, le permalien v2 renverra la
+        dernière exportation v2, mais restera sur la v2 même lorsque la v3 sera
+        disponible.
       file_formats:
         #original_hash: b086d79
         sql: 'Requête SQL, pour l’importation dans les bases de données SQL.'

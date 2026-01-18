@@ -29,6 +29,7 @@ RSpec.describe "registrations" do
       it "renders an error when there are missing columns" do
         file = csv_file [
           ["Status", "Name", "WCA ID", "Birth date", "Gender", "Email", "444"],
+          ["a", "Sherlock Holmes", "", "2000-01-01", "m", "sherlock@example.com", "1"],
         ]
         post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
         expect(response).to have_http_status(:unprocessable_content)
@@ -401,16 +402,18 @@ RSpec.describe "registrations" do
 
         context "registrant accepted in the database, but not in the CSV file" do
           it "deletes the registration" do
-            registration = create(:registration, :accepted, competition: competition)
+            registration1 = create(:registration, :accepted, competition: competition, events: %w[333])
+            registration2 = create(:registration, :accepted, competition: competition, events: %w[444])
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+              ["a", registration1.user.name, registration1.user.country.id, "", registration1.user.dob, registration1.user.gender, registration1.user.email, "1", "0"],
             ]
             expect do
               post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
             end.to not_change { User.count }
               .and not_change { competition.registrations.count }
               .and change { competition.registrations.accepted.count }.by(-1)
-            expect(registration.reload).to be_cancelled
+            expect(registration2.reload).to be_cancelled
           end
         end
 
@@ -423,6 +426,19 @@ RSpec.describe "registrations" do
             expect do
               post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
             end.to change { competition.registrations.count }.by(1)
+          end
+        end
+
+        context "CSV empty file" do
+          it "throws an error" do
+            file = csv_file [
+              ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+            ]
+            expect do
+              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+            end.not_to(change { competition.registrations.count })
+            expect(response).to have_http_status(:unprocessable_content)
+            expect(response.body).to include "The file is empty."
           end
         end
       end
