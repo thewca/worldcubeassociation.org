@@ -68,11 +68,12 @@ module ResultsValidators
 
       def check_rounds_match(competition, results)
         # Check for rounds which are entirely missing results.
-        # This is treated as a warning because under certain circumstances, you can plan for a round but not hold it.
+        #   This is treated as a warning because under certain circumstances, you can plan for a round but not hold it.
         #   The most "popular" reason for this is Regulation 9m (https://www.worldcubeassociation.org/regulations/#9m)
         #   which effectively means that you wanted to hold three rounds of 3BLD but not enough people showed up.
-        # This scenario happens often enough that we allow Delegates to fix it "by themselves"
-        #   without WCAT intervention. That's why it's only a soft warning (as opposed to events being a hard error).
+        #   This scenario happens often enough that we allow Delegates to fix it "by themselves" without WCAT intervention.
+        # Additionally, we are filtering out H2H finals as their results are loaded via a different process until we transition
+        #   all results to be loaded via the live_results/live_attempts pipeline. See #13200 for more information.
         expected = competition.rounds.reject { it.is_h2h_mock == true }.map(&:human_id)
         real = results.map(&:round_human_id).uniq
 

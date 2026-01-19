@@ -5,7 +5,7 @@ namespace :h2h_results do
   task :import, [:file_path] => :environment do |_t, args|
     file_path = args[:file_path]
 
-    # TODO: Add support for multiple rounds in one file (I think I already have this?)
+    # TODO: Add test that confirms support for multiple rounds in one file
     ActiveRecord::Base.transaction do
       CSV.foreach(file_path, headers: true) do |row|
         puts "considering #{row}"
