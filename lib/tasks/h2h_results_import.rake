@@ -28,7 +28,7 @@ namespace :h2h_results do
         end
 
         match = H2hMatch.find_or_create_by!(round_id: round_id, match_number: match_number)
-        competitor = H2hCompetitor.find_or_create_by!(h2h_match_id: match.id, user_id: Registration.find(registration_id).user.id)
+        competitor = H2hMatchCompetitor.find_or_create_by!(h2h_match_id: match.id, user_id: Registration.find(registration_id).user.id)
 
         set = H2hSet.find_or_create_by!(h2h_match_id: match.id, set_number: set_number)
 
@@ -43,8 +43,8 @@ namespace :h2h_results do
         h2h_attempt = H2hAttempt.create!(
           h2h_set: set,
           live_attempt: live_attempt,
-          h2h_competitor: competitor,
-          set_attempt_number: H2hAttempt.where(h2h_set_id: set, h2h_competitor_id: competitor).count + 1,
+          h2h_match_competitor: competitor,
+          set_attempt_number: H2hAttempt.where(h2h_set_id: set, h2h_match_competitor_id: competitor).count + 1,
         )
         puts h2h_attempt.errors unless h2h_attempt.valid?
 

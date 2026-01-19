@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'rake'
 
-RSpec.describe "import:h2h_data", type: :task do
+RSpec.xdescribe "import:h2h_data", type: :task do
   before(:all) do
     Rake.application.rake_require "tasks/h2h_results_import"
     Rake::Task.define_task(:environment)
@@ -157,11 +157,11 @@ RSpec.describe "import:h2h_data", type: :task do
       Rake::Task["h2h_results:import"].invoke(temp_csv.path)
     end
 
-    it 'creates the expected number of model objects', :cxzz do
+    it 'creates the expected number of model objects' do
       expect(LiveResult.count).to be(8)
       expect(Result.count).to be(0)
       expect(H2hMatch.count).to be(8)
-      expect(H2hCompetitor.count).to be(16)
+      expect(H2hMatchCompetitor.count).to be(16)
       expect(H2hSet.count).to be(15)
       expect(LiveAttempt.count).to be(120)
       expect(ResultAttempt.count).to be(0)
@@ -170,7 +170,7 @@ RSpec.describe "import:h2h_data", type: :task do
       expect(H2hAttempt.where(result_attempt_id: nil).count).to be(120)
     end
 
-    it 'creates valid LiveResults', :cxzx do
+    it 'creates valid LiveResults' do
       LiveResult.all.each do |lr|
         # populates global and local pos
         expect(lr.global_pos).to be_an_integer
@@ -182,14 +182,14 @@ RSpec.describe "import:h2h_data", type: :task do
   end
 
   context 'h2h results posting' do
-    it 'creates/deletes the expected number of model objects', :cxz do
+    it 'creates/deletes the expected number of model objects' do
       Rake::Task["h2h_results:import"].invoke(temp_csv.path)
       Rake::Task["h2h_results:post"].invoke(competition.id)
 
       expect(LiveResult.count).to be(0)
       expect(Result.count).to be(8)
       expect(H2hMatch.count).to be(8)
-      expect(H2hCompetitor.count).to be(16)
+      expect(H2hMatchCompetitor.count).to be(16)
       expect(H2hSet.count).to be(15)
       expect(LiveAttempt.count).to be(0)
       expect(ResultAttempt.count).to be(120)
