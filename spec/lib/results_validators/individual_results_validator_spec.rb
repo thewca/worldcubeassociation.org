@@ -99,7 +99,7 @@ RSpec.describe IRV do
         res_fm = create(result_kind, :over_cutoff,
                         competition: competition2, cutoff: cutoff_fm,
                         format_id: "m", event_id: "333fm", round: round_fm)
-        res_fm.update!(value1: 30)
+        res_fm.update!(value1: 30, best: 30)
 
         errs << RV::ValidationError.new(IRV::MET_CUTOFF_MISSING_RESULTS_ERROR,
                                         :results, competition2.id,
