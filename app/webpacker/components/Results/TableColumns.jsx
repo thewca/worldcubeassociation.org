@@ -11,18 +11,16 @@ import {
   PersonCell,
 } from './TableCells';
 
-function resultAttempts(result, minColSpan) {
-  const definedAttempts = result.result_details
-    .split(',')
-    .map(Number)
-    .filter((res) => res !== undefined);
+function resultAttempts(result) {
+  const definedAttempts = [
+    result?.value1,
+    result?.value2,
+    result?.value3,
+    result?.value4,
+    result?.value5,
+  ].filter((res) => res !== undefined);
 
-  const paddedAttempts = Object.assign(
-    new Array(minColSpan).fill(0),
-    definedAttempts,
-  );
-
-  const validAttempts = paddedAttempts.filter((res) => res !== 0);
+  const validAttempts = definedAttempts.filter((res) => res !== 0);
   const completedAttempts = validAttempts.filter((res) => res > 0);
   const uncompletedAttempts = validAttempts.filter((res) => res < 0);
 
@@ -32,10 +30,10 @@ function resultAttempts(result, minColSpan) {
   const worstResult = _.min(uncompletedAttempts) || _.max(validAttempts);
   const bestResult = _.min(completedAttempts);
 
-  const bestResultIndex = paddedAttempts.indexOf(bestResult);
-  const worstResultIndex = paddedAttempts.indexOf(worstResult);
+  const bestResultIndex = definedAttempts.indexOf(bestResult);
+  const worstResultIndex = definedAttempts.indexOf(worstResult);
 
-  return [paddedAttempts, bestResultIndex, worstResultIndex];
+  return [definedAttempts, bestResultIndex, worstResultIndex];
 }
 
 export const resultsFiveWideColumn = {
@@ -48,7 +46,7 @@ export const resultsFiveWideColumn = {
 
     if (!result) return (<Table.Cell />);
 
-    const [attempts, bestResultIndex, worstResultIndex] = resultAttempts(result, 5);
+    const [attempts, bestResultIndex, worstResultIndex] = resultAttempts(result);
 
     return (
       <AttemptsCells

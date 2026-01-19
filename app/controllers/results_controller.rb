@@ -199,30 +199,12 @@ class ResultsController < ApplicationController
 
       @query = <<-SQL.squish
         SELECT
+          results.*,
+          competitions.cell_name         competition_name,
           competitions.start_date,
           YEAR(competitions.start_date)  year,
           MONTH(competitions.start_date) month,
-          DAY(competitions.start_date)   day,
-          events.id              event_id,
-          events.name            event_name,
-          results.id             id,
-          results.type           type,
-          results.value          value,
-          results.format_id      format_id,
-          results.round_type_id  round_type_id,
-          events.format          value_format,
-          results.record_name,
-          results.person_id              person_id,
-          results.person_name            person_name,
-          results.country_id             country_id,
-          countries.name                 country_name,
-          competitions.id                competition_id,
-          competitions.cell_name         competition_name,
-          (
-            SELECT GROUP_CONCAT(ra.value ORDER BY ra.attempt_number)
-            FROM result_attempts ra
-            WHERE ra.result_id = results.id
-          ) AS result_details
+          DAY(competitions.start_date)   day
         FROM
           (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
             SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') results
@@ -247,7 +229,7 @@ class ResultsController < ApplicationController
           UNION
           #{current_records_query('average', 'average')}) helper
         ORDER BY
-          `rank`, type DESC, start_date, round_type_id, person_name
+          event_rank, type DESC, start_date, round_type_id, person_name
       SQL
     end
 
@@ -261,14 +243,11 @@ class ResultsController < ApplicationController
   private def current_records_query(value, type)
     <<-SQL.squish
       SELECT
-        '#{type}'              type,
-                               results.*,
-                               value,
-        events.name            event_name,
-                               format,
-        countries.name         country_name,
-        competitions.cell_name competition_name,
-                               `rank`,
+        '#{type}'                      type,
+        results.*,
+        records.value,
+        events.`rank`                  event_rank,
+        competitions.cell_name         competition_name,
         competitions.start_date,
         YEAR(competitions.start_date)  year,
         MONTH(competitions.start_date) month,
@@ -286,11 +265,10 @@ class ResultsController < ApplicationController
         results
         #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
         JOIN events ON results.event_id = events.id
-        JOIN countries ON results.country_id = countries.id
         JOIN competitions ON results.competition_id = competitions.id
       WHERE events.`rank` < 990
-        AND results.#{value} = value
-        AND results.event_id = record_event_id
+        AND results.#{value} = records.value
+        AND results.event_id = records.record_event_id
         #{@event_condition}
         #{@region_condition}
         #{@years_condition_competition}
