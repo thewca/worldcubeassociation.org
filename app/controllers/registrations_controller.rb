@@ -431,18 +431,17 @@ class RegistrationsController < ApplicationController
         stored_holder = stored_intent.holder
 
         if stored_holder.is_a? Registration
-          stored_payment = stored_holder.record_payment(
+          stored_holder.record_payment(
             ruby_money.cents,
             ruby_money.currency.iso_code,
             charge_transaction,
             stored_intent.initiated_by_id,
+            # Webhooks are running in async mode, so we need to rely on the creation timestamp sent by Stripe.
+            # Context: When our servers die due to traffic spikes, the Stripe webhook cannot be processed
+            #   and Stripe tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
+            #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
+            paid_at: audit_remote_timestamp,
           )
-
-          # Webhooks are running in async mode, so we need to rely on the creation timestamp sent by Stripe.
-          # Context: When our servers die due to traffic spikes, the Stripe webhook cannot be processed
-          #   and Stripe tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
-          #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
-          stored_payment.update!(created_at: audit_remote_timestamp)
         end
       end
     when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
@@ -550,16 +549,15 @@ class RegistrationsController < ApplicationController
     stored_intent.update_status_and_charges(payment_account, remote_intent, current_user) do |charge_transaction|
       ruby_money = charge_transaction.money_amount
 
+      # Running in sync mode, so if the code reaches this point we're reasonably confident that the time the Stripe payment
+      #   succeeded matches the time that the information reached our database. There are cases for async webhooks where
+      #   this behavior differs and we overwrite paid_at manually, see #stripe_webhook above.
       registration.record_payment(
         ruby_money.cents,
         ruby_money.currency.iso_code,
         charge_transaction,
         current_user.id,
       )
-
-      # Running in sync mode, so if the code reaches this point we're reasonably confident that the time the Stripe payment
-      #   succeeded matches the time that the information reached our database. There are cases for async webhooks where
-      #   this behavior differs and we overwrite created_at manually, see #stripe_webhook above.
     end
 
     # For details on what the individual statuses mean, please refer to the comments
