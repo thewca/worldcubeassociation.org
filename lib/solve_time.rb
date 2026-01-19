@@ -156,7 +156,7 @@ class SolveTime
   end
 
   def <=>(other)
-    to_orderable <=> other&.to_orderable
+    to_orderable <=> other.to_orderable
   end
 
   def self.multibld_attempt_to_points(attempt_result)

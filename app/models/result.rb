@@ -82,10 +82,6 @@ class Result < ApplicationRecord
   alias_attribute :name, :person_name
   alias_attribute :wca_id, :person_id
 
-  def attempts
-    [value1, value2, value3, value4, value5]
-  end
-
   delegate :iso2, to: :country, prefix: true
 
   DEFAULT_SERIALIZE_OPTIONS = {
