@@ -7,6 +7,8 @@ class ResultAttempt < ApplicationRecord
 
   belongs_to :result
 
+  scope :completed, -> { where.not(value: ..0) }
+
   validates :value, presence: true, numericality: { only_integer: true }
   validates :attempt_number, numericality: { only_integer: true }, uniqueness: { scope: :result_id }
 
