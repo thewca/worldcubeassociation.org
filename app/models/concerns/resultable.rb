@@ -215,7 +215,7 @@ module Resultable
   end
 
   def solve_times
-    attempts.map { SolveTime.new(event_id, :single, it.value) }
+    attempts.map { SolveTime.new(event_id, :single, it) }
   end
 
   def legacy_attempts
