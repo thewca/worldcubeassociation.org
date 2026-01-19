@@ -30,33 +30,32 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
 
     query = if @is_history
               <<-SQL.squish
-        SELECT
-          results.*,
-          value,
-          competitions.cell_name competition_name,
-          competitions.start_date,
-          competitions.country_id competition_country_id
-        FROM
-          (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
-            SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') results
-          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
-          competitions
-        WHERE
-          competitions.id = competition_id
-          #{@region_condition}
-          #{@gender_condition}
-        ORDER BY
-          type desc, value, start_date desc
+                SELECT
+                  results.*,
+                  value,
+                  competitions.cell_name competition_name,
+                  competitions.start_date,
+                  competitions.country_id competition_country_id
+                FROM
+                  (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
+                    SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') results
+                  #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+                  JOIN competitions ON competitions.id = results.competition_id
+                WHERE 1
+                  #{@region_condition}
+                  #{@gender_condition}
+                ORDER BY
+                  type desc, value, start_date desc
               SQL
             else
               <<-SQL.squish
-        SELECT *
-        FROM
-          (#{current_records_query('best', 'single')}
-          UNION
-          #{current_records_query('average', 'average')}) helper
-        ORDER BY
-          type DESC, round_type_id, person_name
+                SELECT *
+                FROM
+                  (#{current_records_query('best', 'single')}
+                  UNION
+                  #{current_records_query('average', 'average')}) helper
+                ORDER BY
+                  type DESC, round_type_id, person_name
               SQL
             end
     # TODO: move this to records-page-api when migration to next is done so this can be properly precompute
@@ -75,11 +74,11 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
   private def current_records_query(value, type)
     <<-SQL.squish
       SELECT
-      '#{type}' type,
-                results.*,
-                value,
-                competitions.cell_name competition_name,
-                competitions.country_id competition_country_id
+        '#{type}' type,
+        results.*,
+        value,
+        competitions.cell_name competition_name,
+        competitions.country_id competition_country_id
       FROM
         (SELECT event_id record_event_id, MIN(value_and_id) DIV 1000000000 value
           FROM concise_#{type}_results results
@@ -89,13 +88,12 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
           #{@gender_condition}
           GROUP BY event_id) records,
         results
-        #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
-        competitions
+        #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+        JOIN competitions ON competitions.id = results.competition_id
       WHERE results.#{value} = value
+        AND results.event_id = record_event_id
         #{@region_condition}
         #{@gender_condition}
-        AND results.event_id = record_event_id
-        AND competitions.id  = results.competition_id
     SQL
   end
 
