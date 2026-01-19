@@ -13,6 +13,11 @@ required:
   - round_type_id
   - round_id
   - format_id
+  - value1
+  - value2
+  - value3
+  - value4
+  - value5
   - best
   - average
   - regional_single_record
@@ -59,6 +64,21 @@ properties:
   format_id:
     type: string
     example: "a"
+  value1:
+    type: integer
+    example: 126
+  value2:
+    type: integer
+    example: 84
+  value3:
+    type: integer
+    example: 91
+  value4:
+    type: integer
+    example: 89
+  value5:
+    type: integer
+    example: 85
   best:
     type: integer
     example: 84
