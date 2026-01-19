@@ -4,20 +4,13 @@ module ResultsHelper
   def solve_tds_for_result(result)
     # It's ok to use map + reduce (:+) here because this is not an Integer
     # rubocop:disable Performance/Sum
-    completed_solves = result.solve_times.each_with_index.map do |solve_time, i|
+    result.solve_times.each_with_index.map do |solve_time, i|
       classes = ["solve", i.to_s]
       classes << "trimmed" if result.trimmed_indices.include?(i)
       classes << "best" if i == result.best_index
       classes << "worst" if i == result.worst_index
       content_tag :td, solve_time.clock_format, class: classes.join(' ')
     end.reduce(:+)
-
-    # Currently there are always 5 solves in any results, even for mean of 3 or Bo1
-    # That's why we always need to fill it up with 5 tds
-    missing_solves = 5 - result.solve_times.length
-    return completed_solves + Array.new(missing_solves, content_tag(:td)).reduce(:+) if missing_solves != 0
-
-    completed_solves
     # rubocop:enable Performance/Sum
   end
 
