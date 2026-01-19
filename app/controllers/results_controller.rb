@@ -191,31 +191,19 @@ class ResultsController < ApplicationController
               end
 
       @query = <<-SQL.squish
-        WITH regional_records AS (
-          SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record <> ''
-          UNION
-          SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>''
-        ),
-        record_attempts AS (
-          SELECT unique_ids.id, GROUP_CONCAT(ra.value ORDER BY ra.attempt_number) AS details
-          FROM result_attempts ra
-          INNER JOIN (SELECT DISTINCT id FROM regional_records) unique_ids
-            ON ra.result_id = unique_ids.id
-          GROUP BY unique_ids.id
-        )
         SELECT
           competitions.start_date,
           YEAR(competitions.start_date)  year,
           MONTH(competitions.start_date) month,
           DAY(competitions.start_date)   day,
-          events.id                      event_id,
-          events.name                    event_name,
-          results.id                     id,
-          results.type                   type,
-          results.value                  value,
-          results.format_id              format_id,
-          results.round_type_id          round_type_id,
-          events.format                  value_format,
+          events.id              event_id,
+          events.name            event_name,
+          results.id             id,
+          results.type           type,
+          results.value          value,
+          results.format_id      format_id,
+          results.round_type_id  round_type_id,
+          events.format          value_format,
           results.record_name,
           results.person_id              person_id,
           results.person_name            person_name,
@@ -223,9 +211,14 @@ class ResultsController < ApplicationController
           countries.name                 country_name,
           competitions.id                competition_id,
           competitions.cell_name         competition_name,
-          record_attempts.details        result_details,
-        FROM regional_records AS results
-          INNER JOIN record_attempts ON results.id = record_attempts.id
+          (
+            SELECT GROUP_CONCAT(ra.value ORDER BY ra.attempt_number)
+            FROM result_attempts ra
+            WHERE ra.result_id = results.id
+          ) AS result_details
+        FROM
+          (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
+            SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') results
           #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
           JOIN events ON results.event_id = events.id
           JOIN round_types ON results.round_type_id = round_types.id
