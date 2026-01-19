@@ -2889,6 +2889,11 @@ es-ES:
         connected: 'Conectado, los resultados se están actualizando'
         #original_hash: 53abaa2
         disconnected: 'Conexión perdida, los resultados no se están actualizando'
+      podiums:
+        #original_hash: 02ae2bd
+        title: Podios
+        #original_hash: d7297a7
+        undetermined: Podios por determinar
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mis competiciones
