@@ -78,14 +78,21 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
                     result_attempts.value,
                     competitions.cell_name competition_name,
                     competitions.country_id competition_country_id
-                  FROM result_attempts
-                    INNER JOIN results ON result_attempts.result_id = results.id
-                  #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
-                  JOIN competitions on competitions.id = results.competition_id
+                  FROM (
+                    SELECT id
+                    FROM results
+                    #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+                    WHERE best > 0
+                      #{@event_condition}
+                      #{@region_condition}
+                      #{@gender_condition}
+                    ORDER BY best
+                    LIMIT #{5 * show}
+                  ) AS best_results
+                    INNER JOIN results ON results.id = best_results.id
+                    INNER JOIN result_attempts ON result_attempts.result_id = results.id
+                    JOIN competitions on competitions.id = results.competition_id
                   WHERE value > 0
-                    #{@event_condition}
-                    #{@region_condition}
-                    #{@gender_condition}
                   ORDER BY value, person_name, competition_id, round_type_id
                   #{limit_condition}
                 SQL

@@ -109,15 +109,22 @@ class ResultsController < ApplicationController
           SELECT
             results.*,
             result_attempts.value
-          FROM result_attempts
-            INNER JOIN results ON result_attempts.result_id = results.id
-          #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
-          #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
+          FROM (
+            SELECT id
+            FROM results
+            #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+            #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
+            WHERE best > 0
+              #{@event_condition}
+              #{@years_condition_competition}
+              #{@region_condition}
+              #{@gender_condition}
+            ORDER BY best
+            LIMIT #{5 * @show}
+          ) AS best_results
+            INNER JOIN results ON results.id = best_results.id
+            INNER JOIN result_attempts ON result_attempts.result_id = results.id
           WHERE value > 0
-            #{@event_condition}
-            #{@years_condition_competition}
-            #{@region_condition}
-            #{@gender_condition}
           ORDER BY value, person_name, competition_id, round_type_id
           #{limit_condition}
         SQL
