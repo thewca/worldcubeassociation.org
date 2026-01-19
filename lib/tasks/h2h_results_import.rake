@@ -15,6 +15,7 @@ namespace :h2h_results do
         set_number     = row['Set #'].to_i
         attempt_number = row['Attempt number'].to_i
         registration_id     = row['registration_id'].to_i
+        final_pos = row['final_position'].to_i
         value  = row['Time (seconds)'].sub(".", "").to_i
 
         # First find/create the H2H infrastructure models
@@ -22,6 +23,8 @@ namespace :h2h_results do
           lr.average = 0
           lr.best = 0
           lr.last_attempt_entered_at = DateTime.now
+          lr.global_pos = final_pos
+          lr.local_pos = final_pos
         end
 
         match = H2hMatch.find_or_create_by!(round_id: round_id, match_number: match_number)
@@ -44,6 +47,7 @@ namespace :h2h_results do
           set_attempt_number: H2hAttempt.where(h2h_set_id: set, h2h_competitor_id: competitor).count + 1,
         )
         puts h2h_attempt.errors unless h2h_attempt.valid?
+
       end
 
       puts "Import complete!"
@@ -73,6 +77,7 @@ namespace :h2h_results do
             person: lr.registration.person,
             person_name: lr.registration.name,
             country_id: lr.registration.country.id,
+            pos: lr.global_pos,
           )
 
           lr.live_attempts.each do |la|

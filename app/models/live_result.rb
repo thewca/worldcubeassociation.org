@@ -61,6 +61,8 @@ class LiveResult < ApplicationRecord
   end
 
   def recompute_local_pos
+    return if round.is_h2h_mock?
+
     rank_by = format.rank_by_column
     # We only want to decide ties by single in events decided by average
     secondary_rank_by = format.secondary_rank_by_column
@@ -106,6 +108,8 @@ class LiveResult < ApplicationRecord
     end
 
     def recompute_advancing
+      return if round.is_h2h_mock?
+
       has_linked_round = round.linked_round.present?
       advancement_determining_results = has_linked_round ? round.linked_round.live_results : round.live_results
 
@@ -134,6 +138,8 @@ class LiveResult < ApplicationRecord
     end
 
     def recompute_global_pos
+      return if round.is_h2h_mock?
+
       # For non-linked rounds, just set the global_pos to local_pos
       return round.live_results.update_all("global_pos = local_pos") if round.linked_round.blank?
 
