@@ -56,6 +56,33 @@ resource "aws_security_group" "lb" {
   }
 }
 
+resource "aws_security_group" "internal-lb" {
+  name        = "${var.name_prefix}-internal-load-balancer"
+  description = "Internal load balancer"
+  vpc_id      = aws_default_vpc.default.id
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow everything from Load Balancer"
+    security_groups = [aws_security_group.lb.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all egress"
+  }
+
+  tags = {
+    Name = "${var.name_prefix}-internal-load-balancer"
+  }
+}
+
 resource "aws_lb" "this" {
   name               = var.name_prefix
   internal           = false
@@ -74,9 +101,46 @@ resource "aws_lb" "this" {
   idle_timeout = 60
 }
 
+resource "aws_lb" "internal" {
+  name = "${var.name_prefix}-internal"
+  internal = true
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.internal-lb.id]
+  subnets            = [aws_default_subnet.default_az1.id,"subnet-0349cc3938fa60ef5", aws_default_subnet.default_az3.id, aws_default_subnet.default_az4.id]
+  ip_address_type    = "ipv4"
+  enable_deletion_protection = true
+
+  idle_timeout = 60
+}
+
 data "aws_acm_certificate" "this" {
   domain   = "*.worldcubeassociation.org"
   statuses = ["ISSUED"]
+}
+
+resource "aws_lb_target_group" "rails-production-internal" {
+  name        = "wca-main-production-internal-${count.index}"
+  port        = 3000
+  protocol    = "HTTP"
+  vpc_id      = aws_default_vpc.default.id
+  target_type = "ip"
+  count = 2
+
+  deregistration_delay = 10
+  health_check {
+    interval            = 10
+    path                = "/api/v0/healthcheck"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    matcher             = 200
+  }
+  tags = {
+    Name = "${var.name_prefix}-internal"
+    Env = "production"
+  }
 }
 
 resource "aws_lb_target_group" "rails-production" {
