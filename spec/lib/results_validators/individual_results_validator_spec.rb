@@ -60,7 +60,7 @@ RSpec.describe IRV do
         res_over_missing_value = create(result_kind, :over_cutoff,
                                         competition: competition1,
                                         cutoff: cutoff, event_id: "444", round: round44)
-        res_over_missing_value.update!(value2: 0, value3: 0, value4: 0, value5: 0)
+        res_over_missing_value.update!(value2: 0)
 
         errs << RV::ValidationError.new(IRV::WRONG_ATTEMPTS_FOR_CUTOFF_ERROR,
                                         :results, competition1.id,

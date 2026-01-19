@@ -147,8 +147,8 @@ module ResultsValidators
         maybe_qualifying_results = solve_times[0, number_of_attempts_for_cutoff]
         # Get the remaining attempt according to the expected solve count given the format
         other_results = solve_times[number_of_attempts_for_cutoff, total_number_of_attempts - number_of_attempts_for_cutoff]
-        if maybe_qualifying_results.length < number_of_attempts_for_cutoff
-          # There are not enough results for cutoff
+        if maybe_qualifying_results.any?(&:skipped?)
+          # There are at least one skipped results among those in the first phase.
           @errors << ValidationError.new(WRONG_ATTEMPTS_FOR_CUTOFF_ERROR,
                                          :results, competition.id,
                                          round_id: round.human_id,
@@ -156,18 +156,18 @@ module ResultsValidators
         end
 
         qualifying_results = maybe_qualifying_results.select { |solve_time| solve_time < cutoff_result }
-        total_solves = solve_times.length
+        skipped, unskipped = other_results.partition(&:skipped?)
         if qualifying_results.any?
-          # Meets the cutoff, should have all attempts
-          if total_solves != total_number_of_attempts
+          # Meets the cutoff, no result should be SKIPPED
+          if skipped.any?
             @errors << ValidationError.new(MET_CUTOFF_MISSING_RESULTS_ERROR,
                                            :results, competition.id,
                                            round_id: round.human_id,
                                            person_name: result.person_name,
                                            cutoff: cutoff.to_s(round))
           end
-        elsif other_results.present?
-          # Doesn't meet the cutoff, shouldn't have anymore attempts
+        elsif unskipped.any?
+          # Doesn't meet the cutoff, all results should be SKIPPED
           @errors << ValidationError.new(DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
                                          :results, competition.id,
                                          round_id: round.human_id,
