@@ -79,7 +79,7 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
                     competitions.cell_name competition_name,
                     competitions.country_id competition_country_id
                   FROM (
-                    SELECT id
+                    SELECT results.id
                     FROM results
                     #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
                     WHERE best > 0

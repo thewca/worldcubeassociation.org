@@ -110,7 +110,7 @@ class ResultsController < ApplicationController
             results.*,
             result_attempts.value
           FROM (
-            SELECT id
+            SELECT results.id
             FROM results
             #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
             #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
