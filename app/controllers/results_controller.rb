@@ -85,6 +85,8 @@ class ResultsController < ApplicationController
       SQL
 
     elsif @is_results
+      # rubocop:disable Style/ConditionalAssignment
+      #   for better readability of the individual indentations of the SQL queries
       if @is_average
         @query = <<-SQL.squish
           SELECT
@@ -102,33 +104,25 @@ class ResultsController < ApplicationController
             average, person_name, competition_id, round_type_id
           #{limit_condition}
         SQL
-
       else
-        subqueries = (1..5).map do |i|
-          <<-SQL.squish
-            SELECT
-              results.*,
-              value#{i} value
-            FROM results
-            #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
-            #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
-            WHERE value#{i} > 0
-              #{@event_condition}
-              #{@years_condition_competition}
-              #{@region_condition}
-              #{@gender_condition}
-            ORDER BY value
-            #{limit_condition}
-          SQL
-        end
-        subquery = "(#{subqueries.join(') UNION ALL (')})"
         @query = <<-SQL.squish
-          SELECT *
-          FROM (#{subquery}) union_results
+          SELECT
+            results.*,
+            result_attempts.value
+          FROM result_attempts
+            INNER JOIN results ON result_attempts.result_id = results.id
+          #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+          #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
+          WHERE value > 0
+            #{@event_condition}
+            #{@years_condition_competition}
+            #{@region_condition}
+            #{@gender_condition}
           ORDER BY value, person_name, competition_id, round_type_id
           #{limit_condition}
         SQL
       end
+      # rubocop:enable Style/ConditionalAssignment
     elsif @is_by_region
       @query = <<-SQL.squish
         SELECT
