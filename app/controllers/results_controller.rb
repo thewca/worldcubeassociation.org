@@ -215,16 +215,12 @@ class ResultsController < ApplicationController
         FROM
           (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
             SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') results
-          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
-          events,
-          round_types,
-          competitions,
-          countries
-        WHERE events.id = event_id
-          AND events.`rank` < 1000
-          AND round_types.id = round_type_id
-          AND competitions.id = competition_id
-          AND countries.id = results.country_id
+          #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+          JOIN events ON results.event_id = events.id
+          JOIN round_types ON results.round_type_id = round_types.id
+          JOIN competitions ON results.competition_id = competitions.id
+          JOIN countries ON results.country_id = countries.id
+        WHERE events.`rank` < 1000
           #{@region_condition}
           #{@event_condition}
           #{@years_condition_competition}
@@ -277,20 +273,17 @@ class ResultsController < ApplicationController
           #{@gender_condition}
           GROUP BY event_id) records,
         results
-        #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
-        events,
-        countries,
-        competitions
-      WHERE results.#{value} = value
+        #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+        JOIN events ON results.event_id = events.id
+        JOIN countries ON results.country_id = countries.id
+        JOIN competitions ON results.competition_id = competitions.id
+      WHERE events.`rank` < 990
+        AND results.#{value} = value
+        AND results.event_id = record_event_id
         #{@event_condition}
         #{@region_condition}
         #{@years_condition_competition}
         #{@gender_condition}
-        AND results.event_id = record_event_id
-        AND events.id        = results.event_id
-        AND countries.id     = results.country_id
-        AND competitions.id  = results.competition_id
-        AND events.`rank` < 990
     SQL
   end
 
