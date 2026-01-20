@@ -48,6 +48,8 @@ resource "aws_default_subnet" "default_az4" {
 }
 
 output "private_subnets" {
+  # Explicitly only have one of the private subnets here as cross AZ traffic costs 2c a GB
+  # We can revisit this if we need more than the 4000 available IPs or want the resilience trade-off
   value = [aws_default_subnet.default_az2]
 }
 
