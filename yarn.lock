@@ -10050,16 +10050,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-intersection-observer@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "react-intersection-observer@npm:10.0.0"
+"react-intersection-observer@npm:^10.0.2":
+  version: 10.0.2
+  resolution: "react-intersection-observer@npm:10.0.2"
   peerDependencies:
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/ab2d9316adaab401cfff657ced221c12665434dfa0846d8d22b6871c053916550c541e5835969399ae292ee8b68b5cfc5cc3047bfd69b09efc605dc95aef532f
+  checksum: 10c0/6a71956dcad43699a3d3ea9e9d311c85525de88074d2b7869b4315a7778cd0edfda41cdb63733711a17fd30094a8effae7ab2932728448b4e56eed0b51a3c4d3
   languageName: node
   linkType: hard
 
@@ -10625,7 +10625,7 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-google-recaptcha: "npm:^3.1.0"
     react-image-crop: "npm:^11.0.10"
-    react-intersection-observer: "npm:^10.0.0"
+    react-intersection-observer: "npm:^10.0.2"
     react-leaflet: "npm:^4.2.1"
     react-refresh: "npm:^0.18.0"
     react-simplemde-editor: "npm:^5.2.0"
