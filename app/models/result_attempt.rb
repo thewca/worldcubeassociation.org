@@ -6,7 +6,7 @@ class ResultAttempt < ApplicationRecord
   default_scope { order(:attempt_number) }
 
   belongs_to :result
-  has_one :h2h_attempt
+  has_one :h2h_attempt, dependent: :destroy
 
   validates :value, presence: true
   validates :value, numericality: { only_integer: true }

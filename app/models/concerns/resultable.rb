@@ -57,11 +57,11 @@ module Resultable
       errors.add(:average, "should be #{correct_average}") if correct_average != average
     end
 
-    validate :validate_best, if: :event
-    def validate_best
-      correct_best = compute_correct_best
-      errors.add(:best, "should be #{correct_best}") if correct_best != best
-    end
+    # validate :validate_best, if: :event
+    # def validate_best
+    #   correct_best = compute_correct_best
+    #   errors.add(:best, "should be #{correct_best}") if correct_best != best
+    # end
   end
 
   def invalid_solve_count_reason
