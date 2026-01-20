@@ -7983,7 +7983,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:^2.7.6, mini-css-extract-plugin@npm:^2.9.4":
+"mini-css-extract-plugin@npm:^2.10.0":
+  version: 2.10.0
+  resolution: "mini-css-extract-plugin@npm:2.10.0"
+  dependencies:
+    schema-utils: "npm:^4.0.0"
+    tapable: "npm:^2.2.1"
+  peerDependencies:
+    webpack: ^5.0.0
+  checksum: 10c0/5fb0654471f4fb695629d96324d327d4d3a05069a95b83770d070e8f48a07d5b5f8da61adabdd56e3119cf6b17eef058c4ba6ab4cd31a7b2af48624621fe0520
+  languageName: node
+  linkType: hard
+
+"mini-css-extract-plugin@npm:^2.7.6":
   version: 2.9.4
   resolution: "mini-css-extract-plugin@npm:2.9.4"
   dependencies:
@@ -10664,7 +10676,7 @@ __metadata:
     lodash: "npm:^4.17.21"
     luxon: "npm:^3.7.2"
     make-plural: "npm:^8.1.0"
-    mini-css-extract-plugin: "npm:^2.9.4"
+    mini-css-extract-plugin: "npm:^2.10.0"
     path-complete-extname: "npm:^1.0.0"
     playwright: "npm:^1.57.0"
     pnp-webpack-plugin: "npm:^1.7.0"
