@@ -86,8 +86,8 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
                       #{@event_condition}
                       #{@region_condition}
                       #{@gender_condition}
-                    ORDER BY best
-                    LIMIT #{5 * show}
+                    ORDER BY best, person_name, competition_id, round_type_id
+                    #{limit_condition}
                   ) AS best_results
                     INNER JOIN results ON results.id = best_results.id
                     INNER JOIN result_attempts ON result_attempts.result_id = results.id
