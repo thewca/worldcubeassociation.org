@@ -45,6 +45,11 @@ variable "DATABASE_WRT_USER" {
   description = "The name of the database user that WRT signs in with"
 }
 
+variable "DATABASE_WRT_SENIOR_USER" {
+  type        = string
+  description = "The name of the database user that WRT Senior Members signs in with"
+}
+
 variable "VAULT_ADDR" {
   type        = string
   description = "The address of the vault cluster that is running in our private subnet"
@@ -69,6 +74,18 @@ variable "rds_iam_identifier" {
   type = string
   description = "The identifier of the RDS Instance used for IAM Auth"
   default = "db-VFBCC2563NK74KYKEYEC32YXHA"
+}
+
+variable "rds_dev_dump_identifier" {
+  type = string
+  description = "The identifier of the dev dump"
+  default = "db-CLQZYYW5FGHVA6IGWTN64N24PI"
+}
+
+variable "rds_read_replica_identifier" {
+  type = string
+  description = "The identifier of the read replica"
+  default = "db-YF7CCUEQCJOJXD5KU3ASUPYBSE"
 }
 
 variable "shared" {

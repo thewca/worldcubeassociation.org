@@ -1,4 +1,4 @@
-import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
+import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthenticityToken';
 import { bulkUpdateRegistrationUrl, updateRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
 
 export default async function updateRegistration({
@@ -6,7 +6,7 @@ export default async function updateRegistration({
   payload,
 }) {
   const route = updateRegistrationUrl(registrationId);
-  const { data } = await fetchWithJWTToken(route, {
+  const { data } = await fetchJsonOrError(route, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export async function bulkUpdateRegistrations({
   payload,
 }) {
   const route = bulkUpdateRegistrationUrl(competitionId);
-  const { data } = await fetchWithJWTToken(route, {
+  const { data } = await fetchJsonOrError(route, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

@@ -188,7 +188,7 @@ class Person < ApplicationRecord
             .includes(:format, :competition)
             .group_by do |results|
               # Group by country_id in the case of a national championship to cover the case of a comp acting as multiple national championships
-              championship_type == :national ? { event_id: results.event_id, country_id: results.country_id } : :event_id
+              championship_type == :national ? { event_id: results.event_id, country_id: results.country_id } : { event_id: results.event_id }
             end
             .each_value do |final_results|
               previous_old_pos = nil
@@ -248,7 +248,7 @@ class Person < ApplicationRecord
   end
 
   def completed_solves_count
-    result_attempts.where("value > 0").count
+    result_attempts.completed.count
   end
 
   def gender_visible?
@@ -361,6 +361,16 @@ class Person < ApplicationRecord
     )
 
     new_wca_id
+  end
+
+  def execute_edit_person_request(change_type, edit_params)
+    if change_type == "fix"
+      update!(edit_params)
+    elsif change_type == "update"
+      update_using_sub_id!(edit_params)
+    else
+      raise "Unknown change_type #{change_type}"
+    end
   end
 
   def private_attributes_for_user(user)

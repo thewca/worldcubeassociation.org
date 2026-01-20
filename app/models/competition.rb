@@ -57,6 +57,13 @@ class Competition < ApplicationRecord
            allow_nil: true,
            with_model_currency: :currency_code
 
+  validate :start_date, :cant_change_across_regulation_boundaries, if: -> { start_date_was.present? && event_ids.include?('333bf') }
+  private def cant_change_across_regulation_boundaries
+    errors.add(:start_date, "You can't change the start date across Regulation boundaries.") if
+      (start_date_was.year == 2025 && start_date.year == 2026) ||
+      (start_date_was.year == 2026 && start_date.year == 2025)
+  end
+
   scope :not_cancelled, -> { where(cancelled_at: nil) }
   scope :visible, -> { where(show_at_all: true) }
   scope :not_visible, -> { where(show_at_all: false) }
@@ -223,6 +230,7 @@ class Competition < ApplicationRecord
                    format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
   validates :cell_name, length: { maximum: MAX_CELL_NAME_LENGTH },
                         format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
+  strip_attributes only: %i[name cell_name], collapse_spaces: true, allow_empty: true
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :external_website, format: { with: URL_RE }, allow_blank: true
   validates :external_registration_page, presence: true, format: { with: URL_RE }, if: :external_registration_page_required?
@@ -250,7 +258,7 @@ class Competition < ApplicationRecord
   # where we legitimately don't know whether or not they used qualification times so we have to set them to NULL.
   validates :qualification_results_reason, presence: true, if: :persisted_uses_qualification?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
-  validates :main_event_id, inclusion: { in: ->(comp) { [nil].concat(comp.persisted_events_id) } }
+  validates :main_event_id, inclusion: { in: :persisted_events_id, allow_nil: true }
 
   # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
   validates :name, length: { maximum: MAX_NAME_LENGTH }
@@ -293,6 +301,18 @@ class Competition < ApplicationRecord
   def persisted_uses_qualification?
     with_old_id do
       self.uses_qualification?
+    end
+  end
+
+  def persisted_staff_delegate_ids
+    with_old_id do
+      self.staff_delegate_ids
+    end
+  end
+
+  def persisted_organizer_ids
+    with_old_id do
+      self.organizer_ids
     end
   end
 
@@ -396,7 +416,8 @@ class Competition < ApplicationRecord
       !auto_accept_preference_disabled? && !use_wca_registration
 
     errors.add(:auto_accept_preference, I18n.t('competitions.errors.must_use_payment_integration')) if
-      !auto_accept_preference_disabled? && confirmed_or_visible? && competition_payment_integrations.where(connected_account_type: "ConnectedStripeAccount").none?
+      !auto_accept_preference_disabled? && confirmed_or_visible? && !probably_over? &&
+      competition_payment_integrations.where(connected_account_type: "ConnectedStripeAccount").none?
 
     errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_limit')) if
       auto_accept_disable_threshold.present? &&
@@ -492,12 +513,12 @@ class Competition < ApplicationRecord
 
   validate :must_have_at_least_one_delegate, if: :confirmed_or_visible?
   def must_have_at_least_one_delegate
-    errors.add(:staff_delegate_ids, I18n.t('competitions.errors.must_contain_delegate')) if staff_delegate_ids.empty?
+    errors.add(:staff_delegate_ids, I18n.t('competitions.errors.must_contain_delegate')) if persisted_staff_delegate_ids.empty?
   end
 
   validate :must_have_at_least_one_organizer, if: :confirmed_or_visible?
   def must_have_at_least_one_organizer
-    errors.add(:organizer_ids, I18n.t('competitions.errors.must_contain_organizer')) if organizer_ids.empty?
+    errors.add(:organizer_ids, I18n.t('competitions.errors.must_contain_organizer')) if persisted_organizer_ids.empty?
   end
 
   def confirmed_or_visible?
@@ -1027,7 +1048,9 @@ class Competition < ApplicationRecord
   end
 
   def can_show_competitors_page?
-    after_registration_open? && registrations.competing_status_accepted.competing.any?
+    organizer_delegate_ids = organizers.pluck(:id) + delegates.pluck(:id)
+    normal_competitor_ids = registrations.competing_status_accepted.competing.pluck(:user_id) - organizer_delegate_ids
+    after_registration_open? || normal_competitor_ids.any?
   end
 
   def registration_status
@@ -1202,14 +1225,14 @@ class Competition < ApplicationRecord
     errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS)) if number_of_days > MAX_SPAN_DAYS
   end
 
-  validate :registration_dates_must_be_valid
+  validate :registration_dates_must_be_valid, if: :start_date?
   private def registration_dates_must_be_valid
     errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start')) if refund_policy_limit_date? && refund_policy_limit_date > start_date
 
-    if registration_period_required? && registration_open.present? && registration_close.present? &&
-       (registration_open >= start_date || registration_close >= start_date)
-      errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start'))
-    end
+    return unless registration_period_required? && [registration_open, registration_close].all?(&:present?)
+
+    errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start')) if
+      registration_open >= start_date || registration_close >= start_date
   end
 
   validate :waiting_list_dates_must_be_valid
@@ -1474,16 +1497,16 @@ class Competition < ApplicationRecord
   end
 
   def events_with_podium_results
-    results.podium.order(:pos).group_by(&:event)
+    results.includes(:result_attempts).podium.order(:pos).group_by(&:event)
            .sort_by { |event, _results| event.rank }
   end
 
   def winning_results
-    results.winners
+    results.includes(:result_attempts).winners
   end
 
   def person_ids_with_results
-    results.group_by(&:person_id)
+    results.includes(:result_attempts).group_by(&:person_id)
            .sort_by { |_person_id, results| results.first.person_name }
            .map do |person_id, results|
       results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
@@ -1811,12 +1834,24 @@ class Competition < ApplicationRecord
     }
   end
 
+  def approval_step_parameters
+    {
+      auto_accept_enabled?: self.auto_accept_preference_disabled?,
+      auto_accept_preference: self.auto_accept_preference,
+    }
+  end
+
+  def tab_names
+    tabs.pluck(:name)
+  end
+
   def available_registration_lanes(current_user)
     # There is currently only one lane, so this always returns the competitor lane
     steps = []
     steps << { key: 'requirements', isEditable: false }
     steps << { key: 'competing', parameters: competing_step_parameters(current_user), isEditable: true }
     steps << { key: 'payment', parameters: payment_step_parameters, isEditable: true, deadline: self.registration_close } if using_payment_integrations?
+    steps << { key: 'approval', parameters: approval_step_parameters, isEditable: false }
 
     steps
   end
@@ -1832,7 +1867,7 @@ class Competition < ApplicationRecord
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
   def to_wcif(authorized: false)
     {
-      "formatVersion" => "1.0",
+      "formatVersion" => "1.1",
       "id" => id,
       "name" => name,
       "shortName" => cell_name,
@@ -1862,9 +1897,10 @@ class Competition < ApplicationRecord
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled auto_accept_preference auto_accept_disable_threshold],
+      # TODO: h2h_rounds is a temporary method, which should be removed when full-fledged H2H backend support is added - expected in Q1 2026
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series? registration_full_and_accepted?],
+                  part_of_competition_series? registration_full_and_accepted? h2h_rounds tab_names],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -2275,13 +2311,6 @@ class Competition < ApplicationRecord
 
     series_registrations
       .where.not(competition: self)
-  end
-
-  def find_round_for(event_id, round_type_id, format_id = nil)
-    rounds.find do |r|
-      r.event.id == event_id && r.round_type_id == round_type_id &&
-        (format_id.nil? || format_id == r.format_id)
-    end
   end
 
   def export_for_dues_generation
@@ -3054,5 +3083,9 @@ class Competition < ApplicationRecord
 
     threshold_reached = fully_paid_registrations_count >= auto_close_threshold && auto_close_threshold.positive?
     threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
+  end
+
+  def h2h_rounds
+    self.rounds.h2h.map(&:wcif_id)
   end
 end

@@ -58,7 +58,7 @@ class TicketsCompetitionResult < ApplicationRecord
     )
 
     ticket_log = ticket.ticket_logs.create!(
-      action_type: TicketLog.action_types[:update_status],
+      action_type: TicketLog.action_types[:create_ticket],
       acting_user_id: submitted_delegate.id,
       acting_stakeholder_id: competition_stakeholder.id,
     )

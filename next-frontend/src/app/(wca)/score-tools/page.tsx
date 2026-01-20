@@ -21,6 +21,15 @@ import { AiFillQuestionCircle } from "react-icons/ai";
 import { CgWebsite } from "react-icons/cg";
 import Image from "next/image";
 import _ from "lodash";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("score_tools.title"),
+  };
+}
 
 export default async function ScoreTools() {
   const { t, lng } = await getT();
@@ -42,7 +51,7 @@ export default async function ScoreTools() {
   const toolsByCategory = _.groupBy(tools, "category");
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack gap="8" width="full" pt="8" alignItems="left">
         <Heading size="5xl">Software tools for WCA competitions</Heading>
         <Text>{t("score_tools.intro.desc")}</Text>

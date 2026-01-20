@@ -127,34 +127,40 @@ RSpec.describe Person do
   describe "#continental_championship_podiums" do
     let!(:nac2025) { create(:competition, championship_types: ["_North America", "CA"], starts: Date.new(2017, 1, 1)) }
     let!(:nac_333) { create(:round, competition: nac2025) }
+    let!(:nac_444) { create(:round, event_id: '444', competition: nac2025) }
 
     let!(:fr_competitor) do
       create(:person, country_id: "France").tap do |fr_competitor|
         create(:result, person: fr_competitor, competition: nac2025, pos: 1, event_id: "333", round: nac_333)
+        create(:result, person: fr_competitor, competition: nac2025, pos: 2, event_id: "444", round: nac_444)
       end
     end
 
     let!(:us_competitor) do
       create(:person, country_id: "USA").tap do |us_competitor|
         create(:result, person: us_competitor, competition: nac2025, pos: 2, event_id: "333", round: nac_333)
+        create(:result, person: us_competitor, competition: nac2025, pos: 5, event_id: "444", round: nac_444)
       end
     end
 
     let!(:can_competitor) do
       create(:person, country_id: "Canada").tap do |can_competitor|
         create(:result, person: can_competitor, competition: nac2025, pos: 3, event_id: "333", round: nac_333)
+        create(:result, person: can_competitor, competition: nac2025, pos: 4, event_id: "444", round: nac_444)
       end
     end
 
     let!(:us_competitor_2) do
       create(:person, country_id: "USA").tap do |us_2|
         create(:result, person: us_2, competition: nac2025, pos: 4, event_id: "333", round: nac_333)
+        create(:result, person: us_2, competition: nac2025, pos: 3, event_id: "444", round: nac_444)
       end
     end
 
     let!(:can_competitor_2) do
       create(:person, country_id: "Canada").tap do |can_2|
         create(:result, person: can_2, competition: nac2025, pos: 5, event_id: "333", round: nac_333)
+        create(:result, person: can_2, competition: nac2025, pos: 1, event_id: "444", round: nac_444)
       end
     end
 
@@ -162,20 +168,68 @@ RSpec.describe Person do
       expect(fr_competitor.championship_podiums[:continental]).to be_empty
     end
 
-    it 'assigns correct podium placements to competitors from different NA countries', :zxc do
-      expect(us_competitor.championship_podiums[:continental].first.pos).to be(1)
-      expect(can_competitor.championship_podiums[:continental].first.pos).to be(2)
-      expect(us_competitor_2.championship_podiums[:continental].first.pos).to be(3)
+    it 'assigns correct 333 podium placements to competitors from different NA countries' do
+      expect(
+        us_competitor.championship_podiums[:continental].find { it.event_id == '333' }.pos,
+      ).to be(1)
+      expect(
+        can_competitor.championship_podiums[:continental].find { it.event_id == '333' }.pos,
+      ).to be(2)
+      expect(
+        us_competitor_2.championship_podiums[:continental].find { it.event_id == '333' }.pos,
+      ).to be(3)
     end
 
-    it 'also recognizes national podiums' do
-      expect(us_competitor.championship_podiums[:national]).to be_empty
-      expect(can_competitor.championship_podiums[:national].first.pos).to be(1)
-      expect(us_competitor_2.championship_podiums[:national]).to be_empty
+    it 'assigns correct 444 podium placements to competitors from different NA countries' do
+      expect(
+        can_competitor_2.championship_podiums[:continental].find { it.event_id == '444' }.pos,
+      ).to be(1)
+      expect(
+        us_competitor_2.championship_podiums[:continental].find { it.event_id == '444' }.pos,
+      ).to be(2)
+      expect(
+        can_competitor.championship_podiums[:continental].find { it.event_id == '444' }.pos,
+      ).to be(3)
     end
 
-    it 'makes no assignment for 4th-place NA competitor' do
-      expect(can_competitor_2.championship_podiums[:continental]).to be_empty
+    it 'also recognizes 333 national podiums' do
+      expect(
+        us_competitor.championship_podiums[:national].find { it.event_id == '333' },
+      ).to be_nil
+      expect(
+        us_competitor_2.championship_podiums[:national].find { it.event_id == '333' },
+      ).to be_nil
+      expect(
+        can_competitor.championship_podiums[:national].find { it.event_id == '333' }.pos,
+      ).to be(1)
+      expect(
+        can_competitor_2.championship_podiums[:national].find { it.event_id == '333' }.pos,
+      ).to be(2)
+    end
+
+    it 'also recognizes 444 national podiums' do
+      expect(
+        us_competitor.championship_podiums[:national].find { it.event_id == '444' },
+      ).to be_nil
+      expect(
+        us_competitor_2.championship_podiums[:national].find { it.event_id == '444' },
+      ).to be_nil
+      expect(
+        can_competitor.championship_podiums[:national].find { it.event_id == '444' }.pos,
+      ).to be(2)
+      expect(
+        can_competitor_2.championship_podiums[:national].find { it.event_id == '444' }.pos,
+      ).to be(1)
+    end
+
+    it 'makes no assignment for 4th-place NA competitors' do
+      expect(
+        can_competitor_2.championship_podiums[:continental].find { it.event_id == '333' },
+      ).to be_nil
+
+      expect(
+        us_competitor.championship_podiums[:continental].find { it.event_id == '444' },
+      ).to be_nil
     end
   end
 

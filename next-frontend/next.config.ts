@@ -3,11 +3,23 @@ import type { NextConfig } from "next";
 import nextRoutes from "nextjs-routes/config";
 import path from "path";
 
+// New Relic is CommonJS
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const nrExternals = require("newrelic/load-externals");
+
 const withRoutes = nextRoutes({ outDir: "src/types" });
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["newrelic"],
+  webpack: (config, { isServer }) => {
+    if (isServer && process.env.NODE_ENV === "production") {
+      nrExternals(config);
+    }
+    return config;
+  },
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
+    reactCompiler: true,
   },
   logging: {
     fetches: {

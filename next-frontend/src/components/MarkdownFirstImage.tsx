@@ -20,9 +20,9 @@ export const MarkdownFirstImage = ({
   const imageUrl = match[1];
 
   return (
-    <Card.Root coloredBg maxWidth="md" {...cardRootProps}>
+    <Card.Root maxWidth="md" {...cardRootProps}>
       <Card.Body justifyContent="center">
-        <Image src={imageUrl} alt={alt} maxW="100%" borderRadius="md" />
+        <Image src={imageUrl} alt={alt} maxW="xs" borderRadius="md" />
       </Card.Body>
     </Card.Root>
   );

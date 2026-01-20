@@ -13,7 +13,49 @@ class Result < ApplicationRecord
   # we also need sure to query the correct competition as well through a composite key.
   belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
-  has_many :result_attempts, dependent: :destroy
+  # See the pre-validation hook `backlink_attempts` below for an explanation of `autosave: false`
+  has_many :result_attempts, dependent: :destroy, autosave: false, index_errors: true
+  validates_associated :result_attempts
+
+  before_validation :backlink_attempts
+
+  # As of writing this comment, we are transitioning `value1..5` to a separate row-based table.
+  # The hooks for actually _writing_ the data are defined below (called `create_or_update_attempts`)
+  #   and are working well. However, we can only write once we have established that the data is valid.
+  # This means that the validations need to "think" that the result_attempts are already there, but
+  #   without actually writing them to the database. To solve this issue, we write them into memory
+  #   before validations happen, but also prevent Rails from saving them by using `autosave: false`
+  #   on the original associations. If validations pass, our efficient `upsert_all` from the backfilling hook
+  #   will take care of everything. If validations fail, the values will still be in memory
+  #   but won't be written to the DB, which is (surprisingly!) consistent with normal ActiveRecord properties.
+  def backlink_attempts
+    memory_attempts = self.result_attempts_attributes.map do |attempt_attributes|
+      attempt = self.result_attempts.find { it.attempt_number == attempt_attributes[:attempt_number] } || result_attempts.build(attempt_attributes)
+
+      attempt.tap { it.assign_attributes(**attempt_attributes, result: self) }
+    end
+
+    # Hack into Rails to only update the values in-memory.
+    #   Calling `self.result_attempts = memory_attempts` would trigger a write operation!
+    self.result_attempts.proxy_association.target = memory_attempts
+  end
+
+  after_save :create_or_update_attempts
+
+  def create_or_update_attempts
+    attempts = self.result_attempts_attributes(result_id: self.id)
+
+    # Delete attempts when the value was set to 0
+    zero_attempts = self.skipped_attempt_numbers
+    ResultAttempt.where(result_id: id, attempt_number: zero_attempts).delete_all if zero_attempts.any?
+
+    ResultAttempt.upsert_all(attempts)
+
+    # Force reloading the now-persisted values upon next read.
+    # Note that this is necessary because in `before_validation`, we had written non-persisted phantom data
+    #   solely for the purpose of state validation and business logic.
+    self.result_attempts.reset
+  end
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
 
@@ -24,19 +66,7 @@ class Result < ApplicationRecord
     Country.c_find(self.country_id)
   end
 
-  # If saving changes to person_id, make sure that there is no results for
-  # that person yet for the round.
-  validate :unique_result_per_round, if: lambda {
-    will_save_change_to_person_id? || will_save_change_to_competition_id? || will_save_change_to_event_id? || will_save_change_to_round_type_id?
-  }
-
-  def unique_result_per_round
-    has_result = Result.where(competition_id: competition_id,
-                              person_id: person_id,
-                              event_id: event_id,
-                              round_type_id: round_type_id).any?
-    errors.add(:person_id, "this WCA ID already has a result for that round") if has_result
-  end
+  validates :person_id, uniqueness: { scope: :round_id, message: "this WCA ID already has a result for that round" }
 
   scope :final, -> { where(round_type_id: RoundType.final_rounds.select(:id)) }
   scope :succeeded, -> { where("best > 0") }
@@ -51,10 +81,6 @@ class Result < ApplicationRecord
 
   alias_attribute :name, :person_name
   alias_attribute :wca_id, :person_id
-
-  def attempts
-    result_attempts.pluck(:value)
-  end
 
   delegate :iso2, to: :country, prefix: true
 

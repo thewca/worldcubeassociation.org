@@ -1,0 +1,66 @@
+allOf:
+  - $ref: './BaseRegistrationConfig.yaml'
+  - type: object
+    properties:
+      parameters:
+        type: object
+        properties:
+          events_per_registration_limit:
+            type: integer # nullable
+          allow_registration_edits:
+            type: boolean # always
+          guest_entry_status:
+            type: string # always
+            enum:
+              - unclear
+              - free
+              - restricted
+          guests_per_registration_limit:
+            type: integer
+          guests_enabled:
+            type: boolean
+          uses_qualification?:
+            type: boolean
+          allow_registration_without_qualification:
+            type: boolean
+          force_comment_in_registration:
+            type: boolean
+          qualification_wcif:
+            type: object
+            additionalProperties:
+              $ref: '../../wcif/WcifQualification.yaml'
+          event_ids:
+            type: array
+            items:
+              type: string
+          preferredEvents:
+            type: array
+            items:
+              type: string
+          personalRecords:
+            type: object
+            properties:
+              single:
+                type: array
+                items:
+                  $ref: '../../wcif/WcifPersonalBest.yaml'
+              average:
+                type: array
+                items:
+                  $ref: '../../wcif/WcifPersonalBest.yaml'
+            required:
+              - single
+              - average
+        required:
+          - allow_registration_edits
+          - guest_entry_status
+          - guests_enabled
+          - uses_qualification?
+          - allow_registration_without_qualification
+          - force_comment_in_registration
+          - qualification_wcif
+          - event_ids
+          - preferredEvents
+          - personalRecords
+    required:
+      - parameters

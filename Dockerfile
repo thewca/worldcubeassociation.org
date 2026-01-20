@@ -24,7 +24,7 @@ RUN apt-get update -qq && \
       curl \
       gnupg
 
-ARG NODE_MAJOR=22
+ARG NODE_MAJOR=24
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
     apt-get install -y nodejs
 
@@ -38,11 +38,13 @@ RUN corepack enable
 # libssl-dev = bindings for the native extensions of Ruby SSL gem
 # libyaml-dev = bindings for the native extensions of Ruby psych gem
 # tzdata = Timezone information for Rails ActiveSupport
+# libclang-dev and cargo = Rust compiler toolchain for Ruby gems that have external Rust bindings
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       build-essential \
       git \
-      clang \
+      libclang-dev \
+      cargo \
       pkg-config \
       libvips \
       libssl-dev \

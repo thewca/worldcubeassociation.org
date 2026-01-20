@@ -41,28 +41,28 @@ vi:
     #original_hash: 4d206a8
     TT: Trinidad và Tobago
     #original_hash: fefc818
-    TW: Trung Hoa Đài Bắc
+    TW: Đài Bắc Trung Hoa
     #original_hash: 3fa9b2d
     VC: Saint Vincent và Grenadines
     #original_hash: 9af4622
-    XF: Nhiều quốc gia (Châu Phi)
+    XF: Nhiều Quốc gia (Châu Phi)
     #original_hash: 374ac0d
-    XM: Nhiều quốc gia (Châu Mỹ)
+    XM: Nhiều Quốc gia (Châu Mỹ)
     #original_hash: 3f8c9de
-    XA: Nhiều quốc gia (Châu Á)
+    XA: Nhiều Quốc gia (Châu Á)
     #original_hash: 090f3ce
-    XE: Nhiều quốc gia (Châu Âu)
+    XE: Nhiều Quốc gia (Châu Âu)
     #original_hash: b50b7a5
-    XN: Nhiều quốc gia (Bắc Mỹ)
+    XN: Nhiều Quốc gia (Bắc Mỹ)
     #original_hash: 428e7af
-    XO: Nhiều quốc gia (Châu Đại Dương)
+    XO: Nhiều Quốc gia (Châu Đại Dương)
     #original_hash: 459f987
-    XS: Nhiều quốc gia (Nam Mỹ)
+    XS: Nhiều Quốc gia (Nam Mỹ)
     #original_hash: 9027fe6
-    XW: Nhiều quốc gia (toàn thế giới)
+    XW: Nhiều Quốc gia (Toàn thế giới)
   continents:
     #original_hash: 0f138c8
-    Multiple Continents: Nhiều châu lục
+    Multiple Continents: Nhiều Châu lục
     #original_hash: 1d35114
     Africa: Châu Phi
     #original_hash: a173e72
@@ -98,7 +98,7 @@ vi:
     #original_hash: 29d5411
     333bf: 3x3x3 Bịt mắt
     #original_hash: 0a5e7bf
-    333fm: 3x3x3 Giải tối ưu
+    333fm: 3x3x3 Giải Tối ưu
     #original_hash: 31ed23f
     333oh: 3x3x3 Một tay
     #original_hash: be41d70
@@ -118,20 +118,22 @@ vi:
     #original_hash: aea5216
     555bf: 5x5x5 Bịt mắt
     #original_hash: cedbf87
-    333mbf: Bịt mắt nhiều 3x3x3
+    333mbf: Bịt mắt Nhiều 3x3x3
     #original_hash: e6791be
     magic: Magic
     #original_hash: c962425
     mmagic: Master Magic
     #original_hash: 1843dc4
-    333mbo: Bịt mắt nhiều 3x3x3 kiểu cũ
+    333mbo: Bịt mắt Nhiều 3x3x3 Kiểu cũ
   formats:
     #original_hash: e4b3c11
-    '1': Thành tích tốt nhất trong 1 lượt
+    '1': Tốt nhất trong 1 lượt
     #original_hash: 778e14d
-    '2': Thành tích tốt nhất trong 2 lượt
+    '2': Tốt nhất trong 2 lượt
     #original_hash: 21f623c
-    '3': Thành tích tốt nhất trong 3 lượt
+    '3': Tốt nhất trong 3 lượt
+    #original_hash: cca816d
+    '5': Tốt nhất trong 5 lượt
     #original_hash: 2342d2b
     a: Trung bình 5 lượt
     #original_hash: 940c82d
@@ -143,10 +145,14 @@ vi:
       '2': Bo2
       #original_hash: b41f36f
       '3': Bo3
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      #original_hash: 60827cb
+      h: H2H
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -157,12 +163,12 @@ vi:
       #original_hash: 1e725b6
       name: Vòng một
       #original_hash: 1e725b6
-      cell_name: Đầu tiên
+      cell_name: Vòng một
     '2':
       #original_hash: 985c8d0
       name: Vòng hai
       #original_hash: 985c8d0
-      cell_name: Thứ hai
+      cell_name: Vòng hai
     '3':
       #original_hash: e2f74d2
       name: Bán kết
@@ -180,14 +186,14 @@ vi:
       cell_name: Chung kết
     d:
       #original_hash: 1e725b6
-      name: Đầu tiên
+      name: Vòng một
       #original_hash: 1e725b6
-      cell_name: Đầu tiên
+      cell_name: Vòng một
     e:
       #original_hash: 985c8d0
-      name: Thứ hai
+      name: Vòng hai
       #original_hash: 985c8d0
-      cell_name: Thứ hai
+      cell_name: Vòng hai
     f:
       #original_hash: 672b22c
       name: Chung kết
@@ -208,15 +214,15 @@ vi:
     attempt_name: 'Lượt %{number}'
   round:
     #original_hash: 236c41d
-    name: '%{event_name} %{round_name}'
+    name: '%{round_name} %{event_name}'
     #original_hash: 747df5a
     round_number: 'Vòng %{round_number}'
   advancement_condition:
     short:
       #original_hash: 6100c20
-      ranking: 'Tốp %{ranking}'
+      ranking: 'Top %{ranking}'
       #original_hash: 0664a83
-      percent: 'Tốp %{percent}%'
+      percent: 'Top %{percent}%'
       attempt_result:
         #original_hash: ac6a282
         time: '%{round_format} < %{time}'
@@ -225,37 +231,37 @@ vi:
         #original_hash: 076911b
         points: '%{round_format} > %{points}'
     #original_hash: 6e55337
-    ranking: 'Xếp hạng %{ranking} được vào vòng tiếp theo'
+    ranking: 'Top %{ranking} được vào vòng tiếp theo'
     #original_hash: 7ee969c
-    percent: 'Nằm trong nhóm %{percent}% được vào vòng tiếp theo'
+    percent: 'Top %{percent}% được vào vòng tiếp theo'
     attempt_result:
       #original_hash: 6173090
-      time: '%{round_format} < %{time} vào vòng sau'
+      time: '%{round_format} < %{time} được vào vòng tiếp theo'
       #original_hash: 581709d
-      moves: '%{round_format} < %{moves} bước vào vòng sau'
+      moves: '%{round_format} < %{moves} bước được vào vòng tiếp theo'
       #original_hash: e9f0c92
-      points: '%{round_format} > %{points} điểm vào vòng sau'
+      points: '%{round_format} > %{points} điểm được vào vòng tiếp theo'
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} lượt giải để đạt được < %{time}'
-      other: '%{count} lượt giải để đạt được < %{time}'
+      zero: '%{count} lượt để đạt < %{time}'
+      other: '%{count} lượt để đạt < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} lượt giải để đạt được < %{moves} bước'
-      other: '%{count} lượt giải để đạt được < %{moves} bước'
+      zero: '%{count} lượt để đạt < %{moves} bước'
+      other: '%{count} lượt để đạt < %{moves} bước'
     #original_hash: eba1b97
     points:
-      zero: '%{count} lượt giải để đạt được > %{points} điểm'
-      other: '%{count} lượt giải để đạt được > %{points} điểm'
+      zero: '%{count} lượt để đạt > %{points} điểm'
+      other: '%{count} lượt để đạt > %{points} điểm'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
-      one_round: '%{time} tổng cộng'
+      one_round: 'Tổng cộng %{time}'
       #original_hash: c01adfa
-      across_rounds: '%{time} tổng cộng cho %{rounds}'
+      across_rounds: 'Tổng cộng %{time} cho %{rounds}'
     #original_hash: f030c3d
-    333fm: 1 giờ đồng hồ
+    333fm: 1 giờ
     #original_hash: cc7d8bb
     333mbf: '10:00.00 mỗi khối hình, tối đa 60:00.00'
     #original_hash: da39a3e
@@ -338,11 +344,11 @@ vi:
     #original_hash: 77003d0
     best: Tốt nhất
     #original_hash: dd11868
-    single: Thành tích đơn
+    single: Đơn
     #original_hash: 15f86c0
-    average: Thành tích trung bình
+    average: Trung bình
     #original_hash: e7f6fc5
-    solves: Lượt giải
+    solves: Kết quả lượt thi
     #original_hash: c9d0561
     hello: 'Xin chào %{name},'
     date:
@@ -360,10 +366,10 @@ vi:
       invalid: không hợp lệ
     #original_hash: 49d0140
     days:
-      zero: 0 ngày
+      zero: '%{count} ngày'
       other: '%{count} ngày'
     #original_hash: 51ef7d4
-    search_site: Trang tìm kiếm
+    search_site: Tim kiếm trên trang
     #original_hash: d7decf1
     filter: Bộ lọc
     #original_hash: f6fdbe4
@@ -373,7 +379,7 @@ vi:
     #original_hash: 52249b5
     datetime_placeholder: 'YYYY-MM-DD HH:MM'
     #original_hash: 7136e3b
-    time_format: 12h
+    time_format: 24h
     solve_time:
       #original_hash: 7febce0
       unit_seconds: giây
@@ -392,11 +398,11 @@ vi:
       #original_hash: 89ff312
       owner: Chủ sở hữu
       #original_hash: 557031c
-      application_id: ID của ứng dụng
+      application_id: ID Ứng dụng
       #original_hash: c3cd636
-      actions: Hành động
+      actions: Các tác vụ
       #original_hash: f4e7a87
-      secret: Bí mật
+      secret: Khóa bí mật
       #original_hash: c23540e
       scopes: Phạm vi
       #original_hash: 3b0d449
@@ -405,9 +411,9 @@ vi:
     submit:
       competition_medium:
         #original_hash: dc112af
-        create: Đăng tải phương tiện
+        create: Tải tệp đa phương tiện
         #original_hash: 4cf19ca
-        update: Cập nhật phương tiện
+        update: Cập nhật tệp đa phương tiện
   activerecord:
     attributes:
       user:
@@ -434,40 +440,44 @@ vi:
         #original_hash: aefce7f
         password_confirmation: Nhập lại mật khẩu
         #original_hash: ced7b30
-        remember_me: Ghi nhớ tôi
+        remember_me: Duy trì đăng nhập
         #original_hash: 102efae
-        pending_avatar: Đăng tải hình đại diện mới
+        pending_avatar: Tải hình đại diện mới
         #original_hash: 58e0c56
         remove_avatar: Xoá hình đại diện
         #original_hash: 9af9099
-        results_notifications_enabled: Gửi email cho tôi khi kết quả được đăng tải
+        results_notifications_enabled: Gửi email cho tôi khi kết quả thi đấu được đăng tải.
         #original_hash: 29ce2ff
         registration_notifications_enabled: >-
           Khi tôi tổ chức hoặc làm nhiệm vụ Delegate cho một giải đấu, gửi email
           cho tôi khi có đơn đăng ký mới.
         #original_hash: de60ab8
-        delegate_status: Chức vụ delegate
+        delegate_status: Chức vụ Delegate
         #original_hash: d219c68
         location: Địa điểm
         #original_hash: 0f21717
         region: Khu vực
         #original_hash: e3fc6e9
         subRegion: Khu vực phụ
+        #original_hash: a1ba702
+        receive_developer_mails: >-
+          Tôi muốn nhận thông báo khi các tài nguyên phần mềm của WCA có cập
+          nhật mới
         #original_hash: 730db33
-        receive_delegate_reports: Tôi muốn nhận Báo cáo cho Giải đấu WCA từ Delegate qua email
+        receive_delegate_reports: Tôi muốn nhận Báo cáo Delegate từ các Giải đấu WCA qua email
         #original_hash: 8667157
-        delegate_reports_region: Tôi chỉ muốn nhận Báo cáo Delegate cho các khu vực sau
+        delegate_reports_region: Tôi chỉ muốn nhận Báo cáo Delegate từ các khu vực sau
         #original_hash: 57eaf24
         user_preferred_events: Nội dung ưa thích
         #original_hash: e632fbf
-        otp_attempt: Nhập mã xác thực hai yếu tố của bạn
+        otp_attempt: 'Nhập mã xác thực hai yếu tố của bạn:'
       registration:
         #original_hash: 3c23a67
-        guests: Khách mời
+        guests: Khách
         #original_hash: fce06e2
         comments: Bình luận
         #original_hash: dc9d458
-        paid_entry_fees: Đã trả tiền
+        paid_entry_fees: Đã thanh toán
         #original_hash: bae7d5b
         status: Trạng thái
         #original_hash: a6e8a0b
@@ -480,6 +490,12 @@ vi:
         registration_competition_events: Nội dung
         #original_hash: 84add5b
         email: Email
+        #original_hash: 6d7a30a
+        search: Tìm kiếm...
+        #original_hash: dfd309d
+        too_few_chars: Quá ít ký tự
+        #original_hash: b993b0c
+        no_results: Không có kết quả
       competition_tab:
         #original_hash: 4f9be05
         content: Nội dung
@@ -503,15 +519,15 @@ vi:
         #original_hash: 7106c2d
         setup_images: Ảnh sắp đặt hội trường giải đấu
         #original_hash: 1362470
-        wrc_feedback_requested: Tôi muốn nhận phản hồi từ WRC về một số sự việc nói trên.
+        wrc_feedback_requested: Tôi muốn nhận phản hồi từ WRC về một số trong số các sự cố nói trên.
         #original_hash: 0c7191d
-        wrc_incidents: Sự việc cần nhận phản hồi từ WRC
+        wrc_incidents: Sự cố cần nhận phản hồi từ WRC
         #original_hash: 1a54a79
-        wic_feedback_requested: Tôi muốn nhận phản hồi của WIC về các sự cố sau đây.
+        wic_feedback_requested: Tôi muốn nhận phản hồi từ WIC về một số trong số các sự cố nói trên.
         #original_hash: 000153c
-        wic_incidents: Các sự cố cần phản hồi của WIC
+        wic_incidents: Sự cố cần nhận phản hồi từ WIC
         #original_hash: d7020f4
-        remarks: Chú ý
+        remarks: Lời bình
       person:
         #original_hash: 8c41ae8
         wca_id: Cá nhân
@@ -524,7 +540,7 @@ vi:
         #original_hash: 709a232
         name: Tên
         #original_hash: c6bc0f4
-        incorrect_wca_id_claim_count: Số lượng ID WCA bị xác nhận sai
+        incorrect_wca_id_claim_count: Số lần xác nhận sai ID WCA
       poll:
         #original_hash: 002ff59
         question: Câu hỏi
@@ -534,20 +550,20 @@ vi:
         #original_hash: 768e0c1
         title: Tiêu đề
         #original_hash: 718a7e8
-        body: Thân bài
+        body: Nội dung
         #original_hash: 6f915a2
-        sticky: Ghi chú
+        sticky: Ghim
         #original_hash: 231d9ff
-        unstick_at: Bỏ dán
+        unstick_at: Bỏ ghim vào
         #original_hash: 848eed0
-        tags: Tags
+        tags: Thẻ
         #original_hash: fb4002e
         show_on_homepage: Hiển thị trên trang chủ
       team:
         #original_hash: 709a232
         name: Tên
         #original_hash: 55f8ebc
-        description: Miêu tả
+        description: Mô tả
       vote:
         #original_hash: 153d7a5
         comment: Bình luận
@@ -555,7 +571,7 @@ vi:
         #original_hash: 768e0c1
         title: Tiêu đề
         #original_hash: cf66d44
-        private_description: Miêu tả (riêng tư)
+        private_description: Mô tả (riêng tư)
         #original_hash: 1171d85
         private_wrc_decision: Quyết định (riêng tư)
         #original_hash: 1c2ed61
@@ -563,22 +579,22 @@ vi:
         #original_hash: 62d6896
         digest_worthy: Đáng lưu ý
         #original_hash: 848eed0
-        tags: Tags
+        tags: Thẻ
         #original_hash: 861e459
-        competition_id: Xảy ra khi
+        competition_id: Xảy ra tại
       competition_medium:
         #original_hash: 1917f4f
         competition_id: Giải đấu
         #original_hash: 3deb745
-        type: Thể loại
+        media_type: Loại
         #original_hash: c3328c3
         text: Văn bản
         #original_hash: d051707
-        uri: Link
+        uri: Đường dẫn
         #original_hash: 1be755a
         submitter_name: Tên người nộp
         #original_hash: 78cdfee
-        submitter_mail: Email người nộp
+        submitter_email: Email của người nộp
         #original_hash: 0d31f23
         submitter_comment: Bình luận của người nộp
         #original_hash: bae7d5b
@@ -595,23 +611,23 @@ vi:
         #original_hash: 84add5b
         email: Email
         #original_hash: 82c42fb
-        address: Địa chỉ
+        address: Địa chỉ chính thức
         #original_hash: 9855f80
-        bylaws: Quy định
+        bylaws: Điều lệ
         #original_hash: 405201b
         directors_and_officers: Danh sách Giám đốc và Cán bộ chủ đạo và chức vụ
         #original_hash: 719db2d
-        area_description: Miêu tả cụ thể về phạm vi ảnh hưởng
+        area_description: Miêu tả cụ thể về phạm vi bao quát
         #original_hash: 0cdb036
         past_and_current_activities: Báo cáo về các hoạt động liên quan đến WCA trong quá khứ và hiện tại
         #original_hash: 0faebcf
         future_plans: >-
-          Kế hoạch trong thời gian tới với tư cách Tổ chức Khu vực được công
-          nhận bởi WCA
+          Kế hoạch trong thời gian tới với tư cách Hiệp hội Khu vực được WCA
+          công nhận
         #original_hash: f5ad34a
-        extra_information: Thông tin thêm
+        extra_information: Thông tin thêm?
         #original_hash: bc07619
-        extra_file: Tài liệu bổ sung
+        extra_file: Tài liệu bổ sung?
         #original_hash: 5ddd986
         start_date: Được công nhận từ
         #original_hash: 1ee885a
@@ -665,7 +681,7 @@ vi:
           treasurer: Thủ quỹ WCA
       ban_scope:
         #original_hash: 80901da
-        competing_only: Cấm thi đấu
+        competing_only: Chỉ cấm thi đấu
         #original_hash: 35a6012
         competing_and_attending: Cấm thi đấu & dự khán
         #original_hash: 4f30c10
@@ -673,14 +689,14 @@ vi:
     competition_medium:
       status:
         #original_hash: 61a0572
-        accepted: Được chấp nhận
+        accepted: Đã duyệt
         #original_hash: 96f608c
-        pending: Đang chờ
+        pending: Đang xử lý
       media_type:
         #original_hash: ee45c30
         report: Báo cáo
         #original_hash: 4360c2d
-        article: Mục
+        article: Bài viết
         #original_hash: 82dabd0
         multimedia: Đa phương tiện
   simple_form:
@@ -704,15 +720,15 @@ vi:
         title: 'Lưu ý nội dung này được công khai, và bạn phải điền bằng tiếng Anh!'
         #original_hash: 67f2a1a
         private_description: >-
-          Miêu tả về sự cố (chỉ Delegate có thể đọc). Vui lòng điền bằng tiếng
+          Mô tả về sự cố (chỉ Delegate có thể đọc). Vui lòng điền bằng tiếng
           Anh.
         #original_hash: b766029
         private_wrc_decision: >-
-          Quyết định cuối cùng của WRC, bao gồm thông tin chi tiết. Vui lòng
-          điền bằng tiếng Anh.
+          Quyết định cuối cùng của WRC, bao gồm các thông tin không công khai.
+          Vui lòng điền bằng tiếng Anh.
         #original_hash: 3de5729
         public_summary: >-
-          Miêu tả tổng quan về sự cố và quyết định cuối cùng để đưa ra công
+          Mô  tả tổng quan về sự cố và quyết định cuối cùng để hiển thị công
           khai. Vui lòng điền bằng tiếng Anh.
         #original_hash: da39a3e
         digest_worthy: ''
@@ -733,8 +749,9 @@ vi:
         email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
-          Sau khi đăng tải hình đại diện mới, bạn phải đợi Đội ngũ Kết quả WCA
-          (WCA Results Team) duyệt.
+          Sau khi đăng tải hình đại diện mới, bạn cần đợi Đội ngũ Kết quả WCA
+          (WCA Results Team) xét duyệt trước khi hình đại diện được hiển thị
+          công khai.
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
@@ -759,15 +776,21 @@ vi:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 27c2251
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          Tùy chọn này chỉ áp dụng đối với các bản cập nhật lớn của các tài
+          nguyên như bản xuất dữ liệu, schema WCIF và API công khai. Các nhà
+          phát triển bảo trì các phần mềm phụ thuộc vào các tài nguyên trên nên
+          kích hoạt tùy chọn này.
+        #original_hash: c564b74
         receive_delegate_reports: >-
-          Nếu bạn là Senior Delegate hoặc Thành viên WRC hoặc WQAC, bạn mặc định
-          sẽ nhận Báo cáo Delegate. Lưu ý: cài đặt có thể mất tầm một giờ để có
-          hiệu lực.
-        #original_hash: 364624c
+          Nếu bạn là Senior Delegate hoặc là Thành viên WRC hoặc WQAC, bạn mặc
+          định sẽ nhận Báo cáo Delegate. Lưu ý: thay đổi có thể mất tối đa 12
+          giờ để có hiệu lực.
+        #original_hash: 0017d38
         delegate_reports_region: >-
-          Nếu bạn muốn nhận tất cả báo cáo, để trống ô này (mục danh sách ở trên
-          cùng). Lưu ý: cài đặt có thể mất tầm một giờ để có hiệu lực.
+          Để trống ô này (tùy chọn trên cùng) nếu bạn muốn nhận tất cả báo cáo.
+          Lưu ý: thay đổi có thể mất tối đa 12 giờ để có hiệu lực.
         #original_hash: 0627e5c
         otp_attempt: >-
           Kiểm tra ứng dụng tạo mã đã cài đặt trên điện thoại để lấy mã OTP,
@@ -795,67 +818,82 @@ vi:
       post:
         #original_hash: 53c16eb
         body: >-
-          Sử dụng tag &lt;!-- break --&gt; để xem trước nội dung trên trang chủ.
-          Bất kỳ bài đăng nào trên trang chủ đều hiện nội dung trước tag. Bài
-          đăng gốc sẽ hiện đầy đủ nội dung.
+          Sử dụng thẻ &lt;!-- break --&gt; để hiện bản xem trước trên trang chủ.
+          Trang chủ sẽ hiện nội dung đặt phía trước thẻ này. Trang bài viết sẽ
+          hiển thị đầy đủ nội dung.
         #original_hash: 0e3764f
         show_on_homepage: >-
-          Lưu ý! Phần này không bảo đảm tính riêng tư của dữ liệu, mà chỉ để
-          giúp trang chủ trở nên bớt lộn xộn. Các bài đăng không được hiện trên
-          trang chủ vẫn có thể được tiếp cận bởi đường dẫn vĩnh viễn hoặc quay
-          tag.
+          Lưu ý! Không sử dụng tùy chọn này cho dữ liệu không công khai. Tùy
+          chọn này chỉ nhằm mục đích tránh làm tràn trang chủ. Các bài viết
+          không đăng trên trang chủ vẫn có thể được truy cập thông qua các liên
+          kết thường trực hoặc các thẻ.
       delegate_report:
         #original_hash: 4eefb60
         schedule_url: >-
-          Đường dẫn đầy đủ đến thời gian biểu (v.d.
+          Đường dẫn đầy đủ đến thời gian biểu (VD:
           https://www.cubingusa.com/usnationals2016/schedule.php)
         #original_hash: 1a68719
         equipment: >-
-          Số lượng và mẫu đồng hồ bấm giờ, hiển thị được sử dụng trong giải đấu.
-          Vui lòng xoá những dòng có trang thiết bị bạn không sử dụng.
+          Số lượng và loại đồng hồ bấm giờ và màn hình hiển thị được sử dụng tại
+          giải đấu. Vui lòng xoá những dòng cho loại thiết bị bạn không sử dụng
         #original_hash: 2822e8d
         summary: >-
-          Những mục trên chỉ mang tính chất gợi ý cho một bản báo cáo hoàn
-          chỉnh. Vui lòng sử dụng tùy theo nhu cầu của bạn. Hãy lược bỏ đi các
-          phần không dùng đến!
+          Những mục trên chỉ là gợi ý bố cục cho một báo cáo hoàn chỉnh. Vui
+          lòng sử dụng tùy theo nhu cầu của bạn. Hãy lược bỏ đi các phần không
+          dùng đến!
         #original_hash: 2822e8d
         venue: >-
-          Những mục trên chỉ mang tính chất gợi ý cho một bản báo cáo hoàn
-          chỉnh. Vui lòng sử dụng tùy theo nhu cầu của bạn. Hãy lược bỏ đi các
-          phần không dùng đến!
+          Những mục trên chỉ là gợi ý bố cục cho một báo cáo hoàn chỉnh. Vui
+          lòng sử dụng tùy theo nhu cầu của bạn. Hãy lược bỏ đi các phần không
+          dùng đến!
         #original_hash: 2822e8d
         organization: >-
-          Những mục trên chỉ mang tính chất gợi ý cho một bản báo cáo hoàn
-          chỉnh. Vui lòng sử dụng tùy theo nhu cầu của bạn. Hãy lược bỏ đi các
-          phần không dùng đến!
+          Những mục trên chỉ là gợi ý bố cục cho một báo cáo hoàn chỉnh. Vui
+          lòng sử dụng tùy theo nhu cầu của bạn. Hãy lược bỏ đi các phần không
+          dùng đến!
         #original_hash: 74affff
         incidents: >-
           Liệt kê toàn bộ các sự cố bất thường so với các sự cố thường gặp. Đánh
-          số cho các sự cố từ 1. để các Delegate khác có thể sử dụng số hiệu này
-          để nhắc đến các sự cố. Nếu không có sự cố gì bất thường, hãy liệt kê
-          ra các sự cố đáng nói nhất. Tích vào các hộp tương ứng dưới đấy nếu
-          bạn cần phản hồi từ các Ủy ban.
-        #original_hash: 8af00aa
+          số cho các sự cố từ 1. để các Delegate khác có thể sử dụng số thứ tự
+          này để nhắc đến các sự cố. Nếu không có sự cố gì bất thường, hãy liệt
+          kê ra các sự cố đáng chú ý nhất. Tích vào các hộp tương ứng dưới đấy
+          nếu bạn cần phản hồi từ các Ủy ban.
+        #original_hash: 7577db4
         setup_images: >-
-          Chọn ít nhất %{image_count} ảnh để minh họa cho cách mà hội trường
-          được sắp đặt cho giải đấu (khu vực tráo đề, khu vực thi đấu, v.v.).
-          Bạn có thể tải lên nhiều ảnh cùng lúc. Bạn chỉ có thể xóa ảnh sau khi
-          đã tải lên đủ số ảnh (nếu bạn muốn thay một ảnh, thì bạn sẽ phải tải
-          lên ảnh mới, sau đó mới xóa được ảnh cũ đi).
+          Bạn PHẢI đính kèm ít nhất %{image_count} ảnh chụp khu vực tráo đề và
+          thi đấu của giải đấu này, nên là ảnh chụp khi giải đấu đang diễn ra
+          (tuy nhiên cũng có thể đính kèm các ảnh khác). Bạn có thể chọn nhiều
+          ảnh cùng một lúc. Bạn chỉ có thể xóa ảnh khi đã tải lên đủ số ảnh khác
+          (nếu muốn thay ảnh, bạn phải đăng ảnh mới lên trước khi xóa ảnh cũ).
+          Vui lòng giải thích lý do nếu không có ảnh chụp khu vực thi đấu và
+          hoặc khu vực tráo đề khi giải đấu đang diễn ra.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: Danh sách số thứ tự các sự cố mà bạn muốn có phản hồi từ WRC.
         #original_hash: da39a3e
         wic_feedback_requested: ''
-        #original_hash: 0aca3b0
-        wic_incidents: Danh sách số hiệu các sự cố cần phản hồi của WIC.
+        #original_hash: 74a092e
+        wic_incidents_html: >-
+          Danh sách số thứ tự các sự cố mà bạn muốn có phản hồi từ WIC. <br>
+          <strong>%{wic_incident_alert}</strong>
+        #original_hash: c4fd7a6
+        wic_incident_alert: >-
+          Nếu sự cố cần WIC xem xét có tính chất nhạy cảm (bao gồm các trường
+          hợp vi phạm pháp luật, quấy rối, hành hung, v.v.), vui lòng không thêm
+          sự cố vào báo cáo và gửi email riêng cho WIC. Đối với các sự cố khác,
+          vui lòng chỉ mô tả ngắn gọn về sự cố mà không bao gồm thông tin cá
+          nhân, và liên hệ riêng với WIC để cung cấp thông tin chi tiết. WIC vẫn
+          sẽ có phản hồi đối với phiên bản được báo cáo công khai để tạo nhận
+          thức chung. Đối với các sự cố cần WIC xem xét mà có liên quan đến Tình
+          nguyện viên WCA, vui lòng loại bỏ toàn bộ thông tin khỏi báo cáo, và
+          liên hệ riêng với WIC.
         #original_hash: f30abdc
         remarks: >-
-          Nói về bất kỳ chi tiết nào khác mà bạn muốn chia sẻ (v.d. sự cải
-          thiện/thu nhỏ của cộng đồng, kế hoạch trong tương lai cho khu vực).
-          Nếu bạn muốn bổ sung nội dung cho các phần trước, xin thoải mái viết
-          thêm ở đây.
+          Nói về bất kỳ chi tiết nào khác mà bạn muốn chia sẻ (VD: công đồng
+          phát triển hơn/suy thoái đi, các kế hoạch sắp tới của khu vực). Nếu
+          bạn muốn bổ sung nội dung cho các phần trước, xin mời viết thêm tại
+          đây.
         #original_hash: da39a3e
         discussion_url: ''
       competition_tab:
@@ -882,7 +920,7 @@ vi:
         #original_hash: da39a3e
         competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
@@ -895,13 +933,6 @@ vi:
         submitter_comment: ''
         #original_hash: da39a3e
         status: ''
-      results_submission:
-        #original_hash: da39a3e
-        schedule_url: ''
-        #original_hash: da39a3e
-        results_file: ''
-        #original_hash: da39a3e
-        message: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -914,7 +945,7 @@ vi:
           Bắt buộc phải ở định dạng PNG, có độ phân giải cao, và có nền trong
           suốt
         #original_hash: da54ab5
-        email: Nên sử dụng danh sách liên lạc chứa tất cả Giám đốc và Cán bộ
+        email: Nên là một danh sách gửi thư đến toàn bộ các Giám đốc và Cán bộ
         #original_hash: da39a3e
         address: ''
         #original_hash: 7d25ff5
@@ -941,7 +972,7 @@ vi:
       registration:
         status:
           #original_hash: 61a0572
-          accepted: Được chấp nhận
+          accepted: Đã duyệt
           #original_hash: a6b2452
           pending: Danh sách chờ
           #original_hash: 441bda6
@@ -950,9 +981,9 @@ vi:
     attributes:
       contact_form:
         #original_hash: d31ab65
-        inquiry: Phần nào sau đây miêu tả đất nước của bạn đúng nhất?
+        inquiry: Mục nào sau đây mô tả gần nhất vấn đề của bạn?
         #original_hash: 1917f4f
-        competition_id: Mục này được sử dụng làm nhãn dán cho các phần của đơn liên lạc
+        competition_id: Giải đấu
         #original_hash: 709a232
         name: Tên
         #original_hash: 3fa6f5f
@@ -975,6 +1006,15 @@ vi:
         #original_hash: 79ccfe2
         dob_invalid: bị sai định dạng
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: Có lỗi xảy ra khi hiển thị trang
+      #original_hash: 22dfe12
+      description: >-
+        Nếu tiếp tục có lỗi, xin vui lòng thông báo cho WST cùng với thông tin
+        chi tiết sau đây
+      #original_hash: 20be860
+      details: Thông tin lỗi
     messages:
       #original_hash: dc2367c
       wrong_size: 'sai kích thước (phải là %{file_size})'
@@ -999,9 +1039,9 @@ vi:
           #original_hash: ec44d52
           confirm: Xác nhận mã
           #original_hash: 912516c
-          regenerated_secret: Đã tạo thành công mã bí mật cho xác thực hai yếu tố.
+          regenerated_secret: Đã tạo lại khóa bí mật cho xác thực hai yếu tố thành công.
           #original_hash: 1b0c44f
-          enabled_success: Đã kích hoạt thành công xác thực hai yếu tố.
+          enabled_success: Đã kích hoạt xác thực hai yếu tố thành công.
           #original_hash: 9515157
           email_auth: Xác thực qua email
           #original_hash: d305ccb
@@ -1043,10 +1083,10 @@ vi:
           #original_hash: d28c3b6
           support_desc_html: 'Website WCA hỗ trợ %{two_factor_link} bằng mã OTP:'
           options:
-            #original_hash: 4f9dcb8
+            #original_hash: a4b35b6
             app: >-
-              được tạo bằng ứng dụng tạo mã 2FA trên điện thoại thông minh (ví
-              dụ như Authy hoặc Google Authenticator).
+              được tạo bằng ứng dụng tạo mã 2FA trên điện thoại thông minh của
+              bạn (VD: Authy, Google Authenticator, iOS Passwords).
             #original_hash: 34a7572
             recovery: lấy từ các mã phục hồi được tạo khi kích hoạt 2FA.
             #original_hash: eaee403
@@ -1062,12 +1102,12 @@ vi:
           #original_hash: 2e35cd9
           disable: Bỏ kích hoạt 2FA
           #original_hash: b2a3d7e
-          reset: Khởi tạo lại mã bí mật 2FA
+          reset: Khởi tạo lại khóa bí mật 2FA
           #original_hash: 14b7bfd
           reset_if_needed: >-
             Nếu một trong các thiết bị của bạn đã bị xâm nhập hoặc muốn tước
-            quyền truy cập khỏi các thiết bị của bạn, bạn có thể khởi tạo lại mã
-            bí mật xác thực hai yếu tố ở dưới đây:
+            quyền truy cập khỏi các thiết bị của bạn, bạn có thể khởi tạo lại
+            khóa bí mật xác thực hai yếu tố ở dưới đây:
           #original_hash: 69100a3
           reset_warning: Bạn sẽ phải thiết lập lại các thiết bị 2FA từ đầu.
           #original_hash: a8d11db
@@ -1078,11 +1118,11 @@ vi:
             bao gồm các phương thức dưới đây.
           #original_hash: 4442f0e
           dedicated_app: Sử dụng ứng dụng tạo mã
-          #original_hash: a61c7d2
+          #original_hash: a87f79f
           dedicated_app_desc_html: >-
-            WST khuyên dùng %{authy} trên các thiết bị cá nhân để tạo mã OTP khi
-            đăng nhập.<br/>Các ứng dụng tạo mã khác bao gồm %{google} và
-            %{microsoft}.
+            WST khuyên dùng %{authy} trên các thiết bị cá nhân để tạo mã dùng
+            một lần khi đăng nhập. Các ứng dụng khác cũng có thể được sử dụng
+            bao gồm %{google}, %{apple}, và %{microsoft}.
           #original_hash: f1b2ec2
           scan_qrcode_html: >-
             Quét mã QR dưới đây khi được chỉ dẫn trên ứng dụng 2FA của bạn (hoặc
@@ -1098,16 +1138,16 @@ vi:
           no_backup_codes: Bạn chưa tạo mã dự phòng. Nhấn nút dưới đây để tạo mã dự phòng.
           #original_hash: b6bc5ec
           regenerate_backup_codes: >-
-            Bạn đã tạo mã dự phòng. Nếu đã sử dụng hoặc làm mất các mã đã tạo,
-            bạn có thể nhấn nút dưới đây để tạo mã mới. Lưu ý rằng các mã dự
-            phòng cũ sẽ bị vô hiệu khi tạo mã mới.
+            Bạn đã tạo mã dự phòng. Nếu đã sử dụng hết hoặc làm mất các mã đã
+            tạo, bạn có thể nhấn nút dưới đây để tạo mã mới. Lưu ý rằng các mã
+            dự phòng cũ sẽ bị vô hiệu khi tạo mã mới.
           #original_hash: 2ee4aca
           generate_backup_codes: Tạo mã dự phòng
           #original_hash: a69dd5b
           backup_codes_warning: >-
-            Mã dự phòng được hiển thị dưới đây. Hãy lưu hoặc ghi lại mã ngay lập
-            tức: các mã này được lưu dưới dạng mã hóa trong cơ sở dữ liệu và sẽ
-            không thể hiển thị lại lần nữa.
+            Mã dự phòng được hiển thị dưới đây. Hãy lưu hoặc ghi lại các mã này
+            ngay lập tức: các mã này được lưu dưới dạng mã hóa trong cơ sở dữ
+            liệu và sẽ không thể hiển thị lại lần nữa.
           #original_hash: b5e3ad8
           email_auth_desc: Bạn có thể yêu cầu nhận mã OTP qua email khi đăng nhập.
           #original_hash: dd991ab
@@ -1115,8 +1155,8 @@ vi:
           #original_hash: 4569d81
           disable_section_content: >-
             WST đặc biệt khuyến cáo bạn không nên bỏ kích hoạt 2FA, nhưng bạn có
-            thể bỏ kích hoạt bằng cách ấn nút dưới lên. Lưu ý rằng bạn sẽ phải
-            thiết lập lại thiết bị từ đầu nếu cần kích hoạt lại 2FA sau này.
+            thể bỏ kích hoạt bằng cách ấn nút dưới đây. Lưu ý rằng bạn sẽ phải
+            thiết lập lại thiết bị từ đầu nếu kích hoạt lại 2FA sau này.
           #original_hash: ab1b77d
           disabled_success: Đã bỏ kích hoạt xác thực hai yếu tố thành công.
           #original_hash: c36d556
@@ -1148,7 +1188,7 @@ vi:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'Đơn chứa một lỗi:'
+          zero: 'Đơn chứa %{count} lỗi:'
           other: 'Đơn chứa %{count} lỗi:'
       error_pages:
         #original_hash: 1042478
@@ -1159,8 +1199,24 @@ vi:
         400_error: Trang bạn đang tìm không tồn tại.
         #original_hash: c9290b6
         400_contact_html: >-
-          Nếu bạn nghĩ đây là lỗi, hãy <a href=%{contact_url}>nhấn vào đây</a>
-          để báo lỗi.
+          Nếu bạn nghĩ đây là lỗi, xin hãy <a href=%{contact_url}>nhấn vào
+          đây</a> để báo lỗi.
+        #original_hash: 508c106
+        comp_not_found: Không tìm thấy Giải đấu
+        #original_hash: c0e86d5
+        comp_not_found_action: >-
+          Không tìm thấy giải đấu có ID "%{comp_id}". Xin vui lòng sử dụng thanh
+          tìm kiếm.
+        #original_hash: 695f7ba
+        comp_not_found_action_2: >-
+          Nếu bạn đến trang này bằng một liên kết từ một trang web khác, xin hãy
+          thông báo với trang web đó rằng liên kết này đang bị lỗi.
+        #original_hash: 7f8f419
+        session_expired: Phiên đăng nhập Đã hết hạn
+        #original_hash: f3e688a
+        session_expired_action: >-
+          Phiên đăng nhập của bạn đã hết hạn. Vui lòng tải lại trang, thử lại
+          tác vụ, hoặc đăng nhập lại để tiếp tục.
     doorkeeper:
       applications:
         help:
@@ -1168,26 +1224,26 @@ vi:
           https_info: Bắt buộc sử dụng HTTPS trừ khi máy chủ là "localhost"
           #original_hash: 40b9d10
           scopes_html: >-
-            Phân tách các phạm vi bằng dấu cách. Để trống để dùng phạm vi mặc
-            định. Danh sách các phạm vi được hỗ trợ ở tại <a
+            Phân tách các phạm vi bằng dấu cách. Để trống để sử dụng các phạm vi
+            mặc định. Danh sách các phạm vi được hỗ trợ ở tại <a
             href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
-            target="_blank">here</a>.
+            target="_blank">đây</a>.
       scopes:
         #original_hash: 1920e95
         public: >-
           Truy cập dữ liệu công khai của bạn (tên, ID WCA, giới tính, quốc tịch,
-          và hình ảnh đại diện)
+          và hình đại diện)
         #original_hash: d4003be
         dob: Truy cập ngày sinh của bạn
         #original_hash: 17aa24f
         email: Truy cập địa chỉ email của bạn
         #original_hash: e0d0654
-        manage_competitions: Quản lý bất kỳ giải đấu nào bạn sắp tổ chức
+        manage_competitions: Quản lý bất kỳ giải đấu nào bạn đang tổ chức
     devise:
       #original_hash: 06184f5
       no_account: Không có tài khoản?
       #original_hash: a268696
-      have_competed: Tôi đã tham gia một giải đấu WCA.
+      have_competed: Tôi đã từng tham gia giải đấu WCA.
       #original_hash: dcd1d70
       have_never_competed: Tôi chưa bao giờ tham gia giải đấu WCA.
       #original_hash: 3511bc5
@@ -1210,21 +1266,21 @@ vi:
       #original_hash: 9ac918a
       about: Về WCA
       #original_hash: ed97787
-      documents: Tài liệu của WCA
+      documents: Tài liệu WCA
       #original_hash: c9bae18
       officers_and_board: Ủy viên & Ban Quản trị WCA
       #original_hash: d8fd3e4
       delegates: WCA Delegate
       #original_hash: 37b8fdc
-      organizations: Các tổ chức trong khu vực
+      organizations: Hiệp hội Khu vực
       #original_hash: 959d354
       translators: Phiên dịch viên
       #original_hash: d790b40
-      faq: Những câu hỏi thường gặp
+      faq: Những Câu hỏi Thường gặp
       #original_hash: cf1d2c9
       forum: Diễn đàn
-      #original_hash: 3ad28c0
-      teams: 'Nhóm, Ủy ban, và Hội đồng'
+      #original_hash: 0e7a036
+      teams: Đội ngũ và Ủy ban
       #original_hash: 7981fb3
       education: Tư liệu giáo dục
       #original_hash: c66444f
@@ -1232,9 +1288,9 @@ vi:
       #original_hash: b37456c
       contact: Liên hệ
       #original_hash: 8e12c09
-      speedcubing_history: Lịch sử của Speedcubing
+      speedcubing_history: Lịch sử Speedcubing
       #original_hash: 4fa8cc8
-      tools: Dụng cụ
+      tools: Công cụ
       #original_hash: 83fce83
       logo: Logo
       #original_hash: db98a68
@@ -1265,22 +1321,20 @@ vi:
       db_dev_export: Bản xuất Nhà phát triển
       #original_hash: 1fa73f3
       regulations: Quy định
-      #original_hash: 3bb8751
-      regulations_full: Quy định & Hướng dẫn
+      #original_hash: 1fa73f3
+      regulations_full: Quy định
       #original_hash: 6bce1b5
       about_regulations: Về Quy định
-      #original_hash: 141d1d7
-      guidelines: Hướng dẫn
       #original_hash: c4622c3
-      scrambles: Tráo
+      scrambles: Tráo đề
       #original_hash: 90ccd64
       history: Lịch sử
       #original_hash: 8ad8302
-      translations: Phiên dịch
+      translations: Bản dịch
       #original_hash: c420cb4
-      disciplinary: Lưu trữ về kỷ luật
+      disciplinary: Nhật trình kỷ luật
       #original_hash: ecba5f4
-      incidents: Lưu trữ về các sự cố
+      incidents: Nhật trình sự cố
       #original_hash: b8be3d1
       administration: Quản trị
       #original_hash: b7ee3c4
@@ -1300,11 +1354,11 @@ vi:
       #original_hash: aee74b8
       new_post: Bài viết mới
       #original_hash: 37b8fdc
-      regional_organizations: Tổ chức Khu vực
+      regional_organizations: Hiệp hội Khu vực
       #original_hash: 6568fa0
-      manage_regional_organizations: Quản lý Tổ chức Khu vực
+      manage_regional_organizations: Quản lý Hiệp hội Khu vực
       #original_hash: 411bbca
-      new_regional_organization: Tổ chức Khu vực mới
+      new_regional_organization: Hiệp hội Khu vực mới
       #original_hash: dc1649a
       sign_out: Đăng xuất
       #original_hash: 753a22b
@@ -1316,7 +1370,7 @@ vi:
       #original_hash: 5524aab
       manage_app: Quản lý ứng dụng của bạn
       #original_hash: 0e8b212
-      manage_auth_app: Quản lý ứng dụng được cho phép
+      manage_auth_app: Quản lý ứng dụng được cấp phép
       #original_hash: acac109
       media_submission: Cung cấp đa phương tiện
       #original_hash: cf01481
@@ -1339,26 +1393,22 @@ vi:
         Giám đốc Điều hành đóng vai trò CEO của WCA, Chủ tịch là người chủ trì
         toàn bộ các cuộc họp Ban Quản trị, Bí thư chịu trách nhiệm quản lý các
         tài liệu của tổ chức, và Thủ quỹ nắm vai trò quản lý tài chính của WCA.
-      #original_hash: e0d37a2
+      #original_hash: 19d4bbb
       board_description: >-
-        Ban Quản trị WCA nắm vài trò lãnh đạo chung cho tổ chức, và thực hiện
-        các nhiệm vụ không nằm dưới vai trò của các Đội ngũ, Ủy ban và Hội đồng
-        khác.
+        Ban Quản trị WCA có vai trò lãnh đạo chung đối với tổ chức, và thực hiện
+        các nhiệm vụ không rơi vào phạm vi của các Đội ngũ và Ủy ban khác
     teams_committees_councils:
-      #original_hash: 0d62207
-      title: 'Đội ngũ, Ủy ban và Hội đồng WCA'
-      #original_hash: 4701b90
+      #original_hash: 1d14e2f
+      title: Các Đội ngũ và Ủy ban WCA
+      #original_hash: 9fdee8f
       description: >-
-        Các đội ngũ và ủy ban của WCA là một phần tất yếu của tổ chức, và là
-        những người thực hiện những nhiệm vụ thường nhật cần thiết để tổ chức có
-        thể hoạt động thành công. Các ủy ban này bao gồm các thành viên của cộng
-        đồng WCA, bao gồm các WCA Delegate và các thí sinh. Mỗi đội ngũ có một
-        người lãnh đạo, có nhiệm vụ đảm bảo đội ngũ hoạt động suôn sẻ và chỉ dẫn
-        các thành viên khác trong đội ngũ. Các hội đồng là các đội ngũ đặc biệt
-        có vai trò cố vấn cho Ban Quản trị WCA; các hội đồng này bao gồm các
-        thành viên cộng đồng không phải Tình nguyện viên WCA. Khi các đội ngũ,
-        ủy ban hay hội đồng có chỗ trống, trên trang chính sẽ có bài viết hướng
-        dẫn về cách ứng tuyển.
+        Các đội ngũ và ủy ban của WCA đóng vai trò mật thiết trong tổ chức và
+        thực hiện các nhiệm vụ thường nhật để đảm bảo cho tổ chức hoạt động suôn
+        sẻ. Các thành viên của các ủy ban này bao gồm các thành viên cộng đồng
+        WCA, bao gồm cả WCA Delegate và thí sinh. Mỗi đội ngũ đều có một người
+        lãnh đạo, với vai trò đảm bảo đội ngũ hoạt động suôn sẻ và hướng dẫn các
+        thành viên khác. Khi có vị trí trống trong các đội ngũ và ủy ban, tại
+        trang chính sẽ có hướng dẫn cách ứng tuyển.
       #original_hash: b37456c
       contact_button: Liên hệ
       #original_hash: ae7928f
@@ -1371,7 +1421,7 @@ vi:
         #original_hash: 2b81984
         wcat: Đội ngũ Công bố Giải đấu WCA
         #original_hash: 94c2e42
-        wic: Ủy ban Chính trực WCA
+        wic: Ủy ban Liêm chính WCA
         #original_hash: d1dbb86
         weat: Đội ngũ Trợ lý Điều hành WCA
         #original_hash: 9cb13de
@@ -1379,7 +1429,7 @@ vi:
         #original_hash: 2035811
         wmt: Đội ngũ Tiếp thị WCA
         #original_hash: c90653c
-        wmct: Đội ngũ Giải Vô địch WCA
+        wmct: Đội ngũ Giải Vô địch Khu vực WCA
         #original_hash: 8f32116
         wqac: Ủy ban Bảo đảm Chất lượng WCA
         #original_hash: 3da1e85
@@ -1391,7 +1441,7 @@ vi:
         #original_hash: 58765c7
         wsot: Đội ngũ Hiệp hội Thể thao WCA
         #original_hash: 78949a7
-        wapc: Ủy ban Kháng cáo WCA
+        wapc: Ủy ban Kháng nghị WCA
       groups_description:
         #original_hash: d62001b
         wat: >-
@@ -1417,11 +1467,11 @@ vi:
           đấu.
         #original_hash: 5007698
         wic: >-
-          Ủy ban Chính trực WCA (WIC) chịu trách nhiệm thực hiện các cuộc điều
-          tra độc lập đối với các thành viên cộng đồng WCA và các vụ việc xảy ra
-          tại các Giải đấu WCA, hoặc trên các kênh trực tuyến chính thức của
-          WCA. Các vụ việc này bao gồm các cáo buộc vi phạm Tinh thần, Quy tắc
-          Ứng xử, Quy chuẩn Đạo đức và/hoặc Quy định của WCA.
+          Ủy ban Liêm chính WCA (WIC) chịu trách nhiệm thực hiện các cuộc điều
+          tra độc lập về các thành viên cộng đồng WCA và các vụ việc xảy ra tại
+          các Giải đấu WCA, hoặc trên các kênh trực tuyến chính thức của WCA.
+          Các vụ việc này bao gồm các cáo buộc vi phạm Tinh thần, Quy tắc Ứng
+          xử, Quy chuẩn Đạo đức và/hoặc Quy định của WCA.
         #original_hash: be491ec
         weat: >-
           Đội ngũ Trợ lý Điều hành WCA (WEAT) có nhiệm vụ thực hiện các công
@@ -1438,12 +1488,12 @@ vi:
         #original_hash: 88a00fa
         wmt: >-
           Đội ngũ Tiếp thị WCA (WMT) chịu trách nhiệm quản lý Thương hiệu WCA,
-          thu hút các nhà tài trợ, và quảng bá các Phụ kiện WCA.
+          thu hút các nhà tài trợ, và quảng bá Văn hóa phẩm WCA.
         #original_hash: fcaa701
         wmct: >-
-          Đội ngũ Giải vô địch WCA (WMCT) chịu trách nhiệm giám sát và quản lý
-          sự phối hợp và phát triển các giải Vô địch Châu lục và Vô địch Thế
-          giới của WCA bằng cách phát triển các khuôn mẫu và kế hoạch chiến
+          Đội ngũ Giải Vô địch Khu vực WCA (WMCT) chịu trách nhiệm giám sát và
+          quản lý sự phối hợp và phát triển các giải Vô địch Châu lục và Vô địch
+          Thế giới WCA bằng cách phát triển các bản hướng dẫn và kế hoạch chiến
           lược, chọn lựa địa điểm đăng cai, hỗ trợ các đội ngũ tổ chức các giải
           Vô địch và đảm bảo trải nghiệm của các thí sinh tại các giải đấu này
           chặt chẽ nhất có thể.
@@ -1472,24 +1522,24 @@ vi:
           mềm của WCA (website, phần mềm tạo công thức tráo, công cụ quản trị).
         #original_hash: 638652c
         wsot: >-
-          Đội ngũ Liên đoàn Thể thao WCA (WSOT) đóng vai trò giám sát và hỗ trợ
-          kế hoạch để WCA được công nhận là liên đoàn thể thao thế giới.
+          Đội ngũ Hiệp hội Thể thao WCA (WSOT) đóng vai trò giám sát và hỗ trợ
+          kế hoạch để WCA được công nhận là hiệp hội thể thao thế giới.
         #original_hash: 30d6048
         wapc: >-
-          Ủy ban Kháng cáo WCA (WAC) có trách nhiệm xem xét và giải quyết các
-          kháng cáo về các quyết định của các Tình nguyện viên WCA khác. Ủy ban
+          Ủy ban Kháng nghị WCA (WAC) có trách nhiệm xem xét và giải quyết các
+          kháng nghị về các quyết định của các Tình nguyện viên WCA khác. Ủy ban
           này có nhiệm vụ cung cấp một quy trình xem xét công minh và độc lập để
           đảm bảo các quyết định đều công bằng, hợp lý và tuân theo các quy định
           và chính sách của WCA.
     contacts:
       #original_hash: 4ef2aad
       title: Đơn Liên lạc WCA
-      #original_hash: bddd3ea
+      #original_hash: ab97069
       faq_note_html: >-
-        Trước khi gửi đơn, bạn nên xem qua các <a href="/faq">Câu hỏi Thường
-        gặp!</a>! Nếu bạn muốn liên hệ một ủy ban hoặc đội ngũ không có tên ở
-        đây, vui lòng xem thông tin liên lạck tại <a
-        href="/teams-committees">trang này</a>.
+        Trước khi liên hệ chúng tôi, trước hết bạn nên đọc qua các <a
+        href="/faq">Câu hỏi Thường gặp</a>! Nếu bạn muốn liên hệ một đội ngũ
+        hoặc ủy ban không được liệt kê tại đây, vui lòng xem thông tin liên hệ
+        tại <a href="/teams-committees">trang này</a>.
       #original_hash: ea20be0
       success_message: Đã gửi email - chúng tôi sẽ sớm hồi âm lại đến bạn.
       #original_hash: 8fa6b95
@@ -1542,7 +1592,7 @@ vi:
         wrt:
           query_type:
             #original_hash: d31ab65
-            label: Bạn có nhu cầu liên lạc nào sau đây?
+            label: Mục nào sau đây mô tả gần nhất vấn đề của bạn?
             edit_profile:
               #original_hash: 322db6c
               label: >-
@@ -1666,11 +1716,12 @@ vi:
       title: Giải đấu
       #original_hash: 0ac88bc
       text_html: >-
-        Tìm các giải đấu ở gần bạn hoặc các kết quả thi đấu. Bạn đang ở tại giải
-        đấu và muốn xem kết quả trực tiếp? Hãy đến ngay %{wca_live_link}!
+        Tìm các giải đấu ở gần bạn hoặc xem kết quả thi đấu của mình. Bạn đang ở
+        tại giải đấu và muốn xem kết quả trực tiếp? Hãy đến ngay
+        %{wca_live_link}!
     merchandise:
       #original_hash: 698cfc8
-      title: Phụ kiện
+      title: Văn hóa phẩm
       #original_hash: 6403f2b
       ad_new: Mới
       #original_hash: 9ad68ce
@@ -1684,8 +1735,8 @@ vi:
       title: Kỷ lục
       #original_hash: 3681af0
       text: >-
-        Xem các kỷ lục hiện tại và quá khứ của các nội dung thi đấu chính thức
-        của WCA.
+        Xem các kỷ lục hiện tại và trong quá khứ của các nội dung thi đấu chính
+        thức của WCA.
     faq:
       #original_hash: 03688ba
       title: Câu hỏi thường gặp
@@ -1707,13 +1758,14 @@ vi:
     support:
       #original_hash: 610edba
       title: Ủng hộ hỗ trợ WCA
-      #original_hash: 1aaf818
+      #original_hash: c254335
       text: >-
-        Hiệp hội Rubik Thế giới là tổ chức miễn thuế dưới diện 501(c)(3) tại Hoa
-        Kỳ. Là một tổ chức phi lợi nhuận hoàn toàn do tình nguyện viên điều
-        hành, chúng tôi rất cảm kích nếu bạn có thể quyên góp để giúp chúng tôi
-        tiếp tục thực hiện mục tiêu gây dựng thêm nhiều giải đấu thú vị ở trên
-        toàn thế giới.
+        Hiệp hội Rubik Thế giới là một tổ chức miễn thuế thuộc diện 501(c)(3).
+        Với vai trò là một tổ chức được duy trì hoàn toàn bởi các tình nguyện
+        viên, chúng tôi rất hoan nghênh việc bạn đóng góp để giúp chúng tôi tiếp
+        tục thực hiện Sứ mệnh đẩy mạnh cộng đồng speedcubing trên toàn thế giới
+        và duy trì một môi trường thi đấu thú vị và công bằng cho tất cả mọi
+        người.
       #original_hash: 65c84ec
       button: Biết thêm những cách bạn có thể hỗ trợ WCA
   users:
@@ -1745,8 +1797,8 @@ vi:
         #original_hash: 333999b
         addendum: >-
           Email này được tự động gửi đi. Nếu bạn không đăng ký tài khoản trên
-          trang web của Hiệp hội Lập phương Thế giới và nhận được tin nhắn này
-          do nhầm lẫn, vui lòng bỏ qua và xoá email này.
+          trang web của Hiệp hội Rubik Thế giới và nhận được tin nhắn này do
+          nhầm lẫn, vui lòng bỏ qua và xoá email này.
         #original_hash: dbc2263
         questions: >-
           Bạn có thêm câu hỏi nào không? Chúng tôi rất vui lòng được trả lời.
@@ -1778,7 +1830,7 @@ vi:
         #original_hash: 87f1f49
         header: 'WCAT đã công bố %{competition}'
         #original_hash: 0d3d10c
-        announced: WCAT đã thông qua giải đấu của bạn và công bố trên trang chủ.
+        announced: WCAT đã xét duyệt giải đấu của bạn và công bố trên trang chủ.
       id_claim_possibility_email:
         #original_hash: 20e9d09
         header: Xin vui lòng liên kết WCA ID với tài khoản của bạn
@@ -1789,8 +1841,8 @@ vi:
           Bạn đã đăng ký tham gia giải đấu %{competition_link}. Chúng tôi vừa
           công bố kết quả cho giải đấu này, và tạo WCA ID cho tất cả các thí
           sinh tham dự lần đầu. Nếu bạn có tham gia thi tại giải đấu này và đây
-          là giải đấu đầu tiên của bạn, vui lòng claim WCA ID (liên kết WCA ID
-          với tài khoản WCA) tại %{claim_link}.
+          là giải đấu đầu tiên của bạn, vui lòng liên kết WCA ID với tài khoản
+          của bạn tại %{claim_link}.
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Bạn đã được thêm vào %{competition} với tư cách ban tổ chức'
@@ -1830,7 +1882,7 @@ vi:
         #original_hash: a585fca
         more_info_html: 'Bạn có thể quản lý các cài đặt về email của bạn %{preferences_link}.'
         #original_hash: 7594a32
-        regards_html: 'Trân trọng,<br/>Đội ngũ Kết Quả WCA thay mặt %{managers}.'
+        regards_html: 'Trân trọng,<br/>Đội ngũ Kết Quả WCA, thay mặt %{managers}.'
       reset_password_instructions:
         #original_hash: 3ffeb60
         subject: Đặt lại mật khẩu tài khoản WCA
@@ -1865,9 +1917,9 @@ vi:
         của bạn.
       #original_hash: 7d605f8
       info_never_competed_html: >-
-        Nếu bạn chưa bao giờ thi đấu, hãy tham gia %{comp}! Chúng tôi sẽ tạo ID
-        WCA cho bạn khi kết quả của giải đấu đầu tiên bạn tham gia được cập
-        nhật.
+        Nếu bạn chưa bao giờ thi đấu, hãy tham gia một %{comp}! Chúng tôi sẽ tạo
+        ID WCA cho bạn khi kết quả của giải đấu đầu tiên bạn tham gia được công
+        bố.
       #original_hash: f28bf87
       submit_value: Xác nhận ID WCA
     edit_avatar_thumbnail:
@@ -1893,7 +1945,7 @@ vi:
       #original_hash: 84add5b
       email: Email
       #original_hash: 9dfd349
-      preferences: Ưu tiên
+      preferences: Tùy chọn
       #original_hash: 8be3c94
       password: Mật khẩu
       #original_hash: 42619dd
@@ -1952,6 +2004,8 @@ vi:
           href='%{delegate_url}'>Delegate</a> nếu cần chỉnh sửa các thông tin
           này.
         reason:
+          #original_hash: 2e22133
+          no_access: bạn không có quyền chỉnh sửa thông tin người dùng
           #original_hash: 370ff12
           assigned: bạn đã có ID WCA
           #original_hash: 1c4670f
@@ -1988,7 +2042,9 @@ vi:
           Nếu có nhiều người trong ảnh đại diện, cần phải dễ dàng chỉ rõ được ai
           là bạn.
         #original_hash: 4083c00
-        '4': 'Phần đầu, không nhất thiết toàn bộ khuôn mặt, phải dễ thấy.'
+        '4': >-
+          Phần đầu, nhưng không nhất thiết phải là toàn bộ khuôn mặt, phải dễ
+          thấy.
         #original_hash: 14c72b2
         '5': >-
           Ảnh đại diện không nên có chữ đè lên, hình dán hay bộ lọc nào, bao gồm
@@ -2005,8 +2061,8 @@ vi:
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
-            Hình ảnh đại diện phải là của bản thân bạn, miêu tả bạn giống phong
-            cách của bạn khi tham gia giải đấu.
+            Hình ảnh đại diện phải là của bản thân bạn, giống phong cách của bạn
+            khi tham gia giải đấu.
           #original_hash: f1f3854
           '2': >-
             Ảnh đại diện phải được cắt, chỉnh góc và ánh sáng sao cho thí sinh
@@ -2014,10 +2070,10 @@ vi:
             bạn tại hội trường thi đấu.
           #original_hash: 13fab02
           '3': >-
-            Hình nhu nhỏ ảnh đại diện chỉ là một phần trong hình ảnh đại diện,
-            và sẽ được sử dụng để miêu tả hình ảnh đại diện đầy đủ của bạn. Hình
-            thu nhỏ cần được chỉnh sửa, để bạn có thể được nhận ra dễ dàng, và
-            hình cần phải có cả khuôn mặt bạn.
+            Hình thu nhỏ ảnh đại diện chỉ là một phần trong hình ảnh đại diện,
+            và sẽ được sử dụng để thay thế hình ảnh đại diện đầy đủ của bạn.
+            Hình thu nhỏ cần được chỉnh sửa sao cho từ riêng hình này có thể
+            nhận diện được bạn, và hình cần phải có cả khuôn mặt bạn.
       sensitive:
         #original_hash: 3f0a787
         info: >-
@@ -2083,7 +2139,7 @@ vi:
       #original_hash: d2f4856
       email_used_by_locked_account_html: >-
         đã được tài khoản khác sử dụng. Tài khoản này đã được tạo tự động do bạn
-        đăng ký tham gia thi bằng trang web khác. Nếu bạn là người giữ email
+        đăng ký tham gia thi bằng trang web khác. Nếu bạn là người sở hữu email
         này, bạn có thể sử dụng tài khoản này sau khi đặt lại mật khẩu <a
         href='/users/password/new'>tại đây</a>.
       #original_hash: 50897d4
@@ -2129,7 +2185,7 @@ vi:
         #original_hash: 5d99dee
         group_name: Tên Đội ngũ/Ủy ban
         #original_hash: 55e4f86
-        delegated_competitions_count: Số Giải đấu đã làm Nhiệm vụ Delegate
+        delegated_competitions_count: Số Giải đấu đã làm nhiệm vụ Delegate
   user_groups:
     group_types:
       #original_hash: abd2828
@@ -2140,6 +2196,12 @@ vi:
       translators: Phiên dịch viên
   registrations:
     errors:
+      #original_hash: 8c2f29b
+      exceeding_competitor_limit: Đã đạt giới hạn thí sinh.
+      #original_hash: 51c7156
+      edit_deadline_passed: >-
+        Đã quá hạn chót chỉnh sửa thông tin đăng ký! Xin chỉ nên chỉnh sửa thông
+        tin trong các trường hợp cá biệt.
       #original_hash: 44ab952
       need_name: Cần có tên
       #original_hash: 6f64c57
@@ -2167,10 +2229,12 @@ vi:
         chuỗi.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Bạn không được đăng ký tham dự các nội dung thi không đủ điều kiện.
+      #original_hash: 93ed20e
+      cannot_change_events_when_cancelling: Bạn không thể thay đổi các nội dung đăng ký khi đang hủy đơn.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Bạn phải thêm lời nhắn. Xin vui lòng đọc Yêu cầu Đăng ký phía trên để
-        xem cần phải thêm vì (VD: địa điểm thi đấu cho giải đấu FMC đồng thời
+        xem cần phải thêm gì (VD: địa điểm thi đấu cho giải đấu FMC đồng thời
         tại nhiều địa điểm).
     registration_info_people:
       #original_hash: bdf1f11
@@ -2200,17 +2264,17 @@ vi:
       added: Đã thêm đơn đăng ký thành công!
     edit_registration:
       #original_hash: 2d15eae
-      title: '%{person} cho %{comp}'
+      title: '%{person} tại %{comp}'
     mailer:
       #original_hash: 72e2180
       regards_html: 'Trân trọng, %{people}.'
       new:
         #original_hash: 63591e5
-        mail_subject: 'Đơn đăng ký Đang chờ: %{comp_name}'
+        mail_subject: 'Đơn đăng ký Đang được xử lý: %{comp_name}'
         #original_hash: 6aa057a
         registered_html: >-
-          Đơn đăng ký của bạn cho %{comp_name} đang ở trong trang thái chờ và
-          đang đợi được ban tổ chức chấp nhận.
+          Đơn đăng ký của bạn cho %{comp_name} đang được xử lý và đang đợi được
+          ban tổ chức chấp nhận.
         #original_hash: f98b245
         awaits_approval: >-
           Hãy đảm bảo rằng bạn đã làm theo các yêu cầu đăng ký của giải đấu. Ví
@@ -2280,7 +2344,9 @@ vi:
       #original_hash: 5301648
       edit: Sửa
       #original_hash: beffc45
-      country_plural: null
+      country_plural:
+        zero: '%{count} khu vực'
+        other: '%{count} khu vực'
       #original_hash: 1feee0e
       export_csv: Xuất ra CSV
       #original_hash: 84add5b
@@ -2296,8 +2362,6 @@ vi:
         with_stripe: Thời gian đóng lệ phí
       #original_hash: ce53c71
       payment_requested_on: 'Yêu cầu thanh toán vào ngày: %{date}'
-      #original_hash: f5b1b34
-      payment_completed_on: 'Thanh toán vào:  %{date}'
       #original_hash: 3141a14
       series_registrations: Đơn đăng ký chuỗi
       #original_hash: b25928c
@@ -2305,10 +2369,6 @@ vi:
     new_registration:
       #original_hash: 8b9f726
       title: 'Đăng ký cho %{comp}'
-    #original_hash: 7cae988
-    registered_with_account_html: >-
-      Người này đã đăng ký bằng tài khoản của họ. Bạn có thể chỉnh sửa thông tin
-      cá nhân của họ %{here}.
     #original_hash: ada2e9e
     sign_in: Đăng nhập
     #original_hash: 5d45a00
@@ -2318,7 +2378,7 @@ vi:
     #original_hash: f484f15
     refund: Hoàn lệ phí
     #original_hash: dc8d7d2
-    refund_confirmation: Bạn có chắc muốn hoàn lại thanh toán này?
+    refund_confirmation: Bạn có chắc muốn hoàn lại giao dịch này?
     #original_hash: a9af643
     update: Cập nhật đơn đăng ký
     #original_hash: b72119a
@@ -2359,16 +2419,21 @@ vi:
       chờ. Đơn đăng ký có thể sẽ không được chấp thuận trừ khi có chỗ trống.
     #original_hash: bcd7d70
     entry_fees_fully_paid: 'Bạn đã đóng đầy đủ lệ phí đăng ký (%{paid}).'
+    #original_hash: e50b275
+    entry_fees_partially_paid: >-
+      Bạn đã nộp %{paid} trên tổng số %{total}. Xin liên hệ ban tổ chức để xác
+      nhận rằng bạn có cần nộp phần lệ phí còn lại hay không.
+    #original_hash: b9d0818
+    entry_fees_fully_refunded: >-
+      Bạn đã được hoàn lại toàn bộ lệ phí đăng ký. Nếu bạn cần nộp lại lệ phí,
+      bạn có thể nộp dưới đây
+    #original_hash: 0c9c8e7
+    entry_fees_pay_again: Tôi muốn nộp lại lệ phí
     #original_hash: 2e5d1b9
     will_pay_here: Bạn sẽ đóng lệ phí tại đây sau khi nộp đơn đăng ký
     #original_hash: 86877d4
     wont_pay_here: Xem thông tin về giải đấu để xem hướng dẫn cách nộp lệ phí
     refund_form:
-      hints:
-        #original_hash: 38c904c
-        refund_amount: >-
-          Số tiền hoàn lại cho thí sinh. Có thể hoàn số tiền bất kì cho đến số
-          tiền đã trả.
       labels:
         #original_hash: 1cc5991
         refund_amount: Số tiền hoàn lại
@@ -2465,6 +2530,15 @@ vi:
       %{link}.
     #original_hash: ee89a3e
     registration_requirements: 'Yêu cầu khi đăng ký cho giải đấu:'
+    registration_history:
+      #original_hash: 342fa25
+      acting_user: Người thực hiện
+      #original_hash: 97c89a4
+      action: Tác vụ
+      #original_hash: 8aa57de
+      changes: Thay đổi
+      #original_hash: cec61a5
+      title: Lịch sử Đơn đăng ký
     import:
       #original_hash: 5a394f3
       title: 'Nhập đơn đăng ký cho %{comp}'
@@ -2511,6 +2585,8 @@ vi:
         wrong_dob_format: >-
           Ngày sinh phải theo định dạng YYYY-mm-dd (năm-tháng-ngày, ví dụ như
           1944-07-13), các ngày sinh sau đây không xử lý đươc: %{raw_dobs}.
+        #original_hash: 6d8e34b
+        empty_file: Tập tin này trống.
     add:
       #original_hash: 975275e
       title: 'Thêm đăng ký cho %{comp}'
@@ -2520,6 +2596,12 @@ vi:
         tại cửa trong giải đấu.
       #original_hash: a11edb8
       add: Thêm đăng ký
+      #original_hash: fd52980
+      ots_not_enabled: >-
+        Thời hạn đăng ký đã đóng và giải đấu không kích hoạt đăng ký tại chỗ -
+        bạn phải chỉnh sửa thông tin giải đấu để kích hoạt tùy chọn này
+      #original_hash: 61125b5
+      competition_over: Bạn không thể thêm các đơn đăng ký tại chỗ sau khi giải đấu đã kết thúc.
       errors:
         #original_hash: d6dcf5c
         already_registered: Người này đã đăng ký rồi.
@@ -2602,8 +2684,6 @@ vi:
         trong ít phút nữa.
       #original_hash: e205d73
       results_already_posted: Kết quả đã được công bố.
-      #original_hash: 376f461
-      results_posted: Đã công bố kết quả thành công!
       #original_hash: afe3a23
       results_preview_alert: Bạn đang xem kết quả chưa được đăng tải đầy đủ.
       #original_hash: 16dd227
@@ -2662,6 +2742,21 @@ vi:
         Giải đấu không có hạn cuối chấp nhận thí sinh trên danh sách chờ. Nếu có
         sử dụng danh sách chờ, vui lòng thêm hạn cuối. Nếu không sử dụng danh
         sách chờ, vui lòng ghi chú rõ ràng trên yêu cầu đăng ký.
+    live:
+      #original_hash: 10d1a3c
+      title: Kết quả Trực tiếp
+      connection:
+        #original_hash: f92b311
+        initialized: Đang kết nối
+        #original_hash: 66d44d4
+        connected: 'Đã kết nối, kết quả đang được cập nhật'
+        #original_hash: 53abaa2
+        disconnected: 'Đã mất kết nối, hiện đang không cập nhật kết quả'
+      podiums:
+        #original_hash: 02ae2bd
+        title: Top 3
+        #original_hash: d7297a7
+        undetermined: Chưa ấn định Top 3
     my_competitions:
       #original_hash: 5c6d3ea
       title: Giải đấu của tôi
@@ -2809,12 +2904,12 @@ vi:
         Chúng tôi khuyến cáo các thi sính đăng ký đầy đủ các nội dung mình muốn
         thi thông qua đơn đăng ký trực tuyến, tuy nhiên thí sinh được phép thêm
         nội dung cho đến khi nội dung tương ứng đã bắt đầu.
-      #original_hash: cf7be5d
+      #original_hash: 51ef4f3
       on_the_spot_registration_fee_html: >-
-        Đăng ký tại bàn ở giải đấu sẽ được chấp nhận với mức lệ phí cơ bản là
-        %{on_the_spot_base_entry_fee}.
-      #original_hash: 1637bea
-      on_the_spot_registration_free: Đơn đăng ký tại giải đấu sẽ được chấp nhận miễn phí.
+        Đơn đăng ký tại chỗ sẽ được chấp nhận nếu còn chỗ, với mức lệ phí cơ sở
+        là %{on_the_spot_base_entry_fee}.
+      #original_hash: 2b4ea65
+      on_the_spot_registration_free: Đơn đăng ký tại chỗ sẽ được chấp nhận miễn phí nếu còn chỗ.
       #original_hash: f5f687d
       no_on_the_spot_registration: Không thể đăng ký trực tiếp tại giải đấu.
       #original_hash: 4df139d
@@ -2876,7 +2971,9 @@ vi:
         Nội dung chính là %{event_name}. Vì không có thí sinh nào hoàn thành
         thành công lượt thi, giải đấu không có người thắng cuộc.
       #original_hash: 6c3b236
-      winner: '%{winner} đạt %{result_sentence} trong nội dung %{event_name}.'
+      winner: >-
+        %{winner} dành chiến thắng %{result_sentence} trong nội dung
+        %{event_name}.
       #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} đạt vị trí thứ hai (%{first_runner_up_result})'
       #original_hash: cffa50a
@@ -3068,10 +3165,10 @@ vi:
       is_visible: >-
         Giải đấu này hoàn toàn công khai, và bất kỳ thay đổi nào đều sẽ được
         hiển thị cho mọi người!
-      #original_hash: 1039850
+      #original_hash: eb98c2c
       pending_confirmation_html: >-
-        Điền đầy đủ thông tin và nhờ Delegate bấm 'Xác nhận' khi đã sẵn sàng để
-        %{contact} phê duyệt giải đấu.
+        Điền toàn bộ các trường thông tin và yêu cầu Delegate nhấn nút 'Xác
+        nhận' khi đã sẵn sàng để %{contact} xét duyệt giải đấu.
       #original_hash: 8966fd0
       submit_create_value: Tạo giải đấu
       #original_hash: 40b0dfd
@@ -3166,6 +3263,10 @@ vi:
           auto_close_threshold: Giới hạn đóng tự động
           #original_hash: b1d5af4
           newcomer_month_reserved_spots: Số vị trí dành riêng cho thí sinh tham dự lần đầu
+          #original_hash: 26b48e3
+          auto_accept_preference: Tự động duyệt đơn đăng ký
+          #original_hash: 1b8698d
+          auto_accept_disable_threshold: Giới hạn tự động duyệt đơn đăng ký
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: WCA Delegate
@@ -3347,12 +3448,10 @@ vi:
           enabled: >-
             Mặc dù Quy định không yêu cầu, việc đặt giới hạn số lượng thí sinh
             rất được khuyến khích.
-          #original_hash: b7b599b
+          #original_hash: 6127d47
           count: >-
-            Số lượng thí sinh được tham gia giải đấu. Hiện tại con số này chỉ
-            mang tính thông báo, và không cản trở các thí sinh đăng ký thêm.
-            Chúng tôi đang nỗ lực phát triển công cụ hỗ trợ quản lý đăng ký giải
-            đấu, và sẽ cập nhật tính năng sau này.
+            Số thí sinh tối đa tại giải đấu. Giới hạn này được hệ thống đăng ký
+            kiểm soát.
           #original_hash: 4bd7102
           reason: >-
             Lý do có giới hạn số lượng thí sinh là gì? Vui lòng điền bằng tiếng
@@ -3366,6 +3465,19 @@ vi:
           newcomer_month_reserved_spots: >-
             Chỉ được sử dụng trong Tháng Thí sinh mới - số vị trí giữ riêng
             không được nhiều hơn một nửa giới hạn thí sinh.
+          #original_hash: 79dcafd
+          auto_accept_preference: >-
+            Tùy chọn này sẽ kích hoạt nút 'Duyệt Tự động Số lượng lớn' tại menu
+            Đơn đăng ký. Nút này sẽ duyệt toàn bộ các đơn đăng ký đã thanh toán
+            ở mục Danh sách chờ và Đang xử lý đến mức giới hạn thí sinh, hoặc
+            đến mức giới hạn dưới đây. Xin vui lòng cẩn trọng trước khi sử dụng
+            tính năng này.
+          #original_hash: b261026
+          auto_accept_disable_threshold: >-
+            Khi số đơn đăng ký đã được duyệt đạt mức này, hệ thống tự động duyệt
+            đơn đăng ký sẽ bị vô hiệu hóa và chuyển lại quyền duyệt thủ công các
+            đơn đăng ký cuối cùng cho ban tổ chức. Giới hạn này phải thấp hơn
+            giới hạn thí sinh. Để trống nếu không dùng đến.
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: WCA Delegate cho giải đấu.
@@ -3523,6 +3635,13 @@ vi:
             'true': Tôi muốn đặt giới hạn số lượng thí sinh
             #original_hash: 53397ec
             'false': Tôi không muốn đặt giới hạn số lượng thí sinh
+          auto_accept_preference:
+            #original_hash: 5996b1f
+            disabled: Ẩn nút 'Duyệt Tự động Số lượng lớn'
+            #original_hash: 1c0c289
+            bulk: Hiện nút 'Duyệt Tự động Số lượng lớn' tại menu Đơn đăng ký
+            #original_hash: 490ed83
+            live: Tự động duyệt đơn đăng ký khi đã nhận lệ phí thi
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -3560,6 +3679,17 @@ vi:
               #original_hash: 6509041
               'false': Thí sinh PHẢI đủ điều kiện để đăng ký
     registration_v2:
+      auto_accept:
+        #original_hash: eaf9960
+        bulk_auto_accept: Tự động duyệt đơn đăng ký
+        #original_hash: 1a84d92
+        cant_bulk_auto_accept: >-
+          Đã xảy ra lỗi khi tự động duyệt đơn số lượng lớn - vui lòng liên hệ
+          WST để được hỗ trợ nếu cần thiết
+        #original_hash: 1897ffb
+        bulk_auto_accepted: Đã duyệt đơn tự động số lượng lớn thành công
+        #original_hash: 786d81b
+        nothing_to_accept: Không có đơn đăng ký nào có thể duyệt tự động
       pdf:
         #original_hash: 5c7d60f
         link: 'Dưới dạng  <0>%{pdfLink}</0>'
@@ -3605,16 +3735,36 @@ vi:
             Mục đang chờ chỉ nên dành cho các đơn đăng ký chưa hoàn thành (VD:
             chưa nộp lệ phí) - xin vui lòng dùng Danh sách chờ nếu không còn vị
             trí để chấp nhận đơn của các thí sinh mới.
+          #original_hash: 134e94f
+          waitlist_skipped_warning: >-
+            Bạn đã bỏ qua %{count} đơn đăng ký xếp trước ở mục Đang xử lý. Bạn
+            có chắc chắn muốn chuyển các đơn đăng ký đã chọn sang Danh sách chờ
+            không?
+          #original_hash: c2875e1
+          approve_skipped_warning: >-
+            Bạn đã bỏ qua %{count} đơn đăng ký xếp trước ở mục Đang xử lý. Bạn
+            có chắc chắn muốn duyệt các đơn đăng ký đã chọn không?
         waitlist:
           #original_hash: 3907ca4
           title: Đơn đăng ký Danh sách chờ
-          #original_hash: a6c86ec
+          #original_hash: de3f9d4
+          information: >-
+            Thí sinh được đưa vào phía cuối Danh sách chờ. Nếu bạn thêm nhiều
+            thí sinh cùng một lúc, các thí sinh đã nộp lệ phí thi sẽ được xếp
+            vào phía cuối danh sách theo thời gian nộp lệ phí, sau đó là các thí
+            sinh còn lại theo thời gian đăng ký. Bạn có thể xếp lại thứ tự trong
+            Chế độ Chỉnh sửa nếu cần thiết.
+          #original_hash: dc16b6c
           skipped_warning: >-
-            Bạn đã bỏ qua %{count} đơn đăng ký trên danh sách chờ. Bạn có muốn
-            chấp nhận các đơn đăng ký còn lại không?
+            Bạn đã bỏ qua %{count} đơn đăng ký ở Danh sách chờ. Bạn có chắc chắn
+            muốn dutyệt các đơn đăng ký đã chọn không?
         approved:
           #original_hash: a59612c
           title: Đơn đăng ký được Chấp nhận
+          #original_hash: bbdee7d
+          pending_waitlist_combined_skipped_warning: >-
+            Bạn đã bỏ qua %{count} đơn đăng ký ở mục Đang xử lý/Danh sách chờ.
+            Bạn có chắc chắn muốn dutyệt các đơn đăng ký đã chọn không?
         cancelled:
           #original_hash: bd69c74
           title: Đơn đăng ký Đã hủy
@@ -3667,6 +3817,8 @@ vi:
         being_deleted: Đơn đăng ký đang được xóa...
         #original_hash: cbf13af
         update_confirm: Bạn có chắc chắn muốn cập nhật đơn đăng ký không?
+        #original_hash: 604da8b
+        organizer_update_confirm: Bạn có chắc chắn muốn chỉnh sửa đơn đăng ký của người dùng không?
         #original_hash: 9b92912
         update_confirm_contact: >-
           Bạn sẽ cần liên hệ ban tổ chức để cập nhật đơn đăng ký, bấm Có để đến
@@ -3703,10 +3855,10 @@ vi:
         rejected: Đã từ chối
         #original_hash: 43dc853
         amount: Số lượng
-        #original_hash: 67b3c7d
+        #original_hash: d7e4497
         too_many: >-
-          Sẽ vượt giới hạn thí sinh với số lượng là %{count} nếu bạn chấp nhận
-          toàn bộ các đơn này.
+          Sẽ có %{count} thí sinh vượt quá giới hạn thí sinh nếu duyệt các đơn
+          đăng ký này.
         #original_hash: 462376a
         no_self_update: Liên hệ ban tổ chức để cập nhật đơn đăng ký.
       register:
@@ -3855,11 +4007,31 @@ vi:
         '-6001': Giải đấu không kích hoạt hệ thống thanh toán WCA
         #original_hash: 092da51
         '-6002': Bạn cần hoàn thành đơn đăng ký trước khi nộp lệ phí
+        #original_hash: ee2c9c4
+        '-6003': >-
+          Không còn lệ phí phải nộp - có thể là do bạn đã nộp lệ phí thi từ
+          trước đó.
+        #original_hash: 631576f
+        '-7001': Thí sinh vẫn còn lệ phí phải nộp
+        #original_hash: 2aa350b
+        '-7002': Giải đấu này không kích hoạt duyệt đơn đăng ký tự động.
+        #original_hash: d191d2d
+        '-7003': >-
+          Chỉ có thể tự động duyệt các đơn đăng ký đang xử lý hoặc xếp đầu danh
+          sách chờ
+        #original_hash: 30fd93d
+        '-7004': Giải đấu đã đạt auto_accept_disable_threshold
+        #original_hash: f2bb661
+        '-7005': Không thể tự động duyệt đơn nếu chưa mở đăng ký
     errors:
       #original_hash: b14d060
       must_use_wca_registration: >-
         Chỉ có thể sử dụng hệ thống duyệt tự động nếu sử dụng website WCA để xử
         lý đơn đăng ký
+      #original_hash: 693d47d
+      must_use_payment_integration: >-
+        Bạn phải tích hợp dịch vụ thanh toán (VD: Stripe) để sử dụng hệ thống tự
+        động duyệt đơn
       #original_hash: 130c901
       auto_accept_limit: Giới hạn duyệt tự động phải ít hơn giới hạn thí sinh
       #original_hash: 42cd8e6
@@ -3948,6 +4120,10 @@ vi:
       event_change_deadline_with_ots: >-
         Hạn cuối cập nhật nội dung thi đấu phải trong thời gian giải đấu diễn ra
         nếu bật đăng ký tại chỗ.
+      #original_hash: e6400f7
+      on_the_spot_with_past_event_change_deadline: >-
+        Không thể kích hoạt đăng ký tại chỗ nếu hạn cuối cập nhật nội dung thi
+        đã qua
       #original_hash: 5ae2437
       series_distance_km: 'Địa điểm giải đấu cách quá xa so với %{competition}.'
       #original_hash: 4a5d7c5
@@ -3958,6 +4134,18 @@ vi:
       not_full_url: >-
         Bạn đang có URL tương đối (%{url}) trong nội dung. Xin đảm bảo mọi URL
         bắt đầu bằng http:// hoặc https://.
+      #original_hash: e8ff0ef
+      editing_deadline_already_passed: >-
+        Bạn chỉ có thể chỉnh sửa thời gian cho các hạn chót trong tương lai,
+        nhưng giá trị gốc là %{timestamp} là thời gian trong quá khứ.
+      #original_hash: e12883e
+      edited_deadline_not_after_original: >-
+        Bạn chỉ được phép đẩy lùi các hạn chót, nhưng %{new_timestamp} diễn ra
+        trước giá trị gốc là %{timestamp}.
+      #original_hash: d79fbb4
+      edited_deadline_not_in_future: >-
+        Bạn chỉ được phép thêm các hạn chót trong tương lai, nhưng
+        %{new_timestamp} là thời gian trong quá khứ.
     new:
       #original_hash: 1208df7
       create_competition: Tạo giải đấu
@@ -4045,8 +4233,6 @@ vi:
     cancelled_by_html: 'Đã hủy bởi %{name} vào %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: Bạn có chắc chắn muốn hủy giải đấu này không?
-    #original_hash: 01de5ee
-    post_results: Công bố kết quả
     #original_hash: b6513f1
     results_posted_by_html: 'Công bố bởi %{poster_name} vào %{date_time}'
     #original_hash: a6b5efe
@@ -4084,16 +4270,14 @@ vi:
           hiệu dừng và đánh dấu kết quả là DNF (xem %{regulation_link}).
         #original_hash: 83d204f
         regulation_link_text: 'Quy định %{number}'
-        #original_hash: bd0e4a9
-        guideline_link_text: 'Hướng dẫn %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: Tổng giới hạn thời gian
         #original_hash: d47f11a
         cumulative_one_round_html: '%{cumulative_time_limit} có thể được sử dụng (xem %{regulation_link}).'
-        #original_hash: c6190b6
+        #original_hash: 44f85f0
         cumulative_across_rounds_html: >-
-          %{cumulative_time_limit} có thể được sử dụng giữa các vòng đấu (xem
-          %{guideline_link}).
+          Có thể áp dụng %{cumulative_time_limit} trong phạm vi nhiều vòng thi
+          (xem %{regulation_link}).
         #original_hash: e8d17df
         cutoff_html: >-
           Thời gian cần đạt để vào giai đoạn hai của vòng thi gộp (xem
@@ -4229,8 +4413,12 @@ vi:
         admin_view: Xem với tư cách quản trị viên
         #original_hash: a857eb4
         tabs: Quản lý các mục
+        #original_hash: e42bf99
+        newcomer_checks: Kiểm tra Thí sinh mới
         #original_hash: f3d6278
         submit_results: Đăng tải kết quả
+        #original_hash: dd2e98f
+        upload_scrambles: Tải lên công thức tráo
         #original_hash: 4c9f914
         delegate_report: Báo cáo của delegate
         #original_hash: b233e77
@@ -4325,18 +4513,10 @@ vi:
       Lưu ý rằng một số bộ lọc (VD: các năm trước đây) đang tạm thời bị vô hiệu
       hóa. Đội ngũ Phần mềm đang cố gắng phục hồi các bộ lọc này - chúng tôi xin
       lỗi vì sự bất tiện này.
-    #original_hash: e3710ed
-    tooltip_no_years: Cơ sở dữ liệu quá lớn để tính toán dữ liệu lịch sử
-    #original_hash: 357094b
-    tooltip_no_quantities: Cơ sở dữ liệu quá lớn để tính bảng xếp hạng lớn
     selector_elements:
       events_selector:
         #original_hash: ad8919a
         event: Nội dung
-        #original_hash: 3e83afa
-        all_events: Tất cả nội dung
-      #original_hash: 0f21717
-      region: Khu vực
       type_selector:
         #original_hash: 3deb745
         type: Loại
@@ -4344,30 +4524,13 @@ vi:
         single: Thành tích đơn
         #original_hash: 15f86c0
         average: Thành tích trung bình
-      years_selector:
-        #original_hash: 96f997b
-        years: Năm
-        #original_hash: 0977c76
-        all_years: Tất cả năm
-        #original_hash: 8737f09
-        only: Chỉ
-        #original_hash: b3c0fe7
-        only_html: 'Chỉ %{year}'
-        #original_hash: 96bdb66
-        until: Cho đến
-        #original_hash: fa23930
-        until_html: 'Cho đén %{year}'
       show_selector:
         #original_hash: d97d1ee
         show: Hiện
         #original_hash: f3cf96e
         persons: Cá nhân
-        #original_hash: 16d3376
-        persons_html: '%{quantity} người'
         #original_hash: 612e12d
         results: Kết quả
-        #original_hash: f3baa4a
-        results_html: '%{quantity} kết quả'
         #original_hash: d46d2ee
         by_region: Theo khu vực
         #original_hash: c0dcb86
@@ -4394,8 +4557,6 @@ vi:
       name: Tên
       #original_hash: 5faa59d
       result: Kết quả
-      #original_hash: fa4c045
-      representing: Đại diện cho
       #original_hash: 1917f4f
       competition: Giải đấu
       #original_hash: e7f6fc5
@@ -4404,28 +4565,45 @@ vi:
       region: Khu vực
       #original_hash: 70c07ec
       world: Thế giới
-      type_options:
-        #original_hash: 3deb745
-        type: Loại
-        #original_hash: dd11868
-        single: Thành tích đơn
-        #original_hash: 15f86c0
-        average: Thành tích trung bình
       #original_hash: ad8919a
       event: Nội dung
       #original_hash: dcf8b56
       date_circa: Ngày ước tính
-      #original_hash: 1c54132
-      record: Kỷ lục
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Kết nối ID WCA với tài khoản của bạn!
   payments:
+    #original_hash: cfeba03
+    header: Lịch sử thanh toná
+    messages:
+      #original_hash: 2eac1cb
+      charge_refunded: Đã hoàn tiền
+      #original_hash: 1e1d219
+      charges_refunded: Đã hoàn tiền toàn bộ
+      #original_hash: c677bd3
+      no_payments: Đơn đăng ký chưa có lịch sử thanh toán
+    errors:
+      refund:
+        #original_hash: 66475ae
+        provider_disconnected: >-
+          Bạn không thể hoàn tiền đơn đăng ký của giải đấu này. Xin vui lòng
+          hoàn tiền bằng bảng điều khiển của dịch vụ thanh toán của bạn.
+        #original_hash: 73e93ee
+        refund_amount_too_high: Bạn không được phép hoàn tiền vượt quá số tiền thí sinh đã thanh toán.
+        #original_hash: 6368ffc
+        refund_amount_too_low: Số tiền hoàn lại phải lớn hơn 0.
+    labels:
+      #original_hash: b6370d7
+      net_payment: Tổng thanh toán
+      #original_hash: ef3cd45
+      original_payment: Mức thanh toán gốc
     payment_providers:
       #original_hash: 559ef55
       paypal: PayPal
       #original_hash: 4d08ec5
       stripe: Stripe
+      #original_hash: 5cd5075
+      manual: Thủ công/Liên kết ngoài
     payment_setup:
       #original_hash: 0aa09ee
       external_dashboard: 'Bảng điều khiển %{provider}'
@@ -4447,6 +4625,8 @@ vi:
       confirm_account_disconnect: >-
         Bạn có chắc chắn muốn bỏ liên kết tài khoản %{provider} không? Không thể
         hoàn tác hành động này.
+      #original_hash: a7bbd29
+      edit_account: Chỉnh sửa tài khoản
       #original_hash: ddea6cf
       supported_currency_warning: >-
         Xin vui lòng đảm bảo rằng đơn vị tiền tệ được hệ thống thanh toán liên
@@ -4458,8 +4638,10 @@ vi:
       provider_heading: 'Thanh toán từ %{provider}'
       #original_hash: 40a098a
       accept_payments_header: Nhận Thanh toán Lệ phí
-      #original_hash: 7ebe178
-      connect_button: 'Liên kết với %{provider}'
+      #original_hash: ebf1ae6
+      manual_payments_header: Thiết lập thanh toán thủ công
+      #original_hash: 399052b
+      connect_button: 'Thiết lập %{provider}'
       connect_account_info:
         #original_hash: f3fdb64
         stripe: >-
@@ -4472,6 +4654,12 @@ vi:
           Bạn cần có tài khoản PayPal Doanh nghiệp để nhận thanh toán qua PayPal
           trên trang của giải đấu. Nếu bạn chưa có tài khoản PayPal Doanh
           nghiệp, nhấn nút dưới đây để được hướng dẫn.
+        #original_hash: d32cb06
+        manual: >-
+          Nêu hướng dẫn thanh toán cho thí sinh. Thí sinh sẽ có thể đánh dấu
+          rằng mình đã thanh toán và cung cấp thông tin để bạn có thể đối chiếu
+          với lịch sử thanh toán của dịch vụ thanh toán liên kết ngoài mà bạn sử
+          dụng.
       connect_account_warning:
         #original_hash: 53adda3
         stripe: >-
@@ -4481,6 +4669,8 @@ vi:
         paypal: >-
           Việc kết nối tài khoản PayPal cho phép website WCA trực tiếp cộng và
           trừ tiền (khi hoàn tiền) vào tài khoản PayPal của bạn.
+        #original_hash: da39a3e
+        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         Giải đấu này được cài đặt nhận lệ phí thi qua %{provider}. Delegate nên
@@ -4510,6 +4700,14 @@ vi:
           display_name: Tên
           #original_hash: 84add5b
           primary_email: Email
+        manual:
+          #original_hash: e5f0dfd
+          payment_instructions: Hướng dẫn nộp lệ phí (được hiển thị trên trang của giải đấu)
+          #original_hash: 5e7242c
+          payment_reference_label: >-
+            Thí sinh nên cung cấp những thông tin nào để nhận diện được giao
+            dịch nộp lệ phí? (VD: số tài khoản / số tham chiếu thanh toán / nội
+            dung chuyển khoản / v.v.)
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:
@@ -4605,6 +4803,15 @@ vi:
         ngắn!
       #original_hash: 8e3a9da
       delivery_error: Có lỗi khi gửi tin nhắn.
+  misc:
+    #original_hash: 9a0f1cc
+    forum_age_requirement: Bạn phải 13 tuổi trở lên để truy cập Diễn đàn WCA.
+    #original_hash: d1f3342
+    forum_enter_dob: >-
+      Bạn phải cung cấp ngày sinh để truy cập diễn đàn. Xin vui lòng nhập ngày
+      sinh và truy cập lại.
+    #original_hash: 56e3bad
+    refresh: Làm mới
   faq:
     #original_hash: d790b40
     title: Các câu hỏi thường gặp
@@ -4848,17 +5055,16 @@ vi:
     spirit_footer: Tinh thần của WCA
     #original_hash: c1781ee
     our_goals_title: Mục tiêu của chúng tôi
-    #original_hash: 375db0f
+    #original_hash: c1144d4
     our_goals_content_html: >-
-      <p>Hiệp hội Rubik Thế giới mong muốn dành nhiều cơ hội tham gia và lãnh
-      đạo cộng đồng cho các người trẻ trên toàn thế giới bằng cách nhân rộng sự
-      tiếp cận đến các giải đấu về "khối hình xoay" của chúng tôi. Chúng tôi tin
-      rằng các trải nghiệm tại các giải đấu và cộng đồng tạo nên các cơ hội phát
-      triển cho các người trẻ liên quan và việc giới thiệu các sự kiện về khối
-      hình cho các đối tượng mới có thể thúc đẩy sự phát triển lớn mạnh của cộng
-      đồng. Vui lòng xem bản tài liệu giới thiệu Tầm nhìn và Chiến lược đề ra
-      cho WCA của Ban Quản trị <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">tại
+      <p>Hiệp hội Rubik Thế giới mong muốn đem cơ hội tham gia và lãnh đạo cộng
+      đồng đến với các người trẻ trên toàn thế giới, thông qua việc nâng cao tầm
+      tiếp cận của các giải đấu 'khối hình xoay' của chúng tôi. Chúng tôi tin
+      rằng các trải nghiệm tại giải đấu và trong cộng đồng sẽ tạo cơ hội phát
+      triển cho các bạn trẻ, và việc giới thiệu các giải đấu đến với công chúng
+      sẽ giúp đẩy mạnh cộng đồng. Vui lòng xem bản Kế hoạch Chiến lược của Ban
+      Quản trị WCA <a
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">tại
       đây</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Mục tiêu tiếp theo của WCA là gì?
@@ -4915,10 +5121,10 @@ vi:
       #original_hash: 9482c5d
       title: Tổ chức
       board:
-        #original_hash: e0d37a2
+        #original_hash: 19d4bbb
         description: >-
-          Ban Quản trị WCA có trách nhiệm dẫn dắt toàn bộ tổ chức, và giúp đỡ
-          các ban nhóm khác hoàn thành nhiệm vụ
+          Ban Quản trị WCA có vai trò lãnh đạo chung đối với tổ chức, và thực
+          hiện các nhiệm vụ không rơi vào phạm vi của các Đội ngũ và Ủy ban khác
       users:
         #original_hash: 57bbaad
         profile: 'Hồ sơ của %{user_name}'
@@ -4974,8 +5180,8 @@ vi:
     codeofconduct: Quy tắc Ứng xử
     #original_hash: 4f05e8f
     finances: Tài chính
-    #original_hash: d1b1406
-    vision_and_strategy: Tầm nhìn và Chiến lược
+    #original_hash: c1e8f94
+    strategic_plan: Kế hoạch Chiến lược
   education:
     #original_hash: 746e863
     title: Tư liệu Giáo dục WCA
@@ -5085,7 +5291,6 @@ vi:
     title: Công cụ phần mềm cho các giải đấu WCA
     #original_hash: 6d2fe37
     wca_icon_text: Được phát triển và duy trì bởi WST
-    #original_hash: 6520873
     intro:
       #original_hash: 0c5fab5
       desc: >-
@@ -5195,6 +5400,7 @@ vi:
   logo:
     #original_hash: c72c969
     title: Logo WCA
+    #original_hash: 6520873
     intro: >-
       Logo WCA được thiết kế bởi Justin Eastman, là bài thi trong một cuộc thi
       thiết kế vào tháng 1 năm 2005. Chúng tôi thích logo này vì thiết kế và màu
@@ -5265,8 +5471,8 @@ vi:
       incidents: Sự cố
       #original_hash: a0ca0c3
       posts: Bài đăng
-      #original_hash: 9d7ea9c
-      regulations_and_guidelines: Quy định và Hướng dẫn
+      #original_hash: 1fa73f3
+      regulations_and_guidelines: Quy định
       #original_hash: db683b3
       search_for: 'Tìm kiếm <b>%{search_string}</b>'
       not_found:
@@ -5280,8 +5486,8 @@ vi:
         posts: Không tìm thấy bài đăng nào có
         #original_hash: 3499e7e
         incidents: Không có sự cố liên quan đến
-        #original_hash: 76a6bf1
-        regulations_and_guidelines: Không có Quy định hay Hướng dẫn nào có
+        #original_hash: 3909204
+        regulations_and_guidelines: Không tìm thấy Quy định ứng với
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: >-
@@ -5300,15 +5506,10 @@ vi:
         Tất cả các giải đấu phải tuân theo <a href="/regulations/">Quy định
         WCA</a>. Thí sinh cần phải đọc các quy định trước khi tham gia giải đấu
         đầu tiên.
-      #original_hash: 4296902
-      content2_html: >-
-        Quy định WCA được bổ sung bởi <a
-        href="/regulations/guidelines.html">Hướng dẫn WCA</a>, với những phần bổ
-        sung rõ nghĩa và giải thích.
       #original_hash: c8e1783
-      content3_html: >-
-        Các quyết định quan trọng về các sự cố tại các giải đấu đươc Ủy ban Quy
-        định WCA giải quyết được lưu lại ở <a href="/incidents">Nhật trình Sự
+      content2_html: >-
+        Các quyết định quan trọng về các sự cố tại các giải đấu được Ủy ban Quy
+        định WCA giải quyết được lưu lại tại <a href="/incidents">Nhật trình Sự
         cố</a>.
     panel2:
       #original_hash: 8ad8302
@@ -5343,8 +5544,8 @@ vi:
         Tài liệu này bao gồm các thông tin quan trọng và cần được đọc bởi mọi
         người tổ chức giải đấu.
   regulations_translations:
-    #original_hash: 9493b8d
-    title: 'Quy định và Hướng dẫn WCA: Bản dịch'
+    #original_hash: a19a3f5
+    title: 'Quy định WCA: Bản dịch'
     #original_hash: 386ecc1
     paragraph1: >-
       Nếu bạn không nói tiếng Anh bản địa, bạn có thể sẽ thấy các bạn dịch dưới
@@ -5795,6 +5996,12 @@ vi:
     results_export:
       #original_hash: 15d00e1
       heading: Bản xuất Dữ liệu Kết quả WCA
+      #original_hash: 733df42
+      deprecation_warning: >-
+        THÔNG BÁO NGỪNG HỖ TRỢ: Phiên bản %{old_version} của Bản xuất Dữ liệu
+        Kết quả đã lỗi thời, và sẽ không còn được hỗ trợ từ ngày
+        %{deprecation_date}. Xin vui lòng chuyển sang Phiên bản %{new_version}
+        trước ngày này.
       #original_hash: f9fe9df
       description: >-
         Ở trang này, chúng tôi xin cung cấp bản xuất dữ liệu kết quả WCA ở nhiều
@@ -5804,6 +6011,12 @@ vi:
         bản mới nhất hay chưa.
       #original_hash: 4f59283
       permalink: link vĩnh viễn
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        Lưu ý: Các liên kết thường trực sẽ trả lại bản xuất dữ liệu kết quả mới
+        nhất của phiên bản đã cho - ví dụ, liên kết thường trực cho phiên bản v2
+        sẽ trả lại bản xuất v2 mới nhất, nhưng sẽ luôn trả lại phiên bản v2 kể
+        cả khi sau khi phiên bản v3 đi vào hoạt động.
       file_formats:
         #original_hash: b086d79
         sql: Các lệnh SQL để nhập vào cơ sở dữ liệu SQL.
@@ -5953,10 +6166,6 @@ vi:
         [%{round_id}] %{person_name} thiếu ít nhất một lượt thi trong giai đoạn
         cutoff. Vui lòng thêm (các) lượt thi còn thiếu hoặc chỉnh sửa thông tin
         vòng thi trong trang Quản lý Nội dung của giải đấu.
-      #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] Kết quả %{person_name} sai thể thức: thể thức đúng là
-        %{expected_format}, nhưng được ghi là %{format}.
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Ít nhất một kết quả của %{person_name} vượt quá giới hạn
@@ -5966,11 +6175,6 @@ vi:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] Tổng các kết quả của %{person_name} vượt quá giới hạn
         thời gian cộng dồn là %{time_limit}.
-      #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] Không có thông tin về cutoff và giới hạn thời gian cho
-        vòng thi này. Các bước kiểm tra này đã được bỏ qua. Xin vui lòng cập
-        nhật thông tin vòng thi tại trang Quản lý Nội dung của giải đấu.
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] Vòng thi này không có giới hạn thời gian xác định, các
@@ -6001,11 +6205,6 @@ vi:
         Vòng %{round_id}: nhiều thí sinh vào vòng sau hơn điều kiện ban đầu
         (%{actual} thay vì %{expected}, điều kiện là: %{condition}). Xin vui
         lòng cập nhật thông tin vòng thi ở trang quản lý nội dung.
-      #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        Vòng thi %{round_id} có trong kết quả nhưng không được tạo trên tab nội
-        dung. Xin vui lòng thêm thông tin vòng thi ở trang quản lý nội dung của
-        giải đấu.
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         Vòng %{round_id} có 99 thí sinh trở xuống nhưng lại có nhiều hơn hai
@@ -6018,8 +6217,8 @@ vi:
       regulation_9m3_error: >-
         Vòng %{round_id} có 7 thí sinh trở xuống nhưng lại có ít nhất một vòng
         kế tiếp, vi phạm Quy định 9m3.
-      #original_hash: e12138a
-      regulation_9p1_error: 'Vòng %{round_id}: Ít hơn 25%% thí sinh bị loại, vi phạm Quy định 9p1.'
+      #original_hash: 44fbfde
+      regulation_9p1_error: 'Vòng %{round_id}: Ít hơn 25% thí sinh bị loại, vi phạm Quy định 9p1.'
       #original_hash: f5d8ae9
       no_competitor_eliminated_error: >-
         Vòng %{round_id}: Phải có ít nhất một thí sinh bị loại theo yêu cầu của
@@ -6049,27 +6248,20 @@ vi:
         Không có kết quả cho vòng %{round_id} nhưng vẫn còn liệt kê ở tab nội
         dung. Nếu vòng thi này không diễn ra, xin vui lòng bỏ vòng thi này ở
         trang quản lý nội dung của giải đấu.
-      #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        Vòng '%{round_name}' không có mức cutoff được thông báo, nhưng lại được
-        ghi là vòng thi gộp trong kết quả. Xin vui lòng sửa thông tin vòng thi ở
-        trang quản lý nội dung của giải đấu.
     events:
-      #original_hash: e87f8a0
+      #original_hash: ef8709f
       not_333_main_event_warning: >-
-        Nội dung chính được chọn của giải đấu này là %{main_event_id}. Giải đấu
-        này được coi là nội dung chính của giải đấu như thế nào? Hãy giải thích
-        ngắn gọn cho WRT (VD: số vòng thi, giải thưởng, thí sinh được coi là
-        người chiến thắng chung cuộc của giải đấu, v.v.)
+        Nội dung chính được chọn là %{main_event_id}. Mặc dù thông tin này đã
+        được WCAT xét duyệt TRƯỚC KHI giải đấu bắt đầu, WRT vẫn có vai trò xác
+        nhận SAU giải đấu rằng nội dung chính này thỏa mãn các hướng dẫn trong
+        bản Chính Yêu cầu Giải đấu WCA. Xin vui lòng nêu lên một hành động cho
+        thấy rằng nội dung %{main_event_id} đã được coi là nội dung chính TRONG
+        khi giải đấu đang diễn ra (VD: được coi là người chiến thắng cả giải
+        đấu, số vòng nhiều nhất, giải thưởng giá trị nhất).
       #original_hash: 1d4e297
       no_main_event_warning: >-
         Không có nội dung chính cho giải đấu. Xin vui lòng xác nhận với WRT rằng
         thông tin này là chính xác.
-      #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        Có kết quả cho nội dung %{event_id} mặc dù không được liệt kê là nội
-        dung chính thức. Vui lòng hủy bỏ kết quả của nội dung này hoặc liên hệ
-        WCAT để yêu cầu thêm nội dung vào website WCA.
       #original_hash: fde208d
       missing_results_warning: >-
         Không kết quả cho nội dung %{event_id} mặc dù được liệt kê là nội dung
@@ -6085,10 +6277,6 @@ vi:
       missing_scrambles_for_competition_error: >-
         Thiếu công thức tráo cho giải đấu. Sử dụng Scrambles Matcher để gán công
         thức tráo.
-      #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Quá nhiều công thức tráo. Sử dụng Scrambles Matcher để
-        lược bỏ công thức tráo không được sử dụng.
       #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] Nhóm %{group_id}: thiếu công thức tráo, chỉ có %{actual}
@@ -6108,3 +6296,9 @@ vi:
         [%{round_id}] Vòng thi có số công thức tráo khác so với số công thức
         được ghi trên trang Quản lý Nội dung của giải đấu. Xin vui lòng chỉnh
         sửa số công thức tráo ở trang trên thành số công thức được sử dụng.
+  tickets:
+    type:
+      #original_hash: e43f273
+      edit_person: Chỉnh sửa Người dùng
+      #original_hash: 5fb2137
+      competition_result: Kết quả Giải đấu

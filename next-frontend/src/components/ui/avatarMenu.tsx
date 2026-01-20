@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Button, Menu } from "@chakra-ui/react";
+import { Avatar, Button, ClientOnly, Menu, Skeleton } from "@chakra-ui/react";
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import React from "react";
@@ -11,7 +11,15 @@ import _ from "lodash";
 
 const AVATAR_COLORS = ["green", "white", "red", "yellow", "blue", "orange"];
 
-export default function AvatarMenu({ session }: { session: Session | null }) {
+export default function Wrapper({ session }: { session: Session | null }) {
+  return (
+    <ClientOnly fallback={<Skeleton boxSize={8} />}>
+      <AvatarMenu session={session} />
+    </ClientOnly>
+  );
+}
+
+function AvatarMenu({ session }: { session: Session | null }) {
   if (!session) {
     return (
       <Button onClick={() => signIn(WCA_PROVIDER_ID)} variant="ghost" size="sm">
@@ -44,20 +52,21 @@ export default function AvatarMenu({ session }: { session: Session | null }) {
           <Menu.Item value="dashboard" asChild>
             <Link href="/dashboard">Developer Dashboard</Link>
           </Menu.Item>
+          <Menu.Separator />
+          <Menu.Item value="mycompetitions" asChild>
+            <Link href="/competitions/mine">My Competitions</Link>
+          </Menu.Item>
           {session.user?.wcaId && (
-            <>
-              <Menu.Separator />
-              <Menu.Item value="myresults" asChild>
-                <Link
-                  href={route({
-                    pathname: "/persons/[wcaId]",
-                    query: { wcaId: session.user.wcaId },
-                  })}
-                >
-                  My Results
-                </Link>
-              </Menu.Item>
-            </>
+            <Menu.Item value="myresults" asChild>
+              <Link
+                href={route({
+                  pathname: "/persons/[wcaId]",
+                  query: { wcaId: session.user.wcaId },
+                })}
+              >
+                My Results
+              </Link>
+            </Menu.Item>
           )}
           <Menu.Separator />
           <Menu.Item value="logout" onSelect={() => signOut()}>

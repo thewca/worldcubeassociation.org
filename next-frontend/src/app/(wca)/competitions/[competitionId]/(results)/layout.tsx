@@ -1,8 +1,9 @@
-import { GridItem, SimpleGrid, Text } from "@chakra-ui/react";
+import { GridItem, SimpleGrid } from "@chakra-ui/react";
 import { InfoCard } from "@/components/competitions/Cards";
 import { MarkdownFirstImage } from "@/components/MarkdownFirstImage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { getT } from "@/lib/i18n/get18n";
+import OpenapiError from "@/components/ui/openapiError";
 
 export default async function CompetitionLayout({
   children,
@@ -12,15 +13,15 @@ export default async function CompetitionLayout({
   params: Promise<{ competitionId: string }>;
 }) {
   const { competitionId } = await params;
-
-  const { data: competitionInfo, error } =
-    await getCompetitionInfo(competitionId);
-
-  if (error) {
-    return <Text>Error fetching competition</Text>;
-  }
-
   const { t } = await getT();
+
+  const {
+    data: competitionInfo,
+    error,
+    response,
+  } = await getCompetitionInfo(competitionId);
+
+  if (error) return <OpenapiError t={t} response={response} />;
 
   return (
     <SimpleGrid columns={3} gap="8">

@@ -132,6 +132,8 @@ fr:
     '2': Meilleur des 2
     #original_hash: 21f623c
     '3': Meilleur des 3
+    #original_hash: cca816d
+    '5': Meilleur des 5
     #original_hash: 2342d2b
     a: Moyenne élaguée des 5
     #original_hash: 940c82d
@@ -143,10 +145,14 @@ fr:
       '2': Bo2
       #original_hash: b41f36f
       '3': Bo3
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      #original_hash: 60827cb
+      h: 1v1
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -457,6 +463,10 @@ fr:
         region: Région
         #original_hash: e3fc6e9
         subRegion: Sous-région
+        #original_hash: a1ba702
+        receive_developer_mails: >-
+          Je souhaite recevoir des notifications concernant les modifications
+          apportées aux ressources logicielles de la WCA.
         #original_hash: 730db33
         receive_delegate_reports: Je souhaite recevoir les rapports des compétitions WCA par e-mail
         #original_hash: 8667157
@@ -774,6 +784,12 @@ fr:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          Cela se limite aux notifications concernant les changements de version
+          majeurs apportés à des ressources telles que les exports de données,
+          le schéma WCIF et les API publiques. Recommandé pour les développeurs
+          qui assurent la maintenance de logiciels reposant sur ces outils.
         #original_hash: c564b74
         receive_delegate_reports: >-
           Si vous êtes un Délégué Senior, membre du WRC ou du WQAC, vous recevez
@@ -851,15 +867,18 @@ fr:
           Délégués puissent les référencer dans leurs commentaires. Même s'ils
           semblent courants, listez au moins les incidents principaux. Merci de
           cocher les cases ci-dessous si vous avez besoin d'un avis.
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
           Vous DEVEZ choisir au moins %{image_count} d'images qui illustrent la
-          zone de mélange et celle de compétition (d'autres images sont les
-          bienvenues). Vous pouvez sélectionner plusieurs fichiers à la fois.
-          Vous ne pouvez supprimer des images que lorsque suffisamment d'autres
-          images ont été téléchargées (si vous souhaitez remplacer une image,
-          vous devez d'abord télécharger la nouvelle image, puis supprimer
-          l'ancienne).
+          zone de mélange et de résolution de cette de compétition, de
+          préférence durant l'évènement (d'autres images sont les bienvenues).
+          Vous pouvez sélectionner plusieurs fichiers à la fois. Vous ne pouvez
+          supprimer des images que lorsque suffisamment d'autres images ont été
+          téléchargées (si vous souhaitez remplacer une image, vous devez
+          d'abord télécharger la nouvelle image, puis supprimer l'ancienne). Si
+          vous ne disposez pas de photos récentes de la zone de compétition
+          et/ou de la zone de mélange pendant leur utilisation, veuillez
+          expliquer pourquoi.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1002,6 +1021,15 @@ fr:
         #original_hash: 79ccfe2
         dob_invalid: est mal formatée
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: Une erreur s'est produite lors du rendu de la page
+      #original_hash: 22dfe12
+      description: >-
+        Si cette erreur persiste, signalez-la à WST en fournissant les
+        informations détaillées ci-dessous.
+      #original_hash: 20be860
+      details: Détails de l'erreur
     messages:
       #original_hash: dc2367c
       wrong_size: 'n''est pas de la bonne taille (il devrait faire %{file_size})'
@@ -1800,12 +1828,13 @@ fr:
     support:
       #original_hash: 610edba
       title: Supporter la WCA
-      #original_hash: 1aaf818
+      #original_hash: c254335
       text: >-
         La World Cube Association est une organisation exonérée d’impôt
         501(c)(3). En tant qu’organisme à but non lucratif géré de façon 100%
-        bénévole, nous accueillons vos dons pour nous aider à poursuivre notre
-        vision d’avoir des compétitions partout dans le monde.
+        bénévole, nous apprécions vos dons qui nous aident à atteindre notre
+        objectif : soutenir la communauté mondiale des speedcubers et maintenir
+        un environnement compétitif amusant et équitable pour tous.
       #original_hash: 65c84ec
       button: En savoir plus sur les moyens de supporter la WCA
   users:
@@ -2708,6 +2737,8 @@ fr:
           %{wca_ids}.
         #original_hash: a0fd4c5
         wrong_dob_format: "La date de naissance doit suivre le format AAAA-mm-jj (année-mois-jour, par exemple 1944-07-13). Les dates suivantes qui ne peuvent pas être analysées\_: %{raw_dobs}."
+        #original_hash: 6d8e34b
+        empty_file: Le fichier est vide.
     add:
       #original_hash: 975275e
       title: 'Ajouter une inscription à %{comp}'
@@ -2872,6 +2903,21 @@ fr:
         veuillez préciser une date limite. Si vous n’utilisez pas de liste
         d’attente, n’oubliez pas de le préciser dans les conditions
         d’inscription.
+    live:
+      #original_hash: 10d1a3c
+      title: Résultats en direct
+      connection:
+        #original_hash: f92b311
+        initialized: Connexion en cours d'initialisation
+        #original_hash: 66d44d4
+        connected: 'Connecté, les résultats sont en cours de mise à jour'
+        #original_hash: 53abaa2
+        disconnected: 'Connexion perdue, les résultats ne sont pas mis à jour'
+      podiums:
+        #original_hash: 02ae2bd
+        title: Podiums
+        #original_hash: d7297a7
+        undetermined: Podiums à déterminer
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mes compétitions
@@ -3312,7 +3358,7 @@ fr:
       is_visible: >-
         Cette compétition est visible publiquement, chaque modification que vous
         ferez sera visible par le public !
-      #original_hash: 1039850
+      #original_hash: eb98c2c
       pending_confirmation_html: >-
         Remplissez tous les champs et demandez à votre Délégué de cliquer sur
         "Confirmer" quand vous êtes prêt à ce que l'%{contact} approuve cette
@@ -3618,13 +3664,10 @@ fr:
             Une limite de compétiteurs est requise. Seules les compétitions FMC
             simultanées avec plusieurs emplacements peuvent ne pas avoir de
             limite de compétiteurs.
-          #original_hash: b7b599b
+          #original_hash: 6127d47
           count: >-
-            Le nombre de compétiteurs autorisés dans cette compétition. Pour
-            l'instant ce nombre est informatif, et ne permet pas d'empêcher plus
-            de personnes de s'inscrire. Nous sommes en train de travailler sur
-            l'intégration de cette limite dans la procédure d'inscription, mais
-            cela demande un peu de travail.
+            Le nombre de compétiteurs autorisés dans cette compétition. Cette
+            limite est appliquée par le système d'inscriptions intégré au site.
           #original_hash: 4bd7102
           reason: >-
             Quelle est la raison pour la limite au nombre de compétiteurs ?
@@ -4541,18 +4584,16 @@ fr:
           %{regulation_link}).
         #original_hash: 83d204f
         regulation_link_text: 'Règle %{number}'
-        #original_hash: bd0e4a9
-        guideline_link_text: 'Recommandation %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: limite de temps cumulative
         #original_hash: d47f11a
         cumulative_one_round_html: >-
           Une %{cumulative_time_limit} peut être imposée (voir la
           %{regulation_link}).
-        #original_hash: c6190b6
+        #original_hash: 44f85f0
         cumulative_across_rounds_html: >-
           Une %{cumulative_time_limit} peut être imposée sur un ensemble de
-          tours (voir la %{guideline_link}).
+          tours (voir la %{regulation_link}).
         #original_hash: e8d17df
         cutoff_html: >-
           Le score à atteindre pour passer à la deuxième phase d'un tour avec
@@ -5360,7 +5401,7 @@ fr:
     spirit_footer: Esprit de la WCA
     #original_hash: c1781ee
     our_goals_title: Nos objectifs
-    #original_hash: 375db0f
+    #original_hash: c1144d4
     our_goals_content_html: >-
       <p>La World Cube Association souhaite offrir des opportunités pour les
       membres de la communauté et un accompagnement pour les jeunes gens du
@@ -5369,9 +5410,9 @@ fr:
       compétition et au sein de notre communauté créent des opportunités de
       progression pour les jeunes gens impliqués et que présenter les
       casse-têtes à de nouveaux groupes de personnes permet à notre communauté
-      de se renforcer. Un document présentant la vision du Bureau des Directeurs
-      et sa stratégie pour la WCA est disponible <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">ici</a>.</p>
+      de se renforcer. Un document contenant le plan stratégique du Bureau des
+      Directeurs pour la WCA est disponible <a
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">ici</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Le futur pour la WCA ?
     #original_hash: 3312277
@@ -5490,8 +5531,8 @@ fr:
     codeofconduct: Code de Conduite
     #original_hash: 4f05e8f
     finances: Finances
-    #original_hash: d1b1406
-    vision_and_strategy: Vision et Stratégie
+    #original_hash: c1e8f94
+    strategic_plan: Plan stratégique
   education:
     #original_hash: 746e863
     title: Ressources Éducatives de la WCA
@@ -6368,6 +6409,12 @@ fr:
     results_export:
       #original_hash: 15d00e1
       heading: Export de résultats WCA
+      #original_hash: 733df42
+      deprecation_warning: >-
+        AVIS DE DÉPRÉCIATION : La version %{old_version} de l'exportation des
+        résultats est désormais obsolète et ne sera plus prise en charge à
+        compter du %{deprecation_date}. Veuillez passer à la version
+        %{new_version} avant cette date.
       #original_hash: f9fe9df
       description: >-
         Sur cette page, nous proposons les résultats WCA à télécharger dans
@@ -6378,6 +6425,12 @@ fr:
         version la plus récente.
       #original_hash: 4f59283
       permalink: permalien
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        Remarque : les permaliens fournissent les derniers résultats exportés
+        dans une version donnée. Par exemple, le permalien v2 renverra la
+        dernière exportation v2, mais restera sur la v2 même lorsque la v3 sera
+        disponible.
       file_formats:
         #original_hash: b086d79
         sql: 'Requête SQL, pour l’importation dans les bases de données SQL.'
@@ -6541,10 +6594,6 @@ fr:
         cutoff. Veuillez modifier le résultat pour inclure la ou les tentatives
         manquantes ou mettre à jour les informations relatives au tour dans la
         page Gérer les événements de la compétition.
-      #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] Les résultats pour %{person_name} sont dans le mauvais
-        format : attendu %{expected_format}, mais obtenu %{format}.
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Au moins un résultat pour %{person_name} dépasse le temps
@@ -6554,12 +6603,6 @@ fr:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] La somme des résultats pour %{person_name} est supérieure
         à la limite de temps cumulée, qui était de %{time_limit}.
-      #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] Il n'y a pas d'information sur la limite de temps pour ce
-        tour. Ces validations ont été ignorées. Veuillez mettre à jour les
-        informations relatives au tour dans la page Gérer les événements de la
-        compétition.
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] La limite de temps pour ce tour est indéfinie, les
@@ -6592,12 +6635,6 @@ fr:
         condition d'avancement prévoyait (%{actual} au lieu de %{expected}, la
         condition était : %{condition}). Veuillez mettre à jour les informations
         relatives au tour dans la page de gestion des événements.
-      #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        Le tour %{round_id} est présent dans les résultats mais n'a pas été créé
-        dans l'onglet des événements. Veuillez inclure les informations
-        relatives au tour dans la page de gestion des événements de la
-        compétition.
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         Le tour %{round_id} compte 99 compétiteurs ou moins mais a plus de deux
@@ -6647,12 +6684,6 @@ fr:
         Il n'y a pas de résultats pour le tour %{round_id} mais il est listé
         dans l'onglet événements. Si ce tour n'a pas eu lieu, veuillez le
         supprimer dans la page de gestion des événements de la compétition.
-      #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        Aucune cutoff n'a été annoncé pour '%{round_name}', mais il a été
-        détecté comme un tour avec cutoff dans les résultats. Veuillez mettre à
-        jour les informations relatives au tour dans la page de gestion des
-        événements de la compétition.
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -6668,12 +6699,6 @@ fr:
       no_main_event_warning: >-
         Il n'y a pas d'épreuve principale sélectionné pour cette compétition.
         Veuillez indiquer au WRT que cela est correct.
-      #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        Des résultats sont présents pour %{event_id}, mais il n'est pas
-        répertorié comme un événement officiel. Veuillez supprimer l'événement
-        des résultats ou contacter le WCAT pour demander l'ajout de l'événement
-        sur le site web de la WCA.
       #original_hash: fde208d
       missing_results_warning: >-
         Il n'y a pas de résultats pour %{event_id}, mais il est répertorié comme
@@ -6689,10 +6714,6 @@ fr:
       missing_scrambles_for_competition_error: >-
         Il manque des mélanges pour la compétition. Utilisez Scrambles Matcher
         pour ajouter des mélanges.
-      #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Trop de mélanges. Utilisez Scrambles Matcher pour décocher
-        les mélanges inutilisés.
       #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] Groupe %{group_id} : mélange manquant, détecté seulement

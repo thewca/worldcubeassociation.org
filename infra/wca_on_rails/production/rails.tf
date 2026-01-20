@@ -19,6 +19,10 @@ locals {
       value = var.ROOT_URL
     },
     {
+      name  = "OIDC_ALGORITHM"
+      value = "RS256"
+    },
+    {
       name  = "ASSET_HOST"
       value = "https://assets.worldcubeassociation.org"
     },
@@ -45,6 +49,10 @@ locals {
     {
       name = "READ_REPLICA_HOST"
       value = "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+    },
+    {
+      name = "DEV_DUMP_HOST"
+      value = "dev-dump-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
     {
       name = "CACHE_REDIS_URL"
@@ -107,6 +115,10 @@ locals {
       value = var.DATABASE_WRT_USER
     },
     {
+      name = "DATABASE_WRT_SENIOR_USER"
+      value = var.DATABASE_WRT_SENIOR_USER
+    },
+    {
       name = "VAULT_ADDR"
       value = var.VAULT_ADDR
     },
@@ -132,7 +144,8 @@ locals {
       name = "PMA_USER_CONFIG_BASE64"
       value = base64encode(templatefile("../templates/config.user.inc.php.tftpl",
         { rds_host: "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
-          rds_replica_host: "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com" }))
+          rds_replica_host: "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
+          dump_replica_host: "dev-dump-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"}))
     }
   ]
 }
@@ -205,7 +218,10 @@ data "aws_iam_policy_document" "task_policy" {
     actions = [
       "rds-db:connect",
     ]
-    resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}"]
+    resources = [
+      "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_dev_dump_identifier}/${var.DATABASE_WRT_USER}",
+      "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_read_replica_identifier}/${var.DATABASE_WRT_SENIOR_USER}",
+      "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_SENIOR_USER}"]
   }
   statement {
     effect = "Allow"
@@ -237,14 +253,14 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   cpu = "1024"
-  memory = "3910"
+  memory = "3900"
 
   container_definitions = jsonencode([
     {
       name              = "rails-production"
       image             = "${var.shared.ecr_repository.repository_url}:latest"
       cpu    = 1024
-      memory = 3910
+      memory = 3900
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,
