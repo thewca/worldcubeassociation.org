@@ -56,7 +56,7 @@
     "flag-icons": "^7.5.0",
     "glob": "^13.0.0",
     "i18n-js": "^4.5.1",
-    "jquery": "3.7.1",
+    "jquery": "4.0.0",
     "js-yaml": "^4.1.1",
     "leaflet": "^1.9.4",
     "leaflet-geosearch": "^4.2.2",
