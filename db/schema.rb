@@ -1123,6 +1123,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_19_131442) do
     t.integer "value3", default: 0, null: false
     t.integer "value4", default: 0, null: false
     t.integer "value5", default: 0, null: false
+    t.index ["average", "person_name", "competition_id", "round_type_id"], name: "results_n_results_average_speedup"
+    t.index ["best", "person_name", "competition_id", "round_type_id"], name: "results_n_results_single_speedup"
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competition_id"], name: "Results_fk_tournament"
     t.index ["country_id"], name: "_tmp_index_Results_on_countryId"

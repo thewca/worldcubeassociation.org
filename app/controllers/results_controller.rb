@@ -83,7 +83,6 @@ class ResultsController < ApplicationController
         JOIN results ON results.id = value_and_id % 1000000000
         ORDER BY value, person_name
       SQL
-
     elsif @is_results
       # rubocop:disable Style/ConditionalAssignment
       #   for better readability of the individual indentations of the SQL queries
@@ -156,7 +155,6 @@ class ResultsController < ApplicationController
           #{@gender_condition}
         ORDER BY value, results.country_id, start_date, person_name
       SQL
-
     else
       flash[:danger] = t(".unknown_show")
       return redirect_to rankings_path
