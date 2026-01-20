@@ -139,14 +139,14 @@ module ResultsValidators
 
       def check_results_for_cutoff(context, cutoff)
         competition, result, round = context
-        number_of_attempts = cutoff.number_of_attempts
+        number_of_attempts_for_cutoff = cutoff.number_of_attempts
+        total_number_of_attempts = round.format.expected_solve_count
         cutoff_result = SolveTime.new(round.event.id, :single, cutoff.attempt_result)
         solve_times = result.solve_times
         # Compare through SolveTime so we don't need to care about DNF/DNS
-        maybe_qualifying_results = solve_times[0, number_of_attempts]
+        maybe_qualifying_results = solve_times[0, number_of_attempts_for_cutoff]
         # Get the remaining attempt according to the expected solve count given the format
-        other_results = solve_times[number_of_attempts, round.format.expected_solve_count - number_of_attempts]
-
+        other_results = solve_times[number_of_attempts_for_cutoff, total_number_of_attempts - number_of_attempts_for_cutoff]
         if maybe_qualifying_results.any?(&:skipped?)
           # There are at least one skipped results among those in the first phase.
           @errors << ValidationError.new(WRONG_ATTEMPTS_FOR_CUTOFF_ERROR,

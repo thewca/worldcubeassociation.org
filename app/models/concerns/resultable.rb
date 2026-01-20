@@ -176,11 +176,11 @@ module Resultable
   end
 
   private def sorted_solves
-    @sorted_solves ||= solve_times.reject(&:skipped?).sort.freeze
+    sorted_solves_with_index.map(&:first).sort
   end
 
   private def sorted_solves_with_index
-    @sorted_solves_with_index ||= solve_times.each_with_index.reject { |s, _| s.skipped? }.sort.freeze
+    solve_times.each_with_index.reject { |s, _| s.skipped? }.sort
   end
 
   def tied_with?(other_result)
@@ -195,16 +195,35 @@ module Resultable
     end
   end
 
+  def result_attempts_hash
+    # We could use a `result_attempts.pluck(:attempt_number, :value)` here,
+    #   but that would unfortunately fire a database call every single time.
+    # With the `to_h` approach (which is just an implicit `map`), we leverage caching and includes.
+    self.result_attempts.to_h { [it.attempt_number, it.value] }
+  end
+
+  def attempts
+    # This is a compromise with the legacy behavior where we had `value1..5` hard-coded as columns
+    #   and every result had at least 5 attempts.
+    # Feel free to revisit this assumption in the future and optimize our model for more generic counts
+    #   after the migration to `result_attempts` succeeded.
+    num_of_results = [result_attempts_hash.keys.max || 0, 5].max
+
+    self.result_attempts_hash
+        .values_at(*1..num_of_results) # turn { 1: 123, 4: 456 } into [123, nil, nil, 456]
+        .map { it || SolveTime::SKIPPED_VALUE } # fill gaps with 0
+  end
+
   def solve_times
-    @solve_times ||= [SolveTime.new(event_id, :single, value1),
-                      SolveTime.new(event_id, :single, value2),
-                      SolveTime.new(event_id, :single, value3),
-                      SolveTime.new(event_id, :single, value4),
-                      SolveTime.new(event_id, :single, value5)].freeze
+    attempts.map { SolveTime.new(event_id, :single, it) }
+  end
+
+  def legacy_attempts
+    [value1, value2, value3, value4, value5]
   end
 
   private def valid_attempts_partition
-    self.attempts
+    self.legacy_attempts
         .map
         .with_index(1)
         .partition { |value, _n| value != SolveTime::SKIPPED_VALUE }
@@ -246,16 +265,8 @@ module Resultable
   end
 
   def counting_solve_times
-    @counting_solve_times ||= solve_times.each_with_index.filter_map do |solve_time, i|
+    solve_times.each_with_index.filter_map do |solve_time, i|
       solve_time if i < format.expected_solve_count && trimmed_indices.exclude?(i)
     end
-  end
-
-  # When someone changes an attribute, clear our cached values.
-  def _write_attribute(attr, value)
-    @sorted_solves_with_index = nil
-    @solve_times = nil
-    @counting_solve_times = nil
-    super
   end
 end
