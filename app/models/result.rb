@@ -13,8 +13,7 @@ class Result < ApplicationRecord
   # we also need sure to query the correct competition as well through a composite key.
   belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
-  # See the pre-validation hook `backlink_attempts` below for an explanation of `autosave: false`
-  has_many :result_attempts, dependent: :destroy, autosave: false, index_errors: true
+  has_many :result_attempts, dependent: :destroy, index_errors: true
   validates_associated :result_attempts
 
   before_validation :repack_attempts
@@ -28,23 +27,6 @@ class Result < ApplicationRecord
     packed_value_attributes = self.attempts.map.with_index(1).to_h { |v, i| [:"value#{i}", v] }
 
     self.assign_attributes(**packed_value_attributes)
-  end
-
-  after_save :create_or_update_attempts
-
-  def create_or_update_attempts
-    attempts = self.result_attempts_attributes(result_id: self.id)
-
-    # Delete attempts when the value was set to 0
-    zero_attempts = self.skipped_attempt_numbers
-    ResultAttempt.where(result_id: id, attempt_number: zero_attempts).delete_all if zero_attempts.any?
-
-    ResultAttempt.upsert_all(attempts)
-
-    # Force reloading the now-persisted values upon next read.
-    # Note that this is necessary because in `before_validation`, we had written non-persisted phantom data
-    #   solely for the purpose of state validation and business logic.
-    self.result_attempts.reset
   end
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
