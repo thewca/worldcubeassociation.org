@@ -409,10 +409,6 @@ class ResultsController < ApplicationController
                                           .index_by(&:id)
                                           .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cell_name id]) }
 
-          result_ids = rows.map { |r| r["id"] }.uniq
-          result_attempts = ResultAttempt.where(result_id: result_ids).group_by(&:result_id)
-          rows = rows.map { |r| r.merge({ attempts: result_attempts[r["id"]].map(&:value) }) }
-
           # Now that we've remembered all competitions, we can safely transform the rows
           rows = yield rows if block_given?
 
