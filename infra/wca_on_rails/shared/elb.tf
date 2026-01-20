@@ -106,7 +106,7 @@ resource "aws_lb" "internal" {
   internal = true
   load_balancer_type = "application"
   security_groups    = [aws_security_group.internal-lb.id]
-  subnets            = [aws_default_subnet.default_az1.id,"subnet-0349cc3938fa60ef5", aws_default_subnet.default_az3.id, aws_default_subnet.default_az4.id]
+  subnets            = [aws_default_subnet.default_az2.id, aws_subnet.private_2c.id]
   ip_address_type    = "ipv4"
   enable_deletion_protection = true
 
