@@ -12,19 +12,28 @@ import {
 } from './TableCells';
 
 function resultAttempts(result) {
-  const completedAttempts = result.attempts.filter((res) => res > 0);
-  const uncompletedAttempts = result.attempts.filter((res) => res < 0);
+  const definedAttempts = [
+    result?.value1,
+    result?.value2,
+    result?.value3,
+    result?.value4,
+    result?.value5,
+  ].filter((res) => res !== undefined);
+
+  const validAttempts = definedAttempts.filter((res) => res !== 0);
+  const completedAttempts = validAttempts.filter((res) => res > 0);
+  const uncompletedAttempts = validAttempts.filter((res) => res < 0);
 
   // DNF/DNS values are very small. If all solves were successful,
   //   then `uncompletedAttempts` is empty and the min is `undefined`,
   //   which means we fall back to the actually slowest value.
-  const worstResult = _.min(uncompletedAttempts) || _.max(result.attempts);
+  const worstResult = _.min(uncompletedAttempts) || _.max(validAttempts);
   const bestResult = _.min(completedAttempts);
 
-  const bestResultIndex = result.attempts.indexOf(bestResult);
-  const worstResultIndex = result.attempts.indexOf(worstResult);
+  const bestResultIndex = definedAttempts.indexOf(bestResult);
+  const worstResultIndex = definedAttempts.indexOf(worstResult);
 
-  return [result.attempts, bestResultIndex, worstResultIndex];
+  return [definedAttempts, bestResultIndex, worstResultIndex];
 }
 
 export const resultsFiveWideColumn = {
