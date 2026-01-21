@@ -21,11 +21,11 @@ class Api::V0::ApiController < ApplicationController
   INTERNAL_RANGES = [
     IPAddr.new('172.16.0.0/12'),
     IPAddr.new('10.0.0.0/8'),
-    IPAddr.new('192.168.0.0/16')
-  ]
+    IPAddr.new('192.168.0.0/16'),
+  ].freeze
 
-  def internal_ip?(ip)
-    INTERNAL_RANGES.any? { |range| range.include?(ip) }
+  def internal_ip?(remote_ip)
+    INTERNAL_RANGES.any? { |range| range.include?(remote_ip) }
   end
 
   def me
