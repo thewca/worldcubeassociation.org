@@ -189,6 +189,11 @@ resource "aws_ecs_service" "nextjs" {
     container_port   = 3000
   }
 
+  service_connect_configuration {
+    enabled = true
+    namespace = aws_service_discovery_private_dns_namespace.this.name
+  }
+
   network_configuration {
     security_groups = [var.shared.cluster_security.id]
     subnets         = var.shared.private_subnets[*].id
