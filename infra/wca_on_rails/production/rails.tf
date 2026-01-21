@@ -148,6 +148,7 @@ locals {
           dump_replica_host: "dev-dump-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"}))
     }
   ]
+  rails_internal_dns = "rails.local"
 }
 
 data "aws_iam_policy_document" "task_assume_role_policy" {
@@ -317,7 +318,7 @@ resource "aws_ecs_task_definition" "this" {
 }
 
 resource "aws_service_discovery_private_dns_namespace" "this" {
-  name = "rails.local"
+  name = local.rails_internal_dns
   vpc  = var.shared.vpc_id
 }
 
@@ -386,7 +387,7 @@ resource "aws_ecs_service" "this" {
       discovery_name = "rails-cluster"
       client_alias {
         port = 3000
-        dns_name = "rails.local"
+        dns_name = local.rails_internal_dns
       }
     }
   }
