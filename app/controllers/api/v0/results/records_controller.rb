@@ -10,8 +10,7 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
   GENDER_ALL = "All"
   EVENTS_ALL = "all events"
 
-  MODE_RANKINGS = "rankings"
-  MODE_RECORDS = "records"
+  MODE_RECORDS_NEXT = "next-records"
 
   def index
     # Default params
@@ -25,7 +24,7 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
 
     shared_constants_and_conditions
 
-    cache_params = ResultsController.compute_cache_key(MODE_RECORDS, **params_for_cache)
+    cache_params = ResultsController.compute_cache_key(MODE_RECORDS_NEXT, **params_for_cache)
     record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
 
     query = if @is_history
