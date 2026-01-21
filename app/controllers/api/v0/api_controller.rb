@@ -4,6 +4,7 @@ class Api::V0::ApiController < ApplicationController
   include Rails::Pagination
 
   include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
+  rate_limit to: 60, within: 1.minute, unless: -> { internal_ip?(request.remote_ip) } if Rails.env.production?
   protect_from_forgery with: :null_session
   before_action :doorkeeper_authorize!, only: [:me]
   rescue_from WcaExceptions::ApiException do |e|
@@ -16,6 +17,16 @@ class Api::V0::ApiController < ApplicationController
   end
 
   DEFAULT_API_RESULT_LIMIT = 20
+
+  INTERNAL_RANGES = [
+    IPAddr.new('172.16.0.0/12'),
+    IPAddr.new('10.0.0.0/8'),
+    IPAddr.new('192.168.0.0/16')
+  ]
+
+  def internal_ip?(ip)
+    INTERNAL_RANGES.any? { |range| range.include?(ip) }
+  end
 
   def me
     render json: { me: current_api_user }, private_attributes: doorkeeper_token.scopes
