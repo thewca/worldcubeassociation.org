@@ -1304,6 +1304,21 @@ RSpec.describe Competition do
 
       expect(comp_6.exempt_from_wca_dues?).to be false
     end
+
+    it "is false if 6th competition is happening after many years" do
+      create_list(:competition, 5, country_id: "Korea", start_date: 7.years.ago, end_date: 7.years.ago + 2.days)
+      comp_6 = create(:competition, country_id: "Korea", start_date: Date.today, end_date: Date.today + 2.days)
+
+      expect(comp_6.exempt_from_wca_dues?).to be false
+    end
+
+    it "is true for 6th competition if one of the first 5 competitions are multi-national FMC competition" do
+      create(:competition, events: [fmc], championship_types: [], country_id: "XW")
+      create_list(:competition, 4, country_id: "Korea", start_date: 2.months.ago, end_date: 2.months.ago + 2.days)
+      comp_6 = create(:competition, country_id: "Korea", start_date: Date.today, end_date: Date.today + 2.days)
+
+      expect(comp_6.exempt_from_wca_dues?).to be true
+    end
   end
 
   context "does not have guest limit" do
