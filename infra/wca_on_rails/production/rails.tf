@@ -171,6 +171,28 @@ resource "aws_iam_role_policy_attachment" "task_execution_role_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+resource "aws_iam_role" "deployment_role" {
+  name = "${var.name_prefix}-deployment-role"
+  assume_role_policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "AllowAccessToECSForInfrastructureManagement",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "ecs.amazonaws.com"
+        },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "deployment_role_attachment" {
+  role       = aws_iam_role.deployment_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonECSInfrastructureRolePolicyForLoadBalancers"
+}
+
 resource "aws_iam_role" "task_role" {
   name               = "${var.name_prefix}-task-role"
   assume_role_policy = data.aws_iam_policy_document.task_assume_role_policy.json
@@ -293,6 +315,25 @@ resource "aws_ecs_task_definition" "this" {
   }
 }
 
+resource "aws_service_discovery_private_dns_namespace" "this" {
+  name = "rails.local"
+  vpc  = var.shared.vpc_id
+}
+
+resource "aws_service_discovery_service" "this" {
+  name = "rails-cluster"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.this.id
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+}
 
 
 data "aws_ecs_task_definition" "this" {
@@ -325,9 +366,16 @@ resource "aws_ecs_service" "this" {
   }
 
   load_balancer {
-    target_group_arn = var.shared.rails-production[0].arn
+    target_group_arn = var.shared.rails-production[1].arn
     container_name   = "rails-production"
     container_port   = 3000
+
+    advanced_configuration {
+      alternate_target_group_arn = var.shared.rails-production[0].arn
+      # It's currently not possible to access the default listener of the rule like var.shared.https_listener.default_arn as per https://github.com/hashicorp/terraform-provider-aws/issues/43932
+      production_listener_rule   = "arn:aws:elasticloadbalancing:us-west-2:285938427530:listener-rule/app/wca-on-rails/396a56d00f80f390/8fb3d991e0309121/196727c3f008871e"
+      role_arn                   = aws_iam_role.deployment_role.arn
+    }
   }
 
   network_configuration {
@@ -336,7 +384,16 @@ resource "aws_ecs_service" "this" {
   }
 
   deployment_controller {
-    type = "CODE_DEPLOY"
+    type = "ECS"
+  }
+
+  deployment_configuration {
+    bake_time_in_minutes = 5
+    strategy = "BLUE_GREEN"
+  }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.this.arn
   }
 
   tags = {
@@ -347,10 +404,6 @@ resource "aws_ecs_service" "this" {
     ignore_changes = [
       # The target group changes during Blue/Green deployment
       load_balancer,
-      # The Task definition will be set by Code Deploy
-      task_definition,
-      # We set the capacity provider strategy in the buildspec
-      capacity_provider_strategy
     ]
   }
 }
