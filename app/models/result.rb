@@ -14,7 +14,7 @@ class Result < ApplicationRecord
   belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
   # See the pre-validation hook `backlink_attempts` below for an explanation of `autosave: false`
-  has_many :result_attempts, dependent: :destroy, autosave: false, index_errors: true
+  has_many :result_attempts, inverse_of: :result, dependent: :destroy, autosave: false, index_errors: true
   validates_associated :result_attempts
 
   before_validation :backlink_attempts

@@ -88,8 +88,7 @@ namespace :h2h_results do
               attempt_number: la.attempt_number,
               value: la.value,
             )
-
-            result.save!
+            result.save! # Save here so that we have a persisted result_attempt that we can point h2h_attempt to
 
             h2h_attempt = la.h2h_attempt
             h2h_attempt.update!(live_attempt: nil, result_attempt: result_attempt)

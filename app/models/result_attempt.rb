@@ -5,7 +5,7 @@ class ResultAttempt < ApplicationRecord
 
   default_scope { order(:attempt_number) }
 
-  belongs_to :result
+  belongs_to :result, inverse_of: :result_attempts
   has_one :h2h_attempt, dependent: :destroy
 
   scope :completed, -> { where.not(value: ..0) }

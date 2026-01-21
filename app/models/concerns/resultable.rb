@@ -57,17 +57,19 @@ module Resultable
       errors.add(:average, "should be #{correct_average}") if correct_average != average
     end
 
-    # validate :validate_best, if: :event
-    # def validate_best
-    #   correct_best = compute_correct_best
-    #   errors.add(:best, "should be #{correct_best}") if correct_best != best
-    # end
+    validate :validate_best, if: :event
+    def validate_best
+      correct_best = compute_correct_best
+      errors.add(:best, "should be #{correct_best}") if correct_best != best
+    end
   end
 
   def invalid_solve_count_reason
+    puts "VALIDATING solve count: attempts=#{result_attempts.inspect}"
+
     return "Invalid format" unless format
     return "Invalid round_type" unless round_type
-    # return "All solves cannot be DNS/skipped." if solve_times.all? { |s| s.dns? || s.skipped? }
+    return "All solves cannot be DNS/skipped." if solve_times.all? { |s| s.dns? || s.skipped? }
 
     return "Skipped solves must all come at the end." unless solve_times.drop_while(&:unskipped?).all?(&:skipped?)
 
@@ -75,7 +77,7 @@ module Resultable
     if round_type.combined?
       "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}." if unskipped_count > format.expected_solve_count
     elsif unskipped_count != format.expected_solve_count
-      # "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
+      "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
     end
   end
 
