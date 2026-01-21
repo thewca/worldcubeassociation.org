@@ -1,17 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V0::Results::RecordsController < Api::V0::ApiController
-  REGION_WORLD = "world"
-  YEARS_ALL = "all years"
-  SHOW_100_PERSONS = "100 persons"
-  SHOWS = ['mixed', 'slim', 'separate', 'history', 'mixed history'].freeze
-  GENDERS = %w[Male Female].freeze
-  SHOW_MIXED = "mixed"
-  GENDER_ALL = "All"
-  EVENTS_ALL = "all events"
-
-  MODE_RECORDS_NEXT = "next-records"
-
+class Api::V0::Results::RecordsController < Api::V0::Results::ResultsController
   def index
     # Default params
     params[:event_id] ||= EVENTS_ALL
