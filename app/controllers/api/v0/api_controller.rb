@@ -4,7 +4,6 @@ class Api::V0::ApiController < ApplicationController
   include Rails::Pagination
 
   include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
-  rate_limit to: 60, within: 1.minute if Rails.env.production?
   protect_from_forgery with: :null_session
   before_action :doorkeeper_authorize!, only: [:me]
   rescue_from WcaExceptions::ApiException do |e|
