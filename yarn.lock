@@ -7747,6 +7747,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash@npm:^4.17.23":
+  version: 4.17.23
+  resolution: "lodash@npm:4.17.23"
+  checksum: 10c0/1264a90469f5bb95d4739c43eb6277d15b6d9e186df4ac68c3620443160fc669e2f14c11e7d8b2ccf078b81d06147c01a8ccced9aab9f9f63d50dcf8cace6bf6
+  languageName: node
+  linkType: hard
+
 "loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
@@ -10630,7 +10637,7 @@ __metadata:
     jshint: "npm:^2.13.6"
     leaflet: "npm:^1.9.4"
     leaflet-geosearch: "npm:^4.2.2"
-    lodash: "npm:^4.17.21"
+    lodash: "npm:^4.17.23"
     luxon: "npm:^3.7.2"
     make-plural: "npm:^8.1.0"
     mini-css-extract-plugin: "npm:^2.10.0"
