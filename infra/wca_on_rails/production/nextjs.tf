@@ -39,7 +39,7 @@ locals {
     },
     {
       name  = "WCA_BACKEND_API_URL"
-      value = "https://www.worldcubeassociation.org/api/"
+      value = "http://rails.local:3000/api/"
     },
     {
       name  = "WCA_FRONTEND_API_URL"
