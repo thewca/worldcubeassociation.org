@@ -59,12 +59,16 @@ module CompetitionsHelper
 
   def winners(competition, main_event)
     top_three = competition.results.where(event: main_event).podium.order(:pos)
+    h2h_finals = top_three.first.format_id == "h"
     results_by_place = top_three.group_by(&:pos)
 
     return t('competitions.competition_info.no_winner', event_name: main_event.name) if results_by_place.blank?
 
     winners = results_by_place[1]
-    text = t('competitions.competition_info.winner', winner: people_to_sentence(winners),
+    text = h2h_finals ? t('competitions.competition_info.h2h_winner', winner: people_to_sentence(winners),
+                                                     result_sentence: pretty_print_result(winners.first),
+                                                     event_name: main_event.name)
+                       : t('competitions.competition_info.winner', winner: people_to_sentence(winners),
                                                      result_sentence: pretty_print_result(winners.first),
                                                      event_name: main_event.name)
     if results_by_place[2]

@@ -2,6 +2,7 @@
 <% hide_round = defined?(hide_round) && hide_round %>
 <% hide_pos = defined?(hide_pos) && hide_pos %>
 <% hide_name = defined?(hide_name) && hide_name %>
+<% hide_solves = defined?(hide_solves) && hide_solves %>
 
 <%= wca_table table_class: "wca-results", float_thead: false do %>
   <thead>
@@ -29,7 +30,10 @@
       <th class="regionalSingleRecord"></th>
 
       <th class="country"><%= t 'common.user.representing' %></th>
-      <th class="solves" colspan="5"><%= t 'common.solves' %></th>
+
+      <% if !hide_solves %>
+        <th class="solves" colspan="5"><%= t 'common.solves' %></th>
+      <% end %>
 
       <% # Extra column for .table-greedy-last-column %>
       <th></th>
@@ -88,7 +92,9 @@
 
         <td class="country"><%= result.country.name %></td>
 
-        <%= solve_tds_for_result(result) %>
+        <% if !hide_solves %>
+          <%= solve_tds_for_result(result) %>
+        <% end %>
 
         <% # Extra column for .table-greedy-last-column %>
         <td></td>

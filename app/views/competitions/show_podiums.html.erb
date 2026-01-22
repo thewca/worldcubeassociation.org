@@ -2,10 +2,17 @@
 
 <%= render layout: 'results_nav' do %>
   <% @competition.events_with_podium_results.each do |event, podium_results| %>
+    <% h2h_round = podium_results.first.format_id == "h" %>
+
     <h3>
       <%= anchorable event.name, "e#{event.id}" %>
     </h3>
 
-    <%= render "results_table", results: podium_results, hide_event: true, hide_round: true %>
+    <% if h2h_round %>
+      <p><i><%= I18n.t('competitions.results_table.h2h_podium_disclaimer') %></i></p>
+    <% end %>
+
+
+    <%= render "results_table", results: podium_results, hide_event: true, hide_round: true, hide_solves: h2h_round %>
   <% end %>
 <% end %>

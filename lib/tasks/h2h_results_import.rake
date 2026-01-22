@@ -27,7 +27,7 @@ namespace :h2h_results do
           lr.local_pos = final_pos
         end
 
-        result.best = value if result.best > value # If the current lr.best is slower than the time in the current row, update lr.best
+        result.update!(best: value) if result.best > value # If the current lr.best is slower than the time in the current row, update lr.best
 
         match = H2hMatch.find_or_create_by!(round_id: round_id, match_number: match_number)
         competitor = H2hMatchCompetitor.find_or_create_by!(h2h_match_id: match.id, user_id: Registration.find(registration_id).user.id)
@@ -68,7 +68,7 @@ namespace :h2h_results do
         puts "handling round: #{r.inspect}"
         r.live_results.each do |lr|
           puts "> handling live_result: #{lr.inspect}"
-          result = Result.build(
+          result = Result.new(
             average: 0,
             best: lr.best,
             competition: r.competition,
@@ -82,18 +82,26 @@ namespace :h2h_results do
             pos: lr.global_pos,
           )
 
-          lr.live_attempts.each do |la|
-            puts ">> handling live_attempt: #{la.inspect}"
-            result_attempt = result.result_attempts.build(
-              attempt_number: la.attempt_number,
-              value: la.value,
-            )
-            result.save! # Save here so that we have a persisted result_attempt that we can point h2h_attempt to
+          result_attempts = lr.live_attempts.map { ResultAttempt.new( attempt_number: it.attempt_number, value: it.value) }
 
-            h2h_attempt = la.h2h_attempt
-            h2h_attempt.update!(live_attempt: nil, result_attempt: result_attempt)
+          result.result_attempts = result_attempts # Set the in-memory attempts so that the `result` validations pass
+          result.save! # Save, but the in-memory result_attempts disappear because of `autosave: false`
+
+          # Iterate over each result_attempt and associate it with the just-created result, so that they can be saved without
+          # failing their validations which require a valid result_id
+          result_attempts.each do |ra|
+            puts ">> creating result_attempt: #{ra.inspect}"
+            ra.result = result
+            ra.save!
           end
 
+          # Now that we have saved result_attempts, we can point the h2h_attempts to those instead of live_attempts
+          lr.live_attempts.each do |la|
+            matching_result_attempt = result_attempts.find { it.attempt_number == la.attempt_number }
+            la.h2h_attempt.update!(live_attempt: nil, result_attempt: matching_result_attempt)
+          end
+
+          puts "destroying live_result #{lr.id}"
           lr.destroy!
         end
       end

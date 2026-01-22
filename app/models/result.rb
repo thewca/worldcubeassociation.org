@@ -29,6 +29,8 @@ class Result < ApplicationRecord
   #   will take care of everything. If validations fail, the values will still be in memory
   #   but won't be written to the DB, which is (surprisingly!) consistent with normal ActiveRecord properties.
   def backlink_attempts
+    return if self.result_attempts.any?
+
     memory_attempts = self.result_attempts_attributes.map do |attempt_attributes|
       attempt = self.result_attempts.find { it.attempt_number == attempt_attributes[:attempt_number] } || result_attempts.build(attempt_attributes)
 

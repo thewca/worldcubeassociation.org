@@ -65,8 +65,6 @@ module Resultable
   end
 
   def invalid_solve_count_reason
-    puts "VALIDATING solve count: attempts=#{result_attempts.inspect}"
-
     return "Invalid format" unless format
     return "Invalid round_type" unless round_type
     return "All solves cannot be DNS/skipped." if solve_times.all? { |s| s.dns? || s.skipped? }
@@ -76,7 +74,7 @@ module Resultable
     unskipped_count = solve_times.count(&:unskipped?)
     if round_type.combined?
       "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}." if unskipped_count > format.expected_solve_count
-    elsif unskipped_count != format.expected_solve_count
+    elsif unskipped_count != format.expected_solve_count && format.id != "h"
       "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
     end
   end

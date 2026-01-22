@@ -1509,6 +1509,7 @@ en:
       mean: "a mean"
       result_sentence: "with %{a_win_by_word} of %{result}"
       no_winner: The main event was %{event_name}. No winner was declared, as no competitors achieved successful results in the event.
+      h2h_winner: "%{winner} won the Head-to-Head finals of the %{event_name} event, achieving a best %{result_sentence}."
       winner: "%{winner} won %{result_sentence} in the %{event_name} event."
       first_runner_up: "%{first_runner_up} finished second (%{first_runner_up_result})"
       and: "and"
@@ -2194,6 +2195,7 @@ en:
         competitors: "Competitors"
         scrambles: "Scrambles"
     results_table:
+      h2h_podium_disclaimer: "Podium determined by a Head-to-Head finals. Full Head-to-Head results display is still under development."
       wca_profile: "WCA profile"
       event: "Event"
       round: "Round"

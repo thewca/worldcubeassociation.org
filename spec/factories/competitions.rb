@@ -433,7 +433,7 @@ FactoryBot.define do
           evaluator.rounds_per_event.times do |i|
             if evaluator.h2h_finals_event_ids.include?(ce.event_id)
               ce.rounds.create!(
-                format: ce.event.preferred_formats.first.format,
+                format: Format.find("h"),
                 number: i + 1,
                 total_number_of_rounds: evaluator.rounds_per_event,
                 scramble_set_count: evaluator.groups_per_round,
