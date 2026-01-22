@@ -17,6 +17,10 @@ namespace :h2h_results do
         registration_id     = row['registration_id'].to_i
         final_pos = row['final_position'].to_i
         value  = row['time_seconds'].sub(".", "").to_i
+        scramble_set_number = row['scramble_set_number'].to_i
+        scramble_number = row['scramble_number'].to_i
+        is_extra = row['is_extra'].to_i
+        scramble = row['scramble']
 
         # First find/create the H2H infrastructure models
         result = LiveResult.find_or_create_by!(registration_id: registration_id, round_id: round_id) do |lr|
@@ -49,6 +53,22 @@ namespace :h2h_results do
           set_attempt_number: H2hAttempt.where(h2h_set_id: set, h2h_match_competitor_id: competitor).count + 1,
         )
         puts h2h_attempt.errors unless h2h_attempt.valid?
+
+        # And finally we can save the attempt's scramble
+        scramble_set = InboxScrambleSet.find_or_create_by!(matched_round: Round.find(round_id), scramble_set_number: scramble_set_number) do |set|
+          set.competition = set.matched_round.competition
+          set.event = set.matched_round.event
+          set.round_number = set.matched_round.number
+          set.ordered_index = scramble_set_number - 1
+        end
+
+        scramble_set.inbox_scrambles.create!(
+          is_extra: is_extra,
+          matched_scramble_set: scramble_set,
+          scramble_number: scramble_number,
+          ordered_index: scramble_number - 1,
+          scramble_string: scramble,
+        )
 
       end
 
@@ -104,6 +124,25 @@ namespace :h2h_results do
           puts "destroying live_result #{lr.id}"
           lr.destroy!
         end
+
+        r.matched_scramble_sets.each do |set|
+          puts "> handling scramble set: #{set.inspect}"
+
+          set.inbox_scrambles.each do |is|
+            Scramble.create!(
+              competition: competition,
+              round: r,
+              round_type_id: r.results.first.round_type_id,
+              event_id: r.event_id,
+              group_id: scramble_set_number_to_group_code(set.scramble_set_number),
+              is_extra: is.is_extra,
+              scramble: is.scramble_string,
+              scramble_num: is.scramble_number,
+            )
+          end
+
+          set.destroy!
+        end
       end
     end
 
@@ -121,7 +160,25 @@ namespace :h2h_results do
         r.live_results.destroy_all
         r.h2h_matches.destroy_all
         r.results.destroy_all
+        r.scrambles.destroy_all
+        r.matched_scramble_sets.destroy_all
       end
     end
+  end
+
+  # Group ID's have to be letters per our validations, this converts a given group number to an alphabet-based letter code
+  def scramble_set_number_to_group_code(number)
+    result = +""
+
+    while number > 0
+      digit = number % 26
+      digit = 26 if digit == 0
+
+      result << (digit + 64).chr
+      number -= digit
+      number /= 26
+    end
+
+    result.reverse
   end
 end
