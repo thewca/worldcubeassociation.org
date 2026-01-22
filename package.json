@@ -60,7 +60,7 @@
     "js-yaml": "^4.1.1",
     "leaflet": "^1.9.4",
     "leaflet-geosearch": "^4.2.2",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "luxon": "^3.7.2",
     "make-plural": "^8.1.0",
     "mini-css-extract-plugin": "^2.10.0",
