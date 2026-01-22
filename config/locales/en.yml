@@ -2195,7 +2195,7 @@ en:
         competitors: "Competitors"
         scrambles: "Scrambles"
     results_table:
-      h2h_podium_disclaimer: "Podium determined by a Head-to-Head finals. Full Head-to-Head results display is still under development."
+      h2h_results_disclaimer: "Results determined by a Head-to-Head Finals. Only placement order and best solve are shown, as full Head-to-Head results display is still under development."
       wca_profile: "WCA profile"
       event: "Event"
       round: "Round"

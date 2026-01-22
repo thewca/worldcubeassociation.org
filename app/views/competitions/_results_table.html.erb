@@ -92,7 +92,14 @@
 
         <td class="country"><%= result.country.name %></td>
 
-        <% if !hide_solves %>
+        <% if result.format_id == 'h' %>
+          <% # 5 blank spaces as we don't display H2H results yet %>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        <% else %>
           <%= solve_tds_for_result(result) %>
         <% end %>
 

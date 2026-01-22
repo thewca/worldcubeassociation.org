@@ -1,6 +1,6 @@
 import React from 'react';
 import SingleEntryTable from '../Panel/SingleEntryTable';
-import ResultRowHeader from './ResultRowHeader';
+import { ResultRowHeader } from './ResultRowHeader';
 import ResultRow from './ResultRow';
 
 function SingleResultRow({

@@ -20,9 +20,13 @@ function RoundResultsTable({
   DataRowBody,
   adminMode,
 }) {
+
+  const isH2hRound = round.results[0].format_id === 'h'
+  console.log('round', round)
   return (
     <>
       <h2>{localizeRoundInformation(eventId, round.roundTypeId)}</h2>
+      {isH2hRound && <p><i>{I18n.t('competitions.results_table.h2h_results_disclaimer')}</i></p>}
       {adminMode && (
         <Button positive as="a" href={newEntryUrlFn(competitionId, round.id)} size="tiny">
           <Icon name="plus" />
@@ -47,6 +51,7 @@ function ResultsView({
   dataUrlFn,
   newEntryUrlFn,
   DataRowHeader,
+  H2hRowHeader,
   DataRowBody,
   adminMode,
 }) {
@@ -66,7 +71,7 @@ function ResultsView({
           eventId={eventId}
           round={round}
           newEntryUrlFn={newEntryUrlFn}
-          DataRowHeader={DataRowHeader}
+          DataRowHeader={round.results[0].format_id === "h" ? H2hRowHeader : DataRowHeader}
           DataRowBody={DataRowBody}
           adminMode={adminMode}
         />
@@ -81,6 +86,7 @@ function ViewData({
   dataUrlFn,
   newEntryUrlFn,
   DataRowHeader,
+  H2hRowHeader,
   DataRowBody,
 }) {
   const { loading, error, data } = useLoadedData(competitionApiUrl(competitionId));
@@ -131,6 +137,7 @@ function ViewData({
                 dataUrlFn={dataUrlFn}
                 newEntryUrlFn={newEntryUrlFn}
                 DataRowHeader={DataRowHeader}
+                H2hRowHeader={H2hRowHeader}
                 DataRowBody={DataRowBody}
                 adminMode={false}
               />
@@ -144,6 +151,7 @@ function ViewData({
             dataUrlFn={dataUrlFn}
             newEntryUrlFn={newEntryUrlFn}
             DataRowHeader={DataRowHeader}
+            H2hRowHeader={H2hRowHeader}
             DataRowBody={DataRowBody}
             adminMode={adminMode}
           />
