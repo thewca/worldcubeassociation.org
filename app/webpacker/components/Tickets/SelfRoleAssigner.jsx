@@ -61,8 +61,9 @@ export default function SelfRoleAssigner({ ticketId, eligibleRoles }) {
   return (
     <>
       <Message warning>
-        <Message.Header>No Active Roles</Message.Header>
-        <p>You don&apos;t have any roles currently, but you can assign a role to yourself.</p>
+        <Message.Header>No Ticket Access</Message.Header>
+        <p>You currently don&apos;t have permission to perform any actions on this ticket.</p>
+        <p>You can assign a role to yourself to gain access.</p>
         <Button primary onClick={() => setIsAssigning(true)}>
           Click here to assign a role for yourself
         </Button>
