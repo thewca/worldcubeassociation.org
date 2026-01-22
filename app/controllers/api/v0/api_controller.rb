@@ -18,6 +18,10 @@ class Api::V0::ApiController < ApplicationController
 
   DEFAULT_API_RESULT_LIMIT = 20
 
+  # AWS Internal Load Balancers make it look like their traffic originates from 127.0.0.1
+  # See the bottom of https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-connect-concepts-deploy.html#service-connect-considerations
+  INTERNAL_LOOPBACK_IP = IPAddr.new('127.0.0.1')
+
   INTERNAL_RANGES = [
     IPAddr.new('172.16.0.0/12'),
     IPAddr.new('10.0.0.0/8'),
@@ -25,7 +29,7 @@ class Api::V0::ApiController < ApplicationController
   ].freeze
 
   def internal_ip?(remote_ip)
-    INTERNAL_RANGES.any? { |range| range.include?(remote_ip) }
+    remote_ip == INTERNAL_LOOPBACK_IP || INTERNAL_RANGES.any? { |range| range.include?(remote_ip) }
   end
 
   def me
