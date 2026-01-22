@@ -162,20 +162,4 @@ Rails.configuration.to_prepare do
       end
     end
   end
-
-  # Temporary fix until https://github.com/phlegx/money-currencylayer-bank/pull/20
-  # to allow exchanging from a currency to itself
-  Money::Bank::CurrencylayerBank.class_eval do
-    # 1. Create an alias for the original method so we don't lose it
-    alias_method :original_get_rate, :get_rate
-
-    # 2. Redefine get_rate to handle the "same currency" check
-    def get_rate(from_currency, to_currency, opts = {})
-      # If source and destination are the same, return 1.0
-      return 1.0 if from_currency == to_currency
-
-      # Otherwise, call the original method (which calls the API/Cache)
-      original_get_rate(from_currency, to_currency, opts)
-    end
-  end
 end
