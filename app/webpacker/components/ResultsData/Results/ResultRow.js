@@ -18,7 +18,7 @@ function ResultRow({
   result, index, results, adminMode,
 }) {
   const isMbldEvent = MBLD_EVENTS.includes(result.event_id);
-  const isH2hResult = result.format_id === "h"
+  const isH2hResult = result.format_id === 'h';
 
   return (
     <Table.Row>
@@ -39,14 +39,16 @@ function ResultRow({
         {formatAttemptResult(result.best, result.event_id)}
       </Table.Cell>
       <Table.Cell>{result.regional_single_record}</Table.Cell>
-      {!isH2hResult &&
+      {!isH2hResult
+        && (
         <Table.Cell className={getRecordClass(result.regional_average_record)}>
           {formatAttemptResult(result.average, result.event_id)}
         </Table.Cell>
-      }
+        )}
       <Table.Cell>{result.regional_average_record}</Table.Cell>
       <Table.Cell><RegionFlag iso2={result.country_iso2} /></Table.Cell>
-      {!isH2hResult &&
+      {!isH2hResult
+        && (
         <Table.Cell
           style={{
             verticalAlign: 'middle',
@@ -55,7 +57,7 @@ function ResultRow({
         >
           {formatAttemptsForResult(result, result.event_id)}
         </Table.Cell>
-      }
+        )}
     </Table.Row>
   );
 }

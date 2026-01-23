@@ -10,6 +10,7 @@ import EventNavigation from './EventNavigation';
 import { getUrlParams, setUrlParams } from '../../lib/utils/wca';
 import { competitionApiUrl } from '../../lib/requests/routes.js.erb';
 import { localizeRoundInformation } from '../../lib/utils/wcif';
+import I18n from '../../../lib/i18n';
 
 function RoundResultsTable({
   competitionId,
@@ -21,7 +22,6 @@ function RoundResultsTable({
   adminMode,
   isH2hRound,
 }) {
-
   return (
     <>
       <h2>{localizeRoundInformation(eventId, round.roundTypeId)}</h2>
@@ -57,7 +57,7 @@ function ResultsView({
   const { loading, error, data } = useLoadedData(
     dataUrlFn(competitionId, eventId),
   );
-  const isH2hRound = data?.round?.results?.[0]?.format_id === 'h'
+  const isH2hRound = data?.round?.results?.[0]?.format_id === 'h';
 
   if (loading) return <Loading />;
   if (error) return <Errored />;

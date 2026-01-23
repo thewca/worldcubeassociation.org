@@ -10,7 +10,7 @@ RSpec.describe "import:h2h_data", type: :task do
   end
 
   let!(:competition) { create(:competition, :with_valid_schedule, h2h_finals_event_ids: ['333']) }
-  let!(:registrations) { create_list(:registration, 8, competition: competition)}
+  let!(:registrations) { create_list(:registration, 8, competition: competition) }
   let!(:round) { competition.competition_events.where(event_id: "333").first.rounds.first }
   let!(:registration_ids) { Registration.pluck(:id) }
 
@@ -174,7 +174,7 @@ RSpec.describe "import:h2h_data", type: :task do
     end
 
     it 'creates valid LiveResults' do
-      LiveResult.all.each do |lr|
+      LiveResult.find_each do |lr|
         # populates global and local pos
         expect(lr.global_pos).to be_an_integer
         expect(lr.local_pos).to be_an_integer

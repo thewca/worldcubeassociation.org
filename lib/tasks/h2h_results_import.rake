@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'csv'
 
 namespace :h2h_results do
@@ -10,13 +12,13 @@ namespace :h2h_results do
       CSV.foreach(file_path, headers: true) do |row|
         puts "considering #{row}"
 
-        round_id    = row['round_id'].to_i
+        round_id = row['round_id'].to_i
         match_number   = row['match_number'].to_i
         set_number     = row['set_number'].to_i
-        attempt_number = row['set_attempt_number'].to_i
-        registration_id     = row['registration_id'].to_i
+        row['set_attempt_number'].to_i
+        registration_id = row['registration_id'].to_i
         final_pos = row['final_position'].to_i
-        value  = row['time_seconds'].sub(".", "").to_i
+        value = row['time_seconds'].sub(".", "").to_i
         scramble_set_number = row['scramble_set_number'].to_i
         scramble_number = row['scramble_number'].to_i
         is_extra = row['is_extra'].to_i
@@ -69,7 +71,6 @@ namespace :h2h_results do
           ordered_index: scramble_number - 1,
           scramble_string: scramble,
         )
-
       end
 
       puts "Import complete!"
@@ -102,7 +103,7 @@ namespace :h2h_results do
             pos: lr.global_pos,
           )
 
-          result_attempts = lr.live_attempts.map { ResultAttempt.new( attempt_number: it.attempt_number, value: it.value) }
+          result_attempts = lr.live_attempts.map { ResultAttempt.new(attempt_number: it.attempt_number, value: it.value) }
 
           result.result_attempts = result_attempts # Set the in-memory attempts so that the `result` validations pass
           result.save! # Save, but the in-memory result_attempts disappear because of `autosave: false`
@@ -127,6 +128,21 @@ namespace :h2h_results do
 
         r.matched_scramble_sets.each do |set|
           puts "> handling scramble set: #{set.inspect}"
+
+          begin
+            result = +""
+
+            while number.positive?
+              digit = number % 26
+              digit = 26 if digit.zero?
+
+              result << (digit + 64).chr
+              number -= digit
+              number /= 26
+            end
+
+            result.reverse
+          end
 
           set.inbox_scrambles.each do |is|
             Scramble.create!(
@@ -167,18 +183,4 @@ namespace :h2h_results do
   end
 
   # Group ID's have to be letters per our validations, this converts a given group number to an alphabet-based letter code
-  def scramble_set_number_to_group_code(number)
-    result = +""
-
-    while number > 0
-      digit = number % 26
-      digit = 26 if digit == 0
-
-      result << (digit + 64).chr
-      number -= digit
-      number /= 26
-    end
-
-    result.reverse
-  end
 end
