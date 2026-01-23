@@ -49,4 +49,18 @@ class LiveAttempt < ApplicationRecord
     # Return `self` for method chaining
     self
   end
+
+  def to_wcif
+    { "result" => self.value, "reconstruction" => nil }
+  end
+
+  def self.wcif_json_schema
+    {
+      "type" => %w[object null],
+      "properties" => {
+        "result" => { "type" => "integer" },
+        "reconstruction" => { "type" => %w[string null] },
+      },
+    }
+  end
 end

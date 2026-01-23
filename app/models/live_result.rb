@@ -25,6 +25,7 @@ class LiveResult < ApplicationRecord
 
   has_one :event, through: :round
   has_one :format, through: :round
+  has_one :person, through: :registration
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[global_pos local_pos registration_id round_id best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
@@ -97,6 +98,29 @@ class LiveResult < ApplicationRecord
     ranking_columns.map do |column|
       to_solve_time(column)
     end
+  end
+
+  def to_wcif
+    {
+      "personId" => self.person_id,
+      "ranking" => self.global_pos,
+      "attempts" => self.attempts.map(&:to_wcif),
+      "best" => self.best,
+      "average" => self.average,
+    }
+  end
+
+  def self.wcif_json_schema
+    {
+      "type" => %w[object null],
+      "properties" => {
+        "personId" => { "type" => "integer" },
+        "ranking" => { "type" => %w[integer null] },
+        "attempts" => { "type" => "array", "items" => LiveAttempt.wcif_json_schema },
+        "best" => { "type" => "integer" },
+        "average" => { "type" => "integer" },
+      },
+    }
   end
 
   private
