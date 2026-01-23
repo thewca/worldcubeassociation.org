@@ -25,7 +25,6 @@ class LiveResult < ApplicationRecord
 
   has_one :event, through: :round
   has_one :format, through: :round
-  has_one :person, through: :registration
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[global_pos local_pos registration_id round_id best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
@@ -102,7 +101,7 @@ class LiveResult < ApplicationRecord
 
   def to_wcif
     {
-      "personId" => self.person_id,
+      "personId" => self.registration.registrant_id,
       "ranking" => self.global_pos,
       "attempts" => self.attempts.map(&:to_wcif),
       "best" => self.best,
