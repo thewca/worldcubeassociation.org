@@ -157,7 +157,7 @@ RSpec.describe "import:h2h_data", type: :task do
       Rake::Task["h2h_results:import"].invoke(temp_csv.path)
     end
 
-    it 'creates the expected number of model objects', :cxzz do
+    it 'creates the expected number of model objects' do
       expect(LiveResult.count).to be(8)
       expect(Result.count).to be(0)
       expect(H2hMatch.count).to be(8)
@@ -192,7 +192,7 @@ RSpec.describe "import:h2h_data", type: :task do
       Rake::Task["h2h_results:post"].invoke(competition.id)
     end
 
-    it 'creates/deletes the expected number of model objects', :cxz do
+    it 'creates/deletes the expected number of model objects' do
       expect(LiveResult.count).to be(0)
       expect(Result.count).to be(8)
       expect(H2hMatch.count).to be(8)

@@ -129,8 +129,9 @@ namespace :h2h_results do
         r.matched_scramble_sets.each do |set|
           puts "> handling scramble set: #{set.inspect}"
 
-          begin
+          group_id = begin
             result = +""
+            number = set.scramble_set_number
 
             while number.positive?
               digit = number % 26
@@ -150,7 +151,7 @@ namespace :h2h_results do
               round: r,
               round_type_id: r.results.first.round_type_id,
               event_id: r.event_id,
-              group_id: scramble_set_number_to_group_code(set.scramble_set_number),
+              group_id: group_id,
               is_extra: is.is_extra,
               scramble: is.scramble_string,
               scramble_num: is.scramble_number,

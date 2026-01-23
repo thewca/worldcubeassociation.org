@@ -10,7 +10,7 @@ import EventNavigation from './EventNavigation';
 import { getUrlParams, setUrlParams } from '../../lib/utils/wca';
 import { competitionApiUrl } from '../../lib/requests/routes.js.erb';
 import { localizeRoundInformation } from '../../lib/utils/wcif';
-import I18n from '../../../lib/i18n';
+import I18n from '../../lib/i18n';
 
 function RoundResultsTable({
   competitionId,
