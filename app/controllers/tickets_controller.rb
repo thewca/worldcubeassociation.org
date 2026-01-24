@@ -70,13 +70,14 @@ class TicketsController < ApplicationController
       end
       format.json do
         ticket = Ticket.find(params.require(:id))
+        bcc_eligible_roles = ticket.metadata.eligible_roles_for_bcc(current_user)
 
-        return head :unauthorized unless ticket.can_user_access?(current_user)
+        return head :unauthorized unless ticket.can_user_access?(current_user) || bcc_eligible_roles.any?
 
         render json: {
           ticket: ticket,
           requester_stakeholders: ticket.user_stakeholders(current_user),
-          eligible_roles_for_bcc: ticket.metadata.eligible_roles_for_bcc(current_user),
+          eligible_roles_for_bcc: bcc_eligible_roles,
         }
       end
     end
