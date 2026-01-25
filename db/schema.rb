@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_19_131442) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_25_133506) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -478,6 +478,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_19_131442) do
     t.string "person_id", limit: 10, default: "", null: false
     t.bigint "value_and_id"
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
+    t.index ["event_id", "average"], name: "mixed_records_speedup"
   end
 
   create_table "concise_single_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -491,6 +492,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_19_131442) do
     t.string "person_id", limit: 10, default: "", null: false
     t.bigint "value_and_id"
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
+    t.index ["event_id", "best"], name: "mixed_records_speedup"
   end
 
   create_table "connected_paypal_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
