@@ -1118,6 +1118,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_19_131442) do
     t.integer "round_id", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
+    t.integer "value1", default: 0, null: false
+    t.integer "value2", default: 0, null: false
+    t.integer "value3", default: 0, null: false
+    t.integer "value4", default: 0, null: false
+    t.integer "value5", default: 0, null: false
     t.index ["average", "person_name", "competition_id", "round_type_id"], name: "results_n_results_average_speedup"
     t.index ["best", "person_name", "competition_id", "round_type_id"], name: "results_n_results_single_speedup"
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
