@@ -480,6 +480,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_26_101113) do
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
     t.index ["event_id", "average"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "average"], name: "regional_records_speedup"
+    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
   end
 
   create_table "concise_single_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -495,6 +496,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_26_101113) do
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
     t.index ["event_id", "best"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "best"], name: "regional_records_speedup"
+    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
   end
 
   create_table "connected_paypal_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
