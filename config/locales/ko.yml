@@ -819,11 +819,13 @@ ko:
           일반적이지 않은 모든 사건을 보고해 주십시오. 사건에 "1."부터 번호를 매겨 다른 파견위원이 해당 번호를 언급하여 의견을
           제시할 수 있도록 하십시오. 모든 것이 일반적인 것처럼 보이더라도 최소한 가장 주목할 만한 사례만 나열하십시오. 적극적으로
           피드백을 구하고자 하는 경우 아래의 해당 박스에 체크해 주십시오.
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
-          스크램블 구역과 기록 측정 구역을 묘사하는 이미지(다른 사진 또한 환영)를 반드시 최소 %{image_count}개 이상
-          포함하여 주십시오. 한 번에 여러 파일을 선택할 수 있습니다. 다른 이미지가 충분히 업로드된 경우에만 이미지를 삭제할 수
-          있습니다(이미지를 교체하려면 먼저 새 이미지를 업로드한 다음 이전 이미지를 삭제해야 합니다).
+          이번 대회에서 사용된 스크램블 구역과 기록 측정 구역을 묘사하는 이미지(다른 사진 또한 환영)를 반드시 최소
+          %{image_count}개 이상 포함하여 주십시오. 대회 진행 도중에 촬영된 사진일수록 좋습니다. 한 번에 여러 파일을
+          선택할 수 있습니다. 다른 이미지가 충분히 업로드된 경우에만 이미지를 삭제할 수 있습니다(이미지를 교체하려면 먼저 새 이미지를
+          업로드한 다음 이전 이미지를 삭제해야 합니다). 기록 측정 구역 및 스크램블 구역의 현재 사진이 없는 경우, 그 이유를 설명해
+          주십시오.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -2054,7 +2056,7 @@ ko:
           신청자 수가 참가자 정원에 도달했지만, 귀하께서는 대기자 명단에 올랐으며 참가할 수 있는 충분한 자리가 생기면 이메일을 받게
           됩니다. 대기자 명단 %{here}에서 자신의 순번을 확인하십시오.
         #original_hash: 8f7358f
-        email_if_error: 이것이 오류라고 생각되면 이 이메일에 답장해 주시기 바랍니다.
+        email_if_error: 이것이 오류라고 생각되시면 이 이메일에 회신해 주시기 바랍니다.
       deleted:
         #original_hash: 8cbc6c0
         mail_subject: '%{comp_name}의 참가 신청이 삭제되었습니다.'
@@ -2064,13 +2066,13 @@ ko:
         email_if_error: 이것이 오류라고 생각되면 이 이메일에 답장해 주시기 바랍니다.
         causes:
           #original_hash: 978944c
-          missing_info: 필수 세부 정보를 모두 제출하지 않았습니다.
+          missing_info: 필수 정보를 모두 제출하지 않았습니다.
           #original_hash: a700652
-          incomplete: '대회 참가 신청 기준을 충족하지 못했습니다(예: 참가비 사전 지불 또는 종목 자격 충족 요건 기록 충족)'
+          incomplete: '대회 참가 신청 조건을 충족하지 못했습니다 (예: 참가비 사전 지불 또는 종목 참가 자격 요건 기록 충족).'
           #original_hash: 1e225f0
-          registrations_full: '참가자 수가 한도에 도달했으며, 더 이상 남은 자리가 없습니다'
+          registrations_full: '참가자 수가 한도에 도달했으며, 더 이상 남은 자리가 없습니다.'
           #original_hash: 238f4ff
-          multiple_registrations: 2회 이상 참가 신청하였습니다
+          multiple_registrations: 2회 이상 참가 신청하였습니다.
           #original_hash: 70b1e2c
           competition_canceled: 대회가 취소되었습니다.
       formerly_banned:
@@ -2417,6 +2419,11 @@ ko:
         connected: '연결됨, 결과가 업데이트 중입니다.'
         #original_hash: 53abaa2
         disconnected: '연결이 끊어짐, 결과가 업데이트되지 않습니다.'
+      podiums:
+        #original_hash: 02ae2bd
+        title: 입상자
+        #original_hash: d7297a7
+        undetermined: 입상자는 추후 결정됩니다
     my_competitions:
       #original_hash: 5c6d3ea
       title: 나의 대회

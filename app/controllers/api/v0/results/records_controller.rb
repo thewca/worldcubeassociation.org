@@ -1,18 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V0::Results::RecordsController < Api::V0::ApiController
-  REGION_WORLD = "world"
-  YEARS_ALL = "all years"
-  SHOW_100_PERSONS = "100 persons"
-  SHOWS = ['mixed', 'slim', 'separate', 'history', 'mixed history'].freeze
-  GENDERS = %w[Male Female].freeze
-  SHOW_MIXED = "mixed"
-  GENDER_ALL = "All"
-  EVENTS_ALL = "all events"
-
-  MODE_RANKINGS = "rankings"
-  MODE_RECORDS = "records"
-
+class Api::V0::Results::RecordsController < Api::V0::Results::ResultsController
   def index
     # Default params
     params[:event_id] ||= EVENTS_ALL
@@ -25,7 +13,7 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
 
     shared_constants_and_conditions
 
-    cache_params = ResultsController.compute_cache_key(MODE_RECORDS, **params_for_cache)
+    cache_params = ResultsController.compute_cache_key(MODE_RECORDS_NEXT, **params_for_cache)
     record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
 
     query = if @is_history

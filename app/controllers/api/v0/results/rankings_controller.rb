@@ -14,9 +14,8 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
 
     shared_constants_and_conditions
 
-    ResultsController.compute_cache_key(MODE_RECORDS, **params_for_cache)
     record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
-    cache_params = ResultsController.compute_cache_key(MODE_RANKINGS, **params_for_cache)
+    cache_params = ResultsController.compute_cache_key(MODE_RANKINGS_NEXT, **params_for_cache)
 
     is_average = params[:type] == @types[1]
     value = is_average ? "average" : "best"
