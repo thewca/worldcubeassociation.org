@@ -431,7 +431,7 @@ FactoryBot.define do
           next if ce.rounds.any?
 
           evaluator.rounds_per_event.times do |i|
-            if evaluator.h2h_finals_event_ids?.include?(ce.event_id)
+            if evaluator.h2h_finals_event_ids && evaluator.h2h_finals_event_ids.include?(ce.event_id)
               ce.rounds.create!(
                 format: Format.find("h"),
                 number: i + 1,
