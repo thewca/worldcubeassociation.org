@@ -29,4 +29,26 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     render json: final_rounds.map { |r| r.to_live_json(only_podiums: true) }
   end
+
+  def open_round
+    competition = Competition.find(params.require(:competition_id))
+
+    event_id, number = params.require(:round_id).split("-")
+
+    return render json: { status: "round not found" }, status: :not_found if event_id.nil? || number.nil?
+
+    competition_event = competition.competition_events.find_by(event_id: event_id)
+
+    round = competition.rounds.find_by!(competition_event_id: competition_event.id, number: number)
+
+    # TODO: Move these to actual error codes at one point
+    # Also think about if we should auto open all round ones at competition day start and not have this check
+    return render json: { status: "previous round has empty results" }, status: :bad_request unless round.number == 1 || round.previous_round.score_taking_done?
+
+    return render json: { status: "round already open" }, status: :bad_request if round.live_results.count > 0
+
+    round.init_round
+
+    render json: { status: "ok" }
+  end
 end
