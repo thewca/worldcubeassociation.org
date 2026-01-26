@@ -70,7 +70,7 @@ function ResultsView({
           eventId={eventId}
           round={round}
           newEntryUrlFn={newEntryUrlFn}
-          DataRowHeader={round?.results?.[0].format_id === 'h' ? H2hRowHeader : DataRowHeader }
+          DataRowHeader={round?.results?.[0].format_id === 'h' ? H2hRowHeader : DataRowHeader}
           DataRowBody={DataRowBody}
           adminMode={adminMode}
           isH2hRound={round?.results?.[0].format_id === 'h'}
