@@ -170,15 +170,27 @@ class Round < ApplicationRecord
     linked_round.present? && linked_round.first_round_in_link.id != id
   end
 
-  def accepted_registrations
+  def advancing_registrations
     if number == 1
       registrations.accepted
     elsif consider_previous_round_results?
-      linked_round.first_round_in_link.accepted_registrations
+      linked_round.first_round_in_link.advancing_registrations
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
       Registration.find(advancing)
     end
+  end
+
+  def init_round
+    empty_results = advancing_registrations.map do |r|
+      { registration_id: r.id, round_id: id }
+    end
+    LiveResult.insert_all!(empty_results)
+  end
+
+  def accepted_registrations
+    registration_ids = live_results.pluck(:registration_id)
+    Registration.find(registration_ids)
   end
 
   def total_accepted_registrations
