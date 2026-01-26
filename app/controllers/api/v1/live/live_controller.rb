@@ -45,7 +45,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     # Also think about if we should auto open all round ones at competition day start and not have this check
     return render json: { status: "previous round has empty results" }, status: :bad_request unless round.number == 1 || round.previous_round.score_taking_done?
 
-    return render json: { status: "round already open" }, status: :bad_request if round.live_results.count > 0
+    return render json: { status: "round already open" }, status: :bad_request if round.live_results.any?
 
     round.init_round
 
