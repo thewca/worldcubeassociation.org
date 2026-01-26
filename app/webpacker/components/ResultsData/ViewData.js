@@ -57,7 +57,6 @@ function ResultsView({
   const { loading, error, data } = useLoadedData(
     dataUrlFn(competitionId, eventId),
   );
-  const isH2hRound = data?.round?.results?.[0]?.format_id === 'h';
 
   if (loading) return <Loading />;
   if (error) return <Errored />;
@@ -71,10 +70,10 @@ function ResultsView({
           eventId={eventId}
           round={round}
           newEntryUrlFn={newEntryUrlFn}
-          DataRowHeader={isH2hRound ? H2hRowHeader : DataRowHeader}
+          DataRowHeader={round?.results?.[0].format_id === 'h' ? H2hRowHeader : DataRowHeader }
           DataRowBody={DataRowBody}
           adminMode={adminMode}
-          isH2hRound={isH2hRound}
+          isH2hRound={round?.results?.[0].format_id === 'h'}
         />
       ))}
     </div>
