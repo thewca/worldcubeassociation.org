@@ -23,21 +23,21 @@ namespace :live_results do
         format = round.format
         results = round_result.attempts
 
-        attempts = results.map.with_index(1) do |r, i|
-          LiveAttempt.build_with_history_entry(r.result, i, 1)
+        attempts = results.map.with_index(1) do |rr, i|
+          LiveAttempt.build_with_history_entry(rr.result, i, 1)
         end
 
         r = Result.new(
-          value1: results[0]&.result,
-          value2: results[1]&.result || 0,
-          value3: results[2]&.result || 0,
-          value4: results[3]&.result || 0,
-          value5: results[4]&.result || 0,
           event_id: event.id,
           round_type_id: round.round_type_id,
           round_id: round.id,
           format_id: format.id,
         )
+
+        r.result_attempts = results.map.with_index(1) do |rr, i|
+          ResultAttempt.new(value: rr.result, attempt_number: i)
+        end
+
 
         live_results << {
           registration_id: registrations_by_wcif_id[round_result.person_id].id,
