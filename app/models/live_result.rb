@@ -113,7 +113,7 @@ class LiveResult < ApplicationRecord
       round_results = advancement_determining_results.where.not(global_pos: nil)
       round_results.update_all(advancing: false, advancing_questionable: false)
 
-      missing_attempts = round.total_accepted_registrations - round_results.count
+      missing_attempts = round.total_competitors - round_results.count
       potential_results = Array.new(missing_attempts) { LiveResult.build(round: round) }
       results_with_potential = (round_results.to_a + potential_results).sort_by(&:potential_solve_time)
 

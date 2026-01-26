@@ -188,13 +188,13 @@ class Round < ApplicationRecord
     LiveResult.insert_all!(empty_results)
   end
 
-  def accepted_registrations
+  def competitors
     registration_ids = live_results.pluck(:registration_id)
     Registration.find(registration_ids)
   end
 
-  def total_accepted_registrations
-    accepted_registrations.count
+  def total_competitors
+    competitors.count
   end
 
   def competitors_live_results_entered
@@ -202,7 +202,7 @@ class Round < ApplicationRecord
   end
 
   def score_taking_done?
-    competitors_live_results_entered == total_accepted_registrations
+    competitors_live_results_entered == total_competitors
   end
 
   def time_limit_undefined?
@@ -294,7 +294,7 @@ class Round < ApplicationRecord
     {
       **self.to_wcif,
       "round_id" => id,
-      "competitors" => accepted_registrations.map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => it.registrant_id) },
+      "competitors" => competitors.map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => it.registrant_id) },
       "results" => only_podiums ? live_podium : live_results,
     }
   end

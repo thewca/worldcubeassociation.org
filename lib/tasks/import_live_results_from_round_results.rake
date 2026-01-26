@@ -38,7 +38,6 @@ namespace :live_results do
           ResultAttempt.new(value: rr.result, attempt_number: i)
         end
 
-
         live_results << {
           registration_id: registrations_by_wcif_id[round_result.person_id].id,
           round: round,
