@@ -44,6 +44,7 @@ class Round < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   has_many :live_results, -> { order(:global_pos) }
+  has_many :live_registrations, through: :live_results, source: :registration
   has_many :results
   has_many :scrambles
 
@@ -189,8 +190,7 @@ class Round < ApplicationRecord
   end
 
   def competitors
-    registration_ids = live_results.pluck(:registration_id)
-    Registration.find(registration_ids)
+    live_registrations
   end
 
   def total_competitors
