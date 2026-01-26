@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_19_131442) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_26_082604) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1142,7 +1142,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_19_131442) do
     t.index ["person_id"], name: "Results_fk_competitor"
     t.index ["regional_average_record", "event_id"], name: "index_Results_on_regionalAverageRecord_and_eventId"
     t.index ["regional_single_record", "event_id"], name: "index_Results_on_regionalSingleRecord_and_eventId"
-    t.index ["round_id", "person_id"], name: "results_person_uniqueness_speedup"
+    t.index ["round_id", "person_id"], name: "results_person_uniqueness_speedup", unique: true
     t.index ["round_id"], name: "index_results_on_round_id"
     t.index ["round_type_id"], name: "Results_fk_round"
   end
