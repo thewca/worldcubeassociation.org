@@ -7,13 +7,11 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     event_id, number = params.require(:round_id).split("-")
 
-    if event_id.nil? || number.nil?
-      return render json: { status: "round not found" }, status: :not_found
-    end
+    return render json: { status: "round not found" }, status: :not_found if event_id.nil? || number.nil?
 
     competition_event = competition.competition_events.find_by(event_id: event_id)
 
-    round = competition.includes(rounds: %i[live_results: %i[live_attempts round event]]).rounds.find_by(competition_event_id: competition_event.id, number: number)
+    round = competition.includes(rounds: [:'live_results:', :'%i[live_attempts', :round, :'event]']).rounds.find_by(competition_event_id: competition_event.id, number: number)
 
     render json: round.to_live_json
   end
