@@ -234,27 +234,43 @@ class Round < ApplicationRecord
   def load_live_results(results_wcif)
     live_results.destroy_all
     registrations_by_wcif_id = competition.registrations.index_by(&:registrant_id)
-    results_to_load = results_wcif.map do |result_wcif|
-      live_attempts = result_wcif["attempts"].map.with_index(1) do |rr, i|
-        LiveAttempt.build_with_history_entry(rr["result"], i, 1)
-      end
+    now = current_time_from_proper_timezone
 
+    results_to_load = results_wcif.map do |result_wcif|
       {
         registration_id: registrations_by_wcif_id[result_wcif["personId"]].id,
         round_id: self.id,
-        live_attempts: live_attempts,
-        last_attempt_entered_at: Time.now.utc,
+        last_attempt_entered_at: now,
         best: result_wcif["best"],
         average: result_wcif["average"],
         global_pos: result_wcif["ranking"],
         local_pos: result_wcif["ranking"],
+        created_at: now,
+        updated_at: now,
       }
     end
-    LiveResult.skip_callback(:create, :after, :recompute_local_pos)
-    LiveResult.skip_callback(:create, :after, :recompute_global_pos)
-    LiveResult.create(results_to_load)
-    LiveResult.set_callback(:create, :after, :recompute_local_pos)
-    LiveResult.set_callback(:create, :after, :recompute_global_pos)
+
+    LiveResult.insert_all!(results_to_load)
+
+    # Reload to get the generated IDs
+    results_by_registration_id = live_results.reload.index_by(&:registration_id)
+
+    attempts_to_load = results_wcif.flat_map do |result_wcif|
+      registration_id = registrations_by_wcif_id[result_wcif["personId"]].id
+      live_result_id = results_by_registration_id[registration_id].id
+
+      result_wcif["attempts"].map.with_index(1) do |attempt, attempt_number|
+        LiveAttempt.build_with_history_entry(attempt["result"], attempt_number, 1)
+                   .attributes
+                   .merge(
+                     live_result_id: live_result_id,
+                     created_at: now,
+                     updated_at: now,
+                   )
+      end
+    end
+
+    LiveAttempt.insert_all!(attempts_to_load) if attempts_to_load.any?
   end
 
   def self.wcif_to_round_attributes(event, wcif, round_number, total_rounds)
