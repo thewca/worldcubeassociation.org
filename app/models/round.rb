@@ -44,7 +44,7 @@ class Round < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   has_many :live_results, -> { order(:global_pos) }
-  has_many :live_registrations, through: :live_results, source: :registration
+  has_many :live_competitors, through: :live_results, source: :registration
   has_many :results
   has_many :scrambles
 
@@ -189,12 +189,8 @@ class Round < ApplicationRecord
     LiveResult.insert_all!(empty_results)
   end
 
-  def competitors
-    live_registrations
-  end
-
   def total_competitors
-    competitors.count
+    live_competitors.count
   end
 
   def competitors_live_results_entered
@@ -294,7 +290,7 @@ class Round < ApplicationRecord
     {
       **self.to_wcif,
       "round_id" => id,
-      "competitors" => competitors.map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => it.registrant_id) },
+      "competitors" => live_competitors.map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => it.registrant_id) },
       "results" => only_podiums ? live_podium : live_results,
     }
   end
