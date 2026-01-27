@@ -232,7 +232,7 @@ GEM
     devise-i18n (1.15.0)
       devise (>= 4.9.0)
       rails-i18n
-    devise-two-factor (6.3.0)
+    devise-two-factor (6.3.1)
       activesupport (>= 7.0, < 8.2)
       devise (>= 4.0, < 5.0)
       railties (>= 7.0, < 8.2)
@@ -1181,7 +1181,7 @@ CHECKSUMS
   devise (4.9.4) sha256=920042fe5e704c548aa4eb65ebdd65980b83ffae67feb32c697206bfd975a7f8
   devise-bootstrap-views (1.1.0) sha256=50a39af0656676eabea5d0eacfe74cb5016c25e20f38f333bfdac641f66d3335
   devise-i18n (1.15.0) sha256=aff406e8a2941cd1d7614643b1619031a403b2855bb6057e391d1c7c273205cd
-  devise-two-factor (6.3.0) sha256=894354ae90aeb71a459571e4db8c00455e7d68605949ad879d5f541f42f2d2b6
+  devise-two-factor (6.3.1) sha256=ac0a264499490e4a26d169acd3146a1214adc6b873fc3602752bef013eeaf957
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
   docile (1.4.0) sha256=5f1734bde23721245c20c3d723e76c104208e1aa01277a69901ce770f0ebb8d3
   domain_name (0.5.20190701) sha256=000a600454cb4a344769b2f10b531765ea7bd3a304fe47ed12e5ca1eab969851
