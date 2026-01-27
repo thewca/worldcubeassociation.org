@@ -1266,9 +1266,7 @@ class User < ApplicationRecord
       default_options[:include].push("teams")
     end
 
-    unless skip_email
-      default_options[:methods].push("email") if include_email || staff_delegate?
-    end
+    default_options[:methods].push("email") if !skip_email && (include_email || staff_delegate?)
 
     options = default_options.merge(options || {}).deep_dup
 
