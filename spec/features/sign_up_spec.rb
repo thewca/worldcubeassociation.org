@@ -15,166 +15,20 @@ RSpec.feature "Sign up" do
     page.driver.with_playwright_page { it.context.add_cookies([cookie_eu_consented]) }
   end
 
-  context 'when signing up as a returning competitor', :js do
-    it 'disables sign up button until the user selects "have competed"' do
+  context 'can sign up', :js do
+    it 'when signing up as a returning competitor' do
       visit "/users/sign_up"
-
-      expect(page).to have_css('#have-competed', visible: :hidden)
-      expect(page).to have_button("Sign up", disabled: true)
-      click_on "I have competed in a WCA competition."
-      expect(page).to have_css('#have-competed', visible: :visible)
-      expect(page).to have_button("Sign up")
-    end
-
-    it 'disables sign up button after opening and then closing "have competed"' do
-      visit "/users/sign_up"
-
-      expect(page).to have_css('#have-competed', visible: :hidden)
-      expect(page).to have_button("Sign up", disabled: true)
-      click_on "I have competed in a WCA competition."
-      expect(page).to have_css('#have-competed', visible: :visible)
-      expect(page).to have_button("Sign up", disabled: false)
-      click_on "I have competed in a WCA competition."
-      expect(page).to have_css('#have-competed', visible: :hidden)
-      expect(page).to have_button("Sign up", disabled: true)
-    end
-
-    it 'finds people by name' do
-      visit "/users/sign_up"
-
-      fill_in "Email", with: "jack@example.com"
-      fill_in "user[password]", with: "wca"
-      fill_in "user[password_confirmation]", with: "wca"
-      click_on "I have competed in a WCA competition."
-
-      # They have not selected a valid WCA ID yet, so don't show the birthdate verification
-      # field.
-      expect(page).to have_css("div.user_dob_verification", visible: :hidden)
-
-      fill_in_selectize "WCA ID", with: person.wca_id
-
-      # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
-
-      # Now that they've selected a valid WCA ID, make sure the birthdate
-      # verification field is visible.
-      expect(page).to have_css("div.user_dob_verification", visible: :visible)
-
-      delegate = person.competitions.first.delegates.first
-      choose("user_delegate_id_to_handle_wca_id_claim_#{delegate.id}")
-
-      # First, intentionally fill in the incorrect birthdate,
-      # to test out our validations.
-      fill_in("Birthdate", with: "1900-01-01").send_keys(:escape)
-      click_button "Sign up"
-
-      # Make sure we inform the user of the incorrect birthdate they just
-      # entered.
-      expect(page.find(".alert.alert-danger")).to have_content("Birthdate does not match our database.")
-      # Now enter the correct birthdate and submit the form!
-      fill_in "Birthdate", with: "1988-02-03"
-      # We also have to re-fill in the password and password confirmation
-      fill_in "user[password]", with: "wca"
-      fill_in "user[password_confirmation]", with: "wca"
-      click_button "Sign up"
-
-      u = User.find_by!(email: "jack@example.com")
-      expect(u.name).to eq person.name
-      expect(u.gender).to eq person.gender
-      expect(u.country_iso2).to eq person.country_iso2
-
-      expect(u.unconfirmed_wca_id).to eq person.wca_id
-      expect(u.delegate_id_to_handle_wca_id_claim).to eq delegate.id
-
-      expect(WcaIdClaimMailer).to receive(:notify_delegate_of_wca_id_claim).with(u).and_call_original
-      expect do
-        visit "/users/confirmation?confirmation_token=#{u.confirmation_token}"
-      end.to change(enqueued_jobs, :size).by(1)
-    end
-
-    it "remembers that they have competed before on validation error" do
-      visit "/users/sign_up"
-      click_on "I have competed in a WCA competition."
-      click_button "Sign up"
-
-      expect(page).to have_css('#have-competed', visible: :visible)
-    end
-
-    it "remembers their selected wca id on validation error" do
-      visit "/users/sign_up"
-      click_on "I have competed in a WCA competition."
-      # They have not selected a valid WCA ID yet, so don't show the birthdate verification
-      # field.
-      expect(page).to have_css("div.user_dob_verification", visible: :hidden)
-
-      fill_in_selectize "WCA ID", with: person.wca_id
-
-      # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
-
-      # Now that they've selected a valid WCA ID, make sure the birthdate
-      # verification field is visible.
-      expect(page).to have_css("div.user_dob_verification", visible: :visible)
-
-      # Submit the form without selecting a delegate.
-      click_button "Sign up"
-
-      expect(page).to have_css('#have-competed', visible: :visible)
-      expect(page).to have_css("div.user_dob_verification", visible: :visible)
-    end
-
-    it "remembers their selected wca id and custom delegate on validation error" do
-      visit "/users/sign_up"
-      click_on "I have competed in a WCA competition."
-      # They have not selected a valid WCA ID yet, so don't show the birthdate verification
-      # field.
-      expect(page).to have_css("div.user_dob_verification", visible: :hidden)
-
-      fill_in_selectize "WCA ID", with: person.wca_id
-
-      # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
-
-      # Now that they've selected a valid WCA ID, make sure the birthdate
-      # verification field is visible.
-      expect(page).to have_css("div.user_dob_verification", visible: :visible)
-
-      # Select a custom delegate.
-      selectize = page.find("#nearby-delegate-search + div.selectize-control")
-      fill_in_selectize selectize, with: custom_delegate.wca_id
-
-      click_button "Sign up"
-
-      # Verify that the custom delegate is still selected.
-      selectize_items = selectize.all(".items")
-      expect(selectize_items.length).to eq 1
-      expect(selectize_items[0].find('.name').text).to eq custom_delegate.name
-
-      expect(page).to have_css('#have-competed', visible: :visible)
-      expect(page).to have_css("div.user_dob_verification", visible: :visible)
-    end
-  end
-
-  context 'when signing up as a first time competitor', :js do
-    it 'can sign up' do
-      visit "/users/sign_up"
-
-      fill_in "Email", with: "jack@example.com"
-      fill_in "user[password]", with: "wca"
-      fill_in "user[password_confirmation]", with: "wca"
-
-      # Check that we disable the sign up button until the user selects
-      # "never competed".
-      expect(page).to have_css('#never-competed', visible: :hidden)
-      expect(page).to have_button("Sign up", disabled: true)
-      click_on "I have never competed in a WCA competition."
-      expect(page).to have_css('#never-competed', visible: :visible)
-      expect(page).to have_button("Sign up")
 
       fill_in "Full name", with: "Jack Johnson"
-      fill_in "Birthdate", with: "1975-05-18"
+      fill_in("Birthdate", with: "1975-05-18").send_keys(:escape)
       select "Male", from: "Gender"
       select "United States", from: "Representing"
+      fill_in "Email", with: "jack@example.com"
+      fill_in "user[password]", with: "wca"
+      fill_in "user[password_confirmation]", with: "wca"
+      choose "should_claim_wca_id_true"
+
+      expect(page).to have_button("Sign up")
 
       click_button "Sign up"
 
@@ -184,119 +38,26 @@ RSpec.feature "Sign up" do
       expect(u.gender).to eq "m"
     end
 
-    it 'disables sign up button after opening and then closing "never competed"' do
+    it 'when signing up as a first time competitor' do
       visit "/users/sign_up"
 
-      expect(page).to have_css('#never-competed', visible: :hidden)
-      expect(page).to have_button("Sign up", disabled: true)
-      click_on "I have never competed in a WCA competition."
-      expect(page).to have_css('#never-competed', visible: :visible)
-      expect(page).to have_button("Sign up", disabled: false)
-      click_on "I have never competed in a WCA competition."
-      expect(page).to have_css('#never-competed', visible: :hidden)
-      expect(page).to have_button("Sign up", disabled: true)
-    end
-
-    it "remembers that they have not competed before on validation error" do
-      visit "/users/sign_up"
-      click_on "I have never competed in a WCA competition."
-      click_button "Sign up"
-
-      expect(page).to have_css('#never-competed', visible: :visible)
-    end
-  end
-
-  context "changing between noobie and have competed", :js do
-    it "disables previous competitor fields when signing up as a noobie" do
-      visit "/users/sign_up"
-
+      fill_in "Full name", with: "Jack Johnson"
+      fill_in("Birthdate", with: "1975-05-18").send_keys(:escape)
+      select "Male", from: "Gender"
+      select "United States", from: "Representing"
       fill_in "Email", with: "jack@example.com"
       fill_in "user[password]", with: "wca"
       fill_in "user[password_confirmation]", with: "wca"
+      choose "should_claim_wca_id_false"
 
-      click_on "I have competed in a WCA competition."
-      fill_in_selectize "WCA ID", with: person.wca_id
+      expect(page).to have_button("Sign up")
 
-      # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
-      # Now that they've selected a valid WCA ID, make sure the birthdate
-      # verification field is visible.
-      expect(page).to have_css("div.user_dob_verification", visible: :visible)
-      delegate = person.competitions.first.delegates.first
-      choose("user_delegate_id_to_handle_wca_id_claim_#{delegate.id}")
-      # Now enter the wrong birthdate.
-      fill_in "Birthdate", with: "1900-02-03"
-
-      # We just filled some invalid information as if we were a returning competitor, but
-      # now change our minds and fill out the form as if we're a noobie. We should only show
-      # an error message about the full name.
-      click_on "I have never competed in a WCA competition."
       click_button "Sign up"
-      expect(page).to have_css(".alert.alert-danger li", count: 1)
-      expect(page.find(".user_name span.help-block")).to have_content "can't be blank"
 
-      fill_in "Full name", with: "Jackson John"
-      fill_in "user[password]", with: "wca"
-      fill_in "user[password_confirmation]", with: "wca"
-      click_button "Sign up"
+      expect(page).to have_content "A message with a confirmation link has been sent to your email address."
+
       u = User.find_by!(email: "jack@example.com")
-      expect(u.name).to eq "Jackson John"
-    end
-
-    it "disables noobie fields when signing up as a previous competitor" do
-      visit "/users/sign_up"
-
-      fill_in "Email", with: "jack@example.com"
-      fill_in "user[password]", with: "wca"
-      fill_in "user[password_confirmation]", with: "wca"
-
-      click_on "I have competed in a WCA competition."
-      click_button "Sign up"
-      expect(page).to have_css(".alert.alert-danger li", count: 3)
-      expect(page.find(".alert.alert-danger")).to have_content "Delegate id to handle wca id claim required"
-      expect(page.find(".alert.alert-danger")).to have_content "Unconfirmed WCA ID required"
-      expect(page.find(".alert.alert-danger")).to have_content "Unconfirmed WCA ID is invalid"
-    end
-  end
-
-  context "changing have competed and noobie", :js do
-    it "does not leak birthdate information" do
-      visit "/users/sign_up"
-
-      fill_in "Email", with: "jack@example.com"
-      fill_in "user[password]", with: "wca"
-      fill_in "user[password_confirmation]", with: "wca"
-
-      click_on "I have competed in a WCA competition."
-      fill_in_selectize "WCA ID", with: person.wca_id
-
-      click_button "Sign up"
-      expect(page.find_by_id('user_dob', visible: :hidden).value).to eq ""
-
-      click_on "I have never competed in a WCA competition."
-      expect(page.find_by_id('user_dob', visible: :visible).value).to eq ""
-    end
-
-    it "does not allow both panels to be open after failed submission" do
-      visit "/users/sign_up"
-
-      fill_in "Email", with: "jack@example.com"
-      fill_in "user[password]", with: "wca"
-      fill_in "user[password_confirmation]", with: "wca"
-
-      click_on "I have competed in a WCA competition."
-
-      click_button "Sign up"
-      page.find_by_id('have-competed', class: %w[collapse in]) # ensure page loads completely
-
-      expect(page).to have_css('#have-competed', visible: :visible)
-      expect(page).to have_css('#never-competed', visible: :hidden)
-      click_on "I have never competed in a WCA competition."
-      expect(page).to have_css('#have-competed', visible: :hidden)
-      expect(page).to have_css('#never-competed', visible: :visible)
-      click_on "I have competed in a WCA competition."
-      expect(page).to have_css('#have-competed', visible: :visible)
-      expect(page).to have_css('#never-competed', visible: :hidden)
+      expect(u.gender).to eq "m"
     end
   end
 
@@ -305,11 +66,14 @@ RSpec.feature "Sign up" do
       page.driver.with_playwright_page { it.context.set_extra_http_headers({ 'Accept-Language' => 'it' }) }
       visit "/users/sign_up"
 
-      fill_in "user[email]", with: "jack@example.com"
+      fill_in "Nome completo", with: "Jack Johnson"
+      fill_in("Data di nascita", with: "1975-05-18").send_keys(:escape)
+      select "Maschio", from: "Sesso"
+      select "Antigua e Barbuda", from: "Cittadinanza"
+      fill_in "Email", with: "jack@example.com"
       fill_in "user[password]", with: "wca"
       fill_in "user[password_confirmation]", with: "wca"
-      click_on "Non ho MAI partecipato a una competizione WCA."
-      fill_in "user[name]", with: "Jack Johnson"
+      choose "should_claim_wca_id_false"
 
       click_button "Registrati"
 
