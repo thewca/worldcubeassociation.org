@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_26_101113) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_27_202420) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1015,11 +1015,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_26_101113) do
     t.integer "average", default: 0, null: false
     t.integer "best", default: 0, null: false
     t.date "competition_end_date", null: false
+    t.integer "competition_year", null: false
     t.string "country_id", null: false
     t.string "event_id", null: false
+    t.string "person_id", null: false
     t.integer "result_id", null: false
     t.index ["event_id", "country_id", "average", "competition_end_date"], name: "idx_on_eventId_countryId_average_competitionEndDate_b424c59953"
     t.index ["event_id", "country_id", "best", "competition_end_date"], name: "idx_on_eventId_countryId_best_competitionEndDate_4e01b1ae38"
+    t.index ["person_id", "country_id", "event_id", "competition_year", "average", "result_id"], name: "concise_average_speedup"
+    t.index ["person_id", "country_id", "event_id", "competition_year", "best", "result_id"], name: "concise_single_speedup"
     t.index ["result_id"], name: "index_regional_records_lookup_on_resultId"
   end
 
