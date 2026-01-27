@@ -52,49 +52,83 @@ module AuxiliaryDataComputation
       DbHelper.with_temp_table(table_name) do |temp_table_name|
         ActiveRecord::Base.connection.execute <<-SQL.squish
           INSERT INTO #{temp_table_name} (person_id, event_id, best, world_rank, continent_rank, country_rank)
-          WITH current_person_data AS (
-            SELECT wca_id, country_id, continent_id
-            FROM persons
-              INNER JOIN countries ON persons.country_id = countries.id
-            WHERE sub_id = 1
+          WITH CurrentPersonStatus AS (
+            SELECT
+              p.wca_id AS person_id,
+              p.country_id AS current_country_id,
+              c.continent_id AS current_continent_id
+            FROM persons p
+            JOIN countries c ON p.country_id = c.id
+            WHERE p.sub_id = 1
           ),
-          person_stats AS (
-            SELECT r.person_id,
-                   r.event_id,
-                   r.#{field} AS value,
-                   r.id AS result_id,
-                   ROW_NUMBER() OVER (
-                     PARTITION BY r.person_id, r.event_id
-                     ORDER BY r.#{field}, r.id
-                   ) AS rn,
-                   MIN(CASE WHEN r.continent_id = p.continent_id THEN r.#{field} END)
-                     OVER (PARTITION BY r.person_id, r.event_id) AS continent_valid_best,
-                   MIN(CASE WHEN r.country_id = p.country_id THEN r.#{field} END)
-                     OVER (PARTITION BY r.person_id, r.event_id) AS country_valid_best,
-                   p.continent_id AS current_continent_id,
-                   p.country_id AS current_country_id
-            FROM #{concise_table_name} r
-              INNER JOIN current_person_data p ON r.person_id = p.wca_id
+          WorldStats AS (
+            SELECT
+              person_id,
+              event_id,
+              MIN(#{field}) AS world_best
+            FROM #{concise_table_name}
+            GROUP BY person_id, event_id
+          ),
+          WorldRanks AS (
+            SELECT
+              person_id,
+              event_id,
+              world_best,
+              RANK() OVER (PARTITION BY event_id ORDER BY world_best ASC) as world_rank
+            FROM WorldStats
+          ),
+          ContinentStats AS (
+            SELECT
+              person_id,
+              event_id,
+              continent_id,
+              MIN(#{field}) AS continent_best
+            FROM #{concise_table_name}
+            GROUP BY person_id, event_id, continent_id
+          ),
+          ContinentRanks AS (
+            SELECT
+              person_id,
+              event_id,
+              continent_id,
+              RANK() OVER (PARTITION BY continent_id, event_id ORDER BY continent_best ASC) as continent_rank
+            FROM ContinentStats
+          ),
+          CountryStats AS (
+            SELECT
+              person_id,
+              event_id,
+              country_id,
+              MIN(#{field}) AS country_best
+            FROM #{concise_table_name}
+            GROUP BY person_id, event_id, country_id
+          ),
+          CountryRanks AS (
+            SELECT
+              person_id,
+              event_id,
+              country_id,
+              RANK() OVER (PARTITION BY country_id, event_id ORDER BY country_best ASC) as country_rank
+            FROM CountryStats
           )
-          SELECT person_id,
-                 event_id,
-                 value,
-                 RANK() OVER (PARTITION BY event_id ORDER BY value) AS world_rank,
-                 IF(continent_valid_best IS NULL, 0,
-                   RANK() OVER (
-                     PARTITION BY event_id, current_continent_id
-                     ORDER BY (continent_valid_best IS NULL), continent_valid_best
-                   )
-                 ) AS continent_rank,
-                 IF(country_valid_best IS NULL, 0,
-                   RANK() OVER (
-                     PARTITION BY event_id, current_country_id
-                     ORDER BY (country_valid_best IS NULL), country_valid_best
-                   )
-                 ) AS country_rank
-          FROM person_stats
-          WHERE rn = 1
-          ORDER BY event_id, value
+          SELECT
+            wr.person_id,
+            wr.event_id,
+            wr.world_best AS best,
+            wr.world_rank,
+            COALESCE(cr.continent_rank, 0) AS continent_rank,
+            COALESCE(cnr.country_rank, 0) AS country_rank
+          FROM WorldRanks wr
+          INNER JOIN CurrentPersonStatus cps
+            ON wr.person_id = cps.person_id
+          LEFT JOIN ContinentRanks cr
+            ON wr.person_id = cr.person_id
+            AND wr.event_id = cr.event_id
+            AND cps.current_continent_id = cr.continent_id
+          LEFT JOIN CountryRanks cnr
+            ON wr.person_id = cnr.person_id
+            AND wr.event_id = cnr.event_id
+            AND cps.current_country_id = cnr.country_id
         SQL
       end
     end
