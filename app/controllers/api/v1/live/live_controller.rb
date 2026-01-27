@@ -51,6 +51,6 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     result = round.init_round
 
-    render json: { success: result.affected_rows.positive? }
+    render json: { status: "ok", added_rows: result.affected_rows }
   end
 end
