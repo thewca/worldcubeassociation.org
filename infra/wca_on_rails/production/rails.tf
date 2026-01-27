@@ -291,6 +291,7 @@ resource "aws_ecs_task_definition" "this" {
           hostPort = 3000
           containerPort = 3000
           protocol      = "tcp"
+          appProtocol = "http"
         },
       ]
       logConfiguration = {
@@ -385,6 +386,9 @@ resource "aws_ecs_service" "this" {
     service {
       port_name = "rails-port"
       discovery_name = "rails-cluster"
+      timeout {
+        per_request_timeout_seconds = 60
+      }
       client_alias {
         port = 3000
         dns_name = local.rails_internal_dns

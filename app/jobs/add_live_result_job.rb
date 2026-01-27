@@ -9,22 +9,14 @@ class AddLiveResultJob < ApplicationJob
       LiveAttempt.build_with_history_entry(r, i, entered_by)
     end
     round = Round.find(round_id)
-    event = round.event
-    format = round.format
 
-    r = Result.new(
-      event_id: event.id,
-      round_type_id: round.round_type_id,
-      round_id: round.id,
-      format_id: format.id,
-      result_attempts: results.map.with_index(1) { |r, index| ResultAttempt.new(attempt_number: index, value: r) },
-    )
+    average, best = LiveResult.compute_average_and_best(attempts, round)
 
     LiveResult.create!(registration_id: registration_id,
                        round: round,
                        live_attempts: attempts,
                        last_attempt_entered_at: Time.now.utc,
-                       best: r.compute_correct_best,
-                       average: r.compute_correct_average)
+                       best: best,
+                       average: average)
   end
 end
