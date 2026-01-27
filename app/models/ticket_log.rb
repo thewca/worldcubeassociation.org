@@ -3,7 +3,6 @@
 class TicketLog < ApplicationRecord
   enum :action_type, {
     create_ticket: "create_ticket",
-    update_status: "update_status",
     create_comment: "create_comment",
     metadata_action: "metadata_action",
   }, prefix: true

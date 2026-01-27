@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_06_131200) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_26_101113) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -480,6 +480,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_131200) do
     t.string "person_id", limit: 10, default: "", null: false
     t.bigint "value_and_id"
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
+    t.index ["event_id", "average"], name: "mixed_records_speedup"
+    t.index ["event_id", "country_id", "average"], name: "regional_records_speedup"
   end
 
   create_table "concise_single_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -493,6 +495,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_131200) do
     t.string "person_id", limit: 10, default: "", null: false
     t.bigint "value_and_id"
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
+    t.index ["event_id", "best"], name: "mixed_records_speedup"
+    t.index ["event_id", "country_id", "best"], name: "regional_records_speedup"
   end
 
   create_table "connected_paypal_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -753,8 +757,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_131200) do
     t.datetime "entered_at", null: false
     t.string "entered_by", null: false
     t.bigint "live_attempt_id", null: false
-    t.integer "result", null: false
     t.datetime "updated_at", null: false
+    t.integer "value", null: false
     t.index ["live_attempt_id"], name: "index_live_attempt_history_entries_on_live_attempt_id"
   end
 
@@ -762,8 +766,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_131200) do
     t.integer "attempt_number", null: false
     t.datetime "created_at", null: false
     t.bigint "live_result_id"
-    t.integer "result", null: false
     t.datetime "updated_at", null: false
+    t.integer "value", null: false
     t.index ["live_result_id"], name: "index_live_attempts_on_live_result_id"
   end
 
@@ -1100,7 +1104,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_131200) do
     t.datetime "updated_at", null: false
     t.integer "value", null: false
     t.index ["result_id", "attempt_number"], name: "index_result_attempts_on_result_id_and_attempt_number", unique: true
+    t.index ["result_id", "value", "attempt_number"], name: "idx_on_result_id_value_attempt_number_710cd8e85d"
     t.index ["result_id"], name: "index_result_attempts_on_result_id"
+    t.index ["value"], name: "index_result_attempts_on_value"
   end
 
   create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1123,6 +1129,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_131200) do
     t.integer "value3", default: 0, null: false
     t.integer "value4", default: 0, null: false
     t.integer "value5", default: 0, null: false
+    t.index ["average", "person_name", "competition_id", "round_type_id"], name: "results_n_results_average_speedup"
+    t.index ["best", "person_name", "competition_id", "round_type_id"], name: "results_n_results_single_speedup"
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competition_id"], name: "Results_fk_tournament"
     t.index ["country_id"], name: "_tmp_index_Results_on_countryId"

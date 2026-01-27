@@ -29,8 +29,8 @@ jobs:
           environment: production
           build_tag: ${{ env.SHORT_SHA }}
           registry: ${{ steps.login-ecr.outputs.registry }}/wca-on-rails
-        # Replace the old sidekiq image with the new one
-      - name: Deploy Sidekiq and sqs worker
+      - name: Deploy new Services
         run: |
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-prod --force-new-deployment
           aws ecs update-service --cluster wca-on-rails --service wca-on-rails-prod-auxiliary-services --force-new-deployment
           aws ecs update-service --cluster wca-on-rails --service wca-on-rails-prod-sqs-worker --force-new-deployment

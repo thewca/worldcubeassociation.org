@@ -179,6 +179,7 @@ export const subordinateDelegateClaimsUrl = `<%= CGI.unescape(Rails.application.
 export const subordinateUpcomingCompetitionsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.competitions_for_senior_path) %>`;
 export const wfcCompetitionsExportUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.wfc_competitions_export_path) %>`;
 export const generateDbTokenUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_generate_db_token_path) %>`
+export const sanityCheckResultsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.sanity_check_path) %>`
 
 export const wfcXeroUsersUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wfc_xero_users_path) %>`;
 
@@ -319,7 +320,6 @@ export const viewUrls = {
 export const actionUrls = {
   tickets: {
     show: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_path("${ticketId}", format: "json")) %>`,
-    updateStatus: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_update_status_path("${ticketId}")) %>`,
     editPersonValidators: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_edit_person_validators_path("${ticketId}")) %>`,
     addComment: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_comments_path("${ticketId}")) %>`,
     getDetailsBeforeAnonymization: (userId, wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.tickets_details_before_anonymization_path) %>?${jsonToQueryString({ userId, wcaId })}`,

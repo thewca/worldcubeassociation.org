@@ -7,10 +7,10 @@ class ResultAttempt < ApplicationRecord
 
   belongs_to :result
 
-  validates :value, presence: true
-  validates :value, numericality: { only_integer: true }
-  validates :attempt_number, numericality: { only_integer: true }
-  validates :attempt_number, uniqueness: { scope: :result_id }
+  scope :completed, -> { where.not(value: ..0) }
+
+  validates :value, presence: true, numericality: { only_integer: true }
+  validates :attempt_number, numericality: { only_integer: true }, uniqueness: { scope: :result_id }
 
   def <=>(other)
     value <=> other.value
