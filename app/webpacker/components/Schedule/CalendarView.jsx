@@ -1,7 +1,7 @@
-import luxonPlugin from '@fullcalendar/luxon3';
+import luxonPlugin, { toLuxonDateTime } from '@fullcalendar/luxon3';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { DateTime } from 'luxon';
+import { DateTime, Interval } from 'luxon';
 import React from 'react';
 import {
   earliestTimeOfDayWithBuffer,
@@ -92,10 +92,62 @@ export default function CalendarView({
         locale={calendarLocale}
         timeZone={timeZone}
         events={fcActivities}
+        // custom rendering of event content
+        eventContent={(args) => (
+          <CalendarEventView {...args} />
+        )}
       />
       {fcActivities.length === 0 && (
         <em>{I18n.t('competitions.schedule.no_activities')}</em>
       )}
     </>
   );
+}
+
+function CalendarEventView({ event, timeText, view }) {
+  const startLuxon = toLuxonDateTime(event.start, view.calendar);
+  const endLuxon = toLuxonDateTime(event.end, view.calendar);
+  const interval = Interval.fromDateTimes(startLuxon, endLuxon);
+  const lengthInMin = interval.length('minutes');
+
+  const style = getEventStyle(lengthInMin);
+
+  return (
+    <div className='fc-event-main-frame' style={style}>
+      <InnerEventContent
+        onlyOneLine={lengthInMin < 25}
+        title={event.title}
+        timeText={timeText}
+      />
+    </div>
+  );
+}
+
+function InnerEventContent({ onlyOneLine, timeText, title }) {
+  if (onlyOneLine) {
+    return (
+      <>{timeText} - {title}</>
+    );
+  } else {
+    return (
+      <>
+        <div style={{ whiteSpace: 'nowrap' }}>{timeText}</div>
+        <div>{title}</div>
+      </>
+    );
+  }
+}
+
+function getEventStyle(lengthInMin) {
+  if (lengthInMin < 15) {
+    return { overflow: 'hidden', whiteSpace: 'nowrap', lineHeight: '1.2em', fontSize: '80%' };
+  } else if (lengthInMin < 20) {
+    return { overflow: 'hidden', whiteSpace: 'nowrap', lineHeight: '1.5em' };
+  } else if (lengthInMin < 25) {
+    return { overflow: 'hidden', whiteSpace: 'nowrap' };
+  } else if (lengthInMin < 30) {
+    return { overflow: 'hidden', lineHeight: '1.4em' };
+  } else {
+    return { overflow: 'hidden' };
+  }
 }
