@@ -231,6 +231,33 @@ class Round < ApplicationRecord
     { event_id: event_id, round_number: round_number }
   end
 
+  def load_live_results(results_wcif)
+    live_results.destroy_all
+    registrations_by_wcif_id = competition.registrations.index_by(&:registrant_id)
+    results_to_load = results_wcif.map do |result_wcif|
+      r = Result.new(
+        event_id: event.id,
+        round_type_id: round.round_type_id,
+        round_id: round.id,
+        format_id: format.id,
+        )
+
+      r.result_attempts = result_wcif.map.with_index(1) do |rr, i|
+        ResultAttempt.new(value: rr["result"], attempt_number: i)
+      end
+
+      {
+        registration_id: registrations_by_wcif_id[result_wcif.person_id].id,
+        round: self,
+        live_attempts: attempts,
+        last_attempt_entered_at: Time.now.utc,
+        best: r.compute_correct_best,
+        average: r.compute_correct_average,
+      }
+    end
+    LiveResult.import(results_to_load)
+  end
+
   def self.wcif_to_round_attributes(event, wcif, round_number, total_rounds)
     {
       number: round_number,
@@ -240,7 +267,6 @@ class Round < ApplicationRecord
       cutoff: Cutoff.load(wcif["cutoff"]),
       advancement_condition: AdvancementConditions::AdvancementCondition.load(wcif["advancementCondition"]),
       scramble_set_count: wcif["scrambleSetCount"],
-      round_results: RoundResults.load(wcif["results"]),
     }
   end
 
@@ -273,7 +299,7 @@ class Round < ApplicationRecord
       "cutoff" => cutoff&.to_wcif,
       "advancementCondition" => advancement_condition&.to_wcif,
       "scrambleSetCount" => self.scramble_set_count,
-      "results" => round_results.map(&:to_wcif),
+      "results" => live_results.map(&:to_wcif),
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
