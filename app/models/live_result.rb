@@ -99,6 +99,26 @@ class LiveResult < ApplicationRecord
     end
   end
 
+  def to_inbox_result
+    attempt_values = result.attempts.map(&:value)
+    InboxResult.new({
+                      competition: competition,
+                      person_id: result.person_id,
+                      pos: result.ranking,
+                      event_id: round.event_id,
+                      round_type_id: round.round_type_id,
+                      round_id: round.id,
+                      format_id: round.format_id,
+                      best: result.best,
+                      average: result.average,
+                      value1: attempt_values[0],
+                      value2: attempt_values[1] || 0,
+                      value3: attempt_values[2] || 0,
+                      value4: attempt_values[3] || 0,
+                      value5: attempt_values[4] || 0,
+                    })
+  end
+
   def to_wcif
     {
       "personId" => self.registration.registrant_id,
