@@ -320,6 +320,7 @@ export const viewUrls = {
 export const actionUrls = {
   tickets: {
     show: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_path("${ticketId}", format: "json")) %>`,
+    createStakeholder: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_stakeholders_path("${ticketId}", format: "json")) %>`,
     editPersonValidators: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_edit_person_validators_path("${ticketId}")) %>`,
     addComment: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_comments_path("${ticketId}")) %>`,
     getDetailsBeforeAnonymization: (userId, wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.tickets_details_before_anonymization_path) %>?${jsonToQueryString({ userId, wcaId })}`,
