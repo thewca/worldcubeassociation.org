@@ -184,7 +184,7 @@ class Round < ApplicationRecord
 
   def init_round
     empty_results = advancing_registrations.map do |r|
-      { registration_id: r.id, round_id: id, average: 0, best: 0, last_attempt_entered_at: Time.now.utc }
+      { registration_id: r.id, round_id: id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
     end
     LiveResult.insert_all!(empty_results)
   end
