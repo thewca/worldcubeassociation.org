@@ -52,7 +52,7 @@ module AuxiliaryDataComputation
       DbHelper.with_temp_table(table_name) do |temp_table_name|
         ActiveRecord::Base.connection.execute <<-SQL.squish
           INSERT INTO #{temp_table_name} (person_id, event_id, best, world_rank, continent_rank, country_rank)
-          WITH CurrentPersonStatus AS (
+          WITH current_person_regions AS (
             SELECT
               p.wca_id AS person_id,
               p.country_id AS current_country_id,
@@ -61,7 +61,7 @@ module AuxiliaryDataComputation
             JOIN countries c ON p.country_id = c.id
             WHERE p.sub_id = 1
           ),
-          WorldStats AS (
+          world_stats AS (
             SELECT
               person_id,
               event_id,
@@ -69,15 +69,15 @@ module AuxiliaryDataComputation
             FROM #{concise_table_name}
             GROUP BY person_id, event_id
           ),
-          WorldRanks AS (
+          world_ranks AS (
             SELECT
               person_id,
               event_id,
               world_best,
-              RANK() OVER (PARTITION BY event_id ORDER BY world_best ASC) as world_rank
-            FROM WorldStats
+              RANK() OVER (PARTITION BY event_id ORDER BY world_best) as world_rank
+            FROM world_stats
           ),
-          ContinentStats AS (
+          continent_stats AS (
             SELECT
               person_id,
               event_id,
@@ -86,15 +86,15 @@ module AuxiliaryDataComputation
             FROM #{concise_table_name}
             GROUP BY person_id, event_id, continent_id
           ),
-          ContinentRanks AS (
+          continent_ranks AS (
             SELECT
               person_id,
               event_id,
               continent_id,
-              RANK() OVER (PARTITION BY continent_id, event_id ORDER BY continent_best ASC) as continent_rank
-            FROM ContinentStats
+              RANK() OVER (PARTITION BY continent_id, event_id ORDER BY continent_best) as continent_rank
+            FROM continent_stats
           ),
-          CountryStats AS (
+          country_stats AS (
             SELECT
               person_id,
               event_id,
@@ -103,13 +103,13 @@ module AuxiliaryDataComputation
             FROM #{concise_table_name}
             GROUP BY person_id, event_id, country_id
           ),
-          CountryRanks AS (
+          country_ranks AS (
             SELECT
               person_id,
               event_id,
               country_id,
-              RANK() OVER (PARTITION BY country_id, event_id ORDER BY country_best ASC) as country_rank
-            FROM CountryStats
+              RANK() OVER (PARTITION BY country_id, event_id ORDER BY country_best) as country_rank
+            FROM country_stats
           )
           SELECT
             wr.person_id,
@@ -118,14 +118,14 @@ module AuxiliaryDataComputation
             wr.world_rank,
             COALESCE(cr.continent_rank, 0) AS continent_rank,
             COALESCE(cnr.country_rank, 0) AS country_rank
-          FROM WorldRanks wr
-          INNER JOIN CurrentPersonStatus cps
+          FROM world_ranks wr
+          INNER JOIN current_person_regions cps
             ON wr.person_id = cps.person_id
-          LEFT JOIN ContinentRanks cr
+          LEFT JOIN continent_ranks cr
             ON wr.person_id = cr.person_id
             AND wr.event_id = cr.event_id
             AND cps.current_continent_id = cr.continent_id
-          LEFT JOIN CountryRanks cnr
+          LEFT JOIN country_ranks cnr
             ON wr.person_id = cnr.person_id
             AND wr.event_id = cnr.event_id
             AND cps.current_country_id = cnr.country_id
