@@ -69,7 +69,7 @@ class Api::V0::Results::RecordsController < Api::V0::Results::ResultsController
                 competitions.cell_name competition_name,
                 competitions.country_id competition_country_id
       FROM
-        (SELECT event_id record_event_id, MIN(value_and_id) DIV 1000000000 value
+        (SELECT event_id record_event_id, MIN(#{value}) value
           FROM concise_#{type}_results results
           #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
           WHERE 1
