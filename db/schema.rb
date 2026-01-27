@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_27_202420) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_27_205619) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -471,10 +471,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_27_202420) do
     t.integer "average", default: 0, null: false
     t.string "continent_id", limit: 50, default: "", null: false
     t.string "country_id", limit: 50, default: "", null: false
-    t.integer "day", limit: 2, default: 0, null: false, unsigned: true
     t.string "event_id", limit: 6, default: "", null: false
     t.integer "id", default: 0, null: false
-    t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.string "person_id", limit: 10, default: "", null: false
     t.bigint "value_and_id"
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
@@ -486,10 +484,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_27_202420) do
     t.integer "best", default: 0, null: false
     t.string "continent_id", limit: 50, default: "", null: false
     t.string "country_id", limit: 50, default: "", null: false
-    t.integer "day", limit: 2, default: 0, null: false, unsigned: true
     t.string "event_id", limit: 6, default: "", null: false
     t.integer "id", default: 0, null: false
-    t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.string "person_id", limit: 10, default: "", null: false
     t.bigint "value_and_id"
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true

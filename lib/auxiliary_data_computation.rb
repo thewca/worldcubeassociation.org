@@ -15,7 +15,7 @@ module AuxiliaryDataComputation
     ].each do |field, table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
         ActiveRecord::Base.connection.execute <<~SQL.squish
-          INSERT INTO #{temp_table_name} (id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, year, month, day)
+          INSERT INTO #{temp_table_name} (id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, year)
           WITH concise_agg AS (
             SELECT MIN(#{field} * 1000000000 + result_id) value_and_id
             FROM regional_records_lookup
@@ -28,15 +28,11 @@ module AuxiliaryDataComputation
             value_and_id,
             person_id,
             event_id,
-            countries.id country_id,
+            country_id,
             continent_id,
-            YEAR(start_date) year,
-            MONTH(start_date) month,
-            DAY(start_date) day
+            competition_year,
           FROM concise_agg
-            INNER JOIN results ON results.id = concise_agg.value_and_id % 1000000000
-            INNER JOIN competitions ON competitions.id = results.competition_id
-            INNER JOIN countries ON countries.id = results.country_id
+            INNER JOIN countries ON countries.id = concise_agg.country_id
         SQL
       end
     end
