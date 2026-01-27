@@ -1258,14 +1258,17 @@ class User < ApplicationRecord
     # of the freezed variables (which would leak PII)!
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
 
-    include_email, exclude_deprecated = options&.values_at(:include_email, :exclude_deprecated)
+    include_email, exclude_deprecated, skip_email = options&.values_at(:include_email, :exclude_deprecated, :skip_email)
 
     unless exclude_deprecated
       default_options[:methods].push("location", "region_id") if staff_delegate?
       default_options[:methods].push("delegate_status")
       default_options[:include].push("teams")
     end
-    default_options[:methods].push("email") if include_email || staff_delegate?
+
+    unless skip_email
+      default_options[:methods].push("email") if include_email || staff_delegate?
+    end
 
     options = default_options.merge(options || {}).deep_dup
 
