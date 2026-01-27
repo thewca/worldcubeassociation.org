@@ -246,9 +246,15 @@ class Round < ApplicationRecord
         last_attempt_entered_at: Time.now.utc,
         best: result_wcif["best"],
         average: result_wcif["average"],
+        global_pos: result_wcif["ranking"],
+        local_pos: result_wcif["ranking"],
       }
     end
+    LiveResult.skip_callback(:create, :after, :recompute_local_pos)
+    LiveResult.skip_callback(:create, :after, :recompute_global_pos)
     LiveResult.create(results_to_load)
+    LiveResult.set_callback(:create, :after, :recompute_local_pos)
+    LiveResult.set_callback(:create, :after, :recompute_global_pos)
   end
 
   def self.wcif_to_round_attributes(event, wcif, round_number, total_rounds)
