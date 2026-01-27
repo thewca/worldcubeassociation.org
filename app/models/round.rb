@@ -240,7 +240,7 @@ class Round < ApplicationRecord
         round_type_id: round.round_type_id,
         round_id: round.id,
         format_id: format.id,
-        )
+      )
 
       r.result_attempts = result_wcif.map.with_index(1) do |rr, i|
         ResultAttempt.new(value: rr["result"], attempt_number: i)
