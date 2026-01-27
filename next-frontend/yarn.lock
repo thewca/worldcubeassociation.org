@@ -5203,19 +5203,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stylistic/eslint-plugin@npm:^5.7.0":
-  version: 5.7.0
-  resolution: "@stylistic/eslint-plugin@npm:5.7.0"
+"@stylistic/eslint-plugin@npm:^5.7.1":
+  version: 5.7.1
+  resolution: "@stylistic/eslint-plugin@npm:5.7.1"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.9.1"
-    "@typescript-eslint/types": "npm:^8.52.0"
-    eslint-visitor-keys: "npm:^5.0.0"
-    espree: "npm:^11.0.0"
+    "@typescript-eslint/types": "npm:^8.53.1"
+    eslint-visitor-keys: "npm:^4.2.1"
+    espree: "npm:^10.4.0"
     estraverse: "npm:^5.3.0"
     picomatch: "npm:^4.0.3"
   peerDependencies:
     eslint: ">=9.0.0"
-  checksum: 10c0/257872abe3841466bf7c5c434d75915c44c77e6707bdca05cec463f56ec87c538489d55b0b7026ac3480baacf5d58536539a29d6c70d116af3a86cc42ee97232
+  checksum: 10c0/0f3b00162dbf3ae594b86ed468322e1e49ea8b2de1cdb95f589954457d26020ebde007da451e53c85e95108fc1d1461e0c7c355c39c7c124f71cc468dbe69104
   languageName: node
   linkType: hard
 
@@ -5909,7 +5909,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/types@npm:8.53.1, @typescript-eslint/types@npm:^8.45.0, @typescript-eslint/types@npm:^8.52.0, @typescript-eslint/types@npm:^8.53.1":
+"@typescript-eslint/types@npm:8.53.1, @typescript-eslint/types@npm:^8.45.0, @typescript-eslint/types@npm:^8.53.1":
   version: 8.53.1
   resolution: "@typescript-eslint/types@npm:8.53.1"
   checksum: 10c0/fa49f5f60de6851de45a9aff0a3ba3c4d00a0991100414e8af1a5d6f32764a48b6b7c0f65748a651f0da0e57df0745cdb8f11c590fa0fb22dd0e54e4c6b5c878
@@ -9342,13 +9342,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-visitor-keys@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "eslint-visitor-keys@npm:5.0.0"
-  checksum: 10c0/5ec68b7ae350f6e7813a9ab469f8c64e01e5a954e6e6ee6dc441cc24d315eb342e5fb81ab5fc21f352cf0125096ab4ed93ca892f602a1576ad1eedce591fe64a
-  languageName: node
-  linkType: hard
-
 "eslint@npm:^9":
   version: 9.39.2
   resolution: "eslint@npm:9.39.2"
@@ -9406,17 +9399,6 @@ __metadata:
     acorn-jsx: "npm:^5.3.2"
     eslint-visitor-keys: "npm:^4.2.1"
   checksum: 10c0/c63fe06131c26c8157b4083313cb02a9a54720a08e21543300e55288c40e06c3fc284bdecf108d3a1372c5934a0a88644c98714f38b6ae8ed272b40d9ea08d6b
-  languageName: node
-  linkType: hard
-
-"espree@npm:^11.0.0":
-  version: 11.0.0
-  resolution: "espree@npm:11.0.0"
-  dependencies:
-    acorn: "npm:^8.15.0"
-    acorn-jsx: "npm:^5.3.2"
-    eslint-visitor-keys: "npm:^5.0.0"
-  checksum: 10c0/1e07fdb2a135bb9996a4b23baad51980dde7bcdf4d7115cdec06437663790f4bbe3416eb560fc7dc7330c01a6006f789722f1e5b243208f4cb6e054efef57afd
   languageName: node
   linkType: hard
 
@@ -12623,7 +12605,7 @@ __metadata:
     "@payloadcms/storage-s3": "npm:3.72.0"
     "@rails/actioncable": "npm:^8.1.200"
     "@redocly/cli": "npm:2.14.5"
-    "@stylistic/eslint-plugin": "npm:^5.7.0"
+    "@stylistic/eslint-plugin": "npm:^5.7.1"
     "@tanstack/eslint-plugin-query": "npm:^5.91.3"
     "@tanstack/react-form": "npm:^1.27.7"
     "@tanstack/react-query": "npm:^5.90.20"

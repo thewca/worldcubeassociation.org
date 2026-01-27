@@ -68,7 +68,7 @@
     "@chakra-ui/cli": "^3.31.0",
     "@eslint/eslintrc": "^3",
     "@redocly/cli": "2.14.5",
-    "@stylistic/eslint-plugin": "^5.7.0",
+    "@stylistic/eslint-plugin": "^5.7.1",
     "@tanstack/eslint-plugin-query": "^5.91.3",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
