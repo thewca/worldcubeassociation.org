@@ -50,8 +50,8 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "round already open" }, status: :bad_request if round.live_results.any?
 
-    round.init_round
+    result = round.init_round
 
-    render json: { status: "ok" }
+    render json: { success: result.affected_rows > 0 }
   end
 end
