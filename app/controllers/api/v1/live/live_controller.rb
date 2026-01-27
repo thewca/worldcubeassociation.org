@@ -35,8 +35,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     activity_code =  ScheduleActivity.parse_activity_code(params.require(:round_id))
 
-    event_id = activity_code[:event_id]
-    number = activity_code[:round_number]
+    event_id, number = activity_code.values_at(:event_id, :round_number)
 
     return render json: { status: "round not found" }, status: :not_found if event_id.nil? || number.nil?
 
