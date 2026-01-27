@@ -235,27 +235,20 @@ class Round < ApplicationRecord
     live_results.destroy_all
     registrations_by_wcif_id = competition.registrations.index_by(&:registrant_id)
     results_to_load = results_wcif.map do |result_wcif|
-      r = Result.new(
-        event_id: event.id,
-        round_type_id: round.round_type_id,
-        round_id: round.id,
-        format_id: format.id,
-      )
-
-      r.result_attempts = result_wcif.map.with_index(1) do |rr, i|
-        ResultAttempt.new(value: rr["result"], attempt_number: i)
+      live_attempts = result_wcif["attempts"].map.with_index(1) do |rr, i|
+        LiveAttempt.build_with_history_entry(rr["result"], i, 1)
       end
 
       {
-        registration_id: registrations_by_wcif_id[result_wcif.person_id].id,
-        round: self,
-        live_attempts: attempts,
+        registration_id: registrations_by_wcif_id[result_wcif["personId"]].id,
+        round_id: self.id,
+        live_attempts: live_attempts,
         last_attempt_entered_at: Time.now.utc,
-        best: r.compute_correct_best,
-        average: r.compute_correct_average,
+        best: result_wcif["best"],
+        average: result_wcif["average"],
       }
     end
-    LiveResult.import(results_to_load)
+    LiveResult.create(results_to_load)
   end
 
   def self.wcif_to_round_attributes(event, wcif, round_number, total_rounds)
