@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module AuxiliaryDataComputation
-  def self.compute_everything
-    self.insert_regional_records_lookup
+  def self.compute_everything(competition_id = nil)
+    self.insert_regional_records_lookup(competition_id)
     self.compute_concise_results
     self.compute_rank_tables
   end
@@ -24,15 +24,16 @@ module AuxiliaryDataComputation
           )
           SELECT
             results.id,
-            #{field},
-            value_and_id,
-            person_id,
-            event_id,
-            country_id,
-            continent_id,
-            competition_year,
+            results.#{field},
+            concise_agg.value_and_id,
+            results.person_id,
+            results.event_id,
+            results.country_id,
+            countries.continent_id,
+            2000 competition_year
           FROM concise_agg
-            INNER JOIN countries ON countries.id = concise_agg.country_id
+            INNER JOIN results ON results.id = (value_and_id % 1000000000)
+            INNER JOIN countries ON countries.id = results.country_id
         SQL
       end
     end
@@ -99,9 +100,9 @@ module AuxiliaryDataComputation
     end
   end
 
-  def self.insert_regional_records_lookup
+  def self.insert_regional_records_lookup(competition_id = nil)
     DbHelper.with_temp_table("regional_records_lookup") do |temp_table_name|
-      CheckRegionalRecords.add_to_lookup_table(table_name: temp_table_name)
+      CheckRegionalRecords.add_to_lookup_table(competition_id, table_name: temp_table_name)
     end
   end
 end
