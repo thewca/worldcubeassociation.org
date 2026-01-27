@@ -278,9 +278,9 @@ class TicketsController < ApplicationController
     edit_params = @ticket.metadata.tickets_edit_person_fields.to_h do |edit_person_field|
       # Temporary hack till we migrate to using country_iso2 everywhere
       if edit_person_field.field_name == TicketsEditPersonField.field_names[:country_iso2]
-        ['country_id', Country.c_find_by_iso2(edit_person_field.new_value).id]
+        [:country_id, Country.c_find_by_iso2(edit_person_field.new_value).id]
       else
-        [edit_person_field.field_name, edit_person_field.new_value]
+        [edit_person_field.field_name.to_sym, edit_person_field.new_value]
       end
     end
 
