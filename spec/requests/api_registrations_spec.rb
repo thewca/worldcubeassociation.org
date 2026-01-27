@@ -471,14 +471,15 @@ RSpec.describe 'API Registrations' do
       expect(response).to have_http_status(:unauthorized)
     end
 
-    it 'user cant update registration if registration edits arent allowed' do
+    it 'user cant update accepted registration if registration edits arent allowed' do
       edits_not_allowed = create(:competition, :registration_open)
-      registration = create(:registration, competition: edits_not_allowed)
+      registration = create(:registration, :accepted, competition: edits_not_allowed)
 
       update_request = build(
         :update_request,
         competition_id: registration.competition_id,
         user_id: registration.user_id,
+        competing: { 'event_ids' => ['333'] },
       )
       api_sign_in_as(registration.user)
 
@@ -490,6 +491,23 @@ RSpec.describe 'API Registrations' do
 
       expect(response.body).to eq(error_json)
       expect(response).to have_http_status(:forbidden)
+    end
+
+    it 'user may update non-accepted registration even when allow_registration_edits is false' do
+      edits_not_allowed = create(:competition, :registration_open)
+      registration = create(:registration, competition: edits_not_allowed)
+
+      update_request = build(
+        :update_request,
+        competition_id: registration.competition_id,
+        user_id: registration.user_id,
+        competing: { 'event_ids' => ['333'] },
+      )
+
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registration_path(registration), params: update_request, headers: headers
+      expect(response).to be_successful
     end
 
     it 'user cant change events after comp has started' do

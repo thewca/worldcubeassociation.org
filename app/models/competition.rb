@@ -1201,11 +1201,14 @@ class Competition < ApplicationRecord
     start_date.present? && start_date > Date.new(2021, 6, 24)
   end
 
+  def cannot_edit_accepted_registrations?
+    !self.allow_registration_edits?
+  end
+
   # can registration edits be done right now
   # must be allowed in general, and if the deadline field exists, is it a date and in the future
   def registration_edits_currently_permitted?
-    !started? && self.allow_registration_edits &&
-      (!event_change_deadline_date_required? || event_change_deadline_date.blank? || event_change_deadline_date > DateTime.now)
+    !started? && (!event_change_deadline_date_required? || event_change_deadline_date.blank? || event_change_deadline_date > DateTime.now)
   end
 
   private def dates_must_be_valid
