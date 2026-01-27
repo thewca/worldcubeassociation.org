@@ -1,9 +1,9 @@
 type: object
 required:
-  - result
+  - value
   - attempt_number
 properties:
-  result:
+  value:
     type: integer
   attempt_number:
     type: integer

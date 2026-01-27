@@ -1,0 +1,17 @@
+type: object
+required:
+  - error
+  - data
+properties:
+  error:
+    type: string
+  data:
+    type: object
+    required:
+      - model
+      - id
+    properties:
+      model:
+        type: string
+      id:
+        type: string

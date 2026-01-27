@@ -26,6 +26,7 @@ class Api::V0::Wrt::PersonsController < Api::V0::ApiController
     wca_id = params.require(:id)
     person = Person.current.find_by(wca_id: wca_id)
     person_params = params.require(:person)
+    change_type = params.require(:method)
 
     if person.nil?
       render status: :unprocessable_content, json: { error: "Person with WCA ID #{wca_id} not found." }
@@ -33,22 +34,9 @@ class Api::V0::Wrt::PersonsController < Api::V0::ApiController
     end
 
     edit_params = edit_params_from_person_params(person_params)
+    person.execute_edit_person_request(change_type, edit_params)
 
-    if params[:method] == "fix"
-      if person.update(edit_params)
-        render status: :ok, json: { success: "Successfully fixed #{person.name}." }
-      else
-        render status: :unprocessable_content, json: { error: "Error while fixing #{person.name}." }
-      end
-    elsif params[:method] == "update"
-      if person.update_using_sub_id(edit_params)
-        render status: :ok, json: { success: "Successfully updated #{person.name}." }
-      else
-        render status: :unprocessable_content, json: { error: "Error while updating #{person.name}." }
-      end
-    else
-      render status: :unprocessable_content, json: { error: "Unknown method #{params[:method]}." }
-    end
+    render status: :ok, json: { success: true }
   end
 
   def destroy

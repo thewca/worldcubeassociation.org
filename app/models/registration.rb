@@ -66,7 +66,8 @@ class Registration < ApplicationRecord
   before_create :ensure_registrant_id
 
   private def ensure_registrant_id
-    self.registrant_id ||= competition.registrations.count + 1
+    max_registrant_id = competition.registrations.maximum(:registrant_id) || 0
+    self.registrant_id ||= max_registrant_id + 1
   end
 
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
@@ -215,7 +216,8 @@ class Registration < ApplicationRecord
     amount_lowest_denomination,
     currency_code,
     receipt,
-    user_id
+    user_id,
+    paid_at: nil
   )
     add_history_entry({ payment_status: receipt.determine_wca_status, iso_amount: amount_lowest_denomination }, "user", user_id, 'Payment')
     registration_payments.create!(
@@ -223,6 +225,7 @@ class Registration < ApplicationRecord
       currency_code: currency_code,
       receipt: receipt,
       user_id: user_id,
+      paid_at: paid_at,
     )
   end
 

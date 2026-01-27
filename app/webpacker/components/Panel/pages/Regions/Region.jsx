@@ -22,14 +22,12 @@ export default function Region({ group }) {
       {subregions.map((subregion) => (
         <Subregion
           key={subregion.id}
-          title={subregion.name}
-          groupId={subregion.id}
+          group={subregion}
         />
       ))}
       <Subregion
         key="no-subregion"
-        title="No subregion"
-        groupId={group.id}
+        group={group}
       />
     </>
   );

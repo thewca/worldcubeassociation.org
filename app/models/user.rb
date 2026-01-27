@@ -630,6 +630,7 @@ class User < ApplicationRecord
       regionsAdmin
       downloadVoters
       generateDbToken
+      sanityCheckResults
       approveAvatars
       editPersonRequests
       anonymizationScript
@@ -700,6 +701,7 @@ class User < ApplicationRecord
           panel_pages[:computeAuxiliaryData],
           panel_pages[:generateDataExports],
           panel_pages[:fixResults],
+          panel_pages[:sanityCheckResults],
           panel_pages[:mergeProfiles],
           panel_pages[:mergeUsers],
           panel_pages[:helpfulQueries],

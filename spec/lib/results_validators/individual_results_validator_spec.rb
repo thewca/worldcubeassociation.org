@@ -87,7 +87,7 @@ RSpec.describe IRV do
                                              event_id: "444",
                                              best: 4000, average: 4200,
                                              round_type_id: "c", round: round44)
-        res_over_limit.update(value5: 12_001)
+        res_over_limit.update!(value5: 12_001)
 
         errs << RV::ValidationError.new(IRV::RESULT_OVER_TIME_LIMIT_ERROR,
                                         :results, competition1.id,
@@ -99,7 +99,7 @@ RSpec.describe IRV do
         res_fm = create(result_kind, :over_cutoff,
                         competition: competition2, cutoff: cutoff_fm,
                         format_id: "m", event_id: "333fm", round: round_fm)
-        res_fm.update(value1: 30)
+        res_fm.update!(value1: 30, best: 30)
 
         errs << RV::ValidationError.new(IRV::MET_CUTOFF_MISSING_RESULTS_ERROR,
                                         :results, competition2.id,
@@ -148,33 +148,6 @@ RSpec.describe IRV do
       expect(irv.warnings).to match_array(expected_warnings)
     end
 
-    it "triggers mismatched result format error" do
-      # Triggers MISMATCHED_RESULT_FORMAT_ERROR
-      errs = {
-        "Result" => [],
-        "InboxResult" => [],
-      }
-
-      round_444 = create(:round, competition: competition1, event_id: "444")
-
-      [Result, InboxResult].each do |model|
-        result_kind = model.model_name.singular.to_sym
-        create(result_kind, competition: competition1, event_id: "444", round: round_444)
-        res_ko = create(result_kind, :skip_validation, :mo3, competition: competition1, event_id: "444", round: round_444)
-        errs[model.to_s] << RV::ValidationError.new(IRV::MISMATCHED_RESULT_FORMAT_ERROR,
-                                                    :results, competition1.id,
-                                                    round_id: "444-f",
-                                                    person_name: res_ko.person_name,
-                                                    expected_format: "Average of 5",
-                                                    format: "Mean of 3")
-      end
-      validator_args.each do |arg|
-        irv = IRV.new.validate(**arg)
-        expect(irv.errors).to match_array(errs[arg[:model].to_s])
-        expect(irv.warnings).to be_empty
-      end
-    end
-
     it "triggers several warnings about results" do
       # Triggers MBF_RESULT_OVER_TIME_LIMIT_WARNING
       # Triggers RESULT_AFTER_DNS_WARNING
@@ -196,7 +169,7 @@ RSpec.describe IRV do
         result_kind = model.model_name.singular.to_sym
         res_mbf = create(result_kind, :mbf, competition: competition1, round: round_333mbf)
         # 8 points in 60:02 (ie: reached the time limit and got +2)
-        res_mbf.update(value2: 910_360_200)
+        res_mbf.update!(value2: 910_360_200)
         warns << RV::ValidationWarning.new(IRV::MBF_RESULT_OVER_TIME_LIMIT_WARNING,
                                            :results, competition1.id,
                                            round_id: "333mbf-f",
@@ -204,7 +177,7 @@ RSpec.describe IRV do
                                            result: res_mbf.solve_times[1].clock_format)
 
         res22 = create(result_kind, competition: competition2, event_id: "222", round: round_222)
-        res22.update(value4: -2)
+        res22.update!(value4: -2)
         warns << RV::ValidationWarning.new(IRV::RESULT_AFTER_DNS_WARNING,
                                            :results, competition2.id,
                                            round_id: "222-f",

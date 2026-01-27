@@ -258,7 +258,7 @@ class Competition < ApplicationRecord
   # where we legitimately don't know whether or not they used qualification times so we have to set them to NULL.
   validates :qualification_results_reason, presence: true, if: :persisted_uses_qualification?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
-  validates :main_event_id, inclusion: { in: ->(comp) { [nil].concat(comp.persisted_events_id) } }
+  validates :main_event_id, inclusion: { in: :persisted_events_id, allow_nil: true }
 
   # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
   validates :name, length: { maximum: MAX_NAME_LENGTH }
@@ -301,6 +301,18 @@ class Competition < ApplicationRecord
   def persisted_uses_qualification?
     with_old_id do
       self.uses_qualification?
+    end
+  end
+
+  def persisted_staff_delegate_ids
+    with_old_id do
+      self.staff_delegate_ids
+    end
+  end
+
+  def persisted_organizer_ids
+    with_old_id do
+      self.organizer_ids
     end
   end
 
@@ -501,12 +513,12 @@ class Competition < ApplicationRecord
 
   validate :must_have_at_least_one_delegate, if: :confirmed_or_visible?
   def must_have_at_least_one_delegate
-    errors.add(:staff_delegate_ids, I18n.t('competitions.errors.must_contain_delegate')) if staff_delegate_ids.empty?
+    errors.add(:staff_delegate_ids, I18n.t('competitions.errors.must_contain_delegate')) if persisted_staff_delegate_ids.empty?
   end
 
   validate :must_have_at_least_one_organizer, if: :confirmed_or_visible?
   def must_have_at_least_one_organizer
-    errors.add(:organizer_ids, I18n.t('competitions.errors.must_contain_organizer')) if organizer_ids.empty?
+    errors.add(:organizer_ids, I18n.t('competitions.errors.must_contain_organizer')) if persisted_organizer_ids.empty?
   end
 
   def confirmed_or_visible?
@@ -1485,16 +1497,16 @@ class Competition < ApplicationRecord
   end
 
   def events_with_podium_results
-    results.podium.order(:pos).group_by(&:event)
+    results.includes(:result_attempts).podium.order(:pos).group_by(&:event)
            .sort_by { |event, _results| event.rank }
   end
 
   def winning_results
-    results.winners
+    results.includes(:result_attempts).winners
   end
 
   def person_ids_with_results
-    results.group_by(&:person_id)
+    results.includes(:result_attempts).group_by(&:person_id)
            .sort_by { |_person_id, results| results.first.person_name }
            .map do |person_id, results|
       results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }

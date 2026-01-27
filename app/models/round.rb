@@ -343,14 +343,18 @@ class Round < ApplicationRecord
   end
 
   def wcif_id
-    "#{event.id}-r#{self.number}"
+    "#{self.event_id}-r#{self.number}"
+  end
+
+  def human_id
+    "#{self.event_id}-#{self.round_type_id}"
   end
 
   def to_string_map(short: false)
     {
       wcif_id: wcif_id,
       name: name,
-      event_id: event.id,
+      event_id: event_id,
       cumulative_round_ids: time_limit.cumulative_round_ids,
       format_name: full_format_name(with_short_names: true),
       time_limit: time_limit_to_s,

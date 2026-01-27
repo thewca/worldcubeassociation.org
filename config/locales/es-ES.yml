@@ -873,14 +873,17 @@ es-ES:
           a ellos por su número. Si todos los incidentes han sido genéricos,
           enumera al menos los casos más notorios. Marca las casillas apropiadas
           si deseas retroalimentación.
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
           Tienes que incluir al menos %{image_count} imágenes que muestren las
-          zonas de mezclas y de competición (también se aceptan otras imágenes).
-          Puedes seleccionar varios archivos a la vez. Puedes eliminar imágenes
-          solo cuando suficientes otras imágenes se hayan subido (si quieres
-          reemplazar una imagen, necesitas subir la nueva primero y luego
-          eliminar la antigua).
+          zonas de mezclas y de competición de la competición actual,
+          preferiblemente durante la competición (también se aceptan otras
+          imágenes). Puedes seleccionar varios archivos a la vez. Puedes
+          eliminar imágenes solo cuando suficientes otras imágenes se hayan
+          subido (si quieres reemplazar una imagen, necesitas subir la nueva
+          primero y luego eliminar la antigua). Si no dispones de fotografías
+          actuales de la zona de competición y/o de la zona de mezclas mientras
+          se utilizan, explica por qué.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1026,6 +1029,15 @@ es-ES:
         #original_hash: 79ccfe2
         dob_invalid: no tiene el formato correcto
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: Ha ocurrido un error renderizando la página
+      #original_hash: 22dfe12
+      description: >-
+        Si este error persiste, informa sobre ello al WST con los detalles que
+        se indican a continuación
+      #original_hash: 20be860
+      details: Detalles del error
     messages:
       #original_hash: dc2367c
       wrong_size: 'no tiene el tamaño correcto (debería ser %{file_size})'
@@ -2703,6 +2715,8 @@ es-ES:
           La fecha de nacimiento tiene que estar en formato YY-mm-dd
           (año-mes-día, por ejemplo 1944-07-13). Se han encontrado las
           siguientes fechas que no pueden ser procesadas: %{raw_dobs}.
+        #original_hash: 6d8e34b
+        empty_file: El archivo está vacío.
     add:
       #original_hash: 975275e
       title: 'Añadir registros para %{comp}'
@@ -2875,6 +2889,11 @@ es-ES:
         connected: 'Conectado, los resultados se están actualizando'
         #original_hash: 53abaa2
         disconnected: 'Conexión perdida, los resultados no se están actualizando'
+      podiums:
+        #original_hash: 02ae2bd
+        title: Podios
+        #original_hash: d7297a7
+        undetermined: Podios por determinar
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mis competiciones
@@ -6298,6 +6317,12 @@ es-ES:
     results_export:
       #original_hash: 15d00e1
       heading: Exportación de los Resultados de la WCA
+      #original_hash: 733df42
+      deprecation_warning: >-
+        AVISO DE DISCONTINUACIÓN: La Versión %{old_version} de la Exportación de
+        los Resultados ha quedado obsoleta y su soporte técnico se interrumpirá
+        a partir del %{deprecation_date}. Por favor, cambia a la Versión
+        %{new_version} antes de esa fecha.
       #original_hash: f9fe9df
       description: >-
         En esta página ofrecemos los resultados de la WCA para descarga en
@@ -6307,6 +6332,12 @@ es-ES:
         comprobar si tienes ya la versión más reciente.
       #original_hash: 4f59283
       permalink: Enlace permanente
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        Nota: Los enlaces permanentes proporcionan la última exportación de
+        resultados dentro de una versión determinada, es decir, el enlace
+        permanente v2 devolverá la última exportación v2, pero permanecerá en v2
+        incluso cuando se lance la v3.
       file_formats:
         #original_hash: b086d79
         sql: 'Sentencias SQL, para importar en bases de datos SQL.'
@@ -6465,10 +6496,6 @@ es-ES:
         de la fase de corte. Por favor, edita los resultados para incluir el o
         los intentos faltantes, o actualiza la información de la ronda en la
         página Administrar categorías de la competición.
-      #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] Los resultados de %{person_name} tienen el formato
-        incorrecto: se esperó %{expected_format} pero se encontró %{format}.
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Al menos un resultado de %{person_name} excede el tiempo
@@ -6478,12 +6505,6 @@ es-ES:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] La suma de resultados de %{person_name} excede el límite
         acumulativo, que era %{time_limit}.
-      #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] No hay información sobre el corte y tiempo límite para
-        esta ronda. Se han omitido estos validadores. Por favor, actualiza la
-        información de la ronda en la página Administrar categorías de la
-        competición.
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] El tiempo límite de esta ronda es indefinido, se han
@@ -6515,11 +6536,6 @@ es-ES:
         condición de avance (%{actual} en vez de %{expected}), a condición era:
         %{condition}. Por favor, actualiza la información de la ronda en la
         página Administrar categorías.
-      #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        La ronda %{round_id} está presente en los resultados pero no se
-        encuentra en la pestaña de de categorías. Por favor, incluye la
-        información de la ronda en la página Administrar categorías.
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         La ronda %{round_id} tiene 99 competidores o menos, pero tiene más de
@@ -6569,12 +6585,6 @@ es-ES:
         No hay resultados para la ronda %{round_id} pero está listada en la
         pestaña de categorías. Si esta ronda no se celebró, por favor elimínala
         en la página Administrar categorías de la competición.
-      #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        No se anunció ningún corte para "%{round_name}", pero se detectó como
-        una ronda con corte en los resultados. Por favor, actualiza la
-        información de la ronda en la página Administrar categorías de la
-        competición.
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -6590,12 +6600,6 @@ es-ES:
       no_main_event_warning: >-
         No hay categoría principal seleccionada para esta competición. Por
         favor, indica al WRT que esto es correcto.
-      #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        Se encontraron resultados para %{event_id}, pero no está listada como
-        categoría oficial. Por favor, elimina la categoría de los resultados o
-        ponte en contacto con el WCAT para pedir añadirlo a página web de la
-        WCA.
       #original_hash: fde208d
       missing_results_warning: >-
         No hay resultados para %{event_id} pero está listada como categoría
@@ -6611,10 +6615,6 @@ es-ES:
       missing_scrambles_for_competition_error: >-
         Faltan las mezclas de la competición. Utiliza Scrambles Matcher para
         añadir las mezclas.
-      #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Demasiadas mezclas. Utiliza Scrambles Matcher para
-        eliminar las mezclas que no se utilizaron.
       #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] Grupo %{group_id}: faltan las mezclas, se detectaron

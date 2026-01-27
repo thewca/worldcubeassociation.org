@@ -6,6 +6,7 @@ class Person < ApplicationRecord
 
   has_one :user, primary_key: "wca_id", foreign_key: "wca_id"
   has_many :results, primary_key: "wca_id"
+  has_many :result_attempts, through: :results
   has_many :competitions, -> { distinct }, through: :results
   has_many :ranks_average, primary_key: "wca_id", class_name: "RanksAverage"
   has_many :ranks_single, primary_key: "wca_id", class_name: "RanksSingle"
@@ -247,7 +248,7 @@ class Person < ApplicationRecord
   end
 
   def completed_solves_count
-    results.pluck("value1, value2, value3, value4, value5").flatten.count(&:positive?)
+    result_attempts.completed.count
   end
 
   def gender_visible?
@@ -360,6 +361,16 @@ class Person < ApplicationRecord
     )
 
     new_wca_id
+  end
+
+  def execute_edit_person_request(change_type, edit_params)
+    if change_type == "fix"
+      update!(edit_params)
+    elsif change_type == "update"
+      update_using_sub_id!(edit_params)
+    else
+      raise "Unknown change_type #{change_type}"
+    end
   end
 
   def private_attributes_for_user(user)

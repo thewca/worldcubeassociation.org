@@ -77,6 +77,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/podiums": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets Information about the Podiums of the Live Results */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Returns podiums with round information */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["LiveRound"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/registrations/{registrationId}": {
         parameters: {
             query?: never;
@@ -782,7 +820,7 @@ export interface components {
             extensions: unknown[];
         };
         LiveAttempt: {
-            result: number;
+            value: number;
             attempt_number: number;
         };
         LiveResult: {
@@ -824,6 +862,7 @@ export interface components {
              * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
              */
             thumb_url?: string;
+            is_default: boolean;
         };
         WcifRegistration: {
             wcaRegistrationId: number;
@@ -1024,6 +1063,20 @@ export interface components {
             tab_names: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
+        };
+        General404: {
+            error: string;
+            data: {
+                model: string;
+                id: string;
+            };
+        };
+        Competition404: components["schemas"]["General404"] & {
+            data?: {
+                /** @enum {string} */
+                model: "Competition";
+                id: string;
+            };
         };
         WcifEvent: {
             /** @example 333 */
@@ -1498,7 +1551,17 @@ export interface components {
             logo_url?: string;
         };
     };
-    responses: never;
+    responses: {
+        /** @description Competition not found */
+        CompetitionNotFound: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["Competition404"];
+            };
+        };
+    };
     parameters: never;
     requestBodies: never;
     headers: never;
@@ -1570,6 +1633,7 @@ export interface operations {
                     "application/json": components["schemas"]["CompetitionInfo"];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionEvents: {
@@ -1592,6 +1656,7 @@ export interface operations {
                     "application/json": components["schemas"]["WcifEvent"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionSchedule: {
@@ -1614,6 +1679,7 @@ export interface operations {
                     "application/json": components["schemas"]["WcifSchedule"];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionTabs: {
@@ -1636,6 +1702,7 @@ export interface operations {
                     "application/json": components["schemas"]["Tabs"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionRegistrations: {
@@ -1658,6 +1725,7 @@ export interface operations {
                     "application/json": components["schemas"]["RegistrationData"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionPodiums: {
@@ -1680,19 +1748,23 @@ export interface operations {
                     "application/json": components["schemas"]["Result"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionList: {
         parameters: {
             query?: {
-                include_cancelled?: string;
+                include_cancelled?: boolean;
                 continent?: string;
                 country_iso2?: string;
                 delegate?: string;
-                event_ids?: string[];
+                "event_ids[]"?: string[];
                 start?: string;
                 end?: string;
                 admin_status?: string;
+                q?: string;
+                sort?: string;
+                ongoing_and_future?: string;
             };
             header?: never;
             path?: never;
@@ -1780,6 +1852,7 @@ export interface operations {
                     "application/json": components["schemas"]["Scramble"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     getRankings: {

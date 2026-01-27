@@ -36,7 +36,7 @@ class LiveController < ApplicationController
       previous_attempt = previous_attempts[i]
 
       if previous_attempt.present?
-        if previous_attempt.result == r
+        if previous_attempt.value == r
           previous_attempt
         else
           previous_attempt.update_with_history_entry(r, current_user)
@@ -48,15 +48,11 @@ class LiveController < ApplicationController
 
     # TODO: What is the best way to do this?
     r = Result.new(
-      value1: results[0],
-      value2: results[1],
-      value3: results[2],
-      value4: results[3] || 0,
-      value5: results[4] || 0,
       event_id: round.event.id,
       round_type_id: round.round_type_id,
       round_id: round.id,
       format_id: round.format_id,
+      result_attempts: results.map.with_index(1) { |r, index| ResultAttempt.new(attempt_number: index, value: r) },
     )
 
     result.update(average: r.compute_correct_average, best: r.compute_correct_best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)

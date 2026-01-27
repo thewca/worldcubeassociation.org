@@ -505,7 +505,7 @@ en:
         venue: "The listed points above are just for guidance for a complete report. Use them at your discretion for what you see fit. Please remove unused parts!"
         organization: "The listed points above are just for guidance for a complete report. Use them at your discretion for what you see fit. Please remove unused parts!"
         incidents: "Please report all incidents which are non-standard cases. Number the incidents starting from 1., so that other Delegates can comment referring to them by their numbers. Even if everything seemed generic, just list at least the most noteworthy cases. Please check off the appropriate boxes below if you are actively seeking feedback."
-        setup_images: "You MUST include at least %{image_count} images which illustrate the scrambling and competition areas (other images are also welcome). You can select multiple files at once. You can delete images only when enough other images have been uploaded (if you want to replace an image, you need to upload the new one first, and then delete the old one)."
+        setup_images: "You MUST include at least %{image_count} images which illustrate the scrambling and competition areas from this current competition, preferably during the competition (other images are also welcome). You can select multiple files at once. You can delete images only when enough other images have been uploaded (if you want to replace an image, you need to upload the new one first, and then delete the old one). If you do not have current pictures of the competition area and/or the scrambling area while in use, please explain why."
         wrc_feedback_requested: ""
         wrc_incidents: "List of numbers referencing any incidents that you would like the WRC's feedback on."
         wic_feedback_requested: ""
@@ -581,6 +581,10 @@ en:
       dob_contact:
         dob_invalid: "is misformatted"
   errors:
+    next_frontend:
+      title: "An error occurred when rendering the page"
+      description: "If this error persists, report it to WST with the details listed below"
+      details: "Error details"
     #These are locales used in lib/ (ignored by configuration)
     #context: Error message when submitting a profile picture
     messages:
@@ -1333,6 +1337,7 @@ en:
         email_duplicates: "Email must be unique, found the following duplicates: %{emails}."
         wca_id_duplicates: "WCA ID must be unique, found the following duplicates: %{wca_ids}."
         wrong_dob_format: "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: %{raw_dobs}."
+        empty_file: "The file is empty."
     add:
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
@@ -1395,6 +1400,9 @@ en:
         initialized: "Connection being initialized"
         connected: "Connected, results are being updated"
         disconnected: "Lost connection, results are not being updated"
+      podiums:
+        title: "Podiums"
+        undetermined: "Podiums to be determined"
     #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"
@@ -2876,8 +2884,10 @@ en:
   database:
     results_export:
       heading: "WCA Results Export"
+      deprecation_warning: "DEPRECATION NOTICE: Version %{old_version} of the Results Export has been deprecated, and support for it will be discontinued from %{deprecation_date}. Please switch to using Version %{new_version} before then."
       description: "On this page we offer the WCA results for download in several formats so you can use/analyze them at large. We will usually update after each competition weekend when the results are finalized. The files are numbered and dated so you can see whether you have the newest version already."
       permalink: "permalink"
+      permalink_note: "Note: Permalinks deliver the latest results export within a given version - ie, the v2 permalink will return the latest v2 export, but will stay on v2 even when v3 is released."
       file_formats:
         sql: "SQL statements, for import into SQL databases."
         tsv: "Tab-separated values, for spreadsheets in OpenOffice.org, Excel, etc."
@@ -2920,17 +2930,14 @@ en:
       met_cutoff_but_missing_results_error: "[%{round_id}] %{person_name} met the cutoff but is missing results for the second phase of the round. The cutoff was %{cutoff}."
       didnt_meet_cutoff_but_has_results_error: "[%{round_id}] %{person_name} has at least one result for the second phase of the round but didn't meet the cutoff. The cutoff was %{cutoff}."
       wrong_attempts_for_cutoff_error: "[%{round_id}] %{person_name} is missing at least one attempt for the cutoff phase. Please edit the result to include the missing attempt(s) or update the round's information in the competition's Manage Events page."
-      mismatched_result_format_error: "[%{round_id}] Results for %{person_name} are in the wrong format: expected %{expected_format}, but got %{format}."
       result_over_time_limit_error: "[%{round_id}] At least one result for %{person_name} is over the time limit for the round, which is %{time_limit} per attempt. All solves over the time limit must be changed to DNF."
       results_over_cumulative_time_limit_error: "[%{round_ids}] The sum of results for %{person_name} is over the cumulative time limit, which was %{time_limit}."
-      no_round_information_warning: "[%{round_id}] There is no information about the cutoff and time limit for this round. These validations have been skipped. Please update the round's information in the competition's Manage Events page."
       undefined_time_limit_warning: "[%{round_id}] The time limit for this round is undefined, time limit validations have been skipped. This is expected only for competitions before 2013."
       suspicious_dnf_warning: "[%{round_ids}] The round has a cumulative time limit, and extrapolating based on %{person_name}'s successful solves, they would have had very little time left for at least one of their DNFs. Please ensure that every DNF and DNS is indeed correct. If the competitor did not start an attempt or did not have any remaining time before starting an attempt, it must be entered as DNS."
       missing_cumulative_round_id_error: "[%{original_round_id}] Unable to find the round %{wcif_id} for the cumulative time limit specified in the WCIF. Please go to the competition's Manage Events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
       wrong_position_in_results_error: "[%{round_id}] %{person_name} is in the wrong position: expected %{expected_pos}, but got %{pos}."
     rounds:
       too_many_qualified_warning: "Round %{round_id}: more competitors qualified than what the advancement condition planned (%{actual} instead of %{expected}, the condition was: %{condition}). Please update the round information in the manage events page."
-      unexpected_round_results_error: "The round %{round_id} is present in the results but was not created on the events tab. Please include the round's information in the competition's manage events page."
       regulation_9m1_error: "Round %{round_id} has 99 or fewer competitors but has more than two subsequent rounds, which is not permitted as per Regulation 9m1."
       regulation_9m2_error: "Round %{round_id} has 15 or fewer competitors but has more than one subsequent round, which is not permitted as per Regulation 9m2."
       regulation_9m3_error: "Round %{round_id} has 7 or fewer competitors but has at least one subsequent round, which is not permitted as per Regulation 9m3."
@@ -2941,16 +2948,13 @@ en:
       competed_not_qualified_error: "Round %{round_id}: %{ids} competed but did not meet the attempt result advancement condition (%{condition}). Please make sure the advancement condition reflects what was used during the competition, and remove the results if needed."
       round_not_found_error: "Round %{round_id} could not be found. Please make sure that the WCA website Edit Events panel and WCA Live are in sync."
       missing_round_results_error: "There are no results for round %{round_id} but it is listed in the events tab. If this round was not held, please remove the round in the competition's manage events page."
-      unexpected_combined_round_error: "No cutoff was announced for '%{round_name}', but it has been detected as a cutoff round in the results. Please update the round's information in the competition's manage events page."
     events:
       not_333_main_event_warning: "The selected main event is %{main_event_id}. Although this was approved by WCAT BEFORE the competition, WRT is responsible for ensuring AFTER the competition that the suitable main event guidelines from the WCA Competition Requirements Policy were met. Please give one action that was taken to treat %{main_event_id} as the main event DURING the competition (valid examples: declared the winner of the competition, most number of rounds, bigger prize)."
       no_main_event_warning: "There is no selected main event for this competition. Please let WRT know that this is correct."
-      unexpected_results_error: "Results are present for %{event_id}, however it is not listed as an official event. Please remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
       missing_results_warning: "There are no results for %{event_id}, but it is listed as an official event. If the event was held, please reupload your JSON with the results included. If the event was not held, leave a comment for the WRT."
     scrambles:
       missing_scrambles_for_round_error: "[%{round_id}] Missing scrambles. Use Scrambles Matcher to add the correct scrambles to the round."
       missing_scrambles_for_competition_error: "Missing scrambles for the competition. Use Scrambles Matcher to add scrambles."
-      unexpected_scrambles_for_round_error: "[%{round_id}] Too many scrambles. Use Scrambles Matcher to uncheck the unused scrambles."
       missing_scrambles_for_group_error: "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
       missing_scrambles_for_multi_error: "[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts."
       multiple_fmc_groups_warning: "[%{round_id}] There are multiple groups of FMC used. If one group of FMC was used, please use the Scrambles Matcher to uncheck the unused scrambles. Otherwise, please include a comment to WRT explaining why multiple groups of FMC were used."
