@@ -44,6 +44,7 @@ class Round < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   has_many :live_results, -> { order(:global_pos) }
+  has_many :live_competitors, through: :live_results, source: :registration
   has_many :results
   has_many :scrambles
 
@@ -170,15 +171,26 @@ class Round < ApplicationRecord
     linked_round.present? && linked_round.first_round_in_link.id != id
   end
 
-  def accepted_registrations
+  def advancing_registrations
     if number == 1
       registrations.accepted
     elsif consider_previous_round_results?
-      linked_round.first_round_in_link.accepted_registrations
+      linked_round.first_round_in_link.advancing_registrations
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
       Registration.find(advancing)
     end
+  end
+
+  def init_round
+    empty_results = advancing_registrations.map do |r|
+      { registration_id: r.id, round_id: id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
+    end
+    LiveResult.insert_all!(empty_results)
+  end
+
+  def total_competitors
+    live_competitors.count
   end
 
   def recompute_live_columns
@@ -195,7 +207,7 @@ class Round < ApplicationRecord
     round_results = advancement_determining_results.where.not(global_pos: nil)
     round_results.update_all(advancing: false, advancing_questionable: false)
 
-    missing_attempts = total_accepted_registrations - round_results.count
+    missing_attempts = total_competitors - round_results.count
     potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
     results_with_potential = (round_results.to_a + potential_results).sort_by(&:potential_solve_time)
 
@@ -279,16 +291,12 @@ class Round < ApplicationRecord
     SQL
   end
 
-  def total_accepted_registrations
-    accepted_registrations.count
-  end
-
   def competitors_live_results_entered
-    live_results.count
+    live_results.not_empty.count
   end
 
   def score_taking_done?
-    competitors_live_results_entered == total_accepted_registrations
+    competitors_live_results_entered == total_competitors
   end
 
   def time_limit_undefined?
@@ -323,10 +331,13 @@ class Round < ApplicationRecord
     time_limit != TimeLimit::UNDEF_TL && time_limit.cumulative_round_ids.empty? && self.event.fast_event? && time_limit.centiseconds > 60_000
   end
 
+  def self.find_by_wcif_id!(wcif_id, competition_id)
+    event_id, number = Round.parse_wcif_id(wcif_id).values_at(:event_id, :round_number)
+    Round.includes(:competition_event, live_results: %i[live_attempts event]).find_by!(competition_event: { competition_id: competition_id, event_id: event_id }, number: number)
+  end
+
   def self.parse_wcif_id(wcif_id)
-    event_id, round_number = /^([^-]+)-r([^-]+)$/.match(wcif_id).captures
-    round_number = round_number.to_i
-    { event_id: event_id, round_number: round_number }
+    ScheduleActivity.parse_activity_code(wcif_id)
   end
 
   def self.wcif_to_round_attributes(event, wcif, round_number, total_rounds)
@@ -380,7 +391,7 @@ class Round < ApplicationRecord
     {
       **self.to_wcif,
       "round_id" => id,
-      "competitors" => accepted_registrations.includes(:user).map { it.as_json({ methods: %i[user_name], only: %i[id user_id registrant_id] }) },
+      "competitors" => live_competitors.includes(:user).map { it.as_json({ methods: %i[user_name], only: %i[id user_id registrant_id] }) },
       "results" => only_podiums ? live_podium : live_results,
     }
   end
