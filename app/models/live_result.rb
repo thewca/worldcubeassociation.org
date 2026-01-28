@@ -65,35 +65,6 @@ class LiveResult < ApplicationRecord
     saved_change_to_best? || saved_change_to_average?
   end
 
-  def recompute_local_pos
-    rank_by = format.rank_by_column
-    # We only want to decide ties by single in events decided by average
-    secondary_rank_by = format.secondary_rank_by_column
-    # The following query uses an `ORDER BY best <= 0, best ASC` trick. The idea is:
-    #   1. The first part of the `ORDER BY` evaluates to a boolean. Booleans are just
-    #     `TINYINT` in MySQL with TRUE=1 and FALSE=0, so that FALSE < TRUE.
-    #     This means that valid attempts where `best <= 0` is FALSE come first, and
-    #     invalid attempts where `best <= 0` is TRUE come last.
-    #   2. The attempts are then sorted among themselves using their normal numeric value.
-    #     This works in particular because sorting in MySQL is stable, i.e. the sorting
-    #     based on the second part won't destroy the order established by the first part.
-    ActiveRecord::Base.connection.exec_query <<-SQL.squish
-      UPDATE live_results r
-      LEFT JOIN (
-          SELECT id,
-                 RANK() OVER (
-                     ORDER BY #{rank_by} <= 0, #{rank_by} ASC
-                       #{", #{secondary_rank_by} <= 0, #{secondary_rank_by} ASC" if secondary_rank_by}
-                 ) AS `rank`
-          FROM live_results
-          WHERE round_id = #{round.id} AND best != 0
-      ) ranked
-      ON r.id = ranked.id
-      SET r.local_pos = ranked.rank
-      WHERE r.round_id = #{round.id};
-    SQL
-  end
-
   def complete?
     live_attempts.where.not(value: 0).count == round.format.expected_solve_count
   end

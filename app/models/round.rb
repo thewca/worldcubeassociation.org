@@ -207,7 +207,7 @@ class Round < ApplicationRecord
     round_results = advancement_determining_results.where.not(global_pos: nil)
     round_results.update_all(advancing: false, advancing_questionable: false)
 
-    missing_attempts = total_accepted_registrations - round_results.count
+    missing_attempts = total_competitors - round_results.count
     potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
     results_with_potential = (round_results.to_a + potential_results).sort_by(&:potential_solve_time)
 
@@ -289,10 +289,6 @@ class Round < ApplicationRecord
       SET r.local_pos = ranked.rank
       WHERE r.round_id = #{id};
     SQL
-  end
-
-  def total_accepted_registrations
-    accepted_registrations.count
   end
 
   def competitors_live_results_entered
