@@ -840,8 +840,8 @@ export interface components {
         LiveCompetitor: {
             id: number;
             registrant_id: number;
-            user_id?: number;
-            user_name?: string;
+            user_id: number;
+            user_name: string;
         };
         LiveRound: components["schemas"]["WcifRound"] & {
             results: components["schemas"]["LiveResult"][];

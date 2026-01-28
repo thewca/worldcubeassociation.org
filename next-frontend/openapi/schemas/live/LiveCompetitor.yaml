@@ -2,7 +2,8 @@ type: object
 required:
   - id
   - registrant_id
-  - user
+  - user_name
+  - user_id
 properties:
   id:
     type: number
