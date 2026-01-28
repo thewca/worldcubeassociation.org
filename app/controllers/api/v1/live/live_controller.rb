@@ -32,12 +32,13 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
   end
 
   def open_round
-    competition_id = params.require(:competition_id)
+    competition = Competition.find(params.require(:competition_id))
     wcif_id = params.require(:round_id)
 
-    round = Round.find_by_wcif_id!(wcif_id, competition_id)
+    round = Round.find_by_wcif_id!(wcif_id, competition.id)
 
     # TODO: Move these to actual error codes at one point
+    return render json: { status: "unauthorized" }, status: :unauthorized unless @current_user.can_manage_competition?(competition)
     # Also think about if we should auto open all round ones at competition day start and not have this check
     return render json: { status: "previous round has empty results" }, status: :bad_request unless round.number == 1 || round.previous_round.score_taking_done?
 
@@ -45,6 +46,21 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     result = round.init_round
 
-    render json: { status: "ok", added_rows: result.affected_rows }
+    locked = round.previous_round.lock_results(@current_user) if round.number != 1
+
+    render json: { status: "ok", added_rows: result.affected_rows, locked: locked.present? }
+  end
+
+  def quit_competitor
+    competition = Competition.find(params.require(:competition_id))
+    registration_id = params.require(:registration_id)
+
+    return render json: { status: "unauthorized" }, status: :unauthorized unless @current_user.can_manage_competition?(competition)
+
+    round = Round.find_by_wcif_id!(wcif_id, competition.id)
+
+    quit = round.live_results.find_by!(registration_id: registration_id).update_columns(locked_by_id: @current_user.id)
+
+    render json: { status: "ok", quit: quit }
   end
 end

@@ -14,6 +14,10 @@ class LiveResult < ApplicationRecord
 
   belongs_to :round
 
+  belongs_to :quit_by, class_name: 'User', optional: true
+
+  belongs_to :locked_by, class_name: 'User', optional: true
+
   scope :not_empty, -> { where.not(best: 0) }
 
   alias_attribute :result_id, :id
