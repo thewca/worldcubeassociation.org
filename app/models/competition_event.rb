@@ -72,6 +72,7 @@ class CompetitionEvent < ApplicationRecord
       round_number = Round.parse_wcif_id(round_wcif["id"])[:round_number]
       round = rounds.find { |r| r.wcif_id == round_wcif["id"] } || rounds.build
       round.update!(Round.wcif_to_round_attributes(self.event, round_wcif, round_number, total_rounds))
+      round.load_live_results(round_wcif["results"]) if round_wcif["results"]
       WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
       round
     end
