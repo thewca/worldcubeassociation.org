@@ -292,7 +292,7 @@ class Round < ApplicationRecord
   end
 
   def competitors_live_results_entered
-    live_results.where.not(best: 0).count
+    live_results.not_empty.count
   end
 
   def score_taking_done?
