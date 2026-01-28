@@ -46,16 +46,9 @@ class LiveController < ApplicationController
       end
     end
 
-    # TODO: What is the best way to do this?
-    r = Result.new(
-      event_id: round.event.id,
-      round_type_id: round.round_type_id,
-      round_id: round.id,
-      format_id: round.format_id,
-      result_attempts: results.map.with_index(1) { |r, index| ResultAttempt.new(attempt_number: index, value: r) },
-    )
+    average, best = LiveResult.compute_average_and_best(new_attempts, round)
 
-    result.update(average: r.compute_correct_average, best: r.compute_correct_best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)
+    result.update(average: average, best: best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)
 
     render json: { status: "ok" }
   end
