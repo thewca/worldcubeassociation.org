@@ -282,9 +282,7 @@ class Round < ApplicationRecord
     {
       **self.to_wcif,
       "round_id" => id,
-      "competitors" => accepted_registrations.includes([:user]).map do |registration|
-        registration.as_json({ include: [user: { only: [:name], methods: [], include: [], skip_email: true, exclude_deprecated: true }], methods: [] }).merge("registration_id" => registration.registrant_id)
-      end,
+      "competitors" => accepted_registrations.includes(:user).map { it.as_json({ methods: %i[user_name registrant_id] })},
       "results" => only_podiums ? live_podium : live_results,
     }
   end

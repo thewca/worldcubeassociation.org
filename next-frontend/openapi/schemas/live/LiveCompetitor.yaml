@@ -8,16 +8,7 @@ properties:
     type: number
   registrant_id:
     type: number
-  user:
-    type: object
-    required:
-      - name
-      - id
-      - wca_id
-    properties:
-      id:
-        type: number
-      wca_id:
-        type: string
-      name:
-        type: string
+  user_id:
+    type: number
+  user_name:
+    type: string
