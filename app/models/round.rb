@@ -331,10 +331,13 @@ class Round < ApplicationRecord
     time_limit != TimeLimit::UNDEF_TL && time_limit.cumulative_round_ids.empty? && self.event.fast_event? && time_limit.centiseconds > 60_000
   end
 
+  def self.find_by_wcif_id!(wcif_id, competition_id)
+    event_id, number = Round.parse_wcif_id(wcif_id).values_at(:event_id, :round_number)
+    Round.includes(:competition_event, live_results: %i[live_attempts event]).find_by!(competition_event: { competition_id: competition_id, event_id: event_id }, number: number)
+  end
+
   def self.parse_wcif_id(wcif_id)
-    event_id, round_number = /^([^-]+)-r([^-]+)$/.match(wcif_id).captures
-    round_number = round_number.to_i
-    { event_id: event_id, round_number: round_number }
+    ScheduleActivity.parse_activity_code(wcif_id)
   end
 
   def self.wcif_to_round_attributes(event, wcif, round_number, total_rounds)
