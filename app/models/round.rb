@@ -353,6 +353,10 @@ class Round < ApplicationRecord
     }
   end
 
+  def lock_results(current_user)
+    live_results.update_columns(locked_by_id: current_user.id)
+  end
+
   def wcif_id
     "#{self.event_id}-r#{self.number}"
   end
