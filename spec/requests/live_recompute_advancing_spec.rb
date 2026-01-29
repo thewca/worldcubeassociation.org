@@ -144,8 +144,8 @@ RSpec.describe "WCA Live API" do
         expect(round.competitors_live_results_entered).to eq 5
 
         round.lock_results(User.first)
-        # Update best/average after locking
-        round.live_results.first.mark_as_quit(User.first)
+        # Quit user after locking
+        round.quit_from_round!(round.live_results.first.registration_id, User.first)
 
         # Quit user is marked as not advancing
         expect(round.live_results.pluck(:global_pos, :advancing)).to eq([[1, false], [2, true], [3, false], [4, false], [5, false]])
