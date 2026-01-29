@@ -72,7 +72,7 @@ class LiveResult < ApplicationRecord
   end
 
   def should_recompute?
-    locked_by.blank? && (saved_change_to_best? || saved_change_to_average?)
+    saved_change_to_best? || saved_change_to_average?
   end
 
   def complete?
@@ -92,6 +92,6 @@ class LiveResult < ApplicationRecord
     end
 
     def trigger_recompute_columns
-      round.recompute_live_columns
+      round.recompute_live_columns(locked_by.present?)
     end
 end

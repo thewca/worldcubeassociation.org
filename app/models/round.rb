@@ -200,10 +200,10 @@ class Round < ApplicationRecord
     live_competitors.count
   end
 
-  def recompute_live_columns
+  def recompute_live_columns(locked)
     recompute_local_pos
     recompute_global_pos
-    recompute_advancing
+    recompute_advancing unless locked
   end
 
   def recompute_advancing
