@@ -107,7 +107,7 @@ export default function LiveResultsTable({
                       : `/competitions/${competitionId}/live/competitors/${competitor.id}`
                   }
                 >
-                  {competitor.user.name}
+                  {competitor.user_name}
                 </Link>
               </Table.Cell>
               {hasResult &&

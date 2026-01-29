@@ -26,6 +26,10 @@ class LiveAttempt < ApplicationRecord
     value <=> other.value
   end
 
+  def to_result_attempt
+    ResultAttempt.new(value: value, attempt_number: attempt_number)
+  end
+
   def self.build_with_history_entry(value, attempt_number, acting_user)
     LiveAttempt.build(
       value: value,
