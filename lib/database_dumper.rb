@@ -218,6 +218,52 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
+    "h2h_attempts" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          h2h_match_competitor_id
+          h2h_set_id
+          live_attempt_id
+          result_attempt_id
+          set_attempt_number
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
+    "h2h_match_competitors" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          h2h_match_id
+          user_id
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
+    "h2h_matches" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          match_number
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
+    "h2h_sets" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          h2h_match_id
+          set_number
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
     "inbox_persons" => :skip_all_rows,
     "inbox_results" => :skip_all_rows,
     "inbox_scramble_sets" => :skip_all_rows,

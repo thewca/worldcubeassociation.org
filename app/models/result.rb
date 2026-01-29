@@ -11,7 +11,7 @@ class Result < ApplicationRecord
 
   # InboxPerson IDs are only unique per competition. So in addition to querying the ID itself (which is guaranteed by :foreign_key)
   # we also need sure to query the correct competition as well through a composite key.
-  belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
+ belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
   # See the pre-validation hook `backlink_attempts` below for an explanation of `autosave: false`
   has_many :result_attempts, inverse_of: :result, dependent: :destroy, autosave: false, index_errors: true
@@ -29,7 +29,9 @@ class Result < ApplicationRecord
   #   will take care of everything. If validations fail, the values will still be in memory
   #   but won't be written to the DB, which is (surprisingly!) consistent with normal ActiveRecord properties.
   def backlink_attempts
+    puts "before backlink"
     return if self.result_attempts.any?
+    puts "backlinking"
 
     memory_attempts = self.result_attempts_attributes.map do |attempt_attributes|
       attempt = self.result_attempts.find { it.attempt_number == attempt_attributes[:attempt_number] } || result_attempts.build(attempt_attributes)
@@ -45,7 +47,9 @@ class Result < ApplicationRecord
   after_save :create_or_update_attempts
 
   def create_or_update_attempts
+    puts "creating or updating"
     attempts = self.result_attempts_attributes(result_id: self.id)
+    puts attempts
 
     # Delete attempts when the value was set to 0
     zero_attempts = self.skipped_attempt_numbers

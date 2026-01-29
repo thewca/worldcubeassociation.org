@@ -51,6 +51,7 @@ module Resultable
 
     validate :validate_average
     def validate_average
+      # byebug
       return if average_is_not_computable_reason
 
       correct_average = compute_correct_average
@@ -69,6 +70,7 @@ module Resultable
     return "Invalid round_type" unless round_type
     return "All solves cannot be DNS/skipped." if solve_times.all? { |s| s.dns? || s.skipped? }
 
+    # byebug
     return "Skipped solves must all come at the end." unless solve_times.drop_while(&:unskipped?).all?(&:skipped?)
 
     unskipped_count = solve_times.count(&:unskipped?)
@@ -238,6 +240,7 @@ module Resultable
   end
 
   def result_attempts_attributes(**kwargs)
+    # byebug
     self.valid_attempts.map do |value, n|
       { value: value, attempt_number: n, **kwargs }
     end
