@@ -44,7 +44,10 @@ class Round < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   has_many :live_results, -> { order(:global_pos) }
-  has_many :live_competitors, through: :live_results, source: :registration
+  has_many :live_results_without_quitters,
+           -> { without_quitters.order(:global_pos) },
+           class_name: "LiveResult"
+  has_many :live_competitors, through: :live_results_without_quitters, source: :registration
   has_many :results
   has_many :scrambles
 
@@ -374,9 +377,9 @@ class Round < ApplicationRecord
     return 1 if number == 1 || linked_round.present?
 
     # We need to also quit the result from the previous round so advancement can be correctly shown
-    previous_round_results = linked_round.present? ? linked_round.live_results : live_results
+    previous_round_results = previous_round.linked_round.present? ? previous_round.linked_round.live_results : previous_round.live_results
 
-    previous_round_results.where(registration_id: registration_id).map(&:mark_as_quit).count { it == true }
+    previous_round_results.where(registration_id: registration_id).map { it.mark_as_quit(current_user) }.count { it == true }
   end
 
   def wcif_id

@@ -20,6 +20,8 @@ class LiveResult < ApplicationRecord
 
   scope :not_empty, -> { where.not(best: 0) }
 
+  scope :without_quitters, -> { where(quit_by_id: nil).or(where.not(best: 0)) }
+
   alias_attribute :result_id, :id
 
   has_one :event, through: :round
@@ -52,7 +54,7 @@ class LiveResult < ApplicationRecord
   end
 
   def mark_as_quit(current_user)
-    update(quit_by: current_user, advancing: false, advancing_questionable: false)
+    update( quit_by_id: current_user.id, advancing: false, advancing_questionable: false)
   end
 
   def self.compute_average_and_best(attempts, round)
