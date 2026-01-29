@@ -57,7 +57,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     round = Round.find_by_wcif_id!(wcif_id, competition.id)
 
-    quit = round.live_results.find_by!(registration_id: registration_id).update_columns(locked_by_id: @current_user.id)
+    result = round.live_results.find_by!(registration_id: registration_id)
+
+    quit = result.mark_as_quit(@current_user)
 
     render json: { status: "ok", quit: quit }
   end

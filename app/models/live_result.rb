@@ -51,6 +51,10 @@ class LiveResult < ApplicationRecord
     end
   end
 
+  def mark_as_quit(current_user)
+    update(quit_by: current_user)
+  end
+
   def self.compute_average_and_best(attempts, round)
     r = Result.new(
       event_id: round.event.id,
