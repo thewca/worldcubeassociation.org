@@ -72,7 +72,7 @@ class LiveResult < ApplicationRecord
   end
 
   def should_recompute?
-    saved_change_to_best? || saved_change_to_average?
+    locked_by.blank? && (saved_change_to_best? || saved_change_to_average?)
   end
 
   def complete?
