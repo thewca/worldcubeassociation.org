@@ -57,64 +57,24 @@ RSpec.describe IRV do
         errs = []
         # Creates a result which doesn't meet the cutoff and is missing values
         # compared to the first phase expected number of attempts.
-        # res_over_missing_value = create(result_kind, :over_cutoff,
-        #                                 competition: competition1,
-        #                                 cutoff: cutoff, event_id: "444", round: round44)
-        # res_over_missing_value.update!(value2: 0)
+        res_over_missing_value = create(result_kind, :over_cutoff,
+                                        competition: competition1,
+                                        cutoff: cutoff, event_id: "444", round: round44)
+        res_over_missing_value.update!(value2: 0)
 
-        # errs << RV::ValidationError.new(IRV::WRONG_ATTEMPTS_FOR_CUTOFF_ERROR,
-        #                                 :results, competition1.id,
-        #                                 round_id: "444-c",
-        #                                 person_name: res_over_missing_value.person_name)
+        errs << RV::ValidationError.new(IRV::WRONG_ATTEMPTS_FOR_CUTOFF_ERROR,
+                                        :results, competition1.id,
+                                        round_id: "444-c",
+                                        person_name: res_over_missing_value.person_name)
 
         # Creates a result which doesn't meet the cutoff but yet has extra values
         res_over_with_results = create(result_kind, :over_cutoff,
                                        competition: competition1,
                                        cutoff: cutoff, event_id: "444", round: round44)
-        puts res_over_with_results.attempts # This makes the tests pass but I have no idea why
-        # Create result_attempts so that the validations pass
-        if model == Result
-          res_over_with_results.result_attempts.new(attempt_number: 3, value: res_over_with_results.value2)
-          # puts 2
-          # puts res_over_with_results.attempts
-          # puts "==="
-          res_over_with_results.result_attempts.new(attempt_number: 4, value: res_over_with_results.value2)
-          # puts 3
-          # puts res_over_with_results.attempts
-          # puts "==="
-          res_over_with_results.result_attempts.new(attempt_number: 5, value: res_over_with_results.value2)
-          # puts 4
-          # puts res_over_with_results.attempts
-          # puts "==="
-          # byebug
-          # res_over_with_results.update!(average: res_over_with_results.value2)
-          # puts 5
-          # puts res_over_with_results.attempts
-          # puts "==="
-          # res_over_with_results.result_attempts.each { it.save! }
-          # res_over_with_results.live_attempts.new(attempt_number: 3, value: res_over_with_results.value2)
-          # res_over_with_results.live_attempts.new(attempt_number: 4, value: res_over_with_results.value2)
-          # res_over_with_results.live_attempts.new(attempt_number: 5, value: res_over_with_results.value2)
-
-          puts "here"
-          # Once the validations pass, create_or_update_attempts ONLY reads from value1-5, so we need to update those too
-          res_over_with_results.update_columns(value3: res_over_with_results.value2,
-                                        value4: res_over_with_results.value2,
-                                        value5: res_over_with_results.value2,
-                                        average: res_over_with_results.value2)
-          # res_over_with_results.update!(average: res_over_with_results.value2)
-          # res_over_with_results.save!
-          # res_over_with_results.update!(value3: res_over_with_results.value2,
-          #                               value4: res_over_with_results.value2,
-          #                               value5: res_over_with_results.value2,
-          #                               average: res_over_with_results.value2)
-
-        else
-          res_over_with_results.update!(value3: res_over_with_results.value2,
-                                        value4: res_over_with_results.value2,
-                                        value5: res_over_with_results.value2,
-                                        average: res_over_with_results.value2)
-        end
+        res_over_with_results.update!(value3: res_over_with_results.value2,
+                                      value4: res_over_with_results.value2,
+                                      value5: res_over_with_results.value2,
+                                      average: res_over_with_results.value2)
 
         errs << RV::ValidationError.new(IRV::DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
                                         :results, competition1.id,
@@ -127,12 +87,7 @@ RSpec.describe IRV do
                                              event_id: "444",
                                              best: 4000, average: 4200,
                                              round_type_id: "c", round: round44)
-        # res_over_limit.update!(value5: 12_001)
-        if model == Result
-          res_over_limit.update_columns(value5: 12_001)
-        else
-          res_over_limit.update!(value5: 12_001)
-        end
+        res_over_limit.update!(value5: 12_001)
 
         errs << RV::ValidationError.new(IRV::RESULT_OVER_TIME_LIMIT_ERROR,
                                         :results, competition1.id,
@@ -144,11 +99,7 @@ RSpec.describe IRV do
         res_fm = create(result_kind, :over_cutoff,
                         competition: competition2, cutoff: cutoff_fm,
                         format_id: "m", event_id: "333fm", round: round_fm)
-        if model == Result
-          res_fm.update_columns(value1: 30, best: 30)
-        else
-          res_fm.update!(value1: 30, best: 30)
-        end
+        res_fm.update!(value1: 30, best: 30)
 
         errs << RV::ValidationError.new(IRV::MET_CUTOFF_MISSING_RESULTS_ERROR,
                                         :results, competition2.id,
@@ -176,8 +127,6 @@ RSpec.describe IRV do
       end
       validator_args.each do |arg|
         irv = IRV.new.validate(**arg)
-        puts irv.errors
-        puts expected_errors[arg[:model].to_s]
         expect(irv.errors).to match_array(expected_errors[arg[:model].to_s])
         expect(irv.warnings).to be_empty
       end
