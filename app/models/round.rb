@@ -182,6 +182,13 @@ class Round < ApplicationRecord
     end
   end
 
+  def open_and_lock_previous(current_user)
+    init_round
+    return 0 if number == 1 || linked_round.present?
+
+    previous_round.lock_results(current_user)
+  end
+
   def init_round
     empty_results = advancing_registrations.map do |r|
       { registration_id: r.id, round_id: id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
@@ -354,7 +361,9 @@ class Round < ApplicationRecord
   end
 
   def lock_results(current_user)
-    live_results.update_columns(locked_by_id: current_user.id)
+    results_to_lock = linked_round.present? ? linked_round.live_results : live_results
+
+    results_to_lock.update_all(locked_by_id: current_user.id)
   end
 
   def wcif_id

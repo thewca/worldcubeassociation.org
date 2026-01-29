@@ -44,11 +44,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "round already open" }, status: :bad_request if round.live_results.any?
 
-    result = round.init_round
+    result = round.open_and_lock_previous(@current_user)
 
-    locked = round.previous_round.lock_results(@current_user) if round.number != 1
-
-    render json: { status: "ok", added_rows: result.affected_rows, locked: locked.present? }
+    render json: { status: "ok", locked_rows: result }
   end
 
   def quit_competitor
