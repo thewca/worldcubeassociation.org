@@ -210,8 +210,8 @@ class Round < ApplicationRecord
     has_linked_round = linked_round.present?
     advancement_determining_results = has_linked_round ? linked_round.live_results : live_results
 
-    # Only ranked results can be considered for advancing.
-    round_results = advancement_determining_results.where.not(global_pos: nil).where.not(locked_by_id: nil)
+    # Only ranked results that are not locked can be considered for advancing.
+    round_results = advancement_determining_results.where.not(global_pos: nil).where(locked_by_id: nil)
     round_results.update_all(advancing: false, advancing_questionable: false)
 
     missing_attempts = total_competitors - round_results.count
@@ -364,6 +364,19 @@ class Round < ApplicationRecord
     results_to_lock = linked_round.present? ? linked_round.live_results : live_results
 
     results_to_lock.update_all(locked_by_id: current_user.id)
+  end
+
+  def quit_from_round!(registration_id, current_user)
+    result = live_results.find_by!(registration_id: registration_id)
+
+    result.mark_as_quit(current_user)
+
+    return 1 if number == 1 || linked_round.present?
+
+    # We need to also quit the result from the previous round so advancement can be correctly shown
+    previous_round_results = linked_round.present? ? linked_round.live_results : live_results
+
+    previous_round_results.where(registration_id: registration_id).map(&:mark_as_quit).count { it == true }
   end
 
   def wcif_id

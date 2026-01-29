@@ -128,7 +128,27 @@ RSpec.describe "WCA Live API" do
         round.live_results.last.update(average: 50)
 
         # Advancing is not updated, but ranking is
-        expect(round.live_results.pluck(:ranking, :advancing)).to eq([[1, false], [2, true], [3, true], [4, false], [5, false]])
+        expect(round.live_results.pluck(:global_pos, :advancing)).to eq([[1, false], [2, true], [3, true], [4, false], [5, false]])
+      end
+    end
+
+    context "with quit results" do
+      it "quit after locking doesn't change advancing" do
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+
+        5.times do |i|
+          create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
+        end
+
+        expect(round.total_competitors).to eq 5
+        expect(round.competitors_live_results_entered).to eq 5
+
+        round.lock_results(User.first)
+        # Update best/average after locking
+        round.live_results.first.mark_as_quit(User.first)
+
+        # Quit user is marked as not advancing
+        expect(round.live_results.pluck(:global_pos, :advancing)).to eq([[1, false], [2, true], [3, false], [4, false], [5, false]])
       end
     end
   end

@@ -52,7 +52,7 @@ class LiveResult < ApplicationRecord
   end
 
   def mark_as_quit(current_user)
-    update(quit_by: current_user)
+    update(quit_by: current_user, advancing: false, advancing_questionable: false)
   end
 
   def self.compute_average_and_best(attempts, round)

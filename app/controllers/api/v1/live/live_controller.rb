@@ -57,10 +57,8 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     round = Round.find_by_wcif_id!(wcif_id, competition.id)
 
-    result = round.live_results.find_by!(registration_id: registration_id)
+    quit_count = round.quit_from_round!(registration_id, @current_user)
 
-    quit = result.mark_as_quit(@current_user)
-
-    render json: { status: "ok", quit: quit }
+    render json: { status: "ok", quit: quit_count }
   end
 end
