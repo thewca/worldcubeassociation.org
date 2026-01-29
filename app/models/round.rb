@@ -211,7 +211,7 @@ class Round < ApplicationRecord
     advancement_determining_results = has_linked_round ? linked_round.live_results : live_results
 
     # Only ranked results can be considered for advancing.
-    round_results = advancement_determining_results.where.not(global_pos: nil).where.not(locked_by: nil)
+    round_results = advancement_determining_results.where.not(global_pos: nil).where.not(locked_by_id: nil)
     round_results.update_all(advancing: false, advancing_questionable: false)
 
     missing_attempts = total_competitors - round_results.count
@@ -290,7 +290,7 @@ class Round < ApplicationRecord
                        #{", #{secondary_rank_by} <= 0, #{secondary_rank_by} ASC" if secondary_rank_by}
                  ) AS `rank`
           FROM live_results
-          WHERE round_id = #{id} AND best != 0 AND locked_by != NULL
+          WHERE round_id = #{id} AND best != 0 AND locked_by_id != NULL
       ) ranked
       ON r.id = ranked.id
       SET r.local_pos = ranked.rank
