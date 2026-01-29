@@ -290,7 +290,7 @@ class Round < ApplicationRecord
                        #{", #{secondary_rank_by} <= 0, #{secondary_rank_by} ASC" if secondary_rank_by}
                  ) AS `rank`
           FROM live_results
-          WHERE round_id = #{id} AND best != 0 AND locked_by_id != NULL
+          WHERE round_id = #{id} AND best != 0
       ) ranked
       ON r.id = ranked.id
       SET r.local_pos = ranked.rank
