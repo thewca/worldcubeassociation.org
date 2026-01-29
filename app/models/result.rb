@@ -11,7 +11,7 @@ class Result < ApplicationRecord
 
   # InboxPerson IDs are only unique per competition. So in addition to querying the ID itself (which is guaranteed by :foreign_key)
   # we also need sure to query the correct competition as well through a composite key.
- belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
+  belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
   # See the pre-validation hook `backlink_attempts` below for an explanation of `autosave: false`
   has_many :result_attempts, inverse_of: :result, dependent: :destroy, autosave: false, index_errors: true
