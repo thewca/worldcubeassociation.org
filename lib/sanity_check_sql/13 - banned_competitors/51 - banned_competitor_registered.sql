@@ -1,6 +1,6 @@
 SELECT DISTINCT banned.person_name           AS PersonName,
                 banned.person_id             AS person_id,
-                comps.id                     AS competition_id,
+                comps.competition_id         AS competition_id,
                 comps.start_date             AS CompetitionStartDate,
                 comps.end_date               AS CompetitionEndDate,
                 comps.end_date               AS CompetitionEndDate,
@@ -8,10 +8,10 @@ SELECT DISTINCT banned.person_name           AS PersonName,
                 banned.end_date              AS BanEndDate,
                 (NOT reg.deleted_at is Null) As Deleted
 FROM registrations AS reg
-       INNER JOIN (SELECT id, start_date, end_date
+       INNER JOIN (SELECT competition_id, start_date, end_date
                    FROM competitions
                    WHERE announced_by is not NULL
-                     AND start_date >= CURDATE()) AS comps ON reg.competition_id = comps.id
+                     AND start_date >= CURDATE()) AS comps ON reg.competition_id = comps.competition_id
        INNER JOIN (SELECT role.user_id,
                           role.start_date AS start_date,
                           role.end_date   AS end_date,

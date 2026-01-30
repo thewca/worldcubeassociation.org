@@ -76,7 +76,7 @@ WITH round_dates AS (SELECT sa.round_id,
                    ona.old_NR_average
             FROM results r
                    JOIN competitions c
-                        ON c.id = r.competition_id
+                        ON c.competition_id = r.competition_id
                    JOIN competition_events ce
                         ON r.competition_id = ce.competition_id
                           AND r.event_id = ce.event_id
