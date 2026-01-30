@@ -218,29 +218,6 @@ module Resultable
     attempts.map { SolveTime.new(event_id, :single, it) }
   end
 
-  def legacy_attempts
-    [value1, value2, value3, value4, value5]
-  end
-
-  private def valid_attempts_partition
-    self.legacy_attempts
-        .map
-        .with_index(1)
-        .partition { |value, _n| value != SolveTime::SKIPPED_VALUE }
-  end
-
-  def valid_attempts
-    self.valid_attempts_partition[0]
-  end
-
-  def skipped_attempts
-    self.valid_attempts_partition[1]
-  end
-
-  def skipped_attempt_numbers
-    self.skipped_attempts.map { |_value, n| n }
-  end
-
   def worst_index
     sorted_solves_with_index.max[1]
   end
