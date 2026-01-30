@@ -107,7 +107,7 @@ class LiveResult < ApplicationRecord
       before_state = round.live_state
       round.recompute_live_columns
       after_state = round.live_state
-      diff = LiveResults::Helper.round_state_diff(before_state, after_state)
+      diff = Live::Helper.round_state_diff(before_state, after_state)
       ActionCable.server.broadcast(WcaLive.broadcast_key(round_id), diff)
     end
 end

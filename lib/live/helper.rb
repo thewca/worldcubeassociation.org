@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module LiveResults
+module Live
   module Helper
     def self.round_state_diff(before_state, after_state)
       before_hash = before_state.index_by { |r| r[:registration_id] }
