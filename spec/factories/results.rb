@@ -125,8 +125,8 @@ FactoryBot.define do
     regional_single_record { nil }
     regional_average_record { nil }
 
-    after(:build) do |result|
-      legacy_attempts = (1..5).map { result[:"value#{it}"] }
+    after(:build) do |result, builder|
+      legacy_attempts = (1..5).map { builder.public_send(:"value#{it}") }
 
       Result.unpack_attempt_attributes(legacy_attempts).each do |at|
         result.result_attempts.build(**at)
