@@ -291,6 +291,10 @@ class Round < ApplicationRecord
     SQL
   end
 
+  def live_state
+    live_results.reload.includes(:live_attempts).map(&:to_live_state)
+  end
+
   def competitors_live_results_entered
     live_results.not_empty.count
   end

@@ -42,6 +42,23 @@ class LiveAttempt < ApplicationRecord
     )
   end
 
+  def self.attempt_changed?(before_attempts, after_attempts)
+    before_hash = (before_attempts || []).index_by { |a| a[:id] }
+    after_hash = (after_attempts || []).index_by { |a| a[:id] }
+
+    # Updated or created attempts
+    after_hash.each do |id, after_attempt|
+      before_attempt = before_hash[id]
+      return true if before_attempt.nil? || before_attempt != after_attempt
+    end
+
+    # Deleted attempts
+    deleted = before_hash.keys - after_hash.keys
+    return true if deleted.any?
+
+    false
+  end
+
   def update_with_history_entry(value, acting_user)
     self.update(value: value)
     self.live_attempt_history_entries.create(

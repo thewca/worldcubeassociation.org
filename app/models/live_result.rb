@@ -6,9 +6,7 @@ class LiveResult < ApplicationRecord
   has_many :live_attempts
   alias_method :attempts, :live_attempts
 
-  after_save :trigger_recompute_columns, if: :should_recompute?
-
-  after_save :notify_users
+  after_save :trigger_recompute_and_notify, if: :should_recompute?
 
   belongs_to :registration
 
@@ -77,13 +75,39 @@ class LiveResult < ApplicationRecord
     end
   end
 
-  private
+  def self.column_names_for_live_state
+    self.column_names - %w[id last_attempt_entered_at created_at updated_at quit_by_id locked_by_id round_id]
+  end
 
-    def notify_users
-      ActionCable.server.broadcast(WcaLive.broadcast_key(round_id), as_json)
+  def to_live_state
+    serializable_hash({ only: LiveResult.column_names_for_live_state, methods: [], include: [live_attempts: { only: %i[id value attempt_number] }] })
+  end
+
+  def self.compute_diff(before_result, after_result)
+    diff = { "registration_id" => after_result["registration_id"] }
+
+    column_names_for_live_state.map.each do |field|
+      diff[field] = after_result[field] if before_result[field] != after_result[field]
     end
 
-    def trigger_recompute_columns
+    # Include new attempts if they have changed, it's too much of a hassle to
+    # replace single values in the frontend.
+    diff["live_attempts"] = after_result["live_attempts"] if LiveAttempt.attempt_changed?(
+      before_result["live_attempts"],
+      after_result["live_attempts"],
+    )
+
+    # Only return if there are actual changes
+    diff.keys.size > 1 ? diff : nil
+  end
+
+  private
+
+    def trigger_recompute_and_notify
+      before_state = round.live_state
       round.recompute_live_columns
+      after_state = round.live_state
+      diff = Live::Helper.round_state_diff(before_state, after_state)
+      ActionCable.server.broadcast(WcaLive.broadcast_key(round_id), diff)
     end
 end
