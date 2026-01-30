@@ -14,6 +14,8 @@ class LiveResult < ApplicationRecord
 
   belongs_to :round
 
+  scope :not_empty, -> { where.not(best: 0) }
+
   alias_attribute :result_id, :id
 
   has_one :event, through: :round
