@@ -291,6 +291,31 @@ class Round < ApplicationRecord
     SQL
   end
 
+  def live_state
+    live_results.reload.includes(:live_attempts).map do |result|
+      {
+        id: result.id,
+        registration_id: result.registration_id,
+        advancing: result.advancing,
+        advancing_questionable: result.advancing_questionable,
+        average: result.average,
+        average_record_tag: result.average_record_tag,
+        best: result.best,
+        global_pos: result.global_pos,
+        local_pos: result.local_pos,
+        single_record_tag: result.single_record_tag,
+        last_attempt_entered_at: result.last_attempt_entered_at,
+        attempts: result.live_attempts.order(:attempt_number).map do |attempt|
+          {
+            id: attempt.id,
+            attempt_number: attempt.attempt_number,
+            value: attempt.value
+          }
+        end
+      }
+    end
+  end
+
   def competitors_live_results_entered
     live_results.not_empty.count
   end
