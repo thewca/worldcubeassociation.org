@@ -7,6 +7,8 @@ class Round < ApplicationRecord
   has_one :competition, through: :competition_event
   delegate :competition_id, to: :competition_event
 
+  has_many :h2h_matches
+
   has_one :event, through: :competition_event
   # CompetitionEvent uses the cached value
   delegate :event_id, :event, to: :competition_event

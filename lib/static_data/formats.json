@@ -79,5 +79,18 @@
       "1",
       "2"
     ]
+  },
+  {
+    "id": "h",
+    "sort_by": "single",
+    "sort_by_second": "average",
+    "expected_solve_count": 0,
+    "trim_fastest_n": 0,
+    "trim_slowest_n": 0,
+    "name": "Head-to-Head",
+    "short_name": "H2H",
+    "allowed_first_phase_formats": [
+    ]
   }
+
 ]
