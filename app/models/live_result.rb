@@ -14,7 +14,13 @@ class LiveResult < ApplicationRecord
 
   belongs_to :round
 
+  belongs_to :quit_by, class_name: 'User', optional: true
+
+  belongs_to :locked_by, class_name: 'User', optional: true
+
   scope :not_empty, -> { where.not(best: 0) }
+
+  scope :without_quitters, -> { where(quit_by_id: nil).or(where.not(best: 0)) }
 
   alias_attribute :result_id, :id
 
@@ -45,6 +51,10 @@ class LiveResult < ApplicationRecord
     ranking_columns.map do |column|
       SolveTime.new(event_id, column, BEST_POSSIBLE_SCORE)
     end
+  end
+
+  def mark_as_quit(current_user)
+    update(quit_by_id: current_user.id, advancing: false, advancing_questionable: false)
   end
 
   def self.compute_average_and_best(attempts, round)
@@ -84,6 +94,6 @@ class LiveResult < ApplicationRecord
     end
 
     def trigger_recompute_columns
-      round.recompute_live_columns
+      round.recompute_live_columns(skip_advancing: locked_by.present?)
     end
 end

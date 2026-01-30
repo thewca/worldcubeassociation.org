@@ -9,6 +9,9 @@ FactoryBot.define do
     average { 5000 }
     last_attempt_entered_at { Time.now.utc }
 
+    locked_by_id { nil }
+    quit_by_id { nil }
+
     transient do
       attempts_count { 5 }
     end

@@ -44,7 +44,10 @@ class Round < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   has_many :live_results, -> { order(:global_pos) }
-  has_many :live_competitors, through: :live_results, source: :registration
+  has_many :live_results_without_quitters,
+           -> { without_quitters.order(:global_pos) },
+           class_name: "LiveResult"
+  has_many :live_competitors, through: :live_results_without_quitters, source: :registration
   has_many :results
   has_many :scrambles
 
@@ -182,6 +185,13 @@ class Round < ApplicationRecord
     end
   end
 
+  def open_and_lock_previous(current_user)
+    init_round
+    return 0 if number == 1 || linked_round.present?
+
+    previous_round.lock_results(current_user)
+  end
+
   def init_round
     empty_results = advancing_registrations.map do |r|
       { registration_id: r.id, round_id: id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
@@ -193,18 +203,18 @@ class Round < ApplicationRecord
     live_competitors.count
   end
 
-  def recompute_live_columns
+  def recompute_live_columns(skip_advancing: false)
     recompute_local_pos
     recompute_global_pos
-    recompute_advancing
+    recompute_advancing unless skip_advancing
   end
 
   def recompute_advancing
     has_linked_round = linked_round.present?
     advancement_determining_results = has_linked_round ? linked_round.live_results : live_results
 
-    # Only ranked results can be considered for advancing.
-    round_results = advancement_determining_results.where.not(global_pos: nil)
+    # Only ranked results that are not locked can be considered for advancing.
+    round_results = advancement_determining_results.where.not(global_pos: nil).where(locked_by_id: nil)
     round_results.update_all(advancing: false, advancing_questionable: false)
 
     missing_attempts = total_competitors - round_results.count
@@ -351,6 +361,25 @@ class Round < ApplicationRecord
       scramble_set_count: wcif["scrambleSetCount"],
       round_results: RoundResults.load(wcif["results"]),
     }
+  end
+
+  def lock_results(locking_user)
+    results_to_lock = linked_round.present? ? linked_round.live_results : live_results
+
+    results_to_lock.update_all(locked_by_id: locking_user.id)
+  end
+
+  def quit_from_round!(registration_id, quitting_user)
+    result = live_results.find_by!(registration_id: registration_id)
+
+    is_quit = result.mark_as_quit(quitting_user)
+
+    return is_quit ? 1 : 0 if number == 1 || linked_round.present?
+
+    # We need to also quit the result from the previous round so advancement can be correctly shown
+    previous_round_results = previous_round.linked_round.present? ? previous_round.linked_round.live_results : previous_round.live_results
+
+    previous_round_results.where(registration_id: registration_id).map { it.mark_as_quit(quitting_user) }.count { it == true }
   end
 
   def wcif_id
