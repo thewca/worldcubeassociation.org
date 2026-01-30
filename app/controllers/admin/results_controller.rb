@@ -93,34 +93,26 @@ module Admin
     end
 
     def create
-      json = {}
       # Build a brand new result, validations will make sure the specified round
       # data are valid.
       result = Result.new(result_params)
 
-      # Extract attempt values if present
-      attempt_values = (1..5).map { |i| params[:result].delete("value#{i}") }
-
-      # Create attempts
-      if attempt_values.compact.any?
-        result.result_attempts.destroy_all
-        attempt_values.each_with_index do |v, i|
-          next if v.blank?
-
-          result.result_attempts.new(attempt_number: i + 1, value: v)
-        end
-      end
+      attempt_attributes = Result.unpack_attempt_attributes(attempts_params)
+      result.result_attempts.build(attempt_attributes)
 
       if result.save
         # We just inserted a new result, make sure we at least give it the
         # correct position.
         validator = ResultsValidators::PositionsValidator.new(apply_fixes: true)
         validator.validate(competition_ids: [result.competition_id])
-        json[:messages] = ["Result inserted!"].concat(validator.infos.map(&:to_s))
+        render json: {
+          messages: ["Result inserted!"].concat(validator.infos.map(&:to_s)),
+        }
       else
-        json[:errors] = result.errors.map(&:full_message)
+        render json: {
+          errors: result.errors.map(&:full_message),
+        }
       end
-      render json: json
     end
 
     def update
@@ -129,20 +121,14 @@ module Admin
       # both competitions if needed.
       competitions_to_validate = [result.competition_id]
 
-      # Extract attempt values if present
-      attempt_values = (1..5).map { |i| params[:result].delete("value#{i}") }
+      result_updated = result.with_transaction_returning_status do
+        attempt_attributes = Result.unpack_attempt_attributes(attempts_params, result_id: result.id)
+        ResultAttempt.upsert_all(attempt_attributes)
 
-      # Update attempts
-      if attempt_values.compact.any?
-        result.result_attempts.destroy_all
-        attempt_values.each_with_index do |v, i|
-          next if v.blank?
-
-          result.result_attempts.create!(attempt_number: i + 1, value: v)
-        end
+        result.update(result_params)
       end
 
-      if result.update(result_params)
+      if result_updated
         competitions_to_validate << result.competition_id
         competitions_to_validate.uniq!
         validator = ResultsValidators::PositionsValidator.new(apply_fixes: true)
@@ -180,11 +166,15 @@ module Admin
     end
 
     private def result_params
-      params.expect(result: %i[value1 value2 value3 value4 value5
-                               competition_id round_type_id round_id event_id
+      params.expect(result: %i[competition_id round_type_id round_id event_id
                                format_id person_name person_id country_id
                                best average
                                regional_single_record regional_average_record])
+    end
+
+    private def attempts_params
+      # This is Rails notation for saying "the key `attempts` should hold an array of values".
+      params.expect(attempts: [])
     end
   end
 end

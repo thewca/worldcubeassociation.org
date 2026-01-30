@@ -58,9 +58,7 @@ const dataToResult = ({
     round_type_id: roundTypeId,
     round_id: roundId,
   };
-  // Map individual attempts to valueN...
-  attemptsData.attempts.forEach((a, index) => { result[`value${index + 1}`] = a; });
-  return { result };
+  return { result, ...attemptsData };
 };
 
 function ResultForm({
