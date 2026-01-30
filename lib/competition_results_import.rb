@@ -56,6 +56,13 @@ module CompetitionResultsImport
           round_type_id: inbox_res.round_type_id,
           round_id: inbox_res.round_id,
           format_id: inbox_res.format_id,
+          # We keep writing to the valueN columns here as an exception,
+          # because the bulk import through `insert_all` below does not trigger model hooks
+          value1: inbox_res.value1,
+          value2: inbox_res.value2,
+          value3: inbox_res.value3,
+          value4: inbox_res.value4,
+          value5: inbox_res.value5,
           best: inbox_res.best,
           average: inbox_res.average,
           attempt_values: inbox_res.attempts,
