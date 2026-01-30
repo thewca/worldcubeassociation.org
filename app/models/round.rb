@@ -203,10 +203,10 @@ class Round < ApplicationRecord
     live_competitors.count
   end
 
-  def recompute_live_columns(locked)
+  def recompute_live_columns(skip_advancing: false)
     recompute_local_pos
     recompute_global_pos
-    recompute_advancing unless locked
+    recompute_advancing unless skip_advancing
   end
 
   def recompute_advancing
@@ -363,23 +363,23 @@ class Round < ApplicationRecord
     }
   end
 
-  def lock_results(current_user)
+  def lock_results(locking_user)
     results_to_lock = linked_round.present? ? linked_round.live_results : live_results
 
-    results_to_lock.update_all(locked_by_id: current_user.id)
+    results_to_lock.update_all(locked_by_id: locking_user.id)
   end
 
-  def quit_from_round!(registration_id, current_user)
+  def quit_from_round!(registration_id, quitting_user)
     result = live_results.find_by!(registration_id: registration_id)
 
-    result.mark_as_quit(current_user)
+    result.mark_as_quit(quitting_user)
 
     return 1 if number == 1 || linked_round.present?
 
     # We need to also quit the result from the previous round so advancement can be correctly shown
     previous_round_results = previous_round.linked_round.present? ? previous_round.linked_round.live_results : previous_round.live_results
 
-    previous_round_results.where(registration_id: registration_id).map { it.mark_as_quit(current_user) }.count { it == true }
+    previous_round_results.where(registration_id: registration_id).map { it.mark_as_quit(quitting_user) }.count { it == true }
   end
 
   def wcif_id
