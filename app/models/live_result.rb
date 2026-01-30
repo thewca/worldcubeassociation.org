@@ -79,24 +79,21 @@ class LiveResult < ApplicationRecord
     self.column_names - %w[id last_attempt_entered_at created_at updated_at quit_by_id locked_by_id]
   end
 
-
   def to_live_state
-    serializable_hash({ only: LiveResult.column_names_for_live_state, methods: [], include: [ live_attempts: { only: [:id, :value, :attempt_number] }] })
+    serializable_hash({ only: LiveResult.column_names_for_live_state, methods: [], include: [live_attempts: { only: %i[id value attempt_number] }] })
   end
 
   def self.compute_diff(before_result, after_result)
     diff = { "registration_id" => after_result["registration_id"] }
 
     column_names_for_live_state.map.each do |field|
-      if before_result[field] != after_result[field]
-        diff[field] = after_result[field]
-      end
+      diff[field] = after_result[field] if before_result[field] != after_result[field]
     end
 
     # Check attempts
     attempts_diff = LiveAttempt.compute_diff(
       before_result["live_attempts"],
-      after_result["live_attempts"]
+      after_result["live_attempts"],
     )
     diff[:attempts] = attempts_diff if attempts_diff.present?
 
@@ -105,6 +102,7 @@ class LiveResult < ApplicationRecord
   end
 
   private
+
     def trigger_recompute_and_notify
       before_state = round.live_state
       round.recompute_live_columns

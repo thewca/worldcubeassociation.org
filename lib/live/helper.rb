@@ -9,7 +9,7 @@ module LiveResults
       {
         updated: compute_updated(before_hash, after_hash),
         deleted: compute_deleted(before_hash, after_hash),
-        created: compute_created(before_hash, after_hash)
+        created: compute_created(before_hash, after_hash),
       }.compact_blank
     end
 

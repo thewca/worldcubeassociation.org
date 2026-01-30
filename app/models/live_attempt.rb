@@ -52,9 +52,7 @@ class LiveAttempt < ApplicationRecord
     updated = []
     after_hash.each do |id, after_attempt|
       before_attempt = before_hash[id]
-      if before_attempt.nil? || before_attempt != after_attempt
-        updated << after_attempt
-      end
+      updated << after_attempt if before_attempt.nil? || before_attempt != after_attempt
     end
     diff[:updated] = updated if updated.any?
 
