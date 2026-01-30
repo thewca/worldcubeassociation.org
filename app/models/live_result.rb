@@ -76,7 +76,7 @@ class LiveResult < ApplicationRecord
   end
 
   def self.column_names_for_live_state
-    self.column_names - %w[id last_attempt_entered_at created_at updated_at quit_by_id locked_by_id]
+    self.column_names - %w[id last_attempt_entered_at created_at updated_at quit_by_id locked_by_id round_id]
   end
 
   def to_live_state
@@ -90,12 +90,12 @@ class LiveResult < ApplicationRecord
       diff[field] = after_result[field] if before_result[field] != after_result[field]
     end
 
-    # Check attempts
-    attempts_diff = LiveAttempt.compute_diff(
+    # Include new attempts if they have changed, it's too much of a hassle to
+    # replace single values in the frontend.
+    diff["live_attempts"] = after_result["live_attempts"] if LiveAttempt.attempt_changed?(
       before_result["live_attempts"],
       after_result["live_attempts"],
     )
-    diff[:attempts] = attempts_diff if attempts_diff.present?
 
     # Only return if there are actual changes
     diff.keys.size > 1 ? diff : nil
