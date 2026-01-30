@@ -12,6 +12,7 @@ RSpec.describe "WCA Live API" do
       competition = create(:competition, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
+      round.init_round
 
       live_request = {
         attempts: [111, 222, 333, 444, 555],
@@ -34,13 +35,13 @@ RSpec.describe "WCA Live API" do
       expect(result.average).to eq 333
     end
 
-    it "Can't add result if it already exist" do
+    it "Can't add result if round isn't open yet" do
       sign_in delegate
 
       competition = create(:competition, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
-      create(:live_result, round: round, registration: registration)
+
       live_request = {
         attempts: [111, 222, 333, 444, 555],
         registration_id: registration.id,
