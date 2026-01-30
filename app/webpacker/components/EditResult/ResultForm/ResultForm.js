@@ -58,7 +58,10 @@ const dataToResult = ({
     round_type_id: roundTypeId,
     round_id: roundId,
   };
-  return { result, ...attemptsData };
+  return {
+    result,
+    attempts: attemptsData.attempts,
+  };
 };
 
 function ResultForm({
