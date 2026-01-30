@@ -94,6 +94,6 @@ class LiveResult < ApplicationRecord
     end
 
     def trigger_recompute_columns
-      round.recompute_live_columns(locked_by.present?)
+      round.recompute_live_columns(skip_advancing: locked_by.present?)
     end
 end
