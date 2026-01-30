@@ -3,7 +3,9 @@
 require 'rails_helper'
 require 'rake'
 
-RSpec.xdescribe "import:h2h_data", type: :task do
+RSpec.describe "import:h2h_data", type: :task do
+  skip "only needs to be run in local development"
+
   before(:all) do
     Rake.application.rake_require "tasks/h2h_results_import"
     Rake::Task.define_task(:environment)
