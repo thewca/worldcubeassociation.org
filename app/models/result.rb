@@ -25,8 +25,9 @@ class Result < ApplicationRecord
   #   result_attempts there can be expensive, so we rely on the de-normalized value1..5 just for the time being.
   def repack_attempts
     packed_value_attributes = self.attempts.map.with_index(1).to_h { |v, i| [:"value#{i}", v] }
+    legacy_attempt_attributes = packed_value_attributes.with_indifferent_access.slice(*Result.attribute_names)
 
-    self.assign_attributes(**packed_value_attributes)
+    self.assign_attributes(**legacy_attempt_attributes)
   end
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
