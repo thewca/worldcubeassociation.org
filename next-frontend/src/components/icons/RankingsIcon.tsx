@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const RankingsIcon = createIcon({
@@ -13,10 +14,9 @@ const RankingsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const RankingsIconPreview = () => {
-  return <RankingsIcon size="lg" />;
-};
-
-export default RankingsIconPreview;
+export default RankingsIcon;

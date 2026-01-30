@@ -5,8 +5,9 @@ class StripeRecord < ApplicationRecord
   # TODO: Add a link to the Stripe status definitions/documentation
   WCA_TO_STRIPE_STATUS_MAP = {
     created: %w[requires_payment_method legacy_payment_intent_registered legacy_unknown],
-    pending: %w[pending requires_capture requires_confirmation requires_action],
+    pending: %w[pending requires_confirmation requires_action],
     processing: %w[processing],
+    requires_capture: %w[requires_capture],
     partial: %w[],
     failed: %w[legacy_failure failed],
     succeeded: %w[legacy_success succeeded],
@@ -182,17 +183,19 @@ class StripeRecord < ApplicationRecord
     amount_stripe_denomination.to_i
   end
 
-  def self.create_from_api(api_record, parameters, account_id, parent_record = nil)
-    StripeRecord.create!(
-      stripe_record_type: api_record.object,
-      parameters: parameters,
-      stripe_id: api_record.id,
-      amount_stripe_denomination: api_record.amount,
-      currency_code: api_record.currency,
-      stripe_status: api_record.status,
-      account_id: account_id,
-      parent_record: parent_record,
-    )
+  def self.create_or_update_from_api(api_record, parameters = nil, account_id = nil, parent_record = nil)
+    StripeRecord.find_or_initialize_by(stripe_id: api_record.id, stripe_record_type: api_record.object) do |new_record|
+      new_record.parameters = parameters
+      new_record.account_id = account_id
+      new_record.parent_record = parent_record
+    end.tap do |record|
+      record.update!(
+        stripe_id: api_record.id,
+        amount_stripe_denomination: api_record.amount,
+        currency_code: api_record.currency,
+        stripe_status: api_record.status,
+      )
+    end
   end
 
   private def stripe_client

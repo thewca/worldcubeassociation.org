@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const SearchIcon = createIcon({
@@ -13,10 +14,9 @@ const SearchIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const SearchIconPreview = () => {
-  return <SearchIcon size="lg" />;
-};
-
-export default SearchIconPreview;
+export default SearchIcon;

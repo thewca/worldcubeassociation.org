@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const FacebookIcon = createIcon({
@@ -13,10 +14,9 @@ const FacebookIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const FacebookIconPreview = () => {
-  return <FacebookIcon size="lg" />;
-};
-
-export default FacebookIconPreview;
+export default FacebookIcon;

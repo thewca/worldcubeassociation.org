@@ -142,7 +142,7 @@ class ScheduleActivity < ApplicationRecord
     wcif_attributes = ScheduleActivity.wcif_to_attributes(wcif)
 
     self.assign_attributes(wcif_attributes.slice(:activity_code))
-    round = parent_activity&.round || self.find_matched_round
+    round = parent_activity&.round || self.find_matched_round(venue_room)
 
     update!(
       venue_room: venue_room,
@@ -159,9 +159,11 @@ class ScheduleActivity < ApplicationRecord
     self
   end
 
-  private def find_matched_round
+  private def find_matched_round(override_venue_room = nil)
+    linked_venue_room = override_venue_room || self.venue_room
+
     # Using `find` instead of `find_by` throughout to leverage preloaded associations
-    competition_event = venue_room.competition.competition_events.find { it.event_id == self.parsed_activity_code[:event_id] }
+    competition_event = linked_venue_room.competition.competition_events.find { it.event_id == self.parsed_activity_code[:event_id] }
     return nil if competition_event.blank?
 
     competition_event.rounds.find { it.number == self.parsed_activity_code[:round_number] }

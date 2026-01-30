@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { getJsonItem, setJsonItem } from '../utils/localStorage';
 
 /**
  * This functions like the useState hook, but it fetches the state stored in
@@ -8,16 +9,11 @@ import { useState } from 'react';
  * will not update the other's state.
  */
 export default function useStoredState(initialState, key) {
-  let storedState;
-  try {
-    storedState = JSON.parse(localStorage.getItem(key));
-  } catch {
-    storedState = null;
-  }
-
   const [state, setState] = useState(() => {
+    const storedState = getJsonItem(key);
+
     if (storedState === null) {
-      localStorage.setItem(key, JSON.stringify(initialState));
+      setJsonItem(key, initialState);
       return initialState;
     }
     return storedState;
@@ -25,7 +21,7 @@ export default function useStoredState(initialState, key) {
 
   function setAndStoreState(newState) {
     setState(newState);
-    localStorage.setItem(key, JSON.stringify(newState));
+    setJsonItem(key, newState);
   }
 
   return [state, setAndStoreState];

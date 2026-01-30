@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { Table } from 'semantic-ui-react';
 import React from 'react';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
+import I18n from '../../../lib/i18n';
 
 const moneyCountHumanReadable = (registrations, competitionInfo) => {
   const moneyCount = _.sum(registrations.map((r) => r.payment.paid_amount_iso));
@@ -18,7 +19,9 @@ export default function RegistrationAdministrationTableFooter({
   competitionInfo,
   withPosition = false,
 }) {
-  const { events: eventsAreExpanded, comments: commentsAreShown } = columnsExpanded;
+  const {
+    dob: dobIsShown, events: eventsAreExpanded, comments: commentsAreShown,
+  } = columnsExpanded;
 
   const newcomerCount = registrations.filter(
     (reg) => !reg.user.wca_id,
@@ -45,11 +48,26 @@ export default function RegistrationAdministrationTableFooter({
   return (
     <Table.Row>
       <Table.Cell colSpan={withPosition ? 5 : 4}>
-        {`${newcomerCount} First-Timers + ${
-          registrations.length - newcomerCount
-        } Returners = ${registrations.length} People`}
+        {
+          `${
+            newcomerCount
+          } ${
+            I18n.t('registrations.registration_info_people.newcomer', { count: newcomerCount })
+          } + ${
+            registrations.length - newcomerCount
+          } ${
+            I18n.t('registrations.registration_info_people.returner', { count: registrations.length - newcomerCount })
+          } = ${
+            registrations.length
+          } ${
+            I18n.t('registrations.registration_info_people.person', { count: registrations.length })
+          }`
+        }
       </Table.Cell>
-      <Table.Cell>{`${countryCount} Countries`}</Table.Cell>
+      {dobIsShown && <Table.Cell key="dob" />}
+      <Table.Cell>
+        {`${I18n.t('registrations.list.country_plural', { count: countryCount })}`}
+      </Table.Cell>
       <Table.Cell key="registered on" />
       {competitionInfo['using_payment_integrations?'] && (
         <Table.Cell>{moneyCountHumanReadable(registrations, competitionInfo)}</Table.Cell>

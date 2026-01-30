@@ -1,0 +1,21 @@
+get:
+  summary: Get registration config for a competition
+  tags:
+    - competitions
+    - registrations
+  operationId: competitionRegistrationConfig
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../schemas/registrations/RegistrationConfig.yaml'

@@ -70,7 +70,7 @@ class ResultsController < ApplicationController
         FROM (
           SELECT MIN(value_and_id) value_and_id
           FROM concise_#{type_param}_results results
-          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' : ''}
+          #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
           WHERE #{value} > 0
             #{@event_condition}
             #{@years_condition_result}
@@ -83,16 +83,17 @@ class ResultsController < ApplicationController
         JOIN results ON results.id = value_and_id % 1000000000
         ORDER BY value, person_name
       SQL
-
     elsif @is_results
+      # rubocop:disable Style/ConditionalAssignment
+      #   for better readability of the individual indentations of the SQL queries
       if @is_average
         @query = <<-SQL.squish
           SELECT
             results.*,
             average value
           FROM results
-          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' : ''}
-          #{@years_condition_competition.present? ? 'JOIN competitions on competitions.id = results.competition_id' : ''}
+          #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+          #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
           WHERE average > 0
             #{@event_condition}
             #{@years_condition_competition}
@@ -102,33 +103,32 @@ class ResultsController < ApplicationController
             average, person_name, competition_id, round_type_id
           #{limit_condition}
         SQL
-
       else
-        subqueries = (1..5).map do |i|
-          <<-SQL.squish
-            SELECT
-              results.*,
-              value#{i} value
+        @query = <<-SQL.squish
+          SELECT
+            results.*,
+            result_attempts.value
+          FROM (
+            SELECT results.id
             FROM results
-            #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' : ''}
-            #{@years_condition_competition.present? ? 'JOIN competitions on competitions.id = results.competition_id' : ''}
-            WHERE value#{i} > 0
+            #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+            #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
+            WHERE best > 0
               #{@event_condition}
               #{@years_condition_competition}
               #{@region_condition}
               #{@gender_condition}
-            ORDER BY value
+            ORDER BY best, person_name, competition_id, round_type_id
             #{limit_condition}
-          SQL
-        end
-        subquery = "(#{subqueries.join(') UNION ALL (')})"
-        @query = <<-SQL.squish
-          SELECT *
-          FROM (#{subquery}) union_results
+          ) AS best_results
+            INNER JOIN results ON results.id = best_results.id
+            INNER JOIN result_attempts ON result_attempts.result_id = results.id
+          WHERE value > 0
           ORDER BY value, person_name, competition_id, round_type_id
           #{limit_condition}
         SQL
       end
+      # rubocop:enable Style/ConditionalAssignment
     elsif @is_by_region
       @query = <<-SQL.squish
         SELECT
@@ -139,7 +139,7 @@ class ResultsController < ApplicationController
             results.country_id record_country_id,
             MIN(#{value}) record_value
           FROM concise_#{type_param}_results results
-          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' : ''}
+          #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
           WHERE 1
             #{@event_condition}
             #{@years_condition_result}
@@ -148,14 +148,13 @@ class ResultsController < ApplicationController
         ) records
         JOIN results ON results.#{value} = record_value AND results.country_id = record_country_id
         JOIN competitions on competitions.id = results.competition_id
-        #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' : ''}
+        #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
         WHERE 1
           #{@event_condition}
           #{@years_condition_competition}
           #{@gender_condition}
         ORDER BY value, results.country_id, start_date, person_name
       SQL
-
     else
       flash[:danger] = t(".unknown_show")
       return redirect_to rankings_path
@@ -198,39 +197,21 @@ class ResultsController < ApplicationController
 
       @query = <<-SQL.squish
         SELECT
+          results.*,
+          competitions.cell_name         competition_name,
           competitions.start_date,
           YEAR(competitions.start_date)  year,
           MONTH(competitions.start_date) month,
-          DAY(competitions.start_date)   day,
-          events.id              event_id,
-          events.name            event_name,
-          results.id              id,
-          results.type            type,
-          results.value           value,
-          results.format_id       format_id,
-          results.round_type_id   round_type_id,
-          events.format          value_format,
-                                 record_name,
-          results.person_id       person_id,
-          results.person_name     person_name,
-          results.country_id      country_id,
-          countries.name         country_name,
-          competitions.id        competition_id,
-          competitions.cell_name competition_name,
-          value1, value2, value3, value4, value5
+          DAY(competitions.start_date)   day
         FROM
           (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
             SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') results
-          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
-          events,
-          round_types,
-          competitions,
-          countries
-        WHERE events.id = event_id
-          AND events.`rank` < 1000
-          AND round_types.id = round_type_id
-          AND competitions.id = competition_id
-          AND countries.id = results.country_id
+          #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+          JOIN events ON results.event_id = events.id
+          JOIN round_types ON results.round_type_id = round_types.id
+          JOIN competitions ON results.competition_id = competitions.id
+          JOIN countries ON results.country_id = countries.id
+        WHERE events.`rank` < 1000
           #{@region_condition}
           #{@event_condition}
           #{@years_condition_competition}
@@ -246,7 +227,7 @@ class ResultsController < ApplicationController
           UNION
           #{current_records_query('average', 'average')}) helper
         ORDER BY
-          `rank`, type DESC, start_date, round_type_id, person_name
+          event_rank, type DESC, start_date, round_type_id, person_name
       SQL
     end
 
@@ -260,22 +241,19 @@ class ResultsController < ApplicationController
   private def current_records_query(value, type)
     <<-SQL.squish
       SELECT
-        '#{type}'              type,
-                               results.*,
-                               value,
-        events.name            event_name,
-                               format,
-        countries.name         country_name,
-        competitions.cell_name competition_name,
-                               `rank`,
+        '#{type}'                      type,
+        results.*,
+        records.value,
+        events.`rank`                  event_rank,
+        competitions.cell_name         competition_name,
         competitions.start_date,
         YEAR(competitions.start_date)  year,
         MONTH(competitions.start_date) month,
         DAY(competitions.start_date)   day
       FROM
-        (SELECT event_id record_event_id, MIN(value_and_id) DIV 1000000000 value
+        (SELECT event_id record_event_id, MIN(#{value}) value
           FROM concise_#{type}_results results
-          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' : ''}
+          #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
           WHERE 1
           #{@event_condition}
           #{@region_condition}
@@ -283,20 +261,16 @@ class ResultsController < ApplicationController
           #{@gender_condition}
           GROUP BY event_id) records,
         results
-        #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
-        events,
-        countries,
-        competitions
-      WHERE results.#{value} = value
+        #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+        JOIN events ON results.event_id = events.id
+        JOIN competitions ON results.competition_id = competitions.id
+      WHERE events.`rank` < 990
+        AND results.#{value} = records.value
+        AND results.event_id = records.record_event_id
         #{@event_condition}
         #{@region_condition}
         #{@years_condition_competition}
         #{@gender_condition}
-        AND results.event_id = record_event_id
-        AND events.id        = results.event_id
-        AND countries.id     = results.country_id
-        AND competitions.id  = results.competition_id
-        AND events.`rank` < 990
     SQL
   end
 

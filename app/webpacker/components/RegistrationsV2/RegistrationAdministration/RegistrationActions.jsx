@@ -18,8 +18,15 @@ import {
 } from '../../../lib/utils/registrationAdmin';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
+function escapeCsv(value) {
+  if (!value) return '';
+  // Double any quotes (RFC 4180), then wrap the whole field in quotes
+  const str = String(value).replace(/"/g, '""');
+  return `"${str}"`;
+}
+
 function V3csvExport(selected, registrations, competition) {
-  let csvContent = `Status,Name,Country,WCA ID,Birth Date,Gender,${competition.event_ids.join(',')},Email,Guests,IP,Registration Date Time (UTC),Payment Date Time(UTC),User Id,Registration Status,Registrant Id\n`;
+  let csvContent = `Status,Name,Country,WCA ID,Birth Date,Gender,${competition.event_ids.join(',')},Email,Guests,IP,Registration Date Time (UTC),Payment Date Time(UTC),User Id,Registration Status,Registrant Id,Waiting List Position,Comments\n`;
   registrations
     .filter((r) => selected.length === 0 || selected.includes(r.user_id))
     .forEach((registration) => {
@@ -43,6 +50,10 @@ function V3csvExport(selected, registrations, competition) {
         registration.competing.registration_status
       },${
         registration.registrant_id
+      },${
+        registration.competing.waiting_list_position || ''
+      },${
+        escapeCsv(registration.competing.comments)
       }\n`;
     });
 

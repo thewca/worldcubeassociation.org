@@ -1,63 +1,50 @@
-import { Button, Flex, Link, Text, VStack, Card } from "@chakra-ui/react";
+import { Text, Accordion } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
+import { Announcement, User } from "@/types/payload";
+
+function AnnouncementItem({ announcement }: { announcement: Announcement }) {
+  const publishedByUser = announcement.publishedBy as User;
+
+  return (
+    <Accordion.Item value={announcement.id} layerStyle="fill.deep">
+      <Accordion.ItemTrigger textStyle="s1" _open={{ textStyle: "h2" }}>
+        <Accordion.ItemIndicator _open={{ display: "none" }} />
+        {announcement.title}
+      </Accordion.ItemTrigger>
+      <Accordion.ItemContent>
+        <Text textStyle="s2">
+          Posted by {publishedByUser.name} · {announcement.publishedAt}
+        </Text>
+        <MarkdownProse
+          as={Accordion.ItemBody}
+          content={announcement.contentMarkdown!}
+          textStyle="body"
+        />
+      </Accordion.ItemContent>
+    </Accordion.Item>
+  );
+}
 
 export default function AnnouncementsCard({
   hero,
-  others,
+  others = [],
+  colorPalette,
 }: {
-  hero: {
-    title: string;
-    postedBy: string;
-    postedAt: string;
-    markdown: string;
-    fullLink: string;
-  };
-  others: { title: string; href: string }[];
+  hero: Announcement;
+  others: Announcement[];
+  colorPalette: string;
 }) {
   return (
-    <Flex direction="column" gap={3} width="full">
-      {/* HERO ANNOUNCEMENT */}
-      <Card.Root
-        variant="info"
-        flexDirection="column"
-        overflow="hidden"
-        colorPalette="grey"
-        flex="2"
-      >
-        <Card.Body bg="blue.100" color="blue.fg">
-          <Card.Title>{hero.title}</Card.Title>
-          <Text fontSize="sm" mt={1}>
-            Posted by {hero.postedBy} · {hero.postedAt}
-          </Text>
-          <MarkdownProse content={hero.markdown} />
-          <Button mt="auto" mr="auto" asChild>
-            <Link href={hero.fullLink}>Read full article</Link>
-          </Button>
-        </Card.Body>
-      </Card.Root>
+    <Accordion.Root
+      variant="card"
+      defaultValue={[hero.id]}
+      colorPalette={colorPalette}
+    >
+      <AnnouncementItem announcement={hero} />
 
-      {/* OTHER ANNOUNCEMENTS */}
-      <VStack align="start" gap={3}>
-        {others.map((a, i) => (
-          <Button
-            key={i}
-            asChild
-            variant="solid"
-            width="full"
-            justifyContent="flex-start"
-          >
-            <Link href={a.href}>{a.title}</Link>
-          </Button>
-        ))}
-        <Button
-          asChild
-          variant="solid"
-          width="full"
-          justifyContent="flex-start"
-        >
-          <Link href="#">See All Announcements</Link>
-        </Button>
-      </VStack>
-    </Flex>
+      {others.map((announcement) => (
+        <AnnouncementItem key={announcement.id} announcement={announcement} />
+      ))}
+    </Accordion.Root>
   );
 }

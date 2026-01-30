@@ -10,6 +10,14 @@ resource "aws_s3_bucket" "backup-bucket" {
     "Name" = "wca-backups"
   }
 }
+
+resource "aws_s3_bucket" "next-media" {
+  bucket = "wca-nextjs-media-prod"
+  tags = {
+    "Name" = "wca-nextjs-media-prod"
+  }
+}
+
 resource "aws_s3_bucket" "avatars" {
   bucket = "wca-avatar"
   tags = {

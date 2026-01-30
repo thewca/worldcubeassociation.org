@@ -125,6 +125,11 @@ resource "aws_ecs_service" "auxiliary" {
     type = "ECS"
   }
 
+  deployment_circuit_breaker {
+    enable   = true
+    rollback = true
+  }
+
   tags = {
     Name = var.name_prefix
   }

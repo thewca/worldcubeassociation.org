@@ -9,21 +9,28 @@ class RegistrationPayment < ApplicationRecord
   belongs_to :refunded_registration_payment, class_name: 'RegistrationPayment', optional: true
   has_many :refunding_registration_payments, class_name: 'RegistrationPayment', inverse_of: :refunded_registration_payment, foreign_key: :refunded_registration_payment_id, dependent: :destroy
 
-  delegate :auto_accept_registrations?, to: :registration
-  after_create :auto_accept_hook, if: :should_auto_accept?
-  after_create :auto_close_hook, unless: :refunded_registration_payment_id?
+  delegate :auto_accept_preference_live?, to: :registration
+  before_save :set_paid_at, if: :becoming_completed?, unless: :paid_at?
+  after_create :auto_accept_hook, if: :auto_accept_preference_live?
+  after_save :auto_close_hook
+
+  scope :completed, -> { where(is_completed: true) }
 
   monetize :amount_lowest_denomination,
            as: "amount",
            allow_nil: true,
            with_model_currency: :currency_code
 
-  def amount_available_for_refund
-    amount_lowest_denomination + refunding_registration_payments.sum(:amount_lowest_denomination)
+  private def becoming_completed?
+    is_completed && (will_save_change_to_is_completed? || new_record?)
   end
 
-  private def should_auto_accept?
-    auto_accept_registrations? && Registration::LIVE_AUTO_ACCEPT_ENABLED
+  private def set_paid_at
+    self.paid_at = current_time_from_proper_timezone
+  end
+
+  def amount_available_for_refund
+    amount_lowest_denomination + refunding_registration_payments.sum(:amount_lowest_denomination)
   end
 
   private def auto_accept_hook
@@ -31,7 +38,9 @@ class RegistrationPayment < ApplicationRecord
   end
 
   private def auto_close_hook
-    registration.consider_auto_close
+    return unless refunded_registration_payment_id.nil? && is_completed?
+
+    registration.consider_auto_close if saved_change_to_is_completed? || previously_new_record?
   end
 
   def to_v2_json(refunds: false)

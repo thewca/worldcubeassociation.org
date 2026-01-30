@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, {
-  useMemo, useReducer, useRef, useState,
+  useMemo, useRef, useState,
 } from 'react';
 import {
   Accordion, Button, Checkbox, Divider, Form, Header, Icon, List, Modal, Segment, Sticky,
@@ -10,6 +10,7 @@ import RegistrationAdministrationSearch from './RegistrationAdministrationSearch
 import RegistrationActions from './RegistrationActions';
 import { showMessage, showMessages } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
+import { autoAcceptPreferences } from '../../../lib/wca-data.js.erb';
 import I18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
@@ -17,6 +18,7 @@ import bulkAutoAccept from '../api/registration/patch/bulk_auto_accept';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import useOrderedSet from '../../../lib/hooks/useOrderedSet';
+import useStoredReducer from '../../../lib/hooks/useStoredReducer';
 import {
   APPROVED_COLOR, APPROVED_ICON,
   CANCELLED_COLOR, CANCELLED_ICON,
@@ -56,9 +58,10 @@ const expandedColumnsReducer = (state, action) => {
 };
 
 export default function RegistrationAdministrationList({ competitionInfo }) {
-  const [expandedColumns, dispatchExpandedColumns] = useReducer(
+  const [expandedColumns, dispatchExpandedColumns] = useStoredReducer(
     expandedColumnsReducer,
     initialExpandedColumns,
+    'reg-admin-expanded-columns',
   );
 
   const [waitlistEditModeEnabled, setWaitlistEditModeEnabled] = useCheckboxState(false);
@@ -423,7 +426,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   return (
     <Segment loading={isMutating || isAutoAccepting}>
-      {competitionInfo.auto_accept_registrations && (
+      {competitionInfo.auto_accept_preference === autoAcceptPreferences.bulk && (
         <>
           <Button
             disabled={isAutoAccepting}
@@ -446,7 +449,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
                 <List bulleted>
                   {Object.entries(modalData).map(([key, value]) => (
                     <List.Item key={key}>
-                      {key}
+                      {registrations.find(
+                        (registration) => registration.id === Number(key),
+                      )?.user.name}
                       {' - '}
                       <b>Succeeded</b>
                       {': '}

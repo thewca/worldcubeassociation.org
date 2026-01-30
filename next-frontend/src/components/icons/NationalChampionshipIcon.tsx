@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const NationalChampionshipIcon = createIcon({
@@ -17,10 +18,9 @@ const NationalChampionshipIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const NationalChampionshipIconPreview = () => {
-  return <NationalChampionshipIcon size="lg" boxSize="1em" />;
-};
-
-export default NationalChampionshipIconPreview;
+export default NationalChampionshipIcon;

@@ -11,20 +11,40 @@ updates:
     - dependency-name: iso
     - dependency-name: selectize-rails
     - dependency-name: i18n-country-translations
-    - dependency-name: starburst
-    # This gem is not listed on RubyGems.com, causing the Dependabot parser to freak out
-    #   and crash the whole update cycle. See https://github.com/dependabot/dependabot-core/issues/12110
-    - dependency-name: datetimepicker-rails
   open-pull-requests-limit: 10
 - package-ecosystem: npm
   directory: "/"
   schedule:
     interval: weekly
+  ignore:
+    # Version 7 automatically activates React Compiler strict rules that we won't implement in the old ecosystem
+    - dependency-name: eslint-plugin-react-hooks
+      versions:
+        - ">= 7"
   open-pull-requests-limit: 10
 - package-ecosystem: npm
   directory: "/next-frontend"
   schedule:
     interval: weekly
+  groups:
+    react:
+      patterns:
+        - "react"
+        - "react-dom"
+    payload:
+      patterns:
+        - "payload"
+        - "@payloadcms/*"
+    chakra-ui:
+      patterns:
+        - "@chakra-ui/*"
+    fullcalendar:
+      patterns:
+        - "@fullcalendar/*"
+    nextjs:
+      patterns:
+        - "next"
+        - "eslint-config-next"
   open-pull-requests-limit: 10
 - package-ecosystem: github-actions
   directory: "/"

@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   before_action :store_user_location!, if: :storable_location?
   before_action :add_new_relic_headers
   protected def add_new_relic_headers
-    ::NewRelic::Agent.add_custom_attributes(user_id: current_user ? current_user.id : nil)
+    ::NewRelic::Agent.add_custom_attributes(user_id: current_user&.id)
     ::NewRelic::Agent.add_custom_attributes(HTTP_REFERER: request.headers['HTTP_REFERER'])
     ::NewRelic::Agent.add_custom_attributes(HTTP_ACCEPT: request.headers['HTTP_ACCEPT'])
     ::NewRelic::Agent.add_custom_attributes(HTTP_USER_AGENT: request.user_agent)
@@ -30,6 +30,8 @@ class ApplicationController < ActionController::Base
     #  - the current user preferred locale
     #  - the Accept-Language http header
     session[:locale] ||= current_user&.preferred_locale || http_accept_language.language_region_compatible_from(I18n.available_locales)
+    session[:locale] = current_user&.country_iso2 == 'ES' ? 'es-ES' : 'es-419' if session[:locale] == 'es'
+
     I18n.locale = session[:locale] || I18n.default_locale
 
     @@locale_counts ||= Hash.new(0)
@@ -92,9 +94,6 @@ class ApplicationController < ActionController::Base
     session[:should_reset_jwt] = true
     super
   end
-
-  # Starburst announcements, see https://github.com/starburstgem/starburst#installation
-  helper Starburst::AnnouncementsHelper
 
   private
 

@@ -39,6 +39,7 @@ export function ReportTableCell({
 }) {
   const canViewDelegateReport = permissions.can_view_delegate_report.scope === '*' || permissions.can_view_delegate_report.scope.includes(competitionId);
   const canEditDelegateReport = permissions.can_edit_delegate_report.scope === '*' || permissions.can_edit_delegate_report.scope.includes(competitionId);
+  const canSeeMissingReport = permissions.can_administer_competitions.scope === '*' || permissions.can_administer_competitions.scope.includes(competitionId);
   if (!canViewDelegateReport) {
     return <Table.Cell />;
   }
@@ -66,15 +67,15 @@ export function ReportTableCell({
             />
           )}
 
-        { isPastCompetition && !isReportPosted
-          && permissions.can_administer_competitions.scope.includes(competitionId) && (
+        { isPastCompetition && !isReportPosted && canSeeMissingReport
+          && (
             <Popup
               content={I18n.t('competitions.my_competitions_table.missing_report')}
               trigger={(
                 <Icon name="warning" />
               )}
             />
-        )}
+          )}
       </>
     </Table.Cell>
   );

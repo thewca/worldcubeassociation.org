@@ -1,0 +1,22 @@
+get:
+  summary: Returns the podium results
+  tags:
+    - competitions
+  operationId: competitionPodiums
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../schemas/results/Result.yaml"
+    '404':
+      $ref: '../../errorResponses/CompetitionNotFound.yaml'

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const RegisterIcon = createIcon({
@@ -13,10 +14,9 @@ const RegisterIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const RegisterIconPreview = () => {
-  return <RegisterIcon size="lg" />;
-};
-
-export default RegisterIconPreview;
+export default RegisterIcon;

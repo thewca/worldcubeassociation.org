@@ -6,6 +6,7 @@ class Person < ApplicationRecord
 
   has_one :user, primary_key: "wca_id", foreign_key: "wca_id"
   has_many :results, primary_key: "wca_id"
+  has_many :result_attempts, through: :results
   has_many :competitions, -> { distinct }, through: :results
   has_many :ranks_average, primary_key: "wca_id", class_name: "RanksAverage"
   has_many :ranks_single, primary_key: "wca_id", class_name: "RanksSingle"
@@ -73,6 +74,8 @@ class Person < ApplicationRecord
     end
     user.save! if user # User copies data from the person before validation, so this will update him.
   end
+
+  delegate :id, to: :user, prefix: true, allow_nil: true
 
   def update_using_sub_id!(attributes)
     raise unless update_using_sub_id(attributes)
@@ -164,7 +167,7 @@ class Person < ApplicationRecord
            .includes(:competition, :format)
   end
 
-  def championship_podiums_with_condition
+  def championship_podiums_with_condition(championship_type)
     # Get all championship competitions of the given type where the person made it to the finals.
     # For each of these competitions, get final results only for people eligible for the championship
     # and reassign their positions. If a result belongs to the person, add it to the array.
@@ -183,7 +186,10 @@ class Person < ApplicationRecord
             .joins(:event)
             .order("events.rank, pos")
             .includes(:format, :competition)
-            .group_by(&:event_id)
+            .group_by do |results|
+              # Group by country_id in the case of a national championship to cover the case of a comp acting as multiple national championships
+              championship_type == :national ? { event_id: results.event_id, country_id: results.country_id } : { event_id: results.event_id }
+            end
             .each_value do |final_results|
               previous_old_pos = nil
               previous_new_pos = nil
@@ -204,18 +210,18 @@ class Person < ApplicationRecord
   def championship_podiums
     {}.tap do |podiums|
       podiums[:world] = world_championship_podiums
-      podiums[:continental] = championship_podiums_with_condition do |results|
+      podiums[:continental] = championship_podiums_with_condition(:continental) do |results|
         results.joins(:country, competition: [:championships]).where("championships.championship_type = countries.continent_id")
       end
       EligibleCountryIso2ForChampionship::CHAMPIONSHIP_TYPES.each do |championship_type|
-        podiums[championship_type.to_sym] = championship_podiums_with_condition do |results|
+        podiums[championship_type.to_sym] = championship_podiums_with_condition(championship_type.to_sym) do |results|
           results
             .joins(:country, competition: { championships: :eligible_country_iso2s_for_championship })
             .where(eligible_country_iso2s_for_championship: { championship_type: championship_type })
             .where("eligible_country_iso2s_for_championship.eligible_country_iso2 = countries.iso2")
         end
       end
-      podiums[:national] = championship_podiums_with_condition do |results|
+      podiums[:national] = championship_podiums_with_condition(:national) do |results|
         results.joins(:country, competition: [:championships]).where("championships.championship_type = countries.iso2")
       end
     end
@@ -242,7 +248,7 @@ class Person < ApplicationRecord
   end
 
   def completed_solves_count
-    results.pluck("value1, value2, value3, value4, value5").flatten.count(&:positive?)
+    result_attempts.completed.count
   end
 
   def gender_visible?
@@ -355,6 +361,16 @@ class Person < ApplicationRecord
     )
 
     new_wca_id
+  end
+
+  def execute_edit_person_request(change_type, edit_params)
+    if change_type == "fix"
+      update!(edit_params)
+    elsif change_type == "update"
+      update_using_sub_id!(edit_params)
+    else
+      raise "Unknown change_type #{change_type}"
+    end
   end
 
   def private_attributes_for_user(user)

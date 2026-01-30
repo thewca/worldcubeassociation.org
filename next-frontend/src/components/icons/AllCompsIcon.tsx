@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 export const AllCompsIcon = createIcon({
@@ -17,10 +18,9 @@ export const AllCompsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const AllCompsIconPreview = () => {
-  return <AllCompsIcon size="lg" boxSize="1em" />;
-};
-
-export default AllCompsIconPreview;
+export default AllCompsIcon;

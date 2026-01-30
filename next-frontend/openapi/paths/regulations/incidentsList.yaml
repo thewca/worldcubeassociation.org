@@ -1,0 +1,31 @@
+get:
+  summary: Get a list of incidents
+  tags:
+    - regulations
+  operationId: regulationsList
+  parameters:
+    - name: q
+      in: query
+      schema:
+        type: string
+    - name: tags
+      in: query
+      schema:
+        type: string
+    - name: page
+      in: query
+      schema:
+        type: number
+    - name: per_page
+      in: query
+      schema:
+        type: number
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../schemas/regulations/Incident.yaml'

@@ -1,28 +1,25 @@
 # frozen_string_literal: true
 
 class InboxScrambleSet < ApplicationRecord
-  belongs_to :competition
+  SERIALIZATION_INCLUDES = { inbox_scrambles: [], scramble_file_upload: [], matched_round: [:competition_event] }.freeze
+
+  belongs_to :competition, inverse_of: :inbox_scramble_sets
   belongs_to :event
 
   belongs_to :scramble_file_upload, optional: true, foreign_key: "external_upload_id", inverse_of: :inbox_scramble_sets
-  belongs_to :matched_round, class_name: "Round", optional: true
+  belongs_to :matched_round, class_name: "Round", optional: true, inverse_of: :matched_scramble_sets
 
-  has_many :inbox_scrambles, dependent: :destroy
+  has_many :inbox_scrambles, inverse_of: :inbox_scramble_set, dependent: :destroy
+  has_many :matched_inbox_scrambles, -> { order(:ordered_index) }, class_name: "InboxScramble", inverse_of: :matched_scramble_set, dependent: :nullify
 
-  validates :scramble_set_number, uniqueness: { scope: %i[competition_id event_id round_number] }
+  validates :ordered_index, uniqueness: { scope: :matched_round_id, if: :matched_round_id? }
 
-  before_validation :backfill_round_information!, if: :matched_round_id?
+  delegate :round_type_id, to: :matched_round, allow_nil: true
+  delegate :wcif_id, to: :matched_round, allow_nil: true, prefix: true
+  delegate :original_filename, to: :scramble_file_upload, allow_nil: true
 
-  def backfill_round_information!
-    return if matched_round.blank?
-
-    self.competition_id = matched_round.competition_id
-    self.event_id = matched_round.event_id
-    self.round_number = matched_round.number
-  end
-
-  def matched_round_wcif_id
-    matched_round&.wcif_id || "#{self.event_id}-r#{self.round_number}"
+  def event
+    Event.c_find(self.event_id)
   end
 
   def alphabetic_group_index
@@ -38,7 +35,7 @@ class InboxScrambleSet < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     except: %w[matched_round_id],
-    methods: %w[matched_round_wcif_id],
+    methods: %w[matched_round_wcif_id original_filename],
     include: %w[inbox_scrambles],
   }.freeze
 

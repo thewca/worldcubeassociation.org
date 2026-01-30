@@ -16,16 +16,13 @@ module Admin
       @scramble = {
         competition_id: competition.id,
         round_type_id: round.round_type_id,
+        round_id: round.id,
         event_id: round.event.id,
       }
     end
 
     def edit
       @scramble = Scramble.includes(:competition).find(params[:id])
-    end
-
-    def match_scrambles
-      @competition = Competition.find(params[:competition_id])
     end
 
     def create
@@ -87,8 +84,8 @@ module Admin
     end
 
     private def scramble_params
-      params.require(:scramble).permit(:competition_id, :round_type_id, :round_id, :event_id,
-                                       :group_id, :is_extra, :scramble_num, :scramble)
+      params.expect(scramble: %i[competition_id round_type_id round_id event_id
+                                 group_id is_extra scramble_num scramble])
     end
   end
 end

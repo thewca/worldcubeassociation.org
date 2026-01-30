@@ -1,13 +1,5 @@
-<% provide(:title, "Check results") %>
 <%= render layout: 'competitions/nav' do %>
-  <h1><%= yield(:title) %></h1>
-  <p>
-    Check existing results for the competition.
-  </p>
-
-  <%= react_component("Panel/pages/RunValidatorsPage/RunValidatorsForm", {
-    competitionIds: [@competition.id],
+  <%= react_component("CompetitionResultSubmission/CheckExistingResults", {
+    competitionId: @competition.id,
   }) %>
-
-  <%= render "results_submission/results_preview_panel", results_validator: @results_validator %>
 <% end %>

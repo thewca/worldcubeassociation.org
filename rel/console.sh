@@ -18,6 +18,7 @@ usage() {
   printf "${COLOR_DEFAULT}Usage: $0 -e <environment>\n"
   printf " -e <environment>  Specify the environment (production or staging)"
   printf " -b: Run a bash shell instead of the default command"
+  printf " -n: Connect to Nextjs"
   exit 1
 }
 
@@ -53,15 +54,20 @@ else
 fi
 
 # Parse the environment argument
+nextjs=false
 environment=""
 command="/rails/bin/rails c"
-while getopts ":e:bh" opt; do
+while getopts ":e:bnh" opt; do
   case $opt in
     e)
       environment=$OPTARG
       ;;
     b)
       command="/bin/bash"
+      ;;
+    n)
+      command="/bin/sh"
+      nextjs=true
       ;;
     h)
       usage
@@ -99,6 +105,11 @@ case "$environment" in
     usage
   ;;
 esac
+
+if [ "$nextjs" == "true" ]; then
+  service_name="wca-on-rails-prod-nextjs-production"
+  container_name="nextjs-production"
+fi
 
 task_arn="$(
   aws ecs list-tasks \

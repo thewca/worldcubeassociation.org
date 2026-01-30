@@ -925,8 +925,6 @@ pl:
         results_file: ''
         #original_hash: da39a3e
         message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1532,7 +1530,7 @@ pl:
         href="/faq">Najczęściej zadawanych pytań</a>! Jeżeli chcesz się
         skontaktować z konkretnym komitetem bądź zespołem nie podanym tutaj
         możesz znaleźć ich informacje kontaktowe na <a
-        href="/teams-committees-councils">tej stronie</a>.
+        href="/teams-committees">tej stronie</a>.
       #original_hash: ea20be0
       success_message: E-mail wysłany - odezwiemy sie do Ciebie wkrótce.
       #original_hash: 8fa6b95
@@ -5062,7 +5060,7 @@ pl:
       możliwość rozwoju, oraz że przeprowadzanie wydarzeń w nowych grupach ludzi
       pozwala na wzmocnienie naszej społeczności. Dokument zawierający Wizję
       oraz Strategię Zarządu dla WCA można znaleźć <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">tutaj</a>.</p>
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">tutaj</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Co czeka WCA?
     #original_hash: 3312277

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const CloneIcon = createIcon({
@@ -13,10 +14,9 @@ const CloneIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const CloneIconPreview = () => {
-  return <CloneIcon size="lg" />;
-};
-
-export default CloneIconPreview;
+export default CloneIcon;

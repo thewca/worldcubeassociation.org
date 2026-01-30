@@ -7,6 +7,7 @@ is_compiling_assets = ENV.fetch("ASSETS_COMPILATION", false)
 EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
   if Rails.env.production?
     mandatory :READ_REPLICA_HOST, :string
+    mandatory :DEV_DUMP_HOST, :string
     mandatory :CACHE_REDIS_URL, :string
     mandatory :SIDEKIQ_REDIS_URL, :string
     mandatory :DISCOURSE_URL, :string
@@ -19,6 +20,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     mandatory :CDN_AVATARS_DISTRIBUTION_ID, :string
     mandatory :AWS_REGION, :string
     mandatory :DATABASE_WRT_USER, :string
+    mandatory :DATABASE_WRT_SENIOR_USER, :string
     optional :PAYPAL_BASE_URL, :string ## TODO: Change to mandatory when launching paypal
     mandatory :WRC_WEBHOOK_URL, :string
 
@@ -38,6 +40,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     end
   else
     optional :READ_REPLICA_HOST, :string, ''
+    optional :DEV_DUMP_HOST, :string, ''
     optional :CACHE_REDIS_URL, :string, ''
     optional :SIDEKIQ_REDIS_URL, :string, ''
     optional :DISCOURSE_URL, :string, ''
@@ -50,12 +53,14 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     optional :AVATARS_PRIVATE_STORAGE, :string, ''
     optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
     optional :DATABASE_WRT_USER, :string, ''
+    optional :DATABASE_WRT_SENIOR_USER, :string, ''
     optional :WCA_REGISTRATIONS_URL, :string, ''
     optional :WCA_REGISTRATIONS_POLL_URL, :string, ''
     optional :PAYPAL_BASE_URL, :string, ''
     optional :WRC_WEBHOOK_URL, :string, ''
     optional :REGISTRATION_QUEUE, :string, ''
     optional :LIVE_QUEUE, :string, ''
+    optional :DEVELOPMENT_OFFLINE_MODE, :bool, false
 
     optional :V2_REGISTRATIONS_POLL_URL, :string, ''
     optional :V3_REGISTRATIONS_POLL_URL, :string, ''
@@ -98,6 +103,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
 
   optional :ROOT_URL, :string, default_root_url
   optional :OIDC_ISSUER, :string, default_root_url
+  mandatory :OIDC_ALGORITHM, :string
 
   # For server status
   optional :BUILD_TAG, :string, "local"

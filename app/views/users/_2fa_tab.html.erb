@@ -28,7 +28,8 @@
   <p><%= t("devise.sessions.new.2fa.dedicated_app_desc_html",
            authy: link_to("Authy", "https://authy.com/download/"),
            google: link_to("Google Authenticator", "https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"),
-           microsoft: link_to("Microsoft Authenticator", "https://www.microsoft.com/en-us/account/authenticator")) %></p>
+           microsoft: link_to("Microsoft Authenticator", "https://www.microsoft.com/en-us/account/authenticator"),
+           apple: link_to("iOS Passwords", "https://apps.apple.com/us/app/passwords/id6473799789?platform=iphone")) %></p>
 
   <p><%= t("devise.sessions.new.2fa.scan_qrcode_html",
            here: link_to(t("common.here"), otp_provisioning_uri_for_user(@user))) %></p>

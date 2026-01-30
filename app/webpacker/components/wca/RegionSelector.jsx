@@ -10,23 +10,27 @@ export const ALL_REGIONS_VALUE = 'all';
 
 const allRegionsOption = { key: 'all', text: I18n.t('common.all_regions'), value: ALL_REGIONS_VALUE };
 
-const continentOptions = Object.values(continents.real).map((continent) => (
-  { key: continent.id, text: continent.name, value: continent.id }
-));
+const continentOptions = Object.values(continents.real)
+  .toSorted((a, b) => a.name.localeCompare(b.name))
+  .map((continent) => (
+    { key: continent.id, text: continent.name, value: continent.id }
+  ));
 
-const countryOptions = Object.values(countries.real).map((country) => (
-  {
-    key: country.id,
-    text: country.name,
-    value: country.iso2,
-    flag: (
-      <>
-        <RegionFlag iso2={country.iso2} withoutTooltip />
-        {' '}
-      </>
-    ),
-  }
-));
+const countryOptions = Object.values(countries.real)
+  .toSorted((a, b) => a.name.localeCompare(b.name))
+  .map((country) => (
+    {
+      key: country.id,
+      text: country.name,
+      value: country.iso2,
+      flag: (
+        <>
+          <RegionFlag iso2={country.iso2} withoutTooltip />
+          {' '}
+        </>
+      ),
+    }
+  ));
 
 const regionsOptions = [
   allRegionsOption,

@@ -80,7 +80,7 @@ export function IdWcaSearch({
   const onChangeIdOnly = useCallback((evt, data) => {
     const { value: apiValues } = data;
 
-    const extractedIds = multiple ? apiValues.map((apiValue) => apiValue.id) : apiValues.id;
+    const extractedIds = multiple ? apiValues.map((apiValue) => apiValue.id) : apiValues?.id;
     const changePayload = { ...data, value: extractedIds };
 
     onChange(evt, changePayload);

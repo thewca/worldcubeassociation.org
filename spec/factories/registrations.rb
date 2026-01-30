@@ -104,17 +104,28 @@ FactoryBot.define do
       end
     end
 
-    trait :paid_no_hooks do
+    trait :uncaptured do
       after(:create) do |registration|
-        payment = FactoryBot.build(:registration_payment, registration: registration, user: registration.user,
-                                                          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination)
-        payment.save(validate: false)
+        FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination.round,
+          is_completed: false,
+        )
       end
     end
 
-    trait :unpaid do
+    trait :paid_no_hooks do
       after(:create) do |registration|
-        FactoryBot.create(:registration_payment, registration: registration, user: registration.user)
+        payment = FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          is_completed: false, # Set false so that the successful apyment hooks don't trigger
+          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination,
+        )
+        payment.update_column(:is_completed, true) # Directly update is_completed column to skip hooks
       end
     end
 

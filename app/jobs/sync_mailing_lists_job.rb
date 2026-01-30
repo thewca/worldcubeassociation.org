@@ -1,14 +1,22 @@
 # frozen_string_literal: true
 
 class SyncMailingListsJob < WcaCronjob
+  EXECUTIVE_DIRECTOR_EMAIL = 'rmurphy@worldcubeassociation.org'
+
   before_enqueue do
     # NOTE: we want to only do this on the actual "production" server, as we need the real users' emails.
     throw :abort unless EnvConfig.WCA_LIVE_SITE?
   end
 
+  # Google APIs have extremely strict quotas, but their Ruby SDK client offers no batching or request backoff...
+  #   And since I don't feel like building our own request queue with timed execution, we just let Sidekiq retry.
+  # However, the fail happens relatively fast, and we want to avoid Sidekiq retrying over and over again
+  sidekiq_options retry: 10
+
   def perform
     GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", UserGroup.teams_committees.filter_map(&:lead_user).map(&:email))
-    GsuiteMailingLists.sync_group(GroupsMetadataBoard.email, UserGroup.board_group.active_users.map(&:email))
+    board_users = UserGroup.board_group.active_users.map(&:email) | [EXECUTIVE_DIRECTOR_EMAIL]
+    GsuiteMailingLists.sync_group(GroupsMetadataBoard.email, board_users)
     translator_users = UserGroup.translators.flat_map(&:users)
     GsuiteMailingLists.sync_group("translators@worldcubeassociation.org", translator_users.map(&:email))
 

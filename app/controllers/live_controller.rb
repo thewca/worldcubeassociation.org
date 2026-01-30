@@ -14,7 +14,7 @@ class LiveController < ApplicationController
     round_id = params.require(:round_id)
     registration_id = params.require(:registration_id)
 
-    return render json: { status: "result already exist" }, status: :unprocessable_entity if LiveResult.exists?(round_id: round_id, registration_id: registration_id)
+    return render json: { status: "result already exist" }, status: :unprocessable_content if LiveResult.exists?(round_id: round_id, registration_id: registration_id)
 
     AddLiveResultJob.perform_later(results, round_id, registration_id, current_user)
 
@@ -28,7 +28,7 @@ class LiveController < ApplicationController
 
     result = LiveResult.includes(:live_attempts).find_by(round: round, registration_id: registration_id)
 
-    return render json: { status: "result does not exist" }, status: :unprocessable_entity if result.blank?
+    return render json: { status: "result does not exist" }, status: :unprocessable_content if result.blank?
 
     previous_attempts = result.live_attempts.index_by(&:attempt_number)
 
@@ -36,7 +36,7 @@ class LiveController < ApplicationController
       previous_attempt = previous_attempts[i]
 
       if previous_attempt.present?
-        if previous_attempt.result == r
+        if previous_attempt.value == r
           previous_attempt
         else
           previous_attempt.update_with_history_entry(r, current_user)
@@ -46,20 +46,9 @@ class LiveController < ApplicationController
       end
     end
 
-    # TODO: What is the best way to do this?
-    r = Result.new(
-      value1: results[0],
-      value2: results[1],
-      value3: results[2],
-      value4: results[3] || 0,
-      value5: results[4] || 0,
-      event_id: round.event.id,
-      round_type_id: round.round_type_id,
-      round_id: round.id,
-      format_id: round.format_id,
-    )
+    average, best = LiveResult.compute_average_and_best(new_attempts, round)
 
-    result.update(average: r.compute_correct_average, best: r.compute_correct_best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)
+    result.update(average: average, best: best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)
 
     render json: { status: "ok" }
   end

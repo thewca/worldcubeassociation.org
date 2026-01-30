@@ -1,0 +1,13 @@
+allOf:
+  - $ref: '../users/Person.yaml'
+  - type: object
+    properties:
+      delegate_status:
+        type: string
+        example: "regional_delegate"
+      email:
+        type: string
+        format: email
+        example: "255@worldcubeassociation.org"
+      avatar:
+        $ref: '../users/UserAvatar.yaml'

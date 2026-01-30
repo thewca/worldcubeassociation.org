@@ -4,9 +4,9 @@ import {
   subordinateDelegateClaimsUrl,
   subordinateUpcomingCompetitionsUrl,
   generateDbTokenUrl,
+  sanityCheckResultsUrl,
   serverStatusPageUrl,
   mergeProfilesUrl,
-  reassignConnectedWcaIdUrl,
 } from '../../lib/requests/routes.js.erb';
 import PostingCompetitionsTable from '../PostingCompetitions';
 import EditPersonPage from './pages/EditPersonPage';
@@ -38,6 +38,8 @@ import ComputeAuxiliaryDataPage from './pages/ComputeAuxiliaryDataPage';
 import GenerateDataExportsPage from './pages/GenerateDataExportsPage';
 import CheckRecordsPage from './pages/CheckRecordsPage';
 import FixResultsPage from './pages/FixResultsPage';
+import MergeUsersPage from './pages/MergeUsersPage';
+import HelpfulQueriesPage from './pages/HelpfulQueriesPage';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -140,6 +142,10 @@ export default {
     name: 'Generate DB Token',
     link: generateDbTokenUrl,
   },
+  [PANEL_PAGES.sanityCheckResults]: {
+    name: 'Sanity Check Results',
+    link: sanityCheckResultsUrl,
+  },
   [PANEL_PAGES.approveAvatars]: {
     name: 'Approve Avatars',
     component: ApprovePictures,
@@ -184,8 +190,12 @@ export default {
     name: 'Merge Profiles',
     link: mergeProfilesUrl,
   },
-  [PANEL_PAGES.reassignConnectedWcaId]: {
-    name: 'Reassign Connected WCA ID',
-    link: reassignConnectedWcaIdUrl,
+  [PANEL_PAGES.mergeUsers]: {
+    name: 'Merge Users',
+    component: MergeUsersPage,
+  },
+  [PANEL_PAGES.helpfulQueries]: {
+    name: 'Helpful Queries',
+    component: HelpfulQueriesPage,
   },
 };

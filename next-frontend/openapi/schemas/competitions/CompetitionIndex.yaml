@@ -1,0 +1,92 @@
+type: object
+required:
+  - id
+  - name
+  - short_display_name
+  - start_date
+  - end_date
+  - registration_open
+  - registration_close
+  - announced_at
+  - country_iso2
+  - city
+  - venue
+  - latitude_degrees
+  - longitude_degrees
+  - event_ids
+  - main_event_id
+  - competitor_limit
+  - championship_types
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  short_display_name:
+    type: string
+  start_date:
+    type: string
+    format: date
+  end_date:
+    type: string
+    format: date
+  registration_open:
+    type: string
+    format: date-time
+  registration_close:
+    type: string
+    format: date-time
+  announced_at:
+    type: string
+    format: date-time
+  country_iso2:
+    type: string
+  city:
+    type: string
+  venue:
+    type: string
+  latitude_degrees:
+    type: number
+    format: float
+  longitude_degrees:
+    type: number
+    format: float
+  event_ids:
+    type: array
+    items:
+      type: string
+  main_event_id:
+    type: string
+  competitor_limit:
+    type: integer
+  championship_types:
+    type: array
+    items:
+      type: string
+      example: 'world'
+  results_submitted_at:
+    type: string
+    format: date-time
+  results_posted_at:
+    type: string
+    format: date-time
+  report_posted_at:
+    type: string
+    format: date-time
+  report_posted_by_user:
+    type: integer
+  delegates:
+    type: array
+    items:
+      type: object
+      required:
+        - id
+        - name
+        - avatar
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        avatar:
+          $ref: '../users/UserAvatar.yaml'

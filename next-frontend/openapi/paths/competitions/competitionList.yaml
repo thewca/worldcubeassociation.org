@@ -1,0 +1,64 @@
+get:
+  summary: Get a list of (upcoming) competitions for table display
+  tags:
+    - competitions
+  operationId: competitionList
+  parameters:
+    - name: include_cancelled
+      in: query
+      schema:
+        type: boolean
+    - name: continent
+      in: query
+      schema:
+        type: string
+    - name: country_iso2
+      in: query
+      schema:
+        type: string
+    - name: delegate
+      in: query
+      schema:
+        type: string
+    - name: event_ids[]
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+    - name: start
+      in: query
+      schema:
+        type: string
+        format: datetime
+    - name: end
+      in: query
+      schema:
+        type: string
+        format: datetime
+    - name: admin_status
+      in: query
+      schema:
+        type: string
+    - name: q
+      in: query
+      schema:
+        type: string
+    - name: sort
+      in: query
+      schema:
+        type: string
+    - name: ongoing_and_future
+      in: query
+      schema:
+        type: string
+        format: datetime
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../schemas/competitions/CompetitionIndex.yaml'

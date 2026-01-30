@@ -1,127 +1,133 @@
-"use client";
+"use server";
 
-import { VStack, Container, Card, Heading, Tabs } from "@chakra-ui/react";
 import {
-  AccordionItem,
-  AccordionItemContent,
-  AccordionItemTrigger,
-  AccordionRoot,
+  VStack,
+  Container,
+  Card,
+  Heading,
+  Tabs,
+  Accordion,
+  Text,
 } from "@chakra-ui/react";
+import { getPayload } from "payload";
+import config from "@payload-config";
+import { FaqCategory, FaqQuestion } from "@/types/payload";
+import { MarkdownProse } from "@/components/Markdown";
+import { uniqBy } from "lodash";
+import { Metadata } from "next";
+import { getT } from "@/lib/i18n/get18n";
 
-export default function FAQ() {
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("faq.title"),
+  };
+}
+
+export default async function FAQ() {
+  const payload = await getPayload({ config });
+
+  const faqPage = await payload.findGlobal({ slug: "faq-page", depth: 2 });
+  const faqQuestionsRaw = faqPage.questions;
+
+  if (faqQuestionsRaw.length === 0) {
+    return <Heading>No FAQ Categories, add some!</Heading>;
+  }
+
+  const faqQuestions = faqQuestionsRaw.map(
+    (item) => item.faqQuestion as FaqQuestion,
+  );
+
+  const allCategories = faqQuestions.map(
+    (item) => item.category as FaqCategory,
+  );
+
+  const faqCategories = uniqBy(allCategories, "id");
+
   return (
-    <Container>
-      <VStack gap="8" width="full" pt="8" alignItems="left">
-        <Heading size="5xl"> Frequently Asked Questions</Heading>
+    <Container paddingTop="8" bg="bg">
+      <VStack gap="8" width="full" alignItems="left">
         <Card.Root maxW="40em">
           <Card.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+            <Card.Title textStyle="h1">Frequently Asked Questions</Card.Title>
+            {faqPage.introTextMarkdown ? (
+              <MarkdownProse
+                content={faqPage.introTextMarkdown}
+                textStyle="body"
+              />
+            ) : (
+              <Text>No Intro text, add it!</Text>
+            )}
           </Card.Body>
         </Card.Root>
-        <Card.Root variant="hero" overflow="hidden">
-          <Card.Body bg="bg">
+        <Card.Root borderWidth={0} bg="transparent">
+          <Card.Body paddingX={0}>
             <Tabs.Root
               variant="subtle"
               fitted
-              defaultValue={"tab-1"}
+              defaultValue={faqCategories[0].id.toString()}
               width="full"
             >
               <Tabs.List>
-                <Tabs.Trigger value="tab-1">Tab 1</Tabs.Trigger>
-                <Tabs.Trigger value="tab-2">Tab 2</Tabs.Trigger>
-                <Tabs.Trigger value="tab-3">Tab 3</Tabs.Trigger>
+                {faqCategories.map((category) => (
+                  <Tabs.Trigger
+                    key={category.id}
+                    value={category.id.toString()}
+                    colorPalette={category.colorPalette}
+                  >
+                    {category.title}
+                  </Tabs.Trigger>
+                ))}
               </Tabs.List>
-              <Tabs.Content value="tab-1">
-                <AccordionRoot
-                  multiple
-                  collapsible
-                  variant="subtle"
-                  width="full"
-                >
-                  <AccordionItem value="wca-id">
-                    <AccordionItemTrigger colorPalette="blue">
-                      How do I obtain a WCA ID and a WCA profile?
-                    </AccordionItemTrigger>
-                    <AccordionItemContent>
-                      You can obtain a WCA ID and profile by participating in an
-                      official WCA competition. Once your results are uploaded,
-                      your profile will be automatically created.
-                    </AccordionItemContent>
-                  </AccordionItem>
-                  <AccordionItem value="find-competition">
-                    <AccordionItemTrigger colorPalette="blue">
-                      How can I find a WCA competition?
-                    </AccordionItemTrigger>
-                    <AccordionItemContent>
-                      You can find WCA competitions on the official WCA website
-                      under the &quot;Competitions&quot; tab. There, you can
-                      filter competitions by country, date, or type.
-                    </AccordionItemContent>
-                  </AccordionItem>
-                </AccordionRoot>
-              </Tabs.Content>
-              <Tabs.Content value="tab-2">
-                <AccordionRoot
-                  multiple
-                  collapsible
-                  variant="subtle"
-                  width="full"
-                >
-                  <AccordionItem value="wca-id">
-                    <AccordionItemTrigger colorPalette="green">
-                      How can I have a WCA Competition in my hometown?
-                    </AccordionItemTrigger>
-                    <AccordionItemContent>
-                      You can obtain a WCA ID and profile by participating in an
-                      official WCA competition. Once your results are uploaded,
-                      your profile will be automatically created.
-                    </AccordionItemContent>
-                  </AccordionItem>
-                  <AccordionItem value="find-competition">
-                    <AccordionItemTrigger colorPalette="green">
-                      What are the WCA accounts for? What is the difference
-                      between WCA accounts and WCA profiles?
-                    </AccordionItemTrigger>
-                    <AccordionItemContent>
-                      You can find WCA competitions on the official WCA website
-                      under the &quot;Competitions&quot; tab. There, you can
-                      filter competitions by country, date, or type.
-                    </AccordionItemContent>
-                  </AccordionItem>
-                </AccordionRoot>
-              </Tabs.Content>
-              <Tabs.Content value="tab-3">
-                <AccordionRoot
-                  multiple
-                  collapsible
-                  variant="subtle"
-                  width="full"
-                >
-                  <AccordionItem value="wca-id">
-                    <AccordionItemTrigger colorPalette="red">
-                      How do I change my profile picture?
-                    </AccordionItemTrigger>
-                    <AccordionItemContent>
-                      You can obtain a WCA ID and profile by participating in an
-                      official WCA competition. Once your results are uploaded,
-                      your profile will be automatically created.
-                    </AccordionItemContent>
-                  </AccordionItem>
-                  <AccordionItem value="find-competition">
-                    <AccordionItemTrigger colorPalette="red">
-                      How do I connect my WCA account with my WCA ID?
-                    </AccordionItemTrigger>
-                    <AccordionItemContent>
-                      You can find WCA competitions on the official WCA website
-                      under the &quot;Competitions&quot; tab. There, you can
-                      filter competitions by country, date, or type.
-                    </AccordionItemContent>
-                  </AccordionItem>
-                </AccordionRoot>
-              </Tabs.Content>
+              {faqCategories.map((category) => {
+                const questions = faqQuestions.filter(
+                  (faqQuestion) =>
+                    (faqQuestion.category as FaqCategory).id === category.id,
+                );
+                return (
+                  <Tabs.Content
+                    key={category.id}
+                    value={category.id.toString()}
+                  >
+                    <Accordion.Root
+                      multiple
+                      collapsible
+                      variant="card"
+                      width="full"
+                    >
+                      {questions.map((question) => (
+                        <Accordion.Item
+                          key={question.id}
+                          value={question.id.toString()}
+                          layerStyle="outline.solid"
+                          borderColor="border"
+                          bg="bg.panel"
+                        >
+                          <Accordion.ItemTrigger
+                            textStyle="s1"
+                            _open={{
+                              bgImage: `linear-gradient(90deg, {colors.${category.colorPalette}.subtle}, {colors.bg.panel})`,
+                              borderBottomRadius: 0,
+                            }}
+                            _hover={{
+                              bgImage: `linear-gradient(90deg, {colors.${category.colorPalette}.subtle}, {colors.bg.panel})`,
+                            }}
+                          >
+                            {question.question}
+                            <Accordion.ItemIndicator />
+                          </Accordion.ItemTrigger>
+                          <Accordion.ItemContent textStyle="body">
+                            <Accordion.ItemBody>
+                              {question.answer}
+                            </Accordion.ItemBody>
+                          </Accordion.ItemContent>
+                        </Accordion.Item>
+                      ))}
+                    </Accordion.Root>
+                  </Tabs.Content>
+                );
+              })}
             </Tabs.Root>
           </Card.Body>
         </Card.Root>

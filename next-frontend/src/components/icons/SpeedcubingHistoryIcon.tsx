@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const SpeedcubingHistoryIcon = createIcon({
@@ -13,10 +14,9 @@ const SpeedcubingHistoryIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const SpeedcubingHistoryIconPreview = () => {
-  return <SpeedcubingHistoryIcon size="lg" />;
-};
-
-export default SpeedcubingHistoryIconPreview;
+export default SpeedcubingHistoryIcon;

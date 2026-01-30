@@ -910,8 +910,6 @@ hr:
         results_file: ''
         #original_hash: da39a3e
         message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1501,7 +1499,7 @@ hr:
         Prije postavljanja upita, možda biste željeli pogledati naša <a
         href="/faq">Često postavljana pitanja</a>! Ako želite kontaktirati
         određeni odbor ili tim koji nije ovdje naveden, možete provjeriti
-        njihove podatke na <a href="/teams-committees-councils">ovoj
+        njihove podatke na <a href="/teams-committees">ovoj
         stranici</a>.
       #original_hash: ea20be0
       success_message: Email poslan - javit ćemo vam se u najbržem roku.
@@ -4904,7 +4902,7 @@ hr:
       pokazivanjem mozgalica novim grupama ljudi pruža veliku priliku za rast
       zajednice. Dokument koji sadrži Viziju i Strategiju WCA Upravnog odbora
       može se pronaći <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">ovdje</a>.</p>
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">ovdje</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Što je sljedeće za WCA?
     #original_hash: 3312277

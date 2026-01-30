@@ -14,28 +14,28 @@ RSpec.describe "API Competitions" do
     it "orders competitions by date descending by default" do
       get api_v0_competitions_path, params: { start: 2.weeks.from_now }
       expect(response).to be_successful
-      ids = response.parsed_body.map { |c| c["id"] }
+      ids = response.parsed_body.pluck("id")
       expect(ids).to eq [competition4, competition3].map(&:id)
     end
 
     it "allows ordering by date ascending" do
       get api_v0_competitions_path, params: { start: 2.weeks.from_now, sort: "start_date" }
       expect(response).to be_successful
-      ids = response.parsed_body.map { |c| c["id"] }
+      ids = response.parsed_body.pluck("id")
       expect(ids).to eq [competition3, competition4].map(&:id)
     end
 
     it "allows ordering by multiple fields" do
       get api_v0_competitions_path, params: { sort: "start_date,name" }
       expect(response).to be_successful
-      ids = response.parsed_body.map { |c| c["id"] }
+      ids = response.parsed_body.pluck("id")
       expect(ids).to eq [competition1, competition2, competition3, competition4].map(&:id)
     end
 
     it "allows setting descending order" do
       get api_v0_competitions_path, params: { sort: "start_date,-name" }
       expect(response).to be_successful
-      ids = response.parsed_body.map { |c| c["id"] }
+      ids = response.parsed_body.pluck("id")
       expect(ids).to eq [competition2, competition1, competition3, competition4].map(&:id)
     end
   end
@@ -85,7 +85,7 @@ RSpec.describe "API Competitions" do
       get api_v0_competition_registrations_path(competition)
       expect(response).to be_successful
       json = response.parsed_body
-      expect(json.map { |r| r["id"] }).to eq [accepted_registration.id]
+      expect(json.pluck("id")).to eq [accepted_registration.id]
     end
   end
 
@@ -208,7 +208,7 @@ RSpec.describe "API Competitions" do
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
           expect(response).to have_http_status(:bad_request)
           response_json = response.parsed_body
-          expect(response_json["error"]).to eq "The property '#/events/0/rounds/0/format' value \"invalidformat\" did not match one of the following values: 1, 2, 3, a, m"
+          expect(response_json["error"]).to eq "The property '#/events/0/rounds/0/format' value \"invalidformat\" did not match one of the following values: 1, 2, 3, 5, a, m"
           expect(competition.reload.competition_events.find_by(event_id: "333").rounds.length).to eq 2
         end
 

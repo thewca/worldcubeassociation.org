@@ -3,34 +3,33 @@ import React, { JSX, useState } from "react";
 import {
   Table,
   Text,
-  Link,
+  Link as ChakraLink,
   Button,
   CloseButton,
   Drawer,
   Portal,
-  Badge,
-  VStack,
   Heading,
   Float,
+  Icon,
 } from "@chakra-ui/react";
 
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 
 import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
 import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
 import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
 
-import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
-import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
-import RegisterIcon from "@/components/icons/RegisterIcon";
-import LocationIcon from "@/components/icons/LocationIcon";
 import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
 
-import EventIcon from "@/components/EventIcon";
 import CountryMap from "@/components/CountryMap";
 
-import type { components } from "@/lib/wca/wcaSchema";
+import type { components } from "@/types/openapi";
+import Link from "next/link";
+import { route } from "nextjs-routes";
+import { useT } from "@/lib/i18n/useI18n";
+import { formatDateRange } from "@/lib/dates/format";
+import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
 
 // Raw competition type from WCA API
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
@@ -64,44 +63,13 @@ const registrationStatusIcons: Record<string, JSX.Element> = {
   full: <CompRegoFullButOpenOrangeIcon />,
 };
 
-// Format date range
-function formatDateRange(start: string, end: string): string {
-  const startDate = new Date(start);
-  const endDate = new Date(end);
-  const sameDay = startDate.toDateString() === endDate.toDateString();
-
-  const dayFormatter = new Intl.DateTimeFormat("en-US", { day: "numeric" });
-  const monthDayFormatter = new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-  });
-  const fullFormatter = new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-
-  if (sameDay) return fullFormatter.format(startDate);
-
-  const sameMonth = startDate.getMonth() === endDate.getMonth();
-  const sameYear = startDate.getFullYear() === endDate.getFullYear();
-
-  if (sameMonth && sameYear) {
-    return `${monthDayFormatter.format(startDate)} - ${dayFormatter.format(endDate)}, ${startDate.getFullYear()}`;
-  }
-
-  if (sameYear) {
-    return `${monthDayFormatter.format(startDate)} - ${monthDayFormatter.format(endDate)}, ${startDate.getFullYear()}`;
-  }
-
-  return `${fullFormatter.format(startDate)} - ${fullFormatter.format(endDate)}`;
-}
-
 const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
   const [open, setOpen] = useState(false);
   const regoStatus = getRegistrationStatus(comp);
+
+  const { t } = useT();
   return (
-    <Table.Row bg="bg.inverted" onClick={() => setOpen(true)} key={comp.id}>
+    <Table.Row onClick={() => setOpen(true)} key={comp.id}>
       <Table.Cell>{registrationStatusIcons[regoStatus] || null}</Table.Cell>
 
       <Table.Cell>
@@ -109,13 +77,16 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
       </Table.Cell>
 
       <Table.Cell>
-        <Link
-          hoverArrow
-          href={`/competitions/${comp.id}`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {comp.name}
-        </Link>
+        <ChakraLink asChild>
+          <Link
+            href={route({
+              pathname: "/competitions/[competitionId]",
+              query: { competitionId: comp.id },
+            })}
+          >
+            {comp.name}
+          </Link>
+        </ChakraLink>
       </Table.Cell>
 
       <Table.Cell width="100%">
@@ -123,23 +94,24 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
       </Table.Cell>
 
       <Table.Cell textAlign="right">
-        <CountryMap code={comp.country_iso2} bold />
+        <CountryMap code={comp.country_iso2} fontWeight="bold" t={t} />
       </Table.Cell>
 
       <Table.Cell minWidth="4em">
-        <Flag code={comp.country_iso2} fallback={comp.country_iso2} />
+        <Icon size="lg">
+          <WcaFlag code={comp.country_iso2} fallback={comp.country_iso2} />
+        </Icon>
       </Table.Cell>
 
-      <Drawer.Root
-        open={open}
-        onOpenChange={(e) => setOpen(e.open)}
-        variant="competitionInfo"
-        size="xl"
-      >
+      <Drawer.Root open={open} onOpenChange={(e) => setOpen(e.open)} size="xl">
         <Portal>
           <Drawer.Backdrop />
           <Drawer.Positioner padding="4">
-            <Drawer.Content overflow="hidden">
+            <Drawer.Content
+              overflow="hidden"
+              borderRadius="wca"
+              height="max-content"
+            >
               {comp.championship_types.length > 0 && (
                 <Float
                   placement="middle-end"
@@ -154,44 +126,21 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                 <Heading size="3xl">{comp.name}</Heading>
               </Drawer.Header>
               <Drawer.Body>
-                <VStack alignItems="start">
-                  <Badge variant="information" colorPalette="grey">
-                    <Flag
-                      code={comp.country_iso2}
-                      fallback={comp.country_iso2}
-                    />
-                    <CountryMap code={comp.country_iso2} bold /> {comp.city}
-                  </Badge>
-                  <Badge variant="information" colorPalette="grey">
-                    <CompRegoCloseDateIcon />
-                    {formatDateRange(comp.start_date, comp.end_date)}
-                  </Badge>
-                  <Badge variant="information" colorPalette="grey">
-                    <CompetitorsIcon />
-                    {comp.competitor_limit} Competitor Limit
-                  </Badge>
-                  <Badge variant="information" colorPalette="grey">
-                    <RegisterIcon />
-                    {comp.competitor_limit} Spots Left
-                  </Badge>
-                  <Badge variant="information" colorPalette="grey">
-                    <LocationIcon />
-                    {comp.city}
-                  </Badge>
-                </VStack>
-                <Text>Events:</Text>
-                {comp.event_ids.map((eventId) => (
-                  <EventIcon
-                    eventId={eventId}
-                    key={eventId}
-                    main={eventId === comp.main_event_id}
-                  />
-                ))}
+                <CompetitionShortlist comp={comp} t={t} />
               </Drawer.Body>
               <Drawer.Footer justifyContent="space-between" width="full">
                 {/* TODO: Only Show register button/link if registration is not full */}
                 <Button variant="outline">Register Now</Button>
-                <Button variant="solid">View Competition</Button>
+                <Button variant="solid" asChild>
+                  <Link
+                    href={route({
+                      pathname: "/competitions/[competitionId]",
+                      query: { competitionId: comp.id },
+                    })}
+                  >
+                    View Competition
+                  </Link>
+                </Button>
               </Drawer.Footer>
               <Drawer.CloseTrigger asChild>
                 <CloseButton size="sm" />

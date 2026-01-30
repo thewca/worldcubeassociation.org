@@ -1,0 +1,15 @@
+get:
+  summary: Get a list of Olson timezones that the backend understands
+  tags:
+    - wca
+  operationId: knownTimezones
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'America/New_York'

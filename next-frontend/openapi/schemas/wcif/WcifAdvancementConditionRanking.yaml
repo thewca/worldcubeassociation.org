@@ -1,0 +1,10 @@
+type: object
+properties:
+  type:
+    type: string
+    example: "ranking"
+  level:
+    $ref: './WcifRanking.yaml'
+required:
+  - type
+  - level

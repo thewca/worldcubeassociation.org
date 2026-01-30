@@ -17,6 +17,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
     group_type = params[:groupType]
     group_id = params[:groupId]
+    parent_group_id = params[:parentGroupId]
     user_id = params[:userId]
 
     # In next few lines, instead of foo.present? we are using !foo.nil? because foo.present? returns
@@ -27,6 +28,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     active_record = active_record.where(group: { is_hidden: is_group_hidden }) unless is_group_hidden.nil?
     active_record = active_record.where(group: { group_type: group_type }) if group_type.present?
     active_record = active_record.where(group_id: group_id) if group_id.present?
+    active_record = active_record.where(group: { parent_group_id: parent_group_id }) if parent_group_id.present?
     active_record = active_record.where(user_id: user_id) if user_id.present?
     active_record
   end
@@ -40,7 +42,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     roles = UserRole.sort_roles(roles, params[:sort])
 
     # Paginating the list by sending only first 100 elements unless mentioned in the API.
-    paginate json: roles
+    paginate json: roles, include: {
+      user: { exclude_deprecated: true, include_email: true },
+      group: {},
+      metadata: {},
+    }
   end
 
   def show
@@ -79,13 +85,13 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       upcoming_comps_for_user = user.competitions_with_active_registrations.distinct
       upcoming_comps_for_user = upcoming_comps_for_user.between_dates(Date.today, end_date) if end_date.present?
       unless upcoming_comps_for_user.empty?
-        return render status: :unprocessable_entity, json: {
+        return render status: :unprocessable_content, json: {
           error: "The user has upcoming competitions: #{upcoming_comps_for_user.pluck(:id).join(', ')}. Before banning the user, make sure their registrations are deleted.",
         }
       end
     end
 
-    return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
+    return render status: :unprocessable_content, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id.to_i)
 
     role_to_end = nil
@@ -94,7 +100,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     ActiveRecord::Base.transaction do
       if status.present? && group.unique_status?(status)
         role_to_end = group.lead_role
-        role_to_end.update!(end_date: Date.today) if role_to_end.present?
+        role_to_end.presence&.update!(end_date: Date.today)
       end
 
       metadata = if group.group_type == UserGroup.group_types[:delegate_regions]
@@ -205,7 +211,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         new_role_metadata.location = location
       end
 
-      return render status: :unprocessable_entity, json: { error: "No valid parameters to be changed" } if changes.empty?
+      return render status: :unprocessable_content, json: { error: "No valid parameters to be changed" } if changes.empty?
       return head :unauthorized unless current_user.has_permission?(:can_edit_groups, new_role.group_id)
 
       ActiveRecord::Base.transaction do
@@ -214,7 +220,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         new_role.save!
       end
     elsif group_type == UserGroup.group_types[:delegate_probation]
-      return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" } unless params.key?(:endDate)
+      return render status: :unprocessable_content, json: { error: "Invalid parameter to be changed" } unless params.key?(:endDate)
 
       end_date = params.require(:endDate)
       changes << UserRole::UserRoleChange.new(
@@ -226,7 +232,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       role.update!(end_date: Date.safe_parse(end_date))
 
     elsif [UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]].include?(group_type)
-      return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" } unless params.key?(:status)
+      return render status: :unprocessable_content, json: { error: "Invalid parameter to be changed" } unless params.key?(:status)
 
       status = params.require(:status)
       changes << UserRole::UserRoleChange.new(
@@ -264,7 +270,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       changes.concat(changes_in_model(role.metadata&.previous_changes).compact)
       changes.concat(changes_in_model(role.previous_changes).compact)
     else
-      return render status: :unprocessable_entity, json: { error: "Invalid group type" }
+      return render status: :unprocessable_content, json: { error: "Invalid group type" }
     end
     RoleChangeMailer.notify_role_change(role, current_user, changes.to_json).deliver_later
     render json: { success: true }
