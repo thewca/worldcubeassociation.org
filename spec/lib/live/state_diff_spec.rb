@@ -13,10 +13,10 @@ RSpec.describe Live::Helper do
       registration_1 = registrations.first
       round.init_round
       result = round.live_results.find_by!(registration_id: registration_1.id)
-      expect {
+      expect do
         result.update(best: 100)
-      }.to have_broadcasted_to(WcaLive.broadcast_key(round.id))
-             .from_channel(ApplicationCable::Channel)
+      end.to have_broadcasted_to(WcaLive.broadcast_key(round.id))
+        .from_channel(ApplicationCable::Channel)
     end
 
     it 'correct diff for new results' do
@@ -28,7 +28,7 @@ RSpec.describe Live::Helper do
       before_hash = round.live_state
 
       attempts = 5.times.map.with_index(1) do |r, i|
-        LiveAttempt.build_with_history_entry(( r + 1) * 100, i, User.first)
+        LiveAttempt.build_with_history_entry((r + 1) * 100, i, User.first)
       end
       average, best = LiveResult.compute_average_and_best(attempts, round)
       result.update!(live_attempts: attempts, best: best, average: average)
@@ -44,7 +44,7 @@ RSpec.describe Live::Helper do
                                                    "best" => best,
                                                    "global_pos" => 1,
                                                    "local_pos" => 1,
-                                                   "live_attempts" => attempts.map { it.serializable_hash({ only: %i[id value attempt_number] }) }
+                                                   "live_attempts" => attempts.map { it.serializable_hash({ only: %i[id value attempt_number] }) },
                                                  })
     end
 
@@ -56,7 +56,7 @@ RSpec.describe Live::Helper do
       result = round.live_results.find_by!(registration_id: registration_1.id)
 
       attempts = 5.times.map.with_index(1) do |r, i|
-        LiveAttempt.build_with_history_entry(( r + 1) * 200, i, User.first)
+        LiveAttempt.build_with_history_entry((r + 1) * 200, i, User.first)
       end
       average, best = LiveResult.compute_average_and_best(attempts, round)
       result.update!(live_attempts: attempts, best: best, average: average)
@@ -65,7 +65,7 @@ RSpec.describe Live::Helper do
       result_2 = round.live_results.find_by!(registration_id: registration_2.id)
 
       attempts_2 = 5.times.map.with_index(1) do |r, i|
-        LiveAttempt.build_with_history_entry(( r + 1) * 100, i, User.first)
+        LiveAttempt.build_with_history_entry((r + 1) * 100, i, User.first)
       end
       average, best = LiveResult.compute_average_and_best(attempts_2, round)
       result_2.update!(live_attempts: attempts, best: best, average: average)
@@ -81,7 +81,7 @@ RSpec.describe Live::Helper do
                                                    "best" => best,
                                                    "global_pos" => 1,
                                                    "local_pos" => 1,
-                                                   "live_attempts" => attempts.map { it.serializable_hash({ only: %i[id value attempt_number] }) }
+                                                   "live_attempts" => attempts.map { it.serializable_hash({ only: %i[id value attempt_number] }) },
                                                  },
                                                  {
                                                    "registration_id" => registration_1.id,
