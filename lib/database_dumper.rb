@@ -1140,7 +1140,7 @@ module DatabaseDumper
           longitude
         ],
         fake_values: {
-          "id" => "competition_id",
+          "id" => "competitions.competition_id",
           "cityName" => "city_name",
           "countryId" => "country_id",
           "venueAddress" => "venue_address",
@@ -1342,7 +1342,7 @@ module DatabaseDumper
           cell_name
         ],
         fake_values: {
-          "id" => "competition_id",
+          "id" => "competitions.competition_id",
           "cancelled" => "(competitions.cancelled_at IS NOT NULL AND competitions.cancelled_by IS NOT NULL)",
           "event_specs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
           "delegates" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
