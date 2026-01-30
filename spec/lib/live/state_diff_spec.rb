@@ -38,13 +38,55 @@ RSpec.describe Live::Helper do
       diff = Live::Helper.round_state_diff(before_hash, after_hash)
 
       expect(diff["updates"]).to contain_exactly({
-                                                   "registration_id" => 1,
+                                                   "registration_id" => registration_1.id,
                                                    "advancing_questionable" => true,
                                                    "average" => average,
                                                    "best" => best,
                                                    "global_pos" => 1,
                                                    "local_pos" => 1,
                                                    "live_attempts" => attempts.map { it.serializable_hash({ only: %i[id value attempt_number] }) }
+                                                 })
+    end
+
+    it 'correct diff for updated results' do
+      registration_1 = registrations.first
+      registration_2 = registrations.second
+      round.init_round
+
+      result = round.live_results.find_by!(registration_id: registration_1.id)
+
+      attempts = 5.times.map.with_index(1) do |r, i|
+        LiveAttempt.build_with_history_entry(( r + 1) * 200, i, User.first)
+      end
+      average, best = LiveResult.compute_average_and_best(attempts, round)
+      result.update!(live_attempts: attempts, best: best, average: average)
+
+      before_hash = round.live_state
+      result_2 = round.live_results.find_by!(registration_id: registration_2.id)
+
+      attempts_2 = 5.times.map.with_index(1) do |r, i|
+        LiveAttempt.build_with_history_entry(( r + 1) * 100, i, User.first)
+      end
+      average, best = LiveResult.compute_average_and_best(attempts_2, round)
+      result_2.update!(live_attempts: attempts, best: best, average: average)
+
+      after_hash = round.live_state
+
+      diff = Live::Helper.round_state_diff(before_hash, after_hash)
+
+      expect(diff["updates"]).to contain_exactly({
+                                                   "registration_id" => registration_2.id,
+                                                   "advancing_questionable" => true,
+                                                   "average" => average,
+                                                   "best" => best,
+                                                   "global_pos" => 1,
+                                                   "local_pos" => 1,
+                                                   "live_attempts" => attempts.map { it.serializable_hash({ only: %i[id value attempt_number] }) }
+                                                 },
+                                                 {
+                                                   "registration_id" => registration_1.id,
+                                                   "global_pos" => 2,
+                                                   "local_pos" => 2,
                                                  })
     end
   end
