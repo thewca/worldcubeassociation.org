@@ -75,12 +75,19 @@ class LiveResult < ApplicationRecord
     end
   end
 
+  def self.column_names_for_live_state
+    self.column_names - %w[id last_attempt_entered_at created_at updated_at quit_by_id locked_by_id]
+  end
+
+
+  def to_live_state
+    serializable_hash({ only: LiveResult.column_names_for_live_state, methods: [], include: [ live_attempts: { only: [:id, :value, :attempt_number] }] })
+  end
+
   def self.compute_diff(before_result, after_result)
-    diff = { registration_id: after_result[:registration_id] }
+    diff = { "registration_id" => after_result["registration_id"] }
 
-    part_of_diff_fields = self.column_names - %w[id last_attempt_entered_at created_at updated_at quit_by_id locked_by_id]
-
-    part_of_diff_fields.map(&:to_sym).each do |field|
+    column_names_for_live_state.map.each do |field|
       if before_result[field] != after_result[field]
         diff[field] = after_result[field]
       end
@@ -88,8 +95,8 @@ class LiveResult < ApplicationRecord
 
     # Check attempts
     attempts_diff = LiveAttempt.compute_diff(
-      before_result[:attempts],
-      after_result[:attempts]
+      before_result["live_attempts"],
+      after_result["live_attempts"]
     )
     diff[:attempts] = attempts_diff if attempts_diff.present?
 
@@ -102,7 +109,7 @@ class LiveResult < ApplicationRecord
       before_state = round.live_state
       round.recompute_live_columns
       after_state = round.live_state
-      diff = Round.state_diff(before_state, after_state)
+      diff = LiveResults::Helper.round_state_diff(before_state, after_state)
       ActionCable.server.broadcast(WcaLive.broadcast_key(round_id), diff)
     end
 end

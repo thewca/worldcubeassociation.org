@@ -292,62 +292,7 @@ class Round < ApplicationRecord
   end
 
   def live_state
-    live_results.reload.includes(:live_attempts).map do |result|
-      {
-        registration_id: result.registration_id,
-        advancing: result.advancing,
-        advancing_questionable: result.advancing_questionable,
-        average: result.average,
-        average_record_tag: result.average_record_tag,
-        best: result.best,
-        global_pos: result.global_pos,
-        local_pos: result.local_pos,
-        single_record_tag: result.single_record_tag,
-        attempts: result.live_attempts.order(:attempt_number).map do |attempt|
-          {
-            id: attempt.id,
-            attempt_number: attempt.attempt_number,
-            value: attempt.value
-          }
-        end
-      }
-    end
-  end
-
-  def self.state_diff(before_state, after_state)
-    before_hash = before_state.index_by { |r| r[:registration_id] }
-    after_hash = after_state.index_by { |r| r[:registration_id] }
-
-    {
-      updated: compute_updated(before_hash, after_hash),
-      deleted: compute_deleted(before_hash, after_hash),
-      created: compute_created(before_hash, after_hash)
-    }.compact_blank
-  end
-
-  def self.compute_updated(before_hash, after_hash)
-    updates = []
-
-    after_hash.each do |id, after_result|
-      before_result = before_hash[id]
-      next unless before_result # Skip new results
-
-      result_diff = LiveResult.compute_diff(before_result, after_result)
-      updates << result_diff if result_diff.present?
-    end
-
-    updates.presence
-  end
-
-  def self.compute_deleted(before_hash, after_hash)
-    deleted_ids = before_hash.keys - after_hash.keys
-    deleted_ids.presence
-  end
-
-  def self.compute_created(before_hash, after_hash)
-    created_ids = after_hash.keys - before_hash.keys
-    created = created_ids.map { |id| after_hash[id] }
-    created.presence
+    live_results.reload.includes(:live_attempts).map(&:to_live_state)
   end
 
   def competitors_live_results_entered
