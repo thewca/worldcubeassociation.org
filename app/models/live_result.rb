@@ -6,9 +6,7 @@ class LiveResult < ApplicationRecord
   has_many :live_attempts
   alias_method :attempts, :live_attempts
 
-  after_save :trigger_recompute_columns, if: :should_recompute?
-
-  after_save :notify_users
+  after_save :trigger_recompute_and_notify, if: :should_recompute?
 
   belongs_to :registration
 
@@ -77,13 +75,34 @@ class LiveResult < ApplicationRecord
     end
   end
 
-  private
+  def self.compute_diff(before_result, after_result)
+    diff = { registration_id: after_result[:registration_id] }
 
-    def notify_users
-      ActionCable.server.broadcast(WcaLive.broadcast_key(round_id), as_json)
+    part_of_diff_fields = self.column_names - %w[id last_attempt_entered_at created_at updated_at quit_by_id locked_by_id]
+
+    part_of_diff_fields.map(&:to_sym).each do |field|
+      if before_result[field] != after_result[field]
+        diff[field] = after_result[field]
+      end
     end
 
-    def trigger_recompute_columns
+    # Check attempts
+    attempts_diff = LiveAttempt.compute_diff(
+      before_result[:attempts],
+      after_result[:attempts]
+    )
+    diff[:attempts] = attempts_diff if attempts_diff.present?
+
+    # Only return if there are actual changes
+    diff.keys.size > 1 ? diff : nil
+  end
+
+  private
+    def trigger_recompute_and_notify
+      before_state = round.live_state
       round.recompute_live_columns
+      after_state = round.live_state
+      diff = Round.state_diff
+      ActionCable.server.broadcast(WcaLive.broadcast_key(round_id), diff)
     end
 end
