@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useMemo, useState, useEffect,
+  useCallback, useMemo, useState,
 } from 'react';
 import {
   Button, Checkbox, Form, FormField, FormGroup, Header, Message,
@@ -12,6 +12,7 @@ import MarkdownEditor from '../wca/FormBuilder/input/MarkdownEditor';
 import { createPost, editPost } from './api/posts';
 import UtcDatePicker from '../wca/UtcDatePicker';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
 
 export default function PostForm({
   header, allTags, post,
@@ -107,19 +108,7 @@ export default function PostForm({
     postId,
   ]);
 
-  const onUnload = useCallback((e) => {
-    if (unsavedChanges) {
-      return e.preventDefault();
-    }
-    return null;
-  }, [unsavedChanges]);
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', onUnload);
-    return () => {
-      window.removeEventListener('beforeunload', onUnload);
-    };
-  }, [onUnload]);
+  useUnsavedChangesAlert(unsavedChanges);
 
   return (
     <>
