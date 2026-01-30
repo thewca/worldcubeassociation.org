@@ -372,9 +372,9 @@ class Round < ApplicationRecord
   def quit_from_round!(registration_id, quitting_user)
     result = live_results.find_by!(registration_id: registration_id)
 
-    result.mark_as_quit(quitting_user)
+    is_quit = result.mark_as_quit(quitting_user)
 
-    return 1 if number == 1 || linked_round.present?
+    return is_quit ? 1 : 0 if number == 1 || linked_round.present?
 
     # We need to also quit the result from the previous round so advancement can be correctly shown
     previous_round_results = previous_round.linked_round.present? ? previous_round.linked_round.live_results : previous_round.live_results
