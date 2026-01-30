@@ -247,6 +247,7 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
+          round_id
           match_number
           created_at
           updated_at

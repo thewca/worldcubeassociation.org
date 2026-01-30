@@ -22,7 +22,7 @@ RSpec.describe IRV do
       end
     end
 
-    it "triggers errors on cutoff and time limits", :cxz do
+    it "triggers errors on cutoff and time limits" do
       # Triggers:
       # DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR
       # RESULT_OVER_TIME_LIMIT_ERROR
