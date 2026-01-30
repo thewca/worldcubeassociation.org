@@ -16,14 +16,6 @@ FactoryBot.define do
     round_type_id { "f" }
     format_id { "a" }
 
-    transient do
-      value1 { best }
-      value2 { average }
-      value3 { average }
-      value4 { average }
-      value5 { average }
-    end
-
     best { 3000 }
     average { 5000 }
     round { association(:round, competition: competition, event_id: event_id, format_id: format_id) }
@@ -94,6 +86,12 @@ FactoryBot.define do
   factory :inbox_result do
     instance_eval(&resultable_instance_members)
 
+    value1 { best }
+    value2 { average }
+    value3 { average }
+    value4 { average }
+    value5 { average }
+
     transient do
       person { FactoryBot.create(:inbox_person, competition_id: competition.id) }
     end
@@ -115,6 +113,15 @@ FactoryBot.define do
 
   factory :result do
     instance_eval(&resultable_instance_members)
+
+    transient do
+      value1 { best }
+      value2 { average }
+      value3 { average }
+      value4 { average }
+      value5 { average }
+    end
+
     transient do
       person { FactoryBot.create(:person) }
     end
