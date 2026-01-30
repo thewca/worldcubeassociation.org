@@ -237,12 +237,6 @@ module Resultable
     self.valid_attempts_partition[1]
   end
 
-  def result_attempts_attributes(**kwargs)
-    self.valid_attempts.map do |value, n|
-      { value: value, attempt_number: n, **kwargs }
-    end
-  end
-
   def skipped_attempt_numbers
     self.skipped_attempts.map { |_value, n| n }
   end

@@ -67,4 +67,14 @@ class Result < ApplicationRecord
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
+
+  def self.unpack_attempt_attributes(attempt_values, **additional_attributes)
+    attempt_values
+      .map
+      .with_index(1)
+      .filter { |value, _n| value != SolveTime::SKIPPED_VALUE }
+      .map do |value, n|
+      { value: value, attempt_number: n, **additional_attributes }
+    end
+  end
 end

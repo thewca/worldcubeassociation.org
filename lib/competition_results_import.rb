@@ -38,7 +38,7 @@ module CompetitionResultsImport
 
   def self.merge_inbox_results(competition)
     ActiveRecord::Base.transaction do
-      result_rows = competition.inbox_results
+      result_data = competition.inbox_results
                                .includes(:inbox_person)
                                .map do |inbox_res|
         inbox_person = inbox_res.inbox_person
@@ -56,20 +56,22 @@ module CompetitionResultsImport
           round_type_id: inbox_res.round_type_id,
           round_id: inbox_res.round_id,
           format_id: inbox_res.format_id,
-          value1: inbox_res.value1,
-          value2: inbox_res.value2,
-          value3: inbox_res.value3,
-          value4: inbox_res.value4,
-          value5: inbox_res.value5,
           best: inbox_res.best,
           average: inbox_res.average,
+          attempt_values: inbox_res.attempts,
         }
       end
 
+      result_rows = result_data.map { it.with_indifferent_access.slice(*Result.attribute_names) }
       Result.insert_all!(result_rows)
 
-      attempts = competition.reload.results.flat_map { it.result_attempts_attributes(result_id: it.id) }
-      ResultAttempt.insert_all!(attempts)
+      # Idea: Every result is unique by the (round_id, person_id) tuple.
+      #   So even before inserting into the DB, we can uniquely identify which attempts belong to which result.
+      result_attempts_index = result_data.to_h { [[it[:round_id], it[:person_id]], it[:attempt_values]] }
+      # Then we insert next, which generates IDs through the AUTO-INCREMENT key.
+      #   But the properties round_id and person_id are still the same as before, so we use them as a lookup.
+      attempt_rows = competition.reload.results.flat_map { Result.unpack_attempt_attributes(result_attempts_index[[it.round_id, it.person_id]], result_id: it.id) }
+      ResultAttempt.insert_all!(attempt_rows)
 
       competition.inbox_results.destroy_all
     end
