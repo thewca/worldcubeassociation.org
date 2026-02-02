@@ -182,14 +182,16 @@ class Round < ApplicationRecord
     end
   end
 
-  def open_and_lock_previous(current_user)
-    init_round
-    return 0 if number == 1 || linked_round.present?
+  def open_and_lock_previous(locking_user)
+    open_round!
+    return 0 if number == 1 || (linked_round.present? && linked_round.first_round_in_link.number == 1)
 
-    previous_round.lock_results(current_user)
+    round_to_lock = linked_round.present? ? linked_round.first_round_in_link.previous_round : previous_round
+
+    round_to_lock.lock_results(locking_user)
   end
 
-  def init_round
+  def open_round!
     empty_results = advancing_registrations.map do |r|
       { registration_id: r.id, round_id: id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
     end
@@ -371,7 +373,7 @@ class Round < ApplicationRecord
 
     is_quit = result.destroy
 
-    return is_quit ? 1 : 0 if number == 1 || linked_round.present?
+    return is_quit ? 1 : 0 if number == 1 || (linked_round.present? && linked_round.first_round_in_series)
 
     # We need to also quit the result from the previous round so advancement can be correctly shown
     previous_round_results = previous_round.linked_round.present? ? previous_round.linked_round.live_results : previous_round.live_results
