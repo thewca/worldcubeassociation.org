@@ -526,12 +526,12 @@ class CompetitionsController < ApplicationController
         competition.create_id_and_cell_name(force_override: true)
 
         # Try to update the ID only if it _actually_ changed
-        new_id = competition.competition_id unless competition.competition_id == persisted_id
+        new_id = competition.id unless competition.id == persisted_id
       end
 
       # In the first update pass, we need to pretend like the ID never changed.
       # Changing ID needs a special hack, see above.
-      competition.competition_id = persisted_id
+      competition.id = persisted_id
 
       competition.save
     end
