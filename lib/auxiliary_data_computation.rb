@@ -32,7 +32,7 @@ module AuxiliaryDataComputation
             countries.continent_id,
             rll.competition_year `year`
           FROM concise_agg
-            INNER JOIN regional_records_lookup rll ON rll.result_id = (value_and_id % 1000000000)
+            INNER JOIN regional_records_lookup rll ON rll.result_id = (concise_agg.value_and_id % 1000000000)
             INNER JOIN countries ON countries.id = rll.country_id
         SQL
       end
@@ -101,6 +101,9 @@ module AuxiliaryDataComputation
   end
 
   def self.insert_regional_records_lookup(competition_id = nil)
+    # Don't use `with_temp_table` here, because the `add_to_lookup_table` in itself
+    # is designed as an in-place UPSERT (it uses ON DUPLICATE KEY UPDATE)
+    # and it is not publicly visible anywhere in the UI at all
     CheckRegionalRecords.add_to_lookup_table(competition_id)
   end
 end
