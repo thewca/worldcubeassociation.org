@@ -245,7 +245,7 @@ class Round < ApplicationRecord
     # Similar to the query that recomputes local_pos, but
     # at first it computes the best result of a person over all linked rounds
     # by using the same ORDER BY <=0 trick
-    query = <<-SQL.squish
+    query = <<~SQL.squish
       UPDATE live_results r
       LEFT JOIN
         (SELECT id,
@@ -281,7 +281,7 @@ class Round < ApplicationRecord
     #   2. The attempts are then sorted among themselves using their normal numeric value.
     #     This works in particular because sorting in MySQL is stable, i.e. the sorting
     #     based on the second part won't destroy the order established by the first part.
-    ActiveRecord::Base.connection.exec_query <<-SQL.squish
+    ActiveRecord::Base.connection.exec_query <<~SQL.squish
       UPDATE live_results r
       LEFT JOIN (
           SELECT id,

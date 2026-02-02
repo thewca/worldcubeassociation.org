@@ -17,34 +17,34 @@ class Api::V0::Results::RecordsController < Api::V0::Results::ResultsController
     record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
 
     query = if @is_history
-              <<-SQL.squish
-        SELECT
-          results.*,
-          value,
-          competitions.cell_name competition_name,
-          competitions.start_date,
-          competitions.country_id competition_country_id
-        FROM
-          (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
-            SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') results
-          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
-          competitions
-        WHERE
-          competitions.id = competition_id
-          #{@region_condition}
-          #{@gender_condition}
-        ORDER BY
-          type desc, value, start_date desc
+              <<~SQL.squish
+                SELECT
+                  results.*,
+                  value,
+                  competitions.cell_name competition_name,
+                  competitions.start_date,
+                  competitions.country_id competition_country_id
+                FROM
+                  (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
+                    SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') results
+                  #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
+                  competitions
+                WHERE
+                  competitions.id = competition_id
+                  #{@region_condition}
+                  #{@gender_condition}
+                ORDER BY
+                  type desc, value, start_date desc
               SQL
             else
-              <<-SQL.squish
-        SELECT *
-        FROM
-          (#{current_records_query('best', 'single')}
-          UNION
-          #{current_records_query('average', 'average')}) helper
-        ORDER BY
-          type DESC, round_type_id, person_name
+              <<~SQL.squish
+                SELECT *
+                FROM
+                  (#{current_records_query('best', 'single')}
+                  UNION
+                  #{current_records_query('average', 'average')}) helper
+                ORDER BY
+                  type DESC, round_type_id, person_name
               SQL
             end
     # TODO: move this to records-page-api when migration to next is done so this can be properly precompute
@@ -61,7 +61,7 @@ class Api::V0::Results::RecordsController < Api::V0::Results::ResultsController
   end
 
   private def current_records_query(value, type)
-    <<-SQL.squish
+    <<~SQL.squish
       SELECT
       '#{type}' type,
                 results.*,
