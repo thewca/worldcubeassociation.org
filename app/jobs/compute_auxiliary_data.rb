@@ -35,31 +35,7 @@ class ComputeAuxiliaryData < WcaCronjob
           db_role: :writing,
         )
       end
-
-      # The records page by default shows a "mixed" view which contains both single and average at once,
-      #   so there's no need to do this inside the small single/average loop like the rankings above.
-      records_query = self.mixed_records_query(event_id: event_id)
-      records_cache_key = ResultsController.compute_cache_key(ResultsController::MODE_RECORDS, event_id: event_id, show: ResultsController::SHOW_MIXED)
-
-      DbHelper.execute_cached_query(
-        records_cache_key,
-        predicted_timestamp,
-        records_query,
-        db_role: :writing,
-      )
     end
-
-    # Lastly, compute the "All events" default view for mixed records.
-    #   Again, this only applies to Records because Rankings must specify an event.
-    all_records_query = self.mixed_records_query
-    all_records_cache_key = ResultsController.compute_cache_key(ResultsController::MODE_RECORDS, show: ResultsController::SHOW_MIXED)
-
-    DbHelper.execute_cached_query(
-      all_records_cache_key,
-      predicted_timestamp,
-      all_records_query,
-      db_role: :writing,
-    )
   end
 
   ######
@@ -80,7 +56,7 @@ class ComputeAuxiliaryData < WcaCronjob
   ######
 
   private def rankings_query(type, column, event_id)
-    <<-SQL.squish
+    <<~SQL.squish
       SELECT
         results.*,
         results.#{column} value
@@ -95,55 +71,6 @@ class ComputeAuxiliaryData < WcaCronjob
       ) top
       JOIN results ON results.id = value_and_id % 1000000000
       ORDER BY value, person_name
-    SQL
-  end
-
-  private def mixed_records_query(event_id: nil)
-    <<-SQL.squish
-      SELECT *
-      FROM
-        (#{self.current_records_query('best', 'single', event_id: event_id)}
-        UNION
-        #{self.current_records_query('average', 'average', event_id: event_id)}) helper
-      ORDER BY
-        `rank`, type DESC, start_date, round_type_id, person_name
-    SQL
-  end
-
-  private def current_records_query(value, type, event_id: nil)
-    event_condition = event_id.present? ? "AND results.event_id = '#{event_id}'" : ""
-
-    <<-SQL.squish
-      SELECT
-        '#{type}'              type,
-                               results.*,
-                               value,
-        events.name            event_name,
-                               format,
-        countries.name         country_name,
-        competitions.cell_name competition_name,
-                               `rank`,
-        competitions.start_date,
-        YEAR(competitions.start_date)  year,
-        MONTH(competitions.start_date) month,
-        DAY(competitions.start_date)   day
-      FROM
-        (SELECT event_id record_event_id, MIN(value_and_id) DIV 1000000000 value
-          FROM concise_#{type}_results results
-          WHERE 1
-            #{event_condition}
-          GROUP BY event_id) record,
-        results,
-        events,
-        countries,
-        competitions
-      WHERE results.#{value} = value
-        #{event_condition}
-        AND results.event_id = record_event_id
-        AND events.id        = results.event_id
-        AND countries.id     = results.country_id
-        AND competitions.id  = results.competition_id
-        AND events.`rank` < 990
     SQL
   end
 end

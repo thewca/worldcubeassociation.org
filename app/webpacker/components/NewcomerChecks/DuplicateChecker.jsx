@@ -43,7 +43,7 @@ export default function DuplicateChecker({ competitionId, setUserIdToEdit }) {
         run={() => computePotentialDuplicatesMutate({ competitionId })}
         refetch={refetch}
       />
-      {lastDuplicateCheckerJobRun.potential_duplicate_persons.length === 0 && (
+      {lastDuplicateCheckerJobRun?.potential_duplicate_persons?.length === 0 && (
         <Segment>No newcomers to show</Segment>
       )}
       {lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.success

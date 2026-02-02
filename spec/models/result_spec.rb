@@ -429,12 +429,11 @@ RSpec.describe Result do
     end
 
     context "check number of non-zero solves" do
-      def result_with_n_solves(n, options)
-        result = build(:result, options)
-        (1..5).each do |i|
-          result.send :"value#{i}=", i <= n ? 42 : 0
+      def result_with_n_solves(n, **)
+        result_attempts = (1..5).to_h do |i|
+          [:"value#{i}", i <= n ? 42 : 0]
         end
-        result
+        build(:result, **, **result_attempts)
       end
 
       context "non-cutoff rounds" do

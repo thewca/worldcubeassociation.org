@@ -858,13 +858,15 @@ vi:
           này để nhắc đến các sự cố. Nếu không có sự cố gì bất thường, hãy liệt
           kê ra các sự cố đáng chú ý nhất. Tích vào các hộp tương ứng dưới đấy
           nếu bạn cần phản hồi từ các Ủy ban.
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
-          Bạn BẮT BUỘC phải đính kèm ít nhất %{image_count} hình chụp các khu
-          vực tráo đề và khu vực thi đấu (và cũng có thể thêm các ảnh khác). Bạn
-          có thể chọn nhiều file cùng lúc. Bạn chỉ có thể xóa hình cũ khi đã tải
-          lên đủ số hình (nếu muốn thay thế một hình, bạn phải tải lên hình mới
-          và xóa hình cũ đi).
+          Bạn PHẢI đính kèm ít nhất %{image_count} ảnh chụp khu vực tráo đề và
+          thi đấu của giải đấu này, nên là ảnh chụp khi giải đấu đang diễn ra
+          (tuy nhiên cũng có thể đính kèm các ảnh khác). Bạn có thể chọn nhiều
+          ảnh cùng một lúc. Bạn chỉ có thể xóa ảnh khi đã tải lên đủ số ảnh khác
+          (nếu muốn thay ảnh, bạn phải đăng ảnh mới lên trước khi xóa ảnh cũ).
+          Vui lòng giải thích lý do nếu không có ảnh chụp khu vực thi đấu và
+          hoặc khu vực tráo đề khi giải đấu đang diễn ra.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -2583,6 +2585,8 @@ vi:
         wrong_dob_format: >-
           Ngày sinh phải theo định dạng YYYY-mm-dd (năm-tháng-ngày, ví dụ như
           1944-07-13), các ngày sinh sau đây không xử lý đươc: %{raw_dobs}.
+        #original_hash: 6d8e34b
+        empty_file: Tập tin này trống.
     add:
       #original_hash: 975275e
       title: 'Thêm đăng ký cho %{comp}'
@@ -2748,6 +2752,11 @@ vi:
         connected: 'Đã kết nối, kết quả đang được cập nhật'
         #original_hash: 53abaa2
         disconnected: 'Đã mất kết nối, hiện đang không cập nhật kết quả'
+      podiums:
+        #original_hash: 02ae2bd
+        title: Top 3
+        #original_hash: d7297a7
+        undetermined: Chưa ấn định Top 3
     my_competitions:
       #original_hash: 5c6d3ea
       title: Giải đấu của tôi
@@ -6157,10 +6166,6 @@ vi:
         [%{round_id}] %{person_name} thiếu ít nhất một lượt thi trong giai đoạn
         cutoff. Vui lòng thêm (các) lượt thi còn thiếu hoặc chỉnh sửa thông tin
         vòng thi trong trang Quản lý Nội dung của giải đấu.
-      #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] Kết quả %{person_name} sai thể thức: thể thức đúng là
-        %{expected_format}, nhưng được ghi là %{format}.
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Ít nhất một kết quả của %{person_name} vượt quá giới hạn
@@ -6170,11 +6175,6 @@ vi:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] Tổng các kết quả của %{person_name} vượt quá giới hạn
         thời gian cộng dồn là %{time_limit}.
-      #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] Không có thông tin về cutoff và giới hạn thời gian cho
-        vòng thi này. Các bước kiểm tra này đã được bỏ qua. Xin vui lòng cập
-        nhật thông tin vòng thi tại trang Quản lý Nội dung của giải đấu.
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] Vòng thi này không có giới hạn thời gian xác định, các
@@ -6205,11 +6205,6 @@ vi:
         Vòng %{round_id}: nhiều thí sinh vào vòng sau hơn điều kiện ban đầu
         (%{actual} thay vì %{expected}, điều kiện là: %{condition}). Xin vui
         lòng cập nhật thông tin vòng thi ở trang quản lý nội dung.
-      #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        Vòng thi %{round_id} có trong kết quả nhưng không được tạo trên tab nội
-        dung. Xin vui lòng thêm thông tin vòng thi ở trang quản lý nội dung của
-        giải đấu.
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         Vòng %{round_id} có 99 thí sinh trở xuống nhưng lại có nhiều hơn hai
@@ -6253,11 +6248,6 @@ vi:
         Không có kết quả cho vòng %{round_id} nhưng vẫn còn liệt kê ở tab nội
         dung. Nếu vòng thi này không diễn ra, xin vui lòng bỏ vòng thi này ở
         trang quản lý nội dung của giải đấu.
-      #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        Vòng '%{round_name}' không có mức cutoff được thông báo, nhưng lại được
-        ghi là vòng thi gộp trong kết quả. Xin vui lòng sửa thông tin vòng thi ở
-        trang quản lý nội dung của giải đấu.
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -6272,11 +6262,6 @@ vi:
       no_main_event_warning: >-
         Không có nội dung chính cho giải đấu. Xin vui lòng xác nhận với WRT rằng
         thông tin này là chính xác.
-      #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        Có kết quả cho nội dung %{event_id} mặc dù không được liệt kê là nội
-        dung chính thức. Vui lòng hủy bỏ kết quả của nội dung này hoặc liên hệ
-        WCAT để yêu cầu thêm nội dung vào website WCA.
       #original_hash: fde208d
       missing_results_warning: >-
         Không kết quả cho nội dung %{event_id} mặc dù được liệt kê là nội dung
@@ -6292,10 +6277,6 @@ vi:
       missing_scrambles_for_competition_error: >-
         Thiếu công thức tráo cho giải đấu. Sử dụng Scrambles Matcher để gán công
         thức tráo.
-      #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Quá nhiều công thức tráo. Sử dụng Scrambles Matcher để
-        lược bỏ công thức tráo không được sử dụng.
       #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] Nhóm %{group_id}: thiếu công thức tráo, chỉ có %{actual}
