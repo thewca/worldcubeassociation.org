@@ -101,8 +101,6 @@ module AuxiliaryDataComputation
   end
 
   def self.insert_regional_records_lookup(competition_id = nil)
-    DbHelper.with_temp_table(CheckRegionalRecords::LOOKUP_TABLE_NAME) do |temp_table_name|
-      CheckRegionalRecords.add_to_lookup_table(competition_id, table_name: temp_table_name)
-    end
+    CheckRegionalRecords.add_to_lookup_table(competition_id)
   end
 end
