@@ -113,7 +113,7 @@ class LiveResult < ApplicationRecord
       round.live_results.reload
 
       after_state = round.live_state
-      diff = Live::Helper.round_state_diff(before_state, after_state)
+      diff = Live::DiffHelper.round_state_diff(before_state, after_state)
       ActionCable.server.broadcast(WcaLive.broadcast_key(round_id), diff)
     end
 end

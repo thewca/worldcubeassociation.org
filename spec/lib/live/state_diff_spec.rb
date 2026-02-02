@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Live::Helper do
+RSpec.describe Live::DiffHelper do
   let(:competition) { create(:competition, event_ids: ["333"]) }
   let(:registrations) { create_list(:registration, 5, :accepted, competition: competition, event_ids: ["333"]) }
 
@@ -36,7 +36,7 @@ RSpec.describe Live::Helper do
       round.live_results.reload
       after_state = round.live_state
 
-      diff = Live::Helper.round_state_diff(before_state, after_state)
+      diff = Live::DiffHelper.round_state_diff(before_state, after_state)
 
       expect(diff["updated"]).to contain_exactly({
                                                    "registration_id" => registration_1.id,
@@ -49,8 +49,8 @@ RSpec.describe Live::Helper do
                                                  })
       expect(diff["deleted"]).to be_nil
       expect(diff["created"]).to be_nil
-      expect(diff["before_hash"]).to eq Live::Helper.state_hash(before_state)
-      expect(diff["after_hash"]).to eq Live::Helper.state_hash(after_state)
+      expect(diff["before_hash"]).to eq Live::DiffHelper.state_hash(before_state)
+      expect(diff["after_hash"]).to eq Live::DiffHelper.state_hash(after_state)
     end
 
     it 'correct diff for updated results' do
@@ -78,7 +78,7 @@ RSpec.describe Live::Helper do
       round.live_results.reload
       after_state = round.live_state
 
-      diff = Live::Helper.round_state_diff(before_state, after_state)
+      diff = Live::DiffHelper.round_state_diff(before_state, after_state)
 
       expect(diff["updated"]).to contain_exactly({
                                                    "registration_id" => registration_2.id,
@@ -96,8 +96,8 @@ RSpec.describe Live::Helper do
                                                  })
       expect(diff["deleted"]).to be_nil
       expect(diff["created"]).to be_nil
-      expect(diff["before_hash"]).to eq Live::Helper.state_hash(before_state)
-      expect(diff["after_hash"]).to eq Live::Helper.state_hash(after_state)
+      expect(diff["before_hash"]).to eq Live::DiffHelper.state_hash(before_state)
+      expect(diff["after_hash"]).to eq Live::DiffHelper.state_hash(after_state)
     end
   end
 
@@ -106,19 +106,19 @@ RSpec.describe Live::Helper do
 
     it 'produces consistent hash for same state' do
       state = round.live_state
-      hash1 = Live::Helper.state_hash(state)
-      hash2 = Live::Helper.state_hash(state)
+      hash1 = Live::DiffHelper.state_hash(state)
+      hash2 = Live::DiffHelper.state_hash(state)
 
       expect(hash1).to eq(hash2)
     end
 
     it 'produces different hash when state changes' do
-      before_hash = Live::Helper.state_hash(round.live_state)
+      before_hash = Live::DiffHelper.state_hash(round.live_state)
 
       create(:live_result, round: round)
       round.reload
 
-      after_hash = Live::Helper.state_hash(round.live_state)
+      after_hash = Live::DiffHelper.state_hash(round.live_state)
 
       expect(before_hash).not_to eq(after_hash)
     end

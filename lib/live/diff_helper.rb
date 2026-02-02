@@ -3,7 +3,7 @@
 require 'digest/sha1'
 
 module Live
-  module Helper
+  module DiffHelper
     def self.round_state_diff(before_state, after_state)
       before_hash = before_state.index_by { |r| r["registration_id"] }
       after_hash = after_state.index_by { |r| r["registration_id"] }
