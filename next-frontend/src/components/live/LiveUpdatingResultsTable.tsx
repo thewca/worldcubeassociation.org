@@ -2,20 +2,36 @@
 
 import { components } from "@/types/openapi";
 import { useCallback, useState } from "react";
-import useResultsSubscription from "@/lib/hooks/useResultsSubscription";
+import useResultsSubscription, {
+  DiffedLiveResult,
+  DiffProtocolResponse,
+} from "@/lib/hooks/useResultsSubscription";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
 import { Heading, HStack, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
+import _ from "lodash";
 
-function updateOrAddResult(
+function applyDiff(
   previousResults: components["schemas"]["LiveResult"][],
-  newResult: components["schemas"]["LiveResult"],
-) {
-  const resultsWithoutNewResult = previousResults.filter(
-    (r) => r.registration_id !== newResult.registration_id,
+  updated: DiffedLiveResult[],
+  created: components["schemas"]["LiveResult"][],
+  deleted: number[],
+): components["schemas"]["LiveResult"][] {
+  const resultsWithoutDeleted = previousResults.filter(
+    (r) => !deleted.includes(r.registration_id),
   );
 
-  return [...resultsWithoutNewResult, newResult];
+  const updates = _.keyBy(updated, "registration_id");
+
+  const resultsWithUpdates = resultsWithoutDeleted.map((r) => {
+    const updated = updates[r.registration_id];
+    if (updated) {
+      return { ...r, ...updated };
+    }
+    return r;
+  });
+
+  return [...resultsWithUpdates, ...created];
 }
 
 export default function LiveUpdatingResultsTable({
@@ -42,8 +58,12 @@ export default function LiveUpdatingResultsTable({
 
   // Move to onEffectEvent when we are on React 19
   const onReceived = useCallback(
-    (result: components["schemas"]["LiveResult"]) => {
-      updateLiveResults((results) => updateOrAddResult(results, result));
+    (result: DiffProtocolResponse) => {
+      const { updated, created, deleted } = result;
+
+      updateLiveResults((results) =>
+        applyDiff(results, updated, created, deleted),
+      );
     },
     [updateLiveResults],
   );
