@@ -79,7 +79,7 @@ class LiveResult < ApplicationRecord
     self.column_names - %w[id last_attempt_entered_at created_at updated_at quit_by_id locked_by_id round_id]
   end
 
-  def to_live_state
+  def live_state
     serializable_hash({ only: LiveResult.column_names_for_live_state, methods: [], include: [live_attempts: { only: %i[id value attempt_number] }] })
   end
 
