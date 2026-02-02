@@ -14,7 +14,7 @@ module AuxiliaryDataComputation
       %w[average concise_average_results],
     ].each do |field, table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
-        ActiveRecord::Base.connection.execute <<-SQL.squish
+        ActiveRecord::Base.connection.execute <<~SQL.squish
           INSERT INTO #{temp_table_name} (id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, year, month, day)
           SELECT
             results.id,
@@ -50,7 +50,7 @@ module AuxiliaryDataComputation
       %w[average ranks_average concise_average_results],
     ].each do |field, table_name, concise_table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
-        ActiveRecord::Base.connection.execute <<-SQL.squish
+        ActiveRecord::Base.connection.execute <<~SQL.squish
           INSERT INTO #{temp_table_name} (person_id, event_id, best, world_rank, continent_rank, country_rank)
           WITH current_person_regions AS (
             SELECT
