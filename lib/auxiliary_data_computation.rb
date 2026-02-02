@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module AuxiliaryDataComputation
-  def self.compute_everything
+  def self.compute_everything(competition_id = nil)
+    self.insert_regional_records_lookup(competition_id)
     self.compute_concise_results
     self.compute_rank_tables
-    self.insert_regional_records_lookup
   end
 
   ## Build 'concise results' tables.
@@ -15,29 +15,25 @@ module AuxiliaryDataComputation
     ].each do |field, table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
         ActiveRecord::Base.connection.execute <<~SQL.squish
-          INSERT INTO #{temp_table_name} (id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, year, month, day)
+          INSERT INTO #{temp_table_name} (id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, year)
+          WITH concise_agg AS (
+            SELECT MIN(#{field} * 1000000000 + result_id) value_and_id
+            FROM regional_records_lookup
+            WHERE #{field} > 0
+            GROUP BY person_id, country_id, event_id, competition_year
+          )
           SELECT
-            results.id,
-            #{field},
-            valueAndId,
-            person_id,
-            event_id,
-            countries.id country_id,
-            continent_id,
-            YEAR(start_date) year,
-            MONTH(start_date) month,
-            DAY(start_date) day
-          FROM (
-              SELECT MIN(#{field} * 1000000000 + results.id) valueAndId
-              FROM results
-              JOIN competitions ON competitions.id = competition_id
-              WHERE #{field} > 0
-              GROUP BY person_id, results.country_id, event_id, YEAR(start_date)
-            ) MinValuesWithId
-            JOIN results ON results.id = valueAndId % 1000000000
-            JOIN competitions ON competitions.id = results.competition_id
-            JOIN countries ON countries.id = results.country_id
-            JOIN events ON events.id = results.event_id
+            rll.result_id id,
+            rll.#{field},
+            concise_agg.value_and_id,
+            rll.person_id,
+            rll.event_id,
+            rll.country_id,
+            countries.continent_id,
+            rll.competition_year `year`
+          FROM concise_agg
+            INNER JOIN regional_records_lookup rll ON rll.result_id = (concise_agg.value_and_id % 1000000000)
+            INNER JOIN countries ON countries.id = rll.country_id
         SQL
       end
     end
@@ -104,9 +100,10 @@ module AuxiliaryDataComputation
     end
   end
 
-  def self.insert_regional_records_lookup
-    DbHelper.with_temp_table("regional_records_lookup") do |temp_table_name|
-      CheckRegionalRecords.add_to_lookup_table(table_name: temp_table_name)
-    end
+  def self.insert_regional_records_lookup(competition_id = nil)
+    # Don't use `with_temp_table` here, because the `add_to_lookup_table` in itself
+    # is designed as an in-place UPSERT (it uses ON DUPLICATE KEY UPDATE)
+    # and it is not publicly visible anywhere in the UI at all
+    CheckRegionalRecords.add_to_lookup_table(competition_id)
   end
 end

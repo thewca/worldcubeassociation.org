@@ -17,7 +17,7 @@ RSpec.describe "AuxiliaryDataComputation" do
       create(:result, event_id: "333", best: 700, average: 850, competition: competition_2016, person: person, round_type_id: "f", round: round_333_f)
       create(:result, event_id: "333", best: 800, average: 900, competition: competition_2017, person: person)
       create(:result, event_id: "222", best: 100, average: 150, competition: competition_2017, person: person)
-      AuxiliaryDataComputation.compute_concise_results
+      AuxiliaryDataComputation.compute_everything
       # Concise single results
       concise_single_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, year, best FROM concise_single_results"
       expect(concise_single_results).to contain_exactly(["333", person.wca_id, 2016, 700], ["333", person.wca_id, 2017, 800], ["222", person.wca_id, 2017, 100])
@@ -30,7 +30,7 @@ RSpec.describe "AuxiliaryDataComputation" do
       create(:result, event_id: "333", best: 700, average: 800, competition: competition_2016, person: person)
       person.update_using_sub_id! country_id: "Chile"
       create(:result, event_id: "333", best: 750, average: 850, competition: next_competition_2016, person: person)
-      AuxiliaryDataComputation.compute_concise_results
+      AuxiliaryDataComputation.compute_everything
       # Concise single results
       concise_single_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, country_id, year, best FROM concise_single_results"
       expect(concise_single_results).to contain_exactly(["333", person.wca_id, "China", 2016, 700], ["333", person.wca_id, "Chile", 2016, 750])
@@ -58,8 +58,7 @@ RSpec.describe "AuxiliaryDataComputation" do
     end
 
     it "computes world, continental, and national ranking position" do
-      AuxiliaryDataComputation.compute_concise_results # Rank tables computation require concise results to be present.
-      AuxiliaryDataComputation.compute_rank_tables
+      AuxiliaryDataComputation.compute_everything
       %w[ranks_single ranks_average].each do |ranks_type|
         expect(rank_333(australian, ranks_type)).to include(world_rank: 1, continent_rank: 1, country_rank: 1)
         expect(rank_333(american_1, ranks_type)).to include(world_rank: 2, continent_rank: 1, country_rank: 1)
@@ -74,8 +73,7 @@ RSpec.describe "AuxiliaryDataComputation" do
       australian.update_using_sub_id! country_id: "France"
       new_french = australian
       create(:result, event_id: "333", best: 900, average: 1000, person: new_canadian)
-      AuxiliaryDataComputation.compute_concise_results # Rank tables computation require concise results to be present.
-      AuxiliaryDataComputation.compute_rank_tables
+      AuxiliaryDataComputation.compute_everything
       %w[ranks_single ranks_average].each do |ranks_type|
         # NOTE: this person hasn't got any results in Europe/France yet.
         expect(rank_333(new_french, ranks_type)).to include(world_rank: 1, continent_rank: 0, country_rank: 0)
