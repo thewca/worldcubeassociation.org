@@ -183,12 +183,12 @@ class Round < ApplicationRecord
   end
 
   def open_and_lock_previous(locking_user)
-    open_round!
-    return 0 if first_round?
+    open_count = open_round!
+    return [open_count, 0] if first_round?
 
     round_to_lock = linked_round.present? ? linked_round.first_round_in_link.previous_round : previous_round
 
-    round_to_lock.lock_results(locking_user)
+    [open_count, round_to_lock.lock_results(locking_user)]
   end
 
   def open_round!
