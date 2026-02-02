@@ -17,8 +17,6 @@ class LiveResult < ApplicationRecord
   belongs_to :quit_by, class_name: 'User', optional: true
   belongs_to :locked_by, class_name: 'User', optional: true
 
-  alias_method :locked?, :locked_by_id?
-
   scope :not_empty, -> { where.not(best: 0) }
 
   alias_attribute :result_id, :id
@@ -54,6 +52,10 @@ class LiveResult < ApplicationRecord
 
   def mark_as_quit(quit_by_user)
     update(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
+  end
+
+  def locked?
+    locked_by_id.present?
   end
 
   def self.compute_average_and_best(attempts, round)
