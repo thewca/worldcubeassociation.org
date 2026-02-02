@@ -14,7 +14,7 @@ module AuxiliaryDataComputation
       %w[average concise_average_results],
     ].each do |field, table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
-        ActiveRecord::Base.connection.execute <<-SQL.squish
+        ActiveRecord::Base.connection.execute <<~SQL.squish
           INSERT INTO #{temp_table_name} (id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, year, month, day)
           SELECT
             results.id,
@@ -52,7 +52,7 @@ module AuxiliaryDataComputation
       DbHelper.with_temp_table(table_name) do |temp_table_name|
         current_country_by_wca_id = Person.current.pluck(:wca_id, :country_id).to_h
         # Get all personal records (note: people that changed their country appear once for each country).
-        personal_records_with_event = ActiveRecord::Base.connection.execute <<-SQL.squish
+        personal_records_with_event = ActiveRecord::Base.connection.execute <<~SQL.squish
           SELECT event_id, person_id, country_id, continent_id, MIN(#{field}) value
           FROM #{concise_table_name}
           GROUP BY person_id, country_id, continent_id, event_id
@@ -94,7 +94,7 @@ module AuxiliaryDataComputation
           end
           # Insert 500 rows at once to avoid running into too long query.
           values.each_slice(500) do |values_subset|
-            ActiveRecord::Base.connection.execute <<-SQL.squish
+            ActiveRecord::Base.connection.execute <<~SQL.squish
               INSERT INTO #{temp_table_name} (person_id, event_id, best, world_rank, continent_rank, country_rank) VALUES
               #{values_subset.join(",\n")}
             SQL
