@@ -75,18 +75,20 @@ class LiveResult < ApplicationRecord
     end
   end
 
-  def self.column_names_for_live_state
-    self.column_names - %w[id last_attempt_entered_at created_at updated_at quit_by_id locked_by_id round_id]
-  end
+  LIVE_STATE_SERIALIZE_OPTIONS = {
+    only: %w[advancing advancing_questionable average average_record_tag best global_pos local_pos registration_id single_record_tag],
+    methods: %w[],
+    include: [live_attempts: { only: %i[id value attempt_number] }],
+  }.freeze
 
   def live_state
-    serializable_hash({ only: LiveResult.column_names_for_live_state, methods: [], include: [live_attempts: { only: %i[id value attempt_number] }] })
+    serializable_hash(LIVE_STATE_SERIALIZE_OPTIONS)
   end
 
   def self.compute_diff(before_result, after_result)
     diff = { "registration_id" => after_result["registration_id"] }
 
-    column_names_for_live_state.map.each do |field|
+    LIVE_STATE_SERIALIZE_OPTIONS[:only].map.each do |field|
       diff[field] = after_result[field] if before_result[field] != after_result[field]
     end
 
