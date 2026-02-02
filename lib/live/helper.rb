@@ -7,7 +7,9 @@ module Live
       after_hash = after_state.index_by { |r| r["registration_id"] }
 
       {
-        "updates" => compute_updated(before_hash, after_hash),
+        "updated" => compute_updated(before_hash, after_hash),
+        "deleted" => compute_deleted(before_hash, after_hash),
+        "created" => compute_created(before_hash, after_hash),
       }.compact_blank
     end
 
@@ -23,6 +25,17 @@ module Live
       end
 
       updates.presence
+    end
+
+    def self.compute_deleted(before_hash, after_hash)
+      deleted_ids = before_hash.keys - after_hash.keys
+      deleted_ids.presence
+    end
+
+    def self.compute_created(before_hash, after_hash)
+      created_ids = after_hash.keys - before_hash.keys
+      created = created_ids.map { |id| after_hash[id] }
+      created.presence
     end
   end
 end

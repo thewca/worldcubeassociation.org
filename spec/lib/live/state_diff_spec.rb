@@ -37,7 +37,7 @@ RSpec.describe Live::Helper do
 
       diff = Live::Helper.round_state_diff(before_hash, after_hash)
 
-      expect(diff["updates"]).to contain_exactly({
+      expect(diff["updated"]).to contain_exactly({
                                                    "registration_id" => registration_1.id,
                                                    "advancing_questionable" => true,
                                                    "average" => average,
@@ -46,6 +46,8 @@ RSpec.describe Live::Helper do
                                                    "local_pos" => 1,
                                                    "live_attempts" => attempts.map { it.serializable_hash({ only: %i[id value attempt_number] }) },
                                                  })
+      expect(diff["deleted"]).to be_nil
+      expect(diff["created"]).to be_nil
     end
 
     it 'correct diff for updated results' do
@@ -74,7 +76,7 @@ RSpec.describe Live::Helper do
 
       diff = Live::Helper.round_state_diff(before_hash, after_hash)
 
-      expect(diff["updates"]).to contain_exactly({
+      expect(diff["updated"]).to contain_exactly({
                                                    "registration_id" => registration_2.id,
                                                    "advancing_questionable" => true,
                                                    "average" => average,
@@ -88,6 +90,8 @@ RSpec.describe Live::Helper do
                                                    "global_pos" => 2,
                                                    "local_pos" => 2,
                                                  })
+      expect(diff["deleted"]).to be_nil
+      expect(diff["created"]).to be_nil
     end
   end
 end
