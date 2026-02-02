@@ -20,7 +20,7 @@ RSpec.describe SyncMailingListsJob do
 
     # Africa delegates
     reports_region_sample = Country.c_find!('Zimbabwe')
-    africa_delegate_1 = create(:delegate_role, group: africa_region)
+    africa_delegate_1 = create(:regional_delegate_role, group: africa_region)
     africa_delegate_1.user.update!(receive_delegate_reports: true)
     africa_delegate_2 = create(:delegate_role, group: africa_region)
     africa_delegate_2.user.update!(receive_delegate_reports: true, delegate_reports_region: reports_region_sample.continent)
@@ -29,25 +29,25 @@ RSpec.describe SyncMailingListsJob do
     africa_delegate_4 = create(:trainee_delegate_role, group: africa_region)
 
     # Asia delegates
-    asia_delegate_1 = create(:delegate_role, group: asia_region)
+    asia_delegate_1 = create(:regional_delegate_role, group: asia_region)
     asia_delegate_2 = create(:delegate_role, group: asia_region)
     asia_delegate_3 = create(:junior_delegate_role, group: asia_region)
     asia_delegate_4 = create(:trainee_delegate_role, group: asia_region)
 
     # Europe delegates
-    europe_delegate_1 = create(:delegate_role, group: europe_region)
+    europe_delegate_1 = create(:regional_delegate_role, group: europe_region)
     europe_delegate_2 = create(:delegate_role, group: europe_region)
     europe_delegate_3 = create(:junior_delegate_role, group: europe_region)
     europe_delegate_4 = create(:trainee_delegate_role, group: europe_region)
 
     # Oceania delegates
-    oceania_delegate_1 = create(:delegate_role, group: oceania_region)
+    oceania_delegate_1 = create(:regional_delegate_role, group: oceania_region)
     oceania_delegate_2 = create(:delegate_role, group: oceania_region)
     oceania_delegate_3 = create(:junior_delegate_role, group: oceania_region)
     oceania_delegate_4 = create(:trainee_delegate_role, group: oceania_region)
 
     # Americas delegates
-    americas_delegate_1 = create(:delegate_role, group: americas_region)
+    americas_delegate_1 = create(:regional_delegate_role, group: americas_region)
     americas_delegate_2 = create(:delegate_role, group: americas_region)
     americas_delegate_3 = create(:junior_delegate_role, group: americas_region)
     americas_delegate_4 = create(:trainee_delegate_role, group: americas_region)
@@ -284,6 +284,14 @@ RSpec.describe SyncMailingListsJob do
       "seniors@worldcubeassociation.org",
       a_collection_containing_exactly(
         africa_senior_delegate.user.email, asia_senior_delegate.user.email, europe_senior_delegate.user.email, oceania_senior_delegate.user.email, americas_senior_delegate.user.email
+      ),
+    )
+
+    # seniors@ mailing list
+    expect(GsuiteMailingLists).to receive(:sync_group).with(
+      "regionals@worldcubeassociation.org",
+      a_collection_containing_exactly(
+        africa_delegate_1.user.email, asia_delegate_1.user.email, europe_delegate_1.user.email, oceania_delegate_1.user.email, americas_delegate_1.user.email
       ),
     )
 
