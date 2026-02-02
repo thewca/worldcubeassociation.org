@@ -81,7 +81,7 @@ class LiveResult < ApplicationRecord
     include: [live_attempts: { only: %i[id value attempt_number] }],
   }.freeze
 
-  def live_state
+  def to_live_state
     serializable_hash(LIVE_STATE_SERIALIZE_OPTIONS)
   end
 
@@ -106,13 +106,11 @@ class LiveResult < ApplicationRecord
   private
 
     def trigger_recompute_and_notify
-      before_state = round.live_state
+      before_state = round.to_live_state
 
       round.recompute_live_columns
-      # We need to reload because live results are changed directly on SQL level for more optimized queries
-      round.live_results.reset
 
-      after_state = round.live_state
+      after_state = round.to_live_state
       diff = Live::DiffHelper.round_state_diff(before_state, after_state)
       ActionCable.server.broadcast(WcaLive.broadcast_key(round_id), diff)
     end

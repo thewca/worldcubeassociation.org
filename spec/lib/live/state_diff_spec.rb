@@ -25,7 +25,7 @@ RSpec.describe Live::DiffHelper do
 
       result = round.live_results.find_by!(registration_id: registration_1.id)
 
-      before_state = round.live_state
+      before_state = round.to_live_state
 
       attempts = 5.times.map.with_index(1) do |r, i|
         LiveAttempt.build_with_history_entry((r + 1) * 100, i, User.first)
@@ -34,7 +34,7 @@ RSpec.describe Live::DiffHelper do
       result.update!(live_attempts: attempts, best: best, average: average)
 
       round.live_results.reload
-      after_state = round.live_state
+      after_state = round.to_live_state
 
       diff = Live::DiffHelper.round_state_diff(before_state, after_state)
 
@@ -66,7 +66,7 @@ RSpec.describe Live::DiffHelper do
       average, best = LiveResult.compute_average_and_best(attempts, round)
       result.update!(live_attempts: attempts, best: best, average: average)
 
-      before_state = round.live_state
+      before_state = round.to_live_state
       result_2 = round.live_results.find_by!(registration_id: registration_2.id)
 
       attempts_2 = 5.times.map.with_index(1) do |r, i|
@@ -76,7 +76,7 @@ RSpec.describe Live::DiffHelper do
       result_2.update!(live_attempts: attempts, best: best, average: average)
 
       round.live_results.reload
-      after_state = round.live_state
+      after_state = round.to_live_state
 
       diff = Live::DiffHelper.round_state_diff(before_state, after_state)
 
@@ -105,7 +105,7 @@ RSpec.describe Live::DiffHelper do
     let(:round) { create(:round) }
 
     it 'produces consistent hash for same state' do
-      state = round.live_state
+      state = round.to_live_state
       hash1 = Live::DiffHelper.state_hash(state)
       hash2 = Live::DiffHelper.state_hash(state)
 
@@ -113,12 +113,12 @@ RSpec.describe Live::DiffHelper do
     end
 
     it 'produces different hash when state changes' do
-      before_hash = Live::DiffHelper.state_hash(round.live_state)
+      before_hash = Live::DiffHelper.state_hash(round.to_live_state)
 
       create(:live_result, round: round)
       round.reload
 
-      after_hash = Live::DiffHelper.state_hash(round.live_state)
+      after_hash = Live::DiffHelper.state_hash(round.to_live_state)
 
       expect(before_hash).not_to eq(after_hash)
     end

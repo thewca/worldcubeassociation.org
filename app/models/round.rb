@@ -197,6 +197,8 @@ class Round < ApplicationRecord
     recompute_local_pos
     recompute_global_pos
     recompute_advancing
+    # We need to reset because live results are changed directly on SQL level for more optimized queries
+    live_results.reset
   end
 
   def recompute_advancing
@@ -291,8 +293,8 @@ class Round < ApplicationRecord
     SQL
   end
 
-  def live_state
-    live_results.includes(:live_attempts).map(&:live_state)
+  def to_live_state
+    live_results.includes(:live_attempts).map(&:to_live_state)
   end
 
   def competitors_live_results_entered
@@ -397,7 +399,7 @@ class Round < ApplicationRecord
       "round_id" => id,
       "competitors" => live_competitors.includes(:user).map { it.as_json({ methods: %i[user_name], only: %i[id user_id registrant_id] }) },
       "results" => only_podiums ? live_podium : live_results,
-      "state_hash" => Live::DiffHelper.state_hash(live_state),
+      "state_hash" => Live::DiffHelper.state_hash(to_live_state),
     }
   end
 
