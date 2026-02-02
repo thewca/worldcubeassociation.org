@@ -2213,7 +2213,7 @@ class Competition < ApplicationRecord
     if competition_series_id.nil? && # if we just processed an update to remove the competition series
        (old_series_id = competition_series_id_previously_was) && # and we previously had an ID
        (old_series = CompetitionSeries.find_by(id: old_series_id)) # and that series still exists
-      old_series.reload.destroy_if_orphaned # prompt it to check for orphaned state.
+      old_series.reload.destroy_if_orphaned(self) # prompt it to check for orphaned state.
     end
   end
 
