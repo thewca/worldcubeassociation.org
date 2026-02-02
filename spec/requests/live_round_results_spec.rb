@@ -19,7 +19,7 @@ RSpec.describe "WCA Live API" do
       expect(response).to be_successful
 
       json = response.parsed_body
-      expect(json["results"].length).to eq 1
+      expect(json.length).to eq 1
     end
   end
 end

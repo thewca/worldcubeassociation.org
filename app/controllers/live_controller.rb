@@ -14,8 +14,7 @@ class LiveController < ApplicationController
     round_id = params.require(:round_id)
     registration_id = params.require(:registration_id)
 
-    # We create empty results when a round is open
-    return render json: { status: "round is not open" }, status: :unprocessable_content unless LiveResult.exists?(round_id: round_id, registration_id: registration_id)
+    return render json: { status: "result already exist" }, status: :unprocessable_content if LiveResult.exists?(round_id: round_id, registration_id: registration_id)
 
     AddLiveResultJob.perform_later(results, round_id, registration_id, current_user)
 
@@ -67,9 +66,7 @@ class LiveController < ApplicationController
 
     # TODO: Figure out why this fires a query for every live_attempt
     # LiveAttempt Load (0.6ms)  SELECT `live_attempts`.* FROM `live_attempts` WHERE `live_attempts`.`live_result_id` = 39 AND `live_attempts`.`replaced_by_id` IS NULL ORDER BY `live_attempts`.`attempt_number` ASC
-
-    round = Round.includes(live_results: %i[live_attempts round event]).find(round_id)
-    render json: { results: round.live_results, hash: Live::Helper.state_hash(round.live_state) }
+    render json: Round.includes(live_results: %i[live_attempts round event]).find(round_id).live_results
   end
 
   def double_check
