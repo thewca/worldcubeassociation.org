@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'digest/md5'
+require 'digest/sha1'
 
 module Live
   module Helper
@@ -43,7 +43,7 @@ module Live
     end
 
     def self.state_hash(live_state)
-      Digest::MD5.hexdigest(live_state.to_json)
+      Digest::SHA1.hexdigest(live_state.to_json)
     end
   end
 end
