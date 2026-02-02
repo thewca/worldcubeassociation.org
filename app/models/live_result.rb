@@ -50,8 +50,8 @@ class LiveResult < ApplicationRecord
     end
   end
 
-  def mark_as_quit(quit_by_user)
-    update(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
+  def mark_as_quit!(quit_by_user)
+    update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
   end
 
   def locked?

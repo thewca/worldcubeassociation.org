@@ -377,16 +377,18 @@ class Round < ApplicationRecord
   end
 
   def quit_from_round!(registration_id, quitting_user)
-    result = live_results.find_by!(registration_id: registration_id)
+    ActiveRecord::Base.transaction do
+      result = live_results.find_by!(registration_id: registration_id)
 
-    is_quit = result.destroy
+      is_quit = result.destroy
 
-    return is_quit ? 1 : 0 if first_round?
+      return is_quit ? 1 : 0 if first_round?
 
-    # We need to also quit the result from the previous round so advancement can be correctly shown
-    previous_round_results = previous_round.linked_round.present? ? previous_round.linked_round.live_results : previous_round.live_results
+      # We need to also quit the result from the previous round so advancement can be correctly shown
+      previous_round_results = previous_round.linked_round.present? ? previous_round.linked_round.live_results : previous_round.live_results
 
-    previous_round_results.where(registration_id: registration_id).count { |r| r.mark_as_quit(quitting_user) }
+      previous_round_results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
+    end
   end
 
   def wcif_id
