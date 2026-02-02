@@ -160,6 +160,11 @@ namespace :db do
             owner_id: User.find_by!(wca_id: "2005FLEI01").id,
             owner_type: "User",
           )
+
+          # Run the CAD jobs so that results are available
+          LogTask.log_task "Populating CAD tables" do
+            AuxiliaryDataComputation.compute_everything
+          end
         end
       end
     end

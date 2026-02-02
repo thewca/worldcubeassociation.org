@@ -31,7 +31,7 @@ module DuesCalculator
       "Country band detail not found for #{country_band.iso2}."
     elsif !Money::Currency.table.key?(currency_code.downcase.to_sym)
       "Currency #{currency_code} is not supported."
-    elsif Money.default_bank.get_rate(currency_code, 'USD').nil?
+    elsif currency_code != 'USD' && Money.default_bank.get_rate(currency_code, 'USD').nil?
       "Currency #{currency_code} cannot be converted to USD."
     end
     # Money.default_bank.get_rate will return CurrencyUnavailable if the currency cannot be
