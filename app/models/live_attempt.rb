@@ -54,7 +54,7 @@ class LiveAttempt < ApplicationRecord
 
     # Deleted attempts
     deleted = before_hash.keys - after_hash.keys
-    return deleted.any?
+    deleted.any?
   end
 
   def update_with_history_entry(value, acting_user)
