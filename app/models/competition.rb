@@ -258,7 +258,7 @@ class Competition < ApplicationRecord
   # where we legitimately don't know whether or not they used qualification times so we have to set them to NULL.
   validates :qualification_results_reason, presence: true, if: :uses_qualification?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
-  validates :main_event_id, inclusion: { in: :events_id, allow_nil: true }
+  validates :main_event_id, inclusion: { in: :event_ids, allow_nil: true }
 
   # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
   validates :name, length: { maximum: MAX_NAME_LENGTH }
