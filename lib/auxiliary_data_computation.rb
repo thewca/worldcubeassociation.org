@@ -23,17 +23,17 @@ module AuxiliaryDataComputation
             GROUP BY person_id, country_id, event_id, competition_year
           )
           SELECT
-            results.id,
-            results.#{field},
+            rll.result_id id,
+            rll.#{field},
             concise_agg.value_and_id,
-            results.person_id,
-            results.event_id,
-            results.country_id,
+            rll.person_id,
+            rll.event_id,
+            rll.country_id,
             countries.continent_id,
-            2000 competition_year
+            rll.competition_year `year`
           FROM concise_agg
-            INNER JOIN results ON results.id = (value_and_id % 1000000000)
-            INNER JOIN countries ON countries.id = results.country_id
+            INNER JOIN regional_records_lookup rll ON rll.result_id = (value_and_id % 1000000000)
+            INNER JOIN countries ON countries.id = rll.country_id
         SQL
       end
     end
@@ -101,7 +101,7 @@ module AuxiliaryDataComputation
   end
 
   def self.insert_regional_records_lookup(competition_id = nil)
-    DbHelper.with_temp_table("regional_records_lookup") do |temp_table_name|
+    DbHelper.with_temp_table(CheckRegionalRecords::LOOKUP_TABLE_NAME) do |temp_table_name|
       CheckRegionalRecords.add_to_lookup_table(competition_id, table_name: temp_table_name)
     end
   end
