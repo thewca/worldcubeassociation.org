@@ -44,10 +44,7 @@ class Round < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   has_many :live_results, -> { order(:global_pos) }
-  has_many :live_results_without_quitters,
-           -> { without_quitters.order(:global_pos) },
-           class_name: "LiveResult"
-  has_many :live_competitors, through: :live_results_without_quitters, source: :registration
+  has_many :live_competitors, through: :live_results, source: :registration
   has_many :results
   has_many :scrambles
 
@@ -372,7 +369,7 @@ class Round < ApplicationRecord
   def quit_from_round!(registration_id, quitting_user)
     result = live_results.find_by!(registration_id: registration_id)
 
-    is_quit = result.mark_as_quit(quitting_user)
+    is_quit = result.destroy
 
     return is_quit ? 1 : 0 if number == 1 || linked_round.present?
 

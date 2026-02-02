@@ -56,6 +56,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     return render json: { status: "unauthorized" }, status: :unauthorized unless @current_user.can_manage_competition?(competition)
 
     round = Round.find_by_wcif_id!(wcif_id, competition.id)
+    result = round.live_results.find_by!(registration_id: registration_id)
+
+    return render json: { status: "Cannot quit competitor with results" }, status: :bad_request if result.live_attempts.any?
 
     quit_count = round.quit_from_round!(registration_id, @current_user)
 
