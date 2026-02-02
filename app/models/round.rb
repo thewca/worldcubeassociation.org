@@ -365,11 +365,15 @@ class Round < ApplicationRecord
   def lock_results(locking_user)
     results_to_lock = linked_round.present? ? linked_round.live_results : live_results
 
+    # Don't double lock results if we are in a R1 (R2 R3) R4 linked round situation and we are opening rounds
+    # separately
+    return 0 if results_to_lock.first.locked_by.present?
+
     results_to_lock.update_all(locked_by_id: locking_user.id)
   end
 
   def first_round?
-    number == 1 || (linked_round.present? && linked_round.first_round_in_link.number == 1 )
+    number == 1 || (linked_round.present? && linked_round.first_round_in_link.number == 1)
   end
 
   def quit_from_round!(registration_id, quitting_user)
