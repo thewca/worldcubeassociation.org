@@ -287,7 +287,7 @@ RSpec.describe SyncMailingListsJob do
       ),
     )
 
-    # seniors@ mailing list
+    # regionals@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "regionals@worldcubeassociation.org",
       a_collection_containing_exactly(
