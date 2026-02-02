@@ -18,17 +18,12 @@ module Live
     end
 
     def self.compute_updated(before_hash, after_hash)
-      updates = []
-
-      after_hash.each do |id, after_result|
+      after_hash.filter_map do |id, after_result|
         before_result = before_hash[id]
-        next unless before_result # Skip new results
-
-        result_diff = LiveResult.compute_diff(before_result, after_result)
-        updates << result_diff if result_diff.present?
-      end
-
-      updates.presence
+        next unless before_result
+    
+        LiveResult.compute_diff(before_result, after_result).presence
+      end.presence
     end
 
     def self.compute_deleted(before_hash, after_hash)
