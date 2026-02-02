@@ -162,7 +162,9 @@ namespace :db do
           )
 
           # Run the CAD jobs so that results are available
-          ComputeAuxiliaryData.new.perform
+          LogTask.log_task "Populating CAD tables" do
+            ComputeAuxiliaryData.new.perform
+          end
         end
       end
     end
