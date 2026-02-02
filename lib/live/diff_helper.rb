@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'digest/sha1'
-
 module Live
   module DiffHelper
     def self.round_state_diff(before_state, after_state)
@@ -21,7 +19,7 @@ module Live
       after_hash.filter_map do |id, after_result|
         before_result = before_hash[id]
         next unless before_result
-    
+
         LiveResult.compute_diff(before_result, after_result).presence
       end.presence
     end

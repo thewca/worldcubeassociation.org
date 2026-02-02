@@ -94,7 +94,7 @@ class LiveResult < ApplicationRecord
 
     # Include new attempts if they have changed, it's too much of a hassle to
     # replace single values in the frontend.
-    diff["live_attempts"] = after_result["live_attempts"] if LiveAttempt.attempt_changed?(
+    diff["live_attempts"] = after_result["live_attempts"] if LiveAttempt.attempts_changed?(
       before_result["live_attempts"],
       after_result["live_attempts"],
     )
@@ -110,7 +110,7 @@ class LiveResult < ApplicationRecord
 
       round.recompute_live_columns
       # We need to reload because live results are changed directly on SQL level for more optimized queries
-      round.live_results.reload
+      round.live_results.reset
 
       after_state = round.live_state
       diff = Live::DiffHelper.round_state_diff(before_state, after_state)
