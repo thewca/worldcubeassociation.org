@@ -2405,7 +2405,7 @@ class Competition < ApplicationRecord
   # It is quite uncool that we have to duplicate the internal form_data formatting like this
   # but as long as we let our backend handle the complete error validation we literally have no other choice
   def form_errors
-    self_valid = self.valid?
+    self_valid = self.errors.empty? && self.valid?
     # If we're cloning, we also need to check the parent's associations.
     #   Otherwise, the user may be surprised by a silent fail if some tabs/venues/schedules
     #   of the parent are invalid. (This can happen if we introduce new validations on old data)

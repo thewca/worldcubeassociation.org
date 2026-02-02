@@ -538,15 +538,11 @@ class CompetitionsController < ApplicationController
 
     if saved_competition
       if new_id && !competition.update(id: new_id)
-        # Changing the competition id breaks all our associations, and our view
-        # code was not written to handle this. Rather than trying to update our view
-        # code, just revert the attempted id change. The user will have to deal with
-        # editing the ID text box manually. This will go away once we have proper
-        # immutable ids for competitions.
-        return render json: {
-          status: "ok",
-          redirect: competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition),
-        }
+        # Changing the competition id breaks all our associations, and our model code
+        # is trying its best to handle this. However, in certain edge cases
+        # (for example, connected Stripe accounts) there might still be errors
+        # which we need to communicate to the user
+        return render status: :bad_request, json: competition.form_errors
       end
 
       new_organizers = competition.organizers - old_organizers
