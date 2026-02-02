@@ -9,7 +9,6 @@ import useResultsSubscription, {
 import LiveResultsTable from "@/components/live/LiveResultsTable";
 import { Heading, HStack, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
-import _ from "lodash";
 
 function applyDiff(
   previousResults: components["schemas"]["LiveResult"][],
@@ -17,21 +16,19 @@ function applyDiff(
   created: components["schemas"]["LiveResult"][],
   deleted: number[],
 ): components["schemas"]["LiveResult"][] {
-  const resultsWithoutDeleted = previousResults.filter(
-    (r) => !deleted.includes(r.registration_id),
-  );
+  const deletedSet = new Set(deleted);
+  const updatesMap = new Map(updated.map((u) => [u.registration_id, u]));
 
-  const updates = _.keyBy(updated, "registration_id");
+  const results: components["schemas"]["LiveResult"][] = [];
 
-  const resultsWithUpdates = resultsWithoutDeleted.map((r) => {
-    const updated = updates[r.registration_id];
-    if (updated) {
-      return { ...r, ...updated };
-    }
-    return r;
-  });
+  for (const result of previousResults) {
+    if (deletedSet.has(result.registration_id)) continue;
 
-  return [...resultsWithUpdates, ...created];
+    const update = updatesMap.get(result.registration_id);
+    results.push(update ? { ...result, ...update } : result);
+  }
+
+  return results.concat(created);
 }
 
 export default function LiveUpdatingResultsTable({

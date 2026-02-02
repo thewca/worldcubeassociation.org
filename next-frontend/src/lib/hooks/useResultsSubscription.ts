@@ -17,9 +17,8 @@ export const CONNECTION_COLORS = {
   [CONNECTION_STATE_DISCONNECTED]: "red",
 };
 
-export type DiffedLiveResult = Partial<components["schemas"]["LiveResult"]> & {
-  registration_id: string;
-};
+export type DiffedLiveResult = Partial<components["schemas"]["LiveResult"]> &
+  Pick<components["schemas"]["LiveResult"], "registration_id">;
 
 export type DiffProtocolResponse = {
   updated: DiffedLiveResult[];
