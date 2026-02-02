@@ -160,6 +160,9 @@ namespace :db do
             owner_id: User.find_by!(wca_id: "2005FLEI01").id,
             owner_type: "User",
           )
+
+          # Run the CAD jobs so that results are available
+          ComputeAuxiliaryData.new.perform
         end
       end
     end
