@@ -261,7 +261,7 @@ module DatabaseDumper
         ],
         db_default: %w[
           round_results
-        ]
+        ],
       ),
     }.freeze,
     "linked_rounds" => {
