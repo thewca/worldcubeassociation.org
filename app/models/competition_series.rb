@@ -133,7 +133,7 @@ class CompetitionSeries < ApplicationRecord
       "id" => wcif_id,
       "name" => name,
       "shortName" => short_name,
-      "competitionIds" => (authorized ? competitions : public_competitions).pluck(:id),
+      "competitionIds" => (authorized ? competitions : public_competitions).ids,
     }
   end
 
@@ -169,6 +169,6 @@ class CompetitionSeries < ApplicationRecord
   end
 
   def public_competitions
-    self.competitions.where(show_at_all: true)
+    self.competitions.visible
   end
 end
