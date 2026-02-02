@@ -439,7 +439,7 @@ RSpec.describe CompetitionsController do
         competition.update(show_at_all: false)
         delete :destroy, params: { id: competition }
         expect(response).to be_successful
-        expect(Competition.find_by(id: competition.id)).to be_nil
+        expect(Competition.find_by(competition_id: competition.id)).to be_nil
       end
 
       it "board member cannot delete a visible competition" do
@@ -448,7 +448,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         parsed_body = response.parsed_body
         expect(parsed_body["error"]).to eq "Cannot delete a competition that is publicly visible."
-        expect(Competition.find_by(id: competition.id)).not_to be_nil
+        expect(Competition.find_by(competition_id: competition.id)).not_to be_nil
       end
     end
 
@@ -573,7 +573,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a competition that is publicly visible."
-        expect(Competition.find_by(id: competition.id)).not_to be_nil
+        expect(Competition.find_by(competition_id: competition.id)).not_to be_nil
       end
 
       it "cannot delete confirmed competition" do
@@ -584,7 +584,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a confirmed competition."
-        expect(Competition.find_by(id: competition.id)).not_to be_nil
+        expect(Competition.find_by(competition_id: competition.id)).not_to be_nil
       end
 
       it "can delete not confirmed and not visible competition" do
@@ -592,7 +592,7 @@ RSpec.describe CompetitionsController do
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
         delete :destroy, params: { id: competition }
-        expect(Competition.find_by(id: competition.id)).to be_nil
+        expect(Competition.find_by(competition_id: competition.id)).to be_nil
         expect(response).to be_successful
       end
 
@@ -791,7 +791,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a competition that is publicly visible."
-        expect(Competition.find_by(id: competition.id)).not_to be_nil
+        expect(Competition.find_by(competition_id: competition.id)).not_to be_nil
       end
 
       it "cannot delete confirmed competition" do
@@ -802,7 +802,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a confirmed competition."
-        expect(Competition.find_by(id: competition.id)).not_to be_nil
+        expect(Competition.find_by(competition_id: competition.id)).not_to be_nil
       end
 
       it "can delete not confirmed and not visible competition" do
@@ -810,7 +810,7 @@ RSpec.describe CompetitionsController do
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
         delete :destroy, params: { id: competition }
-        expect(Competition.find_by(id: competition.id)).to be_nil
+        expect(Competition.find_by(competition_id: competition.id)).to be_nil
         expect(response).to be_successful
       end
 
@@ -918,7 +918,7 @@ RSpec.describe CompetitionsController do
         # Attempt to delete competition. This should not work, because we're
         # not the delegate for this competition.
         delete :destroy, params: { id: competition }
-        expect(Competition.find_by(id: competition.id)).not_to be_nil
+        expect(Competition.find_by(competition_id: competition.id)).not_to be_nil
       end
     end
   end

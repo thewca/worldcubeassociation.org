@@ -1,13 +1,13 @@
-SELECT DISTINCT res.person_name   AS PersonName,
-                res.person_id     AS person_id,
-                comps.id          AS competition_id,
-                comps.start_date  AS CompetitionStartDate,
-                comps.end_date    AS CompetitionEndDate,
-                banned.start_date AS BanStartDate,
-                banned.end_date   AS BanEndDate
+SELECT DISTINCT res.person_name      AS PersonName,
+                res.person_id        AS person_id,
+                comps.competition_id AS competition_id,
+                comps.start_date     AS CompetitionStartDate,
+                comps.end_date       AS CompetitionEndDate,
+                banned.start_date    AS BanStartDate,
+                banned.end_date      AS BanEndDate
 FROM results AS res
-       INNER JOIN (SELECT id, start_date, end_date FROM competitions WHERE results_posted_by is NOT NULL) AS comps
-                  ON res.competition_id = comps.id
+       INNER JOIN (SELECT competition_id, start_date, end_date FROM competitions WHERE results_posted_by is NOT NULL) AS comps
+                  ON res.competition_id = comps.competition_id
        INNER JOIN (SELECT role.user_id,
                           role.start_date AS start_date,
                           role.end_date   AS end_date,
