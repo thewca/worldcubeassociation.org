@@ -184,7 +184,7 @@ class Round < ApplicationRecord
 
   def open_and_lock_previous(locking_user)
     open_round!
-    return 0 if number == 1 || (linked_round.present? && linked_round.first_round_in_link.number == 1)
+    return 0 if first_round?
 
     round_to_lock = linked_round.present? ? linked_round.first_round_in_link.previous_round : previous_round
 
@@ -368,12 +368,16 @@ class Round < ApplicationRecord
     results_to_lock.update_all(locked_by_id: locking_user.id)
   end
 
+  def first_round?
+    number == 1 || (linked_round.present? && linked_round.first_round_in_link.number == 1 )
+  end
+
   def quit_from_round!(registration_id, quitting_user)
     result = live_results.find_by!(registration_id: registration_id)
 
     is_quit = result.destroy
 
-    return is_quit ? 1 : 0 if number == 1 || (linked_round.present? && linked_round.first_round_in_series)
+    return is_quit ? 1 : 0 if first_round?
 
     # We need to also quit the result from the previous round so advancement can be correctly shown
     previous_round_results = previous_round.linked_round.present? ? previous_round.linked_round.live_results : previous_round.live_results
