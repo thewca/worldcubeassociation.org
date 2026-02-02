@@ -310,7 +310,7 @@ FactoryBot.define do
 
     trait :registration_not_opened do
       registration_open { 1.week.from_now.change(usec: 0) }
-      registration_close { 4.weeks.from_now.change(usec: 0) }
+      registration_close { 3.weeks.from_now.change(usec: 0) }
       starts { 1.month.from_now }
       ends { starts }
     end
