@@ -12537,9 +12537,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"newrelic@npm:^13.10.0":
-  version: 13.10.0
-  resolution: "newrelic@npm:13.10.0"
+"newrelic@npm:^13.11.0":
+  version: 13.11.0
+  resolution: "newrelic@npm:13.11.0"
   dependencies:
     "@apm-js-collab/tracing-hooks": "npm:^0.3.1"
     "@grpc/grpc-js": "npm:^1.13.2"
@@ -12576,7 +12576,7 @@ __metadata:
       optional: true
   bin:
     newrelic-naming-rules: bin/test-naming-rules.js
-  checksum: 10c0/8edc60c030d9a7e3c3c64a30a3eacaf031b0ff0490a98dbbe5e8ec95baa330c68b0e290471c010d961f85bd436911fb227b7cf0e005ed2f17dc2a156d9ad29a9
+  checksum: 10c0/baaa4012d8afca81b285a328f90bd8fcb5e24574e98ad1ab6dbc9e1491b08b8484e90ef9fc09ff7af887436bcb169b1ccfd3bb333af0832d4d322c8a1462e96b
   languageName: node
   linkType: hard
 
@@ -12662,7 +12662,7 @@ __metadata:
     jsdom: "npm:^27.4.0"
     lodash: "npm:^4.17.23"
     luxon: "npm:^3.7.2"
-    newrelic: "npm:^13.10.0"
+    newrelic: "npm:^13.11.0"
     next: "npm:15.5.10"
     next-auth: "npm:5.0.0-beta.30"
     next-themes: "npm:^0.4.6"
