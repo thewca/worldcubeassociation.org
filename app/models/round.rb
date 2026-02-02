@@ -292,7 +292,7 @@ class Round < ApplicationRecord
   end
 
   def live_state
-    live_results.reload.includes(:live_attempts).map(&:to_live_state)
+    live_results.includes(:live_attempts).map(&:to_live_state)
   end
 
   def competitors_live_results_entered

@@ -105,7 +105,11 @@ class LiveResult < ApplicationRecord
 
     def trigger_recompute_and_notify
       before_state = round.live_state
+
       round.recompute_live_columns
+      # We need to reload because live results are changed directly on SQL level for more optimized queries
+      round.live_results.reload
+
       after_state = round.live_state
       diff = Live::Helper.round_state_diff(before_state, after_state)
       ActionCable.server.broadcast(WcaLive.broadcast_key(round_id), diff)

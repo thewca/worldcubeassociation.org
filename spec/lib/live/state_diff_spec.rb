@@ -33,6 +33,7 @@ RSpec.describe Live::Helper do
       average, best = LiveResult.compute_average_and_best(attempts, round)
       result.update!(live_attempts: attempts, best: best, average: average)
 
+      round.live_results.reload
       after_state = round.live_state
 
       diff = Live::Helper.round_state_diff(before_state, after_state)
@@ -74,6 +75,7 @@ RSpec.describe Live::Helper do
       average, best = LiveResult.compute_average_and_best(attempts_2, round)
       result_2.update!(live_attempts: attempts, best: best, average: average)
 
+      round.live_results.reload
       after_state = round.live_state
 
       diff = Live::Helper.round_state_diff(before_state, after_state)
