@@ -8669,27 +8669,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.57.0":
-  version: 1.57.0
-  resolution: "playwright-core@npm:1.57.0"
+"playwright-core@npm:1.58.1":
+  version: 1.58.1
+  resolution: "playwright-core@npm:1.58.1"
   bin:
     playwright-core: cli.js
-  checksum: 10c0/798e35d83bf48419a8c73de20bb94d68be5dde68de23f95d80a0ebe401e3b83e29e3e84aea7894d67fa6c79d2d3d40cc5bcde3e166f657ce50987aaa2421b6a9
+  checksum: 10c0/2c12755579148cbd13811cc1a01e9693432f0e4595c76ebb02d2e1b4ee7286719c6769fdb26cda61f218bc49b7ddd4de5d856abbd034acde4ff3dbeee93e4773
   languageName: node
   linkType: hard
 
-"playwright@npm:^1.57.0":
-  version: 1.57.0
-  resolution: "playwright@npm:1.57.0"
+"playwright@npm:^1.58.1":
+  version: 1.58.1
+  resolution: "playwright@npm:1.58.1"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.57.0"
+    playwright-core: "npm:1.58.1"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10c0/ab03c99a67b835bdea9059f516ad3b6e42c21025f9adaa161a4ef6bc7ca716dcba476d287140bb240d06126eb23f889a8933b8f5f1f1a56b80659d92d1358899
+  checksum: 10c0/29cb2b34ad80f9dc1b27d26d8cf56e0964d7787e0beb18b25fd9d087a09ce56a359779104d2a1717d08789c2f2713928ef59140b2905e6ef00b2cb6df58bb107
   languageName: node
   linkType: hard
 
@@ -10650,7 +10650,7 @@ __metadata:
     make-plural: "npm:^8.1.0"
     mini-css-extract-plugin: "npm:^2.10.0"
     path-complete-extname: "npm:^1.0.0"
-    playwright: "npm:^1.57.0"
+    playwright: "npm:^1.58.1"
     pnp-webpack-plugin: "npm:^1.7.0"
     postcss: "npm:^8.5.6"
     postcss-flexbugs-fixes: "npm:^5.0.2"
