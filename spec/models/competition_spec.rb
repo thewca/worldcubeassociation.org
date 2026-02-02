@@ -658,7 +658,7 @@ RSpec.describe Competition do
     delegate1 = create(:delegate, name: "Daniel", email: "daniel@d.com")
     delegate2 = create(:delegate, name: "Chris", email: "chris@c.com")
     delegates = [delegate1, delegate2]
-    staff_delegate_ids = delegates.map(&:id).join(",")
+    staff_delegate_ids = delegates.map(&:id)
     competition = create(:competition, staff_delegate_ids: staff_delegate_ids)
     expect(competition.delegates.sort_by(&:name)).to eq delegates.sort_by(&:name)
   end
@@ -667,7 +667,7 @@ RSpec.describe Competition do
     organizer1 = create(:user, name: "Bob", email: "bob@b.com")
     organizer2 = create(:user, name: "Jane", email: "jane@j.com")
     organizers = [organizer1, organizer2]
-    organizer_ids = organizers.map(&:id).join(",")
+    organizer_ids = organizers.map(&:id)
     competition = create(:competition, organizer_ids: organizer_ids)
     expect(competition.organizers.sort_by(&:name)).to eq organizers.sort_by(&:name)
   end
@@ -707,29 +707,19 @@ RSpec.describe Competition do
       expect(r2.reload.competition_id).to eq "NewID2015"
     end
 
-    it "changes the competitionId of scrambles" do
+    it "changes the competition_id of scrambles" do
       scramble1 = create(:scramble, competition: competition)
       competition.update_attribute(:id, "NewID2015")
       expect(scramble1.reload.competition_id).to eq "NewID2015"
     end
 
-    it "can set competition_events_attributes" do
-      comp_events = competition.competition_events
+    it "changes the competition_id of competition_events" do
+      old_comp_events = competition.competition_events
 
-      # Force ActiveRecord to do database queries for the associated competition_events
-      # with the new competition id.
-      competition.reload
+      competition.update_attribute(:id, "NewID2015")
+      new_comp_events = old_comp_events.reload
 
-      old_events = competition.events
-      competition.update!(
-        id: "MyerComp2016",
-        competition_events_attributes: [
-          { "id" => comp_events[0].id, "event_id" => comp_events[0].event_id, "_destroy" => "0" },
-          { "id" => comp_events[1].id, "event_id" => comp_events[1].event_id, "_destroy" => "0" },
-        ],
-      )
-      new_events = competition.events
-      expect(new_events).to eq old_events
+      expect(new_comp_events.pluck(:competition_id)).to eq Array.new(old_comp_events.count, "NewID2015")
     end
 
     it "updates the competition_id of competition_delegates and competition_organizers" do
@@ -744,9 +734,7 @@ RSpec.describe Competition do
       co = CompetitionOrganizer.find_by(organizer_id: organizer.id)
       expect(co).not_to be_nil
 
-      c = Competition.find(competition.id)
-      c.id = "NewID2015"
-      c.save!
+      competition.update_attribute(:id, "NewID2015")
 
       expect(CompetitionDelegate.where(delegate_id: delegate.id).count).to eq 1
       expect(CompetitionOrganizer.where(organizer_id: organizer.id).count).to eq 1
