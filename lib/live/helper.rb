@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'digest/md5'
+
 module Live
   module Helper
     def self.round_state_diff(before_state, after_state)
@@ -10,6 +12,8 @@ module Live
         "updated" => compute_updated(before_hash, after_hash),
         "deleted" => compute_deleted(before_hash, after_hash),
         "created" => compute_created(before_hash, after_hash),
+        'before_hash' => state_hash(before_state),
+        'after_hash' => state_hash(after_state),
       }.compact_blank
     end
 
@@ -36,6 +40,10 @@ module Live
       created_ids = after_hash.keys - before_hash.keys
       created = created_ids.map { |id| after_hash[id] }
       created.presence
+    end
+
+    def self.state_hash(live_state)
+      Digest::MD5.hexdigest(live_state.to_json)
     end
   end
 end

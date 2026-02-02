@@ -67,7 +67,9 @@ class LiveController < ApplicationController
 
     # TODO: Figure out why this fires a query for every live_attempt
     # LiveAttempt Load (0.6ms)  SELECT `live_attempts`.* FROM `live_attempts` WHERE `live_attempts`.`live_result_id` = 39 AND `live_attempts`.`replaced_by_id` IS NULL ORDER BY `live_attempts`.`attempt_number` ASC
-    render json: Round.includes(live_results: %i[live_attempts round event]).find(round_id).live_results
+
+    round = Round.includes(live_results: %i[live_attempts round event]).find(round_id)
+    render json: { results: round.live_results, hash: Live::Helper.state_hash(round.live_state) }
   end
 
   def double_check
