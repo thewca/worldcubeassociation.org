@@ -386,7 +386,7 @@ class Round < ApplicationRecord
     # We need to also quit the result from the previous round so advancement can be correctly shown
     previous_round_results = previous_round.linked_round.present? ? previous_round.linked_round.live_results : previous_round.live_results
 
-    previous_round_results.where(registration_id: registration_id).map { it.mark_as_quit(quitting_user) }.count { it == true }
+    previous_round_results.where(registration_id: registration_id).count { |r| r.mark_as_quit(quitting_user) }
   end
 
   def wcif_id
