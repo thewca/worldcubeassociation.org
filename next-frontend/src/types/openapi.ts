@@ -774,6 +774,8 @@ export interface components {
         LiveRoundAdmin: components["schemas"]["WcifRound"] & {
             open?: boolean;
             locked?: boolean;
+            openable?: boolean;
+            clearable?: boolean;
             total_competitors?: number;
             competitors_live_results_entered?: number;
         };

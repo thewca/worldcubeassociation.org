@@ -6,6 +6,10 @@ allOf:
         type: boolean
       locked:
         type: boolean
+      openable:
+        type: boolean
+      clearable:
+        type: boolean
       total_competitors:
         type: number
       competitors_live_results_entered:

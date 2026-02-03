@@ -88,16 +88,18 @@ export default async function LiveOverview({
                                 },
                               })}
                             >
-                              {t(`rounds.${roundTypeId}.name`)}
+                              {t(`rounds.${roundTypeId}.name`)}{" "}
+                              {r.open &&
+                                `(${r.competitors_live_results_entered}/${r.total_competitors}) entered`}
                             </NextLink>
                           </Link>
                         </Button>
-                        {!r.open && (
+                        {r.openable && (
                           <Button variant="outline" size="sm">
                             Open
                           </Button>
                         )}
-                        {!r.locked && (
+                        {r.clearable && (
                           <Button variant="outline" size="sm">
                             Clear
                           </Button>

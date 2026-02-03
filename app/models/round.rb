@@ -442,9 +442,11 @@ class Round < ApplicationRecord
     {
       **self.to_wcif,
       "open" => open?,
+      "locked" => live_results.any?(&:locked?),
+      "openable" => !open? && (number == 1 || (previous_round.open? && previous_round.score_taking_done?)),
+      "clearable" => open? && (number == 1 || previous_round&.locked?),
       "total_competitors" => total_competitors,
       "competitors_live_results_entered" => competitors_live_results_entered,
-      "locked" => live_results.any?(&:locked?),
     }
   end
 
