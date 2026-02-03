@@ -11,7 +11,7 @@ RSpec.describe Live::DiffHelper do
 
     it 'broadcasts diff to ActionCable' do
       registration_1 = registrations.first
-      round.init_round
+      round.open_round!
       result = round.live_results.find_by!(registration_id: registration_1.id)
       expect do
         result.update(best: 100)
@@ -21,7 +21,7 @@ RSpec.describe Live::DiffHelper do
 
     it 'correct diff for new results' do
       registration_1 = registrations.first
-      round.init_round
+      round.open_round!
 
       result = round.live_results.find_by!(registration_id: registration_1.id)
 
@@ -56,7 +56,7 @@ RSpec.describe Live::DiffHelper do
     it 'correct diff for updated results' do
       registration_1 = registrations.first
       registration_2 = registrations.second
-      round.init_round
+      round.open_round!
 
       result = round.live_results.find_by!(registration_id: registration_1.id)
 

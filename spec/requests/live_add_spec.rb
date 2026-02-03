@@ -12,7 +12,7 @@ RSpec.describe "WCA Live API" do
       competition = create(:competition, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
-      round.init_round
+      round.open_round!
 
       live_request = {
         attempts: [111, 222, 333, 444, 555],
