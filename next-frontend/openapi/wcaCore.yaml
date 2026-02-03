@@ -17,6 +17,8 @@ paths:
   /v1/competitions/{competitionId}/registration_config:
     $ref: 'paths/registrations/registrationConfigForCompetition.yaml'
 
+  /v1/competitions/{competitionId}/live/admin:
+    $ref: 'paths/competitions/live/LiveAdmin.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}:
     $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
   /v1/competitions/{competitionId}/live/podiums:

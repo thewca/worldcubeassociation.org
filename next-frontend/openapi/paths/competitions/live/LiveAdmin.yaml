@@ -1,8 +1,8 @@
 get:
-  summary: Gets Information about the Podiums of the Live Results
+  summary: Gets Live Admin Information
   tags:
     - live
-  operationId: livePodiums
+  operationId: liveAdmin
   parameters:
     - name: competitionId
       in: path
@@ -11,10 +11,10 @@ get:
         type: string
   responses:
     '200':
-      description: Returns podiums with round information
+      description: Returns Live Admin Information with Rounds
       content:
         application/json:
           schema:
             type: array
             items:
-              $ref: "../../../schemas/live/LiveRound.yaml"
+              $ref: "../../../schemas/live/LiveRoundAdmin.yaml"

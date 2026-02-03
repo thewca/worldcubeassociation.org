@@ -38,6 +38,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/admin": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets Live Admin Information */
+        get: operations["liveAdmin"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/rounds/{roundId}": {
         parameters: {
             query?: never;
@@ -46,29 +63,7 @@ export interface paths {
             cookie?: never;
         };
         /** Gets Information about the Round including the live Results */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    competitionId: string;
-                    roundId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Returns results */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["LiveRound"];
-                    };
-                };
-            };
-        };
+        get: operations["liveByRound"];
         put?: never;
         post?: never;
         delete?: never;
@@ -85,28 +80,7 @@ export interface paths {
             cookie?: never;
         };
         /** Gets Information about the Podiums of the Live Results */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    competitionId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Returns podiums with round information */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["LiveRound"][];
-                    };
-                };
-            };
-        };
+        get: operations["livePodiums"];
         put?: never;
         post?: never;
         delete?: never;
@@ -123,29 +97,7 @@ export interface paths {
             cookie?: never;
         };
         /** Gets Information about the Competitors's live result */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    competitionId: string;
-                    registrationId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Returns a person and their results */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["LivePerson"];
-                    };
-                };
-            };
-        };
+        get: operations["liveByPerson"];
         put?: never;
         post?: never;
         delete?: never;
@@ -818,6 +770,11 @@ export interface components {
             scrambleSetCount: number;
             scrambleSets: components["schemas"]["WcifScrambleSet"][];
             extensions: unknown[];
+        };
+        LiveRoundAdmin: components["schemas"]["WcifRound"] & {
+            open?: boolean;
+            total_competitors?: number;
+            competitors_live_results_entered?: number;
         };
         LiveAttempt: {
             value: number;
@@ -1606,6 +1563,96 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RegistrationConfig"][];
+                };
+            };
+        };
+    };
+    liveAdmin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns Live Admin Information with Rounds */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveRoundAdmin"][];
+                };
+            };
+        };
+    };
+    liveByRound: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns results */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveRound"];
+                };
+            };
+        };
+    };
+    livePodiums: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns podiums with round information */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveRound"][];
+                };
+            };
+        };
+    };
+    liveByPerson: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                registrationId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns a person and their results */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LivePerson"];
                 };
             };
         };

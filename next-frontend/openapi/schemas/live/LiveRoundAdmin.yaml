@@ -1,0 +1,10 @@
+allOf:
+  - $ref: '../wcif/WcifRound.yaml'
+  - type: object
+    properties:
+      open:
+        type: boolean
+      total_competitors:
+        type: number
+      competitors_live_results_entered:
+        type: number
