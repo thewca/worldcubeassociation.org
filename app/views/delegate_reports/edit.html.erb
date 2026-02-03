@@ -6,7 +6,7 @@
 <%= render layout: 'nav' do %>
   <h2>Editing Delegate Report for <%= @competition.name%></h2>
   <%= simple_form_for @delegate_report, url: delegate_report_path(@competition.id),
-                                        html: { class: "delegate-report" } do |f| %>
+                                        html: { class: "delegate-report are-you-sure" } do |f| %>
     <%= f.hidden_field :updated_at %>
 
     <% if @delegate_report.posted? %>
