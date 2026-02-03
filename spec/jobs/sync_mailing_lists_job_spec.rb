@@ -95,7 +95,7 @@ RSpec.describe SyncMailingListsJob do
     # board@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "board@worldcubeassociation.org",
-      a_collection_containing_exactly(board_member.email, SyncMailingListsJob::EXECUTIVE_DIRECTOR_EMAIL),
+      a_collection_containing_exactly(board_member.email),
     )
 
     # communication-china@ mailing list
