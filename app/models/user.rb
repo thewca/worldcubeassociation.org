@@ -762,6 +762,12 @@ class User < ApplicationRecord
           panel_pages[:delegateProbations],
         ],
       },
+      wqac: {
+        name: 'WQAC panel',
+        pages: [
+          panel_pages[:helpfulQueries],
+        ],
+      },
     }
   end
 
@@ -1444,6 +1450,8 @@ class User < ApplicationRecord
       wic_team?
     when :weat
       weat_team?
+    when :wqac
+      quality_assurance_committee?
     else
       false
     end
