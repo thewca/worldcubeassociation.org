@@ -99,7 +99,7 @@ class LiveResult < ApplicationRecord
   def self.compute_diff(before_result, after_result)
     diff = { "registration_id" => after_result["registration_id"] }
 
-    LIVE_STATE_SERIALIZE_OPTIONS[:only].map.each do |field|
+    LIVE_STATE_SERIALIZE_OPTIONS[:only].each do |field|
       diff[field] = after_result[field] if before_result[field] != after_result[field]
     end
 

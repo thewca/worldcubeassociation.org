@@ -20,7 +20,6 @@ class LiveController < ApplicationController
     unless result_exists
       round = Round.find(round_id)
       return render json: { status: "round is not open" }, status: :unprocessable_content unless round.live_results.any?
-      return render json: { status: "user was quit from this round" }, status: :unprocessable_content if round.number != 1 && round.previous_round.live_results.where.not(quit_by_id: nil).where(registration_id: registration_id).any?
 
       return render json: { status: "user is not part of this round" }, status: :unprocessable_content
     end
