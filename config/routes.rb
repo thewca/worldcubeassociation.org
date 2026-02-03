@@ -378,6 +378,7 @@ Rails.application.routes.draw do
             put '/rounds/:round_id/:registration_id' => 'live#quit_competitor', as: :quit_competitor_from_round
             get '/podiums' => 'live#podiums', as: :live_podiums
             get '/registrations/:registration_id' => 'live#by_person', as: :get_live_by_person
+            get '/admin' => 'live#admin', as: :live_admin
           end
         end
 

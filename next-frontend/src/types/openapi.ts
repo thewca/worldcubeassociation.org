@@ -773,6 +773,7 @@ export interface components {
         };
         LiveRoundAdmin: components["schemas"]["WcifRound"] & {
             open?: boolean;
+            locked?: boolean;
             total_competitors?: number;
             competitors_live_results_entered?: number;
         };
@@ -1584,7 +1585,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LiveRoundAdmin"][];
+                    "application/json": {
+                        rounds: components["schemas"]["LiveRoundAdmin"][];
+                    };
                 };
             };
         };

@@ -11,6 +11,13 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     render json: round.to_live_json
   end
 
+  def admin
+    competition = Competition.find(params.require(:competition_id))
+    return render json: { status: "unauthorized" }, status: :unauthorized unless @current_user.can_manage_competition?(competition)
+
+    render json: { rounds: competition.rounds.map { |r| r.to_live_admin_json } }
+  end
+
   def by_person
     registration_id = params.require(:registration_id)
     registration = Registration.find(registration_id)

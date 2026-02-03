@@ -15,6 +15,11 @@ get:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: "../../../schemas/live/LiveRoundAdmin.yaml"
+            type: object
+            required:
+              - rounds
+            properties:
+              rounds:
+                type: array
+                items:
+                  $ref: "../../../schemas/live/LiveRoundAdmin.yaml"

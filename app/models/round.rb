@@ -372,6 +372,10 @@ class Round < ApplicationRecord
     results_to_lock.update_all(locked_by_id: locking_user.id)
   end
 
+  def open?
+    live_results.any?
+  end
+
   def first_round?
     number == 1 || (linked_round.present? && linked_round.first_round_in_link.number == 1)
   end
@@ -431,6 +435,16 @@ class Round < ApplicationRecord
       "round_id" => id,
       "competitors" => live_competitors.includes(:user).map { it.as_json({ methods: %i[user_name], only: %i[id user_id registrant_id] }) },
       "results" => only_podiums ? live_podium : live_results,
+    }
+  end
+
+  def to_live_admin_json
+    {
+      **self.to_wcif,
+      "open" => open?,
+      "total_competitors" => total_competitors,
+      "competitors_live_results_entered" => competitors_live_results_entered,
+      "locked" => live_results.any?(&:locked?),
     }
   end
 
