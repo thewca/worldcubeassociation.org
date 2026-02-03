@@ -73,7 +73,7 @@ RSpec.describe Live::DiffHelper do
         LiveAttempt.build_with_history_entry((r + 1) * 100, i, User.first)
       end
       average, best = LiveResult.compute_average_and_best(attempts_2, round)
-      result_2.update!(live_attempts: attempts, best: best, average: average)
+      result_2.update!(live_attempts: attempts_2, best: best, average: average)
 
       round.live_results.reload
       after_state = round.to_live_state
@@ -87,7 +87,7 @@ RSpec.describe Live::DiffHelper do
                                                    "best" => best,
                                                    "global_pos" => 1,
                                                    "local_pos" => 1,
-                                                   "live_attempts" => attempts.map { it.serializable_hash({ only: %i[id value attempt_number] }) },
+                                                   "live_attempts" => attempts_2.map { it.serializable_hash({ only: %i[id value attempt_number] }) },
                                                  },
                                                  {
                                                    "registration_id" => registration_1.id,
