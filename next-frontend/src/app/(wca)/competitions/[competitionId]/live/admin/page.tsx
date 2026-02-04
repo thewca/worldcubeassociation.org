@@ -3,7 +3,6 @@ import OpenapiError from "@/components/ui/openapiError";
 import { auth } from "@/auth";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 import {
-  Box,
   Button,
   Card,
   Container,
