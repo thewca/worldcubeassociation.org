@@ -93,7 +93,7 @@ export default async function LiveOverview({
                             >
                               {t(`rounds.${roundTypeId}.name`)}{" "}
                               {r.state == "open" &&
-                                `(${r.competitors_live_results_entered}/${r.total_competitors}) entered`}
+                                `(${r.competitors_live_results_entered}/${r.total_competitors} entered)`}
                               {r.state == "locked" &&
                                 `${r.total_competitors} locked`}
                             </NextLink>
