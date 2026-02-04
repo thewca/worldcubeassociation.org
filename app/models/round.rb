@@ -475,14 +475,14 @@ class Round < ApplicationRecord
     }
     if [STATE_OPEN, STATE_LOCKED].include?(state)
       json = json.merge({
-                   "total_competitors" => total_competitors,
-                 })
+                          "total_competitors" => total_competitors,
+                        })
     end
 
     if state == STATE_OPEN
       json = json.merge({
-                   "competitors_live_results_entered" => competitors_live_results_entered,
-                 })
+                          "competitors_live_results_entered" => competitors_live_results_entered,
+                        })
     end
     json
   end
