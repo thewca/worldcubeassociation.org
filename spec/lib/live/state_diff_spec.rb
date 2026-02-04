@@ -15,7 +15,7 @@ RSpec.describe Live::DiffHelper do
       result = round.live_results.find_by!(registration_id: registration_1.id)
       expect do
         result.update(best: 100)
-      end.to have_broadcasted_to(WcaLive.broadcast_key(round.id))
+      end.to have_broadcasted_to(Live::Config.broadcast_key(round.id))
         .from_channel(ApplicationCable::Channel)
     end
 
