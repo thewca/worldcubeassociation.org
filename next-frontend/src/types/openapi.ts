@@ -771,14 +771,19 @@ export interface components {
             scrambleSets: components["schemas"]["WcifScrambleSet"][];
             extensions: unknown[];
         };
-        LiveRoundAdmin: components["schemas"]["WcifRound"] & {
-            open?: boolean;
-            locked?: boolean;
-            openable?: boolean;
-            clearable?: boolean;
-            total_competitors?: number;
-            competitors_live_results_entered?: number;
-        };
+        LiveRoundAdmin: components["schemas"]["WcifRound"] & ({
+            /** @enum {string} */
+            state: "open";
+            total_competitors: number;
+            competitors_live_results_entered: number;
+        } | {
+            /** @enum {string} */
+            state: "locked";
+            total_competitors: number;
+        } | {
+            /** @enum {string} */
+            state: "pending" | "ready";
+        });
         LiveAttempt: {
             value: number;
             attempt_number: number;
