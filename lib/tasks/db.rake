@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+def within_database(db_name)
+  base_config = ActiveRecord::Base.connection_db_config
+  temp_config_hash = base_config.configuration_hash.merge(database: db_name)
+
+  begin
+    ActiveRecord::Base.establish_connection(temp_config_hash)
+    yield temp_config_hash if block_given?
+  ensure
+    ActiveRecord::Base.establish_connection(base_config)
+  end
+end
+
 # Copied from https://gist.github.com/koffeinfrei/8931935,
 # and slightly modified.
 namespace :db do
@@ -72,25 +84,19 @@ namespace :db do
             system("unzip #{local_file} ") || raise("Error while running `unzip`")
           end
 
-          config = ActiveRecord::Base.connection_db_config
-          config_hash = ActiveRecord::Base.connection_db_config.configuration_hash
-          database_name = config.database
+          database_name = ActiveRecord::Base.connection.current_database
           temp_db_name = "#{database_name}_temp"
 
           load_description = reload ? "Reloading Database '#{database_name}' from #{local_file}" : "Clobbering contents of '#{database_name}' with #{local_file}"
 
           LogTask.log_task load_description do
             # Create new or temporary db
-            working_db = if reload
-                           ActiveRecord::Base.establish_connection(config_hash.merge(database: nil))
-                           ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{temp_db_name} ")
-                           ActiveRecord::Base.connection.execute("CREATE DATABASE #{temp_db_name}")
-                           temp_db_name
-                         else
-                           ActiveRecord::Tasks::DatabaseTasks.drop config
-                           ActiveRecord::Tasks::DatabaseTasks.create config
-                           database_name
-                         end
+            working_db = reload ? temp_db_name : database_name
+
+            within_database(working_db) do |temp_config|
+              ActiveRecord::Tasks::DatabaseTasks.drop temp_config
+              ActiveRecord::Tasks::DatabaseTasks.create temp_config
+            end
 
             DatabaseDumper.mysql("SET unique_checks=0", working_db)
             DatabaseDumper.mysql("SET foreign_key_checks=0", working_db)
@@ -112,33 +118,41 @@ namespace :db do
 
           # Achieve no downtime reload by swapping tables
           if reload
+            old_db_name = "#{database_name}_old"
+
             LogTask.log_task "Swapping tables between databases" do
-              ActiveRecord::Base.connection.execute("CREATE DATABASE #{database_name}_old")
-              # Re-establish the connection to the old database so we can swap
-              ActiveRecord::Base.establish_connection(config_hash)
+              within_database(old_db_name) do |temp_config|
+                ActiveRecord::Tasks::DatabaseTasks.create temp_config
+              end
+
               # Get the list of tables from the current database using ActiveRecord
               current_tables = ActiveRecord::Base.connection.tables
 
               # Get the list of tables in the temporary database because there might be new tables
-              temp_tables = ActiveRecord::Base.connection.execute("SHOW TABLES FROM #{temp_db_name}").map { |row| row[0] }
+              temp_tables = within_database(temp_db_name) { ActiveRecord::Base.connection.tables }
 
               # Swap tables between the databases
               temp_tables.each do |table|
-                rename_sql = if current_tables.include?(table)
-                               "RENAME TABLE #{database_name}.#{table} TO #{database_name}_old.#{table}, #{temp_db_name}.#{table} TO #{database_name}.#{table};"
-                             else
-                               "RENAME TABLE #{temp_db_name}.#{table} TO #{database_name}.#{table};"
-                             end
+                renames = [temp_db_name, database_name]
+                renames << old_db_name if current_tables.include?(table)
+
+                # `each_cons` stands for "each-consecutive", creating a sliding window:
+                #   [1,2,3,4].each_cons(2) creates [[1,2],[2,3],[3,4]]
+                # We need to reverse these windows because we first need to "swap away" the existing table
+                #   into the old_db to "make room", and then execute the original temp -> existing swap
+                rename_swaps = renames.each_cons(2).to_a.reverse
+
+                rename_sub_statements = rename_swaps.map { |from, to| "#{from}.#{table} TO #{to}.#{table}" }
+                rename_sql = "RENAME TABLE #{rename_sub_statements.join(', ')}"
+
                 ActiveRecord::Base.connection.execute(rename_sql)
               end
             end
 
             # Clean up the old database
             LogTask.log_task "Dropping old database" do
-              ActiveRecord::Base.establish_connection(config_hash.merge(database: nil))
-              ActiveRecord::Base.connection.execute("DROP DATABASE #{temp_db_name}")
-              ActiveRecord::Base.connection.execute("DROP DATABASE #{database_name}_old")
-              ActiveRecord::Base.establish_connection(config_hash)
+              within_database(temp_db_name) { ActiveRecord::Tasks::DatabaseTasks.drop it }
+              within_database(old_db_name) { ActiveRecord::Tasks::DatabaseTasks.drop it }
             end
           end
 
