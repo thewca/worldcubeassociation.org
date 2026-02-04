@@ -39,7 +39,7 @@ export default function LiveUpdatingResultsTable({
   isAdmin = false,
   showEmpty = true,
 }: {
-  roundId: number;
+  roundId: string;
   results: components["schemas"]["LiveResult"][];
   eventId: string;
   competitionId: string;

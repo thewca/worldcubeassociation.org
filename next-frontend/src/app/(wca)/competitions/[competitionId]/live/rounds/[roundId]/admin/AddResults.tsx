@@ -105,7 +105,7 @@ export default function AddResults({
         },
         body: {
           attempts: attempts.map((attempt, index) => ({
-            result: attempt,
+            value: attempt,
             attempt_number: index + 1,
           })),
           registration_id: registrationId,
@@ -118,7 +118,7 @@ export default function AddResults({
         },
         body: {
           attempts: attempts.map((attempt, index) => ({
-            result: attempt,
+            value: attempt,
             attempt_number: index + 1,
           })),
           registration_id: registrationId,
@@ -180,7 +180,7 @@ export default function AddResults({
           eventId={eventId}
           competitors={competitors}
           competitionId={competitionId}
-          roundId={Number.parseInt(roundId, 10)}
+          roundId={roundId}
           title="Current Results"
           isAdmin
         />
