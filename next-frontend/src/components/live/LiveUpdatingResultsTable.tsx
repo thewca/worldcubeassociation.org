@@ -19,16 +19,14 @@ function applyDiff(
   const deletedSet = new Set(deleted);
   const updatesMap = new Map(updated.map((u) => [u.registration_id, u]));
 
-  const results: components["schemas"]["LiveResult"][] = [];
+  const diffedResults = previousResults
+    .filter((res) => !deletedSet.has(res.registration_id))
+    .map((res) => {
+      const update = updatesMap.get(res.registration_id);
+      return update ? { ...res, ...update } : res;
+    });
 
-  for (const result of previousResults) {
-    if (deletedSet.has(result.registration_id)) continue;
-
-    const update = updatesMap.get(result.registration_id);
-    results.push(update ? { ...result, ...update } : result);
-  }
-
-  return results.concat(created);
+  return diffedResults.concat(created);
 }
 
 export default function LiveUpdatingResultsTable({
