@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class AddLiveResultJob < ApplicationJob
-  self.queue_adapter = :shoryuken if WcaLive.sqs_queued?
-  queue_as EnvConfig.LIVE_QUEUE if WcaLive.sqs_queued?
+  self.queue_adapter = :shoryuken if Live::Config.sqs_queued?
+  queue_as EnvConfig.LIVE_QUEUE if Live::Config.sqs_queued?
 
   def perform(results, round_id, registration_id, entered_by)
     attempts = results.map.with_index(1) do |r, i|

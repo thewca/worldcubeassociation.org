@@ -97,11 +97,9 @@ class LiveResult < ApplicationRecord
   end
 
   def self.compute_diff(before_result, after_result)
-    diff = { "registration_id" => after_result["registration_id"] }
-
-    LIVE_STATE_SERIALIZE_OPTIONS[:only].each do |field|
-      diff[field] = after_result[field] if before_result[field] != after_result[field]
-    end
+    changed_vals = after_result.slice(*LIVE_STATE_SERIALIZE_OPTIONS[:only])
+                        .reject { |k, v| before_result[k] == v }
+    diff = changed_vals.merge("registration_id" => after_result["registration_id"])
 
     # Include new attempts if they have changed, it's too much of a hassle to
     # replace single values in the frontend.
@@ -111,7 +109,7 @@ class LiveResult < ApplicationRecord
     )
 
     # Only return if there are actual changes
-    diff.keys.size > 1 ? diff : nil
+    diff if diff.except("registration_id").present?
   end
 
   private
@@ -123,6 +121,6 @@ class LiveResult < ApplicationRecord
 
       after_state = round.to_live_state
       diff = Live::DiffHelper.round_state_diff(before_state, after_state)
-      ActionCable.server.broadcast(WcaLive.broadcast_key(round_id), diff)
+      ActionCable.server.broadcast(Live::Config.broadcast_key(round_id), diff)
     end
 end

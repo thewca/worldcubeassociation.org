@@ -25,14 +25,12 @@ module Live
     end
 
     def self.compute_deleted(before_hash, after_hash)
-      deleted_ids = before_hash.keys - after_hash.keys
-      deleted_ids.presence
+      (before_hash.keys - after_hash.keys).presence
     end
 
     def self.compute_created(before_hash, after_hash)
       created_ids = after_hash.keys - before_hash.keys
-      created = created_ids.map { |id| after_hash[id] }
-      created.presence
+      after_hash.slice(*created_ids).values.presence
     end
 
     def self.state_hash(live_state)
