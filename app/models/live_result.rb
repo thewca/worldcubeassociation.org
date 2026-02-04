@@ -98,7 +98,7 @@ class LiveResult < ApplicationRecord
 
   def self.compute_diff(before_result, after_result)
     changed_vals = after_result.slice(*LIVE_STATE_SERIALIZE_OPTIONS[:only])
-                        .reject { |k, v| before_result[k] == v }
+                               .reject { |k, v| before_result[k] == v }
     diff = changed_vals.merge("registration_id" => after_result["registration_id"])
 
     # Include new attempts if they have changed, it's too much of a hassle to
