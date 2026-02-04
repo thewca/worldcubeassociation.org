@@ -1,11 +1,12 @@
 oneOf:
   - $ref: './AdminRounds/OpenRound.yaml'
   - $ref: './AdminRounds/LockedRound.yaml'
-  - $ref: './AdminRounds/BaseAdminRound.yaml'
+  - $ref: './AdminRounds/PendingRound.yaml'
+  - $ref: './AdminRounds/ReadyRound.yaml'
 discriminator:
   propertyName: state
   mapping:
     open: './AdminRounds/OpenRound.yaml'
     locked: './AdminRounds/LockedRound.yaml'
-    pending: './AdminRounds/BaseAdminRound.yaml'
-    ready: './AdminRounds/BaseAdminRound.yaml'
+    pending: './AdminRounds/PendingRound.yaml'
+    ready: './AdminRounds/ReadyRound.yaml'
