@@ -381,6 +381,7 @@ class Round < ApplicationRecord
     return STATE_LOCKED if locked?
     return STATE_OPEN if open?
     return STATE_READY if number == 1 || previous_round.score_taking_done?
+
     STATE_PENDING
   end
 
@@ -460,13 +461,17 @@ class Round < ApplicationRecord
       **self.to_wcif,
       "state" => state,
     }
-    json.merge({
-                           "total_competitors" => total_competitors,
-                         }) if [STATE_OPEN, STATE_LOCKED].includes? state
+    if [STATE_OPEN, STATE_LOCKED].includes? state
+      json.merge({
+                   "total_competitors" => total_competitors,
+                 })
+    end
 
-    json.merge({
-                           "competitors_live_results_entered" => competitors_live_results_entered,
-                         }) if state == STATE_OPEN
+    if state == STATE_OPEN
+      json.merge({
+                   "competitors_live_results_entered" => competitors_live_results_entered,
+                 })
+    end
     json
   end
 
