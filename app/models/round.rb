@@ -305,7 +305,7 @@ class Round < ApplicationRecord
   end
 
   def score_taking_done?
-    competitors_live_results_entered == total_competitors
+    open? && competitors_live_results_entered == total_competitors
   end
 
   def time_limit_undefined?
@@ -370,6 +370,18 @@ class Round < ApplicationRecord
     return 0 if results_to_lock.first.locked_by.present?
 
     results_to_lock.update_all(locked_by_id: locking_user.id)
+  end
+
+  STATE_LOCKED = "locked"
+  STATE_OPEN = "open"
+  STATE_READY = "ready"
+  STATE_PENDING = "pending"
+
+  def lifecycle_state
+    return STATE_LOCKED if live_results.first&.locked?
+    return STATE_OPEN if open?
+    return STATE_READY if number == 1 || previous_round.score_taking_done?
+    STATE_PENDING
   end
 
   def open?
@@ -439,15 +451,19 @@ class Round < ApplicationRecord
   end
 
   def to_live_admin_json
-    {
+    state = lifecycle_state
+    json = {
       **self.to_wcif,
-      "open" => open?,
-      "locked" => live_results.any?(&:locked?),
-      "openable" => !open? && (number == 1 || (previous_round.open? && previous_round.score_taking_done?)),
-      "clearable" => open? && (number == 1 || previous_round&.locked?),
-      "total_competitors" => total_competitors,
-      "competitors_live_results_entered" => competitors_live_results_entered,
+      "state" => state,
     }
+    json.merge({
+                           "total_competitors" => total_competitors,
+                         }) if [STATE_OPEN, STATE_LOCKED].includes? state
+
+    json.merge({
+                           "competitors_live_results_entered" => competitors_live_results_entered,
+                         }) if state == STATE_OPEN
+    json
   end
 
   def self.wcif_json_schema
