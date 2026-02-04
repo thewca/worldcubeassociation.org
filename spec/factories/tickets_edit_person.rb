@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :tickets_edit_person do
     status { :open }
-    wca_id { FactoryBot.create(:user_with_wca_id).wca_id }
+    person { association(:person) }
 
     trait :default_stakeholders do
       after(:create) do |edit_person_ticket|
