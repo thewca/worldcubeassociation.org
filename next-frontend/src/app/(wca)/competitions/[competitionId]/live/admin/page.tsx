@@ -16,6 +16,7 @@ import EventIcon from "@/components/EventIcon";
 import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
+import ActionButtons from "@/app/(wca)/competitions/[competitionId]/live/admin/ActionButtons";
 
 export default async function LiveOverview({
   params,
@@ -96,16 +97,11 @@ export default async function LiveOverview({
                             </NextLink>
                           </Link>
                         </Button>
-                        {r.state == "ready" && (
-                          <Button variant="outline" size="sm">
-                            Open
-                          </Button>
-                        )}
-                        {r.state == "open" && (
-                          <Button variant="outline" size="sm">
-                            Clear
-                          </Button>
-                        )}
+                        <ActionButtons
+                          state={r.state}
+                          roundId={r.id}
+                          competitionId={competitionId}
+                        />
                       </HStack>
                     );
                   })}

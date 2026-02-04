@@ -375,6 +375,7 @@ Rails.application.routes.draw do
           namespace :live do
             get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
             put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
+            put '/rounds/:round_id/clear' => "live#clear_round", as: :live_round_clear
             put '/rounds/:round_id/:registration_id' => 'live#quit_competitor', as: :quit_competitor_from_round
             get '/podiums' => 'live#podiums', as: :live_podiums
             get '/registrations/:registration_id' => 'live#by_person', as: :get_live_by_person

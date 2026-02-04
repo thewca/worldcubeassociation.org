@@ -21,6 +21,10 @@ paths:
     $ref: 'paths/competitions/live/LiveAdmin.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}:
     $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/clear:
+    $ref: 'paths/competitions/live/ClearRound.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/open:
+    $ref: 'paths/competitions/live/OpenRound.yaml'
   /v1/competitions/{competitionId}/live/podiums:
     $ref: 'paths/competitions/live/LivePodiums.yaml'
   /v1/competitions/{competitionId}/live/registrations/{registrationId}:

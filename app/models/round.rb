@@ -191,6 +191,11 @@ class Round < ApplicationRecord
     [open_count, round_to_lock.lock_results(locking_user)]
   end
 
+  def clear_round!
+    live_results.destroy_all
+    open_round!
+  end
+
   def open_round!
     empty_results = advancing_registrations.map do |r|
       { registration_id: r.id, round_id: id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }

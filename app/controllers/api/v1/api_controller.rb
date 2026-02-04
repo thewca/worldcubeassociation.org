@@ -9,6 +9,7 @@ class Api::V1::ApiController < ApplicationController
   end
 
   def require_manage!(competition)
+    require_user!
     raise WcaExceptions::NotPermitted.new("Organizer privileges required") unless @current_user.can_manage_competition?(competition)
   end
 

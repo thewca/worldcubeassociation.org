@@ -1,0 +1,34 @@
+put:
+  summary: Opens a round and locks the previous round if necessary
+  tags:
+    - live
+  operationId: clearRound
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: roundId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returns number of locked an created results
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - status
+              - created_rows
+              - locked_rows
+            properties:
+              status:
+                type: string
+              recreated_rows:
+                type: number
+              locked_rows:
+                type: number
