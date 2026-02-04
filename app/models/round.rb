@@ -378,7 +378,7 @@ class Round < ApplicationRecord
   STATE_PENDING = "pending"
 
   def lifecycle_state
-    return STATE_LOCKED if live_results.first&.locked?
+    return STATE_LOCKED if locked?
     return STATE_OPEN if open?
     return STATE_READY if number == 1 || previous_round.score_taking_done?
     STATE_PENDING
@@ -386,6 +386,10 @@ class Round < ApplicationRecord
 
   def open?
     live_results.any?
+  end
+
+  def locked?
+    live_results.locked == total_competitors
   end
 
   def first_round?
