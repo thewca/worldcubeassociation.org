@@ -74,7 +74,7 @@ export default async function LiveOverview({
                           asChild
                           variant="subtle"
                           flex="1"
-                          disabled={!r.open}
+                          disabled={["open", "locked"].includes(r.state)}
                         >
                           <Link asChild textStyle="headerLink">
                             <NextLink
@@ -89,17 +89,19 @@ export default async function LiveOverview({
                               })}
                             >
                               {t(`rounds.${roundTypeId}.name`)}{" "}
-                              {r.open &&
+                              {r.state == "open" &&
                                 `(${r.competitors_live_results_entered}/${r.total_competitors}) entered`}
+                              {r.state == "locked" &&
+                                `${r.total_competitors} locked`}
                             </NextLink>
                           </Link>
                         </Button>
-                        {r.openable && (
+                        {r.state == "ready" && (
                           <Button variant="outline" size="sm">
                             Open
                           </Button>
                         )}
-                        {r.clearable && (
+                        {r.state == "open" && (
                           <Button variant="outline" size="sm">
                             Clear
                           </Button>
