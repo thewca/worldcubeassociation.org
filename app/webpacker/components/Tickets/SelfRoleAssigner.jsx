@@ -32,17 +32,8 @@ export default function SelfRoleAssigner({ ticketId, eligibleRoles }) {
     error,
   } = useMutation({
     mutationFn: joinAsBccStakeholder,
-    onSuccess: (newStakeholder) => {
-      queryClient.setQueryData(
-        ['ticket-details', ticketId],
-        (oldTicketDetails) => ({
-          ...oldTicketDetails,
-          requester_stakeholders: [
-            ...oldTicketDetails.requester_stakeholders,
-            newStakeholder,
-          ],
-        }),
-      );
+    onSuccess: () => {
+      queryClient.invalidateQueries(['ticket-details', ticketId]);
     },
   });
 

@@ -4,7 +4,7 @@ import { actionUrls } from '../../../lib/requests/routes.js.erb';
 export default async function joinAsBccStakeholder({
   ticketId, connection, stakeholderRole, isActive,
 }) {
-  const { data } = await fetchJsonOrError(
+  await fetchJsonOrError(
     actionUrls.tickets.joinAsBccStakeholder(ticketId),
     {
       method: 'POST',
@@ -18,5 +18,4 @@ export default async function joinAsBccStakeholder({
       }),
     },
   );
-  return data;
 }

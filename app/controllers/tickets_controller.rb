@@ -80,12 +80,15 @@ class TicketsController < ApplicationController
         ticket = Ticket.find(params.require(:id))
         bcc_eligible_roles = ticket.metadata.eligible_roles_for_bcc(current_user)
 
-        return head :unauthorized unless ticket.can_user_access?(current_user) || bcc_eligible_roles.any?
+        unless ticket.can_user_access?(current_user)
+          return render json: { eligible_roles_for_bcc: bcc_eligible_roles } if bcc_eligible_roles.any?
+
+          return head :unauthorized
+        end
 
         render json: {
           ticket: ticket,
           requester_stakeholders: ticket.user_stakeholders(current_user),
-          eligible_roles_for_bcc: bcc_eligible_roles,
         }
       end
     end
@@ -371,7 +374,7 @@ class TicketsController < ApplicationController
     connection = params.require(:connection)
     is_active = ActiveRecord::Type::Boolean.new.cast(params.require(:is_active))
 
-    stakeholder = ActiveRecord::Base.transaction do
+    ActiveRecord::Base.transaction do
       new_stakeholder = @ticket.ticket_stakeholders.create!(
         stakeholder: current_user,
         connection: connection,
@@ -383,9 +386,8 @@ class TicketsController < ApplicationController
         acting_user_id: current_user.id,
         acting_stakeholder_id: new_stakeholder.id,
       )
-      new_stakeholder
     end
 
-    render status: :ok, json: stakeholder
+    render status: :ok, json: { success: true }
   end
 end
