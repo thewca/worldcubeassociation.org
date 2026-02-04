@@ -846,6 +846,7 @@ export interface components {
             results: components["schemas"]["LiveResult"][];
             competitors: components["schemas"]["LiveCompetitor"][];
             round_id: number;
+            state_hash: string;
         };
         UserAvatar: {
             /**
