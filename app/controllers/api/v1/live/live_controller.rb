@@ -2,6 +2,30 @@
 
 class Api::V1::Live::LiveController < Api::V1::ApiController
   skip_before_action :require_user, only: %i[round_results by_person podiums]
+
+  def add_or_update_result
+    results = params.permit(attempts: %i[result attempt_number])[:attempts]
+    round_id = params.require(:round_id)
+    registration_id = params.require(:registration_id)
+
+    # TODO: add require_managed! from round admin PR
+
+    # We create empty results when a round is open
+    live_result = LiveResult.find_by(round_id: round_id, registration_id: registration_id)
+    result_exists = live_result.present?
+
+    unless result_exists
+      round = Round.find(round_id)
+      return render json: { status: "round is not open" }, status: :unprocessable_content unless round.live_results.any?
+
+      return render json: { status: "user is not part of this round" }, status: :unprocessable_content
+    end
+
+    UpdateLiveResultJob.perform_later(results, live_result.id, current_user)
+
+    render json: { status: "ok" }
+  end
+
   def round_results
     competition_id = params.require(:competition_id)
     wcif_id = params.require(:round_id)
