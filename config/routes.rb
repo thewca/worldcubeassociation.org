@@ -53,6 +53,7 @@ Rails.application.routes.draw do
 
   get 'profile/claim_wca_id' => 'users#claim_wca_id'
   get 'profile/claim_wca_id/select_nearby_delegate' => 'users#select_nearby_delegate'
+  post 'users/reset_should_claim_wca_id' => 'users#reset_should_claim_wca_id'
 
   get 'users/:id/avatar' => 'users#avatar_data', as: :users_avatar_data
   post 'users/:id/avatar' => 'users#upload_avatar'

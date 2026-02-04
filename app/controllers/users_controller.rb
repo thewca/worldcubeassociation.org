@@ -510,4 +510,10 @@ class UsersController < ApplicationController
       result: User.search(query, params: params).limit(SearchResultsController::SEARCH_RESULT_LIMIT),
     }
   end
+
+  def reset_should_claim_wca_id
+    current_user.update!(should_claim_wca_id: false)
+
+    render status: :ok, json: { success: true }
+  end
 end
