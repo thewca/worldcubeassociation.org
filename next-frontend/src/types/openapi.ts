@@ -805,19 +805,35 @@ export interface components {
             scrambleSets: components["schemas"]["WcifScrambleSet"][];
             extensions: unknown[];
         };
-        LiveRoundAdmin: components["schemas"]["WcifRound"] & ({
-            /** @enum {string} */
-            state: "open";
+        BaseAdminRound: components["schemas"]["WcifRound"] & {
+            state: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            state: "pending" | "ready";
+        };
+        OpenRound: components["schemas"]["BaseAdminRound"] & {
             total_competitors: number;
             competitors_live_results_entered: number;
-        } | {
-            /** @enum {string} */
-            state: "locked";
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            state: "open";
+        };
+        LockedRound: components["schemas"]["BaseAdminRound"] & {
             total_competitors: number;
-        } | {
-            /** @enum {string} */
-            state: "pending" | "ready";
-        });
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            state: "locked";
+        };
+        LiveRoundAdmin: components["schemas"]["OpenRound"] | components["schemas"]["LockedRound"] | components["schemas"]["BaseAdminRound"];
         LiveAttempt: {
             value: number;
             attempt_number: number;

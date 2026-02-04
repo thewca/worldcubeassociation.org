@@ -1,33 +1,11 @@
-allOf:
-  - $ref: '../wcif/WcifRound.yaml'
-  - oneOf:
-      - type: object
-        required:
-          - state
-          - total_competitors
-          - competitors_live_results_entered
-        properties:
-          state:
-            type: string
-            enum: ["open"]
-          total_competitors:
-            type: number
-          competitors_live_results_entered:
-            type: number
-      - type: object
-        required:
-          - state
-          - total_competitors
-        properties:
-          state:
-            type: string
-            enum: ["locked"]
-          total_competitors:
-            type: number
-      - type: object
-        required:
-          - state
-        properties:
-          state:
-            type: string
-            enum: ["pending", "ready"]
+oneOf:
+  - $ref: './AdminRounds/OpenRound.yaml'
+  - $ref: './AdminRounds/LockedRound.yaml'
+  - $ref: './AdminRounds/BaseAdminRound.yaml'
+discriminator:
+  propertyName: state
+  mapping:
+    open: './AdminRounds/OpenRound.yaml'
+    locked: './AdminRounds/LockedRound.yaml'
+    pending: './AdminRounds/BaseAdminRound.yaml'
+    ready: './AdminRounds/BaseAdminRound.yaml'
