@@ -3,6 +3,7 @@ import OpenapiError from "@/components/ui/openapiError";
 import { auth } from "@/auth";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 import {
+  Box,
   Button,
   Card,
   Container,
@@ -61,7 +62,7 @@ export default async function LiveOverview({
                     {events.byId[eventId].name}
                   </HStack>
                 </Card.Title>
-                <Card.Description>
+                <Card.Description w="full">
                   {rounds.map((r) => {
                     const { roundNumber } = parseActivityCode(r.id);
                     const roundTypeId = getRoundTypeId(
@@ -70,14 +71,16 @@ export default async function LiveOverview({
                       false,
                     );
                     return (
-                      <HStack key={r.id} textAlign="left">
+                      <HStack key={r.id}>
                         <Button
                           asChild
                           variant="subtle"
                           flex="1"
-                          disabled={["open", "locked"].includes(r.state)}
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          disabled={["ready", "pending"].includes(r.state)}
                         >
-                          <Link asChild textStyle="headerLink">
+                          <Link asChild>
                             <NextLink
                               href={route({
                                 // TODO move to [roundId]/admin when the PR is merged
