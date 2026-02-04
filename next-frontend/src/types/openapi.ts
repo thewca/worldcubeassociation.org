@@ -98,7 +98,7 @@ export interface paths {
         };
         get?: never;
         /** Opens a round and locks the previous round if necessary */
-        put: operations["clearRound"];
+        put: operations["openRound"];
         post?: never;
         delete?: never;
         options?: never;
@@ -1683,7 +1683,7 @@ export interface operations {
             };
         };
     };
-    clearRound: {
+    openRound: {
         parameters: {
             query?: never;
             header?: never;
@@ -1703,7 +1703,7 @@ export interface operations {
                 content: {
                     "application/json": {
                         status: string;
-                        recreated_rows?: number;
+                        created_rows: number;
                         locked_rows: number;
                     };
                 };

@@ -2,7 +2,7 @@ put:
   summary: Opens a round and locks the previous round if necessary
   tags:
     - live
-  operationId: clearRound
+  operationId: openRound
   parameters:
     - name: competitionId
       in: path
@@ -28,7 +28,7 @@ put:
             properties:
               status:
                 type: string
-              recreated_rows:
+              created_rows:
                 type: number
               locked_rows:
                 type: number
