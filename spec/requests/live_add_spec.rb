@@ -12,6 +12,7 @@ RSpec.describe "WCA Live API" do
       competition = create(:competition, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
+      round.open_round!
 
       live_request = {
         attempts: [111, 222, 333, 444, 555],
@@ -34,13 +35,13 @@ RSpec.describe "WCA Live API" do
       expect(result.average).to eq 333
     end
 
-    it "Can't add result if it already exist" do
+    it "Can't add result if round isn't open yet" do
       sign_in delegate
 
       competition = create(:competition, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
-      create(:live_result, round: round, registration: registration)
+
       live_request = {
         attempts: [111, 222, 333, 444, 555],
         registration_id: registration.id,
@@ -48,6 +49,25 @@ RSpec.describe "WCA Live API" do
 
       post add_live_result_path(competition.id, round.id), params: live_request
       expect(response).not_to be_successful
+    end
+
+    it "Can't add result for a competitor that isn't in that round" do
+      sign_in delegate
+
+      competition = create(:competition, event_ids: %w[333 444], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333")
+      create(:registration, :accepted, competition: competition)
+      registration = create(:registration, :accepted, competition: competition, event_ids: ["444"])
+      round.open_round!
+
+      live_request = {
+        attempts: [111, 222, 333, 444, 555],
+        registration_id: registration.id,
+      }
+
+      post add_live_result_path(competition.id, round.id), params: live_request
+      expect(response).not_to be_successful
+      expect(response.parsed_body["status"]).to eq "user is not part of this round"
     end
   end
 end

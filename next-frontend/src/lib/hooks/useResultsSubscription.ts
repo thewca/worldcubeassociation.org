@@ -17,9 +17,18 @@ export const CONNECTION_COLORS = {
   [CONNECTION_STATE_DISCONNECTED]: "red",
 };
 
+export type DiffedLiveResult = Partial<components["schemas"]["LiveResult"]> &
+  Pick<components["schemas"]["LiveResult"], "registration_id">;
+
+export type DiffProtocolResponse = {
+  updated: DiffedLiveResult[];
+  deleted: number[];
+  created: components["schemas"]["LiveResult"][];
+};
+
 export default function useResultsSubscription(
   roundId: number,
-  onReceived: (data: components["schemas"]["LiveResult"]) => void,
+  onReceived: (data: DiffProtocolResponse) => void,
 ) {
   const [connectionState, setConnectionState] = useState<ConnectionState>(
     CONNECTION_STATE_INITIALIZED,

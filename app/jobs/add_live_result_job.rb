@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class AddLiveResultJob < ApplicationJob
-  self.queue_adapter = :shoryuken if WcaLive.sqs_queued?
-  queue_as EnvConfig.LIVE_QUEUE if WcaLive.sqs_queued?
+  self.queue_adapter = :shoryuken if Live::Config.sqs_queued?
+  queue_as EnvConfig.LIVE_QUEUE if Live::Config.sqs_queued?
 
   def perform(results, round_id, registration_id, entered_by)
     attempts = results.map.with_index(1) do |r, i|
@@ -12,11 +12,9 @@ class AddLiveResultJob < ApplicationJob
 
     average, best = LiveResult.compute_average_and_best(attempts, round)
 
-    LiveResult.create!(registration_id: registration_id,
-                       round: round,
-                       live_attempts: attempts,
-                       last_attempt_entered_at: Time.now.utc,
-                       best: best,
-                       average: average)
+    # There always exist empty results
+    live_result = round.live_results.find_by!(registration_id: registration_id)
+
+    live_result.update!(live_attempts: attempts, best: best, average: average, last_attempt_entered_at: Time.now.utc)
   end
 end
