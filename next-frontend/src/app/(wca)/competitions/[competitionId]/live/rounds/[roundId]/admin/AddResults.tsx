@@ -42,7 +42,7 @@ export default function AddResults({
         (r) => r.registration_id === value,
       );
       if (alreadyEnteredResults) {
-        setAttempts(alreadyEnteredResults.attempts.map((a) => a.result));
+        setAttempts(alreadyEnteredResults.attempts.map((a) => a.value));
       } else {
         setAttempts(zeroedArrayOfSize(solveCount));
       }
