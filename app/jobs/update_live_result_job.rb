@@ -7,7 +7,7 @@ class UpdateLiveResultJob < ApplicationJob
   def perform(results, live_result_id, entered_by)
     live_result = LiveResult.find(live_result_id)
 
-    previous_attempts = result.live_attempts.index_by(&:attempt_number)
+    previous_attempts = live_result.live_attempts.index_by(&:attempt_number)
 
     new_attempts = attempts.map do |r|
       previous_attempt = previous_attempts[r[:attempt_number]]
