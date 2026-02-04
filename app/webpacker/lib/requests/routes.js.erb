@@ -320,7 +320,6 @@ export const viewUrls = {
 export const actionUrls = {
   tickets: {
     show: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_path("${ticketId}", format: "json")) %>`,
-    createStakeholder: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_stakeholders_path("${ticketId}", format: "json")) %>`,
     editPersonValidators: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_edit_person_validators_path("${ticketId}")) %>`,
     addComment: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_comments_path("${ticketId}")) %>`,
     getDetailsBeforeAnonymization: (userId, wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.tickets_details_before_anonymization_path) %>?${jsonToQueryString({ userId, wcaId })}`,
@@ -334,6 +333,7 @@ export const actionUrls = {
     editPersonFields: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_edit_person_fields_path("${ticketId}")) %>`,
     editPersonField: (ticketId, editPersonFieldId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_edit_person_field_path("${ticketId}", "${editPersonFieldId}")) %>`,
     syncEditPersonRequest: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_sync_edit_person_request_path("${ticketId}")) %>`,
+    joinAsBccStakeholder: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_join_as_bcc_stakeholder_path("${ticketId}")) %>`,
   },
   validators: {
     forCompetitionList: (competitionIds, selectedValidators, applyFixWhenPossible, checkRealResults) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_validators_for_competition_list_path) %>?${jsonToQueryString({ competitionIds, selectedValidators, applyFixWhenPossible, checkRealResults })}`,

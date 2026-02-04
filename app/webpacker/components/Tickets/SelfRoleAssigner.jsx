@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useInputState from '../../lib/hooks/useInputState';
 import I18n from '../../lib/i18n';
 import { ticketStakeholderConnections } from '../../lib/wca-data.js.erb';
-import createStakeholder from './api/createStakeholder';
+import joinAsBccStakeholder from './api/joinAsBccStakeholder';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 
@@ -26,12 +26,12 @@ export default function SelfRoleAssigner({ ticketId, eligibleRoles }) {
   }));
 
   const {
-    mutate: createStakeholderMutate,
+    mutate: joinAsBccStakeholderMutate,
     isPending,
     isError,
     error,
   } = useMutation({
-    mutationFn: createStakeholder,
+    mutationFn: joinAsBccStakeholder,
     onSuccess: (newStakeholder) => {
       queryClient.setQueryData(
         ['ticket-details', ticketId],
@@ -47,7 +47,7 @@ export default function SelfRoleAssigner({ ticketId, eligibleRoles }) {
   });
 
   const createBccStakeholder = () => {
-    createStakeholderMutate({
+    joinAsBccStakeholderMutate({
       ticketId,
       connection: ticketStakeholderConnections.bcc,
       stakeholderRole: selectedRole,

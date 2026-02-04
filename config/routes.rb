@@ -241,9 +241,9 @@ Rails.application.routes.draw do
     post 'approve_edit_person_request' => 'tickets#approve_edit_person_request', as: :approve_edit_person_request
     post 'reject_edit_person_request' => 'tickets#reject_edit_person_request', as: :reject_edit_person_request
     post 'sync_edit_person_request' => 'tickets#sync_edit_person_request', as: :sync_edit_person_request
+    post 'join_as_bcc_stakeholder' => 'tickets#join_as_bcc_stakeholder', as: :join_as_bcc_stakeholder
     resources :ticket_comments, only: %i[index create], as: :comments
     resources :ticket_logs, only: [:index], as: :logs
-    resources :ticket_stakeholders, only: [:create], as: :stakeholders
     resources :tickets_edit_person_fields, only: %i[create update destroy], as: :edit_person_fields
   end
   resources :notifications, only: [:index]
