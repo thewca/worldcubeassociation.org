@@ -6,7 +6,6 @@ require 'rake'
 skip "only needs to be run in local development" unless Rails.env.development?
 
 RSpec.describe "import:h2h_data", type: :task do
-
   before(:all) do
     Rake.application.rake_require "tasks/h2h_results_import"
     Rake::Task.define_task(:environment)
