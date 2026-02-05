@@ -55,7 +55,6 @@ export default function LiveUpdatingResultsTable({
   const onReceived = useCallback(
     (result: DiffProtocolResponse) => {
       const { updated, created, deleted } = result;
-      console.log(result);
 
       updateLiveResults((results) =>
         applyDiff(results, updated, created, deleted),
