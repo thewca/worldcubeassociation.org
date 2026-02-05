@@ -1,12 +1,45 @@
 # frozen_string_literal: true
 
-def within_database(db_name)
+def apply_connection_options(**opts)
+  opts.each do |key, opt|
+    global_scope, desired_value = opt.values_at(:global, :value)
+
+    scope_modifier = global_scope ? "GLOBAL" : "SESSION"
+    ActiveRecord::Base.connection.execute("SET #{scope_modifier} #{key}=#{desired_value}")
+  end
+end
+
+def with_connection_options(**opts, &)
+  current_settings = opts.to_h do |key, opt|
+    sql_var_name = "@@#{key}"
+    query_res = ActiveRecord::Base.connection.exec_query("SELECT #{sql_var_name}")
+
+    # exec_query above is designed to return many rows at once. But by design of our specific query,
+    #   we know for sure only one row will ever be returned. That's why we use `first` sloppily.
+    current_value = query_res.first[sql_var_name]
+    current_setting = { **opt, value: current_value }
+
+    [key, current_setting]
+  end
+
+  begin
+    apply_connection_options(**opts)
+    yield
+  ensure
+    apply_connection_options(**current_settings)
+  end
+end
+
+def within_database(db_name, **connection_opts, &)
   base_config = ActiveRecord::Base.connection_db_config
   temp_config_hash = base_config.configuration_hash.merge(database: db_name)
 
   begin
     ActiveRecord::Base.establish_connection(temp_config_hash)
-    yield temp_config_hash if block_given?
+
+    with_connection_options(**connection_opts) do
+      yield temp_config_hash
+    end
   ensure
     ActiveRecord::Base.establish_connection(base_config)
   end
@@ -98,22 +131,21 @@ namespace :db do
               ActiveRecord::Tasks::DatabaseTasks.create temp_config
             end
 
-            DatabaseDumper.mysql("SET unique_checks=0", working_db)
-            DatabaseDumper.mysql("SET foreign_key_checks=0", working_db)
-            DatabaseDumper.mysql("SET autocommit=0", working_db)
-            DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=0", working_db) if Rails.env.development?
+            import_options = {
+              unique_checks: { global: false, value: 0 },
+              foreign_key_checks: { global: false, value: 0 },
+              autocommit: { global: false, value: 0 },
+            }
 
-            # Explicitly loading the schema is not necessary because the downloaded SQL dump file contains CREATE TABLE
-            # definitions, so if we load the schema here the SOURCE command below would overwrite it anyways
+            import_options[:innodb_flush_log_at_trx_commit] = { global: true, value: 0 } if Rails.env.development?
 
-            DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", working_db)
+            within_database(working_db, **import_options.compact) do
+              # Explicitly loading the schema is not necessary because the downloaded SQL dump file contains CREATE TABLE
+              # definitions, so if we load the schema here the SOURCE command below would overwrite it anyways
 
-            DatabaseDumper.mysql("SET unique_checks=1", working_db)
-            DatabaseDumper.mysql("SET foreign_key_checks=1", working_db)
-            DatabaseDumper.mysql("SET autocommit=1", working_db)
-            DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=1", working_db) if Rails.env.development?
-
-            DatabaseDumper.mysql("COMMIT", working_db)
+              ActiveRecord::Base.connection.exec("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}")
+              ActiveRecord::Base.connection.commit_db_transaction
+            end
           end
 
           # Achieve no downtime reload by swapping tables
@@ -151,8 +183,13 @@ namespace :db do
 
             # Clean up the old database
             LogTask.log_task "Dropping old database" do
-              within_database(temp_db_name) { ActiveRecord::Tasks::DatabaseTasks.drop it }
-              within_database(old_db_name) { ActiveRecord::Tasks::DatabaseTasks.drop it }
+              # Even when you turn MySQL to burn the whole database down, it still worries about
+              #   foreign key integrity in the middle of the deletion process...
+              # WHO MADE THAT DESIGN DECISION ON THE InnoDB TEAM??!
+              drop_options = { foreign_key_checks: { global: false, value: 0 } }
+
+              within_database(temp_db_name, **drop_options) { ActiveRecord::Tasks::DatabaseTasks.drop it }
+              within_database(old_db_name, **drop_options) { ActiveRecord::Tasks::DatabaseTasks.drop it }
             end
           end
 
