@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'rake'
 
-skip "only needs to be run in local development" unless Rails.env.development?
+return unless Rails.env.development?
 
 RSpec.describe "import:h2h_data", type: :task do
   before(:all) do
