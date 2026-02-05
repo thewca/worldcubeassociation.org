@@ -907,7 +907,10 @@ export interface components {
             round_id: number;
             state_hash: string;
         };
-        SubmitLiveResult: unknown;
+        SubmitLiveResult: {
+            attempts: components["schemas"]["LiveAttempt"][];
+            registration_id: number;
+        };
         UserAvatar: {
             /**
              * Format: uri

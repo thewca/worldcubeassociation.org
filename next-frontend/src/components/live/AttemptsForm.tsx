@@ -26,7 +26,6 @@ interface AttemptsFormProps {
 }
 
 export default function AttemptsForm({
-  registrationId,
   handleRegistrationIdChange,
   competitors,
   solveCount,
