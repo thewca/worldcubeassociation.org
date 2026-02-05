@@ -199,7 +199,7 @@ class ResultsSubmissionController < ApplicationController
       }
     end
 
-    CompetitionsMailer.results_submitted(competition, results_validator, message, current_user).deliver_later
+    CompetitionsMailer.results_submitted(competition, results_validator.warnings, message, current_user).deliver_later
 
     ActiveRecord::Base.transaction do
       competition.touch(:results_submitted_at)

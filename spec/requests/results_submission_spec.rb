@@ -58,15 +58,14 @@ RSpec.describe ResultsSubmissionController do
         { message: submission_message, competition_id: comp.id }
       end
 
-      it "sends the 'results submitted' email immediately" do
+      it "enqueues the 'results submitted' email" do
         expect(CompetitionsMailer)
           .to receive(:results_submitted)
           .and_call_original
 
         expect do
           post competition_submit_results_path(comp.id), params: results_submission_params
-        end.to change { ActionMailer::Base.deliveries.count }.by(1)
-        assert_enqueued_jobs 0
+        end.to have_enqueued_mail(CompetitionsMailer, :results_submitted)
       end
 
       it "throw error if empty message is provided" do
