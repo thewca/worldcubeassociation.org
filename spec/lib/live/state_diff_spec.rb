@@ -43,8 +43,6 @@ RSpec.describe Live::DiffHelper do
                                                    "advancing_questionable" => true,
                                                    "average" => average,
                                                    "best" => best,
-                                                   "global_pos" => 1,
-                                                   "local_pos" => 1,
                                                    "live_attempts" => attempts.map { it.serializable_hash({ only: %i[id value attempt_number] }) },
                                                  })
       expect(diff["deleted"]).to be_nil
@@ -85,14 +83,7 @@ RSpec.describe Live::DiffHelper do
                                                    "advancing_questionable" => true,
                                                    "average" => average,
                                                    "best" => best,
-                                                   "global_pos" => 1,
-                                                   "local_pos" => 1,
                                                    "live_attempts" => attempts_2.map { it.serializable_hash({ only: %i[id value attempt_number] }) },
-                                                 },
-                                                 {
-                                                   "registration_id" => registration_1.id,
-                                                   "global_pos" => 2,
-                                                   "local_pos" => 2,
                                                  })
       expect(diff["deleted"]).to be_nil
       expect(diff["created"]).to be_nil
@@ -121,6 +112,12 @@ RSpec.describe Live::DiffHelper do
       after_hash = Live::DiffHelper.state_hash(round.to_live_state)
 
       expect(before_hash).not_to eq(after_hash)
+    end
+
+    it "has a compression key defined for each serialization attribute" do
+      # This is definitely not the best way of doing it, probably better to look at a results live_state instead?
+      keys = LiveResult::LIVE_STATE_SERIALIZE_OPTIONS[:only] + LiveResult::LIVE_STATE_SERIALIZE_OPTIONS[:include].flat_map { |r| r.keys.flat_map { |k| [k] + r[k][:only] } }
+      expect(keys.map(&:to_s)).to contain_exactly(*Live::DiffHelper::COMPRESSION_MAP.keys.map(&:to_s))
     end
   end
 end

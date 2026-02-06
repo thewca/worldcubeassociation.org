@@ -98,7 +98,7 @@ Rails.application.configure do
     }
   else
     # When not on the live site, send emails to mailcatcher
-    config.action_mailer.smtp_settings = { address: 'localhost', port: 1025 }
+you can de    config.action_mailer.smtp_settings = { address: 'localhost', port: 1025 }
   end
 
   # Setup for ActiveStorage.

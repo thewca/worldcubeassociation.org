@@ -3,6 +3,7 @@
 import { components } from "@/types/openapi";
 import { useCallback, useState } from "react";
 import useResultsSubscription, {
+  CompressedLiveResult,
   DiffedLiveResult,
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
@@ -10,14 +11,30 @@ import LiveResultsTable from "@/components/live/LiveResultsTable";
 import { Heading, HStack, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 
+function decompressDiff(
+  diff: DiffedLiveResult,
+): Partial<components["schemas"]["LiveResult"]> &
+  Pick<components["schemas"]["LiveResult"], "registration_id"> {
+  return {
+    advancing: diff.ad,
+    advancing_questionable: diff.adq,
+    average: diff.a,
+    best: diff.b,
+    average_record_tag: diff.art,
+    single_record_tag: diff.srt,
+    registration_id: diff.r,
+    attempts: diff.la?.map((l) => ({ value: l.v, attempt_number: l.an })),
+  };
+}
+
 function applyDiff(
   previousResults: components["schemas"]["LiveResult"][],
   updated: DiffedLiveResult[],
-  created: components["schemas"]["LiveResult"][],
+  created: CompressedLiveResult[],
   deleted: number[],
 ): components["schemas"]["LiveResult"][] {
   const deletedSet = new Set(deleted);
-  const updatesMap = new Map(updated.map((u) => [u.registration_id, u]));
+  const updatesMap = new Map(updated.map((u) => [u.r, decompressDiff(u)]));
 
   const diffedResults = previousResults
     .filter((res) => !deletedSet.has(res.registration_id))
@@ -26,7 +43,12 @@ function applyDiff(
       return update ? { ...res, ...update } : res;
     });
 
-  return diffedResults.concat(created);
+  return diffedResults.concat(
+    created.map(
+      // Created will always be a full result
+      (d) => decompressDiff(d) as components["schemas"]["LiveResult"],
+    ),
+  );
 }
 
 export default function LiveUpdatingResultsTable({
