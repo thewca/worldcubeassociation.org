@@ -19,7 +19,7 @@ module DbDumpHelper
   DEFAULT_DEV_PASSWORD = 'wca'
 
   def self.dump_developer_db(local: false)
-    target_dir = local ? "#{DEVELOPER_EXPORT_SQL}".tap { Dir.mkdir(it) } : Dir.mktmpdir
+    target_dir = local ? DEVELOPER_EXPORT_SQL.tap { Dir.mkdir(it) } : Dir.mktmpdir
 
     FileUtils.cd target_dir do
       # WARNING: Headache ahead! By using Rails-DSL database schema files, the migrations in the dev export can break.

@@ -1419,7 +1419,7 @@ module DatabaseDumper
     ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
 
     LogTask.log_task "Populating sanitized tables in '#{dump_db_name}'" do
-      ActiveRecord::Base.connection.execute(<<~SQL)
+      ActiveRecord::Base.connection.execute(<<~SQL.squish)
         SET SESSION sql_mode = 'NO_AUTO_VALUE_ON_ZERO,STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION';
       SQL
 
