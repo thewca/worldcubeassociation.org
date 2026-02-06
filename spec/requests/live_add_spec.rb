@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "WCA Live API" do
-  describe "POST #add_result" do
+  describe "POST #add_or_update_result" do
     let!(:delegate) { create(:delegate) }
 
     it "Adds the Live Result Correctly" do
