@@ -111,7 +111,7 @@ export default function LiveResultsTable({
                 </Link>
               </Table.Cell>
               {hasResult &&
-                competitorResult.attempts.map((attempt) => (
+                competitorResult.live_attempts.map((attempt) => (
                   <Table.Cell
                     textAlign="right"
                     key={`${competitor.id}-${attempt.attempt_number}`}

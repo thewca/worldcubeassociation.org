@@ -16,6 +16,8 @@ RSpec.describe "WCA Live API" do
         create(:live_result, round: round, registration: registration, average: (i + 1) * 100)
       end
 
+      round.recompute_live_columns
+
       round.live_results.sort_by(&:average).each.with_index(1) do |r, i|
         expect(r.local_pos).to eq i
       end
@@ -30,6 +32,8 @@ RSpec.describe "WCA Live API" do
 
         create(:live_result, round: round, registration: registration, best: (i + 1) * 100)
       end
+
+      round.recompute_live_columns
 
       round.live_results.sort_by(&:best).each.with_index(1) do |r, i|
         expect(r.local_pos).to eq i
@@ -46,6 +50,8 @@ RSpec.describe "WCA Live API" do
         create(:live_result, round: round, registration: registration, average: 100)
       end
 
+      round.recompute_live_columns
+
       round.live_results.sort_by(&:average).each do |r|
         expect(r.local_pos).to eq 1
       end
@@ -61,6 +67,8 @@ RSpec.describe "WCA Live API" do
         create(:live_result, round: round, registration: registration, best: (i + 1) * 100)
       end
 
+      round.recompute_live_columns
+
       round.live_results.sort_by(&:best).each.with_index(1) do |r, i|
         expect(r.local_pos).to eq i
       end
@@ -75,6 +83,8 @@ RSpec.describe "WCA Live API" do
 
         create(:live_result, round: round, registration: registration, best: 100, average: (i + 1) * 100)
       end
+
+      round.recompute_live_columns
 
       round.live_results.each do |r|
         expect(r.local_pos).to eq 1
@@ -94,6 +104,8 @@ RSpec.describe "WCA Live API" do
       registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
       create(:live_result, round: round, registration: registration, best: -1)
 
+      round.recompute_live_columns
+
       expect(round.live_results.sort_by(&:best).pluck(:local_pos)).to eq [4, 1, 2, 3]
     end
 
@@ -110,6 +122,8 @@ RSpec.describe "WCA Live API" do
       registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
       create(:live_result, round: round, registration: registration, best: -2)
 
+      round.recompute_live_columns
+
       expect(round.live_results.sort_by(&:best).pluck(:local_pos)).to eq [4, 1, 2, 3]
     end
 
@@ -122,6 +136,8 @@ RSpec.describe "WCA Live API" do
 
         create(:live_result, round: round, registration: registration, best: (i + 1) * 100)
       end
+
+      round.recompute_live_columns
 
       registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
       create(:live_result, round: round, registration: registration, best: 0)
@@ -145,6 +161,9 @@ RSpec.describe "WCA Live API" do
         create(:live_result, round: round1, registration: registration, average: (i + 1) * 100)
         create(:live_result, round: round2, registration: registration, average: ((i + 1) * 100) - 1)
       end
+
+      round1.recompute_live_columns
+      round2.recompute_live_columns
 
       round1.live_results.sort_by(&:average).each.with_index(1) do |r, i|
         expect(r.local_pos).to eq i
@@ -171,6 +190,8 @@ RSpec.describe "WCA Live API" do
         create(:live_result, round: round1, registration: registration, average: (i + 1) * 100)
       end
 
+      round1.recompute_live_columns
+
       round1.live_results.sort_by(&:average).each.with_index(1) do |r, i|
         expect(r.local_pos).to eq i
         expect(r.global_pos).to eq i
@@ -188,6 +209,9 @@ RSpec.describe "WCA Live API" do
         create(:live_result, round: round1, registration: registration, best: ((i + 1) * 100) - 1)
         create(:live_result, round: round2, registration: registration, best: (i + 1) * 100)
       end
+
+      round1.recompute_live_columns
+      round2.recompute_live_columns
 
       round1.live_results.sort_by(&:best).each.with_index(1) do |r, i|
         expect(r.local_pos).to eq i
@@ -214,6 +238,8 @@ RSpec.describe "WCA Live API" do
         create(:live_result, round: round1, registration: registration, best: ((i + 1) * 100) - 1)
       end
 
+      round1.recompute_live_columns
+
       round1.live_results.sort_by(&:best).each.with_index(1) do |r, i|
         expect(r.local_pos).to eq i
         expect(r.global_pos).to eq i
@@ -231,6 +257,9 @@ RSpec.describe "WCA Live API" do
         create(:live_result, round: round1, registration: registration, best: (i + 1) * 100)
         create(:live_result, round: round2, registration: registration, best: -1)
       end
+
+      round1.recompute_live_columns
+      round2.recompute_live_columns
 
       round1.linked_round.merged_live_results.each.with_index(1) do |r, i|
         expect(r.global_pos).to eq i
@@ -250,6 +279,9 @@ RSpec.describe "WCA Live API" do
         create(:live_result, round: round2, registration: registration, best: -2)
       end
 
+      round1.recompute_live_columns
+      round2.recompute_live_columns
+
       round1.linked_round.merged_live_results.each.with_index(1) do |r, i|
         expect(r.global_pos).to eq i
         expect(r.round_id).to eq round1.id
@@ -267,6 +299,9 @@ RSpec.describe "WCA Live API" do
         create(:live_result, round: round1, registration: registration, best: (i + 1) * 100)
         create(:live_result, round: round2, registration: registration, best: 0)
       end
+
+      round1.recompute_live_columns
+      round2.recompute_live_columns
 
       round1.linked_round.merged_live_results.each.with_index(1) do |r, i|
         expect(r.global_pos).to eq i
