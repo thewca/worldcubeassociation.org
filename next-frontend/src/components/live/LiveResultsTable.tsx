@@ -8,14 +8,20 @@ import { recordTagBadge } from "@/components/results/TableCells";
 const customOrderBy = (
   competitor: components["schemas"]["LiveCompetitor"],
   resultsByRegistrationId: Record<string, components["schemas"]["LiveResult"]>,
+  eventId: string,
 ) => {
   const competitorResult = resultsByRegistrationId[competitor.id];
 
   if (!competitorResult) {
-    return competitor.id;
+    return [competitor.id];
   }
 
-  return competitorResult.global_pos;
+  const format = events.byId[eventId].recommendedFormat;
+
+  return [
+    competitorResult[format.sort_by as "best" | "average"],
+    competitorResult[format.sort_by_second as "best" | "average"],
+  ];
 };
 
 export const rankingCellColorPalette = (
@@ -52,10 +58,7 @@ export default function LiveResultsTable({
 
   const sortedCompetitors = _.orderBy(
     competitors,
-    [
-      (competitor) => customOrderBy(competitor, resultsByRegistrationId),
-      (competitor) => customOrderBy(competitor, resultsByRegistrationId),
-    ],
+    (competitor) => customOrderBy(competitor, resultsByRegistrationId, eventId),
     ["asc", "asc"],
   );
 
