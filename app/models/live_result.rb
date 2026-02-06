@@ -87,7 +87,7 @@ class LiveResult < ApplicationRecord
   end
 
   LIVE_STATE_SERIALIZE_OPTIONS = {
-    only: %w[advancing advancing_questionable average average_record_tag best global_pos local_pos registration_id single_record_tag],
+    only: %w[advancing advancing_questionable average average_record_tag best registration_id single_record_tag],
     methods: %w[],
     include: [live_attempts: { only: %i[id value attempt_number] }],
   }.freeze
@@ -121,6 +121,6 @@ class LiveResult < ApplicationRecord
 
       after_state = round.to_live_state
       diff = Live::DiffHelper.round_state_diff(before_state, after_state)
-      ActionCable.server.broadcast(Live::Config.broadcast_key(round_id), diff)
+      ActionCable.server.broadcast(Live::Config.broadcast_key(round_id), Live::DiffHelper.compress_payload(diff))
     end
 end

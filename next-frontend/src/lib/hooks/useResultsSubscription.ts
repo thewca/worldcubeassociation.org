@@ -17,13 +17,29 @@ export const CONNECTION_COLORS = {
   [CONNECTION_STATE_DISCONNECTED]: "red",
 };
 
-export type DiffedLiveResult = Partial<components["schemas"]["LiveResult"]> &
-  Pick<components["schemas"]["LiveResult"], "registration_id">;
+// Move this to something like https://www.asyncapi.com
+
+export type CompressedLiveResult = {
+  ad: boolean;
+  adq: boolean;
+  a: number;
+  b: number;
+  art: string;
+  srt: string;
+  r: number;
+  la: {
+    v: number;
+    an: number;
+  }[];
+};
+
+export type DiffedLiveResult = Partial<CompressedLiveResult> &
+  Pick<CompressedLiveResult, "r">;
 
 export type DiffProtocolResponse = {
   updated: DiffedLiveResult[];
   deleted: number[];
-  created: components["schemas"]["LiveResult"][];
+  created: CompressedLiveResult[];
 };
 
 export default function useResultsSubscription(
