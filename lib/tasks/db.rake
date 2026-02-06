@@ -83,12 +83,14 @@ namespace :db do
 
   namespace :dump do
     desc 'Generates a dump of our database with sensitive information stripped, safe for public viewing.'
-    task development: :environment do
-      DbDumpHelper.dump_developer_db
+    task :development, [:local] => [:environment] do |_, args|
+      local = args[:local].present?
+
+      puts "Dumping developer database #{'locally' if local}."
+      DbDumpHelper.dump_developer_db(local: local)
     end
 
     desc 'Generates a partial dump of our database containing only results and relevant stuff for statistics.'
-    # task public_results: :environment do
     task :public_results, [:local] => [:environment] do |_, args|
       local = args[:local].present?
 
@@ -143,7 +145,7 @@ namespace :db do
               # Explicitly loading the schema is not necessary because the downloaded SQL dump file contains CREATE TABLE
               # definitions, so if we load the schema here the SOURCE command below would overwrite it anyways
 
-              ActiveRecord::Base.connection.exec("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}")
+              DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", working_db)
               ActiveRecord::Base.connection.commit_db_transaction
             end
           end

@@ -18,30 +18,32 @@ module DbDumpHelper
   BUCKET_NAME = 'assets.worldcubeassociation.org'
   DEFAULT_DEV_PASSWORD = 'wca'
 
-  def self.dump_developer_db
-    Dir.mktmpdir do |dir|
-      FileUtils.cd dir do
-        # WARNING: Headache ahead! By using Rails-DSL database schema files, the migrations in the dev export can break.
-        #   Rails uses the timestamp at the top of the schema file to determine which migration is the latest one.
-        #   It then proceeds to glob the migration folder for older migrations and inserts them when loading the schema.
-        #   However, this glob is _relative_ to the Rails root. Due to our chdir into a temporary directory (where we can
-        #   write files to our heart's desire) the glob returns an empty list. So we symlink the migrations into our tmp
-        #   working directory to make sure that Rails can find them when loading/dumping the schema.
-        primary_connection_pool = ActiveRecord::Base.connection_pool
-        migration_paths = primary_connection_pool.migration_context.migrations_paths
+  def self.dump_developer_db(local: false)
+    target_dir = local ? "#{DEVELOPER_EXPORT_SQL}".tap { Dir.mkdir(it) } : Dir.mktmpdir
 
-        migration_paths.each do |migration_path|
-          FileUtils.mkpath(File.dirname(migration_path))
+    FileUtils.cd target_dir do
+      # WARNING: Headache ahead! By using Rails-DSL database schema files, the migrations in the dev export can break.
+      #   Rails uses the timestamp at the top of the schema file to determine which migration is the latest one.
+      #   It then proceeds to glob the migration folder for older migrations and inserts them when loading the schema.
+      #   However, this glob is _relative_ to the Rails root. Due to our chdir into a temporary directory (where we can
+      #   write files to our heart's desire) the glob returns an empty list. So we symlink the migrations into our tmp
+      #   working directory to make sure that Rails can find them when loading/dumping the schema.
+      primary_connection_pool = ActiveRecord::Base.connection_pool
+      migration_paths = primary_connection_pool.migration_context.migrations_paths
 
-          abs_migrations = File.join(Rails.application.root, migration_path)
-          FileUtils.ln_s abs_migrations, migration_path, verbose: true
-        end
+      migration_paths.each do |migration_path|
+        FileUtils.mkpath(File.dirname(migration_path))
 
-        DatabaseDumper.development_dump(DEVELOPER_EXPORT_SQL)
-        zip_file_name = File.basename(DEVELOPER_EXPORT_SQL_PERMALINK)
-
-        self.zip_and_upload_to_s3(zip_file_name, DEVELOPER_EXPORT_SQL_PERMALINK, DEVELOPER_EXPORT_SQL)
+        abs_migrations = File.join(Rails.application.root, migration_path)
+        FileUtils.ln_s abs_migrations, migration_path, verbose: true
       end
+
+      DatabaseDumper.development_dump(DEVELOPER_EXPORT_SQL)
+      zip_file_name = File.basename(DEVELOPER_EXPORT_SQL_PERMALINK)
+
+      self.zip_and_upload_to_s3(zip_file_name, DEVELOPER_EXPORT_SQL_PERMALINK, DEVELOPER_EXPORT_SQL) unless local
+    ensure
+      FileUtils.remove_entry dir unless local
     end
   end
 

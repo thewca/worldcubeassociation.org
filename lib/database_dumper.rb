@@ -1419,6 +1419,10 @@ module DatabaseDumper
     ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
 
     LogTask.log_task "Populating sanitized tables in '#{dump_db_name}'" do
+      ActiveRecord::Base.connection.execute(<<~SQL)
+        SET SESSION sql_mode = 'NO_AUTO_VALUE_ON_ZERO,STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION';
+      SQL
+
       ordered_table_names.each do |table_name|
         table_sanitizer = dump_sanitizers[table_name]
 
