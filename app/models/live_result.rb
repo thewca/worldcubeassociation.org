@@ -16,6 +16,7 @@ class LiveResult < ApplicationRecord
   belongs_to :locked_by, class_name: 'User', optional: true
 
   scope :not_empty, -> { where.not(best: 0) }
+  scope :locked, -> { where.not(locked_by: nil) }
 
   alias_attribute :result_id, :id
 
