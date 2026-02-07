@@ -64,13 +64,13 @@ namespace :h2h_results do
           set.ordered_index = scramble_set_number - 1
         end
 
-        scramble_set.inbox_scrambles.create!(
-          is_extra: is_extra,
-          matched_scramble_set: scramble_set,
-          scramble_number: scramble_number,
-          ordered_index: scramble_number - 1,
-          scramble_string: scramble,
-        )
+        scramble_set.inbox_scrambles.find_or_create_by!(matched_scramble_set: scramble_set, scramble_number: scramble_number) do |scramble|
+          scramble.is_extra = is_extra
+          scramble.matched_scramble_set = scramble_set
+          scramble.scramble_number = scramble_number
+          scramble.ordered_index = scramble_number - 1
+          scramble.scramble_string = scramble
+        end
       end
 
       puts "Import complete!"

@@ -8,7 +8,7 @@ class LiveResult < ApplicationRecord
 
   after_save :trigger_recompute_columns, if: :should_recompute?
 
-  after_save :notify_users
+  #after_save :notify_users
 
   belongs_to :registration
 
