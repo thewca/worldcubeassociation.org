@@ -35,7 +35,6 @@ function Tickets({ id }) {
 
   const {
     requester_stakeholders: stakeholders = [],
-    eligible_roles_for_bcc: eligibleRoles = [],
   } = ticketDetails || {};
 
   const currentStakeholder = useMemo(() => {
@@ -48,15 +47,11 @@ function Tickets({ id }) {
   }, [stakeholders, userSelectedStakeholder]);
 
   if (isPendingTicketDetails) return <Loading />;
-  if (isErrorTicketDetails) return <Errored error={errorTicketDetails} />;
-
-  if (stakeholders.length === 0 && eligibleRoles.length > 0) {
-    return (
-      <SelfRoleAssigner
-        ticketId={id}
-        eligibleRoles={eligibleRoles}
-      />
-    );
+  if (isErrorTicketDetails) {
+    if (errorTicketDetails?.status === 401) {
+      return <SelfRoleAssigner ticketId={id} />;
+    }
+    return <Errored />;
   }
 
   return (

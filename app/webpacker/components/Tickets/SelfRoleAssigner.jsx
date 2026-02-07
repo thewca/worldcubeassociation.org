@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import {
   Button, Dropdown, Message, Modal,
 } from 'semantic-ui-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import useInputState from '../../lib/hooks/useInputState';
 import I18n from '../../lib/i18n';
 import { ticketStakeholderConnections } from '../../lib/wca-data.js.erb';
 import joinAsBccStakeholder from './api/joinAsBccStakeholder';
+import getEligibleRoles from './api/getEligibleRoles';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 
@@ -14,12 +15,22 @@ import Errored from '../Requests/Errored';
 // i18n-tasks-use t('tickets.stakeholder_role.actioner')
 // i18n-tasks-use t('tickets.stakeholder_role.requester')
 
-export default function SelfRoleAssigner({ ticketId, eligibleRoles }) {
+export default function SelfRoleAssigner({ ticketId }) {
   const queryClient = useQueryClient();
   const [isAssigning, setIsAssigning] = useState();
   const [selectedRole, setSelectedRole] = useInputState();
 
-  const roleOptions = eligibleRoles.map((role) => ({
+  const {
+    data: eligibleRoles,
+    isPending: isPendingEligibleRoles,
+    isError: isErrorEligibleRoles,
+    error: errorEligibleRoles,
+  } = useQuery({
+    queryKey: ['eligible-roles', ticketId],
+    queryFn: () => getEligibleRoles({ ticketId }),
+  });
+
+  const roleOptions = (eligibleRoles || []).map((role) => ({
     key: role,
     text: I18n.t(`tickets.stakeholder_role.${role}`),
     value: role,
@@ -46,8 +57,9 @@ export default function SelfRoleAssigner({ ticketId, eligibleRoles }) {
     });
   };
 
-  if (isPending) return <Loading />;
+  if (isPending || isPendingEligibleRoles) return <Loading />;
   if (isError) return <Errored error={error} />;
+  if (isErrorEligibleRoles) return <Errored error={errorEligibleRoles} />;
 
   return (
     <>

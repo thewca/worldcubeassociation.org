@@ -78,13 +78,9 @@ class TicketsController < ApplicationController
       end
       format.json do
         ticket = Ticket.find(params.require(:id))
-        bcc_eligible_roles = ticket.metadata.eligible_roles_for_bcc(current_user)
 
-        unless ticket.can_user_access?(current_user)
-          return render json: { eligible_roles_for_bcc: bcc_eligible_roles } if bcc_eligible_roles.any?
-
-          return head :unauthorized
-        end
+        # Only stakeholders can access the ticket.
+        return head :unauthorized unless ticket.can_user_access?(current_user)
 
         render json: {
           ticket: ticket,
@@ -92,6 +88,13 @@ class TicketsController < ApplicationController
         }
       end
     end
+  end
+
+  def eligible_roles
+    ticket = Ticket.find(params.require(:ticket_id))
+    eligible_roles = ticket.metadata.eligible_roles_for_bcc(current_user)
+
+    render json: { eligible_roles: eligible_roles }
   end
 
   def edit_person_validators
