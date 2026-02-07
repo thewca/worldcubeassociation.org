@@ -66,3 +66,6 @@ next-frontend/src/app/(wca)/fonts/TTNormsPro/*
 
 # Local database exports
 WCA_export_*
+
+# Temp for CSV files
+h2h_scoretaking_import.csv

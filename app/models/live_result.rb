@@ -3,7 +3,7 @@
 class LiveResult < ApplicationRecord
   BEST_POSSIBLE_SCORE = 1
 
-  has_many :live_attempts
+  has_many :live_attempts, dependent: :destroy
   alias_method :attempts, :live_attempts
 
   after_save :trigger_recompute_and_notify, if: :should_recompute?
