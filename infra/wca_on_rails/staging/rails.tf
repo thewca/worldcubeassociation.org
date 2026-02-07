@@ -22,7 +22,7 @@ locals {
     },
     {
       name = "DATABASE_HOST"
-      value = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = "staging-v2-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
     {
       name = "WCA_REGISTRATIONS_POLL_URL"
@@ -42,11 +42,11 @@ locals {
     },
     {
       name = "READ_REPLICA_HOST"
-      value = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = "staging-v2-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
     {
       name = "DEV_DUMP_HOST"
-      value = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = "staging-v2-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
     {
       name = "CACHE_REDIS_URL"
