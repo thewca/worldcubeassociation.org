@@ -95,7 +95,9 @@ export default function Subregion({ group }) {
   };
 
   const promoteDelegateAction = (delegate) => {
-    confirm().then(() => {
+    confirm({
+      content: `Are you sure that you want to promote ${delegate.user.name} from ${I18n.t(`enums.user_roles.status.delegate_regions.${delegate.metadata.status}`)} to ${I18n.t(`enums.user_roles.status.delegate_regions.${nextStatusOfGroupType(delegate.metadata.status, delegate.group.group_type)}`)}?`,
+    }).then(() => {
       save(
         apiV0Urls.userRoles.update(delegate.id),
         { status: nextStatusOfGroupType(delegate.metadata.status, delegate.group.group_type) },
@@ -107,7 +109,9 @@ export default function Subregion({ group }) {
   };
 
   const demoteDelegateAction = (delegate) => {
-    confirm().then(() => {
+    confirm({
+      content: `Are you sure that you want to demote ${delegate.user.name} from ${I18n.t(`enums.user_roles.status.delegate_regions.${delegate.metadata.status}`)} to ${I18n.t(`enums.user_roles.status.delegate_regions.${previousStatusOfGroupType(delegate.metadata.status, delegate.group.group_type)}`)}?`,
+    }).then(() => {
       save(
         apiV0Urls.userRoles.update(delegate.id),
         { status: previousStatusOfGroupType(delegate.metadata.status, delegate.group.group_type) },
@@ -119,13 +123,17 @@ export default function Subregion({ group }) {
   };
 
   const endDelegateRoleAction = (delegate) => {
-    confirm().then(() => {
+    confirm({
+      content: `Are you sure that you want to end the Delegate role for ${delegate.user.name} (${I18n.t(`enums.user_roles.status.delegate_regions.${delegate.metadata.status}`)})?`,
+    }).then(() => {
       save(apiV0Urls.userRoles.delete(delegate.id), {}, sync, { method: 'DELETE' });
     });
   };
 
   const editLocationAction = (changes) => {
-    confirm().then(() => {
+    confirm({
+      content: `Are you sure that you want to update the location for ${delegateToChange.user.name}?`,
+    }).then(() => {
       save(apiV0Urls.userRoles.update(delegateToChange.id), changes, () => {
         sync();
         setOpenModalType(null);
