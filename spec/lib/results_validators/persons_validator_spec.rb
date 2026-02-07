@@ -131,6 +131,7 @@ RSpec.describe PV do
       # EMPTY_GENDER_WARNING
       # WHITESPACE_IN_NAME_ERROR
       # WRONG_PARENTHESIS_TYPE_ERROR
+      # SPECIAL_CHARACTERS_IN_NAME_WARNING
       # MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING
       # LOWERCASE_NAME_WARNING
       # UPPERCASE_NAME_WARNING
@@ -170,6 +171,21 @@ RSpec.describe PV do
                                      event_id: "333oh",
                                      round: round_333_oh)
         res_bad_parenthesis.person.update(name: "Bad Parenthesis Guy（test）")
+        res_special_chars1 = create(:inbox_result,
+                                    competition: competition1,
+                                    event_id: "333oh",
+                                    round: round_333_oh)
+        res_special_chars1.person.update(name: "John \"Doe\"")
+        res_special_chars2 = create(:inbox_result,
+                                    competition: competition1,
+                                    event_id: "333oh",
+                                    round: round_333_oh)
+        res_special_chars2.person.update(name: "Jane123 Smith")
+        res_special_chars3 = create(:inbox_result,
+                                    competition: competition1,
+                                    event_id: "333oh",
+                                    round: round_333_oh)
+        res_special_chars3.person.update(name: "Bob@Email")
         res_lowercase1 = create(:inbox_result,
                                 competition: competition1,
                                 event_id: "333oh",
@@ -243,6 +259,15 @@ RSpec.describe PV do
           RV::ValidationWarning.new(PV::EMPTY_GENDER_WARNING,
                                     :persons, competition1.id,
                                     name: res_whitespace.person.name),
+          RV::ValidationWarning.new(PV::SPECIAL_CHARACTERS_IN_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_special_chars1.person.name),
+          RV::ValidationWarning.new(PV::SPECIAL_CHARACTERS_IN_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_special_chars2.person.name),
+          RV::ValidationWarning.new(PV::SPECIAL_CHARACTERS_IN_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_special_chars3.person.name),
           RV::ValidationWarning.new(PV::MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,
                                     :persons, competition1.id,
                                     name: res_same_name1.person.name),
