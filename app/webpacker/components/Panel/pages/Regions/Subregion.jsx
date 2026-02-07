@@ -42,7 +42,6 @@ const canPromote = (role) => (
 
 const canDemote = (role) => (
   [
-    statusObjectOfGroupType(role.group.group_type).junior_delegate,
     statusObjectOfGroupType(role.group.group_type).delegate,
   ].includes(role.metadata.status)
 );
