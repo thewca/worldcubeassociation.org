@@ -44,6 +44,10 @@ class LiveAttempt < ApplicationRecord
     )
   end
 
+  def self.attempts_changed?(before_attempts, after_attempts)
+    Set.new(before_attempts) != Set.new(after_attempts)
+  end
+
   def update_with_history_entry(value, acting_user)
     self.update(value: value)
     self.live_attempt_history_entries.create(

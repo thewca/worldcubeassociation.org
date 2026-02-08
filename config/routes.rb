@@ -155,7 +155,7 @@ Rails.application.routes.draw do
   get 'competitions/edit/registration-collisions-json' => 'competitions#registration_collisions_json', as: :registration_collisions_json
   get 'competitions/edit/series-eligible-competitions-json' => 'competitions#series_eligible_competitions_json', as: :series_eligible_competitions_json
 
-  if WcaLive.enabled?
+  if Live::Config.enabled?
     get 'competitions/:competition_id/live/competitors/:registration_id' => 'live#by_person', as: :live_person_results
     get 'competitions/:competition_id/live/podiums' => 'live#podiums', as: :live_podiums
     get 'competitions/:competition_id/live/competitors' => 'live#competitors', as: :live_competitors
@@ -371,10 +371,11 @@ Rails.application.routes.draw do
     # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
       resources :competitions, only: [] do
-        if WcaLive.enabled?
+        if Live::Config.enabled?
           namespace :live do
             get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
             put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
+            put '/rounds/:round_id/:registration_id' => 'live#quit_competitor', as: :quit_competitor_from_round
             get '/podiums' => 'live#podiums', as: :live_podiums
             get '/registrations/:registration_id' => 'live#by_person', as: :get_live_by_person
           end

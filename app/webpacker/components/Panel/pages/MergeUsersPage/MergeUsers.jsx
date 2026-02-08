@@ -68,8 +68,8 @@ export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
       <SpecialAccountDetails user={firstUser} />
       <SpecialAccountDetails user={secondUser} />
       <div>
-        Select the email ID that want to be maintained
-        (the account with the other email ID will be anonymized)
+        Select the account to keep
+        (all data from the other account will be transferred to this one)
       </div>
       <Select
         options={selectOptions}

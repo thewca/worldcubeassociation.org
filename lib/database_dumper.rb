@@ -138,38 +138,8 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "concise_average_results" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          average
-          continent_id
-          country_id
-          day
-          event_id
-          id
-          month
-          person_id
-          value_and_id
-          year
-        ],
-      ),
-    }.freeze,
-    "concise_single_results" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          best
-          continent_id
-          country_id
-          day
-          event_id
-          id
-          month
-          person_id
-          value_and_id
-          year
-        ],
-      ),
-    }.freeze,
+    "concise_average_results" => :skip_all_rows,
+    "concise_single_results" => :skip_all_rows,
     "connected_paypal_accounts" => :skip_all_rows,
     "connected_stripe_accounts" => :skip_all_rows,
     "manual_payment_integrations" => :skip_all_rows,
@@ -289,32 +259,8 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "ranks_average" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          id
-          best
-          continent_rank
-          country_rank
-          event_id
-          person_id
-          world_rank
-        ],
-      ),
-    }.freeze,
-    "ranks_single" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          id
-          best
-          continent_rank
-          country_rank
-          event_id
-          person_id
-          world_rank
-        ],
-      ),
-    }.freeze,
+    "ranks_average" => :skip_all_rows,
+    "ranks_single" => :skip_all_rows,
     "results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -354,12 +300,14 @@ module DatabaseDumper
           cutoff
           advancement_condition
           scramble_set_count
-          round_results
           created_at
           updated_at
           old_type
           linked_round_id
           is_h2h_mock
+        ],
+        db_default: %w[
+          round_results
         ],
       ),
     }.freeze,

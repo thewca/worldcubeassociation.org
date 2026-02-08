@@ -6,13 +6,14 @@ class LiveResult < ApplicationRecord
   has_many :live_attempts, dependent: :destroy
   alias_method :attempts, :live_attempts
 
-  after_save :trigger_recompute_columns, if: :should_recompute?
-
-  #after_save :notify_users
+  after_save :trigger_recompute_and_notify, if: :should_recompute?
 
   belongs_to :registration
 
   belongs_to :round
+
+  belongs_to :quit_by, class_name: 'User', optional: true
+  belongs_to :locked_by, class_name: 'User', optional: true
 
   scope :not_empty, -> { where.not(best: 0) }
 
@@ -47,6 +48,14 @@ class LiveResult < ApplicationRecord
     end
   end
 
+  def mark_as_quit!(quit_by_user)
+    update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
+  end
+
+  def locked?
+    locked_by_id.present?
+  end
+
   def self.compute_average_and_best(attempts, round)
     r = Result.new(
       event_id: round.event.id,
@@ -77,13 +86,41 @@ class LiveResult < ApplicationRecord
     end
   end
 
+  LIVE_STATE_SERIALIZE_OPTIONS = {
+    only: %w[advancing advancing_questionable average average_record_tag best global_pos local_pos registration_id single_record_tag],
+    methods: %w[],
+    include: [live_attempts: { only: %i[id value attempt_number] }],
+  }.freeze
+
+  def to_live_state
+    serializable_hash(LIVE_STATE_SERIALIZE_OPTIONS)
+  end
+
+  def self.compute_diff(before_result, after_result)
+    changed_vals = after_result.slice(*LIVE_STATE_SERIALIZE_OPTIONS[:only])
+                               .reject { |k, v| before_result[k] == v }
+    diff = changed_vals.merge("registration_id" => after_result["registration_id"])
+
+    # Include new attempts if they have changed, it's too much of a hassle to
+    # replace single values in the frontend.
+    diff["live_attempts"] = after_result["live_attempts"] if LiveAttempt.attempts_changed?(
+      before_result["live_attempts"],
+      after_result["live_attempts"],
+    )
+
+    # Only return if there are actual changes
+    diff if diff.except("registration_id").present?
+  end
+
   private
 
-    def notify_users
-      ActionCable.server.broadcast(WcaLive.broadcast_key(round_id), as_json)
-    end
+    def trigger_recompute_and_notify
+      before_state = round.to_live_state
 
-    def trigger_recompute_columns
-      round.recompute_live_columns
+      round.recompute_live_columns(skip_advancing: locked?)
+
+      after_state = round.to_live_state
+      diff = Live::DiffHelper.round_state_diff(before_state, after_state)
+      ActionCable.server.broadcast(Live::Config.broadcast_key(round_id), diff)
     end
 end

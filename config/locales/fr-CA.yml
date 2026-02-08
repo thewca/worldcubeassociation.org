@@ -2835,9 +2835,9 @@ fr-CA:
       results_not_posted: >-
         Les résultats de cette compétition sont visibles mais n'ont pas encore
         été postés.
-      #original_hash: 9d95f05
+      #original_hash: 7f176a5
       results_still_processing: >-
-        Nous sommes occupés à traiter les résultats de ce concours - ils
+        Nous sommes occupés à traiter les résultats de cette compétition; ils
         devraient être disponibles sous peu.
       #original_hash: 6c46989
       results_already_posted: Les résultats ont déjà été postés.
@@ -4648,8 +4648,8 @@ fr-CA:
       activity: Activité
       #original_hash: a78a655
       no_activities: Aucune activité pour les salles/épreuves sélectionnées.
-      #original_hash: e85468f
-      all_venues: Tout les salles
+      #original_hash: bfb6925
+      all_venues: Toutes les salles
       #original_hash: 4f100fe
       room_or_stage: Salle ou zone
       #original_hash: 7ebefb7
@@ -4678,8 +4678,10 @@ fr-CA:
         other: >-
           Vous consultez l'horaire de la %{venue_name}, une des %{count} salle
           pour cette compétition.
-      #original_hash: df455fa
-      venue_selection_all: 'Vous consultez l''horaire de toutes les salles %{venueCount} à la fois.'
+      #original_hash: f9b04fa
+      venue_selection_all: >-
+        Vous consultez l'horaire de l'ensemble des %{venueCount} salles à la
+        fois.
       #original_hash: 6ae976a
       timezone_message: 'Le fuseau horaire pour cette salle est %{timezone}.'
       #original_hash: f6889a4
