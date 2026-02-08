@@ -14,7 +14,7 @@ namespace :h2h_results do
 
         round_id = row['round_id'].to_i
         match_number   = row['match_number'].to_i
-        set_number     = row['set_number'].to_i
+        set_number     = row['match_set_number'].to_i
         row['set_attempt_number'].to_i
         registration_id = row['registration_id'].to_i
         final_pos = row['final_position'].to_i
@@ -33,7 +33,7 @@ namespace :h2h_results do
           lr.local_pos = final_pos
         end
 
-        result.update!(best: value) if result.best > value # If the current lr.best is slower than the time in the current row, update lr.best
+        result.update!(best: value) if value.positive? && result.best > value
 
         match = H2hMatch.find_or_create_by!(round_id: round_id, match_number: match_number)
         competitor = H2hMatchCompetitor.find_or_create_by!(h2h_match_id: match.id, user_id: Registration.find(registration_id).user.id)
@@ -64,12 +64,12 @@ namespace :h2h_results do
           set.ordered_index = scramble_set_number - 1
         end
 
-        scramble_set.inbox_scrambles.find_or_create_by!(matched_scramble_set: scramble_set, scramble_number: scramble_number) do |scramble|
-          scramble.is_extra = is_extra
-          scramble.matched_scramble_set = scramble_set
-          scramble.scramble_number = scramble_number
-          scramble.ordered_index = scramble_number - 1
-          scramble.scramble_string = scramble
+        scramble_set.inbox_scrambles.find_or_create_by!(matched_scramble_set: scramble_set, scramble_number: scramble_number) do |inbox_scramble|
+          inbox_scramble.is_extra = is_extra
+          inbox_scramble.matched_scramble_set = scramble_set
+          inbox_scramble.scramble_number = scramble_number
+          inbox_scramble.ordered_index = scramble_number - 1
+          inbox_scramble.scramble_string = scramble
         end
       end
 
@@ -129,6 +129,7 @@ namespace :h2h_results do
         r.matched_scramble_sets.each do |set|
           puts "> handling scramble set: #{set.inspect}"
 
+          # Group ID's have to be letters per our validations, this converts a given group number to an alphabet-based letter code
           group_id = begin
             result = +""
             number = set.scramble_set_number
@@ -182,6 +183,4 @@ namespace :h2h_results do
       end
     end
   end
-
-  # Group ID's have to be letters per our validations, this converts a given group number to an alphabet-based letter code
 end
