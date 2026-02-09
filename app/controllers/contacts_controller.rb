@@ -180,14 +180,14 @@ class ContactsController < ApplicationController
     maybe_send_dob_email success_url: contact_dob_url, fail_view: :dob
   end
 
-  private def maybe_send_dob_email(success_url: nil, fail_view: nil)
+  private def maybe_send_dob_email(success_url: nil, fail_view: nil, force_locale: :en)
     if !@contact.valid?
       render fail_view
     elsif !verify_recaptcha
       # Convert flash to a flash.now, since we're about to render, not redirect.
       flash.now[:recaptcha_error] = flash[:recaptcha_error]
       render fail_view
-    elsif I18n.with_locale(:en) { @contact.deliver }
+    elsif force_locale ? I18n.with_locale(force_locale) { @contact.deliver } : @contact.deliver
       flash[:success] = I18n.t('contacts.messages.success')
       redirect_to success_url
     else
