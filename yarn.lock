@@ -6768,14 +6768,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18n-js@npm:^4.5.1":
-  version: 4.5.1
-  resolution: "i18n-js@npm:4.5.1"
+"i18n-js@npm:^4.5.2":
+  version: 4.5.2
+  resolution: "i18n-js@npm:4.5.2"
   dependencies:
     bignumber.js: "npm:*"
     lodash: "npm:*"
-    make-plural: "npm:*"
-  checksum: 10c0/242d618679e5dd06bd3a5d66c17e07c9fd41141a78885e0a883ee633131da60deb3b3fa760f9071d873aeef2fbfb3186faeccae347eb1e81fba1f12b258ae038
+    make-plural: "npm:7.5.0"
+  checksum: 10c0/20a01d1a798fd41ec30da735d21591b9b14fe7ff749ae3396860833e5506b9205bfe190a533b410e1b7a25e9343c21ac9f30d22ef01c96048204ab8a75371cdf
   languageName: node
   linkType: hard
 
@@ -7819,7 +7819,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-plural@npm:*, make-plural@npm:^8.1.0":
+"make-plural@npm:7.5.0":
+  version: 7.5.0
+  resolution: "make-plural@npm:7.5.0"
+  checksum: 10c0/4cfecc77301cda7d01539027de3aedbacd91555767a4afb7ec18dbb8d9648293bf712a1d968e333c448f4e13e95cfef6457b338cf562620abcc4e7b313eeca29
+  languageName: node
+  linkType: hard
+
+"make-plural@npm:^8.1.0":
   version: 8.1.0
   resolution: "make-plural@npm:8.1.0"
   checksum: 10c0/e3c346cc7a217072f2c5058f6b1cdf98ec71c68511ebce2d7480380c9abcc13ad37661152b54a4925996d9e590bd215fa26552497bcc6d3e435897eeacc59aeb
@@ -10640,7 +10647,7 @@ __metadata:
     file-loader: "npm:^6.2.0"
     flag-icons: "npm:^7.5.0"
     glob: "npm:^13.0.1"
-    i18n-js: "npm:^4.5.1"
+    i18n-js: "npm:^4.5.2"
     jquery: "npm:3.7.1"
     js-yaml: "npm:^4.1.1"
     jshint: "npm:^2.13.6"
