@@ -503,8 +503,8 @@ GEM
     nenv (0.3.0)
     net-http (0.9.1)
       uri (>= 0.11.1)
-    net-http-persistent (4.0.6)
-      connection_pool (~> 2.2, >= 2.2.4)
+    net-http-persistent (4.0.8)
+      connection_pool (>= 2.2.4, < 4)
     net-imap (0.6.2)
       date
       net-protocol
@@ -923,7 +923,7 @@ GEM
       activemodel
       mail (>= 2.6.1)
       simpleidn
-    vault (0.19.0)
+    vault (0.20.0)
       aws-sigv4
       base64
       connection_pool (~> 2.4)
@@ -1302,7 +1302,7 @@ CHECKSUMS
   mysql2 (0.5.7) sha256=ba09ede515a0ae8a7192040a1b778c0fb0f025fa5877e9be895cd325fa5e9d7b
   nenv (0.3.0) sha256=d9de6d8fb7072228463bf61843159419c969edb34b3cef51832b516ae7972765
   net-http (0.9.1) sha256=25ba0b67c63e89df626ed8fac771d0ad24ad151a858af2cc8e6a716ca4336996
-  net-http-persistent (4.0.6) sha256=2abb3a04438edf6cb9e0e7e505969605f709eda3e3c5211beadd621a2c84dd5d
+  net-http-persistent (4.0.8) sha256=ef3de8319d691537b329053fae3a33195f8b070bbbfae8bf1a58c796081960e6
   net-imap (0.6.2) sha256=08caacad486853c61676cca0c0c47df93db02abc4a8239a8b67eb0981428acc6
   net-pop (0.1.2) sha256=848b4e982013c15b2f0382792268763b748cce91c9e91e36b0f27ed26420dff3
   net-protocol (0.2.2) sha256=aa73e0cba6a125369de9837b8d8ef82a61849360eba0521900e2c3713aa162a8
@@ -1473,7 +1473,7 @@ CHECKSUMS
   uri (1.1.1) sha256=379fa58d27ffb1387eaada68c749d1426738bd0f654d812fcc07e7568f5c57c6
   useragent (0.16.11) sha256=700e6413ad4bb954bb63547fa098dddf7b0ebe75b40cc6f93b8d54255b173844
   valid_email (0.2.1) sha256=79b06a7cc67a4aaeac731c940df775c4092623c455667e86d2a706acd3e9604f
-  vault (0.19.0) sha256=a18f91119e1296120d6957e47583f42d1636c9a5c7607780cf604b9f9e1b28aa
+  vault (0.20.0) sha256=7c20581cdcc150ecacfee88d235aef67e8e54ac5404d322976294a00de69cc73
   version_gem (1.1.9) sha256=0c1a0962ae543c84a00889bb018d9f14d8f8af6029d26b295d98774e3d2eb9a4
   warden (1.2.9) sha256=46684f885d35a69dbb883deabf85a222c8e427a957804719e143005df7a1efd0
   wca_i18n (0.4.4) sha256=33830f157616a33d10918d4f9e9c1c17e4311731832f19153c3cfcbb51233461
