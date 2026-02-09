@@ -826,10 +826,11 @@ GEM
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
     shellany (0.0.1)
-    shoryuken (6.2.1)
-      aws-sdk-core (>= 2)
+    shoryuken (7.0.1)
+      aws-sdk-sqs (>= 1.66.0)
       concurrent-ruby
       thor
+      zeitwerk (~> 2.6)
     sidekiq (8.0.10)
       connection_pool (>= 2.5.0)
       json (>= 2.9.0)
@@ -1426,7 +1427,7 @@ CHECKSUMS
   semantic_range (3.1.0) sha256=9fc01ee40f2e5f81042e95d421837f688177dd603753b5eab41ff9bba50a34a1
   shakapacker (9.5.0) sha256=6b589291210c52641d6881b05b4dbb2fed87dd3083caad2a6fb2af12dc3f39a8
   shellany (0.0.1) sha256=0e127a9132698766d7e752e82cdac8250b6adbd09e6c0a7fbbb6f61964fedee7
-  shoryuken (6.2.1) sha256=95ddc0a717624a54e799d25a0a05100cb5a0c3728a96211935c214faaf16b3b6
+  shoryuken (7.0.1) sha256=358572984b0012c57c0273bbeb5e089c1d92452e77e898bc06ffce2bca2bb26d
   sidekiq (8.0.10) sha256=37ccd8da8d46f6779b8655cb30c1bfcb0decd57e890ff56d8b8252a5d9a84cd6
   sidekiq-cron (2.3.1) sha256=96ab3da372289a30dc744c1daa2ae2e85960b2444a6f6ed68df1ff7882c44aac
   signet (0.21.0) sha256=d617e9fbf24928280d39dcfefba9a0372d1c38187ffffd0a9283957a10a8cd5b
