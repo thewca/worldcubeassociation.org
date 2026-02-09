@@ -893,7 +893,7 @@ export interface components {
             advancing: boolean;
             advancing_questionable: boolean;
             event_id: string;
-            live_attempts: components["schemas"]["LiveAttempt"][];
+            attempts: components["schemas"]["LiveAttempt"][];
         };
         LiveCompetitor: {
             id: number;

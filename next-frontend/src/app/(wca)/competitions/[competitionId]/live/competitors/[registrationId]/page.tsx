@@ -50,7 +50,7 @@ export default async function PersonResults({
               {eventResults.map((result) => {
                 const {
                   round_id: roundId,
-                  live_attempts,
+                  attempts,
                   global_pos,
                   average,
                   best,
@@ -72,7 +72,7 @@ export default async function PersonResults({
                     >
                       {global_pos}
                     </Table.Cell>
-                    {live_attempts.map((a) => (
+                    {attempts.map((a) => (
                       <Table.Cell key={`${roundId}-${key}-${a.attempt_number}`}>
                         {formatAttemptResult(a.value, key)}
                       </Table.Cell>

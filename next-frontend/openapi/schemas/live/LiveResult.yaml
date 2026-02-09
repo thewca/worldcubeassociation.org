@@ -11,7 +11,7 @@ required:
   - advancing
   - advancing_questionable
   - event_id
-  - live_attempts
+  - attempts
 properties:
   registration_id:
     type: integer
@@ -35,7 +35,7 @@ properties:
     type: boolean
   event_id:
     type: string
-  live_attempts:
+  attempts:
     type: array
     items:
       $ref: "./LiveAttempt.yaml"
