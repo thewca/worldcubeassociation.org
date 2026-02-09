@@ -199,7 +199,7 @@ GEM
     coderay (1.1.3)
     colorize (0.8.1)
     concurrent-ruby (1.3.6)
-    connection_pool (2.5.5)
+    connection_pool (3.0.2)
     cookies_eu (1.7.8)
       js_cookie_rails (~> 2.2.0)
     crack (1.0.1)
@@ -503,8 +503,6 @@ GEM
     nenv (0.3.0)
     net-http (0.9.1)
       uri (>= 0.11.1)
-    net-http-persistent (4.0.8)
-      connection_pool (>= 2.2.4, < 4)
     net-imap (0.6.2)
       date
       net-protocol
@@ -666,7 +664,7 @@ GEM
     redcarpet (3.6.1)
     redis (5.4.1)
       redis-client (>= 0.22.0)
-    redis-client (0.26.2)
+    redis-client (0.26.4)
       connection_pool
     regexp_parser (2.11.3)
     reline (0.6.3)
@@ -831,12 +829,12 @@ GEM
       concurrent-ruby
       thor
       zeitwerk (~> 2.6)
-    sidekiq (8.0.10)
-      connection_pool (>= 2.5.0)
-      json (>= 2.9.0)
-      logger (>= 1.6.2)
-      rack (>= 3.1.0)
-      redis-client (>= 0.23.2)
+    sidekiq (8.1.0)
+      connection_pool (>= 3.0.0)
+      json (>= 2.16.0)
+      logger (>= 1.7.0)
+      rack (>= 3.2.0)
+      redis-client (>= 0.26.0)
     sidekiq-cron (2.3.1)
       cronex (>= 0.13.0)
       fugit (~> 1.8, >= 1.11.1)
@@ -924,11 +922,8 @@ GEM
       activemodel
       mail (>= 2.6.1)
       simpleidn
-    vault (0.20.0)
+    vault (0.18.2)
       aws-sigv4
-      base64
-      connection_pool (~> 2.4)
-      net-http-persistent (~> 4.0, >= 4.0.2)
     version_gem (1.1.9)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -1165,7 +1160,7 @@ CHECKSUMS
   coderay (1.1.3) sha256=dc530018a4684512f8f38143cd2a096c9f02a1fc2459edcfe534787a7fc77d4b
   colorize (0.8.1) sha256=0ba0c2a58232f9b706dc30621ea6aa6468eeea120eb6f1ccc400105b90c4798c
   concurrent-ruby (1.3.6) sha256=6b56837e1e7e5292f9864f34b69c5a2cbc75c0cf5338f1ce9903d10fa762d5ab
-  connection_pool (2.5.5) sha256=e54ff92855753df1fd7c59fa04a398833355f27dd14c074f8c83a05f72a716ad
+  connection_pool (3.0.2) sha256=33fff5ba71a12d2aa26cb72b1db8bba2a1a01823559fb01d29eb74c286e62e0a
   cookies_eu (1.7.8) sha256=ed40607d1d79a824c87ffe59855d744cf54ca734e674d585246d4d52cd53e66e
   crack (1.0.1) sha256=ff4a10390cd31d66440b7524eb1841874db86201d5b70032028553130b6d4c7e
   crass (1.0.6) sha256=dc516022a56e7b3b156099abc81b6d2b08ea1ed12676ac7a5657617f012bd45d
@@ -1303,7 +1298,6 @@ CHECKSUMS
   mysql2 (0.5.7) sha256=ba09ede515a0ae8a7192040a1b778c0fb0f025fa5877e9be895cd325fa5e9d7b
   nenv (0.3.0) sha256=d9de6d8fb7072228463bf61843159419c969edb34b3cef51832b516ae7972765
   net-http (0.9.1) sha256=25ba0b67c63e89df626ed8fac771d0ad24ad151a858af2cc8e6a716ca4336996
-  net-http-persistent (4.0.8) sha256=ef3de8319d691537b329053fae3a33195f8b070bbbfae8bf1a58c796081960e6
   net-imap (0.6.2) sha256=08caacad486853c61676cca0c0c47df93db02abc4a8239a8b67eb0981428acc6
   net-pop (0.1.2) sha256=848b4e982013c15b2f0382792268763b748cce91c9e91e36b0f27ed26420dff3
   net-protocol (0.2.2) sha256=aa73e0cba6a125369de9837b8d8ef82a61849360eba0521900e2c3713aa162a8
@@ -1367,7 +1361,7 @@ CHECKSUMS
   recaptcha (5.21.1) sha256=e003e9ceba9b993a9f0c6a828c192f2d46693cd2aa0b0beae94f936649507adb
   redcarpet (3.6.1) sha256=d444910e6aa55480c6bcdc0cdb057626e8a32c054c29e793fa642ba2f155f445
   redis (5.4.1) sha256=b5e675b57ad22b15c9bcc765d5ac26f60b675408af916d31527af9bd5a81faae
-  redis-client (0.26.2) sha256=1336fb5a7202d398b719531853c184b7c9cbdcace1f00f8356062b9dfba6779b
+  redis-client (0.26.4) sha256=3ad70beff5da2653e02dfeae996e7d8d7147a558da12b16b2282ad345e4c7120
   regexp_parser (2.11.3) sha256=ca13f381a173b7a93450e53459075c9b76a10433caadcb2f1180f2c741fc55a4
   reline (0.6.3) sha256=1198b04973565b36ec0f11542ab3f5cfeeec34823f4e54cebde90968092b1835
   representable (3.2.0) sha256=cc29bf7eebc31653586849371a43ffe36c60b54b0a6365b5f7d95ec34d1ebace
@@ -1428,7 +1422,7 @@ CHECKSUMS
   shakapacker (9.5.0) sha256=6b589291210c52641d6881b05b4dbb2fed87dd3083caad2a6fb2af12dc3f39a8
   shellany (0.0.1) sha256=0e127a9132698766d7e752e82cdac8250b6adbd09e6c0a7fbbb6f61964fedee7
   shoryuken (7.0.1) sha256=358572984b0012c57c0273bbeb5e089c1d92452e77e898bc06ffce2bca2bb26d
-  sidekiq (8.0.10) sha256=37ccd8da8d46f6779b8655cb30c1bfcb0decd57e890ff56d8b8252a5d9a84cd6
+  sidekiq (8.1.0) sha256=6bde5eaee9e4d7b1121e97ebd585273627fb32b1f870a47893723572479ad1e4
   sidekiq-cron (2.3.1) sha256=96ab3da372289a30dc744c1daa2ae2e85960b2444a6f6ed68df1ff7882c44aac
   signet (0.21.0) sha256=d617e9fbf24928280d39dcfefba9a0372d1c38187ffffd0a9283957a10a8cd5b
   simple_form (5.4.1) sha256=58c3d229034c7e5545035c3271b6f030ef730c340b9d7d8eb730e0a385b20808
@@ -1474,7 +1468,7 @@ CHECKSUMS
   uri (1.1.1) sha256=379fa58d27ffb1387eaada68c749d1426738bd0f654d812fcc07e7568f5c57c6
   useragent (0.16.11) sha256=700e6413ad4bb954bb63547fa098dddf7b0ebe75b40cc6f93b8d54255b173844
   valid_email (0.2.1) sha256=79b06a7cc67a4aaeac731c940df775c4092623c455667e86d2a706acd3e9604f
-  vault (0.20.0) sha256=7c20581cdcc150ecacfee88d235aef67e8e54ac5404d322976294a00de69cc73
+  vault (0.18.2) sha256=29346c2d8364c19effb548b7a8952bf187545b99b70d1ddde76bd6c69046d27c
   version_gem (1.1.9) sha256=0c1a0962ae543c84a00889bb018d9f14d8f8af6029d26b295d98774e3d2eb9a4
   warden (1.2.9) sha256=46684f885d35a69dbb883deabf85a222c8e427a957804719e143005df7a1efd0
   wca_i18n (0.4.4) sha256=33830f157616a33d10918d4f9e9c1c17e4311731832f19153c3cfcbb51233461
