@@ -18,15 +18,14 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     # We create empty results when a round is open
     live_result = round.live_results.find_by(registration_id: registration_id)
-    result_exists = live_result.present?
 
-    unless result_exists
+    if live_result.blank?
       return render json: { status: "round is not open" }, status: :unprocessable_content unless round.live_results.any?
 
       return render json: { status: "user is not part of this round" }, status: :unprocessable_content
     end
 
-    UpdateLiveResultJob.perform_later(results, live_result.id, @current_user.id)
+    UpdateLiveResultJob.perform_later(live_result, results, @current_user.id)
 
     render json: { status: "ok" }
   end
