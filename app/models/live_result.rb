@@ -6,6 +6,8 @@ class LiveResult < ApplicationRecord
   has_many :live_attempts
   alias_method :attempts, :live_attempts
 
+  after_save :trigger_recompute, if: :should_recompute?
+
   belongs_to :registration
 
   belongs_to :round
@@ -22,8 +24,8 @@ class LiveResult < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[global_pos local_pos registration_id round_id best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
-    methods: %w[event_id result_id],
-    include: %w[live_attempts],
+    methods: %w[event_id attempts result_id],
+    include: %w[],
   }.freeze
 
   def serializable_hash(options = nil)
@@ -70,6 +72,10 @@ class LiveResult < ApplicationRecord
     complete? ? values_for_sorting : best_possible_solve_times
   end
 
+  def should_recompute?
+    saved_change_to_best? || saved_change_to_average?
+  end
+
   def complete?
     live_attempts.where.not(value: 0).count == round.format.expected_solve_count
   end
@@ -105,4 +111,10 @@ class LiveResult < ApplicationRecord
     # Only return if there are actual changes
     diff if diff.except("registration_id").present?
   end
+
+  private
+
+    def trigger_recompute
+      round.recompute_live_columns(skip_advancing: locked?)
+    end
 end

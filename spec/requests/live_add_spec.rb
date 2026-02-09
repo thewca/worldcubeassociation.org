@@ -35,6 +35,26 @@ RSpec.describe "WCA Live API" do
       expect(result.average).to eq 333
     end
 
+    it 'broadcasts diff to ActionCable' do
+      sign_in delegate
+
+      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333")
+      registration = create(:registration, :accepted, competition: competition)
+      round.open_round!
+
+      expect do
+        live_request = {
+          attempts: [{ value: 111, attempt_number: 1 }, { value: 222, attempt_number: 2 }, { value: 333, attempt_number: 3 }, { value: 444, attempt_number: 4 }, { value: 555, attempt_number: 5 }],
+          registration_id: registration.id,
+        }
+
+        post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request
+        perform_enqueued_jobs
+      end.to have_broadcasted_to(Live::Config.broadcast_key(round.wcif_id))
+        .from_channel(ApplicationCable::Channel)
+    end
+
     it "Can't add result if round isn't open yet" do
       sign_in delegate
 

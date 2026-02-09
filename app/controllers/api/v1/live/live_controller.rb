@@ -2,10 +2,11 @@
 
 class Api::V1::Live::LiveController < Api::V1::ApiController
   protect_from_forgery with: :null_session
+
   skip_before_action :require_user, only: %i[round_results by_person podiums]
 
   def add_or_update_result
-    results = params.permit(attempts: %i[value attempt_number])[:attempts]
+    results = params.expect(attempts: [%i[value attempt_number]])
     round_id = params.require(:round_id)
     competition_id = params.require(:competition_id)
     registration_id = params.require(:registration_id)
@@ -17,15 +18,14 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     # We create empty results when a round is open
     live_result = round.live_results.find_by(registration_id: registration_id)
-    result_exists = live_result.present?
 
-    unless result_exists
+    if live_result.blank?
       return render json: { status: "round is not open" }, status: :unprocessable_content unless round.live_results.any?
 
       return render json: { status: "user is not part of this round" }, status: :unprocessable_content
     end
 
-    UpdateLiveResultJob.perform_later(results, live_result.id, @current_user.id)
+    UpdateLiveResultJob.perform_later(live_result, results, @current_user.id)
 
     render json: { status: "ok" }
   end

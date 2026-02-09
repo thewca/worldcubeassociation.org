@@ -51,7 +51,7 @@ class LiveAttempt < ApplicationRecord
     self.live_attempt_history_entries.create(
       value: value,
       entered_at: Time.now.utc,
-      entered_by_id: acting_user_id,
+      entered_by: acting_user_id,
     )
 
     # Return `self` for method chaining

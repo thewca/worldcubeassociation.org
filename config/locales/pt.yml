@@ -2807,6 +2807,11 @@ pt:
         connected: 'Ligado, os resultados estão a ser atualizados.'
         #original_hash: 53abaa2
         disconnected: 'Ligação perdida, os resultados não estão a ser atualizados'
+      podiums:
+        #original_hash: 02ae2bd
+        title: Pódios
+        #original_hash: d7297a7
+        undetermined: Pódios a determinar
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
@@ -5160,12 +5165,12 @@ pt:
   about:
     #original_hash: 9ac918a
     title: Sobre a WCA
-    #original_hash: af00571
+    #original_hash: ee35764
     mission_statement: >-
-      A nossa missão é ter mais competições em mais países com mais pessoas e
-      mais divertimento, sob condições justas e semelhantes.
-    #original_hash: e627278
-    mission_footer: Declaração da Missão da WCA
+      O nosso Propósito é fortalecer a comunidade global de speedcubing e manter
+      um ambiente competitivo, divertido e justo para todos.
+    #original_hash: 5bed828
+    mission_footer: Declaração do Propósito da WCA
     #original_hash: cdab446
     who_we_are_title: Quem somos
     #original_hash: 303f17a

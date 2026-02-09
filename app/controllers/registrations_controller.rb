@@ -627,14 +627,19 @@ class RegistrationsController < ApplicationController
     return render status: :bad_request, json: { error: :refund_amount_too_high } if amount_left.negative?
     return render status: :bad_request, json: { error: :refund_amount_too_low } if refund_amount.negative?
 
-    refund_receipt = payment_account.issue_refund(payment_record, refund_amount)
-
-    # Should be the same as `refund_amount`, but by double-converting from the Payment Gateway object
-    # we can also double-check that they're on the same page as we are (to be _really_ sure!)
-    ruby_money = refund_receipt.money_amount
-    original_payment = payment_record.registration_payment
-
     registration.with_lock do
+      # It is crucial that we enter the `with_lock` first, and _then_ start
+      #   triggering stuff in the Stripe API. Otherwise, in some rare cases,
+      #   the async webhooks (another controller route above) can kick in
+      #   *very fast* and obtain the lock between "Stripe API refund issued"
+      #   and "local lock here in this method obtained", leading to duplicates.
+      refund_receipt = payment_account.issue_refund(payment_record, refund_amount)
+
+      # Should be the same as `refund_amount`, but by double-converting from the Payment Gateway object
+      # we can also double-check that they're on the same page as we are (to be _really_ sure!)
+      ruby_money = refund_receipt.money_amount
+      original_payment = payment_record.registration_payment
+
       already_refunded = original_payment.refunding_registration_payments.where(receipt: refund_receipt).any?
 
       unless already_refunded

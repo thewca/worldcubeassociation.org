@@ -4,9 +4,7 @@ class UpdateLiveResultJob < ApplicationJob
   self.queue_adapter = :shoryuken if Live::Config.sqs_queued?
   queue_as EnvConfig.LIVE_QUEUE if Live::Config.sqs_queued?
 
-  def perform(results, live_result_id, entered_by_id)
-    live_result = LiveResult.find(live_result_id)
-
+  def perform(live_result, results, entered_by_id)
     previous_attempts = live_result.live_attempts.index_by(&:attempt_number)
 
     new_attempts = results.map do |r|
@@ -23,7 +21,7 @@ class UpdateLiveResultJob < ApplicationJob
       end
     end
 
-    round = Round.find(live_result.round_id)
+    round = live_result.round
 
     # We need the state before the result is updated
     before_state = round.to_live_state
@@ -31,8 +29,6 @@ class UpdateLiveResultJob < ApplicationJob
     average, best = LiveResult.compute_average_and_best(new_attempts, round)
 
     live_result.update!(live_attempts: new_attempts, best: best, average: average, last_attempt_entered_at: Time.now.utc)
-
-    round.recompute_live_columns(skip_advancing: false) # round.locked? from the other PR
 
     after_state = round.to_live_state
     diff = Live::DiffHelper.round_state_diff(before_state, after_state)
