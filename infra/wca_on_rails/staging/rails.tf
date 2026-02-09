@@ -149,10 +149,10 @@ locals {
     { # The PHPMyAdmin Docker file allows us to pass the user config as a base 64 encoded environment variable
       name = "PMA_USER_CONFIG_BASE64"
       value = base64encode(templatefile("../templates/config.user.inc.php.tftpl",
-        { rds_host: "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
-          rds_replica_host: "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
-          # There is no dump replica on staging
-          dump_replica_host: "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"}))
+        { rds_host: "staging-v2-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
+          # There is no read only or dump replica on staging
+          rds_replica_host: "staging-v2-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
+          dump_replica_host: "staging-v2-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"}))
     }
   ]
 }
