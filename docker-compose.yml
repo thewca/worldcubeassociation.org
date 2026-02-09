@@ -21,6 +21,7 @@ x-app: &app
 x-app-environment: &appEnv
   <<: *env
   SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
+  ACTIONCABLE_REDIS_URL: redis://wca_redis:6379/2
   MAILCATCHER_SMTP_HOST: wca_mailcatcher
 
 services:
