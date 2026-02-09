@@ -3,6 +3,8 @@
 require 'rails_helper'
 require 'rake'
 
+return unless Rails.env.development?
+
 RSpec.describe "import:h2h_data", type: :task do
   before(:all) do
     Rake.application.rake_require "tasks/h2h_results_import"
