@@ -6,7 +6,7 @@ module ResultsHelper
     # rubocop:disable Performance/Sum
     if result.format_id == "h"
       # 5 blank spaces as we don't display H2H results yet
-      5.times.map do
+      Array.new(5) do
         content_tag :td
       end.join.html_safe
     else
