@@ -171,10 +171,6 @@ RSpec.describe PV do
                                      event_id: "333oh",
                                      round: round_333_oh)
         res_bad_parenthesis.person.update(name: "Bad Parenthesis Guy（test）")
-        res_special_chars = create(:inbox_result,
-                                   competition: competition1,
-                                   event_id: "333oh",
-                                   round: round_333_oh)
         res_special_chars1 = create(:inbox_result,
                                     competition: competition1,
                                     event_id: "333oh",
