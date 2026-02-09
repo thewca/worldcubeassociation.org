@@ -27,8 +27,6 @@ RSpec.describe "WCA Live API" do
           create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
         end
 
-        round.recompute_live_columns
-
         expect(round.total_competitors).to eq 5
         expect(round.competitors_live_results_entered).to eq 5
 
@@ -44,8 +42,6 @@ RSpec.describe "WCA Live API" do
           create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
         end
 
-        round.recompute_live_columns
-
         expect(round.total_competitors).to eq 5
         expect(round.competitors_live_results_entered).to eq 5
 
@@ -59,8 +55,6 @@ RSpec.describe "WCA Live API" do
         5.times do |i|
           create(:live_result, registration: registrations[i], round: round, best: (i + 1) * 100, average: 300)
         end
-
-        round.recompute_live_columns
 
         expect(round.total_competitors).to eq 5
         expect(round.competitors_live_results_entered).to eq 5
@@ -78,8 +72,6 @@ RSpec.describe "WCA Live API" do
 
         create(:live_result, registration: registrations[4], round: round, average: -1)
 
-        round.recompute_live_columns
-
         expect(round.total_competitors).to eq 5
         expect(round.competitors_live_results_entered).to eq 5
 
@@ -96,8 +88,6 @@ RSpec.describe "WCA Live API" do
 
         create(:live_result, registration: registrations[4], round: round, average: -2)
 
-        round.recompute_live_columns
-
         expect(round.total_competitors).to eq 5
         expect(round.competitors_live_results_entered).to eq 5
 
@@ -113,8 +103,6 @@ RSpec.describe "WCA Live API" do
         5.times do |i|
           create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
         end
-
-        round.recompute_live_columns
 
         expect(round.total_competitors).to eq 5
         expect(round.competitors_live_results_entered).to eq 5
@@ -135,13 +123,9 @@ RSpec.describe "WCA Live API" do
         expect(round.total_competitors).to eq 5
         expect(round.competitors_live_results_entered).to eq 5
 
-        round.recompute_live_columns
-
         round.lock_results(User.first)
         # Update best/average after locking
         round.live_results.last.update(average: 50)
-
-        round.recompute_live_columns(skip_advancing: true)
 
         # Advancing is not updated, but ranking is
         expect(round.live_results.pluck(:global_pos, :advancing)).to eq([[1, false], [2, true], [3, true], [4, false], [5, false]])
@@ -159,8 +143,6 @@ RSpec.describe "WCA Live API" do
         # Quit Competitor
         round.quit_from_round!(registration_1.id, User.first)
 
-        round.recompute_live_columns
-
         # Quit users is not part of the rounds competitors
         expect(round.live_competitors.count).to eq 4
         expect(round.live_competitors.pluck(:registration_id)).not_to include registrations.first.id
@@ -173,8 +155,6 @@ RSpec.describe "WCA Live API" do
         5.times do |i|
           create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
         end
-
-        round.recompute_live_columns
 
         expect(round.total_competitors).to eq 5
         expect(round.competitors_live_results_entered).to eq 5

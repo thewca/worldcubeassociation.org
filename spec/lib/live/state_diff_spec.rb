@@ -23,8 +23,6 @@ RSpec.describe Live::DiffHelper do
       average, best = LiveResult.compute_average_and_best(attempts, round)
       result.update!(live_attempts: attempts, best: best, average: average)
 
-      round.recompute_live_columns
-
       round.live_results.reload
       after_state = round.to_live_state
 
@@ -58,8 +56,6 @@ RSpec.describe Live::DiffHelper do
       average, best = LiveResult.compute_average_and_best(attempts, round)
       result.update!(live_attempts: attempts, best: best, average: average)
 
-      round.recompute_live_columns
-
       before_state = round.to_live_state
       result_2 = round.live_results.find_by!(registration_id: registration_2.id)
 
@@ -68,8 +64,6 @@ RSpec.describe Live::DiffHelper do
       end
       average, best = LiveResult.compute_average_and_best(attempts_2, round)
       result_2.update!(live_attempts: attempts_2, best: best, average: average)
-
-      round.recompute_live_columns
 
       round.live_results.reload
       after_state = round.to_live_state
