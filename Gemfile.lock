@@ -868,7 +868,7 @@ GEM
     snaky_hash (2.0.3)
       hashie (>= 0.1.0, < 6)
       version_gem (>= 1.1.8, < 3)
-    spring (4.4.0)
+    spring (4.4.2)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
     sprockets (4.2.1)
@@ -1438,7 +1438,7 @@ CHECKSUMS
   simpleidn (0.2.1) sha256=35dda985b761dff5751fefa7fba02e477427c975d47b11c4c4ffaf01afe1c719
   slack-ruby-client (3.1.0) sha256=8198cefb065e6c48fd5c62fb84846c8ee23364aea62d4750be9430f81647e172
   snaky_hash (2.0.3) sha256=25a3d299566e8153fb02fa23fd9a9358845950f7a523ddbbe1fa1e0d79a6d456
-  spring (4.4.0) sha256=ec4e6cf5fb48d96b9ec9a80ebb40f962f2467b651c000693f33c14b6d6c340af
+  spring (4.4.2) sha256=22f61bacd8dc8595cedcdc738de46d7fc18be4d7a770986760344c924f485ce7
   spring-commands-rspec (1.0.4) sha256=6202e54fa4767452e3641461a83347645af478bf45dddcca9737b43af0dd1a2c
   sprockets (4.2.1) sha256=951b13dd2f2fcae840a7184722689a803e0ff9d2702d902bd844b196da773f97
   sprockets-rails (3.5.2) sha256=a9e88e6ce9f8c912d349aa5401509165ec42326baf9e942a85de4b76dbc4119e
