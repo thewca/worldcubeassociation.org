@@ -115,6 +115,8 @@ class LiveResult < ApplicationRecord
   private
 
     def trigger_recompute_and_notify
+      return if format.id == "h"
+
       before_state = round.to_live_state
 
       round.recompute_live_columns(skip_advancing: locked?)
