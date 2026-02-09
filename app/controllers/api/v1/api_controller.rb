@@ -34,7 +34,7 @@ class Api::V1::ApiController < ApplicationController
     render json: { error: e.to_s, data: { model: e.model, id: e.id } }, status: :not_found
   end
 
-  rescue_from WcaExceptions::NotPermitted do |e|
-    render json: { status: e.error_details }, status: e.status
+  rescue_from WcaExceptions::ApiException do |e|
+    render status: e.status, json: { error: e.to_s }.reverse_merge(e.error_details.compact)
   end
 end

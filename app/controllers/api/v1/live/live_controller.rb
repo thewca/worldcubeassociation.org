@@ -13,7 +13,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     render json: round.to_live_json
   end
 
-  def admin
+  def rounds
     competition = Competition.find(params.require(:competition_id))
     require_manage!(competition)
 

@@ -38,7 +38,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/competitions/{competitionId}/live/admin": {
+    "/v1/competitions/{competitionId}/live/rounds": {
         parameters: {
             query?: never;
             header?: never;

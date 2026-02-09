@@ -192,8 +192,10 @@ class Round < ApplicationRecord
   end
 
   def clear_round!
-    live_results.destroy_all
-    open_round!
+    self.transaction do
+      live_results.destroy_all
+      open_round!
+    end
   end
 
   def open_round!
@@ -401,7 +403,7 @@ class Round < ApplicationRecord
   end
 
   def locked?
-    live_results.locked == total_competitors
+    score_taking_done? && live_results.locked.count == total_competitors
   end
 
   def first_round?
