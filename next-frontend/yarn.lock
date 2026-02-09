@@ -1656,9 +1656,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@chakra-ui/cli@npm:^3.31.0":
-  version: 3.31.0
-  resolution: "@chakra-ui/cli@npm:3.31.0"
+"@chakra-ui/cli@npm:^3.32.0":
+  version: 3.32.0
+  resolution: "@chakra-ui/cli@npm:3.32.0"
   dependencies:
     "@babel/core": "npm:^7.26.0"
     "@babel/parser": "npm:^7.26.0"
@@ -1688,13 +1688,13 @@ __metadata:
     "@chakra-ui/react": ">=3.0.0-next.0"
   bin:
     chakra: bin/index.js
-  checksum: 10c0/ed3a6901bfb15d916c66d67eac38ee0a76d8dba28cb5a07b56584a106fa6c325ef8baa81805de895fa1681f81757284a5eb5845a52df11461b2f1d4c8f4de023
+  checksum: 10c0/460319526ca35ddc961469b41f7a1929ea01887f309ac27be44ce7ab263230110e56b72b75a332903a3994a04c3263a20545a579f929d27451e3f945bd5b3ead
   languageName: node
   linkType: hard
 
-"@chakra-ui/react@npm:^3.31.0":
-  version: 3.31.0
-  resolution: "@chakra-ui/react@npm:3.31.0"
+"@chakra-ui/react@npm:^3.32.0":
+  version: 3.32.0
+  resolution: "@chakra-ui/react@npm:3.32.0"
   dependencies:
     "@ark-ui/react": "npm:^5.29.1"
     "@emotion/is-prop-valid": "npm:^1.4.0"
@@ -1707,7 +1707,7 @@ __metadata:
     "@emotion/react": ">=11"
     react: ">=18"
     react-dom: ">=18"
-  checksum: 10c0/fccc8ee864e0b9feccf8c3c2f8d20d40df82e3a119f040bc7cb28c35567b21fc4873933469bf66315a48b9531e0305b9c2b8f59214c13c50eb5c14b30bb730e6
+  checksum: 10c0/2ba7fed3ad04becc9fda39877ce86f643238575aa5db48b55494ab52d904b146aa1aa013bc51830d15b51b13eba1b094bd60ab0a9de2e826f831f4d5bec45145
   languageName: node
   linkType: hard
 
@@ -12868,8 +12868,8 @@ __metadata:
   resolution: "next-frontend@workspace:."
   dependencies:
     "@aws-sdk/credential-providers": "npm:^3.980.0"
-    "@chakra-ui/cli": "npm:^3.31.0"
-    "@chakra-ui/react": "npm:^3.31.0"
+    "@chakra-ui/cli": "npm:^3.32.0"
+    "@chakra-ui/react": "npm:^3.32.0"
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
     "@fullcalendar/core": "npm:^6.1.20"
