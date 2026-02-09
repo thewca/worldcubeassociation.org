@@ -232,10 +232,10 @@ GEM
     devise-i18n (1.15.0)
       devise (>= 4.9.0)
       rails-i18n
-    devise-two-factor (6.3.1)
-      activesupport (>= 7.0, < 8.2)
-      devise (>= 4.0, < 5.0)
-      railties (>= 7.0, < 8.2)
+    devise-two-factor (6.4.0)
+      activesupport (>= 7.2, < 8.2)
+      devise (>= 4.0, < 6.0)
+      railties (>= 7.2, < 8.2)
       rotp (~> 6.0)
     diff-lcs (1.6.2)
     docile (1.4.0)
@@ -422,7 +422,7 @@ GEM
     jmespath (1.6.2)
     js_cookie_rails (2.2.0)
       railties (>= 3.1)
-    json (2.18.0)
+    json (2.18.1)
     json-schema (6.1.0)
       addressable (~> 2.8)
       bigdecimal (>= 3.1, < 5)
@@ -1181,7 +1181,7 @@ CHECKSUMS
   devise (4.9.4) sha256=920042fe5e704c548aa4eb65ebdd65980b83ffae67feb32c697206bfd975a7f8
   devise-bootstrap-views (1.1.0) sha256=50a39af0656676eabea5d0eacfe74cb5016c25e20f38f333bfdac641f66d3335
   devise-i18n (1.15.0) sha256=aff406e8a2941cd1d7614643b1619031a403b2855bb6057e391d1c7c273205cd
-  devise-two-factor (6.3.1) sha256=ac0a264499490e4a26d169acd3146a1214adc6b873fc3602752bef013eeaf957
+  devise-two-factor (6.4.0) sha256=09e3a23b5b9ae7da78881d238a89860454d9e2ba0912e175576e9c028757adb4
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
   docile (1.4.0) sha256=5f1734bde23721245c20c3d723e76c104208e1aa01277a69901ce770f0ebb8d3
   domain_name (0.5.20190701) sha256=000a600454cb4a344769b2f10b531765ea7bd3a304fe47ed12e5ca1eab969851
@@ -1265,7 +1265,7 @@ CHECKSUMS
   jbuilder (2.14.1) sha256=4eb26376ff60ef100cb4fd6fd7533cd271f9998327e86adf20fd8c0e69fabb42
   jmespath (1.6.2) sha256=238d774a58723d6c090494c8879b5e9918c19485f7e840f2c1c7532cf84ebcb1
   js_cookie_rails (2.2.0) sha256=06e6b27ee093945c3acf3982d2dbf9e9117d1130f33bb07e1660ebea68229c62
-  json (2.18.0) sha256=b10506aee4183f5cf49e0efc48073d7b75843ce3782c68dbeb763351c08fd505
+  json (2.18.1) sha256=fe112755501b8d0466b5ada6cf50c8c3f41e897fa128ac5d263ec09eedc9f986
   json-schema (6.1.0) sha256=6bf70a2cfb6dfd5a06da28093fa8190f324c88eabd36a7f47097f227321dc702
   jwt (3.1.2) sha256=af6991f19a6bb4060d618d9add7a66f0eeb005ac0bc017cd01f63b42e122d535
   kaminari (1.2.2) sha256=c4076ff9adccc6109408333f87b5c4abbda5e39dc464bd4c66d06d9f73442a3e
