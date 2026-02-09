@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class ContactsController < ApplicationController
-  private def maybe_send_contact_email(contact, force_locale: :en)
+  CONTACT_DEFAULT_LOCALE = :en
+
+  private def maybe_send_contact_email(contact, force_locale: nil)
     if !contact.valid?
       render status: :bad_request, json: { error: "Invalid contact object created" }
     elsif force_locale ? I18n.with_locale(force_locale) { contact.deliver } : contact.deliver
@@ -21,7 +23,6 @@ class ContactsController < ApplicationController
         request: request,
         logged_in_email: current_user&.email || 'None',
       ),
-      force_locale: nil,
     )
   end
 
@@ -34,6 +35,7 @@ class ContactsController < ApplicationController
         request: request,
         logged_in_email: current_user&.email || 'None',
       ),
+      force_locale: CONTACT_DEFAULT_LOCALE,
     )
   end
 
@@ -49,6 +51,7 @@ class ContactsController < ApplicationController
         request: request,
         logged_in_email: current_user&.email || 'None',
       ),
+      force_locale: CONTACT_DEFAULT_LOCALE,
     )
   end
 
@@ -62,6 +65,7 @@ class ContactsController < ApplicationController
         request: request,
         logged_in_email: current_user&.email || 'None',
       ),
+      force_locale: CONTACT_DEFAULT_LOCALE,
     )
   end
 
@@ -165,6 +169,7 @@ class ContactsController < ApplicationController
         document: attachment,
         request: request,
       ),
+      force_locale: CONTACT_DEFAULT_LOCALE,
     )
   end
 
@@ -177,10 +182,10 @@ class ContactsController < ApplicationController
     @contact.request = request
     @contact.to_email = "results@worldcubeassociation.org"
     @contact.subject = "WCA DOB change request by #{@contact.name}"
-    maybe_send_dob_email success_url: contact_dob_url, fail_view: :dob
+    maybe_send_dob_email success_url: contact_dob_url, fail_view: :dob, force_locale: CONTACT_DEFAULT_LOCALE
   end
 
-  private def maybe_send_dob_email(success_url: nil, fail_view: nil, force_locale: :en)
+  private def maybe_send_dob_email(success_url: nil, fail_view: nil, force_locale: nil)
     if !@contact.valid?
       render fail_view
     elsif !verify_recaptcha
