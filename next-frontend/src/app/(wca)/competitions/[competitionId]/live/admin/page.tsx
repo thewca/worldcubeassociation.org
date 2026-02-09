@@ -35,7 +35,7 @@ export default async function LiveOverview({
   const client = serverClientWithToken(session.accessToken);
 
   const { error, data, response } = await client.GET(
-    "/v1/competitions/{competitionId}/live/admin",
+    "/v1/competitions/{competitionId}/live/rounds",
     { params: { path: { competitionId } } },
   );
 
