@@ -27,10 +27,10 @@ RSpec.describe "WCA Live API" do
       expect(result).to be_present
 
       expect(result.live_attempts.map { |l| { attempt_number: l.attempt_number, value: l.value } }).to contain_exactly({ attempt_number: 1, value: 111 },
-                                                                                                                         { attempt_number: 2, value: 222 },
-                                                                                                                         { attempt_number: 3, value: 333 },
-                                                                                                                         { attempt_number: 4, value: 444 },
-                                                                                                                         { attempt_number: 5, value: 555 })
+                                                                                                                       { attempt_number: 2, value: 222 },
+                                                                                                                       { attempt_number: 3, value: 333 },
+                                                                                                                       { attempt_number: 4, value: 444 },
+                                                                                                                       { attempt_number: 5, value: 555 })
       expect(result.best).to eq 111
       expect(result.average).to eq 333
     end
