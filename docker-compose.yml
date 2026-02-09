@@ -173,8 +173,8 @@ services:
   wca_redis:
     image: redis:7.0-alpine
     container_name: "redis-main"
-    expose:
-      - "6379"
+    ports:
+      - "6379:6379"
     command: redis-server --loglevel warning
     volumes:
       - cache_volume:/data
