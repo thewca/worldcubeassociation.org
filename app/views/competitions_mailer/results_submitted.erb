@@ -18,7 +18,7 @@
     The competition results had no warning.
   <% else %>
     Please find below the list of warnings for the competition's results:
-    <% @results_validator.group_by(&:kind).each do |type, warnings| %>
+    <% @results_validator.warnings.group_by(&:kind).each do |type, warnings| %>
       <% if warnings.any? %>
         <br/>Warnings detected in <%= type %>
         <ul>
