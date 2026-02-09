@@ -6,8 +6,6 @@ class LiveResult < ApplicationRecord
   has_many :live_attempts
   alias_method :attempts, :live_attempts
 
-  after_save :trigger_recompute_and_notify, if: :should_recompute?
-
   belongs_to :registration
 
   belongs_to :round
@@ -72,10 +70,6 @@ class LiveResult < ApplicationRecord
     complete? ? values_for_sorting : best_possible_solve_times
   end
 
-  def should_recompute?
-    saved_change_to_best? || saved_change_to_average?
-  end
-
   def complete?
     live_attempts.where.not(value: 0).count == round.format.expected_solve_count
   end
@@ -111,16 +105,4 @@ class LiveResult < ApplicationRecord
     # Only return if there are actual changes
     diff if diff.except("registration_id").present?
   end
-
-  private
-
-    def trigger_recompute_and_notify
-      before_state = round.to_live_state
-
-      round.recompute_live_columns(skip_advancing: locked?)
-
-      after_state = round.to_live_state
-      diff = Live::DiffHelper.round_state_diff(before_state, after_state)
-      ActionCable.server.broadcast(Live::Config.broadcast_key(round_id), diff)
-    end
 end
