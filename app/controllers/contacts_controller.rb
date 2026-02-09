@@ -6,7 +6,7 @@ class ContactsController < ApplicationController
   private def maybe_send_contact_email(contact, force_locale: nil)
     if !contact.valid?
       render status: :bad_request, json: { error: "Invalid contact object created" }
-    elsif force_locale ? I18n.with_locale(force_locale) { contact.deliver } : contact.deliver
+    elsif I18n.with_locale(force_locale) { contact.deliver }
       render status: :ok, json: { message: "Mail sent successfully" }
     else
       render status: :internal_server_error, json: { error: "Mail delivery failed" }
@@ -192,7 +192,7 @@ class ContactsController < ApplicationController
       # Convert flash to a flash.now, since we're about to render, not redirect.
       flash.now[:recaptcha_error] = flash[:recaptcha_error]
       render fail_view
-    elsif force_locale ? I18n.with_locale(force_locale) { @contact.deliver } : @contact.deliver
+    elsif I18n.with_locale(force_locale) { @contact.deliver }
       flash[:success] = I18n.t('contacts.messages.success')
       redirect_to success_url
     else
