@@ -10,14 +10,14 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     round = Round.find_by_wcif_id!(wcif_id, competition_id)
 
-    render json: round.to_live_json
+    render json: round.to_live_results_json
   end
 
   def rounds
     competition = Competition.find(params.require(:competition_id))
     require_manage!(competition)
 
-    render json: { rounds: competition.rounds.map(&:to_live_admin_json) }
+    render json: { rounds: competition.rounds.map(&:to_live_info_json) }
   end
 
   def by_person
@@ -37,7 +37,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     competition = Competition.find(params.require(:competition_id))
     final_rounds = competition.rounds.includes(live_results: %i[live_attempts round event]).select(&:final_round?)
 
-    render json: final_rounds.map { |r| r.to_live_json(only_podiums: true) }
+    render json: final_rounds.map { |r| r.to_live_results_json(only_podiums: true) }
   end
 
   def clear_round

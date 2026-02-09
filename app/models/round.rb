@@ -459,7 +459,7 @@ class Round < ApplicationRecord
     }
   end
 
-  def to_live_json(only_podiums: false)
+  def to_live_results_json(only_podiums: false)
     {
       **self.to_wcif,
       "round_id" => id,
@@ -469,7 +469,7 @@ class Round < ApplicationRecord
     }
   end
 
-  def to_live_admin_json
+  def to_live_info_json
     state = lifecycle_state
     json = {
       **self.to_wcif,
