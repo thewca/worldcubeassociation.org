@@ -12930,7 +12930,7 @@ __metadata:
     nextjs-routes: "npm:^2.2.5"
     node-vault: "npm:^0.10.9"
     openapi-fetch: "npm:^0.16.0"
-    openapi-react-query: "npm:^0.5.1"
+    openapi-react-query: "npm:^0.5.3"
     openapi-typescript: "npm:^7.10.1"
     payload: "npm:3.74.0"
     payload-authjs: "npm:^0.10.0"
@@ -13375,15 +13375,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openapi-react-query@npm:^0.5.1":
-  version: 0.5.1
-  resolution: "openapi-react-query@npm:0.5.1"
+"openapi-react-query@npm:^0.5.3":
+  version: 0.5.3
+  resolution: "openapi-react-query@npm:0.5.3"
   dependencies:
     openapi-typescript-helpers: "npm:^0.0.15"
   peerDependencies:
     "@tanstack/react-query": ^5.80.0
-    openapi-fetch: ^0.15.0
-  checksum: 10c0/23701d4e40fbd09ed6e848b075aec96f12a172bacc93b67b81c5e461f4e30e3889defb48d2c52d9c03471aceb73b5291b1c3756ede4fce11ab27e6237d9c8f53
+    openapi-fetch: ^0.16.0
+  checksum: 10c0/5b177c4217b314624be822a820eee56166a8226124ebb1b12dfe865bbdda8efcc8870e421d8df8fc950939674440a09a58117d3d92cf08a0aab29f54a1583ce1
   languageName: node
   linkType: hard
 
