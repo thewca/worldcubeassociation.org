@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "WCA Live API" do
-  describe "POST #add_result" do
+  describe "POST #add_or_update_result" do
     let!(:delegate) { create(:delegate) }
 
     it "Adds the Live Result Correctly" do
@@ -15,11 +15,11 @@ RSpec.describe "WCA Live API" do
       round.open_round!
 
       live_request = {
-        attempts: [111, 222, 333, 444, 555],
+        attempts: [{ value: 111, attempt_number: 1 }, { value: 222, attempt_number: 2 }, { value: 333, attempt_number: 3 }, { value: 444, attempt_number: 4 }, { value: 555, attempt_number: 5 }],
         registration_id: registration.id,
       }
 
-      post add_live_result_path(competition.id, round.id), params: live_request
+      post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request
       expect(response).to be_successful
       perform_enqueued_jobs
 
@@ -43,11 +43,11 @@ RSpec.describe "WCA Live API" do
       registration = create(:registration, :accepted, competition: competition)
 
       live_request = {
-        attempts: [111, 222, 333, 444, 555],
+        attempts: [{ value: 111, attempt_number: 1 }, { value: 222, attempt_number: 2 }, { value: 333, attempt_number: 3 }, { value: 444, attempt_number: 4 }, { value: 555, attempt_number: 5 }],
         registration_id: registration.id,
       }
 
-      post add_live_result_path(competition.id, round.id), params: live_request
+      post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request
       expect(response).not_to be_successful
     end
 
@@ -61,11 +61,11 @@ RSpec.describe "WCA Live API" do
       round.open_round!
 
       live_request = {
-        attempts: [111, 222, 333, 444, 555],
+        attempts: [{ value: 111, attempt_number: 1 }, { value: 222, attempt_number: 2 }, { value: 333, attempt_number: 3 }, { value: 444, attempt_number: 4 }, { value: 555, attempt_number: 5 }],
         registration_id: registration.id,
       }
 
-      post add_live_result_path(competition.id, round.id), params: live_request
+      post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request
       expect(response).not_to be_successful
       expect(response.parsed_body["status"]).to eq "user is not part of this round"
     end
