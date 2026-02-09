@@ -6,7 +6,7 @@ class LiveResult < ApplicationRecord
   has_many :live_attempts
   alias_method :attempts, :live_attempts
 
-  after_save :trigger_recompute_and_notify, if: :should_recompute?
+  after_save :trigger_recompute, if: :should_recompute?
 
   belongs_to :registration
 
@@ -114,13 +114,7 @@ class LiveResult < ApplicationRecord
 
   private
 
-    def trigger_recompute_and_notify
-      before_state = round.to_live_state
-
+    def trigger_recompute
       round.recompute_live_columns(skip_advancing: locked?)
-
-      after_state = round.to_live_state
-      diff = Live::DiffHelper.round_state_diff(before_state, after_state)
-      ActionCable.server.broadcast(Live::Config.broadcast_key(round_id), diff)
     end
 end
