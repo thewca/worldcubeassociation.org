@@ -67,7 +67,6 @@ module CompetitionsHelper
     winners = results_by_place[1]
     text = if h2h_finals
              t('competitions.competition_info.h2h_winner', winner: people_to_sentence(winners),
-                                                           result_sentence: pretty_print_result(winners.first),
                                                            event_name: main_event.name)
            else
              t('competitions.competition_info.winner', winner: people_to_sentence(winners),
