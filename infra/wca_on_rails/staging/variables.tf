@@ -56,7 +56,7 @@ variable "rails_startup_time" {
 variable "rds_iam_identifier" {
   type = string
   description = "The identifier of the RDS Instance used for IAM Auth"
-  default = "db-GEOER6N45337C3ZMAYEL2WBAOY"
+  default = "db-PRC5ADGNMAABH5YKYYJWEEJBUI"
 }
 
 variable "WCA_REGISTRATIONS_URL" {
