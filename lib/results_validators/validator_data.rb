@@ -30,10 +30,10 @@ module ResultsValidators
     def self.from_results(validator, results, check_real_results)
       results.group_by(&:competition_id)
              .map do |competition_id, comp_results|
-        competition_scope = self.load_competition_includes(validator, check_real_results: check_real_results)
-        model_competition = competition_scope.find(competition_id)
+               competition_scope = self.load_competition_includes(validator, check_real_results: check_real_results)
+               model_competition = competition_scope.find(competition_id)
 
-        self.load_data(validator, model_competition, comp_results, check_real_results: check_real_results)
+               self.load_data(validator, model_competition, comp_results, check_real_results: check_real_results)
       end
     end
 
