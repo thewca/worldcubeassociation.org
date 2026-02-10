@@ -7,13 +7,12 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
   def add_or_update_result
     results = params.expect(attempts: [%i[value attempt_number]])
     round_id = params.require(:round_id)
-    competition_id = params.require(:competition_id)
+    competition = Competition.find(params.require(:competition_id))
     registration_id = params.require(:registration_id)
 
-    round = Round.find_by_wcif_id!(round_id, competition_id)
+    round = Round.find_by_wcif_id!(round_id, competition.id)
 
-    # TODO: add require_managed! from round admin PR
-    require_user
+    require_manage!(competition)
 
     # We create empty results when a round is open
     live_result = round.live_results.find_by(registration_id: registration_id)
