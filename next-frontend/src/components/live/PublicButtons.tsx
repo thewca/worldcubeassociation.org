@@ -30,20 +30,22 @@ export default function PublicButtons({
       </Button>
       <Button asChild>
         <ClientOnly>
-          <PDFDownloadLink
-            document={
-              <ResultsPDF
-                competitionId={competitionId}
-                roundId={roundId}
-                results={results}
-                formatId={formatId}
-                competitors={competitors}
-              />
-            }
-            fileName="results.pdf"
-          >
-            <LuPrinter />
-          </PDFDownloadLink>
+          <Button asChild>
+            <PDFDownloadLink
+              document={
+                <ResultsPDF
+                  competitionId={competitionId}
+                  roundId={roundId}
+                  results={results}
+                  formatId={formatId}
+                  competitors={competitors}
+                />
+              }
+              fileName="results.pdf"
+            >
+              <LuPrinter />
+            </PDFDownloadLink>
+          </Button>
         </ClientOnly>
       </Button>
       <Button asChild>
