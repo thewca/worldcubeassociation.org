@@ -9,7 +9,7 @@ export default function BannedCompetitors({
   canEditBannedCompetitors,
   editBannedCompetitor,
 }) {
-  const pagination = usePagination(25);
+  const pagination = usePagination(50);
   const { entriesPerPage, activePage } = pagination;
   const paginatedRoles = bannedCompetitorRoles.slice(
     (activePage - 1) * entriesPerPage,
