@@ -33,7 +33,7 @@ class ComputePotentialDuplicates < ApplicationJob
       case algorithm.to_sym
       when :jarowinkler
         similar_persons = FinishUnfinishedPersons.compute_similar_persons(user.name, user.country.id, persons_cache)
-        similar_persons.to_h { |person, name_similarity, _country_similarity| [person.id, name_similarity * 100] }
+        similar_persons.map { |person, name_similarity, _country_similarity| [person.id, name_similarity * 100] }
       when :exact_first_last_dob
         find_exact_first_last_dob_matches(user, persons_cache)
       else
@@ -42,38 +42,29 @@ class ComputePotentialDuplicates < ApplicationJob
     end
 
     def find_exact_first_last_dob_matches(user, persons_cache)
-      return {} if user.dob.blank?
+      return [] if user.dob.blank?
 
       user_first_name, user_last_name = extract_first_last_name(user.name)
-      return {} if user_first_name.blank? || user_last_name.blank?
+      return [] if user_first_name.blank? || user_last_name.blank?
 
-      matches = {}
-
-      persons_cache.each do |person|
-        next if person.dob.blank? || person.dob != user.dob
+      persons_cache.filter do |person|
+        next false if person.dob.blank? || person.dob != user.dob
 
         person_first_name, person_last_name = extract_first_last_name(person.name)
-        next if person_first_name.blank? || person_last_name.blank?
+        next false if person_first_name.blank? || person_last_name.blank?
 
-        matches[person.id] = 100 if user_first_name.casecmp?(person_first_name) && user_last_name.casecmp?(person_last_name)
-      end
-
-      matches
+        user_first_name.casecmp?(person_first_name) && user_last_name.casecmp?(person_last_name)
+      end.map { |person| [person.id, 100] }
     end
 
     def extract_first_last_name(full_name)
       roman_name = FinishUnfinishedPersons.extract_roman_name(full_name)
       sanitized_name = FinishUnfinishedPersons.remove_accents(roman_name)
-      name_parts = sanitized_name.gsub(/[^a-zA-Z ]/, '').split
+
+      name_parts = sanitized_name.split.take_while { !FinishUnfinishedPersons::GENERATIONAL_SUFFIXES.include?(_1.upcase) }
 
       return [nil, nil] if name_parts.length < 2
 
-      last_name_index = FinishUnfinishedPersons::GENERATIONAL_SUFFIXES.include?(name_parts[-1].upcase) ? -2 : -1
-      return [nil, nil] if last_name_index == -2 && name_parts.length < 3
-
-      last_name = name_parts[last_name_index]
-      first_name = name_parts.first
-
-      [first_name, last_name]
+      [name_parts.first, name_parts.last]
     end
 end
