@@ -90,6 +90,11 @@ type Stat = {
   field: "average" | "best";
 };
 
+const statMap: Stat[] = [
+  { name: "average", recordTagField: "average_record_tag", field: "average" },
+  { name: "single", recordTagField: "single_record_tag", field: "best" },
+];
+
 export default function ResultsPDF({
   competitionId,
   roundId,
@@ -107,10 +112,9 @@ export default function ResultsPDF({
   const event = events.byId[eventId];
   const format = formats.byId[formatId];
 
-  const stats: Stat[] = [
-    { name: "average", recordTagField: "average_record_tag", field: "average" },
-    { name: "single", recordTagField: "single_record_tag", field: "best" },
-  ];
+  const stats = [format.sort_by, format.sort_by_second]
+    .filter((s) => s)
+    .map((s) => statMap.find((stat) => stat.name === s)!);
 
   const resultsByRegistrationId = _.keyBy(results, "registration_id");
 
