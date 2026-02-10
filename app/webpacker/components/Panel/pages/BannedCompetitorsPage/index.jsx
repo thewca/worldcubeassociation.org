@@ -18,7 +18,7 @@ export default function BannedCompetitorsPage() {
   } = useLoadedData(apiV0Urls.userRoles.list({
     isActive: true,
     groupType: groupTypes.banned_competitors,
-  }, 'startDate'));
+  }, 'startDate', 500));
   const {
     data: pastBannedCompetitorRoles,
     loading: pastBannedCompetitorRolesLoading,
@@ -27,7 +27,7 @@ export default function BannedCompetitorsPage() {
   } = useLoadedData(apiV0Urls.userRoles.list({
     isActive: false,
     groupType: groupTypes.banned_competitors,
-  }, 'startDate:desc'));
+  }, 'startDate:desc', 500));
   const {
     data: bannedGroups,
     loading: bannedGroupLoading,
