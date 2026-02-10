@@ -2,6 +2,15 @@
 
 module AdvancementConditions
   class LinkedRoundCondition < AdvancementCondition
+
+    attr_accessor :nested_advancement_condition, :linked_round_ids
+
+    def initialize(nested_advancement_condition, linked_round_ids)
+      self.nested_advancement_condition = nested_advancement_condition
+      self.linked_round_ids = linked_round_ids
+      self.level = nested_advancement_condition.level
+    end
+
     def self.wcif_type
       "dual"
     end
@@ -10,12 +19,8 @@ module AdvancementConditions
       I18n.t("advancement_condition#{'.short' if short}.dual")
     end
 
-    # No one "advances" to the linked round of a dual round
-    # so these are ignored in an advancing check,
-    # instead the results of all linked rounds are merged
-    # and the advancement condition of the last round is applied
-    def max_advancing(_results)
-      0
+    def max_advancing(results)
+      nested_advancement_condition.max_advancing(results)
     end
   end
 end
