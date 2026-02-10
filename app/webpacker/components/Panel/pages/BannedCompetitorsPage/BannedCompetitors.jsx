@@ -61,10 +61,10 @@ export default function BannedCompetitors({
       </Table>
 
       <PaginationFooter
-          pagination={pagination}
-          totalPages={Math.ceil(bannedCompetitorRoles.length / entriesPerPage)}
-          totalEntries={bannedCompetitorRoles.length}
-        />
+        pagination={pagination}
+        totalPages={Math.ceil(bannedCompetitorRoles.length / entriesPerPage)}
+        totalEntries={bannedCompetitorRoles.length}
+      />
     </>
   ) : (
     <Segment placeholder textAlign="center">
