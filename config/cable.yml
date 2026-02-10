@@ -1,11 +1,11 @@
 development:
   adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") { "redis://wca_redis:6379/3" } %>
+  url: <%= EnvConfig.ACTIONCABLE_REDIS_URL %>
 
 test:
   adapter: test
 
 production:
   adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+  url: <%= EnvConfig.ACTIONCABLE_REDIS_URL %>
   channel_prefix: wca_production
