@@ -58,10 +58,7 @@ class ComputePotentialDuplicates < ApplicationJob
     end
 
     def extract_first_last_name(full_name)
-      roman_name = FinishUnfinishedPersons.extract_roman_name(full_name)
-      sanitized_name = FinishUnfinishedPersons.remove_accents(roman_name)
-
-      name_parts = sanitized_name.split.take_while { !FinishUnfinishedPersons::GENERATIONAL_SUFFIXES.include?(_1.upcase) }
+      name_parts = FinishUnfinishedPersons.name_parts_without_suffix(full_name)
 
       return [nil, nil] if name_parts.length < 2
 
