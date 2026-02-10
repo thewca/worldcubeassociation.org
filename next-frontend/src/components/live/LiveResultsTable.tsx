@@ -5,6 +5,7 @@ import { components } from "@/types/openapi";
 import { recordTagBadge } from "@/components/results/TableCells";
 import countries from "@/lib/wca/data/countries";
 import formats from "@/lib/wca/data/formats";
+import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 
 const customOrderBy = (
   competitor: components["schemas"]["LiveCompetitor"],
@@ -61,7 +62,10 @@ export default function LiveResultsTable({
     ["asc", "asc"],
   );
 
-  const solveCount = formats.byId[formatId].expected_solve_count;
+  const format = formats.byId[formatId];
+  const solveCount = format.expected_solve_count;
+
+  const stats = statColumnsForFormat(format);
   const attemptIndexes = [...Array(solveCount).keys()];
 
   return (
@@ -77,15 +81,18 @@ export default function LiveResultsTable({
               {num + 1}
             </Table.ColumnHeader>
           ))}
-          <Table.ColumnHeader textAlign="right">Average</Table.ColumnHeader>
-          <Table.ColumnHeader textAlign="right">Best</Table.ColumnHeader>
+          {stats.map((stat) => (
+            <Table.ColumnHeader textAlign="right" key={stat.field}>
+              {stat.name}
+            </Table.ColumnHeader>
+          ))}
         </Table.Row>
       </Table.Header>
 
       <Table.Body>
         {sortedCompetitors.map((competitor, index) => {
           const competitorResult = resultsByRegistrationId[competitor.id];
-          const hasResult = Boolean(competitorResult);
+          const hasResult = competitorResult.attempts.length > 0;
 
           if (!showEmpty && !hasResult) {
             return null;
@@ -125,26 +132,18 @@ export default function LiveResultsTable({
                     {formatAttemptResult(attempt.value, eventId)}
                   </Table.Cell>
                 ))}
-              {hasResult && (
-                <>
+              {hasResult &&
+                stats.map((stat) => (
                   <Table.Cell
+                    key={`${competitorResult.registration_id}-${stat.name}`}
                     textAlign="right"
                     style={{ position: "relative" }}
                   >
-                    {formatAttemptResult(competitorResult.average, eventId)}{" "}
+                    {formatAttemptResult(competitorResult[stat.field], eventId)}{" "}
                     {!isAdmin &&
-                      recordTagBadge(competitorResult.average_record_tag)}
+                      recordTagBadge(competitorResult[stat.recordTagField])}
                   </Table.Cell>
-                  <Table.Cell
-                    textAlign="right"
-                    style={{ position: "relative" }}
-                  >
-                    {formatAttemptResult(competitorResult.best, eventId)}
-                    {!isAdmin &&
-                      recordTagBadge(competitorResult.single_record_tag)}
-                  </Table.Cell>
-                </>
-              )}
+                ))}
             </Table.Row>
           );
         })}

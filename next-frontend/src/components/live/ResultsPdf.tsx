@@ -6,6 +6,7 @@ import { components } from "@/types/openapi";
 import formats from "@/lib/wca/data/formats";
 import _ from "lodash";
 import countries from "@/lib/wca/data/countries";
+import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 
 const styles = StyleSheet.create({
   page: {
@@ -84,17 +85,6 @@ const padSkipped = (attempts: number[], expectedNumberOfAttempts: number) => {
 
 const latinName = (name: string) => name.replace(/\s*[(（].*/u, "");
 
-type Stat = {
-  name: "average" | "single";
-  recordTagField: "average_record_tag" | "single_record_tag";
-  field: "average" | "best";
-};
-
-const statMap: Stat[] = [
-  { name: "average", recordTagField: "average_record_tag", field: "average" },
-  { name: "single", recordTagField: "single_record_tag", field: "best" },
-];
-
 export default function ResultsPDF({
   competitionId,
   roundId,
@@ -112,9 +102,7 @@ export default function ResultsPDF({
   const event = events.byId[eventId];
   const format = formats.byId[formatId];
 
-  const stats = [format.sort_by, format.sort_by_second]
-    .filter((s) => s)
-    .map((s) => statMap.find((stat) => stat.name === s)!);
+  const stats = statColumnsForFormat(format);
 
   const resultsByRegistrationId = _.keyBy(results, "registration_id");
 
