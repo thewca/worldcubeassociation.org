@@ -80,7 +80,7 @@ class TicketsController < ApplicationController
         ticket = Ticket.find(params.require(:id))
 
         # Only stakeholders can access the ticket.
-        return head :unauthorized unless ticket.can_user_access?(current_user)
+        render(status: :unauthorized, json: {}) and return unless ticket.can_user_access?(current_user)
 
         render json: {
           ticket: ticket,
