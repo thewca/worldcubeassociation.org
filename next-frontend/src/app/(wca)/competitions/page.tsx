@@ -16,6 +16,9 @@ import {
   Field,
   ButtonGroup,
   Tabs,
+  IconButton,
+  ClientOnly,
+  Icon,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -30,14 +33,13 @@ import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 
 import { useSession } from "next-auth/react";
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { useMemo, useReducer, useState } from "react";
 import {
   competitionFilterReducer,
   createFilterState,
 } from "@/lib/wca/competitions/filterUtils";
 import { createSearchParams } from "@/lib/wca/competitions/queryUtils";
 import useAPI from "@/lib/wca/useAPI";
-import EventSelector from "@/components/EventSelector";
 import useDebounce from "@/lib/hooks/useDebounce";
 import { WCA_API_PAGINATION } from "@/lib/wca/data/wca";
 import Loading from "@/components/ui/loading";
@@ -49,12 +51,15 @@ import RegionSelector from "@/components/RegionSelector";
 import { components } from "@/types/openapi";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
+import { FormEventSelector } from "@/components/EventSelector";
+import { LuMapPin, LuSettings2 } from "react-icons/lu";
+import BetaDisabledTooltip from "@/components/BetaDisabledTooltip";
 
 const DEBOUNCE_MS = 600;
 
 export default function CompetitionsPage() {
   const session = useSession();
-  const [location, setLocation] = useState<GeoCoordinates | null>(null);
+  const [location, setLocation] = useState<GeoCoordinates>();
   const [distanceFilter, setDistanceFilter] = useState<number>(100);
 
   const api = useAPI();
@@ -87,7 +92,7 @@ export default function CompetitionsPage() {
     "get",
     "/v0/competition_index",
     {
-      params: { query: Object.fromEntries(querySearchParams.entries()) },
+      params: { query: querySearchParams },
     },
     {
       pageParamName: "page",
@@ -109,13 +114,13 @@ export default function CompetitionsPage() {
     }
   });
 
-  useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        setLocation(position.coords);
-      });
-    }
-  });
+  const geolocationSupported = "geolocation" in navigator;
+
+  const requestGeolocationPermission = () => {
+    return navigator.geolocation.getCurrentPosition((position) => {
+      setLocation(position.coords);
+    });
+  };
 
   const marks = [
     { value: 0, label: "closest" },
@@ -130,7 +135,7 @@ export default function CompetitionsPage() {
 
     const flatPages = rawCompetitionData.pages.flatMap((page) => page);
 
-    if (location === null || distanceFilter === 100) return flatPages;
+    if (location === undefined || distanceFilter === 100) return flatPages;
 
     return flatPages.filter(
       (competition) =>
@@ -148,37 +153,44 @@ export default function CompetitionsPage() {
   return (
     <Container>
       <VStack gap="8" width="full" pt="8">
-        {!session.data?.user && (
-          <RemovableCard
-            imageUrl="newcomer.png"
-            heading="Why Compete?"
-            description="This section will only be visible to new visitors..."
-            buttonText="Learn More"
-            buttonUrl="/"
-          />
-        )}
-        <Card.Root size="md" coloredBg>
+        <ClientOnly>
+          {session.status === "unauthenticated" && (
+            <RemovableCard
+              imageUrl="newcomer.png"
+              heading="Why Compete?"
+              description="This section will only be visible to new visitors..."
+              buttonText="Learn More"
+              buttonUrl="/"
+            />
+          )}
+        </ClientOnly>
+        <Card.Root size="md">
           <Tabs.Root variant="subtle" colorPalette="blue" defaultValue="list">
             <Card.Header asChild>
               <HStack justify="space-between">
-                <Card.Title textStyle="h1">
-                  <AllCompsIcon /> All Competitions
+                <Card.Title>
+                  <HStack gap={3}>
+                    <AllCompsIcon fontSize="5xl" marginTop="-2" />
+                    <Text textStyle="h1">All Competitions</Text>
+                  </HStack>
                 </Card.Title>
                 <Tabs.List>
                   <Tabs.Trigger value="list">
                     <ListIcon />
                     List
                   </Tabs.Trigger>
-                  <Tabs.Trigger value="map">
-                    <MapIcon />
-                    Map
-                  </Tabs.Trigger>
+                  <BetaDisabledTooltip>
+                    <Tabs.Trigger value="map" disabled>
+                      <MapIcon />
+                      Map
+                    </Tabs.Trigger>
+                  </BetaDisabledTooltip>
                 </Tabs.List>
               </HStack>
             </Card.Header>
             <Card.Body asChild>
-              <VStack gap="2" borderBottom="black">
-                <EventSelector
+              <VStack gap="3" borderBottom="black">
+                <FormEventSelector
                   selectedEvents={filterState.selectedEvents}
                   title="Event"
                   onEventClick={(eventId) =>
@@ -236,9 +248,23 @@ export default function CompetitionsPage() {
                     value={[distanceFilter]}
                     onValueChange={(e) => setDistanceFilter(e.value[0])}
                     step={25}
-                    disabled={location === null}
+                    disabled={location === undefined}
                   >
-                    <Slider.Label>Distance</Slider.Label>
+                    <Slider.Label asChild>
+                      <HStack justifyContent="space-between">
+                        Distance
+                        {geolocationSupported && location === undefined && (
+                          <IconButton
+                            size="xs"
+                            variant="outline"
+                            colorPalette="blue"
+                            onClick={() => requestGeolocationPermission()}
+                          >
+                            <LuMapPin />
+                          </IconButton>
+                        )}
+                      </HStack>
+                    </Slider.Label>
                     <Slider.Control>
                       <Slider.Track>
                         <Slider.Range />
@@ -250,18 +276,22 @@ export default function CompetitionsPage() {
                   <ButtonGroup variant="outline">
                     {/* TODO: replace these buttons with DatePicker (Chakra does not have one by default) */}
                     <Button>
-                      <CompRegoOpenDateIcon />
-                      Date From
+                      <CompRegoOpenDateIcon /> Date From
                     </Button>
                     <Button>
                       <CompRegoCloseDateIcon />
-                      Date To
+                      Date To{" "}
                     </Button>
                   </ButtonGroup>
                   {/* TODO: add "accordion" functionality to this button */}
-                  <Button variant="outline" size="sm">
-                    Advanced Filters
-                  </Button>
+                  <BetaDisabledTooltip>
+                    <Button variant="outline" disabled>
+                      <Icon>
+                        <LuSettings2 />
+                      </Icon>{" "}
+                      Advanced Filters
+                    </Button>
+                  </BetaDisabledTooltip>
                 </HStack>
               </VStack>
             </Card.Body>
@@ -315,15 +345,7 @@ function CompetitionTable({
   bottomRef: (node?: Element | null) => void;
 }) {
   return (
-    <Table.Root
-      size="xs"
-      striped
-      rounded="md"
-      colorPalette="blue"
-      variant="competitions"
-      borderWidth="2px"
-      borderRadius="md"
-    >
+    <Table.Root size="xs" variant="competitions" borderWidth="2px">
       <Table.Body>
         {competitions.map((comp) => (
           <CompetitionTableEntry comp={comp} key={comp.id} />

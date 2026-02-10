@@ -1,231 +1,444 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
+import { oklch, toGamut, formatHex, parseHex, lerp } from "culori";
+import _ from "lodash";
+import type { Rgb, Oklch } from "culori";
+
+interface WcaPaletteInput {
+  primary: string; // 1A (Solid / Top Face)
+  pantoneDescription: string;
+  secondaryLight: string; // 2B (Pastel)
+  secondaryMedium: string; // 2C (Bright)
+  secondaryDark: string; // 2A (Deep)
+  cubeLight: string; // Left Face
+  cubeDark: string; // Right Face
+}
+
+type LuminanceKey =
+  | "50"
+  | "100"
+  | "200"
+  | "300"
+  | "400"
+  | "500"
+  | "600"
+  | "700"
+  | "800"
+  | "900"
+  | "950";
+
+type ColorScale = Readonly<Record<LuminanceKey, string>>;
+type ChakraColorScale = Readonly<Record<LuminanceKey, { value: string }>>;
+
+type ColorDelta = Readonly<Oklch> & { h: number };
+
+const slateColors = {
+  green: {
+    primary: "#029347",
+    pantoneDescription: "Pantone 348 C",
+    secondaryLight: "#C1E6CD",
+    secondaryMedium: "#00FF7F",
+    secondaryDark: "#1B4D3E",
+    cubeLight: "#1AB55C",
+    cubeDark: "#04632D",
+  } satisfies WcaPaletteInput,
+  white: {
+    primary: "#EEEEEE",
+    pantoneDescription: "Pantone Cool Gray 1 C",
+    secondaryLight: "#E0DDD5",
+    secondaryMedium: "#F4F1ED",
+    secondaryDark: "#3B3B3B",
+    cubeLight: "#FFFFFF",
+    cubeDark: "#CCCCCC",
+  } satisfies WcaPaletteInput,
+  red: {
+    primary: "#C62535",
+    pantoneDescription: "Pantone 1797 C",
+    secondaryLight: "#F6C5C5",
+    secondaryMedium: "#FF6B6B",
+    secondaryDark: "#7A1220",
+    cubeLight: "#E53841",
+    cubeDark: "#A3131A",
+  } satisfies WcaPaletteInput,
+  yellow: {
+    primary: "#FFD313",
+    pantoneDescription: "Pantone 116 C",
+    secondaryLight: "#FFF5B8",
+    secondaryMedium: "#FFF5AA",
+    secondaryDark: "#664D00",
+    cubeLight: "#FFDE55",
+    cubeDark: "#CEA705",
+  } satisfies WcaPaletteInput,
+  blue: {
+    primary: "#0051BA",
+    pantoneDescription: "Pantone 293 C",
+    secondaryLight: "#99C7FF",
+    secondaryMedium: "#42D0FF",
+    secondaryDark: "#003366",
+    cubeLight: "#066AC4",
+    cubeDark: "#03458C",
+  } satisfies WcaPaletteInput,
+  orange: {
+    primary: "#FF5800",
+    pantoneDescription: "Pantone Orange 021 C",
+    secondaryLight: "#FFD5BD",
+    secondaryMedium: "#FFD59E",
+    secondaryDark: "#7A2B00",
+    cubeLight: "#F96E32",
+    cubeDark: "#D34405",
+  } satisfies WcaPaletteInput,
+} as const;
+
+// From within Chakra, we assume that the RGB codes are always "correct".
+const hexToRgb = (hexCode: string) => parseHex(hexCode)!;
+const rgbToHex = (rgb: Rgb) => formatHex(rgb).toUpperCase();
+
+const rgbToOklch = (rgb: Rgb): Oklch => oklch(rgb);
+const oklchToRgb = toGamut("rgb", "oklch");
+
+const getHueDelta = (sourceH: number = 0, targetH: number = 0): number =>
+  ((targetH - sourceH + 540) % 360) - 180;
+
+const calculateDelta = (source: Oklch, target: Oklch): ColorDelta => ({
+  mode: "oklch",
+  l: target.l - source.l,
+  c: target.c - source.c,
+  h: getHueDelta(source.h, target.h),
+});
+
+const typedKeys = <K extends string, V>(object: Record<K, V>): K[] =>
+  Object.keys(object).filter((k): k is K => k in object);
+
+const getSortedKeys = (scale: ColorScale): ReadonlyArray<LuminanceKey> =>
+  typedKeys(scale).toSorted((a, b) => parseInt(a) - parseInt(b));
+
+const findNearestSlotKey = (
+  scale: ColorScale,
+  targetOklch: Oklch,
+): LuminanceKey => {
+  const keys = typedKeys(scale);
+
+  const bestKey = _.minBy(keys, (key) => {
+    const currentOklch = rgbToOklch(hexToRgb(scale[key]));
+    return Math.abs(currentOklch.l - targetOklch.l);
+  });
+
+  // ColorScale is never empty, so the `minBy` above is safe
+  return bestKey!;
+};
+
+const generateSequence = (
+  start: number,
+  end: number,
+): ReadonlyArray<number> => {
+  const length = Math.abs(end - start);
+  const step = end > start ? 1 : -1;
+
+  return Array.from({ length }, (_, i) => start + i * step);
+};
+
+const createAnchorMap = (
+  baseScale: ColorScale,
+  colors: ReadonlyArray<string>,
+): Readonly<Record<LuminanceKey, string>> => {
+  const sortedScaleKeys = getSortedKeys(baseScale);
+  const maxIdx = sortedScaleKeys.length;
+
+  const sortedInputs = colors.toSorted((a, b) => {
+    const lA = rgbToOklch(hexToRgb(a)).l;
+    const lB = rgbToOklch(hexToRgb(b)).l;
+
+    return lB - lA; // Descending Lightness
+  });
+
+  return sortedInputs.reduce(
+    (assignments, color) => {
+      const colorOklch = rgbToOklch(hexToRgb(color));
+      const idealKey = findNearestSlotKey(baseScale, colorOklch);
+      const idealIdx = sortedScaleKeys.indexOf(idealKey);
+
+      const searchPath = [
+        idealIdx,
+        ...generateSequence(idealIdx + 1, maxIdx),
+        ...generateSequence(idealIdx - 1, -1),
+      ];
+
+      const foundIdx = searchPath.find((idx) => {
+        const key = sortedScaleKeys[idx];
+        return !(key in assignments);
+      });
+
+      if (foundIdx === undefined) return assignments;
+
+      const foundKey = sortedScaleKeys[foundIdx];
+      return { ...assignments, [foundKey]: color };
+    },
+    {} as Record<LuminanceKey, string>,
+  );
+};
+
+const getInterpolatedDelta = (
+  currentIdx: number,
+  sortedKeys: ReadonlyArray<string>,
+  anchorIndices: ReadonlyArray<number>,
+  anchorDeltas: Readonly<Record<string, ColorDelta>>,
+): { delta: ColorDelta; distanceToAnchor: number } => {
+  const nextAnchorPtr = anchorIndices.findIndex((idx) => idx >= currentIdx);
+
+  if (nextAnchorPtr === 0) {
+    const anchorIdx = anchorIndices[0];
+
+    return {
+      delta: anchorDeltas[sortedKeys[anchorIdx]],
+      distanceToAnchor: Math.abs(currentIdx - anchorIdx),
+    };
+  }
+
+  if (nextAnchorPtr === -1) {
+    const anchorIdx = anchorIndices[anchorIndices.length - 1];
+
+    return {
+      delta: anchorDeltas[sortedKeys[anchorIdx]],
+      distanceToAnchor: Math.abs(currentIdx - anchorIdx),
+    };
+  }
+
+  const idxPrev = anchorIndices[nextAnchorPtr - 1];
+  const idxNext = anchorIndices[nextAnchorPtr];
+
+  const deltaPrev = anchorDeltas[sortedKeys[idxPrev]];
+  const deltaNext = anchorDeltas[sortedKeys[idxNext]];
+
+  const t = (currentIdx - idxPrev) / (idxNext - idxPrev);
+
+  const interpolatedDelta = {
+    mode: "oklch",
+    l: lerp(deltaPrev.l, deltaNext.l, t),
+    c: lerp(deltaPrev.c, deltaNext.c, t),
+    h: lerp(deltaPrev.h, deltaNext.h, t),
+  } as const;
+
+  const distanceToAnchor = Math.min(
+    Math.abs(currentIdx - idxPrev),
+    Math.abs(currentIdx - idxNext),
+  );
+
+  return { delta: interpolatedDelta, distanceToAnchor };
+};
+
+type AdjustmentConfig = {
+  readonly strength?: number;
+  readonly baseInfluence?: number;
+  readonly sigma?: number;
+};
+
+const adjustScale = (
+  baseScale: ColorScale,
+  anchors: Readonly<Record<LuminanceKey, string>>,
+  config: AdjustmentConfig = {},
+): ColorScale => {
+  const sortedKeys = getSortedKeys(baseScale);
+
+  const anchorData = Object.entries(anchors)
+    .map(([key, targetHex]) => {
+      const sourceHex = baseScale[key as LuminanceKey];
+
+      const src = rgbToOklch(hexToRgb(sourceHex));
+      const tgt = rgbToOklch(hexToRgb(targetHex));
+
+      return {
+        key,
+        idx: sortedKeys.indexOf(key as LuminanceKey),
+        delta: calculateDelta(src, tgt),
+      };
+    })
+    .sort((a, b) => a.idx - b.idx);
+
+  if (anchorData.length === 0) return baseScale;
+
+  const anchorIndices = anchorData.map((d) => d.idx);
+  const anchorDeltas = Object.fromEntries(
+    anchorData.map((d) => [d.key, d.delta]),
+  );
+
+  return _.mapValues(baseScale, (hex, key) => {
+    const currentIdx = sortedKeys.indexOf(key as LuminanceKey);
+    const sourceOklch = rgbToOklch(hexToRgb(hex));
+
+    const { delta: rawDelta, distanceToAnchor } = getInterpolatedDelta(
+      currentIdx,
+      sortedKeys,
+      anchorIndices,
+      anchorDeltas,
+    );
+
+    const {
+      strength = 1.0 / Object.entries(anchors).length,
+      baseInfluence = 0,
+      sigma,
+    } = config;
+
+    const decayFactor =
+      sigma !== undefined
+        ? Math.exp(-(distanceToAnchor * distanceToAnchor) / (2 * sigma * sigma))
+        : 1.0;
+    const effectiveStrength = lerp(baseInfluence, strength, decayFactor);
+
+    const newOklch = {
+      mode: "oklch",
+      l: Math.max(
+        0,
+        Math.min(1, sourceOklch.l + rawDelta.l * effectiveStrength),
+      ),
+      c: Math.max(0, sourceOklch.c + rawDelta.c * effectiveStrength),
+      h: (sourceOklch.h || 0) + rawDelta.h * effectiveStrength,
+    } as const;
+
+    return rgbToHex(oklchToRgb(newOklch));
+  });
+};
+
+const deriveLuminanceScale = (
+  chakraRefScheme: string,
+  colorScheme: WcaPaletteInput,
+): ChakraColorScale => {
+  // Chakra is not very friendly about exporting its pre-defined schemes and tokens…
+  const modelScheme = defaultConfig.theme?.tokens?.colors?.[
+    chakraRefScheme
+  ] as unknown as ChakraColorScale;
+  const baseScale = _.mapValues(
+    modelScheme,
+    (chakraToken) => chakraToken.value,
+  );
+
+  const secondaryAnchors = createAnchorMap(baseScale, [
+    colorScheme.secondaryDark,
+    colorScheme.secondaryMedium,
+    colorScheme.secondaryLight,
+  ]);
+
+  const ambientScale = adjustScale(baseScale, secondaryAnchors, { sigma: 1.5 });
+
+  const primaryAnchors = createAnchorMap(baseScale, [colorScheme.primary]);
+  const heroScale = adjustScale(ambientScale, primaryAnchors, { sigma: 2.5 });
+
+  return _.mapValues(heroScale, (rgbHex) => ({ value: rgbHex }));
+};
 
 const compileColorScheme = (
   baseColor: string,
-  textContrast: "light" | "dark" = "light",
+  solidShade: number = 600,
+  darkDeep: number | string = solidShade + 100,
+  lightDeep: number | string = solidShade,
 ) => ({
-  contrast: { value: `{colors.supplementary.text.${textContrast}}` },
-  fg: { value: `{colors.${baseColor}.2B}` },
-  subtle: { value: `{colors.${baseColor}.2A}` },
-  muted: { value: `{colors.${baseColor}.2A/90}` },
-  emphasized: { value: `{colors.${baseColor}.2C}` },
-  solid: {
-    value: {
-      _light: `{colors.${baseColor}.1A}`,
-      _dark: `{colors.${baseColor}.2A}`,
-    },
-  },
-  focusRing: {
-    value: {
-      _light: `{colors.${baseColor}.1A}`,
-      _dark: `{colors.${baseColor}.2A}`,
-    },
-  },
-  highContrast: {
-    value: {
-      _light: `{colors.${baseColor}.1A}`,
-      _dark: `{colors.${baseColor}.2C}`,
-    },
-  },
   cubeShades: {
     left: { value: `{colors.${baseColor}.lighter}` },
     top: { value: `{colors.${baseColor}.1A}` },
     right: { value: `{colors.${baseColor}.darker}` },
   },
-  text: {
+  deep: {
     value: {
-      _light: `{colors.${baseColor}.contrast}`,
-      _dark: `{colors.${baseColor}.2B}`,
+      _light: `{colors.${baseColor}.${lightDeep.toString()}}`,
+      _dark: `{colors.${baseColor}.${darkDeep.toString()}}`,
     },
   },
-  gradient: {
-    default: {
-      value: {
-        _light: `linear-gradient(90deg, {colors.${baseColor}.fg} 0%, {colors.bg} 100%)`,
-        _dark: `linear-gradient(90deg, {colors.${baseColor}.muted} 0%, {colors.bg} 100%)`,
-      },
-    },
-    hover: {
-      value: {
-        _light: `linear-gradient(90deg, {colors.${baseColor}.fg/80} 0%, {colors.bg} 100%)`,
-        _dark: `linear-gradient(90deg, {colors.${baseColor}.muted/80} 0%, {colors.bg} 100%)`,
-      },
-    },
-  },
+});
+
+const defineColorAliases = (colorPalette: WcaPaletteInput) => ({
+  "1A": { value: colorPalette.primary },
+  "2A": { value: colorPalette.secondaryDark },
+  "2B": { value: colorPalette.secondaryLight },
+  "2C": { value: colorPalette.secondaryMedium },
+  lighter: { value: colorPalette.cubeLight },
+  darker: { value: colorPalette.cubeDark },
 });
 
 const customConfig = defineConfig({
   theme: {
     tokens: {
       colors: {
-        green: {
-          "1A": { value: "#029347", description: "Pantone 348 C" },
-          "2A": { value: "#1B4D3E" },
-          "2B": { value: "#C1E6CD" },
-          "2C": { value: "#00FF7F" },
-          lighter: { value: "#1AB55C" },
-          darker: { value: "#04632D" },
-        },
         wcaWhite: {
-          DEFAULT: { value: "#FFFFFF" },
-          "1A": { value: "#EEEEEE", description: "Pantone Cool Gray 1C" },
-          "2A": { value: "#3B3B3B" },
-          "2B": { value: "#E0DDD5" },
-          "2C": { value: "#F4F1ED" },
-          lighter: { value: "#FFFFFF" },
-          darker: { value: "#CCCCCC" },
+          ...defineColorAliases(slateColors.white),
+          ...deriveLuminanceScale("gray", slateColors.white),
+        },
+        green: {
+          ...defineColorAliases(slateColors.green),
+          ...deriveLuminanceScale("green", slateColors.green),
         },
         red: {
-          "1A": { value: "#C62535", description: "Pantone 1797 C" },
-          "2A": { value: "#7A1220" },
-          "2B": { value: "#F6C5C5" },
-          "2C": { value: "#FF6B6B" },
-          lighter: { value: "#E53841" },
-          darker: { value: "#A3131A" },
+          ...defineColorAliases(slateColors.red),
+          ...deriveLuminanceScale("red", slateColors.red),
         },
         yellow: {
-          "1A": { value: "#FFD313", description: "Pantone 116 C" },
-          "2A": { value: "#664D00" },
-          "2B": { value: "#FFF5B8" },
-          "2C": { value: "#FFF5AA" },
-          lighter: { value: "#FFDE55" },
-          darker: { value: "#CEA705" },
+          ...defineColorAliases(slateColors.yellow),
+          ...deriveLuminanceScale("yellow", slateColors.yellow),
         },
         blue: {
-          "1A": { value: "#0051BA", description: "Pantone 293 C" },
-          "2A": { value: "#003366" },
-          "2B": { value: "#99C7FF" },
-          "2C": { value: "#42D0FF" },
-          lighter: { value: "#066AC4" },
-          darker: { value: "#03458C" },
+          ...defineColorAliases(slateColors.blue),
+          ...deriveLuminanceScale("blue", slateColors.blue),
         },
         orange: {
-          "1A": { value: "#FF5800", description: "Pantone Orange 021 C" },
-          "2A": { value: "#7A2B00" },
-          "2B": { value: "#FFD5BD" },
-          "2C": { value: "#FFD59E" },
-          lighter: { value: "#F96E32" },
-          darker: { value: "#D34405" },
+          ...defineColorAliases(slateColors.orange),
+          ...deriveLuminanceScale("orange", slateColors.orange),
+        },
+        // Interpolated gray scale, anchored at the `supplementary.bg` values.
+        // There is an additional added "zinc" nudge on the blue channel,
+        //   which it seems most modern UI frameworks do.
+        gray: {
+          50: { value: "#FCFCFC", description: "Supplementary Bg White" },
+          100: { value: "#F4F4F2" },
+          200: { value: "#EDEDE9", description: "Supplementary Bg Light" },
+          300: { value: "#DCDCD6", description: "Supplementary Bg Medium" },
+          400: { value: "#B8B8B0", description: "Supplementary Bg Dark" },
+          500: { value: "#85857D" },
+          600: { value: "#5D5D57" },
+          700: { value: "#454540" },
+          800: { value: "#272723" },
+          900: { value: "#181816" },
+          950: { value: "#111111" },
         },
         supplementary: {
           text: {
-            light: { value: "#FCFCFC" },
-            dark: { value: "#1E1E1E" },
-            lightgray: { value: "#6B6B6B" },
-            darkgray: { value: "#3B3B3B" },
+            white: { value: "#FCFCFC" },
+            light: { value: "#6B6B6B" },
+            dark: { value: "#3B3B3B" },
+            black: { value: "#1E1E1E" },
           },
           bg: {
             white: { value: "#FCFCFC" },
             light: { value: "#EDEDED" },
             medium: { value: "#DCDCDC" },
             dark: { value: "#B8B8B8" },
-            // not in the styleguide, but necessary for dark mode
-            //   stolen from the text colors above, so texts on Light
-            //   become backgrounds on Dark. Shout if you have better ideas!
-            darker: { value: "#6B6B6B" },
-            darkest: { value: "#3B3B3B" },
-            black: { value: "#1E1E1E" },
           },
-          link: { value: "#0051BA" },
+          link: {
+            DEFAULT: { value: "#0051BA" },
+            lighter: { value: "#6B93E0" },
+          },
         },
       },
     },
     semanticTokens: {
       colors: {
-        link: { value: "{colors.supplementary.link}" },
-        advancing: { value: "{colors.green.500}" },
-        advancingQuestionable: { value: "{colors.yellow.500}" },
+        link: {
+          DEFAULT: {
+            value: {
+              _light: "{colors.supplementary.link}",
+              _dark: "{colors.supplementary.link.lighter}",
+            },
+          },
+          fg: { value: "{colors.link}" },
+        },
         recordMarkers: {
           personal: { value: "{colors.orange.1A}" },
           national: { value: "{colors.green.1A}" },
           continental: { value: "{colors.red.1A}" },
           world: { value: "{colors.blue.1A}" },
         },
-        bg: {
-          DEFAULT: {
-            value: {
-              _light: "{colors.supplementary.bg.white}",
-              _dark: "{colors.supplementary.bg.black}",
-            },
-          },
-          subtle: {
-            value: {
-              _light: "{colors.supplementary.bg.light}",
-              _dark: "{colors.supplementary.bg.darkest}",
-            },
-          },
-          muted: {
-            value: {
-              _light: "{colors.supplementary.bg.light}",
-              _dark: "{colors.supplementary.bg.darkest}",
-            },
-          },
-          emphasized: {
-            value: {
-              _light: "{colors.supplementary.bg.medium}",
-              _dark: "{colors.supplementary.bg.darker}",
-            },
-          },
-          inverted: {
-            value: {
-              _light: "{colors.supplementary.bg.black}",
-              _dark: "{colors.supplementary.bg.white}",
-            },
-          },
-          panel: {
-            value: {
-              _light: "{colors.supplementary.bg.white}",
-              _dark: "{colors.gray.950}",
-            },
-          },
-        },
-        fg: {
-          DEFAULT: {
-            value: {
-              _light: "{colors.supplementary.text.dark}",
-              _dark: "{colors.supplementary.text.light}",
-            },
-          },
-          muted: {
-            value: {
-              _light: "{colors.supplementary.text.darkgray}",
-              _dark: "{colors.supplementary.text.lightgray}",
-            },
-          },
-          subtle: {
-            value: {
-              _light: "{colors.supplementary.text.lightgray}",
-              _dark: "{colors.supplementary.text.darkgray}",
-            },
-          },
-          inverted: {
-            value: {
-              _light: "{colors.supplementary.text.light}",
-              _dark: "{colors.supplementary.text.dark}",
-            },
-          },
-        },
         green: compileColorScheme("green"),
-        white: {
-          ...compileColorScheme("wcaWhite"),
-          // white has special behavior for contrast colors between light/dark modes
-          contrast: {
-            value: {
-              _light: "{colors.supplementary.text.dark}",
-              _dark: "{colors.supplementary.text.light}",
-            },
-          },
-          solid: {
-            value: {
-              _light: "{colors.wcaWhite.2C}",
-              _dark: "{colors.wcaWhite.2A}",
-            },
-          },
-        },
+        white: compileColorScheme("wcaWhite"),
         red: compileColorScheme("red"),
-        yellow: compileColorScheme("yellow", "dark"),
+        yellow: compileColorScheme("yellow", 300),
         blue: compileColorScheme("blue"),
-        orange: compileColorScheme("orange"),
+        orange: compileColorScheme("orange", 600, 600),
         black: {
           // not a full color scheme, only the necessary colors for badges
           subtle: { value: "{colors.supplementary.text.dark}" },
@@ -244,7 +457,7 @@ const customConfig = defineConfig({
       h1: {
         value: {
           fontSize: "3rem",
-          lineHeight: "3.75rem",
+          lineHeight: "1.2",
           fontWeight: "extrabold",
           textTransform: "uppercase",
         },
@@ -252,35 +465,35 @@ const customConfig = defineConfig({
       h2: {
         value: {
           fontSize: "2.25rem",
-          lineHeight: "2.75rem",
+          lineHeight: "1.25",
           fontWeight: "extrabold",
         },
       },
       h3: {
         value: {
           fontSize: "1.6875rem",
-          lineHeight: "2.25rem",
+          lineHeight: "calc(4/3)",
           fontWeight: "extrabold",
         },
       },
       s1: {
         value: {
           fontSize: "1.125rem",
-          lineHeight: "1.75rem",
+          lineHeight: "1.5",
           fontWeight: "bold",
         },
       },
       s2: {
         value: {
           fontSize: "1.125rem",
-          lineHeight: "1.75rem",
+          lineHeight: "1.5",
           fontWeight: "medium",
         },
       },
       s3: {
         value: {
           fontSize: "1.125rem",
-          lineHeight: "1.75rem",
+          lineHeight: "1.5",
           fontWeight: "bold",
           textTransform: "uppercase",
         },
@@ -288,7 +501,7 @@ const customConfig = defineConfig({
       s4: {
         value: {
           fontSize: "1rem",
-          lineHeight: "1.5rem",
+          lineHeight: "1.5",
           fontWeight: "medium",
           textTransform: "uppercase",
           letterSpacing: "wider",
@@ -297,21 +510,21 @@ const customConfig = defineConfig({
       body: {
         value: {
           fontSize: "0.875rem",
-          lineHeight: "1.25rem",
+          lineHeight: "1.5",
           fontWeight: "light",
         },
       },
       bodyEmphasis: {
         value: {
           fontSize: "0.875rem",
-          lineHeight: "1.25rem",
+          lineHeight: "1.5",
           fontWeight: "medium",
         },
       },
       annotation: {
         value: {
           fontSize: "0.6875rem",
-          lineHeight: "0.825rem",
+          lineHeight: "1.2",
           fontWeight: "light",
           // fontStyle: "italic",
         },
@@ -319,7 +532,7 @@ const customConfig = defineConfig({
       quote: {
         value: {
           fontSize: "1rem",
-          lineHeight: "1.5rem",
+          lineHeight: "1.5",
           fontWeight: "light",
           fontStyle: "italic",
         },
@@ -327,7 +540,7 @@ const customConfig = defineConfig({
       hyperlink: {
         value: {
           fontSize: "0.875rem",
-          lineHeight: "1.25rem",
+          lineHeight: "1.5",
           fontWeight: "medium",
           color: "link",
         },
@@ -335,152 +548,92 @@ const customConfig = defineConfig({
       headerLink: {
         value: {
           fontSize: "1rem",
-          lineHeight: "1.5rem",
+          lineHeight: "1.5",
           fontWeight: "medium",
+          color: "currentColor",
+        },
+      },
+    },
+    layerStyles: {
+      "fill.emphasized": {
+        value: {
+          background: "colorPalette.emphasized",
+          color: "colorPalette.contrast",
+        },
+      },
+      "fill.deep": {
+        value: {
+          background: "colorPalette.deep",
+          color: "colorPalette.contrast",
+        },
+      },
+      "card.dark": {
+        value: {
+          background: "colorPalette.2A",
+          color: "colorPalette.2B",
+        },
+      },
+      "card.pastel": {
+        value: {
+          background: "colorPalette.1A",
+          color: "colorPalette.contrast",
+        },
+      },
+      "card.bright": {
+        value: {
+          background: "colorPalette.2C",
+          color: "colorPalette.2A",
         },
       },
     },
     recipes: {
-      button: {
-        base: {
-          transitionTimingFunction: "ease",
-          borderRadius: "l3",
-          colorPalette: "blue",
-        },
-        variants: {
-          variant: {
-            solid: {
-              _hover: {
-                bg: "colorPalette.muted",
-                borderColor: "colorPalette.muted",
-              },
-              _expanded: {
-                bg: "colorPalette.muted",
-                borderColor: "colorPalette.muted",
-              },
-            },
-            outline: {
-              borderWidth: "2px",
-              borderColor: "colorPalette.solid",
-              color: "fg",
-              _hover: {
-                bg: "colorPalette.fg/30",
-                color: "colorPalette.solid",
-              },
-            },
-            ghost: {
-              color: "fg",
-              focusRing: "colorPalette.highContrast",
-              _hover: {
-                bg: "colorPalette.fg/30",
-                color: "colorPalette.solid",
-              },
-              _expanded: {
-                bg: "colorPalette.fg/30",
-                color: "colorPalette.solid",
-              },
-            },
-            plain: {
-              color: "colorPalette.subtle",
-            },
-          },
-          size: {
-            sm: {
-              padding: "3",
-            },
-            lg: {
-              px: "6",
-              py: "2.5",
-              textStyle: "sm",
-            },
-          },
-        },
-        defaultVariants: {
-          // @ts-expect-error This is a legitimate key, but the typing system doesn't see it before merge.
-          variant: "solid",
-          size: "lg",
-        },
-      },
       link: {
         base: {
-          transitionProperty: "color",
-          transitionTimingFunction: "ease",
-          transitionDuration: "moderate",
+          colorPalette: "link",
+          textStyle: "hyperlink",
         },
-        variants: {
-          variant: {
-            wca: {
-              textStyle: "hyperlink",
-              _hover: {
-                color: "{colors.blue.highContrast/80}",
-              },
-            },
-            header: {
-              textStyle: "headerLink",
-              _hover: {
-                color: "{colors.blue.highContrast}",
-              },
-            },
-          },
-          hoverArrow: {
-            true: {
-              position: "relative",
-              paddingRight: "10px",
-              _after: {
-                content: '""',
-                position: "absolute",
-                top: "60%",
-                right: "0",
-                width: "7px",
-                height: "12px",
-                backgroundImage: "url('/linkArrow.svg')",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "contain",
-                transform: "translateY(-50%) translateX(-8px)",
-                transition: "all 0.3s ease-in-out",
-                opacity: 0,
-              },
-              _hover: {
-                color: "{colors.blue.highContrast/80}",
-                _after: {
-                  transform: "translateY(-50%) translateX(0px)",
-                  opacity: 1,
-                },
-              },
-            },
-          },
-        },
-        defaultVariants: {
-          // @ts-expect-error This is a legitimate key, but the typing system doesn't see it before merge.
-          variant: "wca",
-          hoverArrow: false,
+      },
+      text: {
+        base: {
+          textStyle: "body",
         },
       },
       badge: {
         variants: {
           variant: {
-            information: {
-              background: "transparent",
-              fontWeight: "light",
-              gap: 2,
+            achievement: {
+              fontWeight: "inherit",
+              paddingX: 2.5,
+              gap: 3,
+              "& svg": {
+                fontSize: "4xl",
+              },
             },
           },
         },
       },
-      heading: {
-        base: {
-          fontFamily: "inherit",
-        },
-      },
     },
     slotRecipes: {
+      dataList: {
+        slots: [],
+        variants: {
+          iconLabel: {
+            true: {
+              itemLabel: {
+                minWidth: "6",
+                justifyContent: "end",
+                color: "fg",
+              },
+            },
+          },
+        },
+      },
       stat: {
         slots: [],
         variants: {
           variant: {
             competition: {
               label: {
-                color: "colorPalette.text",
                 alignItems: "start",
                 textStyle: "annotation",
               },
@@ -502,18 +655,76 @@ const customConfig = defineConfig({
           },
         },
         variants: {
-          coloredBg: {
-            true: {
+          variant: {
+            info: {
               root: {
-                colorPalette: "white",
-                bg: "colorPalette.solid",
-                color: "colorPalette.text",
-              },
-              description: {
-                color: "colorPalette.text",
+                bg: "bg.muted",
+                borderWidth: "1px",
+                borderColor: "border",
               },
             },
           },
+          colorVariant: {
+            solid: {
+              root: {
+                colorPalette: "white",
+                layerStyle: "fill.solid",
+              },
+              description: {
+                layerStyle: "fill.solid",
+              },
+            },
+            muted: {
+              root: {
+                colorPalette: "white",
+                layerStyle: "fill.muted",
+              },
+              description: {
+                layerStyle: "fill.muted",
+              },
+            },
+            subtle: {
+              root: {
+                colorPalette: "white",
+                layerStyle: "fill.subtle",
+              },
+              description: {
+                layerStyle: "fill.subtle",
+              },
+            },
+            surface: {
+              root: {
+                colorPalette: "white",
+                layerStyle: "fill.surface",
+              },
+              description: {
+                // using fill.surface here would apply borders _within_ the card body
+                layerStyle: "fill.subtle",
+              },
+            },
+            emphasized: {
+              root: {
+                colorPalette: "white",
+                layerStyle: "fill.emphasized",
+              },
+              description: {
+                layerStyle: "fill.emphasized",
+              },
+            },
+            deep: {
+              root: {
+                colorPalette: "white",
+                layerStyle: "fill.deep",
+              },
+              description: {
+                layerStyle: "fill.deep",
+              },
+            },
+          },
+        },
+        defaultVariants: {
+          // @ts-expect-error TypeScript does not know about the new variant before compiling the theme further down below
+          variant: "info",
         },
       },
       accordion: {
@@ -525,41 +736,21 @@ const customConfig = defineConfig({
         },
         variants: {
           variant: {
-            subtle: {
-              item: {
-                borderColor: "{colors.supplementary.bg.dark}",
-                borderWidth: "1px",
-                marginBottom: "3",
-                _open: {
-                  bg: "bg",
-                },
+            card: {
+              root: {
+                spaceY: "4",
+                overflow: "hidden",
+                "--accordion-padding-x": "spacing.6",
+                "--accordion-padding-y": "spacing.3",
               },
               itemTrigger: {
-                padding: "3",
-                bgImage: "var(--chakra-colors-color-palette-gradient-hover)",
-                backgroundSize: "0% 100%", // Ensures the gradient fills the element
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "-100% 0%",
-                animation: "slideOutGradient 0.25s ease-in-out forwards",
-                _hover: {
-                  animation: "slideInGradient 0.25s ease-in-out forwards",
-                },
-                _open: {
-                  bgImage:
-                    "var(--chakra-colors-color-palette-gradient-default)",
-                  borderTopRadius: "var(--accordion-radius)",
-                  borderBottomRadius: "0",
-                  backgroundSize: "100% 100%",
-                  animation: "dontSlideGradient 0.25s ease-in-out forwards",
-                  _hover: {
-                    bgImage:
-                      "var(--chakra-colors-color-palette-gradient-hover)",
-                    animation: "dontSlideGradient 0.25s ease-in-out forwards",
-                  },
-                },
+                px: "var(--accordion-padding-x)",
               },
               itemContent: {
-                padding: "3",
+                px: "var(--accordion-padding-x)",
+              },
+              item: {
+                borderRadius: "l3",
               },
             },
           },
@@ -577,14 +768,14 @@ const customConfig = defineConfig({
                 whiteSpace: "noWrap",
               },
               row: {
+                cursor: "pointer",
                 "& td": {
                   transitionProperty: "background-color",
                   transitionTimingFunction: "ease",
                   transitionDuration: "150ms",
                 },
-                cursor: "pointer",
                 "&:nth-of-type(odd) td": {
-                  bg: "bg.muted",
+                  bg: "bg.subtle",
                 },
                 "&:hover td": {
                   bg: "colorPalette.fg/60",
@@ -614,78 +805,11 @@ const customConfig = defineConfig({
       tabs: {
         slots: [],
         variants: {
-          variant: {
-            enclosed: {
-              list: {
-                bg: "colorPalette.solid",
-                borderRadius: "wca",
-              },
+          highContrast: {
+            true: {
               trigger: {
-                color: "colorPalette.text",
-                transitionProperty: "background-color",
-                transitionTimingFunction: "ease",
-                transitionDuration: "200ms",
-                _hover: {
-                  bg: "colorPalette.solid",
-                },
                 _selected: {
-                  color: "currentColor",
-                  shadow: "sm",
-                  bg: "colorPalette.solid",
-                },
-              },
-            },
-            slider: {
-              root: {
-                width: "100%",
-              },
-              content: {
-                _vertical: {
-                  ps: "0px",
-                },
-                width: "100%",
-              },
-              trigger: {
-                p: "0px",
-                width: "1rem",
-                height: "1rem",
-                bg: "white/50",
-                cursor: "pointer",
-                minWidth: "1rem",
-                borderRadius: "0.5rem",
-                _selected: {
-                  bg: "white",
-                },
-              },
-            },
-            results: {
-              content: {
-                p: "8",
-              },
-              trigger: {
-                borderRadius: "0",
-                color: "fg",
-                _notFirst: {
-                  _before: {
-                    content: '""',
-                    position: "absolute",
-                    left: 0,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    height: "1.5em",
-                    width: "1.5px",
-                    backgroundColor: "#D9D9D9",
-                  },
-                },
-                _selected: {
-                  bg: "colorPalette.solid",
                   color: "colorPalette.contrast",
-                  _before: {
-                    display: "none", // Remove the line when selected
-                  },
-                },
-                "&[data-selected] + &::before": {
-                  display: "none",
                 },
               },
             },

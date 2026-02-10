@@ -17,21 +17,34 @@ import {
 import Loading from "@/components/ui/loading";
 import { getRegionalOrganizations } from "@/lib/wca/organizations/getRegionalOrganizations";
 import { getT } from "@/lib/i18n/get18n";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import _ from "lodash";
 import WcaFlag from "@/components/WcaFlag";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("regional_organizations.title"),
+  };
+}
 
 export default async function RegionalOrganizations() {
   const I18n = await getT();
 
-  const { data: organizations, error } = await getRegionalOrganizations();
+  const {
+    data: organizations,
+    error,
+    response,
+  } = await getRegionalOrganizations();
 
-  if (error) return <Errored error={error} />;
+  if (error) return <OpenapiError response={response} t={I18n.t} />;
   if (!organizations) return <Loading />;
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left">
         <Heading size="5xl">{I18n.t("regional_organizations.title")}</Heading>
         <Text>{I18n.t("regional_organizations.content")}</Text>
@@ -78,8 +91,7 @@ export default async function RegionalOrganizations() {
                 <LinkOverlay asChild>
                   <Link
                     href={org.website}
-                    variant="header"
-                    textStyle="2xl"
+                    textStyle="headerLink"
                     textAlign="center"
                   >
                     {org.name}

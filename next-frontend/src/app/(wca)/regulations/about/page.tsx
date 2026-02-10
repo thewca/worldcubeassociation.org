@@ -5,6 +5,15 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import { MarkdownProse } from "@/components/Markdown";
 import { getT } from "@/lib/i18n/get18n";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("about_regulations.title"),
+  };
+}
 
 export default async function AboutTheRegulations() {
   const payload = await getPayload({ config });
@@ -22,7 +31,7 @@ export default async function AboutTheRegulations() {
   const { t } = await getT();
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack gap="8" width="full" pt="8" alignItems="left">
         <Heading size="5xl">{t("about_regulations.title")}</Heading>
         {aboutRegulationsItems.map((item) => (

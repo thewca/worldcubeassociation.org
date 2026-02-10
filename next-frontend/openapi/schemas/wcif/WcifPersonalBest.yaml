@@ -9,14 +9,15 @@ required:
 properties:
   eventId:
     type: string
+    example: '333'
   best:
-    type: number
+    $ref: './WcifAttemptResult.yaml'
   worldRanking:
-    type: number
+    type: integer
   continentalRanking:
-    type: number
+    type: integer
   nationalRanking:
-    type: number
+    type: integer
   type:
     type: string
     enum: ["single", "average"]

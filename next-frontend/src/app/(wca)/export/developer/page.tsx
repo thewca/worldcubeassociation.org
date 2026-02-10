@@ -2,20 +2,29 @@ import { VStack, Container, Heading, Text, Link } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
 import { getExportDetails } from "@/lib/wca/exports/getExportDetails";
 import Loading from "@/components/ui/loading";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    title: t("page.officers_and_board.title"),
+  };
+}
 
 export default async function ResultExportPage() {
   const { t } = await getT();
 
-  const { data: exports, error } = await getExportDetails();
+  const { data: exports, error, response } = await getExportDetails();
 
-  if (error) return <Errored error={error} />;
+  if (error) return <OpenapiError response={response} t={t} />;
 
   if (!exports) return <Loading />;
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left" gap="16px" as="span">
         <Heading size="5xl">{t("database.developer_export.heading")}</Heading>
         <I18nHTMLTranslate

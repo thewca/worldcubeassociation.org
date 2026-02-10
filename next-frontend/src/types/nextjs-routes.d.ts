@@ -24,7 +24,9 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/competitions/[competitionId]/admin", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/competitors", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/events", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/live", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/live/competitors/[registrationId]", { "competitionId": string; "registrationId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/live/podiums", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/live/rounds/[roundId]", { "competitionId": string; "roundId": string }>
     | DynamicRoute<"/competitions/[competitionId]/podiums", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/register", { "competitionId": string }>
@@ -32,6 +34,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/competitions/[competitionId]/results/byPerson", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/schedule", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/scrambles", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/tabs/[tabName]", { "competitionId": string; "tabName": string }>
     | StaticRoute<"/competitions/mine">
     | StaticRoute<"/dashboard">
     | StaticRoute<"/delegates">

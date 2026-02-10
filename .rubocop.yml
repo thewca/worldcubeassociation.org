@@ -24,6 +24,7 @@ AllCops:
     - 'db/schema.rb'
     - 'db/developer_dump_schema.rb'
     - 'db/results_dump_schema.rb'
+    - 'db/results_dump_v2_schema.rb'
     - '.git-hooks/**/*'
 
 Style/StringConcatenation:
@@ -321,4 +322,7 @@ RSpec/NamedSubject:
   Enabled: false
 
 RSpec/Be:
+  Enabled: false
+
+RSpec/LeakyLocalVariable:
   Enabled: false

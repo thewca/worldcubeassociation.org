@@ -77,6 +77,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.results
   end
 
+  def tabs
+    competition = competition_from_params
+    render json: competition.tabs
+  end
+
   def podiums
     competition = Competition.find(params.require(:competition_id))
 
@@ -92,11 +97,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
                         .except(:order)
                         .order(number: :desc)
                         .map do |round|
-      {
-        id: round.id,
-        roundTypeId: round.round_type_id,
-        results: round.results.sort_by { |r| [r.pos, r.person_name] },
-      }
+                          {
+                            id: round.id,
+                            roundTypeId: round.round_type_id,
+                            results: round.results.sort_by { |r| [r.pos, r.person_name] },
+                          }
     end
     render json: {
       id: event.id,
@@ -118,11 +123,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
                         .except(:order)
                         .order(number: :desc)
                         .map do |round|
-      {
-        id: round.id,
-        roundTypeId: round.round_type_id,
-        scrambles: round.scrambles,
-      }
+                          {
+                            id: round.id,
+                            roundTypeId: round.round_type_id,
+                            scrambles: round.scrambles,
+                          }
     end
     render json: {
       id: event.id,

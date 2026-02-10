@@ -21,6 +21,7 @@ x-app: &app
 x-app-environment: &appEnv
   <<: *env
   SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
+  ACTIONCABLE_REDIS_URL: redis://wca_redis:6379/2
   MAILCATCHER_SMTP_HOST: wca_mailcatcher
 
 services:
@@ -63,7 +64,7 @@ services:
       RUNNING_IN_DOCKER: true
     tty: true
     # Start the server and bind to 0.0.0.0 (vs 127.0.0.1) so Docker's port mappings work correctly
-    command: bin/rails server -b 0.0.0.0
+    command: bin/dev -b 0.0.0.0
     depends_on:
       wca_environment:
         condition: service_completed_successfully
@@ -172,8 +173,8 @@ services:
   wca_redis:
     image: redis:7.0-alpine
     container_name: "redis-main"
-    expose:
-      - "6379"
+    ports:
+      - "6379:6379"
     command: redis-server --loglevel warning
     volumes:
       - cache_volume:/data
@@ -181,7 +182,7 @@ services:
       - wca-main
 
   wca_playwright:
-    image: mcr.microsoft.com/playwright:v1.56.1
+    image: mcr.microsoft.com/playwright:v1.57.0
     container_name: "playwright"
     extra_hosts:
       - "hostmachine:host-gateway"

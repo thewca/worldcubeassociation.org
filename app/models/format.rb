@@ -20,6 +20,7 @@ class Format < ApplicationRecord
       "1" => [],
       "2" => ["1"],
       "3" => %w[1 2],
+      "5" => %w[1 2],
       "m" => %w[1 2],
       "a" => ["2"], # https://www.worldcubeassociation.org/regulations/#9b1
     }[self.id]

@@ -6,18 +6,20 @@
   <dl>
     <dt>
       SQL: <%= link_to(@sql_filename, @sql_path) %> (<%= number_to_human_size @sql_filesize %>)
-      <small>(<%= link_to(t('.permalink'), sql_permalink_path) %>)</small>
+      <small>(<%= link_to(t('.permalink'), results_permalink_path(@export_version, "sql")) %>)</small>
     </dt>
     <dd><%= t('.file_formats.sql') %></dd>
 
     <dt>
       TSV: <%= link_to(@tsv_filename, @tsv_path) %> (<%= number_to_human_size @tsv_filesize %>)
-      <small>(<%= link_to(t('.permalink'), tsv_permalink_path) %>)</small>
+      <small>(<%= link_to(t('.permalink'), results_permalink_path(@export_version, "tsv")) %>)</small>
     </dt>
     <dd><%= t('.file_formats.tsv') %></dd>
   </dl>
 
+  <p><i><%= t('.permalink_note') %></i></p>
+
   <p><%= t('.hint_readme_html', readme_filename: content_tag('code', DbDumpHelper::RESULTS_EXPORT_README)) %></p>
 
-  <pre><%= DatabaseController.render_readme(self, DateTime.now) %></pre>
+  <pre><%= DatabaseController.render_readme(self, DateTime.now, @export_version) %></pre>
 </div>

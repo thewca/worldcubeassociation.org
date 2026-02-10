@@ -4,4 +4,5 @@ mariadb-client
 libssl-dev
 libyaml-dev
 tzdata
-clang
+libclang-dev
+cargo

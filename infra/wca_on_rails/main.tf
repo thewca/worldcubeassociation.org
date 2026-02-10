@@ -6,7 +6,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 6.14.1"
+      version = ">= 6.28.0"
     }
   }
 
@@ -35,6 +35,7 @@ module "production" {
   shared = module.shared
   VAULT_ADDR = var.VAULT_ADDR
   DATABASE_WRT_USER = var.DATABASE_WRT_USER
+  DATABASE_WRT_SENIOR_USER = var.DATABASE_WRT_SENIOR_USER
   rails_startup_time = local.rails_startup_time
   WRC_WEBHOOK_URL = var.WRC_WEBHOOK_URL
 }
@@ -45,6 +46,7 @@ module "staging" {
   region = var.region
   VAULT_ADDR = var.VAULT_ADDR
   DATABASE_WRT_USER = var.DATABASE_WRT_USER
+  DATABASE_WRT_SENIOR_USER = var.DATABASE_WRT_SENIOR_USER
   shared = module.shared
   rails_startup_time = local.rails_startup_time
   WRC_WEBHOOK_URL = var.WRC_WEBHOOK_URL
