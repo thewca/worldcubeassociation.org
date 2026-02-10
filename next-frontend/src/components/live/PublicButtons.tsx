@@ -14,12 +14,14 @@ export default function PublicButtons({
   formatId,
   results,
   competitors,
+  enableProjectorView,
 }: {
   competitionId: string;
   roundId: string;
   formatId: string;
   results: components["schemas"]["LiveResult"][];
   competitors: components["schemas"]["LiveCompetitor"][];
+  enableProjectorView: () => void;
 }) {
   return (
     <ButtonGroup>
@@ -48,12 +50,8 @@ export default function PublicButtons({
           </Button>
         </ClientOnly>
       </Button>
-      <Button asChild>
-        <Link
-          href={`/competitions/${competitionId}/live/rounds/${roundId}/double-check`}
-        >
-          <LuGalleryVertical />
-        </Link>
+      <Button onClick={enableProjectorView}>
+        <LuGalleryVertical />
       </Button>
     </ButtonGroup>
   );

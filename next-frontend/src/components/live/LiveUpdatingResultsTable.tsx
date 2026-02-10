@@ -11,6 +11,7 @@ import { Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 import AdminButtons from "@/components/live/AdminButtons";
 import PublicButtons from "@/components/live/PublicButtons";
+import ResultsProjector from "@/components/live/ResultsProjector";
 
 function applyDiff(
   previousResults: components["schemas"]["LiveResult"][],
@@ -55,6 +56,16 @@ export default function LiveUpdatingResultsTable({
   const [liveResults, updateLiveResults] =
     useState<components["schemas"]["LiveResult"][]>(results);
 
+  const [inProjectorMode, setInProjectorMode] = useState(false);
+  const enableProjectorView = useCallback(
+    () => setInProjectorMode(true),
+    [setInProjectorMode],
+  );
+  const disableProjectorView = useCallback(
+    () => setInProjectorMode(false),
+    [setInProjectorMode],
+  );
+
   // Move to onEffectEvent when we are on React 19
   const onReceived = useCallback(
     (result: DiffProtocolResponse) => {
@@ -68,6 +79,20 @@ export default function LiveUpdatingResultsTable({
   );
 
   const connectionState = useResultsSubscription(roundId, onReceived);
+
+  if (inProjectorMode) {
+    return (
+      <ResultsProjector
+        competitors={competitors}
+        results={results}
+        disableProjectorView={disableProjectorView}
+        formatId={formatId}
+        eventId={eventId}
+        forecastView={false}
+        title={title}
+      />
+    );
+  }
 
   return (
     <VStack align="left">
@@ -84,6 +109,7 @@ export default function LiveUpdatingResultsTable({
             formatId={formatId}
             results={results}
             competitors={competitors}
+            enableProjectorView={enableProjectorView}
           />
         )}
       </HStack>
