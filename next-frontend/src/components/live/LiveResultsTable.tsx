@@ -6,6 +6,7 @@ import { recordTagBadge } from "@/components/results/TableCells";
 import countries from "@/lib/wca/data/countries";
 import formats from "@/lib/wca/data/formats";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
+import { orderResults } from "@/lib/live/orderResults";
 
 const customOrderBy = (
   competitor: components["schemas"]["LiveCompetitor"],
@@ -51,18 +52,11 @@ export default function LiveResultsTable({
   isAdmin?: boolean;
   showEmpty?: boolean;
 }) {
-  const resultsByRegistrationId = _.keyBy(results, "registration_id");
-
-  const sortedCompetitors = _.orderBy(
-    competitors,
-    [
-      (competitor) => customOrderBy(competitor, resultsByRegistrationId),
-      (competitor) => customOrderBy(competitor, resultsByRegistrationId),
-    ],
-    ["asc", "asc"],
-  );
+  const competitorsByRegistrationId = _.keyBy(competitors, "id");
 
   const format = formats.byId[formatId];
+
+  const sortedResults = orderResults(results, format);
   const solveCount = format.expected_solve_count;
 
   const stats = statColumnsForFormat(format);
@@ -90,9 +84,10 @@ export default function LiveResultsTable({
       </Table.Header>
 
       <Table.Body>
-        {sortedCompetitors.map((competitor, index) => {
-          const competitorResult = resultsByRegistrationId[competitor.id];
-          const hasResult = competitorResult.attempts.length > 0;
+        {sortedResults.map((result, index) => {
+          const competitor =
+            competitorsByRegistrationId[result.registration_id];
+          const hasResult = result.attempts.length > 0;
 
           if (!showEmpty && !hasResult) {
             return null;
@@ -104,7 +99,7 @@ export default function LiveResultsTable({
                 width={1}
                 layerStyle="fill.deep"
                 textAlign="right"
-                colorPalette={rankingCellColorPalette(competitorResult)}
+                colorPalette={rankingCellColorPalette(result)}
               >
                 {index + 1}
               </Table.Cell>
@@ -124,7 +119,7 @@ export default function LiveResultsTable({
                 {countries.byIso2[competitor.country_iso2].name}
               </Table.Cell>
               {hasResult &&
-                competitorResult.attempts.map((attempt) => (
+                result.attempts.map((attempt) => (
                   <Table.Cell
                     textAlign="right"
                     key={`${competitor.id}-${attempt.attempt_number}`}
@@ -135,13 +130,12 @@ export default function LiveResultsTable({
               {hasResult &&
                 stats.map((stat) => (
                   <Table.Cell
-                    key={`${competitorResult.registration_id}-${stat.name}`}
+                    key={`${result.registration_id}-${stat.name}`}
                     textAlign="right"
                     style={{ position: "relative" }}
                   >
-                    {formatAttemptResult(competitorResult[stat.field], eventId)}{" "}
-                    {!isAdmin &&
-                      recordTagBadge(competitorResult[stat.recordTagField])}
+                    {formatAttemptResult(result[stat.field], eventId)}{" "}
+                    {!isAdmin && recordTagBadge(result[stat.recordTagField])}
                   </Table.Cell>
                 ))}
             </Table.Row>
