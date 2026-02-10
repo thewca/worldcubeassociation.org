@@ -99,6 +99,7 @@ Rails.application.routes.draw do
     post 'registrations/export' => 'registrations#export', as: :registrations_export
     get 'registrations/import' => 'registrations#import', as: :registrations_import
     post 'registrations/import' => 'registrations#do_import', as: :registrations_do_import
+    post 'registrations/validate_and_convert_registrations' => 'registrations#validate_and_convert_registrations', as: :registrations_validate_and_convert
     get 'registrations/add' => 'registrations#add', as: :registrations_add
     post 'registrations/add' => 'registrations#do_add', as: :registrations_do_add
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
