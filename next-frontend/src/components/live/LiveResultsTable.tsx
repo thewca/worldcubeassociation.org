@@ -1,5 +1,4 @@
 import _ from "lodash";
-import events from "@/lib/wca/data/events";
 import { Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { components } from "@/types/openapi";
