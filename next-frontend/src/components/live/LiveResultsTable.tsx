@@ -4,6 +4,8 @@ import { Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { components } from "@/types/openapi";
 import { recordTagBadge } from "@/components/results/TableCells";
+import countries from "@/lib/wca/data/countries";
+import formats from "@/lib/wca/data/formats";
 
 const customOrderBy = (
   competitor: components["schemas"]["LiveCompetitor"],
@@ -35,6 +37,7 @@ export const rankingCellColorPalette = (
 export default function LiveResultsTable({
   results,
   eventId,
+  formatId,
   competitionId,
   competitors,
   isAdmin = false,
@@ -42,13 +45,13 @@ export default function LiveResultsTable({
 }: {
   results: components["schemas"]["LiveResult"][];
   eventId: string;
+  formatId: string;
   competitionId: string;
   competitors: components["schemas"]["LiveCompetitor"][];
   isAdmin?: boolean;
   showEmpty?: boolean;
 }) {
   const resultsByRegistrationId = _.keyBy(results, "registration_id");
-  const event = events.byId[eventId];
 
   const sortedCompetitors = _.orderBy(
     competitors,
@@ -59,7 +62,7 @@ export default function LiveResultsTable({
     ["asc", "asc"],
   );
 
-  const solveCount = event.recommendedFormat.expected_solve_count;
+  const solveCount = formats.byId[formatId].expected_solve_count;
   const attemptIndexes = [...Array(solveCount).keys()];
 
   return (
@@ -69,6 +72,7 @@ export default function LiveResultsTable({
           <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
           {isAdmin && <Table.ColumnHeader>Id</Table.ColumnHeader>}
           <Table.ColumnHeader>Competitor</Table.ColumnHeader>
+          <Table.ColumnHeader>Country</Table.ColumnHeader>
           {attemptIndexes.map((num) => (
             <Table.ColumnHeader key={num} textAlign="right">
               {num + 1}
@@ -107,8 +111,11 @@ export default function LiveResultsTable({
                       : `/competitions/${competitionId}/live/competitors/${competitor.id}`
                   }
                 >
-                  {competitor.user_name}
+                  {competitor.name}
                 </Link>
+              </Table.Cell>
+              <Table.Cell>
+                {countries.byIso2[competitor.country_iso2].name}
               </Table.Cell>
               {hasResult &&
                 competitorResult.attempts.map((attempt) => (

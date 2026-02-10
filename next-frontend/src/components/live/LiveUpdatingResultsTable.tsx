@@ -7,8 +7,10 @@ import useResultsSubscription, {
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
-import { Heading, HStack, VStack } from "@chakra-ui/react";
+import { Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
+import AdminButtons from "@/components/live/AdminButtons";
+import PublicButtons from "@/components/live/PublicButtons";
 
 function applyDiff(
   previousResults: components["schemas"]["LiveResult"][],
@@ -33,15 +35,17 @@ export default function LiveUpdatingResultsTable({
   roundId,
   results,
   eventId,
+  formatId,
   competitionId,
   competitors,
   title,
   isAdmin = false,
   showEmpty = true,
 }: {
-  roundId: number;
+  roundId: string;
   results: components["schemas"]["LiveResult"][];
   eventId: string;
+  formatId: string;
   competitionId: string;
   competitors: components["schemas"]["LiveCompetitor"][];
   title: string;
@@ -70,6 +74,18 @@ export default function LiveUpdatingResultsTable({
       <HStack>
         <Heading textStyle="h1">{title}</Heading>
         <ConnectionPulse connectionState={connectionState} />
+        <Spacer flex={1} />
+        {isAdmin ? (
+          <AdminButtons competitionId={competitionId} roundId={roundId} />
+        ) : (
+          <PublicButtons
+            competitionId={competitionId}
+            roundId={roundId}
+            formatId={formatId}
+            results={results}
+            competitors={competitors}
+          />
+        )}
       </HStack>
       <LiveResultsTable
         results={liveResults}
@@ -78,6 +94,7 @@ export default function LiveUpdatingResultsTable({
         competitors={competitors}
         isAdmin={isAdmin}
         showEmpty={showEmpty}
+        formatId={formatId}
       />
     </VStack>
   );
