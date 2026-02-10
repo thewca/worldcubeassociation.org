@@ -48,7 +48,7 @@ function Tickets({ id }) {
 
   if (isPendingTicketDetails) return <Loading />;
   if (isErrorTicketDetails) {
-    if (errorTicketDetails?.response?.status === 401) {
+    if (errorTicketDetails?.response?.status === 401 && errorTicketDetails?.message?.includes('No access to ticket')) {
       return <SelfRoleAssigner ticketId={id} />;
     }
     return <Errored />;

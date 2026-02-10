@@ -235,7 +235,7 @@ Rails.application.routes.draw do
     post 'merge_inbox_results' => 'tickets#merge_inbox_results', as: :merge_inbox_results
     post 'post_results' => 'tickets#post_results', as: :post_results
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
-    get 'eligible_roles' => 'tickets#eligible_roles', as: :eligible_roles
+    get 'eligible_roles_for_bcc' => 'tickets#eligible_roles_for_bcc', as: :eligible_roles_for_bcc
     get 'inbox_person_summary' => 'tickets#inbox_person_summary', as: :inbox_person_summary
     post 'delete_inbox_persons' => 'tickets#delete_inbox_persons', as: :delete_inbox_persons
     get 'events_merged_data' => 'tickets#events_merged_data', as: :events_merged_data

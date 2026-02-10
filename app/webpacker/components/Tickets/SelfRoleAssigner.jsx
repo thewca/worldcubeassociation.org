@@ -7,7 +7,7 @@ import useInputState from '../../lib/hooks/useInputState';
 import I18n from '../../lib/i18n';
 import { ticketStakeholderConnections } from '../../lib/wca-data.js.erb';
 import joinAsBccStakeholder from './api/joinAsBccStakeholder';
-import getEligibleRoles from './api/getEligibleRoles';
+import getEligibleRolesForBcc from './api/getEligibleRolesForBcc';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 
@@ -27,7 +27,7 @@ export default function SelfRoleAssigner({ ticketId }) {
     error: errorEligibleRoles,
   } = useQuery({
     queryKey: ['eligible-roles', ticketId],
-    queryFn: () => getEligibleRoles({ ticketId }),
+    queryFn: () => getEligibleRolesForBcc({ ticketId }),
   });
 
   const roleOptions = (eligibleRoles || []).map((role) => ({
