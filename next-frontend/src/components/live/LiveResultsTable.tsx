@@ -5,6 +5,7 @@ import { components } from "@/types/openapi";
 import { recordTagBadge } from "@/components/results/TableCells";
 import countries from "@/lib/wca/data/countries";
 import formats from "@/lib/wca/data/formats";
+import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import { orderResults } from "@/lib/live/orderResults";
 
 export const rankingCellColorPalette = (
@@ -43,8 +44,9 @@ export default function LiveResultsTable({
   const format = formats.byId[formatId];
 
   const sortedResults = orderResults(results, format);
-
   const solveCount = format.expected_solve_count;
+
+  const stats = statColumnsForFormat(format);
   const attemptIndexes = [...Array(solveCount).keys()];
 
   return (
@@ -60,8 +62,11 @@ export default function LiveResultsTable({
               {num + 1}
             </Table.ColumnHeader>
           ))}
-          <Table.ColumnHeader textAlign="right">Average</Table.ColumnHeader>
-          <Table.ColumnHeader textAlign="right">Best</Table.ColumnHeader>
+          {stats.map((stat) => (
+            <Table.ColumnHeader textAlign="right" key={stat.field}>
+              {stat.name}
+            </Table.ColumnHeader>
+          ))}
         </Table.Row>
       </Table.Header>
 
@@ -69,7 +74,7 @@ export default function LiveResultsTable({
         {sortedResults.map((result) => {
           const competitor =
             competitorsByRegistrationId[result.registration_id];
-          const hasResult = Boolean(result.attempts.length > 0);
+          const hasResult = result.attempts.length > 0;
 
           if (!showEmpty && !hasResult) {
             return null;
@@ -109,24 +114,17 @@ export default function LiveResultsTable({
                     {formatAttemptResult(attempt.value, eventId)}
                   </Table.Cell>
                 ))}
-              {hasResult && (
-                <>
+              {hasResult &&
+                stats.map((stat) => (
                   <Table.Cell
+                    key={`${result.registration_id}-${stat.name}`}
                     textAlign="right"
                     style={{ position: "relative" }}
                   >
-                    {formatAttemptResult(result.average, eventId)}{" "}
-                    {!isAdmin && recordTagBadge(result.average_record_tag)}
+                    {formatAttemptResult(result[stat.field], eventId)}{" "}
+                    {!isAdmin && recordTagBadge(result[stat.recordTagField])}
                   </Table.Cell>
-                  <Table.Cell
-                    textAlign="right"
-                    style={{ position: "relative" }}
-                  >
-                    {formatAttemptResult(result.best, eventId)}
-                    {!isAdmin && recordTagBadge(result.single_record_tag)}
-                  </Table.Cell>
-                </>
-              )}
+                ))}
             </Table.Row>
           );
         })}
