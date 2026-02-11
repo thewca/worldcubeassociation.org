@@ -40,23 +40,22 @@ export const orderResults = (
   });
 
   let currentRank = 1;
-  sortedResults.forEach((result, index) => {
+
+  return sortedResults.map((result, index) => {
     if (index === 0) {
-      result.global_pos = currentRank;
-    } else {
-      const prev = sortedResults[index - 1];
-
-      const isTied =
-        result[rankBy] === prev[rankBy] &&
-        (!secondaryRankBy || result[secondaryRankBy] === prev[secondaryRankBy]);
-
-      if (!isTied) {
-        currentRank = index + 1;
-      }
-
-      result.global_pos = currentRank;
+      return { ...result, global_pos: currentRank };
     }
-  });
 
-  return sortedResults;
+    const prev = sortedResults[index - 1];
+
+    const isTied =
+      result[rankBy] === prev[rankBy] &&
+      (!secondaryRankBy || result[secondaryRankBy] === prev[secondaryRankBy]);
+
+    if (!isTied) {
+      currentRank = index + 1;
+    }
+
+    return { ...result, global_pos: currentRank };
+  });
 };
