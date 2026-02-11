@@ -1623,7 +1623,7 @@ en:
       submit_confirm_value: "Confirm"
       submit_delete_value: "Delete"
       submit_confirm: "Are you sure you're ready to confirm? After confirming, you won't be able to modify any information. Check your email after this to verify that the WCA Competition Announcement Team was notified."
-      submit_delete: "Are you sure you want to delete this competition? There is no going back."
+      submit_delete: "This action cannot be undone. Please type the competition ID \"%{competition_id}\" below to confirm deletion."
       coordinates: "Coordinates"
       add_championship: "Add Championship"
       championship_types:
