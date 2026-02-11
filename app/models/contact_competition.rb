@@ -22,7 +22,7 @@ class ContactCompetition < ContactForm
 
   def competition_url
     competition = Competition.find_by(id: competition_id)
-    return nil unless competition.present?
+    return nil if competition.blank?
 
     Rails.application.routes.url_helpers.competition_url(competition, host: EnvConfig.ROOT_URL)
   end
