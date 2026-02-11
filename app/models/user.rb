@@ -948,7 +948,7 @@ class User < ApplicationRecord
   end
 
   def can_check_newcomers_data?
-    can_admin_results?
+    can_admin_results? || any_kind_of_delegate?
   end
 
   def can_create_poll?
