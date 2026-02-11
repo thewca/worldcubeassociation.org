@@ -577,6 +577,7 @@ en:
         document: "Document"
       contact_wrt:
         wca_id: "WCA ID"
+    competition_link_html: "Click <a href='%{url}'>here</a> to visit the competition page"
     errors:
       dob_contact:
         dob_invalid: "is misformatted"

@@ -19,4 +19,11 @@ class ContactCompetition < ContactForm
   def subject
     Time.now.strftime("[WCA Website] Comment for #{Competition.find_by(id: competition_id)&.name} by #{name} on %d %b %Y at %R")
   end
+
+  def competition_url
+    competition = Competition.find_by(id: competition_id)
+    return nil unless competition.present?
+
+    Rails.application.routes.url_helpers.competition_url(competition, host: EnvConfig.ROOT_URL)
+  end
 end
