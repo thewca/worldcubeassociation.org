@@ -39,23 +39,19 @@ export const orderResults = (
     return 0;
   });
 
-  let currentRank = 1;
-
-  return sortedResults.map((result, index) => {
+  return sortedResults.map((result, index, arr) => {
     if (index === 0) {
-      return { ...result, global_pos: currentRank };
+      return { ...result, global_pos: 1 };
     }
 
-    const prev = sortedResults[index - 1];
+    const prev = arr[index - 1];
 
     const isTied =
       result[rankBy] === prev[rankBy] &&
       (!secondaryRankBy || result[secondaryRankBy] === prev[secondaryRankBy]);
 
-    if (!isTied) {
-      currentRank = index + 1;
-    }
+    const global_pos = isTied ? prev.global_pos : index + 1;
 
-    return { ...result, global_pos: currentRank };
+    return { ...result, global_pos };
   });
 };
