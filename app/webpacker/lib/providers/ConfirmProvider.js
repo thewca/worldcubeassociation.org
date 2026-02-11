@@ -4,7 +4,9 @@
 import React, {
   createContext, useCallback, useContext, useState,
 } from 'react';
-import { Confirm, Modal, Input, Button, Message } from 'semantic-ui-react';
+import {
+  Confirm, Modal, Input, Button, Message,
+} from 'semantic-ui-react';
 
 const ConfirmationContext = createContext();
 
