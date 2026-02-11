@@ -116,6 +116,7 @@ export default function LiveUpdatingResultsTable({
       <LiveResultsTable
         results={liveResults}
         eventId={eventId}
+        formatId={formatId}
         competitionId={competitionId}
         competitors={competitors}
         isAdmin={isAdmin}

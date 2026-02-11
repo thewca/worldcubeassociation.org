@@ -7,19 +7,7 @@ import countries from "@/lib/wca/data/countries";
 import formats from "@/lib/wca/data/formats";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import { orderResults } from "@/lib/live/orderResults";
-
-const customOrderBy = (
-  competitor: components["schemas"]["LiveCompetitor"],
-  resultsByRegistrationId: Record<string, components["schemas"]["LiveResult"]>,
-) => {
-  const competitorResult = resultsByRegistrationId[competitor.id];
-
-  if (!competitorResult) {
-    return competitor.id;
-  }
-
-  return competitorResult.global_pos;
-};
+import { padSkipped } from "@/lib/live/padSkipped";
 
 export const rankingCellColorPalette = (
   result: components["schemas"]["LiveResult"],
@@ -84,7 +72,7 @@ export default function LiveResultsTable({
       </Table.Header>
 
       <Table.Body>
-        {sortedResults.map((result, index) => {
+        {sortedResults.map((result) => {
           const competitor =
             competitorsByRegistrationId[result.registration_id];
           const hasResult = result.attempts.length > 0;
@@ -101,7 +89,7 @@ export default function LiveResultsTable({
                 textAlign="right"
                 colorPalette={rankingCellColorPalette(result)}
               >
-                {index + 1}
+                {result.global_pos}
               </Table.Cell>
               {isAdmin && <Table.Cell>{competitor.registrant_id}</Table.Cell>}
               <Table.Cell>
@@ -119,14 +107,16 @@ export default function LiveResultsTable({
                 {countries.byIso2[competitor.country_iso2].name}
               </Table.Cell>
               {hasResult &&
-                result.attempts.map((attempt) => (
-                  <Table.Cell
-                    textAlign="right"
-                    key={`${competitor.id}-${attempt.attempt_number}`}
-                  >
-                    {formatAttemptResult(attempt.value, eventId)}
-                  </Table.Cell>
-                ))}
+                padSkipped(result.attempts, format.expected_solve_count).map(
+                  (attempt) => (
+                    <Table.Cell
+                      textAlign="right"
+                      key={`${competitor.id}-${attempt.attempt_number}`}
+                    >
+                      {formatAttemptResult(attempt.value, eventId)}
+                    </Table.Cell>
+                  ),
+                )}
               {hasResult &&
                 stats.map((stat) => (
                   <Table.Cell
