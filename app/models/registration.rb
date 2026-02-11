@@ -147,7 +147,7 @@ class Registration < ApplicationRecord
     new_record? || cancelled? || !is_competing?
   end
 
-  delegate :name, :gender, :country, :email, :dob, :wca_id, to: :user
+  delegate :name, :gender, :country, :country_iso2, :email, :dob, :wca_id, to: :user
 
   alias_method :birthday, :dob
 

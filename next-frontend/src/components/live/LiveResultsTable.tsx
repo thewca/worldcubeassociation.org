@@ -4,6 +4,7 @@ import { Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { components } from "@/types/openapi";
 import { recordTagBadge } from "@/components/results/TableCells";
+import countries from "@/lib/wca/data/countries";
 
 const customOrderBy = (
   competitor: components["schemas"]["LiveCompetitor"],
@@ -69,6 +70,7 @@ export default function LiveResultsTable({
           <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
           {isAdmin && <Table.ColumnHeader>Id</Table.ColumnHeader>}
           <Table.ColumnHeader>Competitor</Table.ColumnHeader>
+          <Table.ColumnHeader>Country</Table.ColumnHeader>
           {attemptIndexes.map((num) => (
             <Table.ColumnHeader key={num} textAlign="right">
               {num + 1}
@@ -107,8 +109,11 @@ export default function LiveResultsTable({
                       : `/competitions/${competitionId}/live/competitors/${competitor.id}`
                   }
                 >
-                  {competitor.user_name}
+                  {competitor.name}
                 </Link>
+              </Table.Cell>
+              <Table.Cell>
+                {countries.byIso2[competitor.country_iso2].name}
               </Table.Cell>
               {hasResult &&
                 competitorResult.attempts.map((attempt) => (
