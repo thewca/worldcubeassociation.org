@@ -23,7 +23,7 @@ class Registration < ApplicationRecord
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
-  delegate :name, to: :user, prefix: true
+
   has_many :registration_history_entries, -> { order(:created_at) }, dependent: :destroy
   has_many :registration_competition_events
   has_many :registration_payments
