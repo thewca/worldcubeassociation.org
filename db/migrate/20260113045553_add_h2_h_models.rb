@@ -12,8 +12,8 @@ class AddH2HModels < ActiveRecord::Migration[8.1]
       t.references :h2h_match, null: false, foreign_key: true
       t.references :user, type: :integer, null: false, foreign_key: true
       t.timestamps
+      t.index %i[h2h_match_id user_id], unique: true
     end
-    add_index :h2h_match_competitors, %i[h2h_match_id user_id], unique: true
 
     create_table :h2h_sets do |t|
       t.references :h2h_match, null: false, foreign_key: true

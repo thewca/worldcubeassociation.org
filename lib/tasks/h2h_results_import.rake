@@ -36,7 +36,7 @@ namespace :h2h_results do
         result.update!(best: value) if value.positive? && result.best > value
 
         match = H2hMatch.find_or_create_by!(round_id: round_id, match_number: match_number)
-        competitor = H2hMatchCompetitor.find_or_create_by!(h2h_match_id: match.id, user_id: Registration.find(registration_id).user.id)
+        competitor = H2hMatchCompetitor.find_or_create_by!(h2h_match_id: match.id, user_id: Registration.find(registration_id).user_id)
 
         set = H2hSet.find_or_create_by!(h2h_match_id: match.id, set_number: set_number)
 
@@ -46,7 +46,6 @@ namespace :h2h_results do
           attempt_number: result.live_attempts.count + 1,
           live_result: result,
         )
-        puts live_attempt.errors unless live_attempt.valid?
 
         h2h_attempt = H2hAttempt.create!(
           h2h_set: set,
@@ -54,7 +53,6 @@ namespace :h2h_results do
           h2h_match_competitor: competitor,
           set_attempt_number: H2hAttempt.where(h2h_set_id: set, h2h_match_competitor_id: competitor).count + 1,
         )
-        puts h2h_attempt.errors unless h2h_attempt.valid?
 
         # And finally we can save the attempt's scramble
         scramble_set = InboxScrambleSet.find_or_create_by!(matched_round: Round.find(round_id), scramble_set_number: scramble_set_number) do |set|
@@ -129,30 +127,13 @@ namespace :h2h_results do
         r.matched_scramble_sets.each do |set|
           puts "> handling scramble set: #{set.inspect}"
 
-          # Group ID's have to be letters per our validations, this converts a given group number to an alphabet-based letter code
-          group_id = begin
-            result = +""
-            number = set.scramble_set_number
-
-            while number.positive?
-              digit = number % 26
-              digit = 26 if digit.zero?
-
-              result << (digit + 64).chr
-              number -= digit
-              number /= 26
-            end
-
-            result.reverse
-          end
-
           set.inbox_scrambles.each do |is|
             Scramble.create!(
               competition: competition,
               round: r,
               round_type_id: r.results.first.round_type_id,
               event_id: r.event_id,
-              group_id: group_id,
+              group_id: set.alphabetic_group_index,
               is_extra: is.is_extra,
               scramble: is.scramble_string,
               scramble_num: is.scramble_number,
