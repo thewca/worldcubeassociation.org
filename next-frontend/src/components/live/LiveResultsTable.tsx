@@ -1,10 +1,10 @@
 import _ from "lodash";
-import events from "@/lib/wca/data/events";
 import { Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { components } from "@/types/openapi";
 import { recordTagBadge } from "@/components/results/TableCells";
 import countries from "@/lib/wca/data/countries";
+import formats from "@/lib/wca/data/formats";
 
 const customOrderBy = (
   competitor: components["schemas"]["LiveCompetitor"],
@@ -36,6 +36,7 @@ export const rankingCellColorPalette = (
 export default function LiveResultsTable({
   results,
   eventId,
+  formatId,
   competitionId,
   competitors,
   isAdmin = false,
@@ -43,13 +44,13 @@ export default function LiveResultsTable({
 }: {
   results: components["schemas"]["LiveResult"][];
   eventId: string;
+  formatId: string;
   competitionId: string;
   competitors: components["schemas"]["LiveCompetitor"][];
   isAdmin?: boolean;
   showEmpty?: boolean;
 }) {
   const resultsByRegistrationId = _.keyBy(results, "registration_id");
-  const event = events.byId[eventId];
 
   const sortedCompetitors = _.orderBy(
     competitors,
@@ -60,7 +61,9 @@ export default function LiveResultsTable({
     ["asc", "asc"],
   );
 
-  const solveCount = event.recommendedFormat.expected_solve_count;
+  const format = formats.byId[formatId];
+
+  const solveCount = format.expected_solve_count;
   const attemptIndexes = [...Array(solveCount).keys()];
 
   return (
