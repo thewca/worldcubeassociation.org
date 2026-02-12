@@ -1527,18 +1527,6 @@ class Competition < ApplicationRecord
            end
   end
 
-  def last_event_of_competition
-    # Find the event_id of the last scheduled activity (by end_time)
-    # Using joins through the association chain: competition -> rounds -> schedule_activities
-    # This is optimized to use a single query with joins instead of loading all activities
-    rounds
-      .joins(:schedule_activities)
-      .where(schedule_activities: { parent_activity_id: nil }) # Only root activities
-      .order('schedule_activities.end_time DESC')
-      .limit(1)
-      .pick(:event_id)
-  end
-
   def ineligible_events(user)
     competition_events.reject { |ce| ce.can_register?(user) }.map(&:event)
   end
@@ -1874,6 +1862,15 @@ class Competition < ApplicationRecord
 
   def top_level_activities
     competition_venues.includes(venue_rooms: { schedule_activities: [:child_activities] }).map(&:top_level_activities).flatten
+  end
+
+  def last_event_of_competition
+    competition_events
+      .joins(rounds: :schedule_activities)
+      .order('schedule_activities.end_time DESC')
+      .limit(1)
+      .pluck(:event_id)
+      .first
   end
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
