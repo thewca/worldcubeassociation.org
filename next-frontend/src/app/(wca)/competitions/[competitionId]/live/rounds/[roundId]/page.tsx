@@ -4,6 +4,8 @@ import { Container, VStack } from "@chakra-ui/react";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
+import LiveUpdatingDualRoundsTable from "@/components/live/LiveUpdatingDualRoundsTable";
+import _ from "lodash";
 
 export default async function ResultPage({
   params,
@@ -18,7 +20,38 @@ export default async function ResultPage({
     return <p>Error loading Results</p>;
   }
 
-  const { results, id, competitors, format } = resultsRequest.data;
+  const { results, id, competitors, format, linked_round_ids } =
+    resultsRequest.data;
+
+  if (linked_round_ids) {
+    const linkedResults = (
+      await Promise.all(
+        linked_round_ids
+          .filter((wcif_id) => wcif_id !== id)
+          .map((wcif_id) => getResultByRound(competitionId, wcif_id)),
+      )
+    ).flatMap((round) =>
+      round.data!.results.map((r) => ({ ...r, round_id: round.data!.id })),
+    );
+
+    const resultsByRegistrationId = _.groupBy(linkedResults, "registration_id");
+
+    return (
+      <Container bg="bg">
+        <VStack align="left">
+          <LiveUpdatingDualRoundsTable
+            roundId={Number.parseInt(roundId, 10)}
+            resultsByRegistrationId={resultsByRegistrationId}
+            formatId={format}
+            eventId={parseActivityCode(id).eventId}
+            competitors={competitors}
+            competitionId={competitionId}
+            title="Live Results"
+          />
+        </VStack>
+      </Container>
+    );
+  }
 
   return (
     <Container bg="bg">
