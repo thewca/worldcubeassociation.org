@@ -56,14 +56,8 @@ export default function LiveUpdatingResultsTable({
     useState<components["schemas"]["LiveResult"][]>(results);
 
   const [inProjectorMode, setInProjectorMode] = useState(false);
-  const enableProjectorView = useCallback(
-    () => setInProjectorMode(true),
-    [setInProjectorMode],
-  );
-  const disableProjectorView = useCallback(
-    () => setInProjectorMode(false),
-    [setInProjectorMode],
-  );
+  const enableProjectorView = () => setInProjectorMode(true);
+  const disableProjectorView = () => setInProjectorMode(false);
 
   // Move to onEffectEvent when we are on React 19
   const onReceived = useCallback(
