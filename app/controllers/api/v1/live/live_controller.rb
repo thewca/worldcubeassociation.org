@@ -11,7 +11,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     competition_id = params.require(:competition_id)
     registration_id = params.require(:registration_id)
 
-    round = Round.find_by_wcif_id!(round_id, competition_id)
+    round = Round.find_by_wcif_id!(round_id, competition_id, includes: [:live_results])
 
     # TODO: add require_managed! from round admin PR
     require_user
@@ -34,7 +34,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     competition_id = params.require(:competition_id)
     wcif_id = params.require(:round_id)
 
-    round = Round.find_by_wcif_id!(wcif_id, competition_id)
+    round = Round.find_by_wcif_id!(wcif_id, competition_id, includes: [:linked_round, live_results: %i[live_attempts event]])
 
     render json: round.to_live_json
   end
@@ -63,7 +63,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     competition = Competition.find(params.require(:competition_id))
     wcif_id = params.require(:round_id)
 
-    round = Round.find_by_wcif_id!(wcif_id, competition.id)
+    round = Round.find_by_wcif_id!(wcif_id, competition.id, includes: [:live_results])
 
     # TODO: Move these to actual error codes at one point
     return render json: { status: "unauthorized" }, status: :unauthorized unless @current_user.can_manage_competition?(competition)
@@ -83,7 +83,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "unauthorized" }, status: :unauthorized unless @current_user.can_manage_competition?(competition)
 
-    round = Round.find_by_wcif_id!(wcif_id, competition.id)
+    round = Round.find_by_wcif_id!(wcif_id, competition.id, includes: [:live_results])
     result = round.live_results.find_by!(registration_id: registration_id)
 
     return render json: { status: "Cannot quit competitor with results" }, status: :bad_request if result.live_attempts.any?
