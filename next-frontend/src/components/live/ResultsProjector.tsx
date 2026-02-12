@@ -109,7 +109,7 @@ function ResultsProjector({
     }
     if (status === STATUS.SHOWN) {
       if (nonemptyResults.length > getNumberOfRows()) {
-        const timeout: NodeJS.Timeout = setTimeout(
+        const timeout = setTimeout(
           () => {
             setStatus(STATUS.HIDING);
           },
@@ -121,13 +121,13 @@ function ResultsProjector({
       }
     }
     if (status === STATUS.SHOWING) {
-      const timeout: NodeJS.Timeout = setTimeout(() => {
+      const timeout = setTimeout(() => {
         setStatus(STATUS.SHOWN);
       }, DURATION.SHOWING);
       return () => clearTimeout(timeout);
     }
     if (status === STATUS.HIDING) {
-      const timeout: NodeJS.Timeout = setTimeout(() => {
+      const timeout = setTimeout(() => {
         setStatus(STATUS.SHOWING);
         setTopResultIndex((topResultIndex) => {
           const newIndex = topResultIndex + getNumberOfRows();
