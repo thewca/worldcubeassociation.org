@@ -69,7 +69,6 @@ export default function ConfirmProvider({ children }) {
     }
   }, [resolve, handleClose, options.requireInput, inputValue]);
 
-
   const isOpen = resolveReject.length === 2;
 
   return (
