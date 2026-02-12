@@ -281,7 +281,7 @@ vi:
       #original_hash: 4aebda3
       ranking: Top N
       #original_hash: 3bc54a0
-      any_result: Bất kỳ kết quả
+      any_result: Kết quả bất kì
     single:
       #original_hash: d596f44
       time: 'Thành tích đơn dưới %{time}'
@@ -292,7 +292,7 @@ vi:
       #original_hash: ed2b051
       ranking: 'Top %{ranking} theo thành tích đơn'
       #original_hash: 933b7dc
-      any_result: Thành tích đơn bất kỳ
+      any_result: Thành tích đơn bất kì
     average:
       #original_hash: 2682ae8
       time: 'Thành tích trung bình dưới %{time}'
@@ -303,7 +303,7 @@ vi:
       #original_hash: 805171c
       ranking: 'Top %{ranking} theo thành tích trung bình'
       #original_hash: 2223a1b
-      any_result: Thành tích trung bình bất kỳ
+      any_result: Thành tích trung bình bất kì
     deadline:
       #original_hash: 3b7f9f6
       description: Hạn cuối đạt điều kiện
@@ -369,7 +369,7 @@ vi:
       zero: '%{count} ngày'
       other: '%{count} ngày'
     #original_hash: 51ef7d4
-    search_site: Tim kiếm trên trang
+    search_site: Tim kiếm
     #original_hash: d7decf1
     filter: Bộ lọc
     #original_hash: f6fdbe4
@@ -388,7 +388,7 @@ vi:
   oauth:
     applications:
       #original_hash: 0c4ea38
-      your_apps: Ứng dụng OAuth của bạn
+      your_apps: Các ứng dụng OAuth của bạn
       #original_hash: 6403f2b
       new: Tạo mới
       #original_hash: 709a232
@@ -5021,13 +5021,12 @@ vi:
   about:
     #original_hash: 9ac918a
     title: Về WCA
-    #original_hash: af00571
+    #original_hash: ee35764
     mission_statement: >-
-      Nhiệm vụ của chúng tôi là tổ chức càng nhiều giải đấu, tại càng nhiều quốc
-      gia, với nhiều thí sinh, và càng nhiều niềm vui, cùng với một điều kiện
-      bình đẳng và thượng võ.
-    #original_hash: e627278
-    mission_footer: Tuyên bố về Mục tiêu của WCA
+      Sứ mệnh của chúng tôi là thúc đẩy cộng đồng speedcubing toàn cầu và giữ
+      vững một môi trường thi đấu thú vị và công bằng cho tất cả mọi người.
+    #original_hash: 5bed828
+    mission_footer: Tuyên bố về Sứ mệnh của WCA
     #original_hash: cdab446
     who_we_are_title: Chúng tôi là ai
     #original_hash: 303f17a
@@ -6093,7 +6092,7 @@ vi:
         Quốc tịch '%{country}' của %{name} (%{wca_id}) không đúng với dữ liệu
         trong cơ sở dữ liệu WCA ('%{expected_country}'). Nếu có sai sót, xin vui
         lòng sửa lại. Nếu không, xin vui lòng ghi chú cho WRT.
-      #original_hash: e15e700
+      #original_hash: 6179b35
       multiple_newcomers_with_same_name_warning: >-
         Có nhiều thí sinh với tên hoàn toàn giống nhau %{name}. Xin vui lòng đảm
         bảo rằng tất cả kết quả của các thí sinh này đều đúng và được phân tách
@@ -6102,6 +6101,11 @@ vi:
       wrong_parenthesis_type_error: >-
         Dấu ngoặc đơn trong '%{name}' là ký hiệu bất thường, xin thay bằng dấu
         ngoặc đơn chuẩn '(' hoặc ')' và đánh dấu cách sao cho đúng.
+      #original_hash: fec0347
+      special_characters_in_name_warning: >-
+        Tên của thí sinh '%{name}' có chứa kí tự đặc biệt không hợp lệ (số, dấu
+        ngoặc kép, hoặc các kí hiệu khác). Tên thí sinh chỉ được phép bao gồm
+        chữ cái, dấu cách, dấu gạch ngang, dấu nháy, dấu chấm và dấu ngoặc đơn.
       #original_hash: 4b90583
       successive_uppercase_name_warning: >-
         '%{name}' có nhiều chữ viết hoa liền nhau trong tên. Hãy xác minh rằng
@@ -6302,3 +6306,8 @@ vi:
       edit_person: Chỉnh sửa Người dùng
       #original_hash: 5fb2137
       competition_result: Kết quả Giải đấu
+    stakeholder_role:
+      #original_hash: e095187
+      actioner: Người thực hiện
+      #original_hash: bcdf8d3
+      requester: Người yêu cầu
