@@ -11,6 +11,7 @@ import {
   DualLiveResult,
   mergeAndOrderResults,
 } from "@/lib/live/mergeAndOrderResults";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 
 export const rankingCellColorPalette = (
   result: components["schemas"]["LiveResult"],
@@ -32,7 +33,6 @@ export default function DualRoundsTable({
   formatId,
   competitionId,
   competitors,
-  isAdmin = false,
   showEmpty = true,
 }: {
   resultsByRegistrationId: Record<string, DualLiveResult[]>;
@@ -40,7 +40,6 @@ export default function DualRoundsTable({
   formatId: string;
   competitionId: string;
   competitors: components["schemas"]["LiveCompetitor"][];
-  isAdmin?: boolean;
   showEmpty?: boolean;
 }) {
   const competitorsByRegistrationId = _.keyBy(competitors, "id");
@@ -62,8 +61,8 @@ export default function DualRoundsTable({
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
-          {isAdmin && <Table.ColumnHeader>Id</Table.ColumnHeader>}
           <Table.ColumnHeader>Competitor</Table.ColumnHeader>
+          <Table.ColumnHeader>Round</Table.ColumnHeader>
           <Table.ColumnHeader>Country</Table.ColumnHeader>
           {attemptIndexes.map((num) => (
             <Table.ColumnHeader key={num} textAlign="right">
@@ -88,8 +87,8 @@ export default function DualRoundsTable({
             return null;
           }
 
-          return competitorWithResults.results.map((r) => (
-            <Table.Row key={competitorWithResults.id}>
+          return competitorWithResults.results.map((r, index) => (
+            <Table.Row key={`${competitorWithResults.id}-${r.wcifId}`}>
               <Table.Cell
                 width={1}
                 layerStyle="fill.deep"
@@ -98,22 +97,17 @@ export default function DualRoundsTable({
               >
                 {r.local_pos}
               </Table.Cell>
-              {isAdmin && (
-                <Table.Cell>{competitorWithResults.registrant_id}</Table.Cell>
-              )}
               <Table.Cell>
                 <Link
-                  href={
-                    isAdmin
-                      ? `/registrations/${competitorWithResults.id}/edit`
-                      : `/competitions/${competitionId}/live/competitors/${competitorWithResults.id}`
-                  }
+                  href={`/competitions/${competitionId}/live/competitors/${competitorWithResults.id}`}
                 >
-                  {competitorWithResults.name}
+                  {index === 0 && competitorWithResults.name}
                 </Link>
               </Table.Cell>
+              <Table.Cell>{parseActivityCode(r.wcifId).roundNumber}</Table.Cell>
               <Table.Cell>
-                {countries.byIso2[competitorWithResults.country_iso2].name}
+                {index === 0 &&
+                  countries.byIso2[competitorWithResults.country_iso2].name}
               </Table.Cell>
               {hasResult &&
                 padSkipped(r.attempts, format.expected_solve_count).map(
@@ -134,7 +128,7 @@ export default function DualRoundsTable({
                     style={{ position: "relative" }}
                   >
                     {formatAttemptResult(r[stat.field], eventId)}{" "}
-                    {!isAdmin && recordTagBadge(r[stat.recordTagField])}
+                    {recordTagBadge(r[stat.recordTagField])}
                   </Table.Cell>
                 ))}
             </Table.Row>

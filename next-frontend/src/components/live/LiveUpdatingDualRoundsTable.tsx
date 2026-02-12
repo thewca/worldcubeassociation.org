@@ -6,16 +6,15 @@ import useResultsSubscription, {
   DiffedLiveResult,
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
-import LiveResultsTable from "@/components/live/LiveResultsTable";
 import { Heading, HStack, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { DualLiveResult } from "@/lib/live/mergeAndOrderResults";
 import DualRoundsTable from "@/components/live/DualRoundsTable";
 
 function applyDiff(
-  previousResults: components["schemas"]["LiveResult"][],
+  previousResults: DualLiveResult[],
   updated: DiffedLiveResult[],
-  created: components["schemas"]["LiveResult"][],
+  created: DualLiveResult[],
   deleted: number[],
 ): DualLiveResult[] {
   const deletedSet = new Set(deleted);
@@ -82,7 +81,6 @@ export default function LiveUpdatingDualRoundsTable({
         formatId={formatId}
         competitionId={competitionId}
         competitors={competitors}
-        isAdmin={isAdmin}
         showEmpty={showEmpty}
       />
     </VStack>

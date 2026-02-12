@@ -4,7 +4,7 @@ import { Format } from "@/lib/wca/data/formats";
 import { orderResults } from "@/lib/live/orderResults";
 
 export type DualLiveResult = components["schemas"]["LiveResult"] & {
-  round_id: string;
+  wcifId: string;
 };
 
 export const mergeAndOrderResults = (

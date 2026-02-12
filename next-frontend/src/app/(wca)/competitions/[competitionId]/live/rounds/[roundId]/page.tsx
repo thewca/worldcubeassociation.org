@@ -31,10 +31,15 @@ export default async function ResultPage({
           .map((wcif_id) => getResultByRound(competitionId, wcif_id)),
       )
     ).flatMap((round) =>
-      round.data!.results.map((r) => ({ ...r, round_id: round.data!.id })),
+      round.data!.results.map((r) => ({ ...r, wcifId: round.data!.id })),
     );
 
-    const resultsByRegistrationId = _.groupBy(linkedResults, "registration_id");
+    const totalResults = [
+      ...results.map((r) => ({ ...r, wcifId: id })),
+      ...linkedResults,
+    ];
+
+    const resultsByRegistrationId = _.groupBy(totalResults, "registration_id");
 
     return (
       <Container bg="bg">
