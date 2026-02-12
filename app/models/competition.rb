@@ -1869,8 +1869,7 @@ class Competition < ApplicationRecord
       .joins(rounds: :schedule_activities)
       .order('schedule_activities.end_time DESC')
       .limit(1)
-      .pluck(:event_id)
-      .first
+      .pick(:event_id)
   end
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
