@@ -2,11 +2,12 @@
 // https://github.com/jonatanklosko/material-ui-confirm
 
 import React, {
-  createContext, useCallback, useContext, useState,
+  createContext, useCallback, useContext, useState, useMemo,
 } from 'react';
 import {
   Confirm, Modal, Input, Button, Message,
 } from 'semantic-ui-react';
+import useInputState from '../hooks/useInputState';
 
 const ConfirmationContext = createContext();
 
@@ -20,8 +21,13 @@ const DefaultOptions = {
 export default function ConfirmProvider({ children }) {
   const [options, setOptions] = useState(DefaultOptions);
   const [resolveReject, setResolveReject] = useState([]);
-  const [inputValue, setInputValue] = useState('');
-  const [inputError, setInputError] = useState(false);
+  const [inputValue, setInputValue] = useInputState('');
+  const [submitAttempted, setSubmitAttempted] = useState(false);
+
+  const inputError = useMemo(
+    () => submitAttempted && options.requireInput && inputValue !== options.requireInput,
+    [submitAttempted, options.requireInput, inputValue],
+  );
 
   const confirm = useCallback(
     (newOptions = {}) => new Promise((resolve, reject) => {
@@ -31,9 +37,9 @@ export default function ConfirmProvider({ children }) {
       });
       setResolveReject([resolve, reject]);
       setInputValue('');
-      setInputError(false);
+      setSubmitAttempted(false);
     }),
-    [],
+    [setInputValue],
   );
 
   const [resolve, reject] = resolveReject;
@@ -41,8 +47,8 @@ export default function ConfirmProvider({ children }) {
   const handleClose = useCallback(() => {
     setResolveReject([]);
     setInputValue('');
-    setInputError(false);
-  }, []);
+    setSubmitAttempted(false);
+  }, [setInputValue]);
 
   const handleCancel = useCallback(() => {
     if (reject) {
@@ -53,7 +59,7 @@ export default function ConfirmProvider({ children }) {
 
   const handleConfirm = useCallback(() => {
     if (options.requireInput && inputValue !== options.requireInput) {
-      setInputError(true);
+      setSubmitAttempted(true);
       return;
     }
 
@@ -63,20 +69,15 @@ export default function ConfirmProvider({ children }) {
     }
   }, [resolve, handleClose, options.requireInput, inputValue]);
 
-  const handleInputChange = useCallback((e) => {
-    setInputValue(e.target.value);
-    setInputError(false);
-  }, []);
 
   const isOpen = resolveReject.length === 2;
 
-  // If requireInput is set, use a custom Modal with input field
-  if (options.requireInput) {
-    return (
-      <>
-        <ConfirmationContext.Provider value={confirm}>
-          {children}
-        </ConfirmationContext.Provider>
+  return (
+    <>
+      <ConfirmationContext.Provider value={confirm}>
+        {children}
+      </ConfirmationContext.Provider>
+      {options.requireInput ? (
         <Modal
           open={isOpen}
           onClose={handleCancel}
@@ -89,7 +90,7 @@ export default function ConfirmProvider({ children }) {
               fluid
               placeholder={`Type "${options.requireInput}" to confirm`}
               value={inputValue}
-              onChange={handleInputChange}
+              onChange={setInputValue}
               error={inputError}
               autoFocus
             />
@@ -112,24 +113,16 @@ export default function ConfirmProvider({ children }) {
             </Button>
           </Modal.Actions>
         </Modal>
-      </>
-    );
-  }
-
-  // Default simple confirmation
-  return (
-    <>
-      <ConfirmationContext.Provider value={confirm}>
-        {children}
-      </ConfirmationContext.Provider>
-      <Confirm
-        open={isOpen}
-        onCancel={handleCancel}
-        onConfirm={handleConfirm}
-        content={options.content}
-        cancelButton={options.cancelButton}
-        confirmButton={options.confirmButton}
-      />
+      ) : (
+        <Confirm
+          open={isOpen}
+          onCancel={handleCancel}
+          onConfirm={handleConfirm}
+          content={options.content}
+          cancelButton={options.cancelButton}
+          confirmButton={options.confirmButton}
+        />
+      )}
     </>
   );
 }
