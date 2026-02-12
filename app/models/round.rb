@@ -442,7 +442,7 @@ class Round < ApplicationRecord
       "competitors" => live_competitors.includes(:user).map { it.as_json({ methods: %i[name country_iso2], only: %i[id user_id registrant_id] }) },
       "results" => only_podiums ? live_podium : live_results,
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
-      "linked_round_ids": linked_round&.round_ids,
+      "linked_round_ids": linked_round&.wcif_ids,
     }
   end
 
