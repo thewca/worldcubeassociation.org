@@ -1527,7 +1527,7 @@ class Competition < ApplicationRecord
            end
   end
 
-  def final_event_of_competition
+  def last_event_of_competition
     # Find the event_id of the last scheduled activity (by end_time)
     # Using joins through the association chain: competition -> rounds -> schedule_activities
     # This is optimized to use a single query with joins instead of loading all activities
