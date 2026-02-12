@@ -947,8 +947,8 @@ class User < ApplicationRecord
     can_upload_competition_results?(competition) && (can_admin_results? || competition.staff_delegates.include?(self))
   end
 
-  def can_check_newcomers_data?
-    can_admin_results? || any_kind_of_delegate?
+  def can_check_newcomers_data?(competition)
+    can_admin_results? || competition.delegates.include?(self)
   end
 
   def can_create_poll?

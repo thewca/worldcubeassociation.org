@@ -781,16 +781,45 @@ RSpec.describe User do
   end
 
   describe '#can_check_newcomers_data?' do
+    let(:competition_delegate) { create(:delegate) }
+    let(:competition) { create(:competition, :announced, starts: 1.month.from_now, delegates: [competition_delegate]) }
+
     it "returns true for WRT" do
       wrt_user = create(:user, :wrt_member)
 
-      expect(wrt_user.can_check_newcomers_data?).to be true
+      expect(wrt_user.can_check_newcomers_data?(competition)).to be true
+    end
+
+    it "returns true for competition delegate" do
+      expect(competition_delegate.can_check_newcomers_data?(competition)).to be true
+    end
+
+    it "returns true for competition organizer who is also a delegate" do
+      organizer_delegate = create(:delegate)
+      competition.organizers << organizer_delegate
+      competition.delegates << organizer_delegate
+
+      expect(organizer_delegate.can_check_newcomers_data?(competition)).to be true
+    end
+
+    it "returns false for competition organizer who is not a delegate" do
+      organizer = create(:user)
+      competition.organizers << organizer
+
+      expect(organizer.can_check_newcomers_data?(competition)).to be false
+    end
+
+    it "returns false for delegate of another competition" do
+      other_delegate = create(:delegate)
+      create(:competition, :announced, starts: 1.month.from_now, delegates: [other_delegate])
+
+      expect(other_delegate.can_check_newcomers_data?(competition)).to be false
     end
 
     it "returns false for non-WRT user" do
       user = create(:user)
 
-      expect(user.can_check_newcomers_data?).to be false
+      expect(user.can_check_newcomers_data?(competition)).to be false
     end
   end
 
