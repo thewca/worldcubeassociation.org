@@ -109,9 +109,11 @@ module FinishUnfinishedPersons
     sanitized_roman_name = self.remove_accents roman_name
     name_parts = sanitized_roman_name.gsub(/[^a-zA-Z ]/, '').upcase.split
 
-    name_parts.pop if name_parts.length > 1 && GENERATIONAL_SUFFIXES.include?(name_parts[-1])
-
-    name_parts
+    if name_parts.length > 1 && GENERATIONAL_SUFFIXES.include?(name_parts[-1])
+      name_parts[...-1]
+    else
+      name_parts
+    end
   end
 
   def self.compute_semi_id(competition_year, person_name, available_per_semi = {})
