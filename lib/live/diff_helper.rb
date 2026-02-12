@@ -53,21 +53,7 @@ module Live
 
     # To send even less data, we shorten the quite long attribute names
     def self.compress_payload(diff)
-      compress_diff_keys(diff, created: { live_attempts: nil }, updated: { live_attempts: nil })
-    end
-
-    def self.compress_diff_keys(diff_hash, **nested_compressions)
-      nested_keys = nested_compressions.stringify_keys.keys
-
-      compressed_recursive = diff_hash.slice(*nested_keys).to_h do |diff_key, diff_val|
-        recursive_compressions = nested_compressions.fetch(diff_key.to_sym, {})
-        compressed_val = diff_val.map { compress_diff_keys(it, **recursive_compressions) }
-
-        [diff_key, compressed_val]
-      end
-
-      compressed_values = diff_hash.except(*nested_keys).merge(compressed_recursive)
-      compressed_values.transform_keys { COMPRESSION_MAP.fetch(it, it) }
+      diff.deep_transform_keys { COMPRESSION_MAP.fetch(it, it) }
     end
   end
 end
