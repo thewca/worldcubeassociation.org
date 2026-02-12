@@ -1,10 +1,6 @@
 import { Button, ButtonGroup, ClientOnly, Link } from "@chakra-ui/react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import {
-  LuChartNoAxesCombined,
-  LuGalleryVertical,
-  LuPrinter,
-} from "react-icons/lu";
+import { LuChartNoAxesCombined, LuPrinter } from "react-icons/lu";
 import ResultsPDF from "@/components/live/ResultsPdf";
 import { components } from "@/types/openapi";
 
@@ -14,14 +10,12 @@ export default function PublicButtons({
   formatId,
   results,
   competitors,
-  enableProjectorView,
 }: {
   competitionId: string;
   roundId: string;
   formatId: string;
   results: components["schemas"]["LiveResult"][];
   competitors: components["schemas"]["LiveCompetitor"][];
-  enableProjectorView: () => void;
 }) {
   return (
     <ButtonGroup>
@@ -49,9 +43,6 @@ export default function PublicButtons({
             </PDFDownloadLink>
           </Button>
         </ClientOnly>
-      </Button>
-      <Button onClick={enableProjectorView}>
-        <LuGalleryVertical />
       </Button>
     </ButtonGroup>
   );
