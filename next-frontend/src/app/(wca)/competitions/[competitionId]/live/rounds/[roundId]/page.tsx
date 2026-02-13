@@ -6,6 +6,15 @@ import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import LiveUpdatingDualRoundsTable from "@/components/live/LiveUpdatingDualRoundsTable";
 import _ from "lodash";
+import { components } from "@/types/openapi";
+
+// Temporary fix, there is an issue where results are not correctly overwritten
+// in the allOf. I think this is an openapi-typescript issue caused by having a union type with the same
+// results key.
+type FixedLiveRound = Omit<components["schemas"]["WcifRound"], "results"> &
+  Omit<components["schemas"]["LiveRound"], "results"> & {
+    results: components["schemas"]["LiveResult"][];
+  };
 
 export default async function ResultPage({
   params,
@@ -21,7 +30,7 @@ export default async function ResultPage({
   }
 
   const { results, id, competitors, format, linked_round_ids } =
-    resultsRequest.data;
+    resultsRequest.data as FixedLiveRound;
 
   if (linked_round_ids) {
     const linkedResults = (
@@ -31,7 +40,10 @@ export default async function ResultPage({
           .map((wcif_id) => getResultByRound(competitionId, wcif_id)),
       )
     ).flatMap((round) =>
-      round.data!.results.map((r) => ({ ...r, wcifId: round.data!.id })),
+      (round.data! as FixedLiveRound).results.map((r) => ({
+        ...r,
+        wcifId: round.data!.id,
+      })),
     );
 
     const totalResults = [
