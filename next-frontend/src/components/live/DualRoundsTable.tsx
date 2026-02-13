@@ -62,7 +62,9 @@ export default function DualRoundsTable({
                       ? competitorWithResults.global_pos
                       : r.local_pos
                   }
-                  advancingParams={competitorWithResults}
+                  advancingParams={
+                    showDualRoundsView ? competitorWithResults : r
+                  }
                   hide={!showText}
                 />
                 <Table.Cell>
