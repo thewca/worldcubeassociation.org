@@ -55,7 +55,7 @@ namespace :h2h_results do
         )
 
         # And finally we can save the attempt's scramble
-        scramble_set = InboxScrambleSet.find_or_create_by!(matched_round: Round.find(round_id), scramble_set_number: scramble_set_number) do |set|
+        scramble_set = InboxScrambleSet.find_or_create_by!(matched_round_id: Round.find(round_id), scramble_set_number: scramble_set_number) do |set|
           set.competition = set.matched_round.competition
           set.event = set.matched_round.event
           set.round_number = set.matched_round.number
