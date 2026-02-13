@@ -15,16 +15,13 @@ export const mergeAndOrderResults = (
   >,
   format: Format,
 ) => {
-  const bestResultByRegistrationId = _.mapValues(
+  const orderedResultsByRegistrationId = _.mapValues(
     resultsByRegistrationId,
-    (results) => {
-      const orderedResults = orderResults(results, format);
-      return orderedResults[0];
-    },
+    (results) => orderResults(results, format),
   );
 
   const orderedResults = orderResults(
-    Object.values(bestResultByRegistrationId),
+    Object.values(_.map(orderedResultsByRegistrationId, (r) => r[0])),
     format,
   );
 
@@ -33,7 +30,8 @@ export const mergeAndOrderResults = (
 
     return {
       ...competitor,
-      results: resultsByRegistrationId[result.registration_id],
+      global_pos: result.global_pos,
+      results: orderedResultsByRegistrationId[result.registration_id],
     };
   });
 };

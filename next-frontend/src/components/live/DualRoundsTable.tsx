@@ -95,7 +95,7 @@ export default function DualRoundsTable({
                 textAlign="right"
                 colorPalette={rankingCellColorPalette(r)}
               >
-                {r.local_pos}
+                {index === 0 && competitorWithResults.global_pos}
               </Table.Cell>
               <Table.Cell>
                 <Link
