@@ -38,11 +38,10 @@ export default function AttemptsForm({
   isPending,
 }: AttemptsFormProps) {
   const { collection, filter } = useListCollection({
-    initialItems: competitors.map((c) => ({
-      ...c,
-      label: `${c.name} (${c.registrant_id})`,
-      value: c.id,
-    })),
+    initialItems: competitors,
+    itemToValue: (competitor) => competitor.id.toString(),
+    itemToString: (competitor) =>
+      `${competitor.name} (${competitor.registrant_id})`,
     filter: (itemText, filterText, item) =>
       itemText.includes(filterText) ||
       parseInt(filterText, 10) === item.registrant_id,
@@ -74,8 +73,8 @@ export default function AttemptsForm({
             <Combobox.Content>
               <Combobox.Empty>No items found</Combobox.Empty>
               {collection.items.map((item) => (
-                <Combobox.Item item={item} key={item.value}>
-                  {item.label}
+                <Combobox.Item item={item} key={item.id}>
+                  `${item.name} (${item.registrant_id})`
                   <Combobox.ItemIndicator />
                 </Combobox.Item>
               ))}
