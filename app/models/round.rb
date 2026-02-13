@@ -193,6 +193,13 @@ class Round < ApplicationRecord
     [open_count, round_to_lock.lock_results(locking_user)]
   end
 
+  def clear_round!
+    self.transaction do
+      live_results.destroy_all
+      open_round!
+    end
+  end
+
   def open_round!
     empty_results = advancing_registrations.map do |r|
       { registration_id: r.id, round_id: id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
@@ -317,7 +324,7 @@ class Round < ApplicationRecord
   end
 
   def score_taking_done?
-    competitors_live_results_entered == total_competitors
+    open? && competitors_live_results_entered == total_competitors
   end
 
   def time_limit_undefined?
@@ -384,6 +391,27 @@ class Round < ApplicationRecord
     results_to_lock.update_all(locked_by_id: locking_user.id)
   end
 
+  STATE_LOCKED = "locked"
+  STATE_OPEN = "open"
+  STATE_READY = "ready"
+  STATE_PENDING = "pending"
+
+  def lifecycle_state
+    return STATE_LOCKED if locked?
+    return STATE_OPEN if open?
+    return STATE_READY if number == 1 || previous_round.score_taking_done?
+
+    STATE_PENDING
+  end
+
+  def open?
+    live_results.any?
+  end
+
+  def locked?
+    score_taking_done? && live_results.locked.count == total_competitors
+  end
+
   def first_round?
     number == 1 || (linked_round.present? && linked_round.first_round_in_link.number == 1)
   end
@@ -437,7 +465,7 @@ class Round < ApplicationRecord
     }
   end
 
-  def to_live_json(only_podiums: false)
+  def to_live_results_json(only_podiums: false)
     {
       **self.to_wcif,
       "round_id" => id,
@@ -445,6 +473,26 @@ class Round < ApplicationRecord
       "results" => only_podiums ? live_podium : live_results,
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
     }
+  end
+
+  def to_live_info_json
+    state = lifecycle_state
+    json = {
+      **self.to_wcif,
+      "state" => state,
+    }
+    if [STATE_OPEN, STATE_LOCKED].include?(state)
+      json = json.merge({
+                          "total_competitors" => total_competitors,
+                        })
+    end
+
+    if state == STATE_OPEN
+      json = json.merge({
+                          "competitors_live_results_entered" => competitors_live_results_entered,
+                        })
+    end
+    json
   end
 
   def self.wcif_json_schema
