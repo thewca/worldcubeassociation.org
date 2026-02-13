@@ -27,7 +27,7 @@ export type DiffProtocolResponse = {
 };
 
 export default function useResultsSubscription(
-  roundId: number,
+  roundId: string,
   onReceived: (data: DiffProtocolResponse) => void,
 ) {
   const [connectionState, setConnectionState] = useState<ConnectionState>(

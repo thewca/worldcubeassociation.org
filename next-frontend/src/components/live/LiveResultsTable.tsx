@@ -1,14 +1,17 @@
 import _ from "lodash";
-import { Link, Table } from "@chakra-ui/react";
-import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
+import { Table } from "@chakra-ui/react";
 import { components } from "@/types/openapi";
-import { recordTagBadge } from "@/components/results/TableCells";
-import countries from "@/lib/wca/data/countries";
 import formats from "@/lib/wca/data/formats";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import { orderResults } from "@/lib/live/orderResults";
-import { padSkipped } from "@/lib/live/padSkipped";
-import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
+import {
+  LiveCompetitorCell,
+  LiveTableHeader,
+  LivePositionCell,
+  LiveAttemptsCells,
+  LiveStatCells,
+} from "@/components/live/Cells";
+import { CountryCell } from "@/components/results/ResultTableCells";
 
 export default function LiveResultsTable({
   results,
@@ -32,31 +35,12 @@ export default function LiveResultsTable({
   const format = formats.byId[formatId];
 
   const sortedResults = orderResults(results, format);
-  const solveCount = format.expected_solve_count;
 
   const stats = statColumnsForFormat(format);
-  const attemptIndexes = [...Array(solveCount).keys()];
 
   return (
     <Table.Root>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
-          {isAdmin && <Table.ColumnHeader>Id</Table.ColumnHeader>}
-          <Table.ColumnHeader>Competitor</Table.ColumnHeader>
-          <Table.ColumnHeader>Country</Table.ColumnHeader>
-          {attemptIndexes.map((num) => (
-            <Table.ColumnHeader key={num} textAlign="right">
-              {num + 1}
-            </Table.ColumnHeader>
-          ))}
-          {stats.map((stat) => (
-            <Table.ColumnHeader textAlign="right" key={stat.field}>
-              {stat.name}
-            </Table.ColumnHeader>
-          ))}
-        </Table.Row>
-      </Table.Header>
+      <LiveTableHeader format={format} />
 
       <Table.Body>
         {sortedResults.map((result) => {
@@ -70,54 +54,29 @@ export default function LiveResultsTable({
 
           return (
             <Table.Row key={competitor.id}>
-              <Table.Cell
-                width={1}
-                layerStyle="fill.deep"
-                textAlign="right"
-                colorPalette={rankingCellColorPalette(result)}
-              >
-                {result.global_pos}
-              </Table.Cell>
+              <LivePositionCell
+                position={result.global_pos}
+                advancingParams={result}
+              />
               {isAdmin && <Table.Cell>{competitor.registrant_id}</Table.Cell>}
-              <Table.Cell>
-                <Link
-                  href={
-                    isAdmin
-                      ? `/registrations/${competitor.id}/edit`
-                      : `/competitions/${competitionId}/live/competitors/${competitor.id}`
-                  }
-                >
-                  {competitor.name}
-                </Link>
-              </Table.Cell>
-              <Table.Cell>
-                {countries.byIso2[competitor.country_iso2].name}
-              </Table.Cell>
-              {hasResult &&
-                padSkipped(result.attempts, format.expected_solve_count).map(
-                  (attempt) => (
-                    <Table.Cell
-                      textAlign="right"
-                      key={`${competitor.id}-${attempt.attempt_number}`}
-                    >
-                      {formatAttemptResult(attempt.value, eventId)}
-                    </Table.Cell>
-                  ),
-                )}
-              {hasResult &&
-                stats.map((stat, statIndex) => (
-                  <Table.Cell
-                    key={`${result.registration_id}-${stat.name}`}
-                    textAlign="right"
-                    style={{
-                      position: "relative",
-                      fontWeight: statIndex === 0 ? "bold" : "normal",
-                    }}
-                  >
-                    {formatAttemptResult(result[stat.field], eventId)}{" "}
-                    {!isAdmin && recordTagBadge(result[stat.recordTagField])}
-                  </Table.Cell>
-                ))}
+              <LiveCompetitorCell
+                competitionId={competitionId}
+                competitor={competitor}
+                isAdmin={isAdmin}
+              />
+              <CountryCell countryIso2={competitor.country_iso2} />
+              <LiveAttemptsCells
+                format={format}
+                attempts={result.attempts}
+                eventId={eventId}
+                competitorId={competitor.id}
+              />
+              <LiveStatCells
+                stats={stats}
+                competitorId={competitor.id}
+                eventId={eventId}
+                result={result}
+              />
             </Table.Row>
           );
         })}

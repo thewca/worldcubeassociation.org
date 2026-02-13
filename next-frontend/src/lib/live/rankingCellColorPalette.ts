@@ -1,11 +1,15 @@
-export function rankingCellColorPalette<
-  T extends { advancing: boolean; advancing_questionable: boolean },
->(result: T) {
-  if (result.advancing) {
+export function rankingCellColorPalette({
+  advancing,
+  advancing_questionable,
+}: {
+  advancing: boolean;
+  advancing_questionable: boolean;
+}) {
+  if (advancing) {
     return "green";
   }
 
-  if (result.advancing_questionable) {
+  if (advancing_questionable) {
     return "yellow";
   }
 
