@@ -7,6 +7,8 @@ class Round < ApplicationRecord
   has_one :competition, through: :competition_event
   delegate :competition_id, to: :competition_event
 
+  has_many :h2h_matches
+
   has_one :event, through: :competition_event
   # CompetitionEvent uses the cached value
   delegate :event_id, :event, to: :competition_event
@@ -239,6 +241,8 @@ class Round < ApplicationRecord
   end
 
   def recompute_global_pos
+    return if format_id == "h"
+
     # For non-linked rounds, just set the global_pos to local_pos
     return live_results.update_all("global_pos = local_pos") if linked_round.blank?
 
@@ -274,6 +278,8 @@ class Round < ApplicationRecord
   end
 
   def recompute_local_pos
+    return if format_id == "h"
+
     rank_by = format.rank_by_column
     # We only want to decide ties by single in events decided by average
     secondary_rank_by = format.secondary_rank_by_column

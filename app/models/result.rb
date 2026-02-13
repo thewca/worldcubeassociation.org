@@ -14,7 +14,7 @@ class Result < ApplicationRecord
   belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
   # See the pre-validation hook `backlink_attempts` below for an explanation of `autosave: false`
-  has_many :result_attempts, dependent: :destroy, autosave: false, index_errors: true
+  has_many :result_attempts, inverse_of: :result, dependent: :destroy, autosave: false, index_errors: true
   validates_associated :result_attempts
 
   before_validation :backlink_attempts
@@ -29,6 +29,8 @@ class Result < ApplicationRecord
   #   will take care of everything. If validations fail, the values will still be in memory
   #   but won't be written to the DB, which is (surprisingly!) consistent with normal ActiveRecord properties.
   def backlink_attempts
+    return if self.format_id == "h"
+
     memory_attempts = self.result_attempts_attributes.map do |attempt_attributes|
       attempt = self.result_attempts.find { it.attempt_number == attempt_attributes[:attempt_number] } || result_attempts.build(attempt_attributes)
 
