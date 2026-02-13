@@ -84,9 +84,9 @@ class User < ApplicationRecord
       UserGroup.board,
       UserGroup.officers,
     ].flatten.flat_map(&:active_roles)
-      .select(&:eligible_voter?)
-      .map(&:user)
-      .uniq
+     .select(&:eligible_voter?)
+     .map(&:user)
+     .uniq
   end
 
   def self.leader_senior_voters

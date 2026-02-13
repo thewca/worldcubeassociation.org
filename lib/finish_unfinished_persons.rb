@@ -104,15 +104,23 @@ module FinishUnfinishedPersons
     JaroWinkler.similarity(string_a, string_b, ignore_case: true)
   end
 
-  def self.compute_semi_id(competition_year, person_name, available_per_semi = {})
+  def self.name_parts_without_suffix(person_name)
     roman_name = self.extract_roman_name person_name
     sanitized_roman_name = self.remove_accents roman_name
     name_parts = sanitized_roman_name.gsub(/[^a-zA-Z ]/, '').upcase.split
 
-    last_name_index = name_parts.length > 1 && GENERATIONAL_SUFFIXES.include?(name_parts[-1]) ? -2 : -1
+    if name_parts.length > 1 && GENERATIONAL_SUFFIXES.include?(name_parts[-1])
+      name_parts[...-1]
+    else
+      name_parts
+    end
+  end
 
-    last_name = name_parts[last_name_index]
-    rest_of_name = name_parts[...last_name_index].join
+  def self.compute_semi_id(competition_year, person_name, available_per_semi = {})
+    name_parts = self.name_parts_without_suffix(person_name)
+
+    last_name = name_parts[-1]
+    rest_of_name = name_parts[...-1].join
 
     padded_rest_of_name = rest_of_name.ljust WCA_QUARTER_ID_LENGTH, WCA_ID_PADDING
     letters_to_shift = [0, WCA_QUARTER_ID_LENGTH - last_name.length].max

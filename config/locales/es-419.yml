@@ -872,14 +872,16 @@ es-419:
           Si todos los incidentes fueron genéricos, enumera al menos los casos
           más notorios. Marca los recuadros apropiados si estás buscando
           retroalimentación de WIC o WRC.
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
           SE DEBEN incluir al menos %{image_count} imágenes que ilustren la zona
-          de mezclas y de competición (otras imágenes son bienvenidas también).
+          de mezclas y de competición de esta competencia, preferiblemente
+          durante la competencia (otras imágenes son bienvenidas también).
           Puedes elegir múltiples archivos a la vez. Puedes eliminar imágenes
           solo cuando suficientes otras se hayan subido (si quieres reemplazar
           una imagen, necesitas subir la nueva primero, y luego eliminar la
-          antigua).
+          antigua). Si no tienes imágenes de estas zonas en uso, por favor
+          explica la razón.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -2843,6 +2845,11 @@ es-419:
         connected: 'Conectado, actualizando resultados'
         #original_hash: 53abaa2
         disconnected: 'Conexión perdida, resultados no actualizados'
+      podiums:
+        #original_hash: 02ae2bd
+        title: Podios
+        #original_hash: d7297a7
+        undetermined: Podios a definir
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mis competiciones
@@ -5217,12 +5224,12 @@ es-419:
   about:
     #original_hash: 9ac918a
     title: Acerca de la WCA
-    #original_hash: af00571
+    #original_hash: ee35764
     mission_statement: >-
-      Nuestra misión es tener más competiciones en más paises con más gente y de
-      forma más divertida, bajo condiciones justas y equitativas.
-    #original_hash: e627278
-    mission_footer: Declaración de propósitos de la WCA
+      Nuestro propósito es empoderar a la comunidad global de speedcubing y
+      mantener un entorno divertido y justo de competencia para todos.
+    #original_hash: 5bed828
+    mission_footer: Propósito de la WCA
     #original_hash: cdab446
     who_we_are_title: Quienes somos
     #original_hash: 303f17a
