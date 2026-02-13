@@ -21,9 +21,12 @@ export type DiffedLiveResult = Partial<components["schemas"]["LiveResult"]> &
   Pick<components["schemas"]["LiveResult"], "registration_id">;
 
 export type DiffProtocolResponse = {
-  updated: DiffedLiveResult[];
-  deleted: number[];
-  created: components["schemas"]["LiveResult"][];
+  updated?: DiffedLiveResult[];
+  deleted?: number[];
+  created?: components["schemas"]["LiveResult"][];
+  before_hash: string;
+  after_hash: string;
+  wcif_id: string;
 };
 
 export default function useResultsSubscription(

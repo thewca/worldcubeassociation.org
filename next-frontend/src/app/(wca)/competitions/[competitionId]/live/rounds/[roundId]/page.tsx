@@ -62,7 +62,7 @@ export default async function ResultPage({
     <Container bg="bg">
       <VStack align="left">
         <LiveUpdatingResultsTable
-          roundId={Number.parseInt(roundId, 10)}
+          roundId={roundId}
           results={results}
           formatId={format}
           eventId={parseActivityCode(id).eventId}

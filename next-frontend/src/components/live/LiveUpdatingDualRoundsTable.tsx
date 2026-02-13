@@ -10,24 +10,35 @@ import { Heading, HStack, Spacer, Switch, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { DualLiveResult } from "@/lib/live/mergeAndOrderResults";
 import DualRoundsTable from "@/components/live/DualRoundsTable";
+import _ from "lodash";
 
 function applyDiff(
-  previousResults: DualLiveResult[],
+  previousResults: Record<string, DualLiveResult[]>,
   updated: DiffedLiveResult[],
   created: DualLiveResult[],
   deleted: number[],
-): DualLiveResult[] {
+  wcif_id: string,
+): Record<string, DualLiveResult[]> {
   const deletedSet = new Set(deleted);
   const updatesMap = new Map(updated.map((u) => [u.registration_id, u]));
 
-  const diffedResults = previousResults
-    .filter((res) => !deletedSet.has(res.registration_id))
-    .map((res) => {
-      const update = updatesMap.get(res.registration_id);
-      return update ? { ...res, ...update } : res;
-    });
+  const resultsWithoutRemoved = _.filter(
+    previousResults,
+    (_r, registration_id) => !deletedSet.has(Number(registration_id)),
+  );
 
-  return diffedResults.concat(created);
+  const updatedResults = _.mapValues(resultsWithoutRemoved, (results) => {
+    return results.map((result) => {
+      const update = updatesMap.get(result.registration_id);
+      return update && wcif_id === result.wcifId
+        ? { ...result, ...update }
+        : result;
+    });
+  });
+
+  const newResults = _.groupBy(created, "registration_id");
+
+  return _.merge(updatedResults, newResults);
 }
 
 export default function LiveUpdatingDualRoundsTable({
@@ -56,10 +67,16 @@ export default function LiveUpdatingDualRoundsTable({
   // Move to onEffectEvent when we are on React 19
   const onReceived = useCallback(
     (result: DiffProtocolResponse) => {
-      const { updated, created, deleted } = result;
+      const { updated = [], created = [], deleted = [], wcif_id } = result;
 
       updateLiveResults((results) =>
-        applyDiff(results, updated, created, deleted),
+        applyDiff(
+          results,
+          updated,
+          created.map((r) => ({ ...r, wcifId: wcif_id })),
+          deleted,
+          wcif_id,
+        ),
       );
     },
     [updateLiveResults],

@@ -40,7 +40,7 @@ export default function LiveUpdatingResultsTable({
   isAdmin = false,
   showEmpty = true,
 }: {
-  roundId: number;
+  roundId: string;
   results: components["schemas"]["LiveResult"][];
   eventId: string;
   formatId: string;
@@ -56,7 +56,7 @@ export default function LiveUpdatingResultsTable({
   // Move to onEffectEvent when we are on React 19
   const onReceived = useCallback(
     (result: DiffProtocolResponse) => {
-      const { updated, created, deleted } = result;
+      const { updated = [], created = [], deleted = [] } = result;
 
       updateLiveResults((results) =>
         applyDiff(results, updated, created, deleted),

@@ -32,6 +32,11 @@ class UpdateLiveResultJob < ApplicationJob
 
     after_state = round.to_live_state
     diff = Live::DiffHelper.round_state_diff(before_state, after_state)
-    ActionCable.server.broadcast(Live::Config.broadcast_key(round.wcif_id), diff)
+
+    rounds_to_broadcast_to = round.linked_round&.wcif_ids || [round.wcif_id]
+
+    rounds_to_broadcast_to.each do |wcif_id|
+      ActionCable.server.broadcast(Live::Config.broadcast_key(wcif_id), diff.merge({ "wcif_id" => round.wcif_id }))
+    end
   end
 end
