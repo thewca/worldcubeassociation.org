@@ -15,13 +15,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "rgba(0, 0, 0, 0.87)",
-    fontSize: 20,
+    fontSize: 15,
     marginBottom: 4,
-  },
-  subtitle: {
-    color: "rgba(0, 0, 0, 0.54)",
-    fontSize: 16,
-    marginBottom: 16,
   },
   table: {
     width: "100%",
@@ -38,9 +33,9 @@ const styles = StyleSheet.create({
     padding: "6px 8px",
   },
   tableCell: {
-    fontSize: 11,
+    fontSize: 10,
     color: "rgba(0, 0, 0, 0.87)",
-    padding: "6px 8px",
+    padding: "4px 6px",
   },
   colRight: {
     alignItems: "flex-end",
@@ -109,9 +104,8 @@ export default function ResultsPDF({
   return (
     <Document>
       <Page size="A4" style={styles.page} orientation="landscape">
-        <Text style={styles.title}>{competitionId}</Text>
-        <Text style={styles.subtitle}>
-          {event.name} - {roundNumber}
+        <Text style={styles.title}>
+          {competitionId}: {event.name} - {roundNumber}
         </Text>
 
         <View style={styles.table}>
