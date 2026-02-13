@@ -45,7 +45,7 @@ export default async function ResultPage({
       <Container bg="bg">
         <VStack align="left">
           <LiveUpdatingDualRoundsTable
-            roundId={Number.parseInt(roundId, 10)}
+            roundId={roundId}
             resultsByRegistrationId={resultsByRegistrationId}
             formatId={format}
             eventId={parseActivityCode(id).eventId}

@@ -6,7 +6,7 @@ import useResultsSubscription, {
   DiffedLiveResult,
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
-import { Heading, HStack, VStack } from "@chakra-ui/react";
+import { Heading, HStack, Spacer, Switch, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { DualLiveResult } from "@/lib/live/mergeAndOrderResults";
 import DualRoundsTable from "@/components/live/DualRoundsTable";
@@ -38,22 +38,20 @@ export default function LiveUpdatingDualRoundsTable({
   competitionId,
   competitors,
   title,
-  isAdmin = false,
-  showEmpty = true,
 }: {
-  roundId: number;
+  roundId: string;
   resultsByRegistrationId: Record<string, DualLiveResult[]>;
   eventId: string;
   formatId: string;
   competitionId: string;
   competitors: components["schemas"]["LiveCompetitor"][];
   title: string;
-  isAdmin?: boolean;
-  showEmpty?: boolean;
 }) {
   const [liveResults, updateLiveResults] = useState<
     Record<string, DualLiveResult[]>
   >(resultsByRegistrationId);
+
+  const [showDualRoundsView, setShowDualRoundsView] = useState(true);
 
   // Move to onEffectEvent when we are on React 19
   const onReceived = useCallback(
@@ -74,14 +72,26 @@ export default function LiveUpdatingDualRoundsTable({
       <HStack>
         <Heading textStyle="h1">{title}</Heading>
         <ConnectionPulse connectionState={connectionState} />
+        <Spacer flex={1} />
+        <Switch.Root
+          checked={showDualRoundsView}
+          onCheckedChange={(e) => setShowDualRoundsView(e.checked)}
+        >
+          <Switch.HiddenInput />
+          <Switch.Control>
+            <Switch.Thumb />
+          </Switch.Control>
+          <Switch.Label>Show combined Results</Switch.Label>
+        </Switch.Root>
       </HStack>
       <DualRoundsTable
+        wcifId={roundId}
         resultsByRegistrationId={liveResults}
         eventId={eventId}
         formatId={formatId}
         competitionId={competitionId}
         competitors={competitors}
-        showEmpty={showEmpty}
+        showDualRoundsView={showDualRoundsView}
       />
     </VStack>
   );

@@ -18,16 +18,18 @@ export default function DualRoundsTable({
   resultsByRegistrationId,
   eventId,
   formatId,
+  wcifId,
   competitionId,
   competitors,
-  showEmpty = true,
+  showDualRoundsView = true,
 }: {
+  wcifId: string;
   resultsByRegistrationId: Record<string, DualLiveResult[]>;
   eventId: string;
   formatId: string;
   competitionId: string;
   competitors: components["schemas"]["LiveCompetitor"][];
-  showEmpty?: boolean;
+  showDualRoundsView?: boolean;
 }) {
   const competitorsByRegistrationId = _.keyBy(competitors, "id");
 
@@ -66,38 +68,36 @@ export default function DualRoundsTable({
 
       <Table.Body>
         {sortedResultsByCompetitor.map((competitorWithResults) => {
-          const hasResult = competitorWithResults.results.some(
-            (r) => r.attempts.length > 0,
-          );
+          return competitorWithResults.results.map((r, index) => {
+            if (!showDualRoundsView && r.wcifId != wcifId) return undefined;
 
-          if (!showEmpty && !hasResult) {
-            return null;
-          }
+            const showText = !showDualRoundsView || index === 0;
 
-          return competitorWithResults.results.map((r, index) => (
-            <Table.Row key={`${competitorWithResults.id}-${r.wcifId}`}>
-              <Table.Cell
-                width={1}
-                layerStyle="fill.deep"
-                textAlign="right"
-                colorPalette={rankingCellColorPalette(competitorWithResults)}
-              >
-                {index === 0 && competitorWithResults.global_pos}
-              </Table.Cell>
-              <Table.Cell>
-                <Link
-                  href={`/competitions/${competitionId}/live/competitors/${competitorWithResults.id}`}
+            return (
+              <Table.Row key={`${competitorWithResults.id}-${r.wcifId}`}>
+                <Table.Cell
+                  width={1}
+                  layerStyle="fill.deep"
+                  textAlign="right"
+                  colorPalette={rankingCellColorPalette(competitorWithResults)}
                 >
-                  {index === 0 && competitorWithResults.name}
-                </Link>
-              </Table.Cell>
-              <Table.Cell>{parseActivityCode(r.wcifId).roundNumber}</Table.Cell>
-              <Table.Cell>
-                {index === 0 &&
-                  countries.byIso2[competitorWithResults.country_iso2].name}
-              </Table.Cell>
-              {hasResult &&
-                padSkipped(r.attempts, format.expected_solve_count).map(
+                  {showText && competitorWithResults.global_pos}
+                </Table.Cell>
+                <Table.Cell>
+                  <Link
+                    href={`/competitions/${competitionId}/live/competitors/${competitorWithResults.id}`}
+                  >
+                    {showText && competitorWithResults.name}
+                  </Link>
+                </Table.Cell>
+                <Table.Cell>
+                  {parseActivityCode(r.wcifId).roundNumber}
+                </Table.Cell>
+                <Table.Cell>
+                  {showText &&
+                    countries.byIso2[competitorWithResults.country_iso2].name}
+                </Table.Cell>
+                {padSkipped(r.attempts, format.expected_solve_count).map(
                   (attempt) => (
                     <Table.Cell
                       textAlign="right"
@@ -107,8 +107,7 @@ export default function DualRoundsTable({
                     </Table.Cell>
                   ),
                 )}
-              {hasResult &&
-                stats.map((stat, statIndex) => (
+                {stats.map((stat, statIndex) => (
                   <Table.Cell
                     key={`${r.registration_id}-${stat.name}`}
                     textAlign="right"
@@ -121,8 +120,9 @@ export default function DualRoundsTable({
                     {recordTagBadge(r[stat.recordTagField])}
                   </Table.Cell>
                 ))}
-            </Table.Row>
-          ));
+              </Table.Row>
+            );
+          });
         })}
       </Table.Body>
     </Table.Root>
