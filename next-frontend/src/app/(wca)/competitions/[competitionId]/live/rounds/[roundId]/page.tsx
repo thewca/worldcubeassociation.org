@@ -18,7 +18,7 @@ export default async function ResultPage({
     return <p>Error loading Results</p>;
   }
 
-  const { results, id, competitors } = resultsRequest.data;
+  const { results, id, competitors, format } = resultsRequest.data;
 
   return (
     <Container bg="bg">
@@ -26,6 +26,7 @@ export default async function ResultPage({
         <LiveUpdatingResultsTable
           roundId={roundId}
           results={results}
+          formatId={format}
           eventId={parseActivityCode(id).eventId}
           competitors={competitors}
           competitionId={competitionId}

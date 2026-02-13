@@ -1,4 +1,7 @@
 summary: Gets Information about the Round including the live Results
+tags:
+  - live
+operationId: liveByRound
 parameters:
   - name: competitionId
     in: path

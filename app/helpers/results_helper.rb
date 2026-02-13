@@ -4,14 +4,21 @@ module ResultsHelper
   def solve_tds_for_result(result)
     # It's ok to use map + reduce (:+) here because this is not an Integer
     # rubocop:disable Performance/Sum
-    result.solve_times.each_with_index.map do |solve_time, i|
-      classes = ["solve", i.to_s]
-      classes << "trimmed" if result.trimmed_indices.include?(i)
-      classes << "best" if i == result.best_index
-      classes << "worst" if i == result.worst_index
-      content_tag :td, solve_time.clock_format, class: classes.join(' ')
-    end.reduce(:+)
-    # rubocop:enable Performance/Sum
+    if result.format_id == "h"
+      # 5 blank spaces as we don't display H2H results yet
+      Array.new(5) do
+        content_tag :td
+      end.join.html_safe
+    else
+      result.solve_times.each_with_index.map do |solve_time, i|
+        classes = ["solve", i.to_s]
+        classes << "trimmed" if result.trimmed_indices.include?(i)
+        classes << "best" if i == result.best_index
+        classes << "worst" if i == result.worst_index
+        content_tag :td, solve_time.clock_format, class: classes.join(' ')
+      end.reduce(:+)
+      # rubocop:enable Performance/Sum
+    end
   end
 
   # NOTE: PB markers are computed in the order in which results are given.

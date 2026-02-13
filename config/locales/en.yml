@@ -577,6 +577,7 @@ en:
         document: "Document"
       contact_wrt:
         wca_id: "WCA ID"
+    competition_link_html: "Click <a href='%{url}'>here</a> to visit the competition page"
     errors:
       dob_contact:
         dob_invalid: "is misformatted"
@@ -1509,10 +1510,13 @@ en:
       mean: "a mean"
       result_sentence: "with %{a_win_by_word} of %{result}"
       no_winner: The main event was %{event_name}. No winner was declared, as no competitors achieved successful results in the event.
+      h2h_winner: "%{winner} won the Head-to-Head finals of the %{event_name} event."
       winner: "%{winner} won %{result_sentence} in the %{event_name} event."
       first_runner_up: "%{first_runner_up} finished second (%{first_runner_up_result})"
+      h2h_first_runner_up: "%{first_runner_up} finished second"
       and: "and"
       second_runner_up: "%{second_runner_up} finished third (%{second_runner_up_result})."
+      h2h_second_runner_up: "%{second_runner_up} finished third."
       records:
         wr: "World records"
         afr: "African records"
@@ -2194,6 +2198,7 @@ en:
         competitors: "Competitors"
         scrambles: "Scrambles"
     results_table:
+      h2h_results_disclaimer: "Results determined by a Head-to-Head Finals. Only placement order and best solve are shown, as full Head-to-Head results display is still under development."
       wca_profile: "WCA profile"
       event: "Event"
       round: "Round"
@@ -2913,8 +2918,9 @@ en:
       empty_gender_warning: "The gender for newcomer %{name} is empty. Valid gender values are 'female', 'male' and 'other'. Please leave a comment to the WRT about this."
       non_matching_name_warning: "The name '%{name}' provided for %{wca_id} does not match the current record in the WCA database ('%{expected_name}'). "
       non_matching_country_warning: "The country '%{country}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_country}'). If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
-      multiple_newcomers_with_same_name_warning: "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors and that all results are correctly seperated by their corresponding id."
+      multiple_newcomers_with_same_name_warning: "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors and that all results are correctly separated by their corresponding id."
       wrong_parenthesis_type_error: "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
+      special_characters_in_name_warning: "The name '%{name}' contains invalid special characters (such as numbers, quotes, or other symbols). Names should only contain letters, spaces, hyphens, apostrophes, periods, and regular parentheses."
       successive_uppercase_name_warning: "'%{name}' has successive uppercase letters in their name. Please confirm that this is indeed the correct spelling or fix the name."
       lowercase_name_warning: "'%{name}' has a lowercase name. Please confirm that this is indeed the correct spelling or fix the name."
       missing_period_in_single_letter_middle_name_warning: "'%{name}' has a single letter middle name without an abbreviation period. Please confirm that this is indeed the correct spelling or fix the name."
@@ -2963,3 +2969,6 @@ en:
     type:
       edit_person: "Edit Person"
       competition_result: "Competition Result"
+    stakeholder_role:
+      actioner: "Actioner"
+      requester: "Requester"

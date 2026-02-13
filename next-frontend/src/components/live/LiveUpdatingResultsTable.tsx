@@ -33,6 +33,7 @@ export default function LiveUpdatingResultsTable({
   roundId,
   results,
   eventId,
+  formatId,
   competitionId,
   competitors,
   title,
@@ -42,6 +43,7 @@ export default function LiveUpdatingResultsTable({
   roundId: string;
   results: components["schemas"]["LiveResult"][];
   eventId: string;
+  formatId: string;
   competitionId: string;
   competitors: components["schemas"]["LiveCompetitor"][];
   title: string;
@@ -74,6 +76,7 @@ export default function LiveUpdatingResultsTable({
       <LiveResultsTable
         results={liveResults}
         eventId={eventId}
+        formatId={formatId}
         competitionId={competitionId}
         competitors={competitors}
         isAdmin={isAdmin}
