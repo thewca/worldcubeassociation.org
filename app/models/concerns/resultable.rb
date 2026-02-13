@@ -49,19 +49,8 @@ module Resultable
       errors.add(:base, invalid_solve_count_reason) if invalid_solve_count_reason
     end
 
-    validate :validate_average
-    def validate_average
-      return if average_is_not_computable_reason
-
-      correct_average = compute_correct_average
-      errors.add(:average, "should be #{correct_average}") if correct_average != average
-    end
-
-    validate :validate_best, if: :event
-    def validate_best
-      correct_best = compute_correct_best
-      errors.add(:best, "should be #{correct_best}") if correct_best != best
-    end
+    validates :average, comparison: { equal_to: :compute_correct_average, if: :event_id?, unless: :invalid_solve_count_reason }
+    validates :best, comparison: { equal_to: :compute_correct_best, if: :event_id? }
   end
 
   def invalid_solve_count_reason
