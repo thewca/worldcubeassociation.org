@@ -51,7 +51,7 @@ namespace :h2h_results do
           h2h_set: set,
           live_attempt: live_attempt,
           h2h_match_competitor: competitor,
-          set_attempt_number: H2hAttempt.where(h2h_set_id: set, h2h_match_competitor_id: competitor).count + 1,
+          set_attempt_number: H2hAttempt.where(h2h_set: set, h2h_match_competitor: competitor).count + 1,
         )
 
         # And finally we can save the attempt's scramble
