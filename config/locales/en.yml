@@ -577,6 +577,7 @@ en:
         document: "Document"
       contact_wrt:
         wca_id: "WCA ID"
+    competition_link_html: "Click <a href='%{url}'>here</a> to visit the competition page"
     errors:
       dob_contact:
         dob_invalid: "is misformatted"
@@ -2485,8 +2486,8 @@ en:
   #context: About the WCA
   about:
     title: "About the WCA"
-    mission_statement: Our mission is to have more competitions in more countries with more people and more fun, under fair and equal conditions.
-    mission_footer: WCA Mission Statement
+    mission_statement: Our Purpose is to empower the global speedcubing community and uphold a fun and fair competitive environment for all.
+    mission_footer: WCA Purpose Statement
     who_we_are_title: Who we are
     who_we_are_content_html: <p>The World Cube Association governs competitions for mechanical puzzles that are operated by twisting groups of pieces, commonly known as 'twisty puzzles'. The most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA.</p>
       <p>As the WCA has evolved over the past decade, over 245,000 people have competed in our competitions. Despite this growth, we remain an organization that is almost entirely run by volunteers, from local organizers to WCA Delegates to even the WCA Board. We are very grateful to everyone who takes time out of their lives to allow the WCA to function. With more financial support, we hope to bring an even greater level of professionalism to our competitions as we continue to sanction more events across the globe.</p>
@@ -2913,8 +2914,9 @@ en:
       empty_gender_warning: "The gender for newcomer %{name} is empty. Valid gender values are 'female', 'male' and 'other'. Please leave a comment to the WRT about this."
       non_matching_name_warning: "The name '%{name}' provided for %{wca_id} does not match the current record in the WCA database ('%{expected_name}'). "
       non_matching_country_warning: "The country '%{country}' provided for %{name} (%{wca_id}) does not match the current record in the WCA database ('%{expected_country}'). If this is an error, fix it. Otherwise, leave a comment to the WRT about it."
-      multiple_newcomers_with_same_name_warning: "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors and that all results are correctly seperated by their corresponding id."
+      multiple_newcomers_with_same_name_warning: "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors and that all results are correctly separated by their corresponding id."
       wrong_parenthesis_type_error: "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
+      special_characters_in_name_warning: "The name '%{name}' contains invalid special characters (such as numbers, quotes, or other symbols). Names should only contain letters, spaces, hyphens, apostrophes, periods, and regular parentheses."
       successive_uppercase_name_warning: "'%{name}' has successive uppercase letters in their name. Please confirm that this is indeed the correct spelling or fix the name."
       lowercase_name_warning: "'%{name}' has a lowercase name. Please confirm that this is indeed the correct spelling or fix the name."
       missing_period_in_single_letter_middle_name_warning: "'%{name}' has a single letter middle name without an abbreviation period. Please confirm that this is indeed the correct spelling or fix the name."
@@ -2963,3 +2965,6 @@ en:
     type:
       edit_person: "Edit Person"
       competition_result: "Competition Result"
+    stakeholder_role:
+      actioner: "Actioner"
+      requester: "Requester"

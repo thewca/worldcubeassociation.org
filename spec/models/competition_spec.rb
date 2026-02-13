@@ -1239,6 +1239,7 @@ RSpec.describe Competition do
   describe "is exempt from dues" do
     let(:four_by_four) { Event.find "444" }
     let(:fmc) { Event.find "333fm" }
+    let!(:initial_competitions) { create_list(:competition, 5, country_id: "Canada", city_name: "Vancouver, British Columbia", start_date: 2.years.ago, end_date: 2.years.ago + 2.days) }
 
     it "is false when competition has no championships" do
       competition = create(:competition, events: [four_by_four], championship_types: [], country_id: "Canada", city_name: "Vancouver, British Columbia")
@@ -1278,6 +1279,44 @@ RSpec.describe Competition do
     it "is true when competition is a world championship" do
       competition = create(:competition, events: Event.official, championship_types: ["world"], country_id: "Korea")
       expect(competition.exempt_from_wca_dues?).to be true
+    end
+
+    it "is true for the very first competition in a country" do
+      competition = create(:competition, country_id: "Australia", city_name: "Melbourne, Victoria", start_date: Date.today, end_date: Date.today + 2.days)
+      expect(competition.exempt_from_wca_dues?).to be true
+    end
+
+    it "is true for both 5th and 6th competitions if they start on the same date" do
+      create_list(:competition, 4, country_id: "Germany", start_date: 2.months.ago, end_date: 2.months.ago + 2.days)
+
+      comp_5 = create(:competition, country_id: "Germany", start_date: 1.month.ago, end_date: 1.month.ago + 2.days)
+      comp_6 = create(:competition, country_id: "Germany", start_date: 1.month.ago, end_date: 1.month.ago + 3.days)
+
+      expect(comp_5.exempt_from_wca_dues?).to be true
+      expect(comp_6.exempt_from_wca_dues?).to be true
+    end
+
+    it "is false for the 6th competition if it starts after the first 5 and true for the first 5 competitions" do
+      comp_6 = create(:competition, country_id: "Canada", city_name: "Vancouver, British Columbia", start_date: Date.today, end_date: Date.today + 2.days)
+
+      expect(comp_6.exempt_from_wca_dues?).to be false
+      expect(initial_competitions).to all(be_exempt_from_wca_dues)
+    end
+
+    it "is false if 6th competition is happening after many years and true for first 5 competitions" do
+      first_competitions = create_list(:competition, 5, country_id: "Korea", start_date: 7.years.ago, end_date: 7.years.ago + 2.days)
+      comp_6 = create(:competition, country_id: "Korea", start_date: Date.today, end_date: Date.today + 2.days)
+
+      expect(comp_6.exempt_from_wca_dues?).to be false
+      expect(first_competitions).to all(be_exempt_from_wca_dues)
+    end
+
+    it "is true for 6th competition if one of the first 5 competitions are multi-national FMC competition" do
+      create(:competition, events: [fmc], championship_types: [], country_id: "XW")
+      create_list(:competition, 4, country_id: "Korea", start_date: 2.months.ago, end_date: 2.months.ago + 2.days)
+      comp_6 = create(:competition, country_id: "Korea", start_date: Date.today, end_date: Date.today + 2.days)
+
+      expect(comp_6.exempt_from_wca_dues?).to be true
     end
   end
 

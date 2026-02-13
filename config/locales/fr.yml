@@ -2837,7 +2837,7 @@ fr:
         été postés.
       #original_hash: 5c24cd8
       results_still_processing: >-
-        Nous sommes occupés à traiter les résultats de ce concours - ils
+        Nous sommes occupés à traiter les résultats de cette compétition; ils
         devraient être disponibles sous peu.
       #original_hash: e205d73
       results_already_posted: Les résultats ont déjà été postés.
@@ -4648,7 +4648,7 @@ fr:
       #original_hash: 15e58c6
       no_activities: Aucune activité pour les salles/épreuves sélectionnées.
       #original_hash: 10a56c8
-      all_venues: Tout les salles
+      all_venues: Toutes les salles
       #original_hash: a0b3266
       room_or_stage: Salle ou zone
       #original_hash: f37605b
@@ -4678,7 +4678,9 @@ fr:
           Vous consultez le planning de la %{venue_name}, une des %{count} salle
           pour cette compétition.
       #original_hash: 8d175ad
-      venue_selection_all: 'Vous consultez le planning de toutes les salles %{venueCount} à la fois.'
+      venue_selection_all: >-
+        Vous consultez le planning de l'ensemble des %{venueCount} salles à la
+        fois.
       #original_hash: 97df911
       timezone_message: 'Le fuseau horaire pour cette salle est %{timezone}.'
       #original_hash: 94b2570

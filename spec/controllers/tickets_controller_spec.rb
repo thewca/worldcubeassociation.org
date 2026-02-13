@@ -182,4 +182,76 @@ RSpec.describe TicketsController do
       end
     end
   end
+
+  describe "POST #approve_edit_person_request" do
+    let(:wrt_member) { create(:user, :wrt_member) }
+
+    before do
+      sign_in wrt_member
+    end
+
+    context "when the person's data is out of sync" do
+      let(:edit_name_ticket) { create(:edit_name_ticket) }
+
+      before do
+        edit_name_ticket.person.update!(name: "John Doe")
+      end
+
+      it "returns unprocessable content with an error message" do
+        post :approve_edit_person_request, params: {
+          ticket_id: edit_name_ticket.ticket.id,
+          acting_stakeholder_id: edit_name_ticket.ticket.user_stakeholders(wrt_member)[0].id,
+          change_type: "update",
+        }
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body["error"]).to include("The person's data has changed")
+      end
+    end
+
+    context "when the request is valid" do
+      %w[fix update].each do |change_type|
+        [
+          {
+            edit_field: "name",
+            factory: :edit_name_ticket,
+          },
+          {
+            edit_field: "dob",
+            factory: :edit_dob_ticket,
+          },
+          {
+            edit_field: "country",
+            factory: :edit_country_ticket,
+          },
+          {
+            edit_field: "gender",
+            factory: :edit_gender_ticket,
+          },
+        ].each do |data|
+          it "executes the request for #{data[:edit_field]} #{change_type}" do
+            edit_person_ticket = create(data[:factory])
+
+            field = edit_person_ticket.tickets_edit_person_fields.first
+            expected_params = { field.field_name.to_sym => field.new_value }
+
+            if field.field_name.to_sym == :country_iso2
+              # Temporary hack till we migrate to using country_iso2 everywhere
+              expected_params = { country_id: Country.find_by(iso2: field.new_value).id }
+            end
+
+            expect_any_instance_of(Person).to receive(:execute_edit_person_request).with(change_type, expected_params)
+
+            post :approve_edit_person_request, params: {
+              ticket_id: edit_person_ticket.ticket.id,
+              acting_stakeholder_id: edit_person_ticket.ticket.user_stakeholders(wrt_member)[0].id,
+              change_type: change_type,
+            }
+
+            expect(response).to have_http_status(:ok)
+          end
+        end
+      end
+    end
+  end
 end

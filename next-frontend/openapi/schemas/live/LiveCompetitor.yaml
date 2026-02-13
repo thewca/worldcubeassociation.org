@@ -2,7 +2,8 @@ type: object
 required:
   - id
   - registrant_id
-  - user_name
+  - name
+  - country_iso2
   - user_id
 properties:
   id:
@@ -11,5 +12,7 @@ properties:
     type: number
   user_id:
     type: number
-  user_name:
+  name:
+    type: string
+  country_iso2:
     type: string

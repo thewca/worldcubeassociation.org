@@ -29,7 +29,7 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
     limit_condition = "LIMIT #{show}"
 
     query = if is_persons
-              <<-SQL.squish
+              <<~SQL.squish
                 SELECT
                   results.*,
                   results.#{value} value,
@@ -53,7 +53,7 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
               SQL
             elsif is_results
               if is_average
-                <<-SQL.squish
+                <<~SQL.squish
                   SELECT
                     results.*,
                     average value,
@@ -71,7 +71,7 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
                   #{limit_condition}
                 SQL
               else
-                <<-SQL.squish
+                <<~SQL.squish
                   SELECT
                     results.*,
                     result_attempts.value,
@@ -97,7 +97,7 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
                 SQL
               end
             elsif is_by_region
-              <<-SQL.squish
+              <<~SQL.squish
                 SELECT
                   results.*,
                   results.#{value} value,

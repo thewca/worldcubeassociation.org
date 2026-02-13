@@ -841,12 +841,14 @@ export interface components {
             id: number;
             registrant_id: number;
             user_id: number;
-            user_name: string;
+            name: string;
+            country_iso2: string;
         };
         LiveRound: components["schemas"]["WcifRound"] & {
             results: components["schemas"]["LiveResult"][];
             competitors: components["schemas"]["LiveCompetitor"][];
             round_id: number;
+            state_hash: string;
         };
         UserAvatar: {
             /**

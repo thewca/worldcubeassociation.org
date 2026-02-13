@@ -36,7 +36,12 @@ export default function MergeUsersPage() {
       >
         Initiate Merge
       </Button>
-      <Modal open={modalOpen}>
+      <Modal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        closeOnEscape
+        closeIcon
+      >
         <Modal.Content>
           <MergeUsers firstUserId={firstUserId} secondUserId={secondUserId} />
         </Modal.Content>

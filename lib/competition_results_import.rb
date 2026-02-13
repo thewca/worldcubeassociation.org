@@ -41,32 +41,32 @@ module CompetitionResultsImport
       result_data = competition.inbox_results
                                .includes(:inbox_person)
                                .map do |inbox_res|
-        inbox_person = inbox_res.inbox_person
+                                 inbox_person = inbox_res.inbox_person
 
-        person_id = inbox_person&.wca_id.presence || inbox_res.person_id
-        person_country = inbox_person&.country
+                                 person_id = inbox_person&.wca_id.presence || inbox_res.person_id
+                                 person_country = inbox_person&.country
 
-        {
-          pos: inbox_res.pos,
-          person_id: person_id,
-          person_name: inbox_res.person_name,
-          country_id: person_country.id,
-          competition_id: inbox_res.competition_id,
-          event_id: inbox_res.event_id,
-          round_type_id: inbox_res.round_type_id,
-          round_id: inbox_res.round_id,
-          format_id: inbox_res.format_id,
-          # We keep writing to the valueN columns here as an exception,
-          # because the bulk import through `insert_all` below does not trigger model hooks
-          value1: inbox_res.value1,
-          value2: inbox_res.value2,
-          value3: inbox_res.value3,
-          value4: inbox_res.value4,
-          value5: inbox_res.value5,
-          best: inbox_res.best,
-          average: inbox_res.average,
-          attempt_values: inbox_res.attempts,
-        }
+                                 {
+                                   pos: inbox_res.pos,
+                                   person_id: person_id,
+                                   person_name: inbox_res.person_name,
+                                   country_id: person_country.id,
+                                   competition_id: inbox_res.competition_id,
+                                   event_id: inbox_res.event_id,
+                                   round_type_id: inbox_res.round_type_id,
+                                   round_id: inbox_res.round_id,
+                                   format_id: inbox_res.format_id,
+                                   # We keep writing to the valueN columns here as an exception,
+                                   # because the bulk import through `insert_all` below does not trigger model hooks
+                                   value1: inbox_res.value1,
+                                   value2: inbox_res.value2,
+                                   value3: inbox_res.value3,
+                                   value4: inbox_res.value4,
+                                   value5: inbox_res.value5,
+                                   best: inbox_res.best,
+                                   average: inbox_res.average,
+                                   attempt_values: inbox_res.attempts,
+                                 }
       end
 
       result_rows = result_data.map { it.with_indifferent_access.slice(*Result.attribute_names) }

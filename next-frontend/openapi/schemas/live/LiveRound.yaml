@@ -12,7 +12,10 @@ allOf:
           $ref: './LiveCompetitor.yaml'
       round_id:
         type: number
+      state_hash:
+        type: string
     required:
       - results
       - competitors
       - round_id
+      - state_hash

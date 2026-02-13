@@ -1509,8 +1509,8 @@ class Competition < ApplicationRecord
     results.includes(:result_attempts).group_by(&:person_id)
            .sort_by { |_person_id, results| results.first.person_name }
            .map do |person_id, results|
-      results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
-      [person_id, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
+             results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
+             [person_id, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
     end
   end
 
@@ -1785,14 +1785,14 @@ class Competition < ApplicationRecord
     order = if params[:sort]
               params[:sort].split(',')
                            .map do |part|
-                reverse, field = part.match(/^(-)?(\w+)$/).captures
-                [field.to_sym, reverse ? :desc : :asc]
+                             reverse, field = part.match(/^(-)?(\w+)$/).captures
+                             [field.to_sym, reverse ? :desc : :asc]
               end
-                                   # rubocop:disable Style/HashSlice
-                                   #   RuboCop suggests using `slice` here, which is a noble intention but breaks the order
-                                   #   of sort arguments. However, this order is crucial (sorting by "name then start_date"
-                                   #   is different from sorting by "start_date then name") so we insist on doing it our way.
-                                   .select { |field, _| orderable_fields.include?(field) }
+                           # rubocop:disable Style/HashSlice
+                           #   RuboCop suggests using `slice` here, which is a noble intention but breaks the order
+                           #   of sort arguments. However, this order is crucial (sorting by "name then start_date"
+                           #   is different from sorting by "start_date then name") so we insist on doing it our way.
+                           .select { |field, _| orderable_fields.include?(field) }
                            # rubocop:enable Style/HashSlice
                            .to_h
             else
@@ -1947,8 +1947,8 @@ class Competition < ApplicationRecord
                        .includes(includes_associations)
                        .select { authorized || it.wcif_status == "accepted" }
                        .map do |registration|
-      managers.delete(registration.user)
-      registration.user.to_wcif(self, registration, authorized: authorized)
+                         managers.delete(registration.user)
+                         registration.user.to_wcif(self, registration, authorized: authorized)
     end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
@@ -2274,7 +2274,12 @@ class Competition < ApplicationRecord
   end
 
   def exempt_from_wca_dues?
-    world_or_continental_championship? || multi_country_fmc_competition?
+    world_or_continental_championship? ||
+      multi_country_fmc_competition? ||
+      # Exempt the first 5 competitions in a country.
+      # The logic uses strict inequality (<) to ignore competitions starting on the same date.
+      # Therefore, if multiple competitions cross the threshold simultaneously, they are all exempt.
+      country.competitions.where(start_date: ...start_date).count < 5
   end
 
   validate :series_siblings_must_be_valid

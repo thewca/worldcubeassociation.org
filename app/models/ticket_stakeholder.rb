@@ -4,6 +4,7 @@ class TicketStakeholder < ApplicationRecord
   enum :connection, {
     assigned: "assigned",
     cc: "cc",
+    bcc: "bcc",
   }
 
   enum :stakeholder_role, {

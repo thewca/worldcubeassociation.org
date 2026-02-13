@@ -56,7 +56,7 @@ class ComputeAuxiliaryData < WcaCronjob
   ######
 
   private def rankings_query(type, column, event_id)
-    <<-SQL.squish
+    <<~SQL.squish
       SELECT
         results.*,
         results.#{column} value
