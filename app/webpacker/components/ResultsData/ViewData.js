@@ -63,7 +63,6 @@ function ResultsView({
   return (
     <div className="results-data">
       {data.rounds.map((round) => (
-        console.log(round),
         <RoundResultsTable
           key={round.id}
           competitionId={competitionId}
