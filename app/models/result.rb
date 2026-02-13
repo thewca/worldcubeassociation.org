@@ -13,7 +13,7 @@ class Result < ApplicationRecord
   # we also need sure to query the correct competition as well through a composite key.
   belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
-  has_many :result_attempts, dependent: :destroy, autosave: true, index_errors: true
+  has_many :result_attempts, inverse_of: :result, dependent: :destroy, autosave: true, index_errors: true
   validates_associated :result_attempts
 
   # This is a hack because in our test suite we do `update!(valueN: 123)` lots of times
