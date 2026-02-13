@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Link, Table } from "@chakra-ui/react";
+import { Table } from "@chakra-ui/react";
 import { components } from "@/types/openapi";
 import formats from "@/lib/wca/data/formats";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
