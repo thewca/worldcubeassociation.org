@@ -105,11 +105,14 @@ export default function LiveResultsTable({
                   ),
                 )}
               {hasResult &&
-                stats.map((stat) => (
+                stats.map((stat, statIndex) => (
                   <Table.Cell
                     key={`${result.registration_id}-${stat.name}`}
                     textAlign="right"
-                    style={{ position: "relative" }}
+                    style={{
+                      position: "relative",
+                      fontWeight: statIndex === 0 ? "bold" : "normal",
+                    }}
                   >
                     {formatAttemptResult(result[stat.field], eventId)}{" "}
                     {!isAdmin && recordTagBadge(result[stat.recordTagField])}

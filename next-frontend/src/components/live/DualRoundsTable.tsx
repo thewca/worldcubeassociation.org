@@ -108,11 +108,14 @@ export default function DualRoundsTable({
                   ),
                 )}
               {hasResult &&
-                stats.map((stat) => (
+                stats.map((stat, statIndex) => (
                   <Table.Cell
                     key={`${r.registration_id}-${stat.name}`}
                     textAlign="right"
-                    style={{ position: "relative" }}
+                    style={{
+                      position: "relative",
+                      fontWeight: index + statIndex === 0 ? "bold" : "normal",
+                    }}
                   >
                     {formatAttemptResult(r[stat.field], eventId)}{" "}
                     {recordTagBadge(r[stat.recordTagField])}
