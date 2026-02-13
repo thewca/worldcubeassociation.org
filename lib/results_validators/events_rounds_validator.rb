@@ -70,7 +70,7 @@ module ResultsValidators
         # Check for rounds which are entirely missing results.
         # We are filtering out H2H finals as their results are loaded via a different process until we transition
         #   all results to be loaded via the live_results/live_attempts pipeline. See #13200 for more information.
-        expected = competition.rounds.reject { it.is_h2h_mock? }.map(&:human_id)
+        expected = competition.rounds.reject(&:is_h2h_mock?).map(&:human_id)
         real = results.map(&:round_human_id).uniq
 
         (expected - real).each do |round_id|

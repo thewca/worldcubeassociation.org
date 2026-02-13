@@ -47,7 +47,7 @@ namespace :h2h_results do
           live_result: result,
         )
 
-        h2h_attempt = H2hAttempt.create!(
+        H2hAttempt.create!(
           h2h_set: set,
           live_attempt: live_attempt,
           h2h_match_competitor: competitor,
