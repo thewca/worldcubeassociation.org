@@ -18,6 +18,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 4,
   },
+  subtitle: {
+    color: "rgba(0, 0, 0, 0.54)",
+    fontSize: 12,
+    marginBottom: 16,
+  },
   table: {
     width: "100%",
   },
@@ -105,7 +110,10 @@ export default function ResultsPDF({
     <Document>
       <Page size="A4" style={styles.page} orientation="landscape">
         <Text style={styles.title}>
-          {competitionId}: {event.name} - {roundNumber}
+          {competitionId}:{" "}
+          <Text style={styles.subtitle}>
+            {event.name} - {roundNumber}
+          </Text>
         </Text>
 
         <View style={styles.table}>
