@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_26_101113) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_28_194213) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -649,6 +649,46 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_26_101113) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "h2h_attempts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "h2h_match_competitor_id", null: false
+    t.bigint "h2h_set_id", null: false
+    t.bigint "live_attempt_id"
+    t.bigint "result_attempt_id"
+    t.integer "set_attempt_number", limit: 1, null: false
+    t.datetime "updated_at", null: false
+    t.index ["h2h_match_competitor_id"], name: "index_h2h_attempts_on_h2h_match_competitor_id"
+    t.index ["h2h_set_id"], name: "index_h2h_attempts_on_h2h_set_id"
+    t.index ["live_attempt_id"], name: "index_h2h_attempts_on_live_attempt_id"
+    t.index ["result_attempt_id"], name: "index_h2h_attempts_on_result_attempt_id"
+  end
+
+  create_table "h2h_match_competitors", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "h2h_match_id", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["h2h_match_id", "user_id"], name: "index_h2h_match_competitors_on_h2h_match_id_and_user_id", unique: true
+    t.index ["h2h_match_id"], name: "index_h2h_match_competitors_on_h2h_match_id"
+    t.index ["user_id"], name: "index_h2h_match_competitors_on_user_id"
+  end
+
+  create_table "h2h_matches", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "match_number", limit: 1, null: false
+    t.integer "round_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["round_id"], name: "index_h2h_matches_on_round_id"
+  end
+
+  create_table "h2h_sets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "h2h_match_id", null: false
+    t.integer "set_number", limit: 1, null: false
+    t.datetime "updated_at", null: false
+    t.index ["h2h_match_id"], name: "index_h2h_sets_on_h2h_match_id"
+  end
+
   create_table "inbox_persons", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", limit: 32, null: false
     t.string "country_iso2", limit: 2, default: "", null: false
@@ -779,10 +819,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_26_101113) do
     t.integer "global_pos"
     t.datetime "last_attempt_entered_at", null: false
     t.integer "local_pos"
+    t.integer "locked_by_id"
+    t.integer "quit_by_id"
     t.bigint "registration_id", null: false
     t.bigint "round_id", null: false
     t.string "single_record_tag", limit: 255
     t.datetime "updated_at", null: false
+    t.index ["locked_by_id"], name: "index_live_results_on_locked_by_id"
+    t.index ["quit_by_id"], name: "index_live_results_on_quit_by_id"
     t.index ["registration_id", "round_id"], name: "index_live_results_on_registration_id_and_round_id", unique: true
     t.index ["registration_id"], name: "index_live_results_on_registration_id"
     t.index ["round_id"], name: "index_live_results_on_round_id"
@@ -1146,7 +1190,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_26_101113) do
     t.index ["person_id"], name: "Results_fk_competitor"
     t.index ["regional_average_record", "event_id"], name: "index_Results_on_regionalAverageRecord_and_eventId"
     t.index ["regional_single_record", "event_id"], name: "index_Results_on_regionalSingleRecord_and_eventId"
-    t.index ["round_id", "person_id"], name: "results_person_uniqueness_speedup"
+    t.index ["round_id", "person_id"], name: "results_person_uniqueness_speedup", unique: true
     t.index ["round_id"], name: "index_results_on_round_id"
     t.index ["round_type_id"], name: "Results_fk_round"
   end
@@ -1572,6 +1616,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_26_101113) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "h2h_attempts", "h2h_match_competitors"
+  add_foreign_key "h2h_attempts", "h2h_sets"
+  add_foreign_key "h2h_attempts", "live_attempts"
+  add_foreign_key "h2h_attempts", "result_attempts"
+  add_foreign_key "h2h_match_competitors", "h2h_matches"
+  add_foreign_key "h2h_match_competitors", "users"
+  add_foreign_key "h2h_matches", "rounds"
+  add_foreign_key "h2h_sets", "h2h_matches"
   add_foreign_key "inbox_results", "rounds"
   add_foreign_key "inbox_scramble_sets", "events"
   add_foreign_key "inbox_scramble_sets", "rounds", column: "matched_round_id"
@@ -1579,6 +1631,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_26_101113) do
   add_foreign_key "inbox_scrambles", "inbox_scramble_sets"
   add_foreign_key "inbox_scrambles", "inbox_scramble_sets", column: "matched_scramble_set_id"
   add_foreign_key "live_attempt_history_entries", "live_attempts"
+  add_foreign_key "live_results", "users", column: "locked_by_id"
+  add_foreign_key "live_results", "users", column: "quit_by_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
