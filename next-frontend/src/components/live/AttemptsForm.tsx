@@ -11,7 +11,6 @@ import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
 import _ from "lodash";
 
 interface AttemptsFormProps {
-  registrationId: number | null;
   handleRegistrationIdChange: (value: number) => void;
   competitors: components["schemas"]["LiveCompetitor"][];
   solveCount: number;
@@ -41,7 +40,7 @@ export default function AttemptsForm({
   const { collection, filter } = useListCollection({
     initialItems: competitors.map((c) => ({
       ...c,
-      label: `${c.user_name} (${c.registrant_id})`,
+      label: `${c.name} (${c.registrant_id})`,
       value: c.id,
     })),
     filter: (itemText, filterText, item) =>
@@ -88,7 +87,7 @@ export default function AttemptsForm({
         <AttemptResultField
           eventId={eventId}
           key={index}
-          value={attempts[index] ?? 0}
+          value={attempts[index]}
           onChange={(value) => handleAttemptChange(index, value)}
           resultType="single"
         />

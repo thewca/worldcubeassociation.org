@@ -1,37 +1,39 @@
 "use client";
 import { useCallback, useState } from "react";
 import { components } from "@/types/openapi";
-import events from "@/lib/wca/data/events";
 import useAPI from "@/lib/wca/useAPI";
 import { Button, ButtonGroup, Grid, GridItem, Link } from "@chakra-ui/react";
 import AttemptsForm from "@/components/live/AttemptsForm";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
+import { Format } from "@/lib/wca/data/formats";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 function zeroedArrayOfSize(size: number) {
   return Array(size).fill(0);
 }
 
 export default function AddResults({
   results,
-  eventId,
+  format,
   roundId,
   competitionId,
   competitors,
 }: {
   results: components["schemas"]["LiveResult"][];
-  eventId: string;
+  format: Format;
   roundId: string;
   competitionId: string;
   competitors: components["schemas"]["LiveCompetitor"][];
 }) {
-  const event = events.byId[eventId];
-  const solveCount = event.recommendedFormat.expected_solve_count;
+  const eventId = parseActivityCode(roundId).eventId;
 
-  const [registrationId, setRegistrationId] = useState<number | null>(null);
+  const solveCount = format.expected_solve_count;
+
+  const [registrationId, setRegistrationId] = useState<number>();
   const [attempts, setAttempts] = useState<number[]>(
     zeroedArrayOfSize(solveCount),
   );
-  const [error, setError] = useState<string>("");
-  const [success, setSuccess] = useState<string>("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const api = useAPI();
 
@@ -50,31 +52,13 @@ export default function AddResults({
     [results, solveCount],
   );
 
-  const { mutate: mutateSubmit, isPending: isPendingSubmit } = api.useMutation(
-    "post",
-    "/v1/competitions/{competitionId}/live/rounds/{roundId}",
-    {
-      onSuccess: () => {
-        setSuccess("Results added successfully!");
-        setRegistrationId(null);
-        setAttempts(zeroedArrayOfSize(solveCount));
-        setError("");
-
-        setTimeout(() => setSuccess(""), 3000);
-      },
-      onError: () => {
-        setError("Failed to submit results. Please try again.");
-      },
-    },
-  );
-
   const { mutate: mutateUpdate, isPending: isPendingUpdate } = api.useMutation(
     "patch",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}",
     {
       onSuccess: () => {
         setSuccess("Results updated successfully!");
-        setRegistrationId(null);
+        setRegistrationId(undefined);
         setAttempts(zeroedArrayOfSize(solveCount));
         setError("");
 
@@ -111,19 +95,6 @@ export default function AddResults({
           registration_id: registrationId,
         },
       });
-    } else {
-      mutateSubmit({
-        params: {
-          path: { competitionId: competitionId, roundId: roundId },
-        },
-        body: {
-          attempts: attempts.map((attempt, index) => ({
-            value: attempt,
-            attempt_number: index + 1,
-          })),
-          registration_id: registrationId,
-        },
-      });
     }
   };
 
@@ -133,7 +104,6 @@ export default function AddResults({
         <AttemptsForm
           error={error}
           success={success}
-          registrationId={registrationId}
           handleAttemptChange={handleAttemptChange}
           handleSubmit={handleSubmit}
           handleRegistrationIdChange={handleRegistrationIdChange}
@@ -142,7 +112,7 @@ export default function AddResults({
           competitors={competitors}
           solveCount={solveCount}
           eventId={eventId}
-          isPending={isPendingSubmit || isPendingUpdate}
+          isPending={isPendingUpdate}
         />
       </GridItem>
 
@@ -181,6 +151,7 @@ export default function AddResults({
           competitors={competitors}
           competitionId={competitionId}
           roundId={roundId}
+          formatId={format.id}
           title="Current Results"
           isAdmin
         />
