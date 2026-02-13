@@ -12,20 +12,7 @@ import {
   mergeAndOrderResults,
 } from "@/lib/live/mergeAndOrderResults";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
-
-export const rankingCellColorPalette = (
-  result: components["schemas"]["LiveResult"],
-) => {
-  if (result?.advancing) {
-    return "green";
-  }
-
-  if (result?.advancing_questionable) {
-    return "yellow";
-  }
-
-  return "";
-};
+import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
 
 export default function DualRoundsTable({
   resultsByRegistrationId,
@@ -93,7 +80,7 @@ export default function DualRoundsTable({
                 width={1}
                 layerStyle="fill.deep"
                 textAlign="right"
-                colorPalette={rankingCellColorPalette(r)}
+                colorPalette={rankingCellColorPalette(competitorWithResults)}
               >
                 {index === 0 && competitorWithResults.global_pos}
               </Table.Cell>

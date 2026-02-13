@@ -31,7 +31,11 @@ export const mergeAndOrderResults = (
     return {
       ...competitor,
       global_pos: result.global_pos,
-      results: orderedResultsByRegistrationId[result.registration_id],
+      advancing: result.advancing,
+      advancing_questionable: result.advancing_questionable,
+      results: orderedResultsByRegistrationId[
+        result.registration_id
+      ] as DualLiveResult[],
     };
   });
 };

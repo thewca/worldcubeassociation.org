@@ -8,20 +8,7 @@ import formats from "@/lib/wca/data/formats";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import { orderResults } from "@/lib/live/orderResults";
 import { padSkipped } from "@/lib/live/padSkipped";
-
-export const rankingCellColorPalette = (
-  result: components["schemas"]["LiveResult"],
-) => {
-  if (result?.advancing) {
-    return "green";
-  }
-
-  if (result?.advancing_questionable) {
-    return "yellow";
-  }
-
-  return "";
-};
+import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
 
 export default function LiveResultsTable({
   results,
