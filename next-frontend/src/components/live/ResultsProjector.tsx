@@ -37,12 +37,11 @@ const fadeStyle = ({
   };
   style?: React.CSSProperties;
 }): React.CSSProperties => ({
-  opacity: isVisible ? 1 : 0,
-  transition: `opacity ${
-    isVisible
-      ? (transition?.enter?.duration ?? 1)
-      : (transition?.exit?.duration ?? 1)
-  }s ease-in-out`,
+  opacity: isVisible ? 0 : 1,
+  animation: isVisible
+    ? `fadeIn ${transition?.enter?.duration ?? 1}s ease-in-out`
+    : `fadeOut ${transition?.exit?.duration ?? 1}s ease-in-out`,
+  animationFillMode: "forwards",
   ...style,
 });
 
@@ -58,7 +57,7 @@ const STATUS: Record<string, StatusType> = {
 const DURATION = {
   SHOWN: 10 * 1000,
   FORECAST_SHOWN: 20 * 1000,
-  SHOWING: 1000,
+  SHOWING: 3000,
   HIDING: 1000,
 } as const;
 
@@ -262,7 +261,7 @@ function ResultsProjector({
                             },
                             style:
                               status === STATUS.SHOWING
-                                ? { transitionDelay: `${index * 150}ms` }
+                                ? { animationDelay: `${index * 100}ms` }
                                 : {},
                           })}
                         >
