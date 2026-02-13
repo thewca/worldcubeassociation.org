@@ -13,6 +13,7 @@ import {
   LivePositionCell,
   LiveAttemptsCells,
   LiveStatCells,
+  LiveCompetitorCell,
 } from "@/components/live/Cells";
 import { CountryCell } from "@/components/results/ResultTableCells";
 
@@ -53,36 +54,43 @@ export default function DualRoundsTable({
             if (!showDualRoundsView && r.wcifId != wcifId) return undefined;
 
             const showText = !showDualRoundsView || index === 0;
+            const rowSpan = showDualRoundsView
+              ? competitorWithResults.results.length
+              : 1;
 
             return (
               <Table.Row key={`${competitorWithResults.id}-${r.wcifId}`}>
-                <LivePositionCell
-                  position={
-                    showDualRoundsView
-                      ? competitorWithResults.global_pos
-                      : r.local_pos
-                  }
-                  advancingParams={
-                    showDualRoundsView ? competitorWithResults : r
-                  }
-                  hide={!showText}
-                />
-                <Table.Cell>
-                  <Link
-                    href={`/competitions/${competitionId}/live/competitors/${competitorWithResults.id}`}
-                  >
-                    {showText && competitorWithResults.name}
-                  </Link>
-                </Table.Cell>
+                {showText && (
+                  <LivePositionCell
+                    position={
+                      showDualRoundsView
+                        ? competitorWithResults.global_pos
+                        : r.local_pos
+                    }
+                    advancingParams={
+                      showDualRoundsView ? competitorWithResults : r
+                    }
+                    rowSpan={rowSpan}
+                  />
+                )}
+                {showText && (
+                  <LiveCompetitorCell
+                    competitionId={competitionId}
+                    competitor={competitorWithResults}
+                    rowSpan={rowSpan}
+                  />
+                )}
                 {showDualRoundsView && (
                   <Table.Cell>
                     {parseActivityCode(r.wcifId).roundNumber}
                   </Table.Cell>
                 )}
-                <CountryCell
-                  hide={!showText}
-                  countryIso2={competitorWithResults.country_iso2}
-                />
+                {showText && (
+                  <CountryCell
+                    countryIso2={competitorWithResults.country_iso2}
+                    rowSpan={rowSpan}
+                  />
+                )}
                 <LiveAttemptsCells
                   format={format}
                   attempts={r.attempts}

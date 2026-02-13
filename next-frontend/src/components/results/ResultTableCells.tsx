@@ -4,22 +4,23 @@ import events from "@/lib/wca/data/events";
 import { HStack, Icon, Link, Table } from "@chakra-ui/react";
 import countries from "@/lib/wca/data/countries";
 
-type CountryCellProps =
+type CountryCellProps = (
   | {
       countryId: string;
       countryIso2?: undefined;
-      hide?: boolean;
     }
   | {
       countryIso2: string;
       countryId?: undefined;
-      hide?: boolean;
-    };
+    }
+) & {
+  rowSpan?: number;
+};
 
 export function CountryCell({
   countryId,
   countryIso2,
-  hide = false,
+  rowSpan,
 }: CountryCellProps) {
   const country =
     // Explicitly check for undefined so TypeScript knows which branch it is
@@ -27,13 +28,13 @@ export function CountryCell({
       ? countries.byId[countryId]
       : countries.byIso2[countryIso2];
   return (
-    <Table.Cell>
-      {country && !hide && (
+    <Table.Cell rowSpan={rowSpan}>
+      {country && (
         <Icon asChild size="sm">
           <WcaFlag code={country.iso2} />
         </Icon>
       )}{" "}
-      {!hide && country.name}
+      {country.name}
     </Table.Cell>
   );
 }

@@ -76,6 +76,7 @@ export default function LiveUpdatingDualRoundsTable({
         <Switch.Root
           checked={showDualRoundsView}
           onCheckedChange={(e) => setShowDualRoundsView(e.checked)}
+          colorPalette="green"
         >
           <Switch.HiddenInput />
           <Switch.Control>

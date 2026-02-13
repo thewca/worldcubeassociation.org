@@ -43,11 +43,11 @@ export function LiveTableHeader({
 
 export function LivePositionCell({
   position,
-  hide = false,
+  rowSpan,
   advancingParams,
 }: {
   position: number;
-  hide?: boolean;
+  rowSpan?: number;
   advancingParams: {
     advancing: boolean;
     advancing_questionable: boolean;
@@ -58,26 +58,27 @@ export function LivePositionCell({
       width={1}
       layerStyle="fill.deep"
       textAlign="right"
+      rowSpan={rowSpan}
       colorPalette={rankingCellColorPalette(advancingParams)}
     >
-      {!hide && position}
+      {position}
     </Table.Cell>
   );
 }
 
 export function LiveCompetitorCell({
   isAdmin = false,
-  hide = false,
+  rowSpan,
   competitionId,
   competitor,
 }: {
   isAdmin?: boolean;
-  hide?: boolean;
+  rowSpan?: number;
   competitionId: string;
   competitor: { name: string; id: number };
 }) {
   return (
-    <Table.Cell>
+    <Table.Cell rowSpan={rowSpan}>
       <Link
         href={
           isAdmin
@@ -85,7 +86,7 @@ export function LiveCompetitorCell({
             : `/competitions/${competitionId}/live/competitors/${competitor.id}`
         }
       >
-        {!hide && competitor.name}
+        {competitor.name}
       </Link>
     </Table.Cell>
   );
