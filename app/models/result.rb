@@ -13,8 +13,25 @@ class Result < ApplicationRecord
   # we also need sure to query the correct competition as well through a composite key.
   belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
-  has_many :result_attempts, dependent: :destroy, index_errors: true
+  has_many :result_attempts, dependent: :destroy, autosave: true, index_errors: true
   validates_associated :result_attempts
+
+  # This is a hack because in our test suite we do `update!(valueN: 123)` lots of times
+  #   to mock different result submission scenarios. Unfortunately, this can only be changed
+  #   and "harmonized" once `inbox_results` is gone, because that still relies on valueNs.
+  before_validation :backlink_attempts, on: :update, if: -> { Rails.env.test? }
+
+  def backlink_attempts
+    (1..5).each do |n|
+      legacy_value = self.attributes["value#{n}"]
+
+      # Crucially, `find_or_initialize_by` does NOT work here, because it circumvents Rails memory
+      #   by going directly down to the database layer. `autosave: true` above needs the memory layer, though.
+      in_memory_attempt = self.result_attempts.find { it.attempt_number == n } || result_attempts.build(attempt_number: n)
+
+      in_memory_attempt.assign_attributes(value: legacy_value)
+    end
+  end
 
   # We run this _after_ validations as part of the transition process:
   #   In order to make sure that all validations correctly "see" the `result_attempts`,
