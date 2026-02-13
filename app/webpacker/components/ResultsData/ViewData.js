@@ -64,16 +64,17 @@ function ResultsView({
   return (
     <div className="results-data">
       {data.rounds.map((round) => (
+        console.log(round),
         <RoundResultsTable
           key={round.id}
           competitionId={competitionId}
           eventId={eventId}
           round={round}
           newEntryUrlFn={newEntryUrlFn}
-          DataRowHeader={round?.results?.[0].format_id === 'h' ? H2hRowHeader : DataRowHeader}
+          DataRowHeader={round.isH2hMock ? H2hRowHeader : DataRowHeader}
           DataRowBody={DataRowBody}
           adminMode={adminMode}
-          isH2hRound={round?.results?.[0].format_id === 'h'}
+          isH2hRound={round.isH2hMock}
         />
       ))}
     </div>
