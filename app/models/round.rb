@@ -404,7 +404,7 @@ class Round < ApplicationRecord
                        live_result_id: live_result_id,
                        created_at: now,
                        updated_at: now,
-                       )
+                     )
         end
       end
 
