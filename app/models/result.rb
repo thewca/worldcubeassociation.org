@@ -16,7 +16,10 @@ class Result < ApplicationRecord
   has_many :result_attempts, dependent: :destroy, index_errors: true
   validates_associated :result_attempts
 
-  before_validation :repack_attempts
+  # We run this _after_ validations as part of the transition process:
+  #   In order to make sure that all validations correctly "see" the `result_attempts`,
+  #   we only backfill to the old columns once we have established that the attempts are valid
+  after_validation :repack_attempts
 
   # As of writing this comment, we are transitioning `value1..5` to a separate row-based table.
   # We have progressed to productively using the new, normalized `result_attempts` table
