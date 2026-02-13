@@ -20,12 +20,11 @@ function RoundResultsTable({
   DataRowHeader,
   DataRowBody,
   adminMode,
-  isH2hRound,
 }) {
   return (
     <>
       <h2>{localizeRoundInformation(eventId, round.roundTypeId)}</h2>
-      {isH2hRound && <p><i>{I18n.t('competitions.results_table.h2h_results_disclaimer')}</i></p>}
+      {round.isH2hMock && <p><i>{I18n.t('competitions.results_table.h2h_results_disclaimer')}</i></p>}
       {adminMode && (
         <Button positive as="a" href={newEntryUrlFn(competitionId, round.id)} size="tiny">
           <Icon name="plus" />
@@ -74,7 +73,6 @@ function ResultsView({
           DataRowHeader={round.isH2hMock ? H2hRowHeader : DataRowHeader}
           DataRowBody={DataRowBody}
           adminMode={adminMode}
-          isH2hRound={round.isH2hMock}
         />
       ))}
     </div>
