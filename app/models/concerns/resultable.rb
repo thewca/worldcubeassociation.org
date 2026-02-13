@@ -49,8 +49,8 @@ module Resultable
       errors.add(:base, invalid_solve_count_reason) if invalid_solve_count_reason
     end
 
-    validates :average, comparison: { equal_to: :compute_correct_average, if: :event_id?, unless: :invalid_solve_count_reason }
-    validates :best, comparison: { equal_to: :compute_correct_best, if: :event_id? }
+    validates :average, comparison: { equal_to: :compute_correct_average, if: :event, unless: :invalid_solve_count_reason }
+    validates :best, comparison: { equal_to: :compute_correct_best, if: :event }
   end
 
   def invalid_solve_count_reason
