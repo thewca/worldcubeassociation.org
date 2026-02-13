@@ -8,6 +8,7 @@ class PotentialDuplicatePerson < ApplicationRecord
 
   enum :name_matching_algorithm, {
     jarowinkler: 'jarowinkler',
+    exact_first_last_dob: 'exact_first_last_dob',
   }
 
   DEFAULT_SERIALIZE_OPTIONS = {

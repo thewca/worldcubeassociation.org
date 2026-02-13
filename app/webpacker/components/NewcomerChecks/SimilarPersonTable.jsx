@@ -1,5 +1,7 @@
 import React from 'react';
-import { Button, Popup, Table } from 'semantic-ui-react';
+import {
+  Button, Icon, Popup, Table,
+} from 'semantic-ui-react';
 import { personUrl } from '../../lib/requests/routes.js.erb';
 
 export default function SimilarPersonTable({
@@ -33,7 +35,11 @@ export default function SimilarPersonTable({
           </Table.Cell>
         </Table.Row>
         {potentialDuplicates.map((potentialDuplicatePerson) => {
-          const { duplicate_person: duplicatePerson, score } = potentialDuplicatePerson;
+          const {
+            duplicate_person: duplicatePerson,
+            score,
+            name_matching_algorithm: nameMatchingAlgorithm,
+          } = potentialDuplicatePerson;
           const exactSameDetails = (
             originalUser.name === duplicatePerson.name
                   && originalUser.dob === duplicatePerson.dob
@@ -49,7 +55,14 @@ export default function SimilarPersonTable({
                   {duplicatePerson.wca_id}
                 </a>
               </Table.Cell>
-              <Table.Cell>{score}</Table.Cell>
+              <Table.Cell>
+                {score}
+                {' '}
+                <Popup
+                  trigger={<Icon name="info circle" />}
+                  content={`Computed using ${nameMatchingAlgorithm} algorithm`}
+                />
+              </Table.Cell>
               <Table.Cell>
                 <Popup
                   trigger={(
