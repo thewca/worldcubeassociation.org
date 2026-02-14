@@ -60,7 +60,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   def create
     user_id = params.require(:userId)
     group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
-    start_date = params[:startDate].present? ? params[:startDate] : Date.today
+    start_date = params[:startDate].presence || Date.today
     end_date = params[:endDate]
 
     create_supported_groups = [
