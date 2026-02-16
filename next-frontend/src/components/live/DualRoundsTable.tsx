@@ -102,6 +102,7 @@ export default function DualRoundsTable({
                   competitorId={competitorWithResults.id}
                   eventId={eventId}
                   result={r}
+                  highlight={showText}
                 />
               </Table.Row>
             );

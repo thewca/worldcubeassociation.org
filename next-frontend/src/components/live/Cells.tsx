@@ -119,12 +119,14 @@ export function LiveStatCells({
   eventId,
   result,
   isAdmin = false,
+  highlight = false,
 }: {
   stats: Stat[];
   competitorId: number;
   eventId: string;
   result: components["schemas"]["LiveResult"];
   isAdmin?: boolean;
+  highlight?: boolean;
 }) {
   return stats.map((stat, statIndex) => (
     <Table.Cell
@@ -134,6 +136,8 @@ export function LiveStatCells({
         position: "relative",
         fontWeight: statIndex === 0 ? "bold" : "normal",
       }}
+      colorPalette="blue"
+      bg={statIndex === 0 && highlight ? "colorPalette.subtle" : ""}
     >
       {formatAttemptResult(result[stat.field], eventId)}{" "}
       {!isAdmin && recordTagBadge(result[stat.recordTagField])}
