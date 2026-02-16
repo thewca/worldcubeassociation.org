@@ -133,7 +133,7 @@ GEM
     aws-sdk-kms (1.121.0)
       aws-sdk-core (~> 3, >= 3.241.4)
       aws-sigv4 (~> 1.5)
-    aws-sdk-rds (1.306.0)
+    aws-sdk-rds (1.307.0)
       aws-sdk-core (~> 3, >= 3.241.4)
       aws-sigv4 (~> 1.5)
     aws-sdk-s3 (1.213.0)
@@ -1135,7 +1135,7 @@ CHECKSUMS
   aws-sdk-cloudfront (1.141.0) sha256=857e62408cab8ab39cf3d18f6f93c944ef80ea475880afae0f99385e1c4797b8
   aws-sdk-core (3.242.0) sha256=c17b3003acc78d80c1a8437b285a1cfc5e4d7749ce7821cf3071e847535a29a0
   aws-sdk-kms (1.121.0) sha256=d563c1cfb4b5754efbc671216c8eca875338748adad0f42518c28dfa0a2d01e0
-  aws-sdk-rds (1.306.0) sha256=dd7fa2c087ccc2ee94652d2dd08358b2d65d340dbbc5c47211cc88b52b17fdda
+  aws-sdk-rds (1.307.0) sha256=663ce9f60fd4200c1662e2e684487c07ff062380b110780ece48ae3fb5533574
   aws-sdk-s3 (1.213.0) sha256=af596ccf544582406db610e95cc9099276eaf03142f57a2f30f76940e598e50d
   aws-sdk-sqs (1.111.0) sha256=b5bf7986ba3002c6f48472454fa009b4e68fe1023b38124aa7594c00a7d8df99
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
