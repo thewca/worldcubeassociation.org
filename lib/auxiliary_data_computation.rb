@@ -15,7 +15,7 @@ module AuxiliaryDataComputation
     ].each do |field, table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
         ActiveRecord::Base.connection.execute <<~SQL.squish
-          INSERT INTO #{temp_table_name} (id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, year)
+          INSERT INTO #{temp_table_name} (id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, reg_year)
           SELECT
             results.id,
             #{field},
@@ -24,7 +24,7 @@ module AuxiliaryDataComputation
             event_id,
             countries.id country_id,
             continent_id,
-            YEAR(start_date) year
+            YEAR(start_date) reg_year
           FROM (
               SELECT MIN(#{field} * 1000000000 + results.id) valueAndId
               FROM results
