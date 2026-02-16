@@ -12,6 +12,7 @@ import useResultsSubscription, {
 } from "@/lib/hooks/useResultsSubscription";
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
+import _ from "lodash";
 function zeroedArrayOfSize(size: number) {
   return Array(size).fill(0);
 }
@@ -134,6 +135,11 @@ export default function AddResults({
     }
   };
 
+  const [pendingResults, finalizedResults] = _.partition(
+    liveResults,
+    (r) => r.attempts.length > 0 && r.best === 0,
+  );
+
   return (
     <Grid templateColumns="repeat(16, 1fr)" gap="6">
       <GridItem colSpan={4}>
@@ -182,8 +188,17 @@ export default function AddResults({
             </Link>
           </Button>
         </ButtonGroup>
+        {pendingResults.length > 0 && (
+          <LiveResultsTable
+            results={pendingResults}
+            eventId={eventId}
+            formatId={format.id}
+            competitionId={competitionId}
+            competitors={competitors}
+          />
+        )}
         <LiveResultsTable
-          results={liveResults}
+          results={finalizedResults}
           eventId={eventId}
           formatId={format.id}
           competitionId={competitionId}
