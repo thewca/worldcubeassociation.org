@@ -1024,6 +1024,8 @@ es-ES:
       contact_wrt:
         #original_hash: 603a218
         wca_id: ID de la WCA
+    #original_hash: 687d968
+    competition_link_html: 'Pincha <a href=''%{url}''>aquí</a> para visitar la página de la competición'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -3124,18 +3126,24 @@ es-ES:
       no_winner: >-
         La categoría principal fue %{event_name}. No se proclamó ningún ganador,
         ya que ningún competidor consiguió un resultado exitoso en la categoría.
+      #original_hash: 5262865
+      h2h_winner: '%{winner} ha ganado la final Cara a Cara de la categoría %{event_name}.'
       #original_hash: 6c3b236
       winner: '%{winner} ha ganado %{result_sentence} en la categoría %{event_name}.'
       #original_hash: ec7f18a
       first_runner_up: >-
         %{first_runner_up} terminó en segunda posición
         (%{first_runner_up_result}).
+      #original_hash: 2926d10
+      h2h_first_runner_up: '%{first_runner_up} terminó en segunda posición'
       #original_hash: cffa50a
       and: 'y'
       #original_hash: 67d285c
       second_runner_up: >-
         %{second_runner_up} terminó en tercera posición
         (%{second_runner_up_result}).
+      #original_hash: 157b649
+      h2h_second_runner_up: '%{second_runner_up} terminó en tercera posición.'
       records:
         #original_hash: 0658e11
         wr: Récords mundiales
@@ -4683,6 +4691,11 @@ es-ES:
         #original_hash: c4622c3
         scrambles: Mezclas
     results_table:
+      #original_hash: bdbfcdc
+      h2h_results_disclaimer: >-
+        Resultados determinados por una Final Cara a Cara. Solo se muestran el
+        orden de clasificación y la mejor resolución, ya que la visualización
+        completa de los resultados Cara a Cara aún se encuentra en desarrollo.
       #original_hash: 3e9a6b5
       wca_profile: Perfil de la WCA
       #original_hash: ad8919a
@@ -6419,7 +6432,7 @@ es-ES:
         registrado en la base de datos de la WCA ("%{expected_country}"). Si
         esto es un error, por favor corrígelo. En caso contrario, deja una nota
         al WRT al respecto explicando la situación.
-      #original_hash: e15e700
+      #original_hash: 6179b35
       multiple_newcomers_with_same_name_warning: >-
         Hay múltiples competidores nuevos con el mismo nombre exacto: %{name}.
         Por favor, asegúrate de que los resultados son correctos para estos
@@ -6430,6 +6443,11 @@ es-ES:
         El paréntesis utilizado en "%{name}" es un carácter irregular, por favor
         reemplázalo con un paréntesis regular "(" o ")" y con espacios
         apropiados.
+      #original_hash: fec0347
+      special_characters_in_name_warning: >-
+        El nombre '%{name}' contiene caracteres especiales inválidos (como
+        números, comillas u otros símbolos). Los nombres solo deberían contener
+        letras, espacios, guiones, apóstrofos, puntos y paréntesis normales.
       #original_hash: 4b90583
       successive_uppercase_name_warning: >-
         "%{name}" tiene mayúsculas consecutivas en su nombre. Por favor,
@@ -6642,3 +6660,8 @@ es-ES:
       edit_person: Editar persona
       #original_hash: 5fb2137
       competition_result: Resultado de competición
+    stakeholder_role:
+      #original_hash: e095187
+      actioner: Accionador
+      #original_hash: bcdf8d3
+      requester: Solicitante
