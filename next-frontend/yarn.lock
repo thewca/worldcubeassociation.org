@@ -13478,7 +13478,7 @@ __metadata:
     node-vault: "npm:^0.10.9"
     openapi-fetch: "npm:^0.16.0"
     openapi-react-query: "npm:^0.5.4"
-    openapi-typescript: "npm:^7.12.0"
+    openapi-typescript: "npm:^7.13.0"
     payload: "npm:3.76.1"
     payload-authjs: "npm:^0.10.1"
     prettier: "npm:^3.8.1"
@@ -13970,9 +13970,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openapi-typescript@npm:^7.12.0":
-  version: 7.12.0
-  resolution: "openapi-typescript@npm:7.12.0"
+"openapi-typescript@npm:^7.13.0":
+  version: 7.13.0
+  resolution: "openapi-typescript@npm:7.13.0"
   dependencies:
     "@redocly/openapi-core": "npm:^1.34.6"
     ansi-colors: "npm:^4.1.3"
@@ -13984,7 +13984,7 @@ __metadata:
     typescript: ^5.x
   bin:
     openapi-typescript: bin/cli.js
-  checksum: 10c0/04ca18a29faa296445ac4761c9d858e24df752febb48ceb5b3a54bddd889c18111571d06d8924f00e4e1098faa271f535955b331fcf3e640313fb6191de14756
+  checksum: 10c0/56d25e160fee33a231646d0648407ca4e65415ff7696b6545bca948828a941a3aeb55585fe34159b71ba8ad93bac55d025db46815132ea092d07ef7386efa462
   languageName: node
   linkType: hard
 
