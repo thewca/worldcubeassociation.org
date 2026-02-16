@@ -88,16 +88,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         return render status: :unprocessable_content, json: {
           error: "The user has upcoming competitions: #{upcoming_comps_for_user.pluck(:id).join(', ')}. Before banning the user, make sure their registrations are deleted.",
         }
-        ActiveRecord::Base.transaction do
-          upcoming_comps_for_user.each do |registration|
-            begin
-              registration.update!(competing_status: Registrations::Helper::STATUS_REJECTED)
-              RegistrationsMailer.notify_delegates_of_registration_deletion_of_banned_competitor(registration, end_date).deliver_later
-            rescue ActiveRecord::RecordInvalid => e
-              raise ActiveRecord::Rollback, "Registration update failed: #{e.message}"
-            end
-          end
-        end
       end
     end
 
@@ -131,7 +121,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         start_date: Date.today,
         end_date: end_date,
         metadata: metadata,
-        )
+      )
     end
 
     RoleChangeMailer.notify_role_end(role_to_end, current_user).deliver_later if role_to_end.present?
