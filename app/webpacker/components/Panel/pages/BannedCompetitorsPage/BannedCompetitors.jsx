@@ -2,19 +2,15 @@ import React from 'react';
 import { Icon, Table, Segment } from 'semantic-ui-react';
 import UserBadge from '../../../UserBadge';
 import PaginationFooter from '../../../PaginationFooter';
-import usePagination from '../../../../lib/hooks/usePagination';
 
 export default function BannedCompetitors({
   bannedCompetitorRoles,
   canEditBannedCompetitors,
   editBannedCompetitor,
+  pagination,
+  totalPages,
+  toatlEntries,
 }) {
-  const pagination = usePagination(50);
-  const { entriesPerPage, activePage } = pagination;
-  const paginatedRoles = bannedCompetitorRoles.slice(
-    (activePage - 1) * entriesPerPage,
-    activePage * entriesPerPage,
-  );
   return bannedCompetitorRoles.length > 0 ? (
     <>
       <Table>
@@ -32,7 +28,7 @@ export default function BannedCompetitors({
         </Table.Header>
 
         <Table.Body>
-          {paginatedRoles.map((role) => (
+          {bannedCompetitorRoles.map((role) => (
             <Table.Row key={role.id}>
               <Table.Cell>
                 <UserBadge
@@ -62,8 +58,9 @@ export default function BannedCompetitors({
 
       <PaginationFooter
         pagination={pagination}
-        totalPages={Math.ceil(bannedCompetitorRoles.length / entriesPerPage)}
-        totalEntries={bannedCompetitorRoles.length}
+        totalPages={totalPages}
+        totalEntries={toatlEntries}
+        allowChangingEntriesPerPage
       />
     </>
   ) : (
