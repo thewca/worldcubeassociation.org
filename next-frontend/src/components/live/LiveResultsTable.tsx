@@ -124,7 +124,9 @@ export default function LiveResultsTable({
                     textAlign="right"
                     style={{ position: "relative" }}
                   >
-                    {formatAttemptResult(result[stat.field], eventId)}{" "}
+                    {result[stat.field]
+                      ? formatAttemptResult(result[stat.field], eventId)
+                      : "pending"}{" "}
                     {!isAdmin && recordTagBadge(result[stat.recordTagField])}
                   </Table.Cell>
                 ))}

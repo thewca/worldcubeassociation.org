@@ -4,9 +4,14 @@ import { components } from "@/types/openapi";
 import useAPI from "@/lib/wca/useAPI";
 import { Button, ButtonGroup, Grid, GridItem, Link } from "@chakra-ui/react";
 import AttemptsForm from "@/components/live/AttemptsForm";
-import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import { Format } from "@/lib/wca/data/formats";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import LiveResultsTable from "@/components/live/LiveResultsTable";
+import useResultsSubscription, {
+  DiffProtocolResponse,
+} from "@/lib/hooks/useResultsSubscription";
+import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
+import ConnectionPulse from "@/components/live/ConnectionPulse";
 function zeroedArrayOfSize(size: number) {
   return Array(size).fill(0);
 }
@@ -37,6 +42,23 @@ export default function AddResults({
 
   const api = useAPI();
 
+  const [liveResults, updateLiveResults] =
+    useState<components["schemas"]["LiveResult"][]>(results);
+
+  // Move to onEffectEvent when we are on React 19
+  const onReceived = useCallback(
+    (result: DiffProtocolResponse) => {
+      const { updated = [], created = [], deleted = [] } = result;
+
+      updateLiveResults((results) =>
+        applyDiffToLiveResults(results, updated, created, deleted),
+      );
+    },
+    [updateLiveResults],
+  );
+
+  const connectionState = useResultsSubscription(roundId, onReceived);
+
   const handleRegistrationIdChange = useCallback(
     (value: number) => {
       setRegistrationId(value);
@@ -56,7 +78,21 @@ export default function AddResults({
     "patch",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}",
     {
-      onSuccess: () => {
+      onSuccess: (_data, variables) => {
+        // Insert Updates as pending that get overwritten by the actual WebSocket
+        updateLiveResults((results) =>
+          applyDiffToLiveResults(
+            results,
+            [
+              {
+                registration_id: variables.body.registration_id,
+                live_attempts: variables.body.attempts,
+              },
+            ],
+            [],
+            [],
+          ),
+        );
         setSuccess("Results updated successfully!");
         setRegistrationId(undefined);
         setAttempts(zeroedArrayOfSize(solveCount));
@@ -118,6 +154,7 @@ export default function AddResults({
 
       <GridItem colSpan={12}>
         <ButtonGroup float="right">
+          <ConnectionPulse connectionState={connectionState} />
           <Button asChild>
             <Link
               href={`/competitions/${competitionId}/live/rounds/${roundId}`}
@@ -145,14 +182,12 @@ export default function AddResults({
             </Link>
           </Button>
         </ButtonGroup>
-        <LiveUpdatingResultsTable
-          results={results}
+        <LiveResultsTable
+          results={liveResults}
           eventId={eventId}
-          competitors={competitors}
-          competitionId={competitionId}
-          roundId={roundId}
           formatId={format.id}
-          title="Current Results"
+          competitionId={competitionId}
+          competitors={competitors}
           isAdmin
         />
       </GridItem>
