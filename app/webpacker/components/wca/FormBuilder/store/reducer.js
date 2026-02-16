@@ -28,6 +28,7 @@ const reducers = {
   [ChangesSaved]: (state, { payload }) => ({
     ...state,
     initialObject: payload.override || state.object,
+    object: payload.writeWorkingState ? payload.override : state.object,
   }),
 
   [SetErrors]: (state, { payload }) => ({

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const MultimediaIcon = createIcon({
@@ -13,10 +14,9 @@ const MultimediaIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const MultimediaIconPreview = () => {
-  return <MultimediaIcon size="lg" />;
-};
-
-export default MultimediaIconPreview;
+export default MultimediaIcon;

@@ -11,18 +11,30 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_ENV: test
+      NODE_MAJOR: 24
     defaults:
       run:
         working-directory: next-frontend
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Corepack/Yarn
         run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_MAJOR }}
           cache: 'yarn'
       - name: Install fresh Yarn packages
         run: yarn install
+      - name: Check types
+        run: yarn run check:types
       - name: Run Lint
         run: yarn run lint
+      - name: Create dummy fonts
+        shell: bash
+        run: |
+          mkdir ./src/styles/fonts/TTNormsPro
+          for style in Light Light_Italic Regular Medium Bold Condensed_ExtraBold; do
+            touch "./src/styles/fonts/TTNormsPro/TT_Norms_Pro_${style}.woff2"
+          done
+      - name: Run build
+        run: yarn run build

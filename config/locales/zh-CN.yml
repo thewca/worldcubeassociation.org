@@ -81,7 +81,7 @@ zh-CN:
     #original_hash: df5f4ea
     band_title: '层级%{number}'
     #original_hash: 6521e5d
-    due_value: '每场比赛每位參賽者$%{value}'
+    due_value: '每场比赛每位参赛者$%{value}'
   events:
     #original_hash: 3732390
     '222': 二阶
@@ -127,7 +127,26 @@ zh-CN:
     333mbo: 多盲-旧赛制
   formats:
     #original_hash: e4b3c11
-    '1': 单次最好
+    '1': 单次计最好
+    #original_hash: 778e14d
+    '2': 两次计最好
+    #original_hash: 21f623c
+    '3': 三次计最好
+    #original_hash: 2342d2b
+    a: 五次计平均
+    #original_hash: 940c82d
+    m: 三次计平均
+    short:
+      #original_hash: c21bc2a
+      '1': 单次计最好
+      #original_hash: 49e914a
+      '2': 两次计最好
+      #original_hash: b41f36f
+      '3': 三次计最好
+      #original_hash: 4a34175
+      a: 五次计平均
+      #original_hash: 53ba088
+      m: 三次计平均
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -184,19 +203,51 @@ zh-CN:
       name: 组合制资格赛
       #original_hash: 4d618bb
       cell_name: 组合制资格赛
+  attempts:
+    #original_hash: 17dae1e
+    attempt_name: '第%{number}次还原'
+  round:
+    #original_hash: 236c41d
+    name: '%{event_name} %{round_name}'
+    #original_hash: 747df5a
+    round_number: '第%{round_number}轮'
+  advancement_condition:
+    short:
+      #original_hash: 6100c20
+      ranking: '排名前 %{ranking}'
+      #original_hash: 0664a83
+      percent: '前 %{percent}%'
+      attempt_result:
+        #original_hash: ac6a282
+        time: '%{round_format} < %{time}'
+        #original_hash: 45db130
+        moves: '%{round_format} < %{moves}步'
+        #original_hash: 076911b
+        points: '%{round_format} > %{points}点'
+    #original_hash: 6e55337
+    ranking: '排名前%{ranking}晋级下一轮'
+    #original_hash: 7ee969c
+    percent: '前%{percent}%晋级下一轮'
+    attempt_result:
+      #original_hash: 6173090
+      time: '%{round_format} < %{time}晋级下一轮'
+      #original_hash: 581709d
+      moves: '%{round_format} < %{moves}步晋级下一轮'
+      #original_hash: e9f0c92
+      points: '%{round_format} > %{points}点晋级下一轮'
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count}次尝试<%{time}'
-      other: '%{count}次尝试<%{time}'
+      zero: '%{count}次尝试 < %{time}'
+      other: '%{count}次尝试 < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count}次尝试<%{moves}步'
-      other: '%{count}次尝试<%{moves}步'
+      zero: '%{count}次尝试 < %{moves}步'
+      other: '%{count}次尝试 < %{moves}步'
     #original_hash: eba1b97
     points:
-      zero: '%{count}次尝试>%{points}分'
-      other: '%{count}次尝试>%{points}分'
+      zero: '%{count}次尝试 > %{points}分'
+      other: '%{count}次尝试 > %{points}分'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -214,6 +265,8 @@ zh-CN:
     type_label: 资格类型
     #original_hash: 65c848f
     result_type: 结果类型
+    #original_hash: 29ef642
+    for_event: '%{event}的参赛资格'
     type:
       #original_hash: f5c3f76
       none: 无资格
@@ -223,9 +276,56 @@ zh-CN:
       ranking: 首 N
       #original_hash: 3bc54a0
       any_result: 任何结果
+    single:
+      #original_hash: d596f44
+      time: '单次还原 < %{time}'
+      #original_hash: 52ba186
+      moves: '单次 < %{moves}步'
+      #original_hash: b1993ae
+      points: '单次分数 > %{points}点'
+      #original_hash: ed2b051
+      ranking: '单次前%{ranking}'
+      #original_hash: 933b7dc
+      any_result: 任何单次成绩
+    average:
+      #original_hash: 2682ae8
+      time: '平均 < %{time}'
+      #original_hash: 1b9b5fc
+      moves: '平均 < %{moves}步'
+      #original_hash: 05c417e
+      points: '平均 > %{points}点'
+      #original_hash: 805171c
+      ranking: '平均为前%{ranking}'
+      #original_hash: 2223a1b
+      any_result: 任何平均成绩
     deadline:
       #original_hash: 3b7f9f6
       description: 资格截止日期
+      #original_hash: bed8220
+      by_date: '在%{date}之前'
+  activity:
+    #original_hash: ad38ae8
+    registration: 现场报名
+    #original_hash: 48431e7
+    checkin: 签到
+    #original_hash: 40ba6a3
+    tutorial: 新手教学
+    #original_hash: ceab6ea
+    multi: 多盲魔方提交
+    #original_hash: 364653c
+    breakfast: 早餐
+    #original_hash: 585ecb7
+    lunch: 午餐
+    #original_hash: 8cf98a5
+    dinner: 晚餐
+    #original_hash: 75226d7
+    awards: 颁奖
+    #original_hash: cdd7bb2
+    setup: 布置
+    #original_hash: 0b28e08
+    teardown: 收尾
+    #original_hash: 6e6a6f2
+    misc: 其他
   common:
     #original_hash: 70c07ec
     world: 世界
@@ -251,10 +351,10 @@ zh-CN:
     user:
       #original_hash: 603a218
       wca_id: WCA ID
-      #original_hash: e0f64f7
-      citizen_of: 地区
+      #original_hash: fa4c045
+      representing: 国家/地区
     #original_hash: 3fc0ba1
-    all_regions: 所有地区
+    all_regions: 所有国家/地区
     errors:
       #original_hash: 81f344a
       invalid: 不正确
@@ -346,12 +446,20 @@ zh-CN:
         remove_avatar: 删除头像
         #original_hash: 9af9099
         results_notifications_enabled: 当我的（参赛）成绩公示时给我发邮件。
+        #original_hash: 29ce2ff
+        registration_notifications_enabled: 当我是该场比赛的代表或是主办团队的时候，有人报名时，用电子邮件通知我。
         #original_hash: de60ab8
         delegate_status: 代表状态
+        #original_hash: d219c68
+        location: 地点
         #original_hash: 0f21717
         region: 国家/地区
+        #original_hash: e3fc6e9
+        subRegion: 子地区
         #original_hash: 730db33
         receive_delegate_reports: 我希望通过电子邮件收到世界魔方协会比赛的代表报告
+        #original_hash: 8667157
+        delegate_reports_region: 我只想收到以下国家/地区的比赛报告
         #original_hash: 57eaf24
         user_preferred_events: 首选项目
         #original_hash: e632fbf
@@ -435,12 +543,22 @@ zh-CN:
         paid_entry_fees: 已支付
         #original_hash: bae7d5b
         status: 状态
+        #original_hash: a6e8a0b
+        administrative_notes: 管理用备注
         #original_hash: 709a232
         name: 名字
         #original_hash: a6b9d69
         birthday: 生日
         #original_hash: c5497bc
         registration_competition_events: 项目
+        #original_hash: 84add5b
+        email: 电子邮件
+        #original_hash: 6d7a30a
+        search: 搜索。。。
+        #original_hash: dfd309d
+        too_few_chars: 字数太少
+        #original_hash: b993b0c
+        no_results: 没有结果
       competition_tab:
         #original_hash: 4f9be05
         content: 内容
@@ -451,6 +569,8 @@ zh-CN:
         discussion_url: 在谷歌群组的讨论链接
         #original_hash: 65a9b28
         schedule_url: 赛程链接
+        #original_hash: 12b71c3
+        summary: 总结
         #original_hash: 36155d4
         equipment: 设备
         #original_hash: 67cd406
@@ -459,12 +579,22 @@ zh-CN:
         organization: 组织情况
         #original_hash: 5e326b1
         incidents: 事件
+        #original_hash: 7106c2d
+        setup_images: 会场布置图片
+        #original_hash: 1362470
+        wrc_feedback_requested: 我想要WRC对于某些意外事件做意见反馈
+        #original_hash: 0c7191d
+        wrc_incidents: 需要WRC意见反馈的意外事故
+        #original_hash: 1a54a79
+        wic_feedback_requested: 我想要WIC对于某些意外事件做意见反馈
+        #original_hash: 000153c
+        wic_incidents: 需要WIC意见反馈的意外事故
         #original_hash: d7020f4
         remarks: 备注
       person:
         #original_hash: 8c41ae8
         wca_id: 选手
-        #original_hash: d523ebb
+        #original_hash: fa4c045
         country_id: 国家/地区
         #original_hash: ab58155
         dob: 生日
@@ -472,6 +602,8 @@ zh-CN:
         gender: 性别
         #original_hash: 709a232
         name: 名字
+        #original_hash: c6bc0f4
+        incorrect_wca_id_claim_count: 错误WCA ID 反馈次数
       poll:
         #original_hash: 002ff59
         question: 问题
@@ -484,6 +616,8 @@ zh-CN:
         body: 正文
         #original_hash: 6f915a2
         sticky: 置顶
+        #original_hash: 231d9ff
+        unstick_at: 在以下时间取消置顶
         #original_hash: 848eed0
         tags: 标签
         #original_hash: fb4002e
@@ -496,6 +630,21 @@ zh-CN:
       vote:
         #original_hash: 153d7a5
         comment: 备注
+      incident:
+        #original_hash: 768e0c1
+        title: 标题
+        #original_hash: cf66d44
+        private_description: 描述（隐藏）
+        #original_hash: 1171d85
+        private_wrc_decision: 裁决（隐藏）
+        #original_hash: 1c2ed61
+        public_summary: 总结（公开）
+        #original_hash: 62d6896
+        digest_worthy: 值得摘要
+        #original_hash: 848eed0
+        tags: 标签
+        #original_hash: 861e459
+        competition_id: 发生于
       competition_medium:
         #original_hash: 1917f4f
         competition_id: 比赛
@@ -513,6 +662,37 @@ zh-CN:
         submitter_comment: 提交人留言
         #original_hash: bae7d5b
         status: 状态
+      regional_organization:
+        #original_hash: 709a232
+        name: 名称
+        #original_hash: 0f21717
+        country: 国家/地区
+        #original_hash: 2e8a57c
+        website: 网站
+        #original_hash: 83fce83
+        logo: 标志
+        #original_hash: 84add5b
+        email: 电子邮件
+        #original_hash: 82c42fb
+        address: 官方地址
+        #original_hash: 9855f80
+        bylaws: 章程
+        #original_hash: 405201b
+        directors_and_officers: 所有理事和干事及他们的职称
+        #original_hash: 719db2d
+        area_description: 清楚的标明所包含的地区
+        #original_hash: 0cdb036
+        past_and_current_activities: 过去以及现在跟WCA有关的相关活动
+        #original_hash: 0faebcf
+        future_plans: 被WCA认可为地区组织后，对于未来的计划
+        #original_hash: f5ad34a
+        extra_information: 有任何其他的信息想要添加的吗?
+        #original_hash: bc07619
+        extra_file: 有任何额外的档案吗?
+        #original_hash: 5ddd986
+        start_date: 被认可开始
+        #original_hash: 1ee885a
+        end_date: 被认可到
   enums:
     user:
       gender:
@@ -529,6 +709,8 @@ zh-CN:
         candidate_delegate: 初级代表
         #original_hash: 12ab214
         delegate: 代表
+        #original_hash: 45c2317
+        regional_delegate: 区域代表
         #original_hash: d463c23
         senior_delegate: 高级代表
       role_status:
@@ -557,6 +739,24 @@ zh-CN:
           senior_member: 高级成员
           #original_hash: e26c936
           leader: 组长
+        officers:
+          #original_hash: de34439
+          chair: WCA董事长
+          #original_hash: 7d405ff
+          executive_director: WCA执行董事
+          #original_hash: 1dd4a07
+          secretary: WCA秘书
+          #original_hash: 0388b19
+          vice_chair: WCA副董事长
+          #original_hash: 75e65d9
+          treasurer: WCA财务长
+      ban_scope:
+        #original_hash: 80901da
+        competing_only: 只有参赛
+        #original_hash: 35a6012
+        competing_and_attending: 参赛及前往赛场
+        #original_hash: 4f30c10
+        competing_and_attending_and_forums: 比赛、前往赛场和讨论区
     person:
       gender:
         #original_hash: 3f3a489
@@ -597,6 +797,12 @@ zh-CN:
       incident:
         #original_hash: c54e268
         title: 请记住，这是公开的，而且你必须用英语填写。
+        #original_hash: 67f2a1a
+        private_description: 意外事件的描述，仅WCA代表能浏览。请用英文填写。
+        #original_hash: b766029
+        private_wrc_decision: WRC的最终裁决，包括非公开的资讯。请用英文填写。
+        #original_hash: 3de5729
+        public_summary: 关于意外事件以及其裁决的完整描述，并将公开显示。请用英文填写。
         #original_hash: da39a3e
         digest_worthy: ''
         #original_hash: da39a3e
@@ -636,6 +842,12 @@ zh-CN:
         results_notifications_enabled: ''
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
+        #original_hash: 27c2251
+        receive_delegate_reports: 如果您是高级代表、WRC或WQAC的成员，您会自动收到比赛报告。注：此变更可能得花一个小时才生效。
+        #original_hash: 364624c
+        delegate_reports_region: 如果您想要收到所有的报告，请在这个栏位留白(下拉式选单的最上面)。请注意：这个变更可能需要一个小时才会生效。
+        #original_hash: 0627e5c
+        otp_attempt: 请开启您的行动装置上的应用程式来取得一次性的密码，或是输入您其中一个备用码。
         #original_hash: da39a3e
         wca_id: ''
       competition:
@@ -772,10 +984,21 @@ zh-CN:
         #original_hash: 74affff
         incidents: >-
           汇报你觉得需要提及的任何事件。从1.开始给事件编号，方便其他代表使用编号说对应事件。请确保只提及具体情况，而不是通用的事件（常规的+2和DNF）。随便问其他代表或者WRC的意见。如果你想要WDC介入某些事件，请明确说明。
+        #original_hash: 8af00aa
+        setup_images: >-
+          请至少选择 %{image_count} 张能够说明比赛现场设置的照片（如打乱区、比赛区等）。您可以一次选择多个文件。只有在上传足够数量的其他图片后，才能删除现有图片（如果您想替换某张图片，请先上传新的，再删除旧的）。
         #original_hash: da39a3e
         wrc_feedback_requested: ''
+        #original_hash: 98bb5cd
+        wrc_incidents: 列出希望WRC反馈的意外事件编号。
         #original_hash: da39a3e
-        wdc_feedback_requested: ''
+        wic_feedback_requested: ''
+        #original_hash: 74a092e
+        wic_incidents_html: '请列出您希望WIC提供意见的事件编号清单。<br><strong>%{wic_incident_alert}</strong>'
+        #original_hash: c4fd7a6
+        wic_incident_alert: >-
+          如果WIC事件内容较为敏感（包括但不限于犯罪、骚扰、攻击等），请勿在报告中提及，并另行以电子邮件单独联繫WIC。对于其他WIC事件，请以简要、匿名的方式进行描述，并私下向WIC补充详细资讯。即使是匿名版本，WIC仍会提供意见以提升整体认识。若事件涉及WCA志愿者，请完全不要在报告中提及任何细节，务必私下联系WIC。
+
         #original_hash: f30abdc
         remarks: 说一说你想分享的其他方面（例：社群的提升，当地未来的计划等）。如果为了所谓的简洁性你有一些之前部分没提及的，尽情在这里说。
         #original_hash: da39a3e
@@ -845,8 +1068,6 @@ zh-CN:
         results_file: ''
         #original_hash: da39a3e
         message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -916,7 +1137,9 @@ zh-CN:
       #original_hash: 1531237
       size_too_small: '太小了（至少%{file_size}）'
       #original_hash: a2a43b3
-      size_too_big: '太大了（最多%{file_size}）'
+      size_too_big: '太大了(最多%{file_size})'
+      #original_hash: de76004
+      no_permission: 您没有进入这个网页的所需权限。
   devise:
     passwords:
       edit:
@@ -957,14 +1180,14 @@ zh-CN:
             subject: 您在 WCA 的一次性密码
             #original_hash: f82488f
             2fa_attempt: 您正试图在 WCA 网站上进行认证。您已经启用了双因素认证，并且您刚刚要求通过电子邮件发送一个一次性密码。请在下面找到它：
-            #original_hash: e27e540
+            #original_hash: 8aeccbf
             disclaimer: 如果你没有申请该认证码，请立即回复此邮件联系 WST：你可能在某处有一个公开的会话，或者你的密码可能被泄露。
           #original_hash: 8c13694
           name: 双因素认证(2FA)
           #original_hash: d28c3b6
           support_desc_html: 'WCA 网站支持使用一次性密码的 %{two_factor_link}'
           options:
-            #original_hash: 4f9dcb8
+            #original_hash: a4b35b6
             app: 由你的智能手机上的专用 2FA 应用程序（例如 Authy 或 Google 身份验证器）生成。
             #original_hash: 34a7572
             recovery: 取自激活 2FA 时产生的恢复代码。
@@ -992,7 +1215,7 @@ zh-CN:
           methods_description: 你可以使用几种方法来获得登录时的一次性密码，它们描述如下。
           #original_hash: 4442f0e
           dedicated_app: 使用一个专门的双因素应用程序
-          #original_hash: a61c7d2
+          #original_hash: a87f79f
           dedicated_app_desc_html: >-
             WST 建议在您的个人设备上使用 %{authy}，以便在登录时获得您的一次性密码。<br/>你也可以使用 %{google} 和
             %{microsoft}。
@@ -1048,12 +1271,21 @@ zh-CN:
         form_error:
           zero: 没有错误
           other: '表单有 %{count} 项错误：'
+      error_pages:
+        #original_hash: 1042478
+        500_error: 抱歉，出现问题了
+        #original_hash: 3e2364e
+        500_contact_html: '<a href=%{contact_url}>按这里</a>来报告。'
+        #original_hash: b61e305
+        400_error: 您要寻找的页面并不存在
+        #original_hash: c9290b6
+        400_contact_html: '如果您认为这是一个错误，请<a href=%{contact_url}>按这里</a>来报告。'
     doorkeeper:
       applications:
         help:
           #original_hash: 95c10ec
           https_info: 除非主机是 "localhost"，否则需要 HTTPS。
-          #original_hash: 62a0113
+          #original_hash: 40b9d10
           scopes_html: >-
             将权限用空格分开。留空将使用默认权限。 <a
             href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
@@ -1074,11 +1306,11 @@ zh-CN:
       have_competed: 我之前参加过 WCA 比赛。
       #original_hash: dcd1d70
       have_never_competed: 我从没参加过 WCA 比赛。
-      #original_hash: 86a60c9
+      #original_hash: 3511bc5
       let_us_know: 如果你之前参加过 WCA 比赛，请告知我们。
       #original_hash: f9f512b
       welcome_back: 欢迎回来！要注册一个 WCA 网站帐号，我们需要知道你参加比赛的 WCA ID。
-      #original_hash: 3b2bcea
+      #original_hash: ef8243e
       welcome_html: >-
         欢迎！在你参加第一场 WCA
         比赛之前，我们需要一些额外信息。除非你同意，否则你的生日永远不会公开。<br/><br/>如果你帮助其他人报名，请提供<strong>参赛者</strong>的详细信息。
@@ -1102,11 +1334,13 @@ zh-CN:
       faq: 常见问题
       #original_hash: cf1d2c9
       forum: 论坛
-      #original_hash: 3ad28c0
+      #original_hash: 0e7a036
       teams: 团队、委员会和理事会
       #original_hash: 7981fb3
       education: 教育资源
-      #original_hash: a34b69f
+      #original_hash: c66444f
+      wca_live: WCA Live
+      #original_hash: b37456c
       contact: 联系信息
       #original_hash: 8e12c09
       speedcubing_history: 魔方速拧历史
@@ -1210,14 +1444,18 @@ zh-CN:
       #original_hash: 312e799
       officers_description: >-
         WCA董事负责负责处理与WCA非营利地位相关的任务。这些董事由WCA董事会选举产生。执行董事是WCA的首席执行官，主席主持所有董事会会议，秘书负责维护组织的文件，财务主管管理WCA的财务事务。
-      #original_hash: e0d37a2
+      #original_hash: 19d4bbb
       board_description: WCA董事会负责领导整个组织，并履行其他团队、委员会和理事会未履行的任何职责。
     teams_committees_councils:
-      #original_hash: 0d62207
+      #original_hash: 1d14e2f
       title: WCA团队、委员会和理事会
-      #original_hash: d54d953
+      #original_hash: 9fdee8f
       description: >-
         WCA的团队和委员会是组织不可分割的一部分，执行保持其运作所需的日常任务。这些委员会由WCA社区成员组成，包括WCA代表和参赛人员。每个团队都有一个领导者，其作用是确保团队的正常运作并指导其他团队成员。理事会是一种特殊类型的团队，为WCA董事会发挥咨询作用，由社区成员组成，而不是WCA工作人员。当有委员会、团队或理事会空缺时，有关如何申请的信息会发布在首页上。
+      #original_hash: b37456c
+      contact_button: 联系
+      #original_hash: ae7928f
+      no_contact_description: 这个团队/委员会的联系方式是非公开的。
       groups_name:
         #original_hash: 90a1280
         wat: WCA资料整理组 (WAT)
@@ -1309,6 +1547,8 @@ zh-CN:
     merchandise:
       #original_hash: 698cfc8
       title: 商品
+      #original_hash: 6403f2b
+      ad_new: 最新商品
       #original_hash: 9ad68ce
       text_html: 看看我们新推出的官方商品，包括从T恤到连帽衫的一系列服装。
       #original_hash: b0fc6c4
@@ -1349,6 +1589,8 @@ zh-CN:
       unavailable: 你选的语言不可用。
     mailer:
       create_new_account:
+        #original_hash: a4ef6b6
+        header: 确认说明
         #original_hash: 6ee63db
         welcome: '欢迎 %{user_email} ！'
         #original_hash: da39d05
@@ -1357,6 +1599,8 @@ zh-CN:
         confirmation_link: 确认我的账号
         #original_hash: d484f70
         activate: 激活后，你可以登录到世界魔方协会的网站。
+        #original_hash: fb02586
+        login_form: 登录
         #original_hash: 333999b
         addendum: 这封邮件是自动生成的。如果你没有在世界魔方协会的网站上注册账户，而错误地收到这封邮件，请忽略并删除它。
         #original_hash: dbc2263
@@ -2405,14 +2649,6 @@ zh-CN:
       no_schedule: 这个比赛没有时间表，无法生成 pdf。
     nav:
       menu:
-        #original_hash: 612e12d
-        results: 成绩
-        #original_hash: 02ae2bd
-        podiums: 领奖台
-        #original_hash: 6a72085
-        all: 所有
-        #original_hash: aaefdb6
-        by_person: 按选手
         #original_hash: 4b631f6
         info: 基本信息
         #original_hash: 5301648
@@ -2423,16 +2659,22 @@ zh-CN:
         orga_view: 主办方视角
         #original_hash: c6171f8
         event_view: 管理项目
+        #original_hash: 6235b27
+        schedule_view: 管理赛程
         #original_hash: 6f7aef9
         payment_view: 支付信息
         #original_hash: 76bfdcf
         admin_view: 管理员视角
         #original_hash: a857eb4
         tabs: 管理标签
+        #original_hash: f3d6278
+        submit_results: 上传成绩
         #original_hash: 4c9f914
         delegate_report: 报告
         #original_hash: b233e77
         registration: 报名管理
+        #original_hash: 3f9176e
+        import_registrations: 导入报名资料
         #original_hash: d672995
         register: 报名
         #original_hash: 855bd26
@@ -2822,7 +3064,7 @@ zh-CN:
     our_goals_title: 我们的目标
     #original_hash: 743ca74
     our_goals_content_html: >-
-      <p>世界魔方协会希望通过增加魔方比赛，为世界各地的年轻人带来参与社群和领导社群的机会。我们相信，比赛和社群内的经历为参与其中的年轻人创造了成长机会，让更多人群接触到魔方，让魔友群体茁壮成长。关于董事会对于WCA愿景与策略的文件可以在<a href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">这里</a>查阅。</p>
+      <p>世界魔方协会希望通过增加魔方比赛，为世界各地的年轻人带来参与社群和领导社群的机会。我们相信，比赛和社群内的经历为参与其中的年轻人创造了成长机会，让更多人群接触到魔方，让魔友群体茁壮成长。关于董事会对于WCA愿景与策略的文件可以在<a href="https://www.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">这里</a>查阅。</p>
     #original_hash: dc71704
     world_championship_title: 世界锦标赛
     #original_hash: 57cf7f7

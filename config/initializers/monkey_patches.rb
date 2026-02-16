@@ -52,6 +52,8 @@ Rails.configuration.to_prepare do
   end
 
   Hash.class_eval do
+    include TSort
+
     def merge_serialization_opts(other = nil)
       self.to_h do |key, value|
         # Try to read `key` from the other hash, fall back to empty array.
@@ -63,6 +65,14 @@ Rails.configuration.to_prepare do
         # Return the merged result associated with the original (common) key
         [key, merged_value]
       end
+    end
+
+    # The following enables topological sorting on dependency hashes.
+    #   Snippet stolen from https://github.com/ruby/tsort
+    alias_method :tsort_each_node, :each_key
+
+    def tsort_each_child(node, &)
+      fetch(node).each(&)
     end
   end
 
@@ -140,15 +150,6 @@ Rails.configuration.to_prepare do
         else
           ActiveRecord::SchemaMigration.table_name
         end
-      end
-    end
-  end
-  # Temporary fix until https://github.com/ruby-shoryuken/shoryuken/pull/777 or
-  # https://github.com/rails/rails/pull/53336 is merged
-  if Rails.env.production?
-    ActiveJob::QueueAdapters::ShoryukenAdapter.class_eval do
-      def enqueue_after_transaction_commit?
-        true
       end
     end
   end

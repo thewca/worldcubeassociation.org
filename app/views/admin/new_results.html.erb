@@ -1,30 +1,10 @@
 <% provide(:title, "Upload results") %>
 <%= render layout: 'competitions/nav' do %>
   <h1><%= yield(:title) %></h1>
-  <% if @competition.results_submitted? && !@competition.results_posted? %>
-    <%= alert :info, note: true do %>
-      It looks like the results have been submitted by the Delegate but not posted yet.
-      If you want to let the Delegate submit the results again you can
-      <%= link_to("clear the results submission",
-                  competition_clear_results_submission_path(@competition),
-                  method: :post, class: "btn btn-primary") %>
-    <% end %>
-  <% end %>
-  <p>
-    Import the results JSON for this competition.
-    The server will check for any error compared to the declared rounds, cutoffs, and time limits.
-  </p>
-  <p>
-    When you are done checking the results, you can go ahead and import them <%= link_to "here", competition_admin_import_results_path(@competition.id) %>.
-  </p>
-
-  <%= render "results_submission/submit_json_panel",
-    upload_json: @upload_json,
-    action: competition_admin_upload_results_path,
-    already_has_submitted_result: @results_validator.any_results?
-  %>
-
-  <%= render "results_submission/check_results_panel", results_validator: @results_validator %>
-
-  <%= render "results_submission/results_preview_panel", results_validator: @results_validator %>
+  <%= react_component("CompetitionResultSubmissionAdmin", {
+    competitionId: @competition.id,
+    hasTemporaryResults: @competition.inbox_results.present?,
+    uploadedScrambleFilesCount: @competition.scramble_file_uploads.count,
+    ticketId: @competition.result_ticket&.id,
+  }) %>
 <% end %>

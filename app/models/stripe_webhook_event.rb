@@ -3,10 +3,21 @@
 class StripeWebhookEvent < ApplicationRecord
   PAYMENT_INTENT_SUCCEEDED = 'payment_intent.succeeded'
   PAYMENT_INTENT_CANCELED = 'payment_intent.canceled'
+  REFUND_CREATED = 'refund.created'
+  REFUND_UPDATED = 'refund.updated'
 
   HANDLED_EVENTS = [
     PAYMENT_INTENT_SUCCEEDED,
     PAYMENT_INTENT_CANCELED,
+    REFUND_CREATED,
+    REFUND_UPDATED,
+  ].freeze
+
+  # Events that when listening to, may contain new (incoming) payloads
+  #   that we did not yet know anything about
+  INCOMING_EVENTS = [
+    REFUND_CREATED,
+    REFUND_UPDATED,
   ].freeze
 
   default_scope -> { handled }

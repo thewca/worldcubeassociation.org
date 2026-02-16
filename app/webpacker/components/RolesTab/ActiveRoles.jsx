@@ -36,27 +36,30 @@ export default function ActiveRoles({ activeRoles }) {
     <>
       <Header>Active Roles</Header>
       <List divided relaxed>
-        {activeRoles?.map((role) => (
-          <List.Item
-            key={role.id}
-            disabled={!loggedInUserPermissions.canEditGroup(role.group.id)}
-          >
-            <List.Content
-              floated="left"
-              href={hyperlink(role)}
+        {activeRoles?.map((role) => {
+          const editUrl = hyperlink(role);
+          return (
+            <List.Item
+              key={role.id}
+              disabled={!(loggedInUserPermissions.canEditGroup(role.group.id) && editUrl)}
             >
-              <Icon
-                name="edit"
-                size="large"
-                link
-              />
-            </List.Content>
-            <List.Content>
-              <List.Header>{getRoleDescription(role)}</List.Header>
-              <List.Description>{getRoleSubDescription(role)}</List.Description>
-            </List.Content>
-          </List.Item>
-        ))}
+              <List.Content
+                floated="left"
+                href={editUrl}
+              >
+                <Icon
+                  name="edit"
+                  size="large"
+                  link
+                />
+              </List.Content>
+              <List.Content>
+                <List.Header>{getRoleDescription(role)}</List.Header>
+                <List.Description>{getRoleSubDescription(role)}</List.Description>
+              </List.Content>
+            </List.Item>
+          );
+        })}
       </List>
     </>
   );

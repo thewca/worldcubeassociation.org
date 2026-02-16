@@ -13,9 +13,9 @@ module ResultsValidators
 
       results_assoc = check_real_results ? :results : :inbox_results
       # Deliberately NOT sending :format and :event because those are cached values anyways
-      associations.deep_merge!({ results_assoc => [] })
+      associations.deep_merge!({ results_assoc => { round: [:competition_event] } })
 
-      competition_scope = self.load_competition_includes(validator, associations)
+      competition_scope = self.load_competition_includes(validator, associations, check_real_results: check_real_results)
                               .where(id: competition_ids)
 
       competition_scope = competition_scope.find_each(batch_size: batch_size) if batch_size.present?
@@ -27,16 +27,13 @@ module ResultsValidators
       end
     end
 
-    def self.from_results(validator, results)
+    def self.from_results(validator, results, check_real_results)
       results.group_by(&:competition_id)
              .map do |competition_id, comp_results|
-        # TODO: A bit hacky to check this, but fair given the assumptions of the previous default `validate` method.
-        check_real_results = comp_results.any?(Result)
+               competition_scope = self.load_competition_includes(validator, check_real_results: check_real_results)
+               model_competition = competition_scope.find(competition_id)
 
-        competition_scope = self.load_competition_includes(validator, check_real_results: check_real_results)
-        model_competition = competition_scope.find(competition_id)
-
-        self.load_data(validator, model_competition, comp_results, check_real_results: check_real_results)
+               self.load_data(validator, model_competition, comp_results, check_real_results: check_real_results)
       end
     end
 

@@ -3,6 +3,7 @@
 module FinishUnfinishedPersons
   WCA_ID_PADDING = 'U'
   WCA_QUARTER_ID_LENGTH = 4
+  GENERATIONAL_SUFFIXES = %w[JR JNR SR SNR II III IV].freeze
 
   WITH_ACCENT = 'ÀÁÂÃÄÅÆĂÇĆČÈÉÊËÌÍÎÏİÐĐÑÒÓÔÕÖØÙÚÛÜÝÞřßŞȘŠŚşșśšŢȚţțŻŽźżžəàáâãäåæăąắặảầấạậāằçćčèéêëęěễệếềēểğìíîïịĩіıðđķКкŁłļñńņňòóôõöøỗọơốờőợồộớùúûüưứữũụűūůựýýþÿỳỹ'
   WITHOUT_ACCENT = 'aaaaaaaaccceeeeiiiiiddnoooooouuuuybrsssssssssttttzzzzzaaaaaaaaaaaaaaaaaaaccceeeeeeeeeeeegiiiiiiiiddkKklllnnnnoooooooooooooooouuuuuuuuuuuuuyybyyy'
@@ -40,7 +41,7 @@ module FinishUnfinishedPersons
 
       inbox_dob = res.inbox_person&.dob
 
-      similar_persons = compute_similar_persons(res, persons_cache)
+      similar_persons = compute_similar_persons(res.person_name, res.country_id, persons_cache)
 
       unfinished_persons.push({
                                 person_id: res.person_id,
@@ -72,8 +73,8 @@ module FinishUnfinishedPersons
     end.join
   end
 
-  def self.compute_similar_persons(result, persons_cache, n = 5)
-    res_roman_name = self.extract_roman_name(result.person_name)
+  def self.compute_similar_persons(person_name, country_id, persons_cache, n = 5)
+    res_roman_name = self.extract_roman_name(person_name)
 
     only_probas = []
     persons_with_probas = []
@@ -83,7 +84,7 @@ module FinishUnfinishedPersons
       p_roman_name = self.extract_roman_name(p.name)
 
       name_similarity = self.string_similarity(res_roman_name, p_roman_name)
-      country_similarity = result.country_id == p.country_id ? 1 : 0
+      country_similarity = country_id == p.country_id ? 1 : 0
 
       only_probas.push name_similarity
       persons_with_probas.push [p, name_similarity, country_similarity]
@@ -103,10 +104,20 @@ module FinishUnfinishedPersons
     JaroWinkler.similarity(string_a, string_b, ignore_case: true)
   end
 
-  def self.compute_semi_id(competition_year, person_name, available_per_semi = {})
+  def self.name_parts_without_suffix(person_name)
     roman_name = self.extract_roman_name person_name
     sanitized_roman_name = self.remove_accents roman_name
     name_parts = sanitized_roman_name.gsub(/[^a-zA-Z ]/, '').upcase.split
+
+    if name_parts.length > 1 && GENERATIONAL_SUFFIXES.include?(name_parts[-1])
+      name_parts[...-1]
+    else
+      name_parts
+    end
+  end
+
+  def self.compute_semi_id(competition_year, person_name, available_per_semi = {})
+    name_parts = self.name_parts_without_suffix(person_name)
 
     last_name = name_parts[-1]
     rest_of_name = name_parts[...-1].join

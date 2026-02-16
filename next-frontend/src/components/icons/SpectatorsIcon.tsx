@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const SpectatorsIcon = createIcon({
@@ -25,10 +26,9 @@ const SpectatorsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const SpectatorsIconPreview = () => {
-  return <SpectatorsIcon size="lg" />;
-};
-
-export default SpectatorsIconPreview;
+export default SpectatorsIcon;

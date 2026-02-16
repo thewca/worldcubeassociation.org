@@ -6,6 +6,11 @@ class SyncMailingListsJob < WcaCronjob
     throw :abort unless EnvConfig.WCA_LIVE_SITE?
   end
 
+  # Google APIs have extremely strict quotas, but their Ruby SDK client offers no batching or request backoff...
+  #   And since I don't feel like building our own request queue with timed execution, we just let Sidekiq retry.
+  # However, the fail happens relatively fast, and we want to avoid Sidekiq retrying over and over again
+  sidekiq_options retry: 10
+
   def perform
     GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", UserGroup.teams_committees.filter_map(&:lead_user).map(&:email))
     GsuiteMailingLists.sync_group(GroupsMetadataBoard.email, UserGroup.board_group.active_users.map(&:email))
@@ -43,6 +48,7 @@ class SyncMailingListsJob < WcaCronjob
     delegate_emails = []
     trainee_emails = []
     senior_emails = []
+    regionals_emails = []
     active_root_delegate_regions = UserGroup.delegate_regions.where(parent_group_id: nil, is_active: true)
     active_root_delegate_regions.each do |region|
       region_emails = []
@@ -56,6 +62,7 @@ class SyncMailingListsJob < WcaCronjob
           delegate_emails << role_email
         end
         senior_emails << role_email if role_status == RolesMetadataDelegateRegions.statuses[:senior_delegate]
+        regionals_emails << role_email if role_status == RolesMetadataDelegateRegions.statuses[:regional_delegate]
       end
       region_email_id = region.metadata&.email
       GsuiteMailingLists.sync_group(region_email_id, region_emails.uniq) if region_email_id.present?
@@ -63,6 +70,7 @@ class SyncMailingListsJob < WcaCronjob
     GsuiteMailingLists.sync_group("delegates@worldcubeassociation.org", delegate_emails.uniq)
     GsuiteMailingLists.sync_group("trainees@worldcubeassociation.org", trainee_emails.uniq)
     GsuiteMailingLists.sync_group("seniors@worldcubeassociation.org", senior_emails.uniq)
+    GsuiteMailingLists.sync_group("regionals@worldcubeassociation.org", regionals_emails.uniq)
 
     organizations_emails = [RegionalOrganization.currently_acknowledged.map(&:email), GroupsMetadataBoard.email].flatten
     GsuiteMailingLists.sync_group("organizations@worldcubeassociation.org", organizations_emails)

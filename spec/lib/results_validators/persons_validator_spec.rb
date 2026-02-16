@@ -24,10 +24,12 @@ RSpec.describe PV do
 
     context "validations on both Inbox and actual results" do
       it "doesn't complain when it's fine" do
+        round_333oh = create(:round, competition: competition1, event_id: "333oh")
+        round_222 = create(:round, competition: competition2, event_id: "222")
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          create_list(result_kind, 10, competition: competition1, event_id: "333oh")
-          create_list(result_kind, 10, competition: competition2, event_id: "222")
+          create_list(result_kind, 10, competition: competition1, event_id: "333oh", round: round_333oh)
+          create_list(result_kind, 10, competition: competition2, event_id: "222", round: round_222)
         end
 
         validator_args.each do |arg|
@@ -44,10 +46,12 @@ RSpec.describe PV do
           "Result" => [],
           "InboxResult" => [],
         }
+        round_333oh = create(:round, competition: competition1, event_id: "333oh")
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
           res1 = create(result_kind, competition: competition1,
-                                     event_id: "333oh")
+                                     event_id: "333oh",
+                                     round: round_333oh)
           res1.person.delete
           expected_errors[model.to_s] = [
             RV::ValidationError.new(PV::RESULTS_WITHOUT_PERSON_ERROR,
@@ -127,6 +131,7 @@ RSpec.describe PV do
       # EMPTY_GENDER_WARNING
       # WHITESPACE_IN_NAME_ERROR
       # WRONG_PARENTHESIS_TYPE_ERROR
+      # SPECIAL_CHARACTERS_IN_NAME_WARNING
       # MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING
       # LOWERCASE_NAME_WARNING
       # UPPERCASE_NAME_WARNING
@@ -135,69 +140,98 @@ RSpec.describe PV do
       # SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING
       # SINGLE_NAME_WARNING
       it "validates person data" do
-        create(:inbox_result, competition: competition2, event_id: "222")
-        res1 = create(:inbox_result, competition: competition2, event_id: "222")
+        round_222 = create(:round, event_id: "222", competition: competition2)
+        create(:inbox_result, competition: competition2, event_id: "222", round: round_222)
+        res1 = create(:inbox_result, competition: competition2, event_id: "222", round: round_222)
         res1.delete
 
+        round_333_oh = create(:round, event_id: "333oh", competition: competition1)
         res0101 = create(:inbox_result,
-                         competition: competition1, event_id: "333oh")
+                         competition: competition1, event_id: "333oh", round: round_333_oh)
         # To the person reading that in 2100: haha, enjoy my 80+ years old joke :)
         # Just bump that date to make the "not_so_young" warning go away.
         res0101.person.update(dob: Date.new(2000, 1, 1))
         res_too_young = create(:inbox_result,
                                competition: competition1,
-                               event_id: "333oh")
+                               event_id: "333oh",
+                               round: round_333_oh)
         res_too_young.person.update(dob: 2.years.ago)
         res_not_young = create(:inbox_result,
                                competition: competition1,
-                               event_id: "333oh")
+                               event_id: "333oh",
+                               round: round_333_oh)
         res_not_young.person.update(dob: 101.years.ago)
         res_whitespace = create(:inbox_result,
                                 competition: competition1,
-                                event_id: "333oh")
+                                event_id: "333oh",
+                                round: round_333_oh)
         res_whitespace.person.update(name: "Hey(  There)", gender: nil)
         res_bad_parenthesis = create(:inbox_result,
                                      competition: competition1,
-                                     event_id: "333oh")
+                                     event_id: "333oh",
+                                     round: round_333_oh)
         res_bad_parenthesis.person.update(name: "Bad Parenthesis Guy（test）")
+        res_special_chars1 = create(:inbox_result,
+                                    competition: competition1,
+                                    event_id: "333oh",
+                                    round: round_333_oh)
+        res_special_chars1.person.update(name: "John \"Doe\"")
+        res_special_chars2 = create(:inbox_result,
+                                    competition: competition1,
+                                    event_id: "333oh",
+                                    round: round_333_oh)
+        res_special_chars2.person.update(name: "Jane123 Smith")
+        res_special_chars3 = create(:inbox_result,
+                                    competition: competition1,
+                                    event_id: "333oh",
+                                    round: round_333_oh)
+        res_special_chars3.person.update(name: "Bob$ Smith")
         res_lowercase1 = create(:inbox_result,
                                 competition: competition1,
-                                event_id: "333oh")
+                                event_id: "333oh",
+                                round: round_333_oh)
         res_lowercase1.person.update(name: "Yamada taro (山田太郎)")
         res_lowercase2 = create(:inbox_result,
                                 competition: competition1,
-                                event_id: "333oh")
+                                event_id: "333oh",
+                                round: round_333_oh)
         res_lowercase2.person.update(name: "ilis Xocavənd")
         res_missing_period = create(:inbox_result,
                                     competition: competition1,
-                                    event_id: "333oh")
+                                    event_id: "333oh",
+                                    round: round_333_oh)
         res_missing_period.person.update(name: "Missing A Period")
         res_single_letter = create(:inbox_result,
                                    competition: competition1,
-                                   event_id: "333oh")
+                                   event_id: "333oh",
+                                   round: round_333_oh)
         res_single_letter.person.update(name: "A. B. van der Doe")
         res_bad_period_upcase = create(:inbox_result,
                                        competition: competition1,
-                                       event_id: "333oh")
+                                       event_id: "333oh",
+                                       round: round_333_oh)
         res_bad_period_upcase.person.update(name: "David K.J. RAmsey")
         res_same_name1 = create(:inbox_result,
                                 competition: competition1,
-                                event_id: "333oh")
+                                event_id: "333oh",
+                                round: round_333_oh)
         res_same_name1.person.update(name: "Tester")
         res_same_name2 = create(:inbox_result,
                                 competition: competition1,
-                                event_id: "333oh")
+                                event_id: "333oh",
+                                round: round_333_oh)
         res_same_name2.person.update(name: "Tester")
         res_wrong_wca_id = create(:inbox_result,
                                   competition: competition1,
-                                  event_id: "333oh")
+                                  event_id: "333oh",
+                                  round: round_333_oh)
         res_wrong_wca_id.person.update(wca_id: "ERR")
 
         expected_errors = [
           RV::ValidationError.new(PV::PERSON_WITHOUT_RESULTS_ERROR,
                                   :persons, competition2.id,
                                   person_name: res1.person.name,
-                                  person_id: res1.person.id),
+                                  person_id: res1.person.ref_id),
           RV::ValidationError.new(PV::WHITESPACE_IN_NAME_ERROR,
                                   :persons, competition1.id,
                                   name: res_whitespace.person.name),
@@ -225,6 +259,18 @@ RSpec.describe PV do
           RV::ValidationWarning.new(PV::EMPTY_GENDER_WARNING,
                                     :persons, competition1.id,
                                     name: res_whitespace.person.name),
+          RV::ValidationWarning.new(PV::SPECIAL_CHARACTERS_IN_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_special_chars1.person.name),
+          RV::ValidationWarning.new(PV::SPECIAL_CHARACTERS_IN_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_special_chars2.person.name),
+          RV::ValidationWarning.new(PV::SPECIAL_CHARACTERS_IN_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_special_chars3.person.name),
+          RV::ValidationWarning.new(PV::SPECIAL_CHARACTERS_IN_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_bad_parenthesis.person.name),
           RV::ValidationWarning.new(PV::MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,
                                     :persons, competition1.id,
                                     name: res_same_name1.person.name),

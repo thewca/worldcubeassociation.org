@@ -1,0 +1,23 @@
+get:
+  summary: Gets Information about the Round including the live Results
+  tags:
+    - live
+  operationId: liveByRound
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: roundId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returns results
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/live/LiveRound.yaml"

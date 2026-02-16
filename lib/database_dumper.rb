@@ -12,8 +12,6 @@ module DatabaseDumper
                             "LEFT JOIN users AS users_organizers ON users_organizers.id = competition_organizers.organizer_id #{WHERE_VISIBLE_COMP} " \
                             "GROUP BY competitions.id".freeze
 
-  PUBLIC_RESULTS_VERSION = '1.0.0'
-
   def self.actions_to_column_sanitizers(columns_by_action)
     {}.tap do |column_sanitizers|
       columns_by_action.each do |action, columns|
@@ -106,12 +104,12 @@ module DatabaseDumper
           forbid_newcomers
           forbid_newcomers_reason
           auto_close_threshold
-          auto_accept_registrations
           auto_accept_disable_threshold
           newcomer_month_reserved_spots
           competitor_can_cancel
         ],
         db_default: %w[
+          auto_accept_preference
           connected_stripe_account_id
         ],
         fake_values: {
@@ -140,40 +138,11 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "concise_average_results" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          average
-          continent_id
-          country_id
-          day
-          event_id
-          id
-          month
-          person_id
-          value_and_id
-          year
-        ],
-      ),
-    }.freeze,
-    "concise_single_results" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          best
-          continent_id
-          country_id
-          day
-          event_id
-          id
-          month
-          person_id
-          value_and_id
-          year
-        ],
-      ),
-    }.freeze,
+    "concise_average_results" => :skip_all_rows,
+    "concise_single_results" => :skip_all_rows,
     "connected_paypal_accounts" => :skip_all_rows,
     "connected_stripe_accounts" => :skip_all_rows,
+    "manual_payment_integrations" => :skip_all_rows,
     "continents" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -219,6 +188,53 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
+    "h2h_attempts" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          h2h_match_competitor_id
+          h2h_set_id
+          live_attempt_id
+          result_attempt_id
+          set_attempt_number
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
+    "h2h_match_competitors" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          h2h_match_id
+          user_id
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
+    "h2h_matches" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          round_id
+          match_number
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
+    "h2h_sets" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          h2h_match_id
+          set_number
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
     "inbox_persons" => :skip_all_rows,
     "inbox_results" => :skip_all_rows,
     "inbox_scramble_sets" => :skip_all_rows,
@@ -243,32 +259,8 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "ranks_average" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          id
-          best
-          continent_rank
-          country_rank
-          event_id
-          person_id
-          world_rank
-        ],
-      ),
-    }.freeze,
-    "ranks_single" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          id
-          best
-          continent_rank
-          country_rank
-          event_id
-          person_id
-          world_rank
-        ],
-      ),
-    }.freeze,
+    "ranks_average" => :skip_all_rows,
+    "ranks_single" => :skip_all_rows,
     "results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -285,6 +277,7 @@ module DatabaseDumper
           regional_average_record
           regional_single_record
           round_type_id
+          round_id
           updated_at
           value1
           value2
@@ -307,10 +300,24 @@ module DatabaseDumper
           cutoff
           advancement_condition
           scramble_set_count
-          round_results
           created_at
           updated_at
           old_type
+          linked_round_id
+          is_h2h_mock
+        ],
+        db_default: %w[
+          round_results
+        ],
+      ),
+    }.freeze,
+    "linked_rounds" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          wcif_id
+          created_at
+          updated_at
         ],
       ),
     }.freeze,
@@ -333,6 +340,7 @@ module DatabaseDumper
           group_id
           is_extra
           round_type_id
+          round_id
           scramble
           id
           scramble_num
@@ -458,8 +466,6 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
-          holder_type
-          holder_id
           venue_room_id
           parent_activity_id
           wcif_id
@@ -630,10 +636,9 @@ module DatabaseDumper
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,
+    "sanity_check_results" => :skip_all_rows,
     "cached_results" => :skip_all_rows,
     "schema_migrations" => :skip_all_rows, # This is populated when loading our schema dump
-    "starburst_announcement_views" => :skip_all_rows,
-    "starburst_announcements" => :skip_all_rows,
     "user_preferred_events" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -751,6 +756,7 @@ module DatabaseDumper
           otp_required_for_login
           pending_avatar_id
           preferred_locale
+          receive_developer_mails
           remember_created_at
           reset_password_sent_at
           reset_password_token
@@ -811,6 +817,7 @@ module DatabaseDumper
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
     "server_settings" => {
+      where_clause: "WHERE name NOT IN (#{ServerSetting::HIDDEN_SETTINGS.map { "'#{it}'" }.join(',')})",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           name
@@ -952,15 +959,18 @@ module DatabaseDumper
       ),
     }.freeze,
     "roles_metadata_banned_competitors" => :skip_all_rows,
-    "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
     "ticket_logs" => :skip_all_rows,
+    "ticket_log_changes" => :skip_all_rows,
     "ticket_comments" => :skip_all_rows,
     "ticket_stakeholders" => :skip_all_rows,
     "tickets" => :skip_all_rows,
     "tickets_edit_person" => :skip_all_rows,
     "tickets_edit_person_fields" => :skip_all_rows,
+    "duplicate_checker_job_runs" => :skip_all_rows,
+    "potential_duplicate_persons" => :skip_all_rows,
+    "tickets_competition_result" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {
@@ -1189,6 +1199,234 @@ module DatabaseDumper
     }.freeze,
   }.freeze
 
+  V2_RESULTS_SANITIZERS = {
+    "results" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          pos
+          best
+          average
+          competition_id
+          round_type_id
+          event_id
+          person_name
+          person_id
+          format_id
+          regional_single_record
+          regional_average_record
+        ],
+        fake_values: {
+          "person_country_id" => "country_id",
+        }.freeze,
+      ),
+    }.freeze,
+    "result_attempts" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          value
+          attempt_number
+          result_id
+        ],
+      ),
+    }.freeze,
+    "ranks_single" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          best
+          person_id
+          event_id
+          world_rank
+          continent_rank
+          country_rank
+        ],
+      ),
+    }.freeze,
+    "ranks_average" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          best
+          person_id
+          event_id
+          world_rank
+          continent_rank
+          country_rank
+        ],
+      ),
+    }.freeze,
+    "round_types" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          final
+          name
+          rank
+          cell_name
+        ],
+      ),
+    }.freeze,
+    "events" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          format
+          name
+          rank
+        ],
+      ),
+    }.freeze,
+    "formats" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          expected_solve_count
+          name
+          sort_by
+          sort_by_second
+          trim_fastest_n
+          trim_slowest_n
+        ],
+      ),
+    }.freeze,
+    "countries" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          iso2
+          name
+          continent_id
+        ],
+      ),
+    }.freeze,
+    "continents" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          name
+          record_name
+        ],
+      ),
+    }.freeze,
+    "persons" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          name
+          gender
+          wca_id
+          sub_id
+          country_id
+        ],
+      ),
+    }.freeze,
+    "competitions" => {
+      where_clause: PUBLIC_COMPETITION_JOIN,
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          name
+          information
+          external_website
+          venue
+          city_name
+          country_id
+          venue_address
+          venue_details
+          cell_name
+        ],
+        fake_values: {
+          "cancelled" => "(competitions.cancelled_at IS NOT NULL AND competitions.cancelled_by IS NOT NULL)",
+          "event_specs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
+          "delegates" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
+          "organizers" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_organizers.name, \"}{mailto:\", users_organizers.email, \"}]\")) SEPARATOR \" \")",
+          "year" => "YEAR(start_date)",
+          "month" => "MONTH(start_date)",
+          "day" => "DAY(start_date)",
+          "end_year" => "YEAR(end_date)",
+          "end_month" => "MONTH(end_date)",
+          "end_day" => "DAY(end_date)",
+          "latitude_microdegrees" => "latitude",
+          "longitude_microdegrees" => "longitude",
+        }.freeze,
+      ),
+      tsv_sanitizers: actions_to_column_sanitizers(
+        fake_values: {
+          "information" => "REGEXP_REPLACE(information, '[[:space:]]+', ' ')",
+        },
+      ),
+    }.freeze,
+    "scrambles" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          scramble
+          id
+          competition_id
+          event_id
+          group_id
+          is_extra
+          round_type_id
+          scramble_num
+        ],
+      ),
+      tsv_sanitizers: actions_to_column_sanitizers(
+        fake_values: {
+          "scramble" => "IF(event_id='333mbf', REPLACE(scramble, '\\n', '|'), scramble)",
+        },
+      ),
+    }.freeze,
+    "championships" => {
+      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          competition_id
+          championship_type
+        ],
+      ),
+    }.freeze,
+    "eligible_country_iso2s_for_championship" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          championship_type
+          eligible_country_iso2
+        ],
+      ),
+    }.freeze,
+  }.freeze
+
+  RESULTS_EXPORT_VERSIONS = {
+    v1: {
+      metadata: {
+        export_format_version: 'v1.0.0',
+        version_label: 'deprecated',
+        end_of_life_date: '2026-01-15',
+      },
+      db_config: :results_dump,
+      db_sanitizers: RESULTS_SANITIZERS,
+    },
+    v2: {
+      metadata: {
+        export_format_version: 'v2.0.2',
+        version_label: 'current',
+        end_of_life_date: nil,
+      },
+      db_config: :results_dump_v2,
+      db_sanitizers: V2_RESULTS_SANITIZERS,
+    },
+  }.freeze
+
+  def self.results_export_live_versions
+    past_eol = RESULTS_EXPORT_VERSIONS.select do |_, v|
+      date = v[:metadata][:end_of_life_date]
+      date && Date.parse(date) <= Date.today
+    end.keys
+
+    RESULTS_EXPORT_VERSIONS.keys - past_eol
+  end
+
+  def self.current_results_export_version
+    RESULTS_EXPORT_VERSIONS.find { |_k, v| v[:metadata][:version_label] == "current" }&.first
+  end
+
   # NOTE: The parameter dump_config_name has to correspond exactly to the desired key in config/database.yml
   def self.with_dumped_db(dump_config_name, dump_sanitizers, dump_ts_name = nil, drop_db_after_dump: true)
     primary_db_config = ActiveRecord::Base.connection_db_config
@@ -1196,10 +1434,25 @@ module DatabaseDumper
     config = ActiveRecord::Base.configurations.configs_for(name: dump_config_name.to_s, include_hidden: true)
     dump_db_name = config.configuration_hash[:database]
 
+    # By default, assume that we're running dumps in the order they're refined.
+    # This will be overridden in a deeper scope down below.
+    ordered_table_names = dump_sanitizers.keys
+
     LogTask.log_task "Creating temporary database '#{dump_db_name}'" do
       ActiveRecord::Tasks::DatabaseTasks.drop config
       ActiveRecord::Tasks::DatabaseTasks.create config
       ActiveRecord::Tasks::DatabaseTasks.load_schema config
+
+      # We need to make sure that the dump runs in the correct order, because of foreign key dependencies.
+      #   Normally, this would not be a problem for a "standard SQL dump", because tools like `mysqldump` or `mariadb-dump`
+      #   simply disable Foreign Keys altogether, then dump the data in one go, and then enable the foreign key checking again.
+      # However, since we're running manual dumps while foreign key checking is enabled, we need to make sure that our data
+      #   is being dumped in the "correct order". For example, we cannot run the `results` dumper before `rounds`,
+      #   because there is a Foreign Key pointing from the former to the latter, so inserting values into `results`
+      #   without the corresponding `rounds` row already existing, will make the DB throw errors.
+      ordered_table_names = ordered_table_names
+                            .index_with { ActiveRecord::Base.connection.foreign_keys(it).pluck(:to_table) }
+                            .tsort
     ensure
       # Need to connect to primary database again because the operations above redirect the entire ActiveRecord connection
       ActiveRecord::Base.establish_connection(primary_db_config) if primary_db_config
@@ -1209,8 +1462,13 @@ module DatabaseDumper
       ActiveRecord::Base.connection.execute("SET SESSION group_concat_max_len = 1048576")
     end
 
+    # Turn of foreign key checking to avoid errors when dumping data caused by foreign keys referencing not yet existing rows.
+    ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
+
     LogTask.log_task "Populating sanitized tables in '#{dump_db_name}'" do
-      dump_sanitizers.each do |table_name, table_sanitizer|
+      ordered_table_names.each do |table_name|
+        table_sanitizer = dump_sanitizers[table_name]
+
         next if table_sanitizer == :skip_all_rows
 
         # Give an option to override source table name if schemas diverge
@@ -1235,6 +1493,9 @@ module DatabaseDumper
       end
 
       ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.server_settings (name, value, created_at, updated_at) VALUES ('#{dump_ts_name}', UNIX_TIMESTAMP(), NOW(), NOW())") if dump_ts_name.present?
+
+      # Turn these back on. We do establish a new connection again in the ensure block, but just in case this carries over
+      ActiveRecord::Base.connection.execute("SET foreign_key_checks=1")
     end
 
     yield dump_db_name
@@ -1253,13 +1514,16 @@ module DatabaseDumper
     end
   end
 
-  def self.public_results_dump(dump_filename, tsv_folder)
-    self.with_dumped_db(:results_dump, RESULTS_SANITIZERS) do |dump_db|
+  def self.public_results_dump(dump_filename, tsv_folder, version)
+    sanitizers = RESULTS_EXPORT_VERSIONS[version][:db_sanitizers]
+    dump_config = RESULTS_EXPORT_VERSIONS[version][:db_config]
+
+    self.with_dumped_db(dump_config, sanitizers) do |dump_db|
       LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
         self.mysqldump(dump_db, dump_filename)
       end
 
-      RESULTS_SANITIZERS.each do |table_name, table_sanitizer|
+      sanitizers.each do |table_name, table_sanitizer|
         next if table_sanitizer == :skip_all_rows
 
         column_expressions = table_sanitizer[:column_sanitizers].map do |column_name, _|
@@ -1285,7 +1549,7 @@ module DatabaseDumper
 
   def self.mysql_cli_creds
     config = ActiveRecord::Base.connection_db_config.configuration_hash
-    "--user=#{config[:username]} --password=#{config[:password] || "''"} --port=#{config[:port]} --host=#{config[:host]}"
+    "--user=#{config[:username]} --password=#{config[:password] || "''"} --port=#{config[:port]} --host=#{config[:host]} #{'--ssl-ca=/rails/rds-cert.pem' if Rails.env.production?}"
   end
 
   def self.mysql(command, database = nil)
@@ -1293,7 +1557,7 @@ module DatabaseDumper
   end
 
   def self.mysqldump_tsv(database, command, dest_filename)
-    system_pipefail!("mysql #{self.mysql_cli_creds} #{database} --batch -e \"#{command}\" #{filter_out_mysql_warning dest_filename}")
+    system_pipefail!("mysql #{self.mysql_cli_creds} #{database} --batch --quick -e \"#{command}\" #{filter_out_mysql_warning dest_filename}")
   end
 
   def self.mysqldump(db_name, dest_filename)
@@ -1302,7 +1566,7 @@ module DatabaseDumper
   end
 
   def self.filter_out_mysql_warning(dest_filename = nil)
-    "2>&1 | grep -v \"\\[Warning\\] Using a password on the command line interface can be insecure.\"#{dest_filename.present? ? " > #{dest_filename}" : ''} || true"
+    "2>&1 | grep -v \"\\[Warning\\] Using a password on the command line interface can be insecure.\"#{" > #{dest_filename}" if dest_filename.present?} || true"
   end
 end
 

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const FiltersIcon = createIcon({
@@ -13,10 +14,9 @@ const FiltersIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const FiltersIconPreview = () => {
-  return <FiltersIcon size="lg" />;
-};
-
-export default FiltersIconPreview;
+export default FiltersIcon;

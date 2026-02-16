@@ -1,8 +1,8 @@
 <% provide(:title, 'WCA Scrambles') %>
 <div class="container">
   <h1>WCA Scrambles</h1>
-  <% latest_version = "TNoodle-WCA-1.2.2" %>
-  <% latest_jarfilename = "https://github.com/thewca/tnoodle/releases/download/v1.2.2/TNoodle-WCA-1.2.2.jar" %>
+  <% latest_version = "TNoodle-WCA-1.2.3" %>
+  <% latest_jarfilename = "https://github.com/thewca/tnoodle/releases/download/v1.2.3/TNoodle-WCA-1.2.3.jar" %>
   <p>The current official scramble programs is <em><%= latest_version %></em>. It generates high-quality scramble sequences for all the events of a competition at once.</p>
   <center>
     <span style="font-size: 200%; line-height: 150%; padding: 0.5em;">
@@ -10,7 +10,7 @@
       <strong><%= link_to latest_version, latest_jarfilename %></strong>
     </span>
     <br/>
-    Last official change: January 22nd, 2024
+    Last official change: January 1st, 2026
   </center>
   <h2>Important Notes for Delegates</h2>
   <ul>
@@ -42,14 +42,14 @@
   <h3>Notes</h3>
   <ul>
     <li>4x4x4 scramble sequences <strong>may take a few minutes</strong> to initialize and generate. If you are generating 4x4x4 scramble sequences, be patient while the loading bar may appear to be stuck.</li>
-    <li>TNoodle creates a <code>tnoodle_resources</code> folder with a few MB of files (mostly cached tables) in the same folder it is run.<br />
+    <li>In old versions, TNoodle creates a <code>tnoodle_resources</code> folder with a few MB of files (mostly cached tables) in the same folder it is run.<br />
       Keep this folder if you want to generate more 4x4x4 scramble sequences more quickly in the future, but feel free to delete it if you need to reclaim disk space.</li>
     <li>TNoodle performs scramble filtering according to <a href="https://www.worldcubeassociation.org/regulations/#4b3">Regulation 4b3</a>.</li>
   </ul>
   <h2>About TNoodle</h2>
   <p>TNoodle uses code developed or adapted by Jeremy Fleischman, Ryan Zheng, Cl&#233;ment Gallet, Shuang Chen, Bruce Norskog, and Lucas Garron. View the <%= link_to "TNoodle project on GitHub", "https://github.com/thewca/tnoodle" %> to view the source, report an issue, or contribute to its development.</p>
   <h2>History of Official Releases</h2>
-  <p>Old versions must not be used without permission from the WCA Board. These are provided in case you want to check the behaviour of an older version.</p>
+  <p>Old versions must not be used. These are provided in case you want to check the behaviour of an older version.</p>
   <ul>
     <li><%= link_to "TNoodle-0.7.4", "https://github.com/thewca/tnoodle/releases/download/v0.7.4/TNoodle-0.7.4.jar" %> (2013-01-01)</li>
     <li><%= link_to "TNoodle-0.7.5", "https://github.com/thewca/tnoodle/releases/download/v0.7.5/TNoodle-0.7.5.jar" %> (2013-02-26)</li>
@@ -81,5 +81,6 @@
     <li><%= link_to "TNoodle-WCA-1.2.0", "https://github.com/thewca/tnoodle/releases/download/v1.2.0/TNoodle-WCA-1.2.0.jar" %> (2023-12-31)</li>
     <li><%= link_to "TNoodle-WCA-1.2.1", "https://github.com/thewca/tnoodle/releases/download/v1.2.1/TNoodle-WCA-1.2.1.jar" %> (2024-01-02)</li>
     <li><%= link_to "TNoodle-WCA-1.2.2", "https://github.com/thewca/tnoodle/releases/download/v1.2.2/TNoodle-WCA-1.2.2.jar" %> (2024-01-22)</li>
+    <li><%= link_to "TNoodle-WCA-1.2.3", "https://github.com/thewca/tnoodle/releases/download/v1.2.3/TNoodle-WCA-1.2.3.jar" %> (2025-12-17)</li>
   </ul>
 </div>

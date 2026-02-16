@@ -324,3 +324,22 @@ export function cutoffToString(wcifRound, { short } = {}) {
 
   return null;
 }
+
+export function isActivityTimeValid(activity, wcifVenue, wcifSchedule) {
+  const { startDate, numberOfDays: days } = wcifSchedule;
+  const { startTime, endTime } = activity;
+
+  const competitionLocalStartTime = DateTime.fromISO(startDate)
+    .setZone(wcifVenue?.timezone, { keepLocalTime: true });
+  const competitionLocalEndTime = DateTime.fromISO(startDate).plus({ days })
+    .setZone(wcifVenue?.timezone, { keepLocalTime: true });
+
+  const activityStartTime = DateTime.fromISO(startTime);
+  const activityEndTime = DateTime.fromISO(endTime);
+
+  const hasPositiveDuration = activityStartTime < activityEndTime;
+  const startsOnOrAfterStartDate = competitionLocalStartTime <= activityStartTime;
+  const endsOnOrBeforeEndDate = activityEndTime <= competitionLocalEndTime;
+
+  return hasPositiveDuration && startsOnOrAfterStartDate && endsOnOrBeforeEndDate;
+}

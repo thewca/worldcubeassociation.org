@@ -1,0 +1,22 @@
+get:
+  summary: Returns the competition scrambles
+  operationId: getScrambles
+  tags:
+    - competitions
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../schemas/results/Scramble.yaml"
+    '404':
+      $ref: '../../errorResponses/CompetitionNotFound.yaml'

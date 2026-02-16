@@ -1,0 +1,57 @@
+type: object
+required:
+  - id
+  - name
+  - group_type
+  - is_active
+  - is_hidden
+  - created_at
+  - updated_at
+properties:
+  id:
+    type: integer
+  name:
+    type: string
+  group_type:
+    type: string
+  parent_group_id:
+    type: integer
+    nullable: true
+  is_active:
+    type: boolean
+  is_hidden:
+    type: boolean
+  metadata_id:
+    type: integer
+    nullable: true
+  metadata_type:
+    type: string
+    nullable: true
+  created_at:
+    type: string
+    format: date-time
+  updated_at:
+    type: string
+    format: date-time
+  lead_user:
+    $ref: './Person.yaml'
+  metadata:
+    type: object
+    properties:
+      id:
+        type: integer
+      status:
+        type: string
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+      email:
+        type: string
+        format: email
+      preferred_contact_mode:
+        type: string
+      friendly_id:
+        type: string

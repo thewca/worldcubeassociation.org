@@ -8,6 +8,7 @@ default: &default
   cache_path: tmp/cache/webpacker
   check_yarn_integrity: false
   webpack_compile_output: true
+  javascript_transpiler: "babel"
   ensure_consistent_versioning: true
   nested_entries: true
 

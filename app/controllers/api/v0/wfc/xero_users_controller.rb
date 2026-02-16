@@ -18,7 +18,7 @@ class Api::V0::Wfc::XeroUsersController < Api::V0::ApiController
     if wfc_xero_user.save
       render json: wfc_xero_user, status: :created
     else
-      render json: wfc_xero_user.errors, status: :unprocessable_entity
+      render json: wfc_xero_user.errors, status: :unprocessable_content
     end
   end
 

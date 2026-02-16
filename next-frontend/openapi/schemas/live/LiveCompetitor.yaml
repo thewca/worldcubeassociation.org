@@ -1,0 +1,18 @@
+type: object
+required:
+  - id
+  - registrant_id
+  - name
+  - country_iso2
+  - user_id
+properties:
+  id:
+    type: number
+  registrant_id:
+    type: number
+  user_id:
+    type: number
+  name:
+    type: string
+  country_iso2:
+    type: string

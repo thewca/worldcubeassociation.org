@@ -45,6 +45,11 @@ variable "DATABASE_WRT_USER" {
   description = "The name of the database user that WRT signs in with"
 }
 
+variable "DATABASE_WRT_SENIOR_USER" {
+  type        = string
+  description = "The name of the database user that WRT Senior Members signs in with"
+}
+
 variable "VAULT_ADDR" {
   type        = string
   description = "The address of the vault cluster that is running in our private subnet"
@@ -71,6 +76,18 @@ variable "rds_iam_identifier" {
   default = "db-VFBCC2563NK74KYKEYEC32YXHA"
 }
 
+variable "rds_dev_dump_identifier" {
+  type = string
+  description = "The identifier of the dev dump"
+  default = "db-CLQZYYW5FGHVA6IGWTN64N24PI"
+}
+
+variable "rds_read_replica_identifier" {
+  type = string
+  description = "The identifier of the read replica"
+  default = "db-YF7CCUEQCJOJXD5KU3ASUPYBSE"
+}
+
 variable "shared" {
   type = object({
     vpc_id: string,
@@ -79,6 +96,7 @@ variable "shared" {
       name: string
       arn: string
     }),
+    next_repository_url: string,
     ecs_cluster: object({
       id: string
       name: string
@@ -98,6 +116,9 @@ variable "shared" {
     https_listener: object({
       arn: string
     })
+    nextjs-production: object({
+      arn: string
+    })
     pma_production: object({
       arn: string
     })
@@ -105,6 +126,7 @@ variable "shared" {
       id: string,
       root_resource_id: string
     })
+    next_url: string
     account_id: string
     # These are booth arrays
     private_subnets: any

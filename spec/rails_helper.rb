@@ -38,7 +38,7 @@ ActiveRecord::Migration.maintain_test_schema!
 Capybara.register_driver :playwright_debug do |app|
   Capybara::Playwright::Driver.new(
     app,
-    playwright_server_endpoint_url: EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL,
+    browser_server_endpoint_url: EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL,
     browser_type: :chromium,
     # For running Playwright browsers in headed mode, there has to be a writable X11 socket under `/tmp/.X11-unix`
     #   available in the container, and its user ID (file ownership) has to match the host system exactly.
@@ -52,7 +52,7 @@ Capybara.register_driver :playwright do |app|
   if ENV["CI"].present?
     Capybara::Playwright::Driver.new(app, playwright_cli_executable_path: 'yarn playwright', channel: :chromium)
   else
-    Capybara::Playwright::Driver.new(app, playwright_server_endpoint_url: EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL, channel: :chromium)
+    Capybara::Playwright::Driver.new(app, browser_server_endpoint_url: EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL, channel: :chromium)
   end
 end
 
@@ -134,6 +134,8 @@ RSpec.configure do |config|
   end
 
   config.filter_run_excluding disabled: true if Rails.env.local?
+
+  config.include ActiveSupport::Testing::TimeHelpers
 end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735

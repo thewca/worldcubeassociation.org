@@ -62,6 +62,10 @@ class UserAvatar < ApplicationRecord
     end
   end
 
+  def strict_url
+    self.url unless self.default_avatar? || (self.active_storage? && !self.attached?)
+  end
+
   def thumbnail_url
     case self.backend
     when 's3_legacy_cdn'

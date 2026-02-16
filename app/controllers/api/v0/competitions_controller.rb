@@ -17,22 +17,35 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     paginate json: competitions
   end
 
+  def mine
+    grouped_competitions, registration_statuses = require_user!.my_competitions
+
+    serial_competitions = grouped_competitions
+                          .transform_keys { :"#{it}_competitions" }
+                          .transform_values { it.as_json(User::MY_COMPETITIONS_SERIALIZATION_HASH) }
+
+    render json: {
+      **serial_competitions,
+      registrations_by_competition: registration_statuses,
+    }
+  end
+
   def competition_index
     admin_mode = current_user&.can_see_admin_competitions?
 
-    competitions_scope = Competition.includes(:events)
+    competitions_scope = Competition.includes(:events, :championships)
     competitions_scope = competitions_scope.includes(:delegate_report, delegates: [:current_avatar]) if admin_mode
 
     competitions = competitions_scope.search(params[:q], params: params)
 
-    serial_methods = %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at]
+    serial_methods = %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at championship_types]
     serial_includes = {}
 
     serial_includes["delegates"] = { only: %w[id name], methods: [], include: ["avatar"] } if admin_mode
     serial_methods |= %w[results_submitted_at results_posted_at report_posted_at report_posted_by_user] if admin_mode
 
     paginate json: competitions,
-             only: %w[id name start_date end_date registration_open registration_close venue],
+             only: %w[id name start_date end_date registration_open registration_close venue competitor_limit main_event_id],
              methods: serial_methods,
              include: serial_includes
   end
@@ -49,6 +62,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.qualification_wcif
   end
 
+  def events
+    competition = competition_from_params
+    render json: competition.events_wcif
+  end
+
   def schedule
     competition = competition_from_params
     render json: competition.schedule_wcif
@@ -59,23 +77,32 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.results
   end
 
+  def tabs
+    competition = competition_from_params
+    render json: competition.tabs
+  end
+
+  def podiums
+    competition = Competition.find(params.require(:competition_id))
+
+    render json: competition.results.podium
+  end
+
   def event_results
     competition = competition_from_params(associations: [:rounds])
     event = Event.c_find!(params[:event_id])
-    results_by_round = competition.results
-                                  .where(event_id: event.id)
-                                  .group_by(&:round_type)
-                                  .sort_by { |round_type, _| -round_type.rank }
-    rounds = results_by_round.map do |round_type, results|
-      # I think all competitions now have round data, but let's be cautious
-      # and assume they may not.
-      # round data.
-      round = competition.find_round_for(event.id, round_type.id)
-      {
-        id: round&.id,
-        roundTypeId: round_type.id,
-        results: results.sort_by { |r| [r.pos, r.person_name] },
-      }
+    rounds = competition.rounds
+                        .includes(:results)
+                        .where(competition_events: { event: event })
+                        .except(:order)
+                        .order(number: :desc)
+                        .map do |round|
+                          {
+                            id: round.id,
+                            roundTypeId: round.round_type_id,
+                            isH2hMock: round.is_h2h_mock?,
+                            results: round.results.sort_by { |r| [r.pos, r.person_name] },
+                          }
     end
     render json: {
       id: event.id,
@@ -91,20 +118,17 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def event_scrambles
     competition = competition_from_params
     event = Event.c_find!(params[:event_id])
-    scrambles_by_round = competition.scrambles
-                                    .where(event_id: event.id)
-                                    .group_by(&:round_type)
-                                    .sort_by { |round_type, _| -round_type.rank }
-    rounds = scrambles_by_round.map do |round_type, scrambles|
-      # I think all competitions now have round data, but let's be cautious
-      # and assume they may not.
-      # round data.
-      round = competition.find_round_for(event.id, round_type.id)
-      {
-        id: round&.id,
-        roundTypeId: round_type.id,
-        scrambles: scrambles,
-      }
+    rounds = competition.rounds
+                        .includes(:scrambles)
+                        .where(competition_events: { event: event })
+                        .except(:order)
+                        .order(number: :desc)
+                        .map do |round|
+                          {
+                            id: round.id,
+                            roundTypeId: round.round_type_id,
+                            scrambles: round.scrambles,
+                          }
     end
     render json: {
       id: event.id,

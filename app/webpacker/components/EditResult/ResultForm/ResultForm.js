@@ -20,6 +20,7 @@ import './ResultForm.scss';
 const roundDataFromResult = (result) => ({
   competitionId: result.competition_id || '',
   roundTypeId: result.round_type_id || '',
+  roundId: result.round_id || '',
   formatId: result.format_id || '',
   eventId: result.event_id || '',
 });
@@ -40,7 +41,7 @@ const personDataFromResult = (result) => ({
 });
 
 const dataToResult = ({
-  eventId, formatId, competitionId, roundTypeId,
+  eventId, formatId, competitionId, roundTypeId, roundId,
 }, person, attemptsData) => {
   const country = countries.byIso2[person.countryIso2];
   const result = {
@@ -55,6 +56,7 @@ const dataToResult = ({
     format_id: formatId,
     competition_id: competitionId,
     round_type_id: roundTypeId,
+    round_id: roundId,
   };
   // Map individual attempts to valueN...
   attemptsData.attempts.forEach((a, index) => { result[`value${index + 1}`] = a; });

@@ -8,6 +8,7 @@ import {
 import I18n from '../../../lib/i18n';
 import { useCheckboxUpdater } from '../../../lib/hooks/useCheckboxState';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
+import { useStepNavigation } from '../lib/StepNavigationProvider';
 import { useFormObjectState } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 function RegistrationFullMessage({ competitionInfo }) {
@@ -30,9 +31,10 @@ function RegistrationFullMessage({ competitionInfo }) {
   return null;
 }
 
-export default function RegistrationRequirements({ nextStep, competitionInfo }) {
+export default function RegistrationRequirements({ competitionInfo }) {
   const [infoAcknowledged, setInfoAcknowledgedRaw] = useFormObjectState('infoAcknowledged', ['regRequirements']);
   const setInfoAcknowledged = useCheckboxUpdater(setInfoAcknowledgedRaw);
+  const { nextStep } = useStepNavigation();
 
   return (
     <Segment basic>

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const ToolsIcon = createIcon({
@@ -13,10 +14,9 @@ const ToolsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const ToolsIconPreview = () => {
-  return <ToolsIcon size="lg" />;
-};
-
-export default ToolsIconPreview;
+export default ToolsIcon;

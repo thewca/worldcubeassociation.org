@@ -249,6 +249,11 @@ resource "aws_ecr_repository" "this" {
   force_delete = true
 }
 
+resource "aws_ecr_repository" "nextjs" {
+  name         = "wca-nextjs"
+  force_delete = true
+}
+
 resource "aws_ecr_lifecycle_policy" "this" {
   repository = aws_ecr_repository.this.name
 
@@ -273,6 +278,10 @@ resource "aws_ecr_lifecycle_policy" "this" {
 
 output "ecr_repository" {
   value = aws_ecr_repository.this
+}
+
+output "next_repository_url" {
+  value = aws_ecr_repository.nextjs.repository_url
 }
 
 output "ecs_cluster" {

@@ -18,6 +18,7 @@ FactoryBot.define do
       starts { 1.year.ago }
       ends { starts }
       event_ids { %w[333 333oh 555 pyram minx 222 444] }
+      h2h_finals_event_ids { nil }
 
       today { Time.now.utc.iso8601 }
       next_month { 1.month.from_now.iso8601 }
@@ -109,12 +110,22 @@ FactoryBot.define do
     end
 
     trait :auto_accept do
+      stripe_connected
       use_wca_registration { true }
-      auto_accept_registrations { true }
       competitor_limit_enabled { true }
       competitor_limit_reason { 'test' }
       competitor_limit { 5 }
       auto_accept_disable_threshold { 4 }
+    end
+
+    trait :bulk_auto_accept do
+      auto_accept
+      auto_accept_preference { :bulk }
+    end
+
+    trait :live_auto_accept do
+      auto_accept
+      auto_accept_preference { :live }
     end
 
     trait :allow_self_delete do
@@ -276,8 +287,8 @@ FactoryBot.define do
         person = FactoryBot.create(:inbox_person, competition_id: competition.id)
         rounds = competition.competition_events.map(&:rounds).flatten
         rounds.each do |round|
-          FactoryBot.create(:inbox_result, competition_id: competition.id, person_id: person.id, event_id: round.event.id, format_id: round.format.id)
-          FactoryBot.create_list(:scramble, 5, competition_id: competition.id, event_id: round.event.id)
+          FactoryBot.create(:inbox_result, competition: competition, person_id: person.ref_id, event_id: round.event.id, format_id: round.format.id, round: round)
+          FactoryBot.create_list(:scramble, 5, competition: competition, event_id: round.event.id, format_id: round.format.id, round: round)
         end
       end
     end
@@ -300,7 +311,7 @@ FactoryBot.define do
 
     trait :registration_not_opened do
       registration_open { 1.week.from_now.change(usec: 0) }
-      registration_close { 4.weeks.from_now.change(usec: 0) }
+      registration_close { 3.weeks.from_now.change(usec: 0) }
       starts { 1.month.from_now }
       ends { starts }
     end
@@ -346,6 +357,12 @@ FactoryBot.define do
       cancelled_by { FactoryBot.create(:user, :wcat_member).id }
     end
 
+    trait :all_integrations_connected do
+      stripe_connected
+      paypal_connected
+      manual_connected
+    end
+
     trait :stripe_connected do
       # This is an actual test stripe account set up
       # for testing Stripe payments, and is connected
@@ -360,6 +377,12 @@ FactoryBot.define do
     trait :paypal_connected do
       transient do
         paypal_merchant_id { '95XC2UKUP2CFW' }
+      end
+    end
+
+    trait :manual_connected do
+      transient do
+        manual_payment_instructions { "Cash in an unmarked envelope left under a bench in the park" }
       end
     end
 
@@ -408,12 +431,22 @@ FactoryBot.define do
           next if ce.rounds.any?
 
           evaluator.rounds_per_event.times do |i|
-            ce.rounds.create!(
-              format: ce.event.preferred_formats.first.format,
-              number: i + 1,
-              total_number_of_rounds: evaluator.rounds_per_event,
-              scramble_set_count: evaluator.groups_per_round,
-            )
+            if evaluator.h2h_finals_event_ids&.include?(ce.event_id)
+              ce.rounds.create!(
+                format: Format.find("h"),
+                number: i + 1,
+                total_number_of_rounds: evaluator.rounds_per_event,
+                scramble_set_count: evaluator.groups_per_round,
+                is_h2h_mock: true,
+              )
+            else
+              ce.rounds.create!(
+                format: ce.event.preferred_formats.first.format,
+                number: i + 1,
+                total_number_of_rounds: evaluator.rounds_per_event,
+                scramble_set_count: evaluator.groups_per_round,
+              )
+            end
           end
         end
       end
@@ -569,6 +602,14 @@ FactoryBot.define do
           consent_status: "test",
         )
         competition.competition_payment_integrations.new(connected_account: paypal_account)
+        competition.save
+      end
+
+      if defined?(evaluator.manual_payment_instructions)
+        manual_payment_account = ManualPaymentIntegration.new(
+          payment_instructions: evaluator.manual_payment_instructions, payment_reference_label: "Bench Location",
+        )
+        competition.competition_payment_integrations.new(connected_account: manual_payment_account)
         competition.save
       end
     end

@@ -68,7 +68,12 @@ class ScheduleActivity < ApplicationRecord
     errors.add(:activity_code, "event should match the selected round") if parts[:event_id] != round.event_id
     errors.add(:activity_code, "round number should match the selected round") if parts[:round_number].present? && (parts[:round_number] != round.number)
 
-    errors.add(:activity_code, "group should not be larger than the number of scramble sets") if parts[:group_number].present? && (parts[:group_number] > round.scramble_set_count)
+    # TODO: We normally want this validation, but it messes with established "workflows" of Delegates
+    #   who want to sync in-progress schedules or experiment with external group assignment tools
+    #   while at the same time not wanting to constantly switch to the "Edit Events" page to update the scramble set number
+    # See also https://github.com/thewca/worldcubeassociation.org/issues/11654 fpr details
+    # errors.add(:activity_code, "group should not be larger than the number of scramble sets") if parts[:group_number].present? && (parts[:group_number] > round.scramble_set_count)
+
     errors.add(:activity_code, "attempt number should not be larger than the number of expected attempts") if parts[:attempt_number].present? && (parts[:attempt_number] > round.format.expected_solve_count)
   end
 
@@ -137,7 +142,7 @@ class ScheduleActivity < ApplicationRecord
     wcif_attributes = ScheduleActivity.wcif_to_attributes(wcif)
 
     self.assign_attributes(wcif_attributes.slice(:activity_code))
-    round = parent_activity&.round || self.find_matched_round
+    round = parent_activity&.round || self.find_matched_round(venue_room)
 
     update!(
       venue_room: venue_room,
@@ -154,9 +159,11 @@ class ScheduleActivity < ApplicationRecord
     self
   end
 
-  private def find_matched_round
+  private def find_matched_round(override_venue_room = nil)
+    linked_venue_room = override_venue_room || self.venue_room
+
     # Using `find` instead of `find_by` throughout to leverage preloaded associations
-    competition_event = venue_room.competition.competition_events.find { it.event_id == self.parsed_activity_code[:event_id] }
+    competition_event = linked_venue_room.competition.competition_events.find { it.event_id == self.parsed_activity_code[:event_id] }
     return nil if competition_event.blank?
 
     competition_event.rounds.find { it.number == self.parsed_activity_code[:round_number] }

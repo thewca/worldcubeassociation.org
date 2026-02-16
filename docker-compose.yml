@@ -21,6 +21,7 @@ x-app: &app
 x-app-environment: &appEnv
   <<: *env
   SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
+  ACTIONCABLE_REDIS_URL: redis://wca_redis:6379/2
   MAILCATCHER_SMTP_HOST: wca_mailcatcher
 
 services:
@@ -63,7 +64,7 @@ services:
       RUNNING_IN_DOCKER: true
     tty: true
     # Start the server and bind to 0.0.0.0 (vs 127.0.0.1) so Docker's port mappings work correctly
-    command: bin/rails server -b 0.0.0.0
+    command: bin/dev -b 0.0.0.0
     depends_on:
       wca_environment:
         condition: service_completed_successfully
@@ -83,7 +84,25 @@ services:
       yarn run dev'
     volumes:
       - ./next-frontend:/app
+      - ./lib/static_data:/app/src/lib/staticData
+      - ./config/locales/available.json:/app/src/lib/i18n/locales/available.json
       - next_yarn_volume:/app/node_modules
+    networks:
+      - wca-main
+
+  wca_payload_db:
+    image: mongo:8
+    container_name: "payload_db"
+    command:
+      - --quiet
+      - --logpath
+      - /var/log/mongodb/mongod.log
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: payload
+    ports:
+      - "27017:27017"
     networks:
       - wca-main
 
@@ -95,7 +114,6 @@ services:
     environment:
       <<: *appEnv
       SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
-      NODE_ENV: development
     command: bin/shakapacker-dev-server
     depends_on:
       wca_environment:
@@ -122,7 +140,7 @@ services:
       # Cronjobs are disabled in development by default. If you wish to run cronjobs,
       # set this env variable to any integer value greater than zero
       # CRONJOB_POLLING_MINUTES: 30
-    command: bin/bundle exec sidekiq
+    command: bin/sidekiq
     depends_on:
       wca_environment:
         condition: service_completed_successfully
@@ -155,8 +173,8 @@ services:
   wca_redis:
     image: redis:7.0-alpine
     container_name: "redis-main"
-    expose:
-      - "6379"
+    ports:
+      - "6379:6379"
     command: redis-server --loglevel warning
     volumes:
       - cache_volume:/data
@@ -164,7 +182,7 @@ services:
       - wca-main
 
   wca_playwright:
-    image: mcr.microsoft.com/playwright:v1.52.0
+    image: mcr.microsoft.com/playwright:v1.57.0
     container_name: "playwright"
     extra_hosts:
       - "hostmachine:host-gateway"

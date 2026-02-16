@@ -41,43 +41,39 @@ function canIBookPlaneTickets(registrationStatus, hasPaid, competitionInfo) {
   }
 }
 
-function RegistrationStatusMessage({ registration, competitionInfo }) {
+export default function RegistrationStatus({ registration, hasPaid = false, competitionInfo }) {
+  const {
+    registration_status: registrationStatus,
+    waiting_list_position: waitingListPosition,
+  } = registration.competing;
+
   return (
     <Message
-      info={registration.competing.registration_status === 'pending'}
-      success={registration.competing.registration_status === 'accepted'}
-      negative={registration.competing.registration_status === 'cancelled'
-        || registration.competing.registration_status === 'rejected'}
-      warning={registration.competing.registration_status === 'waiting_list'}
+      info={registrationStatus === 'pending'}
+      success={registrationStatus === 'accepted'}
+      negative={registrationStatus === 'cancelled'
+        || registrationStatus === 'rejected'}
+      warning={registrationStatus === 'waiting_list'}
       icon
     >
-      <Icon name={registrationIconByStatus(registration.competing.registration_status)} />
+      <Icon name={registrationIconByStatus(registrationStatus)} />
       <Message.Content>
         <Message.Header>
           {I18n.t(
-            `competitions.registration_v2.register.registration_status.${registration.competing.registration_status}`,
+            `competitions.registration_v2.register.registration_status.${registrationStatus}`,
             {
-              waiting_list_position: registration.competing.waiting_list_position,
+              waiting_list_position: waitingListPosition,
             },
           )}
         </Message.Header>
         <p>
           {canIBookPlaneTickets(
-            registration.competing.registration_status,
-            registration.payment?.has_paid,
+            registrationStatus,
+            hasPaid,
             competitionInfo,
           )}
         </p>
       </Message.Content>
     </Message>
-  );
-}
-
-export default function RegistrationStatus({ registration, competitionInfo }) {
-  return (
-    <RegistrationStatusMessage
-      registration={registration}
-      competitionInfo={competitionInfo}
-    />
   );
 }

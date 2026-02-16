@@ -2,6 +2,7 @@
 
 class RanksAverage < ApplicationRecord
   include PersonalBest
+
   # ActiveRecord inflects the last word, so by default, this would be 'ranks_averages'
   self.table_name = 'ranks_average'
 

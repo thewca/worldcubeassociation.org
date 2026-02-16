@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const YoutubeIcon = createIcon({
@@ -13,10 +14,9 @@ const YoutubeIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const YoutubeIconPreview = () => {
-  return <YoutubeIcon size="lg" />;
-};
-
-export default YoutubeIconPreview;
+export default YoutubeIcon;

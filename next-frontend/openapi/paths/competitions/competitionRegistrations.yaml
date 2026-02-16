@@ -1,0 +1,22 @@
+get:
+  summary: Get competition registrations
+  tags:
+    - competitions
+  operationId: competitionRegistrations
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../schemas/registrations/RegistrationData.yaml'
+    '404':
+      $ref: '../../errorResponses/CompetitionNotFound.yaml'

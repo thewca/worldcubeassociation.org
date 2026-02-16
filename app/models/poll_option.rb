@@ -9,7 +9,7 @@ class PollOption < ApplicationRecord
   validates :description, presence: true
 
   def percentage
-    if self.poll.votes.count.positive?
+    if self.poll.votes.any?
       (self.vote_options.count.to_f / self.poll.votes.count * 100).round(2)
     else
       0

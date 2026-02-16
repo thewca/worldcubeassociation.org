@@ -473,7 +473,8 @@ RSpec.describe Competition do
 
     it "warns if competition has results and haven't been posted" do
       competition = create(:competition, :confirmed, :announced, :visible, :past, results_posted_at: nil, results_posted_by: nil)
-      create(:result, person: create(:person), competition_id: competition.id)
+      round = create(:round, competition: competition, number: 2, event_id: "333oh")
+      create(:result, person: create(:person), competition_id: competition.id, round: round)
       wrt_member = create(:user, :wrt_member)
 
       expect(competition).to be_valid
@@ -698,15 +699,16 @@ RSpec.describe Competition do
     end
 
     it "changes the competition_id of results" do
-      r1 = create(:result, competition_id: competition.id)
-      r2 = create(:result, competition_id: competition.id)
+      round = create(:round, competition: competition, event_id: "333oh")
+      r1 = create(:result, competition_id: competition.id, round: round)
+      r2 = create(:result, competition_id: competition.id, round: round)
       competition.update_attribute(:id, "NewID2015")
       expect(r1.reload.competition_id).to eq "NewID2015"
       expect(r2.reload.competition_id).to eq "NewID2015"
     end
 
     it "changes the competitionId of scrambles" do
-      scramble1 = create(:scramble, competition_id: competition.id)
+      scramble1 = create(:scramble, competition: competition)
       competition.update_attribute(:id, "NewID2015")
       expect(scramble1.reload.competition_id).to eq "NewID2015"
     end
@@ -910,31 +912,28 @@ RSpec.describe Competition do
   describe "results" do
     let(:three_by_three) { Event.find "333" }
     let(:two_by_two) { Event.find "222" }
-    let!(:competition) do
-      c = create(:competition, events: [three_by_three, two_by_two])
-      # Create the results rounds right now so that we can use them later.
-      create(:round, competition: c, total_number_of_rounds: 2, number: 1, event_id: "333")
-      create(:round, competition: c, total_number_of_rounds: 2, number: 2, event_id: "333")
-      create(:round, competition: c, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100))
-      c
-    end
+    let!(:competition) { create(:competition, events: [three_by_three, two_by_two]) }
 
     let(:person_one) { create(:person, name: "One") }
     let(:person_two) { create(:person, name: "Two") }
     let(:person_three) { create(:person, name: "Three") }
     let(:person_four) { create(:person, name: "Four") }
 
-    let!(:r_333_1_first) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 1, person: person_one) }
-    let!(:r_333_1_second) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 2, person: person_two) }
-    let!(:r_333_1_third) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 3, person: person_three) }
-    let!(:r_333_1_fourth) { create(:result, competition: competition, event_id: "333", round_type_id: "1", pos: 4, person: person_four) }
+    let(:round_333_1) { create(:round, competition: competition, total_number_of_rounds: 2, number: 1, event_id: "333") }
+    let(:round_333_f) { create(:round, competition: competition, total_number_of_rounds: 2, number: 2, event_id: "333") }
+    let(:round_222_c) { create(:round, competition: competition, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100)) }
 
-    let!(:r_333_f_first) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 1, person: person_one) }
-    let!(:r_333_f_second) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 2, person: person_two) }
-    let!(:r_333_f_third) { create(:result, competition: competition, event_id: "333", round_type_id: "f", pos: 3, person: person_three) }
+    let!(:r_333_1_first) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 1, person: person_one) }
+    let!(:r_333_1_second) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 2, person: person_two) }
+    let!(:r_333_1_third) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 3, person: person_three) }
+    let!(:r_333_1_fourth) { create(:result, round: round_333_1, competition: competition, event_id: "333", round_type_id: "1", pos: 4, person: person_four) }
 
-    let!(:r_222_c_second_tied) { create(:result, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_two) }
-    let!(:r_222_c_first_tied) { create(:result, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_one) }
+    let!(:r_333_f_first) { create(:result, round: round_333_f, competition: competition, event_id: "333", round_type_id: "f", pos: 1, person: person_one) }
+    let!(:r_333_f_second) { create(:result, round: round_333_f, competition: competition, event_id: "333", round_type_id: "f", pos: 2, person: person_two) }
+    let!(:r_333_f_third) { create(:result, round: round_333_f, competition: competition, event_id: "333", round_type_id: "f", pos: 3, person: person_three) }
+
+    let!(:r_222_c_second_tied) { create(:result, round: round_222_c, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_two) }
+    let!(:r_222_c_first_tied) { create(:result, round: round_222_c, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_one) }
 
     it "events_with_podium_results" do
       result = competition.events_with_podium_results
@@ -991,7 +990,7 @@ RSpec.describe Competition do
 
   it "when id is changed, foreign keys are updated as well" do
     competition = create(:competition, :with_delegate, :with_organizer, :with_delegate_report, :registration_open)
-    create(:result, competition_id: competition.id)
+    create(:result, competition: competition)
     create(:competition_tab, competition: competition)
     create(:registration, competition: competition)
 
@@ -1051,14 +1050,16 @@ RSpec.describe Competition do
     let!(:competition) { create(:competition) }
 
     it "works" do
-      create_list(:result, 2, competition: competition)
+      round = create(:round, competition: competition, event_id: "333oh")
+      create_list(:result, 2, competition: competition, round: round)
       expect(competition.competitors.count).to eq 2
     end
 
     it "handles competitors with multiple sub_ids" do
       person_with_sub_ids = create(:person_with_multiple_sub_ids)
-      create(:result, competition: competition, person: person_with_sub_ids)
-      create(:result, competition: competition)
+      round = create(:round, competition: competition, event_id: "333oh")
+      create(:result, competition: competition, person: person_with_sub_ids, round: round)
+      create(:result, competition: competition, round: round)
       expect(competition.competitors.count).to eq 2
     end
   end
@@ -1238,6 +1239,7 @@ RSpec.describe Competition do
   describe "is exempt from dues" do
     let(:four_by_four) { Event.find "444" }
     let(:fmc) { Event.find "333fm" }
+    let!(:initial_competitions) { create_list(:competition, 5, country_id: "Canada", city_name: "Vancouver, British Columbia", start_date: 2.years.ago, end_date: 2.years.ago + 2.days) }
 
     it "is false when competition has no championships" do
       competition = create(:competition, events: [four_by_four], championship_types: [], country_id: "Canada", city_name: "Vancouver, British Columbia")
@@ -1277,6 +1279,44 @@ RSpec.describe Competition do
     it "is true when competition is a world championship" do
       competition = create(:competition, events: Event.official, championship_types: ["world"], country_id: "Korea")
       expect(competition.exempt_from_wca_dues?).to be true
+    end
+
+    it "is true for the very first competition in a country" do
+      competition = create(:competition, country_id: "Australia", city_name: "Melbourne, Victoria", start_date: Date.today, end_date: Date.today + 2.days)
+      expect(competition.exempt_from_wca_dues?).to be true
+    end
+
+    it "is true for both 5th and 6th competitions if they start on the same date" do
+      create_list(:competition, 4, country_id: "Germany", start_date: 2.months.ago, end_date: 2.months.ago + 2.days)
+
+      comp_5 = create(:competition, country_id: "Germany", start_date: 1.month.ago, end_date: 1.month.ago + 2.days)
+      comp_6 = create(:competition, country_id: "Germany", start_date: 1.month.ago, end_date: 1.month.ago + 3.days)
+
+      expect(comp_5.exempt_from_wca_dues?).to be true
+      expect(comp_6.exempt_from_wca_dues?).to be true
+    end
+
+    it "is false for the 6th competition if it starts after the first 5 and true for the first 5 competitions" do
+      comp_6 = create(:competition, country_id: "Canada", city_name: "Vancouver, British Columbia", start_date: Date.today, end_date: Date.today + 2.days)
+
+      expect(comp_6.exempt_from_wca_dues?).to be false
+      expect(initial_competitions).to all(be_exempt_from_wca_dues)
+    end
+
+    it "is false if 6th competition is happening after many years and true for first 5 competitions" do
+      first_competitions = create_list(:competition, 5, country_id: "Korea", start_date: 7.years.ago, end_date: 7.years.ago + 2.days)
+      comp_6 = create(:competition, country_id: "Korea", start_date: Date.today, end_date: Date.today + 2.days)
+
+      expect(comp_6.exempt_from_wca_dues?).to be false
+      expect(first_competitions).to all(be_exempt_from_wca_dues)
+    end
+
+    it "is true for 6th competition if one of the first 5 competitions are multi-national FMC competition" do
+      create(:competition, events: [fmc], championship_types: [], country_id: "XW")
+      create_list(:competition, 4, country_id: "Korea", start_date: 2.months.ago, end_date: 2.months.ago + 2.days)
+      comp_6 = create(:competition, country_id: "Korea", start_date: Date.today, end_date: Date.today + 2.days)
+
+      expect(comp_6.exempt_from_wca_dues?).to be true
     end
   end
 
@@ -1438,19 +1478,23 @@ RSpec.describe Competition do
 
   context "payment integration methods" do
     describe "#payment_account_for" do
+      let(:competition) { create(:competition, :all_integrations_connected) }
+
       it 'returns the connected stripe account' do
-        competition = create(:competition, :stripe_connected, :paypal_connected)
         expect(competition.payment_account_for(:stripe).account_id).to eq('acct_19ZQVmE2qoiROdto')
       end
 
       it 'returns the connected paypal account' do
-        competition = create(:competition, :stripe_connected, :paypal_connected)
         expect(competition.payment_account_for(:paypal).paypal_merchant_id).to eq('95XC2UKUP2CFW')
       end
 
+      it 'returns the connected manual payment account' do
+        expect(competition.payment_account_for(:manual).payment_reference_label).to eq('Bench Location')
+      end
+
       it 'returns nil if no matching account is found' do
-        competition = create(:competition)
-        expect(competition.payment_account_for(:paypal)).to be_nil
+        paypal_not_connected = create(:competition, :stripe_connected, :manual_connected)
+        expect(paypal_not_connected.payment_account_for(:paypal)).to be_nil
       end
     end
 
@@ -1465,8 +1509,13 @@ RSpec.describe Competition do
         expect(competition.payments_enabled?).to be(true)
       end
 
+      it 'returns true when manual is connected' do
+        competition = create(:competition, :manual_connected)
+        expect(competition.payments_enabled?).to be(true)
+      end
+
       it 'returns true when multiple integrations are connected' do
-        competition = create(:competition, :stripe_connected, :paypal_connected)
+        competition = create(:competition, :all_integrations_connected)
         expect(competition.payments_enabled?).to be(true)
       end
 
@@ -1487,6 +1536,11 @@ RSpec.describe Competition do
         expect(competition.stripe_connected?).to be(false)
       end
 
+      it 'returns false when manual is connected' do
+        competition = create(:competition, :manual_connected)
+        expect(competition.stripe_connected?).to be(false)
+      end
+
       it 'returns false when no integrations are connected' do
         competition = create(:competition)
         expect(competition.stripe_connected?).to be(false)
@@ -1504,9 +1558,36 @@ RSpec.describe Competition do
         expect(competition.paypal_connected?).to be(true)
       end
 
+      it 'returns false when manual is connected' do
+        competition = create(:competition, :manual_connected)
+        expect(competition.paypal_connected?).to be(false)
+      end
+
       it 'returns false when no integrations are connected' do
         competition = create(:competition)
         expect(competition.paypal_connected?).to be(false)
+      end
+    end
+
+    describe '#manual_connected?' do
+      it 'returns false when stripe is connected' do
+        competition = create(:competition, :stripe_connected)
+        expect(competition.manual_connected?).to be(false)
+      end
+
+      it 'returns false when paypal is connected' do
+        competition = create(:competition, :paypal_connected)
+        expect(competition.manual_connected?).to be(false)
+      end
+
+      it 'returns true when manual is connected' do
+        competition = create(:competition, :manual_connected)
+        expect(competition.manual_connected?).to be(true)
+      end
+
+      it 'returns false when no integrations are connected' do
+        competition = create(:competition)
+        expect(competition.manual_connected?).to be(false)
       end
     end
 
@@ -1569,6 +1650,11 @@ RSpec.describe Competition do
   context "new competition is invalid when" do
     let!(:new_competition) { build(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
 
+    it 'there is no start date' do
+      new_competition.start_date = nil
+      expect(new_competition).not_to be_valid
+    end
+
     it "nameReason is too long" do
       new_competition.name_reason = "Veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long name reason"
       expect(new_competition).not_to be_valid
@@ -1591,62 +1677,210 @@ RSpec.describe Competition do
   end
 
   describe "validate auto accept fields" do
-    let(:auto_accept_comp) { build(:competition, :auto_accept) }
     let(:competition) { create(:competition, use_wca_registration: true) }
 
-    context 'cant enable auto-accept when' do
-      it 'not using WCA registration' do
-        auto_accept_comp.use_wca_registration = false
+    context 'preference: bulk' do
+      let(:auto_accept_comp) { build(:competition, :bulk_auto_accept) }
+
+      context 'cant enable auto-accept when' do
+        it 'not using WCA registration' do
+          auto_accept_comp.use_wca_registration = false
+          expect(auto_accept_comp).not_to be_valid
+          expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Auto-accept can only be used if you are using the WCA website for registrations")
+        end
+
+        it 'integrated payment not enabled when competition is confirmed' do
+          confirmed_comp = build(:competition, :confirmed, :bulk_auto_accept, :future)
+          expect(confirmed_comp).not_to be_valid
+          expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
+        end
+
+        it 'any paid-pending registrations exist' do
+          create(:registration, :paid, :pending, competition: competition)
+          competition.auto_accept_preference = :bulk
+
+          expect(competition).not_to be_valid
+          expect(competition.errors[:auto_accept_preference]).to include("Can't enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list")
+        end
+
+        it 'waitlisted registrations exist and accepted competitors < competition limit' do
+          create(:registration, :waiting_list, competition: competition)
+          competition.auto_accept_preference = :bulk
+
+          expect(competition).not_to be_valid
+          expect(competition.errors[:auto_accept_preference]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
+        end
+      end
+
+      it 'is valid after end_date even with no connected payment integration' do
+        auto_accept_comp.disconnect_all_payment_integrations
+        expect(auto_accept_comp).to be_valid
+      end
+
+      it 'disable threshold cant exceed competitor limit' do
+        auto_accept_comp.competitor_limit = 100
+        auto_accept_comp.auto_accept_disable_threshold = 101
         expect(auto_accept_comp).not_to be_valid
-        expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Auto-accept can only be used if you are using the WCA website for registrations")
+        expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
       end
 
-      it 'integrated payment not enabled when competition is confirmed' do
-        confirmed_comp = build(:competition, :confirmed, :auto_accept)
-        expect(confirmed_comp).not_to be_valid
-        expect(confirmed_comp.errors[:auto_accept_registrations]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
+      it 'disable threshld must be less than competitor limit' do
+        auto_accept_comp.competitor_limit = 100
+        auto_accept_comp.auto_accept_disable_threshold = 100
+        expect(auto_accept_comp).not_to be_valid
+        expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
       end
 
-      it 'any paid-pending registrations exist' do
-        create(:registration, :paid, :pending, competition: competition)
-        competition.auto_accept_registrations = true
-
-        expect(competition).not_to be_valid
-        expect(competition.errors[:auto_accept_registrations]).to include("Can't enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list")
+      it 'disable threshold may be 0' do
+        auto_accept_comp.auto_accept_disable_threshold = 0
+        expect(auto_accept_comp).to be_valid
       end
 
-      it 'waitlisted registrations exist and accepted competitors < competition limit' do
-        create(:registration, :waiting_list, competition: competition)
-        competition.auto_accept_registrations = true
-
-        expect(competition).not_to be_valid
-        expect(competition.errors[:auto_accept_registrations]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
+      it 'disable threshold may not be be less than 0' do
+        auto_accept_comp.auto_accept_disable_threshold = -1
+        expect(auto_accept_comp).not_to be_valid
+        expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Limit for auto-accepted registrations cannot be less than 0.")
       end
     end
 
-    it 'disable threshold cant exceed competitor limit' do
-      auto_accept_comp.competitor_limit = 100
-      auto_accept_comp.auto_accept_disable_threshold = 101
-      expect(auto_accept_comp).not_to be_valid
-      expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
+    context 'preference: live' do
+      let(:auto_accept_comp) { build(:competition, :live_auto_accept) }
+
+      context 'cant enable auto-accept when' do
+        it 'not using WCA registration' do
+          auto_accept_comp.use_wca_registration = false
+          expect(auto_accept_comp).not_to be_valid
+          expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Auto-accept can only be used if you are using the WCA website for registrations")
+        end
+
+        it 'integrated payment not enabled when competition is confirmed' do
+          confirmed_comp = build(:competition, :confirmed, :live_auto_accept, :future)
+          expect(confirmed_comp).not_to be_valid
+          expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
+        end
+
+        it 'any paid-pending registrations exist' do
+          create(:registration, :paid, :pending, competition: competition)
+          competition.auto_accept_preference = :live
+
+          expect(competition).not_to be_valid
+          expect(competition.errors[:auto_accept_preference]).to include("Can't enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list")
+        end
+
+        it 'waitlisted registrations exist and accepted competitors < competition limit' do
+          create(:registration, :waiting_list, competition: competition)
+          competition.auto_accept_preference = :live
+
+          expect(competition).not_to be_valid
+          expect(competition.errors[:auto_accept_preference]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
+        end
+      end
+
+      it 'is valid after end_date even with no connected payment integration' do
+        auto_accept_comp.disconnect_all_payment_integrations
+        expect(auto_accept_comp).to be_valid
+      end
+
+      it 'disable threshold cant exceed competitor limit' do
+        auto_accept_comp.competitor_limit = 100
+        auto_accept_comp.auto_accept_disable_threshold = 101
+        expect(auto_accept_comp).not_to be_valid
+        expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
+      end
+
+      it 'disable threshld must be less than competitor limit' do
+        auto_accept_comp.competitor_limit = 100
+        auto_accept_comp.auto_accept_disable_threshold = 100
+        expect(auto_accept_comp).not_to be_valid
+        expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
+      end
+
+      it 'disable threshold may be 0' do
+        auto_accept_comp.auto_accept_disable_threshold = 0
+        expect(auto_accept_comp).to be_valid
+      end
+
+      it 'disable threshold may not be be less than 0' do
+        auto_accept_comp.auto_accept_disable_threshold = -1
+        expect(auto_accept_comp).not_to be_valid
+        expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Limit for auto-accepted registrations cannot be less than 0.")
+      end
+    end
+  end
+
+  describe 'auto accept preferences' do
+    let(:competition) { create(:competition, :registration_open) }
+    let(:pending_reg) { create(:registration, :pending, competition: competition) }
+    let(:waitlisted_reg) { create(:registration, :waiting_list, competition: competition) }
+
+    context 'preference: disabled' do
+      before { competition.auto_accept_preference = :disabled }
+
+      it 'wont bulk auto accept' do
+        create(:registration_payment, registration: pending_reg, competition: competition)
+        expect(pending_reg.competing_status).to eq('pending')
+        create(:registration_payment, registration: waitlisted_reg, competition: competition)
+        expect(waitlisted_reg.competing_status).to eq('waiting_list')
+
+        Registration.bulk_auto_accept(competition)
+        expect(pending_reg.reload.competing_status).to eq('pending')
+        expect(pending_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7002")
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+        expect(waitlisted_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7002")
+      end
+
+      it 'wont live auto accept' do
+        create(:registration_payment, registration: pending_reg, competition: competition)
+        expect(pending_reg.reload.competing_status).to eq('pending')
+        create(:registration_payment, registration: waitlisted_reg, competition: competition)
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+      end
     end
 
-    it 'disable threshld must be less than competitor limit' do
-      auto_accept_comp.competitor_limit = 100
-      auto_accept_comp.auto_accept_disable_threshold = 100
-      expect(auto_accept_comp).not_to be_valid
-      expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
+    context 'preference: bulk' do
+      before { competition.auto_accept_preference = :bulk }
+
+      it 'will bulk auto accept' do
+        create(:registration_payment, registration: pending_reg, competition: competition)
+        expect(pending_reg.competing_status).to eq('pending')
+        create(:registration_payment, registration: waitlisted_reg, competition: competition)
+        expect(waitlisted_reg.competing_status).to eq('waiting_list')
+
+        Registration.bulk_auto_accept(competition)
+        expect(pending_reg.reload.competing_status).to eq('accepted')
+        expect(waitlisted_reg.reload.competing_status).to eq('accepted')
+      end
+
+      it 'wont live auto accept' do
+        create(:registration_payment, registration: pending_reg, competition: competition)
+        expect(pending_reg.reload.competing_status).to eq('pending')
+        create(:registration_payment, registration: waitlisted_reg, competition: competition)
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+      end
     end
 
-    it 'disable threshold may be 0' do
-      auto_accept_comp.auto_accept_disable_threshold = 0
-      expect(auto_accept_comp).to be_valid
-    end
+    context 'preference: live' do
+      before { competition.auto_accept_preference = :live }
 
-    it 'disable threshold may not be be less than 0' do
-      auto_accept_comp.auto_accept_disable_threshold = -1
-      expect(auto_accept_comp).not_to be_valid
-      expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations cannot be less than 0.")
+      it 'wont bulk auto accept' do
+        create(:registration_payment, :skip_create_hook, registration: pending_reg, competition: competition)
+        expect(pending_reg.competing_status).to eq('pending')
+        create(:registration_payment, :skip_create_hook, registration: waitlisted_reg, competition: competition)
+        expect(waitlisted_reg.competing_status).to eq('waiting_list')
+
+        Registration.bulk_auto_accept(competition)
+        expect(pending_reg.reload.competing_status).to eq('pending')
+        expect(pending_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7002")
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+        expect(waitlisted_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7002")
+      end
+
+      it 'will live auto accept' do
+        create(:registration_payment, registration: pending_reg, competition: competition)
+        expect(pending_reg.reload.competing_status).to eq('accepted')
+        create(:registration_payment, registration: waitlisted_reg, competition: competition)
+        expect(waitlisted_reg.reload.competing_status).to eq('accepted')
+      end
     end
   end
 
@@ -1776,6 +2010,11 @@ RSpec.describe Competition do
       expect(comp.fully_paid_registrations_count).to eq(0)
     end
 
+    it 'doesnt include uncaptured registration payments' do
+      create_list(:registration, 5, :uncaptured, competition: comp)
+      expect(comp.fully_paid_registrations_count).to eq(0)
+    end
+
     it 'counts registrations == competition fee' do
       create_list(:registration, 5, :paid, competition: comp)
       expect(comp.fully_paid_registrations_count).to eq(5)
@@ -1790,6 +2029,50 @@ RSpec.describe Competition do
       create_list(:registration, 5, :paid, competition: comp)
       create_list(:registration, 3, :refunded, competition: comp)
       expect(comp.fully_paid_registrations_count).to eq(5)
+    end
+  end
+
+  describe '#can_show_competitors_page?' do
+    let(:competition) { create(:competition, :registration_open, :with_organizer, :with_delegate) }
+
+    context 'after registration has opened' do
+      it 'is true after registration has opened' do
+        expect(competition.can_show_competitors_page?).to be(true)
+      end
+
+      it 'is true even if no registrations are accepted' do
+        expect(competition.registrations.competing_status_accepted.competing.count).to be(0)
+        expect(competition.can_show_competitors_page?).to be(true)
+      end
+    end
+
+    it 'is true after registration has closed irrespective of registrations' do
+      competition.registration_close = 1.day.ago
+      expect(competition.registrations.competing_status_accepted.competing.count).to be(0)
+      expect(competition.can_show_competitors_page?).to be(true)
+    end
+
+    context 'before registration opens', :zxc do
+      let(:not_open) { create(:competition, :registration_not_opened, :with_organizer, :with_delegate) }
+
+      it 'is false with no accepted registrations' do
+        expect(not_open.can_show_competitors_page?).to be(false)
+      end
+
+      it 'is false if the only accepted registrations are for organizers/delegates' do
+        delegate = not_open.delegates.first
+        organizer = not_open.organizers.first
+
+        create(:registration, :accepted, competition: not_open, user: delegate)
+        create(:registration, :accepted, competition: not_open, user: organizer)
+
+        expect(not_open.can_show_competitors_page?).to be(false)
+      end
+
+      it 'is true if there are accepted non-delegate/organizer registrations' do
+        create(:registration, :accepted, competition: not_open)
+        expect(not_open.can_show_competitors_page?).to be(true)
+      end
     end
   end
 end

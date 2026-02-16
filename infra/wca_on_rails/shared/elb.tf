@@ -104,6 +104,30 @@ resource "aws_lb_target_group" "rails-production" {
   }
 }
 
+resource "aws_lb_target_group" "nextjs-production" {
+  name        = "nextjs-production"
+  port        = 3000
+  protocol    = "HTTP"
+  vpc_id      = aws_default_vpc.default.id
+  target_type = "ip"
+
+  deregistration_delay = 10
+  health_check {
+    interval            = 10
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    matcher             = 200
+  }
+  tags = {
+    Name = "${var.name_prefix}-nextjs"
+    Env = "production"
+  }
+}
+
 resource "aws_lb_target_group" "auxiliary" {
   name        = "wca-auxiliary"
   port        = 80
@@ -288,7 +312,7 @@ resource "aws_lb_listener" "http" {
 
 resource "aws_lb_listener_rule" "pma_forward_prod" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 3
+  priority     = 4
 
   action {
     authenticate_oidc {
@@ -322,9 +346,29 @@ resource "aws_lb_listener_rule" "pma_forward_prod" {
   }
 }
 
+locals {
+  next_url = "next.worldcubeassociation.org"
+}
+
+resource "aws_lb_listener_rule" "next_forward_prod" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 10
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.nextjs-production.arn
+  }
+
+  condition {
+    host_header {
+      values = [local.next_url]
+    }
+  }
+}
+
 resource "aws_lb_listener_rule" "rails_forward_staging" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 4
+  priority     = 5
 
   action {
     type             = "forward"
@@ -340,7 +384,7 @@ resource "aws_lb_listener_rule" "rails_forward_staging" {
 
 resource "aws_lb_listener_rule" "rails_forward_staging_api" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 2
+  priority     = 3
 
   action {
     type             = "forward"
@@ -416,6 +460,10 @@ output "rails-production" {
   value = aws_lb_target_group.rails-production
 }
 
+output "nextjs-production" {
+  value = aws_lb_target_group.nextjs-production
+}
+
 output "rails_staging"{
   value = aws_lb_target_group.rails-staging
 }
@@ -434,4 +482,8 @@ output "pma_staging"{
 
 output "mailcatcher"{
   value = aws_lb_target_group.mailcatcher-staging
+}
+
+output "next_url" {
+  value = local.next_url
 }

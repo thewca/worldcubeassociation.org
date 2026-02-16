@@ -23,18 +23,8 @@
   <% else %>
   <%= react_component('RegistrationsV2/Register', { competitionInfo: @competition.to_competition_info ,
                                                     userInfo: @current_user,
-                                                    registrationId: @registration&.id,
+                                                    serverRegistration: @registration&.to_v2_json(admin: true),
                                                     userCanPreRegister: @competition.user_can_pre_register?(@current_user),
-                                                    preferredEvents: @current_user.preferred_events.pluck(:id),
-                                                    stripePublishableKey: AppSecrets.STRIPE_PUBLISHABLE_KEY,
-                                                    connectedAccountId: @competition.payment_account_for(:stripe)&.account_id,
-                                                    qualifications: {
-                                                      wcif: @competition.qualification_wcif,
-                                                      personalRecords: {
-                                                        single: current_user.person&.ranks_single&.map(&:to_wcif) || [],
-                                                        average: current_user.person&.ranks_average&.map(&:to_wcif) || [],
-                                                      }
-                                                    },
                                                     cannotRegisterReasons: current_user.cannot_register_for_competition_reasons(@competition),
                                                     isProcessing: @is_processing,
     }) %>
