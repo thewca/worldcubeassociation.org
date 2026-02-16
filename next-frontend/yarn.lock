@@ -11270,9 +11270,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^25.8.8":
-  version: 25.8.8
-  resolution: "i18next@npm:25.8.8"
+"i18next@npm:^25.8.10":
+  version: 25.8.10
+  resolution: "i18next@npm:25.8.10"
   dependencies:
     "@babel/runtime": "npm:^7.28.4"
   peerDependencies:
@@ -11280,7 +11280,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/137f3fe87cd021396f1a7e02909eca43a7f533799a1ad3be5ff70561ab27c0e568871bf78f7703588f52886e9e6e58aad563a8e0a76ac1a9611d290ddd9ee2e0
+  checksum: 10c0/2bce0c055e7dded0b559b2d34f01ed932369730771a232dfc93a3c50ca28771c1f13d640512a42abcc01811524bb14a0823c78a947af34beda29a99ea2c7d969
   languageName: node
   linkType: hard
 
@@ -13463,7 +13463,7 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.5.5"
     graphql: "npm:^16.12.0"
     i18n-iso-countries: "npm:^7.14.0"
-    i18next: "npm:^25.8.8"
+    i18next: "npm:^25.8.10"
     i18next-browser-languagedetector: "npm:^8.2.1"
     i18next-resources-to-backend: "npm:^1.2.1"
     js-cookie: "npm:^3.0.5"
