@@ -119,7 +119,7 @@ export function LiveStatCells({
   eventId,
   result,
   isAdmin = false,
-  highlight = false,
+  highlight,
 }: {
   stats: Stat[];
   competitorId: number;
@@ -128,16 +128,21 @@ export function LiveStatCells({
   isAdmin?: boolean;
   highlight?: boolean;
 }) {
+  const shouldHighlight = (statIndex: number) => {
+    if (highlight !== undefined) {
+      return highlight;
+    }
+    return statIndex === 0;
+  };
+
   return stats.map((stat, statIndex) => (
     <Table.Cell
       key={`${competitorId}-${stat.name}`}
       textAlign="right"
       style={{
         position: "relative",
-        fontWeight: statIndex === 0 ? "bold" : "normal",
+        fontWeight: shouldHighlight(statIndex) ? "bold" : "normal",
       }}
-      colorPalette="blue"
-      bg={statIndex === 0 && highlight ? "colorPalette.subtle" : ""}
     >
       {formatAttemptResult(result[stat.field], eventId)}{" "}
       {!isAdmin && recordTagBadge(result[stat.recordTagField])}
