@@ -38,13 +38,13 @@ export type DiffedLiveResult = Partial<CompressedLiveResult> &
   Pick<components["schemas"]["LiveResult"], "registration_id">;
 
 export type DiffProtocolResponse = {
-  updated: DiffedLiveResult[];
-  deleted: number[];
-  created: CompressedLiveResult[];
+  updated?: DiffedLiveResult[];
+  deleted?: number[];
+  created?: CompressedLiveResult[];
 };
 
 export default function useResultsSubscription(
-  roundId: number,
+  roundId: string,
   onReceived: (data: DiffProtocolResponse) => void,
 ) {
   const [connectionState, setConnectionState] = useState<ConnectionState>(
