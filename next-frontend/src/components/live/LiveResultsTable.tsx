@@ -89,7 +89,7 @@ export default function LiveResultsTable({
                 textAlign="right"
                 colorPalette={rankingCellColorPalette(result)}
               >
-                {result.global_pos}
+                {hasResult && result.global_pos}
               </Table.Cell>
               {isAdmin && <Table.Cell>{competitor.registrant_id}</Table.Cell>}
               <Table.Cell>
