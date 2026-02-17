@@ -44,6 +44,7 @@ export default function SimilarPersonTable({
             originalUser.name === duplicatePerson.name
                   && originalUser.dob === duplicatePerson.dob
                   && originalUser.country_iso2 === duplicatePerson.country_iso2
+                  && originalUser.gender === duplicatePerson.gender
           );
           return (
             <Table.Row negative={exactSameDetails}>
