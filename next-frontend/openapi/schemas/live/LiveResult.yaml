@@ -23,6 +23,13 @@ properties:
     type: integer
   best:
     type: integer
+  best_and_worst_possible_average:
+    type: object
+    properties:
+      best_possible_average:
+        type: integer
+      worst_possible_average:
+        type: integer
   average:
     type: integer
   single_record_tag:

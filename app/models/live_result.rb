@@ -90,7 +90,7 @@ class LiveResult < ApplicationRecord
 
   LIVE_STATE_SERIALIZE_OPTIONS = {
     only: %w[advancing advancing_questionable average average_record_tag best global_pos local_pos registration_id single_record_tag],
-    methods: %w[best_and_worse_possible_average],
+    methods: %w[best_and_worst_possible_average],
     include: [{ live_attempts: { only: %i[id value attempt_number] } }],
   }.freeze
 
@@ -114,7 +114,7 @@ class LiveResult < ApplicationRecord
     diff if diff.except("registration_id").present?
   end
 
-  def best_and_worse_possible_average
+  def best_and_worst_possible_average
     # use .length on purpose here as otherwise we would use one query per row
     LiveResult.compute_best_and_worse_possible_average(live_attempts, round) if live_attempts.length < round.format.expected_solve_count
   end

@@ -852,6 +852,10 @@ export interface components {
             global_pos: number;
             local_pos: number;
             best: number;
+            best_and_worst_possible_average?: {
+                best_possible_average?: number;
+                worst_possible_average?: number;
+            };
             average: number;
             single_record_tag: string;
             average_record_tag: string;
