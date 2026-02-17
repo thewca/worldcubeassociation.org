@@ -3,7 +3,6 @@
 import { Container, VStack } from "@chakra-ui/react";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
-import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import ShowResults from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/ShowResults";
 
 export default async function ResultPage({
