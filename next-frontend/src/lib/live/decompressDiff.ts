@@ -1,4 +1,7 @@
-import { DiffedLiveResult } from "@/lib/hooks/useResultsSubscription";
+import {
+  CompressedLiveResult,
+  DiffedLiveResult,
+} from "@/lib/hooks/useResultsSubscription";
 import { components } from "@/types/openapi";
 import _ from "lodash";
 
@@ -8,10 +11,14 @@ type PartialLiveResultWithRegistrationId = Partial<
   Pick<components["schemas"]["LiveResult"], "registration_id">;
 
 export function decompressDiff(
+  diff: CompressedLiveResult,
+): components["schemas"]["LiveResult"];
+export function decompressDiff(
   diff: DiffedLiveResult,
-): PartialLiveResultWithRegistrationId {
-  // This looks a little silly right now, but this is part of https://github.com/thewca/worldcubeassociation.org/pull/13352
-  // where the actual compressed values will be put in.
+): PartialLiveResultWithRegistrationId;
+export function decompressDiff(
+  diff: DiffedLiveResult | CompressedLiveResult,
+): PartialLiveResultWithRegistrationId | components["schemas"]["LiveResult"] {
   return _.omitBy(
     {
       ...diff,

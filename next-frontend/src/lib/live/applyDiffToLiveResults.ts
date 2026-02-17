@@ -23,10 +23,5 @@ export function applyDiffToLiveResults(
       return update ? { ...res, ...update } : res;
     });
 
-  return diffedResults.concat(
-    created.map(
-      // Created will always be a full result
-      (d) => decompressDiff(d) as components["schemas"]["LiveResult"],
-    ),
-  );
+  return diffedResults.concat(created.map((d) => decompressDiff(d)));
 }
