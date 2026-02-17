@@ -11,7 +11,7 @@ export const orderResults = (
   const rankBy = stats[0].field;
   const secondaryRankBy = stats[1].field;
 
-  const sortedResults = results.sort((a, b) => {
+  const sortedResults = results.toSorted((a, b) => {
     const aInvalid = a[rankBy] <= 0;
     const bInvalid = b[rankBy] <= 0;
 
