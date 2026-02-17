@@ -115,16 +115,28 @@ RSpec.describe ResultsSubmissionController do
       end
     end
 
-    context "when competition is not upcoming (past competition)" do
-      let(:past_comp) { create(:competition, :announced, :past) }
+    context "when competition is ongoing and results not yet submitted" do
+      let(:ongoing_comp) { create(:competition, :announced, :ongoing) }
+
+      it "allows access for WRT user" do
+        sign_in wrt_user
+
+        get competition_newcomer_name_format_check_path(ongoing_comp.id)
+
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "when competition has results submitted" do
+      let(:results_submitted_comp) { create(:competition, :announced, results_submitted_at: Time.now) }
 
       it "returns bad_request for WRT user" do
         sign_in wrt_user
 
-        get competition_newcomer_name_format_check_path(past_comp.id)
+        get competition_newcomer_name_format_check_path(results_submitted_comp.id)
 
         expect(response).to have_http_status(:bad_request)
-        expect(response.parsed_body["error"]).to eq("The newcomer check dashboard can only be used for upcoming competitions.")
+        expect(response.parsed_body["error"]).to eq("The newcomer check dashboard can only be used before the results are submitted.")
       end
     end
   end

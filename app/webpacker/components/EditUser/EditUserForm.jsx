@@ -34,7 +34,14 @@ export default function EditUserForm({ userDetails, onSuccess }) {
     value: date,
   });
 
-  if (isSuccess) return <Message positive>Edit success.</Message>;
+  if (isSuccess) {
+    return (
+      <Message positive>
+        Edit success. Please make sure to re-sync WCA Live and other tools (like Groupifier)
+        to get the updated details.
+      </Message>
+    );
+  }
   if (isPending) return <Loading />;
   if (isError) return <Errored error={error} />;
 
