@@ -2,6 +2,7 @@
 
 class LiveResult < ApplicationRecord
   BEST_POSSIBLE_SCORE = 1
+  WORST_POSSIBLE_SCORE = -1
 
   has_many :live_attempts, dependent: :destroy
   alias_method :attempts, :live_attempts
@@ -89,7 +90,7 @@ class LiveResult < ApplicationRecord
 
   LIVE_STATE_SERIALIZE_OPTIONS = {
     only: %w[advancing advancing_questionable average average_record_tag best global_pos local_pos registration_id single_record_tag],
-    methods: %w[],
+    methods: %w[best_and_worse_possible_average],
     include: [{ live_attempts: { only: %i[id value attempt_number] } }],
   }.freeze
 
@@ -111,6 +112,43 @@ class LiveResult < ApplicationRecord
 
     # Only return if there are actual changes
     diff if diff.except("registration_id").present?
+  end
+
+  def best_and_worse_possible_average
+    # use .length on purpose here as otherwise we would use one query per row
+    LiveResult.compute_best_and_worse_possible_average(live_attempts, round) if live_attempts.length < round.format.expected_solve_count
+  end
+
+  def self.compute_best_and_worse_possible_average(live_attempts, round)
+    missing_count = round.format.expected_solve_count - live_attempts.length
+
+    best_padding = Array.new(missing_count) do |i|
+      {
+        "attempt_number" => live_attempts.length + i + 1,
+        "value" => BEST_POSSIBLE_SCORE,
+      }
+    end
+
+    worse_padding = Array.new(missing_count) do |i|
+      {
+        "attempt_number" => live_attempts.length + i + 1,
+        "value" => WORST_POSSIBLE_SCORE,
+      }
+    end
+
+    attempts_with_best =
+      (live_attempts + best_padding).map { |l| LiveAttempt.new(l) }
+
+    attempts_with_worse =
+      (live_attempts + worse_padding).map { |l| LiveAttempt.new(l) }
+
+    best_average, = LiveResult.compute_average_and_best(attempts_with_best, round)
+    worst_average, = LiveResult.compute_average_and_best(attempts_with_worse, round)
+
+    {
+      "best_possible_average" => best_average,
+      "worst_possible_average" => worst_average,
+    }
   end
 
   private
