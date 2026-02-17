@@ -1,0 +1,4 @@
+<p>Hello <%= @user.name %>,</p>
+
+<p>As part of a cleanup of unclaimed WCA IDs, we found that your pending claim for WCA ID <%= wca_id_link @unconfirmed_wca_id %> is no longer valid. This WCA ID was already assigned to another account before your claim could be processed, so your claim has been cancelled.</p>
+<p>If you believe this is an error, please <%= link_to "contact us", contact_url %>.</p>
