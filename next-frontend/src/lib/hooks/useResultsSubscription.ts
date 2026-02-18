@@ -17,17 +17,34 @@ export const CONNECTION_COLORS = {
   [CONNECTION_STATE_DISCONNECTED]: "red",
 };
 
-export type DiffedLiveResult = Partial<components["schemas"]["LiveResult"]> &
+// Move this to something like https://www.asyncapi.com
+// The actual compression will happen in https://github.com/thewca/worldcubeassociation.org/pull/13352
+// But I need the mapping logic
+export type CompressedLiveResult = {
+  advancing: boolean;
+  advancing_questionable: boolean;
+  average: number;
+  best: number;
+  average_record_tag: string;
+  single_record_tag: string;
+  registration_id: number;
+  live_attempts: {
+    value: number;
+    attempt_number: number;
+  }[];
+};
+
+export type DiffedLiveResult = Partial<CompressedLiveResult> &
   Pick<components["schemas"]["LiveResult"], "registration_id">;
 
 export type DiffProtocolResponse = {
-  updated: DiffedLiveResult[];
-  deleted: number[];
-  created: components["schemas"]["LiveResult"][];
+  updated?: DiffedLiveResult[];
+  deleted?: number[];
+  created?: CompressedLiveResult[];
 };
 
 export default function useResultsSubscription(
-  roundId: number,
+  roundId: string,
   onReceived: (data: DiffProtocolResponse) => void,
 ) {
   const [connectionState, setConnectionState] = useState<ConnectionState>(

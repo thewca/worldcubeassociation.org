@@ -337,10 +337,10 @@ class ResultsController < ApplicationController
 
     if @is_only
       @years_condition_competition = "AND YEAR(competitions.start_date) = #{@year}"
-      @years_condition_result = "AND results.year = #{@year}"
+      @years_condition_result = "AND results.reg_year = #{@year}"
     elsif @is_until
       @years_condition_competition = "AND YEAR(competitions.start_date) <= #{@year}"
-      @years_condition_result = "AND results.year <= #{@year}"
+      @years_condition_result = "AND results.reg_year <= #{@year}"
     else
       @years_condition_competition = ""
       @years_condition_result = ""
