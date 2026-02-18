@@ -1857,7 +1857,7 @@ class Competition < ApplicationRecord
   end
 
   def all_activities
-    competition_venues.includes(venue_rooms: { schedule_activities: [child_activities: [:child_activities]] }).map(&:all_activities).flatten
+    competition_venues.includes(venue_rooms: { schedule_activities: [{ child_activities: [:child_activities] }] }).map(&:all_activities).flatten
   end
 
   def top_level_activities

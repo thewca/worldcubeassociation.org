@@ -97,7 +97,7 @@ class CompetitionsController < ApplicationController
   end
 
   def edit_schedule
-    @competition = competition_from_params(includes: [competition_events: { rounds: { competition_event: [:event] } }, competition_venues: { venue_rooms: { schedule_activities: [:child_activities] } }])
+    @competition = competition_from_params(includes: [{ competition_events: { rounds: { competition_event: [:event] } }, competition_venues: { venue_rooms: { schedule_activities: [:child_activities] } } }])
   end
 
   def get_nearby_competitions(competition)

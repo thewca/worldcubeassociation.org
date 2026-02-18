@@ -90,7 +90,7 @@ class LiveResult < ApplicationRecord
   LIVE_STATE_SERIALIZE_OPTIONS = {
     only: %w[advancing advancing_questionable average average_record_tag best global_pos local_pos registration_id single_record_tag],
     methods: %w[],
-    include: [live_attempts: { only: %i[id value attempt_number] }],
+    include: [{ live_attempts: { only: %i[id value attempt_number] } }],
   }.freeze
 
   def to_live_state

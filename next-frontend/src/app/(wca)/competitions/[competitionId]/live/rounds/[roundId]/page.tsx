@@ -15,6 +15,7 @@ type FixedLiveRound = Omit<components["schemas"]["WcifRound"], "results"> &
   Omit<components["schemas"]["LiveRound"], "results"> & {
     results: components["schemas"]["LiveResult"][];
   };
+import ShowResults from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/ShowResults";
 
 export default async function ResultPage({
   params,

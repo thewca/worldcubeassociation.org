@@ -1001,6 +1001,8 @@ vi:
       contact_wrt:
         #original_hash: 603a218
         wca_id: WCA ID
+    #original_hash: 687d968
+    competition_link_html: 'Nhấn vào <a href=''%{url}''>đây</a> để đến trang của giải đấu'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -2970,16 +2972,24 @@ vi:
       no_winner: >-
         Nội dung chính là %{event_name}. Vì không có thí sinh nào hoàn thành
         thành công lượt thi, giải đấu không có người thắng cuộc.
+      #original_hash: 5262865
+      h2h_winner: >-
+        %{winner} dành chiến thắng trong vòng chung kết Đối đầu của nội dung
+        %{event_name}.
       #original_hash: 6c3b236
       winner: >-
         %{winner} dành chiến thắng %{result_sentence} trong nội dung
         %{event_name}.
       #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} đạt vị trí thứ hai (%{first_runner_up_result})'
+      #original_hash: 2926d10
+      h2h_first_runner_up: '%{first_runner_up} dành vị trí thứ hai'
       #original_hash: cffa50a
       and: và
       #original_hash: 67d285c
       second_runner_up: '%{second_runner_up} đạt vị trí thứ ba (%{second_runner_up_result}).'
+      #original_hash: 157b649
+      h2h_second_runner_up: '%{second_runner_up} dành vị trí thứ ba.'
       records:
         #original_hash: 0658e11
         wr: Kỷ lục Thế giới
@@ -4432,6 +4442,11 @@ vi:
         #original_hash: c4622c3
         scrambles: Công thức tráo
     results_table:
+      #original_hash: bdbfcdc
+      h2h_results_disclaimer: >-
+        Kết quả của vòng chung kết Đối đầu. Hiện tại phần này chỉ hiển thị thứ
+        hạng và lượt thi tốt nhất do hệ thống hiển thị đầy đủ kết quả vòng Đối
+        đầu đang trong quá trình phát triển.
       #original_hash: 3e9a6b5
       wca_profile: Hồ sơ WCA
       #original_hash: ad8919a
