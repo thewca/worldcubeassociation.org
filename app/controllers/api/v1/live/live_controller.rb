@@ -2,19 +2,17 @@
 
 class Api::V1::Live::LiveController < Api::V1::ApiController
   protect_from_forgery with: :null_session
-
-  skip_before_action :require_user, only: %i[round_results by_person podiums]
+  skip_before_action :require_user!, only: %i[round_results by_person podiums]
 
   def add_or_update_result
     results = params.expect(attempts: [%i[value attempt_number]])
     round_id = params.require(:round_id)
-    competition_id = params.require(:competition_id)
+    competition = Competition.find(params.require(:competition_id))
     registration_id = params.require(:registration_id)
 
-    round = Round.find_by_wcif_id!(round_id, competition_id)
+    round = Round.find_by_wcif_id!(round_id, competition.id)
 
-    # TODO: add require_managed! from round admin PR
-    require_user
+    require_manage!(competition)
 
     # We create empty results when a round is open
     live_result = round.live_results.find_by(registration_id: registration_id)
@@ -36,7 +34,14 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     round = Round.find_by_wcif_id!(wcif_id, competition_id)
 
-    render json: round.to_live_json
+    render json: round.to_live_results_json
+  end
+
+  def rounds
+    competition = Competition.find(params.require(:competition_id))
+    require_manage!(competition)
+
+    render json: { rounds: competition.rounds.map(&:to_live_info_json) }
   end
 
   def by_person
@@ -56,7 +61,27 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     competition = Competition.find(params.require(:competition_id))
     final_rounds = competition.rounds.includes(live_results: %i[live_attempts round event]).select(&:final_round?)
 
-    render json: final_rounds.map { |r| r.to_live_json(only_podiums: true) }
+    render json: final_rounds.map { |r| r.to_live_results_json(only_podiums: true) }
+  end
+
+  def clear_round
+    competition = Competition.find(params.require(:competition_id))
+    wcif_id = params.require(:round_id)
+
+    round = Round.find_by_wcif_id!(wcif_id, competition.id)
+
+    # TODO: Move these to actual error codes at one point
+    require_manage!(competition)
+
+    state = round.lifecycle_state
+
+    return render json: { status: "round is locked" }, status: :bad_request if state == Round::STATE_LOCKED
+
+    return render json: { status: "round is not open" }, status: :bad_request if [Round::STATE_READY, Round::STATE_PENDING].include?(state)
+
+    recreated_rows = round.clear_round!
+
+    render json: { status: "ok", recreated_rows: recreated_rows }
   end
 
   def open_round
@@ -66,11 +91,13 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     round = Round.find_by_wcif_id!(wcif_id, competition.id)
 
     # TODO: Move these to actual error codes at one point
-    return render json: { status: "unauthorized" }, status: :unauthorized unless @current_user.can_manage_competition?(competition)
-    # Also think about if we should auto open all round ones at competition day start and not have this check
-    return render json: { status: "previous round has empty results" }, status: :bad_request unless round.number == 1 || round.previous_round.score_taking_done?
+    require_manage!(competition)
 
-    return render json: { status: "round already open" }, status: :bad_request if round.live_results.any?
+    state = round.lifecycle_state
+
+    return render json: { status: "score taking is not finished in the previous round" }, status: :bad_request if state == Round::STATE_PENDING
+
+    return render json: { status: "round already open" }, status: :bad_request if [Round::STATE_OPEN, Round::STATE_LOCKED].include?(state)
 
     created_rows, locked_rows = round.open_and_lock_previous(@current_user)
 
@@ -81,7 +108,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     competition = Competition.find(params.require(:competition_id))
     registration_id = params.require(:registration_id)
 
-    return render json: { status: "unauthorized" }, status: :unauthorized unless @current_user.can_manage_competition?(competition)
+    require_manage!(competition)
 
     round = Round.find_by_wcif_id!(wcif_id, competition.id)
     result = round.live_results.find_by!(registration_id: registration_id)
