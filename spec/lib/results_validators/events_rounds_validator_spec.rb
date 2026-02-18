@@ -113,9 +113,9 @@ RSpec.describe ERV do
              event_ids: %w[222 444 555])
     end
 
-    let(:round_222) { competition.rounds.find_by(event_id: "222") }
-    let(:round_444) { competition.rounds.find_by(event_id: "444") }
-    let(:round_555) { competition.rounds.find_by(event_id: "555") }
+    let(:round_222) { competition.rounds.joins(:competition_event).find_by(competition_events: { event_id: "222" }) }
+    let(:round_444) { competition.rounds.joins(:competition_event).find_by(competition_events: { event_id: "444" }) }
+    let(:round_555) { competition.rounds.joins(:competition_event).find_by(competition_events: { event_id: "555" }) }
 
     let(:event_activities) do
       competition.all_activities.reject do |activity|
