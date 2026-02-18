@@ -1864,12 +1864,15 @@ class Competition < ApplicationRecord
     competition_venues.includes(venue_rooms: { schedule_activities: [:child_activities] }).map(&:top_level_activities).flatten
   end
 
-  def last_event_id_for_competition
-    competition_events
-      .joins(rounds: :schedule_activities)
-      .order('schedule_activities.end_time DESC')
-      .first
-      .event_id
+  def last_event_id_of_competition
+    last_activity = all_activities
+                      .reject { |activity| activity.activity_code.start_with?("other-") }
+                      .max_by(&:end_time)
+
+    return nil unless last_activity
+
+    # Extract event ID from activity code (e.g., "333-r1" -> "333")
+    last_activity.activity_code.split('-').first
   end
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
