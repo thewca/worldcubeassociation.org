@@ -34,7 +34,7 @@ function NewcomerChecks({ competitionId }) {
       }),
     );
 
-    if (queryClient.getQueryData(['newcomer-name-format-checks', competitionId]).some((check) => check.id === user.id)) {
+    if (queryClient.getQueryData(['newcomer-name-format-checks', competitionId])?.some((check) => check.id === user.id)) {
       queryClient.invalidateQueries(['newcomer-name-format-checks', competitionId]);
     }
   };
