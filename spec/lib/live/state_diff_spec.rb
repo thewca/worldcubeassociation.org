@@ -33,7 +33,7 @@ RSpec.describe Live::DiffHelper do
                                                    "advancing_questionable" => true,
                                                    "average" => average,
                                                    "best" => best,
-                                                   "live_attempts" => attempts.map { it.serializable_hash({ only: %i[id value attempt_number] }) },
+                                                   "live_attempts" => attempts.map { it.serializable_hash({ only: %i[value attempt_number] }) },
                                                  })
       expect(diff["deleted"]).to be_nil
       expect(diff["created"]).to be_nil
@@ -73,7 +73,7 @@ RSpec.describe Live::DiffHelper do
                                                    "advancing_questionable" => true,
                                                    "average" => average,
                                                    "best" => best,
-                                                   "live_attempts" => attempts_2.map { it.serializable_hash({ only: %i[id value attempt_number] }) },
+                                                   "live_attempts" => attempts_2.map { it.serializable_hash({ only: %i[value attempt_number] }) },
                                                  })
       expect(diff["deleted"]).to be_nil
       expect(diff["created"]).to be_nil
@@ -105,9 +105,10 @@ RSpec.describe Live::DiffHelper do
     end
 
     it "has a compression key defined for each serialization attribute" do
-      # This is definitely not the best way of doing it, probably better to look at a results live_state instead?
-      keys = LiveResult::LIVE_STATE_SERIALIZE_OPTIONS[:only] + LiveResult::LIVE_STATE_SERIALIZE_OPTIONS[:include].flat_map { |r| r.keys.flat_map { |k| [k] + r[k][:only] } }
-      expect(keys.map(&:to_s)).to contain_exactly(*Live::DiffHelper::COMPRESSION_MAP.keys.map(&:to_s))
+      create(:live_result, round: round)
+      keys = []
+      round.to_live_state.first.deep_transform_keys { keys << it }
+      expect(keys.uniq).to match_array(Live::DiffHelper::COMPRESSION_MAP.keys.map(&:to_s))
     end
   end
 end

@@ -46,10 +46,9 @@ module Live
       "single_record_tag" => "srt",
       "registration_id" => "r",
       "live_attempts" => "la",
-      "id" => "id",
       "value" => "v",
       "attempt_number" => "an",
-    }
+    }.freeze
 
     # To send even less data, we shorten the quite long attribute names
     def self.compress_payload(diff)
