@@ -5,7 +5,8 @@ require 'fileutils'
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, except: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
-  before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
+  before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?) }, only: %i[newcomer_checks]
+  before_action :check_newcomers_data_access, only: %i[last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
 
   def new
     @competition = competition_from_params
@@ -145,14 +146,14 @@ class ResultsSubmissionController < ApplicationController
                                    .includes(:user)
                                    .select { it.wcif_status == "accepted" && person_with_results.include?(it.registrant_id.to_s) }
                                    .map do |registration|
-      InboxPerson.new({
-                        id: [registration.registrant_id, competition.id],
-                        wca_id: registration.wca_id || '',
-                        name: registration.name,
-                        country_iso2: registration.country.iso2,
-                        gender: registration.gender,
-                        dob: registration.dob,
-                      })
+                                     InboxPerson.new({
+                                                       id: [registration.registrant_id, competition.id],
+                                                       wca_id: registration.wca_id || '',
+                                                       name: registration.name,
+                                                       country_iso2: registration.country.iso2,
+                                                       gender: registration.gender,
+                                                       dob: registration.dob,
+                                                     })
     end
 
     scrambles_to_import = competition.matched_scramble_sets.flat_map do |scramble_set|
@@ -218,5 +219,13 @@ class ResultsSubmissionController < ApplicationController
 
   private def competition_from_params
     Competition.find(params[:competition_id])
+  end
+
+  private def check_newcomers_data_access
+    competition = competition_from_params
+
+    return head :unauthorized unless current_user.can_check_newcomers_data?
+
+    render status: :bad_request, json: { error: "The newcomer check dashboard can only be used for upcoming competitions." } unless competition.upcoming?
   end
 end

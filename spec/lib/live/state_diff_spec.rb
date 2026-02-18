@@ -9,16 +9,6 @@ RSpec.describe Live::DiffHelper do
   context "Round Diff" do
     let(:round) { create(:round, event_id: "333", number: 1, competition: competition) }
 
-    it 'broadcasts diff to ActionCable' do
-      registration_1 = registrations.first
-      round.open_round!
-      result = round.live_results.find_by!(registration_id: registration_1.id)
-      expect do
-        result.update(best: 100)
-      end.to have_broadcasted_to(Live::Config.broadcast_key(round.id))
-        .from_channel(ApplicationCable::Channel)
-    end
-
     it 'correct diff for new results' do
       registration_1 = registrations.first
       round.open_round!

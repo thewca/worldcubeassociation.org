@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
-import { components } from "@/types/openapi";
 
 export const CONNECTION_STATE_INITIALIZED = "initialized";
 export const CONNECTION_STATE_CONNECTED = "connected";
@@ -37,13 +36,13 @@ export type DiffedLiveResult = Partial<CompressedLiveResult> &
   Pick<CompressedLiveResult, "r">;
 
 export type DiffProtocolResponse = {
-  updated: DiffedLiveResult[];
-  deleted: number[];
-  created: CompressedLiveResult[];
+  updated?: DiffedLiveResult[];
+  deleted?: number[];
+  created?: CompressedLiveResult[];
 };
 
 export default function useResultsSubscription(
-  roundId: number,
+  roundId: string,
   onReceived: (data: DiffProtocolResponse) => void,
 ) {
   const [connectionState, setConnectionState] = useState<ConnectionState>(

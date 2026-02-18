@@ -1,28 +1,13 @@
 import _ from "lodash";
-import events from "@/lib/wca/data/events";
 import { Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { components } from "@/types/openapi";
 import { recordTagBadge } from "@/components/results/TableCells";
-
-const customOrderBy = (
-  competitor: components["schemas"]["LiveCompetitor"],
-  resultsByRegistrationId: Record<string, components["schemas"]["LiveResult"]>,
-  eventId: string,
-) => {
-  const competitorResult = resultsByRegistrationId[competitor.id];
-
-  if (!competitorResult) {
-    return [competitor.id];
-  }
-
-  const format = events.byId[eventId].recommendedFormat;
-
-  return [
-    competitorResult[format.sort_by as "best" | "average"],
-    competitorResult[format.sort_by_second as "best" | "average"],
-  ];
-};
+import countries from "@/lib/wca/data/countries";
+import formats from "@/lib/wca/data/formats";
+import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
+import { orderResults } from "@/lib/live/orderResults";
+import { padSkipped } from "@/lib/live/padSkipped";
 
 export const rankingCellColorPalette = (
   result: components["schemas"]["LiveResult"],
@@ -41,6 +26,7 @@ export const rankingCellColorPalette = (
 export default function LiveResultsTable({
   results,
   eventId,
+  formatId,
   competitionId,
   competitors,
   isAdmin = false,
@@ -48,21 +34,20 @@ export default function LiveResultsTable({
 }: {
   results: components["schemas"]["LiveResult"][];
   eventId: string;
+  formatId: string;
   competitionId: string;
   competitors: components["schemas"]["LiveCompetitor"][];
   isAdmin?: boolean;
   showEmpty?: boolean;
 }) {
-  const resultsByRegistrationId = _.keyBy(results, "registration_id");
-  const event = events.byId[eventId];
+  const competitorsByRegistrationId = _.keyBy(competitors, "id");
 
-  const sortedCompetitors = _.orderBy(
-    competitors,
-    (competitor) => customOrderBy(competitor, resultsByRegistrationId, eventId),
-    ["asc", "asc"],
-  );
+  const format = formats.byId[formatId];
 
-  const solveCount = event.recommendedFormat.expected_solve_count;
+  const sortedResults = orderResults(results, format);
+  const solveCount = format.expected_solve_count;
+
+  const stats = statColumnsForFormat(format);
   const attemptIndexes = [...Array(solveCount).keys()];
 
   return (
@@ -72,20 +57,25 @@ export default function LiveResultsTable({
           <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
           {isAdmin && <Table.ColumnHeader>Id</Table.ColumnHeader>}
           <Table.ColumnHeader>Competitor</Table.ColumnHeader>
+          <Table.ColumnHeader>Country</Table.ColumnHeader>
           {attemptIndexes.map((num) => (
             <Table.ColumnHeader key={num} textAlign="right">
               {num + 1}
             </Table.ColumnHeader>
           ))}
-          <Table.ColumnHeader textAlign="right">Average</Table.ColumnHeader>
-          <Table.ColumnHeader textAlign="right">Best</Table.ColumnHeader>
+          {stats.map((stat) => (
+            <Table.ColumnHeader textAlign="right" key={stat.field}>
+              {stat.name}
+            </Table.ColumnHeader>
+          ))}
         </Table.Row>
       </Table.Header>
 
       <Table.Body>
-        {sortedCompetitors.map((competitor, index) => {
-          const competitorResult = resultsByRegistrationId[competitor.id];
-          const hasResult = Boolean(competitorResult);
+        {sortedResults.map((result) => {
+          const competitor =
+            competitorsByRegistrationId[result.registration_id];
+          const hasResult = result.attempts.length > 0;
 
           if (!showEmpty && !hasResult) {
             return null;
@@ -97,9 +87,9 @@ export default function LiveResultsTable({
                 width={1}
                 layerStyle="fill.deep"
                 textAlign="right"
-                colorPalette={rankingCellColorPalette(competitorResult)}
+                colorPalette={rankingCellColorPalette(result)}
               >
-                {index + 1}
+                {result.global_pos}
               </Table.Cell>
               {isAdmin && <Table.Cell>{competitor.registrant_id}</Table.Cell>}
               <Table.Cell>
@@ -110,38 +100,34 @@ export default function LiveResultsTable({
                       : `/competitions/${competitionId}/live/competitors/${competitor.id}`
                   }
                 >
-                  {competitor.user_name}
+                  {competitor.name}
                 </Link>
               </Table.Cell>
+              <Table.Cell>
+                {countries.byIso2[competitor.country_iso2].name}
+              </Table.Cell>
               {hasResult &&
-                competitorResult.attempts.map((attempt) => (
+                padSkipped(result.attempts, format.expected_solve_count).map(
+                  (attempt) => (
+                    <Table.Cell
+                      textAlign="right"
+                      key={`${competitor.id}-${attempt.attempt_number}`}
+                    >
+                      {formatAttemptResult(attempt.value, eventId)}
+                    </Table.Cell>
+                  ),
+                )}
+              {hasResult &&
+                stats.map((stat) => (
                   <Table.Cell
+                    key={`${result.registration_id}-${stat.name}`}
                     textAlign="right"
-                    key={`${competitor.id}-${attempt.attempt_number}`}
+                    style={{ position: "relative" }}
                   >
-                    {formatAttemptResult(attempt.value, eventId)}
+                    {formatAttemptResult(result[stat.field], eventId)}{" "}
+                    {!isAdmin && recordTagBadge(result[stat.recordTagField])}
                   </Table.Cell>
                 ))}
-              {hasResult && (
-                <>
-                  <Table.Cell
-                    textAlign="right"
-                    style={{ position: "relative" }}
-                  >
-                    {formatAttemptResult(competitorResult.average, eventId)}{" "}
-                    {!isAdmin &&
-                      recordTagBadge(competitorResult.average_record_tag)}
-                  </Table.Cell>
-                  <Table.Cell
-                    textAlign="right"
-                    style={{ position: "relative" }}
-                  >
-                    {formatAttemptResult(competitorResult.best, eventId)}
-                    {!isAdmin &&
-                      recordTagBadge(competitorResult.single_record_tag)}
-                  </Table.Cell>
-                </>
-              )}
             </Table.Row>
           );
         })}

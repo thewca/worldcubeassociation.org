@@ -36,6 +36,15 @@ class TicketsEditPerson < ApplicationRecord
     end
   end
 
+  def eligible_roles_for_bcc(user)
+    return [] unless user.admin?
+
+    [
+      TicketStakeholder.stakeholder_roles[:actioner],
+      TicketStakeholder.stakeholder_roles[:requester],
+    ]
+  end
+
   def self.create_ticket(wca_id, changes_requested, requester)
     ActiveRecord::Base.transaction do
       ticket_metadata = TicketsEditPerson.create!(

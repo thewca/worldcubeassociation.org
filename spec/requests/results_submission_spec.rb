@@ -90,4 +90,42 @@ RSpec.describe ResultsSubmissionController do
       end
     end
   end
+
+  describe "#check_newcomers_data_access" do
+    let(:wrt_user) { create(:user, :wrt_member) }
+    let(:regular_user) { create(:user) }
+
+    context "when competition is upcoming" do
+      let(:upcoming_comp) { create(:competition, :announced, :future) }
+
+      it "allows access for WRT user" do
+        sign_in wrt_user
+
+        get competition_newcomer_name_format_check_path(upcoming_comp.id)
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "returns unauthorized for regular user" do
+        sign_in regular_user
+
+        get competition_newcomer_name_format_check_path(upcoming_comp.id)
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when competition is not upcoming (past competition)" do
+      let(:past_comp) { create(:competition, :announced, :past) }
+
+      it "returns bad_request for WRT user" do
+        sign_in wrt_user
+
+        get competition_newcomer_name_format_check_path(past_comp.id)
+
+        expect(response).to have_http_status(:bad_request)
+        expect(response.parsed_body["error"]).to eq("The newcomer check dashboard can only be used for upcoming competitions.")
+      end
+    end
+  end
 end
