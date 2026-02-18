@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import {
   Button, Message, Modal, Segment,
 } from 'semantic-ui-react';
+import { RESYNC_MESSAGE } from '../EditUser/EditUserForm';
 import SimilarPersonTable from './SimilarPersonTable';
 import MergeModal from './MergeModal';
 
@@ -50,8 +51,9 @@ export default function SimilarPersons({ similarPersons, competitionId, setUserI
       >
         <Modal.Content>
           <Message success>
-            Merged Successfully. Please make sure to re-sync WCA Live
-            and other tools (like Groupifier) to get the updated details.
+            Merged Successfully.
+            {' '}
+            {RESYNC_MESSAGE}
           </Message>
         </Modal.Content>
         <Modal.Actions>

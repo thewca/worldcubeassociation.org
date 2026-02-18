@@ -116,7 +116,8 @@ RSpec.describe ResultsSubmissionController do
     end
 
     context "when competition is ongoing and results not yet submitted" do
-      let(:ongoing_comp) { create(:competition, :announced, :ongoing) }
+      let(:comp_delegate) { create(:delegate) }
+      let(:ongoing_comp) { create(:competition, :announced, :ongoing, delegates: [comp_delegate]) }
 
       it "allows access for WRT user" do
         sign_in wrt_user
@@ -125,10 +126,18 @@ RSpec.describe ResultsSubmissionController do
 
         expect(response).to have_http_status(:ok)
       end
+
+      it "does not allows access for a Delegate of this current competition" do
+        sign_in comp_delegate
+
+        get competition_newcomer_name_format_check_path(ongoing_comp.id)
+
+        expect(response).to have_http_status(:unauthorized)
+      end
     end
 
     context "when competition has results submitted" do
-      let(:results_submitted_comp) { create(:competition, :announced, results_submitted_at: Time.now) }
+      let(:results_submitted_comp) { create(:competition, :announced, :with_valid_submitted_results) }
 
       it "returns bad_request for WRT user" do
         sign_in wrt_user

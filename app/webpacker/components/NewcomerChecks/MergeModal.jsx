@@ -2,6 +2,7 @@ import React from 'react';
 import { Message } from 'semantic-ui-react';
 import { useQueryClient } from '@tanstack/react-query';
 import MergeUsers from '../Panel/pages/MergeUsersPage/MergeUsers';
+import { RESYNC_MESSAGE } from '../EditUser/EditUserForm';
 
 export default function MergeModal({
   potentialDuplicatePerson, competitionId, onMergeSuccess,
@@ -28,8 +29,9 @@ export default function MergeModal({
   if (!duplicatePerson.user_id) {
     return (
       <Message warning>
-        Please go to user&apos;s edit page and add the WCA ID. Once done, please make sure to
-        re-sync WCA Live and other tools (like Groupifier) to get the updated details.
+        Please go to user&apos;s edit page and add the WCA ID. Once done,
+        {' '}
+        {RESYNC_MESSAGE}
       </Message>
     );
   }

@@ -9,6 +9,8 @@ import updateUserData from './api/updateUserData';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 
+export const RESYNC_MESSAGE = 'Please make sure to re-sync WCA Live and other tools (like Groupifier) to get the updated details.';
+
 export default function EditUserForm({ userDetails, onSuccess }) {
   const [editedUserDetails, setEditedUserDetails] = useState(userDetails);
 
@@ -37,8 +39,9 @@ export default function EditUserForm({ userDetails, onSuccess }) {
   if (isSuccess) {
     return (
       <Message positive>
-        Edit success. Please make sure to re-sync WCA Live and other tools (like Groupifier)
-        to get the updated details.
+        Edit success.
+        {' '}
+        {RESYNC_MESSAGE}
       </Message>
     );
   }
