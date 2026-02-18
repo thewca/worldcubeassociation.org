@@ -19,11 +19,14 @@ export function decompressDiff(
 export function decompressDiff(
   diff: DiffedLiveResult | CompressedLiveResult,
 ): PartialLiveResultWithRegistrationId | components["schemas"]["LiveResult"] {
-  return _.omitBy(
-    {
-      ...diff,
-      attempts: diff.live_attempts,
-    },
-    _.isUndefined,
-  ) as PartialLiveResultWithRegistrationId;
+  return {
+    registration_id: diff.registration_id,
+    ..._.omitBy(
+      {
+        ...diff,
+        attempts: diff.live_attempts,
+      },
+      _.isUndefined,
+    ),
+  };
 }
