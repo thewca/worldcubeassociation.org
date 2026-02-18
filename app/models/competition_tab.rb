@@ -40,7 +40,7 @@ class CompetitionTab < ApplicationRecord
       url = match[1]
       next if url.blank?
 
-      errors.add(:content, I18n.t('competitions.errors.not_full_url', url: url)) unless url.starts_with?('http://', 'https://', 'mailto:')
+      errors.add(:content, I18n.t('competitions.errors.not_full_url', url: url)) unless url.starts_with?('http://', 'https://', 'mailto:', '#')
     end
   end
 

@@ -87,5 +87,10 @@ RSpec.describe CompetitionTab do
       competition_tab.update(content: "[Link](http://full)")
       expect(competition_tab).to be_valid
     end
+
+    it "allows anchors (potentially to other competition tabs)" do
+      competition_tab.update(content: "For accomodation, click [here](#12345-accomodation)")
+      expect(competition_tab).to be_valid
+    end
   end
 end
