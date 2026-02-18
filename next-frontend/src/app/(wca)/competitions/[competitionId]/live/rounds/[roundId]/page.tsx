@@ -3,7 +3,6 @@
 import { Container, VStack } from "@chakra-ui/react";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
-import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import LiveUpdatingDualRoundsTable from "@/components/live/LiveUpdatingDualRoundsTable";
 import _ from "lodash";
 import { components } from "@/types/openapi";
