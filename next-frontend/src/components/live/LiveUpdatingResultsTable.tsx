@@ -6,9 +6,11 @@ import useResultsSubscription, {
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
-import { Heading, HStack, VStack } from "@chakra-ui/react";
+import { Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
+import AdminButtons from "@/components/live/AdminButtons";
+import PublicButtons from "@/components/live/PublicButtons";
 
 export default function LiveUpdatingResultsTable({
   roundId,
@@ -54,6 +56,18 @@ export default function LiveUpdatingResultsTable({
       <HStack>
         <Heading textStyle="h1">{title}</Heading>
         <ConnectionPulse connectionState={connectionState} />
+        <Spacer flex={1} />
+        {isAdmin ? (
+          <AdminButtons competitionId={competitionId} roundId={roundId} />
+        ) : (
+          <PublicButtons
+            competitionId={competitionId}
+            roundId={roundId}
+            formatId={formatId}
+            results={liveResults}
+            competitors={competitors}
+          />
+        )}
       </HStack>
       <LiveResultsTable
         results={liveResults}

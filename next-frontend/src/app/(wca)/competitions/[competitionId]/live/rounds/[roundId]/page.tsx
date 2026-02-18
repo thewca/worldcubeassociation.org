@@ -3,6 +3,8 @@
 import { Container, VStack } from "@chakra-ui/react";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
+import OpenapiError from "@/components/ui/openapiError";
+import { getT } from "@/lib/i18n/get18n";
 import ShowResults from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/ShowResults";
 
 export default async function ResultPage({
@@ -11,14 +13,20 @@ export default async function ResultPage({
   params: Promise<{ roundId: string; competitionId: string }>;
 }) {
   const { roundId, competitionId } = await params;
+  const { t } = await getT();
 
-  const resultsRequest = await getResultByRound(competitionId, roundId);
+  const { data, response, error } = await getResultByRound(
+    competitionId,
+    roundId,
+  );
 
-  if (!resultsRequest.data) {
-    return <p>Error loading Results</p>;
+  if (error) {
+    return <OpenapiError response={response} t={t} />;
   }
 
-  const { results, id, competitors, format } = resultsRequest.data;
+  const { results, competitors, format } = data;
+
+  const { eventId } = parseActivityCode(roundId);
 
   return (
     <Container bg="bg">
@@ -26,7 +34,7 @@ export default async function ResultPage({
         <ShowResults
           roundId={roundId}
           results={results}
-          eventId={parseActivityCode(id).eventId}
+          eventId={eventId}
           formatId={format}
           competitionId={competitionId}
           competitors={competitors}
