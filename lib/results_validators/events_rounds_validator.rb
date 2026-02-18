@@ -46,15 +46,12 @@ module ResultsValidators
           return
         end
 
-        if competition.main_event_id == "333" || competition.events.length == 1
-          return
-        end
+        return if competition.main_event_id == "333" || competition.events.length == 1
+        return if competition.main_event_last_in_schedule?
 
-        unless competition.main_event_last_in_schedule?
-          @warnings << ValidationWarning.new(NOT_333_MAIN_EVENT_WARNING,
-                                             :events, competition.id,
-                                             main_event_id: competition.main_event_id)
-        end
+        @warnings << ValidationWarning.new(NOT_333_MAIN_EVENT_WARNING,
+                                           :events, competition.id,
+                                           main_event_id: competition.main_event_id)
       end
 
       def check_events_match(competition, results)

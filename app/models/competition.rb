@@ -482,11 +482,11 @@ class Competition < ApplicationRecord
   end
 
   def main_event_last_in_schedule?
-    return false unless main_event_id.present?
+    return false if main_event_id.blank?
     return false unless competition_venues.any?
 
-    event_activities = all_activities.select do |activity|
-      activity.parsed_activity_code[:event_id] != ScheduleActivity::ACTIVITY_CODE_OTHER
+    event_activities = all_activities.reject do |activity|
+      activity.parsed_activity_code[:event_id] == ScheduleActivity::ACTIVITY_CODE_OTHER
     end
 
     return false if event_activities.empty?

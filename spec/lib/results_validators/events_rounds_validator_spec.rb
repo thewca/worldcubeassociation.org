@@ -112,7 +112,7 @@ RSpec.describe ERV do
       create(:competition, :past, :with_valid_schedule,
              event_ids: %w[222 444 555])
     end
-    
+
     let(:round_222) { create(:round, event_id: "222", competition: competition) }
     let(:round_444) { create(:round, event_id: "444", competition: competition) }
     let(:round_555) { create(:round, event_id: "555", competition: competition) }
