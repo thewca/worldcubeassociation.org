@@ -1056,6 +1056,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_173059) do
     t.integer "best", default: 0, null: false
     t.date "competition_end_date", null: false
     t.integer "competition_reg_year", null: false
+    t.string "continent_id", null: false
     t.string "country_id", null: false
     t.string "event_id", null: false
     t.string "person_id", null: false

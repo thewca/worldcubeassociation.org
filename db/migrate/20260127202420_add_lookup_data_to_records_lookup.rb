@@ -17,6 +17,7 @@ class AddLookupDataToRecordsLookup < ActiveRecord::Migration[8.1]
     change_table :regional_records_lookup, bulk: true do |t|
       t.string :person_id, after: :result_id, null: false
       t.integer :competition_reg_year, after: :competition_end_date, null: false
+      t.string :continent_id, after: :country_id, null: false
     end
     # rubocop:enable Rails/NotNullColumn
 
