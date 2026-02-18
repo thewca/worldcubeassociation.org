@@ -1,7 +1,7 @@
 "use client";
 
 import { components } from "@/types/openapi";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import useResultsSubscription, {
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
@@ -12,7 +12,8 @@ import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
 
 export default function LiveUpdatingResultsTable({
   roundId,
-  results,
+  liveResults,
+  updateLiveResults,
   eventId,
   formatId,
   competitionId,
@@ -22,7 +23,10 @@ export default function LiveUpdatingResultsTable({
   showEmpty = true,
 }: {
   roundId: string;
-  results: components["schemas"]["LiveResult"][];
+  liveResults: components["schemas"]["LiveResult"][];
+  updateLiveResults: React.Dispatch<
+    React.SetStateAction<components["schemas"]["LiveResult"][]>
+  >;
   eventId: string;
   formatId: string;
   competitionId: string;
@@ -31,13 +35,10 @@ export default function LiveUpdatingResultsTable({
   isAdmin?: boolean;
   showEmpty?: boolean;
 }) {
-  const [liveResults, updateLiveResults] =
-    useState<components["schemas"]["LiveResult"][]>(results);
-
   // Move to onEffectEvent when we are on React 19
   const onReceived = useCallback(
     (result: DiffProtocolResponse) => {
-      const { updated, created, deleted } = result;
+      const { updated = [], created = [], deleted = [] } = result;
 
       updateLiveResults((results) =>
         applyDiffToLiveResults(results, updated, created, deleted),
