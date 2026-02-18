@@ -2,27 +2,31 @@
 
 class AddLookupDataToRecordsLookup < ActiveRecord::Migration[8.1]
   def change
-    change_table :regional_records_lookup, bulk: true do |t|
-      t.string :person_id, after: :result_id
-      t.integer :competition_reg_year, after: :competition_end_date
+    reversible do |dir|
+      dir.up do
+        truncate_tables :regional_records_lookup
+      end
+
+      # Upon reversing, the table can just stay as-is
+      #   because the schema changes will simply be dropped
     end
+
+    # rubocop:disable Rails/NotNullColumn
+    #   It is okay to introduce a non-null column without default value here,
+    #   because we've made sure above that the table will definitely be empty.
+    change_table :regional_records_lookup, bulk: true do |t|
+      t.string :person_id, after: :result_id, null: false
+      t.integer :competition_reg_year, after: :competition_end_date, null: false
+    end
+    # rubocop:enable Rails/NotNullColumn
 
     reversible do |dir|
       dir.up do
-        execute <<~SQL.squish
-          UPDATE regional_records_lookup rrl
-          INNER JOIN results ON rrl.result_id = results.id
-          INNER JOIN competitions ON results.competition_id = competitions.id
-          SET rrl.competition_reg_year = YEAR(competitions.start_date), rrl.person_id = results.person_id
-          WHERE 1
-        SQL
+        CheckRegionalRecords.add_to_lookup_table
       end
 
       # Don't need a `down` because the `change_table` above will just delete the whole column altogether.
     end
-
-    change_column_null :regional_records_lookup, :competition_reg_year, false
-    change_column_null :regional_records_lookup, :person_id, false
 
     change_table :regional_records_lookup, bulk: true do |t|
       t.index %i[person_id country_id event_id competition_reg_year best result_id], name: :concise_single_speedup
