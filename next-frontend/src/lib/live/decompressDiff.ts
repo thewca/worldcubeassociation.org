@@ -13,27 +13,43 @@ type PartialLiveResultWithRegistrationId = PartialExcept<
   "registration_id"
 >;
 
-export function decompressDiff(diff: CompressedLiveResult): LiveResult;
-export function decompressDiff(
-  diff: DiffedLiveResult,
-): PartialLiveResultWithRegistrationId;
-export function decompressDiff(
-  diff: DiffedLiveResult | CompressedLiveResult,
-): PartialLiveResultWithRegistrationId | components["schemas"]["LiveResult"] {
+export function decompressFullResult(diff: CompressedLiveResult): LiveResult {
   return {
+    advancing: diff.ad,
+    advancing_questionable: diff.adq,
+    average: diff.a,
+    best: diff.b,
+    average_record_tag: diff.art,
+    single_record_tag: diff.srt,
     registration_id: diff.r,
-    ..._.omitBy(
-      {
-        advancing: diff.ad,
-        advancing_questionable: diff.adq,
-        average: diff.a,
-        best: diff.b,
-        average_record_tag: diff.art,
-        single_record_tag: diff.srt,
-        registration_id: diff.r,
-        attempts: diff.la?.map((l) => ({ attempt_number: l.an, value: l.v })),
-      },
-      _.isUndefined,
-    ),
+    attempts: diff.la.map((l) => ({ attempt_number: l.an, value: l.v })),
+  };
+}
+
+export function decompressPartialResult(
+  diff: DiffedLiveResult,
+): PartialLiveResultWithRegistrationId {
+  return _.omitBy(
+    {
+      advancing: diff.ad,
+      advancing_questionable: diff.adq,
+      average: diff.a,
+      best: diff.b,
+      average_record_tag: diff.art,
+      single_record_tag: diff.srt,
+      registration_id: diff.r,
+      attempts: diff.la?.map((l) => ({ attempt_number: l.an, value: l.v })),
+    },
+    _.isUndefined,
+  );
+}
+
+export function decompressDiff<
+  T extends Pick<CompressedLiveResult, "r">,
+  U extends Pick<LiveResult, "registration_id">,
+>(compressed: T, decompressionRoutine: (comp: T) => U): U {
+  return {
+    ...decompressionRoutine(compressed),
+    registration_id: compressed.r,
   };
 }
