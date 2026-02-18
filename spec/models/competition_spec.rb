@@ -2075,4 +2075,32 @@ RSpec.describe Competition do
       end
     end
   end
+
+  describe '#main_event_last_in_schedule?' do
+    let(:competition) { create(:competition, :with_valid_schedule, event_ids: %w[333 222 444]) }
+
+    it 'returns false when main_event_id is nil' do
+      competition.update!(main_event_id: nil)
+      expect(competition.main_event_last_in_schedule?).to be(false)
+    end
+
+    it 'returns false when there are no competition venues' do
+      competition.competition_venues.destroy_all
+      expect(competition.main_event_last_in_schedule?).to be(false)
+    end
+
+    it 'returns true when main event is the last event in schedule' do
+      last_event = competition.all_activities.select { |a| a.parsed_activity_code[:event_id] != ScheduleActivity::ACTIVITY_CODE_OTHER }.max_by(&:end_time)
+      last_event_id = last_event.parsed_activity_code[:event_id]
+      competition.update!(main_event_id: last_event_id)
+      expect(competition.main_event_last_in_schedule?).to be(true)
+    end
+
+    it 'returns false when main event is not the last event in schedule' do
+      first_event = competition.all_activities.select { |a| a.parsed_activity_code[:event_id] != ScheduleActivity::ACTIVITY_CODE_OTHER }.min_by(&:end_time)
+      first_event_id = first_event.parsed_activity_code[:event_id]
+      competition.update!(main_event_id: first_event_id)
+      expect(competition.main_event_last_in_schedule?).to be(false)
+    end
+  end
 end

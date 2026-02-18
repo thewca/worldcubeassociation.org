@@ -19,6 +19,7 @@ module ResultsValidators
       {
         events: [],
         rounds: [:competition_event],
+        competition_venues: { venue_rooms: { schedule_activities: [:child_activities] } },
       }
     end
 
@@ -39,15 +40,20 @@ module ResultsValidators
     private
 
       def check_main_event(competition)
-        if competition.main_event
-          if competition.main_event_id != "333" && competition.events.length > 1
-            @warnings << ValidationWarning.new(NOT_333_MAIN_EVENT_WARNING,
-                                               :events, competition.id,
-                                               main_event_id: competition.main_event_id)
-          end
-        else
-          @warnings << ValidationWarning.new(NO_MAIN_EVENT_WARNING,
-                                             :events, competition.id)
+        # Check for the main event being 3x3x3, being the only event, or being last in the schedule
+        unless competition.main_event
+          @warnings << ValidationWarning.new(NO_MAIN_EVENT_WARNING, :events, competition.id)
+          return
+        end
+
+        if competition.main_event_id == "333" || competition.events.length == 1
+          return
+        end
+
+        unless competition.main_event_last_in_schedule?
+          @warnings << ValidationWarning.new(NOT_333_MAIN_EVENT_WARNING,
+                                             :events, competition.id,
+                                             main_event_id: competition.main_event_id)
         end
       end
 

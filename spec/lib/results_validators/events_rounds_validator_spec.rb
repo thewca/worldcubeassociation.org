@@ -106,4 +106,59 @@ RSpec.describe ERV do
       end
     end
   end
+
+  context "when main event is last in schedule" do
+    let!(:competition) do
+      create(:competition, :past, :with_valid_schedule,
+             event_ids: %w[222 444 555])
+    end
+    
+    let(:round_222) { create(:round, event_id: "222", competition: competition) }
+    let(:round_444) { create(:round, event_id: "444", competition: competition) }
+    let(:round_555) { create(:round, event_id: "555", competition: competition) }
+
+    let(:event_activities) do
+      competition.all_activities.reject do |activity|
+        activity.parsed_activity_code[:event_id] == ScheduleActivity::ACTIVITY_CODE_OTHER
+      end
+    end
+
+    it "does not trigger NOT_333_MAIN_EVENT_WARNING" do
+      last_event_id = event_activities.max_by(&:end_time).parsed_activity_code[:event_id]
+      competition.update!(main_event_id: last_event_id)
+
+      [Result, InboxResult].each do |model|
+        result_kind = model.model_name.singular.to_sym
+        create(result_kind, competition: competition, event_id: "222", round: round_222)
+        create(result_kind, competition: competition, event_id: "444", round: round_444)
+        create(result_kind, competition: competition, event_id: "555", round: round_555)
+
+        erv = ERV.new.validate(competition_ids: competition.id, model: model)
+        expect(erv.warnings).to be_empty
+        expect(erv.errors).to be_empty
+      end
+    end
+
+    it "triggers NOT_333_MAIN_EVENT_WARNING when main event is not last" do
+      first_event_id = event_activities.min_by(&:end_time).parsed_activity_code[:event_id]
+      competition.update!(main_event_id: first_event_id)
+
+      expected_warnings = [
+        RV::ValidationWarning.new(ERV::NOT_333_MAIN_EVENT_WARNING,
+                                  :events, competition.id,
+                                  main_event_id: first_event_id),
+      ]
+
+      [Result, InboxResult].each do |model|
+        result_kind = model.model_name.singular.to_sym
+        create(result_kind, competition: competition, event_id: "222", round: round_222)
+        create(result_kind, competition: competition, event_id: "444", round: round_444)
+        create(result_kind, competition: competition, event_id: "555", round: round_555)
+
+        erv = ERV.new.validate(competition_ids: competition.id, model: model)
+        expect(erv.warnings).to match_array(expected_warnings)
+        expect(erv.errors).to be_empty
+      end
+    end
+  end
 end

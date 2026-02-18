@@ -481,6 +481,20 @@ class Competition < ApplicationRecord
     Event.c_find(main_event_id)
   end
 
+  def main_event_last_in_schedule?
+    return false unless main_event_id.present?
+    return false unless competition_venues.any?
+
+    event_activities = all_activities.select do |activity|
+      activity.parsed_activity_code[:event_id] != ScheduleActivity::ACTIVITY_CODE_OTHER
+    end
+
+    return false if event_activities.empty?
+
+    last_event_activity = event_activities.max_by(&:end_time)
+    last_event_activity.parsed_activity_code[:event_id] == main_event_id
+  end
+
   def report_posted?
     delegate_report.posted?
   end
