@@ -9,6 +9,8 @@ import LiveResultsTable from "@/components/live/LiveResultsTable";
 import { Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
+import AdminButtons from "@/components/live/AdminButtons";
+import PublicButtons from "@/components/live/PublicButtons";
 
 export default function LiveUpdatingResultsTable({
   roundId,
@@ -62,7 +64,7 @@ export default function LiveUpdatingResultsTable({
             competitionId={competitionId}
             roundId={roundId}
             formatId={formatId}
-            results={results}
+            results={liveResults}
             competitors={competitors}
           />
         )}
