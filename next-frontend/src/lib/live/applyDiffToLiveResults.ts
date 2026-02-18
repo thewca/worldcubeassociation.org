@@ -12,9 +12,7 @@ export function applyDiffToLiveResults(
   deleted: number[],
 ): components["schemas"]["LiveResult"][] {
   const deletedSet = new Set(deleted);
-  const updatesMap = new Map(
-    updated.map((u) => [u.registration_id, decompressDiff(u)]),
-  );
+  const updatesMap = new Map(updated.map((u) => [u.r, decompressDiff(u)]));
 
   const diffedResults = previousResults
     .filter((res) => !deletedSet.has(res.registration_id))
