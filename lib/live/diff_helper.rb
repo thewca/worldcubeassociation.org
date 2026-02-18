@@ -38,14 +38,13 @@ module Live
     end
 
     def self.add_forecast_stats(diff, round)
-      diff["updated"] = diff["updated"].map do |updated|
-        if updated["live_attempts"].length < round.format.expected_solve_count
-          updated.merge(LiveResult.compute_best_and_worse_possible_average(updated["live_attempts"], round))
-        else
-          updated
-        end
-      end
-      diff
+      diff.merge("updated" => Array.wrap(diff["updated"]).map { forecast_for(it, round) }).compact_blank
+    end
+
+    def self.forecast_for(updated_result, round)
+      return updated_result unless result["live_attempts"].length < round.format.expected_solve_count
+
+      updated_result.merge(LiveResult.compute_best_and_worse_possible_average(updated_result["live_attempts"], round))
     end
   end
 end
