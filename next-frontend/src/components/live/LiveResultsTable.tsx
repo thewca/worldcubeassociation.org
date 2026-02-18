@@ -76,6 +76,7 @@ export default function LiveResultsTable({
           const competitor =
             competitorsByRegistrationId[result.registration_id];
           const hasResult = result.attempts.length > 0;
+          const isPending = hasResult && result.best == 0;
 
           if (!showEmpty && !hasResult) {
             return null;
@@ -89,7 +90,7 @@ export default function LiveResultsTable({
                 textAlign="right"
                 colorPalette={rankingCellColorPalette(result)}
               >
-                {hasResult && result.global_pos}
+                {isPending ? "pending" : result.global_pos}
               </Table.Cell>
               {isAdmin && <Table.Cell>{competitor.registrant_id}</Table.Cell>}
               <Table.Cell>
@@ -124,9 +125,9 @@ export default function LiveResultsTable({
                     textAlign="right"
                     style={{ position: "relative" }}
                   >
-                    {result[stat.field]
-                      ? formatAttemptResult(result[stat.field], eventId)
-                      : "pending"}{" "}
+                    {isPending
+                      ? "pending"
+                      : formatAttemptResult(result[stat.field], eventId)}{" "}
                     {!isAdmin && recordTagBadge(result[stat.recordTagField])}
                   </Table.Cell>
                 ))}
