@@ -20,7 +20,7 @@ module AuxiliaryDataComputation
             SELECT MIN(#{field} * 1000000000 + result_id) value_and_id
             FROM regional_records_lookup
             WHERE #{field} > 0
-            GROUP BY person_id, country_id, event_id, competition_year
+            GROUP BY person_id, country_id, event_id, competition_reg_year
           )
           SELECT
             rrl.result_id id,
@@ -30,7 +30,7 @@ module AuxiliaryDataComputation
             rrl.event_id,
             rrl.country_id,
             countries.continent_id,
-            rrl.competition_year `reg_year`
+            rrl.competition_reg_year `reg_year`
           FROM concise_agg
             INNER JOIN regional_records_lookup rrl ON rrl.result_id = (concise_agg.value_and_id % 1000000000)
             INNER JOIN countries ON countries.id = rrl.country_id
