@@ -11,6 +11,7 @@ import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { DualLiveResult } from "@/lib/live/mergeAndOrderResults";
 import DualRoundsTable from "@/components/live/DualRoundsTable";
 import _ from "lodash";
+import { decompressDiff } from "@/lib/live/decompressDiff";
 
 function applyDiff(
   previousResults: Record<string, DualLiveResult[]>,
@@ -73,7 +74,7 @@ export default function LiveUpdatingDualRoundsTable({
         applyDiff(
           results,
           updated,
-          created.map((r) => ({ ...r, wcifId: wcif_id })),
+          created.map((r) => ({ ...decompressDiff(r), wcifId: wcif_id })),
           deleted,
           wcif_id,
         ),

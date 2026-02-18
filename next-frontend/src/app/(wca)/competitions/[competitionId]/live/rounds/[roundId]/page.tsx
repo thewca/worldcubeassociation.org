@@ -74,14 +74,13 @@ export default async function ResultPage({
   return (
     <Container bg="bg">
       <VStack align="left">
-        <LiveUpdatingResultsTable
+        <ShowResults
           roundId={roundId}
           results={results}
-          formatId={format}
           eventId={parseActivityCode(id).eventId}
-          competitors={competitors}
+          formatId={format}
           competitionId={competitionId}
-          title="Live Results"
+          competitors={competitors}
         />
       </VStack>
     </Container>
