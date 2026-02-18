@@ -1111,12 +1111,7 @@ class User < ApplicationRecord
     fields += %i[name dob gender country_iso2] unless cannot_edit_data_reason_html(user)
     fields += CLAIM_WCA_ID_PARAMS if user == self || can_edit_any_user?
     fields << :name if user.wca_id.blank? && organizer_for?(user)
-    if can_edit_any_user?
-      fields += %i[
-        unconfirmed_wca_id
-      ]
-      fields += %i[wca_id] unless user.special_account?
-    end
+    fields << :wca_id if can_edit_any_user? && !user.special_account?
     fields
   end
 

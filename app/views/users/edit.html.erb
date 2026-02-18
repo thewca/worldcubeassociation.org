@@ -76,16 +76,12 @@
                     <%= t 'activerecord.attributes.user.unconfirmed_wca_id' %>
                   </label>
                   <div class="input-group">
-                    <%= f.input_field :unconfirmed_wca_id, as: :wca_id, disabled: !editable_fields.include?(:unconfirmed_wca_id), class: "form-control" %>
-                    <span class="input-group-addon">
-                      <a href="#" id="unconfirmed-wca-id-profile" target="_blank">
-                        <%= t '.profile' %>
-                      </a>
-                    </span>
+                    <%= f.input_field :unconfirmed_wca_id, as: :wca_id, disabled: true, class: "form-control" %>
                     <div class="input-group-btn">
-                      <button type="button" class="btn btn-default" id="approve-wca-id">
-                        <%= t '.approve' %>
-                      </button>
+                      <% claim_ticket = TicketsClaimWcaId.open.find_by(user: @user)&.ticket %>
+                      <% if claim_ticket %>
+                        <%= link_to t('.go_to_claim_wca_id_ticket'), ticket_path(claim_ticket), class: "btn btn-primary", target: "_blank" %>
+                      <% end %>
                     </div>
                   </div>
                 </div>
