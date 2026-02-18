@@ -100,10 +100,9 @@ module AuxiliaryDataComputation
     end
   end
 
-  def self.insert_regional_records_lookup(competition_id = nil)
-    # Don't use `with_temp_table` here, because the `add_to_lookup_table` in itself
-    # is designed as an in-place UPSERT (it uses ON DUPLICATE KEY UPDATE)
-    # and it is not publicly visible anywhere in the UI at all
-    CheckRegionalRecords.add_to_lookup_table(competition_id)
+  def self.insert_regional_records_lookup
+    DbHelper.with_temp_table("regional_records_lookup") do |temp_table_name|
+      CheckRegionalRecords.add_to_lookup_table(table_name: temp_table_name)
+    end
   end
 end

@@ -4,9 +4,9 @@ module CheckRegionalRecords
   REGION_WORLD = '__World'
   LOOKUP_TABLE_NAME = 'regional_records_lookup'
 
-  def self.add_to_lookup_table(competition_id = nil)
+  def self.add_to_lookup_table(competition_id = nil, table_name: LOOKUP_TABLE_NAME)
     ActiveRecord::Base.connection.execute <<~SQL.squish
-      INSERT INTO #{LOOKUP_TABLE_NAME}
+      INSERT INTO #{table_name}
       (result_id, person_id, country_id, event_id, competition_end_date, competition_reg_year, best, average)
       SELECT results.id, results.person_id, results.country_id, results.event_id, competitions.end_date, YEAR(competitions.start_date), results.best, results.average
       FROM results
