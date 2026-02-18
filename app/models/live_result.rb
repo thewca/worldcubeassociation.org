@@ -122,33 +122,21 @@ class LiveResult < ApplicationRecord
   def self.compute_best_and_worse_possible_average(live_attempts, round)
     missing_count = round.format.expected_solve_count - live_attempts.length
 
-    best_padding = Array.new(missing_count) do |i|
-      {
-        "attempt_number" => live_attempts.length + i + 1,
-        "value" => BEST_POSSIBLE_SCORE,
-      }
-    end
-
-    worse_padding = Array.new(missing_count) do |i|
-      {
-        "attempt_number" => live_attempts.length + i + 1,
-        "value" => WORST_POSSIBLE_SCORE,
-      }
-    end
-
-    attempts_with_best =
-      (live_attempts + best_padding).map { |l| LiveAttempt.new(l) }
-
-    attempts_with_worse =
-      (live_attempts + worse_padding).map { |l| LiveAttempt.new(l) }
-
-    best_average, = LiveResult.compute_average_and_best(attempts_with_best, round)
-    worst_average, = LiveResult.compute_average_and_best(attempts_with_worse, round)
-
     {
-      "best_possible_average" => best_average,
-      "worst_possible_average" => worst_average,
-    }
+      "best_possible_average" => BEST_POSSIBLE_SCORE,
+      "worst_possible_average" => WORST_POSSIBLE_SCORE,
+    }.transform_values do |score|
+      padded = live_attempts + Array.new(missing_count) do |i|
+        {
+          "attempt_number" => live_attempts.length + i + 1,
+          "value" => score,
+        }
+      end
+
+      attempts = padded.map { |l| LiveAttempt.new(l) }
+      avg, = LiveResult.compute_average_and_best(attempts, round)
+      avg
+    end
   end
 
   private
