@@ -1866,13 +1866,12 @@ class Competition < ApplicationRecord
 
   def last_event_id_of_competition
     last_activity = all_activities
-                      .reject { |activity| activity.activity_code.start_with?("other-") }
-                      .max_by(&:end_time)
+                    .reject { |activity| activity.activity_code.start_with?("other-") }
+                    .max_by(&:end_time)
 
     return nil unless last_activity
 
-    # Extract event ID from activity code (e.g., "333-r1" -> "333")
-    last_activity.activity_code.split('-').first
+    last_activity.parsed_activity_code[:event_id]
   end
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
