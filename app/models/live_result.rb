@@ -26,7 +26,7 @@ class LiveResult < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[global_pos local_pos registration_id round_id best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
-    methods: %w[event_id attempts result_id best_and_worst_possible_average],
+    methods: %w[event_id attempts result_id forecast_statistics],
     include: %w[],
   }.freeze
 
@@ -114,7 +114,7 @@ class LiveResult < ApplicationRecord
     diff if diff.except("registration_id").present?
   end
 
-  def best_and_worst_possible_average
+  def forecast_statistics
     # use .length on purpose here as otherwise we would use one query per row
     LiveResult.compute_best_and_worse_possible_average(live_attempts.as_json, round) if live_attempts.length < round.format.expected_solve_count
   end
@@ -133,9 +133,8 @@ class LiveResult < ApplicationRecord
         }
       end
 
-      attempts = padded.map { |l| LiveAttempt.new(l) }
-      avg, = LiveResult.compute_average_and_best(attempts, round)
-      avg
+      attempts = padded.map { LiveAttempt.new(it) }
+      LiveResult.compute_average_and_best(attempts, round).first
     end
   end
 

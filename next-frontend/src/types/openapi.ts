@@ -852,7 +852,7 @@ export interface components {
             global_pos: number;
             local_pos: number;
             best: number;
-            best_and_worst_possible_average?: {
+            forecast_statistics?: {
                 best_possible_average?: number;
                 worst_possible_average?: number;
             };

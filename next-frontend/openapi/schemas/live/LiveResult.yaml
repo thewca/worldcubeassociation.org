@@ -23,7 +23,7 @@ properties:
     type: integer
   best:
     type: integer
-  best_and_worst_possible_average:
+  forecast_statistics:
     type: object
     properties:
       best_possible_average:
