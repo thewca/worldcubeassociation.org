@@ -7,12 +7,9 @@ import AttemptsForm from "@/components/live/AttemptsForm";
 import { Format } from "@/lib/wca/data/formats";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
-import useResultsSubscription, {
-  DiffProtocolResponse,
-} from "@/lib/hooks/useResultsSubscription";
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
-import ConnectionPulse from "@/components/live/ConnectionPulse";
 import _ from "lodash";
+import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 function zeroedArrayOfSize(size: number) {
   return Array(size).fill(0);
 }
@@ -45,20 +42,6 @@ export default function AddResults({
 
   const [liveResults, updateLiveResults] =
     useState<components["schemas"]["LiveResult"][]>(results);
-
-  // Move to onEffectEvent when we are on React 19
-  const onReceived = useCallback(
-    (result: DiffProtocolResponse) => {
-      const { updated = [], created = [], deleted = [] } = result;
-
-      updateLiveResults((results) =>
-        applyDiffToLiveResults(results, updated, created, deleted),
-      );
-    },
-    [updateLiveResults],
-  );
-
-  const connectionState = useResultsSubscription(roundId, onReceived);
 
   const handleRegistrationIdChange = useCallback(
     (value: number) => {
@@ -160,7 +143,6 @@ export default function AddResults({
 
       <GridItem colSpan={12}>
         <ButtonGroup float="right">
-          <ConnectionPulse connectionState={connectionState} />
           <Button asChild>
             <Link
               href={`/competitions/${competitionId}/live/rounds/${roundId}`}
@@ -197,13 +179,16 @@ export default function AddResults({
             competitors={competitors}
           />
         )}
-        <LiveResultsTable
-          results={finalizedResults}
+        <LiveUpdatingResultsTable
+          liveResults={finalizedResults}
+          updateLiveResults={updateLiveResults}
           eventId={eventId}
           formatId={format.id}
           competitionId={competitionId}
           competitors={competitors}
           isAdmin
+          roundId={roundId}
+          title=""
         />
       </GridItem>
     </Grid>

@@ -6,8 +6,6 @@ export const orderResults = (
   results: components["schemas"]["LiveResult"][],
   format: Format,
 ) => {
-  const validResults = results.filter((result) => result.best !== 0);
-
   const stats = statColumnsForFormat(format);
 
   const rankBy = stats[0].field;
