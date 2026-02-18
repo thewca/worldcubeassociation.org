@@ -471,13 +471,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_28_194213) do
     t.integer "average", default: 0, null: false
     t.string "continent_id", limit: 50, default: "", null: false
     t.string "country_id", limit: 50, default: "", null: false
-    t.integer "day", limit: 2, default: 0, null: false, unsigned: true
     t.string "event_id", limit: 6, default: "", null: false
     t.integer "id", default: 0, null: false
-    t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.string "person_id", limit: 10, default: "", null: false
+    t.integer "reg_year", limit: 2, default: 0, null: false, unsigned: true
     t.bigint "value_and_id"
-    t.integer "year", limit: 2, default: 0, null: false, unsigned: true
     t.index ["event_id", "average"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "average"], name: "regional_records_speedup"
   end
@@ -486,13 +484,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_28_194213) do
     t.integer "best", default: 0, null: false
     t.string "continent_id", limit: 50, default: "", null: false
     t.string "country_id", limit: 50, default: "", null: false
-    t.integer "day", limit: 2, default: 0, null: false, unsigned: true
     t.string "event_id", limit: 6, default: "", null: false
     t.integer "id", default: 0, null: false
-    t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.string "person_id", limit: 10, default: "", null: false
+    t.integer "reg_year", limit: 2, default: 0, null: false, unsigned: true
     t.bigint "value_and_id"
-    t.integer "year", limit: 2, default: 0, null: false, unsigned: true
     t.index ["event_id", "best"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "best"], name: "regional_records_speedup"
   end
