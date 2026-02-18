@@ -6,9 +6,33 @@ import useResultsSubscription, {
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
-import { Heading, HStack, VStack } from "@chakra-ui/react";
+import { Button, Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
+<<<<<<< projectorview
+import ResultsProjector from "@/components/live/ResultsProjector";
+import { LuGalleryVertical } from "react-icons/lu";
+
+function applyDiff(
+  previousResults: components["schemas"]["LiveResult"][],
+  updated: DiffedLiveResult[],
+  created: components["schemas"]["LiveResult"][],
+  deleted: number[],
+): components["schemas"]["LiveResult"][] {
+  const deletedSet = new Set(deleted);
+  const updatesMap = new Map(updated.map((u) => [u.registration_id, u]));
+
+  const diffedResults = previousResults
+    .filter((res) => !deletedSet.has(res.registration_id))
+    .map((res) => {
+      const update = updatesMap.get(res.registration_id);
+      return update ? { ...res, ...update } : res;
+    });
+
+  return diffedResults.concat(created);
+}
+=======
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
+>>>>>>> main
 
 export default function LiveUpdatingResultsTable({
   roundId,
@@ -35,6 +59,16 @@ export default function LiveUpdatingResultsTable({
   isAdmin?: boolean;
   showEmpty?: boolean;
 }) {
+<<<<<<< projectorview
+  const [liveResults, updateLiveResults] =
+    useState<components["schemas"]["LiveResult"][]>(results);
+
+  const [inProjectorMode, setInProjectorMode] = useState(false);
+  const enableProjectorView = () => setInProjectorMode(true);
+  const disableProjectorView = () => setInProjectorMode(false);
+
+=======
+>>>>>>> main
   // Move to onEffectEvent when we are on React 19
   const onReceived = useCallback(
     (result: DiffProtocolResponse) => {
@@ -49,11 +83,29 @@ export default function LiveUpdatingResultsTable({
 
   const connectionState = useResultsSubscription(roundId, onReceived);
 
+  if (inProjectorMode) {
+    return (
+      <ResultsProjector
+        competitors={competitors}
+        results={results}
+        disableProjectorView={disableProjectorView}
+        formatId={formatId}
+        eventId={eventId}
+        forecastView={false}
+        title={title}
+      />
+    );
+  }
+
   return (
     <VStack align="left">
       <HStack>
         <Heading textStyle="h1">{title}</Heading>
         <ConnectionPulse connectionState={connectionState} />
+        <Spacer flex={1} />
+        <Button onClick={enableProjectorView}>
+          <LuGalleryVertical />
+        </Button>
       </HStack>
       <LiveResultsTable
         results={liveResults}
