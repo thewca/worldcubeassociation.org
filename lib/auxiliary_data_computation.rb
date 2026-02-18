@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module AuxiliaryDataComputation
-  def self.compute_everything(competition_id = nil)
-    self.insert_regional_records_lookup(competition_id)
+  def self.compute_everything
+    self.insert_regional_records_lookup
     self.compute_concise_results
     self.compute_rank_tables
   end
