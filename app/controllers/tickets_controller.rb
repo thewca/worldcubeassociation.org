@@ -4,6 +4,7 @@ class TicketsController < ApplicationController
   include Rails::Pagination
 
   before_action :authenticate_user!
+  before_action :check_ticket_errors_join_as_bcc_stakeholder, only: [:join_as_bcc_stakeholder]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:verify_warnings]) }, only: [:verify_warnings]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_results]) }, only: [:merge_inbox_results]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:approve_edit_person_request]) }, only: [:approve_edit_person_request]
@@ -15,6 +16,13 @@ class TicketsController < ApplicationController
     createdAt:
       ->(ticket) { ticket.created_at },
   }.freeze
+
+  private def check_ticket_errors_join_as_bcc_stakeholder
+    @ticket = Ticket.find(params.require(:ticket_id))
+    @stakeholder_role = params.require(:stakeholder_role)
+
+    render status: :unauthorized unless @ticket.metadata.eligible_roles_for_bcc(current_user).include?(@stakeholder_role)
+  end
 
   private def check_ticket_errors(action_type, metadata_action = nil)
     @action_type = action_type
@@ -71,8 +79,8 @@ class TicketsController < ApplicationController
       format.json do
         ticket = Ticket.find(params.require(:id))
 
-        # Currently only stakeholders can access the ticket.
-        return head :unauthorized unless ticket.can_user_access?(current_user)
+        # Only stakeholders can access the ticket.
+        return render json: { error: "No access to ticket" }, status: :unauthorized unless ticket.can_user_access?(current_user)
 
         render json: {
           ticket: ticket,
@@ -80,6 +88,14 @@ class TicketsController < ApplicationController
         }
       end
     end
+  end
+
+  def eligible_roles_for_bcc
+    ticket = Ticket.find(params.require(:ticket_id))
+
+    render json: {
+      eligible_roles_for_bcc: ticket.metadata.eligible_roles_for_bcc(current_user),
+    }
   end
 
   def edit_person_validators
@@ -356,5 +372,26 @@ class TicketsController < ApplicationController
     end
 
     render status: :ok, json: @ticket
+  end
+
+  def join_as_bcc_stakeholder
+    connection = params.require(:connection)
+    is_active = ActiveRecord::Type::Boolean.new.cast(params.require(:is_active))
+
+    ActiveRecord::Base.transaction do
+      new_stakeholder = @ticket.ticket_stakeholders.create!(
+        stakeholder: current_user,
+        connection: connection,
+        stakeholder_role: @stakeholder_role,
+        is_active: is_active,
+      )
+      @ticket.ticket_logs.create!(
+        action_type: TicketLog.action_types[:join_as_bcc_stakeholder],
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: new_stakeholder.id,
+      )
+    end
+
+    render status: :ok, json: { success: true }
   end
 end

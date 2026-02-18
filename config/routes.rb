@@ -235,12 +235,14 @@ Rails.application.routes.draw do
     post 'merge_inbox_results' => 'tickets#merge_inbox_results', as: :merge_inbox_results
     post 'post_results' => 'tickets#post_results', as: :post_results
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
+    get 'eligible_roles_for_bcc' => 'tickets#eligible_roles_for_bcc', as: :eligible_roles_for_bcc
     get 'inbox_person_summary' => 'tickets#inbox_person_summary', as: :inbox_person_summary
     post 'delete_inbox_persons' => 'tickets#delete_inbox_persons', as: :delete_inbox_persons
     get 'events_merged_data' => 'tickets#events_merged_data', as: :events_merged_data
     post 'approve_edit_person_request' => 'tickets#approve_edit_person_request', as: :approve_edit_person_request
     post 'reject_edit_person_request' => 'tickets#reject_edit_person_request', as: :reject_edit_person_request
     post 'sync_edit_person_request' => 'tickets#sync_edit_person_request', as: :sync_edit_person_request
+    post 'join_as_bcc_stakeholder' => 'tickets#join_as_bcc_stakeholder', as: :join_as_bcc_stakeholder
     resources :ticket_comments, only: %i[index create], as: :comments
     resources :ticket_logs, only: [:index], as: :logs
     resources :tickets_edit_person_fields, only: %i[create update destroy], as: :edit_person_fields
@@ -375,9 +377,13 @@ Rails.application.routes.draw do
           namespace :live do
             get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
             put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
+            put '/rounds/:round_id/clear' => "live#clear_round", as: :live_round_clear
             put '/rounds/:round_id/:registration_id' => 'live#quit_competitor', as: :quit_competitor_from_round
+            post '/rounds/:round_id' => 'live#add_or_update_result', as: :add_results
+            patch '/rounds/:round_id' => 'live#add_or_update_result', as: :update_results
             get '/podiums' => 'live#podiums', as: :live_podiums
             get '/registrations/:registration_id' => 'live#by_person', as: :get_live_by_person
+            get '/rounds' => 'live#rounds', as: :live_admin
           end
         end
 

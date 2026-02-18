@@ -324,4 +324,6 @@ export interface UtilityValues {
     | "slide-to-right"
     | "scale-in"
     | "scale-out"
+    | "marqueeX"
+    | "marqueeY"
 }

@@ -8,6 +8,8 @@ class LiveAttempt < ApplicationRecord
   belongs_to :live_result
   has_many :live_attempt_history_entries, dependent: :destroy
 
+  has_one :h2h_attempt, dependent: :destroy
+
   validates :value, presence: true
   validates :value, numericality: { only_integer: true }
   validates :attempt_number, numericality: { only_integer: true }
@@ -28,7 +30,7 @@ class LiveAttempt < ApplicationRecord
     ResultAttempt.new(value: value, attempt_number: attempt_number)
   end
 
-  def self.build_with_history_entry(value, attempt_number, acting_user)
+  def self.build_with_history_entry(value, attempt_number, acting_user_id)
     LiveAttempt.build(
       value: value,
       attempt_number: attempt_number,
@@ -36,7 +38,7 @@ class LiveAttempt < ApplicationRecord
         LiveAttemptHistoryEntry.build(
           value: value,
           entered_at: Time.now.utc,
-          entered_by: acting_user,
+          entered_by: acting_user_id,
         ),
       ],
     )
@@ -46,12 +48,12 @@ class LiveAttempt < ApplicationRecord
     Set.new(before_attempts) != Set.new(after_attempts)
   end
 
-  def update_with_history_entry(value, acting_user)
+  def update_with_history_entry(value, acting_user_id)
     self.update(value: value)
     self.live_attempt_history_entries.create(
       value: value,
       entered_at: Time.now.utc,
-      entered_by: acting_user,
+      entered_by: acting_user_id,
     )
 
     # Return `self` for method chaining
