@@ -10,10 +10,10 @@ class AddLookupDataToRecordsLookup < ActiveRecord::Migration[8.1]
     reversible do |dir|
       dir.up do
         execute <<~SQL.squish
-          UPDATE regional_records_lookup rll
-          INNER JOIN results ON rll.result_id = results.id
+          UPDATE regional_records_lookup rrl
+          INNER JOIN results ON rrl.result_id = results.id
           INNER JOIN competitions ON results.competition_id = competitions.id
-          SET rll.competition_year = YEAR(competitions.start_date), rll.person_id = results.person_id
+          SET rrl.competition_year = YEAR(competitions.start_date), rrl.person_id = results.person_id
           WHERE 1
         SQL
       end

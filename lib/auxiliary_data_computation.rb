@@ -23,17 +23,17 @@ module AuxiliaryDataComputation
             GROUP BY person_id, country_id, event_id, competition_year
           )
           SELECT
-            rll.result_id id,
-            rll.#{field},
+            rrl.result_id id,
+            rrl.#{field},
             concise_agg.value_and_id,
-            rll.person_id,
-            rll.event_id,
-            rll.country_id,
+            rrl.person_id,
+            rrl.event_id,
+            rrl.country_id,
             countries.continent_id,
-            rll.competition_year `reg_year`
+            rrl.competition_year `reg_year`
           FROM concise_agg
-            INNER JOIN regional_records_lookup rll ON rll.result_id = (concise_agg.value_and_id % 1000000000)
-            INNER JOIN countries ON countries.id = rll.country_id
+            INNER JOIN regional_records_lookup rrl ON rrl.result_id = (concise_agg.value_and_id % 1000000000)
+            INNER JOIN countries ON countries.id = rrl.country_id
         SQL
       end
     end
