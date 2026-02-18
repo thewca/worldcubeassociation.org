@@ -208,7 +208,7 @@ RSpec.describe "API Competitions" do
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
           expect(response).to have_http_status(:bad_request)
           response_json = response.parsed_body
-          expect(response_json["error"]).to eq "The property '#/events/0/rounds/0/format' value \"invalidformat\" did not match one of the following values: 1, 2, 3, 5, a, m"
+          expect(response_json["error"]).to eq "The property '#/events/0/rounds/0/format' value \"invalidformat\" did not match one of the following values: 1, 2, 3, 5, a, h, m"
           expect(competition.reload.competition_events.find_by(event_id: "333").rounds.length).to eq 2
         end
 

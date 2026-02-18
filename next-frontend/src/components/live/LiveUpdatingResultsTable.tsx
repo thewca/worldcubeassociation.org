@@ -1,14 +1,14 @@
 "use client";
 
 import { components } from "@/types/openapi";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import useResultsSubscription, {
-  DiffedLiveResult,
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
 import { Button, Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
+<<<<<<< projectorview
 import ResultsProjector from "@/components/live/ResultsProjector";
 import { LuGalleryVertical } from "react-icons/lu";
 
@@ -30,10 +30,14 @@ function applyDiff(
 
   return diffedResults.concat(created);
 }
+=======
+import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
+>>>>>>> main
 
 export default function LiveUpdatingResultsTable({
   roundId,
-  results,
+  liveResults,
+  updateLiveResults,
   eventId,
   formatId,
   competitionId,
@@ -42,8 +46,11 @@ export default function LiveUpdatingResultsTable({
   isAdmin = false,
   showEmpty = true,
 }: {
-  roundId: number;
-  results: components["schemas"]["LiveResult"][];
+  roundId: string;
+  liveResults: components["schemas"]["LiveResult"][];
+  updateLiveResults: React.Dispatch<
+    React.SetStateAction<components["schemas"]["LiveResult"][]>
+  >;
   eventId: string;
   formatId: string;
   competitionId: string;
@@ -52,6 +59,7 @@ export default function LiveUpdatingResultsTable({
   isAdmin?: boolean;
   showEmpty?: boolean;
 }) {
+<<<<<<< projectorview
   const [liveResults, updateLiveResults] =
     useState<components["schemas"]["LiveResult"][]>(results);
 
@@ -59,13 +67,15 @@ export default function LiveUpdatingResultsTable({
   const enableProjectorView = () => setInProjectorMode(true);
   const disableProjectorView = () => setInProjectorMode(false);
 
+=======
+>>>>>>> main
   // Move to onEffectEvent when we are on React 19
   const onReceived = useCallback(
     (result: DiffProtocolResponse) => {
-      const { updated, created, deleted } = result;
+      const { updated = [], created = [], deleted = [] } = result;
 
       updateLiveResults((results) =>
-        applyDiff(results, updated, created, deleted),
+        applyDiffToLiveResults(results, updated, created, deleted),
       );
     },
     [updateLiveResults],
