@@ -4,15 +4,16 @@ import {
 } from "@/lib/hooks/useResultsSubscription";
 import { components } from "@/types/openapi";
 import _ from "lodash";
+import type { PartialExcept } from "@/lib/types/objects";
 
-type PartialLiveResultWithRegistrationId = Partial<
-  components["schemas"]["LiveResult"]
-> &
-  Pick<components["schemas"]["LiveResult"], "registration_id">;
+type LiveResult = components["schemas"]["LiveResult"];
 
-export function decompressDiff(
-  diff: CompressedLiveResult,
-): components["schemas"]["LiveResult"];
+type PartialLiveResultWithRegistrationId = PartialExcept<
+  LiveResult,
+  "registration_id"
+>;
+
+export function decompressDiff(diff: CompressedLiveResult): LiveResult;
 export function decompressDiff(
   diff: DiffedLiveResult,
 ): PartialLiveResultWithRegistrationId;
@@ -30,7 +31,7 @@ export function decompressDiff(
         average_record_tag: diff.art,
         single_record_tag: diff.srt,
         registration_id: diff.r,
-        attempts: diff.la?.map((l) => ({ value: l.v, attempt_number: l.an })),
+        attempts: diff.la?.map((l) => ({ attempt_number: l.an, value: l.v })),
       },
       _.isUndefined,
     ),

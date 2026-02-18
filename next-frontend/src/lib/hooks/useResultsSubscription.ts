@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
+import type { PartialExcept } from "@/lib/types/objects";
 
 export const CONNECTION_STATE_INITIALIZED = "initialized";
 export const CONNECTION_STATE_CONNECTED = "connected";
@@ -17,7 +18,6 @@ export const CONNECTION_COLORS = {
 };
 
 // Move this to something like https://www.asyncapi.com
-
 export type CompressedLiveResult = {
   ad: boolean;
   adq: boolean;
@@ -32,8 +32,7 @@ export type CompressedLiveResult = {
   }[];
 };
 
-export type DiffedLiveResult = Partial<CompressedLiveResult> &
-  Pick<CompressedLiveResult, "r">;
+export type DiffedLiveResult = PartialExcept<CompressedLiveResult, "r">;
 
 export type DiffProtocolResponse = {
   updated?: DiffedLiveResult[];
