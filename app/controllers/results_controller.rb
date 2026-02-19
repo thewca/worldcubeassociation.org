@@ -280,15 +280,15 @@ class ResultsController < ApplicationController
     rows
       .group_by { |row| row["event_id"] }
       .each_value do |event_rows|
-      singles, averages = event_rows.partition { |row| row["type"] == "single" }
-      balance = singles.size - averages.size
-      if balance.negative?
-        singles += Array.new(-balance, nil)
-      elsif balance.positive?
-        averages += Array.new(balance, nil)
-      end
-      single_rows += singles
-      average_rows += averages
+        singles, averages = event_rows.partition { |row| row["type"] == "single" }
+        balance = singles.size - averages.size
+        if balance.negative?
+          singles += Array.new(-balance, nil)
+        elsif balance.positive?
+          averages += Array.new(balance, nil)
+        end
+        single_rows += singles
+        average_rows += averages
     end
 
     slim_rows = single_rows.zip(average_rows)
@@ -337,10 +337,10 @@ class ResultsController < ApplicationController
 
     if @is_only
       @years_condition_competition = "AND YEAR(competitions.start_date) = #{@year}"
-      @years_condition_result = "AND results.year = #{@year}"
+      @years_condition_result = "AND results.reg_year = #{@year}"
     elsif @is_until
       @years_condition_competition = "AND YEAR(competitions.start_date) <= #{@year}"
-      @years_condition_result = "AND results.year <= #{@year}"
+      @years_condition_result = "AND results.reg_year <= #{@year}"
     else
       @years_condition_competition = ""
       @years_condition_result = ""

@@ -90,4 +90,63 @@ RSpec.describe ResultsSubmissionController do
       end
     end
   end
+
+  describe "#check_newcomers_data_access" do
+    let(:wrt_user) { create(:user, :wrt_member) }
+    let(:regular_user) { create(:user) }
+
+    context "when competition is upcoming" do
+      let(:upcoming_comp) { create(:competition, :announced, :future) }
+
+      it "allows access for WRT user" do
+        sign_in wrt_user
+
+        get competition_newcomer_name_format_check_path(upcoming_comp.id)
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "returns unauthorized for regular user" do
+        sign_in regular_user
+
+        get competition_newcomer_name_format_check_path(upcoming_comp.id)
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when competition is ongoing and results not yet submitted" do
+      let(:comp_delegate) { create(:delegate) }
+      let(:ongoing_comp) { create(:competition, :announced, :ongoing, delegates: [comp_delegate]) }
+
+      it "allows access for WRT user" do
+        sign_in wrt_user
+
+        get competition_newcomer_name_format_check_path(ongoing_comp.id)
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "does not allows access for a Delegate of this current competition" do
+        sign_in comp_delegate
+
+        get competition_newcomer_name_format_check_path(ongoing_comp.id)
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when competition has results submitted" do
+      let(:results_submitted_comp) { create(:competition, :announced, :with_valid_submitted_results) }
+
+      it "returns bad_request for WRT user" do
+        sign_in wrt_user
+
+        get competition_newcomer_name_format_check_path(results_submitted_comp.id)
+
+        expect(response).to have_http_status(:bad_request)
+        expect(response.parsed_body["error"]).to eq("The newcomer check dashboard can only be used before the results are submitted.")
+      end
+    end
+  end
 end

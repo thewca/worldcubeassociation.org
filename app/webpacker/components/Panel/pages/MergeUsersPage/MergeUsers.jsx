@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
-  Button, Header, Message, Select,
+  Button, Header, Select,
 } from 'semantic-ui-react';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
@@ -41,7 +41,6 @@ export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
     isPending: isMergePending,
     isError: isMergeError,
     error: mergeError,
-    isSuccess,
   } = useMutation({
     mutationFn: ({
       fromUserId: mutationFromUserId,
@@ -54,7 +53,6 @@ export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
   if (isErrorFirstUser) return <Errored error={errorFirstUser} />;
   if (isErrorSecondUser) return <Errored error={errorSecondUser} />;
   if (isMergeError) return <Errored error={mergeError} />;
-  if (isSuccess) return <Message success>Merged Successfully.</Message>;
 
   const selectOptions = [firstUser, secondUser].map((user) => ({
     key: user.id,
@@ -68,8 +66,8 @@ export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
       <SpecialAccountDetails user={firstUser} />
       <SpecialAccountDetails user={secondUser} />
       <div>
-        Select the email ID that want to be maintained
-        (the account with the other email ID will be anonymized)
+        Select the account to keep
+        (all data from the other account will be transferred to this one)
       </div>
       <Select
         options={selectOptions}

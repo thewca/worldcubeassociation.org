@@ -949,6 +949,8 @@ ko:
       contact_wrt:
         #original_hash: 603a218
         wca_id: WCA ID
+    #original_hash: 687d968
+    competition_link_html: '대회 페이지를 방문하려면 <a href=''%{url}''>여기</a>를 클릭하세요'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -2620,14 +2622,20 @@ ko:
       result_sentence: '%{result}의 %{a_win_by_word}으로'
       #original_hash: 756603f
       no_winner: '주 종목은 %{event_name}이었습니다. 종목에서 완성된 결과를 달성한 선수가 없었기 때문에 우승자가 선언되지 않았습니다.'
+      #original_hash: 5262865
+      h2h_winner: '%{winner}이(가) %{event_name} 종목의 일대일 결승전에서 우승했습니다.'
       #original_hash: 6c3b236
       winner: '%{winner}이(가) %{event_name} 종목에서 %{result_sentence} 우승하였습니다.'
       #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up}이(가) 2위(%{first_runner_up_result})를 차지'
+      #original_hash: 2926d10
+      h2h_first_runner_up: '%{first_runner_up}이(가) 2위를 차지했으며'
       #original_hash: cffa50a
       and: 하였으며
       #original_hash: 67d285c
       second_runner_up: '%{second_runner_up}이(가) 3위(%{second_runner_up_result})를 차지했습니다.'
+      #original_hash: 157b649
+      h2h_second_runner_up: '%{second_runner_up}이(가) 3위를 차지했습니다.'
       records:
         #original_hash: 0658e11
         wr: 세계 신기록
@@ -3901,6 +3909,8 @@ ko:
         #original_hash: c4622c3
         scrambles: 스크램블
     results_table:
+      #original_hash: bdbfcdc
+      h2h_results_disclaimer: '결과는 일대일 결승전으로 결정됩니다. 전체 일대일 결과 표시 기능은 아직 개발 중이므로, 순위와 최고 기록만 표시됩니다.'
       #original_hash: 3e9a6b5
       wca_profile: WCA 프로필
       #original_hash: ad8919a
@@ -4417,10 +4427,10 @@ ko:
   about:
     #original_hash: 9ac918a
     title: WCA 소개
-    #original_hash: af00571
-    mission_statement: '우리의 사명은 더 많은 국가에서 더 많은 사람들이 참여하고, 더 많은 즐거움을 공정하고 평등한 조건에서 제공하는 것입니다.'
-    #original_hash: e627278
-    mission_footer: WCA 사명 선언문
+    #original_hash: ee35764
+    mission_statement: '저희의 목적은 전 세계 스피드큐빙 커뮤니티의 성장을 도모하고, 모두를 위한 즐겁고 공정한 경쟁 환경을 조성하는 것입니다.'
+    #original_hash: 5bed828
+    mission_footer: WCA 목적 선언문
     #original_hash: cdab446
     who_we_are_title: 우리는 누구인가
     #original_hash: 303f17a
@@ -5297,12 +5307,16 @@ ko:
         %{name}(%{wca_id})에 할당된 국가 '%{country}'가 WCA 데이터베이스의 현재
         기록('%{expected_country}')과 일치하지 않습니다. 이것이 오류라면 수정하십시오. 그렇지 않으면 WRT에 이에
         대한 코멘트를 남겨주십시오.
-      #original_hash: e15e700
+      #original_hash: 6179b35
       multiple_newcomers_with_same_name_warning: >-
         동명이인인 첫 참가자가 여러 명 있습니다: %{name}. 이 선수에 대한 모든 결과가 올바른지, 모든 결과가 해당 ID로
         올바르게 구분되어 있는지 확인하십시오.
       #original_hash: 7732038
       wrong_parenthesis_type_error: '''%{name}''에 사용된 괄호 문자는 사용할 수 없는 문자입니다. 적절한 간격을 두고 소괄호 ''('' 또는 '')''로 바꿔주십시오.'
+      #original_hash: fec0347
+      special_characters_in_name_warning: >-
+        '%{name}'이라는 이름에 유효하지 않은 특수 문자(숫자, 따옴표 또는 기타 기호)가 포함되어 있습니다. 이름에는 문자,
+        공백, 하이픈, 아포스트로피, 마침표 및 일반 괄호만 포함되어야 합니다.
       #original_hash: 4b90583
       successive_uppercase_name_warning: '''%{name}''의 이름에 연속된 대문자가 있습니다. 이것이 실제로 올바른 철자인지 확인하거나 이름을 수정하십시오.'
       #original_hash: 654b60d
@@ -5461,3 +5475,8 @@ ko:
       edit_person: 인물 수정
       #original_hash: 5fb2137
       competition_result: 대회 결과
+    stakeholder_role:
+      #original_hash: e095187
+      actioner: Actioner
+      #original_hash: bcdf8d3
+      requester: 요청자

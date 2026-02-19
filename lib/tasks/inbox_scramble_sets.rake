@@ -7,7 +7,7 @@ namespace :inbox_scramble_sets do
                     .where(round_number: 0)
                     .where.not(matched_round: nil)
                     .find_each do |ibs|
-      ibs.update!(round_number: ibs.matched_round.number)
+                      ibs.update!(round_number: ibs.matched_round.number)
     end
   end
 end
