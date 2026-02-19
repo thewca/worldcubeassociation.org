@@ -41,6 +41,8 @@ export type DiffProtocolResponse = {
   updated?: DiffedLiveResult[];
   deleted?: number[];
   created?: CompressedLiveResult[];
+  before_hash: string;
+  after_hash: string;
 };
 
 export default function useResultsSubscription(
