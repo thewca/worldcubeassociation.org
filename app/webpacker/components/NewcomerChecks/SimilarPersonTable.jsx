@@ -43,7 +43,7 @@ export default function SimilarPersonTable({
           const exactSameDetails = (
             originalUser.name === duplicatePerson.name
                   && originalUser.dob === duplicatePerson.dob
-                  && originalUser.country_iso2 === duplicatePerson.country_iso2
+                  && originalUser.country.iso2 === duplicatePerson.country.iso2
                   && originalUser.gender === duplicatePerson.gender
           );
           return (
