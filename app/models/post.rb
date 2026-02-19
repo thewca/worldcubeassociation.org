@@ -2,6 +2,7 @@
 
 class Post < ApplicationRecord
   include MarkdownHelper
+
   belongs_to :author, class_name: "User"
   has_many :post_tags, autosave: true, dependent: :destroy
   include Taggable
@@ -20,6 +21,11 @@ class Post < ApplicationRecord
   before_validation :clear_unstick_at, unless: :sticky?
   private def clear_unstick_at
     self.unstick_at = nil
+  end
+
+  before_validation :set_default_unstick_at, if: :sticky?
+  private def set_default_unstick_at
+    self.unstick_at ||= 2.weeks.from_now.to_date
   end
 
   BREAK_TAG_RE = /<!--\s*break\s*-->/
@@ -62,12 +68,12 @@ class Post < ApplicationRecord
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     json[:class] = self.class.to_s.downcase
-    if options[:teaser_only]
+    if options&.try(:teaser_only)
       json[:teaser] = md(body_teaser)
     else
       json[:body] = body
     end
-    json[:edit_url] = Rails.application.routes.url_helpers.edit_post_path(slug) if options[:can_manage]
+    json[:edit_url] = Rails.application.routes.url_helpers.edit_post_path(slug) if options&.try(:can_manage)
 
     json
   end

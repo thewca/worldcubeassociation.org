@@ -14,6 +14,11 @@ variable "DATABASE_WRT_USER" {
   description = "The name of the database user that WRT signs in with"
 }
 
+variable "DATABASE_WRT_SENIOR_USER" {
+  type        = string
+  description = "The name of the database user that WRT Senior Members signs in with"
+}
+
 variable "WCA_LIVE_SITE" {
   type        = string
   description = "If the Website is Staging or Prod"
@@ -51,7 +56,7 @@ variable "rails_startup_time" {
 variable "rds_iam_identifier" {
   type = string
   description = "The identifier of the RDS Instance used for IAM Auth"
-  default = "db-GEOER6N45337C3ZMAYEL2WBAOY"
+  default = "db-PRC5ADGNMAABH5YKYYJWEEJBUI"
 }
 
 variable "WCA_REGISTRATIONS_URL" {

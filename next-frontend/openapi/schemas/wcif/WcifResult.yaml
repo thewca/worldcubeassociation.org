@@ -1,0 +1,21 @@
+type: object
+properties:
+  personId:
+    type: integer
+    example: 1
+  ranking:
+    type: integer
+    example: 10
+  attempts:
+    type: array
+    items:
+      $ref: './WcifAttempt.yaml'
+  best:
+    $ref: './WcifAttemptResult.yaml'
+  average:
+    $ref: './WcifAttemptResult.yaml'
+required:
+  - personId
+  - attempts
+  - best
+  - average

@@ -1,11 +1,8 @@
-"use client";
+import React from "react";
 
-import {
-  PermissionFunctions,
-  usePermissions,
-} from "@/providers/PermissionProvider";
+import { getPermissions, PermissionFunctions } from "@/lib/wca/permissions";
 
-export default function PermissionCheck({
+export default async function PermissionCheck({
   children,
   requiredPermission,
   item,
@@ -14,10 +11,11 @@ export default function PermissionCheck({
   requiredPermission: keyof PermissionFunctions;
   item: string;
 }) {
-  const permissions = usePermissions();
+  const permissions = await getPermissions();
 
   if (permissions && permissions[requiredPermission](item)) {
     return children;
   }
+
   return <p>You are not authorized to view this page.</p>;
 }

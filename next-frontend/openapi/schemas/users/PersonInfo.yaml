@@ -1,0 +1,55 @@
+type: object
+required:
+  - person
+  - medals
+  - records
+  - personal_records
+  - championship_podiums
+  - competition_count
+  - total_solves
+properties:
+  person:
+    $ref: './Person.yaml'
+  previous_persons:
+    type: array
+    items:
+      type: object
+  ranks_single:
+    type: array
+    items:
+      $ref: '../results/Rank.yaml'
+  ranks_average:
+    type: array
+    items:
+      $ref: '../results/Rank.yaml'
+  medals:
+    $ref: '../results/Medals.yaml'
+  records:
+    $ref: '../results/Records.yaml'
+  personal_records:
+    type: object
+    additionalProperties:
+      $ref: '../results/SingleAndAverageRank.yaml'
+  championship_podiums:
+    type: object
+    properties:
+      world:
+        type: array
+        items:
+          type: object
+      continental:
+        type: array
+        items:
+          type: object
+      greater_china:
+        type: array
+        items:
+          type: object
+      national:
+        type: array
+        items:
+          type: object
+  competition_count:
+    type: integer
+  total_solves:
+    type: integer

@@ -11,18 +11,18 @@ RSpec.describe "AuxiliaryDataComputation" do
     let(:competition_2017) { create(:competition, starts: Date.parse("2017-08-08")) }
 
     it "creates tables containing best results data for each person per event per year" do
-      create(:round, competition: competition_2016, total_number_of_rounds: 2)
-      create(:round, competition: competition_2016, total_number_of_rounds: 2, number: 2)
-      create(:result, event_id: "333", best: 750, average: 800, competition: competition_2016, person: person, round_type_id: "1")
-      create(:result, event_id: "333", best: 700, average: 850, competition: competition_2016, person: person, round_type_id: "f")
+      round_333 = create(:round, competition: competition_2016, total_number_of_rounds: 2)
+      round_333_f = create(:round, competition: competition_2016, total_number_of_rounds: 2, number: 2)
+      create(:result, event_id: "333", best: 750, average: 800, competition: competition_2016, person: person, round_type_id: "1", round: round_333)
+      create(:result, event_id: "333", best: 700, average: 850, competition: competition_2016, person: person, round_type_id: "f", round: round_333_f)
       create(:result, event_id: "333", best: 800, average: 900, competition: competition_2017, person: person)
       create(:result, event_id: "222", best: 100, average: 150, competition: competition_2017, person: person)
       AuxiliaryDataComputation.compute_concise_results
       # Concise single results
-      concise_single_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, year, best FROM concise_single_results"
+      concise_single_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, reg_year, best FROM concise_single_results"
       expect(concise_single_results).to contain_exactly(["333", person.wca_id, 2016, 700], ["333", person.wca_id, 2017, 800], ["222", person.wca_id, 2017, 100])
       # Concise average results
-      concise_average_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, year, average FROM concise_average_results"
+      concise_average_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, reg_year, average FROM concise_average_results"
       expect(concise_average_results).to contain_exactly(["333", person.wca_id, 2016, 800], ["333", person.wca_id, 2017, 900], ["222", person.wca_id, 2017, 150])
     end
 
@@ -32,10 +32,10 @@ RSpec.describe "AuxiliaryDataComputation" do
       create(:result, event_id: "333", best: 750, average: 850, competition: next_competition_2016, person: person)
       AuxiliaryDataComputation.compute_concise_results
       # Concise single results
-      concise_single_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, country_id, year, best FROM concise_single_results"
+      concise_single_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, country_id, reg_year, best FROM concise_single_results"
       expect(concise_single_results).to contain_exactly(["333", person.wca_id, "China", 2016, 700], ["333", person.wca_id, "Chile", 2016, 750])
       # Concise average results
-      concise_average_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, country_id, year, average FROM concise_average_results"
+      concise_average_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, country_id, reg_year, average FROM concise_average_results"
       expect(concise_average_results).to contain_exactly(["333", person.wca_id, "China", 2016, 800], ["333", person.wca_id, "Chile", 2016, 850])
     end
   end

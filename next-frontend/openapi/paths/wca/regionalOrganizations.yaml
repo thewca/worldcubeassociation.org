@@ -1,0 +1,14 @@
+get:
+  summary: A list of currently acknowledged regional organizations
+  tags:
+    - wca
+  operationId: regionalOrganizations
+  responses:
+    "200":
+      description: Retrieved organizations
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../schemas/wca/RegionalOrganization.yaml"

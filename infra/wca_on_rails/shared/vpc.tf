@@ -17,6 +17,21 @@ resource "aws_default_subnet" "default_az2" {
     Name = "Default subnet for us-west-2b PRIVATE"
   }
 }
+
+resource "aws_subnet" "private_2c" {
+  vpc_id = aws_default_vpc.default.id
+
+  map_public_ip_on_launch = false
+  availability_zone = "us-west-2c"
+  # Our other Private Subnet is at 172.31.16.0/20
+  # This is the next free /20 block
+  cidr_block = "172.31.80.0/20"
+
+  tags = {
+    Name = "Private subnet for us-west-2c"
+  }
+}
+
 resource "aws_default_subnet" "default_az3" {
   availability_zone = "us-west-2c"
 
@@ -33,6 +48,8 @@ resource "aws_default_subnet" "default_az4" {
 }
 
 output "private_subnets" {
+  # Explicitly only have one of the private subnets here as cross AZ traffic costs 2c a GB
+  # We can revisit this if we need more than the 4000 available IPs or want the resilience trade-off
   value = [aws_default_subnet.default_az2]
 }
 

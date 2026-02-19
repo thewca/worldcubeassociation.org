@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const DeveloperExportIcon = createIcon({
@@ -13,10 +14,9 @@ const DeveloperExportIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const DeveloperExportIconPreview = () => {
-  return <DeveloperExportIcon size="lg" />;
-};
-
-export default DeveloperExportIconPreview;
+export default DeveloperExportIcon;

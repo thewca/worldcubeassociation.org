@@ -1,0 +1,15 @@
+type: object
+required:
+  - url
+  - is_default
+properties:
+  url:
+    type: string
+    format: uri
+    example: "https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg"
+  thumb_url:
+    type: string
+    format: uri
+    example: "https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg"
+  is_default:
+    type: boolean

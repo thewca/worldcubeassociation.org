@@ -180,6 +180,10 @@ export const nearbyCompetitionDistanceDanger = <%= Competition::NEARBY_DISTANCE_
 
 export const competitionMaxShortNameLength = <%= Competition::MAX_CELL_NAME_LENGTH.to_json.html_safe %>
 
+export const newcomerMonthEnabled = <%= Competition::NEWCOMER_MONTH_ENABLED.to_json.html_safe %>
+
+export const autoAcceptPreferences = <%= Competition.auto_accept_preferences.keys.index_with(&:itself).to_json.html_safe %>
+
 // ----- CHAMPIONSHIPS -----
 
 const eligibleCountryForChampionshipData = loadStaticData(<%= EligibleCountryIso2ForChampionship.all_raw.to_json.html_safe %>);
@@ -232,6 +236,9 @@ export const avatarImageTypes = <%= Rails.application.config.active_storage.web_
 export const ticketTypes = <%= Ticket::TICKET_TYPES.to_json %>;
 export const ticketStatuses = <%= Ticket::TICKET_TYPES.transform_values { |value| value.safe_constantize&.statuses }.to_json %>;
 export const ticketLogActionTypes = <%= TicketLog.action_types.to_json %>;
+export const ticketStakeholderRoles = <%= TicketStakeholder.stakeholder_roles.to_json %>;
+export const ticketStakeholderConnections = <%= TicketStakeholder.connections.to_json %>;
+export const ticketsCompetitionResultStatuses = <%= TicketsCompetitionResult.statuses.to_json %>
 
 // ----- VALIDATORS -----
 export const ALL_VALIDATORS = <%= ResultsValidators::Utils::ALL_VALIDATORS.map(&:class_name) %>;
@@ -239,3 +246,6 @@ export const VALIDATORS_WITH_FIX = <%= ResultsValidators::Utils::VALIDATORS_WITH
 
 // ----- CRONJOBS -----
 export const cronjobs = <%= JobUtils::WCA_CRONJOBS.map(&:to_s).to_h { |item| [item, item] }.to_json.html_safe %>;
+
+// ----- RESULTS -----
+export const duplicateCheckerJobRunStatuses = <%= DuplicateCheckerJobRun.run_statuses.to_json %>

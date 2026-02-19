@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const ExternalLinkIcon = createIcon({
@@ -13,10 +14,9 @@ const ExternalLinkIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const ExternalLinkIconPreview = () => {
-  return <ExternalLinkIcon size="lg" />;
-};
-
-export default ExternalLinkIconPreview;
+export default ExternalLinkIcon;

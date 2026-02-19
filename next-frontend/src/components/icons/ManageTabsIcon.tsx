@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const ManageTabsIcon = createIcon({
@@ -13,10 +14,9 @@ const ManageTabsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const ManageTabsIconPreview = () => {
-  return <ManageTabsIcon size="lg" />;
-};
-
-export default ManageTabsIconPreview;
+export default ManageTabsIcon;

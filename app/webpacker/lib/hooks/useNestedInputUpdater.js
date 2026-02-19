@@ -24,6 +24,7 @@ const useNestedInputUpdater = (updater, path, dataKey = 'value') => useCallback(
     _.set(newState, path, value);
     return newState;
   });
+  return value;
 }, [updater, path, dataKey]);
 
 export default useNestedInputUpdater;

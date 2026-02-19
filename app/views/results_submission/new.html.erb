@@ -1,41 +1,14 @@
 <% provide(:title, "Results submission") %>
-<% add_to_packs("markdown_editor") %>
 
 <%= render layout: 'nav' do %>
   <h1><%= yield(:title) %></h1>
 
-  <% if @competition.results_submitted? %>
-    <p>The results have already been submitted. If you have any more questions or comments please reply to the email sent with the first results submission.</p>
-  <% else %>
-    <p>
-      The result submission process has two steps:
-      <ul>
-        <li>Uploading a valid JSON to the website or use the results submitted via WCA Live</li>
-        <li>Then the website will run a number of checks. If everything is correct you'll be able to submit these results to the WRT.</li>
-      </ul>
-    </p>
-    <%= render "submit_json_panel", upload_json: @upload_json, already_has_submitted_result: @results_validator.any_results? %>
-    <% unless Rails.env.production? && EnvConfig.WCA_LIVE_SITE? %>
-      <%= button_to competition_import_from_live_path,
-                    title: "Submit WCA Live Results",
-                    class: "btn btn-primary",
-                    method: :post do
-      %>
-        Submit WCA Live Results
-      <% end %>
-    <% end %>
-
-    <%= render "check_results_panel",
-      results_validator: @results_validator,
-      force_collapse: @results_submission
-    %>
-    <% if @current_user.can_submit_competition_results?(@competition) %>
-      <%= render "results_submission_panel",
-        competition: @competition,
-        has_errors: @results_validator.any_errors?,
-        results_submission: @results_submission
-      %>
-    <% end %>
-  <% end %>
-
+  <%= react_component("CompetitionResultSubmission", {
+    competitionId: @competition.id,
+    resultsSubmitted: @competition.results_submitted?,
+    hasTemporaryResults: @competition.inbox_results.present?,
+    uploadedScrambleFilesCount: @competition.scramble_file_uploads.count,
+    showWcaLiveBeta: @show_wca_live_beta,
+    canSubmitResults: @current_user.can_submit_competition_results?(@competition),
+  }) %>
 <% end %>

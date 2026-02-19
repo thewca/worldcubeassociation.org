@@ -24,10 +24,10 @@ RSpec.describe "WCA Live API" do
         round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition)
 
         5.times do |i|
-          create(:live_result, registration: registrations[i], round: round, ranking: i + 1, average: (i + 1) * 100)
+          create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
         end
 
-        expect(round.total_accepted_registrations).to eq 5
+        expect(round.total_competitors).to eq 5
         expect(round.competitors_live_results_entered).to eq 5
 
         expect(round.live_results.pluck(:advancing)).to eq([true, true, true, false, false])
@@ -39,10 +39,56 @@ RSpec.describe "WCA Live API" do
         round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
 
         5.times do |i|
-          create(:live_result, registration: registrations[i], round: round, ranking: i + 1, average: (i + 1) * 100)
+          create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
         end
 
-        expect(round.total_accepted_registrations).to eq 5
+        expect(round.total_competitors).to eq 5
+        expect(round.competitors_live_results_entered).to eq 5
+
+        # 40% of 5 is exactly 2.
+        expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
+      end
+
+      it 'considers ties' do
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
+
+        5.times do |i|
+          create(:live_result, registration: registrations[i], round: round, best: (i + 1) * 100, average: 300)
+        end
+
+        expect(round.total_competitors).to eq 5
+        expect(round.competitors_live_results_entered).to eq 5
+
+        # 40% of 5 is exactly 2.
+        expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
+      end
+
+      it 'considers dnfs' do
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
+
+        4.times do |i|
+          create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
+        end
+
+        create(:live_result, registration: registrations[4], round: round, average: -1)
+
+        expect(round.total_competitors).to eq 5
+        expect(round.competitors_live_results_entered).to eq 5
+
+        # 40% of 5 is exactly 2.
+        expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
+      end
+
+      it 'considers dns' do
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
+
+        4.times do |i|
+          create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
+        end
+
+        create(:live_result, registration: registrations[4], round: round, average: -2)
+
+        expect(round.total_competitors).to eq 5
         expect(round.competitors_live_results_entered).to eq 5
 
         # 40% of 5 is exactly 2.
@@ -55,14 +101,77 @@ RSpec.describe "WCA Live API" do
         round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
 
         5.times do |i|
-          create(:live_result, registration: registrations[i], round: round, ranking: i + 1, average: (i + 1) * 100)
+          create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
         end
 
-        expect(round.total_accepted_registrations).to eq 5
+        expect(round.total_competitors).to eq 5
         expect(round.competitors_live_results_entered).to eq 5
 
         # Only strictly _better_ than 3 seconds will proceed, so that's two entries.
         expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
+      end
+    end
+
+    context "with locked results" do
+      it "doesn't change advancing of locked results" do
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+
+        5.times do |i|
+          create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
+        end
+
+        expect(round.total_competitors).to eq 5
+        expect(round.competitors_live_results_entered).to eq 5
+
+        round.lock_results(User.first)
+        # Update best/average after locking
+        round.live_results.last.update(average: 50)
+
+        # Advancing is not updated, but ranking is
+        expect(round.live_results.pluck(:global_pos, :advancing)).to eq([[1, false], [2, true], [3, true], [4, false], [5, false]])
+      end
+    end
+
+    context "with quit results" do
+      it "quit from first round excludes from competitors" do
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+        registration_1 = registrations.first
+
+        # Open Round
+        round.open_and_lock_previous(User.first)
+
+        # Quit Competitor
+        round.quit_from_round!(registration_1.id, User.first)
+
+        # Quit users is not part of the rounds competitors
+        expect(round.live_competitors.count).to eq 4
+        expect(round.live_competitors.pluck(:registration_id)).not_to include registrations.first.id
+      end
+
+      it "quit from next round marks as no advancing in previous round" do
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+        final = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
+
+        5.times do |i|
+          create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
+        end
+
+        expect(round.total_competitors).to eq 5
+        expect(round.competitors_live_results_entered).to eq 5
+
+        # Open next round and quit first result from it
+        final.open_and_lock_previous(User.first)
+        final.quit_from_round!(registrations.first.id, User.first)
+
+        # Quit user is marked as not advancing
+        expect(round.live_results.reload.pluck(:global_pos, :advancing)).to eq([[1, false], [2, true], [3, false], [4, false], [5, false]])
+
+        # Quit users is not part of the final round competitors
+        expect(final.live_competitors.count).to eq 1
+        expect(final.live_competitors.first.id).to eq registrations.second.id
+
+        # But still part of the first round competitors
+        expect(round.live_competitors.count).to eq 5
       end
     end
   end

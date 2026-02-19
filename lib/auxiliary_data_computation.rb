@@ -14,8 +14,8 @@ module AuxiliaryDataComputation
       %w[average concise_average_results],
     ].each do |field, table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
-        ActiveRecord::Base.connection.execute <<-SQL.squish
-          INSERT INTO #{temp_table_name} (id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, year, month, day)
+        ActiveRecord::Base.connection.execute <<~SQL.squish
+          INSERT INTO #{temp_table_name} (id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, reg_year)
           SELECT
             results.id,
             #{field},
@@ -24,9 +24,7 @@ module AuxiliaryDataComputation
             event_id,
             countries.id country_id,
             continent_id,
-            YEAR(start_date) year,
-            MONTH(start_date) month,
-            DAY(start_date) day
+            YEAR(start_date) reg_year
           FROM (
               SELECT MIN(#{field} * 1000000000 + results.id) valueAndId
               FROM results
@@ -50,7 +48,7 @@ module AuxiliaryDataComputation
       %w[average ranks_average concise_average_results],
     ].each do |field, table_name, concise_table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
-        ActiveRecord::Base.connection.execute <<-SQL.squish
+        ActiveRecord::Base.connection.execute <<~SQL.squish
           INSERT INTO #{temp_table_name} (person_id, event_id, best, world_rank, continent_rank, country_rank)
           WITH personal_bests AS (
             SELECT

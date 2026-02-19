@@ -24,6 +24,7 @@ module ResultsValidators
     LETTER_AFTER_PERIOD_WARNING = :letter_after_period_warning
     SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = :single_letter_first_or_last_name_warning
     SINGLE_NAME_WARNING = :single_name_warning
+    SPECIAL_CHARACTERS_IN_NAME_WARNING = :special_characters_in_name_warning
 
     def self.description
       "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
@@ -73,6 +74,12 @@ module ResultsValidators
 
       # Check for wrong parenthesis type.
       validation_issues << ValidationError.new(WRONG_PARENTHESIS_TYPE_ERROR, :persons, competition_id, name: name) if /[（）]/.match?(name)
+
+      # Check for special characters in name.
+      # Regex [^[:alpha:]\s\-'.()] uses negated character class - matches anything NOT allowed
+      # : [:alpha:] (Unicode letters), \s (whitespace), \- (hyphen), ' (apostrophe), . (period), () (parentheses)
+      # Triggers warning for: digits, @, #, and other special symbols
+      validation_issues << ValidationWarning.new(SPECIAL_CHARACTERS_IN_NAME_WARNING, :persons, competition_id, name: name) if /[^[:alpha:]\s\-'.()]/.match?(name)
 
       # Check for lowercase name.
       validation_issues << ValidationWarning.new(LOWERCASE_NAME_WARNING, :persons, competition_id, name: name) if split_name.first.downcase == split_name.first || split_name.last.downcase == split_name.last
@@ -148,7 +155,7 @@ module ResultsValidators
             end
           end
           # Look for if 2 new competitors that share the exact same name
-          duplicate_newcomer_names << p.name if without_wca_id.count { |p2| p2.name == p.name } > 1 && duplicate_newcomer_names.exclude?(p.name)
+          duplicate_newcomer_names << p.name if without_wca_id.many? { |p2| p2.name == p.name } && duplicate_newcomer_names.exclude?(p.name)
         end
         duplicate_newcomer_names.each do |name|
           @warnings << ValidationWarning.new(MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,

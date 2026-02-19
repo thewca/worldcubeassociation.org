@@ -33,7 +33,7 @@ RSpec.describe Api::V0::UserGroupsController do
           GroupsMetadataDelegateRegions.find_by!(friendly_id: 'north-america').user_group,
           GroupsMetadataDelegateRegions.find_by!(friendly_id: 'oceania').user_group,
           GroupsMetadataDelegateRegions.find_by!(friendly_id: 'south-america').user_group,
-        ].to_json)
+        ].to_json(methods: %w[lead_user]))
       end
 
       it 'returns list of active delegate regions' do
@@ -55,7 +55,7 @@ RSpec.describe Api::V0::UserGroupsController do
           GroupsMetadataDelegateRegions.find_by!(friendly_id: 'india').user_group,
           GroupsMetadataDelegateRegions.find_by!(friendly_id: 'new-zealand').user_group,
           GroupsMetadataDelegateRegions.find_by!(friendly_id: 'oceania').user_group,
-        ].to_json)
+        ].to_json(methods: %w[lead_user]))
       end
 
       it 'returns list of inactive delegate regions' do
@@ -67,7 +67,7 @@ RSpec.describe Api::V0::UserGroupsController do
         expect(response.body).to eq([
           GroupsMetadataDelegateRegions.find_by!(friendly_id: 'north-america').user_group,
           GroupsMetadataDelegateRegions.find_by!(friendly_id: 'south-america').user_group,
-        ].to_json)
+        ].to_json(methods: %w[lead_user]))
       end
 
       it 'returns list of delegate regions under europe' do
@@ -79,7 +79,7 @@ RSpec.describe Api::V0::UserGroupsController do
         expect(response.body).to eq([
           GroupsMetadataDelegateRegions.find_by!(friendly_id: 'europe-north').user_group,
           GroupsMetadataDelegateRegions.find_by!(friendly_id: 'europe-south').user_group,
-        ].to_json)
+        ].to_json(methods: %w[lead_user]))
       end
     end
   end

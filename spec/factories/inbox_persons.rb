@@ -8,7 +8,12 @@ FactoryBot.define do
     # what is present in the db.
     # Since id is a varchar, `maximum(:id)` only works up to "9"...
     # Therefore we must do the max logic in RoR's world after casting.
-    id { ((InboxPerson.pluck(:id).map(&:to_i).max || 0) + 1) }
+    transient do
+      ref_id { ((InboxPerson.pluck(:id).map(&:to_i).max || 0) + 1) }
+      competition_id { nil }
+    end
+
+    id { [ref_id, competition_id] }
     wca_id { "" }
     name { Faker::Name.name }
     country_iso2 { Country.real.sample.iso2 }

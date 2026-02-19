@@ -1,10 +1,7 @@
 <% provide(:title, t('registrations.import.title', comp: @competition.name)) %>
 
 <%= render layout: "nav" do %>
-  <%= alert :info, t('registrations.import.info'), note: true %>
-  <%= simple_form_for :registrations_import, url: competition_registrations_do_import_path(@competition) do |f| %>
-    <%= f.input :registrations_file, as: :file, input_html: { accept: 'text/csv' },
-                label: t('registrations.import.registrations_file_label'), hint: t('registrations.import.registrations_file_hint') %>
-    <%= f.submit t('registrations.import.import'), class: "btn btn-primary" %>
-  <% end %>
+  <%= react_component("ImportRegistrations", {
+    competitionId: @competition.id,
+  }) %>
 <% end %>

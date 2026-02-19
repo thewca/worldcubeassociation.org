@@ -3,6 +3,7 @@ import '@cubing/icons';
 
 import 'semantic-css/accordion';
 import 'semantic-css/button';
+import 'semantic-css/breadcrumb';
 import 'semantic-css/card';
 import 'semantic-css/checkbox';
 import 'semantic-css/container';

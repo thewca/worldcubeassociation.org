@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const PaymentIcon = createIcon({
@@ -13,10 +14,9 @@ const PaymentIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const PaymentIconPreview = () => {
-  return <PaymentIcon size="lg" />;
-};
-
-export default PaymentIconPreview;
+export default PaymentIcon;

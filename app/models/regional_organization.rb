@@ -33,6 +33,11 @@ class RegionalOrganization < ApplicationRecord
     Rails.application.routes.url_helpers.rails_representation_url(logo.variant(resize: "500x300").processed) if logo.attached?
   end
 
+  def country_iso2
+    # Have to use this weird [] notation because ROs have a column called `country` which should be `country_id`
+    Country.c_find(self[:country])&.iso2
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[name website country],
     methods: ["logo_url"],

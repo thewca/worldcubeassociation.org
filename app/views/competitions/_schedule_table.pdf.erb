@@ -1,6 +1,6 @@
 <% rounds_by_wcif_id = Hash[@competition.rounds.map { |r| [r.wcif_id, r.to_string_map(short: true)] }] %>
 <% activities = @competition.competition_venues.flat_map(&:top_level_activities).sort_by(&:start_time) %>
-<% activities.map!{ |a| a.to_event(rounds_by_wcif_id) } %>
+<% activities.map!{ it.to_event } %>
 <% activities_by_day = activities.group_by { |a| a[:start].strftime("%Y-%m-%d") } %>
 <% output_venue_name = @competition.competition_venues.size > 1 %>
 <% output_room_name = @competition.competition_venues.flat_map(&:venue_rooms).size > 1 %>
@@ -22,7 +22,7 @@
         </tr>
       </thead>
       <tbody>
-        <% grouped_activities.each do |title, activities| %>
+        <% grouped_activities.each do |_, activities| %>
           <% a = activities.first %>
           <% activity_code_without_attempt = "#{a[:activityDetails][:event_id]}-r#{a[:activityDetails][:round_number]}" %>
           <% round_data = rounds_by_wcif_id[activity_code_without_attempt] || {} %>

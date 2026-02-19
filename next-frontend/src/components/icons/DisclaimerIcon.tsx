@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const DisclaimerIcon = createIcon({
@@ -13,10 +14,9 @@ const DisclaimerIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const DisclaimerIconPreview = () => {
-  return <DisclaimerIcon size="lg" />;
-};
-
-export default DisclaimerIconPreview;
+export default DisclaimerIcon;

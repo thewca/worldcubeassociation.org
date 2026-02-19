@@ -1,0 +1,22 @@
+type: object
+required:
+  - id
+  - friendly_id
+  - leader
+  - senior_member
+properties:
+  id:
+    type: integer
+  friendly_id:
+    type: string
+    example: "wst"
+  leader:
+    type: boolean
+  senior_member:
+    type: boolean
+  name:
+    type: string
+  wca_id:
+    type: string
+  avatar:
+    $ref: 'UserAvatar.yaml'

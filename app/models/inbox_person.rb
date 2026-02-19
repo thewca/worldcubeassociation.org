@@ -4,6 +4,10 @@ class InboxPerson < ApplicationRecord
   # for some reason, the ActiveRecord plural for "Person" is "people"…
   self.table_name = 'inbox_persons'
 
+  # For historic reasons, we insert the registrant ID as the SQL table `id` column.
+  #   These IDs are only unique per competition however, so we use a composite foreign key.
+  self.primary_key = %i[id competition_id]
+
   belongs_to :person, -> { current }, foreign_key: "wca_id", primary_key: "wca_id", optional: true
   belongs_to :country, foreign_key: "country_iso2", primary_key: "iso2"
 
@@ -15,26 +19,10 @@ class InboxPerson < ApplicationRecord
   alias_attribute :country_id, :country_iso2
 
   validates :name, presence: true
-  validates :dob, presence: true
+  validates :dob, presence: true, comparison: { less_than: Date.today, message: "must be in the past" }
   validates :country_iso2, presence: true
-
-  validate :dob_must_be_in_the_past
-  private def dob_must_be_in_the_past
-    errors.add(:dob, "must be in the past") if dob && dob >= Date.today
-  end
 
   def country
     Country.c_find_by_iso2(self.country_iso2)
-  end
-
-  # NOTE: silly method overriding: we don't have an id on that table.
-  # Hopefully this necessary dirty hack will go away when we streamline posting
-  # results through WCIF.
-  def delete
-    InboxPerson.where(id: id, competition_id: competition_id).delete_all
-  end
-
-  def update(args)
-    InboxPerson.where(id: id, competition_id: competition_id).update_all(args)
   end
 end

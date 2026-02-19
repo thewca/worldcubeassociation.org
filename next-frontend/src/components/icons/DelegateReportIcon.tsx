@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const DelegateReportIcon = createIcon({
@@ -13,10 +14,9 @@ const DelegateReportIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const DelegateReportIconPreview = () => {
-  return <DelegateReportIcon size="lg" />;
-};
-
-export default DelegateReportIconPreview;
+export default DelegateReportIcon;

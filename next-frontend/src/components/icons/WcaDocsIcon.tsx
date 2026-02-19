@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const WcaDocsIcon = createIcon({
@@ -13,10 +14,9 @@ const WcaDocsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const WcaDocsIconPreview = () => {
-  return <WcaDocsIcon size="lg" />;
-};
-
-export default WcaDocsIconPreview;
+export default WcaDocsIcon;

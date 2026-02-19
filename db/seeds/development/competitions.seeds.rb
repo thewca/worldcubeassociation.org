@@ -67,7 +67,7 @@ after "development:users", "development:user_roles" do
         round_format = event.preferred_formats.first.format
         is_final = j == round_types.length - 1
 
-        Round.create!(
+        round = Round.create!(
           competition_event: competition_event,
           format: round_format,
           number: j + 1,
@@ -88,6 +88,7 @@ after "development:users", "development:user_roles" do
             competition_id: competition.id,
             event_id: event.id,
             round_type_id: round_type_id,
+            round_id: round.id,
             format_id: round_format.id,
             regional_single_record: k.zero? ? "WR" : nil,
             regional_average_record: k.zero? ? "WR" : nil,

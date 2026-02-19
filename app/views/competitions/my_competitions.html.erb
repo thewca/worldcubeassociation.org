@@ -1,24 +1,10 @@
 <% provide(:title, t('.title')) %>
 
-<% options = {
-  only: %w[id name website start_date end_date registration_open],
-  methods: %w[url city country_iso2 results_posted? visible? confirmed? cancelled? report_posted? short_display_name],
-  include: %w[championships],
-} %>
-
-<% options_with_reg_status = options.deep_merge({
-  methods: options[:methods] + %w[registration_status]
-}) %>
-
 <div class="container">
   <%= react_component("MyCompetitions", {
       wcaId: current_user.wca_id,
       permissions: current_user.permissions,
-      competitions: {
-        pastCompetitions: @past_competitions.as_json(options),
-        futureCompetitions: @not_past_competitions.as_json(options_with_reg_status),
-        bookmarkedCompetitions: @bookmarked_competitions.as_json(options_with_reg_status),
-        competingStatuses: @registered_for_by_competition_id,
-      },
+      competitions: @my_competitions.transform_values { it.as_json(User::MY_COMPETITIONS_SERIALIZATION_HASH) },
+      registrationStatuses: @my_registrations,
   }) %>
 </div>

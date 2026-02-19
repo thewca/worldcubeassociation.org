@@ -9,6 +9,7 @@ FactoryBot.define do
       posted_at { Time.now }
       posted_by_user { FactoryBot.create(:user) }
       upload_files { true }
+      discussion_url { "http://example.com" }
     end
 
     trait :with_images do

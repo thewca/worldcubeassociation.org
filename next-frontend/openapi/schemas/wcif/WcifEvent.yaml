@@ -1,0 +1,19 @@
+type: object
+properties:
+  id:
+    type: string
+    example: '333'
+  rounds:
+    type: array
+    items:
+      $ref: './WcifRound.yaml'
+  competitorLimit:
+    type: integer
+  qualification:
+    $ref: './WcifQualification.yaml'
+  extensions:
+    type: array
+required:
+  - id
+  - rounds
+  - extensions

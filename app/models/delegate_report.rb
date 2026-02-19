@@ -23,28 +23,47 @@ class DelegateReport < ApplicationRecord
     attachable.variant :preview, resize_to_limit: [100, 100]
   end
 
-  attr_accessor :current_user
+  strip_attributes only: %i[schedule_url remarks]
 
-  before_create :set_discussion_url
-  def set_discussion_url
-    self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/#{URI.encode_www_form_component(competition.name)}"
-  end
+  attr_accessor :current_user
 
   private def render_section_template(section)
     ActionController::Base.new.render_to_string(template: "delegate_reports/#{self.version}/_#{section}_default", formats: :md)
   end
 
-  before_create :md_section_defaults!
-  def md_section_defaults!
+  after_initialize :load_md_templates, unless: :posted?
+  def load_md_templates
     # Make sure that sections which are NOT being used are explicitly set to `nil`
     #   by initializing an empty default map. Think of this as "default options".
     empty_sections = AVAILABLE_SECTIONS.index_with(nil)
 
     rendered_sections = self.md_sections
-                            .index_with { |section| render_section_template(section) }
+                            .index_with { self.report_section(it) || self.render_section_template(it) }
                             .reverse_merge(empty_sections)
 
     self.assign_attributes(**rendered_sections)
+  end
+
+  before_save :clean_untouched_sections, unless: :posted?
+  def clean_untouched_sections
+    # This is doing more sophisticated stuff than just a simple `==` comparison,
+    #   because different OSes use different line break characters
+    untouched_sections = self.md_sections.filter do |section|
+      normalized_section = self.report_section(section)&.encode(universal_newline: true)
+      normalized_template = self.render_section_template(section).encode(universal_newline: true)
+
+      normalized_section == normalized_template
+    end
+
+    # Those sections which exactly match their default template should not be stored in the DB
+    #   so we reset them to a blank `nil` value before persisting
+    section_reset_map = untouched_sections.index_with(nil)
+
+    self.assign_attributes(**section_reset_map) if section_reset_map.any?
+  end
+
+  def report_section(section_name)
+    self.attributes[section_name.to_s].presence
   end
 
   validates :schedule_url, presence: true, if: :schedule_and_discussion_urls_required?
@@ -54,19 +73,15 @@ class DelegateReport < ApplicationRecord
   validates :wrc_incidents, presence: true, if: :wrc_feedback_requested
   validates :wic_incidents, presence: true, if: :wic_feedback_requested
 
-  validate :setup_image_count, if: %i[posted? requires_setup_images?]
-  private def setup_image_count
-    errors.add(:setup_images, "Needs at least #{self.required_setup_images_count} images") if self.setup_images.count < self.required_setup_images_count
-  end
-
-  validates :setup_images, blob: { content_type: :web_image }
+  validates :setup_images, blob: { content_type: :web_image },
+                           length: { minimum: :required_setup_images_count, if: %i[posted? requires_setup_images?] }
 
   def schedule_and_discussion_urls_required?
     posted? && created_at > Date.new(2019, 7, 21)
   end
 
   def posted?
-    !!posted_at
+    self.posted_at?
   end
 
   def uses_section?(section)
@@ -81,7 +96,7 @@ class DelegateReport < ApplicationRecord
   end
 
   def md_sections
-    AVAILABLE_SECTIONS.filter { |section| self.uses_section?(section) }
+    AVAILABLE_SECTIONS.filter { self.uses_section?(it) }
   end
 
   def requires_setup_images?
@@ -104,6 +119,7 @@ class DelegateReport < ApplicationRecord
     new_posted = ActiveRecord::Type::Boolean.new.cast(new_posted)
     self.posted_at = (new_posted ? Time.now : nil)
     self.posted_by_user_id = current_user&.id
+    self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/#{URI.encode_www_form_component(competition.name)}"
   end
 
   GLOBAL_MAILING_LIST = "reports@worldcubeassociation.org"

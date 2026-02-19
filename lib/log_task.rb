@@ -2,8 +2,8 @@
 
 module LogTask
   def self.log_task(description, &)
-    Rails.logger.debug { "#{description}..." }
+    Rails.logger.info { "#{description}..." }
     time = Benchmark.realtime(&)
-    Rails.logger.debug format("done in %.2fs", time)
+    Rails.logger.info format("done in %.2fs", time)
   end
 end

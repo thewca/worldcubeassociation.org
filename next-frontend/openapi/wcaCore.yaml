@@ -1,0 +1,98 @@
+openapi: 3.1.0
+info:
+  title: WCA API Documentation
+  summary: Documentation of the WCA API, currently in progress
+  description: The WCA API allows developers to access data from the WCA using oidc
+  contact:
+    name: WCA Software Team
+    url: https://www.worldcubeassociation.org
+    email: software@worldcubeassociation.org
+  version: 0.1.0
+servers:
+  - url: http://localhost:3000/api/
+    description: The production API server
+paths:
+  /v1/competitions/{competitionId}/registrations:
+    $ref: 'paths/registrations/registrationsByCompetition.yaml'
+  /v1/competitions/{competitionId}/registration_config:
+    $ref: 'paths/registrations/registrationConfigForCompetition.yaml'
+
+  /v1/competitions/{competitionId}/live/rounds:
+    $ref: 'paths/competitions/live/LiveAdmin.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}:
+    $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/clear:
+    $ref: 'paths/competitions/live/ClearRound.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/open:
+    $ref: 'paths/competitions/live/OpenRound.yaml'
+  /v1/competitions/{competitionId}/live/podiums:
+    $ref: 'paths/competitions/live/LivePodiums.yaml'
+  /v1/competitions/{competitionId}/live/registrations/{registrationId}:
+    $ref: 'paths/competitions/live/liveResultsByPerson.yaml'
+
+  /v0/competitions/{competitionId}/:
+    $ref: 'paths/competitions/competitionById.yaml'
+  /v0/competitions/{competitionId}/events:
+    $ref: 'paths/competitions/competitionEvents.yaml'
+  /v0/competitions/{competitionId}/schedule:
+    $ref: 'paths/competitions/competitionSchedule.yaml'
+  /v0/competitions/{competitionId}/tabs:
+    $ref: 'paths/competitions/competitionTabs.yaml'
+  /v0/competitions/{competitionId}/registrations:
+    $ref: 'paths/competitions/competitionRegistrations.yaml'
+  /v0/competitions/{competitionId}/podiums:
+    $ref: 'paths/competitions/competitionPodiums.yaml'
+  /v0/competitions/{competitionId}/psych-sheet/{eventId}:
+    $ref: 'paths/results/psychSheetByCompetitionAndEvent.yaml'
+  /v0/competition_index:
+    $ref: 'paths/competitions/competitionList.yaml'
+  /v0/competitions/mine:
+    $ref: 'paths/competitions/myCompetitions.yaml'
+  /v0/competitions/{competitionId}/results:
+    $ref: 'paths/results/resultsByCompetition.yaml'
+  /v0/competitions/{competitionId}/scrambles:
+    $ref: 'paths/competitions/competitionScrambles.yaml'
+
+  /v0/results/rankings/{event_id}/{type}:
+    $ref: 'paths/results/rankingsByEventAndType.yaml'
+
+  /v0/incidents:
+    $ref: 'paths/regulations/incidentsList.yaml'
+
+  /v0/results/records:
+    $ref: 'paths/results/getRecords.yaml'
+
+  /v0/persons/{wca_id}/:
+    $ref: 'paths/users/personByWCAId.yaml'
+  /v0/persons/{wca_id}/results:
+    $ref: 'paths/users/personResults.yaml'
+  /v0/persons/{wca_id}/records:
+    $ref: 'paths/users/personRecords.yaml'
+  /v0/persons/{wca_id}/competitions:
+    $ref: 'paths/users/personCompetitions.yaml'
+
+  /v0/user_groups:
+    $ref: 'paths/users/userGroups.yaml'
+  /v0/user_roles:
+    $ref: 'paths/users/userRoles.yaml'
+  /v0/users/me/permissions:
+    $ref: 'paths/users/userPermissions.yaml'
+
+  /v0/regulations/translations:
+    $ref: 'paths/regulations/regulationTranslations.yaml'
+
+  /v0/export/public:
+    $ref: 'paths/results/publicExports.yaml'
+
+  /v0/known-timezones:
+    $ref: 'paths/wca/knownTimezones.yaml'
+
+  /v0/regional-organizations:
+    $ref: 'paths/wca/regionalOrganizations.yaml'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

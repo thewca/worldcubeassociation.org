@@ -1,5 +1,3 @@
-import React from "react";
-
 import AboutTheRegulationsIcon from "@/components/icons/AboutTheRegulationsIcon";
 import AboutTheWcaIcon from "@/components/icons/AboutTheWcaIcon";
 import AdminResultsIcon from "@/components/icons/AdminResultsIcon";
@@ -103,111 +101,7 @@ import _PyramIcon from "@/components/icons/events/_PyramIcon";
 import _SkewbIcon from "@/components/icons/events/_SkewbIcon";
 import _Sq1Icon from "@/components/icons/events/_Sq1Icon";
 
-export type IconName =
-  | "About the Regulations"
-  | "About the WCA"
-  | "Admin Results"
-  | "All Competitions"
-  | "Bookmark"
-  | "Clone"
-  | "Competition Not Started"
-  | "Registration Closed"
-  | "Registration Closed (Red)"
-  | "Registration Full but Open"
-  | "Registration Full but Open (Orange)"
-  | "Registration Not Full, Open"
-  | "Registration Not Full, Open (Green)"
-  | "Registration Not Open Yet"
-  | "Registration Not Open Yet (Grey)"
-  | "Registration Open Date"
-  | "Registration Close Date"
-  | "Competitors"
-  | "Contact"
-  | "Delegate Report"
-  | "Details"
-  | "Developer Export"
-  | "Disciplinary Log"
-  | "Disclaimer"
-  | "Download"
-  | "Edit"
-  | "Educational Resources"
-  | "Error"
-  | "External Link"
-  | "Facebook"
-  | "Filters"
-  | "GitHub"
-  | "Guidelines"
-  | "Help and FAQs"
-  | "Incidents Log"
-  | "Information"
-  | "Instagram"
-  | "Language"
-  | "List"
-  | "Location"
-  | "Manage Tabs"
-  | "Map"
-  | "Media Submission"
-  | "Menu"
-  | "Multimedia"
-  | "My Competitions"
-  | "My Results"
-  | "National Championship"
-  | "New Competition"
-  | "On-the-Spot Registration"
-  | "Payment"
-  | "Privacy"
-  | "Rankings"
-  | "Records"
-  | "Regional Organisations"
-  | "Register"
-  | "Registration"
-  | "Regulations and Guidelines"
-  | "Regulations History"
-  | "Regulations"
-  | "Results Export"
-  | "Scrambles"
-  | "Search"
-  | "Spectators"
-  | "Speedcubing History"
-  | "Spots Left"
-  | "Statistics"
-  | "Teams, Committees and Councils"
-  | "Tools"
-  | "Translators"
-  | "Twitch"
-  | "User"
-  | "Users / Persons"
-  | "Venue"
-  | "WCA Delegates"
-  | "WCA Documents"
-  | "WCA Live"
-  | "WCA Officers and Board"
-  | "Weibo"
-  | "X (formerly Twitter)"
-  | "YouTube"
-  | "222Icon"
-  | "333Icon"
-  | "333bfIcon"
-  | "333fmIcon"
-  | "333ftIcon"
-  | "333mbfIcon"
-  | "333ohIcon"
-  | "333mboIcon"
-  | "444Icon"
-  | "444bfIcon"
-  | "555Icon"
-  | "555bfIcon"
-  | "666Icon"
-  | "777Icon"
-  | "ClockIcon"
-  | "MagicIcon"
-  | "MinxIcon"
-  | "MmagicIcon"
-  | "PyramIcon"
-  | "SkewbIcon"
-  | "Sq1Icon";
-
-export const iconMap: Record<IconName, React.ComponentType> = {
+export const iconMap = {
   "About the Regulations": AboutTheRegulationsIcon,
   "About the WCA": AboutTheWcaIcon,
   "Admin Results": AdminResultsIcon,
@@ -310,4 +204,6 @@ export const iconMap: Record<IconName, React.ComponentType> = {
   PyramIcon: _PyramIcon,
   SkewbIcon: _SkewbIcon,
   Sq1Icon: _Sq1Icon,
-};
+} as const;
+
+export type IconName = keyof typeof iconMap;

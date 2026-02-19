@@ -1,0 +1,22 @@
+get:
+  summary: Get competition events in WCIF v0 format
+  tags:
+    - competitions
+  operationId: competitionEvents
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../schemas/wcif/WcifEvent.yaml'
+    '404':
+      $ref: '../../errorResponses/CompetitionNotFound.yaml'

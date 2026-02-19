@@ -8,7 +8,7 @@ class WcaCronjob < ApplicationJob
   # Middleware: Check queue status of cronjob. Record timestamp if it's being enqueued,
   #   or reject it if it has already been enqueued previously
   before_enqueue do |job|
-    statistics = job.class.cronjob_statistics
+    statistics = job.instance_cronjob_statistics
 
     if statistics.scheduled? || statistics.in_progress? || statistics.recently_errored?
       statistics.increment! :recently_rejected
@@ -31,7 +31,7 @@ class WcaCronjob < ApplicationJob
   # Middleware: Record when and how long a cronjob was executed
   #   (or, if applicable, record that it was not executed)
   around_perform do |job, block|
-    statistics = job.class.cronjob_statistics
+    statistics = job.instance_cronjob_statistics
 
     statistics.touch :run_start
 
@@ -77,9 +77,9 @@ class WcaCronjob < ApplicationJob
         runtime = (statistics.run_end.to_f - statistics.run_start.to_f).in_milliseconds
 
         current_average = statistics.average_runtime || 0
-        new_average = (current_average + runtime.round) / statistics.times_completed
+        new_average = current_average + ((runtime - current_average) / statistics.times_completed)
 
-        statistics.average_runtime = new_average
+        statistics.average_runtime = new_average.round
         statistics.recently_errored = 0
       else
         statistics.increment :recently_errored
@@ -89,11 +89,21 @@ class WcaCronjob < ApplicationJob
     end
   end
 
+  def instance_cronjob_statistics
+    # Default implementation that can be overridden by child jobs as required.
+    #   See SanityCheckCategoryJob for an example.
+    self.class.cronjob_statistics
+  end
+
   class << self
     delegate :in_progress?, :scheduled?, :enqueued_at, :finished?, :last_run_successful?, :last_error_message, :recently_errored?, to: :cronjob_statistics
 
-    def cronjob_statistics
-      CronjobStatistic.find_or_create_by!(name: self.name)
+    def cronjob_statistics(custom_name = nil)
+      # Cannot put `self.name` directly as default value in the method declaration,
+      #   because Ruby does not have this JS-esque behavior of using the default value when passing `nil` :(
+      job_name = custom_name || self.name
+
+      CronjobStatistic.find_or_create_by!(name: job_name)
     end
 
     def start_date

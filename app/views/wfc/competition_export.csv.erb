@@ -6,15 +6,13 @@
   "Currency Code", "Base Registration Fee", "Currency Subunit",
   "Championship Type", "Exempt from WCA Dues", "Organizers", "Calculated Dues",
   "Dues Payer Name", "Dues Payer Email", "Is Combined Invoice", "Dues Band",
+  "Error (if any)",
 ] %>
 <%= CSV.generate_line(headers, col_sep: "\t").html_safe -%>
 <% @competitions.each do |c| %>
-  <%= CSV.generate_line([
-    c.id, c.name, c.country.iso2, c.continent.id,
-    c.start_date, c.end_date, c.announced_at, c.results_posted_at,
-    competition_url(c.id), c.num_competitors, c.delegates.reject(&:trainee_delegate?).map(&:name).sort.join(","),
-    c.currency_code, c.base_entry_fee_lowest_denomination, Money::Currency.new(c.currency_code).subunit_to_unit,
-    c.championships.map(&:championship_type).sort.join(","), c.exempt_from_wca_dues?, c.organizers.map(&:name).sort.join(","),
-    c.dues_per_competitor_in_usd * c.num_competitors, c.dues_payer_name, c.dues_payer_email, c.dues_payer_is_combined_invoice?, c.country.try(:band).try(:number) || 0,
-  ], col_sep: "\t").html_safe -%>
+  <%#
+    Force English locale to ensure numbers are formatted with dots (e.g., "123.45")
+    instead of commas, preventing errors in formula calculations.
+  %>
+  <%= I18n.with_locale(:en) { CSV.generate_line(c.export_for_dues_generation, col_sep: "\t") }.html_safe -%>
 <% end %>

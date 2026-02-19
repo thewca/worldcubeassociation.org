@@ -1,37 +1,37 @@
 import React, { useState } from 'react';
 import { Button } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
-import lockupPrimary from './LogoImages/WCA Lockup Positive Primary.svg';
-import lockupNegative from './LogoImages/WCA Lockup Negative Primary.svg';
-import lockupMonoBlack from './LogoImages/WCA Lockup Mono Black.svg';
-import lockupMonoWhite from './LogoImages/WCA Lockup Mono White.svg';
-import logoOnlyPrimary from './LogoImages/WCA Logo Only Positive Primary.svg';
-import logoOnlyNegative from './LogoImages/WCA Logo Only Negative Primary.svg';
-import logoOnlyMonoBlack from './LogoImages/WCA Logo Only Mono Black.svg';
-import logoOnlyMonoWhite from './LogoImages/WCA Logo Only Mono White.svg';
+import lockupPrimary from './LogoImages/1 Positive Primary/WCA Logo Lockup.svg';
+import lockupNegative from './LogoImages/2 Negative Primary/WCA Logo Lockup.svg';
+import lockupMonoBlack from './LogoImages/3 Mono Black/WCA Logo Lockup.svg';
+import lockupMonoWhite from './LogoImages/4 Mono White/WCA Logo Lockup.svg';
+import logoOnlyPrimary from './LogoImages/1 Positive Primary/WCA Logo.svg';
+import logoOnlyNegative from './LogoImages/2 Negative Primary/WCA Logo.svg';
+import logoOnlyMonoBlack from './LogoImages/3 Mono Black/WCA Logo.svg';
+import logoOnlyMonoWhite from './LogoImages/4 Mono White/WCA Logo.svg';
 
-const lockupStyle = {
+const logoBox = {
   width: '100%',
   maxWidth: '400px',
-  backgroundColor: '#f8f8f8',
-};
-
-const lockupStyleDark = {
-  ...lockupStyle,
-  backgroundColor: '#1c2a33',
-};
-
-const logoOnlyStyle = {
-  boxSizing: 'border-box',
-  width: '100%',
-  maxWidth: '150px',
+  backgroundColor: '#ffffff',
   padding: '25px',
-  backgroundColor: '#f8f8f8',
+  borderRadius: '5px',
 };
 
-const logoOnlyStyleDark = {
-  ...logoOnlyStyle,
+const logoBoxDark = {
+  ...logoBox,
   backgroundColor: '#1c2a33',
+};
+
+const logoOnlyBox = {
+  ...logoBox,
+  maxWidth: '150px',
+};
+
+const logoOnlyBoxDark = {
+  ...logoBox,
+  backgroundColor: '#1c2a33',
+  maxWidth: '150px',
 };
 
 const sideBySideStyle = {
@@ -84,8 +84,8 @@ function Logo({ title, logoFileUrl }) {
         />
       </p>
       <div style={sideBySideStyle}>
-        <img src={lockupPrimary} alt="Primary logo" style={lockupStyle} />
-        <img src={lockupNegative} alt="Primary logo" style={lockupStyleDark} />
+        <img src={lockupPrimary} alt="Primary logo" style={logoBox} />
+        <img src={lockupNegative} alt="Primary logo" style={logoBoxDark} />
       </div>
       <h4>
         <I18nHTMLTranslate
@@ -98,8 +98,8 @@ function Logo({ title, logoFileUrl }) {
         />
       </p>
       <div style={sideBySideStyle}>
-        <img src={lockupMonoBlack} alt="Primary logo" style={lockupStyle} />
-        <img src={lockupMonoWhite} alt="Primary logo" style={lockupStyleDark} />
+        <img src={lockupMonoBlack} alt="Primary logo" style={logoBox} />
+        <img src={lockupMonoWhite} alt="Primary logo" style={logoBoxDark} />
       </div>
       <h3>
         <I18nHTMLTranslate
@@ -112,17 +112,17 @@ function Logo({ title, logoFileUrl }) {
         />
       </p>
       <div style={sideBySideStyle}>
-        <img src={logoOnlyPrimary} alt="Primary logo" style={logoOnlyStyle} />
+        <img src={logoOnlyPrimary} alt="Primary logo" style={logoOnlyBox} />
         <img
           src={logoOnlyNegative}
           alt="Primary logo"
-          style={logoOnlyStyleDark}
+          style={logoOnlyBoxDark}
         />
-        <img src={logoOnlyMonoBlack} alt="Primary logo" style={logoOnlyStyle} />
+        <img src={logoOnlyMonoBlack} alt="Primary logo" style={logoOnlyBox} />
         <img
           src={logoOnlyMonoWhite}
           alt="Primary logo"
-          style={logoOnlyStyleDark}
+          style={logoOnlyBoxDark}
         />
       </div>
       <h2>

@@ -1,0 +1,35 @@
+get:
+  summary: Get user groups
+  tags:
+    - users
+  operationId: userGroups
+  parameters:
+    - name: isActive
+      in: query
+      schema:
+        type: boolean
+      description: Filter by whether the group is active
+    - name: isHidden
+      in: query
+      schema:
+        type: boolean
+      description: Filter by whether the group is hidden
+    - name: groupType
+      in: query
+      schema:
+        type: string
+      description: Filter by group type (e.g., "officers")
+    - name: sort
+      in: query
+      schema:
+        type: string
+      description: Sort by a specific field (e.g., "start_date", "-created_at")
+  responses:
+    '200':
+      description: A list of user groups
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../schemas/users/UserGroup.yaml'

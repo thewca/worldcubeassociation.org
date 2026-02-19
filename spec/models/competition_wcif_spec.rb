@@ -8,20 +8,23 @@ RSpec.describe "Competition WCIF" do
       :competition,
       :visible,
       :with_competitor_limit,
+      :with_valid_schedule,
       id: "TestComp2014",
       name: "Test Comp 2014",
       cell_name: "Test 2014",
       start_date: "2014-02-03",
       end_date: "2014-02-05",
       external_website: "http://example.com",
-      event_ids: %w[333 444 333fm 333mbf],
-      with_schedule: true,
+      event_ids: [],
+      competition_events: [event_333, event_222, event_444, event_333fm, event_333mbf],
+      exclude_from_schedule: %w[222],
+      schedule_only_one_venue: true,
       competitor_limit: 50,
       registration_open: "2013-12-01",
       registration_close: "2013-12-31",
     )
   end
-  let(:partner_competition) do
+  let!(:partner_competition) do
     create(
       :competition,
       :visible,
@@ -43,22 +46,23 @@ RSpec.describe "Competition WCIF" do
   let(:organizer) { competition.organizers.first }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
   let(:top_16_advance) { AdvancementConditions::RankingCondition.new(16) }
-  let!(:round333_1) { create(:round, competition: competition, event_id: "333", number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
-  let!(:round333_2) { create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2) }
-  let!(:round444_1) { create(:round, competition: competition, event_id: "444", number: 1) }
-  let!(:round333fm_1) { create(:round, competition: competition, event_id: "333fm", number: 1, format_id: "m") }
-  let!(:round333mbf_1) { create(:round, competition: competition, event_id: "333mbf", number: 1, format_id: "3") }
-  let!(:round333mbf_1_extension) { round333mbf_1.wcif_extensions.create!(extension_id: "com.third.party", spec_url: "https://example.com", data: { "tables" => 5 }) }
-
-  before :each do
-    # Load all the rounds we just created.
-    competition.reload
-  end
+  let(:round333_1) { build(:round, number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
+  let(:round333_2) { build(:round, number: 2, total_number_of_rounds: 2) }
+  let(:event_333) { build(:competition_event, event_id: "333", rounds: [round333_1, round333_2]) }
+  let(:round444_1) { build(:round, number: 1) }
+  let(:event_444) { build(:competition_event, event_id: "444", rounds: [round444_1]) }
+  let(:round222_1) { build(:round, number: 1) }
+  let(:event_222) { build(:competition_event, event_id: "222", rounds: [round222_1]) }
+  let(:round333fm_1) { build(:round, number: 1, format_id: "m") }
+  let(:event_333fm) { build(:competition_event, event_id: "333fm", rounds: [round333fm_1]) }
+  let(:round333mbf_1_extension) { WcifExtension.new(extension_id: "com.third.party", spec_url: "https://example.com", data: { "tables" => 5 }) }
+  let(:round333mbf_1) { build(:round, number: 1, format_id: "3", wcif_extensions: [round333mbf_1_extension]) }
+  let(:event_333mbf) { build(:competition_event, event_id: "333mbf", rounds: [round333mbf_1]) }
 
   describe "#to_wcif" do
     it "renders a valid WCIF" do
       expect(competition.to_wcif).to eq(
-        "formatVersion" => "1.0",
+        "formatVersion" => "1.1",
         "id" => "TestComp2014",
         "name" => "Test Comp 2014",
         "shortName" => "Test 2014",
@@ -95,6 +99,26 @@ RSpec.describe "Competition WCIF" do
               },
               {
                 "id" => "333-r2",
+                "format" => "a",
+                "timeLimit" => {
+                  "centiseconds" => 10.minutes.in_centiseconds,
+                  "cumulativeRoundIds" => [],
+                },
+                "cutoff" => nil,
+                "advancementCondition" => nil,
+                "scrambleSetCount" => 1,
+                "results" => [],
+                "extensions" => [],
+              },
+            ],
+            "qualification" => nil,
+          },
+          {
+            "id" => "222",
+            "extensions" => [],
+            "rounds" => [
+              {
+                "id" => "222-r1",
                 "format" => "a",
                 "timeLimit" => {
                   "centiseconds" => 10.minutes.in_centiseconds,
@@ -193,7 +217,161 @@ RSpec.describe "Competition WCIF" do
                   "activities" => [
                     {
                       "id" => 1,
-                      "name" => "Some name",
+                      "name" => "Great round",
+                      "activityCode" => "333-r1",
+                      "startTime" => "2014-02-03T10:00:00Z",
+                      "endTime" => "2014-02-03T14:00:00Z",
+                      "childActivities" => [
+                        {
+                          "id" => 2,
+                          "name" => "Great round, group 1",
+                          "activityCode" => "333-r1-g1",
+                          "startTime" => "2014-02-03T10:00:00Z",
+                          "endTime" => "2014-02-03T10:15:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 3,
+                          "name" => "Great round, group 2",
+                          "activityCode" => "333-r1-g2",
+                          "startTime" => "2014-02-03T10:15:00Z",
+                          "endTime" => "2014-02-03T10:30:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 4,
+                          "name" => "Great round, group 3",
+                          "activityCode" => "333-r1-g3",
+                          "startTime" => "2014-02-03T10:30:00Z",
+                          "endTime" => "2014-02-03T10:45:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 5,
+                          "name" => "Great round, group 4",
+                          "activityCode" => "333-r1-g4",
+                          "startTime" => "2014-02-03T10:45:00Z",
+                          "endTime" => "2014-02-03T11:00:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 6,
+                          "name" => "Great round, group 5",
+                          "activityCode" => "333-r1-g5",
+                          "startTime" => "2014-02-03T11:00:00Z",
+                          "endTime" => "2014-02-03T11:15:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 7,
+                          "name" => "Great round, group 6",
+                          "activityCode" => "333-r1-g6",
+                          "startTime" => "2014-02-03T11:15:00Z",
+                          "endTime" => "2014-02-03T11:30:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 8,
+                          "name" => "Great round, group 7",
+                          "activityCode" => "333-r1-g7",
+                          "startTime" => "2014-02-03T11:30:00Z",
+                          "endTime" => "2014-02-03T11:45:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 9,
+                          "name" => "Great round, group 8",
+                          "activityCode" => "333-r1-g8",
+                          "startTime" => "2014-02-03T11:45:00Z",
+                          "endTime" => "2014-02-03T12:00:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 10,
+                          "name" => "Great round, group 9",
+                          "activityCode" => "333-r1-g9",
+                          "startTime" => "2014-02-03T12:00:00Z",
+                          "endTime" => "2014-02-03T12:15:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 11,
+                          "name" => "Great round, group 10",
+                          "activityCode" => "333-r1-g10",
+                          "startTime" => "2014-02-03T12:15:00Z",
+                          "endTime" => "2014-02-03T12:30:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 12,
+                          "name" => "Great round, group 11",
+                          "activityCode" => "333-r1-g11",
+                          "startTime" => "2014-02-03T12:30:00Z",
+                          "endTime" => "2014-02-03T12:45:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 13,
+                          "name" => "Great round, group 12",
+                          "activityCode" => "333-r1-g12",
+                          "startTime" => "2014-02-03T12:45:00Z",
+                          "endTime" => "2014-02-03T13:00:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 14,
+                          "name" => "Great round, group 13",
+                          "activityCode" => "333-r1-g13",
+                          "startTime" => "2014-02-03T13:00:00Z",
+                          "endTime" => "2014-02-03T13:15:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 15,
+                          "name" => "Great round, group 14",
+                          "activityCode" => "333-r1-g14",
+                          "startTime" => "2014-02-03T13:15:00Z",
+                          "endTime" => "2014-02-03T13:30:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 16,
+                          "name" => "Great round, group 15",
+                          "activityCode" => "333-r1-g15",
+                          "startTime" => "2014-02-03T13:30:00Z",
+                          "endTime" => "2014-02-03T13:45:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 17,
+                          "name" => "Great round, group 16",
+                          "activityCode" => "333-r1-g16",
+                          "startTime" => "2014-02-03T13:45:00Z",
+                          "endTime" => "2014-02-03T14:00:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                      ],
+                      "extensions" => [],
+                    },
+                    {
+                      "id" => 18,
+                      "name" => "Enjoy your meal!",
                       "activityCode" => "other-lunch",
                       "startTime" => "2014-02-03T12:00:00Z",
                       "endTime" => "2014-02-03T13:00:00Z",
@@ -201,42 +379,49 @@ RSpec.describe "Competition WCIF" do
                       "extensions" => [],
                     },
                     {
-                      "id" => 2,
-                      "name" => "another activity",
-                      "activityCode" => "333fm-r1",
-                      "startTime" => "2014-02-05T10:00:00Z",
-                      "endTime" => "2014-02-05T11:00:00Z",
+                      "id" => 19,
+                      "name" => "Great round",
+                      "activityCode" => "333-r2",
+                      "startTime" => "2014-02-03T14:00:00Z",
+                      "endTime" => "2014-02-03T18:00:00Z",
+                      "childActivities" => [],
                       "extensions" => [],
-                      "childActivities" => [
-                        {
-                          "id" => 3,
-                          "name" => "first group",
-                          "activityCode" => "333fm-r1-g1",
-                          "startTime" => "2014-02-05T10:00:00Z",
-                          "endTime" => "2014-02-05T10:30:00Z",
-                          "childActivities" => [],
-                          "extensions" => [],
-                        },
-                        {
-                          "id" => 4,
-                          "name" => "second group",
-                          "activityCode" => "333fm-r1-g2",
-                          "startTime" => "2014-02-05T10:30:00Z",
-                          "endTime" => "2014-02-05T11:00:00Z",
-                          "extensions" => [],
-                          "childActivities" => [
-                            {
-                              "id" => 5,
-                              "name" => "some nested thing",
-                              "activityCode" => "333fm-r1-g2-a1",
-                              "startTime" => "2014-02-05T10:30:00Z",
-                              "endTime" => "2014-02-05T11:00:00Z",
-                              "childActivities" => [],
-                              "extensions" => [],
-                            },
-                          ],
-                        },
-                      ],
+                    },
+                    {
+                      "id" => 20,
+                      "name" => "Great round",
+                      "activityCode" => "444-r1",
+                      "startTime" => "2014-02-04T10:00:00Z",
+                      "endTime" => "2014-02-04T14:00:00Z",
+                      "childActivities" => [],
+                      "extensions" => [],
+                    },
+                    {
+                      "id" => 21,
+                      "name" => "Enjoy your meal!",
+                      "activityCode" => "other-lunch",
+                      "startTime" => "2014-02-04T12:00:00Z",
+                      "endTime" => "2014-02-04T13:00:00Z",
+                      "childActivities" => [],
+                      "extensions" => [],
+                    },
+                    {
+                      "id" => 22,
+                      "name" => "Great round",
+                      "activityCode" => "333fm-r1",
+                      "startTime" => "2014-02-04T14:00:00Z",
+                      "endTime" => "2014-02-04T18:00:00Z",
+                      "extensions" => [],
+                      "childActivities" => [],
+                    },
+                    {
+                      "id" => 23,
+                      "name" => "Great round",
+                      "activityCode" => "333mbf-r1",
+                      "startTime" => "2014-02-05T10:00:00Z",
+                      "endTime" => "2014-02-05T14:00:00Z",
+                      "extensions" => [],
+                      "childActivities" => [],
                     },
                   ],
                 },
@@ -353,7 +538,7 @@ RSpec.describe "Competition WCIF" do
       competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      expect(competition.events.map(&:id)).to match_array %w[333 333fm 333mbf 444]
+      expect(competition.event_ids).to match_array %w[222 333 333fm 333mbf 444]
     end
 
     it "does remove competition event when wcif rounds are nil" do
@@ -364,7 +549,7 @@ RSpec.describe "Competition WCIF" do
 
       wcif["events"].reject! { |e| e["id"] == "444" }
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      expect(competition.events.map(&:id)).to match_array %w[333 333fm 333mbf]
+      expect(competition.event_ids).to match_array %w[222 333 333fm 333mbf]
     end
 
     it "removes competition event when wcif event is missing" do
@@ -373,7 +558,7 @@ RSpec.describe "Competition WCIF" do
       competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      expect(competition.events.map(&:id)).to match_array %w[333 333fm 333mbf]
+      expect(competition.event_ids).to match_array %w[222 333 333fm 333mbf]
     end
 
     it "creates competition event when adding round to previously nonexistent event" do
@@ -398,7 +583,7 @@ RSpec.describe "Competition WCIF" do
         "qualification" => nil,
       }
       # Add 5x5x5 after 4x4x4 to match the expected order.
-      wcif["events"].insert(2, wcif555)
+      wcif["events"].insert(3, wcif555)
 
       competition.set_wcif_events!(wcif["events"], delegate)
 
@@ -558,34 +743,34 @@ RSpec.describe "Competition WCIF" do
 
     context "activities" do
       it "Removing activities works and destroy nested activities" do
-        activity_with_child = schedule_wcif["venues"][0]["rooms"][0]["activities"].find { |a| a["id"] == 2 }
+        activity_with_child = schedule_wcif["venues"][0]["rooms"][0]["activities"].find { |a| a["id"] == 1 }
         activity_with_child["childActivities"] = []
 
         competition.set_wcif_schedule!(schedule_wcif)
 
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)
-        expect(ScheduleActivity.all.size).to eq 2
+        expect(ScheduleActivity.all.size).to eq 7
       end
 
       it "Updating activity's attributes correctly updates the existing object" do
         first_venue = schedule_wcif["venues"][0]
         first_room = first_venue["rooms"][0]
-        first_activity = first_room["activities"][0]
+        second_activity = first_room["activities"][1]
         activity_object = competition.competition_venues.find_by(wcif_id: first_venue["id"])
                                      .venue_rooms.find_by(wcif_id: first_room["id"])
-                                     .schedule_activities.find_by(wcif_id: first_activity["id"])
+                                     .schedule_activities.find_by(wcif_id: second_activity["id"])
 
-        first_activity["name"] = "activity name"
-        first_activity["activityCode"] = "222-r1"
-        first_activity["startTime"] = (activity_object.start_time + 20.minutes).iso8601
-        first_activity["endTime"] = (activity_object.end_time + 20.minutes).iso8601
+        second_activity["name"] = "activity name"
+        second_activity["activityCode"] = "222-r1"
+        second_activity["startTime"] = (activity_object.start_time + 20.minutes).iso8601
+        second_activity["endTime"] = (activity_object.end_time + 20.minutes).iso8601
         competition.set_wcif_schedule!(schedule_wcif)
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)
         activity_object.reload
         expect(activity_object.name).to eq "activity name"
         expect(activity_object.activity_code).to eq "222-r1"
-        expect(activity_object.start_time).to eq first_activity["startTime"]
-        expect(activity_object.end_time).to eq first_activity["endTime"]
+        expect(activity_object.start_time).to eq second_activity["startTime"]
+        expect(activity_object.end_time).to eq second_activity["endTime"]
       end
 
       it "Creating nested activities works" do
@@ -685,7 +870,7 @@ RSpec.describe "Competition WCIF" do
 
       it "Doesn't update a nested activity which is not included in parent" do
         # Let's try first a past date
-        activity = schedule_wcif["venues"][0]["rooms"][0]["activities"][1]
+        activity = schedule_wcif["venues"][0]["rooms"][0]["activities"][0]
         nested_activity = activity["childActivities"][0]
         # Get rid of nested-nested, to make sure we don't run into their validations
         nested_activity["childActivities"] = []

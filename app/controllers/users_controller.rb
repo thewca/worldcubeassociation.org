@@ -2,8 +2,12 @@
 
 class UsersController < ApplicationController
   before_action :authenticate_user!, except: %i[select_nearby_delegate acknowledge_cookies]
-  before_action :check_recent_authentication!, only: %i[enable_2fa disable_2fa regenerate_2fa_backup_codes]
+  before_action :check_recent_authentication, only: %i[enable_2fa disable_2fa regenerate_2fa_backup_codes]
+  before_action :check_recent_auth_dangerous, only: %i[update], if: :dangerous_profile_change?
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
+  before_action :redirect_if_cannot_edit_user, only: %i[edit update]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search merge]
+  before_action -> { check_edit_access }, only: %i[show_for_edit update_user_data]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
 
@@ -42,6 +46,67 @@ class UsersController < ApplicationController
         }
       end
     end
+  end
+
+  private def check_edit_access
+    @user = User.find(params.require(:id))
+    cannot_edit_reason = current_user.cannot_edit_data_reason_html(@user)
+
+    render status: :unauthorized, json: { error: cannot_edit_reason } if cannot_edit_reason.present?
+  end
+
+  def show_for_edit
+    render status: :ok, json: @user.as_json(
+      only: %w[id name gender country_iso2],
+      private_attributes: %w[dob],
+      methods: [],
+      include: [],
+    )
+  end
+
+  def update_user_data
+    user_details = params.permit(:name, :gender, :dob, :country_iso2)
+
+    @user.update!(user_details)
+
+    render status: :ok, json: @user.as_json(
+      private_attributes: %w[dob],
+    )
+  end
+
+  def show_for_merge
+    user = User.find(params.require(:id))
+
+    render status: :ok, json: user.as_json(
+      include: %w[roles],
+      methods: %w[special_account_competitions],
+      private_attributes: %w[email],
+    )
+  end
+
+  def merge
+    from_user = User.find(params.require(:fromUserId))
+    to_user = User.find(params.require(:toUserId))
+
+    return render status: :bad_request, json: { error: "Cannot merge user with itself" } if to_user.id == from_user.id
+
+    if to_user.name != from_user.name ||
+       to_user.country_iso2 != from_user.country_iso2 ||
+       to_user.gender != from_user.gender ||
+       to_user.dob != from_user.dob
+      return render status: :bad_request, json: { error: "Cannot merge users with different details" }
+    end
+
+    if !current_user.results_team? && (to_user.special_account? || from_user.special_account?)
+      return render status: :bad_request,
+                    json: { error: 'One of the account is a special account, please contact WRT to merge them.' }
+    end
+
+    return render status: :bad_request, json: { error: "Cannot merge users with both having a WCA ID" } if to_user.wca_id.present? && from_user.wca_id.present?
+
+    from_user.transfer_data_to(to_user)
+
+    render status: :ok, json: { success: true }
   end
 
   private def user_to_edit
@@ -94,7 +159,7 @@ class UsersController < ApplicationController
   end
 
   def authenticate_user_for_sensitive_edit
-    action_params = params.require(:user).permit(:otp_attempt, :password)
+    action_params = params.expect(user: %i[otp_attempt password])
     # This methods store the current time in the "last_authenticated_at" session
     # variable, if password matches, or if 2FA check matches.
     on_success = lambda do
@@ -122,9 +187,6 @@ class UsersController < ApplicationController
   def edit
     params[:section] ||= "general"
 
-    @user = user_to_edit
-    return if redirect_if_cannot_edit_user(@user)
-
     @current_user = current_user
   end
 
@@ -139,7 +201,7 @@ class UsersController < ApplicationController
 
   def select_nearby_delegate
     @user = current_user || User.new
-    user_params = params.require(:user).permit(:unconfirmed_wca_id, :delegate_id_to_handle_wca_id_claim, :dob_verification)
+    user_params = params.expect(user: %i[unconfirmed_wca_id delegate_id_to_handle_wca_id_claim dob_verification])
     @user.assign_attributes(user_params)
     render partial: 'select_nearby_delegate'
   end
@@ -213,12 +275,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = user_to_edit
     @user.current_user = current_user
-    return if redirect_if_cannot_edit_user(@user)
-
-    dangerous_change = current_user == @user && %i[password password_confirmation email].any? { |attribute| user_params.key? attribute }
-    return if dangerous_change && !check_recent_authentication!
 
     old_confirmation_sent_at = @user.confirmation_sent_at
     if @user.update(user_params)
@@ -263,6 +320,12 @@ class UsersController < ApplicationController
 
     if current_user.forum_banned?
       flash[:alert] = I18n.t('registrations.errors.banned_html').html_safe
+      return redirect_to new_user_session_path
+    elsif current_user.dob.nil?
+      flash[:alert] = I18n.t('misc.forum_enter_dob').html_safe
+      return redirect_to edit_user_path(current_user)
+    elsif current_user.below_forum_age_requirement?
+      flash[:alert] = I18n.t('misc.forum_age_requirement').html_safe
       return redirect_to new_user_session_path
     end
 
@@ -320,17 +383,84 @@ class UsersController < ApplicationController
     render json: { ok: true }
   end
 
-  private def redirect_if_cannot_edit_user(user)
-    unless current_user&.can_edit_user?(user)
-      flash[:danger] = "You cannot edit this user"
-      redirect_to root_url
-      return true
-    end
-    false
+  def registrations
+    user_id = params.require(:userId)
+
+    user = User.find(user_id)
+    registrations = user.registrations
+                        .joins(:competition)
+                        .merge(Competition.not_over)
+                        .order(start_date: :asc)
+
+    render json: registrations.as_json(
+      only: %w[competing_status],
+      include: {
+        competition: {
+          only: %w[id name city_name country_id start_date],
+          include: [],
+        },
+      },
+    )
+  end
+
+  def organized_competitions
+    user_id = params.require(:userId)
+
+    user = User.find(user_id)
+    competitions = user.organized_competitions
+                       .over.visible.not_cancelled
+                       .order(start_date: :desc)
+
+    render json: competitions.as_json(
+      only: %w[id name city_name country_id start_date],
+    )
+  end
+
+  def delegated_competitions
+    user_id = params.require(:userId)
+
+    user = User.find(user_id)
+    competitions = user.delegated_competitions
+                       .over.visible.not_cancelled
+                       .order(start_date: :desc)
+
+    render json: competitions.as_json(
+      only: %w[id name city_name country_id start_date],
+    )
+  end
+
+  def past_competitions
+    user_id = params.require(:userId)
+
+    user = User.find(user_id)
+
+    return Competition.none unless user.person
+
+    competitions = user.person.competitions
+                       .over.visible.not_cancelled
+                       .where(start_date: ..Date.current)
+                       .order(start_date: :desc)
+
+    render json: competitions.as_json(
+      only: %w[id name city_name country_id start_date],
+    )
+  end
+
+  private def redirect_if_cannot_edit_user
+    @user = user_to_edit
+
+    return if current_user&.can_edit_user?(@user)
+
+    flash[:danger] = "You cannot edit this user"
+    redirect_to root_url
+  end
+
+  private def dangerous_profile_change?
+    current_user == user_to_edit && %i[password password_confirmation email].any? { |attribute| user_params.key? attribute }
   end
 
   private def user_params
-    params.require(:user).permit(current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
+    params.expect(user: current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
       user_params[:wca_id] = user_params[:wca_id].upcase if user_params.key?(:wca_id)
       if user_params.key?(:delegate_reports_region)
         raw_region = user_params.delete(:delegate_reports_region)
@@ -357,12 +487,27 @@ class UsersController < ApplicationController
     @recently_authenticated = recently_authenticated?
   end
 
-  private def check_recent_authentication!
-    unless recently_authenticated?
-      flash[:danger] = I18n.t("users.edit.sensitive.identity_error")
-      redirect_to profile_edit_path(section: "2fa-check")
-      return false
-    end
-    true
+  private def check_recent_authentication
+    return if recently_authenticated?
+
+    flash[:danger] = I18n.t("users.edit.sensitive.identity_error")
+    redirect_to profile_edit_path(section: "2fa-check")
+  end
+
+  # We need this separate method because you cannot define `before_filter` chains
+  #   with the same name on different endpoints :(
+  # See https://guides.rubyonrails.org/action_controller_overview.html#before-action
+  private def check_recent_auth_dangerous
+    check_recent_authentication if dangerous_profile_change?
+  end
+
+  def admin_search
+    query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
+
+    return render status: :bad_request, json: { error: "No query specified" } unless query
+
+    render status: :ok, json: {
+      result: User.search(query, params: params).limit(SearchResultsController::SEARCH_RESULT_LIMIT),
+    }
   end
 end

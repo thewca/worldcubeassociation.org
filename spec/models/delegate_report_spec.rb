@@ -29,9 +29,15 @@ RSpec.describe DelegateReport do
     expect(dr).to be_valid
   end
 
-  it "discussion_url is set on creation" do
-    dr = create(:delegate_report)
-    expect(dr.discussion_url).to eq "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/#{URI.encode_www_form_component(dr.competition.name)}"
+  it "sets discussion_url only when posted" do
+    competition = create(:competition, name: "Test Comp 2025")
+    dr = build(:delegate_report, competition: competition, discussion_url: nil)
+    dr.current_user = create(:delegate)
+
+    expect(dr.discussion_url).to be_nil
+
+    dr.posted = true
+    expect(dr.discussion_url).to eq("https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/Test+Comp+2025")
   end
 
   it "wrc_feedback_requested is set false on creation" do

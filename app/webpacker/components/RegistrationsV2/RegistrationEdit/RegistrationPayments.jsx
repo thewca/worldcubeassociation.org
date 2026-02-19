@@ -27,12 +27,19 @@ export default function RegistrationPayments({
   } = useQuery({
     queryKey: ['registration-payments', registrationId],
     queryFn: () => getRegistrationPayments(registrationId),
-    select: (data) => data.charges.filter((r) => r.iso_amount_refundable !== 0),
+    select: (data) => data.charges,
   });
 
   const { data: userInfo, isLoading: userInfoLoading } = useQuery({
     queryKey: ['payments-user', payments],
-    queryFn: () => getUsersInfo(_.uniq(payments.map((p) => p.user_id))),
+    queryFn: () => getUsersInfo(
+      _.uniq(
+        payments.flatMap((p) => [
+          p.user_id,
+          ...p.refunding_payments.map((r) => r.user_id),
+        ]),
+      ),
+    ),
     enabled: Boolean(payments),
   });
 
@@ -43,8 +50,8 @@ export default function RegistrationPayments({
   return (
     <>
       <Header>
-        Payments
-        <Button floated="right" onClick={refetchPayments}>Refresh</Button>
+        {I18n.t('payments.header')}
+        <Button floated="right" onClick={refetchPayments}>{I18n.t('misc.refresh')}</Button>
       </Header>
       <PaymentsMainBody
         registrationId={registrationId}
@@ -78,7 +85,7 @@ function PaymentsMainBody({
       ));
 
       queryClient.setQueryData(
-        ['payments', registrationId],
+        ['registration-payments', registrationId],
         (prevData) => ({
           charges: [
             ...prevData.charges.filter((ch) => ch.payment_id !== refundedCharge.payment_id),
@@ -102,32 +109,38 @@ function PaymentsMainBody({
   });
 
   if (payments.length === 0) {
-    return <Message warning>{I18n.t('payments.messages.charges_refunded')}</Message>;
+    return <Message warning>{I18n.t('payments.messages.no_payments')}</Message>;
   }
 
   return (
-    <Table>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>{I18n.t('payments.labels.net_payment')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('payments.labels.original_payment')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('registrations.refund_form.labels.refund_amount')}</Table.HeaderCell>
-          <Table.HeaderCell />
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {payments.map((refund) => (
-          <PaymentRow
-            payment={refund}
-            refundMutation={refundMutation}
-            isMutating={isMutating}
-            competitionId={competitionId}
-            key={refund.payment_id}
-            userInfo={userInfo}
-          />
-        ))}
-      </Table.Body>
-    </Table>
+    <>
+      {payments.filter((r) => r.iso_amount_refundable !== 0).length === 0 && (
+        <Message warning>{I18n.t('payments.messages.charges_refunded')}</Message>
+      )}
+
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>{I18n.t('payments.labels.net_payment')}</Table.HeaderCell>
+            <Table.HeaderCell>{I18n.t('payments.labels.original_payment')}</Table.HeaderCell>
+            <Table.HeaderCell>{I18n.t('registrations.refund_form.labels.refund_amount')}</Table.HeaderCell>
+            <Table.HeaderCell />
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {payments.map((refund) => (
+            <PaymentRow
+              payment={refund}
+              refundMutation={refundMutation}
+              isMutating={isMutating}
+              competitionId={competitionId}
+              key={refund.payment_id}
+              userInfo={userInfo}
+            />
+          ))}
+        </Table.Body>
+      </Table>
+    </>
   );
 }
 
@@ -166,22 +179,26 @@ function PaymentRow({
         <Table.Cell>
           {isoMoneyToHumanReadable(payment.iso_amount_payment, payment.currency_code)}
         </Table.Cell>
-        <Table.Cell>
-          <AutonumericField
-            currency={payment.currency_code.toUpperCase()}
-            value={amountToRefund}
-            onChange={setAmountToRefund}
-            max={payment.iso_amount_refundable}
-          />
-        </Table.Cell>
-        <Table.Cell>
-          <Button
-            onClick={attemptRefund}
-            disabled={isMutating}
-          >
-            {I18n.t('registrations.refund')}
-          </Button>
-        </Table.Cell>
+        {payment.iso_amount_refundable !== 0 && (
+          <>
+            <Table.Cell>
+              <AutonumericField
+                currency={payment.currency_code.toUpperCase()}
+                value={amountToRefund}
+                onChange={setAmountToRefund}
+                max={payment.iso_amount_refundable}
+              />
+            </Table.Cell>
+            <Table.Cell>
+              <Button
+                onClick={attemptRefund}
+                disabled={isMutating}
+              >
+                {I18n.t('registrations.refund')}
+              </Button>
+            </Table.Cell>
+          </>
+        )}
       </Table.Row>
       {payment.refunding_payments.map((p) => (
         <Table.Row key={p.payment_id}>

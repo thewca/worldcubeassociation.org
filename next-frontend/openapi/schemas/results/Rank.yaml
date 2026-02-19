@@ -1,0 +1,24 @@
+type: object
+required:
+  - id
+  - person_id
+  - event_id
+  - best
+  - world_rank
+  - continent_rank
+  - country_rank
+properties:
+  id:
+    type: integer
+  person_id:
+    type: string
+  event_id:
+    type: string
+  best:
+    type: integer
+  world_rank:
+    type: integer
+  continent_rank:
+    type: integer
+  country_rank:
+    type: integer

@@ -14,7 +14,12 @@ import {
 import UpcomingCompetitionTable from './UpcomingCompetitionTable';
 import PastCompetitionsTable from './PastCompetitionTable';
 
-export default function MyCompetitions({ permissions, competitions, wcaId }) {
+export default function MyCompetitions({
+  permissions,
+  competitions,
+  registrationStatuses,
+  wcaId,
+}) {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
 
   return (
@@ -36,9 +41,9 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
         {I18n.t('competitions.my_competitions.disclaimer')}
       </p>
       <UpcomingCompetitionTable
-        competitions={competitions.futureCompetitions}
+        competitions={competitions.future}
         permissions={permissions}
-        registrationStatuses={competitions.competingStatuses}
+        registrationStatuses={registrationStatuses}
         fallbackMessage={{
           key: 'competitions.my_competitions_table.no_upcoming_competitions_html',
           options: { link: `<a href="${competitionsUrl({})}">${I18n.t('competitions.my_competitions_table.competitions_list')}</a>` },
@@ -49,12 +54,12 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
           active={isAccordionOpen}
           onClick={() => setIsAccordionOpen((prevValue) => !prevValue)}
         >
-          {`${I18n.t('competitions.my_competitions.past_competitions')} (${competitions.pastCompetitions?.length ?? 0})`}
+          {`${I18n.t('competitions.my_competitions.past_competitions')} (${competitions.past.length ?? 0})`}
         </Accordion.Title>
         <Accordion.Content active={isAccordionOpen}>
           <PastCompetitionsTable
             permissions={permissions}
-            competitions={competitions.pastCompetitions}
+            competitions={competitions.past}
             fallbackMessage={{ key: 'competitions.my_competitions_table.no_past_competitions' }}
           />
         </Accordion.Content>
@@ -66,8 +71,8 @@ export default function MyCompetitions({ permissions, competitions, wcaId }) {
       </Header>
       <p>{I18n.t('competitions.my_competitions.bookmarked_explanation')}</p>
       <UpcomingCompetitionTable
-        competitions={competitions.bookmarkedCompetitions}
-        registrationStatuses={competitions.competingStatuses}
+        competitions={competitions.bookmarked}
+        registrationStatuses={registrationStatuses}
         permissions={permissions}
         fallbackMessage={{ key: 'competitions.my_competitions_table.no_bookmarked_competitions' }}
       />

@@ -1,0 +1,69 @@
+<!-- I tried jumbotron-in-jumbotron, but it doesn't lead to the a visual distinction between the outer and inner boxes -->
+<div class="wc2025" id="wc2025-container">
+  <h2 class="wc2025-header hidden-xs">
+    <%= "JULY 3-6: RUBIK'S WCA WORLD CHAMPIONSHIP 2025" %>
+  </h2>
+
+  <div class="container jumbotron" id="wc2025-jumbotron">
+    <div class="row" id="outer-row">
+      <div class="col-md-4 col-lg-3 column-gap">
+        <div class="row" id="inner-row">
+          <div class="col-xs-6 col-md-12">
+            <%= link_to "https://www.cubingusa.org/worlds/", target: "_blank", class: "hide-new-window-icon" do %>
+              <%= image_tag "wc2025-logo.png", id: "wc2025-logo", alt: "WC2025 Logo", class: "img-responsive", style: "margin-bottom: 20px;" %>
+            <% end %>
+          </div>
+
+          <div class="col-xs-6 col-md-12">
+            <div class="wc2025-buttons" style="display: flex; flex-direction: column; gap: 10px;">
+              <a
+                href="https://live.worldcubeassociation.org/competitions/7025"
+                class="ui button primary hide-new-window-icon"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Live Results</a>
+              <a
+                href="https://www.worldcubeassociation.org/competitions/WC2025#competition-schedule"
+                class="ui button primary hide-new-window-icon"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Schedule</a>
+              <a
+                href="https://www.competitiongroups.com/competitions/WC2025"
+                class="ui button primary hide-new-window-icon"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Competition Groups</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8 col-lg-6 column-gap">
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe
+            class="embed-responsive-item"
+            style="border-radius: 12px; overflow: hidden;"
+            src="<%= "https://www.youtube.com/embed/#{@video_id}?autoplay=1&mute=1&loop=1&playlist=#{@video_id}" %>"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+
+      <div class="clearfix visible-md-block"></div>
+
+      <div class="col-xs-6 col-xs-offset-3 col-md-4 col-md-offset-4 col-lg-3 col-lg-offset-0">
+        <h3>Thank you to our title sponsor:</h3>
+        <%= link_to "https://www.rubiks.com/", target: "_blank", class: "hide-new-window-icon" do %>
+          <!-- Without min-width the Rubik's logo gets weirdly small. It starts going off-centre at 370px -->
+          <!-- Not much we can do without using media-queries to update the offset value, which doesnt seem great -->
+          <%= image_tag "rubiks_new.png", alt: "WC2025 Logo", class: "img-responsive", style: "min-width: 140px;" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

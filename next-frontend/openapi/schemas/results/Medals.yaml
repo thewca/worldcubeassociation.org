@@ -1,0 +1,15 @@
+type: object
+required:
+  - gold
+  - silver
+  - bronze
+  - total
+properties:
+  gold:
+    type: integer
+  silver:
+    type: integer
+  bronze:
+    type: integer
+  total:
+    type: integer

@@ -14,28 +14,28 @@ RSpec.describe "API Competitions" do
     it "orders competitions by date descending by default" do
       get api_v0_competitions_path, params: { start: 2.weeks.from_now }
       expect(response).to be_successful
-      ids = response.parsed_body.map { |c| c["id"] }
+      ids = response.parsed_body.pluck("id")
       expect(ids).to eq [competition4, competition3].map(&:id)
     end
 
     it "allows ordering by date ascending" do
       get api_v0_competitions_path, params: { start: 2.weeks.from_now, sort: "start_date" }
       expect(response).to be_successful
-      ids = response.parsed_body.map { |c| c["id"] }
+      ids = response.parsed_body.pluck("id")
       expect(ids).to eq [competition3, competition4].map(&:id)
     end
 
     it "allows ordering by multiple fields" do
       get api_v0_competitions_path, params: { sort: "start_date,name" }
       expect(response).to be_successful
-      ids = response.parsed_body.map { |c| c["id"] }
+      ids = response.parsed_body.pluck("id")
       expect(ids).to eq [competition1, competition2, competition3, competition4].map(&:id)
     end
 
     it "allows setting descending order" do
       get api_v0_competitions_path, params: { sort: "start_date,-name" }
       expect(response).to be_successful
-      ids = response.parsed_body.map { |c| c["id"] }
+      ids = response.parsed_body.pluck("id")
       expect(ids).to eq [competition2, competition1, competition3, competition4].map(&:id)
     end
   end
@@ -85,7 +85,7 @@ RSpec.describe "API Competitions" do
       get api_v0_competition_registrations_path(competition)
       expect(response).to be_successful
       json = response.parsed_body
-      expect(json.map { |r| r["id"] }).to eq [accepted_registration.id]
+      expect(json.pluck("id")).to eq [accepted_registration.id]
     end
   end
 
@@ -208,7 +208,7 @@ RSpec.describe "API Competitions" do
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
           expect(response).to have_http_status(:bad_request)
           response_json = response.parsed_body
-          expect(response_json["error"]).to eq "The property '#/events/0/rounds/0/format' value \"invalidformat\" did not match one of the following values: 1, 2, 3, a, m"
+          expect(response_json["error"]).to eq "The property '#/events/0/rounds/0/format' value \"invalidformat\" did not match one of the following values: 1, 2, 3, 5, a, h, m"
           expect(competition.reload.competition_events.find_by(event_id: "333").rounds.length).to eq 2
         end
 
@@ -232,7 +232,7 @@ RSpec.describe "API Competitions" do
           let(:competition) { create(:competition, :past, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w[222 333]) }
 
           it "allows adding rounds to an event" do
-            competition.competition_events.find_by(event_id: "333").rounds.delete_all
+            competition.competition_events.find_by(event_id: "333").rounds.destroy_all
             expect(competition.competition_events.find_by(event_id: "333").rounds.length).to eq 0
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[222 333]).to_json, headers: headers
             expect(response).to be_successful
@@ -248,7 +248,7 @@ RSpec.describe "API Competitions" do
           let!(:competition) { create(:competition, :future, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w[222 333]) }
 
           it "allows adding rounds to an event" do
-            competition.competition_events.find_by(event_id: "333").rounds.delete_all
+            competition.competition_events.find_by(event_id: "333").rounds.destroy_all
             expect(competition.competition_events.find_by(event_id: "333").rounds.length).to eq 0
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[222 333]).to_json, headers: headers
             expect(response).to be_successful
@@ -298,7 +298,7 @@ RSpec.describe "API Competitions" do
     end
 
     describe "persons" do
-      let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, with_schedule: true) }
+      let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, :with_valid_schedule) }
       let!(:registration) { create(:registration, :accepted, competition: competition) }
       let!(:organizer_registration) { create(:registration, :accepted, competition: competition, user: competition.organizers.first) }
 
@@ -352,7 +352,7 @@ RSpec.describe "API Competitions" do
     end
 
     describe "schedule" do
-      let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, with_schedule: true) }
+      let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, :with_valid_schedule, schedule_only_one_venue: true, event_ids: ["333"], rounds_per_event: 2, groups_per_round: 2) }
       let!(:wcif) { competition.to_wcif.slice("schedule") }
 
       context "when signed in as a competition manager" do
@@ -418,34 +418,36 @@ RSpec.describe "API Competitions" do
 
         it "can update activities and nested activities" do
           room = competition.competition_venues.first.venue_rooms.first
-          activity_with_child = room.schedule_activities.find_by(wcif_id: 2)
+          activity_with_child = room.schedule_activities.find_by(wcif_id: 1)
           wcif_room = wcif["schedule"]["venues"][0]["rooms"][0]
-          wcif_room["activities"][1]["name"] = "new name"
-          wcif_room["activities"][1]["childActivities"][0]["name"] = "foo"
-          wcif_room["activities"][1]["childActivities"][1]["name"] = "bar"
+          wcif_room["activities"][0]["name"] = "new name"
+          wcif_room["activities"][0]["childActivities"][0]["name"] = "foo"
+          wcif_room["activities"][0]["childActivities"][1]["name"] = "bar"
 
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
 
           expect(activity_with_child.reload.name).to eq "new name"
-          expect(activity_with_child.child_activities.find_by(wcif_id: 3).name).to eq "foo"
-          expect(activity_with_child.child_activities.find_by(wcif_id: 4).name).to eq "bar"
+          expect(activity_with_child.child_activities.find_by(wcif_id: 2).name).to eq "foo"
+          expect(activity_with_child.child_activities.find_by(wcif_id: 3).name).to eq "bar"
         end
 
         it "can delete activities and nested activities" do
           room = competition.competition_venues.first.venue_rooms.first
-          activity_with_child = room.schedule_activities.find_by(wcif_id: 2)
+          activity_with_child = room.schedule_activities.find_by(wcif_id: 1)
           # Remove the nested activity with a child activity
           wcif_room = wcif["schedule"]["venues"][0]["rooms"][0]
-          wcif_room["activities"][1]["childActivities"].delete_at(1)
+          wcif_room["activities"][0]["childActivities"].delete_at(1)
           # Remove an activity
-          wcif_room["activities"].delete_at(0)
+          wcif_room["activities"].delete_at(1)
 
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
 
-          expect(room.reload.schedule_activities.size).to eq 1
+          expect(room.reload.schedule_activities.size).to eq 2
           expect(activity_with_child.reload.child_activities.size).to eq 1
-          # We expect the nested-nested activity to be destroyed with its parent
-          expect(ScheduleActivity.all.size).to eq 2
+          # We deleted one activity (lunch) and one child activity. Still leaves:
+          #   - the original round + 2 groups as children
+          #   - the second round + 1 child that was not deleted
+          expect(ScheduleActivity.all.size).to eq 5
         end
 
         it "doesn't change anything when submitting an invalid WCIF" do

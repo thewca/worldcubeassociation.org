@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const InstagramIcon = createIcon({
@@ -21,10 +22,9 @@ const InstagramIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const InstagramIconPreview = () => {
-  return <InstagramIcon size="lg" />;
-};
-
-export default InstagramIconPreview;
+export default InstagramIcon;

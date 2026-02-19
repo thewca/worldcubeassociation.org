@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const GithubIcon = createIcon({
@@ -13,10 +14,9 @@ const GithubIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const GithubIconPreview = () => {
-  return <GithubIcon size="lg" />;
-};
-
-export default GithubIconPreview;
+export default GithubIcon;

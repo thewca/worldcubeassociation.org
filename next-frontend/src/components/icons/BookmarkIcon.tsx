@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const BookmarkIcon = createIcon({
@@ -13,10 +14,9 @@ const BookmarkIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const BookmarkIconPreview = () => {
-  return <BookmarkIcon size="lg" />;
-};
-
-export default BookmarkIconPreview;
+export default BookmarkIcon;
