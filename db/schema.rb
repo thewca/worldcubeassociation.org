@@ -947,7 +947,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.index ["country_id"], name: "Persons_fk_country"
     t.index ["name"], name: "Persons_name"
     t.index ["name"], name: "index_persons_on_name", type: :fulltext
-    t.index ["sub_id", "country_id", "wca_id"], name: "current_person_ranks_speedup"
+    t.index ["sub_id"], name: "current_person_ranks_speedup"
     t.index ["wca_id", "sub_id"], name: "index_Persons_on_wca_id_and_subId", unique: true
     t.index ["wca_id"], name: "index_persons_on_wca_id"
   end
