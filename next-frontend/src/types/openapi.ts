@@ -848,7 +848,6 @@ export interface components {
         };
         LiveResult: {
             registration_id: number;
-            round_id: number;
             global_pos: number;
             local_pos: number;
             best: number;
@@ -857,7 +856,6 @@ export interface components {
             average_record_tag: string;
             advancing: boolean;
             advancing_questionable: boolean;
-            event_id: string;
             attempts: components["schemas"]["LiveAttempt"][];
         };
         LiveCompetitor: {

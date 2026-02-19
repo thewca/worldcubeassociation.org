@@ -23,25 +23,33 @@ export function decompressFullResult(diff: CompressedLiveResult): LiveResult {
     single_record_tag: diff.srt,
     registration_id: diff.r,
     attempts: diff.la.map((l) => ({ attempt_number: l.an, value: l.v })),
+    // We dynamically calculate these in the frontend
+    local_pos: 0,
+    global_pos: 0,
   };
 }
 
 export function decompressPartialResult(
   diff: DiffedLiveResult,
 ): PartialLiveResultWithRegistrationId {
-  return _.omitBy(
-    {
-      advancing: diff.ad,
-      advancing_questionable: diff.adq,
-      average: diff.a,
-      best: diff.b,
-      average_record_tag: diff.art,
-      single_record_tag: diff.srt,
-      registration_id: diff.r,
-      attempts: diff.la?.map((l) => ({ attempt_number: l.an, value: l.v })),
-    },
-    _.isUndefined,
-  );
+  return {
+    registration_id: diff.r,
+    ..._.omitBy(
+      {
+        advancing: diff.ad,
+        advancing_questionable: diff.adq,
+        average: diff.a,
+        best: diff.b,
+        average_record_tag: diff.art,
+        single_record_tag: diff.srt,
+        attempts: diff.la?.map((l) => ({ attempt_number: l.an, value: l.v })),
+        // We dynamically calculate these in the frontend
+        local_pos: 0,
+        global_pos: 0,
+      },
+      _.isUndefined,
+    ),
+  };
 }
 
 export function decompressDiff<
