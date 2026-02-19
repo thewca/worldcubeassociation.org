@@ -781,32 +781,16 @@ RSpec.describe User do
   end
 
   describe '#can_check_newcomers_data?' do
-    it "returns true for WRT if competition is in future" do
+    it "returns true for WRT" do
       wrt_user = create(:user, :wrt_member)
-      competition = create(:competition, starts: 1.month.from_now)
 
-      expect(wrt_user.can_check_newcomers_data?(competition)).to be true
-    end
-
-    it "returns false for WRT if competition is in past" do
-      wrt_user = create(:user, :wrt_member)
-      competition = create(:competition, starts: 1.month.ago)
-
-      expect(wrt_user.can_check_newcomers_data?(competition)).to be false
+      expect(wrt_user.can_check_newcomers_data?).to be true
     end
 
     it "returns false for non-WRT user" do
       user = create(:user)
-      competition = create(:competition, starts: 1.month.from_now)
 
-      expect(user.can_check_newcomers_data?(competition)).to be false
-    end
-
-    it "returns false for WRT if competition is happening now" do
-      wrt_user = create(:user, :wrt_member)
-      competition = create(:competition, starts: Time.current, ends: 1.hour.from_now)
-
-      expect(wrt_user.can_check_newcomers_data?(competition)).to be false
+      expect(user.can_check_newcomers_data?).to be false
     end
   end
 
