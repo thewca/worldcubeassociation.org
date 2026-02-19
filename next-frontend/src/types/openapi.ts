@@ -850,6 +850,8 @@ export interface components {
             registration_id: number;
             global_pos: number;
             local_pos: number;
+            event_id: string;
+            round_id: string;
             best: number;
             forecast_statistics?: {
                 best_possible_average?: number;

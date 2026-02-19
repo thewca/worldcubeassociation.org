@@ -1,6 +1,8 @@
 type: object
 required:
   - registration_id
+  - event_id
+  - round_id
   - global_pos
   - local_pos
   - best
@@ -17,6 +19,10 @@ properties:
     type: integer
   local_pos:
     type: integer
+  event_id:
+    type: string
+  round_id:
+    type: string
   best:
     type: integer
   forecast_statistics:

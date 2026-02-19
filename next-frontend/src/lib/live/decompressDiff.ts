@@ -13,6 +13,16 @@ type PartialLiveResultWithRegistrationId = PartialExcept<
   "registration_id"
 >;
 
+// Dummy values for properties that don't get sent over WebSockets as they are not needed
+const DUMMY_VALUES = {
+  // We dynamically calculate these in the frontend
+  local_pos: 0,
+  global_pos: 0,
+  // These do not get used for LiveUpdating Results
+  round_id: "",
+  event_id: "",
+};
+
 export function decompressFullResult(diff: CompressedLiveResult): LiveResult {
   return {
     advancing: diff.ad,
@@ -23,9 +33,7 @@ export function decompressFullResult(diff: CompressedLiveResult): LiveResult {
     single_record_tag: diff.srt,
     registration_id: diff.r,
     attempts: diff.la.map((l) => ({ attempt_number: l.an, value: l.v })),
-    // We dynamically calculate these in the frontend
-    local_pos: 0,
-    global_pos: 0,
+    ...DUMMY_VALUES,
   };
 }
 
@@ -43,9 +51,7 @@ export function decompressPartialResult(
         average_record_tag: diff.art,
         single_record_tag: diff.srt,
         attempts: diff.la?.map((l) => ({ attempt_number: l.an, value: l.v })),
-        // We dynamically calculate these in the frontend
-        local_pos: 0,
-        global_pos: 0,
+        ...DUMMY_VALUES,
       },
       _.isUndefined,
     ),
