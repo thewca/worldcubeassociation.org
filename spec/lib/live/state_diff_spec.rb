@@ -105,8 +105,6 @@ RSpec.describe Live::DiffHelper do
                                                    "registration_id" => registration_1.id,
                                                    "advancing_questionable" => true,
                                                    "best" => best,
-                                                   "global_pos" => 1,
-                                                   "local_pos" => 1,
                                                    "live_attempts" => attempts.map { it.serializable_hash({ only: %i[id value attempt_number] }) },
                                                    "best_possible_average" => 200,
                                                    "worst_possible_average" => 300,
