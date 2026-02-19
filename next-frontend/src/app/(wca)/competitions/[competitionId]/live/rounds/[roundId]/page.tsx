@@ -3,7 +3,10 @@
 import { Container, VStack } from "@chakra-ui/react";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
-import ShowResults from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/ShowResults";
+import { LiveResultProvider } from "@/providers/LiveResultProvider";
+import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
+import OpenapiError from "@/components/ui/openapiError";
+import { getT } from "@/lib/i18n/get18n";
 
 export default async function ResultPage({
   params,
@@ -11,26 +14,36 @@ export default async function ResultPage({
   params: Promise<{ roundId: string; competitionId: string }>;
 }) {
   const { roundId, competitionId } = await params;
+  const { t } = await getT();
 
-  const resultsRequest = await getResultByRound(competitionId, roundId);
+  const { data, error, response } = await getResultByRound(
+    competitionId,
+    roundId,
+  );
 
-  if (!resultsRequest.data) {
-    return <p>Error loading Results</p>;
+  if (error) {
+    return <OpenapiError response={response} t={t} />;
   }
 
-  const { results, id, competitors, format } = resultsRequest.data;
+  const { results, competitors, format, state_hash } = data;
 
   return (
     <Container bg="bg">
       <VStack align="left">
-        <ShowResults
-          roundId={roundId}
-          results={results}
-          eventId={parseActivityCode(id).eventId}
-          formatId={format}
+        <LiveResultProvider
+          initialResults={results}
           competitionId={competitionId}
-          competitors={competitors}
-        />
+          roundId={roundId}
+          initialHash={state_hash}
+        >
+          <LiveUpdatingResultsTable
+            formatId={format}
+            eventId={parseActivityCode(roundId).eventId}
+            competitors={competitors}
+            competitionId={competitionId}
+            title="Live Results"
+          />
+        </LiveResultProvider>
       </VStack>
     </Container>
   );

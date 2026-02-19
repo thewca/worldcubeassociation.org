@@ -10,6 +10,7 @@ import {
 import { LiveResult } from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
 import useResultsSubscription, {
+  ConnectionState,
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
@@ -18,7 +19,7 @@ interface LiveResultContextType {
   liveResults: LiveResult[];
   updateLiveResults: React.Dispatch<React.SetStateAction<LiveResult[]>>;
   stateHash: string;
-  connectionState: string;
+  connectionState: ConnectionState;
   updateStateHash: React.Dispatch<React.SetStateAction<string>>;
   refetch: () => Promise<void>;
 }
