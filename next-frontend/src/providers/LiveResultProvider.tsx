@@ -17,10 +17,8 @@ import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
 
 interface LiveResultContextType {
   liveResults: LiveResult[];
-  updateLiveResults: React.Dispatch<React.SetStateAction<LiveResult[]>>;
   stateHash: string;
   connectionState: ConnectionState;
-  updateStateHash: React.Dispatch<React.SetStateAction<string>>;
   refetch: () => Promise<void>;
 }
 
@@ -93,9 +91,7 @@ export function LiveResultProvider({
     <LiveResultContext.Provider
       value={{
         liveResults,
-        updateLiveResults,
         stateHash,
-        updateStateHash,
         refetch: refetchResults,
         connectionState,
       }}
