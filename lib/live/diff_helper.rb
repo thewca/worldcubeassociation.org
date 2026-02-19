@@ -54,5 +54,15 @@ module Live
     def self.compress_payload(diff)
       diff.deep_transform_keys { COMPRESSION_MAP.fetch(it, it) }
     end
+
+    def self.add_forecast_stats(diff, round)
+      diff.merge("updated" => Array.wrap(diff["updated"]).map { forecast_for(it, round) }).compact_blank
+    end
+
+    def self.forecast_for(updated_result, round)
+      return updated_result unless updated_result["live_attempts"].length < round.format.expected_solve_count
+
+      updated_result.merge(LiveResult.compute_best_and_worse_possible_average(updated_result["live_attempts"], round))
+    end
   end
 end
