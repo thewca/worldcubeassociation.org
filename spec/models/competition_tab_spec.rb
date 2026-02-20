@@ -88,9 +88,19 @@ RSpec.describe CompetitionTab do
       expect(competition_tab).to be_valid
     end
 
-    it "allows anchors (potentially to other competition tabs)" do
-      competition_tab.update(content: "For accomodation, click [here](#12345-accomodation)")
+    it "allows anchors to static competition tabs" do
+      competition_tab.update(content: "For general info, click [here](#general-info)")
       expect(competition_tab).to be_valid
+    end
+
+    it "does not allow anchors to something that looks like a static tab but isn't" do
+      competition_tab.update(content: "For general info, click [here](#general-info-with-injection-payload)")
+      expect(competition_tab).not_to be_valid
+    end
+
+    it "does not allow anchors to custom tabs" do
+      competition_tab.update(content: "For accommodation around the venue, click [here](#12345-accommodation)")
+      expect(competition_tab).not_to be_valid
     end
   end
 end
