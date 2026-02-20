@@ -78,8 +78,18 @@ RSpec.describe CompetitionTab do
   describe "#verify_if_full_urls" do
     let(:competition_tab) { build(:competition_tab) }
 
-    it "doesn't allow relative URLs" do
+    it "doesn't allow relative URLs in general" do
       competition_tab.update(content: "[Link](/relative)")
+      expect(competition_tab).not_to be_valid
+    end
+
+    it "allows relative links to ALLOWED_RELATIVE_LINKS" do
+      competition_tab.update(content: "To register, click [here](/register)")
+      expect(competition_tab).to be_valid
+    end
+
+    it "does not allow relative links to something that looks like ALLOWED_RELATIVE_LINKS but isn't" do
+      competition_tab.update(content: "For general info, click [here](/register?hack=mwahahahaha)")
       expect(competition_tab).not_to be_valid
     end
 
@@ -88,12 +98,12 @@ RSpec.describe CompetitionTab do
       expect(competition_tab).to be_valid
     end
 
-    it "allows anchors to static competition tabs" do
+    it "allows anchors to STATIC_TAB_IDS" do
       competition_tab.update(content: "For general info, click [here](#general-info)")
       expect(competition_tab).to be_valid
     end
 
-    it "does not allow anchors to something that looks like a static tab but isn't" do
+    it "does not allow anchors to something that looks like STATIC_TAB_IDS but isn't" do
       competition_tab.update(content: "For general info, click [here](#general-info-with-injection-payload)")
       expect(competition_tab).not_to be_valid
     end
