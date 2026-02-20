@@ -50,7 +50,7 @@ export function LiveResultProvider({
     initialData: initialRound,
   });
 
-  const { results, state_hash } = data!;
+  const { results, state_hash } = data;
 
   const onReceived = useCallback(
     (result: DiffProtocolResponse) => {
@@ -90,7 +90,7 @@ export function LiveResultProvider({
       value={{
         liveResults: results,
         stateHash: state_hash,
-        refetch: refetchResults,
+        refetch,
         connectionState,
       }}
     >
