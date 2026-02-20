@@ -78,7 +78,7 @@
             icon: "clone",
           }
         end
-        if current_user&.can_check_newcomers_data?
+        if current_user&.can_check_newcomers_data?(@competition)
           nav_items << {
             text: t('.menu.newcomer_checks'),
             path: competition_newcomer_checks_path(@competition),
