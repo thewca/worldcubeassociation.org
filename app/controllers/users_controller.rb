@@ -115,7 +115,7 @@ class UsersController < ApplicationController
     wca_id = params.require(:wcaId)
     person = Person.find_by(wca_id: wca_id)
 
-    return render status: :bad_request, json: { error: "WCA ID #{wca_id} does not exist" } if person.nil?
+    return render status: :not_found, json: { error: "WCA ID #{wca_id} does not exist" } if person.nil?
     return render status: :bad_request, json: { error: "User already has a WCA ID: #{user.wca_id}" } if user.wca_id.present?
     return render status: :bad_request, json: { error: "WCA ID #{wca_id} is already assigned to user #{person.user.id}" } if person.user.present?
 
