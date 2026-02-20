@@ -8,7 +8,6 @@ import useResultsSubscription, {
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
-import { components } from "@/types/openapi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface LiveResultContextType {
