@@ -478,6 +478,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.bigint "value_and_id"
     t.index ["event_id", "average"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "average"], name: "regional_records_speedup"
+    t.index ["person_id", "event_id", "continent_id", "country_id", "average"], name: "average_ranks_speedup"
   end
 
   create_table "concise_single_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -491,6 +492,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.bigint "value_and_id"
     t.index ["event_id", "best"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "best"], name: "regional_records_speedup"
+    t.index ["person_id", "event_id", "continent_id", "country_id", "best"], name: "single_ranks_speedup"
   end
 
   create_table "connected_paypal_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -945,6 +947,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.index ["country_id"], name: "Persons_fk_country"
     t.index ["name"], name: "Persons_name"
     t.index ["name"], name: "index_persons_on_name", type: :fulltext
+    t.index ["sub_id"], name: "current_person_ranks_speedup"
     t.index ["wca_id", "sub_id"], name: "index_Persons_on_wca_id_and_subId", unique: true
     t.index ["wca_id"], name: "index_persons_on_wca_id"
   end
