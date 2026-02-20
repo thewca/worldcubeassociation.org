@@ -17,7 +17,7 @@ namespace :cleanup do
         WcaIdClaimMailer.notify_user_of_claim_cancelled(user, wca_id).deliver_later
         puts "Cleared stale claim for user #{user.id} (#{user.email}) - WCA ID #{wca_id}"
       else
-        puts "Failed to clear stale claim for user #{user.id} (#{user.email}) - WCA ID #{wca_id}"
+        puts "Failed to clear stale claim for user #{user.id} (#{user.email}) - WCA ID #{wca_id}: #{user.errors.full_messages.join(', ')}"
       end
     end
 
