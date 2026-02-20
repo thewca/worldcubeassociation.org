@@ -19,7 +19,7 @@ module ResultsValidators
 
     def competition_associations
       {
-        scrambles: [],
+        scrambles: [:round],
       }
     end
 
