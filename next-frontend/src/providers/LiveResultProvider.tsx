@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, ReactNode, useCallback, useContext } from "react";
-import { LiveResult } from "@/types/live";
+import { LiveResult, LiveRound } from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
 import useResultsSubscription, {
   ConnectionState,
@@ -27,7 +27,7 @@ export function LiveResultProvider({
   competitionId,
   children,
 }: {
-  initialRound: components["schemas"]["LiveRound"];
+  initialRound: LiveRound;
   competitionId: string;
   children: ReactNode;
 }) {
@@ -65,7 +65,7 @@ export function LiveResultProvider({
       } else {
         queryClient.setQueryData(
           queryOptions.queryKey,
-          (oldData: components["schemas"]["LiveRound"]) => ({
+          (oldData: LiveRound) => ({
             ...oldData,
             results: applyDiffToLiveResults(
               oldData.results,
