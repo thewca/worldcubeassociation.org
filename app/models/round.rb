@@ -383,8 +383,6 @@ class Round < ApplicationRecord
           average: result_wcif["average"],
           global_pos: result_wcif["ranking"],
           local_pos: result_wcif["ranking"],
-          created_at: now,
-          updated_at: now,
         }
       end
 
@@ -402,8 +400,6 @@ class Round < ApplicationRecord
                      .attributes
                      .merge(
                        live_result_id: live_result_id,
-                       created_at: now,
-                       updated_at: now,
                      )
         end
       end
@@ -421,6 +417,7 @@ class Round < ApplicationRecord
       cutoff: Cutoff.load(wcif["cutoff"]),
       advancement_condition: AdvancementConditions::AdvancementCondition.load(wcif["advancementCondition"]),
       scramble_set_count: wcif["scrambleSetCount"],
+      round_results: RoundResults.load(wcif["results"]),
     }
   end
 

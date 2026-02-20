@@ -34,6 +34,7 @@ class LiveResult < ApplicationRecord
   end
 
   delegate :id, to: :event, prefix: true
+  delegate :id, to: :format, prefix: true
 
   def to_solve_time(field)
     SolveTime.new(event_id, field, send(field))
@@ -119,10 +120,10 @@ class LiveResult < ApplicationRecord
                       competition: competition,
                       person_id: registration.person_id,
                       pos: local_pos,
-                      event_id: round.event_id,
+                      event_id: event_id,
                       round_type_id: round.round_type_id,
-                      round_id: round.id,
-                      format_id: round.format_id,
+                      round_id: round_id,
+                      format_id: format_id,
                       best: best,
                       average: average,
                       value1: attempt_values[0],
