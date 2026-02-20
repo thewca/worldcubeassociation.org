@@ -7,10 +7,8 @@ import AttemptsForm from "@/components/live/AttemptsForm";
 import { Format } from "@/lib/wca/data/formats";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
-import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import { useLiveResults } from "@/providers/LiveResultProvider";
-import { LiveResult } from "@/types/live";
 function zeroedArrayOfSize(size: number) {
   return Array(size).fill(0);
 }
@@ -34,12 +32,12 @@ export default function AddResults({
   const [attempts, setAttempts] = useState<number[]>(
     zeroedArrayOfSize(solveCount),
   );
-  const [pendingResults, updatePendingResults] = useState<LiveResult[]>([]);
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const { liveResults } = useLiveResults();
+  const { liveResults, pendingLiveResults, addPendingLiveResult } =
+    useLiveResults();
 
   const api = useAPI();
   const handleRegistrationIdChange = useCallback(
@@ -63,25 +61,20 @@ export default function AddResults({
     {
       onSuccess: (_data, variables) => {
         // Insert Updates as pending that get overwritten by the actual WebSocket
-        updatePendingResults((results) =>
-          applyDiffToLiveResults(
-            results,
-            [],
-            [
-              {
-                registration_id: variables.body.registration_id,
-                live_attempts: variables.body.attempts,
-                advancing: false,
-                advancing_questionable: false,
-                average: 0,
-                best: 0,
-                average_record_tag: "",
-                single_record_tag: "",
-              },
-            ],
-            [],
-          ),
-        );
+        addPendingLiveResult({
+          registration_id: variables.body.registration_id,
+          attempts: variables.body.attempts,
+          advancing: false,
+          advancing_questionable: false,
+          average: 0,
+          best: 0,
+          average_record_tag: "",
+          single_record_tag: "",
+          round_id: 0,
+          event_id: eventId,
+          local_pos: 0,
+          global_pos: 0,
+        });
         setSuccess("Results updated successfully!");
         setRegistrationId(undefined);
         setAttempts(zeroedArrayOfSize(solveCount));
@@ -168,9 +161,9 @@ export default function AddResults({
             </Link>
           </Button>
         </ButtonGroup>
-        {pendingResults.length > 0 && (
+        {pendingLiveResults.length > 0 && (
           <LiveResultsTable
-            results={pendingResults}
+            results={pendingLiveResults}
             eventId={eventId}
             formatId={format.id}
             competitionId={competitionId}
