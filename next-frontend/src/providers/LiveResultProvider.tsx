@@ -14,6 +14,7 @@ import useResultsSubscription, {
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
+import { components } from "@/types/openapi";
 
 interface LiveResultContextType {
   liveResults: LiveResult[];
@@ -27,31 +28,34 @@ const LiveResultContext = createContext<LiveResultContextType | undefined>(
 );
 
 export function LiveResultProvider({
-  initialResults,
-  initialHash,
+  initialRound,
   roundId,
   competitionId,
   children,
 }: {
-  initialResults: LiveResult[];
-  initialHash: string;
+  initialRound: components["schemas"]["LiveRound"];
   roundId: string;
   competitionId: string;
   children: ReactNode;
 }) {
-  const [liveResults, updateLiveResults] =
-    useState<LiveResult[]>(initialResults);
-  const [stateHash, updateStateHash] = useState<string>(initialHash);
+  const [liveResults, updateLiveResults] = useState<LiveResult[]>(
+    initialRound.results,
+  );
+  const [stateHash, updateStateHash] = useState<string>(
+    initialRound.state_hash,
+  );
   const api = useAPI();
 
   const { refetch } = api.useQuery(
     "get",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}",
     {
-      enabled: false,
       params: {
         path: { roundId, competitionId },
       },
+    },
+    {
+      initialData: initialRound,
     },
   );
 
