@@ -4,29 +4,66 @@ import {
 } from "@/lib/hooks/useResultsSubscription";
 import { components } from "@/types/openapi";
 import _ from "lodash";
+import type { PartialExcept } from "@/lib/types/objects";
 
-type PartialLiveResultWithRegistrationId = Partial<
-  components["schemas"]["LiveResult"]
-> &
-  Pick<components["schemas"]["LiveResult"], "registration_id">;
+type LiveResult = components["schemas"]["LiveResult"];
 
-export function decompressDiff(
-  diff: CompressedLiveResult,
-): components["schemas"]["LiveResult"];
-export function decompressDiff(
-  diff: DiffedLiveResult,
-): PartialLiveResultWithRegistrationId;
-export function decompressDiff(
-  diff: DiffedLiveResult | CompressedLiveResult,
-): PartialLiveResultWithRegistrationId | components["schemas"]["LiveResult"] {
+type PartialLiveResultWithRegistrationId = PartialExcept<
+  LiveResult,
+  "registration_id"
+>;
+
+// Dummy values for properties that don't get sent over WebSockets as they are not needed
+const DUMMY_VALUES = {
+  // We dynamically calculate these in the frontend
+  local_pos: 0,
+  global_pos: 0,
+  // These do not get used for LiveUpdating Results
+  round_id: "",
+  event_id: "",
+};
+
+export function decompressFullResult(diff: CompressedLiveResult): LiveResult {
   return {
-    registration_id: diff.registration_id,
+    advancing: diff.ad,
+    advancing_questionable: diff.adq,
+    average: diff.a,
+    best: diff.b,
+    average_record_tag: diff.art,
+    single_record_tag: diff.srt,
+    registration_id: diff.r,
+    attempts: diff.la.map((l) => ({ attempt_number: l.an, value: l.v })),
+    ...DUMMY_VALUES,
+  };
+}
+
+export function decompressPartialResult(
+  diff: DiffedLiveResult,
+): PartialLiveResultWithRegistrationId {
+  return {
+    registration_id: diff.r,
     ..._.omitBy(
       {
-        ...diff,
-        attempts: diff.live_attempts,
+        advancing: diff.ad,
+        advancing_questionable: diff.adq,
+        average: diff.a,
+        best: diff.b,
+        average_record_tag: diff.art,
+        single_record_tag: diff.srt,
+        attempts: diff.la?.map((l) => ({ attempt_number: l.an, value: l.v })),
+        ...DUMMY_VALUES,
       },
       _.isUndefined,
     ),
+  };
+}
+
+export function decompressDiff<
+  T extends Pick<CompressedLiveResult, "r">,
+  U extends Pick<LiveResult, "registration_id">,
+>(compressed: T, decompressionRoutine: (comp: T) => U): U {
+  return {
+    ...decompressionRoutine(compressed),
+    registration_id: compressed.r,
   };
 }

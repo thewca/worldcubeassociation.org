@@ -3,7 +3,11 @@ import {
   CompressedLiveResult,
   DiffedLiveResult,
 } from "@/lib/hooks/useResultsSubscription";
-import { decompressDiff } from "@/lib/live/decompressDiff";
+import {
+  decompressDiff,
+  decompressFullResult,
+  decompressPartialResult,
+} from "@/lib/live/decompressDiff";
 
 export function applyDiffToLiveResults(
   previousResults: components["schemas"]["LiveResult"][],
@@ -12,16 +16,23 @@ export function applyDiffToLiveResults(
   deleted: number[],
 ): components["schemas"]["LiveResult"][] {
   const deletedSet = new Set(deleted);
-  const updatesMap = new Map(
-    updated.map((u) => [u.registration_id, decompressDiff(u)]),
+
+  const retainedResults = previousResults.filter(
+    (r) => !deletedSet.has(r.registration_id),
   );
 
-  const diffedResults = previousResults
-    .filter((res) => !deletedSet.has(res.registration_id))
-    .map((res) => {
-      const update = updatesMap.get(res.registration_id);
-      return update ? { ...res, ...update } : res;
-    });
+  const updatesMap = new Map(
+    updated.map((u) => [u.r, decompressDiff(u, decompressPartialResult)]),
+  );
 
-  return diffedResults.concat(created.map((d) => decompressDiff(d)));
+  const diffedResults = retainedResults.map((res) => {
+    const update = updatesMap.get(res.registration_id) ?? {};
+    return { ...res, ...update };
+  });
+
+  const createdResults = created.map((c) =>
+    decompressDiff(c, decompressFullResult),
+  );
+
+  return [...diffedResults, ...createdResults];
 }

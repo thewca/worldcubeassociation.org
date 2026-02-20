@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
-import { components } from "@/types/openapi";
+import type { PartialExcept } from "@/lib/types/objects";
 
 export const CONNECTION_STATE_INITIALIZED = "initialized";
 export const CONNECTION_STATE_CONNECTED = "connected";
@@ -18,24 +18,21 @@ export const CONNECTION_COLORS = {
 };
 
 // Move this to something like https://www.asyncapi.com
-// The actual compression will happen in https://github.com/thewca/worldcubeassociation.org/pull/13352
-// But I need the mapping logic
 export type CompressedLiveResult = {
-  advancing: boolean;
-  advancing_questionable: boolean;
-  average: number;
-  best: number;
-  average_record_tag: string;
-  single_record_tag: string;
-  registration_id: number;
-  live_attempts: {
-    value: number;
-    attempt_number: number;
+  ad: boolean;
+  adq: boolean;
+  a: number;
+  b: number;
+  art: string;
+  srt: string;
+  r: number;
+  la: {
+    v: number;
+    an: number;
   }[];
 };
 
-export type DiffedLiveResult = Partial<CompressedLiveResult> &
-  Pick<components["schemas"]["LiveResult"], "registration_id">;
+export type DiffedLiveResult = PartialExcept<CompressedLiveResult, "r">;
 
 export type DiffProtocolResponse = {
   updated?: DiffedLiveResult[];
