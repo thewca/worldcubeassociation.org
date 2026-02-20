@@ -1,4 +1,4 @@
-import { Container, Heading, VStack } from "@chakra-ui/react";
+import { Container, VStack } from "@chakra-ui/react";
 import PermissionCheck from "@/components/PermissionCheck";
 import AddResults from "./AddResults";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
@@ -6,6 +6,7 @@ import OpenapiError from "@/components/ui/openapiError";
 import React from "react";
 import { getT } from "@/lib/i18n/get18n";
 import formats from "@/lib/wca/data/formats";
+import { LiveResultProvider } from "@/providers/LiveResultProvider";
 
 export default async function ResultPage({
   params,
@@ -22,7 +23,7 @@ export default async function ResultPage({
 
   if (error) return <OpenapiError response={response} t={t} />;
 
-  const { results, competitors, format } = data;
+  const { competitors, format } = data;
 
   return (
     <Container bg="bg">
@@ -31,14 +32,14 @@ export default async function ResultPage({
         item={competitionId}
       >
         <VStack align="left">
-          <Heading textStyle="h1">Live Results</Heading>
-          <AddResults
-            results={results}
-            format={formats.byId[format]}
-            roundId={roundId}
-            competitionId={competitionId}
-            competitors={competitors!}
-          />
+          <LiveResultProvider initialRound={data} competitionId={competitionId}>
+            <AddResults
+              format={formats.byId[format]}
+              roundId={roundId}
+              competitionId={competitionId}
+              competitors={competitors!}
+            />
+          </LiveResultProvider>
         </VStack>
       </PermissionCheck>
     </Container>

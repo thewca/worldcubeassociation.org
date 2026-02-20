@@ -8,20 +8,19 @@ import { Format } from "@/lib/wca/data/formats";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
-import _ from "lodash";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
+import { useLiveResults } from "@/providers/LiveResultProvider";
+import { LiveResult } from "@/types/live";
 function zeroedArrayOfSize(size: number) {
   return Array(size).fill(0);
 }
 
 export default function AddResults({
-  results,
   format,
   roundId,
   competitionId,
   competitors,
 }: {
-  results: components["schemas"]["LiveResult"][];
   format: Format;
   roundId: string;
   competitionId: string;
@@ -35,18 +34,18 @@ export default function AddResults({
   const [attempts, setAttempts] = useState<number[]>(
     zeroedArrayOfSize(solveCount),
   );
+  const [pendingResults, updatePendingResults] = useState<LiveResult[]>([]);
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const { liveResults } = useLiveResults();
+
   const api = useAPI();
-
-  const [liveResults, updateLiveResults] =
-    useState<components["schemas"]["LiveResult"][]>(results);
-
   const handleRegistrationIdChange = useCallback(
     (value: number) => {
       setRegistrationId(value);
-      const alreadyEnteredResults = results.find(
+      const alreadyEnteredResults = liveResults.find(
         (r) => r.registration_id === value,
       );
       if (alreadyEnteredResults) {
@@ -55,7 +54,7 @@ export default function AddResults({
         setAttempts(zeroedArrayOfSize(solveCount));
       }
     },
-    [results, solveCount],
+    [liveResults, solveCount],
   );
 
   const { mutate: mutateUpdate, isPending: isPendingUpdate } = api.useMutation(
@@ -64,16 +63,22 @@ export default function AddResults({
     {
       onSuccess: (_data, variables) => {
         // Insert Updates as pending that get overwritten by the actual WebSocket
-        updateLiveResults((results) =>
+        updatePendingResults((results) =>
           applyDiffToLiveResults(
             results,
+            [],
             [
               {
                 registration_id: variables.body.registration_id,
                 live_attempts: variables.body.attempts,
+                advancing: false,
+                advancing_questionable: false,
+                average: 0,
+                best: 0,
+                average_record_tag: "",
+                single_record_tag: "",
               },
             ],
-            [],
             [],
           ),
         );
@@ -102,26 +107,19 @@ export default function AddResults({
       return;
     }
 
-    if (results.find((r) => r.registration_id === registrationId)) {
-      mutateUpdate({
-        params: {
-          path: { competitionId: competitionId, roundId: roundId },
-        },
-        body: {
-          attempts: attempts.map((attempt, index) => ({
-            value: attempt,
-            attempt_number: index + 1,
-          })),
-          registration_id: registrationId,
-        },
-      });
-    }
+    mutateUpdate({
+      params: {
+        path: { competitionId: competitionId, roundId: roundId },
+      },
+      body: {
+        attempts: attempts.map((attempt, index) => ({
+          value: attempt,
+          attempt_number: index + 1,
+        })),
+        registration_id: registrationId,
+      },
+    });
   };
-
-  const [pendingResults, finalizedResults] = _.partition(
-    liveResults,
-    (r) => r.attempts.length > 0 && r.best === 0,
-  );
 
   return (
     <Grid templateColumns="repeat(16, 1fr)" gap="6">
@@ -180,14 +178,11 @@ export default function AddResults({
           />
         )}
         <LiveUpdatingResultsTable
-          liveResults={finalizedResults}
-          updateLiveResults={updateLiveResults}
           eventId={eventId}
           formatId={format.id}
           competitionId={competitionId}
           competitors={competitors}
           isAdmin
-          roundId={roundId}
           title=""
         />
       </GridItem>
