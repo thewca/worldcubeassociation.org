@@ -24,12 +24,10 @@ const LiveResultContext = createContext<LiveResultContextType | undefined>(
 
 export function LiveResultProvider({
   initialRound,
-  roundId,
   competitionId,
   children,
 }: {
   initialRound: components["schemas"]["LiveRound"];
-  roundId: string;
   competitionId: string;
   children: ReactNode;
 }) {
@@ -40,7 +38,7 @@ export function LiveResultProvider({
     "/v1/competitions/{competitionId}/live/rounds/{roundId}",
     {
       params: {
-        path: { roundId, competitionId },
+        path: { roundId: initialRound.id, competitionId },
       },
     },
   );
@@ -83,7 +81,7 @@ export function LiveResultProvider({
     [queryClient, queryOptions.queryKey, refetch, state_hash],
   );
 
-  const connectionState = useResultsSubscription(roundId, onReceived);
+  const connectionState = useResultsSubscription(initialRound.id, onReceived);
 
   return (
     <LiveResultContext.Provider

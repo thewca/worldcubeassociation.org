@@ -25,17 +25,12 @@ export default async function ResultPage({
     return <OpenapiError response={response} t={t} />;
   }
 
-  const { results, competitors, format, state_hash } = data;
+  const { competitors, format } = data;
 
   return (
     <Container bg="bg">
       <VStack align="left">
-        <LiveResultProvider
-          initialResults={results}
-          competitionId={competitionId}
-          roundId={roundId}
-          initialHash={state_hash}
-        >
+        <LiveResultProvider initialRound={data} competitionId={competitionId}>
           <LiveUpdatingResultsTable
             formatId={format}
             eventId={parseActivityCode(roundId).eventId}
