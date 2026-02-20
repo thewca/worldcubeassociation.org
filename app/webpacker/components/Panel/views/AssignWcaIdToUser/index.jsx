@@ -3,18 +3,18 @@ import { useMutation } from '@tanstack/react-query';
 import { Button, Form } from 'semantic-ui-react';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
-import mergeWcaIdToUser from './api/mergeWcaIdToUser';
+import assignWcaIdToUser from './api/assignWcaIdToUser';
 
-export default function MergeWcaIdToUser({
+export default function AssignWcaIdToUser({
   userId, wcaId, onSuccess,
 }) {
   const {
-    mutate: mergeWcaIdMutation,
+    mutate: assignWcaIdMutation,
     isPending,
     isError,
     error,
   } = useMutation({
-    mutationFn: () => mergeWcaIdToUser(userId, wcaId),
+    mutationFn: assignWcaIdToUser,
     onSuccess,
   });
 
@@ -28,7 +28,7 @@ export default function MergeWcaIdToUser({
       </p>
       <Button
         primary
-        onClick={mergeWcaIdMutation}
+        onClick={() => assignWcaIdMutation({ userId, wcaId })}
       >
         Merge
       </Button>

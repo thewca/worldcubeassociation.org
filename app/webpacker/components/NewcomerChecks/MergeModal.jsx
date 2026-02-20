@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import MergeUsers from '../Panel/pages/MergeUsersPage/MergeUsers';
-import MergeWcaIdToUser from '../Panel/views/MergeWcaIdToUser';
+import AssignWcaIdToUser from '../Panel/views/AssignWcaIdToUser';
 
 export default function MergeModal({ potentialDuplicatePerson, competitionId, onMergeSuccess }) {
   const queryClient = useQueryClient();
@@ -31,7 +31,7 @@ export default function MergeModal({ potentialDuplicatePerson, competitionId, on
 
   if (action === 'assign_wca_id') {
     return (
-      <MergeWcaIdToUser
+      <AssignWcaIdToUser
         userId={originalUser.id}
         wcaId={duplicatePerson.wca_id}
         onSuccess={onWcaIdMergeSuccess}

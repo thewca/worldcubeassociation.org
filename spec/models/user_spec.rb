@@ -194,6 +194,62 @@ RSpec.describe User do
     end
   end
 
+  describe "#assign_wca_id" do
+    let(:person) { create(:person) }
+    let(:user) { create(:user, name: person.name, dob: person.dob, country_iso2: person.country_iso2, gender: person.gender) }
+
+    it "assigns the WCA ID to the user" do
+      user.assign_wca_id(person.wca_id)
+      expect(user.wca_id).to eq person.wca_id
+    end
+
+    it "is a no-op when wca_id is blank" do
+      user.assign_wca_id("")
+      expect(user.wca_id).to be_nil
+    end
+
+    it "raises if the user already has a WCA ID" do
+      user_with_id = create(:user_with_wca_id)
+      expect { user_with_id.assign_wca_id(person.wca_id) }.to raise_error(RuntimeError, /already has WCA ID/)
+    end
+
+    it "clears potential duplicate persons for the user" do
+      job_run = DuplicateCheckerJobRun.create!(competition: create(:competition), run_status: :not_started)
+      PotentialDuplicatePerson.create!(duplicate_checker_job_run_id: job_run.id, original_user: user, duplicate_person: person, name_matching_algorithm: :jarowinkler, score: 90)
+
+      expect { user.assign_wca_id(person.wca_id) }
+        .to change { user.potential_duplicate_persons.count }.from(1).to(0)
+    end
+
+    context "when other users have pending claims for the same WCA ID" do
+      let(:delegate_role) { create(:delegate_role) }
+      let!(:claimant1) do
+        create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
+      end
+      let!(:claimant2) do
+        create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
+      end
+
+      it "clears unconfirmed_wca_id and delegate fields on stale claimants" do
+        user.assign_wca_id(person.wca_id)
+
+        expect(claimant1.reload.unconfirmed_wca_id).to be_nil
+        expect(claimant1.delegate_id_to_handle_wca_id_claim).to be_nil
+        expect(claimant2.reload.unconfirmed_wca_id).to be_nil
+        expect(claimant2.delegate_id_to_handle_wca_id_claim).to be_nil
+      end
+
+      it "sends a cancellation email to each stale claimant" do
+        allow(WcaIdClaimMailer).to receive(:notify_user_of_claim_cancelled)
+          .with(claimant1, person.wca_id).and_return(double(deliver_later: nil))
+        allow(WcaIdClaimMailer).to receive(:notify_user_of_claim_cancelled)
+          .with(claimant2, person.wca_id).and_return(double(deliver_later: nil))
+
+        user.assign_wca_id(person.wca_id)
+      end
+    end
+  end
+
   it "can create user with empty password" do
     create(:user, encrypted_password: "")
   end
