@@ -9,7 +9,7 @@ import useResultsSubscription, {
 } from "@/lib/hooks/useResultsSubscription";
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
 import { components } from "@/types/openapi";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface LiveResultContextType {
   liveResults: LiveResult[];
@@ -35,7 +35,7 @@ export function LiveResultProvider({
 }) {
   const api = useAPI();
   const queryClient = useQueryClient();
-  const { refetch, data } = api.useQuery(
+  const queryOptions = api.queryOptions(
     "get",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}",
     {
@@ -43,10 +43,12 @@ export function LiveResultProvider({
         path: { roundId, competitionId },
       },
     },
-    {
-      initialData: initialRound,
-    },
   );
+
+  const { refetch, data } = useQuery({
+    ...queryOptions,
+    initialData: initialRound,
+  });
 
   const { results, state_hash } = data!;
 
@@ -67,32 +69,19 @@ export function LiveResultProvider({
       if (before_hash !== state_hash) {
         refetchResults();
       } else {
-        queryClient.setQueryData(
-          api.queryOptions(
-            "get",
-            "/v1/competitions/{competitionId}/live/rounds/{roundId}",
-            {
-              params: {
-                path: { roundId, competitionId },
-              },
-            },
-          ).queryKey,
-          {
-            ...initialRound,
-            results: applyDiffToLiveResults(results, updated, created, deleted),
-            state_hash: after_hash,
-          },
-        );
+        queryClient.setQueryData(queryOptions.queryKey, {
+          ...initialRound,
+          results: applyDiffToLiveResults(results, updated, created, deleted),
+          state_hash: after_hash,
+        });
       }
     },
     [
-      api,
-      competitionId,
       initialRound,
       queryClient,
+      queryOptions.queryKey,
       refetchResults,
       results,
-      roundId,
       state_hash,
     ],
   );
