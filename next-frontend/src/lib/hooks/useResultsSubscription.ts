@@ -43,6 +43,7 @@ export type DiffProtocolResponse = {
   created?: CompressedLiveResult[];
   before_hash: string;
   after_hash: string;
+  wcif_id: string;
 };
 
 export default function useResultsSubscription(
