@@ -64,16 +64,6 @@ export default function AddResults({
         addPendingLiveResult({
           registration_id: variables.body.registration_id,
           attempts: variables.body.attempts,
-          advancing: false,
-          advancing_questionable: false,
-          average: 0,
-          best: 0,
-          average_record_tag: "",
-          single_record_tag: "",
-          round_id: 0,
-          event_id: eventId,
-          local_pos: 0,
-          global_pos: 0,
         });
         setSuccess("Results updated successfully!");
         setRegistrationId(undefined);

@@ -7,7 +7,7 @@ import {
   useContext,
   useState,
 } from "react";
-import { LiveResult, LiveRound } from "@/types/live";
+import { LiveResult, LiveRound, PendingLiveResult } from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
 import useResultsSubscription, {
   ConnectionState,
@@ -19,7 +19,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 interface LiveResultContextType {
   liveResults: LiveResult[];
   pendingLiveResults: LiveResult[];
-  addPendingLiveResult: (liveResult: LiveResult) => void;
+  addPendingLiveResult: (liveResult: PendingLiveResult) => void;
   stateHash: string;
   connectionState: ConnectionState;
   refetch: () => void;
@@ -90,9 +90,22 @@ export function LiveResultProvider({
     [queryClient, queryOptions.queryKey, refetch, state_hash],
   );
 
-  const addPendingLiveResult = useCallback((liveResult: LiveResult) => {
-    updatePendingResults((pending) => [...pending, liveResult]);
-  }, []);
+  const addPendingLiveResult = useCallback(
+    (liveResult: PendingLiveResult) => {
+      updatePendingResults((pending) => [
+        ...pending,
+        ...applyDiffToLiveResults(
+          results.filter(
+            (r: LiveResult) => r.registration_id == liveResult.registration_id,
+          ),
+          [liveResult],
+          [],
+          [],
+        ),
+      ]);
+    },
+    [results],
+  );
 
   const connectionState = useResultsSubscription(initialRound.id, onReceived);
 
