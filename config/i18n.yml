@@ -65,6 +65,7 @@ translations:
       - "*.wca.errors.messages.form_error"
       - "*.users.edit.*"
       - "*.users.edit_avatar_thumbnail.*"
+      - "*.users.claim_wca_id.*"
       - "*.page.*"
       - "*.registrations.*"
       - "*.api.*"

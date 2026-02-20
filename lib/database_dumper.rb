@@ -764,6 +764,7 @@ module DatabaseDumper
           unconfirmed_email
           session_validity_token
           otp_secret
+          should_claim_wca_id
         ],
         fake_values: {
           "dob" => "'1954-12-04'",
