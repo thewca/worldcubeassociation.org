@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useCallback,
-} from "react";
+import { createContext, ReactNode, useCallback, useContext } from "react";
 import { LiveResult } from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
 import useResultsSubscription, {
@@ -15,12 +9,13 @@ import useResultsSubscription, {
 } from "@/lib/hooks/useResultsSubscription";
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
 import { components } from "@/types/openapi";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface LiveResultContextType {
   liveResults: LiveResult[];
   stateHash: string;
   connectionState: ConnectionState;
-  refetch: () => Promise<void>;
+  refetch: () => void;
 }
 
 const LiveResultContext = createContext<LiveResultContextType | undefined>(
@@ -38,15 +33,9 @@ export function LiveResultProvider({
   competitionId: string;
   children: ReactNode;
 }) {
-  const [liveResults, updateLiveResults] = useState<LiveResult[]>(
-    initialRound.results,
-  );
-  const [stateHash, updateStateHash] = useState<string>(
-    initialRound.state_hash,
-  );
   const api = useAPI();
-
-  const { refetch } = api.useQuery(
+  const queryClient = useQueryClient();
+  const { refetch, data } = api.useQuery(
     "get",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}",
     {
@@ -59,12 +48,10 @@ export function LiveResultProvider({
     },
   );
 
-  const refetchResults = useCallback(async () => {
-    const { data } = await refetch();
-    if (data) {
-      updateLiveResults(data.results);
-      updateStateHash(data.state_hash);
-    }
+  const { results, state_hash } = data!;
+
+  const refetchResults = useCallback(() => {
+    refetch();
   }, [refetch]);
 
   const onReceived = useCallback(
@@ -77,16 +64,37 @@ export function LiveResultProvider({
         after_hash,
       } = result;
 
-      if (before_hash !== stateHash) {
+      if (before_hash !== state_hash) {
         refetchResults();
       } else {
-        updateLiveResults((results) =>
-          applyDiffToLiveResults(results, updated, created, deleted),
+        queryClient.setQueryData(
+          api.queryOptions(
+            "get",
+            "/v1/competitions/{competitionId}/live/rounds/{roundId}",
+            {
+              params: {
+                path: { roundId, competitionId },
+              },
+            },
+          ).queryKey,
+          {
+            ...initialRound,
+            results: applyDiffToLiveResults(results, updated, created, deleted),
+            state_hash: after_hash,
+          },
         );
-        updateStateHash(after_hash);
       }
     },
-    [refetchResults, stateHash],
+    [
+      api,
+      competitionId,
+      initialRound,
+      queryClient,
+      refetchResults,
+      results,
+      roundId,
+      state_hash,
+    ],
   );
 
   const connectionState = useResultsSubscription(roundId, onReceived);
@@ -94,8 +102,8 @@ export function LiveResultProvider({
   return (
     <LiveResultContext.Provider
       value={{
-        liveResults,
-        stateHash,
+        liveResults: results,
+        stateHash: state_hash,
         refetch: refetchResults,
         connectionState,
       }}
