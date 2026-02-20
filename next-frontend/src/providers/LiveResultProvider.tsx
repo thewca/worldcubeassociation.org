@@ -52,10 +52,6 @@ export function LiveResultProvider({
 
   const { results, state_hash } = data!;
 
-  const refetchResults = useCallback(() => {
-    refetch();
-  }, [refetch]);
-
   const onReceived = useCallback(
     (result: DiffProtocolResponse) => {
       const {
@@ -67,23 +63,24 @@ export function LiveResultProvider({
       } = result;
 
       if (before_hash !== state_hash) {
-        refetchResults();
+        refetch();
       } else {
-        queryClient.setQueryData(queryOptions.queryKey, {
-          ...initialRound,
-          results: applyDiffToLiveResults(results, updated, created, deleted),
-          state_hash: after_hash,
-        });
+        queryClient.setQueryData(
+          queryOptions.queryKey,
+          (oldData: components["schemas"]["LiveRound"]) => ({
+            ...oldData,
+            results: applyDiffToLiveResults(
+              oldData.results,
+              updated,
+              created,
+              deleted,
+            ),
+            state_hash: after_hash,
+          }),
+        );
       }
     },
-    [
-      initialRound,
-      queryClient,
-      queryOptions.queryKey,
-      refetchResults,
-      results,
-      state_hash,
-    ],
+    [queryClient, queryOptions.queryKey, refetch, state_hash],
   );
 
   const connectionState = useResultsSubscription(roundId, onReceived);
