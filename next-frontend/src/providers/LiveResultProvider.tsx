@@ -85,6 +85,11 @@ export function LiveResultProvider({
             state_hash: after_hash,
           }),
         );
+        updatePendingResults((pendingResults) =>
+          pendingResults.filter((r) =>
+            updated.map((u) => u.registration_id).includes(r.registration_id),
+          ),
+        );
       }
     },
     [queryClient, queryOptions.queryKey, refetch, state_hash],
