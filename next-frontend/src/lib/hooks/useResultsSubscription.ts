@@ -41,6 +41,8 @@ export type DiffProtocolResponse = {
   updated?: DiffedLiveResult[];
   deleted?: number[];
   created?: CompressedLiveResult[];
+  before_hash: string;
+  after_hash: string;
   wcif_id: string;
 };
 

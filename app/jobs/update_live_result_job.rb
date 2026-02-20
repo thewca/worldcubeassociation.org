@@ -33,6 +33,8 @@ class UpdateLiveResultJob < ApplicationJob
     after_state = round.to_live_state
     diff = Live::DiffHelper.round_state_diff(before_state, after_state)
 
+    diff = Live::DiffHelper.add_forecast_stats(diff, round)
+
     rounds_to_broadcast_to = round.linked_round&.wcif_ids || [round.wcif_id]
 
     rounds_to_broadcast_to.each do |wcif_id|
