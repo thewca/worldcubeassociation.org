@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
   before_action :redirect_if_cannot_edit_user, only: %i[edit update]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search merge]
+  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id]
   before_action -> { check_edit_access }, only: %i[show_for_edit update_user_data]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
@@ -105,6 +106,20 @@ class UsersController < ApplicationController
     return render status: :bad_request, json: { error: "Cannot merge users with both having a WCA ID" } if to_user.wca_id.present? && from_user.wca_id.present?
 
     from_user.transfer_data_to(to_user)
+
+    render status: :ok, json: { success: true }
+  end
+
+  def assign_wca_id
+    user = User.find(params.require(:userId))
+    wca_id = params.require(:wcaId)
+    person = Person.find_by(wca_id: wca_id)
+
+    return render status: :not_found, json: { error: "WCA ID #{wca_id} does not exist" } if person.nil?
+    return render status: :bad_request, json: { error: "User already has a WCA ID: #{user.wca_id}" } if user.wca_id.present?
+    return render status: :bad_request, json: { error: "WCA ID #{wca_id} is already assigned to user #{person.user.id}" } if person.user.present?
+
+    user.assign_wca_id(wca_id)
 
     render status: :ok, json: { success: true }
   end

@@ -1,8 +1,7 @@
 import React from 'react';
-import { Message } from 'semantic-ui-react';
 import { useQueryClient } from '@tanstack/react-query';
 import MergeUsers from '../Panel/pages/MergeUsersPage/MergeUsers';
-import { RESYNC_MESSAGE } from '../EditUser/EditUserForm';
+import AssignWcaIdToUser from '../Panel/views/AssignWcaIdToUser';
 
 export default function MergeModal({
   potentialDuplicatePerson, competitionId, onMergeSuccess,
@@ -32,13 +31,19 @@ export default function MergeModal({
     onMergeSuccess();
   };
 
+  const onAssignSuccess = (_, { userId }) => {
+    clearUserIdsFromDuplicates([userId]);
+    onMergeSuccess();
+  };
+
   if (action === 'assign_wca_id') {
     return (
-      <Message warning>
-        Please go to user&apos;s edit page and add the WCA ID. Once done,
-        {' '}
-        {RESYNC_MESSAGE}
-      </Message>
+      <AssignWcaIdToUser
+        user={originalUser}
+        prefilledWcaId={duplicatePerson.wca_id}
+        onSuccess={onAssignSuccess}
+        requireConfirmation
+      />
     );
   }
 
