@@ -20,7 +20,12 @@ paths:
   /v1/competitions/{competitionId}/live/rounds:
     $ref: 'paths/competitions/live/LiveAdmin.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}:
-    $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
+    post:
+      $ref: 'paths/competitions/live/SubmitLiveResults.yaml'
+    patch:
+      $ref: 'paths/competitions/live/UpdateLiveResults.yaml'
+    get:
+      $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/clear:
     $ref: 'paths/competitions/live/ClearRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/open:
