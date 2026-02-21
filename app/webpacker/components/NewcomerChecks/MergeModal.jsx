@@ -3,7 +3,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import MergeUsers from '../Panel/pages/MergeUsersPage/MergeUsers';
 import AssignWcaIdToUser from '../Panel/views/AssignWcaIdToUser';
 
-export default function MergeModal({ potentialDuplicatePerson, competitionId, onMergeSuccess }) {
+export default function MergeModal({
+  potentialDuplicatePerson, competitionId, onMergeSuccess,
+}) {
   const queryClient = useQueryClient();
   const {
     original_user: originalUser,
@@ -29,12 +31,18 @@ export default function MergeModal({ potentialDuplicatePerson, competitionId, on
     onMergeSuccess();
   };
 
+  const onAssignSuccess = (_, { userId }) => {
+    clearUserIdsFromDuplicates([userId]);
+    onMergeSuccess();
+  };
+
   if (action === 'assign_wca_id') {
     return (
       <AssignWcaIdToUser
-        userId={originalUser.id}
-        wcaId={duplicatePerson.wca_id}
+        user={originalUser}
+        prefilledWcaId={duplicatePerson.wca_id}
         onSuccess={onAssignSuccess}
+        requireConfirmation
       />
     );
   }
