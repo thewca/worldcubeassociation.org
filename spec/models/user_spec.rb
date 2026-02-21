@@ -248,6 +248,24 @@ RSpec.describe User do
         user.assign_wca_id(person.wca_id)
       end
     end
+
+    context "when the user itself has a pending claim for the same WCA ID" do
+      let(:delegate_role) { create(:delegate_role) }
+
+      before do
+        user.update!(unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
+      end
+
+      it "does not send a cancellation email to the user being assigned" do
+        expect(WcaIdClaimMailer).not_to receive(:notify_user_of_claim_cancelled).with(user, person.wca_id)
+        user.assign_wca_id(person.wca_id)
+      end
+
+      it "still assigns the WCA ID" do
+        user.assign_wca_id(person.wca_id)
+        expect(user.reload.wca_id).to eq person.wca_id
+      end
+    end
   end
 
   it "can create user with empty password" do

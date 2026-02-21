@@ -1582,7 +1582,7 @@ class User < ApplicationRecord
     return if wca_id.blank?
     raise "User #{id} already has WCA ID #{self.wca_id}" if self.wca_id.present?
 
-    stale_claims = User.where(unconfirmed_wca_id: wca_id).to_a
+    stale_claims = User.where(unconfirmed_wca_id: wca_id).where.not(id: id).to_a
 
     ActiveRecord::Base.transaction do
       update!(wca_id: wca_id)
