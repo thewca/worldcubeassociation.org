@@ -24,6 +24,7 @@ export default function BanendCompetitorForm({
 }) {
   const [formValues, setFormValues] = useState({
     user: null,
+    startDate: banActionRole?.start_date,
     endDate: banActionRole?.end_date,
     banReason: banActionRole?.metadata.ban_reason,
     scope: banActionRole?.metadata.scope,
@@ -37,6 +38,7 @@ export default function BanendCompetitorForm({
     save(apiV0Urls.userRoles.create(), {
       userId: formValues?.user?.id,
       groupType: groupTypes.banned_competitors,
+      startDate: formValues?.startDate || new Date().toISOString().split('T')[0],
       endDate: formValues?.endDate,
       banReason: formValues?.banReason,
       scope: formValues?.scope,
@@ -48,6 +50,7 @@ export default function BanendCompetitorForm({
 
   const editBannedCompetitor = () => {
     save(apiV0Urls.userRoles.update(banActionRole.id), {
+      startDate: formValues?.startDate || new Date().toISOString().split('T')[0],
       endDate: formValues?.endDate,
       banReason: formValues?.banReason,
       scope: formValues?.scope,
@@ -75,6 +78,20 @@ export default function BanendCompetitorForm({
           multiple={false}
         />
       )}
+      <Form.Field
+        label="Start Date"
+        name="startDate"
+        control={UtcDatePicker}
+        showYearDropdown
+        dateFormatOverride="yyyy-MM-dd"
+        dropdownMode="select"
+        isoDate={formValues?.startDate}
+        onChange={(date) => handleFormChange(null, {
+          name: 'startDate',
+          value: date,
+        })}
+        placeholderText="Leave empty to use current date"
+      />
       <Form.Field
         label="End Date"
         name="endDate"
