@@ -7,6 +7,7 @@ import Navbar from "./navbar";
 import Footer from "@/components/Footer";
 import RandomBackground from "@/components/RandomBackground";
 import { Rubik } from "next/font/google";
+import { ttNormsPro } from "@/styles/fonts";
 
 export const metadata: Metadata = {
   title: {
@@ -19,8 +20,6 @@ const devFont = Rubik({ subsets: ["latin"] });
 
 const computeFont = async () => {
   if (process.env.PROPRIETARY_FONT === "TTNormsPro") {
-    const { ttNormsPro } = await import("@/styles/fonts");
-
     return ttNormsPro;
   }
 
