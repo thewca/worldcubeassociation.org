@@ -34,7 +34,7 @@ export default function MergeModal({ potentialDuplicatePerson, competitionId, on
       <AssignWcaIdToUser
         userId={originalUser.id}
         wcaId={duplicatePerson.wca_id}
-        onSuccess={onWcaIdMergeSuccess}
+        onSuccess={onAssignSuccess}
       />
     );
   }
