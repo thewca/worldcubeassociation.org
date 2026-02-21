@@ -16,7 +16,7 @@ import {
   eventColumn,
 } from '../TableColumns';
 
-function augmentResults(results, competitionsById) {
+function augmentResults(results, competitionsById, resultAttemptsByResult) {
   return results.map((result) => {
     // This happens particularly during "Slim" view augmenting,
     //   where we iterate over [single, average] tuples and the average does not exist.
@@ -25,8 +25,11 @@ function augmentResults(results, competitionsById) {
     const competition = competitionsById[result.competition_id];
     const country = countries.real.find((c) => c.id === result.country_id);
 
+    const attempts = resultAttemptsByResult[result.id];
+    const augmentedResult = { ...result, attempts };
+
     return {
-      result,
+      result: augmentedResult,
       competition,
       country,
     };
@@ -34,7 +37,7 @@ function augmentResults(results, competitionsById) {
 }
 
 export function augmentApiResults(data, show) {
-  const { rows, competitionsById } = data;
+  const { rows, competitionsById, resultAttemptsByResult } = data;
 
   const isSlim = show === 'slim';
   const isSeparate = show === 'separate';
@@ -44,12 +47,12 @@ export function augmentApiResults(data, show) {
 
     return [
       slimmed, // The 'slim' view does not need augmented data
-      augmentResults(singleRows, competitionsById),
-      augmentResults(averageRows, competitionsById),
+      augmentResults(singleRows, competitionsById, resultAttemptsByResult),
+      augmentResults(averageRows, competitionsById, resultAttemptsByResult),
     ];
   }
 
-  return augmentResults(rows, competitionsById);
+  return augmentResults(rows, competitionsById, resultAttemptsByResult);
 }
 
 export const slimConfig = [

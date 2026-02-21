@@ -21,7 +21,7 @@ function getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, i
 }
 
 export function mapRankingsData(data, isByRegion) {
-  const { rows, competitionsById } = data;
+  const { rows, competitionsById, resultAttemptsByResult } = data;
   const [rowsToMap, firstContinentIndex, firstCountryIndex] = isByRegion ? rows : [rows, 0, 0];
 
   return rowsToMap.reduce((acc, result, index) => {
@@ -37,8 +37,11 @@ export function mapRankingsData(data, isByRegion) {
 
     const country = getCountryOrContinent(result, firstContinentIndex, firstCountryIndex, index);
 
+    const attempts = resultAttemptsByResult[result.id];
+    const augmentedResult = { ...result, attempts };
+
     return [...acc, {
-      result,
+      result: augmentedResult,
       competition,
       country,
       rank,
