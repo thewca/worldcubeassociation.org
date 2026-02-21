@@ -68,6 +68,7 @@ export default function TableRow({
   withPosition = false,
   color,
   distinguishPaidUnpaid = false,
+  isReadOnly = false,
 }) {
   const {
     dob: dobIsShown,
@@ -119,29 +120,38 @@ export default function TableRow({
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <Table.Cell className={checkboxCellColor}>
-              { /* We manually set the margin to 0 here to fix the table row height */}
-              {draggable ? (
-                <Icon name="bars" />
-              ) : (
-                <Checkbox onChange={onCheckboxChange} checked={isSelected} style={{ margin: 0 }} />
-              )}
-            </Table.Cell>
+            {!isReadOnly && (
+              <Table.Cell className={checkboxCellColor}>
+                { /* We manually set the margin to 0 here to fix the table row height */}
+                {draggable ? (
+                  <Icon name="bars" />
+                ) : (
+                  <Checkbox
+                    onChange={onCheckboxChange}
+                    checked={isSelected}
+                    style={{ margin: 0 }}
+                  />
+                )}
+              </Table.Cell>
+            )}
 
             {withPosition && (
               <Table.Cell>{position}</Table.Cell>
             )}
 
-            <Table.Cell>
-              <a href={editRegistrationUrl(registration.id)}>
-                {I18n.t('registrations.list.edit')}
-              </a>
-            </Table.Cell>
+            {!isReadOnly && (
+              <Table.Cell>
+                <a href={editRegistrationUrl(registration.id)}>
+                  {I18n.t('registrations.list.edit')}
+                </a>
+              </Table.Cell>
+            )}
 
             <Table.Cell>
-              {wcaId ? (
+              {wcaId && (
                 <a href={personUrl(wcaId)}>{wcaId}</a>
-              ) : (
+              )}
+              {!wcaId && userId && (
                 <a href={editPersonUrl(userId)}>
                   <Icon name="edit" />
                   {I18n.t('users.edit.profile')}

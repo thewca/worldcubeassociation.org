@@ -21,7 +21,7 @@ class RegistrationsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
                 except: %i[index psych_sheet psych_sheet_event register payment_completion load_payment_intent stripe_webhook payment_denomination capture_paypal_payment]
 
-  before_action :competition_must_be_using_wca_registration!, except: %i[import do_import add do_add index psych_sheet psych_sheet_event stripe_webhook payment_denomination]
+  before_action :competition_must_be_using_wca_registration!, except: %i[import do_import validate_and_convert_registrations add do_add index psych_sheet psych_sheet_event stripe_webhook payment_denomination]
   private def competition_must_be_using_wca_registration!
     return if competition_from_params.use_wca_registration?
 
@@ -29,13 +29,43 @@ class RegistrationsController < ApplicationController
     redirect_to competition_path(competition_from_params)
   end
 
-  before_action :competition_must_not_be_using_wca_registration!, only: %i[import do_import]
+  before_action :competition_must_not_be_using_wca_registration!, only: %i[import do_import validate_and_convert_registrations]
   private def competition_must_not_be_using_wca_registration!
     redirect_to competition_path(competition_from_params) if competition_from_params.use_wca_registration?
   end
 
   before_action :validate_import_registration, only: %i[do_import]
   private def validate_import_registration
+    @competition = competition_from_params
+
+    registration_rows = params.require(:registrations)
+
+    return render status: :unprocessable_content, json: { error: "Expected array of registrations" } unless registration_rows.is_a?(Array)
+
+    errors = [
+      validate_registrations(registration_rows, @competition),
+      competitor_limit_error(@competition, registration_rows.length),
+    ].compact.flatten
+
+    return render status: :unprocessable_content, json: { error: errors.compact.join(", ") } if errors.any?
+
+    @registration_rows = registration_rows.map do |row|
+      country = Country.c_find_by_iso2(row[:countryIso2])
+
+      {
+        name: row[:name],
+        wca_id: row[:wcaId],
+        country: country.id,
+        gender: row[:gender],
+        birth_date: row[:birthdate],
+        email: row[:email],
+        event_ids: row.dig(:registration, :eventIds) || [],
+      }
+    end
+  end
+
+  before_action :validate_and_parse_registration_data, only: %i[validate_and_convert_registrations]
+  private def validate_and_parse_registration_data
     @competition = competition_from_params
     file = params.require(:csv_registration_file)
 
@@ -71,10 +101,23 @@ class RegistrationsController < ApplicationController
 
     filtered_rows.map do |row|
       event_ids = competition.competition_events.filter_map do |competition_event|
-        competition_event.id if row[competition_event.event_id.to_sym] == "1"
+        competition_event.event_id if row[competition_event.event_id.to_sym] == "1"
       end
 
-      row.to_hash.merge(event_ids: event_ids)
+      {
+        name: row[:name],
+        wcaId: row[:wca_id]&.upcase,
+        countryIso2: Country.c_find(row[:country]).iso2,
+        gender: row[:gender],
+        birthdate: row[:birth_date],
+        email: row[:email]&.downcase,
+        registration: {
+          eventIds: event_ids,
+          status: "accepted",
+          isCompeting: true,
+          registeredAt: Time.now.utc,
+        },
+      }
     end
   end
 
@@ -105,29 +148,40 @@ class RegistrationsController < ApplicationController
       end
     end
 
-    dob_column_error = column_check(csv_rows, :birth_date, 'wrong_dob_format', :raw_dobs) do |raw_dob|
-      Date.safe_parse(raw_dob)&.to_fs != raw_dob
-    end
-
-    email_duplicate_error = column_check(csv_rows, :email, 'email_duplicates', :emails) do |email, emails|
-      emails.count(email) > 1
-    end
-
-    wca_id_duplicate_error = column_check(csv_rows, :wca_id, "wca_id_duplicates", :wca_ids) do |wca_id, wca_ids|
-      wca_id.present? && wca_ids.count(wca_id) > 1
-    end
-
-    [event_column_errors, dob_column_error, email_duplicate_error, wca_id_duplicate_error].flatten
+    [
+      event_column_errors,
+      validate_dob_formats(csv_rows.pluck(:birth_date)),
+      validate_no_duplicates(csv_rows.pluck(:email), 'email_duplicates', :emails),
+      validate_no_duplicates(csv_rows.pluck(:wca_id).compact_blank, 'wca_id_duplicates', :wca_ids),
+    ].flatten.compact
   end
 
-  private def column_check(csv_rows, column_name, error_key, i18n_keyword)
-    column_values = csv_rows.pluck(column_name)
+  private def validate_registrations(registration_rows, competition)
+    # Validate country codes
+    invalid_countries = registration_rows.filter_map { |e| e[:countryIso2] }.uniq.reject { |iso2| Country.c_find_by_iso2(iso2) }
 
-    malformed_values = column_values.select do |value|
-      yield value, column_values
-    end.uniq
+    # Validate event IDs against competition events
+    valid_event_ids = competition.competition_events.pluck(:event_id)
+    all_event_ids = registration_rows.flat_map { |e| e.dig(:registration, :eventIds) || [] }.uniq
+    invalid_event_ids = all_event_ids - valid_event_ids
 
-    I18n.t("registrations.import.errors.#{error_key}", i18n_keyword => malformed_values.join(", ")) if malformed_values.any?
+    [
+      invalid_countries.any? && "Invalid country codes: #{invalid_countries.join(', ')}",
+      invalid_event_ids.any? && "Invalid event IDs for this competition: #{invalid_event_ids.join(', ')}",
+      validate_dob_formats(registration_rows.filter_map { |e| e[:birthdate] }),
+      validate_no_duplicates(registration_rows.filter_map { |e| e[:email]&.downcase }, 'email_duplicates', :emails),
+      validate_no_duplicates(registration_rows.filter_map { |e| e[:wcaId]&.upcase }, 'wca_id_duplicates', :wca_ids),
+    ].flatten.compact
+  end
+
+  private def validate_dob_formats(dobs)
+    malformed = dobs.compact.reject { |dob| Date.safe_parse(dob)&.to_fs == dob }.uniq
+    I18n.t("registrations.import.errors.wrong_dob_format", raw_dobs: malformed.join(", ")) if malformed.any?
+  end
+
+  private def validate_no_duplicates(values, error_key, i18n_keyword)
+    duplicates = values.compact.select { |v| values.count(v) > 1 }.uniq
+    I18n.t("registrations.import.errors.#{error_key}", i18n_keyword => duplicates.join(", ")) if duplicates.any?
   end
 
   private def competitor_limit_error(competition, competitor_count)
@@ -202,7 +256,8 @@ class RegistrationsController < ApplicationController
         registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED) unless registration.accepted?
         registration.registration_competition_events = []
         registration_row[:event_ids].each do |event_id|
-          registration.registration_competition_events.build(competition_event_id: event_id)
+          competition_event = @competition.competition_events.find { |ce| ce.event_id == event_id }
+          registration.registration_competition_events.build(competition_event_id: competition_event.id)
         end
         registration.save!
         registration.add_history_entry({ event_ids: registration.event_ids }, "user", current_user.id, "CSV Import")
@@ -216,6 +271,10 @@ class RegistrationsController < ApplicationController
     render status: :ok, json: { success: true }
   rescue StandardError => e
     render status: :unprocessable_content, json: { error: e.to_s }
+  end
+
+  def validate_and_convert_registrations
+    render status: :ok, json: @registration_rows
   end
 
   def add
