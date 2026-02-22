@@ -70,11 +70,12 @@ RSpec.describe IRV do
         # Creates a result which doesn't meet the cutoff but yet has extra values
         res_over_with_results = create(result_kind, :over_cutoff,
                                        competition: competition1,
-                                       cutoff: cutoff, event_id: "444", round: round44,
-                                       value3: res_over_with_results.value2,
-                                       value4: res_over_with_results.value2,
-                                       value5: res_over_with_results.value2,
-                                       average: res_over_with_results.value2)
+                                       event_id: "444", round: round44,
+                                       cutoff: cutoff, cutoff_threshold: 200,
+                                       value3: cutoff.attempt_result + 200,
+                                       value4: cutoff.attempt_result + 200,
+                                       value5: cutoff.attempt_result + 200,
+                                       average: cutoff.attempt_result + 200)
 
         errs << RV::ValidationError.new(IRV::DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
                                         :results, competition1.id,

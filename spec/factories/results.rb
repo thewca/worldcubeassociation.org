@@ -71,13 +71,14 @@ FactoryBot.define do
     trait :over_cutoff do
       transient do
         cutoff { nil }
+        cutoff_threshold { 100 }
       end
-      value1 { cutoff.attempt_result + 100 }
-      value2 { cutoff.attempt_result + 200 }
+      value1 { cutoff.attempt_result + cutoff_threshold }
+      value2 { cutoff.attempt_result + (2 * cutoff_threshold) }
       value3 { 0 }
       value4 { 0 }
       value5 { 0 }
-      best { cutoff.attempt_result + 100 }
+      best { cutoff.attempt_result + cutoff_threshold }
       average { 0 }
       round_type_id { "c" }
     end
