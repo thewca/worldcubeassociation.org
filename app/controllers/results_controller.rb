@@ -411,10 +411,7 @@ class ResultsController < ApplicationController
 
           # Then extract result_attempts, because joining them above
           #   would be too expensive and also too cumbersome with the sorting by `attempt_number`
-          result_ids = rows.pluck("id").uniq
-          result_attempts_by_result = ResultAttempt.where(result_id: result_ids)
-                                                   .group_by(&:result_id)
-                                                   .transform_values { |attempts| attempts.sort_by(&:attempt_number).map(&:value) }
+          rows = Result.augment_attempts(rows)
 
           # Now that we've remembered all competitions, we can safely transform the rows
           rows = yield rows if block_given?
@@ -422,7 +419,6 @@ class ResultsController < ApplicationController
           {
             rows: rows,
             competitionsById: competitions_by_id,
-            resultAttemptsByResult: result_attempts_by_result,
           }
         end
         render json: cached_data

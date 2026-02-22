@@ -81,4 +81,14 @@ class Result < ApplicationRecord
         { value: value, attempt_number: n, **additional_attributes }
     end
   end
+
+  def self.augment_attempts(result_attrs, id_key: "id")
+    result_ids = result_attrs.pluck(id_key).uniq
+
+    result_attempts_by_result = ResultAttempt.where(result_id: result_ids)
+                                             .group_by(&:result_id)
+                                             .transform_values { it.sort_by(&:attempt_number).map(&:value) }
+
+    result_attrs.map { it.merge(attempts: result_attempts_by_result[it[id_key]]) }
+  end
 end
