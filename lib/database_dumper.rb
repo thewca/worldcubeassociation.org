@@ -976,6 +976,8 @@ module DatabaseDumper
           pos
           best
           average
+        ],
+        db_default: %w[
           value1
           value2
           value3
