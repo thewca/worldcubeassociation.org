@@ -910,12 +910,6 @@ class User < ApplicationRecord
     can_admin_competitions? || any_kind_of_delegate?
   end
 
-  def can_edit_registration?(registration)
-    # A registration can be edited by a user if it hasn't been accepted yet, and if edits are allowed.
-    editable_by_user = !registration.accepted? || registration.competition.registration_edits_currently_permitted?
-    can_manage_competition?(registration.competition) || (registration.user_id == self.id && editable_by_user)
-  end
-
   def can_confirm_competition?(competition)
     # We don't let competition organizers confirm competitions.
     can_admin_results? || competition.staff_delegates.include?(self)

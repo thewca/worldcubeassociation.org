@@ -1572,4 +1572,39 @@ RSpec.describe Registration do
       end
     end
   end
+
+  describe "can edit registration" do
+    let!(:competitor) { create(:user) }
+    let!(:organizer) { create(:user) }
+    let!(:competition) { create(:competition, :registration_open, organizers: [organizer]) }
+    let!(:registration) { create(:registration, user: competitor, competition: competition) }
+
+    it "if they are an organizer" do
+      expect(registration.user_can_modify?(organizer)).to be true
+    end
+
+    it "if their registration is pending" do
+      registration.competing_status = Registrations::Helper::STATUS_PENDING
+      expect(registration.user_can_modify?(competitor)).to be true
+    end
+
+    it "unless their registration is accepted and allow_registration_edits is false" do
+      registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
+      expect(registration.user_can_modify?(competitor)).to be false
+    end
+
+    it "if event edit deadline is in the future" do
+      registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
+      competition.allow_registration_edits = true
+      competition.event_change_deadline_date = 2.weeks.from_now
+      expect(registration.user_can_modify?(competitor)).to be true
+    end
+
+    it "unless event edit deadline has passed" do
+      registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
+      competition.allow_registration_edits = true
+      competition.event_change_deadline_date = 2.weeks.ago
+      expect(registration.user_can_modify?(competitor)).to be false
+    end
+  end
 end

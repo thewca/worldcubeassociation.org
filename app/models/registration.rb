@@ -659,4 +659,15 @@ class Registration < ApplicationRecord
       false
     end
   end
+
+  def user_can_modify?(user)
+    # Managers can always modify a registrations
+    return true if user.can_manage_competition?(self.competition)
+
+    # A registration can be edited by a user if it hasn't been accepted yet, and if edits are allowed.
+    editable_by_user = !(self.accepted? && self.competition.cannot_edit_accepted_registrations?) &&
+                       self.competition.registration_edits_currently_permitted?
+
+    user.id == self.user_id && editable_by_user
+  end
 end
