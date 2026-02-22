@@ -59,8 +59,8 @@ RSpec.describe IRV do
         # compared to the first phase expected number of attempts.
         res_over_missing_value = create(result_kind, :over_cutoff,
                                         competition: competition1,
-                                        cutoff: cutoff, event_id: "444", round: round44)
-        res_over_missing_value.update!(value2: 0)
+                                        cutoff: cutoff, event_id: "444", round: round44,
+                                        value2: 0)
 
         errs << RV::ValidationError.new(IRV::WRONG_ATTEMPTS_FOR_CUTOFF_ERROR,
                                         :results, competition1.id,
@@ -70,11 +70,11 @@ RSpec.describe IRV do
         # Creates a result which doesn't meet the cutoff but yet has extra values
         res_over_with_results = create(result_kind, :over_cutoff,
                                        competition: competition1,
-                                       cutoff: cutoff, event_id: "444", round: round44)
-        res_over_with_results.update!(value3: res_over_with_results.value2,
-                                      value4: res_over_with_results.value2,
-                                      value5: res_over_with_results.value2,
-                                      average: res_over_with_results.value2)
+                                       cutoff: cutoff, event_id: "444", round: round44,
+                                       value3: res_over_with_results.value2,
+                                       value4: res_over_with_results.value2,
+                                       value5: res_over_with_results.value2,
+                                       average: res_over_with_results.value2)
 
         errs << RV::ValidationError.new(IRV::DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
                                         :results, competition1.id,
@@ -86,8 +86,8 @@ RSpec.describe IRV do
         res_over_limit = create(result_kind, competition: competition1,
                                              event_id: "444",
                                              best: 4000, average: 4200,
-                                             round_type_id: "c", round: round44)
-        res_over_limit.update!(value5: 12_001)
+                                             round_type_id: "c", round: round44,
+                                             value5: 12_001)
 
         errs << RV::ValidationError.new(IRV::RESULT_OVER_TIME_LIMIT_ERROR,
                                         :results, competition1.id,
@@ -98,8 +98,8 @@ RSpec.describe IRV do
         # Create a result which meets the cutoff but doesn't have all the necessary values
         res_fm = create(result_kind, :over_cutoff,
                         competition: competition2, cutoff: cutoff_fm,
-                        format_id: "m", event_id: "333fm", round: round_fm)
-        res_fm.update!(value1: 30, best: 30)
+                        format_id: "m", event_id: "333fm", round: round_fm,
+                        value1: 30, best: 30)
 
         errs << RV::ValidationError.new(IRV::MET_CUTOFF_MISSING_RESULTS_ERROR,
                                         :results, competition2.id,
@@ -167,17 +167,15 @@ RSpec.describe IRV do
       [Result, InboxResult].each do |model|
         warns = []
         result_kind = model.model_name.singular.to_sym
-        res_mbf = create(result_kind, :mbf, competition: competition1, round: round_333mbf)
         # 8 points in 60:02 (ie: reached the time limit and got +2)
-        res_mbf.update!(value2: 910_360_200)
+        res_mbf = create(result_kind, :mbf, competition: competition1, round: round_333mbf, value2: 910_360_200)
         warns << RV::ValidationWarning.new(IRV::MBF_RESULT_OVER_TIME_LIMIT_WARNING,
                                            :results, competition1.id,
                                            round_id: "333mbf-f",
                                            person_name: res_mbf.person_name,
                                            result: res_mbf.solve_times[1].clock_format)
 
-        res22 = create(result_kind, competition: competition2, event_id: "222", round: round_222)
-        res22.update!(value4: -2)
+        res22 = create(result_kind, competition: competition2, event_id: "222", round: round_222, value4: -2)
         warns << RV::ValidationWarning.new(IRV::RESULT_AFTER_DNS_WARNING,
                                            :results, competition2.id,
                                            round_id: "222-f",
