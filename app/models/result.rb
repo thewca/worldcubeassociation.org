@@ -24,7 +24,7 @@ class Result < ApplicationRecord
 
   def backlink_attempts
     (1..5).each do |n|
-      legacy_value = self.attributes["value#{n}"]
+      legacy_value = self.public_send(:"@value#{n}") || 0
 
       # Crucially, `find_or_initialize_by` does NOT work here, because it circumvents Rails memory
       #   by going directly down to the database layer. `autosave: true` above needs the memory layer, though.
