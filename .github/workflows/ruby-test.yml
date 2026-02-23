@@ -6,6 +6,16 @@ on:
   pull_request:
     branches:
       - '**'
+    paths:
+      - '**/*.rb'
+      - '**/*.erb'
+      - '**/*.rake'
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - 'Rakefile'
+      - '.ruby-version'
+      - 'package.json'
+      - 'yarn.lock'
 
 jobs:
   test:
