@@ -104,8 +104,6 @@ export function LiveResultProvider({
             (r: LiveResult) => r.registration_id == liveResult.registration_id,
           ),
           [liveResult],
-          [],
-          [],
         ),
       ]);
     },

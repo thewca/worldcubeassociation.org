@@ -2,13 +2,14 @@
 import { useCallback, useState } from "react";
 import { components } from "@/types/openapi";
 import useAPI from "@/lib/wca/useAPI";
-import { Button, ButtonGroup, Grid, GridItem, Link } from "@chakra-ui/react";
+import { Grid, GridItem } from "@chakra-ui/react";
 import AttemptsForm from "@/components/live/AttemptsForm";
 import { Format } from "@/lib/wca/data/formats";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import { useLiveResults } from "@/providers/LiveResultProvider";
+import events from "@/lib/wca/data/events";
 function zeroedArrayOfSize(size: number) {
   return Array(size).fill(0);
 }
@@ -24,7 +25,7 @@ export default function AddResults({
   competitionId: string;
   competitors: components["schemas"]["LiveCompetitor"][];
 }) {
-  const eventId = parseActivityCode(roundId).eventId;
+  const { eventId, roundNumber } = parseActivityCode(roundId);
 
   const solveCount = format.expected_solve_count;
 
@@ -123,34 +124,6 @@ export default function AddResults({
       </GridItem>
 
       <GridItem colSpan={12}>
-        <ButtonGroup float="right">
-          <Button asChild>
-            <Link
-              href={`/competitions/${competitionId}/live/rounds/${roundId}`}
-            >
-              Results
-            </Link>
-          </Button>
-          <Button asChild>
-            <Link href={`/competitions/${competitionId}/edit/registrations`}>
-              Add Competitor
-            </Link>
-          </Button>
-          <Button asChild>
-            <Link
-              href={`/competitions/${competitionId}/live/rounds/${roundId}/pdf`}
-            >
-              PDF
-            </Link>
-          </Button>
-          <Button asChild>
-            <Link
-              href={`/competitions/${competitionId}/live/rounds/${roundId}/double-check`}
-            >
-              Double Check
-            </Link>
-          </Button>
-        </ButtonGroup>
         {pendingLiveResults.length > 0 && (
           <LiveResultsTable
             results={pendingLiveResults}
@@ -166,7 +139,7 @@ export default function AddResults({
           competitionId={competitionId}
           competitors={competitors}
           isAdmin
-          title=""
+          title={`${events.byId[eventId].name} - ${roundNumber}`}
         />
       </GridItem>
     </Grid>
