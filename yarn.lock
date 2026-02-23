@@ -2909,10 +2909,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:^8.7.0":
-  version: 8.7.0
-  resolution: "@stripe/stripe-js@npm:8.7.0"
-  checksum: 10c0/47f7071a7549f94f3bfcc0cf3d7fe4992abdb2d3eb0a1fb712552da1bd0f2b1cb2c1e34ec9c5921d86a8d9e01bb7fff915faa5fa31130ffc40d8872ada94e92d
+"@stripe/stripe-js@npm:^8.8.0":
+  version: 8.8.0
+  resolution: "@stripe/stripe-js@npm:8.8.0"
+  checksum: 10c0/d1f13044ae35b0b52c2fedbf20038963645e1afaab20ae4addfa35b95daa0698020c5bf84b044950abe28ffa90c0cf626688e713ff7fe4ae0d99b489efb695bc
   languageName: node
   linkType: hard
 
@@ -10632,7 +10632,7 @@ __metadata:
     "@rails/actioncable": "npm:^8.1.200"
     "@rails/ujs": "npm:^7.1.600"
     "@stripe/react-stripe-js": "npm:^5.6.0"
-    "@stripe/stripe-js": "npm:^8.7.0"
+    "@stripe/stripe-js": "npm:^8.8.0"
     "@tanstack/react-query": "npm:^5.90.21"
     "@tanstack/react-table": "npm:^8.21.3"
     "@wca/helpers": "npm:^1.1.6"
