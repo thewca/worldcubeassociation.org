@@ -93,5 +93,5 @@ export default function useResultsSubscriptions(
 
   // Aggregate: worst state wins
   const values = Object.values(connectionStates);
-  return _.min(values);
+  return _.min(values)!;
 }

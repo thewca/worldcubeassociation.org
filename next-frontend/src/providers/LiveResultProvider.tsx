@@ -18,13 +18,13 @@ import useResultsSubscriptions, {
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
+import useEffectEvent from "@/lib/hooks/useEffectEvent";
 
 export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
 
 interface LiveResultContextType {
   liveResultsByRegistrationId: LiveResultsByRegistrationId;
   connectionState: ConnectionState;
-  refetch: () => void;
 }
 
 const LiveResultContext = createContext<LiveResultContextType | undefined>(
@@ -73,22 +73,28 @@ export function MultiRoundResultProvider({
     ),
   );
 
-  const results = useQueries({
+  const { liveResultsByRegistrationId, stateHashesByRoundId } = useQueries({
     queries: queries.map((q, i) => ({ ...q, initialData: initialRounds[i] })),
+    combine: (results) => ({
+      liveResultsByRegistrationId: _.groupBy(
+        results.flatMap((r, i) =>
+          r.data.results.map((res) => ({
+            ...res,
+            // To differentiate between results for Dual Rounds
+            round_wcif_id: initialRounds[i].id,
+          })),
+        ),
+        "registration_id",
+      ),
+      stateHashesByRoundId: Object.fromEntries(
+        results.map((r) => [r.data.id, r.data.state_hash]),
+      ),
+    }),
   });
 
-  // Stable ref to latest results as otherwise dynamic arrays (as returned from useQueries) in dependency can cause issues
-  const resultsRef = useRef(results);
-  useLayoutEffect(() => {
-    resultsRef.current = results;
-  });
+  const roundIds = initialRounds.map((r) => r.id);
 
-  const roundIds = useMemo(
-    () => initialRounds.map((r) => r.id),
-    [initialRounds],
-  );
-
-  const onReceived = useCallback(
+  const onReceived = useEffectEvent(
     (roundId: string, diff: DiffProtocolResponse) => {
       const {
         updated = [],
@@ -101,11 +107,10 @@ export function MultiRoundResultProvider({
       const queryIndex = initialRounds.findIndex((r) => r.id === roundId);
       if (queryIndex === -1) return;
 
-      const result = resultsRef.current[queryIndex];
       const query = queries[queryIndex];
 
-      if (before_hash !== result.data.state_hash) {
-        result.refetch();
+      if (before_hash !== stateHashesByRoundId[roundId]) {
+        queryClient.refetchQueries({ queryKey: query.queryKey, exact: true });
       } else {
         queryClient.setQueryData(query.queryKey, (oldData: LiveRound) => ({
           ...oldData,
@@ -119,32 +124,14 @@ export function MultiRoundResultProvider({
         }));
       }
     },
-    [initialRounds, queries, queryClient],
   );
 
   const connectionState = useResultsSubscriptions(roundIds, onReceived);
-
-  // Merge results by registration_id for the context
-  const liveResultsByRegistrationId = useMemo(
-    () =>
-      _.groupBy(
-        resultsRef.current.flatMap((r, i) =>
-          (r.data.results ?? []).map((res) => ({
-            ...res,
-            // To differentiate between results for Dual Rounds
-            round_wcif_id: initialRounds[i].id,
-          })),
-        ),
-        "registration_id",
-      ),
-    [initialRounds],
-  );
 
   return (
     <LiveResultContext.Provider
       value={{
         liveResultsByRegistrationId,
-        refetch: () => results.forEach((r) => r.refetch()),
         connectionState,
       }}
     >
