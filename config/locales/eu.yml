@@ -1006,6 +1006,8 @@ eu:
       contact_wrt:
         #original_hash: 603a218
         wca_id: WCA ID
+    #original_hash: 687d968
+    competition_link_html: 'Zoaz <a href=''%{url}''>hona</a> lehiakieta orria bisitatzeko.'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -3047,14 +3049,20 @@ eu:
       no_winner: >-
         Proba nagusia %{event_name} zen. Ez zen irabazlerik aitortu, inorek ez
         baitzuen proban emaitza osorik lortu.
+      #original_hash: 5262865
+      h2h_winner: '%{winner}((r)e)k %{event_name} probako buruz buruko finala irabazi zuen.'
       #original_hash: 6c3b236
       winner: '%{winner}((r)e)k %{event_name}ko proban %{result_sentence} irabazi zuen.'
       #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} bigarren bukatu zuen (%{first_runner_up_result})'
+      #original_hash: 2926d10
+      h2h_first_runner_up: '%{first_runner_up} bigarren gelditu zen'
       #original_hash: cffa50a
       and: eta
       #original_hash: 67d285c
       second_runner_up: '%{second_runner_up} hirugarren bukatu zuen (%{second_runner_up_result}).'
+      #original_hash: 157b649
+      h2h_second_runner_up: '%{second_runner_up} hirugarren gelditu zen.'
       records:
         #original_hash: 0658e11
         wr: Munduko errekorrak
@@ -3263,8 +3271,10 @@ eu:
         Ziur al zaude baieztatzeko prest zaudela? Baieztatu ondoren, ezin izanen
         duzu informaziorik aldatu. Zoaz e-mailera hau egin ondoren WCAko
         Lehiaketa Iragarpen Taldea honetaz ohartarazita dagoela berresteko.
-      #original_hash: 4c7deb7
-      submit_delete: Ziur al zaude lehiaketa hau ezabatzeaz? Ez dago atzera egiterik.
+      #original_hash: 89fbbca
+      submit_delete: >-
+        Ekintza hau ezin da desegin. Idatzi hemen behan lehiaketaren IDa
+        "%{competition_id}" ezabatzea burutzeko.
       #original_hash: 8ebebca
       coordinates: Koordenatuak
       #original_hash: a672984
@@ -4555,6 +4565,11 @@ eu:
         #original_hash: c4622c3
         scrambles: Nahasteak
     results_table:
+      #original_hash: bdbfcdc
+      h2h_results_disclaimer: >-
+        Emaitzak buruz buruko finalak zehazten ditu. Soilik posizio ordena eta
+        ebazpen hoberena erakusten dira, buruz buruko final osoen emaitzen
+        pantaila garatzen ari baita.
       #original_hash: 3e9a6b5
       wca_profile: WCAko profila
       #original_hash: ad8919a
@@ -5152,13 +5167,12 @@ eu:
   about:
     #original_hash: 9ac918a
     title: WCAri inguruan
-    #original_hash: af00571
+    #original_hash: ee35764
     mission_statement: >-
-      Gure zeregina lehiaketa gehiago, herrialde gehiagoetan, pertsona
-      gehiagorekin eta gozamen gehiagorekin eta dena baldintza bidezko eta
-      berdinetan izatea da.
-    #original_hash: e627278
-    mission_footer: WCAko zeregin deklarazioa
+      Gure xedea munduko kuboen komunitatea indartzea eta denontzako justua eta
+      dibertigarria den lehiaketa giroa mantentzea da
+    #original_hash: 5bed828
+    mission_footer: WCAko xede deklarazioa
     #original_hash: cdab446
     who_we_are_title: Nor garen
     #original_hash: 303f17a
@@ -6233,16 +6247,22 @@ eu:
         %{name}(r)i (%{wca_id}(r)i) hornitutako "%{country}" herrialdea ez dator
         bat WCAko datutegiko agiriarekin ("%{expected_country}" dena). Hau akats
         bat bada, konpon ezazu. Bestela, utzi WRTri honen inguruko iruzkin bat.
-      #original_hash: e15e700
+      #original_hash: 6179b35
       multiple_newcomers_with_same_name_warning: >-
         Lehiakide berri bi edo gehiagok izen berbera dute: %{name}. Ziurtatu
-        lehiakide hauentzako emaitza guztiak ongi daudela eta dagokien IDari
-        behar bezala banatuta daudela.
+        lehiakide hauentzako emaitza guztiak ongi daudela eta dagozkion IDari
+        behar bezala banatuta daudela mesedez.
       #original_hash: 7732038
       wrong_parenthesis_type_error: >-
         "%{name}" izenean parentesi karakterea irregularra da, ordeztu ezazu
         parentesi erregular batekin "(" edo ")" eta tartekatze aproposarekin
         mesedez.
+      #original_hash: fec0347
+      special_characters_in_name_warning: >-
+        "%{name}" izenak balio ez duten karaktere bereziak dauzka (zenbakiak,
+        komatxiak, edo bestelakoak bezalakoak). Izenek bakarrik letrak, tarteak,
+        marratxoak, apostrofoak, puntuak eta parentesi normalak eduki beharko
+        lituzkete.
       #original_hash: 4b90583
       successive_uppercase_name_warning: >-
         "%{name}" izenak jarraian doazen maiuskulazko letra batzuk ditu.
@@ -6451,3 +6471,8 @@ eu:
       edit_person: Pertsona editatu
       #original_hash: 5fb2137
       competition_result: Lehiaketako emaitza
+    stakeholder_role:
+      #original_hash: e095187
+      actioner: Jokalaria
+      #original_hash: bcdf8d3
+      requester: Eskatzailea

@@ -77,7 +77,7 @@ module CompetitionResultsImport
       result_attempts_index = result_data.to_h { [[it[:round_id], it[:person_id]], it[:attempt_values]] }
       # Then we insert next, which generates IDs through the AUTO-INCREMENT key.
       #   But the properties round_id and person_id are still the same as before, so we use them as a lookup.
-      attempt_rows = competition.reload.results.flat_map { Result.unpack_attempt_attributes(result_attempts_index[[it.round_id, it.person_id]], result_id: it.id) }
+      attempt_rows = competition.reload.results.flat_map { Result.unpack_attempt_attributes(result_attempts_index.fetch([it.round_id, it.person_id]), result_id: it.id) }
       ResultAttempt.insert_all!(attempt_rows)
 
       competition.inbox_results.destroy_all
