@@ -89,6 +89,42 @@ RSpec.describe Live::DiffHelper do
       expect(diff["before_hash"]).to eq Live::DiffHelper.state_hash(before_state)
       expect(diff["after_hash"]).to eq Live::DiffHelper.state_hash(after_state)
     end
+
+    it 'sends best and worst possible for incomplete results' do
+      registration_1 = registrations.first
+      round.open_round!
+
+      result = round.live_results.find_by!(registration_id: registration_1.id)
+
+      before_state = round.to_live_state
+
+      attempts = 4.times.map.with_index(1) do |r, i|
+        LiveAttempt.build_with_history_entry((r + 1) * 100, i, User.first)
+      end
+      average, best = LiveResult.compute_average_and_best(attempts, round)
+      result.update!(live_attempts: attempts, best: best, average: average)
+
+      round.live_results.reload
+      after_state = round.to_live_state
+
+      diff = Live::DiffHelper.round_state_diff(before_state, after_state)
+      diff = Live::DiffHelper.add_forecast_stats(diff, round)
+
+      expect(diff["updated"]).to contain_exactly({
+                                                   "registration_id" => registration_1.id,
+                                                   "advancing_questionable" => true,
+                                                   "best" => best,
+                                                   "global_pos" => 1,
+                                                   "local_pos" => 1,
+                                                   "live_attempts" => attempts.map { it.serializable_hash({ only: %i[id value attempt_number] }) },
+                                                   "best_possible_average" => 200,
+                                                   "worst_possible_average" => 300,
+                                                 })
+      expect(diff["deleted"]).to be_nil
+      expect(diff["created"]).to be_nil
+      expect(diff["before_hash"]).to eq Live::DiffHelper.state_hash(before_state)
+      expect(diff["after_hash"]).to eq Live::DiffHelper.state_hash(after_state)
+    end
   end
 
   describe 'State Hash' do
