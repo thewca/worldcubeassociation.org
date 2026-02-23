@@ -14,6 +14,8 @@ module ResultsValidators
       results_assoc = check_real_results ? :results : :inbox_results
       # Deliberately NOT sending :format and :event because those are cached values anyways
       associations.deep_merge!({ results_assoc => { round: [:competition_event] } })
+      # TODO: Reconsider the `if` postfix once we have migrated away from inbox_results
+      associations.deep_merge!({ results_assoc => { result_attempts: [] } }) if check_real_results
 
       competition_scope = self.load_competition_includes(validator, associations, check_real_results: check_real_results)
                               .where(id: competition_ids)
