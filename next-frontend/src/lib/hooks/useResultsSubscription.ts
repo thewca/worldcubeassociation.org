@@ -1,11 +1,12 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
 import { components } from "@/types/openapi";
 import useEffectEvent from "@/lib/hooks/useEffectEvent";
+import _ from "lodash";
 
-export const CONNECTION_STATE_INITIALIZED = "initialized";
-export const CONNECTION_STATE_CONNECTED = "connected";
-export const CONNECTION_STATE_DISCONNECTED = "disconnected";
+export const CONNECTION_STATE_INITIALIZED = 1;
+export const CONNECTION_STATE_CONNECTED = 2;
+export const CONNECTION_STATE_DISCONNECTED = 0;
 
 export type ConnectionState =
   | typeof CONNECTION_STATE_INITIALIZED
@@ -59,6 +60,16 @@ export default function useResultsSubscriptions(
     ),
   );
 
+  const changeConnectionState = useCallback(
+    (roundId: string, connectionState: ConnectionState) => {
+      setConnectionStates((prev) => ({
+        ...prev,
+        [roundId]: connectionState,
+      }));
+    },
+    [],
+  );
+
   useEffectEvent(() => {
     const cable = createConsumer("http://localhost:3000/cable");
 
@@ -68,20 +79,11 @@ export default function useResultsSubscriptions(
         {
           received: (data: DiffProtocolResponse) => onReceived(roundId, data),
           initialized: () =>
-            setConnectionStates((prev) => ({
-              ...prev,
-              [roundId]: CONNECTION_STATE_INITIALIZED,
-            })),
+            changeConnectionState(roundId, CONNECTION_STATE_INITIALIZED),
           connected: () =>
-            setConnectionStates((prev) => ({
-              ...prev,
-              [roundId]: CONNECTION_STATE_CONNECTED,
-            })),
+            changeConnectionState(roundId, CONNECTION_STATE_CONNECTED),
           disconnected: () =>
-            setConnectionStates((prev) => ({
-              ...prev,
-              [roundId]: CONNECTION_STATE_DISCONNECTED,
-            })),
+            changeConnectionState(roundId, CONNECTION_STATE_DISCONNECTED),
         },
       ),
     );
@@ -91,9 +93,5 @@ export default function useResultsSubscriptions(
 
   // Aggregate: worst state wins
   const values = Object.values(connectionStates);
-  return values.includes(CONNECTION_STATE_DISCONNECTED)
-    ? CONNECTION_STATE_DISCONNECTED
-    : values.every((s) => s === CONNECTION_STATE_CONNECTED)
-      ? CONNECTION_STATE_CONNECTED
-      : CONNECTION_STATE_INITIALIZED;
+  return _.min(values);
 }
