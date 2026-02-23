@@ -13,6 +13,8 @@ class LiveResult < ApplicationRecord
 
   belongs_to :round
 
+  delegate :wcif_id, to: :round
+
   belongs_to :quit_by, class_name: 'User', optional: true
   belongs_to :locked_by, class_name: 'User', optional: true
 
@@ -25,8 +27,8 @@ class LiveResult < ApplicationRecord
   has_one :format, through: :round
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: %w[global_pos local_pos registration_id round_id best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
-    methods: %w[event_id attempts result_id forecast_statistics],
+    only: %w[global_pos local_pos registration_id best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
+    methods: %w[event_id attempts result_id forecast_statistics wcif_id],
     include: %w[],
   }.freeze
 

@@ -44,7 +44,10 @@ export default async function PodiumsPage({
             </Heading>
             {finalRound.results.length > 0 ? (
               <LiveResultsTable
-                results={finalRound.results}
+                resultsByRegistrationId={_.groupBy(
+                  finalRound.results,
+                  "registration_id",
+                )}
                 competitionId={competitionId}
                 competitors={finalRound.competitors}
                 eventId={e}

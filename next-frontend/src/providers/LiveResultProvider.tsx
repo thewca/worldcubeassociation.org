@@ -19,7 +19,7 @@ import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
 
-type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
+export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
 
 interface LiveResultContextType {
   liveResultsByRegistrationId: LiveResultsByRegistrationId;
@@ -113,7 +113,7 @@ export function LiveResultProvider({
           (r.data.results ?? []).map((res) => ({
             ...res,
             // To differentiate between results for Dual Rounds
-            wcifId: initialRounds[i].id,
+            wcif_id: initialRounds[i].id,
           })),
         ),
         "registration_id",

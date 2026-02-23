@@ -850,7 +850,7 @@ export interface components {
         };
         LiveResult: {
             registration_id: number;
-            round_id: number;
+            wcif_id: string;
             global_pos: number;
             local_pos: number;
             best: number;
