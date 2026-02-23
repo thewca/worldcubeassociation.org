@@ -38,7 +38,7 @@ export default function BanendCompetitorForm({
     save(apiV0Urls.userRoles.create(), {
       userId: formValues?.user?.id,
       groupType: groupTypes.banned_competitors,
-      startDate: formValues?.startDate || new Date().toISOString().split('T')[0],
+      startDate: formValues?.startDate,
       endDate: formValues?.endDate,
       banReason: formValues?.banReason,
       scope: formValues?.scope,
@@ -50,7 +50,7 @@ export default function BanendCompetitorForm({
 
   const editBannedCompetitor = () => {
     save(apiV0Urls.userRoles.update(banActionRole.id), {
-      startDate: formValues?.startDate || new Date().toISOString().split('T')[0],
+      startDate: formValues?.startDate,
       endDate: formValues?.endDate,
       banReason: formValues?.banReason,
       scope: formValues?.scope,
