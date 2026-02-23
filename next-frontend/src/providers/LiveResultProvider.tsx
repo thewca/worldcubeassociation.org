@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useContext,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-} from "react";
+import { createContext, ReactNode, useContext } from "react";
 import { LiveResult, LiveRound } from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
 import useResultsSubscriptions, {
