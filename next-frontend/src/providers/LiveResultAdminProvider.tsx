@@ -6,8 +6,6 @@ import {
   ReactNode,
 } from "react";
 import { Format } from "@/lib/wca/data/formats";
-import { components } from "@/types/openapi";
-import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
 
