@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_28_194213) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -471,30 +471,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_28_194213) do
     t.integer "average", default: 0, null: false
     t.string "continent_id", limit: 50, default: "", null: false
     t.string "country_id", limit: 50, default: "", null: false
-    t.integer "day", limit: 2, default: 0, null: false, unsigned: true
     t.string "event_id", limit: 6, default: "", null: false
     t.integer "id", default: 0, null: false
-    t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.string "person_id", limit: 10, default: "", null: false
+    t.integer "reg_year", limit: 2, default: 0, null: false, unsigned: true
     t.bigint "value_and_id"
-    t.integer "year", limit: 2, default: 0, null: false, unsigned: true
     t.index ["event_id", "average"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "average"], name: "regional_records_speedup"
+    t.index ["person_id", "event_id", "continent_id", "country_id", "average"], name: "average_ranks_speedup"
   end
 
   create_table "concise_single_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "best", default: 0, null: false
     t.string "continent_id", limit: 50, default: "", null: false
     t.string "country_id", limit: 50, default: "", null: false
-    t.integer "day", limit: 2, default: 0, null: false, unsigned: true
     t.string "event_id", limit: 6, default: "", null: false
     t.integer "id", default: 0, null: false
-    t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.string "person_id", limit: 10, default: "", null: false
+    t.integer "reg_year", limit: 2, default: 0, null: false, unsigned: true
     t.bigint "value_and_id"
-    t.integer "year", limit: 2, default: 0, null: false, unsigned: true
     t.index ["event_id", "best"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "best"], name: "regional_records_speedup"
+    t.index ["person_id", "event_id", "continent_id", "country_id", "best"], name: "single_ranks_speedup"
   end
 
   create_table "connected_paypal_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -949,6 +947,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_28_194213) do
     t.index ["country_id"], name: "Persons_fk_country"
     t.index ["name"], name: "Persons_name"
     t.index ["name"], name: "index_persons_on_name", type: :fulltext
+    t.index ["sub_id"], name: "current_person_ranks_speedup"
     t.index ["wca_id", "sub_id"], name: "index_Persons_on_wca_id_and_subId", unique: true
     t.index ["wca_id"], name: "index_persons_on_wca_id"
   end
@@ -1055,16 +1054,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_28_194213) do
     t.index ["name"], name: "index_regional_organizations_on_name"
   end
 
-  create_table "regional_records_lookup", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "regional_records_lookup", primary_key: "result_id", id: :integer, default: nil, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "average", default: 0, null: false
     t.integer "best", default: 0, null: false
     t.date "competition_end_date", null: false
     t.string "country_id", null: false
     t.string "event_id", null: false
-    t.integer "result_id", null: false
     t.index ["event_id", "country_id", "average", "competition_end_date"], name: "idx_on_eventId_countryId_average_competitionEndDate_b424c59953"
     t.index ["event_id", "country_id", "best", "competition_end_date"], name: "idx_on_eventId_countryId_best_competitionEndDate_4e01b1ae38"
-    t.index ["result_id"], name: "index_regional_records_lookup_on_resultId"
   end
 
   create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1072,7 +1069,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_28_194213) do
     t.integer "registration_id"
     t.index ["competition_event_id"], name: "index_registration_competition_events_on_competition_event_id"
     t.index ["registration_id", "competition_event_id"], name: "idx_registration_competition_events_on_reg_id_and_comp_event_id", unique: true
-    t.index ["registration_id", "competition_event_id"], name: "index_reg_events_reg_id_comp_event_id"
     t.index ["registration_id"], name: "index_registration_competition_events_on_registration_id"
   end
 
@@ -1180,11 +1176,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_28_194213) do
     t.index ["event_id", "best"], name: "Results_eventAndBest"
     t.index ["event_id", "competition_id", "round_type_id", "country_id", "average"], name: "Results_regionalAverageRecordCheckSpeedup"
     t.index ["event_id", "competition_id", "round_type_id", "country_id", "best"], name: "Results_regionalSingleRecordCheckSpeedup"
-    t.index ["event_id", "value1"], name: "index_Results_on_eventId_and_value1"
-    t.index ["event_id", "value2"], name: "index_Results_on_eventId_and_value2"
-    t.index ["event_id", "value3"], name: "index_Results_on_eventId_and_value3"
-    t.index ["event_id", "value4"], name: "index_Results_on_eventId_and_value4"
-    t.index ["event_id", "value5"], name: "index_Results_on_eventId_and_value5"
     t.index ["event_id"], name: "Results_fk_event"
     t.index ["format_id"], name: "Results_fk_format"
     t.index ["person_id"], name: "Results_fk_competitor"
