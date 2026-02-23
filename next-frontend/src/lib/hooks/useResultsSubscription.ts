@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
 import { components } from "@/types/openapi";
+import useEffectEvent from "@/lib/hooks/useEffectEvent";
 
 export const CONNECTION_STATE_INITIALIZED = "initialized";
 export const CONNECTION_STATE_CONNECTED = "connected";
@@ -58,21 +59,14 @@ export default function useResultsSubscriptions(
     ),
   );
 
-  // Stable ref so onReceived doesn't retrigger the effect
-  const onReceivedRef = useRef(onReceived);
-  useLayoutEffect(() => {
-    onReceivedRef.current = onReceived;
-  });
-
-  useEffect(() => {
+  useEffectEvent(() => {
     const cable = createConsumer("http://localhost:3000/cable");
 
     const subscriptions = roundIds.map((roundId) =>
       cable.subscriptions.create(
         { channel: "LiveResultsChannel", round_id: roundId },
         {
-          received: (data: DiffProtocolResponse) =>
-            onReceivedRef.current(roundId, data),
+          received: (data: DiffProtocolResponse) => onReceived(roundId, data),
           initialized: () =>
             setConnectionStates((prev) => ({
               ...prev,
@@ -93,7 +87,7 @@ export default function useResultsSubscriptions(
     );
 
     return () => subscriptions.forEach((s) => s.unsubscribe());
-  }, [roundIds]); // roundIds should be stable (useMemo at call site)
+  });
 
   // Aggregate: worst state wins
   const values = Object.values(connectionStates);
