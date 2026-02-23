@@ -18,7 +18,7 @@
     "postinstall": "chakra typegen ./src/theme.ts"
   },
   "dependencies": {
-    "@aws-sdk/credential-providers": "^3.990.0",
+    "@aws-sdk/credential-providers": "^3.995.0",
     "@chakra-ui/react": "^3.33.0",
     "@emotion/react": "^11.14.0",
     "@fullcalendar/core": "^6.1.20",
