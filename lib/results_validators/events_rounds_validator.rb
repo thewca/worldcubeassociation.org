@@ -15,7 +15,7 @@ module ResultsValidators
       false
     end
 
-    def competition_associations
+    def competition_associations(check_real_results: false)
       {
         events: [],
         rounds: [:competition_event],

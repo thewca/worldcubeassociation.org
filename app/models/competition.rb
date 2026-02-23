@@ -256,9 +256,9 @@ class Competition < ApplicationRecord
   validates :early_puzzle_submission_reason, presence: true, if: :early_puzzle_submission?
   # cannot validate `qualification_results IN [true, false]` because we historically have competitions
   # where we legitimately don't know whether or not they used qualification times so we have to set them to NULL.
-  validates :qualification_results_reason, presence: true, if: :persisted_uses_qualification?
+  validates :qualification_results_reason, presence: true, if: :uses_qualification?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
-  validates :main_event_id, inclusion: { in: :persisted_events_id, allow_nil: true }
+  validates :main_event_id, inclusion: { in: :event_ids, allow_nil: true }
 
   # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
   validates :name, length: { maximum: MAX_NAME_LENGTH }
@@ -290,32 +290,6 @@ class Competition < ApplicationRecord
     newcomer_month_reserved_spots - registrations.newcomer_month_eligible_competitors_count
   end
 
-  # Dirty old trick to deal with competition id changes (see other methods using
-  # 'with_old_id' for more details).
-  def persisted_events_id
-    with_old_id do
-      self.competition_events.map(&:event_id)
-    end
-  end
-
-  def persisted_uses_qualification?
-    with_old_id do
-      self.uses_qualification?
-    end
-  end
-
-  def persisted_staff_delegate_ids
-    with_old_id do
-      self.staff_delegate_ids
-    end
-  end
-
-  def persisted_organizer_ids
-    with_old_id do
-      self.organizer_ids
-    end
-  end
-
   def guests_per_registration_limit_enabled?
     some_guests_allowed? && guests_per_registration_limit.present?
   end
@@ -325,7 +299,7 @@ class Competition < ApplicationRecord
   end
 
   def number_of_events
-    persisted_events_id.length
+    event_ids.length
   end
 
   NEARBY_DISTANCE_KM_WARNING = 250
@@ -497,29 +471,12 @@ class Competition < ApplicationRecord
     uses_qualification? && !allow_registration_without_qualification
   end
 
-  def with_old_id
-    new_id = self.id
-    self.id = id_was
-    yield
-  ensure
-    self.id = new_id
-  end
-
   def no_events?
-    with_old_id do
-      competition_events.reject(&:marked_for_destruction?).empty?
-    end
+    competition_events.reject(&:marked_for_destruction?).empty?
   end
 
-  validate :must_have_at_least_one_delegate, if: :confirmed_or_visible?
-  def must_have_at_least_one_delegate
-    errors.add(:staff_delegate_ids, I18n.t('competitions.errors.must_contain_delegate')) if persisted_staff_delegate_ids.empty?
-  end
-
-  validate :must_have_at_least_one_organizer, if: :confirmed_or_visible?
-  def must_have_at_least_one_organizer
-    errors.add(:organizer_ids, I18n.t('competitions.errors.must_contain_organizer')) if persisted_organizer_ids.empty?
-  end
+  validates :staff_delegate_ids, length: { minimum: 1, message: I18n.t('competitions.errors.must_contain_delegate'), if: :confirmed_or_visible? }
+  validates :organizer_ids, length: { minimum: 1, message: I18n.t('competitions.errors.must_contain_organizer'), if: :confirmed_or_visible? }
 
   def confirmed_or_visible?
     self.confirmed? || self.show_at_all?
@@ -761,7 +718,13 @@ class Competition < ApplicationRecord
 
   before_validation :compute_coordinates
   before_validation :create_id_and_cell_name
-  before_validation :unpack_delegate_organizer_ids
+  # This is a (small) mess. The UI handles "Full Delegates" and "Trainee Delegates"
+  #   as separate fields, but the backend just has one "competition_delegates" table
+  #   which handles both.
+  # So when an update comes in, it has separate attributes `staff_delegate_ids` and `trainee_delegate_ids`
+  #   but we need to map them down to just the general `competition_delegates` association.
+  before_validation :unpack_staff_delegate_ids
+  before_validation :unpack_trainee_delegate_ids
   # After the cloned competition is created, clone other associations which cannot just be copied.
   after_create :clone_associations
   private def clone_associations
@@ -800,50 +763,28 @@ class Competition < ApplicationRecord
     self.cell_name = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
   end
 
-  attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
+  attr_writer :staff_delegate_ids, :trainee_delegate_ids
 
   def staff_delegate_ids
-    @staff_delegate_ids || staff_delegates.map(&:id).join(",")
-  end
-
-  def organizer_ids
-    @organizer_ids || organizers.map(&:id).join(",")
+    @staff_delegate_ids || staff_delegates.pluck(:id)
   end
 
   def trainee_delegate_ids
-    @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
+    @trainee_delegate_ids || trainee_delegates.pluck(:id)
   end
 
-  def should_render_register_v2?(user)
-    user.cannot_register_for_competition_reasons(self).empty?
+  def unpack_staff_delegate_ids
+    return if @staff_delegate_ids.nil?
+
+    # we overwrite staff_delegates, which means that we _keep_ existing trainee_delegates.
+    self.delegate_ids = self.trainee_delegate_ids | @staff_delegate_ids
   end
 
-  def unpack_delegate_organizer_ids
-    # This is a mess. When changing competition ids, the calls to delegates=
-    # and organizers= below will cause database writes with a new competition_id.
-    # We hack around this by pretending our id actually didn't change, and then
-    # we restore it at the end. This means we'll preseve our existing
-    # CompetitionOrganizer and CompetitionDelegate rows rather than creating new ones.
-    # We'll fix their competition_id below in update_foreign_keys.
-    with_old_id do
-      if @staff_delegate_ids || @trainee_delegate_ids
-        self.delegates ||= []
+  def unpack_trainee_delegate_ids
+    return if @trainee_delegate_ids.nil?
 
-        if @staff_delegate_ids
-          unpacked_staff_delegates = @staff_delegate_ids.split(",").map { |id| User.find(id) }
-
-          # we overwrite staff_delegates, which means that we _keep_ existing trainee_delegates.
-          self.delegates = self.trainee_delegates | unpacked_staff_delegates
-        end
-        if @trainee_delegate_ids
-          unpacked_trainee_delegates = @trainee_delegate_ids.split(",").map { |id| User.find(id) }
-
-          # we overwrite trainee_delegates, which means that we _keep_ existing staff_delegates.
-          self.delegates = self.staff_delegates | unpacked_trainee_delegates
-        end
-      end
-      self.organizers = @organizer_ids.split(",").map { |id| User.find(id) } if @organizer_ids
-    end
+    # we overwrite trainee_delegates, which means that we _keep_ existing staff_delegates.
+    self.delegate_ids = self.staff_delegate_ids | @trainee_delegate_ids
   end
 
   def staff_delegates
@@ -861,16 +802,6 @@ class Competition < ApplicationRecord
     self.start_date.present? && self.end_date.present?
   end
 
-  old_competition_events_attributes = instance_method(:competition_events_attributes=)
-  define_method(:competition_events_attributes=) do |attributes|
-    # This is also a mess. We "overload" the competition_events_attributes= method
-    # so it won't be confused by the fact that our competition's id is changing.
-    # See similar hack and comment in unpack_delegate_organizer_ids.
-    with_old_id do
-      old_competition_events_attributes.bind_call(self, attributes)
-    end
-  end
-
   # We only do this after_update, because upon adding/removing a manager to a
   # competition the attribute is automatically set to that manager's preference.
   after_update :update_receive_registration_emails
@@ -880,17 +811,8 @@ class Competition < ApplicationRecord
   # that checks our database sanity instead.
   after_save :remove_non_existent_organizers_and_delegates
   def remove_non_existent_organizers_and_delegates
-    CompetitionOrganizer.where(competition_id: id).where.not(organizer_id: organizers.map(&:id)).delete_all
-    CompetitionDelegate.where(competition_id: id).where.not(delegate_id: delegates.map(&:id)).delete_all
-  end
-
-  # We setup an alias here to be able to take advantage of `includes(:delegate_report)` on a competition,
-  # while still being able to use the 'with_old_id' trick.
-  alias_method :original_delegate_report, :delegate_report
-  def delegate_report
-    with_old_id do
-      original_delegate_report
-    end
+    competition_organizers.where.not(organizer_id: organizer_ids).delete_all
+    competition_delegates.where.not(delegate_id: delegate_ids).delete_all
   end
 
   def report_posted_at
@@ -907,7 +829,7 @@ class Competition < ApplicationRecord
   def update_foreign_keys
     Competition.reflect_on_all_associations.uniq(&:klass).each do |association_reflection|
       foreign_key = association_reflection.foreign_key
-      association_reflection.klass.where(foreign_key => id_before_last_save).update_all(foreign_key => id) if %w[competition_id competitionId].include?(foreign_key)
+      association_reflection.klass.where(foreign_key => id_before_last_save).update_all(foreign_key => id) if foreign_key == 'competition_id'
     end
   end
 
@@ -2306,7 +2228,7 @@ class Competition < ApplicationRecord
     if competition_series_id.nil? && # if we just processed an update to remove the competition series
        (old_series_id = competition_series_id_previously_was) && # and we previously had an ID
        (old_series = CompetitionSeries.find_by(id: old_series_id)) # and that series still exists
-      old_series.reload.destroy_if_orphaned # prompt it to check for orphaned state.
+      old_series.reload.destroy_if_orphaned(self) # prompt it to check for orphaned state.
     end
   end
 
@@ -2430,9 +2352,9 @@ class Competition < ApplicationRecord
         "autoAcceptDisableThreshold" => auto_accept_disable_threshold,
       },
       "staff" => {
-        "staffDelegateIds" => staff_delegates.to_a.pluck(:id),
-        "traineeDelegateIds" => trainee_delegates.to_a.pluck(:id),
-        "organizerIds" => organizers.to_a.pluck(:id),
+        "staffDelegateIds" => staff_delegate_ids,
+        "traineeDelegateIds" => trainee_delegate_ids,
+        "organizerIds" => organizer_ids,
         "contact" => contact,
       },
       "championships" => championship_types,
@@ -2498,7 +2420,7 @@ class Competition < ApplicationRecord
   # It is quite uncool that we have to duplicate the internal form_data formatting like this
   # but as long as we let our backend handle the complete error validation we literally have no other choice
   def form_errors
-    self_valid = self.valid?
+    self_valid = self.errors.empty? && self.valid?
     # If we're cloning, we also need to check the parent's associations.
     #   Otherwise, the user may be surprised by a silent fail if some tabs/venues/schedules
     #   of the parent are invalid. (This can happen if we introduce new validations on old data)
@@ -2711,9 +2633,9 @@ class Competition < ApplicationRecord
       cell_name: form_data['shortName'],
       latitude_degrees: form_data.dig('venue', 'coordinates', 'lat'),
       longitude_degrees: form_data.dig('venue', 'coordinates', 'long'),
-      staff_delegate_ids: form_data.dig('staff', 'staffDelegateIds')&.join(','),
-      trainee_delegate_ids: form_data.dig('staff', 'traineeDelegateIds')&.join(','),
-      organizer_ids: form_data.dig('staff', 'organizerIds')&.join(','),
+      staff_delegate_ids: form_data.dig('staff', 'staffDelegateIds'),
+      trainee_delegate_ids: form_data.dig('staff', 'traineeDelegateIds'),
+      organizer_ids: form_data.dig('staff', 'organizerIds'),
       contact: form_data.dig('staff', 'contact'),
       remarks: form_data['remarks'],
       registration_open: form_data.dig('registration', 'openingDateTime')&.presence,
