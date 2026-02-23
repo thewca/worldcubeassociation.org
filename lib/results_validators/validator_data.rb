@@ -38,7 +38,7 @@ module ResultsValidators
     end
 
     def self.load_associations(validator, check_real_results: false)
-      associations = validator.competition_associations
+      associations = validator.competition_associations(check_real_results: check_real_results)
 
       if validator.include_persons?
         persons_assoc = check_real_results ? :competitors : :inbox_persons
