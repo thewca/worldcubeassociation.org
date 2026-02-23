@@ -18,7 +18,7 @@ class InboxResult < ApplicationRecord
   alias_method :name, :person_name
 
   def attempts
-    self.legacy_attempts
+    [value1, value2, value3, value4, value5]
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
-  Button, Header, Message, Select,
+  Button, Form, Header, Select,
 } from 'semantic-ui-react';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
@@ -9,8 +9,12 @@ import getUserDetails from './api/getUserDetails';
 import useInputState from '../../../../lib/hooks/useInputState';
 import mergeUsers from './api/mergeUsers';
 import SpecialAccountDetails from './SpecialAccountDetails';
+import { useConfirm } from '../../../../lib/providers/ConfirmProvider';
 
-export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
+export default function MergeUsers({
+  firstUserId, secondUserId, onSuccess, requireConfirmation,
+}) {
+  const confirm = useConfirm();
   const {
     data: firstUser,
     isPending: isPendingFirstUser,
@@ -41,12 +45,8 @@ export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
     isPending: isMergePending,
     isError: isMergeError,
     error: mergeError,
-    isSuccess,
   } = useMutation({
-    mutationFn: ({
-      fromUserId: mutationFromUserId,
-      toUserId: mutationToUserId,
-    }) => mergeUsers(mutationFromUserId, mutationToUserId),
+    mutationFn: mergeUsers,
     onSuccess,
   });
 
@@ -54,7 +54,6 @@ export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
   if (isErrorFirstUser) return <Errored error={errorFirstUser} />;
   if (isErrorSecondUser) return <Errored error={errorSecondUser} />;
   if (isMergeError) return <Errored error={mergeError} />;
-  if (isSuccess) return <Message success>Merged Successfully.</Message>;
 
   const selectOptions = [firstUser, secondUser].map((user) => ({
     key: user.id,
@@ -71,18 +70,36 @@ export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
         Select the account to keep
         (all data from the other account will be transferred to this one)
       </div>
-      <Select
-        options={selectOptions}
-        value={toUserId}
-        onChange={setToUserId}
-      />
-      <Button
-        primary
-        disabled={!toUserId}
-        onClick={() => mergeUsersMutation({ fromUserId, toUserId })}
-      >
-        Merge
-      </Button>
+      <Form>
+        <Form.Field>
+          <Select
+            options={selectOptions}
+            value={toUserId}
+            onChange={setToUserId}
+          />
+        </Form.Field>
+        <Form.Field>
+          <Button
+            primary
+            disabled={!toUserId}
+            onClick={() => {
+              if (requireConfirmation) {
+                confirm({
+                  content: 'Are you sure you want to merge these users?',
+                  confirmButton: 'Merge',
+                  requireInput: 'MERGE USERS',
+                })
+                  .then(() => mergeUsersMutation({ fromUserId, toUserId }))
+                  .catch(() => {});
+              } else {
+                mergeUsersMutation({ fromUserId, toUserId });
+              }
+            }}
+          >
+            Merge
+          </Button>
+        </Form.Field>
+      </Form>
     </>
   );
 }

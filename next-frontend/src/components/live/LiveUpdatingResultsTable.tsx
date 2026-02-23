@@ -1,21 +1,14 @@
 "use client";
 
 import { components } from "@/types/openapi";
-import { useCallback } from "react";
-import useResultsSubscription, {
-  DiffProtocolResponse,
-} from "@/lib/hooks/useResultsSubscription";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
 import { Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
-import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
+import { useLiveResults } from "@/providers/LiveResultProvider";
 import AdminButtons from "@/components/live/AdminButtons";
 import PublicButtons from "@/components/live/PublicButtons";
 
 export default function LiveUpdatingResultsTable({
-  roundId,
-  liveResults,
-  updateLiveResults,
   eventId,
   formatId,
   competitionId,
@@ -24,11 +17,6 @@ export default function LiveUpdatingResultsTable({
   isAdmin = false,
   showEmpty = true,
 }: {
-  roundId: string;
-  liveResults: components["schemas"]["LiveResult"][];
-  updateLiveResults: React.Dispatch<
-    React.SetStateAction<components["schemas"]["LiveResult"][]>
-  >;
   eventId: string;
   formatId: string;
   competitionId: string;
@@ -37,19 +25,7 @@ export default function LiveUpdatingResultsTable({
   isAdmin?: boolean;
   showEmpty?: boolean;
 }) {
-  // Move to onEffectEvent when we are on React 19
-  const onReceived = useCallback(
-    (result: DiffProtocolResponse) => {
-      const { updated = [], created = [], deleted = [] } = result;
-
-      updateLiveResults((results) =>
-        applyDiffToLiveResults(results, updated, created, deleted),
-      );
-    },
-    [updateLiveResults],
-  );
-
-  const connectionState = useResultsSubscription(roundId, onReceived);
+  const { connectionState, liveResults } = useLiveResults();
 
   return (
     <VStack align="left">
