@@ -18,6 +18,12 @@ export const CONNECTION_COLORS = {
   [CONNECTION_STATE_DISCONNECTED]: "red",
 };
 
+export const CONNECTION_TRANSLATION_KEYS = {
+  [CONNECTION_STATE_INITIALIZED]: "initialized",
+  [CONNECTION_STATE_CONNECTED]: "connected",
+  [CONNECTION_STATE_DISCONNECTED]: "disconnected",
+};
+
 // Move this to something like https://www.asyncapi.com
 // The actual compression will happen in https://github.com/thewca/worldcubeassociation.org/pull/13352
 // But I need the mapping logic
