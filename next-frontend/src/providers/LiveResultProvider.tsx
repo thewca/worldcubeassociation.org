@@ -63,18 +63,19 @@ export function MultiRoundResultProvider({
   const queryClient = useQueryClient();
 
   // One query per round
-  const queries = initialRounds.map((round) =>
-    api.queryOptions(
+  const queries = initialRounds.map((round, i) => ({
+    ...api.queryOptions(
       "get",
       "/v1/competitions/{competitionId}/live/rounds/{roundId}",
       {
         params: { path: { roundId: round.id, competitionId } },
       },
     ),
-  );
+    initialData: initialRounds[i],
+  }));
 
   const { liveResultsByRegistrationId, stateHashesByRoundId } = useQueries({
-    queries: queries.map((q, i) => ({ ...q, initialData: initialRounds[i] })),
+    queries,
     combine: (results) => ({
       liveResultsByRegistrationId: _.groupBy(
         results.flatMap((r, i) =>
