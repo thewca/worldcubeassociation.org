@@ -7,6 +7,7 @@ import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import AdminButtons from "@/components/live/AdminButtons";
 import PublicButtons from "@/components/live/PublicButtons";
+import { useParams } from "next/navigation";
 
 export default function LiveUpdatingResultsTable({
   eventId,
@@ -26,6 +27,9 @@ export default function LiveUpdatingResultsTable({
   showEmpty?: boolean;
 }) {
   const { connectionState, liveResults } = useLiveResults();
+
+  const { roundId } =
+    useParams<"/competitions/[competitionId]/live/rounds/[roundId]">();
 
   return (
     <VStack align="left">
