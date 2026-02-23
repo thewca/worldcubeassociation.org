@@ -32,6 +32,25 @@ const LiveResultContext = createContext<LiveResultContextType | undefined>(
 );
 
 export function LiveResultProvider({
+  initialRound,
+  competitionId,
+  children,
+}: {
+  initialRound: LiveRound;
+  competitionId: string;
+  children: ReactNode;
+}) {
+  return (
+    <MultiRoundResultProvider
+      initialRounds={[initialRound]}
+      competitionId={competitionId}
+    >
+      {children}
+    </MultiRoundResultProvider>
+  );
+}
+
+export function MultiRoundResultProvider({
   initialRounds,
   competitionId,
   children,
@@ -113,7 +132,7 @@ export function LiveResultProvider({
           (r.data.results ?? []).map((res) => ({
             ...res,
             // To differentiate between results for Dual Rounds
-            wcif_id: initialRounds[i].id,
+            round_wcif_id: initialRounds[i].id,
           })),
         ),
         "registration_id",

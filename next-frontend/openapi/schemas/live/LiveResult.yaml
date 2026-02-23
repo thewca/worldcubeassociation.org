@@ -1,7 +1,7 @@
 type: object
 required:
   - registration_id
-  - wcif_id
+  - round_wcif_id
   - global_pos
   - local_pos
   - best
@@ -15,7 +15,7 @@ required:
 properties:
   registration_id:
     type: integer
-  wcif_id:
+  round_wcif_id:
     type: string
   global_pos:
     type: integer

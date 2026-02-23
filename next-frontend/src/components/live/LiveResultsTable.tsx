@@ -45,7 +45,7 @@ export default function LiveResultsTable({
 
   const format = formats.byId[formatId];
 
-  const sortedResultsByCompetitor = mergeAndOrderResults(
+  const competitorsWithOrderedResults = mergeAndOrderResults(
     resultsByRegistrationId,
     competitorsByRegistrationId,
     format,
@@ -77,47 +77,54 @@ export default function LiveResultsTable({
       </Table.Header>
 
       <Table.Body>
-        {sortedResultsByCompetitor.map((competitorWithResults) => {
-          return competitorWithResults.results.map((r) => {
-            const hasResult = r.attempts.length > 0;
+        {competitorsWithOrderedResults.map((competitorAndTheirResults) => {
+          return competitorAndTheirResults.results.map((result) => {
+            const hasResult = result.attempts.length > 0;
 
             if (!showEmpty && !hasResult) {
               return null;
             }
 
             return (
-              <Table.Row key={`${competitorWithResults.id}-${r.wcif_id}`}>
+              <Table.Row
+                key={`${competitorAndTheirResults.id}-${result.round_wcif_id}`}
+              >
                 <Table.Cell
                   width={1}
                   layerStyle="fill.deep"
                   textAlign="right"
-                  colorPalette={rankingCellColorPalette(r)}
+                  colorPalette={rankingCellColorPalette(result)}
                 >
-                  {hasResult && r.global_pos}
+                  {hasResult && result.global_pos}
                 </Table.Cell>
                 {isAdmin && (
-                  <Table.Cell>{competitorWithResults.registrant_id}</Table.Cell>
+                  <Table.Cell>
+                    {competitorAndTheirResults.registrant_id}
+                  </Table.Cell>
                 )}
                 <Table.Cell>
                   <Link
                     href={
                       isAdmin
-                        ? `/registrations/${competitorWithResults.id}/edit`
-                        : `/competitions/${competitionId}/live/competitors/${competitorWithResults.id}`
+                        ? `/registrations/${competitorAndTheirResults.id}/edit`
+                        : `/competitions/${competitionId}/live/competitors/${competitorAndTheirResults.id}`
                     }
                   >
-                    {competitorWithResults.name}
+                    {competitorAndTheirResults.name}
                   </Link>
                 </Table.Cell>
                 <Table.Cell>
-                  {countries.byIso2[competitorWithResults.country_iso2].name}
+                  {
+                    countries.byIso2[competitorAndTheirResults.country_iso2]
+                      .name
+                  }
                 </Table.Cell>
                 {hasResult &&
-                  padSkipped(r.attempts, format.expected_solve_count).map(
+                  padSkipped(result.attempts, format.expected_solve_count).map(
                     (attempt) => (
                       <Table.Cell
                         textAlign="right"
-                        key={`${competitorWithResults.id}-${attempt.attempt_number}`}
+                        key={`${competitorAndTheirResults.id}-${attempt.attempt_number}`}
                       >
                         {formatAttemptResult(attempt.value, eventId)}
                       </Table.Cell>
@@ -126,12 +133,12 @@ export default function LiveResultsTable({
                 {hasResult &&
                   stats.map((stat) => (
                     <Table.Cell
-                      key={`${r.registration_id}-${stat.name}`}
+                      key={`${result.registration_id}-${stat.name}`}
                       textAlign="right"
                       style={{ position: "relative" }}
                     >
-                      {formatAttemptResult(r[stat.field], eventId)}{" "}
-                      {!isAdmin && recordTagBadge(r[stat.recordTagField])}
+                      {formatAttemptResult(result[stat.field], eventId)}{" "}
+                      {!isAdmin && recordTagBadge(result[stat.recordTagField])}
                     </Table.Cell>
                   ))}
               </Table.Row>

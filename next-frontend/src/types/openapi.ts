@@ -779,7 +779,7 @@ export interface components {
             scrambles: components["schemas"]["WcifScramble"][];
             extraScrambles: components["schemas"]["WcifScramble"][];
         };
-        BaseRound: {
+        BaseWcifRound: {
             /** @example 333-r1 */
             id: string;
             /** @enum {string} */
@@ -804,7 +804,7 @@ export interface components {
             best: components["schemas"]["WcifAttemptResult"];
             average: components["schemas"]["WcifAttemptResult"];
         };
-        WcifRound: components["schemas"]["BaseRound"] & {
+        WcifRound: components["schemas"]["BaseWcifRound"] & {
             results: components["schemas"]["WcifResult"][];
         };
         BaseAdminRound: components["schemas"]["WcifRound"] & {
@@ -850,7 +850,7 @@ export interface components {
         };
         LiveResult: {
             registration_id: number;
-            wcif_id: string;
+            round_wcif_id: string;
             global_pos: number;
             local_pos: number;
             best: number;
@@ -873,7 +873,7 @@ export interface components {
             name: string;
             country_iso2: string;
         };
-        LiveRound: components["schemas"]["BaseRound"] & {
+        LiveRound: components["schemas"]["BaseWcifRound"] & {
             results: components["schemas"]["LiveResult"][];
             competitors: components["schemas"]["LiveCompetitor"][];
             round_id: number;

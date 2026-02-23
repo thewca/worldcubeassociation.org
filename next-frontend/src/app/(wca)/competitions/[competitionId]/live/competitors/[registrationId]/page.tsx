@@ -49,7 +49,7 @@ export default async function PersonResults({
             <Table.Body>
               {eventResults.map((result) => {
                 const {
-                  wcif_id: wcifId,
+                  round_wcif_id: wcifId,
                   attempts,
                   global_pos,
                   average,
