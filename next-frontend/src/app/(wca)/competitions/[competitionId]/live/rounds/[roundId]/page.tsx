@@ -8,8 +8,6 @@ import LiveUpdatingDualRoundsTable from "@/components/live/LiveUpdatingDualRound
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
-import _ from "lodash";
-import { components } from "@/types/openapi";
 import { DualRoundLiveResultProvider } from "@/providers/DualRoundLiveResultProvider";
 
 export default async function ResultPage({
