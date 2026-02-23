@@ -7,6 +7,7 @@ import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import { LuGalleryVertical } from "react-icons/lu";
 import ResultsProjector from "@/components/live/ResultsProjector";
+import { useState } from "react";
 
 export default function LiveUpdatingResultsTable({
   eventId,
@@ -35,7 +36,7 @@ export default function LiveUpdatingResultsTable({
     return (
       <ResultsProjector
         competitors={competitors}
-        results={results}
+        results={liveResults}
         disableProjectorView={disableProjectorView}
         formatId={formatId}
         eventId={eventId}
