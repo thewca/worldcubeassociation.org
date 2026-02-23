@@ -871,7 +871,11 @@ export interface components {
             name: string;
             country_iso2: string;
         };
-        LiveRound: components["schemas"]["WcifRound"] & {
+        LiveRound: {
+            /** @example 333-r1 */
+            id: string;
+            /** @enum {string} */
+            format: "1" | "2" | "3" | "a" | "m";
             results: components["schemas"]["LiveResult"][];
             competitors: components["schemas"]["LiveCompetitor"][];
             round_id: number;

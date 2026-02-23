@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
 import { components } from "@/types/openapi";
 
@@ -43,34 +43,63 @@ export type DiffProtocolResponse = {
   created?: CompressedLiveResult[];
   before_hash: string;
   after_hash: string;
+  wcif_id: string;
 };
 
-export default function useResultsSubscription(
-  roundId: string,
-  onReceived: (data: DiffProtocolResponse) => void,
+export default function useResultsSubscriptions(
+  roundIds: string[],
+  onReceived: (roundId: string, data: DiffProtocolResponse) => void,
 ) {
-  const [connectionState, setConnectionState] = useState<ConnectionState>(
-    CONNECTION_STATE_INITIALIZED,
+  const [connectionStates, setConnectionStates] = useState<
+    Record<string, ConnectionState>
+  >(() =>
+    Object.fromEntries(
+      roundIds.map((id) => [id, CONNECTION_STATE_INITIALIZED]),
+    ),
   );
 
+  // Stable ref so onReceived doesn't retrigger the effect
+  const onReceivedRef = useRef(onReceived);
+  useLayoutEffect(() => {
+    onReceivedRef.current = onReceived;
+  });
+
   useEffect(() => {
-    // TODO: Change the Environment variable to not include the /api part by default
     const cable = createConsumer("http://localhost:3000/cable");
 
-    const subscription = cable.subscriptions.create(
-      { channel: "LiveResultsChannel", round_id: roundId },
-      {
-        received: onReceived,
-        initialized: () => setConnectionState(CONNECTION_STATE_INITIALIZED),
-        connected: () => setConnectionState(CONNECTION_STATE_CONNECTED),
-        disconnected: () => setConnectionState(CONNECTION_STATE_DISCONNECTED),
-      },
+    const subscriptions = roundIds.map((roundId) =>
+      cable.subscriptions.create(
+        { channel: "LiveResultsChannel", round_id: roundId },
+        {
+          received: (data: DiffProtocolResponse) =>
+            onReceivedRef.current(roundId, data),
+          initialized: () =>
+            setConnectionStates((prev) => ({
+              ...prev,
+              [roundId]: CONNECTION_STATE_INITIALIZED,
+            })),
+          connected: () =>
+            setConnectionStates((prev) => ({
+              ...prev,
+              [roundId]: CONNECTION_STATE_CONNECTED,
+            })),
+          disconnected: () =>
+            setConnectionStates((prev) => ({
+              ...prev,
+              [roundId]: CONNECTION_STATE_DISCONNECTED,
+            })),
+        },
+      ),
     );
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [roundId, onReceived]);
+    return () => subscriptions.forEach((s) => s.unsubscribe());
+  }, [roundIds]); // roundIds should be stable (useMemo at call site)
 
-  return connectionState;
+  // Aggregate: worst state wins
+  const values = Object.values(connectionStates);
+  return values.includes(CONNECTION_STATE_DISCONNECTED)
+    ? CONNECTION_STATE_DISCONNECTED
+    : values.every((s) => s === CONNECTION_STATE_CONNECTED)
+      ? CONNECTION_STATE_CONNECTED
+      : CONNECTION_STATE_INITIALIZED;
 }

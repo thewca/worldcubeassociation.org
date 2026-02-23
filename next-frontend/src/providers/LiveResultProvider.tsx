@@ -1,18 +1,28 @@
 "use client";
 
-import { createContext, ReactNode, useCallback, useContext } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from "react";
 import { LiveResult, LiveRound } from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
-import useResultsSubscription, {
+import useResultsSubscriptions, {
   ConnectionState,
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueries, useQueryClient } from "@tanstack/react-query";
+import _ from "lodash";
+
+type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
 
 interface LiveResultContextType {
-  liveResults: LiveResult[];
-  stateHash: string;
+  liveResultsByRegistrationId: LiveResultsByRegistrationId;
   connectionState: ConnectionState;
   refetch: () => void;
 }
@@ -22,72 +32,99 @@ const LiveResultContext = createContext<LiveResultContextType | undefined>(
 );
 
 export function LiveResultProvider({
-  initialRound,
+  initialRounds,
   competitionId,
   children,
 }: {
-  initialRound: LiveRound;
+  initialRounds: LiveRound[];
   competitionId: string;
   children: ReactNode;
 }) {
   const api = useAPI();
   const queryClient = useQueryClient();
-  const queryOptions = api.queryOptions(
-    "get",
-    "/v1/competitions/{competitionId}/live/rounds/{roundId}",
-    {
-      params: {
-        path: { roundId: initialRound.id, competitionId },
+
+  // One query per round
+  const queries = initialRounds.map((round) =>
+    api.queryOptions(
+      "get",
+      "/v1/competitions/{competitionId}/live/rounds/{roundId}",
+      {
+        params: { path: { roundId: round.id, competitionId } },
       },
-    },
+    ),
   );
 
-  const { refetch, data } = useQuery({
-    ...queryOptions,
-    initialData: initialRound,
+  const results = useQueries({
+    queries: queries.map((q, i) => ({ ...q, initialData: initialRounds[i] })),
   });
 
-  const { results, state_hash } = data;
+  // Stable ref to latest results as otherwise dynamic arrays (as returned from useQueries) in dependency can cause issues
+  const resultsRef = useRef(results);
+  useLayoutEffect(() => {
+    resultsRef.current = results;
+  });
+
+  const roundIds = useMemo(
+    () => initialRounds.map((r) => r.id),
+    [initialRounds],
+  );
 
   const onReceived = useCallback(
-    (result: DiffProtocolResponse) => {
+    (roundId: string, diff: DiffProtocolResponse) => {
       const {
         updated = [],
         created = [],
         deleted = [],
         before_hash,
         after_hash,
-      } = result;
+      } = diff;
 
-      if (before_hash !== state_hash) {
-        refetch();
+      const queryIndex = initialRounds.findIndex((r) => r.id === roundId);
+      if (queryIndex === -1) return;
+
+      const result = resultsRef.current[queryIndex];
+      const query = queries[queryIndex];
+
+      if (before_hash !== result.data?.state_hash) {
+        result.refetch();
       } else {
-        queryClient.setQueryData(
-          queryOptions.queryKey,
-          (oldData: LiveRound) => ({
-            ...oldData,
-            results: applyDiffToLiveResults(
-              oldData.results,
-              updated,
-              created,
-              deleted,
-            ),
-            state_hash: after_hash,
-          }),
-        );
+        queryClient.setQueryData(query.queryKey, (oldData: LiveRound) => ({
+          ...oldData,
+          results: applyDiffToLiveResults(
+            oldData.results,
+            updated,
+            created,
+            deleted,
+          ),
+          state_hash: after_hash,
+        }));
       }
     },
-    [queryClient, queryOptions.queryKey, refetch, state_hash],
+    [initialRounds, queries, queryClient],
   );
 
-  const connectionState = useResultsSubscription(initialRound.id, onReceived);
+  const connectionState = useResultsSubscriptions(roundIds, onReceived);
+
+  // Merge results by registration_id for the context
+  const liveResultsByRegistrationId = useMemo(
+    () =>
+      _.groupBy(
+        resultsRef.current.flatMap((r, i) =>
+          (r.data?.results ?? []).map((res) => ({
+            ...res,
+            wcifId: initialRounds[i].id,
+          })),
+        ),
+        "registration_id",
+      ),
+    [initialRounds],
+  );
 
   return (
     <LiveResultContext.Provider
       value={{
-        liveResults: results,
-        stateHash: state_hash,
-        refetch,
+        liveResultsByRegistrationId,
+        refetch: () => results.forEach((r) => r.refetch()),
         connectionState,
       }}
     >

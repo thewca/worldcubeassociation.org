@@ -5,6 +5,7 @@ import LiveResultsTable from "@/components/live/LiveResultsTable";
 import { Heading, HStack, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { useLiveResults } from "@/providers/LiveResultProvider";
+import _ from "lodash";
 
 export default function LiveUpdatingResultsTable({
   eventId,
@@ -23,7 +24,9 @@ export default function LiveUpdatingResultsTable({
   isAdmin?: boolean;
   showEmpty?: boolean;
 }) {
-  const { connectionState, liveResults } = useLiveResults();
+  const { connectionState, liveResultsByRegistrationId } = useLiveResults();
+
+  const liveResults = _.flatMap(liveResultsByRegistrationId);
 
   return (
     <VStack align="left">

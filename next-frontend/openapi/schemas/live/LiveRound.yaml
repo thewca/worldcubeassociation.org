@@ -1,21 +1,27 @@
-allOf:
-  - $ref: '../wcif/WcifRound.yaml'
-  - type: object
-    properties:
-      results:
-        type: array
-        items:
-          $ref: './LiveResult.yaml'
-      competitors:
-        type: array
-        items:
-          $ref: './LiveCompetitor.yaml'
-      round_id:
-        type: number
-      state_hash:
-        type: string
-    required:
-      - results
-      - competitors
-      - round_id
-      - state_hash
+type: object
+properties:
+  id:
+    type: string
+    example: "333-r1"
+  format:
+    type: string
+    enum: [ '1', '2', '3', 'a', 'm' ]
+  results:
+    type: array
+    items:
+      $ref: './LiveResult.yaml'
+  competitors:
+    type: array
+    items:
+      $ref: './LiveCompetitor.yaml'
+  round_id:
+    type: number
+  state_hash:
+    type: string
+required:
+  - results
+  - competitors
+  - round_id
+  - state_hash
+  - format
+  - id
