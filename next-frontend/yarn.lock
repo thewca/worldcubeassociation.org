@@ -12990,7 +12990,7 @@ __metadata:
     next-themes: "npm:^0.4.6"
     nextjs-routes: "npm:^2.2.5"
     node-vault: "npm:^0.10.9"
-    openapi-fetch: "npm:^0.16.0"
+    openapi-fetch: "npm:^0.17.0"
     openapi-react-query: "npm:^0.5.4"
     openapi-typescript: "npm:^7.13.0"
     payload: "npm:3.77.0"
@@ -13427,12 +13427,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openapi-fetch@npm:^0.16.0":
-  version: 0.16.0
-  resolution: "openapi-fetch@npm:0.16.0"
+"openapi-fetch@npm:^0.17.0":
+  version: 0.17.0
+  resolution: "openapi-fetch@npm:0.17.0"
   dependencies:
-    openapi-typescript-helpers: "npm:^0.0.15"
-  checksum: 10c0/678ccbc2a262750874f5f123efcff2a7578e64132835ee76cd157a71184b86c1f112e7972043d7a017b596dfac33226b3268c9664078c1e09f0f6d72b10e1c36
+    openapi-typescript-helpers: "npm:^0.1.0"
+  checksum: 10c0/7e981d28c7839469662a73d44f3a85e05c1a5842a8afd5d6e36c75cbf085aa7f705862871cc7ce07c04605ddc936af3d5850c2cc66d193ee1fea07e7135da192
   languageName: node
   linkType: hard
 
@@ -13456,13 +13456,6 @@ __metadata:
     fast-xml-parser: "npm:^5.3.4"
     json-pointer: "npm:0.6.2"
   checksum: 10c0/c367e0f907091d3f55de7e6cb3faaf536d60ac349a93481ce5dc562a7e0096623a1c689e655e819e37d379670271bc7cb6c2328fe854b995c0af6e77b47da2f0
-  languageName: node
-  linkType: hard
-
-"openapi-typescript-helpers@npm:^0.0.15":
-  version: 0.0.15
-  resolution: "openapi-typescript-helpers@npm:0.0.15"
-  checksum: 10c0/5eb68d487b787e3e31266470b1a310726549dd45a1079655ab18066ab291b0b3c343fdf629991013706a2329b86964f8798d56ef0272b94b931fe6c19abd7a88
   languageName: node
   linkType: hard
 
