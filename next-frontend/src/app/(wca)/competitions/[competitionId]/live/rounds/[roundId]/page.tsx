@@ -40,7 +40,7 @@ export default async function ResultPage({
       <Container bg="bg">
         <VStack align="left">
           <DualRoundLiveResultProvider
-            initialRounds={[...linkedRounds.map((d) => d.data!), data]}
+            initialRounds={[data, ...linkedRounds.map((d) => d.data!)]}
           >
             <LiveUpdatingDualRoundsTable
               roundId={roundId}

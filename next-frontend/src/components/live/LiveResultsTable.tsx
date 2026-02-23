@@ -55,7 +55,7 @@ export default function LiveResultsTable({
           return (
             <Table.Row key={competitor.id}>
               <LivePositionCell
-                position={result.global_pos}
+                position={hasResult ? result.global_pos : ""}
                 advancingParams={result}
               />
               {isAdmin && <Table.Cell>{competitor.registrant_id}</Table.Cell>}

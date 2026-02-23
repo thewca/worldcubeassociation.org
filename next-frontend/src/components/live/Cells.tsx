@@ -46,7 +46,7 @@ export function LivePositionCell({
   rowSpan,
   advancingParams,
 }: {
-  position: number;
+  position: number | string;
   rowSpan?: number;
   advancingParams: {
     advancing: boolean;

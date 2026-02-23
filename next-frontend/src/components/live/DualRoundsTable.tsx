@@ -53,20 +53,21 @@ export default function DualRoundsTable({
           return competitorWithResults.results.map((r, index) => {
             if (!showDualRoundsView && r.wcifId != wcifId) return undefined;
 
+            const hasResults = r.attempts.length > 0;
             const showText = !showDualRoundsView || index === 0;
             const rowSpan = showDualRoundsView
               ? competitorWithResults.results.length
               : 1;
 
+            const ranking = showDualRoundsView
+              ? competitorWithResults.global_pos
+              : r.local_pos;
+
             return (
               <Table.Row key={`${competitorWithResults.id}-${r.wcifId}`}>
                 {showText && (
                   <LivePositionCell
-                    position={
-                      showDualRoundsView
-                        ? competitorWithResults.global_pos
-                        : r.local_pos
-                    }
+                    position={hasResults ? ranking : ""}
                     advancingParams={
                       showDualRoundsView ? competitorWithResults : r
                     }
