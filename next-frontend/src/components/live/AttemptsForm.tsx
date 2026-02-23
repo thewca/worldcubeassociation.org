@@ -9,34 +9,31 @@ import {
 } from "@chakra-ui/react";
 import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
 import _ from "lodash";
+import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 
 interface AttemptsFormProps {
-  handleRegistrationIdChange: (value: number) => void;
   competitors: components["schemas"]["LiveCompetitor"][];
   solveCount: number;
-  eventId: string;
-  attempts: number[];
-  handleAttemptChange: (index: number, value: number) => void;
-  handleSubmit: () => void;
-  error?: string;
-  success?: string;
   header: string;
-  isPending: boolean;
+  eventId: string;
 }
 
 export default function AttemptsForm({
-  handleRegistrationIdChange,
   competitors,
   solveCount,
-  eventId,
-  attempts,
-  handleAttemptChange,
-  handleSubmit,
-  error,
-  success,
   header,
-  isPending,
+  eventId,
 }: AttemptsFormProps) {
+  const {
+    error,
+    success,
+    handleRegistrationIdChange,
+    handleSubmit,
+    attempts,
+    handleAttemptChange,
+    isPendingUpdate,
+  } = useResultsAdmin();
+
   const { collection, filter } = useListCollection({
     initialItems: competitors,
     itemToValue: (competitor) => competitor.id.toString(),
@@ -91,7 +88,7 @@ export default function AttemptsForm({
           resultType="single"
         />
       ))}
-      <Button onClick={handleSubmit} disabled={isPending}>
+      <Button onClick={handleSubmit} disabled={isPendingUpdate}>
         Submit Results
       </Button>
     </form>
