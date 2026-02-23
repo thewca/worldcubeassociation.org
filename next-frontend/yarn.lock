@@ -4897,16 +4897,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/cli@npm:2.18.2":
-  version: 2.18.2
-  resolution: "@redocly/cli@npm:2.18.2"
+"@redocly/cli@npm:2.19.1":
+  version: 2.19.1
+  resolution: "@redocly/cli@npm:2.19.1"
   dependencies:
     "@opentelemetry/exporter-trace-otlp-http": "npm:0.202.0"
     "@opentelemetry/resources": "npm:2.0.1"
     "@opentelemetry/sdk-trace-node": "npm:2.0.1"
     "@opentelemetry/semantic-conventions": "npm:1.34.0"
-    "@redocly/openapi-core": "npm:2.18.2"
-    "@redocly/respect-core": "npm:2.18.2"
+    "@redocly/openapi-core": "npm:2.19.1"
+    "@redocly/respect-core": "npm:2.19.1"
     abort-controller: "npm:^3.0.0"
     ajv: "npm:@redocly/ajv@8.17.4"
     ajv-formats: "npm:^3.0.1"
@@ -4925,14 +4925,14 @@ __metadata:
     semver: "npm:^7.5.2"
     set-cookie-parser: "npm:^2.3.5"
     simple-websocket: "npm:^9.0.0"
-    styled-components: "npm:^6.3.8"
+    styled-components: "npm:6.3.9"
     ulid: "npm:^3.0.1"
     undici: "npm:^6.23.0"
     yargs: "npm:17.0.1"
   bin:
     openapi: bin/cli.js
     redocly: bin/cli.js
-  checksum: 10c0/b9504ca9e443e249d84fb05ba3798a9ca592f76571869708b4a6e681dbf609cbe2445f5df8e9f1cc0c83a5d8ddfa9da5f0861208206b18b7a0c080dd4b1b1d69
+  checksum: 10c0/5c4d21e57c85fe9c66078071c077c15caeb4a6c10483c35a2357b7f900b71d15ce5bfb7f1f5cb10e543627584eeb556a355cdfb8c3a46cc39c8cd49fd84dd7e5
   languageName: node
   linkType: hard
 
@@ -4952,9 +4952,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/openapi-core@npm:2.18.2":
-  version: 2.18.2
-  resolution: "@redocly/openapi-core@npm:2.18.2"
+"@redocly/openapi-core@npm:2.19.1":
+  version: 2.19.1
+  resolution: "@redocly/openapi-core@npm:2.19.1"
   dependencies:
     "@redocly/ajv": "npm:^8.17.4"
     "@redocly/config": "npm:^0.43.0"
@@ -4966,7 +4966,7 @@ __metadata:
     picomatch: "npm:^4.0.3"
     pluralize: "npm:^8.0.0"
     yaml-ast-parser: "npm:0.0.43"
-  checksum: 10c0/b275a2af71e11a9772c0132a51b59e3da366232890c8be4bebf4185369f2d5eaba185fdc5a23b5cd083313605ac9db37ea4b960b665711fe265aaecdd695381d
+  checksum: 10c0/f83d5f277ad5e03f8db46398032f9558907c2fb2e621a7cc4546c5a7ec418f7efdf0f7d9eea5290f3abad8c278e19e982f6ed8987bc67bd42b58da86a04eb5be
   languageName: node
   linkType: hard
 
@@ -4987,14 +4987,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/respect-core@npm:2.18.2":
-  version: 2.18.2
-  resolution: "@redocly/respect-core@npm:2.18.2"
+"@redocly/respect-core@npm:2.19.1":
+  version: 2.19.1
+  resolution: "@redocly/respect-core@npm:2.19.1"
   dependencies:
     "@faker-js/faker": "npm:^7.6.0"
     "@noble/hashes": "npm:^1.8.0"
     "@redocly/ajv": "npm:8.17.4"
-    "@redocly/openapi-core": "npm:2.18.2"
+    "@redocly/openapi-core": "npm:2.19.1"
     ajv: "npm:@redocly/ajv@8.17.4"
     better-ajv-errors: "npm:^1.2.0"
     colorette: "npm:^2.0.20"
@@ -5003,7 +5003,7 @@ __metadata:
     openapi-sampler: "npm:^1.7.0"
     outdent: "npm:^0.8.0"
     picomatch: "npm:^4.0.3"
-  checksum: 10c0/124761ecbaf961b3d2fcb82098d183b1626ba98e6f1869f4d0a849891b23f2e83eebc3ec2ac16fdb4d5dbb71719e99a6935892e4d359d2095e902214ab0012fa
+  checksum: 10c0/da927a91edbc84fb287234d40a9804a914a227bd88dcaa9d6581fb39f7003eff55bb77e4798f3080bb351836ae6c0ad7fe069760240b47e5ebbf8decd11676fb
   languageName: node
   linkType: hard
 
@@ -13439,7 +13439,7 @@ __metadata:
     "@payloadcms/richtext-lexical": "npm:3.77.0"
     "@payloadcms/storage-s3": "npm:3.77.0"
     "@rails/actioncable": "npm:^8.1.200"
-    "@redocly/cli": "npm:2.18.2"
+    "@redocly/cli": "npm:2.19.1"
     "@stylistic/eslint-plugin": "npm:^5.9.0"
     "@tanstack/eslint-plugin-query": "npm:^5.91.4"
     "@tanstack/react-form": "npm:^1.28.3"
@@ -16231,7 +16231,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:^6.3.8":
+"styled-components@npm:6.3.9":
   version: 6.3.9
   resolution: "styled-components@npm:6.3.9"
   dependencies:
