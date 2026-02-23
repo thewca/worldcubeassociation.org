@@ -3267,10 +3267,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wca/helpers@npm:^1.1.6":
-  version: 1.1.6
-  resolution: "@wca/helpers@npm:1.1.6"
-  checksum: 10c0/9929af84b96ea24540997456f9bc9b91ebb66814613b86fe3a019cd32a93bae714a0ab2baf4647cf74cecc3cfdb57fbc5dcea44b83cd5e2017a56caa92a08f36
+"@wca/helpers@npm:^1.1.7":
+  version: 1.1.7
+  resolution: "@wca/helpers@npm:1.1.7"
+  checksum: 10c0/b8b367c91852018db684a02b6a274cf07477b2f4b0e25debcd1f0a086c91a87ddba2a535efd78a8bf6a3c27cd73676b28b2c2787c7388f48201492e64961c89f
   languageName: node
   linkType: hard
 
@@ -10654,7 +10654,7 @@ __metadata:
     "@stripe/stripe-js": "npm:^8.8.0"
     "@tanstack/react-query": "npm:^5.90.21"
     "@tanstack/react-table": "npm:^8.21.3"
-    "@wca/helpers": "npm:^1.1.6"
+    "@wca/helpers": "npm:^1.1.7"
     autonumeric: "npm:^4.10.9"
     autoprefixer: "npm:^10.4.24"
     autosize: "npm:^6.0.1"
