@@ -85,7 +85,7 @@ export function LiveResultProvider({
       const result = resultsRef.current[queryIndex];
       const query = queries[queryIndex];
 
-      if (before_hash !== result.data?.state_hash) {
+      if (before_hash !== result.data.state_hash) {
         result.refetch();
       } else {
         queryClient.setQueryData(query.queryKey, (oldData: LiveRound) => ({
@@ -110,8 +110,9 @@ export function LiveResultProvider({
     () =>
       _.groupBy(
         resultsRef.current.flatMap((r, i) =>
-          (r.data?.results ?? []).map((res) => ({
+          (r.data.results ?? []).map((res) => ({
             ...res,
+            // To differentiate between results for Dual Rounds
             wcifId: initialRounds[i].id,
           })),
         ),
