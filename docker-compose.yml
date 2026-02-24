@@ -195,7 +195,6 @@ services:
       - DEBIAN_FRONTEND=noninteractive
       - DEBUG=pw:api
       - DISPLAY=$DISPLAY
-      - SYSTEM_TEST_BASE_URL=http://wca_nextjs:3001
     ports:
       - "8089:8089"
     working_dir: /app
