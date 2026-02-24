@@ -33,6 +33,7 @@
     "@payloadcms/richtext-lexical": "3.77.0",
     "@payloadcms/storage-s3": "3.77.0",
     "@rails/actioncable": "^8.1.200",
+    "@react-pdf/renderer": "^4.3.2",
     "@tanstack/react-form": "^1.28.3",
     "@tanstack/react-query": "^5.90.21",
     "accept-language-parser": "^1.5.0",
