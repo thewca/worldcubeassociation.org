@@ -26,7 +26,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.SYSTEM_TEST_BASE_URL,
+    baseURL: process.env.PW_TEST_BASE_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -81,14 +81,14 @@ export default defineConfig({
       command: 'yarn dev',
       env: { NODE_ENV: 'test', PORT: '3001' },
       name: 'NextJS',
-      url: process.env.SYSTEM_TEST_FRONTEND_SERVER,
+      url: process.env.PW_TEST_FRONTEND_HEALTH_URL,
       reuseExistingServer: !process.env.CI,
     },
     {
       command: 'bin/rails server',
       env: { RAILS_ENV: 'test' },
       name: 'Rails',
-      url: process.env.SYSTEM_TEST_BACKEND_SERVER,
+      url: process.env.PW_TEST_BACKEND_HEALTH_URL,
       reuseExistingServer: !process.env.CI,
     },
   ],
