@@ -1789,8 +1789,8 @@ class Competition < ApplicationRecord
   def last_event_id_of_competition
     competition_events
       .joins(rounds: :schedule_activities)
-      .reorder('schedule_activities.end_time DESC')
-      .first
+      .reorder('schedule_activities.end_time')
+      .last
       .event_id
   end
 
