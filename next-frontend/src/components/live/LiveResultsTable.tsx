@@ -80,7 +80,9 @@ export default function LiveResultsTable({
         {competitorsWithOrderedResults.map((competitorAndTheirResults) => {
           return competitorAndTheirResults.results.map((result) => {
             const hasResult = result.attempts.length > 0;
-            const ranking = hasResult ? result.global_pos : "";
+            const ranking = hasResult
+              ? competitorAndTheirResults.global_pos
+              : "";
 
             if (!showEmpty && !hasResult) {
               return null;
