@@ -84,9 +84,9 @@ class User < ApplicationRecord
       UserGroup.board,
       UserGroup.officers,
     ].flatten.flat_map(&:active_roles)
-      .select(&:eligible_voter?)
-      .map(&:user)
-      .uniq
+     .select(&:eligible_voter?)
+     .map(&:user)
+     .uniq
   end
 
   def self.leader_senior_voters
@@ -630,6 +630,7 @@ class User < ApplicationRecord
       regionsAdmin
       downloadVoters
       generateDbToken
+      sanityCheckResults
       approveAvatars
       editPersonRequests
       anonymizationScript
@@ -700,6 +701,7 @@ class User < ApplicationRecord
           panel_pages[:computeAuxiliaryData],
           panel_pages[:generateDataExports],
           panel_pages[:fixResults],
+          panel_pages[:sanityCheckResults],
           panel_pages[:mergeProfiles],
           panel_pages[:mergeUsers],
           panel_pages[:helpfulQueries],
@@ -758,6 +760,12 @@ class User < ApplicationRecord
         pages: [
           panel_pages[:bannedCompetitors],
           panel_pages[:delegateProbations],
+        ],
+      },
+      wqac: {
+        name: 'WQAC panel',
+        pages: [
+          panel_pages[:helpfulQueries],
         ],
       },
     }
@@ -939,8 +947,8 @@ class User < ApplicationRecord
     can_upload_competition_results?(competition) && (can_admin_results? || competition.staff_delegates.include?(self))
   end
 
-  def can_check_newcomers_data?(competition)
-    competition.upcoming? && can_admin_results?
+  def can_check_newcomers_data?
+    can_admin_results?
   end
 
   def can_create_poll?
@@ -1442,6 +1450,8 @@ class User < ApplicationRecord
       wic_team?
     when :weat
       weat_team?
+    when :wqac
+      quality_assurance_committee?
     else
       false
     end

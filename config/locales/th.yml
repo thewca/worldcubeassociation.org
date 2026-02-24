@@ -134,6 +134,8 @@ th:
     '2': Best of 2
     #original_hash: 21f623c
     '3': Best of 3
+    #original_hash: cca816d
+    '5': Best of 5
     #original_hash: 2342d2b
     a: Average of 5
     #original_hash: 940c82d
@@ -145,10 +147,14 @@ th:
       '2': Bo2
       #original_hash: b41f36f
       '3': Bo3
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      #original_hash: 60827cb
+      h: H2H
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -455,6 +461,8 @@ th:
         region: Region
         #original_hash: e3fc6e9
         subRegion: ภูมิภาคย่อย
+        #original_hash: a1ba702
+        receive_developer_mails: ฉันต้องการรับการแจ้งเตือนเกี่ยวกับการเปลี่ยนแปลงของ Software WCA
         #original_hash: 730db33
         receive_delegate_reports: ฉันต้องการรับ email รายงานการแข่งขันของ WCA
         #original_hash: 8667157
@@ -762,6 +770,11 @@ th:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          ข้อจำกัดนี้จำกัดเฉพาะการแจ้งเตือนการเปลี่ยนแปลงเวอร์ชันหลักของ เช่น
+          การส่งออกข้อมูล, WCIF และ API สาธารณะ
+          แนะนำสำหรับนักพัฒนาซอฟต์แวร์ที่ใช้เครื่องมือเหล่านี้
         #original_hash: c564b74
         receive_delegate_reports: >-
           ถ้าคุณเป็น Trainee Delegate, Junior Delegate, Senior Delegate, หรือ
@@ -978,6 +991,15 @@ th:
         #original_hash: 79ccfe2
         dob_invalid: ผิดรูปแบบหรือไม่
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: เกิดข้อผิดพลาดขณะแสดงผลหน้าเว็บ
+      #original_hash: 22dfe12
+      description: >-
+        หากปัญหานี้ยังคงเกิดขึ้น โปรดแจ้งให้ WST
+        ทราบพร้อมรายละเอียดตามที่ระบุไว้ด้านล่าง
+      #original_hash: 20be860
+      details: รายละเอียดข้อผิดพลาด
     messages:
       #original_hash: dc2367c
       wrong_size: 'ขนาดไม่ถูกต้อง (ควรจะเป็น %{file_size})'
@@ -2638,6 +2660,16 @@ th:
         การแข่งขันนี้ไม่มีกำหนดเวลาในการรับผู้เข้าแข่งขันใน waiting list
         หากคุณกำลังใช้ waiting list โปรดระบุกำหนดเวลา หากคุณไม่ได้ใช้ waiting
         list โปรดอย่าลืมระบุสิ่งนี้ในข้อกำหนดการสมัครการแข่งขัน
+    live:
+      #original_hash: 10d1a3c
+      title: ผลการแข่งขัน
+      connection:
+        #original_hash: f92b311
+        initialized: กำลังเริ่มต้นการเชื่อมต่อ
+        #original_hash: 66d44d4
+        connected: เชื่อมต่อแล้ว กำลังอัปเดตผลการแข่งขัน
+        #original_hash: 53abaa2
+        disconnected: การเชื่อมต่อขาดหาย ผลการแข่งขันไม่ได้รับการอัปเดต
     my_competitions:
       #original_hash: 5c6d3ea
       title: การแข่งขันของฉัน
@@ -3049,9 +3081,9 @@ th:
         เพื่อให้ปรากฎต่อสาธารณะ
       #original_hash: e94cba8
       is_visible: การแข่งขันนี้ปรากฎต่อสาธารณะ การแก้ไขจะแสดงเป็นสาธารณะ
-      #original_hash: 1039850
+      #original_hash: eb98c2c
       pending_confirmation_html: >-
-        เติมลงทุกช่องและให้ Delegate คลิกยืนยันเมื่อคุณพร้อมให้ %{contact}
+        เติมลงทุกช่องและขอให้ Delegate คลิกยืนยันเมื่อคุณพร้อมให้ %{contact}
         ยืนยันการแข่งขันนี้
       #original_hash: 8966fd0
       submit_create_value: สร้างการแข่งขัน
@@ -3324,12 +3356,10 @@ th:
           enabled: >-
             จำเป็นต้องใส่จำนวนผู้เข้าแข่งขันสูงสุด เฉพาะการแข่งขัน FMC
             หลายสถานที่เท่านั้นจึงจะไม่ต้องใส่จำนวนผู้เข้าแข่งขันสูงสุดได้
-          #original_hash: b7b599b
+          #original_hash: 6127d47
           count: >-
             จำนวนของผู้เข้าแข่งขันที่ได้รับอนุญาตในการแข่งขันครั้งนี้
-            สำหรับตอนนี้ตัวเลขนี้เป็นเพียงการให้ข้อมูลเท่านั้นและยังไม่สามารถป้องกันไม่ให้มีคนสมัครการแข่งขันเกินได้
-            เรากำลังดำเนินการเพื่อเพิ่มส่วนนี้ในขั้นตอนการสมัครการแข่งขัน
-            แต่จำเป็นต้องทำอย่างอื่นก่อน
+            ระบบการสมัครจะบังคับใช้ข้อจำกัดนี้
           #original_hash: 4bd7102
           reason: เหตุผลในการจำกัดจำนวนผู้เข้าแข่งขัน กรุณากรอกเป็นภาษาอังกฤษ
           #original_hash: 045d250
@@ -4138,16 +4168,14 @@ th:
           DNF (see %{regulation_link})
         #original_hash: 83d204f
         regulation_link_text: 'กติกา %{number}'
-        #original_hash: bd0e4a9
-        guideline_link_text: 'แนวปฏิบัติ %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: จำกัดเวลาสะสม
         #original_hash: d47f11a
         cumulative_one_round_html: '%{cumulative_time_limit} อาจจะถูกบังคับใช้ (ดู%{regulation_link})'
-        #original_hash: c6190b6
+        #original_hash: 44f85f0
         cumulative_across_rounds_html: >-
-          %{cumulative_time_limit} อาจจะถูกบังคับใช้ข้ามรอบได้
-          (ดู%{guideline_link})
+          %{cumulative_time_limit} อาจจะถูกบังคับใช้ข้ามรอบได้ (ดู
+          %{regulation_link})
         #original_hash: e8d17df
         cutoff_html: >-
           ผลการแข่งขันอย่างน้อยที่สุดที่ต้องทำให้ได้เพื่อที่จะได้เข้าสู่ช่วงที่สองของรอบ
@@ -4908,7 +4936,7 @@ th:
       สร้างโอกาสการเติบโตสำหรับคนหนุ่มสาวที่เกี่ยวข้องและการแนะนำกิจกรรมนี้ให้กับกลุ่มคนใหม่
       ๆ ทำให้ชุมชนโดยรวมของเราแข็งแกร่งขึ้น
       เอกสารที่มีแผนเชิงกลยุทธ์ของคณะกรรมการสำหรับ WCA สามารถอ่านได้<a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">
+      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">
       ที่นี่ </a></p>
     #original_hash: f64ccc7
     whats_next_title: ก้าวต่อไปของ WCA
@@ -5819,6 +5847,12 @@ th:
     results_export:
       #original_hash: 15d00e1
       heading: WCA Results Export
+      #original_hash: 733df42
+      deprecation_warning: >-
+        ประกาศแจ้งเตือนการเลิกใช้งาน: เวอร์ชัน %{old_version} ของ Results Export
+        ถูกยกเลิกการใช้งานแล้ว และจะยุติการสนับสนุนตั้งแต่วันที่
+        %{deprecation_date} โปรดเปลี่ยนไปใช้เวอร์ชัน %{new_version}
+        ก่อนวันดังกล่าว
       #original_hash: f9fe9df
       description: >-
         ในหน้านี้ เรามีผลการแข่งขันของ WCA สำหรับดาวน์โหลดในหลายรูปแบบ
@@ -5827,6 +5861,11 @@ th:
         ไฟล์จะมีหมายเลขและวันที่ คุณจึงดูได้ว่าคุณมีเวอร์ชันล่าสุดแล้วหรือยัง
       #original_hash: 4f59283
       permalink: permalink
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        ลิงก์ถาวรจะแสดงผลการส่งออกเวอร์ชันล่าสุดภายในเวอร์ชันที่กำหนด เช่น
+        ลิงก์ถาวร v2 จะแสดงผลการส่งออก v2 เวอร์ชันล่าสุด แต่จะยังคงเป็น v2
+        ต่อไปแม้ว่า v3 จะออกมาแล้วก็ตาม
       file_formats:
         #original_hash: b086d79
         sql: คำสั่ง SQL สำหรับการนำเข้าไปยังฐานข้อมูล SQL
@@ -5972,10 +6011,6 @@ th:
         [%{round_id}] %{person_name} มีผลการแข่งขันอย่างน้อยหนึ่งครั้งใน cutoff
         phase หายไป
         โปรดแก้ไขผลการแข่งขันเพื่อรวมผลการแข่งขันที่หายไปหรืออัปเดตข้อมูลของรอบในหน้าจัดการกิจกรรมของการแข่งขัน
-      #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] ผลการแข่งขันของ %{person_name} อยู่ในรูปแบบที่ไม่ถูกต้อง:
-        คาดหวังเป็น %{expected_format} แต่กลับเป็น %{format}
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] ผลการแข่งขันอย่างน้อยหนึ่งครั้งของ %{person_name}
@@ -5985,11 +6020,6 @@ th:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] ผลรวมของผลการแข่งขันของ %{person_name}
         เกินขีดจำกัดเวลาสะสม ซึ่งอยู่ที่ %{time_limit}
-      #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] ไม่มีข้อมูลเกี่ยวกับ cutoff และขีดจำกัดเวลาสำหรับรอบนี้
-        การตรวจสอบเหล่านี้ถูกข้ามไป
-        โปรดอัปเดตข้อมูลของรอบในหน้าจัดการกิจกรรมของการแข่งขัน
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] ขีดจำกัดเวลาสำหรับรอบนี้ไม่ได้กำหนดไว้
@@ -6020,10 +6050,6 @@ th:
         รอบ %{round_id}: มีผู้เข้าแข่งขันมากกว่าที่เงื่อนไขการเข้ารอบที่ตั้งไว้
         (%{actual} คน แทนที่จะเป็น %{expected} คน เงื่อนไขคือ: %{condition})
         โปรดอัปเดตข้อมูลรอบในหน้าจัดการกิจกรรม
-      #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        รอบ %{round_id} ปรากฏอยู่ในผลการแข่งขันแต่ไม่ได้สร้างในแท็บ event
-        โปรดระบุข้อมูลของรอบในหน้าจัดการกิจกรรมของการแข่งขัน
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         รอบ %{round_id} มีผู้เข้าแข่งขัน 99 คนหรือน้อยกว่า แต่มีรอบถัดไปมากกว่า
@@ -6069,11 +6095,6 @@ th:
       missing_round_results_error: >-
         ไม่มีผลการแข่งขันสำหรับรอบ %{round_id} แต่จะแสดงอยู่ในแท็บ event
         หากรอบนี้ไม่ได้จัดขึ้น โปรดลบรอบดังกล่าวในหน้าจัดการกิจกรรมของการแข่งขัน
-      #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        ไม่มีการประกาศ cutoff สำหรับ '%{round_name}' แต่พบว่ามีการใช้ cutoff
-        ในผลการแข่งขัน
-        โปรดอัปเดตข้อมูลของรอบดังกล่าวในหน้าจัดการกิจกรรมของการแข่งขัน
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -6088,11 +6109,6 @@ th:
       no_main_event_warning: >-
         ไม่มีการเลือก event หลักสำหรับการแข่งขันนี้ โปรดแจ้งให้ WRT
         ทราบว่านี่ถูกต้องหรือไม่
-      #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        ผลการแข่งขันสำหรับ %{event_id} ปรากฏแล้ว อย่างไรก็ตาม ไม่ได้แสดงเป็น
-        event อย่างเป็นทางการ โปรดลบ event ดังกล่าวออกจากผลการแข่งขันหรือติดต่อ
-        WCAT เพื่อขอให้เพิ่ม event ดังกล่าวลงในเว็บไซต์ของ WCA
       #original_hash: fde208d
       missing_results_warning: >-
         ไม่มีผลการแข่งขันสำหรับ %{event_id} แต่มีแสดงเป็น event อย่างเป็นทางการ
@@ -6106,10 +6122,6 @@ th:
         เพื่อเพิ่มโจทย์ที่ถูกต้องให้กับรอบนั้น
       #original_hash: 340d2f3
       missing_scrambles_for_competition_error: โจทย์ของการแข่งขันหายไป โปรดใช้ Scrambles Matcher เพื่อเพิ่มโจทย์
-      #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] มีการโจทย์มากเกินไป ใช้ Scrambles Matcher
-        เพื่อลบโจทย์ที่ไม่ได้ใช้
       #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] โจทย์ของกลุ่ม %{group_id} หายไป ตรวจพบเฉพาะ %{actual}

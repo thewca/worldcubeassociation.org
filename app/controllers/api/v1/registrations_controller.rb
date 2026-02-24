@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::RegistrationsController < Api::V1::ApiController
-  skip_before_action :require_user, only: [:index]
+  skip_before_action :require_user!, only: [:index]
   # The order of the validations is important to not leak any non public info via the API
   # That's why we should always validate a request first, before taking any other before action
   # before_actions are triggered in the order they are defined
@@ -109,7 +109,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @target_user.id
 
     # Only organizers can register when registration is closed
-    raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) unless @competition.registration_currently_open? || current_user.can_manage_competition?(@competition)
+    raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) unless @competition.registration_currently_open? || @current_user.can_manage_competition?(@competition)
 
     # Users must have the necessary permissions to compete - eg, they cannot be banned or have incomplete profiles
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_CANNOT_COMPETE) unless @target_user.cannot_register_for_competition_reasons(@competition).empty?
@@ -150,7 +150,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
       user_is_rejected?(@current_user, target_user, @registration) && !organizer_modifying_own_registration?(@competition, @current_user, target_user)
 
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
-      existing_registration_in_series?(@competition, target_user) && !current_user.can_manage_competition?(@competition)
+      existing_registration_in_series?(@competition, target_user) && !@current_user.can_manage_competition?(@competition)
 
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_admin_fields?(@request) && !@current_user.can_manage_competition?(@competition)
 
@@ -195,7 +195,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
       will_exceed_competitor_limit?(@update_requests, @competition)
 
     raise WcaExceptions::BulkUpdateError.new(:unauthorized, [Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS]) unless
-      current_user.can_manage_competition?(@competition)
+      @current_user.can_manage_competition?(@competition)
   end
 
   def validate_bulk_update_request

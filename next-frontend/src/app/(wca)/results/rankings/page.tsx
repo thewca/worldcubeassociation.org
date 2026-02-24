@@ -2,10 +2,9 @@ import { getRankings } from "@/lib/wca/results/rankings";
 import { Container } from "@chakra-ui/react";
 import React from "react";
 import FilteredRankings from "@/app/(wca)/results/rankings/filteredRankings";
-import { HydrationBoundary, QueryClient } from "@tanstack/react-query";
-import { dehydrate } from "@tanstack/query-core";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
+import OpenapiError from "@/components/ui/openapiError";
 
 const GENDER_ALL = "All";
 const SHOW_100_PERSONS = "100 persons";
@@ -32,29 +31,31 @@ export default async function RecordsPage({
     type = "single",
   } = await searchParams;
 
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery({
-    queryFn: () =>
-      getRankings({
-        gender,
-        region,
-        show,
-        eventId,
-        type,
-      }) // We need to take out the response as Next can't serialize it
-        .then((res) => ({
-          data: res.data,
-          error: res.error,
-        })),
-    queryKey: ["rankings", region, gender, show, eventId, type],
+  const { data, error, response } = await getRankings({
+    gender,
+    region,
+    show,
+    eventId,
+    type,
   });
+
+  const { t } = await getT();
+
+  if (error) return <OpenapiError response={response} t={t} />;
 
   return (
     <Container bg="bg">
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <FilteredRankings />
-      </HydrationBoundary>
+      <FilteredRankings
+        searchParams={{
+          gender,
+          region,
+          event: eventId,
+          rankingType: type,
+          show,
+        }}
+        rankings={data.rankings}
+        timestamp={data.timestamp}
+      />
     </Container>
   );
 }

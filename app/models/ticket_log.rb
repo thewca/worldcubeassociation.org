@@ -3,8 +3,8 @@
 class TicketLog < ApplicationRecord
   enum :action_type, {
     create_ticket: "create_ticket",
-    update_status: "update_status",
     create_comment: "create_comment",
+    join_as_bcc_stakeholder: "join_as_bcc_stakeholder",
     metadata_action: "metadata_action",
   }, prefix: true
   belongs_to :ticket

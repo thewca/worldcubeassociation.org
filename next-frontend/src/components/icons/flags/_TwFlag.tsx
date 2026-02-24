@@ -140,7 +140,8 @@ const _TwFlag = createIcon({
   ),
   defaultProps: {
     bg: "white",
-    width: "24px",
+    aspectRatio: "landscape",
+    height: "auto",
   },
 });
 

@@ -132,6 +132,8 @@ fr:
     '2': Meilleur des 2
     #original_hash: 21f623c
     '3': Meilleur des 3
+    #original_hash: cca816d
+    '5': Meilleur des 5
     #original_hash: 2342d2b
     a: Moyenne élaguée des 5
     #original_hash: 940c82d
@@ -143,6 +145,8 @@ fr:
       '2': Bo2
       #original_hash: b41f36f
       '3': Bo3
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: Ao5
       #original_hash: 53ba088
@@ -863,15 +867,18 @@ fr:
           Délégués puissent les référencer dans leurs commentaires. Même s'ils
           semblent courants, listez au moins les incidents principaux. Merci de
           cocher les cases ci-dessous si vous avez besoin d'un avis.
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
           Vous DEVEZ choisir au moins %{image_count} d'images qui illustrent la
-          zone de mélange et celle de compétition (d'autres images sont les
-          bienvenues). Vous pouvez sélectionner plusieurs fichiers à la fois.
-          Vous ne pouvez supprimer des images que lorsque suffisamment d'autres
-          images ont été téléchargées (si vous souhaitez remplacer une image,
-          vous devez d'abord télécharger la nouvelle image, puis supprimer
-          l'ancienne).
+          zone de mélange et de résolution de cette de compétition, de
+          préférence durant l'évènement (d'autres images sont les bienvenues).
+          Vous pouvez sélectionner plusieurs fichiers à la fois. Vous ne pouvez
+          supprimer des images que lorsque suffisamment d'autres images ont été
+          téléchargées (si vous souhaitez remplacer une image, vous devez
+          d'abord télécharger la nouvelle image, puis supprimer l'ancienne). Si
+          vous ne disposez pas de photos récentes de la zone de compétition
+          et/ou de la zone de mélange pendant leur utilisation, veuillez
+          expliquer pourquoi.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1009,11 +1016,22 @@ fr:
       contact_wrt:
         #original_hash: 603a218
         wca_id: ID WCA
+    #original_hash: 687d968
+    competition_link_html: 'Cliquez <a href=''%{url}''>ici</a> pour accéder à la page de la compétition.'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
         dob_invalid: est mal formatée
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: Une erreur s'est produite lors du rendu de la page
+      #original_hash: 22dfe12
+      description: >-
+        Si cette erreur persiste, signalez-la à WST en fournissant les
+        informations détaillées ci-dessous.
+      #original_hash: 20be860
+      details: Détails de l'erreur
     messages:
       #original_hash: dc2367c
       wrong_size: 'n''est pas de la bonne taille (il devrait faire %{file_size})'
@@ -2721,6 +2739,8 @@ fr:
           %{wca_ids}.
         #original_hash: a0fd4c5
         wrong_dob_format: "La date de naissance doit suivre le format AAAA-mm-jj (année-mois-jour, par exemple 1944-07-13). Les dates suivantes qui ne peuvent pas être analysées\_: %{raw_dobs}."
+        #original_hash: 6d8e34b
+        empty_file: Le fichier est vide.
     add:
       #original_hash: 975275e
       title: 'Ajouter une inscription à %{comp}'
@@ -2819,7 +2839,7 @@ fr:
         été postés.
       #original_hash: 5c24cd8
       results_still_processing: >-
-        Nous sommes occupés à traiter les résultats de ce concours - ils
+        Nous sommes occupés à traiter les résultats de cette compétition; ils
         devraient être disponibles sous peu.
       #original_hash: e205d73
       results_already_posted: Les résultats ont déjà été postés.
@@ -2895,6 +2915,11 @@ fr:
         connected: 'Connecté, les résultats sont en cours de mise à jour'
         #original_hash: 53abaa2
         disconnected: 'Connexion perdue, les résultats ne sont pas mis à jour'
+      podiums:
+        #original_hash: 02ae2bd
+        title: Podiums
+        #original_hash: d7297a7
+        undetermined: Podiums à déterminer
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mes compétitions
@@ -3131,14 +3156,22 @@ fr:
         L'épreuve principale était le %{event_name}. Aucun·e gagnant·e n’a été
         déclaré·e, car aucun·e participant·e n’a obtenu de résultats au cours de
         l'épreuve.
+      #original_hash: 5262865
+      h2h_winner: >-
+        %{winner} a remporté la finale en face à face de la compétition
+        %{event_name}.
       #original_hash: 6c3b236
       winner: '%{winner} a gagné %{result_sentence} dans l''épreuve du %{event_name}.'
       #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} a terminé second (%{first_runner_up_result})'
+      #original_hash: 2926d10
+      h2h_first_runner_up: '%{first_runner_up} a terminé deuxième'
       #original_hash: cffa50a
       and: et
       #original_hash: 67d285c
       second_runner_up: '%{second_runner_up} a terminé troisième (%{second_runner_up_result}).'
+      #original_hash: 157b649
+      h2h_second_runner_up: '%{second_runner_up} a terminé troisième.'
       records:
         #original_hash: 0658e11
         wr: Records du Monde
@@ -4625,7 +4658,7 @@ fr:
       #original_hash: 15e58c6
       no_activities: Aucune activité pour les salles/épreuves sélectionnées.
       #original_hash: 10a56c8
-      all_venues: Tout les salles
+      all_venues: Toutes les salles
       #original_hash: a0b3266
       room_or_stage: Salle ou zone
       #original_hash: f37605b
@@ -4655,7 +4688,9 @@ fr:
           Vous consultez le planning de la %{venue_name}, une des %{count} salle
           pour cette compétition.
       #original_hash: 8d175ad
-      venue_selection_all: 'Vous consultez le planning de toutes les salles %{venueCount} à la fois.'
+      venue_selection_all: >-
+        Vous consultez le planning de l'ensemble des %{venueCount} salles à la
+        fois.
       #original_hash: 97df911
       timezone_message: 'Le fuseau horaire pour cette salle est %{timezone}.'
       #original_hash: 94b2570
@@ -4726,6 +4761,11 @@ fr:
         #original_hash: c4622c3
         scrambles: Mélanges
     results_table:
+      #original_hash: bdbfcdc
+      h2h_results_disclaimer: >-
+        Résultats déterminés par une finale en face à face. Seuls le classement
+        et la meilleure résolution sont affichés, car l'affichage complet des
+        résultats en face à face est encore en cours de développement.
       #original_hash: 3e9a6b5
       wca_profile: Profil WCA
       #original_hash: ad8919a
@@ -5345,11 +5385,11 @@ fr:
   about:
     #original_hash: 9ac918a
     title: À propos de la WCA
-    #original_hash: af00571
+    #original_hash: ee35764
     mission_statement: >-
-      Notre but est d'avoir plus de compétitions dans plus de pays avec plus de
-      personnes et d'amusement, dans des conditions égales et équitables.
-    #original_hash: e627278
+      Notre objectif est de soutenir la communauté mondiale du speedcubing et de
+      garantir un environnement compétitif amusant et équitable pour tous.
+    #original_hash: 5bed828
     mission_footer: But de la WCA
     #original_hash: cdab446
     who_we_are_title: Qui sommes nous
@@ -6386,6 +6426,12 @@ fr:
     results_export:
       #original_hash: 15d00e1
       heading: Export de résultats WCA
+      #original_hash: 733df42
+      deprecation_warning: >-
+        AVIS DE DÉPRÉCIATION : La version %{old_version} de l'exportation des
+        résultats est désormais obsolète et ne sera plus prise en charge à
+        compter du %{deprecation_date}. Veuillez passer à la version
+        %{new_version} avant cette date.
       #original_hash: f9fe9df
       description: >-
         Sur cette page, nous proposons les résultats WCA à télécharger dans
@@ -6396,6 +6442,12 @@ fr:
         version la plus récente.
       #original_hash: 4f59283
       permalink: permalien
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        Remarque : les permaliens fournissent les derniers résultats exportés
+        dans une version donnée. Par exemple, le permalien v2 renverra la
+        dernière exportation v2, mais restera sur la v2 même lorsque la v3 sera
+        disponible.
       file_formats:
         #original_hash: b086d79
         sql: 'Requête SQL, pour l’importation dans les bases de données SQL.'
@@ -6480,7 +6532,7 @@ fr:
         l'enregistrement actuel dans la base de données WCA
         ('%{expected_country}'). S'il s'agit d'une erreur, corrigez-la. Sinon,
         laissez un commentaire au WRT à ce sujet.
-      #original_hash: e15e700
+      #original_hash: 6179b35
       multiple_newcomers_with_same_name_warning: >-
         Il y a plusieurs nouveaux compétiteurs qui portent exactement le même
         nom : %{name}. Veuillez vous assurer que tous les résultats sont
@@ -6491,6 +6543,12 @@ fr:
         Le caractère parenthèse utilisé dans « %{name} » est un caractère
         irrégulier, veuillez le remplacer par une parenthèse régulière '(' ou
         ')' et avec un espacement approprié.
+      #original_hash: fec0347
+      special_characters_in_name_warning: >-
+        Le nom « %{name} » contient des caractères spéciaux non valides (tels
+        que des chiffres, des guillemets ou d'autres symboles). Les noms ne
+        doivent contenir que des lettres, des espaces, des tirets, des
+        apostrophes, des points et des parenthèses normales.
       #original_hash: 4b90583
       successive_uppercase_name_warning: >-
         Le nom de '%{name}' comporte plusieurs lettres majuscules successives.
@@ -6559,10 +6617,6 @@ fr:
         cutoff. Veuillez modifier le résultat pour inclure la ou les tentatives
         manquantes ou mettre à jour les informations relatives au tour dans la
         page Gérer les événements de la compétition.
-      #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] Les résultats pour %{person_name} sont dans le mauvais
-        format : attendu %{expected_format}, mais obtenu %{format}.
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Au moins un résultat pour %{person_name} dépasse le temps
@@ -6572,12 +6626,6 @@ fr:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] La somme des résultats pour %{person_name} est supérieure
         à la limite de temps cumulée, qui était de %{time_limit}.
-      #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] Il n'y a pas d'information sur la limite de temps pour ce
-        tour. Ces validations ont été ignorées. Veuillez mettre à jour les
-        informations relatives au tour dans la page Gérer les événements de la
-        compétition.
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] La limite de temps pour ce tour est indéfinie, les
@@ -6610,12 +6658,6 @@ fr:
         condition d'avancement prévoyait (%{actual} au lieu de %{expected}, la
         condition était : %{condition}). Veuillez mettre à jour les informations
         relatives au tour dans la page de gestion des événements.
-      #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        Le tour %{round_id} est présent dans les résultats mais n'a pas été créé
-        dans l'onglet des événements. Veuillez inclure les informations
-        relatives au tour dans la page de gestion des événements de la
-        compétition.
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         Le tour %{round_id} compte 99 compétiteurs ou moins mais a plus de deux
@@ -6665,12 +6707,6 @@ fr:
         Il n'y a pas de résultats pour le tour %{round_id} mais il est listé
         dans l'onglet événements. Si ce tour n'a pas eu lieu, veuillez le
         supprimer dans la page de gestion des événements de la compétition.
-      #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        Aucune cutoff n'a été annoncé pour '%{round_name}', mais il a été
-        détecté comme un tour avec cutoff dans les résultats. Veuillez mettre à
-        jour les informations relatives au tour dans la page de gestion des
-        événements de la compétition.
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -6686,12 +6722,6 @@ fr:
       no_main_event_warning: >-
         Il n'y a pas d'épreuve principale sélectionné pour cette compétition.
         Veuillez indiquer au WRT que cela est correct.
-      #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        Des résultats sont présents pour %{event_id}, mais il n'est pas
-        répertorié comme un événement officiel. Veuillez supprimer l'événement
-        des résultats ou contacter le WCAT pour demander l'ajout de l'événement
-        sur le site web de la WCA.
       #original_hash: fde208d
       missing_results_warning: >-
         Il n'y a pas de résultats pour %{event_id}, mais il est répertorié comme
@@ -6707,10 +6737,6 @@ fr:
       missing_scrambles_for_competition_error: >-
         Il manque des mélanges pour la compétition. Utilisez Scrambles Matcher
         pour ajouter des mélanges.
-      #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Trop de mélanges. Utilisez Scrambles Matcher pour décocher
-        les mélanges inutilisés.
       #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] Groupe %{group_id} : mélange manquant, détecté seulement
@@ -6738,3 +6764,8 @@ fr:
       edit_person: Modifier la personne
       #original_hash: 5fb2137
       competition_result: Résultat de la compétition
+    stakeholder_role:
+      #original_hash: e095187
+      actioner: Personne en charge
+      #original_hash: bcdf8d3
+      requester: Demandeur

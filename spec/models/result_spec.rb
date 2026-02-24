@@ -159,7 +159,7 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq 4401
-            expect(result).to be_invalid_with_errors(average: ["should be 4401"])
+            expect(result).to be_invalid_with_errors(average: ["must be equal to 4401"])
           end
 
           it "all solves with average above 10 minutes" do
@@ -169,7 +169,7 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq 60_100
-            expect(result).to be_invalid_with_errors(average: ["should be 60100"])
+            expect(result).to be_invalid_with_errors(average: ["must be equal to 60100"])
           end
 
           it "DNF average" do
@@ -178,7 +178,7 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq SolveTime::DNF_VALUE
-            expect(result).to be_invalid_with_errors(average: ["should be -1"])
+            expect(result).to be_invalid_with_errors(average: ["must be equal to -1"])
           end
 
           it "missing solves" do
@@ -205,7 +205,7 @@ RSpec.describe Result do
 
               result.average = 33
               expect(result.compute_correct_average).to eq 43
-              expect(result).to be_invalid_with_errors(average: ["should be 43"])
+              expect(result).to be_invalid_with_errors(average: ["must be equal to 43"])
             end
 
             it "missing solves" do
@@ -214,7 +214,7 @@ RSpec.describe Result do
 
               result.average = 33
               expect(result.compute_correct_average).to eq 0
-              expect(result).to be_invalid_with_errors(average: ["should be 0"])
+              expect(result).to be_invalid_with_errors(average: ["must be equal to 0"])
             end
 
             it "too many solves" do
@@ -235,7 +235,7 @@ RSpec.describe Result do
 
               result.average = 33
               expect(result.compute_correct_average).to eq 4401
-              expect(result).to be_invalid_with_errors(average: ["should be 4401"])
+              expect(result).to be_invalid_with_errors(average: ["must be equal to 4401"])
             end
 
             it "all solves with average above 10 minutes" do
@@ -245,7 +245,7 @@ RSpec.describe Result do
 
               result.average = 33
               expect(result.compute_correct_average).to eq 60_100
-              expect(result).to be_invalid_with_errors(average: ["should be 60100"])
+              expect(result).to be_invalid_with_errors(average: ["must be equal to 60100"])
             end
 
             it "rounds instead of truncates" do
@@ -254,7 +254,7 @@ RSpec.describe Result do
 
               result.average = 33
               expect(result.compute_correct_average).to eq 4
-              expect(result).to be_invalid_with_errors(average: ["should be 4"])
+              expect(result).to be_invalid_with_errors(average: ["must be equal to 4"])
             end
 
             it "missing solves" do
@@ -283,7 +283,7 @@ RSpec.describe Result do
 
             result.average = 4200
             expect(result.compute_correct_average).to eq 4233
-            expect(result).to be_invalid_with_errors(average: ["should be 4233"])
+            expect(result).to be_invalid_with_errors(average: ["must be equal to 4233"])
           end
 
           it "correctly computes DNF average" do
@@ -292,7 +292,7 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq(-1)
-            expect(result).to be_invalid_with_errors(average: ["should be -1"])
+            expect(result).to be_invalid_with_errors(average: ["must be equal to -1"])
           end
         end
       end
@@ -312,7 +312,7 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq 1000
-            expect(result).to be_invalid_with_errors(average: ["should be 1000"])
+            expect(result).to be_invalid_with_errors(average: ["must be equal to 1000"])
           end
 
           it "leaves average for 333bf as skipped if one of three solves is skipped" do
@@ -371,7 +371,7 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq 1000
-            expect(result).to be_invalid_with_errors(average: ["should be 1000"])
+            expect(result).to be_invalid_with_errors(average: ["must be equal to 1000"])
           end
         end
 
@@ -386,7 +386,7 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq 1000
-            expect(result).to be_invalid_with_errors(average: ["should be 1000"])
+            expect(result).to be_invalid_with_errors(average: ["must be equal to 1000"])
           end
         end
 
@@ -401,7 +401,7 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq 2500
-            expect(result).to be_invalid_with_errors(average: ["should be 2500"])
+            expect(result).to be_invalid_with_errors(average: ["must be equal to 2500"])
           end
         end
 
@@ -422,19 +422,18 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq 0
-            expect(result).to be_invalid_with_errors(average: ["should be 0"])
+            expect(result).to be_invalid_with_errors(average: ["must be equal to 0"])
           end
         end
       end
     end
 
     context "check number of non-zero solves" do
-      def result_with_n_solves(n, options)
-        result = build(:result, options)
-        (1..5).each do |i|
-          result.send :"value#{i}=", i <= n ? 42 : 0
+      def result_with_n_solves(n, **)
+        result_attempts = (1..5).to_h do |i|
+          [:"value#{i}", i <= n ? 42 : 0]
         end
-        result
+        build(:result, **, **result_attempts)
       end
 
       context "non-cutoff rounds" do

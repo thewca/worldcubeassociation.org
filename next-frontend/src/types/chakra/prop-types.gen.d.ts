@@ -44,8 +44,6 @@ export interface UtilityValues {
     | "blue.cubeShades"
     | "yellow.cubeShades"
     | "link"
-    | "advancing"
-    | "advancingQuestionable"
     | "recordMarkers"
     | "white.cubeShades"
     | "black.cubeShades"
@@ -326,4 +324,6 @@ export interface UtilityValues {
     | "slide-to-right"
     | "scale-in"
     | "scale-out"
+    | "marqueeX"
+    | "marqueeY"
 }

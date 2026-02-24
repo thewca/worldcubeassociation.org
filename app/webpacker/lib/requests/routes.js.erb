@@ -1,7 +1,11 @@
-function jsonToQueryString(json) {
-  const jsonAfterRemovingUndefinedAndNull = Object.fromEntries(
+export function omitNullAndUndefined(json) {
+  return Object.fromEntries(
     Object.entries(json).filter(([key, value]) => value !== null && value !== undefined)
   );
+}
+
+function jsonToQueryString(json) {
+  const jsonAfterRemovingUndefinedAndNull = omitNullAndUndefined(json);
   return (new URLSearchParams(jsonAfterRemovingUndefinedAndNull)).toString();
 }
 
@@ -175,6 +179,7 @@ export const subordinateDelegateClaimsUrl = `<%= CGI.unescape(Rails.application.
 export const subordinateUpcomingCompetitionsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.competitions_for_senior_path) %>`;
 export const wfcCompetitionsExportUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.wfc_competitions_export_path) %>`;
 export const generateDbTokenUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_generate_db_token_path) %>`
+export const sanityCheckResultsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.sanity_check_path) %>`
 
 export const wfcXeroUsersUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wfc_xero_users_path) %>`;
 
@@ -232,7 +237,7 @@ export const apiV0Urls = {
     resetClaimCount: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_person_reset_claim_count_path("${wcaId}"))%>`,
   },
   userRoles: {
-    list: ({isActive, isGroupHidden, userId, groupId, status, groupType, isLead} = {}, sort, perPage = 100) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_roles_path) %>?${jsonToQueryString({ sort, isActive, isGroupHidden, userId, groupId, status, groupType, isLead, per_page: perPage })}`,
+    list: ({isActive, isGroupHidden, userId, groupId, status, groupType, isLead, page} = {}, sort, perPage = 100) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_roles_path) %>?${jsonToQueryString({ sort, isActive, isGroupHidden, userId, groupId, status, groupType, isLead, page, per_page: perPage })}`,
     create: () => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_roles_path) %>`,
     update: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_role_path("${roleId}")) %>`,
     delete: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_role_path("${roleId}")) %>`,
@@ -315,7 +320,6 @@ export const viewUrls = {
 export const actionUrls = {
   tickets: {
     show: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_path("${ticketId}", format: "json")) %>`,
-    updateStatus: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_update_status_path("${ticketId}")) %>`,
     editPersonValidators: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_edit_person_validators_path("${ticketId}")) %>`,
     addComment: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_comments_path("${ticketId}")) %>`,
     getDetailsBeforeAnonymization: (userId, wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.tickets_details_before_anonymization_path) %>?${jsonToQueryString({ userId, wcaId })}`,
@@ -324,10 +328,13 @@ export const actionUrls = {
     mergeInboxResults: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_merge_inbox_results_path("${ticketId}")) %>`,
     deleteInboxPersons: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_delete_inbox_persons_path("${ticketId}")) %>`,
     postResults: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_post_results_path("${ticketId}")) %>`,
+    approveEditPersonRequest: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_approve_edit_person_request_path("${ticketId}")) %>`,
     rejectEditPersonRequest: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_reject_edit_person_request_path("${ticketId}")) %>`,
     editPersonFields: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_edit_person_fields_path("${ticketId}")) %>`,
     editPersonField: (ticketId, editPersonFieldId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_edit_person_field_path("${ticketId}", "${editPersonFieldId}")) %>`,
     syncEditPersonRequest: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_sync_edit_person_request_path("${ticketId}")) %>`,
+    joinAsBccStakeholder: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_join_as_bcc_stakeholder_path("${ticketId}")) %>`,
+    eligibleRolesForBcc: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_eligible_roles_for_bcc_path("${ticketId}")) %>`,
   },
   validators: {
     forCompetitionList: (competitionIds, selectedValidators, applyFixWhenPossible, checkRealResults) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_validators_for_competition_list_path) %>?${jsonToQueryString({ competitionIds, selectedValidators, applyFixWhenPossible, checkRealResults })}`,

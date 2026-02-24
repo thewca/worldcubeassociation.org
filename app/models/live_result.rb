@@ -2,24 +2,22 @@
 
 class LiveResult < ApplicationRecord
   BEST_POSSIBLE_SCORE = 1
+  WORST_POSSIBLE_SCORE = -1
 
-  has_many :live_attempts
+  has_many :live_attempts, dependent: :destroy
   alias_method :attempts, :live_attempts
 
-  after_create :recompute_local_pos
-  after_create :recompute_global_pos
-
-  after_update :recompute_local_pos, if: :should_recompute?
-  after_update :recompute_global_pos, if: :should_recompute?
-
-  # This hook has to be executed _after_ computing the rankings
-  after_save :recompute_advancing, if: :should_recompute?
-
-  after_save :notify_users
+  after_save :trigger_recompute, if: :should_recompute?
 
   belongs_to :registration
 
   belongs_to :round
+
+  belongs_to :quit_by, class_name: 'User', optional: true
+  belongs_to :locked_by, class_name: 'User', optional: true
+
+  scope :not_empty, -> { where.not(best: 0) }
+  scope :locked, -> { where.not(locked_by: nil) }
 
   alias_attribute :result_id, :id
 
@@ -28,7 +26,7 @@ class LiveResult < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[global_pos local_pos registration_id round_id best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
-    methods: %w[event_id attempts result_id],
+    methods: %w[event_id attempts result_id forecast_statistics],
     include: %w[],
   }.freeze
 
@@ -52,6 +50,26 @@ class LiveResult < ApplicationRecord
     end
   end
 
+  def mark_as_quit!(quit_by_user)
+    update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
+  end
+
+  def locked?
+    locked_by_id.present?
+  end
+
+  def self.compute_average_and_best(attempts, round)
+    r = Result.new(
+      event_id: round.event.id,
+      round_type_id: round.round_type_id,
+      round_id: round.id,
+      format_id: round.format_id,
+      result_attempts: attempts.map(&:to_result_attempt),
+    )
+
+    [r.compute_correct_average, r.compute_correct_best]
+  end
+
   def potential_solve_time
     complete? ? values_for_sorting : best_possible_solve_times
   end
@@ -60,37 +78,8 @@ class LiveResult < ApplicationRecord
     saved_change_to_best? || saved_change_to_average?
   end
 
-  def recompute_local_pos
-    rank_by = format.rank_by_column
-    # We only want to decide ties by single in events decided by average
-    secondary_rank_by = format.secondary_rank_by_column
-    # The following query uses an `ORDER BY best <= 0, best ASC` trick. The idea is:
-    #   1. The first part of the `ORDER BY` evaluates to a boolean. Booleans are just
-    #     `TINYINT` in MySQL with TRUE=1 and FALSE=0, so that FALSE < TRUE.
-    #     This means that valid attempts where `best <= 0` is FALSE come first, and
-    #     invalid attempts where `best <= 0` is TRUE come last.
-    #   2. The attempts are then sorted among themselves using their normal numeric value.
-    #     This works in particular because sorting in MySQL is stable, i.e. the sorting
-    #     based on the second part won't destroy the order established by the first part.
-    ActiveRecord::Base.connection.exec_query <<-SQL.squish
-      UPDATE live_results r
-      LEFT JOIN (
-          SELECT id,
-                 RANK() OVER (
-                     ORDER BY #{rank_by} <= 0, #{rank_by} ASC
-                       #{", #{secondary_rank_by} <= 0, #{secondary_rank_by} ASC" if secondary_rank_by}
-                 ) AS `rank`
-          FROM live_results
-          WHERE round_id = #{round.id} AND best != 0
-      ) ranked
-      ON r.id = ranked.id
-      SET r.local_pos = ranked.rank
-      WHERE r.round_id = #{round.id};
-    SQL
-  end
-
   def complete?
-    live_attempts.where.not(result: 0).count == round.format.expected_solve_count
+    live_attempts.where.not(value: 0).count == round.format.expected_solve_count
   end
 
   def values_for_sorting
@@ -99,83 +88,61 @@ class LiveResult < ApplicationRecord
     end
   end
 
+  LIVE_STATE_SERIALIZE_OPTIONS = {
+    only: %w[advancing advancing_questionable average average_record_tag best global_pos local_pos registration_id single_record_tag],
+    methods: %w[],
+    include: [{ live_attempts: { only: %i[id value attempt_number] } }],
+  }.freeze
+
+  def to_live_state
+    serializable_hash(LIVE_STATE_SERIALIZE_OPTIONS)
+  end
+
+  def self.compute_diff(before_result, after_result)
+    changed_vals = after_result.slice(*LIVE_STATE_SERIALIZE_OPTIONS[:only])
+                               .reject { |k, v| before_result[k] == v }
+    diff = changed_vals.merge("registration_id" => after_result["registration_id"])
+
+    # Include new attempts if they have changed, it's too much of a hassle to
+    # replace single values in the frontend.
+    diff["live_attempts"] = after_result["live_attempts"] if LiveAttempt.attempts_changed?(
+      before_result["live_attempts"],
+      after_result["live_attempts"],
+    )
+
+    # Only return if there are actual changes
+    diff if diff.except("registration_id").present?
+  end
+
+  def forecast_statistics
+    # use .length on purpose here as otherwise we would use one query per row
+    LiveResult.compute_best_and_worse_possible_average(live_attempts.as_json, round) if live_attempts.length < round.format.expected_solve_count
+  end
+
+  def self.compute_best_and_worse_possible_average(live_attempts, round)
+    missing_count = round.format.expected_solve_count - live_attempts.length
+
+    {
+      "best_possible_average" => BEST_POSSIBLE_SCORE,
+      "worst_possible_average" => WORST_POSSIBLE_SCORE,
+    }.transform_values do |score|
+      padded = live_attempts + Array.new(missing_count) do |i|
+        {
+          "attempt_number" => live_attempts.length + i + 1,
+          "value" => score,
+        }
+      end
+
+      attempts = padded.map { LiveAttempt.new(it) }
+      LiveResult.compute_average_and_best(attempts, round).first
+    end
+  end
+
   private
 
-    def notify_users
-      ActionCable.server.broadcast(WcaLive.broadcast_key(round_id), as_json)
-    end
+    def trigger_recompute
+      return if format.id == "h"
 
-    def recompute_advancing
-      has_linked_round = round.linked_round.present?
-      advancement_determining_results = has_linked_round ? round.linked_round.live_results : round.live_results
-
-      # Only ranked results can be considered for advancing.
-      round_results = advancement_determining_results.where.not(global_pos: nil)
-      round_results.update_all(advancing: false, advancing_questionable: false)
-
-      missing_attempts = round.total_accepted_registrations - round_results.count
-      potential_results = Array.new(missing_attempts) { LiveResult.build(round: round) }
-      results_with_potential = (round_results.to_a + potential_results).sort_by(&:potential_solve_time)
-
-      qualifying_index = if round.final_round?
-                           3
-                         else
-                           # Our Regulations allow at most 75% of competitors to proceed
-                           max_qualifying = (round_results.count * 0.75).floor
-                           [round.advancement_condition.max_advancing(round_results), max_qualifying].min
-                         end
-
-      round_results.update_all("advancing_questionable = global_pos BETWEEN 1 AND #{qualifying_index}")
-
-      # Determine which results would advance if everyone achieved their best possible attempt.
-      advancing_ids = results_with_potential.take(qualifying_index).select(&:complete?).pluck(:id)
-
-      LiveResult.where(id: advancing_ids).update_all(advancing: true)
-    end
-
-    def recompute_global_pos
-      # For non-linked rounds, just set the global_pos to local_pos
-      return round.live_results.update_all("global_pos = local_pos") if round.linked_round.blank?
-
-      rank_by = format.rank_by_column
-      secondary_rank_by = format.secondary_rank_by_column
-      round_ids = round.linked_round.round_ids.join(",")
-
-      # Similar to the query that recomputes local_pos, but
-      # at first it computes the best result of a person over all linked rounds
-      # by using the same ORDER BY <=0 trick
-      query = <<-SQL.squish
-      UPDATE live_results r
-      LEFT JOIN (
-          SELECT id,
-                 RANK() OVER (
-                   ORDER BY person_best.#{rank_by} <= 0, person_best.#{rank_by} ASC
-                   #{", person_best.#{secondary_rank_by} <= 0, person_best.#{secondary_rank_by} ASC" if secondary_rank_by}
-                 ) AS ranking
-          FROM (
-        SELECT *
-        FROM (
-            SELECT
-              lr.*,
-              ROW_NUMBER() OVER (
-                PARTITION BY lr.registration_id
-                ORDER BY
-                  (lr.#{rank_by} <= 0) ASC,
-                  lr.#{rank_by} ASC
-                  #{", lr.#{secondary_rank_by} <= 0, lr.#{secondary_rank_by} ASC" if secondary_rank_by}
-              ) AS rownum
-            FROM live_results lr
-            WHERE lr.round_id IN (#{round_ids})
-              AND lr.best != 0
-        ) x
-        WHERE rownum = 1
-    ) AS person_best
-      ) ranked
-      ON r.id = ranked.id
-      SET r.global_pos = ranked.ranking
-      WHERE r.round_id IN (#{round_ids});
-      SQL
-
-      ActiveRecord::Base.connection.exec_query query
+      round.recompute_live_columns(skip_advancing: locked?)
     end
 end

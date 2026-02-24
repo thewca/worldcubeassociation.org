@@ -10,7 +10,7 @@ module ResultsValidators
       false
     end
 
-    attr_reader :results, :persons, :validators
+    attr_reader :results, :validators
 
     # Takes a list of validator classes, and if it should process real results or not.
     def initialize(validators = [], check_real_results: false, apply_fixes: false, sql_batch: nil, memory_batch: nil)
@@ -24,29 +24,25 @@ module ResultsValidators
       @memory_batch = memory_batch
 
       @results = []
-      @persons = []
     end
 
-    def self.create_full_validation
-      new(ResultsValidators::Utils::ALL_VALIDATORS)
+    def self.create_full_validation(check_real_results: false)
+      new(ResultsValidators::Utils::ALL_VALIDATORS, check_real_results: check_real_results)
     end
 
     def any_results?
       @results.any?
     end
 
-    def persons_by_id
-      @persons_by_id ||= @persons.index_by(&:ref_id)
-    end
-
-    def competition_associations
-      @validators.map { |v| self.load_validator v }
-                 .map(&:competition_associations)
+    def competition_associations(check_real_results: false)
+      @validators.map { self.load_validator it }
+                 .map { it.competition_associations(check_real_results: check_real_results) }
                  .inject({}, :deep_merge) # default {} value for the rare case that @validators is empty.
     end
 
     def include_persons?
-      true
+      @validators.map { self.load_validator it }
+                 .any?(&:include_persons?)
     end
 
     protected def validate_competitions(competition_ids, check_real_results)
@@ -69,7 +65,6 @@ module ResultsValidators
     def run_validation(validator_data)
       validator_data.each do |competition_data|
         @results += competition_data.results
-        @persons += competition_data.persons
       end
 
       # Ensure any call to localizable name (eg: round names) is made in English,

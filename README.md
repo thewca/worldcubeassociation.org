@@ -27,9 +27,6 @@
 - [Other WCA Repos](https://docs.worldcubeassociation.org/#wca-software-resources)
 - [Using OAuth, or writing data to the website](https://docs.worldcubeassociation.org/knowledge_base/v0_api.html)
 
-## Can I join WST?
-Currently (2023-09-10) WST is not accepting new members. We aim to onboard more volunteers by late 2023/early 2024.
-
 ## \*Unofficial API
 
 If you want to query WCA data via an API, the [Unofficial API](https://wca-rest-api.robiningelbrecht.be/) is the best way to do this. It is not developed or supported by WST, but it makes use of the results export and updates daily, so you can rely on the information it provides.
@@ -37,4 +34,3 @@ If you want to query WCA data via an API, the [Unofficial API](https://wca-rest-
 ----
 
 If the above links don't give you what you need, feel free to open an issue or [contact us](https://www.worldcubeassociation.org/contact)
-

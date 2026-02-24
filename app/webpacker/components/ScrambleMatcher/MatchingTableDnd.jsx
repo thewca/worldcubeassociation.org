@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import {
+  Button,
   Header,
   Icon,
   Popup,
   Ref,
+  Segment,
   Table,
 } from 'semantic-ui-react';
 import _ from 'lodash';
@@ -19,6 +21,9 @@ export default function MatchingTableDnd({
   cellDetailsAreData = false,
   onClickMoveAction = undefined,
   onClickDeleteAction = undefined,
+  showFooterReference = false,
+  footerReferenceLabel = null,
+  adjustFooterReferenceAction = undefined,
 }) {
   const [currentDragStart, setCurrentDragStart] = useState(null);
   const [currentDragIndex, setCurrentDragIndex] = useState(null);
@@ -173,6 +178,20 @@ export default function MatchingTableDnd({
           )}
         </Droppable>
       </DragDropContext>
+      {showFooterReference && (
+        <Table.Footer fullWidth>
+          <Table.Row>
+            <Table.HeaderCell textAlign="right">
+              {footerReferenceLabel}
+            </Table.HeaderCell>
+            <Table.HeaderCell colSpan={3}>
+              <Button negative icon="minus square outline" compact attached="left" disabled={expectedNumOfRows <= Math.max(1, matchableRows.length)} onClick={() => adjustFooterReferenceAction(expectedNumOfRows - 1)} />
+              <Segment as="span" piled>{expectedNumOfRows}</Segment>
+              <Button positive icon="plus square outline" compact attached="right" onClick={() => adjustFooterReferenceAction(expectedNumOfRows + 1)} />
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Footer>
+      )}
     </Table>
   );
 }

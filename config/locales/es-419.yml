@@ -872,14 +872,16 @@ es-419:
           Si todos los incidentes fueron genéricos, enumera al menos los casos
           más notorios. Marca los recuadros apropiados si estás buscando
           retroalimentación de WIC o WRC.
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
           SE DEBEN incluir al menos %{image_count} imágenes que ilustren la zona
-          de mezclas y de competición (otras imágenes son bienvenidas también).
+          de mezclas y de competición de esta competencia, preferiblemente
+          durante la competencia (otras imágenes son bienvenidas también).
           Puedes elegir múltiples archivos a la vez. Puedes eliminar imágenes
           solo cuando suficientes otras se hayan subido (si quieres reemplazar
           una imagen, necesitas subir la nueva primero, y luego eliminar la
-          antigua).
+          antigua). Si no tienes imágenes de estas zonas en uso, por favor
+          explica la razón.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1024,6 +1026,15 @@ es-419:
         #original_hash: 79ccfe2
         dob_invalid: tiene un formato incorrecto
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: Ha ocurrido un error renderizando la página
+      #original_hash: 22dfe12
+      description: >-
+        Si el error persiste, repórtalo al WST con los detalles que se indican
+        debajo
+      #original_hash: 20be860
+      details: Detalles del error
     messages:
       #original_hash: dc2367c
       wrong_size: 'Tamaño erróneo (debe ser %{file_size})'
@@ -2659,6 +2670,8 @@ es-419:
           La fecha de nacimiento debe seguir el formato AAAA-mm-dd (año-mes-día,
           por ejemplo 2000-10-14), se encontraron las siguientes fechas que no
           pueden ser procesadas: %{raw_dobs}.
+        #original_hash: 6d8e34b
+        empty_file: El archivo está vacío.
     add:
       #original_hash: 975275e
       title: 'Añadir registros para %{comp}'
@@ -2832,6 +2845,11 @@ es-419:
         connected: 'Conectado, actualizando resultados'
         #original_hash: 53abaa2
         disconnected: 'Conexión perdida, resultados no actualizados'
+      podiums:
+        #original_hash: 02ae2bd
+        title: Podios
+        #original_hash: d7297a7
+        undetermined: Podios a definir
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mis competiciones
@@ -5206,12 +5224,12 @@ es-419:
   about:
     #original_hash: 9ac918a
     title: Acerca de la WCA
-    #original_hash: af00571
+    #original_hash: ee35764
     mission_statement: >-
-      Nuestra misión es tener más competiciones en más paises con más gente y de
-      forma más divertida, bajo condiciones justas y equitativas.
-    #original_hash: e627278
-    mission_footer: Declaración de propósitos de la WCA
+      Nuestro propósito es empoderar a la comunidad global de speedcubing y
+      mantener un entorno divertido y justo de competencia para todos.
+    #original_hash: 5bed828
+    mission_footer: Propósito de la WCA
     #original_hash: cdab446
     who_we_are_title: Quienes somos
     #original_hash: 303f17a
@@ -6220,6 +6238,12 @@ es-419:
     results_export:
       #original_hash: 15d00e1
       heading: Export de Resultados WCA
+      #original_hash: 733df42
+      deprecation_warning: >-
+        AVISO DE DESUSO: La versión %{old_version} de la Exportación de
+        Resultados ha sido marcada en desuso, y se descontinuará soporte a la
+        misma desde la fecha %{deprecation_date}. Por favor, cambia a la Versión
+        %{new_version} antes de esa fecha.
       #original_hash: f9fe9df
       description: >-
         En esta página ofrecemos los resultados WCA para descarga en varios
@@ -6229,6 +6253,12 @@ es-419:
         tienes ya la versión más reciente.
       #original_hash: 4f59283
       permalink: Enlace permanente
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        Los links permanentes entregan la exportación más reciente dentro de una
+        versión dada. Por ejemplo, el link permanente de la v2 retornará la
+        exportación de v2 más reciente, pero continuará retornando v2 incluso
+        cuando se lance la v3.
       file_formats:
         #original_hash: b086d79
         sql: 'Sentencias SQL, para importar en Bases de datos SQL.'
@@ -6384,10 +6414,6 @@ es-419:
         de la fase de corte. Por favor, edita los resultados para incluir el o
         los intentos faltantes, o actualiza la información de la ronda en la
         página de "Administrar eventos" (Manage Events).
-      #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] Los resultados de %{person_name} tienen el formato
-        incorrecto: se esperó %{expected_format} pero se encontró %{format}.
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Al menos un resultado de %{person_name} excede el tiempo
@@ -6397,12 +6423,6 @@ es-419:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] La suma de resultados de %{person_name} excede el límite
         acumulativo, que era %{time_limit}.
-      #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] No hay información sobre el corte y tiempo límite para
-        esta ronda. Se han omitido estos validadores. Por favor, actualiza la
-        información de la ronda en la página de "Administrar eventos" (Manage
-        Events).
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] El tiempo límite de esta ronda es indefinido, se han
@@ -6432,11 +6452,6 @@ es-419:
         [%{round_id}] Más competidores clasificaron de lo que se esperaba
         (%{actual} en vez de %{expected}). La condición era "%{condition}". Por
         favor, actualiza la información de la ronda en el menú de "Administrar
-        eventos" (Manage Events).
-      #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        [%{round_id}] La ronda está presente pero no se encuentra en la pestaña
-        de eventos. Por favor, crea la ronda en la pestaña de "Administrar
         eventos" (Manage Events).
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
@@ -6488,12 +6503,6 @@ es-419:
         [%{round_id}] No hay resultados para la ronda, pero se lista en la
         pestaña de eventos. Si esta ronda no sucedió, por favor elimínala en la
         pestaña de "Administrar eventos" (Manage Events).
-      #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        [%{round_name}] No se anunció ningún corte para la ronda, pero se
-        detectó como una ronda con corte (cutoff). Por favor, actualiza la
-        información de la ronda en la pestaña de "Administrar eventos" (Manage
-        Events).
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -6510,11 +6519,6 @@ es-419:
         Ningún evento ha sido seleccionado como evento principal. Por favor,
         indica al WRT que esto es lo correcto o corrígelo en caso de ser
         necesario.
-      #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        Se encontraron resultados para %{event_id}, pero no está listado como
-        evento oficial. Por favor, remueve el evento de los resultados o
-        contacta al WCAT para pedir su adición a la competición.
       #original_hash: fde208d
       missing_results_warning: >-
         No hay resultados para %{event_id}. Si el evento se celebró, por favor
@@ -6529,10 +6533,6 @@ es-419:
       missing_scrambles_for_competition_error: >-
         Faltan las mezclas para la competición. Utiliza "Scrambles Matcher" para
         agregar las mezclas.
-      #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Demasiadas mezclas. Utiliza "Scrambles Matcher" para
-        retirar las mezclas que no se utilizaron.
       #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] Grupo %{group_id}: faltan las mezclas. Se detectaron
