@@ -24,7 +24,8 @@ export default function LiveUpdatingResultsTable({
   isAdmin?: boolean;
   showEmpty?: boolean;
 }) {
-  const { connectionState, liveResultsByRegistrationId } = useLiveResults();
+  const { connectionState, liveResultsByRegistrationId, pendingLiveResults } =
+    useLiveResults();
 
   return (
     <VStack align="left">
@@ -33,6 +34,7 @@ export default function LiveUpdatingResultsTable({
         <ConnectionPulse connectionState={connectionState} />
       </HStack>
       <PendingResultsTable
+        pendingLiveResults={pendingLiveResults}
         formatId={formatId}
         eventId={eventId}
         competitors={competitors}

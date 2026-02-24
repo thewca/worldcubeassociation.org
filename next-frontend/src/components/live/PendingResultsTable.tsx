@@ -21,16 +21,16 @@ export const rankingCellColorPalette = (
 };
 
 export default function PendingResultsTable({
+  pendingLiveResults,
   formatId,
   eventId,
   competitors,
 }: {
+  pendingLiveResults: components["schemas"]["LiveResult"][];
   formatId: string;
   eventId: string;
   competitors: components["schemas"]["LiveCompetitor"][];
 }) {
-  const { pendingLiveResults } = useLiveResults();
-
   const competitorsByRegistrationId = _.keyBy(competitors, "id");
 
   const format = formats.byId[formatId];
