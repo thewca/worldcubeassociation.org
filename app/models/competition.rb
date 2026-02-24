@@ -1791,7 +1791,7 @@ class Competition < ApplicationRecord
       .joins(rounds: :schedule_activities)
       .reorder('schedule_activities.end_time')
       .last
-      .event_id
+      &.event_id
   end
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
