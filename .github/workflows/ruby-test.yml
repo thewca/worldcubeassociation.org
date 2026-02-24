@@ -21,6 +21,9 @@ on:
       - '.ruby-version'
       - 'package.json'
       - 'yarn.lock'
+      - '.env*'
+      - 'docker-compose.yml'
+      - 'Dockerfile*'
       - '.github/workflows/ruby-test.yml'
 
 jobs:
