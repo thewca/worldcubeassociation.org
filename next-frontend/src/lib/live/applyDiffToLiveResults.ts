@@ -1,16 +1,16 @@
-import { components } from "@/types/openapi";
 import {
   CompressedLiveResult,
   DiffedLiveResult,
 } from "@/lib/hooks/useResultsSubscription";
 import { decompressDiff } from "@/lib/live/decompressDiff";
+import { LiveResult } from "@/types/live";
 
 export function applyDiffToLiveResults(
-  previousResults: components["schemas"]["LiveResult"][],
+  previousResults: LiveResult[],
   updated: DiffedLiveResult[],
-  created: CompressedLiveResult[],
-  deleted: number[],
-): components["schemas"]["LiveResult"][] {
+  created: CompressedLiveResult[] = [],
+  deleted: number[] = [],
+): LiveResult[] {
   const deletedSet = new Set(deleted);
   const updatesMap = new Map(
     updated.map((u) => [u.registration_id, decompressDiff(u)]),

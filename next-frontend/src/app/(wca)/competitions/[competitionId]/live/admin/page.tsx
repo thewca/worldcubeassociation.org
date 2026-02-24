@@ -82,9 +82,8 @@ export default async function LiveOverview({
                           <Link asChild>
                             <NextLink
                               href={route({
-                                // TODO move to [roundId]/admin when the PR is merged
                                 pathname:
-                                  "/competitions/[competitionId]/live/rounds/[roundId]",
+                                  "/competitions/[competitionId]/live/rounds/[roundId]/admin",
                                 query: {
                                   competitionId,
                                   roundId: r.id,

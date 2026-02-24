@@ -3353,10 +3353,10 @@ es-ES:
         podrás modificar ninguna información. Comprueba tu correo electrónico
         después de esto para verificar que el Equipo de Anuncio de Competiciones
         de la WCA ha sido notificado.
-      #original_hash: 4c7deb7
+      #original_hash: 89fbbca
       submit_delete: >-
-        ¿Estás seguro de que quieres eliminar esta competición? No hay vuelta
-        atrás.
+        Esta acción no se puede deshacer. Por favor, escribe a continuación el
+        ID de la competición "%{competition_id}" para confirmar la eliminación.
       #original_hash: 8ebebca
       coordinates: Coordenadas
       #original_hash: a672984

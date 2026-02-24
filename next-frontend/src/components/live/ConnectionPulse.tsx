@@ -2,6 +2,8 @@
 
 import {
   CONNECTION_COLORS,
+  CONNECTION_STATE_CONNECTED,
+  CONNECTION_TRANSLATION_KEYS,
   ConnectionState,
 } from "@/lib/hooks/useResultsSubscription";
 import { Status } from "@chakra-ui/react";
@@ -20,13 +22,17 @@ export default function ConnectionPulse({
   return (
     <Status.Root colorPalette={connectionColor}>
       <Status.Indicator
-        animationName={connectionState === "connected" ? "pulse" : undefined}
+        animationName={
+          connectionState === CONNECTION_STATE_CONNECTED ? "pulse" : undefined
+        }
         animationDuration="1.5s"
         animationTimingFunction="ease-in-out"
         animationIterationCount="infinite"
         animationDirection="alternate"
       />
-      {t(`competitions.live.connection.${connectionState}`)}
+      {t(
+        `competitions.live.connection.${CONNECTION_TRANSLATION_KEYS[connectionState]}`,
+      )}
     </Status.Root>
   );
 }
