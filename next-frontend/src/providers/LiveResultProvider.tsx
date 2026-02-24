@@ -1,7 +1,13 @@
 "use client";
 
-import { createContext, ReactNode, useCallback, useContext } from "react";
-import { LiveResult, LiveRound } from "@/types/live";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
+import { LiveResult, LiveRound, PendingLiveResult } from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
 import useResultsSubscription, {
   ConnectionState,
@@ -12,6 +18,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface LiveResultContextType {
   liveResults: LiveResult[];
+  pendingLiveResults: LiveResult[];
+  addPendingLiveResult: (liveResult: PendingLiveResult) => void;
   stateHash: string;
   connectionState: ConnectionState;
   refetch: () => void;
@@ -30,6 +38,8 @@ export function LiveResultProvider({
   competitionId: string;
   children: ReactNode;
 }) {
+  const [pendingResults, updatePendingResults] = useState<LiveResult[]>([]);
+
   const api = useAPI();
   const queryClient = useQueryClient();
   const queryOptions = api.queryOptions(
@@ -75,9 +85,29 @@ export function LiveResultProvider({
             state_hash: after_hash,
           }),
         );
+        updatePendingResults((pendingResults) =>
+          pendingResults.filter((r) =>
+            updated.map((u) => u.registration_id).includes(r.registration_id),
+          ),
+        );
       }
     },
     [queryClient, queryOptions.queryKey, refetch, state_hash],
+  );
+
+  const addPendingLiveResult = useCallback(
+    (liveResult: PendingLiveResult) => {
+      updatePendingResults((pending) => [
+        ...pending,
+        ...applyDiffToLiveResults(
+          results.filter(
+            (r: LiveResult) => r.registration_id == liveResult.registration_id,
+          ),
+          [liveResult],
+        ),
+      ]);
+    },
+    [results],
   );
 
   const connectionState = useResultsSubscription(initialRound.id, onReceived);
@@ -85,6 +115,8 @@ export function LiveResultProvider({
   return (
     <LiveResultContext.Provider
       value={{
+        pendingLiveResults: pendingResults,
+        addPendingLiveResult,
         liveResults: results,
         stateHash: state_hash,
         refetch,
