@@ -1,6 +1,12 @@
 "use client";
 
-import {createContext, ReactNode, useCallback, useContext, useState} from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
 import { LiveResult, LiveRound, PendingLiveResult } from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
 import useResultsSubscriptions, {
@@ -34,8 +40,6 @@ export function LiveResultProvider({
   competitionId: string;
   children: ReactNode;
 }) {
-  const [pendingResults, updatePendingResults] = useState<LiveResult[]>([]);
-
   return (
     <MultiRoundResultProvider
       initialRounds={[initialRound]}
@@ -55,6 +59,8 @@ export function MultiRoundResultProvider({
   competitionId: string;
   children: ReactNode;
 }) {
+  const [pendingResults, updatePendingResults] = useState<LiveResult[]>([]);
+
   const api = useAPI();
   const queryClient = useQueryClient();
 
@@ -133,17 +139,15 @@ export function MultiRoundResultProvider({
       updatePendingResults((pending) => [
         ...pending,
         ...applyDiffToLiveResults(
-          results.filter(
-            (r: LiveResult) => r.registration_id == liveResult.registration_id,
-          ),
+          liveResultsByRegistrationId[liveResult.registration_id],
           [liveResult],
         ),
       ]);
     },
-    [results],
+    [liveResultsByRegistrationId],
   );
 
-  const connectionState = useResultsSubscription(initialRound.id, onReceived);
+  const connectionState = useResultsSubscriptions(roundIds, onReceived);
 
   return (
     <LiveResultContext.Provider
