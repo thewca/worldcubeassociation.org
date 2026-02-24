@@ -85,9 +85,10 @@ export default function ConfirmProvider({ children }) {
           <Modal.Header>Confirm Action</Modal.Header>
           <Modal.Content>
             <p>{options.content}</p>
+            <p>{`Type "${options.requireInput}" to confirm`}</p>
             <Input
               fluid
-              placeholder={`Type "${options.requireInput}" to confirm`}
+              placeholder={options.requireInput}
               value={inputValue}
               onChange={setInputValue}
               error={inputError}
