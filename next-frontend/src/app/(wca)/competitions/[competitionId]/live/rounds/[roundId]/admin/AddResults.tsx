@@ -1,5 +1,4 @@
 "use client";
-import { components } from "@/types/openapi";
 import { SimpleGrid, GridItem } from "@chakra-ui/react";
 import AttemptsForm from "@/components/live/AttemptsForm";
 import { Format } from "@/lib/wca/data/formats";
@@ -7,6 +6,7 @@ import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable
 import events from "@/lib/wca/data/events";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
+import { LiveCompetitor } from "@/types/live";
 
 export default function AddResults({
   format,
@@ -17,7 +17,7 @@ export default function AddResults({
   format: Format;
   roundId: string;
   competitionId: string;
-  competitors: components["schemas"]["LiveCompetitor"][];
+  competitors: LiveCompetitor[];
 }) {
   const { eventId, roundNumber } = parseActivityCode(roundId);
 

@@ -906,23 +906,24 @@ export interface components {
             value: number;
             attempt_number: number;
         };
-        LiveResult: {
+        BaseLiveResult: {
             registration_id: number;
-            round_wcif_id: string;
-            global_pos: number;
-            local_pos: number;
             best: number;
-            forecast_statistics?: {
-                best_possible_average?: number;
-                worst_possible_average?: number;
-            };
             average: number;
             single_record_tag: string;
             average_record_tag: string;
             advancing: boolean;
             advancing_questionable: boolean;
-            event_id: string;
             attempts: components["schemas"]["LiveAttempt"][];
+        };
+        RoundLiveResult: components["schemas"]["BaseLiveResult"] & {
+            round_wcif_id: string;
+            global_pos: number;
+            local_pos: number;
+            forecast_statistics?: {
+                best_possible_average?: number;
+                worst_possible_average?: number;
+            };
         };
         LiveCompetitor: {
             id: number;
@@ -932,7 +933,7 @@ export interface components {
             country_iso2: string;
         };
         LiveRound: components["schemas"]["BaseWcifRound"] & {
-            results: components["schemas"]["LiveResult"][];
+            results: components["schemas"]["RoundLiveResult"][];
             competitors: components["schemas"]["LiveCompetitor"][];
             round_id: number;
             state_hash: string;
@@ -982,8 +983,14 @@ export interface components {
             personalBests: components["schemas"]["WcifPersonalBest"][];
             extensions: unknown[];
         };
+        ByPersonLiveResult: components["schemas"]["BaseLiveResult"] & {
+            round_wcif_id: string;
+            global_pos: number;
+            local_pos: number;
+            event_id: string;
+        };
         LivePerson: components["schemas"]["WcifPerson"] & {
-            results: components["schemas"]["LiveResult"][];
+            results: components["schemas"]["ByPersonLiveResult"][];
         };
         TeamMembership: {
             id: number;

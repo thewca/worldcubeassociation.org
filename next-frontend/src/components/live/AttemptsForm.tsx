@@ -1,4 +1,3 @@
-import { components } from "@/types/openapi";
 import {
   Alert,
   Button,
@@ -10,9 +9,10 @@ import {
 import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
+import { LiveCompetitor } from "@/types/live";
 
 interface AttemptsFormProps {
-  competitors: components["schemas"]["LiveCompetitor"][];
+  competitors: LiveCompetitor[];
   solveCount: number;
   header: string;
   eventId: string;
