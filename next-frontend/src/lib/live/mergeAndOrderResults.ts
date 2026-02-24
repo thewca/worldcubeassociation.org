@@ -3,14 +3,11 @@ import _ from "lodash";
 import { Format } from "@/lib/wca/data/formats";
 import { orderResults } from "@/lib/live/orderResults";
 import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
-import { LiveResult } from "@/types/live";
+import { LiveResult, LiveRound } from "@/types/live";
 
-type CompetitorWithResults = components["schemas"]["LiveCompetitor"] & {
-  global_pos: number;
-  advancing: boolean;
-  advancing_questionable: boolean;
-  results: LiveResult[];
-};
+type CompetitorWithResults = components["schemas"]["LiveCompetitor"] &
+  Pick<LiveRound, "results"> &
+  Pick<LiveResult, "advancing_questionable" | "advancing" | "global_pos">;
 
 export const mergeAndOrderResults = (
   resultsByRegistrationId: LiveResultsByRegistrationId,
@@ -25,12 +22,13 @@ export const mergeAndOrderResults = (
     (results) => orderResults(results, format),
   );
 
-  const orderedResults = orderResults(
-    Object.values(_.map(orderedResultsByRegistrationId, (r) => r[0])),
-    format,
-  );
+  const bestResultsPerCompetitor = Object.values(
+    orderedResultsByRegistrationId,
+  ).map((results) => results[0]);
 
-  return orderedResults.map((result) => {
+  const globallyOrderedResults = orderResults(bestResultsPerCompetitor, format);
+
+  return globallyOrderedResults.map((result) => {
     const competitor = competitorsByRegistrationId[result.registration_id];
 
     return {

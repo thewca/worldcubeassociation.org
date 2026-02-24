@@ -78,9 +78,9 @@ export function MultiRoundResultProvider({
 
   const { liveResultsByRegistrationId, stateHashesByRoundId } = useQueries({
     queries,
-    combine: (results) => ({
+    combine: (queryResults) => ({
       liveResultsByRegistrationId: _.groupBy(
-        results.flatMap((r, i) =>
+        queryResults.flatMap((r, i) =>
           r.data.results.map((res) => ({
             ...res,
             // To differentiate between results for Dual Rounds
@@ -90,49 +90,45 @@ export function MultiRoundResultProvider({
         "registration_id",
       ),
       stateHashesByRoundId: Object.fromEntries(
-        results.map((r) => [r.data.id, r.data.state_hash]),
+        queryResults.map((r) => [r.data.id, r.data.state_hash]),
       ),
     }),
   });
 
-  const roundIds = initialRounds.map((r) => r.id);
+  const onReceived = (roundId: string, diff: DiffProtocolResponse) => {
+    const {
+      updated = [],
+      created = [],
+      deleted = [],
+      before_hash,
+      after_hash,
+    } = diff;
 
-  const onReceived = useEffectEvent(
-    (roundId: string, diff: DiffProtocolResponse) => {
-      const {
-        updated = [],
-        created = [],
-        deleted = [],
-        before_hash,
-        after_hash,
-      } = diff;
+    const queryIndex = initialRounds.findIndex((r) => r.id === roundId);
+    if (queryIndex === -1) return;
 
-      const queryIndex = initialRounds.findIndex((r) => r.id === roundId);
-      if (queryIndex === -1) return;
+    const query = queries[queryIndex];
 
-      const query = queries[queryIndex];
-
-      if (before_hash !== stateHashesByRoundId[roundId]) {
-        queryClient.refetchQueries({ queryKey: query.queryKey, exact: true });
-      } else {
-        queryClient.setQueryData(query.queryKey, (oldData: LiveRound) => ({
-          ...oldData,
-          results: applyDiffToLiveResults(
-            oldData.results,
-            updated,
-            created,
-            deleted,
-          ),
-          state_hash: after_hash,
-        }));
-        updatePendingResults((pendingResults) =>
-          pendingResults.filter((r) =>
-            updated.map((u) => u.registration_id).includes(r.registration_id),
-          ),
-        );
-      }
-    },
-  );
+    if (before_hash !== stateHashesByRoundId[roundId]) {
+      queryClient.refetchQueries({ queryKey: query.queryKey, exact: true });
+    } else {
+      queryClient.setQueryData(query.queryKey, (oldData: LiveRound) => ({
+        ...oldData,
+        results: applyDiffToLiveResults(
+          oldData.results,
+          updated,
+          created,
+          deleted,
+        ),
+        state_hash: after_hash,
+      }));
+      updatePendingResults((pendingResults) =>
+        pendingResults.filter((r) =>
+          updated.map((u) => u.registration_id).includes(r.registration_id),
+        ),
+      );
+    }
+  };
 
   const addPendingLiveResult = useCallback(
     (liveResult: PendingLiveResult) => {
@@ -147,6 +143,7 @@ export function MultiRoundResultProvider({
     [liveResultsByRegistrationId],
   );
 
+  const roundIds = initialRounds.map((r) => r.id);
   const connectionState = useResultsSubscriptions(roundIds, onReceived);
 
   return (

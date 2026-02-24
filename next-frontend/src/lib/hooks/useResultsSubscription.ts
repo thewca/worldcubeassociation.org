@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
 import { components } from "@/types/openapi";
 import _ from "lodash";
+import useEffectEvent from "@/lib/hooks/useEffectEvent";
 
 export const CONNECTION_STATE_INITIALIZED = 1;
 export const CONNECTION_STATE_CONNECTED = 2;
@@ -75,6 +76,8 @@ export default function useResultsSubscriptions(
     [],
   );
 
+  const onReceivedEvent = useEffectEvent(onReceived);
+
   useEffect(() => {
     const cable = createConsumer("http://localhost:3000/cable");
 
@@ -82,7 +85,8 @@ export default function useResultsSubscriptions(
       cable.subscriptions.create(
         { channel: "LiveResultsChannel", round_id: roundId },
         {
-          received: (data: DiffProtocolResponse) => onReceived(roundId, data),
+          received: (data: DiffProtocolResponse) =>
+            onReceivedEvent(roundId, data),
           initialized: () =>
             changeConnectionState(roundId, CONNECTION_STATE_INITIALIZED),
           connected: () =>
@@ -94,7 +98,7 @@ export default function useResultsSubscriptions(
     );
 
     return () => subscriptions.forEach((s) => s.unsubscribe());
-  }, [changeConnectionState, onReceived, roundIds]);
+  }, [changeConnectionState, onReceivedEvent, roundIds]);
 
   // Aggregate: worst state wins
   const values = Object.values(connectionStates);
