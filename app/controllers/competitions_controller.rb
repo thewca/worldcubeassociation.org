@@ -97,7 +97,7 @@ class CompetitionsController < ApplicationController
   end
 
   def edit_schedule
-    @competition = competition_from_params(includes: [competition_events: { rounds: { competition_event: [:event] } }, competition_venues: { venue_rooms: { schedule_activities: [:child_activities] } }])
+    @competition = competition_from_params(includes: [{ competition_events: { rounds: { competition_event: [:event] } }, competition_venues: { venue_rooms: { schedule_activities: [:child_activities] } } }])
   end
 
   def get_nearby_competitions(competition)
@@ -503,20 +503,12 @@ class CompetitionsController < ApplicationController
 
     form_data = params_for_competition_form
 
-    #####
-    # HACK BECAUSE WE DON'T HAVE PERSISTENT COMPETITION IDS
-    #####
-
-    # Need to delete the ID in this first update pass because it's our primary key (yay legacy code!)
+    # Remember what the persisted ID is like in the database before the update
     persisted_id = competition.competition_id
-    new_id = nil # Initialize under the assumption that nothing changed.
 
+    # Check whether the user desired an ID change, which needs a second update pass (see below)
     form_id = form_data[:competitionId]
     new_id = form_id unless form_id == persisted_id
-
-    #####
-    # HACK END
-    #####
 
     saved_competition = competition.with_transaction_returning_status do
       competition.set_form_data(form_data, current_user)
@@ -532,23 +524,16 @@ class CompetitionsController < ApplicationController
       # In the first update pass, we need to pretend like the ID never changed.
       # Changing ID needs a special hack, see above.
       competition.competition_id = persisted_id
+      data_changed = competition.save
 
-      competition.save
+      # Changing the competition ID breaks all our associations, so we need to handle this
+      #   in a separate update pass after all the other data has already been changed
+      id_changed_or_not_necessary = new_id.nil? || competition.update(competition_id: new_id)
+
+      data_changed && id_changed_or_not_necessary
     end
 
     if saved_competition
-      if new_id && !competition.update(competition_id: new_id)
-        # Changing the competition id breaks all our associations, and our view
-        # code was not written to handle this. Rather than trying to update our view
-        # code, just revert the attempted id change. The user will have to deal with
-        # editing the ID text box manually. This will go away once we have proper
-        # immutable ids for competitions.
-        return render json: {
-          status: "ok",
-          redirect: competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition),
-        }
-      end
-
       new_organizers = competition.organizers - old_organizers
       removed_organizers = old_organizers - competition.organizers
 

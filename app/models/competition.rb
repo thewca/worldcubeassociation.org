@@ -1435,8 +1435,8 @@ class Competition < ApplicationRecord
     results.includes(:result_attempts).group_by(&:person_id)
            .sort_by { |_person_id, results| results.first.person_name }
            .map do |person_id, results|
-      results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
-      [person_id, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
+             results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
+             [person_id, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
     end
   end
 
@@ -1711,14 +1711,14 @@ class Competition < ApplicationRecord
     order = if params[:sort]
               params[:sort].split(',')
                            .map do |part|
-                reverse, field = part.match(/^(-)?(\w+)$/).captures
-                [field.to_sym, reverse ? :desc : :asc]
+                             reverse, field = part.match(/^(-)?(\w+)$/).captures
+                             [field.to_sym, reverse ? :desc : :asc]
               end
-                                   # rubocop:disable Style/HashSlice
-                                   #   RuboCop suggests using `slice` here, which is a noble intention but breaks the order
-                                   #   of sort arguments. However, this order is crucial (sorting by "name then start_date"
-                                   #   is different from sorting by "start_date then name") so we insist on doing it our way.
-                                   .select { |field, _| orderable_fields.include?(field) }
+                           # rubocop:disable Style/HashSlice
+                           #   RuboCop suggests using `slice` here, which is a noble intention but breaks the order
+                           #   of sort arguments. However, this order is crucial (sorting by "name then start_date"
+                           #   is different from sorting by "start_date then name") so we insist on doing it our way.
+                           .select { |field, _| orderable_fields.include?(field) }
                            # rubocop:enable Style/HashSlice
                            .to_h
             else
@@ -1783,7 +1783,7 @@ class Competition < ApplicationRecord
   end
 
   def all_activities
-    competition_venues.includes(venue_rooms: { schedule_activities: [child_activities: [:child_activities]] }).map(&:all_activities).flatten
+    competition_venues.includes(venue_rooms: { schedule_activities: [{ child_activities: [:child_activities] }] }).map(&:all_activities).flatten
   end
 
   def top_level_activities
@@ -1873,8 +1873,8 @@ class Competition < ApplicationRecord
                        .includes(includes_associations)
                        .select { authorized || it.wcif_status == "accepted" }
                        .map do |registration|
-      managers.delete(registration.user)
-      registration.user.to_wcif(self, registration, authorized: authorized)
+                         managers.delete(registration.user)
+                         registration.user.to_wcif(self, registration, authorized: authorized)
     end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
@@ -2200,7 +2200,12 @@ class Competition < ApplicationRecord
   end
 
   def exempt_from_wca_dues?
-    world_or_continental_championship? || multi_country_fmc_competition?
+    world_or_continental_championship? ||
+      multi_country_fmc_competition? ||
+      # Exempt the first 5 competitions in a country.
+      # The logic uses strict inequality (<) to ignore competitions starting on the same date.
+      # Therefore, if multiple competitions cross the threshold simultaneously, they are all exempt.
+      country.competitions.where(start_date: ...start_date).count < 5
   end
 
   validate :series_siblings_must_be_valid
@@ -2409,7 +2414,7 @@ class Competition < ApplicationRecord
   # It is quite uncool that we have to duplicate the internal form_data formatting like this
   # but as long as we let our backend handle the complete error validation we literally have no other choice
   def form_errors
-    self_valid = self.valid?
+    self_valid = self.errors.empty? && self.valid?
     # If we're cloning, we also need to check the parent's associations.
     #   Otherwise, the user may be surprised by a silent fail if some tabs/venues/schedules
     #   of the parent are invalid. (This can happen if we introduce new validations on old data)
@@ -2677,12 +2682,12 @@ class Competition < ApplicationRecord
   end
 
   def set_form_data_series(form_data_series, current_user)
-    raise WcaExceptions::BadApiParameter.new("Cannot change Competition Series") unless current_user.can_update_competition_series?(self)
-
     raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.") unless form_data_series["competitionIds"].include?(self.id)
 
-    competition_series = form_data_series["id"].present? ? CompetitionSeries.find(form_data_series["id"]) : CompetitionSeries.new
+    competition_series = form_data_series["id"].present? ? CompetitionSeries.find(form_data_series["id"]) : self.build_competition_series
     competition_series.set_form_data(form_data_series)
+
+    raise WcaExceptions::BadApiParameter.new("Cannot change Competition Series") if competition_series.changed? && !current_user.can_update_competition_series?(self)
 
     self.competition_series = competition_series
   end

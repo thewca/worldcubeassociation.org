@@ -5,7 +5,7 @@ module CheckRegionalRecords
   LOOKUP_TABLE_NAME = 'regional_records_lookup'
 
   def self.add_to_lookup_table(competition_id = nil, table_name: LOOKUP_TABLE_NAME)
-    ActiveRecord::Base.connection.execute <<-SQL.squish
+    ActiveRecord::Base.connection.execute <<~SQL.squish
       INSERT INTO #{table_name}
       (result_id, country_id, event_id, competition_end_date, best, average)
       SELECT results.id, results.country_id, results.event_id, competitions.end_date, results.best, results.average
@@ -107,20 +107,20 @@ module CheckRegionalRecords
                             .where("results.#{value_column} = helper.`value`")
 
     (marked_records + minimum_results).uniq(&:id)
-                                      .sort_by do |r|
-      [
-        # Ordering by Event rank is cosmetic
-        r.event.rank,
-        # Ordering by Competition start date is the most important criterion for temporal order of results
-        r.competition.start_date,
-        # Ordering by competition ID makes sure that all rounds of one competition (see immediately below) stay together
-        r.competition_id,
-        # Ordering by Round Type rank is crucial because it encodes information about the order of rounds
-        #   (e.g. Final has a higher rank than First Round, which is exactly what we want)
-        r.round_type.rank,
-        # Lastly, order the results by result value within a round because we compute records eagerly
-        r.send(value_column),
-      ]
+      .sort_by do |r|
+        [
+          # Ordering by Event rank is cosmetic
+          r.event.rank,
+          # Ordering by Competition start date is the most important criterion for temporal order of results
+          r.competition.start_date,
+          # Ordering by competition ID makes sure that all rounds of one competition (see immediately below) stay together
+          r.competition_id,
+          # Ordering by Round Type rank is crucial because it encodes information about the order of rounds
+          #   (e.g. Final has a higher rank than First Round, which is exactly what we want)
+          r.round_type.rank,
+          # Lastly, order the results by result value within a round because we compute records eagerly
+          r.send(value_column),
+        ]
     end
   end
 
@@ -165,55 +165,55 @@ module CheckRegionalRecords
 
       check_results = self.load_ordered_results(event_id, competition_id, value_column, regional_record_symbol)
                           .filter_map do |r|
-        value_solve = r.send(value_solve_symbol)
+                            value_solve = r.send(value_solve_symbol)
 
-        # Skip DNF, DNS, invalid Multi attempts
-        next if value_solve.incomplete?
+                            # Skip DNF, DNS, invalid Multi attempts
+                            next if value_solve.incomplete?
 
-        if r.event_id != current_event&.id
-          # make sure that we have a (dummy) base record set even when no competition was selected
-          base_records[r.event_id] ||= {}
+                            if r.event_id != current_event&.id
+                              # make sure that we have a (dummy) base record set even when no competition was selected
+                              base_records[r.event_id] ||= {}
 
-          confirmed_records = base_records[r.event_id].deep_dup
+                              confirmed_records = base_records[r.event_id].deep_dup
 
-          current_competition = nil
-          pending_competitions = []
+                              current_competition = nil
+                              pending_competitions = []
 
-          current_event = r.event
-        end
+                              current_event = r.event
+                            end
 
-        if r.competition_id != current_competition&.id
-          # this entire merging behavior can be removed once we're able to order results among competitions
-          if current_competition.present?
-            pending_competitions.push({
-                                        competition: current_competition,
-                                        tentative_records: tentative_records,
-                                      })
-          end
+                            if r.competition_id != current_competition&.id
+                              # this entire merging behavior can be removed once we're able to order results among competitions
+                              if current_competition.present?
+                                pending_competitions.push({
+                                                            competition: current_competition,
+                                                            tentative_records: tentative_records,
+                                                          })
+                              end
 
-          confirmed_records, pending_competitions = self.confirm_records(
-            confirmed_records,
-            pending_competitions,
-            r.competition.start_date,
-          )
+                              confirmed_records, pending_competitions = self.confirm_records(
+                                confirmed_records,
+                                pending_competitions,
+                                r.competition.start_date,
+                              )
 
-          tentative_records = confirmed_records.deep_dup
+                              tentative_records = confirmed_records.deep_dup
 
-          current_competition = r.competition
-        end
+                              current_competition = r.competition
+                            end
 
-        stored_marker = r.send(regional_record_symbol)
-        computed_marker, tentative_records = self.compute_record_marker(tentative_records, r, value_solve.wca_value)
+                            stored_marker = r.send(regional_record_symbol)
+                            computed_marker, tentative_records = self.compute_record_marker(tentative_records, r, value_solve.wca_value)
 
-        # Nothing to see here. Go on.
-        next unless computed_marker.present? || stored_marker.present?
-        next unless self.relevant_result?(event_id, competition_id, r, computed_marker, stored_marker)
+                            # Nothing to see here. Go on.
+                            next unless computed_marker.present? || stored_marker.present?
+                            next unless self.relevant_result?(event_id, competition_id, r, computed_marker, stored_marker)
 
-        {
-          computed_marker: computed_marker,
-          competition: r.competition,
-          result: r,
-        }
+                            {
+                              computed_marker: computed_marker,
+                              competition: r.competition,
+                              result: r,
+                            }
       end
 
       [value_column, check_results]

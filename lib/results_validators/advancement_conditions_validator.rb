@@ -28,7 +28,7 @@ module ResultsValidators
       false
     end
 
-    def competition_associations
+    def competition_associations(check_real_results: false)
       {
         rounds: [:competition_event],
       }
@@ -43,9 +43,12 @@ module ResultsValidators
         results_by_event_id.each do |event_id, results_for_event|
           results_by_round_id = results_for_event.group_by(&:round_id)
 
+          # We are filtering out H2H finals as their results are loaded via a different process until we transition
+          # all results to be loaded via the live_results/live_attempts pipeline. See #13200 for more information.
           rounds_without_deprecated_types = competition.rounds
                                                        .filter { it.event_id == event_id }
                                                        .reject { IGNORE_ROUND_TYPES.include?(it.round_type_id) }
+                                                       .reject(&:is_h2h_mock?)
 
           previous_round = nil
 

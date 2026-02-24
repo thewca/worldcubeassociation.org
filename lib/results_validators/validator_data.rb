@@ -14,6 +14,8 @@ module ResultsValidators
       results_assoc = check_real_results ? :results : :inbox_results
       # Deliberately NOT sending :format and :event because those are cached values anyways
       associations.deep_merge!({ results_assoc => { round: [:competition_event] } })
+      # TODO: Reconsider the `if` postfix once we have migrated away from inbox_results
+      associations.deep_merge!({ results_assoc => { result_attempts: [] } }) if check_real_results
 
       competition_scope = self.load_competition_includes(validator, associations, check_real_results: check_real_results)
                               .where(competition_id: competition_ids)
@@ -30,15 +32,15 @@ module ResultsValidators
     def self.from_results(validator, results, check_real_results)
       results.group_by(&:competition_id)
              .map do |competition_id, comp_results|
-        competition_scope = self.load_competition_includes(validator, check_real_results: check_real_results)
-        model_competition = competition_scope.find(competition_id)
+               competition_scope = self.load_competition_includes(validator, check_real_results: check_real_results)
+               model_competition = competition_scope.find(competition_id)
 
-        self.load_data(validator, model_competition, comp_results, check_real_results: check_real_results)
+               self.load_data(validator, model_competition, comp_results, check_real_results: check_real_results)
       end
     end
 
     def self.load_associations(validator, check_real_results: false)
-      associations = validator.competition_associations
+      associations = validator.competition_associations(check_real_results: check_real_results)
 
       if validator.include_persons?
         persons_assoc = check_real_results ? :competitors : :inbox_persons

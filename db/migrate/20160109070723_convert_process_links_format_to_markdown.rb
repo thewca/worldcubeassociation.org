@@ -18,9 +18,6 @@ class ConvertProcessLinksFormatToMarkdown < ActiveRecord::Migration
           )
         end
       end
-
-      dir.down do
-      end
     end
   end
 end

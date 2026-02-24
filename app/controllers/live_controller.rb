@@ -9,50 +9,6 @@ class LiveController < ApplicationController
     @competitors = @round.accepted_registrations_with_wcif_id
   end
 
-  def add_result
-    results = params.require(:attempts)
-    round_id = params.require(:round_id)
-    registration_id = params.require(:registration_id)
-
-    return render json: { status: "result already exist" }, status: :unprocessable_content if LiveResult.exists?(round_id: round_id, registration_id: registration_id)
-
-    AddLiveResultJob.perform_later(results, round_id, registration_id, current_user)
-
-    render json: { status: "ok" }
-  end
-
-  def update_result
-    results = params.require(:attempts)
-    round = Round.find(params.require(:round_id))
-    registration_id = params.require(:registration_id)
-
-    result = LiveResult.includes(:live_attempts).find_by(round: round, registration_id: registration_id)
-
-    return render json: { status: "result does not exist" }, status: :unprocessable_content if result.blank?
-
-    previous_attempts = result.live_attempts.index_by(&:attempt_number)
-
-    new_attempts = results.map.with_index(1) do |r, i|
-      previous_attempt = previous_attempts[i]
-
-      if previous_attempt.present?
-        if previous_attempt.value == r
-          previous_attempt
-        else
-          previous_attempt.update_with_history_entry(r, current_user)
-        end
-      else
-        LiveAttempt.build_with_history_entry(r, i, current_user)
-      end
-    end
-
-    average, best = LiveResult.compute_average_and_best(new_attempts, round)
-
-    result.update(average: average, best: best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)
-
-    render json: { status: "ok" }
-  end
-
   def round_results
     @competition_id = params[:competition_id]
     @competition = Competition.find(@competition_id)

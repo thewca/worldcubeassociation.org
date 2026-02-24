@@ -48,6 +48,7 @@ export default async function PodiumsPage({
                 competitionId={competitionId}
                 competitors={finalRound.competitors}
                 eventId={e}
+                formatId={finalRound.format}
                 showEmpty={false}
               />
             ) : (
