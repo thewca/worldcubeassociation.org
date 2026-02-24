@@ -1578,6 +1578,23 @@ class User < ApplicationRecord
     end
   end
 
+  def assign_wca_id(wca_id)
+    return if wca_id.blank?
+    raise "User #{id} already has WCA ID #{self.wca_id}" if self.wca_id.present?
+
+    stale_claims = User.where(unconfirmed_wca_id: wca_id).where.not(id: id)
+    stale_claims_before_update = stale_claims.to_a
+
+    ActiveRecord::Base.transaction do
+      update!(wca_id: wca_id)
+      User.where(id: stale_claims.ids)
+          .update_all(unconfirmed_wca_id: nil, delegate_id_to_handle_wca_id_claim: nil)
+      potential_duplicate_persons.delete_all
+    end
+
+    stale_claims_before_update.each { |user| WcaIdClaimMailer.notify_user_of_claim_cancelled(user, wca_id).deliver_later }
+  end
+
   MY_COMPETITIONS_SERIALIZATION_HASH = {
     only: %w[id name website start_date end_date registration_open],
     methods: %w[url city country_iso2 results_posted? visible? confirmed? cancelled? report_posted? short_display_name registration_status],
