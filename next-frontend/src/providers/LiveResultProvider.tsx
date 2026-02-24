@@ -9,20 +9,21 @@ import {
 } from "react";
 import { LiveResult, LiveRound, PendingLiveResult } from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
-import useResultsSubscription, {
+import useResultsSubscriptions, {
   ConnectionState,
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueries, useQueryClient } from "@tanstack/react-query";
+import _ from "lodash";
+
+export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
 
 interface LiveResultContextType {
-  liveResults: LiveResult[];
+  liveResultsByRegistrationId: LiveResultsByRegistrationId;
   pendingLiveResults: LiveResult[];
   addPendingLiveResult: (liveResult: PendingLiveResult) => void;
-  stateHash: string;
   connectionState: ConnectionState;
-  refetch: () => void;
 }
 
 const LiveResultContext = createContext<LiveResultContextType | undefined>(
@@ -38,88 +39,119 @@ export function LiveResultProvider({
   competitionId: string;
   children: ReactNode;
 }) {
+  return (
+    <MultiRoundResultProvider
+      initialRounds={[initialRound]}
+      competitionId={competitionId}
+    >
+      {children}
+    </MultiRoundResultProvider>
+  );
+}
+
+export function MultiRoundResultProvider({
+  initialRounds,
+  competitionId,
+  children,
+}: {
+  initialRounds: LiveRound[];
+  competitionId: string;
+  children: ReactNode;
+}) {
   const [pendingResults, updatePendingResults] = useState<LiveResult[]>([]);
 
   const api = useAPI();
   const queryClient = useQueryClient();
-  const queryOptions = api.queryOptions(
-    "get",
-    "/v1/competitions/{competitionId}/live/rounds/{roundId}",
-    {
-      params: {
-        path: { roundId: initialRound.id, competitionId },
-      },
-    },
-  );
 
-  const { refetch, data } = useQuery({
-    ...queryOptions,
-    initialData: initialRound,
+  // One query per round
+  const queries = initialRounds.map((round) => ({
+    ...api.queryOptions(
+      "get",
+      "/v1/competitions/{competitionId}/live/rounds/{roundId}",
+      {
+        params: { path: { roundId: round.id, competitionId } },
+      },
+    ),
+    initialData: round,
+  }));
+
+  const { liveResultsByRegistrationId, stateHashesByRoundId } = useQueries({
+    queries,
+    combine: (queryResults) => ({
+      liveResultsByRegistrationId: _.groupBy(
+        queryResults.flatMap((r, i) =>
+          r.data.results.map((res) => ({
+            ...res,
+            // To differentiate between results for Dual Rounds
+            round_wcif_id: initialRounds[i].id,
+          })),
+        ),
+        "registration_id",
+      ),
+      stateHashesByRoundId: Object.fromEntries(
+        queryResults.map((r) => [r.data.id, r.data.state_hash]),
+      ),
+    }),
   });
 
-  const { results, state_hash } = data;
+  const onReceived = (roundId: string, diff: DiffProtocolResponse) => {
+    const {
+      updated = [],
+      created = [],
+      deleted = [],
+      before_hash,
+      after_hash,
+    } = diff;
 
-  const onReceived = useCallback(
-    (result: DiffProtocolResponse) => {
-      const {
-        updated = [],
-        created = [],
-        deleted = [],
-        before_hash,
-        after_hash,
-      } = result;
+    const queryIndex = initialRounds.findIndex((r) => r.id === roundId);
+    if (queryIndex === -1) return;
 
-      if (before_hash !== state_hash) {
-        refetch();
-      } else {
-        queryClient.setQueryData(
-          queryOptions.queryKey,
-          (oldData: LiveRound) => ({
-            ...oldData,
-            results: applyDiffToLiveResults(
-              oldData.results,
-              updated,
-              created,
-              deleted,
-            ),
-            state_hash: after_hash,
-          }),
-        );
-        updatePendingResults((pendingResults) =>
-          pendingResults.filter((r) =>
-            updated.map((u) => u.registration_id).includes(r.registration_id),
-          ),
-        );
-      }
-    },
-    [queryClient, queryOptions.queryKey, refetch, state_hash],
-  );
+    const query = queries[queryIndex];
+
+    if (before_hash !== stateHashesByRoundId[roundId]) {
+      queryClient.refetchQueries({ queryKey: query.queryKey, exact: true });
+    } else {
+      queryClient.setQueryData(query.queryKey, (oldData: LiveRound) => ({
+        ...oldData,
+        results: applyDiffToLiveResults(
+          oldData.results,
+          updated,
+          created,
+          deleted,
+        ),
+        state_hash: after_hash,
+      }));
+      updatePendingResults((pendingResults) =>
+        pendingResults.filter(
+          (r) =>
+            !updated.map((u) => u.registration_id).includes(r.registration_id),
+        ),
+      );
+    }
+  };
 
   const addPendingLiveResult = useCallback(
     (liveResult: PendingLiveResult) => {
       updatePendingResults((pending) => [
         ...pending,
         ...applyDiffToLiveResults(
-          results.filter(
-            (r: LiveResult) => r.registration_id == liveResult.registration_id,
-          ),
+          liveResultsByRegistrationId[liveResult.registration_id],
           [liveResult],
         ),
       ]);
     },
-    [results],
+    [liveResultsByRegistrationId],
   );
 
-  const connectionState = useResultsSubscription(initialRound.id, onReceived);
+  const roundIds = initialRounds.map((r) => r.id);
+  const connectionState = useResultsSubscriptions(roundIds, onReceived);
 
   return (
     <LiveResultContext.Provider
       value={{
+        liveResultsByRegistrationId,
         pendingLiveResults: pendingResults,
         addPendingLiveResult,
-        liveResults: results,
-        stateHash: state_hash,
-        refetch,
         connectionState,
       }}
     >

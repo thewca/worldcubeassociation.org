@@ -1,11 +1,8 @@
 import { Format } from "@/lib/wca/data/formats";
-import { components } from "@/types/openapi";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
+import { LiveResult } from "@/types/live";
 
-export const orderResults = (
-  results: components["schemas"]["LiveResult"][],
-  format: Format,
-) => {
+export const orderResults = (results: LiveResult[], format: Format) => {
   const stats = statColumnsForFormat(format);
 
   const rankBy = stats[0].field;
