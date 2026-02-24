@@ -74,7 +74,7 @@ export default defineConfig({
   webServer: [
     {
       cwd: 'next-frontend',
-      command: 'yarn start',
+      command: process.env.CI ? 'yarn dev' : 'yarn start',
       env: { PORT: '3001' },
       name: 'NextJS',
       url: process.env.SYSTEM_TEST_FRONTEND_SERVER,

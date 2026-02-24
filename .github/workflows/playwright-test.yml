@@ -51,8 +51,15 @@ jobs:
           key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
         run: bin/yarn playwright install --with-deps
+      - name: Compile frontend to run against
+        run: yarn build
+        working-directory: next-frontend
       - name: Run Playwright tests
         run: bin/yarn playwright test
+        env:
+          # This looks like someone forgot to clean up after a PR,
+          #   but it's actually useful because in CI, Playwright manages our entire stack
+          DEBUG: pw:webserver
       - uses: actions/upload-artifact@v6
         if: ${{ !cancelled() }}
         with:
