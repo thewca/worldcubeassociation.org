@@ -69,6 +69,10 @@ jobs:
       - name: Compile frontend to run against
         run: yarn build
         working-directory: next-frontend
+      - name: Compile old Rails assets
+        run: |
+          bin/i18n export
+          bin/rails assets:precompile
       - name: Run Playwright tests
         run: bin/yarn playwright test
         env:
