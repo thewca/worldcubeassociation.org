@@ -85,12 +85,20 @@ export default function ConfirmProvider({ children }) {
           <Modal.Header>Confirm Action</Modal.Header>
           <Modal.Content>
             <p>{options.content}</p>
-            <p>{`Type "${options.requireInput}" to confirm`}</p>
+            <p>
+              Type
+              {' '}
+              <code>{options.requireInput}</code>
+              {' '}
+              to confirm
+            </p>
             <Input
               fluid
               placeholder={options.requireInput}
               value={inputValue}
               onChange={setInputValue}
+              // Disable pasting to force user to type the exact string
+              onPaste={(e) => e.preventDefault()}
               error={inputError}
               autoFocus
             />
