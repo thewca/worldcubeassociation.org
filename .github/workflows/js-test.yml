@@ -7,6 +7,7 @@ on:
     branches: [ main ]
     paths:
       - 'next-frontend/**/*'
+      - '.github/workflows/js-test.yml'
 
 jobs:
   test:

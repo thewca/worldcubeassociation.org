@@ -16,6 +16,7 @@ on:
       - '.ruby-version'
       - 'package.json'
       - 'yarn.lock'
+      - '.github/workflows/ruby-test.yml'
 
 jobs:
   test:
