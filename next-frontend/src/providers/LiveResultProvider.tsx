@@ -21,7 +21,7 @@ export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
 
 interface LiveResultContextType {
   liveResultsByRegistrationId: LiveResultsByRegistrationId;
-  pendingLiveResults: PendingLiveResult[];
+  pendingLiveResults: LiveResult[];
   addPendingLiveResult: (liveResult: PendingLiveResult) => void;
   connectionState: ConnectionState;
 }
@@ -122,8 +122,9 @@ export function MultiRoundResultProvider({
         state_hash: after_hash,
       }));
       updatePendingResults((pendingResults) =>
-        pendingResults.filter((r) =>
-          updated.map((u) => u.registration_id).includes(r.registration_id),
+        pendingResults.filter(
+          (r) =>
+            !updated.map((u) => u.registration_id).includes(r.registration_id),
         ),
       );
     }
