@@ -51,6 +51,14 @@ jobs:
           key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
         run: bin/yarn playwright install --with-deps
+      - name: Create dummy fonts
+        run: |
+          mkdir ./src/styles/fonts/TTNormsPro
+          for style in Light Light_Italic Regular Medium Bold Condensed_ExtraBold; do
+            touch "./src/styles/fonts/TTNormsPro/TT_Norms_Pro_${style}.woff2"
+          done
+        shell: bash
+        working-directory: next-frontend
       - name: Compile frontend to run against
         run: yarn build
         working-directory: next-frontend
