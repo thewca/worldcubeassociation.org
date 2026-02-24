@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, ReactNode, useContext } from "react";
-import { LiveResult, LiveRound } from "@/types/live";
+import {createContext, ReactNode, useCallback, useContext, useState} from "react";
+import { LiveResult, LiveRound, PendingLiveResult } from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
 import useResultsSubscriptions, {
   ConnectionState,
@@ -16,6 +16,8 @@ export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
 
 interface LiveResultContextType {
   liveResultsByRegistrationId: LiveResultsByRegistrationId;
+  pendingLiveResults: PendingLiveResult[];
+  addPendingLiveResult: (liveResult: PendingLiveResult) => void;
   connectionState: ConnectionState;
 }
 
@@ -32,6 +34,8 @@ export function LiveResultProvider({
   competitionId: string;
   children: ReactNode;
 }) {
+  const [pendingResults, updatePendingResults] = useState<LiveResult[]>([]);
+
   return (
     <MultiRoundResultProvider
       initialRounds={[initialRound]}
@@ -115,16 +119,38 @@ export function MultiRoundResultProvider({
           ),
           state_hash: after_hash,
         }));
+        updatePendingResults((pendingResults) =>
+          pendingResults.filter((r) =>
+            updated.map((u) => u.registration_id).includes(r.registration_id),
+          ),
+        );
       }
     },
   );
 
-  const connectionState = useResultsSubscriptions(roundIds, onReceived);
+  const addPendingLiveResult = useCallback(
+    (liveResult: PendingLiveResult) => {
+      updatePendingResults((pending) => [
+        ...pending,
+        ...applyDiffToLiveResults(
+          results.filter(
+            (r: LiveResult) => r.registration_id == liveResult.registration_id,
+          ),
+          [liveResult],
+        ),
+      ]);
+    },
+    [results],
+  );
+
+  const connectionState = useResultsSubscription(initialRound.id, onReceived);
 
   return (
     <LiveResultContext.Provider
       value={{
         liveResultsByRegistrationId,
+        pendingLiveResults: pendingResults,
+        addPendingLiveResult,
         connectionState,
       }}
     >
