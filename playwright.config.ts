@@ -74,7 +74,11 @@ export default defineConfig({
   webServer: [
     {
       cwd: 'next-frontend',
-      command: process.env.CI ? 'yarn start' : 'yarn dev',
+      // Ideally we would want this to be `yarn start`
+      //   but NextJS builds are extremely opinionated about hard-coding
+      //   NODE_ENV to `production` when running `yarn build`, no matter
+      //   what your actual environment originally said :(
+      command: 'yarn dev',
       env: { NODE_ENV: 'test', PORT: '3001' },
       name: 'NextJS',
       url: process.env.SYSTEM_TEST_FRONTEND_SERVER,

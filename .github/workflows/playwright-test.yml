@@ -66,10 +66,7 @@ jobs:
           done
         shell: bash
         working-directory: next-frontend
-      - name: Compile frontend to run against
-        run: yarn build
-        working-directory: next-frontend
-      - name: Compile old Rails assets
+      - name: Compile old Rails assets # This is just so Rails can boot faster, the assets don't serve an actual purpose
         run: |
           bin/i18n export
           bin/rails assets:precompile
