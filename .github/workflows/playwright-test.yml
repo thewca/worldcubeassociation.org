@@ -20,7 +20,7 @@ jobs:
       NODE_MAJOR: 24
       PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
       PW_TEST_CONNECT_WS_ENDPOINT: "" # Override Docker orchestra default
-      SYSTEM_TEST_BASE_URL: http://localhost:3000 # Talk to Rails directly on this machine
+      SYSTEM_TEST_BASE_URL: http://localhost:3001 # Talk to Next directly on this machine
     steps:
       - uses: actions/checkout@v6
       - name: Set up Ruby
