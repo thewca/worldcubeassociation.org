@@ -76,7 +76,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}-capybara
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
         run: bin/yarn playwright install --with-deps --no-shell chromium
       - name: Run tests
