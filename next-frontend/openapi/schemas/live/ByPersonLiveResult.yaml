@@ -1,0 +1,17 @@
+allOf:
+  - $ref: './BaseLiveResult.yaml'
+  - type: object
+    required:
+      - round_wcif_id
+      - global_pos
+      - local_pos
+      - event_id
+    properties:
+      round_wcif_id:
+        type: integer
+      global_pos:
+        type: integer
+      local_pos:
+        type: integer
+      event_id:
+        type: string

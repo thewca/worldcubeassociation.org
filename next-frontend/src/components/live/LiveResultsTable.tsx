@@ -9,20 +9,7 @@ import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import { padSkipped } from "@/lib/live/padSkipped";
 import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
 import { mergeAndOrderResults } from "@/lib/live/mergeAndOrderResults";
-
-export const rankingCellColorPalette = (
-  result: components["schemas"]["LiveResult"],
-) => {
-  if (result?.advancing) {
-    return "green";
-  }
-
-  if (result?.advancing_questionable) {
-    return "yellow";
-  }
-
-  return "";
-};
+import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
 
 export default function LiveResultsTable({
   resultsByRegistrationId,
