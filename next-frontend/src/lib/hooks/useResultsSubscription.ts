@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
-import { components } from "@/types/openapi";
 import _ from "lodash";
 import useEffectEvent from "@/lib/hooks/useEffectEvent";
+import { LiveResult } from "@/types/live";
 
 export const CONNECTION_STATE_INITIALIZED = 1;
 export const CONNECTION_STATE_CONNECTED = 2;
@@ -43,7 +43,7 @@ export type CompressedLiveResult = {
 };
 
 export type DiffedLiveResult = Partial<CompressedLiveResult> &
-  Pick<components["schemas"]["LiveResult"], "registration_id">;
+  Pick<LiveResult, "registration_id">;
 
 export type DiffProtocolResponse = {
   updated?: DiffedLiveResult[];

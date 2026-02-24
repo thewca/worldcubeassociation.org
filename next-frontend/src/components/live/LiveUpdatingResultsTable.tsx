@@ -1,11 +1,11 @@
 "use client";
 
-import { components } from "@/types/openapi";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
 import { Heading, HStack, Spacer, Switch, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import PendingResultsTable from "@/components/live/PendingResultsTable";
+import { LiveCompetitor } from "@/types/live";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
 
@@ -22,7 +22,7 @@ export default function LiveUpdatingResultsTable({
   roundWcifId: string;
   formatId: string;
   competitionId: string;
-  competitors: components["schemas"]["LiveCompetitor"][];
+  competitors: LiveCompetitor[];
   title: string;
   isAdmin?: boolean;
   showEmpty?: boolean;

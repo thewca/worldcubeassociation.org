@@ -5,7 +5,7 @@ allOf:
       results:
         type: array
         items:
-          $ref: './LiveResult.yaml'
+          $ref: './RoundLiveResult.yaml'
       competitors:
         type: array
         items:

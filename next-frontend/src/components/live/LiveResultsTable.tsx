@@ -1,6 +1,5 @@
 import _ from "lodash";
 import { Table } from "@chakra-ui/react";
-import { components } from "@/types/openapi";
 import formats from "@/lib/wca/data/formats";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import {
@@ -14,6 +13,7 @@ import { CountryCell } from "@/components/results/ResultTableCells";
 import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
 import { mergeAndOrderResults } from "@/lib/live/mergeAndOrderResults";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { LiveCompetitor } from "@/types/live";
 
 export default function LiveResultsTable({
   resultsByRegistrationId,
@@ -29,7 +29,7 @@ export default function LiveResultsTable({
   formatId: string;
   roundWcifId: string;
   competitionId: string;
-  competitors: components["schemas"]["LiveCompetitor"][];
+  competitors: LiveCompetitor[];
   isAdmin?: boolean;
   showEmpty?: boolean;
   showDualRoundsView?: boolean;
