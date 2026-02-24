@@ -1,10 +1,9 @@
+import { LiveResult } from "@/types/live";
+
 export function rankingCellColorPalette({
   advancing,
   advancing_questionable,
-}: {
-  advancing: boolean;
-  advancing_questionable: boolean;
-}) {
+}: Pick<LiveResult, "advancing_questionable" | "advancing">) {
   if (advancing) {
     return "green";
   }

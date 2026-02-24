@@ -4,9 +4,12 @@ import {
 } from "@/lib/hooks/useResultsSubscription";
 import _ from "lodash";
 import { LiveResult } from "@/types/live";
+import { PartialExcept } from "@/lib/types/objects";
 
-type PartialLiveResultWithRegistrationId = Partial<LiveResult> &
-  Pick<LiveResult, "registration_id">;
+type PartialLiveResultWithRegistrationId = PartialExcept<
+  LiveResult,
+  "registration_id"
+>;
 
 export function decompressDiff(diff: CompressedLiveResult): LiveResult;
 export function decompressDiff(
