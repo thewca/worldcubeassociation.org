@@ -82,6 +82,7 @@ export default function LiveResultsTable({
           return competitorAndTheirResults.results.map((result) => {
             const hasResult = result.attempts.length > 0;
             const isPending = hasResult && result.best == 0;
+            const ranking = hasResult ? result.global_pos : "";
 
             if (!showEmpty && !hasResult) {
               return null;
@@ -97,7 +98,7 @@ export default function LiveResultsTable({
                   textAlign="right"
                   colorPalette={rankingCellColorPalette(result)}
                 >
-                  {isPending ? "pending" : result.global_pos}
+                  {isPending ? "pending" : ranking}
                 </Table.Cell>
                 {isAdmin && (
                   <Table.Cell>

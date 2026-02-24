@@ -16,7 +16,6 @@ import useResultsSubscriptions, {
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
-import useEffectEvent from "@/lib/hooks/useEffectEvent";
 
 export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
 
