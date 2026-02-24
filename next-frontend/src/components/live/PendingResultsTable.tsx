@@ -4,21 +4,6 @@ import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { components } from "@/types/openapi";
 import formats from "@/lib/wca/data/formats";
 import { padSkipped } from "@/lib/live/padSkipped";
-import { useLiveResults } from "@/providers/LiveResultProvider";
-
-export const rankingCellColorPalette = (
-  result: components["schemas"]["LiveResult"],
-) => {
-  if (result?.advancing) {
-    return "green";
-  }
-
-  if (result?.advancing_questionable) {
-    return "yellow";
-  }
-
-  return "";
-};
 
 export default function PendingResultsTable({
   pendingLiveResults,
