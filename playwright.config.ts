@@ -75,7 +75,7 @@ export default defineConfig({
     {
       cwd: 'next-frontend',
       command: process.env.CI ? 'yarn start' : 'yarn dev',
-      env: { PORT: '3001' },
+      env: { NODE_ENV: 'test', PORT: '3001' },
       name: 'NextJS',
       url: process.env.SYSTEM_TEST_FRONTEND_SERVER,
       reuseExistingServer: !process.env.CI,
