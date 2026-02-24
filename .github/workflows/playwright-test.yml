@@ -42,6 +42,13 @@ jobs:
         working-directory: next-frontend
       - name: Activate MySQL # as per https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
         run: sudo systemctl start mysql.service
+      - name: Install and start MongoDB # for Payload CMS in the frontend
+        uses: supercharge/mongodb-github-action@1.12.1
+        with:
+          mongodb-version: 8
+          mongodb-username: root
+          mongodb-password: root
+          mongodb-db: payload
       - name: Populate backend database with seeds
         run: bin/rails db:reset
       - name: Cache Playwright runnables
