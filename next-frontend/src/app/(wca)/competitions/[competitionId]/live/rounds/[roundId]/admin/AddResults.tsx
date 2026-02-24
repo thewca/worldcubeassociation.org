@@ -40,7 +40,7 @@ export default function AddResults({
 
       <GridItem colSpan={12}>
         <LiveUpdatingResultsTable
-          eventId={eventId}
+          roundWcifId={roundId}
           formatId={format.id}
           competitionId={competitionId}
           competitors={competitors}

@@ -1,7 +1,6 @@
 "use server";
 
 import { Container, VStack } from "@chakra-ui/react";
-import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import {
   LiveResultProvider,
@@ -46,10 +45,11 @@ export default async function ResultPage({
           >
             <LiveUpdatingResultsTable
               formatId={format}
-              eventId={parseActivityCode(roundId).eventId}
+              roundWcifId={roundId}
               competitors={competitors}
               competitionId={competitionId}
               title="Live Results"
+              isDualRound
             />
           </MultiRoundResultProvider>
         </VStack>
@@ -63,7 +63,7 @@ export default async function ResultPage({
         <LiveResultProvider initialRound={data} competitionId={competitionId}>
           <LiveUpdatingResultsTable
             formatId={format}
-            eventId={parseActivityCode(roundId).eventId}
+            roundWcifId={roundId}
             competitors={competitors}
             competitionId={competitionId}
             title="Live Results"
