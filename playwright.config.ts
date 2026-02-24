@@ -6,7 +6,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 import dotenv from 'dotenv';
 import path from 'path';
-dotenv.config({ path: path.resolve(__dirname, '.env.test') });
+dotenv.config({ path: path.resolve(__dirname, '.env.test'), quiet: true });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -71,10 +71,21 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'cd next-frontend && corepack install && yarn install && yarn dev --port 3001',
-  //   url: 'http://localhost:3001',
-  //   reuseExistingServer: !process.env.CI,
-  //   timeout: 120 * 1000,
-  // },
+  webServer: [
+    {
+      cwd: 'next-frontend',
+      command: 'yarn start',
+      env: { PORT: '3001' },
+      name: 'NextJS',
+      url: process.env.SYSTEM_TEST_FRONTEND_SERVER,
+      reuseExistingServer: !process.env.CI,
+    },
+    {
+      command: 'bin/rails server',
+      env: { RAILS_ENV: 'test' },
+      name: 'Rails',
+      url: process.env.SYSTEM_TEST_BACKEND_SERVER,
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
 });
