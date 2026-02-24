@@ -1787,13 +1787,11 @@ class Competition < ApplicationRecord
   end
 
   def last_event_id_of_competition
-    last_activity = all_activities
-                    .reject { |activity| activity.activity_code.start_with?("other-") }
-                    .max_by(&:end_time)
-
-    return nil unless last_activity
-
-    last_activity.parsed_activity_code[:event_id]
+    competition_events
+      .joins(rounds: :schedule_activities)
+      .reorder('schedule_activities.end_time DESC')
+      .first
+      .event_id
   end
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
