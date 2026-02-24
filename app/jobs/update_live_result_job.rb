@@ -33,7 +33,6 @@ class UpdateLiveResultJob < ApplicationJob
     after_state = round.to_live_state
     diff = Live::DiffHelper.round_state_diff(before_state, after_state)
 
-    puts(diff)
     diff = Live::DiffHelper.add_forecast_stats(diff, round)
 
     ActionCable.server.broadcast(Live::Config.broadcast_key(round.wcif_id), diff)
