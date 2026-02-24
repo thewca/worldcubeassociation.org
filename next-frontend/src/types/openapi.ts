@@ -984,7 +984,7 @@ export interface components {
             extensions: unknown[];
         };
         ByPersonLiveResult: components["schemas"]["BaseLiveResult"] & {
-            round_wcif_id: number;
+            round_wcif_id: string;
             global_pos: number;
             local_pos: number;
             event_id: string;

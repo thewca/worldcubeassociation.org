@@ -2,23 +2,19 @@ import {
   CompressedLiveResult,
   DiffedLiveResult,
 } from "@/lib/hooks/useResultsSubscription";
-import { components } from "@/types/openapi";
 import _ from "lodash";
+import { LiveResult } from "@/types/live";
 
-type PartialLiveResultWithRegistrationId = Partial<
-  components["schemas"]["LiveResult"]
-> &
-  Pick<components["schemas"]["LiveResult"], "registration_id">;
+type PartialLiveResultWithRegistrationId = Partial<LiveResult> &
+  Pick<LiveResult, "registration_id">;
 
-export function decompressDiff(
-  diff: CompressedLiveResult,
-): components["schemas"]["LiveResult"];
+export function decompressDiff(diff: CompressedLiveResult): LiveResult;
 export function decompressDiff(
   diff: DiffedLiveResult,
 ): PartialLiveResultWithRegistrationId;
 export function decompressDiff(
   diff: DiffedLiveResult | CompressedLiveResult,
-): PartialLiveResultWithRegistrationId | components["schemas"]["LiveResult"] {
+): PartialLiveResultWithRegistrationId | LiveResult {
   return {
     registration_id: diff.registration_id,
     ..._.omitBy(

@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import { components } from "@/types/openapi";
 import { recordTagBadge } from "@/components/results/TableCells";
 import countries from "@/lib/wca/data/countries";
 import formats from "@/lib/wca/data/formats";
@@ -10,6 +9,7 @@ import { padSkipped } from "@/lib/live/padSkipped";
 import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
 import { mergeAndOrderResults } from "@/lib/live/mergeAndOrderResults";
 import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
+import { LiveCompetitor } from "@/types/live";
 
 export default function LiveResultsTable({
   resultsByRegistrationId,
@@ -24,7 +24,7 @@ export default function LiveResultsTable({
   eventId: string;
   formatId: string;
   competitionId: string;
-  competitors: components["schemas"]["LiveCompetitor"][];
+  competitors: LiveCompetitor[];
   isAdmin?: boolean;
   showEmpty?: boolean;
 }) {

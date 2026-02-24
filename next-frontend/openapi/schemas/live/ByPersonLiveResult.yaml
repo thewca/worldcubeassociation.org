@@ -8,7 +8,7 @@ allOf:
       - event_id
     properties:
       round_wcif_id:
-        type: integer
+        type: string
       global_pos:
         type: integer
       local_pos:
