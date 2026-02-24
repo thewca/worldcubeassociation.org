@@ -35,8 +35,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_MAJOR }}
           cache: 'yarn'
-      - name: Install fresh Yarn packages
+      - name: Install fresh root Yarn packages
         run: bin/yarn install
+      - name: Install fresh frontend Yarn packages
+        run: yarn install
+        working-directory: next-frontend
       - name: Activate MySQL # as per https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
         run: sudo systemctl start mysql.service
       - name: Populate backend database with seeds
