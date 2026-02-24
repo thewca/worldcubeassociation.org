@@ -3,12 +3,13 @@
 import { Container, VStack } from "@chakra-ui/react";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
-import { LiveResultProvider } from "@/providers/LiveResultProvider";
-import LiveUpdatingDualRoundsTable from "@/components/live/LiveUpdatingDualRoundsTable";
+import {
+  LiveResultProvider,
+  MultiRoundResultProvider,
+} from "@/providers/LiveResultProvider";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
-import { DualRoundLiveResultProvider } from "@/providers/DualRoundLiveResultProvider";
 
 export default async function ResultPage({
   params,
@@ -39,18 +40,18 @@ export default async function ResultPage({
     return (
       <Container bg="bg">
         <VStack align="left">
-          <DualRoundLiveResultProvider
+          <MultiRoundResultProvider
             initialRounds={[data, ...linkedRounds.map((d) => d.data!)]}
+            competitionId={competitionId}
           >
-            <LiveUpdatingDualRoundsTable
-              roundId={roundId}
+            <LiveUpdatingResultsTable
               formatId={format}
-              eventId={parseActivityCode(id).eventId}
+              eventId={parseActivityCode(roundId).eventId}
               competitors={competitors}
               competitionId={competitionId}
               title="Live Results"
             />
-          </DualRoundLiveResultProvider>
+          </MultiRoundResultProvider>
         </VStack>
       </Container>
     );

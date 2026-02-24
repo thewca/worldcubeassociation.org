@@ -2,7 +2,6 @@ import { Container, Heading, Link, Table } from "@chakra-ui/react";
 import { getResultByPerson } from "@/lib/wca/live/getResultByPerson";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
-import { rankingCellColorPalette } from "@/components/live/LiveResultsTable";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { Fragment } from "react";
 import { LivePositionCell } from "@/components/live/Cells";
