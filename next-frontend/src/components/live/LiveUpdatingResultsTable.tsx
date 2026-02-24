@@ -17,7 +17,7 @@ export default function LiveUpdatingResultsTable({
   title,
   isAdmin = false,
   showEmpty = true,
-  isDualRound = false,
+  isLinkedRound = false,
 }: {
   roundWcifId: string;
   formatId: string;
@@ -26,9 +26,9 @@ export default function LiveUpdatingResultsTable({
   title: string;
   isAdmin?: boolean;
   showEmpty?: boolean;
-  isDualRound?: boolean;
+  isLinkedRound?: boolean;
 }) {
-  const [showDualRoundsView, setShowDualRoundsView] = useState(isDualRound);
+  const [showDualRoundsView, setShowDualRoundsView] = useState(isLinkedRound);
 
   const { connectionState, liveResultsByRegistrationId, pendingLiveResults } =
     useLiveResults();
@@ -41,7 +41,7 @@ export default function LiveUpdatingResultsTable({
         <Heading textStyle="h1">{title}</Heading>
         <ConnectionPulse connectionState={connectionState} />
         <Spacer flex={1} />
-        {isDualRound && (
+        {isLinkedRound && (
           <Switch.Root
             checked={showDualRoundsView}
             onCheckedChange={(e) => setShowDualRoundsView(e.checked)}

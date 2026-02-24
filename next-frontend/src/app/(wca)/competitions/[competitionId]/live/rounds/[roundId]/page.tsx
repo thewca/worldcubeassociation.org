@@ -49,7 +49,7 @@ export default async function ResultPage({
               competitors={competitors}
               competitionId={competitionId}
               title="Live Results"
-              isDualRound
+              isLinkedRound
             />
           </MultiRoundResultProvider>
         </VStack>
