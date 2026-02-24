@@ -947,8 +947,8 @@ class User < ApplicationRecord
     can_upload_competition_results?(competition) && (can_admin_results? || competition.staff_delegates.include?(self))
   end
 
-  def can_check_newcomers_data?
-    can_admin_results?
+  def can_check_newcomers_data?(competition)
+    can_admin_results? || competition.delegates.include?(self)
   end
 
   def can_create_poll?
@@ -1576,6 +1576,23 @@ class User < ApplicationRecord
       self.potential_duplicate_persons.delete_all
       new_user.potential_duplicate_persons.delete_all
     end
+  end
+
+  def assign_wca_id(wca_id)
+    return if wca_id.blank?
+    raise "User #{id} already has WCA ID #{self.wca_id}" if self.wca_id.present?
+
+    stale_claims = User.where(unconfirmed_wca_id: wca_id).where.not(id: id)
+    stale_claims_before_update = stale_claims.to_a
+
+    ActiveRecord::Base.transaction do
+      update!(wca_id: wca_id)
+      User.where(id: stale_claims.ids)
+          .update_all(unconfirmed_wca_id: nil, delegate_id_to_handle_wca_id_claim: nil)
+      potential_duplicate_persons.delete_all
+    end
+
+    stale_claims_before_update.each { |user| WcaIdClaimMailer.notify_user_of_claim_cancelled(user, wca_id).deliver_later }
   end
 
   MY_COMPETITIONS_SERIALIZATION_HASH = {

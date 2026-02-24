@@ -3,7 +3,6 @@ import { Table } from "@chakra-ui/react";
 import { components } from "@/types/openapi";
 import formats from "@/lib/wca/data/formats";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
-import { orderResults } from "@/lib/live/orderResults";
 import {
   LiveCompetitorCell,
   LiveTableHeader,
@@ -12,9 +11,11 @@ import {
   LiveStatCells,
 } from "@/components/live/Cells";
 import { CountryCell } from "@/components/results/ResultTableCells";
+import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
+import { mergeAndOrderResults } from "@/lib/live/mergeAndOrderResults";
 
 export default function LiveResultsTable({
-  results,
+  resultsByRegistrationId,
   eventId,
   formatId,
   competitionId,
@@ -22,7 +23,7 @@ export default function LiveResultsTable({
   isAdmin = false,
   showEmpty = true,
 }: {
-  results: components["schemas"]["LiveResult"][];
+  resultsByRegistrationId: LiveResultsByRegistrationId;
   eventId: string;
   formatId: string;
   competitionId: string;
@@ -34,7 +35,11 @@ export default function LiveResultsTable({
 
   const format = formats.byId[formatId];
 
-  const sortedResults = orderResults(results, format);
+  const competitorsWithOrderedResults = mergeAndOrderResults(
+    resultsByRegistrationId,
+    competitorsByRegistrationId,
+    format,
+  );
 
   const stats = statColumnsForFormat(format);
 
@@ -43,42 +48,50 @@ export default function LiveResultsTable({
       <LiveTableHeader format={format} />
 
       <Table.Body>
-        {sortedResults.map((result) => {
-          const competitor =
-            competitorsByRegistrationId[result.registration_id];
-          const hasResult = result.attempts.length > 0;
+        {competitorsWithOrderedResults.map((competitorAndTheirResults) => {
+          return competitorAndTheirResults.results.map((result) => {
+            const hasResult = result.attempts.length > 0;
+            const ranking = hasResult
+              ? competitorAndTheirResults.global_pos
+              : "";
 
-          if (!showEmpty && !hasResult) {
-            return null;
-          }
+            if (!showEmpty && !hasResult) {
+              return null;
+            }
 
-          return (
-            <Table.Row key={competitor.id}>
-              <LivePositionCell
-                position={hasResult ? result.global_pos : ""}
-                advancingParams={result}
-              />
-              {isAdmin && <Table.Cell>{competitor.registrant_id}</Table.Cell>}
-              <LiveCompetitorCell
-                competitionId={competitionId}
-                competitor={competitor}
-                isAdmin={isAdmin}
-              />
-              <CountryCell countryIso2={competitor.country_iso2} />
-              <LiveAttemptsCells
-                format={format}
-                attempts={result.attempts}
-                eventId={eventId}
-                competitorId={competitor.id}
-              />
-              <LiveStatCells
-                stats={stats}
-                competitorId={competitor.id}
-                eventId={eventId}
-                result={result}
-              />
-            </Table.Row>
-          );
+            return (
+              <Table.Row
+                key={`${competitorAndTheirResults.id}-${result.round_wcif_id}`}
+              >
+                <LivePositionCell position={ranking} advancingParams={result} />
+                {isAdmin && (
+                  <Table.Cell>
+                    {competitorAndTheirResults.registrant_id}
+                  </Table.Cell>
+                )}
+                <LiveCompetitorCell
+                  competitionId={competitionId}
+                  competitor={competitorAndTheirResults}
+                  isAdmin={isAdmin}
+                />
+                <CountryCell
+                  countryIso2={competitorAndTheirResults.country_iso2}
+                />
+                <LiveAttemptsCells
+                  format={format}
+                  attempts={result.attempts}
+                  eventId={eventId}
+                  competitorId={competitorAndTheirResults.id}
+                />
+                <LiveStatCells
+                  stats={stats}
+                  competitorId={competitorAndTheirResults.id}
+                  eventId={eventId}
+                  result={result}
+                />
+              </Table.Row>
+            );
+          });
         })}
       </Table.Body>
     </Table.Root>

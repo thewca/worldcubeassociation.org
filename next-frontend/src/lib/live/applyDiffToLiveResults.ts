@@ -8,8 +8,8 @@ import { decompressDiff } from "@/lib/live/decompressDiff";
 export function applyDiffToLiveResults(
   previousResults: components["schemas"]["LiveResult"][],
   updated: DiffedLiveResult[],
-  created: CompressedLiveResult[],
-  deleted: number[],
+  created: CompressedLiveResult[] = [],
+  deleted: number[] = [],
 ): components["schemas"]["LiveResult"][] {
   const deletedSet = new Set(deleted);
   const updatesMap = new Map(

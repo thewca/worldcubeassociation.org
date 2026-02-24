@@ -847,18 +847,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "wcif_extensions" => :skip_all_rows,
-    "assignments" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          id
-          registration_id
-          registration_type
-          schedule_activity_id
-          station_number
-          assignment_code
-        ],
-      ),
-    }.freeze,
+    "assignments" => :skip_all_rows,
     "paypal_records" => :skip_all_rows,
     "stripe_records" => :skip_all_rows,
     "payment_intents" => :skip_all_rows,

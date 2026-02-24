@@ -22,6 +22,17 @@ module ResultsValidators
       "This validator checks that all results respect the format, time limit, and cutoff information if available. It also looks for similar results within the round."
     end
 
+    def competition_associations(check_real_results: false)
+      if check_real_results
+        # Real, posted `Result`s directly have a denormalized column `person_name`,
+        #   so we do not have to load any extra associations in that case
+        {}
+      else
+        # Inboxed results do not have that column, they rely on loading the linked inbox_person…
+        { inbox_results: { inbox_person: [] } }
+      end
+    end
+
     def self.automatically_fixable?
       false
     end

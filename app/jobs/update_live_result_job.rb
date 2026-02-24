@@ -11,7 +11,7 @@ class UpdateLiveResultJob < ApplicationJob
       previous_attempt = previous_attempts[r[:attempt_number]]
 
       if previous_attempt.present?
-        if previous_attempt.result == r[:value]
+        if previous_attempt.value == r[:value]
           previous_attempt
         else
           previous_attempt.update_with_history_entry(r[:value], entered_by_id)

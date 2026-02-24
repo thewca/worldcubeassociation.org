@@ -2,6 +2,7 @@ import { Container, Heading, Link, Table } from "@chakra-ui/react";
 import { getResultByPerson } from "@/lib/wca/live/getResultByPerson";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
+import { rankingCellColorPalette } from "@/components/live/LiveResultsTable";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { Fragment } from "react";
 import { LivePositionCell } from "@/components/live/Cells";
@@ -48,23 +49,29 @@ export default async function PersonResults({
             </Table.Header>
             <Table.Body>
               {eventResults.map((result) => {
-                const { round_id: roundId, attempts, average, best } = result;
+                const {
+                  round_wcif_id: wcifId,
+                  attempts,
+                  global_pos,
+                  average,
+                  best,
+                } = result;
 
                 return (
-                  <Table.Row key={`${roundId}-${key}`}>
+                  <Table.Row key={`${wcifId}-${key}`}>
                     <Table.Cell>
                       <Link
-                        href={`/competitions/${competitionId}/live/rounds/${roundId}`}
+                        href={`/competitions/${competitionId}/live/rounds/${wcifId}`}
                       >
-                        Round {roundId}
+                        Round {wcifId}
                       </Link>
                     </Table.Cell>
                     <LivePositionCell
-                      position={result.global_pos}
+                      position={global_pos}
                       advancingParams={result}
                     />
                     {attempts.map((a) => (
-                      <Table.Cell key={`${roundId}-${key}-${a.attempt_number}`}>
+                      <Table.Cell key={`${wcifId}-${key}-${a.attempt_number}`}>
                         {formatAttemptResult(a.value, key)}
                       </Table.Cell>
                     ))}
