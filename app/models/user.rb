@@ -1582,16 +1582,17 @@ class User < ApplicationRecord
     return if wca_id.blank?
     raise "User #{id} already has WCA ID #{self.wca_id}" if self.wca_id.present?
 
-    stale_claims = User.where(unconfirmed_wca_id: wca_id).where.not(id: id).to_a
+    stale_claims = User.where(unconfirmed_wca_id: wca_id).where.not(id: id)
+    stale_claim_users = stale_claims.to_a
 
     ActiveRecord::Base.transaction do
       update!(wca_id: wca_id)
-      User.where(id: stale_claims.map(&:id))
+      User.where(id: stale_claims.ids)
           .update_all(unconfirmed_wca_id: nil, delegate_id_to_handle_wca_id_claim: nil)
       potential_duplicate_persons.delete_all
     end
 
-    stale_claims.each { |user| WcaIdClaimMailer.notify_user_of_claim_cancelled(user, wca_id).deliver_later }
+    stale_claim_users.each { |user| WcaIdClaimMailer.notify_user_of_claim_cancelled(user, wca_id).deliver_later }
   end
 
   MY_COMPETITIONS_SERIALIZATION_HASH = {
