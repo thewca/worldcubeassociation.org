@@ -68,10 +68,6 @@ jobs:
         working-directory: next-frontend
       - name: Run Playwright tests
         run: bin/yarn playwright test
-        env:
-          # This looks like someone forgot to clean up after a PR,
-          #   but it's actually useful because in CI, Playwright manages our entire stack
-          DEBUG: pw:webserver
       - uses: actions/upload-artifact@v6
         if: ${{ !cancelled() }}
         with:
