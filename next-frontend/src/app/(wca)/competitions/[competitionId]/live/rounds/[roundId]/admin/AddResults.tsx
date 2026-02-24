@@ -1,6 +1,6 @@
 "use client";
 import { components } from "@/types/openapi";
-import { Grid, GridItem } from "@chakra-ui/react";
+import { SimpleGrid, GridItem } from "@chakra-ui/react";
 import AttemptsForm from "@/components/live/AttemptsForm";
 import { Format } from "@/lib/wca/data/formats";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
@@ -26,7 +26,7 @@ export default function AddResults({
   const { pendingLiveResults } = useLiveResults();
 
   return (
-    <Grid templateColumns="repeat(16, 1fr)" gap="6">
+    <SimpleGrid columns={16} gap={6}>
       <GridItem colSpan={4}>
         <LiveResultAdminProvider
           format={format}
@@ -61,6 +61,6 @@ export default function AddResults({
           title={`${events.byId[eventId].name} - ${roundNumber}`}
         />
       </GridItem>
-    </Grid>
+    </SimpleGrid>
   );
 }
