@@ -6,6 +6,7 @@ import { components } from "@/types/openapi";
 import { padSkipped } from "@/lib/live/padSkipped";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { recordTagBadge } from "@/components/results/TableCells";
+import { LiveResult } from "@/types/live";
 
 export function LiveTableHeader({
   isDual = false,
@@ -124,7 +125,7 @@ export function LiveStatCells({
   stats: Stat[];
   competitorId: number;
   eventId: string;
-  result: components["schemas"]["LiveResult"];
+  result: LiveResult;
   isAdmin?: boolean;
   highlight?: boolean;
 }) {
