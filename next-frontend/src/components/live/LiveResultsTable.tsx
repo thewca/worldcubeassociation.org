@@ -6,8 +6,9 @@ import { recordTagBadge } from "@/components/results/TableCells";
 import countries from "@/lib/wca/data/countries";
 import formats from "@/lib/wca/data/formats";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
-import { orderResults } from "@/lib/live/orderResults";
 import { padSkipped } from "@/lib/live/padSkipped";
+import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
+import { mergeAndOrderResults } from "@/lib/live/mergeAndOrderResults";
 
 export const rankingCellColorPalette = (
   result: components["schemas"]["LiveResult"],
@@ -24,7 +25,7 @@ export const rankingCellColorPalette = (
 };
 
 export default function LiveResultsTable({
-  results,
+  resultsByRegistrationId,
   eventId,
   formatId,
   competitionId,
@@ -32,7 +33,7 @@ export default function LiveResultsTable({
   isAdmin = false,
   showEmpty = true,
 }: {
-  results: components["schemas"]["LiveResult"][];
+  resultsByRegistrationId: LiveResultsByRegistrationId;
   eventId: string;
   formatId: string;
   competitionId: string;
@@ -44,7 +45,11 @@ export default function LiveResultsTable({
 
   const format = formats.byId[formatId];
 
-  const sortedResults = orderResults(results, format);
+  const competitorsWithOrderedResults = mergeAndOrderResults(
+    resultsByRegistrationId,
+    competitorsByRegistrationId,
+    format,
+  );
   const solveCount = format.expected_solve_count;
 
   const stats = statColumnsForFormat(format);
@@ -72,67 +77,76 @@ export default function LiveResultsTable({
       </Table.Header>
 
       <Table.Body>
-        {sortedResults.map((result) => {
-          const competitor =
-            competitorsByRegistrationId[result.registration_id];
-          const hasResult = result.attempts.length > 0;
-          const isPending = hasResult && result.best == 0;
+        {competitorsWithOrderedResults.map((competitorAndTheirResults) => {
+          return competitorAndTheirResults.results.map((result) => {
+            const hasResult = result.attempts.length > 0;
+            const ranking = hasResult
+              ? competitorAndTheirResults.global_pos
+              : "";
 
-          if (!showEmpty && !hasResult) {
-            return null;
-          }
+            if (!showEmpty && !hasResult) {
+              return null;
+            }
 
-          return (
-            <Table.Row key={competitor.id}>
-              <Table.Cell
-                width={1}
-                layerStyle="fill.deep"
-                textAlign="right"
-                colorPalette={rankingCellColorPalette(result)}
+            return (
+              <Table.Row
+                key={`${competitorAndTheirResults.id}-${result.round_wcif_id}`}
               >
-                {isPending ? "pending" : result.global_pos}
-              </Table.Cell>
-              {isAdmin && <Table.Cell>{competitor.registrant_id}</Table.Cell>}
-              <Table.Cell>
-                <Link
-                  href={
-                    isAdmin
-                      ? `/registrations/${competitor.id}/edit`
-                      : `/competitions/${competitionId}/live/competitors/${competitor.id}`
-                  }
+                <Table.Cell
+                  width={1}
+                  layerStyle="fill.deep"
+                  textAlign="right"
+                  colorPalette={rankingCellColorPalette(result)}
                 >
-                  {competitor.name}
-                </Link>
-              </Table.Cell>
-              <Table.Cell>
-                {countries.byIso2[competitor.country_iso2].name}
-              </Table.Cell>
-              {hasResult &&
-                padSkipped(result.attempts, format.expected_solve_count).map(
-                  (attempt) => (
-                    <Table.Cell
-                      textAlign="right"
-                      key={`${competitor.id}-${attempt.attempt_number}`}
-                    >
-                      {formatAttemptResult(attempt.value, eventId)}
-                    </Table.Cell>
-                  ),
-                )}
-              {hasResult &&
-                stats.map((stat) => (
-                  <Table.Cell
-                    key={`${result.registration_id}-${stat.name}`}
-                    textAlign="right"
-                    style={{ position: "relative" }}
-                  >
-                    {isPending
-                      ? "pending"
-                      : formatAttemptResult(result[stat.field], eventId)}{" "}
-                    {!isAdmin && recordTagBadge(result[stat.recordTagField])}
+                  {ranking}
+                </Table.Cell>
+                {isAdmin && (
+                  <Table.Cell>
+                    {competitorAndTheirResults.registrant_id}
                   </Table.Cell>
-                ))}
-            </Table.Row>
-          );
+                )}
+                <Table.Cell>
+                  <Link
+                    href={
+                      isAdmin
+                        ? `/registrations/${competitorAndTheirResults.id}/edit`
+                        : `/competitions/${competitionId}/live/competitors/${competitorAndTheirResults.id}`
+                    }
+                  >
+                    {competitorAndTheirResults.name}
+                  </Link>
+                </Table.Cell>
+                <Table.Cell>
+                  {
+                    countries.byIso2[competitorAndTheirResults.country_iso2]
+                      .name
+                  }
+                </Table.Cell>
+                {hasResult &&
+                  padSkipped(result.attempts, format.expected_solve_count).map(
+                    (attempt) => (
+                      <Table.Cell
+                        textAlign="right"
+                        key={`${competitorAndTheirResults.id}-${attempt.attempt_number}`}
+                      >
+                        {formatAttemptResult(attempt.value, eventId)}
+                      </Table.Cell>
+                    ),
+                  )}
+                {hasResult &&
+                  stats.map((stat) => (
+                    <Table.Cell
+                      key={`${result.registration_id}-${stat.name}`}
+                      textAlign="right"
+                      style={{ position: "relative" }}
+                    >
+                      {formatAttemptResult(result[stat.field], eventId)}{" "}
+                      {!isAdmin && recordTagBadge(result[stat.recordTagField])}
+                    </Table.Cell>
+                  ))}
+              </Table.Row>
+            );
+          });
         })}
       </Table.Body>
     </Table.Root>

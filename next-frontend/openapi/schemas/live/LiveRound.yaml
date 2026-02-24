@@ -1,5 +1,5 @@
 allOf:
-  - $ref: '../wcif/WcifRound.yaml'
+  - $ref: '../competitions/BaseWcifRound.yaml'
   - type: object
     properties:
       results:

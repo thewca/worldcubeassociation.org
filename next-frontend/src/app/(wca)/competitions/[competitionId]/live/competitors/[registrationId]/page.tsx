@@ -49,7 +49,7 @@ export default async function PersonResults({
             <Table.Body>
               {eventResults.map((result) => {
                 const {
-                  round_id: roundId,
+                  round_wcif_id: wcifId,
                   attempts,
                   global_pos,
                   average,
@@ -57,12 +57,12 @@ export default async function PersonResults({
                 } = result;
 
                 return (
-                  <Table.Row key={`${roundId}-${key}`}>
+                  <Table.Row key={`${wcifId}-${key}`}>
                     <Table.Cell>
                       <Link
-                        href={`/competitions/${competitionId}/live/rounds/${roundId}`}
+                        href={`/competitions/${competitionId}/live/rounds/${wcifId}`}
                       >
-                        Round {roundId}
+                        Round {wcifId}
                       </Link>
                     </Table.Cell>
                     <Table.Cell
@@ -73,7 +73,7 @@ export default async function PersonResults({
                       {global_pos}
                     </Table.Cell>
                     {attempts.map((a) => (
-                      <Table.Cell key={`${roundId}-${key}-${a.attempt_number}`}>
+                      <Table.Cell key={`${wcifId}-${key}-${a.attempt_number}`}>
                         {formatAttemptResult(a.value, key)}
                       </Table.Cell>
                     ))}

@@ -48,22 +48,22 @@ export function LiveResultAdminProvider({
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const { liveResults, addPendingLiveResult } = useLiveResults();
+  const { liveResultsByRegistrationId, addPendingLiveResult } =
+    useLiveResults();
   const api = useAPI();
 
   const handleRegistrationIdChange = useCallback(
     (value: number) => {
       setRegistrationId(value);
-      const alreadyEnteredResults = liveResults.find(
-        (r) => r.registration_id === value,
-      );
+      // Even for Dual Rounds we only fetch one round in the admin view
+      const alreadyEnteredResults = liveResultsByRegistrationId[value][0];
       if (alreadyEnteredResults) {
         setAttempts(alreadyEnteredResults.attempts.map((a) => a.value));
       } else {
         setAttempts(zeroedArrayOfSize(solveCount));
       }
     },
-    [liveResults, solveCount],
+    [liveResultsByRegistrationId, solveCount],
   );
 
   const { mutate: mutateUpdate, isPending: isPendingUpdate } = api.useMutation(
@@ -73,7 +73,7 @@ export function LiveResultAdminProvider({
       onSuccess: (_data, variables) => {
         addPendingLiveResult({
           registration_id: variables.body.registration_id,
-          attempts: variables.body.attempts,
+          live_attempts: variables.body.attempts,
         });
         setSuccess("Results updated successfully!");
         setRegistrationId(undefined);
