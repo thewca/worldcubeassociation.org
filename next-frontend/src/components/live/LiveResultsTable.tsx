@@ -6,7 +6,6 @@ import { recordTagBadge } from "@/components/results/TableCells";
 import countries from "@/lib/wca/data/countries";
 import formats from "@/lib/wca/data/formats";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
-import { orderResults } from "@/lib/live/orderResults";
 import { padSkipped } from "@/lib/live/padSkipped";
 import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
 import { mergeAndOrderResults } from "@/lib/live/mergeAndOrderResults";
@@ -81,7 +80,6 @@ export default function LiveResultsTable({
         {competitorsWithOrderedResults.map((competitorAndTheirResults) => {
           return competitorAndTheirResults.results.map((result) => {
             const hasResult = result.attempts.length > 0;
-            const isPending = hasResult && result.best == 0;
             const ranking = hasResult ? result.global_pos : "";
 
             if (!showEmpty && !hasResult) {
@@ -98,7 +96,7 @@ export default function LiveResultsTable({
                   textAlign="right"
                   colorPalette={rankingCellColorPalette(result)}
                 >
-                  {isPending ? "pending" : ranking}
+                  {ranking}
                 </Table.Cell>
                 {isAdmin && (
                   <Table.Cell>
@@ -140,9 +138,7 @@ export default function LiveResultsTable({
                       textAlign="right"
                       style={{ position: "relative" }}
                     >
-                      {isPending
-                        ? "pending"
-                        : formatAttemptResult(result[stat.field], eventId)}{" "}
+                      {formatAttemptResult(result[stat.field], eventId)}{" "}
                       {!isAdmin && recordTagBadge(result[stat.recordTagField])}
                     </Table.Cell>
                   ))}

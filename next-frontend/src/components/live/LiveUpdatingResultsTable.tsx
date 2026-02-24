@@ -5,6 +5,7 @@ import LiveResultsTable from "@/components/live/LiveResultsTable";
 import { Heading, HStack, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { useLiveResults } from "@/providers/LiveResultProvider";
+import PendingResultsTable from "@/components/live/PendingResultsTable";
 
 export default function LiveUpdatingResultsTable({
   eventId,
@@ -31,6 +32,11 @@ export default function LiveUpdatingResultsTable({
         <Heading textStyle="h1">{title}</Heading>
         <ConnectionPulse connectionState={connectionState} />
       </HStack>
+      <PendingResultsTable
+        formatId={formatId}
+        eventId={eventId}
+        competitors={competitors}
+      />
       <LiveResultsTable
         resultsByRegistrationId={liveResultsByRegistrationId}
         eventId={eventId}
