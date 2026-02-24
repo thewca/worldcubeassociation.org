@@ -2678,12 +2678,12 @@ class Competition < ApplicationRecord
   end
 
   def set_form_data_series(form_data_series, current_user)
-    raise WcaExceptions::BadApiParameter.new("Cannot change Competition Series") unless current_user.can_update_competition_series?(self)
-
     raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.") unless form_data_series["competitionIds"].include?(self.id)
 
-    competition_series = form_data_series["id"].present? ? CompetitionSeries.find(form_data_series["id"]) : CompetitionSeries.new
+    competition_series = form_data_series["id"].present? ? CompetitionSeries.find(form_data_series["id"]) : self.build_competition_series
     competition_series.set_form_data(form_data_series)
+
+    raise WcaExceptions::BadApiParameter.new("Cannot change Competition Series") if competition_series.changed? && !current_user.can_update_competition_series?(self)
 
     self.competition_series = competition_series
   end
