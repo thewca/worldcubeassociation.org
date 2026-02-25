@@ -1,7 +1,6 @@
 import PermissionCheck from "@/components/PermissionCheck";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import DoubleCheck from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check/DoubleCheck";
-import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 
 export default async function DoubleCheckPage({
   params,
@@ -28,8 +27,7 @@ export default async function DoubleCheckPage({
         competitors={competitors}
         results={results}
         formatId={format}
-        roundId={roundId}
-        eventId={parseActivityCode(id).eventId}
+        roundWcifId={id}
       />
     </PermissionCheck>
   );
