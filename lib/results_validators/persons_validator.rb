@@ -75,13 +75,21 @@ module ResultsValidators
       # Check for wrong parenthesis type.
       validation_issues << ValidationError.new(WRONG_PARENTHESIS_TYPE_ERROR, :persons, competition_id, name: name) if /[（）]/.match?(name)
 
-      # Check for special characters in name.
-      # Regex [^\p{L}\p{M}\s\-'.()·•/] uses negated character class - matches anything NOT allowed
-      # \p{L} - Unicode letters, \p{M} - Unicode combining marks (e.g., diacritics)
-      # \s - whitespace, \- - hyphen, ' - apostrophe, . - period, () - parentheses
-      # · - middle dot, • - bullet, / - forward slash
-      # Triggers warning for: digits, @, #, quotation marks, and other special symbols not in the allowed set
-      validation_issues << ValidationWarning.new(SPECIAL_CHARACTERS_IN_NAME_WARNING, :persons, competition_id, name: name) if %r{[^\p{L}\p{M}\s\-'.()·•/]}.match?(name)
+      ## Check for special characters in name.
+      # # Regex %r{[^\p{L}\p{M}\p{Zs}\-'.’()·•/]} uses a negated character class —
+      # # it matches any character NOT in the allowed set.
+      # # \p{L}  - Any Unicode letter (Latin, Cyrillic, Arabic, Chinese, Tamil, etc.)
+      # # \p{M}  - Unicode combining marks (accents/diacritics used in names)
+      # # \p{Zs} - Unicode space separators (standard and non-breaking spaces)
+      # # \-     - Hyphen
+      # # ' ’    - Straight and curly apostrophes
+      # # .      - Period
+      # # ()     - Parentheses
+      # # ·      - Middle dot (e.g., Chinese/Catalan names)
+      # # •      - Bullet character
+      # # /      - Forward slash (e.g., A/L naming format)
+      # # Triggers warning for digits, @, #, quotes, emojis, and any other symbols
+      validation_issues << ValidationWarning.new(SPECIAL_CHARACTERS_IN_NAME_WARNING, :persons, competition_id, name: name) if %r{[^\p{L}\p{M}\p{Zs}\-'.’()·•/]}.match?(name)
 
       # Check for lowercase name.
       validation_issues << ValidationWarning.new(LOWERCASE_NAME_WARNING, :persons, competition_id, name: name) if split_name.first.downcase == split_name.first || split_name.last.downcase == split_name.last
