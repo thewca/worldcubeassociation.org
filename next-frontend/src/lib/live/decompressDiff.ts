@@ -4,24 +4,16 @@ import {
 } from "@/lib/hooks/useResultsSubscription";
 import _ from "lodash";
 import type { PartialExcept } from "@/lib/types/objects";
-import { LiveResult } from "@/types/live";
+import { BaseLiveResult, LiveResult } from "@/types/live";
 
 type PartialLiveResultWithRegistrationId = PartialExcept<
   LiveResult,
   "registration_id"
 >;
 
-// Dummy values for properties that don't get sent over WebSockets as they are not needed
-const DUMMY_VALUES = {
-  // We dynamically calculate these in the frontend
-  local_pos: 0,
-  global_pos: 0,
-  // These do not get used for LiveUpdating Results
-  round_id: "",
-  event_id: "",
-};
-
-export function decompressFullResult(diff: CompressedLiveResult): LiveResult {
+export function decompressFullResult(
+  diff: CompressedLiveResult,
+): BaseLiveResult {
   return {
     advancing: diff.ad,
     advancing_questionable: diff.adq,
@@ -31,7 +23,6 @@ export function decompressFullResult(diff: CompressedLiveResult): LiveResult {
     single_record_tag: diff.srt,
     registration_id: diff.r,
     attempts: diff.la.map((l) => ({ attempt_number: l.an, value: l.v })),
-    ...DUMMY_VALUES,
   };
 }
 
@@ -49,7 +40,6 @@ export function decompressPartialResult(
         average_record_tag: diff.art,
         single_record_tag: diff.srt,
         attempts: diff.la?.map((l) => ({ attempt_number: l.an, value: l.v })),
-        ...DUMMY_VALUES,
       },
       _.isUndefined,
     ),

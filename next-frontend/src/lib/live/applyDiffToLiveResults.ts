@@ -2,19 +2,42 @@ import {
   CompressedLiveResult,
   DiffedLiveResult,
 } from "@/lib/hooks/useResultsSubscription";
-import { LiveResult } from "@/types/live";
+import { BaseLiveResult, LiveResult } from "@/types/live";
 import {
   decompressDiff,
   decompressFullResult,
   decompressPartialResult,
 } from "@/lib/live/decompressDiff";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 
-export function applyDiffToLiveResults(
-  previousResults: LiveResult[],
-  updated: DiffedLiveResult[],
-  created: CompressedLiveResult[] = [],
-  deleted: number[] = [],
-): LiveResult[] {
+const augmentResults = (
+  r: BaseLiveResult,
+  roundWcifId: string,
+  eventId: string,
+): LiveResult => ({
+  ...r,
+  round_wcif_id: roundWcifId,
+  event_id: eventId,
+  // These are calculated dynamically
+  global_pos: 0,
+  local_pos: 0,
+});
+
+interface ApplyDiffToLiveResultsParams {
+  previousResults: LiveResult[];
+  updated: DiffedLiveResult[];
+  created?: CompressedLiveResult[];
+  deleted?: number[];
+  roundWcifId: string;
+}
+
+export function applyDiffToLiveResults({
+  previousResults,
+  updated,
+  deleted = [],
+  created = [],
+  roundWcifId,
+}: ApplyDiffToLiveResultsParams): LiveResult[] {
   const deletedSet = new Set(deleted);
 
   const retainedResults = previousResults.filter(
@@ -34,5 +57,9 @@ export function applyDiffToLiveResults(
     decompressDiff(c, decompressFullResult),
   );
 
-  return [...diffedResults, ...createdResults];
+  const { eventId } = parseActivityCode(roundWcifId);
+
+  return [...diffedResults, ...createdResults].map((r) =>
+    augmentResults(r, roundWcifId, eventId),
+  );
 }
