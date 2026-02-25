@@ -23,7 +23,7 @@ export default function LiveResultsTable({
   competitors,
   isAdmin = false,
   showEmpty = true,
-  showDualRoundsView = false,
+  showLinkedRoundsView = false,
 }: {
   resultsByRegistrationId: LiveResultsByRegistrationId;
   formatId: string;
@@ -32,7 +32,7 @@ export default function LiveResultsTable({
   competitors: LiveCompetitor[];
   isAdmin?: boolean;
   showEmpty?: boolean;
-  showDualRoundsView?: boolean;
+  showLinkedRoundsView?: boolean;
 }) {
   const competitorsByRegistrationId = _.keyBy(competitors, "id");
 
@@ -50,20 +50,20 @@ export default function LiveResultsTable({
 
   return (
     <Table.Root>
-      <LiveTableHeader format={format} isDual={showDualRoundsView} />
+      <LiveTableHeader format={format} isLinked={showLinkedRoundsView} />
       <Table.Body>
         {competitorsWithOrderedResults.map((competitorAndTheirResults) => {
           return competitorAndTheirResults.results.map((result, index) => {
             const hasResult = result.attempts.length > 0;
-            const showText = !showDualRoundsView || index === 0;
-            const rowSpan = showDualRoundsView
+            const showText = !showLinkedRoundsView || index === 0;
+            const rowSpan = showLinkedRoundsView
               ? competitorAndTheirResults.results.length
               : 1;
             const ranking = hasResult
               ? competitorAndTheirResults.global_pos
               : "";
 
-            if (!showDualRoundsView && result.round_wcif_id != roundWcifId)
+            if (!showLinkedRoundsView && result.round_wcif_id != roundWcifId)
               return undefined;
 
             if (!showEmpty && !hasResult) {
@@ -78,7 +78,7 @@ export default function LiveResultsTable({
                   <LivePositionCell
                     position={hasResult ? ranking : ""}
                     advancingParams={
-                      showDualRoundsView ? competitorAndTheirResults : result
+                      showLinkedRoundsView ? competitorAndTheirResults : result
                     }
                     rowSpan={rowSpan}
                   />
@@ -96,7 +96,7 @@ export default function LiveResultsTable({
                     isAdmin={isAdmin}
                   />
                 )}
-                {showDualRoundsView && (
+                {showLinkedRoundsView && (
                   <Table.Cell>
                     {parseActivityCode(result.round_wcif_id).roundNumber}
                   </Table.Cell>

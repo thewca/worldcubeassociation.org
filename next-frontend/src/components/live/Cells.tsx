@@ -2,17 +2,16 @@ import { Format } from "@/lib/wca/data/formats";
 import { Link, Table } from "@chakra-ui/react";
 import { Stat, statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
-import { components } from "@/types/openapi";
 import { padSkipped } from "@/lib/live/padSkipped";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { recordTagBadge } from "@/components/results/TableCells";
-import { LiveResult } from "@/types/live";
+import { LiveAttempt, LiveCompetitor, LiveResult } from "@/types/live";
 
 export function LiveTableHeader({
-  isDual = false,
+  isLinked = false,
   format,
 }: {
-  isDual?: boolean;
+  isLinked?: boolean;
   format: Format;
 }) {
   const solveCount = format.expected_solve_count;
@@ -25,7 +24,7 @@ export function LiveTableHeader({
       <Table.Row>
         <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
         <Table.ColumnHeader>Competitor</Table.ColumnHeader>
-        {isDual && <Table.ColumnHeader>Round</Table.ColumnHeader>}
+        {isLinked && <Table.ColumnHeader>Round</Table.ColumnHeader>}
         <Table.ColumnHeader>Country</Table.ColumnHeader>
         {attemptIndexes.map((num) => (
           <Table.ColumnHeader key={num} textAlign="right">
@@ -49,10 +48,7 @@ export function LivePositionCell({
 }: {
   position: number | string;
   rowSpan?: number;
-  advancingParams: {
-    advancing: boolean;
-    advancing_questionable: boolean;
-  };
+  advancingParams: Pick<LiveResult, "advancing_questionable" | "advancing">;
 }) {
   return (
     <Table.Cell
@@ -76,7 +72,7 @@ export function LiveCompetitorCell({
   isAdmin?: boolean;
   rowSpan?: number;
   competitionId: string;
-  competitor: { name: string; id: number };
+  competitor: Pick<LiveCompetitor, "id" | "name">;
 }) {
   return (
     <Table.Cell rowSpan={rowSpan}>
@@ -100,7 +96,7 @@ export function LiveAttemptsCells({
   competitorId,
 }: {
   format: Format;
-  attempts: components["schemas"]["LiveAttempt"][];
+  attempts: LiveAttempt[];
   eventId: string;
   competitorId: number;
 }) {
@@ -140,10 +136,8 @@ export function LiveStatCells({
     <Table.Cell
       key={`${competitorId}-${stat.name}`}
       textAlign="right"
-      style={{
-        position: "relative",
-        fontWeight: shouldHighlight(statIndex) ? "bold" : "normal",
-      }}
+      position="relative"
+      fontWeight={shouldHighlight(statIndex) ? "bold" : "normal"}
     >
       {formatAttemptResult(result[stat.field], eventId)}{" "}
       {!isAdmin && recordTagBadge(result[stat.recordTagField])}

@@ -28,7 +28,8 @@ export default function LiveUpdatingResultsTable({
   showEmpty?: boolean;
   isLinkedRound?: boolean;
 }) {
-  const [showDualRoundsView, setShowDualRoundsView] = useState(isLinkedRound);
+  const [showLinkedRoundsView, setShowLinkedRoundsView] =
+    useState(isLinkedRound);
 
   const { connectionState, liveResultsByRegistrationId, pendingLiveResults } =
     useLiveResults();
@@ -43,8 +44,8 @@ export default function LiveUpdatingResultsTable({
         <Spacer flex={1} />
         {isLinkedRound && (
           <Switch.Root
-            checked={showDualRoundsView}
-            onCheckedChange={(e) => setShowDualRoundsView(e.checked)}
+            checked={showLinkedRoundsView}
+            onCheckedChange={(e) => setShowLinkedRoundsView(e.checked)}
             colorPalette="green"
           >
             <Switch.HiddenInput />
@@ -69,7 +70,7 @@ export default function LiveUpdatingResultsTable({
         competitors={competitors}
         isAdmin={isAdmin}
         showEmpty={showEmpty}
-        showDualRoundsView={showDualRoundsView}
+        showLinkedRoundsView={showLinkedRoundsView}
       />
     </VStack>
   );
