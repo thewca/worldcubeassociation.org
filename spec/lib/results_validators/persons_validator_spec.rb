@@ -383,7 +383,7 @@ RSpec.describe PV do
           # None of these names should trigger SPECIAL_CHARACTERS_IN_NAME_WARNING
           special_char_warnings = pv.warnings.select { |w| w.code == PV::SPECIAL_CHARACTERS_IN_NAME_WARNING }
           expect(special_char_warnings).to be_empty,
-            "Expected no SPECIAL_CHARACTERS_IN_NAME_WARNING, but got warnings for: #{special_char_warnings.map { |w| w.data[:name] }.join(', ')}"
+                                           "Expected no SPECIAL_CHARACTERS_IN_NAME_WARNING, but got warnings for: #{special_char_warnings.map { |w| w.data[:name] }.join(', ')}"
           expect(pv.errors).to be_empty
         end
       end
