@@ -4,6 +4,7 @@ import DoubleCheck from "@/app/(wca)/competitions/[competitionId]/live/rounds/[r
 import { LiveResultProvider } from "@/providers/LiveResultProvider";
 import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
 import formats from "@/lib/wca/data/formats";
+import { Container } from "@chakra-ui/react";
 
 export default async function DoubleCheckPage({
   params,
@@ -21,29 +22,31 @@ export default async function DoubleCheckPage({
   const { results, id, competitors, format } = resultsRequest.data;
 
   return (
-    <PermissionCheck
-      requiredPermission="canAdministerCompetition"
-      item={competitionId}
-    >
-      <LiveResultProvider
-        initialRound={resultsRequest.data}
-        competitionId={competitionId}
+    <Container>
+      <PermissionCheck
+        requiredPermission="canAdministerCompetition"
+        item={competitionId}
       >
-        <LiveResultAdminProvider
-          format={formats.byId[format]}
-          roundId={id}
+        <LiveResultProvider
+          initialRound={resultsRequest.data}
           competitionId={competitionId}
-          initialRegistrationId={competitors[0].id}
         >
-          <DoubleCheck
+          <LiveResultAdminProvider
+            format={formats.byId[format]}
+            roundId={id}
             competitionId={competitionId}
-            competitors={competitors}
-            results={results}
-            formatId={format}
-            roundWcifId={id}
-          />
-        </LiveResultAdminProvider>
-      </LiveResultProvider>
-    </PermissionCheck>
+            initialRegistrationId={competitors[0].id}
+          >
+            <DoubleCheck
+              competitionId={competitionId}
+              competitors={competitors}
+              results={results}
+              formatId={format}
+              roundWcifId={id}
+            />
+          </LiveResultAdminProvider>
+        </LiveResultProvider>
+      </PermissionCheck>
+    </Container>
   );
 }

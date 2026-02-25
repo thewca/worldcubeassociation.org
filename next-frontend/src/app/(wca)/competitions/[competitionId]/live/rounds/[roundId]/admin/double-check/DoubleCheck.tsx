@@ -64,9 +64,9 @@ export default function DoubleCheck({
         )}
       </GridItem>
       <GridItem colSpan={7} textAlign="center" verticalAlign="middle">
-        <Card.Root>
+        <Card.Root height="full" variant="outline">
           <Card.Body>
-            <Card.Header>
+            <Card.Header textAlign="center">
               {currentIndex + 1} of {results.length}
               <br />
               {events.byId[eventId].name} - {roundNumber}
