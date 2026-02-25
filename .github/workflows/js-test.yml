@@ -5,6 +5,12 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+    paths:
+      - 'next-frontend/**/*'
+      - '.env*'
+      - 'docker-compose.yml'
+      - 'Dockerfile*'
+      - '.github/workflows/js-test.yml'
 
 jobs:
   test:

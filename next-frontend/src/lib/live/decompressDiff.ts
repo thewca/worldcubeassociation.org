@@ -2,11 +2,9 @@ import {
   CompressedLiveResult,
   DiffedLiveResult,
 } from "@/lib/hooks/useResultsSubscription";
-import { components } from "@/types/openapi";
 import _ from "lodash";
 import type { PartialExcept } from "@/lib/types/objects";
-
-type LiveResult = components["schemas"]["LiveResult"];
+import { LiveResult } from "@/types/live";
 
 type PartialLiveResultWithRegistrationId = PartialExcept<
   LiveResult,

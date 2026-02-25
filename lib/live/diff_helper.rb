@@ -60,7 +60,7 @@ module Live
     end
 
     def self.forecast_for(updated_result, round)
-      return updated_result unless updated_result["live_attempts"].length < round.format.expected_solve_count
+      return updated_result if updated_result["live_attempts"].nil? || updated_result["live_attempts"].length == round.format.expected_solve_count
 
       updated_result.merge(LiveResult.compute_best_and_worse_possible_average(updated_result["live_attempts"], round))
     end

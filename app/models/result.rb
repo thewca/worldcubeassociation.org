@@ -13,50 +13,41 @@ class Result < ApplicationRecord
   # we also need sure to query the correct competition as well through a composite key.
   belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
-  # See the pre-validation hook `backlink_attempts` below for an explanation of `autosave: false`
-  has_many :result_attempts, inverse_of: :result, dependent: :destroy, autosave: false, index_errors: true
+  has_many :result_attempts, inverse_of: :result, dependent: :destroy, autosave: true, index_errors: true
   validates_associated :result_attempts
 
-  before_validation :backlink_attempts
+  # This is a hack because in our test suite we do `update!(valueN: 123)` lots of times
+  #   to mock different result submission scenarios. Unfortunately, this can only be changed
+  #   and "harmonized" once `inbox_results` is gone, because that still relies on valueNs.
+  before_validation :backlink_attempts, on: :update, if: -> { Rails.env.test? }
 
-  # As of writing this comment, we are transitioning `value1..5` to a separate row-based table.
-  # The hooks for actually _writing_ the data are defined below (called `create_or_update_attempts`)
-  #   and are working well. However, we can only write once we have established that the data is valid.
-  # This means that the validations need to "think" that the result_attempts are already there, but
-  #   without actually writing them to the database. To solve this issue, we write them into memory
-  #   before validations happen, but also prevent Rails from saving them by using `autosave: false`
-  #   on the original associations. If validations pass, our efficient `upsert_all` from the backfilling hook
-  #   will take care of everything. If validations fail, the values will still be in memory
-  #   but won't be written to the DB, which is (surprisingly!) consistent with normal ActiveRecord properties.
   def backlink_attempts
-    return if self.format_id == "h"
+    (1..5).each do |n|
+      legacy_value = self.attributes["value#{n}"]
 
-    memory_attempts = self.result_attempts_attributes.map do |attempt_attributes|
-      attempt = self.result_attempts.find { it.attempt_number == attempt_attributes[:attempt_number] } || result_attempts.build(attempt_attributes)
+      # Crucially, `find_or_initialize_by` does NOT work here, because it circumvents Rails memory
+      #   by going directly down to the database layer. `autosave: true` above needs the memory layer, though.
+      in_memory_attempt = self.result_attempts.find { it.attempt_number == n } || result_attempts.build(attempt_number: n)
 
-      attempt.tap { it.assign_attributes(**attempt_attributes, result: self) }
+      in_memory_attempt.assign_attributes(value: legacy_value)
     end
-
-    # Hack into Rails to only update the values in-memory.
-    #   Calling `self.result_attempts = memory_attempts` would trigger a write operation!
-    self.result_attempts.proxy_association.target = memory_attempts
   end
 
-  after_save :create_or_update_attempts
+  # We run this _after_ validations as part of the transition process:
+  #   In order to make sure that all validations correctly "see" the `result_attempts`,
+  #   we only backfill to the old columns once we have established that the attempts are valid
+  after_validation :repack_attempts
 
-  def create_or_update_attempts
-    attempts = self.result_attempts_attributes(result_id: self.id)
+  # As of writing this comment, we are transitioning `value1..5` to a separate row-based table.
+  # We have progressed to productively using the new, normalized `result_attempts` table
+  #   wherever we can, but there is still one (annoyingly popular) place where it's hard to make the transition:
+  #   The Rankings and Records pages. These feature *very* heavy SQL queries and JOINing in the full
+  #   result_attempts there can be expensive, so we rely on the de-normalized value1..5 just for the time being.
+  def repack_attempts
+    packed_value_attributes = self.attempts.map.with_index(1).to_h { |v, i| [:"value#{i}", v] }
+    legacy_attempt_attributes = packed_value_attributes.with_indifferent_access.slice(*Result.attribute_names)
 
-    # Delete attempts when the value was set to 0
-    zero_attempts = self.skipped_attempt_numbers
-    ResultAttempt.where(result_id: id, attempt_number: zero_attempts).delete_all if zero_attempts.any?
-
-    ResultAttempt.upsert_all(attempts)
-
-    # Force reloading the now-persisted values upon next read.
-    # Note that this is necessary because in `before_validation`, we had written non-persisted phantom data
-    #   solely for the purpose of state validation and business logic.
-    self.result_attempts.reset
+    self.assign_attributes(**legacy_attempt_attributes)
   end
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
@@ -95,5 +86,15 @@ class Result < ApplicationRecord
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
+
+  def self.unpack_attempt_attributes(attempt_values, **additional_attributes)
+    attempt_values
+      .map
+      .with_index(1)
+      .filter { |value, _n| value != SolveTime::SKIPPED_VALUE }
+      .map do |value, n|
+        { value: value, attempt_number: n, **additional_attributes }
+    end
   end
 end
