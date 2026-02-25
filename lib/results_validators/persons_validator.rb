@@ -76,10 +76,10 @@ module ResultsValidators
       validation_issues << ValidationError.new(WRONG_PARENTHESIS_TYPE_ERROR, :persons, competition_id, name: name) if /[（）]/.match?(name)
 
       # Check for special characters in name.
-      # Regex [^[:alpha:]\s\-'.()] uses negated character class - matches anything NOT allowed
-      # : [:alpha:] (Unicode letters), \s (whitespace), \- (hyphen), ' (apostrophe), . (period), () (parentheses)
+      # Regex [^\p{L}\s\-'.()] uses negated character class - matches anything NOT allowed
+      # : ^\p{L} (Unicode letters), \s (whitespace), \- (hyphen), ' (apostrophe), . (period), () (parentheses), /u (enables unicode mode)
       # Triggers warning for: digits, @, #, and other special symbols
-      validation_issues << ValidationWarning.new(SPECIAL_CHARACTERS_IN_NAME_WARNING, :persons, competition_id, name: name) if /[^[:alpha:]\s\-'.()]/.match?(name)
+      validation_issues << ValidationWarning.new( SPECIAL_CHARACTERS_IN_NAME_WARNING, :persons, competition_id, name: name) if /[^\p{L}\s\-'.()]/u.match?(name)
 
       # Check for lowercase name.
       validation_issues << ValidationWarning.new(LOWERCASE_NAME_WARNING, :persons, competition_id, name: name) if split_name.first.downcase == split_name.first || split_name.last.downcase == split_name.last
