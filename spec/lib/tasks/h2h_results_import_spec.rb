@@ -25,7 +25,7 @@ RSpec.describe "import:h2h_data", type: :task do
       #{round.id},1,1,2,#{registration_ids[0]},10,10.15,B' L2 B2 D B2 D R2 U R2 D2 B2 L2 D2 R' D L2 U R' D2 F',1,2,0
       #{round.id},1,1,3,#{registration_ids[0]},10,8.67,D' B' L' F2 L2 U2 B' F' D2 F L2 F' L D2 R' F' L D U,1,3,0
       #{round.id},1,1,4,#{registration_ids[0]},10,8.40,D R2 L' U D L2 U R2 B' R2 F' L2 F U2 R2 B2 U2 D' L,1,4,0
-      #{round.id},1,1,1,#{registration_ids[1]},5,7.49,L2 R2 B2 L2 D' B2 D' B2 U F U' R F' U' F2 U' B D2 F,1,1,0
+      #{round.id},1,1,1,#{registration_ids[1]},5,-1,L2 R2 B2 L2 D' B2 D' B2 U F U' R F' U' F2 U' B D2 F,1,1,0
       #{round.id},1,1,2,#{registration_ids[1]},5,8.73,B' L2 B2 D B2 D R2 U R2 D2 B2 L2 D2 R' D L2 U R' D2 F',1,2,0
       #{round.id},1,1,3,#{registration_ids[1]},5,7.56,D' B' L' F2 L2 U2 B' F' D2 F L2 F' L D2 R' F' L D U,1,3,0
       #{round.id},1,1,4,#{registration_ids[1]},5,7.02,D R2 L' U D L2 U R2 B' R2 F' L2 F U2 R2 B2 U2 D' L,1,4,0

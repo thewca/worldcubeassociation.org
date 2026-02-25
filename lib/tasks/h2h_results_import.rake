@@ -33,7 +33,8 @@ namespace :h2h_results do
           lr.local_pos = final_pos
         end
 
-        result.update!(best: value) if value.positive? && result.best > value
+        # negative result.best means it is DNF, so we also ovrwrite the `best` if we have a non-negative `value` and a negative `best`
+        result.update!(best: value) if value.positive? && (result.best > value || result.best.negative?)
 
         match = H2hMatch.find_or_create_by!(round_id: round_id, match_number: match_number)
         competitor = H2hMatchCompetitor.find_or_create_by!(h2h_match_id: match.id, user_id: Registration.find(registration_id).user_id)
