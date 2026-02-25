@@ -36,6 +36,12 @@ export default async function ResultPage({
         .map((wcif_id) => getResultByRound(competitionId, wcif_id)),
     );
 
+    const erroredResponse = linkedRounds.find((data) => data.error);
+
+    if (erroredResponse) {
+      return <OpenapiError response={erroredResponse.response} t={t} />;
+    }
+
     return (
       <Container bg="bg">
         <VStack align="left">
