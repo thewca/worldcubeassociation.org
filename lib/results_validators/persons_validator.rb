@@ -76,7 +76,7 @@ module ResultsValidators
       validation_issues << ValidationError.new(WRONG_PARENTHESIS_TYPE_ERROR, :persons, competition_id, name: name) if /[（）]/.match?(name)
 
       ## Check for special characters in name.
-      # # Regex %r{[^\p{L}\p{M}\p{Zs}\-'.’()·•/]} uses a negated character class —
+      # # Regex %r{[^\p{L}\p{M}\p{Zs}\-'.''()·•/]} uses a negated character class —
       # # it matches any character NOT in the allowed set.
       # # \p{L}  - Any Unicode letter (Latin, Cyrillic, Arabic, Chinese, Tamil, etc.)
       # # \p{M}  - Unicode combining marks (accents/diacritics used in names)
@@ -89,7 +89,7 @@ module ResultsValidators
       # # •      - Bullet character
       # # /      - Forward slash (e.g., A/L naming format)
       # # Triggers warning for digits, @, #, quotes, emojis, and any other symbols
-      validation_issues << ValidationWarning.new(SPECIAL_CHARACTERS_IN_NAME_WARNING, :persons, competition_id, name: name) if %r{[^\p{L}\p{M}\p{Zs}\-'.'()·•/]}.match?(name)
+      validation_issues << ValidationWarning.new(SPECIAL_CHARACTERS_IN_NAME_WARNING, :persons, competition_id, name: name) if %r{[^\p{L}\p{M}\p{Zs}\-'.()·•\/]}.match?(name)
 
       # Check for lowercase name.
       validation_issues << ValidationWarning.new(LOWERCASE_NAME_WARNING, :persons, competition_id, name: name) if split_name.first.downcase == split_name.first || split_name.last.downcase == split_name.last
