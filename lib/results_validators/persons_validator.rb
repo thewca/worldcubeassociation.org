@@ -77,9 +77,9 @@ module ResultsValidators
 
       # Check for special characters in name.
       # Regex [^\p{L}\s\-'.()] uses negated character class - matches anything NOT allowed
-      # : ^\p{L} (Unicode letters), \s (whitespace), \- (hyphen), ' (apostrophe), . (period), () (parentheses), /u (enables unicode mode)
+      # : ^\p{L} (Unicode letters), \p{M} (combining/accent marks) \s (whitespace), \- (hyphen), ' (apostrophe), . (period), () (parentheses), /u (enables unicode mode)
       # Triggers warning for: digits, @, #, and other special symbols
-      validation_issues << ValidationWarning.new( SPECIAL_CHARACTERS_IN_NAME_WARNING, :persons, competition_id, name: name) if /[^\p{L}\s\-'.()]/u.match?(name)
+      validation_issues << ValidationWarning.new( SPECIAL_CHARACTERS_IN_NAME_WARNING, :persons, competition_id, name: name) if /[^\p{L}\p{M}\s\-'.()]/u.match?(name)
 
       # Check for lowercase name.
       validation_issues << ValidationWarning.new(LOWERCASE_NAME_WARNING, :persons, competition_id, name: name) if split_name.first.downcase == split_name.first || split_name.last.downcase == split_name.last
