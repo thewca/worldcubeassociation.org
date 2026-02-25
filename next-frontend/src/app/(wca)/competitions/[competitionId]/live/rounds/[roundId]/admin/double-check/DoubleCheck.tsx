@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, Card, GridItem, SimpleGrid } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
 import { useState } from "react";
@@ -30,12 +32,12 @@ export default function DoubleCheck({
   const { isPendingUpdate, handleRegistrationIdChange } = useResultsAdmin();
 
   const onPrevious = () => {
-    handleRegistrationIdChange(results[currentIndex].registration_id);
+    handleRegistrationIdChange(results[currentIndex - 1].registration_id);
     setCurrentIndex((oldIndex) => oldIndex - 1);
   };
 
   const onNext = () => {
-    handleRegistrationIdChange(results[currentIndex].registration_id);
+    handleRegistrationIdChange(results[currentIndex + 1].registration_id);
     setCurrentIndex((oldIndex) => oldIndex + 1);
   };
 

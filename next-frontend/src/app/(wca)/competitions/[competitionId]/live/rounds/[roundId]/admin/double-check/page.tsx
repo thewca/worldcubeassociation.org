@@ -1,6 +1,9 @@
 import PermissionCheck from "@/components/PermissionCheck";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import DoubleCheck from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check/DoubleCheck";
+import { LiveResultProvider } from "@/providers/LiveResultProvider";
+import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
+import formats from "@/lib/wca/data/formats";
 
 export default async function DoubleCheckPage({
   params,
@@ -22,13 +25,25 @@ export default async function DoubleCheckPage({
       requiredPermission="canAdministerCompetition"
       item={competitionId}
     >
-      <DoubleCheck
+      <LiveResultProvider
+        initialRound={resultsRequest.data}
         competitionId={competitionId}
-        competitors={competitors}
-        results={results}
-        formatId={format}
-        roundWcifId={id}
-      />
+      >
+        <LiveResultAdminProvider
+          format={formats.byId[format]}
+          roundId={id}
+          competitionId={competitionId}
+          initialRegistrationId={competitors[0].id}
+        >
+          <DoubleCheck
+            competitionId={competitionId}
+            competitors={competitors}
+            results={results}
+            formatId={format}
+            roundWcifId={id}
+          />
+        </LiveResultAdminProvider>
+      </LiveResultProvider>
     </PermissionCheck>
   );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   createContext,
   useCallback,
@@ -33,23 +35,32 @@ export function LiveResultAdminProvider({
   format,
   roundId,
   competitionId,
+  initialRegistrationId,
 }: {
   children: ReactNode;
   format: Format;
   roundId: string;
   competitionId: string;
+  initialRegistrationId?: number;
 }) {
+  const { liveResultsByRegistrationId, addPendingLiveResult } =
+    useLiveResults();
+
   const solveCount = format.expected_solve_count;
 
-  const [registrationId, setRegistrationId] = useState<number>();
+  const [registrationId, setRegistrationId] = useState<number | undefined>(
+    initialRegistrationId,
+  );
   const [attempts, setAttempts] = useState<number[]>(
-    zeroedArrayOfSize(solveCount),
+    initialRegistrationId
+      ? liveResultsByRegistrationId[initialRegistrationId][0].attempts.map(
+          (a) => a.value,
+        )
+      : zeroedArrayOfSize(solveCount),
   );
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const { liveResultsByRegistrationId, addPendingLiveResult } =
-    useLiveResults();
   const api = useAPI();
 
   const handleRegistrationIdChange = useCallback(
