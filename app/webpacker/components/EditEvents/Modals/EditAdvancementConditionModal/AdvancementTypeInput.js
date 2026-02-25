@@ -9,6 +9,7 @@ const AdvancementTypeOptions = [
   { key: 1, value: 'ranking', text: 'Ranking' },
   { key: 2, value: 'percent', text: 'Percent' },
   { key: 3, value: 'attemptResult', text: 'Result' },
+  { key: 4, value: 'dual', text: 'Dual Round' },
 ];
 
 export function AdvancementTypeInput({
