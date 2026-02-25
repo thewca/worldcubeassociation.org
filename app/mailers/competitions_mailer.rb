@@ -150,11 +150,25 @@ class CompetitionsMailer < ApplicationMailer
     @message = message
     @submitter_user = submitter_user
     last_uploaded_json = @competition.uploaded_jsons.order(:id).last
-    if last_uploaded_json
+    if last_uploaded_json.present?
       attachments["Results for #{@competition.id}.json"] = {
         mime_type: "application/json",
         content: last_uploaded_json.json_str,
       }
+      # If the upload type is the classic "Results JSON", then *everything* is contained
+      #   within the file that was uploaded by the Delegate, including scrambles.
+      # If the WCA Live sync was used, it means that scrambles were uploaded separately,
+      #   so we have to add them as attachments for record keeping.
+      if last_uploaded_json.wca_live?
+        @competition.scramble_file_uploads.each_with_index do |scr_file_upload, i|
+          deduplicated_filename = "[Scrambles #{i}] #{scr_file_upload.original_filename}"
+
+          attachments[deduplicated_filename] = {
+            mime_type: "application/json",
+            content: scr_file_upload.tnoodle_interchange_data.to_json,
+          }
+        end
+      end
     end
     mail(
       from: "results@worldcubeassociation.org",
