@@ -2,6 +2,7 @@
 
 class LiveResult < ApplicationRecord
   BEST_POSSIBLE_SCORE = 1
+  WORST_POSSIBLE_SCORE = -1
 
   has_many :live_attempts, dependent: :destroy
   alias_method :attempts, :live_attempts
@@ -11,6 +12,8 @@ class LiveResult < ApplicationRecord
   belongs_to :registration
 
   belongs_to :round
+
+  delegate :wcif_id, to: :round, prefix: true
 
   belongs_to :quit_by, class_name: 'User', optional: true
   belongs_to :locked_by, class_name: 'User', optional: true
@@ -24,8 +27,8 @@ class LiveResult < ApplicationRecord
   has_one :format, through: :round
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: %w[global_pos local_pos registration_id round_id best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
-    methods: %w[event_id attempts result_id],
+    only: %w[global_pos local_pos registration_id best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
+    methods: %w[event_id attempts result_id forecast_statistics round_wcif_id],
     include: %w[],
   }.freeze
 
@@ -111,6 +114,30 @@ class LiveResult < ApplicationRecord
 
     # Only return if there are actual changes
     diff if diff.except("registration_id").present?
+  end
+
+  def forecast_statistics
+    # use .length on purpose here as otherwise we would use one query per row
+    LiveResult.compute_best_and_worse_possible_average(live_attempts.as_json, round) if live_attempts.length < round.format.expected_solve_count
+  end
+
+  def self.compute_best_and_worse_possible_average(live_attempts, round)
+    missing_count = round.format.expected_solve_count - live_attempts.length
+
+    {
+      "best_possible_average" => BEST_POSSIBLE_SCORE,
+      "worst_possible_average" => WORST_POSSIBLE_SCORE,
+    }.transform_values do |score|
+      padded = live_attempts + Array.new(missing_count) do |i|
+        {
+          "attempt_number" => live_attempts.length + i + 1,
+          "value" => score,
+        }
+      end
+
+      attempts = padded.map { LiveAttempt.new(it) }
+      LiveResult.compute_average_and_best(attempts, round).first
+    end
   end
 
   private

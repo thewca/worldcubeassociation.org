@@ -36,5 +36,15 @@ module Live
     def self.state_hash(live_state)
       Digest::SHA1.hexdigest(live_state.to_json)
     end
+
+    def self.add_forecast_stats(diff, round)
+      diff.merge("updated" => Array.wrap(diff["updated"]).map { forecast_for(it, round) }).compact_blank
+    end
+
+    def self.forecast_for(updated_result, round)
+      return updated_result if updated_result["live_attempts"].nil? || updated_result["live_attempts"].length == round.format.expected_solve_count
+
+      updated_result.merge(LiveResult.compute_best_and_worse_possible_average(updated_result["live_attempts"], round))
+    end
   end
 end

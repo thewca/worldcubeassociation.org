@@ -5,7 +5,7 @@ require 'fileutils'
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, except: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
-  before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?) }, only: %i[newcomer_checks]
+  before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks]
   before_action :check_newcomers_data_access, only: %i[last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
 
   def new
@@ -224,8 +224,8 @@ class ResultsSubmissionController < ApplicationController
   private def check_newcomers_data_access
     competition = competition_from_params
 
-    return head :unauthorized unless current_user.can_check_newcomers_data?
+    return head :unauthorized unless current_user.can_check_newcomers_data?(competition)
 
-    render status: :bad_request, json: { error: "The newcomer check dashboard can only be used for upcoming competitions." } unless competition.upcoming?
+    render status: :bad_request, json: { error: "The newcomer check dashboard can only be used before the results are submitted." } if competition.results_submitted?
   end
 end

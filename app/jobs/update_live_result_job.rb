@@ -11,7 +11,7 @@ class UpdateLiveResultJob < ApplicationJob
       previous_attempt = previous_attempts[r[:attempt_number]]
 
       if previous_attempt.present?
-        if previous_attempt.result == r[:value]
+        if previous_attempt.value == r[:value]
           previous_attempt
         else
           previous_attempt.update_with_history_entry(r[:value], entered_by_id)
@@ -32,6 +32,9 @@ class UpdateLiveResultJob < ApplicationJob
 
     after_state = round.to_live_state
     diff = Live::DiffHelper.round_state_diff(before_state, after_state)
+
+    diff = Live::DiffHelper.add_forecast_stats(diff, round)
+
     ActionCable.server.broadcast(Live::Config.broadcast_key(round.wcif_id), diff)
   end
 end

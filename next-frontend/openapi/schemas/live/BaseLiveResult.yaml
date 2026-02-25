@@ -1,25 +1,15 @@
 type: object
 required:
   - registration_id
-  - round_id
-  - global_pos
-  - local_pos
   - best
   - average
   - single_record_tag
   - average_record_tag
   - advancing
   - advancing_questionable
-  - event_id
   - attempts
 properties:
   registration_id:
-    type: integer
-  round_id:
-    type: integer
-  global_pos:
-    type: integer
-  local_pos:
     type: integer
   best:
     type: integer
@@ -33,8 +23,6 @@ properties:
     type: boolean
   advancing_questionable:
     type: boolean
-  event_id:
-    type: string
   attempts:
     type: array
     items:
