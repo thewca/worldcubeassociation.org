@@ -10,7 +10,7 @@ module CheckRegionalRecords
       (result_id, country_id, event_id, competition_end_date, best, average)
       SELECT results.id, results.country_id, results.event_id, competitions.end_date, results.best, results.average
       FROM results
-      INNER JOIN competitions ON results.competition_id = competitions.id
+      INNER JOIN competitions ON results.competition_id = competitions.competition_id
       #{"WHERE results.competition_id = '#{competition_id}'" if competition_id.present?}
       ON DUPLICATE KEY UPDATE
         country_id = results.country_id,

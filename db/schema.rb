@@ -387,7 +387,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.index ["competition_id"], name: "index_competition_venues_on_competition_id"
   end
 
-  create_table "competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "competitions", primary_key: "stable_id", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.boolean "allow_registration_edits", default: false, null: false
     t.boolean "allow_registration_without_qualification", default: false
     t.datetime "announced_at", precision: nil
@@ -400,6 +400,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.integer "cancelled_by"
     t.string "cell_name", limit: 45, default: "", null: false
     t.string "city_name", limit: 50, default: "", null: false
+    t.string "competition_id", limit: 32, default: "", null: false
     t.integer "competition_series_id"
     t.integer "competitor_can_cancel", default: 0, null: false
     t.integer "competitor_limit"
@@ -462,6 +463,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.string "venue_details"
     t.datetime "waiting_list_deadline_date", precision: nil
     t.index ["cancelled_at"], name: "index_competitions_on_cancelled_at"
+    t.index ["competition_id"], name: "index_competitions_on_competition_id", unique: true
     t.index ["country_id"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_competitions_on_end_date"
     t.index ["start_date"], name: "index_competitions_on_start_date"
@@ -1649,7 +1651,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
   add_foreign_key "ticket_comments", "users", column: "acting_user_id"
   add_foreign_key "ticket_logs", "ticket_stakeholders", column: "acting_stakeholder_id"
   add_foreign_key "ticket_logs", "users", column: "acting_user_id"
-  add_foreign_key "tickets_competition_result", "competitions"
+  add_foreign_key "tickets_competition_result", "competitions", primary_key: "competition_id"
   add_foreign_key "user_avatars", "users"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"

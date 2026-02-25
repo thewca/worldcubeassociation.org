@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Competition < ApplicationRecord
+  # Overwrite primary key to test non-destructive migration to stable id
+  self.primary_key = "competition_id"
+
   # We need this default order, tests rely on it.
   has_many :competition_events, -> { order(:event_id) }, dependent: :destroy
   has_many :events, through: :competition_events
@@ -86,17 +89,17 @@ class Competition < ApplicationRecord
   }
   scope :has_event, lambda { |event_id|
     joins(
-      "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = competitions.id
+      "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = competitions.competition_id
       join events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id",
     ).where("e#{event_id}.id = :event_id", event_id: event_id)
   }
   scope :managed_by, lambda { |user_id|
-    joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = competitions.id")
-      .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = competitions.id")
+    joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = competitions.competition_id")
+      .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = competitions.competition_id")
       .where(
         "delegate_id = :user_id OR organizer_id = :user_id",
         user_id: user_id,
-      ).group(:id)
+      ).group(:competition_id)
   }
   scope :order_by_date, -> { order(:start_date, :end_date) }
   scope :order_by_announcement_date, -> { where.not(announced_at: nil).order(announced_at: :desc) }
@@ -153,7 +156,8 @@ class Competition < ApplicationRecord
     competitor_can_cancel
   ].freeze
   UNCLONEABLE_ATTRIBUTES = %w[
-    id
+    stable_id
+    competition_id
     start_date
     end_date
     name
@@ -221,8 +225,8 @@ class Competition < ApplicationRecord
   validates :events_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions? }
   validates :guests_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_GUEST_LIMIT, allow_blank: true, if: :some_guests_allowed? }
   validates :events_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions? }
-  validates :id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
-                 format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
+  validates :competition_id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
+                             format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
     self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
   end
@@ -650,7 +654,7 @@ class Competition < ApplicationRecord
   end
 
   def being_cloned_from
-    @being_cloned_from ||= Competition.find_by(id: being_cloned_from_id)
+    @being_cloned_from ||= Competition.find_by(competition_id: being_cloned_from_id)
   end
 
   def build_clone
@@ -750,12 +754,12 @@ class Competition < ApplicationRecord
 
     name_without_year = m[1]
     year = m[2]
-    if id.blank? || force_override
+    if competition_id.blank? || force_override
       # Generate competition id from name
       # By replacing accented chars with their ascii equivalents, and then
       # removing everything that isn't a digit or a character.
       safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year, locale: :en).gsub(/[^a-z0-9]+/i, '')
-      self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
+      self.competition_id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
     end
     return unless cell_name.blank? || force_override
 
@@ -825,11 +829,11 @@ class Competition < ApplicationRecord
 
   # This callback updates all tables having the competition id, when the id changes.
   # This should be deleted after competition id is made immutable: https://github.com/thewca/worldcubeassociation.org/pull/381
-  after_save :update_foreign_keys, if: :saved_change_to_id?
+  after_save :update_foreign_keys, if: :saved_change_to_competition_id?
   def update_foreign_keys
     Competition.reflect_on_all_associations.uniq(&:klass).each do |association_reflection|
       foreign_key = association_reflection.foreign_key
-      association_reflection.klass.where(foreign_key => id_before_last_save).update_all(foreign_key => id) if foreign_key == 'competition_id'
+      association_reflection.klass.where(foreign_key => competition_id_before_last_save).update_all(foreign_key => competition_id) if foreign_key == 'competition_id'
     end
   end
 
@@ -1193,7 +1197,7 @@ class Competition < ApplicationRecord
   end
 
   def adjacent_competitions(days, distance)
-    Competition.where("ABS(DATEDIFF(?, start_date)) <= ? AND id <> ?", start_date, days, id)
+    Competition.where("ABS(DATEDIFF(?, start_date)) <= ? AND competition_id <> ?", start_date, days, competition_id)
                .select { |c| kilometers_to(c) <= distance }
                .sort_by { |c| kilometers_to(c) }
   end
@@ -1215,7 +1219,7 @@ class Competition < ApplicationRecord
   end
 
   def colliding_registration_start_competitions
-    Competition.where("ABS(TIMESTAMPDIFF(MINUTE, ?, registration_open)) <= ? AND id <> ?", registration_open, REGISTRATION_COLLISION_MINUTES_WARNING, id)
+    Competition.where("ABS(TIMESTAMPDIFF(MINUTE, ?, registration_open)) <= ? AND competition_id <> ?", registration_open, REGISTRATION_COLLISION_MINUTES_WARNING, competition_id)
                .order(:registration_open)
   end
 
@@ -1699,7 +1703,7 @@ class Competition < ApplicationRecord
     end
 
     query&.split&.each do |part|
-      like_query = %w[id name cell_name city_name country_id].map { |column| "competitions.#{column} LIKE :part" }.join(" OR ")
+      like_query = %w[competition_id name cell_name city_name country_id].map { |column| "competitions.#{column} LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
@@ -1812,7 +1816,7 @@ class Competition < ApplicationRecord
 
   def to_competition_info
     options = {
-      only: %w[id name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
+      only: %w[name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
                extra_registration_requirements enable_donations refund_policy_limit_date event_change_deadline_date waiting_list_deadline_date
                on_the_spot_registration on_the_spot_entry_fee_lowest_denomination qualification_results event_restrictions
                base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel
@@ -1820,7 +1824,7 @@ class Competition < ApplicationRecord
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled auto_accept_preference auto_accept_disable_threshold],
       # TODO: h2h_rounds is a temporary method, which should be removed when full-fledged H2H backend support is added - expected in Q1 2026
-      methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
+      methods: %w[id url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
                   part_of_competition_series? registration_full_and_accepted? h2h_rounds tab_names],
       include: %w[delegates organizers],
@@ -2135,10 +2139,10 @@ class Competition < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: %w[id name website start_date end_date
+    only: %w[name website start_date end_date
              registration_open registration_close announced_at
              cancelled_at results_posted_at competitor_limit venue],
-    methods: %w[url website short_name short_display_name city
+    methods: %w[id url website short_name short_display_name city
                 venue_address venue_details latitude_degrees longitude_degrees
                 country_iso2 event_ids time_until_registration date_range],
     include: %w[delegates organizers],
@@ -2230,7 +2234,7 @@ class Competition < ApplicationRecord
     return [] unless part_of_competition_series?
 
     series_competitions
-      .where.not(id: self.id)
+      .where.not(competition_id: self.competition_id)
   end
 
   def series_sibling_registrations
@@ -2245,7 +2249,7 @@ class Competition < ApplicationRecord
     dues_per_competitor_in_usd = error.nil? ? DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code) : 0
 
     [
-      id, name, country.iso2, continent.id,
+      competition_id, name, country.iso2, continent.id,
       start_date, end_date, announced_at, results_posted_at,
       Rails.application.routes.url_helpers.competition_url(id), num_competitors, delegates.reject(&:trainee_delegate?).map(&:name).sort.join(","),
       currency_code, base_entry_fee_lowest_denomination, Money::Currency.new(currency_code).subunit_to_unit,
@@ -2421,7 +2425,7 @@ class Competition < ApplicationRecord
     {
       # for historic reasons, we keep 'name' errors listed under ID. Don't ask.
       "competitionId" => self.persisted? ? (errors[:id] + errors[:name]) : [],
-      "name" => self.persisted? ? [] : (errors[:id] + errors[:name]),
+      "name" => self.persisted? ? [] : (errors[:competition_id] + errors[:name]),
       "shortName" => errors[:cell_name],
       "nameReason" => errors[:name_reason],
       "venue" => {
@@ -2611,7 +2615,7 @@ class Competition < ApplicationRecord
 
   def self.form_data_to_attributes(form_data)
     {
-      id: form_data['competitionId'],
+      competition_id: form_data['competitionId'],
       name: form_data['name'],
       city_name: form_data.dig('venue', 'cityName'),
       country_id: form_data.dig('venue', 'countryId'),

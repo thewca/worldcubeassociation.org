@@ -784,7 +784,7 @@ class User < ApplicationRecord
         scope: can_create_competitions? && cannot_organize_competition_reasons.empty? ? "*" : [],
       },
       can_administer_competitions: {
-        scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id),
+        scope: can_admin_competitions? ? "*" : delegated_competition_ids + organized_competition_ids,
       },
       can_view_delegate_admin_page: {
         scope: can_view_delegate_matters? ? "*" : [],
@@ -1626,7 +1626,7 @@ class User < ApplicationRecord
                                 .includes(:delegate_report, :championships)
                                 # cannot use `find` here, because `find` violently explodes when some records are not found,
                                 # and in case of cancelled competitions we might have a registration but the scope above hides the competition.
-                                .where(id: competition_ids.uniq)
+                                .where(competition_id: competition_ids.uniq)
                                 .sort_by { it.start_date || 20.years.from_now }
                                 .reverse
 

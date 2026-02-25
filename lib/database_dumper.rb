@@ -2,15 +2,18 @@
 
 module DatabaseDumper
   WHERE_VISIBLE_COMP = "WHERE competitions.show_at_all = 1"
-  JOIN_WHERE_VISIBLE_COMP = "JOIN competitions ON competitions.id = competition_id #{WHERE_VISIBLE_COMP}".freeze
   DEV_TIMESTAMP_NAME = "developer_dump_exported_at"
   RESULTS_TIMESTAMP_NAME = "public_results_exported_at"
-  PUBLIC_COMPETITION_JOIN = "LEFT JOIN competition_events ON competitions.id = competition_events.competition_id " \
-                            "LEFT JOIN competition_delegates ON competitions.id = competition_delegates.competition_id " \
+  PUBLIC_COMPETITION_JOIN = "LEFT JOIN competition_events ON competitions.competition_id = competition_events.competition_id " \
+                            "LEFT JOIN competition_delegates ON competitions.competition_id = competition_delegates.competition_id " \
                             "LEFT JOIN users AS users_delegates ON users_delegates.id = competition_delegates.delegate_id " \
-                            "LEFT JOIN competition_organizers ON competitions.id = competition_organizers.competition_id " \
+                            "LEFT JOIN competition_organizers ON competitions.competition_id = competition_organizers.competition_id " \
                             "LEFT JOIN users AS users_organizers ON users_organizers.id = competition_organizers.organizer_id #{WHERE_VISIBLE_COMP} " \
-                            "GROUP BY competitions.id".freeze
+                            "GROUP BY competitions.competition_id".freeze
+
+  def self.join_where_visible_comp(table_name)
+    "JOIN competitions ON competitions.competition_id = #{table_name}.competition_id #{WHERE_VISIBLE_COMP}"
+  end
 
   def self.actions_to_column_sanitizers(columns_by_action)
     {}.tap do |column_sanitizers|
@@ -36,7 +39,8 @@ module DatabaseDumper
       where_clause: WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
-          id
+          stable_id
+          competition_id
           name
           name_reason
           city_name
@@ -288,7 +292,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "rounds" => {
-      where_clause: "JOIN competition_events ON competition_events.id = competition_event_id #{JOIN_WHERE_VISIBLE_COMP}",
+      where_clause: "JOIN competition_events ON competition_events.id = competition_event_id #{self.join_where_visible_comp('competition_events')}",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -364,7 +368,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_delegates" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("competition_delegates"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -377,7 +381,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_events" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("competition_events"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -389,7 +393,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_organizers" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("competition_organizers"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -416,7 +420,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_tabs" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("competition_tabs"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -428,7 +432,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_venues" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("competition_venues"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -445,7 +449,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "venue_rooms" => {
-      where_clause: "JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}",
+      where_clause: "JOIN competition_venues ON competition_venues.id = competition_venue_id #{self.join_where_visible_comp('competition_venues')}",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -462,7 +466,7 @@ module DatabaseDumper
     "live_attempts" => :skip_all_rows,
     "live_attempt_history_entries" => :skip_all_rows,
     "schedule_activities" => {
-      where_clause: "JOIN venue_rooms ON venue_rooms.id = venue_room_id JOIN competition_venues ON competition_venues.id = venue_rooms.competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}",
+      where_clause: "JOIN venue_rooms ON venue_rooms.id = venue_room_id JOIN competition_venues ON competition_venues.id = venue_rooms.competition_venue_id #{self.join_where_visible_comp('competition_venues')}",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -481,7 +485,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "delegate_reports" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("delegate_reports"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -593,7 +597,7 @@ module DatabaseDumper
     }.freeze,
     "registration_payments" => :skip_all_rows,
     "registrations" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("registrations"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -829,7 +833,7 @@ module DatabaseDumper
     }.freeze,
     "cronjob_statistics" => :skip_all_rows,
     "championships" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("championships"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -855,7 +859,7 @@ module DatabaseDumper
     "uploaded_jsons" => :skip_all_rows,
     "scramble_file_uploads" => :skip_all_rows,
     "bookmarked_competitions" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("bookmarked_competitions"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -1112,7 +1116,6 @@ module DatabaseDumper
       where_clause: PUBLIC_COMPETITION_JOIN,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
-          id
           name
           information
           external_website
@@ -1121,6 +1124,7 @@ module DatabaseDumper
           longitude
         ],
         fake_values: {
+          "id" => "competitions.competition_id",
           "cityName" => "city_name",
           "countryId" => "country_id",
           "venueAddress" => "venue_address",
@@ -1166,7 +1170,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "championships" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("championships"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -1311,7 +1315,6 @@ module DatabaseDumper
       where_clause: PUBLIC_COMPETITION_JOIN,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
-          id
           name
           information
           external_website
@@ -1323,6 +1326,7 @@ module DatabaseDumper
           cell_name
         ],
         fake_values: {
+          "id" => "competitions.competition_id",
           "cancelled" => "(competitions.cancelled_at IS NOT NULL AND competitions.cancelled_by IS NOT NULL)",
           "event_specs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
           "delegates" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
@@ -1363,7 +1367,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "championships" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      where_clause: self.join_where_visible_comp("championships"),
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id

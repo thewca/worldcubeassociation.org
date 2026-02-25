@@ -504,7 +504,7 @@ class CompetitionsController < ApplicationController
     form_data = params_for_competition_form
 
     # Remember what the persisted ID is like in the database before the update
-    persisted_id = competition.id
+    persisted_id = competition.competition_id
 
     # Check whether the user desired an ID change, which needs a second update pass (see below)
     form_id = form_data[:competitionId]
@@ -518,17 +518,17 @@ class CompetitionsController < ApplicationController
         competition.create_id_and_cell_name(force_override: true)
 
         # Try to update the ID only if it _actually_ changed
-        new_id = competition.id unless competition.id == persisted_id
+        new_id = competition.competition_id unless competition.competition_id == persisted_id
       end
 
       # In the first update pass, we need to pretend like the ID never changed.
       # Changing ID needs a special hack, see above.
-      competition.id = persisted_id
+      competition.competition_id = persisted_id
       data_changed = competition.save
 
       # Changing the competition ID breaks all our associations, so we need to handle this
       #   in a separate update pass after all the other data has already been changed
-      id_changed_or_not_necessary = new_id.nil? || competition.update(id: new_id)
+      id_changed_or_not_necessary = new_id.nil? || competition.update(competition_id: new_id)
 
       data_changed && id_changed_or_not_necessary
     end
@@ -547,7 +547,7 @@ class CompetitionsController < ApplicationController
 
       response_data = { status: "ok", message: t('.save_success') }
 
-      if persisted_id != competition.id
+      if competition.competition_id_previously_changed?
         response_data[:redirect] = competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition)
       end
 

@@ -10,7 +10,7 @@ class ContactCompetition < ContactForm
   delegate :url, to: :competition, prefix: true, allow_nil: true
 
   def competition
-    @competition ||= Competition.find_by(id: competition_id)
+    @competition ||= Competition.find_by(competition_id: competition_id)
   end
 
   def to_email

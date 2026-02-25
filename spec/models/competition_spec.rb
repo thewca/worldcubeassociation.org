@@ -502,15 +502,15 @@ RSpec.describe Competition do
     end
 
     it "warns if competition id starts with a lowercase" do
-      competition = build(:competition, id: "lowercase2021")
+      competition = build(:competition, competition_id: "lowercase2021")
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:id]).to eq I18n.t('competitions.messages.id_starts_with_lowercase')
     end
 
     it "do not warn if competition id starts with a number" do
-      competition = build(:competition, id: "1stNumberedComp2021")
+      competition = build(:competition, competition_id: "1stNumberedComp2021")
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:id]).to be_nil
+      expect(competition.warnings_for(nil)[:competition_id]).to be_nil
     end
 
     it "warns if advancement condition isn't present for a non final round" do
@@ -590,11 +590,11 @@ RSpec.describe Competition do
     end
 
     it "over scope does include the competition" do
-      expect(Competition.over.find_by(id: competition.id)).to eq competition
+      expect(Competition.over.find_by(competition_id: competition.id)).to eq competition
     end
 
     it "not_over scope does not include the competition" do
-      expect(Competition.not_over.find_by(id: competition.id)).to be_nil
+      expect(Competition.not_over.find_by(competition_id: competition.id)).to be_nil
     end
   end
 
@@ -694,7 +694,7 @@ RSpec.describe Competition do
 
     it "changes the competition_id of registrations" do
       reg1 = create(:registration, competition_id: competition.id)
-      competition.update_attribute(:id, "NewID2015")
+      competition.update_attribute(:competition_id, "NewID2015")
       expect(reg1.reload.competition_id).to eq "NewID2015"
     end
 
@@ -702,14 +702,14 @@ RSpec.describe Competition do
       round = create(:round, competition: competition, event_id: "333oh")
       r1 = create(:result, competition_id: competition.id, round: round)
       r2 = create(:result, competition_id: competition.id, round: round)
-      competition.update_attribute(:id, "NewID2015")
+      competition.update_attribute(:competition_id, "NewID2015")
       expect(r1.reload.competition_id).to eq "NewID2015"
       expect(r2.reload.competition_id).to eq "NewID2015"
     end
 
     it "changes the competition_id of scrambles" do
       scramble1 = create(:scramble, competition: competition)
-      competition.update_attribute(:id, "NewID2015")
+      competition.update_attribute(:competition_id, "NewID2015")
       expect(scramble1.reload.competition_id).to eq "NewID2015"
     end
 
@@ -983,7 +983,7 @@ RSpec.describe Competition do
     create(:registration, competition: competition)
 
     expect do
-      competition.update_attribute(:id, "NewName2016")
+      competition.update_attribute(:competition_id, "NewName2016")
     end.not_to(change do
       %i[results organizers delegates tabs registrations delegate_report].map do |associated|
         competition.send(associated)

@@ -23,7 +23,7 @@ FROM (SELECT distinct competition_id, round_type_id, format_id, event_id FROM re
                   ON s.competition_id = r.competition_id AND s.round_type_id = r.round_type_id AND
                      s.event_id = r.event_id
        INNER JOIN formats as f ON r.format_id = f.id
-       INNER JOIN competitions as c ON s.competition_id = c.id
+       INNER JOIN competitions as c ON s.competition_id = c.competition_id
 WHERE ((min_scramble_num <> f.expected_solve_count OR max_scramble_num <> f.expected_solve_count) AND
        s.event_id <> '333mbf')
    OR (max_scramble_num <> f.expected_solve_count AND s.event_id = '333mbf')

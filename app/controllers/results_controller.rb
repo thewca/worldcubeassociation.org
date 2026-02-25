@@ -93,14 +93,14 @@ class ResultsController < ApplicationController
             average value
           FROM results
           #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
-          #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
+          #{'JOIN competitions on competitions.competition_id = results.competition_id' if @years_condition_competition.present?}
           WHERE average > 0
             #{@event_condition}
             #{@years_condition_competition}
             #{@region_condition}
             #{@gender_condition}
           ORDER BY
-            average, person_name, competition_id, round_type_id
+            average, person_name, results.competition_id, round_type_id
           #{limit_condition}
         SQL
       else
@@ -112,7 +112,7 @@ class ResultsController < ApplicationController
             SELECT results.id
             FROM results
             #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
-            #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
+            #{'JOIN competitions on competitions.competition_id = results.competition_id' if @years_condition_competition.present?}
             WHERE best > 0
               #{@event_condition}
               #{@years_condition_competition}
@@ -147,7 +147,7 @@ class ResultsController < ApplicationController
           GROUP BY results.country_id
         ) records
         JOIN results ON results.#{value} = record_value AND results.country_id = record_country_id
-        JOIN competitions on competitions.id = results.competition_id
+        JOIN competitions on competitions.competition_id = results.competition_id
         #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
         WHERE 1
           #{@event_condition}
@@ -209,7 +209,7 @@ class ResultsController < ApplicationController
           #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
           JOIN events ON results.event_id = events.id
           JOIN round_types ON results.round_type_id = round_types.id
-          JOIN competitions ON results.competition_id = competitions.id
+          JOIN competitions ON results.competition_id = competitions.competition_id
           JOIN countries ON results.country_id = countries.id
         WHERE events.`rank` < 1000
           #{@region_condition}
@@ -263,7 +263,7 @@ class ResultsController < ApplicationController
         results
         #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
         JOIN events ON results.event_id = events.id
-        JOIN competitions ON results.competition_id = competitions.id
+        JOIN competitions ON results.competition_id = competitions.competition_id
       WHERE events.`rank` < 990
         AND results.#{value} = records.value
         AND results.event_id = records.record_event_id
@@ -405,7 +405,7 @@ class ResultsController < ApplicationController
 
           # First, extract unique competitions
           comp_ids = rows.map { |r| r["competition_id"] }.uniq
-          competitions_by_id = Competition.where(id: comp_ids)
+          competitions_by_id = Competition.where(competition_id: comp_ids)
                                           .index_by(&:id)
                                           .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cell_name id]) }
 

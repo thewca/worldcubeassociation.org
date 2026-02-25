@@ -28,12 +28,12 @@ module AuxiliaryDataComputation
           FROM (
               SELECT MIN(#{field} * 1000000000 + results.id) valueAndId
               FROM results
-              JOIN competitions ON competitions.id = competition_id
+              JOIN competitions ON competitions.competition_id = results.competition_id
               WHERE #{field} > 0
               GROUP BY person_id, results.country_id, event_id, YEAR(start_date)
             ) MinValuesWithId
             JOIN results ON results.id = valueAndId % 1000000000
-            JOIN competitions ON competitions.id = results.competition_id
+            JOIN competitions ON competitions.competition_id = results.competition_id
             JOIN countries ON countries.id = results.country_id
             JOIN events ON events.id = results.event_id
         SQL
