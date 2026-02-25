@@ -33,8 +33,11 @@ namespace :h2h_results do
           lr.local_pos = final_pos
         end
 
-        # negative result.best means it is DNF, so we also ovrwrite the `best` if we have a non-negative `value` and a negative `best`
-        result.update!(best: value) if value.positive? && (result.best > value || result.best.negative?)
+        # negative result.best means it is DN*, so we need to consider that the new value either beat the current best in a traditional way OR the current best until now is a DN* penalty
+        is_time_better = value.positive? && (value < result.best || result.best.negative?)
+        # When the result is already a penalty, DNF beats DNS. In terms of numbers, this means `-1` is "better" than `-2`, even though mathematically `-1 > -2`
+        is_penalty_better = value.negative? && result.best.negative? && value > result.best
+        result.update!(best: value) if is_time_better || is_penalty_better
 
         match = H2hMatch.find_or_create_by!(round_id: round_id, match_number: match_number)
         competitor = H2hMatchCompetitor.find_or_create_by!(h2h_match_id: match.id, user_id: Registration.find(registration_id).user_id)
