@@ -16,9 +16,12 @@ import useResultsSubscriptions, {
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
+import {
+  decompressFullResult,
+  decompressPartialResult,
+} from "@/lib/live/decompressDiff";
 
 export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
-
 interface LiveResultContextType {
   liveResultsByRegistrationId: LiveResultsByRegistrationId;
   pendingLiveResults: LiveResult[];
@@ -108,12 +111,18 @@ export function MultiRoundResultProvider({
     if (before_hash !== stateHashesByRoundId[roundId]) {
       queryClient.refetchQueries({ queryKey: query.queryKey, exact: true });
     } else {
+      const decompressedUpdated = updated.map((r) =>
+        decompressPartialResult(r),
+      );
+
+      const decompressedCreated = created.map((r) => decompressFullResult(r));
+
       queryClient.setQueryData(query.queryKey, (oldData: LiveRound) => ({
         ...oldData,
         results: applyDiffToLiveResults({
           previousResults: oldData.results,
-          updated,
-          created,
+          updated: decompressedUpdated,
+          created: decompressedCreated,
           deleted,
           roundWcifId: roundId,
         }),
@@ -132,7 +141,8 @@ export function MultiRoundResultProvider({
       updatePendingResults((pending) => [
         ...pending,
         ...applyDiffToLiveResults({
-          previousResults: liveResultsByRegistrationId[liveResult.r],
+          previousResults:
+            liveResultsByRegistrationId[liveResult.registration_id],
           updated: [liveResult],
           roundWcifId: roundWcifId,
         }),

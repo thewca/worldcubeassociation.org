@@ -1,15 +1,10 @@
 import {
+  CompressedDiffedLiveResults,
   CompressedLiveResult,
   DiffedLiveResult,
 } from "@/lib/hooks/useResultsSubscription";
 import _ from "lodash";
-import type { PartialExcept } from "@/lib/types/objects";
-import { BaseLiveResult, LiveResult } from "@/types/live";
-
-type PartialLiveResultWithRegistrationId = PartialExcept<
-  LiveResult,
-  "registration_id"
->;
+import { BaseLiveResult } from "@/types/live";
 
 export function decompressFullResult(
   diff: CompressedLiveResult,
@@ -27,8 +22,8 @@ export function decompressFullResult(
 }
 
 export function decompressPartialResult(
-  diff: DiffedLiveResult,
-): PartialLiveResultWithRegistrationId {
+  diff: CompressedDiffedLiveResults,
+): DiffedLiveResult {
   return {
     registration_id: diff.r,
     ..._.omitBy(
@@ -43,15 +38,5 @@ export function decompressPartialResult(
       },
       _.isUndefined,
     ),
-  };
-}
-
-export function decompressDiff<
-  T extends Pick<CompressedLiveResult, "r">,
-  U extends Pick<LiveResult, "registration_id">,
->(compressed: T, decompressionRoutine: (comp: T) => U): U {
-  return {
-    ...decompressionRoutine(compressed),
-    registration_id: compressed.r,
   };
 }

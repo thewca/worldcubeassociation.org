@@ -23,8 +23,6 @@ properties:
     type: boolean
   advancing_questionable:
     type: boolean
-  event_id:
-    type: string
   attempts:
     type: array
     items:
