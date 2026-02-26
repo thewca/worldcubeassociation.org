@@ -1786,6 +1786,14 @@ class Competition < ApplicationRecord
     competition_venues.includes(venue_rooms: { schedule_activities: [:child_activities] }).map(&:top_level_activities).flatten
   end
 
+  def last_event_id_of_competition
+    competition_events
+      .joins(rounds: :schedule_activities)
+      .reorder('schedule_activities.end_time')
+      .last
+      &.event_id
+  end
+
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
   def to_wcif(authorized: false)
     {
