@@ -47,7 +47,7 @@ class RegistrationsController < ApplicationController
       competitor_limit_error(@competition, registration_rows.length),
     ].compact.flatten
 
-    return render status: :unprocessable_content, json: { error: errors.compact.join(", ") } if errors.any?
+    return render status: :unprocessable_content, json: { error: errors.join(", ") } if errors.any?
 
     @registration_rows = registration_rows.map do |row|
       country = Country.c_find_by_iso2(row[:countryIso2])
@@ -70,6 +70,10 @@ class RegistrationsController < ApplicationController
     file = params.require(:csv_registration_file)
 
     @registration_rows = parse_csv_file(file.path, @competition)
+  end
+
+  def validate_and_convert_registrations
+    render status: :ok, json: @registration_rows
   end
 
   private def parse_csv_file(file_path, competition)
@@ -97,7 +101,9 @@ class RegistrationsController < ApplicationController
       competitor_limit_error(competition, filtered_rows.length),
     ].compact.flatten
 
-    return render status: :unprocessable_content, json: { error: errors.compact.join(", ") } if errors.any?
+    return render status: :unprocessable_content, json: { error: errors.join(", ") } if errors.any?
+
+    import_time = Time.now.utc
 
     filtered_rows.map do |row|
       event_ids = competition.competition_events.filter_map do |competition_event|
@@ -115,7 +121,7 @@ class RegistrationsController < ApplicationController
           eventIds: event_ids,
           status: "accepted",
           isCompeting: true,
-          registeredAt: Time.now.utc,
+          registeredAt: import_time,
         },
       }
     end
@@ -255,10 +261,7 @@ class RegistrationsController < ApplicationController
         end
         registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED) unless registration.accepted?
         registration.registration_competition_events = []
-        registration_row[:event_ids].each do |event_id|
-          competition_event = @competition.competition_events.find { |ce| ce.event_id == event_id }
-          registration.registration_competition_events.build(competition_event_id: competition_event.id)
-        end
+        build_registration_events(registration, registration_row[:event_ids], @competition.competition_events)
         registration.save!
         registration.add_history_entry({ event_ids: registration.event_ids }, "user", current_user.id, "CSV Import")
       rescue StandardError => e
@@ -271,10 +274,6 @@ class RegistrationsController < ApplicationController
     render status: :ok, json: { success: true }
   rescue StandardError => e
     render status: :unprocessable_content, json: { error: e.to_s }
-  end
-
-  def validate_and_convert_registrations
-    render status: :ok, json: @registration_rows
   end
 
   def add
@@ -305,10 +304,7 @@ class RegistrationsController < ApplicationController
       registration_comment = params.dig(:registration_data, :comments)
       registration.assign_attributes(comments: registration_comment) if registration_comment.present?
       registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED)
-      params[:registration_data][:event_ids]&.each do |event_id|
-        competition_event = @competition.competition_events.find { |ce| ce.event_id == event_id }
-        registration.registration_competition_events.build(competition_event_id: competition_event.id)
-      end
+      build_registration_events(registration, params[:registration_data][:event_ids], @competition.competition_events)
       registration.save!
       registration.add_history_entry({ event_ids: registration.event_ids }, "user", current_user.id, "OTS Form")
       RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later if locked_account_created
@@ -318,6 +314,12 @@ class RegistrationsController < ApplicationController
   rescue StandardError => e
     flash.now[:danger] = e.to_s
     render :add
+  end
+
+  private def build_registration_events(registration, event_ids_registered, competition_events)
+    registration.registration_competition_events.build(
+      competition_events.where(event_id: event_ids_registered).ids.map { |id| { competition_event_id: id } },
+    )
   end
 
   private def user_for_registration!(registration_row)

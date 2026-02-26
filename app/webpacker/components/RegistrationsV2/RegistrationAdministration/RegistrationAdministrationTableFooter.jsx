@@ -52,11 +52,9 @@ export default function RegistrationAdministrationTableFooter({
     return 4;
   };
 
-  const firstColSpan = getColSpan();
-
   return (
     <Table.Row>
-      <Table.Cell colSpan={firstColSpan}>
+      <Table.Cell colSpan={getColSpan()}>
         {
           `${
             newcomerCount

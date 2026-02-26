@@ -40,12 +40,14 @@ function ImportRegistrations({ competitionId }) {
         {I18n.t('registrations.import.info')}
       </Message>
       <Tab panes={panes} />
-      <RegistrationPreview
-        registrations={registrationsToPreview}
-        competitionId={competitionId}
-        onClose={() => setRegistrationsToPreview(null)}
-        onImportSuccess={() => setSuccess(true)}
-      />
+      {registrationsToPreview && (
+        <RegistrationPreview
+          registrations={registrationsToPreview}
+          competitionId={competitionId}
+          onClose={() => setRegistrationsToPreview(null)}
+          onImportSuccess={() => setSuccess(true)}
+        />
+      )}
     </>
   );
 }

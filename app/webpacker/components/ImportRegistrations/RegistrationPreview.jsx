@@ -47,7 +47,7 @@ export default function RegistrationPreview({
   });
 
   const tableRegistrations = useMemo(
-    () => (registrations || []).map(transformRegistration),
+    () => registrations.map(transformRegistration),
     [registrations],
   );
 
@@ -65,7 +65,7 @@ export default function RegistrationPreview({
 
   return (
     <Modal
-      open={!!registrations}
+      open
       onClose={onClose}
       closeOnEscape
       size="fullscreen"
