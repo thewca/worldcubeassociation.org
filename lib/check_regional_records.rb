@@ -7,15 +7,19 @@ module CheckRegionalRecords
   def self.add_to_lookup_table(competition_id = nil, table_name: LOOKUP_TABLE_NAME)
     ActiveRecord::Base.connection.execute <<~SQL.squish
       INSERT INTO #{table_name}
-      (result_id, country_id, event_id, competition_end_date, best, average)
-      SELECT results.id, results.country_id, results.event_id, competitions.end_date, results.best, results.average
+      (result_id, person_id, country_id, continent_id, event_id, competition_end_date, competition_reg_year, best, average)
+      SELECT results.id, results.person_id, results.country_id, countries.continent_id, results.event_id, competitions.end_date, YEAR(competitions.start_date), results.best, results.average
       FROM results
       INNER JOIN competitions ON results.competition_id = competitions.id
+      INNER JOIN countries ON results.country_id = countries.id
       #{"WHERE results.competition_id = '#{competition_id}'" if competition_id.present?}
       ON DUPLICATE KEY UPDATE
+        person_id = results.person_id,
         country_id = results.country_id,
+        continent_id = countries.continent_id,
         event_id = results.event_id,
         competition_end_date = competitions.end_date,
+        competition_reg_year = YEAR(competitions.start_date),
         best = results.best,
         average = results.average
     SQL
