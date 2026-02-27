@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_25_164242) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -804,7 +804,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.bigint "live_result_id"
     t.datetime "updated_at", null: false
     t.integer "value", null: false
-    t.index ["live_result_id"], name: "index_live_attempts_on_live_result_id"
+    t.index ["live_result_id"], name: "fk_rails_b8d7c73463"
   end
 
   create_table "live_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1621,7 +1621,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
   add_foreign_key "inbox_scramble_sets", "scramble_file_uploads", column: "external_upload_id"
   add_foreign_key "inbox_scrambles", "inbox_scramble_sets"
   add_foreign_key "inbox_scrambles", "inbox_scramble_sets", column: "matched_scramble_set_id"
-  add_foreign_key "live_attempt_history_entries", "live_attempts"
+  add_foreign_key "live_attempt_history_entries", "live_attempts", on_delete: :cascade
+  add_foreign_key "live_attempts", "live_results", on_delete: :cascade
   add_foreign_key "live_results", "users", column: "locked_by_id"
   add_foreign_key "live_results", "users", column: "quit_by_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade

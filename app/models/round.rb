@@ -195,7 +195,7 @@ class Round < ApplicationRecord
 
   def clear_round!
     self.transaction do
-      live_results.destroy_all
+      live_results.delete_all
       open_round!
     end
   end
