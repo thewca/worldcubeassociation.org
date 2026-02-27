@@ -32,6 +32,7 @@ export default function AttemptsForm({
     attempts,
     handleAttemptChange,
     isPendingUpdate,
+    registrationId,
   } = useResultsAdmin();
 
   const { collection, filter } = useListCollection({
@@ -44,6 +45,11 @@ export default function AttemptsForm({
       parseInt(filterText, 10) === item.registrant_id,
   });
 
+  const selectedCompetitor = competitors.find((c) => c.id === registrationId);
+  const inputDisplayValue = selectedCompetitor
+    ? `${selectedCompetitor.name} (${selectedCompetitor.registrant_id})`
+    : "";
+
   return (
     <form>
       {error && <Alert.Root status="error" title={error} />}
@@ -51,9 +57,13 @@ export default function AttemptsForm({
       <Combobox.Root
         collection={collection}
         onInputValueChange={(e) => filter(e.inputValue)}
-        onValueChange={(e) =>
-          handleRegistrationIdChange(parseInt(e.value[0], 10))
-        }
+        inputValue={inputDisplayValue}
+        onValueChange={(e) => {
+          if (e.value.length > 0) {
+            handleRegistrationIdChange(parseInt(e.value[0], 10));
+          }
+        }}
+        value={registrationId ? [registrationId.toString()] : []}
       >
         <Combobox.Label>
           <Heading size="2xl">{header}</Heading>
@@ -71,7 +81,7 @@ export default function AttemptsForm({
               <Combobox.Empty>No items found</Combobox.Empty>
               {collection.items.map((item) => (
                 <Combobox.Item item={item} key={item.id}>
-                  `${item.name} (${item.registrant_id})`
+                  {`${item.name} (${item.registrant_id})`}
                   <Combobox.ItemIndicator />
                 </Combobox.Item>
               ))}
