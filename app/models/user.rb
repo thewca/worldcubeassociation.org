@@ -77,6 +77,11 @@ class User < ApplicationRecord
 
   FORUM_AGE_REQUIREMENT = 13
 
+  CLEAR_WCA_ID_CLAIM_ATTRIBUTES = {
+    unconfirmed_wca_id: nil,
+    delegate_id_to_handle_wca_id_claim: nil,
+  }.freeze
+
   def self.eligible_voters
     [
       UserGroup.delegate_regions,
