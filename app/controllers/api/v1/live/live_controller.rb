@@ -106,7 +106,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
   def quit_competitor
     competition = Competition.find(params.require(:competition_id))
+    wcif_id = params.require(:round_id)
     registration_id = params.require(:registration_id)
+    should_advance_next = params.require(:advance_next)
 
     require_manage!(competition)
 
