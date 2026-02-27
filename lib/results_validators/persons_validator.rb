@@ -25,6 +25,7 @@ module ResultsValidators
     SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = :single_letter_first_or_last_name_warning
     SINGLE_NAME_WARNING = :single_name_warning
     SPECIAL_CHARACTERS_IN_NAME_WARNING = :special_characters_in_name_warning
+    REGISTRATION_DETAILS_MISMATCH_WARNING = :registration_details_mismatch_warning
 
     def self.description
       "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
@@ -201,6 +202,17 @@ module ResultsValidators
                                            :persons, competition.id,
                                            name: p.name, wca_id: p.wca_id)
           end
+        end
+
+        competition_data.persons.select { |p| p.is_a?(InboxPerson) }.each do |p|
+          mismatches = p.registration_mismatches
+          next if mismatches.empty?
+
+          @warnings << ValidationWarning.new(REGISTRATION_DETAILS_MISMATCH_WARNING,
+                                             :persons, competition.id,
+                                             person_id: p.ref_id,
+                                             name: p.name,
+                                             mismatches: mismatches.join(', '))
         end
       end
     end
