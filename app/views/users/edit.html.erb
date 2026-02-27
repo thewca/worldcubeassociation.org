@@ -83,7 +83,10 @@
                       </a>
                     </span>
                     <div class="input-group-btn">
-                      <%= link_to t('.approve'), confirm_wca_id_path(userId: @user.id, wcaId: @user.unconfirmed_wca_id), method: :post, data: { confirm: t('.approve_confirm', wca_id: @user.unconfirmed_wca_id) }, class: "btn btn-default", id: "approve-wca-id" %>
+                      <% claim_ticket = TicketsClaimWcaId.open.find_by(user: @user)&.ticket %>
+                      <% if claim_ticket %>
+                        <%= link_to t('.go_to_claim_wca_id_ticket'), ticket_path(claim_ticket), class: "btn btn-primary", target: "_blank" %>
+                      <% end %>
                     </div>
                   </div>
                 </div>

@@ -325,6 +325,8 @@ class UsersController < ApplicationController
                                  wca_id: @user.unconfirmed_wca_id,
                                  user: @user.delegate_to_handle_wca_id_claim.name)
         WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_later
+        TicketsClaimWcaId.create_ticket!(@user)
+
         redirect_to profile_claim_wca_id_path
       else
         redirect_to edit_user_url(@user, params.permit(:section))
