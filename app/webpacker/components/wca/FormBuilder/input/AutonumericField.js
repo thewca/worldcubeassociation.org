@@ -38,7 +38,10 @@ export default function AutonumericField({
       onInvalidPaste: 'clamp',
     };
     if (max) {
-      options.maximumValue = max / currencyInfo.subunitToUnit;
+      const subunitMax = max / currencyInfo.subunitToUnit;
+
+      options.maximumValue = subunitMax;
+      options.minimumValue = Math.min(options.minimumValue, subunitMax);
     }
     return options;
   }, [currencyInfo, max]);
