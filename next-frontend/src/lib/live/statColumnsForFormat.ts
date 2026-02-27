@@ -13,7 +13,10 @@ const statMap = {
   },
 } as const;
 
+type StatKey = keyof typeof statMap;
+export type Stat = (typeof statMap)[StatKey];
+
 export const statColumnsForFormat = (format: Format) =>
   [format.sort_by, format.sort_by_second]
     .filter(Boolean)
-    .map((s) => statMap[s as keyof typeof statMap]);
+    .map((s) => statMap[s as StatKey]);

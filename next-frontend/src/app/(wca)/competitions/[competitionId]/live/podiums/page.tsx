@@ -53,7 +53,7 @@ export default async function PodiumsPage({
                 resultsByRegistrationId={resultsByRegistrationId}
                 competitionId={competitionId}
                 competitors={finalRound.competitors}
-                eventId={e}
+                roundWcifId={finalRound.id}
                 formatId={finalRound.format}
                 showEmpty={false}
               />

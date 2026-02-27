@@ -1,11 +1,11 @@
-import { components } from "@/types/openapi";
+import { LiveAttempt } from "@/types/live";
 
 export const padSkipped = (
-  attempts: components["schemas"]["LiveAttempt"][],
+  attempts: LiveAttempt[],
   expectedNumberOfAttempts: number,
-) => {
+): LiveAttempt[] => {
   return [
     ...attempts,
-    ...Array(expectedNumberOfAttempts - attempts.length).fill(0),
+    ...Array(expectedNumberOfAttempts - attempts.length).fill({ value: 0 }),
   ];
 };
