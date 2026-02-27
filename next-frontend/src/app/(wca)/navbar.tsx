@@ -60,6 +60,7 @@ export default async function Navbar() {
       padding="3"
       justifyContent="space-between"
       bg="bg"
+      data-testid="header-navbar"
     >
       <RefreshRouteOnSave />
       <HStack>

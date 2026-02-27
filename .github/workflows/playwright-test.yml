@@ -1,0 +1,76 @@
+name: Playwright E2E tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'next-frontend/**/*'
+      - '.github/workflows/playwright-test.yml'
+      - 'playwright.config.ts'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      DISABLE_SPRING: 1
+      RAILS_ENV: test
+      NODE_ENV: test
+      NODE_MAJOR: 24
+      PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
+      PW_TEST_CONNECT_WS_ENDPOINT: "" # Override Docker orchestra default
+      PW_TEST_BASE_URL: http://localhost:3001 # Talk to Next directly on this machine
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Install fresh Bundler packages
+        run: bin/bundle install
+      - name: Set up Corepack/Yarn
+        run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_MAJOR }}
+          cache: 'yarn'
+      - name: Install fresh root Yarn packages
+        run: bin/yarn install
+      - name: Install fresh frontend Yarn packages
+        run: yarn install
+        working-directory: next-frontend
+      - name: Activate MySQL # as per https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
+        run: sudo systemctl start mysql.service
+      - name: Install and start MongoDB # for Payload CMS in the frontend
+        uses: supercharge/mongodb-github-action@1.12.1
+        with:
+          mongodb-version: 8
+          mongodb-username: root
+          mongodb-password: root
+          mongodb-db: payload
+      - name: Populate backend database with seeds
+        run: bin/rails db:reset
+      - name: Cache Playwright runnables
+        uses: actions/cache@v5
+        with:
+          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}
+      - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
+        run: bin/yarn playwright install --with-deps
+      - name: Create dummy fonts
+        run: |
+          mkdir ./src/styles/fonts/TTNormsPro
+          for style in Light Light_Italic Regular Medium Bold Condensed_ExtraBold; do
+            touch "./src/styles/fonts/TTNormsPro/TT_Norms_Pro_${style}.woff2"
+          done
+        shell: bash
+        working-directory: next-frontend
+      - name: Run Playwright tests
+        run: bin/yarn playwright test
+      - uses: actions/upload-artifact@v6
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

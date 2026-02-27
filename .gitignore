@@ -66,3 +66,9 @@ next-frontend/src/app/(wca)/fonts/TTNormsPro/*
 
 # Local database exports
 WCA_export_*
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
