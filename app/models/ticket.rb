@@ -4,6 +4,7 @@ class Ticket < ApplicationRecord
   TICKET_TYPES = {
     edit_person: "TicketsEditPerson",
     competition_result: "TicketsCompetitionResult",
+    claim_wca_id: "TicketsClaimWcaId",
   }.freeze
 
   has_many :ticket_comments

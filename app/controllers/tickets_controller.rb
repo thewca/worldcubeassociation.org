@@ -10,6 +10,9 @@ class TicketsController < ApplicationController
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:approve_edit_person_request]) }, only: [:approve_edit_person_request]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:reject_edit_person_request]) }, only: [:reject_edit_person_request]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:sync_edit_person_request]) }, only: [:sync_edit_person_request]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsClaimWcaId::ACTION_TYPE[:approve_claim]) }, only: [:approve_claim_wca_id]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsClaimWcaId::ACTION_TYPE[:reject_claim]) }, only: [:reject_claim_wca_id]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsClaimWcaId::ACTION_TYPE[:transfer_claim]) }, only: [:transfer_claim_wca_id]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[delete_inbox_persons]
 
   SORT_WEIGHT_LAMBDAS = {
@@ -36,6 +39,54 @@ class TicketsController < ApplicationController
     return if metadata_action.nil?
 
     render status: :unauthorized, json: { error: "You are not allowed to perform this metadata action." } unless @acting_stakeholder.metadata_actions_allowed.include?(@metadata_action)
+
+    case @ticket.metadata_type
+    when Ticket::TICKET_TYPES[:claim_wca_id]
+      if @metadata_action == TicketsClaimWcaId::ACTION_TYPE[:approve_claim]
+        @user = @ticket.metadata.user
+        @wca_id = @user.unconfirmed_wca_id
+        @person = Person.find_by(wca_id: @wca_id)
+
+        if @user.wca_id.present?
+          render status: :unprocessable_content, json: {
+            error: "This user already has a WCA ID assigned.",
+          }
+        end
+
+        if @user.unconfirmed_wca_id.nil?
+          render status: :unprocessable_content, json: {
+            error: "This user does not have an unconfirmed WCA ID to approve.",
+          }
+        end
+
+        if @person.nil?
+          render status: :unprocessable_content, json: {
+            error: "WCA ID #{@wca_id} does not exist.",
+          }
+        end
+
+        if @person&.user.present?
+          render status: :unprocessable_content, json: {
+            error: "WCA ID #{@wca_id} is already assigned to another user.",
+          }
+        end
+
+        unless @acting_stakeholder.assigned?
+          render status: :unauthorized, json: {
+            error: "Only the assigned delegate can approve/reject.",
+          }
+        end
+      elsif @metadata_action == TicketsClaimWcaId::ACTION_TYPE[:transfer_claim]
+        new_delegate_id = params.require(:new_delegate_id)
+        @new_delegate = User.find(new_delegate_id)
+
+        unless @new_delegate.any_kind_of_delegate?
+          render status: :unprocessable_content, json: {
+            error: "The selected user is not a delegate.",
+          }
+        end
+      end
+    end
   end
 
   def index
@@ -393,5 +444,84 @@ class TicketsController < ApplicationController
     end
 
     render status: :ok, json: { success: true }
+  end
+
+  def approve_claim_wca_id
+    ticket_status = TicketsClaimWcaId.statuses[:closed]
+
+    ActiveRecord::Base.transaction do
+      user.update!(wca_id: @user.unconfirmed_wca_id)
+      @ticket.metadata.update!(status: ticket_status)
+      ticket_log = @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+      ticket_log.ticket_log_changes.create!(
+        field_name: TicketLogChange.field_names[:status],
+        field_value: ticket_status,
+      )
+    end
+    render status: :ok, json: { success: true }
+  end
+
+  def reject_claim_wca_id
+    ticket_status = TicketsClaimWcaId.statuses[:closed]
+
+    ActiveRecord::Base.transaction do
+      @ticket.metadata.update!(status: ticket_status)
+      ticket_log = @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+      ticket_log.ticket_log_changes.create!(
+        field_name: TicketLogChange.field_names[:status],
+        field_value: ticket_status,
+      )
+    end
+    render status: :ok, json: { success: true }
+  end
+
+  def transfer_claim_wca_id
+    user = @ticket.metadata.user
+
+    ActiveRecord::Base.transaction do
+      user.update!(delegate_to_handle_wca_id_claim: @new_delegate)
+
+      old_stakeholder = @ticket.ticket_stakeholders.find_by(
+        stakeholder_type: "User",
+        stakeholder_role: TicketStakeholder.stakeholder_roles[:actioner],
+        connection: TicketStakeholder.connections[:assigned],
+      )
+      old_stakeholder.update!(connection: TicketStakeholder.connections[:cc])
+
+      existing_new = @ticket.ticket_stakeholders.find_by(
+        stakeholder_type: "User",
+        stakeholder_id: @new_delegate.id,
+      )
+
+      if existing_new
+        existing_new.update!(connection: TicketStakeholder.connections[:assigned])
+      else
+        @ticket.ticket_stakeholders.create!(
+          stakeholder: @new_delegate,
+          connection: TicketStakeholder.connections[:assigned],
+          stakeholder_role: TicketStakeholder.stakeholder_roles[:actioner],
+          is_active: true,
+        )
+      end
+
+      @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+    end
+
+    render status: :ok, json: @ticket
   end
 end
