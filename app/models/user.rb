@@ -41,6 +41,7 @@ class User < ApplicationRecord
   has_many :active_bans, through: :active_bans_metadata, source: :user_role, class_name: "UserRole"
   has_many :active_groups, through: :active_roles, source: :group, class_name: "UserGroup"
   has_many :board_metadata, through: :active_groups, source: :metadata, source_type: "GroupsMetadataBoard"
+  has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
@@ -205,8 +206,7 @@ class User < ApplicationRecord
   def maybe_clear_claimed_wca_id
     return unless !claiming_wca_id && ((unconfirmed_wca_id_was.present? && wca_id == unconfirmed_wca_id_was) || unconfirmed_wca_id.blank?)
 
-    self.unconfirmed_wca_id = nil
-    self.delegate_to_handle_wca_id_claim = nil
+    clear_wca_id_claim_fields
   end
 
   # Virtual attribute for people claiming a WCA ID.
@@ -1578,6 +1578,24 @@ class User < ApplicationRecord
     end
   end
 
+  def self.clear_wca_id_claim_fields(relation)
+    # This method could also have reused the method below, which will actually make the
+    # logic to single place, but that will impact performance very badly if the relation
+    # is large.
+    # But in future, if we move WCA ID claims to tickets, then we need to call each ticket
+    # separately, and unifying may not be possible that time.
+    relation.update_all(unconfirmed_wca_id: nil, delegate_id_to_handle_wca_id_claim: nil)
+  end
+
+  def clear_wca_id_claim_fields
+    # Must use update_columns (skips callbacks and validations) rather than update! here.
+    # This method is called from `maybe_clear_claimed_wca_id`. Using update! would
+    # re-trigger before_validation, and since `unconfirmed_wca_id_was` still holds the
+    # original DB value, `maybe_clear_claimed_wca_id` would pass its condition and call
+    # this method again causing infinite recursion.
+    update_columns(unconfirmed_wca_id: nil, delegate_id_to_handle_wca_id_claim: nil)
+  end
+
   def assign_wca_id(wca_id)
     return if wca_id.blank?
     raise "User #{id} already has WCA ID #{self.wca_id}" if self.wca_id.present?
@@ -1587,8 +1605,7 @@ class User < ApplicationRecord
 
     ActiveRecord::Base.transaction do
       update!(wca_id: wca_id)
-      User.where(id: stale_claims.ids)
-          .update_all(unconfirmed_wca_id: nil, delegate_id_to_handle_wca_id_claim: nil)
+      User.clear_wca_id_claim_fields(stale_claims)
       potential_duplicate_persons.delete_all
     end
 

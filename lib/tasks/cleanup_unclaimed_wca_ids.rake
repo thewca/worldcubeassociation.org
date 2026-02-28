@@ -13,11 +13,12 @@ namespace :cleanup do
 
     stale_claims.limit(limit).each do |user|
       wca_id = user.unconfirmed_wca_id
-      if user.update_columns(unconfirmed_wca_id: nil, delegate_id_to_handle_wca_id_claim: nil)
+      begin
+        user.clear_wca_id_claim_fields
         WcaIdClaimMailer.notify_user_of_claim_cancelled(user, wca_id, cleanup: true).deliver_later
         puts "Cleared stale claim for user #{user.id} (#{user.email}) - WCA ID #{wca_id}"
-      else
-        puts "Failed to clear stale claim for user #{user.id} (#{user.email}) - WCA ID #{wca_id}: #{user.errors.full_messages.join(', ')}"
+      rescue StandardError => e
+        puts "Failed to clear stale claim for user #{user.id} (#{user.email}) - WCA ID #{wca_id}: #{e.message}"
       end
     end
 

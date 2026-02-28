@@ -121,7 +121,7 @@ class UsersController < ApplicationController
 
     ActiveRecord::Base.transaction do
       user.assign_wca_id(wca_id)
-      user.update!(unconfirmed_wca_id: nil, delegate_id_to_handle_wca_id_claim: nil)
+      user.clear_wca_id_claim_fields
     end
 
     redirect_to edit_user_path(user), flash: { success: "Successfully confirmed WCA ID #{wca_id}." }
