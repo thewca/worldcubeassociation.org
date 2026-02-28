@@ -33,11 +33,5 @@ export function recordAttempts(
     | components["schemas"]["Record"]
     | components["schemas"]["ExtendedResult"],
 ) {
-  return cleanAttempts([
-    record.value1,
-    record.value2,
-    record.value3,
-    record.value4,
-    record.value5,
-  ]);
+  return cleanAttempts(record.attempts);
 }

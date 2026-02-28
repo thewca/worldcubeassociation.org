@@ -16,40 +16,6 @@ class Result < ApplicationRecord
   has_many :result_attempts, inverse_of: :result, dependent: :destroy, autosave: true, index_errors: true
   validates_associated :result_attempts
 
-  # This is a hack because in our test suite we do `update!(valueN: 123)` lots of times
-  #   to mock different result submission scenarios. Unfortunately, this can only be changed
-  #   and "harmonized" once `inbox_results` is gone, because that still relies on valueNs.
-  before_validation :backlink_attempts, on: :update, if: -> { Rails.env.test? }
-
-  def backlink_attempts
-    (1..5).each do |n|
-      legacy_value = self.attributes["value#{n}"]
-
-      # Crucially, `find_or_initialize_by` does NOT work here, because it circumvents Rails memory
-      #   by going directly down to the database layer. `autosave: true` above needs the memory layer, though.
-      in_memory_attempt = self.result_attempts.find { it.attempt_number == n } || result_attempts.build(attempt_number: n)
-
-      in_memory_attempt.assign_attributes(value: legacy_value)
-    end
-  end
-
-  # We run this _after_ validations as part of the transition process:
-  #   In order to make sure that all validations correctly "see" the `result_attempts`,
-  #   we only backfill to the old columns once we have established that the attempts are valid
-  after_validation :repack_attempts
-
-  # As of writing this comment, we are transitioning `value1..5` to a separate row-based table.
-  # We have progressed to productively using the new, normalized `result_attempts` table
-  #   wherever we can, but there is still one (annoyingly popular) place where it's hard to make the transition:
-  #   The Rankings and Records pages. These feature *very* heavy SQL queries and JOINing in the full
-  #   result_attempts there can be expensive, so we rely on the de-normalized value1..5 just for the time being.
-  def repack_attempts
-    packed_value_attributes = self.attempts.map.with_index(1).to_h { |v, i| [:"value#{i}", v] }
-    legacy_attempt_attributes = packed_value_attributes.with_indifferent_access.slice(*Result.attribute_names)
-
-    self.assign_attributes(**legacy_attempt_attributes)
-  end
-
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
 
   validates :regional_single_record, inclusion: { in: MARKERS }
@@ -96,5 +62,15 @@ class Result < ApplicationRecord
       .map do |value, n|
         { value: value, attempt_number: n, **additional_attributes }
     end
+  end
+
+  def self.augment_attempts(result_attrs, id_key: "id")
+    result_ids = result_attrs.pluck(id_key).uniq
+
+    result_attempts_by_result = ResultAttempt.where(result_id: result_ids)
+                                             .group_by(&:result_id)
+                                             .transform_values { it.sort_by(&:attempt_number).map(&:value) }
+
+    result_attrs.map { it.merge(attempts: result_attempts_by_result[it[id_key]]) }
   end
 end

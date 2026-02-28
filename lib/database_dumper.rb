@@ -279,11 +279,6 @@ module DatabaseDumper
           round_type_id
           round_id
           updated_at
-          value1
-          value2
-          value3
-          value4
-          value5
         ],
       ),
     }.freeze,
@@ -970,6 +965,8 @@ module DatabaseDumper
           pos
           best
           average
+        ],
+        db_default: %w[
           value1
           value2
           value3
