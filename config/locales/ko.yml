@@ -1763,6 +1763,8 @@ ko:
       profile: 프로필
       #original_hash: 7b2c7f1
       approve: 승인
+      #original_hash: d9455bf
+      approve_confirm: 'WCA ID %{wca_id}를 승인하시겠습니까?'
       #original_hash: 85de4b8
       unconfirmed_email: '이 계정의 이메일 주소 (%{email})는 검증되지 않았습니다.'
       #original_hash: 7069007
@@ -2100,12 +2102,12 @@ ko:
       #original_hash: e86b1e1
       non_competing: 대회 미참가 참가 신청
       #original_hash: ac5d958
-      not_paid: 참가비 미지불
+      not_paid: 미지불
       registered:
         #original_hash: 2c2f473
         without_stripe: 접수 일시
         #original_hash: fca3213
-        with_stripe: 참가비 지불 일시
+        with_stripe: 결제 일시
       #original_hash: ce53c71
       payment_requested_on: '결제 요청일: %{date}'
       #original_hash: 3141a14
@@ -2829,8 +2831,8 @@ ko:
       submit_confirm: >-
         확정할 준비가 확실히 되었나요? 확정 후에는 어떤 정보도 수정할 수 없습니다. 이후에는 이메일을 확인하여 WCA 대회 발표 팀에
         알림이 전달되었는지 확인하십시오.
-      #original_hash: 4c7deb7
-      submit_delete: 이 대회를 삭제하시겠습니까? 되돌릴 수 없습니다.
+      #original_hash: 89fbbca
+      submit_delete: '이 작업은 되돌릴 수 없습니다. 삭제를 확정하려면 대회 ID "%{competition_id}"를 아래에 입력하세요.'
       #original_hash: 8ebebca
       coordinates: 좌표
       #original_hash: a672984
@@ -3406,7 +3408,7 @@ ko:
         #original_hash: 27eeb7a
         rejected: 거절됨
         #original_hash: 43dc853
-        amount: 양
+        amount: 금액
         #original_hash: d7e4497
         too_many: '이 모든 참가 신청을 수락하면 참가자 정원을 %{count}만큼 초과하게 됩니다'
         #original_hash: 462376a
