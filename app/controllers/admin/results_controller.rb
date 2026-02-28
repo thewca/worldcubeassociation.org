@@ -125,6 +125,9 @@ module Admin
         attempt_attributes = Result.unpack_attempt_attributes(attempts_params, result_id: result.id)
         ResultAttempt.upsert_all(attempt_attributes)
 
+        attempt_numbers = attempt_attributes.pluck(:attempt_number)
+        result.result_attempts.where.not(attempt_number: attempt_numbers).delete_all
+
         result.update(result_params)
       end
 
