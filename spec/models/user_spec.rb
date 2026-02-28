@@ -268,7 +268,7 @@ RSpec.describe User do
     end
   end
 
-  describe ".clear_wca_id_claim_fields" do
+  describe "clearing WCA claims via constant" do
     let(:delegate_role) { create(:delegate_role) }
     let(:person) { create(:person) }
 
@@ -276,7 +276,7 @@ RSpec.describe User do
       user1 = create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
       user2 = create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
 
-      User.clear_wca_id_claim_fields(User.where(id: [user1.id, user2.id]))
+      User.where(id: [user1.id, user2.id]).update_all(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
 
       expect(user1.reload.unconfirmed_wca_id).to be_nil
       expect(user1.delegate_id_to_handle_wca_id_claim).to be_nil
@@ -284,19 +284,10 @@ RSpec.describe User do
       expect(user2.delegate_id_to_handle_wca_id_claim).to be_nil
     end
 
-    it "handles an empty relation without error" do
-      expect { User.clear_wca_id_claim_fields(User.none) }.not_to raise_error
-    end
-  end
-
-  describe "#clear_wca_id_claim_fields" do
-    let(:delegate_role) { create(:delegate_role) }
-    let(:person) { create(:person) }
-
     it "clears unconfirmed_wca_id and delegate_id_to_handle_wca_id_claim on the user" do
       user = create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
 
-      user.clear_wca_id_claim_fields
+      user.update_columns(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
 
       expect(user.reload.unconfirmed_wca_id).to be_nil
       expect(user.delegate_id_to_handle_wca_id_claim).to be_nil
@@ -306,7 +297,7 @@ RSpec.describe User do
       user = create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
       original_name = user.name
 
-      user.clear_wca_id_claim_fields
+      user.update_columns(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
 
       expect(user.reload.name).to eq original_name
     end

@@ -8,7 +8,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       WcaIdClaimMailer.notify_user_of_delegate_demotion(confirmed_user, role.user, region_senior_delegate).deliver_later
     end
     # Clear all pending WCA IDs claims for the demoted Delegate
-    User.clear_wca_id_claim_fields(role.user.users_claiming_wca_id)
+    role.user.users_claiming_wca_id.update_all(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
   end
 
   private def pre_filtered_user_roles
