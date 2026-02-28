@@ -61,7 +61,6 @@ Rails.application.routes.draw do
   post 'users/update_user_data' => 'users#update_user_data'
   post 'users/merge' => 'users#merge'
   post 'users/assign_wca_id' => 'users#assign_wca_id'
-  post 'users/confirm_wca_id' => 'users#confirm_wca_id', as: :confirm_wca_id
   get '/users/registrations' => 'users#registrations', as: :helpful_queries_registrations
   get '/users/organized-competitions' => 'users#organized_competitions', as: :helpful_queries_organized_competitions
   get '/users/delegated-competitions' => 'users#delegated_competitions', as: :helpful_queries_delegated_competitions
@@ -245,6 +244,9 @@ Rails.application.routes.draw do
     post 'reject_edit_person_request' => 'tickets#reject_edit_person_request', as: :reject_edit_person_request
     post 'sync_edit_person_request' => 'tickets#sync_edit_person_request', as: :sync_edit_person_request
     post 'join_as_bcc_stakeholder' => 'tickets#join_as_bcc_stakeholder', as: :join_as_bcc_stakeholder
+    post 'approve_claim_wca_id' => 'tickets#approve_claim_wca_id', as: :approve_claim_wca_id
+    post 'reject_claim_wca_id' => 'tickets#reject_claim_wca_id', as: :reject_claim_wca_id
+    post 'transfer_claim_wca_id' => 'tickets#transfer_claim_wca_id', as: :transfer_claim_wca_id
     resources :ticket_comments, only: %i[index create], as: :comments
     resources :ticket_logs, only: [:index], as: :logs
     resources :tickets_edit_person_fields, only: %i[create update destroy], as: :edit_person_fields

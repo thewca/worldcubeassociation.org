@@ -960,6 +960,7 @@ module DatabaseDumper
     "duplicate_checker_job_runs" => :skip_all_rows,
     "potential_duplicate_persons" => :skip_all_rows,
     "tickets_competition_result" => :skip_all_rows,
+    "tickets_claim_wca_id" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {
