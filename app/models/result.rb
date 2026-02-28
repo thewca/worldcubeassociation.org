@@ -92,9 +92,9 @@ class Result < ApplicationRecord
     attempt_values
       .map
       .with_index(1)
-      .filter { |value, _n| value != SolveTime::SKIPPED_VALUE }
+      .filter { |value, _n| !value.nil? }
       .map do |value, n|
-        { value: value, attempt_number: n, **additional_attributes }
+      { value: value, attempt_number: n, **additional_attributes }
     end
   end
 end
