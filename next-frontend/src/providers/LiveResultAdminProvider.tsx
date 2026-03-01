@@ -15,9 +15,12 @@ interface AdminResultsContextValue {
   error: string;
   success: string;
   isPendingUpdate: boolean;
+  isPendingQuit: boolean;
   handleRegistrationIdChange: (value: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
   handleSubmit: () => void;
+  clearCompetitorsResults: (registrationId: number) => void;
+  quitCompetitor: (registrationId: number) => void;
 }
 
 function zeroedArrayOfSize(size: number) {
@@ -84,6 +87,19 @@ export function LiveResultAdminProvider({
     },
   );
 
+  const { mutate: mutateQuit, isPending: isPendingQuit } = api.useMutation(
+    "put",
+    "/v1/competitions/{competitionId}/rounds/{round_id}/{:registration_id}/quit",
+    {
+      onSuccess: () => {
+        // Do we remove the competitor here or do we wait for the web socket update?
+      },
+      onError: () => {
+        setError("Failed to update results. Please try again.");
+      },
+    },
+  );
+
   const handleAttemptChange = (index: number, value: number) => {
     const newAttempts = [...attempts];
     newAttempts[index] = value;
@@ -110,6 +126,31 @@ export function LiveResultAdminProvider({
     });
   };
 
+  const clearCompetitorsResults = (registrationId: number) => {
+    mutateUpdate({
+      params: {
+        path: { competitionId, roundId },
+      },
+      body: {
+        attempts: zeroedArrayOfSize(format.expected_solve_count).map(
+          (attempt, index) => ({
+            value: attempt,
+            attempt_number: index + 1,
+          }),
+        ),
+        registration_id: registrationId,
+      },
+    });
+  };
+
+  const quitCompetitor = (registrationId: number) => {
+    mutateQuit({
+      params: {
+        path: { competitionId, roundId, registrationId },
+      },
+    });
+  };
+
   return (
     <AdminResultsContext.Provider
       value={{
@@ -118,9 +159,12 @@ export function LiveResultAdminProvider({
         error,
         success,
         isPendingUpdate,
+        isPendingQuit,
+        quitCompetitor,
         handleRegistrationIdChange,
         handleAttemptChange,
         handleSubmit,
+        clearCompetitorsResults,
       }}
     >
       {children}
