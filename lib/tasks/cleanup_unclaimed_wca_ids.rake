@@ -13,7 +13,7 @@ namespace :cleanup do
 
     stale_claims.limit(limit).each do |user|
       wca_id = user.unconfirmed_wca_id
-      if user.update_columns(unconfirmed_wca_id: nil, delegate_id_to_handle_wca_id_claim: nil)
+      if user.update_columns(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
         WcaIdClaimMailer.notify_user_of_claim_cancelled(user, wca_id, cleanup: true).deliver_later
         puts "Cleared stale claim for user #{user.id} (#{user.email}) - WCA ID #{wca_id}"
       else
