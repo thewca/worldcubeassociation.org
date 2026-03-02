@@ -7,9 +7,9 @@ module Live
       after_hash = after_state.index_by { |r| r["registration_id"] }
 
       {
-        "updated" => compute_updated(before_hash, after_hash),
+        "updated" => Array.wrap(compute_updated(before_hash, after_hash)).map { compress_payload it },
         "deleted" => compute_deleted(before_hash, after_hash),
-        "created" => compute_created(before_hash, after_hash),
+        "created" => Array.wrap(compute_created(before_hash, after_hash)).map { compress_payload it },
         'before_hash' => state_hash(before_state),
         'after_hash' => state_hash(after_state),
       }.compact_blank

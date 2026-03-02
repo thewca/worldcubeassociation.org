@@ -34,10 +34,13 @@ RSpec.describe "WCA Live API" do
       round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
       registration_1 = registrations.first
       round.open_and_lock_previous(User.first)
+      before_hash = Live::DiffHelper.state_hash(round.to_live_state)
 
       expect do
         delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, round.wcif_id, registration_1.id)
-      end.to have_broadcasted_to(Live::Config.broadcast_key(round.wcif_id)).from_channel(ApplicationCable::Channel)
+      end.to have_broadcasted_to(Live::Config.broadcast_key(round.wcif_id))
+        .from_channel(ApplicationCable::Channel)
+        .with(hash_including(deleted: [registration_1.id], before_hash: before_hash))
     end
 
     it "Broadcasts to first round when quitting second round with advancing set" do
@@ -51,6 +54,7 @@ RSpec.describe "WCA Live API" do
       end
 
       final.open_and_lock_previous(User.first)
+      before_hash = Live::DiffHelper.state_hash(round.to_live_state)
 
       live_request = {
         advance_next: true,
@@ -58,7 +62,11 @@ RSpec.describe "WCA Live API" do
 
       expect do
         delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request
-      end.to have_broadcasted_to(Live::Config.broadcast_key(round.wcif_id)).from_channel(ApplicationCable::Channel)
+      end.to have_broadcasted_to(Live::Config.broadcast_key(round.wcif_id))
+        .from_channel(ApplicationCable::Channel)
+        .with(hash_including(updated: [{ "advancing" => false, "advancing_questionable" => false, "registration_id" => registrations.first.id },
+                                       { "advancing" => true, "registration_id" => registrations.third.id }].map { Live::DiffHelper.compress_payload it },
+                             before_hash: before_hash))
     end
   end
 end
