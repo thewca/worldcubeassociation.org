@@ -21,6 +21,7 @@ export default function LiveResultsTable({
   roundWcifId,
   competitionId,
   competitors,
+  pendingQuitCompetitors,
   isAdmin = false,
   showEmpty = true,
   showLinkedRoundsView = false,
@@ -30,6 +31,7 @@ export default function LiveResultsTable({
   roundWcifId: string;
   competitionId: string;
   competitors: LiveCompetitor[];
+  pendingQuitCompetitors: Set<number>;
   isAdmin?: boolean;
   showEmpty?: boolean;
   showLinkedRoundsView?: boolean;
@@ -73,6 +75,11 @@ export default function LiveResultsTable({
             return (
               <Table.Row
                 key={`${competitorAndTheirResults.id}-${result.round_wcif_id}`}
+                colorPalette={
+                  pendingQuitCompetitors.has(competitorAndTheirResults.id)
+                    ? "red"
+                    : undefined
+                }
               >
                 {showText && (
                   <LivePositionCell

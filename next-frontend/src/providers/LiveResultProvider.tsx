@@ -22,6 +22,8 @@ export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
 interface LiveResultContextType {
   liveResultsByRegistrationId: LiveResultsByRegistrationId;
   pendingLiveResults: LiveResult[];
+  pendingQuitCompetitors: Set<number>;
+  addPendingQuitCompetitor: (registrationId: number) => void;
   addPendingLiveResult: (liveResult: PendingLiveResult) => void;
   connectionState: ConnectionState;
 }
@@ -59,6 +61,9 @@ export function MultiRoundResultProvider({
   children: ReactNode;
 }) {
   const [pendingResults, updatePendingResults] = useState<LiveResult[]>([]);
+  const [pendingQuitCompetitors, updatePendingQuitCompetitors] = useState<
+    Set<number>
+  >(new Set());
 
   const api = useAPI();
   const queryClient = useQueryClient();
@@ -127,6 +132,9 @@ export function MultiRoundResultProvider({
             !updated.map((u) => u.registration_id).includes(r.registration_id),
         ),
       );
+      updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
+        currentlyQuitCompetitors.difference(new Set(deleted)),
+      );
     }
   };
 
@@ -143,6 +151,12 @@ export function MultiRoundResultProvider({
     [liveResultsByRegistrationId],
   );
 
+  const addPendingQuitCompetitor = useCallback((registrationId: number) => {
+    updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
+      currentlyQuitCompetitors.add(registrationId),
+    );
+  }, []);
+
   const roundIds = initialRounds.map((r) => r.id);
   const connectionState = useResultsSubscriptions(roundIds, onReceived);
 
@@ -152,6 +166,8 @@ export function MultiRoundResultProvider({
         liveResultsByRegistrationId,
         pendingLiveResults: pendingResults,
         addPendingLiveResult,
+        pendingQuitCompetitors,
+        addPendingQuitCompetitor,
         connectionState,
       }}
     >

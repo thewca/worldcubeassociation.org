@@ -8,6 +8,7 @@ import PendingResultsTable from "@/components/live/PendingResultsTable";
 import { LiveCompetitor } from "@/types/live";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
+import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 
 export default function LiveUpdatingResultsTable({
   roundWcifId,
@@ -31,8 +32,12 @@ export default function LiveUpdatingResultsTable({
   const [showLinkedRoundsView, setShowLinkedRoundsView] =
     useState(isLinkedRound);
 
-  const { connectionState, liveResultsByRegistrationId, pendingLiveResults } =
-    useLiveResults();
+  const {
+    connectionState,
+    liveResultsByRegistrationId,
+    pendingLiveResults,
+    pendingQuitCompetitors,
+  } = useLiveResults();
 
   const { eventId } = parseActivityCode(roundWcifId);
 
@@ -68,6 +73,7 @@ export default function LiveUpdatingResultsTable({
         formatId={formatId}
         competitionId={competitionId}
         competitors={competitors}
+        pendingQuitCompetitors={pendingQuitCompetitors}
         isAdmin={isAdmin}
         showEmpty={showEmpty}
         showLinkedRoundsView={showLinkedRoundsView}
