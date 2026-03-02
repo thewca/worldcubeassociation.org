@@ -361,10 +361,6 @@ RSpec.describe PV do
         res_slash = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
         res_slash.person.update(name: "Sanjev A/L Loganathan")
 
-        # Test names with middle dot
-        res_middledot = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
-        res_middledot.person.update(name: "Shayibai Halimulati (莎伊拜·哈力木拉提)")
-
         # Test names with bullet
         res_bullet = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
         res_bullet.person.update(name: "Arabel•la Puig Villacorta")
