@@ -2,14 +2,33 @@
 
 module Live
   module DiffHelper
+    def self.broadcast_compressed_diff(before_state, after_state, round)
+      diff = self.compressed_round_state_diff(before_state, after_state, round)
+
+      ActionCable.server.broadcast(Live::Config.broadcast_key(round.wcif_id), diff)
+    end
+
+    def self.compressed_round_state_diff(before_state, after_state, round)
+      diff = self.round_state_diff(before_state, after_state)
+      diff = self.add_forecast_stats(diff, round)
+
+      {
+        "updated" => Array.wrap(diff["updated"]).map { compress_payload it },
+        "deleted" => diff["deleted"],
+        "created" => Array.wrap(diff["created"]).map { compress_payload it },
+        'before_hash' => state_hash(before_state),
+        'after_hash' => state_hash(after_state),
+      }.compact_blank
+    end
+
     def self.round_state_diff(before_state, after_state)
       before_hash = before_state.index_by { |r| r["registration_id"] }
       after_hash = after_state.index_by { |r| r["registration_id"] }
 
       {
-        "updated" => Array.wrap(compute_updated(before_hash, after_hash)).map { compress_payload it },
+        "updated" => compute_updated(before_hash, after_hash),
         "deleted" => compute_deleted(before_hash, after_hash),
-        "created" => Array.wrap(compute_created(before_hash, after_hash)).map { compress_payload it },
+        "created" => compute_created(before_hash, after_hash),
         'before_hash' => state_hash(before_state),
         'after_hash' => state_hash(after_state),
       }.compact_blank
@@ -48,6 +67,8 @@ module Live
       "live_attempts" => "la",
       "value" => "v",
       "attempt_number" => "an",
+      "best_possible_average" => "bpa",
+      "worst_possible_average" => "wpa",
     }.freeze
 
     # To send even less data, we shorten the quite long attribute names

@@ -454,14 +454,12 @@ class Round < ApplicationRecord
     recompute_advancing
     live_results.reset
     after_quit_state = to_live_state
-    ActionCable.server.broadcast(Live::Config.broadcast_key(wcif_id),
-                                 Live::DiffHelper.round_state_diff(before_quit_state, after_quit_state))
+    Live::DiffHelper.broadcast_compressed_diff(before_quit_state, after_quit_state, self)
 
     unless first_round?
       previous_round.live_results.reset
       after_quit_state_previous_round = previous_round.to_live_state
-      ActionCable.server.broadcast(Live::Config.broadcast_key(previous_round.wcif_id),
-                                   Live::DiffHelper.round_state_diff(before_quit_state_previous_round, after_quit_state_previous_round))
+      Live::DiffHelper.broadcast_compressed_diff(before_quit_state_previous_round, after_quit_state_previous_round, self)
     end
 
     quit_count
