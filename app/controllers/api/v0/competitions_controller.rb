@@ -188,6 +188,15 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def update_wcif
     competition = competition_from_params
     require_can_manage!(competition)
+
+    # Only admins can update WCIF (including schedule) after results are submitted
+    if competition.results_submitted? && !current_user.can_admin_competitions?
+      return render status: :forbidden, json: {
+        status: "Error while saving WCIF",
+        error: "The competition data cannot be edited after results have been submitted.",
+      }
+    end
+
     wcif = params.permit!.to_h
     wcif = wcif["_json"] || wcif
     competition.set_wcif!(wcif, require_user!)
