@@ -135,6 +135,9 @@ Style/SignalException:
 Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
 
+Layout/IndentationWidth:
+  EnforcedStyleAlignWith: relative_to_receiver
+
 # This causes a bunch of false positives as of 2025-03-17
 Rails/ActionControllerFlashBeforeRender:
   Enabled: false
