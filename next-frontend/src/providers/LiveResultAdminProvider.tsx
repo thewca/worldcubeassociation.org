@@ -8,7 +8,6 @@ import {
 import { Format } from "@/lib/wca/data/formats";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
-import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
 
 interface AdminResultsContextValue {
   registrationId: number | undefined;

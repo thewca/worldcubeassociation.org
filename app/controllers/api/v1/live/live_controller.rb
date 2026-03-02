@@ -117,9 +117,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     round = Round.find_by_wcif_id!(wcif_id, competition.id, includes: [:live_results])
     result = round.live_results.find_by!(registration_id: registration_id)
 
-    if should_advance_next
-      return render json: { status: "Can't advance next for first rounds" }, status: :bad_request if round.first_round?
-    end
+    return render json: { status: "Can't advance next for first rounds" }, status: :bad_request if should_advance_next && round.first_round?
 
     return render json: { status: "Cannot quit competitor with results" }, status: :bad_request if result.live_attempts.any?
 
