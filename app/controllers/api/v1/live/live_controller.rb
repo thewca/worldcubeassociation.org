@@ -5,7 +5,8 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
   skip_before_action :require_user!, only: %i[round_results by_person podiums]
 
   def add_or_update_result
-    results = params.expect(attempts: [%i[value attempt_number]])
+    # can't use .expect here because [] is valid for attempts
+    results = params.permit(attempts: %i[value attempt_number]).fetch(:attempts, [])
     round_id = params.require(:round_id)
     competition = Competition.find(params.require(:competition_id))
     registration_id = params.require(:registration_id)
