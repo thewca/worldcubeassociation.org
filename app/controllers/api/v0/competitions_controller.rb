@@ -191,10 +191,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     # Only admins can update WCIF (including schedule) after results are submitted
     if competition.results_submitted? && !current_user.can_admin_competitions?
-      return render status: :forbidden, json: {
+      render status: :forbidden, json: {
         status: "Error while saving WCIF",
         error: "The competition data cannot be edited after results have been submitted.",
       }
+      return
     end
 
     wcif = params.permit!.to_h

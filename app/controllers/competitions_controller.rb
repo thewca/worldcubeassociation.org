@@ -100,10 +100,10 @@ class CompetitionsController < ApplicationController
     @competition = competition_from_params(includes: [{ competition_events: { rounds: { competition_event: [:event] } }, competition_venues: { venue_rooms: { schedule_activities: [:child_activities] } } }])
 
     # Only admins can access schedule after results are submitted
-    if @competition.results_submitted? && !current_user.can_admin_competitions?
-      flash[:danger] = "The schedule cannot be edited after results have been submitted."
-      redirect_to competition_path(@competition)
-    end
+    return unless @competition.results_submitted? && !current_user.can_admin_competitions?
+
+    flash[:danger] = "The schedule cannot be edited after results have been submitted."
+    redirect_to competition_path(@competition)
   end
 
   def get_nearby_competitions(competition)
