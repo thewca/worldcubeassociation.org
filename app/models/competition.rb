@@ -1473,7 +1473,6 @@ class Competition < ApplicationRecord
     :single_rank,
     :tied_previous,
     :pos,
-    keyword_init: true,
   )
 
   # rubocop:disable Lint/StructNewOverride
@@ -1482,7 +1481,6 @@ class Competition < ApplicationRecord
     :sorted_rankings,
     :sort_by,
     :sort_by_second,
-    keyword_init: true,
   )
   # rubocop:enable Lint/StructNewOverride
 
