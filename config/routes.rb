@@ -61,6 +61,7 @@ Rails.application.routes.draw do
   post 'users/update_user_data' => 'users#update_user_data'
   post 'users/merge' => 'users#merge'
   post 'users/assign_wca_id' => 'users#assign_wca_id'
+  post 'users/confirm_wca_id' => 'users#confirm_wca_id', as: :confirm_wca_id
   get '/users/registrations' => 'users#registrations', as: :helpful_queries_registrations
   get '/users/organized-competitions' => 'users#organized_competitions', as: :helpful_queries_organized_competitions
   get '/users/delegated-competitions' => 'users#delegated_competitions', as: :helpful_queries_delegated_competitions

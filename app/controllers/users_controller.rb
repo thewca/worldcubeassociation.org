@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
   before_action :redirect_if_cannot_edit_user, only: %i[edit update]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search merge]
-  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id]
+  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id]
   before_action -> { check_edit_access }, only: %i[show_for_edit update_user_data]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
@@ -108,6 +108,23 @@ class UsersController < ApplicationController
     from_user.transfer_data_to(to_user)
 
     render status: :ok, json: { success: true }
+  end
+
+  def confirm_wca_id
+    user = User.find(params.require(:userId))
+    wca_id = params.require(:wcaId)
+    person = Person.find_by(wca_id: wca_id)
+
+    return redirect_to edit_user_path(user), flash: { danger: "WCA ID #{wca_id} does not exist." } if person.nil?
+    return redirect_to edit_user_path(user), flash: { danger: "User already has a WCA ID: #{user.wca_id}." } if user.wca_id.present?
+    return redirect_to edit_user_path(user), flash: { danger: "WCA ID #{wca_id} is already assigned to another user." } if person.user.present?
+
+    ActiveRecord::Base.transaction do
+      user.assign_wca_id(wca_id)
+      user.update!(unconfirmed_wca_id: nil, delegate_id_to_handle_wca_id_claim: nil)
+    end
+
+    redirect_to edit_user_path(user), flash: { success: "Successfully confirmed WCA ID #{wca_id}." }
   end
 
   def assign_wca_id

@@ -76,16 +76,14 @@
                     <%= t 'activerecord.attributes.user.unconfirmed_wca_id' %>
                   </label>
                   <div class="input-group">
-                    <%= f.input_field :unconfirmed_wca_id, as: :wca_id, disabled: !editable_fields.include?(:unconfirmed_wca_id), class: "form-control" %>
+                    <%= f.input_field :unconfirmed_wca_id, as: :wca_id, disabled: true, class: "form-control" %>
                     <span class="input-group-addon">
-                      <a href="#" id="unconfirmed-wca-id-profile" target="_blank">
+                      <a href="<%= person_path(@user.unconfirmed_wca_id) %>" id="unconfirmed-wca-id-profile" target="_blank">
                         <%= t '.profile' %>
                       </a>
                     </span>
                     <div class="input-group-btn">
-                      <button type="button" class="btn btn-default" id="approve-wca-id">
-                        <%= t '.approve' %>
-                      </button>
+                      <%= link_to t('.approve'), confirm_wca_id_path(userId: @user.id, wcaId: @user.unconfirmed_wca_id), method: :post, data: { confirm: t('.approve_confirm', wca_id: @user.unconfirmed_wca_id) }, class: "btn btn-default", id: "approve-wca-id" %>
                     </div>
                   </div>
                 </div>
