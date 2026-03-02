@@ -115,18 +115,17 @@ RSpec.describe "WCA Live API" do
       expect do
         delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request
       end.to have_broadcasted_to(Live::Config.broadcast_key(final.wcif_id))
-               .from_channel(ApplicationCable::Channel)
-               .with(hash_including(deleted: [registrations.first.id],
-                                    before_hash: before_hash,
-                                    created: [{ "advancing" => false,
-                                                "advancing_questionable" => false,
-                                                "average" => 0,
-                                                "best" => 0,
-                                                "average_record_tag" => nil,
-                                                "registration_id" => registrations.third.id,
-                                                "single_record_tag" => nil,
-                                                "live_attempts" => [],
-                                              }].map { Live::DiffHelper.compress_payload it }))
+        .from_channel(ApplicationCable::Channel)
+        .with(hash_including(deleted: [registrations.first.id],
+                             before_hash: before_hash,
+                             created: [{ "advancing" => false,
+                                         "advancing_questionable" => false,
+                                         "average" => 0,
+                                         "best" => 0,
+                                         "average_record_tag" => nil,
+                                         "registration_id" => registrations.third.id,
+                                         "single_record_tag" => nil,
+                                         "live_attempts" => [] }].map { Live::DiffHelper.compress_payload it }))
     end
   end
 end
