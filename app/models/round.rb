@@ -427,23 +427,29 @@ class Round < ApplicationRecord
 
       is_quit = result.destroy
 
-      return is_quit ? 1 : 0 if first_round?
+      if first_round?
+        is_quit ? 1 : 0
+      else
 
-      # Set the last person that didn't advance to advancing if wanted
-      # We need to do this before marking the competitor as quit as otherwise
-      # the quit competitor could be the "best non-advancing" competitor
-      if should_advance_next
-        # The scope is ordered by global_pos by default
-        to_advance = previous_round.live_results.where.not(advancing: true).first
-        to_advance.update(advancing: true)
-        live_results.create(**LiveResult.empty_result_attributes(to_advance.registration_id, id))
+        # Set the last person that didn't advance to advancing if wanted
+        # We need to do this before marking the competitor as quit as otherwise
+        # the quit competitor could be the "best non-advancing" competitor
+        if should_advance_next
+          # The scope is ordered by global_pos by default
+          to_advance = previous_round.live_results.where.not(advancing: true).first
+          to_advance.update(advancing: true)
+          live_results.create(**LiveResult.empty_result_attributes(to_advance.registration_id, id))
+        end
+
+        # We need to also quit the result from the previous round so advancement can be correctly shown
+        previous_round_results = previous_round.linked_round.present? ? previous_round.linked_round.live_results : previous_round.live_results
+
+        previous_round_results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
       end
-
-      # We need to also quit the result from the previous round so advancement can be correctly shown
-      previous_round_results = previous_round.linked_round.present? ? previous_round.linked_round.live_results : previous_round.live_results
-
-      previous_round_results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
     end
+
+    return quit_count if quit_count.zero?
+
     # Now that the transaction has finished we can notify the clients
     recompute_advancing
     live_results.reset

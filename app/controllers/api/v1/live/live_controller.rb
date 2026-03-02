@@ -121,7 +121,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "Cannot quit competitor with results" }, status: :bad_request if result.live_attempts.any?
 
-    quit_count = round.quit_from_round!(registration_id, @current_user, should_advance_next)
+    quit_count = round.quit_from_round!(registration_id, @current_user, should_advance_next: should_advance_next)
 
     render json: { status: "ok", quit: quit_count }
   end
