@@ -453,7 +453,7 @@ class Round < ApplicationRecord
 
     unless first_round?
       previous_round.live_results.reset
-      after_quit_state_previous_round = previous_round.state_hash
+      after_quit_state_previous_round = previous_round.to_live_state
       ActionCable.server.broadcast(Live::Config.broadcast_key(previous_round.wcif_id),
                                    Live::DiffHelper.round_state_diff(before_quit_state_previous_round, after_quit_state_previous_round))
     end

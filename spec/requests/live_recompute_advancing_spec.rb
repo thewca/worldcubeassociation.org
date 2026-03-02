@@ -173,6 +173,29 @@ RSpec.describe "WCA Live API" do
         # But still part of the first round competitors
         expect(round.live_competitors.count).to eq 5
       end
+
+      it "quit from next round advances next competitor if set" do
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+        final = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
+
+        5.times do |i|
+          create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
+        end
+
+        expect(round.total_competitors).to eq 5
+        expect(round.competitors_live_results_entered).to eq 5
+
+        # Open next round and quit first result from it while letting the next one advance
+        final.open_and_lock_previous(User.first)
+        final.quit_from_round!(registrations.first.id, User.first, should_advance_next: true)
+
+        # Next Competitor is marked as advancing
+        expect(round.live_results.reload.pluck(:global_pos, :advancing)).to eq([[1, false], [2, true], [3, true], [4, false], [5, false]])
+
+        # Two competitors advance
+        expect(final.live_competitors.count).to eq 2
+        expect(final.live_competitors.second.id).to eq registrations.third.id
+      end
     end
   end
 end
