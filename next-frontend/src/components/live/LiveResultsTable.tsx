@@ -22,7 +22,7 @@ export default function LiveResultsTable({
   roundWcifId,
   competitionId,
   competitors,
-  pendingQuitCompetitors,
+  pendingQuitCompetitors = new Set(),
   isAdmin = false,
   showEmpty = true,
   showLinkedRoundsView = false,
@@ -32,7 +32,7 @@ export default function LiveResultsTable({
   roundWcifId: string;
   competitionId: string;
   competitors: LiveCompetitor[];
-  pendingQuitCompetitors: Set<number>;
+  pendingQuitCompetitors?: Set<number>;
   isAdmin?: boolean;
   showEmpty?: boolean;
   showLinkedRoundsView?: boolean;
