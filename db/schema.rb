@@ -804,7 +804,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_164242) do
     t.bigint "live_result_id"
     t.datetime "updated_at", null: false
     t.integer "value", null: false
-    t.index ["live_result_id"], name: "fk_rails_b8d7c73463"
+    t.index ["live_result_id"], name: "index_live_attempts_on_live_result_id"
   end
 
   create_table "live_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
