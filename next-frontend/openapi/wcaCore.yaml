@@ -30,7 +30,7 @@ paths:
     $ref: 'paths/competitions/live/ClearRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/open:
     $ref: 'paths/competitions/live/OpenRound.yaml'
-  /v1/competitions/{competitionId}/rounds/{round_id}/{:registration_id}/quit:
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}:
     $ref: 'paths/competitions/live/QuitCompetitor.yaml'
   /v1/competitions/{competitionId}/live/podiums:
     $ref: 'paths/competitions/live/LivePodiums.yaml'

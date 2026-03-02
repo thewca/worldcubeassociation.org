@@ -93,7 +93,7 @@ export function LiveResultAdminProvider({
 
   const { mutate: mutateQuit, isPending: isPendingQuit } = api.useMutation(
     "delete",
-    "/v1/competitions/{competitionId}/rounds/{round_id}/{:registration_id}/quit",
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
     {
       onSuccess: () => {},
       onError: () => {

@@ -164,7 +164,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/competitions/{competitionId}/rounds/{round_id}/{:registration_id}/quit": {
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}": {
         parameters: {
             query?: never;
             header?: never;

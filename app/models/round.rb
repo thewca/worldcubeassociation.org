@@ -202,7 +202,7 @@ class Round < ApplicationRecord
 
   def open_round!
     empty_results = advancing_registrations.map do |r|
-      { registration_id: r.id, round_id: id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
+      LiveResult.empty_result_attributes(r.id, id)
     end
     LiveResult.insert_all!(empty_results)
   end
@@ -419,19 +419,25 @@ class Round < ApplicationRecord
     number == 1 || (linked_round.present? && linked_round.first_round_in_link.number == 1)
   end
 
-  def state_hash
-    Live::DiffHelper.state_hash(to_live_state)
-  end
-
-  def quit_from_round!(registration_id, quitting_user)
-    before_quit_hash = state_hash
-    before_quit_hash_next_round = round.previous_round.state_hash unless first_round?
-    quit_count = ActiveRecord::Base.transaction do
+  def quit_from_round!(registration_id, quitting_user, should_advance_next: false)
+    before_quit_state = to_live_state
+    before_quit_state_previous_round = previous_round.to_live_state unless first_round?
+    quit_count = transaction do
       result = live_results.find_by!(registration_id: registration_id)
 
       is_quit = result.destroy
 
       return is_quit ? 1 : 0 if first_round?
+
+      # Set the last person that didn't advance to advancing if wanted
+      # We need to do this before marking the competitor as quit as otherwise
+      # the quit competitor could be the "best non-advancing" competitor
+      if should_advance_next
+        # The scope is ordered by global_pos by default
+        to_advance = previous_round.live_results.where.not(advancing: true).first
+        to_advance.update(advancing: true)
+        live_results.create(**LiveResult.empty_result_attributes(to_advance.registration_id, id))
+      end
 
       # We need to also quit the result from the previous round so advancement can be correctly shown
       previous_round_results = previous_round.linked_round.present? ? previous_round.linked_round.live_results : previous_round.live_results
@@ -439,18 +445,17 @@ class Round < ApplicationRecord
       previous_round_results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
     end
     # Now that the transaction has finished we can notify the clients
+    recompute_advancing
     live_results.reset
-    after_quit_hash = state_hash
-    ActionCable.server.broadcast(Live::Config.broadcast_key(wcif_id), { "deleted": [registration_id],
-                                                                        "before_hash": before_quit_hash,
-                                                                        "after_hash": after_quit_hash })
+    after_quit_state = to_live_state
+    ActionCable.server.broadcast(Live::Config.broadcast_key(wcif_id),
+                                 Live::DiffHelper.round_state_diff(before_quit_state, after_quit_state))
 
     unless first_round?
       previous_round.live_results.reset
-      after_quit_hash_next_round = previous_round.state_hash
-      ActionCable.server.broadcast(Live::Config.broadcast_key(previous_round.wcif_id), { "updated": [{ "r": registration_id, "ad": false, "adq": false },
-                                                                                         "before_hash": before_quit_hash_next_round,
-                                                                                         "after_hash": after_quit_hash_next_round] })
+      after_quit_state_previous_round = previous_round.state_hash
+      ActionCable.server.broadcast(Live::Config.broadcast_key(previous_round.wcif_id),
+                                   Live::DiffHelper.round_state_diff(before_quit_state_previous_round, after_quit_state_previous_round))
     end
 
     quit_count

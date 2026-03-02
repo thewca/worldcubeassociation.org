@@ -6,6 +6,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
   def add_or_update_result
     # can't use .expect here because [] is valid for attempts
+    # TODO: Think about if a synchronous route instead would make sense instead
     results = params.permit(attempts: %i[value attempt_number]).fetch(:attempts, [])
     round_id = params.require(:round_id)
     competition = Competition.find(params.require(:competition_id))
@@ -109,16 +110,20 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     competition = Competition.find(params.require(:competition_id))
     wcif_id = params.require(:round_id)
     registration_id = params.require(:registration_id)
-    should_advance_next = params.require(:advance_next)
+    should_advance_next = params[:advance_next]
 
     require_manage!(competition)
 
     round = Round.find_by_wcif_id!(wcif_id, competition.id, includes: [:live_results])
     result = round.live_results.find_by!(registration_id: registration_id)
 
+    if should_advance_next
+      return render json: { status: "Can't advance next for first rounds" }, status: :bad_request if round.first_round?
+    end
+
     return render json: { status: "Cannot quit competitor with results" }, status: :bad_request if result.live_attempts.any?
 
-    quit_count = round.quit_from_round!(registration_id, @current_user)
+    quit_count = round.quit_from_round!(registration_id, @current_user, should_advance_next)
 
     render json: { status: "ok", quit: quit_count }
   end
