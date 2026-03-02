@@ -134,12 +134,7 @@ export function LiveResultAdminProvider({
         path: { competitionId, roundId },
       },
       body: {
-        attempts: zeroedArrayOfSize(format.expected_solve_count).map(
-          (attempt, index) => ({
-            value: attempt,
-            attempt_number: index + 1,
-          }),
-        ),
+        attempts: [],
         registration_id: registrationId,
       },
     });

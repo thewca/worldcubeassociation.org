@@ -8,7 +8,6 @@ import PendingResultsTable from "@/components/live/PendingResultsTable";
 import { LiveCompetitor } from "@/types/live";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
-import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 
 export default function LiveUpdatingResultsTable({
   roundWcifId,

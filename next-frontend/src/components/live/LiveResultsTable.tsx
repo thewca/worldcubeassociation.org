@@ -14,6 +14,7 @@ import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
 import { mergeAndOrderResults } from "@/lib/live/mergeAndOrderResults";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { LiveCompetitor } from "@/types/live";
+import ResultMenu from "@/components/live/Admin/ResultMenu";
 
 export default function LiveResultsTable({
   resultsByRegistrationId,
@@ -92,7 +93,11 @@ export default function LiveResultsTable({
                 )}
                 {isAdmin && (
                   <Table.Cell>
-                    {competitorAndTheirResults.registrant_id}
+                    <ResultMenu
+                      result={result}
+                      competitor={competitorAndTheirResults}
+                      competitionId={competitionId}
+                    />
                   </Table.Cell>
                 )}
                 {showText && (

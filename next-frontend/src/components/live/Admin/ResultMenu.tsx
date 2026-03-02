@@ -1,12 +1,12 @@
 "use client";
 
-import { Link, Menu, Portal, Text } from "@chakra-ui/react";
+import { Button, Link, Menu, Portal } from "@chakra-ui/react";
 import { useState } from "react";
 import { LiveCompetitor, LiveResult } from "@/types/live";
 import { route } from "nextjs-routes";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 
-function ResultMenu({
+export default function ResultMenu({
   result,
   competitor,
   competitionId,
@@ -38,22 +38,17 @@ function ResultMenu({
   }
 
   return (
-    <Menu.Root
-      open={isOpen}
-      onOpenChange={({ open }) => setIsOpen(open)}
-      positioning={{
-        strategy: "fixed",
-        placement: "bottom",
-      }}
-    >
+    <Menu.Root open={isOpen} onOpenChange={({ open }) => setIsOpen(open)}>
+      <Menu.Trigger asChild>
+        <Button variant="outline" size="sm">
+          {competitor.registrant_id}
+        </Button>
+      </Menu.Trigger>
       <Portal>
         <Menu.Positioner>
           <Menu.Content>
             {result && (
               <Menu.ItemGroup>
-                <Menu.ItemGroupLabel>
-                  <Text>{competitor.name}</Text>
-                </Menu.ItemGroupLabel>
                 <Menu.Item
                   value="edit"
                   onClick={handleEditClick}

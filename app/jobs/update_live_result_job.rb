@@ -6,6 +6,7 @@ class UpdateLiveResultJob < ApplicationJob
 
   def perform(live_result, results, entered_by_id)
     previous_attempts = live_result.live_attempts.index_by(&:attempt_number)
+    new_attempt_numbers = results.map { |r| r[:attempt_number] }.to_set
 
     new_attempts = results.map do |r|
       previous_attempt = previous_attempts[r[:attempt_number]]
@@ -19,6 +20,10 @@ class UpdateLiveResultJob < ApplicationJob
       else
         LiveAttempt.build_with_history_entry(r[:value], r[:attempt_number], entered_by_id)
       end
+    end
+
+    previous_attempts.each do |attempt_number, attempt|
+      attempt.destroy unless new_attempt_numbers.include?(attempt_number)
     end
 
     round = live_result.round
