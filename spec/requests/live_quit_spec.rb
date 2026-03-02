@@ -28,6 +28,32 @@ RSpec.describe "WCA Live API" do
       expect(result).to be_nil
     end
 
+    it "Correctly quits a result from the first round and advances the next competitor" do
+      sign_in delegate
+
+      round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+      final = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
+
+      5.times do |i|
+        create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
+      end
+
+      final.open_and_lock_previous(User.first)
+
+      live_request = {
+        advance_next: true,
+      }
+
+      delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request
+      expect(response).to be_successful
+
+      result = LiveResult.find_by(round_id: final.id, registration_id: registrations.first.id)
+      expect(result).to be_nil
+
+      result = LiveResult.find_by(round_id: final.id, registration_id: registrations.third.id)
+      expect(result).to be_present
+    end
+
     it "Broadcasts to the first round when quitting first round" do
       sign_in delegate
 
@@ -67,6 +93,40 @@ RSpec.describe "WCA Live API" do
         .with(hash_including(updated: [{ "advancing" => false, "advancing_questionable" => false, "registration_id" => registrations.first.id },
                                        { "advancing" => true, "registration_id" => registrations.third.id }].map { Live::DiffHelper.compress_payload it },
                              before_hash: before_hash))
+    end
+
+    it "Broadcasts to second round when quitting second round with advancing set" do
+      sign_in delegate
+
+      round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+      final = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
+
+      5.times do |i|
+        create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
+      end
+
+      final.open_and_lock_previous(User.first)
+      before_hash = Live::DiffHelper.state_hash(final.to_live_state)
+
+      live_request = {
+        advance_next: true,
+      }
+
+      expect do
+        delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request
+      end.to have_broadcasted_to(Live::Config.broadcast_key(final.wcif_id))
+               .from_channel(ApplicationCable::Channel)
+               .with(hash_including(deleted: [registrations.first.id],
+                                    before_hash: before_hash,
+                                    created: [{ "advancing" => false,
+                                                "advancing_questionable" => false,
+                                                "average" => 0,
+                                                "best" => 0,
+                                                "average_record_tag" => nil,
+                                                "registration_id" => registrations.third.id,
+                                                "single_record_tag" => nil,
+                                                "live_attempts" => [],
+                                              }].map { Live::DiffHelper.compress_payload it }))
     end
   end
 end
