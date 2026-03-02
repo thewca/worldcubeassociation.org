@@ -419,8 +419,14 @@ class Round < ApplicationRecord
     number == 1 || (linked_round.present? && linked_round.first_round_in_link.number == 1)
   end
 
+  def state_hash
+    Live::DiffHelper.state_hash(to_live_state)
+  end
+
   def quit_from_round!(registration_id, quitting_user)
-    ActiveRecord::Base.transaction do
+    before_quit_hash = state_hash
+    before_quit_hash_next_round = round.previous_round.state_hash unless first_round?
+    quit_count = ActiveRecord::Base.transaction do
       result = live_results.find_by!(registration_id: registration_id)
 
       is_quit = result.destroy
@@ -432,6 +438,22 @@ class Round < ApplicationRecord
 
       previous_round_results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
     end
+    # Now that the transaction has finished we can notify the clients
+    live_results.reset
+    after_quit_hash = state_hash
+    ActionCable.server.broadcast(Live::Config.broadcast_key(wcif_id), { "deleted": [registration_id],
+                                                                        "before_hash": before_quit_hash,
+                                                                        "after_hash": after_quit_hash })
+
+    unless first_round?
+      previous_round.live_results.reset
+      after_quit_hash_next_round = previous_round.state_hash
+      ActionCable.server.broadcast(Live::Config.broadcast_key(previous_round.wcif_id), { "updated": [{ "r": registration_id, "ad": false, "adq": false },
+                                                                                         "before_hash": before_quit_hash_next_round,
+                                                                                         "after_hash": after_quit_hash_next_round] })
+    end
+
+    quit_count
   end
 
   def wcif_id

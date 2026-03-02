@@ -172,10 +172,10 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        /** Clears a round deleting all results */
-        put: operations["quitCompetitor"];
+        put?: never;
         post?: never;
-        delete?: never;
+        /** Clears a round deleting all results */
+        delete: operations["quitCompetitor"];
         options?: never;
         head?: never;
         patch?: never;

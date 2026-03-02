@@ -1,4 +1,4 @@
-put:
+delete:
   summary: Clears a round deleting all results
   tags:
     - live

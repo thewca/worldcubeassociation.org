@@ -8,6 +8,7 @@ import {
 import { Format } from "@/lib/wca/data/formats";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
+import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
 
 interface AdminResultsContextValue {
   registrationId: number | undefined;
@@ -91,14 +92,12 @@ export function LiveResultAdminProvider({
   );
 
   const { mutate: mutateQuit, isPending: isPendingQuit } = api.useMutation(
-    "put",
+    "delete",
     "/v1/competitions/{competitionId}/rounds/{round_id}/{:registration_id}/quit",
     {
-      onSuccess: () => {
-        // Do we remove the competitor here or do we wait for the web socket update?
-      },
+      onSuccess: () => {},
       onError: () => {
-        setError("Failed to update results. Please try again.");
+        setError("Failed to Quit Competitor. Please try again.");
       },
     },
   );
