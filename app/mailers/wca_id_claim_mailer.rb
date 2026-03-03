@@ -11,6 +11,16 @@ class WcaIdClaimMailer < ApplicationMailer
     )
   end
 
+  def notify_user_of_claim_cancelled(user, unconfirmed_wca_id, cleanup: false)
+    @user = user
+    @unconfirmed_wca_id = unconfirmed_wca_id
+    @cleanup = cleanup
+    mail(
+      to: user.email,
+      subject: "Your WCA ID claim for #{unconfirmed_wca_id} has been cancelled",
+    )
+  end
+
   def notify_user_of_delegate_demotion(user, delegate, senior_delegate = nil)
     @user = user
     @delegate = delegate

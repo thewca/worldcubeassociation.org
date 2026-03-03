@@ -62,7 +62,7 @@ translations:
       - "*.activerecord.attributes.championship.*"
       - "*.activerecord.attributes.registration.*"
       - "*.datetime.*"
-      - "*.wca.errors.messages.form_error"
+      - "*.wca.errors.messages.form_error.*"
       - "*.users.edit.*"
       - "*.users.edit_avatar_thumbnail.*"
       - "*.page.*"

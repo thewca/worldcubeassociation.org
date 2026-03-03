@@ -1,18 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V0::Results::RecordsController < Api::V0::ApiController
-  REGION_WORLD = "world"
-  YEARS_ALL = "all years"
-  SHOW_100_PERSONS = "100 persons"
-  SHOWS = ['mixed', 'slim', 'separate', 'history', 'mixed history'].freeze
-  GENDERS = %w[Male Female].freeze
-  SHOW_MIXED = "mixed"
-  GENDER_ALL = "All"
-  EVENTS_ALL = "all events"
-
-  MODE_RANKINGS = "rankings"
-  MODE_RECORDS = "records"
-
+class Api::V0::Results::RecordsController < Api::V0::Results::ResultsController
   def index
     # Default params
     params[:event_id] ||= EVENTS_ALL
@@ -25,38 +13,38 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
 
     shared_constants_and_conditions
 
-    cache_params = ResultsController.compute_cache_key(MODE_RECORDS, **params_for_cache)
+    cache_params = ResultsController.compute_cache_key(MODE_RECORDS_NEXT, **params_for_cache)
     record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
 
     query = if @is_history
-              <<-SQL.squish
-        SELECT
-          results.*,
-          value,
-          competitions.cell_name competition_name,
-          competitions.start_date,
-          competitions.country_id competition_country_id
-        FROM
-          (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
-            SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') results
-          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
-          competitions
-        WHERE
-          competitions.id = competition_id
-          #{@region_condition}
-          #{@gender_condition}
-        ORDER BY
-          type desc, value, start_date desc
+              <<~SQL.squish
+                SELECT
+                  results.*,
+                  value,
+                  competitions.cell_name competition_name,
+                  competitions.start_date,
+                  competitions.country_id competition_country_id
+                FROM
+                  (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
+                    SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') results
+                  #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
+                  competitions
+                WHERE
+                  competitions.id = competition_id
+                  #{@region_condition}
+                  #{@gender_condition}
+                ORDER BY
+                  type desc, value, start_date desc
               SQL
             else
-              <<-SQL.squish
-        SELECT *
-        FROM
-          (#{current_records_query('best', 'single')}
-          UNION
-          #{current_records_query('average', 'average')}) helper
-        ORDER BY
-          type DESC, round_type_id, person_name
+              <<~SQL.squish
+                SELECT *
+                FROM
+                  (#{current_records_query('best', 'single')}
+                  UNION
+                  #{current_records_query('average', 'average')}) helper
+                ORDER BY
+                  type DESC, round_type_id, person_name
               SQL
             end
     # TODO: move this to records-page-api when migration to next is done so this can be properly precompute
@@ -73,7 +61,7 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
   end
 
   private def current_records_query(value, type)
-    <<-SQL.squish
+    <<~SQL.squish
       SELECT
       '#{type}' type,
                 results.*,
@@ -81,7 +69,7 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
                 competitions.cell_name competition_name,
                 competitions.country_id competition_country_id
       FROM
-        (SELECT event_id record_event_id, MIN(value_and_id) DIV 1000000000 value
+        (SELECT event_id record_event_id, MIN(#{value}) value
           FROM concise_#{type}_results results
           #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
           WHERE 1

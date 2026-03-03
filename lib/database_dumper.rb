@@ -138,38 +138,8 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "concise_average_results" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          average
-          continent_id
-          country_id
-          day
-          event_id
-          id
-          month
-          person_id
-          value_and_id
-          year
-        ],
-      ),
-    }.freeze,
-    "concise_single_results" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          best
-          continent_id
-          country_id
-          day
-          event_id
-          id
-          month
-          person_id
-          value_and_id
-          year
-        ],
-      ),
-    }.freeze,
+    "concise_average_results" => :skip_all_rows,
+    "concise_single_results" => :skip_all_rows,
     "connected_paypal_accounts" => :skip_all_rows,
     "connected_stripe_accounts" => :skip_all_rows,
     "manual_payment_integrations" => :skip_all_rows,
@@ -218,6 +188,53 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
+    "h2h_attempts" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          h2h_match_competitor_id
+          h2h_set_id
+          live_attempt_id
+          result_attempt_id
+          set_attempt_number
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
+    "h2h_match_competitors" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          h2h_match_id
+          user_id
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
+    "h2h_matches" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          round_id
+          match_number
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
+    "h2h_sets" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          h2h_match_id
+          set_number
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
     "inbox_persons" => :skip_all_rows,
     "inbox_results" => :skip_all_rows,
     "inbox_scramble_sets" => :skip_all_rows,
@@ -242,32 +259,8 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "ranks_average" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          id
-          best
-          continent_rank
-          country_rank
-          event_id
-          person_id
-          world_rank
-        ],
-      ),
-    }.freeze,
-    "ranks_single" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          id
-          best
-          continent_rank
-          country_rank
-          event_id
-          person_id
-          world_rank
-        ],
-      ),
-    }.freeze,
+    "ranks_average" => :skip_all_rows,
+    "ranks_single" => :skip_all_rows,
     "results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -307,12 +300,14 @@ module DatabaseDumper
           cutoff
           advancement_condition
           scramble_set_count
-          round_results
           created_at
           updated_at
           old_type
           linked_round_id
           is_h2h_mock
+        ],
+        db_default: %w[
+          round_results
         ],
       ),
     }.freeze,
@@ -641,6 +636,7 @@ module DatabaseDumper
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,
+    "sanity_check_results" => :skip_all_rows,
     "cached_results" => :skip_all_rows,
     "schema_migrations" => :skip_all_rows, # This is populated when loading our schema dump
     "user_preferred_events" => {
@@ -851,18 +847,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "wcif_extensions" => :skip_all_rows,
-    "assignments" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          id
-          registration_id
-          registration_type
-          schedule_activity_id
-          station_number
-          assignment_code
-        ],
-      ),
-    }.freeze,
+    "assignments" => :skip_all_rows,
     "paypal_records" => :skip_all_rows,
     "stripe_records" => :skip_all_rows,
     "payment_intents" => :skip_all_rows,
@@ -1228,12 +1213,9 @@ module DatabaseDumper
     "result_attempts" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
-          id
           value
           attempt_number
           result_id
-          created_at
-          updated_at
         ],
       ),
     }.freeze,
@@ -1412,7 +1394,7 @@ module DatabaseDumper
     },
     v2: {
       metadata: {
-        export_format_version: 'v2.0.0',
+        export_format_version: 'v2.0.2',
         version_label: 'current',
         end_of_life_date: nil,
       },

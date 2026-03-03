@@ -17,6 +17,16 @@ class CompetitionTab < ApplicationRecord
     competition_id
   ].freeze
 
+  STATIC_TAB_IDS = %w[
+    general-info
+    competition-events
+    competition-schedule
+  ].freeze
+
+  ALLOWED_RELATIVE_LINKS = %w[
+    register
+  ].freeze
+
   def slug
     # parameterization behaves differently under different locales. However, we
     # want slugs to be the same across all locales, so we intentionally wrap
@@ -40,7 +50,11 @@ class CompetitionTab < ApplicationRecord
       url = match[1]
       next if url.blank?
 
-      errors.add(:content, I18n.t('competitions.errors.not_full_url', url: url)) unless url.starts_with?('http://', 'https://', 'mailto:')
+      is_absolute_url = url.starts_with?('http://', 'https://', 'mailto:')
+      is_static_tab = STATIC_TAB_IDS.map { "##{it}" }.include?(url)
+      is_allowed_relative = ALLOWED_RELATIVE_LINKS.map { "/#{it}" }.include? url
+
+      errors.add(:content, I18n.t('competitions.errors.not_full_url', url: url)) unless is_absolute_url || is_static_tab || is_allowed_relative
     end
   end
 

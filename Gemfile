@@ -80,7 +80,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '9.4.0'
+gem 'shakapacker', '9.5.0'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'

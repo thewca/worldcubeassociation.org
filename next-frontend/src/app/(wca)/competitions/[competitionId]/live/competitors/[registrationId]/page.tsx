@@ -2,9 +2,9 @@ import { Container, Heading, Link, Table } from "@chakra-ui/react";
 import { getResultByPerson } from "@/lib/wca/live/getResultByPerson";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
-import { rankingCellColour } from "@/components/live/LiveResultsTable";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { Fragment } from "react";
+import { LivePositionCell } from "@/components/live/Cells";
 
 export default async function PersonResults({
   params,
@@ -49,7 +49,7 @@ export default async function PersonResults({
             <Table.Body>
               {eventResults.map((result) => {
                 const {
-                  round_id: roundId,
+                  round_wcif_id: wcifId,
                   attempts,
                   global_pos,
                   average,
@@ -57,23 +57,21 @@ export default async function PersonResults({
                 } = result;
 
                 return (
-                  <Table.Row key={`${roundId}-${key}`}>
+                  <Table.Row key={`${wcifId}-${key}`}>
                     <Table.Cell>
                       <Link
-                        href={`/competitions/${competitionId}/live/rounds/${roundId}`}
+                        href={`/competitions/${competitionId}/live/rounds/${wcifId}`}
                       >
-                        Round {roundId}
+                        Round {wcifId}
                       </Link>
                     </Table.Cell>
-                    <Table.Cell
-                      width={1}
-                      backgroundColor={rankingCellColour(result)}
-                    >
-                      {global_pos}
-                    </Table.Cell>
+                    <LivePositionCell
+                      position={global_pos}
+                      advancingParams={result}
+                    />
                     {attempts.map((a) => (
-                      <Table.Cell key={`${roundId}-${key}-${a.attempt_number}`}>
-                        {formatAttemptResult(a.result, key)}
+                      <Table.Cell key={`${wcifId}-${key}-${a.attempt_number}`}>
+                        {formatAttemptResult(a.value, key)}
                       </Table.Cell>
                     ))}
                     <Table.Cell>{formatAttemptResult(average, key)}</Table.Cell>

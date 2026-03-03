@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 
 class Api::V1::ApiController < ApplicationController
-  prepend_before_action :require_user
+  prepend_before_action :require_user!
 
-  def require_user
+  def require_user!
     @current_user = current_user || api_user
     raise WcaExceptions::MustLogIn.new if @current_user.nil?
+  end
+
+  def require_manage!(competition)
+    require_user!
+    raise WcaExceptions::NotPermitted.new("Organizer privileges required") unless @current_user.can_manage_competition?(competition)
   end
 
   def api_user
@@ -27,5 +32,9 @@ class Api::V1::ApiController < ApplicationController
   # Probably nicer to have some kind of errorcode/string depending on the model
   rescue_from ActiveRecord::RecordNotFound do |e|
     render json: { error: e.to_s, data: { model: e.model, id: e.id } }, status: :not_found
+  end
+
+  rescue_from WcaExceptions::ApiException do |e|
+    render status: e.status, json: { error: e.to_s }.reverse_merge(e.error_details.compact)
   end
 end

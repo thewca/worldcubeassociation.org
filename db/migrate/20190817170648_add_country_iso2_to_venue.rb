@@ -13,8 +13,6 @@ class AddCountryIso2ToVenue < ActiveRecord::Migration[5.2]
         #  SELECT c.id FROM Competitions c JOIN competition_venues cv ON cv.competition_id = c.id GROUP BY c.id HAVING COUNT(*) > 1
         execute "UPDATE competition_venues JOIN Competitions JOIN Countries ON Countries.id=Competitions.countryId SET competition_venues.country_iso2 = Countries.iso2;"
       end
-      dir.down do
-      end
     end
   end
 end

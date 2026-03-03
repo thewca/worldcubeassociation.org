@@ -3,6 +3,30 @@
 require 'rails_helper'
 
 RSpec.describe FinishUnfinishedPersons, type: :module do
+  shared_examples 'name_parts_without_suffix' do |input, expected|
+    it "returns #{expected} for '#{input}'" do
+      expect(described_class.name_parts_without_suffix(input)).to eq(expected)
+    end
+  end
+
+  describe '.name_parts_without_suffix' do
+    it_behaves_like 'name_parts_without_suffix', 'John Smith', %w[JOHN SMITH]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith Jr', %w[JOHN SMITH]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith Jr.', %w[JOHN SMITH]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith Sr', %w[JOHN SMITH]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith Jnr', %w[JOHN SMITH]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith Snr', %w[JOHN SMITH]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith II', %w[JOHN SMITH]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith III', %w[JOHN SMITH]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith IV', %w[JOHN SMITH]
+    it_behaves_like 'name_parts_without_suffix', 'Jr', %w[JR]
+    it_behaves_like 'name_parts_without_suffix', 'José García', %w[JOSE GARCIA]
+    it_behaves_like 'name_parts_without_suffix', 'Takeshi Yamada (山田武)', %w[TAKESHI YAMADA]
+    it_behaves_like 'name_parts_without_suffix', "John O'Connor", %w[JOHN OCONNOR]
+    it_behaves_like 'name_parts_without_suffix', 'John Silver', %w[JOHN SILVER]
+    it_behaves_like 'name_parts_without_suffix', 'John Michael David Smith Jr', %w[JOHN MICHAEL DAVID SMITH]
+  end
+
   describe '.compute_semi_id' do
     let(:competition_year) { 2023 }
     let(:available_per_semi) { {} }

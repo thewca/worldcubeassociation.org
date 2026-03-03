@@ -2,6 +2,6 @@
 
 class LiveResultsChannel < ApplicationCable::Channel
   def subscribed
-    stream_from WcaLive.broadcast_key(params[:round_id])
+    stream_from Live::Config.broadcast_key(params[:round_id])
   end
 end
