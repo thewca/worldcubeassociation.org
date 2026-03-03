@@ -459,7 +459,7 @@ class Round < ApplicationRecord
     unless first_round?
       previous_round.live_results.reset
       after_quit_state_previous_round = previous_round.to_live_state
-      Live::DiffHelper.broadcast_compressed_diff(before_quit_state_previous_round, after_quit_state_previous_round, self)
+      Live::DiffHelper.broadcast_compressed_diff(before_quit_state_previous_round, after_quit_state_previous_round, previous_round)
     end
 
     quit_count
