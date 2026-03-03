@@ -125,7 +125,7 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
             end
 
     # TODO: move this to rankings-page-api when migration to next is done so this can be properly precompute
-    rankings = Rails.cache.fetch ["rankings-page-api-next", *cache_params, record_timestamp] do
+    rankings = Rails.cache.fetch ["rankings-page-api-next", "augmented", *cache_params, record_timestamp] do
       rows = DbHelper.execute_cached_query(cache_params, record_timestamp, query)
 
       # As of writing this comment, we are maintaining two frontends.

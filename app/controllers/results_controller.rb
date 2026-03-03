@@ -400,7 +400,7 @@ class ResultsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        cached_data = Rails.cache.fetch [key_prefix, *@cache_params, @record_timestamp] do
+        cached_data = Rails.cache.fetch [key_prefix, "augmented", *@cache_params, @record_timestamp] do
           rows = DbHelper.execute_cached_query(@cache_params, @record_timestamp, @query)
 
           # First, extract unique competitions

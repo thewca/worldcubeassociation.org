@@ -49,7 +49,7 @@ class Api::V0::Results::RecordsController < Api::V0::Results::ResultsController
             end
     # TODO: move this to records-page-api when migration to next is done so this can be properly precompute
 
-    records = Rails.cache.fetch ["records-page-api-next", *cache_params, record_timestamp] do
+    records = Rails.cache.fetch ["records-page-api-next", "augmented", *cache_params, record_timestamp] do
       rows = DbHelper.execute_cached_query(cache_params, record_timestamp, query)
 
       # As of writing this comment, we are maintaining two frontends.
