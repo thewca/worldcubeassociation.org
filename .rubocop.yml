@@ -135,6 +135,9 @@ Style/SignalException:
 Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
 
+Layout/IndentationWidth:
+  EnforcedStyleAlignWith: relative_to_receiver
+
 # This causes a bunch of false positives as of 2025-03-17
 Rails/ActionControllerFlashBeforeRender:
   Enabled: false
@@ -192,6 +195,13 @@ Style/HashSyntax:
 
 Style/ArgumentsForwarding:
   RedundantBlockArgumentNames: []
+
+Style/OneClassPerFile:
+  Exclude:
+    - 'app/controllers/server_status_controller.rb'
+    - 'lib/round_results.rb'
+    - 'spec/controllers/server_status_controller_spec.rb'
+    - 'spec/jobs/wca_cronjob_spec.rb'
 
 # These are files where we accept in-memory caching as a trade-off
 # for thread safety. At the time of writing this comment, WST is confident that these three

@@ -229,7 +229,10 @@ class Round < ApplicationRecord
 
     missing_attempts = total_competitors - round_results.count
     potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
-    results_with_potential = (round_results.to_a + potential_results).sort_by(&:potential_solve_time)
+
+    # Eager load associations to avoid N+1 on potential_solve_time
+    loaded_results = round_results.includes(:live_attempts).to_a
+    results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
 
     qualifying_index = if final_round?
                          3

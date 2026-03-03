@@ -16,13 +16,19 @@ import useResultsSubscriptions, {
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
+import {
+  decompressFullResult,
+  decompressPartialResult,
+} from "@/lib/live/decompressDiff";
 
 export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
-
 interface LiveResultContextType {
   liveResultsByRegistrationId: LiveResultsByRegistrationId;
   pendingLiveResults: LiveResult[];
-  addPendingLiveResult: (liveResult: PendingLiveResult) => void;
+  addPendingLiveResult: (
+    liveResult: PendingLiveResult,
+    roundWcifId: string,
+  ) => void;
   connectionState: ConnectionState;
 }
 
@@ -79,13 +85,7 @@ export function MultiRoundResultProvider({
     queries,
     combine: (queryResults) => ({
       liveResultsByRegistrationId: _.groupBy(
-        queryResults.flatMap((r, i) =>
-          r.data.results.map((res) => ({
-            ...res,
-            // To differentiate between results for Dual Rounds
-            round_wcif_id: initialRounds[i].id,
-          })),
-        ),
+        queryResults.flatMap((r) => r.data.results),
         "registration_id",
       ),
       stateHashesByRoundId: Object.fromEntries(
@@ -111,33 +111,41 @@ export function MultiRoundResultProvider({
     if (before_hash !== stateHashesByRoundId[roundId]) {
       queryClient.refetchQueries({ queryKey: query.queryKey, exact: true });
     } else {
+      const decompressedUpdated = updated.map((r) =>
+        decompressPartialResult(r),
+      );
+
+      const decompressedCreated = created.map((r) => decompressFullResult(r));
+
       queryClient.setQueryData(query.queryKey, (oldData: LiveRound) => ({
         ...oldData,
-        results: applyDiffToLiveResults(
-          oldData.results,
-          updated,
-          created,
+        results: applyDiffToLiveResults({
+          previousResults: oldData.results,
+          updated: decompressedUpdated,
+          created: decompressedCreated,
           deleted,
-        ),
+          roundWcifId: roundId,
+        }),
         state_hash: after_hash,
       }));
       updatePendingResults((pendingResults) =>
         pendingResults.filter(
-          (r) =>
-            !updated.map((u) => u.registration_id).includes(r.registration_id),
+          (r) => !updated.map((u) => u.r).includes(r.registration_id),
         ),
       );
     }
   };
 
   const addPendingLiveResult = useCallback(
-    (liveResult: PendingLiveResult) => {
+    (liveResult: PendingLiveResult, roundWcifId: string) => {
       updatePendingResults((pending) => [
         ...pending,
-        ...applyDiffToLiveResults(
-          liveResultsByRegistrationId[liveResult.registration_id],
-          [liveResult],
-        ),
+        ...applyDiffToLiveResults({
+          previousResults:
+            liveResultsByRegistrationId[liveResult.registration_id],
+          updated: [liveResult],
+          roundWcifId: roundWcifId,
+        }),
       ]);
     },
     [liveResultsByRegistrationId],

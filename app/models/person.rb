@@ -115,7 +115,7 @@ class Person < ApplicationRecord
     all_delegates = competitions.order(:start_date).flat_map(&:staff_delegates).select(&:any_kind_of_delegate?)
     return [] if all_delegates.empty?
 
-    counts_by_delegate = all_delegates.group_by(&:itself).transform_values(&:count)
+    counts_by_delegate = all_delegates.tally
     most_frequent_delegate, _count = counts_by_delegate.max_by { |_delegate, count| count }
     most_recent_delegate = all_delegates.last
 
