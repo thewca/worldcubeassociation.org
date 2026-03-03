@@ -427,8 +427,6 @@ const customConfig = defineConfig({
           },
           fg: { value: "{colors.link}" },
         },
-        advancing: { value: "{colors.green.1A}" },
-        advancingQuestionable: { value: "{colors.yellow.1A}" },
         recordMarkers: {
           personal: { value: "{colors.orange.1A}" },
           national: { value: "{colors.green.1A}" },

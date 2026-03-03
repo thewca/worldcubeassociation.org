@@ -13,6 +13,7 @@ class TicketsEditPerson < ApplicationRecord
   belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :wca_id
 
   ACTION_TYPE = {
+    approve_edit_person_request: "approve_edit_person_request",
     reject_edit_person_request: "reject_edit_person_request",
     create_edit_person_change: "create_edit_person_change",
     update_edit_person_change: "update_edit_person_change",
@@ -23,6 +24,7 @@ class TicketsEditPerson < ApplicationRecord
   def metadata_actions_allowed_for(ticket_stakeholder)
     if ticket_stakeholder.stakeholder == UserGroup.teams_committees_group_wrt
       [
+        ACTION_TYPE[:approve_edit_person_request],
         ACTION_TYPE[:reject_edit_person_request],
         ACTION_TYPE[:create_edit_person_change],
         ACTION_TYPE[:update_edit_person_change],
@@ -32,6 +34,15 @@ class TicketsEditPerson < ApplicationRecord
     else
       []
     end
+  end
+
+  def eligible_roles_for_bcc(user)
+    return [] unless user.admin?
+
+    [
+      TicketStakeholder.stakeholder_roles[:actioner],
+      TicketStakeholder.stakeholder_roles[:requester],
+    ]
   end
 
   def self.create_ticket(wca_id, changes_requested, requester)
@@ -75,6 +86,12 @@ class TicketsEditPerson < ApplicationRecord
       )
 
       return ticket
+    end
+  end
+
+  def out_of_sync?
+    tickets_edit_person_fields.any? do |edit_person_field|
+      person.send(edit_person_field.field_name).to_s != edit_person_field.old_value
     end
   end
 

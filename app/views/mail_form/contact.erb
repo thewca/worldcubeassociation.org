@@ -13,6 +13,10 @@
   %></p>
 <% end %>
 
+<% if @resource.is_a?(ContactCompetition) && @resource.competition_url.present? %>
+  <p><%= raw(I18n.t('mail_form.competition_link_html', url: @resource.competition_url)) %></p>
+<% end %>
+
 <% unless @resource.class.mail_appendable.blank? %>
   <br /><h4 style="text-decoration:underline"><%= I18n.t :title, :scope => [ :mail_form, :request ], :default => 'Request information' %></h4>
 

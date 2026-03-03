@@ -59,30 +59,51 @@ module CompetitionsHelper
 
   def winners(competition, main_event)
     top_three = competition.results.where(event: main_event).podium.order(:pos)
+    h2h_finals = top_three.first.format_id == "h"
     results_by_place = top_three.group_by(&:pos)
 
     return t('competitions.competition_info.no_winner', event_name: main_event.name) if results_by_place.blank?
 
     winners = results_by_place[1]
-    text = t('competitions.competition_info.winner', winner: people_to_sentence(winners),
-                                                     result_sentence: pretty_print_result(winners.first),
-                                                     event_name: main_event.name)
+    text = if h2h_finals
+             t('competitions.competition_info.h2h_winner', winner: people_to_sentence(winners),
+                                                           event_name: main_event.name)
+           else
+             t('competitions.competition_info.winner', winner: people_to_sentence(winners),
+                                                       result_sentence: pretty_print_result(winners.first),
+                                                       event_name: main_event.name)
+           end
     if results_by_place[2]
-      text += " #{t('competitions.competition_info.first_runner_up',
-                    first_runner_up: people_to_sentence(results_by_place[2]),
-                    first_runner_up_result: pretty_print_result(top_three.second, short: true))}"
+      text += if h2h_finals
+                " #{t('competitions.competition_info.h2h_first_runner_up',
+                      first_runner_up: people_to_sentence(results_by_place[2]))}"
+              else
+                " #{t('competitions.competition_info.first_runner_up',
+                      first_runner_up: people_to_sentence(results_by_place[2]),
+                      first_runner_up_result: pretty_print_result(top_three.second, short: true))}"
+              end
       if results_by_place[3]
         text += " #{t('competitions.competition_info.and')}"
-        text += " #{t('competitions.competition_info.second_runner_up',
-                      second_runner_up: people_to_sentence(results_by_place[3]),
-                      second_runner_up_result: pretty_print_result(top_three.third, short: true))}"
+        text += if h2h_finals
+                  " #{t('competitions.competition_info.h2h_second_runner_up',
+                        second_runner_up: people_to_sentence(results_by_place[3]))}"
+                else
+                  " #{t('competitions.competition_info.second_runner_up',
+                        second_runner_up: people_to_sentence(results_by_place[3]),
+                        second_runner_up_result: pretty_print_result(top_three.third, short: true))}"
+                end
       else
         text += "."
       end
     elsif results_by_place[3]
-      text += " #{t('competitions.competition_info.second_runner_up',
-                    second_runner_up: people_to_sentence(results_by_place[3]),
-                    second_runner_up_result: pretty_print_result(top_three.third, short: true))}"
+      text += if h2h_finals
+                " #{t('competitions.competition_info.h2h_second_runner_up',
+                      second_runner_up: people_to_sentence(results_by_place[3]))}"
+              else
+                " #{t('competitions.competition_info.second_runner_up',
+                      second_runner_up: people_to_sentence(results_by_place[3]),
+                      second_runner_up_result: pretty_print_result(top_three.third, short: true))}"
+              end
     end
 
     text

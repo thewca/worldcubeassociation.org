@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 class ContactsController < ApplicationController
-  private def maybe_send_contact_email(contact)
+  CONTACT_DEFAULT_LOCALE = :en
+
+  private def maybe_send_contact_email(contact, force_locale: nil)
     if !contact.valid?
       render status: :bad_request, json: { error: "Invalid contact object created" }
-    elsif contact.deliver
+    elsif I18n.with_locale(force_locale) { contact.deliver }
       render status: :ok, json: { message: "Mail sent successfully" }
     else
       render status: :internal_server_error, json: { error: "Mail delivery failed" }
@@ -33,6 +35,7 @@ class ContactsController < ApplicationController
         request: request,
         logged_in_email: current_user&.email || 'None',
       ),
+      force_locale: CONTACT_DEFAULT_LOCALE,
     )
   end
 
@@ -48,6 +51,7 @@ class ContactsController < ApplicationController
         request: request,
         logged_in_email: current_user&.email || 'None',
       ),
+      force_locale: CONTACT_DEFAULT_LOCALE,
     )
   end
 
@@ -61,6 +65,7 @@ class ContactsController < ApplicationController
         request: request,
         logged_in_email: current_user&.email || 'None',
       ),
+      force_locale: CONTACT_DEFAULT_LOCALE,
     )
   end
 
@@ -164,6 +169,7 @@ class ContactsController < ApplicationController
         document: attachment,
         request: request,
       ),
+      force_locale: CONTACT_DEFAULT_LOCALE,
     )
   end
 
@@ -176,17 +182,17 @@ class ContactsController < ApplicationController
     @contact.request = request
     @contact.to_email = "results@worldcubeassociation.org"
     @contact.subject = "WCA DOB change request by #{@contact.name}"
-    maybe_send_dob_email success_url: contact_dob_url, fail_view: :dob
+    maybe_send_dob_email success_url: contact_dob_url, fail_view: :dob, force_locale: CONTACT_DEFAULT_LOCALE
   end
 
-  private def maybe_send_dob_email(success_url: nil, fail_view: nil)
+  private def maybe_send_dob_email(success_url: nil, fail_view: nil, force_locale: nil)
     if !@contact.valid?
       render fail_view
     elsif !verify_recaptcha
       # Convert flash to a flash.now, since we're about to render, not redirect.
       flash.now[:recaptcha_error] = flash[:recaptcha_error]
       render fail_view
-    elsif @contact.deliver
+    elsif I18n.with_locale(force_locale) { @contact.deliver }
       flash[:success] = I18n.t('contacts.messages.success')
       redirect_to success_url
     else

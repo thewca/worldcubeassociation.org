@@ -8,13 +8,13 @@ class ConnectedStripeAccount < ApplicationRecord
                 .incomplete
                 .stripe
                 .each do |intent|
-      next unless intent.account_id == self.account_id && intent.created?
+                  next unless intent.account_id == self.account_id && intent.created?
 
-      # Send the updated parameters to Stripe (maybe the user decided to donate in the meantime,
-      # so we need to make sure that the correct amount is being used)
-      intent.payment_record.update_amount_remote(amount_iso, currency_iso)
+                  # Send the updated parameters to Stripe (maybe the user decided to donate in the meantime,
+                  # so we need to make sure that the correct amount is being used)
+                  intent.payment_record.update_amount_remote(amount_iso, currency_iso)
 
-      return intent
+                  return intent
     end
 
     self.create_intent(registration, amount_iso, currency_iso, paying_user)

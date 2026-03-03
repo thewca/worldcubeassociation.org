@@ -32,6 +32,15 @@ class TicketsCompetitionResult < ApplicationRecord
     end
   end
 
+  def eligible_roles_for_bcc(user)
+    return [] unless user.admin?
+
+    [
+      TicketStakeholder.stakeholder_roles[:actioner],
+      TicketStakeholder.stakeholder_roles[:requester],
+    ]
+  end
+
   def self.create_ticket!(competition, delegate_message, submitted_delegate)
     ticket_metadata = TicketsCompetitionResult.create!(
       status: TicketsCompetitionResult.statuses[:submitted],
@@ -58,7 +67,7 @@ class TicketsCompetitionResult < ApplicationRecord
     )
 
     ticket_log = ticket.ticket_logs.create!(
-      action_type: TicketLog.action_types[:update_status],
+      action_type: TicketLog.action_types[:create_ticket],
       acting_user_id: submitted_delegate.id,
       acting_stakeholder_id: competition_stakeholder.id,
     )
