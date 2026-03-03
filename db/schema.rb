@@ -1616,7 +1616,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_03_105926) do
   add_foreign_key "inbox_scramble_sets", "scramble_file_uploads", column: "external_upload_id"
   add_foreign_key "inbox_scrambles", "inbox_scramble_sets"
   add_foreign_key "inbox_scrambles", "inbox_scramble_sets", column: "matched_scramble_set_id"
-  add_foreign_key "live_attempt_history_entries", "live_attempts"
+  add_foreign_key "live_attempt_history_entries", "live_attempts", on_delete: :cascade
+  add_foreign_key "live_attempts", "live_results", on_delete: :cascade
   add_foreign_key "live_results", "users", column: "locked_by_id"
   add_foreign_key "live_results", "users", column: "quit_by_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
