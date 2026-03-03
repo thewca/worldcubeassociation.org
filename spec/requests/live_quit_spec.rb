@@ -2,8 +2,8 @@
 
 require "rails_helper"
 
-def attempt_result_condition
-  AdvancementConditions::AttemptResultCondition.new(300)
+def percent_condition
+  AdvancementConditions::PercentCondition.new(40)
 end
 
 RSpec.describe "WCA Live API" do
@@ -15,7 +15,7 @@ RSpec.describe "WCA Live API" do
     it "Correctly quits a user from a first round" do
       sign_in delegate
 
-      round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+      round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
 
       registration_1 = registrations.first
       round.open_and_lock_previous(User.first)
@@ -31,7 +31,7 @@ RSpec.describe "WCA Live API" do
     it "Correctly quits a result from the first round and advances the next competitor" do
       sign_in delegate
 
-      round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+      round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
       final = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
 
       5.times do |i|
@@ -57,7 +57,7 @@ RSpec.describe "WCA Live API" do
     it "Broadcasts to the first round when quitting first round" do
       sign_in delegate
 
-      round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+      round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
       registration_1 = registrations.first
       round.open_and_lock_previous(User.first)
       before_hash = Live::DiffHelper.state_hash(round.to_live_state)
@@ -72,7 +72,7 @@ RSpec.describe "WCA Live API" do
     it "Broadcasts to first round when quitting second round with advancing set" do
       sign_in delegate
 
-      round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+      round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
       final = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
 
       5.times do |i|
@@ -98,7 +98,7 @@ RSpec.describe "WCA Live API" do
     it "Broadcasts to second round when quitting second round with advancing set" do
       sign_in delegate
 
-      round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+      round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
       final = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
 
       5.times do |i|

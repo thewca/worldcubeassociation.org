@@ -219,27 +219,31 @@ class Round < ApplicationRecord
     live_results.reset
   end
 
+  def max_qualifying(advancement_determining_results)
+    # Our Regulations allow at most 75% of competitors to proceed
+    max_qualifying = (live_results.count * 0.75).floor
+    [advancement_condition.max_advancing(advancement_determining_results), max_qualifying].min
+  end
+
   def recompute_advancing
     has_linked_round = linked_round.present?
-    advancement_determining_results = has_linked_round ? linked_round.live_results : live_results
+    round_results = has_linked_round ? linked_round.live_results : live_results
 
     # Only ranked results that are not locked can be considered for advancing.
-    round_results = advancement_determining_results.where.not(global_pos: nil).where(locked_by_id: nil)
-    round_results.update_all(advancing: false, advancing_questionable: false)
+    advancement_determining_results = round_results.where.not(global_pos: nil).where(locked_by_id: nil)
+    advancement_determining_results.update_all(advancing: false, advancing_questionable: false)
 
-    missing_attempts = total_competitors - round_results.count
+    missing_attempts = total_competitors - advancement_determining_results.count
     potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
-    results_with_potential = (round_results.to_a + potential_results).sort_by(&:potential_solve_time)
+    results_with_potential = (advancement_determining_results.to_a + potential_results).sort_by(&:potential_solve_time)
 
     qualifying_index = if final_round?
                          3
                        else
-                         # Our Regulations allow at most 75% of competitors to proceed
-                         max_qualifying = (round_results.count * 0.75).floor
-                         [advancement_condition.max_advancing(round_results), max_qualifying].min
+                         max_qualifying(advancement_determining_results)
                        end
 
-    round_results.update_all("advancing_questionable = global_pos BETWEEN 1 AND #{qualifying_index}")
+    advancement_determining_results.update_all("advancing_questionable = global_pos BETWEEN 1 AND #{qualifying_index}")
 
     # Determine which results would advance if everyone achieved their best possible attempt.
     advancing_ids = results_with_potential.take(qualifying_index).select(&:complete?).pluck(:id)
@@ -419,6 +423,42 @@ class Round < ApplicationRecord
     number == 1 || (linked_round.present? && linked_round.first_round_in_link.number == 1)
   end
 
+  # Port from https://github.com/thewca/wca-live/blob/main/lib/wca_live/scoretaking/advancing.ex#L143
+  # Basically this just removes the number one placed competitor and then sees who of the non-advancing
+  # competitors would make it
+  def next_qualifying_to_round
+    return [] if first_round?
+
+    prev_round = previous_round
+    prev_results = prev_round.linked_round.present? ? prev_round.linked_round.live_results : prev_round.live_results
+
+    return [] unless prev_results.exists?(advancing: true)
+
+    already_quit_ids = prev_results.where.not(quit_by_id: nil).pluck(:id)
+
+    first_advancing = prev_results.where(advancing: true).first
+
+    candidate_ids = prev_results
+                    .where(advancing: false)
+                    .where.not(id: already_quit_ids)
+                    .pluck(:id)
+
+    return [] if candidate_ids.empty?
+
+    ignored_ids = ([first_advancing.id] + already_quit_ids)
+
+    advancement_determining = prev_results
+                              .where.not(id: ignored_ids)
+
+    qualifying_index = prev_round.max_qualifying(advancement_determining)
+
+    hypothetically_advancing_ids = advancement_determining
+                                   .take(qualifying_index)
+                                   .filter_map(&:id)
+
+    prev_results.where(id: hypothetically_advancing_ids & candidate_ids)
+  end
+
   def quit_from_round!(registration_id, quitting_user, should_advance_next: false)
     before_quit_state = to_live_state
     before_quit_state_previous_round = previous_round.to_live_state unless first_round?
@@ -430,17 +470,6 @@ class Round < ApplicationRecord
       if first_round?
         is_quit ? 1 : 0
       else
-
-        # Set the last person that didn't advance to advancing if wanted
-        # We need to do this before marking the competitor as quit as otherwise
-        # the quit competitor could be the "best non-advancing" competitor
-        if should_advance_next
-          # The scope is ordered by global_pos by default
-          to_advance = previous_round.live_results.where.not(advancing: true).first
-          to_advance.update(advancing: true)
-          live_results.create(**LiveResult.empty_result_attributes(to_advance.registration_id, id))
-        end
-
         # We need to also quit the result from the previous round so advancement can be correctly shown
         previous_round_results = previous_round.linked_round.present? ? previous_round.linked_round.live_results : previous_round.live_results
 
@@ -449,6 +478,15 @@ class Round < ApplicationRecord
     end
 
     return quit_count if quit_count.zero?
+
+    if should_advance_next
+      to_advance = next_qualifying_to_round.first
+
+      if to_advance.present?
+        to_advance.update(advancing: true)
+        live_results.create(**LiveResult.empty_result_attributes(to_advance.registration_id, id))
+      end
+    end
 
     # Now that the transaction has finished we can notify the clients
     recompute_advancing

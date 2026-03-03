@@ -15,10 +15,10 @@ def attempt_result_condition
 end
 
 RSpec.describe "WCA Live API" do
-  describe "Advancing Recomputation" do
-    let(:competition) { create(:competition, event_ids: ["333"]) }
-    let(:registrations) { create_list(:registration, 5, :accepted, competition: competition, event_ids: ["333"]) }
+  let(:competition) { create(:competition, event_ids: ["333"]) }
+  let(:registrations) { create_list(:registration, 5, :accepted, competition: competition, event_ids: ["333"]) }
 
+  describe "Advancing Recomputation" do
     context 'with a ranking advancement condition' do
       it 'returns results with ranking better or equal to the given level' do
         round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition)
@@ -175,7 +175,7 @@ RSpec.describe "WCA Live API" do
       end
 
       it "quit from next round advances next competitor if set" do
-        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
         final = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
 
         5.times do |i|
@@ -195,6 +195,80 @@ RSpec.describe "WCA Live API" do
         # Two competitors advance
         expect(final.live_competitors.count).to eq 2
         expect(final.live_competitors.second.id).to eq registrations.third.id
+      end
+    end
+  end
+
+  describe 'Next Advancing to round' do
+    context 'when called on a first round' do
+      it 'returns an empty array' do
+        round = create(:round, number: 1, total_number_of_rounds: 1, event_id: "333", competition: competition)
+        expect(round.next_qualifying_to_round).to eq([])
+      end
+    end
+
+    context 'with RankingCondition (top 3 advance)' do
+      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition) }
+      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+
+      it 'returns the next ranked person after the cutoff' do
+        5.times { |i| create(:live_result, registration: registrations[i], round: round1, average: (i + 1) * 100) }
+
+        # Ranks 1-3 advance; rank 4 is the next qualifying person
+        next_qualifying = round2.next_qualifying_to_round
+        expect(next_qualifying.map(&:registration_id)).to contain_exactly(registrations[3].id)
+      end
+
+      it 'skips already-quit results and returns the next non-quit candidate' do
+        5.times { |i| create(:live_result, registration: registrations[i], round: round1, average: (i + 1) * 100) }
+
+        # Rank 4 has quit; rank 5 is still a valid candidate
+        rank4 = round1.live_results.order(global_pos: :asc).offset(3).first
+        rank4.update!(quit_by_id: create(:user).id)
+
+        next_qualifying = round2.next_qualifying_to_round
+        expect(next_qualifying.map(&:registration_id)).to contain_exactly(registrations[4].id)
+      end
+    end
+
+    context 'with PercentCondition where the percent itself is the binding constraint' do
+      # 40% of 5 = 2 advance; cap = floor(5 * 0.75) = 3 — cap never kicks in
+      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition) }
+      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+
+      it 'returns empty because removing first_advancing shrinks the quota further' do
+        5.times { |i| create(:live_result, registration: registrations[i], round: round1, average: (i + 1) * 100) }
+
+        # With first_advancing removed: pool=4, 40% of 4=1, cap=3 → only 1 advance
+        # That 1 is rank 2, who is already advancing — no new person qualifies
+        expect(round2.next_qualifying_to_round).to eq([])
+      end
+    end
+
+    context 'with AttemptResultCondition where the 75% cap is the binding constraint' do
+      # 4 results under 300 (100,200,250,280) but cap = floor(5*0.75) = 3
+      # So rank 4 (280) doesn't advance despite being under the threshold
+      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition) }
+      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+
+      it 'returns the person who meets the condition but was capped out' do
+        averages = [100, 200, 250, 280, 310]
+        5.times { |i| create(:live_result, registration: registrations[i], round: round1, average: averages[i]) }
+
+        # ranks 1,2,3 advance (capped). rank 4 (280) meets condition but was capped out.
+        # With rank 1 removed: pool=4, under-300 = 200,250,280 = 3, cap=3 → rank 4 qualifies
+        next_qualifying = round2.next_qualifying_to_round
+        expect(next_qualifying.map(&:registration_id)).to contain_exactly(registrations[3].id)
+      end
+
+      it 'returns empty when the next person exceeds the time threshold' do
+        averages = [100, 200, 250, 310, 400]
+        5.times { |i| create(:live_result, registration: registrations[i], round: round1, average: averages[i]) }
+
+        # ranks 1,2,3 advance (all under 300, not capped). rank 4 (310) is over threshold.
+        # With rank 1 removed: pool=4, under-300 = 200,250 = 2, cap=3 → only 2 advance
+        # Ranks 2 and 3 are already advancing — no new person qualifies
+        expect(round2.next_qualifying_to_round).to eq([])
       end
     end
   end
