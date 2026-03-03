@@ -13,7 +13,7 @@ import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissio
 
 export default function DelegateProbations() {
   const {
-    data: probationRoles, loading, error, sync,
+    data: probationRoles, loading: rolesLoading, error: rolesError, sync: rolesSync,
   } = useLoadedData(apiV0Urls.userRoles.list({ groupType: groupTypes.delegate_probation }));
   const {
     data: probationGroups,
@@ -23,8 +23,8 @@ export default function DelegateProbations() {
   const { save, saving } = useSaveAction();
   const { loggedInUserPermissions, loading: permissionsLoading } = useLoggedInUserPermissions();
 
-  if (loading || saving || probationGroupLoading || permissionsLoading) return <Loading />;
-  if (error || probationGroupError) return <Errored />;
+  if (rolesLoading || saving || probationGroupLoading || permissionsLoading) return <Loading />;
+  if (rolesError || probationGroupError) return <Errored />;
 
   const now = DateTime.now();
 
@@ -41,14 +41,14 @@ export default function DelegateProbations() {
   return (
     <>
       <h1>Delegate Probations</h1>
-      {canEditProbation && <ProbationForm save={save} sync={sync} />}
+      {canEditProbation && <ProbationForm save={save} sync={rolesSync} />}
 
       <h2>Active Probations</h2>
       <ProbationListTable
         roleList={activeRoles}
         isActive={canEditProbation}
         save={save}
-        sync={sync}
+        sync={rolesSync}
       />
 
       <h2>Past Probations</h2>
