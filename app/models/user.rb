@@ -343,6 +343,18 @@ class User < ApplicationRecord
     dummy_user.reload.destroy!
   end
 
+  after_update :react_to_cleared_wca_id, if: :recently_cleared_claims?
+
+  private def react_to_cleared_wca_id
+    raise "Daniel forgot to change this implementation to something meaningful!"
+  end
+
+  private def recently_cleared_claims?
+    CLEAR_WCA_ID_CLAIM_ATTRIBUTES.all? do |attr, target_value|
+      self.attribute_previously_changed?(attr.to_sym, to: target_value)
+    end
+  end
+
   def avatar
     self.current_avatar || UserAvatar.default_avatar(self)
   end
