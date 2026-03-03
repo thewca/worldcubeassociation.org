@@ -18,6 +18,9 @@ interface AttemptsFormProps {
   eventId: string;
 }
 
+const toCompetitorString = (competitor: LiveCompetitor) =>
+  `${competitor.name} (${competitor.registrant_id})`;
+
 export default function AttemptsForm({
   competitors,
   solveCount,
@@ -38,8 +41,7 @@ export default function AttemptsForm({
   const { collection, filter } = useListCollection({
     initialItems: competitors,
     itemToValue: (competitor) => competitor.id.toString(),
-    itemToString: (competitor) =>
-      `${competitor.name} (${competitor.registrant_id})`,
+    itemToString: toCompetitorString,
     filter: (itemText, filterText, item) =>
       itemText.includes(filterText) ||
       parseInt(filterText, 10) === item.registrant_id,
@@ -47,7 +49,7 @@ export default function AttemptsForm({
 
   const selectedCompetitor = competitors.find((c) => c.id === registrationId);
   const inputDisplayValue = selectedCompetitor
-    ? `${selectedCompetitor.name} (${selectedCompetitor.registrant_id})`
+    ? toCompetitorString(selectedCompetitor)
     : "";
 
   return (
@@ -81,7 +83,7 @@ export default function AttemptsForm({
               <Combobox.Empty>No items found</Combobox.Empty>
               {collection.items.map((item) => (
                 <Combobox.Item item={item} key={item.id}>
-                  {`${item.name} (${item.registrant_id})`}
+                  {toCompetitorString(item)}
                   <Combobox.ItemIndicator />
                 </Combobox.Item>
               ))}
