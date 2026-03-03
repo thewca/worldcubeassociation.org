@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_21_105326) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_03_105926) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1054,7 +1054,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_21_105326) do
     t.index ["name"], name: "index_regional_organizations_on_name"
   end
 
-  create_table "regional_records_lookup", primary_key: "result_id", id: :integer, default: nil, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "regional_records_lookup", primary_key: "result_id", id: :bigint, default: nil, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "average", default: 0, null: false
     t.integer "best", default: 0, null: false
     t.date "competition_end_date", null: false
@@ -1147,7 +1147,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_21_105326) do
     t.index ["value"], name: "index_result_attempts_on_value"
   end
 
-  create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "average", default: 0, null: false
     t.integer "best", default: 0, null: false
     t.string "competition_id", limit: 32, default: "", null: false
