@@ -81,7 +81,8 @@ class LiveResult < ApplicationRecord
   end
 
   def complete?
-    live_attempts.where.not(value: 0).count == round.format.expected_solve_count
+    # Use length hear to not fire a COUNT query for every row
+    live_attempts.length == round.format.expected_solve_count
   end
 
   def values_for_sorting

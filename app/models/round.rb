@@ -195,7 +195,7 @@ class Round < ApplicationRecord
 
   def clear_round!
     self.transaction do
-      live_results.destroy_all
+      live_results.delete_all
       open_round!
     end
   end
@@ -235,7 +235,14 @@ class Round < ApplicationRecord
 
     missing_attempts = total_competitors - advancement_determining_results.count
     potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
+<<<<<<< quit-and-clear-competitor-menu
     results_with_potential = (advancement_determining_results.to_a + potential_results).sort_by(&:potential_solve_time)
+=======
+
+    # Eager load associations to avoid N+1 on potential_solve_time
+    loaded_results = round_results.includes(:live_attempts).to_a
+    results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
+>>>>>>> main
 
     qualifying_index = if final_round?
                          3
