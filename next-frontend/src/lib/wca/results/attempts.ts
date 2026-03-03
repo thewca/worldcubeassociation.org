@@ -28,7 +28,11 @@ export function resultAttempts(result: components["schemas"]["Result"]) {
   return cleanAttempts(result.attempts);
 }
 
-export function recordAttempts(record: components["schemas"]["Record"]) {
+export function recordAttempts(
+  record:
+    | components["schemas"]["Record"]
+    | components["schemas"]["ExtendedResult"],
+) {
   return cleanAttempts([
     record.value1,
     record.value2,

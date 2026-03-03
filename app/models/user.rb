@@ -84,9 +84,9 @@ class User < ApplicationRecord
       UserGroup.board,
       UserGroup.officers,
     ].flatten.flat_map(&:active_roles)
-      .select(&:eligible_voter?)
-      .map(&:user)
-      .uniq
+     .select(&:eligible_voter?)
+     .map(&:user)
+     .uniq
   end
 
   def self.leader_senior_voters
@@ -630,6 +630,7 @@ class User < ApplicationRecord
       regionsAdmin
       downloadVoters
       generateDbToken
+      sanityCheckResults
       approveAvatars
       editPersonRequests
       anonymizationScript
@@ -700,6 +701,7 @@ class User < ApplicationRecord
           panel_pages[:computeAuxiliaryData],
           panel_pages[:generateDataExports],
           panel_pages[:fixResults],
+          panel_pages[:sanityCheckResults],
           panel_pages[:mergeProfiles],
           panel_pages[:mergeUsers],
           panel_pages[:helpfulQueries],
@@ -758,6 +760,12 @@ class User < ApplicationRecord
         pages: [
           panel_pages[:bannedCompetitors],
           panel_pages[:delegateProbations],
+        ],
+      },
+      wqac: {
+        name: 'WQAC panel',
+        pages: [
+          panel_pages[:helpfulQueries],
         ],
       },
     }
@@ -940,7 +948,7 @@ class User < ApplicationRecord
   end
 
   def can_check_newcomers_data?(competition)
-    competition.upcoming? && can_admin_results?
+    can_admin_results? || competition.delegates.include?(self)
   end
 
   def can_create_poll?
@@ -1442,6 +1450,8 @@ class User < ApplicationRecord
       wic_team?
     when :weat
       weat_team?
+    when :wqac
+      quality_assurance_committee?
     else
       false
     end
@@ -1566,6 +1576,23 @@ class User < ApplicationRecord
       self.potential_duplicate_persons.delete_all
       new_user.potential_duplicate_persons.delete_all
     end
+  end
+
+  def assign_wca_id(wca_id)
+    return if wca_id.blank?
+    raise "User #{id} already has WCA ID #{self.wca_id}" if self.wca_id.present?
+
+    stale_claims = User.where(unconfirmed_wca_id: wca_id).where.not(id: id)
+    stale_claims_before_update = stale_claims.to_a
+
+    ActiveRecord::Base.transaction do
+      update!(wca_id: wca_id)
+      User.where(id: stale_claims.ids)
+          .update_all(unconfirmed_wca_id: nil, delegate_id_to_handle_wca_id_claim: nil)
+      potential_duplicate_persons.delete_all
+    end
+
+    stale_claims_before_update.each { |user| WcaIdClaimMailer.notify_user_of_claim_cancelled(user, wca_id).deliver_later }
   end
 
   MY_COMPETITIONS_SERIALIZATION_HASH = {

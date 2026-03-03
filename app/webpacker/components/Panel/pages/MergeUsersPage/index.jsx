@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Header, Modal } from 'semantic-ui-react';
+import {
+  Button, Header, Message, Modal,
+} from 'semantic-ui-react';
 import AdminWcaSearch from '../../../SearchWidget/AdminWcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import useInputState from '../../../../lib/hooks/useInputState';
@@ -9,6 +11,7 @@ export default function MergeUsersPage() {
   const [firstUserId, setFirstUserId] = useInputState();
   const [secondUserId, setSecondUserId] = useInputState();
   const [modalOpen, setModalOpen] = useState(false);
+  const [mergeSuccess, setMergeSuccess] = useState(false);
 
   return (
     <>
@@ -36,9 +39,22 @@ export default function MergeUsersPage() {
       >
         Initiate Merge
       </Button>
-      <Modal open={modalOpen}>
+      <Modal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        closeOnEscape
+        closeIcon
+      >
         <Modal.Content>
-          <MergeUsers firstUserId={firstUserId} secondUserId={secondUserId} />
+          {mergeSuccess ? (
+            <Message success>Merged Successfully.</Message>
+          ) : (
+            <MergeUsers
+              firstUserId={firstUserId}
+              secondUserId={secondUserId}
+              onSuccess={() => setMergeSuccess(true)}
+            />
+          )}
         </Modal.Content>
       </Modal>
     </>

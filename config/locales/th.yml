@@ -849,14 +849,17 @@ th:
           เริ่มจาก 1 เพื่อให้ Delegate คนอื่นสามารถอ้างอิงได้
           แม้ว่าทุกอย่างจะดูปกติ แต่อย่างน้อยให้ระบุกรณีที่น่าจดจำที่สุด
           โปรดทำเครื่องหมายในช่องที่เหมาะสมด้านล่างหากคุณกำลังรับข้อเสนอแนะ
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
           คุณต้องเลือกรูปภาพอย่างน้อย %{image_count} รูป
-          ที่มีแสดงพื้นที่ตั้งโจทย์และพื้นที่แข่งขัน (รูปอื่น ๆ
-          สามารถใส่มาได้ด้วย) คุณสามารถเลือกไฟล์ได้หลายไฟล์พร้อมกัน
+          ที่มีแสดงพื้นที่ตั้งโจทย์และพื้นที่แข่งขันจากการแข่งขันนี้
+          แนะนำว่าเป็นช่วงระหว่างการแข่งขัน (รูปอื่น ๆ สามารถใส่มาได้ด้วย)
+          คุณสามารถเลือกไฟล์ได้หลายไฟล์พร้อมกัน
           คุณสามารถลบรูปภาพได้เฉพาะเมื่ออัปโหลดรูปภาพอื่น ๆ เพียงพอแล้ว
           (หากคุณต้องการเปลี่ยนรูปภาพ คุณต้องอัปโหลดรูปภาพใหม่ก่อน
           จากนั้นจึงลบรูปภาพเก่า)
+          หากคุณไม่มีรูปของพื้นที่แข่งขันและ/หรือพื้นที่ตั้งโจทย์ขณะกำลังใช้งาน
+          กรุณาแจ้งเหตุผล
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -986,11 +989,22 @@ th:
       contact_wrt:
         #original_hash: 603a218
         wca_id: WCA ID
+    #original_hash: 687d968
+    competition_link_html: 'คลิก <a href=''%{url}''>ที่นี่</a> เพื่อเข้าไปดูหน้าการแข่งขัน'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
         dob_invalid: ผิดรูปแบบหรือไม่
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: เกิดข้อผิดพลาดขณะแสดงผลหน้าเว็บ
+      #original_hash: 22dfe12
+      description: >-
+        หากปัญหานี้ยังคงเกิดขึ้น โปรดแจ้งให้ WST
+        ทราบพร้อมรายละเอียดตามที่ระบุไว้ด้านล่าง
+      #original_hash: 20be860
+      details: รายละเอียดข้อผิดพลาด
     messages:
       #original_hash: dc2367c
       wrong_size: 'ขนาดไม่ถูกต้อง (ควรจะเป็น %{file_size})'
@@ -2507,6 +2521,8 @@ th:
         wrong_dob_format: >-
           วันเกิดต้องอยู่ในรูปแบบ YYYY-mm-dd (year-month-day เป็นคริสต์ศักราช,
           เช่น 1944-07-13), ดูตัวอย่างของวันที่ไม่ถูกต้อง: %{raw_dobs}.
+        #original_hash: 6d8e34b
+        empty_file: ไฟล์ว่างเปล่า
     add:
       #original_hash: 975275e
       title: 'เพิ่มการสมัครของ %{comp}'
@@ -2661,6 +2677,11 @@ th:
         connected: เชื่อมต่อแล้ว กำลังอัปเดตผลการแข่งขัน
         #original_hash: 53abaa2
         disconnected: การเชื่อมต่อขาดหาย ผลการแข่งขันไม่ได้รับการอัปเดต
+      podiums:
+        #original_hash: 02ae2bd
+        title: Podiums
+        #original_hash: d7297a7
+        undetermined: จะกำหนดผู้ได้รับรางวัลในภายหลัง
     my_competitions:
       #original_hash: 5c6d3ea
       title: การแข่งขันของฉัน
@@ -2879,14 +2900,22 @@ th:
       no_winner: >-
         ประเภทการแข่งขันหลักคือ %{event_name} ไม่มีการประกาศผู้ชนะ
         เนื่องจากไม่มีผู้แข่งขันคนใดแก้โจทย์ได้สำเร็จในการแข่งขัน
+      #original_hash: 5262865
+      h2h_winner: >-
+        %{winner} ชนะการแข่งขันรอบชิงชนะเลิศแบบ Head-to-Head ในการแข่งขัน
+        %{event_name}
       #original_hash: 6c3b236
       winner: '%{winner} ชนะในการแข่งขัน %{result_sentence} ในประเภท %{event_name}'
       #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} ได้รองชนะเลิศอันดับหนึ่ง (%{first_runner_up_result})'
+      #original_hash: 2926d10
+      h2h_first_runner_up: '%{first_runner_up} ได้อันดับที่สอง'
       #original_hash: cffa50a
       and: และ
       #original_hash: 67d285c
       second_runner_up: '%{second_runner_up} ได้รองชนะเลิศอันดับสอง (%{second_runner_up_result}).'
+      #original_hash: 157b649
+      h2h_second_runner_up: '%{second_runner_up} ได้อันดับที่สาม'
       records:
         #original_hash: 0658e11
         wr: สถิติโลก
@@ -3089,8 +3118,10 @@ th:
         คุณแน่ใจว่าจะยืนยีน? หลังจากยืนยันแล้ว คุณจะไม่สามารถแก้ไขข้อมูลใด ๆ ได้
         ตรวจสอบ email หลังจากนี้เพื่อยืนยันว่า WCA Competition Announcement
         ได้รับแจ้งแล้ว
-      #original_hash: 4c7deb7
-      submit_delete: คุณแน่ใจที่จะลบการแข่งขันนี้? ไม่สามารถกู้คืนได้
+      #original_hash: 89fbbca
+      submit_delete: >-
+        การลบการแข่งขันไม่สามารถกู้คืนได้ กรุณาพิม ID การแข่งขัน
+        "%{competition_id}" ด้านล่างเพื่อนยืนยันการลบ
       #original_hash: 8ebebca
       coordinates: พิกัด
       #original_hash: a672984
@@ -4318,6 +4349,12 @@ th:
         #original_hash: c4622c3
         scrambles: โจทย์
     results_table:
+      #original_hash: bdbfcdc
+      h2h_results_disclaimer: >-
+        ผลการแข่งขันตัดสินจากรอบชิงชนะเลิศแบบ  Head-to-Head
+        จะแสดงเฉพาะลำดับผลการแข่งขันที่ดีที่สุดเท่านั้น
+        เนื่องจากการแสดงผลการแข่งขันแบบ Head-to-Head
+        ฉบับเต็มยังอยู่ระหว่างการพัฒนา
       #original_hash: 3e9a6b5
       wca_profile: WCA profile
       #original_hash: ad8919a
@@ -4888,12 +4925,12 @@ th:
   about:
     #original_hash: 9ac918a
     title: เกี่ยวกับ WCA
-    #original_hash: af00571
+    #original_hash: ee35764
     mission_statement: >-
-      ภารกิจของเราคือการแข่งขันที่มากขึ้น ในประเทศที่มากขึ้น ผู้คนที่มากขึ้น
-      ความสนุกที่มากขึ้น ภายใต้เงื่อนไขที่ยุติธรรมและเท่าเทียมกัน
-    #original_hash: e627278
-    mission_footer: พันธกิจของ WCA
+      จุดประสงค์ของเราคือการส่งเสริมชุมชน speedcubing ทั่วโลก
+      และรักษาบรรยากาศการแข่งขันที่สนุกสนานและยุติธรรมสำหรับทุกคน
+    #original_hash: 5bed828
+    mission_footer: คำแถลงวัตถุประสงค์ของ WCA
     #original_hash: cdab446
     who_we_are_title: เราคือใคร
     #original_hash: 303f17a
@@ -5930,7 +5967,7 @@ th:
         ไม่ตรงกับข้อมูลปัจจุบันในฐานข้อมูล WCA ('%{expected_country}')
         หากเป็นข้อผิดพลาด โปรดแก้ไข มิฉะนั้น
         โปรดแสดงความคิดเห็นเกี่ยวกับเรื่องนี้ให้ WRT ทราบ
-      #original_hash: e15e700
+      #original_hash: 6179b35
       multiple_newcomers_with_same_name_warning: >-
         มีผู้เข้าแข่งขันใหม่หลายรายที่มีชื่อเดียวกัน: %{name}
         โปรดตรวจสอบให้แน่ใจว่าผลลัพธ์ทั้งหมดถูกต้องสำหรับผู้เข้าแข่งชันเหล่านี้
@@ -5940,6 +5977,12 @@ th:
         เครื่องหมายวงเล็บที่ใช้ใน '%{name}' เป็นอักขระที่ไม่ปกติ
         โปรดแทนที่ด้วยเครื่องหมายวงเล็บปกติ '(' หรือ ')'
         และเว้นวรรคตามความเหมาะสม
+      #original_hash: fec0347
+      special_characters_in_name_warning: >-
+        ชื่อ '%{name}' มีอักขระพิเศษที่ไม่ถูกต้อง (เช่น ตัวเลข
+        เครื่องหมายอัญประกาศ หรือสัญลักษณ์อื่น ๆ ) ชื่อควรประกอบด้วยตัวอักษร
+        เว้นวรรค เครื่องหมายขีดกลาง เครื่องหมายอัญประกาศเดี่ยว จุด
+        และวงเล็บปกติเท่านั้น
       #original_hash: 4b90583
       successive_uppercase_name_warning: >-
         '%{name}' มีตัวอักษรพิมพ์ใหญ่เรียงกันในชื่อ
@@ -6002,10 +6045,6 @@ th:
         [%{round_id}] %{person_name} มีผลการแข่งขันอย่างน้อยหนึ่งครั้งใน cutoff
         phase หายไป
         โปรดแก้ไขผลการแข่งขันเพื่อรวมผลการแข่งขันที่หายไปหรืออัปเดตข้อมูลของรอบในหน้าจัดการกิจกรรมของการแข่งขัน
-      #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] ผลการแข่งขันของ %{person_name} อยู่ในรูปแบบที่ไม่ถูกต้อง:
-        คาดหวังเป็น %{expected_format} แต่กลับเป็น %{format}
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] ผลการแข่งขันอย่างน้อยหนึ่งครั้งของ %{person_name}
@@ -6015,11 +6054,6 @@ th:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] ผลรวมของผลการแข่งขันของ %{person_name}
         เกินขีดจำกัดเวลาสะสม ซึ่งอยู่ที่ %{time_limit}
-      #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] ไม่มีข้อมูลเกี่ยวกับ cutoff และขีดจำกัดเวลาสำหรับรอบนี้
-        การตรวจสอบเหล่านี้ถูกข้ามไป
-        โปรดอัปเดตข้อมูลของรอบในหน้าจัดการกิจกรรมของการแข่งขัน
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] ขีดจำกัดเวลาสำหรับรอบนี้ไม่ได้กำหนดไว้
@@ -6050,10 +6084,6 @@ th:
         รอบ %{round_id}: มีผู้เข้าแข่งขันมากกว่าที่เงื่อนไขการเข้ารอบที่ตั้งไว้
         (%{actual} คน แทนที่จะเป็น %{expected} คน เงื่อนไขคือ: %{condition})
         โปรดอัปเดตข้อมูลรอบในหน้าจัดการกิจกรรม
-      #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        รอบ %{round_id} ปรากฏอยู่ในผลการแข่งขันแต่ไม่ได้สร้างในแท็บ event
-        โปรดระบุข้อมูลของรอบในหน้าจัดการกิจกรรมของการแข่งขัน
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         รอบ %{round_id} มีผู้เข้าแข่งขัน 99 คนหรือน้อยกว่า แต่มีรอบถัดไปมากกว่า
@@ -6099,11 +6129,6 @@ th:
       missing_round_results_error: >-
         ไม่มีผลการแข่งขันสำหรับรอบ %{round_id} แต่จะแสดงอยู่ในแท็บ event
         หากรอบนี้ไม่ได้จัดขึ้น โปรดลบรอบดังกล่าวในหน้าจัดการกิจกรรมของการแข่งขัน
-      #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        ไม่มีการประกาศ cutoff สำหรับ '%{round_name}' แต่พบว่ามีการใช้ cutoff
-        ในผลการแข่งขัน
-        โปรดอัปเดตข้อมูลของรอบดังกล่าวในหน้าจัดการกิจกรรมของการแข่งขัน
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -6118,11 +6143,6 @@ th:
       no_main_event_warning: >-
         ไม่มีการเลือก event หลักสำหรับการแข่งขันนี้ โปรดแจ้งให้ WRT
         ทราบว่านี่ถูกต้องหรือไม่
-      #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        ผลการแข่งขันสำหรับ %{event_id} ปรากฏแล้ว อย่างไรก็ตาม ไม่ได้แสดงเป็น
-        event อย่างเป็นทางการ โปรดลบ event ดังกล่าวออกจากผลการแข่งขันหรือติดต่อ
-        WCAT เพื่อขอให้เพิ่ม event ดังกล่าวลงในเว็บไซต์ของ WCA
       #original_hash: fde208d
       missing_results_warning: >-
         ไม่มีผลการแข่งขันสำหรับ %{event_id} แต่มีแสดงเป็น event อย่างเป็นทางการ
@@ -6136,10 +6156,6 @@ th:
         เพื่อเพิ่มโจทย์ที่ถูกต้องให้กับรอบนั้น
       #original_hash: 340d2f3
       missing_scrambles_for_competition_error: โจทย์ของการแข่งขันหายไป โปรดใช้ Scrambles Matcher เพื่อเพิ่มโจทย์
-      #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] มีการโจทย์มากเกินไป ใช้ Scrambles Matcher
-        เพื่อลบโจทย์ที่ไม่ได้ใช้
       #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] โจทย์ของกลุ่ม %{group_id} หายไป ตรวจพบเฉพาะ %{actual}
@@ -6163,3 +6179,8 @@ th:
       edit_person: แก้ไขบุคคล
       #original_hash: 5fb2137
       competition_result: ผลการแข่งขัน
+    stakeholder_role:
+      #original_hash: e095187
+      actioner: Actioner
+      #original_hash: bcdf8d3
+      requester: Requester

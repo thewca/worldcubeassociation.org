@@ -4,14 +4,13 @@ import {
 } from 'semantic-ui-react';
 import useLoadedData from '../../../../lib/hooks/useLoadedData';
 import {
-  fetchUserGroupsUrl, addUserGroupsUrl, userGroupsUpdateUrl, apiV0Urls,
+  fetchUserGroupsUrl, addUserGroupsUrl, userGroupsUpdateUrl,
 } from '../../../../lib/requests/routes.js.erb';
 import { delegateRegionsStatus } from '../../../../lib/wca-data.js.erb';
 import Errored from '../../../Requests/Errored';
 import Loading from '../../../Requests/Loading';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
-import WcaSearch from '../../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
+import CreateModal from '../../views/UserRoles/CreateModal';
 
 const defaultRegion = {
   name: '',
@@ -55,15 +54,13 @@ function UserGroupVisibility({
 
 export default function RegionManager() {
   const {
-    data, loading: fetchLoading, error, sync,
+    data, loading, error, sync,
   } = useLoadedData(fetchUserGroupsUrl('delegate_regions'));
   const { save, saving } = useSaveAction();
   const [openModalType, setOpenModalType] = React.useState();
   const [newRegion, setNewRegion] = React.useState(defaultRegion);
   const [saveError, setSaveError] = React.useState();
   const [selectedGroup, setSelectedGroup] = React.useState();
-  const [newLeadDelegate, setNewLeadDelegate] = React.useState();
-  const [loading, setLoading] = React.useState(false);
 
   const selectedGroupAndShowModal = (group) => {
     setSelectedGroup(group);
@@ -79,7 +76,7 @@ export default function RegionManager() {
     return Object.groupBy(subRegionsList, (group) => group.parent_group_id);
   }, [data]);
 
-  if (loading || fetchLoading || saving) return <Loading />;
+  if (loading || saving) return <Loading />;
   if (error || saveError) return <Errored error={error || saveError} />;
 
   return (
@@ -247,62 +244,20 @@ export default function RegionManager() {
           </Form>
         </Modal.Content>
       </Modal>
-      <Modal
+      <CreateModal
+        open={openModalType === 'newLeadDelegate'}
         onClose={() => {
           closeModal();
           setSelectedGroup(null);
-          setNewLeadDelegate(null);
+          sync();
         }}
-        open={openModalType === 'newLeadDelegate'}
-      >
-        <Modal.Content>
-          <Form>
-            <Form.Field
-              label="New Lead Delegate"
-              control={WcaSearch}
-              value={newLeadDelegate}
-              onChange={(e, { value }) => setNewLeadDelegate(value)}
-              model={SEARCH_MODELS.user}
-              multiple={false}
-            />
-            <Form.Button onClick={() => {
-              closeModal();
-              setSelectedGroup(null);
-              setNewLeadDelegate(null);
-            }}
-            >
-              Cancel
-            </Form.Button>
-            <Form.Button
-              disabled={!newLeadDelegate}
-              onClick={() => {
-                closeModal();
-                setLoading(true);
-                save(
-                  apiV0Urls.userRoles.create(),
-                  {
-                    userId: newLeadDelegate.id,
-                    groupId: selectedGroup.id,
-                    status: (selectedGroup.parent_group_id
-                      ? delegateRegionsStatus.regional_delegate
-                      : delegateRegionsStatus.senior_delegate),
-                    location: selectedGroup.name,
-                  },
-                  () => {
-                    sync();
-                    setSelectedGroup(null);
-                    setNewLeadDelegate(null);
-                    setLoading(false);
-                  },
-                  { method: 'POST' },
-                );
-              }}
-            >
-              Save
-            </Form.Button>
-          </Form>
-        </Modal.Content>
-      </Modal>
+        title="New Lead Delegate"
+        groupId={selectedGroup?.id}
+        status={(selectedGroup?.parent_group_id
+          ? delegateRegionsStatus.regional_delegate
+          : delegateRegionsStatus.senior_delegate)}
+        location={selectedGroup?.name}
+      />
     </>
   );
 }

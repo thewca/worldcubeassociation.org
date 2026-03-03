@@ -10,5 +10,9 @@
 ] %>
 <%= CSV.generate_line(headers, col_sep: "\t").html_safe -%>
 <% @competitions.each do |c| %>
-  <%= CSV.generate_line(c.export_for_dues_generation, col_sep: "\t").html_safe -%>
+  <%#
+    Force English locale to ensure numbers are formatted with dots (e.g., "123.45")
+    instead of commas, preventing errors in formula calculations.
+  %>
+  <%= I18n.with_locale(:en) { CSV.generate_line(c.export_for_dues_generation, col_sep: "\t") }.html_safe -%>
 <% end %>

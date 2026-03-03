@@ -8,7 +8,7 @@ module ApplicationCable
     # identified_by :current_user
     #
     def connect
-      reject_unauthorized_connection unless WcaLive.enabled?
+      reject_unauthorized_connection unless Live::Config.enabled?
     end
     #
     # private

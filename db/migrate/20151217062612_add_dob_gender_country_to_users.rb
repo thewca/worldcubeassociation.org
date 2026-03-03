@@ -14,8 +14,6 @@ class AddDobGenderCountryToUsers < ActiveRecord::Migration
           user.save
         end
       end
-      change.down do
-      end
     end
   end
 end

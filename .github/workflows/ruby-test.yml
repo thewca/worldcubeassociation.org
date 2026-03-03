@@ -6,6 +6,25 @@ on:
   pull_request:
     branches:
       - '**'
+    paths:
+      - 'app/**/*'
+      - 'config/**/*'
+      - 'db/**/*'
+      - 'public/**/*'
+      - 'vendor/**/*'
+      - '**/*.rb'
+      - '**/*.erb'
+      - '**/*.rake'
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - 'Rakefile'
+      - '.ruby-version'
+      - 'package.json'
+      - 'yarn.lock'
+      - '.env*'
+      - 'docker-compose.yml'
+      - 'Dockerfile*'
+      - '.github/workflows/ruby-test.yml'
 
 jobs:
   test:

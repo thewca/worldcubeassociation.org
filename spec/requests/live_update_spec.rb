@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "WCA Live API" do
-  describe "POST #add_result" do
+  describe "PATCH #add_or_update_result" do
     let!(:delegate) { create(:delegate) }
 
     it "Updates a Live Result Correctly" do
@@ -14,21 +14,23 @@ RSpec.describe "WCA Live API" do
       registration = create(:registration, :accepted, competition: competition)
       create(:live_result, round: round, registration: registration)
       live_request = {
-        attempts: [111, 222, 333, 444, 555],
+        attempts: [{ value: 111, attempt_number: 1 }, { value: 222, attempt_number: 2 }, { value: 333, attempt_number: 3 }, { value: 444, attempt_number: 4 }, { value: 555, attempt_number: 5 }],
         registration_id: registration.id,
       }
 
-      patch update_live_result_path(competition.id, round.id), params: live_request
+      patch api_v1_competition_live_update_results_path(competition.id, round.wcif_id), params: live_request
       expect(response).to be_successful
+
+      perform_enqueued_jobs
 
       result = LiveResult.find_by(round_id: round.id, registration_id: registration.id)
       expect(result).to be_present
 
-      expect(result.live_attempts.map { |l| { attempt_number: l.attempt_number, result: l.result } }).to contain_exactly({ attempt_number: 1, result: 111 },
-                                                                                                                         { attempt_number: 2, result: 222 },
-                                                                                                                         { attempt_number: 3, result: 333 },
-                                                                                                                         { attempt_number: 4, result: 444 },
-                                                                                                                         { attempt_number: 5, result: 555 })
+      expect(result.live_attempts.map { |l| { attempt_number: l.attempt_number, value: l.value } }).to contain_exactly({ attempt_number: 1, value: 111 },
+                                                                                                                       { attempt_number: 2, value: 222 },
+                                                                                                                       { attempt_number: 3, value: 333 },
+                                                                                                                       { attempt_number: 4, value: 444 },
+                                                                                                                       { attempt_number: 5, value: 555 })
       expect(result.best).to eq 111
       expect(result.average).to eq 333
     end
@@ -41,11 +43,11 @@ RSpec.describe "WCA Live API" do
       registration = create(:registration, :accepted, competition: competition)
 
       live_request = {
-        attempts: [111, 222, 333, 444, 555],
+        attempts: [{ value: 111, attempt_number: 1 }, { value: 222, attempt_number: 2 }, { value: 333, attempt_number: 3 }, { value: 444, attempt_number: 4 }, { value: 555, attempt_number: 5 }],
         registration_id: registration.id,
       }
 
-      patch update_live_result_path(competition.id, round.id), params: live_request
+      patch api_v1_competition_live_update_results_path(competition.id, round.wcif_id), params: live_request
       expect(response).not_to be_successful
     end
   end

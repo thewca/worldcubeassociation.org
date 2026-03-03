@@ -13,18 +13,41 @@ class Result < ApplicationRecord
   # we also need sure to query the correct competition as well through a composite key.
   belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
-  has_many :result_attempts, dependent: :destroy
+  has_many :result_attempts, inverse_of: :result, dependent: :destroy, autosave: true, index_errors: true
+  validates_associated :result_attempts
 
-  after_update_commit :create_or_update_attempts
+  # This is a hack because in our test suite we do `update!(valueN: 123)` lots of times
+  #   to mock different result submission scenarios. Unfortunately, this can only be changed
+  #   and "harmonized" once `inbox_results` is gone, because that still relies on valueNs.
+  before_validation :backlink_attempts, on: :update, if: -> { Rails.env.test? }
 
-  def create_or_update_attempts
-    attempts = self.result_attempts_attributes(result_id: self.id)
+  def backlink_attempts
+    (1..5).each do |n|
+      legacy_value = self.attributes["value#{n}"]
 
-    # Delete attempts when the value was set to 0
-    zero_attempts = self.skipped_attempt_numbers
-    ResultAttempt.where(result_id: id, attempt_number: zero_attempts).delete_all if zero_attempts.any?
+      # Crucially, `find_or_initialize_by` does NOT work here, because it circumvents Rails memory
+      #   by going directly down to the database layer. `autosave: true` above needs the memory layer, though.
+      in_memory_attempt = self.result_attempts.find { it.attempt_number == n } || result_attempts.build(attempt_number: n)
 
-    ResultAttempt.upsert_all(attempts)
+      in_memory_attempt.assign_attributes(value: legacy_value)
+    end
+  end
+
+  # We run this _after_ validations as part of the transition process:
+  #   In order to make sure that all validations correctly "see" the `result_attempts`,
+  #   we only backfill to the old columns once we have established that the attempts are valid
+  after_validation :repack_attempts
+
+  # As of writing this comment, we are transitioning `value1..5` to a separate row-based table.
+  # We have progressed to productively using the new, normalized `result_attempts` table
+  #   wherever we can, but there is still one (annoyingly popular) place where it's hard to make the transition:
+  #   The Rankings and Records pages. These feature *very* heavy SQL queries and JOINing in the full
+  #   result_attempts there can be expensive, so we rely on the de-normalized value1..5 just for the time being.
+  def repack_attempts
+    packed_value_attributes = self.attempts.map.with_index(1).to_h { |v, i| [:"value#{i}", v] }
+    legacy_attempt_attributes = packed_value_attributes.with_indifferent_access.slice(*Result.attribute_names)
+
+    self.assign_attributes(**legacy_attempt_attributes)
   end
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
@@ -52,10 +75,6 @@ class Result < ApplicationRecord
   alias_attribute :name, :person_name
   alias_attribute :wca_id, :person_id
 
-  def attempts
-    [value1, value2, value3, value4, value5]
-  end
-
   delegate :iso2, to: :country, prefix: true
 
   DEFAULT_SERIALIZE_OPTIONS = {
@@ -67,5 +86,15 @@ class Result < ApplicationRecord
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
+
+  def self.unpack_attempt_attributes(attempt_values, **additional_attributes)
+    attempt_values
+      .map
+      .with_index(1)
+      .filter { |value, _n| value != SolveTime::SKIPPED_VALUE }
+      .map do |value, n|
+        { value: value, attempt_number: n, **additional_attributes }
+    end
   end
 end
