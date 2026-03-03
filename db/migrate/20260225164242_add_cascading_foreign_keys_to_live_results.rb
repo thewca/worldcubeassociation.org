@@ -10,10 +10,10 @@ class AddCascadingForeignKeysToLiveResults < ActiveRecord::Migration[8.1]
     up_only do
       # Clean up orphaned live_attempts (live_result_id points to a non-existent live_result)
       execute <<~SQL
-      DELETE FROM live_attempts
-      WHERE live_result_id IS NOT NULL
-        AND live_result_id NOT IN (SELECT id FROM live_results)
-    SQL
+        DELETE FROM live_attempts
+        WHERE live_result_id IS NOT NULL
+          AND live_result_id NOT IN (SELECT id FROM live_results)
+      SQL
     end
 
     add_foreign_key :live_attempts, :live_results, on_delete: :cascade
