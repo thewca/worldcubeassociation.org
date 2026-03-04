@@ -141,6 +141,10 @@ class LiveResult < ApplicationRecord
     end
   end
 
+  def self.empty_result_attributes(registration_id, round_id)
+    { registration_id: registration_id, round_id: round_id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
+  end
+
   private
 
     def trigger_recompute

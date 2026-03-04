@@ -26,6 +26,9 @@ paths:
       $ref: 'paths/competitions/live/UpdateLiveResults.yaml'
     get:
       $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}:
+    put:
+      $ref: 'paths/competitions/live/addCompetitorToRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/clear:
     $ref: 'paths/competitions/live/ClearRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/open:
