@@ -12,7 +12,6 @@ export default function AddResults({
   format,
   roundId,
   competitionId,
-  competitors,
 }: {
   format: Format;
   roundId: string;

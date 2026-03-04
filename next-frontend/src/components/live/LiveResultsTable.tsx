@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { Table } from "@chakra-ui/react";
 import formats from "@/lib/wca/data/formats";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";

@@ -9,7 +9,6 @@ import {
 import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
-import { LiveCompetitor } from "@/types/live";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 
 interface AttemptsFormProps {
