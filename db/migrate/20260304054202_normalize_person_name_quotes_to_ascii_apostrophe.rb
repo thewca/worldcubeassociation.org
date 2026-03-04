@@ -4,8 +4,8 @@ class NormalizePersonNameQuotesToAsciiApostrophe < ActiveRecord::Migration[8.1]
   def up
     Person.where("name REGEXP ?", "[’‘]").find_each do |person|
       new_name = person.name
-                       .gsub("’", "'")
-                       .gsub("‘", "'")
+                       .tr("’", "'")
+                       .tr("‘", "'")
 
       next if new_name == person.name
 
