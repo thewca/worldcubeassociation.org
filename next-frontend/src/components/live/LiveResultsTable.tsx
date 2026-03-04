@@ -29,20 +29,18 @@ export default function LiveResultsTable({
   formatId: string;
   roundWcifId: string;
   competitionId: string;
-  competitors: LiveCompetitor[];
+  competitors: Map<number, LiveCompetitor>;
   isAdmin?: boolean;
   showEmpty?: boolean;
   showLinkedRoundsView?: boolean;
 }) {
-  const competitorsByRegistrationId = _.keyBy(competitors, "id");
-
   const { eventId } = parseActivityCode(roundWcifId);
 
   const format = formats.byId[formatId];
 
   const competitorsWithOrderedResults = mergeAndOrderResults(
     resultsByRegistrationId,
-    competitorsByRegistrationId,
+    competitors,
     format,
   );
 

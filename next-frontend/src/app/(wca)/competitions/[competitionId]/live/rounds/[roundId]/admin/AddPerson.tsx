@@ -16,19 +16,18 @@ import { LiveCompetitor } from "@/types/live";
 import React, { useState } from "react";
 import { useT } from "@/lib/i18n/useI18n";
 import Loading from "@/components/ui/loading";
-import _ from "lodash";
 
 export default function AddPersonModal({
   competitionId,
   competitors,
 }: {
   competitionId: string;
-  competitors: LiveCompetitor[];
+  competitors: Map<number, LiveCompetitor>;
 }) {
   const [open, setOpen] = useState(false);
 
   const [selectedCompetitor, setSelectedCompetitor] = useState<number>();
-  const { addCompetitor, isPending } = useResultsAdmin();
+  const { addCompetitorToRound, isPending } = useResultsAdmin();
 
   return (
     <Dialog.Root lazyMount open={open} onOpenChange={(e) => setOpen(e.open)}>
@@ -56,7 +55,9 @@ export default function AddPersonModal({
               <Button
                 disabled={!selectedCompetitor || isPending}
                 onClick={() =>
-                  addCompetitor(selectedCompetitor!).then(() => setOpen(false))
+                  addCompetitorToRound(selectedCompetitor!).then(() =>
+                    setOpen(false),
+                  )
                 }
               >
                 Add Competitor to Round
@@ -81,7 +82,7 @@ function AddPerson({
   setSelectedCompetitor,
 }: {
   competitionId: string;
-  competitors: LiveCompetitor[];
+  competitors: Map<number, LiveCompetitor>;
   close: () => void;
   setSelectedCompetitor: (registrationId: number) => void;
 }) {
@@ -97,11 +98,9 @@ function AddPerson({
     },
   );
 
-  const competitorsById = _.keyBy(competitors, "id");
-
   const { collection, filter } = useListCollection({
     initialItems: (registrationsQuery ?? []).filter(
-      (r) => !competitorsById[r.id],
+      (r) => !competitors.has(r.id),
     ),
     itemToValue: (competitor) => competitor.id.toString(),
     itemToString: (competitor) => competitor.user.name,

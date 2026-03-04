@@ -14,7 +14,6 @@ export default function LiveUpdatingResultsTable({
   roundWcifId,
   formatId,
   competitionId,
-  competitors,
   title,
   isAdmin = false,
   showEmpty = true,
@@ -23,7 +22,6 @@ export default function LiveUpdatingResultsTable({
   roundWcifId: string;
   formatId: string;
   competitionId: string;
-  competitors: LiveCompetitor[];
   title: string;
   isAdmin?: boolean;
   showEmpty?: boolean;
@@ -32,8 +30,12 @@ export default function LiveUpdatingResultsTable({
   const [showLinkedRoundsView, setShowLinkedRoundsView] =
     useState(isLinkedRound);
 
-  const { connectionState, liveResultsByRegistrationId, pendingLiveResults } =
-    useLiveResults();
+  const {
+    connectionState,
+    liveResultsByRegistrationId,
+    pendingLiveResults,
+    competitors,
+  } = useLiveResults();
 
   const { eventId } = parseActivityCode(roundWcifId);
 

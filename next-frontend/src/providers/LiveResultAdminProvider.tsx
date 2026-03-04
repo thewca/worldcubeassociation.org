@@ -18,7 +18,7 @@ interface AdminResultsContextValue {
   handleRegistrationIdChange: (value: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
   handleSubmit: () => void;
-  addCompetitor: (registrationId: number) => Promise<void>;
+  addCompetitorToRound: (registrationId: number) => Promise<void>;
 }
 
 function zeroedArrayOfSize(size: number) {
@@ -49,7 +49,7 @@ export function LiveResultAdminProvider({
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const { liveResultsByRegistrationId, addPendingLiveResult } =
+  const { liveResultsByRegistrationId, addPendingLiveResult, addCompetitor } =
     useLiveResults();
   const api = useAPI();
 
@@ -90,13 +90,16 @@ export function LiveResultAdminProvider({
       "put",
       "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
       {
+        onSuccess: (data) => {
+          addCompetitor(data.competitor);
+        },
         onError: () => {
           setError("Failed to add Competitor. Please try again.");
         },
       },
     );
 
-  const addCompetitor = useCallback(
+  const addCompetitorToRound = useCallback(
     async (registrationId: number) => {
       await addCompetitorMutation({
         params: {
@@ -149,7 +152,7 @@ export function LiveResultAdminProvider({
         handleRegistrationIdChange,
         handleAttemptChange,
         handleSubmit,
-        addCompetitor,
+        addCompetitorToRound,
       }}
     >
       {children}

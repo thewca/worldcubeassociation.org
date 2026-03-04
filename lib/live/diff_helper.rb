@@ -4,6 +4,7 @@ module Live
   module DiffHelper
     # This method does not call round.live_results.reset so make sure to
     # change live_results only directly through the round associations, never through LiveResult.(...)
+    # or reset yourself if you do
     def self.broadcast_changes(round, &)
       before_state = round.to_live_state
 

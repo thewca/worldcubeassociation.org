@@ -1777,7 +1777,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        created: components["schemas"]["BaseLiveResult"];
+                        competitor: components["schemas"]["LiveCompetitor"];
                     };
                 };
             };

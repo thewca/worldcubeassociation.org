@@ -26,7 +26,7 @@ responses:
         schema:
           type: object
           required:
-            - created
+            - competitor
           properties:
-            created:
-              $ref: '../../../schemas/live/BaseLiveResult.yaml'
+            competitor:
+              $ref: '../../../schemas/live/LiveCompetitor.yaml'
