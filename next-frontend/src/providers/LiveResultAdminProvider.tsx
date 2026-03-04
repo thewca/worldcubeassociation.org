@@ -91,7 +91,6 @@ export function LiveResultAdminProvider({
     "delete",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
     {
-      onSuccess: () => {},
       onError: () => {
         setError("Failed to Quit Competitor. Please try again.");
       },

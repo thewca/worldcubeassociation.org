@@ -202,7 +202,7 @@ class Round < ApplicationRecord
 
   def open_round!
     empty_results = advancing_registrations.map do |r|
-      LiveResult.empty_result_attributes(r.id, id)
+      LiveResult.empty_result_attributes(r.id, self.id)
     end
     LiveResult.insert_all!(empty_results)
   end
@@ -219,10 +219,10 @@ class Round < ApplicationRecord
     live_results.reset
   end
 
-  def max_qualifying(advancement_determining_results)
+  def max_qualifying
     # Our Regulations allow at most 75% of competitors to proceed
     max_qualifying = (live_results.count * 0.75).floor
-    [advancement_condition.max_advancing(advancement_determining_results), max_qualifying].min
+    [advancement_condition.max_advancing(live_results), max_qualifying].min
   end
 
   def recompute_advancing
@@ -243,7 +243,7 @@ class Round < ApplicationRecord
     qualifying_index = if final_round?
                          3
                        else
-                         max_qualifying(advancement_determining_results)
+                         max_qualifying
                        end
 
     advancement_determining_results.update_all("advancing_questionable = global_pos BETWEEN 1 AND #{qualifying_index}")
@@ -437,27 +437,24 @@ class Round < ApplicationRecord
 
     return [] unless prev_results.exists?(advancing: true)
 
-    already_quit_ids = prev_results.where.not(quit_by_id: nil).pluck(:id)
+    already_quit_ids = prev_results.quit.pluck(:id)
 
-    first_advancing = prev_results.where(advancing: true).first
+    first_advancing = prev_results.advancing.first
 
-    candidate_ids = prev_results
-                    .where(advancing: false)
-                    .where.not(id: already_quit_ids)
-                    .pluck(:id)
+    candidate_ids = prev_results.not_advancing.not_quit.pluck(:id)
 
     return [] if candidate_ids.empty?
 
-    ignored_ids = ([first_advancing.id] + already_quit_ids)
+    ignored_ids = ([first_advancing.id] | already_quit_ids)
 
     advancement_determining = prev_results
                               .where.not(id: ignored_ids)
 
-    qualifying_index = prev_round.max_qualifying(advancement_determining)
+    qualifying_index = prev_round.max_qualifying
 
     hypothetically_advancing_ids = advancement_determining
                                    .take(qualifying_index)
-                                   .filter_map(&:id)
+                                   .map(&:id)
 
     prev_results.where(id: hypothetically_advancing_ids & candidate_ids)
   end
@@ -490,8 +487,8 @@ class Round < ApplicationRecord
     to_advance = next_qualifying_to_round.first
     return unless to_advance.present?
 
-    to_advance.update(advancing: true)
-    live_results.create(**LiveResult.empty_result_attributes(to_advance.registration_id, id))
+    to_advance.update!(advancing: true)
+    live_results.create(**LiveResult.empty_result_attributes(to_advance.registration_id, self.id))
   end
 
   def wcif_id
