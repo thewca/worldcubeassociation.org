@@ -8,6 +8,7 @@ import PendingResultsTable from "@/components/live/PendingResultsTable";
 import { LiveCompetitor } from "@/types/live";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
+import AddPersonModal from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
 
 export default function LiveUpdatingResultsTable({
   roundWcifId,
@@ -54,6 +55,12 @@ export default function LiveUpdatingResultsTable({
             </Switch.Control>
             <Switch.Label>Show combined Results</Switch.Label>
           </Switch.Root>
+        )}
+        {isAdmin && (
+          <AddPersonModal
+            competitionId={competitionId}
+            competitors={competitors}
+          />
         )}
       </HStack>
       <PendingResultsTable
