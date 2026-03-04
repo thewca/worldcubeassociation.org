@@ -36,7 +36,6 @@ interface LiveResultContextType {
   ) => void;
   connectionState: ConnectionState;
   competitors: Map<number, LiveCompetitor>;
-  addCompetitor: (r: LiveCompetitor) => void;
 }
 
 const LiveResultContext = createContext<LiveResultContextType | undefined>(
@@ -113,6 +112,8 @@ export function MultiRoundResultProvider({
       after_hash,
     } = diff;
 
+    console.log(created);
+
     const queryIndex = initialRounds.findIndex((r) => r.id === roundId);
     if (queryIndex === -1) return;
 
@@ -138,11 +139,20 @@ export function MultiRoundResultProvider({
         }),
         state_hash: after_hash,
       }));
+
       updatePendingResults((pendingResults) =>
         pendingResults.filter(
           (r) => !updated.map((u) => u.r).includes(r.registration_id),
         ),
       );
+
+      setCompetitors((previous) => {
+        const next = new Map(previous);
+        created.forEach((r) => {
+          next.set(r.user.id, r.user);
+        });
+        return next;
+      });
     }
   };
 
@@ -161,12 +171,6 @@ export function MultiRoundResultProvider({
     [liveResultsByRegistrationId],
   );
 
-  const addCompetitor = useCallback(
-    (competitor: LiveCompetitor) =>
-      setCompetitors((previous) => previous.set(competitor.id, competitor)),
-    [],
-  );
-
   const roundIds = initialRounds.map((r) => r.id);
   const connectionState = useResultsSubscriptions(roundIds, onReceived);
 
@@ -178,7 +182,6 @@ export function MultiRoundResultProvider({
         addPendingLiveResult,
         connectionState,
         competitors,
-        addCompetitor,
       }}
     >
       {children}

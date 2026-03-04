@@ -49,7 +49,7 @@ export function LiveResultAdminProvider({
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const { liveResultsByRegistrationId, addPendingLiveResult, addCompetitor } =
+  const { liveResultsByRegistrationId, addPendingLiveResult } =
     useLiveResults();
   const api = useAPI();
 
@@ -90,9 +90,6 @@ export function LiveResultAdminProvider({
       "put",
       "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
       {
-        onSuccess: (data) => {
-          addCompetitor(data.competitor);
-        },
         onError: () => {
           setError("Failed to add Competitor. Please try again.");
         },
