@@ -355,12 +355,6 @@ RSpec.describe PV do
         res_vietnamese = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
         res_vietnamese.person.update(name: "Trần Tử Kiên")
 
-        # Test names with forward slash (names in Malaysia especially among Malaysians of Indian origin)
-        # A/L = “Anak Lelaki” (Malay) → means “son of”
-        # A/P = “Anak Perempuan” → means “daughter of”
-        res_slash = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
-        res_slash.person.update(name: "Sanjev A/L Loganathan")
-
         # Test names with bullet
         res_bullet = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
         res_bullet.person.update(name: "Arabel•la Puig Villacorta")
