@@ -71,10 +71,7 @@ export function LiveResultAdminProvider({
     "/v1/competitions/{competitionId}/live/rounds/{roundId}",
     {
       onSuccess: (_data, variables) => {
-        addPendingLiveResult({
-          registration_id: variables.body.registration_id,
-          live_attempts: variables.body.attempts,
-        });
+        addPendingLiveResult(variables.body, roundId);
         setSuccess("Results updated successfully!");
         setRegistrationId(undefined);
         setAttempts(zeroedArrayOfSize(solveCount));

@@ -1021,6 +1021,8 @@ es-419:
       contact_wrt:
         #original_hash: 603a218
         wca_id: WCA ID
+    #original_hash: 687d968
+    competition_link_html: 'Click <a href=''%{url}''>aquí</a> para visitar la página de la competición.'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -3079,16 +3081,22 @@ es-419:
         El evento principal fue %{event_name}. No hubo ganador de la
         competición, ya que ningún competidor consiguió un resultado exitoso en
         ese evento.
+      #original_hash: 5262865
+      h2h_winner: '%{winner} ganó la final Head-to-Head del evento %{event_name}.'
       #original_hash: 6c3b236
       winner: '%{winner} ganó %{result_sentence} en el evento %{event_name}.'
       #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} acabó en segundo puesto (%{first_runner_up_result})'
+      #original_hash: 2926d10
+      h2h_first_runner_up: '%{first_runner_up} terminó en segundo lugar'
       #original_hash: cffa50a
       and: 'y'
       #original_hash: 67d285c
       second_runner_up: >-
         %{second_runner_up} acabó en  tercer puesto
         (%{second_runner_up_result}).
+      #original_hash: 157b649
+      h2h_second_runner_up: '%{second_runner_up} terminó en tercer lugar.'
       records:
         #original_hash: 0658e11
         wr: Records del mundo
@@ -3295,10 +3303,10 @@ es-419:
         ¿Estás seguro de que quieres confirmar? Después de confirmar no podrás
         modificar nada. Tras confirmar, comprueba tu correo para verificar que
         el Equipo de Anuncios de Competiciones de la WCA ha sido notificado.
-      #original_hash: 4c7deb7
+      #original_hash: 89fbbca
       submit_delete: >-
-        ¿Estás seguro de querer eliminar esta competición? Esta operación no es
-        reversible.
+        Esta acción no puede deshacerse. Por favor, escribe "%{competition_id}"
+        debajo para confirmar la eliminación.
       #original_hash: 8ebebca
       coordinates: Coordenadas
       #original_hash: a672984
@@ -4621,6 +4629,11 @@ es-419:
         #original_hash: c4622c3
         scrambles: Mezclas
     results_table:
+      #original_hash: bdbfcdc
+      h2h_results_disclaimer: >-
+        Resultados determinados por una final Head-to-Head. Solo se muestra la
+        posición y la mejor solve, ya que la presentación de resultados
+        Head-to-Head completos sigue en desarrollo.
       #original_hash: 3e9a6b5
       wca_profile: Perfil WCA
       #original_hash: ad8919a
@@ -6337,7 +6350,7 @@ es-419:
         El país de %{name} (%{wca_id}), %{country}, no coincide lo registrado en
         la base de datos ("%{expected_country}"). Si es un error, corrígelo. En
         caso contrario, deja un comentario al WRT explicando la situación.
-      #original_hash: e15e700
+      #original_hash: 6179b35
       multiple_newcomers_with_same_name_warning: >-
         Hay múltiples primerizos con el mismo nombre: %{name}. Por favor,
         asegúrate de que los resultados son correctos para estos competidores y
@@ -6347,6 +6360,11 @@ es-419:
         El paréntesis utilizado en "%{name}" es un carácter irregular, por favor
         reemplázalo con un paréntesis regular "(" o ")" y con espacios
         apropiados.
+      #original_hash: fec0347
+      special_characters_in_name_warning: >-
+        El nombre '%{name}' contiene caracteres especiales inválidos (como
+        números, comillas, u otros símbolos). Los nombres solo deberían contener
+        letras, espacios, guiones, apóstrofes, puntos, y paréntesis regulares.
       #original_hash: 4b90583
       successive_uppercase_name_warning: >-
         "%{name}" tiene mayúsculas consecutivas en su nombre. Por favor,
@@ -6559,3 +6577,8 @@ es-419:
       edit_person: Editar persona
       #original_hash: 5fb2137
       competition_result: Resultado de competición
+    stakeholder_role:
+      #original_hash: e095187
+      actioner: Responsable
+      #original_hash: bcdf8d3
+      requester: Solicitante

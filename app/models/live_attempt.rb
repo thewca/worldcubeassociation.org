@@ -10,8 +10,9 @@ class LiveAttempt < ApplicationRecord
 
   has_one :h2h_attempt, dependent: :destroy
 
-  validates :value, presence: true
-  validates :value, numericality: { only_integer: true }
+  validates :value,
+            presence: true,
+            numericality: { only_integer: true, other_than: 0 }
   validates :attempt_number, numericality: { only_integer: true }
 
   DEFAULT_SERIALIZE_OPTIONS = {

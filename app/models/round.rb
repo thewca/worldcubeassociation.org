@@ -195,7 +195,7 @@ class Round < ApplicationRecord
 
   def clear_round!
     self.transaction do
-      live_results.destroy_all
+      live_results.delete_all
       open_round!
     end
   end
@@ -229,7 +229,10 @@ class Round < ApplicationRecord
 
     missing_attempts = total_competitors - round_results.count
     potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
-    results_with_potential = (round_results.to_a + potential_results).sort_by(&:potential_solve_time)
+
+    # Eager load associations to avoid N+1 on potential_solve_time
+    loaded_results = round_results.includes(:live_attempts).to_a
+    results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
 
     qualifying_index = if final_round?
                          3
@@ -359,9 +362,12 @@ class Round < ApplicationRecord
     time_limit != TimeLimit::UNDEF_TL && time_limit.cumulative_round_ids.empty? && self.event.fast_event? && time_limit.centiseconds > 60_000
   end
 
-  def self.find_by_wcif_id!(wcif_id, competition_id)
+  def self.find_by_wcif_id!(wcif_id, competition_id, includes: [])
     event_id, number = Round.parse_wcif_id(wcif_id).values_at(:event_id, :round_number)
-    Round.includes(:competition_event, live_results: %i[live_attempts event]).find_by!(competition_event: { competition_id: competition_id, event_id: event_id }, number: number)
+
+    all_includes = [:competition_event, *Array.wrap(includes)]
+
+    Round.includes(all_includes).find_by!(competition_event: { competition_id: competition_id, event_id: event_id }, number: number)
   end
 
   def self.parse_wcif_id(wcif_id)
@@ -472,6 +478,7 @@ class Round < ApplicationRecord
       "competitors" => live_competitors.includes(:user).map { it.as_json({ methods: %i[name country_iso2], only: %i[id user_id registrant_id] }) },
       "results" => only_podiums ? live_podium : live_results,
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
+      "linked_round_ids" => linked_round&.wcif_ids,
     }
   end
 
