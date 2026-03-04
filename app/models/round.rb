@@ -463,47 +463,35 @@ class Round < ApplicationRecord
   end
 
   def quit_from_round!(registration_id, quitting_user, should_advance_next: false)
-    before_quit_state = to_live_state
-    before_quit_state_previous_round = previous_round.to_live_state unless first_round?
-    quit_count = transaction do
-      result = live_results.find_by!(registration_id: registration_id)
+    transaction do
+      quit_count = Live::DiffHelper.broadcast_changes(self) do
+        result = live_results.find_by!(registration_id: registration_id)
+        destroyed = result.destroy
+        recompute_advancing
+        live_results.reset
+        destroyed ? 1 : 0
+      end
 
-      is_quit = result.destroy
+      return quit_count if quit_count.zero? || first_round?
 
-      if first_round?
-        is_quit ? 1 : 0
-      else
-        # We need to also quit the result from the previous round so advancement can be correctly shown
-        previous_round_results = previous_round.linked_round.present? ? previous_round.linked_round.live_results : previous_round.live_results
-
-        previous_round_results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
+      quit_count + Live::DiffHelper.broadcast_changes(previous_round) do
+        advance_next_qualifier if should_advance_next
+        quit_from_previous_round(registration_id, quitting_user)
       end
     end
+  end
 
-    return quit_count if quit_count.zero?
+  def quit_from_previous_round(registration_id, quitting_user)
+    results = previous_round.linked_round&.live_results || previous_round.live_results
+    results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
+  end
 
-    if should_advance_next
-      to_advance = next_qualifying_to_round.first
+  def advance_next_qualifier
+    to_advance = next_qualifying_to_round.first
+    return unless to_advance.present?
 
-      if to_advance.present?
-        to_advance.update(advancing: true)
-        live_results.create(**LiveResult.empty_result_attributes(to_advance.registration_id, id))
-      end
-    end
-
-    # Now that the transaction has finished we can notify the clients
-    recompute_advancing
-    live_results.reset
-    after_quit_state = to_live_state
-    Live::DiffHelper.broadcast_compressed_diff(before_quit_state, after_quit_state, self)
-
-    unless first_round?
-      previous_round.live_results.reset
-      after_quit_state_previous_round = previous_round.to_live_state
-      Live::DiffHelper.broadcast_compressed_diff(before_quit_state_previous_round, after_quit_state_previous_round, previous_round)
-    end
-
-    quit_count
+    to_advance.update(advancing: true)
+    live_results.create(**LiveResult.empty_result_attributes(to_advance.registration_id, id))
   end
 
   def wcif_id

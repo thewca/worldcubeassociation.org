@@ -2,10 +2,25 @@
 
 module Live
   module DiffHelper
-    def self.broadcast_compressed_diff(before_state, after_state, round)
+    # This method does not call round.live_results.reset so make sure to
+    # change live_results only directly through the round associations, never through LiveResult.(...)
+    # or reset yourself if you do
+    def self.broadcast_changes(round, &)
+      before_state = round.to_live_state
+
+      result = yield
+
+      after_state = round.to_live_state
+
       diff = self.compressed_round_state_diff(before_state, after_state, round)
 
-      ActionCable.server.broadcast(Live::Config.broadcast_key(round.wcif_id), diff)
+      # Queues the broadcast — fires after outermost transaction commits,
+      # or immediately if not inside a transaction. Never fires on rollback.
+      ActiveRecord::Base.connection.after_commit do
+        ActionCable.server.broadcast(Live::Config.broadcast_key(round.wcif_id), diff)
+      end
+
+      result
     end
 
     def self.compressed_round_state_diff(before_state, after_state, round)
