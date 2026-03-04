@@ -38,6 +38,7 @@ class CompetitionsController < ApplicationController
     edit_schedule
     payment_integration_setup
   ]
+  before_action :require_admin_for_schedule_if_results_submitted, only: [:edit_schedule]
 
   rescue_from WcaExceptions::ApiException do |e|
     render status: e.status, json: { error: e.to_s }.reverse_merge(e.error_details.compact)
@@ -82,6 +83,14 @@ class CompetitionsController < ApplicationController
     competition.editing_user_id = current_user&.id
   end
 
+  private def require_admin_for_schedule_if_results_submitted
+    competition = competition_from_params
+    return unless competition.results_submitted? && !current_user.can_admin_competitions?
+
+    flash[:danger] = t('competitions.messages.schedule_locked_after_results_submitted')
+    redirect_to competition_path(competition)
+  end
+
   # Rubocop is unhappy about all the things we do in this controller action,
   # which is understandable.
   def index
@@ -98,12 +107,6 @@ class CompetitionsController < ApplicationController
 
   def edit_schedule
     @competition = competition_from_params(includes: [{ competition_events: { rounds: { competition_event: [:event] } }, competition_venues: { venue_rooms: { schedule_activities: [:child_activities] } } }])
-
-    # Only admins can access schedule after results are submitted
-    return unless @competition.results_submitted? && !current_user.can_admin_competitions?
-
-    flash[:danger] = "The schedule cannot be edited after results have been submitted."
-    redirect_to competition_path(@competition)
   end
 
   def get_nearby_competitions(competition)
