@@ -23,18 +23,10 @@ class UpdateLiveResultJob < ApplicationJob
 
     round = live_result.round
 
-    # We need the state before the result is updated
-    before_state = round.to_live_state
+    Live::DiffHelper.broadcast_changes(round) do
+      average, best = LiveResult.compute_average_and_best(new_attempts, round)
 
-    average, best = LiveResult.compute_average_and_best(new_attempts, round)
-
-    live_result.update!(live_attempts: new_attempts, best: best, average: average, last_attempt_entered_at: Time.now.utc)
-
-    after_state = round.to_live_state
-    diff = Live::DiffHelper.round_state_diff(before_state, after_state)
-
-    diff = Live::DiffHelper.add_forecast_stats(diff, round)
-
-    ActionCable.server.broadcast(Live::Config.broadcast_key(round.wcif_id), diff)
+      live_result.update!(live_attempts: new_attempts, best: best, average: average, last_attempt_entered_at: Time.now.utc)
+    end
   end
 end

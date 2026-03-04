@@ -126,8 +126,11 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     round = Round.find_by_wcif_id!(params.require(:round_id), competition.id)
 
     require_manage!(competition)
-    created_result = round.create_empty_live_result(registration.id)
 
-    render json: { status: "ok", created: created_result }
+    Live::DiffHelper.broadcast_changes(round) do
+      round.create_empty_live_result(registration.id)
+    end
+
+    render json: { status: "ok", competitor: registration.to_live_json }
   end
 end
