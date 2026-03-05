@@ -49,14 +49,14 @@ class Ticket < ApplicationRecord
 
   private
 
-  def default_page_title
-    # Turns `TicketsFooBar` into `['tickets', 'foo', 'bar']`
-    metadata_parts = metadata_type.underscore.split('_')
+    def default_page_title
+      # Turns `TicketsFooBar` into `['tickets', 'foo', 'bar']`
+      metadata_parts = metadata_type.underscore.split('_')
 
-    # Removes the typical 'Tickets' prefix from the metadata identifier
-    type_description = metadata_parts.drop_while { |part| part == 'tickets' }
+      # Removes the typical 'Tickets' prefix from the metadata identifier
+      type_description = metadata_parts.drop_while { |part| part == 'tickets' }
 
-    # Collates metadata and ID into "Foo Bar Ticket 456"
-    [*type_description, 'Ticket', id].join(' ').titlecase
-  end
+      # Collates metadata and ID into "Foo Bar Ticket 456"
+      [*type_description, 'Ticket', id].join(' ').titlecase
+    end
 end
