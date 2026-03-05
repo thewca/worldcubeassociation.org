@@ -264,7 +264,8 @@ class Round < ApplicationRecord
                             # will be adjacent — walk forward and include any that match exactly.
                             remaining = results_with_potential.drop(qualifying_index)
                             tied_at_boundary = remaining.take_while { |r| r.potential_solve_time == cutoff }
-                            top_qualifying + tied_at_boundary
+                            with_ties = top_qualifying + tied_at_boundary
+                            with_ties.length > max_qualifying ? top_qualifying : with_ties
                           else
                             []
                           end

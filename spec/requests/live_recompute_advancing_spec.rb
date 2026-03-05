@@ -119,7 +119,7 @@ RSpec.describe "WCA Live API" do
 
           create(:live_result, registration: registrations[0], round: round, average: 100)
           create(:live_result, registration: registrations[1], round: round, average: 200)
-          # Tied at rank 3 — the boundary. Including both would exceed the condition,
+          # Tied at rank 3 — the boundary. Including both would exceed the 75% rule,
           # so neither advances (tie group is excluded together).
           create(:live_result, registration: registrations[2], round: round, average: 300, best: 150)
           create(:live_result, registration: registrations[3], round: round, average: 300, best: 150)
