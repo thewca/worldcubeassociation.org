@@ -33,6 +33,10 @@ class Ticket < ApplicationRecord
       ticket_stakeholders.belongs_to_groups(user.active_groups).any?
   end
 
+  def page_title
+    metadata.try(:page_title) || default_page_title
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     include: %w[metadata],
   }.freeze
@@ -41,5 +45,18 @@ class Ticket < ApplicationRecord
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     json[:class] = self.class.to_s.downcase
     json
+  end
+
+  private
+
+  def default_page_title
+    # Turns `TicketsFooBar` into `['tickets', 'foo', 'bar']`
+    metadata_parts = metadata_type.underscore.split('_')
+
+    # Removes the typical 'Tickets' prefix from the metadata identifier
+    type_description = metadata_parts.drop_while { |it| it == 'tickets' }
+
+    # Collates metadata and ID into "Foo Bar Ticket 456"
+    [*type_description, 'Ticket', id].join(' ').titlecase
   end
 end

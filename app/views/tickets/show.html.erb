@@ -1,8 +1,2 @@
-<%
-  if @ticket.metadata_type == 'TicketsEditPerson'
-    provide(:title, 'Edit Person Ticket')
-  elsif @ticket.metadata_type == 'TicketsCompetitionResult'
-    provide(:title, @ticket.metadata.competition.name)
-  end
-%>
+<% provide(:title, @ticket.page_title) %>
 <%= react_component("Tickets", {id: @ticket_id}) %>

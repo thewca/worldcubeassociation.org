@@ -74,7 +74,6 @@ class TicketsController < ApplicationController
     respond_to do |format|
       format.html do
         @ticket_id = params.require(:id).to_i
-        @ticket = Ticket.find(@ticket_id)
         render :show
       end
       format.json do
