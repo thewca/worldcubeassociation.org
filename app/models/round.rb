@@ -219,34 +219,57 @@ class Round < ApplicationRecord
     live_results.reset
   end
 
+  def max_qualifying
+    # Our Regulations allow at most 75% of competitors to proceed
+    max_qualifying = (live_results.count * 0.75).floor
+    [advancement_condition.max_advancing(live_results), max_qualifying].min
+  end
+
   def recompute_advancing
     has_linked_round = linked_round.present?
-    advancement_determining_results = has_linked_round ? linked_round.live_results : live_results
+    round_results = has_linked_round ? linked_round.live_results : live_results
 
-    # Only ranked results that are not locked can be considered for advancing.
-    round_results = advancement_determining_results.where.not(global_pos: nil).where(locked_by_id: nil)
-    round_results.update_all(advancing: false, advancing_questionable: false)
+    advancement_determining_results = round_results.where.not(global_pos: nil).where(locked_by_id: nil)
+    advancement_determining_results.update_all(advancing: false, advancing_questionable: false)
 
-    missing_attempts = total_competitors - round_results.count
+    missing_attempts = total_competitors - advancement_determining_results.count
     potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
 
-    # Eager load associations to avoid N+1 on potential_solve_time
-    loaded_results = round_results.includes(:live_attempts).to_a
+    loaded_results = advancement_determining_results.includes(:live_attempts).to_a
     results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
 
-    qualifying_index = if final_round?
-                         3
-                       else
-                         # Our Regulations allow at most 75% of competitors to proceed
-                         max_qualifying = (round_results.count * 0.75).floor
-                         [advancement_condition.max_advancing(round_results), max_qualifying].min
-                       end
+    qualifying_index = final_round? ? 3 : max_qualifying
 
-    round_results.update_all("advancing_questionable = global_pos BETWEEN 1 AND #{qualifying_index}")
+    # Compute tie-aware boundary: the first ranking that does NOT qualify.
+    # People who tied at the boundary either all advance or none do.
+    # See: https://www.worldcubeassociation.org/regulations/#9p1
+    sorted_rankings = advancement_determining_results.reorder(:global_pos).pluck(:global_pos)
+    first_non_qualifying_ranking = if sorted_rankings.length > qualifying_index
+                                     sorted_rankings[qualifying_index]
+                                   else
+                                     sorted_rankings.empty? ? 1 : sorted_rankings.last + 1
+                                   end
+
+    # Mark questionable using the tie-aware ranking boundary instead of a fixed index.
+    advancement_determining_results.update_all(
+      "advancing_questionable = (global_pos < #{first_non_qualifying_ranking})",
+    )
 
     # Determine which results would advance if everyone achieved their best possible attempt.
-    advancing_ids = results_with_potential.take(qualifying_index).select(&:complete?).pluck(:id)
+    top_qualifying = results_with_potential.first(qualifying_index)
 
+    advancing_with_ties = if top_qualifying.any?
+                            cutoff = top_qualifying.last.potential_solve_time
+                            # Since results_with_potential is already sorted, ties at the boundary
+                            # will be adjacent — walk forward and include any that match exactly.
+                            remaining = results_with_potential.drop(qualifying_index)
+                            tied_at_boundary = remaining.take_while { |r| r.potential_solve_time == cutoff }
+                            top_qualifying + tied_at_boundary
+                          else
+                            []
+                          end
+
+    advancing_ids = advancing_with_ties.select(&:complete?).pluck(:id)
     LiveResult.where(id: advancing_ids).update_all(advancing: true)
   end
 
