@@ -429,7 +429,7 @@ class Round < ApplicationRecord
   # Port from https://github.com/thewca/wca-live/blob/main/lib/wca_live/scoretaking/advancing.ex#L143
   # Basically this just removes the number one placed competitor and then sees who of the non-advancing
   # competitors would make it
-  def next_qualifying_to_round
+  def next_qualifying_to_round(competitor_being_quit)
     return [] if first_round?
 
     prev_round = previous_round
@@ -445,7 +445,7 @@ class Round < ApplicationRecord
 
     return [] if candidate_ids.empty?
 
-    ignored_ids = ([first_advancing.id] | already_quit_ids)
+    ignored_ids = ([first_advancing.id, competitor_being_quit] | already_quit_ids)
 
     advancement_determining = prev_results
                               .where.not(id: ignored_ids)
@@ -460,10 +460,13 @@ class Round < ApplicationRecord
   end
 
   def quit_from_round!(registration_id, quitting_user, should_advance_next: false)
+    to_advance = next_qualifying_to_round(registration_id).first if should_advance_next
+
     transaction do
       quit_count = Live::DiffHelper.broadcast_changes(self) do
         result = live_results.find_by!(registration_id: registration_id)
         destroyed = result.destroy
+        live_results.create(**LiveResult.empty_result_attributes(to_advance.registration_id, self.id)) if to_advance.present?
         recompute_advancing
         live_results.reset
         destroyed ? 1 : 0
@@ -472,7 +475,7 @@ class Round < ApplicationRecord
       return quit_count if quit_count.zero? || first_round?
 
       quit_count + Live::DiffHelper.broadcast_changes(previous_round) do
-        advance_next_qualifier if should_advance_next
+        to_advance&.update!(advancing: true)
         quit_from_previous_round(registration_id, quitting_user)
       end
     end
@@ -481,14 +484,6 @@ class Round < ApplicationRecord
   def quit_from_previous_round(registration_id, quitting_user)
     results = previous_round.linked_round&.live_results || previous_round.live_results
     results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
-  end
-
-  def advance_next_qualifier
-    to_advance = next_qualifying_to_round.first
-    return unless to_advance.present?
-
-    to_advance.update!(advancing: true)
-    live_results.create(**LiveResult.empty_result_attributes(to_advance.registration_id, self.id))
   end
 
   def wcif_id

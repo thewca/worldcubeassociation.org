@@ -16,7 +16,7 @@ module Live
 
       # Queues the broadcast — fires after outermost transaction commits,
       # or immediately if not inside a transaction. Never fires on rollback.
-      ActiveRecord::Base.connection.after_commit do
+      ActiveRecord.after_all_transactions_commit do
         ActionCable.server.broadcast(Live::Config.broadcast_key(round.wcif_id), diff)
       end
 
