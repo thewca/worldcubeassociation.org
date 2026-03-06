@@ -112,8 +112,6 @@ export function MultiRoundResultProvider({
       after_hash,
     } = diff;
 
-    console.log(created);
-
     const queryIndex = initialRounds.findIndex((r) => r.id === roundId);
     if (queryIndex === -1) return;
 
