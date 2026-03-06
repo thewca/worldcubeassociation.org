@@ -214,7 +214,7 @@ module ResultsValidators
           end
         end
 
-        competition_data.persons.select { |p| p.is_a?(InboxPerson) }.each do |p|
+        competition_data.persons.grep(InboxPerson).each do |p|
           mismatches = p.registration_mismatches
           next if mismatches.empty?
 
