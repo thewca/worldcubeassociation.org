@@ -8,13 +8,19 @@ module Live
     def self.broadcast_changes(round, &)
       before_state = round.to_live_state
 
-      yield
+      result = yield
 
       after_state = round.to_live_state
 
       diff = self.compressed_round_state_diff(before_state, after_state, round)
 
-      ActionCable.server.broadcast(Live::Config.broadcast_key(round.wcif_id), diff)
+      # Queues the broadcast — fires after outermost transaction commits,
+      # or immediately if not inside a transaction. Never fires on rollback.
+      ActiveRecord.after_all_transactions_commit do
+        ActionCable.server.broadcast(Live::Config.broadcast_key(round.wcif_id), diff)
+      end
+
+      result
     end
 
     def self.compressed_round_state_diff(before_state, after_state, round)
