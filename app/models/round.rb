@@ -426,41 +426,41 @@ class Round < ApplicationRecord
     number == 1 || (linked_round.present? && linked_round.first_round_in_link.number == 1)
   end
 
+  def relevant_results
+    linked_round.present? ? linked_round.live_results : live_results
+  end
+
   # Port from https://github.com/thewca/wca-live/blob/main/lib/wca_live/scoretaking/advancing.ex#L143
   # Basically this just removes the number one placed competitor and then sees who of the non-advancing
-  # competitors would make it
-  def next_qualifying_to_round(competitor_being_quit)
-    return [] if first_round?
+  # competitors would make it if that competitor got dnf
+  def next_advancing_without(competitor_being_quit)
+    already_quit_ids = relevant_results.quit.pluck(:id)
 
-    prev_round = previous_round
-    prev_results = prev_round.linked_round.present? ? prev_round.linked_round.live_results : prev_round.live_results
+    first_advancing = relevant_results.advancing.first
 
-    return [] unless prev_results.exists?(advancing: true)
-
-    already_quit_ids = prev_results.quit.pluck(:id)
-
-    first_advancing = prev_results.advancing.first
-
-    candidate_ids = prev_results.not_advancing.not_quit.pluck(:id)
+    candidate_ids = relevant_results.not_advancing.not_quit.pluck(:id)
 
     return [] if candidate_ids.empty?
 
     ignored_ids = ([first_advancing.id, competitor_being_quit] | already_quit_ids)
 
-    advancement_determining = prev_results
+    advancement_determining = relevant_results
                               .where.not(id: ignored_ids)
 
-    qualifying_index = prev_round.max_qualifying
+    # Eager load associations to avoid N+1 on potential_solve_time
+    loaded_results = advancement_determining.includes(:live_attempts).to_a
 
-    hypothetically_advancing_ids = advancement_determining
-                                   .take(qualifying_index)
-                                   .map(&:id)
+    # Assume that everyone who quit got dnf
+    worst_results = Array.new(ignored_ids.length) { LiveResult.build(round: self, best: -1, average: -1) }
+    results_with_worst = (loaded_results + worst_results).sort_by(&:values_for_sorting)
 
-    prev_results.where(id: hypothetically_advancing_ids & candidate_ids)
+    hypothetically_advancing_ids = advancement_condition.apply(results_with_worst).first
+
+    relevant_results.where(id: hypothetically_advancing_ids & candidate_ids)
   end
 
   def quit_from_round!(registration_id, quitting_user, should_advance_next: false)
-    to_advance = next_qualifying_to_round(registration_id).first if should_advance_next
+    to_advance = previous_round.next_advancing_without(registration_id).first if should_advance_next
 
     transaction do
       quit_count = Live::DiffHelper.broadcast_changes(self) do
@@ -482,7 +482,7 @@ class Round < ApplicationRecord
   end
 
   def quit_from_previous_round(registration_id, quitting_user)
-    results = previous_round.linked_round&.live_results || previous_round.live_results
+    results = previous_round.relevant_results
     results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
   end
 
