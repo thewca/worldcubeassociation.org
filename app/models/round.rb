@@ -219,12 +219,6 @@ class Round < ApplicationRecord
     live_results.reset
   end
 
-  def max_qualifying
-    # Our Regulations allow at most 75% of competitors to proceed
-    max_qualifying = (live_results.count * 0.75).floor
-    [advancement_condition.max_advancing(live_results), max_qualifying].min
-  end
-
   def recompute_advancing
     has_linked_round = linked_round.present?
     round_results = has_linked_round ? linked_round.live_results : live_results
