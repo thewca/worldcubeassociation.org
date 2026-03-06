@@ -114,7 +114,7 @@ RSpec.describe "WCA Live API" do
 
     describe "tie handling" do
       context "with a ranking advancement condition" do
-        it "excludes all results tied at the qualifying boundary" do
+        it "excludes all results tied at the qualifying boundary if over the 75% rule" do
           round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition)
 
           create(:live_result, registration: registrations[0], round: round, average: 100)
@@ -143,18 +143,18 @@ RSpec.describe "WCA Live API" do
       end
 
       context "with a percent advancement condition" do
-        it "excludes all results tied at the qualifying boundary" do
+        it "doesn't exclude results tied at the qualifying boundary when still in the 75% boundary" do
           round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
 
           create(:live_result, registration: registrations[0], round: round, average: 100)
           # 40% of 5 = 2. These two are tied for rank 2 — advancing both would exceed
-          # the condition, so neither advances.
+          # the condition, but is still under the 75% so they still proceed
           create(:live_result, registration: registrations[1], round: round, average: 200, best: 100)
           create(:live_result, registration: registrations[2], round: round, average: 200, best: 100)
           create(:live_result, registration: registrations[3], round: round, average: 300)
           create(:live_result, registration: registrations[4], round: round, average: 400)
 
-          expect(round.live_results.order(:average, :best).pluck(:advancing)).to eq([true, false, false, false, false])
+          expect(round.live_results.order(:average, :best).pluck(:advancing)).to eq([true, true, true, false, false])
         end
 
         it "advances all results tied within the qualifying zone" do

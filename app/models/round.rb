@@ -219,12 +219,6 @@ class Round < ApplicationRecord
     live_results.reset
   end
 
-  def max_qualifying
-    # Our Regulations allow at most 75% of competitors to proceed
-    max_qualifying = (live_results.count * 0.75).floor
-    [advancement_condition.max_advancing(live_results), max_qualifying].min
-  end
-
   def recompute_advancing
     has_linked_round = linked_round.present?
     round_results = has_linked_round ? linked_round.live_results : live_results
@@ -235,42 +229,18 @@ class Round < ApplicationRecord
     missing_attempts = total_competitors - advancement_determining_results.count
     potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
 
+    # Determine which results would advance if everyone achieved their best possible attempt.
     loaded_results = advancement_determining_results.includes(:live_attempts).to_a
     results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
 
-    qualifying_index = final_round? ? 3 : max_qualifying
+    advancement_determining_condition = final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
 
-    # Compute tie-aware boundary: the first ranking that does NOT qualify.
-    # People who tied at the boundary either all advance or none do.
-    # See: https://www.worldcubeassociation.org/regulations/#9p1
-    sorted_rankings = advancement_determining_results.reorder(:global_pos).pluck(:global_pos)
-    first_non_qualifying_ranking = if sorted_rankings.length > qualifying_index
-                                     sorted_rankings[qualifying_index]
-                                   else
-                                     sorted_rankings.empty? ? 1 : sorted_rankings.last + 1
-                                   end
+    advancing_ids, max_advancing = advancement_determining_condition.apply(results_with_potential)
 
-    # Mark questionable using the tie-aware ranking boundary instead of a fixed index.
     advancement_determining_results.update_all(
-      "advancing_questionable = (global_pos < #{first_non_qualifying_ranking})",
+      "advancing_questionable = (global_pos < #{max_advancing})",
     )
 
-    # Determine which results would advance if everyone achieved their best possible attempt.
-    top_qualifying = results_with_potential.first(qualifying_index)
-
-    advancing_with_ties = if top_qualifying.any?
-                            cutoff = top_qualifying.last.potential_solve_time
-                            # Since results_with_potential is already sorted, ties at the boundary
-                            # will be adjacent — walk forward and include any that match exactly.
-                            remaining = results_with_potential.drop(qualifying_index)
-                            tied_at_boundary = remaining.take_while { |r| r.potential_solve_time == cutoff }
-                            with_ties = top_qualifying + tied_at_boundary
-                            with_ties.length > max_qualifying ? top_qualifying : with_ties
-                          else
-                            []
-                          end
-
-    advancing_ids = advancing_with_ties.select(&:complete?).pluck(:id)
     LiveResult.where(id: advancing_ids).update_all(advancing: true)
   end
 
