@@ -4,10 +4,10 @@ namespace :duplicate_payments do
   desc "Remove duplicate payment records from database"
   task destroy: :environment do
     duplicate_refund_stripe_ids = StripeRecord
-                                    .group(:stripe_id)
-                                    .having("COUNT(*) > 1")
-                                    .count
-                                    .keys
+                                  .group(:stripe_id)
+                                  .having("COUNT(*) > 1")
+                                  .count
+                                  .keys
 
     puts "About to process #{duplicate_refund_stripe_ids}. Continue? [y/N]"
     proceed = $stdin.gets.chomp.downcase
@@ -39,7 +39,7 @@ namespace :duplicate_payments do
         break
       end
 
-      unless non_wh_record.registration_payment.present?
+      if non_wh_record.registration_payment.blank?
         puts "No registration_payment present for non_wh_record: #{non_wh_record} - aborting."
         break
       end
