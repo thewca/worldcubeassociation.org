@@ -130,6 +130,23 @@ export interface paths {
         };
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the next competitor assuming the registration in the query is quit */
+        get: operations["getNextCompetitor"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/clear": {
         parameters: {
             query?: never;
@@ -174,7 +191,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        /** Clears a round deleting all results */
+        /** Quits a competitor from the round and advances the next one if prompted */
         delete: operations["quitCompetitor"];
         options?: never;
         head?: never;
@@ -1757,6 +1774,31 @@ export interface operations {
             };
         };
     };
+    getNextCompetitor: {
+        parameters: {
+            query: {
+                registration_id: number;
+            };
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the next competitors who would advance if the registration */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveCompetitor"][];
+                };
+            };
+        };
+    };
     clearRound: {
         parameters: {
             query?: never;
@@ -1821,7 +1863,13 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody?: {
+            content: {
+                "application/json": {
+                    should_advance_next?: boolean;
+                };
+            };
+        };
         responses: {
             /** @description Returns number of rounds the competitor was marked as quit in */
             200: {

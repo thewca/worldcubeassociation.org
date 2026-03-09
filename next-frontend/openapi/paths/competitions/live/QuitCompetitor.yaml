@@ -1,5 +1,5 @@
 delete:
-  summary: Clears a round deleting all results
+  summary: Quits a competitor from the round and advances the next one if prompted
   tags:
     - live
   operationId: quitCompetitor
@@ -19,6 +19,15 @@ delete:
       required: true
       schema:
         type: number
+  requestBody:
+    required: false
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            should_advance_next:
+              type: boolean
   responses:
     '200':
       description: Returns number of rounds the competitor was marked as quit in

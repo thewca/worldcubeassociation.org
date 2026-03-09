@@ -237,7 +237,7 @@ class Round < ApplicationRecord
     qualifying_index = if final_round?
                          3
                        else
-                         max_qualifying
+                         advancement_condition.max_qualifying(results_with_potential)
                        end
 
     advancement_determining_results.update_all("advancing_questionable = global_pos BETWEEN 1 AND #{qualifying_index}")

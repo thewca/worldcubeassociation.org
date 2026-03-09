@@ -20,7 +20,7 @@ interface AdminResultsContextValue {
   handleAttemptChange: (index: number, value: number) => void;
   handleSubmit: () => void;
   clearCompetitorsResults: (registrationId: number) => void;
-  quitCompetitor: (registrationId: number) => void;
+  quitCompetitor: (registrationId: number, shouldAdvanceNext: boolean) => void;
 }
 
 function zeroedArrayOfSize(size: number) {
@@ -135,10 +135,16 @@ export function LiveResultAdminProvider({
     });
   };
 
-  const quitCompetitor = (registrationId: number) => {
+  const quitCompetitor = (
+    registrationId: number,
+    shouldAdvanceNext: boolean,
+  ) => {
     mutateQuit({
       params: {
         path: { competitionId, roundId, registrationId },
+      },
+      body: {
+        should_advance_next: shouldAdvanceNext,
       },
     });
   };

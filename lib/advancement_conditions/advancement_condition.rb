@@ -64,7 +64,7 @@ module AdvancementConditions
 
       advancing_with_ties = if top_qualifying.any?
                               cutoff = top_qualifying.last.potential_solve_time
-                              # Since results_with_potential is already sorted, ties at the boundary
+                              # Since results are already sorted, ties at the boundary
                               # will be adjacent — walk forward and include any that match exactly.
                               remaining = results.drop(qualifying_index)
                               tied_at_boundary = remaining.take_while { |r| r.potential_solve_time == cutoff }

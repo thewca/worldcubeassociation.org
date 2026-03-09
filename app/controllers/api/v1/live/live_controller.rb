@@ -125,4 +125,18 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     render json: { status: "ok", quit: quit_count }
   end
+
+  def next_if_quit
+    competition = Competition.find(params.require(:competition_id))
+    wcif_id = params.require(:round_id)
+    registration_id = params.require(:registration_id)
+
+    require_manage!(competition)
+
+    round = Round.find_by_wcif_id!(wcif_id, competition.id, includes: [:live_results])
+
+    to_advance = round.first_round? ? [] : round.previous_round.next_advancing_without(registration_id).take(1)
+
+    render json: { status: "ok", next_advancing: to_advance }
+  end
 end

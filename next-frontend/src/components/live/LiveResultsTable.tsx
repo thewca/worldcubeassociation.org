@@ -97,6 +97,7 @@ export default function LiveResultsTable({
                       result={result}
                       competitor={competitorAndTheirResults}
                       competitionId={competitionId}
+                      roundId={roundWcifId}
                     />
                   </Table.Cell>
                 )}
