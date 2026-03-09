@@ -223,27 +223,24 @@ class Round < ApplicationRecord
     has_linked_round = linked_round.present?
     round_results = has_linked_round ? linked_round.live_results : live_results
 
-    # Only ranked results that are not locked can be considered for advancing.
     advancement_determining_results = round_results.where.not(global_pos: nil).where(locked_by_id: nil)
     advancement_determining_results.update_all(advancing: false, advancing_questionable: false)
 
     missing_attempts = total_competitors - advancement_determining_results.count
-    potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
+    potential_results = Array.new(missing_attempts) { LiveResult.build(round: self, average: 0, best: 0) }
 
-    # Eager load associations to avoid N+1 on potential_solve_time
+    # Determine which results would advance if everyone achieved their best possible attempt.
     loaded_results = advancement_determining_results.includes(:live_attempts).to_a
     results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
 
-    qualifying_index = if final_round?
-                         3
-                       else
-                         advancement_condition.max_qualifying(results_with_potential)
-                       end
+    advancement_determining_condition = final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
 
-    advancement_determining_results.update_all("advancing_questionable = global_pos BETWEEN 1 AND #{qualifying_index}")
+    advancing_ids = advancement_determining_condition.apply(results_with_potential)
+    max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
 
-    # Determine which results would advance if everyone achieved their best possible attempt.
-    advancing_ids = results_with_potential.take(qualifying_index).select(&:complete?).pluck(:id)
+    advancement_determining_results.update_all(
+      "advancing_questionable = (global_pos < #{max_advancing})",
+    )
 
     LiveResult.where(id: advancing_ids).update_all(advancing: true)
   end

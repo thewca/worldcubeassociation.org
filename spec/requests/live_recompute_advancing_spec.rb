@@ -49,7 +49,7 @@ RSpec.describe "WCA Live API" do
         expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
       end
 
-      it 'considers ties' do
+      it 'considers average tied but better single' do
         round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
 
         5.times do |i|
@@ -109,6 +109,108 @@ RSpec.describe "WCA Live API" do
 
         # Only strictly _better_ than 3 seconds will proceed, so that's two entries.
         expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
+      end
+    end
+
+    describe "tie handling" do
+      context "with a ranking advancement condition" do
+        it "excludes all results tied at the qualifying boundary if over the 75% rule" do
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition)
+
+          create(:live_result, registration: registrations[0], round: round, average: 100)
+          create(:live_result, registration: registrations[1], round: round, average: 200)
+          # Tied at rank 3 — the boundary. Including both would exceed the 75% rule,
+          # so neither advances (tie group is excluded together).
+          create(:live_result, registration: registrations[2], round: round, average: 300, best: 150)
+          create(:live_result, registration: registrations[3], round: round, average: 300, best: 150)
+          create(:live_result, registration: registrations[4], round: round, average: 400)
+
+          expect(round.live_results.order(:average, :best).pluck(:advancing)).to eq([true, true, false, false, false])
+        end
+
+        it "excludes all results tied at the qualifying boundary that are also tied with previous results if over the 75% rule" do
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition)
+
+          # These are all tied and if all would advance it would break the 75% rule so no one advances
+          create(:live_result, registration: registrations[0], round: round, average: 300, best: 150)
+          create(:live_result, registration: registrations[1], round: round, average: 300, best: 150)
+          create(:live_result, registration: registrations[2], round: round, average: 300, best: 150)
+          create(:live_result, registration: registrations[3], round: round, average: 300, best: 150)
+          create(:live_result, registration: registrations[4], round: round, average: 400)
+
+          expect(round.live_results.order(:average, :best).pluck(:advancing)).to eq([false, false, false, false, false])
+        end
+
+        it "advances all results tied within the qualifying zone" do
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition)
+
+          create(:live_result, registration: registrations[0], round: round, average: 100)
+          # Tied at rank 2 — both are comfortably within the top 3, so both advance.
+          create(:live_result, registration: registrations[1], round: round, average: 200, best: 100)
+          create(:live_result, registration: registrations[2], round: round, average: 200, best: 100)
+          create(:live_result, registration: registrations[3], round: round, average: 300)
+          create(:live_result, registration: registrations[4], round: round, average: 400)
+
+          expect(round.live_results.order(:average, :best).pluck(:advancing)).to eq([true, true, true, false, false])
+        end
+      end
+
+      context "with a percent advancement condition" do
+        it "doesn't exclude results tied at the qualifying boundary when still in the 75% boundary" do
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
+
+          create(:live_result, registration: registrations[0], round: round, average: 100)
+          # 40% of 5 = 2. These two are tied for rank 2 — advancing both would exceed
+          # the condition, but is still under the 75% so they still proceed
+          create(:live_result, registration: registrations[1], round: round, average: 200, best: 100)
+          create(:live_result, registration: registrations[2], round: round, average: 200, best: 100)
+          create(:live_result, registration: registrations[3], round: round, average: 300)
+          create(:live_result, registration: registrations[4], round: round, average: 400)
+
+          expect(round.live_results.order(:average, :best).pluck(:advancing)).to eq([true, true, true, false, false])
+        end
+
+        it "advances all results tied within the qualifying zone" do
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
+
+          # 40% of 5 = 2. Two are tied at rank 1 — both are inside the qualifying zone.
+          create(:live_result, registration: registrations[0], round: round, average: 100, best: 50)
+          create(:live_result, registration: registrations[1], round: round, average: 100, best: 50)
+          create(:live_result, registration: registrations[2], round: round, average: 200)
+          create(:live_result, registration: registrations[3], round: round, average: 300)
+          create(:live_result, registration: registrations[4], round: round, average: 400)
+
+          expect(round.live_results.order(:average, :best).pluck(:advancing)).to eq([true, true, false, false, false])
+        end
+      end
+
+      context "with an attempt_result advancement condition" do
+        it "excludes all results tied exactly at the cutoff time" do
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+
+          create(:live_result, registration: registrations[0], round: round, average: 100)
+          create(:live_result, registration: registrations[1], round: round, average: 200)
+          # Both tied exactly at the 3-second cutoff. The condition requires strictly
+          # better than 300, so neither qualifies.
+          create(:live_result, registration: registrations[2], round: round, average: 300, best: 150)
+          create(:live_result, registration: registrations[3], round: round, average: 300, best: 150)
+          create(:live_result, registration: registrations[4], round: round, average: 400)
+
+          expect(round.live_results.order(:average, :best).pluck(:advancing)).to eq([true, true, false, false, false])
+        end
+
+        it "advances all results tied well within the cutoff" do
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+
+          # Both are comfortably under 3 seconds, so both qualify.
+          create(:live_result, registration: registrations[0], round: round, average: 100, best: 50)
+          create(:live_result, registration: registrations[1], round: round, average: 100, best: 50)
+          create(:live_result, registration: registrations[2], round: round, average: 400)
+          create(:live_result, registration: registrations[3], round: round, average: 500)
+          create(:live_result, registration: registrations[4], round: round, average: 600)
+
+          expect(round.live_results.order(:average, :best).pluck(:advancing)).to eq([true, true, false, false, false])
+        end
       end
     end
 

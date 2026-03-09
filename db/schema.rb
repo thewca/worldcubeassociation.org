@@ -1339,6 +1339,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_164242) do
     t.string "stripe_status", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["parent_record_id"], name: "fk_rails_6ad225b020"
+    t.index ["stripe_id", "stripe_record_type"], name: "index_stripe_records_on_stripe_id_and_stripe_record_type", unique: true
     t.index ["stripe_id"], name: "index_stripe_records_on_stripe_id"
     t.index ["stripe_status"], name: "index_stripe_records_on_stripe_status"
   end
