@@ -26,6 +26,14 @@ class LiveResult < ApplicationRecord
   has_one :event, through: :round
   has_one :format, through: :round
 
+  validates :best,
+            presence: true,
+            numericality: { only_integer: true }
+
+  validates :average,
+            presence: true,
+            numericality: { only_integer: true }
+
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[global_pos local_pos registration_id best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
     methods: %w[event_id attempts result_id forecast_statistics round_wcif_id],
