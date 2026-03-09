@@ -56,7 +56,7 @@ namespace :duplicate_payments do
       wh_record.reload.destroy!
 
       # Check whether the registration now has a positive balance
-      negative_entry_fees << non_wh_record.registration_id unless non_wh_record.registration.reload.paid_entry_fees >= 0
+      negative_entry_fees << non_wh_record.registration_id unless non_wh_record.registration_payment.registration.reload.paid_entry_fees >= 0
     end
 
     puts "Completed."
