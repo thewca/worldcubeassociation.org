@@ -335,6 +335,9 @@ export const actionUrls = {
     syncEditPersonRequest: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_sync_edit_person_request_path("${ticketId}")) %>`,
     joinAsBccStakeholder: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_join_as_bcc_stakeholder_path("${ticketId}")) %>`,
     eligibleRolesForBcc: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_eligible_roles_for_bcc_path("${ticketId}")) %>`,
+    approveClaimWcaId: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_approve_claim_wca_id_path("${ticketId}")) %>`,
+    rejectClaimWcaId: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_reject_claim_wca_id_path("${ticketId}")) %>`,
+    transferClaimWcaId: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_transfer_claim_wca_id_path("${ticketId}")) %>`,
   },
   validators: {
     forCompetitionList: (competitionIds, selectedValidators, applyFixWhenPossible, checkRealResults) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_validators_for_competition_list_path) %>?${jsonToQueryString({ competitionIds, selectedValidators, applyFixWhenPossible, checkRealResults })}`,
