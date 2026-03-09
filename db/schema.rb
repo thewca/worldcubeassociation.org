@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_25_164242) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_09_071156) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -432,6 +432,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_164242) do
     t.integer "guests_per_registration_limit"
     t.text "information", size: :medium
     t.integer "latitude"
+    t.bigint "lead_delegate_id"
     t.integer "longitude"
     t.string "main_event_id"
     t.string "name", limit: 50, default: "", null: false
@@ -464,6 +465,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_164242) do
     t.index ["cancelled_at"], name: "index_competitions_on_cancelled_at"
     t.index ["country_id"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_competitions_on_end_date"
+    t.index ["lead_delegate_id"], name: "index_competitions_on_lead_delegate_id"
     t.index ["start_date"], name: "index_competitions_on_start_date"
   end
 
