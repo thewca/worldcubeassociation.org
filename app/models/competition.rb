@@ -707,6 +707,8 @@ class Competition < ApplicationRecord
           clone.organizers = organizers
         when 'delegates'
           clone.delegates = delegates
+        when 'lead_delegate'
+          clone.lead_delegate = lead_delegate
         when 'events'
           clone.events = events
         when 'tabs'
