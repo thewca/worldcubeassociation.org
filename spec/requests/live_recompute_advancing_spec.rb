@@ -128,6 +128,19 @@ RSpec.describe "WCA Live API" do
           expect(round.live_results.order(:average, :best).pluck(:advancing)).to eq([true, true, false, false, false])
         end
 
+        it "excludes all results tied at the qualifying boundary that are also tied with previous results if over the 75% rule" do
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition)
+
+          # These are all tied and if all would advance it would break the 75% rule so no one advances
+          create(:live_result, registration: registrations[0], round: round, average: 300, best: 150)
+          create(:live_result, registration: registrations[1], round: round, average: 300, best: 150)
+          create(:live_result, registration: registrations[2], round: round, average: 300, best: 150)
+          create(:live_result, registration: registrations[3], round: round, average: 300, best: 150)
+          create(:live_result, registration: registrations[4], round: round, average: 400)
+
+          expect(round.live_results.order(:average, :best).pluck(:advancing)).to eq([false, false, false, false, false])
+        end
+
         it "advances all results tied within the qualifying zone" do
           round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition)
 
