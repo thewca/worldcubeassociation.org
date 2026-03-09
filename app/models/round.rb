@@ -221,31 +221,26 @@ class Round < ApplicationRecord
 
   def recompute_advancing
     has_linked_round = linked_round.present?
-    advancement_determining_results = has_linked_round ? linked_round.live_results : live_results
+    round_results = has_linked_round ? linked_round.live_results : live_results
 
-    # Only ranked results that are not locked can be considered for advancing.
-    round_results = advancement_determining_results.where.not(global_pos: nil).where(locked_by_id: nil)
-    round_results.update_all(advancing: false, advancing_questionable: false)
+    advancement_determining_results = round_results.where.not(global_pos: nil).where(locked_by_id: nil)
+    advancement_determining_results.update_all(advancing: false, advancing_questionable: false)
 
-    missing_attempts = total_competitors - round_results.count
-    potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
-
-    # Eager load associations to avoid N+1 on potential_solve_time
-    loaded_results = round_results.includes(:live_attempts).to_a
-    results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
-
-    qualifying_index = if final_round?
-                         3
-                       else
-                         # Our Regulations allow at most 75% of competitors to proceed
-                         max_qualifying = (round_results.count * 0.75).floor
-                         [advancement_condition.max_advancing(round_results), max_qualifying].min
-                       end
-
-    round_results.update_all("advancing_questionable = global_pos BETWEEN 1 AND #{qualifying_index}")
+    missing_attempts = total_competitors - advancement_determining_results.count
+    potential_results = Array.new(missing_attempts) { LiveResult.build(round: self, average: 0, best: 0) }
 
     # Determine which results would advance if everyone achieved their best possible attempt.
-    advancing_ids = results_with_potential.take(qualifying_index).select(&:complete?).pluck(:id)
+    loaded_results = advancement_determining_results.includes(:live_attempts).to_a
+    results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
+
+    advancement_determining_condition = final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
+
+    advancing_ids = advancement_determining_condition.apply(results_with_potential)
+    max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
+
+    advancement_determining_results.update_all(
+      "advancing_questionable = (global_pos < #{max_advancing})",
+    )
 
     LiveResult.where(id: advancing_ids).update_all(advancing: true)
   end
