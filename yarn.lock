@@ -10737,7 +10737,7 @@ __metadata:
     sass: "npm:^1.97.3"
     sass-loader: "npm:^16.0.7"
     semantic-ui-react: "npm:^2.1.5"
-    shakapacker: "npm:9.5.0"
+    shakapacker: "npm:9.6.1"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^17.4.0"
     stylelint-config-recommended-scss: "npm:^17.0.0"
@@ -11102,9 +11102,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shakapacker@npm:9.5.0":
-  version: 9.5.0
-  resolution: "shakapacker@npm:9.5.0"
+"shakapacker@npm:9.6.1":
+  version: 9.6.1
+  resolution: "shakapacker@npm:9.6.1"
   dependencies:
     js-yaml: "npm:^4.1.0"
     path-complete-extname: "npm:^1.0.0"
@@ -11122,7 +11122,7 @@ __metadata:
     "@types/babel__core": ^7.0.0
     "@types/webpack": ^5.0.0
     babel-loader: ^8.2.4 || ^9.0.0 || ^10.0.0
-    compression-webpack-plugin: ^9.0.0 || ^10.0.0 || ^11.0.0
+    compression-webpack-plugin: ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0
     css-loader: ^6.8.1 || ^7.0.0
     esbuild: ^0.14.0 || ^0.15.0 || ^0.16.0 || ^0.17.0 || ^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0 || ^0.25.0 || ^0.26.0 || ^0.27.0
     esbuild-loader: ^2.0.0 || ^3.0.0 || ^4.0.0
@@ -11190,7 +11190,7 @@ __metadata:
       optional: true
     webpack-subresource-integrity:
       optional: true
-  checksum: 10c0/941d7d25cc9f41be031f7ef0ba6d683ab2a0e599ac7713fbd6761087e33ab77968b3551d52becd3f17918db9c3ef9fe05cebb9845b0176ee411648810f37e811
+  checksum: 10c0/c48179d6546bfe5b7cf5055b2b40c96ad508afda67acd24d24fc721e41f60b65c8ca3135514153aeaca2eaf1242a437ac957e1bafe49a83a08cbd2dad623b028
   languageName: node
   linkType: hard
 
