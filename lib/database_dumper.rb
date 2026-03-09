@@ -92,6 +92,7 @@ module DatabaseDumper
           results_posted_by
           posting_by
           main_event_id
+          lead_delegate_id
           cancelled_at
           cancelled_by
           waiting_list_deadline_date
