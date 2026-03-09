@@ -57,25 +57,30 @@ module AdvancementConditions
       [max_advancing(results), regulations_boundary(results)].min
     end
 
-    def apply(results)
-      qualifying_index = max_qualifying(results)
+    # Make sure you always pass the full results to this method,
+    # otherwise the qualifying conditions will not be applied correctly
+    def apply(full_results)
+      qualifying_rank = max_qualifying(full_results)
 
-      top_qualifying = results.first(qualifying_index)
+      top_qualifying = full_results.first(qualifying_rank)
 
-      advancing_with_ties = if top_qualifying.any?
-                              cutoff = top_qualifying.last.potential_solve_time
-                              # Since results are already sorted, ties at the boundary
-                              # will be adjacent — walk forward and include any that match exactly.
-                              remaining = results.drop(qualifying_index)
-                              tied_at_boundary = remaining.take_while { |r| r.potential_solve_time == cutoff }
-                              with_ties = top_qualifying + tied_at_boundary
-                              # If the ties exceed the 75% rule, none of the tied results proceed, so we need to remove the last qualifier
-                              with_ties.length > regulations_boundary(results) ? top_qualifying.tap(&:pop) : with_ties
+      return [] if top_qualifying.empty?
+
+      cutoff = top_qualifying.last.potential_solve_time
+      # Since full_results is already sorted, ties at the boundary
+      # will be adjacent — walk forward and include any that match exactly.
+      remaining = full_results.drop(qualifying_rank)
+      tied_at_boundary = remaining.take_while { it.potential_solve_time == cutoff }
+      with_ties = top_qualifying + tied_at_boundary
+      # If the ties exceed the 75% rule, none of the tied results proceed
+      advancing_with_ties = if with_ties.length > regulations_boundary(full_results)
+                              top_qualifying.reject { it.potential_solve_time == cutoff }
                             else
-                              []
+                              with_ties
                             end
 
-      [advancing_with_ties.select(&:complete?).pluck(:id), qualifying_index]
+      # Filter out potential results
+      advancing_with_ties.reject(&:empty_result?).pluck(:id)
     end
   end
 end

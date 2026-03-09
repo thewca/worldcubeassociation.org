@@ -442,7 +442,7 @@ class Round < ApplicationRecord
     worst_results = Array.new(ignored_ids.length) { LiveResult.build(round: self, best: -1, average: -1) }
     results_with_worst = (loaded_results + worst_results).sort_by(&:values_for_sorting)
 
-    hypothetically_advancing_ids = advancement_condition.apply(results_with_worst).first
+    hypothetically_advancing_ids = advancement_condition.apply(results_with_worst)
 
     relevant_results.where(id: hypothetically_advancing_ids & candidate_ids)
   end
