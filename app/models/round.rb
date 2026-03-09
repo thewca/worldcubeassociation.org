@@ -224,7 +224,7 @@ class Round < ApplicationRecord
     advancement_determining_results.update_all(advancing: false, advancing_questionable: false)
 
     missing_attempts = total_competitors - advancement_determining_results.count
-    potential_results = Array.new(missing_attempts) { LiveResult.build(round: self, average: 0, best: 0) }
+    potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
 
     # Determine which results would advance if everyone achieved their best possible attempt.
     loaded_results = advancement_determining_results.includes(:live_attempts).to_a
