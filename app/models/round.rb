@@ -220,10 +220,7 @@ class Round < ApplicationRecord
   end
 
   def recompute_advancing
-    has_linked_round = linked_round.present?
-    round_results = has_linked_round ? linked_round.live_results : live_results
-
-    advancement_determining_results = round_results.where.not(global_pos: nil).where(locked_by_id: nil)
+    advancement_determining_results = relevant_results.where.not(global_pos: nil).where(locked_by_id: nil)
     advancement_determining_results.update_all(advancing: false, advancing_questionable: false)
 
     missing_attempts = total_competitors - advancement_determining_results.count
