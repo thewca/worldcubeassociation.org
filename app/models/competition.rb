@@ -701,14 +701,13 @@ class Competition < ApplicationRecord
              'accepted_newcomers',
              'duplicate_checker_job_runs',
              'tickets_competition_result',
-             'result_ticket'
+             'result_ticket',
+             'lead_delegate'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
         when 'delegates'
           clone.delegates = delegates
-        when 'lead_delegate'
-          clone.lead_delegate = lead_delegate
         when 'events'
           clone.events = events
         when 'tabs'
