@@ -194,10 +194,7 @@ class Round < ApplicationRecord
   end
 
   def clear_round!
-    self.transaction do
-      live_results.delete_all
-      open_round!
-    end
+    LiveAttempt.where(live_result_id: live_result_ids).delete_all
   end
 
   def open_round!
@@ -205,6 +202,12 @@ class Round < ApplicationRecord
       { registration_id: r.id, round_id: id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
     end
     LiveResult.insert_all!(empty_results)
+  end
+
+  def create_empty_live_result(registration_id)
+    live_results.find_or_create_by(registration_id: registration_id) do |lr|
+      lr.assign_attributes(LiveResult.empty_result_attributes(registration_id, id))
+    end
   end
 
   def total_competitors
@@ -475,7 +478,7 @@ class Round < ApplicationRecord
     {
       **self.to_wcif,
       "round_id" => id,
-      "competitors" => live_competitors.includes(:user).map { it.as_json({ methods: %i[name country_iso2], only: %i[id user_id registrant_id] }) },
+      "competitors" => live_competitors.includes(:user).map(&:to_live_json),
       "results" => only_podiums ? live_podium : live_results,
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
       "linked_round_ids" => linked_round&.wcif_ids,

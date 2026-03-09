@@ -7,7 +7,12 @@ import {
   useContext,
   useState,
 } from "react";
-import { LiveResult, LiveRound, PendingLiveResult } from "@/types/live";
+import {
+  LiveCompetitor,
+  LiveResult,
+  LiveRound,
+  PendingLiveResult,
+} from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
 import useResultsSubscriptions, {
   ConnectionState,
@@ -30,6 +35,7 @@ interface LiveResultContextType {
     roundWcifId: string,
   ) => void;
   connectionState: ConnectionState;
+  competitors: Map<number, LiveCompetitor>;
 }
 
 const LiveResultContext = createContext<LiveResultContextType | undefined>(
@@ -65,6 +71,9 @@ export function MultiRoundResultProvider({
   children: ReactNode;
 }) {
   const [pendingResults, updatePendingResults] = useState<LiveResult[]>([]);
+  const [competitors, setCompetitors] = useState<Map<number, LiveCompetitor>>(
+    new Map(initialRounds.flatMap((r) => r.competitors.map((r) => [r.id, r]))),
+  );
 
   const api = useAPI();
   const queryClient = useQueryClient();
@@ -128,11 +137,20 @@ export function MultiRoundResultProvider({
         }),
         state_hash: after_hash,
       }));
+
       updatePendingResults((pendingResults) =>
         pendingResults.filter(
           (r) => !updated.map((u) => u.r).includes(r.registration_id),
         ),
       );
+
+      setCompetitors((previous) => {
+        const next = new Map(previous);
+        created.forEach((r) => {
+          next.set(r.user.id, r.user);
+        });
+        return next;
+      });
     }
   };
 
@@ -161,6 +179,7 @@ export function MultiRoundResultProvider({
         pendingLiveResults: pendingResults,
         addPendingLiveResult,
         connectionState,
+        competitors,
       }}
     >
       {children}

@@ -12,7 +12,6 @@ export default function AddResults({
   format,
   roundId,
   competitionId,
-  competitors,
 }: {
   format: Format;
   roundId: string;
@@ -23,31 +22,29 @@ export default function AddResults({
 
   return (
     <SimpleGrid columns={16} gap={6}>
-      <GridItem colSpan={4}>
-        <LiveResultAdminProvider
-          format={format}
-          roundId={roundId}
-          competitionId={competitionId}
-        >
+      <LiveResultAdminProvider
+        format={format}
+        roundId={roundId}
+        competitionId={competitionId}
+      >
+        <GridItem colSpan={4}>
           <AttemptsForm
             header="Add Result"
             eventId={eventId}
-            competitors={competitors}
             solveCount={format.expected_solve_count}
           />
-        </LiveResultAdminProvider>
-      </GridItem>
+        </GridItem>
 
-      <GridItem colSpan={12}>
-        <LiveUpdatingResultsTable
-          roundWcifId={roundId}
-          formatId={format.id}
-          competitionId={competitionId}
-          competitors={competitors}
-          isAdmin
-          title={`${events.byId[eventId].name} - ${roundNumber}`}
-        />
-      </GridItem>
+        <GridItem colSpan={12}>
+          <LiveUpdatingResultsTable
+            roundWcifId={roundId}
+            formatId={format.id}
+            competitionId={competitionId}
+            isAdmin
+            title={`${events.byId[eventId].name} - ${roundNumber}`}
+          />
+        </GridItem>
+      </LiveResultAdminProvider>
     </SimpleGrid>
   );
 }

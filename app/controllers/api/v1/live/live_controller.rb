@@ -119,4 +119,18 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     render json: { status: "ok", quit: quit_count }
   end
+
+  def add_competitor_to_round
+    competition = Competition.find(params.require(:competition_id))
+    registration = Registration.find(params.require(:registration_id))
+    round = Round.find_by_wcif_id!(params.require(:round_id), competition.id)
+
+    require_manage!(competition)
+
+    Live::DiffHelper.broadcast_changes(round) do
+      round.create_empty_live_result(registration.id)
+    end
+
+    render json: { status: "ok", competitor: registration.to_live_json }
+  end
 end

@@ -14,10 +14,11 @@ interface AdminResultsContextValue {
   attempts: number[];
   error: string;
   success: string;
-  isPendingUpdate: boolean;
+  isPending: boolean;
   handleRegistrationIdChange: (value: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
   handleSubmit: () => void;
+  addCompetitorToRound: (registrationId: number) => Promise<void>;
 }
 
 function zeroedArrayOfSize(size: number) {
@@ -84,6 +85,32 @@ export function LiveResultAdminProvider({
     },
   );
 
+  const { mutateAsync: addCompetitorMutation, isPending: isPendingAdd } =
+    api.useMutation(
+      "put",
+      "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
+      {
+        onError: () => {
+          setError("Failed to add Competitor. Please try again.");
+        },
+      },
+    );
+
+  const addCompetitorToRound = useCallback(
+    async (registrationId: number) => {
+      await addCompetitorMutation({
+        params: {
+          path: {
+            registrationId,
+            competitionId,
+            roundId,
+          },
+        },
+      });
+    },
+    [addCompetitorMutation, competitionId, roundId],
+  );
+
   const handleAttemptChange = (index: number, value: number) => {
     const newAttempts = [...attempts];
     newAttempts[index] = value;
@@ -117,10 +144,12 @@ export function LiveResultAdminProvider({
         attempts,
         error,
         success,
-        isPendingUpdate,
+        // Merging these, as we don't allow multiple mutations at the same time
+        isPending: isPendingAdd || isPendingUpdate,
         handleRegistrationIdChange,
         handleAttemptChange,
         handleSubmit,
+        addCompetitorToRound,
       }}
     >
       {children}

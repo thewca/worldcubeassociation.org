@@ -43,6 +43,10 @@ export default async function PodiumsPage({
           "registration_id",
         );
 
+        const competitors = new Map(
+          finalRound.competitors.map((r) => [r.id, r]),
+        );
+
         return (
           <Fragment key={finalRound.id}>
             <Heading textStyle="h3" p="2">
@@ -52,7 +56,7 @@ export default async function PodiumsPage({
               <LiveResultsTable
                 resultsByRegistrationId={resultsByRegistrationId}
                 competitionId={competitionId}
-                competitors={finalRound.competitors}
+                competitors={competitors}
                 roundWcifId={finalRound.id}
                 formatId={finalRound.format}
                 showEmpty={false}

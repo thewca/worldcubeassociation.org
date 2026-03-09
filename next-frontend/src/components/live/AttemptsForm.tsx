@@ -9,17 +9,15 @@ import {
 import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
-import { LiveCompetitor } from "@/types/live";
+import { useLiveResults } from "@/providers/LiveResultProvider";
 
 interface AttemptsFormProps {
-  competitors: LiveCompetitor[];
   solveCount: number;
   header: string;
   eventId: string;
 }
 
 export default function AttemptsForm({
-  competitors,
   solveCount,
   header,
   eventId,
@@ -31,11 +29,13 @@ export default function AttemptsForm({
     handleSubmit,
     attempts,
     handleAttemptChange,
-    isPendingUpdate,
+    isPending,
   } = useResultsAdmin();
 
+  const { competitors } = useLiveResults();
+
   const { collection, filter } = useListCollection({
-    initialItems: competitors,
+    initialItems: Array.from(competitors.values()),
     itemToValue: (competitor) => competitor.id.toString(),
     itemToString: (competitor) =>
       `${competitor.name} (${competitor.registrant_id})`,
@@ -88,7 +88,7 @@ export default function AttemptsForm({
           resultType="single"
         />
       ))}
-      <Button onClick={handleSubmit} disabled={isPendingUpdate}>
+      <Button onClick={handleSubmit} disabled={isPending}>
         Submit Results
       </Button>
     </form>

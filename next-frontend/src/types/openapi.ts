@@ -130,6 +130,23 @@ export interface paths {
         };
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Adds a use to a round */
+        put: operations["addCompetitor"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/clear": {
         parameters: {
             query?: never;
@@ -1736,6 +1753,32 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LiveRound"];
+                };
+            };
+        };
+    };
+    addCompetitor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+                registrationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the created empty live result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        competitor: components["schemas"]["LiveCompetitor"];
+                    };
                 };
             };
         };
