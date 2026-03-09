@@ -155,12 +155,14 @@ en:
     short:
       ranking: "Top %{ranking}"
       percent: "Top %{percent}%"
+      dual: "Dual Round"
       attempt_result:
         time: "%{round_format} < %{time}"
         moves: "%{round_format} < %{moves}"
         points: "%{round_format} > %{points}"
     ranking: "Top %{ranking} advance to next round"
     percent: "Top %{percent}% advance to next round"
+    dual: "Results are combined with the next round to determine advancement"
     attempt_result:
       time: "%{round_format} < %{time} advances to next round"
       moves: "%{round_format} < %{moves} moves advances to next round"
