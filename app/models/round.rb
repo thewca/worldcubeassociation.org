@@ -235,7 +235,8 @@ class Round < ApplicationRecord
 
     advancement_determining_condition = final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
 
-    advancing_ids, max_advancing = advancement_determining_condition.apply(results_with_potential)
+    advancing_ids = advancement_determining_condition.apply(results_with_potential)
+    max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
 
     advancement_determining_results.update_all(
       "advancing_questionable = (global_pos < #{max_advancing})",

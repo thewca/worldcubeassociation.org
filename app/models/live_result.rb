@@ -85,6 +85,10 @@ class LiveResult < ApplicationRecord
     live_attempts.length == round.format.expected_solve_count
   end
 
+  def empty_result?
+    best.zero?
+  end
+
   def values_for_sorting
     ranking_columns.map do |column|
       to_solve_time(column)

@@ -64,7 +64,7 @@ module AdvancementConditions
 
       top_qualifying = full_results.first(qualifying_rank)
 
-      return [[], qualifying_rank] if top_qualifying.empty?
+      return [] if top_qualifying.empty?
 
       cutoff = top_qualifying.last.potential_solve_time
       # Since full_results is already sorted, ties at the boundary
@@ -80,7 +80,7 @@ module AdvancementConditions
                             end
 
       # Filter out potential results
-      [advancing_with_ties.filter { it.best != 0 }.pluck(:id), qualifying_rank]
+      advancing_with_ties.reject(&:empty_result?).pluck(:id)
     end
   end
 end
