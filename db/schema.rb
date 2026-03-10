@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_10_084658) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_10_134659) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -453,9 +453,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_084658) do
     t.integer "results_posted_by"
     t.datetime "results_submitted_at", precision: nil
     t.boolean "show_at_all", default: false, null: false
+    t.integer "software_for_scoretaking", default: 0, null: false
     t.date "start_date"
     t.datetime "updated_at", precision: nil
-    t.boolean "use_wca_live_for_scoretaking", default: false, null: false
     t.boolean "use_wca_registration", default: true, null: false
     t.string "venue", limit: 240, default: "", null: false
     t.string "venue_address"
