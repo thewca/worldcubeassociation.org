@@ -110,18 +110,22 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     competition = Competition.find(params.require(:competition_id))
     wcif_id = params.require(:round_id)
     registration_id = params.require(:registration_id)
-    should_advance_next = params[:advance_next]
+    advancing_ids = params[:advancing_ids]
 
     require_manage!(competition)
 
     round = Round.find_by_wcif_id!(wcif_id, competition.id, includes: [:live_results])
     result = round.live_results.find_by!(registration_id: registration_id)
 
-    return render json: { status: "Can't advance next for first rounds" }, status: :bad_request if should_advance_next && round.first_round?
+    return render json: { status: "Can't advance next for first rounds" }, status: :bad_request if advancing_ids.present? && round.first_round?
 
     return render json: { status: "Cannot quit competitor with results" }, status: :bad_request if result.live_attempts.any?
 
-    quit_count = round.quit_from_round!(registration_id, @current_user, should_advance_next: should_advance_next)
+    to_advance = round.previous_round.next_advancing_without(registration_id) if advancing_ids.present?
+
+    return render json: { status: "The advancing competitor doesn't match who should be advancing.", should_advance: to_advance }, status: :bad_request if advancing_ids&.map(&:to_i) != to_advance&.pluck(:registration_id)
+
+    quit_count = round.quit_from_round!(registration_id, @current_user, to_advance: to_advance)
 
     render json: { status: "ok", quit: quit_count }
   end

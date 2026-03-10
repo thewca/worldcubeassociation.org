@@ -40,8 +40,10 @@ RSpec.describe "WCA Live API" do
 
       final.open_and_lock_previous(User.first)
 
+      to_advance = round.next_advancing_without(registrations.first.id)
+
       live_request = {
-        advance_next: true,
+        advancing_ids: to_advance.pluck(:registration_id),
       }
 
       delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request
@@ -82,12 +84,15 @@ RSpec.describe "WCA Live API" do
       final.open_and_lock_previous(User.first)
       before_hash = Live::DiffHelper.state_hash(round.to_live_state)
 
+      to_advance = round.next_advancing_without(registrations.first.id)
+
       live_request = {
-        advance_next: true,
+        advancing_ids: to_advance.pluck(:registration_id),
       }
 
       expect do
         delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request
+        puts(response.inspect)
       end.to have_broadcasted_to(Live::Config.broadcast_key(round.wcif_id))
         .from_channel(ApplicationCable::Channel)
         .with(hash_including(updated: [{ "advancing" => false, "advancing_questionable" => false, "registration_id" => registrations.first.id },
@@ -108,8 +113,10 @@ RSpec.describe "WCA Live API" do
       final.open_and_lock_previous(User.first)
       before_hash = Live::DiffHelper.state_hash(final.to_live_state)
 
+      to_advance = round.next_advancing_without(registrations.first.id)
+
       live_request = {
-        advance_next: true,
+        advancing_ids: to_advance.pluck(:registration_id),
       }
 
       expect do

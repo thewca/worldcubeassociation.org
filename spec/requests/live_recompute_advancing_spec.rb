@@ -289,7 +289,8 @@ RSpec.describe "WCA Live API" do
 
         # Open next round and quit first result from it while letting the next one advance
         final.open_and_lock_previous(User.first)
-        final.quit_from_round!(registrations.first.id, User.first, should_advance_next: true)
+        to_advance = round.next_advancing_without(registrations.first.id)
+        final.quit_from_round!(registrations.first.id, User.first, to_advance: to_advance)
 
         # Next Competitor is marked as advancing
         expect(round.live_results.reload.pluck(:global_pos, :advancing)).to eq([[1, false], [2, true], [3, true], [4, false], [5, false]])

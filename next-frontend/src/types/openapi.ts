@@ -1866,7 +1866,7 @@ export interface operations {
         requestBody?: {
             content: {
                 "application/json": {
-                    should_advance_next?: boolean;
+                    advancing_ids?: number[];
                 };
             };
         };

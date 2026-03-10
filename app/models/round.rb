@@ -447,14 +447,12 @@ class Round < ApplicationRecord
     relevant_results.where(id: hypothetically_advancing_ids & candidate_ids)
   end
 
-  def quit_from_round!(registration_id, quitting_user, should_advance_next: false)
-    to_advance = previous_round.next_advancing_without(registration_id).first if should_advance_next
-
+  def quit_from_round!(registration_id, quitting_user, to_advance: nil)
     transaction do
       Live::DiffHelper.broadcast_changes(self) do
         result = live_results.find_by!(registration_id: registration_id)
         result.destroy!
-        live_results.create(**LiveResult.empty_result_attributes(to_advance.registration_id, self.id)) if to_advance.present?
+        live_results.create(to_advance.map { { **LiveResult.empty_result_attributes(it.registration_id, self.id) } }) if to_advance.present?
         recompute_advancing
         live_results.reset
       end

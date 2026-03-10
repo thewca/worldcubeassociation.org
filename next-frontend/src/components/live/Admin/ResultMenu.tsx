@@ -129,15 +129,39 @@ function QuitModal({
 }) {
   const [advanceNext, setAdvanceNext] = useState(false);
 
+  const api = useAPI();
+
+  const { isLoading, data: toAdvance } = api.useQuery(
+    "get",
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit",
+    {
+      params: {
+        path: { competitionId, roundId },
+        query: { registration_id: competitor.id },
+      },
+    },
+  );
+
   const { quitCompetitor, isPendingQuit } = useResultsAdmin();
 
   const onQuitClick = useCallback(() => {
-    quitCompetitor(competitor.id, advanceNext);
+    quitCompetitor(
+      competitor.id,
+      toAdvance!.map((r) => r.id),
+    );
     setMenuClose();
-  }, [advanceNext, competitor.id, quitCompetitor, setMenuClose]);
+  }, [competitor.id, quitCompetitor, setMenuClose, toAdvance]);
+
+  if (!toAdvance) {
+    return <Text>Failed to fetch next Competitor</Text>;
+  }
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
-    <Dialog.Root lazyMount open onOpenChange={() => setMenuClose()}>
+    <Dialog.Root open onOpenChange={() => setMenuClose()}>
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
@@ -146,13 +170,18 @@ function QuitModal({
               <Dialog.Title>Quit Competitor</Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
-              <NextAdvancingText
-                roundId={roundId}
-                competitionId={competitionId}
-                competitorId={competitor.id}
-                advanceNext={advanceNext}
-                setAdvanceNext={setAdvanceNext}
-              />
+              <Text>
+                The next competitor to advance is{" "}
+                {toAdvance.map((competitor) => competitor.name)}
+                <Checkbox.Root
+                  checked={advanceNext}
+                  onCheckedChange={(e) => setAdvanceNext(!!e.checked)}
+                >
+                  <Checkbox.HiddenInput />
+                  <Checkbox.Control />
+                  <Checkbox.Label>Advance next competitor</Checkbox.Label>
+                </Checkbox.Root>
+              </Text>
             </Dialog.Body>
             <Dialog.Footer>
               <Button disabled={isPendingQuit} onClick={onQuitClick}>
@@ -170,56 +199,4 @@ function QuitModal({
       </Portal>
     </Dialog.Root>
   );
-}
-
-function NextAdvancingText({
-  competitionId,
-  roundId,
-  competitorId,
-  advanceNext,
-  setAdvanceNext,
-}: {
-  competitionId: string;
-  roundId: string;
-  competitorId: number;
-  advanceNext: boolean;
-  setAdvanceNext: (newAdvanceNext: boolean) => void;
-}) {
-  const api = useAPI();
-
-  const { isLoading, data: toAdvance } = api.useQuery(
-    "get",
-    "/v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit",
-    {
-      params: {
-        path: { competitionId, roundId },
-        query: { registration_id: competitorId },
-      },
-    },
-  );
-
-  if (!toAdvance) {
-    return <Text>Failed to fetch next Competitor</Text>;
-  }
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  if (toAdvance.length > 0) {
-    return (
-      <Text>
-        The next competitor to advance is{" "}
-        {toAdvance.map((competitor) => competitor.name)}
-        <Checkbox.Root
-          checked={advanceNext}
-          onCheckedChange={(e) => setAdvanceNext(!!e.checked)}
-        >
-          <Checkbox.HiddenInput />
-          <Checkbox.Control />
-          <Checkbox.Label>Advance next competitor</Checkbox.Label>
-        </Checkbox.Root>
-      </Text>
-    );
-  }
 }

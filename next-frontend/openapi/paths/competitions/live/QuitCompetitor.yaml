@@ -26,8 +26,10 @@ delete:
         schema:
           type: object
           properties:
-            should_advance_next:
-              type: boolean
+            advancing_ids:
+              type: array
+              items:
+                type: number
   responses:
     '200':
       description: Returns number of rounds the competitor was marked as quit in
