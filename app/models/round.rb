@@ -180,8 +180,15 @@ class Round < ApplicationRecord
       linked_round.first_round_in_link.advancing_registrations
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
-      Registration.find(advancing)
+      Registration.where(id: advancing)
     end
+  end
+
+  private def bulk_insert_history(live_ids_to_insert, entered_by_user, **attributes)
+    history_entries = live_ids_to_insert.map { LiveResultHistoryEntry.build(live_result_id: it, entered_by_id: entered_by_user.id, **attributes) }
+
+    history_entry_attributes = history_entries.map(&:attributes)
+    LiveResultHistoryEntry.insert_all(history_entry_attributes)
   end
 
   def open_and_lock_previous(locking_user)
@@ -201,10 +208,15 @@ class Round < ApplicationRecord
   end
 
   def open_round!
-    empty_results = advancing_registrations.map do |r|
-      { registration_id: r.id, round_id: id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
+    advancing_reg_ids = advancing_registrations.ids
+
+    empty_results = advancing_reg_ids.map do
+      { registration_id: it, round_id: self.id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
     end
     LiveResult.insert_all!(empty_results)
+
+    inserted_ids = self.live_results.where(registration_id: advancing_reg_ids).ids
+    # self.bulk_insert_history(inserted_ids, foo_bar, action_type: :proceeding)
   end
 
   def total_competitors
@@ -390,6 +402,7 @@ class Round < ApplicationRecord
     return 0 if results_to_lock.first.locked_by.present?
 
     results_to_lock.update_all(locked_by_id: locking_user.id)
+    self.bulk_insert_history(results_to_lock.ids, locking_user, action_type: :locked)
   end
 
   STATE_LOCKED = "locked"
