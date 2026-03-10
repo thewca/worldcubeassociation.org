@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_09_071156) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_09_174022) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -812,9 +812,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_09_071156) do
   create_table "live_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.boolean "advancing", default: false, null: false
     t.boolean "advancing_questionable", default: false, null: false
-    t.integer "average", null: false
+    t.integer "average", default: 0, null: false
     t.string "average_record_tag", limit: 255
-    t.integer "best", null: false
+    t.integer "best", default: 0, null: false
     t.datetime "created_at", null: false
     t.integer "global_pos"
     t.datetime "last_attempt_entered_at", null: false
@@ -1341,6 +1341,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_09_071156) do
     t.string "stripe_status", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["parent_record_id"], name: "fk_rails_6ad225b020"
+    t.index ["stripe_id", "stripe_record_type"], name: "index_stripe_records_on_stripe_id_and_stripe_record_type", unique: true
     t.index ["stripe_id"], name: "index_stripe_records_on_stripe_id"
     t.index ["stripe_status"], name: "index_stripe_records_on_stripe_status"
   end

@@ -68,7 +68,7 @@ jobs:
         working-directory: next-frontend
       - name: Run Playwright tests
         run: bin/yarn playwright test
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
