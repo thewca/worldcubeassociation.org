@@ -18,7 +18,7 @@ RSpec.describe Live::DiffHelper do
       before_state = round.to_live_state
 
       attempts = 5.times.map.with_index(1) do |r, i|
-        LiveAttempt.build_with_history_entry((r + 1) * 100, i, User.first)
+        LiveAttempt.build(value: (r + 1) * 100, attempt_number: i)
       end
       average, best = LiveResult.compute_average_and_best(attempts, round)
       result.update!(live_attempts: attempts, best: best, average: average)
@@ -49,7 +49,7 @@ RSpec.describe Live::DiffHelper do
       result = round.live_results.find_by!(registration_id: registration_1.id)
 
       attempts = 5.times.map.with_index(1) do |r, i|
-        LiveAttempt.build_with_history_entry((r + 1) * 200, i, User.first)
+        LiveAttempt.build(value: (r + 1) * 200, attempt_number: i)
       end
       average, best = LiveResult.compute_average_and_best(attempts, round)
       result.update!(live_attempts: attempts, best: best, average: average)
@@ -58,7 +58,7 @@ RSpec.describe Live::DiffHelper do
       result_2 = round.live_results.find_by!(registration_id: registration_2.id)
 
       attempts_2 = 5.times.map.with_index(1) do |r, i|
-        LiveAttempt.build_with_history_entry((r + 1) * 100, i, User.first)
+        LiveAttempt.build(value: (r + 1) * 100, attempt_number: i)
       end
       average, best = LiveResult.compute_average_and_best(attempts_2, round)
       result_2.update!(live_attempts: attempts_2, best: best, average: average)
@@ -90,7 +90,7 @@ RSpec.describe Live::DiffHelper do
       before_state = round.to_live_state
 
       attempts = 4.times.map.with_index(1) do |r, i|
-        LiveAttempt.build_with_history_entry((r + 1) * 100, i, User.first)
+        LiveAttempt.build(value: (r + 1) * 100, attempt_number: i)
       end
       average, best = LiveResult.compute_average_and_best(attempts, round)
       result.update!(live_attempts: attempts, best: best, average: average)

@@ -31,20 +31,6 @@ class LiveAttempt < ApplicationRecord
     ResultAttempt.new(value: value, attempt_number: attempt_number)
   end
 
-  def self.build_with_history_entry(value, attempt_number, acting_user_id)
-    LiveAttempt.build(
-      value: value,
-      attempt_number: attempt_number,
-      live_attempt_history_entries: [
-        LiveAttemptHistoryEntry.build(
-          value: value,
-          entered_at: Time.now.utc,
-          entered_by: acting_user_id,
-        ),
-      ],
-    )
-  end
-
   def self.attempts_changed?(before_attempts, after_attempts)
     Set.new(before_attempts) != Set.new(after_attempts)
   end

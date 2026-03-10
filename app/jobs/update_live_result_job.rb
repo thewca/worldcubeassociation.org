@@ -17,7 +17,7 @@ class UpdateLiveResultJob < ApplicationJob
           previous_attempt.update_with_history_entry(r[:value], entered_by_id)
         end
       else
-        LiveAttempt.build_with_history_entry(r[:value], r[:attempt_number], entered_by_id)
+        LiveAttempt.build(**r)
       end
     end
 
@@ -29,6 +29,7 @@ class UpdateLiveResultJob < ApplicationJob
     average, best = LiveResult.compute_average_and_best(new_attempts, round)
 
     live_result.update!(live_attempts: new_attempts, best: best, average: average, last_attempt_entered_at: Time.now.utc)
+    live_result.live_result_history_entries.create!(entered_by_id: entered_by_id, action_type: :scoretaking, attempt_details: new_attempts.pluck(:value))
 
     after_state = round.to_live_state
     diff = Live::DiffHelper.round_state_diff(before_state, after_state)

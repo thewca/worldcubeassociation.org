@@ -22,4 +22,12 @@ class LiveResultHistoryEntry < ApplicationRecord
   validates :entered_by, presence: true, unless: :action_source_backfilling?
   validates :action_type, presence: true, if: :action_source_live_results?
   validates :attempt_details, presence: true, if: :action_type_scoretaking?
+
+  # Set a `entered_at` timestamp for newly created records,
+  #   but only if there is no value already specified from the outside
+  after_initialize :mark_entered_at, if: :new_record?, unless: :entered_at?
+
+  private def mark_entered_at
+    self.entered_at = current_time_from_proper_timezone
+  end
 end

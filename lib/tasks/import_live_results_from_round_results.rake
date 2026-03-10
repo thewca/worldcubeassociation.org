@@ -24,7 +24,7 @@ namespace :live_results do
         results = round_result.attempts
 
         attempts = results.map.with_index(1) do |rr, i|
-          LiveAttempt.build_with_history_entry(rr.result, i, 1)
+          LiveAttempt.build(value: rr.result, attempt_number: i)
         end
 
         r = Result.new(
@@ -38,16 +38,23 @@ namespace :live_results do
           ResultAttempt.new(value: rr.result, attempt_number: i)
         end
 
+        history_entry = LiveResultHistoryEntry.build(
+          action_source: :backfilling,
+          attempt_details: attempts.pluck(:value),
+        )
+
         live_results << {
           registration_id: registrations_by_wcif_id[round_result.person_id].id,
           round: round,
           live_attempts: attempts,
+          live_result_history_entries: [history_entry],
           last_attempt_entered_at: Time.now.utc,
           best: r.compute_correct_best,
           average: r.compute_correct_average,
         }
       end
     end
+
     LiveResult.create(live_results)
   end
 end
