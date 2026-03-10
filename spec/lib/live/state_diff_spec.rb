@@ -139,9 +139,15 @@ RSpec.describe Live::DiffHelper do
     end
 
     it "has a compression key defined for each serialization attribute" do
-      create(:live_result, round: round)
-      keys = %w[best_possible_average worst_possible_average]
-      round.to_live_state.first.deep_transform_keys { keys << it }
+      r = create(:live_result, round: round)
+      # We need an incomplete result to include all keys
+      attempts = 3.times.map.with_index(1) do |r, i|
+        LiveAttempt.build_with_history_entry((r + 1) * 200, i, User.first)
+      end
+      r.update!(live_attempts: attempts)
+      keys = %w[]
+      full_live_state = Live::DiffHelper.forecast_for(round.to_live_state.first, round)
+      full_live_state.deep_transform_keys { keys << it }
       expect(keys.uniq).to match_array(Live::DiffHelper::COMPRESSION_MAP.keys.map(&:to_s))
     end
   end
