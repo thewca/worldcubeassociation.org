@@ -210,8 +210,8 @@ class Round < ApplicationRecord
   def open_round!(opening_user)
     advancing_reg_ids = advancing_registrations.ids
 
-    empty_results = advancing_reg_ids.map do
-      { registration_id: it, round_id: self.id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
+    empty_results = advancing_reg_ids.map do |reg_id|
+      { registration_id: reg_id, round_id: self.id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
     end
     LiveResult.insert_all!(empty_results)
 
