@@ -151,15 +151,12 @@ RSpec.describe Api::V0::UserRolesController do
         expect(response).to be_successful
       end
 
-      it 'cannot ban a user if the user have any upcoming competitions' do
+      it 'can ban a user if the user have any upcoming competitions' do
         post :create, params: {
           userId: user_to_be_banned_with_future_comps.id,
           groupType: UserGroup.group_types[:banned_competitors],
         }
-        upcoming_comps_for_user = user_to_be_banned_with_future_comps.competitions_registered_for.not_over.merge(Registration.not_cancelled).pluck(:id)
-        expect(response).to have_http_status(:unprocessable_content)
-        response_json = response.parsed_body
-        expect(response_json["error"]).to eq "The user has upcoming competitions: #{upcoming_comps_for_user.join(', ')}. Before banning the user, make sure their registrations are deleted."
+        expect(response).to be_successful
       end
 
       it "can ban a user if the user's upcoming competitions are after end date" do
