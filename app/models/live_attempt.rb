@@ -34,16 +34,4 @@ class LiveAttempt < ApplicationRecord
   def self.attempts_changed?(before_attempts, after_attempts)
     Set.new(before_attempts) != Set.new(after_attempts)
   end
-
-  def update_with_history_entry(value, acting_user_id)
-    self.update(value: value)
-    self.live_attempt_history_entries.create(
-      value: value,
-      entered_at: Time.now.utc,
-      entered_by: acting_user_id,
-    )
-
-    # Return `self` for method chaining
-    self
-  end
 end
