@@ -11,9 +11,9 @@ class LiveResultHistoryEntry < ApplicationRecord
   }, prefix: true, default: :live_results
 
   enum :action_type, {
-    proceeding: 'proceeding',
+    opened: 'opened',
     scoretaking: 'scoretaking',
-    bumped_up: 'bumped_up',
+    advanced_next: 'advanced_next',
     locked: 'locked',
     quit: 'quit',
   }, prefix: true

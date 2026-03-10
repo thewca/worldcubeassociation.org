@@ -216,7 +216,7 @@ class Round < ApplicationRecord
     LiveResult.insert_all!(empty_results)
 
     inserted_ids = self.live_results.where(registration_id: advancing_reg_ids).ids
-    self.bulk_insert_history(inserted_ids, opening_user, action_type: :proceeding)
+    self.bulk_insert_history(inserted_ids, opening_user, action_type: :opened)
   end
 
   def total_competitors
