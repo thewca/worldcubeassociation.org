@@ -430,7 +430,7 @@ class Round < ApplicationRecord
 
     return [] if candidate_ids.empty?
 
-    ignored_ids = ([first_advancing.id, competitor_being_quit] | already_quit_ids)
+    ignored_ids = [first_advancing.id, competitor_being_quit] | already_quit_ids
 
     advancement_determining = relevant_results
                               .where.not(id: ignored_ids)
@@ -451,18 +451,17 @@ class Round < ApplicationRecord
     to_advance = previous_round.next_advancing_without(registration_id).first if should_advance_next
 
     transaction do
-      quit_count = Live::DiffHelper.broadcast_changes(self) do
+      Live::DiffHelper.broadcast_changes(self) do
         result = live_results.find_by!(registration_id: registration_id)
-        destroyed = result.destroy
+        result.destroy!
         live_results.create(**LiveResult.empty_result_attributes(to_advance.registration_id, self.id)) if to_advance.present?
         recompute_advancing
         live_results.reset
-        destroyed ? 1 : 0
       end
 
-      return quit_count if quit_count.zero? || first_round?
+      return 1 if first_round?
 
-      quit_count + Live::DiffHelper.broadcast_changes(previous_round) do
+      1 + Live::DiffHelper.broadcast_changes(previous_round) do
         to_advance&.update!(advancing: true)
         quit_from_previous_round(registration_id, quitting_user)
       end

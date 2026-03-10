@@ -24,13 +24,13 @@ import {
 export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
 interface LiveResultContextType {
   liveResultsByRegistrationId: LiveResultsByRegistrationId;
-  pendingLiveResults: LiveResult[];
-  pendingQuitCompetitors: Set<number>;
-  addPendingQuitCompetitor: (registrationId: number) => void;
   addPendingLiveResult: (
     liveResult: PendingLiveResult,
     roundWcifId: string,
   ) => void;
+  pendingLiveResults: LiveResult[];
+  addPendingQuitCompetitor: (registrationId: number) => void;
+  pendingQuitCompetitors: Set<number>;
   connectionState: ConnectionState;
 }
 
