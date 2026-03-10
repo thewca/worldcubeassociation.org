@@ -116,7 +116,7 @@ class Competition < ApplicationRecord
 
   enum :auto_accept_preference, %i[disabled bulk live], prefix: true
 
-  enum software_for_scoretaking: %i[external wca_live internal], prefix: true
+  enum :software_for_scoretaking, %i[external wca_live internal], prefix: true
 
   CLONEABLE_ATTRIBUTES = %w[
     city_name

@@ -4,7 +4,7 @@ class ChangeUseWcaLiveToEnum < ActiveRecord::Migration[8.1]
   def up
     add_column :competitions, :use_wca_live_for_scoretaking_tmp, :integer, default: 0, null: false
 
-    execute <<~SQL
+    execute <<~SQL.squish
       UPDATE competitions
       SET use_wca_live_for_scoretaking_tmp =
         CASE
@@ -13,14 +13,16 @@ class ChangeUseWcaLiveToEnum < ActiveRecord::Migration[8.1]
         END
     SQL
 
-    remove_column :competitions, :use_wca_live_for_scoretaking
-    rename_column :competitions, :use_wca_live_for_scoretaking_tmp, :software_for_scoretaking
+    change_table :competitions, bulk: true do |t|
+      t.remove_column :use_wca_live_for_scoretaking
+      t.rename_column :use_wca_live_for_scoretaking_tmp, :software_for_scoretaking
+    end
   end
 
   def down
     add_column :competitions, :use_wca_live_for_scoretaking_tmp, :boolean, default: false, null: false
 
-    execute <<~SQL
+    execute <<~SQL.squish
       UPDATE competitions
       SET use_wca_live_for_scoretaking_tmp =
         CASE
@@ -29,7 +31,9 @@ class ChangeUseWcaLiveToEnum < ActiveRecord::Migration[8.1]
         END
     SQL
 
-    remove_column :competitions, :software_for_scoretaking
-    rename_column :competitions, :use_wca_live_for_scoretaking_tmp, :use_wca_live_for_scoretaking
+    change_table :competitions, bulk: true do |t|
+      t.remove_column :software_for_scoretaking
+      t.rename_column :use_wca_live_for_scoretaking_tmp, :use_wca_live_for_scoretaking
+    end
   end
 end
