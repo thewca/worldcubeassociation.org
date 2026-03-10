@@ -86,6 +86,7 @@ export default function ContactEditProfilePage({ loggedInUserId, recaptchaPublic
           wcaId={wcaId}
           onContactSuccess={() => setContactSuccess(true)}
           recaptchaPublicKey={recaptchaPublicKey}
+          editOthersProfileMode={editOthersProfileMode}
         />
       )}
     </Container>

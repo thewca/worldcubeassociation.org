@@ -12,13 +12,35 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import UtcDatePicker from '../wca/UtcDatePicker';
 import RegionSelector from '../wca/RegionSelector';
 import GenderSelector from '../wca/GenderSelector';
+import { GENERATIONAL_SUFFIXES } from '../../lib/wca-data.js.erb';
 
 const CONTACT_EDIT_PROFILE_FORM_QUERY_CLIENT = new QueryClient();
+
+const extractRomanName = (personName) => {
+  const match = personName.match(/(.*)\((.*)\)$/);
+  const romanName = match ? match[1] : personName;
+  return romanName.trim();
+};
+
+export const extractLastNameWithSuffix = (personName) => {
+  if (!personName) return '';
+  const romanName = extractRomanName(personName);
+  const nameParts = romanName.split(/\s+/).filter(Boolean);
+
+  if (nameParts.length === 0) return '';
+
+  const lastPart = nameParts[nameParts.length - 1];
+  if (nameParts.length > 1 && GENERATIONAL_SUFFIXES.includes(lastPart.toUpperCase())) {
+    return `${nameParts[nameParts.length - 2]} ${lastPart}`;
+  }
+  return lastPart;
+};
 
 export default function EditProfileForm({
   wcaId,
   onContactSuccess,
   recaptchaPublicKey,
+  editOthersProfileMode,
 }) {
   const [editProfileReason, setEditProfileReason] = useState();
   const [editedProfileDetails, setEditedProfileDetails] = useState();
@@ -39,6 +61,22 @@ export default function EditProfileForm({
     () => !editedProfileDetails || _.isEqual(editedProfileDetails, profileDetails) || !captchaValue,
     [captchaValue, editedProfileDetails, profileDetails],
   );
+
+  const proofAttachmentRequired = useMemo(() => {
+    if (!editedProfileDetails || !profileDetails) return false;
+
+    // Country and DOB changes always require proof.
+    if (editedProfileDetails.country_iso2 !== profileDetails.country_iso2) return true;
+    if (editedProfileDetails.dob !== profileDetails.dob) return true;
+
+    // Gender changes (and accompanying name changes) are considered sensitive,
+    // hence proof is optional.
+    if (editedProfileDetails.gender !== profileDetails.gender) return false;
+
+    // Otherwise, check if the last name (including generational suffix) changed.
+    return extractLastNameWithSuffix(editedProfileDetails.name)
+      !== extractLastNameWithSuffix(profileDetails.name);
+  }, [editedProfileDetails, profileDetails]);
 
   useEffect(() => {
     setEditedProfileDetails(profileDetails);
@@ -126,7 +164,18 @@ export default function EditProfileForm({
         label={I18n.t('page.contact_edit_profile.form.proof_attach.label')}
         type="file"
         onChange={handleProofUpload}
+        required={proofAttachmentRequired && !editOthersProfileMode}
       />
+      <p className="help-block">
+        <span className="text-danger">IMPORTANT</span>
+        : Attach a picture of a
+        {' '}
+        <u>legal document</u>
+        {' '}
+        (identity card, driver license, passport...) that validates the requested fields;
+        {' '}
+        feel free to blur-out/obfuscate any other personal data on the identification.
+      </p>
       <Form.Field>
         <ReCAPTCHA
           sitekey={recaptchaPublicKey}

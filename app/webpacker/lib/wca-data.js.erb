@@ -249,3 +249,6 @@ export const cronjobs = <%= JobUtils::WCA_CRONJOBS.map(&:to_s).to_h { |item| [it
 
 // ----- RESULTS -----
 export const duplicateCheckerJobRunStatuses = <%= DuplicateCheckerJobRun.run_statuses.to_json %>
+
+// ----- PERSONS -----
+export const GENERATIONAL_SUFFIXES = <%= FinishUnfinishedPersons::GENERATIONAL_SUFFIXES.to_json.html_safe %>;
