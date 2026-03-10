@@ -11,7 +11,7 @@ RSpec.describe Live::DiffHelper do
 
     it 'correct diff for new results' do
       registration_1 = registrations.first
-      round.open_round!
+      round.open_round!(User.first)
 
       result = round.live_results.find_by!(registration_id: registration_1.id)
 
@@ -44,7 +44,7 @@ RSpec.describe Live::DiffHelper do
     it 'correct diff for updated results' do
       registration_1 = registrations.first
       registration_2 = registrations.second
-      round.open_round!
+      round.open_round!(User.first)
 
       result = round.live_results.find_by!(registration_id: registration_1.id)
 
@@ -83,7 +83,7 @@ RSpec.describe Live::DiffHelper do
 
     it 'sends best and worst possible for incomplete results' do
       registration_1 = registrations.first
-      round.open_round!
+      round.open_round!(User.first)
 
       result = round.live_results.find_by!(registration_id: registration_1.id)
 

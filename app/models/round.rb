@@ -192,7 +192,7 @@ class Round < ApplicationRecord
   end
 
   def open_and_lock_previous(locking_user)
-    open_count = open_round!
+    open_count = open_round!(locking_user)
     return [open_count, 0] if first_round?
 
     round_to_lock = linked_round.present? ? linked_round.first_round_in_link.previous_round : previous_round
@@ -200,14 +200,14 @@ class Round < ApplicationRecord
     [open_count, round_to_lock.lock_results(locking_user)]
   end
 
-  def clear_round!
+  def clear_round!(clearing_user)
     self.transaction do
       live_results.delete_all
-      open_round!
+      open_round!(clearing_user)
     end
   end
 
-  def open_round!
+  def open_round!(opening_user)
     advancing_reg_ids = advancing_registrations.ids
 
     empty_results = advancing_reg_ids.map do
@@ -216,7 +216,7 @@ class Round < ApplicationRecord
     LiveResult.insert_all!(empty_results)
 
     inserted_ids = self.live_results.where(registration_id: advancing_reg_ids).ids
-    # self.bulk_insert_history(inserted_ids, foo_bar, action_type: :proceeding)
+    self.bulk_insert_history(inserted_ids, opening_user, action_type: :proceeding)
   end
 
   def total_competitors
