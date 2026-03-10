@@ -456,7 +456,6 @@ module DatabaseDumper
     "live_results" => :skip_all_rows,
     "live_result_history_entries" => :skip_all_rows,
     "live_attempts" => :skip_all_rows,
-    "live_attempt_history_entries" => :skip_all_rows,
     "schedule_activities" => {
       where_clause: "JOIN venue_rooms ON venue_rooms.id = venue_room_id JOIN competition_venues ON competition_venues.id = venue_rooms.competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}",
       column_sanitizers: actions_to_column_sanitizers(

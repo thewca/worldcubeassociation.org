@@ -6,7 +6,6 @@ class LiveAttempt < ApplicationRecord
   default_scope { order(:attempt_number) }
 
   belongs_to :live_result
-  has_many :live_attempt_history_entries, dependent: :destroy
 
   has_one :h2h_attempt, dependent: :destroy
 
