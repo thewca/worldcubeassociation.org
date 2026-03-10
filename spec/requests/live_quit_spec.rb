@@ -92,7 +92,6 @@ RSpec.describe "WCA Live API" do
 
       expect do
         delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request
-        puts(response.inspect)
       end.to have_broadcasted_to(Live::Config.broadcast_key(round.wcif_id))
         .from_channel(ApplicationCable::Channel)
         .with(hash_including(updated: [{ "advancing" => false, "advancing_questionable" => false, "registration_id" => registrations.first.id },
