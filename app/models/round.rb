@@ -187,7 +187,7 @@ class Round < ApplicationRecord
   private def bulk_insert_history(live_ids_to_insert, entered_by_user, **attributes)
     history_entries = live_ids_to_insert.map { LiveResultHistoryEntry.build(live_result_id: it, entered_by_id: entered_by_user.id, **attributes) }
 
-    history_entry_attributes = history_entries.map(&:attributes)
+    history_entry_attributes = history_entries.map { it.attributes.symbolize_keys.except(:id, :created_at, :updated_at) }
     LiveResultHistoryEntry.insert_all(history_entry_attributes)
   end
 
