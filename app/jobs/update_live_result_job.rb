@@ -5,7 +5,8 @@ class UpdateLiveResultJob < ApplicationJob
   queue_as EnvConfig.LIVE_QUEUE if Live::Config.sqs_queued?
 
   def perform(live_result, results, entered_by_id)
-    LiveAttempt.upsert_all(results)
+    result_upserts = results.map { it.merge(live_result_id: live_result.id) }
+    LiveAttempt.upsert_all(result_upserts)
 
     attempt_numbers = results.pluck(:attempt_number)
     live_result.live_attempts.where.not(attempt_number: attempt_numbers).delete_all
@@ -20,7 +21,7 @@ class UpdateLiveResultJob < ApplicationJob
 
     live_result.update!(best: best, average: average, last_attempt_entered_at: Time.now.utc)
 
-    history_ordered_results = results.sort_by { it[:attempt_number] }.pluck(:value)
+    history_ordered_results = new_attempts.order(:attempt_number).pluck(:value)
     live_result.live_result_history_entries.create!(entered_by_id: entered_by_id, action_type: :scoretaking, attempt_details: history_ordered_results)
 
     after_state = round.to_live_state
