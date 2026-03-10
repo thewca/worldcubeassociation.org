@@ -8,14 +8,14 @@ class UpdateLiveResultJob < ApplicationJob
     LiveAttempt.upsert_all(results)
 
     attempt_numbers = results.pluck(:attempt_number)
-    live_result.result_attempts.where.not(attempt_number: attempt_numbers).delete_all
+    live_result.live_attempts.where.not(attempt_number: attempt_numbers).delete_all
 
     round = live_result.round
 
     # We need the state before the result is updated
     before_state = round.to_live_state
 
-    new_attempts = live_result.result_attempts.reload # We did some `upsert_all` and `delete_all` shenanigans above, which bypass Rails memory. Hence reloading...
+    new_attempts = live_result.live_attempts.reload # We did some `upsert_all` and `delete_all` shenanigans above, which bypass Rails memory. Hence reloading...
     average, best = LiveResult.compute_average_and_best(new_attempts, round)
 
     live_result.update!(best: best, average: average, last_attempt_entered_at: live_result.current_time_from_proper_timezone)
