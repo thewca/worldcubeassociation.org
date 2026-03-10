@@ -18,7 +18,7 @@ class UpdateLiveResultJob < ApplicationJob
     new_attempts = live_result.live_attempts.reload # We did some `upsert_all` and `delete_all` shenanigans above, which bypass Rails memory. Hence reloading...
     average, best = LiveResult.compute_average_and_best(new_attempts, round)
 
-    live_result.update!(best: best, average: average, last_attempt_entered_at: live_result.current_time_from_proper_timezone)
+    live_result.update!(best: best, average: average, last_attempt_entered_at: Time.now.utc)
 
     history_ordered_results = results.sort_by { it[:attempt_number] }.pluck(:value)
     live_result.live_result_history_entries.create!(entered_by_id: entered_by_id, action_type: :scoretaking, attempt_details: history_ordered_results)
