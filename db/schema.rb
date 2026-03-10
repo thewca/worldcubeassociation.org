@@ -807,6 +807,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_084658) do
     t.index ["live_result_id"], name: "index_live_attempts_on_live_result_id"
   end
 
+  create_table "live_result_history_entries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "action_source", null: false
+    t.string "action_type"
+    t.json "attempt_details"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "entered_at", null: false
+    t.bigint "entered_by_id"
+    t.bigint "live_result_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entered_by_id"], name: "index_live_result_history_entries_on_entered_by_id"
+    t.index ["live_result_id"], name: "index_live_result_history_entries_on_live_result_id"
+  end
+
   create_table "live_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.boolean "advancing", default: false, null: false
     t.boolean "advancing_questionable", default: false, null: false
@@ -1619,6 +1633,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_084658) do
   add_foreign_key "inbox_scrambles", "inbox_scramble_sets", column: "matched_scramble_set_id"
   add_foreign_key "live_attempt_history_entries", "live_attempts", on_delete: :cascade
   add_foreign_key "live_attempts", "live_results", on_delete: :cascade
+  add_foreign_key "live_result_history_entries", "live_results", on_delete: :cascade
+  add_foreign_key "live_result_history_entries", "users", column: "entered_by_id"
   add_foreign_key "live_results", "users", column: "locked_by_id"
   add_foreign_key "live_results", "users", column: "quit_by_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
