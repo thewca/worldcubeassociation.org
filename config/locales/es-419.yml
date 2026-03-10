@@ -2015,6 +2015,8 @@ es-419:
       profile: Perfil
       #original_hash: 7b2c7f1
       approve: Aprobar
+      #original_hash: d9455bf
+      approve_confirm: '¿Estás seguro de querer aprobar el WCA ID %{wca_id}?'
       #original_hash: 85de4b8
       unconfirmed_email: 'El correo electrónico de esta cuenta (%{email}) no está confirmado.'
       #original_hash: 7069007
