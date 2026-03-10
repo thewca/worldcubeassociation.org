@@ -1119,7 +1119,7 @@ class Competition < ApplicationRecord
   end
 
   def lead_delegate_required?
-    confirmed? && created_at.present? && created_at > Date.new(2026, 4, 1)
+    confirmed? && confirmed_at >= Date.new(2026, 4, 1)
   end
 
   def pending_results_or_report(num_days)
