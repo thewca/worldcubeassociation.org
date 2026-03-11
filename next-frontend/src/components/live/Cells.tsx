@@ -10,8 +10,10 @@ import { LiveAttempt, LiveCompetitor, LiveResult } from "@/types/live";
 export function LiveTableHeader({
   isLinked = false,
   format,
+  showFull = true,
 }: {
   isLinked?: boolean;
+  showFull?: boolean;
   format: Format;
 }) {
   const solveCount = format.expected_solve_count;
@@ -25,12 +27,13 @@ export function LiveTableHeader({
         <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
         <Table.ColumnHeader>Competitor</Table.ColumnHeader>
         {isLinked && <Table.ColumnHeader>Round</Table.ColumnHeader>}
-        <Table.ColumnHeader>Country</Table.ColumnHeader>
-        {attemptIndexes.map((num) => (
-          <Table.ColumnHeader key={num} textAlign="right">
-            {num + 1}
-          </Table.ColumnHeader>
-        ))}
+        {showFull && <Table.ColumnHeader>Country</Table.ColumnHeader>}
+        {showFull &&
+          attemptIndexes.map((num) => (
+            <Table.ColumnHeader key={num} textAlign="right">
+              {num + 1}
+            </Table.ColumnHeader>
+          ))}
         {stats.map((stat) => (
           <Table.ColumnHeader textAlign="right" key={stat.field}>
             {stat.name}
