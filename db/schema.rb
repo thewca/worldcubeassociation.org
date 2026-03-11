@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_10_084658) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_11_060513) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1629,6 +1629,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_084658) do
   add_foreign_key "potential_duplicate_persons", "users", column: "original_user_id"
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
+  add_foreign_key "result_attempts", "results", on_delete: :cascade
   add_foreign_key "results", "rounds"
   add_foreign_key "rounds", "linked_rounds"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
