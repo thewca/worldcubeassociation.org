@@ -7,6 +7,8 @@ class LiveResult < ApplicationRecord
   has_many :live_attempts, dependent: :destroy
   alias_method :attempts, :live_attempts
 
+  has_many :live_result_history_entries, dependent: :delete_all
+
   after_save :trigger_recompute, if: :should_recompute?
 
   belongs_to :registration
@@ -61,7 +63,8 @@ class LiveResult < ApplicationRecord
   end
 
   def mark_as_quit!(quit_by_user)
-    update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
+    self.update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
+    self.live_result_history_entries.create!(entered_by_id: quit_by_user.id, action_type: :quit)
   end
 
   def locked?
