@@ -21,7 +21,7 @@ x-app: &app
 x-app-environment: &appEnv
   <<: *env
   SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
-  ACTIONCABLE_REDIS_URL: redis://wca_redis:6379/2
+  ANYCABLE_REDIS_URL: redis://wca_redis:6379/2
   MAILCATCHER_SMTP_HOST: wca_mailcatcher
 
 services:
@@ -62,6 +62,7 @@ services:
       SHAKAPACKER_DEV_SERVER_HOST: wca_webpacker
       CACHE_REDIS_URL: redis://wca_redis:6379/0
       RUNNING_IN_DOCKER: true
+      CABLE_URL: ws://wca_ws:8085
     tty: true
     # Start the server and bind to 0.0.0.0 (vs 127.0.0.1) so Docker's port mappings work correctly
     command: bin/dev -b 0.0.0.0
@@ -178,6 +179,42 @@ services:
     command: redis-server --loglevel warning
     volumes:
       - cache_volume:/data
+    networks:
+      - wca-main
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  wca_ws:
+    image: anycable/anycable-go:1.6
+    ports:
+      - '8085:8085'
+    environment:
+      ANYCABLE_HOST: "0.0.0.0"
+      ANYCABLE_REDIS_URL: redis://wca_redis:6379/2
+      ANYCABLE_RPC_HOST: wca_anycable:50051
+      ANYCABLE_DEBUG: 1
+      ANYCABLE_PORT: 8085
+    networks:
+      - wca-main
+    depends_on:
+      wca_redis:
+        condition: service_healthy
+
+  wca_anycable:
+    <<: *app
+    command: bin/anycable
+    environment:
+      ANYCABLE_RPC_HOST: 0.0.0.0:50051
+      ANYCABLE_DEBUG: 1
+    ports:
+      - '50051:50051'
+    depends_on:
+      - wca_db
+      - wca_ws
     networks:
       - wca-main
 

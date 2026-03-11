@@ -81,7 +81,7 @@ export default function useResultsSubscriptions(
   const onReceivedEvent = useEffectEvent(onReceived);
 
   useEffect(() => {
-    const cable = createConsumer("http://localhost:3000/cable");
+    const cable = createConsumer("http://localhost:8085/cable");
 
     const subscriptions = roundIds.map((roundId) =>
       cable.subscriptions.create(

@@ -113,6 +113,23 @@ GEM
       activerecord (>= 4.2)
       activesupport
     ansi (1.5.0)
+    anycable (1.6.3)
+      anycable-core (= 1.6.3)
+      grpc (~> 1.6)
+    anycable-core (1.6.3)
+      anyway_config (~> 2.2)
+      base64 (>= 0.2)
+      google-protobuf (~> 4)
+      stringio (~> 3)
+    anycable-rails (1.6.1)
+      anycable
+      anycable-rails-core (= 1.6.1)
+    anycable-rails-core (1.6.1)
+      actioncable (>= 7.0, < 9.0)
+      anycable-core (~> 1.6.0)
+      globalid
+    anyway_config (2.8.0)
+      ruby-next-core (~> 1.0)
     api-pagination (7.0.0)
     ast (2.4.3)
     autoprefixer-rails (9.4.7)
@@ -347,6 +364,8 @@ GEM
     google-protobuf (4.33.2-x86_64-linux-musl)
       bigdecimal
       rake (>= 13)
+    googleapis-common-protos-types (1.22.0)
+      google-protobuf (~> 4.26)
     googleauth (1.16.1)
       faraday (>= 1.0, < 3.a)
       google-cloud-env (~> 2.2)
@@ -355,6 +374,33 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (>= 0.16, < 2.a)
+    grpc (1.78.1)
+      google-protobuf (>= 3.25, < 5.0)
+      googleapis-common-protos-types (~> 1.0)
+    grpc (1.78.1-aarch64-linux-gnu)
+      google-protobuf (>= 3.25, < 5.0)
+      googleapis-common-protos-types (~> 1.0)
+    grpc (1.78.1-aarch64-linux-musl)
+      google-protobuf (>= 3.25, < 5.0)
+      googleapis-common-protos-types (~> 1.0)
+    grpc (1.78.1-arm64-darwin)
+      google-protobuf (>= 3.25, < 5.0)
+      googleapis-common-protos-types (~> 1.0)
+    grpc (1.78.1-x86-linux-gnu)
+      google-protobuf (>= 3.25, < 5.0)
+      googleapis-common-protos-types (~> 1.0)
+    grpc (1.78.1-x86-linux-musl)
+      google-protobuf (>= 3.25, < 5.0)
+      googleapis-common-protos-types (~> 1.0)
+    grpc (1.78.1-x86_64-darwin)
+      google-protobuf (>= 3.25, < 5.0)
+      googleapis-common-protos-types (~> 1.0)
+    grpc (1.78.1-x86_64-linux-gnu)
+      google-protobuf (>= 3.25, < 5.0)
+      googleapis-common-protos-types (~> 1.0)
+    grpc (1.78.1-x86_64-linux-musl)
+      google-protobuf (>= 3.25, < 5.0)
+      googleapis-common-protos-types (~> 1.0)
     guard (2.18.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -766,6 +812,7 @@ GEM
     ruby-ll (2.1.4)
       ansi
       ast
+    ruby-next-core (1.2.0)
     ruby-progressbar (1.13.0)
     ruby-vips (2.2.3)
       ffi (~> 1.12)
@@ -984,6 +1031,7 @@ DEPENDENCIES
   activerecord-import
   activestorage-validator
   after_commit_everywhere
+  anycable-rails
   api-pagination
   aws-sdk-cloudfront
   aws-sdk-rds
@@ -1130,6 +1178,11 @@ CHECKSUMS
   addressable (2.8.9) sha256=cc154fcbe689711808a43601dee7b980238ce54368d23e127421753e46895485
   after_commit_everywhere (1.6.0) sha256=c8b3409a1172e43070d2e57f4b9d7b89dce5a7f057576b748cb9fe0a0dd4d917
   ansi (1.5.0) sha256=5408253274e33d9d27d4a98c46d2998266fd51cba58a7eb9d08f50e57ed23592
+  anycable (1.6.3) sha256=30092c7687c5670c240d1809f417565829e8b6fabd19975219ef28713da0217f
+  anycable-core (1.6.3) sha256=12f0398509b69e51ee6488bf3724ee2c97f01dfc279001feef21242fc51feca3
+  anycable-rails (1.6.1) sha256=b924a83cb30c13f71688e73c75aa7c9a0d1fe364306fee04d4932e26e77396d8
+  anycable-rails-core (1.6.1) sha256=97fd349dad1bb1f5fa45ab630cb31ba521af0b12e8c64b46a451043f7170ae7d
+  anyway_config (2.8.0) sha256=f6797a7231f81202dcd3d0c07284e836e45713e761d320180348b13a5c7c9306
   api-pagination (7.0.0) sha256=0c16b6b352e5a51f1eb72e3b15845ac7f29edc62642e5076f4294eee19700db7
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   autoprefixer-rails (9.4.7) sha256=7104f54efa89e6390391bd894498a9db92bffaf74474942c4152e6dc0775ab3b
@@ -1240,7 +1293,17 @@ CHECKSUMS
   google-protobuf (4.33.2-x86_64-darwin) sha256=87cde586234674562cf099e2b708a65e376e2d39b0f0f48281f4b4ea182b47f8
   google-protobuf (4.33.2-x86_64-linux-gnu) sha256=73cba041477afcac92ff383fcbdec195ea28d96b994876d1deaa944d18f91786
   google-protobuf (4.33.2-x86_64-linux-musl) sha256=97cdf4f772c5540f9274603b00f1474ed5e6e2238b1d8b1585e77f941a36bd2c
+  googleapis-common-protos-types (1.22.0) sha256=f97492b77bd6da0018c860d5004f512fe7cd165554d7019a8f4df6a56fbfc4c7
   googleauth (1.16.1) sha256=36776bce9d55d8c1a0c6638c939b000dcee5954ca5b728f06ec4c2df4a46709c
+  grpc (1.78.1) sha256=c9e8a54cf901263c25c1e17af116f9145fbfdf4b69931234581b0be2059f6758
+  grpc (1.78.1-aarch64-linux-gnu) sha256=11597d75fd0efc855a5d8898867d00179ad215ddca2ec53ddb4d1b3a9bf313a4
+  grpc (1.78.1-aarch64-linux-musl) sha256=ba7d5b82cf935ffd2476196b53f5abce152f1e640fb2011d937a2a6965686e3b
+  grpc (1.78.1-arm64-darwin) sha256=7378b58db8dc65b19dce8006a47c0da30f1faf5d07160d2e1816c31126d3a388
+  grpc (1.78.1-x86-linux-gnu) sha256=d05ef89ad5cd5bf830edca3686b506924583b0cacb17cf980889bd86b850b310
+  grpc (1.78.1-x86-linux-musl) sha256=795fcdab18dd2e444880bf7d68903a489c1da9469bc57836acfc46511800caad
+  grpc (1.78.1-x86_64-darwin) sha256=4b1fe081374c3abcb7204a1396d2986c80c6478a77a93586b27c56d9237947f0
+  grpc (1.78.1-x86_64-linux-gnu) sha256=c0715fe9bc80cf21fbaca2713abf8db6f628f6f31ec1d8762b667151e6ab0c9f
+  grpc (1.78.1-x86_64-linux-musl) sha256=4e90a3d0f2baa1cd70756ffe116bd81bb7b398ff774272828a23a89ac9a30b06
   guard (2.18.0) sha256=12f2b801a0c8d41e7480ab5c2c4283e439fbe0ac7574a0da1dee82ec484a1eff
   guard-compat (1.2.1) sha256=3ad21ab0070107f92edfd82610b5cdc2fb8e368851e72362ada9703443d646fe
   guard-rspec (4.7.3) sha256=a47ba03cbd1e3c71e6ae8645cea97e203098a248aede507461a43e906e2f75ca
@@ -1402,6 +1465,7 @@ CHECKSUMS
   rubocop-rspec_rails (2.32.0) sha256=4a0d641c72f6ebb957534f539d9d0a62c47abd8ce0d0aeee1ef4701e892a9100
   rubocop-thread_safety (0.7.3) sha256=067cdd52fbf5deffc18995437e45b5194236eaff4f71de3375a1f6052e48f431
   ruby-ll (2.1.4) sha256=bec3a40078e4b8578b20751f0b2e3dc3fcaa773e34fae3d9725b724032e47e0c
+  ruby-next-core (1.2.0) sha256=f6a7d00bb5186cecbb02f7f1845a0f3a2c9788d35b6ccff5c9be3f0d46799b86
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
   ruby-vips (2.2.3) sha256=41d12b1a805cd6ead4a7965201a8f7c5fe459bb58d3a7d967c9eb0719a6edc92
   sass-embedded (1.96.0) sha256=a124de2a3451827dcf936bd54918265e414da623f1671c14f268d7cbdab56504

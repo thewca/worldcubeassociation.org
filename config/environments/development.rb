@@ -114,6 +114,9 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
+  config.after_initialize do
+    config.action_cable.url = ActionCable.server.config.url = ENV.fetch("CABLE_URL", "ws://localhost:8080/cable") if AnyCable::Rails.enabled?
+  end
 
   # Whitelist the Docker Intranet IPs when we're in Docker (meaning local dev environment)
   config.web_console.whitelisted_ips = %w[172.18.0.0/16] if EnvConfig.RUNNING_IN_DOCKER?
