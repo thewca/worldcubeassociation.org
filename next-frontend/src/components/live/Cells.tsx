@@ -103,7 +103,7 @@ export function LiveAttemptsCells({
   return padSkipped(attempts, format.expected_solve_count).map((attempt) => (
     <Table.Cell
       textAlign="right"
-      key={`${competitorId}-${attempt.attempt_number}`}
+      key={`attempts-${competitorId}-${attempt.attempt_number}`}
     >
       {formatAttemptResult(attempt.value, eventId)}
     </Table.Cell>
