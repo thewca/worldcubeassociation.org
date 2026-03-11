@@ -51,7 +51,7 @@ export default function LiveResultsTable({
   const showFull = useBreakpointValue({ base: false, md: true });
 
   return (
-    <Table.Root>
+    <Table.Root size="sm">
       <LiveTableHeader
         format={format}
         isLinked={showLinkedRoundsView}
@@ -100,6 +100,7 @@ export default function LiveResultsTable({
                     competitor={competitorAndTheirResults}
                     rowSpan={rowSpan}
                     isAdmin={isAdmin}
+                    link={showFull}
                   />
                 )}
                 {showLinkedRoundsView && (
