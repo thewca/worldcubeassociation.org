@@ -1327,7 +1327,9 @@ en:
       info: "You can import registrations multiple times. Changes will be determined and the database will be updated accordingly."
       registrations_file_label: "Registrations file"
       registrations_file_hint: "CSV file with columns: Status, Name, Region, WCA ID, Birth Date, Gender, Email, and one column for each event."
+      preview: "Preview Registration Data"
       import: "Import"
+      cancel: "Cancel"
       errors:
         error: "Error importing %{registration}: %{error}."
         missing_columns: "Missing columns: %{columns}."
