@@ -5,6 +5,8 @@ import { LiveResultProvider } from "@/providers/LiveResultProvider";
 import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
 import formats from "@/lib/wca/data/formats";
 import { Container } from "@chakra-ui/react";
+import OpenapiError from "@/components/ui/openapiError";
+import { getT } from "@/lib/i18n/get18n";
 
 export default async function DoubleCheckPage({
   params,
@@ -13,13 +15,18 @@ export default async function DoubleCheckPage({
 }) {
   const { roundId, competitionId } = await params;
 
-  const resultsRequest = await getResultByRound(competitionId, roundId);
+  const { t } = await getT();
 
-  if (!resultsRequest.data) {
-    return <p>Error loading Results</p>;
+  const { data, error, response } = await getResultByRound(
+    competitionId,
+    roundId,
+  );
+
+  if (error) {
+    return <OpenapiError response={response} t={t} />;
   }
 
-  const { results, id, competitors, format } = resultsRequest.data;
+  const { results, id, competitors, format } = data;
 
   return (
     <Container>
@@ -27,10 +34,7 @@ export default async function DoubleCheckPage({
         requiredPermission="canAdministerCompetition"
         item={competitionId}
       >
-        <LiveResultProvider
-          initialRound={resultsRequest.data}
-          competitionId={competitionId}
-        >
+        <LiveResultProvider initialRound={data} competitionId={competitionId}>
           <LiveResultAdminProvider
             format={formats.byId[format]}
             roundId={id}
