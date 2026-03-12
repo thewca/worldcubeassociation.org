@@ -142,7 +142,7 @@ RSpec.describe Live::DiffHelper do
       r = create(:live_result, round: round)
       # We need an incomplete result to include all keys
       attempts = 3.times.map.with_index(1) do |r, i|
-        LiveAttempt.build_with_history_entry((r + 1) * 200, i, User.first)
+        LiveAttempt.build(value: (r + 1) * 200, attempt_number: i)
       end
       r.update!(live_attempts: attempts)
       keys = %w[]

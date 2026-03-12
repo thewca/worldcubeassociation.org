@@ -21,8 +21,6 @@ class UpdateLiveResultJob < ApplicationJob
 
       history_ordered_results = new_attempts.order(:attempt_number).pluck(:value)
       live_result.live_result_history_entries.create!(entered_by_id: entered_by_id, action_type: :scoretaking, attempt_details: history_ordered_results)
-
-      live_result.update!(live_attempts: new_attempts, best: best, average: average, last_attempt_entered_at: Time.now.utc)
     end
   end
 end
