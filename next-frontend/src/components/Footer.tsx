@@ -72,7 +72,7 @@ export default function Footer() {
         </HStack>
 
         {/* Footer Links */}
-        <HStack gap={5}>
+        <HStack gap={5} wrap="wrap">
           <ChakraImage asChild>
             <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
           </ChakraImage>
