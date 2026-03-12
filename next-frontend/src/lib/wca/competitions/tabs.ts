@@ -4,14 +4,27 @@ import { iconMap } from "@/components/icons/iconMap";
 import { LuCalendar } from "react-icons/lu";
 import type { RouteLiteral } from "nextjs-routes";
 import type { ComponentType } from "react";
+import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
+import _ from "lodash";
+import { EventId } from "@/lib/wca/data/events";
 
-export interface CompetitionNavTab {
+export type TabWithChildren = {
+  i18nKey: string;
+  menuKey: string;
+  icon: ComponentType;
+  betaDisabled?: boolean;
+  children: TabWithLink[];
+};
+
+type TabWithLink = {
   i18nKey: string;
   href: RouteLiteral;
   menuKey: string;
   icon: ComponentType;
   betaDisabled?: boolean;
-}
+};
+
+export type CompetitionNavTab = TabWithChildren | TabWithLink;
 
 export const beforeCompetitionTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
@@ -65,8 +78,69 @@ export const beforeCompetitionTabs = (
     },
   ];
 };
-// TODO: Later for WCA Live Integration
-export const duringCompetitionTabs: CompetitionNavTab[] = [];
+
+export const duringCompetitionTabs = (
+  competitionInfo: components["schemas"]["CompetitionInfo"],
+  rounds: components["schemas"]["LiveRoundAdmin"][],
+): CompetitionNavTab[] => {
+  const roundsByEventId = _.groupBy(
+    rounds,
+    (r) => parseActivityCode(r.id).eventId,
+  );
+
+  return [
+    {
+      i18nKey: "competitions.show.schedule",
+      href: route({
+        pathname: "/competitions/[competitionId]/live",
+        query: { competitionId: competitionInfo.id },
+      }),
+      menuKey: "live",
+      icon: iconMap["Information"],
+    },
+    {
+      i18nKey: "competitions.nav.menu.podiums",
+      href: route({
+        pathname: "/competitions/[competitionId]/live/podiums",
+        query: { competitionId: competitionInfo.id },
+      }),
+      menuKey: "podiums",
+      icon: iconMap["Records"],
+    },
+    {
+      i18nKey: "competitions.nav.menu.competitors",
+      href: route({
+        pathname: "/competitions/[competitionId]/competitors",
+        query: { competitionId: competitionInfo.id },
+      }),
+      menuKey: "competitors",
+      icon: iconMap["Competitors"],
+    },
+    ..._.map(roundsByEventId, (rounds, eventId: EventId) => ({
+      i18nKey: `events.${eventId}`,
+      menuKey: eventId,
+      icon: iconMap[`333Icon`],
+      children: rounds.map((round) => {
+        const { roundNumber } = parseActivityCode(round.id);
+
+        const roundTypeId = getRoundTypeId(
+          roundNumber!,
+          rounds.length,
+          Boolean(round.cutoff),
+        );
+        return {
+          i18nKey: `rounds.${roundTypeId}.name`,
+          menuKey: eventId,
+          icon: iconMap[`333Icon`],
+          href: route({
+            pathname: "/competitions/[competitionId]/live/rounds/[roundId]",
+            query: { competitionId: competitionInfo.id, roundId: round.id },
+          }),
+        };
+      }),
+    })),
+  ];
+};
 export const afterCompetitionTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
 ): CompetitionNavTab[] => {

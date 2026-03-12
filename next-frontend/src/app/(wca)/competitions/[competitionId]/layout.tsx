@@ -5,6 +5,7 @@ import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
+import LiveMenu from "@/components/competitions/LiveMenu";
 
 type TitleProps = {
   params: Promise<{ competitionId: string }>;
@@ -25,6 +26,8 @@ export async function generateMetadata({
   };
 }
 
+const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
+
 export default async function CompetitionLayout({
   children,
   params,
@@ -44,8 +47,14 @@ export default async function CompetitionLayout({
 
   return (
     <Container pt="8">
-      <MobileMenu competitionInfo={competitionInfo}>{children}</MobileMenu>
-      <TabMenu competitionInfo={competitionInfo}>{children}</TabMenu>
+      {LIVE_RESULT_BETA ? (
+        <LiveMenu competitionInfo={competitionInfo}>{children}</LiveMenu>
+      ) : (
+        <>
+          <MobileMenu competitionInfo={competitionInfo}>{children}</MobileMenu>
+          <TabMenu competitionInfo={competitionInfo}>{children}</TabMenu>
+        </>
+      )}
     </Container>
   );
 }
