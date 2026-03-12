@@ -2,6 +2,7 @@
 
 import _ from "lodash";
 import {
+  Button,
   CloseButton,
   DataList,
   Dialog,
@@ -237,6 +238,11 @@ export default function LiveResultsTable({
                   </DataList.Root>
                 )}
               </Dialog.Body>
+              <Dialog.Footer>
+                <Dialog.ActionTrigger asChild>
+                  <Button variant="outline">Close</Button>
+                </Dialog.ActionTrigger>
+              </Dialog.Footer>
               <Dialog.CloseTrigger asChild>
                 <CloseButton size="sm" />
               </Dialog.CloseTrigger>
