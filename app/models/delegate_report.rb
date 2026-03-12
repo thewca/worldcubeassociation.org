@@ -91,8 +91,6 @@ class DelegateReport < ApplicationRecord
       self.working_group_2024_version?
     when :equipment
       self.legacy_version?
-    when :remarks
-      self.working_group_2024_version?
     else
       true
     end
