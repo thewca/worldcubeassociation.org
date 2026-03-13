@@ -492,13 +492,13 @@ RSpec.describe "API Competitions" do
         end
 
         it "can update wcif" do
-          create(:registration, :accepted, competition: competition)
+          competitor = create(:registration, :accepted, competition: competition)
           wcif = create_wcif_with_events(%w[333])
           round333_first = wcif[:events][0][:rounds][0]
           round333_first[:scrambleSetCount] = 2
           round333_first[:results] = [
             {
-              personId: 1,
+              personId: competitor.registrant_id,
               ranking: 10,
               attempts: [{ result: 456 }, { result: 745 }, { result: 657 }, { result: 465 }, { result: 835 }],
               best: 456,
@@ -510,6 +510,8 @@ RSpec.describe "API Competitions" do
           rounds = competition.reload.competition_events.find_by(event_id: "333").rounds
           expect(rounds.length).to eq 1
           expect(rounds.first.scramble_set_count).to eq 2
+          expect(rounds.first.round_results.length).to eq 1
+          expect(rounds.first.round_results.first.attempts.map(&:result)).to eq [456, 745, 657, 465, 835]
           expect(rounds.first.live_results.length).to eq 1
           expect(rounds.first.live_results.first.attempts.pluck(:value)).to eq [456, 745, 657, 465, 835]
         end

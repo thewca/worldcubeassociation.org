@@ -663,21 +663,20 @@ RSpec.describe "Competition WCIF" do
     end
 
     it "can set round results" do
-      create(:registration, :accepted, competition: competition)
-      create(:registration, :accepted, competition: competition)
+      competitors = create_list(:registration, 2, :accepted, competition: competition)
       wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
       # These have to be in the order of ranking if we want a byte by byte equality later
       # as we sort by ranking by default
       wcif_333_event["rounds"][0]["results"] = [
         {
-          "personId" => 2,
+          "personId" => competitors[1].registrant_id,
           "ranking" => 5,
           "attempts" => [{ "result" => 784, "reconstruction" => nil }] * 5,
           "best" => 784,
           "average" => 784,
         },
         {
-          "personId" => 1,
+          "personId" => competitors[0].registrant_id,
           "ranking" => 10,
           "attempts" => [{ "result" => 456, "reconstruction" => nil }] * 5,
           "best" => 456,
