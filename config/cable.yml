@@ -1,5 +1,5 @@
 development:
-  adapter: redis
+  adapter: anycable
   url: <%= EnvConfig.ACTIONCABLE_REDIS_URL %>
 
 test:
