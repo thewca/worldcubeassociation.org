@@ -395,7 +395,7 @@ class Round < ApplicationRecord
       recorded_not_incoming = results_by_registration_id.except(*incoming_registration_ids)
 
       result_ids_to_delete = recorded_not_incoming.values.pluck(:id)
-      # TODO is it really smart to just flat-out delete the results that WCA Live doesn't send over?
+      # TODO: Is it really smart to just flat-out delete the results that WCA Live doesn't send over?
       #   Can we infer whether someone was quit externally?
       LiveResult.where(id: result_ids_to_delete).delete_all
 
@@ -403,7 +403,7 @@ class Round < ApplicationRecord
         {
           registration_id: person_id_to_registration_id[round_result_wcif["personId"]],
           round_id: self.id,
-          # TODO should we set this only if an actual attempt value changed?
+          # TODO: Should we set this only if an actual attempt value changed?
           last_attempt_entered_at: database_now,
           best: round_result_wcif["best"],
           average: round_result_wcif["average"],
