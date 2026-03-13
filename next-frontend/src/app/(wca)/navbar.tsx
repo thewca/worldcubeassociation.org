@@ -66,13 +66,15 @@ export default async function Navbar() {
     >
       <RefreshRouteOnSave />
       <HStack>
-        <IconButton asChild variant="ghost">
-          <Link href="/">
-            <ChakraImage asChild maxW={10}>
-              <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
-            </ChakraImage>
-          </Link>
-        </IconButton>
+        {!LIVE_RESULT_BETA && (
+          <IconButton asChild variant="ghost">
+            <Link href="/">
+              <ChakraImage asChild maxW={10}>
+                <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
+              </ChakraImage>
+            </Link>
+          </IconButton>
+        )}
         {!LIVE_RESULT_BETA &&
           navbar.entry.map((navbarEntry) => (
             <React.Fragment key={navbarEntry.id}>

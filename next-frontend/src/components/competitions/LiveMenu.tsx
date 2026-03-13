@@ -1,12 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { Box, Collapsible, Tabs, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  CloseButton,
+  Collapsible,
+  Drawer,
+  IconButton,
+  Portal,
+  Spacer,
+  Tabs,
+  Text,
+} from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import _ from "lodash";
 import { components } from "@/types/openapi";
 import { useT } from "@/lib/i18n/useI18n";
 import {
+  CompetitionNavTab,
   duringCompetitionTabs,
   TabWithChildren,
 } from "@/lib/wca/competitions/tabs";
@@ -14,6 +26,7 @@ import useAPI from "@/lib/wca/useAPI";
 import Loading from "@/components/ui/loading";
 import { useState } from "react";
 import { TFunction } from "i18next";
+import { LuAlignJustify } from "react-icons/lu";
 
 export default function LiveMenu({
   competitionInfo,
@@ -23,6 +36,7 @@ export default function LiveMenu({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const pathName = usePathname();
   const { t } = useT();
@@ -51,7 +65,6 @@ export default function LiveMenu({
       orientation="vertical"
       lazyMount
       unmountOnExit
-      hideBelow="md"
       colorPalette="white"
     >
       <Tabs.List
@@ -59,34 +72,106 @@ export default function LiveMenu({
         position="sticky"
         minWidth="fit-content"
         textAlign="center"
+        hideBelow="md"
         gap="3"
       >
-        {tabs.map((tab) =>
-          "href" in tab ? (
-            <Tabs.Trigger value={tab.menuKey} asChild key={tab.menuKey}>
-              <Text asChild textStyle="bodyEmphasis">
-                <Link href={tab.href}>{t(tab.i18nKey)}</Link>
-              </Text>
-            </Tabs.Trigger>
-          ) : (
-            <CollapsibleTabGroup
-              key={tab.menuKey}
-              tab={tab}
-              t={t}
-              isOpen={openGroup === tab.menuKey}
-              onToggle={() =>
-                setOpenGroup((prev) =>
-                  prev === tab.menuKey ? null : tab.menuKey,
-                )
-              }
-            />
-          ),
-        )}
+        <TabList
+          tabs={tabs}
+          t={t}
+          openGroup={openGroup}
+          onToggle={(tab: CompetitionNavTab) =>
+            setOpenGroup((prev) => (prev === tab.menuKey ? null : tab.menuKey))
+          }
+        />
       </Tabs.List>
+      <Box hideFrom="md" mb="4">
+        <Drawer.Root
+          open={drawerOpen}
+          onOpenChange={(e) => setDrawerOpen(e.open)}
+          placement="start"
+        >
+          <Drawer.Trigger asChild>
+            <IconButton
+              aria-label="Open menu"
+              size="sm"
+              position="fixed"
+              left="3"
+              top="3"
+              colorPalette="bg"
+              variant="ghost"
+            >
+              <LuAlignJustify />
+            </IconButton>
+          </Drawer.Trigger>
+
+          <Drawer.Backdrop />
+          <Drawer.Positioner>
+            <Drawer.Content>
+              <Drawer.Header>
+                <Drawer.Title>{competitionInfo.name}</Drawer.Title>
+                <Drawer.CloseTrigger asChild>
+                  <CloseButton />
+                </Drawer.CloseTrigger>
+              </Drawer.Header>
+
+              <Drawer.Body>
+                <Tabs.List
+                  flexDirection="column"
+                  gap="1"
+                  borderInlineEnd="none"
+                  w="100%"
+                  bg="none"
+                >
+                  <TabList
+                    tabs={tabs}
+                    t={t}
+                    openGroup={openGroup}
+                    onToggle={(tab: CompetitionNavTab) =>
+                      setOpenGroup((prev) =>
+                        prev === tab.menuKey ? null : tab.menuKey,
+                      )
+                    }
+                  />
+                </Tabs.List>
+              </Drawer.Body>
+            </Drawer.Content>
+          </Drawer.Positioner>
+        </Drawer.Root>
+      </Box>
       <Tabs.Content width="full" value={currentPath!}>
         {children}
       </Tabs.Content>
     </Tabs.Root>
+  );
+}
+
+function TabList({
+  tabs,
+  t,
+  onToggle,
+  openGroup,
+}: {
+  tabs: CompetitionNavTab[];
+  t: TFunction;
+  openGroup: string | null;
+  onToggle: (tab: CompetitionNavTab) => void;
+}) {
+  return tabs.map((tab) =>
+    "href" in tab ? (
+      <Tabs.Trigger value={tab.menuKey} asChild key={tab.menuKey}>
+        <Text asChild textStyle="bodyEmphasis" justifyContent="left">
+          <Link href={tab.href}>{t(tab.i18nKey)}</Link>
+        </Text>
+      </Tabs.Trigger>
+    ) : (
+      <CollapsibleTabGroup
+        key={tab.menuKey}
+        tab={tab}
+        t={t}
+        isOpen={openGroup === tab.menuKey}
+        onToggle={() => onToggle(tab)}
+      />
+    ),
   );
 }
 
@@ -101,6 +186,8 @@ function CollapsibleTabGroup({
   isOpen: boolean;
   onToggle: () => void;
 }) {
+  const { i18nKey, icon: IconComponent, children } = tab;
+
   return (
     <Collapsible.Root open={isOpen} onOpenChange={onToggle}>
       <Collapsible.Trigger
@@ -112,25 +199,33 @@ function CollapsibleTabGroup({
         borderRadius="md"
         _hover={{ bg: "bg.subtle" }}
       >
-        <Text textStyle="bodyEmphasis" textAlign="center">
-          {t(tab.i18nKey)}
+        <Text textStyle="bodyEmphasis">
+          <IconComponent /> {t(i18nKey)}
         </Text>
       </Collapsible.Trigger>
 
       <Collapsible.Content>
         <Box pl="3" display="flex" flexDirection="column" gap="1" pt="1">
-          {tab.children.map((child) => (
-            <Tabs.Trigger
-              value={child.menuKey}
-              asChild
-              key={child.menuKey}
-              disabled={child.disabled}
-            >
-              <Text asChild>
-                <Link href={child.href}>{t(child.i18nKey)}</Link>
-              </Text>
-            </Tabs.Trigger>
-          ))}
+          {children.map(
+            ({ menuKey, disabled, i18nKey, href, icon: IconComponent }) => (
+              <Tabs.Trigger
+                value={menuKey}
+                asChild
+                key={menuKey}
+                disabled={disabled}
+              >
+                <Text asChild justifyContent="left">
+                  {disabled ? (
+                    <Text>{t(i18nKey)}</Text>
+                  ) : (
+                    <Link href={href}>
+                      {t(i18nKey)} <Spacer /> <IconComponent />
+                    </Link>
+                  )}
+                </Text>
+              </Tabs.Trigger>
+            ),
+          )}
         </Box>
       </Collapsible.Content>
     </Collapsible.Root>
