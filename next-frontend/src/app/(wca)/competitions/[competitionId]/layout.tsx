@@ -50,10 +50,7 @@ export default async function CompetitionLayout({
       {LIVE_RESULT_BETA ? (
         <LiveMenu competitionInfo={competitionInfo}>{children}</LiveMenu>
       ) : (
-        <>
-          <MobileMenu competitionInfo={competitionInfo}>{children}</MobileMenu>
-          <TabMenu competitionInfo={competitionInfo}>{children}</TabMenu>
-        </>
+        <TabMenu competitionInfo={competitionInfo}>{children}</TabMenu>
       )}
     </Container>
   );

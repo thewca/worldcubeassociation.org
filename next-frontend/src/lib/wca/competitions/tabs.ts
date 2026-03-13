@@ -1,7 +1,7 @@
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
 import { iconMap } from "@/components/icons/iconMap";
-import { LuCalendar, LuSquareCheck } from "react-icons/lu";
+import { LuCalendar, LuSquare, LuSquareCheck } from "react-icons/lu";
 import type { RouteLiteral } from "nextjs-routes";
 import type { ComponentType } from "react";
 import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
@@ -131,8 +131,7 @@ export const duringCompetitionTabs = (
         return {
           i18nKey: `rounds.${roundTypeId}.name`,
           menuKey: round.id,
-          icon:
-            round.state === "locked" ? LuSquareCheck : iconMap["Spots Left"],
+          icon: round.state === "locked" ? LuSquareCheck : LuSquare,
           disabled: round.state === "pending" || round.state === "ready",
           href: route({
             pathname: "/competitions/[competitionId]/live/rounds/[roundId]",
