@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Dropdown, Input, Popup, Table, Icon,
+  Dropdown, Input, Table,
 } from 'semantic-ui-react';
 import { events, formats } from '../../../lib/wca-data.js.erb';
 import { roundIdToString } from '../../../lib/utils/wcif';
