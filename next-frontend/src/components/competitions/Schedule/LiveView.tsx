@@ -71,7 +71,7 @@ export default function LiveView({
     <VStack align="left">
       <Select.Root
         collection={collection}
-        width="3/12"
+        width={{ md: "3/12", sm: "full" }}
         value={[timeZone]}
         onValueChange={(e) => setTimeZone(e.value[0])}
       >
@@ -118,7 +118,7 @@ export default function LiveView({
 
           return (
             <Tabs.Content value={date.day.toString()} key={date.day}>
-              <SimpleGrid columns={3} gap={2}>
+              <SimpleGrid columns={{ md: 3, sm: 1 }} gap={2}>
                 {groupedActivities.map((activityGroup) => {
                   const activity = activityGroup[0];
                   const { eventId } = parseActivityCode(activity.activityCode);

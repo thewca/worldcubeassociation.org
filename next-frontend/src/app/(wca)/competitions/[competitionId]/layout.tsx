@@ -1,10 +1,9 @@
 import { Container } from "@chakra-ui/react";
-import TabMenu from "@/components/competitions/TabMenu";
-import MobileMenu from "@/components/competitions/MobileMenu";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
+import CompetitionMenu from "@/components/competitions/CompetitionMenu";
 
 type TitleProps = {
   params: Promise<{ competitionId: string }>;
@@ -44,8 +43,9 @@ export default async function CompetitionLayout({
 
   return (
     <Container pt="8">
-      <MobileMenu competitionInfo={competitionInfo}>{children}</MobileMenu>
-      <TabMenu competitionInfo={competitionInfo}>{children}</TabMenu>
+      <CompetitionMenu competitionInfo={competitionInfo}>
+        {children}
+      </CompetitionMenu>
     </Container>
   );
 }
