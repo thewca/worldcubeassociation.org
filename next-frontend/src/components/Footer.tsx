@@ -46,7 +46,7 @@ export default function Footer() {
         </ChakraImage>
 
         {/* Social Media Icons */}
-        <HStack>
+        <HStack wrap="wrap">
           <IconButton variant="ghost" asChild>
             <ChakraLink
               textStyle="headerLink"
