@@ -47,6 +47,7 @@ class LiveResult < ApplicationRecord
   end
 
   delegate :id, to: :event, prefix: true
+  delegate :id, to: :format, prefix: true
 
   def to_solve_time(field)
     SolveTime.new(event_id, field, send(field))
@@ -130,6 +131,49 @@ class LiveResult < ApplicationRecord
 
     # Only return if there are actual changes
     diff if diff.except("registration_id").present?
+  end
+
+  def to_inbox_result
+    attempt_values = attempts.map(&:value)
+    InboxResult.new({
+                      competition: competition,
+                      person_id: registration.person_id,
+                      pos: local_pos,
+                      event_id: event_id,
+                      round_type_id: round.round_type_id,
+                      round_id: round_id,
+                      format_id: format_id,
+                      best: best,
+                      average: average,
+                      value1: attempt_values[0],
+                      value2: attempt_values[1] || 0,
+                      value3: attempt_values[2] || 0,
+                      value4: attempt_values[3] || 0,
+                      value5: attempt_values[4] || 0,
+                    })
+  end
+
+  def to_wcif
+    {
+      "personId" => self.registration.registrant_id,
+      "ranking" => self.local_pos,
+      "attempts" => self.attempts.map(&:to_wcif),
+      "best" => self.best,
+      "average" => self.average,
+    }
+  end
+
+  def self.wcif_json_schema
+    {
+      "type" => %w[object null],
+      "properties" => {
+        "personId" => { "type" => "integer" },
+        "ranking" => { "type" => %w[integer null] },
+        "attempts" => { "type" => "array", "items" => LiveAttempt.wcif_json_schema },
+        "best" => { "type" => "integer" },
+        "average" => { "type" => "integer" },
+      },
+    }
   end
 
   def forecast_statistics

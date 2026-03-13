@@ -381,6 +381,80 @@ class Round < ApplicationRecord
     ScheduleActivity.parse_activity_code(wcif_id)
   end
 
+  def load_live_results!(round_results_wcif, current_user, comp_registrations: nil)
+    comp_registrations ||= self.competition.registrations
+    person_id_to_registration_id = comp_registrations.to_h { [it.registrant_id, it.id] }
+
+    results_by_registration_id = self.live_results.index_by(&:registration_id)
+    recorded_registration_ids = results_by_registration_id.keys
+
+    database_now = self.current_time_from_proper_timezone
+
+    self.transaction do
+      incoming_registration_ids = round_results_wcif.map { person_id_to_registration_id[it["personId"]] }
+      recorded_not_incoming = results_by_registration_id.except(*incoming_registration_ids)
+
+      result_ids_to_delete = recorded_not_incoming.values.pluck(:id)
+      # TODO: Is it really smart to just flat-out delete the results that WCA Live doesn't send over?
+      #   Can we infer whether someone was quit externally?
+      LiveResult.where(id: result_ids_to_delete).delete_all
+
+      result_data_to_load = round_results_wcif.map do |round_result_wcif|
+        {
+          registration_id: person_id_to_registration_id[round_result_wcif["personId"]],
+          round_id: self.id,
+          # TODO: Should we set this only if an actual attempt value changed?
+          last_attempt_entered_at: database_now,
+          best: round_result_wcif["best"],
+          average: round_result_wcif["average"],
+          global_pos: round_result_wcif["ranking"],
+          local_pos: round_result_wcif["ranking"],
+        }
+      end
+
+      LiveResult.upsert_all(result_data_to_load)
+
+      # Reload to get the generated IDs
+      results_by_registration_id = self.live_results.reload.index_by(&:registration_id)
+
+      inserted_result_ids = results_by_registration_id.values.pluck(:id)
+      LiveAttempt.where(live_result_id: inserted_result_ids).delete_all
+
+      attempts_to_load = round_results_wcif.flat_map do |round_result_wcif|
+        registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
+        live_result = results_by_registration_id[registration_id]
+
+        round_result_wcif["attempts"].map.with_index(1) do |attempt, attempt_number|
+          live_result.live_attempts
+                     .build(value: attempt["result"], attempt_number: attempt_number)
+                     .attributes
+                     .symbolize_keys
+                     .except(:id, :created_at, :updated_at)
+        end
+      end
+
+      LiveAttempt.insert_all!(attempts_to_load) if attempts_to_load.any?
+
+      histories_to_generate = round_results_wcif.map do |round_result_wcif|
+        registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
+        live_result = results_by_registration_id[registration_id]
+
+        result_already_existed = recorded_registration_ids.include?(person_id_to_registration_id[round_result_wcif["personId"]])
+        action_type = result_already_existed ? :scoretaking : :opened
+
+        attempts = round_result_wcif["attempts"].pluck("result") if action_type == :scoretaking
+
+        live_result.live_result_history_entries
+                   .build(action_source: :api_sync, action_type: action_type, attempt_details: attempts, entered_by: current_user)
+                   .attributes
+                   .symbolize_keys
+                   .except(:id, :created_at, :updated_at)
+      end
+
+      LiveResultHistoryEntry.insert_all!(histories_to_generate) if histories_to_generate.any?
+    end
+  end
+
   def self.wcif_to_round_attributes(event, wcif, round_number, total_rounds)
     {
       number: round_number,
