@@ -62,7 +62,7 @@ export default function LiveMenu({
         gap="3"
       >
         {tabs.map((tab) =>
-          tab.href !== undefined ? (
+          "href" in tab ? (
             <Tabs.Trigger value={tab.menuKey} asChild key={tab.menuKey}>
               <Text asChild textStyle="bodyEmphasis">
                 <Link href={tab.href}>{t(tab.i18nKey)}</Link>

@@ -18,17 +18,17 @@ export type TabWithChildren = {
 
 type TabWithLink = {
   i18nKey: string;
-  href: RouteLiteral;
   menuKey: string;
   icon: ComponentType;
   betaDisabled?: boolean;
+  href: RouteLiteral;
 };
 
 export type CompetitionNavTab = TabWithChildren | TabWithLink;
 
 export const beforeCompetitionTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
-): CompetitionNavTab[] => {
+): TabWithLink[] => {
   return [
     {
       i18nKey: "competitions.nav.menu.info",
@@ -143,7 +143,7 @@ export const duringCompetitionTabs = (
 };
 export const afterCompetitionTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
-): CompetitionNavTab[] => {
+): TabWithLink[] => {
   return [
     {
       i18nKey: "competitions.nav.menu.info",
