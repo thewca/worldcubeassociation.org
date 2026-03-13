@@ -1916,9 +1916,9 @@ class Competition < ApplicationRecord
 
     ActiveRecord::Base.transaction do
       set_wcif_series!(wcif["series"], current_user) if wcif["series"]
+      update_persons_wcif!(wcif["persons"]) if wcif["persons"]
       set_wcif_events!(wcif["events"], current_user) if wcif["events"]
       set_wcif_schedule!(wcif["schedule"]) if wcif["schedule"]
-      update_persons_wcif!(wcif["persons"]) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
       set_wcif_competitor_limit!(wcif["competitorLimit"], current_user) if wcif["competitorLimit"]
 
@@ -2061,6 +2061,8 @@ class Competition < ApplicationRecord
     end
     Assignment.where(id: removed_assignments).delete_all if removed_assignments.any?
     Assignment.upsert_all(new_assignments) if new_assignments.any?
+
+    reload
   end
 
   def set_wcif_schedule!(wcif_schedule)
