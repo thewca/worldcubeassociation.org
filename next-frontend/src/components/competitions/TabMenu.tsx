@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import {
+  Badge,
   Box,
   CloseButton,
   Collapsible,
@@ -190,26 +191,24 @@ function CollapsibleTabGroup({
 
       <Collapsible.Content>
         <Box pl="3" display="flex" flexDirection="column" gap="1" pt="1">
-          {children.map(
-            ({ menuKey, disabled, i18nKey, href, icon: IconComponent }) => (
-              <Tabs.Trigger
-                value={menuKey}
-                asChild
-                key={menuKey}
-                disabled={disabled}
-              >
-                <Text asChild justifyContent="left">
-                  {disabled ? (
-                    <Text>{t(i18nKey)}</Text>
-                  ) : (
-                    <Link href={href}>
-                      {t(i18nKey)} <Spacer /> <IconComponent />
-                    </Link>
-                  )}
-                </Text>
-              </Tabs.Trigger>
-            ),
-          )}
+          {children.map(({ menuKey, disabled, i18nKey, href, badge }) => (
+            <Tabs.Trigger
+              value={menuKey}
+              asChild
+              key={menuKey}
+              disabled={disabled}
+            >
+              <Text asChild justifyContent="left">
+                {disabled ? (
+                  <Text>{t(i18nKey)}</Text>
+                ) : (
+                  <Link href={href}>
+                    {t(i18nKey)} <Spacer /> <Badge>{badge}</Badge>
+                  </Link>
+                )}
+              </Text>
+            </Tabs.Trigger>
+          ))}
         </Box>
       </Collapsible.Content>
     </Collapsible.Root>

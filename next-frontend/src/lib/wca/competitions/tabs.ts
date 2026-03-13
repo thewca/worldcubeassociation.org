@@ -19,7 +19,8 @@ export type TabWithChildren = {
 type TabWithLink = {
   i18nKey: string;
   menuKey: string;
-  icon: ComponentType;
+  icon?: ComponentType;
+  badge?: string;
   disabled?: boolean;
   href: RouteLiteral;
 };
@@ -131,7 +132,7 @@ export const duringCompetitionTabs = (
         return {
           i18nKey: `rounds.${roundTypeId}.name`,
           menuKey: round.id,
-          icon: round.state === "locked" ? LuSquareCheck : LuSquare,
+          badge: round.state === "locked" ? "Done" : "live",
           disabled: round.state === "pending" || round.state === "ready",
           href: route({
             pathname: "/competitions/[competitionId]/live/rounds/[roundId]",
