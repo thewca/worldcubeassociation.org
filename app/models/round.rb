@@ -381,21 +381,21 @@ class Round < ApplicationRecord
     ScheduleActivity.parse_activity_code(wcif_id)
   end
 
-  def load_live_results(results_wcif)
+  def load_live_results(round_results_wcif)
     self.transaction do
       live_results.destroy_all
       registrations_by_wcif_id = competition.registrations.index_by(&:registrant_id)
-      now = current_time_from_proper_timezone
+      now = self.current_time_from_proper_timezone
 
-      results_to_load = results_wcif.map do |result_wcif|
+      results_to_load = round_results_wcif.map do |round_result_wcif|
         {
-          registration_id: registrations_by_wcif_id[result_wcif["personId"]].id,
+          registration_id: registrations_by_wcif_id[round_result_wcif["personId"]].id,
           round_id: self.id,
           last_attempt_entered_at: now,
-          best: result_wcif["best"],
-          average: result_wcif["average"],
-          global_pos: result_wcif["ranking"],
-          local_pos: result_wcif["ranking"],
+          best: round_result_wcif["best"],
+          average: round_result_wcif["average"],
+          global_pos: round_result_wcif["ranking"],
+          local_pos: round_result_wcif["ranking"],
         }
       end
 
@@ -404,16 +404,16 @@ class Round < ApplicationRecord
       # Reload to get the generated IDs
       results_by_registration_id = live_results.reload.index_by(&:registration_id)
 
-      attempts_to_load = results_wcif.flat_map do |result_wcif|
+      attempts_to_load = round_results_wcif.flat_map do |result_wcif|
         registration_id = registrations_by_wcif_id[result_wcif["personId"]].id
-        live_result_id = results_by_registration_id[registration_id].id
+        live_result = results_by_registration_id[registration_id]
 
         result_wcif["attempts"].map.with_index(1) do |attempt, attempt_number|
-          LiveAttempt.build_with_history_entry(attempt["result"], attempt_number, 1)
+          live_result.live_attempts
+                     .build(value: attempt["result"], attempt_number: attempt_number)
                      .attributes
-                     .merge(
-                       live_result_id: live_result_id,
-                     )
+                     .symbolize_keys
+                     .except(:id, :created_at, :updated_at)
         end
       end
 
