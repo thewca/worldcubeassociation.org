@@ -59,12 +59,8 @@ export default function TabMenu({
         gap="3"
       >
         {tabs.map((tab) => (
-          <BetaDisabledTooltip key={tab.i18nKey} disabled={!tab.betaDisabled}>
-            <Tabs.Trigger
-              value={tab.menuKey}
-              disabled={tab.betaDisabled}
-              asChild
-            >
+          <BetaDisabledTooltip key={tab.i18nKey} disabled={!tab.disabled}>
+            <Tabs.Trigger value={tab.menuKey} disabled={tab.disabled} asChild>
               <Text textStyle="bodyEmphasis" asChild maxW="44">
                 <Link href={tab.href}>{t(tab.i18nKey)}</Link>
               </Text>

@@ -120,7 +120,12 @@ function CollapsibleTabGroup({
       <Collapsible.Content>
         <Box pl="3" display="flex" flexDirection="column" gap="1" pt="1">
           {tab.children.map((child) => (
-            <Tabs.Trigger value={child.menuKey} asChild key={child.menuKey}>
+            <Tabs.Trigger
+              value={child.menuKey}
+              asChild
+              key={child.menuKey}
+              disabled={child.disabled}
+            >
               <Text asChild>
                 <Link href={child.href}>{t(child.i18nKey)}</Link>
               </Text>

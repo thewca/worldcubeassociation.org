@@ -12,7 +12,7 @@ export type TabWithChildren = {
   i18nKey: string;
   menuKey: string;
   icon: ComponentType;
-  betaDisabled?: boolean;
+  disabled?: boolean;
   children: TabWithLink[];
 };
 
@@ -20,7 +20,7 @@ type TabWithLink = {
   i18nKey: string;
   menuKey: string;
   icon: ComponentType;
-  betaDisabled?: boolean;
+  disabled?: boolean;
   href: RouteLiteral;
 };
 
@@ -47,7 +47,7 @@ export const beforeCompetitionTabs = (
       }),
       menuKey: "register",
       icon: iconMap["Register"],
-      betaDisabled: process.env.NODE_ENV === "production",
+      disabled: process.env.NODE_ENV === "production",
     },
     {
       i18nKey: "competitions.nav.menu.competitors",
@@ -130,8 +130,9 @@ export const duringCompetitionTabs = (
         );
         return {
           i18nKey: `rounds.${roundTypeId}.name`,
-          menuKey: eventId,
+          menuKey: round.id,
           icon: iconMap[`333Icon`],
+          disabled: round.state === "pending",
           href: route({
             pathname: "/competitions/[competitionId]/live/rounds/[roundId]",
             query: { competitionId: competitionInfo.id, roundId: round.id },
