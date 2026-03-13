@@ -1,11 +1,9 @@
 import { Container } from "@chakra-ui/react";
-import TabMenu from "@/components/competitions/TabMenu";
-import MobileMenu from "@/components/competitions/MobileMenu";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
-import LiveMenu from "@/components/competitions/LiveMenu";
+import CompetitionMenu from "@/components/competitions/CompetitionMenu";
 
 type TitleProps = {
   params: Promise<{ competitionId: string }>;
@@ -26,8 +24,6 @@ export async function generateMetadata({
   };
 }
 
-const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
-
 export default async function CompetitionLayout({
   children,
   params,
@@ -47,11 +43,9 @@ export default async function CompetitionLayout({
 
   return (
     <Container pt="8">
-      {LIVE_RESULT_BETA ? (
-        <LiveMenu competitionInfo={competitionInfo}>{children}</LiveMenu>
-      ) : (
-        <TabMenu competitionInfo={competitionInfo}>{children}</TabMenu>
-      )}
+      <CompetitionMenu competitionInfo={competitionInfo}>
+        {children}
+      </CompetitionMenu>
     </Container>
   );
 }

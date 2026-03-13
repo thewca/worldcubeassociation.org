@@ -805,7 +805,7 @@ export type ListboxVariantMap = {
   [K in keyof ListboxVariant]: Array<ListboxVariant[K]>
 }
 
-// Menu
+// CompetitionMenu
 
 export type MenuSlot =
   | "arrow"
