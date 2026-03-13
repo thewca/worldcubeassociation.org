@@ -13,22 +13,14 @@ class UpdateLiveResultJob < ApplicationJob
 
     round = live_result.round
 
-    # We need the state before the result is updated
-    before_state = round.to_live_state
+    Live::DiffHelper.broadcast_changes(round) do
+      new_attempts = live_result.live_attempts.reload # We did some `upsert_all` and `delete_all` shenanigans above, which bypass Rails memory. Hence reloading...
+      average, best = LiveResult.compute_average_and_best(new_attempts, round)
 
-    new_attempts = live_result.live_attempts.reload # We did some `upsert_all` and `delete_all` shenanigans above, which bypass Rails memory. Hence reloading...
-    average, best = LiveResult.compute_average_and_best(new_attempts, round)
+      live_result.update!(best: best, average: average, last_attempt_entered_at: Time.now.utc)
 
-    live_result.update!(best: best, average: average, last_attempt_entered_at: Time.now.utc)
-
-    history_ordered_results = new_attempts.order(:attempt_number).pluck(:value)
-    live_result.live_result_history_entries.create!(entered_by_id: entered_by_id, action_type: :scoretaking, attempt_details: history_ordered_results)
-
-    after_state = round.to_live_state
-    diff = Live::DiffHelper.round_state_diff(before_state, after_state)
-
-    diff = Live::DiffHelper.add_forecast_stats(diff, round)
-
-    ActionCable.server.broadcast(Live::Config.broadcast_key(round.wcif_id), diff)
+      history_ordered_results = new_attempts.order(:attempt_number).pluck(:value)
+      live_result.live_result_history_entries.create!(entered_by_id: entered_by_id, action_type: :scoretaking, attempt_details: history_ordered_results)
+    end
   end
 end

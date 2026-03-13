@@ -5,7 +5,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
   skip_before_action :require_user!, only: %i[round_results by_person podiums]
 
   def add_or_update_result
-    results = params.expect(attempts: [%i[value attempt_number]])
+    # can't use .expect here because [] is valid for attempts
+    # TODO: Think about if a synchronous route instead would make sense instead
+    results = params.permit(attempts: %i[value attempt_number]).fetch(:attempts, [])
     round_id = params.require(:round_id)
     competition = Competition.find(params.require(:competition_id))
     registration_id = params.require(:registration_id)
@@ -106,17 +108,39 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
   def quit_competitor
     competition = Competition.find(params.require(:competition_id))
+    wcif_id = params.require(:round_id)
     registration_id = params.require(:registration_id)
+    advancing_ids = params[:advancing_ids]
 
     require_manage!(competition)
 
     round = Round.find_by_wcif_id!(wcif_id, competition.id, includes: [:live_results])
     result = round.live_results.find_by!(registration_id: registration_id)
 
+    return render json: { status: "Can't advance next for first rounds" }, status: :bad_request if advancing_ids.present? && round.first_round?
+
     return render json: { status: "Cannot quit competitor with results" }, status: :bad_request if result.live_attempts.any?
 
-    quit_count = round.quit_from_round!(registration_id, @current_user)
+    to_advance = round.previous_round.next_advancing_without(registration_id) if advancing_ids.present?
+
+    return render json: { status: "The advancing competitor doesn't match who should be advancing.", should_advance: to_advance }, status: :bad_request if advancing_ids&.map(&:to_i) != to_advance&.pluck(:registration_id)
+
+    quit_count = round.quit_from_round!(registration_id, @current_user, to_advance: to_advance)
 
     render json: { status: "ok", quit: quit_count }
+  end
+
+  def next_if_quit
+    competition = Competition.find(params.require(:competition_id))
+    wcif_id = params.require(:round_id)
+    registration_id = params.require(:registration_id)
+
+    require_manage!(competition)
+
+    round = Round.find_by_wcif_id!(wcif_id, competition.id, includes: [:live_results])
+
+    to_advance = round.first_round? ? [] : round.previous_round.next_advancing_without(registration_id)
+
+    render json: { status: "ok", next_advancing: to_advance }
   end
 end
