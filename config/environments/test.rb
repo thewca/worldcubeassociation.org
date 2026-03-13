@@ -72,4 +72,11 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Don't log queries in tests
+  config.active_record.verbose_query_logs = false
+  config.active_record.query_log_tags_enabled = false
+
+  # Raise the log level to reduce i/o
+  config.log_level = :fatal
 end
