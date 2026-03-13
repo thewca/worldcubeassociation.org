@@ -1,7 +1,7 @@
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
 import { iconMap } from "@/components/icons/iconMap";
-import { LuCalendar, LuSquare, LuSquareCheck } from "react-icons/lu";
+import { LuCalendar } from "react-icons/lu";
 import type { RouteLiteral } from "nextjs-routes";
 import type { ComponentType } from "react";
 import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
@@ -120,7 +120,7 @@ export const duringCompetitionTabs = (
     ..._.map(roundsByEventId, (rounds, eventId: EventId) => ({
       i18nKey: `events.${eventId}`,
       menuKey: eventId,
-      icon: iconMap[`333Icon`],
+      icon: iconMap[`${eventId}Icon` as keyof typeof iconMap],
       children: rounds.map((round) => {
         const { roundNumber } = parseActivityCode(round.id);
 
