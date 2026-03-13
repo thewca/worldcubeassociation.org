@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
   Center,
@@ -7,7 +5,7 @@ import {
   IconButton,
   Link as ChakraLink,
   Image as ChakraImage,
-  VStack,
+  Stack,
 } from "@chakra-ui/react";
 import InstagramIcon from "@/components/icons/InstagramIcon";
 import FacebookIcon from "@/components/icons/FacebookIcon";
@@ -21,7 +19,32 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <Center borderTop="md" padding={3} mt={5} bg="bg">
-      <VStack>
+      <Stack align="center" gap={5} direction={{ base: "column", lg: "row" }}>
+        {/* Footer page links (future CMS) */}
+        <ChakraLink asChild textStyle="headerLink">
+          <Link href="/about">About Us</Link>
+        </ChakraLink>
+        <ChakraLink asChild textStyle="headerLink">
+          <Link href="/faq">FAQs</Link>
+        </ChakraLink>
+        <ChakraLink
+          textStyle="headerLink"
+          href="https://worldcubeassociation.org/contact"
+        >
+          Contact
+        </ChakraLink>
+        <ChakraLink
+          textStyle="headerLink"
+          href="https://github.com/thewca"
+          target="_blank"
+        >
+          GitHub
+        </ChakraLink>
+
+        <ChakraImage asChild>
+          <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
+        </ChakraImage>
+
         {/* Social Media Icons */}
         <HStack>
           <IconButton variant="ghost" asChild>
@@ -71,30 +94,8 @@ export default function Footer() {
           </IconButton>
         </HStack>
 
-        {/* Footer Links */}
-        <HStack gap={5} wrap="wrap">
-          <ChakraImage asChild>
-            <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
-          </ChakraImage>
-          <ChakraLink asChild textStyle="headerLink">
-            <Link href="/about">About Us</Link>
-          </ChakraLink>
-          <ChakraLink asChild textStyle="headerLink">
-            <Link href="/faq">FAQs</Link>
-          </ChakraLink>
-          <ChakraLink
-            textStyle="headerLink"
-            href="https://worldcubeassociation.org/contact"
-          >
-            Contact
-          </ChakraLink>
-          <ChakraLink
-            textStyle="headerLink"
-            href="https://github.com/thewca"
-            target="_blank"
-          >
-            GitHub
-          </ChakraLink>
+        {/* Footer legal disclaimer and links */}
+        <HStack>
           <ChakraLink asChild textStyle="headerLink">
             <Link href="/privacy">Privacy</Link>
           </ChakraLink>
@@ -102,7 +103,7 @@ export default function Footer() {
             <Link href="/disclaimer">Disclaimer</Link>
           </ChakraLink>
         </HStack>
-      </VStack>
+      </Stack>
     </Center>
   );
 }
