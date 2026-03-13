@@ -237,7 +237,7 @@ export const apiV0Urls = {
     resetClaimCount: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_person_reset_claim_count_path("${wcaId}"))%>`,
   },
   userRoles: {
-    list: ({isActive, isGroupHidden, userId, groupId, status, groupType, isLead} = {}, sort, perPage = 100) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_roles_path) %>?${jsonToQueryString({ sort, isActive, isGroupHidden, userId, groupId, status, groupType, isLead, per_page: perPage })}`,
+    list: ({isActive, isGroupHidden, userId, groupId, status, groupType, isLead, page} = {}, sort, perPage = 100) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_roles_path) %>?${jsonToQueryString({ sort, isActive, isGroupHidden, userId, groupId, status, groupType, isLead, page, per_page: perPage })}`,
     create: () => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_roles_path) %>`,
     update: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_role_path("${roleId}")) %>`,
     delete: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_role_path("${roleId}")) %>`,
@@ -356,6 +356,7 @@ export const actionUrls = {
   users: {
     updateUserData: `<%= CGI.unescape(Rails.application.routes.url_helpers.users_update_user_data_path) %>`,
     merge: `<%= CGI.unescape(Rails.application.routes.url_helpers.users_merge_path) %>`,
+    assignWcaId: `<%= CGI.unescape(Rails.application.routes.url_helpers.users_assign_wca_id_path) %>`,
   },
 }
 

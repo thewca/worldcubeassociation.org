@@ -337,10 +337,10 @@ class ResultsController < ApplicationController
 
     if @is_only
       @years_condition_competition = "AND YEAR(competitions.start_date) = #{@year}"
-      @years_condition_result = "AND results.year = #{@year}"
+      @years_condition_result = "AND results.reg_year = #{@year}"
     elsif @is_until
       @years_condition_competition = "AND YEAR(competitions.start_date) <= #{@year}"
-      @years_condition_result = "AND results.year <= #{@year}"
+      @years_condition_result = "AND results.reg_year <= #{@year}"
     else
       @years_condition_competition = ""
       @years_condition_result = ""
@@ -400,20 +400,25 @@ class ResultsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        cached_data = Rails.cache.fetch [key_prefix, *@cache_params, @record_timestamp] do
+        cached_data = Rails.cache.fetch [key_prefix, "augmented", *@cache_params, @record_timestamp] do
           rows = DbHelper.execute_cached_query(@cache_params, @record_timestamp, @query)
 
           # First, extract unique competitions
-          comp_ids = rows.map { |r| r["competition_id"] }.uniq
+          comp_ids = rows.pluck("competition_id").uniq
           competitions_by_id = Competition.where(id: comp_ids)
                                           .index_by(&:id)
                                           .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cell_name id]) }
+
+          # Then extract result_attempts, because joining them above
+          #   would be too expensive and also too cumbersome with the sorting by `attempt_number`
+          rows = Result.augment_attempts(rows)
 
           # Now that we've remembered all competitions, we can safely transform the rows
           rows = yield rows if block_given?
 
           {
-            rows: rows.as_json, competitionsById: competitions_by_id
+            rows: rows,
+            competitionsById: competitions_by_id,
           }
         end
         render json: cached_data

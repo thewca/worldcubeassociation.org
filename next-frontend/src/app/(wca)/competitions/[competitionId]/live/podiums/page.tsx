@@ -37,6 +37,12 @@ export default async function PodiumsPage({
       {WCA_EVENT_IDS.map((e) => {
         const finalRound = roundsByEventId[e];
         if (!finalRound) return;
+
+        const resultsByRegistrationId = _.groupBy(
+          finalRound.results,
+          "registration_id",
+        );
+
         return (
           <Fragment key={finalRound.id}>
             <Heading textStyle="h3" p="2">
@@ -44,10 +50,10 @@ export default async function PodiumsPage({
             </Heading>
             {finalRound.results.length > 0 ? (
               <LiveResultsTable
-                results={finalRound.results}
+                resultsByRegistrationId={resultsByRegistrationId}
                 competitionId={competitionId}
                 competitors={finalRound.competitors}
-                eventId={e}
+                roundWcifId={finalRound.id}
                 formatId={finalRound.format}
                 showEmpty={false}
               />

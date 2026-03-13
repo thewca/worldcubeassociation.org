@@ -36,5 +36,33 @@ module Live
     def self.state_hash(live_state)
       Digest::SHA1.hexdigest(live_state.to_json)
     end
+
+    COMPRESSION_MAP = {
+      "advancing" => "ad",
+      "advancing_questionable" => "adq",
+      "average" => "a",
+      "best" => "b",
+      "average_record_tag" => "art",
+      "single_record_tag" => "srt",
+      "registration_id" => "r",
+      "live_attempts" => "la",
+      "value" => "v",
+      "attempt_number" => "an",
+    }.freeze
+
+    # To send even less data, we shorten the quite long attribute names
+    def self.compress_payload(diff)
+      diff.deep_transform_keys { COMPRESSION_MAP.fetch(it, it) }
+    end
+
+    def self.add_forecast_stats(diff, round)
+      diff.merge("updated" => Array.wrap(diff["updated"]).map { forecast_for(it, round) }).compact_blank
+    end
+
+    def self.forecast_for(updated_result, round)
+      return updated_result if updated_result["live_attempts"].nil? || updated_result["live_attempts"].length == round.format.expected_solve_count
+
+      updated_result.merge(LiveResult.compute_best_and_worse_possible_average(updated_result["live_attempts"], round))
+    end
   end
 end

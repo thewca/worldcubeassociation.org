@@ -65,11 +65,69 @@ export interface paths {
         /** Gets Information about the Round including the live Results */
         get: operations["liveByRound"];
         put?: never;
-        post?: never;
+        /** Adds a live result for a given round */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                    roundId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SubmitLiveResult"];
+                };
+            };
+            responses: {
+                /** @description Result Accepted */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            status?: string;
+                        };
+                    };
+                };
+            };
+        };
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        /** Updates a live result for a given round */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                    roundId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SubmitLiveResult"];
+                };
+            };
+            responses: {
+                /** @description Result Updated */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            status?: string;
+                        };
+                    };
+                };
+            };
+        };
         trace?: never;
     };
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/clear": {
@@ -772,6 +830,25 @@ export interface components {
             level: components["schemas"]["WcifAttemptResult"];
         };
         WcifAdvancementCondition: components["schemas"]["WcifAdvancementConditionRanking"] | components["schemas"]["WcifAdvancementConditionPercent"] | components["schemas"]["WcifAdvancementConditionAttemptResult"];
+        WcifScramble: string;
+        WcifScrambleSet: {
+            /** @example 1 */
+            id: number;
+            scrambles: components["schemas"]["WcifScramble"][];
+            extraScrambles: components["schemas"]["WcifScramble"][];
+        };
+        BaseWcifRound: {
+            /** @example 333-r1 */
+            id: string;
+            /** @enum {string} */
+            format: "1" | "2" | "3" | "a" | "m";
+            timeLimit?: components["schemas"]["WcifTimeLimit"];
+            cutoff?: components["schemas"]["WcifCutoff"];
+            advancementCondition?: components["schemas"]["WcifAdvancementCondition"];
+            scrambleSetCount: number;
+            scrambleSets: components["schemas"]["WcifScrambleSet"][];
+            extensions: unknown[];
+        };
         WcifAttempt: {
             result: components["schemas"]["WcifAttemptResult"];
             reconstruction?: string;
@@ -785,25 +862,8 @@ export interface components {
             best: components["schemas"]["WcifAttemptResult"];
             average: components["schemas"]["WcifAttemptResult"];
         };
-        WcifScramble: string;
-        WcifScrambleSet: {
-            /** @example 1 */
-            id: number;
-            scrambles: components["schemas"]["WcifScramble"][];
-            extraScrambles: components["schemas"]["WcifScramble"][];
-        };
-        WcifRound: {
-            /** @example 333-r1 */
-            id: string;
-            /** @enum {string} */
-            format: "1" | "2" | "3" | "a" | "m";
-            timeLimit?: components["schemas"]["WcifTimeLimit"];
-            cutoff?: components["schemas"]["WcifCutoff"];
-            advancementCondition?: components["schemas"]["WcifAdvancementCondition"];
+        WcifRound: components["schemas"]["BaseWcifRound"] & {
             results: components["schemas"]["WcifResult"][];
-            scrambleSetCount: number;
-            scrambleSets: components["schemas"]["WcifScrambleSet"][];
-            extensions: unknown[];
         };
         BaseAdminRound: components["schemas"]["WcifRound"] & {
             state: string;
@@ -846,19 +906,24 @@ export interface components {
             value: number;
             attempt_number: number;
         };
-        LiveResult: {
+        BaseLiveResult: {
             registration_id: number;
-            round_id: number;
-            global_pos: number;
-            local_pos: number;
             best: number;
             average: number;
             single_record_tag: string;
             average_record_tag: string;
             advancing: boolean;
             advancing_questionable: boolean;
-            event_id: string;
             attempts: components["schemas"]["LiveAttempt"][];
+        };
+        RoundLiveResult: components["schemas"]["BaseLiveResult"] & {
+            round_wcif_id: string;
+            global_pos: number;
+            local_pos: number;
+            forecast_statistics?: {
+                best_possible_average?: number;
+                worst_possible_average?: number;
+            };
         };
         LiveCompetitor: {
             id: number;
@@ -867,11 +932,16 @@ export interface components {
             name: string;
             country_iso2: string;
         };
-        LiveRound: components["schemas"]["WcifRound"] & {
-            results: components["schemas"]["LiveResult"][];
+        LiveRound: components["schemas"]["BaseWcifRound"] & {
+            results: components["schemas"]["RoundLiveResult"][];
             competitors: components["schemas"]["LiveCompetitor"][];
             round_id: number;
             state_hash: string;
+            linked_round_ids?: string[];
+        };
+        SubmitLiveResult: {
+            attempts: components["schemas"]["LiveAttempt"][];
+            registration_id: number;
         };
         UserAvatar: {
             /**
@@ -914,8 +984,14 @@ export interface components {
             personalBests: components["schemas"]["WcifPersonalBest"][];
             extensions: unknown[];
         };
+        ByPersonLiveResult: components["schemas"]["BaseLiveResult"] & {
+            round_wcif_id: string;
+            global_pos: number;
+            local_pos: number;
+            event_id: string;
+        };
         LivePerson: components["schemas"]["WcifPerson"] & {
-            results: components["schemas"]["LiveResult"][];
+            results: components["schemas"]["ByPersonLiveResult"][];
         };
         TeamMembership: {
             id: number;
@@ -1295,16 +1371,7 @@ export interface components {
             round_id: string | null;
             /** @example a */
             format_id: string;
-            /** @example 126 */
-            value1: number;
-            /** @example 84 */
-            value2: number;
-            /** @example 91 */
-            value3: number;
-            /** @example 89 */
-            value4: number;
-            /** @example 85 */
-            value5: number;
+            attempts: number[];
             /** @example 84 */
             best: number;
             /** @example 88 */
@@ -1378,16 +1445,7 @@ export interface components {
             round_id: string | null;
             /** @example a */
             format_id: string;
-            /** @example 126 */
-            value1: number;
-            /** @example 84 */
-            value2: number;
-            /** @example 91 */
-            value3: number;
-            /** @example 89 */
-            value4: number;
-            /** @example 85 */
-            value5: number;
+            attempts: number[];
             /** @example 84 */
             best: number;
             /** @example 88 */

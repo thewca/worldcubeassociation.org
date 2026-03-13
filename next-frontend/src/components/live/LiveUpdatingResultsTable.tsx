@@ -1,86 +1,76 @@
 "use client";
 
-import { components } from "@/types/openapi";
-import { useCallback, useState } from "react";
-import useResultsSubscription, {
-  DiffedLiveResult,
-  DiffProtocolResponse,
-} from "@/lib/hooks/useResultsSubscription";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
-import { Heading, HStack, VStack } from "@chakra-ui/react";
+import { Heading, HStack, Spacer, Switch, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
-
-function applyDiff(
-  previousResults: components["schemas"]["LiveResult"][],
-  updated: DiffedLiveResult[],
-  created: components["schemas"]["LiveResult"][],
-  deleted: number[],
-): components["schemas"]["LiveResult"][] {
-  const deletedSet = new Set(deleted);
-  const updatesMap = new Map(updated.map((u) => [u.registration_id, u]));
-
-  const diffedResults = previousResults
-    .filter((res) => !deletedSet.has(res.registration_id))
-    .map((res) => {
-      const update = updatesMap.get(res.registration_id);
-      return update ? { ...res, ...update } : res;
-    });
-
-  return diffedResults.concat(created);
-}
+import { useLiveResults } from "@/providers/LiveResultProvider";
+import PendingResultsTable from "@/components/live/PendingResultsTable";
+import { LiveCompetitor } from "@/types/live";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { useState } from "react";
 
 export default function LiveUpdatingResultsTable({
-  roundId,
-  results,
-  eventId,
+  roundWcifId,
   formatId,
   competitionId,
   competitors,
   title,
   isAdmin = false,
   showEmpty = true,
+  isLinkedRound = false,
 }: {
-  roundId: number;
-  results: components["schemas"]["LiveResult"][];
-  eventId: string;
+  roundWcifId: string;
   formatId: string;
   competitionId: string;
-  competitors: components["schemas"]["LiveCompetitor"][];
+  competitors: LiveCompetitor[];
   title: string;
   isAdmin?: boolean;
   showEmpty?: boolean;
+  isLinkedRound?: boolean;
 }) {
-  const [liveResults, updateLiveResults] =
-    useState<components["schemas"]["LiveResult"][]>(results);
+  const [showLinkedRoundsView, setShowLinkedRoundsView] =
+    useState(isLinkedRound);
 
-  // Move to onEffectEvent when we are on React 19
-  const onReceived = useCallback(
-    (result: DiffProtocolResponse) => {
-      const { updated, created, deleted } = result;
+  const { connectionState, liveResultsByRegistrationId, pendingLiveResults } =
+    useLiveResults();
 
-      updateLiveResults((results) =>
-        applyDiff(results, updated, created, deleted),
-      );
-    },
-    [updateLiveResults],
-  );
-
-  const connectionState = useResultsSubscription(roundId, onReceived);
+  const { eventId } = parseActivityCode(roundWcifId);
 
   return (
     <VStack align="left">
       <HStack>
-        <Heading textStyle="h1">{title}</Heading>
+        <Heading textStyle={{ sm: "h3", md: "h2", lg: "h1" }}>{title}</Heading>
         <ConnectionPulse connectionState={connectionState} />
+        <Spacer flex={1} />
+        {isLinkedRound && (
+          <Switch.Root
+            checked={showLinkedRoundsView}
+            onCheckedChange={(e) => setShowLinkedRoundsView(e.checked)}
+            colorPalette="green"
+          >
+            <Switch.HiddenInput />
+            <Switch.Control>
+              <Switch.Thumb />
+            </Switch.Control>
+            <Switch.Label>Show combined Results</Switch.Label>
+          </Switch.Root>
+        )}
       </HStack>
-      <LiveResultsTable
-        results={liveResults}
+      <PendingResultsTable
+        pendingLiveResults={pendingLiveResults}
+        formatId={formatId}
         eventId={eventId}
+        competitors={competitors}
+      />
+      <LiveResultsTable
+        resultsByRegistrationId={liveResultsByRegistrationId}
+        roundWcifId={roundWcifId}
         formatId={formatId}
         competitionId={competitionId}
         competitors={competitors}
         isAdmin={isAdmin}
         showEmpty={showEmpty}
+        showLinkedRoundsView={showLinkedRoundsView}
       />
     </VStack>
   );

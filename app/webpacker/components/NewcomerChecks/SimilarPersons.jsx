@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import React, { useState } from 'react';
-import { Modal, Segment } from 'semantic-ui-react';
+import {
+  Button, Message, Modal, Segment,
+} from 'semantic-ui-react';
+import { RESYNC_MESSAGE } from '../EditUser/EditUserForm';
 import SimilarPersonTable from './SimilarPersonTable';
 import MergeModal from './MergeModal';
 
@@ -9,6 +12,7 @@ export default function SimilarPersons({ similarPersons, competitionId, setUserI
   const userIds = _.keys(duplicatesByUserId);
 
   const [potentialDuplicatePerson, setPotentialDuplicatePerson] = useState();
+  const [mergeSuccess, setMergeSuccess] = useState(false);
 
   if (userIds.length === 0) {
     return <Segment>No newcomers to show</Segment>;
@@ -33,8 +37,30 @@ export default function SimilarPersons({ similarPersons, competitionId, setUserI
           <MergeModal
             potentialDuplicatePerson={potentialDuplicatePerson}
             competitionId={competitionId}
+            onMergeSuccess={() => {
+              setPotentialDuplicatePerson(null);
+              setMergeSuccess(true);
+            }}
           />
         </Modal.Content>
+      </Modal>
+      <Modal
+        open={mergeSuccess}
+        onClose={() => setMergeSuccess(false)}
+        size="tiny"
+      >
+        <Modal.Content>
+          <Message success>
+            Merged Successfully.
+            {' '}
+            {RESYNC_MESSAGE}
+          </Message>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button primary onClick={() => setMergeSuccess(false)}>
+            OK
+          </Button>
+        </Modal.Actions>
       </Modal>
     </>
   );
