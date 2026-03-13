@@ -418,7 +418,7 @@ class Round < ApplicationRecord
       results_by_registration_id = self.live_results.reload.index_by(&:registration_id)
 
       inserted_result_ids = results_by_registration_id.values.pluck(:id)
-      LiveAttempt.where(result_id: inserted_result_ids).delete_all
+      LiveAttempt.where(live_result_id: inserted_result_ids).delete_all
 
       attempts_to_load = round_results_wcif.flat_map do |round_result_wcif|
         registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
