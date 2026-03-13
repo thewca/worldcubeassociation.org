@@ -381,17 +381,30 @@ class Round < ApplicationRecord
     ScheduleActivity.parse_activity_code(wcif_id)
   end
 
-  def load_live_results(round_results_wcif)
-    self.transaction do
-      live_results.destroy_all
-      registrations_by_wcif_id = competition.registrations.index_by(&:registrant_id)
-      now = self.current_time_from_proper_timezone
+  def load_live_results!(round_results_wcif, current_user)
+    # FIXME perhaps pass in the registrations into this method to avoid expensive loading??
+    person_id_to_registration_id = self.competition.registrations.to_h { [it.registrant_id, it.id] }
 
-      results_to_load = round_results_wcif.map do |round_result_wcif|
+    results_by_registration_id = self.live_results.index_by(&:registration_id)
+    recorded_registration_ids = results_by_registration_id.keys
+
+    database_now = self.current_time_from_proper_timezone
+
+    self.transaction do
+      incoming_registration_ids = round_results_wcif.map { person_id_to_registration_id[it["personId"]] }
+      recorded_not_incoming = results_by_registration_id.except(*incoming_registration_ids)
+
+      result_ids_to_delete = recorded_not_incoming.values.pluck(:id)
+      # TODO is it really smart to just flat-out delete the results that WCA Live doesn't send over?
+      #   Can we infer whether someone was quit externally?
+      LiveResult.where(id: result_ids_to_delete).delete_all
+
+      result_data_to_load = round_results_wcif.map do |round_result_wcif|
         {
-          registration_id: registrations_by_wcif_id[round_result_wcif["personId"]].id,
+          registration_id: person_id_to_registration_id[round_result_wcif["personId"]],
           round_id: self.id,
-          last_attempt_entered_at: now,
+          # TODO should we set this only if an actual attempt value changed?
+          last_attempt_entered_at: database_now,
           best: round_result_wcif["best"],
           average: round_result_wcif["average"],
           global_pos: round_result_wcif["ranking"],
@@ -399,16 +412,19 @@ class Round < ApplicationRecord
         }
       end
 
-      LiveResult.insert_all!(results_to_load)
+      LiveResult.upsert_all(result_data_to_load)
 
       # Reload to get the generated IDs
-      results_by_registration_id = live_results.reload.index_by(&:registration_id)
+      results_by_registration_id = self.live_results.reload.index_by(&:registration_id)
 
-      attempts_to_load = round_results_wcif.flat_map do |result_wcif|
-        registration_id = registrations_by_wcif_id[result_wcif["personId"]].id
+      inserted_result_ids = results_by_registration_id.values.pluck(:id)
+      LiveAttempt.where(result_id: inserted_result_ids).delete_all
+
+      attempts_to_load = round_results_wcif.flat_map do |round_result_wcif|
+        registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
         live_result = results_by_registration_id[registration_id]
 
-        result_wcif["attempts"].map.with_index(1) do |attempt, attempt_number|
+        round_result_wcif["attempts"].map.with_index(1) do |attempt, attempt_number|
           live_result.live_attempts
                      .build(value: attempt["result"], attempt_number: attempt_number)
                      .attributes
@@ -418,6 +434,24 @@ class Round < ApplicationRecord
       end
 
       LiveAttempt.insert_all!(attempts_to_load) if attempts_to_load.any?
+
+      histories_to_generate = round_results_wcif.map do |round_result_wcif|
+        registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
+        live_result = results_by_registration_id[registration_id]
+
+        result_already_existed = recorded_registration_ids.include?(person_id_to_registration_id[round_result_wcif["personId"]])
+        action_type = result_already_existed ? :scoretaking : :opened
+
+        attempts = round_result_wcif["attempts"].pluck("result") if action_type == :scoretaking
+
+        live_result.live_result_history_entries
+                   .build(action_source: :api_sync, action_type: action_type, attempt_details: attempts, entered_by: current_user)
+                   .attributes
+                   .symbolize_keys
+                   .except(:id, :created_at, :updated_at)
+      end
+
+      LiveResultHistoryEntry.insert_all!(histories_to_generate) if histories_to_generate.any?
     end
   end
 
