@@ -40,7 +40,7 @@ class LiveAttempt < ApplicationRecord
 
   def self.wcif_json_schema
     {
-      "type" => %w[object null],
+      "type" => "object",
       "properties" => {
         "result" => { "type" => "integer" },
         "reconstruction" => { "type" => %w[string null] },
