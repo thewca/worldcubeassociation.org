@@ -9,6 +9,8 @@ import {
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
+import events from "@/lib/wca/data/events";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 
 export default async function ResultPage({
   params,
@@ -63,6 +65,8 @@ export default async function ResultPage({
     );
   }
 
+  const { eventId, roundNumber } = parseActivityCode(roundId);
+
   return (
     <Container bg="bg">
       <VStack align="left">
@@ -72,7 +76,7 @@ export default async function ResultPage({
             roundWcifId={roundId}
             competitors={competitors}
             competitionId={competitionId}
-            title="Live Results"
+            title={`${events.byId[eventId].name} - Round ${roundNumber}`}
           />
         </LiveResultProvider>
       </VStack>
