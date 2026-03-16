@@ -13,6 +13,7 @@ import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
 import { mergeAndOrderResults } from "@/lib/live/mergeAndOrderResults";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { LiveCompetitor } from "@/types/live";
+import ResultMenu from "@/components/live/Admin/ResultMenu";
 
 export default function LiveResultsTable({
   resultsByRegistrationId,
@@ -20,6 +21,7 @@ export default function LiveResultsTable({
   roundWcifId,
   competitionId,
   competitors,
+  pendingQuitCompetitors = new Set(),
   isAdmin = false,
   showEmpty = true,
   showLinkedRoundsView = false,
@@ -29,6 +31,7 @@ export default function LiveResultsTable({
   roundWcifId: string;
   competitionId: string;
   competitors: Map<number, LiveCompetitor>;
+  pendingQuitCompetitors?: Set<number>;
   isAdmin?: boolean;
   showEmpty?: boolean;
   showLinkedRoundsView?: boolean;
@@ -76,6 +79,11 @@ export default function LiveResultsTable({
             return (
               <Table.Row
                 key={`${competitorAndTheirResults.id}-${result.round_wcif_id}`}
+                colorPalette={
+                  pendingQuitCompetitors.has(competitorAndTheirResults.id)
+                    ? "red"
+                    : undefined
+                }
               >
                 {showText && (
                   <LivePositionCell
@@ -88,7 +96,12 @@ export default function LiveResultsTable({
                 )}
                 {isAdmin && (
                   <Table.Cell>
-                    {competitorAndTheirResults.registrant_id}
+                    <ResultMenu
+                      result={result}
+                      competitor={competitorAndTheirResults}
+                      competitionId={competitionId}
+                      roundId={roundWcifId}
+                    />
                   </Table.Cell>
                 )}
                 {showText && (

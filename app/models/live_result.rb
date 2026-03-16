@@ -23,6 +23,12 @@ class LiveResult < ApplicationRecord
   scope :not_empty, -> { where.not(best: 0) }
   scope :locked, -> { where.not(locked_by: nil) }
 
+  scope :advancing, -> { where(advancing: true) }
+  scope :not_advancing, -> { where(advancing: false) }
+
+  scope :quit, -> { where.not(quit_by_id: nil) }
+  scope :not_quit, -> { where(quit_by_id: nil) }
+
   alias_attribute :result_id, :id
 
   has_one :event, through: :round

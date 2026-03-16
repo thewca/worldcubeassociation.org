@@ -34,6 +34,7 @@ export default function LiveUpdatingResultsTable({
     liveResultsByRegistrationId,
     pendingLiveResults,
     competitors,
+    pendingQuitCompetitors,
   } = useLiveResults();
 
   const { eventId } = parseActivityCode(roundWcifId);
@@ -76,6 +77,7 @@ export default function LiveUpdatingResultsTable({
         formatId={formatId}
         competitionId={competitionId}
         competitors={competitors}
+        pendingQuitCompetitors={pendingQuitCompetitors}
         isAdmin={isAdmin}
         showEmpty={showEmpty}
         showLinkedRoundsView={showLinkedRoundsView}

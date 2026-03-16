@@ -21,12 +21,12 @@ export default function AddResults({
   const { eventId, roundNumber } = parseActivityCode(roundId);
 
   return (
-    <SimpleGrid columns={16} gap={6}>
-      <LiveResultAdminProvider
-        format={format}
-        roundId={roundId}
-        competitionId={competitionId}
-      >
+    <LiveResultAdminProvider
+      format={format}
+      roundId={roundId}
+      competitionId={competitionId}
+    >
+      <SimpleGrid columns={16} gap={6}>
         <GridItem colSpan={4}>
           <AttemptsForm
             header="Add Result"
@@ -44,7 +44,7 @@ export default function AddResults({
             title={`${events.byId[eventId].name} - ${roundNumber}`}
           />
         </GridItem>
-      </LiveResultAdminProvider>
-    </SimpleGrid>
+      </SimpleGrid>
+    </LiveResultAdminProvider>
   );
 }

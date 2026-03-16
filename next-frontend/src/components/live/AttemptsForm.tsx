@@ -88,7 +88,10 @@ export default function AttemptsForm({
           resultType="single"
         />
       ))}
-      <Button onClick={handleSubmit} disabled={isPending}>
+      <Button
+        onClick={handleSubmit}
+        disabled={isPending || attempts.length === 0}
+      >
         Submit Results
       </Button>
     </form>

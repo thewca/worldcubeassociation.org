@@ -18,6 +18,8 @@ interface AdminResultsContextValue {
   handleRegistrationIdChange: (value: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
   handleSubmit: () => void;
+  clearCompetitorsResults: (registrationId: number) => void;
+  quitCompetitor: (registrationId: number, toAdvance: number[]) => void;
   addCompetitorToRound: (registrationId: number) => Promise<void>;
 }
 
@@ -111,6 +113,26 @@ export function LiveResultAdminProvider({
     [addCompetitorMutation, competitionId, roundId],
   );
 
+  const { mutate: mutateQuit, isPending: isPendingQuit } = api.useMutation(
+    "delete",
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
+    {
+      onError: () => {
+        setError("Failed to Quit Competitor. Please try again.");
+      },
+    },
+  );
+
+  const { mutate: mutateClear, isPending: isPendingClear } = api.useMutation(
+    "put",
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}/clear",
+    {
+      onError: () => {
+        setError("Failed to Quit Competitor. Please try again.");
+      },
+    },
+  );
+
   const handleAttemptChange = (index: number, value: number) => {
     const newAttempts = [...attempts];
     newAttempts[index] = value;
@@ -137,6 +159,25 @@ export function LiveResultAdminProvider({
     });
   };
 
+  const clearCompetitorsResults = (registrationId: number) => {
+    mutateClear({
+      params: {
+        path: { competitionId, roundId, registrationId },
+      },
+    });
+  };
+
+  const quitCompetitor = (registrationId: number, toAdvance: number[]) => {
+    mutateQuit({
+      params: {
+        path: { competitionId, roundId, registrationId },
+      },
+      body: {
+        advancing_ids: toAdvance,
+      },
+    });
+  };
+
   return (
     <AdminResultsContext.Provider
       value={{
@@ -144,12 +185,13 @@ export function LiveResultAdminProvider({
         attempts,
         error,
         success,
-        // Merging these, as we don't allow multiple mutations at the same time
-        isPending: isPendingAdd || isPendingUpdate,
+        isPending: isPendingUpdate || isPendingClear || isPendingQuit || isPendingAdd,
+        quitCompetitor,
         handleRegistrationIdChange,
         handleAttemptChange,
         handleSubmit,
         addCompetitorToRound,
+        clearCompetitorsResults,
       }}
     >
       {children}

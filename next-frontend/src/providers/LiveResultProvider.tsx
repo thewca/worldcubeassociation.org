@@ -29,11 +29,13 @@ import {
 export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
 interface LiveResultContextType {
   liveResultsByRegistrationId: LiveResultsByRegistrationId;
-  pendingLiveResults: LiveResult[];
   addPendingLiveResult: (
     liveResult: PendingLiveResult,
     roundWcifId: string,
   ) => void;
+  pendingLiveResults: LiveResult[];
+  addPendingQuitCompetitor: (registrationId: number) => void;
+  pendingQuitCompetitors: Set<number>;
   connectionState: ConnectionState;
   competitors: Map<number, LiveCompetitor>;
 }
@@ -71,6 +73,9 @@ export function MultiRoundResultProvider({
   children: ReactNode;
 }) {
   const [pendingResults, updatePendingResults] = useState<LiveResult[]>([]);
+  const [pendingQuitCompetitors, updatePendingQuitCompetitors] = useState<
+    Set<number>
+  >(new Set());
   const [competitors, setCompetitors] = useState<Map<number, LiveCompetitor>>(
     new Map(initialRounds.flatMap((r) => r.competitors.map((r) => [r.id, r]))),
   );
@@ -143,6 +148,9 @@ export function MultiRoundResultProvider({
           (r) => !updated.map((u) => u.r).includes(r.registration_id),
         ),
       );
+      updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
+        currentlyQuitCompetitors.difference(new Set(deleted)),
+      );
 
       setCompetitors(
         (previous) =>
@@ -169,6 +177,12 @@ export function MultiRoundResultProvider({
     [liveResultsByRegistrationId],
   );
 
+  const addPendingQuitCompetitor = useCallback((registrationId: number) => {
+    updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
+      currentlyQuitCompetitors.add(registrationId),
+    );
+  }, []);
+
   const roundIds = initialRounds.map((r) => r.id);
   const connectionState = useResultsSubscriptions(roundIds, onReceived);
 
@@ -178,6 +192,8 @@ export function MultiRoundResultProvider({
         liveResultsByRegistrationId,
         pendingLiveResults: pendingResults,
         addPendingLiveResult,
+        pendingQuitCompetitors,
+        addPendingQuitCompetitor,
         connectionState,
         competitors,
       }}
