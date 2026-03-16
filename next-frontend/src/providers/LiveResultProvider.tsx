@@ -144,13 +144,13 @@ export function MultiRoundResultProvider({
         ),
       );
 
-      setCompetitors((previous) => {
-        const next = new Map(previous);
-        created.forEach((r) => {
-          next.set(r.user.id, r.user);
-        });
-        return next;
-      });
+      setCompetitors(
+        (previous) =>
+          new Map([
+            ...previous,
+            ...created.map((r) => [r.user.id, r.user] as const),
+          ]),
+      );
     }
   };
 

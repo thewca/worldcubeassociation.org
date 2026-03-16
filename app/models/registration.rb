@@ -289,7 +289,7 @@ class Registration < ApplicationRecord
   end
 
   def to_live_json
-    as_json({ methods: %i[name country_iso2], only: %i[id user_id registrant_id] })
+    as_json(methods: %i[name country_iso2], only: %i[id user_id registrant_id])
   end
 
   def to_v2_json(admin: false, pii: false)

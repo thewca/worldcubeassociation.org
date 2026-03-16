@@ -46,9 +46,7 @@ export default function AddPersonModal({
                 competitionId={competitionId}
                 competitors={competitors}
                 close={() => setOpen(false)}
-                setSelectedCompetitor={(registrationId: number) =>
-                  setSelectedCompetitor(registrationId)
-                }
+                setSelectedCompetitor={setSelectedCompetitor}
               />
             </Dialog.Body>
             <Dialog.Footer>
