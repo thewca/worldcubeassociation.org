@@ -116,7 +116,12 @@ export default function LiveResultsTable({
                   )}
                   {isAdmin && (
                     <Table.Cell>
-                      {competitorAndTheirResults.registrant_id}
+                      <ResultMenu
+                        result={result}
+                        competitor={competitorAndTheirResults}
+                        competitionId={competitionId}
+                        roundId={roundWcifId}
+                      />
                     </Table.Cell>
                   )}
                   {showText && (
