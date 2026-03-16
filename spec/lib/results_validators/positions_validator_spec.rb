@@ -129,7 +129,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
       it "validates correctly tied results" do
         # In a BoX format, results with the same best should have the same position,
         # even if one has a mean.
-        round = create(:round, competition: competition1, event_id: "333bf", format_id: "3")
+        round = create(:round, competition: competition1, event_id: "333bf", format_id: "5")
         create(:result, :blind_dnf_mo3, competition: competition1, pos: 1, best: 1000, round: round)
         create(:result, :blind_mo3, competition: competition1, pos: 1, best: 1000, round: round)
         create(:result, :blind_mo3, competition: competition1, pos: 3, best: 2000, round: round)
@@ -139,7 +139,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
 
       it "invalidates incorrectly ordered results" do
         # In a BoX format, results should be ordered by best, not mean.
-        round = create(:round, competition: competition1, event_id: "333bf", format_id: "3")
+        round = create(:round, competition: competition1, event_id: "333bf", format_id: "5")
         r1 = create(:result, :blind_mo3, competition: competition1, pos: 1, best: 2000, round: round)
         r2 = create(:result, :blind_dnf_mo3, competition: competition1, pos: 2, best: 1000, round: round)
         expected_errors = [

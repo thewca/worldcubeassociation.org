@@ -304,7 +304,7 @@ RSpec.describe Result do
         context "333bf" do
           let(:format_id) { "3" }
           let(:event_id) { "333bf" }
-          let!(:round) { create(:round, competition: competition, event_id: "333bf", format_id: "3") }
+          let!(:round) { create(:round, competition: competition, event_id: "333bf", format_id: "5") }
 
           it "does compute average" do
             result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000, round: round)

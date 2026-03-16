@@ -26,7 +26,7 @@ RSpec.describe SV do
     context "Scramble" do
       let(:round_333oh) { create(:round, competition: competition1, event_id: "333oh") }
       let(:round_222) { create(:round, competition: competition2, event_id: "222") }
-      let(:round_333bf) { create(:round, competition: competition2, event_id: "333bf", format_id: "3") }
+      let(:round_333bf) { create(:round, competition: competition2, event_id: "333bf", format_id: "5") }
 
       # Triggers:
       # MISSING_SCRAMBLES_FOR_ROUND_ERROR
