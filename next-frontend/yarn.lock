@@ -4497,16 +4497,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/cli@npm:2.20.4":
-  version: 2.20.4
-  resolution: "@redocly/cli@npm:2.20.4"
+"@redocly/cli@npm:2.21.1":
+  version: 2.21.1
+  resolution: "@redocly/cli@npm:2.21.1"
   dependencies:
     "@opentelemetry/exporter-trace-otlp-http": "npm:0.202.0"
     "@opentelemetry/resources": "npm:2.0.1"
     "@opentelemetry/sdk-trace-node": "npm:2.0.1"
     "@opentelemetry/semantic-conventions": "npm:1.34.0"
-    "@redocly/openapi-core": "npm:2.20.4"
-    "@redocly/respect-core": "npm:2.20.4"
+    "@redocly/openapi-core": "npm:2.21.1"
+    "@redocly/respect-core": "npm:2.21.1"
     abort-controller: "npm:^3.0.0"
     ajv: "npm:@redocly/ajv@8.18.0"
     ajv-formats: "npm:^3.0.1"
@@ -4532,7 +4532,7 @@ __metadata:
   bin:
     openapi: bin/cli.js
     redocly: bin/cli.js
-  checksum: 10c0/f6972b49a6f2074dd9080debe380ebe34997b32c4f7aa5824e4ebd9e2b5edbf540217fca830378b4cb8afaf7427610133286cd92172f8f4d0f923c6907b963da
+  checksum: 10c0/b45db1695020affdcf74000bf67338f8fd6135cb5e61b329d47842d4287b7a1bce99aff6410d8687942ec9bcdef0996969d6c15ad58fbfceba030f3abd5e0880
   languageName: node
   linkType: hard
 
@@ -4543,21 +4543,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/config@npm:^0.44.0":
-  version: 0.44.0
-  resolution: "@redocly/config@npm:0.44.0"
+"@redocly/config@npm:^0.44.1":
+  version: 0.44.1
+  resolution: "@redocly/config@npm:0.44.1"
   dependencies:
     json-schema-to-ts: "npm:2.7.2"
-  checksum: 10c0/b2bfadb220608473bccd0fc0c52d8683e539d0dd6b9052d83f1bb720018962e83109f5c27a28c0f5f61ea8143e7be7d0635d86d6639acb8aa885ca1ee4f3ea07
+  checksum: 10c0/8d24085160d1a7c268a5faeb7063745e52d98a292843921934a2a80f8fe8c4bf56aeb2e9abad833a1d57365b49b4cf38bf7fb073d9fa0c288e185c596e624869
   languageName: node
   linkType: hard
 
-"@redocly/openapi-core@npm:2.20.4":
-  version: 2.20.4
-  resolution: "@redocly/openapi-core@npm:2.20.4"
+"@redocly/openapi-core@npm:2.21.1":
+  version: 2.21.1
+  resolution: "@redocly/openapi-core@npm:2.21.1"
   dependencies:
     "@redocly/ajv": "npm:^8.18.0"
-    "@redocly/config": "npm:^0.44.0"
+    "@redocly/config": "npm:^0.44.1"
     ajv: "npm:@redocly/ajv@8.18.0"
     ajv-formats: "npm:^3.0.1"
     colorette: "npm:^1.2.0"
@@ -4566,7 +4566,7 @@ __metadata:
     picomatch: "npm:^4.0.3"
     pluralize: "npm:^8.0.0"
     yaml-ast-parser: "npm:0.0.43"
-  checksum: 10c0/63862b10276301c65b580ed329196cbbbe3da508adbbc70322221bfd1a49308340b60415eb4dfc31f19bd1b6b7dffe914a8339abcb784d25ce366f8afa5f0eb8
+  checksum: 10c0/00f7104510037f4af46a61525b34b72cf28998cde930383f6272c7bbbf520bf520031572747523fb18b7798851bf0bd4c214536671ae058f496814a3f52f1dad
   languageName: node
   linkType: hard
 
@@ -4587,14 +4587,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/respect-core@npm:2.20.4":
-  version: 2.20.4
-  resolution: "@redocly/respect-core@npm:2.20.4"
+"@redocly/respect-core@npm:2.21.1":
+  version: 2.21.1
+  resolution: "@redocly/respect-core@npm:2.21.1"
   dependencies:
     "@faker-js/faker": "npm:^7.6.0"
     "@noble/hashes": "npm:^1.8.0"
     "@redocly/ajv": "npm:^8.18.0"
-    "@redocly/openapi-core": "npm:2.20.4"
+    "@redocly/openapi-core": "npm:2.21.1"
     ajv: "npm:@redocly/ajv@8.18.0"
     better-ajv-errors: "npm:^1.2.0"
     colorette: "npm:^2.0.20"
@@ -4603,7 +4603,7 @@ __metadata:
     openapi-sampler: "npm:^1.7.1"
     outdent: "npm:^0.8.0"
     picomatch: "npm:^4.0.3"
-  checksum: 10c0/7a108ad95b6d1709061984afc8f203e2d4b20d1bfbe8aecf17e5be86922905cbe605cbea1f121674ce6d7169cbc180ef529cee354d3cb69e03834dac331b1ea5
+  checksum: 10c0/fbbc294341b21822925575b43e9886e0f929d25b9e7c83fccc05050782186a49f8106989ddc89901935466f54b1c8548eb0f6cfd7b4003b253d92366290c32f6
   languageName: node
   linkType: hard
 
@@ -13277,7 +13277,7 @@ __metadata:
     "@payloadcms/richtext-lexical": "npm:3.79.0"
     "@payloadcms/storage-s3": "npm:3.79.0"
     "@rails/actioncable": "npm:^8.1.200"
-    "@redocly/cli": "npm:2.20.4"
+    "@redocly/cli": "npm:2.21.1"
     "@stylistic/eslint-plugin": "npm:^5.10.0"
     "@tanstack/eslint-plugin-query": "npm:^5.91.4"
     "@tanstack/react-form": "npm:^1.28.5"
