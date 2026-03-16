@@ -68,6 +68,28 @@ FactoryBot.define do
       value3 { -1 }
     end
 
+    trait :bo5 do
+      format_id { "5" }
+      average { best }
+      value1 { best }
+      value2 { best }
+      value3 { best }
+      value4 { best }
+      value5 { best }
+    end
+
+    trait :blind_bo5 do
+      bo5
+      event_id { "333bf" }
+    end
+
+    trait :blind_dnf_bo5 do
+      blind_bo5
+      average { -1 }
+      value3 { -1 }
+      value4 { -1 }
+    end
+
     trait :over_cutoff do
       transient do
         cutoff { nil }
