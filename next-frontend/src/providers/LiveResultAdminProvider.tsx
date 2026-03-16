@@ -185,7 +185,8 @@ export function LiveResultAdminProvider({
         attempts,
         error,
         success,
-        isPending: isPendingUpdate || isPendingClear || isPendingQuit || isPendingAdd,
+        isPending:
+          isPendingUpdate || isPendingClear || isPendingQuit || isPendingAdd,
         quitCompetitor,
         handleRegistrationIdChange,
         handleAttemptChange,
