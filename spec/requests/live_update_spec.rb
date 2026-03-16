@@ -46,8 +46,8 @@ RSpec.describe "WCA Live API" do
       expect do
         put api_v1_competition_live_clear_competitor_in_round_path(competition.id, round.wcif_id, registration.id)
       end.to have_broadcasted_to(Live::Config.broadcast_key(round.wcif_id))
-               .from_channel(ApplicationCable::Channel)
-               .with(hash_including("updated" => [Live::DiffHelper.compress_payload({ "registration_id" => registration.id, "average" => 0, "best" => 0, "live_attempts" => [], "bpa" => 1, "wpa": -1})]))
+        .from_channel(ApplicationCable::Channel)
+        .with(hash_including("updated" => [Live::DiffHelper.compress_payload({ "registration_id" => registration.id, "average" => 0, "best" => 0, "live_attempts" => [], "bpa" => 1, wpa: -1 })]))
 
       result = LiveResult.find_by(round_id: round.id, registration_id: registration.id)
       expect(result).to be_present
