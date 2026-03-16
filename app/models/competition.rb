@@ -32,12 +32,12 @@ class Competition < ApplicationRecord
   belongs_to :competition_series, optional: true
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
   has_many :series_registrations, -> { readonly }, through: :series_competitions, source: :registrations
-  belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
+  belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User", inverse_of: :competitions_posting
   belongs_to :posted_user, optional: true, foreign_key: 'results_posted_by', class_name: "User", inverse_of: :competitions_results_posted
   has_many :inbox_results, dependent: :delete_all
   has_many :inbox_persons, dependent: :delete_all
   belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User", inverse_of: :competitions_announced
-  belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
+  belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User", inverse_of: :competitions_cancelled
   has_many :competition_payment_integrations
   has_many :scramble_file_uploads, dependent: :delete_all
   has_many :external_scramble_sets, through: :scramble_file_uploads
