@@ -200,8 +200,9 @@ class Round < ApplicationRecord
     [open_count, round_to_lock.lock_results(locking_user)]
   end
 
-  def clear_round!
+  def clear_round!(clearing_user)
     LiveAttempt.where(live_result_id: live_result_ids).delete_all
+    self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
   end
 
   def open_round!(opening_user)
