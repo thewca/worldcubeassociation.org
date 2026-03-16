@@ -1,31 +1,26 @@
-"use client";
-
 import { components } from "@/types/openapi";
 import { duringCompetitionTabs } from "@/lib/wca/competitions/tabs";
-import useAPI from "@/lib/wca/useAPI";
-import Loading from "@/components/ui/loading";
 import TabMenu from "@/components/competitions/TabMenu";
+import { getRounds } from "@/lib/wca/live/getRounds";
+import OpenapiError from "@/components/ui/openapiError";
+import { getT } from "@/lib/i18n/get18n";
 
-export default function LiveMenu({
+export default async function LiveMenu({
   competitionInfo,
   children,
 }: {
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
-  const api = useAPI();
+  const { t } = await getT();
 
-  const { data, isLoading } = api.useQuery(
-    "get",
-    "/v1/competitions/{competitionId}/live/rounds",
-    { params: { path: { competitionId: competitionInfo.id } } },
-  );
+  const { data, error, response } = await getRounds(competitionInfo.id);
 
-  if (isLoading) {
-    return <Loading />;
+  if (error) {
+    return <OpenapiError response={response} t={t} />;
   }
 
-  const tabs = duringCompetitionTabs(competitionInfo, data!.rounds);
+  const tabs = duringCompetitionTabs(competitionInfo, data.rounds);
 
   return (
     <TabMenu tabs={tabs} competitionInfo={competitionInfo}>

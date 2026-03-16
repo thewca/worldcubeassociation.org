@@ -22,7 +22,7 @@ import _555bfIcon from "@/components/icons/events/_555bfIcon";
 
 import type { ComponentPropsWithoutRef } from "react";
 
-const eventIconMap = {
+export const eventIconMap = {
   "333": _333Icon,
   "333bf": _333bfIcon,
   "333ft": _333ftIcon,
@@ -46,7 +46,7 @@ const eventIconMap = {
   "555bf": _555bfIcon,
 } as const;
 
-type EventIconId = keyof typeof eventIconMap;
+export type EventIconId = keyof typeof eventIconMap;
 
 type EventIconIntrinsic = (typeof eventIconMap)[EventIconId];
 type EventIconIntrinsicProps = ComponentPropsWithoutRef<EventIconIntrinsic>;

@@ -7,23 +7,24 @@ import type { ComponentType } from "react";
 import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import { EventId } from "@/lib/wca/data/events";
+import { EventIconId, eventIconMap } from "@/components/EventIcon";
 
-export type TabWithChildren = {
-  i18nKey: string;
-  menuKey: string;
-  icon: ComponentType;
-  disabled?: boolean;
-  children: TabWithLink[];
-};
-
-type TabWithLink = {
+interface TabBase {
   i18nKey: string;
   menuKey: string;
   icon?: ComponentType;
-  badge?: string;
   disabled?: boolean;
+}
+
+export interface TabWithChildren extends TabBase {
+  icon: ComponentType;
+  children: TabWithLink[];
+}
+
+interface TabWithLink extends TabBase {
+  badge?: string;
   href: RouteLiteral;
-};
+}
 
 export type CompetitionNavTab = TabWithChildren | TabWithLink;
 
@@ -120,7 +121,7 @@ export const duringCompetitionTabs = (
     ..._.map(roundsByEventId, (rounds, eventId: EventId) => ({
       i18nKey: `events.${eventId}`,
       menuKey: eventId,
-      icon: iconMap[`${eventId}Icon` as keyof typeof iconMap],
+      icon: eventIconMap[eventId as EventIconId],
       children: rounds.map((round) => {
         const { roundNumber } = parseActivityCode(round.id);
 
