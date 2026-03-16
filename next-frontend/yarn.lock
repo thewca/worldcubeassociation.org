@@ -1577,6 +1577,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.28.6":
+  version: 7.28.6
+  resolution: "@babel/runtime@npm:7.28.6"
+  checksum: 10c0/358cf2429992ac1c466df1a21c1601d595c46930a13c1d4662fde908d44ee78ec3c183aaff513ecb01ef8c55c3624afe0309eeeb34715672dbfadb7feedb2c0d
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.28.6":
   version: 7.28.6
   resolution: "@babel/template@npm:7.28.6"
@@ -10762,17 +10769,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^25.8.16":
-  version: 25.8.16
-  resolution: "i18next@npm:25.8.16"
+"i18next@npm:^25.8.18":
+  version: 25.8.18
+  resolution: "i18next@npm:25.8.18"
   dependencies:
-    "@babel/runtime": "npm:^7.28.4"
+    "@babel/runtime": "npm:^7.28.6"
   peerDependencies:
     typescript: ^5
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/c1969016f262b7f1792619a4393704f42ea51819ab9fb1b3fe0954d633c029b2b0091de0d3a7deaeffc64c25fe754b6306882161a3ea2e47f3c6ab70bb63301b
+  checksum: 10c0/a5b68b12a8de7db59c6253f6c714616e0a687f1543300cbcfdc847bf6199aef2e3d3645756e3c36a261fdbdde127ad42f4bd1d25571cfe0519849fcbe7665724
   languageName: node
   linkType: hard
 
@@ -12939,7 +12946,7 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.5.5"
     graphql: "npm:^16.13.1"
     i18n-iso-countries: "npm:^7.14.0"
-    i18next: "npm:^25.8.16"
+    i18next: "npm:^25.8.18"
     i18next-browser-languagedetector: "npm:^8.2.1"
     i18next-resources-to-backend: "npm:^1.2.1"
     js-cookie: "npm:^3.0.5"
