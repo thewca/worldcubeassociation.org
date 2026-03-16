@@ -23,6 +23,12 @@ class LiveResult < ApplicationRecord
   scope :not_empty, -> { where.not(best: 0) }
   scope :locked, -> { where.not(locked_by: nil) }
 
+  scope :advancing, -> { where(advancing: true) }
+  scope :not_advancing, -> { where(advancing: false) }
+
+  scope :quit, -> { where.not(quit_by_id: nil) }
+  scope :not_quit, -> { where(quit_by_id: nil) }
+
   alias_attribute :result_id, :id
 
   has_one :event, through: :round
@@ -154,6 +160,10 @@ class LiveResult < ApplicationRecord
       attempts = padded.map { LiveAttempt.new(it) }
       LiveResult.compute_average_and_best(attempts, round).first
     end
+  end
+
+  def self.empty_result_attributes(registration_id, round_id)
+    { registration_id: registration_id, round_id: round_id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
   end
 
   private
