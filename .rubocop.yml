@@ -236,6 +236,10 @@ Rails/Date:
 Rails/SkipsModelValidations:
   Enabled: false
 
+Rails/InverseOf:
+  Exclude:
+    - 'app/models/forum_topic.rb'
+
 Rails/HasManyOrHasOneDependent:
   Enabled: false
 
