@@ -56,6 +56,18 @@ FactoryBot.define do
       value5 { 0 }
     end
 
+    trait :blind_mo3 do
+      mo3
+      event_id { "333bf" }
+      format_id { "3" }
+    end
+
+    trait :blind_dnf_mo3 do
+      blind_mo3
+      average { -1 }
+      value3 { -1 }
+    end
+
     trait :bo5 do
       format_id { "5" }
       average { best }
