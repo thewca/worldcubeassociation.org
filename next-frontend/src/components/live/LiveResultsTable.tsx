@@ -21,6 +21,7 @@ import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { LiveCompetitor } from "@/types/live";
 import React, { useState } from "react";
 import LiveResultsMobileModal from "@/components/live/LiveResultsMobileModal";
+import ResultMenu from "@/components/live/Admin/ResultMenu";
 
 export default function LiveResultsTable({
   resultsByRegistrationId,
@@ -28,6 +29,7 @@ export default function LiveResultsTable({
   roundWcifId,
   competitionId,
   competitors,
+  pendingQuitCompetitors = new Set(),
   isAdmin = false,
   showEmpty = true,
   showLinkedRoundsView = false,
@@ -37,6 +39,7 @@ export default function LiveResultsTable({
   roundWcifId: string;
   competitionId: string;
   competitors: LiveCompetitor[];
+  pendingQuitCompetitors?: Set<number>;
   isAdmin?: boolean;
   showEmpty?: boolean;
   showLinkedRoundsView?: boolean;
@@ -94,6 +97,11 @@ export default function LiveResultsTable({
                   key={`${competitorAndTheirResults.id}-${result.round_wcif_id}`}
                   onClick={() => setSelectedRow(competitorAndTheirResults)}
                   cursor={isMobile ? "pointer" : undefined}
+                  colorPalette={
+                    pendingQuitCompetitors.has(competitorAndTheirResults.id)
+                      ? "red"
+                      : undefined
+                  }
                 >
                   {showText && (
                     <LivePositionCell

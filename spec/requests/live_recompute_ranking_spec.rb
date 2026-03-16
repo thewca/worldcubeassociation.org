@@ -23,7 +23,7 @@ RSpec.describe "WCA Live API" do
 
     it "Ranks results correctly by single" do
       competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round = create(:round, competition: competition, event_id: "333bf", format_id: "3")
+      round = create(:round, competition: competition, event_id: "333bf", format_id: "5")
 
       3.times do |i|
         registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
@@ -68,7 +68,7 @@ RSpec.describe "WCA Live API" do
 
     it "Handles ties correctly average does not beat single ties" do
       competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round = create(:round, competition: competition, event_id: "333bf", format_id: "3")
+      round = create(:round, competition: competition, event_id: "333bf", format_id: "5")
 
       3.times do |i|
         registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
@@ -83,7 +83,7 @@ RSpec.describe "WCA Live API" do
 
     it "Ranks results correctly by single even with DNFs present" do
       competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round = create(:round, competition: competition, event_id: "333bf", format_id: "3")
+      round = create(:round, competition: competition, event_id: "333bf", format_id: "5")
 
       3.times do |i|
         registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
@@ -99,7 +99,7 @@ RSpec.describe "WCA Live API" do
 
     it "Ranks results correctly by single even with DNSs present" do
       competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round = create(:round, competition: competition, event_id: "333bf", format_id: "3")
+      round = create(:round, competition: competition, event_id: "333bf", format_id: "5")
 
       3.times do |i|
         registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
@@ -115,7 +115,7 @@ RSpec.describe "WCA Live API" do
 
     it "Ranks results correctly by single even with incomplete results present" do
       competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round = create(:round, competition: competition, event_id: "333bf", format_id: "3")
+      round = create(:round, competition: competition, event_id: "333bf", format_id: "5")
 
       3.times do |i|
         registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
@@ -179,8 +179,8 @@ RSpec.describe "WCA Live API" do
 
     it "Ranks results correctly by single if both rounds have results" do
       competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round1 = create(:round, competition: competition, event_id: "333bf", format_id: "3", linked_round: linked_round)
-      round2 = create(:round, competition: competition, event_id: "333bf", format_id: "3", linked_round: linked_round, number: 2)
+      round1 = create(:round, competition: competition, event_id: "333bf", format_id: "5", linked_round: linked_round)
+      round2 = create(:round, competition: competition, event_id: "333bf", format_id: "5", linked_round: linked_round, number: 2)
 
       3.times do |i|
         registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
@@ -205,8 +205,8 @@ RSpec.describe "WCA Live API" do
 
     it "Ranks results correctly by single if only one round has results" do
       competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round1 = create(:round, competition: competition, event_id: "333bf", format_id: "3", linked_round: linked_round)
-      create(:round, competition: competition, event_id: "333bf", format_id: "3", linked_round: linked_round, number: 2)
+      round1 = create(:round, competition: competition, event_id: "333bf", format_id: "5", linked_round: linked_round)
+      create(:round, competition: competition, event_id: "333bf", format_id: "5", linked_round: linked_round, number: 2)
 
       3.times do |i|
         registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
@@ -222,8 +222,8 @@ RSpec.describe "WCA Live API" do
 
     it "Ranks results correctly by single even with DNFs present in one of the rounds" do
       competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round1 = create(:round, competition: competition, event_id: "333bf", format_id: "3", linked_round: linked_round)
-      round2 = create(:round, competition: competition, event_id: "333bf", format_id: "3", linked_round: linked_round, number: 2)
+      round1 = create(:round, competition: competition, event_id: "333bf", format_id: "5", linked_round: linked_round)
+      round2 = create(:round, competition: competition, event_id: "333bf", format_id: "5", linked_round: linked_round, number: 2)
 
       3.times do |i|
         registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
@@ -240,8 +240,8 @@ RSpec.describe "WCA Live API" do
 
     it "Ranks results correctly by single even with DNSs present in one of the rounds" do
       competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round1 = create(:round, competition: competition, event_id: "333bf", format_id: "3", linked_round: linked_round)
-      round2 = create(:round, competition: competition, event_id: "333bf", format_id: "3", linked_round: linked_round, number: 2)
+      round1 = create(:round, competition: competition, event_id: "333bf", format_id: "5", linked_round: linked_round)
+      round2 = create(:round, competition: competition, event_id: "333bf", format_id: "5", linked_round: linked_round, number: 2)
 
       3.times do |i|
         registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
@@ -258,8 +258,8 @@ RSpec.describe "WCA Live API" do
 
     it "Ranks results correctly by single even with incomplete results present in one of the rounds" do
       competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round1 = create(:round, competition: competition, event_id: "333bf", format_id: "3", linked_round: linked_round)
-      round2 = create(:round, competition: competition, event_id: "333bf", format_id: "3", linked_round: linked_round, number: 2)
+      round1 = create(:round, competition: competition, event_id: "333bf", format_id: "5", linked_round: linked_round)
+      round2 = create(:round, competition: competition, event_id: "333bf", format_id: "5", linked_round: linked_round, number: 2)
 
       3.times do |i|
         registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])

@@ -31,7 +31,7 @@ export default function AttemptsForm({
     handleSubmit,
     attempts,
     handleAttemptChange,
-    isPendingUpdate,
+    isPending,
   } = useResultsAdmin();
 
   const { collection, filter } = useListCollection({
@@ -88,7 +88,10 @@ export default function AttemptsForm({
           resultType="single"
         />
       ))}
-      <Button onClick={handleSubmit} disabled={isPendingUpdate}>
+      <Button
+        onClick={handleSubmit}
+        disabled={isPending || attempts.length === 0}
+      >
         Submit Results
       </Button>
     </form>
