@@ -302,12 +302,12 @@ RSpec.describe Result do
         let(:competition) { create(:competition, event_ids: %w[333bf 444bf 555bf 333mbf 333ft 333fm]) }
 
         context "333bf" do
-          let(:format_id) { "3" }
+          let(:format_id) { "5" }
           let(:event_id) { "333bf" }
           let!(:round) { create(:round, competition: competition, event_id: "333bf", format_id: "5") }
 
           it "does compute average" do
-            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 0, value5: 0, best: 999, average: 1000, round: round)
+            result = build_result(value1: 999, value2: 1000, value3: 1001, value4: 1000, value5: 1000, best: 999, average: 1000, round: round)
             expect(result).to be_valid
 
             result.average = 33
@@ -315,24 +315,24 @@ RSpec.describe Result do
             expect(result).to be_invalid_with_errors(average: ["must be equal to 1000"])
           end
 
-          it "leaves average for 333bf as skipped if one of three solves is skipped" do
+          it "leaves average for 333bf as skipped if two of five solves is skipped" do
             result = build_result(value1: 3000, value2: 3000,
-                                  value3: SolveTime::SKIPPED_VALUE,
+                                  value3: 3000,
                                   value4: SolveTime::SKIPPED_VALUE,
                                   value5: SolveTime::SKIPPED_VALUE,
                                   round: round)
             expect(result.compute_correct_average).to eq SolveTime::SKIPPED_VALUE
           end
 
-          it "sets DNF average for 333bf if one of three solves is either DNF or DNS" do
+          it "sets DNF average for 333bf if two of five solves is either DNF or DNS" do
             result_dns = build_result(value1: 3000, value2: 3000,
                                       value3: SolveTime::DNS_VALUE,
-                                      value4: SolveTime::SKIPPED_VALUE,
-                                      value5: SolveTime::SKIPPED_VALUE, round: round)
+                                      value4: SolveTime::DNS_VALUE,
+                                      value5: 3000, round: round)
             result_dnf = build_result(value1: 3000, value2: 3000,
                                       value3: SolveTime::DNF_VALUE,
-                                      value4: SolveTime::SKIPPED_VALUE,
-                                      value5: SolveTime::SKIPPED_VALUE, round: round)
+                                      value4: SolveTime::DNF_VALUE,
+                                      value5: 3000, round: round)
             expect(result_dnf.compute_correct_average).to eq SolveTime::DNF_VALUE
             expect(result_dns.compute_correct_average).to eq SolveTime::DNF_VALUE
           end
@@ -343,8 +343,8 @@ RSpec.describe Result do
             result = build_result(value1: over10,
                                   value2: over10,
                                   value3: over10,
-                                  value4: SolveTime::SKIPPED_VALUE,
-                                  value5: SolveTime::SKIPPED_VALUE, round: round)
+                                  value4: over10,
+                                  value5: over10, round: round)
             expect(result.compute_correct_average).to eq((10.minutes + 10.seconds) * 100)
           end
 
@@ -354,8 +354,8 @@ RSpec.describe Result do
             result = build_result(value1: over10,
                                   value2: over10,
                                   value3: over10,
-                                  value4: SolveTime::SKIPPED_VALUE,
-                                  value5: SolveTime::SKIPPED_VALUE, round: round)
+                                  value4: over10,
+                                  value5: over10, round: round)
             expect(result.compute_correct_average).to eq((10.minutes + 11.seconds) * 100)
           end
         end

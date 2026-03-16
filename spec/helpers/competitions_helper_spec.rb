@@ -111,8 +111,8 @@ RSpec.describe CompetitionsHelper do
                value1: 60.seconds.in_centiseconds,
                value2: 60.seconds.in_centiseconds,
                value3: 60.seconds.in_centiseconds,
-               value4: 0,
-               value5: 0,
+               value4: 60.seconds.in_centiseconds,
+               value5: 60.seconds.in_centiseconds,
                best: 60.seconds.in_centiseconds,
                average: 60.seconds.in_centiseconds)
       end

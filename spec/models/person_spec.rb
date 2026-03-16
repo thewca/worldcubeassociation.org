@@ -261,7 +261,7 @@ RSpec.describe Person do
 
     it "ignores DNF results on the podium" do
       expect do
-        create(:result, :blind_dnf_mo3, person: us_competitor, competition: us_nationals2017,
+        create(:result, :blind_dnf_bo5, person: us_competitor, competition: us_nationals2017,
                                         pos: 2, event_id: "555bf", best: SolveTime::DNF_VALUE)
       end.not_to(change { us_competitor.championship_podiums[:national] })
     end

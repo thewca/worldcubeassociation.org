@@ -130,9 +130,9 @@ RSpec.describe ResultsValidators::PositionsValidator do
         # In a BoX format, results with the same best should have the same position,
         # even if one has a mean.
         round = create(:round, competition: competition1, event_id: "333bf", format_id: "5")
-        create(:result, :blind_dnf_mo3, competition: competition1, pos: 1, best: 1000, round: round)
-        create(:result, :blind_mo3, competition: competition1, pos: 1, best: 1000, round: round)
-        create(:result, :blind_mo3, competition: competition1, pos: 3, best: 2000, round: round)
+        create(:result, :blind_dnf_bo5, competition: competition1, pos: 1, best: 1000, round: round)
+        create(:result, :blind_bo5, competition: competition1, pos: 1, best: 1000, round: round)
+        create(:result, :blind_bo5, competition: competition1, pos: 3, best: 2000, round: round)
         pv = ResultsValidators::PositionsValidator.new.validate(competition_ids: competition1.id, model: Result)
         expect(pv.any_errors?).to be false
       end
@@ -140,8 +140,8 @@ RSpec.describe ResultsValidators::PositionsValidator do
       it "invalidates incorrectly ordered results" do
         # In a BoX format, results should be ordered by best, not mean.
         round = create(:round, competition: competition1, event_id: "333bf", format_id: "5")
-        r1 = create(:result, :blind_mo3, competition: competition1, pos: 1, best: 2000, round: round)
-        r2 = create(:result, :blind_dnf_mo3, competition: competition1, pos: 2, best: 1000, round: round)
+        r1 = create(:result, :blind_bo5, competition: competition1, pos: 1, best: 2000, round: round)
+        r2 = create(:result, :blind_dnf_bo5, competition: competition1, pos: 2, best: 1000, round: round)
         expected_errors = [
           create_result_error(competition1.id, "333bf-f", r1.person_name, 2, 1),
           create_result_error(competition1.id, "333bf-f", r2.person_name, 1, 2),
