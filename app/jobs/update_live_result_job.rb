@@ -5,26 +5,19 @@ class UpdateLiveResultJob < ApplicationJob
   queue_as EnvConfig.LIVE_QUEUE if Live::Config.sqs_queued?
 
   def perform(live_result, results, entered_by_id)
-    previous_attempts = live_result.live_attempts.index_by(&:attempt_number)
+    result_upserts = results.map { it.merge(live_result_id: live_result.id) }
+    LiveAttempt.upsert_all(result_upserts)
 
-    new_attempts = results.map do |r|
-      previous_attempt = previous_attempts[r[:attempt_number]]
-
-      if previous_attempt.present?
-        if previous_attempt.value == r[:value]
-          previous_attempt
-        else
-          previous_attempt.update_with_history_entry(r[:value], entered_by_id)
-        end
-      else
-        LiveAttempt.build_with_history_entry(r[:value], r[:attempt_number], entered_by_id)
-      end
-    end
+    attempt_numbers = results.pluck(:attempt_number)
+    live_result.live_attempts.where.not(attempt_number: attempt_numbers).delete_all
 
     round = live_result.round
 
     Live::DiffHelper.broadcast_changes(round) do
+      new_attempts = live_result.live_attempts.reload # We did some `upsert_all` and `delete_all` shenanigans above, which bypass Rails memory. Hence reloading...
       average, best = LiveResult.compute_average_and_best(new_attempts, round)
+      history_ordered_results = new_attempts.order(:attempt_number).pluck(:value)
+      live_result.live_result_history_entries.create!(entered_by_id: entered_by_id, action_type: :scoretaking, attempt_details: history_ordered_results)
 
       live_result.update!(live_attempts: new_attempts, best: best, average: average, last_attempt_entered_at: Time.now.utc)
     end

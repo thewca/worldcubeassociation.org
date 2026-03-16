@@ -7,6 +7,8 @@ class LiveResult < ApplicationRecord
   has_many :live_attempts, dependent: :destroy
   alias_method :attempts, :live_attempts
 
+  has_many :live_result_history_entries, dependent: :delete_all
+
   after_save :trigger_recompute, if: :should_recompute?
 
   belongs_to :registration
@@ -25,6 +27,14 @@ class LiveResult < ApplicationRecord
 
   has_one :event, through: :round
   has_one :format, through: :round
+
+  validates :best,
+            presence: true,
+            numericality: { only_integer: true }
+
+  validates :average,
+            presence: true,
+            numericality: { only_integer: true }
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[global_pos local_pos registration_id best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
@@ -53,7 +63,8 @@ class LiveResult < ApplicationRecord
   end
 
   def mark_as_quit!(quit_by_user)
-    update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
+    self.update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
+    self.live_result_history_entries.create!(entered_by_id: quit_by_user.id, action_type: :quit)
   end
 
   def locked?
@@ -83,6 +94,10 @@ class LiveResult < ApplicationRecord
   def complete?
     # Use length hear to not fire a COUNT query for every row
     live_attempts.length == round.format.expected_solve_count
+  end
+
+  def empty_result?
+    best.zero?
   end
 
   def values_for_sorting

@@ -1,4 +1,4 @@
-import { Table } from "@chakra-ui/react";
+import { Table, useBreakpointValue } from "@chakra-ui/react";
 import formats from "@/lib/wca/data/formats";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import {
@@ -45,9 +45,15 @@ export default function LiveResultsTable({
 
   const stats = statColumnsForFormat(format);
 
+  const showFull = useBreakpointValue({ base: false, md: true });
+
   return (
-    <Table.Root>
-      <LiveTableHeader format={format} isLinked={showLinkedRoundsView} />
+    <Table.Root size="sm">
+      <LiveTableHeader
+        format={format}
+        isLinked={showLinkedRoundsView}
+        showFull={showFull}
+      />
       <Table.Body>
         {competitorsWithOrderedResults.map((competitorAndTheirResults) => {
           return competitorAndTheirResults.results.map((result, index) => {
@@ -91,6 +97,7 @@ export default function LiveResultsTable({
                     competitor={competitorAndTheirResults}
                     rowSpan={rowSpan}
                     isAdmin={isAdmin}
+                    link={showFull}
                   />
                 )}
                 {showLinkedRoundsView && (
@@ -98,18 +105,20 @@ export default function LiveResultsTable({
                     {parseActivityCode(result.round_wcif_id).roundNumber}
                   </Table.Cell>
                 )}
-                {showText && (
+                {showText && showFull && (
                   <CountryCell
                     countryIso2={competitorAndTheirResults.country_iso2}
                     rowSpan={rowSpan}
                   />
                 )}
-                <LiveAttemptsCells
-                  format={format}
-                  attempts={result.attempts}
-                  eventId={eventId}
-                  competitorId={competitorAndTheirResults.id}
-                />
+                {showFull && (
+                  <LiveAttemptsCells
+                    format={format}
+                    attempts={result.attempts}
+                    eventId={eventId}
+                    competitorId={competitorAndTheirResults.id}
+                  />
+                )}
                 <LiveStatCells
                   stats={stats}
                   competitorId={competitorAndTheirResults.id}

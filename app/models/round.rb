@@ -180,12 +180,19 @@ class Round < ApplicationRecord
       linked_round.first_round_in_link.advancing_registrations
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
-      Registration.find(advancing)
+      Registration.where(id: advancing)
     end
   end
 
+  private def bulk_insert_history(live_ids_to_insert, entered_by_user, **attributes)
+    history_entries = live_ids_to_insert.map { LiveResultHistoryEntry.build(live_result_id: it, entered_by_id: entered_by_user.id, **attributes) }
+
+    history_entry_attributes = history_entries.map { it.attributes.symbolize_keys.except(:id, :created_at, :updated_at) }
+    LiveResultHistoryEntry.insert_all(history_entry_attributes)
+  end
+
   def open_and_lock_previous(locking_user)
-    open_count = open_round!
+    open_count = open_round!(locking_user)
     return [open_count, 0] if first_round?
 
     round_to_lock = linked_round.present? ? linked_round.first_round_in_link.previous_round : previous_round
@@ -197,11 +204,16 @@ class Round < ApplicationRecord
     LiveAttempt.where(live_result_id: live_result_ids).delete_all
   end
 
-  def open_round!
-    empty_results = advancing_registrations.map do |r|
-      { registration_id: r.id, round_id: id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
+  def open_round!(opening_user)
+    advancing_reg_ids = advancing_registrations.ids
+
+    empty_results = advancing_reg_ids.map do |reg_id|
+      { registration_id: reg_id, round_id: self.id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
     end
     LiveResult.insert_all!(empty_results)
+
+    inserted_ids = self.live_results.where(registration_id: advancing_reg_ids).ids
+    self.bulk_insert_history(inserted_ids, opening_user, action_type: :opened)
   end
 
   def create_empty_live_result(registration_id)
@@ -224,31 +236,26 @@ class Round < ApplicationRecord
 
   def recompute_advancing
     has_linked_round = linked_round.present?
-    advancement_determining_results = has_linked_round ? linked_round.live_results : live_results
+    round_results = has_linked_round ? linked_round.live_results : live_results
 
-    # Only ranked results that are not locked can be considered for advancing.
-    round_results = advancement_determining_results.where.not(global_pos: nil).where(locked_by_id: nil)
-    round_results.update_all(advancing: false, advancing_questionable: false)
+    advancement_determining_results = round_results.where.not(global_pos: nil).where(locked_by_id: nil)
+    advancement_determining_results.update_all(advancing: false, advancing_questionable: false)
 
-    missing_attempts = total_competitors - round_results.count
+    missing_attempts = total_competitors - advancement_determining_results.count
     potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
 
-    # Eager load associations to avoid N+1 on potential_solve_time
-    loaded_results = round_results.includes(:live_attempts).to_a
+    # Determine which results would advance if everyone achieved their best possible attempt.
+    loaded_results = advancement_determining_results.includes(:live_attempts).to_a
     results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
 
-    qualifying_index = if final_round?
-                         3
-                       else
-                         # Our Regulations allow at most 75% of competitors to proceed
-                         max_qualifying = (round_results.count * 0.75).floor
-                         [advancement_condition.max_advancing(round_results), max_qualifying].min
-                       end
+    advancement_determining_condition = final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
 
-    round_results.update_all("advancing_questionable = global_pos BETWEEN 1 AND #{qualifying_index}")
+    advancing_ids = advancement_determining_condition.apply(results_with_potential)
+    max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
 
-    # Determine which results would advance if everyone achieved their best possible attempt.
-    advancing_ids = results_with_potential.take(qualifying_index).select(&:complete?).pluck(:id)
+    advancement_determining_results.update_all(
+      "advancing_questionable = (global_pos < #{max_advancing})",
+    )
 
     LiveResult.where(id: advancing_ids).update_all(advancing: true)
   end
@@ -398,6 +405,7 @@ class Round < ApplicationRecord
     return 0 if results_to_lock.first.locked_by.present?
 
     results_to_lock.update_all(locked_by_id: locking_user.id)
+    self.bulk_insert_history(results_to_lock.ids, locking_user, action_type: :locked)
   end
 
   STATE_LOCKED = "locked"

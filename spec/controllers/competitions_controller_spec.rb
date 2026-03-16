@@ -1194,6 +1194,36 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status :ok
         expect(assigns(:competition)).to eq competition
       end
+
+      context 'when results are submitted' do
+        before do
+          competition.update!(results_submitted_at: Time.now)
+        end
+
+        it 'redirects with an error message' do
+          get :edit_schedule, params: { id: competition }
+          expect(response).to redirect_to competition_path(competition)
+          expect(flash[:danger]).to eq "The schedule cannot be edited after results have been submitted."
+        end
+      end
+    end
+
+    context 'when signed in as a competition admin' do
+      before do
+        sign_in create(:admin)
+      end
+
+      context 'when results are submitted' do
+        before do
+          competition.update!(results_submitted_at: Time.now)
+        end
+
+        it 'allows access to the page' do
+          get :edit_schedule, params: { id: competition }
+          expect(response).to have_http_status :ok
+          expect(assigns(:competition)).to eq competition
+        end
+      end
     end
   end
 end

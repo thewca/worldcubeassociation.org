@@ -41,6 +41,7 @@ class User < ApplicationRecord
   has_many :active_bans, through: :active_bans_metadata, source: :user_role, class_name: "UserRole"
   has_many :active_groups, through: :active_roles, source: :group, class_name: "UserGroup"
   has_many :board_metadata, through: :active_groups, source: :metadata, source_type: "GroupsMetadataBoard"
+  has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
@@ -76,6 +77,11 @@ class User < ApplicationRecord
   ANONYMOUS_COUNTRY_ISO2 = 'US'
 
   FORUM_AGE_REQUIREMENT = 13
+
+  CLEAR_WCA_ID_CLAIM_ATTRIBUTES = {
+    unconfirmed_wca_id: nil,
+    delegate_id_to_handle_wca_id_claim: nil,
+  }.freeze
 
   def self.eligible_voters
     [
@@ -205,8 +211,7 @@ class User < ApplicationRecord
   def maybe_clear_claimed_wca_id
     return unless !claiming_wca_id && ((unconfirmed_wca_id_was.present? && wca_id == unconfirmed_wca_id_was) || unconfirmed_wca_id.blank?)
 
-    self.unconfirmed_wca_id = nil
-    self.delegate_to_handle_wca_id_claim = nil
+    self.assign_attributes(**CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
   end
 
   # Virtual attribute for people claiming a WCA ID.
@@ -1587,8 +1592,7 @@ class User < ApplicationRecord
 
     ActiveRecord::Base.transaction do
       update!(wca_id: wca_id)
-      User.where(id: stale_claims.ids)
-          .update_all(unconfirmed_wca_id: nil, delegate_id_to_handle_wca_id_claim: nil)
+      stale_claims.update_all(**CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
       potential_duplicate_persons.delete_all
     end
 

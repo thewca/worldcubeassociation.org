@@ -79,7 +79,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "round is not open" }, status: :bad_request if [Round::STATE_READY, Round::STATE_PENDING].include?(state)
 
-    recreated_rows = round.clear_round!
+    recreated_rows = round.clear_round!(@current_user)
 
     render json: { status: "ok", recreated_rows: recreated_rows }
   end
