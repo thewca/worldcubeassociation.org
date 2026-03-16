@@ -5,9 +5,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
   skip_before_action :require_user!, only: %i[round_results by_person podiums]
 
   def add_or_update_result
-    # can't use .expect here because [] is valid for attempts
-    # TODO: Think about if a synchronous route instead would make sense instead
-    results = params.permit(attempts: %i[value attempt_number]).fetch(:attempts, [])
+    results = params.expect(attempts: [%i[value attempt_number]])
     round_id = params.require(:round_id)
     competition = Competition.find(params.require(:competition_id))
     registration_id = params.require(:registration_id)
@@ -84,6 +82,28 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     recreated_rows = round.clear_round!(@current_user)
 
     render json: { status: "ok", recreated_rows: recreated_rows }
+  end
+
+  def clear_competitor
+    competition = Competition.find(params.require(:competition_id))
+    wcif_id = params.require(:round_id)
+    registration_id = params.require(:registration_id)
+
+    round = Round.find_by_wcif_id!(wcif_id, competition.id)
+
+    require_manage!(competition)
+
+    result = round.live_results.find_by!(registration_id: registration_id)
+
+    delete_count = Live::DiffHelper.broadcast_changes(round) do
+      deleted = result.live_attempts.delete_all
+      result.update!(average: 0, best: 0)
+      deleted
+    end
+
+    result.live_result_history_entries.create(action_source: "live_results", action_type: "cleared", entered_by: @current_user)
+
+    render json: { status: "ok", deleted_attempts: delete_count }
   end
 
   def open_round

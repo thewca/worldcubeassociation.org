@@ -14,8 +14,7 @@ interface AdminResultsContextValue {
   attempts: number[];
   error: string;
   success: string;
-  isPendingUpdate: boolean;
-  isPendingQuit: boolean;
+  isPending: boolean;
   handleRegistrationIdChange: (value: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
   handleSubmit: () => void;
@@ -97,6 +96,16 @@ export function LiveResultAdminProvider({
     },
   );
 
+  const { mutate: mutateClear, isPending: isPendingClear } = api.useMutation(
+    "put",
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}/clear",
+    {
+      onError: () => {
+        setError("Failed to Quit Competitor. Please try again.");
+      },
+    },
+  );
+
   const handleAttemptChange = (index: number, value: number) => {
     const newAttempts = [...attempts];
     newAttempts[index] = value;
@@ -124,13 +133,9 @@ export function LiveResultAdminProvider({
   };
 
   const clearCompetitorsResults = (registrationId: number) => {
-    mutateUpdate({
+    mutateClear({
       params: {
-        path: { competitionId, roundId },
-      },
-      body: {
-        attempts: [],
-        registration_id: registrationId,
+        path: { competitionId, roundId, registrationId },
       },
     });
   };
@@ -153,8 +158,7 @@ export function LiveResultAdminProvider({
         attempts,
         error,
         success,
-        isPendingUpdate,
-        isPendingQuit,
+        isPending: isPendingUpdate || isPendingClear || isPendingQuit,
         quitCompetitor,
         handleRegistrationIdChange,
         handleAttemptChange,

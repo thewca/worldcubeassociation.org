@@ -198,6 +198,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}/clear": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Quits a competitor from the round and advances the next one if prompted */
+        put: operations["clearCompetitor"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/podiums": {
         parameters: {
             query?: never;
@@ -1879,6 +1896,32 @@ export interface operations {
                 content: {
                     "application/json": {
                         quit: number;
+                    };
+                };
+            };
+        };
+    };
+    clearCompetitor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+                registrationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the number of attempts that were deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        deleted_attempts: number;
                     };
                 };
             };

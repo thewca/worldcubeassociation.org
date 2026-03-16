@@ -31,7 +31,7 @@ export default function ResultMenu({
   const [isOpen, setIsOpen] = useState(false);
   const [isQuitting, setIsQuitting] = useState(false);
 
-  const { handleRegistrationIdChange, clearCompetitorsResults, isPendingQuit } =
+  const { handleRegistrationIdChange, clearCompetitorsResults, isPending } =
     useResultsAdmin();
 
   function handleEditClick() {
@@ -71,11 +71,11 @@ export default function ResultMenu({
                   <Menu.Item
                     value="edit"
                     onClick={handleEditClick}
-                    disabled={isPendingQuit}
+                    disabled={isPending}
                   >
                     Edit
                   </Menu.Item>
-                  <Menu.Item value="results" asChild disabled={isPendingQuit}>
+                  <Menu.Item value="results" asChild disabled={isPending}>
                     <Link
                       href={route({
                         pathname:
@@ -93,7 +93,7 @@ export default function ResultMenu({
                     <Menu.Item
                       value="clear"
                       onClick={handleClearClick}
-                      disabled={isPendingQuit}
+                      disabled={isPending}
                     >
                       Clear
                     </Menu.Item>
@@ -101,7 +101,7 @@ export default function ResultMenu({
                     <Menu.Item
                       value="quit"
                       onClick={() => setIsQuitting(true)}
-                      disabled={isPendingQuit}
+                      disabled={isPending}
                     >
                       Quit
                     </Menu.Item>
@@ -142,7 +142,7 @@ function QuitModal({
     },
   );
 
-  const { quitCompetitor, isPendingQuit } = useResultsAdmin();
+  const { quitCompetitor, isPending } = useResultsAdmin();
 
   const onQuitClick = useCallback(() => {
     quitCompetitor(
@@ -184,7 +184,7 @@ function QuitModal({
               </Text>
             </Dialog.Body>
             <Dialog.Footer>
-              <Button disabled={isPendingQuit} onClick={onQuitClick}>
+              <Button disabled={isPending} onClick={onQuitClick}>
                 Quit Competitor from Round
               </Button>
               <Dialog.ActionTrigger asChild>

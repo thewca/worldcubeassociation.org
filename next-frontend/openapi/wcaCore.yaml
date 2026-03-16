@@ -34,6 +34,8 @@ paths:
     $ref: 'paths/competitions/live/OpenRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}:
     $ref: 'paths/competitions/live/QuitCompetitor.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}/clear:
+    $ref: 'paths/competitions/live/ClearCompetitor.yaml'
   /v1/competitions/{competitionId}/live/podiums:
     $ref: 'paths/competitions/live/LivePodiums.yaml'
   /v1/competitions/{competitionId}/live/registrations/{registrationId}:
