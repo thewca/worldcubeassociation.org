@@ -27,6 +27,7 @@ RSpec.feature "create competition tabs" do
     sign_in organizer
     visit competition_path(competition)
     click_on "Manage tabs"
+    expect(page).to have_content "New tab" # Wait for the page to fully load
     within("#competition-tabs tbody tr:first") { click_on "Edit" }
 
     fill_in "Name", with: "Travel!"

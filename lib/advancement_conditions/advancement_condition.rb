@@ -47,5 +47,40 @@ module AdvancementConditions
         },
       }
     end
+
+    # Our Regulations allow at most 75% of competitors to proceed
+    def regulations_boundary(results)
+      (results.count * 0.75).floor
+    end
+
+    def max_qualifying(results)
+      [max_advancing(results), regulations_boundary(results)].min
+    end
+
+    # Make sure you always pass the full results to this method,
+    # otherwise the qualifying conditions will not be applied correctly
+    def apply(full_results)
+      qualifying_rank = max_qualifying(full_results)
+
+      top_qualifying = full_results.first(qualifying_rank)
+
+      return [] if top_qualifying.empty?
+
+      cutoff = top_qualifying.last.potential_solve_time
+      # Since full_results is already sorted, ties at the boundary
+      # will be adjacent — walk forward and include any that match exactly.
+      remaining = full_results.drop(qualifying_rank)
+      tied_at_boundary = remaining.take_while { it.potential_solve_time == cutoff }
+      with_ties = top_qualifying + tied_at_boundary
+      # If the ties exceed the 75% rule, none of the tied results proceed
+      advancing_with_ties = if with_ties.length > regulations_boundary(full_results)
+                              top_qualifying.reject { it.potential_solve_time == cutoff }
+                            else
+                              with_ties
+                            end
+
+      # Filter out potential results
+      advancing_with_ties.reject(&:empty_result?).pluck(:id)
+    end
   end
 end

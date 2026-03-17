@@ -13,6 +13,7 @@ import {
   beforeCompetitionTabs,
 } from "@/lib/wca/competitions/tabs";
 import { route } from "nextjs-routes";
+import BetaDisabledTooltip from "@/components/BetaDisabledTooltip";
 
 export default function TabMenu({
   competitionInfo,
@@ -58,15 +59,26 @@ export default function TabMenu({
         gap="3"
       >
         {tabs.map((tab) => (
-          <Tabs.Trigger key={tab.i18nKey} value={tab.menuKey} asChild>
-            <Text textStyle="bodyEmphasis" asChild maxW="44">
-              <Link href={tab.href}>{t(tab.i18nKey)}</Link>
-            </Text>
-          </Tabs.Trigger>
+          <BetaDisabledTooltip key={tab.i18nKey} disabled={!tab.betaDisabled}>
+            <Tabs.Trigger
+              value={tab.menuKey}
+              disabled={tab.betaDisabled}
+              asChild
+            >
+              <Text textStyle="bodyEmphasis" asChild maxW="44">
+                <Link href={tab.href}>{t(tab.i18nKey)}</Link>
+              </Text>
+            </Tabs.Trigger>
+          </BetaDisabledTooltip>
         ))}
         <Separator />
         {competitionInfo.tab_names.map((tabName) => (
-          <Tabs.Trigger key={tabName} value={tabName} asChild>
+          <Tabs.Trigger
+            key={tabName}
+            value={tabName}
+            minHeight="fit-content"
+            asChild
+          >
             <Text textStyle="bodyEmphasis" asChild maxW="44">
               <Link
                 href={route({

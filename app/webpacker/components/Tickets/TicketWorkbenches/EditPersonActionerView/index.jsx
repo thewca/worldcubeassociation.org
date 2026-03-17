@@ -1,20 +1,14 @@
 import React from 'react';
-import EditPersonForm from '../../../Panel/pages/EditPersonPage/EditPersonForm';
 import { ticketStatuses, PANEL_PAGES } from '../../../../lib/wca-data.js.erb';
 import { panelPageUrl } from '../../../../lib/requests/routes.js.erb';
 import EditPersonValidations from './EditPersonValidations';
 import EditPersonRequestedChanges from './EditPersonRequestedChanges';
 import RejectView from './RejectView';
 import OldDataSyncInfo from './OldDataSyncInfo';
+import ApproveView from './ApproveView';
 
-export default function EditPersonActionerView({
-  ticketDetails,
-  currentStakeholder,
-  updateStatus,
-}) {
+export default function EditPersonActionerView({ ticketDetails, currentStakeholder }) {
   const { ticket: { id, metadata } } = ticketDetails;
-
-  const closeTicket = () => updateStatus(ticketStatuses.edit_person.closed);
 
   if (ticketDetails.ticket.metadata.status === ticketStatuses.edit_person.closed) {
     return (
@@ -45,10 +39,7 @@ export default function EditPersonActionerView({
         requestedChanges={metadata.tickets_edit_person_fields}
         person={metadata.person}
       />
-      <EditPersonForm
-        wcaId={metadata.wca_id}
-        onSuccess={closeTicket}
-      />
+      <ApproveView ticketId={id} currentStakeholder={currentStakeholder} />
       <RejectView ticketId={id} currentStakeholder={currentStakeholder} />
     </>
   );

@@ -112,9 +112,8 @@ export function TimeField({ value, onChange }: AttemptResultProps) {
 
   return (
     <Field.Root invalid={!isValid}>
-      <Field.Label>TimeField</Field.Label>
+      <Field.Label>Attempt</Field.Label>
       <Input spellCheck={false} {...binding} />
-      <Field.HelperText>{value}</Field.HelperText>
     </Field.Root>
   );
 }

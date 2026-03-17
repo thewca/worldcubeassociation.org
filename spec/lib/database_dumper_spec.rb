@@ -90,14 +90,14 @@ RSpec.describe "DatabaseDumper" do
         all_live = {
           v1: {
             metadata: {
-              export_format_version: '1.0.0',
+              export_format_version: 'v1.0.0',
               version_label: 'deprecated',
               end_of_life_date: '3026-01-01',
             },
           },
           v2: {
             metadata: {
-              export_format_version: '2.0.0',
+              export_format_version: 'v2.0.2',
               version_label: 'current',
               end_of_life_date: nil,
             },
@@ -112,14 +112,14 @@ RSpec.describe "DatabaseDumper" do
         v1_dead = {
           v1: {
             metadata: {
-              export_format_version: '1.0.0',
+              export_format_version: 'v1.0.0',
               version_label: 'deprecated',
               end_of_life_date: '1026-01-01',
             },
           },
           v2: {
             metadata: {
-              export_format_version: '2.0.0',
+              export_format_version: 'v2.0.2',
               version_label: 'current',
               end_of_life_date: nil,
             },

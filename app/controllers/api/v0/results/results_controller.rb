@@ -10,8 +10,8 @@ class Api::V0::Results::ResultsController < Api::V0::ApiController
   GENDER_ALL = "All"
   EVENTS_ALL = "all events"
 
-  MODE_RANKINGS = "rankings"
-  MODE_RECORDS = "records"
+  MODE_RANKINGS_NEXT = "next-rankings"
+  MODE_RECORDS_NEXT = "next-records"
 
   private def support_old_links!
     params[:event_id]&.tr!("+", " ")

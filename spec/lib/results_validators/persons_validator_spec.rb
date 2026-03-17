@@ -131,6 +131,7 @@ RSpec.describe PV do
       # EMPTY_GENDER_WARNING
       # WHITESPACE_IN_NAME_ERROR
       # WRONG_PARENTHESIS_TYPE_ERROR
+      # SPECIAL_CHARACTERS_IN_NAME_WARNING
       # MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING
       # LOWERCASE_NAME_WARNING
       # UPPERCASE_NAME_WARNING
@@ -170,6 +171,21 @@ RSpec.describe PV do
                                      event_id: "333oh",
                                      round: round_333_oh)
         res_bad_parenthesis.person.update(name: "Bad Parenthesis Guy（test）")
+        res_special_chars1 = create(:inbox_result,
+                                    competition: competition1,
+                                    event_id: "333oh",
+                                    round: round_333_oh)
+        res_special_chars1.person.update(name: "John \"Doe\"")
+        res_special_chars2 = create(:inbox_result,
+                                    competition: competition1,
+                                    event_id: "333oh",
+                                    round: round_333_oh)
+        res_special_chars2.person.update(name: "Jane123 Smith")
+        res_special_chars3 = create(:inbox_result,
+                                    competition: competition1,
+                                    event_id: "333oh",
+                                    round: round_333_oh)
+        res_special_chars3.person.update(name: "Bob$ Smith")
         res_lowercase1 = create(:inbox_result,
                                 competition: competition1,
                                 event_id: "333oh",
@@ -243,6 +259,18 @@ RSpec.describe PV do
           RV::ValidationWarning.new(PV::EMPTY_GENDER_WARNING,
                                     :persons, competition1.id,
                                     name: res_whitespace.person.name),
+          RV::ValidationWarning.new(PV::SPECIAL_CHARACTERS_IN_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_special_chars1.person.name),
+          RV::ValidationWarning.new(PV::SPECIAL_CHARACTERS_IN_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_special_chars2.person.name),
+          RV::ValidationWarning.new(PV::SPECIAL_CHARACTERS_IN_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_special_chars3.person.name),
+          RV::ValidationWarning.new(PV::SPECIAL_CHARACTERS_IN_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_bad_parenthesis.person.name),
           RV::ValidationWarning.new(PV::MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,
                                     :persons, competition1.id,
                                     name: res_same_name1.person.name),
@@ -279,6 +307,72 @@ RSpec.describe PV do
           pv = PV.new.validate(**arg)
           expect(pv.errors).to match_array(expected_errors)
           expect(pv.warnings).to match_array(expected_warnings)
+        end
+      end
+
+      # Test case for valid international names that should NOT trigger SPECIAL_CHARACTERS_IN_NAME_WARNING
+      it "allows valid international names with apostrophes, Unicode scripts, and special characters" do
+        round_333oh = create(:round, event_id: "333oh", competition: competition1)
+
+        # Test names with apostrophes (common in many countries)
+        res_apostrophe1 = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_apostrophe1.person.update!(name: "Adam D'Aloia")
+
+        res_apostrophe2 = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_apostrophe2.person.update!(name: "Sebastian O'Mahony-Hagan")
+
+        # Test names with Unicode scripts (Chinese, Thai, Devanagari, Arabic, Russian, Tamil, etc.)
+        res_chinese = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_chinese.person.update!(name: "Shayibai Halimulati (莎伊拜·哈力木拉提)")
+
+        res_thai = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_thai.person.update!(name: "Kanneti Sae Han (คันธ์เนตี แซ่ห่าน)")
+
+        res_devanagari = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_devanagari.person.update!(name: "Ram Thakkar (राम ठक्कर)")
+
+        res_arabic = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_arabic.person.update!(name: "Farham Farajizadeh (فرهام فرجی‌زاده)")
+
+        res_russian = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_russian.person.update!(name: "Nikita Razzamazov (Никита Раззама́зов)")
+
+        res_tamil = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_tamil.person.update!(name: "Akash Sreedharan (ஆகாஷ் ஸ்ரீதரன்)")
+
+        res_bengali = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_bengali.person.update!(name: "Sourayan Chanda (সৌরায়ন চন্দ)")
+
+        res_kannada = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_kannada.person.update!(name: "Smijo P. Abraham (സ്മിജോ പി എബ്രഹാം)")
+
+        res_ukrainian = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_ukrainian.person.update!(name: "Oleksii Grygoriev (Олексій Григор'єв)")
+
+        res_baybayin = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_baybayin.person.update!(name: "John Edison Ubaldo (ᜇ᜔ᜌᜓ︀ᜈ᜔ ᜁᜇᜒᜐᜓ︀ᜈ᜔ ᜂᜊᜎ᜔ᜇᜓ︀)")
+
+        res_vietnamese = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_vietnamese.person.update!(name: "Trần Tử Kiên")
+
+        # Test names with bullet
+        res_bullet = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_bullet.person.update!(name: "Arabel•la Puig Villacorta")
+
+        # Test name with Dutch "in 't"
+        res_dutch = create(:inbox_result, competition: competition1, event_id: "333oh", round: round_333oh)
+        res_dutch.person.update!(name: "Jelle in 't Veld")
+
+        validator_args = [
+          { competition_ids: [competition1.id], model: InboxResult },
+          { results: InboxResult.where(competition_id: competition1.id), model: InboxResult },
+        ]
+
+        validator_args.each do |arg|
+          pv = PV.new.validate(**arg)
+          # None of these names should trigger SPECIAL_CHARACTERS_IN_NAME_WARNING
+          expect(pv.warnings).to be_empty
+          expect(pv.errors).to be_empty
         end
       end
     end

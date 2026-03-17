@@ -21,6 +21,7 @@ x-app: &app
 x-app-environment: &appEnv
   <<: *env
   SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
+  ACTIONCABLE_REDIS_URL: redis://wca_redis:6379/2
   MAILCATCHER_SMTP_HOST: wca_mailcatcher
 
 services:
@@ -172,8 +173,8 @@ services:
   wca_redis:
     image: redis:7.0-alpine
     container_name: "redis-main"
-    expose:
-      - "6379"
+    ports:
+      - "6379:6379"
     command: redis-server --loglevel warning
     volumes:
       - cache_volume:/data
@@ -181,7 +182,7 @@ services:
       - wca-main
 
   wca_playwright:
-    image: mcr.microsoft.com/playwright:v1.56.1
+    image: mcr.microsoft.com/playwright:v1.58.2
     container_name: "playwright"
     extra_hosts:
       - "hostmachine:host-gateway"
@@ -191,9 +192,12 @@ services:
       - SYS_ADMIN
     init: true
     environment:
-      - DEBIAN_FRONTEND=noninteractive
-      - DEBUG=pw:api
-      - DISPLAY=$DISPLAY
+      DEBIAN_FRONTEND: noninteractive
+      DEBUG: pw:api
+      DISPLAY: $DISPLAY
+      PW_TEST_CONNECT_WS_ENDPOINT: ""
+      PW_TEST_BACKEND_HEALTH_URL: http://wca_on_rails:3000/api/v0/healthcheck
+      PW_TEST_FRONTEND_HEALTH_URL: http://nextjs:3001
     ports:
       - "8089:8089"
     working_dir: /app

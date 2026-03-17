@@ -28,6 +28,7 @@ const areGroupable = (a, b) => (
   a.startTime === b.startTime
   && a.endTime === b.endTime
   && a.activityCode === b.activityCode
+  && a.name === b.name
 );
 
 // assumes they are sorted

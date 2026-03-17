@@ -752,10 +752,10 @@ zh-TW:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 27c2251
-        receive_delegate_reports: 如果您是高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花一個小時才生效。
-        #original_hash: 364624c
-        delegate_reports_region: 如果您想要收到所有的報告，請在這個欄位留白(下拉式選單的最上面)。請注意：這個變更可能需要一個小時才會生效。
+        #original_hash: c564b74
+        receive_delegate_reports: 如果您是高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花12個小時才生效。
+        #original_hash: 0017d38
+        delegate_reports_region: 如果您想要收到所有的報告，請在這個欄位留白(下拉式選單的最上面)。請注意：這個變更可能需要12個小時才會生效。
         #original_hash: 0627e5c
         otp_attempt: 請開啟您的行動裝置上的應用程式來取得一次性的密碼，或是輸入您其中一個備用碼。
       dob_contact:
@@ -792,10 +792,10 @@ zh-TW:
         #original_hash: 74affff
         incidents: >-
           請報告所有非一般的事件。請把意外事件按照號碼從1.開始排序，好讓其他代表根據號碼發表回應。就算所有事物看起來都很類似，請列出那些最值得報告的事項。如果您需要意見回饋，請在下面適當的部分選擇做選擇。
-        #original_hash: 8af00aa
+        #original_hash: f2309fc
         setup_images: >-
-          請至少選擇 %{image_count}
-          張能夠說明比賽現場設置的照片（如打亂區、比賽區等）。您可以一次選擇多個檔案。只有在上傳足夠數量的其他圖片後，才能刪除現有圖片（如果您想替換某張圖片，請先上傳新的，再刪除舊的）。
+          您必須選擇 %{image_count}
+          張能夠說明比賽現場打亂區、比賽區的照片等(其他照片也沒問題)。您可以一次選擇多個檔案。只有在上傳足夠數量的其他圖片後，才能刪除現有圖片（如果您想替換某張圖片，請先上傳新的，再刪除舊的）。
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1507,10 +1507,10 @@ zh-TW:
     support:
       #original_hash: 610edba
       title: 幫助WCA
-      #original_hash: 1aaf818
+      #original_hash: c254335
       text: >-
         世界方塊協會是美利堅合眾國
-        501(c)(3)免稅組織。由於我們是一個100%志願者主導的非營利團體，我們歡迎您的捐款，這讓我們能夠拓展我們的願景，並幫助全世界舉辦更讓人樂於其中的比賽。
+        501(c)(3)免稅組織。由於我們是一個100%志願者主導的非營利團體，我們誠摯歡迎您的捐款，協助我們進一步實現賦能全球魔術方塊速解社群的宗旨，並維護一個對所有人而言既有趣又公平的競賽環境。
       #original_hash: 65c84ec
       button: 我還想知道有哪些方法能幫助WCA
   users:
@@ -2223,8 +2223,6 @@ zh-TW:
       results_still_processing: 我們正忙著處理這場比賽的成績，應該不久後就能查看。
       #original_hash: e205d73
       results_already_posted: 成績已被公告。
-      #original_hash: 376f461
-      results_posted: 已成功公布成績！
       #original_hash: afe3a23
       results_preview_alert: 您正在瀏覽尚未公布的成績。
       #original_hash: 16dd227
@@ -2391,10 +2389,10 @@ zh-TW:
       event_change_deadline_edits_allowed_html: '如果您是正式報名參賽者，您可以在 %{event_change_deadline} 之前在%{register}項目中來更改報名的參賽項目。'
       #original_hash: eff3594
       event_change_deadline_default_html: 我們鼓勵所有人線上報名他們想參加的比賽項目，但您可以在該比賽項目開始前增加比賽報名項目。
-      #original_hash: cf7be5d
-      on_the_spot_registration_fee_html: '現場報名的基本報名費是 %{on_the_spot_base_entry_fee}。'
-      #original_hash: 1637bea
-      on_the_spot_registration_free: 現場報名免費。
+      #original_hash: 51ef4f3
+      on_the_spot_registration_fee_html: '如果還有名額的話，將可以現場報名，基本報名費是 %{on_the_spot_base_entry_fee}。'
+      #original_hash: 2b4ea65
+      on_the_spot_registration_free: 如果還有名額，現場報名費為免費。
       #original_hash: f5f687d
       no_on_the_spot_registration: 不允許現場報名。
       #original_hash: 4df139d
@@ -2630,7 +2628,7 @@ zh-TW:
       confirmed_but_not_visible_html: '您已經確認了這場比賽但尚未公開。請等待%{contact}的公開。'
       #original_hash: e94cba8
       is_visible: 這場比賽已經公開了，因此任何改變將會被公開！
-      #original_hash: 1039850
+      #original_hash: eb98c2c
       pending_confirmation_html: '當您準備請%{contact}許可這場比賽時，請確實填寫所有表格並請代表點選確認。'
       #original_hash: 8966fd0
       submit_create_value: 申請比賽
@@ -2871,8 +2869,8 @@ zh-TW:
         competitor_limit:
           #original_hash: 945da5b
           enabled: 比賽要設置人數上限，只有複數地點的最少步數解比賽能夠不設置人數上限。
-          #original_hash: b7b599b
-          count: 這場比賽允許的參賽人數。目前這數字僅做為發佈消息之用，並不會阻止更多參賽者報名比賽。我們正在開發更完整的報名流程，但這需要一些時間。
+          #original_hash: 6127d47
+          count: 這場比賽允許的參賽人數。此限制是由內建的報名系統所強制執行的。。
           #original_hash: 4bd7102
           reason: 設定人數上限的理由是什麼？請用英文填寫！
           #original_hash: 045d250
@@ -3429,8 +3427,6 @@ zh-TW:
     cancelled_by_html: '已於 %{date_time} 被 %{name} 取消'
     #original_hash: 25e68c3
     cancel_confirm: 您確定要取消這場比賽嗎？
-    #original_hash: 01de5ee
-    post_results: 公告成績
     #original_hash: b6513f1
     results_posted_by_html: '由%{poster_name}在%{date_time}公告。'
     #original_hash: a6b5efe
@@ -3464,14 +3460,12 @@ zh-TW:
         time_limit_html: '如果您超過了時間限制，裁判會停止您並將成績記錄為DNF（參見%{regulation_link}）。'
         #original_hash: 83d204f
         regulation_link_text: '規則%{number}'
-        #original_hash: bd0e4a9
-        guideline_link_text: '指導方針%{number}'
         #original_hash: b2a983a
         cumulative_time_limit: 累計制時間限制
         #original_hash: d47f11a
         cumulative_one_round_html: '可能採用%{cumulative_time_limit}（參見%{regulation_link}）。'
-        #original_hash: c6190b6
-        cumulative_across_rounds_html: '可能於不同輪共同採用%{cumulative_time_limit}（參見%{guideline_link}）。'
+        #original_hash: 44f85f0
+        cumulative_across_rounds_html: '可能於不同輪共同採用%{cumulative_time_limit}（參見%{regulation_link}）。'
         #original_hash: e8d17df
         cutoff_html: '在門檻制比賽中，進入第二階段的秒數門檻（參見%{regulation_link}）。'
         #original_hash: f571a30
@@ -3773,8 +3767,8 @@ zh-TW:
       provider_heading: '%{provider} 付款方式'
       #original_hash: 40a098a
       accept_payments_header: 接受報名付款
-      #original_hash: 7ebe178
-      connect_button: '和 %{provider} 連結'
+      #original_hash: 399052b
+      connect_button: '設定 %{provider}'
       connect_account_info:
         #original_hash: f3fdb64
         stripe: >-
@@ -3787,6 +3781,8 @@ zh-TW:
         stripe: 連結Stripe帳號能讓您在WCA網站上面做變更以及直接退款到您的Stripe帳號。
         #original_hash: 7cedd12
         paypal: 連結PayPal帳號到WCA網站能讓款項直接進入到您的戶頭，以及直接用您的PayPal帳號退款。
+        #original_hash: da39a3e
+        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: '這場比賽被設定成接受%{provider}的付款。這場比賽的WCA代表應該要聯絡比賽公告組 (WCAT)來做連結帳號的更改。'
       #original_hash: bc14f0f
@@ -4071,9 +4067,9 @@ zh-TW:
     spirit_footer: WCA精神
     #original_hash: c1781ee
     our_goals_title: 我們的目標
-    #original_hash: 375db0f
+    #original_hash: c1144d4
     our_goals_content_html: >-
-      <p>世界方塊協會希望藉由增加參加「魔術方塊」比賽的方式，讓全世界更多的年輕人能夠有參與社群跟領導社群的機會。我們相信比賽經驗以及社群經驗可以讓年輕人有成長機會，並藉由新的方塊比賽項目接觸到更多的人群，能夠讓整個社群成長茁壯。關於董事會對於WCA願景與策略的文件可以在<a
+      <p>世界方塊協會希望藉由增加參加「魔術方塊」比賽的方式，讓全世界更多的年輕人能夠有參與社群跟領導社群的機會。我們相信比賽經驗以及社群經驗可以讓年輕人有成長機會，並藉由新的方塊比賽項目接觸到更多的人群，能夠讓整個社群成長茁壯。關於董事會對於WCA的策略計畫文件可以在<a
       href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">這裡</a>閱覽。</p>
     #original_hash: f64ccc7
     whats_next_title: WCA的下一步是甚麼？
@@ -4151,8 +4147,6 @@ zh-TW:
     codeofconduct: 行為準則
     #original_hash: 4f05e8f
     finances: 財政
-    #original_hash: d1b1406
-    vision_and_strategy: 願景與戰略
   education:
     #original_hash: 746e863
     title: WCA教育資源

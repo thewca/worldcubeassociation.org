@@ -1,9 +1,16 @@
 "use server";
 
 import { Container, VStack } from "@chakra-ui/react";
-import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
+import {
+  LiveResultProvider,
+  MultiRoundResultProvider,
+} from "@/providers/LiveResultProvider";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
+import OpenapiError from "@/components/ui/openapiError";
+import { getT } from "@/lib/i18n/get18n";
+import events from "@/lib/wca/data/events";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 
 export default async function ResultPage({
   params,
@@ -11,26 +18,67 @@ export default async function ResultPage({
   params: Promise<{ roundId: string; competitionId: string }>;
 }) {
   const { roundId, competitionId } = await params;
+  const { t } = await getT();
 
-  const resultsRequest = await getResultByRound(competitionId, roundId);
+  const { data, error, response } = await getResultByRound(
+    competitionId,
+    roundId,
+  );
 
-  if (!resultsRequest.data) {
-    return <p>Error loading Results</p>;
+  if (error) {
+    return <OpenapiError response={response} t={t} />;
   }
 
-  const { results, id, competitors } = resultsRequest.data;
+  const { competitors, format, id, linked_round_ids } = data;
+
+  if (linked_round_ids) {
+    const linkedRounds = await Promise.all(
+      linked_round_ids
+        .filter((wcif_id) => wcif_id !== id)
+        .map((wcif_id) => getResultByRound(competitionId, wcif_id)),
+    );
+
+    const erroredResponse = linkedRounds.find((data) => data.error);
+
+    if (erroredResponse) {
+      return <OpenapiError response={erroredResponse.response} t={t} />;
+    }
+
+    return (
+      <Container bg="bg">
+        <VStack align="left">
+          <MultiRoundResultProvider
+            initialRounds={[data, ...linkedRounds.map((d) => d.data!)]}
+            competitionId={competitionId}
+          >
+            <LiveUpdatingResultsTable
+              formatId={format}
+              roundWcifId={roundId}
+              competitors={competitors}
+              competitionId={competitionId}
+              title="Live Results"
+              isLinkedRound
+            />
+          </MultiRoundResultProvider>
+        </VStack>
+      </Container>
+    );
+  }
+
+  const { eventId, roundNumber } = parseActivityCode(roundId);
 
   return (
     <Container bg="bg">
       <VStack align="left">
-        <LiveUpdatingResultsTable
-          roundId={Number.parseInt(roundId, 10)}
-          results={results}
-          eventId={parseActivityCode(id).eventId}
-          competitors={competitors}
-          competitionId={competitionId}
-          title="Live Results"
-        />
+        <LiveResultProvider initialRound={data} competitionId={competitionId}>
+          <LiveUpdatingResultsTable
+            formatId={format}
+            roundWcifId={roundId}
+            competitors={competitors}
+            competitionId={competitionId}
+            title={`${events.byId[eventId].name} - Round ${roundNumber}`}
+          />
+        </LiveResultProvider>
       </VStack>
     </Container>
   );

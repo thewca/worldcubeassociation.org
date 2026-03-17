@@ -436,7 +436,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
       json = response.parsed_body
       expect(json).to eq(
         'export_date' => export_timestamp.iso8601,
-        'export_version' => 'v2.0.0',
+        'export_version' => 'v2.0.2',
         'sql_url' => "#{root_url}export/results/v2/sql",
         'sql_filesize_bytes' => 123_456,
         'tsv_url' => "#{root_url}export/results/v2/tsv",
