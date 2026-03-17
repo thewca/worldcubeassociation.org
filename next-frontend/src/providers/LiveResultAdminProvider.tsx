@@ -14,10 +14,13 @@ interface AdminResultsContextValue {
   attempts: number[];
   error: string;
   success: string;
-  isPendingUpdate: boolean;
+  isPending: boolean;
   handleRegistrationIdChange: (value: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
   handleSubmit: () => void;
+  clearCompetitorsResults: (registrationId: number) => void;
+  quitCompetitor: (registrationId: number, toAdvance: number[]) => void;
+  addCompetitorToRound: (registrationId: number) => Promise<void>;
 }
 
 function zeroedArrayOfSize(size: number) {
@@ -84,6 +87,52 @@ export function LiveResultAdminProvider({
     },
   );
 
+  const { mutateAsync: addCompetitorMutation, isPending: isPendingAdd } =
+    api.useMutation(
+      "put",
+      "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
+      {
+        onError: () => {
+          setError("Failed to add Competitor. Please try again.");
+        },
+      },
+    );
+
+  const addCompetitorToRound = useCallback(
+    async (registrationId: number) => {
+      await addCompetitorMutation({
+        params: {
+          path: {
+            registrationId,
+            competitionId,
+            roundId,
+          },
+        },
+      });
+    },
+    [addCompetitorMutation, competitionId, roundId],
+  );
+
+  const { mutate: mutateQuit, isPending: isPendingQuit } = api.useMutation(
+    "delete",
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
+    {
+      onError: () => {
+        setError("Failed to Quit Competitor. Please try again.");
+      },
+    },
+  );
+
+  const { mutate: mutateClear, isPending: isPendingClear } = api.useMutation(
+    "put",
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}/clear",
+    {
+      onError: () => {
+        setError("Failed to Quit Competitor. Please try again.");
+      },
+    },
+  );
+
   const handleAttemptChange = (index: number, value: number) => {
     const newAttempts = [...attempts];
     newAttempts[index] = value;
@@ -110,6 +159,25 @@ export function LiveResultAdminProvider({
     });
   };
 
+  const clearCompetitorsResults = (registrationId: number) => {
+    mutateClear({
+      params: {
+        path: { competitionId, roundId, registrationId },
+      },
+    });
+  };
+
+  const quitCompetitor = (registrationId: number, toAdvance: number[]) => {
+    mutateQuit({
+      params: {
+        path: { competitionId, roundId, registrationId },
+      },
+      body: {
+        advancing_ids: toAdvance,
+      },
+    });
+  };
+
   return (
     <AdminResultsContext.Provider
       value={{
@@ -117,10 +185,14 @@ export function LiveResultAdminProvider({
         attempts,
         error,
         success,
-        isPendingUpdate,
+        isPending:
+          isPendingUpdate || isPendingClear || isPendingQuit || isPendingAdd,
+        quitCompetitor,
         handleRegistrationIdChange,
         handleAttemptChange,
         handleSubmit,
+        addCompetitorToRound,
+        clearCompetitorsResults,
       }}
     >
       {children}

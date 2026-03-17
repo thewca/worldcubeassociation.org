@@ -1065,10 +1065,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_104129) do
     t.integer "average", default: 0, null: false
     t.integer "best", default: 0, null: false
     t.date "competition_end_date", null: false
+    t.integer "competition_reg_year", null: false
+    t.string "continent_id", null: false
     t.string "country_id", null: false
     t.string "event_id", null: false
+    t.string "person_id", null: false
     t.index ["event_id", "country_id", "average", "competition_end_date"], name: "idx_on_eventId_countryId_average_competitionEndDate_b424c59953"
     t.index ["event_id", "country_id", "best", "competition_end_date"], name: "idx_on_eventId_countryId_best_competitionEndDate_4e01b1ae38"
+    t.index ["person_id", "country_id", "event_id", "competition_reg_year", "average", "result_id"], name: "concise_average_speedup"
+    t.index ["person_id", "country_id", "event_id", "competition_reg_year", "best", "result_id"], name: "concise_single_speedup"
   end
 
   create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1447,6 +1452,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_104129) do
   create_table "uploaded_jsons", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
     t.text "json_str", size: :long
+    t.string "upload_type", null: false
     t.index ["competition_id"], name: "index_uploaded_jsons_on_competition_id"
   end
 
