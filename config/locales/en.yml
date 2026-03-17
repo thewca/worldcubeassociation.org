@@ -2931,7 +2931,7 @@ en:
       single_name_warning: "'%{name}' has only one name. Please confirm that this is indeed the competitor's full name according to an official document."
       competitor_limit_exceeded_warning: "The number of persons in the competition (%{n_competitors}) is above the competitor limit (%{competitor_limit}). The results of the competitors registered after the competitor limit was reached must be removed."
       registration_details_mismatch_warning: "Person with registrant ID %{person_id} (%{name}) has details that do not match their registration: %{mismatches}"
-      missing_matching_registration_warning: "There is no matching registrations for at least one competitor."
+      missing_matching_registration_warning: "Person %{name} does not have a matching registration."
     results:
       automatically_position_fixed_info: "[%{round_id}] Automatically fixed the position of %{person_name} from %{pos} to %{expected_pos}."
       mbf_result_over_time_limit_warning: "[%{round_id}] Result '%{result}' for %{person_name} is over the time limit. Please ensure this is due to time penalties before sending the results, or fix the result to DNF."

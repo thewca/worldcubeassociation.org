@@ -399,7 +399,8 @@ RSpec.describe PV do
           pv = PV.new.validate(**arg)
           expect(pv.warnings).to include(
             RV::ValidationWarning.new(PV::MISSING_MATCHING_REGISTRATION_WARNING,
-                                      :persons, competition_with_regs.id),
+                                      :persons, competition_with_regs.id,
+                                      name: person_without_reg.name),
           )
         end
       end
@@ -447,7 +448,8 @@ RSpec.describe PV do
           pv = PV.new.validate(**arg)
           expect(pv.warnings).not_to include(
             RV::ValidationWarning.new(PV::MISSING_MATCHING_REGISTRATION_WARNING,
-                                      :persons, competition_no_regs.id),
+                                      :persons, competition_no_regs.id,
+                                      name: person.name),
           )
         end
       end

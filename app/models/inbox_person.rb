@@ -28,13 +28,12 @@ class InboxPerson < ApplicationRecord
   end
 
   def registration_mismatches
-    return [] unless registration
+    return [] unless registration # This line may not be needed, because we are doing the check in persons_validator. This needs to be removed before merging.
 
     mismatch_checks = [:name, :country_iso2, :gender, :dob]
     mismatches = mismatch_checks.filter_map do |field|
       ibp_data = self.public_send(field).presence
       reg_data = registration.public_send(field).presence
-      
       "#{field} ('#{ibp_data}' VS '#{reg_data}')" if ibp_data != reg_data
     end
   end

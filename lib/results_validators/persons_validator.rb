@@ -221,17 +221,18 @@ module ResultsValidators
         # This could have been managed by overriding competition_associations, and adding `:registrations`,
         # but it was not so straightforward. Also since `InboxPerson` will soon be removed entirely, didn't
         # go deep into it.
-        inbox_person_ref_ids = competition_data.persons.grep(InboxPerson).map(&:ref_id)
+        inbox_person_ref_ids = competition_data.persons.map(&:ref_id)
         inbox_persons = InboxPerson.where(competition_id: competition.id, id: inbox_person_ref_ids)
         registrations_by_id = competition.registrations.where(registrant_id: inbox_person_ref_ids).index_by(&:registrant_id)
 
-        if inbox_persons.any? { |p| !registrations_by_id.key?(p.ref_id.to_i) }
-          @warnings << ValidationWarning.new(MISSING_MATCHING_REGISTRATION_WARNING,
-                                             :persons, competition.id)
-          next
-        end
-
         inbox_persons.each do |p|
+          unless registrations_by_id.key?(p.ref_id.to_i)
+            @warnings << ValidationWarning.new(MISSING_MATCHING_REGISTRATION_WARNING,
+                                               :persons, competition.id,
+                                               name: p.name)
+            next
+          end
+
           mismatches = p.registration_mismatches
           next if mismatches.empty?
 
