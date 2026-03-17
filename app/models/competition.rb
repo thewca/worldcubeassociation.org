@@ -675,6 +675,7 @@ class Competition < ApplicationRecord
              'continent',
              'championships',
              'rounds',
+             'linked_rounds',
              'uploaded_jsons',
              'wcif_extensions',
              'bookmarked_competitions',
