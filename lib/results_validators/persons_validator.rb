@@ -26,6 +26,7 @@ module ResultsValidators
     SINGLE_NAME_WARNING = :single_name_warning
     SPECIAL_CHARACTERS_IN_NAME_WARNING = :special_characters_in_name_warning
     REGISTRATION_DETAILS_MISMATCH_WARNING = :registration_details_mismatch_warning
+    MISSING_MATCHING_REGISTRATION_WARNING = :missing_matching_registration_warning
 
     def self.description
       "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
@@ -214,7 +215,23 @@ module ResultsValidators
           end
         end
 
-        competition_data.persons.grep(InboxPerson).each do |p|
+        next unless competition.use_wca_registration? || competition.registrations.any?
+
+        # Load registrations ahead of time here so we don't query for each InboxPerson.
+        # This could have been managed by overriding competition_associations, and adding `:registrations`,
+        # but it was not so straightforward. Also since `InboxPerson` will soon be removed entirely, didn't
+        # go deep into it.
+        inbox_person_ref_ids = competition_data.persons.grep(InboxPerson).map(&:ref_id)
+        inbox_persons = InboxPerson.where(competition_id: competition.id, id: inbox_person_ref_ids)
+        registrations_by_id = competition.registrations.where(registrant_id: inbox_person_ref_ids).index_by(&:registrant_id)
+
+        if inbox_persons.any? { |p| !registrations_by_id.key?(p.ref_id.to_i) }
+          @warnings << ValidationWarning.new(MISSING_MATCHING_REGISTRATION_WARNING,
+                                             :persons, competition.id)
+          next
+        end
+
+        inbox_persons.each do |p|
           mismatches = p.registration_mismatches
           next if mismatches.empty?
 
