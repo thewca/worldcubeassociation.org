@@ -1911,6 +1911,10 @@ class Competition < ApplicationRecord
     }
   end
 
+  def linked_rounds
+    rounds.where.not(linked_round_id: nil)
+  end
+
   def set_wcif!(wcif, current_user)
     JSON::Validator.validate!(Competition.wcif_json_schema, wcif)
 
