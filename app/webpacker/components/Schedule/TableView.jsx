@@ -137,8 +137,6 @@ function SingleDayTable({
               (round) => round.id === getActivityRoundId(representativeActivity),
             );
 
-            console.log(activityRound?.id)
-
             return (
               <ActivityRow
                 key={representativeActivity.id}
