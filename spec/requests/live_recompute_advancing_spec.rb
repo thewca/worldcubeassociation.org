@@ -302,6 +302,89 @@ RSpec.describe "WCA Live API" do
     end
   end
 
+  describe "Advancing Questionable" do
+    context 'with Percent Condition' do
+      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition) }
+      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+
+      it 'correctly sets advancing questionable to true if the first result is entered' do
+        registration = registrations.first
+        round1.open_round!(User.first)
+
+        live_results = round1.live_results
+
+        expect(live_results.count).to be 5
+
+        registration_result = live_results.find_by!(registration_id: registration.id)
+
+        UpdateLiveResultJob.perform_now(registration_result, Array.new(5) { |i| { value: (i + 1) * 500, attempt_number: i + 1 } }, User.first.id)
+
+        expect(registration_result.reload.advancing_questionable).to be true
+      end
+    end
+
+    context 'with RankingCondition (top 3 advance)' do
+      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition) }
+      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+
+      it 'correctly sets advancing questionable to true if the first result is entered' do
+        registration = registrations.first
+        round1.open_round!(User.first)
+
+        live_results = round1.live_results
+
+        expect(live_results.count).to be 5
+
+        registration_result = live_results.find_by!(registration_id: registration.id)
+
+        UpdateLiveResultJob.perform_now(registration_result, Array.new(5) { |i| { value: (i + 1) * 500, attempt_number: i + 1 } }, User.first.id)
+
+        expect(registration_result.reload.advancing_questionable).to be true
+      end
+    end
+
+    context 'with AttemptResultCondition' do
+      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition) }
+      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+
+      it 'correctly sets advancing questionable to true if the first result entered is under the condition' do
+        registration = registrations.first
+        round1.open_round!(User.first)
+
+        live_results = round1.live_results
+
+        expect(live_results.count).to be 5
+
+        registration_result = live_results.find_by!(registration_id: registration.id)
+
+        UpdateLiveResultJob.perform_now(registration_result, Array.new(5) { |i| { value: (i + 1) * 50, attempt_number: i + 1 } }, User.first.id)
+
+        registration_result.reload
+
+        expect(registration_result.average).to be 150
+        expect(registration_result.advancing_questionable).to be true
+      end
+
+      it 'correctly sets advancing questionable to false if the first result entered is above the condition' do
+        registration = registrations.first
+        round1.open_round!(User.first)
+
+        live_results = round1.live_results
+
+        expect(live_results.count).to be 5
+
+        registration_result = live_results.find_by!(registration_id: registration.id)
+
+        UpdateLiveResultJob.perform_now(registration_result, Array.new(5) { |i| { value: (i + 1) * 500, attempt_number: i + 1 } }, User.first.id)
+
+        registration_result.reload
+
+        expect(registration_result.average).to be 1500
+        expect(registration_result.advancing_questionable).to be false
+      end
+    end
+  end
+
   describe 'Next Advancing to round' do
     context 'with RankingCondition (top 3 advance)' do
       let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition) }
