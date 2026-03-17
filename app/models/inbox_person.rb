@@ -10,7 +10,7 @@ class InboxPerson < ApplicationRecord
 
   belongs_to :person, -> { current }, foreign_key: "wca_id", primary_key: "wca_id", optional: true
   belongs_to :country, foreign_key: "country_iso2", primary_key: "iso2"
-  belongs_to :registration, foreign_key: %i[competition_id id], primary_key: %i[competition_id registrant_id], optional: true
+  belongs_to :registration, foreign_key: %i[competition_id id], primary_key: %i[competition_id registrant_id], optional: true, inverse_of: :inbox_person
 
   alias_attribute :ref_id, :id
   alias_method :wca_person, :person

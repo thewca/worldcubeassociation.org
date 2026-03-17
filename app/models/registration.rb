@@ -34,6 +34,8 @@ class Registration < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all
 
+  has_one :inbox_person, foreign_key: %i[competition_id id], primary_key: %i[competition_id registrant_id], inverse_of: :registration
+
   enum :competing_status, {
     pending: Registrations::Helper::STATUS_PENDING,
     accepted: Registrations::Helper::STATUS_ACCEPTED,
