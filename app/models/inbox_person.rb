@@ -35,7 +35,7 @@ class InboxPerson < ApplicationRecord
     MISMATCH_CHECKS.filter_map do |field|
       ibp_data = public_send(field).presence
       reg_data = registration.public_send(field).presence
-      "#{I18n.t("activerecord.attributes.user.#{field}", locale: :en)} ('#{ibp_data}' VS '#{reg_data}')" if ibp_data != reg_data
+      "#{I18n.t("activerecord.attributes.user.#{field}")} ('#{ibp_data}' VS '#{reg_data}')" if ibp_data != reg_data
     end
   end
 end
