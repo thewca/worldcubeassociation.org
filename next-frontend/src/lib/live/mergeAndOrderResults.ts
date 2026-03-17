@@ -5,7 +5,7 @@ import { orderResults } from "@/lib/live/orderResults";
 import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
 import { LiveResult, LiveRound } from "@/types/live";
 
-type CompetitorWithResults = components["schemas"]["LiveCompetitor"] &
+export type CompetitorWithResults = components["schemas"]["LiveCompetitor"] &
   Pick<LiveRound, "results"> &
   Pick<LiveResult, "advancing_questionable" | "advancing" | "global_pos">;
 
