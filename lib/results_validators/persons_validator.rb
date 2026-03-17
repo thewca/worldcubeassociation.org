@@ -222,7 +222,7 @@ module ResultsValidators
         # but it was not so straightforward. Also since `InboxPerson` will soon be removed entirely, didn't
         # go deep into it.
         inbox_person_ref_ids = competition_data.persons.map(&:ref_id)
-        inbox_persons = competition.inbox_persons.left_joins(:registration).where(id: inbox_person_ref_ids)
+        inbox_persons = competition.inbox_persons.eager_load(:registration).where(id: inbox_person_ref_ids)
         competition_registrant_ids = competition.registrations.pluck(:registrant_id)
 
         inbox_persons.find_each do |p|
