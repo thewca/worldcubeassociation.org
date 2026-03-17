@@ -2,7 +2,7 @@
 
 class Api::V1::Live::LiveController < Api::V1::ApiController
   protect_from_forgery with: :null_session
-  skip_before_action :require_user!, only: %i[round_results by_person podiums]
+  skip_before_action :require_user!, only: %i[round_results by_person podiums rounds]
 
   def add_or_update_result
     results = params.expect(attempts: [%i[value attempt_number]])
@@ -39,7 +39,6 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
   def rounds
     competition = Competition.find(params.require(:competition_id))
-    require_manage!(competition)
 
     render json: { rounds: competition.rounds.map(&:to_live_info_json) }
   end
