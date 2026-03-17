@@ -35,7 +35,7 @@ export default function CalendarView({
   activeEventIds,
   calendarLocale,
   wcifEvents,
-  linked_rounds,
+  linkedRounds,
 }) {
   const fcActivities = activeRooms.flatMap((room) => room.activities
     .filter((activity) => ['other', ...activeEventIds].includes(getActivityEventId(activity)))
@@ -45,7 +45,7 @@ export default function CalendarView({
       const eventColor = activity.activityCode.startsWith('other') ? ACTIVITY_OTHER_GREY : room.color;
 
       return ({
-        title: linked_rounds.includes(activity.activityCode) ? `${eventName} (Dual Round)` : eventName,
+        title: linkedRounds.includes(activity.activityCode) ? `${eventName} (Dual Round)` : eventName,
         start: activity.startTime,
         end: activity.endTime,
         backgroundColor: eventColor,

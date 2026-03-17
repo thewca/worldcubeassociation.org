@@ -5,6 +5,7 @@ class Competition < ApplicationRecord
   has_many :competition_events, -> { order(:event_id) }, dependent: :destroy
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
+  has_many :linked_rounds, -> { distinct.reorder(nil) }, through: :rounds
   has_many :registrations, dependent: :destroy
   has_many :results
   has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }
@@ -1909,10 +1910,6 @@ class Competition < ApplicationRecord
       "numberOfDays" => number_of_days,
       "venues" => competition_venues.includes(competition_venues_includes_associations).map(&:to_wcif),
     }
-  end
-
-  def linked_rounds
-    rounds.where.not(linked_round_id: nil)
   end
 
   def set_wcif!(wcif, current_user)

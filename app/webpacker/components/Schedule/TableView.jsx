@@ -35,7 +35,7 @@ export default function TableView({
   activeVenueOrNull,
   competitionName,
   wcifEvents,
-  linked_rounds,
+  linkedRounds,
 }) {
   const activeRounds = activeEvents.flatMap((event) => event.rounds);
 
@@ -80,7 +80,7 @@ export default function TableView({
             activeVenueOrNull={activeVenueOrNull}
             competitionName={competitionName}
             wcifEvents={wcifEvents}
-            linked_rounds={linked_rounds}
+            linkedRounds={linkedRounds}
           />
         );
       })}
@@ -98,7 +98,7 @@ function SingleDayTable({
   activeVenueOrNull,
   competitionName,
   wcifEvents,
-  linked_rounds,
+  linkedRounds,
 }) {
   const title = I18n.t('competitions.schedule.schedule_for_full_date', { date: date.toLocaleString(DateTime.DATE_HUGE) });
 
@@ -148,7 +148,7 @@ function SingleDayTable({
                 rooms={rooms}
                 timeZone={timeZone}
                 wcifEvents={wcifEvents}
-                isLinked={linked_rounds.includes(activityRound?.id)}
+                isLinked={linkedRounds.includes(activityRound?.id)}
               />
             );
           })
