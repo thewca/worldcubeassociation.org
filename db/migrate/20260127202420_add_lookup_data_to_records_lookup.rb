@@ -20,8 +20,8 @@ class AddLookupDataToRecordsLookup < ActiveRecord::Migration[8.1]
 
     up_only do
       # Don't need a `down` because the `change_table` above will just delete the whole column altogether.
-      say_with_time("Recomputing RRL index with augmented columns") do
-        CheckRegionalRecords.add_to_lookup_table
+      say_with_time("Recomputing RRL index with augmented columns (this may take a moment)") do
+        CheckRegionalRecords.add_to_lookup_table unless Rails.env.production?
       end
     end
 
