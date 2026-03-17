@@ -25,7 +25,6 @@ class UserRole < ApplicationRecord
     :changed_parameter,
     :previous_value,
     :new_value,
-    keyword_init: true,
   )
 
   UserRoleEmailRecipient = Struct.new(

@@ -1,146 +1,137 @@
 import _ from "lodash";
-import events from "@/lib/wca/data/events";
-import { Link, Table } from "@chakra-ui/react";
-import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import { components } from "@/types/openapi";
-import { recordTagBadge } from "@/components/results/TableCells";
-
-const customOrderBy = (
-  competitor: components["schemas"]["LiveCompetitor"],
-  resultsByRegistrationId: Record<string, components["schemas"]["LiveResult"]>,
-) => {
-  const competitorResult = resultsByRegistrationId[competitor.id];
-
-  if (!competitorResult) {
-    return competitor.id;
-  }
-
-  return competitorResult.global_pos;
-};
-
-export const rankingCellColorPalette = (
-  result: components["schemas"]["LiveResult"],
-) => {
-  if (result?.advancing) {
-    return "green";
-  }
-
-  if (result?.advancing_questionable) {
-    return "yellow";
-  }
-
-  return "";
-};
+import { Table, useBreakpointValue } from "@chakra-ui/react";
+import formats from "@/lib/wca/data/formats";
+import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
+import {
+  LiveCompetitorCell,
+  LiveTableHeader,
+  LivePositionCell,
+  LiveAttemptsCells,
+  LiveStatCells,
+} from "@/components/live/Cells";
+import { CountryCell } from "@/components/results/ResultTableCells";
+import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
+import { mergeAndOrderResults } from "@/lib/live/mergeAndOrderResults";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { LiveCompetitor } from "@/types/live";
 
 export default function LiveResultsTable({
-  results,
-  eventId,
+  resultsByRegistrationId,
+  formatId,
+  roundWcifId,
   competitionId,
   competitors,
   isAdmin = false,
   showEmpty = true,
+  showLinkedRoundsView = false,
 }: {
-  results: components["schemas"]["LiveResult"][];
-  eventId: string;
+  resultsByRegistrationId: LiveResultsByRegistrationId;
+  formatId: string;
+  roundWcifId: string;
   competitionId: string;
-  competitors: components["schemas"]["LiveCompetitor"][];
+  competitors: LiveCompetitor[];
   isAdmin?: boolean;
   showEmpty?: boolean;
+  showLinkedRoundsView?: boolean;
 }) {
-  const resultsByRegistrationId = _.keyBy(results, "registration_id");
-  const event = events.byId[eventId];
+  const competitorsByRegistrationId = _.keyBy(competitors, "id");
 
-  const sortedCompetitors = _.orderBy(
-    competitors,
-    [
-      (competitor) => customOrderBy(competitor, resultsByRegistrationId),
-      (competitor) => customOrderBy(competitor, resultsByRegistrationId),
-    ],
-    ["asc", "asc"],
+  const { eventId } = parseActivityCode(roundWcifId);
+
+  const format = formats.byId[formatId];
+
+  const competitorsWithOrderedResults = mergeAndOrderResults(
+    resultsByRegistrationId,
+    competitorsByRegistrationId,
+    format,
   );
 
-  const solveCount = event.recommendedFormat.expected_solve_count;
-  const attemptIndexes = [...Array(solveCount).keys()];
+  const stats = statColumnsForFormat(format);
+
+  const showFull = useBreakpointValue({ base: false, md: true });
 
   return (
-    <Table.Root>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
-          {isAdmin && <Table.ColumnHeader>Id</Table.ColumnHeader>}
-          <Table.ColumnHeader>Competitor</Table.ColumnHeader>
-          {attemptIndexes.map((num) => (
-            <Table.ColumnHeader key={num} textAlign="right">
-              {num + 1}
-            </Table.ColumnHeader>
-          ))}
-          <Table.ColumnHeader textAlign="right">Average</Table.ColumnHeader>
-          <Table.ColumnHeader textAlign="right">Best</Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-
+    <Table.Root size="sm">
+      <LiveTableHeader
+        format={format}
+        isLinked={showLinkedRoundsView}
+        showFull={showFull}
+      />
       <Table.Body>
-        {sortedCompetitors.map((competitor, index) => {
-          const competitorResult = resultsByRegistrationId[competitor.id];
-          const hasResult = Boolean(competitorResult);
+        {competitorsWithOrderedResults.map((competitorAndTheirResults) => {
+          return competitorAndTheirResults.results.map((result, index) => {
+            const hasResult = result.attempts.length > 0;
+            const showText = !showLinkedRoundsView || index === 0;
+            const rowSpan = showLinkedRoundsView
+              ? competitorAndTheirResults.results.length
+              : 1;
+            const ranking = hasResult
+              ? competitorAndTheirResults.global_pos
+              : "";
 
-          if (!showEmpty && !hasResult) {
-            return null;
-          }
+            if (!showLinkedRoundsView && result.round_wcif_id != roundWcifId)
+              return undefined;
 
-          return (
-            <Table.Row key={competitor.id}>
-              <Table.Cell
-                width={1}
-                layerStyle="fill.deep"
-                textAlign="right"
-                colorPalette={rankingCellColorPalette(competitorResult)}
+            if (!showEmpty && !hasResult) {
+              return null;
+            }
+
+            return (
+              <Table.Row
+                key={`${competitorAndTheirResults.id}-${result.round_wcif_id}`}
               >
-                {index + 1}
-              </Table.Cell>
-              {isAdmin && <Table.Cell>{competitor.registrant_id}</Table.Cell>}
-              <Table.Cell>
-                <Link
-                  href={
-                    isAdmin
-                      ? `/registrations/${competitor.id}/edit`
-                      : `/competitions/${competitionId}/live/competitors/${competitor.id}`
-                  }
-                >
-                  {competitor.user.name}
-                </Link>
-              </Table.Cell>
-              {hasResult &&
-                competitorResult.attempts.map((attempt) => (
-                  <Table.Cell
-                    textAlign="right"
-                    key={`${competitor.id}-${attempt.attempt_number}`}
-                  >
-                    {formatAttemptResult(attempt.value, eventId)}
+                {showText && (
+                  <LivePositionCell
+                    position={hasResult ? ranking : ""}
+                    advancingParams={
+                      showLinkedRoundsView ? competitorAndTheirResults : result
+                    }
+                    rowSpan={rowSpan}
+                  />
+                )}
+                {isAdmin && (
+                  <Table.Cell>
+                    {competitorAndTheirResults.registrant_id}
                   </Table.Cell>
-                ))}
-              {hasResult && (
-                <>
-                  <Table.Cell
-                    textAlign="right"
-                    style={{ position: "relative" }}
-                  >
-                    {formatAttemptResult(competitorResult.average, eventId)}{" "}
-                    {!isAdmin &&
-                      recordTagBadge(competitorResult.average_record_tag)}
+                )}
+                {showText && (
+                  <LiveCompetitorCell
+                    competitionId={competitionId}
+                    competitor={competitorAndTheirResults}
+                    rowSpan={rowSpan}
+                    isAdmin={isAdmin}
+                    link={showFull}
+                  />
+                )}
+                {showLinkedRoundsView && (
+                  <Table.Cell>
+                    {parseActivityCode(result.round_wcif_id).roundNumber}
                   </Table.Cell>
-                  <Table.Cell
-                    textAlign="right"
-                    style={{ position: "relative" }}
-                  >
-                    {formatAttemptResult(competitorResult.best, eventId)}
-                    {!isAdmin &&
-                      recordTagBadge(competitorResult.single_record_tag)}
-                  </Table.Cell>
-                </>
-              )}
-            </Table.Row>
-          );
+                )}
+                {showText && showFull && (
+                  <CountryCell
+                    countryIso2={competitorAndTheirResults.country_iso2}
+                    rowSpan={rowSpan}
+                  />
+                )}
+                {showFull && (
+                  <LiveAttemptsCells
+                    format={format}
+                    attempts={result.attempts}
+                    eventId={eventId}
+                    competitorId={competitorAndTheirResults.id}
+                  />
+                )}
+                <LiveStatCells
+                  stats={stats}
+                  competitorId={competitorAndTheirResults.id}
+                  eventId={eventId}
+                  result={result}
+                  highlight={showText}
+                />
+              </Table.Row>
+            );
+          });
         })}
       </Table.Body>
     </Table.Root>

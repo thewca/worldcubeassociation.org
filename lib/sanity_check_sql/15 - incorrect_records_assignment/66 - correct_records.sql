@@ -10,40 +10,40 @@ WITH round_dates AS (SELECT sa.round_id,
                                csr.event_id,
                                MIN(csr.best) AS old_NR_single
                         FROM concise_single_results csr
-                        WHERE csr.year < 2019
+                        WHERE csr.reg_year < 2019
                         GROUP BY country_id, event_id),
 -- Fetches the NR averages of each country as of the end of the previous year.
      old_nr_averages AS (SELECT car.country_id,
                                 car.event_id,
                                 MIN(car.average) AS old_NR_average
                          FROM concise_average_results car
-                         WHERE car.year < 2019
+                         WHERE car.reg_year < 2019
                          GROUP BY country_id, event_id),
 -- Fetches the CR singles of each continent as of the end of the previous year.
      old_cr_singles AS (SELECT csr.continent_id,
                                csr.event_id,
                                MIN(csr.best) AS old_CR_single
                         FROM concise_single_results csr
-                        WHERE csr.year < 2019
+                        WHERE csr.reg_year < 2019
                         GROUP BY continent_id, event_id),
 -- Fetches the CR averages of each continent as of the end of the previous year.
      old_cr_averages AS (SELECT car.continent_id,
                                 car.event_id,
                                 MIN(car.average) AS old_CR_average
                          FROM concise_average_results car
-                         WHERE car.year < 2019
+                         WHERE car.reg_year < 2019
                          GROUP BY continent_id, event_id),
 -- Fetches WR singles as of the end of the previous year.
      old_wr_singles AS (SELECT csr.event_id,
                                MIN(csr.best) AS old_WR_single
                         FROM concise_single_results csr
-                        WHERE csr.year < 2019
+                        WHERE csr.reg_year < 2019
                         GROUP BY event_id),
 -- Fetches WR averages as of the end of the previous year.
      old_wr_averages AS (SELECT car.event_id,
                                 MIN(car.average) AS old_WR_average
                          FROM concise_average_results car
-                         WHERE car.year < 2019
+                         WHERE car.reg_year < 2019
                          GROUP BY event_id),
 -- Joins round date to results table and filters out rows that are not <= NRs from previous years. Assigns ranking 1 to each single or average that is the best for that country for that day.
      t1 AS (SELECT r.id                                                                 AS results_id,

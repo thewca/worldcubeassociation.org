@@ -105,6 +105,8 @@ module DbDumpHelper
 
       tsv_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README] | tsv_files
       self.zip_and_upload_to_s3(tsv_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{tsv_zip_filename}", *tsv_zip_contents) unless local
+    ensure
+      FileUtils.remove_entry target_dir unless local
     end
   end
 

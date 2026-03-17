@@ -6,10 +6,12 @@ class LiveAttempt < ApplicationRecord
   default_scope { order(:attempt_number) }
 
   belongs_to :live_result
-  has_many :live_attempt_history_entries, dependent: :destroy
 
-  validates :value, presence: true
-  validates :value, numericality: { only_integer: true }
+  has_one :h2h_attempt, dependent: :destroy
+
+  validates :value,
+            presence: true,
+            numericality: { only_integer: true, other_than: 0 }
   validates :attempt_number, numericality: { only_integer: true }
 
   DEFAULT_SERIALIZE_OPTIONS = {
@@ -24,29 +26,11 @@ class LiveAttempt < ApplicationRecord
     value <=> other.value
   end
 
-  def self.build_with_history_entry(value, attempt_number, acting_user)
-    LiveAttempt.build(
-      value: value,
-      attempt_number: attempt_number,
-      live_attempt_history_entries: [
-        LiveAttemptHistoryEntry.build(
-          value: value,
-          entered_at: Time.now.utc,
-          entered_by: acting_user,
-        ),
-      ],
-    )
+  def to_result_attempt
+    ResultAttempt.new(value: value, attempt_number: attempt_number)
   end
 
-  def update_with_history_entry(value, acting_user)
-    self.update(value: value)
-    self.live_attempt_history_entries.create(
-      value: value,
-      entered_at: Time.now.utc,
-      entered_by: acting_user,
-    )
-
-    # Return `self` for method chaining
-    self
+  def self.attempts_changed?(before_attempts, after_attempts)
+    Set.new(before_attempts) != Set.new(after_attempts)
   end
 end

@@ -7,7 +7,7 @@ def db
 end
 
 RSpec.describe "database" do
-  database_info = db.select_one <<-SQL.squish
+  database_info = db.select_one <<~SQL.squish
     SELECT *
     FROM information_schema.schemata
     WHERE schema_name = '#{db.current_database}'
@@ -37,7 +37,7 @@ RSpec.describe "database" do
     next if /archive_phpbb3\w+|schema_migrations|ar_internal_metadata/.match?(table)
 
     describe(table) do
-      table_info = db.select_one <<-SQL.squish
+      table_info = db.select_one <<~SQL.squish
         SELECT *
         FROM information_schema.tables T
         JOIN information_schema.COLLATION_CHARACTER_SET_APPLICABILITY CCSA
@@ -56,7 +56,7 @@ RSpec.describe "database" do
 
       db.columns(table).each do |column|
         describe(column.name) do
-          column_info = db.select_one <<-SQL.squish
+          column_info = db.select_one <<~SQL.squish
             SELECT *
             FROM information_schema.columns
             WHERE table_schema = '#{db.current_database}'

@@ -1016,6 +1016,8 @@ fr-CA:
       contact_wrt:
         #original_hash: da1f7ef
         wca_id: ID WCA
+    #original_hash: 7857124
+    competition_link_html: 'Cliquez <a href=''%{url}''>ici</a> pour accéder à la page de la compétition.'
     errors:
       dob_contact:
         #original_hash: 6139e0a
@@ -2835,9 +2837,9 @@ fr-CA:
       results_not_posted: >-
         Les résultats de cette compétition sont visibles mais n'ont pas encore
         été postés.
-      #original_hash: 9d95f05
+      #original_hash: 7f176a5
       results_still_processing: >-
-        Nous sommes occupés à traiter les résultats de ce concours - ils
+        Nous sommes occupés à traiter les résultats de cette compétition; ils
         devraient être disponibles sous peu.
       #original_hash: 6c46989
       results_already_posted: Les résultats ont déjà été postés.
@@ -3154,14 +3156,22 @@ fr-CA:
         L'épreuve principale était le %{event_name}. Aucun·e gagnant·e n’a été
         déclaré·e, car aucun·e participant·e n’a obtenu de résultats au cours de
         l'épreuve.
+      #original_hash: 99b51cb
+      h2h_winner: >-
+        %{winner} a remporté la finale en face à face de la compétition
+        %{event_name}.
       #original_hash: 27667ac
       winner: '%{winner} a gagné %{result_sentence} dans l''épreuve du %{event_name}.'
       #original_hash: d320def
       first_runner_up: '%{first_runner_up} a terminé second (%{first_runner_up_result})'
+      #original_hash: 956b425
+      h2h_first_runner_up: '%{first_runner_up} a terminé deuxième'
       #original_hash: a5bc1d9
       and: et
       #original_hash: 7e90044
       second_runner_up: '%{second_runner_up} a terminé troisième (%{second_runner_up_result}).'
+      #original_hash: a69f59e
+      h2h_second_runner_up: '%{second_runner_up} a terminé troisième.'
       records:
         #original_hash: 5a24c27
         wr: Records Mondiaux
@@ -4648,8 +4658,8 @@ fr-CA:
       activity: Activité
       #original_hash: a78a655
       no_activities: Aucune activité pour les salles/épreuves sélectionnées.
-      #original_hash: e85468f
-      all_venues: Tout les salles
+      #original_hash: bfb6925
+      all_venues: Toutes les salles
       #original_hash: 4f100fe
       room_or_stage: Salle ou zone
       #original_hash: 7ebefb7
@@ -4678,8 +4688,10 @@ fr-CA:
         other: >-
           Vous consultez l'horaire de la %{venue_name}, une des %{count} salle
           pour cette compétition.
-      #original_hash: df455fa
-      venue_selection_all: 'Vous consultez l''horaire de toutes les salles %{venueCount} à la fois.'
+      #original_hash: f9b04fa
+      venue_selection_all: >-
+        Vous consultez l'horaire de l'ensemble des %{venueCount} salles à la
+        fois.
       #original_hash: 6ae976a
       timezone_message: 'Le fuseau horaire pour cette salle est %{timezone}.'
       #original_hash: f6889a4
@@ -4750,6 +4762,11 @@ fr-CA:
         #original_hash: 5cc5142
         scrambles: Mélanges
     results_table:
+      #original_hash: 66c7be5
+      h2h_results_disclaimer: >-
+        Résultats déterminés par une finale en face à face. Seuls le classement
+        et la meilleure résolution sont affichés, car l'affichage complet des
+        résultats en face à face est encore en cours de développement.
       #original_hash: 43f48b3
       wca_profile: Profil WCA
       #original_hash: 6858354
@@ -5369,10 +5386,10 @@ fr-CA:
   about:
     #original_hash: bc769a7
     title: À propos de la WCA
-    #original_hash: bbf6ce9
+    #original_hash: 191510e
     mission_statement: >-
-      Notre but est d'avoir plus de compétitions dans plus de pays avec plus de
-      personnes et d'amusement, dans des conditions égales et équitables.
+      Notre objectif est de soutenir la communauté mondiale du speedcubing et de
+      garantir un environnement compétitif amusant et équitable pour tous.
     #original_hash: 155adb1
     mission_footer: But de la WCA
     #original_hash: 9179545
@@ -6527,6 +6544,12 @@ fr-CA:
         Le caractère parenthèse utilisé dans « %{name} » est un caractère
         irrégulier, veuillez le remplacer par une parenthèse régulière '(' ou
         ')' et avec un espacement approprié.
+      #original_hash: 9a5202a
+      special_characters_in_name_warning: >-
+        Le nom « %{name} » contient des caractères spéciaux non valides (tels
+        que des chiffres, des guillemets ou d'autres symboles). Les noms ne
+        doivent contenir que des lettres, des espaces, des tirets, des
+        apostrophes, des points et des parenthèses normales.
       #original_hash: 774854c
       successive_uppercase_name_warning: >-
         Le nom de '%{name}' comporte plusieurs lettres majuscules successives.
@@ -6742,3 +6765,8 @@ fr-CA:
       edit_person: Modifier la personne
       #original_hash: aa4151c
       competition_result: Résultat de la compétition
+    stakeholder_role:
+      #original_hash: e8eeb9e
+      actioner: Personne en charge
+      #original_hash: 624ec47
+      requester: Demandeur

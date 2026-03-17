@@ -29,7 +29,7 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
     limit_condition = "LIMIT #{show}"
 
     query = if is_persons
-              <<-SQL.squish
+              <<~SQL.squish
                 SELECT
                   results.*,
                   results.#{value} value,
@@ -53,7 +53,7 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
               SQL
             elsif is_results
               if is_average
-                <<-SQL.squish
+                <<~SQL.squish
                   SELECT
                     results.*,
                     average value,
@@ -71,7 +71,7 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
                   #{limit_condition}
                 SQL
               else
-                <<-SQL.squish
+                <<~SQL.squish
                   SELECT
                     results.*,
                     result_attempts.value,
@@ -97,7 +97,7 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
                 SQL
               end
             elsif is_by_region
-              <<-SQL.squish
+              <<~SQL.squish
                 SELECT
                   results.*,
                   results.#{value} value,
@@ -125,11 +125,15 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
             end
 
     # TODO: move this to rankings-page-api when migration to next is done so this can be properly precompute
-    rankings = Rails.cache.fetch ["rankings-page-api-next", *cache_params, record_timestamp] do
-      DbHelper.execute_cached_query(cache_params, record_timestamp, query)
-    end
+    rankings = Rails.cache.fetch ["rankings-page-api-next", "augmented", *cache_params, record_timestamp] do
+      rows = DbHelper.execute_cached_query(cache_params, record_timestamp, query)
 
-    rankings = rankings.to_a
+      # As of writing this comment, we are maintaining two frontends.
+      #   Augmenting the attempts manually (instead of clever joining)
+      #   is the most reasonable compromise for backwards-compatibility.
+      # Feel free to improve this once the React-Rails frontend is dead.
+      Result.augment_attempts(rows.as_json)
+    end
 
     render json: {
       rankings: rankings,

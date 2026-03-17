@@ -20,15 +20,15 @@ namespace :db do
       ActiveRecord::Base.subclasses
                         .reject { |type| type.to_s.include?('::') || type.to_s == "WiceGridSerializedQuery" }
                         .each do |type|
-        type.find_each do |record|
-          unless record.valid?
-            puts "#<#{type} id: #{record.id}, errors: #{record.errors.full_messages}>"
-            error_count += 1
-          end
-        end
-      rescue StandardError => e
-        puts "An exception occurred: #{e.message}"
-        error_count += 1
+                          type.find_each do |record|
+                            unless record.valid?
+                              puts "#<#{type} id: #{record.id}, errors: #{record.errors.full_messages}>"
+                              error_count += 1
+                            end
+                          end
+                        rescue StandardError => e
+                          puts "An exception occurred: #{e.message}"
+                          error_count += 1
       end
       ActiveRecord::Base.logger.level = original_log_level
 
@@ -160,6 +160,11 @@ namespace :db do
             owner_id: User.find_by!(wca_id: "2005FLEI01").id,
             owner_type: "User",
           )
+
+          # Run the CAD jobs so that results are available
+          LogTask.log_task "Populating CAD tables" do
+            AuxiliaryDataComputation.compute_everything
+          end
         end
       end
     end

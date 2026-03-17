@@ -10,6 +10,7 @@ import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import TicketContent from './TicketContent';
 import SkateholderSelector from './SkateholderSelector';
 import getTicketDetails from './api/getTicketDetails';
+import SelfRoleAssigner from './SelfRoleAssigner';
 
 export default function Wrapper({ id }) {
   return (
@@ -31,17 +32,27 @@ function Tickets({ id }) {
   });
 
   const [userSelectedStakeholder, setUserSelectedStakeholder] = useInputState();
+
+  const {
+    requester_stakeholders: stakeholders = [],
+  } = ticketDetails || {};
+
   const currentStakeholder = useMemo(() => {
     if (userSelectedStakeholder) {
       return userSelectedStakeholder;
-    } if (ticketDetails?.requester_stakeholders.length === 1) {
-      return ticketDetails?.requester_stakeholders[0];
+    } if (stakeholders.length === 1) {
+      return stakeholders[0];
     }
     return null;
-  }, [ticketDetails?.requester_stakeholders, userSelectedStakeholder]);
+  }, [stakeholders, userSelectedStakeholder]);
 
   if (isPendingTicketDetails) return <Loading />;
-  if (isErrorTicketDetails) return <Errored error={errorTicketDetails} />;
+  if (isErrorTicketDetails) {
+    if (errorTicketDetails.message.includes('No access to ticket')) {
+      return <SelfRoleAssigner ticketId={id} />;
+    }
+    return <Errored />;
+  }
 
   return (
     <>
@@ -71,7 +82,7 @@ function Tickets({ id }) {
         <Modal.Header>Select stakeholder</Modal.Header>
         <Modal.Content>
           <SkateholderSelector
-            stakeholderList={ticketDetails?.requester_stakeholders}
+            stakeholderList={stakeholders}
             setUserSelectedStakeholder={setUserSelectedStakeholder}
           />
         </Modal.Content>

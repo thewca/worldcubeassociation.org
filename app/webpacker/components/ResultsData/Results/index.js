@@ -1,5 +1,5 @@
 import React from 'react';
-import ResultRowHeader from './ResultRowHeader';
+import { H2hRowHeader, ResultRowHeader } from './ResultRowHeader';
 import ResultRowBody from './ResultRowBody';
 import { competitionEventResultsApiUrl, newResultUrl } from '../../../lib/requests/routes.js.erb';
 import ViewData from '../ViewData';
@@ -12,6 +12,7 @@ function CompetitionResults({ competitionId, canAdminResults }) {
       dataUrlFn={competitionEventResultsApiUrl}
       newEntryUrlFn={newResultUrl}
       DataRowHeader={ResultRowHeader}
+      H2hRowHeader={H2hRowHeader}
       DataRowBody={ResultRowBody}
     />
   );

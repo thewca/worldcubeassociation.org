@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class AllSanityChecksJob < WcaCronjob
+  before_enqueue do
+    # Sanity checks do not need to run on staging
+    throw :abort unless EnvConfig.WCA_LIVE_SITE?
+  end
+
   def perform
     grouped_by_email = SanityCheckCategory.all.group_by(&:email_to)
 

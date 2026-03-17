@@ -41,6 +41,7 @@ class User < ApplicationRecord
   has_many :active_bans, through: :active_bans_metadata, source: :user_role, class_name: "UserRole"
   has_many :active_groups, through: :active_roles, source: :group, class_name: "UserGroup"
   has_many :board_metadata, through: :active_groups, source: :metadata, source_type: "GroupsMetadataBoard"
+  has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
@@ -77,6 +78,11 @@ class User < ApplicationRecord
 
   FORUM_AGE_REQUIREMENT = 13
 
+  CLEAR_WCA_ID_CLAIM_ATTRIBUTES = {
+    unconfirmed_wca_id: nil,
+    delegate_id_to_handle_wca_id_claim: nil,
+  }.freeze
+
   def self.eligible_voters
     [
       UserGroup.delegate_regions,
@@ -84,9 +90,9 @@ class User < ApplicationRecord
       UserGroup.board,
       UserGroup.officers,
     ].flatten.flat_map(&:active_roles)
-      .select(&:eligible_voter?)
-      .map(&:user)
-      .uniq
+     .select(&:eligible_voter?)
+     .map(&:user)
+     .uniq
   end
 
   def self.leader_senior_voters
@@ -205,8 +211,7 @@ class User < ApplicationRecord
   def maybe_clear_claimed_wca_id
     return unless !claiming_wca_id && ((unconfirmed_wca_id_was.present? && wca_id == unconfirmed_wca_id_was) || unconfirmed_wca_id.blank?)
 
-    self.unconfirmed_wca_id = nil
-    self.delegate_to_handle_wca_id_claim = nil
+    self.assign_attributes(**CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
   end
 
   # Virtual attribute for people claiming a WCA ID.
@@ -762,6 +767,12 @@ class User < ApplicationRecord
           panel_pages[:delegateProbations],
         ],
       },
+      wqac: {
+        name: 'WQAC panel',
+        pages: [
+          panel_pages[:helpfulQueries],
+        ],
+      },
     }
   end
 
@@ -942,7 +953,7 @@ class User < ApplicationRecord
   end
 
   def can_check_newcomers_data?(competition)
-    competition.upcoming? && can_admin_results?
+    can_admin_results? || competition.delegates.include?(self)
   end
 
   def can_create_poll?
@@ -1444,6 +1455,8 @@ class User < ApplicationRecord
       wic_team?
     when :weat
       weat_team?
+    when :wqac
+      quality_assurance_committee?
     else
       false
     end
@@ -1568,6 +1581,22 @@ class User < ApplicationRecord
       self.potential_duplicate_persons.delete_all
       new_user.potential_duplicate_persons.delete_all
     end
+  end
+
+  def assign_wca_id(wca_id)
+    return if wca_id.blank?
+    raise "User #{id} already has WCA ID #{self.wca_id}" if self.wca_id.present?
+
+    stale_claims = User.where(unconfirmed_wca_id: wca_id).where.not(id: id)
+    stale_claims_before_update = stale_claims.to_a
+
+    ActiveRecord::Base.transaction do
+      update!(wca_id: wca_id)
+      stale_claims.update_all(**CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+      potential_duplicate_persons.delete_all
+    end
+
+    stale_claims_before_update.each { |user| WcaIdClaimMailer.notify_user_of_claim_cancelled(user, wca_id).deliver_later }
   end
 
   MY_COMPETITIONS_SERIALIZATION_HASH = {

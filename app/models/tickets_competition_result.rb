@@ -32,6 +32,15 @@ class TicketsCompetitionResult < ApplicationRecord
     end
   end
 
+  def eligible_roles_for_bcc(user)
+    return [] unless user.admin?
+
+    [
+      TicketStakeholder.stakeholder_roles[:actioner],
+      TicketStakeholder.stakeholder_roles[:requester],
+    ]
+  end
+
   def self.create_ticket!(competition, delegate_message, submitted_delegate)
     ticket_metadata = TicketsCompetitionResult.create!(
       status: TicketsCompetitionResult.statuses[:submitted],
@@ -74,6 +83,10 @@ class TicketsCompetitionResult < ApplicationRecord
 
       self.update!(status: TicketsCompetitionResult.statuses[:merged_inbox_results])
     end
+  end
+
+  def page_title
+    competition.name
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

@@ -63,7 +63,7 @@ class ResultsController < ApplicationController
     @cache_params = ResultsController.compute_cache_key(MODE_RANKINGS, **params_for_cache)
 
     if @is_persons
-      @query = <<-SQL.squish
+      @query = <<~SQL.squish
         SELECT
           results.*,
           results.#{value} value
@@ -87,7 +87,7 @@ class ResultsController < ApplicationController
       # rubocop:disable Style/ConditionalAssignment
       #   for better readability of the individual indentations of the SQL queries
       if @is_average
-        @query = <<-SQL.squish
+        @query = <<~SQL.squish
           SELECT
             results.*,
             average value
@@ -104,7 +104,7 @@ class ResultsController < ApplicationController
           #{limit_condition}
         SQL
       else
-        @query = <<-SQL.squish
+        @query = <<~SQL.squish
           SELECT
             results.*,
             result_attempts.value
@@ -130,7 +130,7 @@ class ResultsController < ApplicationController
       end
       # rubocop:enable Style/ConditionalAssignment
     elsif @is_by_region
-      @query = <<-SQL.squish
+      @query = <<~SQL.squish
         SELECT
           results.*,
           results.#{value} value
@@ -195,7 +195,7 @@ class ResultsController < ApplicationController
                 'start_date desc, events.`rank`, type desc, value, round_types.`rank` desc'
               end
 
-      @query = <<-SQL.squish
+      @query = <<~SQL.squish
         SELECT
           results.*,
           competitions.cell_name         competition_name,
@@ -220,7 +220,7 @@ class ResultsController < ApplicationController
           #{order}
       SQL
     else
-      @query = <<-SQL.squish
+      @query = <<~SQL.squish
         SELECT *
         FROM
           (#{current_records_query('best', 'single')}
@@ -239,7 +239,7 @@ class ResultsController < ApplicationController
   end
 
   private def current_records_query(value, type)
-    <<-SQL.squish
+    <<~SQL.squish
       SELECT
         '#{type}'                      type,
         results.*,
@@ -280,15 +280,15 @@ class ResultsController < ApplicationController
     rows
       .group_by { |row| row["event_id"] }
       .each_value do |event_rows|
-      singles, averages = event_rows.partition { |row| row["type"] == "single" }
-      balance = singles.size - averages.size
-      if balance.negative?
-        singles += Array.new(-balance, nil)
-      elsif balance.positive?
-        averages += Array.new(balance, nil)
-      end
-      single_rows += singles
-      average_rows += averages
+        singles, averages = event_rows.partition { |row| row["type"] == "single" }
+        balance = singles.size - averages.size
+        if balance.negative?
+          singles += Array.new(-balance, nil)
+        elsif balance.positive?
+          averages += Array.new(balance, nil)
+        end
+        single_rows += singles
+        average_rows += averages
     end
 
     slim_rows = single_rows.zip(average_rows)
@@ -337,10 +337,10 @@ class ResultsController < ApplicationController
 
     if @is_only
       @years_condition_competition = "AND YEAR(competitions.start_date) = #{@year}"
-      @years_condition_result = "AND results.year = #{@year}"
+      @years_condition_result = "AND results.reg_year = #{@year}"
     elsif @is_until
       @years_condition_competition = "AND YEAR(competitions.start_date) <= #{@year}"
-      @years_condition_result = "AND results.year <= #{@year}"
+      @years_condition_result = "AND results.reg_year <= #{@year}"
     else
       @years_condition_competition = ""
       @years_condition_result = ""
@@ -400,20 +400,25 @@ class ResultsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        cached_data = Rails.cache.fetch [key_prefix, *@cache_params, @record_timestamp] do
+        cached_data = Rails.cache.fetch [key_prefix, "augmented", *@cache_params, @record_timestamp] do
           rows = DbHelper.execute_cached_query(@cache_params, @record_timestamp, @query)
 
           # First, extract unique competitions
-          comp_ids = rows.map { |r| r["competition_id"] }.uniq
+          comp_ids = rows.pluck("competition_id").uniq
           competitions_by_id = Competition.where(id: comp_ids)
                                           .index_by(&:id)
                                           .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cell_name id]) }
+
+          # Then extract result_attempts, because joining them above
+          #   would be too expensive and also too cumbersome with the sorting by `attempt_number`
+          rows = Result.augment_attempts(rows)
 
           # Now that we've remembered all competitions, we can safely transform the rows
           rows = yield rows if block_given?
 
           {
-            rows: rows.as_json, competitionsById: competitions_by_id
+            rows: rows,
+            competitionsById: competitions_by_id,
           }
         end
         render json: cached_data

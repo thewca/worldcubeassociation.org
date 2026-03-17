@@ -49,19 +49,8 @@ module Resultable
       errors.add(:base, invalid_solve_count_reason) if invalid_solve_count_reason
     end
 
-    validate :validate_average
-    def validate_average
-      return if average_is_not_computable_reason
-
-      correct_average = compute_correct_average
-      errors.add(:average, "should be #{correct_average}") if correct_average != average
-    end
-
-    validate :validate_best, if: :event
-    def validate_best
-      correct_best = compute_correct_best
-      errors.add(:best, "should be #{correct_best}") if correct_best != best
-    end
+    validates :average, comparison: { equal_to: :compute_correct_average, if: :event, unless: :invalid_solve_count_reason }
+    validates :best, comparison: { equal_to: :compute_correct_best, if: :event }
   end
 
   def invalid_solve_count_reason
@@ -74,7 +63,7 @@ module Resultable
     unskipped_count = solve_times.count(&:unskipped?)
     if round_type.combined?
       "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}." if unskipped_count > format.expected_solve_count
-    elsif unskipped_count != format.expected_solve_count
+    elsif unskipped_count != format.expected_solve_count && format.id != "h"
       "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
     end
   end
@@ -216,35 +205,6 @@ module Resultable
 
   def solve_times
     attempts.map { SolveTime.new(event_id, :single, it) }
-  end
-
-  def legacy_attempts
-    [value1, value2, value3, value4, value5]
-  end
-
-  private def valid_attempts_partition
-    self.legacy_attempts
-        .map
-        .with_index(1)
-        .partition { |value, _n| value != SolveTime::SKIPPED_VALUE }
-  end
-
-  def valid_attempts
-    self.valid_attempts_partition[0]
-  end
-
-  def skipped_attempts
-    self.valid_attempts_partition[1]
-  end
-
-  def result_attempts_attributes(**kwargs)
-    self.valid_attempts.map do |value, n|
-      { value: value, attempt_number: n, **kwargs }
-    end
-  end
-
-  def skipped_attempt_numbers
-    self.skipped_attempts.map { |_value, n| n }
   end
 
   def worst_index
