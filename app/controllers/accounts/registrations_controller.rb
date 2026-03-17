@@ -9,6 +9,8 @@ class Accounts::RegistrationsController < Devise::RegistrationsController
 
   def create
     super do |resource|
+      # Ensure the user was successfully saved to the database.
+      # This will be false if the record fails validation (e.g. password too short, email taken).
       next unless resource.persisted?
       next if resource.delegate_to_handle_wca_id_claim.nil?
 
