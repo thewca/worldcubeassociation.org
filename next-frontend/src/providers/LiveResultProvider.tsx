@@ -123,7 +123,36 @@ export function MultiRoundResultProvider({
     const query = queries[queryIndex];
 
     if (before_hash !== stateHashesByRoundId[roundId]) {
-      queryClient.refetchQueries({ queryKey: query.queryKey, exact: true });
+      queryClient
+        .refetchQueries({ queryKey: query.queryKey, exact: true })
+        .then(() => {
+          const newData = queryClient.getQueryData(query.queryKey) as LiveRound;
+          const newResults = newData.results;
+          const newCompetitors = newData.competitors;
+
+          updatePendingResults((pendingResults) =>
+            pendingResults.filter(
+              (p) =>
+                !newResults.some(
+                  (r) => r.average === p.average && r.best === p.best,
+                ),
+            ),
+          );
+
+          setCompetitors(
+            (previous) =>
+              new Map([
+                ...previous,
+                ...newCompetitors.map((r) => [r.id, r] as const),
+              ]),
+          );
+
+          updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
+            currentlyQuitCompetitors.intersection(
+              new Set(newCompetitors.map((r) => r.id)),
+            ),
+          );
+        });
     } else {
       const decompressedUpdated = updated.map((r) =>
         decompressPartialResult(r),
@@ -148,6 +177,7 @@ export function MultiRoundResultProvider({
           (r) => !updated.map((u) => u.r).includes(r.registration_id),
         ),
       );
+
       updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
         currentlyQuitCompetitors.difference(new Set(deleted)),
       );
