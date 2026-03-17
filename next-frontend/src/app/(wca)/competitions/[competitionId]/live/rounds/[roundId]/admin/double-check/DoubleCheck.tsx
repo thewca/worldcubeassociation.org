@@ -18,7 +18,6 @@ import events from "@/lib/wca/data/events";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 
 export default function DoubleCheck({
-  competitors,
   results,
   roundWcifId,
   formatId,
@@ -26,7 +25,6 @@ export default function DoubleCheck({
   results: LiveResult[];
   roundWcifId: string;
   competitionId: string;
-  competitors: LiveCompetitor[];
   formatId: string;
 }) {
   const format = formats.byId[formatId];
@@ -36,7 +34,7 @@ export default function DoubleCheck({
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const { isPendingUpdate, handleRegistrationIdChange } = useResultsAdmin();
+  const { isPending, handleRegistrationIdChange } = useResultsAdmin();
 
   const onPageChange = (details: { page: number }) => {
     const newIndex = details.page - 1; // Chakra's page is 1-indexed
@@ -66,12 +64,11 @@ export default function DoubleCheck({
         </GridItem>
 
         <GridItem colSpan={7}>
-          {isPendingUpdate ? (
+          {isPending ? (
             <Loading />
           ) : (
             <AttemptsForm
               header="Double Check Result"
-              competitors={competitors}
               solveCount={solveCount}
               eventId={eventId}
             />

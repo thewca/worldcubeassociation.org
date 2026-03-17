@@ -43,7 +43,6 @@ export default async function DoubleCheckPage({
           >
             <DoubleCheck
               competitionId={competitionId}
-              competitors={competitors}
               results={results}
               formatId={format}
               roundWcifId={id}
