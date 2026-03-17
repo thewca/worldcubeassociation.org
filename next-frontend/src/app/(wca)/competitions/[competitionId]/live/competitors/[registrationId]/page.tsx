@@ -4,7 +4,7 @@ import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { Fragment } from "react";
-import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
+import { LivePositionCell } from "@/components/live/Cells";
 
 export default async function PersonResults({
   params,
@@ -65,13 +65,10 @@ export default async function PersonResults({
                         Round {wcifId}
                       </Link>
                     </Table.Cell>
-                    <Table.Cell
-                      width={1}
-                      layerStyle="fill.deep"
-                      colorPalette={rankingCellColorPalette(result)}
-                    >
-                      {global_pos}
-                    </Table.Cell>
+                    <LivePositionCell
+                      position={global_pos}
+                      advancingParams={result}
+                    />
                     {attempts.map((a) => (
                       <Table.Cell key={`${wcifId}-${key}-${a.attempt_number}`}>
                         {formatAttemptResult(a.value, key)}

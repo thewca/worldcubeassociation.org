@@ -85,6 +85,10 @@ class TicketsCompetitionResult < ApplicationRecord
     end
   end
 
+  def page_title
+    competition.name
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     include: {
       competition: { only: %i[id name results_posted_at], methods: [], include: %i[posted_user] },

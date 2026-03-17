@@ -1,37 +1,69 @@
 "use client";
 
 import LiveResultsTable from "@/components/live/LiveResultsTable";
-import { Heading, HStack, VStack } from "@chakra-ui/react";
+import { Heading, HStack, Spacer, Switch, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import PendingResultsTable from "@/components/live/PendingResultsTable";
-import { LiveCompetitor } from "@/types/live";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { useState } from "react";
+import AddPersonModal from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
 
 export default function LiveUpdatingResultsTable({
-  eventId,
+  roundWcifId,
   formatId,
   competitionId,
-  competitors,
   title,
   isAdmin = false,
   showEmpty = true,
+  isLinkedRound = false,
 }: {
-  eventId: string;
+  roundWcifId: string;
   formatId: string;
   competitionId: string;
-  competitors: LiveCompetitor[];
   title: string;
   isAdmin?: boolean;
   showEmpty?: boolean;
+  isLinkedRound?: boolean;
 }) {
-  const { connectionState, liveResultsByRegistrationId, pendingLiveResults } =
-    useLiveResults();
+  const [showLinkedRoundsView, setShowLinkedRoundsView] =
+    useState(isLinkedRound);
+
+  const {
+    connectionState,
+    liveResultsByRegistrationId,
+    pendingLiveResults,
+    competitors,
+    pendingQuitCompetitors,
+  } = useLiveResults();
+
+  const { eventId } = parseActivityCode(roundWcifId);
 
   return (
     <VStack align="left">
       <HStack>
-        <Heading textStyle="h1">{title}</Heading>
+        <Heading textStyle={{ sm: "h3", md: "h2", lg: "h1" }}>{title}</Heading>
         <ConnectionPulse connectionState={connectionState} />
+        <Spacer flex={1} />
+        {isLinkedRound && (
+          <Switch.Root
+            checked={showLinkedRoundsView}
+            onCheckedChange={(e) => setShowLinkedRoundsView(e.checked)}
+            colorPalette="green"
+          >
+            <Switch.HiddenInput />
+            <Switch.Control>
+              <Switch.Thumb />
+            </Switch.Control>
+            <Switch.Label>Show combined Results</Switch.Label>
+          </Switch.Root>
+        )}
+        {isAdmin && (
+          <AddPersonModal
+            competitionId={competitionId}
+            competitors={competitors}
+          />
+        )}
       </HStack>
       <PendingResultsTable
         pendingLiveResults={pendingLiveResults}
@@ -41,12 +73,14 @@ export default function LiveUpdatingResultsTable({
       />
       <LiveResultsTable
         resultsByRegistrationId={liveResultsByRegistrationId}
-        eventId={eventId}
+        roundWcifId={roundWcifId}
         formatId={formatId}
         competitionId={competitionId}
         competitors={competitors}
+        pendingQuitCompetitors={pendingQuitCompetitors}
         isAdmin={isAdmin}
         showEmpty={showEmpty}
+        showLinkedRoundsView={showLinkedRoundsView}
       />
     </VStack>
   );

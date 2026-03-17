@@ -279,11 +279,6 @@ module DatabaseDumper
           round_type_id
           round_id
           updated_at
-          value1
-          value2
-          value3
-          value4
-          value5
         ],
       ),
     }.freeze,
@@ -459,8 +454,8 @@ module DatabaseDumper
       ),
     }.freeze,
     "live_results" => :skip_all_rows,
+    "live_result_history_entries" => :skip_all_rows,
     "live_attempts" => :skip_all_rows,
-    "live_attempt_history_entries" => :skip_all_rows,
     "schedule_activities" => {
       where_clause: "JOIN venue_rooms ON venue_rooms.id = venue_room_id JOIN competition_venues ON competition_venues.id = venue_rooms.competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}",
       column_sanitizers: actions_to_column_sanitizers(
@@ -970,6 +965,8 @@ module DatabaseDumper
           pos
           best
           average
+        ],
+        db_default: %w[
           value1
           value2
           value3

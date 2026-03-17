@@ -9,10 +9,9 @@ import {
 import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
-import { LiveCompetitor } from "@/types/live";
+import { useLiveResults } from "@/providers/LiveResultProvider";
 
 interface AttemptsFormProps {
-  competitors: LiveCompetitor[];
   solveCount: number;
   header: string;
   eventId: string;
@@ -22,7 +21,6 @@ const toCompetitorString = (competitor: LiveCompetitor) =>
   `${competitor.name} (${competitor.registrant_id})`;
 
 export default function AttemptsForm({
-  competitors,
   solveCount,
   header,
   eventId,
@@ -34,12 +32,18 @@ export default function AttemptsForm({
     handleSubmit,
     attempts,
     handleAttemptChange,
+<<<<<<< next-double-check
     isPendingUpdate,
     registrationId,
+=======
+    isPending,
+>>>>>>> main
   } = useResultsAdmin();
 
+  const { competitors } = useLiveResults();
+
   const { collection, filter } = useListCollection({
-    initialItems: competitors,
+    initialItems: Array.from(competitors.values()),
     itemToValue: (competitor) => competitor.id.toString(),
     itemToString: toCompetitorString,
     filter: (itemText, filterText, item) =>
@@ -100,7 +104,10 @@ export default function AttemptsForm({
           resultType="single"
         />
       ))}
-      <Button onClick={handleSubmit} disabled={isPendingUpdate}>
+      <Button
+        onClick={handleSubmit}
+        disabled={isPending || attempts.length === 0}
+      >
         Submit Results
       </Button>
     </form>

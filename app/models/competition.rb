@@ -1473,7 +1473,6 @@ class Competition < ApplicationRecord
     :single_rank,
     :tied_previous,
     :pos,
-    keyword_init: true,
   )
 
   # rubocop:disable Lint/StructNewOverride
@@ -1482,7 +1481,6 @@ class Competition < ApplicationRecord
     :sorted_rankings,
     :sort_by,
     :sort_by_second,
-    keyword_init: true,
   )
   # rubocop:enable Lint/StructNewOverride
 
@@ -1784,6 +1782,14 @@ class Competition < ApplicationRecord
 
   def top_level_activities
     competition_venues.includes(venue_rooms: { schedule_activities: [:child_activities] }).map(&:top_level_activities).flatten
+  end
+
+  def last_event_id_of_competition
+    competition_events
+      .joins(rounds: :schedule_activities)
+      .reorder('schedule_activities.end_time')
+      .last
+      &.event_id
   end
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif

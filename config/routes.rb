@@ -61,6 +61,7 @@ Rails.application.routes.draw do
   post 'users/update_user_data' => 'users#update_user_data'
   post 'users/merge' => 'users#merge'
   post 'users/assign_wca_id' => 'users#assign_wca_id'
+  post 'users/confirm_wca_id' => 'users#confirm_wca_id', as: :confirm_wca_id
   get '/users/registrations' => 'users#registrations', as: :helpful_queries_registrations
   get '/users/organized-competitions' => 'users#organized_competitions', as: :helpful_queries_organized_competitions
   get '/users/delegated-competitions' => 'users#delegated_competitions', as: :helpful_queries_delegated_competitions
@@ -379,7 +380,10 @@ Rails.application.routes.draw do
             get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
             put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
             put '/rounds/:round_id/clear' => "live#clear_round", as: :live_round_clear
-            put '/rounds/:round_id/:registration_id' => 'live#quit_competitor', as: :quit_competitor_from_round
+            delete '/rounds/:round_id/:registration_id' => 'live#quit_competitor', as: :quit_competitor_from_round
+            put '/rounds/:round_id/:registration_id/clear' => 'live#clear_competitor', as: :clear_competitor_in_round
+            get '/rounds/:round_id/next_if_quit' => 'live#next_if_quit', as: :next_advancing_competitor
+            put '/rounds/:round_id/:registration_id' => 'live#add_competitor_to_round', as: :add_competitor_to_round
             post '/rounds/:round_id' => 'live#add_or_update_result', as: :add_results
             patch '/rounds/:round_id' => 'live#add_or_update_result', as: :update_results
             get '/podiums' => 'live#podiums', as: :live_podiums

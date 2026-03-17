@@ -2031,6 +2031,8 @@ es-ES:
       profile: Perfil
       #original_hash: 7b2c7f1
       approve: Aprobar
+      #original_hash: d9455bf
+      approve_confirm: '¿Seguro que quieres aprobar el ID de la WCA %{wca_id}?'
       #original_hash: 85de4b8
       unconfirmed_email: >-
         La dirección de correo electrónico de esta cuenta (%{email}) no está
@@ -2840,7 +2842,7 @@ es-ES:
       #original_hash: 8eeeb44
       in_progress_at_wca_live_html: >-
         La competición se está celebrando ahora mismo. ¡Puedes consultar los
-        resultados en directo<a href='%{link_here}'>aquí</a>!
+        resultados en directo <a href='%{link_here}'>aquí</a>!
       #original_hash: 8ab1548
       reg_opens_too_early: El registro abre en menos de las 48 horas requeridas.
       #original_hash: a25e7a2
@@ -2881,6 +2883,8 @@ es-ES:
         la lista de espera. Si estás usando una lista de espera, por favor
         especifica una fecha límite. Si no estás usando una lista de espera, por
         favor recuerda especificarlo en los requisitos de registro.
+      #original_hash: 51376ef
+      schedule_locked_after_results_submitted: El horario no se puede editar tras haber subido los resultados.
     live:
       #original_hash: 10d1a3c
       title: Resultados en directo

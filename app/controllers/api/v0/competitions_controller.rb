@@ -188,6 +188,10 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def update_wcif
     competition = competition_from_params
     require_can_manage!(competition)
+
+    # Only admins can update WCIF (including schedule) after results are submitted
+    require_can_admin_competitions! if competition.results_submitted?
+
     wcif = params.permit!.to_h
     wcif = wcif["_json"] || wcif
     competition.set_wcif!(wcif, require_user!)
@@ -232,5 +236,10 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def require_can_manage!(competition)
     require_user!
     raise WcaExceptions::NotPermitted.new("Not authorized to manage competition") unless can_manage?(competition)
+  end
+
+  def require_can_admin_competitions!
+    require_user!
+    raise WcaExceptions::NotPermitted.new("The competition data cannot be edited after results have been submitted.") unless current_user.can_admin_competitions?
   end
 end

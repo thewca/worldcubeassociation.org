@@ -7,7 +7,12 @@ import {
   useContext,
   useState,
 } from "react";
-import { LiveResult, LiveRound, PendingLiveResult } from "@/types/live";
+import {
+  LiveCompetitor,
+  LiveResult,
+  LiveRound,
+  PendingLiveResult,
+} from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
 import useResultsSubscriptions, {
   ConnectionState,
@@ -16,14 +21,23 @@ import useResultsSubscriptions, {
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
+import {
+  decompressFullResult,
+  decompressPartialResult,
+} from "@/lib/live/decompressDiff";
 
 export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
-
 interface LiveResultContextType {
   liveResultsByRegistrationId: LiveResultsByRegistrationId;
+  addPendingLiveResult: (
+    liveResult: PendingLiveResult,
+    roundWcifId: string,
+  ) => void;
   pendingLiveResults: LiveResult[];
-  addPendingLiveResult: (liveResult: PendingLiveResult) => void;
+  addPendingQuitCompetitor: (registrationId: number) => void;
+  pendingQuitCompetitors: Set<number>;
   connectionState: ConnectionState;
+  competitors: Map<number, LiveCompetitor>;
 }
 
 const LiveResultContext = createContext<LiveResultContextType | undefined>(
@@ -59,6 +73,12 @@ export function MultiRoundResultProvider({
   children: ReactNode;
 }) {
   const [pendingResults, updatePendingResults] = useState<LiveResult[]>([]);
+  const [pendingQuitCompetitors, updatePendingQuitCompetitors] = useState<
+    Set<number>
+  >(new Set());
+  const [competitors, setCompetitors] = useState<Map<number, LiveCompetitor>>(
+    new Map(initialRounds.flatMap((r) => r.competitors.map((r) => [r.id, r]))),
+  );
 
   const api = useAPI();
   const queryClient = useQueryClient();
@@ -79,13 +99,7 @@ export function MultiRoundResultProvider({
     queries,
     combine: (queryResults) => ({
       liveResultsByRegistrationId: _.groupBy(
-        queryResults.flatMap((r, i) =>
-          r.data.results.map((res) => ({
-            ...res,
-            // To differentiate between results for Dual Rounds
-            round_wcif_id: initialRounds[i].id,
-          })),
-        ),
+        queryResults.flatMap((r) => r.data.results),
         "registration_id",
       ),
       stateHashesByRoundId: Object.fromEntries(
@@ -111,37 +125,63 @@ export function MultiRoundResultProvider({
     if (before_hash !== stateHashesByRoundId[roundId]) {
       queryClient.refetchQueries({ queryKey: query.queryKey, exact: true });
     } else {
+      const decompressedUpdated = updated.map((r) =>
+        decompressPartialResult(r),
+      );
+
+      const decompressedCreated = created.map((r) => decompressFullResult(r));
+
       queryClient.setQueryData(query.queryKey, (oldData: LiveRound) => ({
         ...oldData,
-        results: applyDiffToLiveResults(
-          oldData.results,
-          updated,
-          created,
+        results: applyDiffToLiveResults({
+          previousResults: oldData.results,
+          updated: decompressedUpdated,
+          created: decompressedCreated,
           deleted,
-        ),
+          roundWcifId: roundId,
+        }),
         state_hash: after_hash,
       }));
+
       updatePendingResults((pendingResults) =>
         pendingResults.filter(
-          (r) =>
-            !updated.map((u) => u.registration_id).includes(r.registration_id),
+          (r) => !updated.map((u) => u.r).includes(r.registration_id),
         ),
+      );
+      updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
+        currentlyQuitCompetitors.difference(new Set(deleted)),
+      );
+
+      setCompetitors(
+        (previous) =>
+          new Map([
+            ...previous,
+            ...created.map((r) => [r.user.id, r.user] as const),
+          ]),
       );
     }
   };
 
   const addPendingLiveResult = useCallback(
-    (liveResult: PendingLiveResult) => {
+    (liveResult: PendingLiveResult, roundWcifId: string) => {
       updatePendingResults((pending) => [
         ...pending,
-        ...applyDiffToLiveResults(
-          liveResultsByRegistrationId[liveResult.registration_id],
-          [liveResult],
-        ),
+        ...applyDiffToLiveResults({
+          previousResults:
+            liveResultsByRegistrationId[liveResult.registration_id],
+          updated: [liveResult],
+          roundWcifId: roundWcifId,
+        }),
       ]);
     },
     [liveResultsByRegistrationId],
   );
+
+  const addPendingQuitCompetitor = useCallback((registrationId: number) => {
+    updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
+      currentlyQuitCompetitors.add(registrationId),
+    );
+  }, []);
 
   const roundIds = initialRounds.map((r) => r.id);
   const connectionState = useResultsSubscriptions(roundIds, onReceived);
@@ -152,7 +192,10 @@ export function MultiRoundResultProvider({
         liveResultsByRegistrationId,
         pendingLiveResults: pendingResults,
         addPendingLiveResult,
+        pendingQuitCompetitors,
+        addPendingQuitCompetitor,
         connectionState,
+        competitors,
       }}
     >
       {children}

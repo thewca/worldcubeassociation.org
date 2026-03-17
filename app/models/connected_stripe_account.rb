@@ -62,7 +62,7 @@ class ConnectedStripeAccount < ApplicationRecord
     intent = stripe_client.v1.payment_intents.create(payment_intent_args)
 
     # Log the payment attempt. We register the payment intent ID to find it later after checkout completed.
-    stripe_record = StripeRecord.create_or_update_from_api(intent, payment_intent_args, self.account_id)
+    stripe_record = StripeRecord.create_or_update_from_api!(intent, payment_intent_args, self.account_id)
 
     # memoize the payment intent in our DB because payments are handled asynchronously
     # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
@@ -88,7 +88,7 @@ class ConnectedStripeAccount < ApplicationRecord
       if stripe_record.present?
         stripe_record.update_status(charge)
       else
-        stripe_record = StripeRecord.create_or_update_from_api(charge, {}, self.account_id, intent_record)
+        stripe_record = StripeRecord.create_or_update_from_api!(charge, {}, self.account_id, intent_record)
         yield stripe_record if block_given?
       end
 
@@ -122,7 +122,7 @@ class ConnectedStripeAccount < ApplicationRecord
 
     refund = stripe_client.v1.refunds.create(refund_args)
 
-    StripeRecord.create_or_update_from_api(refund, refund_args, self.account_id, charge_record)
+    StripeRecord.create_or_update_from_api!(refund, refund_args, self.account_id, charge_record)
   end
 
   def account_details

@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -140,6 +141,37 @@ function EditActivities({
     ),
     [wcifRoom, wcifVenue],
   );
+
+  useEffect(() => {
+    if (earliestActivity) {
+      setCalendarStart(
+        (oldStart) => Math.min(
+          oldStart,
+          Math.max(0, getHour(earliestActivity) - 1),
+        ),
+      );
+    }
+  }, [earliestActivity, setCalendarStart]);
+
+  const latestActivity = useMemo(
+    () => (
+      (wcifRoom && wcifVenue)
+        ? latestTimeOfDayWithBuffer(wcifRoom.activities, wcifVenue.timezone)
+        : undefined
+    ),
+    [wcifRoom, wcifVenue],
+  );
+
+  useEffect(() => {
+    if (latestActivity) {
+      setCalendarEnd(
+        (oldEnd) => Math.max(
+          oldEnd,
+          Math.min(24, getHour(latestActivity, { roundForward: true }) + 1),
+        ),
+      );
+    }
+  }, [latestActivity, setCalendarEnd]);
 
   const fcActivities = useMemo(() => (
     wcifRoom?.activities.map((activity) => {

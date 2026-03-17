@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
 import _ from "lodash";
 import useEffectEvent from "@/lib/hooks/useEffectEvent";
-import { LiveResult } from "@/types/live";
+import type { PartialExcept } from "@/lib/types/objects";
+import { LiveCompetitor, LiveResult } from "@/types/live";
 
 export const CONNECTION_STATE_INITIALIZED = 1;
 export const CONNECTION_STATE_CONNECTED = 2;
@@ -26,29 +27,34 @@ export const CONNECTION_TRANSLATION_KEYS = {
 };
 
 // Move this to something like https://www.asyncapi.com
-// The actual compression will happen in https://github.com/thewca/worldcubeassociation.org/pull/13352
-// But I need the mapping logic
 export type CompressedLiveResult = {
-  advancing: boolean;
-  advancing_questionable: boolean;
-  average: number;
-  best: number;
-  average_record_tag: string;
-  single_record_tag: string;
-  registration_id: number;
-  live_attempts: {
-    value: number;
-    attempt_number: number;
+  ad: boolean;
+  adq: boolean;
+  a: number;
+  b: number;
+  art: string;
+  srt: string;
+  r: number;
+  la: {
+    v: number;
+    an: number;
   }[];
 };
 
-export type DiffedLiveResult = Partial<CompressedLiveResult> &
-  Pick<LiveResult, "registration_id">;
+type CompressedLiveResultWithUser = CompressedLiveResult & {
+  user: LiveCompetitor;
+};
+
+export type DiffedLiveResult = PartialExcept<LiveResult, "registration_id">;
+export type CompressedDiffedLiveResults = PartialExcept<
+  CompressedLiveResult,
+  "r"
+>;
 
 export type DiffProtocolResponse = {
-  updated?: DiffedLiveResult[];
+  updated?: CompressedDiffedLiveResults[];
   deleted?: number[];
-  created?: CompressedLiveResult[];
+  created?: CompressedLiveResultWithUser[];
   before_hash: string;
   after_hash: string;
   wcif_id: string;
