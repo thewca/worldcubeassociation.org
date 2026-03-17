@@ -30,11 +30,11 @@ class InboxPerson < ApplicationRecord
   def registration_mismatches
     return [] unless registration.present?
 
-    mismatch_checks = [:name, :country_iso2, :gender, :dob]
+    mismatch_checks = [:name, :country_iso2, :gender, :dob, :wca_id]
     mismatches = mismatch_checks.filter_map do |field|
       ibp_data = self.public_send(field).presence
       reg_data = registration.public_send(field).presence
-      "#{field} ('#{ibp_data}' VS '#{reg_data}')" if ibp_data != reg_data
+      "#{I18n.t("activerecord.attributes.user.#{field}", locale: :en)} ('#{ibp_data}' VS '#{reg_data}')" if ibp_data != reg_data
     end
   end
 end

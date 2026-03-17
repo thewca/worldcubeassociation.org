@@ -20,35 +20,35 @@ RSpec.describe InboxPerson do
 
     it 'reports a name mismatch' do
       inbox_person.name = "Jane Doe"
-      expect(inbox_person.registration_mismatches).to eq ["name ('Jane Doe' vs 'John Doe')"]
+      expect(inbox_person.registration_mismatches).to eq ["Full name ('Jane Doe' VS 'John Doe')"]
     end
 
     it 'reports a country mismatch' do
       inbox_person.country_iso2 = "GB"
-      expect(inbox_person.registration_mismatches).to eq ["country ('GB' vs 'US')"]
+      expect(inbox_person.registration_mismatches).to eq ["Representing ('GB' VS 'US')"]
     end
 
     it 'reports a gender mismatch' do
       inbox_person.gender = "f"
-      expect(inbox_person.registration_mismatches).to eq ["gender ('f' vs 'm')"]
+      expect(inbox_person.registration_mismatches).to eq ["Gender ('f' VS 'm')"]
     end
 
     it 'reports a dob mismatch' do
       inbox_person.dob = Date.new(1991, 7, 20)
-      expect(inbox_person.registration_mismatches).to eq ["dob ('1991-07-20' vs '1990-06-15')"]
+      expect(inbox_person.registration_mismatches).to eq ["Birthdate ('1991-07-20' VS '1990-06-15')"]
     end
 
     it 'reports a WCA ID mismatch' do
       inbox_person.wca_id = "2015WXYZ01"
-      expect(inbox_person.registration_mismatches).to eq ["WCA ID ('2015WXYZ01' vs '')"]
+      expect(inbox_person.registration_mismatches).to eq ["WCA ID ('2015WXYZ01' VS '')"]
     end
 
     it 'reports multiple mismatches at once' do
       inbox_person.name = "Jane Doe"
       inbox_person.country_iso2 = "GB"
       expect(inbox_person.registration_mismatches).to eq [
-        "name ('Jane Doe' vs 'John Doe')",
-        "country ('GB' vs 'US')",
+        "Full name ('Jane Doe' VS 'John Doe')",
+        "Representing ('GB' VS 'US')",
       ]
     end
   end
