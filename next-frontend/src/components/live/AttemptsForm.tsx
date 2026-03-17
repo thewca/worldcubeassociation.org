@@ -10,6 +10,7 @@ import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
+import { LiveCompetitor } from "@/types/live";
 
 interface AttemptsFormProps {
   solveCount: number;
@@ -32,12 +33,8 @@ export default function AttemptsForm({
     handleSubmit,
     attempts,
     handleAttemptChange,
-<<<<<<< next-double-check
-    isPendingUpdate,
     registrationId,
-=======
     isPending,
->>>>>>> main
   } = useResultsAdmin();
 
   const { competitors } = useLiveResults();
@@ -51,7 +48,9 @@ export default function AttemptsForm({
       parseInt(filterText, 10) === item.registrant_id,
   });
 
-  const selectedCompetitor = competitors.find((c) => c.id === registrationId);
+  const selectedCompetitor = registrationId
+    ? competitors.get(registrationId)
+    : undefined;
   const inputDisplayValue = selectedCompetitor
     ? toCompetitorString(selectedCompetitor)
     : "";
