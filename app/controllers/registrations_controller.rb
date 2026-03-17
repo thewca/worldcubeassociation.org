@@ -64,8 +64,8 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  before_action :validate_and_parse_registration_data, only: %i[validate_and_convert_registrations]
-  private def validate_and_parse_registration_data
+  before_action :validate_and_parse_registration_preview, only: %i[validate_and_convert_registrations]
+  private def validate_and_parse_registration_preview
     @competition = competition_from_params
     file = params.require(:csv_registration_file)
 
