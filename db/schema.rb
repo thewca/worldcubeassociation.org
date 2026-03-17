@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< change-what-wca-live-to-use
-ActiveRecord::Schema[8.1].define(version: 2026_03_10_134659) do
-=======
 ActiveRecord::Schema[8.1].define(version: 2026_03_16_104129) do
->>>>>>> main
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
