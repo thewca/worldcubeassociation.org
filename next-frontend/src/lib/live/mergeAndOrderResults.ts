@@ -11,10 +11,7 @@ export type CompetitorWithResults = components["schemas"]["LiveCompetitor"] &
 
 export const mergeAndOrderResults = (
   resultsByRegistrationId: LiveResultsByRegistrationId,
-  competitorsByRegistrationId: Record<
-    string,
-    components["schemas"]["LiveCompetitor"]
-  >,
+  competitors: Map<number, components["schemas"]["LiveCompetitor"]>,
   format: Format,
 ): CompetitorWithResults[] => {
   const orderedResultsByRegistrationId = _.mapValues(
@@ -29,7 +26,7 @@ export const mergeAndOrderResults = (
   const globallyOrderedResults = orderResults(bestResultsPerCompetitor, format);
 
   return globallyOrderedResults.map((result) => {
-    const competitor = competitorsByRegistrationId[result.registration_id];
+    const competitor = competitors.get(result.registration_id)!;
 
     return {
       ...competitor,

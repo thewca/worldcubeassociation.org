@@ -20,6 +20,7 @@ interface AdminResultsContextValue {
   handleSubmit: () => void;
   clearCompetitorsResults: (registrationId: number) => void;
   quitCompetitor: (registrationId: number, toAdvance: number[]) => void;
+  addCompetitorToRound: (registrationId: number) => Promise<void>;
 }
 
 function zeroedArrayOfSize(size: number) {
@@ -84,6 +85,32 @@ export function LiveResultAdminProvider({
         setError("Failed to update results. Please try again.");
       },
     },
+  );
+
+  const { mutateAsync: addCompetitorMutation, isPending: isPendingAdd } =
+    api.useMutation(
+      "put",
+      "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
+      {
+        onError: () => {
+          setError("Failed to add Competitor. Please try again.");
+        },
+      },
+    );
+
+  const addCompetitorToRound = useCallback(
+    async (registrationId: number) => {
+      await addCompetitorMutation({
+        params: {
+          path: {
+            registrationId,
+            competitionId,
+            roundId,
+          },
+        },
+      });
+    },
+    [addCompetitorMutation, competitionId, roundId],
   );
 
   const { mutate: mutateQuit, isPending: isPendingQuit } = api.useMutation(
@@ -158,11 +185,13 @@ export function LiveResultAdminProvider({
         attempts,
         error,
         success,
-        isPending: isPendingUpdate || isPendingClear || isPendingQuit,
+        isPending:
+          isPendingUpdate || isPendingClear || isPendingQuit || isPendingAdd,
         quitCompetitor,
         handleRegistrationIdChange,
         handleAttemptChange,
         handleSubmit,
+        addCompetitorToRound,
         clearCompetitorsResults,
       }}
     >

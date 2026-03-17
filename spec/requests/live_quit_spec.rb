@@ -118,6 +118,8 @@ RSpec.describe "WCA Live API" do
         advancing_ids: to_advance.pluck(:registration_id),
       }
 
+      user = registrations.third.to_live_json
+
       expect do
         delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request
       end.to have_broadcasted_to(Live::Config.broadcast_key(final.wcif_id))
@@ -131,7 +133,7 @@ RSpec.describe "WCA Live API" do
                                          "average_record_tag" => nil,
                                          "registration_id" => registrations.third.id,
                                          "single_record_tag" => nil,
-                                         "live_attempts" => [] }].map { Live::DiffHelper.compress_payload it }))
+                                         "live_attempts" => [] }].map { (Live::DiffHelper.compress_payload it).merge({ "user" => user }) }))
     end
   end
 end

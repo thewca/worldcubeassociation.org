@@ -7,7 +7,12 @@ import {
   useContext,
   useState,
 } from "react";
-import { LiveResult, LiveRound, PendingLiveResult } from "@/types/live";
+import {
+  LiveCompetitor,
+  LiveResult,
+  LiveRound,
+  PendingLiveResult,
+} from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
 import useResultsSubscriptions, {
   ConnectionState,
@@ -32,6 +37,7 @@ interface LiveResultContextType {
   addPendingQuitCompetitor: (registrationId: number) => void;
   pendingQuitCompetitors: Set<number>;
   connectionState: ConnectionState;
+  competitors: Map<number, LiveCompetitor>;
 }
 
 const LiveResultContext = createContext<LiveResultContextType | undefined>(
@@ -70,6 +76,9 @@ export function MultiRoundResultProvider({
   const [pendingQuitCompetitors, updatePendingQuitCompetitors] = useState<
     Set<number>
   >(new Set());
+  const [competitors, setCompetitors] = useState<Map<number, LiveCompetitor>>(
+    new Map(initialRounds.flatMap((r) => r.competitors.map((r) => [r.id, r]))),
+  );
 
   const api = useAPI();
   const queryClient = useQueryClient();
@@ -133,6 +142,7 @@ export function MultiRoundResultProvider({
         }),
         state_hash: after_hash,
       }));
+
       updatePendingResults((pendingResults) =>
         pendingResults.filter(
           (r) => !updated.map((u) => u.r).includes(r.registration_id),
@@ -140,6 +150,14 @@ export function MultiRoundResultProvider({
       );
       updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
         currentlyQuitCompetitors.difference(new Set(deleted)),
+      );
+
+      setCompetitors(
+        (previous) =>
+          new Map([
+            ...previous,
+            ...created.map((r) => [r.user.id, r.user] as const),
+          ]),
       );
     }
   };
@@ -177,6 +195,7 @@ export function MultiRoundResultProvider({
         pendingQuitCompetitors,
         addPendingQuitCompetitor,
         connectionState,
+        competitors,
       }}
     >
       {children}

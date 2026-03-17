@@ -1,6 +1,5 @@
 "use client";
 
-import _ from "lodash";
 import { Table, useBreakpointValue } from "@chakra-ui/react";
 import formats from "@/lib/wca/data/formats";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
@@ -38,7 +37,7 @@ export default function LiveResultsTable({
   formatId: string;
   roundWcifId: string;
   competitionId: string;
-  competitors: LiveCompetitor[];
+  competitors: Map<number, LiveCompetitor>;
   pendingQuitCompetitors?: Set<number>;
   isAdmin?: boolean;
   showEmpty?: boolean;
@@ -48,15 +47,13 @@ export default function LiveResultsTable({
     null,
   );
 
-  const competitorsByRegistrationId = _.keyBy(competitors, "id");
-
   const { eventId } = parseActivityCode(roundWcifId);
 
   const format = formats.byId[formatId];
 
   const competitorsWithOrderedResults = mergeAndOrderResults(
     resultsByRegistrationId,
-    competitorsByRegistrationId,
+    competitors,
     format,
   );
 
