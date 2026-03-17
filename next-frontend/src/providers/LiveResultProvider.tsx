@@ -134,7 +134,11 @@ export function MultiRoundResultProvider({
             pendingResults.filter(
               (p) =>
                 !newResults.some(
-                  (r) => r.average === p.average && r.best === p.best,
+                  (r) =>
+                    r.average === p.average &&
+                    r.best === p.best &&
+                    r.registration_id &&
+                    p.registration_id,
                 ),
             ),
           );
