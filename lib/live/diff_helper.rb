@@ -27,10 +27,12 @@ module Live
       diff = self.round_state_diff(before_state, after_state)
       diff = self.add_forecast_stats(diff, round)
 
+      created_with_user = Array.wrap(diff["created"]).map { compress_payload(it).merge({ user: Registration.find(it["registration_id"]).to_live_json }) }
+
       {
         "updated" => Array.wrap(diff["updated"]).map { compress_payload it },
         "deleted" => diff["deleted"],
-        "created" => Array.wrap(diff["created"]).map { compress_payload it },
+        "created" => created_with_user,
         'before_hash' => state_hash(before_state),
         'after_hash' => state_hash(after_state),
       }.compact_blank

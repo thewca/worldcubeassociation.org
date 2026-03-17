@@ -1,44 +1,43 @@
-delete:
-  summary: Quits a competitor from the round and advances the next one if prompted
-  tags:
-    - live
-  operationId: quitCompetitor
-  parameters:
-    - name: competitionId
-      in: path
-      required: true
+summary: Quits a competitor from the round and advances the next one if prompted
+tags:
+  - live
+operationId: quitCompetitor
+parameters:
+  - name: competitionId
+    in: path
+    required: true
+    schema:
+      type: string
+  - name: roundId
+    in: path
+    required: true
+    schema:
+      type: string
+  - name: registrationId
+    in: path
+    required: true
+    schema:
+      type: number
+requestBody:
+  required: false
+  content:
+    application/json:
       schema:
-        type: string
-    - name: roundId
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: registrationId
-      in: path
-      required: true
-      schema:
-        type: number
-  requestBody:
-    required: false
+        type: object
+        properties:
+          advancing_ids:
+            type: array
+            items:
+              type: number
+responses:
+  '200':
+    description: Returns number of rounds the competitor was marked as quit in
     content:
       application/json:
         schema:
           type: object
+          required:
+            - quit
           properties:
-            advancing_ids:
-              type: array
-              items:
-                type: number
-  responses:
-    '200':
-      description: Returns number of rounds the competitor was marked as quit in
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - quit
-            properties:
-              quit:
-                type: number
+            quit:
+              type: number

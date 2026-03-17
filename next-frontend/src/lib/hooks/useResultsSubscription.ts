@@ -3,7 +3,7 @@ import { createConsumer } from "@rails/actioncable";
 import _ from "lodash";
 import useEffectEvent from "@/lib/hooks/useEffectEvent";
 import type { PartialExcept } from "@/lib/types/objects";
-import { LiveResult } from "@/types/live";
+import { LiveCompetitor, LiveResult } from "@/types/live";
 
 export const CONNECTION_STATE_INITIALIZED = 1;
 export const CONNECTION_STATE_CONNECTED = 2;
@@ -41,6 +41,10 @@ export type CompressedLiveResult = {
   }[];
 };
 
+type CompressedLiveResultWithUser = CompressedLiveResult & {
+  user: LiveCompetitor;
+};
+
 export type DiffedLiveResult = PartialExcept<LiveResult, "registration_id">;
 export type CompressedDiffedLiveResults = PartialExcept<
   CompressedLiveResult,
@@ -50,7 +54,7 @@ export type CompressedDiffedLiveResults = PartialExcept<
 export type DiffProtocolResponse = {
   updated?: CompressedDiffedLiveResults[];
   deleted?: number[];
-  created?: CompressedLiveResult[];
+  created?: CompressedLiveResultWithUser[];
   before_hash: string;
   after_hash: string;
   wcif_id: string;
