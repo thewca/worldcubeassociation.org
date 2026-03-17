@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< change-what-wca-live-to-use
 ActiveRecord::Schema[8.1].define(version: 2026_03_10_134659) do
+=======
+ActiveRecord::Schema[8.1].define(version: 2026_03_16_104129) do
+>>>>>>> main
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -788,23 +792,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_134659) do
     t.string "wcif_id"
   end
 
-  create_table "live_attempt_history_entries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "entered_at", null: false
-    t.string "entered_by", null: false
-    t.bigint "live_attempt_id", null: false
-    t.datetime "updated_at", null: false
-    t.integer "value", null: false
-    t.index ["live_attempt_id"], name: "index_live_attempt_history_entries_on_live_attempt_id"
-  end
-
   create_table "live_attempts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "attempt_number", null: false
     t.datetime "created_at", null: false
     t.bigint "live_result_id"
     t.datetime "updated_at", null: false
     t.integer "value", null: false
+    t.index ["live_result_id", "attempt_number"], name: "index_live_attempts_on_live_result_id_and_attempt_number", unique: true
     t.index ["live_result_id"], name: "index_live_attempts_on_live_result_id"
+  end
+
+  create_table "live_result_history_entries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "action_source", null: false
+    t.string "action_type"
+    t.json "attempt_details"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "entered_at", null: false
+    t.bigint "entered_by_id"
+    t.bigint "live_result_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entered_by_id"], name: "index_live_result_history_entries_on_entered_by_id"
+    t.index ["live_result_id"], name: "index_live_result_history_entries_on_live_result_id"
   end
 
   create_table "live_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1058,10 +1067,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_134659) do
     t.integer "average", default: 0, null: false
     t.integer "best", default: 0, null: false
     t.date "competition_end_date", null: false
+    t.integer "competition_reg_year", null: false
+    t.string "continent_id", null: false
     t.string "country_id", null: false
     t.string "event_id", null: false
+    t.string "person_id", null: false
     t.index ["event_id", "country_id", "average", "competition_end_date"], name: "idx_on_eventId_countryId_average_competitionEndDate_b424c59953"
     t.index ["event_id", "country_id", "best", "competition_end_date"], name: "idx_on_eventId_countryId_best_competitionEndDate_4e01b1ae38"
+    t.index ["person_id", "country_id", "event_id", "competition_reg_year", "average", "result_id"], name: "concise_average_speedup"
+    t.index ["person_id", "country_id", "event_id", "competition_reg_year", "best", "result_id"], name: "concise_single_speedup"
   end
 
   create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1306,7 +1320,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_134659) do
     t.index ["uploaded_by"], name: "index_scramble_file_uploads_on_uploaded_by"
   end
 
-  create_table "scrambles", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "scrambles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", limit: 32, null: false
     t.string "event_id", limit: 6, null: false
     t.string "group_id", limit: 3, null: false
@@ -1440,6 +1454,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_134659) do
   create_table "uploaded_jsons", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
     t.text "json_str", size: :long
+    t.string "upload_type", null: false
     t.index ["competition_id"], name: "index_uploaded_jsons_on_competition_id"
   end
 
@@ -1617,8 +1632,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_134659) do
   add_foreign_key "inbox_scramble_sets", "scramble_file_uploads", column: "external_upload_id"
   add_foreign_key "inbox_scrambles", "inbox_scramble_sets"
   add_foreign_key "inbox_scrambles", "inbox_scramble_sets", column: "matched_scramble_set_id"
-  add_foreign_key "live_attempt_history_entries", "live_attempts", on_delete: :cascade
   add_foreign_key "live_attempts", "live_results", on_delete: :cascade
+  add_foreign_key "live_result_history_entries", "live_results", on_delete: :cascade
+  add_foreign_key "live_result_history_entries", "users", column: "entered_by_id"
   add_foreign_key "live_results", "users", column: "locked_by_id"
   add_foreign_key "live_results", "users", column: "quit_by_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade

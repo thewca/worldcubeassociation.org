@@ -2,9 +2,9 @@
 
 module AuxiliaryDataComputation
   def self.compute_everything
+    self.insert_regional_records_lookup
     self.compute_concise_results
     self.compute_rank_tables
-    self.insert_regional_records_lookup
   end
 
   ## Build 'concise results' tables.
@@ -16,26 +16,23 @@ module AuxiliaryDataComputation
       DbHelper.with_temp_table(table_name) do |temp_table_name|
         ActiveRecord::Base.connection.execute <<~SQL.squish
           INSERT INTO #{temp_table_name} (id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, reg_year)
+          WITH concise_agg AS (
+            SELECT MIN(#{field} * 1000000000 + result_id) value_and_id
+            FROM regional_records_lookup
+            WHERE #{field} > 0
+            GROUP BY person_id, country_id, event_id, competition_reg_year
+          )
           SELECT
-            results.id,
-            #{field},
-            valueAndId,
-            person_id,
-            event_id,
-            countries.id country_id,
-            continent_id,
-            YEAR(start_date) reg_year
-          FROM (
-              SELECT MIN(#{field} * 1000000000 + results.id) valueAndId
-              FROM results
-              JOIN competitions ON competitions.id = competition_id
-              WHERE #{field} > 0
-              GROUP BY person_id, results.country_id, event_id, YEAR(start_date)
-            ) MinValuesWithId
-            JOIN results ON results.id = valueAndId % 1000000000
-            JOIN competitions ON competitions.id = results.competition_id
-            JOIN countries ON countries.id = results.country_id
-            JOIN events ON events.id = results.event_id
+            rrl.result_id id,
+            rrl.#{field},
+            concise_agg.value_and_id,
+            rrl.person_id,
+            rrl.event_id,
+            rrl.country_id,
+            rrl.continent_id,
+            rrl.competition_reg_year `reg_year`
+          FROM concise_agg
+            INNER JOIN regional_records_lookup rrl ON rrl.result_id = (concise_agg.value_and_id % 1000000000)
         SQL
       end
     end

@@ -4,7 +4,7 @@ class Person < ApplicationRecord
   # for some reason, the ActiveRecord plural for "Person" is "people"…
   self.table_name = 'persons'
 
-  has_one :user, primary_key: "wca_id", foreign_key: "wca_id"
+  has_one :user, primary_key: "wca_id", foreign_key: "wca_id", inverse_of: :person
   has_many :results, primary_key: "wca_id"
   has_many :result_attempts, through: :results
   has_many :competitions, -> { distinct }, through: :results

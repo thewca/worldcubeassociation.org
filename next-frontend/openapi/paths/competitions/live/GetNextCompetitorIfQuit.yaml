@@ -1,0 +1,30 @@
+get:
+  summary: Get the next competitor assuming the registration in the query is quit
+  tags:
+    - live
+  operationId: getNextCompetitor
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: roundId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: registration_id
+      in: query
+      required: true
+      schema:
+        type: number
+  responses:
+    '200':
+      description: Returns the next competitors who would advance if the registration
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../../schemas/live/LiveCompetitor.yaml"

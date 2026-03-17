@@ -6,6 +6,12 @@ export const padSkipped = (
 ): LiveAttempt[] => {
   return [
     ...attempts,
-    ...Array(expectedNumberOfAttempts - attempts.length).fill({ value: 0 }),
+    ...Array.from(
+      { length: attempts.length - expectedNumberOfAttempts },
+      (_, i) => ({
+        value: 0,
+        attempt_number: attempts.length + i + 1,
+      }),
+    ),
   ];
 };
