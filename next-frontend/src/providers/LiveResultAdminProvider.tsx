@@ -60,7 +60,7 @@ export function LiveResultAdminProvider({
       setRegistrationId(value);
       // Even for Dual Rounds we only fetch one round in the admin view
       const alreadyEnteredResults = liveResultsByRegistrationId[value][0];
-      if (alreadyEnteredResults) {
+      if (alreadyEnteredResults.attempts.length > 0) {
         setAttempts(alreadyEnteredResults.attempts.map((a) => a.value));
       } else {
         setAttempts(zeroedArrayOfSize(solveCount));
