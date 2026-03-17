@@ -10,7 +10,7 @@ import {
 import Loading from "@/components/ui/loading";
 import { useState } from "react";
 import formats from "@/lib/wca/data/formats";
-import { LiveCompetitor, LiveResult } from "@/types/live";
+import { LiveResult } from "@/types/live";
 import AttemptsForm from "@/components/live/AttemptsForm";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
