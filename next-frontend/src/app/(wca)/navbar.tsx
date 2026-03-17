@@ -183,7 +183,7 @@ export default async function Navbar() {
         ))}
       </HStack>
       <HStack>
-        {navbar.entry.length === 0 && !LIVE_RESULT_BETA && (
+        {navbarEntries.length === 0 && !LIVE_RESULT_BETA && (
           <Text>Oh no, there are no navbar items!</Text>
         )}
       </HStack>
