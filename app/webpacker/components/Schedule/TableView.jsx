@@ -243,7 +243,7 @@ function ActivityRow({
             </Grid.Column>
             <Grid.Column width={2}>{cutoff && cutoffToString(round)}</Grid.Column>
             <Grid.Column width={2}>
-              {isLinked && "Dual Round: "}
+              {isLinked && 'Dual Round: '}
               {advancementCondition && advancementConditionToString(round)}
             </Grid.Column>
           </>
@@ -318,7 +318,7 @@ function ActivityRow({
                   {I18n.t('competitions.events.proceed')}
                 </Grid.Column>
                 <Grid.Column textAlign="right" mobile={10} tablet={4}>
-                  {isLinked && "Dual Round: "}
+                  {isLinked && 'Dual Round: '}
                   <b>{advancementConditionToString(round)}</b>
                 </Grid.Column>
               </>
