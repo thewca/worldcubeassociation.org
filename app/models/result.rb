@@ -3,7 +3,7 @@
 class Result < ApplicationRecord
   include Resultable
 
-  belongs_to :person, -> { current }, primary_key: :wca_id, optional: true
+  belongs_to :person, -> { current }, primary_key: :wca_id, optional: true, inverse_of: :results
   validates :person_name, presence: true
   belongs_to :country
   has_one :continent, through: :country

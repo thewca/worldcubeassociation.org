@@ -41,11 +41,11 @@ class Round < ApplicationRecord
   serialize :round_results, coder: RoundResults
   validates_associated :round_results
 
-  has_many :schedule_activities, -> { root_activities }, dependent: :destroy
+  has_many :schedule_activities, -> { root_activities }, dependent: :destroy, inverse_of: :round
 
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
-  has_many :live_results, -> { order(:global_pos) }
+  has_many :live_results, -> { order(:global_pos) }, inverse_of: :round
   has_many :live_competitors, through: :live_results, source: :registration
   has_many :results
   has_many :scrambles
@@ -240,7 +240,7 @@ class Round < ApplicationRecord
     max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
 
     advancement_determining_results.update_all(
-      "advancing_questionable = (global_pos < #{max_advancing})",
+      "advancing_questionable = (global_pos <= #{max_advancing})",
     )
 
     LiveResult.where(id: advancing_ids).update_all(advancing: true)
