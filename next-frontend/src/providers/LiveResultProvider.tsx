@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import {
+  LiveAttempt,
   LiveCompetitor,
   LiveResult,
   LiveRound,
@@ -16,6 +17,7 @@ import {
 import useAPI from "@/lib/wca/useAPI";
 import useResultsSubscriptions, {
   ConnectionState,
+  DiffedLiveResult,
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
@@ -43,6 +45,24 @@ interface LiveResultContextType {
 const LiveResultContext = createContext<LiveResultContextType | undefined>(
   undefined,
 );
+
+const toOrderedAttemptValues = (attempts: LiveAttempt[]) =>
+  attempts
+    .toSorted((a, b) => a.attempt_number - b.attempt_number)
+    .map((att) => att.value);
+
+const compareAttempts = (
+  attemptsA: LiveAttempt[],
+  attemptsB: LiveAttempt[],
+) => {
+  const sortedValuesA = toOrderedAttemptValues(attemptsA);
+  const sortedValuesB = toOrderedAttemptValues(attemptsB);
+
+  return (
+    sortedValuesA.length === sortedValuesB.length &&
+    sortedValuesA.every((value, index) => value === sortedValuesB[index])
+  );
+};
 
 export function LiveResultProvider({
   initialRound,
@@ -123,6 +143,25 @@ export function MultiRoundResultProvider({
     }),
   });
 
+  const diffPendingResults = useCallback(
+    <T extends DiffedLiveResult>(
+      incomingResults: T[],
+      comparisonFn: (pending: LiveResult, incoming: T) => boolean,
+    ) => {
+      updatePendingResults((prevPendingResults) =>
+        prevPendingResults.filter(
+          (pr) =>
+            !incomingResults.some(
+              (ir) =>
+                ir.registration_id === pr.registration_id &&
+                comparisonFn(pr, ir),
+            ),
+        ),
+      );
+    },
+    [],
+  );
+
   const onReceived = (roundId: string, diff: DiffProtocolResponse) => {
     const {
       updated = [],
@@ -142,20 +181,12 @@ export function MultiRoundResultProvider({
         const newResults = newData.results;
         const newCompetitors = newData.competitors;
 
-        updatePendingResults((pendingResults) =>
-          pendingResults.filter(
-            (p) =>
-              // We just made a full refetch. Only keep those results as "pending"
-              //   which are NOT contained exactly in the refetched round.
-              // In other words, if we find a competitor with the updated average and the updated best
-              //   in the refetched round, then their result is not pending anymore.
-              !newResults.some(
-                (r) =>
-                  r.average === p.average &&
-                  r.best === p.best &&
-                  r.registration_id === p.registration_id,
-              ),
-          ),
+        // We just made a full refetch. Only keep those results as "pending"
+        //   which are NOT contained exactly in the refetched round.
+        // In other words, if we find a competitor with the updated average and the updated best
+        //   in the refetched round, then their result is not pending anymore.
+        diffPendingResults(newResults, (pr, ir) =>
+          compareAttempts(pr.attempts, ir.attempts),
         );
 
         updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
@@ -188,12 +219,15 @@ export function MultiRoundResultProvider({
         }),
       );
 
-      updatePendingResults((pendingResults) =>
-        // If we received an update on a competitor, assume that it was actually the update that we were waiting for
-        pendingResults.filter(
-          (p) => !decompressedUpdated.map((u) => u.registration_id).includes(p.registration_id),
-        ),
-      );
+      diffPendingResults(decompressedUpdated, (pr, ir) => {
+        // TODO GB: Is there a smarter way to compare these? The incoming values are diffs, meaning (type-wise)
+        //   they might not actually contain attempts. What would an attempt-less update look like though?
+        return (
+          "attempts" in ir &&
+          ir.attempts !== undefined &&
+          compareAttempts(pr.attempts, ir.attempts)
+        );
+      });
 
       updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
         // If a competitor is listed as "deleted", then consider that our pending quit was executed by the backend
