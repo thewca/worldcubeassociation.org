@@ -145,6 +145,10 @@ export function MultiRoundResultProvider({
         updatePendingResults((pendingResults) =>
           pendingResults.filter(
             (p) =>
+              // We just made a full refetch. Only keep those results as "pending"
+              //   which are NOT contained exactly in the refetched round.
+              // In other words, if we find a competitor with the updated average and the updated best
+              //   in the refetched round, then their result is not pending anymore.
               !newResults.some(
                 (r) =>
                   r.average === p.average &&
@@ -155,6 +159,8 @@ export function MultiRoundResultProvider({
         );
 
         updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
+          // Only keep pending quit markers if they are _still_ in the refetched round
+          //   (ie the "quit" has not been executed yet)
           currentlyQuitCompetitors.intersection(
             new Set(newCompetitors.map((r) => r.id)),
           ),
@@ -183,12 +189,14 @@ export function MultiRoundResultProvider({
       );
 
       updatePendingResults((pendingResults) =>
+        // If we received an update on a competitor, assume that it was actually the update that we were waiting for
         pendingResults.filter(
-          (r) => !updated.map((u) => u.r).includes(r.registration_id),
+          (p) => !decompressedUpdated.map((u) => u.registration_id).includes(p.registration_id),
         ),
       );
 
       updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
+        // If a competitor is listed as "deleted", then consider that our pending quit was executed by the backend
         currentlyQuitCompetitors.difference(new Set(deleted)),
       );
     }
