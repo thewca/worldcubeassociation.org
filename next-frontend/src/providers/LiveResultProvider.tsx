@@ -92,22 +92,29 @@ export function MultiRoundResultProvider({
     initialData: round,
   }));
 
-  const { liveResultsByRegistrationId, stateHashesByRoundId, competitors } =
-    useQueries({
-      queries,
-      combine: (queryResults) => ({
-        liveResultsByRegistrationId: _.groupBy(
-          queryResults.flatMap((r) => r.data.results),
-          "registration_id",
-        ),
-        stateHashesByRoundId: Object.fromEntries(
-          queryResults.map((r) => [r.data.id, r.data.state_hash]),
-        ),
-        competitors: new Map(
-          queryResults.flatMap((r) => r.data.competitors.map((c) => [c.id, c])),
-        ),
-      }),
-    });
+  const {
+    liveResultsByRegistrationId,
+    stateHashesByRoundId,
+    competitors,
+    refetchRound,
+  } = useQueries({
+    queries,
+    combine: (queryResults) => ({
+      liveResultsByRegistrationId: _.groupBy(
+        queryResults.flatMap((r) => r.data.results),
+        "registration_id",
+      ),
+      stateHashesByRoundId: Object.fromEntries(
+        queryResults.map((r) => [r.data.id, r.data.state_hash]),
+      ),
+      competitors: new Map(
+        queryResults.flatMap((r) => r.data.competitors.map((c) => [c.id, c])),
+      ),
+      refetchRound: async (roundId: string) => {
+        return queryResults.find((r) => r.data.id === roundId)!.refetch();
+      },
+    }),
+  });
 
   const onReceived = (roundId: string, diff: DiffProtocolResponse) => {
     const {
@@ -124,38 +131,37 @@ export function MultiRoundResultProvider({
     const query = queries[queryIndex];
 
     if (before_hash !== stateHashesByRoundId[roundId]) {
-      queryClient
-        .refetchQueries({ queryKey: query.queryKey, exact: true })
-        .then(() => {
-          const newData = queryClient.getQueryData(query.queryKey) as LiveRound;
-          const newResults = newData.results;
-          const newCompetitors = newData.competitors;
+      refetchRound(roundId).then((res) => {
+        if (!res.isSuccess) {
+          return;
+        }
 
-          updatePendingResults((pendingResults) =>
-            pendingResults.filter(
-              (p) =>
-                !newResults.some(
-                  (r) =>
-                    r.average === p.average &&
-                    r.best === p.best &&
-                    r.registration_id &&
-                    p.registration_id,
-                ),
-            ),
-          );
+        const newData = res.data;
+        const newResults = newData.results;
+        const newCompetitors = newData.competitors;
 
-          updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
-            currentlyQuitCompetitors.intersection(
-              new Set(newCompetitors.map((r) => r.id)),
-            ),
-          );
-        });
+        updatePendingResults((pendingResults) =>
+          pendingResults.filter(
+            (p) =>
+              !newResults.some(
+                (r) =>
+                  r.average === p.average &&
+                  r.best === p.best &&
+                  r.registration_id &&
+                  p.registration_id,
+              ),
+          ),
+        );
+
+        updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
+          currentlyQuitCompetitors.intersection(
+            new Set(newCompetitors.map((r) => r.id)),
+          ),
+        );
+      });
     } else {
-      const decompressedUpdated = updated.map((r) =>
-        decompressPartialResult(r),
-      );
-
-      const decompressedCreated = created.map((r) => decompressFullResult(r));
+      const decompressedUpdated = updated.map(decompressPartialResult);
+      const decompressedCreated = created.map(decompressFullResult);
 
       queryClient.setQueryData(
         query.queryKey,
