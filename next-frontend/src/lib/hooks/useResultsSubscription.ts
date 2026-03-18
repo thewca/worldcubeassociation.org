@@ -4,6 +4,7 @@ import _ from "lodash";
 import useEffectEvent from "@/lib/hooks/useEffectEvent";
 import type { PartialExcept } from "@/lib/types/objects";
 import { LiveCompetitor, LiveResult } from "@/types/live";
+import { anycableConnection } from "@/lib/websocket/anycable";
 
 export const CONNECTION_STATE_INITIALIZED = 1;
 export const CONNECTION_STATE_CONNECTED = 2;
@@ -62,7 +63,7 @@ export type DiffProtocolResponse = {
 
 export default function useResultsSubscriptions(
   roundIds: string[],
-  competition_id: string,
+  competitionId: string,
   onReceived: (roundId: string, data: DiffProtocolResponse) => void,
 ) {
   const [connectionStates, setConnectionStates] = useState<
@@ -86,29 +87,23 @@ export default function useResultsSubscriptions(
   const onReceivedEvent = useEffectEvent(onReceived);
 
   useEffect(() => {
-    const cable = createConsumer("http://localhost:8085/cable");
+    const cable = createConsumer(process.env.NEXT_PUBLIC_WEBSOCKET_URL);
 
     const subscriptions = roundIds.map((roundId) =>
-      cable.subscriptions.create(
-        {
-          channel: "$pubsub",
-          stream_name: `results_${competition_id}_${roundId}`,
-        },
-        {
-          received: (data: DiffProtocolResponse) =>
-            onReceivedEvent(roundId, data),
-          initialized: () =>
-            changeConnectionState(roundId, CONNECTION_STATE_INITIALIZED),
-          connected: () =>
-            changeConnectionState(roundId, CONNECTION_STATE_CONNECTED),
-          disconnected: () =>
-            changeConnectionState(roundId, CONNECTION_STATE_DISCONNECTED),
-        },
-      ),
+      cable.subscriptions.create(anycableConnection(competitionId, roundId), {
+        received: (data: DiffProtocolResponse) =>
+          onReceivedEvent(roundId, data),
+        initialized: () =>
+          changeConnectionState(roundId, CONNECTION_STATE_INITIALIZED),
+        connected: () =>
+          changeConnectionState(roundId, CONNECTION_STATE_CONNECTED),
+        disconnected: () =>
+          changeConnectionState(roundId, CONNECTION_STATE_DISCONNECTED),
+      }),
     );
 
     return () => subscriptions.forEach((s) => s.unsubscribe());
-  }, [changeConnectionState, competition_id, onReceivedEvent, roundIds]);
+  }, [changeConnectionState, competitionId, onReceivedEvent, roundIds]);
 
   // Aggregate: worst state wins
   const values = Object.values(connectionStates);

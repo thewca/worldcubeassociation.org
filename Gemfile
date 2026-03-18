@@ -137,7 +137,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'bullet'
   gem 'web-console'
-  gem 'anycable-rails'
+  gem 'anycable-rails-core'
 end
 
 group :test do
