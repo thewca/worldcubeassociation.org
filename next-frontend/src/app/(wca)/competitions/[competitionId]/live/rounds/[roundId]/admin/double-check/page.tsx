@@ -26,7 +26,11 @@ export default async function DoubleCheckPage({
     return <OpenapiError response={response} t={t} />;
   }
 
-  const { results, id, competitors, format } = data;
+  const { results, id, format } = data;
+
+  const sortedResults = results.toSorted((a, b) =>
+    b.last_attempt_entered_at.localeCompare(a.last_attempt_entered_at),
+  );
 
   return (
     <Container>
@@ -39,11 +43,11 @@ export default async function DoubleCheckPage({
             format={formats.byId[format]}
             roundId={id}
             competitionId={competitionId}
-            initialRegistrationId={competitors[0].id}
+            initialRegistrationId={sortedResults[0].registration_id}
           >
             <DoubleCheck
               competitionId={competitionId}
-              results={results}
+              results={sortedResults}
               formatId={format}
               roundWcifId={id}
             />
