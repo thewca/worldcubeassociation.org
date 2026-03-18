@@ -80,15 +80,22 @@ export function MultiRoundResultProvider({
   const api = useAPI();
   const queryClient = useQueryClient();
 
+  const roundQueryOptions = useCallback(
+    (roundId: string) => {
+      return api.queryOptions(
+        "get",
+        "/v1/competitions/{competitionId}/live/rounds/{roundId}",
+        {
+          params: { path: { roundId, competitionId } },
+        },
+      );
+    },
+    [api, competitionId],
+  );
+
   // One query per round
   const queries = initialRounds.map((round) => ({
-    ...api.queryOptions(
-      "get",
-      "/v1/competitions/{competitionId}/live/rounds/{roundId}",
-      {
-        params: { path: { roundId: round.id, competitionId } },
-      },
-    ),
+    ...roundQueryOptions(round.id),
     initialData: round,
   }));
 
@@ -125,11 +132,6 @@ export function MultiRoundResultProvider({
       after_hash,
     } = diff;
 
-    const queryIndex = initialRounds.findIndex((r) => r.id === roundId);
-    if (queryIndex === -1) return;
-
-    const query = queries[queryIndex];
-
     if (before_hash !== stateHashesByRoundId[roundId]) {
       refetchRound(roundId).then((res) => {
         if (!res.isSuccess) {
@@ -163,8 +165,10 @@ export function MultiRoundResultProvider({
       const decompressedUpdated = updated.map(decompressPartialResult);
       const decompressedCreated = created.map(decompressFullResult);
 
+      const roundQuery = roundQueryOptions(roundId);
+
       queryClient.setQueryData(
-        query.queryKey,
+        roundQuery.queryKey,
         (oldData: LiveRound): LiveRound => ({
           ...oldData,
           results: applyDiffToLiveResults({
