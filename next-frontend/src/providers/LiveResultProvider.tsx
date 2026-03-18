@@ -76,9 +76,6 @@ export function MultiRoundResultProvider({
   const [pendingQuitCompetitors, updatePendingQuitCompetitors] = useState<
     Set<number>
   >(new Set());
-  const [competitors, setCompetitors] = useState<Map<number, LiveCompetitor>>(
-    new Map(initialRounds.flatMap((r) => r.competitors.map((r) => [r.id, r]))),
-  );
 
   const api = useAPI();
   const queryClient = useQueryClient();
@@ -95,7 +92,7 @@ export function MultiRoundResultProvider({
     initialData: round,
   }));
 
-  const { liveResultsByRegistrationId, stateHashesByRoundId } = useQueries({
+  const { liveResultsByRegistrationId, stateHashesByRoundId, competitors } = useQueries({
     queries,
     combine: (queryResults) => ({
       liveResultsByRegistrationId: _.groupBy(
@@ -104,6 +101,9 @@ export function MultiRoundResultProvider({
       ),
       stateHashesByRoundId: Object.fromEntries(
         queryResults.map((r) => [r.data.id, r.data.state_hash]),
+      ),
+      competitors: new Map(
+        queryResults.flatMap((r) => r.data.competitors.map((c) => [c.id, c]))
       ),
     }),
   });
@@ -143,14 +143,6 @@ export function MultiRoundResultProvider({
             ),
           );
 
-          setCompetitors(
-            (previous) =>
-              new Map([
-                ...previous,
-                ...newCompetitors.map((r) => [r.id, r] as const),
-              ]),
-          );
-
           updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
             currentlyQuitCompetitors.intersection(
               new Set(newCompetitors.map((r) => r.id)),
@@ -164,7 +156,7 @@ export function MultiRoundResultProvider({
 
       const decompressedCreated = created.map((r) => decompressFullResult(r));
 
-      queryClient.setQueryData(query.queryKey, (oldData: LiveRound) => ({
+      queryClient.setQueryData(query.queryKey, (oldData: LiveRound): LiveRound => ({
         ...oldData,
         results: applyDiffToLiveResults({
           previousResults: oldData.results,
@@ -174,6 +166,10 @@ export function MultiRoundResultProvider({
           roundWcifId: roundId,
         }),
         state_hash: after_hash,
+        competitors: [
+          ...oldData.competitors,
+          ...created.map((c) => c.user),
+        ]
       }));
 
       updatePendingResults((pendingResults) =>
@@ -184,14 +180,6 @@ export function MultiRoundResultProvider({
 
       updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
         currentlyQuitCompetitors.difference(new Set(deleted)),
-      );
-
-      setCompetitors(
-        (previous) =>
-          new Map([
-            ...previous,
-            ...created.map((r) => [r.user.id, r.user] as const),
-          ]),
       );
     }
   };
