@@ -35,7 +35,7 @@ interface LiveResultContextType {
     liveResult: PendingLiveResult,
     roundWcifId: string,
   ) => void;
-  pendingLiveResults: LiveResult[];
+  pendingLiveResults: PendingLiveResult[];
   addPendingQuitCompetitor: (registrationId: number) => void;
   pendingQuitCompetitors: Set<number>;
   connectionState: ConnectionState;
@@ -92,7 +92,7 @@ export function MultiRoundResultProvider({
   competitionId: string;
   children: ReactNode;
 }) {
-  const [pendingResults, updatePendingResults] = useState<LiveResult[]>([]);
+  const [pendingResults, updatePendingResults] = useState<PendingLiveResult[]>([]);
   const [pendingQuitCompetitors, updatePendingQuitCompetitors] = useState<
     Set<number>
   >(new Set());
@@ -146,7 +146,7 @@ export function MultiRoundResultProvider({
   const diffPendingResults = useCallback(
     <T extends DiffedLiveResult>(
       incomingResults: T[],
-      comparisonFn: (pending: LiveResult, incoming: T) => boolean,
+      comparisonFn: (pending: PendingLiveResult, incoming: T) => boolean,
     ) => {
       updatePendingResults((prevPendingResults) =>
         prevPendingResults.filter(
