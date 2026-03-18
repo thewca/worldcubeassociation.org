@@ -62,6 +62,7 @@ export type DiffProtocolResponse = {
 
 export default function useResultsSubscriptions(
   roundIds: string[],
+  competition_id: string,
   onReceived: (roundId: string, data: DiffProtocolResponse) => void,
 ) {
   const [connectionStates, setConnectionStates] = useState<
@@ -89,7 +90,10 @@ export default function useResultsSubscriptions(
 
     const subscriptions = roundIds.map((roundId) =>
       cable.subscriptions.create(
-        { channel: "LiveResultsChannel", round_id: roundId },
+        {
+          channel: "$pubsub",
+          stream_name: `results_${competition_id}_${roundId}`,
+        },
         {
           received: (data: DiffProtocolResponse) =>
             onReceivedEvent(roundId, data),
@@ -104,7 +108,7 @@ export default function useResultsSubscriptions(
     );
 
     return () => subscriptions.forEach((s) => s.unsubscribe());
-  }, [changeConnectionState, onReceivedEvent, roundIds]);
+  }, [changeConnectionState, competition_id, onReceivedEvent, roundIds]);
 
   // Aggregate: worst state wins
   const values = Object.values(connectionStates);

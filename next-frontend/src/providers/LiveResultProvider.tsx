@@ -258,7 +258,11 @@ export function MultiRoundResultProvider({
   }, []);
 
   const roundIds = initialRounds.map((r) => r.id);
-  const connectionState = useResultsSubscriptions(roundIds, onReceived);
+  const connectionState = useResultsSubscriptions(
+    roundIds,
+    competitionId,
+    onReceived,
+  );
 
   return (
     <LiveResultContext.Provider
