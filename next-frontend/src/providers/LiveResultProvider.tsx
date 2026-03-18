@@ -149,8 +149,7 @@ export function MultiRoundResultProvider({
                 (r) =>
                   r.average === p.average &&
                   r.best === p.best &&
-                  r.registration_id &&
-                  p.registration_id,
+                  r.registration_id === p.registration_id,
               ),
           ),
         );
