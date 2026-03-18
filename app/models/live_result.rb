@@ -7,6 +7,8 @@ class LiveResult < ApplicationRecord
   has_many :live_attempts, dependent: :destroy
   alias_method :attempts, :live_attempts
 
+  has_many :live_result_history_entries, dependent: :delete_all
+
   after_save :trigger_recompute, if: :should_recompute?
 
   belongs_to :registration
@@ -20,6 +22,12 @@ class LiveResult < ApplicationRecord
 
   scope :not_empty, -> { where.not(best: 0) }
   scope :locked, -> { where.not(locked_by: nil) }
+
+  scope :advancing, -> { where(advancing: true) }
+  scope :not_advancing, -> { where(advancing: false) }
+
+  scope :quit, -> { where.not(quit_by_id: nil) }
+  scope :not_quit, -> { where(quit_by_id: nil) }
 
   alias_attribute :result_id, :id
 
@@ -61,7 +69,8 @@ class LiveResult < ApplicationRecord
   end
 
   def mark_as_quit!(quit_by_user)
-    update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
+    self.update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
+    self.live_result_history_entries.create!(entered_by_id: quit_by_user.id, action_type: :quit)
   end
 
   def locked?
@@ -151,6 +160,10 @@ class LiveResult < ApplicationRecord
       attempts = padded.map { LiveAttempt.new(it) }
       LiveResult.compute_average_and_best(attempts, round).first
     end
+  end
+
+  def self.empty_result_attributes(registration_id, round_id)
+    { registration_id: registration_id, round_id: round_id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
   end
 
   private

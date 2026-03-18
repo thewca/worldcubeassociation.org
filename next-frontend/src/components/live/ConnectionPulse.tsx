@@ -6,7 +6,7 @@ import {
   CONNECTION_TRANSLATION_KEYS,
   ConnectionState,
 } from "@/lib/hooks/useResultsSubscription";
-import { Status } from "@chakra-ui/react";
+import { Status, useBreakpointValue } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 
 export default function ConnectionPulse({
@@ -19,6 +19,8 @@ export default function ConnectionPulse({
 
   const connectionColor = CONNECTION_COLORS[connectionState];
 
+  const showFull = useBreakpointValue({ base: false, md: true });
+
   return (
     <Status.Root colorPalette={connectionColor}>
       <Status.Indicator
@@ -30,9 +32,10 @@ export default function ConnectionPulse({
         animationIterationCount="infinite"
         animationDirection="alternate"
       />
-      {t(
-        `competitions.live.connection.${CONNECTION_TRANSLATION_KEYS[connectionState]}`,
-      )}
+      {showFull &&
+        t(
+          `competitions.live.connection.${CONNECTION_TRANSLATION_KEYS[connectionState]}`,
+        )}
     </Status.Root>
   );
 }

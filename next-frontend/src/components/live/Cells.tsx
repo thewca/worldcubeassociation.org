@@ -10,8 +10,10 @@ import { LiveAttempt, LiveCompetitor, LiveResult } from "@/types/live";
 export function LiveTableHeader({
   isLinked = false,
   format,
+  showFull = true,
 }: {
   isLinked?: boolean;
+  showFull?: boolean;
   format: Format;
 }) {
   const solveCount = format.expected_solve_count;
@@ -25,12 +27,13 @@ export function LiveTableHeader({
         <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
         <Table.ColumnHeader>Competitor</Table.ColumnHeader>
         {isLinked && <Table.ColumnHeader>Round</Table.ColumnHeader>}
-        <Table.ColumnHeader>Country</Table.ColumnHeader>
-        {attemptIndexes.map((num) => (
-          <Table.ColumnHeader key={num} textAlign="right">
-            {num + 1}
-          </Table.ColumnHeader>
-        ))}
+        {showFull && <Table.ColumnHeader>Country</Table.ColumnHeader>}
+        {showFull &&
+          attemptIndexes.map((num) => (
+            <Table.ColumnHeader key={num} textAlign="right">
+              {num + 1}
+            </Table.ColumnHeader>
+          ))}
         {stats.map((stat) => (
           <Table.ColumnHeader textAlign="right" key={stat.field}>
             {stat.name}
@@ -65,26 +68,32 @@ export function LivePositionCell({
 
 export function LiveCompetitorCell({
   isAdmin = false,
+  link = true,
   rowSpan,
   competitionId,
   competitor,
 }: {
   isAdmin?: boolean;
+  link?: boolean;
   rowSpan?: number;
   competitionId: string;
   competitor: Pick<LiveCompetitor, "id" | "name">;
 }) {
   return (
     <Table.Cell rowSpan={rowSpan}>
-      <Link
-        href={
-          isAdmin
-            ? `/registrations/${competitor.id}/edit`
-            : `/competitions/${competitionId}/live/competitors/${competitor.id}`
-        }
-      >
-        {competitor.name}
-      </Link>
+      {link ? (
+        <Link
+          href={
+            isAdmin
+              ? `/registrations/${competitor.id}/edit`
+              : `/competitions/${competitionId}/live/competitors/${competitor.id}`
+          }
+        >
+          {competitor.name}
+        </Link>
+      ) : (
+        competitor.name
+      )}
     </Table.Cell>
   );
 }
@@ -103,7 +112,7 @@ export function LiveAttemptsCells({
   return padSkipped(attempts, format.expected_solve_count).map((attempt) => (
     <Table.Cell
       textAlign="right"
-      key={`${competitorId}-${attempt.attempt_number}`}
+      key={`attempts-${competitorId}-${attempt.attempt_number}`}
     >
       {formatAttemptResult(attempt.value, eventId)}
     </Table.Cell>
