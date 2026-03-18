@@ -51,7 +51,7 @@ RSpec.describe "WCA Live API" do
 
         post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request
         perform_enqueued_jobs
-      end.to have_broadcasted_to(Live::Config.broadcast_key(round.wcif_id))
+      end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, round.wcif_id))
         .from_channel(ApplicationCable::Channel)
     end
 
