@@ -144,6 +144,11 @@ class LiveResult < ApplicationRecord
   end
 
   def self.compute_best_and_worse_possible_average(live_attempts, round)
+    return {
+      "best_possible_average" => BEST_POSSIBLE_SCORE,
+      "worst_possible_average" => WORST_POSSIBLE_SCORE,
+    } if live_attempts.length == 0
+
     missing_count = round.format.expected_solve_count - live_attempts.length
 
     {
