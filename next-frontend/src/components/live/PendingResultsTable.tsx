@@ -2,7 +2,7 @@ import { Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import formats from "@/lib/wca/data/formats";
 import { padSkipped } from "@/lib/live/padSkipped";
-import { LiveCompetitor, LiveResult } from "@/types/live";
+import { LiveCompetitor, PendingLiveResult } from "@/types/live";
 
 export default function PendingResultsTable({
   pendingLiveResults,
@@ -10,7 +10,7 @@ export default function PendingResultsTable({
   eventId,
   competitors,
 }: {
-  pendingLiveResults: LiveResult[];
+  pendingLiveResults: PendingLiveResult[];
   formatId: string;
   eventId: string;
   competitors: Map<number, LiveCompetitor>;
