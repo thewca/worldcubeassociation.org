@@ -92,21 +92,22 @@ export function MultiRoundResultProvider({
     initialData: round,
   }));
 
-  const { liveResultsByRegistrationId, stateHashesByRoundId, competitors } = useQueries({
-    queries,
-    combine: (queryResults) => ({
-      liveResultsByRegistrationId: _.groupBy(
-        queryResults.flatMap((r) => r.data.results),
-        "registration_id",
-      ),
-      stateHashesByRoundId: Object.fromEntries(
-        queryResults.map((r) => [r.data.id, r.data.state_hash]),
-      ),
-      competitors: new Map(
-        queryResults.flatMap((r) => r.data.competitors.map((c) => [c.id, c]))
-      ),
-    }),
-  });
+  const { liveResultsByRegistrationId, stateHashesByRoundId, competitors } =
+    useQueries({
+      queries,
+      combine: (queryResults) => ({
+        liveResultsByRegistrationId: _.groupBy(
+          queryResults.flatMap((r) => r.data.results),
+          "registration_id",
+        ),
+        stateHashesByRoundId: Object.fromEntries(
+          queryResults.map((r) => [r.data.id, r.data.state_hash]),
+        ),
+        competitors: new Map(
+          queryResults.flatMap((r) => r.data.competitors.map((c) => [c.id, c])),
+        ),
+      }),
+    });
 
   const onReceived = (roundId: string, diff: DiffProtocolResponse) => {
     const {
@@ -156,21 +157,21 @@ export function MultiRoundResultProvider({
 
       const decompressedCreated = created.map((r) => decompressFullResult(r));
 
-      queryClient.setQueryData(query.queryKey, (oldData: LiveRound): LiveRound => ({
-        ...oldData,
-        results: applyDiffToLiveResults({
-          previousResults: oldData.results,
-          updated: decompressedUpdated,
-          created: decompressedCreated,
-          deleted,
-          roundWcifId: roundId,
+      queryClient.setQueryData(
+        query.queryKey,
+        (oldData: LiveRound): LiveRound => ({
+          ...oldData,
+          results: applyDiffToLiveResults({
+            previousResults: oldData.results,
+            updated: decompressedUpdated,
+            created: decompressedCreated,
+            deleted,
+            roundWcifId: roundId,
+          }),
+          state_hash: after_hash,
+          competitors: [...oldData.competitors, ...created.map((c) => c.user)],
         }),
-        state_hash: after_hash,
-        competitors: [
-          ...oldData.competitors,
-          ...created.map((c) => c.user),
-        ]
-      }));
+      );
 
       updatePendingResults((pendingResults) =>
         pendingResults.filter(
