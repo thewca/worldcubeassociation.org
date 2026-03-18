@@ -92,7 +92,9 @@ export function MultiRoundResultProvider({
   competitionId: string;
   children: ReactNode;
 }) {
-  const [pendingResults, updatePendingResults] = useState<PendingLiveResult[]>([]);
+  const [pendingResults, updatePendingResults] = useState<PendingLiveResult[]>(
+    [],
+  );
   const [pendingQuitCompetitors, updatePendingQuitCompetitors] = useState<
     Set<number>
   >(new Set());
@@ -183,7 +185,7 @@ export function MultiRoundResultProvider({
 
         // We just made a full refetch. Only keep those results as "pending"
         //   which are NOT contained exactly in the refetched round.
-        // In other words, if we find a competitor with the updated average and the updated best
+        // In other words, if we find a competitor with the updated attempts
         //   in the refetched round, then their result is not pending anymore.
         diffPendingResults(newResults, (pr, ir) =>
           compareAttempts(pr.attempts, ir.attempts),
@@ -221,7 +223,7 @@ export function MultiRoundResultProvider({
 
       diffPendingResults(decompressedUpdated, (pr, ir) => {
         // TODO GB: Is there a smarter way to compare these? The incoming values are diffs, meaning (type-wise)
-        //   they might not actually contain attempts. What would an attempt-less update look like though?
+        //   they might not actually contain attempts. For example when only advancing is updated
         return (
           "attempts" in ir &&
           ir.attempts !== undefined &&
