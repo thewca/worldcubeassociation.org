@@ -967,6 +967,8 @@ export interface components {
             advancing: boolean;
             advancing_questionable: boolean;
             attempts: components["schemas"]["LiveAttempt"][];
+            /** Format: datetime */
+            last_attempt_entered_at?: string;
         };
         RoundLiveResult: components["schemas"]["BaseLiveResult"] & {
             round_wcif_id: string;

@@ -27,3 +27,6 @@ properties:
     type: array
     items:
       $ref: "./LiveAttempt.yaml"
+  last_attempt_entered_at:
+    type: string
+    format: datetime

@@ -39,6 +39,7 @@ export type CompressedLiveResult = {
     v: number;
     an: number;
   }[];
+  at: string;
 };
 
 type CompressedLiveResultWithUser = CompressedLiveResult & {

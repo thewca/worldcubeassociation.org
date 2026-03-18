@@ -86,6 +86,7 @@ module Live
       "attempt_number" => "an",
       "best_possible_average" => "bpa",
       "worst_possible_average" => "wpa",
+      "last_attempt_entered_at" => "at",
     }.freeze
 
     # To send even less data, we shorten the quite long attribute names
