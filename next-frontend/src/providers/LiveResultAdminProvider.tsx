@@ -54,13 +54,31 @@ export function LiveResultAdminProvider({
   const [registrationId, setRegistrationId] = useState<number | undefined>(
     initialRegistrationId,
   );
-  const [attempts, setAttempts] = useState<number[]>(
-    initialRegistrationId
-      ? liveResultsByRegistrationId[initialRegistrationId][0].attempts.map(
-          (a) => a.value,
-        )
-      : zeroedArrayOfSize(solveCount),
+
+  const getAttemptsForCompetitor = useCallback(
+    (registrationId?: number): number[] => {
+      if (registrationId === undefined) {
+        return zeroedArrayOfSize(solveCount);
+      }
+
+      // Even for Dual Rounds we only fetch one round in the admin view
+      const competitorResults = liveResultsByRegistrationId[registrationId][0];
+
+      if (competitorResults.attempts.length > 0) {
+        return competitorResults.attempts
+          .toSorted((a, b) => a.attempt_number - b.attempt_number)
+          .map((a) => a.value);
+      }
+
+      return zeroedArrayOfSize(solveCount);
+    },
+    [liveResultsByRegistrationId, solveCount],
   );
+
+  const [attempts, setAttempts] = useState<number[]>(() =>
+    getAttemptsForCompetitor(initialRegistrationId),
+  );
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -69,15 +87,11 @@ export function LiveResultAdminProvider({
   const handleRegistrationIdChange = useCallback(
     (value: number) => {
       setRegistrationId(value);
-      // Even for Dual Rounds we only fetch one round in the admin view
-      const alreadyEnteredResults = liveResultsByRegistrationId[value][0];
-      if (alreadyEnteredResults.attempts.length > 0) {
-        setAttempts(alreadyEnteredResults.attempts.map((a) => a.value));
-      } else {
-        setAttempts(zeroedArrayOfSize(solveCount));
-      }
+
+      const competitorAttempts = getAttemptsForCompetitor(value);
+      setAttempts(competitorAttempts);
     },
-    [liveResultsByRegistrationId, solveCount],
+    [getAttemptsForCompetitor],
   );
 
   const { mutate: mutateUpdate, isPending: isPendingUpdate } = api.useMutation(
