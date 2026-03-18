@@ -115,7 +115,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
   optional :ASSETS_COMPILATION, :bool, false
 
   # For ActionCable, currently optional
-  optional :ACTIONCABLE_REDIS_URL, :string, ''
+  optional :ANYCABLE_REDIS_URL, :string, ''
 
   # For local Playwright instances
   optional :PLAYWRIGHT_SERVER_SOCKET_URL, :string, ''
