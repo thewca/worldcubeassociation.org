@@ -140,7 +140,7 @@ class LiveResult < ApplicationRecord
 
   def forecast_statistics
     # use .length on purpose here as otherwise we would use one query per row
-    LiveResult.compute_best_and_worse_possible_average(live_attempts.as_json, round) if live_attempts.length < round.format.expected_solve_count
+    LiveResult.compute_best_and_worse_possible_average(live_attempts.as_json, round) if live_attempts.length == round.format.expected_solve_count - 1
   end
 
   def self.compute_best_and_worse_possible_average(live_attempts, round)
