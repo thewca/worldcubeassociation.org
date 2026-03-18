@@ -222,12 +222,10 @@ export function MultiRoundResultProvider({
       );
 
       diffPendingResults(decompressedUpdated, (pr, ir) => {
-        // TODO GB: Is there a smarter way to compare these? The incoming values are diffs, meaning (type-wise)
+        // The incoming values are diffs, meaning (type-wise)
         //   they might not actually contain attempts. For example when only advancing is updated
         return (
-          "attempts" in ir &&
-          ir.attempts !== undefined &&
-          compareAttempts(pr.attempts, ir.attempts)
+          ir.attempts !== undefined && compareAttempts(pr.attempts, ir.attempts)
         );
       });
 
