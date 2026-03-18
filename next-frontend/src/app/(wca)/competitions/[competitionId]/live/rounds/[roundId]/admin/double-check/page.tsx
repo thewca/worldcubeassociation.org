@@ -7,6 +7,7 @@ import formats from "@/lib/wca/data/formats";
 import { Container } from "@chakra-ui/react";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
+import { DateTime } from "luxon";
 
 export default async function DoubleCheckPage({
   params,
@@ -28,8 +29,10 @@ export default async function DoubleCheckPage({
 
   const { results, id, format } = data;
 
-  const sortedResults = results.toSorted((a, b) =>
-    b.last_attempt_entered_at.localeCompare(a.last_attempt_entered_at),
+  const sortedResults = results.toSorted(
+    (a, b) =>
+      DateTime.fromISO(b.last_attempt_entered_at).toMillis() -
+      DateTime.fromISO(a.last_attempt_entered_at).toMillis(),
   );
 
   return (
