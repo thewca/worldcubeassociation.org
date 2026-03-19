@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_16_104129) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_19_150521) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -467,31 +467,31 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_104129) do
     t.index ["start_date"], name: "index_competitions_on_start_date"
   end
 
-  create_table "concise_average_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "concise_average_results", primary_key: "result_id", id: :bigint, default: 0, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "average", default: 0, null: false
     t.string "continent_id", limit: 50, default: "", null: false
     t.string "country_id", limit: 50, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
-    t.integer "id", default: 0, null: false
     t.string "person_id", limit: 10, default: "", null: false
     t.integer "reg_year", limit: 2, default: 0, null: false, unsigned: true
     t.bigint "value_and_id"
     t.index ["event_id", "average"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "average"], name: "regional_records_speedup"
+    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
     t.index ["person_id", "event_id", "continent_id", "country_id", "average"], name: "average_ranks_speedup"
   end
 
-  create_table "concise_single_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "concise_single_results", primary_key: "result_id", id: :bigint, default: 0, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "best", default: 0, null: false
     t.string "continent_id", limit: 50, default: "", null: false
     t.string "country_id", limit: 50, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
-    t.integer "id", default: 0, null: false
     t.string "person_id", limit: 10, default: "", null: false
     t.integer "reg_year", limit: 2, default: 0, null: false, unsigned: true
     t.bigint "value_and_id"
     t.index ["event_id", "best"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "best"], name: "regional_records_speedup"
+    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
     t.index ["person_id", "event_id", "continent_id", "country_id", "best"], name: "single_ranks_speedup"
   end
 
@@ -1614,6 +1614,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_104129) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "concise_average_results", "results", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "concise_single_results", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "h2h_attempts", "h2h_match_competitors"
   add_foreign_key "h2h_attempts", "h2h_sets"
   add_foreign_key "h2h_attempts", "live_attempts"
