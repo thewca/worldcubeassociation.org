@@ -122,6 +122,7 @@ class UsersController < ApplicationController
     ActiveRecord::Base.transaction do
       user.assign_wca_id(wca_id)
       user.update!(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+      user.claim_wca_id_ticket&.update!(status: TicketsClaimWcaId.statuses[:closed])
     end
 
     redirect_to edit_user_path(user), flash: { success: "Successfully confirmed WCA ID #{wca_id}." }

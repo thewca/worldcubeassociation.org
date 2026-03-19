@@ -431,7 +431,6 @@ class TicketsController < ApplicationController
     is_active = ActiveRecord::Type::Boolean.new.cast(params.require(:is_active))
 
     ActiveRecord::Base.transaction do
-      @user.update!(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
       new_stakeholder = @ticket.ticket_stakeholders.create!(
         stakeholder: current_user,
         connection: connection,
