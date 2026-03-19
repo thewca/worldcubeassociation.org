@@ -477,7 +477,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_150521) do
     t.bigint "value_and_id"
     t.index ["event_id", "average"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "average"], name: "regional_records_speedup"
-    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
     t.index ["person_id", "event_id", "continent_id", "country_id", "average"], name: "average_ranks_speedup"
   end
 
@@ -491,7 +490,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_150521) do
     t.bigint "value_and_id"
     t.index ["event_id", "best"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "best"], name: "regional_records_speedup"
-    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
     t.index ["person_id", "event_id", "continent_id", "country_id", "best"], name: "single_ranks_speedup"
   end
 
