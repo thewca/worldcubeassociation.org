@@ -44,79 +44,82 @@ module AuxiliaryDataComputation
       %w[best ranks_single concise_single_results],
       %w[average ranks_average concise_average_results],
     ].each do |field, table_name, concise_table_name|
-      DbHelper.with_temp_table(table_name) do |temp_table_name|
-        ActiveRecord::Base.connection.execute <<~SQL.squish
-          INSERT INTO #{temp_table_name} (person_id, event_id, best, world_rank, continent_rank, country_rank)
-          WITH current_person_regions AS (
-            SELECT
-              p.wca_id AS person_id,
-              p.country_id AS current_country_id,
-              c.continent_id AS current_continent_id
-            FROM persons p
-              INNER JOIN countries c ON p.country_id = c.id
-            WHERE p.sub_id = 1
-          ),
-          personal_bests AS (
-            SELECT
-              person_id,
-              event_id,
-              continent_id,
-              country_id,
-              MIN(#{field}) AS value
-            FROM #{concise_table_name}
-            GROUP BY
-              person_id,
-              event_id,
-              continent_id,
-              country_id
-            WITH ROLLUP
-            HAVING person_id IS NOT NULL
-              AND event_id IS NOT NULL
-          ),
-          world_ranks AS (
-            SELECT person_id, event_id, value,
-              RANK() OVER (PARTITION BY event_id ORDER BY value) AS world_rank
-            FROM personal_bests
-            WHERE country_id IS NULL
-              AND continent_id IS NULL
-          ),
-          continent_ranks AS (
-            SELECT person_id, event_id, continent_id, value,
-              RANK() OVER (PARTITION BY event_id, continent_id ORDER BY value) AS continent_rank
-            FROM personal_bests
-            WHERE country_id IS NULL
-              AND continent_id IS NOT NULL
-          ),
-          country_ranks AS (
-            SELECT person_id, event_id, country_id, value,
-              RANK() OVER (PARTITION BY event_id, country_id ORDER BY value) AS country_rank
-            FROM personal_bests
-            WHERE country_id IS NOT NULL
-              AND continent_id IS NOT NULL
-          )
+      ActiveRecord::Base.connection.execute <<~SQL.squish
+        INSERT INTO #{table_name} (person_id, event_id, best, world_rank, continent_rank, country_rank)
+        WITH current_person_regions AS (
           SELECT
-            wr.person_id,
-            wr.event_id,
-            wr.value AS best,
-            wr.world_rank,
-            COALESCE(cr.continent_rank, 0) AS continent_rank,
-            COALESCE(nr.country_rank, 0) AS country_rank
-          FROM world_ranks wr
-          INNER JOIN current_person_regions cpr
-            ON cpr.person_id = wr.person_id
-          LEFT JOIN continent_ranks cr
-            ON cpr.person_id = cr.person_id
-              AND wr.event_id = cr.event_id
-              AND cpr.current_continent_id = cr.continent_id
-          LEFT JOIN country_ranks nr
-            ON cpr.person_id = nr.person_id
-              AND wr.event_id = nr.event_id
-              AND cpr.current_country_id = nr.country_id
-          ORDER BY
-            wr.event_id,
-            wr.world_rank
-        SQL
-      end
+            p.wca_id AS person_id,
+            p.country_id AS current_country_id,
+            c.continent_id AS current_continent_id
+          FROM persons p
+            INNER JOIN countries c ON p.country_id = c.id
+          WHERE p.sub_id = 1
+        ),
+        personal_bests AS (
+          SELECT
+            person_id,
+            event_id,
+            continent_id,
+            country_id,
+            MIN(#{field}) AS value
+          FROM #{concise_table_name}
+          GROUP BY
+            person_id,
+            event_id,
+            continent_id,
+            country_id
+          WITH ROLLUP
+          HAVING person_id IS NOT NULL
+            AND event_id IS NOT NULL
+        ),
+        world_ranks AS (
+          SELECT person_id, event_id, value,
+            RANK() OVER (PARTITION BY event_id ORDER BY value) AS world_rank
+          FROM personal_bests
+          WHERE country_id IS NULL
+            AND continent_id IS NULL
+        ),
+        continent_ranks AS (
+          SELECT person_id, event_id, continent_id, value,
+            RANK() OVER (PARTITION BY event_id, continent_id ORDER BY value) AS continent_rank
+          FROM personal_bests
+          WHERE country_id IS NULL
+            AND continent_id IS NOT NULL
+        ),
+        country_ranks AS (
+          SELECT person_id, event_id, country_id, value,
+            RANK() OVER (PARTITION BY event_id, country_id ORDER BY value) AS country_rank
+          FROM personal_bests
+          WHERE country_id IS NOT NULL
+            AND continent_id IS NOT NULL
+        )
+        SELECT
+          wr.person_id,
+          wr.event_id,
+          wr.value AS best,
+          wr.world_rank,
+          COALESCE(cr.continent_rank, 0) AS continent_rank,
+          COALESCE(nr.country_rank, 0) AS country_rank
+        FROM world_ranks wr
+        INNER JOIN current_person_regions cpr
+          ON cpr.person_id = wr.person_id
+        LEFT JOIN continent_ranks cr
+          ON cpr.person_id = cr.person_id
+            AND wr.event_id = cr.event_id
+            AND cpr.current_continent_id = cr.continent_id
+        LEFT JOIN country_ranks nr
+          ON cpr.person_id = nr.person_id
+            AND wr.event_id = nr.event_id
+            AND cpr.current_country_id = nr.country_id
+        ORDER BY
+          wr.event_id,
+          wr.world_rank
+        ON DUPLICATE KEY UPDATE
+          best = wr.value,
+          world_rank = wr.world_rank,
+          continent_rank = wr.continent_rank,
+          country_rank = wr.country_rank
+      SQL
     end
   end
 
