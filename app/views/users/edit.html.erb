@@ -71,7 +71,7 @@
           <div class="row" id="wca_id">
             <div class="col-xs-6">
               <% claim_ticket = TicketsClaimWcaId.open.find_by(user: @user)&.ticket %>
-              <% if claim_ticket %>
+              <% if claim_ticket.present? %>
                 <div class="form-group wca_id optional user_unconfirmed_wca_id">
                   <label class="wca_id optional control-label" for="user_unconfirmed_wca_id">
                     <%= t 'activerecord.attributes.user.unconfirmed_wca_id' %>
