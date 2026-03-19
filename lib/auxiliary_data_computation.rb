@@ -2,7 +2,8 @@
 
 module AuxiliaryDataComputation
   def self.compute_everything
-    self.insert_regional_records_lookup
+    CheckRegionalRecords.add_to_lookup_table
+
     self.compute_concise_results
     self.compute_rank_tables
   end
@@ -117,12 +118,6 @@ module AuxiliaryDataComputation
             wr.world_rank
         SQL
       end
-    end
-  end
-
-  def self.insert_regional_records_lookup
-    DbHelper.with_temp_table("regional_records_lookup") do |temp_table_name|
-      CheckRegionalRecords.add_to_lookup_table(table_name: temp_table_name)
     end
   end
 end
