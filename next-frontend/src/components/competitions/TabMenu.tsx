@@ -23,6 +23,7 @@ import {
 import { useState } from "react";
 import { TFunction } from "i18next";
 import { LuAlignJustify } from "react-icons/lu";
+import { iconMap } from "@/components/icons/iconMap";
 
 export default function TabMenu({
   competitionInfo,
@@ -171,7 +172,8 @@ function CollapsibleTabGroup({
   isOpen: boolean;
   onToggle: () => void;
 }) {
-  const { i18nKey, icon: IconComponent, children } = tab;
+  const { i18nKey, icon, children } = tab;
+  const IconComponent = iconMap[icon];
 
   return (
     <Collapsible.Root open={isOpen} onOpenChange={onToggle}>

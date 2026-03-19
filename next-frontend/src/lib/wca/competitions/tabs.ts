@@ -1,23 +1,20 @@
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
-import { iconMap } from "@/components/icons/iconMap";
-import { LuCalendar } from "react-icons/lu";
+import type { IconName } from "@/components/icons/iconMap";
 import type { RouteLiteral } from "nextjs-routes";
-import type { ComponentType } from "react";
 import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import { EventId } from "@/lib/wca/data/events";
-import { EventIconId, eventIconMap } from "@/components/EventIcon";
 
 interface TabBase {
   i18nKey: string;
   menuKey: string;
-  icon?: ComponentType;
+  icon?: IconName;
   disabled?: boolean;
 }
 
 export interface TabWithChildren extends TabBase {
-  icon: ComponentType;
+  icon: IconName;
   children: TabWithLink[];
 }
 
@@ -39,7 +36,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "general",
-      icon: iconMap["Information"],
+      icon: "Information",
     },
     {
       i18nKey: "competitions.nav.menu.register",
@@ -48,7 +45,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "register",
-      icon: iconMap["Register"],
+      icon: "Register",
       disabled: process.env.NODE_ENV === "production",
     },
     {
@@ -58,7 +55,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "competitors",
-      icon: iconMap["Competitors"],
+      icon: "Competitors",
     },
     {
       i18nKey: "competitions.show.events",
@@ -67,7 +64,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "events",
-      icon: iconMap["333Icon"],
+      icon: "333Icon",
     },
     {
       i18nKey: "competitions.show.schedule",
@@ -76,7 +73,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "schedule",
-      icon: LuCalendar,
+      icon: "Registration Open Date",
     },
   ];
 };
@@ -98,7 +95,7 @@ export const duringCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "live",
-      icon: iconMap["Information"],
+      icon: "Information",
     },
     {
       i18nKey: "competitions.nav.menu.podiums",
@@ -107,7 +104,7 @@ export const duringCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "podiums",
-      icon: iconMap["Records"],
+      icon: "Records",
     },
     {
       i18nKey: "competitions.nav.menu.competitors",
@@ -116,12 +113,12 @@ export const duringCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "competitors",
-      icon: iconMap["Competitors"],
+      icon: "Competitors",
     },
     ..._.map(roundsByEventId, (rounds, eventId: EventId) => ({
       i18nKey: `events.${eventId}`,
       menuKey: eventId,
-      icon: eventIconMap[eventId as EventIconId],
+      icon: `${eventId}Icon` as IconName,
       children: rounds.map((round) => {
         const { roundNumber } = parseActivityCode(round.id);
 
@@ -155,7 +152,7 @@ export const afterCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "general",
-      icon: iconMap["Information"],
+      icon: "Information",
     },
     {
       i18nKey: "competitions.nav.menu.podiums",
@@ -164,7 +161,7 @@ export const afterCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "podiums",
-      icon: iconMap["Records"],
+      icon: "Records",
     },
     {
       i18nKey: "competitions.nav.menu.results",
@@ -173,7 +170,7 @@ export const afterCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "all",
-      icon: iconMap["List"],
+      icon: "List",
     },
     {
       i18nKey: "competitions.nav.menu.by_person",
@@ -182,7 +179,7 @@ export const afterCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "byPerson",
-      icon: iconMap["Competitors"],
+      icon: "Competitors",
     },
   ];
 };
