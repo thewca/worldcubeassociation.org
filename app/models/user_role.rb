@@ -55,6 +55,7 @@ class UserRole < ApplicationRecord
       RolesMetadataOfficers.statuses[:treasurer],
       RolesMetadataOfficers.statuses[:vice_chair],
       RolesMetadataOfficers.statuses[:secretary],
+      RolesMetadataOfficers.statuses[:chief_operating_officer],
       RolesMetadataOfficers.statuses[:executive_director],
       RolesMetadataOfficers.statuses[:chair],
     ],

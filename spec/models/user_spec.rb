@@ -620,6 +620,11 @@ RSpec.describe User do
       expect(board_member.can_view_all_users?).to be true
     end
 
+    it "returns true for higher permission officer" do
+      chief_operating_officer = create(:chief_operating_officer_role).user
+      expect(chief_operating_officer.can_view_all_users?).to be true
+    end
+
     it "returns false for normal user" do
       normal_user = create(:user)
       expect(normal_user.can_view_all_users?).to be false
@@ -632,6 +637,11 @@ RSpec.describe User do
     it "returns true for board" do
       board_member = create(:user, :board_member)
       expect(board_member.can_edit_user?(user)).to be true
+    end
+
+    it "returns true for higher permission officer" do
+      chief_operating_officer = create(:chief_operating_officer_role).user
+      expect(chief_operating_officer.can_edit_user?(user)).to be true
     end
 
     it "returns false for normal user" do
@@ -804,12 +814,14 @@ RSpec.describe User do
 
     it "returns true for Officer roles" do
       executive_director = create(:executive_director_role)
+      chief_operating_officer = create(:chief_operating_officer_role)
       chair = create(:chair_role)
       vice_chair = create(:vice_chair_role)
       secretary = create(:secretary_role)
       treasurer = create(:treasurer_role)
 
       expect(executive_director.user.staff?).to be true
+      expect(chief_operating_officer.user.staff?).to be true
       expect(chair.user.staff?).to be true
       expect(vice_chair.user.staff?).to be true
       expect(secretary.user.staff?).to be true
