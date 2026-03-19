@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --webpack",
     "check:types": "tsc --noEmit",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "types:openapi": "redocly bundle openapi/wcaCore.yaml -o openapi/wcaAPI.yaml && openapi-typescript openapi/wcaAPI.yaml -o src/types/openapi.ts && redocly build-docs openapi/wcaAPI.yaml -o public/api.html",
     "types:chakra": "chakra typegen ./src/theme.ts --outdir src/types/chakra --strict",
