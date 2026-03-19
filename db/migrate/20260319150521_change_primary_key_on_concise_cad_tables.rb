@@ -11,6 +11,9 @@ class ChangePrimaryKeyOnConciseCadTables < ActiveRecord::Migration[8.1]
       dir.down do
         change_column :concise_single_results, :id, :integer, null: false, default: 0
         change_column :concise_average_results, :id, :integer, null: false, default: 0
+
+        execute "ALTER TABLE concise_single_results DROP PRIMARY KEY"
+        execute "ALTER TABLE concise_average_results DROP PRIMARY KEY"
       end
     end
 
