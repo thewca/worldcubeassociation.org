@@ -33,8 +33,8 @@ export default function AttemptsForm({
     handleSubmit,
     attempts,
     handleAttemptChange,
-    isPending,
     registrationId,
+    isPending,
   } = useResultsAdmin();
 
   const { competitors } = useLiveResults();
@@ -42,7 +42,7 @@ export default function AttemptsForm({
   const { collection, filter } = useListCollection({
     initialItems: Array.from(competitors.values()),
     itemToValue: (competitor) => competitor.id.toString(),
-    itemToString: (competitor) => toCompetitorString(competitor),
+    itemToString: toCompetitorString,
     filter: (itemText, filterText, item) =>
       itemText.includes(filterText) ||
       parseInt(filterText, 10) === item.registrant_id,

@@ -43,7 +43,7 @@ class LiveResult < ApplicationRecord
             numericality: { only_integer: true }
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: %w[global_pos local_pos registration_id best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
+    only: %w[global_pos local_pos registration_id best average single_record_tag average_record_tag advancing last_attempt_entered_at advancing_questionable entered_at entered_by_id],
     methods: %w[event_id attempts result_id forecast_statistics round_wcif_id],
     include: %w[],
   }.freeze
@@ -113,7 +113,7 @@ class LiveResult < ApplicationRecord
   end
 
   LIVE_STATE_SERIALIZE_OPTIONS = {
-    only: %w[advancing advancing_questionable average average_record_tag best registration_id single_record_tag],
+    only: %w[advancing advancing_questionable average average_record_tag best registration_id last_attempt_entered_at single_record_tag],
     methods: %w[],
     include: [{ live_attempts: { only: %i[value attempt_number] } }],
   }.freeze
