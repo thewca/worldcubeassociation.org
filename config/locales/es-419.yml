@@ -685,6 +685,8 @@ es-419:
           chair: Presidente WCA
           #original_hash: 7d405ff
           executive_director: Director Ejecutivo WCA
+          #original_hash: 36a137f
+          chief_operating_officer: WCA Director de Operaciones
           #original_hash: 1dd4a07
           secretary: Secretario Corporativo WCA
           #original_hash: 0388b19
@@ -2839,6 +2841,8 @@ es-419:
         la lista de espera. Si estás usando lista de espera, por favor
         especifica una fecha límite. Si no estás usando una lista de espera,
         recuerda especificar esto en los requisitos de las inscripciones.
+      #original_hash: 51376ef
+      schedule_locked_after_results_submitted: El horario no puede ser editado luego de enviar los resultados.
     live:
       #original_hash: 10d1a3c
       title: Resultados en vivo
