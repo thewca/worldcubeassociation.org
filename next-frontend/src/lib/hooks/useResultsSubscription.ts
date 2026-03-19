@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useEffectEvent, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
 import _ from "lodash";
-import useEffectEvent from "@/lib/hooks/useEffectEvent";
 import type { PartialExcept } from "@/lib/types/objects";
 import { LiveCompetitor, LiveResult } from "@/types/live";
 import { anycableConnection } from "@/lib/websocket/anycable";
@@ -103,7 +102,7 @@ export default function useResultsSubscriptions(
     );
 
     return () => subscriptions.forEach((s) => s.unsubscribe());
-  }, [changeConnectionState, competitionId, onReceivedEvent, roundIds]);
+  }, [changeConnectionState, competitionId, roundIds]);
 
   // Aggregate: worst state wins
   const values = Object.values(connectionStates);
