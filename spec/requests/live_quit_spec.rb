@@ -133,6 +133,7 @@ RSpec.describe "WCA Live API" do
                                          "average_record_tag" => nil,
                                          "registration_id" => registrations.third.id,
                                          "single_record_tag" => nil,
+                                         "last_attempt_entered_at" => anything,
                                          "live_attempts" => [] }].map { (Live::DiffHelper.compress_payload it).merge({ "user" => user }) }))
     end
   end
