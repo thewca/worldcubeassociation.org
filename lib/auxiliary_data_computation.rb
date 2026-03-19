@@ -117,8 +117,8 @@ module AuxiliaryDataComputation
         ON DUPLICATE KEY UPDATE
           best = wr.value,
           world_rank = wr.world_rank,
-          continent_rank = wr.continent_rank,
-          country_rank = wr.country_rank
+          continent_rank = COALESCE(cr.continent_rank, 0),
+          country_rank = COALESCE(nr.country_rank, 0)
       SQL
     end
   end
