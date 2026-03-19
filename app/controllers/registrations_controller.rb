@@ -49,7 +49,7 @@ class RegistrationsController < ApplicationController
 
     return render status: :unprocessable_content, json: { error: errors.join(", ") } if errors.any?
 
-    @registration_rows = registration_rows.map do |row|
+    @registration_data = registration_rows.map do |row|
       country = Country.c_find_by_iso2(row[:countryIso2])
 
       {
@@ -69,14 +69,14 @@ class RegistrationsController < ApplicationController
     @competition = competition_from_params
     file = params.require(:csv_registration_file)
 
-    @registration_rows = parse_csv_file(file.path, @competition)
+    @converted_registrations = parse_csv_to_registration_data(file.path, @competition)
   end
 
   def validate_and_convert_registrations
-    render status: :ok, json: @registration_rows
+    render status: :ok, json: @converted_registrations
   end
 
-  private def parse_csv_file(file_path, competition)
+  private def parse_csv_to_registration_data(file_path, competition)
     all_rows = CSV.read(
       file_path,
       headers: true,
@@ -248,12 +248,12 @@ class RegistrationsController < ApplicationController
     #   from CSV import to be considered as one "batch". So we mark a timestamp
     #   once, and then reuse it throughout the loop.
     import_time = Time.now.utc
-    emails = @registration_rows.pluck(:email)
+    emails = @registration_data.pluck(:email)
     ActiveRecord::Base.transaction do
       @competition.registrations.accepted.each do |registration|
         registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED) unless emails.include?(registration.user.email)
       end
-      @registration_rows.each do |registration_row|
+      @registration_data.each do |registration_row|
         user, locked_account_created = user_for_registration!(registration_row)
         new_locked_users << user if locked_account_created
         registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
