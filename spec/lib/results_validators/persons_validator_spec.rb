@@ -405,6 +405,27 @@ RSpec.describe PV do
         end
       end
 
+      it "warns if an inbox person has an unaccepted registration" do
+        reg = create(:registration, :pending, competition: competition_with_regs)
+
+        person_with_unaccepted_reg = create(:inbox_person, competition_id: competition_with_regs.id, name: reg.name, ref_id: reg.registrant_id)
+        create(:inbox_result, competition: competition_with_regs, person: person_with_unaccepted_reg, event_id: "333", round: round_333)
+
+        validator_args = [
+          { competition_ids: [competition_with_regs.id], model: InboxResult },
+          { results: InboxResult.where(competition_id: competition_with_regs.id), model: InboxResult },
+        ]
+
+        validator_args.each do |arg|
+          pv = PV.new.validate(**arg)
+          expect(pv.warnings).to include(
+            RV::ValidationWarning.new(PV::UNACCEPTED_REGISTRATION_WITH_RESULTS_WARNING,
+                                      :persons, competition_with_regs.id,
+                                      name: person_with_unaccepted_reg.name),
+          )
+        end
+      end
+
       it "warns if registration details mismatch" do
         reg = create(:registration, :accepted, competition: competition_with_regs)
 

@@ -27,6 +27,7 @@ module ResultsValidators
     SPECIAL_CHARACTERS_IN_NAME_WARNING = :special_characters_in_name_warning
     REGISTRATION_DETAILS_MISMATCH_WARNING = :registration_details_mismatch_warning
     MISSING_MATCHING_REGISTRATION_WARNING = :missing_matching_registration_warning
+    UNACCEPTED_REGISTRATION_WITH_RESULTS_WARNING = :unaccepted_registration_with_results_warning
 
     def self.description
       "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
@@ -231,6 +232,12 @@ module ResultsValidators
                                                :persons, competition.id,
                                                name: p.name)
             next
+          end
+
+          unless p.registration.accepted?
+            @warnings << ValidationWarning.new(UNACCEPTED_REGISTRATION_WITH_RESULTS_WARNING,
+                                               :persons, competition.id,
+                                               name: p.name)
           end
 
           mismatches = p.registration_mismatches
