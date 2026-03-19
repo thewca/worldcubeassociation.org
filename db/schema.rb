@@ -467,7 +467,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_150521) do
     t.index ["start_date"], name: "index_competitions_on_start_date"
   end
 
-  create_table "concise_average_results", primary_key: "result_id", id: :bigint, default: 0, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "concise_average_results", primary_key: "result_id", id: :bigint, default: nil, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "average", default: 0, null: false
     t.string "continent_id", limit: 50, default: "", null: false
     t.string "country_id", limit: 50, default: "", null: false
@@ -481,7 +481,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_150521) do
     t.index ["person_id", "event_id", "continent_id", "country_id", "average"], name: "average_ranks_speedup"
   end
 
-  create_table "concise_single_results", primary_key: "result_id", id: :bigint, default: 0, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "concise_single_results", primary_key: "result_id", id: :bigint, default: nil, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "best", default: 0, null: false
     t.string "continent_id", limit: 50, default: "", null: false
     t.string "country_id", limit: 50, default: "", null: false

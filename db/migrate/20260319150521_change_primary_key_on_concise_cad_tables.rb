@@ -4,13 +4,13 @@ class ChangePrimaryKeyOnConciseCadTables < ActiveRecord::Migration[8.1]
   def change
     reversible do |dir|
       dir.up do
-        change_column :concise_single_results, :id, :primary_key
-        change_column :concise_average_results, :id, :primary_key
+        change_column :concise_single_results, :id, :primary_key, null: true, default: nil
+        change_column :concise_average_results, :id, :primary_key, null: true, default: nil
       end
 
       dir.down do
-        change_column :concise_single_results, :id, :integer
-        change_column :concise_average_results, :id, :integer
+        change_column :concise_single_results, :id, :integer, null: false, default: 0
+        change_column :concise_average_results, :id, :integer, null: false, default: 0
       end
     end
 
