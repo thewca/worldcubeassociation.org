@@ -1,12 +1,19 @@
 # frozen_string_literal: true
 
 class Accounts::RegistrationsController < Devise::RegistrationsController
-  # We delegate the create method to the super class
-  # rubocop:disable Rails/LexicallyScopedActionFilter
   before_action :check_captcha, only: [:create]
-  # rubocop:enable Rails/LexicallyScopedActionFilter
+
   protected def after_update_path_for(_resource)
     edit_user_registration_path
+  end
+
+  def create
+    super do |resource|
+      # Ensure the user was successfully saved to the database.
+      # This will be false if the record fails validation (e.g. password too short, email taken).
+      next unless resource.persisted?
+      TicketsClaimWcaId.create_ticket!(resource) if resource.delegate_to_handle_wca_id_claim.present?
+    end
   end
 
   private
