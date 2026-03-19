@@ -1,5 +1,3 @@
-"use client";
-
 import { components } from "@/types/openapi";
 import { hasPassed } from "@/lib/wca/dates";
 import {
