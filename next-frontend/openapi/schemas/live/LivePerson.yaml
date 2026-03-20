@@ -5,6 +5,6 @@ allOf:
       results:
         type: array
         items:
-          $ref: './LiveResult.yaml'
+          $ref: './ByPersonLiveResult.yaml'
     required:
       - results

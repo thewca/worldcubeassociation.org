@@ -463,6 +463,10 @@ kk:
         region: Ел
         #original_hash: e3fc6e9
         subRegion: Субаймақ
+        #original_hash: a1ba702
+        receive_developer_mails: >-
+          Мен WCA бағдарламалық ресурстарындағы өзгерістер туралы хабарламалар
+          алғым келеді.
         #original_hash: 730db33
         receive_delegate_reports: >-
           Мен WCA жарыстарының Делегаттық Есептерін электрондық пошта арқылы
@@ -475,7 +479,7 @@ kk:
         otp_attempt: 'Екі факторлы аутентификация кодыңызды енгізіңіз:'
       registration:
         #original_hash: 3c23a67
-        guests: Қонақтар
+        guests: Көрермендер
         #original_hash: fce06e2
         comments: Пікірлер
         #original_hash: dc9d458
@@ -780,6 +784,12 @@ kk:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          Бұл деректер экспорттары, WCIF схемасы және ашық API сияқты
+          ресурстардың негізгі нұсқа өзгерістері туралы хабарламалармен
+          шектеледі. Осы құралдарға тәуелді бағдарламалық қамтамасыз етуді
+          қолдайтын әзірлеушілерге ұсынылады.
         #original_hash: c564b74
         receive_delegate_reports: >-
           Егер сіз Аға Делегат немесе WRC немесе WQAC мүшесі болсаңыз, сіз
@@ -874,6 +884,20 @@ kk:
           тізімі.
         #original_hash: da39a3e
         wic_feedback_requested: ''
+        #original_hash: 74a092e
+        wic_incidents_html: >-
+          WIC-тен кері байланыс алғыңыз келетін оқиғалардың нөмірлер тізімі.
+          <br> <strong>%{wic_incident_alert}</strong>
+        #original_hash: c4fd7a6
+        wic_incident_alert: >-
+          Егер WIC оқиғасы сезімтал сипатта болса (соның ішінде, бірақ олармен
+          шектелмей: қылмыс, қудалау, шабуыл және т.б.), оны есепке қоспаңыз
+          және WIC-ке жеке электрондық пошта арқылы хабарласыңыз. Басқа WIC
+          оқиғалары үшін есепте әдепкі түрде қысқаша анонимді сипаттама беріп,
+          толық мәліметтерді WIC-пен жеке түрде бөлісіңіз. WIC жалпы хабардарлық
+          үшін анонимді нұсқалар бойынша да кері байланыс береді. WCA еріктісіне
+          қатысты барлық WIC оқиғалары бойынша есептен барлық мәліметтерді алып
+          тастап, WIC-пен жеке түрде байланысыңыз.
         #original_hash: f30abdc
         remarks: >-
           Кез келген басқа мәліметтермен бөлісіңіз (мысалы, қауымдастықтағы
@@ -987,11 +1011,22 @@ kk:
       contact_wrt:
         #original_hash: 603a218
         wca_id: WCA ID
+    #original_hash: 687d968
+    competition_link_html: 'Жарыс бетіне өту үшін <a href=''%{url}''>осыны</a> басыңыз.'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
         dob_invalid: қате форматталған
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: Бетті көрсету кезінде қате пайда болды
+      #original_hash: 22dfe12
+      description: >-
+        Егер бұл қате қайталанса, төменде көрсетілген мәліметтермен бірге WST-ке
+        хабарлаңыз
+      #original_hash: 20be860
+      details: Қате мәліметтері
     messages:
       #original_hash: dc2367c
       wrong_size: 'қате өлшемде ( %{file_size} болуы керек)'
@@ -1193,6 +1228,22 @@ kk:
         400_contact_html: >-
           Егер бұл қате деп ойласаңыз, оны хабарлау үшін <a
           href=%{contact_url}>мында басыңыз</a>.
+        #original_hash: 508c106
+        comp_not_found: Жарыс табылмады
+        #original_hash: c0e86d5
+        comp_not_found_action: >-
+          «%{comp_id}» ID-і бар жарыс табылмады. Оны іздеу жолағы арқылы іздеп
+          көріңіз.
+        #original_hash: 695f7ba
+        comp_not_found_action_2: >-
+          Егер сіз бұл жерге басқа сайттағы сілтеме арқылы кірсеңіз, сол сайтқа
+          олардың сілтемесі қате екенін хабарлаңыз.
+        #original_hash: 7f8f419
+        session_expired: Сеанс Аяқталды
+        #original_hash: f3e688a
+        session_expired_action: >-
+          Сіздің сессияңыз аяқталды. Жалғастыру үшін бетті жаңартыңыз, әрекетті
+          қайта орындаңыз немесе жүйеге қайта кіріңіз.
     doorkeeper:
       applications:
         help:
@@ -1995,6 +2046,8 @@ kk:
           target='_blank'>WCA Нәтижелер Тобымен</a> немесе <a
           href='%{delegate_url}'>делегатпен</a> байланысыңыз.
         reason:
+          #original_hash: 2e22133
+          no_access: Пайдаланушыны өңдеуге рұқсатыңыз жоқ.
           #original_hash: 370ff12
           assigned: сізге WCA ID тағайындалған.
           #original_hash: 1c4670f
@@ -2187,6 +2240,12 @@ kk:
       translators: Аудармашылар
   registrations:
     errors:
+      #original_hash: 8c2f29b
+      exceeding_competitor_limit: Қатысушылар шегі толды.
+      #original_hash: 51c7156
+      edit_deadline_passed: >-
+        Тіркеуді өзгерту мерзімі аяқталды! Өзгерістер тек ерекше жағдайларда
+        жасалуы керек.
       #original_hash: 44ab952
       need_name: Атауы қажет
       #original_hash: 6f64c57
@@ -2213,6 +2272,8 @@ kk:
       series_more_than_one_accepted: Сіз бір уақытта тек бір Сериялы жарысқа ғана қабылдана аласыз.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Сіз біліктілік талаптарына сәйкес келмейтін жарыстарға тіркеле алмайсыз.
+      #original_hash: 93ed20e
+      cannot_change_events_when_cancelling: Тіркелуді болдырғанда өз оқиғаларыңызды өзгерте алмайсыз.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Сізге түсініктеме қалдыру қажет. Жоғарыдағы Тіркеу Талаптарын оқып
@@ -2221,19 +2282,19 @@ kk:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: Жаңа қатысушы
-        one: Жаңа қатысушы
-        other: Жаңа қатысушы
+        zero: жаңа қатысушы
+        one: жаңа қатысушы
+        other: жаңа қатысушылар
       #original_hash: bc010e3
       returner:
         zero: ардагер
         one: ардагер
-        other: ардагер
+        other: ардагерлер
       #original_hash: b7da17a
       person:
-        zero: адам
-        one: адам
-        other: адам
+        zero: қатысушы
+        one: қатысушы
+        other: қатысушылар
     flash:
       #original_hash: da7ec53
       not_using_wca: Бұл жарыс WCA тіркелу жүйесін пайдаланбайды.
@@ -2333,7 +2394,7 @@ kk:
       country_plural:
         zero: мемлекет жоқ
         one: 1 мемлекет
-        other: '%{count} мемлекет'
+        other: '%{count} мемлекеттер'
       #original_hash: 1feee0e
       export_csv: CSV-ге Экспорттау
       #original_hash: 84add5b
@@ -2408,6 +2469,16 @@ kk:
       пайда болмаса, тіркелуіңіз мақұлданбауы мүмкін.
     #original_hash: bcd7d70
     entry_fees_fully_paid: 'Сіз %{paid} төледіңіз, бұл тіркелу жарнасын толықтай жабады.'
+    #original_hash: e50b275
+    entry_fees_partially_paid: >-
+      Сіз негізгі %{total} %{paid} төлегенсіз. Қалғанын төлеу қажет болса,
+      ұйымдастырушыларға хабарласыңыз.
+    #original_hash: b9d0818
+    entry_fees_fully_refunded: >-
+      Сіздің тіркелу жарналарыңыз толық қайтарылды. Қайта төлеу қажет болса, оны
+      төменде жасай аласыз.
+    #original_hash: 0c9c8e7
+    entry_fees_pay_again: Мен қайтадан төлегім келеді
     #original_hash: 2e5d1b9
     will_pay_here: Тіркеуді жібергеннен кейін сіз оларға мұнда төлем жасайсыз.
     #original_hash: 86877d4
@@ -2513,9 +2584,18 @@ kk:
       аласыз.
     #original_hash: ee89a3e
     registration_requirements: 'Байқауға тіркелу талаптары:'
+    registration_history:
+      #original_hash: 342fa25
+      acting_user: Әрекеттегі Пайдаланушы
+      #original_hash: 97c89a4
+      action: Әрекет
+      #original_hash: 8aa57de
+      changes: Өзгерістер
+      #original_hash: cec61a5
+      title: Тіркеу Тарихы
     import:
       #original_hash: 5a394f3
-      title: '%{comp} жарысына тіркелуді импорттау'
+      title: '%{comp} үшін импорттық тіркеулер'
       #original_hash: 620f5ce
       info: >-
         Сіз тіркеу деректерін бірнеше рет импорттай аласыз. Өзгерістер
@@ -2560,6 +2640,8 @@ kk:
         wrong_dob_format: >-
           Туған күн форматы ЖЖЖЖ-аа-кк (жыл-ай-күн, мысалы 1944-07-13) болуы
           керек. Төмендегі күндерді өңдеу мүмкін емес: %{raw_dobs}.
+        #original_hash: 6d8e34b
+        empty_file: Файл бос.
     add:
       #original_hash: 975275e
       title: '%{comp} жарысына тіркеу қосу'
@@ -2569,6 +2651,12 @@ kk:
         қалған қатысушыларды тіркеу үшін пайдаланыңыз.
       #original_hash: a11edb8
       add: Тіркеуді қосу
+      #original_hash: fd52980
+      ots_not_enabled: >-
+        Тіркеу жабық және орнында тіркелу қосылмаған - алдымен оны қосу үшін
+        жарысты өңдеу керек
+      #original_hash: 61125b5
+      competition_over: Жарыс аяқталғаннан кейін сіз жергілікті тіркеуді қоса алмайсыз.
       errors:
         #original_hash: d6dcf5c
         already_registered: Бұл адам тізімде бар
@@ -2703,6 +2791,21 @@ kk:
         белгіленбеген. Егер сіз күту тізімін пайдалансаңыз, өтінеміз, мерзімді
         белгілеңіз. Егер күту тізімін пайдаланбасаңыз, тіркеу талаптарында оны
         көрсетуіңізді ұмытпаңыз.
+    live:
+      #original_hash: 10d1a3c
+      title: Тікелей Нәтижелер
+      connection:
+        #original_hash: f92b311
+        initialized: Қосылым инициализациялануда
+        #original_hash: 66d44d4
+        connected: 'Қосылған, нәтижелер жаңартылуда'
+        #original_hash: 53abaa2
+        disconnected: 'Байланыс үзілді, нәтижелер жаңартылмайды'
+      podiums:
+        #original_hash: 02ae2bd
+        title: Подиумдар
+        #original_hash: d7297a7
+        undetermined: Подиумдар анықталады
     my_competitions:
       #original_hash: 5c6d3ea
       title: Менің жарыстарым
@@ -2871,9 +2974,9 @@ kk:
           етіледі.
       #original_hash: 35f892a
       guest_limit:
-        zero: Қатысушы қонақ алып келе алмайды.
-        one: Қатысушы бір ғана қонақ алып келуге құқылы.
-        other: 'Қатысушы ең көбі %{count} қонақ алып келуге құқылы.'
+        zero: Қатысушы көрермен алып келе алмайды.
+        one: Қатысушы бір ғана көрермен алып келуге құқылы.
+        other: 'Қатысушы ең көбі %{count} көрермен алып келуге құқылы.'
       #original_hash: bad09c8
       event_limit:
         zero: Қатысушы ешбір іс-шараға тіркеле алмайды.
@@ -2922,16 +3025,22 @@ kk:
       no_winner: >-
         Негізгі іс-шара — %{event_name} болды. Бұл іс-шарада бірде-бір қатысушы
         сәтті нәтиже көрсетпегендіктен, жеңімпаз анықталмады.
+      #original_hash: 5262865
+      h2h_winner: '%{winner} %{event_name} оқиғасының Бетпе-бет финалында жеңіске жетті.'
       #original_hash: 6c3b236
       winner: >-
         %{winner} %{event_name} іс-шарасында %{result_sentence} нәтижесімен
         жеңіске жетті.
       #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} екінші орынға ие болды (%{first_runner_up_result})'
+      #original_hash: 2926d10
+      h2h_first_runner_up: '%{first_runner_up} екінші орынды алды'
       #original_hash: cffa50a
       and: және
       #original_hash: 67d285c
       second_runner_up: '%{second_runner_up} үшінші орынға ие болды (%{second_runner_up_result}).'
+      #original_hash: 157b649
+      h2h_second_runner_up: '%{second_runner_up} үшінші орынды алды'
       records:
         #original_hash: 0658e11
         wr: Әлемдік рекордтар
@@ -3138,10 +3247,10 @@ kk:
         өзгерту мүмкін болмайды. Осыдан кейін WCA Жарыстарын Хабарлау Тобына
         хабарлама жіберілгенін тексеру үшін электрондық поштаңызды қарап
         шығыңыз.
-      #original_hash: 4c7deb7
+      #original_hash: 89fbbca
       submit_delete: >-
-        Сіз бұл жарысты жойғыңыз келетініне сенімдісіз бе? Бұл әрекет
-        қайтарылмайды.
+        Бұл әрекетті болдырмау мүмкін емес. Жоюды растау үшін төменде
+        "%{competition_id}" байқау идентификаторын теріңіз.
       #original_hash: 8ebebca
       coordinates: Координаттар
       #original_hash: a672984
@@ -3221,6 +3330,10 @@ kk:
           auto_close_threshold: Автоматты жабылу шегі
           #original_hash: b1d5af4
           newcomer_month_reserved_spots: Жаңадан қатысушыларға арналған орындар саны
+          #original_hash: 26b48e3
+          auto_accept_preference: Тіркеуді автоматты түрде қабылдау
+          #original_hash: 1b8698d
+          auto_accept_disable_threshold: Тіркеулерді автоматты түрде қабылдау шегі
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: WCA Делегат(тар)
@@ -3253,7 +3366,7 @@ kk:
           #original_hash: 69780b5
           on_the_spot_entry_fee: Оқиға орнында тіркелудің негізгі ақысы
           #original_hash: 3542671
-          guest_entry_fee: Қонақтарға арналған кіру ақысы
+          guest_entry_fee: Көрермендерге арналған кіру ақысы
           #original_hash: 71c8461
           donations_enabled: >-
             Тіркелу ақыларымен қатар қайырымдылық жарналарын да қабылдағым
@@ -3278,11 +3391,11 @@ kk:
           #original_hash: 7e53b96
           allow_self_edits: Тіркеуді өңдеу
           #original_hash: 3c23a67
-          guests_enabled: Қонақтар
+          guests_enabled: Көрермендер
           #original_hash: bb16247
-          guest_entry_status: Қонақтар үшін тегін кіру туралы хабарламаны көрсету
+          guest_entry_status: Көрермендер үшін тегін кіру туралы хабарламаны көрсету
           #original_hash: 7d78478
-          guests_per_registration: Әр тіркелу бойынша қонақтардың ең көп саны
+          guests_per_registration: Әр тіркелу бойынша көрермендердің ең көп саны
           #original_hash: 556fda0
           extra_requirements: Қосымша тіркелу талаптары
           #original_hash: 6c8e5bf
@@ -3430,6 +3543,18 @@ kk:
           newcomer_month_reserved_spots: >-
             Тек Жаңадан Қатысушылар Айы кезінде ғана рұқсат етіледі —
             резервтелген орындар Қатысушылар Шектеуінің жартысынан аспауы керек.
+          #original_hash: 79dcafd
+          auto_accept_preference: >-
+            Бұл Тіркеулер мәзірінде «Көп мөлшерде автоматты қабылдау» батырмасын
+            қосады. Ол барлық төленген Күтуде және Күтуде тұрған қатысушыларды
+            қатысушылар шегіне дейін немесе төменде көрсетілген шекке дейін
+            қабылдайды. Өз тәуекеліңізге қолданыңыз.
+          #original_hash: b261026
+          auto_accept_disable_threshold: >-
+            Қабылданған тіркеулер саны осы көрсеткішке жеткенде, автоматты
+            қабылдау өздігінен өшеді — ұйымдастырушылар соңғы тіркеулерді қолмен
+            мақұлдай алады. Бұл сан қатысушылар шегінен аз болуы керек. Қажет
+            болмаса бос қалдырыңыз.
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: Жарысқа жауапты WCA Делегаттары.
@@ -3480,9 +3605,9 @@ kk:
           #original_hash: 0419547
           guest_entry_fee: >-
             Қазіргі уақытта бұл сан тек ақпараттық мақсатта көрсетіледі,
-            қонақтарға арналған төлемдер осы веб-сайт арқылы басқарылмайды. Егер
-            бұл мән 0 болса, көрермендерге қатысты саясат туралы өз таңдауыңыз
-            бойынша сөйлем көрсетіледі.
+            көрермендерге арналған төлемдер осы веб-сайт арқылы басқарылмайды.
+            Егер бұл мән 0 болса, көрермендерге қатысты саясат туралы өз
+            таңдауыңыз бойынша сөйлем көрсетіледі.
           #original_hash: da39a3e
           donations_enabled: ''
           #original_hash: 180b7b3
@@ -3524,9 +3649,9 @@ kk:
           guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
-            Бұл жарысқа бір тіркеуге рұқсат етілген қонақтар саны. Қонақтар саны
-            шектен асқан тіркеулер қабылданбайды. Егер шектеу болмаса, бұл
-            өрісті бос қалдырыңыз.
+            Бұл жарысқа бір тіркеуге рұқсат етілген көрермендер саны.
+            Көрермендер саны шектен асқан тіркеулер қабылданбайды. Егер шектеу
+            болмаса, бұл өрісті бос қалдырыңыз.
           #original_hash: 3de153b
           extra_requirements: >-
             Мұнда жоғарыда қамтылмаған кез келген қосымша тіркеу талаптарын
@@ -3591,15 +3716,24 @@ kk:
       choices:
         guests_enabled:
           #original_hash: cb8809d
-          'true': Қонақтар туралы сұраңыз
+          'true': Көрермендер туралы сұраңыз
           #original_hash: f8c2332
-          'false': Қонақтар туралы сұрамаңыз
+          'false': Көрермендер туралы СҰРАМАҢЫЗ
         competitor_limit:
           enabled:
             #original_hash: d9c05cc
             'true': Мен қатысушылардың шекті санын көрсеткім келеді.
             #original_hash: 53397ec
             'false': Мен қатысушылардың шекті санын көрсеткім келмейді.
+          auto_accept_preference:
+            #original_hash: 5996b1f
+            disabled: «Көп мөлшерде автоматты қабылдау» батырмасын өшіру
+            #original_hash: 1c0c289
+            bulk: >-
+              Тіркеулер мәзірінде «Көп мөлшерде автоматты қабылдау» батырмасын
+              қосу
+            #original_hash: 490ed83
+            live: Төлем жасалған кезде тіркеуді автоматты түрде қабылдау
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -3645,6 +3779,17 @@ kk:
                 Қатысушылар белгілі бір іс-шараға тіркелу үшін міндетті түрде
                 білікті болуы керек.
     registration_v2:
+      auto_accept:
+        #original_hash: eaf9960
+        bulk_auto_accept: Қатысушыларды автоматты мақұлдау
+        #original_hash: 1a84d92
+        cant_bulk_auto_accept: >-
+          Көп мөлшерде автоматты қабылдауға әрекет жасаған кезде қате орын алды
+          — қажет болса, көмек үшін WST-пен хабарласыңыз.
+        #original_hash: 1897ffb
+        bulk_auto_accepted: Көп мөлшерде автоматты қабылдау сәтті аяқталды
+        #original_hash: 786d81b
+        nothing_to_accept: Автоматты қабылдауға сәйкес келетін тіркеулер жоқ
       pdf:
         #original_hash: 5c7d60f
         link: '<0>%{pdfLink}</0> ретінде'
@@ -3694,9 +3839,23 @@ kk:
             "Күту" мәртебесі тек толық емес (мысалы, төленбеген) тіркелулер үшін
             ғана қолданылуы тиіс — егер жарысыңызға жаңа қатысушыларды қабылдай
             алмайтындай толып тұрса, оның орнына "Күту тізімін" пайдаланыңыз.
+          #original_hash: 134e94f
+          waitlist_skipped_warning: >-
+            Сіз бұрынғы %{count} Күтуде тұрған тіркеулерді өткізіп алдыңыз.
+            Таңдалған тіркеулерді Күту тізіміне көшіруді шынымен қалайсыз ба?
+          #original_hash: c2875e1
+          approve_skipped_warning: >-
+            Сіз бұрынғы %{count} Күтуде тұрған тіркеулерді өткізіп алдыңыз.
+            Таңдалған тіркеулерді қабылдағыңыз келетініне сенімдісіз бе?
         waitlist:
           #original_hash: 3907ca4
           title: Күту тізіміндегі тіркеулер
+          #original_hash: de3f9d4
+          information: >-
+            Қатысушылар Күту тізімінің соңына қосылады. Егер бір уақытта бірнеше
+            адам қоссаңыз, төлем жасаған қатысушылар төлем жасаған ретімен
+            соңына қосылады, ал қалғандары тіркелген ретімен қосылады. Қажет
+            болса, Редакциялау режимінде тәртіпті қолмен өзгерте аласыз.
           #original_hash: dc16b6c
           skipped_warning: >-
             Сіз күту тізіміндегі %{count} тіркеуді өткізіп жібердіңіз. Таңдалған
@@ -3704,6 +3863,11 @@ kk:
         approved:
           #original_hash: a59612c
           title: Бекітілген тіркелулер
+          #original_hash: bbdee7d
+          pending_waitlist_combined_skipped_warning: >-
+            Сіз бұрынғы %{count} Күтуде тұрған немесе Күту тізіміндегі
+            тіркеулерді өткізіп алдыңыз. Таңдалған тіркеулерді қабылдағыңыз
+            келетініне сенімдісіз бе?
         cancelled:
           #original_hash: bd69c74
           title: Бас тартылған тіркелулер
@@ -3714,6 +3878,13 @@ kk:
           title: Қабылданбаған тіркелімдер
           #original_hash: 3fd2e0c
           information: Қабылданбаған қатысушылар қайта тіркеле алмайды.
+        non_competing:
+          #original_hash: d4e453a
+          title: Бәсекеге қабілетсіз тіркеулер
+          #original_hash: 2ed9c67
+          information: >-
+            WCIF-те қызметкерлердің міндеттерін тағайындай алатын бәсекелес емес
+            адамдар үшін.
         payment:
           #original_hash: d6fbc7a
           refunded_status: Қайтарылды
@@ -3750,6 +3921,8 @@ kk:
         being_deleted: Тіркеу жойылуда...
         #original_hash: cbf13af
         update_confirm: Тіркеуді жаңартқыңыз келетініне сенімдісіз бе?
+        #original_hash: 604da8b
+        organizer_update_confirm: Пайдаланушының тіркелуін жаңартқыңыз келетініне сенімдісіз бе?
         #original_hash: 9b92912
         update_confirm_contact: >-
           Тіркеуіңізді жаңарту үшін ұйымдастырушылармен хабарласуыңыз қажет,
@@ -3846,7 +4019,153 @@ kk:
           accepted: Тіркеуіңіз қабылданды.
           #original_hash: 3d7aa97
           pending: Тіркеуіңіз ұйымдастырушылардың мақұлдауын күтуде.
+          #original_hash: dcc4906
+          cancelled: Тіркелуіңіз жойылды.
+          #original_hash: 92dab83
+          rejected: Тіркелуіңіз қабылданбады.
+          #original_hash: a02390c
+          waiting_list: 'Сіз %{waiting_list_position} позициясындағы күту тізіміндесіз.'
+        #original_hash: 2d9f36c
+        disclaimer: Тіркеуді тапсыру жарысқа қатысуға рұқсат беруді білдірмейді
+        #original_hash: 8fe68a1
+        processing: Тіркелуіңіз өңделуде...
+        #original_hash: c7f124a
+        processing_longer: >-
+          Тіркелуіңіз қабылданды және жақын арада өңделеді - егер серверлеріміз
+          бос болмаса, бұл біраз уақыт алуы мүмкін.
+        #original_hash: 79ba42a
+        processing_queue: 'Көптеген тіркеулер өңделуде, кезекте %{queueCount} бар.'
+        #original_hash: ff6550f
+        event_limit: 'Бұл байқау тіркеле алатын іс-шаралар санын %{max_events}-пен шектейді.'
+      errors:
+        #original_hash: 3890616
+        events: 'Іс-шаралар жүктелмеді, қайталап көріңіз'
+        #original_hash: 7b78793
+        '-1': >-
+          Сіз жарамсыз токен жібердіңіз, бетті жаңартыңыз. Егер бұл мәселе
+          шешілмесе, WST-ке хабарласыңыз.
+        #original_hash: 44cf123
+        '-2': 'Аутентификация мерзімі аяқталды, бетті жаңартыңыз'
+        #original_hash: 2d63156
+        '-3': 'Аутентификация жоқ, жүйеге кіріңіз'
+        #original_hash: e631d99
+        '-4': >-
+          Тіркеу қызметі ішкі қатеге тап болды. Егер бұл мәселе шешілмесе,
+          WST-ке хабарласыңыз
+        #original_hash: e0b69a9
+        '-1000': Жарыс жоқ
+        #original_hash: 2aa4aa1
+        '-1001': 'Жарыс мәліметтерін алу кезінде қате шықты, кейінірек қайталап көріңіз'
+        #original_hash: 25b0063
+        '-2001': Сізге WCA жарыстарына қатысуға тыйым салынды
+        #original_hash: 82267b1
+        '-2002': Профиліңіз толық емес
+        #original_hash: 4dd79f2
+        '-2003': Бұл әрекетті аяқтауға рұқсатыңыз жоқ
+        #original_hash: 374e1c7
+        '-2004': >-
+          Ұйымдастырушылар сіздің тіркеуіңізді қабылдамағандықтан, сізге
+          тіркелуге рұқсат етілмейді. Қателік болды деп ойласаңыз, оларға
+          хабарласыңыз.
+        #original_hash: cb4093a
+        '-3000': Тіркелу жоқ
+        #original_hash: 9bbefa9
+        '-3001': Сіз осы сериядағы басқа жарысқа тіркеліп қойғансыз.
+        #original_hash: bc53fb6
+        '-4000': Сұрауда жарамсыз деректер бар
+        #original_hash: 35fddf4
+        '-4001': Іс-шараны өңдеу мерзімі өтіп кетті
+        #original_hash: 097491c
+        '-4002': Көрермендер саны рұқсат етілген шектен асып кетті
+        #original_hash: 4a0baa0
+        '-4003': Берілген түсініктеме тым ұзын
+        #original_hash: 952daed
+        '-4004': Жарамсыз іс-шара таңдауы жіберілді
+        #original_hash: b8a1526
+        '-4005': Бұл жарысқа комментарий қажет
+        #original_hash: 2087dad
+        '-4006': Бәсекелестер шегіне жетті
+        #original_hash: 6d95124
+        '-4007': Жарамсыз тіркеу мәртебесі берілген
+        #original_hash: 020234c
+        '-4008': Тіркеу жабылды
+        #original_hash: b30e613
+        '-4009': Тек Ұйымдастырушылар ғана бұл байқауға тіркелуден бас тарта алады
+        #original_hash: 3c4cbaa
+        '-4010': Күту тізімінің позициясы жарамсыз
+        #original_hash: e489908
+        '-4011': Сіз тек бірінші кезекте тұрған адамды қабылдай аласыз
+        #original_hash: 8d089d6
+        '-4012': Таңдалған іс-шараларда жарысуға құқығыңыз жоқ
+        #original_hash: fb1d742
+        '-4013': >-
+          Тек жаңадан келгендер үшін резервтелген орындар қалған кезде жаңадан
+          келгендерді қабылдай алмайды
+        #original_hash: a244fde
+        '-4014': Сіз бұл жарысқа тіркелгенсіз.
+        #original_hash: 369db78
+        '-4015': >-
+          Көрермендер ақылға сыйымды санын енгізіңіз немесе көрермендің төтенше
+          санын әкелу қажет болса, ұйымдастырушыларға хабарласыңыз.
+        #original_hash: 0df821f
+        '-6001': Бұл жарыс үшін WCA төлемі қосылмаған
+        #original_hash: 092da51
+        '-6002': Төлегенге дейін тіркеуді аяқтауыңыз керек
+        #original_hash: ee2c9c4
+        '-6003': >-
+          Өтелмеген төлем табылмады - бұл сіздің тіркелуіңіз үшін төлегеніңізге
+          байланысты болуы мүмкін.
+        #original_hash: 631576f
+        '-7001': Бәсекелестің әлі де тіркеу ақысы бар
+        #original_hash: 2aa350b
+        '-7002': Бұл жарыс үшін автоматты түрде қабылдау қосылмаған.
+        #original_hash: d191d2d
+        '-7003': >-
+          Тек күтудегі тіркелулерді немесе кезектегі бірінші позицияны автоматты
+          түрде қабылдай алады
+        #original_hash: 30fd93d
+        '-7004': Бәсекелестік auto_accept_disable_threshold шегіне жетті
+        #original_hash: f2bb661
+        '-7005': Тіркеу ашық емес кезде автоматты түрде қабылдауға болмайды
     errors:
+      #original_hash: b14d060
+      must_use_wca_registration: >-
+        Тіркелу үшін WCA веб-сайтын пайдалансаңыз ғана автоқабылдауды
+        пайдалануға болады
+      #original_hash: 693d47d
+      must_use_payment_integration: >-
+        Автоматты қабылдауды пайдалану үшін төлем интеграциясын (мысалы, Stripe)
+        қосу керек
+      #original_hash: 130c901
+      auto_accept_limit: Автоқабылданған тіркеулер үшін шек бәсекелестер шегінен аз болуы керек
+      #original_hash: 42cd8e6
+      auto_accept_not_negative: >-
+        Автоматты түрде қабылданатын тіркелімдердің шегі 0-ден кем болмауы
+        керек.
+      #original_hash: 181d8d9
+      auto_accept_accept_paid_pending: >-
+        Ақылы тіркеулер бар болса, автоматты түрде қабылдау мүмкін емес - оларды
+        қабылдаңыз немесе оларды кезекке жылжытыңыз
+      #original_hash: 96db418
+      auto_accept_accept_waitlisted: >-
+        Автоқабылдауды қосу мүмкін емес - Күту тізімінен мүмкіндігінше көп
+        пайдаланушыларды қабылдаңыз.
+      #original_hash: 6d11b4e
+      auto_close_exceed_paid: >-
+        Автоматты түрде жабу шегі ағымдағы ақылы тіркеулер санынан көп болуы
+        керек
+      #original_hash: abee516
+      auto_close_positive_nonzero: Автожабу шегі 0-ден үлкен болуы керек
+      #original_hash: b81ee7e
+      must_exceed_competitor_limit: Автожабу шегі бәсекелестің шегінен үлкен болуы керек
+      #original_hash: 148c1d4
+      use_wca_registration: Жарыс WCA тіркеуін қолдануы керек
+      #original_hash: 2c41c57
+      newcomer_month_reservations_percentage: жаңадан келгендер үшін орындардың 50% -дан астамын резервтей алмайды
+      #original_hash: 58d244e
+      newcomer_month_reservations_available: >-
+        Қажетті жаңадан келген айға резервтелген орындар резервтелген орындар
+        санынан асып түседі
       #original_hash: f7ef9f6
       invalid_name_message: >-
         Жылмен аяқталуы керек және тек әріптер, сандар, сызықшалар (-),
@@ -3866,10 +4185,14 @@ kk:
         қажет.
       #original_hash: 6e228b7
       must_contain_delegate: Кемінде бір WCA делегаты болуы қажет
+      #original_hash: b5677c2
+      must_contain_organizer: кем дегенде бір ұйымдастырушыны қамтуы тиіс
       #original_hash: 8131fc2
       not_all_delegates: барлығы Делегаттар емес
       #original_hash: 43a23c2
       registration_close_after_open: Тіркелу жабылу уақыты тіркелу ашылу уақытынан кейін болуы керек.
+      #original_hash: 2f8765e
+      registration_already_closed: тіркеу қазірдің өзінде жабылмаған болуы керек.
       #original_hash: 8a3a4f6
       start_date_must_be_28_days_in_advance: Басталу күні кем дегенде 28 күннен кейін болуы керек.
       #original_hash: 43a83a9
@@ -3882,6 +4205,54 @@ kk:
       invalid_currency_code: Таңдалған валюта коды жарамсыз
       #original_hash: 902a278
       advancement_condition_must_be_present_for_all_non_final_rounds: Барлық соңғы емес айналымдарда іріктеу шарты көрсетілуі қажет
+      #original_hash: da17c99
+      registration_period_after_start: Тіркеу мерзімі басталу күнінен кейін болуы мүмкін емес.
+      #original_hash: 2a26c1c
+      waiting_list_deadline_before_registration_close: >-
+        Күту тізімінің аяқталу мерзімі тіркеу аяқталғанға дейін болуы мүмкін
+        емес.
+      #original_hash: ececa98
+      waiting_list_deadline_before_refund_date: >-
+        Күту тізімінің аяқталу мерзімі ақшаны қайтару үшін шектеу күнінен бұрын
+        болуы мүмкін емес.
+      #original_hash: 7324d19
+      waiting_list_deadline_after_end: Күту тізімінің мерзімі жарыс аяқталғанға дейін болуы керек.
+      #original_hash: c3eb1be
+      event_change_deadline_before_registration_close: Оқиғаларды жаңарту мерзімі тіркеу аяқталғанға дейін болуы мүмкін емес.
+      #original_hash: bc1ca0f
+      event_change_deadline_after_end_date: >-
+        Іс-шараларды жаңартудың соңғы мерзімі конкурстан кейін болуы мүмкін
+        емес.
+      #original_hash: a2e4fc9
+      event_change_deadline_with_ots: >-
+        Іс-шараларды өзектендірудің соңғы мерзімі, егер оқиға орнында
+        тіркелімдер қабылданса, конкурс кезінде болуы керек.
+      #original_hash: e6400f7
+      on_the_spot_with_past_event_change_deadline: >-
+        Оқиғаларды жаңарту мерзімі өткен болса, орнында тіркелулерді қосу мүмкін
+        емес.
+      #original_hash: 5ae2437
+      series_distance_km: 'Жарыс %{competition}-дан тым алыс орналасқан.'
+      #original_hash: 4a5d7c5
+      series_distance_days: 'Жарыс %{competition}-дан тым көп күн қалғанда жоспарланған.'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: 'Көрермендердің саны шектеулі болса, көрермендер туралы сұрау керек.'
+      #original_hash: 000564d
+      not_full_url: >-
+        Мазмұнда салыстырмалы URL (%{url}) бар. Толық URL мекенжайын http://
+        немесе https:// префиксімен енгізіңіз.
+      #original_hash: e8ff0ef
+      editing_deadline_already_passed: >-
+        Сізге әлі өтпеген мерзімдер үшін ғана күндерді өзгертуге рұқсат етіледі,
+        бірақ %{timestamp} бастапқы мәні өтіп кеткен.
+      #original_hash: e12883e
+      edited_deadline_not_after_original: >-
+        Сізге тек мерзімдерді ұзартуға рұқсат етіледі, бірақ %{new_timestamp}
+        бастапқы %{timestamp} мәнінен бұрын орнатылған.
+      #original_hash: d79fbb4
+      edited_deadline_not_in_future: >-
+        Сізге тек болашақ мерзімдерді енгізуге рұқсат етіледі, бірақ
+        %{new_timestamp} болашақта емес.
     new:
       #original_hash: 1208df7
       create_competition: Жарысты құру
@@ -3903,6 +4274,54 @@ kk:
       competition_in: 'Жарыс %{n_days} күннен кейін өтеді.'
       #original_hash: e6e096a
       competition_was: 'Жарыс %{n_days} күн бұрын өтті.'
+    adjacent_competitions:
+      #original_hash: e3528ec
+      label: 'Жақын жердегі жарыстар (%{days} күн және %{kms} км ішінде)'
+      #original_hash: feefb46
+      no_comp_nearby: Жақын жерде ешқандай жарыс жоқ!
+      #original_hash: 7e76950
+      no_date_yet: Сіз бұл жарысқа әлі күн тағайындаған жоқсыз.
+      #original_hash: 82a95d2
+      no_location_yet: Сіз бұл жарысқа әлі орын тағайындаған жоқсыз.
+      #original_hash: 6def491
+      save_first: Бұл жарысты Серияға қоспас бұрын сақтаңыз.
+      #original_hash: 709a232
+      name: Атау
+      #original_hash: adc24b7
+      delegates: Делегат(тар)
+      #original_hash: eb9a4bc
+      date: Мерзім
+      #original_hash: 6c82e6d
+      time: Уақыт
+      #original_hash: d219c68
+      location: Орналасу
+      #original_hash: 4232080
+      distance: Арақашықтық
+      #original_hash: 51de2b8
+      before: бұрын
+      #original_hash: 405906c
+      after: кейін
+      #original_hash: e1978a9
+      starts_on: басталады
+      #original_hash: 964aedc
+      ends_on: аяқталады
+      #original_hash: 24d948e
+      limit: Шектеу
+      #original_hash: 855bd26
+      competitors: Бәсекелестер
+      #original_hash: c5497bc
+      events: Іс-шаралар
+      #original_hash: 50cb854
+      show_events: Іс-шараларды көрсету
+      #original_hash: 0df66f7
+      hide_events: Іс-шараларды жасыру
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'Тіркеу мерзімдері соқтығысуда (%{hours} сағат ішінде басталады)'
+      #original_hash: f1cecf1
+      no_comp_colliding: Тіркеу кезеңінде соқтығысулар жоқ!
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: Сіз бұл жарысқа тіркелудің басталу күнін әлі тағайындаған жоқсыз.
     #original_hash: 06b01c4
     announcements: Жарияланымдар
     #original_hash: a2b80b0
@@ -4387,8 +4806,8 @@ kk:
       '9':
         #original_hash: 7a4a71d
         title: >-
-          Мен кейбір пәндер бойынша жарысқа тіркелдім және қосымша пәндер қосқым
-          келеді. Болады мұны? Қонақтарды әкелуге бола ма?
+          Мен байқауға тіркелдім және қосымша іс-шараға тіркелгім келеді, не
+          істеуім керек? Көрермендер әкелуге бола ма?
         content:
           #original_hash: 957487d
           '1': >-
@@ -4529,7 +4948,7 @@ kk:
       картасымен қайырымдылық жасай аласыз. Егер сіз чек жазғыңыз келсе, келесі
       мекен-жайға жаза аласыз:
     #original_hash: 2af9b71
-    tax_deductible_note: Садақаларды АҚШ-тағы салықтардан алып тастауға болады.
+    tax_deductible_note: АҚШ-та салықтан босатылады.
     #original_hash: 6026d35
     other_help_title: Көмектесудің басқа тәсілдері
     #original_hash: cb228f6
@@ -5222,5 +5641,3 @@ kk:
   footer:
     #original_hash: cf01481
     privacy: Құпиялылық
-    #original_hash: 4c4a2e8
-    disclaimer: Ескертпе

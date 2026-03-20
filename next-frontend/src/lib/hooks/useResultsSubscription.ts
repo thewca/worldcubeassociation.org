@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useEffectEvent, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
-import { components } from "@/types/openapi";
+import _ from "lodash";
+import type { PartialExcept } from "@/lib/types/objects";
+import { LiveCompetitor, LiveResult } from "@/types/live";
+import { anycableConnection } from "@/lib/websocket/anycable";
 
-export const CONNECTION_STATE_INITIALIZED = "initialized";
-export const CONNECTION_STATE_CONNECTED = "connected";
-export const CONNECTION_STATE_DISCONNECTED = "disconnected";
+export const CONNECTION_STATE_INITIALIZED = 1;
+export const CONNECTION_STATE_CONNECTED = 2;
+export const CONNECTION_STATE_DISCONNECTED = 0;
 
 export type ConnectionState =
   | typeof CONNECTION_STATE_INITIALIZED
@@ -17,58 +20,92 @@ export const CONNECTION_COLORS = {
   [CONNECTION_STATE_DISCONNECTED]: "red",
 };
 
-// Move this to something like https://www.asyncapi.com
-// The actual compression will happen in https://github.com/thewca/worldcubeassociation.org/pull/13352
-// But I need the mapping logic
-export type CompressedLiveResult = {
-  advancing: boolean;
-  advancing_questionable: boolean;
-  average: number;
-  best: number;
-  average_record_tag: string;
-  single_record_tag: string;
-  registration_id: number;
-  live_attempts: {
-    value: number;
-    attempt_number: number;
-  }[];
+export const CONNECTION_TRANSLATION_KEYS = {
+  [CONNECTION_STATE_INITIALIZED]: "initialized",
+  [CONNECTION_STATE_CONNECTED]: "connected",
+  [CONNECTION_STATE_DISCONNECTED]: "disconnected",
 };
 
-export type DiffedLiveResult = Partial<CompressedLiveResult> &
-  Pick<components["schemas"]["LiveResult"], "registration_id">;
+// Move this to something like https://www.asyncapi.com
+export type CompressedLiveResult = {
+  ad: boolean;
+  adq: boolean;
+  a: number;
+  b: number;
+  art: string;
+  srt: string;
+  r: number;
+  la: {
+    v: number;
+    an: number;
+  }[];
+  at: string;
+};
+
+type CompressedLiveResultWithUser = CompressedLiveResult & {
+  user: LiveCompetitor;
+};
+
+export type DiffedLiveResult = PartialExcept<LiveResult, "registration_id">;
+export type CompressedDiffedLiveResults = PartialExcept<
+  CompressedLiveResult,
+  "r"
+>;
 
 export type DiffProtocolResponse = {
-  updated?: DiffedLiveResult[];
+  updated?: CompressedDiffedLiveResults[];
   deleted?: number[];
-  created?: CompressedLiveResult[];
+  created?: CompressedLiveResultWithUser[];
+  before_hash: string;
+  after_hash: string;
+  wcif_id: string;
 };
 
-export default function useResultsSubscription(
-  roundId: string,
-  onReceived: (data: DiffProtocolResponse) => void,
+export default function useResultsSubscriptions(
+  roundIds: string[],
+  competitionId: string,
+  onReceived: (roundId: string, data: DiffProtocolResponse) => void,
 ) {
-  const [connectionState, setConnectionState] = useState<ConnectionState>(
-    CONNECTION_STATE_INITIALIZED,
+  const [connectionStates, setConnectionStates] = useState<
+    Record<string, ConnectionState>
+  >(() =>
+    Object.fromEntries(
+      roundIds.map((id) => [id, CONNECTION_STATE_INITIALIZED]),
+    ),
   );
 
-  useEffect(() => {
-    // TODO: Change the Environment variable to not include the /api part by default
-    const cable = createConsumer("http://localhost:3000/cable");
+  const changeConnectionState = useCallback(
+    (roundId: string, connectionState: ConnectionState) => {
+      setConnectionStates((prev) => ({
+        ...prev,
+        [roundId]: connectionState,
+      }));
+    },
+    [],
+  );
 
-    const subscription = cable.subscriptions.create(
-      { channel: "LiveResultsChannel", round_id: roundId },
-      {
-        received: onReceived,
-        initialized: () => setConnectionState(CONNECTION_STATE_INITIALIZED),
-        connected: () => setConnectionState(CONNECTION_STATE_CONNECTED),
-        disconnected: () => setConnectionState(CONNECTION_STATE_DISCONNECTED),
-      },
+  const onReceivedEvent = useEffectEvent(onReceived);
+
+  useEffect(() => {
+    const cable = createConsumer(process.env.NEXT_PUBLIC_WEBSOCKET_URL);
+
+    const subscriptions = roundIds.map((roundId) =>
+      cable.subscriptions.create(anycableConnection(competitionId, roundId), {
+        received: (data: DiffProtocolResponse) =>
+          onReceivedEvent(roundId, data),
+        initialized: () =>
+          changeConnectionState(roundId, CONNECTION_STATE_INITIALIZED),
+        connected: () =>
+          changeConnectionState(roundId, CONNECTION_STATE_CONNECTED),
+        disconnected: () =>
+          changeConnectionState(roundId, CONNECTION_STATE_DISCONNECTED),
+      }),
     );
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [roundId, onReceived]);
+    return () => subscriptions.forEach((s) => s.unsubscribe());
+  }, [changeConnectionState, competitionId, roundIds]);
 
-  return connectionState;
+  // Aggregate: worst state wins
+  const values = Object.values(connectionStates);
+  return _.min(values)!;
 }

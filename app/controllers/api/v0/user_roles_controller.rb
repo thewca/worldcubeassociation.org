@@ -8,7 +8,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       WcaIdClaimMailer.notify_user_of_delegate_demotion(confirmed_user, role.user, region_senior_delegate).deliver_later
     end
     # Clear all pending WCA IDs claims for the demoted Delegate
-    User.where(delegate_to_handle_wca_id_claim: role.user.id).update_all(delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil)
+    role.user.users_claiming_wca_id.update_all(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
   end
 
   private def pre_filtered_user_roles
@@ -60,6 +60,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   def create
     user_id = params.require(:userId)
     group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
+    start_date = params[:startDate].presence || Date.today
     end_date = params[:endDate]
 
     create_supported_groups = [
@@ -118,7 +119,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       new_role = UserRole.create!(
         user_id: user_id,
         group_id: group_id,
-        start_date: Date.today,
+        start_date: start_date,
         end_date: end_date,
         metadata: metadata,
       )
@@ -133,6 +134,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   private def changed_key_to_human_readable(changed_key)
     {
+      'start_date' => 'Start Date',
       'end_date' => 'End Date',
       'ban_reason' => 'Ban reason',
       'scope' => 'Ban scope',
@@ -257,6 +259,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       end
 
     elsif group_type == UserGroup.group_types[:banned_competitors]
+      role.start_date = params[:startDate] if params.key?(:startDate)
+
       role.end_date = params[:endDate] if params.key?(:endDate)
 
       role.metadata.ban_reason = params[:banReason] if params.key?(:banReason)

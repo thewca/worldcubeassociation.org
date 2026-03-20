@@ -1,68 +1,86 @@
 "use client";
 
-import { components } from "@/types/openapi";
-import { useCallback } from "react";
-import useResultsSubscription, {
-  DiffProtocolResponse,
-} from "@/lib/hooks/useResultsSubscription";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
-import { Heading, HStack, VStack } from "@chakra-ui/react";
+import { Heading, HStack, Spacer, Switch, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
-import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
+import { useLiveResults } from "@/providers/LiveResultProvider";
+import PendingResultsTable from "@/components/live/PendingResultsTable";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { useState } from "react";
+import AddPersonModal from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
 
 export default function LiveUpdatingResultsTable({
-  roundId,
-  liveResults,
-  updateLiveResults,
-  eventId,
+  roundWcifId,
   formatId,
   competitionId,
-  competitors,
   title,
   isAdmin = false,
   showEmpty = true,
+  isLinkedRound = false,
 }: {
-  roundId: string;
-  liveResults: components["schemas"]["LiveResult"][];
-  updateLiveResults: React.Dispatch<
-    React.SetStateAction<components["schemas"]["LiveResult"][]>
-  >;
-  eventId: string;
+  roundWcifId: string;
   formatId: string;
   competitionId: string;
-  competitors: components["schemas"]["LiveCompetitor"][];
   title: string;
   isAdmin?: boolean;
   showEmpty?: boolean;
+  isLinkedRound?: boolean;
 }) {
-  // Move to onEffectEvent when we are on React 19
-  const onReceived = useCallback(
-    (result: DiffProtocolResponse) => {
-      const { updated = [], created = [], deleted = [] } = result;
+  const [showLinkedRoundsView, setShowLinkedRoundsView] =
+    useState(isLinkedRound);
 
-      updateLiveResults((results) =>
-        applyDiffToLiveResults(results, updated, created, deleted),
-      );
-    },
-    [updateLiveResults],
-  );
+  const {
+    connectionState,
+    liveResultsByRegistrationId,
+    pendingLiveResults,
+    competitors,
+    pendingQuitCompetitors,
+  } = useLiveResults();
 
-  const connectionState = useResultsSubscription(roundId, onReceived);
+  const { eventId } = parseActivityCode(roundWcifId);
 
   return (
     <VStack align="left">
       <HStack>
-        <Heading textStyle="h1">{title}</Heading>
+        <Heading textStyle={{ sm: "h3", md: "h2", lg: "h1" }}>{title}</Heading>
         <ConnectionPulse connectionState={connectionState} />
+        <Spacer flex={1} />
+        {isLinkedRound && (
+          <Switch.Root
+            checked={showLinkedRoundsView}
+            onCheckedChange={(e) => setShowLinkedRoundsView(e.checked)}
+            colorPalette="green"
+          >
+            <Switch.HiddenInput />
+            <Switch.Control>
+              <Switch.Thumb />
+            </Switch.Control>
+            <Switch.Label>Show combined Results</Switch.Label>
+          </Switch.Root>
+        )}
+        {isAdmin && (
+          <AddPersonModal
+            competitionId={competitionId}
+            competitors={competitors}
+          />
+        )}
       </HStack>
-      <LiveResultsTable
-        results={liveResults}
+      <PendingResultsTable
+        pendingLiveResults={pendingLiveResults}
+        formatId={formatId}
         eventId={eventId}
+        competitors={competitors}
+      />
+      <LiveResultsTable
+        resultsByRegistrationId={liveResultsByRegistrationId}
+        roundWcifId={roundWcifId}
         formatId={formatId}
         competitionId={competitionId}
         competitors={competitors}
+        pendingQuitCompetitors={pendingQuitCompetitors}
         isAdmin={isAdmin}
         showEmpty={showEmpty}
+        showLinkedRoundsView={showLinkedRoundsView}
       />
     </VStack>
   );

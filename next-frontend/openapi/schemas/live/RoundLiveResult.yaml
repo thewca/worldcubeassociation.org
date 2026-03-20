@@ -1,0 +1,21 @@
+allOf:
+  - $ref: './BaseLiveResult.yaml'
+  - type: object
+    required:
+      - global_pos
+      - local_pos
+      - round_wcif_id
+    properties:
+      round_wcif_id:
+        type: string
+      global_pos:
+        type: integer
+      local_pos:
+        type: integer
+      forecast_statistics:
+        type: object
+        properties:
+          best_possible_average:
+            type: integer
+          worst_possible_average:
+            type: integer

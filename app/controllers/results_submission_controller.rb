@@ -5,7 +5,7 @@ require 'fileutils'
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, except: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
-  before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?) }, only: %i[newcomer_checks]
+  before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks]
   before_action :check_newcomers_data_access, only: %i[last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
 
   def new
@@ -99,6 +99,7 @@ class ResultsSubmissionController < ApplicationController
     errors = CompetitionResultsImport.import_temporary_results(
       competition,
       temporary_results_data,
+      UploadedJson.upload_types[:results_json],
       mark_result_submitted: mark_result_submitted,
       store_uploaded_json: store_uploaded_json,
       results_json_str: upload_json.results_json_str,
@@ -180,7 +181,22 @@ class ResultsSubmissionController < ApplicationController
       scrambles_to_import: scrambles_to_import,
       persons_to_import: persons_to_import,
     }
-    errors = CompetitionResultsImport.import_temporary_results(competition, temporary_results_data)
+
+    mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))
+    store_uploaded_json = ActiveRecord::Type::Boolean.new.cast(params.require(:store_uploaded_json))
+
+    errors = CompetitionResultsImport.import_temporary_results(
+      competition,
+      temporary_results_data,
+      UploadedJson.upload_types[:wca_live],
+      mark_result_submitted: mark_result_submitted,
+      store_uploaded_json: store_uploaded_json,
+      # The "traditional" Results JSON also contains personal data like DOB,
+      #   so it is fine to hard-code the `authorized: true` here.
+      # It is intentional and desired that WRT (who have admin power to view DOBs anyway)
+      #   can reconstruct personal information from the moment the upload happened.
+      results_json_str: competition.to_wcif(authorized: true).to_json,
+    )
 
     return render status: :unprocessable_content, json: { error: errors } if errors.any?
 
@@ -224,7 +240,7 @@ class ResultsSubmissionController < ApplicationController
   private def check_newcomers_data_access
     competition = competition_from_params
 
-    return head :unauthorized unless current_user.can_check_newcomers_data?
+    return head :unauthorized unless current_user.can_check_newcomers_data?(competition)
 
     render status: :bad_request, json: { error: "The newcomer check dashboard can only be used before the results are submitted." } if competition.results_submitted?
   end

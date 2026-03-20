@@ -4,7 +4,7 @@ class Person < ApplicationRecord
   # for some reason, the ActiveRecord plural for "Person" is "people"…
   self.table_name = 'persons'
 
-  has_one :user, primary_key: "wca_id", foreign_key: "wca_id"
+  has_one :user, primary_key: "wca_id", foreign_key: "wca_id", inverse_of: :person
   has_many :results, primary_key: "wca_id"
   has_many :result_attempts, through: :results
   has_many :competitions, -> { distinct }, through: :results
@@ -115,7 +115,7 @@ class Person < ApplicationRecord
     all_delegates = competitions.order(:start_date).flat_map(&:staff_delegates).select(&:any_kind_of_delegate?)
     return [] if all_delegates.empty?
 
-    counts_by_delegate = all_delegates.group_by(&:itself).transform_values(&:count)
+    counts_by_delegate = all_delegates.tally
     most_frequent_delegate, _count = counts_by_delegate.max_by { |_delegate, count| count }
     most_recent_delegate = all_delegates.last
 

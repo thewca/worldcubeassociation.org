@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_16_104129) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -478,6 +478,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.bigint "value_and_id"
     t.index ["event_id", "average"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "average"], name: "regional_records_speedup"
+    t.index ["person_id", "event_id", "continent_id", "country_id", "average"], name: "average_ranks_speedup"
   end
 
   create_table "concise_single_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -491,6 +492,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.bigint "value_and_id"
     t.index ["event_id", "best"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "best"], name: "regional_records_speedup"
+    t.index ["person_id", "event_id", "continent_id", "country_id", "best"], name: "single_ranks_speedup"
   end
 
   create_table "connected_paypal_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -663,7 +665,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.datetime "created_at", null: false
     t.bigint "h2h_match_id", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.index ["h2h_match_id", "user_id"], name: "index_h2h_match_competitors_on_h2h_match_id_and_user_id", unique: true
     t.index ["h2h_match_id"], name: "index_h2h_match_competitors_on_h2h_match_id"
     t.index ["user_id"], name: "index_h2h_match_competitors_on_user_id"
@@ -786,37 +788,42 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.string "wcif_id"
   end
 
-  create_table "live_attempt_history_entries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "entered_at", null: false
-    t.string "entered_by", null: false
-    t.bigint "live_attempt_id", null: false
-    t.datetime "updated_at", null: false
-    t.integer "value", null: false
-    t.index ["live_attempt_id"], name: "index_live_attempt_history_entries_on_live_attempt_id"
-  end
-
   create_table "live_attempts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "attempt_number", null: false
     t.datetime "created_at", null: false
     t.bigint "live_result_id"
     t.datetime "updated_at", null: false
     t.integer "value", null: false
+    t.index ["live_result_id", "attempt_number"], name: "index_live_attempts_on_live_result_id_and_attempt_number", unique: true
     t.index ["live_result_id"], name: "index_live_attempts_on_live_result_id"
+  end
+
+  create_table "live_result_history_entries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "action_source", null: false
+    t.string "action_type"
+    t.json "attempt_details"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "entered_at", null: false
+    t.bigint "entered_by_id"
+    t.bigint "live_result_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entered_by_id"], name: "index_live_result_history_entries_on_entered_by_id"
+    t.index ["live_result_id"], name: "index_live_result_history_entries_on_live_result_id"
   end
 
   create_table "live_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.boolean "advancing", default: false, null: false
     t.boolean "advancing_questionable", default: false, null: false
-    t.integer "average", null: false
+    t.integer "average", default: 0, null: false
     t.string "average_record_tag", limit: 255
-    t.integer "best", null: false
+    t.integer "best", default: 0, null: false
     t.datetime "created_at", null: false
     t.integer "global_pos"
     t.datetime "last_attempt_entered_at", null: false
     t.integer "local_pos"
-    t.integer "locked_by_id"
-    t.integer "quit_by_id"
+    t.bigint "locked_by_id"
+    t.bigint "quit_by_id"
     t.bigint "registration_id", null: false
     t.bigint "round_id", null: false
     t.string "single_record_tag", limit: 255
@@ -905,7 +912,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.text "error_details"
     t.bigint "holder_id"
     t.string "holder_type"
-    t.integer "initiated_by_id"
+    t.bigint "initiated_by_id"
     t.bigint "payment_record_id"
     t.string "payment_record_type"
     t.datetime "updated_at", precision: nil, null: false
@@ -945,6 +952,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.index ["country_id"], name: "Persons_fk_country"
     t.index ["name"], name: "Persons_name"
     t.index ["name"], name: "index_persons_on_name", type: :fulltext
+    t.index ["sub_id"], name: "current_person_ranks_speedup"
     t.index ["wca_id", "sub_id"], name: "index_Persons_on_wca_id_and_subId", unique: true
     t.index ["wca_id"], name: "index_persons_on_wca_id"
   end
@@ -994,7 +1002,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.bigint "duplicate_checker_job_run_id", null: false
     t.integer "duplicate_person_id", null: false
     t.string "name_matching_algorithm", null: false
-    t.integer "original_user_id", null: false
+    t.bigint "original_user_id", null: false
     t.integer "score", null: false
     t.datetime "updated_at", null: false
     t.index ["duplicate_checker_job_run_id"], name: "idx_on_duplicate_checker_job_run_id_12b05a3796"
@@ -1051,14 +1059,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.index ["name"], name: "index_regional_organizations_on_name"
   end
 
-  create_table "regional_records_lookup", primary_key: "result_id", id: :integer, default: nil, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "regional_records_lookup", primary_key: "result_id", id: :bigint, default: nil, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "average", default: 0, null: false
     t.integer "best", default: 0, null: false
     t.date "competition_end_date", null: false
+    t.integer "competition_reg_year", null: false
+    t.string "continent_id", null: false
     t.string "country_id", null: false
     t.string "event_id", null: false
+    t.string "person_id", null: false
     t.index ["event_id", "country_id", "average", "competition_end_date"], name: "idx_on_eventId_countryId_average_competitionEndDate_b424c59953"
     t.index ["event_id", "country_id", "best", "competition_end_date"], name: "idx_on_eventId_countryId_best_competitionEndDate_4e01b1ae38"
+    t.index ["person_id", "country_id", "event_id", "competition_reg_year", "average", "result_id"], name: "concise_average_speedup"
+    t.index ["person_id", "country_id", "event_id", "competition_reg_year", "best", "result_id"], name: "concise_single_speedup"
   end
 
   create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1144,7 +1157,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.index ["value"], name: "index_result_attempts_on_value"
   end
 
-  create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "average", default: 0, null: false
     t.integer "best", default: 0, null: false
     t.string "competition_id", limit: 32, default: "", null: false
@@ -1159,11 +1172,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.integer "round_id", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
-    t.integer "value1", default: 0, null: false
-    t.integer "value2", default: 0, null: false
-    t.integer "value3", default: 0, null: false
-    t.integer "value4", default: 0, null: false
-    t.integer "value5", default: 0, null: false
     t.index ["average", "person_name", "competition_id", "round_type_id"], name: "results_n_results_average_speedup"
     t.index ["best", "person_name", "competition_id", "round_type_id"], name: "results_n_results_single_speedup"
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
@@ -1303,12 +1311,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.string "scramble_program"
     t.datetime "updated_at", null: false
     t.timestamp "uploaded_at", null: false
-    t.integer "uploaded_by", null: false
+    t.bigint "uploaded_by", null: false
     t.index ["competition_id"], name: "index_scramble_file_uploads_on_competition_id"
     t.index ["uploaded_by"], name: "index_scramble_file_uploads_on_uploaded_by"
   end
 
-  create_table "scrambles", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "scrambles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", limit: 32, null: false
     t.string "event_id", limit: 6, null: false
     t.string "group_id", limit: 3, null: false
@@ -1341,6 +1349,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.string "stripe_status", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["parent_record_id"], name: "fk_rails_6ad225b020"
+    t.index ["stripe_id", "stripe_record_type"], name: "index_stripe_records_on_stripe_id_and_stripe_record_type", unique: true
     t.index ["stripe_id"], name: "index_stripe_records_on_stripe_id"
     t.index ["stripe_status"], name: "index_stripe_records_on_stripe_status"
   end
@@ -1359,7 +1368,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
 
   create_table "ticket_comments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "acting_stakeholder_id", null: false
-    t.integer "acting_user_id", null: false
+    t.bigint "acting_user_id", null: false
     t.text "comment"
     t.datetime "created_at", null: false
     t.bigint "ticket_id", null: false
@@ -1380,7 +1389,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
 
   create_table "ticket_logs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "acting_stakeholder_id", null: false
-    t.integer "acting_user_id", null: false
+    t.bigint "acting_user_id", null: false
     t.string "action_type", null: false
     t.datetime "created_at", null: false
     t.string "metadata_action"
@@ -1441,6 +1450,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
   create_table "uploaded_jsons", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
     t.text "json_str", size: :long
+    t.string "upload_type", null: false
     t.index ["competition_id"], name: "index_uploaded_jsons_on_competition_id"
   end
 
@@ -1459,7 +1469,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.integer "thumbnail_crop_x"
     t.integer "thumbnail_crop_y"
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.bigint "user_id"
     t.index ["status"], name: "index_user_avatars_on_status"
     t.index ["user_id"], name: "index_user_avatars_on_user_id"
   end
@@ -1491,12 +1501,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
     t.string "metadata_type"
     t.date "start_date", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.index ["group_id"], name: "index_user_roles_on_group_id"
     t.index ["user_id"], name: "index_user_roles_on_user_id"
   end
 
-  create_table "users", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.boolean "competition_notifications_enabled"
     t.datetime "confirmation_sent_at", precision: nil
     t.string "confirmation_token", limit: 255
@@ -1618,7 +1628,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_18_192442) do
   add_foreign_key "inbox_scramble_sets", "scramble_file_uploads", column: "external_upload_id"
   add_foreign_key "inbox_scrambles", "inbox_scramble_sets"
   add_foreign_key "inbox_scrambles", "inbox_scramble_sets", column: "matched_scramble_set_id"
-  add_foreign_key "live_attempt_history_entries", "live_attempts"
+  add_foreign_key "live_attempts", "live_results", on_delete: :cascade
+  add_foreign_key "live_result_history_entries", "live_results", on_delete: :cascade
+  add_foreign_key "live_result_history_entries", "users", column: "entered_by_id"
   add_foreign_key "live_results", "users", column: "locked_by_id"
   add_foreign_key "live_results", "users", column: "quit_by_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
