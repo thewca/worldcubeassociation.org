@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_20_090104) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -843,6 +843,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_090104) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "matched_scramble_sets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "external_scramble_set_id"
+    t.integer "ordered_index", null: false
+    t.bigint "round_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_scramble_set_id"], name: "index_matched_scramble_sets_on_external_scramble_set_id"
+    t.index ["round_id", "ordered_index"], name: "ordering_sequence", unique: true
+    t.index ["round_id"], name: "index_matched_scramble_sets_on_round_id"
+  end
+
+  create_table "matched_scrambles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "external_scramble_id"
+    t.boolean "is_extra", default: false, null: false
+    t.bigint "matched_scramble_set_id", null: false
+    t.integer "ordered_index", null: false
+    t.text "scramble_string", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_scramble_id"], name: "index_matched_scrambles_on_external_scramble_id"
+    t.index ["matched_scramble_set_id", "ordered_index"], name: "ordering_sequence", unique: true
+    t.index ["matched_scramble_set_id"], name: "index_matched_scrambles_on_matched_scramble_set_id"
+  end
+
   create_table "oauth_access_grants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "application_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1627,6 +1651,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_090104) do
   add_foreign_key "live_results", "rounds"
   add_foreign_key "live_results", "users", column: "locked_by_id"
   add_foreign_key "live_results", "users", column: "quit_by_id"
+  add_foreign_key "matched_scramble_sets", "external_scramble_sets"
+  add_foreign_key "matched_scramble_sets", "rounds"
+  add_foreign_key "matched_scrambles", "external_scrambles"
+  add_foreign_key "matched_scrambles", "matched_scramble_sets", on_delete: :cascade
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"

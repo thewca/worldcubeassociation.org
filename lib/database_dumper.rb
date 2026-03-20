@@ -177,6 +177,8 @@ module DatabaseDumper
     }.freeze,
     "external_scramble_sets" => :skip_all_rows,
     "external_scrambles" => :skip_all_rows,
+    "matched_scramble_sets" => :skip_all_rows,
+    "matched_scrambles" => :skip_all_rows,
     "formats" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
