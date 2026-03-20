@@ -10,7 +10,7 @@ locals {
     },
     {
       name  = "ANYCABLE_NOAUTH"
-      value = 1
+      value = "1"
     },
     {
       name  = "ANYCABLE_PUBSUB"
@@ -18,7 +18,7 @@ locals {
     },
     {
       name  = "ANYCABLE_PUBLIC"
-      value = 1
+      value = "1"
     },
     {
       name = "ANYCABLE_REDIS_URL",
@@ -67,13 +67,6 @@ resource "aws_ecs_task_definition" "anycable" {
         }
       }
       environment = local.any_cable_environment
-      healthCheck       = {
-        command            = ["CMD-SHELL", "pgrep go || exit 1"]
-        interval           = 30
-        retries            = 3
-        startPeriod        = 60
-        timeout            = 5
-      }
     },
   ])
 
@@ -82,15 +75,15 @@ resource "aws_ecs_task_definition" "anycable" {
   }
 }
 
-data "aws_ecs_task_definition" "worker" {
-  task_definition = aws_ecs_task_definition.worker.family
+data "aws_ecs_task_definition" "anycable" {
+  task_definition = aws_ecs_task_definition.anycable.family
 }
 
 resource "aws_ecs_service" "anycable" {
   name                               = "${var.name_prefix}-anycable"
   cluster                            = var.shared.ecs_cluster.id
-  task_definition                    = data.aws_ecs_task_definition.worker.arn
-  desired_count                      = 2
+  task_definition                    = data.aws_ecs_task_definition.anycable.arn
+  desired_count                      = 1
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
@@ -131,4 +124,9 @@ resource "aws_ecs_service" "anycable" {
     Name = var.name_prefix
   }
 
+  load_balancer {
+    target_group_arn = var.shared.anycable_staging.arn
+    container_name   = "anycable-staging"
+    container_port   = 8085
+  }
 }
