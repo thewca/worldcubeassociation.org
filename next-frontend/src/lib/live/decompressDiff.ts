@@ -1,30 +1,42 @@
 import {
+  CompressedDiffedLiveResults,
   CompressedLiveResult,
   DiffedLiveResult,
 } from "@/lib/hooks/useResultsSubscription";
-import { components } from "@/types/openapi";
 import _ from "lodash";
+import { BaseLiveResult } from "@/types/live";
 
-type PartialLiveResultWithRegistrationId = Partial<
-  components["schemas"]["LiveResult"]
-> &
-  Pick<components["schemas"]["LiveResult"], "registration_id">;
-
-export function decompressDiff(
+export function decompressFullResult(
   diff: CompressedLiveResult,
-): components["schemas"]["LiveResult"];
-export function decompressDiff(
-  diff: DiffedLiveResult,
-): PartialLiveResultWithRegistrationId;
-export function decompressDiff(
-  diff: DiffedLiveResult | CompressedLiveResult,
-): PartialLiveResultWithRegistrationId | components["schemas"]["LiveResult"] {
+): BaseLiveResult {
   return {
-    registration_id: diff.registration_id,
+    advancing: diff.ad,
+    advancing_questionable: diff.adq,
+    average: diff.a,
+    best: diff.b,
+    average_record_tag: diff.art,
+    single_record_tag: diff.srt,
+    registration_id: diff.r,
+    attempts: diff.la.map((l) => ({ attempt_number: l.an, value: l.v })),
+    last_attempt_entered_at: diff.at,
+  };
+}
+
+export function decompressPartialResult(
+  diff: CompressedDiffedLiveResults,
+): DiffedLiveResult {
+  return {
+    registration_id: diff.r,
     ..._.omitBy(
       {
-        ...diff,
-        attempts: diff.live_attempts,
+        advancing: diff.ad,
+        advancing_questionable: diff.adq,
+        average: diff.a,
+        best: diff.b,
+        average_record_tag: diff.art,
+        single_record_tag: diff.srt,
+        attempts: diff.la?.map((l) => ({ attempt_number: l.an, value: l.v })),
+        last_attempt_entered_at: diff.at,
       },
       _.isUndefined,
     ),

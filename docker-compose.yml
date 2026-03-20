@@ -21,7 +21,7 @@ x-app: &app
 x-app-environment: &appEnv
   <<: *env
   SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
-  ACTIONCABLE_REDIS_URL: redis://wca_redis:6379/2
+  ANYCABLE_REDIS_URL: redis://wca_redis:6379/2
   MAILCATCHER_SMTP_HOST: wca_mailcatcher
 
 services:
@@ -180,9 +180,33 @@ services:
       - cache_volume:/data
     networks:
       - wca-main
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  wca_ws:
+    image: anycable/anycable-go:1.6
+    ports:
+      - '8085:8085'
+    environment:
+      <<: *appEnv
+      ANYCABLE_HOST: "0.0.0.0"
+      ANYCABLE_DEBUG: 1
+      ANYCABLE_PORT: 8085
+      ANYCABLE_NOAUTH: 1
+      ANYCABLE_PUBSUB: redis
+      ANYCABLE_PUBLIC: 1
+    networks:
+      - wca-main
+    depends_on:
+      wca_redis:
+        condition: service_healthy
 
   wca_playwright:
-    image: mcr.microsoft.com/playwright:v1.57.0
+    image: mcr.microsoft.com/playwright:v1.58.2
     container_name: "playwright"
     extra_hosts:
       - "hostmachine:host-gateway"
@@ -192,9 +216,12 @@ services:
       - SYS_ADMIN
     init: true
     environment:
-      - DEBIAN_FRONTEND=noninteractive
-      - DEBUG=pw:api
-      - DISPLAY=$DISPLAY
+      DEBIAN_FRONTEND: noninteractive
+      DEBUG: pw:api
+      DISPLAY: $DISPLAY
+      PW_TEST_CONNECT_WS_ENDPOINT: ""
+      PW_TEST_BACKEND_HEALTH_URL: http://wca_on_rails:3000/api/v0/healthcheck
+      PW_TEST_FRONTEND_HEALTH_URL: http://nextjs:3001
     ports:
       - "8089:8089"
     working_dir: /app

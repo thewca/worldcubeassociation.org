@@ -1,0 +1,32 @@
+summary: Adds a use to a round
+tags:
+  - live
+operationId: addCompetitor
+parameters:
+  - name: competitionId
+    in: path
+    required: true
+    schema:
+      type: string
+  - name: roundId
+    in: path
+    required: true
+    schema:
+      type: string
+  - name: registrationId
+    in: path
+    required: true
+    schema:
+      type: number
+responses:
+  '200':
+    description: Returns the created empty live result
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - competitor
+          properties:
+            competitor:
+              $ref: '../../../schemas/live/LiveCompetitor.yaml'

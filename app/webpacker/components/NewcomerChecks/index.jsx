@@ -6,11 +6,14 @@ import DuplicateChecker from './DuplicateChecker';
 import NameFormatChecker from './NameFormatChecker';
 import DobChecker from './DobChecker';
 import EditUser from '../EditUser';
+import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 
 export default function Wrapper({ competitionId }) {
   return (
     <WCAQueryClientProvider>
-      <NewcomerChecks competitionId={competitionId} />
+      <ConfirmProvider>
+        <NewcomerChecks competitionId={competitionId} />
+      </ConfirmProvider>
     </WCAQueryClientProvider>
   );
 }

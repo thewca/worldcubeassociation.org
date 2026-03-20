@@ -20,8 +20,8 @@ class UserGroup < ApplicationRecord
   # There are few associations/methods here that are used only for testing. They are to make sure
   # the connections between group and roles are as expected. It's recommended not to remove them.
   has_many :direct_child_groups, class_name: "UserGroup", inverse_of: :parent_group, foreign_key: "parent_group_id"
-  has_many :roles, foreign_key: "group_id", class_name: "UserRole"
-  has_many :active_roles, -> { active }, foreign_key: "group_id", class_name: "UserRole"
+  has_many :roles, foreign_key: "group_id", class_name: "UserRole", inverse_of: :group
+  has_many :active_roles, -> { active }, foreign_key: "group_id", class_name: "UserRole", inverse_of: :group
   has_many :direct_child_roles, through: :direct_child_groups, source: :roles
   has_many :active_direct_child_roles, -> { active }, through: :direct_child_groups, source: :roles
   has_many :users, through: :roles

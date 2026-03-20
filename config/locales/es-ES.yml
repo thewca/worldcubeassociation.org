@@ -685,6 +685,8 @@ es-ES:
           chair: Presidente de la WCA
           #original_hash: 7d405ff
           executive_director: Director Ejecutivo de la WCA
+          #original_hash: 36a137f
+          chief_operating_officer: Director de Operaciones de la WCA
           #original_hash: 1dd4a07
           secretary: Secretario de la WCA
           #original_hash: 0388b19
@@ -2031,6 +2033,8 @@ es-ES:
       profile: Perfil
       #original_hash: 7b2c7f1
       approve: Aprobar
+      #original_hash: d9455bf
+      approve_confirm: '¿Seguro que quieres aprobar el ID de la WCA %{wca_id}?'
       #original_hash: 85de4b8
       unconfirmed_email: >-
         La dirección de correo electrónico de esta cuenta (%{email}) no está
@@ -2840,7 +2844,7 @@ es-ES:
       #original_hash: 8eeeb44
       in_progress_at_wca_live_html: >-
         La competición se está celebrando ahora mismo. ¡Puedes consultar los
-        resultados en directo<a href='%{link_here}'>aquí</a>!
+        resultados en directo <a href='%{link_here}'>aquí</a>!
       #original_hash: 8ab1548
       reg_opens_too_early: El registro abre en menos de las 48 horas requeridas.
       #original_hash: a25e7a2
@@ -2881,6 +2885,8 @@ es-ES:
         la lista de espera. Si estás usando una lista de espera, por favor
         especifica una fecha límite. Si no estás usando una lista de espera, por
         favor recuerda especificarlo en los requisitos de registro.
+      #original_hash: 51376ef
+      schedule_locked_after_results_submitted: El horario no se puede editar tras haber subido los resultados.
     live:
       #original_hash: 10d1a3c
       title: Resultados en directo
@@ -3353,10 +3359,10 @@ es-ES:
         podrás modificar ninguna información. Comprueba tu correo electrónico
         después de esto para verificar que el Equipo de Anuncio de Competiciones
         de la WCA ha sido notificado.
-      #original_hash: 4c7deb7
+      #original_hash: 89fbbca
       submit_delete: >-
-        ¿Estás seguro de que quieres eliminar esta competición? No hay vuelta
-        atrás.
+        Esta acción no se puede deshacer. Por favor, escribe a continuación el
+        ID de la competición "%{competition_id}" para confirmar la eliminación.
       #original_hash: 8ebebca
       coordinates: Coordenadas
       #original_hash: a672984
@@ -6480,6 +6486,16 @@ es-ES:
         límite de competidores (%{competitor_limit}). Los resultados de los
         competidores registrados una vez se alcanzó el límite de competidores
         tienen que ser eliminados.
+      #original_hash: d8f2f1e
+      registration_details_mismatch_warning: >-
+        La persona con el ID de registro %{person_id} (%{name}) tiene detalles
+        que no coinciden con su registro: %{mismatches}
+      #original_hash: 1a9da05
+      missing_matching_registration_warning: 'La persona %{name} no tiene un registro coincidente.'
+      #original_hash: 7d62dd5
+      unaccepted_registration_with_results_warning: >-
+        La persona %{name} tiene resultados en la competición, pero el registro
+        no está marcado como "aceptado".
     results:
       #original_hash: 5685ae8
       automatically_position_fixed_info: >-

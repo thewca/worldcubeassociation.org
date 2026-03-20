@@ -22,7 +22,7 @@ class CronjobWarningJob < WcaCronjob
       average_runtime = (statistics.average_runtime / 1000.0).seconds
       should_start_before = last_scheduled_run + (3 * average_runtime)
 
-      started_as_planned = statistics.run_start.between?(last_scheduled_run, should_start_before)
+      started_as_planned = statistics.run_start&.between?(last_scheduled_run, should_start_before)
       completed_later_successfully = statistics.successful_run_start >= should_start_before
       running_extremely_long = !statistics.run_end? && statistics.run_start <= (5 * average_runtime).ago
 
