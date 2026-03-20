@@ -9,6 +9,7 @@ class ExternalScrambleSet < ApplicationRecord
   belongs_to :scramble_file_upload
 
   has_many :external_scrambles, dependent: :destroy
+  has_many :matched_scramble_sets, dependent: :nullify
 
   delegate :original_filename, to: :scramble_file_upload, allow_nil: true
 
@@ -17,14 +18,7 @@ class ExternalScrambleSet < ApplicationRecord
   end
 
   def alphabetic_group_index
-    prefix_for_index(self.scramble_set_number - 1)
-  end
-
-  private def prefix_for_index(index)
-    char = (65 + (index % 26)).chr
-    return char if index < 26
-
-    prefix_for_index((index / 26) - 1) + char
+    Scramble.prefix_for_index(self.scramble_set_number - 1)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

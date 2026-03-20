@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ExternalScramble < ApplicationRecord
-  belongs_to :external_scramble_set, inverse_of: :external_scrambles
+  belongs_to :external_scramble_set
 
   scope :not_extra, -> { where(is_extra: false) }
 
