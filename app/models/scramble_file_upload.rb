@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ScrambleFileUpload < ApplicationRecord
-  SERIALIZATION_INCLUDES = { inbox_scramble_sets: InboxScrambleSet::SERIALIZATION_INCLUDES }.freeze
+  SERIALIZATION_INCLUDES = { external_scramble_sets: ExternalScrambleSet::SERIALIZATION_INCLUDES }.freeze
 
   # The original Java `LocalDateTime` format is defined as `"MMM dd, yyyy h:m:s a"`.
   #   The below format string should be the Ruby equivalent for strptime.
@@ -10,7 +10,7 @@ class ScrambleFileUpload < ApplicationRecord
   belongs_to :uploaded_by_user, foreign_key: "uploaded_by", class_name: "User"
   belongs_to :competition
 
-  has_many :inbox_scramble_sets, inverse_of: :scramble_file_upload, dependent: :destroy
+  has_many :external_scramble_sets, dependent: :destroy
 
   scope :for_serialization, -> { includes(**SERIALIZATION_INCLUDES) }
 
@@ -26,7 +26,7 @@ class ScrambleFileUpload < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     except: %w[raw_wcif],
-    include: %w[inbox_scramble_sets],
+    include: %w[external_scramble_sets],
   }.freeze
 
   def serializable_hash(options = nil)

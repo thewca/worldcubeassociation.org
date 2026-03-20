@@ -175,6 +175,8 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
+    "external_scramble_sets" => :skip_all_rows,
+    "external_scrambles" => :skip_all_rows,
     "formats" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -237,8 +239,6 @@ module DatabaseDumper
     }.freeze,
     "inbox_persons" => :skip_all_rows,
     "inbox_results" => :skip_all_rows,
-    "inbox_scramble_sets" => :skip_all_rows,
-    "inbox_scrambles" => :skip_all_rows,
     "persons" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
