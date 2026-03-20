@@ -17,7 +17,7 @@ locals {
       value = "redis"
     },
     {
-      name  = "ANYCABLE_PUBLIC"
+      name  = "ANYCABLE_PUBLIC_STREAMS"
       value = "1"
     },
     {
