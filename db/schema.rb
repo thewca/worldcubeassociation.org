@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_19_150521) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_20_090104) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -672,7 +672,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_150521) do
   create_table "h2h_matches", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "match_number", limit: 1, null: false
-    t.integer "round_id", null: false
+    t.bigint "round_id", null: false
     t.datetime "updated_at", null: false
     t.index ["round_id"], name: "index_h2h_matches_on_round_id"
   end
@@ -707,7 +707,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_150521) do
     t.string "format_id", limit: 1, default: "", null: false
     t.string "person_id", limit: 20, null: false
     t.integer "pos", limit: 2, default: 0, null: false
-    t.integer "round_id", null: false
+    t.bigint "round_id", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
     t.integer "value1", default: 0, null: false
     t.integer "value2", default: 0, null: false
@@ -726,7 +726,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_150521) do
     t.datetime "created_at", null: false
     t.string "event_id", null: false
     t.bigint "external_upload_id"
-    t.integer "matched_round_id"
+    t.bigint "matched_round_id"
     t.integer "ordered_index", null: false
     t.integer "round_number", null: false
     t.integer "scramble_set_number", null: false
@@ -1167,7 +1167,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_150521) do
     t.integer "pos", limit: 2, default: 0, null: false
     t.string "regional_average_record", limit: 3
     t.string "regional_single_record", limit: 3
-    t.integer "round_id", null: false
+    t.bigint "round_id", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
     t.index ["average", "person_name", "competition_id", "round_type_id"], name: "results_n_results_average_speedup"
@@ -1231,7 +1231,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_150521) do
     t.integer "rank", default: 0, null: false
   end
 
-  create_table "rounds", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "rounds", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.text "advancement_condition"
     t.integer "competition_event_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1288,7 +1288,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_150521) do
     t.datetime "end_time", precision: nil, null: false
     t.string "name", null: false
     t.bigint "parent_activity_id"
-    t.integer "round_id"
+    t.bigint "round_id"
     t.integer "scramble_set_id"
     t.datetime "start_time", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -1319,7 +1319,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_150521) do
     t.string "event_id", limit: 6, null: false
     t.string "group_id", limit: 3, null: false
     t.boolean "is_extra", null: false
-    t.integer "round_id", null: false
+    t.bigint "round_id", null: false
     t.string "round_type_id", limit: 1, null: false
     t.text "scramble", null: false
     t.integer "scramble_num", null: false
@@ -1631,6 +1631,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_150521) do
   add_foreign_key "live_attempts", "live_results", on_delete: :cascade
   add_foreign_key "live_result_history_entries", "live_results", on_delete: :cascade
   add_foreign_key "live_result_history_entries", "users", column: "entered_by_id"
+  add_foreign_key "live_results", "rounds"
   add_foreign_key "live_results", "users", column: "locked_by_id"
   add_foreign_key "live_results", "users", column: "quit_by_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
