@@ -23,6 +23,10 @@ locals {
     {
       name = "ANYCABLE_REDIS_URL",
       value = "redis://wca-staging-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
+    },
+    {
+      name = "ANYCABLE_PATH",
+      value = "/api/v1/live/cable"
     }
   ]
 }
