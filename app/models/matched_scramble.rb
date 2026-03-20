@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class MatchedScramble < ApplicationRecord
+  default_scope { order(:ordered_index) }
+
   belongs_to :matched_scramble_set
   belongs_to :external_scramble, optional: true
 

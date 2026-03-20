@@ -97,44 +97,36 @@ class ScrambleFilesController < ApplicationController
     competition = competition_from_params
 
     competition.transaction do
+      competition.matched_scramble_sets.delete_all
+
       competition.rounds.each do |round|
         updated_round = params[round.wcif_id]
 
         next if updated_round.blank?
 
-        updated_set_count = updated_round[:scramble_set_count]
-        round.update!(scramble_set_count: updated_set_count)
+        round.scramble_set_count = updated_round[:scramble_set_count]
 
-        updated_sets = updated_round[:scramble_sets]
+        updated_round[:scramble_sets].each_with_index do |ext_set, set_idx|
+          matched_set = round.matched_scramble_sets.build(
+            external_scramble_set_id: ext_set[:id],
+            ordered_index: set_idx,
+          )
 
-        updated_set_ids = updated_sets.pluck(:id)
-        updated_sets_by_id = updated_sets.index_by { it[:id] }
-
-        round.matched_scramble_sets.update_all(matched_round_id: nil)
-
-        # This avoids validation issues when reassigning the indices one by one in the `each` loop below
-        ExternalScrambleSet.where(id: updated_set_ids).update_all(ordered_index: -1)
-
-        ExternalScrambleSet.find(updated_set_ids)
-                        .each_with_index do |scramble_set, set_idx|
-                          scramble_set.update!(matched_round: round, ordered_index: set_idx)
-
-                          updated_scramble_ids = updated_sets_by_id[scramble_set.id][:inbox_scrambles]
-                          scramble_set.matched_inbox_scrambles.update_all(matched_scramble_set_id: nil)
-
-                          # This avoids validation issues when reassigning the indices one by one in the `each` loop below
-                          ExternalScramble.where(id: updated_scramble_ids).update_all(ordered_index: -1)
-
-                          ExternalScramble.find(updated_scramble_ids)
-                                       .each_with_index do |scramble, idx|
-                                         scramble.update!(matched_scramble_set: scramble_set, ordered_index: idx)
-                          end
+          ext_set[:scrambles].each_with_index do |ext_scr, scr_idx|
+            matched_set.matched_scrambles.build(
+              external_scramble_id: ext_scr[:id],
+              ordered_index: scr_idx,
+              scramble_string: ext_scr[:scramble_string],
+              is_extra: ext_scr[:is_extra],
+            )
+          end
         end
+
+        round.save!
       end
     end
 
-    render json: competition.inbox_scramble_sets
-                 .includes(**ExternalScrambleSet::SERIALIZATION_INCLUDES)
+    render json: competition.matched_scramble_sets
   end
 
   private def competition_from_params

@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class MatchedScrambleSet < ApplicationRecord
-  belongs_to :round
+  default_scope { order(:ordered_index) }
 
+  belongs_to :round
   belongs_to :external_scramble_set, optional: true
 
   has_many :matched_scrambles, dependent: :destroy
