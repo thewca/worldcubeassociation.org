@@ -17,7 +17,7 @@ module Live
       # Queues the broadcast — fires after outermost transaction commits,
       # or immediately if not inside a transaction. Never fires on rollback.
       ActiveRecord.after_all_transactions_commit do
-        ActionCable.server.broadcast(Live::Config.broadcast_key(round.wcif_id), diff)
+        ActionCable.server.broadcast(Live::Config.broadcast_key(round.competition_id, round.wcif_id), diff)
       end
 
       result
@@ -27,10 +27,12 @@ module Live
       diff = self.round_state_diff(before_state, after_state)
       diff = self.add_forecast_stats(diff, round)
 
+      created_with_user = Array.wrap(diff["created"]).map { compress_payload(it).merge({ user: Registration.find(it["registration_id"]).to_live_json }) }
+
       {
         "updated" => Array.wrap(diff["updated"]).map { compress_payload it },
         "deleted" => diff["deleted"],
-        "created" => Array.wrap(diff["created"]).map { compress_payload it },
+        "created" => created_with_user,
         'before_hash' => state_hash(before_state),
         'after_hash' => state_hash(after_state),
       }.compact_blank
@@ -84,6 +86,7 @@ module Live
       "attempt_number" => "an",
       "best_possible_average" => "bpa",
       "worst_possible_average" => "wpa",
+      "last_attempt_entered_at" => "at",
     }.freeze
 
     # To send even less data, we shorten the quite long attribute names

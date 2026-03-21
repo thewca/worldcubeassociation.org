@@ -12,7 +12,6 @@ export default function AddResults({
   format,
   roundId,
   competitionId,
-  competitors,
 }: {
   format: Format;
   roundId: string;
@@ -32,7 +31,6 @@ export default function AddResults({
           <AttemptsForm
             header="Add Result"
             eventId={eventId}
-            competitors={competitors}
             solveCount={format.expected_solve_count}
           />
         </GridItem>
@@ -42,7 +40,6 @@ export default function AddResults({
             roundWcifId={roundId}
             formatId={format.id}
             competitionId={competitionId}
-            competitors={competitors}
             isAdmin
             title={`${events.byId[eventId].name} - ${roundNumber}`}
           />

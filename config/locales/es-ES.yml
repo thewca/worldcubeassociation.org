@@ -685,6 +685,8 @@ es-ES:
           chair: Presidente de la WCA
           #original_hash: 7d405ff
           executive_director: Director Ejecutivo de la WCA
+          #original_hash: 36a137f
+          chief_operating_officer: Director de Operaciones de la WCA
           #original_hash: 1dd4a07
           secretary: Secretario de la WCA
           #original_hash: 0388b19
@@ -6484,6 +6486,16 @@ es-ES:
         límite de competidores (%{competitor_limit}). Los resultados de los
         competidores registrados una vez se alcanzó el límite de competidores
         tienen que ser eliminados.
+      #original_hash: d8f2f1e
+      registration_details_mismatch_warning: >-
+        La persona con el ID de registro %{person_id} (%{name}) tiene detalles
+        que no coinciden con su registro: %{mismatches}
+      #original_hash: 1a9da05
+      missing_matching_registration_warning: 'La persona %{name} no tiene un registro coincidente.'
+      #original_hash: 7d62dd5
+      unaccepted_registration_with_results_warning: >-
+        La persona %{name} tiene resultados en la competición, pero el registro
+        no está marcado como "aceptado".
     results:
       #original_hash: 5685ae8
       automatically_position_fixed_info: >-

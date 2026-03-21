@@ -15,7 +15,7 @@ class Championship < ApplicationRecord
   ].freeze
 
   belongs_to :competition
-  has_many :eligible_country_iso2s_for_championship, class_name: "EligibleCountryIso2ForChampionship", foreign_key: :championship_type, primary_key: :championship_type
+  has_many :eligible_country_iso2s_for_championship, class_name: "EligibleCountryIso2ForChampionship", foreign_key: :championship_type, primary_key: :championship_type, inverse_of: :championship
   validates :championship_type, uniqueness: { scope: :competition_id, case_sensitive: false },
                                 inclusion: { in: CHAMPIONSHIP_TYPES }
 

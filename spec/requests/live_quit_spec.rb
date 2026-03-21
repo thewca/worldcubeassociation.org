@@ -66,7 +66,7 @@ RSpec.describe "WCA Live API" do
 
       expect do
         delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, round.wcif_id, registration_1.id)
-      end.to have_broadcasted_to(Live::Config.broadcast_key(round.wcif_id))
+      end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, round.wcif_id))
         .from_channel(ApplicationCable::Channel)
         .with(hash_including(deleted: [registration_1.id], before_hash: before_hash))
     end
@@ -92,7 +92,7 @@ RSpec.describe "WCA Live API" do
 
       expect do
         delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request
-      end.to have_broadcasted_to(Live::Config.broadcast_key(round.wcif_id))
+      end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, round.wcif_id))
         .from_channel(ApplicationCable::Channel)
         .with(hash_including(updated: [{ "advancing" => false, "advancing_questionable" => false, "registration_id" => registrations.first.id },
                                        { "advancing" => true, "registration_id" => registrations.third.id }].map { Live::DiffHelper.compress_payload it },
@@ -118,9 +118,11 @@ RSpec.describe "WCA Live API" do
         advancing_ids: to_advance.pluck(:registration_id),
       }
 
+      user = registrations.third.to_live_json
+
       expect do
         delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request
-      end.to have_broadcasted_to(Live::Config.broadcast_key(final.wcif_id))
+      end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, final.wcif_id))
         .from_channel(ApplicationCable::Channel)
         .with(hash_including(deleted: [registrations.first.id],
                              before_hash: before_hash,
@@ -131,7 +133,8 @@ RSpec.describe "WCA Live API" do
                                          "average_record_tag" => nil,
                                          "registration_id" => registrations.third.id,
                                          "single_record_tag" => nil,
-                                         "live_attempts" => [] }].map { Live::DiffHelper.compress_payload it }))
+                                         "last_attempt_entered_at" => anything,
+                                         "live_attempts" => [] }].map { (Live::DiffHelper.compress_payload it).merge({ "user" => user }) }))
     end
   end
 end

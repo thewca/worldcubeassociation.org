@@ -2,7 +2,7 @@
 
 class Api::V1::Live::LiveController < Api::V1::ApiController
   protect_from_forgery with: :null_session
-  skip_before_action :require_user!, only: %i[round_results by_person podiums]
+  skip_before_action :require_user!, only: %i[round_results by_person podiums rounds]
 
   def add_or_update_result
     results = params.expect(attempts: [%i[value attempt_number]])
@@ -39,7 +39,6 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
   def rounds
     competition = Competition.find(params.require(:competition_id))
-    require_manage!(competition)
 
     render json: { rounds: competition.rounds.map(&:to_live_info_json) }
   end
@@ -162,5 +161,19 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     to_advance = round.first_round? ? [] : round.previous_round.next_advancing_without(registration_id)
 
     render json: { status: "ok", next_advancing: to_advance }
+  end
+
+  def add_competitor_to_round
+    competition = Competition.find(params.require(:competition_id))
+    registration = Registration.find(params.require(:registration_id))
+    round = Round.find_by_wcif_id!(params.require(:round_id), competition.id)
+
+    require_manage!(competition)
+
+    Live::DiffHelper.broadcast_changes(round) do
+      round.create_empty_live_result(registration.id)
+    end
+
+    render json: { status: "ok", competitor: registration.to_live_json }
   end
 end

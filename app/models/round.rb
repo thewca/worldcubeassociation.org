@@ -41,11 +41,11 @@ class Round < ApplicationRecord
   serialize :round_results, coder: RoundResults
   validates_associated :round_results
 
-  has_many :schedule_activities, -> { root_activities }, dependent: :destroy
+  has_many :schedule_activities, -> { root_activities }, dependent: :destroy, inverse_of: :round
 
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
-  has_many :live_results, -> { order(:global_pos) }
+  has_many :live_results, -> { order(:global_pos) }, inverse_of: :round
   has_many :live_competitors, through: :live_results, source: :registration
   has_many :results
   has_many :scrambles
@@ -189,10 +189,8 @@ class Round < ApplicationRecord
   end
 
   def clear_round!(clearing_user)
-    self.transaction do
-      live_results.delete_all
-      open_round!(clearing_user)
-    end
+    LiveAttempt.where(live_result_id: live_result_ids).delete_all
+    self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
   end
 
   def open_round!(opening_user)
@@ -205,6 +203,12 @@ class Round < ApplicationRecord
 
     inserted_ids = self.live_results.where(registration_id: advancing_reg_ids).ids
     self.bulk_insert_history(inserted_ids, opening_user, action_type: :opened)
+  end
+
+  def create_empty_live_result(registration_id)
+    live_results.find_or_create_by(registration_id: registration_id) do |lr|
+      lr.assign_attributes(LiveResult.empty_result_attributes(registration_id, id))
+    end
   end
 
   def total_competitors
@@ -236,7 +240,7 @@ class Round < ApplicationRecord
     max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
 
     advancement_determining_results.update_all(
-      "advancing_questionable = (global_pos < #{max_advancing})",
+      "advancing_questionable = (global_pos <= #{max_advancing})",
     )
 
     LiveResult.where(id: advancing_ids).update_all(advancing: true)
@@ -508,7 +512,7 @@ class Round < ApplicationRecord
     {
       **self.to_wcif,
       "round_id" => id,
-      "competitors" => live_competitors.includes(:user).map { it.as_json({ methods: %i[name country_iso2], only: %i[id user_id registrant_id] }) },
+      "competitors" => live_competitors.includes(:user).map(&:to_live_json),
       "results" => only_podiums ? live_podium : live_results,
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
       "linked_round_ids" => linked_round&.wcif_ids,

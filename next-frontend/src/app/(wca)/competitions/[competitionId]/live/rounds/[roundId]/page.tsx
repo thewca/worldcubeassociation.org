@@ -29,7 +29,7 @@ export default async function ResultPage({
     return <OpenapiError response={response} t={t} />;
   }
 
-  const { competitors, format, id, linked_round_ids } = data;
+  const { format, id, linked_round_ids } = data;
 
   if (linked_round_ids) {
     const linkedRounds = await Promise.all(
@@ -54,7 +54,6 @@ export default async function ResultPage({
             <LiveUpdatingResultsTable
               formatId={format}
               roundWcifId={roundId}
-              competitors={competitors}
               competitionId={competitionId}
               title="Live Results"
               isLinkedRound
@@ -74,7 +73,6 @@ export default async function ResultPage({
           <LiveUpdatingResultsTable
             formatId={format}
             roundWcifId={roundId}
-            competitors={competitors}
             competitionId={competitionId}
             title={`${events.byId[eventId].name} - Round ${roundNumber}`}
           />
