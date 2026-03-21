@@ -2,13 +2,12 @@
 
 class Competition < ApplicationRecord
   # We need this default order, tests rely on it.
-  has_many :competition_events, -> { order(:event_id) }, dependent: :destroy
+  has_many :competition_events, -> { order(:event_id) }, dependent: :destroy, inverse_of: :competition
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
-  has_many :linked_rounds, -> { distinct.reorder(nil) }, through: :rounds
   has_many :registrations, dependent: :destroy
   has_many :results
-  has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }
+  has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }, inverse_of: :competition
   has_many :uploaded_jsons, dependent: :destroy
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
@@ -17,7 +16,7 @@ class Competition < ApplicationRecord
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", dependent: :delete_all
-  has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
+  has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab", inverse_of: :competition
   has_one :delegate_report, dependent: :destroy
   has_one :waiting_list, dependent: :destroy, as: :holder
   has_many :competition_venues, dependent: :destroy
@@ -33,16 +32,16 @@ class Competition < ApplicationRecord
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
   has_many :series_registrations, -> { readonly }, through: :series_competitions, source: :registrations
   belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
-  belongs_to :posted_user, optional: true, foreign_key: 'results_posted_by', class_name: "User"
+  belongs_to :posted_user, optional: true, foreign_key: 'results_posted_by', class_name: "User", inverse_of: :competitions_results_posted
   has_many :inbox_results, dependent: :delete_all
   has_many :inbox_persons, dependent: :delete_all
   has_many :inbox_scramble_sets, dependent: :delete_all
   has_many :matched_scramble_sets, through: :rounds
-  belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User"
+  belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User", inverse_of: :competitions_announced
   belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
   has_many :competition_payment_integrations
   has_many :scramble_file_uploads, dependent: :delete_all
-  has_many :accepted_registrations, -> { accepted }, class_name: "Registration", foreign_key: "competition_id"
+  has_many :accepted_registrations, -> { accepted }, class_name: "Registration", foreign_key: "competition_id", inverse_of: :competition
   has_many :accepted_newcomers, -> { where(wca_id: nil) }, through: :accepted_registrations, source: :user
   has_many :duplicate_checker_job_runs, dependent: :delete_all
   has_one :tickets_competition_result
@@ -675,7 +674,6 @@ class Competition < ApplicationRecord
              'continent',
              'championships',
              'rounds',
-             'linked_rounds',
              'uploaded_jsons',
              'wcif_extensions',
              'bookmarked_competitions',

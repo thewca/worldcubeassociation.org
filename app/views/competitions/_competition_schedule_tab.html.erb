@@ -3,5 +3,5 @@
   wcifEvents: @competition.events_wcif,
   competitionName: @competition.name,
   calendarLocale: I18n.locale,
-  linkedRounds: @competition.linked_rounds.flat_map { it.wcif_ids },
+  linkedRounds: @competition.rounds.to_h { [it.wcif_id, it.linked_round&.wcif_ids] }.compact_blank,
 }) %>

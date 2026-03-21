@@ -45,7 +45,7 @@ export default function CalendarView({
       const eventColor = activity.activityCode.startsWith('other') ? ACTIVITY_OTHER_GREY : room.color;
 
       return ({
-        title: linkedRounds.includes(activity.activityCode) ? `${eventName} (Dual Round)` : eventName,
+        title: linkedRounds[activity.activityCode] ? `${eventName} (Dual Round)` : eventName,
         start: activity.startTime,
         end: activity.endTime,
         backgroundColor: eventColor,

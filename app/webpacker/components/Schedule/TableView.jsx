@@ -146,7 +146,7 @@ function SingleDayTable({
                 rooms={rooms}
                 timeZone={timeZone}
                 wcifEvents={wcifEvents}
-                isLinked={linkedRounds.includes(activityRound?.id)}
+                isLinked={linkedRounds[activityRound?.id]}
               />
             );
           })
