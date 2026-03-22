@@ -9,7 +9,7 @@ class ScrambleFilesController < ApplicationController
   def index
     competition = competition_from_params
 
-    render json: ScrambleFileUpload.for_serialization.where(competition: competition)
+    render json: competition.scramble_file_uploads.for_serialization
   end
 
   def create
@@ -24,8 +24,7 @@ class ScrambleFilesController < ApplicationController
     generation_date = DateTime.strptime(tnoodle_json[:generationDate], ScrambleFileUpload::TNOODLE_DATETIME_FORMAT)
     tnoodle_version = tnoodle_json[:version]
 
-    existing_upload = ScrambleFileUpload.for_serialization.find_by(
-      competition: competition,
+    existing_upload = competition.scramble_file_uploads.for_serialization.find_by(
       scramble_program: tnoodle_version,
       generated_at: generation_date,
     )
@@ -40,51 +39,49 @@ class ScrambleFilesController < ApplicationController
       :events,
     )
 
-    scr_file_upload = ScrambleFileUpload.for_serialization.create!(
+    scr_file_upload = competition.scramble_file_uploads.for_serialization.build(
       uploaded_by_user: current_user,
-      uploaded_at: DateTime.now,
-      competition: competition,
       original_filename: uploaded_file.original_filename,
       scramble_program: tnoodle_version,
       generated_at: generation_date,
       raw_wcif: tnoodle_wcif,
     )
 
-    scr_file_upload.transaction do
-      tnoodle_wcif[:events].each do |wcif_event|
-        competition_event = competition.competition_events.find_by!(event_id: wcif_event[:id])
+    tnoodle_wcif[:events].each do |wcif_event|
+      competition_event = competition.competition_events.find_by!(event_id: wcif_event[:id])
 
-        wcif_event[:rounds].each_with_index do |wcif_round, rd_idx|
-          parsed_round_number = ScheduleActivity.parse_activity_code(wcif_round[:id]).fetch(:round_number, rd_idx + 1)
+      wcif_event[:rounds].each_with_index do |wcif_round, rd_idx|
+        parsed_round_number = ScheduleActivity.parse_activity_code(wcif_round[:id]).fetch(:round_number, rd_idx + 1)
 
-          wcif_round[:scrambleSets].each_with_index do |wcif_scramble_set, idx|
-            scramble_set = scr_file_upload.external_scramble_sets.create!(
-              competition_id: competition.id,
-              event_id: competition_event.event_id,
-              round_number: parsed_round_number,
-              scramble_set_number: idx + 1,
-            )
+        wcif_round[:scrambleSets].each_with_index do |wcif_scramble_set, idx|
+          scramble_set = scr_file_upload.external_scramble_sets.build(
+            competition_id: competition.id,
+            event_id: competition_event.event_id,
+            round_number: parsed_round_number,
+            scramble_set_number: idx + 1,
+          )
 
-            %i[scrambles extraScrambles].each do |scramble_kind|
-              wcif_scramble_set[scramble_kind].each_with_index do |wcif_scramble, n|
-                scramble_set.external_scrambles.create!(
-                  scramble_string: wcif_scramble,
-                  scramble_number: n + 1,
-                  is_extra: scramble_kind == :extraScrambles,
-                )
-              end
+          %i[scrambles extraScrambles].each do |scramble_kind|
+            wcif_scramble_set[scramble_kind].each_with_index do |wcif_scramble, n|
+              scramble_set.external_scrambles.build(
+                scramble_string: wcif_scramble,
+                scramble_number: n + 1,
+                is_extra: scramble_kind == :extraScrambles,
+              )
             end
           end
         end
       end
     end
 
+    scr_file_upload.save!
+
     render json: scr_file_upload, status: :created
   end
 
   def destroy
     scramble_file_id = params.require(:id)
-    scramble_upload = ScrambleFileUpload.find(scramble_file_id)
+    scramble_upload = ScrambleFileUpload.find_by(id: scramble_file_id)
 
     return head :not_found if scramble_upload.blank?
 

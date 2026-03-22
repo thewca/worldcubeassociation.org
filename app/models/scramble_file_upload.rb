@@ -16,6 +16,14 @@ class ScrambleFileUpload < ApplicationRecord
 
   serialize :raw_wcif, coder: JSON
 
+  # Set a `uploaded_at` timestamp for newly created records,
+  #   but only if there is no value already specified from the outside
+  after_initialize :mark_uploaded_at, if: :new_record?, unless: :uploaded_at?
+
+  private def mark_uploaded_at
+    self.uploaded_at = current_time_from_proper_timezone
+  end
+
   def tnoodle_interchange_data
     {
       version: self.scramble_program,
