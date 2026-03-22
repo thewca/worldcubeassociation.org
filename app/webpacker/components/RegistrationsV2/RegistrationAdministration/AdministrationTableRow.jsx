@@ -50,14 +50,14 @@ function PaidOn({
   );
 
   const content = (() => {
+    if (paymentStatus === 'refund') {
+      return I18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(updatedAt) });
+    }
     if (!hasPaid) {
       return I18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
     }
     if (paymentStatus === 'initialized') {
       return I18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(updatedAt) });
-    }
-    if (paymentStatus === 'refund') {
-      return I18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(updatedAt) });
     }
     // the above cases should be exhaustive
     return getRegistrationTimestamp(updatedAt);
