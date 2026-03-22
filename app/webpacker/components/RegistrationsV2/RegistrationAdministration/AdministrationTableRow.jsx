@@ -40,14 +40,27 @@ function RegisteredOn({
 function PaidOn({
   withFullDate, registeredOn, paymentStatus, hasPaid, updatedAt,
 }) {
-  const wasRefunded = paymentStatus === 'refund';
-  const trigger = (
-    <span>
-      {hasPaid
-        ? `${formatDate(updatedAt, withFullDate)}${wasRefunded ? '*' : ''}`
-        : I18n.t('registrations.list.not_paid')}
-    </span>
-  );
+  const trigger = (() => {
+    if (hasPaid) {
+      return (
+        <span>
+          {formatDate(updatedAt, withFullDate)}
+        </span>
+      );
+    }
+    if (paymentStatus === 'refund') {
+      return (
+        <span>
+          {I18n.t('competitions.registration_v2.list.payment.refunded_status')}
+        </span>
+      );
+    }
+    return (
+      <span>
+        {I18n.t('registrations.list.not_paid')}
+      </span>
+    );
+  })();
 
   const content = (() => {
     if (paymentStatus === 'refund') {
