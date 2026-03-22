@@ -40,6 +40,7 @@ function RegisteredOn({
 function PaidOn({
   withFullDate, registeredOn, paymentStatus, hasPaid, updatedAt,
 }) {
+  // trigger must be wrapped in a span, literal text causes a crash
   const trigger = (() => {
     if (hasPaid) {
       return (
