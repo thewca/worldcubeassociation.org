@@ -67,7 +67,7 @@ class Country < ApplicationRecord
 
   belongs_to :continent
   has_many :competitions
-  has_one :band, foreign_key: :iso2, primary_key: :iso2, class_name: "CountryBand"
+  has_one :band, foreign_key: :iso2, primary_key: :iso2, class_name: "CountryBand", inverse_of: :country
 
   def continent
     Continent.c_find(self.continent_id)

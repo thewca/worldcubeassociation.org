@@ -1,0 +1,33 @@
+put:
+  summary: Quits a competitor from the round and advances the next one if prompted
+  tags:
+    - live
+  operationId: clearCompetitor
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: roundId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: registrationId
+      in: path
+      required: true
+      schema:
+        type: number
+  responses:
+    '200':
+      description: Returns the number of attempts that were deleted
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - deleted_attempts
+            properties:
+              deleted_attempts:
+                type: number

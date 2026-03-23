@@ -60,6 +60,7 @@ export function ImportResultsData({
           <ImportWcaLiveResults
             competitionId={competitionId}
             uploadedScrambleFilesCount={uploadedScrambleFilesCount}
+            isAdminView={isAdminView}
             onImportSuccess={onImportSuccess}
           />
         </Tab.Pane>
