@@ -159,6 +159,7 @@ locals {
           dump_replica_host: "staging-v2-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"}))
     }
   ]
+  rails_internal_dns = "rails-staging.local"
 }
 
 data "aws_iam_policy_document" "task_assume_role_policy" {
@@ -297,6 +298,11 @@ resource "aws_ecs_task_definition" "api" {
   }
 }
 
+resource "aws_service_discovery_private_dns_namespace" "this" {
+  name = local.rails_internal_dns
+  vpc  = var.shared.vpc_id
+}
+
 resource "aws_ecs_task_definition" "this" {
   family = var.name_prefix
 
@@ -412,6 +418,11 @@ resource "aws_ecs_service" "rails" {
 
   tags = {
     Name = var.name_prefix
+  }
+
+  service_connect_configuration {
+    enabled = true
+    namespace = aws_service_discovery_private_dns_namespace.this.name
   }
 
 }
