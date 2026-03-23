@@ -199,7 +199,7 @@ export default function UnusedScramblesPanel({
   dispatchMatchState,
 }) {
   const scrambleFilesTree = useMemo(() => {
-    const allScrambleSets = scrambleFiles.flatMap((file) => file.inbox_scramble_sets);
+    const allScrambleSets = scrambleFiles.flatMap((file) => file.external_scramble_sets);
 
     return groupScrambleSetsIntoWcif(allScrambleSets);
   }, [scrambleFiles]);

@@ -12,12 +12,14 @@ class MatchedScrambleSet < ApplicationRecord
                             uniqueness: { scope: :round_id }
 
   delegate :competition_id, :event_id, :round_type_id, to: :round
+  delegate :wcif_id, to: :round, prefix: true
 
   def alphabetic_group_index
     Scramble.prefix_for_index(self.ordered_index + 1)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
+    methods: %w[round_wcif_id],
     include: %w[matched_scrambles],
   }.freeze
 

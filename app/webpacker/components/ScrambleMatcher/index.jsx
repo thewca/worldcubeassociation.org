@@ -15,7 +15,7 @@ export default function Wrapper({
   wcifEvents,
   competitionId,
   initialScrambleFiles,
-  inboxScrambleSets,
+  matchedScrambleSets,
 }) {
   return (
     <WCAQueryClientProvider>
@@ -23,7 +23,7 @@ export default function Wrapper({
         wcifEvents={wcifEvents}
         competitionId={competitionId}
         initialScrambleFiles={initialScrambleFiles}
-        inboxScrambleSets={inboxScrambleSets}
+        matchedScrambleSets={matchedScrambleSets}
       />
     </WCAQueryClientProvider>
   );
@@ -39,9 +39,9 @@ async function submitMatchedScrambles({ competitionId, matchState }) {
     roundsByWcifId,
     (round) => ({
       scramble_set_count: round.scrambleSetCount,
-      scramble_sets: round.scrambleSets.map((set) => ({
+      matched_scramble_sets: round.scrambleSets.map((set) => ({
         id: set.id,
-        inbox_scrambles: set.inbox_scrambles.map((scr) => ({
+        matched_scrambles: set.matched_scrambles.map((scr) => ({
           id: scr.id,
           scramble_string: scr.scramble_string,
           is_extra: scr.is_extra,
@@ -65,7 +65,7 @@ function ScrambleMatcher({
   wcifEvents,
   competitionId,
   initialScrambleFiles,
-  inboxScrambleSets,
+  matchedScrambleSets,
 }) {
   const [
     {
@@ -77,7 +77,7 @@ function ScrambleMatcher({
     scrambleMatchReducer,
     {
       wcifEvents,
-      scrambleSets: inboxScrambleSets,
+      scrambleSets: matchedScrambleSets,
     },
     initializeState,
   );

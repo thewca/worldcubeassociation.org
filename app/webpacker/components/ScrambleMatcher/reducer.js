@@ -2,35 +2,27 @@ import _ from 'lodash';
 import { addItemToArray, moveArrayItem } from './util';
 
 function addScrambleSetsToEvents(wcifEvents, scrambleSets, keepExistingSets = true) {
-  const groupedScrambles = _.groupBy(
-    scrambleSets.flatMap((scrSet) => scrSet.inbox_scrambles),
-    'matched_scramble_set_id',
-  );
-
   const groupedScrambleSets = _.groupBy(
-    scrambleSets.map((scrSet) => ({
-      ...scrSet,
-      inbox_scrambles: groupedScrambles[scrSet.id],
-    })),
-    'matched_round_wcif_id',
+    scrambleSets,
+    'round_wcif_id',
   );
 
   return {
     events: wcifEvents.map((wcifEvent) => ({
       ...wcifEvent,
-      rounds: wcifEvent.rounds.map((round) => ({
-        ...round,
+      rounds: wcifEvent.rounds.map((wcifRound) => ({
+        ...wcifRound,
         scrambleSets: _.sortBy(
           _.uniqBy([
             // The order of lines is important here:
             //   Lodash keeps only the first appearance, so we need to list
             //   the newest possible entries first, followed by existing entries.
-            ...(groupedScrambleSets[round.id] ?? []),
-            ...(keepExistingSets ? (round.scrambleSets ?? []) : []),
+            ...(groupedScrambleSets[wcifRound.id] ?? []),
+            ...(keepExistingSets ? (wcifRound.scrambleSets ?? []) : []),
           ], 'id').map((scrSet) => ({
             ...scrSet,
-            inbox_scrambles: _.sortBy(
-              scrSet.inbox_scrambles,
+            matched_scrambles: _.sortBy(
+              scrSet.matched_scrambles,
               'ordered_index',
             ),
           })),
@@ -60,7 +52,7 @@ export function initializeState({ wcifEvents, scrambleSets }) {
 }
 
 function addScrambleFile(state, newScrambleFile) {
-  return addScrambleSetsToEvents(state.events, newScrambleFile.inbox_scramble_sets);
+  return addScrambleSetsToEvents(state.events, newScrambleFile.matched_scramble_sets);
 }
 
 function removeScrambleFile(state, oldScrambleFile) {
@@ -79,7 +71,7 @@ function removeScrambleFile(state, oldScrambleFile) {
           (scrSet) => setUploadLookup[scrSet.id] !== oldScrambleFile.id,
         ).map((scrSet) => ({
           ...scrSet,
-          inbox_scrambles: scrSet.inbox_scrambles.filter(
+          matched_scrambles: scrSet.matched_scrambles.filter(
             (ibs) => setUploadLookup[ibs.matched_scramble_set_id] !== oldScrambleFile.id,
           ),
         })),

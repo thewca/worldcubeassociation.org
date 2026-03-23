@@ -103,13 +103,13 @@ class ScrambleFilesController < ApplicationController
 
         round.scramble_set_count = updated_round[:scramble_set_count]
 
-        updated_round[:scramble_sets].each_with_index do |ext_set, set_idx|
+        updated_round[:matched_scramble_sets].each_with_index do |ext_set, set_idx|
           matched_set = round.matched_scramble_sets.build(
             external_scramble_set_id: ext_set[:id],
             ordered_index: set_idx,
           )
 
-          ext_set[:scrambles].each_with_index do |ext_scr, scr_idx|
+          ext_set[:matched_scrambles].each_with_index do |ext_scr, scr_idx|
             matched_set.matched_scrambles.build(
               external_scramble_id: ext_scr[:id],
               ordered_index: scr_idx,

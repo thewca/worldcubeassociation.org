@@ -68,7 +68,7 @@ class ResultsSubmissionController < ApplicationController
   def upload_scrambles
     @competition = Competition.includes(
       scramble_file_uploads: ScrambleFileUpload::SERIALIZATION_INCLUDES,
-      **ScrambleFileUpload::SERIALIZATION_INCLUDES,
+      matched_scramble_sets: :matched_scrambles,
     ).find(params[:competition_id])
   end
 

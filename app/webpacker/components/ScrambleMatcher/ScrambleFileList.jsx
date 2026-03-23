@@ -327,8 +327,8 @@ function ScrambleFileBody({
   );
 
   const scrambleFileTree = useMemo(
-    () => groupScrambleSetsIntoWcif(scrambleFile.inbox_scramble_sets),
-    [scrambleFile.inbox_scramble_sets],
+    () => groupScrambleSetsIntoWcif(scrambleFile.external_scramble_sets),
+    [scrambleFile.external_scramble_sets],
   );
 
   return (

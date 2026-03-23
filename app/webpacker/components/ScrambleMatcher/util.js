@@ -26,7 +26,7 @@ export const pickerLocalizationConfig = {
     dropdownLabel: 'Scramble Set',
     pickerLabel: 'Groups',
   },
-  inbox_scrambles: {
+  matched_scrambles: {
     computeEntityName: (id, idx) => `Attempt ${idx + 1}`,
     headerLabel: 'Scrambles',
     dropdownLabel: 'Scramble',
@@ -67,7 +67,7 @@ export const pickerStepConfig = {
   },
   scrambleSets: {
     enabledCondition: (history) => isForAttemptBasedEvent(history),
-    matchingConfigKey: 'inbox_scrambles',
+    matchingConfigKey: 'matched_scrambles',
     pickFirstDefault: true,
   },
 };
@@ -80,7 +80,7 @@ export const matchingDndConfig = {
     computeExpectedRowCount: (round) => round.scrambleSetCount,
     tableReferenceKey: 'scrambleSetCount',
   },
-  inbox_scrambles: {
+  matched_scrambles: {
     computeCellName: scrambleToName,
     computeCellDetails: (scr) => scr.scramble_string,
     cellDetailsAreData: true,
@@ -186,7 +186,7 @@ export function computeMatchingProgress(wcifEvents) {
               id: scrSet.id,
               index: idx,
               expected: formatExpectedSolveCount,
-              actual: scrSet.inbox_scrambles?.length ?? 0,
+              actual: scrSet.matched_scrambles?.length ?? 0,
             }),
           ),
         };
