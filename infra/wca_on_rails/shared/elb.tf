@@ -423,7 +423,7 @@ resource "aws_lb_listener_rule" "anycable_forward_staging" {
 
   condition {
     path_pattern {
-      values = ["/api/v1/live/cable"]
+      values = [var.anycable_path]
     }
   }
 }

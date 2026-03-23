@@ -26,7 +26,7 @@ locals {
     },
     {
       name = "ANYCABLE_PATH",
-      value = "/api/v1/live/cable"
+      value = var.anycable_path
     }
   ]
 }

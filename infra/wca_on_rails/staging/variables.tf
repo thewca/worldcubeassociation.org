@@ -121,3 +121,8 @@ variable "WRC_WEBHOOK_URL" {
   description = "The URL to send delegate report webhook notifications for WRC to"
   type = string
 }
+
+variable "anycable_path" {
+  type = string
+  description = "The Path where anycable is mounted"
+}
