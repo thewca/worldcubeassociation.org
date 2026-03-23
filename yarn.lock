@@ -10691,7 +10691,7 @@ __metadata:
     sass: "npm:^1.98.0"
     sass-loader: "npm:^16.0.7"
     semantic-ui-react: "npm:^2.1.5"
-    shakapacker: "npm:9.6.1"
+    shakapacker: "npm:9.7.0"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^17.5.0"
     stylelint-config-recommended-scss: "npm:^17.0.0"
@@ -11056,9 +11056,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shakapacker@npm:9.6.1":
-  version: 9.6.1
-  resolution: "shakapacker@npm:9.6.1"
+"shakapacker@npm:9.7.0":
+  version: 9.7.0
+  resolution: "shakapacker@npm:9.7.0"
   dependencies:
     js-yaml: "npm:^4.1.0"
     path-complete-extname: "npm:^1.0.0"
@@ -11069,8 +11069,8 @@ __metadata:
     "@babel/plugin-transform-runtime": ^7.17.0
     "@babel/preset-env": ^7.16.11
     "@babel/runtime": ^7.17.9
-    "@rspack/cli": ^1.0.0
-    "@rspack/core": ^1.0.0
+    "@rspack/cli": ^1.0.0 || ^2.0.0-0
+    "@rspack/core": ^1.0.0 || ^2.0.0-0
     "@rspack/plugin-react-refresh": ^1.0.0
     "@swc/core": ^1.3.0
     "@types/babel__core": ^7.0.0
@@ -11144,7 +11144,7 @@ __metadata:
       optional: true
     webpack-subresource-integrity:
       optional: true
-  checksum: 10c0/c48179d6546bfe5b7cf5055b2b40c96ad508afda67acd24d24fc721e41f60b65c8ca3135514153aeaca2eaf1242a437ac957e1bafe49a83a08cbd2dad623b028
+  checksum: 10c0/d46e192c88840cc654bc20014422cb2c0978fdd3b2fd76bcb1e37b26603e07e459c20ee1d8f6105a4398390d61cebce2f6811f677c3ad884039a6d2b6f8251fa
   languageName: node
   linkType: hard
 
