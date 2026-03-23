@@ -26,6 +26,15 @@ const eslintConfig = [
   {
     rules: {
       "@typescript-eslint/no-unused-vars": "error",
+      "@tanstack/query/exhaustive-deps": [
+        "error",
+        {
+          allowlist: {
+            variables: ["api"],
+            types: ["Client"],
+          },
+        },
+      ],
     },
   },
 ];
