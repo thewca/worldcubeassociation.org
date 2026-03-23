@@ -256,8 +256,8 @@ GEM
       railties (>= 5)
     doorkeeper-i18n (5.2.8)
       doorkeeper (>= 5.2)
-    doorkeeper-openid_connect (1.8.11)
-      doorkeeper (>= 5.5, < 5.9)
+    doorkeeper-openid_connect (1.9.0)
+      doorkeeper (>= 5.5, < 6.0)
       jwt (>= 2.5)
       ostruct (>= 0.5)
     dotenv (3.2.0)
@@ -1208,7 +1208,7 @@ CHECKSUMS
   domain_name (0.5.20190701) sha256=000a600454cb4a344769b2f10b531765ea7bd3a304fe47ed12e5ca1eab969851
   doorkeeper (5.8.2) sha256=a73d07aeaf590b1e7e2a35390446f23131c9f37bc0561653e514d3973f4d50d3
   doorkeeper-i18n (5.2.8) sha256=e4054701df464892f3c0fd6c96507188e9b082cb52938da3aab45f4f9fdaf552
-  doorkeeper-openid_connect (1.8.11) sha256=52a9a9c03176f5fa54d04b8f5378902beff126e3423fa447288b168276b7f6d3
+  doorkeeper-openid_connect (1.9.0) sha256=f689f727bbe60a0e7174b00ccd1e38c52a12c0c34dd096d49018b98cfaec7eb3
   dotenv (3.2.0) sha256=e375b83121ea7ca4ce20f214740076129ab8514cd81378161f11c03853fe619d
   dotenv-rails (3.2.0) sha256=657e25554ba622ffc95d8c4f1670286510f47f2edda9f68293c3f661b303beab
   drb (2.2.3) sha256=0b00d6fdb50995fe4a45dea13663493c841112e4068656854646f418fda13373
