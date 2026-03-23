@@ -41,7 +41,7 @@ const dirname = path.dirname(filename);
 
 function plugins() {
   const isProduction = process.env.NODE_ENV === "production";
-  const isLiveSite =  !!process.env.WCA_LIVE_SITE
+  const isLiveSite = !!process.env.WCA_LIVE_SITE;
 
   return [
     authjsPlugin({
