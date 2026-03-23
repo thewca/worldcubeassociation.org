@@ -1542,10 +1542,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.28.4, @babel/runtime@npm:^7.28.6, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
+"@babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.28.6, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
   version: 7.28.6
   resolution: "@babel/runtime@npm:7.28.6"
   checksum: 10c0/358cf2429992ac1c466df1a21c1601d595c46930a13c1d4662fde908d44ee78ec3c183aaff513ecb01ef8c55c3624afe0309eeeb34715672dbfadb7feedb2c0d
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.29.2":
+  version: 7.29.2
+  resolution: "@babel/runtime@npm:7.29.2"
+  checksum: 10c0/30b80a0140d16467792e1bbeb06f655b0dab70407da38dfac7fedae9c859f9ae9d846ef14ad77bd3814c064295fe9b1bc551f1541ea14646ae9f22b71a8bc17a
   languageName: node
   linkType: hard
 
@@ -12946,7 +12953,7 @@ __metadata:
     prettier: "npm:^3.8.1"
     react: "npm:^19.2.4"
     react-dom: "npm:^19.2.4"
-    react-i18next: "npm:^16.5.8"
+    react-i18next: "npm:^16.6.1"
     react-icons: "npm:^5.6.0"
     react-intersection-observer: "npm:^10.0.3"
     react-markdown: "npm:^10.1.0"
@@ -14155,11 +14162,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^16.5.8":
-  version: 16.5.8
-  resolution: "react-i18next@npm:16.5.8"
+"react-i18next@npm:^16.6.1":
+  version: 16.6.1
+  resolution: "react-i18next@npm:16.6.1"
   dependencies:
-    "@babel/runtime": "npm:^7.28.4"
+    "@babel/runtime": "npm:^7.29.2"
     html-parse-stringify: "npm:^3.0.1"
     use-sync-external-store: "npm:^1.6.0"
   peerDependencies:
@@ -14173,7 +14180,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/a234ed701e53c47ce4c67f2bc74b5718a4fea2865d6eaae06f850cca35a1ead038e6fd25b2a4b629c96947f3e6bb997f6d81d07cc4584997a0373c62c6aba3eb
+  checksum: 10c0/80b6d3ddd5a8c8ae5c40b3ea696f89e8ee6443c6a9d10040be58f18e65a06d6b866a8eb56f58502470f52644ef0171dbe23dc2fc14a5ec7bb48fb3cf5270271f
   languageName: node
   linkType: hard
 
