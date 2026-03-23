@@ -2943,10 +2943,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:^8.9.0":
-  version: 8.9.0
-  resolution: "@stripe/stripe-js@npm:8.9.0"
-  checksum: 10c0/48c324753544a5b2674b5f044b564d444b48b86d31dfe47e32aeb696d45f2b2cf163c1ff5cfb3303d05b57b798c3a5743988f2eb4e34d3d1cb2ade7e103385e6
+"@stripe/stripe-js@npm:^8.11.0":
+  version: 8.11.0
+  resolution: "@stripe/stripe-js@npm:8.11.0"
+  checksum: 10c0/7bada2f8a1c71867b2a0cc31f02e1347ba50b30c6c564635ed5f63d480e093f83902c98311fabc6744bd14dc4cf0fc9122769a4f021a691b70d6fbaf4581c824
   languageName: node
   linkType: hard
 
@@ -3914,16 +3914,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-module-resolver@npm:^5.0.2":
-  version: 5.0.2
-  resolution: "babel-plugin-module-resolver@npm:5.0.2"
+"babel-plugin-module-resolver@npm:^5.0.3":
+  version: 5.0.3
+  resolution: "babel-plugin-module-resolver@npm:5.0.3"
   dependencies:
     find-babel-config: "npm:^2.1.1"
     glob: "npm:^9.3.3"
     pkg-up: "npm:^3.1.0"
     reselect: "npm:^4.1.7"
     resolve: "npm:^1.22.8"
-  checksum: 10c0/ccbb9e673c4219f68937349267521becb72be292cf30bf70b861c3e709d24fbfa589da0bf6c100a0def799d38199299171cb6eac3fb00b1ea740373e2c1fe54c
+  checksum: 10c0/aa8940ae1eaa7dadbf63b12387ed63ab34a19bf6614ac76e16e4d44af80ae36c4741d307a91f864320c0ad33037b34466854bb9d8de6c1e73936b1af1b6d36a6
   languageName: node
   linkType: hard
 
@@ -4573,10 +4573,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.48.0":
-  version: 3.48.0
-  resolution: "core-js@npm:3.48.0"
-  checksum: 10c0/6c3115900dd7cce9fab74c07cb262b3517fc250d02e8fd2ff34f80bda5f43a28482a909dbc4491dc6e1ddd9807f57a7df4c3eeecd1f202b7d9c8bfe25f9d680c
+"core-js@npm:^3.49.0":
+  version: 3.49.0
+  resolution: "core-js@npm:3.49.0"
+  checksum: 10c0/2e42edb47eda38fd5368380131623c8aa5d4a6b42164125b17744bdc08fa5ebbbdd06b4b4aa6ca3663470a560b0f2fba48e18f142dfe264b0039df85bc625694
   languageName: node
   linkType: hard
 
@@ -10675,7 +10675,7 @@ __metadata:
     "@rails/actioncable": "npm:^8.1.200"
     "@rails/ujs": "npm:^7.1.600"
     "@stripe/react-stripe-js": "npm:^5.6.1"
-    "@stripe/stripe-js": "npm:^8.9.0"
+    "@stripe/stripe-js": "npm:^8.11.0"
     "@tanstack/react-query": "npm:^5.95.0"
     "@tanstack/react-table": "npm:^8.21.3"
     "@wca/helpers": "npm:^1.1.7"
@@ -10686,12 +10686,12 @@ __metadata:
     babel-plugin-dynamic-import-node: "npm:^2.3.3"
     babel-plugin-lodash: "npm:^3.3.4"
     babel-plugin-macros: "npm:^3.1.0"
-    babel-plugin-module-resolver: "npm:^5.0.2"
+    babel-plugin-module-resolver: "npm:^5.0.3"
     babel-plugin-transform-react-remove-prop-types: "npm:^0.4.24"
     blueimp-load-image: "npm:^5.16.0"
     classnames: "npm:^2.5.1"
     compression-webpack-plugin: "npm:^12.0.0"
-    core-js: "npm:^3.48.0"
+    core-js: "npm:^3.49.0"
     css-loader: "npm:^7.1.4"
     css-minimizer-webpack-plugin: "npm:^8.0.0"
     date-fns: "npm:^4.1.0"
