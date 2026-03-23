@@ -244,7 +244,7 @@ FactoryBot.define do
 
     trait :with_lead_delegate do
       with_delegate
-      lead_delegate { delegates[0] }
+      lead_delegate { delegates.first }
     end
 
     trait :with_trainee_delegate do
