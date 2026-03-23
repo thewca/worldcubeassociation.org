@@ -447,7 +447,7 @@ resource "aws_lb_listener_rule" "rails_forward_next_staging" {
 
   condition {
     path_pattern {
-      values = ["/competitions/*/live*"]
+      values = ["/competitions/*/live*", "/_next/*"]
     }
   }
 }
