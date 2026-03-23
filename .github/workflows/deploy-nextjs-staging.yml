@@ -1,4 +1,4 @@
-name: Deploy Nextjs to Production
+name: Deploy Nextjs to Staging
 on:
   workflow_dispatch:
 jobs:
