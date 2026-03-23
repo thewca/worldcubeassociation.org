@@ -1542,7 +1542,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.28.6, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
+"@babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
   version: 7.28.6
   resolution: "@babel/runtime@npm:7.28.6"
   checksum: 10c0/358cf2429992ac1c466df1a21c1601d595c46930a13c1d4662fde908d44ee78ec3c183aaff513ecb01ef8c55c3624afe0309eeeb34715672dbfadb7feedb2c0d
@@ -10845,17 +10845,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^25.8.18":
-  version: 25.8.18
-  resolution: "i18next@npm:25.8.18"
+"i18next@npm:^25.10.4":
+  version: 25.10.4
+  resolution: "i18next@npm:25.10.4"
   dependencies:
-    "@babel/runtime": "npm:^7.28.6"
+    "@babel/runtime": "npm:^7.29.2"
   peerDependencies:
     typescript: ^5
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/a5b68b12a8de7db59c6253f6c714616e0a687f1543300cbcfdc847bf6199aef2e3d3645756e3c36a261fdbdde127ad42f4bd1d25571cfe0519849fcbe7665724
+  checksum: 10c0/3e28c7a77eece9cb220ba366d0a6be9ee1ee0d83b51e52438bba008af8b52afe646457513d3e981b13ef96f28a1d07e3979f0c2a5618f6c94a9384121d0251b1
   languageName: node
   linkType: hard
 
@@ -13105,7 +13105,7 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.5.5"
     graphql: "npm:^16.13.1"
     i18n-iso-countries: "npm:^7.14.0"
-    i18next: "npm:^25.8.18"
+    i18next: "npm:^25.10.4"
     i18next-browser-languagedetector: "npm:^8.2.1"
     i18next-resources-to-backend: "npm:^1.2.1"
     js-cookie: "npm:^3.0.5"
