@@ -242,6 +242,11 @@ FactoryBot.define do
       delegates { [FactoryBot.create(:delegate)] }
     end
 
+    trait :with_lead_delegate do
+      with_delegate
+      lead_delegate { delegates[0] }
+    end
+
     trait :with_trainee_delegate do
       delegates { [FactoryBot.create(:trainee_delegate)] }
     end
@@ -329,6 +334,7 @@ FactoryBot.define do
 
     trait :confirmed do
       with_delegate
+      with_lead_delegate
       with_organizer
       with_valid_schedule
       confirmed_at { Time.now }
@@ -340,6 +346,7 @@ FactoryBot.define do
 
     trait :visible do
       with_delegate
+      with_lead_delegate
       with_organizer
       show_at_all { true }
     end
