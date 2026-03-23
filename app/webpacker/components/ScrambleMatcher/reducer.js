@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { addItemToArray, moveArrayItem } from './util';
 
-function addScrambleSetsToEvents(wcifEvents, scrambleSets, keepExistingSets = true) {
+function addScrambleSetsToEvents(wcifEvents, convertedScrambleSets, keepExistingSets = true) {
   const groupedScrambleSets = _.groupBy(
-    scrambleSets,
+    convertedScrambleSets,
     'round_wcif_id',
   );
 
@@ -12,21 +12,21 @@ function addScrambleSetsToEvents(wcifEvents, scrambleSets, keepExistingSets = tr
       ...wcifEvent,
       rounds: wcifEvent.rounds.map((wcifRound) => ({
         ...wcifRound,
-        scrambleSets: _.sortBy(
+        matchedScrambleSets: _.sortBy(
           _.uniqBy([
             // The order of lines is important here:
             //   Lodash keeps only the first appearance, so we need to list
             //   the newest possible entries first, followed by existing entries.
             ...(groupedScrambleSets[wcifRound.id] ?? []),
-            ...(keepExistingSets ? (wcifRound.scrambleSets ?? []) : []),
+            ...(keepExistingSets ? (wcifRound.matchedScrambleSets ?? []) : []),
           ], 'id').map((scrSet) => ({
             ...scrSet,
-            matched_scrambles: _.sortBy(
-              scrSet.matched_scrambles,
-              'ordered_index',
+            matchedScrambles: _.sortBy(
+              scrSet.matchedScrambles,
+              'orderedIndex',
             ),
           })),
-          'ordered_index',
+          'orderedIndex',
         ),
         // we don't care about results in this UI at all,
         //   so deliberately un-setting them saves network bandwidth :)
@@ -43,11 +43,26 @@ function applyAction(state, keys, action) {
   }), state);
 }
 
-export function initializeState({ wcifEvents, scrambleSets }) {
+export function initializeState({ wcifEvents, matchedScrambleSets }) {
+  const convertedScrambleSets = matchedScrambleSets.map((scrSet) => ({
+    ...scrSet,
+    orderedIndex: scrSet.ordered_index,
+    scrambleFileUploadId: scrSet.scramble_file_upload_id,
+    externalScrambleSetId: scrSet.external_scramble_set_id,
+    matchedScrambles: scrSet.matched_scrambles.map((scr) => ({
+      ...scr,
+      scrambleString: scr.scramble_string,
+      isExtra: scr.is_extra,
+      orderedIndex: scr.ordered_index,
+      externalScrambleSetId: scrSet.external_scramble_set_id,
+      externalScrambleId: scr.external_scramble_id,
+    })),
+  }));
+
   return applyAction(
     {},
     ['initial', 'current'],
-    () => addScrambleSetsToEvents(wcifEvents, scrambleSets, false),
+    () => addScrambleSetsToEvents(wcifEvents, convertedScrambleSets, false),
   );
 }
 
@@ -56,10 +71,12 @@ function addScrambleFile(state, newScrambleFile) {
 }
 
 function removeScrambleFile(state, oldScrambleFile) {
-  const scrambleSets = state.events.flatMap((evt) => evt.rounds.flatMap((rd) => rd.scrambleSets));
+  const scrambleSets = state.events.flatMap(
+    (evt) => evt.rounds.flatMap((rd) => rd.matchedScrambleSets),
+  );
 
-  const scrSetLookup = _.keyBy(scrambleSets, 'id');
-  const setUploadLookup = _.mapValues(scrSetLookup, 'external_upload_id');
+  const scrSetLookup = _.keyBy(scrambleSets, 'externalScrambleSetId');
+  const setUploadLookup = _.mapValues(scrSetLookup, 'scrambleFileUploadId');
 
   return {
     ...state,
@@ -67,12 +84,12 @@ function removeScrambleFile(state, oldScrambleFile) {
       ...wcifEvent,
       rounds: wcifEvent.rounds.map((round) => ({
         ...round,
-        scrambleSets: round.scrambleSets.filter(
-          (scrSet) => setUploadLookup[scrSet.id] !== oldScrambleFile.id,
+        matchedScrambleSets: round.matchedScrambleSets.filter(
+          (scrSet) => setUploadLookup[scrSet.externalScrambleSetId] !== oldScrambleFile.id,
         ).map((scrSet) => ({
           ...scrSet,
-          matched_scrambles: scrSet.matched_scrambles.filter(
-            (ibs) => setUploadLookup[ibs.matched_scramble_set_id] !== oldScrambleFile.id,
+          matchedScrambles: scrSet.matchedScrambles.filter(
+            (scr) => setUploadLookup[scr.externalScrambleSetId] !== oldScrambleFile.id,
           ),
         })),
       })),

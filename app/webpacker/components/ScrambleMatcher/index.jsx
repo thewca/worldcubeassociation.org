@@ -39,12 +39,12 @@ async function submitMatchedScrambles({ competitionId, matchState }) {
     roundsByWcifId,
     (round) => ({
       scramble_set_count: round.scrambleSetCount,
-      matched_scramble_sets: round.scrambleSets.map((set) => ({
+      matched_scramble_sets: round.matchedScrambleSets.map((set) => ({
         id: set.id,
-        matched_scrambles: set.matched_scrambles.map((scr) => ({
+        matched_scrambles: set.matchedScrambles.map((scr) => ({
           id: scr.id,
-          scramble_string: scr.scramble_string,
-          is_extra: scr.is_extra,
+          scramble_string: scr.scrambleString,
+          is_extra: scr.isExtra,
         })),
       })),
     }),
@@ -77,7 +77,7 @@ function ScrambleMatcher({
     scrambleMatchReducer,
     {
       wcifEvents,
-      scrambleSets: matchedScrambleSets,
+      matchedScrambleSets,
     },
     initializeState,
   );

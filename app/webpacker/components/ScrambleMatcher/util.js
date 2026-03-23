@@ -20,13 +20,13 @@ export const pickerLocalizationConfig = {
     headerLabel: 'Rounds',
     dropdownLabel: 'Round',
   },
-  scrambleSets: {
+  matchedScrambleSets: {
     computeEntityName: (id, idx) => `Group ${idx + 1}`,
     headerLabel: 'Scramble Sets',
     dropdownLabel: 'Scramble Set',
     pickerLabel: 'Groups',
   },
-  matched_scrambles: {
+  matchedScrambles: {
     computeEntityName: (id, idx) => `Attempt ${idx + 1}`,
     headerLabel: 'Scrambles',
     dropdownLabel: 'Scramble',
@@ -61,26 +61,26 @@ export const pickerStepConfig = {
     nestedPicker: 'rounds',
   },
   rounds: {
-    matchingConfigKey: 'scrambleSets',
-    nestedPicker: 'scrambleSets',
+    matchingConfigKey: 'matchedScrambleSets',
+    nestedPicker: 'matchedScrambleSets',
     pickFirstDefault: true,
   },
-  scrambleSets: {
+  matchedScrambleSets: {
     enabledCondition: (history) => isForAttemptBasedEvent(history),
-    matchingConfigKey: 'matched_scrambles',
+    matchingConfigKey: 'matchedScrambles',
     pickFirstDefault: true,
   },
 };
 
 export const matchingDndConfig = {
-  scrambleSets: {
+  matchedScrambleSets: {
     computeCellName: scrambleSetToTitle,
     computeTableName: scrambleSetToName,
     computeCellDetails: (scrSet) => scrSet.original_filename,
     computeExpectedRowCount: (round) => round.scrambleSetCount,
     tableReferenceKey: 'scrambleSetCount',
   },
-  matched_scrambles: {
+  matchedScrambles: {
     computeCellName: scrambleToName,
     computeCellDetails: (scr) => scr.scramble_string,
     cellDetailsAreData: true,
@@ -160,7 +160,7 @@ export function groupScrambleSetsIntoWcif(scrambleSets) {
         _.map(roundsMap, (sets, roundNum) => ({
           id: `${eventId}-r${roundNum}`,
           roundNum,
-          scrambleSets: sets,
+          matchedScrambleSets: sets,
         })),
         'roundNum',
       ),
@@ -174,19 +174,20 @@ export function groupScrambleSetsIntoWcif(scrambleSets) {
 export function computeMatchingProgress(wcifEvents) {
   return wcifEvents.flatMap(
     (wcifEvent) => wcifEvent.rounds.map(
-      (wcifRound) => {
+      (wcifRound, roundIdx) => {
         const formatExpectedSolveCount = formats.byId[wcifRound.format]?.expectedSolveCount;
 
         return {
           id: wcifRound.id,
+          index: roundIdx,
           expected: wcifRound.scrambleSetCount,
-          actual: wcifRound.scrambleSets?.length ?? 0,
-          scrambleSets: wcifRound.scrambleSets?.map(
-            (scrSet, idx) => ({
+          actual: wcifRound.matchedScrambleSets?.length ?? 0,
+          scrambleSets: wcifRound.matchedScrambleSets?.map(
+            (scrSet, setIdx) => ({
               id: scrSet.id,
-              index: idx,
+              index: setIdx,
               expected: formatExpectedSolveCount,
-              actual: scrSet.matched_scrambles?.length ?? 0,
+              actual: scrSet.matchedScrambles?.length ?? 0,
             }),
           ),
         };

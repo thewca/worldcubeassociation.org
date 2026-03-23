@@ -14,12 +14,14 @@ class MatchedScrambleSet < ApplicationRecord
   delegate :competition_id, :event_id, :round_type_id, to: :round
   delegate :wcif_id, to: :round, prefix: true
 
+  delegate :scramble_file_upload_id, to: :external_scramble_set, allow_nil: true
+
   def alphabetic_group_index
     Scramble.prefix_for_index(self.ordered_index + 1)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    methods: %w[round_wcif_id],
+    methods: %w[round_wcif_id scramble_file_upload_id],
     include: %w[matched_scrambles],
   }.freeze
 
