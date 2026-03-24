@@ -7,6 +7,9 @@ inputs:
   tag:
     description: 'The image tag in the registry'
     required: true
+  base_url:
+    description: 'The Base URL of the Rails APP'
+    required: true
 outputs:
   imageid:
     description: 'The Docker image id build'
@@ -35,3 +38,5 @@ runs:
           ${{ inputs.registry }}:${{ inputs.tag }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        build-args: |
+          WCA_SITE=${{ inputs.base_url }}

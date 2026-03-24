@@ -22,6 +22,7 @@ jobs:
         with:
           registry: ${{ steps.login-ecr.outputs.registry }}/wca-nextjs
           tag: nextjs-production
+          base_url: www.worldcubeassociation.org
       - name: Deploy new nextjs Image
         run: |
           aws ecs update-service --cluster wca-on-rails --service wca-on-rails-prod-nextjs-production --force-new-deployment
