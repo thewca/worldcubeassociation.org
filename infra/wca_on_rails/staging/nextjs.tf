@@ -54,7 +54,7 @@ locals {
     },
     {
       name = "NEXTAUTH_URL"
-      value = "https://staging.worldcubeassociation.org}"
+      value = "https://staging.worldcubeassociation.org"
     },
     {
       name = "TASK_ROLE",

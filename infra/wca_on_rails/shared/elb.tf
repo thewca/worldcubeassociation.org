@@ -432,7 +432,7 @@ resource "aws_lb_listener_rule" "rails_forward_staging" {
 
 resource "aws_lb_listener_rule" "rails_forward_next_staging" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 55
+  priority     = 36
 
   action {
     type             = "forward"
