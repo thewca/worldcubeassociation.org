@@ -88,9 +88,7 @@ data "aws_iam_policy_document" "nextjs_task_policy" {
     ]
 
     resources = [aws_s3_bucket.next-media.arn,
-      "${aws_s3_bucket.next-media.arn}/*",
-      aws_s3_bucket.assets.arn,
-      "${aws_s3_bucket.assets.arn}/*",]
+      "${aws_s3_bucket.next-media.arn}/*",]
   }
 }
 
