@@ -1641,6 +1641,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_104129) do
   add_foreign_key "potential_duplicate_persons", "users", column: "original_user_id"
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
+  add_foreign_key "result_attempts", "results", on_delete: :cascade
   add_foreign_key "results", "rounds"
   add_foreign_key "rounds", "linked_rounds"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
