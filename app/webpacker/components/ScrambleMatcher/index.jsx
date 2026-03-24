@@ -8,8 +8,8 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
 import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
-import { computeMatchingProgress } from './util';
-import PickerWithMatching from './PickerWithMatching';
+import { computeMatchingProgress, useScrambleFilesQuery } from './util';
+import EventAndRoundPicker from './EventAndRoundPicker';
 
 export default function Wrapper({
   wcifEvents,
@@ -67,6 +67,10 @@ function ScrambleMatcher({
   initialScrambleFiles,
   matchedScrambleSets,
 }) {
+  const {
+    data: uploadedScrambleFiles,
+  } = useScrambleFilesQuery(competitionId, initialScrambleFiles);
+
   const [
     {
       initial: persistedMatchState,
@@ -140,10 +144,10 @@ function ScrambleMatcher({
           your changes!
         </Message>
       )}
-      <PickerWithMatching
+      <EventAndRoundPicker
+        uploadedScrambleFiles={uploadedScrambleFiles}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
-        pickerKey="events"
       />
       {hasUnsavedChanges && (
         <Message info content="You have unsaved changes. Don't forget to Save below!" />

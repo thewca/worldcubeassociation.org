@@ -10,19 +10,13 @@ import {
   Message,
   Modal,
 } from 'semantic-ui-react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import ScrambleFileList from './ScrambleFileList';
-import UnusedScramblesPanel from './UnusedScramblesPanel';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
 import MatchingProgressMessage from './MatchingProgressMessage';
-
-async function listScrambleFiles(competitionId) {
-  const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId));
-
-  return data;
-}
+import { useScrambleFilesQuery } from './util';
 
 async function uploadScrambleFile({ competitionId, file, matchingSettings }) {
   const formData = new FormData();
@@ -54,12 +48,11 @@ export default function FileUpload({
   const [matchOnUpload, setMatchOnUpload] = useCheckboxState(true);
   const [limitMatches, setLimitMatches] = useCheckboxState(true);
 
-  const { data: uploadedJsonFiles, isFetching, refetch } = useQuery({
-    queryKey: ['scramble-files', competitionId],
-    queryFn: () => listScrambleFiles(competitionId),
-    initialData: initialScrambleFiles,
-    refetchOnMount: false,
-  });
+  const {
+    data: uploadedJsonFiles,
+    isFetching,
+    refetch,
+  } = useScrambleFilesQuery(competitionId, initialScrambleFiles);
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: uploadScrambleFile,
@@ -180,11 +173,6 @@ export default function FileUpload({
       <ScrambleFileList
         scrambleFiles={uploadedJsonFiles}
         isFetching={isFetching}
-        matchState={matchState}
-        dispatchMatchState={dispatchMatchState}
-      />
-      <UnusedScramblesPanel
-        scrambleFiles={uploadedJsonFiles}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
       />

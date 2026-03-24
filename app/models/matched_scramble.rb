@@ -15,4 +15,12 @@ class MatchedScramble < ApplicationRecord
 
   validates :external_scramble_string, comparison: { equal_to: :scramble_string, allow_nil: true }
   validates :external_is_extra, comparison: { equal_to: :is_extra, allow_nil: true }
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    include: %w[external_scramble],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
 end

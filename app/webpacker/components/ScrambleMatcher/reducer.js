@@ -157,7 +157,7 @@ export default function scrambleMatchReducer(state, action) {
     case 'resetAfterSave':
       return initializeState({
         wcifEvents: state.current.events,
-        scrambleSets: action.scrambleSets,
+        matchedScrambleSets: action.scrambleSets,
       });
     case 'resetToInitial':
       return applyAction(state, ['current'], () => state.initial);
@@ -172,42 +172,60 @@ export default function scrambleMatchReducer(state, action) {
           .update(newPath, (arr = []) => addItemToArray(arr, action.entity))
           .value();
       });
-    case 'reorderMatchingEntities':
-      return applyAction(state, ['current'], (subState) => {
-        const lodashPath = navigationToLodash(subState, action, 'pickerHistory');
-
-        return _.chain(subState)
-          .cloneDeep()
-          .update(lodashPath, (arr = []) => moveArrayItem(arr, action.fromIndex, action.toIndex))
-          .value();
-      });
-    case 'deleteEntityFromMatching':
-      return applyAction(state, ['current'], (subState) => {
-        const lodashPath = navigationToLodash(subState, action, 'pickerHistory');
-
-        return _.chain(subState)
-          .cloneDeep()
-          .update(lodashPath, (arr = []) => arr.filter((ent) => ent.id !== action.entity.id))
-          .value();
-      });
-    case 'addEntityToMatching':
-      return applyAction(state, ['current'], (subState) => {
-        const lodashPath = navigationToLodash(subState, action, 'pickerHistory');
-
-        return _.chain(subState)
-          .cloneDeep()
-          .update(lodashPath, (arr = []) => addItemToArray(arr, action.entity, action.targetIndex))
-          .value();
-      });
-    case 'updateReferenceValue':
-      return applyAction(state, ['current'], (subState) => {
-        const lodashPath = navigationToLodash(subState, action, 'pickerHistory');
-
-        return _.chain(subState)
-          .cloneDeep()
-          .set(lodashPath, action.value)
-          .value();
-      });
+    case 'addExternalToMatching':
+      return applyAction(state, ['current'], (subState) => ({
+        ...subState,
+        events: subState.events.map((evt) => (evt.id === action.eventId ? ({
+          ...evt,
+          rounds: evt.rounds.map((rd) => (rd.id === action.roundId ? ({
+            ...rd,
+            matchedScrambleSets: addItemToArray(
+              rd.matchedScrambleSets,
+              { external_scramble_set: action.externalScrambleSet },
+              action.destinationIndex,
+            ),
+          }) : rd)),
+        }) : evt)),
+      }));
+    case 'moveInsideMatching':
+      return applyAction(state, ['current'], (subState) => ({
+        ...subState,
+        events: subState.events.map((evt) => (evt.id === action.eventId ? ({
+          ...evt,
+          rounds: evt.rounds.map((rd) => (rd.id === action.roundId ? ({
+            ...rd,
+            matchedScrambleSets: moveArrayItem(
+              rd.matchedScrambleSets,
+              action.sourceIndex,
+              action.destinationIndex,
+            ),
+          }) : rd)),
+        }) : evt)),
+      }));
+    case 'removeFromMatching':
+      return applyAction(state, ['current'], (subState) => ({
+        ...subState,
+        events: subState.events.map((evt) => (evt.id === action.eventId ? ({
+          ...evt,
+          rounds: evt.rounds.map((rd) => (rd.id === action.roundId ? ({
+            ...rd,
+            matchedScrambleSets: rd.matchedScrambleSets.filter(
+              (_scrSet, idx) => idx !== action.sourceIndex,
+            ),
+          }) : rd)),
+        }) : evt)),
+      }));
+    case 'updateScrambleSetCount':
+      return applyAction(state, ['current'], (subState) => ({
+        ...subState,
+        events: subState.events.map((evt) => (evt.id === action.eventId ? ({
+          ...evt,
+          rounds: evt.rounds.map((rd) => (rd.id === action.roundId ? ({
+            ...rd,
+            scrambleSetCount: action.scrambleSetCount,
+          }) : rd)),
+        }) : evt)),
+      }));
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }

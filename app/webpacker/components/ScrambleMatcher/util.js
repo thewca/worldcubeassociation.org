@@ -1,7 +1,7 @@
-import _ from 'lodash';
 import { events, formats } from '../../lib/wca-data.js.erb';
-import { humanizeActivityCode } from '../../lib/utils/wcif';
-import { EventsPickerCompat } from './ButtonGroupPicker';
+import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
+import { useQuery } from '@tanstack/react-query';
+import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 
 export const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 
@@ -9,31 +9,10 @@ export const LEGAL_CROSS_MATCHES = [
   ['333', '333oh'],
 ];
 
-export const pickerLocalizationConfig = {
-  events: {
-    computeEntityName: (id) => events.byId[id].name,
-    headerLabel: 'Events',
-    dropdownLabel: 'Event',
-  },
-  rounds: {
-    computeEntityName: (id) => humanizeActivityCode(id),
-    headerLabel: 'Rounds',
-    dropdownLabel: 'Round',
-  },
-  matchedScrambleSets: {
-    computeEntityName: (id, idx) => `Group ${idx + 1}`,
-    headerLabel: 'Scramble Sets',
-    dropdownLabel: 'Scramble Set',
-    pickerLabel: 'Groups',
-  },
-  matchedScrambles: {
-    computeEntityName: (id, idx) => `Attempt ${idx + 1}`,
-    headerLabel: 'Scrambles',
-    dropdownLabel: 'Scramble',
-  },
-};
+export const DROPPABLE_ID_MATCHED_SCRAMBLES = 'matchedScrambles';
+export const DROPPABLE_ID_STORAGE = 'storage';
 
-const prefixForIndex = (index) => {
+export const prefixForIndex = (index) => {
   const char = String.fromCharCode(65 + (index % 26));
   if (index < 26) return char;
 
@@ -41,61 +20,9 @@ const prefixForIndex = (index) => {
 };
 
 export const scrambleSetToName = (scrambleSet) => `Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
-const scrambleSetToTitle = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} ${scrambleSetToName(scrambleSet)}`;
+export const scrambleSetToTitle = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} ${scrambleSetToName(scrambleSet)}`;
 
 export const scrambleToName = (scramble) => `Scramble ${scramble.scramble_number}`;
-
-export const isForAttemptBasedEvent = (pickerHistory) => {
-  const eventsStep = pickerHistory.find((step) => step.key === 'events');
-  return ATTEMPT_BASED_EVENTS.includes(eventsStep.id);
-};
-
-const inferExpectedSolveCount = (pickerHistory) => {
-  const roundsStep = pickerHistory.find((step) => step.key === 'rounds');
-  return formats.byId[roundsStep.entity.format].expectedSolveCount;
-};
-
-export const pickerStepConfig = {
-  events: {
-    pickerComponent: EventsPickerCompat,
-    nestedPicker: 'rounds',
-  },
-  rounds: {
-    matchingConfigKey: 'matchedScrambleSets',
-    nestedPicker: 'matchedScrambleSets',
-    pickFirstDefault: true,
-  },
-  matchedScrambleSets: {
-    enabledCondition: (history) => isForAttemptBasedEvent(history),
-    matchingConfigKey: 'matchedScrambles',
-    pickFirstDefault: true,
-  },
-};
-
-export const matchingDndConfig = {
-  matchedScrambleSets: {
-    computeCellName: scrambleSetToTitle,
-    computeTableName: scrambleSetToName,
-    computeCellDetails: (scrSet) => scrSet.original_filename,
-    computeExpectedRowCount: (round) => round.scrambleSetCount,
-    tableReferenceKey: 'scrambleSetCount',
-  },
-  matchedScrambles: {
-    computeCellName: scrambleToName,
-    computeCellDetails: (scr) => scr.scramble_string,
-    cellDetailsAreData: true,
-    computeExpectedRowCount: (scrambleSet, history) => inferExpectedSolveCount(history),
-  },
-};
-
-export function buildHistoryStep(key, entity, index) {
-  return {
-    key,
-    entity,
-    id: entity.id,
-    index,
-  };
-}
 
 export function moveArrayItem(arr, fromIndex, toIndex) {
   const movedItem = arr[fromIndex];
@@ -118,58 +45,32 @@ export function addItemToArray(arr, entity, targetIdx = arr.length) {
   return arr.toSpliced(targetIdx, 0, entity);
 }
 
-export const searchRecursive = (data, targetStep, currentKey = 'events', searchHistory = []) => {
-  const { nestedPicker, matchingConfigKey = nestedPicker } = pickerStepConfig[currentKey] || {};
+export const searchRecursive = (data, searchPath, targetId, targetKey = 'id', searchDescriptor = {}) => {
+  const [currentKey, ...remainingPath] = searchPath;
 
   return data[currentKey]?.reduce((foundPath, item, index) => {
     if (foundPath) return foundPath;
 
-    const nextHistory = [
-      ...searchHistory,
-      buildHistoryStep(currentKey, item, index),
-    ];
+    const nextHistory = {
+      ...searchDescriptor,
+      [currentKey]: {
+        id: item.id,
+        item,
+        index,
+      },
+    };
 
-    if (currentKey === targetStep.key && item.id === targetStep.id) {
-      return nextHistory;
-    }
-
-    if (matchingConfigKey) {
-      return searchRecursive(item, targetStep, matchingConfigKey, nextHistory);
+    if (remainingPath.length === 0) {
+      if (item[targetKey] === targetId) {
+        return nextHistory;
+      }
+    } else {
+      return searchRecursive(item, remainingPath, targetId, targetKey, nextHistory);
     }
 
     return null;
   }, null);
 };
-
-export function groupScrambleSetsIntoWcif(scrambleSets) {
-  const groupedMap = _.mapValues(
-    _.groupBy(
-      scrambleSets,
-      'event_id',
-    ),
-    (eventItems) => _.groupBy(
-      eventItems,
-      'round_number',
-    ),
-  );
-
-  const wcifEvents = _.sortBy(
-    _.map(groupedMap, (roundsMap, eventId) => ({
-      id: eventId,
-      rounds: _.sortBy(
-        _.map(roundsMap, (sets, roundNum) => ({
-          id: `${eventId}-r${roundNum}`,
-          roundNum,
-          matchedScrambleSets: sets,
-        })),
-        'roundNum',
-      ),
-    })),
-    (event) => events.byId[event.id].rank,
-  );
-
-  return { events: wcifEvents };
-}
 
 export function computeMatchingProgress(wcifEvents) {
   return wcifEvents.flatMap(
@@ -194,4 +95,19 @@ export function computeMatchingProgress(wcifEvents) {
       },
     ),
   );
+}
+
+async function listScrambleFiles(competitionId) {
+  const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId));
+
+  return data;
+}
+
+export function useScrambleFilesQuery(competitionId, initialScrambleFiles = undefined) {
+  return useQuery({
+    queryKey: ['scramble-files', competitionId],
+    queryFn: () => listScrambleFiles(competitionId),
+    initialData: initialScrambleFiles,
+    refetchOnMount: false,
+  });
 }

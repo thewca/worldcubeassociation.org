@@ -1,62 +1,24 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
-import _ from 'lodash';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
-import {
-  buildHistoryStep,
-  LEGAL_CROSS_MATCHES,
-  matchingDndConfig,
-  pickerLocalizationConfig,
-  pickerStepConfig,
-  searchRecursive,
-} from './util';
-
-function navigationToDescriptor(pickerNavigation) {
-  return pickerNavigation.reduce((acc, historyStep) => ({
-    ...acc,
-    [historyStep.key]: historyStep.id,
-  }), {});
-}
-
-function unpackDescriptor(
-  descriptor,
-  currentKey = 'events',
-  accu = [],
-) {
-  if (!descriptor[currentKey]) {
-    return accu;
-  }
-
-  const currentStep = { key: currentKey, id: descriptor[currentKey] };
-  const nextAccu = [...accu, currentStep];
-
-  const { nestedPicker, matchingConfigKey = nestedPicker } = pickerStepConfig[currentKey] || {};
-
-  if (!matchingConfigKey) {
-    return nextAccu;
-  }
-
-  return unpackDescriptor(descriptor, matchingConfigKey, nextAccu);
-}
+import { LEGAL_CROSS_MATCHES, scrambleSetToTitle } from './util';
+import { events } from '../../lib/wca-data.js.erb';
+import { localizeActivityCode } from '../../lib/utils/wcif';
 
 function MatchingSelect({
-  pickerKey,
+  dropdownLabel,
   selectableEntities,
   selectedEntityId,
-  updateTargetPath,
+  computeEntityName,
+  onSelectedChange,
 }) {
-  const {
-    computeEntityName,
-    dropdownLabel,
-  } = pickerLocalizationConfig[pickerKey];
-
   const roundsSelectOptions = useMemo(() => selectableEntities.map((ent, idx) => ({
     key: ent.id,
-    text: computeEntityName(ent.id, idx),
+    text: computeEntityName(ent, idx),
     value: ent.id,
   })), [selectableEntities, computeEntityName]);
 
-  const updateInputState = useInputUpdater(updateTargetPath);
+  const updateInputState = useInputUpdater(onSelectedChange);
 
   return (
     <Form.Select
@@ -71,127 +33,84 @@ function MatchingSelect({
 }
 
 export default function MoveMatchingEntityModal({
-  isOpen,
+  currentEventId,
+  currentRoundId,
+  scrambleSet,
   onClose,
   onConfirm,
-  selectedMatchingEntity,
   rootMatchState,
-  pickerHistory,
-  matchingKey,
   isAddMode = false,
 }) {
-  const { computeCellName: entityToName } = matchingDndConfig[matchingKey];
+  const [targetEventId, setTargetEventId] = useState(currentEventId);
+  const [targetRoundId, setTargetRoundId] = useState(currentRoundId);
 
-  const matchingConfig = _.find(pickerStepConfig, (cfg) => cfg.matchingConfigKey === matchingKey);
-  const { enabledCondition } = matchingConfig || {};
-
-  const baseDescriptor = useMemo(() => navigationToDescriptor(pickerHistory), [pickerHistory]);
-  const [targetDescriptor, setTargetDescriptor] = useState(baseDescriptor);
-
-  const onConfirmInternal = useCallback((entityToMove, newTargetDescriptor) => {
-    const unpackedDescriptor = unpackDescriptor(newTargetDescriptor);
-
-    const fullHistoryPath = searchRecursive(
-      rootMatchState,
-      unpackedDescriptor[unpackedDescriptor.length - 1],
-    );
-
-    onConfirm(entityToMove, fullHistoryPath);
+  const onConfirmInternal = useCallback((entityToMove, selectedEvent, selectedRound) => {
+    onConfirm(entityToMove, selectedEvent, selectedRound);
     onClose();
-  }, [rootMatchState, onConfirm, onClose]);
+  }, [onConfirm, onClose]);
 
-  const computeChoices = useCallback((historyIdx, descriptor) => {
-    const unpacked = unpackDescriptor(descriptor);
+  const isNoopMove = currentEventId === targetEventId && currentRoundId === targetRoundId.id;
+  const canMove = isAddMode || !isNoopMove;
 
-    const previousHistory = unpacked.slice(0, historyIdx);
-    const currentKey = unpacked[historyIdx].key;
+  const selectableEvents = useMemo(
+    () => {
+      const eligibleEventIds = LEGAL_CROSS_MATCHES
+        .find((crossMatches) => crossMatches.includes(scrambleSet.event_id))
+          ?? [scrambleSet.event_id];
 
-    const optionsInState = previousHistory.reduce(
-      (state, unpackedStep) => state[unpackedStep.key].find((ent) => ent.id === unpackedStep.id),
-      rootMatchState,
-    )[currentKey];
-
-    return optionsInState
-      .filter((opt) => {
-        if (currentKey !== 'events') return true;
-
-        const currentEventId = descriptor[currentKey];
-
-        const crossMatchGroup = LEGAL_CROSS_MATCHES
-          .find((cmg) => cmg.includes(currentEventId)) ?? [currentEventId];
-
-        return crossMatchGroup.includes(opt.id);
-      })
-      .filter((opt, idx) => {
-        const mockHistory = [...previousHistory, buildHistoryStep(currentKey, opt, idx)];
-        return enabledCondition?.(mockHistory) ?? true;
-      });
-  }, [rootMatchState, enabledCondition]);
-
-  const fixSelectionPath = useCallback(
-    (selectedDescriptor) => unpackDescriptor(selectedDescriptor)
-      .reduce((correctedDescriptor, historyStep, idx) => {
-        const availableChoices = computeChoices(idx, correctedDescriptor);
-
-        const originalChoiceId = selectedDescriptor[historyStep.key];
-
-        const finalChoice = availableChoices.find(
-          (item) => item.id === originalChoiceId,
-        ) ?? availableChoices[0];
-
-        return {
-          ...correctedDescriptor,
-          [historyStep.key]: finalChoice.id,
-        };
-      }, selectedDescriptor),
-    [computeChoices],
+      return rootMatchState.events.filter((evt) => eligibleEventIds.includes(evt.id));
+    },
+    [scrambleSet.event_id, rootMatchState.events],
   );
 
-  const updateTargetPath = useCallback(
-    (pickerKey, entityId) => setTargetDescriptor(
-      (prevTargetPath) => fixSelectionPath({
-        ...prevTargetPath,
-        [pickerKey]: entityId,
-      }),
-    ),
-    [setTargetDescriptor, fixSelectionPath],
+  const targetEvent = useMemo(
+    () => rootMatchState.events.find((evt) => evt.id === targetEventId),
+    [rootMatchState.events, targetEventId],
   );
 
-  const canMove = isAddMode || !_.isEqual(targetDescriptor, baseDescriptor);
+  const selectableRounds = useMemo(
+    () => targetEvent.rounds,
+    [targetEvent.rounds],
+  );
 
-  if (!selectedMatchingEntity) {
+  if (!scrambleSet) {
     return null;
   }
 
   return (
     <Modal
-      open={isOpen}
+      open={!!scrambleSet}
       onClose={onClose}
       closeIcon
     >
       <Modal.Header>
         Move
         {' '}
-        {entityToName(selectedMatchingEntity)}
+        {scrambleSetToTitle(scrambleSet)}
       </Modal.Header>
       <Modal.Content>
         <Form>
-          {pickerHistory.map((historyStep, idx) => (
-            <MatchingSelect
-              key={historyStep.key}
-              pickerKey={historyStep.key}
-              selectableEntities={computeChoices(idx, targetDescriptor)}
-              selectedEntityId={targetDescriptor[historyStep.key]}
-              updateTargetPath={(id) => updateTargetPath(historyStep.key, id)}
-            />
-          ))}
+          <MatchingSelect
+            dropdownLabel="Event"
+            selectableEntities={selectableEvents}
+            computeEntityName={(evt) => events.byId[evt.id].name}
+            selectedEntityId={targetEventId}
+            onSelectedChange={setTargetEventId}
+          />
+          <MatchingSelect
+            dropdownLabel="Round"
+            selectableEntities={selectableRounds}
+            computeEntityName={(rd) => localizeActivityCode(rd.id, rd, targetEvent)}
+            selectedEntityId={targetRoundId}
+            onSelectedChange={setTargetRoundId}
+          />
         </Form>
       </Modal.Content>
       <Modal.Actions>
         <Button onClick={onClose}>Cancel</Button>
         <Button
           positive
-          onClick={() => onConfirmInternal(selectedMatchingEntity, targetDescriptor)}
+          onClick={() => onConfirmInternal(scrambleSet, targetEventId, targetRoundId)}
           disabled={!canMove}
         >
           {isAddMode ? 'Add' : 'Move'}
