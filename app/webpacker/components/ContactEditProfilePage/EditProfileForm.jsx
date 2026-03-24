@@ -19,7 +19,6 @@ export default function EditProfileForm({
   wcaId,
   onContactSuccess,
   recaptchaPublicKey,
-  editOthersProfileMode,
 }) {
   const [editProfileReason, setEditProfileReason] = useState();
   const [editedProfileDetails, setEditedProfileDetails] = useState();
@@ -40,15 +39,6 @@ export default function EditProfileForm({
     () => !editedProfileDetails || _.isEqual(editedProfileDetails, profileDetails) || !captchaValue,
     [captchaValue, editedProfileDetails, profileDetails],
   );
-
-  const proofAttachmentRequired = useMemo(() => {
-    if (!editedProfileDetails || !profileDetails) return false;
-
-    return (
-      editedProfileDetails.country_iso2 !== profileDetails.country_iso2
-      || editedProfileDetails.dob !== profileDetails.dob
-    );
-  }, [editedProfileDetails, profileDetails]);
 
   useEffect(() => {
     setEditedProfileDetails(profileDetails);
@@ -94,7 +84,7 @@ export default function EditProfileForm({
   if (isError) return <Errored />;
 
   return (
-    <Form onSubmit={formSubmitHandler} error={!!saveError}>
+    <Form onSubmit={formSubmitHandler} error={!!saveError} warning>
       {saveError && (
         <Message
           error
@@ -142,10 +132,9 @@ export default function EditProfileForm({
         label={I18n.t('page.contact_edit_profile.form.proof_attach.label')}
         type="file"
         onChange={handleProofUpload}
-        required={proofAttachmentRequired && !editOthersProfileMode}
       />
-      <p className="help-block">
-        <span className="text-danger">IMPORTANT</span>
+      <Message warning>
+        <strong>IMPORTANT</strong>
         : Attach a picture of a
         {' '}
         <u>legal document</u>
@@ -153,7 +142,7 @@ export default function EditProfileForm({
         (identity card, driver license, passport...) that validates the requested fields;
         {' '}
         feel free to blur-out/obfuscate any other personal data on the identification.
-      </p>
+      </Message>
       <Form.Field>
         <ReCAPTCHA
           sitekey={recaptchaPublicKey}

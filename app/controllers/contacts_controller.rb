@@ -93,17 +93,6 @@ class ContactsController < ApplicationController
     end
   end
 
-  private def requestor_info(user, edit_others_profile_mode)
-    requestor_role = if !edit_others_profile_mode
-                       "Self"
-                     elsif user.any_kind_of_delegate?
-                       "Delegate"
-                     else
-                       "Unknown"
-                     end
-    "#{user.name} (#{requestor_role})"
-  end
-
   def edit_profile_action
     form_values = JSON.parse(params.require(:formValues), symbolize_names: true)
     edited_profile_details = form_values[:editedProfileDetails]
@@ -144,7 +133,7 @@ class ContactsController < ApplicationController
         wca_id: wca_id,
         changes_requested: changes_requested,
         edit_profile_reason: edit_profile_reason,
-        requestor: requestor_info(current_user, edit_others_profile_mode),
+        requestor_user: current_user,
         ticket: ticket,
         document: attachment,
         request: request,
