@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CountryBand < ApplicationRecord
-  belongs_to :country, foreign_key: :iso2, primary_key: :iso2
+  belongs_to :country, foreign_key: :iso2, primary_key: :iso2, inverse_of: :band
   has_many :country_band_details, foreign_key: :number, primary_key: :number
   validates :iso2, inclusion: { in: Country::WCA_COUNTRY_ISO_CODES }
   validates :number, numericality: {

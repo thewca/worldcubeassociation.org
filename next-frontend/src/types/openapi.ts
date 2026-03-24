@@ -130,6 +130,41 @@ export interface paths {
         };
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the next competitor assuming the registration in the query is quit */
+        get: operations["getNextCompetitor"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Adds a use to a round */
+        put: operations["addCompetitor"];
+        post?: never;
+        /** Quits a competitor from the round and advances the next one if prompted */
+        delete: operations["quitCompetitor"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/clear": {
         parameters: {
             query?: never;
@@ -157,6 +192,23 @@ export interface paths {
         get?: never;
         /** Opens a round and locks the previous round if necessary */
         put: operations["openRound"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}/clear": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Quits a competitor from the round and advances the next one if prompted */
+        put: operations["clearCompetitor"];
         post?: never;
         delete?: never;
         options?: never;
@@ -915,6 +967,8 @@ export interface components {
             advancing: boolean;
             advancing_questionable: boolean;
             attempts: components["schemas"]["LiveAttempt"][];
+            /** Format: datetime */
+            last_attempt_entered_at: string;
         };
         RoundLiveResult: components["schemas"]["BaseLiveResult"] & {
             round_wcif_id: string;
@@ -1371,16 +1425,7 @@ export interface components {
             round_id: string | null;
             /** @example a */
             format_id: string;
-            /** @example 126 */
-            value1: number;
-            /** @example 84 */
-            value2: number;
-            /** @example 91 */
-            value3: number;
-            /** @example 89 */
-            value4: number;
-            /** @example 85 */
-            value5: number;
+            attempts: number[];
             /** @example 84 */
             best: number;
             /** @example 88 */
@@ -1454,16 +1499,7 @@ export interface components {
             round_id: string | null;
             /** @example a */
             format_id: string;
-            /** @example 126 */
-            value1: number;
-            /** @example 84 */
-            value2: number;
-            /** @example 91 */
-            value3: number;
-            /** @example 89 */
-            value4: number;
-            /** @example 85 */
-            value5: number;
+            attempts: number[];
             /** @example 84 */
             best: number;
             /** @example 88 */
@@ -1758,6 +1794,89 @@ export interface operations {
             };
         };
     };
+    getNextCompetitor: {
+        parameters: {
+            query: {
+                registration_id: number;
+            };
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the next competitors who would advance if the registration */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveCompetitor"][];
+                };
+            };
+        };
+    };
+    addCompetitor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+                registrationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the created empty live result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        competitor: components["schemas"]["LiveCompetitor"];
+                    };
+                };
+            };
+        };
+    };
+    quitCompetitor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+                registrationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    advancing_ids?: number[];
+                };
+            };
+        };
+        responses: {
+            /** @description Returns number of rounds the competitor was marked as quit in */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        quit: number;
+                    };
+                };
+            };
+        };
+    };
     clearRound: {
         parameters: {
             query?: never;
@@ -1806,6 +1925,32 @@ export interface operations {
                         status: string;
                         created_rows: number;
                         locked_rows: number;
+                    };
+                };
+            };
+        };
+    };
+    clearCompetitor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+                registrationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the number of attempts that were deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        deleted_attempts: number;
                     };
                 };
             };

@@ -7,6 +7,8 @@ class LiveResult < ApplicationRecord
   has_many :live_attempts, dependent: :destroy
   alias_method :attempts, :live_attempts
 
+  has_many :live_result_history_entries, dependent: :delete_all
+
   after_save :trigger_recompute, if: :should_recompute?
 
   belongs_to :registration
@@ -21,13 +23,27 @@ class LiveResult < ApplicationRecord
   scope :not_empty, -> { where.not(best: 0) }
   scope :locked, -> { where.not(locked_by: nil) }
 
+  scope :advancing, -> { where(advancing: true) }
+  scope :not_advancing, -> { where(advancing: false) }
+
+  scope :quit, -> { where.not(quit_by_id: nil) }
+  scope :not_quit, -> { where(quit_by_id: nil) }
+
   alias_attribute :result_id, :id
 
   has_one :event, through: :round
   has_one :format, through: :round
 
+  validates :best,
+            presence: true,
+            numericality: { only_integer: true }
+
+  validates :average,
+            presence: true,
+            numericality: { only_integer: true }
+
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: %w[global_pos local_pos registration_id best average single_record_tag average_record_tag advancing advancing_questionable entered_at entered_by_id],
+    only: %w[global_pos local_pos registration_id best average single_record_tag average_record_tag advancing last_attempt_entered_at advancing_questionable entered_at entered_by_id],
     methods: %w[event_id attempts result_id forecast_statistics round_wcif_id],
     include: %w[],
   }.freeze
@@ -53,7 +69,8 @@ class LiveResult < ApplicationRecord
   end
 
   def mark_as_quit!(quit_by_user)
-    update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
+    self.update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
+    self.live_result_history_entries.create!(entered_by_id: quit_by_user.id, action_type: :quit)
   end
 
   def locked?
@@ -81,7 +98,12 @@ class LiveResult < ApplicationRecord
   end
 
   def complete?
-    live_attempts.where.not(value: 0).count == round.format.expected_solve_count
+    # Use length hear to not fire a COUNT query for every row
+    live_attempts.length == round.format.expected_solve_count
+  end
+
+  def empty_result?
+    best.zero?
   end
 
   def values_for_sorting
@@ -91,7 +113,7 @@ class LiveResult < ApplicationRecord
   end
 
   LIVE_STATE_SERIALIZE_OPTIONS = {
-    only: %w[advancing advancing_questionable average average_record_tag best registration_id single_record_tag],
+    only: %w[advancing advancing_questionable average average_record_tag best registration_id last_attempt_entered_at single_record_tag],
     methods: %w[],
     include: [{ live_attempts: { only: %i[value attempt_number] } }],
   }.freeze
@@ -118,7 +140,7 @@ class LiveResult < ApplicationRecord
 
   def forecast_statistics
     # use .length on purpose here as otherwise we would use one query per row
-    LiveResult.compute_best_and_worse_possible_average(live_attempts.as_json, round) if live_attempts.length < round.format.expected_solve_count
+    LiveResult.compute_best_and_worse_possible_average(live_attempts.as_json, round) if live_attempts.length == round.format.expected_solve_count - 1
   end
 
   def self.compute_best_and_worse_possible_average(live_attempts, round)
@@ -138,6 +160,10 @@ class LiveResult < ApplicationRecord
       attempts = padded.map { LiveAttempt.new(it) }
       LiveResult.compute_average_and_best(attempts, round).first
     end
+  end
+
+  def self.empty_result_attributes(registration_id, round_id)
+    { registration_id: registration_id, round_id: round_id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
   end
 
   private

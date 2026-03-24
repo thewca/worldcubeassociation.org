@@ -428,6 +428,7 @@ en:
         officers:
           chair: "WCA Chair"
           executive_director: "WCA Executive Director"
+          chief_operating_officer: "WCA Chief Operating Officer"
           secretary: "WCA Secretary"
           vice_chair: "WCA Vice-Chair"
           treasurer: "WCA Treasurer"
@@ -1396,6 +1397,7 @@ en:
       orga_closed_reg_success: "Successfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
       no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
+      schedule_locked_after_results_submitted: "The schedule cannot be edited after results have been submitted."
     live:
       title: "Live Results"
       connection:
@@ -2929,6 +2931,9 @@ en:
       single_letter_first_or_last_name_warning: "'%{name}' has a single letter as first or last name. Please fix the name or confirm that this is indeed the competitor's correct name according to an official document."
       single_name_warning: "'%{name}' has only one name. Please confirm that this is indeed the competitor's full name according to an official document."
       competitor_limit_exceeded_warning: "The number of persons in the competition (%{n_competitors}) is above the competitor limit (%{competitor_limit}). The results of the competitors registered after the competitor limit was reached must be removed."
+      registration_details_mismatch_warning: "Person with registrant ID %{person_id} (%{name}) has details that do not match their registration: %{mismatches}"
+      missing_matching_registration_warning: "Person %{name} does not have a matching registration."
+      unaccepted_registration_with_results_warning: "Person %{name} has results in the competition, but the registration is not marked as 'accepted'."
     results:
       automatically_position_fixed_info: "[%{round_id}] Automatically fixed the position of %{person_name} from %{pos} to %{expected_pos}."
       mbf_result_over_time_limit_warning: "[%{round_id}] Result '%{result}' for %{person_name} is over the time limit. Please ensure this is due to time penalties before sending the results, or fix the result to DNF."

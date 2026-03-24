@@ -66,11 +66,11 @@ namespace :h2h_results do
           set.ordered_index = scramble_set_number - 1
         end
 
-        scramble_set.inbox_scrambles.find_or_create_by!(matched_scramble_set: scramble_set, scramble_number: scramble_number) do |inbox_scramble|
+        scramble_set.inbox_scrambles.find_or_create_by!(matched_scramble_set: scramble_set, scramble_number: scramble_number, is_extra: is_extra) do |inbox_scramble|
           inbox_scramble.is_extra = is_extra
           inbox_scramble.matched_scramble_set = scramble_set
           inbox_scramble.scramble_number = scramble_number
-          inbox_scramble.ordered_index = scramble_number - 1
+          inbox_scramble.ordered_index = is_extra == 1 ? 5 + scramble_number - 1 : scramble_number - 1
           inbox_scramble.scramble_string = scramble
         end
       end

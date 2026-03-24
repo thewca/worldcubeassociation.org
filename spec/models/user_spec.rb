@@ -268,6 +268,41 @@ RSpec.describe User do
     end
   end
 
+  describe "clearing WCA claims via constant" do
+    let(:delegate_role) { create(:delegate_role) }
+    let(:person) { create(:person) }
+
+    it "clears unconfirmed_wca_id and delegate fields for all users in the relation" do
+      user1 = create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
+      user2 = create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
+
+      User.where(id: [user1.id, user2.id]).update_all(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+
+      expect(user1.reload.unconfirmed_wca_id).to be_nil
+      expect(user1.delegate_id_to_handle_wca_id_claim).to be_nil
+      expect(user2.reload.unconfirmed_wca_id).to be_nil
+      expect(user2.delegate_id_to_handle_wca_id_claim).to be_nil
+    end
+
+    it "clears unconfirmed_wca_id and delegate_id_to_handle_wca_id_claim on the user" do
+      user = create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
+
+      user.update_columns(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+
+      expect(user.reload.unconfirmed_wca_id).to be_nil
+      expect(user.delegate_id_to_handle_wca_id_claim).to be_nil
+    end
+
+    it "does not affect other fields on the user" do
+      user = create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
+      original_name = user.name
+
+      user.update_columns(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+
+      expect(user.reload.name).to eq original_name
+    end
+  end
+
   it "can create user with empty password" do
     create(:user, encrypted_password: "")
   end
@@ -585,6 +620,11 @@ RSpec.describe User do
       expect(board_member.can_view_all_users?).to be true
     end
 
+    it "returns true for higher permission officer" do
+      chief_operating_officer = create(:chief_operating_officer_role).user
+      expect(chief_operating_officer.can_view_all_users?).to be true
+    end
+
     it "returns false for normal user" do
       normal_user = create(:user)
       expect(normal_user.can_view_all_users?).to be false
@@ -597,6 +637,11 @@ RSpec.describe User do
     it "returns true for board" do
       board_member = create(:user, :board_member)
       expect(board_member.can_edit_user?(user)).to be true
+    end
+
+    it "returns true for higher permission officer" do
+      chief_operating_officer = create(:chief_operating_officer_role).user
+      expect(chief_operating_officer.can_edit_user?(user)).to be true
     end
 
     it "returns false for normal user" do
@@ -769,12 +814,14 @@ RSpec.describe User do
 
     it "returns true for Officer roles" do
       executive_director = create(:executive_director_role)
+      chief_operating_officer = create(:chief_operating_officer_role)
       chair = create(:chair_role)
       vice_chair = create(:vice_chair_role)
       secretary = create(:secretary_role)
       treasurer = create(:treasurer_role)
 
       expect(executive_director.user.staff?).to be true
+      expect(chief_operating_officer.user.staff?).to be true
       expect(chair.user.staff?).to be true
       expect(vice_chair.user.staff?).to be true
       expect(secretary.user.staff?).to be true

@@ -6,8 +6,8 @@ class UsersController < ApplicationController
   before_action :check_recent_auth_dangerous, only: %i[update], if: :dangerous_profile_change?
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
   before_action :redirect_if_cannot_edit_user, only: %i[edit update]
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search merge]
-  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search]
+  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id merge]
   before_action -> { check_edit_access }, only: %i[show_for_edit update_user_data]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
@@ -121,7 +121,7 @@ class UsersController < ApplicationController
 
     ActiveRecord::Base.transaction do
       user.assign_wca_id(wca_id)
-      user.update!(unconfirmed_wca_id: nil, delegate_id_to_handle_wca_id_claim: nil)
+      user.update!(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
     end
 
     redirect_to edit_user_path(user), flash: { success: "Successfully confirmed WCA ID #{wca_id}." }

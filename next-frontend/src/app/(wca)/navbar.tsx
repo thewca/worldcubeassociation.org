@@ -48,11 +48,16 @@ function LinkWrapper<T extends string>({
   );
 }
 
+const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
+
 export default async function Navbar() {
   const payload = await getPayload({ config });
   const navbar = await payload.findGlobal({ slug: "nav" });
 
   const session = await auth();
+
+  // Prevent people part of the Live Results Beta to escape onto the payload pages
+  const navbarEntries = LIVE_RESULT_BETA ? [] : navbar.entry;
 
   return (
     <HStack
@@ -60,17 +65,20 @@ export default async function Navbar() {
       padding="3"
       justifyContent="space-between"
       bg="bg"
+      data-testid="header-navbar"
     >
       <RefreshRouteOnSave />
       <HStack>
-        <IconButton asChild variant="ghost">
-          <Link href="/">
-            <ChakraImage asChild maxW={10}>
-              <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
-            </ChakraImage>
-          </Link>
-        </IconButton>
-        {navbar.entry.map((navbarEntry) => (
+        {!LIVE_RESULT_BETA && (
+          <IconButton asChild variant="ghost">
+            <Link href="/">
+              <ChakraImage asChild maxW={10}>
+                <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
+              </ChakraImage>
+            </Link>
+          </IconButton>
+        )}
+        {navbarEntries.map((navbarEntry) => (
           <React.Fragment key={navbarEntry.id}>
             {navbarEntry.blockType === "LinkItem" && (
               <Button asChild variant="ghost" size="sm">
@@ -175,7 +183,7 @@ export default async function Navbar() {
         ))}
       </HStack>
       <HStack>
-        {navbar.entry.length === 0 && (
+        {navbarEntries.length === 0 && !LIVE_RESULT_BETA && (
           <Text>Oh no, there are no navbar items!</Text>
         )}
       </HStack>

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   createContext,
   useCallback,
@@ -14,10 +16,13 @@ interface AdminResultsContextValue {
   attempts: number[];
   error: string;
   success: string;
-  isPendingUpdate: boolean;
+  isPending: boolean;
   handleRegistrationIdChange: (value: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
   handleSubmit: () => void;
+  clearCompetitorsResults: (registrationId: number) => void;
+  quitCompetitor: (registrationId: number, toAdvance: number[]) => void;
+  addCompetitorToRound: (registrationId: number) => Promise<void>;
 }
 
 function zeroedArrayOfSize(size: number) {
@@ -33,37 +38,60 @@ export function LiveResultAdminProvider({
   format,
   roundId,
   competitionId,
+  initialRegistrationId,
 }: {
   children: ReactNode;
   format: Format;
   roundId: string;
   competitionId: string;
+  initialRegistrationId?: number;
 }) {
+  const { liveResultsByRegistrationId, addPendingLiveResult } =
+    useLiveResults();
+
   const solveCount = format.expected_solve_count;
 
-  const [registrationId, setRegistrationId] = useState<number>();
-  const [attempts, setAttempts] = useState<number[]>(
-    zeroedArrayOfSize(solveCount),
+  const [registrationId, setRegistrationId] = useState<number | undefined>(
+    initialRegistrationId,
   );
+
+  const getAttemptsForCompetitor = useCallback(
+    (registrationId?: number): number[] => {
+      if (registrationId === undefined) {
+        return zeroedArrayOfSize(solveCount);
+      }
+
+      // Even for Dual Rounds we only fetch one round in the admin view
+      const competitorResults = liveResultsByRegistrationId[registrationId][0];
+
+      if (competitorResults.attempts.length > 0) {
+        return competitorResults.attempts
+          .toSorted((a, b) => a.attempt_number - b.attempt_number)
+          .map((a) => a.value);
+      }
+
+      return zeroedArrayOfSize(solveCount);
+    },
+    [liveResultsByRegistrationId, solveCount],
+  );
+
+  const [attempts, setAttempts] = useState<number[]>(() =>
+    getAttemptsForCompetitor(initialRegistrationId),
+  );
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const { liveResultsByRegistrationId, addPendingLiveResult } =
-    useLiveResults();
   const api = useAPI();
 
   const handleRegistrationIdChange = useCallback(
     (value: number) => {
       setRegistrationId(value);
-      // Even for Dual Rounds we only fetch one round in the admin view
-      const alreadyEnteredResults = liveResultsByRegistrationId[value][0];
-      if (alreadyEnteredResults) {
-        setAttempts(alreadyEnteredResults.attempts.map((a) => a.value));
-      } else {
-        setAttempts(zeroedArrayOfSize(solveCount));
-      }
+
+      const competitorAttempts = getAttemptsForCompetitor(value);
+      setAttempts(competitorAttempts);
     },
-    [liveResultsByRegistrationId, solveCount],
+    [getAttemptsForCompetitor],
   );
 
   const { mutate: mutateUpdate, isPending: isPendingUpdate } = api.useMutation(
@@ -80,6 +108,52 @@ export function LiveResultAdminProvider({
       },
       onError: () => {
         setError("Failed to update results. Please try again.");
+      },
+    },
+  );
+
+  const { mutateAsync: addCompetitorMutation, isPending: isPendingAdd } =
+    api.useMutation(
+      "put",
+      "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
+      {
+        onError: () => {
+          setError("Failed to add Competitor. Please try again.");
+        },
+      },
+    );
+
+  const addCompetitorToRound = useCallback(
+    async (registrationId: number) => {
+      await addCompetitorMutation({
+        params: {
+          path: {
+            registrationId,
+            competitionId,
+            roundId,
+          },
+        },
+      });
+    },
+    [addCompetitorMutation, competitionId, roundId],
+  );
+
+  const { mutate: mutateQuit, isPending: isPendingQuit } = api.useMutation(
+    "delete",
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
+    {
+      onError: () => {
+        setError("Failed to Quit Competitor. Please try again.");
+      },
+    },
+  );
+
+  const { mutate: mutateClear, isPending: isPendingClear } = api.useMutation(
+    "put",
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}/clear",
+    {
+      onError: () => {
+        setError("Failed to Quit Competitor. Please try again.");
       },
     },
   );
@@ -110,6 +184,25 @@ export function LiveResultAdminProvider({
     });
   };
 
+  const clearCompetitorsResults = (registrationId: number) => {
+    mutateClear({
+      params: {
+        path: { competitionId, roundId, registrationId },
+      },
+    });
+  };
+
+  const quitCompetitor = (registrationId: number, toAdvance: number[]) => {
+    mutateQuit({
+      params: {
+        path: { competitionId, roundId, registrationId },
+      },
+      body: {
+        advancing_ids: toAdvance,
+      },
+    });
+  };
+
   return (
     <AdminResultsContext.Provider
       value={{
@@ -117,10 +210,14 @@ export function LiveResultAdminProvider({
         attempts,
         error,
         success,
-        isPendingUpdate,
+        isPending:
+          isPendingUpdate || isPendingClear || isPendingQuit || isPendingAdd,
+        quitCompetitor,
         handleRegistrationIdChange,
         handleAttemptChange,
         handleSubmit,
+        addCompetitorToRound,
+        clearCompetitorsResults,
       }}
     >
       {children}
