@@ -96,6 +96,9 @@ variable "shared" {
     rails_staging-api: object({
       arn: string
     })
+    nextjs_staging: object({
+      arn: string
+    })
     pma_staging: object({
       arn: string
     })
@@ -107,6 +110,7 @@ variable "shared" {
       root_resource_id: string
     })
     account_id: string
+    next_repository_url: string,
     private_subnets: any
   })
   description = "The shared resources between Environments"
