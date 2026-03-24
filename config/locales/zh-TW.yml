@@ -792,10 +792,10 @@ zh-TW:
         #original_hash: 74affff
         incidents: >-
           請報告所有非一般的事件。請把意外事件按照號碼從1.開始排序，好讓其他代表根據號碼發表回應。就算所有事物看起來都很類似，請列出那些最值得報告的事項。如果您需要意見回饋，請在下面適當的部分選擇做選擇。
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
           您必須選擇 %{image_count}
-          張能夠說明比賽現場打亂區、比賽區的照片等(其他照片也沒問題)。您可以一次選擇多個檔案。只有在上傳足夠數量的其他圖片後，才能刪除現有圖片（如果您想替換某張圖片，請先上傳新的，再刪除舊的）。
+          張能夠說明比賽現場打亂區、比賽區的照片等來自本次比賽的照片，最好是在比賽進行期間拍攝(其他照片也沒問題)。您可以一次選擇多個檔案。只有在上傳足夠數量的其他圖片後，才能刪除現有圖片（如果您想替換某張圖片，請先上傳新的，再刪除舊的）。如果您沒有最新的比賽區域和／或打亂區域的最新照片，請說明原因。
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -917,6 +917,13 @@ zh-TW:
         #original_hash: 79ccfe2
         dob_invalid: 格式錯誤
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: 頁面渲染時發生錯誤。
+      #original_hash: 22dfe12
+      description: 如果此錯誤持續發生，請將以下列出的詳細資訊回報給 WST。
+      #original_hash: 20be860
+      details: 錯誤詳細資訊
     messages:
       #original_hash: dc2367c
       wrong_size: '錯誤尺寸(應該為%{file_size})'
@@ -1064,6 +1071,16 @@ zh-TW:
         400_error: 您要尋找的頁面並不存在
         #original_hash: c9290b6
         400_contact_html: '如果您認為這是一個錯誤，請<a href=%{contact_url}>按這裡</a>來回報。'
+        #original_hash: 508c106
+        comp_not_found: 未找到比賽
+        #original_hash: c0e86d5
+        comp_not_found_action: '我們找不到 ID 為 %{comp_id} 的比賽。請使用搜尋欄進行查詢。'
+        #original_hash: 695f7ba
+        comp_not_found_action_2: 如果您是透過其他網站的連結進入此頁面，請通知該網站其連結不正確。
+        #original_hash: 7f8f419
+        session_expired: 工作階段已過期
+        #original_hash: f3e688a
+        session_expired_action: 您的工作階段已過期。請重新整理頁面、重新執行您的操作，或重新登入以繼續。
     doorkeeper:
       applications:
         help:
@@ -1700,6 +1717,8 @@ zh-TW:
           href='%{wrt_contact_path}' target='_blank'>WCA成績組</a>或是您的<a
           href='%{delegate_url}'>WCA代表</a>。
         reason:
+          #original_hash: 2e22133
+          no_access: 您沒有權限編輯該使用者。
           #original_hash: 370ff12
           assigned: 您已經有WCA ID了
           #original_hash: 1c4670f
@@ -2640,8 +2659,8 @@ zh-TW:
       submit_delete_value: 取消
       #original_hash: 22316f1
       submit_confirm: 您確定要申請比賽了嗎？一旦申請就無法修改任何資訊了，請檢查您的電子郵件以確保WCA比賽公告團隊有收到比賽申請。
-      #original_hash: 4c7deb7
-      submit_delete: 您確定要取消這場比賽嗎？一旦執行了就回不去了。
+      #original_hash: 89fbbca
+      submit_delete: '此操作無法復原。請在下方輸入比賽 ID「%{competition_id}」以確認刪除。'
       #original_hash: 8ebebca
       coordinates: 座標
       #original_hash: a672984
@@ -4050,10 +4069,10 @@ zh-TW:
   about:
     #original_hash: 9ac918a
     title: 關於WCA
-    #original_hash: af00571
-    mission_statement: 我們的使命是，在更多的國家舉辦更多的比賽，並在公平且相同的條件下讓更多的人參與並得到更多的快樂。
-    #original_hash: e627278
-    mission_footer: WCA的使命
+    #original_hash: ee35764
+    mission_statement: 我們的宗旨是賦能全球魔術方塊速解社群，並維護一個對所有人而言有趣且公平的競賽環境。
+    #original_hash: 5bed828
+    mission_footer: WCA的宗旨
     #original_hash: cdab446
     who_we_are_title: 我們是誰
     #original_hash: 303f17a

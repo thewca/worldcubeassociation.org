@@ -679,6 +679,8 @@ fr:
           chair: Président·e de la WCA
           #original_hash: 7d405ff
           executive_director: Directeur·rice Exécutif·ve de la WCA
+          #original_hash: 36a137f
+          chief_operating_officer: Directeur des opérations de la WCA
           #original_hash: 1dd4a07
           secretary: Secrétaire de la WCA
           #original_hash: 0388b19
@@ -2052,6 +2054,8 @@ fr:
       profile: Profil
       #original_hash: 7b2c7f1
       approve: Approuver
+      #original_hash: d9455bf
+      approve_confirm: 'Êtes-vous sûr de vouloir approuver l''identifiant WCA %{wca_id} ?'
       #original_hash: 85de4b8
       unconfirmed_email: 'L''adresse e-mail (%{email}) de ce compte n''est pas confirmée.'
       #original_hash: 7069007
@@ -2905,6 +2909,8 @@ fr:
         veuillez préciser une date limite. Si vous n’utilisez pas de liste
         d’attente, n’oubliez pas de le préciser dans les conditions
         d’inscription.
+      #original_hash: 51376ef
+      schedule_locked_after_results_submitted: Le planning ne peut plus être modifié une fois les résultats soumis.
     live:
       #original_hash: 10d1a3c
       title: Résultats en direct
@@ -3386,10 +3392,11 @@ fr:
         Êtes-vous sûr de vouloir confirmer ? Une fois la compétition confirmée,
         vous ne pourrez plus modifier les informations la concernant. Consultez
         ensuite vos e-mails pour vérifier que le WCAT a été informé.
-      #original_hash: 4c7deb7
+      #original_hash: 89fbbca
       submit_delete: >-
-        Êtes-vous sûr de vouloir supprimer cette compétition ? Cette opération
-        est irréversible.
+        Cette action ne peut pas être annulée. Veuillez saisir ci-dessous
+        l'identifiant de la compétition « %{competition_id} » pour confirmer la
+        suppression.
       #original_hash: 8ebebca
       coordinates: Coordonnées GPS
       #original_hash: a672984
@@ -6583,6 +6590,17 @@ fr:
         est supérieur à la limite de compétiteurs (%{competitor_limit}). Les
         résultats des compétiteurs enregistrés après que la limite de
         compétiteurs a été atteinte doivent être supprimés.
+      #original_hash: d8f2f1e
+      registration_details_mismatch_warning: >-
+        La personne dont l'identifiant d'inscription est %{person_id} (%{name})
+        présente des informations qui ne correspondent pas à son inscription :
+        %{mismatches}
+      #original_hash: 1a9da05
+      missing_matching_registration_warning: 'La personne %{name} ne correspond à aucune inscription.'
+      #original_hash: 7d62dd5
+      unaccepted_registration_with_results_warning: >-
+        La personne %{name} a obtenu des résultats lors de la compétition, mais
+        son inscription n'est pas marquée comme « acceptée ».
     results:
       #original_hash: 5685ae8
       automatically_position_fixed_info: >-

@@ -1,9 +1,42 @@
-resource "aws_cloudwatch_log_group" "worker" {
-  name = "${var.name_prefix}-sqs-worker"
+locals {
+  any_cable_environment = [
+    {
+      name  = "ANYCABLE_HOST"
+      value = "0.0.0.0"
+    },
+    {
+      name  = "ANYCABLE_PORT"
+      value = "8085"
+    },
+    {
+      name  = "ANYCABLE_NOAUTH"
+      value = "1"
+    },
+    {
+      name  = "ANYCABLE_PUBSUB"
+      value = "redis"
+    },
+    {
+      name  = "ANYCABLE_PUBLIC_STREAMS"
+      value = "1"
+    },
+    {
+      name = "ANYCABLE_REDIS_URL",
+      value = "redis://wca-staging-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
+    },
+    {
+      name = "ANYCABLE_PATH",
+      value = var.anycable_path
+    }
+  ]
 }
 
-resource "aws_ecs_task_definition" "worker" {
-  family = "${var.name_prefix}-sqs-worker"
+resource "aws_cloudwatch_log_group" "anycable" {
+  name = "${var.name_prefix}-anycable"
+}
+
+resource "aws_ecs_task_definition" "anycable" {
+  family = "${var.name_prefix}-anycable"
 
   network_mode             = "awsvpc"
   requires_compatibilities = ["EC2"]
@@ -19,11 +52,16 @@ resource "aws_ecs_task_definition" "worker" {
   container_definitions = jsonencode([
 
     {
-      name              = "sqs-worker-staging"
-      image             = "${var.shared.ecr_repository.repository_url}:staging-sqs-worker"
+      name              = "anycable-staging"
+      image             = "anycable/anycable-go:1.6"
       cpu    = 512
       memory = 1955
-      portMappings = []
+      portMappings = [
+        {
+          containerPort = 8085
+          protocol      = "tcp"
+        },
+      ]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -32,14 +70,7 @@ resource "aws_ecs_task_definition" "worker" {
           awslogs-stream-prefix = var.name_prefix
         }
       }
-      environment = local.rails_environment
-      healthCheck       = {
-        command            = ["CMD-SHELL", "pgrep ruby || exit 1"]
-        interval           = 30
-        retries            = 3
-        startPeriod        = 60
-        timeout            = 5
-      }
+      environment = local.any_cable_environment
     },
   ])
 
@@ -48,18 +79,15 @@ resource "aws_ecs_task_definition" "worker" {
   }
 }
 
-data "aws_ecs_task_definition" "worker" {
-  task_definition = aws_ecs_task_definition.worker.family
+data "aws_ecs_task_definition" "anycable" {
+  task_definition = aws_ecs_task_definition.anycable.family
 }
 
-resource "aws_ecs_service" "worker" {
-  name                               = "${var.name_prefix}-sqs-worker"
+resource "aws_ecs_service" "anycable" {
+  name                               = "${var.name_prefix}-anycable"
   cluster                            = var.shared.ecs_cluster.id
-  # During deployment a new task revision is created with modified
-  # container image, so we want use data.aws_ecs_task_definition to
-  # always point to the active task definition
-  task_definition                    = data.aws_ecs_task_definition.worker.arn
-  desired_count                      = 2
+  task_definition                    = data.aws_ecs_task_definition.anycable.arn
+  desired_count                      = 1
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
@@ -100,4 +128,9 @@ resource "aws_ecs_service" "worker" {
     Name = var.name_prefix
   }
 
+  load_balancer {
+    target_group_arn = var.shared.anycable_staging.arn
+    container_name   = "anycable-staging"
+    container_port   = 8085
+  }
 }
