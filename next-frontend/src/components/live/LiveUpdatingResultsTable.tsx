@@ -5,15 +5,14 @@ import { Heading, HStack, Spacer, Switch, VStack } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import PendingResultsTable from "@/components/live/PendingResultsTable";
-import { LiveCompetitor } from "@/types/live";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
+import AddPersonModal from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
 
 export default function LiveUpdatingResultsTable({
   roundWcifId,
   formatId,
   competitionId,
-  competitors,
   title,
   isAdmin = false,
   showEmpty = true,
@@ -22,7 +21,6 @@ export default function LiveUpdatingResultsTable({
   roundWcifId: string;
   formatId: string;
   competitionId: string;
-  competitors: LiveCompetitor[];
   title: string;
   isAdmin?: boolean;
   showEmpty?: boolean;
@@ -31,15 +29,20 @@ export default function LiveUpdatingResultsTable({
   const [showLinkedRoundsView, setShowLinkedRoundsView] =
     useState(isLinkedRound);
 
-  const { connectionState, liveResultsByRegistrationId, pendingLiveResults } =
-    useLiveResults();
+  const {
+    connectionState,
+    liveResultsByRegistrationId,
+    pendingLiveResults,
+    competitors,
+    pendingQuitCompetitors,
+  } = useLiveResults();
 
   const { eventId } = parseActivityCode(roundWcifId);
 
   return (
     <VStack align="left">
       <HStack>
-        <Heading textStyle="h1">{title}</Heading>
+        <Heading textStyle={{ sm: "h3", md: "h2", lg: "h1" }}>{title}</Heading>
         <ConnectionPulse connectionState={connectionState} />
         <Spacer flex={1} />
         {isLinkedRound && (
@@ -55,6 +58,12 @@ export default function LiveUpdatingResultsTable({
             <Switch.Label>Show combined Results</Switch.Label>
           </Switch.Root>
         )}
+        {isAdmin && (
+          <AddPersonModal
+            competitionId={competitionId}
+            competitors={competitors}
+          />
+        )}
       </HStack>
       <PendingResultsTable
         pendingLiveResults={pendingLiveResults}
@@ -68,6 +77,7 @@ export default function LiveUpdatingResultsTable({
         formatId={formatId}
         competitionId={competitionId}
         competitors={competitors}
+        pendingQuitCompetitors={pendingQuitCompetitors}
         isAdmin={isAdmin}
         showEmpty={showEmpty}
         showLinkedRoundsView={showLinkedRoundsView}

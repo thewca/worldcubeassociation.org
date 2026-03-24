@@ -9,17 +9,19 @@ import {
 import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
+import { useLiveResults } from "@/providers/LiveResultProvider";
 import { LiveCompetitor } from "@/types/live";
 
 interface AttemptsFormProps {
-  competitors: LiveCompetitor[];
   solveCount: number;
   header: string;
   eventId: string;
 }
 
+const toCompetitorString = (competitor: LiveCompetitor) =>
+  `${competitor.name} (${competitor.registrant_id})`;
+
 export default function AttemptsForm({
-  competitors,
   solveCount,
   header,
   eventId,
@@ -31,18 +33,27 @@ export default function AttemptsForm({
     handleSubmit,
     attempts,
     handleAttemptChange,
-    isPendingUpdate,
+    registrationId,
+    isPending,
   } = useResultsAdmin();
 
+  const { competitors } = useLiveResults();
+
   const { collection, filter } = useListCollection({
-    initialItems: competitors,
+    initialItems: Array.from(competitors.values()),
     itemToValue: (competitor) => competitor.id.toString(),
-    itemToString: (competitor) =>
-      `${competitor.name} (${competitor.registrant_id})`,
+    itemToString: toCompetitorString,
     filter: (itemText, filterText, item) =>
       itemText.includes(filterText) ||
       parseInt(filterText, 10) === item.registrant_id,
   });
+
+  const selectedCompetitor = registrationId
+    ? competitors.get(registrationId)
+    : undefined;
+  const inputDisplayValue = selectedCompetitor
+    ? toCompetitorString(selectedCompetitor)
+    : "";
 
   return (
     <form>
@@ -51,9 +62,13 @@ export default function AttemptsForm({
       <Combobox.Root
         collection={collection}
         onInputValueChange={(e) => filter(e.inputValue)}
-        onValueChange={(e) =>
-          handleRegistrationIdChange(parseInt(e.value[0], 10))
-        }
+        inputValue={inputDisplayValue}
+        onValueChange={(e) => {
+          if (e.value.length > 0) {
+            handleRegistrationIdChange(parseInt(e.value[0], 10));
+          }
+        }}
+        value={registrationId ? [registrationId.toString()] : []}
       >
         <Combobox.Label>
           <Heading size="2xl">{header}</Heading>
@@ -71,7 +86,7 @@ export default function AttemptsForm({
               <Combobox.Empty>No items found</Combobox.Empty>
               {collection.items.map((item) => (
                 <Combobox.Item item={item} key={item.id}>
-                  `${item.name} (${item.registrant_id})`
+                  {toCompetitorString(item)}
                   <Combobox.ItemIndicator />
                 </Combobox.Item>
               ))}
@@ -88,7 +103,10 @@ export default function AttemptsForm({
           resultType="single"
         />
       ))}
-      <Button onClick={handleSubmit} disabled={isPendingUpdate}>
+      <Button
+        onClick={handleSubmit}
+        disabled={isPending || attempts.length === 0}
+      >
         Submit Results
       </Button>
     </form>

@@ -1,9 +1,8 @@
-import _ from "lodash";
 import { Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import formats from "@/lib/wca/data/formats";
 import { padSkipped } from "@/lib/live/padSkipped";
-import { LiveCompetitor, LiveResult } from "@/types/live";
+import { LiveCompetitor, PendingLiveResult } from "@/types/live";
 
 export default function PendingResultsTable({
   pendingLiveResults,
@@ -11,13 +10,11 @@ export default function PendingResultsTable({
   eventId,
   competitors,
 }: {
-  pendingLiveResults: LiveResult[];
+  pendingLiveResults: PendingLiveResult[];
   formatId: string;
   eventId: string;
-  competitors: LiveCompetitor[];
+  competitors: Map<number, LiveCompetitor>;
 }) {
-  const competitorsByRegistrationId = _.keyBy(competitors, "id");
-
   const format = formats.byId[formatId];
   const solveCount = format.expected_solve_count;
 
@@ -40,8 +37,7 @@ export default function PendingResultsTable({
 
         <Table.Body>
           {pendingLiveResults.map((pendingResult) => {
-            const competitor =
-              competitorsByRegistrationId[pendingResult.registration_id];
+            const competitor = competitors.get(pendingResult.registration_id)!;
 
             return (
               <Table.Row key={`${pendingResult.registration_id}`}>

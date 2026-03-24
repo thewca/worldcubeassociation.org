@@ -57,6 +57,10 @@ locals {
       value = "redis://wca-staging-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
     },
     {
+      name = "ANYCABLE_REDIS_URL",
+      value = "redis://wca-staging-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
+    },
+    {
       name = "STAGING_OAUTH_URL"
       value = "https://www.worldcubeassociation.org"
     },

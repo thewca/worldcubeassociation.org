@@ -12,7 +12,7 @@ RSpec.describe "WCA Live API" do
       competition = create(:competition, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
-      round.open_round!
+      round.open_round!(User.first)
 
       live_request = {
         attempts: [{ value: 111, attempt_number: 1 }, { value: 222, attempt_number: 2 }, { value: 333, attempt_number: 3 }, { value: 444, attempt_number: 4 }, { value: 555, attempt_number: 5 }],
@@ -41,7 +41,7 @@ RSpec.describe "WCA Live API" do
       competition = create(:competition, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
-      round.open_round!
+      round.open_round!(User.first)
 
       expect do
         live_request = {
@@ -51,7 +51,7 @@ RSpec.describe "WCA Live API" do
 
         post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request
         perform_enqueued_jobs
-      end.to have_broadcasted_to(Live::Config.broadcast_key(round.wcif_id))
+      end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, round.wcif_id))
         .from_channel(ApplicationCable::Channel)
     end
 
@@ -78,7 +78,7 @@ RSpec.describe "WCA Live API" do
       round = create(:round, competition: competition, event_id: "333")
       create(:registration, :accepted, competition: competition)
       registration = create(:registration, :accepted, competition: competition, event_ids: ["444"])
-      round.open_round!
+      round.open_round!(User.first)
 
       live_request = {
         attempts: [{ value: 111, attempt_number: 1 }, { value: 222, attempt_number: 2 }, { value: 333, attempt_number: 3 }, { value: 444, attempt_number: 4 }, { value: 555, attempt_number: 5 }],

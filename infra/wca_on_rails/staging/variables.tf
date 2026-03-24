@@ -90,6 +90,9 @@ variable "shared" {
     rails_staging: object({
       arn: string
     })
+    anycable_staging: object({
+      arn: string
+    })
     rails_staging-api: object({
       arn: string
     })
@@ -117,4 +120,9 @@ variable "name_prefix" {
 variable "WRC_WEBHOOK_URL" {
   description = "The URL to send delegate report webhook notifications for WRC to"
   type = string
+}
+
+variable "anycable_path" {
+  type = string
+  description = "The Path where anycable is mounted"
 }

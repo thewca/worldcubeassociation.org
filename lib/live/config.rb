@@ -12,8 +12,8 @@ module Live
       Rails.env.production? && self.enabled?
     end
 
-    def self.broadcast_key(round_id)
-      "results_#{round_id}"
+    def self.broadcast_key(competition_id, round_id)
+      "results_#{competition_id}_#{round_id}"
     end
   end
 end
