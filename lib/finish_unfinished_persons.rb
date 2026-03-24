@@ -110,20 +110,20 @@ module FinishUnfinishedPersons
     sanitized_roman_name.gsub(/[^a-zA-Z ]/, '').split
   end
 
-  def self.has_generational_suffix?(parts)
+  def self.generational_suffix?(parts)
     parts.length > 1 && GENERATIONAL_SUFFIXES.include?(parts[-1].upcase)
   end
 
   def self.name_parts_without_suffix(person_name)
     parts = self.name_parts(person_name)
 
-    self.has_generational_suffix?(parts) ? parts[...-1] : parts
+    self.generational_suffix?(parts) ? parts[...-1] : parts
   end
 
   def self.last_name_with_suffix(person_name)
     parts = self.name_parts(person_name)
 
-    self.has_generational_suffix?(parts) ? parts[-2..].join(' ') : parts[-1]
+    self.generational_suffix?(parts) ? parts[-2..].join(' ') : parts[-1]
   end
 
   def self.compute_semi_id(competition_year, person_name, available_per_semi = {})
