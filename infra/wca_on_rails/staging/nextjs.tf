@@ -30,7 +30,7 @@ locals {
     },
     {
       name  = "OIDC_ISSUER"
-      value = "https://www.staging.worldcubeassociation.org/"
+      value = "https://staging.worldcubeassociation.org/"
     },
     {
       name  = "DATABASE_URI"
