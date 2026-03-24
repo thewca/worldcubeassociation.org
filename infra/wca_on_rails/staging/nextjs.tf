@@ -34,7 +34,11 @@ locals {
     },
     {
       name  = "DATABASE_URI"
-      value = "mongodb://docdb-2026-03-23-13-36-01.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017/payload?retryWrites=false"
+      value = "mongodb://payload-database-staging.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com/payload?retryWrites=false"
+    },
+    {
+      name  = "LIVE_RESULT_BETA"
+      value = "1"
     },
     {
       name  = "WCA_BACKEND_API_URL"
