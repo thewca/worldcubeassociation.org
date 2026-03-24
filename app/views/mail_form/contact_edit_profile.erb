@@ -6,8 +6,8 @@
   <body>
     <% @resource.changes_requested.each do |change| %>
       <tr>
-        <td><%= change[:field] %></td>
-        <td><%= change[:from] %> -> <%= change[:to] %></td>
+        <td><%= change[:field].to_s.humanize %></td>
+        <td><%= @resource.value_humanized(change[:from], change[:field]) %> -> <%= @resource.value_humanized(change[:to], change[:field]) %></td>
       </tr>
     <% end %>
     <tr style="height: 1em">
