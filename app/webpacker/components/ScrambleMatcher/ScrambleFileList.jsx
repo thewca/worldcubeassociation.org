@@ -11,6 +11,7 @@ import { prefixForIndex, searchRecursive } from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import { getFullDateTimeString } from '../../lib/utils/dates';
 import { localizeActivityCode } from '../../lib/utils/wcif';
+import { useMoveScrambleSetModal } from './MoveScrambleSetModal';
 
 async function deleteScrambleFile({ fileId }) {
   const { data } = await fetchJsonOrError(scrambleFileUrl(fileId), {
@@ -18,6 +19,60 @@ async function deleteScrambleFile({ fileId }) {
   });
 
   return data;
+}
+
+export function ExternalSetActionButtons({
+  scrSet,
+  rootMatchState,
+  dispatchMatchState,
+  fluid = true,
+}) {
+  const moveScramble = useMoveScrambleSetModal();
+
+  const autoInsertNavigation = searchRecursive(
+    rootMatchState,
+    ['events', 'rounds'],
+    `${scrSet.event_id}-r${scrSet.round_number}`,
+  );
+
+  const dispatchAddExternal = (externalScrambleSet, eventId, roundId) => dispatchMatchState({
+    type: 'addExternalToMatching',
+    eventId,
+    roundId,
+    externalScrambleSet,
+  });
+
+  const onClickAutoAssign = (eventId, roundId) => dispatchAddExternal(scrSet, eventId, roundId);
+
+  const onClickManualAssign = () => moveScramble(
+    scrSet,
+    scrSet.event_id,
+    `${scrSet.event_id}-r${scrSet.round_number}`,
+  ).then(({ addedScrSet, eventId, roundId }) => dispatchAddExternal(addedScrSet, eventId, roundId));
+
+  return (
+    <Button.Group compact fluid={fluid}>
+      {autoInsertNavigation && (
+        <Button
+          positive
+          basic
+          icon="magic"
+          content="Auto-Assign"
+          onClick={() => onClickAutoAssign(
+            autoInsertNavigation.events.id,
+            autoInsertNavigation.rounds.id,
+          )}
+        />
+      )}
+      <Button
+        primary
+        basic
+        icon="pencil"
+        content="Manual"
+        onClick={onClickManualAssign}
+      />
+    </Button.Group>
+  );
 }
 
 function ScrambleFileHeader({ scrambleFile }) {
@@ -34,6 +89,40 @@ function ScrambleFileHeader({ scrambleFile }) {
         {getFullDateTimeString(scrambleFile.generated_at)}
       </Header.Subheader>
     </>
+  );
+}
+
+function FileTableGroupCell({
+  fileSets,
+  referenceSet,
+  filterHierarchy,
+  filterIndex,
+  children,
+}) {
+  const filterPrefix = filterHierarchy.slice(0, filterIndex + 1);
+  const filterChildren = filterHierarchy.slice(filterIndex + 1);
+
+  const candidateRows = fileSets.filter(
+    (set) => filterPrefix.every(
+      (key) => set[key] === referenceSet[key],
+    ),
+  );
+
+  const isPrimaryCell = filterChildren.every((key) => referenceSet[key] === 1);
+
+  if (!isPrimaryCell) {
+    return null;
+  }
+
+  return (
+    <Table.Cell
+      textAlign="center"
+      verticalAlign="middle"
+      singleLine
+      rowSpan={candidateRows.length}
+    >
+      {children}
+    </Table.Cell>
   );
 }
 
@@ -69,6 +158,13 @@ function ScrambleFileBody({
     [dispatchMatchState, scrambleFile],
   );
 
+  const clearAction = (eventId, roundId, sourceIndex) => dispatchMatchState({
+    type: 'removeFromMatching',
+    eventId,
+    roundId,
+    sourceIndex,
+  });
+
   const orderedScrambleSets = _.sortBy(scrambleFile.external_scramble_sets, [
     (scrSet) => events.byId[scrSet.event_id].rank,
     'round_number',
@@ -89,9 +185,6 @@ function ScrambleFileBody({
         </Table.Header>
         <Table.Body>
           {orderedScrambleSets.map((scrSet, idx, allSets) => {
-            const roundDefCell = scrSet.scramble_set_number === 1;
-            const eventDefCell = scrSet.round_number === 1 && roundDefCell;
-
             const actualNavigation = searchRecursive(
               matchState,
               ['events', 'rounds', 'matchedScrambleSets'],
@@ -101,42 +194,38 @@ function ScrambleFileBody({
 
             return (
               <Table.Row key={scrSet.id}>
-                {eventDefCell && (
-                  <Table.Cell
-                    textAlign="center"
-                    verticalAlign="middle"
-                    singleLine
-                    rowSpan={allSets.filter((set) => set.event_id === scrSet.event_id).length}
-                  >
-                    <Popup
-                      content={events.byId[scrSet.event_id].name}
-                      trigger={<Icon size="large" className={`cubing-icon event-${scrSet.event_id}`} />}
-                      position="top center"
-                    />
-                  </Table.Cell>
-                )}
-                {roundDefCell && (
-                  <Table.Cell
-                    textAlign="center"
-                    verticalAlign="middle"
-                    singleLine
-                    rowSpan={allSets.filter((set) => set.event_id === scrSet.event_id).filter((set) => set.round_number === scrSet.round_number).length}
-                  >
-                    {scrSet.round_number}
-                  </Table.Cell>
-                )}
-                <Table.Cell
-                  textAlign="center"
-                  verticalAlign="middle"
-                  singleLine
+                <FileTableGroupCell
+                  fileSets={allSets}
+                  referenceSet={scrSet}
+                  filterHierarchy={['event_id', 'round_number', 'scramble_set_number']}
+                  filterIndex={0}
+                >
+                  <Popup
+                    content={events.byId[scrSet.event_id].name}
+                    trigger={<Icon size="large" className={`cubing-icon event-${scrSet.event_id}`} />}
+                    position="top center"
+                  />
+                </FileTableGroupCell>
+                <FileTableGroupCell
+                  fileSets={allSets}
+                  referenceSet={scrSet}
+                  filterHierarchy={['event_id', 'round_number', 'scramble_set_number']}
+                  filterIndex={1}
+                >
+                  {scrSet.round_number}
+                </FileTableGroupCell>
+                <FileTableGroupCell
+                  fileSets={allSets}
+                  referenceSet={scrSet}
+                  filterHierarchy={['event_id', 'round_number', 'scramble_set_number']}
+                  filterIndex={2}
                 >
                   {prefixForIndex(scrSet.scramble_set_number - 1)}
-                </Table.Cell>
+                </FileTableGroupCell>
                 <Table.Cell
                   textAlign="center"
                   verticalAlign="middle"
                   colSpan={2}
-                  disabled={!actualNavigation}
                 >
                   {actualNavigation ? (
                     <>
@@ -154,7 +243,9 @@ function ScrambleFileBody({
                         </Breadcrumb.Section>
                         <Breadcrumb.Divider icon="chevron right" />
                         <Breadcrumb.Section>
-                          Group {actualNavigation.matchedScrambleSets.index + 1}
+                          Group
+                          {' '}
+                          {actualNavigation.matchedScrambleSets.index + 1}
                         </Breadcrumb.Section>
                       </Breadcrumb>
                       <Button
@@ -165,9 +256,21 @@ function ScrambleFileBody({
                         content="Clear"
                         size="tiny"
                         attached="right"
+                        onClick={() => clearAction(
+                          actualNavigation.events.id,
+                          actualNavigation.rounds.id,
+                          actualNavigation.matchedScrambleSets.index,
+                        )}
                       />
                     </>
-                  ) : 'Not in use'}
+                  ) : (
+                    <ExternalSetActionButtons
+                      scrSet={scrSet}
+                      rootMatchState={matchState}
+                      dispatchMatchState={dispatchMatchState}
+                      fluid={false}
+                    />
+                  )}
                 </Table.Cell>
               </Table.Row>
             );

@@ -86,7 +86,6 @@ export default function DndWorkbench({
         selectedRound={selectedRound}
         matchableRows={matchingRows}
         attemptMode={isAttemptMode}
-        rootMatchState={rootMatchState}
         dispatchMatchState={dispatchMatchState}
       />
     </DragDropContext>

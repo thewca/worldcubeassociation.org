@@ -10,6 +10,7 @@ import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
 import { computeMatchingProgress, useScrambleFilesQuery } from './util';
 import EventAndRoundPicker from './EventAndRoundPicker';
+import { MoveModalProvider } from './MoveScrambleSetModal';
 
 export default function Wrapper({
   wcifEvents,
@@ -127,7 +128,7 @@ function ScrambleMatcher({
   ), [isSubmitting, submitAction, hasAnyMissing]);
 
   return (
-    <>
+    <MoveModalProvider rootMatchState={matchState}>
       <FileUpload
         competitionId={competitionId}
         initialScrambleFiles={initialScrambleFiles}
@@ -157,6 +158,6 @@ function ScrambleMatcher({
         {renderSubmitButton('Save Changes', !hasUnsavedChanges)}
         <Button secondary basic content="Reset" icon="refresh" onClick={() => dispatchMatchState({ type: 'resetToInitial' })} />
       </Button.Group>
-    </>
+    </MoveModalProvider>
   );
 }

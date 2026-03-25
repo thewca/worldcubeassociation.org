@@ -1,9 +1,83 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  createContext, useCallback, useContext, useMemo, useState,
+} from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
 import { LEGAL_CROSS_MATCHES, scrambleSetToTitle } from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import { localizeActivityCode } from '../../lib/utils/wcif';
+
+const MoveModalContext = createContext();
+
+const defaultOptions = {
+  isAddMode: false,
+};
+
+export function MoveModalProvider({
+  rootMatchState,
+  children,
+}) {
+  const [scrambleSet, setScrambleSet] = useState();
+
+  const [currentEventId, setCurrentEventId] = useState();
+  const [currentRoundId, setCurrentRoundId] = useState();
+
+  const [options, setOptions] = useState(defaultOptions);
+
+  const [promiseExecution, setPromiseExecution] = useState([]);
+
+  const moveScramble = useCallback(
+    (scrSet, fromEventId, fromRoundId, additionalOptions = {}) => new Promise((resolve, reject) => {
+      setOptions({
+        ...defaultOptions,
+        ...additionalOptions,
+      });
+
+      setPromiseExecution([resolve, reject]);
+
+      setScrambleSet(scrSet);
+
+      setCurrentEventId(fromEventId);
+      setCurrentRoundId(fromRoundId);
+    }),
+    [],
+  );
+
+  const [resolve] = promiseExecution;
+
+  const handleClose = useCallback(() => {
+    setCurrentEventId(undefined);
+    setCurrentRoundId(undefined);
+
+    setScrambleSet(undefined);
+  }, []);
+
+  const handleConfirm = useCallback((addedScrSet, eventId, roundId) => {
+    resolve({ addedScrSet, eventId, roundId });
+  }, [resolve]);
+
+  return (
+    <>
+      <MoveModalContext.Provider value={moveScramble}>
+        {children}
+      </MoveModalContext.Provider>
+      {currentEventId && currentRoundId && (
+        <MoveScrambleSetModal
+          key={scrambleSet?.id}
+          currentEventId={currentEventId}
+          currentRoundId={currentRoundId}
+          scrambleSet={scrambleSet}
+          onClose={handleClose}
+          onConfirm={handleConfirm}
+          rootMatchState={rootMatchState}
+          isAddMode={options.isAddMode}
+        />
+      )}
+    </>
+  );
+}
+
+export const useMoveScrambleSetModal = () => useContext(MoveModalContext);
 
 function MatchingSelect({
   dropdownLabel,
