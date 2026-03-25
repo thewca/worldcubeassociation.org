@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { addItemToArray, moveArrayItem } from './util';
+import { addItemToArray, moveArrayItem, removeItemFromArray } from './util';
 
 function addScrambleSetsToEvents(wcifEvents, convertedScrambleSets, keepExistingSets = true) {
   const groupedScrambleSets = _.groupBy(
@@ -97,41 +97,24 @@ function removeScrambleFile(state, oldScrambleFile) {
   };
 }
 
-function navigationToLodash(rootState, actionWithNav, selector) {
-  const history = actionWithNav[selector];
+function updateMatchedSets(subState, eventId, roundId, updateFn) {
+  return {
+    ...subState,
+    events: subState.events.map((evt) => (evt.id === eventId ? ({
+      ...evt,
+      rounds: evt.rounds.map((rd) => (rd.id === roundId ? ({
+        ...rd,
+        matchedScrambleSets: updateFn(rd.matchedScrambleSets),
+      }) : rd)),
+    }) : evt)),
+  };
+}
 
-  const navigation = history.reduce((navAccu, historyStep) => {
-    const searchSubject = navAccu.lookupState[historyStep.key];
-
-    if (searchSubject === undefined) {
-      return {
-        lookupState: {},
-        accu: undefined,
-      };
-    }
-
-    const targetIndex = searchSubject.findIndex((ent) => ent.id === historyStep.id);
-
-    return {
-      lookupState: searchSubject[targetIndex],
-      accu: [...navAccu.accu, historyStep.key, targetIndex],
-    };
-  }, {
-    lookupState: rootState,
-    accu: [],
-  });
-
-  if (navigation.accu !== undefined) {
-    return [
-      ...navigation.accu,
-      actionWithNav.matchingKey,
-    ];
-  }
-
-  return [
-    ...actionWithNav[selector].flatMap((step) => [step.key, step.index]),
-    actionWithNav.matchingKey,
-  ];
+function mockMatchedSet(externalScrSet) {
+  return {
+    external_scramble_set_id: externalScrSet.id,
+    external_scramble_set: externalScrSet,
+  };
 }
 
 export default function scrambleMatchReducer(state, action) {
@@ -161,60 +144,57 @@ export default function scrambleMatchReducer(state, action) {
       });
     case 'resetToInitial':
       return applyAction(state, ['current'], () => state.initial);
-    case 'moveMatchingEntity':
+    case 'moveMatchedScrambleSet':
       return applyAction(state, ['current'], (subState) => {
-        const oldPath = navigationToLodash(subState, action, 'fromNavigation');
-        const newPath = navigationToLodash(subState, action, 'toNavigation');
+        const removedSubState = updateMatchedSets(
+          subState,
+          action.from.eventId,
+          action.from.roundId,
+          (sets) => removeItemFromArray(sets, action.originalIndex),
+        );
 
-        return _.chain(subState)
-          .cloneDeep()
-          .update(oldPath, (arr) => arr.filter((ent) => ent.id !== action.entity.id))
-          .update(newPath, (arr = []) => addItemToArray(arr, action.entity))
-          .value();
+        return updateMatchedSets(
+          removedSubState,
+          action.to.eventId,
+          action.to.roundId,
+          (sets) => addItemToArray(
+            sets,
+            mockMatchedSet(action.externalScrambleSet),
+          ),
+        );
       });
     case 'addExternalToMatching':
-      return applyAction(state, ['current'], (subState) => ({
-        ...subState,
-        events: subState.events.map((evt) => (evt.id === action.eventId ? ({
-          ...evt,
-          rounds: evt.rounds.map((rd) => (rd.id === action.roundId ? ({
-            ...rd,
-            matchedScrambleSets: addItemToArray(
-              rd.matchedScrambleSets,
-              { external_scramble_set: action.externalScrambleSet },
-              action.destinationIndex,
-            ),
-          }) : rd)),
-        }) : evt)),
-      }));
+      return applyAction(state, ['current'], (subState) => updateMatchedSets(
+        subState,
+        action.eventId,
+        action.roundId,
+        (sets) => addItemToArray(
+          sets,
+          mockMatchedSet(action.externalScrambleSet),
+          action.destinationIndex,
+        ),
+      ));
     case 'moveInsideMatching':
-      return applyAction(state, ['current'], (subState) => ({
-        ...subState,
-        events: subState.events.map((evt) => (evt.id === action.eventId ? ({
-          ...evt,
-          rounds: evt.rounds.map((rd) => (rd.id === action.roundId ? ({
-            ...rd,
-            matchedScrambleSets: moveArrayItem(
-              rd.matchedScrambleSets,
-              action.sourceIndex,
-              action.destinationIndex,
-            ),
-          }) : rd)),
-        }) : evt)),
-      }));
+      return applyAction(state, ['current'], (subState) => updateMatchedSets(
+        subState,
+        action.eventId,
+        action.roundId,
+        (sets) => moveArrayItem(
+          sets,
+          action.sourceIndex,
+          action.destinationIndex,
+        ),
+      ));
     case 'removeFromMatching':
-      return applyAction(state, ['current'], (subState) => ({
-        ...subState,
-        events: subState.events.map((evt) => (evt.id === action.eventId ? ({
-          ...evt,
-          rounds: evt.rounds.map((rd) => (rd.id === action.roundId ? ({
-            ...rd,
-            matchedScrambleSets: rd.matchedScrambleSets.filter(
-              (_scrSet, idx) => idx !== action.sourceIndex,
-            ),
-          }) : rd)),
-        }) : evt)),
-      }));
+      return applyAction(state, ['current'], (subState) => updateMatchedSets(
+        subState,
+        action.eventId,
+        action.roundId,
+        (sets) => removeItemFromArray(
+          sets,
+          action.sourceIndex,
+        ),
+      ));
     case 'updateScrambleSetCount':
       return applyAction(state, ['current'], (subState) => ({
         ...subState,

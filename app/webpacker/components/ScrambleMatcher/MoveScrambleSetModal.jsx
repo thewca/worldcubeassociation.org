@@ -32,7 +32,7 @@ function MatchingSelect({
   );
 }
 
-export default function MoveMatchingEntityModal({
+export default function MoveScrambleSetModal({
   currentEventId,
   currentRoundId,
   scrambleSet,
@@ -44,8 +44,8 @@ export default function MoveMatchingEntityModal({
   const [targetEventId, setTargetEventId] = useState(currentEventId);
   const [targetRoundId, setTargetRoundId] = useState(currentRoundId);
 
-  const onConfirmInternal = useCallback((entityToMove, selectedEvent, selectedRound) => {
-    onConfirm(entityToMove, selectedEvent, selectedRound);
+  const onConfirmInternal = useCallback((entityToMove, selectedEventId, selectedRoundId) => {
+    onConfirm(entityToMove, selectedEventId, selectedRoundId);
     onClose();
   }, [onConfirm, onClose]);
 
@@ -55,12 +55,12 @@ export default function MoveMatchingEntityModal({
   const selectableEvents = useMemo(
     () => {
       const eligibleEventIds = LEGAL_CROSS_MATCHES
-        .find((crossMatches) => crossMatches.includes(scrambleSet.event_id))
-          ?? [scrambleSet.event_id];
+        .find((crossMatches) => crossMatches.includes(currentEventId))
+          ?? [currentEventId];
 
       return rootMatchState.events.filter((evt) => eligibleEventIds.includes(evt.id));
     },
-    [scrambleSet.event_id, rootMatchState.events],
+    [currentEventId, rootMatchState.events],
   );
 
   const targetEvent = useMemo(
@@ -73,6 +73,17 @@ export default function MoveMatchingEntityModal({
     [targetEvent.rounds],
   );
 
+  const safeSetTargetEventId = useCallback((newEventId) => {
+    setTargetEventId(newEventId);
+
+    const newEvent = rootMatchState.events.find((evt) => evt.id === newEventId);
+    const availableRoundIds = newEvent.rounds.map((rd) => rd.id);
+
+    if (!availableRoundIds.includes(targetRoundId)) {
+      setTargetRoundId(availableRoundIds[0]);
+    }
+  }, [rootMatchState.events, targetRoundId]);
+
   if (!scrambleSet) {
     return null;
   }
@@ -84,7 +95,7 @@ export default function MoveMatchingEntityModal({
       closeIcon
     >
       <Modal.Header>
-        Move
+        {isAddMode ? 'Assign' : 'Move'}
         {' '}
         {scrambleSetToTitle(scrambleSet)}
       </Modal.Header>
@@ -95,7 +106,7 @@ export default function MoveMatchingEntityModal({
             selectableEntities={selectableEvents}
             computeEntityName={(evt) => events.byId[evt.id].name}
             selectedEntityId={targetEventId}
-            onSelectedChange={setTargetEventId}
+            onSelectedChange={safeSetTargetEventId}
           />
           <MatchingSelect
             dropdownLabel="Round"

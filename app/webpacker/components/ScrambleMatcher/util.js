@@ -1,6 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import { events, formats } from '../../lib/wca-data.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
-import { useQuery } from '@tanstack/react-query';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 
 export const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
@@ -22,27 +22,22 @@ export const prefixForIndex = (index) => {
 export const scrambleSetToName = (scrambleSet) => `Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
 export const scrambleSetToTitle = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} ${scrambleSetToName(scrambleSet)}`;
 
-export const scrambleToName = (scramble) => `Scramble ${scramble.scramble_number}`;
-
-export function moveArrayItem(arr, fromIndex, toIndex) {
-  const movedItem = arr[fromIndex];
-
-  const withoutMovedItem = [
-    ...arr.slice(0, fromIndex),
-    // here we want to ignore the moved item itself, so we need the +1
-    ...arr.slice(fromIndex + 1),
-  ];
-
+export function removeItemFromArray(arr, indexToRemove) {
   return [
-    ...withoutMovedItem.slice(0, toIndex),
-    movedItem,
-    // here we do NOT want to ignore the items that were originally there, so no +1
-    ...withoutMovedItem.slice(toIndex),
+    ...arr.slice(0, indexToRemove),
+    ...arr.slice(indexToRemove + 1),
   ];
 }
 
 export function addItemToArray(arr, entity, targetIdx = arr.length) {
   return arr.toSpliced(targetIdx, 0, entity);
+}
+
+export function moveArrayItem(arr, fromIndex, toIndex) {
+  const movedItem = arr[fromIndex];
+
+  const withoutMovedItem = removeItemFromArray(arr, fromIndex);
+  return addItemToArray(withoutMovedItem, movedItem, toIndex);
 }
 
 export const searchRecursive = (data, searchPath, targetId, targetKey = 'id', searchDescriptor = {}) => {

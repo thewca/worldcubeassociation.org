@@ -112,6 +112,7 @@ export default function EventAndRoundPicker({
           key={selectedEvent.id}
           uploadedScrambleFiles={uploadedScrambleFiles}
           selectedEvent={selectedEvent}
+          rootMatchState={matchState}
           dispatchMatchState={dispatchMatchState}
         />
       )}
@@ -122,6 +123,7 @@ export default function EventAndRoundPicker({
 function InnerRoundPicker({
   selectedEvent,
   uploadedScrambleFiles,
+  rootMatchState,
   dispatchMatchState,
 }) {
   return (
@@ -136,6 +138,7 @@ function InnerRoundPicker({
           selectedEvent={selectedEvent}
           selectedRound={selectedRound}
           uploadedScrambleFiles={uploadedScrambleFiles}
+          rootMatchState={rootMatchState}
           dispatchMatchState={dispatchMatchState}
         />
       )}

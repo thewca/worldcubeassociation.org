@@ -14,6 +14,7 @@ export default function DndWorkbench({
   selectedEvent,
   selectedRound,
   uploadedScrambleFiles,
+  rootMatchState,
   dispatchMatchState,
 }) {
   const matchingRows = selectedRound.matchedScrambleSets;
@@ -74,13 +75,18 @@ export default function DndWorkbench({
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
       <UnusedScramblesPanel
+        selectedEvent={selectedEvent}
+        selectedRound={selectedRound}
         unusedScrambleSets={unusedScrambleSets}
+        rootMatchState={rootMatchState}
+        dispatchMatchState={dispatchMatchState}
       />
       <MatchingTable
         selectedEvent={selectedEvent}
         selectedRound={selectedRound}
         matchableRows={matchingRows}
         attemptMode={isAttemptMode}
+        rootMatchState={rootMatchState}
         dispatchMatchState={dispatchMatchState}
       />
     </DragDropContext>
