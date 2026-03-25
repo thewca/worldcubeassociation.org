@@ -8,4 +8,3 @@ test:
 production:
   adapter: <%= Live::Config.enabled? ? "anycable" : "redis" %>
   url: <%= EnvConfig.ANYCABLE_REDIS_URL %>
-  channel_prefix: wca_results
