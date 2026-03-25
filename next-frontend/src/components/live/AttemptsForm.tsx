@@ -27,8 +27,6 @@ export default function AttemptsForm({
   eventId,
 }: AttemptsFormProps) {
   const {
-    error,
-    success,
     handleRegistrationIdChange,
     handleSubmit,
     attempts,
@@ -57,8 +55,6 @@ export default function AttemptsForm({
 
   return (
     <form>
-      {error && <Alert.Root status="error" title={error} />}
-      {success && <Alert.Root status="success" title={success} />}
       <Combobox.Root
         collection={collection}
         onInputValueChange={(e) => filter(e.inputValue)}
