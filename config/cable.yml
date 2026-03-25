@@ -6,6 +6,6 @@ test:
   adapter: test
 
 production:
-  adapter: redis
+  adapter: <%= Live::Config.enabled? ? "anycable" : "redis" %>
   url: <%= EnvConfig.ANYCABLE_REDIS_URL %>
-  channel_prefix: wca_production
+  channel_prefix: wca_results
