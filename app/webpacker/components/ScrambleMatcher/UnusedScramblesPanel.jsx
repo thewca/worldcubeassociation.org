@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import {
-  Accordion, Card, Icon, Ref,
+  Accordion, Card, Header, Icon, Ref,
 } from 'semantic-ui-react';
 import { Draggable, Droppable } from '@hello-pangea/dnd';
 import { DROPPABLE_ID_STORAGE, scrambleSetToTitle } from './util';
@@ -60,9 +60,9 @@ export default function UnusedScramblesPanel({
                         ) : (
                           <Card {...providedDraggable.draggableProps}>
                             <Card.Content>
-                              <Card.Header>
+                              <Card.Header as={Header}>
                                 <Icon {...providedDraggable.dragHandleProps} name="bars" />
-                                {scrambleSetToTitle(scrSet)}
+                                <Header.Content>{scrambleSetToTitle(scrSet)}</Header.Content>
                               </Card.Header>
                               <Card.Meta>{scrSet.original_filename}</Card.Meta>
                             </Card.Content>
