@@ -8,9 +8,10 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
 import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
-import { computeMatchingProgress, useScrambleFilesQuery } from './util';
+import { useScrambleFilesQuery } from './util';
 import EventAndRoundPicker from './EventAndRoundPicker';
 import { MoveModalProvider } from './MoveScrambleSetModal';
+import MatchingProgressTable from './MatchingProgressTable';
 
 export default function Wrapper({
   wcifEvents,
@@ -104,18 +105,6 @@ function ScrambleMatcher({
     [competitionId, matchState, submitMatchState],
   );
 
-  const roundMatchingProgress = useMemo(
-    () => computeMatchingProgress(matchState.events),
-    [matchState],
-  );
-
-  const hasAnyMissing = roundMatchingProgress.some(
-    (roundProgress) => roundProgress.actual < roundProgress.expected
-      || roundProgress.scrambleSets.some(
-        (setProgress) => setProgress.actual < setProgress.expected,
-      ),
-  );
-
   const renderSubmitButton = useCallback((btnText, disabledOverride = false) => (
     <Button
       primary
@@ -123,9 +112,9 @@ function ScrambleMatcher({
       icon="save"
       onClick={submitAction}
       loading={isSubmitting}
-      disabled={isSubmitting || hasAnyMissing || disabledOverride}
+      disabled={isSubmitting || disabledOverride}
     />
-  ), [isSubmitting, submitAction, hasAnyMissing]);
+  ), [isSubmitting, submitAction]);
 
   return (
     <MoveModalProvider rootMatchState={matchState}>
@@ -134,7 +123,18 @@ function ScrambleMatcher({
         initialScrambleFiles={initialScrambleFiles}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
-        matchingProgress={roundMatchingProgress}
+      />
+      <MatchingProgressTable
+        rootMatchState={matchState}
+        uploadedScrambleFiles={uploadedScrambleFiles}
+      />
+      <Button
+        primary
+        basic
+        icon="coffee"
+        content="Automatically assign scrambles"
+        fluid
+        style={{ textTransform: 'uppercase' }}
       />
       <Divider />
       {hasUnsavedChanges && (

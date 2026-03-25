@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { events, formats } from '../../lib/wca-data.js.erb';
+import { events } from '../../lib/wca-data.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 
@@ -66,31 +66,6 @@ export const searchRecursive = (data, searchPath, targetId, targetKey = 'id', se
     return null;
   }, null);
 };
-
-export function computeMatchingProgress(wcifEvents) {
-  return wcifEvents.flatMap(
-    (wcifEvent) => wcifEvent.rounds.map(
-      (wcifRound, roundIdx) => {
-        const formatExpectedSolveCount = formats.byId[wcifRound.format]?.expectedSolveCount;
-
-        return {
-          id: wcifRound.id,
-          index: roundIdx,
-          expected: wcifRound.scrambleSetCount,
-          actual: wcifRound.matchedScrambleSets?.length ?? 0,
-          scrambleSets: wcifRound.matchedScrambleSets?.map(
-            (scrSet, setIdx) => ({
-              id: scrSet.id,
-              index: setIdx,
-              expected: formatExpectedSolveCount,
-              actual: scrSet.matchedScrambles?.length ?? 0,
-            }),
-          ),
-        };
-      },
-    ),
-  );
-}
 
 async function listScrambleFiles(competitionId) {
   const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId));

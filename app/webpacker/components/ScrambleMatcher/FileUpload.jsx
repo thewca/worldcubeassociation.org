@@ -15,7 +15,6 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import ScrambleFileList from './ScrambleFileList';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
-import MatchingProgressMessage from './MatchingProgressMessage';
 import { useScrambleFilesQuery } from './util';
 
 async function uploadScrambleFile({ competitionId, file, matchingSettings }) {
@@ -38,7 +37,6 @@ export default function FileUpload({
   initialScrambleFiles,
   matchState,
   dispatchMatchState,
-  matchingProgress,
 }) {
   const inputRef = useRef();
   const queryClient = useQueryClient();
@@ -99,10 +97,6 @@ export default function FileUpload({
 
   return (
     <>
-      <MatchingProgressMessage
-        roundMatchingProgress={matchingProgress}
-        availableScrambleFiles={uploadedJsonFiles}
-      />
       <Header>
         Uploaded JSON files:
         {' '}
