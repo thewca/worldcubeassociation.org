@@ -6,5 +6,5 @@ test:
   adapter: test
 
 production:
-  adapter: <%= Live::Config.enabled? ? "anycable" : "redis" %>
+  adapter: <%= EnvConfig.WCA_LIVE_SITE? ? "anycable" : "redis" %>
   url: <%= EnvConfig.ANYCABLE_REDIS_URL %>
