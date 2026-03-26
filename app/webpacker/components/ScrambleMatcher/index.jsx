@@ -126,6 +126,14 @@ function ScrambleMatcher({
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
       />
+      {hasUnsavedChanges && (
+        <Message info>
+          You have unsaved changes. Don&apos;t forget to
+          {' '}
+          {renderSubmitButton('Save')}
+          your changes!
+        </Message>
+      )}
       <AutoMatchPanel
         autoMatchSettings={autoMatchSettings}
         configureAutoMatch={configureAutoMatch}
@@ -135,14 +143,6 @@ function ScrambleMatcher({
         dispatchMatchState={dispatchMatchState}
       />
       <Divider />
-      {hasUnsavedChanges && (
-        <Message info>
-          You have unsaved changes. Don&apos;t forget to
-          {' '}
-          {renderSubmitButton('Save')}
-          your changes!
-        </Message>
-      )}
       <EventAndRoundPicker
         pickerNavigation={pickerNavigation}
         navigatePicker={navigatePicker}
@@ -155,10 +155,16 @@ function ScrambleMatcher({
         <Message info content="You have unsaved changes. Don't forget to Save below!" />
       )}
       <Divider />
-      <Button.Group>
-        {renderSubmitButton('Save Changes', !hasUnsavedChanges)}
-        <Button secondary basic content="Reset" icon="refresh" onClick={() => dispatchMatchState({ type: 'resetToInitial' })} />
-      </Button.Group>
+      {renderSubmitButton('Save Changes', !hasUnsavedChanges)}
+      <Button
+        floated="right"
+        secondary
+        basic
+        content="Reset"
+        icon="refresh"
+        disabled={!hasUnsavedChanges}
+        onClick={() => dispatchMatchState({ type: 'resetToInitial' })}
+      />
     </MoveModalProvider>
   );
 }
