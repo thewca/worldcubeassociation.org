@@ -26,6 +26,7 @@ function RoundsProgressRow({
   children,
   cellComponent: CellComponent = Table.Cell,
   progressValueFn = undefined,
+  onCellClickFn = undefined,
 }) {
   return (
     <Table.Row>
@@ -40,6 +41,8 @@ function RoundsProgressRow({
             positive={progressValue === 'positive'}
             negative={progressValue === 'negative'}
             warning={progressValue === 'warning'}
+            selectable={onCellClickFn !== undefined}
+            onClick={() => onCellClickFn?.(rd, evt)}
           >
             {children(rd, evt)}
           </CellComponent>
@@ -52,6 +55,7 @@ function RoundsProgressRow({
 export default function MatchingProgressTable({
   rootMatchState,
   uploadedScrambleFiles,
+  navigatePicker,
 }) {
   const uploadedScrSets = uploadedScrambleFiles
     .flatMap((scrFile) => scrFile.external_scramble_sets);
@@ -100,6 +104,11 @@ export default function MatchingProgressTable({
 
     return 'positive';
   }, [calculateRoundExpectedCount, calculateRoundMatchedCount]);
+
+  const navigateToCell = useCallback((round, event) => {
+    navigatePicker('events', event.id);
+    navigatePicker('rounds', round.id);
+  }, [navigatePicker]);
 
   if (uploadedScrambleFiles.length === 0) {
     return (
@@ -164,6 +173,7 @@ export default function MatchingProgressTable({
           rowTitle={null}
           matchStateEvents={rootMatchState.events}
           progressValueFn={determineRoundProgress}
+          onCellClickFn={navigateToCell}
         >
           {getShortRoundLabel}
         </RoundsProgressRow>

@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Header } from 'semantic-ui-react';
 import EventSelector from '../wca/EventSelector';
 import I18n from '../../lib/i18n';
 import { roundToRoundTypeName } from './util';
 import DndWorkbench from './DndWorkbench';
 
-function ButtonPicker({
+function RoundsButtonPicker({
   availableOptions: availableRounds,
   selectedId,
   setSelectedId,
@@ -63,15 +63,13 @@ function EventPickerCompat({
 }
 
 function SmartPicker({
+  selectedId,
+  setSelectedId,
   availableOptions,
   pickerComponent: PickerComponent,
-  selectFirstByDefault = false,
   additionalPickerProps = {},
   children,
 }) {
-  const defaultValue = selectFirstByDefault ? availableOptions[0] : undefined;
-  const [selectedId, setSelectedId] = useState(defaultValue?.id);
-
   const selectedOption = useMemo(
     () => availableOptions.find((opt) => opt.id === selectedId),
     [availableOptions, selectedId],
@@ -98,18 +96,36 @@ function SmartPicker({
 }
 
 export default function EventAndRoundPicker({
+  pickerNavigation,
+  navigatePicker,
   uploadedScrambleFiles,
   matchState,
   dispatchMatchState,
 }) {
+  const navigatePickerEvent = useCallback(
+    (eventId) => {
+      navigatePicker('events', eventId);
+
+      const newEvent = matchState.events.find((evt) => evt.id === eventId);
+
+      if (newEvent !== undefined) {
+        navigatePicker('rounds', newEvent.rounds[0]?.id);
+      }
+    },
+    [matchState.events, navigatePicker],
+  );
+
   return (
     <SmartPicker
+      selectedId={pickerNavigation.events}
+      setSelectedId={navigatePickerEvent}
       availableOptions={matchState.events}
       pickerComponent={EventPickerCompat}
     >
       {(selectedEvent) => (
         <InnerRoundPicker
-          key={selectedEvent.id}
+          pickerNavigation={pickerNavigation}
+          navigatePicker={navigatePicker}
           uploadedScrambleFiles={uploadedScrambleFiles}
           selectedEvent={selectedEvent}
           rootMatchState={matchState}
@@ -121,16 +137,24 @@ export default function EventAndRoundPicker({
 }
 
 function InnerRoundPicker({
+  pickerNavigation,
+  navigatePicker,
   selectedEvent,
   uploadedScrambleFiles,
   rootMatchState,
   dispatchMatchState,
 }) {
+  const navigatePickerRound = useCallback(
+    (roundId) => navigatePicker('rounds', roundId),
+    [navigatePicker],
+  );
+
   return (
     <SmartPicker
+      selectedId={pickerNavigation.rounds}
+      setSelectedId={navigatePickerRound}
       availableOptions={selectedEvent.rounds}
-      pickerComponent={ButtonPicker}
-      selectFirstByDefault
+      pickerComponent={RoundsButtonPicker}
       additionalPickerProps={{ selectedEvent }}
     >
       {(selectedRound) => (

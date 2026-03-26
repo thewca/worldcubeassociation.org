@@ -1,4 +1,6 @@
-import React, { useCallback, useMemo, useReducer } from 'react';
+import React, {
+  useCallback, useMemo, useReducer, useState,
+} from 'react';
 import { Button, Divider, Message } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
@@ -112,6 +114,16 @@ function ScrambleMatcher({
     />
   ), [isSubmitting, submitAction]);
 
+  const [pickerNavigation, setPickerNavigation] = useState({});
+
+  const navigatePicker = useCallback(
+    (navKey, selectedValue) => setPickerNavigation((currentNav) => ({
+      ...currentNav,
+      [navKey]: selectedValue,
+    })),
+    [setPickerNavigation],
+  );
+
   return (
     <MoveModalProvider rootMatchState={matchState}>
       <FileUpload
@@ -123,6 +135,7 @@ function ScrambleMatcher({
       <MatchingProgressTable
         rootMatchState={matchState}
         uploadedScrambleFiles={uploadedScrambleFiles}
+        navigatePicker={navigatePicker}
       />
       <Button
         primary
@@ -142,6 +155,8 @@ function ScrambleMatcher({
         </Message>
       )}
       <EventAndRoundPicker
+        pickerNavigation={pickerNavigation}
+        navigatePicker={navigatePicker}
         uploadedScrambleFiles={uploadedScrambleFiles}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
