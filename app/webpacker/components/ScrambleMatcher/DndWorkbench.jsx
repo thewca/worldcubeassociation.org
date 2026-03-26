@@ -82,6 +82,8 @@ export default function DndWorkbench({
         selectedEvent={selectedEvent}
         selectedRound={selectedRound}
         matchableRows={matchingRows}
+        autoMatchSettings={autoMatchSettings}
+        unusedScrambleSets={unusedScrambleSets}
         attemptMode={isAttemptMode}
         dispatchMatchState={dispatchMatchState}
       />

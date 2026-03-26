@@ -161,7 +161,7 @@ function ScrambleMatcher({
         secondary
         basic
         content="Reset"
-        icon="refresh"
+        icon="undo"
         disabled={!hasUnsavedChanges}
         onClick={() => dispatchMatchState({ type: 'resetToInitial' })}
       />

@@ -107,6 +107,21 @@ export default function scrambleMatchReducer(state, action) {
       });
     case 'resetToInitial':
       return applyAction(state, ['current'], () => state.initial);
+    case 'resetRoundToInitial':
+      return applyAction(state, ['current'], (subState) => updateMatchedSets(
+        subState,
+        action.eventId,
+        action.roundId,
+        () => {
+          const initialRound = searchRecursive(
+            state.initial,
+            ['events', 'rounds'],
+            action.roundId,
+          )?.rounds?.item;
+
+          return initialRound?.external_scramble_sets ?? [];
+        },
+      ));
     case 'autoMatchScrambleSets':
       return applyAction(
         state,
@@ -126,10 +141,17 @@ export default function scrambleMatchReducer(state, action) {
           return accuState;
         }, subState),
       );
-    case 'clearMatching':
+    case 'clearEntireMatching':
       return applyAction(state, ['current'], (subState) => mergeMatchedSetsIntoWcif(
         subState.events,
         [],
+      ));
+    case 'clearRoundMatching':
+      return applyAction(state, ['current'], (subState) => updateMatchedSets(
+        subState,
+        action.eventId,
+        action.roundId,
+        () => [],
       ));
     case 'moveMatchedScrambleSet':
       return applyAction(state, ['current'], (subState) => {

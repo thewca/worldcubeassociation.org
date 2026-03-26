@@ -70,7 +70,7 @@ export default function AutoMatchPanel({
   }, [uploadedScrambleFiles, matchState.events, dispatchMatchState, autoMatchSettings]);
 
   const executeClearMatching = useCallback(() => {
-    dispatchMatchState({ type: 'clearMatching' });
+    dispatchMatchState({ type: 'clearEntireMatching' });
   }, [dispatchMatchState]);
 
   if (uploadedScrambleFiles.length === 0) {

@@ -153,7 +153,7 @@ function ScrambleFileBody({
     [deleteMutation, scrambleFile.id],
   );
 
-  const unlinkAction = useCallback(
+  const clearAllAction = useCallback(
     () => dispatchMatchState({
       type: 'resetScrambleFile',
       scrambleFile,
@@ -161,7 +161,7 @@ function ScrambleFileBody({
     [dispatchMatchState, scrambleFile],
   );
 
-  const clearAction = (eventId, roundId, sourceIndex) => dispatchMatchState({
+  const unassignAction = (eventId, roundId, sourceIndex) => dispatchMatchState({
     type: 'removeFromMatching',
     eventId,
     roundId,
@@ -254,10 +254,10 @@ function ScrambleFileBody({
                         compact
                         basic
                         icon="unlink"
-                        content="Clear"
+                        content="Unassign"
                         size="tiny"
                         attached="right"
-                        onClick={() => clearAction(
+                        onClick={() => unassignAction(
                           actualNavigation.events.id,
                           actualNavigation.rounds.id,
                           actualNavigation.external_scramble_sets.index,
@@ -282,9 +282,9 @@ function ScrambleFileBody({
       <Button.Group widths={2}>
         <Button
           secondary
-          icon="unlink"
+          icon="eraser"
           content="Clear Assignments"
-          onClick={unlinkAction}
+          onClick={clearAllAction}
         />
         <Button
           negative

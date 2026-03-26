@@ -19,7 +19,9 @@ import I18n from '../../lib/i18n';
 export default function MatchingTable({
   selectedEvent,
   selectedRound,
-  matchableRows = [],
+  matchableRows,
+  autoMatchSettings,
+  unusedScrambleSets,
   attemptMode = false,
   dispatchMatchState,
 }) {
@@ -66,6 +68,24 @@ export default function MatchingTable({
     roundId,
   ));
 
+  const onClickResetAction = () => dispatchMatchState({
+    type: 'resetRoundToInitial',
+    eventId: selectedEvent.id,
+    roundId: selectedRound.id,
+  });
+
+  const onClickAutoAssign = () => dispatchMatchState({
+    type: 'autoMatchScrambleSets',
+    scrambleSets: unusedScrambleSets,
+    settings: autoMatchSettings,
+  });
+
+  const onClickClearAction = () => dispatchMatchState({
+    type: 'clearRoundMatching',
+    eventId: selectedEvent.id,
+    roundId: selectedRound.id,
+  });
+
   const expectedNumOfRows = scrambleSetCount * (
     attemptMode ? formats.byId[selectedRound.format].expectedSolveCount : 1
   );
@@ -80,9 +100,17 @@ export default function MatchingTable({
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell />
-          <Table.HeaderCell>Assigned Scrambles</Table.HeaderCell>
+          <Table.HeaderCell>
+            Assigned Scrambles
+            {' '}
+            <Button.Group compact size="mini">
+              <Button basic content="Reset" icon="undo" secondary onClick={onClickResetAction} />
+              <Button basic content="Auto-Assign" icon="coffee" primary onClick={onClickAutoAssign} disabled={unusedScrambleSets.length === 0} />
+              <Button basic content="Clear" icon="eraser" negative onClick={onClickClearAction} disabled={matchableRows.length === 0} />
+            </Button.Group>
+          </Table.HeaderCell>
           <Table.HeaderCell>Move</Table.HeaderCell>
-          <Table.HeaderCell>Delete</Table.HeaderCell>
+          <Table.HeaderCell>Unassign</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Droppable droppableId={DROPPABLE_ID_MATCHED_SCRAMBLES}>
@@ -151,7 +179,7 @@ export default function MatchingTable({
                             </Table.Cell>
                             <Table.Cell textAlign="center" verticalAlign="middle" collapsing>
                               <Icon
-                                name="trash"
+                                name="unlink"
                                 size="large"
                                 link
                                 onClick={() => onClickDeleteAction(index)}
