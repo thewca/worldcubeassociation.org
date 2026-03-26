@@ -63,7 +63,7 @@ export default function UnusedScramblesPanel({
                 }
                 icon="inbox"
                 header="Drop area for unused scrambles"
-                content="Click and drag any scramble row into this area to mark them as unused"
+                content="Click and drag any scramble row from the matching table into this area to mark them as unused"
               />
               <Card.Group {...providedDroppable.droppableProps}>
                 {unusedScrambleSets.map((scrSet, idx) => (
