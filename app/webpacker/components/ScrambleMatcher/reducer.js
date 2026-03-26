@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { addItemToArray, moveArrayItem, removeItemFromArray } from './util';
 
-function addScrambleSetsToEvents(wcifEvents, convertedScrambleSets, keepExistingSets = true) {
+function mergeMatchedSetsIntoWcif(wcifEvents, matchedScrambleSets) {
   const groupedScrambleSets = _.groupBy(
-    convertedScrambleSets,
+    matchedScrambleSets,
     'round_wcif_id',
   );
 
@@ -12,22 +12,22 @@ function addScrambleSetsToEvents(wcifEvents, convertedScrambleSets, keepExisting
       ...wcifEvent,
       rounds: wcifEvent.rounds.map((wcifRound) => ({
         ...wcifRound,
-        matchedScrambleSets: _.sortBy(
-          _.uniqBy([
-            // The order of lines is important here:
-            //   Lodash keeps only the first appearance, so we need to list
-            //   the newest possible entries first, followed by existing entries.
-            ...(groupedScrambleSets[wcifRound.id] ?? []),
-            ...(keepExistingSets ? (wcifRound.matchedScrambleSets ?? []) : []),
-          ], 'id').map((scrSet) => ({
-            ...scrSet,
-            matchedScrambles: _.sortBy(
-              scrSet.matchedScrambles,
-              'orderedIndex',
-            ),
+        external_scramble_sets: _.sortBy(
+          groupedScrambleSets[wcifRound.id] ?? [],
+          'ordered_index',
+        ).map((matchedScrSet) => ({
+          ...matchedScrSet.external_scramble_set,
+          external_scrambles: _.sortBy(
+            matchedScrSet.matched_scrambles,
+            'ordered_index',
+          ).map((matchedScramble) => ({
+            ...matchedScramble.external_scramble,
+            scramble_string: matchedScramble.scramble_string,
+            is_extra: matchedScramble.is_extra,
+            // TODO this is not (currently) present in on-the-fly added scramble (set)s
+            scramble_file_upload_id: matchedScrSet.scramble_file_upload_id,
           })),
-          'orderedIndex',
-        ),
+        })),
         // we don't care about results in this UI at all,
         //   so deliberately un-setting them saves network bandwidth :)
         results: undefined,
@@ -44,52 +44,28 @@ function applyAction(state, keys, action) {
 }
 
 export function initializeState({ wcifEvents, matchedScrambleSets }) {
-  const convertedScrambleSets = matchedScrambleSets.map((scrSet) => ({
-    ...scrSet,
-    orderedIndex: scrSet.ordered_index,
-    scrambleFileUploadId: scrSet.scramble_file_upload_id,
-    externalScrambleSetId: scrSet.external_scramble_set_id,
-    matchedScrambles: scrSet.matched_scrambles.map((scr) => ({
-      ...scr,
-      scrambleString: scr.scramble_string,
-      isExtra: scr.is_extra,
-      orderedIndex: scr.ordered_index,
-      externalScrambleSetId: scrSet.external_scramble_set_id,
-      externalScrambleId: scr.external_scramble_id,
-    })),
-  }));
-
   return applyAction(
     {},
     ['initial', 'current'],
-    () => addScrambleSetsToEvents(wcifEvents, convertedScrambleSets, false),
+    () => mergeMatchedSetsIntoWcif(wcifEvents, matchedScrambleSets),
   );
-}
-
-function addScrambleFile(state, newScrambleFile) {
-  return addScrambleSetsToEvents(state.events, newScrambleFile.matched_scramble_sets);
 }
 
 function removeScrambleFile(state, oldScrambleFile) {
-  const scrambleSets = state.events.flatMap(
-    (evt) => evt.rounds.flatMap((rd) => rd.matchedScrambleSets),
-  );
-
-  const scrSetLookup = _.keyBy(scrambleSets, 'externalScrambleSetId');
-  const setUploadLookup = _.mapValues(scrSetLookup, 'scrambleFileUploadId');
-
+  // TODO Pay attention to cross-matching: When dragging "split" attempts, you may have an attempt from set 2 in set 1. Set 1 should be deleted but...?!
   return {
     ...state,
     events: state.events.map((wcifEvent) => ({
       ...wcifEvent,
       rounds: wcifEvent.rounds.map((round) => ({
         ...round,
-        matchedScrambleSets: round.matchedScrambleSets.filter(
-          (scrSet) => setUploadLookup[scrSet.externalScrambleSetId] !== oldScrambleFile.id,
+        external_scramble_sets: round.external_scramble_sets.filter(
+          (scrSet) => scrSet.scramble_file_upload_id !== oldScrambleFile.id,
         ).map((scrSet) => ({
           ...scrSet,
-          matchedScrambles: scrSet.matchedScrambles.filter(
-            (scr) => setUploadLookup[scr.externalScrambleSetId] !== oldScrambleFile.id,
+          external_scrambles: scrSet.external_scrambles.filter(
+            // TODO this field *on scramble level* is currently hacked
+            (scr) => scr.scramble_file_upload_id !== oldScrambleFile.id,
           ),
         })),
       })),
@@ -97,34 +73,25 @@ function removeScrambleFile(state, oldScrambleFile) {
   };
 }
 
-function updateMatchedSets(subState, eventId, roundId, updateFn) {
+function updateRound(subState, eventId, roundId, updateFn) {
   return {
     ...subState,
     events: subState.events.map((evt) => (evt.id === eventId ? ({
       ...evt,
-      rounds: evt.rounds.map((rd) => (rd.id === roundId ? ({
-        ...rd,
-        matchedScrambleSets: updateFn(rd.matchedScrambleSets),
-      }) : rd)),
+      rounds: evt.rounds.map((rd) => (rd.id === roundId ? updateFn(rd) : rd)),
     }) : evt)),
   };
 }
 
-function mockMatchedSet(externalScrSet) {
-  return {
-    external_scramble_set_id: externalScrSet.id,
-    external_scramble_set: externalScrSet,
-  };
+function updateMatchedSets(subState, eventId, roundId, updateFn) {
+  return updateRound(subState, eventId, roundId, (rd) => ({
+    ...rd,
+    external_scramble_sets: updateFn(rd.external_scramble_sets),
+  }));
 }
 
 export default function scrambleMatchReducer(state, action) {
   switch (action.type) {
-    case 'addScrambleFile':
-      return applyAction(
-        state,
-        ['initial', 'current'],
-        (subState) => addScrambleFile(subState, action.scrambleFile),
-      );
     case 'removeScrambleFile':
       return applyAction(
         state,
@@ -139,8 +106,8 @@ export default function scrambleMatchReducer(state, action) {
       );
     case 'resetAfterSave':
       return initializeState({
+        ...action,
         wcifEvents: state.current.events,
-        matchedScrambleSets: action.scrambleSets,
       });
     case 'resetToInitial':
       return applyAction(state, ['current'], () => state.initial);
@@ -159,7 +126,7 @@ export default function scrambleMatchReducer(state, action) {
           action.to.roundId,
           (sets) => addItemToArray(
             sets,
-            mockMatchedSet(action.externalScrambleSet),
+            action.externalScrambleSet,
           ),
         );
       });
@@ -170,7 +137,7 @@ export default function scrambleMatchReducer(state, action) {
         action.roundId,
         (sets) => addItemToArray(
           sets,
-          mockMatchedSet(action.externalScrambleSet),
+          action.externalScrambleSet,
           action.destinationIndex,
         ),
       ));
@@ -196,16 +163,15 @@ export default function scrambleMatchReducer(state, action) {
         ),
       ));
     case 'updateScrambleSetCount':
-      return applyAction(state, ['current'], (subState) => ({
-        ...subState,
-        events: subState.events.map((evt) => (evt.id === action.eventId ? ({
-          ...evt,
-          rounds: evt.rounds.map((rd) => (rd.id === action.roundId ? ({
-            ...rd,
-            scrambleSetCount: action.scrambleSetCount,
-          }) : rd)),
-        }) : evt)),
-      }));
+      return applyAction(state, ['current'], (subState) => updateRound(
+        subState,
+        action.eventId,
+        action.roundId,
+        (rd) => ({
+          ...rd,
+          scrambleSetCount: action.scrambleSetCount,
+        }),
+      ));
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }

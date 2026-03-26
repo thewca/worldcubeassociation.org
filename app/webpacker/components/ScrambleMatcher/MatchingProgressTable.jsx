@@ -72,7 +72,7 @@ export default function MatchingProgressTable({
   );
 
   const calculateRoundMatchedCount = useCallback(
-    (round) => round.matchedScrambleSets.length,
+    (round) => round.external_scramble_sets.length,
     [],
   );
 

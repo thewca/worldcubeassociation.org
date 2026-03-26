@@ -68,7 +68,7 @@ export function moveArrayItem(arr, fromIndex, toIndex) {
   return addItemToArray(withoutMovedItem, movedItem, toIndex);
 }
 
-export const searchRecursive = (data, searchPath, targetId, targetKey = 'id', searchDescriptor = {}) => {
+export const searchRecursive = (data, searchPath, targetId, searchDescriptor = {}) => {
   const [currentKey, ...remainingPath] = searchPath;
 
   return data[currentKey]?.reduce((foundPath, item, index) => {
@@ -84,11 +84,11 @@ export const searchRecursive = (data, searchPath, targetId, targetKey = 'id', se
     };
 
     if (remainingPath.length === 0) {
-      if (item[targetKey] === targetId) {
+      if (item.id === targetId) {
         return nextHistory;
       }
     } else {
-      return searchRecursive(item, remainingPath, targetId, targetKey, nextHistory);
+      return searchRecursive(item, remainingPath, targetId, nextHistory);
     }
 
     return null;

@@ -52,7 +52,7 @@ export default function MatchingTable({
       roundId: newRoundId,
     },
     originalIndex: matchableRows
-      .findIndex((row) => row.external_scramble_set_id === movedScrSet.id),
+      .findIndex((row) => row.id === movedScrSet.id),
     externalScrambleSet: movedScrSet,
   });
 
@@ -108,7 +108,7 @@ export default function MatchingTable({
                       <Ref innerRef={providedDraggable.innerRef}>
                         {snapshot.isDragging ? (
                           <DraggableScrambleCard
-                            scrambleEntity={rowData.external_scramble_set}
+                            scrambleEntity={rowData}
                             providedDraggable={providedDraggable}
                           />
                         ) : (
@@ -131,9 +131,9 @@ export default function MatchingTable({
                                 <Header.Content>
                                   {hasError ? 'Missing Row' : (
                                     <>
-                                      {scrambleSetToTitle(rowData.external_scramble_set)}
+                                      {scrambleSetToTitle(rowData)}
                                       <Header.Subheader>
-                                        {rowData.external_scramble_set.original_filename}
+                                        {rowData.original_filename}
                                       </Header.Subheader>
                                     </>
                                   )}
@@ -145,7 +145,7 @@ export default function MatchingTable({
                                 name="arrows alternate horizontal"
                                 size="large"
                                 link
-                                onClick={() => onClickMoveAction(rowData.external_scramble_set)}
+                                onClick={() => onClickMoveAction(rowData)}
                                 disabled={hasError}
                               />
                             </Table.Cell>

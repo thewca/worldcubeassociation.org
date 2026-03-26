@@ -186,9 +186,8 @@ function ScrambleFileBody({
           {orderedScrambleSets.map((scrSet, idx, allSets) => {
             const actualNavigation = searchRecursive(
               matchState,
-              ['events', 'rounds', 'matchedScrambleSets'],
+              ['events', 'rounds', 'external_scramble_sets'],
               scrSet.id,
-              'external_scramble_set_id',
             );
 
             return (
@@ -243,7 +242,7 @@ function ScrambleFileBody({
                         <Breadcrumb.Section>
                           Group
                           {' '}
-                          {actualNavigation.matchedScrambleSets.index + 1}
+                          {actualNavigation.external_scramble_sets.index + 1}
                         </Breadcrumb.Section>
                       </Breadcrumb>
                       <Button
@@ -257,7 +256,7 @@ function ScrambleFileBody({
                         onClick={() => clearAction(
                           actualNavigation.events.id,
                           actualNavigation.rounds.id,
-                          actualNavigation.matchedScrambleSets.index,
+                          actualNavigation.external_scramble_sets.index,
                         )}
                       />
                     </>

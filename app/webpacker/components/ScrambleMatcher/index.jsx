@@ -41,13 +41,9 @@ async function submitMatchedScrambles({ competitionId, matchState }) {
     roundsByWcifId,
     (round) => ({
       scramble_set_count: round.scrambleSetCount,
-      matched_scramble_sets: round.matchedScrambleSets.map((set) => ({
-        id: set.id,
-        matched_scrambles: set.matchedScrambles.map((scr) => ({
-          id: scr.id,
-          scramble_string: scr.scrambleString,
-          is_extra: scr.isExtra,
-        })),
+      matched_scramble_sets: round.external_scramble_sets.map((set) => ({
+        ...set,
+        matched_scrambles: set.external_scrambles,
       })),
     }),
   );
@@ -97,7 +93,7 @@ function ScrambleMatcher({
 
   const { mutate: submitMatchState, isPending: isSubmitting } = useMutation({
     mutationFn: submitMatchedScrambles,
-    onSuccess: (data) => dispatchMatchState({ type: 'resetAfterSave', scrambleSets: data }),
+    onSuccess: (data) => dispatchMatchState({ type: 'resetAfterSave', matchedScrambleSets: data }),
   });
 
   const submitAction = useCallback(

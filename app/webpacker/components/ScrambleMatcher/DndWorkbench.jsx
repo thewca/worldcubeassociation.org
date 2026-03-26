@@ -17,7 +17,7 @@ export default function DndWorkbench({
   rootMatchState,
   dispatchMatchState,
 }) {
-  const matchingRows = selectedRound.matchedScrambleSets;
+  const matchingRows = selectedRound.external_scramble_sets;
 
   const uploadedScrambleSets = uploadedScrambleFiles
     .flatMap((scrFile) => scrFile.external_scramble_sets);
@@ -31,7 +31,7 @@ export default function DndWorkbench({
 
   const unusedScrambleSets = eligibleScrambleSets
     .filter((extScrSet) => !matchingRows.some(
-      (row) => row.external_scramble_set.id === extScrSet.id,
+      (row) => row.id === extScrSet.id,
     ));
 
   const isAttemptMode = ATTEMPT_BASED_EVENTS.includes(selectedEvent.id);
