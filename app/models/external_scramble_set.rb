@@ -11,7 +11,7 @@ class ExternalScrambleSet < ApplicationRecord
   has_many :external_scrambles, dependent: :destroy
   has_many :matched_scramble_sets, dependent: :nullify
 
-  delegate :original_filename, to: :scramble_file_upload, allow_nil: true
+  delegate :original_filename, to: :scramble_file_upload
 
   def event
     Event.c_find(self.event_id)

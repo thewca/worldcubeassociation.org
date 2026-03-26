@@ -26,13 +26,8 @@ function mergeMatchedSetsIntoWcif(wcifEvents, matchedScrambleSets) {
             ...matchedScramble.external_scramble,
             scramble_string: matchedScramble.scramble_string,
             is_extra: matchedScramble.is_extra,
-            // TODO this is not (currently) present in on-the-fly added scramble (set)s
-            scramble_file_upload_id: matchedScrSet.scramble_file_upload_id,
           })),
         })),
-        // we don't care about results in this UI at all,
-        //   so deliberately un-setting them saves network bandwidth :)
-        results: undefined,
       })),
     })),
   };
@@ -66,7 +61,6 @@ function removeScrambleFile(state, oldScrambleFile) {
         ).map((scrSet) => ({
           ...scrSet,
           external_scrambles: scrSet.external_scrambles.filter(
-            // TODO this field *on scramble level* is currently hacked
             (scr) => scr.scramble_file_upload_id !== oldScrambleFile.id,
           ),
         })),
