@@ -5,7 +5,6 @@ import {
   ATTEMPT_BASED_EVENTS,
   DROPPABLE_ID_MATCHED_SCRAMBLES,
   DROPPABLE_ID_STORAGE,
-  LEGAL_CROSS_MATCHES,
 } from './util';
 import UnusedScramblesPanel from './UnusedScramblesPanel';
 import { parseActivityCode } from '../../lib/utils/wcif';
@@ -22,11 +21,8 @@ export default function DndWorkbench({
   const uploadedScrambleSets = uploadedScrambleFiles
     .flatMap((scrFile) => scrFile.external_scramble_sets);
 
-  const eligibleEventIds = LEGAL_CROSS_MATCHES
-    .find((crossMatches) => crossMatches.includes(selectedEvent.id)) ?? [selectedEvent.id];
-
   const eligibleScrambleSets = uploadedScrambleSets
-    .filter((set) => eligibleEventIds.includes(set.event_id))
+    .filter((set) => set.event_id === selectedEvent.id)
     .filter((set) => set.round_number === parseActivityCode(selectedRound.id).roundNumber);
 
   const unusedScrambleSets = eligibleScrambleSets

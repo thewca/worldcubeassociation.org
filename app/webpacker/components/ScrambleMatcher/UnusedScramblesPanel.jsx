@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import {
-  Accordion, Card, Header, Icon, Ref,
+  Accordion, Card, Header, Icon, Message, Ref,
 } from 'semantic-ui-react';
 import { Draggable, Droppable } from '@hello-pangea/dnd';
 import { DROPPABLE_ID_STORAGE, scrambleSetToTitle } from './util';
@@ -14,6 +14,12 @@ export function DraggableScrambleCard({
   return (
     <Card
       {...providedDraggable.draggableProps}
+      style={{
+        ...providedDraggable.draggableProps.style,
+        width: 'auto',
+        height: 'auto',
+        boxSizing: 'inherit',
+      }}
       header={scrambleSetToTitle(scrambleEntity)}
       meta={scrambleEntity.original_filename}
     />
@@ -34,6 +40,8 @@ export default function UnusedScramblesPanel({
     [setPanelActive],
   );
 
+  const unusedIds = unusedScrambleSets.map((scrSet) => scrSet.id.toString());
+
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Accordion styled fluid style={{ marginTop: '1em' }}>
@@ -44,15 +52,25 @@ export default function UnusedScramblesPanel({
         Unused scrambles
       </Accordion.Title>
       <Droppable droppableId={DROPPABLE_ID_STORAGE} direction="horizontal">
-        {(providedDroppable) => (
+        {(providedDroppable, dropSnapshot) => (
           <Ref innerRef={providedDroppable.innerRef}>
             <Accordion.Content active={panelActive}>
+              <Message
+                info
+                floating={
+                  dropSnapshot.isDraggingOver
+                    && !unusedIds.includes(dropSnapshot.draggingOverWith)
+                }
+                icon="inbox"
+                header="Drop area for unused scrambles"
+                content="Click and drag any scramble row into this area to mark them as unused"
+              />
               <Card.Group {...providedDroppable.droppableProps}>
                 {unusedScrambleSets.map((scrSet, idx) => (
                   <Draggable key={scrSet.id} draggableId={scrSet.id.toString()} index={idx}>
-                    {(providedDraggable, snapshot) => (
+                    {(providedDraggable, dragSnapshot) => (
                       <Ref innerRef={providedDraggable.innerRef}>
-                        {snapshot.isDragging ? (
+                        {dragSnapshot.isDragging ? (
                           <DraggableScrambleCard
                             scrambleEntity={scrSet}
                             providedDraggable={providedDraggable}
