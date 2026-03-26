@@ -1407,6 +1407,9 @@ en:
       podiums:
         title: "Podiums"
         undetermined: "Podiums to be determined"
+      admin:
+        open: "Open"
+        clear: "Clear"
     #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"

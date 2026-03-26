@@ -3,6 +3,7 @@
 import { components } from "@/types/openapi";
 import { Button } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function ActionButtons({
   state,
@@ -25,6 +26,8 @@ export default function ActionButtons({
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/clear",
   );
 
+  const { t } = useT();
+
   if (state == "ready") {
     return (
       <Button
@@ -35,7 +38,7 @@ export default function ActionButtons({
           openRound({ params: { path: { roundId, competitionId } } })
         }
       >
-        Open
+        {t("competitions.live.admin.open")}
       </Button>
     );
   }
@@ -50,7 +53,7 @@ export default function ActionButtons({
           clearRound({ params: { path: { roundId, competitionId } } })
         }
       >
-        Clear
+        {t("competitions.live.admin.clear")}
       </Button>
     );
   }
