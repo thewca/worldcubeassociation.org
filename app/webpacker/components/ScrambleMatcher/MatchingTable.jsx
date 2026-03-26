@@ -118,7 +118,7 @@ export default function MatchingTable({
                             <Table.Cell textAlign="center" collapsing verticalAlign="middle">
                               {isExpected ? computeDefinitionName(index) : (
                                 <Popup
-                                  trigger={<Icon name="exclamation triangle" color="red" />}
+                                  trigger={<Icon name="exclamation triangle" color="yellow" />}
                                   content="This entry is unexpected"
                                   position="top center"
                                 />
