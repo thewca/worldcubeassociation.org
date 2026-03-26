@@ -1,6 +1,6 @@
 import { Icon, Message, Table } from 'semantic-ui-react';
 import React, { useCallback } from 'react';
-import { parseActivityCode, shortLabelForActivityCode } from '../../lib/utils/wcif';
+import { shortLabelForActivityCode } from '../../lib/utils/wcif';
 
 function EventProgressRow({
   rowTitle,

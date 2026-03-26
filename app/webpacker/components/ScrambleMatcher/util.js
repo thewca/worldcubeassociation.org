@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { events } from '../../lib/wca-data.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
+import { getRoundTypeId, parseActivityCode, shortLabelForActivityCode } from '../../lib/utils/wcif';
+import I18n from '../../lib/i18n';
 
 export const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 
@@ -19,8 +20,35 @@ export const prefixForIndex = (index) => {
   return prefixForIndex(Math.floor(index / 26) - 1) + char;
 };
 
-export const scrambleSetToName = (scrambleSet) => `Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
-export const scrambleSetToTitle = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} ${scrambleSetToName(scrambleSet)}`;
+export const scrambleSetToTitle = (scrambleSet) => {
+  const eventName = I18n.t(`events.${scrambleSet.event_id}`);
+  const roundNumberName = I18n.t('round.round_number', { round_number: scrambleSet.round_number });
+
+  const eventAndRound = I18n.t('round.name', { event_name: eventName, round_name: roundNumberName });
+
+  const letterCode = prefixForIndex(scrambleSet.scramble_set_number - 1);
+  const scrambleSetName = I18n.t('scramble_set.name', { letter_code: letterCode });
+
+  return `${eventAndRound} ${scrambleSetName}`;
+};
+
+export const roundToRoundTypeName = (wcifRound, wcifEvent, suffix = false) => {
+  const { roundNumber } = parseActivityCode(wcifRound.id);
+
+  const roundTypeId = getRoundTypeId(
+    roundNumber,
+    wcifEvent.rounds.length,
+    Boolean(wcifRound.cutoff),
+  );
+
+  const roundTypeName = I18n.t(`rounds.${roundTypeId}.name`);
+
+  if (suffix) {
+    return `${roundTypeName} (${shortLabelForActivityCode(wcifRound.id)})`;
+  }
+
+  return roundTypeName;
+};
 
 export function removeItemFromArray(arr, indexToRemove) {
   return [

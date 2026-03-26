@@ -3,9 +3,8 @@ import React, {
 } from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
-import { LEGAL_CROSS_MATCHES, scrambleSetToTitle } from './util';
+import { LEGAL_CROSS_MATCHES, roundToRoundTypeName, scrambleSetToTitle } from './util';
 import { events } from '../../lib/wca-data.js.erb';
-import { localizeActivityCode } from '../../lib/utils/wcif';
 
 const MoveModalContext = createContext();
 
@@ -185,7 +184,7 @@ export default function MoveScrambleSetModal({
           <MatchingSelect
             dropdownLabel="Round"
             selectableEntities={selectableRounds}
-            computeEntityName={(rd) => localizeActivityCode(rd.id, rd, targetEvent)}
+            computeEntityName={(rd) => roundToRoundTypeName(rd, targetEvent)}
             selectedEntityId={targetRoundId}
             onSelectedChange={setTargetRoundId}
           />

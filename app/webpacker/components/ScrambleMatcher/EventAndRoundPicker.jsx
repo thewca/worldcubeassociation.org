@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Button, Header } from 'semantic-ui-react';
 import EventSelector from '../wca/EventSelector';
 import I18n from '../../lib/i18n';
-import { localizeActivityCode } from '../../lib/utils/wcif';
+import { roundToRoundTypeName } from './util';
 import DndWorkbench from './DndWorkbench';
 
 function ButtonPicker({
@@ -14,7 +14,7 @@ function ButtonPicker({
   return (
     <>
       <Header as="h4">
-        Round
+        {I18n.t('round.title')}
         {' '}
         <Button
           size="mini"
@@ -32,7 +32,7 @@ function ButtonPicker({
             active={round.id === selectedId}
             onClick={() => setSelectedId(round.id)}
           >
-            {localizeActivityCode(round.id, round, selectedEvent)}
+            {roundToRoundTypeName(round, selectedEvent, true)}
           </Button>
         ))}
       </Button.Group>

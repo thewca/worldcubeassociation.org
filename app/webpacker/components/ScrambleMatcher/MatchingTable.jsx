@@ -14,6 +14,7 @@ import { formats } from '../../lib/wca-data.js.erb';
 import { DROPPABLE_ID_MATCHED_SCRAMBLES, scrambleSetToTitle } from './util';
 import { DraggableScrambleCard } from './UnusedScramblesPanel';
 import { useMoveScrambleSetModal } from './MoveScrambleSetModal';
+import I18n from '../../lib/i18n';
 
 export default function MatchingTable({
   selectedEvent,
@@ -71,7 +72,7 @@ export default function MatchingTable({
 
   const rowCount = Math.max(matchableRows.length, expectedNumOfRows);
 
-  const computeDefinitionName = (idx) => `${attemptMode ? 'Attempt' : 'Group'} ${idx + 1}`;
+  const computeDefinitionName = (idx) => I18n.t(`scramble_set.${attemptMode ? 'attempt' : 'group'}`, { number: idx + 1 });
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
@@ -172,7 +173,7 @@ export default function MatchingTable({
       <Table.Footer fullWidth>
         <Table.Row>
           <Table.HeaderCell textAlign="right">
-            Scramble Set Count
+            Scramble Sets
           </Table.HeaderCell>
           <Table.HeaderCell colSpan={3}>
             <Button negative icon="minus square outline" compact attached="left" disabled={scrambleSetCount <= Math.max(1, matchableRows.length)} onClick={() => setScrambleSetCount(scrambleSetCount - 1)} />
