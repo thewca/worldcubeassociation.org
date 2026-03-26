@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useMemo, useReducer, useState,
+  useCallback, useMemo, useReducer,
 } from 'react';
 import { Button, Divider, Message } from 'semantic-ui-react';
 import _ from 'lodash';
@@ -10,10 +10,10 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
 import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
-import { useScrambleFilesQuery } from './util';
+import { useConfigState, useScrambleFilesQuery } from './util';
 import EventAndRoundPicker from './EventAndRoundPicker';
 import { MoveModalProvider } from './MoveScrambleSetModal';
-import MatchingProgressTable from './MatchingProgressTable';
+import AutoMatchPanel, { AUTOMATCH_DEFAULT_SETTINGS } from './AutoMatchPanel';
 
 export default function Wrapper({
   wcifEvents,
@@ -114,36 +114,25 @@ function ScrambleMatcher({
     />
   ), [isSubmitting, submitAction]);
 
-  const [pickerNavigation, setPickerNavigation] = useState({});
-
-  const navigatePicker = useCallback(
-    (navKey, selectedValue) => setPickerNavigation((currentNav) => ({
-      ...currentNav,
-      [navKey]: selectedValue,
-    })),
-    [setPickerNavigation],
-  );
+  const [pickerNavigation, navigatePicker] = useConfigState();
+  const [autoMatchSettings, configureAutoMatch] = useConfigState(AUTOMATCH_DEFAULT_SETTINGS);
 
   return (
     <MoveModalProvider rootMatchState={matchState}>
       <FileUpload
         competitionId={competitionId}
         initialScrambleFiles={initialScrambleFiles}
+        autoMatchSettings={autoMatchSettings}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
       />
-      <MatchingProgressTable
-        rootMatchState={matchState}
-        uploadedScrambleFiles={uploadedScrambleFiles}
+      <AutoMatchPanel
+        autoMatchSettings={autoMatchSettings}
+        configureAutoMatch={configureAutoMatch}
         navigatePicker={navigatePicker}
-      />
-      <Button
-        primary
-        basic
-        icon="coffee"
-        content="Automatically assign scrambles"
-        fluid
-        style={{ textTransform: 'uppercase' }}
+        uploadedScrambleFiles={uploadedScrambleFiles}
+        matchState={matchState}
+        dispatchMatchState={dispatchMatchState}
       />
       <Divider />
       {hasUnsavedChanges && (
@@ -157,6 +146,7 @@ function ScrambleMatcher({
       <EventAndRoundPicker
         pickerNavigation={pickerNavigation}
         navigatePicker={navigatePicker}
+        autoMatchSettings={autoMatchSettings}
         uploadedScrambleFiles={uploadedScrambleFiles}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}

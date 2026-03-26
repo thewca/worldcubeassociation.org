@@ -2,7 +2,6 @@ import React from 'react';
 import { DragDropContext } from '@hello-pangea/dnd';
 import MatchingTable from './MatchingTable';
 import {
-  ATTEMPT_BASED_EVENTS,
   DROPPABLE_ID_MATCHED_SCRAMBLES,
   DROPPABLE_ID_STORAGE,
 } from './util';
@@ -12,6 +11,7 @@ import { parseActivityCode } from '../../lib/utils/wcif';
 export default function DndWorkbench({
   selectedEvent,
   selectedRound,
+  autoMatchSettings,
   uploadedScrambleFiles,
   rootMatchState,
   dispatchMatchState,
@@ -30,7 +30,7 @@ export default function DndWorkbench({
       (row) => row.id === extScrSet.id,
     ));
 
-  const isAttemptMode = ATTEMPT_BASED_EVENTS.includes(selectedEvent.id);
+  const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(selectedEvent.id);
 
   const handleOnDragEnd = (result) => {
     const { source, destination } = result;

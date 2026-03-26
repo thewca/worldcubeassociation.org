@@ -98,6 +98,7 @@ function SmartPicker({
 export default function EventAndRoundPicker({
   pickerNavigation,
   navigatePicker,
+  autoMatchSettings,
   uploadedScrambleFiles,
   matchState,
   dispatchMatchState,
@@ -126,8 +127,9 @@ export default function EventAndRoundPicker({
         <InnerRoundPicker
           pickerNavigation={pickerNavigation}
           navigatePicker={navigatePicker}
-          uploadedScrambleFiles={uploadedScrambleFiles}
           selectedEvent={selectedEvent}
+          autoMatchSettings={autoMatchSettings}
+          uploadedScrambleFiles={uploadedScrambleFiles}
           rootMatchState={matchState}
           dispatchMatchState={dispatchMatchState}
         />
@@ -140,6 +142,7 @@ function InnerRoundPicker({
   pickerNavigation,
   navigatePicker,
   selectedEvent,
+  autoMatchSettings,
   uploadedScrambleFiles,
   rootMatchState,
   dispatchMatchState,
@@ -161,6 +164,7 @@ function InnerRoundPicker({
         <DndWorkbench
           selectedEvent={selectedEvent}
           selectedRound={selectedRound}
+          autoMatchSettings={autoMatchSettings}
           uploadedScrambleFiles={uploadedScrambleFiles}
           rootMatchState={rootMatchState}
           dispatchMatchState={dispatchMatchState}

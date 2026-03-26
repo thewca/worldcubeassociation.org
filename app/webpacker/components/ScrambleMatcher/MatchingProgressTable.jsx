@@ -140,7 +140,7 @@ export default function MatchingProgressTable({
     <Table basic="very" celled="internally" compact="very">
       <Table.Header>
         <EventProgressRow
-          rowTitle="Progress"
+          rowTitle={null}
           matchStateEvents={rootMatchState.events}
           cellComponent={Table.HeaderCell}
         >

@@ -21,8 +21,12 @@ class ExternalScrambleSet < ApplicationRecord
     Scramble.prefix_for_index(self.scramble_set_number - 1)
   end
 
+  def automatch_wcif_id
+    "#{self.event_id}-r#{self.round_number}"
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
-    methods: %w[original_filename],
+    methods: %w[original_filename automatch_wcif_id],
     include: %w[external_scrambles],
   }.freeze
 

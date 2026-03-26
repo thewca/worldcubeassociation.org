@@ -1,5 +1,7 @@
 import _ from 'lodash';
-import { addItemToArray, moveArrayItem, removeItemFromArray } from './util';
+import {
+  addItemToArray, moveArrayItem, removeItemFromArray, searchRecursive,
+} from './util';
 
 function mergeMatchedSetsIntoWcif(wcifEvents, matchedScrambleSets) {
   const groupedScrambleSets = _.groupBy(
@@ -111,6 +113,34 @@ export default function scrambleMatchReducer(state, action) {
       });
     case 'resetToInitial':
       return applyAction(state, ['current'], () => state.initial);
+    case 'autoMatchScrambleSets':
+      return applyAction(
+        state,
+        ['current'],
+        (subState) => action.scrambleSets.reduce((accuState, scrSet) => {
+          const autoInsertNavigation = searchRecursive(
+            accuState,
+            ['events', 'rounds'],
+            scrSet.automatch_wcif_id,
+          );
+
+          if (autoInsertNavigation) {
+            return updateMatchedSets(
+              accuState,
+              autoInsertNavigation.events.id,
+              autoInsertNavigation.rounds.id,
+              (sets) => addItemToArray(sets, scrSet),
+            );
+          }
+
+          return accuState;
+        }, subState),
+      );
+    case 'clearMatching':
+      return applyAction(state, ['current'], (subState) => mergeMatchedSetsIntoWcif(
+        subState.events,
+        [],
+      ));
     case 'moveMatchedScrambleSet':
       return applyAction(state, ['current'], (subState) => {
         const removedSubState = updateMatchedSets(

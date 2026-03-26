@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useCallback, useState } from 'react';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import { getRoundTypeId, parseActivityCode, shortLabelForActivityCode } from '../../lib/utils/wcif';
@@ -94,6 +95,19 @@ export const searchRecursive = (data, searchPath, targetId, searchDescriptor = {
     return null;
   }, null);
 };
+
+export function useConfigState(defaultConfig = {}) {
+  const [internalConfig, setInternalConfig] = useState(defaultConfig);
+
+  const changeConfigItem = useCallback((key, newValue) => {
+    setInternalConfig((currentConfig) => ({
+      ...currentConfig,
+      [key]: newValue,
+    }));
+  }, [setInternalConfig]);
+
+  return [internalConfig, changeConfigItem];
+}
 
 async function listScrambleFiles(competitionId) {
   const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId));

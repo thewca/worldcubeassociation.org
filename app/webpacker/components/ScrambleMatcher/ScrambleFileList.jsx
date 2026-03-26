@@ -31,7 +31,7 @@ export function ExternalSetActionButtons({
   const autoInsertNavigation = searchRecursive(
     rootMatchState,
     ['events', 'rounds'],
-    `${scrSet.event_id}-r${scrSet.round_number}`,
+    scrSet.automatch_wcif_id,
   );
 
   const dispatchAddExternal = (externalScrambleSet, eventId, roundId) => dispatchMatchState({
@@ -46,7 +46,7 @@ export function ExternalSetActionButtons({
   const onClickManualAssign = () => moveScramble(
     scrSet,
     scrSet.event_id,
-    `${scrSet.event_id}-r${scrSet.round_number}`,
+    scrSet.automatch_wcif_id,
   ).then(({ addedScrSet, eventId, roundId }) => dispatchAddExternal(addedScrSet, eventId, roundId));
 
   return (
