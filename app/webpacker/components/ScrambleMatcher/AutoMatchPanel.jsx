@@ -7,6 +7,7 @@ import { useCheckboxUpdater } from '../../lib/hooks/useCheckboxState';
 import { ATTEMPT_BASED_EVENTS } from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import MatchingProgressTable from './MatchingProgressTable';
+import { DateTime } from 'luxon';
 
 export const AUTOMATCH_DEFAULT_SETTINGS = {
   limitMatches: true,
@@ -51,7 +52,10 @@ export default function AutoMatchPanel({
   }, [autoMatchSettings.useAttemptsMatching, configureAutoMatch]);
 
   const executeAutoAssign = useCallback(() => {
-    const allExtScrambleSets = uploadedScrambleFiles.flatMap(
+    const allExtScrambleSets = _.sortBy(
+      uploadedScrambleFiles,
+      (scrFile) => DateTime.fromISO(scrFile.uploaded_at).toUnixInteger(),
+    ).flatMap(
       (extFile) => extFile.external_scramble_sets,
     );
 
@@ -60,8 +64,9 @@ export default function AutoMatchPanel({
     );
 
     const unusedScrambleSets = _.differenceBy(allExtScrambleSets, flatMatchStateSets, 'id');
+    const orderedScrambleSets = _.sortBy(unusedScrambleSets, 'scramble_set_number');
 
-    dispatchMatchState({ type: 'autoMatchScrambleSets', scrambleSets: unusedScrambleSets, settings: autoMatchSettings });
+    dispatchMatchState({ type: 'autoMatchScrambleSets', scrambleSets: orderedScrambleSets, settings: autoMatchSettings });
   }, [uploadedScrambleFiles, matchState.events, dispatchMatchState, autoMatchSettings]);
 
   const executeClearMatching = useCallback(() => {

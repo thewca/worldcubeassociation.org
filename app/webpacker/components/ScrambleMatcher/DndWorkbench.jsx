@@ -73,6 +73,7 @@ export default function DndWorkbench({
       <UnusedScramblesPanel
         selectedEvent={selectedEvent}
         selectedRound={selectedRound}
+        autoMatchSettings={autoMatchSettings}
         unusedScrambleSets={unusedScrambleSets}
         rootMatchState={rootMatchState}
         dispatchMatchState={dispatchMatchState}

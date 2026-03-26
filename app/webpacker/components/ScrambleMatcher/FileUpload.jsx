@@ -147,6 +147,7 @@ export default function FileUpload({
       />
       <ScrambleFileList
         scrambleFiles={uploadedJsonFiles}
+        autoMatchSettings={autoMatchSettings}
         isFetching={isFetching}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}

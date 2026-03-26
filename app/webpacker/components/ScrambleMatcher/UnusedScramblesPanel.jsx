@@ -29,6 +29,7 @@ export function DraggableScrambleCard({
 export default function UnusedScramblesPanel({
   selectedEvent,
   selectedRound,
+  autoMatchSettings,
   unusedScrambleSets,
   rootMatchState,
   dispatchMatchState,
@@ -87,8 +88,11 @@ export default function UnusedScramblesPanel({
                             <Card.Content extra>
                               <ExternalSetActionButtons
                                 scrSet={scrSet}
+                                autoMatchSettings={autoMatchSettings}
                                 rootMatchState={rootMatchState}
                                 dispatchMatchState={dispatchMatchState}
+                                overrideEventId={selectedEvent.id}
+                                overrideRoundId={selectedRound.id}
                               />
                             </Card.Content>
                           </Card>

@@ -4,6 +4,7 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import { getRoundTypeId, parseActivityCode, shortLabelForActivityCode } from '../../lib/utils/wcif';
 import I18n from '../../lib/i18n';
+import { AUTOMATCH_DEFAULT_SETTINGS } from './AutoMatchPanel';
 
 export const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 
@@ -95,6 +96,31 @@ export const searchRecursive = (data, searchPath, targetId, searchDescriptor = {
     return null;
   }, null);
 };
+
+export function autoMatchSearch(
+  scrSet,
+  wcifEvents,
+  autoMatchSettings = AUTOMATCH_DEFAULT_SETTINGS,
+) {
+  const autoMatchNavigation = searchRecursive(
+    wcifEvents,
+    ['events', 'rounds'],
+    scrSet.automatch_wcif_id,
+  );
+
+  if (autoMatchNavigation) {
+    const targetRound = autoMatchNavigation.rounds.item;
+
+    if (
+      !autoMatchSettings.limitMatches
+        || targetRound.scrambleSetCount < targetRound.external_scramble_sets.length
+    ) {
+      return autoMatchNavigation;
+    }
+  }
+
+  return null;
+}
 
 export function useConfigState(defaultConfig = {}) {
   const [internalConfig, setInternalConfig] = useState(defaultConfig);

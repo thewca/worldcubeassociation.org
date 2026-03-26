@@ -7,7 +7,7 @@ import _ from 'lodash';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
-import { prefixForIndex, roundToRoundTypeName, searchRecursive } from './util';
+import { autoMatchSearch, prefixForIndex, roundToRoundTypeName, searchRecursive } from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import { getFullDateTimeString } from '../../lib/utils/dates';
 import { useMoveScrambleSetModal } from './MoveScrambleSetModal';
@@ -22,16 +22,19 @@ async function deleteScrambleFile({ fileId }) {
 
 export function ExternalSetActionButtons({
   scrSet,
+  autoMatchSettings,
   rootMatchState,
   dispatchMatchState,
+  overrideEventId = scrSet.event_id,
+  overrideRoundId = scrSet.automatch_wcif_id,
   fluid = true,
 }) {
   const moveScramble = useMoveScrambleSetModal();
 
-  const autoInsertNavigation = searchRecursive(
+  const autoInsertNavigation = autoMatchSearch(
+    scrSet,
     rootMatchState,
-    ['events', 'rounds'],
-    scrSet.automatch_wcif_id,
+    autoMatchSettings,
   );
 
   const dispatchAddExternal = (externalScrambleSet, eventId, roundId) => dispatchMatchState({
@@ -45,8 +48,8 @@ export function ExternalSetActionButtons({
 
   const onClickManualAssign = () => moveScramble(
     scrSet,
-    scrSet.event_id,
-    scrSet.automatch_wcif_id,
+    overrideEventId,
+    overrideRoundId,
   ).then(({ addedScrSet, eventId, roundId }) => dispatchAddExternal(addedScrSet, eventId, roundId));
 
   return (
@@ -127,6 +130,7 @@ function FileTableGroupCell({
 
 function ScrambleFileBody({
   scrambleFile,
+  autoMatchSettings,
   matchState,
   dispatchMatchState,
 }) {
@@ -263,6 +267,7 @@ function ScrambleFileBody({
                   ) : (
                     <ExternalSetActionButtons
                       scrSet={scrSet}
+                      autoMatchSettings={autoMatchSettings}
                       rootMatchState={matchState}
                       dispatchMatchState={dispatchMatchState}
                       fluid={false}
@@ -296,6 +301,7 @@ function ScrambleFileBody({
 
 export default function ScrambleFileList({
   scrambleFiles,
+  autoMatchSettings,
   isFetching,
   matchState,
   dispatchMatchState,
@@ -313,6 +319,7 @@ export default function ScrambleFileList({
     content: {
       content: <ScrambleFileBody
         scrambleFile={scrFile}
+        autoMatchSettings={autoMatchSettings}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
       />,
