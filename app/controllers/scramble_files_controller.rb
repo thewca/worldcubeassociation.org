@@ -94,9 +94,13 @@ class ScrambleFilesController < ApplicationController
     competition = competition_from_params
 
     competition.transaction do
-      competition.matched_scramble_sets.delete_all
+      # Rails does not do this for some reason, "because it goes through more than one other association"
+      #   So instead, we resort to deleting individually per round, see more below
+      # competition.matched_scramble_sets.delete_all
 
       competition.rounds.each do |round|
+        round.matched_scramble_sets.delete_all
+
         updated_round = params[round.wcif_id]
 
         next if updated_round.blank?

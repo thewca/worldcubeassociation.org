@@ -15,7 +15,7 @@ class Round < ApplicationRecord
 
   has_many :registrations, through: :competition_event
 
-  has_many :matched_scramble_sets, dependent: :nullify
+  has_many :matched_scramble_sets, dependent: :delete_all
 
   # For the following association, we want to keep it to be able to do some joins,
   # but we definitely want to use cached values when directly using the method.
