@@ -310,6 +310,10 @@ export default function ScrambleFileList({
     return <Loading />;
   }
 
+  if (scrambleFiles.length === 0) {
+    return null;
+  }
+
   const panels = scrambleFiles.map((scrFile) => ({
     key: scrFile.id,
     title: {

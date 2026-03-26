@@ -110,16 +110,6 @@ export default function MatchingProgressTable({
     navigatePicker('rounds', round.id);
   }, [navigatePicker]);
 
-  if (uploadedScrambleFiles.length === 0) {
-    return (
-      <Message
-        warning
-        header="No scramble sets available"
-        content="Upload some JSON files to get started!"
-      />
-    );
-  }
-
   const totalMatchedCount = rootMatchState.events.reduce(
     (accu, evt) => accu + calculateEventExpectedCount(evt),
     0,

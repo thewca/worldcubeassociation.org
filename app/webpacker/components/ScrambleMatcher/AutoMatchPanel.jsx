@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import _ from 'lodash';
 import {
-  Button, Form, Header, Modal,
+  Button, Form, Header, Message, Modal,
 } from 'semantic-ui-react';
 import { useCheckboxUpdater } from '../../lib/hooks/useCheckboxState';
 import { ATTEMPT_BASED_EVENTS } from './util';
@@ -72,6 +72,16 @@ export default function AutoMatchPanel({
   const executeClearMatching = useCallback(() => {
     dispatchMatchState({ type: 'clearMatching' });
   }, [dispatchMatchState]);
+
+  if (uploadedScrambleFiles.length === 0) {
+    return (
+      <Message
+        warning
+        header="No scramble sets available"
+        content="Upload some JSON files to get started!"
+      />
+    );
+  }
 
   return (
     <>
