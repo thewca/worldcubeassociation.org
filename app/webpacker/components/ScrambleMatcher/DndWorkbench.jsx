@@ -4,6 +4,7 @@ import MatchingTable from './MatchingTable';
 import {
   DROPPABLE_ID_MATCHED_SCRAMBLES,
   DROPPABLE_ID_STORAGE,
+  unpackScrambleSets,
 } from './util';
 import UnusedScramblesPanel from './UnusedScramblesPanel';
 import { parseActivityCode } from '../../lib/utils/wcif';
@@ -16,21 +17,27 @@ export default function DndWorkbench({
   rootMatchState,
   dispatchMatchState,
 }) {
-  const matchingRows = selectedRound.external_scramble_sets;
+  const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(selectedEvent.id);
 
-  const uploadedScrambleSets = uploadedScrambleFiles
-    .flatMap((scrFile) => scrFile.external_scramble_sets);
+  const matchingRows = unpackScrambleSets(selectedRound.external_scramble_sets, autoMatchSettings);
+
+  const uploadedScrambleSets = uploadedScrambleFiles.flatMap(
+    (scrFile) => unpackScrambleSets(
+      scrFile.external_scramble_sets,
+      autoMatchSettings,
+    ),
+  );
+
+  const selectedRoundNumber = parseActivityCode(selectedRound.id).roundNumber;
 
   const eligibleScrambleSets = uploadedScrambleSets
     .filter((set) => set.event_id === selectedEvent.id)
-    .filter((set) => set.round_number === parseActivityCode(selectedRound.id).roundNumber);
+    .filter((set) => set.round_number === selectedRoundNumber);
 
   const unusedScrambleSets = eligibleScrambleSets
     .filter((extScrSet) => !matchingRows.some(
       (row) => row.id === extScrSet.id,
     ));
-
-  const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(selectedEvent.id);
 
   const handleOnDragEnd = (result) => {
     const { source, destination } = result;
@@ -38,13 +45,16 @@ export default function DndWorkbench({
     if (destination) {
       if (destination.droppableId === DROPPABLE_ID_MATCHED_SCRAMBLES) {
         if (source.droppableId === DROPPABLE_ID_MATCHED_SCRAMBLES) {
-          dispatchMatchState({
-            type: 'moveInsideMatching',
-            eventId: selectedEvent.id,
-            roundId: selectedRound.id,
-            sourceIndex: source.index,
-            destinationIndex: destination.index,
-          });
+          if (source.index !== destination.index) {
+            dispatchMatchState({
+              type: 'moveInsideMatching',
+              eventId: selectedEvent.id,
+              roundId: selectedRound.id,
+              sourceIndex: source.index,
+              destinationIndex: destination.index,
+              isAttemptMode,
+            });
+          }
         } else if (source.droppableId === DROPPABLE_ID_STORAGE) {
           dispatchMatchState({
             type: 'addExternalToMatching',
@@ -63,6 +73,7 @@ export default function DndWorkbench({
           eventId: selectedEvent.id,
           roundId: selectedRound.id,
           sourceIndex: source.index,
+          isAttemptMode,
         });
       }
     }
@@ -84,7 +95,7 @@ export default function DndWorkbench({
         matchableRows={matchingRows}
         autoMatchSettings={autoMatchSettings}
         unusedScrambleSets={unusedScrambleSets}
-        attemptMode={isAttemptMode}
+        isAttemptMode={isAttemptMode}
         dispatchMatchState={dispatchMatchState}
       />
     </DragDropContext>

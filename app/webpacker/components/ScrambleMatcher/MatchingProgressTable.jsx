@@ -1,6 +1,12 @@
-import { Icon, Message, Table } from 'semantic-ui-react';
+import { Icon, Table } from 'semantic-ui-react';
 import React, { useCallback } from 'react';
 import { shortLabelForActivityCode } from '../../lib/utils/wcif';
+import {
+  calculateEventExpectedCount,
+  calculateEventMatchedCount,
+  calculateRoundExpectedCount,
+  calculateRoundMatchedCount,
+} from './util';
 
 function EventProgressRow({
   rowTitle,
@@ -32,7 +38,7 @@ function RoundsProgressRow({
     <Table.Row>
       <CellComponent textAlign="right" singleLine>{rowTitle}</CellComponent>
       {matchStateEvents.flatMap((evt) => evt.rounds.map((rd) => {
-        const progressValue = progressValueFn?.(rd);
+        const progressValue = progressValueFn?.(rd, evt);
 
         return (
           <CellComponent
@@ -54,45 +60,38 @@ function RoundsProgressRow({
 
 export default function MatchingProgressTable({
   rootMatchState,
-  uploadedScrambleFiles,
+  unpackedScrSets,
+  autoMatchSettings,
   navigatePicker,
 }) {
-  const uploadedScrSets = uploadedScrambleFiles
-    .flatMap((scrFile) => scrFile.external_scramble_sets);
-
   const calculateUploadedCount = useCallback(
-    (event) => uploadedScrSets.filter((scrSet) => scrSet.event_id === event.id).length,
-    [uploadedScrSets],
+    (event) => unpackedScrSets.filter((scrSet) => scrSet.event_id === event.id).length,
+    [unpackedScrSets],
   );
 
-  const calculateRoundExpectedCount = useCallback(
-    (round) => round.scrambleSetCount,
-    [],
+  const calculateRoundExpectedCountForEvent = useCallback(
+    (round, event) => calculateRoundExpectedCount(
+      round,
+      autoMatchSettings.useAttemptsMatching.includes(event.id),
+    ),
+    [autoMatchSettings.useAttemptsMatching],
   );
 
-  const calculateEventExpectedCount = useCallback(
-    (event) => event.rounds.reduce((accu, rd) => accu + calculateRoundExpectedCount(rd), 0),
-    [calculateRoundExpectedCount],
+  const calculateRoundMatchedCountForEvent = useCallback(
+    (round, event) => calculateRoundMatchedCount(
+      round,
+      autoMatchSettings.useAttemptsMatching.includes(event.id),
+    ),
+    [autoMatchSettings.useAttemptsMatching],
   );
 
-  const calculateRoundMatchedCount = useCallback(
-    (round) => round.external_scramble_sets.length,
-    [],
-  );
+  const getShortRoundLabel = (round) => shortLabelForActivityCode(round.id);
 
-  const calculateEventMatchedCount = useCallback(
-    (event) => event.rounds.reduce((accu, rd) => accu + calculateRoundMatchedCount(rd), 0),
-    [calculateRoundMatchedCount],
-  );
+  const determineRoundProgress = useCallback((round, event) => {
+    const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(event.id);
 
-  const getShortRoundLabel = useCallback(
-    (round) => shortLabelForActivityCode(round.id),
-    [],
-  );
-
-  const determineRoundProgress = useCallback((round) => {
-    const isExpected = calculateRoundExpectedCount(round);
-    const isMatched = calculateRoundMatchedCount(round);
+    const isExpected = calculateRoundExpectedCount(round, isAttemptMode);
+    const isMatched = calculateRoundMatchedCount(round, isAttemptMode);
 
     if (isMatched < isExpected) {
       return 'negative';
@@ -103,31 +102,15 @@ export default function MatchingProgressTable({
     }
 
     return 'positive';
-  }, [calculateRoundExpectedCount, calculateRoundMatchedCount]);
+  }, [autoMatchSettings.useAttemptsMatching]);
 
   const navigateToCell = useCallback((round, event) => {
     navigatePicker('events', event.id);
     navigatePicker('rounds', round.id);
   }, [navigatePicker]);
 
-  const totalMatchedCount = rootMatchState.events.reduce(
-    (accu, evt) => accu + calculateEventExpectedCount(evt),
-    0,
-  );
-
-  const hasAnyScrambles = totalMatchedCount > 0;
-
-  if (!hasAnyScrambles) {
-    return (
-      <Message
-        error
-        header="No scramble sets matched at all"
-      />
-    );
-  }
-
   return (
-    <Table basic="very" celled="internally" compact="very">
+    <Table basic="very" celled compact="very">
       <Table.Header>
         <EventProgressRow
           rowTitle={null}
@@ -135,8 +118,8 @@ export default function MatchingProgressTable({
           cellComponent={Table.HeaderCell}
         >
           {(evt) => {
-            const matchedCount = calculateEventMatchedCount(evt);
-            const expectedCount = calculateEventExpectedCount(evt);
+            const matchedCount = calculateEventMatchedCount(evt, autoMatchSettings);
+            const expectedCount = calculateEventExpectedCount(evt, autoMatchSettings);
 
             const isMismatchError = matchedCount < expectedCount;
             const isMismatchWarning = matchedCount > expectedCount;
@@ -171,13 +154,13 @@ export default function MatchingProgressTable({
           rowTitle="Expected"
           matchStateEvents={rootMatchState.events}
         >
-          {calculateRoundExpectedCount}
+          {calculateRoundExpectedCountForEvent}
         </RoundsProgressRow>
         <RoundsProgressRow
           rowTitle="Matched"
           matchStateEvents={rootMatchState.events}
         >
-          {calculateRoundMatchedCount}
+          {calculateRoundMatchedCountForEvent}
         </RoundsProgressRow>
       </Table.Body>
     </Table>

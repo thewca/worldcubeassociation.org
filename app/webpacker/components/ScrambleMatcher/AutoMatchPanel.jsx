@@ -3,24 +3,15 @@ import _ from 'lodash';
 import {
   Button, Form, Header, Message, Modal,
 } from 'semantic-ui-react';
+import { DateTime } from 'luxon';
 import { useCheckboxUpdater } from '../../lib/hooks/useCheckboxState';
-import { ATTEMPT_BASED_EVENTS } from './util';
+import { ATTEMPT_BASED_EVENTS, ATTEMPTS_UNPACKING_MARKER, unpackScrambleSets } from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import MatchingProgressTable from './MatchingProgressTable';
-import { DateTime } from 'luxon';
 
-export const AUTOMATCH_DEFAULT_SETTINGS = {
-  limitMatches: true,
-  useAttemptsMatching: ATTEMPT_BASED_EVENTS,
-};
-
-export default function AutoMatchPanel({
+function AutoMatchConfigModal({
   autoMatchSettings,
   configureAutoMatch,
-  navigatePicker,
-  uploadedScrambleFiles,
-  matchState,
-  dispatchMatchState,
 }) {
   const setLimitMatches = useCheckboxUpdater((isChecked) => configureAutoMatch('limitMatches', isChecked));
 
@@ -51,27 +42,92 @@ export default function AutoMatchPanel({
     }
   }, [autoMatchSettings.useAttemptsMatching, configureAutoMatch]);
 
+  return (
+    <Modal
+      closeIcon
+      trigger={<Button secondary basic icon="settings" />}
+    >
+      <Modal.Header>Auto-Match settings</Modal.Header>
+      <Modal.Content>
+        <Form>
+          <Form.Checkbox
+            label="Only match scrambles as long as there are still free, unmatched spots available"
+            checked={autoMatchSettings.limitMatches}
+            onChange={setLimitMatches}
+          />
+          <Form.Checkbox
+            label="Assign individual attempts/scrambles to attempt-based events (Fewest Moves etc.)"
+            checked={allUseAttemptsMatching}
+            onChange={setGlobalAttemptsMatching}
+          />
+          <Form.Group inline style={{ marginLeft: '2em' }}>
+            {ATTEMPT_BASED_EVENTS.map((evtId) => (
+              <Form.Checkbox
+                key={evtId}
+                value={evtId}
+                label={events.byId[evtId].name}
+                disabled={allUseAttemptsMatching}
+                checked={autoMatchSettings.useAttemptsMatching.includes(evtId)}
+                onChange={toggleEventAttemptsMatching}
+              />
+            ))}
+          </Form.Group>
+        </Form>
+      </Modal.Content>
+    </Modal>
+  );
+}
+
+export default function AutoMatchPanel({
+  autoMatchSettings,
+  configureAutoMatch,
+  navigatePicker,
+  uploadedScrambleFiles,
+  matchState,
+  dispatchMatchState,
+}) {
+  const sortedScrambleFiles = _.sortBy(
+    uploadedScrambleFiles,
+    (scrFile) => DateTime.fromISO(scrFile.uploaded_at).toUnixInteger(),
+  );
+
+  const uploadedScrSets = sortedScrambleFiles
+    .flatMap((scrFile) => scrFile.external_scramble_sets);
+
+  const unpackedScrSets = unpackScrambleSets(uploadedScrSets, autoMatchSettings);
+
   const executeAutoAssign = useCallback(() => {
-    const allExtScrambleSets = _.sortBy(
-      uploadedScrambleFiles,
-      (scrFile) => DateTime.fromISO(scrFile.uploaded_at).toUnixInteger(),
-    ).flatMap(
-      (extFile) => extFile.external_scramble_sets,
+    const matchedStateSets = matchState.events.flatMap(
+      (evt) => evt.rounds.flatMap(
+        (rd) => rd.external_scramble_sets,
+      ),
     );
 
-    const flatMatchStateSets = matchState.events.flatMap(
-      (evt) => evt.rounds.flatMap((rd) => rd.external_scramble_sets),
+    const unpackedUsedSets = unpackScrambleSets(matchedStateSets, autoMatchSettings);
+
+    const unusedScrambleSets = _.differenceWith(
+      unpackedScrSets,
+      unpackedUsedSets,
+      (a, b) => {
+        const miniA = _.pick(a, [ATTEMPTS_UNPACKING_MARKER, 'id']);
+        const miniB = _.pick(b, [ATTEMPTS_UNPACKING_MARKER, 'id']);
+
+        return _.isEqual(miniA, miniB);
+      },
     );
 
-    const unusedScrambleSets = _.differenceBy(allExtScrambleSets, flatMatchStateSets, 'id');
-    const orderedScrambleSets = _.sortBy(unusedScrambleSets, 'scramble_set_number');
+    const orderedScrambleSets = _.sortBy(unusedScrambleSets, [
+      'scramble_set_number',
+      'scramble_number',
+    ]);
 
     dispatchMatchState({ type: 'autoMatchScrambleSets', scrambleSets: orderedScrambleSets, settings: autoMatchSettings });
-  }, [uploadedScrambleFiles, matchState.events, dispatchMatchState, autoMatchSettings]);
+  }, [matchState.events, unpackedScrSets, dispatchMatchState, autoMatchSettings]);
 
-  const executeClearMatching = useCallback(() => {
-    dispatchMatchState({ type: 'clearEntireMatching' });
-  }, [dispatchMatchState]);
+  const executeClearMatching = useCallback(
+    () => dispatchMatchState({ type: 'clearEntireMatching' }),
+    [dispatchMatchState],
+  );
 
   if (uploadedScrambleFiles.length === 0) {
     return (
@@ -88,38 +144,10 @@ export default function AutoMatchPanel({
       <Header>
         Progress
         <Button.Group floated="right">
-          <Modal
-            closeIcon
-            trigger={<Button secondary basic icon="settings" />}
-          >
-            <Modal.Header>Auto-Match settings</Modal.Header>
-            <Modal.Content>
-              <Form>
-                <Form.Checkbox
-                  label="Only match scrambles as long as there are still free, unmatched spots available"
-                  checked={autoMatchSettings.limitMatches}
-                  onChange={setLimitMatches}
-                />
-                <Form.Checkbox
-                  label="Assign individual attempts/scrambles to attempt-based events (Fewest Moves etc.)"
-                  checked={allUseAttemptsMatching}
-                  onChange={setGlobalAttemptsMatching}
-                />
-                <Form.Group inline style={{ marginLeft: '2em' }}>
-                  {ATTEMPT_BASED_EVENTS.map((evtId) => (
-                    <Form.Checkbox
-                      key={evtId}
-                      value={evtId}
-                      label={events.byId[evtId].name}
-                      disabled={allUseAttemptsMatching}
-                      checked={autoMatchSettings.useAttemptsMatching.includes(evtId)}
-                      onChange={toggleEventAttemptsMatching}
-                    />
-                  ))}
-                </Form.Group>
-              </Form>
-            </Modal.Content>
-          </Modal>
+          <AutoMatchConfigModal
+            autoMatchSettings={autoMatchSettings}
+            configureAutoMatch={configureAutoMatch}
+          />
           <Button
             primary
             basic
@@ -148,7 +176,8 @@ export default function AutoMatchPanel({
       <div style={{ overflowX: 'auto' }}>
         <MatchingProgressTable
           rootMatchState={matchState}
-          uploadedScrambleFiles={uploadedScrambleFiles}
+          unpackedScrSets={unpackedScrSets}
+          autoMatchSettings={autoMatchSettings}
           navigatePicker={navigatePicker}
         />
       </div>

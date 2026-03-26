@@ -7,7 +7,11 @@ import _ from 'lodash';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
-import { autoMatchSearch, prefixForIndex, roundToRoundTypeName, searchRecursive } from './util';
+import {
+  ATTEMPTS_UNPACKING_MARKER,
+  autoMatchSearch,
+  getAttemptsMultiplier, prefixForIndex, roundToRoundTypeName, searchRecursive, unpackScrambleSets,
+} from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import { getFullDateTimeString } from '../../lib/utils/dates';
 import { useMoveScrambleSetModal } from './MoveScrambleSetModal';
@@ -18,6 +22,52 @@ async function deleteScrambleFile({ fileId }) {
   });
 
   return data;
+}
+
+function computeAttemptIndex(searchResult) {
+  return searchResult.external_scramble_sets.index
+    * getAttemptsMultiplier(searchResult.rounds.item)
+    + searchResult.external_scrambles.index;
+}
+
+function MatchedSetActionButtons({
+  matchedNavigation,
+  dispatchMatchState,
+  isAttemptMode = false,
+}) {
+  const onClickUnassign = (eventId, roundId, sourceIndex) => dispatchMatchState({
+    type: 'removeFromMatching',
+    eventId,
+    roundId,
+    sourceIndex,
+    isAttemptMode,
+  });
+
+  const unassignIndex = isAttemptMode
+    ? computeAttemptIndex(matchedNavigation)
+    : matchedNavigation.external_scramble_sets.index;
+
+  return (
+    <Button.Group compact>
+      <Button
+        primary
+        basic
+        icon="arrows horizontal alternate"
+        content="Move"
+      />
+      <Button
+        secondary
+        basic
+        icon="unlink"
+        content="Unassign"
+        onClick={() => onClickUnassign(
+          matchedNavigation.events.id,
+          matchedNavigation.rounds.id,
+          unassignIndex,
+        )}
+      />
+    </Button.Group>
+  );
 }
 
 export function ExternalSetActionButtons({
@@ -97,20 +147,18 @@ function ScrambleFileHeader({ scrambleFile }) {
 function FileTableGroupCell({
   fileSets,
   referenceSet,
-  filterHierarchy,
-  filterIndex,
+  rowSpanCols,
+  leadIndexCols = [],
+  overrideColSpan = 1,
   children,
 }) {
-  const filterPrefix = filterHierarchy.slice(0, filterIndex + 1);
-  const filterChildren = filterHierarchy.slice(filterIndex + 1);
-
-  const candidateRows = fileSets.filter(
-    (set) => filterPrefix.every(
+  const setsCoveredBySpan = fileSets.filter(
+    (set) => rowSpanCols.every(
       (key) => set[key] === referenceSet[key],
     ),
   );
 
-  const isPrimaryCell = filterChildren.every((key) => referenceSet[key] === 1);
+  const isPrimaryCell = leadIndexCols.every((key) => referenceSet[key] === 1);
 
   if (!isPrimaryCell) {
     return null;
@@ -121,7 +169,8 @@ function FileTableGroupCell({
       textAlign="center"
       verticalAlign="middle"
       singleLine
-      rowSpan={candidateRows.length}
+      rowSpan={setsCoveredBySpan.length}
+      colSpan={overrideColSpan}
     >
       {children}
     </Table.Cell>
@@ -161,17 +210,16 @@ function ScrambleFileBody({
     [dispatchMatchState, scrambleFile],
   );
 
-  const unassignAction = (eventId, roundId, sourceIndex) => dispatchMatchState({
-    type: 'removeFromMatching',
-    eventId,
-    roundId,
-    sourceIndex,
-  });
+  const currentFileSets = unpackScrambleSets(
+    scrambleFile.external_scramble_sets,
+    autoMatchSettings,
+  );
 
-  const orderedScrambleSets = _.sortBy(scrambleFile.external_scramble_sets, [
+  const orderedScrambleSets = _.sortBy(currentFileSets, [
     (scrSet) => events.byId[scrSet.event_id].rank,
     'round_number',
     'scramble_set_number',
+    'scramble_number',
   ]);
 
   const autoAssignAction = useCallback(() => dispatchMatchState({
@@ -190,23 +238,29 @@ function ScrambleFileBody({
             <Table.HeaderCell collapsing>Scramble Set</Table.HeaderCell>
             <Table.HeaderCell collapsing>Scramble</Table.HeaderCell>
             <Table.HeaderCell>Current Status</Table.HeaderCell>
+            <Table.HeaderCell>Actions</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {orderedScrambleSets.map((scrSet, idx, allSets) => {
+            const isAttemptMappedScramble = scrSet[ATTEMPTS_UNPACKING_MARKER];
+            const stateSearchSuffix = isAttemptMappedScramble ? ['external_scrambles'] : [];
+
             const actualNavigation = searchRecursive(
               matchState,
-              ['events', 'rounds', 'external_scramble_sets'],
+              ['events', 'rounds', 'external_scramble_sets', ...stateSearchSuffix],
               scrSet.id,
             );
+
+            const indexColumnSuffix = isAttemptMappedScramble ? ['scramble_number'] : [];
 
             return (
               <Table.Row key={scrSet.id}>
                 <FileTableGroupCell
                   fileSets={allSets}
                   referenceSet={scrSet}
-                  filterHierarchy={['event_id', 'round_number', 'scramble_set_number']}
-                  filterIndex={0}
+                  rowSpanCols={['event_id']}
+                  leadIndexCols={['round_number', 'scramble_set_number', ...indexColumnSuffix]}
                 >
                   <Popup
                     content={events.byId[scrSet.event_id].name}
@@ -217,60 +271,75 @@ function ScrambleFileBody({
                 <FileTableGroupCell
                   fileSets={allSets}
                   referenceSet={scrSet}
-                  filterHierarchy={['event_id', 'round_number', 'scramble_set_number']}
-                  filterIndex={1}
+                  rowSpanCols={['event_id', 'round_number']}
+                  leadIndexCols={['scramble_set_number', ...indexColumnSuffix]}
                 >
                   {scrSet.round_number}
                 </FileTableGroupCell>
                 <FileTableGroupCell
                   fileSets={allSets}
                   referenceSet={scrSet}
-                  filterHierarchy={['event_id', 'round_number', 'scramble_set_number']}
-                  filterIndex={2}
+                  rowSpanCols={['event_id', 'round_number', 'scramble_set_number']}
+                  leadIndexCols={indexColumnSuffix}
+                  overrideColSpan={2 - indexColumnSuffix.length}
                 >
                   {prefixForIndex(scrSet.scramble_set_number - 1)}
                 </FileTableGroupCell>
+                {indexColumnSuffix.length > 0 && (
+                  <FileTableGroupCell
+                    fileSets={allSets}
+                    referenceSet={scrSet}
+                    rowSpanCols={['event_id', 'round_number', 'scramble_set_number', ...indexColumnSuffix]}
+                  >
+                    {scrSet.scramble_number}
+                  </FileTableGroupCell>
+                )}
                 <Table.Cell
                   textAlign="center"
                   verticalAlign="middle"
-                  colSpan={2}
                   disabled={!actualNavigation}
                 >
                   {actualNavigation ? (
-                    <>
-                      <Breadcrumb size="tiny">
-                        <Breadcrumb.Section>
-                          <Icon className={`cubing-icon event-${actualNavigation.events.id}`} />
-                        </Breadcrumb.Section>
-                        <Breadcrumb.Divider icon="chevron right" />
-                        <Breadcrumb.Section>
-                          {roundToRoundTypeName(
-                            actualNavigation.rounds.item,
-                            actualNavigation.events.item,
-                          )}
-                        </Breadcrumb.Section>
-                        <Breadcrumb.Divider icon="chevron right" />
-                        <Breadcrumb.Section>
-                          Group
-                          {' '}
-                          {actualNavigation.external_scramble_sets.index + 1}
-                        </Breadcrumb.Section>
-                      </Breadcrumb>
-                      <Button
-                        secondary
-                        compact
-                        basic
-                        icon="unlink"
-                        content="Unassign"
-                        size="tiny"
-                        attached="right"
-                        onClick={() => unassignAction(
-                          actualNavigation.events.id,
-                          actualNavigation.rounds.id,
-                          actualNavigation.external_scramble_sets.index,
+                    <Breadcrumb size="tiny">
+                      <Breadcrumb.Section>
+                        <Icon className={`cubing-icon event-${actualNavigation.events.id}`} />
+                      </Breadcrumb.Section>
+                      <Breadcrumb.Divider icon="chevron right" />
+                      <Breadcrumb.Section>
+                        {roundToRoundTypeName(
+                          actualNavigation.rounds.item,
+                          actualNavigation.events.item,
                         )}
-                      />
-                    </>
+                      </Breadcrumb.Section>
+                      <Breadcrumb.Divider icon="chevron right" />
+                      <Breadcrumb.Section>
+                        Group
+                        {' '}
+                        {actualNavigation.external_scramble_sets.index + 1}
+                      </Breadcrumb.Section>
+                      {isAttemptMappedScramble && (
+                      <>
+                        <Breadcrumb.Divider icon="chevron right" />
+                        <Breadcrumb.Section>
+                          Attempt
+                          {' '}
+                          {actualNavigation.external_scrambles.index + 1}
+                        </Breadcrumb.Section>
+                      </>
+                      )}
+                    </Breadcrumb>
+                  ) : '(not used)'}
+                </Table.Cell>
+                <Table.Cell
+                  textAlign="center"
+                  verticalAlign="middle"
+                >
+                  {actualNavigation ? (
+                    <MatchedSetActionButtons
+                      matchedNavigation={actualNavigation}
+                      dispatchMatchState={dispatchMatchState}
+                      isAttemptMode={isAttemptMappedScramble}
+                    />
                   ) : (
                     <ExternalSetActionButtons
                       scrSet={scrSet}

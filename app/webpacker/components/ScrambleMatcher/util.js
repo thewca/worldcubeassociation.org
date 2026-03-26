@@ -4,7 +4,7 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import { getRoundTypeId, parseActivityCode, shortLabelForActivityCode } from '../../lib/utils/wcif';
 import I18n from '../../lib/i18n';
-import { AUTOMATCH_DEFAULT_SETTINGS } from './AutoMatchPanel';
+import { formats } from '../../lib/wca-data.js.erb';
 
 export const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 
@@ -15,12 +15,23 @@ export const LEGAL_CROSS_MATCHES = [
 export const DROPPABLE_ID_MATCHED_SCRAMBLES = 'matchedScrambles';
 export const DROPPABLE_ID_STORAGE = 'storage';
 
+export const AUTOMATCH_DEFAULT_SETTINGS = {
+  limitMatches: true,
+  useAttemptsMatching: ATTEMPT_BASED_EVENTS,
+};
+
+export const ATTEMPTS_UNPACKING_MARKER = '_attemptsUnpacking';
+
+export const SET_BACKLINK_MARKER = '_backlinkedSet';
+
 export const prefixForIndex = (index) => {
   const char = String.fromCharCode(65 + (index % 26));
   if (index < 26) return char;
 
   return prefixForIndex(Math.floor(index / 26) - 1) + char;
 };
+
+export const getAttemptsMultiplier = (round) => formats.byId[round.format].expectedSolveCount;
 
 export const scrambleSetToTitle = (scrambleSet) => {
   const eventName = I18n.t(`events.${scrambleSet.event_id}`);
@@ -31,7 +42,15 @@ export const scrambleSetToTitle = (scrambleSet) => {
   const letterCode = prefixForIndex(scrambleSet.scramble_set_number - 1);
   const scrambleSetName = I18n.t('scramble_set.name', { letter_code: letterCode });
 
-  return `${eventAndRound} ${scrambleSetName}`;
+  const setTitle = `${eventAndRound} ${scrambleSetName}`;
+
+  if (scrambleSet[ATTEMPTS_UNPACKING_MARKER]) {
+    const attemptName = I18n.t('scramble_set.attempt', { number: scrambleSet.scramble_number });
+
+    return `${setTitle} ${attemptName}`;
+  }
+
+  return setTitle;
 };
 
 export const roundToRoundTypeName = (wcifRound, wcifEvent, suffix = false) => {
@@ -97,6 +116,67 @@ export const searchRecursive = (data, searchPath, targetId, searchDescriptor = {
   }, null);
 };
 
+function unpackExternalScrambleSet(extScrSet, isAttemptMode) {
+  if (isAttemptMode) {
+    return extScrSet.external_scrambles
+      // TODO GB how to handle extras?
+      .filter((extScr) => !extScr.is_extra)
+      .map((extScr) => ({
+        ...extScr,
+        ...extScrSet,
+        id: extScr.id,
+        [ATTEMPTS_UNPACKING_MARKER]: {
+          ...extScr,
+          [SET_BACKLINK_MARKER]: extScrSet,
+        },
+      }));
+  }
+
+  return [extScrSet];
+}
+
+export function unpackScrambleSets(extScrambleSets, autoMatchSettings) {
+  return extScrambleSets.flatMap((extScrSet) => {
+    const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(extScrSet.event_id);
+
+    return unpackExternalScrambleSet(extScrSet, isAttemptMode);
+  });
+}
+
+export function unpackScrambleSetsInRound(extScrambleSets, isAttemptMode) {
+  return extScrambleSets.flatMap(
+    (extScrSet) => unpackExternalScrambleSet(extScrSet, isAttemptMode),
+  );
+}
+
+export const calculateRoundExpectedCount = (
+  round,
+  isAttemptMode = false,
+) => round.scrambleSetCount * (isAttemptMode ? getAttemptsMultiplier(round) : 1);
+
+export const calculateEventExpectedCount = (event, autoMatchSettings) => {
+  const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(event.id);
+
+  return event.rounds.reduce(
+    (acc, round) => acc + calculateRoundExpectedCount(round, isAttemptMode),
+    0,
+  );
+};
+
+export const calculateRoundMatchedCount = (
+  round,
+  isAttemptMode = false,
+) => unpackScrambleSetsInRound(round.external_scramble_sets, isAttemptMode).length;
+
+export const calculateEventMatchedCount = (event, autoMatchSettings) => {
+  const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(event.id);
+
+  return event.rounds.reduce(
+    (acc, round) => acc + calculateRoundMatchedCount(round, isAttemptMode),
+    0,
+  );
+};
+
 export function autoMatchSearch(
   scrSet,
   wcifEvents,
@@ -110,10 +190,14 @@ export function autoMatchSearch(
 
   if (autoMatchNavigation) {
     const targetRound = autoMatchNavigation.rounds.item;
+    const isAttemptMode = autoMatchSettings.useAttemptsMatching
+      .includes(autoMatchNavigation.events.id);
+
+    const matchingProgress = calculateRoundMatchedCount(targetRound, isAttemptMode);
+    const matchingTarget = calculateRoundExpectedCount(targetRound, isAttemptMode);
 
     if (
-      !autoMatchSettings.limitMatches
-        || targetRound.scrambleSetCount < targetRound.external_scramble_sets.length
+      !autoMatchSettings.limitMatches || matchingProgress < matchingTarget
     ) {
       return autoMatchNavigation;
     }

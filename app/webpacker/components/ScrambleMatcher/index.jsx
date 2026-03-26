@@ -10,10 +10,10 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
 import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
-import { useConfigState, useScrambleFilesQuery } from './util';
+import { AUTOMATCH_DEFAULT_SETTINGS, useConfigState, useScrambleFilesQuery } from './util';
 import EventAndRoundPicker from './EventAndRoundPicker';
 import { MoveModalProvider } from './MoveScrambleSetModal';
-import AutoMatchPanel, { AUTOMATCH_DEFAULT_SETTINGS } from './AutoMatchPanel';
+import AutoMatchPanel from './AutoMatchPanel';
 
 export default function Wrapper({
   wcifEvents,

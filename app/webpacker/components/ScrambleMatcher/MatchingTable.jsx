@@ -10,8 +10,12 @@ import {
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import { Draggable, Droppable } from '@hello-pangea/dnd';
-import { formats } from '../../lib/wca-data.js.erb';
-import { DROPPABLE_ID_MATCHED_SCRAMBLES, scrambleSetToTitle } from './util';
+import {
+  calculateRoundExpectedCount,
+  DROPPABLE_ID_MATCHED_SCRAMBLES,
+  getAttemptsMultiplier,
+  scrambleSetToTitle,
+} from './util';
 import { DraggableScrambleCard } from './UnusedScramblesPanel';
 import { useMoveScrambleSetModal } from './MoveScrambleSetModal';
 import I18n from '../../lib/i18n';
@@ -22,7 +26,7 @@ export default function MatchingTable({
   matchableRows,
   autoMatchSettings,
   unusedScrambleSets,
-  attemptMode = false,
+  isAttemptMode = false,
   dispatchMatchState,
 }) {
   const moveScramble = useMoveScrambleSetModal();
@@ -41,6 +45,7 @@ export default function MatchingTable({
     eventId: selectedEvent.id,
     roundId: selectedRound.id,
     sourceIndex,
+    isAttemptMode,
   });
 
   const onMoveConfirmedAction = (movedScrSet, newEventId, newRoundId) => dispatchMatchState({
@@ -86,13 +91,12 @@ export default function MatchingTable({
     roundId: selectedRound.id,
   });
 
-  const expectedNumOfRows = scrambleSetCount * (
-    attemptMode ? formats.byId[selectedRound.format].expectedSolveCount : 1
-  );
+  const attemptModeFactor = getAttemptsMultiplier(selectedRound);
 
-  const rowCount = Math.max(matchableRows.length, expectedNumOfRows);
+  const expectedNumOfRows = calculateRoundExpectedCount(selectedRound, isAttemptMode);
+  const assignedNumOfSets = Math.ceil(matchableRows.length / attemptModeFactor);
 
-  const computeDefinitionName = (idx) => I18n.t(`scramble_set.${attemptMode ? 'attempt' : 'group'}`, { number: idx + 1 });
+  const renderRowCount = Math.max(matchableRows.length, expectedNumOfRows);
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
@@ -117,9 +121,12 @@ export default function MatchingTable({
         {(providedDroppable) => (
           <Ref innerRef={providedDroppable.innerRef}>
             <Table.Body {...providedDroppable.droppableProps}>
-              {_.times(rowCount).map((index) => {
+              {_.times(renderRowCount).map((index) => {
                 const rowData = matchableRows[index];
                 const isExpected = index < expectedNumOfRows;
+
+                const groupIndex = Math.floor(index / attemptModeFactor);
+                const attemptIndex = index % attemptModeFactor;
 
                 const hasError = isExpected && !rowData;
                 const fallbackIndex = `${DROPPABLE_ID_MATCHED_SCRAMBLES}-${index + 1}`;
@@ -130,7 +137,7 @@ export default function MatchingTable({
                     key={key}
                     draggableId={key}
                     index={index}
-                    isDragDisabled={rowCount === 1 || hasError}
+                    isDragDisabled={renderRowCount === 1 || hasError}
                   >
                     {(providedDraggable, snapshot) => (
                       <Ref innerRef={providedDraggable.innerRef}>
@@ -145,7 +152,17 @@ export default function MatchingTable({
                             negative={hasError}
                           >
                             <Table.Cell textAlign="center" collapsing verticalAlign="middle">
-                              {isExpected ? computeDefinitionName(index) : (
+                              {isExpected ? (
+                                <>
+                                  {I18n.t('scramble_set.group', { number: groupIndex + 1 })}
+                                  {isAttemptMode && (
+                                    <>
+                                      <br />
+                                      {I18n.t('scramble_set.attempt', { number: attemptIndex + 1 })}
+                                    </>
+                                  )}
+                                </>
+                              ) : (
                                 <Popup
                                   trigger={<Icon name="exclamation triangle" color="yellow" />}
                                   content="This entry is unexpected"
@@ -204,7 +221,7 @@ export default function MatchingTable({
             Scramble Sets
           </Table.HeaderCell>
           <Table.HeaderCell colSpan={3}>
-            <Button negative icon="minus square outline" compact attached="left" disabled={scrambleSetCount <= Math.max(1, matchableRows.length)} onClick={() => setScrambleSetCount(scrambleSetCount - 1)} />
+            <Button negative icon="minus square outline" compact attached="left" disabled={scrambleSetCount <= Math.max(1, assignedNumOfSets)} onClick={() => setScrambleSetCount(scrambleSetCount - 1)} />
             <Segment as="span" piled>{scrambleSetCount}</Segment>
             <Button positive icon="plus square outline" compact attached="right" onClick={() => setScrambleSetCount(scrambleSetCount + 1)} />
           </Table.HeaderCell>
