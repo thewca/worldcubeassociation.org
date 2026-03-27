@@ -14,6 +14,7 @@ function AutoMatchConfigModal({
   configureAutoMatch,
 }) {
   const setLimitMatches = useCheckboxUpdater((isChecked) => configureAutoMatch('limitMatches', isChecked));
+  const setTryBestInsert = useCheckboxUpdater((isChecked) => configureAutoMatch('tryBestInsert', isChecked));
 
   const allUseAttemptsMatching = _.isEqual(
     autoMatchSettings.useAttemptsMatching,
@@ -54,6 +55,11 @@ function AutoMatchConfigModal({
             label="Only match scrambles as long as there are still free, unmatched spots available"
             checked={autoMatchSettings.limitMatches}
             onChange={setLimitMatches}
+          />
+          <Form.Checkbox
+            label="Insert scramble sets into the most suitable position, instead of appending them"
+            checked={autoMatchSettings.tryBestInsert}
+            onChange={setTryBestInsert}
           />
           <Form.Checkbox
             label="Assign individual attempts/scrambles to attempt-based events (Fewest Moves etc.)"

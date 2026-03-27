@@ -70,6 +70,20 @@ function MatchedSetActionButtons({
   );
 }
 
+function calculateBestIndex(scrSet, round) {
+  const isAttemptMode = scrSet[ATTEMPTS_UNPACKING_MARKER];
+  const setIndex = scrSet.scramble_set_number - 1;
+
+  if (isAttemptMode) {
+    const attemptCount = getAttemptsMultiplier(round);
+
+    const extraOffset = scrSet.is_extra ? attemptCount : 0;
+    return setIndex * attemptCount + scrSet.scramble_number + extraOffset - 1;
+  }
+
+  return scrSet.scramble_set_number - 1;
+}
+
 export function ExternalSetActionButtons({
   scrSet,
   autoMatchSettings,
@@ -87,20 +101,29 @@ export function ExternalSetActionButtons({
     autoMatchSettings,
   );
 
-  const dispatchAddExternal = (externalScrambleSet, eventId, roundId) => dispatchMatchState({
-    type: 'addExternalToMatching',
-    eventId,
-    roundId,
-    externalScrambleSet,
-  });
+  const onClickAutoAssign = (event, round) => {
+    const bestIndex = calculateBestIndex(scrSet, round);
+    const destinationIndex = autoMatchSettings.tryBestInsert ? bestIndex : undefined;
 
-  const onClickAutoAssign = (eventId, roundId) => dispatchAddExternal(scrSet, eventId, roundId);
+    return dispatchMatchState({
+      type: 'addExternalToMatching',
+      eventId: event.id,
+      roundId: round.id,
+      externalScrambleSet: scrSet,
+      destinationIndex,
+    });
+  };
 
   const onClickManualAssign = () => moveScramble(
     scrSet,
     overrideEventId,
     overrideRoundId,
-  ).then(({ addedScrSet, eventId, roundId }) => dispatchAddExternal(addedScrSet, eventId, roundId));
+  ).then(({ addedScrSet, eventId, roundId }) => dispatchMatchState({
+    type: 'addExternalToMatching',
+    eventId,
+    roundId,
+    externalScrambleSet: addedScrSet,
+  }));
 
   return (
     <Button.Group compact fluid={fluid}>
@@ -111,8 +134,8 @@ export function ExternalSetActionButtons({
           icon="magic"
           content="Auto-Assign"
           onClick={() => onClickAutoAssign(
-            autoInsertNavigation.events.id,
-            autoInsertNavigation.rounds.id,
+            autoInsertNavigation.events.item,
+            autoInsertNavigation.rounds.item,
           )}
         />
       )}

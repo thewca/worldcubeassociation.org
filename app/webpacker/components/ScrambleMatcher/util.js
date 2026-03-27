@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
-import _ from 'lodash';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import { getRoundTypeId, parseActivityCode, shortLabelForActivityCode } from '../../lib/utils/wcif';
@@ -18,6 +17,7 @@ export const DROPPABLE_ID_STORAGE = 'storage';
 
 export const AUTOMATCH_DEFAULT_SETTINGS = {
   limitMatches: true,
+  tryBestInsert: false,
   useAttemptsMatching: ATTEMPT_BASED_EVENTS,
 };
 
