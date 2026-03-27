@@ -1,7 +1,6 @@
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
 import { auth } from "@/auth";
-import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 import {
   Button,
   Card,
@@ -17,6 +16,7 @@ import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import ActionButtons from "@/app/(wca)/competitions/[competitionId]/live/admin/ActionButtons";
+import { getRounds } from "@/lib/wca/live/getRounds";
 
 export default async function LiveOverview({
   params,
@@ -32,12 +32,8 @@ export default async function LiveOverview({
     return <p>Please Log in</p>;
   }
 
-  const client = serverClientWithToken(session.accessToken);
-
-  const { error, data, response } = await client.GET(
-    "/v1/competitions/{competitionId}/live/rounds",
-    { params: { path: { competitionId } } },
-  );
+  // This will always be cached because we need to create the live layout
+  const { error, data, response } = await getRounds(competitionId);
 
   if (error) {
     return <OpenapiError t={t} response={response} />;

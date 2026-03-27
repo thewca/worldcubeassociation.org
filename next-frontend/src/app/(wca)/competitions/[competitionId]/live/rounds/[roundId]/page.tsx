@@ -10,7 +10,9 @@ import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import events from "@/lib/wca/data/events";
-import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { getRounds } from "@/lib/wca/live/getRounds";
+import _ from "lodash";
 
 export default async function ResultPage({
   params,
@@ -29,7 +31,23 @@ export default async function ResultPage({
     return <OpenapiError response={response} t={t} />;
   }
 
-  const { format, id, linked_round_ids } = data;
+  // This will always be cached because we need to create the live layout
+  const {
+    error: roundsError,
+    data: roundsData,
+    response: roundResponse,
+  } = await getRounds(competitionId);
+
+  if (roundsError) {
+    return <OpenapiError response={roundResponse} t={t} />;
+  }
+
+  const roundsByEventId = _.groupBy(
+    roundsData.rounds,
+    (r) => parseActivityCode(r.id).eventId,
+  );
+
+  const { format, id, linked_round_ids, cutoff } = data;
 
   if (linked_round_ids) {
     const linkedRounds = await Promise.all(
@@ -55,7 +73,7 @@ export default async function ResultPage({
               formatId={format}
               roundWcifId={roundId}
               competitionId={competitionId}
-              title="Live Results"
+              title={t("competitions.live.results.dual_round")}
               isLinkedRound
             />
           </MultiRoundResultProvider>
@@ -66,6 +84,12 @@ export default async function ResultPage({
 
   const { eventId, roundNumber } = parseActivityCode(roundId);
 
+  const roundTypeId = getRoundTypeId(
+    roundNumber!,
+    roundsByEventId[eventId].length,
+    Boolean(cutoff),
+  );
+
   return (
     <Container bg="bg">
       <VStack align="left">
@@ -74,7 +98,9 @@ export default async function ResultPage({
             formatId={format}
             roundWcifId={roundId}
             competitionId={competitionId}
-            title={`${events.byId[eventId].name} - Round ${roundNumber}`}
+            title={
+              events.byId[eventId].name + " " + t(`rounds.${roundTypeId}.name`)
+            }
           />
         </LiveResultProvider>
       </VStack>
