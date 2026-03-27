@@ -1,12 +1,14 @@
-import { Icon, Table } from 'semantic-ui-react';
+import { Header, Icon, List, Popup, Table } from 'semantic-ui-react';
 import React, { useCallback } from 'react';
 import { shortLabelForActivityCode } from '../../lib/utils/wcif';
 import {
   calculateEventExpectedCount,
   calculateEventMatchedCount,
   calculateRoundExpectedCount,
-  calculateRoundMatchedCount,
+  calculateRoundMatchedCount, roundToRoundTypeName,
 } from './util';
+import { events } from '../../lib/wca-data.js.erb';
+import _ from 'lodash';
 
 function EventProgressRow({
   rowTitle,
@@ -55,6 +57,75 @@ function RoundsProgressRow({
         );
       }))}
     </Table.Row>
+  );
+}
+
+function getRoundStatus(round, isAttemptMode = false) {
+  const matchedCount = calculateRoundMatchedCount(round, isAttemptMode);
+  const expectedCount = calculateRoundExpectedCount(round, isAttemptMode);
+
+  if (matchedCount > expectedCount) {
+    return 'warning';
+  }
+
+  if (matchedCount < expectedCount) {
+    return 'error';
+  }
+
+  return null;
+}
+
+function EventStatusIcon({
+  event,
+  autoMatchSettings,
+}) {
+  const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(event.id);
+
+  const roundsWithError = event.rounds
+    .filter((rd) => getRoundStatus(rd, isAttemptMode) === 'error');
+
+  const roundsWithWarning = event.rounds
+    .filter((rd) => getRoundStatus(rd, isAttemptMode) === 'warning');
+
+  const isMismatch = roundsWithError.length > 0 || roundsWithWarning.length > 0;
+
+  return (
+    <Popup
+      disabled={!isMismatch}
+      trigger={(
+        <Icon.Group size="large">
+          <Icon className={`cubing-icon event-${event.id}`} />
+          {isMismatch && <Icon name="warning sign" corner color={roundsWithError.length > 0 ? 'red' : 'yellow'} />}
+        </Icon.Group>
+      )}
+      position="top center"
+    >
+      <Popup.Header>{events.byId[event.id].name}</Popup.Header>
+      <Popup.Content>
+        <List bulleted>
+          {roundsWithError.length > 0 && (
+            <>
+              <List.Item>Missing scrambles</List.Item>
+              <List.List bulleted>
+                {roundsWithError.map((rd) => (
+                  <List.Item key={rd.id}>{roundToRoundTypeName(rd, event)}</List.Item>
+                ))}
+              </List.List>
+            </>
+          )}
+          {roundsWithWarning.length > 0 && (
+            <>
+              <List.Item>Too many scrambles</List.Item>
+              <List.List bulleted>
+                {roundsWithWarning.map((rd) => (
+                  <List.Item key={rd.id}>{roundToRoundTypeName(rd, event)}</List.Item>
+                ))}
+              </List.List>
+            </>
+          )}
+        </List>
+      </Popup.Content>
+    </Popup>
   );
 }
 
@@ -117,22 +188,12 @@ export default function MatchingProgressTable({
           matchStateEvents={rootMatchState.events}
           cellComponent={Table.HeaderCell}
         >
-          {(evt) => {
-            const matchedCount = calculateEventMatchedCount(evt, autoMatchSettings);
-            const expectedCount = calculateEventExpectedCount(evt, autoMatchSettings);
-
-            const isMismatchError = matchedCount < expectedCount;
-            const isMismatchWarning = matchedCount > expectedCount;
-
-            const isMismatch = isMismatchError || isMismatchWarning;
-
-            return (
-              <Icon.Group size="large">
-                <Icon className={`cubing-icon event-${evt.id}`} />
-                {isMismatch && <Icon name="warning sign" corner color={isMismatchWarning ? 'yellow' : 'red'} />}
-              </Icon.Group>
-            );
-          }}
+          {(event) => (
+            <EventStatusIcon
+              event={event}
+              autoMatchSettings={autoMatchSettings}
+            />
+          )}
         </EventProgressRow>
       </Table.Header>
       <Table.Body>
