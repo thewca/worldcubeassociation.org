@@ -145,11 +145,13 @@ export default function AutoMatchPanel({
           You can click on the small, colored cells to navigate quickly between rounds.
         </Header.Subheader>
       </Header>
-      <MatchingProgressTable
-        rootMatchState={matchState}
-        uploadedScrambleFiles={uploadedScrambleFiles}
-        navigatePicker={navigatePicker}
-      />
+      <div style={{ overflowX: 'auto' }}>
+        <MatchingProgressTable
+          rootMatchState={matchState}
+          uploadedScrambleFiles={uploadedScrambleFiles}
+          navigatePicker={navigatePicker}
+        />
+      </div>
     </>
   );
 }
