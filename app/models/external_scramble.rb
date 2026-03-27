@@ -5,7 +5,7 @@ class ExternalScramble < ApplicationRecord
 
   belongs_to :external_scramble_set
 
-  has_many :matched_scrambles, dependent: :nullify
+  has_many :matched_scrambles, dependent: :delete_all
 
   scope :not_extra, -> { where(is_extra: false) }
 

@@ -11,7 +11,7 @@ class ExternalScrambleSet < ApplicationRecord
   belongs_to :scramble_file_upload
 
   has_many :external_scrambles, dependent: :destroy
-  has_many :matched_scramble_sets, dependent: :nullify
+  has_many :matched_scramble_sets, dependent: :delete_all
 
   delegate :original_filename, to: :scramble_file_upload
 
