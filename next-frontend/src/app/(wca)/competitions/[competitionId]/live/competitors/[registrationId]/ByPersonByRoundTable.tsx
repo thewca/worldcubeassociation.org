@@ -35,6 +35,7 @@ export default function ByPersonByRoundTable({
         format={formats.byId[rounds[0].format]}
         showFull={showFull}
         byPerson
+        t={t}
       />
       <Table.Body>
         {eventResults.map((result) => {

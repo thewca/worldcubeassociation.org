@@ -1410,6 +1410,8 @@ en:
       admin:
         open: "Open"
         clear: "Clear"
+      results:
+        competitor: "Competitor"
     #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"
