@@ -150,10 +150,14 @@ class Round < ApplicationRecord
     live_results.where(global_pos: 1..3)
   end
 
-  def previous_round
+  def previous_round(all_rounds = nil)
     return nil if number == 1
 
-    Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
+    if all_rounds
+      all_rounds.find { |r| r.competition_event_id == competition_event_id && r.number == number - 1 }
+    else
+      Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
+    end
   end
 
   def consider_previous_round_results?
@@ -212,7 +216,7 @@ class Round < ApplicationRecord
   end
 
   def total_competitors
-    live_competitors.count
+    live_results.map(&:registration_id).length
   end
 
   def recompute_live_columns(skip_advancing: false)
@@ -319,7 +323,7 @@ class Round < ApplicationRecord
   end
 
   def competitors_live_results_entered
-    live_results.not_empty.count
+    live_results.not_empty.length
   end
 
   def score_taking_done?
@@ -397,10 +401,10 @@ class Round < ApplicationRecord
   STATE_READY = "ready"
   STATE_PENDING = "pending"
 
-  def lifecycle_state
+  def lifecycle_state(all_rounds = nil)
     return STATE_LOCKED if locked?
     return STATE_OPEN if open?
-    return STATE_READY if number == 1 || previous_round.score_taking_done?
+    return STATE_READY if number == 1 || previous_round(all_rounds).score_taking_done?
 
     STATE_PENDING
   end
@@ -495,7 +499,7 @@ class Round < ApplicationRecord
     }
   end
 
-  def to_wcif
+  def to_wcif(results: true)
     {
       "id" => wcif_id,
       "format" => self.format_id,
@@ -503,14 +507,14 @@ class Round < ApplicationRecord
       "cutoff" => cutoff&.to_wcif,
       "advancementCondition" => advancement_condition&.to_wcif,
       "scrambleSetCount" => self.scramble_set_count,
-      "results" => round_results.map(&:to_wcif),
+      "results" => results ? round_results.map(&:to_wcif) : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
 
   def to_live_results_json(only_podiums: false)
     {
-      **self.to_wcif,
+      **self.to_wcif(results: false).compact_blank,
       "round_id" => id,
       "competitors" => live_competitors.includes(:user).map(&:to_live_json),
       "results" => only_podiums ? live_podium : live_results,
@@ -519,10 +523,10 @@ class Round < ApplicationRecord
     }
   end
 
-  def to_live_info_json
-    state = lifecycle_state
+  def to_live_info_json(all_rounds)
+    state = lifecycle_state(all_rounds)
     json = {
-      **self.to_wcif,
+      **self.to_wcif(results: false).compact_blank,
       "state" => state,
     }
     if [STATE_OPEN, STATE_LOCKED].include?(state)

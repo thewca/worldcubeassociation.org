@@ -38,9 +38,12 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
   end
 
   def rounds
-    competition = Competition.find(params.require(:competition_id))
+    competition = Competition.includes(
+      rounds: %i[wcif_extensions live_results],
+    ).find(params.require(:competition_id))
 
-    render json: { rounds: competition.rounds.map(&:to_live_info_json) }
+    all_rounds = competition.rounds
+    render json: { rounds: all_rounds.map { |r| r.to_live_info_json(all_rounds) } }
   end
 
   def by_person
