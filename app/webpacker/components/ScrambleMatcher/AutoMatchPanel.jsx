@@ -123,7 +123,7 @@ export default function AutoMatchPanel({
           <Button
             primary
             basic
-            icon="coffee"
+            icon="magic"
             content="Automatically assign scrambles"
             style={{ textTransform: 'uppercase', letterSpacing: '15%' }}
             onClick={executeAutoAssign}

@@ -69,8 +69,8 @@ export function ExternalSetActionButtons({
       <Button
         primary
         basic
-        icon="pencil"
-        content="Manual"
+        icon="arrows horizontal alternate"
+        content="Move"
         onClick={onClickManualAssign}
       />
     </Button.Group>
@@ -234,6 +234,7 @@ function ScrambleFileBody({
                   textAlign="center"
                   verticalAlign="middle"
                   colSpan={2}
+                  disabled={!actualNavigation}
                 >
                   {actualNavigation ? (
                     <>
@@ -288,7 +289,7 @@ function ScrambleFileBody({
       <Button.Group widths={3}>
         <Button
           primary
-          icon="coffee"
+          icon="magic"
           content="Auto-Assign"
           onClick={autoAssignAction}
         />

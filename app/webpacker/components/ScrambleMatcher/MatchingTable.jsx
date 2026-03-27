@@ -105,7 +105,7 @@ export default function MatchingTable({
             {' '}
             <Button.Group compact size="mini">
               <Button basic content="Reset" icon="undo" secondary onClick={onClickResetAction} />
-              <Button basic content="Auto-Assign" icon="coffee" primary onClick={onClickAutoAssign} disabled={unusedScrambleSets.length === 0} />
+              <Button basic content="Auto-Assign" icon="magic" primary onClick={onClickAutoAssign} disabled={unusedScrambleSets.length === 0} />
               <Button basic content="Clear" icon="eraser" negative onClick={onClickClearAction} disabled={matchableRows.length === 0} />
             </Button.Group>
           </Table.HeaderCell>
