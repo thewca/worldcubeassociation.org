@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
+import _ from 'lodash';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import { getRoundTypeId, parseActivityCode, shortLabelForActivityCode } from '../../lib/utils/wcif';
@@ -30,6 +31,11 @@ export const prefixForIndex = (index) => {
 
   return prefixForIndex(Math.floor(index / 26) - 1) + char;
 };
+
+export const clearScramblesFromSet = (extScrSet) => ({
+  ...extScrSet,
+  external_scrambles: [],
+});
 
 export const getAttemptsMultiplier = (round) => formats.byId[round.format].expectedSolveCount;
 
@@ -119,15 +125,13 @@ export const searchRecursive = (data, searchPath, targetId, searchDescriptor = {
 function unpackExternalScrambleSet(extScrSet, isAttemptMode) {
   if (isAttemptMode) {
     return extScrSet.external_scrambles
-      // TODO GB how to handle extras?
-      .filter((extScr) => !extScr.is_extra)
       .map((extScr) => ({
         ...extScr,
         ...extScrSet,
         id: extScr.id,
         [ATTEMPTS_UNPACKING_MARKER]: {
           ...extScr,
-          [SET_BACKLINK_MARKER]: extScrSet,
+          [SET_BACKLINK_MARKER]: clearScramblesFromSet(extScrSet),
         },
       }));
   }

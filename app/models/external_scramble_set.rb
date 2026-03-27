@@ -3,6 +3,8 @@
 class ExternalScrambleSet < ApplicationRecord
   SERIALIZATION_INCLUDES = { external_scrambles: [], scramble_file_upload: [] }.freeze
 
+  default_scope { order(:event_id, :round_number, :scramble_set_number) }
+
   belongs_to :competition
   belongs_to :event
 

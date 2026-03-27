@@ -2,7 +2,9 @@ import _ from 'lodash';
 import {
   addItemToArray,
   ATTEMPTS_UNPACKING_MARKER,
-  autoMatchSearch, getAttemptsMultiplier,
+  autoMatchSearch,
+  clearScramblesFromSet,
+  getAttemptsMultiplier,
   moveArrayItem,
   removeItemFromArray,
   searchRecursive,
@@ -32,7 +34,7 @@ function mergeMatchedSetsIntoWcif(wcifEvents, matchedScrambleSets) {
             ...matchedScramble.external_scramble,
             scramble_string: matchedScramble.scramble_string,
             is_extra: matchedScramble.is_extra,
-            [SET_BACKLINK_MARKER]: matchedScrSet.external_scramble_set,
+            [SET_BACKLINK_MARKER]: clearScramblesFromSet(matchedScrSet.external_scramble_set),
           })),
         })),
       })),
@@ -149,9 +151,20 @@ function executeAddExternalToMatching(
         return filledBracket.filter((set) => set.external_scrambles.length > 0);
       }
 
+      const formattedScrSet = {
+        ...externalScrambleSet,
+        external_scrambles: _.sortBy(
+          externalScrambleSet.external_scrambles,
+          ['is_extra', 'scramble_number'],
+        ).map((extScr) => ({
+          ...extScr,
+          [SET_BACKLINK_MARKER]: clearScramblesFromSet(externalScrambleSet),
+        })),
+      };
+
       return addItemToArray(
         sets,
-        externalScrambleSet,
+        formattedScrSet,
         destinationIndex,
       );
     },

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ExternalScramble < ApplicationRecord
+  default_scope { order(:is_extra, :scramble_number) }
+
   belongs_to :external_scramble_set
 
   has_many :matched_scrambles, dependent: :nullify
