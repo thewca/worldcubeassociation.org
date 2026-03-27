@@ -14,6 +14,7 @@ import { AUTOMATCH_DEFAULT_SETTINGS, useConfigState, useScrambleFilesQuery } fro
 import EventAndRoundPicker from './EventAndRoundPicker';
 import { MoveModalProvider } from './MoveScrambleSetModal';
 import AutoMatchPanel from './AutoMatchPanel';
+import Errored from '../Requests/Errored';
 
 export default function Wrapper({
   wcifEvents,
@@ -93,7 +94,7 @@ function ScrambleMatcher({
 
   useUnsavedChangesAlert(hasUnsavedChanges);
 
-  const { mutate: submitMatchState, isPending: isSubmitting } = useMutation({
+  const { mutate: submitMatchState, isPending: isSubmitting, error } = useMutation({
     mutationFn: submitMatchedScrambles,
     onSuccess: (data) => dispatchMatchState({ type: 'resetAfterSave', matchedScrambleSets: data }),
   });
@@ -151,9 +152,10 @@ function ScrambleMatcher({
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
       />
-      {hasUnsavedChanges && (
+      {hasUnsavedChanges && !error && (
         <Message info content="You have unsaved changes. Don't forget to Save below!" />
       )}
+      {error && <Errored error={error} />}
       <Divider />
       {renderSubmitButton('Save Changes', !hasUnsavedChanges)}
       <Button
