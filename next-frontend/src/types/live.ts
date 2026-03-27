@@ -6,6 +6,7 @@ export type BaseLiveResult = components["schemas"]["BaseLiveResult"];
 export type LiveCompetitor = components["schemas"]["LiveCompetitor"];
 export type LiveAttempt = components["schemas"]["LiveAttempt"];
 export type LiveRound = components["schemas"]["LiveRound"];
+export type LiveRoundAdmin = components["schemas"]["LiveRoundAdmin"]
 export type PendingLiveResult = PartialExcept<
   LiveResult,
   "registration_id" | "attempts"
