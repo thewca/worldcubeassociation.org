@@ -10,9 +10,8 @@ import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import events from "@/lib/wca/data/events";
-import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
-import { getRounds } from "@/lib/wca/live/getRounds";
-import _ from "lodash";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { fetchRoundName } from "@/lib/wca/live/getRoundName";
 
 export default async function ResultPage({
   params,
@@ -31,23 +30,7 @@ export default async function ResultPage({
     return <OpenapiError response={response} t={t} />;
   }
 
-  // This will always be cached because we need to create the live layout
-  const {
-    error: roundsError,
-    data: roundsData,
-    response: roundResponse,
-  } = await getRounds(competitionId);
-
-  if (roundsError) {
-    return <OpenapiError response={roundResponse} t={t} />;
-  }
-
-  const roundsByEventId = _.groupBy(
-    roundsData.rounds,
-    (r) => parseActivityCode(r.id).eventId,
-  );
-
-  const { format, id, linked_round_ids, cutoff } = data;
+  const { format, id, linked_round_ids } = data;
 
   if (linked_round_ids) {
     const linkedRounds = await Promise.all(
@@ -82,13 +65,9 @@ export default async function ResultPage({
     );
   }
 
-  const { eventId, roundNumber } = parseActivityCode(roundId);
+  const { eventId } = parseActivityCode(roundId);
 
-  const roundTypeId = getRoundTypeId(
-    roundNumber!,
-    roundsByEventId[eventId].length,
-    Boolean(cutoff),
-  );
+  const roundName = await fetchRoundName(competitionId, id, t);
 
   return (
     <Container bg="bg">
@@ -98,9 +77,7 @@ export default async function ResultPage({
             formatId={format}
             roundWcifId={roundId}
             competitionId={competitionId}
-            title={
-              events.byId[eventId].name + " " + t(`rounds.${roundTypeId}.name`)
-            }
+            title={events.byId[eventId].name + " " + roundName}
           />
         </LiveResultProvider>
       </VStack>

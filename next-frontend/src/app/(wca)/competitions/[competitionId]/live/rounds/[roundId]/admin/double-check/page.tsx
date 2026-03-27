@@ -8,6 +8,7 @@ import { Container } from "@chakra-ui/react";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import { DateTime } from "luxon";
+import { fetchRoundName } from "@/lib/wca/live/getRoundName";
 
 export default async function DoubleCheckPage({
   params,
@@ -35,6 +36,8 @@ export default async function DoubleCheckPage({
       DateTime.fromISO(a.last_attempt_entered_at).toMillis(),
   );
 
+  const roundName = await fetchRoundName(competitionId, id, t);
+
   return (
     <Container>
       <PermissionCheck
@@ -53,6 +56,7 @@ export default async function DoubleCheckPage({
               results={sortedResults}
               formatId={format}
               roundWcifId={id}
+              roundName={roundName}
             />
           </LiveResultAdminProvider>
         </LiveResultProvider>

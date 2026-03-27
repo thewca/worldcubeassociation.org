@@ -12,11 +12,12 @@ import {
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
 import EventIcon from "@/components/EventIcon";
-import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import ActionButtons from "@/app/(wca)/competitions/[competitionId]/live/admin/ActionButtons";
 import { getRounds } from "@/lib/wca/live/getRounds";
+import { getRoundName } from "@/lib/wca/live/getRoundName";
 
 export default async function LiveOverview({
   params,
@@ -59,12 +60,7 @@ export default async function LiveOverview({
                 </Card.Title>
                 <Card.Description w="full">
                   {rounds.map((r) => {
-                    const { roundNumber } = parseActivityCode(r.id);
-                    const roundTypeId = getRoundTypeId(
-                      roundNumber!,
-                      rounds.length,
-                      false,
-                    );
+                    const roundName = getRoundName(r.id, t, rounds);
                     return (
                       <HStack key={r.id}>
                         <Button
@@ -86,7 +82,7 @@ export default async function LiveOverview({
                                 },
                               })}
                             >
-                              {t(`rounds.${roundTypeId}.name`)}{" "}
+                              {roundName}{" "}
                               {r.state == "open" &&
                                 `(${r.competitors_live_results_entered}/${r.total_competitors} entered)`}
                               {r.state == "locked" &&

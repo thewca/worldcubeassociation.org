@@ -10,9 +10,10 @@ import {
 import formats from "@/lib/wca/data/formats";
 import { LiveResult, LiveRoundAdmin } from "@/types/live";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
-import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useT } from "@/lib/i18n/useI18n";
 import _ from "lodash";
+import { getRoundName } from "@/lib/wca/live/getRoundName";
 
 export default function ByPersonByRoundTable({
   eventResults: eventResults,
@@ -46,14 +47,10 @@ export default function ByPersonByRoundTable({
             registration_id,
           } = result;
 
-          const { eventId, roundNumber } = parseActivityCode(wcifId);
+          const { eventId } = parseActivityCode(wcifId);
           const round = roundsByWcifId[wcifId];
 
-          const roundTypeId = getRoundTypeId(
-            roundNumber!,
-            rounds.length,
-            Boolean(round.cutoff),
-          );
+          const roundName = getRoundName(wcifId, t, rounds);
 
           const format = formats.byId[round.format];
           const stats = statColumnsForFormat(format);
@@ -64,7 +61,7 @@ export default function ByPersonByRoundTable({
                 <Link
                   href={`/competitions/${competitionId}/live/rounds/${wcifId}`}
                 >
-                  {t(`rounds.${roundTypeId}.name`)}
+                  {roundName}
                 </Link>
               </Table.Cell>
               <LivePositionCell
