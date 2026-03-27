@@ -174,6 +174,12 @@ function ScrambleFileBody({
     'scramble_set_number',
   ]);
 
+  const autoAssignAction = useCallback(() => dispatchMatchState({
+    type: 'autoMatchScrambleSets',
+    scrambleSets: orderedScrambleSets,
+    settings: autoMatchSettings,
+  }), [dispatchMatchState, orderedScrambleSets, autoMatchSettings]);
+
   return (
     <>
       <Table celled structured compact>
@@ -279,11 +285,17 @@ function ScrambleFileBody({
           })}
         </Table.Body>
       </Table>
-      <Button.Group widths={2}>
+      <Button.Group widths={3}>
+        <Button
+          primary
+          icon="coffee"
+          content="Auto-Assign"
+          onClick={autoAssignAction}
+        />
         <Button
           secondary
           icon="eraser"
-          content="Clear Assignments"
+          content="Clear"
           onClick={clearAllAction}
         />
         <Button
