@@ -1,14 +1,13 @@
-import { Header, Icon, List, Popup, Table } from 'semantic-ui-react';
+import {
+  Icon, List, Popup, Table,
+} from 'semantic-ui-react';
 import React, { useCallback } from 'react';
 import { shortLabelForActivityCode } from '../../lib/utils/wcif';
 import {
-  calculateEventExpectedCount,
-  calculateEventMatchedCount,
   calculateRoundExpectedCount,
   calculateRoundMatchedCount, roundToRoundTypeName,
 } from './util';
 import { events } from '../../lib/wca-data.js.erb';
-import _ from 'lodash';
 
 function EventProgressRow({
   rowTitle,

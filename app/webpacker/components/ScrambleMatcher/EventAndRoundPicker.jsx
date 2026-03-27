@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Button, Header } from 'semantic-ui-react';
 import EventSelector from '../wca/EventSelector';
 import I18n from '../../lib/i18n';
