@@ -26,7 +26,7 @@ export default async function ResultPage({
 
   const { competitors, format, id } = data;
 
-  const roundName = await fetchRoundName(competitionId, id, t);
+  const roundName = await fetchRoundName(competitionId, id, t, true);
 
   return (
     <Container bg="bg">

@@ -9,8 +9,6 @@ import {
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
-import events from "@/lib/wca/data/events";
-import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { fetchRoundName } from "@/lib/wca/live/getRoundName";
 
 export default async function ResultPage({
@@ -65,9 +63,7 @@ export default async function ResultPage({
     );
   }
 
-  const { eventId } = parseActivityCode(roundId);
-
-  const roundName = await fetchRoundName(competitionId, id, t);
+  const roundName = await fetchRoundName(competitionId, id, t, true);
 
   return (
     <Container bg="bg">
@@ -77,7 +73,7 @@ export default async function ResultPage({
             formatId={format}
             roundWcifId={roundId}
             competitionId={competitionId}
-            title={`${events.byId[eventId].name} - ${roundName}`}
+            title={roundName}
           />
         </LiveResultProvider>
       </VStack>

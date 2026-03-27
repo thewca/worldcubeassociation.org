@@ -36,7 +36,7 @@ export default async function DoubleCheckPage({
       DateTime.fromISO(a.last_attempt_entered_at).toMillis(),
   );
 
-  const roundName = await fetchRoundName(competitionId, id, t);
+  const roundName = await fetchRoundName(competitionId, id, t, true);
 
   return (
     <Container>
