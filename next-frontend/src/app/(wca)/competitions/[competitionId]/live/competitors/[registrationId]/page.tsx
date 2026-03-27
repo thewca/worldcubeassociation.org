@@ -5,7 +5,6 @@ import events from "@/lib/wca/data/events";
 import { Fragment } from "react";
 import ByPersonByRoundTable from "@/app/(wca)/competitions/[competitionId]/live/competitors/[registrationId]/ByPersonByRoundTable";
 import { getRounds } from "@/lib/wca/live/getRounds";
-import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 export default async function PersonResults({
   params,
 }: {
@@ -31,11 +30,6 @@ export default async function PersonResults({
 
   const resultsByEvent = _.groupBy(results, "event_id");
 
-  const roundsByEvent = _.groupBy(
-    rounds,
-    (r) => parseActivityCode(r.id).eventId,
-  );
-
   return (
     <Container>
       <Heading textStyle="h1">{name}</Heading>
@@ -45,7 +39,7 @@ export default async function PersonResults({
           <ByPersonByRoundTable
             eventResults={eventResults}
             competitionId={competitionId}
-            rounds={roundsByEvent[key]}
+            rounds={rounds}
           />
         </Fragment>
       ))}
