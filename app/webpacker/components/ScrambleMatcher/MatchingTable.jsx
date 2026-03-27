@@ -91,7 +91,7 @@ export default function MatchingTable({
     roundId: selectedRound.id,
   });
 
-  const attemptModeFactor = getAttemptsMultiplier(selectedRound);
+  const attemptModeFactor = isAttemptMode ? getAttemptsMultiplier(selectedRound) : 1;
 
   const expectedNumOfRows = calculateRoundExpectedCount(selectedRound, isAttemptMode);
   const assignedNumOfSets = Math.ceil(matchableRows.length / attemptModeFactor);
