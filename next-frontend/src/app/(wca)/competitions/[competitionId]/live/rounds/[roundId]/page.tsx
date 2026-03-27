@@ -77,7 +77,7 @@ export default async function ResultPage({
             formatId={format}
             roundWcifId={roundId}
             competitionId={competitionId}
-            title={events.byId[eventId].name + " " + roundName}
+            title={`${events.byId[eventId].name} - ${roundName}`}
           />
         </LiveResultProvider>
       </VStack>

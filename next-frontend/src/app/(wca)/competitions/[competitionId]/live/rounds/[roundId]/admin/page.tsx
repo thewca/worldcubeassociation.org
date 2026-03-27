@@ -7,6 +7,7 @@ import React from "react";
 import { getT } from "@/lib/i18n/get18n";
 import formats from "@/lib/wca/data/formats";
 import { LiveResultProvider } from "@/providers/LiveResultProvider";
+import { fetchRoundName } from "@/lib/wca/live/getRoundName";
 
 export default async function ResultPage({
   params,
@@ -23,7 +24,9 @@ export default async function ResultPage({
 
   if (error) return <OpenapiError response={response} t={t} />;
 
-  const { competitors, format } = data;
+  const { competitors, format, id } = data;
+
+  const roundName = await fetchRoundName(competitionId, id, t);
 
   return (
     <Container bg="bg">
@@ -38,6 +41,7 @@ export default async function ResultPage({
               roundId={roundId}
               competitionId={competitionId}
               competitors={competitors!}
+              roundName={roundName}
             />
           </LiveResultProvider>
         </VStack>

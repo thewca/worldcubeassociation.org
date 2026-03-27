@@ -12,13 +12,15 @@ export default function AddResults({
   format,
   roundId,
   competitionId,
+  roundName,
 }: {
   format: Format;
   roundId: string;
   competitionId: string;
   competitors: LiveCompetitor[];
+  roundName: string;
 }) {
-  const { eventId, roundNumber } = parseActivityCode(roundId);
+  const { eventId } = parseActivityCode(roundId);
 
   return (
     <LiveResultAdminProvider
@@ -41,7 +43,7 @@ export default function AddResults({
             formatId={format.id}
             competitionId={competitionId}
             isAdmin
-            title={`${events.byId[eventId].name} - ${roundNumber}`}
+            title={`${events.byId[eventId].name} - ${roundName}`}
           />
         </GridItem>
       </SimpleGrid>
