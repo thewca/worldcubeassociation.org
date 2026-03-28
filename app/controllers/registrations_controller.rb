@@ -38,30 +38,16 @@ class RegistrationsController < ApplicationController
   private def validate_import_registration
     @competition = competition_from_params
 
-    registration_rows = params.require(:registrations)
+    @registrations = params.require(:registrations)
 
-    return render status: :unprocessable_content, json: { error: "Expected array of registrations" } unless registration_rows.is_a?(Array)
+    return render status: :unprocessable_content, json: { error: "Expected array of registrations" } unless @registrations.is_a?(Array)
 
     errors = [
-      validate_registrations(registration_rows, @competition),
-      competitor_limit_error(@competition, registration_rows.length),
+      validate_registrations(@registrations, @competition),
+      competitor_limit_error(@competition, @registrations.length),
     ].compact.flatten
 
-    return render status: :unprocessable_content, json: { error: errors.join(", ") } if errors.any?
-
-    @registration_data = registration_rows.map do |row|
-      country = Country.c_find_by_iso2(row[:countryIso2])
-
-      {
-        name: row[:name],
-        wca_id: row[:wcaId],
-        country: country.id,
-        gender: row[:gender],
-        birth_date: row[:birthdate],
-        email: row[:email],
-        event_ids: row.dig(:registration, :eventIds) || [],
-      }
-    end
+    render status: :unprocessable_content, json: { error: errors.join(", ") } if errors.any?
   end
 
   before_action :validate_and_parse_registration_preview, only: %i[validate_and_convert_registrations]
@@ -248,24 +234,20 @@ class RegistrationsController < ApplicationController
     #   from CSV import to be considered as one "batch". So we mark a timestamp
     #   once, and then reuse it throughout the loop.
     import_time = Time.now.utc
-    emails = @registration_data.pluck(:email)
+    emails = @registrations.pluck(:email)
     ActiveRecord::Base.transaction do
       @competition.registrations.accepted.each do |registration|
         registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED) unless emails.include?(registration.user.email)
       end
-      @registration_data.each do |registration_row|
-        user, locked_account_created = user_for_registration!(registration_row)
+      @registrations.each do |registration_data|
+        user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
         new_locked_users << user if locked_account_created
         registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
           reg.registered_at = import_time
         end
-        registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED) unless registration.accepted?
-        registration.registration_competition_events = []
-        build_registration_events(registration, registration_row[:event_ids], @competition.competition_events)
-        registration.save!
-        registration.add_history_entry({ event_ids: registration.event_ids }, "user", current_user.id, "CSV Import")
+        registration.save_registration_data!(registration_data: registration_data, creator: current_user, source: "CSV Import")
       rescue StandardError => e
-        raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_row[:name], error: e))
+        raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_data[:name], error: e))
       end
     end
     new_locked_users.each do |user|
@@ -295,18 +277,25 @@ class RegistrationsController < ApplicationController
     end
 
     ActiveRecord::Base.transaction do
-      user, locked_account_created = user_for_registration!(params[:registration_data])
+      registration_data = {
+        name: params[:registration_data][:name],
+        wcaId: params[:registration_data][:wca_id],
+        countryIso2: Country.c_find(params[:registration_data][:country]).iso2,
+        gender: params[:registration_data][:gender],
+        birthdate: params[:registration_data][:birth_date],
+        email: params[:registration_data][:email],
+        comments: params[:registration_data][:comments],
+        registration: {
+          eventIds: params[:registration_data][:event_ids] || [],
+        },
+      }
+      user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
         reg.registered_at = Time.now.utc
       end
       raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
 
-      registration_comment = params.dig(:registration_data, :comments)
-      registration.assign_attributes(comments: registration_comment) if registration_comment.present?
-      registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED)
-      build_registration_events(registration, params[:registration_data][:event_ids], @competition.competition_events)
-      registration.save!
-      registration.add_history_entry({ event_ids: registration.event_ids }, "user", current_user.id, "OTS Form")
+      registration.save_registration_data!(registration_data: registration_data, creator: current_user, source: "OTS Form")
       RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later if locked_account_created
     end
     flash[:success] = I18n.t("registrations.flash.added")
@@ -314,89 +303,6 @@ class RegistrationsController < ApplicationController
   rescue StandardError => e
     flash.now[:danger] = e.to_s
     render :add
-  end
-
-  private def build_registration_events(registration, event_ids_registered, competition_events)
-    registration.registration_competition_events.build(
-      competition_events.where(event_id: event_ids_registered).ids.map { |id| { competition_event_id: id } },
-    )
-  end
-
-  private def user_for_registration!(registration_row)
-    registration_row[:wca_id]&.upcase!
-    registration_row[:email]&.downcase!
-    person_details = {
-      name: registration_row[:name],
-      country_iso2: Country.c_find(registration_row[:country]).iso2,
-      gender: registration_row[:gender],
-      dob: registration_row[:birth_date],
-    }
-    if registration_row[:wca_id].present?
-      raise I18n.t("registrations.import.errors.non_existent_wca_id", wca_id: registration_row[:wca_id]) unless Person.exists?(wca_id: registration_row[:wca_id])
-
-      user = User.find_by(wca_id: registration_row[:wca_id])
-      if user
-        if user.dummy_account?
-          email_user = User.find_by(email: registration_row[:email])
-          if email_user
-            if email_user.wca_id.present?
-              raise I18n.t("registrations.import.errors.email_user_with_different_wca_id",
-                           email: registration_row[:email], user_wca_id: email_user.wca_id,
-                           registration_wca_id: registration_row[:wca_id])
-            else
-              # User hooks will also remove the dummy user account.
-              email_user.update!(wca_id: registration_row[:wca_id], **person_details)
-              [email_user, false]
-            end
-          else
-            user.skip_reconfirmation!
-            user.update!(dummy_account: false, **person_details, email: registration_row[:email])
-            [user, true]
-          end
-        else
-          [user, false] # Use this account.
-        end
-      else
-        email_user = User.find_by(email: registration_row[:email])
-        if email_user
-          if email_user.unconfirmed_wca_id.present? && email_user.unconfirmed_wca_id != registration_row[:wca_id]
-            raise I18n.t("registrations.import.errors.email_user_with_different_unconfirmed_wca_id",
-                         email: registration_row[:email], unconfirmed_wca_id: email_user.unconfirmed_wca_id,
-                         registration_wca_id: registration_row[:wca_id])
-          else
-            email_user.update!(wca_id: registration_row[:wca_id], **person_details)
-            [email_user, false]
-          end
-        else
-          # Create a locked account with confirmed WCA ID.
-          [create_locked_account!(registration_row), true]
-        end
-      end
-    else
-      email_user = User.find_by(email: registration_row[:email])
-      # Use the user if exists, otherwise create a locked account without WCA ID.
-      if email_user
-        if email_user.wca_id.blank?
-          # If this is just a user account with no WCA ID, update its data.
-          # Given it's verified by organizers, it's more trustworthy/official data (if different at all).
-          email_user.update!(person_details)
-        end
-        [email_user, false]
-      else
-        [create_locked_account!(registration_row), true]
-      end
-    end
-  end
-
-  private def create_locked_account!(registration_row)
-    User.new_locked_account(
-      name: registration_row[:name],
-      email: registration_row[:email],
-      wca_id: registration_row[:wca_id],
-      country_iso2: Country.c_find(registration_row[:country]).iso2,
-      gender: registration_row[:gender],
-      dob: registration_row[:birth_date],
-    ).tap(&:save!)
   end
 
   def register

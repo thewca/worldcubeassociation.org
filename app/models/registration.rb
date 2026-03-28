@@ -262,6 +262,22 @@ class Registration < ApplicationRecord
     end
   end
 
+  def save_registration_data!(registration_data:, creator:, source:)
+    registration_comment = registration_data[:comments]
+    assign_attributes(comments: registration_comment) if registration_comment.present?
+
+    assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED) unless accepted?
+    self.registration_competition_events = []
+
+    event_ids = registration_data.dig(:registration, :eventIds) || []
+    self.registration_competition_events.build(
+      competition.competition_events.where(event_id: event_ids).ids.map { |id| { competition_event_id: id } },
+    )
+
+    save!
+    add_history_entry({ event_ids: self.event_ids }, "user", creator.id, source)
+  end
+
   def wcif_status
     # Non-competing staff are treated as accepted.
     # TODO: WCIF spec needs to be updated - and possibly versioned - to include new statuses
