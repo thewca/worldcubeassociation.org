@@ -10,21 +10,69 @@ RSpec.describe FinishUnfinishedPersons, type: :module do
   end
 
   describe '.name_parts_without_suffix' do
-    it_behaves_like 'name_parts_without_suffix', 'John Smith', %w[JOHN SMITH]
-    it_behaves_like 'name_parts_without_suffix', 'John Smith Jr', %w[JOHN SMITH]
-    it_behaves_like 'name_parts_without_suffix', 'John Smith Jr.', %w[JOHN SMITH]
-    it_behaves_like 'name_parts_without_suffix', 'John Smith Sr', %w[JOHN SMITH]
-    it_behaves_like 'name_parts_without_suffix', 'John Smith Jnr', %w[JOHN SMITH]
-    it_behaves_like 'name_parts_without_suffix', 'John Smith Snr', %w[JOHN SMITH]
-    it_behaves_like 'name_parts_without_suffix', 'John Smith II', %w[JOHN SMITH]
-    it_behaves_like 'name_parts_without_suffix', 'John Smith III', %w[JOHN SMITH]
-    it_behaves_like 'name_parts_without_suffix', 'John Smith IV', %w[JOHN SMITH]
-    it_behaves_like 'name_parts_without_suffix', 'Jr', %w[JR]
-    it_behaves_like 'name_parts_without_suffix', 'José García', %w[JOSE GARCIA]
-    it_behaves_like 'name_parts_without_suffix', 'Takeshi Yamada (山田武)', %w[TAKESHI YAMADA]
-    it_behaves_like 'name_parts_without_suffix', "John O'Connor", %w[JOHN OCONNOR]
-    it_behaves_like 'name_parts_without_suffix', 'John Silver', %w[JOHN SILVER]
-    it_behaves_like 'name_parts_without_suffix', 'John Michael David Smith Jr', %w[JOHN MICHAEL DAVID SMITH]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith', %w[John Smith]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith Jr', %w[John Smith]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith Jr.', %w[John Smith]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith Sr', %w[John Smith]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith Jnr', %w[John Smith]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith Snr', %w[John Smith]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith II', %w[John Smith]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith III', %w[John Smith]
+    it_behaves_like 'name_parts_without_suffix', 'John Smith IV', %w[John Smith]
+    it_behaves_like 'name_parts_without_suffix', 'Jr', %w[Jr]
+    it_behaves_like 'name_parts_without_suffix', 'José García', %w[Jose Garcia]
+    it_behaves_like 'name_parts_without_suffix', 'Takeshi Yamada (山田武)', %w[Takeshi Yamada]
+    it_behaves_like 'name_parts_without_suffix', "John O'Connor", %w[John OConnor]
+    it_behaves_like 'name_parts_without_suffix', 'John Silver', %w[John Silver]
+    it_behaves_like 'name_parts_without_suffix', 'John Michael David Smith Jr', %w[John Michael David Smith]
+  end
+
+  shared_examples 'name_parts' do |input, expected|
+    it "returns #{expected} for '#{input}'" do
+      expect(described_class.name_parts(input)).to eq(expected)
+    end
+  end
+
+  describe '.name_parts' do
+    it_behaves_like 'name_parts', 'John Smith', %w[John Smith]
+    it_behaves_like 'name_parts', 'John Smith Jr', %w[John Smith Jr]
+    it_behaves_like 'name_parts', 'John Smith Jr.', %w[John Smith Jr]
+    it_behaves_like 'name_parts', 'John Smith Sr', %w[John Smith Sr]
+    it_behaves_like 'name_parts', 'John Smith Jnr', %w[John Smith Jnr]
+    it_behaves_like 'name_parts', 'John Smith Snr', %w[John Smith Snr]
+    it_behaves_like 'name_parts', 'John Smith II', %w[John Smith II]
+    it_behaves_like 'name_parts', 'John Smith III', %w[John Smith III]
+    it_behaves_like 'name_parts', 'John Smith IV', %w[John Smith IV]
+    it_behaves_like 'name_parts', 'Jr', %w[Jr]
+    it_behaves_like 'name_parts', 'José García', %w[Jose Garcia]
+    it_behaves_like 'name_parts', 'Takeshi Yamada (山田武)', %w[Takeshi Yamada]
+    it_behaves_like 'name_parts', "John O'Connor", %w[John OConnor]
+    it_behaves_like 'name_parts', 'John Silver', %w[John Silver]
+    it_behaves_like 'name_parts', 'John Michael David Smith Jr', %w[John Michael David Smith Jr]
+  end
+
+  shared_examples 'last_name_with_suffix' do |input, expected|
+    it "returns #{expected} for '#{input}'" do
+      expect(described_class.last_name_with_suffix(input)).to eq(expected)
+    end
+  end
+
+  describe '.last_name_with_suffix' do
+    it_behaves_like 'last_name_with_suffix', 'John Smith', 'Smith'
+    it_behaves_like 'last_name_with_suffix', 'John Smith Jr', 'Smith Jr'
+    it_behaves_like 'last_name_with_suffix', 'John Smith Jr.', 'Smith Jr'
+    it_behaves_like 'last_name_with_suffix', 'John Smith Sr', 'Smith Sr'
+    it_behaves_like 'last_name_with_suffix', 'John Smith Jnr', 'Smith Jnr'
+    it_behaves_like 'last_name_with_suffix', 'John Smith Snr', 'Smith Snr'
+    it_behaves_like 'last_name_with_suffix', 'John Smith II', 'Smith II'
+    it_behaves_like 'last_name_with_suffix', 'John Smith III', 'Smith III'
+    it_behaves_like 'last_name_with_suffix', 'John Smith IV', 'Smith IV'
+    it_behaves_like 'last_name_with_suffix', 'Jr', 'Jr'
+    it_behaves_like 'last_name_with_suffix', 'José García', 'Garcia'
+    it_behaves_like 'last_name_with_suffix', 'Takeshi Yamada (山田武)', 'Yamada'
+    it_behaves_like 'last_name_with_suffix', "John O'Connor", 'OConnor'
+    it_behaves_like 'last_name_with_suffix', 'John Silver', 'Silver'
+    it_behaves_like 'last_name_with_suffix', 'John Michael David Smith Jr', 'Smith Jr'
   end
 
   describe '.compute_semi_id' do
