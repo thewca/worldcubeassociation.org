@@ -189,6 +189,7 @@ services:
 
   wca_ws:
     image: anycable/anycable-go:1.6
+    container_name: "anycable"
     ports:
       - '8085:8085'
     environment:
