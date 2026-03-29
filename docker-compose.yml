@@ -89,6 +89,9 @@ services:
       - next_yarn_volume:/app/node_modules
     networks:
       - wca-main
+    depends_on:
+      wca_payload_db:
+        condition: service_healthy
 
   wca_payload_db:
     image: mongo:8
@@ -98,6 +101,10 @@ services:
       - --logpath
       - /var/log/mongodb/mongod.log
     environment:
+      # Bugfix for MongoDB incompatibility with Linux Kernel 6.19
+      #   Fix comes from https://forums.docker.com/t/docker-compose-mongo-exit-code-139/151353/10
+      #   Remove this as soon as the incompatibility warning at https://www.mongodb.com/docs/manual/release-notes/8.0/ has been fixed.
+      GLIBC_TUNABLES: "glibc:pthread:rseq=1"
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
       MONGO_INITDB_DATABASE: payload
@@ -105,6 +112,11 @@ services:
       - "27017:27017"
     networks:
       - wca-main
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh mongodb://localhost:27017/test --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   wca_webpacker:
     <<: *app
