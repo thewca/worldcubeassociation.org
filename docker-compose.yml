@@ -48,9 +48,9 @@ services:
     restart: no
     depends_on:
       wca_db:
-        condition: "service_healthy"
+        condition: service_healthy
       wca_redis:
-        condition: "service_started"
+        condition: service_healthy
 
   wca_on_rails:
     <<: *app
