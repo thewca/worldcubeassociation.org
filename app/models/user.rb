@@ -567,6 +567,10 @@ class User < ApplicationRecord
     wic_team? || board_member? || higher_permission_officer? || weat_team? || results_team? || admin?
   end
 
+  private def can_request_to_edit_others_profile?
+    any_kind_of_delegate? || results_team?
+  end
+
   private def groups_with_read_access_for_current
     return "*" if can_edit_any_groups?
 
@@ -821,7 +825,7 @@ class User < ApplicationRecord
         scope: panels_with_access,
       },
       can_request_to_edit_others_profile: {
-        scope: any_kind_of_delegate? ? "*" : [],
+        scope: can_request_to_edit_others_profile? ? "*" : [],
       },
     }
     if banned?
