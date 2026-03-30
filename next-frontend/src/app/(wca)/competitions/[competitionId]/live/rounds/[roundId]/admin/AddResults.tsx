@@ -7,7 +7,6 @@ import events from "@/lib/wca/data/events";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
 import { LiveCompetitor } from "@/types/live";
-import { Toaster } from "@/components/ui/toaster";
 
 export default function AddResults({
   format,
@@ -46,7 +45,6 @@ export default function AddResults({
           />
         </GridItem>
       </SimpleGrid>
-      <Toaster />
     </LiveResultAdminProvider>
   );
 }

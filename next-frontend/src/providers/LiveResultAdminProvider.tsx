@@ -10,7 +10,7 @@ import {
 import { Format } from "@/lib/wca/data/formats";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
-import { toaster } from "@/components/ui/toaster";
+import { Toaster, toaster } from "@/components/ui/toaster";
 
 interface AdminResultsContextValue {
   registrationId: number | undefined;
@@ -249,6 +249,7 @@ export function LiveResultAdminProvider({
       }}
     >
       {children}
+      <Toaster />
     </AdminResultsContext.Provider>
   );
 }
