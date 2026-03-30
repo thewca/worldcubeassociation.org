@@ -1,13 +1,13 @@
 import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import { TFunction } from "i18next";
-import { LiveRoundAdmin } from "@/types/live";
+import { LiveRoundAdminBase } from "@/types/live";
 import events from "@/lib/wca/data/events";
 
 export function getRoundName(
   roundWcifId: string,
   t: TFunction,
-  rounds: LiveRoundAdmin[],
+  rounds: Pick<LiveRoundAdminBase, "id" | "cutoff">[],
   withEvent = false,
 ) {
   const roundsByEventId = _.groupBy(
@@ -27,7 +27,7 @@ export function getRoundName(
 
   const roundName = t(`rounds.${roundTypeId}.name`);
 
-  return [...(withEvent ? events.byId[eventId].name : []), roundName].join(
+  return [...(withEvent ? [events.byId[eventId].name] : []), roundName].join(
     " - ",
   );
 }
