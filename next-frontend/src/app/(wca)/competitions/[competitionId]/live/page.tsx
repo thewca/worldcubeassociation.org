@@ -4,6 +4,7 @@ import LiveView from "@/components/competitions/Schedule/LiveView";
 import { getEvents } from "@/lib/wca/competitions/wcif/getEvents";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
+import { getRounds } from "@/lib/wca/live/getRounds";
 
 export default async function LiveOverview({
   params,
@@ -33,6 +34,16 @@ export default async function LiveOverview({
     return <OpenapiError t={t} response={eventResponse} />;
   }
 
+  const {
+    error: roundsError,
+    data: roundsData,
+    response: roundsResponse,
+  } = await getRounds(competitionId);
+
+  if (roundsError) {
+    return <OpenapiError t={t} response={roundsResponse} />;
+  }
+
   const allActivitiesSorted = wcifSchedule.venues
     .flatMap((venue) => venue.rooms)
     .flatMap((room) => room.activities)
@@ -48,6 +59,7 @@ export default async function LiveOverview({
       activities={allActivitiesSorted}
       timeZones={uniqueTimeZones}
       wcifEvents={wcifEvents}
+      rounds={roundsData.rounds}
     />
   );
 }

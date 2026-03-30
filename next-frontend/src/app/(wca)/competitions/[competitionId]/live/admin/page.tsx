@@ -69,6 +69,9 @@ export default async function LiveOverview({
                       rounds.length,
                       false,
                     );
+
+                    const isOpen = ["open", "locked"].includes(r.state);
+
                     return (
                       <HStack key={r.id}>
                         <Button
@@ -79,24 +82,28 @@ export default async function LiveOverview({
                           textAlign="left"
                           disabled={["ready", "pending"].includes(r.state)}
                         >
-                          <Link asChild>
-                            <NextLink
-                              href={route({
-                                pathname:
-                                  "/competitions/[competitionId]/live/rounds/[roundId]/admin",
-                                query: {
-                                  competitionId,
-                                  roundId: r.id,
-                                },
-                              })}
-                            >
-                              {t(`rounds.${roundTypeId}.name`)}{" "}
-                              {r.state == "open" &&
-                                `(${r.competitors_live_results_entered}/${r.total_competitors} entered)`}
-                              {r.state == "locked" &&
-                                `${r.total_competitors} locked`}
-                            </NextLink>
-                          </Link>
+                          {isOpen ? (
+                            <Link asChild>
+                              <NextLink
+                                href={route({
+                                  pathname:
+                                    "/competitions/[competitionId]/live/rounds/[roundId]/admin",
+                                  query: {
+                                    competitionId,
+                                    roundId: r.id,
+                                  },
+                                })}
+                              >
+                                {t(`rounds.${roundTypeId}.name`)}{" "}
+                                {r.state == "open" &&
+                                  `(${r.competitors_live_results_entered}/${r.total_competitors} entered)`}
+                                {r.state == "locked" &&
+                                  `${r.total_competitors} locked`}
+                              </NextLink>
+                            </Link>
+                          ) : (
+                            t(`rounds.${roundTypeId}.name`)
+                          )}
                         </Button>
                         <ActionButtons
                           state={r.state}
