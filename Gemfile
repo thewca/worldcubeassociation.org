@@ -103,6 +103,7 @@ gem 'hash_diff'
 gem 'tsort'
 gem 'html_safe_flash'
 gem 'benchmark'
+gem 'anycable-rails-core'
 
 group :development, :test do
   gem 'spring'
@@ -137,7 +138,6 @@ group :development do
   gem 'binding_of_caller'
   gem 'bullet'
   gem 'web-console'
-  gem 'anycable-rails-core'
 end
 
 group :test do

@@ -10,12 +10,11 @@ import {
 import { Format } from "@/lib/wca/data/formats";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
+import { Toaster, toaster } from "@/components/ui/toaster";
 
 interface AdminResultsContextValue {
   registrationId: number | undefined;
   attempts: number[];
-  error: string;
-  success: string;
   isPending: boolean;
   handleRegistrationIdChange: (value: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
@@ -79,9 +78,6 @@ export function LiveResultAdminProvider({
     getAttemptsForCompetitor(initialRegistrationId),
   );
 
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-
   const api = useAPI();
 
   const handleRegistrationIdChange = useCallback(
@@ -100,14 +96,18 @@ export function LiveResultAdminProvider({
     {
       onSuccess: (_data, variables) => {
         addPendingLiveResult(variables.body, roundId);
-        setSuccess("Results updated successfully!");
+        toaster.create({
+          description: "Results updated queued",
+          type: "success",
+        });
         setRegistrationId(undefined);
         setAttempts(zeroedArrayOfSize(solveCount));
-        setError("");
-        setTimeout(() => setSuccess(""), 3000);
       },
       onError: () => {
-        setError("Failed to update results. Please try again.");
+        toaster.create({
+          description: "Failed to enqueue results",
+          type: "error",
+        });
       },
     },
   );
@@ -117,8 +117,17 @@ export function LiveResultAdminProvider({
       "put",
       "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
       {
+        onSuccess: () => {
+          toaster.create({
+            description: "Successfully added competitor",
+            type: "success",
+          });
+        },
         onError: () => {
-          setError("Failed to add Competitor. Please try again.");
+          toaster.create({
+            description: "Failed to add competitor",
+            type: "error",
+          });
         },
       },
     );
@@ -142,8 +151,17 @@ export function LiveResultAdminProvider({
     "delete",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
     {
+      onSuccess: () => {
+        toaster.create({
+          description: "Successfully quit competitor",
+          type: "success",
+        });
+      },
       onError: () => {
-        setError("Failed to Quit Competitor. Please try again.");
+        toaster.create({
+          description: "Failed to quit competitor",
+          type: "error",
+        });
       },
     },
   );
@@ -152,8 +170,17 @@ export function LiveResultAdminProvider({
     "put",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}/clear",
     {
+      onSuccess: () => {
+        toaster.create({
+          description: "Successfully cleared competitor",
+          type: "success",
+        });
+      },
       onError: () => {
-        setError("Failed to Quit Competitor. Please try again.");
+        toaster.create({
+          description: "Failed to clear competitor",
+          type: "error",
+        });
       },
     },
   );
@@ -166,7 +193,10 @@ export function LiveResultAdminProvider({
 
   const handleSubmit = () => {
     if (!registrationId) {
-      setError("Please enter a user ID");
+      toaster.create({
+        description: "Please enter a user id",
+        type: "error",
+      });
       return;
     }
 
@@ -208,8 +238,6 @@ export function LiveResultAdminProvider({
       value={{
         registrationId,
         attempts,
-        error,
-        success,
         isPending:
           isPendingUpdate || isPendingClear || isPendingQuit || isPendingAdd,
         quitCompetitor,
@@ -221,6 +249,7 @@ export function LiveResultAdminProvider({
       }}
     >
       {children}
+      <Toaster />
     </AdminResultsContext.Provider>
   );
 }

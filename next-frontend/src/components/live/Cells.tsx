@@ -11,9 +11,11 @@ export function LiveTableHeader({
   isLinked = false,
   format,
   showFull = true,
+  byPerson = false,
 }: {
   isLinked?: boolean;
   showFull?: boolean;
+  byPerson?: boolean;
   format: Format;
 }) {
   const solveCount = format.expected_solve_count;
@@ -24,10 +26,15 @@ export function LiveTableHeader({
   return (
     <Table.Header>
       <Table.Row>
+        {byPerson && (
+          <Table.ColumnHeader textAlign="left">Round</Table.ColumnHeader>
+        )}
         <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
-        <Table.ColumnHeader>Competitor</Table.ColumnHeader>
+        {!byPerson && <Table.ColumnHeader>Competitor</Table.ColumnHeader>}
         {isLinked && <Table.ColumnHeader>Round</Table.ColumnHeader>}
-        {showFull && <Table.ColumnHeader>Country</Table.ColumnHeader>}
+        {showFull && !byPerson && (
+          <Table.ColumnHeader>Country</Table.ColumnHeader>
+        )}
         {showFull &&
           attemptIndexes.map((num) => (
             <Table.ColumnHeader key={num} textAlign="right">
