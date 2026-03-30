@@ -13,7 +13,7 @@ class ScrambleFilesController < ApplicationController
   end
 
   def create
-    competition = competition_from_params
+    competition = competition_from_params(associations: [:competition_events])
 
     tnoodle_params = params.expect(tnoodle: [:json])
     uploaded_file = tnoodle_params[:json]
@@ -91,7 +91,7 @@ class ScrambleFilesController < ApplicationController
   end
 
   def update_round_matching
-    competition = competition_from_params
+    competition = competition_from_params(associations: [:rounds])
 
     competition.transaction do
       # Rails does not do this for some reason, "because it goes through more than one other association"
@@ -127,10 +127,10 @@ class ScrambleFilesController < ApplicationController
       end
     end
 
-    render json: competition.matched_scramble_sets
+    render json: competition.matched_scramble_sets.for_serialization
   end
 
-  private def competition_from_params
-    Competition.find(params[:competition_id])
+  private def competition_from_params(associations: {})
+    Competition.includes(associations).find(params[:competition_id])
   end
 end

@@ -1,12 +1,20 @@
 # frozen_string_literal: true
 
 class MatchedScrambleSet < ApplicationRecord
+  SERIALIZATION_INCLUDES = {
+    external_scramble_set: ExternalScrambleSet::SERIALIZATION_INCLUDES,
+    matched_scrambles: [:external_scramble],
+    round: [:competition_event],
+  }.freeze
+
   default_scope { order(:ordered_index) }
 
   belongs_to :round
   belongs_to :external_scramble_set, optional: true
 
   has_many :matched_scrambles, dependent: :destroy
+
+  scope :for_serialization, -> { includes(**SERIALIZATION_INCLUDES) }
 
   validates :ordered_index, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
                             uniqueness: { scope: :round_id }
