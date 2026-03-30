@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
+import _ from 'lodash';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import { getRoundTypeId, parseActivityCode, shortLabelForActivityCode } from '../../lib/utils/wcif';
@@ -23,19 +24,12 @@ export const AUTOMATCH_DEFAULT_SETTINGS = {
 
 export const ATTEMPTS_UNPACKING_MARKER = '_attemptsUnpacking';
 
-export const SET_BACKLINK_MARKER = '_backlinkedSet';
-
 export const prefixForIndex = (index) => {
   const char = String.fromCharCode(65 + (index % 26));
   if (index < 26) return char;
 
   return prefixForIndex(Math.floor(index / 26) - 1) + char;
 };
-
-export const clearScramblesFromSet = (extScrSet) => ({
-  ...extScrSet,
-  external_scrambles: [],
-});
 
 export const getAttemptsMultiplier = (round) => formats.byId[round.format].expectedSolveCount;
 
@@ -122,21 +116,56 @@ export const searchRecursive = (data, searchPath, targetId, searchDescriptor = {
   }, null);
 };
 
+export function thinWcifEvent(wcifEvent) {
+  return _.pick(wcifEvent, 'id');
+}
+
+export function thinWcifRound(wcifRound) {
+  return _.pick(wcifRound, 'id', 'format', 'scrambleSetCount');
+}
+
+export function thinExtScrambleSet(extScrSet) {
+  return _.pick(extScrSet, 'id', 'event_id', 'scramble_file_upload_id', 'round_number', 'scramble_set_number', 'original_filename', 'automatch_wcif_id');
+}
+
+export function thinExtScramble(extScr) {
+  return _.pick(extScr, 'id', 'is_extra', 'scramble_number', 'scramble_string');
+}
+
+export function repackScrambleSet(externalScrambleSet) {
+  return {
+    ...thinExtScrambleSet(externalScrambleSet),
+    external_scrambles: _.sortBy(
+      externalScrambleSet.external_scrambles,
+      ['is_extra', 'scramble_number'],
+    ).map((extScr) => thinExtScramble(extScr)),
+  };
+}
+
+export function reconstructScrambleSet(unpackedScramble) {
+  return {
+    ...thinExtScrambleSet(unpackedScramble),
+    id: unpackedScramble[ATTEMPTS_UNPACKING_MARKER],
+  };
+}
+
 function unpackExternalScrambleSet(extScrSet, isAttemptMode) {
   if (isAttemptMode) {
+    const thinnedScrambleSet = thinExtScrambleSet(extScrSet);
+
     return extScrSet.external_scrambles
-      .map((extScr) => ({
-        ...extScr,
-        ...extScrSet,
-        id: extScr.id,
-        [ATTEMPTS_UNPACKING_MARKER]: {
-          ...extScr,
-          [SET_BACKLINK_MARKER]: clearScramblesFromSet(extScrSet),
-        },
-      }));
+      .map((extScr) => {
+        const thinnedScramble = thinExtScramble(extScr);
+
+        return ({
+          ...thinnedScrambleSet,
+          ...thinnedScramble,
+          [ATTEMPTS_UNPACKING_MARKER]: thinnedScrambleSet.id,
+        });
+      });
   }
 
-  return [extScrSet];
+  return [repackScrambleSet(extScrSet)];
 }
 
 export function unpackScrambleSets(extScrambleSets, autoMatchSettings) {
@@ -158,28 +187,10 @@ export const calculateRoundExpectedCount = (
   isAttemptMode = false,
 ) => round.scrambleSetCount * (isAttemptMode ? getAttemptsMultiplier(round) : 1);
 
-export const calculateEventExpectedCount = (event, autoMatchSettings) => {
-  const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(event.id);
-
-  return event.rounds.reduce(
-    (acc, round) => acc + calculateRoundExpectedCount(round, isAttemptMode),
-    0,
-  );
-};
-
 export const calculateRoundMatchedCount = (
   round,
   isAttemptMode = false,
 ) => unpackScrambleSetsInRound(round.external_scramble_sets, isAttemptMode).length;
-
-export const calculateEventMatchedCount = (event, autoMatchSettings) => {
-  const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(event.id);
-
-  return event.rounds.reduce(
-    (acc, round) => acc + calculateRoundMatchedCount(round, isAttemptMode),
-    0,
-  );
-};
 
 export function autoMatchSearch(
   scrSet,

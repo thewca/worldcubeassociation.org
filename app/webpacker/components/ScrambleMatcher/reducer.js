@@ -3,12 +3,17 @@ import {
   addItemToArray,
   ATTEMPTS_UNPACKING_MARKER,
   autoMatchSearch,
-  clearScramblesFromSet,
   getAttemptsMultiplier,
   moveArrayItem,
+  reconstructScrambleSet,
   removeItemFromArray,
+  repackScrambleSet,
   searchRecursive,
-  SET_BACKLINK_MARKER,
+  thinExtScramble,
+  thinExtScrambleSet,
+  thinWcifEvent,
+  thinWcifRound,
+  unpackScrambleSetsInRound,
 } from './util';
 
 function mergeMatchedSetsIntoWcif(wcifEvents, matchedScrambleSets) {
@@ -19,22 +24,21 @@ function mergeMatchedSetsIntoWcif(wcifEvents, matchedScrambleSets) {
 
   return {
     events: wcifEvents.map((wcifEvent) => ({
-      ...wcifEvent,
+      ...thinWcifEvent(wcifEvent),
       rounds: wcifEvent.rounds.map((wcifRound) => ({
-        ...wcifRound,
+        ...thinWcifRound(wcifRound),
         external_scramble_sets: _.sortBy(
           groupedScrambleSets[wcifRound.id] ?? [],
           'ordered_index',
         ).map((matchedScrSet) => ({
-          ...matchedScrSet.external_scramble_set,
+          ...thinExtScrambleSet(matchedScrSet.external_scramble_set),
           external_scrambles: _.sortBy(
             matchedScrSet.matched_scrambles,
             'ordered_index',
           ).map((matchedScramble) => ({
-            ...matchedScramble.external_scramble,
+            ...thinExtScramble(matchedScramble.external_scramble),
             scramble_string: matchedScramble.scramble_string,
             is_extra: matchedScramble.is_extra,
-            [SET_BACKLINK_MARKER]: clearScramblesFromSet(matchedScrSet.external_scramble_set),
           })),
         })),
       })),
@@ -63,18 +67,17 @@ function removeScrambleFile(state, oldScrambleFile) {
     events: state.events.map((wcifEvent) => ({
       ...wcifEvent,
       rounds: wcifEvent.rounds.map((round) => {
-        const flatScrambles = round.external_scramble_sets
-          .flatMap((scrSet) => scrSet.external_scrambles);
+        const flatScrambles = unpackScrambleSetsInRound(round.external_scramble_sets, true);
 
         const remainingScrambles = flatScrambles
-          .filter((scr) => scr[SET_BACKLINK_MARKER].scramble_file_upload_id !== oldScrambleFile.id);
+          .filter((scr) => scr.scramble_file_upload_id !== oldScrambleFile.id);
 
         const remainingSets = round.external_scramble_sets
           .filter((scrSet) => scrSet.scramble_file_upload_id !== oldScrambleFile.id);
 
         const eligibleSets = [
           ...remainingSets,
-          ...remainingScrambles.map((scr) => scr[SET_BACKLINK_MARKER]),
+          ...remainingScrambles.map((scr) => reconstructScrambleSet(scr)),
         ];
 
         const maxSetBracket = _.uniqBy(eligibleSets, 'id');
@@ -88,7 +91,8 @@ function removeScrambleFile(state, oldScrambleFile) {
         }));
 
         const usedSetsInBracket = filledBracket
-          .filter((set) => set.external_scrambles.length > 0);
+          .filter((set) => set.external_scrambles.length > 0)
+          .map((set) => repackScrambleSet(set));
 
         return {
           ...round,
@@ -129,42 +133,32 @@ function executeAddExternalToMatching(
     roundId,
     (sets, round) => {
       if (externalScrambleSet[ATTEMPTS_UNPACKING_MARKER]) {
-        const flatScrambles = sets.flatMap((set) => set.external_scrambles);
+        const flatScrambles = unpackScrambleSetsInRound(sets, true);
 
         const scramblesWithAdded = addItemToArray(
           flatScrambles,
-          externalScrambleSet[ATTEMPTS_UNPACKING_MARKER],
+          externalScrambleSet,
           destinationIndex,
         );
 
-        const eligibleSets = scramblesWithAdded.map((scr) => scr[SET_BACKLINK_MARKER]);
+        const eligibleSets = scramblesWithAdded.map((scr) => reconstructScrambleSet(scr));
         const maxSetBracket = _.uniqBy(eligibleSets, 'id');
 
         const referenceLength = getAttemptsMultiplier(round);
         const chunkedScrambles = _.chunk(scramblesWithAdded, referenceLength);
 
-        const filledBracket = maxSetBracket.map((set, idx) => ({
+        const filledBracket = maxSetBracket.map((set, idx) => repackScrambleSet({
           ...set,
           external_scrambles: chunkedScrambles[idx] ?? [],
         }));
 
-        return filledBracket.filter((set) => set.external_scrambles.length > 0);
+        return filledBracket
+          .filter((set) => set.external_scrambles.length > 0);
       }
-
-      const formattedScrSet = {
-        ...externalScrambleSet,
-        external_scrambles: _.sortBy(
-          externalScrambleSet.external_scrambles,
-          ['is_extra', 'scramble_number'],
-        ).map((extScr) => ({
-          ...extScr,
-          [SET_BACKLINK_MARKER]: clearScramblesFromSet(externalScrambleSet),
-        })),
-      };
 
       return addItemToArray(
         sets,
-        formattedScrSet,
+        repackScrambleSet(externalScrambleSet),
         destinationIndex,
       );
     },

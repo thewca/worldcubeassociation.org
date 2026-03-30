@@ -45,8 +45,12 @@ async function submitMatchedScrambles({ competitionId, matchState }) {
     (round) => ({
       scramble_set_count: round.scrambleSetCount,
       matched_scramble_sets: round.external_scramble_sets.map((set) => ({
-        ...set,
-        matched_scrambles: set.external_scrambles,
+        id: set.id,
+        matched_scrambles: set.external_scrambles.map((scr) => ({
+          id: scr.id,
+          scramble_string: scr.scramble_string,
+          is_extra: scr.is_extra,
+        })),
       })),
     }),
   );

@@ -10,7 +10,11 @@ import Loading from '../Requests/Loading';
 import {
   ATTEMPTS_UNPACKING_MARKER,
   autoMatchSearch,
-  getAttemptsMultiplier, prefixForIndex, roundToRoundTypeName, searchRecursive, unpackScrambleSets,
+  getAttemptsMultiplier,
+  prefixForIndex,
+  roundToRoundTypeName,
+  searchRecursive,
+  unpackScrambleSets,
 } from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import { getFullDateTimeString } from '../../lib/utils/dates';
