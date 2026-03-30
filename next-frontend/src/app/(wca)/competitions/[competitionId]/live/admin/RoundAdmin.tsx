@@ -1,7 +1,5 @@
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
-import { auth } from "@/auth";
-import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 import { Card, Container, HStack, SimpleGrid } from "@chakra-ui/react";
 
 import EventIcon from "@/components/EventIcon";
