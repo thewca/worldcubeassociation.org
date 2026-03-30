@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, HStack, Link } from "@chakra-ui/react";
+import { Button, HStack, Link, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
 import ActionButtons from "@/app/(wca)/competitions/[competitionId]/live/admin/ActionButtons";
@@ -57,7 +57,7 @@ export default function RoundActions({
             </NextLink>
           </Link>
         ) : (
-          t(`rounds.${roundTypeId}.name`)
+          <Text>{t(`rounds.${roundTypeId}.name`)}</Text>
         )}
       </Button>
       <ActionButtons

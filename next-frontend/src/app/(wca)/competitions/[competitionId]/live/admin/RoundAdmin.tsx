@@ -40,7 +40,7 @@ export default async function RoundAdmin({
                     {events.byId[eventId].name}
                   </HStack>
                 </Card.Title>
-                <Card.Description w="full">
+                <Card.Description w="full" as="div">
                   {rounds.map((r) => {
                     return (
                       <RoundActions
