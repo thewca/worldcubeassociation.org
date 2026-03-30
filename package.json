@@ -123,7 +123,7 @@
     "stylelint": "^17.6.0",
     "stylelint-config-recommended-scss": "^17.0.0",
     "stylelint-scss": "^7.0.0",
-    "webpack-bundle-analyzer": "^5.2.0",
+    "webpack-bundle-analyzer": "^5.3.0",
     "webpack-dev-server": "^5.2.3"
   },
   "scripts": {
