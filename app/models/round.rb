@@ -499,7 +499,7 @@ class Round < ApplicationRecord
     }
   end
 
-  def to_wcif(results: true)
+  def to_wcif(include_results: true)
     {
       "id" => wcif_id,
       "format" => self.format_id,
@@ -507,14 +507,14 @@ class Round < ApplicationRecord
       "cutoff" => cutoff&.to_wcif,
       "advancementCondition" => advancement_condition&.to_wcif,
       "scrambleSetCount" => self.scramble_set_count,
-      "results" => results ? round_results.map(&:to_wcif) : nil,
+      "results" => include_results ? round_results.map(&:to_wcif) : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
-    }
+    }.compact_blank
   end
 
   def to_live_results_json(only_podiums: false)
     {
-      **self.to_wcif(results: false).compact_blank,
+      **self.to_wcif(include_results: false),
       "round_id" => id,
       "competitors" => live_competitors.includes(:user).map(&:to_live_json),
       "results" => only_podiums ? live_podium : live_results,
@@ -526,7 +526,7 @@ class Round < ApplicationRecord
   def to_live_info_json(all_rounds)
     state = lifecycle_state(all_rounds)
     json = {
-      **self.to_wcif(results: false).compact_blank,
+      **self.to_wcif(include_results: false),
       "state" => state,
     }
     if [STATE_OPEN, STATE_LOCKED].include?(state)
