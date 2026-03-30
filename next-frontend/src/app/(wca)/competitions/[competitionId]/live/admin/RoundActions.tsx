@@ -26,6 +26,8 @@ export default function RoundActions({
   const { roundNumber } = parseActivityCode(round.id);
   const roundTypeId = getRoundTypeId(roundNumber!, totalRounds, false);
 
+  const isOpen = ["open", "locked"].includes(round.state);
+
   return (
     <HStack>
       <Button
@@ -36,23 +38,27 @@ export default function RoundActions({
         textAlign="left"
         disabled={["ready", "pending"].includes(state)}
       >
-        <Link asChild>
-          <NextLink
-            href={route({
-              pathname:
-                "/competitions/[competitionId]/live/rounds/[roundId]/admin",
-              query: {
-                competitionId,
-                roundId: round.id,
-              },
-            })}
-          >
-            {t(`rounds.${roundTypeId}.name`)}{" "}
-            {round.state == "open" &&
-              `(${round.competitors_live_results_entered}/${round.total_competitors} entered)`}
-            {round.state == "locked" && `${round.total_competitors} locked`}
-          </NextLink>
-        </Link>
+        {isOpen ? (
+          <Link asChild>
+            <NextLink
+              href={route({
+                pathname:
+                  "/competitions/[competitionId]/live/rounds/[roundId]/admin",
+                query: {
+                  competitionId,
+                  roundId: round.id,
+                },
+              })}
+            >
+              {t(`rounds.${roundTypeId}.name`)}{" "}
+              {round.state == "open" &&
+                `(${round.competitors_live_results_entered}/${round.total_competitors} entered)`}
+              {round.state == "locked" && `${round.total_competitors} locked`}
+            </NextLink>
+          </Link>
+        ) : (
+          t(`rounds.${roundTypeId}.name`)
+        )}
       </Button>
       <ActionButtons
         state={state}

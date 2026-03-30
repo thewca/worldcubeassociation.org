@@ -9,6 +9,7 @@ import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import RoundActions from "@/app/(wca)/competitions/[competitionId]/live/admin/RoundActions";
+import { getRounds } from "@/lib/wca/live/getRounds";
 
 export default async function RoundAdmin({
   competitionId,
@@ -17,15 +18,7 @@ export default async function RoundAdmin({
 }) {
   const { t } = await getT();
 
-  const session = await auth();
-
-  // We check if you are logged in the parent
-  const client = serverClientWithToken(session!.accessToken);
-
-  const { error, data, response } = await client.GET(
-    "/v1/competitions/{competitionId}/live/rounds",
-    { params: { path: { competitionId } } },
-  );
+  const { error, data, response } = await getRounds(competitionId);
 
   if (error) {
     return <OpenapiError t={t} response={response} />;
