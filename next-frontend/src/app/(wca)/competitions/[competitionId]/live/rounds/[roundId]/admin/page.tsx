@@ -7,7 +7,8 @@ import React from "react";
 import { getT } from "@/lib/i18n/get18n";
 import formats from "@/lib/wca/data/formats";
 import { LiveResultProvider } from "@/providers/LiveResultProvider";
-import { fetchRoundName } from "@/lib/wca/live/getRoundName";
+import { getRoundName } from "@/lib/wca/live/getRoundName";
+import { getRounds } from "@/lib/wca/live/getRounds";
 
 export default async function ResultPage({
   params,
@@ -26,7 +27,10 @@ export default async function ResultPage({
 
   const { competitors, format, id } = data;
 
-  const roundName = await fetchRoundName(competitionId, id, t, true);
+  const { data: roundsData } = await getRounds(competitionId);
+
+  // If the request fails, it will have already failed in a parent component so we can safely use !
+  const roundName = getRoundName(id, t, roundsData!.rounds, true);
 
   return (
     <Container bg="bg">
