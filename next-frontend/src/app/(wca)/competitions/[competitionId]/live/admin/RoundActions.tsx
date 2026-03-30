@@ -46,8 +46,15 @@ export default function RoundActions({
           >
             {getRoundName(round.id, t, rounds)}{" "}
             {round.state == "open" &&
-              `(${round.competitors_live_results_entered}/${round.total_competitors} entered)`}
-            {round.state == "locked" && `${round.total_competitors} locked`}
+              `(${t("competitions.live.admin.competitors_entered", {
+                competitors_live_results_entered:
+                  round.competitors_live_results_entered,
+                total_competitors: round.total_competitors,
+              })})`}
+            {round.state == "locked" &&
+              `(${t("competitions.live.admin.round_locked", {
+                total_competitors: round.total_competitors,
+              })})`}
           </NextLink>
         </Link>
       </Button>

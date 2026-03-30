@@ -1410,6 +1410,8 @@ en:
       admin:
         open: "Open"
         clear: "Clear"
+        competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
+        round_locked: "%{total_competitors} locked"
       results:
         competitor: "Competitor"
         dual_round: "Combined Dual Round"
