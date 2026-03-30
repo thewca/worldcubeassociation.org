@@ -81,10 +81,16 @@ export default function EditProfileForm({
   });
 
   if (saving || isLoading) return <Loading />;
-  if (saveError || isError) return <Errored />;
+  if (isError) return <Errored />;
 
   return (
-    <Form onSubmit={formSubmitHandler}>
+    <Form onSubmit={formSubmitHandler} error={!!saveError} warning>
+      {saveError && (
+        <Message
+          error
+          content={saveError.json?.error || 'Something went wrong.'}
+        />
+      )}
       <Form.Input
         label={I18n.t('activerecord.attributes.user.name')}
         name="name"
@@ -127,6 +133,16 @@ export default function EditProfileForm({
         type="file"
         onChange={handleProofUpload}
       />
+      <Message warning>
+        <strong>IMPORTANT</strong>
+        : Attach a picture of a
+        {' '}
+        <u>legal document</u>
+        {' '}
+        (identity card, driver license, passport...) that validates the requested fields;
+        {' '}
+        feel free to blur-out/obfuscate any other personal data on the identification.
+      </Message>
       <Form.Field>
         <ReCAPTCHA
           sitekey={recaptchaPublicKey}
