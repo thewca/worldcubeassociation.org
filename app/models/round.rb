@@ -323,7 +323,7 @@ class Round < ApplicationRecord
   end
 
   def competitors_live_results_entered
-    live_results.not_empty.length
+    live_results.count { it.best != 0 }
   end
 
   def score_taking_done?
