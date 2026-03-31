@@ -3,13 +3,12 @@ import {
   Accordion, Breadcrumb, Button, Header, Icon, Popup, Table,
 } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import _ from 'lodash';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import {
   ATTEMPTS_UNPACKING_MARKER,
-  autoMatchSearch,
+  autoMatchSearch, calculateBestInsertIndex,
   getAttemptsMultiplier,
   prefixForIndex,
   roundToRoundTypeName,
@@ -74,20 +73,6 @@ function MatchedSetActionButtons({
   );
 }
 
-function calculateBestIndex(scrSet, round) {
-  const isAttemptMode = scrSet[ATTEMPTS_UNPACKING_MARKER];
-  const setIndex = scrSet.scramble_set_number - 1;
-
-  if (isAttemptMode) {
-    const attemptCount = getAttemptsMultiplier(round);
-
-    const extraOffset = scrSet.is_extra ? attemptCount : 0;
-    return setIndex * attemptCount + scrSet.scramble_number + extraOffset - 1;
-  }
-
-  return scrSet.scramble_set_number - 1;
-}
-
 export function ExternalSetActionButtons({
   scrSet,
   autoMatchSettings,
@@ -105,29 +90,41 @@ export function ExternalSetActionButtons({
     autoMatchSettings,
   );
 
-  const onClickAutoAssign = (event, round) => {
-    const bestIndex = calculateBestIndex(scrSet, round);
-    const destinationIndex = autoMatchSettings.tryBestInsert ? bestIndex : undefined;
+  const dispatchAddExternal = (
+    eventId,
+    roundId,
+    externalScrambleSet,
+    destinationIndex = undefined,
+  ) => dispatchMatchState({
+    type: 'addExternalToMatching',
+    eventId,
+    roundId,
+    externalScrambleSet: scrSet,
+    destinationIndex,
+  });
 
-    return dispatchMatchState({
-      type: 'addExternalToMatching',
-      eventId: event.id,
-      roundId: round.id,
-      externalScrambleSet: scrSet,
+  const onClickAutoAssign = (targetNavigation) => {
+    const destinationIndex = autoMatchSettings.tryBestInsert
+      ? calculateBestInsertIndex(scrSet, targetNavigation.rounds.item)
+      : undefined;
+
+    return dispatchAddExternal(
+      targetNavigation.events.id,
+      targetNavigation.rounds.id,
+      scrSet,
       destinationIndex,
-    });
+    );
   };
 
   const onClickManualAssign = () => moveScramble(
     scrSet,
     overrideEventId,
     overrideRoundId,
-  ).then(({ addedScrSet, eventId, roundId }) => dispatchMatchState({
-    type: 'addExternalToMatching',
+  ).then(({ addedScrSet, eventId, roundId }) => dispatchAddExternal(
     eventId,
     roundId,
-    externalScrambleSet: addedScrSet,
-  }));
+    addedScrSet,
+  ));
 
   return (
     <Button.Group compact fluid={fluid}>
@@ -137,10 +134,7 @@ export function ExternalSetActionButtons({
           basic
           icon="magic"
           content="Auto-Assign"
-          onClick={() => onClickAutoAssign(
-            autoInsertNavigation.events.item,
-            autoInsertNavigation.rounds.item,
-          )}
+          onClick={() => onClickAutoAssign(autoInsertNavigation)}
         />
       )}
       <Button
@@ -307,7 +301,7 @@ function ScrambleFileBody({
                 >
                   {prefixForIndex(scrSet.scramble_set_number - 1)}
                 </FileTableGroupCell>
-                {indexColumnSuffix.length > 0 && (
+                {isAttemptMappedScramble && (
                   <FileTableGroupCell
                     fileSets={allSets}
                     referenceSet={scrSet}

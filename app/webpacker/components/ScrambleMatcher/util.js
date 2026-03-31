@@ -249,6 +249,20 @@ export function filterUnusedScrambles(
   return sortSetsForAutoMatch(unusedScrambleSets, autoMatchSettings);
 }
 
+export function calculateBestInsertIndex(scrSet, round) {
+  const isAttemptMode = scrSet[ATTEMPTS_UNPACKING_MARKER];
+  const setIndex = scrSet.scramble_set_number - 1;
+
+  if (isAttemptMode) {
+    const attemptCount = getAttemptsMultiplier(round);
+
+    const extraOffset = scrSet.is_extra ? attemptCount : 0;
+    return setIndex * attemptCount + scrSet.scramble_number + extraOffset - 1;
+  }
+
+  return scrSet.scramble_set_number - 1;
+}
+
 export function useConfigState(defaultConfig = {}) {
   const [internalConfig, setInternalConfig] = useState(defaultConfig);
 

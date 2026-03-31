@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {
   addItemToArray,
   ATTEMPTS_UNPACKING_MARKER,
-  autoMatchSearch,
+  autoMatchSearch, calculateBestInsertIndex,
   getAttemptsMultiplier,
   moveArrayItem,
   removeItemFromArray,
@@ -248,11 +248,16 @@ export default function scrambleMatchReducer(state, action) {
           const autoInsertNavigation = autoMatchSearch(scrSet, accuState, action.settings);
 
           if (autoInsertNavigation) {
+            const destinationIndex = action.settings.tryBestInsert
+              ? calculateBestInsertIndex(scrSet, autoInsertNavigation.rounds.item)
+              : undefined;
+
             return executeAddExternalToMatching(
               accuState,
               autoInsertNavigation.events.id,
               autoInsertNavigation.rounds.id,
               scrSet,
+              destinationIndex,
             );
           }
 
