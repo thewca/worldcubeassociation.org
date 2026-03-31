@@ -10,6 +10,7 @@ import { getT } from "@/lib/i18n/get18n";
 import { DateTime } from "luxon";
 import { getRoundName } from "@/lib/wca/live/getRoundName";
 import { getRounds } from "@/lib/wca/live/getRounds";
+import RoundOpenCheck from "@/components/live/RoundOpenCheck";
 
 export default async function DoubleCheckPage({
   params,
@@ -47,29 +48,33 @@ export default async function DoubleCheckPage({
 
   const roundName = getRoundName(id, t, roundsData.rounds, true);
 
+  const round = roundsData.rounds.find((r) => r.id === id)!;
+
   return (
     <Container>
-      <PermissionCheck
-        requiredPermission="canAdministerCompetition"
-        item={competitionId}
-      >
-        <LiveResultProvider initialRound={data} competitionId={competitionId}>
-          <LiveResultAdminProvider
-            format={formats.byId[format]}
-            roundId={id}
-            competitionId={competitionId}
-            initialRegistrationId={sortedResults[0].registration_id}
-          >
-            <DoubleCheck
+      <RoundOpenCheck round={round} t={t}>
+        <PermissionCheck
+          requiredPermission="canAdministerCompetition"
+          item={competitionId}
+        >
+          <LiveResultProvider initialRound={data} competitionId={competitionId}>
+            <LiveResultAdminProvider
+              format={formats.byId[format]}
+              roundId={id}
               competitionId={competitionId}
-              results={sortedResults}
-              formatId={format}
-              roundWcifId={id}
-              roundName={roundName}
-            />
-          </LiveResultAdminProvider>
-        </LiveResultProvider>
-      </PermissionCheck>
+              initialRegistrationId={sortedResults[0].registration_id}
+            >
+              <DoubleCheck
+                competitionId={competitionId}
+                results={sortedResults}
+                formatId={format}
+                roundWcifId={id}
+                roundName={roundName}
+              />
+            </LiveResultAdminProvider>
+          </LiveResultProvider>
+        </PermissionCheck>
+      </RoundOpenCheck>
     </Container>
   );
 }
