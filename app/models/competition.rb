@@ -2279,7 +2279,7 @@ class Competition < ApplicationRecord
       self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
   end
 
-  # # WFC usually sends dues to the lead delegate; if not present, then to the first staff delegate in alphabetical order, provided there are no redirects set up for the country or organizer.
+  # WFC usually sends dues to the lead delegate; if not present, then to the first staff delegate in alphabetical order, provided there are no redirects set up for the country or organizer.
   private def delegate_dues_payer
     lead_delegate || staff_delegates.min_by(&:name)
   end
