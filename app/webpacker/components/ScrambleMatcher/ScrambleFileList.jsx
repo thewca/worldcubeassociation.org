@@ -165,6 +165,53 @@ function ScrambleFileHeader({ scrambleFile }) {
   );
 }
 
+function CurrentlyMatchedBreadcrumbs({
+  actualNavigation,
+  pickerSectionRef,
+  navigatePicker,
+  isAttemptMode = false,
+}) {
+  const onClickNavigate = () => {
+    if (pickerSectionRef.current) {
+      navigatePicker('events', actualNavigation.events.id);
+      navigatePicker('rounds', actualNavigation.rounds.id);
+
+      pickerSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  return (
+    <Breadcrumb size="tiny" onClick={onClickNavigate} style={{ cursor: 'pointer' }}>
+      <Breadcrumb.Section>
+        <Icon className={`cubing-icon event-${actualNavigation.events.id}`} />
+      </Breadcrumb.Section>
+      <Breadcrumb.Divider icon="chevron right" />
+      <Breadcrumb.Section>
+        {roundToRoundTypeName(
+          actualNavigation.rounds.item,
+          actualNavigation.events.item,
+        )}
+      </Breadcrumb.Section>
+      <Breadcrumb.Divider icon="chevron right" />
+      <Breadcrumb.Section>
+        Group
+        {' '}
+        {actualNavigation.external_scramble_sets.index + 1}
+      </Breadcrumb.Section>
+      {isAttemptMode && (
+        <>
+          <Breadcrumb.Divider icon="chevron right" />
+          <Breadcrumb.Section>
+            Attempt
+            {' '}
+            {actualNavigation.external_scrambles.index + 1}
+          </Breadcrumb.Section>
+        </>
+      )}
+    </Breadcrumb>
+  );
+}
+
 function FileTableGroupCell({
   fileSets,
   referenceSet,
@@ -201,6 +248,8 @@ function FileTableGroupCell({
 function ScrambleFileBody({
   scrambleFile,
   autoMatchSettings,
+  pickerSectionRef,
+  navigatePicker,
   matchState,
   dispatchMatchState,
 }) {
@@ -324,34 +373,12 @@ function ScrambleFileBody({
                   disabled={!actualNavigation}
                 >
                   {actualNavigation ? (
-                    <Breadcrumb size="tiny">
-                      <Breadcrumb.Section>
-                        <Icon className={`cubing-icon event-${actualNavigation.events.id}`} />
-                      </Breadcrumb.Section>
-                      <Breadcrumb.Divider icon="chevron right" />
-                      <Breadcrumb.Section>
-                        {roundToRoundTypeName(
-                          actualNavigation.rounds.item,
-                          actualNavigation.events.item,
-                        )}
-                      </Breadcrumb.Section>
-                      <Breadcrumb.Divider icon="chevron right" />
-                      <Breadcrumb.Section>
-                        Group
-                        {' '}
-                        {actualNavigation.external_scramble_sets.index + 1}
-                      </Breadcrumb.Section>
-                      {isAttemptMappedScramble && (
-                      <>
-                        <Breadcrumb.Divider icon="chevron right" />
-                        <Breadcrumb.Section>
-                          Attempt
-                          {' '}
-                          {actualNavigation.external_scrambles.index + 1}
-                        </Breadcrumb.Section>
-                      </>
-                      )}
-                    </Breadcrumb>
+                    <CurrentlyMatchedBreadcrumbs
+                      actualNavigation={actualNavigation}
+                      pickerSectionRef={pickerSectionRef}
+                      navigatePicker={navigatePicker}
+                      isAttemptMode={isAttemptMappedScramble}
+                    />
                   ) : '(not used)'}
                 </Table.Cell>
                 <Table.Cell
@@ -409,6 +436,8 @@ function ScrambleFileBody({
 export default function ScrambleFileList({
   scrambleFiles,
   autoMatchSettings,
+  pickerSectionRef,
+  navigatePicker,
   isFetching,
   matchState,
   dispatchMatchState,
@@ -431,6 +460,8 @@ export default function ScrambleFileList({
       content: <ScrambleFileBody
         scrambleFile={scrFile}
         autoMatchSettings={autoMatchSettings}
+        pickerSectionRef={pickerSectionRef}
+        navigatePicker={navigatePicker}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
       />,

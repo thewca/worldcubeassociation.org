@@ -1,7 +1,9 @@
 import React, {
-  useCallback, useMemo, useReducer,
+  useCallback, useMemo, useReducer, useRef,
 } from 'react';
-import { Button, Divider, Message } from 'semantic-ui-react';
+import {
+  Button, Divider, Message, Ref,
+} from 'semantic-ui-react';
 import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
@@ -122,11 +124,15 @@ function ScrambleMatcher({
   const [pickerNavigation, navigatePicker] = useConfigState();
   const [autoMatchSettings, configureAutoMatch] = useConfigState(AUTOMATCH_DEFAULT_SETTINGS);
 
+  const pickerSectionRef = useRef();
+
   return (
     <MoveModalProvider rootMatchState={matchState}>
       <FileUpload
         competitionId={competitionId}
         initialScrambleFiles={initialScrambleFiles}
+        pickerSectionRef={pickerSectionRef}
+        navigatePicker={navigatePicker}
         autoMatchSettings={autoMatchSettings}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
@@ -147,7 +153,9 @@ function ScrambleMatcher({
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
       />
-      <Divider />
+      <Ref innerRef={pickerSectionRef}>
+        <Divider />
+      </Ref>
       <EventAndRoundPicker
         pickerNavigation={pickerNavigation}
         navigatePicker={navigatePicker}

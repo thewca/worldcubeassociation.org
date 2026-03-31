@@ -31,6 +31,8 @@ async function uploadScrambleFile({ competitionId, file }) {
 export default function FileUpload({
   competitionId,
   initialScrambleFiles,
+  pickerSectionRef,
+  navigatePicker,
   autoMatchSettings,
   matchState,
   dispatchMatchState,
@@ -151,6 +153,8 @@ export default function FileUpload({
       <ScrambleFileList
         scrambleFiles={uploadedJsonFiles}
         autoMatchSettings={autoMatchSettings}
+        pickerSectionRef={pickerSectionRef}
+        navigatePicker={navigatePicker}
         isFetching={isFetching}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
