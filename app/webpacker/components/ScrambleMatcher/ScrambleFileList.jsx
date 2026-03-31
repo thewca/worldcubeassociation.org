@@ -13,7 +13,7 @@ import {
   getAttemptsMultiplier,
   prefixForIndex,
   roundToRoundTypeName,
-  searchRecursive,
+  searchRecursive, sortSetsForAutoMatch,
   unpackScrambleSets,
 } from './util';
 import { events } from '../../lib/wca-data.js.erb';
@@ -242,12 +242,7 @@ function ScrambleFileBody({
     autoMatchSettings,
   );
 
-  const orderedScrambleSets = _.sortBy(currentFileSets, [
-    (scrSet) => events.byId[scrSet.event_id].rank,
-    'round_number',
-    'scramble_set_number',
-    'scramble_number',
-  ]);
+  const orderedScrambleSets = sortSetsForAutoMatch(currentFileSets, autoMatchSettings);
 
   const autoAssignAction = useCallback(() => dispatchMatchState({
     type: 'autoMatchScrambleSets',

@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 import _ from 'lodash';
+import { DateTime } from 'luxon';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import { getRoundTypeId, parseActivityCode, shortLabelForActivityCode } from '../../lib/utils/wcif';
 import I18n from '../../lib/i18n';
-import { formats } from '../../lib/wca-data.js.erb';
+import { events, formats } from '../../lib/wca-data.js.erb';
 
 export const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 
@@ -20,6 +21,7 @@ export const AUTOMATCH_DEFAULT_SETTINGS = {
   limitMatches: true,
   tryBestInsert: false,
   useAttemptsMatching: ATTEMPT_BASED_EVENTS,
+  fileTimestampPreference: 'uploaded_at',
 };
 
 export const ATTEMPTS_UNPACKING_MARKER = '_attemptsUnpacking';
@@ -129,7 +131,7 @@ export function thinWcifRound(wcifRound) {
 }
 
 export function thinExtScrambleSet(extScrSet) {
-  return _.pick(extScrSet, 'id', 'event_id', 'scramble_file_upload_id', 'round_number', 'scramble_set_number', 'original_filename', 'automatch_wcif_id');
+  return _.pick(extScrSet, 'id', 'event_id', 'scramble_file_upload_id', 'round_number', 'scramble_set_number', 'original_filename', 'generated_at', 'uploaded_at', 'automatch_wcif_id');
 }
 
 export function thinExtScramble(extScr) {
@@ -214,6 +216,37 @@ export function autoMatchSearch(
   }
 
   return null;
+}
+
+export function sortSetsForAutoMatch(scrSets, autoMatchSettings) {
+  return _.sortBy(scrSets, [
+    (scrSet) => DateTime.fromISO(
+      scrSet[autoMatchSettings.fileTimestampPreference],
+    ).toUnixInteger(),
+    (scrSet) => events.byId[scrSet.event_id].rank,
+    'round_number',
+    'scramble_set_number',
+    'scramble_number',
+  ]);
+}
+
+export function filterUnusedScrambles(
+  scrFileSets,
+  matchedStateSets,
+  autoMatchSettings,
+) {
+  const unusedScrambleSets = _.differenceWith(
+    scrFileSets,
+    matchedStateSets,
+    (a, b) => {
+      const miniA = _.pick(a, [ATTEMPTS_UNPACKING_MARKER, 'id']);
+      const miniB = _.pick(b, [ATTEMPTS_UNPACKING_MARKER, 'id']);
+
+      return _.isEqual(miniA, miniB);
+    },
+  );
+
+  return sortSetsForAutoMatch(unusedScrambleSets, autoMatchSettings);
 }
 
 export function useConfigState(defaultConfig = {}) {

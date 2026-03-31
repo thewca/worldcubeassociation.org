@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import ScrambleFileList from './ScrambleFileList';
-import { useScrambleFilesQuery } from './util';
+import { sortSetsForAutoMatch, unpackScrambleSets, useScrambleFilesQuery } from './util';
 import useToggleButtonState from '../../lib/hooks/useToggleButtonState';
 
 async function uploadScrambleFile({ competitionId, file }) {
@@ -60,7 +60,10 @@ export default function FileUpload({
       );
 
       if (matchOnUpload) {
-        dispatchMatchState({ type: 'autoMatchScrambleSets', scrambleSets: data.external_scramble_sets, settings: autoMatchSettings });
+        const unpackedScrSets = unpackScrambleSets(data.external_scramble_sets, autoMatchSettings);
+        const sortedScrSets = sortSetsForAutoMatch(unpackedScrSets, autoMatchSettings);
+
+        dispatchMatchState({ type: 'autoMatchScrambleSets', scrambleSets: sortedScrSets, settings: autoMatchSettings });
       }
     },
     onError: (responseError) => setError(responseError.message),

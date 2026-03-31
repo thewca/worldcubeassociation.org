@@ -13,7 +13,7 @@ class ExternalScrambleSet < ApplicationRecord
   has_many :external_scrambles, dependent: :destroy
   has_many :matched_scramble_sets, dependent: :delete_all
 
-  delegate :original_filename, to: :scramble_file_upload
+  delegate :original_filename, :generated_at, :uploaded_at, to: :scramble_file_upload
 
   def event
     Event.c_find(self.event_id)
@@ -28,7 +28,7 @@ class ExternalScrambleSet < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    methods: %w[original_filename automatch_wcif_id],
+    methods: %w[original_filename generated_at uploaded_at automatch_wcif_id],
     include: %w[external_scrambles],
   }.freeze
 

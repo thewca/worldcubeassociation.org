@@ -5,7 +5,11 @@ import {
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { useCheckboxUpdater } from '../../lib/hooks/useCheckboxState';
-import { ATTEMPT_BASED_EVENTS, ATTEMPTS_UNPACKING_MARKER, unpackScrambleSets } from './util';
+import {
+  ATTEMPT_BASED_EVENTS,
+  filterUnusedScrambles,
+  unpackScrambleSets,
+} from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import MatchingProgressTable from './MatchingProgressTable';
 
@@ -43,6 +47,11 @@ function AutoMatchConfigModal({
     }
   }, [autoMatchSettings.useAttemptsMatching, configureAutoMatch]);
 
+  const radioGroupUpdater = useCallback(
+    (e, data) => configureAutoMatch(data.name, data.value),
+    [configureAutoMatch],
+  );
+
   return (
     <Modal
       closeIcon
@@ -66,7 +75,7 @@ function AutoMatchConfigModal({
             checked={allUseAttemptsMatching}
             onChange={setGlobalAttemptsMatching}
           />
-          <Form.Group inline style={{ marginLeft: '2em' }}>
+          <Form.Group inline grouped style={{ marginLeft: '2em' }}>
             {ATTEMPT_BASED_EVENTS.map((evtId) => (
               <Form.Checkbox
                 key={evtId}
@@ -77,6 +86,25 @@ function AutoMatchConfigModal({
                 onChange={toggleEventAttemptsMatching}
               />
             ))}
+          </Form.Group>
+          <Form.Field>
+            When running Auto-Assign, the algorithm should prefer scrambles which have been…
+          </Form.Field>
+          <Form.Group inline grouped style={{ marginLeft: '2em' }}>
+            <Form.Radio
+              label="Uploaded on this page first"
+              name="fileTimestampPreference"
+              value="uploaded_at"
+              checked={autoMatchSettings.fileTimestampPreference === 'uploaded_at'}
+              onChange={radioGroupUpdater}
+            />
+            <Form.Radio
+              label="Generated in TNoodle first"
+              name="fileTimestampPreference"
+              value="generated_at"
+              checked={autoMatchSettings.fileTimestampPreference === 'generated_at'}
+              onChange={radioGroupUpdater}
+            />
           </Form.Group>
         </Form>
       </Modal.Content>
@@ -97,35 +125,28 @@ export default function AutoMatchPanel({
     (scrFile) => DateTime.fromISO(scrFile.uploaded_at).toUnixInteger(),
   );
 
-  const uploadedScrSets = sortedScrambleFiles
-    .flatMap((scrFile) => scrFile.external_scramble_sets);
-
-  const unpackedScrSets = unpackScrambleSets(uploadedScrSets, autoMatchSettings);
+  const unpackedScrSets = sortedScrambleFiles.flatMap(
+    (scrFile) => unpackScrambleSets(
+      scrFile.external_scramble_sets,
+      autoMatchSettings,
+    ),
+  );
 
   const executeAutoAssign = useCallback(() => {
-    const matchedStateSets = matchState.events.flatMap(
+    const unpackedUsedSets = matchState.events.flatMap(
       (evt) => evt.rounds.flatMap(
-        (rd) => rd.external_scramble_sets,
+        (rd) => unpackScrambleSets(
+          rd.external_scramble_sets,
+          autoMatchSettings,
+        ),
       ),
     );
 
-    const unpackedUsedSets = unpackScrambleSets(matchedStateSets, autoMatchSettings);
-
-    const unusedScrambleSets = _.differenceWith(
+    const orderedScrambleSets = filterUnusedScrambles(
       unpackedScrSets,
       unpackedUsedSets,
-      (a, b) => {
-        const miniA = _.pick(a, [ATTEMPTS_UNPACKING_MARKER, 'id']);
-        const miniB = _.pick(b, [ATTEMPTS_UNPACKING_MARKER, 'id']);
-
-        return _.isEqual(miniA, miniB);
-      },
+      autoMatchSettings,
     );
-
-    const orderedScrambleSets = _.sortBy(unusedScrambleSets, [
-      'scramble_set_number',
-      'scramble_number',
-    ]);
 
     dispatchMatchState({ type: 'autoMatchScrambleSets', scrambleSets: orderedScrambleSets, settings: autoMatchSettings });
   }, [matchState.events, unpackedScrSets, dispatchMatchState, autoMatchSettings]);

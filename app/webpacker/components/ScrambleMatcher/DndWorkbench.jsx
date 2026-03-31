@@ -4,6 +4,7 @@ import MatchingTable from './MatchingTable';
 import {
   DROPPABLE_ID_MATCHED_SCRAMBLES,
   DROPPABLE_ID_STORAGE,
+  filterUnusedScrambles,
   unpackScrambleSets,
   unpackScrambleSetsInRound,
 } from './util';
@@ -38,10 +39,11 @@ export default function DndWorkbench({
     .filter((set) => set.event_id === selectedEvent.id)
     .filter((set) => set.round_number === selectedRoundNumber);
 
-  const unusedScrambleSets = eligibleScrambleSets
-    .filter((extScrSet) => !matchingRows.some(
-      (row) => row.id === extScrSet.id,
-    ));
+  const unusedScrambleSets = filterUnusedScrambles(
+    eligibleScrambleSets,
+    matchingRows,
+    autoMatchSettings,
+  );
 
   const handleOnDragEnd = (result) => {
     const { source, destination } = result;
