@@ -50,6 +50,8 @@ class Round < ApplicationRecord
   has_many :results
   has_many :scrambles
 
+  has_many :sibling_rounds, through: :competition_event, source: :rounds
+
   MAX_NUMBER = 4
   validates :number,
             numericality: { only_integer: true,
@@ -150,13 +152,13 @@ class Round < ApplicationRecord
     live_results.where(global_pos: 1..3)
   end
 
-  def previous_round(all_rounds = nil)
+  def previous_round
     return nil if number == 1
 
-    if all_rounds
-      all_rounds.find { |r| r.competition_event_id == competition_event_id && r.number == number - 1 }
+    if sibling_rounds.loaded?
+      sibling_rounds.find { it.number == self.number - 1 }
     else
-      Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
+      sibling_rounds.find_by(number: number - 1)
     end
   end
 
@@ -323,7 +325,11 @@ class Round < ApplicationRecord
   end
 
   def competitors_live_results_entered
-    live_results.count { it.best != 0 }
+    if live_results.loaded?
+      live_results.count(&:not_empty?)
+    else
+      live_results.not_empty.count
+    end
   end
 
   def score_taking_done?
@@ -401,10 +407,10 @@ class Round < ApplicationRecord
   STATE_READY = "ready"
   STATE_PENDING = "pending"
 
-  def lifecycle_state(all_rounds = nil)
+  def lifecycle_state
     return STATE_LOCKED if locked?
     return STATE_OPEN if open?
-    return STATE_READY if number == 1 || previous_round(all_rounds).score_taking_done?
+    return STATE_READY if number == 1 || previous_round.score_taking_done?
 
     STATE_PENDING
   end
@@ -523,8 +529,8 @@ class Round < ApplicationRecord
     }
   end
 
-  def to_live_info_json(all_rounds)
-    state = lifecycle_state(all_rounds)
+  def to_live_info_json
+    state = lifecycle_state
     json = {
       **self.to_wcif(include_results: false).compact_blank,
       "state" => state,
