@@ -70,7 +70,11 @@ function unpackRoundAndApplyAction(
 
   const referenceLength = getAttemptsMultiplier(round);
 
-  const thinScrambles = updatedScrambles.map((scr) => thinExtScramble(scr));
+  const thinScrambles = updatedScrambles.map((scr) => ({
+    ...thinExtScramble(scr),
+    is_extra: false,
+  }));
+
   const chunkedScrambles = _.chunk(thinScrambles, referenceLength);
 
   const filledBracket = maxSetBracket.map((set, idx) => ({
