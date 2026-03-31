@@ -216,7 +216,7 @@ class Round < ApplicationRecord
   end
 
   def total_competitors
-    live_results.map(&:registration_id).length
+    live_results.size
   end
 
   def recompute_live_columns(skip_advancing: false)
