@@ -1119,12 +1119,7 @@ class Competition < ApplicationRecord
   end
 
   def lead_delegate_required?
-    # If you read this comment after April 1st, 2026:
-    #   You may happily remove all the `testing_before_launch` shenanigans. Signed GB 2026-03-20
-    requirement_date = Date.new(2026, 4, 1)
-    testing_before_launch = Rails.env.test? && Date.current < requirement_date
-
-    confirmed? && (testing_before_launch || confirmed_at >= requirement_date)
+    confirmed? && confirmed_at >=  Date.new(2026, 4, 1)
   end
 
   def pending_results_or_report(num_days)
