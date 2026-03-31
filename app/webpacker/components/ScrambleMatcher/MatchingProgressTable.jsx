@@ -104,20 +104,20 @@ function EventStatusIcon({
         <List bulleted>
           {roundsWithError.length > 0 && (
             <>
-              <List.Item>Missing scrambles</List.Item>
-              <List.List bulleted>
+              <List.Item content="Missing scrambles" />
+              <List.List>
                 {roundsWithError.map((rd) => (
-                  <List.Item key={rd.id}>{roundToRoundTypeName(rd, event)}</List.Item>
+                  <List.Item key={rd.id} content={roundToRoundTypeName(rd, event)} />
                 ))}
               </List.List>
             </>
           )}
           {roundsWithWarning.length > 0 && (
             <>
-              <List.Item>Too many scrambles</List.Item>
+              <List.Item content="Too many scrambles" />
               <List.List bulleted>
                 {roundsWithWarning.map((rd) => (
-                  <List.Item key={rd.id}>{roundToRoundTypeName(rd, event)}</List.Item>
+                  <List.Item key={rd.id} content={roundToRoundTypeName(rd, event)} />
                 ))}
               </List.List>
             </>
