@@ -31,7 +31,7 @@ import {
 import EventIcon from "@/components/EventIcon";
 import { route } from "nextjs-routes";
 import { useT } from "@/lib/i18n/useI18n";
-import { LuLock, LuLockOpen } from "react-icons/lu";
+import { LuLock } from "react-icons/lu";
 
 interface LiveViewProps {
   timeZones: string[];
