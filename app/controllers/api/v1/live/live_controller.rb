@@ -32,7 +32,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     competition_id = params.require(:competition_id)
     wcif_id = params.require(:round_id)
 
-    round = Round.find_by_wcif_id!(wcif_id, competition_id, includes: [:linked_round, { live_results: %i[live_attempts event] }])
+    round = Round.find_by_wcif_id!(wcif_id, competition_id, includes: [:linked_round, { live_results: [:live_attempts, :event, { registration: :user }] }])
 
     render json: round.to_live_results_json
   end

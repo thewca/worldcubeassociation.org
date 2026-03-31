@@ -321,7 +321,7 @@ class Round < ApplicationRecord
   end
 
   def to_live_state
-    live_results.includes(:live_attempts).map(&:to_live_state)
+    live_results.map(&:to_live_state)
   end
 
   def competitors_live_results_entered
@@ -373,7 +373,13 @@ class Round < ApplicationRecord
 
     all_includes = [:competition_event, *Array.wrap(includes)]
 
-    Round.includes(all_includes).find_by!(competition_event: { competition_id: competition_id, event_id: event_id }, number: number)
+    Round
+      .joins(:competition_event)
+      .preload(all_includes)
+      .find_by!(
+        competition_events: { competition_id: competition_id, event_id: event_id },
+        number: number,
+      )
   end
 
   def self.parse_wcif_id(wcif_id)
@@ -522,7 +528,7 @@ class Round < ApplicationRecord
     {
       **self.to_wcif(include_results: false).compact_blank,
       "round_id" => id,
-      "competitors" => live_competitors.includes(:user).map(&:to_live_json),
+      "competitors" => live_results.map { it.registration.to_live_json },
       "results" => only_podiums ? live_podium : live_results,
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
       "linked_round_ids" => linked_round&.wcif_ids,
