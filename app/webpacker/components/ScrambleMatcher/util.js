@@ -179,6 +179,21 @@ export function unpackScrambleSetsInRound(extScrambleSets, isAttemptMode) {
   );
 }
 
+export function unpackMatchingState(matchState, autoMatchSettings) {
+  return matchState.events.flatMap(
+    (evt) => {
+      const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(evt.id);
+
+      return evt.rounds.flatMap(
+        (rd) => unpackScrambleSetsInRound(
+          rd.external_scramble_sets,
+          isAttemptMode,
+        ),
+      );
+    },
+  );
+}
+
 export const calculateRoundExpectedCount = (
   round,
   isAttemptMode = false,

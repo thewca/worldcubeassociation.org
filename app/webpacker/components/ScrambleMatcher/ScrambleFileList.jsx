@@ -8,11 +8,11 @@ import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import {
   ATTEMPTS_UNPACKING_MARKER,
-  autoMatchSearch, calculateBestInsertIndex,
+  autoMatchSearch, calculateBestInsertIndex, filterUnusedScrambles,
   getAttemptsMultiplier,
   prefixForIndex,
   roundToRoundTypeName,
-  searchRecursive, sortSetsForAutoMatch,
+  searchRecursive, sortSetsForAutoMatch, unpackMatchingState,
   unpackScrambleSets,
 } from './util';
 import { events } from '../../lib/wca-data.js.erb';
@@ -236,13 +236,21 @@ function ScrambleFileBody({
     autoMatchSettings,
   );
 
-  const orderedScrambleSets = sortSetsForAutoMatch(currentFileSets, autoMatchSettings);
+  const unpackedUsedSets = unpackMatchingState(matchState, autoMatchSettings);
+
+  const unusedScrambleSets = filterUnusedScrambles(
+    currentFileSets,
+    unpackedUsedSets,
+    autoMatchSettings,
+  );
 
   const autoAssignAction = useCallback(() => dispatchMatchState({
     type: 'autoMatchScrambleSets',
-    scrambleSets: orderedScrambleSets,
+    scrambleSets: unusedScrambleSets,
     settings: autoMatchSettings,
-  }), [dispatchMatchState, orderedScrambleSets, autoMatchSettings]);
+  }), [dispatchMatchState, unusedScrambleSets, autoMatchSettings]);
+
+  const orderedScrambleSets = sortSetsForAutoMatch(currentFileSets, autoMatchSettings);
 
   return (
     <>
@@ -377,6 +385,7 @@ function ScrambleFileBody({
           icon="magic"
           content="Auto-Assign"
           onClick={autoAssignAction}
+          disabled={unusedScrambleSets.length === 0}
         />
         <Button
           secondary

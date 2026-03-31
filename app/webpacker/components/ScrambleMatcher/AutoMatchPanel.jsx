@@ -7,7 +7,7 @@ import { DateTime } from 'luxon';
 import { useCheckboxUpdater } from '../../lib/hooks/useCheckboxState';
 import {
   ATTEMPT_BASED_EVENTS,
-  filterUnusedScrambles,
+  filterUnusedScrambles, unpackMatchingState,
   unpackScrambleSets,
 } from './util';
 import { events } from '../../lib/wca-data.js.erb';
@@ -133,14 +133,7 @@ export default function AutoMatchPanel({
   );
 
   const executeAutoAssign = useCallback(() => {
-    const unpackedUsedSets = matchState.events.flatMap(
-      (evt) => evt.rounds.flatMap(
-        (rd) => unpackScrambleSets(
-          rd.external_scramble_sets,
-          autoMatchSettings,
-        ),
-      ),
-    );
+    const unpackedUsedSets = unpackMatchingState(matchState, autoMatchSettings);
 
     const orderedScrambleSets = filterUnusedScrambles(
       unpackedScrSets,
@@ -149,7 +142,7 @@ export default function AutoMatchPanel({
     );
 
     dispatchMatchState({ type: 'autoMatchScrambleSets', scrambleSets: orderedScrambleSets, settings: autoMatchSettings });
-  }, [matchState.events, unpackedScrSets, dispatchMatchState, autoMatchSettings]);
+  }, [matchState, unpackedScrSets, dispatchMatchState, autoMatchSettings]);
 
   const executeClearMatching = useCallback(
     () => dispatchMatchState({ type: 'clearEntireMatching' }),
