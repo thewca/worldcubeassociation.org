@@ -11,6 +11,7 @@ import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import events from "@/lib/wca/data/events";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import getPermissions from "@/lib/wca/permissions";
 
 export default async function ResultPage({
   params,
@@ -30,6 +31,11 @@ export default async function ResultPage({
   }
 
   const { format, id, linked_round_ids } = data;
+
+  const permissions = await getPermissions();
+
+  const canManage =
+    !!permissions && permissions.canAdministerCompetition(competitionId);
 
   if (linked_round_ids) {
     const linkedRounds = await Promise.all(
@@ -57,6 +63,7 @@ export default async function ResultPage({
               competitionId={competitionId}
               title="Live Results"
               isLinkedRound
+              canManage={canManage}
             />
           </MultiRoundResultProvider>
         </VStack>
@@ -75,6 +82,7 @@ export default async function ResultPage({
             roundWcifId={roundId}
             competitionId={competitionId}
             title={`${events.byId[eventId].name} - Round ${roundNumber}`}
+            canManage={canManage}
           />
         </LiveResultProvider>
       </VStack>
