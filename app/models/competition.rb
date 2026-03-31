@@ -36,12 +36,12 @@ class Competition < ApplicationRecord
   belongs_to :posted_user, optional: true, foreign_key: 'results_posted_by', class_name: "User", inverse_of: :competitions_results_posted
   has_many :inbox_results, dependent: :delete_all
   has_many :inbox_persons, dependent: :delete_all
-  has_many :inbox_scramble_sets, dependent: :delete_all
-  has_many :matched_scramble_sets, through: :rounds
   belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User", inverse_of: :competitions_announced
   belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
   has_many :competition_payment_integrations
   has_many :scramble_file_uploads, dependent: :delete_all
+  has_many :external_scramble_sets, through: :scramble_file_uploads
+  has_many :matched_scramble_sets, through: :rounds
   has_many :accepted_registrations, -> { accepted }, class_name: "Registration", foreign_key: "competition_id", inverse_of: :competition
   has_many :accepted_newcomers, -> { where(wca_id: nil) }, through: :accepted_registrations, source: :user
   has_many :duplicate_checker_job_runs, dependent: :delete_all
@@ -688,7 +688,7 @@ class Competition < ApplicationRecord
              'posted_user',
              'inbox_results',
              'inbox_persons',
-             'inbox_scramble_sets',
+             'external_scramble_sets',
              'matched_scramble_sets',
              'announced_by_user',
              'cancelled_by_user',
