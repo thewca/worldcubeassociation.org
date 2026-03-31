@@ -25,6 +25,10 @@ export const AUTOMATCH_DEFAULT_SETTINGS = {
 export const ATTEMPTS_UNPACKING_MARKER = '_attemptsUnpacking';
 
 export const prefixForIndex = (index) => {
+  if (Number.isNaN(index)) {
+    return 'NaN';
+  }
+
   const char = String.fromCharCode(65 + (index % 26));
   if (index < 26) return char;
 
@@ -132,27 +136,10 @@ export function thinExtScramble(extScr) {
   return _.pick(extScr, 'id', 'is_extra', 'scramble_number', 'scramble_string');
 }
 
-export function repackScrambleSet(externalScrambleSet) {
-  return {
-    ...thinExtScrambleSet(externalScrambleSet),
-    external_scrambles: _.sortBy(
-      externalScrambleSet.external_scrambles,
-      ['is_extra', 'scramble_number'],
-    ).map((extScr) => thinExtScramble(extScr)),
-  };
-}
-
-export function reconstructScrambleSet(unpackedScramble) {
-  return {
-    ...thinExtScrambleSet(unpackedScramble),
-    id: unpackedScramble[ATTEMPTS_UNPACKING_MARKER],
-  };
-}
-
 function unpackExternalScrambleSet(extScrSet, isAttemptMode) {
-  if (isAttemptMode) {
-    const thinnedScrambleSet = thinExtScrambleSet(extScrSet);
+  const thinnedScrambleSet = thinExtScrambleSet(extScrSet);
 
+  if (isAttemptMode) {
     return extScrSet.external_scrambles
       .map((extScr) => {
         const thinnedScramble = thinExtScramble(extScr);
@@ -165,7 +152,15 @@ function unpackExternalScrambleSet(extScrSet, isAttemptMode) {
       });
   }
 
-  return [repackScrambleSet(extScrSet)];
+  const repackedScrambleSet = {
+    ...thinnedScrambleSet,
+    external_scrambles: _.sortBy(
+      extScrSet.external_scrambles,
+      ['is_extra', 'scramble_number'],
+    ).map((extScr) => thinExtScramble(extScr)),
+  };
+
+  return [repackedScrambleSet];
 }
 
 export function unpackScrambleSets(extScrambleSets, autoMatchSettings) {

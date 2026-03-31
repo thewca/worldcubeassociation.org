@@ -5,9 +5,7 @@ import {
   autoMatchSearch,
   getAttemptsMultiplier,
   moveArrayItem,
-  reconstructScrambleSet,
   removeItemFromArray,
-  repackScrambleSet,
   searchRecursive,
   thinExtScramble,
   thinExtScrambleSet,
@@ -61,44 +59,44 @@ export function initializeState({ wcifEvents, matchedScrambleSets }) {
   );
 }
 
+function unpackRoundAndApplyAction(
+  round,
+  scrambleActionFn,
+) {
+  const flatScrambles = unpackScrambleSetsInRound(round.external_scramble_sets, true);
+
+  const updatedScrambles = scrambleActionFn(flatScrambles);
+  const maxSetBracket = _.uniqBy(updatedScrambles, ATTEMPTS_UNPACKING_MARKER);
+
+  const referenceLength = getAttemptsMultiplier(round);
+
+  const thinScrambles = updatedScrambles.map((scr) => thinExtScramble(scr));
+  const chunkedScrambles = _.chunk(thinScrambles, referenceLength);
+
+  const filledBracket = maxSetBracket.map((set, idx) => ({
+    ...thinExtScrambleSet(set),
+    id: set[ATTEMPTS_UNPACKING_MARKER],
+    external_scrambles: chunkedScrambles[idx] ?? [],
+  }));
+
+  return filledBracket
+    .filter((set) => set.external_scrambles.length > 0);
+}
+
 function removeScrambleFile(state, oldScrambleFile) {
   return {
     ...state,
     events: state.events.map((wcifEvent) => ({
       ...wcifEvent,
-      rounds: wcifEvent.rounds.map((round) => {
-        const flatScrambles = unpackScrambleSetsInRound(round.external_scramble_sets, true);
-
-        const remainingScrambles = flatScrambles
-          .filter((scr) => scr.scramble_file_upload_id !== oldScrambleFile.id);
-
-        const remainingSets = round.external_scramble_sets
-          .filter((scrSet) => scrSet.scramble_file_upload_id !== oldScrambleFile.id);
-
-        const eligibleSets = [
-          ...remainingSets,
-          ...remainingScrambles.map((scr) => reconstructScrambleSet(scr)),
-        ];
-
-        const maxSetBracket = _.uniqBy(eligibleSets, 'id');
-
-        const referenceLength = round.external_scramble_sets[0].external_scrambles.length;
-        const chunkedScrambles = _.chunk(remainingScrambles, referenceLength);
-
-        const filledBracket = maxSetBracket.map((set, idx) => ({
-          ...set,
-          external_scrambles: chunkedScrambles[idx] ?? [],
-        }));
-
-        const usedSetsInBracket = filledBracket
-          .filter((set) => set.external_scrambles.length > 0)
-          .map((set) => repackScrambleSet(set));
-
-        return {
-          ...round,
-          external_scramble_sets: usedSetsInBracket,
-        };
-      }),
+      rounds: wcifEvent.rounds.map((round) => ({
+        ...round,
+        external_scramble_sets: unpackRoundAndApplyAction(
+          round,
+          (flatScrambles) => flatScrambles.filter(
+            (scrEntity) => scrEntity.scramble_file_upload_id !== oldScrambleFile.id,
+          ),
+        ),
+      })),
     })),
   };
 }
@@ -120,6 +118,23 @@ function updateMatchedSets(subState, eventId, roundId, updateFn) {
   }));
 }
 
+function executeWithAttemptModeChunking(
+  scrSets,
+  round,
+  updateFn,
+  isAttemptMode = false,
+) {
+  if (isAttemptMode) {
+    return unpackRoundAndApplyAction(round, updateFn);
+  }
+
+  return updateFn(scrSets).map((scrSet) => ({
+    ...thinExtScrambleSet(scrSet),
+    external_scrambles: scrSet.external_scrambles
+      .map((scr) => thinExtScramble(scr)),
+  }));
+}
+
 function executeAddExternalToMatching(
   matchedState,
   eventId,
@@ -131,55 +146,17 @@ function executeAddExternalToMatching(
     matchedState,
     eventId,
     roundId,
-    (sets, round) => {
-      if (externalScrambleSet[ATTEMPTS_UNPACKING_MARKER]) {
-        const flatScrambles = unpackScrambleSetsInRound(sets, true);
-
-        const scramblesWithAdded = addItemToArray(
-          flatScrambles,
-          externalScrambleSet,
-          destinationIndex,
-        );
-
-        const eligibleSets = scramblesWithAdded.map((scr) => reconstructScrambleSet(scr));
-        const maxSetBracket = _.uniqBy(eligibleSets, 'id');
-
-        const referenceLength = getAttemptsMultiplier(round);
-        const chunkedScrambles = _.chunk(scramblesWithAdded, referenceLength);
-
-        const filledBracket = maxSetBracket.map((set, idx) => repackScrambleSet({
-          ...set,
-          external_scrambles: chunkedScrambles[idx] ?? [],
-        }));
-
-        return filledBracket
-          .filter((set) => set.external_scrambles.length > 0);
-      }
-
-      return addItemToArray(
-        sets,
-        repackScrambleSet(externalScrambleSet),
+    (sets, round) => executeWithAttemptModeChunking(
+      sets,
+      round,
+      (scrEntities) => addItemToArray(
+        scrEntities,
+        externalScrambleSet,
         destinationIndex,
-      );
-    },
+      ),
+      externalScrambleSet[ATTEMPTS_UNPACKING_MARKER],
+    ),
   );
-}
-
-function executeWithAttemptModeChunking(sets, updateFn, isAttemptMode = false) {
-  if (isAttemptMode) {
-    const flatScrambles = sets.flatMap((set) => set.external_scrambles);
-    const filteredList = updateFn(flatScrambles);
-
-    const referenceLength = sets[0].external_scrambles.length;
-    const chunked = _.chunk(filteredList, referenceLength);
-
-    return sets.map((set, idx) => ({
-      ...set,
-      external_scrambles: chunked[idx],
-    }));
-  }
-
-  return updateFn(sets);
 }
 
 function executeRemoveFromMatching(
@@ -193,8 +170,9 @@ function executeRemoveFromMatching(
     matchedState,
     eventId,
     roundId,
-    (sets) => executeWithAttemptModeChunking(
+    (sets, round) => executeWithAttemptModeChunking(
       sets,
+      round,
       (scrEntities) => removeItemFromArray(scrEntities, sourceIndex),
       isAttemptMode,
     ),
@@ -213,8 +191,9 @@ function executeMoveInsideMatching(
     matchedState,
     eventId,
     roundId,
-    (sets) => executeWithAttemptModeChunking(
+    (sets, round) => executeWithAttemptModeChunking(
       sets,
+      round,
       (scrEntities) => moveArrayItem(
         scrEntities,
         sourceIndex,

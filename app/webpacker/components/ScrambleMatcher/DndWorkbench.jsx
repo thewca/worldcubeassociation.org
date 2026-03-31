@@ -5,6 +5,7 @@ import {
   DROPPABLE_ID_MATCHED_SCRAMBLES,
   DROPPABLE_ID_STORAGE,
   unpackScrambleSets,
+  unpackScrambleSetsInRound,
 } from './util';
 import UnusedScramblesPanel from './UnusedScramblesPanel';
 import { parseActivityCode } from '../../lib/utils/wcif';
@@ -19,7 +20,10 @@ export default function DndWorkbench({
 }) {
   const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(selectedEvent.id);
 
-  const matchingRows = unpackScrambleSets(selectedRound.external_scramble_sets, autoMatchSettings);
+  const matchingRows = unpackScrambleSetsInRound(
+    selectedRound.external_scramble_sets,
+    isAttemptMode,
+  );
 
   const uploadedScrambleSets = uploadedScrambleFiles.flatMap(
     (scrFile) => unpackScrambleSets(
