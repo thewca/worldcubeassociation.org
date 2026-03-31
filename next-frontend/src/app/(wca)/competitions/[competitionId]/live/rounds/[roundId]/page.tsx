@@ -64,10 +64,15 @@ export default async function ResultPage({
     );
   }
 
-  const { data: roundsData } = await getRounds(competitionId);
+  const {
+    data: roundsData,
+    error: roundsError,
+    response: roundsResponse,
+  } = await getRounds(competitionId);
 
-  // If the request fails, it will have already failed in a parent component so we can safely use !
-  const roundName = getRoundName(id, t, roundsData!.rounds, true);
+  if (roundsError) return <OpenapiError response={roundsResponse} t={t} />;
+
+  const roundName = getRoundName(id, t, roundsData.rounds, true);
 
   return (
     <Container bg="bg">
