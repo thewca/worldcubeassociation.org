@@ -80,7 +80,7 @@ export default async function ResultPage({
   return (
     <Container bg="bg">
       <VStack align="left">
-        <RoundOpenCheck round={round} t={t}>
+        <RoundOpenCheck state={round.state} t={t}>
           <LiveResultProvider initialRound={data} competitionId={competitionId}>
             <LiveUpdatingResultsTable
               formatId={format}

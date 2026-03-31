@@ -1411,7 +1411,7 @@ en:
         open: "Open"
         clear: "Clear"
         competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
-        round_locked: "%{total_competitors} locked"
+        round_locked: "locked"
       results:
         competitor: "Competitor"
         dual_round: "Combined Dual Round"

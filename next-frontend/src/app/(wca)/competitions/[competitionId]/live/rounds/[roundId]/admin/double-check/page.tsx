@@ -52,7 +52,7 @@ export default async function DoubleCheckPage({
 
   return (
     <Container>
-      <RoundOpenCheck round={round} t={t}>
+      <RoundOpenCheck state={round.state} t={t}>
         <PermissionCheck
           requiredPermission="canAdministerCompetition"
           item={competitionId}

@@ -1,17 +1,17 @@
-import { LiveRoundAdminBase } from "@/types/live";
+import { LiveRoundState } from "@/types/live";
 import { TFunction } from "i18next";
 import ClosedRoundError from "@/components/live/ClosedRoundError";
 
 export default function RoundOpenCheck({
-  round,
+  state,
   t,
   children,
 }: {
-  round: Pick<LiveRoundAdminBase, "state">;
+  state: LiveRoundState;
   t: TFunction;
   children: React.ReactNode;
 }) {
-  const roundClosed = ["pending", "ready"].includes(round.state);
+  const roundClosed = ["pending", "ready"].includes(state);
 
   if (roundClosed) {
     return <ClosedRoundError t={t} />;

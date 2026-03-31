@@ -26,8 +26,7 @@ export function getRoundName(
   );
 
   const roundName = t(`rounds.${roundTypeId}.name`);
+  const eventOrEmpty = withEvent ? [events.byId[eventId].name] : [];
 
-  return [...(withEvent ? [events.byId[eventId].name] : []), roundName].join(
-    " - ",
-  );
+  return [...eventOrEmpty, roundName].join(" - ");
 }
