@@ -2,17 +2,10 @@
 
 class ChangeUseWcaLiveToEnum < ActiveRecord::Migration[8.1]
   def change
-    add_column :competitions, :software_for_scoretaking, :integer, default: 0, null: false
+    add_column :competitions, :scoretaking_software, :integer, default: 0, null: false
 
     up_only do
-      execute <<~SQL.squish
-        UPDATE competitions
-        SET software_for_scoretaking =
-          CASE
-            WHEN use_wca_live_for_scoretaking = TRUE THEN 1
-            ELSE 0
-          END
-      SQL
+      Competition.where(use_wca_live_for_scoretaking: true).update_all(scoretaking_software: :wca_live)
     end
 
     remove_column :competitions, :use_wca_live_for_scoretaking, :boolean

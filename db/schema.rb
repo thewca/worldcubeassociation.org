@@ -452,8 +452,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_090104) do
     t.datetime "results_posted_at", precision: nil
     t.integer "results_posted_by"
     t.datetime "results_submitted_at", precision: nil
+    t.integer "scoretaking_software", default: 0, null: false
     t.boolean "show_at_all", default: false, null: false
-    t.integer "software_for_scoretaking", default: 0, null: false
     t.date "start_date"
     t.datetime "updated_at", precision: nil
     t.boolean "use_wca_registration", default: true, null: false
