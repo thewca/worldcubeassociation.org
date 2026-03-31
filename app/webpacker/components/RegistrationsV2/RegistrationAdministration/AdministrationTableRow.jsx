@@ -40,24 +40,38 @@ function RegisteredOn({
 function PaidOn({
   withFullDate, registeredOn, paymentStatus, hasPaid, updatedAt,
 }) {
-  const wasRefunded = paymentStatus === 'refund';
-  const trigger = (
-    <span>
-      {hasPaid
-        ? `${formatDate(updatedAt, withFullDate)}${wasRefunded ? '*' : ''}`
-        : I18n.t('registrations.list.not_paid')}
-    </span>
-  );
+  // trigger must be wrapped in a span, literal text causes a crash
+  const trigger = (() => {
+    if (hasPaid) {
+      return (
+        <span>
+          {formatDate(updatedAt, withFullDate)}
+        </span>
+      );
+    }
+    if (paymentStatus === 'refund') {
+      return (
+        <span>
+          {I18n.t('competitions.registration_v2.list.payment.refunded_status')}
+        </span>
+      );
+    }
+    return (
+      <span>
+        {I18n.t('registrations.list.not_paid')}
+      </span>
+    );
+  })();
 
   const content = (() => {
+    if (paymentStatus === 'refund') {
+      return I18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(updatedAt) });
+    }
     if (!hasPaid) {
       return I18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
     }
     if (paymentStatus === 'initialized') {
       return I18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(updatedAt) });
-    }
-    if (paymentStatus === 'refund') {
-      return I18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(updatedAt) });
     }
     // the above cases should be exhaustive
     return getRegistrationTimestamp(updatedAt);

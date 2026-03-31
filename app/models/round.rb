@@ -240,7 +240,7 @@ class Round < ApplicationRecord
     max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
 
     advancement_determining_results.update_all(
-      "advancing_questionable = (global_pos < #{max_advancing})",
+      "advancing_questionable = (global_pos <= #{max_advancing})",
     )
 
     LiveResult.where(id: advancing_ids).update_all(advancing: true)

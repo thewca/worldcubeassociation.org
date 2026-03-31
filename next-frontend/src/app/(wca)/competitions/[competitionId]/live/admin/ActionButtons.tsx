@@ -1,15 +1,18 @@
 "use client";
 
-import { components } from "@/types/openapi";
 import { Button } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
+import { toaster } from "@/components/ui/toaster";
+import { LiveRoundState } from "@/types/live";
 
 export default function ActionButtons({
   state,
+  setState,
   roundId,
   competitionId,
 }: {
-  state: components["schemas"]["LiveRoundAdmin"]["state"];
+  state: LiveRoundState;
+  setState: (state: LiveRoundState) => void;
   roundId: string;
   competitionId: string;
 }) {
@@ -18,11 +21,40 @@ export default function ActionButtons({
   const { isPending: isPendingOpen, mutate: openRound } = api.useMutation(
     "put",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/open",
+    {
+      onSuccess: () => {
+        toaster.create({
+          description: "Round Opened",
+          type: "success",
+        });
+        setState("open");
+      },
+      onError: () => {
+        toaster.create({
+          description: "Round opening failed",
+          type: "error",
+        });
+      },
+    },
   );
 
   const { isPending: isPendingClear, mutate: clearRound } = api.useMutation(
     "put",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/clear",
+    {
+      onSuccess: () => {
+        toaster.create({
+          description: "Round Cleared",
+          type: "success",
+        });
+      },
+      onError: () => {
+        toaster.create({
+          description: "Round clearing failed",
+          type: "error",
+        });
+      },
+    },
   );
 
   if (state == "ready") {

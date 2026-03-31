@@ -1,3 +1,5 @@
+"use client";
+
 import {
   createContext,
   useCallback,
@@ -8,12 +10,11 @@ import {
 import { Format } from "@/lib/wca/data/formats";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
+import { Toaster, toaster } from "@/components/ui/toaster";
 
 interface AdminResultsContextValue {
   registrationId: number | undefined;
   attempts: number[];
-  error: string;
-  success: string;
   isPending: boolean;
   handleRegistrationIdChange: (value: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
@@ -36,37 +37,57 @@ export function LiveResultAdminProvider({
   format,
   roundId,
   competitionId,
+  initialRegistrationId,
 }: {
   children: ReactNode;
   format: Format;
   roundId: string;
   competitionId: string;
+  initialRegistrationId?: number;
 }) {
-  const solveCount = format.expected_solve_count;
-
-  const [registrationId, setRegistrationId] = useState<number>();
-  const [attempts, setAttempts] = useState<number[]>(
-    zeroedArrayOfSize(solveCount),
-  );
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-
   const { liveResultsByRegistrationId, addPendingLiveResult } =
     useLiveResults();
+
+  const solveCount = format.expected_solve_count;
+
+  const [registrationId, setRegistrationId] = useState<number | undefined>(
+    initialRegistrationId,
+  );
+
+  const getAttemptsForCompetitor = useCallback(
+    (registrationId?: number): number[] => {
+      if (registrationId === undefined) {
+        return zeroedArrayOfSize(solveCount);
+      }
+
+      // Even for Dual Rounds we only fetch one round in the admin view
+      const competitorResults = liveResultsByRegistrationId[registrationId][0];
+
+      if (competitorResults.attempts.length > 0) {
+        return competitorResults.attempts
+          .toSorted((a, b) => a.attempt_number - b.attempt_number)
+          .map((a) => a.value);
+      }
+
+      return zeroedArrayOfSize(solveCount);
+    },
+    [liveResultsByRegistrationId, solveCount],
+  );
+
+  const [attempts, setAttempts] = useState<number[]>(() =>
+    getAttemptsForCompetitor(initialRegistrationId),
+  );
+
   const api = useAPI();
 
   const handleRegistrationIdChange = useCallback(
     (value: number) => {
       setRegistrationId(value);
-      // Even for Dual Rounds we only fetch one round in the admin view
-      const alreadyEnteredResults = liveResultsByRegistrationId[value][0];
-      if (alreadyEnteredResults) {
-        setAttempts(alreadyEnteredResults.attempts.map((a) => a.value));
-      } else {
-        setAttempts(zeroedArrayOfSize(solveCount));
-      }
+
+      const competitorAttempts = getAttemptsForCompetitor(value);
+      setAttempts(competitorAttempts);
     },
-    [liveResultsByRegistrationId, solveCount],
+    [getAttemptsForCompetitor],
   );
 
   const { mutate: mutateUpdate, isPending: isPendingUpdate } = api.useMutation(
@@ -75,14 +96,18 @@ export function LiveResultAdminProvider({
     {
       onSuccess: (_data, variables) => {
         addPendingLiveResult(variables.body, roundId);
-        setSuccess("Results updated successfully!");
+        toaster.create({
+          description: "Results updated queued",
+          type: "success",
+        });
         setRegistrationId(undefined);
         setAttempts(zeroedArrayOfSize(solveCount));
-        setError("");
-        setTimeout(() => setSuccess(""), 3000);
       },
       onError: () => {
-        setError("Failed to update results. Please try again.");
+        toaster.create({
+          description: "Failed to enqueue results",
+          type: "error",
+        });
       },
     },
   );
@@ -92,8 +117,17 @@ export function LiveResultAdminProvider({
       "put",
       "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
       {
+        onSuccess: () => {
+          toaster.create({
+            description: "Successfully added competitor",
+            type: "success",
+          });
+        },
         onError: () => {
-          setError("Failed to add Competitor. Please try again.");
+          toaster.create({
+            description: "Failed to add competitor",
+            type: "error",
+          });
         },
       },
     );
@@ -117,8 +151,17 @@ export function LiveResultAdminProvider({
     "delete",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
     {
+      onSuccess: () => {
+        toaster.create({
+          description: "Successfully quit competitor",
+          type: "success",
+        });
+      },
       onError: () => {
-        setError("Failed to Quit Competitor. Please try again.");
+        toaster.create({
+          description: "Failed to quit competitor",
+          type: "error",
+        });
       },
     },
   );
@@ -127,8 +170,17 @@ export function LiveResultAdminProvider({
     "put",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}/clear",
     {
+      onSuccess: () => {
+        toaster.create({
+          description: "Successfully cleared competitor",
+          type: "success",
+        });
+      },
       onError: () => {
-        setError("Failed to Quit Competitor. Please try again.");
+        toaster.create({
+          description: "Failed to clear competitor",
+          type: "error",
+        });
       },
     },
   );
@@ -141,7 +193,10 @@ export function LiveResultAdminProvider({
 
   const handleSubmit = () => {
     if (!registrationId) {
-      setError("Please enter a user ID");
+      toaster.create({
+        description: "Please enter a user id",
+        type: "error",
+      });
       return;
     }
 
@@ -183,8 +238,6 @@ export function LiveResultAdminProvider({
       value={{
         registrationId,
         attempts,
-        error,
-        success,
         isPending:
           isPendingUpdate || isPendingClear || isPendingQuit || isPendingAdd,
         quitCompetitor,
@@ -196,6 +249,7 @@ export function LiveResultAdminProvider({
       }}
     >
       {children}
+      <Toaster />
     </AdminResultsContext.Provider>
   );
 }

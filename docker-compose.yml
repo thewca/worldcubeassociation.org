@@ -21,7 +21,7 @@ x-app: &app
 x-app-environment: &appEnv
   <<: *env
   SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
-  ACTIONCABLE_REDIS_URL: redis://wca_redis:6379/2
+  ANYCABLE_REDIS_URL: redis://wca_redis:6379/2
   MAILCATCHER_SMTP_HOST: wca_mailcatcher
 
 services:
@@ -48,9 +48,9 @@ services:
     restart: no
     depends_on:
       wca_db:
-        condition: "service_healthy"
+        condition: service_healthy
       wca_redis:
-        condition: "service_started"
+        condition: service_healthy
 
   wca_on_rails:
     <<: *app
@@ -89,6 +89,9 @@ services:
       - next_yarn_volume:/app/node_modules
     networks:
       - wca-main
+    depends_on:
+      wca_payload_db:
+        condition: service_healthy
 
   wca_payload_db:
     image: mongo:8
@@ -98,6 +101,10 @@ services:
       - --logpath
       - /var/log/mongodb/mongod.log
     environment:
+      # Bugfix for MongoDB incompatibility with Linux Kernel 6.19
+      #   Fix comes from https://forums.docker.com/t/docker-compose-mongo-exit-code-139/151353/10
+      #   Remove this as soon as the incompatibility warning at https://www.mongodb.com/docs/manual/release-notes/8.0/ has been fixed.
+      GLIBC_TUNABLES: "glibc:pthread:rseq=1"
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
       MONGO_INITDB_DATABASE: payload
@@ -105,6 +112,11 @@ services:
       - "27017:27017"
     networks:
       - wca-main
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh mongodb://localhost:27017/test --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   wca_webpacker:
     <<: *app
@@ -180,6 +192,31 @@ services:
       - cache_volume:/data
     networks:
       - wca-main
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  wca_ws:
+    image: anycable/anycable-go:1.6
+    container_name: "anycable"
+    ports:
+      - '8085:8085'
+    environment:
+      <<: *appEnv
+      ANYCABLE_HOST: "0.0.0.0"
+      ANYCABLE_DEBUG: 1
+      ANYCABLE_PORT: 8085
+      ANYCABLE_NOAUTH: 1
+      ANYCABLE_PUBSUB: redis
+      ANYCABLE_PUBLIC: 1
+    networks:
+      - wca-main
+    depends_on:
+      wca_redis:
+        condition: service_healthy
 
   wca_playwright:
     image: mcr.microsoft.com/playwright:v1.58.2

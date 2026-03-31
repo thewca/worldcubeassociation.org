@@ -16,6 +16,7 @@ import { LiveCompetitor } from "@/types/live";
 import React, { useState } from "react";
 import { useT } from "@/lib/i18n/useI18n";
 import Loading from "@/components/ui/loading";
+import { RegistrationData } from "@/types/registrations";
 
 export default function AddPersonModal({
   competitionId,
@@ -87,19 +88,33 @@ function AddPerson({
   const { t } = useT();
 
   const api = useAPI();
-
   const { data: registrationsQuery, isFetching } = api.useQuery(
     "get",
     "/v1/competitions/{competitionId}/registrations",
-    {
-      params: { path: { competitionId: competitionId } },
-    },
+    { params: { path: { competitionId } } },
   );
 
+  if (isFetching) return <Loading />;
+  if (!registrationsQuery)
+    return <Text>{t("competitions.registration_v2.errors.-1001")}</Text>;
+
+  return (
+    <AddPersonCombobox
+      registrations={registrationsQuery.filter((r) => !competitors.has(r.id))}
+      setSelectedCompetitor={setSelectedCompetitor}
+    />
+  );
+}
+
+function AddPersonCombobox({
+  registrations,
+  setSelectedCompetitor,
+}: {
+  setSelectedCompetitor: (registrationId: number) => void;
+  registrations: RegistrationData[];
+}) {
   const { collection, filter } = useListCollection({
-    initialItems: (registrationsQuery ?? []).filter(
-      (r) => !competitors.has(r.id),
-    ),
+    initialItems: registrations,
     itemToValue: (competitor) => competitor.id.toString(),
     itemToString: (competitor) => competitor.user.name,
     filter: (itemText, filterText, item) =>
@@ -107,45 +122,36 @@ function AddPerson({
       parseInt(filterText, 10) === item.registrant_id,
   });
 
-  if (isFetching) {
-    return <Loading />;
-  }
-
-  if (!registrationsQuery) {
-    return <Text>{t("competitions.registration_v2.errors.-1001")}</Text>;
-  }
-
-  if (registrationsQuery)
-    return (
-      <VStack>
-        <Combobox.Root
-          collection={collection}
-          onInputValueChange={(e) => filter(e.inputValue)}
-          onValueChange={(e) => setSelectedCompetitor(parseInt(e.value[0], 10))}
-        >
-          <Combobox.Control>
-            <Combobox.Input placeholder="Type to search" />
-            <Combobox.IndicatorGroup>
-              <Combobox.ClearTrigger />
-              <Combobox.Trigger />
-            </Combobox.IndicatorGroup>
-          </Combobox.Control>
-          <Portal>
-            <Combobox.Positioner>
-              <Combobox.Content>
-                <Combobox.Empty>
-                  All Competitors are already Part of the Round
-                </Combobox.Empty>
-                {collection.items.map((item) => (
-                  <Combobox.Item item={item} key={item.id}>
-                    {`${item.user.name} (${item.registrant_id})`}
-                    <Combobox.ItemIndicator />
-                  </Combobox.Item>
-                ))}
-              </Combobox.Content>
-            </Combobox.Positioner>
-          </Portal>
-        </Combobox.Root>
-      </VStack>
-    );
+  return (
+    <VStack>
+      <Combobox.Root
+        collection={collection}
+        onInputValueChange={(e) => filter(e.inputValue)}
+        onValueChange={(e) => setSelectedCompetitor(parseInt(e.value[0], 10))}
+      >
+        <Combobox.Control>
+          <Combobox.Input placeholder="Type to search" />
+          <Combobox.IndicatorGroup>
+            <Combobox.ClearTrigger />
+            <Combobox.Trigger />
+          </Combobox.IndicatorGroup>
+        </Combobox.Control>
+        <Portal>
+          <Combobox.Positioner>
+            <Combobox.Content>
+              <Combobox.Empty>
+                All Competitors are already Part of the Round
+              </Combobox.Empty>
+              {collection.items.map((item) => (
+                <Combobox.Item item={item} key={item.id}>
+                  {`${item.user.name} (${item.registrant_id})`}
+                  <Combobox.ItemIndicator />
+                </Combobox.Item>
+              ))}
+            </Combobox.Content>
+          </Combobox.Positioner>
+        </Portal>
+      </Combobox.Root>
+    </VStack>
+  );
 }

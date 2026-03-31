@@ -17,7 +17,7 @@ module Live
       # Queues the broadcast — fires after outermost transaction commits,
       # or immediately if not inside a transaction. Never fires on rollback.
       ActiveRecord.after_all_transactions_commit do
-        ActionCable.server.broadcast(Live::Config.broadcast_key(round.wcif_id), diff)
+        ActionCable.server.broadcast(Live::Config.broadcast_key(round.competition_id, round.wcif_id), diff)
       end
 
       result
@@ -86,6 +86,7 @@ module Live
       "attempt_number" => "an",
       "best_possible_average" => "bpa",
       "worst_possible_average" => "wpa",
+      "last_attempt_entered_at" => "at",
     }.freeze
 
     # To send even less data, we shorten the quite long attribute names

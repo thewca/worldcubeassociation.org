@@ -17,6 +17,7 @@ export default function Schedule({
   wcifEvents,
   competitionName,
   calendarLocale,
+  linkedRounds,
 }) {
   // venues
 
@@ -138,6 +139,7 @@ export default function Schedule({
           activeEventIds={activeEventIds.asArray}
           calendarLocale={calendarLocale}
           wcifEvents={wcifEvents}
+          linkedRounds={linkedRounds}
         />
       ) : (
         <TableView
@@ -148,6 +150,7 @@ export default function Schedule({
           activeVenueOrNull={activeVenueOrNull}
           competitionName={competitionName}
           wcifEvents={wcifEvents}
+          linkedRounds={linkedRounds}
         />
       )}
     </>

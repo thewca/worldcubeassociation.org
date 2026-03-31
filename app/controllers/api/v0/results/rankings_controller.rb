@@ -39,7 +39,7 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
                   SELECT MIN(value_and_id) value_and_id
                   FROM concise_#{type_param}_results results
                   #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
-                  WHERE #{value} > 0
+                  WHERE 1
                     #{@event_condition}
                     #{@region_condition}
                     #{@gender_condition}

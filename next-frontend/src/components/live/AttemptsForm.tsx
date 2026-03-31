@@ -1,5 +1,4 @@
 import {
-  Alert,
   Button,
   Combobox,
   Heading,
@@ -10,6 +9,7 @@ import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
+import { LiveCompetitor } from "@/types/live";
 
 interface AttemptsFormProps {
   solveCount: number;
@@ -17,18 +17,20 @@ interface AttemptsFormProps {
   eventId: string;
 }
 
+const toCompetitorString = (competitor: LiveCompetitor) =>
+  `${competitor.name} (${competitor.registrant_id})`;
+
 export default function AttemptsForm({
   solveCount,
   header,
   eventId,
 }: AttemptsFormProps) {
   const {
-    error,
-    success,
     handleRegistrationIdChange,
     handleSubmit,
     attempts,
     handleAttemptChange,
+    registrationId,
     isPending,
   } = useResultsAdmin();
 
@@ -37,23 +39,31 @@ export default function AttemptsForm({
   const { collection, filter } = useListCollection({
     initialItems: Array.from(competitors.values()),
     itemToValue: (competitor) => competitor.id.toString(),
-    itemToString: (competitor) =>
-      `${competitor.name} (${competitor.registrant_id})`,
+    itemToString: toCompetitorString,
     filter: (itemText, filterText, item) =>
       itemText.includes(filterText) ||
       parseInt(filterText, 10) === item.registrant_id,
   });
 
+  const selectedCompetitor = registrationId
+    ? competitors.get(registrationId)
+    : undefined;
+  const inputDisplayValue = selectedCompetitor
+    ? toCompetitorString(selectedCompetitor)
+    : "";
+
   return (
     <form>
-      {error && <Alert.Root status="error" title={error} />}
-      {success && <Alert.Root status="success" title={success} />}
       <Combobox.Root
         collection={collection}
         onInputValueChange={(e) => filter(e.inputValue)}
-        onValueChange={(e) =>
-          handleRegistrationIdChange(parseInt(e.value[0], 10))
-        }
+        inputValue={inputDisplayValue}
+        onValueChange={(e) => {
+          if (e.value.length > 0) {
+            handleRegistrationIdChange(parseInt(e.value[0], 10));
+          }
+        }}
+        value={registrationId ? [registrationId.toString()] : []}
       >
         <Combobox.Label>
           <Heading size="2xl">{header}</Heading>
@@ -71,7 +81,7 @@ export default function AttemptsForm({
               <Combobox.Empty>No items found</Combobox.Empty>
               {collection.items.map((item) => (
                 <Combobox.Item item={item} key={item.id}>
-                  `${item.name} (${item.registrant_id})`
+                  {toCompetitorString(item)}
                   <Combobox.ItemIndicator />
                 </Combobox.Item>
               ))}

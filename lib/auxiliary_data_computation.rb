@@ -2,7 +2,8 @@
 
 module AuxiliaryDataComputation
   def self.compute_everything
-    self.insert_regional_records_lookup
+    CheckRegionalRecords.add_to_lookup_table
+
     self.compute_concise_results
     self.compute_rank_tables
   end
@@ -13,28 +14,45 @@ module AuxiliaryDataComputation
       %w[best concise_single_results],
       %w[average concise_average_results],
     ].each do |field, table_name|
-      DbHelper.with_temp_table(table_name) do |temp_table_name|
-        ActiveRecord::Base.connection.execute <<~SQL.squish
-          INSERT INTO #{temp_table_name} (id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, reg_year)
-          WITH concise_agg AS (
-            SELECT MIN(#{field} * 1000000000 + result_id) value_and_id
-            FROM regional_records_lookup
-            WHERE #{field} > 0
-            GROUP BY person_id, country_id, event_id, competition_reg_year
-          )
-          SELECT
-            rrl.result_id id,
-            rrl.#{field},
-            concise_agg.value_and_id,
-            rrl.person_id,
-            rrl.event_id,
-            rrl.country_id,
-            rrl.continent_id,
-            rrl.competition_reg_year `reg_year`
-          FROM concise_agg
-            INNER JOIN regional_records_lookup rrl ON rrl.result_id = (concise_agg.value_and_id % 1000000000)
-        SQL
-      end
+      ActiveRecord::Base.connection.execute <<~SQL.squish
+        INSERT INTO #{table_name} (result_id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, reg_year)
+        WITH concise_agg AS (
+          SELECT MIN(#{field} * 1000000000 + result_id) value_and_id
+          FROM regional_records_lookup
+          WHERE #{field} > 0
+          GROUP BY person_id, country_id, event_id, competition_reg_year
+        )
+        SELECT
+          rrl.result_id,
+          rrl.#{field},
+          concise_agg.value_and_id,
+          rrl.person_id,
+          rrl.event_id,
+          rrl.country_id,
+          rrl.continent_id,
+          rrl.competition_reg_year `reg_year`
+        FROM concise_agg
+          INNER JOIN regional_records_lookup rrl ON rrl.result_id = (concise_agg.value_and_id % 1000000000)
+        ON DUPLICATE KEY UPDATE
+          #{field} = rrl.#{field},
+          value_and_id = concise_agg.value_and_id,
+          person_id = rrl.person_id,
+          event_id = rrl.event_id,
+          country_id = rrl.country_id,
+          continent_id = rrl.continent_id,
+          reg_year = rrl.competition_reg_year
+      SQL
+
+      # If somebody had a result > 0 in previous CAD runs, but was later penalized,
+      #   the "old" row will still stick around. This statement cleans them up.
+      ActiveRecord::Base.connection.execute <<~SQL.squish
+        DELETE concise_results
+        FROM #{table_name} concise_results
+        LEFT JOIN regional_records_lookup rrl
+          ON concise_results.result_id = rrl.result_id
+            AND rrl.#{field} > 0
+        WHERE rrl.result_id IS NULL;
+      SQL
     end
   end
 
@@ -117,12 +135,6 @@ module AuxiliaryDataComputation
             wr.world_rank
         SQL
       end
-    end
-  end
-
-  def self.insert_regional_records_lookup
-    DbHelper.with_temp_table("regional_records_lookup") do |temp_table_name|
-      CheckRegionalRecords.add_to_lookup_table(table_name: temp_table_name)
     end
   end
 end
