@@ -100,7 +100,7 @@ module DatabaseDumper
           force_comment_in_registration
           allow_registration_edits
           competition_series_id
-          use_wca_live_for_scoretaking
+          scoretaking_software
           allow_registration_without_qualification
           forbid_newcomers
           forbid_newcomers_reason

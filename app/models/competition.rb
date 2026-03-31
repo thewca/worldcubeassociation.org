@@ -117,6 +117,8 @@ class Competition < ApplicationRecord
 
   enum :auto_accept_preference, %i[disabled bulk live], prefix: true
 
+  enum :scoretaking_software, %i[external wca_live internal], prefix: true
+
   CLONEABLE_ATTRIBUTES = %w[
     city_name
     country_id
@@ -131,7 +133,7 @@ class Competition < ApplicationRecord
     contact
     remarks
     use_wca_registration
-    use_wca_live_for_scoretaking
+    scoretaking_software
     competitor_limit_enabled
     competitor_limit
     competitor_limit_reason
@@ -638,8 +640,10 @@ class Competition < ApplicationRecord
     info = {}
     info[:upload_results] = I18n.t('competitions.messages.upload_results') if !self.results_posted? && self.probably_over? && !self.cancelled?
     if self.in_progress? && !self.cancelled?
-      info[:in_progress] = if self.use_wca_live_for_scoretaking
+      info[:in_progress] = if self.scoretaking_software_wca_live?
                              I18n.t('competitions.messages.in_progress_at_wca_live_html', link_here: self.wca_live_link).html_safe
+                           elsif scoretaking_software_internal?
+                             I18n.t('competitions.messages.in_progress_at_wca_live_html', link_here: self.internal_scoretaking_link).html_safe
                            else
                              I18n.t('competitions.messages.in_progress', date: I18n.l(self.end_date, format: :long))
                            end
@@ -1364,6 +1368,10 @@ class Competition < ApplicationRecord
 
   def wca_live_link
     "https://live.worldcubeassociation.org/link/competitions/#{self.id}"
+  end
+
+  def internal_scoretaking_link
+    "#{internal_website}/live"
   end
 
   def results_submitted?
@@ -2373,7 +2381,7 @@ class Competition < ApplicationRecord
         "externalWebsite" => external_website,
         "externalRegistrationPage" => external_registration_page,
         "usesWcaRegistration" => use_wca_registration,
-        "usesWcaLive" => use_wca_live_for_scoretaking,
+        "usesWcaLive" => scoretaking_software_wca_live?,
       },
       "entryFees" => {
         "currencyCode" => currency_code,
@@ -2481,7 +2489,7 @@ class Competition < ApplicationRecord
         "externalWebsite" => errors[:external_website],
         "externalRegistrationPage" => errors[:external_registration_page],
         "usesWcaRegistration" => errors[:use_wca_registration],
-        "usesWcaLive" => errors[:use_wca_live_for_scoretaking],
+        "usesWcaLive" => errors[:scoretaking_software],
       },
       "entryFees" => {
         "currencyCode" => errors[:currency_code],
@@ -2689,7 +2697,7 @@ class Competition < ApplicationRecord
       guest_entry_status: form_data.dig('registration', 'guestEntryStatus'),
       allow_registration_edits: form_data.dig('registration', 'allowSelfEdits'),
       competitor_can_cancel: form_data.dig('registration', 'competitorCanCancel'),
-      use_wca_live_for_scoretaking: form_data.dig('website', 'usesWcaLive'),
+      scoretaking_software: form_data.dig('website', 'usesWcaLive') ? :wca_live : :external,
       allow_registration_without_qualification: form_data.dig('eventRestrictions', 'qualificationResults', 'allowRegistrationWithout'),
       guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),
       events_per_registration_limit: form_data.dig('eventRestrictions', 'eventLimitation', 'perRegistrationLimit'),
