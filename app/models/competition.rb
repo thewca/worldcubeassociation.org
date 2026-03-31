@@ -1358,7 +1358,7 @@ class Competition < ApplicationRecord
   end
 
   def internal_scoretaking_link
-    "#{Rails.application.routes.url_helpers.competition_path(self.id)}/live"
+    "#{internal_website}/live"
   end
 
   def results_submitted?
