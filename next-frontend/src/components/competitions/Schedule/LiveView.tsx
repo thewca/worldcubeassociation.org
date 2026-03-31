@@ -12,6 +12,8 @@ import {
   Select,
   createListCollection,
   Portal,
+  Spacer,
+  IconButton,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import {
@@ -29,12 +31,14 @@ import {
 import EventIcon from "@/components/EventIcon";
 import { route } from "nextjs-routes";
 import { useT } from "@/lib/i18n/useI18n";
+import { LuLock, LuLockOpen } from "react-icons/lu";
 
 interface LiveViewProps {
   timeZones: string[];
   competitionId: string;
   activities: components["schemas"]["WcifActivity"][];
   wcifEvents: components["schemas"]["WcifEvent"][];
+  canManage?: boolean;
 }
 
 export default function LiveView({
@@ -42,6 +46,7 @@ export default function LiveView({
   competitionId,
   activities,
   wcifEvents,
+  canManage = false,
 }: LiveViewProps) {
   const { t } = useT();
   const firstStartTime = activities[0].startTime;
@@ -69,37 +74,54 @@ export default function LiveView({
 
   return (
     <VStack align="left">
-      <Select.Root
-        collection={collection}
-        width={{ base: "full", md: "3/12" }}
-        value={[timeZone]}
-        onValueChange={(e) => setTimeZone(e.value[0])}
-      >
-        <Select.HiddenSelect />
-        <Select.Label>{t("competitions.schedule.time_zone")}</Select.Label>
-        <Select.Control>
-          <Select.Trigger>
-            <Select.ValueText
-              placeholder={t("competitions.schedule.time_zone")}
-            />
-          </Select.Trigger>
-          <Select.IndicatorGroup>
-            <Select.Indicator />
-          </Select.IndicatorGroup>
-        </Select.Control>
-        <Portal>
-          <Select.Positioner>
-            <Select.Content>
-              {collection.items.map((timezone) => (
-                <Select.Item item={timezone} key={timezone.label}>
-                  {timezone.value}
-                  <Select.ItemIndicator />
-                </Select.Item>
-              ))}
-            </Select.Content>
-          </Select.Positioner>
-        </Portal>
-      </Select.Root>
+      <HStack>
+        <Select.Root
+          collection={collection}
+          width={{ base: "full", md: "3/12" }}
+          value={[timeZone]}
+          onValueChange={(e) => setTimeZone(e.value[0])}
+        >
+          <Select.HiddenSelect />
+          <Select.Label>{t("competitions.schedule.time_zone")}</Select.Label>
+          <Select.Control>
+            <Select.Trigger>
+              <Select.ValueText
+                placeholder={t("competitions.schedule.time_zone")}
+              />
+            </Select.Trigger>
+            <Select.IndicatorGroup>
+              <Select.Indicator />
+            </Select.IndicatorGroup>
+          </Select.Control>
+          <Portal>
+            <Select.Positioner>
+              <Select.Content>
+                {collection.items.map((timezone) => (
+                  <Select.Item item={timezone} key={timezone.label}>
+                    {timezone.value}
+                    <Select.ItemIndicator />
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Positioner>
+          </Portal>
+        </Select.Root>
+        <Spacer />
+        {canManage && (
+          <IconButton variant="ghost">
+            <Link asChild>
+              <NextLink
+                href={route({
+                  pathname: "/competitions/[competitionId]/live/admin",
+                  query: { competitionId },
+                })}
+              >
+                <LuLock />
+              </NextLink>
+            </Link>
+          </IconButton>
+        )}
+      </HStack>
       <Tabs.Root defaultValue={defaultDate.day.toString()}>
         <Tabs.List height="fit-content" position="sticky" top="3">
           {dates.map((date) => (
