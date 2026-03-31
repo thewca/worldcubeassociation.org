@@ -13,6 +13,7 @@ class Competition < ApplicationRecord
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
   has_many :competition_delegates, dependent: :delete_all
   has_many :delegates, -> { includes(:delegate_roles, :delegate_role_metadata).distinct }, through: :competition_delegates
+  belongs_to :lead_delegate, class_name: "User", optional: true
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", dependent: :delete_all
@@ -187,6 +188,7 @@ class Competition < ApplicationRecord
     results_posted_by
     posting_by
     main_event_id
+    lead_delegate_id
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
@@ -259,6 +261,7 @@ class Competition < ApplicationRecord
   validates :qualification_results_reason, presence: true, if: :uses_qualification?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
   validates :main_event_id, inclusion: { in: :event_ids, allow_nil: true }
+  validates :lead_delegate_id, presence: true, inclusion: { in: :delegate_ids }, if: :lead_delegate_required?
 
   # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
   validates :name, length: { maximum: MAX_NAME_LENGTH }
@@ -698,7 +701,8 @@ class Competition < ApplicationRecord
              'accepted_newcomers',
              'duplicate_checker_job_runs',
              'tickets_competition_result',
-             'result_ticket'
+             'result_ticket',
+             'lead_delegate'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -1112,6 +1116,15 @@ class Competition < ApplicationRecord
 
   def name_reason_required?
     confirmed? && created_at.present? && created_at > Date.new(2018, 10, 20)
+  end
+
+  def lead_delegate_required?
+    # If you read this comment after April 1st, 2026:
+    #   You may happily remove all the `testing_before_launch` shenanigans. Signed GB 2026-03-20
+    requirement_date = Date.new(2026, 4, 1)
+    testing_before_launch = Rails.env.test? && Date.current < requirement_date
+
+    confirmed? && (testing_before_launch || confirmed_at >= requirement_date)
   end
 
   def pending_results_or_report(num_days)
@@ -2349,6 +2362,7 @@ class Competition < ApplicationRecord
       },
       "staff" => {
         "staffDelegateIds" => staff_delegate_ids,
+        "leadDelegateId" => lead_delegate_id,
         "traineeDelegateIds" => trainee_delegate_ids,
         "organizerIds" => organizer_ids,
         "contact" => contact,
@@ -2456,6 +2470,7 @@ class Competition < ApplicationRecord
       },
       "staff" => {
         "staffDelegateIds" => errors[:staff_delegate_ids],
+        "leadDelegateId" => errors[:lead_delegate_id],
         "traineeDelegateIds" => errors[:trainee_delegate_ids],
         "organizerIds" => errors[:organizer_ids],
         "contact" => errors[:contact],
@@ -2630,6 +2645,7 @@ class Competition < ApplicationRecord
       latitude_degrees: form_data.dig('venue', 'coordinates', 'lat'),
       longitude_degrees: form_data.dig('venue', 'coordinates', 'long'),
       staff_delegate_ids: form_data.dig('staff', 'staffDelegateIds'),
+      lead_delegate_id: form_data.dig('staff', 'leadDelegateId'),
       trainee_delegate_ids: form_data.dig('staff', 'traineeDelegateIds'),
       organizer_ids: form_data.dig('staff', 'organizerIds'),
       contact: form_data.dig('staff', 'contact'),
@@ -2806,6 +2822,7 @@ class Competition < ApplicationRecord
               "items" => { "type" => "integer" },
               "uniqueItems" => true,
             },
+            "leadDelegateId" => { "type" => %w[integer null] },
             "traineeDelegateIds" => {
               "type" => "array",
               "items" => { "type" => "integer" },

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { create(:competition, :with_delegate, :with_organizer, :registration_open, :with_valid_schedule, :with_guest_limit, :with_meaningless_event_limit, name: "my long competition name above 32 chars 2023") }
+  let(:competition) { create(:competition, :with_lead_delegate, :with_organizer, :registration_open, :with_valid_schedule, :with_guest_limit, :with_meaningless_event_limit, name: "my long competition name above 32 chars 2023") }
   let(:future_competition) { create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #show' do
@@ -100,7 +100,7 @@ RSpec.describe CompetitionsController do
     let!(:my_competition) { create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
     let!(:other_competition) do
       create(
-        :competition, :with_delegate, :with_valid_schedule, latitude: 10.005, longitude: 10.005, starts: 4.days.ago, registration_close: 5.days.ago
+        :competition, :with_lead_delegate, :with_valid_schedule, latitude: 10.005, longitude: 10.005, starts: 4.days.ago, registration_close: 5.days.ago
       )
     end
 

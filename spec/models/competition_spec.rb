@@ -774,7 +774,7 @@ RSpec.describe Competition do
   end
 
   describe "when confirming or making visible" do
-    let(:competition_with_delegate) { build(:competition, :with_delegate, :with_organizer, generate_website: false) }
+    let(:competition_with_delegate) { build(:competition, :with_lead_delegate, :with_organizer, generate_website: false) }
     let(:competition_without_delegate) { build(:competition) }
 
     %i[confirmed show_at_all].each do |action|
@@ -807,7 +807,7 @@ RSpec.describe Competition do
     end
 
     it "sets confirmed_at when setting confirmed true" do
-      competition = create(:competition, :future, :with_delegate, :with_organizer, :with_valid_schedule)
+      competition = create(:competition, :future, :with_lead_delegate, :with_organizer, :with_valid_schedule)
       expect(competition.confirmed_at).to be_nil
 
       now = Time.at(Time.now.to_i)
