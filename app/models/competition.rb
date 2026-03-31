@@ -2681,7 +2681,7 @@ class Competition < ApplicationRecord
       guest_entry_status: form_data.dig('registration', 'guestEntryStatus'),
       allow_registration_edits: form_data.dig('registration', 'allowSelfEdits'),
       competitor_can_cancel: form_data.dig('registration', 'competitorCanCancel'),
-      scoretaking_software: form_data.dig('website', 'usesWcaLive'),
+      scoretaking_software: form_data.dig('website', 'usesWcaLive') ? :wca_live : :external,
       allow_registration_without_qualification: form_data.dig('eventRestrictions', 'qualificationResults', 'allowRegistrationWithout'),
       guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),
       events_per_registration_limit: form_data.dig('eventRestrictions', 'eventLimitation', 'perRegistrationLimit'),
