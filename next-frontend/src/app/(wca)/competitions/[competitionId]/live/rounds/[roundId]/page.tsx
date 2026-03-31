@@ -1,6 +1,6 @@
 "use server";
 
-import { Alert, Container, VStack } from "@chakra-ui/react";
+import { Container, VStack } from "@chakra-ui/react";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import {
   LiveResultProvider,
