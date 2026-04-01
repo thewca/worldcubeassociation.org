@@ -24,11 +24,9 @@ RSpec.describe "WCA Live API" do
     end
 
     it "Correctly gets the podium of a dual round" do
-      l = create(:linked_round)
-      r1 = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, linked_round_id: l.id)
-      r2 = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, linked_round_id: l.id)
-      r1.linked_round.reload
-      r2.linked_round.reload
+      r1 = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+      r2 = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
+      create(:linked_round, rounds: [r1, r2])
 
       5.times do |i|
         create(:live_result, registration: registrations[i], round: r1, average: (i + 1) * 100)
@@ -47,11 +45,9 @@ RSpec.describe "WCA Live API" do
     end
 
     it "Correctly gets the podium when results are mixed across rounds" do
-      l = create(:linked_round)
-      r1 = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, linked_round_id: l.id)
-      r2 = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, linked_round_id: l.id)
-      r1.linked_round.reload
-      r2.linked_round.reload
+      r1 = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+      r2 = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
+      create(:linked_round, rounds: [r1, r2])
 
       # registrations[0]: best in r2 (500 vs 600) -> best: 500
       # registrations[1]: best in r1 (200 vs 900) -> best: 200
@@ -89,11 +85,9 @@ RSpec.describe "WCA Live API" do
     end
 
     it "Correctly gets the podium when some competitors are missing results in one round" do
-      l = create(:linked_round)
-      r1 = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, linked_round_id: l.id)
-      r2 = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, linked_round_id: l.id)
-      r1.linked_round.reload
-      r2.linked_round.reload
+      r1 = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+      r2 = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
+      create(:linked_round, rounds: [r1, r2])
 
       # registrations[0]: only r1 result  -> best: 300
       # registrations[1]: only r2 result  -> best: 100  <- 1st
@@ -131,11 +125,9 @@ RSpec.describe "WCA Live API" do
     end
 
     it "Correctly gets the podium when competitors are tied on average, broken by best single" do
-      l = create(:linked_round)
-      r1 = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, linked_round_id: l.id)
-      r2 = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, linked_round_id: l.id)
-      r1.linked_round.reload
-      r2.linked_round.reload
+      r1 = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+      r2 = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
+      create(:linked_round, rounds: [r1, r2])
 
       # registrations[0] and [1] tie on average (300), broken by best single
       # registrations[0]: average 300, best 280  <- 1st (better single)
@@ -160,11 +152,9 @@ RSpec.describe "WCA Live API" do
     end
 
     it "Correctly marks a shared podium position when average and best are exactly tied" do
-      l = create(:linked_round)
-      r1 = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, linked_round_id: l.id)
-      r2 = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, linked_round_id: l.id)
-      r1.linked_round.reload
-      r2.linked_round.reload
+      r1 = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+      r2 = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
+      create(:linked_round, rounds: [r1, r2])
 
       # registrations[0] and [1] are completely tied (average and best) -> both share 1st
       # registrations[2] comes 3rd
