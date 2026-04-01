@@ -12,7 +12,6 @@ import {
   Select,
   createListCollection,
   Portal,
-  Spacer,
   IconButton,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
@@ -74,7 +73,7 @@ export default function LiveView({
 
   return (
     <VStack align="left">
-      <HStack>
+      <HStack justifyContent="space-between">
         <Select.Root
           collection={collection}
           width={{ base: "full", md: "3/12" }}
@@ -106,7 +105,6 @@ export default function LiveView({
             </Select.Positioner>
           </Portal>
         </Select.Root>
-        <Spacer />
         {canManage && (
           <IconButton variant="ghost">
             <Link asChild>
