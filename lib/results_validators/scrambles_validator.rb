@@ -70,7 +70,9 @@ module ResultsValidators
           if scrambles_by_group_id.size != round.scramble_set_count
             errors_for_round << ValidationError.new(WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR,
                                                     :scrambles, competition.id,
-                                                    round_id: round.human_id)
+                                                    round_id: round.human_id,
+                                                    actual: scrambles_by_group_id.size,
+                                                    expected: round.scramble_set_count)
           end
           if round.event_id == "333fm" && scrambles_by_group_id.size > 1
             @warnings << ValidationWarning.new(MULTIPLE_FMC_GROUPS_WARNING,
