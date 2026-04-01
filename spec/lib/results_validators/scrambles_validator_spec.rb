@@ -47,8 +47,8 @@ RSpec.describe SV do
         ]
 
         # Scrambles are shared between InboxResult and Result
-        create_scramble_set(5, competition: competition1, round: round_333oh, event_id: "333oh")
-        create_scramble_set(5, competition: competition2, round: round_222, event_id: "222")
+        create_scramble_set(5, round: round_333oh)
+        create_scramble_set(5, round: round_222)
 
         validator_args.each do |arg|
           sv = SV.new.validate(**arg)
@@ -64,7 +64,7 @@ RSpec.describe SV do
           create(result_kind, :blind_bo5, competition: competition2, round: round_333bf)
         end
 
-        create_scramble_set(4, competition: competition2, round: round_333bf, event_id: "333bf")
+        create_scramble_set(4, round: round_333bf)
 
         expected_errors = [
           RV::ValidationError.new(SV::MISSING_SCRAMBLES_FOR_COMPETITION_ERROR,
@@ -92,9 +92,9 @@ RSpec.describe SV do
         end
 
         # Create three groups of scrambles:
-        create_scramble_set(5, competition: competition1, round: round_333oh, event_id: "333oh", group_id: "A")
-        create_scramble_set(5, competition: competition1, round: round_333oh, event_id: "333oh", group_id: "B")
-        create_scramble_set(5, competition: competition1, round: round_333oh, event_id: "333oh", group_id: "C")
+        create_scramble_set(5, round: round_333oh, group_index: 0)
+        create_scramble_set(5, round: round_333oh, group_index: 1)
+        create_scramble_set(5, round: round_333oh, group_index: 2)
 
         expected_errors = [
           RV::ValidationError.new(SV::WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR,
@@ -110,16 +110,16 @@ RSpec.describe SV do
       end
 
       it "correctly (in)validates multiple groups for 333fm" do
-        round = create(:round, competition: competition3, event_id: "333fm", format_id: "m", scramble_set_count: 2)
+        round_333fm = create(:round, competition: competition3, event_id: "333fm", format_id: "m", scramble_set_count: 2)
 
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          create(result_kind, :fm, competition: competition3, round: round)
+          create(result_kind, :fm, competition: competition3, round: round_333fm)
         end
 
         # Create two groups in fmc:
-        create_scramble_set(3, competition: competition3, round: round, event_id: "333fm", group_id: "A")
-        create_scramble_set(3, competition: competition3, round: round, event_id: "333fm", group_id: "B")
+        create_scramble_set(3, round: round_333fm, group_index: 0)
+        create_scramble_set(3, round: round_333fm, group_index: 1)
 
         expected_warnings = [
           RV::ValidationWarning.new(SV::MULTIPLE_FMC_GROUPS_WARNING,
@@ -146,13 +146,13 @@ RSpec.describe SV do
 
         # Create two groups in multi: for attempt 1 they did 2 groups,
         # for the others they just did one.
-        create_scramble_set(3, competition: competition1, round: round_333mbf_1, event_id: "333mbf", group_id: "A")
-        create_scramble_set(1, competition: competition1, round: round_333mbf_1, event_id: "333mbf", group_id: "B")
+        create_scramble_set(3, round: round_333mbf_1, group_index: 0)
+        create_scramble_set(1, round: round_333mbf_1, group_index: 1)
 
         # Now for competition2, both groups have only two scrambles but the format
         # is bo3, so the round is missing scrambles.
-        create_scramble_set(2, competition: competition2, round: round_333mbf_2, event_id: "333mbf", group_id: "A")
-        create_scramble_set(2, competition: competition2, round: round_333mbf_2, event_id: "333mbf", group_id: "B")
+        create_scramble_set(2, round: round_333mbf_2, group_index: 0)
+        create_scramble_set(2, round: round_333mbf_2, group_index: 1)
 
         expected_errors = [
           RV::ValidationError.new(SV::MISSING_SCRAMBLES_FOR_MULTI_ERROR,
@@ -169,9 +169,14 @@ RSpec.describe SV do
     end
   end
 
-  def create_scramble_set(n, **)
+  def create_scramble_set(n, round:, group_index: 0, **)
+    group_letter = Scramble.prefix_for_index(group_index)
+
+    matched_scr_set = create(:matched_scramble_set, round: round, ordered_index: group_index)
+
     1.upto(n) do |i|
-      create(:scramble, scramble_num: i, **)
+      create(:scramble, scramble_num: i, competition: round.competition, round: round, group_id: group_letter, event_id: round.event_id, **)
+      create(:matched_scramble, matched_scramble_set: matched_scr_set, ordered_index: i, **)
     end
   end
 end
