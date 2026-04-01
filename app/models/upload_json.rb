@@ -96,12 +96,10 @@ class UploadJson
         sorted_groups = round["groups"].sort_by { [it["group"].length, it["group"]] }
         sorted_groups.each_with_index do |group, group_idx|
           new_scramble_set_attributes = {
-            round_id: competition_round&.id,
             ordered_index: group_idx,
           }
           new_scr_set = MatchedScrambleSet.new(new_scramble_set_attributes)
-          # See above for the trick of setting the association
-          new_scr_set.competition = competition
+          new_scr_set.round = competition_round
           scramble_sets_to_import << new_scr_set
           %w[scrambles extraScrambles].each do |scramble_type|
             group[scramble_type]&.each_with_index do |scramble, scr_index|
@@ -110,8 +108,7 @@ class UploadJson
                 is_extra: scramble_type == "extraScrambles",
                 ordered_index: scr_index,
               }
-              new_scr = new_scr_set.scrambles.build(new_scramble_attributes)
-              scrambles_to_import << new_scr
+              scrambles_to_import << new_scr_set.matched_scrambles.build(new_scramble_attributes)
             end
           end
         end

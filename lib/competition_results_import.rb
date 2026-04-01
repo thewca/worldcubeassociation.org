@@ -27,9 +27,19 @@ module CompetitionResultsImport
       #   want to accidentally delete them again here.
       unless scramble_sets_to_import.empty?
         # Foreign Key handles transitive deletion of individual scrambles
-        MatchedScrambleSet.where(competition_id: competition.id).delete_all
+        competition.rounds.each { it.matched_scramble_sets.delete_all }
 
         MatchedScrambleSet.import!(scramble_sets_to_import)
+
+        scramble_set_lookup = competition.reload
+                                         .matched_scramble_sets
+                                         .index_by { it.import_index }
+
+        scrambles_to_import.each do |scramble|
+          inserted_scramble_set = scramble_set_lookup.fetch(scramble.import_index)
+          scramble.matched_scramble_set = inserted_scramble_set
+        end
+
         MatchedScramble.import!(scrambles_to_import)
       end
 

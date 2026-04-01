@@ -12,7 +12,7 @@ class MatchedScrambleSet < ApplicationRecord
   belongs_to :round
   belongs_to :external_scramble_set, optional: true
 
-  has_many :matched_scrambles, dependent: :destroy
+  has_many :matched_scrambles, dependent: :delete_all
 
   scope :for_serialization, -> { includes(**SERIALIZATION_INCLUDES) }
 
@@ -27,6 +27,10 @@ class MatchedScrambleSet < ApplicationRecord
   end
 
   alias_method :group_id, :alphabetic_group_index
+
+  def import_index
+    [self.round_id, self.ordered_index]
+  end
 
   DEFAULT_SERIALIZE_OPTIONS = {
     methods: %w[round_wcif_id],
