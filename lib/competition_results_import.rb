@@ -108,21 +108,17 @@ module CompetitionResultsImport
       scramble_data = competition.matched_scramble_sets
                                  .includes(:round, :matched_scrambles)
                                  .flat_map do |matched_scr_set|
-        extra_scrambles, std_scrambles = matched_scr_set.matched_scrambles.partition(&:is_extra?)
-
-        [std_scrambles, extra_scrambles].flat_map do |scramble_family|
-          scramble_family.map.with_index do |matched_scr, idx|
-            {
-              competition_id: matched_scr_set.competition_id,
-              event_id: matched_scr_set.event_id,
-              group_id: matched_scr_set.alphabetic_group_index,
-              is_extra: matched_scr.is_extra?,
-              round_id: matched_scr_set.round_id,
-              round_type_id: matched_scr_set.round_type_id,
-              scramble: matched_scr.scramble_string,
-              scramble_num: idx + 1,
-            }
-          end
+        matched_scr_set.matched_scrambles.map do |matched_scr|
+          {
+            competition_id: matched_scr_set.competition_id,
+            event_id: matched_scr_set.event_id,
+            group_id: matched_scr_set.alphabetic_group_index,
+            is_extra: matched_scr.is_extra?,
+            round_id: matched_scr_set.round_id,
+            round_type_id: matched_scr_set.round_type_id,
+            scramble: matched_scr.scramble_string,
+            scramble_num: matched_scr.ordered_index + 1,
+          }
         end
       end
 
