@@ -56,7 +56,7 @@ export default async function ResultPage({
               formatId={format}
               roundWcifId={roundId}
               competitionId={competitionId}
-              title={t("competitions.live.results.dual_round")}
+              title="Combined Dual Round"
               isLinkedRound
             />
           </MultiRoundResultProvider>

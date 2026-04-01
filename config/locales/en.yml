@@ -1414,7 +1414,6 @@ en:
         round_locked: "locked"
       results:
         competitor: "Competitor"
-        dual_round: "Combined Dual Round"
       errors:
         round_closed: "The Round is not open yet"
     #context: on the "My competitions" page
