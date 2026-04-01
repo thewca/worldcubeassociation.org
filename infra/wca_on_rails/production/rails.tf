@@ -44,11 +44,11 @@ locals {
     },
     {
       name = "DATABASE_HOST"
-      value = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = "prod-db-rails.internal.worldcubeassociation.org"
     },
     {
       name = "READ_REPLICA_HOST"
-      value = "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = "prod-db-rails-read-replica.internal.worldcubeassociation.org"
     },
     {
       name = "DEV_DUMP_HOST"
