@@ -1123,12 +1123,7 @@ class Competition < ApplicationRecord
   end
 
   def lead_delegate_required?
-    # If you read this comment after April 1st, 2026:
-    #   You may happily remove all the `testing_before_launch` shenanigans. Signed GB 2026-03-20
-    requirement_date = Date.new(2026, 4, 1)
-    testing_before_launch = Rails.env.test? && Date.current < requirement_date
-
-    confirmed? && (testing_before_launch || confirmed_at >= requirement_date)
+    confirmed? && confirmed_at >= Date.new(2026, 4, 1)
   end
 
   def pending_results_or_report(num_days)
@@ -2287,9 +2282,9 @@ class Competition < ApplicationRecord
       self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
   end
 
-  # WFC usually sends dues to the first staff delegate in alphabetical order if there are no redirects setup for the country or organizer.
+  # WFC usually sends dues to the lead delegate; if not present, then to the first staff delegate in alphabetical order, provided there are no redirects set up for the country or organizer.
   private def delegate_dues_payer
-    staff_delegates.min_by(&:name)
+    lead_delegate || staff_delegates.min_by(&:name)
   end
 
   def dues_payer_name
