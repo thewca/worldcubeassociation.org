@@ -129,7 +129,7 @@ class Round < ApplicationRecord
   end
 
   def final_round?
-    number == total_number_of_rounds
+    number == total_number_of_rounds || linked_round&.final_round?
   end
 
   def name
@@ -149,7 +149,7 @@ class Round < ApplicationRecord
   end
 
   def live_podium
-    live_results.where(global_pos: 1..3)
+    relevant_results.where(global_pos: 1..3)
   end
 
   def previous_round

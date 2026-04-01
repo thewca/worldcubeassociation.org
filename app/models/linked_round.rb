@@ -21,6 +21,10 @@ class LinkedRound < ApplicationRecord
     rounds.map(&:wcif_id)
   end
 
+  def final?
+    rounds.length == rounds.first.total_number_of_rounds
+  end
+
   def self.combine_results(round_results)
     results_by_registration_id = round_results.group_by(&:registration_id)
     persons = results_by_registration_id.keys
