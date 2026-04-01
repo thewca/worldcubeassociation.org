@@ -4,8 +4,7 @@ require "rails_helper"
 
 RSpec.describe "WCA Live API" do
   describe "GET #podiums" do
-    let!(:delegate) { create(:delegate) }
-    let(:competition) { create(:competition, event_ids: ["333"], delegates: [delegate]) }
+    let(:competition) { create(:competition, :with_delegate, event_ids: ["333"]) }
     let(:registrations) { create_list(:registration, 5, :accepted, competition: competition, event_ids: ["333"]) }
 
     it "Correctly gets the podium of a normal round" do
@@ -44,7 +43,7 @@ RSpec.describe "WCA Live API" do
 
       expect(response_json.length).to eq(1)
 
-      expect(response_json.first["results"].pluck(:registration_id)).to eq([registrations.first.id, registrations.second.id, registrations.third.id])
+      expect(response_json.first["results"].pluck(:registration_id)).to eq(registrations.take(3).pluck(:id))
     end
 
     it "Correctly gets the podium when results are mixed across rounds" do

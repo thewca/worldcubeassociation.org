@@ -22,7 +22,7 @@ class LinkedRound < ApplicationRecord
   end
 
   def final_round?
-    rounds.length == rounds.first&.total_number_of_rounds
+    rounds.ordered.last&.final_round?
   end
 
   def self.combine_results(round_results)
