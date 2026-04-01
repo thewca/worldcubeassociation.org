@@ -48,7 +48,7 @@ locals {
     },
     {
       name = "READ_REPLICA_HOST"
-      value = "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = "prod-db-read-replica.internal.worldcubeassociation.org"
     },
     {
       name = "DEV_DUMP_HOST"
