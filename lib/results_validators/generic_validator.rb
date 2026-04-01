@@ -70,6 +70,10 @@ module ResultsValidators
       false
     end
 
+    def include_scrambles?
+      false
+    end
+
     private
 
       def reset_state

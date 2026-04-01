@@ -26,6 +26,8 @@ class MatchedScrambleSet < ApplicationRecord
     Scramble.prefix_for_index(self.ordered_index + 1)
   end
 
+  alias_method :group_id, :alphabetic_group_index
+
   DEFAULT_SERIALIZE_OPTIONS = {
     methods: %w[round_wcif_id],
     include: %w[matched_scrambles external_scramble_set],
