@@ -263,7 +263,7 @@ class Competition < ApplicationRecord
   validates :qualification_results_reason, presence: true, if: :uses_qualification?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
   validates :main_event_id, inclusion: { in: :event_ids, allow_nil: true }
-  validates :lead_delegate_id, presence: true, inclusion: { in: :delegate_ids }, if: :lead_delegate_required?
+  validates :lead_delegate_id, presence: { if: :lead_delegate_required? }, inclusion: { in: :delegate_ids, allow_nil: true }
 
   # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
   validates :name, length: { maximum: MAX_NAME_LENGTH }
