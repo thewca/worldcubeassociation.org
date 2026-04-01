@@ -29,12 +29,15 @@ import {
 import EventIcon from "@/components/EventIcon";
 import { route } from "nextjs-routes";
 import { useT } from "@/lib/i18n/useI18n";
+import { LiveRoundAdmin } from "@/types/live";
+import _ from "lodash";
 
 interface LiveViewProps {
   timeZones: string[];
   competitionId: string;
   activities: components["schemas"]["WcifActivity"][];
   wcifEvents: components["schemas"]["WcifEvent"][];
+  rounds: LiveRoundAdmin[];
 }
 
 export default function LiveView({
@@ -42,6 +45,7 @@ export default function LiveView({
   competitionId,
   activities,
   wcifEvents,
+  rounds,
 }: LiveViewProps) {
   const { t } = useT();
   const firstStartTime = activities[0].startTime;
@@ -66,6 +70,8 @@ export default function LiveView({
   const lastDate = dates[dates.length - 1];
   const defaultDate =
     dates.filter((d) => !hasPassed(d.toISO()!))[0] ?? lastDate;
+
+  const roundsByWcifId = _.keyBy(rounds, "id");
 
   return (
     <VStack align="left">
@@ -123,27 +129,42 @@ export default function LiveView({
                   const activity = activityGroup[0];
                   const { eventId } = parseActivityCode(activity.activityCode);
 
+                  const isOpen = ["open", "locked"].includes(
+                    roundsByWcifId[activity.activityCode].state,
+                  );
+
                   return (
                     <Card.Root key={activity.id} rounded="md">
                       <Card.Body asChild alignItems="baseline">
-                        <Button asChild variant="subtle">
-                          <Link asChild textStyle="headerLink">
-                            <NextLink
-                              href={route({
-                                pathname:
-                                  "/competitions/[competitionId]/live/rounds/[roundId]",
-                                query: {
-                                  competitionId,
-                                  roundId: activity.activityCode,
-                                },
-                              })}
-                            >
-                              <HStack>
-                                <EventIcon eventId={eventId} fontSize="2xl" />
-                                {localizeActivityName(t, activity, wcifEvents)}
-                              </HStack>
-                            </NextLink>
-                          </Link>
+                        <Button asChild variant="subtle" disabled={!isOpen}>
+                          {isOpen ? (
+                            <Link asChild textStyle="headerLink">
+                              <NextLink
+                                href={route({
+                                  pathname:
+                                    "/competitions/[competitionId]/live/rounds/[roundId]",
+                                  query: {
+                                    competitionId,
+                                    roundId: activity.activityCode,
+                                  },
+                                })}
+                              >
+                                <HStack>
+                                  <EventIcon eventId={eventId} fontSize="2xl" />
+                                  {localizeActivityName(
+                                    t,
+                                    activity,
+                                    wcifEvents,
+                                  )}
+                                </HStack>
+                              </NextLink>
+                            </Link>
+                          ) : (
+                            <HStack>
+                              <EventIcon eventId={eventId} fontSize="2xl" />
+                              {localizeActivityName(t, activity, wcifEvents)}
+                            </HStack>
+                          )}
                         </Button>
                       </Card.Body>
                       <Card.Footer>
