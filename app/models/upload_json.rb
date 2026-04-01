@@ -49,6 +49,7 @@ class UploadJson
       persons_to_import << InboxPerson.new(new_person_attributes)
     end
     results_to_import = []
+    scramble_sets_to_import = []
     scrambles_to_import = []
     parsed_json["events"].each do |event|
       competition_event = competition.competition_events.find { |ce| ce.event_id == event["eventId"] }
@@ -90,21 +91,26 @@ class UploadJson
         end
 
         # Import scrambles for round
-        round["groups"].each do |group|
+        # I am too lazy to write actual parsing logic for A->1, B->2, ..., AA->27 etc.
+        #   so this snippet is just "faking" the parse by using length-adjusted lexicographic sorting
+        sorted_groups = round["groups"].sort_by { [it["group"].length, it["group"]] }
+        sorted_groups.each_with_index do |group, group_idx|
+          new_scramble_set_attributes = {
+            round_id: competition_round&.id,
+            ordered_index: group_idx,
+          }
+          new_scr_set = MatchedScrambleSet.new(new_scramble_set_attributes)
+          # See above for the trick of setting the association
+          new_scr_set.competition = competition
+          scramble_sets_to_import << new_scr_set
           %w[scrambles extraScrambles].each do |scramble_type|
-            group[scramble_type]&.each_with_index do |scramble, index|
+            group[scramble_type]&.each_with_index do |scramble, scr_index|
               new_scramble_attributes = {
-                event_id: event["eventId"],
-                round_type_id: round_type_id,
-                group_id: group["group"],
+                scramble_string: scramble,
                 is_extra: scramble_type == "extraScrambles",
-                scramble_num: index + 1,
-                scramble: scramble,
+                ordered_index: scr_index,
               }
-              new_scr = Scramble.new(new_scramble_attributes)
-              # See inbox_results above for an explanation on setting these associations
-              new_scr.competition = competition
-              new_scr.round = competition_round
+              new_scr = new_scr_set.scrambles.build(new_scramble_attributes)
               scrambles_to_import << new_scr
             end
           end
@@ -113,6 +119,7 @@ class UploadJson
     end
     {
       results_to_import: results_to_import,
+      scramble_sets_to_import: scramble_sets_to_import,
       scrambles_to_import: scrambles_to_import,
       persons_to_import: persons_to_import,
     }

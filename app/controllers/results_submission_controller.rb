@@ -157,29 +157,11 @@ class ResultsSubmissionController < ApplicationController
                                                      })
     end
 
-    scrambles_to_import = competition.matched_scramble_sets.flat_map do |scramble_set|
-      extra_scrambles, std_scrambles = scramble_set.matched_scrambles.partition(&:is_extra?)
-
-      [std_scrambles, extra_scrambles].flat_map do |scramble_family|
-        scramble_family.map do |scramble|
-          Scramble.new({
-                         competition_id: competition.id,
-                         event_id: scramble_set.event_id,
-                         round_type_id: scramble_set.round_type_id,
-                         round_id: scramble_set.round_id,
-                         group_id: scramble_set.alphabetic_group_index,
-                         is_extra: scramble.is_extra?,
-                         scramble_num: scramble.ordered_index + 1,
-                         scramble: scramble.scramble_string,
-                       })
-        end
-      end
-    end
-
     temporary_results_data = {
       results_to_import: results_to_import,
-      scrambles_to_import: scrambles_to_import,
       persons_to_import: persons_to_import,
+      # don't need to import any scrambles because WCA Live import
+      #   requires use of our integrated scrambles matcher which handles matched_scrambles.
     }
 
     mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))

@@ -11,6 +11,7 @@ class MatchedScramble < ApplicationRecord
   validates :ordered_index, numericality: { only_integer: true, greater_than_or_equal_to: 0 },
                             uniqueness: { scope: %i[is_extra matched_scramble_set_id] }
 
+  delegate :competition_id, :event_id, :round_type_id, to: :matched_scramble_set
   delegate :scramble_string, to: :external_scramble, prefix: :external, allow_nil: true
 
   validates :scramble_string, comparison: { equal_to: :external_scramble_string, if: :external_scramble_id? }
