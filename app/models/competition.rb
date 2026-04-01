@@ -42,6 +42,7 @@ class Competition < ApplicationRecord
   has_many :scramble_file_uploads, dependent: :delete_all
   has_many :external_scramble_sets, through: :scramble_file_uploads
   has_many :matched_scramble_sets, through: :rounds
+  has_many :matched_scrambles, through: :matched_scramble_sets
   has_many :accepted_registrations, -> { accepted }, class_name: "Registration", foreign_key: "competition_id", inverse_of: :competition
   has_many :accepted_newcomers, -> { where(wca_id: nil) }, through: :accepted_registrations, source: :user
   has_many :duplicate_checker_job_runs, dependent: :delete_all
@@ -694,6 +695,7 @@ class Competition < ApplicationRecord
              'inbox_persons',
              'external_scramble_sets',
              'matched_scramble_sets',
+             'matched_scrambles',
              'announced_by_user',
              'cancelled_by_user',
              'competition_payment_integrations',
