@@ -17,7 +17,7 @@ class User < ApplicationRecord
   has_many :registrations
   has_many :competitions_registered_for, through: :registrations, source: "competition"
   belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true, inverse_of: :user
-  belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
+  belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true, inverse_of: :unconfirmed_user
   belongs_to :delegate_to_handle_wca_id_claim, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true, inverse_of: :users_claiming_wca_id
   belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
@@ -51,6 +51,8 @@ class User < ApplicationRecord
   has_many :bookmarked_competitions, dependent: :destroy
   has_many :competitions_bookmarked, through: :bookmarked_competitions, source: :competition
   has_many :competitions_announced, foreign_key: "announced_by", class_name: "Competition", inverse_of: :announced_by_user
+  has_many :competitions_cancelled, foreign_key: "cancelled_by", class_name: "Competition", inverse_of: :cancelled_by_user
+  has_many :competitions_posting, foreign_key: "posting_by", class_name: "Competition", inverse_of: :posting_user
   has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition", inverse_of: :posted_user
   has_many :confirmed_payment_intents, class_name: "PaymentIntent", as: :confirmation_source
   has_many :canceled_payment_intents, class_name: "PaymentIntent", as: :cancellation_source
@@ -61,7 +63,10 @@ class User < ApplicationRecord
   belongs_to :current_avatar, class_name: "UserAvatar", inverse_of: :current_user, optional: true
   belongs_to :pending_avatar, class_name: "UserAvatar", inverse_of: :pending_user, optional: true
   has_many :user_avatars, dependent: :destroy, inverse_of: :user
+  has_many :approved_user_avatars, class_name: "UserAvatar", inverse_of: :approved_by_user
+  has_many :revoked_user_avatars, class_name: "UserAvatar", inverse_of: :revoked_by_user
   has_many :potential_duplicate_persons, dependent: :destroy, foreign_key: :original_user_id, class_name: "PotentialDuplicatePerson", inverse_of: :original_user
+  has_many :scramble_file_uploads, foreign_key: :uploaded_by, inverse_of: :uploaded_by_user
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
   scope :newcomers, -> { where(wca_id: nil) }
