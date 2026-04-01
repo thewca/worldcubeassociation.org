@@ -113,13 +113,17 @@ class ScrambleFilesController < ApplicationController
             ordered_index: set_idx,
           )
 
-          ext_set[:matched_scrambles].each_with_index do |ext_scr, scr_idx|
-            matched_set.matched_scrambles.build(
-              external_scramble_id: ext_scr[:id],
-              ordered_index: scr_idx,
-              scramble_string: ext_scr[:scramble_string],
-              is_extra: ext_scr[:is_extra],
-            )
+          extra_scrambles, std_scrambles = ext_set[:matched_scrambles].partition { it[:is_extra] }
+
+          [std_scrambles, extra_scrambles].each do |scrambles|
+            scrambles.each_with_index do |ext_scr, scr_idx|
+              matched_set.matched_scrambles.build(
+                external_scramble_id: ext_scr[:id],
+                ordered_index: scr_idx,
+                scramble_string: ext_scr[:scramble_string],
+                is_extra: ext_scr[:is_extra],
+              )
+            end
           end
         end
 
