@@ -21,6 +21,7 @@ import { LiveCompetitor } from "@/types/live";
 import React, { useState } from "react";
 import LiveResultsMobileModal from "@/components/live/LiveResultsMobileModal";
 import ResultMenu from "@/components/live/Admin/ResultMenu";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function LiveResultsTable({
   resultsByRegistrationId,
@@ -43,6 +44,8 @@ export default function LiveResultsTable({
   showEmpty?: boolean;
   showLinkedRoundsView?: boolean;
 }) {
+  const { t } = useT();
+
   const [selectedRow, setSelectedRow] = useState<CompetitorWithResults | null>(
     null,
   );
@@ -69,6 +72,7 @@ export default function LiveResultsTable({
           format={format}
           isLinked={showLinkedRoundsView}
           showFull={showFull}
+          t={t}
         />
         <Table.Body>
           {competitorsWithOrderedResults.map((competitorAndTheirResults) => {

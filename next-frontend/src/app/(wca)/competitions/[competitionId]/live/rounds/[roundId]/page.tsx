@@ -9,8 +9,9 @@ import {
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
-import events from "@/lib/wca/data/events";
-import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { getRoundName } from "@/lib/wca/live/getRoundName";
+import { getRounds } from "@/lib/wca/live/getRounds";
+import RoundOpenCheck from "@/components/live/RoundOpenCheck";
 
 export default async function ResultPage({
   params,
@@ -55,7 +56,7 @@ export default async function ResultPage({
               formatId={format}
               roundWcifId={roundId}
               competitionId={competitionId}
-              title="Live Results"
+              title="Combined Dual Round"
               isLinkedRound
             />
           </MultiRoundResultProvider>
@@ -64,19 +65,31 @@ export default async function ResultPage({
     );
   }
 
-  const { eventId, roundNumber } = parseActivityCode(roundId);
+  const {
+    data: roundsData,
+    error: roundsError,
+    response: roundsResponse,
+  } = await getRounds(competitionId);
+
+  if (roundsError) return <OpenapiError response={roundsResponse} t={t} />;
+
+  const roundName = getRoundName(id, t, roundsData.rounds, true);
+
+  const round = roundsData.rounds.find((r) => r.id === id)!;
 
   return (
     <Container bg="bg">
       <VStack align="left">
-        <LiveResultProvider initialRound={data} competitionId={competitionId}>
-          <LiveUpdatingResultsTable
-            formatId={format}
-            roundWcifId={roundId}
-            competitionId={competitionId}
-            title={`${events.byId[eventId].name} - Round ${roundNumber}`}
-          />
-        </LiveResultProvider>
+        <RoundOpenCheck state={round.state} t={t}>
+          <LiveResultProvider initialRound={data} competitionId={competitionId}>
+            <LiveUpdatingResultsTable
+              formatId={format}
+              roundWcifId={roundId}
+              competitionId={competitionId}
+              title={roundName}
+            />
+          </LiveResultProvider>
+        </RoundOpenCheck>
       </VStack>
     </Container>
   );

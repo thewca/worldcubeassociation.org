@@ -7,28 +7,37 @@ import {
   LiveStatCells,
   LiveTableHeader,
 } from "@/components/live/Cells";
-import { Format } from "@/lib/wca/data/formats";
-import { LiveResult } from "@/types/live";
+import formats from "@/lib/wca/data/formats";
+import { LiveResult, LiveRoundAdmin } from "@/types/live";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { useT } from "@/lib/i18n/useI18n";
+import _ from "lodash";
+import { getRoundName } from "@/lib/wca/live/getRoundName";
 
 export default function ByPersonByRoundTable({
-  format,
   eventResults: eventResults,
   competitionId,
+  rounds,
 }: {
-  format: Format;
   eventResults: LiveResult[];
   competitionId: string;
+  rounds: LiveRoundAdmin[];
 }) {
+  const { t } = useT();
   const isMobile = useBreakpointValue({ base: true, md: false });
   const showFull = !isMobile;
 
-  const stats = statColumnsForFormat(format);
+  const roundsByWcifId = _.keyBy(rounds, "id");
 
   return (
     <Table.Root mb="10" size="sm">
-      <LiveTableHeader format={format} showFull={showFull} byPerson />
+      <LiveTableHeader
+        format={formats.byId[rounds[0].format]}
+        showFull={showFull}
+        byPerson
+        t={t}
+      />
       <Table.Body>
         {eventResults.map((result) => {
           const {
@@ -38,15 +47,21 @@ export default function ByPersonByRoundTable({
             registration_id,
           } = result;
 
-          const { eventId, roundNumber } = parseActivityCode(wcifId);
+          const { eventId } = parseActivityCode(wcifId);
+          const round = roundsByWcifId[wcifId];
+
+          const roundName = getRoundName(wcifId, t, rounds);
+
+          const format = formats.byId[round.format];
+          const stats = statColumnsForFormat(format);
 
           return (
-            <Table.Row key={`${wcifId}`}>
+            <Table.Row key={wcifId}>
               <Table.Cell>
                 <Link
                   href={`/competitions/${competitionId}/live/rounds/${wcifId}`}
                 >
-                  Round {roundNumber}
+                  {roundName}
                 </Link>
               </Table.Cell>
               <LivePositionCell

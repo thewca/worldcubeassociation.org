@@ -1,7 +1,5 @@
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
-import { auth } from "@/auth";
-import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 import { Card, Container, HStack, SimpleGrid } from "@chakra-ui/react";
 
 import EventIcon from "@/components/EventIcon";
@@ -9,6 +7,7 @@ import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import RoundActions from "@/app/(wca)/competitions/[competitionId]/live/admin/RoundActions";
+import { getRounds } from "@/lib/wca/live/getRounds";
 
 export default async function RoundAdmin({
   competitionId,
@@ -16,16 +15,7 @@ export default async function RoundAdmin({
   competitionId: string;
 }) {
   const { t } = await getT();
-
-  const session = await auth();
-
-  // We check if you are logged in the parent
-  const client = serverClientWithToken(session!.accessToken);
-
-  const { error, data, response } = await client.GET(
-    "/v1/competitions/{competitionId}/live/rounds",
-    { params: { path: { competitionId } } },
-  );
+  const { error, data, response } = await getRounds(competitionId);
 
   if (error) {
     return <OpenapiError t={t} response={response} />;
@@ -54,7 +44,7 @@ export default async function RoundAdmin({
                     return (
                       <RoundActions
                         round={r}
-                        totalRounds={rounds.length}
+                        rounds={rounds}
                         competitionId={competitionId}
                         key={r.id}
                       />
