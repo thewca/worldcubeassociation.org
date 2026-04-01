@@ -21,8 +21,8 @@ class LinkedRound < ApplicationRecord
     rounds.map(&:wcif_id)
   end
 
-  def final?
-    rounds.length == rounds.first.total_number_of_rounds
+  def final_round?
+    rounds.length == rounds.first&.total_number_of_rounds
   end
 
   def self.combine_results(round_results)
