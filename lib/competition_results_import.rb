@@ -123,7 +123,7 @@ module CompetitionResultsImport
       end
 
       Scramble.insert_all!(scramble_data)
-      competition.matched_scramble_sets.destroy_all
+      competition.rounds.each { it.matched_scramble_sets.delete_all }
     end
   end
 
