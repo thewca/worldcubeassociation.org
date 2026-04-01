@@ -48,7 +48,7 @@ locals {
     },
     {
       name = "READ_REPLICA_HOST"
-      value = "prod-db-read-replica.internal.worldcubeassociation.org"
+      value = "prod-db-rails-read-replica.internal.worldcubeassociation.org"
     },
     {
       name = "DEV_DUMP_HOST"
