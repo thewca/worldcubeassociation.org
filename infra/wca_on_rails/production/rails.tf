@@ -243,6 +243,7 @@ data "aws_iam_policy_document" "task_policy" {
     ]
     resources = [
       "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_dev_dump_identifier}/${var.DATABASE_WRT_USER}",
+      "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_dev_dump_identifier}/${var.DATABASE_WRT_SENIOR_USER}",
       "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_read_replica_identifier}/${var.DATABASE_WRT_SENIOR_USER}",
       "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_SENIOR_USER}"]
   }
