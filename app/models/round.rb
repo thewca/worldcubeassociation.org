@@ -505,17 +505,66 @@ class Round < ApplicationRecord
     }
   end
 
-  def to_wcif(include_results: true)
+  private def wcif_results(version: Competition::WCIF_STABLE_VERSION)
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      self.live_results.map(&:to_wcif)
+    else
+      self.round_results.map(&:to_wcif)
+    end
+  end
+
+  def wcif_participation_source
+    return { "type" => "registrations" } if self.number == 1
+
+    if self.linked_round.present?
+      first_linked_round = self.linked_round.first_round_in_link
+
+      return first_linked_round.wcif_participation_source if first_linked_round != self
+    end
+
+    if previous_round.linked_round.present?
+      {
+        "type" => "linkedRounds",
+        "roundIds" => previous_round.linked_round.wcif_ids,
+        "resultCondition" => previous_round.linked_round.last_round_in_link.advancement_condition.wcif_result_condition(self.format),
+      }
+    else
+      {
+        "type" => "round",
+        "roundId" => previous_round.wcif_id,
+        "resultCondition" => previous_round.advancement_condition.wcif_result_condition(self.format),
+      }
+    end
+  end
+
+  private def wcif_participation_ruleset
     {
+      "participationSource" => wcif_participation_source,
+      "reservedPlaces" => nil,
+    }
+  end
+
+  def to_wcif(include_results: true, version: Competition::WCIF_STABLE_VERSION)
+    base_wcif = {
       "id" => wcif_id,
       "format" => self.format_id,
       "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
       "cutoff" => cutoff&.to_wcif,
-      "advancementCondition" => advancement_condition&.to_wcif,
       "scrambleSetCount" => self.scramble_set_count,
-      "results" => include_results ? round_results.map(&:to_wcif) : nil,
+      "results" => include_results ? self.wcif_results(version: version) : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
+
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      base_wcif.merge(
+        "linkedRounds" => linked_round&.wcif_ids,
+        "participationRuleset" => wcif_participation_ruleset,
+      )
+    else
+      base_wcif.merge(
+        "advancementCondition" => advancement_condition&.to_wcif,
+      )
+    end
   end
 
   def to_live_results_json(only_podiums: false)

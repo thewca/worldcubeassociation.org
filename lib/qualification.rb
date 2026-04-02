@@ -81,13 +81,43 @@ class Qualification
     }
   end
 
-  def to_wcif
-    {
-      "type" => @wcif_type,
-      "resultType" => @result_type,
-      "whenDate" => @when_date&.strftime("%Y-%m-%d"),
-      "level" => @level,
-    }
+  private def wcif_result_condition
+    case @wcif_type
+    when "attemptResult"
+      {
+        "type" => "resultAchieved",
+        "scope" => @result_type,
+        "value" => @level,
+      }
+    when "ranking"
+      {
+        "type" => "ranking",
+        "value" => @level,
+      }
+    when "anyResult"
+      {
+        "type" => "resultAchieved",
+        "scope" => @result_type,
+        "value" => nil,
+      }
+    end
+  end
+
+  def to_wcif(version: Competition::WCIF_STABLE_VERSION)
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      {
+        "earliestResultDate" => nil,
+        "latestResultDate" => @when_date&.strftime("%Y-%m-%d"),
+        "resultCondition" => self.wcif_result_condition,
+      }
+    else
+      {
+        "type" => @wcif_type,
+        "resultType" => @result_type,
+        "whenDate" => @when_date&.strftime("%Y-%m-%d"),
+        "level" => @level,
+      }
+    end
   end
 
   def to_s(event)

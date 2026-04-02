@@ -1808,16 +1808,18 @@ class Competition < ApplicationRecord
       &.event_id
   end
 
+  WCIF_STABLE_VERSION = "1.1"
+
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
-  def to_wcif(authorized: false)
+  def to_wcif(authorized: false, version: WCIF_STABLE_VERSION)
     {
-      "formatVersion" => "1.1",
+      "formatVersion" => version,
       "id" => id,
       "name" => name,
       "shortName" => cell_name,
       "series" => part_of_competition_series? ? competition_series_wcif(authorized: authorized) : nil,
-      "persons" => persons_wcif(authorized: authorized),
-      "events" => events_wcif,
+      "persons" => persons_wcif(authorized: authorized, version: version),
+      "events" => events_wcif(version: version),
       "schedule" => schedule_wcif,
       "competitorLimit" => competitor_limit_enabled? ? competitor_limit : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
@@ -1872,7 +1874,7 @@ class Competition < ApplicationRecord
       .transform_values(&:to_wcif)
   end
 
-  def persons_wcif(authorized: false)
+  def persons_wcif(authorized: false, version: WCIF_STABLE_VERSION)
     managers = self.managers
     includes_associations = [
       { assignments: [:schedule_activity] },
@@ -1892,14 +1894,14 @@ class Competition < ApplicationRecord
                        .select { authorized || it.wcif_status == "accepted" }
                        .map do |registration|
                          managers.delete(registration.user)
-                         registration.user.to_wcif(self, registration, authorized: authorized)
+                         registration.user.to_wcif(self, registration, authorized: authorized, version: version)
     end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
     persons_wcif + managers.map { it.to_wcif(self, authorized: authorized) }
   end
 
-  def events_wcif
+  def events_wcif(version: WCIF_STABLE_VERSION)
     includes_associations = [
       { rounds: %i[competition_event wcif_extensions] },
       :wcif_extensions,
@@ -1907,7 +1909,7 @@ class Competition < ApplicationRecord
     competition_events
       .includes(includes_associations)
       .sort_by { |ce| ce.event.rank }
-      .map(&:to_wcif)
+      .map { it.to_wcif(version: version) }
   end
 
   def schedule_wcif
