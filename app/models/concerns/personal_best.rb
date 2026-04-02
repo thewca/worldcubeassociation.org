@@ -21,17 +21,31 @@ module PersonalBest
     end
   end
 
-  def self.wcif_json_schema
-    {
-      "type" => "object",
-      "properties" => {
-        "eventId" => { "type" => "string", "enum" => Event.pluck(:id) },
-        "best" => { "type" => "integer" },
-        "worldRanking" => { "type" => "integer" },
-        "continentalRanking" => { "type" => "integer" },
-        "nationalRanking" => { "type" => "integer" },
-        "type" => { "type" => "string", "enum" => %w[single average] },
-      },
-    }
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      {
+        "type" => "object",
+        "properties" => {
+          "eventId" => { "type" => "string", "enum" => Event.pluck(:id) },
+          "value" => { "type" => "integer" },
+          "worldRanking" => { "type" => "integer" },
+          "continentalRanking" => { "type" => "integer" },
+          "nationalRanking" => { "type" => "integer" },
+          "type" => { "type" => "string", "enum" => %w[single average] },
+        },
+      }
+    else
+      {
+        "type" => "object",
+        "properties" => {
+          "eventId" => { "type" => "string", "enum" => Event.pluck(:id) },
+          "best" => { "type" => "integer" },
+          "worldRanking" => { "type" => "integer" },
+          "continentalRanking" => { "type" => "integer" },
+          "nationalRanking" => { "type" => "integer" },
+          "type" => { "type" => "string", "enum" => %w[single average] },
+        },
+      }
+    end
   end
 end

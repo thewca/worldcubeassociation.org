@@ -94,14 +94,14 @@ class CompetitionEvent < ApplicationRecord
     self
   end
 
-  def self.wcif_json_schema
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
     {
       "type" => "object",
       "properties" => {
         "id" => { "type" => "string" },
-        "rounds" => { "type" => %w[array null], "items" => Round.wcif_json_schema },
+        "rounds" => { "type" => %w[array null], "items" => Round.wcif_json_schema(version: version) },
         "competitorLimit" => { "type" => %w[integer null] },
-        "qualification" => Qualification.wcif_json_schema,
+        "qualification" => Qualification.wcif_json_schema(version: version),
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }

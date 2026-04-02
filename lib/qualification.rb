@@ -69,16 +69,27 @@ class Qualification
     qualification ? JSON.dump(qualification.to_wcif) : nil
   end
 
-  def self.wcif_json_schema
-    {
-      "type" => %w[object null],
-      "properties" => {
-        "whenDate" => { "type" => "string" },
-        "resultType" => { "type" => "string", "enum" => %w[single average] },
-        "type" => { "type" => "string", "enum" => %w[attemptResult ranking anyResult] },
-        "level" => { "type" => %w[integer null] },
-      },
-    }
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      {
+        "type" => %w[object null],
+        "properties" => {
+          "earliestResultDate" => { "type" => "string" },
+          "latestResultDate" => { "type" => "string" },
+          "resultCondition" => AdvancementConditions::AdvancementCondition.result_condition_wcif_json_schema,
+        },
+      }
+    else
+      {
+        "type" => %w[object null],
+        "properties" => {
+          "whenDate" => { "type" => "string" },
+          "resultType" => { "type" => "string", "enum" => %w[single average] },
+          "type" => { "type" => "string", "enum" => %w[attemptResult ranking anyResult] },
+          "level" => { "type" => %w[integer null] },
+        },
+      }
+    end
   end
 
   private def wcif_result_condition

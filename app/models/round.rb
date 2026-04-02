@@ -665,21 +665,99 @@ class Round < ApplicationRecord
     json
   end
 
-  def self.wcif_json_schema
+  def self.participation_ruleset_wcif_json_schema
     {
       "type" => "object",
       "properties" => {
-        "id" => { "type" => "string" },
-        "format" => { "type" => "string", "enum" => Format.ids },
-        "timeLimit" => TimeLimit.wcif_json_schema,
-        "cutoff" => Cutoff.wcif_json_schema,
-        "advancementCondition" => AdvancementConditions::AdvancementCondition.wcif_json_schema,
-        "results" => { "type" => "array", "items" => RoundResult.wcif_json_schema },
-        "scrambleSets" => { "type" => "array" }, # TODO: expand on this
-        "scrambleSetCount" => { "type" => "integer" },
-        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
+        "participationSource" => {
+          "allOf" => [
+            {
+              "type" => "object",
+              "properties" => {
+                "type" => { "type" => "string", "enum" => %w[registrations round linkedRounds] },
+              },
+            },
+            {
+              "oneOf" => [
+                {
+                  "type" => "object",
+                  "properties" => {
+                    "type" => { "const" => "registrations" },
+                  },
+                },
+                {
+                  "type" => "object",
+                  "properties" => {
+                    "type" => { "const" => "round" },
+                    "roundId" => { "type" => "string" },
+                    "resultCondition" => AdvancementConditions::AdvancementCondition.result_condition_wcif_json_schema,
+                  },
+                },
+                {
+                  "type" => "object",
+                  "properties" => {
+                    "type" => { "const" => "linkedRounds" },
+                    "roundIds" => {
+                      "type" => "array",
+                      "items" => { "type" => "string" },
+                    },
+                    "resultCondition" => AdvancementConditions::AdvancementCondition.result_condition_wcif_json_schema,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        "reservedPlaces" => {
+          "type" => %w[object null],
+          "properties" => {
+            "nationalities" => {
+              "type" => "array",
+              "items" => { "type" => "string" },
+            },
+            "reservations" => { "type" => "integer" },
+          },
+        },
       },
     }
+  end
+
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      {
+        "type" => "object",
+        "properties" => {
+          "id" => { "type" => "string" },
+          "linkedRounds" => {
+            "type" => %w[array null],
+            "items" => { "type" => "string" },
+          },
+          "format" => { "type" => "string", "enum" => Format.ids },
+          "timeLimit" => TimeLimit.wcif_json_schema,
+          "cutoff" => Cutoff.wcif_json_schema,
+          "participationRuleset" => self.participation_ruleset_wcif_json_schema,
+          "results" => { "type" => "array", "items" => LiveResult.wcif_json_schema },
+          "scrambleSets" => { "type" => "array" }, # TODO: expand on this
+          "scrambleSetCount" => { "type" => "integer" },
+          "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
+        },
+      }
+    else
+      {
+        "type" => "object",
+        "properties" => {
+          "id" => { "type" => "string" },
+          "format" => { "type" => "string", "enum" => Format.ids },
+          "timeLimit" => TimeLimit.wcif_json_schema,
+          "cutoff" => Cutoff.wcif_json_schema,
+          "advancementCondition" => AdvancementConditions::AdvancementCondition.wcif_json_schema,
+          "results" => { "type" => "array", "items" => RoundResult.wcif_json_schema },
+          "scrambleSets" => { "type" => "array" }, # TODO: expand on this
+          "scrambleSetCount" => { "type" => "integer" },
+          "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
+        },
+      }
+    end
   end
 
   def self.name_from_attributes_id(event_id, round_type_id)

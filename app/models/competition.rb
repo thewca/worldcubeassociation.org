@@ -1935,7 +1935,10 @@ class Competition < ApplicationRecord
   end
 
   def set_wcif!(wcif, current_user)
-    JSON::Validator.validate!(Competition.wcif_json_schema, wcif)
+    import_version = wcif["formatVersion"]
+
+    expected_schema = Competition.wcif_json_schema(version: import_version)
+    JSON::Validator.validate!(expected_schema, wcif)
 
     ActiveRecord::Base.transaction do
       set_wcif_series!(wcif["series"], current_user) if wcif["series"]
@@ -2116,7 +2119,7 @@ class Competition < ApplicationRecord
     reload
   end
 
-  def self.wcif_json_schema
+  def self.wcif_json_schema(version: WCIF_STABLE_VERSION)
     {
       "type" => "object",
       "properties" => {
@@ -2125,8 +2128,8 @@ class Competition < ApplicationRecord
         "name" => { "type" => "string" },
         "shortName" => { "type" => "string" },
         "series" => CompetitionSeries.wcif_json_schema,
-        "persons" => { "type" => "array", "items" => User.wcif_json_schema },
-        "events" => { "type" => "array", "items" => CompetitionEvent.wcif_json_schema },
+        "persons" => { "type" => "array", "items" => User.wcif_json_schema(version: version) },
+        "events" => { "type" => "array", "items" => CompetitionEvent.wcif_json_schema(version: version) },
         "schedule" => {
           "type" => "object",
           "properties" => {
