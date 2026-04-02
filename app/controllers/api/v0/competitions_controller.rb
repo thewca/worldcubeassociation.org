@@ -166,23 +166,35 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: data
   end
 
-  def show_wcif
-    competition = competition_from_params
-    require_can_manage!(competition)
+  WCIF_CACHE_MAX_AGE = 5.minutes
 
-    render json: competition.to_wcif(authorized: true)
+  private def render_wcif(competition)
+    if can_manage?(competition)
+      # authorized access always gets a "fresh" WCIF,
+      #   because it might be relevant for syncing
+      return render json: competition.to_wcif(authorized: true)
+    end
+
+    # In the context of WCIF, "unauthorized" means "public",
+    #   that is you can still see the WCIF but only without sensitive information like DOB.
+    # As this is the far more common use-case, we cache the public version for up to 5 minutes
+    #   to reduce traffic and counteract scraping.
+    return unless stale?(competition, public: true, cache_control: { max_age: WCIF_CACHE_MAX_AGE })
+
+    cache_key = "wcif/#{competition.id}"
+    render json: Rails.cache.fetch(cache_key, expires_in: WCIF_CACHE_MAX_AGE) { competition.to_wcif(authorized: false) }
   end
 
-  def show_wcif_public
-    id = params[:competition_id] || params[:id]
-    cache_key = "wcif/#{id}"
+  def show_wcif
     competition = competition_from_params
-    expires_in 5.minutes, public: true
-    return unless stale?(competition, public: true)
 
-    render json: Rails.cache.fetch(cache_key, expires_in: 5.minutes) {
-      competition.to_wcif
-    }
+    render_wcif(competition)
+  end
+
+  def show_wcif_by_lifecycle
+    competition = competition_from_params
+
+    render_wcif(competition)
   end
 
   def update_wcif

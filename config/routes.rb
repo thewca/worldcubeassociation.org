@@ -469,7 +469,7 @@ Rails.application.routes.draw do
 
       resources :competitions, only: %i[index show] do
         get '/wcif' => 'competitions#show_wcif'
-        get '/wcif/public' => 'competitions#show_wcif_public'
+        get '/wcif/:lifecycle_name' => 'competitions#show_wcif_by_lifecycle'
         get '/results' => 'competitions#results', as: :results
         get '/results/:event_id' => 'competitions#event_results', as: :event_results
         get '/competitors' => 'competitions#competitors'
