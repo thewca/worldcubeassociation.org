@@ -168,21 +168,26 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   WCIF_CACHE_MAX_AGE = 5.minutes
 
-  private def render_wcif(competition)
+  private def render_wcif(competition, version: Competition::WCIF_STABLE_VERSION)
     if can_manage?(competition)
       # authorized access always gets a "fresh" WCIF,
       #   because it might be relevant for syncing
-      return render json: competition.to_wcif(authorized: true)
+      return render json: competition.to_wcif(authorized: true, version: version)
     end
 
     # In the context of WCIF, "unauthorized" means "public",
     #   that is you can still see the WCIF but only without sensitive information like DOB.
     # As this is the far more common use-case, we cache the public version for up to 5 minutes
     #   to reduce traffic and counteract scraping.
-    return unless stale?(competition, public: true, cache_control: { max_age: WCIF_CACHE_MAX_AGE })
+    return unless stale?(
+      etag: [competition, version],
+      last_modified: competition.updated_at,
+      public: true,
+      cache_control: { max_age: WCIF_CACHE_MAX_AGE },
+    )
 
-    cache_key = "wcif/#{competition.id}"
-    render json: Rails.cache.fetch(cache_key, expires_in: WCIF_CACHE_MAX_AGE) { competition.to_wcif(authorized: false) }
+    cache_key = "wcif/#{competition.id}/#{version}"
+    render json: Rails.cache.fetch(cache_key, expires_in: WCIF_CACHE_MAX_AGE) { competition.to_wcif(authorized: false, version: version) }
   end
 
   def show_wcif
@@ -194,7 +199,21 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def show_wcif_by_lifecycle
     competition = competition_from_params
 
-    render_wcif(competition)
+    lifecycle_name = params.require(:lifecycle_name)
+                           # backwards compatibility with legacy /wcif/public route
+                           .gsub('public', 'stable')
+                           .to_sym
+
+    unless Competition::WCIF_VERSION_CATALOGUE.key?(lifecycle_name)
+      return render json: {
+        message: "invalid lifecycle name '#{lifecycle_name}'",
+        valid_lifecycle_names: Competition::WCIF_VERSION_CATALOGUE.keys,
+      }, status: :bad_request
+    end
+
+    lifecycle_version = Competition::WCIF_VERSION_CATALOGUE.fetch(lifecycle_name)
+
+    render_wcif(competition, version: lifecycle_version)
   end
 
   def update_wcif
