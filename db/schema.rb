@@ -1044,6 +1044,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
     t.string "person_id", limit: 10, default: "", null: false
     t.integer "world_rank", default: 0, null: false
     t.index ["event_id"], name: "fk_events"
+    t.index ["person_id", "event_id"], name: "index_ranks_average_on_person_id_and_event_id", unique: true
     t.index ["person_id"], name: "fk_persons"
   end
 
@@ -1055,6 +1056,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
     t.string "person_id", limit: 10, default: "", null: false
     t.integer "world_rank", default: 0, null: false
     t.index ["event_id"], name: "fk_events"
+    t.index ["person_id", "event_id"], name: "index_ranks_single_on_person_id_and_event_id", unique: true
     t.index ["person_id"], name: "fk_persons"
   end
 
