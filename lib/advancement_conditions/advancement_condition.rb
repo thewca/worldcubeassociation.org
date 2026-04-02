@@ -82,5 +82,21 @@ module AdvancementConditions
       # Filter out potential results
       advancing_with_ties.reject(&:empty_result?).pluck(:id)
     end
+
+    def wcif_result_condition(format)
+      base_wcif = {
+        "type" => self.class.wcif_type,
+        "value" => self.level,
+      }
+
+      if self.class.wcif_type == "attemptResult"
+        base_wcif.merge(
+          "type" => "resultAchieved",
+          "scope" => format.sort_by,
+        )
+      else
+        base_wcif
+      end
+    end
   end
 end

@@ -56,12 +56,12 @@ class CompetitionEvent < ApplicationRecord
     competition.allow_registration_without_qualification || qualification.nil? || qualification.can_register?(user, event_id)
   end
 
-  def to_wcif
+  def to_wcif(version: Competition::WCIF_STABLE_VERSION)
     {
       "id" => self.event.id,
-      "rounds" => self.rounds.map(&:to_wcif),
+      "rounds" => self.rounds.map { it.to_wcif(version: version) },
       "extensions" => wcif_extensions.map(&:to_wcif),
-      "qualification" => qualification&.to_wcif,
+      "qualification" => qualification&.to_wcif(version: version),
     }
   end
 
