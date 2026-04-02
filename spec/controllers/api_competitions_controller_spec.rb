@@ -317,7 +317,11 @@ RSpec.describe Api::V0::CompetitionsController do
 
       it 'get wcif' do
         get :show_wcif, params: { competition_id: "TestComp2014" }
-        expect(response).to have_http_status :forbidden
+        expect(response).to have_http_status :ok
+        parsed_body = response.parsed_body
+        expect(parsed_body["id"]).to eq "TestComp2014"
+        expect(parsed_body["persons"][0].keys).not_to include "email"
+        expect(parsed_body["persons"][0].keys).not_to include "birthdate"
       end
     end
 
@@ -342,6 +346,8 @@ RSpec.describe Api::V0::CompetitionsController do
         expect(response).to have_http_status :ok
         parsed_body = response.parsed_body
         expect(parsed_body["id"]).to eq "TestComp2014"
+        expect(parsed_body["persons"][0].keys).to include "email"
+        expect(parsed_body["persons"][0].keys).to include "birthdate"
       end
 
       it 'gets wcif with consistent competitor_id' do
@@ -375,7 +381,7 @@ RSpec.describe Api::V0::CompetitionsController do
 
     context 'accessing public endpoint' do
       it 'gets only announced series competitions ids' do
-        get :show_wcif_public, params: { competition_id: 'TestComp2014' }
+        get :show_wcif_by_lifecycle, params: { competition_id: 'TestComp2014', lifecycle_name: 'public' }
         expect(response).to have_http_status :ok
         parsed_body = response.parsed_body
         expect(parsed_body['series']['competitionIds']).to eq ['TestComp2014']

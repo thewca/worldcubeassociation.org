@@ -93,22 +93,24 @@ RSpec.describe "API Competitions" do
     let!(:competition) { create(:competition, :visible) }
 
     context "when not signed in" do
-      it "does not allow access" do
-        patch api_v0_competition_wcif_path(competition)
-        expect(response).to have_http_status(:unauthorized)
+      it "allows access without confidential information" do
+        get api_v0_competition_wcif_path(competition)
+        expect(response).to have_http_status(:ok)
         response_json = response.parsed_body
-        expect(response_json["error"]).to eq "Please log in"
+        expect(response_json["persons"][0].keys).not_to include "email"
+        expect(response_json["persons"][0].keys).not_to include "birthdate"
       end
     end
 
     context "when signed in as not a competition manager" do
       before { sign_in create :user }
 
-      it "does not allow access" do
-        patch api_v0_competition_update_wcif_path(competition)
-        expect(response).to have_http_status(:forbidden)
+      it "allows access without confidential information" do
+        get api_v0_competition_wcif_path(competition)
+        expect(response).to have_http_status(:ok)
         response_json = response.parsed_body
-        expect(response_json["error"]).to eq "Not authorized to manage competition"
+        expect(response_json["persons"][0].keys).not_to include "email"
+        expect(response_json["persons"][0].keys).not_to include "birthdate"
       end
     end
 
@@ -143,7 +145,7 @@ RSpec.describe "API Competitions" do
     end
 
     it "does not return confidential person data" do
-      get api_v0_competition_wcif_public_path(competition)
+      get api_v0_competition_wcif_lifecycle_path(competition, lifecycle_name: "public")
       response_json = response.parsed_body
       expect(response_json["persons"][0].keys).not_to include "email"
       expect(response_json["persons"][0].keys).not_to include "birthdate"
@@ -152,7 +154,7 @@ RSpec.describe "API Competitions" do
     it "returns people with accepted registrations only" do
       create(:registration, :cancelled, competition: competition)
       create(:registration, :pending, competition: competition)
-      get api_v0_competition_wcif_public_path(competition)
+      get api_v0_competition_wcif_lifecycle_path(competition, lifecycle_name: "public")
       response_json = response.parsed_body
       expect(response_json["persons"].length).to eq 2
       expect(response_json["persons"][0]["registration"]["status"]).to eq "accepted"
