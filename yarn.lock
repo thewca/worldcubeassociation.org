@@ -2923,23 +2923,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@stripe/react-stripe-js@npm:6.0.0"
+"@stripe/react-stripe-js@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "@stripe/react-stripe-js@npm:6.1.0"
   dependencies:
     prop-types: "npm:^15.7.2"
   peerDependencies:
     "@stripe/stripe-js": ">=9.0.0 <10.0.0"
     react: ">=16.8.0 <20.0.0"
     react-dom: ">=16.8.0 <20.0.0"
-  checksum: 10c0/a5637a70352bf105689870204fdb30a6bad57fea592c98b5ba099f7927b441237fa4109d55ed21a19ea922afd61f3caeb5c4594ad44ef69c8ef2e6a66563ed43
+  checksum: 10c0/863a6561a925d1906e50ae0dcea4f8195b189efc3279664d3d536c2187947053a039ed4fa463f811c880df8af9b2ac5d93ef60746c46a1195e186714a88f36a2
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "@stripe/stripe-js@npm:9.0.0"
-  checksum: 10c0/77692296dfd518df5430c080d02b9a310e59f0a0b9306faf6118c1b9262d0bf36e33a35b4ba753a9c63f26d85b3ed2fd8bf57c26904fadc11af2ea28a2b414e1
+"@stripe/stripe-js@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "@stripe/stripe-js@npm:9.0.1"
+  checksum: 10c0/3218471ca76d838a3369335a70726291a59cb407c74b228254098cb0cecf9c474e4465689e575b28d248ec9f09ab5c722d770503fd0b6f81aa421be93c01b7b3
   languageName: node
   linkType: hard
 
@@ -10619,8 +10619,8 @@ __metadata:
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.2"
     "@rails/actioncable": "npm:^8.1.300"
     "@rails/ujs": "npm:^7.1.600"
-    "@stripe/react-stripe-js": "npm:^6.0.0"
-    "@stripe/stripe-js": "npm:^9.0.0"
+    "@stripe/react-stripe-js": "npm:^6.1.0"
+    "@stripe/stripe-js": "npm:^9.0.1"
     "@tanstack/react-query": "npm:^5.95.2"
     "@tanstack/react-table": "npm:^8.21.3"
     "@wca/helpers": "npm:^1.1.7"
