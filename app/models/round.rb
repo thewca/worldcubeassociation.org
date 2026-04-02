@@ -149,7 +149,7 @@ class Round < ApplicationRecord
   end
 
   def live_podium
-    live_results.where(global_pos: 1..3)
+    linked_round.present? ? linked_round.merged_live_results.filter { it.global_pos.in? 1..3 } : live_results.where(global_pos: 1..3)
   end
 
   def previous_round
@@ -240,7 +240,7 @@ class Round < ApplicationRecord
     loaded_results = advancement_determining_results.includes(:live_attempts).to_a
     results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
 
-    advancement_determining_condition = final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
+    advancement_determining_condition = final_round? || linked_round&.final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
 
     advancing_ids = advancement_determining_condition.apply(results_with_potential)
     max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
