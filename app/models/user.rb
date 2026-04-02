@@ -1336,7 +1336,7 @@ class User < ApplicationRecord
     }.merge(authorized ? authorized_fields : {})
   end
 
-  def self.wcif_json_schema
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
     {
       "type" => "object",
       "properties" => {
@@ -1352,7 +1352,7 @@ class User < ApplicationRecord
         "roles" => { "type" => "array", "items" => { "type" => "string" } },
         "registration" => Registration.wcif_json_schema,
         "assignments" => { "type" => "array", "items" => Assignment.wcif_json_schema },
-        "personalBests" => { "type" => "array", "items" => PersonalBest.wcif_json_schema },
+        "personalBests" => { "type" => "array", "items" => PersonalBest.wcif_json_schema(version: version) },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }
