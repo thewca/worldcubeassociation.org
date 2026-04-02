@@ -2923,16 +2923,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:^5.6.1":
-  version: 5.6.1
-  resolution: "@stripe/react-stripe-js@npm:5.6.1"
+"@stripe/react-stripe-js@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@stripe/react-stripe-js@npm:6.0.0"
   dependencies:
     prop-types: "npm:^15.7.2"
   peerDependencies:
-    "@stripe/stripe-js": ">=8.0.0 <9.0.0"
+    "@stripe/stripe-js": ">=9.0.0 <10.0.0"
     react: ">=16.8.0 <20.0.0"
     react-dom: ">=16.8.0 <20.0.0"
-  checksum: 10c0/fad382094873e860f25c91f91b7d04e18852c1442da2845f7d61974862041cb7852324165fd08abfa8b1f2549dc4343bc4140bcea73d8b7416f699d6cecc9c36
+  checksum: 10c0/a5637a70352bf105689870204fdb30a6bad57fea592c98b5ba099f7927b441237fa4109d55ed21a19ea922afd61f3caeb5c4594ad44ef69c8ef2e6a66563ed43
   languageName: node
   linkType: hard
 
@@ -7974,7 +7974,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:^2.10.2, mini-css-extract-plugin@npm:^2.7.6":
+"mini-css-extract-plugin@npm:^2.10.2":
   version: 2.10.2
   resolution: "mini-css-extract-plugin@npm:2.10.2"
   dependencies:
@@ -7983,6 +7983,18 @@ __metadata:
   peerDependencies:
     webpack: ^5.0.0
   checksum: 10c0/ba58afb1c090be144b423a3621c4e0d09a9f8f4875410d3bc108915dfcf8e2fd6e550a7f3ba129eb07fd76599157650f86186b09f3ae2c34ccc5b50e82da0aa3
+  languageName: node
+  linkType: hard
+
+"mini-css-extract-plugin@npm:^2.7.6":
+  version: 2.10.1
+  resolution: "mini-css-extract-plugin@npm:2.10.1"
+  dependencies:
+    schema-utils: "npm:^4.0.0"
+    tapable: "npm:^2.2.1"
+  peerDependencies:
+    webpack: ^5.0.0
+  checksum: 10c0/2e90dacdca5bc35862e601e6b3989673e498217c789c4bb270a35bbd22b4d6e85f091795d0324d5cda5a9e2aa2a8f1f3340b6db5a96d66ec208c627659bebb08
   languageName: node
   linkType: hard
 
@@ -10619,7 +10631,7 @@ __metadata:
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.2"
     "@rails/actioncable": "npm:^8.1.300"
     "@rails/ujs": "npm:^7.1.600"
-    "@stripe/react-stripe-js": "npm:^5.6.1"
+    "@stripe/react-stripe-js": "npm:^6.0.0"
     "@stripe/stripe-js": "npm:^9.0.0"
     "@tanstack/react-query": "npm:^5.95.2"
     "@tanstack/react-table": "npm:^8.21.3"
