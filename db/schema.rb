@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_01_130110) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_02_100337) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1337,6 +1337,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_130110) do
   create_table "scrambles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", limit: 32, null: false
     t.string "event_id", limit: 6, null: false
+    t.bigint "external_scramble_id"
     t.string "group_id", limit: 3, null: false
     t.boolean "is_extra", null: false
     t.bigint "round_id", null: false
@@ -1344,6 +1345,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_130110) do
     t.text "scramble", null: false
     t.integer "scramble_num", null: false
     t.index ["competition_id", "event_id"], name: "competitionId"
+    t.index ["external_scramble_id"], name: "fk_rails_ec66de8ac5"
     t.index ["round_id"], name: "index_scrambles_on_round_id"
   end
 
@@ -1675,6 +1677,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_130110) do
   add_foreign_key "schedule_activities", "schedule_activities", column: "parent_activity_id"
   add_foreign_key "schedule_activities", "venue_rooms"
   add_foreign_key "scramble_file_uploads", "users", column: "uploaded_by"
+  add_foreign_key "scrambles", "external_scrambles", on_delete: :nullify
   add_foreign_key "scrambles", "rounds"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"

@@ -3,6 +3,7 @@
 class Scramble < ApplicationRecord
   belongs_to :competition
   belongs_to :round
+  belongs_to :external_scramble, optional: true
 
   validates :group_id, format: { presence: true, with: /\A[A-Z]+\Z/, message: "Invalid scramble group name" }
   validates :event_id, presence: true

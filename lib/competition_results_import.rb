@@ -119,6 +119,7 @@ module CompetitionResultsImport
             round_type_id: matched_scr_set.round_type_id,
             scramble: matched_scr.scramble_string,
             scramble_num: matched_scr.ordered_index + 1,
+            external_scramble_id: matched_scr.external_scramble_id,
           }
         end
       end
