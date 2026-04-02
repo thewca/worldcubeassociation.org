@@ -40,7 +40,8 @@ function ContactEditProfilePage({ loggedInUserId, recaptchaPublicKey }) {
   });
   const { loggedInUserPermissions, loading } = useLoggedInUserPermissions();
   const [inputWcaId, setInputWcaId] = useInputState();
-  const [contactResult, setContactResult] = useState({ success: false, ticketId: null });
+  const [contactSuccess, setContactSuccess] = useState(false);
+  const [ticketId, setTicketId] = useState();
 
   const wcaId = editOthersProfileMode ? inputWcaId : loggedInUserData?.data?.user?.wca_id;
 
@@ -68,13 +69,13 @@ function ContactEditProfilePage({ loggedInUserId, recaptchaPublicKey }) {
       </Message>
     );
   }
-  if (contactResult.success) {
-    if (loggedInUserPermissions.canRequestToEditOthersProfile && contactResult.ticketId) {
+  if (contactSuccess) {
+    if (loggedInUserPermissions.canRequestToEditOthersProfile && ticketId) {
       return (
         <Message success>
           <I18nHTMLTranslate
             i18nKey="page.contact_edit_profile.success_message_with_ticket_link_html"
-            options={{ link: viewUrls.tickets.show(contactResult.ticketId) }}
+            options={{ link: viewUrls.tickets.show(ticketId) }}
           />
         </Message>
       );
@@ -103,7 +104,10 @@ function ContactEditProfilePage({ loggedInUserId, recaptchaPublicKey }) {
       {wcaId && (
         <EditProfileForm
           wcaId={wcaId}
-          onContactSuccess={(res) => setContactResult({ success: true, ticketId: res?.ticket_id })}
+          onContactSuccess={(res) => {
+            setContactSuccess(true);
+            setTicketId(res?.ticket_id);
+          }}
           recaptchaPublicKey={recaptchaPublicKey}
         />
       )}
