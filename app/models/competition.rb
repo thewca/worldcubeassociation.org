@@ -1935,7 +1935,7 @@ class Competition < ApplicationRecord
 
     ActiveRecord::Base.transaction do
       set_wcif_series!(wcif["series"], current_user) if wcif["series"]
-      set_wcif_events!(wcif["events"], current_user) if wcif["events"]
+      set_wcif_events!(wcif["events"], current_user, version: wcif["formatVersion"]) if wcif["events"]
       set_wcif_schedule!(wcif["schedule"]) if wcif["schedule"]
       update_persons_wcif!(wcif["persons"]) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
@@ -1980,7 +1980,7 @@ class Competition < ApplicationRecord
     self.competition_series = competition_series
   end
 
-  def set_wcif_events!(wcif_events, current_user)
+  def set_wcif_events!(wcif_events, current_user, version: WCIF_STABLE_VERSION)
     # Remove extra events.
     competition_events_includes_assotiations = [
       { rounds: %i[competition_event wcif_extensions] },
@@ -2012,7 +2012,7 @@ class Competition < ApplicationRecord
       next unless event_to_be_updated
       raise WcaExceptions::BadApiParameter.new("Cannot update events") unless current_user.can_update_events?(self)
 
-      competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event)
+      competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event, version: version)
     end
 
     reload

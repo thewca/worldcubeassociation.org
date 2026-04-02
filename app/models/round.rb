@@ -380,16 +380,47 @@ class Round < ApplicationRecord
     ScheduleActivity.parse_activity_code(wcif_id)
   end
 
-  def self.wcif_to_round_attributes(event, wcif, round_number, total_rounds)
+  def self.load_wcif_advancement_condition(wcif_round, all_wcif_rounds, version: Competition::WCIF_STABLE_VERSION)
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      round_number = self.parse_wcif_id(wcif_round["id"])[:round_number]
+
+      return nil if round_number == all_wcif_rounds.size
+
+      if wcif_round["linkedRounds"].present?
+        last_round_id = wcif_round["linkedRounds"].max_by { self.parse_wcif_id(it)[:round_number] }
+
+        if wcif_round["id"] != last_round_id
+          # Basically faking because our current V1 store does not support dual round advancement.
+          # These will be skipped when re-serializing into WCIF v2
+          return AdvancementConditions::PercentCondition.new(100)
+        end
+      end
+
+      # This call is safe because we have an "if this is last round" guard clause above already
+      next_wcif_round = all_wcif_rounds[round_number] # WCIF numbers are 1-based, so no +1 necessary
+      next_participation_condition = next_wcif_round.dig("participationRuleset", "participationSource", "resultCondition")
+
+      backported_wcif_v1 = {
+        "type" => next_participation_condition["type"].gsub('resultAchieved', 'attemptResult'),
+        "level" => next_participation_condition["value"],
+      }
+
+      AdvancementConditions::AdvancementCondition.load(backported_wcif_v1)
+    else
+      AdvancementConditions::AdvancementCondition.load(wcif_round["advancementCondition"])
+    end
+  end
+
+  def self.wcif_to_round_attributes(event, wcif_round, all_wcif_rounds, version: Competition::WCIF_STABLE_VERSION)
     {
-      number: round_number,
-      total_number_of_rounds: total_rounds,
-      format_id: wcif["format"],
-      time_limit: event.can_change_time_limit? ? TimeLimit.load(wcif["timeLimit"]) : nil,
-      cutoff: Cutoff.load(wcif["cutoff"]),
-      advancement_condition: AdvancementConditions::AdvancementCondition.load(wcif["advancementCondition"]),
-      scramble_set_count: wcif["scrambleSetCount"],
-      round_results: RoundResults.load(wcif["results"]),
+      number: self.parse_wcif_id(wcif_round["id"])[:round_number],
+      total_number_of_rounds: all_wcif_rounds.size,
+      format_id: wcif_round["format"],
+      time_limit: event.can_change_time_limit? ? TimeLimit.load(wcif_round["timeLimit"]) : nil,
+      cutoff: Cutoff.load(wcif_round["cutoff"]),
+      advancement_condition: self.load_wcif_advancement_condition(wcif_round, all_wcif_rounds, version: version),
+      scramble_set_count: wcif_round["scrambleSetCount"],
+      round_results: RoundResults.load(wcif_round["results"]),
     }
   end
 
