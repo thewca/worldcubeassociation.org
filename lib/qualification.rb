@@ -40,6 +40,26 @@ class Qualification
     end
   end
 
+  def self.load_wcif(json, version: Competition::WCIF_STABLE_VERSION)
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      json_obj = json.is_a?(Hash) ? json : JSON.parse(json)
+      result_condition = json_obj['resultCondition']
+
+      v2_wcif_type = result_condition['type']
+      v1_wcif_type = result_condition['value'].present? ? v2_wcif_type.gsub('resultAchieved', 'attemptResult') : v2_wcif_type.gsub('resultAchieved', 'anyResult')
+
+      Qualification.new(
+        wcif_type: v1_wcif_type,
+        result_type: json_obj['scope'],
+        level: result_condition['value'],
+      ).tap do |qualification|
+        qualification.when_date = Date.iso8601(json_obj['latestResultDate']) if json_obj['latestResultDate'].present?
+      end
+    else
+      self.load(json)
+    end
+  end
+
   def can_register?(user, event_id)
     return false if user.person.nil?
 

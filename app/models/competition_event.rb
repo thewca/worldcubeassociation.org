@@ -65,7 +65,7 @@ class CompetitionEvent < ApplicationRecord
     }
   end
 
-  def load_wcif!(wcif)
+  def load_wcif!(wcif, version: Competition::WCIF_STABLE_VERSION)
     if self.rounds.pluck(:old_type).compact.any?
       raise WcaExceptions::BadApiParameter.new(
         "Cannot edit rounds for a competition which has qualification rounds or b-finals. Please contact WRT or WST if you need to make change to this competition.",
@@ -73,7 +73,7 @@ class CompetitionEvent < ApplicationRecord
     end
     model_rounds = wcif["rounds"].map do |round_wcif|
       round = rounds.find { it.wcif_id == round_wcif["id"] } || rounds.build
-      round.update!(**Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"]))
+      round.update!(**Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"], version: version))
       WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
       round
     end
@@ -83,7 +83,7 @@ class CompetitionEvent < ApplicationRecord
       round.update!(**Round.wcif_backlinking(round, model_rounds))
       round
     end
-    wcif_qualification = Qualification.load(wcif["qualification"])
+    wcif_qualification = Qualification.load_wcif(wcif["qualification"], version: version)
     self.update!(
       rounds: new_rounds,
       qualification: wcif_qualification,
