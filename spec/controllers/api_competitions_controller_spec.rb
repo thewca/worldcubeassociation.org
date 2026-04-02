@@ -303,6 +303,23 @@ RSpec.describe Api::V0::CompetitionsController do
       expect(parsed_body["error"]).to eq "Competition with id #{competition.id} not found"
     end
 
+    context 'not signed in' do
+      it '404s on hidden competition' do
+        get :show_wcif, params: { competition_id: hidden_competition.id }
+        expect(response).to have_http_status :not_found
+      end
+
+      it 'get wcif' do
+        get :show_wcif, params: { competition_id: "TestComp2014" }
+        expect(response).to have_http_status :ok
+        parsed_body = response.parsed_body
+        expect(parsed_body["id"]).to eq "TestComp2014"
+        expect(parsed_body["formatVersion"]).to eq Competition::WCIF_STABLE_VERSION
+        expect(parsed_body["persons"][0].keys).not_to include "email"
+        expect(parsed_body["persons"][0].keys).not_to include "birthdate"
+      end
+    end
+
     context 'signed in without manage_competitions scope' do
       let(:delegate) { competition.delegates.first }
 
@@ -320,6 +337,7 @@ RSpec.describe Api::V0::CompetitionsController do
         expect(response).to have_http_status :ok
         parsed_body = response.parsed_body
         expect(parsed_body["id"]).to eq "TestComp2014"
+        expect(parsed_body["formatVersion"]).to eq Competition::WCIF_STABLE_VERSION
         expect(parsed_body["persons"][0].keys).not_to include "email"
         expect(parsed_body["persons"][0].keys).not_to include "birthdate"
       end
@@ -346,6 +364,7 @@ RSpec.describe Api::V0::CompetitionsController do
         expect(response).to have_http_status :ok
         parsed_body = response.parsed_body
         expect(parsed_body["id"]).to eq "TestComp2014"
+        expect(parsed_body["formatVersion"]).to eq Competition::WCIF_STABLE_VERSION
         expect(parsed_body["persons"][0].keys).to include "email"
         expect(parsed_body["persons"][0].keys).to include "birthdate"
       end

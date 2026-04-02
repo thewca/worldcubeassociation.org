@@ -92,6 +92,46 @@ RSpec.describe "API Competitions" do
   describe "GET #show_wcif" do
     let!(:competition) { create(:competition, :visible) }
 
+    context "versioned access" do
+      it "returns stable version by default" do
+        get api_v0_competition_wcif_path(competition)
+        expect(response).to have_http_status(:ok)
+        response_json = response.parsed_body
+        expect(response_json["formatVersion"]).to eq Competition::WCIF_STABLE_VERSION
+      end
+
+      it "resolves lifecycle tags" do
+        get api_v0_competition_wcif_lifecycle_path(competition, "latest")
+        expect(response).to have_http_status(:ok)
+        response_json = response.parsed_body
+        expect(response_json["formatVersion"]).to eq Competition::WCIF_VERSION_CATALOGUE[:latest]
+      end
+
+      it "complains about non-existent lifecycle tag" do
+        get api_v0_competition_wcif_lifecycle_path(competition, "newest")
+        expect(response).to have_http_status(:bad_request)
+      end
+
+      it "gives newest major version" do
+        get api_v0_competition_wcif_version_path(competition, "1")
+        expect(response).to have_http_status(:ok)
+        response_json = response.parsed_body
+        expect(response_json["formatVersion"]).to eq "1.1"
+      end
+
+      it "gives specific SemVer version" do
+        get api_v0_competition_wcif_version_path(competition, "1.1")
+        expect(response).to have_http_status(:ok)
+        response_json = response.parsed_body
+        expect(response_json["formatVersion"]).to eq "1.1"
+      end
+
+      it "complains about non-existent version" do
+        get api_v0_competition_wcif_version_path(competition, "3")
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
     context "when not signed in" do
       it "allows access without confidential information" do
         get api_v0_competition_wcif_path(competition)
