@@ -13,7 +13,6 @@ module CompetitionResultsImport
 
     results_to_import = temporary_results_data[:results_to_import]
     scramble_sets_to_import = temporary_results_data[:scramble_sets_to_import]
-    scrambles_to_import = temporary_results_data[:scrambles_to_import]
     persons_to_import = temporary_results_data[:persons_to_import]
 
     ActiveRecord::Base.transaction do
@@ -35,8 +34,10 @@ module CompetitionResultsImport
                                          .matched_scramble_sets
                                          .index_by { it.import_index }
 
+        scrambles_to_import = scramble_sets_to_import.flat_map { it.matched_scrambles }
+
         scrambles_to_import.each do |scramble|
-          inserted_scramble_set = scramble_set_lookup.fetch(scramble.import_index)
+          inserted_scramble_set = scramble_set_lookup.fetch(scramble.matched_scramble_set.import_index)
           scramble.matched_scramble_set = inserted_scramble_set
         end
 

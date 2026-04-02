@@ -50,7 +50,6 @@ class UploadJson
     end
     results_to_import = []
     scramble_sets_to_import = []
-    scrambles_to_import = []
     parsed_json["events"].each do |event|
       competition_event = competition.competition_events.find { |ce| ce.event_id == event["eventId"] }
       event["rounds"].each do |round|
@@ -100,7 +99,6 @@ class UploadJson
           }
           new_scr_set = MatchedScrambleSet.new(new_scramble_set_attributes)
           new_scr_set.round = competition_round
-          scramble_sets_to_import << new_scr_set
           %w[scrambles extraScrambles].each do |scramble_type|
             group[scramble_type]&.each_with_index do |scramble, scr_index|
               new_scramble_attributes = {
@@ -108,16 +106,16 @@ class UploadJson
                 is_extra: scramble_type == "extraScrambles",
                 ordered_index: scr_index,
               }
-              scrambles_to_import << new_scr_set.matched_scrambles.build(new_scramble_attributes)
+              new_scr_set.matched_scrambles.build(new_scramble_attributes)
             end
           end
+          scramble_sets_to_import << new_scr_set
         end
       end
     end
     {
       results_to_import: results_to_import,
       scramble_sets_to_import: scramble_sets_to_import,
-      scrambles_to_import: scrambles_to_import,
       persons_to_import: persons_to_import,
     }
   end
