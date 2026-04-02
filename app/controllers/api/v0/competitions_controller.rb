@@ -216,6 +216,39 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render_wcif(competition, version: lifecycle_version)
   end
 
+  def show_wcif_by_version
+    competition = competition_from_params
+
+    version_number = params.require(:version_number)
+    user_version = Gem::Version.new(version_number)
+
+    available_versions = Competition::WCIF_VERSION_CATALOGUE.values
+                                                            .map { Gem::Version.new(it) }
+
+    # The idea behind this loop is: Find all pre-defined version numbers
+    #   that "match" the user's desired version by prefix:
+    # - If the user passes just "2", then any version like `2.0.0` or `2.1.1` or `2.6` match
+    # - If the user passes "2.1", then any version like `2.1` or `2.1.3` match
+    # - If the user passes "2.1.7", then only that specific version matches
+    matching_versions = available_versions.select do |version|
+      version.segments.take(user_version.segments.size) == user_version.segments
+    end
+
+    if matching_versions.empty?
+      return render json: {
+        message: "invalid version number '#{version_number}'",
+        valid_version_numbers: Competition::WCIF_VERSION_CATALOGUE.values.uniq,
+        highest_version_number: available_versions.max.to_s,
+        stable_version_number: Competition::WCIF_STABLE_VERSION,
+      }, status: :bad_request
+    end
+
+    # Pick the highest version number that satisfies what the user requested
+    best_version = matching_versions.max.to_s
+
+    render_wcif(competition, version: best_version)
+  end
+
   def update_wcif
     competition = competition_from_params
     require_can_manage!(competition)
