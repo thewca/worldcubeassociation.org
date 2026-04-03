@@ -47,7 +47,7 @@ export default function TabMenu({
     <Tabs.Root
       variant="enclosed"
       width="full"
-      defaultValue={currentPath}
+      value={currentPath}
       orientation="vertical"
       lazyMount
       unmountOnExit
