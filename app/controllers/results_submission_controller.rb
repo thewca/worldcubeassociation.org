@@ -157,11 +157,12 @@ class ResultsSubmissionController < ApplicationController
                                                      })
     end
 
+    scramble_sets_to_import = competition.matched_scramble_sets
+
     temporary_results_data = {
       results_to_import: results_to_import,
+      scramble_sets_to_import: scramble_sets_to_import,
       persons_to_import: persons_to_import,
-      # don't need to import any scrambles because WCA Live import
-      #   requires use of our integrated scrambles matcher which handles matched_scrambles.
     }
 
     mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))
@@ -178,6 +179,7 @@ class ResultsSubmissionController < ApplicationController
       # It is intentional and desired that WRT (who have admin power to view DOBs anyway)
       #   can reconstruct personal information from the moment the upload happened.
       results_json_str: competition.to_wcif(authorized: true).to_json,
+      import_matched_scrambles: false,
     )
 
     return render status: :unprocessable_content, json: { error: errors } if errors.any?
