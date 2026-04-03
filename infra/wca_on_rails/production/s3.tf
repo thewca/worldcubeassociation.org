@@ -43,6 +43,13 @@ resource "aws_s3_bucket" "assets" {
   }
 }
 
+resource "aws_s3_bucket" "exports" {
+  bucket = "exports.worldcubeassociation.org"
+  tags = {
+    "Name" = "exports.worldcubeassociation.org"
+  }
+}
+
 resource "aws_s3_bucket" "avatars_private" {
   bucket = "wca-avatar-private"
   tags = {
