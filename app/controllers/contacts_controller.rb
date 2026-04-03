@@ -124,28 +124,24 @@ class ContactsController < ApplicationController
                                 )
                               end
 
-    contact_object = ContactEditProfile.new(
-      your_email: current_user&.email,
-      name: profile_to_edit[:name],
-      wca_id: wca_id,
-      changes_requested: changes_requested,
-      edit_profile_reason: edit_profile_reason,
-      requestor_user: current_user,
-      ticket: ticket,
-      document: attachment,
-      request: request,
-    )
-
-    unless contact_object.valid?
-      return render status: :bad_request, json: {
-        error: contact_object.errors.full_messages.presence&.join(". ") || "Invalid contact object created",
-      }
+    begin
+      ticket = TicketsEditPerson.create_ticket(wca_id, changes_requested, current_user, attachment)
+    rescue WcaExceptions::ApiException => e
+      return render status: e.status, json: { error: e.message }
     end
 
-    ticket = TicketsEditPerson.create_ticket(wca_id, changes_requested, current_user)
-
     maybe_send_contact_email(
-      contact_object,
+      ContactEditProfile.new(
+        your_email: current_user&.email,
+        name: profile_to_edit[:name],
+        wca_id: wca_id,
+        changes_requested: changes_requested,
+        edit_profile_reason: edit_profile_reason,
+        requestor_user: current_user,
+        ticket: ticket,
+        document: attachment,
+        request: request,
+      ),
       force_locale: CONTACT_DEFAULT_LOCALE,
       ticket: ticket,
     )

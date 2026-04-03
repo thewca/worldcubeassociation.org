@@ -45,8 +45,10 @@ class TicketsEditPerson < ApplicationRecord
     ]
   end
 
-  def self.create_ticket(wca_id, changes_requested, requester)
+  def self.create_ticket(wca_id, changes_requested, requester, attachment = nil)
     ActiveRecord::Base.transaction do
+      check_attachment_requirement(attachment, changes_requested, requester)
+
       ticket_metadata = TicketsEditPerson.create!(
         status: TicketsEditPerson.statuses[:open],
         wca_id: wca_id,
@@ -86,6 +88,32 @@ class TicketsEditPerson < ApplicationRecord
       )
 
       return ticket
+    end
+  end
+
+  def self.check_attachment_requirement(attachment, changes_requested, requester)
+    return if attachment.present?
+
+    # Requests from Delegates do not require proof attachment.
+    return if requester.any_kind_of_delegate?
+
+    errors = []
+    changes_requested.each do |change|
+      case change[:field]
+      when :name
+        old_last_name = FinishUnfinishedPersons.last_name_with_suffix(change[:from])
+        new_last_name = FinishUnfinishedPersons.last_name_with_suffix(change[:to])
+
+        errors << "Proof attachment is required if last name is changed." if old_last_name != new_last_name
+      when :country_iso2
+        errors << "Proof attachment is required if country is changed."
+      when :dob
+        errors << "Proof attachment is required if date of birth is changed."
+      end
+    end
+
+    if errors.any?
+      raise WcaExceptions::ApiException.new(:bad_request, errors.join("\n"))
     end
   end
 
