@@ -213,10 +213,19 @@ es-ES:
     #original_hash: 17dae1e
     attempt_name: 'Intento %{number}'
   round:
+    #original_hash: ceeac4a
+    title: Rondas
     #original_hash: 236c41d
     name: '%{round_name} de %{event_name}'
     #original_hash: 747df5a
     round_number: 'Ronda %{round_number}'
+  scramble_set:
+    #original_hash: ba18ca7
+    name: 'Set de mezclas %{letter_code}'
+    #original_hash: d46fe75
+    group: 'Grupo %{number}'
+    #original_hash: 17dae1e
+    attempt: 'Intento %{number}'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -3455,6 +3464,8 @@ es-ES:
           organizer_ids: Organizador(es)
           #original_hash: b37456c
           contact: Contacto
+          #original_hash: 78ef126
+          lead_delegate_id: Delegado responsable
         #original_hash: 991f419
         championships: Campeonatos
         website:
@@ -3687,6 +3698,11 @@ es-ES:
             enviarán a través de un formulario sin revelar los correos
             electrónicos de los organizadores. %{md}. Por ejemplo: [Texto a
             mostrar](mailto:algun@correo.es)
+          #original_hash: 7a51d00
+          lead_delegate_id: >-
+            El Delegado responsable es responsable de los aspectos
+            administrativos de una competición (Resultados, Informe, pago de la
+            Cuota)
         website:
           #original_hash: da39a3e
           generate_website: ''
