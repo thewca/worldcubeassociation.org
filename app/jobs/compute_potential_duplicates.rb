@@ -8,23 +8,19 @@ class ComputePotentialDuplicates < ApplicationJob
     job.update!(run_status: DuplicateCheckerJobRun.run_statuses[:in_progress])
 
     job.competition.accepted_newcomers.each do |user|
-      matches = PotentialDuplicatePerson.name_matching_algorithms.keys.flat_map do |algorithm|
-        find_duplicates(algorithm, user, persons_cache).map do |person_id, score|
-          {
+      PotentialDuplicatePerson.name_matching_algorithms.each_key do |algorithm|
+        duplicates = find_duplicates(algorithm, user, persons_cache)
+
+        duplicates.each do |person_id, score|
+          PotentialDuplicatePerson.create!(
             duplicate_checker_job_run_id: job.id,
             original_user_id: user.id,
             duplicate_person_id: person_id,
             name_matching_algorithm: PotentialDuplicatePerson.name_matching_algorithms[algorithm],
             score: score,
-          }
+          )
         end
       end
-
-      best_matches = matches
-                     .group_by { |match| match[:duplicate_person_id] }
-                     .map { |_, person_matches| person_matches.max_by { |m| m[:score] } }
-
-      PotentialDuplicatePerson.create!(best_matches) if best_matches.any?
     end
 
     job.touch(:end_time)
