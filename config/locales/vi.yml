@@ -752,10 +752,10 @@ vi:
         dob: Nhập ngày sinh của thí sinh theo định dạng YYYY-MM-DD.
         #original_hash: ac908c9
         name: >-
-          Nhập chính xác họ tên đầy đủ của thí sinh, ví dụ: <strong>Stefan
-          Pochmann</strong>. Không nhập cẩu thả, ví dụ: <strong>s
-          pochman</strong>.<br/>Không bắt buộc nhập tên đệm (đầy đủ hoặc viết
-          tắt).
+          Nhập chính xác họ tên đầy đủ của thí sinh, ví dụ: <strong>Nguyễn Văn
+          A</strong>. Không nhập cẩu thả như <strong>nguyen van a</strong> hay
+          <strong>NGUYEN VAN A</strong>.<br/>Không bắt buộc nhập tên đệm (đầy đủ
+          hoặc viết tắt).
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
