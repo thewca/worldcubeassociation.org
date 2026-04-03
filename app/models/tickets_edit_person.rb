@@ -112,9 +112,7 @@ class TicketsEditPerson < ApplicationRecord
       end
     end
 
-    if errors.any?
-      raise WcaExceptions::ApiException.new(:bad_request, errors.join("\n"))
-    end
+    raise WcaExceptions::ApiException.new(:bad_request, errors.join("\n")) if errors.any?
   end
 
   def out_of_sync?
