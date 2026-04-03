@@ -32,7 +32,7 @@ locals {
     },
     {
       name  = "DUMP_HOST"
-      value = "https://assets.worldcubeassociation.org"
+      value = "https://exports.worldcubeassociation.org"
     },
     {
       name  = "SHAKAPACKER_ASSET_HOST"
@@ -103,8 +103,8 @@ locals {
       value = "ELNTWW0SE1ZJ"
     },
     {
-      name = "CDN_ASSETS_DISTRIBUTION_ID"
-      value = "E27W5ACWLMQE3C"
+      name = "CDN_EXPORTS_DISTRIBUTION_ID"
+      value = "E1752JAESQHVEE"
     },
     {
       name = "WCA_REGISTRATIONS_URL"
@@ -229,8 +229,8 @@ data "aws_iam_policy_document" "task_policy" {
                   "${aws_s3_bucket.documents.arn}/*",
                   aws_s3_bucket.regulations.arn,
                   "${aws_s3_bucket.regulations.arn}/*",
-                  aws_s3_bucket.assets.arn,
-                  "${aws_s3_bucket.assets.arn}/*",
+                  aws_s3_bucket.exports.arn,
+                  "${aws_s3_bucket.exports.arn}/*",
                     aws_s3_bucket.avatars_private.arn,
                   "${aws_s3_bucket.avatars_private.arn}/*",]
     }
