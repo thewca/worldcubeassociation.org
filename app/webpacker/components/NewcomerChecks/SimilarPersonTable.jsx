@@ -1,6 +1,7 @@
 import React from 'react';
+import _ from 'lodash';
 import {
-  Button, Icon, Popup, Table,
+  Button, Icon, List, Popup, Table,
 } from 'semantic-ui-react';
 import { personUrl } from '../../lib/requests/routes.js.erb';
 
@@ -8,6 +9,20 @@ export default function SimilarPersonTable({
   potentialDuplicates, editUser, mergePotentialDuplicate,
 }) {
   const originalUser = potentialDuplicates[0].original_user;
+
+  const displayDuplicates = _.chain(potentialDuplicates)
+    .groupBy('duplicate_person.id')
+    .map((group) => {
+      const highestScoreItem = _.maxBy(group, 'score');
+      return {
+        ...highestScoreItem,
+        allScores: group.map((item) => ({
+          score: item.score,
+          algorithm: item.name_matching_algorithm,
+        })),
+      };
+    })
+    .value();
 
   return (
     <Table celled>
@@ -34,11 +49,12 @@ export default function SimilarPersonTable({
             </Button>
           </Table.Cell>
         </Table.Row>
-        {potentialDuplicates.map((potentialDuplicatePerson) => {
+        {displayDuplicates.map((potentialDuplicatePerson) => {
           const {
             duplicate_person: duplicatePerson,
             score,
             name_matching_algorithm: nameMatchingAlgorithm,
+            allScores,
           } = potentialDuplicatePerson;
           const exactSameDetails = (
             originalUser.name === duplicatePerson.name
@@ -47,7 +63,7 @@ export default function SimilarPersonTable({
                   && originalUser.gender === duplicatePerson.gender
           );
           return (
-            <Table.Row negative={exactSameDetails}>
+            <Table.Row key={duplicatePerson.id} negative={exactSameDetails}>
               <Table.Cell>{duplicatePerson.name}</Table.Cell>
               <Table.Cell>{duplicatePerson.country.name}</Table.Cell>
               <Table.Cell>{duplicatePerson.dob}</Table.Cell>
@@ -61,7 +77,21 @@ export default function SimilarPersonTable({
                 {' '}
                 <Popup
                   trigger={<Icon name="info circle" />}
-                  content={`Computed using ${nameMatchingAlgorithm} algorithm`}
+                  header={allScores.length > 1 ? 'Scores from Multiple Algorithms' : 'Matching Algorithm'}
+                  content={allScores.length > 1 ? (
+                    <List bulleted>
+                      {allScores.map((s) => (
+                        <List.Item key={s.algorithm}>
+                          <strong>{s.algorithm}</strong>
+                          :
+                          {' '}
+                          {s.score}
+                        </List.Item>
+                      ))}
+                    </List>
+                  ) : (
+                    `Computed using ${nameMatchingAlgorithm} algorithm.`
+                  )}
                 />
               </Table.Cell>
               <Table.Cell>
