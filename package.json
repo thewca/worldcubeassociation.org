@@ -26,11 +26,11 @@
     "@fullcalendar/react": "^6.1.20",
     "@fullcalendar/timegrid": "^6.1.20",
     "@hello-pangea/dnd": "^18.0.1",
-    "@rails/actioncable": "^8.1.200",
+    "@rails/actioncable": "^8.1.300",
     "@rails/ujs": "^7.1.600",
-    "@stripe/react-stripe-js": "^5.6.1",
-    "@stripe/stripe-js": "^8.11.0",
-    "@tanstack/react-query": "^5.95.0",
+    "@stripe/react-stripe-js": "^6.1.0",
+    "@stripe/stripe-js": "^9.0.1",
+    "@tanstack/react-query": "^5.95.2",
     "@tanstack/react-table": "^8.21.3",
     "@wca/helpers": "^1.1.7",
     "autonumeric": "^4.10.9",
@@ -61,10 +61,10 @@
     "js-yaml": "^4.1.1",
     "leaflet": "^1.9.4",
     "leaflet-geosearch": "^4.4.0",
-    "lodash": "^4.17.23",
+    "lodash": "^4.18.1",
     "luxon": "^3.7.2",
     "make-plural": "^8.1.0",
-    "mini-css-extract-plugin": "^2.10.1",
+    "mini-css-extract-plugin": "^2.10.2",
     "path-complete-extname": "^1.0.0",
     "pnp-webpack-plugin": "^1.7.0",
     "postcss": "^8.5.8",
@@ -120,15 +120,15 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "jshint": "^2.13.6",
     "react-refresh": "^0.18.0",
-    "stylelint": "^17.5.0",
+    "stylelint": "^17.6.0",
     "stylelint-config-recommended-scss": "^17.0.0",
     "stylelint-scss": "^7.0.0",
-    "webpack-bundle-analyzer": "^5.2.0",
+    "webpack-bundle-analyzer": "^5.3.0",
     "webpack-dev-server": "^5.2.3"
   },
   "scripts": {
     "lint": "eslint -c .eslintrc.json app/webpacker/components/**/*.js app/webpacker/components/**/*.jsx app/webpacker/lib/**/*.js",
     "webpack:analyze": "mkdir -p public/packs && RACK_ENV=test NODE_ENV=production webpack --config config/webpack/webpack.config.js --profile --json > public/packs/stats.json && webpack-bundle-analyzer public/packs/stats.json"
   },
-  "packageManager": "yarn@4.12.0"
+  "packageManager": "yarn@4.13.0"
 }

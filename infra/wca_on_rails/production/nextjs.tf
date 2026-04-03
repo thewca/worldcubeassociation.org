@@ -34,6 +34,10 @@ locals {
       value = "https://www.worldcubeassociation.org/"
     },
     {
+      name = "NEW_RELIC_APP_NAME"
+      value = "next-js-production"
+    },
+    {
       name  = "DATABASE_URI"
       value = "mongodb://payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017/payload?retryWrites=false"
     },

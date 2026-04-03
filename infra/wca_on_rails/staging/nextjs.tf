@@ -33,6 +33,10 @@ locals {
       value = "https://staging.worldcubeassociation.org/"
     },
     {
+      name = "NEW_RELIC_APP_NAME"
+      value = "next-js-staging"
+    },
+    {
       name  = "DATABASE_URI"
       value = "mongodb://payload-database-staging.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com/payload?retryWrites=false"
     },

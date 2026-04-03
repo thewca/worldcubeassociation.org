@@ -44,11 +44,11 @@ locals {
     },
     {
       name = "DATABASE_HOST"
-      value = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = "prod-db-rails.internal.worldcubeassociation.org"
     },
     {
       name = "READ_REPLICA_HOST"
-      value = "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = "prod-db-rails-read-replica.internal.worldcubeassociation.org"
     },
     {
       name = "DEV_DUMP_HOST"
@@ -243,6 +243,7 @@ data "aws_iam_policy_document" "task_policy" {
     ]
     resources = [
       "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_dev_dump_identifier}/${var.DATABASE_WRT_USER}",
+      "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_dev_dump_identifier}/${var.DATABASE_WRT_SENIOR_USER}",
       "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_read_replica_identifier}/${var.DATABASE_WRT_SENIOR_USER}",
       "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_SENIOR_USER}"]
   }

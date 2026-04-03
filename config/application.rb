@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'boot'
-require_relative 'locales/locales'
+require_relative '../lib/available_locales'
 
 require 'rails/all'
 
@@ -69,7 +69,7 @@ module WcaOnRails
                        end
 
     # Setup available locales
-    I18n.available_locales = Locales::AVAILABLE.keys
+    I18n.available_locales = AvailableLocales::ALL.keys
 
     # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
     # the I18n.default_locale when a translation cannot be found).

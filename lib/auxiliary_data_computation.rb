@@ -42,6 +42,17 @@ module AuxiliaryDataComputation
           continent_id = rrl.continent_id,
           reg_year = rrl.competition_reg_year
       SQL
+
+      # If somebody had a result > 0 in previous CAD runs, but was later penalized,
+      #   the "old" row will still stick around. This statement cleans them up.
+      ActiveRecord::Base.connection.execute <<~SQL.squish
+        DELETE concise_results
+        FROM #{table_name} concise_results
+        LEFT JOIN regional_records_lookup rrl
+          ON concise_results.result_id = rrl.result_id
+            AND rrl.#{field} > 0
+        WHERE rrl.result_id IS NULL;
+      SQL
     end
   end
 

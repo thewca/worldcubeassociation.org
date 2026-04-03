@@ -15,7 +15,7 @@ class Round < ApplicationRecord
 
   has_many :registrations, through: :competition_event
 
-  has_many :matched_scramble_sets, -> { order(:ordered_index) }, class_name: 'InboxScrambleSet', foreign_key: "matched_round_id", inverse_of: :matched_round, dependent: :nullify
+  has_many :matched_scramble_sets, dependent: :delete_all
 
   # For the following association, we want to keep it to be able to do some joins,
   # but we definitely want to use cached values when directly using the method.
@@ -49,6 +49,8 @@ class Round < ApplicationRecord
   has_many :live_competitors, through: :live_results, source: :registration
   has_many :results
   has_many :scrambles
+
+  has_many :sibling_rounds, through: :competition_event, source: :rounds
 
   MAX_NUMBER = 4
   validates :number,
@@ -147,13 +149,17 @@ class Round < ApplicationRecord
   end
 
   def live_podium
-    live_results.where(global_pos: 1..3)
+    linked_round.present? ? linked_round.merged_live_results.filter { it.global_pos.in? 1..3 } : live_results.where(global_pos: 1..3)
   end
 
   def previous_round
     return nil if number == 1
 
-    Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
+    if sibling_rounds.loaded?
+      sibling_rounds.find { it.number == self.number - 1 }
+    else
+      sibling_rounds.find_by(number: number - 1)
+    end
   end
 
   def consider_previous_round_results?
@@ -212,7 +218,7 @@ class Round < ApplicationRecord
   end
 
   def total_competitors
-    live_competitors.count
+    live_results.size
   end
 
   def recompute_live_columns(skip_advancing: false)
@@ -234,7 +240,7 @@ class Round < ApplicationRecord
     loaded_results = advancement_determining_results.includes(:live_attempts).to_a
     results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
 
-    advancement_determining_condition = final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
+    advancement_determining_condition = final_round? || linked_round&.final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
 
     advancing_ids = advancement_determining_condition.apply(results_with_potential)
     max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
@@ -319,7 +325,11 @@ class Round < ApplicationRecord
   end
 
   def competitors_live_results_entered
-    live_results.not_empty.count
+    if live_results.loaded?
+      live_results.count(&:not_empty?)
+    else
+      live_results.not_empty.count
+    end
   end
 
   def score_taking_done?
@@ -495,7 +505,7 @@ class Round < ApplicationRecord
     }
   end
 
-  def to_wcif
+  def to_wcif(include_results: true)
     {
       "id" => wcif_id,
       "format" => self.format_id,
@@ -503,14 +513,14 @@ class Round < ApplicationRecord
       "cutoff" => cutoff&.to_wcif,
       "advancementCondition" => advancement_condition&.to_wcif,
       "scrambleSetCount" => self.scramble_set_count,
-      "results" => round_results.map(&:to_wcif),
+      "results" => include_results ? round_results.map(&:to_wcif) : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
   end
 
   def to_live_results_json(only_podiums: false)
     {
-      **self.to_wcif,
+      **self.to_wcif(include_results: false).compact_blank,
       "round_id" => id,
       "competitors" => live_competitors.includes(:user).map(&:to_live_json),
       "results" => only_podiums ? live_podium : live_results,
@@ -522,7 +532,7 @@ class Round < ApplicationRecord
   def to_live_info_json
     state = lifecycle_state
     json = {
-      **self.to_wcif,
+      **self.to_wcif(include_results: false).compact_blank,
       "state" => state,
     }
     if [STATE_OPEN, STATE_LOCKED].include?(state)

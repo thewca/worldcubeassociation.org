@@ -572,7 +572,7 @@ RSpec.describe Competition do
       expect(competition.in_progress?).to be true
       expect(competition.info_messages[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"
 
-      competition.use_wca_live_for_scoretaking = true
+      competition.scoretaking_software = :wca_live
       expect(competition.info_messages[:in_progress]).to eq "This competition is ongoing. You can check the live results <a href='https://live.worldcubeassociation.org/link/competitions/#{competition.id}'>here</a>!"
 
       competition.results_posted_at = Time.now
@@ -774,7 +774,7 @@ RSpec.describe Competition do
   end
 
   describe "when confirming or making visible" do
-    let(:competition_with_delegate) { build(:competition, :with_delegate, :with_organizer, generate_website: false) }
+    let(:competition_with_delegate) { build(:competition, :with_lead_delegate, :with_organizer, generate_website: false) }
     let(:competition_without_delegate) { build(:competition) }
 
     %i[confirmed show_at_all].each do |action|
@@ -807,7 +807,7 @@ RSpec.describe Competition do
     end
 
     it "sets confirmed_at when setting confirmed true" do
-      competition = create(:competition, :future, :with_delegate, :with_organizer, :with_valid_schedule)
+      competition = create(:competition, :future, :with_lead_delegate, :with_organizer, :with_valid_schedule)
       expect(competition.confirmed_at).to be_nil
 
       now = Time.at(Time.now.to_i)

@@ -68,7 +68,7 @@ class ResultsSubmissionController < ApplicationController
   def upload_scrambles
     @competition = Competition.includes(
       scramble_file_uploads: ScrambleFileUpload::SERIALIZATION_INCLUDES,
-      **ScrambleFileUpload::SERIALIZATION_INCLUDES,
+      matched_scramble_sets: MatchedScrambleSet::SERIALIZATION_INCLUDES,
     ).find(params[:competition_id])
   end
 
@@ -158,18 +158,18 @@ class ResultsSubmissionController < ApplicationController
     end
 
     scrambles_to_import = competition.matched_scramble_sets.flat_map do |scramble_set|
-      extra_scrambles, std_scrambles = scramble_set.matched_inbox_scrambles.partition(&:is_extra?)
+      extra_scrambles, std_scrambles = scramble_set.matched_scrambles.partition(&:is_extra?)
 
       [std_scrambles, extra_scrambles].flat_map do |scramble_family|
-        scramble_family.map.with_index do |scramble, idx|
+        scramble_family.map do |scramble|
           Scramble.new({
                          competition_id: competition.id,
                          event_id: scramble_set.event_id,
                          round_type_id: scramble_set.round_type_id,
-                         round_id: scramble_set.matched_round_id,
+                         round_id: scramble_set.round_id,
                          group_id: scramble_set.alphabetic_group_index,
                          is_extra: scramble.is_extra?,
-                         scramble_num: idx + 1,
+                         scramble_num: scramble.ordered_index + 1,
                          scramble: scramble.scramble_string,
                        })
         end
