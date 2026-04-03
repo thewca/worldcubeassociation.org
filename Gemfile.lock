@@ -124,7 +124,7 @@ GEM
       globalid
     anyway_config (2.8.0)
       ruby-next-core (~> 1.0)
-    api-pagination (7.0.0)
+    api-pagination (7.1.0)
     ast (2.4.3)
     autoprefixer-rails (9.4.7)
       execjs
@@ -1145,7 +1145,7 @@ CHECKSUMS
   anycable-core (1.6.3) sha256=12f0398509b69e51ee6488bf3724ee2c97f01dfc279001feef21242fc51feca3
   anycable-rails-core (1.6.1) sha256=97fd349dad1bb1f5fa45ab630cb31ba521af0b12e8c64b46a451043f7170ae7d
   anyway_config (2.8.0) sha256=f6797a7231f81202dcd3d0c07284e836e45713e761d320180348b13a5c7c9306
-  api-pagination (7.0.0) sha256=0c16b6b352e5a51f1eb72e3b15845ac7f29edc62642e5076f4294eee19700db7
+  api-pagination (7.1.0) sha256=ed82836df4435353617f69c3f330c3c282774ea74be9199afe78f0ef941fd0e3
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   autoprefixer-rails (9.4.7) sha256=7104f54efa89e6390391bd894498a9db92bffaf74474942c4152e6dc0775ab3b
   aws-eventstream (1.4.0) sha256=116bf85c436200d1060811e6f5d2d40c88f65448f2125bc77ffce5121e6e183b
