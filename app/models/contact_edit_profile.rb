@@ -37,28 +37,6 @@ class ContactEditProfile < ContactForm
     "#{requestor_user.name} (#{requestor_role})"
   end
 
-  validate :attachment_requirement
-  private def attachment_requirement
-    return if document.present?
-
-    # Requests from Delegates do not require proof attachment.
-    return if requestor_user.any_kind_of_delegate?
-
-    changes_requested&.each do |change|
-      case change.field
-      when :name
-        old_last_name = FinishUnfinishedPersons.last_name_with_suffix(change.from)
-        new_last_name = FinishUnfinishedPersons.last_name_with_suffix(change.to)
-
-        errors.add(:base, "Proof attachment is required if last name is changed.") if old_last_name != new_last_name
-      when :country_iso2
-        errors.add(:base, "Proof attachment is required if country is changed.")
-      when :dob
-        errors.add(:base, "Proof attachment is required if date of birth is changed.")
-      end
-    end
-  end
-
   def to_email
     UserGroup.teams_committees_group_wrt.metadata.email
   end
