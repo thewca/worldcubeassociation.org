@@ -199,6 +199,26 @@ RSpec.describe "API Competitions" do
       expect(response_json["persons"].length).to eq 2
       expect(response_json["persons"][0]["registration"]["status"]).to eq "accepted"
     end
+
+    context "even when signed in as a competition manager" do
+      before { sign_in competition.delegates.first }
+
+      it "does not return confidential person data" do
+        get api_v0_competition_wcif_lifecycle_path(competition, lifecycle_name: "public")
+        response_json = response.parsed_body
+        expect(response_json["persons"][0].keys).not_to include "email"
+        expect(response_json["persons"][0].keys).not_to include "birthdate"
+      end
+
+      it "returns people with accepted registrations only" do
+        create(:registration, :cancelled, competition: competition)
+        create(:registration, :pending, competition: competition)
+        get api_v0_competition_wcif_lifecycle_path(competition, lifecycle_name: "public")
+        response_json = response.parsed_body
+        expect(response_json["persons"].length).to eq 2
+        expect(response_json["persons"][0]["registration"]["status"]).to eq "accepted"
+      end
+    end
   end
 
   describe "PATCH #update_wcif" do

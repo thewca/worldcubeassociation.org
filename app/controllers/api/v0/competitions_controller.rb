@@ -168,8 +168,8 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   WCIF_CACHE_MAX_AGE = 5.minutes
 
-  private def render_wcif(competition, version: Competition::WCIF_STABLE_VERSION)
-    if can_manage?(competition)
+  private def render_wcif(competition, version, force_public: false)
+    if can_manage?(competition) && !force_public
       # authorized access always gets a "fresh" WCIF,
       #   because it might be relevant for syncing
       return render json: competition.to_wcif(authorized: true, version: version)
@@ -193,16 +193,19 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def show_wcif
     competition = competition_from_params
 
-    render_wcif(competition)
+    render_wcif(competition, Competition::WCIF_STABLE_VERSION)
   end
 
   def show_wcif_by_lifecycle
     competition = competition_from_params
 
-    lifecycle_name = params.require(:lifecycle_name)
-                           # backwards compatibility with legacy /wcif/public route
-                           .gsub('public', 'stable')
-                           .to_sym
+    lifecycle_raw = params.require(:lifecycle_name)
+    force_public = lifecycle_raw == 'public'
+
+    lifecycle_name = lifecycle_raw
+                     # backwards compatibility with legacy /wcif/public route
+                     .gsub('public', 'stable')
+                     .to_sym
 
     unless Competition::WCIF_VERSION_CATALOGUE.key?(lifecycle_name)
       return render json: {
@@ -213,7 +216,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     lifecycle_version = Competition::WCIF_VERSION_CATALOGUE.fetch(lifecycle_name)
 
-    render_wcif(competition, version: lifecycle_version)
+    render_wcif(competition, lifecycle_version, force_public: force_public)
   end
 
   def show_wcif_by_version
@@ -246,7 +249,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     # Pick the highest version number that satisfies what the user requested
     best_version = matching_versions.max.to_s
 
-    render_wcif(competition, version: best_version)
+    render_wcif(competition, best_version)
   end
 
   def update_wcif
