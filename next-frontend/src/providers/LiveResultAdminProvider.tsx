@@ -11,6 +11,8 @@ import { Format } from "@/lib/wca/data/formats";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
 import { Toaster, toaster } from "@/components/ui/toaster";
+import { applyCutoff, applyTimeLimit } from "@/lib/live/attempt-result";
+import { WcifCutoff, WcifTimeLimit } from "@/lib/wca/wcif/rounds";
 
 interface AdminResultsContextValue {
   registrationId: number | undefined;
@@ -38,12 +40,16 @@ export function LiveResultAdminProvider({
   roundId,
   competitionId,
   initialRegistrationId,
+  timeLimit,
+  cutoff,
 }: {
   children: ReactNode;
   format: Format;
   roundId: string;
   competitionId: string;
   initialRegistrationId?: number;
+  timeLimit?: WcifTimeLimit;
+  cutoff?: WcifCutoff;
 }) {
   const { liveResultsByRegistrationId, addPendingLiveResult } =
     useLiveResults();
@@ -188,7 +194,7 @@ export function LiveResultAdminProvider({
   const handleAttemptChange = (index: number, value: number) => {
     const newAttempts = [...attempts];
     newAttempts[index] = value;
-    setAttempts(newAttempts);
+    setAttempts(applyCutoff(applyTimeLimit(newAttempts, timeLimit), cutoff));
   };
 
   const handleSubmit = () => {

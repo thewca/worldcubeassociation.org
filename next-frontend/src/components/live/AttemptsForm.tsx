@@ -10,6 +10,9 @@ import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import { LiveCompetitor } from "@/types/live";
+import { useCallback } from "react";
+import { attemptResultsWarning } from "@/lib/live/attempt-result";
+import { useT } from "@/lib/i18n/useI18n";
 
 interface AttemptsFormProps {
   solveCount: number;
@@ -25,6 +28,8 @@ export default function AttemptsForm({
   header,
   eventId,
 }: AttemptsFormProps) {
+  const { t } = useT();
+
   const {
     handleRegistrationIdChange,
     handleSubmit,
@@ -51,6 +56,16 @@ export default function AttemptsForm({
   const inputDisplayValue = selectedCompetitor
     ? toCompetitorString(selectedCompetitor)
     : "";
+
+  const confirmSubmission = useCallback(() => {
+    const submissionWarning = attemptResultsWarning(attempts, eventId, t);
+
+    if (submissionWarning && !confirm(submissionWarning.description)) {
+      return;
+    }
+
+    handleSubmit();
+  }, [attempts, eventId, t, handleSubmit]);
 
   return (
     <form>
@@ -99,7 +114,7 @@ export default function AttemptsForm({
         />
       ))}
       <Button
-        onClick={handleSubmit}
+        onClick={confirmSubmission}
         disabled={isPending || attempts.length === 0}
       >
         Submit Results
