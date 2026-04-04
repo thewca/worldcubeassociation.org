@@ -60,7 +60,6 @@ SELECT
   re.total_number_of_rounds,
   re.person_id,
   re.person_name,
-  '',
   re.result,
   re.adv_type,
   re.adv_count,

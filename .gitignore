@@ -4,9 +4,6 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
-# Claude Code
-.claude/
-
 # byebug stuff
 .byebug_history
 
@@ -75,3 +72,6 @@ WCA_export_*
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Claude Code
+.claude/

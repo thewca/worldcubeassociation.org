@@ -1,4 +1,7 @@
-SELECT id, start_date, end_date
+SELECT
+  id,
+  start_date,
+  end_date
 FROM competitions
 WHERE announced_at IS NOT NULL
   AND RIGHT(id, 4) <> YEAR(start_date)
