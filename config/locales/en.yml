@@ -2932,6 +2932,7 @@ en:
       multiple_newcomers_with_same_name_warning: "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors and that all results are correctly separated by their corresponding id."
       wrong_parenthesis_type_error: "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
       special_characters_in_name_warning: "The name '%{name}' contains invalid special characters (such as numbers, quotes, or other symbols). Names should only contain letters, spaces, hyphens, apostrophes, periods, and regular parentheses."
+      suspicious_last_name_warning: "'%{name}' has '%{suffix}' as their last name, which may not be an actual last name (e.g. a generational suffix written in full). Please confirm it is their legal last name, or replace/remove it accordingly."
       successive_uppercase_name_warning: "'%{name}' has successive uppercase letters in their name. Please confirm that this is indeed the correct spelling or fix the name."
       lowercase_name_warning: "'%{name}' has a lowercase name. Please confirm that this is indeed the correct spelling or fix the name."
       missing_period_in_single_letter_middle_name_warning: "'%{name}' has a single letter middle name without an abbreviation period. Please confirm that this is indeed the correct spelling or fix the name."
