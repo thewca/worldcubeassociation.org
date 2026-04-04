@@ -1,3 +1,5 @@
-SELECT *
-FROM users
-where wca_id not in (SELECT wca_id FROM persons)
+SELECT u.*
+FROM users AS u
+LEFT JOIN persons AS p
+ON u.wca_id = p.wca_id
+WHERE p.wca_id IS NULL;
