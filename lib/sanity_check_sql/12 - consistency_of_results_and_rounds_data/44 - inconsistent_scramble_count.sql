@@ -1,10 +1,14 @@
 WITH scramble_groups AS (
   SELECT DISTINCT
-    competition_id,
-    event_id,
-    round_type_id,
-    group_id
-  FROM scrambles
+    s.competition_id,
+    s.event_id,
+    s.round_type_id,
+    s.group_id
+  FROM scrambles AS s
+  -- exclude Head-to-Head rounds
+  LEFT JOIN h2h_matches AS h2h
+  ON s.round_id = h2h.round_id
+  WHERE h2h.round_id IS NULL
 ),
 scramble_set_counts AS (
   SELECT

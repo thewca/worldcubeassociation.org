@@ -6,6 +6,8 @@ WITH relevant_results AS (
     round_type_id
   FROM results
   WHERE RIGHT(competition_id, 4) >= '2013'
+    -- exclude Head-to-Head rounds
+    AND format_id <> 'h'
 ),
 attempt_counts AS (
   SELECT

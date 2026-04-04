@@ -19,4 +19,6 @@ ON r.format_id = f.id
 JOIN num_solves AS t2
 ON t2.result_id = r.id
 WHERE r.round_type_id NOT IN ('c', 'd', 'e', 'g', 'h')
+  -- exclude Head-to-Head rounds
+  AND format_id <> 'h'
   AND t2.actual_solves <> f.expected_solve_count;

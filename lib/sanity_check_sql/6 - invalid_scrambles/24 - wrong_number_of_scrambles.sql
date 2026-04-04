@@ -5,6 +5,8 @@ WITH round_results AS (
     format_id,
     event_id
   FROM results
+  -- exclude Head-to-Head rounds
+  WHERE format_id <> 'h'
 ),
 scramble_counts AS (
   SELECT
