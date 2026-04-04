@@ -33,4 +33,18 @@ class LiveAttempt < ApplicationRecord
   def self.attempts_changed?(before_attempts, after_attempts)
     Set.new(before_attempts) != Set.new(after_attempts)
   end
+
+  def to_wcif
+    { "value" => self.value, "reconstruction" => nil }
+  end
+
+  def self.wcif_json_schema
+    {
+      "type" => "object",
+      "properties" => {
+        "value" => { "type" => "integer" },
+        "reconstruction" => { "type" => %w[string null] },
+      },
+    }
+  end
 end

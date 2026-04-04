@@ -13,6 +13,8 @@ class LiveResult < ApplicationRecord
 
   belongs_to :registration
 
+  delegate :registrant_id, to: :registration
+
   belongs_to :round
 
   delegate :wcif_id, to: :round, prefix: true
@@ -168,6 +170,29 @@ class LiveResult < ApplicationRecord
 
   def self.empty_result_attributes(registration_id, round_id)
     { registration_id: registration_id, round_id: round_id, average: 0, best: 0, last_attempt_entered_at: current_time_from_proper_timezone }
+  end
+
+  def to_wcif
+    {
+      "personId" => self.registrant_id,
+      "ranking" => self.global_pos,
+      "attempts" => self.live_attempts.map(&:to_wcif),
+      "best" => self.best,
+      "average" => self.average,
+    }
+  end
+
+  def self.wcif_json_schema
+    {
+      "type" => "object",
+      "properties" => {
+        "personId" => { "type" => "integer" },
+        "ranking" => { "type" => %w[integer null] },
+        "attempts" => { "type" => "array", "items" => LiveAttempt.wcif_json_schema },
+        "best" => { "type" => "integer" },
+        "average" => { "type" => "integer" },
+      },
+    }
   end
 
   private

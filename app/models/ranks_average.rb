@@ -8,8 +8,8 @@ class RanksAverage < ApplicationRecord
 
   belongs_to :event
 
-  def to_wcif
-    rank_to_wcif("average")
+  def to_wcif(version: Competition::WCIF_STABLE_VERSION)
+    rank_to_wcif("average", version: version)
   end
 
   def to_s
