@@ -139,6 +139,7 @@ RSpec.describe PV do
       # LETTER_AFTER_PERIOD_WARNING
       # SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING
       # SINGLE_NAME_WARNING
+      # SUSPICIOUS_LAST_NAME_WARNING
       it "validates person data" do
         round_222 = create(:round, event_id: "222", competition: competition2)
         create(:inbox_result, competition: competition2, event_id: "222", round: round_222)
@@ -226,6 +227,16 @@ RSpec.describe PV do
                                   event_id: "333oh",
                                   round: round_333_oh)
         res_wrong_wca_id.person.update(wca_id: "ERR")
+        res_suspicious_junior = create(:inbox_result,
+                                       competition: competition1,
+                                       event_id: "333oh",
+                                       round: round_333_oh)
+        res_suspicious_junior.person.update(name: "John Junior")
+        res_suspicious_senior = create(:inbox_result,
+                                       competition: competition1,
+                                       event_id: "333oh",
+                                       round: round_333_oh)
+        res_suspicious_senior.person.update(name: "Maria Senior")
 
         expected_errors = [
           RV::ValidationError.new(PV::PERSON_WITHOUT_RESULTS_ERROR,
@@ -298,6 +309,14 @@ RSpec.describe PV do
           RV::ValidationWarning.new(PV::SINGLE_NAME_WARNING,
                                     :persons, competition1.id,
                                     name: res_same_name2.person.name),
+          RV::ValidationWarning.new(PV::SUSPICIOUS_LAST_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_suspicious_junior.person.name,
+                                    suffix: "Junior"),
+          RV::ValidationWarning.new(PV::SUSPICIOUS_LAST_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_suspicious_senior.person.name,
+                                    suffix: "Senior"),
         ]
         validator_args = [
           { competition_ids: [competition1.id, competition2.id], model: InboxResult },
