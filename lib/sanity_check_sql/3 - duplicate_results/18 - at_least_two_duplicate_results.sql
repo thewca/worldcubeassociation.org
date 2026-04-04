@@ -2,10 +2,10 @@ WITH attempt_sequences AS (
   SELECT
     result_id,
     GROUP_CONCAT(value ORDER BY attempt_number) AS attempt_sequence,
-    MAX(value) AS worst
+    COUNT(IF(value > 0, 1, NULL)) AS num_solves
   FROM result_attempts
   GROUP BY result_id
-  HAVING worst > 0
+  HAVING num_solves > 1
 )
 SELECT
   attempt_sequence,
@@ -13,7 +13,7 @@ SELECT
   GROUP_CONCAT(t1.id ORDER BY t1.id) AS result_ids,
   GROUP_CONCAT(DISTINCT person_id ORDER BY person_id) AS people,
   GROUP_CONCAT(DISTINCT event_id ORDER BY event_id) AS events,
-  GROUP_CONCAT(DISTINCT competition_id ORDER BY competition_id) AS competitions
+  GROUP_CONCAT(DISTINCT competition_id ORDER BY competition_id) AS competition
 FROM results AS t1
 JOIN attempt_sequences AS t2
 ON t2.result_id = t1.id
