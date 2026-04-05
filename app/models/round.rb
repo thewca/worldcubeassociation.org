@@ -231,13 +231,14 @@ class Round < ApplicationRecord
 
   def recompute_advancing
     advancement_determining_results = relevant_results.where.not(global_pos: nil).where(locked_by_id: nil)
-    advancement_determining_results.update_all(advancing: false, advancing_questionable: false)
 
-    missing_attempts = total_competitors - advancement_determining_results.count
+    # Load with includes first so we can use .size instead of a separate .count query
+    loaded_results = advancement_determining_results.includes(:live_attempts).to_a
+    missing_attempts = total_competitors - loaded_results.size
+
     potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
 
     # Determine which results would advance if everyone achieved their best possible attempt.
-    loaded_results = advancement_determining_results.includes(:live_attempts).to_a
     results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
 
     advancement_determining_condition = final_round? || linked_round&.final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
@@ -245,18 +246,22 @@ class Round < ApplicationRecord
     advancing_ids = advancement_determining_condition.apply(results_with_potential)
     max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
 
-    advancement_determining_results.update_all(
-      "advancing_questionable = (global_pos <= #{max_advancing})",
-    )
-
-    LiveResult.where(id: advancing_ids).update_all(advancing: true)
+    if advancing_ids.any?
+      advancement_determining_results.update_all(
+        ["advancing = (id IN (?)), advancing_questionable = (global_pos <= ?)", advancing_ids, max_advancing],
+      )
+    else
+      advancement_determining_results.update_all(
+        ["advancing = FALSE, advancing_questionable = (global_pos <= ?)", max_advancing],
+      )
+    end
   end
 
   def recompute_global_pos
     return if format_id == "h"
 
-    # For non-linked rounds, just set the global_pos to local_pos
-    return live_results.update_all("global_pos = local_pos") if linked_round.blank?
+    # For non-linked rounds, global_pos was already set equal to local_pos in recompute_local_pos
+    return if linked_round.blank?
 
     rank_by = format.rank_by_column
     secondary_rank_by = format.secondary_rank_by_column
@@ -303,6 +308,10 @@ class Round < ApplicationRecord
     #   2. The attempts are then sorted among themselves using their normal numeric value.
     #     This works in particular because sorting in MySQL is stable, i.e. the sorting
     #     based on the second part won't destroy the order established by the first part.
+    #
+    # For non-linked rounds global_pos equals local_pos, so we set both here to avoid
+    # a second UPDATE in recompute_global_pos.
+    global_pos_clause = linked_round.blank? ? ", r.global_pos = ranked.rank" : ""
     ActiveRecord::Base.connection.exec_query <<~SQL.squish
       UPDATE live_results r
       LEFT JOIN (
@@ -315,7 +324,7 @@ class Round < ApplicationRecord
           WHERE round_id = #{id} AND best != 0
       ) ranked
       ON r.id = ranked.id
-      SET r.local_pos = ranked.rank
+      SET r.local_pos = ranked.rank#{global_pos_clause}
       WHERE r.round_id = #{id};
     SQL
   end
