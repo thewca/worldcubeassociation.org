@@ -8,6 +8,7 @@ import { Container } from "@chakra-ui/react";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import { DateTime } from "luxon";
+import ConfirmProvider from "@/providers/ConfirmProvider";
 
 export default async function DoubleCheckPage({
   params,
@@ -48,12 +49,14 @@ export default async function DoubleCheckPage({
             competitionId={competitionId}
             initialRegistrationId={sortedResults[0].registration_id}
           >
-            <DoubleCheck
-              competitionId={competitionId}
-              results={sortedResults}
-              formatId={format}
-              roundWcifId={id}
-            />
+            <ConfirmProvider>
+              <DoubleCheck
+                competitionId={competitionId}
+                results={sortedResults}
+                formatId={format}
+                roundWcifId={id}
+              />
+            </ConfirmProvider>
           </LiveResultAdminProvider>
         </LiveResultProvider>
       </PermissionCheck>

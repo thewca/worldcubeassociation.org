@@ -7,6 +7,7 @@ import events from "@/lib/wca/data/events";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
 import { LiveCompetitor } from "@/types/live";
+import ConfirmProvider from "@/providers/ConfirmProvider";
 
 export default function AddResults({
   format,
@@ -28,11 +29,13 @@ export default function AddResults({
     >
       <SimpleGrid columns={16} gap={6}>
         <GridItem colSpan={4}>
-          <AttemptsForm
-            header="Add Result"
-            eventId={eventId}
-            solveCount={format.expected_solve_count}
-          />
+          <ConfirmProvider>
+            <AttemptsForm
+              header="Add Result"
+              eventId={eventId}
+              solveCount={format.expected_solve_count}
+            />
+          </ConfirmProvider>
         </GridItem>
 
         <GridItem colSpan={12}>

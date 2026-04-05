@@ -13,6 +13,7 @@ import { LiveCompetitor } from "@/types/live";
 import { useCallback } from "react";
 import { attemptResultsWarning } from "@/lib/live/attempt-result";
 import { useT } from "@/lib/i18n/useI18n";
+import { useConfirm } from "@/providers/ConfirmProvider";
 
 interface AttemptsFormProps {
   solveCount: number;
@@ -39,6 +40,8 @@ export default function AttemptsForm({
     isPending,
   } = useResultsAdmin();
 
+  const confirm = useConfirm();
+
   const { competitors } = useLiveResults();
 
   const { collection, filter } = useListCollection({
@@ -60,12 +63,15 @@ export default function AttemptsForm({
   const confirmSubmission = useCallback(() => {
     const submissionWarning = attemptResultsWarning(attempts, eventId, t);
 
-    if (submissionWarning && !confirm(submissionWarning.description)) {
-      return;
+    if (submissionWarning) {
+      confirm({
+        content: submissionWarning.description,
+        confirmButton: "Submit",
+      }).then(() => handleSubmit());
+    } else {
+      handleSubmit();
     }
-
-    handleSubmit();
-  }, [attempts, eventId, t, handleSubmit]);
+  }, [attempts, eventId, t, handleSubmit, confirm]);
 
   return (
     <form>
