@@ -41,7 +41,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     competition = Competition.includes(
       rounds: {
         wcif_extensions: [],
-        live_results: [],
+        live_results: [:live_attempts],
         sibling_rounds: [:live_results],
       },
     ).find(params.require(:competition_id))

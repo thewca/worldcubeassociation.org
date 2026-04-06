@@ -332,10 +332,11 @@ class Round < ApplicationRecord
   end
 
   def competitors_live_results_entered
-    if live_results.loaded?
-      live_results.count(&:not_empty?)
+    if live_results.loaded? && live_results.all? { |r| r.association(:live_attempts).loaded? }
+      expected = format.expected_solve_count
+      live_results.count { it.live_attempts.length == expected }
     else
-      live_results.not_empty.count
+      live_results.complete(format.expected_solve_count).count
     end
   end
 

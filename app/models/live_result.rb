@@ -21,6 +21,11 @@ class LiveResult < ApplicationRecord
   belongs_to :locked_by, class_name: 'User', optional: true
 
   scope :not_empty, -> { where.not(best: 0) }
+  scope :complete, lambda { |expected_solve_count|
+    where(
+      "#{expected_solve_count} <= (SELECT COUNT(*) FROM live_attempts WHERE live_attempts.live_result_id = live_results.id)",
+    )
+  }
   scope :locked, -> { where.not(locked_by: nil) }
 
   scope :advancing, -> { where(advancing: true) }
