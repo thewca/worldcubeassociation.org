@@ -15,11 +15,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import {
-  activitiesOnDate,
-  groupActivities,
-  localizeActivityName,
-} from "@/lib/wca/wcif/activities";
+import { activitiesOnDate, groupActivities } from "@/lib/wca/wcif/activities";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { components } from "@/types/openapi";
 import {
@@ -33,12 +29,12 @@ import { useT } from "@/lib/i18n/useI18n";
 import { LuLock } from "react-icons/lu";
 import { LiveRoundAdmin } from "@/types/live";
 import _ from "lodash";
+import { getRoundName } from "@/lib/wca/live/getRoundName";
 
 interface LiveViewProps {
   timeZones: string[];
   competitionId: string;
   activities: components["schemas"]["WcifActivity"][];
-  wcifEvents: components["schemas"]["WcifEvent"][];
   canManage?: boolean;
   rounds: LiveRoundAdmin[];
 }
@@ -47,7 +43,6 @@ export default function LiveView({
   timeZones,
   competitionId,
   activities,
-  wcifEvents,
   canManage = false,
   rounds,
 }: LiveViewProps) {
@@ -149,6 +144,13 @@ export default function LiveView({
                   const activity = activityGroup[0];
                   const { eventId } = parseActivityCode(activity.activityCode);
 
+                  const roundName = getRoundName(
+                    activity.activityCode,
+                    t,
+                    rounds,
+                    true,
+                  );
+
                   const isOpen = ["open", "locked"].includes(
                     roundsByWcifId[activity.activityCode].state,
                   );
@@ -171,18 +173,14 @@ export default function LiveView({
                               >
                                 <HStack>
                                   <EventIcon eventId={eventId} fontSize="2xl" />
-                                  {localizeActivityName(
-                                    t,
-                                    activity,
-                                    wcifEvents,
-                                  )}
+                                  {roundName}
                                 </HStack>
                               </NextLink>
                             </Link>
                           ) : (
                             <HStack>
                               <EventIcon eventId={eventId} fontSize="2xl" />
-                              {localizeActivityName(t, activity, wcifEvents)}
+                              {roundName}
                             </HStack>
                           )}
                         </Button>

@@ -1,7 +1,6 @@
 import { getSchedule } from "@/lib/wca/competitions/getSchedule";
 import { earliestWithLongestTieBreaker } from "@/lib/wca/wcif/activities";
 import LiveView from "@/components/competitions/Schedule/LiveView";
-import { getEvents } from "@/lib/wca/competitions/wcif/getEvents";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
 import { getRounds } from "@/lib/wca/live/getRounds";
@@ -24,16 +23,6 @@ export default async function LiveOverview({
 
   if (scheduleError) {
     return <OpenapiError t={t} response={scheduleResponse} />;
-  }
-
-  const {
-    error: wcifEventsError,
-    data: wcifEvents,
-    response: eventResponse,
-  } = await getEvents(competitionId);
-
-  if (wcifEventsError) {
-    return <OpenapiError t={t} response={eventResponse} />;
   }
 
   const permissions = await getPermissions();
@@ -66,7 +55,6 @@ export default async function LiveOverview({
         competitionId={competitionId}
         activities={allActivitiesSorted}
         timeZones={uniqueTimeZones}
-        wcifEvents={wcifEvents}
         canManage={canManage}
         rounds={roundsData.rounds}
       />
