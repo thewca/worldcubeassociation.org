@@ -2943,21 +2943,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.95.2":
-  version: 5.95.2
-  resolution: "@tanstack/query-core@npm:5.95.2"
-  checksum: 10c0/6559483b30dd9ce7fc5d466d54a7ebfe4ca5b5d7f8ce37833a4048516b55565d3072526d74264fa974afbe49a0ae11c9a99ecc1d9ab525966360565ebc600083
+"@tanstack/query-core@npm:5.96.2":
+  version: 5.96.2
+  resolution: "@tanstack/query-core@npm:5.96.2"
+  checksum: 10c0/a856fb9f35ae994e855023d980ac32ce4a1eec5fd94afa3e360cc795f84494a950d0afbf465f726bd8186889d3c457762ec2f627c2fd84fc23f5f4e1d3491d89
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.95.2":
-  version: 5.95.2
-  resolution: "@tanstack/react-query@npm:5.95.2"
+"@tanstack/react-query@npm:^5.96.2":
+  version: 5.96.2
+  resolution: "@tanstack/react-query@npm:5.96.2"
   dependencies:
-    "@tanstack/query-core": "npm:5.95.2"
+    "@tanstack/query-core": "npm:5.96.2"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/d0e3d3601ccc839043ce7351c369f8826c7363e753db4fec59d07bee0d62efdfa606baf8227597eb54c4d4eb18ab3f594f0cd4e164721acb79ab3628115d72d8
+  checksum: 10c0/68528558fc208d921dde98ded3c140409ca55836623efb4e79ee9bd308cefe567c1e9e4cce5bebaa9a72a32e5397febb484b8b6842658b2cdff28de957c11f67
   languageName: node
   linkType: hard
 
@@ -5268,10 +5268,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^17.3.1":
-  version: 17.3.1
-  resolution: "dotenv@npm:17.3.1"
-  checksum: 10c0/c78e0c2d5a549c751e544cc60e2b95e7cb67e0c551f42e094d161c6b297aa44b630a3c2dcacf5569e529a6c2a6b84e2ab9be8d37b299d425df5a18b81ce4a35f
+"dotenv@npm:^17.4.1":
+  version: 17.4.1
+  resolution: "dotenv@npm:17.4.1"
+  checksum: 10c0/eb6ae592ee1e8f6b7f62e0f0c2827c4f27bbe9e00abe9d7910e06456e63dccd42f011de94da9450a63c07ccc52c318f527c1b56ad8e2c81a1a16314b53d4fd99
   languageName: node
   linkType: hard
 
@@ -10242,9 +10242,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react_ujs@npm:^3.2.1":
-  version: 3.2.1
-  resolution: "react_ujs@npm:3.2.1"
+"react_ujs@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "react_ujs@npm:3.3.0"
   dependencies:
     "@babel/preset-react": "npm:^7.22.5"
     css-loader: "npm:^6.8.1"
@@ -10255,7 +10255,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react_ujs: "npm:^2.7.1"
     style-loader: "npm:^3.3.3"
-  checksum: 10c0/fbe39243c84ea1d8f0238e634673b7afed2a079a90502205e40a711a14fbf3d7e4c66f05addbf1f16c728422395e0a48dcb8a7c8feee29b0247c25096538f896
+  checksum: 10c0/24a89af744e80ca320f98fae15395722051393cf0d552136f16bf3b300b62903cd039137a18bdab5205a26b509e0f29e464ba206f355b364f55f676d18f04b5b
   languageName: node
   linkType: hard
 
@@ -10628,7 +10628,7 @@ __metadata:
     "@rails/ujs": "npm:^7.1.600"
     "@stripe/react-stripe-js": "npm:^6.1.0"
     "@stripe/stripe-js": "npm:^9.0.1"
-    "@tanstack/react-query": "npm:^5.95.2"
+    "@tanstack/react-query": "npm:^5.96.2"
     "@tanstack/react-table": "npm:^8.21.3"
     "@wca/helpers": "npm:^1.1.7"
     autonumeric: "npm:^4.10.9"
@@ -10648,7 +10648,7 @@ __metadata:
     css-minimizer-webpack-plugin: "npm:^8.0.0"
     date-fns: "npm:^4.1.0"
     dompurify: "npm:^3.3.3"
-    dotenv: "npm:^17.3.1"
+    dotenv: "npm:^17.4.1"
     easymde: "npm:^2.20.0"
     eslint: "npm:^8.57.0"
     eslint-config-airbnb: "npm:^19.0.4"
@@ -10692,10 +10692,10 @@ __metadata:
     react-simplemde-editor: "npm:^5.2.0"
     react-spinners: "npm:^0.17.0"
     react-textarea-autosize: "npm:^8.5.9"
-    react_ujs: "npm:^3.2.1"
+    react_ujs: "npm:^3.3.0"
     regenerator-runtime: "npm:^0.14.1"
     resolve-url-loader: "npm:^5.0.0"
-    sass: "npm:^1.98.0"
+    sass: "npm:^1.99.0"
     sass-loader: "npm:^16.0.7"
     semantic-ui-react: "npm:^2.1.5"
     shakapacker: "npm:9.7.0"
@@ -10812,9 +10812,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.98.0":
-  version: 1.98.0
-  resolution: "sass@npm:1.98.0"
+"sass@npm:^1.99.0":
+  version: 1.99.0
+  resolution: "sass@npm:1.99.0"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^4.0.0"
@@ -10825,7 +10825,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10c0/9e91daa20f970fefb364ac31289f070636da7aa7eaeb43e371ea98fa98085a6dbc2d3d058504226a02d07717faf0a4ce8d41b579ecb428c4a9d96b4dc1944a95
+  checksum: 10c0/83c54a8c6decb79fff50dd9500d7932cf1cb7c5d9be4bc42bd3d537402c37bbee062aea6efdbdf9fb0b8697b18177d60c72bf101872336b93b1c27a2dc3621e1
   languageName: node
   linkType: hard
 

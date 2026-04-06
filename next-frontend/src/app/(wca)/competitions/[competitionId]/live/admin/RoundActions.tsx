@@ -5,26 +5,23 @@ import NextLink from "next/link";
 import { route } from "nextjs-routes";
 import ActionButtons from "@/app/(wca)/competitions/[competitionId]/live/admin/ActionButtons";
 import { useState } from "react";
-import { LiveRoundState } from "@/types/live";
+import { LiveRoundAdmin, LiveRoundState } from "@/types/live";
 import { useT } from "@/lib/i18n/useI18n";
 import { components } from "@/types/openapi";
-import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { getRoundName } from "@/lib/wca/live/getRoundName";
 
 export default function RoundActions({
   competitionId,
   round,
-  totalRounds,
+  rounds,
 }: {
   competitionId: string;
   round: components["schemas"]["LiveRoundAdmin"];
-  totalRounds: number;
+  rounds: LiveRoundAdmin[];
 }) {
   const { t } = useT();
 
   const [state, setState] = useState<LiveRoundState>(round.state);
-
-  const { roundNumber } = parseActivityCode(round.id);
-  const roundTypeId = getRoundTypeId(roundNumber!, totalRounds, false);
 
   return (
     <HStack>
@@ -47,10 +44,17 @@ export default function RoundActions({
               },
             })}
           >
-            {t(`rounds.${roundTypeId}.name`)}{" "}
+            {getRoundName(round.id, t, rounds)}{" "}
             {round.state == "open" &&
-              `(${round.competitors_live_results_entered}/${round.total_competitors} entered)`}
-            {round.state == "locked" && `${round.total_competitors} locked`}
+              `(${t("competitions.live.admin.competitors_entered", {
+                competitors_live_results_entered:
+                  round.competitors_live_results_entered,
+                total_competitors: round.total_competitors,
+              })})`}
+            {round.state == "locked" &&
+              `(${t("competitions.live.admin.round_locked", {
+                total_competitors: round.total_competitors,
+              })})`}
           </NextLink>
         </Link>
       </Button>
