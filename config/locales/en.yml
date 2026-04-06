@@ -1413,6 +1413,15 @@ en:
       podiums:
         title: "Podiums"
         undetermined: "Podiums to be determined"
+      admin:
+        open: "Open"
+        clear: "Clear"
+        competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
+        round_locked: "locked"
+      results:
+        competitor: "Competitor"
+      errors:
+        round_closed: "The Round is not open yet"
     #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"
