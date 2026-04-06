@@ -1,10 +1,10 @@
 import {
+  decodeMbldResult,
   DNF_VALUE,
   DNS_VALUE,
   formatAttemptResult,
   SKIPPED_VALUE,
 } from "@/lib/wca/wcif/attempts";
-import { decodeMbldAttemptResult } from "../../../../app/webpacker/lib/wca-live/attempts";
 import { WcifCutoff, WcifTimeLimit } from "@/lib/wca/wcif/rounds";
 import { TFunction } from "i18next";
 
@@ -44,8 +44,8 @@ export function attemptResultsWarning(
 
     if (eventId === "333mbf") {
       const lowTimeIndex = attemptResults.findIndex((attempt) => {
-        const { attempted, centiseconds } = decodeMbldAttemptResult(attempt);
-        return attempt > 0 && centiseconds / attempted < 30 * 100;
+        const { attempted, timeCentiseconds } = decodeMbldResult(attempt);
+        return attempt > 0 && timeCentiseconds! / attempted < 30 * 100;
       });
       if (lowTimeIndex !== -1) {
         return t("competitions.live.admin.warnings.impossible", {
