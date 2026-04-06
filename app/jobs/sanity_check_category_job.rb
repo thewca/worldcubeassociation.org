@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+
+class SanityCheckCategoryJob < WcaCronjob
+  queue_as :sanity_checks
+
+  def perform(sanity_check_category)
+    sanity_check_category.sanity_checks.find_each do |sanity_check|
+      query_result = sanity_check.run_query
+
+      sanity_check.sanity_check_results.create!(
+        query_results: query_result,
+      )
+    end
+  end
+
+  def instance_cronjob_statistics
+    category_name = self.arguments.first.snake_case_name
+    self.class.cronjob_statistics(category_name)
+  end
+end

@@ -4,11 +4,15 @@ class Person < ApplicationRecord
   # for some reason, the ActiveRecord plural for "Person" is "people"…
   self.table_name = 'persons'
 
-  has_one :user, primary_key: "wca_id", foreign_key: "wca_id"
+  has_one :user, primary_key: "wca_id", foreign_key: "wca_id", inverse_of: :person
+  has_one :unconfirmed_user, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "User", inverse_of: :unconfirmed_person
   has_many :results, primary_key: "wca_id"
+  has_many :result_attempts, through: :results
   has_many :competitions, -> { distinct }, through: :results
   has_many :ranks_average, primary_key: "wca_id", class_name: "RanksAverage"
   has_many :ranks_single, primary_key: "wca_id", class_name: "RanksSingle"
+  has_many :inbox_persons, primary_key: "wca_id", foreign_key: "wca_id", inverse_of: :person
+  has_many :tickets_edit_person, primary_key: "wca_id", foreign_key: "wca_id", class_name: "TicketsEditPerson", inverse_of: :person
 
   enum :gender, User::ALLOWABLE_GENDERS.index_with(&:to_s)
 
@@ -114,7 +118,7 @@ class Person < ApplicationRecord
     all_delegates = competitions.order(:start_date).flat_map(&:staff_delegates).select(&:any_kind_of_delegate?)
     return [] if all_delegates.empty?
 
-    counts_by_delegate = all_delegates.group_by(&:itself).transform_values(&:count)
+    counts_by_delegate = all_delegates.tally
     most_frequent_delegate, _count = counts_by_delegate.max_by { |_delegate, count| count }
     most_recent_delegate = all_delegates.last
 
@@ -247,7 +251,7 @@ class Person < ApplicationRecord
   end
 
   def completed_solves_count
-    results.pluck("value1, value2, value3, value4, value5").flatten.count(&:positive?)
+    result_attempts.completed.count
   end
 
   def gender_visible?
@@ -360,6 +364,16 @@ class Person < ApplicationRecord
     )
 
     new_wca_id
+  end
+
+  def execute_edit_person_request(change_type, edit_params)
+    if change_type == "fix"
+      update!(edit_params)
+    elsif change_type == "update"
+      update_using_sub_id!(edit_params)
+    else
+      raise "Unknown change_type #{change_type}"
+    end
   end
 
   def private_attributes_for_user(user)

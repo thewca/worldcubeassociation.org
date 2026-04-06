@@ -34,12 +34,16 @@ locals {
       value = "https://www.worldcubeassociation.org/"
     },
     {
+      name = "NEW_RELIC_APP_NAME"
+      value = "next-js-production"
+    },
+    {
       name  = "DATABASE_URI"
       value = "mongodb://payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017/payload?retryWrites=false"
     },
     {
       name  = "WCA_BACKEND_API_URL"
-      value = "https://www.worldcubeassociation.org/api/"
+      value = "http://rails.local:3000/api/"
     },
     {
       name  = "WCA_FRONTEND_API_URL"
@@ -187,6 +191,11 @@ resource "aws_ecs_service" "nextjs" {
     target_group_arn = var.shared.nextjs-production.arn
     container_name   = "nextjs-production"
     container_port   = 3000
+  }
+
+  service_connect_configuration {
+    enabled = true
+    namespace = aws_service_discovery_private_dns_namespace.this.name
   }
 
   network_configuration {

@@ -23,7 +23,8 @@ class Registration < ApplicationRecord
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
-  has_many :registration_history_entries, -> { order(:created_at) }, dependent: :destroy
+
+  has_many :registration_history_entries, -> { order(:created_at) }, dependent: :destroy, inverse_of: :registration
   has_many :registration_competition_events
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
@@ -32,6 +33,8 @@ class Registration < ApplicationRecord
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all
+
+  has_one :inbox_person, foreign_key: %i[competition_id id], primary_key: %i[competition_id registrant_id], inverse_of: :registration
 
   enum :competing_status, {
     pending: Registrations::Helper::STATUS_PENDING,
@@ -66,7 +69,8 @@ class Registration < ApplicationRecord
   before_create :ensure_registrant_id
 
   private def ensure_registrant_id
-    self.registrant_id ||= competition.registrations.count + 1
+    max_registrant_id = competition.registrations.maximum(:registrant_id) || 0
+    self.registrant_id ||= max_registrant_id + 1
   end
 
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
@@ -145,7 +149,7 @@ class Registration < ApplicationRecord
     new_record? || cancelled? || !is_competing?
   end
 
-  delegate :name, :gender, :country, :email, :dob, :wca_id, to: :user
+  delegate :name, :gender, :country, :country_iso2, :email, :dob, :wca_id, to: :user
 
   alias_method :birthday, :dob
 
@@ -215,7 +219,8 @@ class Registration < ApplicationRecord
     amount_lowest_denomination,
     currency_code,
     receipt,
-    user_id
+    user_id,
+    paid_at: nil
   )
     add_history_entry({ payment_status: receipt.determine_wca_status, iso_amount: amount_lowest_denomination }, "user", user_id, 'Payment')
     registration_payments.create!(
@@ -223,6 +228,7 @@ class Registration < ApplicationRecord
       currency_code: currency_code,
       receipt: receipt,
       user_id: user_id,
+      paid_at: paid_at,
     )
   end
 
@@ -282,6 +288,10 @@ class Registration < ApplicationRecord
         action: r.action,
       }
     end
+  end
+
+  def to_live_json
+    as_json(methods: %i[name country_iso2], only: %i[id user_id registrant_id])
   end
 
   def to_v2_json(admin: false, pii: false)

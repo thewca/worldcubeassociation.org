@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class LinkedRound < ApplicationRecord
-  has_many :rounds
+  has_many :rounds, -> { ordered }, inverse_of: :linked_round
   has_many :results, through: :rounds
   has_many :live_results, through: :rounds
   has_many :formats, -> { distinct }, through: :rounds
@@ -14,7 +14,15 @@ class LinkedRound < ApplicationRecord
   end
 
   def first_round_in_link
-    rounds.ordered.first
+    rounds.first
+  end
+
+  def wcif_ids
+    rounds.map(&:wcif_id)
+  end
+
+  def final_round?
+    rounds.last&.final_round?
   end
 
   def self.combine_results(round_results)

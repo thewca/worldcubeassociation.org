@@ -24,6 +24,11 @@ module ResultsValidators
     LETTER_AFTER_PERIOD_WARNING = :letter_after_period_warning
     SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = :single_letter_first_or_last_name_warning
     SINGLE_NAME_WARNING = :single_name_warning
+    SPECIAL_CHARACTERS_IN_NAME_WARNING = :special_characters_in_name_warning
+    SUSPICIOUS_LAST_NAME_WARNING = :suspicious_last_name_warning
+    REGISTRATION_DETAILS_MISMATCH_WARNING = :registration_details_mismatch_warning
+    MISSING_MATCHING_REGISTRATION_WARNING = :missing_matching_registration_warning
+    UNACCEPTED_REGISTRATION_WITH_RESULTS_WARNING = :unaccepted_registration_with_results_warning
 
     def self.description
       "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
@@ -74,6 +79,22 @@ module ResultsValidators
       # Check for wrong parenthesis type.
       validation_issues << ValidationError.new(WRONG_PARENTHESIS_TYPE_ERROR, :persons, competition_id, name: name) if /[（）]/.match?(name)
 
+      ## Check for special characters in name.
+      # # Regex /[^\p{L}\p{M}\p{Zs}\p{Cf}\-'.''()·•]/ uses a negated character class —
+      # # it matches any character NOT in the allowed set.
+      # # \p{L}  - Any Unicode letter (Latin, Cyrillic, Arabic, Chinese, Tamil, etc.)
+      # # \p{M}  - Unicode combining marks (accents/diacritics used in names)
+      # # \p{Zs} - Unicode space separators (standard and non-breaking spaces)
+      # # \p{Cf} - Format characters (includes ZWNJ/ZWJ for Arabic/Persian scripts)
+      # # \-     - Hyphen
+      # # ' '    - Straight and curly apostrophes
+      # # .      - Period
+      # # ()     - Parentheses
+      # # ·      - Middle dot (e.g., Chinese/Catalan names)
+      # # •      - Bullet character
+      # # Triggers warning for digits, @, #, quotes, emojis, and any other symbols
+      validation_issues << ValidationWarning.new(SPECIAL_CHARACTERS_IN_NAME_WARNING, :persons, competition_id, name: name) if /[^\p{L}\p{M}\p{Zs}\p{Cf}\-'.()·•]/.match?(name)
+
       # Check for lowercase name.
       validation_issues << ValidationWarning.new(LOWERCASE_NAME_WARNING, :persons, competition_id, name: name) if split_name.first.downcase == split_name.first || split_name.last.downcase == split_name.last
 
@@ -82,6 +103,9 @@ module ResultsValidators
 
       # Check if the name is a single name.
       validation_issues << ValidationWarning.new(SINGLE_NAME_WARNING, :persons, competition_id, name: name) if split_name.length == 1
+
+      # Check if the last name token is a word that may not be an actual last name (e.g. a generational suffix written in full).
+      validation_issues << ValidationWarning.new(SUSPICIOUS_LAST_NAME_WARNING, :persons, competition_id, name: name, suffix: split_name.last) if %w[junior senior].include?(split_name.last.downcase)
 
       # Check for missing period in single letter middle name.
       validation_issues << ValidationWarning.new(MISSING_PERIOD_WARNING, :persons, competition_id, name: name) if split_name.length > 2 && split_name[1, split_name.length - 2].any? { |n| n.length == 1 }
@@ -194,6 +218,40 @@ module ResultsValidators
                                            :persons, competition.id,
                                            name: p.name, wca_id: p.wca_id)
           end
+        end
+
+        next unless competition.use_wca_registration? || competition.registrations.any?
+
+        # Load registrations ahead of time here so we don't query for each InboxPerson.
+        # This could have been managed by overriding competition_associations, and adding `:registrations`,
+        # but it was not so straightforward. Also since `InboxPerson` will soon be removed entirely, didn't
+        # go deep into it.
+        inbox_person_ref_ids = competition_data.persons.map(&:ref_id)
+        inbox_persons = competition.inbox_persons.eager_load(registration: [:user]).where(id: inbox_person_ref_ids)
+        competition_registrant_ids = competition.registrations.pluck(:registrant_id)
+
+        inbox_persons.find_each do |p|
+          unless competition_registrant_ids.include?(p.ref_id.to_i)
+            @warnings << ValidationWarning.new(MISSING_MATCHING_REGISTRATION_WARNING,
+                                               :persons, competition.id,
+                                               name: p.name)
+            next
+          end
+
+          unless p.registration.accepted?
+            @warnings << ValidationWarning.new(UNACCEPTED_REGISTRATION_WITH_RESULTS_WARNING,
+                                               :persons, competition.id,
+                                               name: p.name)
+          end
+
+          mismatches = p.registration_mismatches
+          next if mismatches.empty?
+
+          @warnings << ValidationWarning.new(REGISTRATION_DETAILS_MISMATCH_WARNING,
+                                             :persons, competition.id,
+                                             person_id: p.ref_id,
+                                             name: p.name,
+                                             mismatches: mismatches.join(', '))
         end
       end
     end

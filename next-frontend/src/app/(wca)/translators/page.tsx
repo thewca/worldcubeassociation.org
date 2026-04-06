@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { Container, Heading, SimpleGrid, VStack } from "@chakra-ui/react";
 import UserBadge from "@/components/UserBadge";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import { getTranslatorRoles } from "@/lib/wca/roles/activeRoles";
 import { Metadata } from "next";
@@ -16,14 +16,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function TranslatorsPage() {
   const { t } = await getT();
 
-  const { data: translatorRoles, error } = await getTranslatorRoles();
+  const { data: translatorRoles, error, response } = await getTranslatorRoles();
 
-  if (error) return <Errored error={error} />;
+  if (error) return <OpenapiError response={response} t={t} />;
 
   const translatorsByLanguage = _.groupBy(translatorRoles, "group.name");
-
-  if (!translatorsByLanguage)
-    return <Errored error="Error Loading Translators" />;
 
   return (
     <Container bg="bg">

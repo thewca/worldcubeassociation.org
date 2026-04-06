@@ -5,7 +5,8 @@ require 'fileutils'
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, except: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
-  before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
+  before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks]
+  before_action :check_newcomers_data_access, only: %i[last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
 
   def new
     @competition = competition_from_params
@@ -67,7 +68,7 @@ class ResultsSubmissionController < ApplicationController
   def upload_scrambles
     @competition = Competition.includes(
       scramble_file_uploads: ScrambleFileUpload::SERIALIZATION_INCLUDES,
-      **ScrambleFileUpload::SERIALIZATION_INCLUDES,
+      matched_scramble_sets: MatchedScrambleSet::SERIALIZATION_INCLUDES,
     ).find(params[:competition_id])
   end
 
@@ -98,6 +99,7 @@ class ResultsSubmissionController < ApplicationController
     errors = CompetitionResultsImport.import_temporary_results(
       competition,
       temporary_results_data,
+      UploadedJson.upload_types[:results_json],
       mark_result_submitted: mark_result_submitted,
       store_uploaded_json: store_uploaded_json,
       results_json_str: upload_json.results_json_str,
@@ -145,29 +147,29 @@ class ResultsSubmissionController < ApplicationController
                                    .includes(:user)
                                    .select { it.wcif_status == "accepted" && person_with_results.include?(it.registrant_id.to_s) }
                                    .map do |registration|
-      InboxPerson.new({
-                        id: [registration.registrant_id, competition.id],
-                        wca_id: registration.wca_id || '',
-                        name: registration.name,
-                        country_iso2: registration.country.iso2,
-                        gender: registration.gender,
-                        dob: registration.dob,
-                      })
+                                     InboxPerson.new({
+                                                       id: [registration.registrant_id, competition.id],
+                                                       wca_id: registration.wca_id || '',
+                                                       name: registration.name,
+                                                       country_iso2: registration.country.iso2,
+                                                       gender: registration.gender,
+                                                       dob: registration.dob,
+                                                     })
     end
 
     scrambles_to_import = competition.matched_scramble_sets.flat_map do |scramble_set|
-      extra_scrambles, std_scrambles = scramble_set.matched_inbox_scrambles.partition(&:is_extra?)
+      extra_scrambles, std_scrambles = scramble_set.matched_scrambles.partition(&:is_extra?)
 
       [std_scrambles, extra_scrambles].flat_map do |scramble_family|
-        scramble_family.map.with_index do |scramble, idx|
+        scramble_family.map do |scramble|
           Scramble.new({
                          competition_id: competition.id,
                          event_id: scramble_set.event_id,
                          round_type_id: scramble_set.round_type_id,
-                         round_id: scramble_set.matched_round_id,
+                         round_id: scramble_set.round_id,
                          group_id: scramble_set.alphabetic_group_index,
                          is_extra: scramble.is_extra?,
-                         scramble_num: idx + 1,
+                         scramble_num: scramble.ordered_index + 1,
                          scramble: scramble.scramble_string,
                        })
         end
@@ -179,7 +181,22 @@ class ResultsSubmissionController < ApplicationController
       scrambles_to_import: scrambles_to_import,
       persons_to_import: persons_to_import,
     }
-    errors = CompetitionResultsImport.import_temporary_results(competition, temporary_results_data)
+
+    mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))
+    store_uploaded_json = ActiveRecord::Type::Boolean.new.cast(params.require(:store_uploaded_json))
+
+    errors = CompetitionResultsImport.import_temporary_results(
+      competition,
+      temporary_results_data,
+      UploadedJson.upload_types[:wca_live],
+      mark_result_submitted: mark_result_submitted,
+      store_uploaded_json: store_uploaded_json,
+      # The "traditional" Results JSON also contains personal data like DOB,
+      #   so it is fine to hard-code the `authorized: true` here.
+      # It is intentional and desired that WRT (who have admin power to view DOBs anyway)
+      #   can reconstruct personal information from the moment the upload happened.
+      results_json_str: competition.to_wcif(authorized: true).to_json,
+    )
 
     return render status: :unprocessable_content, json: { error: errors } if errors.any?
 
@@ -218,5 +235,13 @@ class ResultsSubmissionController < ApplicationController
 
   private def competition_from_params
     Competition.find(params[:competition_id])
+  end
+
+  private def check_newcomers_data_access
+    competition = competition_from_params
+
+    return head :unauthorized unless current_user.can_check_newcomers_data?(competition)
+
+    render status: :bad_request, json: { error: "The newcomer check dashboard can only be used before the results are submitted." } if competition.results_submitted?
   end
 end

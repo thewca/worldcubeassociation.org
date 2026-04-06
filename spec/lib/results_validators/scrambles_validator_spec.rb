@@ -26,7 +26,7 @@ RSpec.describe SV do
     context "Scramble" do
       let(:round_333oh) { create(:round, competition: competition1, event_id: "333oh") }
       let(:round_222) { create(:round, competition: competition2, event_id: "222") }
-      let(:round_333bf) { create(:round, competition: competition2, event_id: "333bf", format_id: "3") }
+      let(:round_333bf) { create(:round, competition: competition2, event_id: "333bf", format_id: "5") }
 
       # Triggers:
       # MISSING_SCRAMBLES_FOR_ROUND_ERROR
@@ -37,7 +37,7 @@ RSpec.describe SV do
           result_kind = model.model_name.singular.to_sym
           create(result_kind, competition: competition1, event_id: "333oh", round: round_333oh)
           create(result_kind, competition: competition2, event_id: "222", round: round_222)
-          create(result_kind, :blind_mo3, competition: competition2, round: round_333bf)
+          create(result_kind, :blind_bo5, competition: competition2, round: round_333bf)
         end
 
         expected_errors = [
@@ -61,10 +61,10 @@ RSpec.describe SV do
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
           create(result_kind, competition: competition1, event_id: "333oh", round: round_333oh)
-          create(result_kind, :blind_mo3, competition: competition2, round: round_333bf)
+          create(result_kind, :blind_bo5, competition: competition2, round: round_333bf)
         end
 
-        create_scramble_set(2, competition: competition2, round: round_333bf, event_id: "333bf")
+        create_scramble_set(4, competition: competition2, round: round_333bf, event_id: "333bf")
 
         expected_errors = [
           RV::ValidationError.new(SV::MISSING_SCRAMBLES_FOR_COMPETITION_ERROR,
@@ -73,7 +73,7 @@ RSpec.describe SV do
           RV::ValidationError.new(SV::MISSING_SCRAMBLES_FOR_GROUP_ERROR,
                                   :scrambles, competition2.id,
                                   round_id: "333bf-f", group_id: "A",
-                                  actual: 2, expected: 3),
+                                  actual: 4, expected: 5),
         ]
 
         validator_args.each do |arg|

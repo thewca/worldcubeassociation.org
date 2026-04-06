@@ -3,7 +3,7 @@
 class Result < ApplicationRecord
   include Resultable
 
-  belongs_to :person, -> { current }, primary_key: :wca_id, optional: true
+  belongs_to :person, -> { current }, primary_key: :wca_id, optional: true, inverse_of: :results
   validates :person_name, presence: true
   belongs_to :country
   has_one :continent, through: :country
@@ -11,21 +11,10 @@ class Result < ApplicationRecord
 
   # InboxPerson IDs are only unique per competition. So in addition to querying the ID itself (which is guaranteed by :foreign_key)
   # we also need sure to query the correct competition as well through a composite key.
-  belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
+  belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true, inverse_of: :results
 
-  has_many :result_attempts, dependent: :destroy
-
-  after_update_commit :create_or_update_attempts
-
-  def create_or_update_attempts
-    attempts = self.result_attempts_attributes(result_id: self.id)
-
-    # Delete attempts when the value was set to 0
-    zero_attempts = self.skipped_attempt_numbers
-    ResultAttempt.where(result_id: id, attempt_number: zero_attempts).delete_all if zero_attempts.any?
-
-    ResultAttempt.upsert_all(attempts)
-  end
+  has_many :result_attempts, inverse_of: :result, dependent: :destroy, autosave: true, index_errors: true
+  validates_associated :result_attempts
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
 
@@ -52,10 +41,6 @@ class Result < ApplicationRecord
   alias_attribute :name, :person_name
   alias_attribute :wca_id, :person_id
 
-  def attempts
-    [value1, value2, value3, value4, value5]
-  end
-
   delegate :iso2, to: :country, prefix: true
 
   DEFAULT_SERIALIZE_OPTIONS = {
@@ -67,5 +52,25 @@ class Result < ApplicationRecord
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
+
+  def self.unpack_attempt_attributes(attempt_values, **additional_attributes)
+    attempt_values
+      .map
+      .with_index(1)
+      .filter { |value, _n| value != SolveTime::SKIPPED_VALUE }
+      .map do |value, n|
+        { value: value, attempt_number: n, **additional_attributes }
+    end
+  end
+
+  def self.augment_attempts(result_attrs, id_key: "id")
+    result_ids = result_attrs.pluck(id_key).uniq
+
+    result_attempts_by_result = ResultAttempt.where(result_id: result_ids)
+                                             .group_by(&:result_id)
+                                             .transform_values { it.sort_by(&:attempt_number).map(&:value) }
+
+    result_attrs.map { it.merge(attempts: result_attempts_by_result[it[id_key]]) }
   end
 end

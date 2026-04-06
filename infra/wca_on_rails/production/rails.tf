@@ -3,6 +3,10 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 locals {
+  primary_db_url = "worldcubeassociation-dot-org-m8.comp2du1hpno.us-west-2.rds.amazonaws.com"
+  read_replica_db_url = "read-replica-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+  dev_dump_db_url = "dev-dump-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+
   sidekiq_environment = [
   ]
   rails_environment = [
@@ -44,15 +48,15 @@ locals {
     },
     {
       name = "DATABASE_HOST"
-      value = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = local.primary_db_url
     },
     {
       name = "READ_REPLICA_HOST"
-      value = "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = local.read_replica_db_url
     },
     {
       name = "DEV_DUMP_HOST"
-      value = "dev-dump-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = local.dev_dump_db_url
     },
     {
       name = "CACHE_REDIS_URL"
@@ -143,11 +147,12 @@ locals {
     { # The PHPMyAdmin Docker file allows us to pass the user config as a base 64 encoded environment variable
       name = "PMA_USER_CONFIG_BASE64"
       value = base64encode(templatefile("../templates/config.user.inc.php.tftpl",
-        { rds_host: "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
-          rds_replica_host: "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
-          dump_replica_host: "dev-dump-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"}))
+        { rds_host: local.primary_db_url,
+          rds_replica_host: local.read_replica_db_url,
+          dump_replica_host: local.dev_dump_db_url}))
     }
   ]
+  rails_internal_dns = "rails.local"
 }
 
 data "aws_iam_policy_document" "task_assume_role_policy" {
@@ -169,6 +174,28 @@ resource "aws_iam_role" "task_execution_role" {
 resource "aws_iam_role_policy_attachment" "task_execution_role_attachment" {
   role       = aws_iam_role.task_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+resource "aws_iam_role" "deployment_role" {
+  name = "${var.name_prefix}-deployment-role"
+  assume_role_policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "AllowAccessToECSForInfrastructureManagement",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "ecs.amazonaws.com"
+        },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "deployment_role_attachment" {
+  role       = aws_iam_role.deployment_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonECSInfrastructureRolePolicyForLoadBalancers"
 }
 
 resource "aws_iam_role" "task_role" {
@@ -220,6 +247,7 @@ data "aws_iam_policy_document" "task_policy" {
     ]
     resources = [
       "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_dev_dump_identifier}/${var.DATABASE_WRT_USER}",
+      "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_dev_dump_identifier}/${var.DATABASE_WRT_SENIOR_USER}",
       "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_read_replica_identifier}/${var.DATABASE_WRT_SENIOR_USER}",
       "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_SENIOR_USER}"]
   }
@@ -263,10 +291,12 @@ resource "aws_ecs_task_definition" "this" {
       memory = 3900
       portMappings = [
         {
-          # The hostPort is automatically set for awsvpc network mode,
-          # see https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PortMapping.html#ECS-Type-PortMapping-hostPort
+          name = "rails-port"
+          # Set hostport for service discovery
+          hostPort = 3000
           containerPort = 3000
           protocol      = "tcp"
+          appProtocol = "http"
         },
       ]
       logConfiguration = {
@@ -293,6 +323,10 @@ resource "aws_ecs_task_definition" "this" {
   }
 }
 
+resource "aws_service_discovery_private_dns_namespace" "this" {
+  name = local.rails_internal_dns
+  vpc  = var.shared.vpc_id
+}
 
 
 data "aws_ecs_task_definition" "this" {
@@ -328,6 +362,13 @@ resource "aws_ecs_service" "this" {
     target_group_arn = var.shared.rails-production[0].arn
     container_name   = "rails-production"
     container_port   = 3000
+
+    advanced_configuration {
+      alternate_target_group_arn = var.shared.rails-production[1].arn
+      # It's currently not possible to access the default listener of the rule like var.shared.https_listener.default_arn as per https://github.com/hashicorp/terraform-provider-aws/issues/43932
+      production_listener_rule   = "arn:aws:elasticloadbalancing:us-west-2:285938427530:listener-rule/app/wca-on-rails/396a56d00f80f390/8fb3d991e0309121/196727c3f008871e"
+      role_arn                   = aws_iam_role.deployment_role.arn
+    }
   }
 
   network_configuration {
@@ -336,21 +377,31 @@ resource "aws_ecs_service" "this" {
   }
 
   deployment_controller {
-    type = "CODE_DEPLOY"
+    type = "ECS"
+  }
+
+  deployment_configuration {
+    bake_time_in_minutes = 5
+    strategy = "BLUE_GREEN"
+  }
+
+  service_connect_configuration {
+    enabled = true
+    namespace = aws_service_discovery_private_dns_namespace.this.name
+    service {
+      port_name = "rails-port"
+      discovery_name = "rails-cluster"
+      timeout {
+        per_request_timeout_seconds = 60
+      }
+      client_alias {
+        port = 3000
+        dns_name = local.rails_internal_dns
+      }
+    }
   }
 
   tags = {
     Name = var.name_prefix
-  }
-
-  lifecycle {
-    ignore_changes = [
-      # The target group changes during Blue/Green deployment
-      load_balancer,
-      # The Task definition will be set by Code Deploy
-      task_definition,
-      # We set the capacity provider strategy in the buildspec
-      capacity_provider_strategy
-    ]
   }
 }

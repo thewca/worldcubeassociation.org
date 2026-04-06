@@ -1,8 +1,9 @@
-import { Container, Text } from "@chakra-ui/react";
-import TabMenu from "@/components/competitions/TabMenu";
-import MobileMenu from "@/components/competitions/MobileMenu";
+import { Container } from "@chakra-ui/react";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { Metadata } from "next";
+import { getT } from "@/lib/i18n/get18n";
+import OpenapiError from "@/components/ui/openapiError";
+import CompetitionMenu from "@/components/competitions/CompetitionMenu";
 
 type TitleProps = {
   params: Promise<{ competitionId: string }>;
@@ -31,17 +32,20 @@ export default async function CompetitionLayout({
   params: Promise<{ competitionId: string }>;
 }) {
   const { competitionId } = await params;
-  const { data: competitionInfo, error } =
-    await getCompetitionInfo(competitionId);
+  const { t } = await getT();
+  const {
+    data: competitionInfo,
+    error,
+    response,
+  } = await getCompetitionInfo(competitionId);
 
-  if (error) {
-    return <Text>Error fetching competition</Text>;
-  }
+  if (error) return <OpenapiError t={t} response={response} />;
 
   return (
     <Container pt="8">
-      <MobileMenu competitionInfo={competitionInfo}>{children}</MobileMenu>
-      <TabMenu competitionInfo={competitionInfo}>{children}</TabMenu>
+      <CompetitionMenu competitionInfo={competitionInfo}>
+        {children}
+      </CompetitionMenu>
     </Container>
   );
 }

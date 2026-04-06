@@ -19,7 +19,7 @@ RSpec.describe Api::V0::Wrt::PersonsController do
       expect(response).to have_http_status :ok
     end
 
-    it "shows a successful message when the person has been changed" do
+    it "returns success response when the person has been changed" do
       patch :update, params: { id: person.wca_id, method: "fix", person: {
         wcaId: person.wca_id,
         name: "New Name",
@@ -29,7 +29,7 @@ RSpec.describe Api::V0::Wrt::PersonsController do
       } }
       expect(response).to have_http_status :ok
       response_json = response.parsed_body
-      expect(response_json['success']).to eq "Successfully fixed New Name."
+      expect(response_json['success']).to be true
     end
   end
 end

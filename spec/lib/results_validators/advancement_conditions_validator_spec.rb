@@ -30,16 +30,14 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       round_222_1, round_222_f = (1..2).map { |i| create(:round, competition: competition2, event_id: "222", total_number_of_rounds: 2, number: i) }
       [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym
-        # Using a single fake person for all the results for better performance.
-        fake_person = build_person(result_kind, competition1)
         # Collecting all the results and using bulk import for better performance.
         results = []
-        results += build_list(result_kind, 100, competition: competition1, event_id: "333oh", round_type_id: "1", person: fake_person, round: round_333oh_1)
-        results += build_list(result_kind, 16, competition: competition1, event_id: "333oh", round_type_id: "2", person: fake_person, round: round_333oh_2)
-        results += build_list(result_kind, 8, competition: competition1, event_id: "333oh", round_type_id: "3", person: fake_person, round: round_333oh_3)
-        results += build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "f", person: fake_person, round: round_333oh_f)
-        results += build_list(result_kind, 8, competition: competition2, event_id: "222", round_type_id: "1", person: fake_person, round: round_222_1)
-        results += build_list(result_kind, 5, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person, round: round_222_f)
+        results += build_list(result_kind, 100, competition: competition1, event_id: "333oh", round_type_id: "1", round: round_333oh_1)
+        results += build_list(result_kind, 16, competition: competition1, event_id: "333oh", round_type_id: "2", round: round_333oh_2)
+        results += build_list(result_kind, 8, competition: competition1, event_id: "333oh", round_type_id: "3", round: round_333oh_3)
+        results += build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "f", round: round_333oh_f)
+        results += build_list(result_kind, 8, competition: competition2, event_id: "222", round_type_id: "1", round: round_222_1)
+        results += build_list(result_kind, 5, competition: competition2, event_id: "222", round_type_id: "f", round: round_222_f)
         model.import(results)
       end
 
@@ -55,13 +53,11 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       round_33_oh_1, round_33_oh_f = (1..2).map { |i| create(:round, competition: competition1, event_id: "333oh", total_number_of_rounds: 2, number: i) }
       [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym
-        # Using a single fake person for all the results for better performance.
-        fake_person = build_person(result_kind, competition1)
         # Collecting all the results and using bulk import for better performance.
         results = []
-        results += build_list(result_kind, 100, competition: competition1, event_id: "333oh", round_type_id: "1", person: fake_person, round: round_33_oh_1)
-        results += build_list(result_kind, 8, competition: competition1, event_id: "333oh", round_type_id: "b", person: fake_person, round: round_333oh_b_final)
-        results += build_list(result_kind, 32, competition: competition1, event_id: "333oh", round_type_id: "f", person: fake_person, round: round_33_oh_f)
+        results += build_list(result_kind, 100, competition: competition1, event_id: "333oh", round_type_id: "1", round: round_33_oh_1)
+        results += build_list(result_kind, 8, competition: competition1, event_id: "333oh", round_type_id: "b", round: round_333oh_b_final)
+        results += build_list(result_kind, 32, competition: competition1, event_id: "333oh", round_type_id: "f", round: round_33_oh_f)
         model.import(results, validate: false)
       end
 
@@ -230,16 +226,14 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       round_222_1, round_222_f = (1..2).map { |i| create(:round, competition: competition2, event_id: "222", total_number_of_rounds: 2, number: i) }
       [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym
-        # Using a single fake person for all the results for better performance.
-        fake_person = build_person(result_kind, competition1)
         # Collecting all the results and using bulk import for better performance.
         results = []
-        results += build_list(result_kind, 99, competition: competition1, event_id: "333oh", round_type_id: "1", person: fake_person, round: round_333oh_1)
-        results += build_list(result_kind, 15, competition: competition1, event_id: "333oh", round_type_id: "2", person: fake_person, round: round_333oh_2)
-        results += build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "3", person: fake_person, round: round_333oh_3)
-        results += build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "f", person: fake_person, round: round_333oh_f)
-        results += build_list(result_kind, 8, competition: competition2, event_id: "222", round_type_id: "1", person: fake_person, round: round_222_1)
-        results += build_list(result_kind, 7, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person, round: round_222_f)
+        results += build_list(result_kind, 99, competition: competition1, event_id: "333oh", round_type_id: "1", round: round_333oh_1)
+        results += build_list(result_kind, 15, competition: competition1, event_id: "333oh", round_type_id: "2", round: round_333oh_2)
+        results += build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "3", round: round_333oh_3)
+        results += build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "f", round: round_333oh_f)
+        results += build_list(result_kind, 8, competition: competition2, event_id: "222", round_type_id: "1", round: round_222_1)
+        results += build_list(result_kind, 7, competition: competition2, event_id: "222", round_type_id: "f", round: round_222_f)
         model.import(results, validate: false)
       end
       expected_errors = [
@@ -267,14 +261,4 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       end
     end
   end
-
-  private
-
-    def build_person(result_kind, competition)
-      if result_kind == :result
-        build(:person)
-      else
-        build(:inbox_person, competition_id: competition.id)
-      end
-    end
 end

@@ -11,6 +11,7 @@ import {
   VenueDetailsCard,
 } from "@/components/competitions/Cards";
 import OrganizationTeamCard from "@/components/competitions/OrganizerCard";
+import OpenapiError from "@/components/ui/openapiError";
 
 export default async function CompetitionOverView({
   params,
@@ -25,18 +26,18 @@ export default async function CompetitionOverView({
 }
 
 async function GeneralPage({ competitionId }: { competitionId: string }) {
-  const { data: competitionInfo, error } =
-    await getCompetitionInfo(competitionId);
+  const { t } = await getT();
+  const {
+    data: competitionInfo,
+    error,
+    response,
+  } = await getCompetitionInfo(competitionId);
 
-  if (error) {
-    return <Text>Error fetching competition</Text>;
-  }
+  if (error) return <OpenapiError t={t} response={response} />;
 
   if (!competitionInfo) {
     return <Text>Competition does not exist</Text>;
   }
-
-  const { t } = await getT();
 
   return (
     <>

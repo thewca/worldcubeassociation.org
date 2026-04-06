@@ -38,6 +38,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/rounds": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets Live Admin Information */
+        get: operations["liveAdmin"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/rounds/{roundId}": {
         parameters: {
             query?: never;
@@ -46,7 +63,10 @@ export interface paths {
             cookie?: never;
         };
         /** Gets Information about the Round including the live Results */
-        get: {
+        get: operations["liveByRound"];
+        put?: never;
+        /** Adds a live result for a given round */
+        post: {
             parameters: {
                 query?: never;
                 header?: never;
@@ -56,19 +76,155 @@ export interface paths {
                 };
                 cookie?: never;
             };
-            requestBody?: never;
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SubmitLiveResult"];
+                };
+            };
             responses: {
-                /** @description Returns results */
+                /** @description Result Accepted */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            status?: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Updates a live result for a given round */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                    roundId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SubmitLiveResult"];
+                };
+            };
+            responses: {
+                /** @description Result Updated */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["LiveRound"];
+                        "application/json": {
+                            status?: string;
+                        };
                     };
                 };
             };
         };
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the next competitor assuming the registration in the query is quit */
+        get: operations["getNextCompetitor"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Adds a use to a round */
+        put: operations["addCompetitor"];
+        post?: never;
+        /** Quits a competitor from the round and advances the next one if prompted */
+        delete: operations["quitCompetitor"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/clear": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Clears a round deleting all results */
+        put: operations["clearRound"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/open": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Opens a round and locks the previous round if necessary */
+        put: operations["openRound"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}/clear": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Quits a competitor from the round and advances the next one if prompted */
+        put: operations["clearCompetitor"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/podiums": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets Information about the Podiums of the Live Results */
+        get: operations["livePodiums"];
         put?: never;
         post?: never;
         delete?: never;
@@ -85,29 +241,7 @@ export interface paths {
             cookie?: never;
         };
         /** Gets Information about the Competitors's live result */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    competitionId: string;
-                    registrationId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Returns a person and their results */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["LivePerson"];
-                    };
-                };
-            };
-        };
+        get: operations["liveByPerson"];
         put?: never;
         post?: never;
         delete?: never;
@@ -748,6 +882,25 @@ export interface components {
             level: components["schemas"]["WcifAttemptResult"];
         };
         WcifAdvancementCondition: components["schemas"]["WcifAdvancementConditionRanking"] | components["schemas"]["WcifAdvancementConditionPercent"] | components["schemas"]["WcifAdvancementConditionAttemptResult"];
+        WcifScramble: string;
+        WcifScrambleSet: {
+            /** @example 1 */
+            id: number;
+            scrambles: components["schemas"]["WcifScramble"][];
+            extraScrambles: components["schemas"]["WcifScramble"][];
+        };
+        BaseWcifRound: {
+            /** @example 333-r1 */
+            id: string;
+            /** @enum {string} */
+            format: "1" | "2" | "3" | "a" | "m";
+            timeLimit?: components["schemas"]["WcifTimeLimit"];
+            cutoff?: components["schemas"]["WcifCutoff"];
+            advancementCondition?: components["schemas"]["WcifAdvancementCondition"];
+            scrambleSetCount: number;
+            scrambleSets: components["schemas"]["WcifScrambleSet"][];
+            extensions: unknown[];
+        };
         WcifAttempt: {
             result: components["schemas"]["WcifAttemptResult"];
             reconstruction?: string;
@@ -761,57 +914,88 @@ export interface components {
             best: components["schemas"]["WcifAttemptResult"];
             average: components["schemas"]["WcifAttemptResult"];
         };
-        WcifScramble: string;
-        WcifScrambleSet: {
-            /** @example 1 */
-            id: number;
-            scrambles: components["schemas"]["WcifScramble"][];
-            extraScrambles: components["schemas"]["WcifScramble"][];
-        };
-        WcifRound: {
-            /** @example 333-r1 */
-            id: string;
-            /** @enum {string} */
-            format: "1" | "2" | "3" | "a" | "m";
-            timeLimit?: components["schemas"]["WcifTimeLimit"];
-            cutoff?: components["schemas"]["WcifCutoff"];
-            advancementCondition?: components["schemas"]["WcifAdvancementCondition"];
+        WcifRound: components["schemas"]["BaseWcifRound"] & {
             results: components["schemas"]["WcifResult"][];
-            scrambleSetCount: number;
-            scrambleSets: components["schemas"]["WcifScrambleSet"][];
-            extensions: unknown[];
         };
+        BaseAdminRound: components["schemas"]["WcifRound"] & {
+            state: string;
+        };
+        OpenRound: components["schemas"]["BaseAdminRound"] & {
+            total_competitors: number;
+            competitors_live_results_entered: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            state: "open";
+        };
+        LockedRound: components["schemas"]["BaseAdminRound"] & {
+            total_competitors: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            state: "locked";
+        };
+        PendingRound: components["schemas"]["BaseAdminRound"] & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            state: "pending";
+        };
+        ReadyRound: components["schemas"]["BaseAdminRound"] & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            state: "ready";
+        };
+        LiveRoundAdmin: components["schemas"]["OpenRound"] | components["schemas"]["LockedRound"] | components["schemas"]["PendingRound"] | components["schemas"]["ReadyRound"];
         LiveAttempt: {
-            result: number;
+            value: number;
             attempt_number: number;
         };
-        LiveResult: {
+        BaseLiveResult: {
             registration_id: number;
-            round_id: number;
-            global_pos: number;
-            local_pos: number;
             best: number;
             average: number;
             single_record_tag: string;
             average_record_tag: string;
             advancing: boolean;
             advancing_questionable: boolean;
-            event_id: string;
             attempts: components["schemas"]["LiveAttempt"][];
+            /** Format: datetime */
+            last_attempt_entered_at: string;
+        };
+        RoundLiveResult: components["schemas"]["BaseLiveResult"] & {
+            round_wcif_id: string;
+            global_pos: number;
+            local_pos: number;
+            forecast_statistics?: {
+                best_possible_average?: number;
+                worst_possible_average?: number;
+            };
         };
         LiveCompetitor: {
             id: number;
             registrant_id: number;
-            user: {
-                id: number;
-                wca_id: string;
-                name: string;
-            };
+            user_id: number;
+            name: string;
+            country_iso2: string;
         };
-        LiveRound: components["schemas"]["WcifRound"] & {
-            results: components["schemas"]["LiveResult"][];
+        LiveRound: components["schemas"]["BaseWcifRound"] & {
+            results: components["schemas"]["RoundLiveResult"][];
             competitors: components["schemas"]["LiveCompetitor"][];
             round_id: number;
+            state_hash: string;
+            linked_round_ids?: string[];
+        };
+        SubmitLiveResult: {
+            attempts: components["schemas"]["LiveAttempt"][];
+            registration_id: number;
         };
         UserAvatar: {
             /**
@@ -854,8 +1038,14 @@ export interface components {
             personalBests: components["schemas"]["WcifPersonalBest"][];
             extensions: unknown[];
         };
+        ByPersonLiveResult: components["schemas"]["BaseLiveResult"] & {
+            round_wcif_id: string;
+            global_pos: number;
+            local_pos: number;
+            event_id: string;
+        };
         LivePerson: components["schemas"]["WcifPerson"] & {
-            results: components["schemas"]["LiveResult"][];
+            results: components["schemas"]["ByPersonLiveResult"][];
         };
         TeamMembership: {
             id: number;
@@ -1025,6 +1215,20 @@ export interface components {
             tab_names: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
+        };
+        General404: {
+            error: string;
+            data: {
+                model: string;
+                id: string;
+            };
+        };
+        Competition404: components["schemas"]["General404"] & {
+            data?: {
+                /** @enum {string} */
+                model: "Competition";
+                id: string;
+            };
         };
         WcifEvent: {
             /** @example 333 */
@@ -1221,16 +1425,7 @@ export interface components {
             round_id: string | null;
             /** @example a */
             format_id: string;
-            /** @example 126 */
-            value1: number;
-            /** @example 84 */
-            value2: number;
-            /** @example 91 */
-            value3: number;
-            /** @example 89 */
-            value4: number;
-            /** @example 85 */
-            value5: number;
+            attempts: number[];
             /** @example 84 */
             best: number;
             /** @example 88 */
@@ -1304,16 +1499,7 @@ export interface components {
             round_id: string | null;
             /** @example a */
             format_id: string;
-            /** @example 126 */
-            value1: number;
-            /** @example 84 */
-            value2: number;
-            /** @example 91 */
-            value3: number;
-            /** @example 89 */
-            value4: number;
-            /** @example 85 */
-            value5: number;
+            attempts: number[];
             /** @example 84 */
             best: number;
             /** @example 88 */
@@ -1499,7 +1685,17 @@ export interface components {
             logo_url?: string;
         };
     };
-    responses: never;
+    responses: {
+        /** @description Competition not found */
+        CompetitionNotFound: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["Competition404"];
+            };
+        };
+    };
     parameters: never;
     requestBodies: never;
     headers: never;
@@ -1551,6 +1747,260 @@ export interface operations {
             };
         };
     };
+    liveAdmin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns Live Admin Information with Rounds */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        rounds: components["schemas"]["LiveRoundAdmin"][];
+                    };
+                };
+            };
+        };
+    };
+    liveByRound: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns results */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveRound"];
+                };
+            };
+        };
+    };
+    getNextCompetitor: {
+        parameters: {
+            query: {
+                registration_id: number;
+            };
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the next competitors who would advance if the registration */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveCompetitor"][];
+                };
+            };
+        };
+    };
+    addCompetitor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+                registrationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the created empty live result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        competitor: components["schemas"]["LiveCompetitor"];
+                    };
+                };
+            };
+        };
+    };
+    quitCompetitor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+                registrationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    advancing_ids?: number[];
+                };
+            };
+        };
+        responses: {
+            /** @description Returns number of rounds the competitor was marked as quit in */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        quit: number;
+                    };
+                };
+            };
+        };
+    };
+    clearRound: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns number of results clear */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status: string;
+                        recreated_rows: number;
+                    };
+                };
+            };
+        };
+    };
+    openRound: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns number of locked an created results */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status: string;
+                        created_rows: number;
+                        locked_rows: number;
+                    };
+                };
+            };
+        };
+    };
+    clearCompetitor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+                registrationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the number of attempts that were deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        deleted_attempts: number;
+                    };
+                };
+            };
+        };
+    };
+    livePodiums: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns podiums with round information */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveRound"][];
+                };
+            };
+        };
+    };
+    liveByPerson: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                registrationId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns a person and their results */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LivePerson"];
+                };
+            };
+        };
+    };
     competitionById: {
         parameters: {
             query?: never;
@@ -1571,6 +2021,7 @@ export interface operations {
                     "application/json": components["schemas"]["CompetitionInfo"];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionEvents: {
@@ -1593,6 +2044,7 @@ export interface operations {
                     "application/json": components["schemas"]["WcifEvent"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionSchedule: {
@@ -1615,6 +2067,7 @@ export interface operations {
                     "application/json": components["schemas"]["WcifSchedule"];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionTabs: {
@@ -1637,6 +2090,7 @@ export interface operations {
                     "application/json": components["schemas"]["Tabs"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionRegistrations: {
@@ -1659,6 +2113,7 @@ export interface operations {
                     "application/json": components["schemas"]["RegistrationData"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionPodiums: {
@@ -1681,19 +2136,23 @@ export interface operations {
                     "application/json": components["schemas"]["Result"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     competitionList: {
         parameters: {
             query?: {
-                include_cancelled?: string;
+                include_cancelled?: boolean;
                 continent?: string;
                 country_iso2?: string;
                 delegate?: string;
-                event_ids?: string[];
+                "event_ids[]"?: string[];
                 start?: string;
                 end?: string;
                 admin_status?: string;
+                q?: string;
+                sort?: string;
+                ongoing_and_future?: string;
             };
             header?: never;
             path?: never;
@@ -1781,6 +2240,7 @@ export interface operations {
                     "application/json": components["schemas"]["Scramble"][];
                 };
             };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     getRankings: {

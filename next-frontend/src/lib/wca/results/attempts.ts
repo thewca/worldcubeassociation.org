@@ -28,12 +28,10 @@ export function resultAttempts(result: components["schemas"]["Result"]) {
   return cleanAttempts(result.attempts);
 }
 
-export function recordAttempts(record: components["schemas"]["Record"]) {
-  return cleanAttempts([
-    record.value1,
-    record.value2,
-    record.value3,
-    record.value4,
-    record.value5,
-  ]);
+export function recordAttempts(
+  record:
+    | components["schemas"]["Record"]
+    | components["schemas"]["ExtendedResult"],
+) {
+  return cleanAttempts(record.attempts);
 }

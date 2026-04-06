@@ -104,15 +104,33 @@ module FinishUnfinishedPersons
     JaroWinkler.similarity(string_a, string_b, ignore_case: true)
   end
 
-  def self.compute_semi_id(competition_year, person_name, available_per_semi = {})
+  def self.name_parts(person_name)
     roman_name = self.extract_roman_name person_name
     sanitized_roman_name = self.remove_accents roman_name
-    name_parts = sanitized_roman_name.gsub(/[^a-zA-Z ]/, '').upcase.split
+    sanitized_roman_name.gsub(/[^a-zA-Z ]/, '').split
+  end
 
-    last_name_index = name_parts.length > 1 && GENERATIONAL_SUFFIXES.include?(name_parts[-1]) ? -2 : -1
+  def self.generational_suffix?(parts)
+    parts.length > 1 && GENERATIONAL_SUFFIXES.include?(parts[-1].upcase)
+  end
 
-    last_name = name_parts[last_name_index]
-    rest_of_name = name_parts[...last_name_index].join
+  def self.name_parts_without_suffix(person_name)
+    parts = self.name_parts(person_name)
+
+    self.generational_suffix?(parts) ? parts[...-1] : parts
+  end
+
+  def self.last_name_with_suffix(person_name)
+    parts = self.name_parts(person_name)
+
+    self.generational_suffix?(parts) ? parts[-2..].join(' ') : parts[-1]
+  end
+
+  def self.compute_semi_id(competition_year, person_name, available_per_semi = {})
+    name_parts = self.name_parts_without_suffix(person_name)
+
+    last_name = name_parts[-1]
+    rest_of_name = name_parts[...-1].join
 
     padded_rest_of_name = rest_of_name.ljust WCA_QUARTER_ID_LENGTH, WCA_ID_PADDING
     letters_to_shift = [0, WCA_QUARTER_ID_LENGTH - last_name.length].max
@@ -121,7 +139,7 @@ module FinishUnfinishedPersons
     cleared_id = false
 
     until cleared_id || letters_to_shift > WCA_QUARTER_ID_LENGTH
-      quarter_id = last_name[...(WCA_QUARTER_ID_LENGTH - letters_to_shift)] + padded_rest_of_name[...letters_to_shift]
+      quarter_id = (last_name[...(WCA_QUARTER_ID_LENGTH - letters_to_shift)] + padded_rest_of_name[...letters_to_shift]).upcase
       semi_id = competition_year.to_s + quarter_id
 
       unless available_per_semi.key?(semi_id)

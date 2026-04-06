@@ -572,7 +572,7 @@ RSpec.describe Competition do
       expect(competition.in_progress?).to be true
       expect(competition.info_messages[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"
 
-      competition.use_wca_live_for_scoretaking = true
+      competition.scoretaking_software = :wca_live
       expect(competition.info_messages[:in_progress]).to eq "This competition is ongoing. You can check the live results <a href='https://live.worldcubeassociation.org/link/competitions/#{competition.id}'>here</a>!"
 
       competition.results_posted_at = Time.now
@@ -658,7 +658,7 @@ RSpec.describe Competition do
     delegate1 = create(:delegate, name: "Daniel", email: "daniel@d.com")
     delegate2 = create(:delegate, name: "Chris", email: "chris@c.com")
     delegates = [delegate1, delegate2]
-    staff_delegate_ids = delegates.map(&:id).join(",")
+    staff_delegate_ids = delegates.map(&:id)
     competition = create(:competition, staff_delegate_ids: staff_delegate_ids)
     expect(competition.delegates.sort_by(&:name)).to eq delegates.sort_by(&:name)
   end
@@ -667,7 +667,7 @@ RSpec.describe Competition do
     organizer1 = create(:user, name: "Bob", email: "bob@b.com")
     organizer2 = create(:user, name: "Jane", email: "jane@j.com")
     organizers = [organizer1, organizer2]
-    organizer_ids = organizers.map(&:id).join(",")
+    organizer_ids = organizers.map(&:id)
     competition = create(:competition, organizer_ids: organizer_ids)
     expect(competition.organizers.sort_by(&:name)).to eq organizers.sort_by(&:name)
   end
@@ -707,29 +707,19 @@ RSpec.describe Competition do
       expect(r2.reload.competition_id).to eq "NewID2015"
     end
 
-    it "changes the competitionId of scrambles" do
+    it "changes the competition_id of scrambles" do
       scramble1 = create(:scramble, competition: competition)
       competition.update_attribute(:id, "NewID2015")
       expect(scramble1.reload.competition_id).to eq "NewID2015"
     end
 
-    it "can set competition_events_attributes" do
-      comp_events = competition.competition_events
+    it "changes the competition_id of competition_events" do
+      old_comp_events = competition.competition_events
 
-      # Force ActiveRecord to do database queries for the associated competition_events
-      # with the new competition id.
-      competition.reload
+      competition.update_attribute(:id, "NewID2015")
+      new_comp_events = old_comp_events.reload
 
-      old_events = competition.events
-      competition.update!(
-        id: "MyerComp2016",
-        competition_events_attributes: [
-          { "id" => comp_events[0].id, "event_id" => comp_events[0].event_id, "_destroy" => "0" },
-          { "id" => comp_events[1].id, "event_id" => comp_events[1].event_id, "_destroy" => "0" },
-        ],
-      )
-      new_events = competition.events
-      expect(new_events).to eq old_events
+      expect(new_comp_events.pluck(:competition_id)).to eq Array.new(old_comp_events.count, "NewID2015")
     end
 
     it "updates the competition_id of competition_delegates and competition_organizers" do
@@ -744,9 +734,7 @@ RSpec.describe Competition do
       co = CompetitionOrganizer.find_by(organizer_id: organizer.id)
       expect(co).not_to be_nil
 
-      c = Competition.find(competition.id)
-      c.id = "NewID2015"
-      c.save!
+      competition.update_attribute(:id, "NewID2015")
 
       expect(CompetitionDelegate.where(delegate_id: delegate.id).count).to eq 1
       expect(CompetitionOrganizer.where(organizer_id: organizer.id).count).to eq 1
@@ -786,7 +774,7 @@ RSpec.describe Competition do
   end
 
   describe "when confirming or making visible" do
-    let(:competition_with_delegate) { build(:competition, :with_delegate, :with_organizer, generate_website: false) }
+    let(:competition_with_delegate) { build(:competition, :with_lead_delegate, :with_organizer, generate_website: false) }
     let(:competition_without_delegate) { build(:competition) }
 
     %i[confirmed show_at_all].each do |action|
@@ -819,7 +807,7 @@ RSpec.describe Competition do
     end
 
     it "sets confirmed_at when setting confirmed true" do
-      competition = create(:competition, :future, :with_delegate, :with_organizer, :with_valid_schedule)
+      competition = create(:competition, :future, :with_lead_delegate, :with_organizer, :with_valid_schedule)
       expect(competition.confirmed_at).to be_nil
 
       now = Time.at(Time.now.to_i)
@@ -939,10 +927,10 @@ RSpec.describe Competition do
       result = competition.events_with_podium_results
       expect(result.size).to eq 2
       expect(result.first.first).to eq three_by_three
-      expect(result.first.last.map(&:value1)).to eq [3000] * 3
+      expect(result.first.last.map { it.attempts.first }).to eq [3000] * 3
 
       expect(result.last.first).to eq two_by_two
-      expect(result.last.last.map(&:value1)).to eq [3000, 3000]
+      expect(result.last.last.map { it.attempts.first }).to eq [3000, 3000]
     end
 
     it "winning_results" do
@@ -969,13 +957,13 @@ RSpec.describe Competition do
       expect(results.size).to eq 2
       expect(results[0].first).to eq three_by_three
       expect(results[0].second.first.first).to eq RoundType.find("f")
-      expect(results[0].second.first.last.map(&:value1)).to eq [3000] * 3
+      expect(results[0].second.first.last.map { it.attempts.first }).to eq [3000] * 3
       expect(results[0].second.first.last.map(&:event_id)).to eq ["333"] * 3
-      expect(results[0].second.second.last.map(&:value1)).to eq [3000] * 4
+      expect(results[0].second.second.last.map { it.attempts.first }).to eq [3000] * 4
 
       expect(results[1].first).to eq two_by_two
       expect(results[1].second.first.first).to eq RoundType.find("c")
-      expect(results[1].second.first.last.map(&:value1)).to eq [3000, 3000]
+      expect(results[1].second.first.last.map { it.attempts.first }).to eq [3000, 3000]
 
       # Orders results which tied by person name.
       expect(results[1].second.first.last.map(&:person_name)).to eq %w[One Two]
@@ -1239,6 +1227,7 @@ RSpec.describe Competition do
   describe "is exempt from dues" do
     let(:four_by_four) { Event.find "444" }
     let(:fmc) { Event.find "333fm" }
+    let!(:initial_competitions) { create_list(:competition, 5, country_id: "Canada", city_name: "Vancouver, British Columbia", start_date: 2.years.ago, end_date: 2.years.ago + 2.days) }
 
     it "is false when competition has no championships" do
       competition = create(:competition, events: [four_by_four], championship_types: [], country_id: "Canada", city_name: "Vancouver, British Columbia")
@@ -1278,6 +1267,44 @@ RSpec.describe Competition do
     it "is true when competition is a world championship" do
       competition = create(:competition, events: Event.official, championship_types: ["world"], country_id: "Korea")
       expect(competition.exempt_from_wca_dues?).to be true
+    end
+
+    it "is true for the very first competition in a country" do
+      competition = create(:competition, country_id: "Australia", city_name: "Melbourne, Victoria", start_date: Date.today, end_date: Date.today + 2.days)
+      expect(competition.exempt_from_wca_dues?).to be true
+    end
+
+    it "is true for both 5th and 6th competitions if they start on the same date" do
+      create_list(:competition, 4, country_id: "Germany", start_date: 2.months.ago, end_date: 2.months.ago + 2.days)
+
+      comp_5 = create(:competition, country_id: "Germany", start_date: 1.month.ago, end_date: 1.month.ago + 2.days)
+      comp_6 = create(:competition, country_id: "Germany", start_date: 1.month.ago, end_date: 1.month.ago + 3.days)
+
+      expect(comp_5.exempt_from_wca_dues?).to be true
+      expect(comp_6.exempt_from_wca_dues?).to be true
+    end
+
+    it "is false for the 6th competition if it starts after the first 5 and true for the first 5 competitions" do
+      comp_6 = create(:competition, country_id: "Canada", city_name: "Vancouver, British Columbia", start_date: Date.today, end_date: Date.today + 2.days)
+
+      expect(comp_6.exempt_from_wca_dues?).to be false
+      expect(initial_competitions).to all(be_exempt_from_wca_dues)
+    end
+
+    it "is false if 6th competition is happening after many years and true for first 5 competitions" do
+      first_competitions = create_list(:competition, 5, country_id: "Korea", start_date: 7.years.ago, end_date: 7.years.ago + 2.days)
+      comp_6 = create(:competition, country_id: "Korea", start_date: Date.today, end_date: Date.today + 2.days)
+
+      expect(comp_6.exempt_from_wca_dues?).to be false
+      expect(first_competitions).to all(be_exempt_from_wca_dues)
+    end
+
+    it "is true for 6th competition if one of the first 5 competitions are multi-national FMC competition" do
+      create(:competition, events: [fmc], championship_types: [], country_id: "XW")
+      create_list(:competition, 4, country_id: "Korea", start_date: 2.months.ago, end_date: 2.months.ago + 2.days)
+      comp_6 = create(:competition, country_id: "Korea", start_date: Date.today, end_date: Date.today + 2.days)
+
+      expect(comp_6.exempt_from_wca_dues?).to be true
     end
   end
 

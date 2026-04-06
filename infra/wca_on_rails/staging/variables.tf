@@ -56,7 +56,7 @@ variable "rails_startup_time" {
 variable "rds_iam_identifier" {
   type = string
   description = "The identifier of the RDS Instance used for IAM Auth"
-  default = "db-GEOER6N45337C3ZMAYEL2WBAOY"
+  default = "db-PRC5ADGNMAABH5YKYYJWEEJBUI"
 }
 
 variable "WCA_REGISTRATIONS_URL" {
@@ -90,7 +90,13 @@ variable "shared" {
     rails_staging: object({
       arn: string
     })
+    anycable_staging: object({
+      arn: string
+    })
     rails_staging-api: object({
+      arn: string
+    })
+    nextjs_staging: object({
       arn: string
     })
     pma_staging: object({
@@ -104,6 +110,7 @@ variable "shared" {
       root_resource_id: string
     })
     account_id: string
+    next_repository_url: string,
     private_subnets: any
   })
   description = "The shared resources between Environments"
@@ -117,4 +124,9 @@ variable "name_prefix" {
 variable "WRC_WEBHOOK_URL" {
   description = "The URL to send delegate report webhook notifications for WRC to"
   type = string
+}
+
+variable "anycable_path" {
+  type = string
+  description = "The Path where anycable is mounted"
 }

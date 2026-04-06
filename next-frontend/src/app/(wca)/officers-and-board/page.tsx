@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import UserBadge from "@/components/UserBadge";
 import { MdMarkEmailUnread } from "react-icons/md";
-import Errored from "@/components/ui/errored";
+import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import { getBoardRoles, getOfficersRoles } from "@/lib/wca/roles/activeRoles";
 import { Metadata } from "next";
@@ -25,13 +25,22 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function OfficersAndBoard() {
   const { t } = await getT();
 
-  const { data: officerRoles, error: officerRolesError } =
-    await getOfficersRoles();
+  const {
+    data: officerRoles,
+    error: officerRolesError,
+    response: officerRolesResponse,
+  } = await getOfficersRoles();
 
-  const { data: boardRoles, error: boardRolesError } = await getBoardRoles();
+  const {
+    data: boardRoles,
+    error: boardRolesError,
+    response: boardRolesResponse,
+  } = await getBoardRoles();
 
-  if (officerRolesError) return <Errored error={officerRolesError} />;
-  if (boardRolesError) return <Errored error={boardRolesError} />;
+  if (officerRolesError)
+    return <OpenapiError response={officerRolesResponse} t={t} />;
+  if (boardRolesError)
+    return <OpenapiError response={boardRolesResponse} t={t} />;
 
   // The same user can hold multiple officer positions, and it won't be good to show same user
   // multiple times.

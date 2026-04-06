@@ -4,18 +4,32 @@ class Api::V0::ApiController < ApplicationController
   include Rails::Pagination
 
   include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
-  rate_limit to: 60, within: 1.minute if Rails.env.production?
+  rate_limit to: 60, within: 1.minute, unless: -> { internal_ip?(request.remote_ip) } if Rails.env.production?
   protect_from_forgery with: :null_session
   before_action :doorkeeper_authorize!, only: [:me]
   rescue_from WcaExceptions::ApiException do |e|
     render status: e.status, json: { error: e.to_s }
   end
 
+  # Probably nicer to have some kind of errorcode/string depending on the model
   rescue_from ActiveRecord::RecordNotFound do |e|
-    render status: :not_found, json: { error: e.to_s }
+    render json: { error: e.to_s, data: { model: e.model, id: e.id } }, status: :not_found
   end
 
   DEFAULT_API_RESULT_LIMIT = 20
+
+  INTERNAL_IP_RANGES = [
+    # Standard loopback range, AWS Internal Load Balancers appear as 127.0.0.1:
+    # Right at the bottom of https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-connect-concepts-deploy.html#service-connect-considerations
+    IPAddr.new('127.0.0.0/8'),
+    IPAddr.new('10.0.0.0/8'), # Private Class A
+    IPAddr.new('172.16.0.0/12'), # Private Class B
+    IPAddr.new('192.168.0.0/16'), # Private Class C
+  ].freeze
+
+  def internal_ip?(remote_ip)
+    INTERNAL_IP_RANGES.any? { it.include?(remote_ip) }
+  end
 
   def me
     render json: { me: current_api_user }, private_attributes: doorkeeper_token.scopes
@@ -70,10 +84,6 @@ class Api::V0::ApiController < ApplicationController
         "download" => "https://github.com/thewca/tnoodle/releases/download/v1.2.3/TNoodle-WCA-1.2.3.jar",
       },
       "allowed" => [
-        "TNoodle-WCA-1.1.3.1",
-        "TNoodle-WCA-1.2.0",
-        "TNoodle-WCA-1.2.1",
-        "TNoodle-WCA-1.2.2",
         "TNoodle-WCA-1.2.3",
       ],
       "publicKeyBytes" => public_key,
@@ -199,7 +209,7 @@ class Api::V0::ApiController < ApplicationController
     concise_results_date = ComputeAuxiliaryData.end_date || Date.current
     cache_key = ["records", concise_results_date.iso8601]
     json = Rails.cache.fetch(cache_key) do
-      records = ActiveRecord::Base.connection.exec_query <<-SQL.squish
+      records = ActiveRecord::Base.connection.exec_query <<~SQL.squish
         SELECT 'single' type, MIN(best) value, country_id, event_id
         FROM concise_single_results
         GROUP BY country_id, event_id
@@ -221,10 +231,10 @@ class Api::V0::ApiController < ApplicationController
   def export_public
     timestamp = DumpPublicResultsDatabase.successful_start_date
 
-    _, sql_filesize = DbDumpHelper.cached_results_export_info("sql", timestamp)
-    _, tsv_filesize = DbDumpHelper.cached_results_export_info("tsv", timestamp)
     current_version_key = DatabaseDumper.current_results_export_version
     current_version_number = DatabaseDumper::RESULTS_EXPORT_VERSIONS[current_version_key][:metadata][:export_format_version]
+    _, sql_filesize = DbDumpHelper.cached_results_export_info("sql", current_version_key, timestamp)
+    _, tsv_filesize = DbDumpHelper.cached_results_export_info("tsv", current_version_key, timestamp)
 
     render json: {
       export_date: timestamp&.iso8601,

@@ -1,0 +1,8 @@
+allOf:
+  - $ref: '../../wcif/WcifRound.yaml'
+  - type: object
+    required:
+      - state
+    properties:
+      state:
+        type: string

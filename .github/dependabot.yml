@@ -4,6 +4,8 @@ updates:
   directory: "/"
   schedule:
     interval: weekly
+    day: monday
+    time: "06:00"
   ignore:
     # Ignore all dependencies that (currently) point to GitHub forks that we ourselves maintain
     #   (in order for updates to be available, we ourselves would need to trigger a fork sync.)
@@ -16,6 +18,8 @@ updates:
   directory: "/"
   schedule:
     interval: weekly
+    day: monday
+    time: "06:00"
   ignore:
     # Version 7 automatically activates React Compiler strict rules that we won't implement in the old ecosystem
     - dependency-name: eslint-plugin-react-hooks
@@ -26,6 +30,8 @@ updates:
   directory: "/next-frontend"
   schedule:
     interval: weekly
+    day: monday
+    time: "06:00"
   groups:
     react:
       patterns:

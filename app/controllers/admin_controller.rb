@@ -14,6 +14,30 @@ class AdminController < ApplicationController
     @merge_people = MergePeople.new
   end
 
+  def sanity_check
+    @categories = SanityCheckCategory.all
+  end
+
+  def run_sanity_check
+    sanity_check_category = SanityCheckCategory.find(params.require(:sanity_check_category_id))
+    SanityCheckCategoryJob.perform_later(sanity_check_category)
+    flash[:success] = "Sanity check job enqueued for category #{sanity_check_category.name}."
+    redirect_to sanity_check_path
+  end
+
+  def add_exclusion
+    sanity_check_id = params.require(:sanity_check_id)
+    exclusion = params.require(:exclusion_json)
+
+    created = SanityCheckExclusion.create(exclusion: exclusion, sanity_check_id: sanity_check_id)
+    if created
+      flash[:success] = "Added exclusion."
+    else
+      flash[:danger] = "Failed to add exclusion."
+    end
+    redirect_to sanity_check_path
+  end
+
   def do_merge_people
     merge_params = params.expect(merge_people: %i[person1_wca_id person2_wca_id])
     @merge_people = MergePeople.new(merge_params)

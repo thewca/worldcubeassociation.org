@@ -12,13 +12,7 @@ import {
 } from './TableCells';
 
 function resultAttempts(result) {
-  const definedAttempts = [
-    result?.value1,
-    result?.value2,
-    result?.value3,
-    result?.value4,
-    result?.value5,
-  ].filter((res) => res !== undefined);
+  const definedAttempts = result.attempts;
 
   const validAttempts = definedAttempts.filter((res) => res !== 0);
   const completedAttempts = validAttempts.filter((res) => res > 0);

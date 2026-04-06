@@ -1,5 +1,0 @@
-<% provide(:title, 'WCA Live Integration Test Page') %>
-
-<%= render layout: 'competitions/nav' do %>
-  <%= react_component('Live/Podiums', { podiums: @final_rounds.as_json({ methods: [:event_id, :live_podium]}), competitors: @competitors.as_json({ methods: [:user]}), competitionId: @competition.id, }) %>
-<% end %>
