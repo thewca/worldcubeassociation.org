@@ -147,17 +147,17 @@ function QuitModal({
   const onQuitClick = useCallback(() => {
     quitCompetitor(
       competitor.id,
-      toAdvance!.map((r) => r.id),
+      advanceNext ? toAdvance!.map((r) => r.id) : [],
     );
     setMenuClose();
-  }, [competitor.id, quitCompetitor, setMenuClose, toAdvance]);
-
-  if (!toAdvance) {
-    return <Text>Failed to fetch next Competitor</Text>;
-  }
+  }, [advanceNext, competitor.id, quitCompetitor, setMenuClose, toAdvance]);
 
   if (isLoading) {
     return <Loading />;
+  }
+
+  if (!toAdvance) {
+    return <Text>Failed to fetch next Competitor</Text>;
   }
 
   return (
@@ -170,18 +170,24 @@ function QuitModal({
               <Dialog.Title>Quit Competitor</Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
-              <Text>
-                The next competitor to advance is{" "}
-                {toAdvance.map((competitor) => competitor.name)}
-                <Checkbox.Root
-                  checked={advanceNext}
-                  onCheckedChange={(e) => setAdvanceNext(!!e.checked)}
-                >
-                  <Checkbox.HiddenInput />
-                  <Checkbox.Control />
-                  <Checkbox.Label>Advance next competitor</Checkbox.Label>
-                </Checkbox.Root>
-              </Text>
+              {toAdvance.length > 0 ? (
+                <>
+                  <Text>
+                    The next competitor to advance is{" "}
+                    {toAdvance.map((competitor) => competitor.name).join(", ")}
+                  </Text>
+                  <Checkbox.Root
+                    checked={advanceNext}
+                    onCheckedChange={(e) => setAdvanceNext(!!e.checked)}
+                  >
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control />
+                    <Checkbox.Label>Advance next competitor</Checkbox.Label>
+                  </Checkbox.Root>
+                </>
+              ) : (
+                <Text>No next competitor to advance.</Text>
+              )}
             </Dialog.Body>
             <Dialog.Footer>
               <Button disabled={isPending} onClick={onQuitClick}>
