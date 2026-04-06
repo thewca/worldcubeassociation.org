@@ -25,6 +25,7 @@ module ResultsValidators
     SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING = :single_letter_first_or_last_name_warning
     SINGLE_NAME_WARNING = :single_name_warning
     SPECIAL_CHARACTERS_IN_NAME_WARNING = :special_characters_in_name_warning
+    SUSPICIOUS_LAST_NAME_WARNING = :suspicious_last_name_warning
     REGISTRATION_DETAILS_MISMATCH_WARNING = :registration_details_mismatch_warning
     MISSING_MATCHING_REGISTRATION_WARNING = :missing_matching_registration_warning
     UNACCEPTED_REGISTRATION_WITH_RESULTS_WARNING = :unaccepted_registration_with_results_warning
@@ -102,6 +103,9 @@ module ResultsValidators
 
       # Check if the name is a single name.
       validation_issues << ValidationWarning.new(SINGLE_NAME_WARNING, :persons, competition_id, name: name) if split_name.length == 1
+
+      # Check if the last name token is a word that may not be an actual last name (e.g. a generational suffix written in full).
+      validation_issues << ValidationWarning.new(SUSPICIOUS_LAST_NAME_WARNING, :persons, competition_id, name: name, suffix: split_name.last) if %w[junior senior].include?(split_name.last.downcase)
 
       # Check for missing period in single letter middle name.
       validation_issues << ValidationWarning.new(MISSING_PERIOD_WARNING, :persons, competition_id, name: name) if split_name.length > 2 && split_name[1, split_name.length - 2].any? { |n| n.length == 1 }
