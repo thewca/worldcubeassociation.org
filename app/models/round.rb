@@ -245,7 +245,8 @@ class Round < ApplicationRecord
     advancing_ids = advancement_determining_condition.apply(results_with_potential)
     max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
 
-    if advancing_ids.any?
+    # We can't update advancing yet if the other linked rounds still have empty results
+    if !LiveResult.where(round_id: sibling_round_ids).exists?(best: 0) && advancing_ids.any?
       advancement_determining_results.update_all(
         ["advancing = (id IN (?)), advancing_questionable = (global_pos <= ?)", advancing_ids, max_advancing],
       )
