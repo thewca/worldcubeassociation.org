@@ -232,9 +232,8 @@ class Round < ApplicationRecord
   def recompute_advancing
     advancement_determining_results = relevant_results.where.not(global_pos: nil).where(locked_by_id: nil)
 
-    # Load with includes first so we can use .size instead of a separate .count query
     loaded_results = advancement_determining_results.includes(:live_attempts).to_a
-    missing_attempts = total_competitors - loaded_results.size
+    missing_attempts = total_competitors - loaded_results.count
 
     potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
 
@@ -311,7 +310,6 @@ class Round < ApplicationRecord
     #
     # For non-linked rounds global_pos equals local_pos, so we set both here to avoid
     # a second UPDATE in recompute_global_pos.
-    global_pos_clause = linked_round.blank? ? ", r.global_pos = ranked.rank" : ""
     ActiveRecord::Base.connection.exec_query <<~SQL.squish
       UPDATE live_results r
       LEFT JOIN (
@@ -324,7 +322,7 @@ class Round < ApplicationRecord
           WHERE round_id = #{id} AND best != 0
       ) ranked
       ON r.id = ranked.id
-      SET r.local_pos = ranked.rank#{global_pos_clause}
+      SET r.local_pos = ranked.rank#{', r.global_pos = ranked.rank' if linked_round.blank?}
       WHERE r.round_id = #{id};
     SQL
   end
