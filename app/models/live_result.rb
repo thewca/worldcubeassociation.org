@@ -106,6 +106,10 @@ class LiveResult < ApplicationRecord
     best.zero?
   end
 
+  def not_empty?
+    !empty_result?
+  end
+
   def values_for_sorting
     ranking_columns.map do |column|
       to_solve_time(column)

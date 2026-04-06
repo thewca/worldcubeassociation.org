@@ -15,7 +15,6 @@ export default async function RoundAdmin({
   competitionId: string;
 }) {
   const { t } = await getT();
-
   const { error, data, response } = await getRounds(competitionId);
 
   if (error) {
@@ -45,7 +44,7 @@ export default async function RoundAdmin({
                     return (
                       <RoundActions
                         round={r}
-                        totalRounds={rounds.length}
+                        rounds={rounds}
                         competitionId={competitionId}
                         key={r.id}
                       />
