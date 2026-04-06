@@ -1,11 +1,12 @@
 "use client";
 
 import {
-  Box,
   Field,
   Fieldset,
+  GridItem,
   Group,
   Input,
+  SimpleGrid,
   useControllableState,
 } from "@chakra-ui/react";
 import useInputMask, {
@@ -199,28 +200,30 @@ export function MbldField({ value, onChange }: AttemptResultProps) {
   return (
     <Fieldset.Root onChangeCapture={captureShortcuts}>
       <Fieldset.Content>
-        <Group attached>
-          <Box flex={3}>
-            <MbldCubesField
-              value={draft.solved}
-              onChange={(solved) => handleChange({ solved })}
-            />
-          </Box>
-          <Box flex={3}>
-            <MbldCubesField
-              value={draft.attempted}
-              onChange={(attempted) => handleChange({ attempted })}
-            />
-          </Box>
-          <Box flex={10}>
-            <TimeField
-              value={draft.timeCentiseconds!}
-              onChange={(timeCentiseconds) =>
-                handleChange({ timeCentiseconds })
-              }
-            />
-          </Box>
-        </Group>
+        <SimpleGrid columns={16} asChild>
+          <Group attached>
+            <GridItem colSpan={3}>
+              <MbldCubesField
+                value={draft.solved}
+                onChange={(solved) => handleChange({ solved })}
+              />
+            </GridItem>
+            <GridItem colSpan={3}>
+              <MbldCubesField
+                value={draft.attempted}
+                onChange={(attempted) => handleChange({ attempted })}
+              />
+            </GridItem>
+            <GridItem colSpan={10}>
+              <TimeField
+                value={draft.timeCentiseconds!}
+                onChange={(timeCentiseconds) =>
+                  handleChange({ timeCentiseconds })
+                }
+              />
+            </GridItem>
+          </Group>
+        </SimpleGrid>
       </Fieldset.Content>
     </Fieldset.Root>
   );
