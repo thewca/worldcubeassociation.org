@@ -31,19 +31,15 @@ export function attemptResultsWarning(
   const skippedGapIndex =
     trimTrailingSkipped(attemptResults).indexOf(SKIPPED_VALUE);
   if (skippedGapIndex !== -1) {
-    return {
-      description: `You've omitted attempt ${
-        skippedGapIndex + 1
-      }. Make sure it's intentional.`,
-    };
+    return t("competitions.live.admin.warnings.omitted", {
+      attempt_number: skippedGapIndex + 1,
+    });
   }
   const completeAttempts = attemptResults.filter((a) => a !== SKIPPED_VALUE);
   if (completeAttempts.length > 0) {
     const bestSingle = Math.min(...completeAttempts);
     if (checkForDnsFollowedByValidResult(attemptResults)) {
-      return {
-        description: `There's at least one DNS followed by a valid result. Please ensure it is indeed a DNS and not a DNF.`,
-      };
+      return t("competitions.live.admin.warnings.DNS");
     }
 
     if (eventId === "333mbf") {
@@ -52,25 +48,18 @@ export function attemptResultsWarning(
         return attempt > 0 && centiseconds / attempted < 30 * 100;
       });
       if (lowTimeIndex !== -1) {
-        return {
-          description: `The result you're trying to submit seems to be impossible:
-            attempt ${lowTimeIndex + 1} is done in
-            less than 30 seconds per cube tried.
-            If you want to enter minutes, don't forget to add two zeros
-            for centiseconds at the end of the score.`,
-        };
+        return t("competitions.live.admin.warnings.impossible", {
+          attempt_number: lowTimeIndex + 1,
+        });
       }
     } else {
       const worstSingle = Math.max(...completeAttempts);
       const inconsistent = worstSingle > bestSingle * 4;
       if (inconsistent) {
-        return {
-          description: `The result you're trying to submit seem to be inconsistent.
-            There's a big difference between the best single
-            (${formatAttemptResult(bestSingle, eventId)}) and the worst single
-            (${formatAttemptResult(worstSingle, eventId)}).
-            Please check that the results are accurate.`,
-        };
+        return t("competitions.live.admin.warnings.inconsistent", {
+          best_single: formatAttemptResult(bestSingle, eventId),
+          worst_single: formatAttemptResult(worstSingle, eventId),
+        });
       }
     }
   }

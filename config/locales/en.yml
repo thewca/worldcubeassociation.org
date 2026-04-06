@@ -1418,6 +1418,11 @@ en:
         clear: "Clear"
         competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
         round_locked: "locked"
+        warnings:
+          omitted: "You've omitted attempt %{attempt_number}. Make sure it's intentional."
+          DNS: "There's at least one DNS followed by a valid result. Please ensure it is indeed a DNS and not a DNF."
+          impossible: "The result you're trying to submit seems to be impossible: attempt %{attempt_number} is done in less than 30 seconds per cube tried. If you want to enter minutes, don't forget to add two zeros for centiseconds at the end of the score"
+          inconsistent: "The result you're trying to submit seem to be inconsistent. There's a big difference between the best single (%{best_single}) and the worst single (%{worst_single}). Please check that the results are accurate."
       results:
         competitor: "Competitor"
       errors:

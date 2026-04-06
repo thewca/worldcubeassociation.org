@@ -65,7 +65,7 @@ export default function AttemptsForm({
 
     if (submissionWarning) {
       confirm({
-        content: submissionWarning.description,
+        content: submissionWarning,
         confirmButton: "Submit",
       }).then(() => handleSubmit());
     } else {
