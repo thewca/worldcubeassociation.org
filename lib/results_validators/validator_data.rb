@@ -50,7 +50,7 @@ module ResultsValidators
       end
 
       if validator.include_scrambles?
-        scrambles_assoc = check_real_results ? :scrambles : :matched_scrambles
+        scrambles_assoc = self.inbox_scrambles_assoc(check_real_results: check_real_results)
 
         associations.deep_merge!({ scrambles_assoc => [:round] })
       end
@@ -94,10 +94,26 @@ module ResultsValidators
       end
 
       if validator.include_scrambles?
-        data.scrambles = check_real_results ? competition.scrambles : competition.matched_scrambles
+        scrambles_relation = self.inbox_scrambles_assoc(check_real_results: check_real_results)
+        data.scrambles = competition.public_send(scrambles_relation)
       end
 
       data
+    end
+
+    def self.inbox_scrambles_assoc(check_real_results: false)
+      if Rails.env.local?
+        # CI tests can already run on the assumption that the split was fully executed
+        return check_real_results ? :scrambles : :matched_scrambles
+      end
+
+      # During the migration of scramble tables, there might be some ongoing postings
+      #   that are still relying on the old table structures.
+      # To enable a smooth migration, we temporarily pretend that all posting procedures
+      #   follow the "old" way of doing things, where the productive `scrambles` table was just hard-wired.
+      #   In around ~3 days from this comment, when all results postings are newer than the deploy(!) date of this comment,
+      #   we can switch safely to running the validators on `matched_scrambles` even in production.
+      :scrambles
     end
   end
 end
