@@ -10242,9 +10242,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react_ujs@npm:^3.2.1":
-  version: 3.2.1
-  resolution: "react_ujs@npm:3.2.1"
+"react_ujs@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "react_ujs@npm:3.3.0"
   dependencies:
     "@babel/preset-react": "npm:^7.22.5"
     css-loader: "npm:^6.8.1"
@@ -10255,7 +10255,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react_ujs: "npm:^2.7.1"
     style-loader: "npm:^3.3.3"
-  checksum: 10c0/fbe39243c84ea1d8f0238e634673b7afed2a079a90502205e40a711a14fbf3d7e4c66f05addbf1f16c728422395e0a48dcb8a7c8feee29b0247c25096538f896
+  checksum: 10c0/24a89af744e80ca320f98fae15395722051393cf0d552136f16bf3b300b62903cd039137a18bdab5205a26b509e0f29e464ba206f355b364f55f676d18f04b5b
   languageName: node
   linkType: hard
 
@@ -10692,7 +10692,7 @@ __metadata:
     react-simplemde-editor: "npm:^5.2.0"
     react-spinners: "npm:^0.17.0"
     react-textarea-autosize: "npm:^8.5.9"
-    react_ujs: "npm:^3.2.1"
+    react_ujs: "npm:^3.3.0"
     regenerator-runtime: "npm:^0.14.1"
     resolve-url-loader: "npm:^5.0.0"
     sass: "npm:^1.99.0"
