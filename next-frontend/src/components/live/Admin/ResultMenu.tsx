@@ -16,6 +16,7 @@ import { route } from "nextjs-routes";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import useAPI from "@/lib/wca/useAPI";
 import Loading from "@/components/ui/loading";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function ResultMenu({
   result,
@@ -131,6 +132,8 @@ function QuitModal({
 
   const api = useAPI();
 
+  const { t } = useT();
+
   const { isLoading, data: toAdvance } = api.useQuery(
     "get",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit",
@@ -157,7 +160,7 @@ function QuitModal({
   }
 
   if (!toAdvance) {
-    return <Text>Failed to fetch next Competitor</Text>;
+    return <Text>{t("competitions.live.admin.quit.failed_to_fetch")}</Text>;
   }
 
   return (
@@ -167,14 +170,20 @@ function QuitModal({
         <Dialog.Positioner>
           <Dialog.Content>
             <Dialog.Header>
-              <Dialog.Title>Quit Competitor</Dialog.Title>
+              <Dialog.Title>
+                {t("competitions.live.admin.quit.title")}
+              </Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
               {toAdvance.length > 0 ? (
                 <>
                   <Text>
-                    The next competitor to advance is{" "}
-                    {toAdvance.map((competitor) => competitor.name).join(", ")}
+                    {t("competitions.live.admin.quit.next_to_advance", {
+                      competitors: toAdvance
+                        .map((competitor) => competitor.name)
+                        .join(", "),
+                      count: toAdvance.length,
+                    })}
                   </Text>
                   <Checkbox.Root
                     checked={advanceNext}
@@ -182,19 +191,23 @@ function QuitModal({
                   >
                     <Checkbox.HiddenInput />
                     <Checkbox.Control />
-                    <Checkbox.Label>Advance next competitor</Checkbox.Label>
+                    <Checkbox.Label>
+                      {t("competitions.live.admin.quit.advance")}
+                    </Checkbox.Label>
                   </Checkbox.Root>
                 </>
               ) : (
-                <Text>No next competitor to advance.</Text>
+                <Text>{t("competitions.live.admin.quit.no_next")}</Text>
               )}
             </Dialog.Body>
             <Dialog.Footer>
               <Button disabled={isPending} onClick={onQuitClick}>
-                Quit Competitor from Round
+                {t("competitions.live.admin.quit.quit_confirm")}
               </Button>
               <Dialog.ActionTrigger asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline">
+                  {t("competitions.live.admin.quit.cancel")}
+                </Button>
               </Dialog.ActionTrigger>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
