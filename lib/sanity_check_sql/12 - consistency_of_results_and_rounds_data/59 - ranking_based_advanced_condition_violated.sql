@@ -32,7 +32,7 @@ re AS (
     adv_cond.adv_type,
     adv_cond.adv_count,
     adv_cond.total_number_of_rounds,
-    adv_cond.id AS roundId,
+    adv_cond.id AS round_id,
     adv_cond.advancement_condition
   FROM results
   INNER JOIN adv_cond
@@ -50,7 +50,7 @@ re AS (
 SELECT
   re.competition_id,
   re.event_id,
-  re.roundId,
+  re.round_id,
   re1.round_type_id,
   re1.number AS number,
   re.total_number_of_rounds,

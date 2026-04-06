@@ -15,7 +15,7 @@ scramble_set_counts AS (
     competition_id,
     event_id,
     round_type_id,
-    COUNT(*) AS scramblesScrambleCount
+    COUNT(*) AS scrambles_scramble_count
   FROM scramble_groups
   GROUP BY competition_id, event_id, round_type_id
 )
@@ -23,8 +23,8 @@ SELECT
   ce.competition_id,
   ce.event_id,
   ro.number AS round_number,
-  ro.scramble_set_count AS roundsScrambleCount,
-  sc.scramblesScrambleCount
+  ro.scramble_set_count AS rounds_scramble_count,
+  sc.scrambles_scramble_count
 FROM rounds AS ro
 INNER JOIN competition_events AS ce
 ON ce.id = ro.competition_event_id
@@ -38,4 +38,4 @@ ON sc.competition_id = ce.competition_id
     WHEN 2 THEN sc.round_type_id IN ('2', 'e')
     WHEN 3 THEN sc.round_type_id IN ('3', 'g')
   END)
-WHERE ro.scramble_set_count <> sc.scramblesScrambleCount;
+WHERE ro.scramble_set_count <> sc.scrambles_scramble_count;

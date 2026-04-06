@@ -38,6 +38,7 @@ Cutoff and time limit data is stored as JSON in `rounds.cutoff` and `rounds.time
 - Inside a **CTE body**, the same rules apply with 2-space indentation
 - Always end the file with a **semicolon**
 - Avoid `SELECT *` — name the columns you need so the result email is self-explanatory
+- All aliases (columns, tables, CTEs) must be **snake_case**
 - Use `--` for comments, not `#`
 - Prefer **CTEs** (`WITH ...`) over inline subqueries in `FROM` or `JOIN` clauses; use LEFT JOIN anti-joins instead of `NOT IN (SELECT ...)`
 

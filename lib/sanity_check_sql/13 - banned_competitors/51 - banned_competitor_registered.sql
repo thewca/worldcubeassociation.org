@@ -22,14 +22,14 @@ banned_persons AS (
   WHERE user_groups.group_type = 'banned_competitors'
 )
 SELECT DISTINCT
-  banned.person_name AS PersonName,
+  banned.person_name AS person_name,
   banned.person_id AS person_id,
   comps.id AS competition_id,
-  comps.start_date AS CompetitionStartDate,
-  comps.end_date AS CompetitionEndDate,
-  banned.start_date AS BanStartDate,
-  banned.end_date AS BanEndDate,
-  (reg.deleted_at IS NOT NULL) AS Deleted
+  comps.start_date AS competition_start_date,
+  comps.end_date AS competition_end_date,
+  banned.start_date AS ban_start_date,
+  banned.end_date AS ban_end_date,
+  (reg.deleted_at IS NOT NULL) AS deleted
 FROM registrations AS reg
 INNER JOIN upcoming_competitions AS comps
 ON reg.competition_id = comps.id

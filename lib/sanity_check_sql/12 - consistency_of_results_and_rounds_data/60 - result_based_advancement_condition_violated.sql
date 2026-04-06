@@ -14,7 +14,7 @@ adv_cond AS (
     rounds.advancement_condition,
     REPLACE(REGEXP_SUBSTR(rounds.advancement_condition, '"(.*?)"', 9), '"', '') AS adv_type,
     REPLACE(REGEXP_SUBSTR(rounds.advancement_condition, '"level":(\\d*)'), '"level":', '') AS adv_count,
-    rounds.format_id AS formatid,
+    rounds.format_id AS format_id,
     rounds.number AS number,
     rounds.total_number_of_rounds AS total_number_of_rounds,
     cevents.competition_id AS competition_id,
@@ -36,8 +36,8 @@ re AS (
     adv_cond.adv_type,
     adv_cond.adv_count,
     adv_cond.total_number_of_rounds,
-    adv_cond.id AS roundId,
-    adv_cond.formatid,
+    adv_cond.id AS round_id,
+    adv_cond.format_id,
     adv_cond.advancement_condition
   FROM results
   INNER JOIN adv_cond
@@ -54,7 +54,7 @@ re AS (
 SELECT
   re.competition_id,
   re.event_id,
-  re.roundId,
+  re.round_id,
   re.round_type_id,
   re.number,
   re.total_number_of_rounds,
