@@ -12,6 +12,16 @@ const withRoutes = nextRoutes({ outDir: "src/types" });
 const nextConfig: NextConfig = {
   serverExternalPackages: ["newrelic"],
   webpack: (config, { isServer }) => {
+    if (process.env.NODE_ENV === "production") {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        "@/styles/fonts": path.resolve(
+          __dirname,
+          "src/styles/fonts.proprietary.ts",
+        ),
+      };
+    }
+
     if (isServer && process.env.NODE_ENV === "production") {
       nrExternals(config);
     }
