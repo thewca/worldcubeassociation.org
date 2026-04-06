@@ -1,12 +1,11 @@
 "use client";
 
 import {
+  Box,
   Field,
   Fieldset,
-  GridItem,
   Group,
   Input,
-  SimpleGrid,
   useControllableState,
 } from "@chakra-ui/react";
 import useInputMask, {
@@ -112,7 +111,6 @@ export function TimeField({ value, onChange }: AttemptResultProps) {
 
   return (
     <Field.Root invalid={!isValid}>
-      <Field.Label>Attempt</Field.Label>
       <Input spellCheck={false} {...binding} />
     </Field.Root>
   );
@@ -144,7 +142,7 @@ export function FmMovesField({
   return (
     <Field.Root invalid={!isValid}>
       <Field.Label>PointsField (isAverage: {isAverage.toString()})</Field.Label>
-      <Input spellCheck={false} {...binding} />
+      <Input placeholder="Attempt" spellCheck={false} {...binding} />
       <Field.HelperText>{value}</Field.HelperText>
     </Field.Root>
   );
@@ -162,9 +160,7 @@ export function MbldCubesField({ value, onChange }: AttemptResultProps) {
 
   return (
     <Field.Root invalid={!isValid}>
-      <Field.Label>CubesField</Field.Label>
       <Input spellCheck={false} {...binding} />
-      <Field.HelperText>{value}</Field.HelperText>
     </Field.Root>
   );
 }
@@ -202,36 +198,30 @@ export function MbldField({ value, onChange }: AttemptResultProps) {
 
   return (
     <Fieldset.Root onChangeCapture={captureShortcuts}>
-      <Fieldset.Legend>MbldField</Fieldset.Legend>
       <Fieldset.Content>
-        <SimpleGrid columns={16} asChild>
-          <Group attached>
-            <GridItem colSpan={3}>
-              <MbldCubesField
-                value={draft.solved}
-                onChange={(solved) => handleChange({ solved })}
-              />
-            </GridItem>
-            <GridItem colSpan={3}>
-              <MbldCubesField
-                value={draft.attempted}
-                onChange={(attempted) => handleChange({ attempted })}
-              />
-            </GridItem>
-            <GridItem colSpan={10}>
-              <TimeField
-                value={draft.timeCentiseconds!}
-                onChange={(timeCentiseconds) =>
-                  handleChange({ timeCentiseconds })
-                }
-              />
-            </GridItem>
-          </Group>
-        </SimpleGrid>
+        <Group attached>
+          <Box flex={3}>
+            <MbldCubesField
+              value={draft.solved}
+              onChange={(solved) => handleChange({ solved })}
+            />
+          </Box>
+          <Box flex={3}>
+            <MbldCubesField
+              value={draft.attempted}
+              onChange={(attempted) => handleChange({ attempted })}
+            />
+          </Box>
+          <Box flex={10}>
+            <TimeField
+              value={draft.timeCentiseconds!}
+              onChange={(timeCentiseconds) =>
+                handleChange({ timeCentiseconds })
+              }
+            />
+          </Box>
+        </Group>
       </Fieldset.Content>
-      <Fieldset.HelperText>
-        {JSON.stringify(decodeMbldResult(value))}
-      </Fieldset.HelperText>
     </Fieldset.Root>
   );
 }
