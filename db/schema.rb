@@ -313,7 +313,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_07_105148) do
     t.index ["delegate_id"], name: "index_competition_delegates_on_delegate_id"
   end
 
-  create_table "competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "competition_events", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", null: false
     t.string "event_id", null: false
     t.integer "fee_lowest_denomination", default: 0, null: false
@@ -1093,8 +1093,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_07_105148) do
     t.index ["person_id", "country_id", "event_id", "competition_reg_year", "best", "result_id"], name: "concise_single_speedup"
   end
 
-  create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "competition_event_id"
+  create_table "registration_competition_events", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "competition_event_id"
     t.integer "registration_id"
     t.index ["competition_event_id"], name: "index_registration_competition_events_on_competition_event_id"
     t.index ["registration_id", "competition_event_id"], name: "idx_registration_competition_events_on_reg_id_and_comp_event_id", unique: true
@@ -1254,7 +1254,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_07_105148) do
 
   create_table "rounds", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.text "advancement_condition"
-    t.integer "competition_event_id", null: false
+    t.bigint "competition_event_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.text "cutoff"
     t.string "format_id", limit: 255, null: false
@@ -1665,9 +1665,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_07_105148) do
   add_foreign_key "potential_duplicate_persons", "persons", column: "duplicate_person_id"
   add_foreign_key "potential_duplicate_persons", "users", column: "original_user_id"
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "registration_competition_events", "competition_events", on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "result_attempts", "results", on_delete: :cascade
   add_foreign_key "results", "rounds"
+  add_foreign_key "rounds", "competition_events", on_delete: :cascade
   add_foreign_key "rounds", "linked_rounds"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
