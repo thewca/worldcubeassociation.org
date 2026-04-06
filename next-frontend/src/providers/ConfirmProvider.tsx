@@ -35,6 +35,8 @@ const DEFAULT_OPTIONS: Required<ConfirmOptions> = {
   requireInput: null,
 };
 
+type voidFunction = () => void;
+
 type ConfirmFn = (options?: ConfirmOptions) => Promise<void>;
 
 const ConfirmationContext = createContext<ConfirmFn | null>(null);
@@ -43,7 +45,7 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
   const [options, setOptions] =
     useState<Required<ConfirmOptions>>(DEFAULT_OPTIONS);
   const [resolveReject, setResolveReject] = useState<
-    [() => void, () => void] | []
+    [voidFunction, voidFunction] | []
   >([]);
   const [inputValue, setInputValue] = useState("");
   const [submitAttempted, setSubmitAttempted] = useState(false);
