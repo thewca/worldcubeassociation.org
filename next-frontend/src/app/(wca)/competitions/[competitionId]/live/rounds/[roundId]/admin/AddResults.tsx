@@ -41,7 +41,8 @@ export default function AddResults({
             roundWcifId={roundId}
             formatId={format.id}
             competitionId={competitionId}
-            isAdmin
+            isAdminView
+            canManage
             title={roundName}
           />
         </GridItem>

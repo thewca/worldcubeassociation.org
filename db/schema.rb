@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_20_090104) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -432,6 +432,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_090104) do
     t.integer "guests_per_registration_limit"
     t.text "information", size: :medium
     t.integer "latitude"
+    t.bigint "lead_delegate_id"
     t.integer "longitude"
     t.string "main_event_id"
     t.string "name", limit: 50, default: "", null: false
@@ -452,10 +453,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_090104) do
     t.datetime "results_posted_at", precision: nil
     t.integer "results_posted_by"
     t.datetime "results_submitted_at", precision: nil
+    t.integer "scoretaking_software", default: 0, null: false
     t.boolean "show_at_all", default: false, null: false
     t.date "start_date"
     t.datetime "updated_at", precision: nil
-    t.boolean "use_wca_live_for_scoretaking", default: false, null: false
     t.boolean "use_wca_registration", default: true, null: false
     t.string "venue", limit: 240, default: "", null: false
     t.string "venue_address"
@@ -464,6 +465,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_090104) do
     t.index ["cancelled_at"], name: "index_competitions_on_cancelled_at"
     t.index ["country_id"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_competitions_on_end_date"
+    t.index ["lead_delegate_id"], name: "index_competitions_on_lead_delegate_id"
     t.index ["start_date"], name: "index_competitions_on_start_date"
   end
 
@@ -602,6 +604,31 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_090104) do
     t.integer "rank", default: 0, null: false
   end
 
+  create_table "external_scramble_sets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "competition_id", null: false
+    t.datetime "created_at", null: false
+    t.string "event_id", null: false
+    t.integer "round_number", null: false
+    t.bigint "scramble_file_upload_id", null: false
+    t.integer "scramble_set_number", null: false
+    t.datetime "updated_at", null: false
+    t.index ["competition_id", "event_id", "round_number"], name: "idx_on_competition_id_event_id_round_number_6e7b51ca42"
+    t.index ["competition_id"], name: "index_external_scramble_sets_on_competition_id"
+    t.index ["event_id"], name: "fk_rails_7a55abc2f3"
+    t.index ["scramble_file_upload_id"], name: "index_external_scramble_sets_on_scramble_file_upload_id"
+  end
+
+  create_table "external_scrambles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "external_scramble_set_id", null: false
+    t.boolean "is_extra", default: false, null: false
+    t.integer "scramble_number", null: false
+    t.text "scramble_string", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_scramble_set_id", "scramble_number", "is_extra"], name: "idx_on_external_scramble_set_id_scramble_number_is__acac8c2663", unique: true
+    t.index ["external_scramble_set_id"], name: "index_external_scrambles_on_external_scramble_set_id"
+  end
+
   create_table "formats", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "expected_solve_count", null: false
     t.string "name", limit: 50, default: "", null: false
@@ -721,37 +748,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_090104) do
     t.index ["round_type_id"], name: "InboxResults_fk_round"
   end
 
-  create_table "inbox_scramble_sets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "competition_id", null: false
-    t.datetime "created_at", null: false
-    t.string "event_id", null: false
-    t.bigint "external_upload_id"
-    t.bigint "matched_round_id"
-    t.integer "ordered_index", null: false
-    t.integer "round_number", null: false
-    t.integer "scramble_set_number", null: false
-    t.datetime "updated_at", null: false
-    t.index ["competition_id", "event_id", "round_number"], name: "idx_on_competition_id_event_id_round_number_063e808d5f"
-    t.index ["competition_id"], name: "index_inbox_scramble_sets_on_competition_id"
-    t.index ["event_id"], name: "fk_rails_7a55abc2f3"
-    t.index ["external_upload_id"], name: "index_inbox_scramble_sets_on_external_upload_id"
-    t.index ["matched_round_id"], name: "index_inbox_scramble_sets_on_matched_round_id"
-  end
-
-  create_table "inbox_scrambles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.bigint "inbox_scramble_set_id", null: false
-    t.boolean "is_extra", default: false, null: false
-    t.bigint "matched_scramble_set_id"
-    t.integer "ordered_index", null: false
-    t.integer "scramble_number", null: false
-    t.text "scramble_string", null: false
-    t.datetime "updated_at", null: false
-    t.index ["inbox_scramble_set_id", "scramble_number", "is_extra"], name: "idx_on_inbox_scramble_set_id_scramble_number_is_ext_bd518aa059", unique: true
-    t.index ["inbox_scramble_set_id"], name: "index_inbox_scrambles_on_inbox_scramble_set_id"
-    t.index ["matched_scramble_set_id"], name: "index_inbox_scrambles_on_matched_scramble_set_id"
-  end
-
   create_table "incident_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "comments"
     t.string "competition_id", null: false
@@ -847,6 +843,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_090104) do
     t.text "payment_instructions", null: false
     t.string "payment_reference_label", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "matched_scramble_sets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "external_scramble_set_id"
+    t.integer "ordered_index", null: false
+    t.bigint "round_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_scramble_set_id"], name: "index_matched_scramble_sets_on_external_scramble_set_id"
+    t.index ["round_id", "ordered_index"], name: "ordering_sequence", unique: true
+    t.index ["round_id"], name: "index_matched_scramble_sets_on_round_id"
+  end
+
+  create_table "matched_scrambles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "external_scramble_id"
+    t.boolean "is_extra", default: false, null: false
+    t.bigint "matched_scramble_set_id", null: false
+    t.integer "ordered_index", null: false
+    t.text "scramble_string", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_scramble_id"], name: "index_matched_scrambles_on_external_scramble_id"
+    t.index ["matched_scramble_set_id", "ordered_index"], name: "ordering_sequence", unique: true
+    t.index ["matched_scramble_set_id"], name: "index_matched_scrambles_on_matched_scramble_set_id"
   end
 
   create_table "oauth_access_grants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1614,6 +1634,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_090104) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "concise_average_results", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "concise_single_results", "results", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "external_scramble_sets", "competitions"
+  add_foreign_key "external_scramble_sets", "events"
+  add_foreign_key "external_scramble_sets", "scramble_file_uploads", on_delete: :cascade
+  add_foreign_key "external_scrambles", "external_scramble_sets", on_delete: :cascade
   add_foreign_key "h2h_attempts", "h2h_match_competitors"
   add_foreign_key "h2h_attempts", "h2h_sets"
   add_foreign_key "h2h_attempts", "live_attempts"
@@ -1623,17 +1647,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_090104) do
   add_foreign_key "h2h_matches", "rounds"
   add_foreign_key "h2h_sets", "h2h_matches"
   add_foreign_key "inbox_results", "rounds"
-  add_foreign_key "inbox_scramble_sets", "events"
-  add_foreign_key "inbox_scramble_sets", "rounds", column: "matched_round_id"
-  add_foreign_key "inbox_scramble_sets", "scramble_file_uploads", column: "external_upload_id"
-  add_foreign_key "inbox_scrambles", "inbox_scramble_sets"
-  add_foreign_key "inbox_scrambles", "inbox_scramble_sets", column: "matched_scramble_set_id"
   add_foreign_key "live_attempts", "live_results", on_delete: :cascade
   add_foreign_key "live_result_history_entries", "live_results", on_delete: :cascade
   add_foreign_key "live_result_history_entries", "users", column: "entered_by_id"
   add_foreign_key "live_results", "rounds"
   add_foreign_key "live_results", "users", column: "locked_by_id"
   add_foreign_key "live_results", "users", column: "quit_by_id"
+  add_foreign_key "matched_scramble_sets", "external_scramble_sets"
+  add_foreign_key "matched_scramble_sets", "rounds"
+  add_foreign_key "matched_scrambles", "external_scrambles"
+  add_foreign_key "matched_scrambles", "matched_scramble_sets", on_delete: :cascade
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"

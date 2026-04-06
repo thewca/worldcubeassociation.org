@@ -82,7 +82,6 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT=3000
-ENV NEW_RELIC_APP_NAME='next-js-production'
 ENV NEW_RELIC_LOG='stdout'
 
 # Even following the official new relic example not all the submodules are copied over

@@ -213,10 +213,19 @@ vi:
     #original_hash: 17dae1e
     attempt_name: 'Lượt %{number}'
   round:
+    #original_hash: ceeac4a
+    title: Vòng thi
     #original_hash: 236c41d
     name: '%{round_name} %{event_name}'
     #original_hash: 747df5a
     round_number: 'Vòng %{round_number}'
+  scramble_set:
+    #original_hash: ba18ca7
+    name: 'Bộ công thức tráo %{letter_code}'
+    #original_hash: d46fe75
+    group: 'Nhóm %{number}'
+    #original_hash: 17dae1e
+    attempt: 'Lượt thi số %{number}'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -673,6 +682,8 @@ vi:
           chair: Chủ tịch WCA
           #original_hash: 7d405ff
           executive_director: Giám đốc Điều hành WCA
+          #original_hash: 36a137f
+          chief_operating_officer: Giám đốc Điều hành WCA
           #original_hash: 1dd4a07
           secretary: Bí thư WCA
           #original_hash: 0388b19
@@ -741,10 +752,10 @@ vi:
         dob: Nhập ngày sinh của thí sinh theo định dạng YYYY-MM-DD.
         #original_hash: ac908c9
         name: >-
-          Nhập chính xác họ tên đầy đủ của thí sinh, ví dụ: <strong>Stefan
-          Pochmann</strong>. Không nhập cẩu thả, ví dụ: <strong>s
-          pochman</strong>.<br/>Không bắt buộc nhập tên đệm (đầy đủ hoặc viết
-          tắt).
+          Nhập chính xác họ tên đầy đủ của thí sinh, ví dụ: <strong>Nguyễn Văn
+          A</strong>. Không nhập cẩu thả như <strong>nguyen van a</strong> hay
+          <strong>NGUYEN VAN A</strong>.<br/>Không bắt buộc nhập tên đệm (đầy đủ
+          hoặc viết tắt).
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
@@ -1960,6 +1971,8 @@ vi:
       profile: Hồ sơ
       #original_hash: 7b2c7f1
       approve: Chấp nhận
+      #original_hash: d9455bf
+      approve_confirm: 'Bạn có chắc chắn muốn chấp thuận WCA ID %{wca_id} không?'
       #original_hash: 85de4b8
       unconfirmed_email: 'Địa chỉ email (%{email}) của tài khoản này chưa được xác nhận.'
       #original_hash: 7069007
@@ -2744,6 +2757,8 @@ vi:
         Giải đấu không có hạn cuối chấp nhận thí sinh trên danh sách chờ. Nếu có
         sử dụng danh sách chờ, vui lòng thêm hạn cuối. Nếu không sử dụng danh
         sách chờ, vui lòng ghi chú rõ ràng trên yêu cầu đăng ký.
+      #original_hash: 51376ef
+      schedule_locked_after_results_submitted: Không thể sửa đổi lịch trình sau khi đã nộp kết quả.
     live:
       #original_hash: 10d1a3c
       title: Kết quả Trực tiếp
@@ -3192,8 +3207,10 @@ vi:
         Bạn có chắc đã sẵn sàng để xác nhận? Sau khi xác nhận, bạn sẽ không thể
         thay đổi bất kỳ thông tin nào. Kiểm tra email của bạn sau đó để xác nhận
         rằng Đội ngũ Quản lý Giải đấu WCA đã được thông báo.
-      #original_hash: 4c7deb7
-      submit_delete: Bạn có chắc muốn xoá giải đấu này? Bạn không thể hoàn tác.
+      #original_hash: 89fbbca
+      submit_delete: >-
+        Tác vụ này không thể hoàn tác. Vui lòng nhập ID của giải đấu là
+        "%{competition_id}" dưới đây để xác nhận.
       #original_hash: 8ebebca
       coordinates: Điều phối
       #original_hash: a672984
@@ -3286,6 +3303,8 @@ vi:
           organizer_ids: Người tổ chức
           #original_hash: b37456c
           contact: Liên lạc
+          #original_hash: 78ef126
+          lead_delegate_id: Trưởng nhóm Delegate
         #original_hash: 991f419
         championships: Loại giải Vô địch
         website:
@@ -3500,6 +3519,10 @@ vi:
             Thông tin liên hệ không bắt buộc. Nếu bạn không điền phần này, email
             của ban tổ chức sẽ được hiển thị công khai. %{md}. Ví dụ: [Text to
             display](mailto:some@email.com)
+          #original_hash: 7a51d00
+          lead_delegate_id: >-
+            Trưởng nhóm Delegate chịu trách nhiệm thực hiện các nhiệm vụ điều
+            hành của giải đấu (nộp kết quả, báo cáo, nộp hội phí WCA)
         website:
           #original_hash: da39a3e
           generate_website: ''
@@ -6152,6 +6175,16 @@ vi:
         Số người tham gia thi trong giải đấu (%{n_competitors}) nhiều hơn giới
         hạn thí sinh (%{competitor_limit}). Kết quả của các thí sinh đăng ký sau
         khi đạt giới hạn thí sinh phải bị hủy bỏ.
+      #original_hash: d8f2f1e
+      registration_details_mismatch_warning: >-
+        Thí sinh có ID đăng ký %{person_id} (%{name}) có thông tin cá nhân không
+        khớp với đơn đăng ký: %{mismatches}
+      #original_hash: 1a9da05
+      missing_matching_registration_warning: 'Thí sinh %{name} không có đơn đăng ký tương ứng.'
+      #original_hash: 7d62dd5
+      unaccepted_registration_with_results_warning: >-
+        Thí sinh %{name} có kết quả thi đấu, nhưng đơn đăng ký chưa được đánh
+        dấu "chấp thuận".
     results:
       #original_hash: 5685ae8
       automatically_position_fixed_info: >-
