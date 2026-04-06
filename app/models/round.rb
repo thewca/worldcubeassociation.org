@@ -428,7 +428,13 @@ class Round < ApplicationRecord
   end
 
   def locked?
-    score_taking_done? && live_results.locked.count == total_competitors
+    return false unless score_taking_done?
+
+    if live_results.loaded?
+      live_results.count { |r| r.locked_by_id.present? } == total_competitors
+    else
+      live_results.locked.count == total_competitors
+    end
   end
 
   def first_round?
