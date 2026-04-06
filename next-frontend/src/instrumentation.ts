@@ -38,7 +38,10 @@ export async function onRequestError(
     routerKind: context.routerKind,
   });
 
-  if (process.env.NODE_ENV === "production") {
+  if (
+    process.env.NEXT_RUNTIME === "nodejs" &&
+    process.env.NODE_ENV === "production"
+  ) {
     const newrelic = (await import("newrelic")).default;
     newrelic.noticeError(err, {
       path: request.path,
