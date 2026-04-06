@@ -443,7 +443,8 @@ class Round < ApplicationRecord
 
     return [] if candidate_ids.empty?
 
-    ignored_ids = [first_advancing.id, competitor_being_quit] | already_quit_ids
+    quit_result_id = relevant_results.find_by(registration_id: competitor_being_quit).id
+    ignored_ids = [first_advancing.id, quit_result_id] | already_quit_ids
 
     advancement_determining = relevant_results
                               .where.not(id: ignored_ids)
