@@ -1808,10 +1808,17 @@ class Competition < ApplicationRecord
       &.event_id
   end
 
+  WCIF_STABLE_VERSION = '1.1'
+
+  WCIF_VERSION_CATALOGUE = {
+    latest: WCIF_STABLE_VERSION,
+    stable: WCIF_STABLE_VERSION,
+  }.freeze
+
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
-  def to_wcif(authorized: false)
+  def to_wcif(authorized: false, version: WCIF_STABLE_VERSION)
     {
-      "formatVersion" => "1.1",
+      "formatVersion" => version.to_s,
       "id" => id,
       "name" => name,
       "shortName" => cell_name,
