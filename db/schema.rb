@@ -1262,6 +1262,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_07_105148) do
     t.bigint "linked_round_id"
     t.integer "number", null: false
     t.string "old_type", limit: 1
+    t.json "participation_condition"
+    t.bigint "participation_source_id"
+    t.string "participation_source_type"
     t.text "round_results", size: :medium
     t.integer "scramble_set_count", default: 1, null: false
     t.text "time_limit"
