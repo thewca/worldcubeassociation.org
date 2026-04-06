@@ -30,6 +30,9 @@ Cutoff and time limit data is stored as JSON in `rounds.cutoff` and `rounds.time
 
 ### Style conventions
 
+All queries should follow these conventions to keep the codebase consistent and readable.
+
+**Formatting:**
 - SQL keywords in **uppercase** (`SELECT`, `FROM`, `WHERE`, `JOIN`, `AND`, `OR`, `AS`, `DISTINCT`, `NOT IN`, `IS NULL`, etc.)
 - Each major clause starts on its **own line**: `SELECT`, `FROM`, `WHERE`, `JOIN`, `ON`, `GROUP BY`, `HAVING`, `ORDER BY`, `WITH`
 - `JOIN` and `ON` are **not indented** (same level as `FROM`)
@@ -37,10 +40,14 @@ Cutoff and time limit data is stored as JSON in `rounds.cutoff` and `rounds.time
 - When a `SELECT` has **multiple targets**, each goes on its own line indented 2 spaces, with `SELECT` alone on its line ([SQLFluff layout.select_targets](https://docs.sqlfluff.com/en/stable/reference/rules.html#rule-layout.select_targets)); a single target stays on the same line as `SELECT`
 - Inside a **CTE body**, the same rules apply with 2-space indentation
 - Always end the file with a **semicolon**
-- Avoid `SELECT *` — name the columns you need so the result email is self-explanatory
-- All aliases (columns, tables, CTEs) must be **snake_case**
 - Use `--` for comments, not `#`
+
+**Naming:**
+- All aliases (columns, tables, CTEs) must be **snake_case**
+
+**Query design:**
 - Prefer **CTEs** (`WITH ...`) over inline subqueries in `FROM` or `JOIN` clauses; use LEFT JOIN anti-joins instead of `NOT IN (SELECT ...)`
+- Avoid `SELECT *` — name the columns you need so the result email is self-explanatory
 
 ### What the query should return
 
