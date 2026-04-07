@@ -121,6 +121,7 @@ export default function LiveUpdatingResultsTable({
         isAdmin={isAdminView}
         showEmpty={showEmpty}
         showLinkedRoundsView={showLinkedRoundsView}
+        isLinkedRound={isLinkedRound}
       />
     </VStack>
   );
