@@ -47,6 +47,8 @@ class Round < ApplicationRecord
 
   has_many :live_results, -> { order(:global_pos) }, inverse_of: :round
   has_many :live_competitors, through: :live_results, source: :registration
+  has_many :colinked_rounds, ->(rd) { where.not(id: rd.id) }, through: :linked_round, source: :rounds
+  has_many :colinked_results, through: :colinked_rounds, source: :live_results
   has_many :results
   has_many :scrambles
 
@@ -245,7 +247,8 @@ class Round < ApplicationRecord
     advancing_ids = advancement_determining_condition.apply(results_with_potential)
     max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
 
-    if advancing_ids.any?
+    # We can't update advancing yet if the other linked rounds still have empty results
+    if !colinked_results.exists?(best: 0) && advancing_ids.any?
       advancement_determining_results.update_all(
         ["advancing = (id IN (?)), advancing_questionable = (global_pos <= ?)", advancing_ids, max_advancing],
       )

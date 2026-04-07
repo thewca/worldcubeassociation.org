@@ -70,10 +70,12 @@ export function LivePositionCell({
   position,
   rowSpan,
   advancingParams,
+  showAdvancing = true,
 }: {
   position: number | string;
   rowSpan?: number;
   advancingParams: Pick<LiveResult, "advancing_questionable" | "advancing">;
+  showAdvancing?: boolean;
 }) {
   return (
     <Table.Cell
@@ -81,7 +83,9 @@ export function LivePositionCell({
       layerStyle="fill.deep"
       textAlign="right"
       rowSpan={rowSpan}
-      colorPalette={rankingCellColorPalette(advancingParams)}
+      colorPalette={
+        showAdvancing ? rankingCellColorPalette(advancingParams) : undefined
+      }
     >
       {position}
     </Table.Cell>

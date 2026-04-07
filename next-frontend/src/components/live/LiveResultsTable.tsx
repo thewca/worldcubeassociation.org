@@ -33,6 +33,7 @@ export default function LiveResultsTable({
   isAdmin = false,
   showEmpty = true,
   showLinkedRoundsView = false,
+  isLinkedRound = false,
 }: {
   resultsByRegistrationId: LiveResultsByRegistrationId;
   formatId: string;
@@ -43,6 +44,7 @@ export default function LiveResultsTable({
   isAdmin?: boolean;
   showEmpty?: boolean;
   showLinkedRoundsView?: boolean;
+  isLinkedRound?: boolean;
 }) {
   const { t } = useT();
 
@@ -113,6 +115,7 @@ export default function LiveResultsTable({
                           : result
                       }
                       rowSpan={rowSpan}
+                      showAdvancing={!isLinkedRound || showLinkedRoundsView}
                     />
                   )}
                   {isAdmin && (
