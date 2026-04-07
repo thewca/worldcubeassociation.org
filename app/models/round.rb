@@ -41,6 +41,9 @@ class Round < ApplicationRecord
   serialize :round_results, coder: RoundResults
   validates_associated :round_results
 
+  serialize :participation_condition, coder: ResultConditions::ResultCondition
+  validates_associated :participation_condition
+
   belongs_to :participation_source, polymorphic: true, optional: true
   has_many :target_rounds, class_name: "Round", as: :participation_source
 
@@ -429,9 +432,24 @@ class Round < ApplicationRecord
     previous_round.linked_round || previous_round
   end
 
+  def self.pick_legacy_advancement_condition(participation_source)
+    case participation_source
+    when CompetitionEvent
+      nil
+    when Round
+      adv_condition = participation_source.advancement_condition
+      ResultConditions::Utils.upcycle_advancement_condition(adv_condition, participation_source)
+    when LinkedRound
+      self.pick_legacy_advancement_condition(participation_source.last_round_in_link)
+    end
+  end
+
   def self.wcif_backlinking(round_model, all_rounds_model)
+    participation_source = self.backport_participation_source(round_model, all_rounds_model)
+
     {
-      participation_source: self.backport_participation_source(round_model, all_rounds_model),
+      participation_source: participation_source,
+      participation_condition: self.pick_legacy_advancement_condition(participation_source),
     }
   end
 
