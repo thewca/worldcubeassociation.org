@@ -98,6 +98,7 @@ export default function AttemptsForm({
             value={attempts[index]}
             onChange={(value) => handleAttemptChange(index, value)}
             resultType="single"
+            placeholder={`Attempt ${index + 1}`}
           />
         ))}
         <Button
