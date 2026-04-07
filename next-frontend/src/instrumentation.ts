@@ -1,3 +1,5 @@
+import type { InstrumentationOnRequestError } from "next/dist/server/instrumentation/types";
+
 export async function register() {
   if (
     process.env.NEXT_RUNTIME === "nodejs" &&
@@ -8,34 +10,15 @@ export async function register() {
 }
 
 export async function onRequestError(
-  // These types are from https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation#parameters
+  // The error type is currently declared indirectly so we are overwriting it for now
   err: { digest: string } & Error,
-  request: {
-    path: string;
-    method: string;
-    headers: Record<string, string>;
-  },
-  context: {
-    routerKind: "Pages Router" | "App Router";
-    routePath: string;
-    routeType: "render" | "route" | "action" | "middleware";
-    renderSource?:
-      | "react-server-components"
-      | "react-server-components-payload"
-      | "server-rendering";
-    revalidateReason?: "on-demand" | "stale" | "build";
-    renderType?: "dynamic" | "dynamic-resume";
-  },
+  request: Parameters<InstrumentationOnRequestError>[1],
+  context: Parameters<InstrumentationOnRequestError>[2],
 ) {
   console.error("[SSR Error]", {
-    message: err.message,
-    stack: err.stack,
-    digest: err.digest,
-    path: request.path,
-    method: request.method,
-    routePath: context.routePath,
-    routeType: context.routeType,
-    routerKind: context.routerKind,
+    ...err,
+    ...request,
+    ...context,
   });
 
   if (
