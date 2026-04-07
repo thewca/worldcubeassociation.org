@@ -28,7 +28,7 @@ export default function RoundActions({
   const roundName = getRoundName(round.id, t, rounds);
 
   return (
-    <HStack>
+    <HStack justify="space-between">
       <Button
         asChild
         variant="subtle"

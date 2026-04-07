@@ -1,6 +1,6 @@
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
-import { Card, Container, HStack, SimpleGrid } from "@chakra-ui/react";
+import { Card, Container, HStack, SimpleGrid, VStack } from "@chakra-ui/react";
 
 import EventIcon from "@/components/EventIcon";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
@@ -39,17 +39,20 @@ export default async function RoundAdmin({
                     {events.byId[eventId].name}
                   </HStack>
                 </Card.Title>
-                {rounds.map((r) => {
-                  return (
-                    <Card.Description w="full" key={r.id} asChild>
-                      <RoundActions
-                        round={r}
-                        rounds={rounds}
-                        competitionId={competitionId}
-                      />
-                    </Card.Description>
-                  );
-                })}
+                <Card.Description w="full" asChild>
+                  <VStack gap="0" alignItems="left">
+                    {rounds.map((r) => {
+                      return (
+                        <RoundActions
+                          key={r.id}
+                          round={r}
+                          rounds={rounds}
+                          competitionId={competitionId}
+                        />
+                      );
+                    })}
+                  </VStack>
+                </Card.Description>
               </Card.Body>
             </Card.Root>
           );
