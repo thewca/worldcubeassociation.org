@@ -31,7 +31,7 @@ export default async function RoundAdmin({
       <SimpleGrid columns={3} gap={2}>
         {_.map(roundsById, (rounds, eventId) => {
           return (
-            <Card.Root key={eventId} rounded="md">
+            <Card.Root key={eventId} rounded="md" size="sm">
               <Card.Body alignItems="baseline">
                 <Card.Title>
                   <HStack>
@@ -39,18 +39,17 @@ export default async function RoundAdmin({
                     {events.byId[eventId].name}
                   </HStack>
                 </Card.Title>
-                <Card.Description w="full" as="div">
-                  {rounds.map((r) => {
-                    return (
+                {rounds.map((r) => {
+                  return (
+                    <Card.Description w="full" key={r.id} asChild>
                       <RoundActions
                         round={r}
                         rounds={rounds}
                         competitionId={competitionId}
-                        key={r.id}
                       />
-                    );
-                  })}
-                </Card.Description>
+                    </Card.Description>
+                  );
+                })}
               </Card.Body>
             </Card.Root>
           );
