@@ -1,4 +1,4 @@
-import type { InstrumentationOnRequestError } from "next/dist/server/instrumentation/types";
+import { type Instrumentation } from 'next'
 
 export async function register() {
   if (
@@ -12,8 +12,8 @@ export async function register() {
 export async function onRequestError(
   // The error type is currently declared indirectly so we are overwriting it for now
   err: { digest: string } & Error,
-  request: Parameters<InstrumentationOnRequestError>[1],
-  context: Parameters<InstrumentationOnRequestError>[2],
+  request: Parameters<Instrumentation.onRequestError>[1],
+  context: Parameters<Instrumentation.onRequestError>[2],
 ) {
   console.error("[SSR Error]", {
     ...err,
