@@ -15,8 +15,12 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { activitiesOnDate, groupActivities } from "@/lib/wca/wcif/activities";
-import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import {
+  activitiesOnDate,
+  getActivityEventId,
+  getActivityRoundId,
+  groupActivities,
+} from "@/lib/wca/wcif/activities";
 import { components } from "@/types/openapi";
 import {
   getDatesBetweenInclusive,
@@ -142,18 +146,14 @@ export default function LiveView({
               <SimpleGrid columns={{ base: 1, md: 3 }} gap={2}>
                 {groupedActivities.map((activityGroup) => {
                   const activity = activityGroup[0];
-                  const { eventId } = parseActivityCode(activity.activityCode);
 
-                  const roundName = getRoundName(
-                    activity.activityCode,
-                    t,
-                    rounds,
-                    true,
-                  );
+                  const eventId = getActivityEventId(activity);
+                  const roundId = getActivityRoundId(activity);
 
-                  const isOpen = ["open", "locked"].includes(
-                    roundsByWcifId[activity.activityCode].state,
-                  );
+                  const roundName = getRoundName(roundId, t, rounds, true);
+
+                  const roundState = roundsByWcifId[roundId].state;
+                  const isOpen = ["open", "locked"].includes(roundState);
 
                   return (
                     <Card.Root key={activity.id} rounded="md">
