@@ -200,8 +200,8 @@ RSpec.describe "import:h2h_data", type: :task do
       expect(H2hAttempt.count).to be(148)
       expect(H2hAttempt.where(live_attempt_id: nil).count).to be(0)
       expect(H2hAttempt.where(result_attempt_id: nil).count).to be(148)
-      expect(ExternalScrambleSet.count).to be(18)
-      expect(ExternalScramble.count).to be(74)
+      expect(MatchedScrambleSet.count).to be(18)
+      expect(MatchedScramble.count).to be(74)
       expect(Scramble.count).to be(0)
     end
 
@@ -235,8 +235,8 @@ RSpec.describe "import:h2h_data", type: :task do
       expect(H2hAttempt.count).to be(148)
       expect(H2hAttempt.where(live_attempt_id: nil).count).to be(148)
       expect(H2hAttempt.where(result_attempt_id: nil).count).to be(0)
-      expect(ExternalScrambleSet.count).to be(0)
-      expect(ExternalScramble.count).to be(0)
+      expect(MatchedScrambleSet.count).to be(0)
+      expect(MatchedScramble.count).to be(0)
       expect(Scramble.count).to be(74)
 
       # Assigns the correct pos placements

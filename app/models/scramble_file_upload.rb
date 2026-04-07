@@ -7,7 +7,7 @@ class ScrambleFileUpload < ApplicationRecord
   #   The below format string should be the Ruby equivalent for strptime.
   TNOODLE_DATETIME_FORMAT = "%b %d, %Y %l:%M:%S %p"
 
-  belongs_to :uploaded_by_user, foreign_key: "uploaded_by", class_name: "User"
+  belongs_to :uploaded_by_user, foreign_key: "uploaded_by", class_name: "User", inverse_of: :scramble_file_uploads
   belongs_to :competition
 
   has_many :external_scramble_sets, dependent: :destroy

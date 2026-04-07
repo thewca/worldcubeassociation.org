@@ -32,12 +32,12 @@ class Competition < ApplicationRecord
   belongs_to :competition_series, optional: true
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
   has_many :series_registrations, -> { readonly }, through: :series_competitions, source: :registrations
-  belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
+  belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User", inverse_of: :competitions_posting
   belongs_to :posted_user, optional: true, foreign_key: 'results_posted_by', class_name: "User", inverse_of: :competitions_results_posted
   has_many :inbox_results, dependent: :delete_all
   has_many :inbox_persons, dependent: :delete_all
   belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User", inverse_of: :competitions_announced
-  belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
+  belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User", inverse_of: :competitions_cancelled
   has_many :competition_payment_integrations
   has_many :scramble_file_uploads, dependent: :delete_all
   has_many :external_scramble_sets, through: :scramble_file_uploads
@@ -263,7 +263,7 @@ class Competition < ApplicationRecord
   validates :qualification_results_reason, presence: true, if: :uses_qualification?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
   validates :main_event_id, inclusion: { in: :event_ids, allow_nil: true }
-  validates :lead_delegate_id, presence: true, inclusion: { in: :delegate_ids }, if: :lead_delegate_required?
+  validates :lead_delegate_id, presence: { if: :lead_delegate_required? }, inclusion: { in: :delegate_ids, allow_nil: true }
 
   # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
   validates :name, length: { maximum: MAX_NAME_LENGTH }
@@ -1123,12 +1123,7 @@ class Competition < ApplicationRecord
   end
 
   def lead_delegate_required?
-    # If you read this comment after April 1st, 2026:
-    #   You may happily remove all the `testing_before_launch` shenanigans. Signed GB 2026-03-20
-    requirement_date = Date.new(2026, 4, 1)
-    testing_before_launch = Rails.env.test? && Date.current < requirement_date
-
-    confirmed? && (testing_before_launch || confirmed_at >= requirement_date)
+    confirmed? && confirmed_at >= Date.new(2026, 4, 1)
   end
 
   def pending_results_or_report(num_days)
@@ -1813,10 +1808,17 @@ class Competition < ApplicationRecord
       &.event_id
   end
 
+  WCIF_STABLE_VERSION = '1.1'
+
+  WCIF_VERSION_CATALOGUE = {
+    latest: WCIF_STABLE_VERSION,
+    stable: WCIF_STABLE_VERSION,
+  }.freeze
+
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
-  def to_wcif(authorized: false)
+  def to_wcif(authorized: false, version: WCIF_STABLE_VERSION)
     {
-      "formatVersion" => "1.1",
+      "formatVersion" => version.to_s,
       "id" => id,
       "name" => name,
       "shortName" => cell_name,
@@ -2287,9 +2289,9 @@ class Competition < ApplicationRecord
       self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
   end
 
-  # WFC usually sends dues to the first staff delegate in alphabetical order if there are no redirects setup for the country or organizer.
+  # WFC usually sends dues to the lead delegate; if not present, then to the first staff delegate in alphabetical order, provided there are no redirects set up for the country or organizer.
   private def delegate_dues_payer
-    staff_delegates.min_by(&:name)
+    lead_delegate || staff_delegates.min_by(&:name)
   end
 
   def dues_payer_name

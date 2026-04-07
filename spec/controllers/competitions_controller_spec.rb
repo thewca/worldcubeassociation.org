@@ -281,7 +281,7 @@ RSpec.describe CompetitionsController do
       it 'saves staff_delegate_ids' do
         staff_delegates = create_list(:delegate, 2)
         staff_delegate_ids = staff_delegates.map(&:id)
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: staff_delegate_ids })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: staff_delegate_ids, leadDelegateId: staff_delegates.first.id })
         patch :update, params: update_params, as: :json
         expect(competition.reload.delegates).to eq staff_delegates
       end
@@ -352,7 +352,7 @@ RSpec.describe CompetitionsController do
 
       it 'can change the delegate' do
         new_delegate = create(:delegate)
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: [new_delegate.id] })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: [new_delegate.id], leadDelegateId: new_delegate.id })
         post :update, params: update_params, as: :json
         competition.reload
         expect(competition.delegates).to eq [new_delegate]
@@ -371,7 +371,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as a delegate. This should be allowed, because we're
         # still an organizer.
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], organizerIds: [organizer.id] })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], leadDelegateId: nil, organizerIds: [organizer.id] })
         patch :update, params: update_params, as: :json
         expect(response).to be_successful
         expect(competition.reload.delegates).to eq []
@@ -429,7 +429,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as an organizer. This should be allowed, because we're
         # still able to administer results.
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], organizerIds: [] }, userSettings: { receiveRegistrationEmails: true })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], leadDelegateId: nil, organizerIds: [] }, userSettings: { receiveRegistrationEmails: true })
         patch :update, params: update_params, as: :json
         expect(competition.reload.delegates).to eq []
         expect(competition.reload.organizers).to eq []
