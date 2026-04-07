@@ -7,12 +7,13 @@ module CompetitionResultsImport
     result_submission_method,
     mark_result_submitted: false,
     store_uploaded_json: false,
+    import_matched_scrambles: true,
     results_json_str: nil
   )
     errors = []
 
     results_to_import = temporary_results_data[:results_to_import]
-    scrambles_to_import = temporary_results_data[:scrambles_to_import]
+    scramble_sets_to_import = temporary_results_data[:scramble_sets_to_import]
     persons_to_import = temporary_results_data[:persons_to_import]
 
     ActiveRecord::Base.transaction do
@@ -20,8 +21,52 @@ module CompetitionResultsImport
       InboxResult.where(competition_id: competition.id).delete_all
       Scramble.where(competition_id: competition.id).delete_all
       InboxPerson.import!(persons_to_import)
-      Scramble.import!(scrambles_to_import)
       InboxResult.import!(results_to_import)
+
+      if import_matched_scrambles
+        # Foreign Key handles transitive deletion of individual scrambles
+        competition.rounds.each { it.matched_scramble_sets.delete_all }
+
+        MatchedScrambleSet.import!(scramble_sets_to_import)
+
+        scramble_set_lookup = competition.reload
+                                         .matched_scramble_sets
+                                         .index_by(&:import_index)
+
+        scrambles_to_import = scramble_sets_to_import.flat_map(&:matched_scrambles)
+
+        scrambles_to_import.each do |scramble|
+          inserted_scramble_set = scramble_set_lookup.fetch(scramble.matched_scramble_set.import_index)
+          scramble.matched_scramble_set = inserted_scramble_set
+        end
+
+        MatchedScramble.import!(scrambles_to_import)
+      end
+
+      flat_scrambles_to_import = scramble_sets_to_import
+                                 .flat_map do |matched_scr_set|
+                                   matched_scr_set.matched_scrambles.map do |matched_scr|
+                                     new_scramble_attributes = {
+                                       competition_id: matched_scr_set.competition_id,
+                                       event_id: matched_scr_set.event_id,
+                                       group_id: matched_scr_set.alphabetic_group_index,
+                                       is_extra: matched_scr.is_extra?,
+                                       round_id: matched_scr_set.round_id,
+                                       round_type_id: matched_scr_set.round_type_id,
+                                       scramble: matched_scr.scramble_string,
+                                       scramble_num: matched_scr.ordered_index + 1,
+                                     }
+
+                                     Scramble.new(new_scramble_attributes).tap do |new_scr|
+                                       # See upload_json for an explanation on setting these associations
+                                       new_scr.competition = competition
+                                       new_scr.round = matched_scr_set.round
+                                       new_scr.external_scramble = matched_scr.external_scramble
+                                     end
+                                   end
+      end
+
+      Scramble.import!(flat_scrambles_to_import)
 
       competition.touch(:results_submitted_at) if mark_result_submitted && !competition.results_submitted?
 
@@ -32,6 +77,10 @@ module CompetitionResultsImport
       object = e.record
       errors << if object.instance_of?(Scramble)
                   "Scramble in '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
+                elsif object.instance_of?(MatchedScrambleSet)
+                  "Scramble Set in '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
+                elsif object.instance_of?(MatchedScramble)
+                  "Scramble ##{object.ordered_index + 1} in set '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
                 elsif object.instance_of?(InboxPerson)
                   "Person #{object.name} is invalid (#{e.message}), please fix it!"
                 elsif object.instance_of?(InboxResult)

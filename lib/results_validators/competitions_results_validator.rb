@@ -45,6 +45,11 @@ module ResultsValidators
                  .any?(&:include_persons?)
     end
 
+    def include_scrambles?
+      @validators.map { self.load_validator it }
+                 .any?(&:include_scrambles?)
+    end
+
     protected def validate_competitions(competition_ids, check_real_results)
       if @memory_batch.present?
         competition_ids.each_slice(@memory_batch) do |batch_ids|
