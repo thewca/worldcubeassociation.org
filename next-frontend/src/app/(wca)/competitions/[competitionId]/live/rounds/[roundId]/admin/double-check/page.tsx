@@ -3,7 +3,6 @@ import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import DoubleCheck from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check/DoubleCheck";
 import { LiveResultProvider } from "@/providers/LiveResultProvider";
 import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
-import formats from "@/lib/wca/data/formats";
 import { Container } from "@chakra-ui/react";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
@@ -31,7 +30,7 @@ export default async function DoubleCheckPage({
     return <OpenapiError response={response} t={t} />;
   }
 
-  const { results, id, format, cutoff, timeLimit } = data;
+  const { results, id, format } = data;
 
   const sortedResults = results.toSorted(
     (a, b) =>
@@ -60,12 +59,9 @@ export default async function DoubleCheckPage({
         >
           <LiveResultProvider initialRound={data} competitionId={competitionId}>
             <LiveResultAdminProvider
-              format={formats.byId[format]}
-              roundId={id}
               competitionId={competitionId}
               initialRegistrationId={sortedResults[0].registration_id}
-              cutoff={cutoff}
-              timeLimit={timeLimit}
+              round={round}
             >
               <ConfirmProvider>
                 <DoubleCheck
