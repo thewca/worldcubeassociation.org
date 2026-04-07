@@ -84,7 +84,7 @@ export function LivePositionCell({
       textAlign="right"
       rowSpan={rowSpan}
       colorPalette={
-        showAdvancing ? rankingCellColorPalette(advancingParams) : ""
+        showAdvancing ? rankingCellColorPalette(advancingParams) : undefined
       }
     >
       {position}
