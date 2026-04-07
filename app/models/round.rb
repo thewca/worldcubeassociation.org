@@ -381,11 +381,9 @@ class Round < ApplicationRecord
   def self.find_by_wcif_id!(wcif_id, competition_id, includes: [])
     event_id, number = Round.parse_wcif_id(wcif_id).values_at(:event_id, :round_number)
 
-    all_includes = [:competition_event, *Array.wrap(includes)]
-
     Round
       .joins(:competition_event)
-      .preload(all_includes)
+      .preload(includes)
       .find_by!(
         competition_events: { competition_id: competition_id, event_id: event_id },
         number: number,
