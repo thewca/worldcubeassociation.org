@@ -47,6 +47,8 @@ class Round < ApplicationRecord
 
   has_many :live_results, -> { order(:global_pos) }, inverse_of: :round
   has_many :live_competitors, through: :live_results, source: :registration
+  has_many :colinked_rounds, ->(rd) { where.not(id: rd.id) }, through: :linked_round, source: :rounds
+  has_many :colinked_results, through: :colinked_rounds, source: :live_results
   has_many :results
   has_many :scrambles
 
@@ -231,13 +233,13 @@ class Round < ApplicationRecord
 
   def recompute_advancing
     advancement_determining_results = relevant_results.where.not(global_pos: nil).where(locked_by_id: nil)
-    advancement_determining_results.update_all(advancing: false, advancing_questionable: false)
 
-    missing_attempts = total_competitors - advancement_determining_results.count
+    loaded_results = advancement_determining_results.includes(:live_attempts).to_a
+    missing_attempts = total_competitors - loaded_results.count
+
     potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
 
     # Determine which results would advance if everyone achieved their best possible attempt.
-    loaded_results = advancement_determining_results.includes(:live_attempts).to_a
     results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
 
     advancement_determining_condition = final_round? || linked_round&.final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
@@ -245,18 +247,23 @@ class Round < ApplicationRecord
     advancing_ids = advancement_determining_condition.apply(results_with_potential)
     max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
 
-    advancement_determining_results.update_all(
-      "advancing_questionable = (global_pos <= #{max_advancing})",
-    )
-
-    LiveResult.where(id: advancing_ids).update_all(advancing: true)
+    # We can't update advancing yet if the other linked rounds still have empty results
+    if !colinked_results.exists?(best: 0) && advancing_ids.any?
+      advancement_determining_results.update_all(
+        ["advancing = (id IN (?)), advancing_questionable = (global_pos <= ?)", advancing_ids, max_advancing],
+      )
+    else
+      advancement_determining_results.update_all(
+        ["advancing = FALSE, advancing_questionable = (global_pos <= ?)", max_advancing],
+      )
+    end
   end
 
   def recompute_global_pos
     return if format_id == "h"
 
-    # For non-linked rounds, just set the global_pos to local_pos
-    return live_results.update_all("global_pos = local_pos") if linked_round.blank?
+    # For non-linked rounds, global_pos was already set equal to local_pos in recompute_local_pos
+    return if linked_round.blank?
 
     rank_by = format.rank_by_column
     secondary_rank_by = format.secondary_rank_by_column
@@ -303,6 +310,9 @@ class Round < ApplicationRecord
     #   2. The attempts are then sorted among themselves using their normal numeric value.
     #     This works in particular because sorting in MySQL is stable, i.e. the sorting
     #     based on the second part won't destroy the order established by the first part.
+    #
+    # For non-linked rounds global_pos equals local_pos, so we set both here to avoid
+    # a second UPDATE in recompute_global_pos.
     ActiveRecord::Base.connection.exec_query <<~SQL.squish
       UPDATE live_results r
       LEFT JOIN (
@@ -315,7 +325,7 @@ class Round < ApplicationRecord
           WHERE round_id = #{id} AND best != 0
       ) ranked
       ON r.id = ranked.id
-      SET r.local_pos = ranked.rank
+      SET r.local_pos = ranked.rank#{', r.global_pos = ranked.rank' if linked_round.blank?}
       WHERE r.round_id = #{id};
     SQL
   end
@@ -326,9 +336,9 @@ class Round < ApplicationRecord
 
   def competitors_live_results_entered
     if live_results.loaded?
-      live_results.count(&:not_empty?)
+      live_results.count(&:complete?)
     else
-      live_results.not_empty.count
+      live_results.where(live_attempts_count: format.expected_solve_count).count
     end
   end
 
@@ -420,7 +430,13 @@ class Round < ApplicationRecord
   end
 
   def locked?
-    score_taking_done? && live_results.locked.count == total_competitors
+    return false unless score_taking_done?
+
+    if live_results.loaded?
+      live_results.count(&:locked?) == total_competitors
+    else
+      live_results.locked.count == total_competitors
+    end
   end
 
   def first_round?
@@ -443,7 +459,8 @@ class Round < ApplicationRecord
 
     return [] if candidate_ids.empty?
 
-    ignored_ids = [first_advancing.id, competitor_being_quit] | already_quit_ids
+    quit_result_ids = relevant_results.where(registration_id: competitor_being_quit).pluck(:id)
+    ignored_ids = [first_advancing.id] | quit_result_ids | already_quit_ids
 
     advancement_determining = relevant_results
                               .where.not(id: ignored_ids)

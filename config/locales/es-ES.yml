@@ -1260,7 +1260,7 @@ es-ES:
         comp_not_found: Competición no encontrada
         #original_hash: c0e86d5
         comp_not_found_action: >-
-          No hemos podido encontrar ninguna competición con el ID "%{comp_id}".
+          No hemos podido encontrar ninguna competición con el ID «%{comp_id}».
           Por favor, búscala utilizando la barra de búsqueda.
         #original_hash: 695f7ba
         comp_not_found_action_2: >-
@@ -1276,7 +1276,7 @@ es-ES:
       applications:
         help:
           #original_hash: 95c10ec
-          https_info: Se requiere HTTPS a no ser que el host sea "localhost"
+          https_info: Se requiere HTTPS a no ser que el host sea «localhost»
           #original_hash: 40b9d10
           scopes_html: >-
             Separa los alcances con espacios. Déjalo en blanco para usar los
@@ -2911,6 +2911,21 @@ es-ES:
         title: Podios
         #original_hash: d7297a7
         undetermined: Podios por determinar
+      admin:
+        #original_hash: cf9b770
+        open: Abrir
+        #original_hash: 719ea39
+        clear: Limpiar
+        #original_hash: 42faad9
+        competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} introducidos'
+        #original_hash: adec79f
+        round_locked: bloqueada
+      results:
+        #original_hash: 4705687
+        competitor: Competidor
+      errors:
+        #original_hash: f522c26
+        round_closed: La ronda no está abierta aún
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mis competiciones
@@ -3371,7 +3386,7 @@ es-ES:
       #original_hash: 89fbbca
       submit_delete: >-
         Esta acción no se puede deshacer. Por favor, escribe a continuación el
-        ID de la competición "%{competition_id}" para confirmar la eliminación.
+        ID de la competición «%{competition_id}» para confirmar la eliminación.
       #original_hash: 8ebebca
       coordinates: Coordenadas
       #original_hash: a672984
@@ -3609,8 +3624,8 @@ es-ES:
             [Parque de las Ciencias](http://www.parqueciencias.com/)
           #original_hash: 2651d1a
           details_html: >-
-            Detalles sobre el recinto (por ejemplo, "primera planta" o "sigue
-            los carteles"). %{md}
+            Detalles sobre el recinto (por ejemplo, «En la primera planta, al
+            fondo, sigue los carteles»). %{md}
           #original_hash: da39a3e
           address: ''
           coordinates:
@@ -3671,7 +3686,7 @@ es-ES:
             pueden ser más que la mitad del límite de competidores.
           #original_hash: 79dcafd
           auto_accept_preference: >-
-            Esto activará un botón de "Aceptar automáticamente en bloque" en el
+            Esto activará un botón de «Aceptar automáticamente en bloque» en el
             menú de registro. Esto aceptará todos los registros en lista de
             espera y pendientes hasta llegar al límite de competidores, o al
             límite definido a continuación. Úsalo bajo tu propia
@@ -3836,7 +3851,7 @@ es-ES:
             per_registration_limit: >-
               Forzar de manera opcional el total de categorías en las que un
               competidor puede registrarse (comúnmente usado para competiciones
-              de tipo "Favorites"). Deberías añadir categorías antes de usar
+              de tipo «Favorites»). Deberías añadir categorías antes de usar
               este campo. Los registros con demasiadas categorías se bloquearán.
               Dejar en blanco si no hay límite.
           #original_hash: 1067798
@@ -3863,10 +3878,10 @@ es-ES:
             'false': NO quiero especificar un límite de competidores
           auto_accept_preference:
             #original_hash: 5996b1f
-            disabled: Desactivar el botón de "Aceptar automáticamente en bloque"
+            disabled: Desactivar el botón de «Aceptar automáticamente en bloque»
             #original_hash: 1c0c289
             bulk: >-
-              Activar el botón de "Aceptar automáticamente en bloque" en el menú
+              Activar el botón de «Aceptar automáticamente en bloque» en el menú
               de registro
             #original_hash: 490ed83
             live: Aceptar automáticamente los registros cuando se realice el pago
@@ -3896,11 +3911,11 @@ es-ES:
             #original_hash: 7e54323
             unclear: >-
               No mostrar nada (y quizás ampliar la información en la sección de
-              "Requisitos adicionales de registro")
+              «Requisitos adicionales de registro»)
             #original_hash: 694bce4
-            free: '"Cualquier espectador puede asistir de manera gratuita"'
+            free: «Cualquier espectador puede asistir de manera gratuita»
             #original_hash: 762c509
-            restricted: '"Solo se permiten espectadores como acompañantes de competidores"'
+            restricted: «Solo se permiten espectadores como acompañantes de competidores»
         event_restrictions:
           qualification_results:
             allow_registration_without:
@@ -3990,7 +4005,7 @@ es-ES:
             más de uno a la vez, los competidores pagados serán añadidos al
             final de la lista en el orden que hayan pagado, seguido por los
             demás en el orden en que se hayan registrado. Puedes ajustar el
-            orden manualmente en "Modo Edición" en caso que sea necesario.
+            orden manualmente en «Modo Edición» en caso que sea necesario.
           #original_hash: dc16b6c
           skipped_warning: >-
             Has omitido %{count} registro(s) en la lista de espera. ¿Estás
@@ -4043,7 +4058,7 @@ es-ES:
         #original_hash: 1255806
         acknowledgement: >-
           He leído y acepto toda la información que hay en la pestaña de
-          "Registro", incluyendo la cuota de entrada, políticas de reembolsos y
+          «Registro», incluyendo la cuota de entrada, políticas de reembolsos y
           cualquier otro requerimiento que se enumerado antes.
         #original_hash: 80d2933
         next_step: Continuar al siguiente paso
@@ -4059,12 +4074,12 @@ es-ES:
         #original_hash: 9b92912
         update_confirm_contact: >-
           Tienes que ponerte en contacto con los organizadores para actualizar
-          tu registro, pincha en "Sí" para ser llevado al formulario de
+          tu registro, pincha en «Sí» para ser llevado al formulario de
           contacto.
         #original_hash: d54056b
         delete_confirm_contact: >-
           Tienes que ponerte en contacto con los organizadores para eliminar tu
-          registro, pincha en "Sí" para ser llevado al formulario de contacto.
+          registro, pincha en «Sí» para ser llevado al formulario de contacto.
         #original_hash: 7fbb20c
         update_contact_message: >-
           Me gustaría actualizar los detalles de mi registro de la siguiente
@@ -4424,7 +4439,7 @@ es-ES:
       #original_hash: c02a415
       note_clone: >-
         Para clonar una competición ve a la página de información de esa
-        competición y pincha en el botón "Clonar" del menú.
+        competición y pincha en el botón «Clonar» del menú.
     update:
       #original_hash: 5fb2f57
       save_success: La competición se ha guardado satisfactoriamente.
@@ -4784,11 +4799,11 @@ es-ES:
       #original_hash: f5fe73c
       title: Rankings
       #original_hash: 65310e5
-      unknown_type: 'Parámetro de tipo desconocido, tiene que ser "single" o "average"'
+      unknown_type: 'Parámetro de tipo desconocido, tiene que ser «single» o «average»'
       #original_hash: 01e188f
       unknown_show: >-
-        Parámetro de mostrar desconocido, tiene que ser "N persons", "N results"
-        o "by region"
+        Parámetro de mostrar desconocido, tiene que ser «N persons», «N results»
+        o «by region»
     records:
       #original_hash: e51c552
       title: Récords
@@ -5341,7 +5356,7 @@ es-ES:
     who_we_are_content_html: >-
       <p>La World Cube Association gobierna competiciones sobre puzzles
       mecánicos que funcionan aplicando giros a grupos de piezas, comúnmente
-      conocidos como "puzzles secuenciales". El más conocido de estos puzzles es
+      conocidos como «puzzles secuenciales». El más conocido de estos puzzles es
       el Cubo de Rubik, inventado por el profesor Rubik de Hungría. Una
       selección de estos puzzles han sido seleccionados como categorías
       oficiales de la WCA.</p><p>Durante la evolución de la WCA en la última
@@ -5365,8 +5380,8 @@ es-ES:
     our_goals_content_html: >-
       <p>La World Cube Association quiere brindar oportunidades para pertenecer
       y liderar comunidades a gente joven alrededor del mundo mediante el
-      aumento de la accesibilidad de nuestras competiciones de "puzzles
-      secuenciales". Creemos que las experiencias en las competiciones y dentro
+      aumento de la accesibilidad de nuestras competiciones de «puzzles
+      secuenciales». Creemos que las experiencias en las competiciones y dentro
       de nuestra comunidad genera oportunidades de crecimiento para gente joven
       involucrada y que introducir estos eventos a nuevos grupos de gente
       permite fortalecerse a nuestra comunidad general. Se puede encontrar <a
@@ -6003,12 +6018,12 @@ es-ES:
     paragraph4:
       #original_hash: b6dca56
       title: Política de Proximidad
-      #original_hash: f5eeb95
+      #original_hash: 0574d31
       content1: >-
-        Las competiciones de la WCA se aceptarán si están al menos a 10 km o a 5
+        Las competiciones de la WCA se aceptarán si están al menos a 30 km o a 5
         días de otra competición. El WCAT debería revisar particularmente una
         competición propuesta si hay otra competición para la que la distancia
-        entre ellas sea menor que 10 km y el tiempo entre ellas sea menor que 5
+        entre ellas sea menor que 30 km y el tiempo entre ellas sea menor que 5
         días. Un Delegado que pida la aceptación de tal competición tiene que
         aportar más información sobre por qué la competición debería ser
         aceptada de todos modos. Posibles argumentos a favor de que se acepte
@@ -6413,45 +6428,45 @@ es-ES:
       results_not_associated_with_any_person_error: 'Hay resultados para una persona desconocida con el ID %{person_id}'
       #original_hash: c29e35d
       whitespace_in_name_error: >-
-        El nombre "%{name}" tiene espacios al comienzo o al final o espacios
+        El nombre «%{name}» tiene espacios al comienzo o al final o espacios
         dobles.
       #original_hash: 9b1ae5f
       person_with_non_existing_wca_id_error: '%{name} tiene un ID de la WCA que no existe: %{wca_id}.'
       #original_hash: 924d832
       no_space_before_parenthesis_error: >-
-        El paréntesis de apertura en "%{name}" tiene que estar precedido por un
+        El paréntesis de apertura en «%{name}» tiene que estar precedido por un
         espacio.
       #original_hash: 6daf706
       same_person_name_warning: >-
-        Ya hay al menos una persona llamada "%{name}" en la base de datos de la
-        WCA (%{wca_ids}). Por favor, asegúrate de que tu "%{name}" sea una
+        Ya hay al menos una persona llamada «%{name}» en la base de datos de la
+        WCA (%{wca_ids}). Por favor, asegúrate de que tu «%{name}» sea una
         persona diferente. En caso contrario, por favor asigna el ID de la WCA
         correcto al usuario y regenera el archivo de resultados JSON.
       #original_hash: eeb688a
       non_matching_dob_warning: >-
-        La fecha de nacimiento "%{dob}" de %{name} (%{wca_id}) no coincide con
-        la registrada en la base de datos de la WCA ("%{expected_dob}"). Si esto
+        La fecha de nacimiento «%{dob}» de %{name} (%{wca_id}) no coincide con
+        la registrada en la base de datos de la WCA («%{expected_dob}»). Si esto
         es un error, por favor corrígelo. En caso contrario, deja una nota al
         WRT al respecto explicando la situación.
       #original_hash: 6a81cc0
       non_matching_gender_warning: >-
-        El género "%{gender}" de %{name} (%{wca_id}) no coincide con el
-        registrado en la base de datos de la WCA ("%{expected_gender}"). Si esto
+        El género «%{gender}» de %{name} (%{wca_id}) no coincide con el
+        registrado en la base de datos de la WCA («%{expected_gender}»). Si esto
         es un error, por favor corrígelo. En caso contrario, deja una nota al
         WRT al respecto explicando la situación.
       #original_hash: da398a2
       empty_gender_warning: >-
         El género del nuevo %{name} está vacío. Valores válidos para este campo
-        son "Femenino", "Masculino", y "Otro". Por favor, deja una nota al WRT
+        son «Femenino», «Masculino», y «Otro». Por favor, deja una nota al WRT
         al respecto explicando la situación.
       #original_hash: 050c7e2
       non_matching_name_warning: >-
-        El nombre "%{name}" de %{wca_id} no coincide con el registrado en la
-        base de datos de la WCA ("%{expected_name}").
+        El nombre «%{name}» de %{wca_id} no coincide con el registrado en la
+        base de datos de la WCA («%{expected_name}»).
       #original_hash: 333a035
       non_matching_country_warning: >-
-        El país "%{country}" de %{name} (%{wca_id}) no coincide con el
-        registrado en la base de datos de la WCA ("%{expected_country}"). Si
+        El país «%{country}» de %{name} (%{wca_id}) no coincide con el
+        registrado en la base de datos de la WCA («%{expected_country}»). Si
         esto es un error, por favor corrígelo. En caso contrario, deja una nota
         al WRT al respecto explicando la situación.
       #original_hash: 6179b35
@@ -6462,39 +6477,45 @@ es-ES:
         su ID.
       #original_hash: 7732038
       wrong_parenthesis_type_error: >-
-        El paréntesis utilizado en "%{name}" es un carácter irregular, por favor
-        reemplázalo con un paréntesis regular "(" o ")" y con espacios
+        El paréntesis utilizado en «%{name}» es un carácter irregular, por favor
+        reemplázalo con un paréntesis regular «(» o «)» y con espacios
         apropiados.
       #original_hash: fec0347
       special_characters_in_name_warning: >-
-        El nombre '%{name}' contiene caracteres especiales inválidos (como
+        El nombre «%{name}» contiene caracteres especiales inválidos (como
         números, comillas u otros símbolos). Los nombres solo deberían contener
         letras, espacios, guiones, apóstrofos, puntos y paréntesis normales.
+      #original_hash: 031123e
+      suspicious_last_name_warning: >-
+        «%{name}» tiene «%{suffix}» como apellido, lo cual puede no ser un
+        apellido real (por ejemplo, un sufijo generacional escrito
+        completamente). Confirma que se trata de su apellido legal o
+        sustitúyelo/elimínalo según corresponda.
       #original_hash: 4b90583
       successive_uppercase_name_warning: >-
-        "%{name}" tiene mayúsculas consecutivas en su nombre. Por favor,
+        «%{name}» tiene mayúsculas consecutivas en su nombre. Por favor,
         confirma que esta es la ortografía correcta de su nombre o corrígelo.
       #original_hash: 654b60d
       lowercase_name_warning: >-
-        "%{name}" tiene un nombre en todo minúsculas. Por favor, confirma que es
+        «%{name}» tiene un nombre en todo minúsculas. Por favor, confirma que es
         la ortografía correcta del nombre o corrígelo.
       #original_hash: 4ea44b6
       missing_period_in_single_letter_middle_name_warning: >-
-        "%{name}" tiene un nombre de una sola letra sin punto de abreviación.
+        «%{name}» tiene un nombre de una sola letra sin punto de abreviación.
         Por favor, confirma que esta es la ortografía correcta del nombre o
         corrígelo.
       #original_hash: cbd3bd6
       letter_after_period_warning: >-
-        "%{name}" tiene un punto sin un espacio a continuación en su nombre. Por
+        «%{name}» tiene un punto sin un espacio a continuación en su nombre. Por
         favor, confirma que es la ortografía correcta del nombre o corrígelo.
       #original_hash: d7803d4
       single_letter_first_or_last_name_warning: >-
-        "%{name}" tiene un nombre o apellido de una sola letra. Por favor,
+        «%{name}» tiene un nombre o apellido de una sola letra. Por favor,
         corrige el nombre o confirma que este es su nombre legal solicitando un
         documento de identidad oficial.
       #original_hash: 9adb87f
       single_name_warning: >-
-        "%{name}" tiene un solo nombre. Por favor, confirma que este es el
+        «%{name}» tiene un solo nombre. Por favor, confirma que este es el
         nombre completo del competidor con un documento de identidad oficial.
       #original_hash: 39c7f3d
       competitor_limit_exceeded_warning: >-
@@ -6511,7 +6532,7 @@ es-ES:
       #original_hash: 7d62dd5
       unaccepted_registration_with_results_warning: >-
         La persona %{name} tiene resultados en la competición, pero el registro
-        no está marcado como "aceptado".
+        no está marcado como «aceptado».
     results:
       #original_hash: 5685ae8
       automatically_position_fixed_info: >-
@@ -6519,7 +6540,7 @@ es-ES:
         %{expected_pos} automáticamente.
       #original_hash: e895bf5
       mbf_result_over_time_limit_warning: >-
-        [%{round_id}] El resultado "%{result}" de %{person_name} supera el
+        [%{round_id}] El resultado «%{result}» de %{person_name} supera el
         tiempo límite. Por favor, asegúrate de que esto sea por penalizaciones
         antes de enviar los resultados o cambia el resultado a DNF.
       #original_hash: c74c2c6
