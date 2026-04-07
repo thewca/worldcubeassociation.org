@@ -2774,6 +2774,21 @@ vi:
         title: Top 3
         #original_hash: d7297a7
         undetermined: Chưa ấn định Top 3
+      admin:
+        #original_hash: cf9b770
+        open: Mở
+        #original_hash: 719ea39
+        clear: Xóa
+        #original_hash: 42faad9
+        competitors_entered: 'Đã nhập %{competitors_live_results_entered}/%{total_competitors}'
+        #original_hash: adec79f
+        round_locked: đã khóa
+      results:
+        #original_hash: 4705687
+        competitor: Thí sinh
+      errors:
+        #original_hash: f522c26
+        round_closed: Vòng này hiện chưa mở
     my_competitions:
       #original_hash: 5c6d3ea
       title: Giải đấu của tôi
@@ -5707,11 +5722,11 @@ vi:
     paragraph4:
       #original_hash: b6dca56
       title: Chính sách về vùng lân cận
-      #original_hash: f5eeb95
+      #original_hash: 0574d31
       content1: >-
-        Giải đấu WCA sẽ được phê duyệt nếu cách ít nhất 10 km hoặc 5 ngày so với
+        Giải đấu WCA sẽ được phê duyệt nếu cách ít nhất 30 km hoặc 5 ngày so với
         các giải đấu khác. WCAT nên cân nhắc kỹ lưỡng yêu cầu giải đấu nếu có
-        giải đấu khác cách ít hơn 10 km và 5 ngày. Delegate phải cung cấp lý do
+        giải đấu khác cách ít hơn 30 km và 5 ngày. Delegate phải cung cấp lý do
         vì sao giải đấu trên nên được phê duyệt. Các lý do phù hợp bao gồm:
       olist1:
         #original_hash: de00462
@@ -6144,6 +6159,11 @@ vi:
         Tên của thí sinh '%{name}' có chứa kí tự đặc biệt không hợp lệ (số, dấu
         ngoặc kép, hoặc các kí hiệu khác). Tên thí sinh chỉ được phép bao gồm
         chữ cái, dấu cách, dấu gạch ngang, dấu nháy, dấu chấm và dấu ngoặc đơn.
+      #original_hash: 031123e
+      suspicious_last_name_warning: >-
+        '%{name}' có tên lót là '%{suffix}', tên này có thể không phải là tên
+        lót thực tế (VD: hậu tố chỉ thế hệ được viết đầy đủ). Hãy xác nhận rằng
+        tên lót trên là tên lót trên giấy tờ, hoặc xóa đi/thay thế nếu cần.
       #original_hash: 4b90583
       successive_uppercase_name_warning: >-
         '%{name}' có nhiều chữ viết hoa liền nhau trong tên. Hãy xác minh rằng
