@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, HStack, Link } from "@chakra-ui/react";
+import { Button, HStack, Link, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
 import ActionButtons from "@/app/(wca)/competitions/[competitionId]/live/admin/ActionButtons";
@@ -23,8 +23,12 @@ export default function RoundActions({
 
   const [state, setState] = useState<LiveRoundState>(round.state);
 
+  const isOpen = ["open", "locked"].includes(round.state);
+
+  const roundName = getRoundName(round.id, t, rounds);
+
   return (
-    <HStack>
+    <HStack justify="space-between">
       <Button
         asChild
         variant="subtle"
@@ -33,30 +37,34 @@ export default function RoundActions({
         textAlign="left"
         disabled={["ready", "pending"].includes(state)}
       >
-        <Link asChild>
-          <NextLink
-            href={route({
-              pathname:
-                "/competitions/[competitionId]/live/rounds/[roundId]/admin",
-              query: {
-                competitionId,
-                roundId: round.id,
-              },
-            })}
-          >
-            {getRoundName(round.id, t, rounds)}{" "}
-            {round.state == "open" &&
-              `(${t("competitions.live.admin.competitors_entered", {
-                competitors_live_results_entered:
-                  round.competitors_live_results_entered,
-                total_competitors: round.total_competitors,
-              })})`}
-            {round.state == "locked" &&
-              `(${t("competitions.live.admin.round_locked", {
-                total_competitors: round.total_competitors,
-              })})`}
-          </NextLink>
-        </Link>
+        {isOpen ? (
+          <Link asChild>
+            <NextLink
+              href={route({
+                pathname:
+                  "/competitions/[competitionId]/live/rounds/[roundId]/admin",
+                query: {
+                  competitionId,
+                  roundId: round.id,
+                },
+              })}
+            >
+              {roundName}{" "}
+              {round.state == "open" &&
+                `(${t("competitions.live.admin.competitors_entered", {
+                  competitors_live_results_entered:
+                    round.competitors_live_results_entered,
+                  total_competitors: round.total_competitors,
+                })})`}
+              {round.state == "locked" &&
+                `(${t("competitions.live.admin.round_locked", {
+                  total_competitors: round.total_competitors,
+                })})`}
+            </NextLink>
+          </Link>
+        ) : (
+          <Text>{roundName}</Text>
+        )}
       </Button>
       <ActionButtons
         state={state}
