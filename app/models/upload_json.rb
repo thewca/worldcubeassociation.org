@@ -53,6 +53,9 @@ class UploadJson
     parsed_json["events"].each do |event|
       competition_event = competition.competition_events.find { |ce| ce.event_id == event["eventId"] }
       event["rounds"].each do |round|
+        # H2H results are skipped, as they get imported via a manual import process. See #13200 for more information
+        next if round['formatId'] == "h"
+
         # Find the corresponding competition round and get the actual round_type_id
         # (in case the incoming one doesn't correspond to cutoff presence).
         incoming_round_type_id = round["roundId"]
