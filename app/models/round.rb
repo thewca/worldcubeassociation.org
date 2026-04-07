@@ -336,9 +336,9 @@ class Round < ApplicationRecord
 
   def competitors_live_results_entered
     if live_results.loaded?
-      live_results.count(&:not_empty?)
+      live_results.count(&:complete?)
     else
-      live_results.not_empty.count
+      live_results.where(live_attempts_count: format.expected_solve_count).count
     end
   end
 
@@ -430,7 +430,13 @@ class Round < ApplicationRecord
   end
 
   def locked?
-    score_taking_done? && live_results.locked.count == total_competitors
+    return false unless score_taking_done?
+
+    if live_results.loaded?
+      live_results.count(&:locked?) == total_competitors
+    else
+      live_results.locked.count == total_competitors
+    end
   end
 
   def first_round?
