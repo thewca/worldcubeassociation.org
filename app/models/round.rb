@@ -41,6 +41,9 @@ class Round < ApplicationRecord
   serialize :round_results, coder: RoundResults
   validates_associated :round_results
 
+  belongs_to :participation_source, polymorphic: true, optional: true
+  has_many :target_rounds, class_name: "Round", as: :participation_source
+
   has_many :schedule_activities, -> { root_activities }, dependent: :destroy, inverse_of: :round
 
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all

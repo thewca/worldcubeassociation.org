@@ -11,6 +11,7 @@ class CompetitionEvent < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :formats, through: :rounds
   has_many :preferred_formats, through: :event
+  has_many :target_rounds, class_name: "Round", as: :participation_source
 
   accepts_nested_attributes_for :rounds, allow_destroy: true
 

@@ -6,6 +6,7 @@ class LinkedRound < ApplicationRecord
   has_many :live_results, through: :rounds
   has_many :formats, -> { distinct }, through: :rounds
   has_many :competition_events, -> { distinct }, through: :rounds
+  has_many :target_rounds, class_name: "Round", as: :participation_source
 
   validates :competition_event_ids, length: { maximum: 1, message: "must all belong to the same competition" }
 
