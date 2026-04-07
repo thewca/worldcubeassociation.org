@@ -20,7 +20,11 @@ interface AdminResultsContextValue {
   handleAttemptChange: (index: number, value: number) => void;
   handleSubmit: () => void;
   clearCompetitorsResults: (registrationId: number) => void;
-  quitCompetitor: (registrationId: number, toAdvance: number[]) => void;
+  quitCompetitor: (
+    registrationId: number,
+    advanceNext: boolean,
+    toAdvance: number[],
+  ) => void;
   addCompetitorToRound: (registrationId: number) => Promise<void>;
 }
 
@@ -222,13 +226,17 @@ export function LiveResultAdminProvider({
     });
   };
 
-  const quitCompetitor = (registrationId: number, toAdvance: number[]) => {
+  const quitCompetitor = (
+    registrationId: number,
+    advanceNext: boolean,
+    toAdvance: number[],
+  ) => {
     mutateQuit({
       params: {
         path: { competitionId, roundId, registrationId },
       },
       body: {
-        advancing_ids: toAdvance,
+        advancing_ids: advanceNext ? toAdvance : [],
       },
     });
   };
