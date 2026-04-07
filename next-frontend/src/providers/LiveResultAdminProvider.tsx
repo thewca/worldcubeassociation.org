@@ -231,16 +231,13 @@ export function LiveResultAdminProvider({
     advanceNext: boolean,
     toAdvance: number[],
   ) => {
-    const body = advanceNext
-      ? {
-          advancing_ids: toAdvance,
-        }
-      : {};
     mutateQuit({
       params: {
         path: { competitionId, roundId, registrationId },
       },
-      body,
+      body: {
+        advancing_ids: advanceNext ? toAdvance : [],
+      },
     });
   };
 
