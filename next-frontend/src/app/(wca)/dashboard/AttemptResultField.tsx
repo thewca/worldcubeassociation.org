@@ -126,6 +126,7 @@ export function FmMovesField({
   value,
   onChange,
   resultType,
+  placeholder,
 }: {
   resultType: "single" | "average";
 } & AttemptResultProps) {
@@ -148,7 +149,7 @@ export function FmMovesField({
   return (
     <Field.Root invalid={!isValid}>
       <Field.Label>PointsField (isAverage: {isAverage.toString()})</Field.Label>
-      <Input placeholder="Attempt" spellCheck={false} {...binding} />
+      <Input placeholder={placeholder} spellCheck={false} {...binding} />
       <Field.HelperText>{value}</Field.HelperText>
     </Field.Root>
   );
