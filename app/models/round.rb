@@ -246,7 +246,7 @@ class Round < ApplicationRecord
     max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
 
     # We can't update advancing yet if the other linked rounds still have empty results
-    if !LiveResult.where(round_id: sibling_round_ids).exists?(best: 0) && advancing_ids.any?
+    if !LiveResult.where(round_id: colinked_rounds).exists?(best: 0) && advancing_ids.any?
       advancement_determining_results.update_all(
         ["advancing = (id IN (?)), advancing_questionable = (global_pos <= ?)", advancing_ids, max_advancing],
       )
@@ -326,6 +326,12 @@ class Round < ApplicationRecord
       SET r.local_pos = ranked.rank#{', r.global_pos = ranked.rank' if linked_round.blank?}
       WHERE r.round_id = #{id};
     SQL
+  end
+
+  def colinked_rounds
+    return nil if linked_round.blank?
+
+    linked_round.round_ids - [id]
   end
 
   def to_live_state
