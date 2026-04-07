@@ -115,10 +115,7 @@ export default function LiveResultsTable({
                           : result
                       }
                       rowSpan={rowSpan}
-                      showAdvancing={
-                        !isLinkedRound ||
-                        (isLinkedRound && showLinkedRoundsView)
-                      }
+                      showAdvancing={!isLinkedRound || showLinkedRoundsView}
                     />
                   )}
                   {isAdmin && (
