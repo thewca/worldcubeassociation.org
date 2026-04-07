@@ -10,7 +10,7 @@ import {
   Portal,
   Text,
 } from "@chakra-ui/react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { LiveCompetitor, LiveResult } from "@/types/live";
 import { route } from "nextjs-routes";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
