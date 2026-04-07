@@ -333,7 +333,7 @@ class Round < ApplicationRecord
 
   def competitors_live_results_entered
     if live_results.loaded?
-      live_results.count { it.live_attempts_count == format.expected_solve_count }
+      live_results.count(&:complete?)
     else
       live_results.where(live_attempts_count: format.expected_solve_count).count
     end

@@ -98,8 +98,7 @@ class LiveResult < ApplicationRecord
   end
 
   def complete?
-    # Use length hear to not fire a COUNT query for every row
-    live_attempts.length == round.format.expected_solve_count
+    live_attempts_count == round.format.expected_solve_count
   end
 
   def empty_result?
