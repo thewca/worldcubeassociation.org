@@ -3,7 +3,11 @@ import { SimpleGrid, GridItem } from "@chakra-ui/react";
 import AttemptsForm from "@/components/live/AttemptsForm";
 import { Format } from "@/lib/wca/data/formats";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
-import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import {
+  parseActivityCode,
+  WcifCutoff,
+  WcifTimeLimit,
+} from "@/lib/wca/wcif/rounds";
 import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
 import { LiveCompetitor } from "@/types/live";
 import ConfirmProvider from "@/providers/ConfirmProvider";
@@ -13,12 +17,16 @@ export default function AddResults({
   roundId,
   competitionId,
   roundName,
+  cutoff,
+  timeLimit,
 }: {
   format: Format;
   roundId: string;
   competitionId: string;
   competitors: LiveCompetitor[];
   roundName: string;
+  cutoff?: WcifCutoff;
+  timeLimit?: WcifTimeLimit;
 }) {
   const { eventId } = parseActivityCode(roundId);
 
@@ -27,6 +35,8 @@ export default function AddResults({
       format={format}
       roundId={roundId}
       competitionId={competitionId}
+      cutoff={cutoff}
+      timeLimit={timeLimit}
     >
       <SimpleGrid columns={16} gap={6}>
         <GridItem colSpan={4}>

@@ -31,7 +31,7 @@ export default async function DoubleCheckPage({
     return <OpenapiError response={response} t={t} />;
   }
 
-  const { results, id, format } = data;
+  const { results, id, format, cutoff, timeLimit } = data;
 
   const sortedResults = results.toSorted(
     (a, b) =>
@@ -64,6 +64,8 @@ export default async function DoubleCheckPage({
               roundId={id}
               competitionId={competitionId}
               initialRegistrationId={sortedResults[0].registration_id}
+              cutoff={cutoff}
+              timeLimit={timeLimit}
             >
               <ConfirmProvider>
                 <DoubleCheck

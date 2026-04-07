@@ -26,7 +26,7 @@ export default async function ResultPage({
 
   if (error) return <OpenapiError response={response} t={t} />;
 
-  const { competitors, format, id } = data;
+  const { competitors, format, id, cutoff, timeLimit } = data;
 
   const {
     data: roundsData,
@@ -58,6 +58,8 @@ export default async function ResultPage({
                 competitionId={competitionId}
                 competitors={competitors!}
                 roundName={roundName}
+                cutoff={cutoff}
+                timeLimit={timeLimit}
               />
             </LiveResultProvider>
           </VStack>
