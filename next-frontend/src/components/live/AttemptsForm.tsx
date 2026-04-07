@@ -4,6 +4,7 @@ import {
   Heading,
   Portal,
   useListCollection,
+  VStack,
 } from "@chakra-ui/react";
 import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
 import _ from "lodash";
@@ -75,56 +76,59 @@ export default function AttemptsForm({
 
   return (
     <form>
-      <Combobox.Root
-        collection={collection}
-        onInputValueChange={(e) => filter(e.inputValue)}
-        inputValue={inputDisplayValue}
-        onValueChange={(e) => {
-          if (e.value.length > 0) {
-            handleRegistrationIdChange(parseInt(e.value[0], 10));
-          }
-        }}
-        value={registrationId ? [registrationId.toString()] : []}
-      >
-        <Combobox.Label>
-          <Heading size="2xl">{header}</Heading>
-        </Combobox.Label>
-        <Combobox.Control>
-          <Combobox.Input placeholder="Type to search" />
-          <Combobox.IndicatorGroup>
-            <Combobox.ClearTrigger />
-            <Combobox.Trigger />
-          </Combobox.IndicatorGroup>
-        </Combobox.Control>
-        <Portal>
-          <Combobox.Positioner>
-            <Combobox.Content>
-              <Combobox.Empty>No items found</Combobox.Empty>
-              {collection.items.map((item) => (
-                <Combobox.Item item={item} key={item.id}>
-                  {toCompetitorString(item)}
-                  <Combobox.ItemIndicator />
-                </Combobox.Item>
-              ))}
-            </Combobox.Content>
-          </Combobox.Positioner>
-        </Portal>
-      </Combobox.Root>
-      {_.times(solveCount).map((index) => (
-        <AttemptResultField
-          eventId={eventId}
-          key={index}
-          value={attempts[index]}
-          onChange={(value) => handleAttemptChange(index, value)}
-          resultType="single"
-        />
-      ))}
-      <Button
-        onClick={confirmSubmission}
-        disabled={isPending || attempts.length === 0}
-      >
-        Submit Results
-      </Button>
+      <VStack align="left">
+        <Combobox.Root
+          collection={collection}
+          onInputValueChange={(e) => filter(e.inputValue)}
+          inputValue={inputDisplayValue}
+          onValueChange={(e) => {
+            if (e.value.length > 0) {
+              handleRegistrationIdChange(parseInt(e.value[0], 10));
+            }
+          }}
+          value={registrationId ? [registrationId.toString()] : []}
+        >
+          <Combobox.Label>
+            <Heading size="2xl">{header}</Heading>
+          </Combobox.Label>
+          <Combobox.Control>
+            <Combobox.Input placeholder="Type to search" />
+            <Combobox.IndicatorGroup>
+              <Combobox.ClearTrigger />
+              <Combobox.Trigger />
+            </Combobox.IndicatorGroup>
+          </Combobox.Control>
+          <Portal>
+            <Combobox.Positioner>
+              <Combobox.Content>
+                <Combobox.Empty>No items found</Combobox.Empty>
+                {collection.items.map((item) => (
+                  <Combobox.Item item={item} key={item.id}>
+                    {toCompetitorString(item)}
+                    <Combobox.ItemIndicator />
+                  </Combobox.Item>
+                ))}
+              </Combobox.Content>
+            </Combobox.Positioner>
+          </Portal>
+        </Combobox.Root>
+        {_.times(solveCount).map((index) => (
+          <AttemptResultField
+            eventId={eventId}
+            key={index}
+            value={attempts[index]}
+            onChange={(value) => handleAttemptChange(index, value)}
+            resultType="single"
+            placeholder={`Attempt ${index + 1}`}
+          />
+        ))}
+        <Button
+          onClick={confirmSubmission}
+          disabled={isPending || attempts.length === 0}
+        >
+          Submit Results
+        </Button>
+      </VStack>
     </form>
   );
 }
