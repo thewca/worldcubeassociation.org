@@ -147,20 +147,21 @@ function QuitModal({
 
   const { quitCompetitor, isPending } = useResultsAdmin();
 
-  const onQuitClick = useCallback(() => {
+  if (!toAdvance) {
+    return <Text>{t("competitions.live.admin.quit.failed_to_fetch")}</Text>;
+  }
+
+  const onQuitClick = () => {
     quitCompetitor(
       competitor.id,
-      advanceNext ? toAdvance!.map((r) => r.id) : [],
+      advanceNext,
+      toAdvance.map((r) => r.id),
     );
     setMenuClose();
-  }, [advanceNext, competitor.id, quitCompetitor, setMenuClose, toAdvance]);
+  };
 
   if (isLoading) {
     return <Loading />;
-  }
-
-  if (!toAdvance) {
-    return <Text>{t("competitions.live.admin.quit.failed_to_fetch")}</Text>;
   }
 
   return (
