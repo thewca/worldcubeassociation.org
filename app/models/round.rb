@@ -432,7 +432,7 @@ class Round < ApplicationRecord
     previous_round.linked_round || previous_round
   end
 
-  def self.pick_legacy_advancement_condition(participation_source)
+  def self.backport_participation_condition(participation_source)
     case participation_source
     when CompetitionEvent
       nil
@@ -440,7 +440,7 @@ class Round < ApplicationRecord
       adv_condition = participation_source.advancement_condition
       ResultConditions::Utils.upcycle_advancement_condition(adv_condition, participation_source)
     when LinkedRound
-      self.pick_legacy_advancement_condition(participation_source.last_round_in_link)
+      self.backport_participation_condition(participation_source.last_round_in_link)
     end
   end
 
@@ -449,7 +449,7 @@ class Round < ApplicationRecord
 
     {
       participation_source: participation_source,
-      participation_condition: self.pick_legacy_advancement_condition(participation_source),
+      participation_condition: self.backport_participation_condition(participation_source),
     }
   end
 
