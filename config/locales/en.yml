@@ -1421,7 +1421,7 @@ en:
         quit:
           title: "Quit Competitor"
           next_to_advance:
-            one: "The next competitors to advance ist %{competitors}"
+            one: "The next competitor to advance is %{competitors}"
             other: "The next competitors to advance are %{competitors}"
           advance: "Advance next Competitor"
           quit_confirm: "Quit Competitor from Round"
