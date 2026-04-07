@@ -332,11 +332,10 @@ class Round < ApplicationRecord
   end
 
   def competitors_live_results_entered
-    if live_results.loaded? && live_results.all? { |r| r.association(:live_attempts).loaded? }
-      expected = format.expected_solve_count
-      live_results.count { it.live_attempts.length == expected }
+    if live_results.loaded?
+      live_results.count { it.live_attempts_count == format.expected_solve_count }
     else
-      live_results.complete(format.expected_solve_count).count
+      live_results.where(live_attempts_count: format.expected_solve_count).count
     end
   end
 
@@ -431,7 +430,7 @@ class Round < ApplicationRecord
     return false unless score_taking_done?
 
     if live_results.loaded?
-      live_results.count { |r| r.locked_by_id.present? } == total_competitors
+      live_results.count(&:locked?) == total_competitors
     else
       live_results.locked.count == total_competitors
     end
