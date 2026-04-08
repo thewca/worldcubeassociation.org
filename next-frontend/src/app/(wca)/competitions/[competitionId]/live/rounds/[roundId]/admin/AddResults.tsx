@@ -1,3 +1,4 @@
+"use client";
 import { SimpleGrid, GridItem } from "@chakra-ui/react";
 import AttemptsForm from "@/components/live/AttemptsForm";
 import formats from "@/lib/wca/data/formats";
@@ -6,9 +7,10 @@ import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { LiveRoundAdminBase } from "@/types/live";
 import ConfirmProvider from "@/providers/ConfirmProvider";
 import { toaster } from "@/components/ui/toaster";
-import { getT } from "@/lib/i18n/get18n";
+import { useT } from "@/lib/i18n/useI18n";
+import { useEffect } from "react";
 
-export default async function AddResults({
+export default function AddResults({
   competitionId,
   roundName,
   round,
@@ -20,16 +22,18 @@ export default async function AddResults({
   const { eventId } = parseActivityCode(round.id);
   const format = formats.byId[round.format];
 
-  const { t } = await getT();
+  const { t } = useT();
 
   const isLocked = round.state === "locked";
 
-  if (isLocked) {
-    toaster.create({
-      description: t("competitions.live.admin.warnings.round_locked"),
-      type: "info",
-    });
-  }
+  useEffect(() => {
+    if (isLocked) {
+      toaster.create({
+        description: t("competitions.live.admin.warnings.round_locked"),
+        type: "info",
+      });
+    }
+  }, [isLocked, t]);
 
   return (
     <SimpleGrid columns={16} gap={6}>
