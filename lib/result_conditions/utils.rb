@@ -19,9 +19,9 @@ module ResultConditions
       when 'attemptResult'
         ResultAchieved.new(scope: round.format.sort_by, value: advancement_condition.level)
       when 'percent'
-        Percent.new(value: advancement_condition.level)
+        Percent.new(scope: round.format.sort_by, value: advancement_condition.level)
       when 'ranking'
-        Ranking.new(value: advancement_condition.level)
+        Ranking.new(scope: round.format.sort_by, value: advancement_condition.level)
       end
     end
 
@@ -32,7 +32,7 @@ module ResultConditions
       when 'attemptResult'
         ResultAchieved.new(scope: v1_qualification.result_type, value: v1_qualification.level)
       when 'ranking'
-        Ranking.new(value: v1_qualification.level)
+        Ranking.new(scope: v1_qualification.result_type, value: v1_qualification.level)
       when 'anyResult'
         ResultAchieved.new(scope: v1_qualification.result_type, value: nil)
       end
