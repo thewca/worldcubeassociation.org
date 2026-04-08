@@ -19,9 +19,22 @@ module ResultConditions
       when 'attemptResult'
         ResultAchieved.new(scope: round.format.sort_by, value: advancement_condition.level)
       when 'percent'
-        Percent.new(value: advancement_condition.level)
+        Percent.new(scope: round.format.sort_by, value: advancement_condition.level)
       when 'ranking'
-        Ranking.new(value: advancement_condition.level)
+        Ranking.new(scope: round.format.sort_by, value: advancement_condition.level)
+      end
+    end
+
+    def self.upcycle_v1_qualification(v1_qualification)
+      return if v1_qualification.blank?
+
+      case v1_qualification.wcif_type
+      when 'attemptResult'
+        ResultAchieved.new(scope: v1_qualification.result_type, value: v1_qualification.level)
+      when 'ranking'
+        Ranking.new(scope: v1_qualification.result_type, value: v1_qualification.level)
+      when 'anyResult'
+        ResultAchieved.new(scope: v1_qualification.result_type, value: nil)
       end
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_07_105148) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_08_132538) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -318,6 +318,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_07_105148) do
     t.string "event_id", null: false
     t.integer "fee_lowest_denomination", default: 0, null: false
     t.text "qualification"
+    t.json "qualification_condition"
+    t.date "qualification_latest_date"
     t.index ["competition_id", "event_id"], name: "index_competition_events_on_competition_id_and_event_id", unique: true
     t.index ["event_id"], name: "fk_rails_ba6cfdafb1"
   end

@@ -23,6 +23,9 @@ class CompetitionEvent < ApplicationRecord
   serialize :qualification, coder: Qualification
   validates_associated :qualification
 
+  serialize :qualification_condition, coder: ResultConditions::ResultCondition
+  validates_associated :qualification_condition
+
   validate do
     remaining_rounds = rounds.reject(&:marked_for_destruction?)
     numbers = remaining_rounds.map(&:number).sort
@@ -84,6 +87,8 @@ class CompetitionEvent < ApplicationRecord
     self.update!(
       rounds: new_rounds,
       qualification: wcif_qualification,
+      qualification_latest_date: wcif_qualification&.when_date,
+      qualification_condition: ResultConditions::Utils.upcycle_v1_qualification(wcif_qualification),
     )
     WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     self
