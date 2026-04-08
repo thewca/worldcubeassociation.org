@@ -148,7 +148,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     to_advance = round.previous_round.next_advancing_without(registration_id) if advancing_ids.present?
 
-    return render json: { status: "The advancing competitor doesn't match who should be advancing.", should_advance: to_advance }, status: :bad_request if advancing_ids&.map(&:to_i) != to_advance&.pluck(:registration_id)
+    return render json: { status: "The advancing competitor doesn't match who should be advancing.", should_advance: to_advance }, status: :bad_request if advancing_ids.present? && advancing_ids.map(&:to_i) != to_advance&.pluck(:registration_id)
 
     quit_count = round.quit_from_round!(registration_id, @current_user, to_advance: to_advance)
 

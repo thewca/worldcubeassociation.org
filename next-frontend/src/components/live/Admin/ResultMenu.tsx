@@ -156,11 +156,7 @@ function QuitModal({
   }
 
   const onQuitClick = () => {
-    quitCompetitor(
-      competitor.id,
-      advanceNext,
-      toAdvance.map((r) => r.id),
-    );
+    quitCompetitor(competitor.id, advanceNext, toAdvance);
     setMenuClose();
   };
 
