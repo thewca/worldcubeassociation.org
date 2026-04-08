@@ -744,6 +744,12 @@ RSpec.describe "Competition WCIF" do
       competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
+
+      # Checking whether the backporting worked as expected
+      competition_333_event = competition.competition_events.find { it.event_id == '333' }
+
+      expect(competition_333_event.qualification_latest_date).to eq(Date.new(2021, 7, 1))
+      expect(competition_333_event.qualification_condition).not_to be_nil
     end
   end
 
