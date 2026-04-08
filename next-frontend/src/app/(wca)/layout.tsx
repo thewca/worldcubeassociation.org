@@ -7,7 +7,7 @@ import Navbar from "./navbar";
 import Footer from "@/components/Footer";
 import RandomBackground from "@/components/RandomBackground";
 import { ThemeProvider } from "@wrksz/themes/next";
-import { computeAppFont } from "@/styles/appFont";
+import { ttNormsPro } from "@/styles/fonts";
 
 export const metadata: Metadata = {
   title: {
@@ -18,16 +18,14 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const appFont = await computeAppFont();
-
   return (
     <html suppressHydrationWarning>
-      <body className={appFont.className}>
+      <body className={ttNormsPro.className}>
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <WCAQueryClientProvider>
             <AuthProvider>
