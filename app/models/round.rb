@@ -235,7 +235,7 @@ class Round < ApplicationRecord
     advancement_determining_results = relevant_results.where.not(global_pos: nil).where(locked_by_id: nil)
 
     loaded_results = advancement_determining_results.includes(:live_attempts).to_a
-    missing_attempts = total_competitors - loaded_results.count
+    missing_attempts = total_competitors - loaded_results.count + colinked_results.where.not(global_pos: nil).count
 
     potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
 
