@@ -87,7 +87,6 @@ class CompetitionEvent < ApplicationRecord
     self.update!(
       rounds: new_rounds,
       qualification: wcif_qualification,
-      # qualification_earliest_date is not supported in WCIF v1 at all
       qualification_latest_date: wcif_qualification&.when_date,
       qualification_condition: ResultConditions::Utils.upcycle_v1_qualification(wcif_qualification),
     )

@@ -386,7 +386,6 @@ module DatabaseDumper
           event_id
           fee_lowest_denomination
           qualification
-          qualification_earliest_date
           qualification_latest_date
           qualification_condition
         ],

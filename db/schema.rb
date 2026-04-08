@@ -319,7 +319,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_08_132538) do
     t.integer "fee_lowest_denomination", default: 0, null: false
     t.text "qualification"
     t.json "qualification_condition"
-    t.date "qualification_earliest_date"
     t.date "qualification_latest_date"
     t.index ["competition_id", "event_id"], name: "index_competition_events_on_competition_id_and_event_id", unique: true
     t.index ["event_id"], name: "fk_rails_ba6cfdafb1"
