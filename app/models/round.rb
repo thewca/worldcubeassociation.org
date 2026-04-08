@@ -217,6 +217,7 @@ class Round < ApplicationRecord
 
     inserted_ids = self.live_results.where(registration_id: advancing_reg_ids).ids
     self.bulk_insert_history(inserted_ids, opening_user, action_type: :opened)
+    inserted_ids.count
   end
 
   def create_empty_live_result(registration_id)
@@ -466,8 +467,9 @@ class Round < ApplicationRecord
     # separately
     return 0 if relevant_results.first.locked_by.present?
 
-    relevant_results.update_all(locked_by_id: locking_user.id)
+    count = relevant_results.update_all(locked_by_id: locking_user.id)
     self.bulk_insert_history(relevant_results.ids, locking_user, action_type: :locked)
+    count
   end
 
   STATE_LOCKED = "locked"
