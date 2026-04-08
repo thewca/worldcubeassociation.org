@@ -24,5 +24,18 @@ module ResultConditions
         Ranking.new(value: advancement_condition.level)
       end
     end
+
+    def self.upcycle_v1_qualification(v1_qualification)
+      return if v1_qualification.blank?
+
+      case v1_qualification.wcif_type
+      when 'attemptResult'
+        ResultAchieved.new(scope: v1_qualification.result_type, value: v1_qualification.level)
+      when 'ranking'
+        Ranking.new(value: v1_qualification.level)
+      when 'anyResult'
+        ResultAchieved.new(scope: v1_qualification.result_type, value: nil)
+      end
+    end
   end
 end
