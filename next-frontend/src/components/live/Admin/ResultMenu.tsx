@@ -147,22 +147,18 @@ function QuitModal({
 
   const { quitCompetitor, isPending } = useResultsAdmin();
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   if (!toAdvance) {
     return <Text>{t("competitions.live.admin.quit.failed_to_fetch")}</Text>;
   }
 
   const onQuitClick = () => {
-    quitCompetitor(
-      competitor.id,
-      advanceNext,
-      toAdvance.map((r) => r.id),
-    );
+    quitCompetitor(competitor.id, advanceNext, toAdvance);
     setMenuClose();
   };
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <Dialog.Root open onOpenChange={() => setMenuClose()}>
