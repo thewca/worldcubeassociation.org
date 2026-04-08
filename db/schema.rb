@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_07_105148) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_08_124442) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1095,7 +1095,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_07_105148) do
 
   create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "competition_event_id"
-    t.integer "registration_id"
+    t.bigint "registration_id"
     t.index ["competition_event_id"], name: "index_registration_competition_events_on_competition_event_id"
     t.index ["registration_id", "competition_event_id"], name: "idx_registration_competition_events_on_reg_id_and_comp_event_id", unique: true
     t.index ["registration_id"], name: "index_registration_competition_events_on_registration_id"
@@ -1129,7 +1129,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_07_105148) do
     t.bigint "receipt_id"
     t.string "receipt_type"
     t.integer "refunded_registration_payment_id"
-    t.integer "registration_id"
+    t.bigint "registration_id"
     t.string "stripe_charge_id"
     t.datetime "updated_at", precision: nil, null: false
     t.integer "user_id"
@@ -1139,7 +1139,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_07_105148) do
     t.index ["stripe_charge_id"], name: "index_registration_payments_on_stripe_charge_id"
   end
 
-  create_table "registrations", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "registrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "accepted_at", precision: nil
     t.integer "accepted_by"
     t.text "administrative_notes"
@@ -1665,6 +1665,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_07_105148) do
   add_foreign_key "potential_duplicate_persons", "persons", column: "duplicate_person_id"
   add_foreign_key "potential_duplicate_persons", "users", column: "original_user_id"
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "registration_competition_events", "registrations", on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "result_attempts", "results", on_delete: :cascade
   add_foreign_key "results", "rounds"
