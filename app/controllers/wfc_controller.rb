@@ -10,7 +10,7 @@ class WfcController < ApplicationController
   def competition_export
     select_attributes = [
       "#{Competition.table_name}.*",
-      "count(distinct persons.id) as num_competitors",
+      "COUNT(DISTINCT persons.id) AS num_competitors",
     ]
     from = params.require(:from_date)
     to = params.require(:to_date)
