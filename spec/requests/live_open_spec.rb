@@ -64,23 +64,25 @@ RSpec.describe "WCA Live API - open_round" do
       create(:registration, :accepted, competition: competition, event_ids: %w[333 444])
 
       linked_round = create(:linked_round)
-      round1_333 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2, linked_round: linked_round)
-      round1_444 = create(:round, competition: competition, event_id: "444", number: 1, linked_round: linked_round)
-      round2_333 = create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2)
+      round1_333_1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 3, linked_round: linked_round)
+      round1_333_2 = create(:round, competition: competition, event_id: "333", number: 2, linked_round: linked_round)
+      round2_333 = create(:round, competition: competition, event_id: "333", number: 3, total_number_of_rounds: 3)
 
       # Open both dual rounds and simulate all results being entered
-      round1_333.open_round!(delegate)
-      round1_444.open_round!(delegate)
+      round1_333_1.open_round!(delegate)
+      round1_333_2.open_round!(delegate)
 
-      expected_solve_count = round1_333.format.expected_solve_count
-      round1_333.live_results.update_all(live_attempts_count: expected_solve_count, advancing: true)
-      round1_444.live_results.update_all(live_attempts_count: expected_solve_count, advancing: true)
+      expected_solve_count = round1_333_1.format.expected_solve_count
+      round1_333_1.live_results.update_all(live_attempts_count: expected_solve_count, advancing: true)
+      round1_333_2.live_results.update_all(live_attempts_count: expected_solve_count, advancing: true)
 
       put api_v1_competition_live_live_round_open_path(competition.id, round2_333.wcif_id)
 
       expect(response).to be_successful
       expect(response.parsed_body["status"]).to eq "ok"
       expect(round2_333.live_results.count).to eq 1
+      expect(round1_333_1).to be_locked
+      expect(round1_333_2).to be_locked
     end
   end
 end
