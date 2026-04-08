@@ -22,28 +22,28 @@ export default function AddResults({
 
   return (
     <LiveResultAdminProvider round={round} competitionId={competitionId}>
-      <SimpleGrid columns={16} gap={6}>
-        <GridItem colSpan={4}>
-          <ConfirmProvider>
+      <ConfirmProvider>
+        <SimpleGrid columns={16} gap={6}>
+          <GridItem colSpan={4}>
             <AttemptsForm
               header="Add Result"
               eventId={eventId}
               solveCount={format.expected_solve_count}
             />
-          </ConfirmProvider>
-        </GridItem>
+          </GridItem>
 
-        <GridItem colSpan={12}>
-          <LiveUpdatingResultsTable
-            roundWcifId={round.id}
-            formatId={round.format}
-            competitionId={competitionId}
-            isAdminView
-            canManage
-            title={roundName}
-          />
-        </GridItem>
-      </SimpleGrid>
+          <GridItem colSpan={12}>
+            <LiveUpdatingResultsTable
+              roundWcifId={round.id}
+              formatId={round.format}
+              competitionId={competitionId}
+              isAdminView
+              canManage
+              title={roundName}
+            />
+          </GridItem>
+        </SimpleGrid>
+      </ConfirmProvider>
     </LiveResultAdminProvider>
   );
 }
