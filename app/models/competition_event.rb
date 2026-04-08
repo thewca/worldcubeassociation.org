@@ -11,6 +11,7 @@ class CompetitionEvent < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :formats, through: :rounds
   has_many :preferred_formats, through: :event
+  has_many :target_rounds, class_name: "Round", as: :participation_source
 
   accepts_nested_attributes_for :rounds, allow_destroy: true
 
@@ -67,18 +68,24 @@ class CompetitionEvent < ApplicationRecord
         "Cannot edit rounds for a competition which has qualification rounds or b-finals. Please contact WRT or WST if you need to make change to this competition.",
       )
     end
-    total_rounds = wcif["rounds"].size
-    new_rounds = wcif["rounds"].map do |round_wcif|
-      round_number = Round.parse_wcif_id(round_wcif["id"])[:round_number]
-      round = rounds.find { |r| r.wcif_id == round_wcif["id"] } || rounds.build
-      round.update!(Round.wcif_to_round_attributes(self.event, round_wcif, round_number, total_rounds))
+    model_rounds = wcif["rounds"].map do |round_wcif|
+      round = rounds.find { it.wcif_id == round_wcif["id"] } || rounds.build
+      round.update!(**Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"]))
       WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
       round
     end
-    self.rounds = new_rounds
+    # Have to do this in a second pass because nested associations (mostly `linked_round` and `participation_source`)
+    #   need the record to already exist in the database in order to reference their IDs
+    new_rounds = model_rounds.map do |round|
+      round.update!(**Round.wcif_backlinking(round, model_rounds))
+      round
+    end
+    wcif_qualification = Qualification.load(wcif["qualification"])
+    self.update!(
+      rounds: new_rounds,
+      qualification: wcif_qualification,
+    )
     WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
-    self.qualification = Qualification.load(wcif["qualification"])
-    self.update!({ "qualification" => self.qualification })
     self
   end
 

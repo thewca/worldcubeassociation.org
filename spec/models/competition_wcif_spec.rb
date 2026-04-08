@@ -614,6 +614,16 @@ RSpec.describe "Competition WCIF" do
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
 
+      # Checking whether the backporting worked as expected
+      competition_444_event = competition.competition_events.find { it.event_id == '444' }
+      first_round, second_round = competition_444_event.rounds
+
+      expect(first_round.participation_source).to eq(competition_444_event)
+      expect(first_round.participation_condition).to be_nil
+
+      expect(second_round.participation_source).to eq(first_round)
+      expect(second_round.participation_condition).not_to be_nil
+
       # Verify that we can remove the round we just added, so long as we
       # clear the advancementCondition on the first round.
       wcif_444_event["rounds"][0]["advancementCondition"] = nil

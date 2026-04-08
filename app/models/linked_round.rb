@@ -6,6 +6,7 @@ class LinkedRound < ApplicationRecord
   has_many :live_results, through: :rounds
   has_many :formats, -> { distinct }, through: :rounds
   has_many :competition_events, -> { distinct }, through: :rounds
+  has_many :target_rounds, class_name: "Round", as: :participation_source
 
   validates :competition_event_ids, length: { maximum: 1, message: "must all belong to the same competition" }
 
@@ -17,13 +18,15 @@ class LinkedRound < ApplicationRecord
     rounds.first
   end
 
+  def last_round_in_link
+    rounds.last
+  end
+
   def wcif_ids
     rounds.map(&:wcif_id)
   end
 
-  def final_round?
-    rounds.last&.final_round?
-  end
+  delegate :final_round?, to: :last_round_in_link
 
   def self.combine_results(round_results)
     results_by_registration_id = round_results.group_by(&:registration_id)
