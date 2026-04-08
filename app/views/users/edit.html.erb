@@ -84,6 +84,7 @@
                     </span>
                     <div class="input-group-btn">
                       <%= link_to t('.approve'), confirm_wca_id_path(userId: @user.id, wcaId: @user.unconfirmed_wca_id), method: :post, data: { confirm: t('.approve_confirm', wca_id: @user.unconfirmed_wca_id) }, class: "btn btn-default", id: "approve-wca-id" %>
+                      <%= link_to t('.clear_claim'), clear_claim_wca_id_path(userId: @user.id), method: :post, data: { confirm: t('.clear_claim_confirm', wca_id: @user.unconfirmed_wca_id) }, class: "btn btn-danger", id: "clear-claim-wca-id" %>
                     </div>
                   </div>
                 </div>
