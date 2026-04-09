@@ -2920,6 +2920,47 @@ es-ES:
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} introducidos'
         #original_hash: adec79f
         round_locked: bloqueada
+        warnings:
+          #original_hash: 9198c71
+          omitted: >-
+            Has omitido %{attempt_number} intentos. Asegúrate de que es
+            intencional.
+          #original_hash: 82d8e53
+          DNS: >-
+            Hay al menos un DNS seguido por un resultado válido. Por favor,
+            asegúrate de que en efecto es un DNS y no un DNF.
+          #original_hash: 6becd6c
+          impossible: >-
+            El resultado que estás intentando introducir parece imposible: el
+            intento %{attempt_number} se ha completado en menos de 30 segundos
+            por cubo intentado. Si quieres introducir minutos, no olvides añadir
+            los dos ceros de las centésimas al final del tiempo
+          #original_hash: a03301d
+          inconsistent: >-
+            El resultado que estás intentando introducir parece inconsistente.
+            Hay una gran diferencia entre el mejor single (%{best_single}) y el
+            peor single (%{worst_single}). Por favor, comprueba que los
+            resultados sean precisos.
+        quit:
+          #original_hash: de62de1
+          title: Eliminar competidor
+          #original_hash: c25b336
+          next_to_advance:
+            zero: 'El próximo competidor en clasificarse es %{competitors}'
+            one: 'El próximo competidor en clasificarse es %{competitors}'
+            other: 'Los próximos competidores en clasificarse son %{competitors}'
+          #original_hash: c87ca67
+          advance: Clasificar al próximo competidor
+          #original_hash: e85b311
+          quit_confirm: Eliminar competidor de la ronda
+          #original_hash: 70835a0
+          no_next: No se pueden clasificar más competidores.
+          #original_hash: 77dfd21
+          cancel: Cancelar
+          #original_hash: 79d6737
+          failed_to_fetch: >-
+            No se ha podido recuperar el siguiente competidor en la
+            clasificación
       results:
         #original_hash: 4705687
         competitor: Competidor
