@@ -439,15 +439,22 @@ class Round < ApplicationRecord
       end
 
       result_data_to_load = round_results_wcif.map do |round_result_wcif|
+        registration_db_id = person_id_to_registration_id[round_result_wcif["personId"]]
+
+        # The REAL `last_attempt_entered_at` is being set below at the very end,
+        #   because only at that point can we compute which results _actually_ changed.
+        # But MySQL upserting needs a "default value" to assume for the INSERT INTO part,
+        #   so we just copy over the one which we already have
+        last_attempt_entered_at = results_by_registration_id[registration_db_id]&.last_attempt_entered_at || database_now
+
         {
-          registration_id: person_id_to_registration_id[round_result_wcif["personId"]],
+          registration_id: registration_db_id,
           round_id: self.id,
-          # TODO: Should we set this only if an actual attempt value changed?
-          last_attempt_entered_at: database_now,
           best: round_result_wcif["best"],
           average: round_result_wcif["average"],
           global_pos: round_result_wcif["ranking"],
           local_pos: round_result_wcif["ranking"],
+          last_attempt_entered_at: last_attempt_entered_at,
         }
       end
 
@@ -510,6 +517,9 @@ class Round < ApplicationRecord
       end
 
       LiveResultHistoryEntry.insert_all!(histories_to_generate) if histories_to_generate.any?
+
+      results_which_changed = histories_to_generate.pluck(:live_result_id)
+      LiveResult.where(id: results_which_changed).update_all(last_attempt_entered_at: database_now)
 
       # Sync up all of the attempts and histories `upsert_all` shenanigans
       self.live_results.reload
