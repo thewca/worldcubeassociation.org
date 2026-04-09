@@ -350,11 +350,7 @@ class Round < ApplicationRecord
   end
 
   def score_taking_done_across_rounds?
-    if linked_round.blank?
-      score_taking_done?
-    else
-      score_taking_done? && colinked_rounds.all?(&:score_taking_done?)
-    end
+    score_taking_done? && colinked_rounds.all?(&:score_taking_done?)
   end
 
   def score_taking_done?
