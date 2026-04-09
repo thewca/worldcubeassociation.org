@@ -21,5 +21,46 @@ module ResultConditions
 
       result_condition.attributes.reverse_merge(type: result_condition.class.wcif_type)
     end
+
+    def self.wcif_json_schema
+      {
+        "allOf" => [
+          {
+            "type" => "object",
+            "properties" => {
+              "type" => { "type" => "string", "enum" => Utils::ALL_RESULT_CONDITIONS.map(&:wcif_type) },
+            },
+          },
+          {
+            "oneOf" => [
+              {
+                "type" => "object",
+                "properties" => {
+                  "type" => { "const" => "resultAchieved" },
+                  "scope" => { "type" => "string", "enum" => %w[single average] },
+                  "value" => { "type" => %w[integer null] },
+                },
+              },
+              {
+                "type" => "object",
+                "properties" => {
+                  "type" => { "const" => "ranking" },
+                  "scope" => { "type" => "string", "enum" => %w[single average] },
+                  "value" => { "type" => "integer" },
+                },
+              },
+              {
+                "type" => "object",
+                "properties" => {
+                  "type" => { "const" => "percent" },
+                  "scope" => { "type" => "string", "enum" => %w[single average] },
+                  "value" => { "type" => "integer" },
+                },
+              },
+            ],
+          },
+        ],
+      }
+    end
   end
 end

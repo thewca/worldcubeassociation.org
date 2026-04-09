@@ -96,7 +96,7 @@ class Qualification
         "properties" => {
           "earliestResultDate" => { "type" => "string" },
           "latestResultDate" => { "type" => "string" },
-          "resultCondition" => AdvancementConditions::AdvancementCondition.result_condition_wcif_json_schema,
+          "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
         },
       }
     else

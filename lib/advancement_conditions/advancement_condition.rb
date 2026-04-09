@@ -48,45 +48,6 @@ module AdvancementConditions
       }
     end
 
-    def self.result_condition_wcif_json_schema
-      {
-        "allOf" => [
-          {
-            "type" => "object",
-            "properties" => {
-              "type" => { "type" => "string", "enum" => %w[resultAchieved ranking percent] },
-            },
-          },
-          {
-            "oneOf" => [
-              {
-                "type" => "object",
-                "properties" => {
-                  "type" => { "const" => "resultAchieved" },
-                  "scope" => { "type" => "string", "enum" => %w[single average] },
-                  "value" => { "type" => %w[integer null] },
-                },
-              },
-              {
-                "type" => "object",
-                "properties" => {
-                  "type" => { "const" => "ranking" },
-                  "value" => { "type" => "integer" },
-                },
-              },
-              {
-                "type" => "object",
-                "properties" => {
-                  "type" => { "const" => "percent" },
-                  "value" => { "type" => "integer" },
-                },
-              },
-            ],
-          },
-        ],
-      }
-    end
-
     # Our Regulations allow at most 75% of competitors to proceed
     def regulations_boundary(results)
       (results.count * 0.75).floor
@@ -120,22 +81,6 @@ module AdvancementConditions
 
       # Filter out potential results
       advancing_with_ties.reject(&:empty_result?).pluck(:id)
-    end
-
-    def wcif_result_condition(format)
-      base_wcif = {
-        "type" => self.class.wcif_type,
-        "value" => self.level,
-      }
-
-      if self.class.wcif_type == "attemptResult"
-        base_wcif.merge(
-          "type" => "resultAchieved",
-          "scope" => format.sort_by,
-        )
-      else
-        base_wcif
-      end
     end
   end
 end
