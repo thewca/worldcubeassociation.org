@@ -607,7 +607,7 @@ class Round < ApplicationRecord
     {
       "type" => "round",
       "roundId" => self.wcif_id,
-      "resultCondition" => target_round.participation_condition.to_wcif,
+      "resultCondition" => target_round.participation_condition&.to_wcif,
     }
   end
 

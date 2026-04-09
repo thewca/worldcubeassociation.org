@@ -42,7 +42,7 @@ class LinkedRound < ApplicationRecord
     {
       "type" => "linkedRounds",
       "roundId" => self.wcif_ids,
-      "resultCondition" => target_round.participation_condition.to_wcif,
+      "resultCondition" => target_round.participation_condition&.to_wcif,
     }
   end
 end

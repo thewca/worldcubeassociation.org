@@ -30,13 +30,17 @@ module ResultConditions
       {
         "allOf" => [
           {
-            "type" => "object",
+            "type" => %w[object null],
             "properties" => {
               "type" => { "type" => "string", "enum" => Utils::ALL_RESULT_CONDITIONS.map(&:wcif_type) },
             },
           },
           {
             "oneOf" => [
+              # For (very) historic records, we do not have advancement condition data
+              #   even though (from a schema standpoint) we _technically_ should.
+              # Backfilling is too complicated and sometimes even impossible, so just accept NULL.
+              { "type" => "null" },
               {
                 "type" => "object",
                 "properties" => {
