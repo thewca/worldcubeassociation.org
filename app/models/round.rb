@@ -603,14 +603,6 @@ class Round < ApplicationRecord
     }
   end
 
-  private def wcif_results(version: Competition::WCIF_STABLE_VERSION)
-    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
-      self.live_results.map(&:to_wcif)
-    else
-      self.round_results.map(&:to_wcif)
-    end
-  end
-
   def as_wcif_participation_source(target_round)
     {
       "type" => "round",
@@ -626,7 +618,7 @@ class Round < ApplicationRecord
       "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
       "cutoff" => cutoff&.to_wcif,
       "scrambleSetCount" => self.scramble_set_count,
-      "results" => include_results ? self.wcif_results(version: version) : nil,
+      "results" => include_results ? round_results.map(&:to_wcif) : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
 
