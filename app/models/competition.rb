@@ -1883,10 +1883,10 @@ class Competition < ApplicationRecord
     managers = self.managers
     includes_associations = [
       { assignments: [:schedule_activity] },
-      { user: {
-        current_avatar: [],
-        person: %i[ranks_single ranks_average],
-      } },
+      { user: [
+        :current_avatar,
+        { person: %i[ranks_single ranks_average] },
+      ] },
       :wcif_extensions,
       :events,
     ]
@@ -1908,7 +1908,11 @@ class Competition < ApplicationRecord
 
   def events_wcif(version: WCIF_STABLE_VERSION)
     includes_associations = [
-      { rounds: %i[competition_event wcif_extensions] },
+      { rounds: [
+        :competition_event,
+        :wcif_extensions,
+        { participation_source: [:competition_event, { rounds: :competition_event }] },
+      ] },
       :wcif_extensions,
     ]
     competition_events
