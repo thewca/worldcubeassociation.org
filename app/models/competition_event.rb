@@ -56,6 +56,12 @@ class CompetitionEvent < ApplicationRecord
     competition.allow_registration_without_qualification || qualification.nil? || qualification.can_register?(user, event_id)
   end
 
+  def as_wcif_participation_source(_target_round)
+    {
+      "type" => "registrations",
+    }
+  end
+
   def v2_qualification_wcif
     return nil if qualification_condition.blank?
 

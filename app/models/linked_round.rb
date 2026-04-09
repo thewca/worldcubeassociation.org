@@ -37,4 +37,12 @@ class LinkedRound < ApplicationRecord
 
     best_result_per_person.sort_by(&:values_for_sorting)
   end
+
+  def as_wcif_participation_source(target_round)
+    {
+      "type" => "linkedRounds",
+      "roundId" => self.wcif_ids,
+      "resultCondition" => target_round.participation_condition.to_wcif,
+    }
+  end
 end

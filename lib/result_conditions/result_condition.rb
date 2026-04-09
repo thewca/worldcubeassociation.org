@@ -19,7 +19,11 @@ module ResultConditions
     def self.dump(result_condition)
       return unless result_condition
 
-      result_condition.attributes.reverse_merge(type: result_condition.class.wcif_type)
+      result_condition.to_wcif
+    end
+
+    def to_wcif
+      self.attributes.reverse_merge("type" => self.class.wcif_type)
     end
 
     def self.wcif_json_schema

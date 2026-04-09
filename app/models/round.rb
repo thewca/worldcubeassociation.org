@@ -611,28 +611,12 @@ class Round < ApplicationRecord
     end
   end
 
-  def wcif_participation_source
-    return { "type" => "registrations" } if self.number == 1
-
-    if self.linked_round.present?
-      first_linked_round = self.linked_round.first_round_in_link
-
-      return first_linked_round.wcif_participation_source if first_linked_round != self
-    end
-
-    if previous_round.linked_round.present?
-      {
-        "type" => "linkedRounds",
-        "roundIds" => previous_round.linked_round.wcif_ids,
-        "resultCondition" => previous_round.linked_round.last_round_in_link.participation_condition,
-      }
-    else
-      {
-        "type" => "round",
-        "roundId" => previous_round.wcif_id,
-        "resultCondition" => previous_round.participation_condition,
-      }
-    end
+  def as_wcif_participation_source(target_round)
+    {
+      "type" => "round",
+      "roundId" => self.wcif_id,
+      "resultCondition" => target_round.participation_condition.to_wcif,
+    }
   end
 
   def to_wcif(include_results: true, version: Competition::WCIF_STABLE_VERSION)
@@ -650,7 +634,7 @@ class Round < ApplicationRecord
       base_wcif.merge(
         "linkedRounds" => linked_round&.wcif_ids,
         "participationRuleset" => {
-          "participationSource" => wcif_participation_source,
+          "participationSource" => participation_source.as_wcif_participation_source(self),
           "reservedPlaces" => nil,
         },
       )
