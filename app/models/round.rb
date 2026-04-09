@@ -474,14 +474,17 @@ class Round < ApplicationRecord
         live_result = results_by_registration_id[registration_id]
 
         result_already_existed = recorded_registration_ids.include?(person_id_to_registration_id[round_result_wcif["personId"]])
+
         result_has_attempts = !round_result_wcif["attempts"].empty?
+        round_previously_had_results = !results_by_registration_id.empty?
 
         action_type = if result_has_attempts
                         :scoretaking
                       elsif result_already_existed
                         :cleared
+                      elsif round_previously_had_results
+                        :advanced_next
                       else
-                        # TODO: specify whether retroactively added (advanced_next) or not
                         :opened
                       end
 
