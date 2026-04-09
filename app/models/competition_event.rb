@@ -132,35 +132,30 @@ class CompetitionEvent < ApplicationRecord
   end
 
   def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
-    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
-      {
-        "type" => "object",
-        "properties" => {
-          "id" => { "type" => "string" },
-          "rounds" => { "type" => %w[array null], "items" => Round.wcif_json_schema(version: version) },
-          "competitorLimit" => { "type" => %w[integer null] },
-          "qualification" => {
-            "type" => %w[object null],
-            "properties" => {
-              "earliestResultDate" => { "type" => "string" },
-              "latestResultDate" => { "type" => "string" },
-              "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
-            },
-          },
-          "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
-        },
-      }
-    else
-      {
-        "type" => "object",
-        "properties" => {
-          "id" => { "type" => "string" },
-          "rounds" => { "type" => %w[array null], "items" => Round.wcif_json_schema(version: version) },
-          "competitorLimit" => { "type" => %w[integer null] },
-          "qualification" => Qualification.wcif_json_schema,
-          "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
-        },
-      }
-    end
+    {
+      "type" => "object",
+      "properties" => self.wcif_json_schema_properties(version: version),
+    }
+  end
+
+  def self.wcif_json_schema_properties(version: Competition::WCIF_STABLE_VERSION)
+    {
+      "id" => { "type" => "string" },
+      "rounds" => { "type" => %w[array null], "items" => Round.wcif_json_schema(version: version) },
+      "competitorLimit" => { "type" => %w[integer null] },
+      "qualification" => if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+                           {
+                             "type" => %w[object null],
+                             "properties" => {
+                               "earliestResultDate" => { "type" => "string" },
+                               "latestResultDate" => { "type" => "string" },
+                               "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
+                             },
+                           }
+                         else
+                           Qualification.wcif_json_schema
+                         end,
+      "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
+    }
   end
 end
