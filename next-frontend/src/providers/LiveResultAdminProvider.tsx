@@ -221,12 +221,15 @@ export function LiveResultAdminProvider({
     });
   };
 
-  const clearCompetitorsResults = (registrationId: number) => {
+  const clearCompetitorsResults = (toClearId: number) => {
     mutateClear({
       params: {
-        path: { competitionId, roundId, registrationId },
+        path: { competitionId, roundId, registrationId: toClearId },
       },
     });
+    if (registrationId === toClearId) {
+      setAttempts(zeroedArrayOfSize(solveCount));
+    }
   };
 
   const quitCompetitor = (
