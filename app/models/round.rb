@@ -416,7 +416,7 @@ class Round < ApplicationRecord
       #   TODO: Think it over whether that's really the best idea.
       LiveResult.where(id: result_ids_to_delete).delete_all
 
-      if self.number > 1
+      unless self.first_round?
         registrations_who_were_deleted = recorded_not_incoming.values.pluck(:registration_id)
 
         # Mark everyone from previous rounds as quit
