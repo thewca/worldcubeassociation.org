@@ -452,7 +452,9 @@ class Round < ApplicationRecord
       LiveResult.upsert_all(result_data_to_load)
 
       # Reload to get the generated IDs
-      results_by_registration_id = self.live_results.reload.index_by(&:registration_id)
+      results_by_registration_id = self.live_results.reload
+                                       .includes(:live_attempts)
+                                       .index_by(&:registration_id)
 
       attempts_to_load = round_results_wcif.flat_map do |round_result_wcif|
         registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
@@ -469,14 +471,19 @@ class Round < ApplicationRecord
 
       LiveAttempt.upsert_all(attempts_to_load) if attempts_to_load.any?
 
-      histories_to_generate = round_results_wcif.map do |round_result_wcif|
+      histories_to_generate = round_results_wcif.filter_map do |round_result_wcif|
         registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
         live_result = results_by_registration_id[registration_id]
 
-        result_already_existed = recorded_registration_ids.include?(person_id_to_registration_id[round_result_wcif["personId"]])
+        imported_attempts = round_result_wcif["attempts"]
 
-        result_has_attempts = !round_result_wcif["attempts"].empty?
+        result_already_existed = recorded_registration_ids.include?(person_id_to_registration_id[round_result_wcif["personId"]])
+        result_has_changed = live_result.live_attempts.pluck(:value) != imported_attempts
+
+        result_has_attempts = !imported_attempts.empty?
         round_previously_had_results = !results_by_registration_id.empty?
+
+        next if result_has_attempts && !result_has_changed
 
         action_type = if result_has_attempts
                         :scoretaking
@@ -500,7 +507,6 @@ class Round < ApplicationRecord
         }
       end
 
-      # TODO: Figure out better which LRs haven't even changed at all
       LiveResultHistoryEntry.insert_all!(histories_to_generate) if histories_to_generate.any?
 
       # Sync up all of the attempts and histories `upsert_all` shenanigans
