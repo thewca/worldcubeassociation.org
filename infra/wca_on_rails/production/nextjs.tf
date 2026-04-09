@@ -3,7 +3,6 @@ resource "aws_cloudwatch_log_group" "nextjs" {
 }
 
 locals {
-  # Most of these are placeholders, as secrets will be in stored in vault
   nextjs_environment = [
     {
       name  = "WCA_LIVE_SITE"
@@ -40,6 +39,10 @@ locals {
     {
       name  = "DATABASE_URI"
       value = "mongodb://payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017/payload?retryWrites=false"
+    },
+    {
+      name  = "LIVE_RESULT_BETA"
+      value = "1"
     },
     {
       name  = "WCA_BACKEND_API_URL"
