@@ -24,8 +24,8 @@ class Registration < ApplicationRecord
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
 
-  has_many :registration_history_entries, -> { order(:created_at) }, dependent: :destroy
-  has_many :registration_competition_events
+  has_many :registration_history_entries, -> { order(:created_at) }, dependent: :destroy, inverse_of: :registration
+  has_many :registration_competition_events, dependent: :destroy
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
@@ -33,6 +33,8 @@ class Registration < ApplicationRecord
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all
+
+  has_one :inbox_person, foreign_key: %i[competition_id id], primary_key: %i[competition_id registrant_id], inverse_of: :registration
 
   enum :competing_status, {
     pending: Registrations::Helper::STATUS_PENDING,
@@ -286,6 +288,10 @@ class Registration < ApplicationRecord
         action: r.action,
       }
     end
+  end
+
+  def to_live_json
+    as_json(methods: %i[name country_iso2], only: %i[id user_id registrant_id])
   end
 
   def to_v2_json(admin: false, pii: false)

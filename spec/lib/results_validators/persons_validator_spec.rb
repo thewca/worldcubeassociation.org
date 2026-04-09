@@ -139,6 +139,7 @@ RSpec.describe PV do
       # LETTER_AFTER_PERIOD_WARNING
       # SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING
       # SINGLE_NAME_WARNING
+      # SUSPICIOUS_LAST_NAME_WARNING
       it "validates person data" do
         round_222 = create(:round, event_id: "222", competition: competition2)
         create(:inbox_result, competition: competition2, event_id: "222", round: round_222)
@@ -226,6 +227,16 @@ RSpec.describe PV do
                                   event_id: "333oh",
                                   round: round_333_oh)
         res_wrong_wca_id.person.update(wca_id: "ERR")
+        res_suspicious_junior = create(:inbox_result,
+                                       competition: competition1,
+                                       event_id: "333oh",
+                                       round: round_333_oh)
+        res_suspicious_junior.person.update(name: "John Junior")
+        res_suspicious_senior = create(:inbox_result,
+                                       competition: competition1,
+                                       event_id: "333oh",
+                                       round: round_333_oh)
+        res_suspicious_senior.person.update(name: "Maria Senior")
 
         expected_errors = [
           RV::ValidationError.new(PV::PERSON_WITHOUT_RESULTS_ERROR,
@@ -298,6 +309,14 @@ RSpec.describe PV do
           RV::ValidationWarning.new(PV::SINGLE_NAME_WARNING,
                                     :persons, competition1.id,
                                     name: res_same_name2.person.name),
+          RV::ValidationWarning.new(PV::SUSPICIOUS_LAST_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_suspicious_junior.person.name,
+                                    suffix: "Junior"),
+          RV::ValidationWarning.new(PV::SUSPICIOUS_LAST_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_suspicious_senior.person.name,
+                                    suffix: "Senior"),
         ]
         validator_args = [
           { competition_ids: [competition1.id, competition2.id], model: InboxResult },
@@ -373,6 +392,105 @@ RSpec.describe PV do
           # None of these names should trigger SPECIAL_CHARACTERS_IN_NAME_WARNING
           expect(pv.warnings).to be_empty
           expect(pv.errors).to be_empty
+        end
+      end
+    end
+
+    context "WCA registrations validations" do
+      let(:competition_with_regs) { create(:competition, :past, event_ids: ["333"], use_wca_registration: true) }
+      let(:round_333) { create(:round, competition: competition_with_regs, event_id: "333") }
+
+      it "warns if any inbox person doesn't have a matching registration" do
+        reg = create(:registration, :accepted, competition: competition_with_regs)
+
+        person_with_reg = create(:inbox_person, competition_id: competition_with_regs.id, name: reg.name, ref_id: reg.registrant_id)
+        create(:inbox_result, competition: competition_with_regs, person: person_with_reg, event_id: "333", round: round_333)
+
+        person_without_reg = create(:inbox_person, competition_id: competition_with_regs.id, name: "Unmatched", ref_id: reg.registrant_id + 1)
+        create(:inbox_result, competition: competition_with_regs, person: person_without_reg, event_id: "333", round: round_333)
+
+        validator_args = [
+          { competition_ids: [competition_with_regs.id], model: InboxResult },
+          { results: InboxResult.where(competition_id: competition_with_regs.id), model: InboxResult },
+        ]
+
+        validator_args.each do |arg|
+          pv = PV.new.validate(**arg)
+          expect(pv.warnings).to include(
+            RV::ValidationWarning.new(PV::MISSING_MATCHING_REGISTRATION_WARNING,
+                                      :persons, competition_with_regs.id,
+                                      name: person_without_reg.name),
+          )
+        end
+      end
+
+      it "warns if an inbox person has an unaccepted registration" do
+        reg = create(:registration, :pending, competition: competition_with_regs)
+
+        person_with_unaccepted_reg = create(:inbox_person, competition_id: competition_with_regs.id, name: reg.name, ref_id: reg.registrant_id)
+        create(:inbox_result, competition: competition_with_regs, person: person_with_unaccepted_reg, event_id: "333", round: round_333)
+
+        validator_args = [
+          { competition_ids: [competition_with_regs.id], model: InboxResult },
+          { results: InboxResult.where(competition_id: competition_with_regs.id), model: InboxResult },
+        ]
+
+        validator_args.each do |arg|
+          pv = PV.new.validate(**arg)
+          expect(pv.warnings).to include(
+            RV::ValidationWarning.new(PV::UNACCEPTED_REGISTRATION_WITH_RESULTS_WARNING,
+                                      :persons, competition_with_regs.id,
+                                      name: person_with_unaccepted_reg.name),
+          )
+        end
+      end
+
+      it "warns if registration details mismatch" do
+        reg = create(:registration, :accepted, competition: competition_with_regs)
+
+        mismatched_person = create(:inbox_person, competition_id: competition_with_regs.id, ref_id: reg.registrant_id, name: "Mismatched Name", dob: 1.day.ago, gender: "o", wca_id: "2000YY01")
+        create(:inbox_result, competition: competition_with_regs, person: mismatched_person, event_id: "333", round: round_333)
+
+        mismatches = mismatched_person.registration_mismatches
+
+        validator_args = [
+          { competition_ids: [competition_with_regs.id], model: InboxResult },
+          { results: InboxResult.where(competition_id: competition_with_regs.id), model: InboxResult },
+        ]
+
+        validator_args.each do |arg|
+          pv = PV.new.validate(**arg)
+          expect(pv.warnings).to include(
+            RV::ValidationWarning.new(PV::REGISTRATION_DETAILS_MISMATCH_WARNING,
+                                      :persons, competition_with_regs.id,
+                                      person_id: mismatched_person.ref_id,
+                                      name: mismatched_person.name,
+                                      mismatches: mismatches.join(', ')),
+          )
+        end
+      end
+
+      it "does not check registrations if competition doesn't use WCA registration" do
+        competition_no_regs = create(:competition, :past, event_ids: ["333"], use_wca_registration: false)
+        create(:registration, :accepted, competition: competition_no_regs)
+
+        round_333_no_regs = create(:round, competition: competition_no_regs, event_id: "333")
+
+        person = create(:inbox_person, competition_id: competition_no_regs.id, name: "Unmatched Name", ref_id: 1)
+        create(:inbox_result, competition: competition_no_regs, person: person, event_id: "333", round: round_333_no_regs)
+
+        validator_args = [
+          { competition_ids: [competition_no_regs.id], model: InboxResult },
+          { results: InboxResult.where(competition_id: competition_no_regs.id), model: InboxResult },
+        ]
+
+        validator_args.each do |arg|
+          pv = PV.new.validate(**arg)
+          expect(pv.warnings).not_to include(
+            RV::ValidationWarning.new(PV::MISSING_MATCHING_REGISTRATION_WARNING,
+                                      :persons, competition_no_regs.id,
+                                      name: person.name),
+          )
         end
       end
     end

@@ -4,25 +4,25 @@ require "uri"
 require "fileutils"
 
 class User < ApplicationRecord
-  has_many :competition_delegates, foreign_key: "delegate_id"
+  has_many :competition_delegates, foreign_key: "delegate_id", inverse_of: :delegate
   # This gives all the competitions where the user is marked as a Delegate,
   # regardless of the competition's status.
   has_many :delegated_competitions, through: :competition_delegates, source: "competition"
   # This gives all the competitions which actually happened and where the user
   # was a Delegate.
   has_many :actually_delegated_competitions, -> { over.visible.not_cancelled }, through: :competition_delegates, source: "competition"
-  has_many :competition_organizers, foreign_key: "organizer_id"
+  has_many :competition_organizers, foreign_key: "organizer_id", inverse_of: :organizer
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
   has_many :votes
   has_many :registrations
   has_many :competitions_registered_for, through: :registrations, source: "competition"
-  belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
-  belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
-  belongs_to :delegate_to_handle_wca_id_claim, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
+  belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true, inverse_of: :user
+  belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true, inverse_of: :unconfirmed_user
+  belongs_to :delegate_to_handle_wca_id_claim, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true, inverse_of: :users_claiming_wca_id
   belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
-  has_many :active_roles, -> { active }, class_name: "UserRole"
-  has_many :past_roles, -> { inactive }, class_name: "UserRole"
+  has_many :active_roles, -> { active }, class_name: "UserRole", inverse_of: :user
+  has_many :past_roles, -> { inactive }, class_name: "UserRole", inverse_of: :user
   has_many :delegate_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataDelegateRegions"
   has_many :delegate_roles, -> { includes(:group, :metadata) }, through: :delegate_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :delegate_region_groups, through: :delegate_roles, source: :group, class_name: "UserGroup"
@@ -41,16 +41,19 @@ class User < ApplicationRecord
   has_many :active_bans, through: :active_bans_metadata, source: :user_role, class_name: "UserRole"
   has_many :active_groups, through: :active_roles, source: :group, class_name: "UserGroup"
   has_many :board_metadata, through: :active_groups, source: :metadata, source_type: "GroupsMetadataBoard"
-  has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
-  has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
+  has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", inverse_of: :delegate_to_handle_wca_id_claim
+  has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", inverse_of: :delegate_to_handle_wca_id_claim
+  has_many :officer_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataOfficers"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
-  has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
+  has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id, inverse_of: false
   has_many :user_preferred_events, dependent: :destroy
   has_many :preferred_events, through: :user_preferred_events, source: :event
   has_many :bookmarked_competitions, dependent: :destroy
   has_many :competitions_bookmarked, through: :bookmarked_competitions, source: :competition
-  has_many :competitions_announced, foreign_key: "announced_by", class_name: "Competition"
-  has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition"
+  has_many :competitions_announced, foreign_key: "announced_by", class_name: "Competition", inverse_of: :announced_by_user
+  has_many :competitions_cancelled, foreign_key: "cancelled_by", class_name: "Competition", inverse_of: :cancelled_by_user
+  has_many :competitions_posting, foreign_key: "posting_by", class_name: "Competition", inverse_of: :posting_user
+  has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition", inverse_of: :posted_user
   has_many :confirmed_payment_intents, class_name: "PaymentIntent", as: :confirmation_source
   has_many :canceled_payment_intents, class_name: "PaymentIntent", as: :cancellation_source
   has_many :ranks_single, through: :person
@@ -60,7 +63,10 @@ class User < ApplicationRecord
   belongs_to :current_avatar, class_name: "UserAvatar", inverse_of: :current_user, optional: true
   belongs_to :pending_avatar, class_name: "UserAvatar", inverse_of: :pending_user, optional: true
   has_many :user_avatars, dependent: :destroy, inverse_of: :user
-  has_many :potential_duplicate_persons, dependent: :destroy, foreign_key: :original_user_id, class_name: "PotentialDuplicatePerson"
+  has_many :approved_user_avatars, class_name: "UserAvatar", inverse_of: :approved_by_user
+  has_many :revoked_user_avatars, class_name: "UserAvatar", inverse_of: :revoked_by_user
+  has_many :potential_duplicate_persons, dependent: :destroy, foreign_key: :original_user_id, class_name: "PotentialDuplicatePerson", inverse_of: :original_user
+  has_many :scramble_file_uploads, foreign_key: :uploaded_by, inverse_of: :uploaded_by_user
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
   scope :newcomers, -> { where(wca_id: nil) }
@@ -462,7 +468,7 @@ class User < ApplicationRecord
   end
 
   def can_administrate_livestream?
-    software_team? || board_member? || communication_team?
+    software_team? || board_member? || higher_permission_officer? || communication_team?
   end
 
   def any_kind_of_delegate?
@@ -479,6 +485,10 @@ class User < ApplicationRecord
     else
       delegate_role_metadata.trainee_delegate.any?
     end
+  end
+
+  def higher_permission_officer?
+    officer_role_metadata.higher_permission.any?
   end
 
   private def staff_delegate?
@@ -534,7 +544,7 @@ class User < ApplicationRecord
   end
 
   private def can_edit_any_groups?
-    admin? || board_member? || results_team?
+    admin? || board_member? || higher_permission_officer? || results_team?
   end
 
   private def groups_with_create_access
@@ -559,7 +569,7 @@ class User < ApplicationRecord
   end
 
   private def can_view_past_banned_competitors?
-    wic_team? || board_member? || weat_team? || results_team? || admin?
+    wic_team? || board_member? || higher_permission_officer? || weat_team? || results_team? || admin?
   end
 
   private def groups_with_read_access_for_current
@@ -832,7 +842,7 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wic_team? || any_kind_of_delegate? || weat_team? || wrc_team? || appeals_committee?
+    admin? || board_member? || higher_permission_officer? || results_team? || communication_team? || wic_team? || any_kind_of_delegate? || weat_team? || wrc_team? || appeals_committee?
   end
 
   def can_edit_user?(user)
@@ -863,7 +873,7 @@ class User < ApplicationRecord
   end
 
   def can_admin_results?
-    admin? || board_member? || results_team?
+    admin? || board_member? || higher_permission_officer? || results_team?
   end
 
   def can_admin_finances?
@@ -875,7 +885,7 @@ class User < ApplicationRecord
   end
 
   def can_manage_regional_organizations?
-    admin? || board_member? || weat_team?
+    admin? || board_member? || higher_permission_officer? || weat_team?
   end
 
   def can_create_competitions?
@@ -957,7 +967,7 @@ class User < ApplicationRecord
   end
 
   def can_create_poll?
-    admin? || board_member? || wrc_team? || wic_team? || quality_assurance_committee?
+    admin? || board_member? || higher_permission_officer? || wrc_team? || wic_team? || quality_assurance_committee?
   end
 
   def can_vote_in_poll?
@@ -1015,7 +1025,7 @@ class User < ApplicationRecord
   end
 
   def can_approve_media?
-    admin? || communication_team? || board_member?
+    admin? || communication_team? || board_member? || higher_permission_officer?
   end
 
   def can_see_eligible_voters?
@@ -1414,7 +1424,7 @@ class User < ApplicationRecord
   end
 
   private def can_manage_delegate_probation?
-    admin? || board_member? || senior_delegate? || can_access_wfc_senior_matters? || group_leader?(UserGroup.teams_committees_group_wic) || weat_team?
+    admin? || board_member? || higher_permission_officer? || senior_delegate? || can_access_wfc_senior_matters? || group_leader?(UserGroup.teams_committees_group_wic) || weat_team?
   end
 
   def senior_delegates
@@ -1426,7 +1436,7 @@ class User < ApplicationRecord
   end
 
   def can_access_senior_delegate_panel?
-    admin? || board_member? || senior_delegate?
+    admin? || board_member? || higher_permission_officer? || senior_delegate?
   end
 
   private def can_access_panel?(panel_id)
@@ -1444,7 +1454,7 @@ class User < ApplicationRecord
     when :wst
       software_team?
     when :board
-      board_member?
+      board_member? || higher_permission_officer?
     when :leader
       active_roles.any? { |role| role.lead? && (role.group.teams_committees? || role.group.councils?) }
     when :senior_delegate

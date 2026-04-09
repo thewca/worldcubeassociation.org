@@ -6,15 +6,20 @@ import { padSkipped } from "@/lib/live/padSkipped";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { recordTagBadge } from "@/components/results/TableCells";
 import { LiveAttempt, LiveCompetitor, LiveResult } from "@/types/live";
+import { TFunction } from "i18next";
 
 export function LiveTableHeader({
   isLinked = false,
   format,
   showFull = true,
+  byPerson = false,
+  t,
 }: {
   isLinked?: boolean;
   showFull?: boolean;
+  byPerson?: boolean;
   format: Format;
+  t: TFunction;
 }) {
   const solveCount = format.expected_solve_count;
 
@@ -24,10 +29,27 @@ export function LiveTableHeader({
   return (
     <Table.Header>
       <Table.Row>
+        {byPerson && (
+          <Table.ColumnHeader textAlign="left">
+            {t("competitions.results_table.round")}
+          </Table.ColumnHeader>
+        )}
         <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
-        <Table.ColumnHeader>Competitor</Table.ColumnHeader>
-        {isLinked && <Table.ColumnHeader>Round</Table.ColumnHeader>}
-        {showFull && <Table.ColumnHeader>Country</Table.ColumnHeader>}
+        {!byPerson && (
+          <Table.ColumnHeader>
+            {t("competitions.live.results.competitor")}
+          </Table.ColumnHeader>
+        )}
+        {isLinked && (
+          <Table.ColumnHeader>
+            {t("competitions.results_table.round")}
+          </Table.ColumnHeader>
+        )}
+        {showFull && !byPerson && (
+          <Table.ColumnHeader>
+            {t("results.table_elements.region")}
+          </Table.ColumnHeader>
+        )}
         {showFull &&
           attemptIndexes.map((num) => (
             <Table.ColumnHeader key={num} textAlign="right">
@@ -36,7 +58,7 @@ export function LiveTableHeader({
           ))}
         {stats.map((stat) => (
           <Table.ColumnHeader textAlign="right" key={stat.field}>
-            {stat.name}
+            {t(`common.${stat.name}`)}
           </Table.ColumnHeader>
         ))}
       </Table.Row>
@@ -48,10 +70,12 @@ export function LivePositionCell({
   position,
   rowSpan,
   advancingParams,
+  showAdvancing = true,
 }: {
   position: number | string;
   rowSpan?: number;
   advancingParams: Pick<LiveResult, "advancing_questionable" | "advancing">;
+  showAdvancing?: boolean;
 }) {
   return (
     <Table.Cell
@@ -59,7 +83,9 @@ export function LivePositionCell({
       layerStyle="fill.deep"
       textAlign="right"
       rowSpan={rowSpan}
-      colorPalette={rankingCellColorPalette(advancingParams)}
+      colorPalette={
+        showAdvancing ? rankingCellColorPalette(advancingParams) : undefined
+      }
     >
       {position}
     </Table.Cell>

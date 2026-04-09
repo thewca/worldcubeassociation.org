@@ -97,9 +97,14 @@ const resultShortcuts: KeyShortcut<string>[] = [
 export interface AttemptResultProps {
   value: number;
   onChange: (value: number) => void;
+  placeholder?: string;
 }
 
-export function TimeField({ value, onChange }: AttemptResultProps) {
+export function TimeField({
+  value,
+  onChange,
+  placeholder,
+}: AttemptResultProps) {
   const { isValid, binding } = useInputMask({
     value,
     onChange,
@@ -112,8 +117,7 @@ export function TimeField({ value, onChange }: AttemptResultProps) {
 
   return (
     <Field.Root invalid={!isValid}>
-      <Field.Label>Attempt</Field.Label>
-      <Input spellCheck={false} {...binding} />
+      <Input spellCheck={false} placeholder={placeholder} {...binding} />
     </Field.Root>
   );
 }
@@ -122,6 +126,7 @@ export function FmMovesField({
   value,
   onChange,
   resultType,
+  placeholder,
 }: {
   resultType: "single" | "average";
 } & AttemptResultProps) {
@@ -144,7 +149,7 @@ export function FmMovesField({
   return (
     <Field.Root invalid={!isValid}>
       <Field.Label>PointsField (isAverage: {isAverage.toString()})</Field.Label>
-      <Input spellCheck={false} {...binding} />
+      <Input placeholder={placeholder} spellCheck={false} {...binding} />
       <Field.HelperText>{value}</Field.HelperText>
     </Field.Root>
   );
@@ -162,14 +167,16 @@ export function MbldCubesField({ value, onChange }: AttemptResultProps) {
 
   return (
     <Field.Root invalid={!isValid}>
-      <Field.Label>CubesField</Field.Label>
       <Input spellCheck={false} {...binding} />
-      <Field.HelperText>{value}</Field.HelperText>
     </Field.Root>
   );
 }
 
-export function MbldField({ value, onChange }: AttemptResultProps) {
+export function MbldField({
+  value,
+  onChange,
+  placeholder,
+}: AttemptResultProps) {
   const [draft, setDraft] = useDraftState(value, decodeMbldResult);
 
   const handleChange = (payload: Partial<MultiBldResult>) => {
@@ -202,7 +209,6 @@ export function MbldField({ value, onChange }: AttemptResultProps) {
 
   return (
     <Fieldset.Root onChangeCapture={captureShortcuts}>
-      <Fieldset.Legend>MbldField</Fieldset.Legend>
       <Fieldset.Content>
         <SimpleGrid columns={16} asChild>
           <Group attached>
@@ -224,14 +230,12 @@ export function MbldField({ value, onChange }: AttemptResultProps) {
                 onChange={(timeCentiseconds) =>
                   handleChange({ timeCentiseconds })
                 }
+                placeholder={placeholder}
               />
             </GridItem>
           </Group>
         </SimpleGrid>
       </Fieldset.Content>
-      <Fieldset.HelperText>
-        {JSON.stringify(decodeMbldResult(value))}
-      </Fieldset.HelperText>
     </Fieldset.Root>
   );
 }
@@ -246,6 +250,7 @@ function AttemptResultField({
   onChange,
   eventId,
   resultType,
+  placeholder,
 }: AttemptResultFieldProps) {
   const [componentValue, setComponentValue] = useControllableState({
     value,
@@ -259,15 +264,28 @@ function AttemptResultField({
         value={componentValue}
         onChange={setComponentValue}
         resultType={resultType}
+        placeholder={placeholder}
       />
     );
   }
 
   if (eventId === "333mbf" || eventId === "333mbo") {
-    return <MbldField value={componentValue} onChange={setComponentValue} />;
+    return (
+      <MbldField
+        value={componentValue}
+        onChange={setComponentValue}
+        placeholder={placeholder}
+      />
+    );
   }
 
-  return <TimeField value={componentValue} onChange={setComponentValue} />;
+  return (
+    <TimeField
+      value={componentValue}
+      onChange={setComponentValue}
+      placeholder={placeholder}
+    />
+  );
 }
 
 export default AttemptResultField;

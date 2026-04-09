@@ -1,38 +1,54 @@
 "use client";
 
 import LiveResultsTable from "@/components/live/LiveResultsTable";
-import { Heading, HStack, Spacer, Switch, VStack } from "@chakra-ui/react";
+import {
+  Heading,
+  HStack,
+  IconButton,
+  Spacer,
+  Switch,
+  VStack,
+  Link,
+} from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import PendingResultsTable from "@/components/live/PendingResultsTable";
-import { LiveCompetitor } from "@/types/live";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
+import AddPersonModal from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
+import { LuLock, LuLockOpen } from "react-icons/lu";
+import NextLink from "next/link";
+import { route } from "nextjs-routes";
 
 export default function LiveUpdatingResultsTable({
   roundWcifId,
   formatId,
   competitionId,
-  competitors,
   title,
-  isAdmin = false,
+  isAdminView = false,
   showEmpty = true,
   isLinkedRound = false,
+  canManage = false,
 }: {
   roundWcifId: string;
   formatId: string;
   competitionId: string;
-  competitors: LiveCompetitor[];
   title: string;
-  isAdmin?: boolean;
+  isAdminView?: boolean;
   showEmpty?: boolean;
   isLinkedRound?: boolean;
+  canManage?: boolean;
 }) {
   const [showLinkedRoundsView, setShowLinkedRoundsView] =
     useState(isLinkedRound);
 
-  const { connectionState, liveResultsByRegistrationId, pendingLiveResults } =
-    useLiveResults();
+  const {
+    connectionState,
+    liveResultsByRegistrationId,
+    pendingLiveResults,
+    competitors,
+    pendingQuitCompetitors,
+  } = useLiveResults();
 
   const { eventId } = parseActivityCode(roundWcifId);
 
@@ -55,6 +71,39 @@ export default function LiveUpdatingResultsTable({
             <Switch.Label>Show combined Results</Switch.Label>
           </Switch.Root>
         )}
+        {canManage && (
+          <IconButton variant="ghost">
+            <Link asChild>
+              {isAdminView ? (
+                <NextLink
+                  href={route({
+                    pathname:
+                      "/competitions/[competitionId]/live/rounds/[roundId]",
+                    query: { competitionId, roundId: roundWcifId },
+                  })}
+                >
+                  <LuLockOpen />
+                </NextLink>
+              ) : (
+                <NextLink
+                  href={route({
+                    pathname:
+                      "/competitions/[competitionId]/live/rounds/[roundId]/admin",
+                    query: { competitionId, roundId: roundWcifId },
+                  })}
+                >
+                  <LuLock />
+                </NextLink>
+              )}
+            </Link>
+          </IconButton>
+        )}
+        {isAdminView && (
+          <AddPersonModal
+            competitionId={competitionId}
+            competitors={competitors}
+          />
+        )}
       </HStack>
       <PendingResultsTable
         pendingLiveResults={pendingLiveResults}
@@ -68,9 +117,11 @@ export default function LiveUpdatingResultsTable({
         formatId={formatId}
         competitionId={competitionId}
         competitors={competitors}
-        isAdmin={isAdmin}
+        pendingQuitCompetitors={pendingQuitCompetitors}
+        isAdmin={isAdminView}
         showEmpty={showEmpty}
         showLinkedRoundsView={showLinkedRoundsView}
+        isLinkedRound={isLinkedRound}
       />
     </VStack>
   );

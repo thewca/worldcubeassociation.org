@@ -10,6 +10,7 @@ class DelegateReport < ApplicationRecord
     venue
     organization
     incidents
+    remarks
   ].freeze
 
   belongs_to :competition

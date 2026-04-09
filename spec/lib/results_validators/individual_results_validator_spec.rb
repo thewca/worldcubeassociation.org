@@ -162,9 +162,9 @@ RSpec.describe IRV do
 
       round_222 = create(:round, competition: competition2, event_id: "222")
       round_333mbf = create(:round, competition: competition1, event_id: "333mbf", format_id: "3")
-      tl = TimeLimit.new(centiseconds: 2.minutes.in_centiseconds, cumulative_round_ids: ["333bf-r1"])
+      tl = TimeLimit.new(centiseconds: 4.minutes.in_centiseconds, cumulative_round_ids: ["333bf-r1"])
       round_333bf = create(:round, competition: competition1, event_id: "333bf",
-                                   format_id: "3", time_limit: tl)
+                                   format_id: "5", time_limit: tl)
       [Result, InboxResult].each do |model|
         warns = []
         result_kind = model.model_name.singular.to_sym
@@ -193,7 +193,7 @@ RSpec.describe IRV do
         # We create a result with attempts #1 and #3 which are DNF.
         # Attempt 2 is suspiscious because the time is 1:40.00, and the competitor
         # already has one DNF which counts towards the cumulative time limit of 2:00.00.
-        res_bf = create(result_kind, :blind_dnf_mo3, competition: competition1, best: 100_00, value1: -1, round: round_333bf)
+        res_bf = create(result_kind, :blind_dnf_bo5, competition: competition1, best: 100_00, value1: -1, round: round_333bf)
 
         warns << RV::ValidationWarning.new(IRV::SUSPICIOUS_DNF_WARNING,
                                            :results, competition1.id,

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { create(:competition, :with_delegate, :with_organizer, :registration_open, :with_valid_schedule, :with_guest_limit, :with_meaningless_event_limit, name: "my long competition name above 32 chars 2023") }
+  let(:competition) { create(:competition, :with_lead_delegate, :with_organizer, :registration_open, :with_valid_schedule, :with_guest_limit, :with_meaningless_event_limit, name: "my long competition name above 32 chars 2023") }
   let(:future_competition) { create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #show' do
@@ -100,7 +100,7 @@ RSpec.describe CompetitionsController do
     let!(:my_competition) { create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
     let!(:other_competition) do
       create(
-        :competition, :with_delegate, :with_valid_schedule, latitude: 10.005, longitude: 10.005, starts: 4.days.ago, registration_close: 5.days.ago
+        :competition, :with_lead_delegate, :with_valid_schedule, latitude: 10.005, longitude: 10.005, starts: 4.days.ago, registration_close: 5.days.ago
       )
     end
 
@@ -281,7 +281,7 @@ RSpec.describe CompetitionsController do
       it 'saves staff_delegate_ids' do
         staff_delegates = create_list(:delegate, 2)
         staff_delegate_ids = staff_delegates.map(&:id)
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: staff_delegate_ids })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: staff_delegate_ids, leadDelegateId: staff_delegates.first.id })
         patch :update, params: update_params, as: :json
         expect(competition.reload.delegates).to eq staff_delegates
       end
@@ -352,7 +352,7 @@ RSpec.describe CompetitionsController do
 
       it 'can change the delegate' do
         new_delegate = create(:delegate)
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: [new_delegate.id] })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: [new_delegate.id], leadDelegateId: new_delegate.id })
         post :update, params: update_params, as: :json
         competition.reload
         expect(competition.delegates).to eq [new_delegate]
@@ -371,7 +371,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as a delegate. This should be allowed, because we're
         # still an organizer.
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], organizerIds: [organizer.id] })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], leadDelegateId: nil, organizerIds: [organizer.id] })
         patch :update, params: update_params, as: :json
         expect(response).to be_successful
         expect(competition.reload.delegates).to eq []
@@ -429,7 +429,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as an organizer. This should be allowed, because we're
         # still able to administer results.
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], organizerIds: [] }, userSettings: { receiveRegistrationEmails: true })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], leadDelegateId: nil, organizerIds: [] }, userSettings: { receiveRegistrationEmails: true })
         patch :update, params: update_params, as: :json
         expect(competition.reload.delegates).to eq []
         expect(competition.reload.organizers).to eq []

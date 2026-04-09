@@ -92,23 +92,65 @@ RSpec.describe "API Competitions" do
   describe "GET #show_wcif" do
     let!(:competition) { create(:competition, :visible) }
 
-    context "when not signed in" do
-      it "does not allow access" do
-        patch api_v0_competition_wcif_path(competition)
-        expect(response).to have_http_status(:unauthorized)
+    context "versioned access" do
+      it "returns stable version by default" do
+        get api_v0_competition_wcif_path(competition)
+        expect(response).to have_http_status(:ok)
         response_json = response.parsed_body
-        expect(response_json["error"]).to eq "Please log in"
+        expect(response_json["formatVersion"]).to eq Competition::WCIF_STABLE_VERSION
+      end
+
+      it "resolves lifecycle tags" do
+        get api_v0_competition_wcif_lifecycle_path(competition, "latest")
+        expect(response).to have_http_status(:ok)
+        response_json = response.parsed_body
+        expect(response_json["formatVersion"]).to eq Competition::WCIF_VERSION_CATALOGUE[:latest]
+      end
+
+      it "complains about non-existent lifecycle tag" do
+        get api_v0_competition_wcif_lifecycle_path(competition, "newest")
+        expect(response).to have_http_status(:bad_request)
+      end
+
+      it "gives newest major version" do
+        get api_v0_competition_wcif_version_path(competition, "1")
+        expect(response).to have_http_status(:ok)
+        response_json = response.parsed_body
+        expect(response_json["formatVersion"]).to eq "1.1"
+      end
+
+      it "gives specific SemVer version" do
+        get api_v0_competition_wcif_version_path(competition, "1.1")
+        expect(response).to have_http_status(:ok)
+        response_json = response.parsed_body
+        expect(response_json["formatVersion"]).to eq "1.1"
+      end
+
+      it "complains about non-existent version" do
+        get api_v0_competition_wcif_version_path(competition, "3")
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    context "when not signed in" do
+      it "allows access without confidential information" do
+        get api_v0_competition_wcif_path(competition)
+        expect(response).to have_http_status(:ok)
+        response_json = response.parsed_body
+        expect(response_json["persons"][0].keys).not_to include "email"
+        expect(response_json["persons"][0].keys).not_to include "birthdate"
       end
     end
 
     context "when signed in as not a competition manager" do
       before { sign_in create :user }
 
-      it "does not allow access" do
-        patch api_v0_competition_update_wcif_path(competition)
-        expect(response).to have_http_status(:forbidden)
+      it "allows access without confidential information" do
+        get api_v0_competition_wcif_path(competition)
+        expect(response).to have_http_status(:ok)
         response_json = response.parsed_body
-        expect(response_json["error"]).to eq "Not authorized to manage competition"
+        expect(response_json["persons"][0].keys).not_to include "email"
+        expect(response_json["persons"][0].keys).not_to include "birthdate"
       end
     end
 
@@ -143,7 +185,7 @@ RSpec.describe "API Competitions" do
     end
 
     it "does not return confidential person data" do
-      get api_v0_competition_wcif_public_path(competition)
+      get api_v0_competition_wcif_lifecycle_path(competition, lifecycle_name: "public")
       response_json = response.parsed_body
       expect(response_json["persons"][0].keys).not_to include "email"
       expect(response_json["persons"][0].keys).not_to include "birthdate"
@@ -152,10 +194,30 @@ RSpec.describe "API Competitions" do
     it "returns people with accepted registrations only" do
       create(:registration, :cancelled, competition: competition)
       create(:registration, :pending, competition: competition)
-      get api_v0_competition_wcif_public_path(competition)
+      get api_v0_competition_wcif_lifecycle_path(competition, lifecycle_name: "public")
       response_json = response.parsed_body
       expect(response_json["persons"].length).to eq 2
       expect(response_json["persons"][0]["registration"]["status"]).to eq "accepted"
+    end
+
+    context "even when signed in as a competition manager" do
+      before { sign_in competition.delegates.first }
+
+      it "does not return confidential person data" do
+        get api_v0_competition_wcif_lifecycle_path(competition, lifecycle_name: "public")
+        response_json = response.parsed_body
+        expect(response_json["persons"][0].keys).not_to include "email"
+        expect(response_json["persons"][0].keys).not_to include "birthdate"
+      end
+
+      it "returns people with accepted registrations only" do
+        create(:registration, :cancelled, competition: competition)
+        create(:registration, :pending, competition: competition)
+        get api_v0_competition_wcif_lifecycle_path(competition, lifecycle_name: "public")
+        response_json = response.parsed_body
+        expect(response_json["persons"].length).to eq 2
+        expect(response_json["persons"][0]["registration"]["status"]).to eq "accepted"
+      end
     end
   end
 

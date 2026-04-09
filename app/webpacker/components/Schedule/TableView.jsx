@@ -35,6 +35,7 @@ export default function TableView({
   activeVenueOrNull,
   competitionName,
   wcifEvents,
+  linkedRounds,
 }) {
   const activeRounds = activeEvents.flatMap((event) => event.rounds);
 
@@ -79,6 +80,7 @@ export default function TableView({
             activeVenueOrNull={activeVenueOrNull}
             competitionName={competitionName}
             wcifEvents={wcifEvents}
+            linkedRounds={linkedRounds}
           />
         );
       })}
@@ -96,6 +98,7 @@ function SingleDayTable({
   activeVenueOrNull,
   competitionName,
   wcifEvents,
+  linkedRounds,
 }) {
   const title = I18n.t('competitions.schedule.schedule_for_full_date', { date: date.toLocaleString(DateTime.DATE_HUGE) });
 
@@ -143,6 +146,7 @@ function SingleDayTable({
                 rooms={rooms}
                 timeZone={timeZone}
                 wcifEvents={wcifEvents}
+                isLinked={linkedRounds[activityRound?.id]}
               />
             );
           })
@@ -184,6 +188,7 @@ function ActivityRow({
   rooms,
   timeZone,
   wcifEvents,
+  isLinked,
 }) {
   const representativeActivity = activityGroup[0];
   const { startTime, endTime } = representativeActivity;
@@ -238,6 +243,7 @@ function ActivityRow({
             </Grid.Column>
             <Grid.Column width={2}>{cutoff && cutoffToString(round)}</Grid.Column>
             <Grid.Column width={2}>
+              {isLinked && 'Dual Round: '}
               {advancementCondition && advancementConditionToString(round)}
             </Grid.Column>
           </>
@@ -312,6 +318,7 @@ function ActivityRow({
                   {I18n.t('competitions.events.proceed')}
                 </Grid.Column>
                 <Grid.Column textAlign="right" mobile={10} tablet={4}>
+                  {isLinked && 'Dual Round: '}
                   <b>{advancementConditionToString(round)}</b>
                 </Grid.Column>
               </>

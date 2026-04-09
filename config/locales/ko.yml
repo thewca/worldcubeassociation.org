@@ -213,10 +213,19 @@ ko:
     #original_hash: 17dae1e
     attempt_name: '%{number}회 차 시도'
   round:
+    #original_hash: ceeac4a
+    title: 라운드
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
     #original_hash: 747df5a
     round_number: '라운드 %{round_number}'
+  scramble_set:
+    #original_hash: ba18ca7
+    name: '스크램블 세트 %{letter_code}'
+    #original_hash: d46fe75
+    group: '%{number}조'
+    #original_hash: 17dae1e
+    attempt: '%{number}회차'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -667,6 +676,8 @@ ko:
           chair: WCA 회장
           #original_hash: 7d405ff
           executive_director: WCA 전무
+          #original_hash: 36a137f
+          chief_operating_officer: WCA 최고운영책임자 (COO)
           #original_hash: 1dd4a07
           secretary: WCA 사무국장
           #original_hash: 0388b19
@@ -2413,6 +2424,8 @@ ko:
       no_waiting_list_specified: >-
         이 대회는 대기 명단에 있는 선수를 수락하는 데 마감일이 없습니다. 대기 명단을 사용하는 경우 마감일을 지정하십시오. 대기 명단을
         사용하지 않는 경우 참가 신청 요건에 이를 명시하는 것을 잊지 마십시오.
+      #original_hash: 51376ef
+      schedule_locked_after_results_submitted: 결과 제출 후에는 일정을 수정할 수 없습니다.
     live:
       #original_hash: 10d1a3c
       title: 실시간 결과
@@ -2923,6 +2936,8 @@ ko:
           organizer_ids: 주최자
           #original_hash: b37456c
           contact: 문의
+          #original_hash: 78ef126
+          lead_delegate_id: 대표 파견위원
         #original_hash: 991f419
         championships: 챔피언십
         website:
@@ -3105,6 +3120,8 @@ ko:
           contact_html: >-
             선택 사항인 연락처 정보입니다. 이 정보를 입력하지 않으면 주최자의 이메일을 공개하지 않고 양식을 통해 문의가 제출됩니다.
             %{md}. 예: [표시할 텍스트](mailto:some@email.com)
+          #original_hash: 7a51d00
+          lead_delegate_id: '대표 파견위원은 대회 운영의 행정적인 측면(결과, 보고서, 참가비 청구서)을 담당합니다'
         website:
           #original_hash: da39a3e
           generate_website: ''
@@ -5339,6 +5356,12 @@ ko:
       competitor_limit_exceeded_warning: >-
         대회 참가자 수(%{n_competitors})가 참가자 정원(%{competitor_limit})을 초과했습니다. 참가자 정원에
         도달한 후 참가 신청된 선수의 결과는 제거해야 합니다.
+      #original_hash: d8f2f1e
+      registration_details_mismatch_warning: '등록 ID가 %{person_id}인 사람(%{name})의 세부 정보가 등록 정보와 일치하지 않습니다: %{mismatches}'
+      #original_hash: 1a9da05
+      missing_matching_registration_warning: '%{name} 님은 일치하는 등록 정보가 없습니다.'
+      #original_hash: 7d62dd5
+      unaccepted_registration_with_results_warning: '%{name} 님은 대회에서 결과를 남겼지만, 참가 신청이 ''승인됨''으로 표시되지 않았습니다.'
     results:
       #original_hash: 5685ae8
       automatically_position_fixed_info: '[%{round_id}] %{person_name}의 위치를 ​​%{pos}에서 %{expected_pos}로 자동 수정했습니다.'
