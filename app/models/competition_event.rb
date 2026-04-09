@@ -75,7 +75,7 @@ class CompetitionEvent < ApplicationRecord
       round = rounds.find { it.wcif_id == round_wcif["id"] } || rounds.build
       round.update!(**Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"]))
       WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
-      round.load_live_results!(round_wcif["results"], current_user, comp_registrations: self.competition.registrations) if round_wcif["results"]
+      round.load_live_results!(round_wcif["results"], current_user) if round_wcif["results"]
       round
     end
     # Have to do this in a second pass because nested associations (mostly `linked_round` and `participation_source`)

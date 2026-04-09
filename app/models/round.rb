@@ -396,9 +396,9 @@ class Round < ApplicationRecord
     ScheduleActivity.parse_activity_code(wcif_id)
   end
 
-  def load_live_results!(round_results_wcif, current_user, comp_registrations: nil)
-    comp_registrations ||= self.competition.registrations
-    person_id_to_registration_id = comp_registrations.to_h { [it.registrant_id, it.id] }
+  def load_live_results!(round_results_wcif, current_user)
+    person_id_to_registration_id = self.competition.registrations
+                                       .to_h { [it.registrant_id, it.id] }
 
     results_by_registration_id = self.live_results.index_by(&:registration_id)
     recorded_registration_ids = results_by_registration_id.keys
@@ -481,6 +481,7 @@ class Round < ApplicationRecord
                       elsif result_already_existed
                         :cleared
                       else
+                        # TODO: specify whether retroactively added (advanced_next) or not
                         :opened
                       end
 
