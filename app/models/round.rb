@@ -409,6 +409,8 @@ class Round < ApplicationRecord
       incoming_registration_ids = round_results_wcif.map { person_id_to_registration_id[it["personId"]] }
       recorded_not_incoming = results_by_registration_id.except(*incoming_registration_ids)
 
+      round_already_had_results = !results_by_registration_id.empty?
+
       result_ids_to_delete = recorded_not_incoming.values.pluck(:id)
       # Hard-deleting the current round matches our ILR quitting behavior.
       #   TODO: Think it over whether that's really the best idea.
@@ -478,18 +480,17 @@ class Round < ApplicationRecord
         imported_attempts = round_result_wcif["attempts"]
 
         result_already_existed = recorded_registration_ids.include?(person_id_to_registration_id[round_result_wcif["personId"]])
-        result_has_changed = live_result.live_attempts.pluck(:value) != imported_attempts
 
         result_has_attempts = !imported_attempts.empty?
-        round_previously_had_results = !results_by_registration_id.empty?
+        attempts_have_changed = live_result.live_attempts.pluck(:value) != imported_attempts
 
-        next if result_has_attempts && !result_has_changed
+        next if result_has_attempts && !attempts_have_changed
 
         action_type = if result_has_attempts
                         :scoretaking
                       elsif result_already_existed
                         :cleared
-                      elsif round_previously_had_results
+                      elsif round_already_had_results
                         :advanced_next
                       else
                         :opened
