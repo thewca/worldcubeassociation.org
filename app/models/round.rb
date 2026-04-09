@@ -440,11 +440,11 @@ class Round < ApplicationRecord
         live_result = results_by_registration_id[registration_id]
 
         round_result_wcif["attempts"].map.with_index(1) do |attempt, attempt_number|
-          live_result.live_attempts
-                     .build(value: attempt["result"], attempt_number: attempt_number)
-                     .attributes
-                     .symbolize_keys
-                     .except(:id, :created_at, :updated_at)
+          {
+            live_result_id: live_result.id,
+            attempt_number: attempt_number,
+            value: attempt["result"],
+          }
         end
       end
 
@@ -459,14 +459,20 @@ class Round < ApplicationRecord
 
         attempts = round_result_wcif["attempts"].pluck("result") if action_type == :scoretaking
 
-        live_result.live_result_history_entries
-                   .build(action_source: :api_sync, action_type: action_type, attempt_details: attempts, entered_by: current_user)
-                   .attributes
-                   .symbolize_keys
-                   .except(:id, :created_at, :updated_at)
+        {
+          live_result_id: live_result.id,
+          entered_by_id: current_user.id,
+          entered_at: database_now,
+          attempt_details: attempts,
+          action_type: action_type,
+          action_source: :api_sync,
+        }
       end
 
       LiveResultHistoryEntry.insert_all!(histories_to_generate) if histories_to_generate.any?
+
+      # Sync up all of the attempts and histories `upsert_all` shenanigans
+      self.live_results.reload
     end
   end
 
