@@ -10,7 +10,9 @@ class LinkedRound < ApplicationRecord
   validates :competition_event_ids, length: { maximum: 1, message: "must all belong to the same competition" }
 
   def merged_live_results
-    LinkedRound.combine_results(live_results)
+    # Query directly instead of going through the cached :live_results association
+    # I would love to know how to circumvent having to do this
+    LinkedRound.combine_results(LiveResult.where(round: rounds))
   end
 
   def first_round_in_link
