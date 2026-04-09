@@ -410,9 +410,31 @@ class Round < ApplicationRecord
       recorded_not_incoming = results_by_registration_id.except(*incoming_registration_ids)
 
       result_ids_to_delete = recorded_not_incoming.values.pluck(:id)
-      # TODO: Is it really smart to just flat-out delete the results that WCA Live doesn't send over?
-      #   Can we infer whether someone was quit externally?
+      # Hard-deleting the current round matches our ILR quitting behavior.
+      #   TODO: Think it over whether that's really the best idea.
       LiveResult.where(id: result_ids_to_delete).delete_all
+
+      if self.number > 1
+        registrations_who_were_deleted = recorded_not_incoming.values.pluck(:registration_id)
+
+        # Mark everyone from previous rounds as quit
+        previous_round_results = self.previous_round.relevant_results
+                                     .where(registration_id: registrations_who_were_deleted)
+
+        previous_round_results.update_all(quit_by_id: current_user)
+
+        quit_history_items = previous_round_results.ids.map do |result_id|
+          {
+            live_result_id: result_id,
+            entered_by_id: current_user.id,
+            entered_at: database_now,
+            action_type: :quit,
+            action_source: :api_sync,
+          }
+        end
+
+        LiveResultHistoryEntry.insert_all!(quit_history_items)
+      end
 
       result_data_to_load = round_results_wcif.map do |round_result_wcif|
         {
@@ -474,6 +496,7 @@ class Round < ApplicationRecord
         }
       end
 
+      # TODO: Figure out better which LRs haven't even changed at all
       LiveResultHistoryEntry.insert_all!(histories_to_generate) if histories_to_generate.any?
 
       # Sync up all of the attempts and histories `upsert_all` shenanigans
