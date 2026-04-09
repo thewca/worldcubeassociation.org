@@ -477,12 +477,13 @@ class Round < ApplicationRecord
         registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
         live_result = results_by_registration_id[registration_id]
 
-        imported_attempts = round_result_wcif["attempts"]
+        recorded_attempts = live_result.live_attempts.pluck(:value)
+        imported_attempts = round_result_wcif["attempts"].pluck("result")
 
         result_already_existed = recorded_registration_ids.include?(person_id_to_registration_id[round_result_wcif["personId"]])
 
         result_has_attempts = !imported_attempts.empty?
-        attempts_have_changed = live_result.live_attempts.pluck(:value) != imported_attempts
+        attempts_have_changed = recorded_attempts != imported_attempts
 
         next if result_has_attempts && !attempts_have_changed
 
@@ -496,7 +497,7 @@ class Round < ApplicationRecord
                         :opened
                       end
 
-        attempts = round_result_wcif["attempts"].pluck("result") if action_type == :scoretaking
+        attempts = imported_attempts if action_type == :scoretaking
 
         {
           live_result_id: live_result.id,
