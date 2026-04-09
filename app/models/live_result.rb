@@ -162,29 +162,6 @@ class LiveResult < ApplicationRecord
                     })
   end
 
-  def to_wcif
-    {
-      "personId" => self.registration.registrant_id,
-      "ranking" => self.local_pos,
-      "attempts" => self.attempts.map(&:to_wcif),
-      "best" => self.best,
-      "average" => self.average,
-    }
-  end
-
-  def self.wcif_json_schema
-    {
-      "type" => %w[object null],
-      "properties" => {
-        "personId" => { "type" => "integer" },
-        "ranking" => { "type" => %w[integer null] },
-        "attempts" => { "type" => "array", "items" => LiveAttempt.wcif_json_schema },
-        "best" => { "type" => "integer" },
-        "average" => { "type" => "integer" },
-      },
-    }
-  end
-
   def forecast_statistics
     # use .length on purpose here as otherwise we would use one query per row
     LiveResult.compute_best_and_worse_possible_average(live_attempts.as_json, round) if live_attempts.length == round.format.expected_solve_count - 1
