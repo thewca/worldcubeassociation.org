@@ -197,9 +197,9 @@ class Round < ApplicationRecord
     open_count = open_round!(locking_user)
     return [open_count, 0] if first_round?
 
-    round_to_lock = linked_round.present? ? linked_round.first_round_in_link.previous_round : previous_round
+    rounds_to_lock = previous_round.linked_round.present? ? previous_round.linked_round.rounds : [previous_round]
 
-    [open_count, round_to_lock.lock_results(locking_user)]
+    [open_count, rounds_to_lock.sum { it.lock_results(locking_user) }]
   end
 
   def clear_round!(clearing_user)
@@ -217,6 +217,7 @@ class Round < ApplicationRecord
 
     inserted_ids = self.live_results.where(registration_id: advancing_reg_ids).ids
     self.bulk_insert_history(inserted_ids, opening_user, action_type: :opened)
+    inserted_ids.count
   end
 
   def create_empty_live_result(registration_id)
@@ -348,6 +349,10 @@ class Round < ApplicationRecord
     end
   end
 
+  def score_taking_done_across_rounds?
+    score_taking_done? && colinked_rounds.all?(&:score_taking_done?)
+  end
+
   def score_taking_done?
     open? && competitors_live_results_entered == total_competitors
   end
@@ -458,8 +463,9 @@ class Round < ApplicationRecord
     # separately
     return 0 if relevant_results.first.locked_by.present?
 
-    relevant_results.update_all(locked_by_id: locking_user.id)
+    count = relevant_results.update_all(locked_by_id: locking_user.id)
     self.bulk_insert_history(relevant_results.ids, locking_user, action_type: :locked)
+    count
   end
 
   STATE_LOCKED = "locked"
@@ -470,7 +476,7 @@ class Round < ApplicationRecord
   def lifecycle_state
     return STATE_LOCKED if locked?
     return STATE_OPEN if open?
-    return STATE_READY if number == 1 || previous_round.score_taking_done?
+    return STATE_READY if first_round? || previous_round.score_taking_done_across_rounds?
 
     STATE_PENDING
   end
