@@ -353,7 +353,7 @@ class Round < ApplicationRecord
     if linked_round.blank?
       score_taking_done?
     else
-      colinked_rounds.all?(&:score_taking_done?)
+      score_taking_done? && colinked_rounds.all?(&:score_taking_done?)
     end
   end
 
@@ -480,7 +480,7 @@ class Round < ApplicationRecord
   def lifecycle_state
     return STATE_LOCKED if locked?
     return STATE_OPEN if open?
-    return STATE_READY if number == 1 || linked_round.present? || previous_round.score_taking_done_across_rounds?
+    return STATE_READY if first_round? || previous_round.score_taking_done_across_rounds?
 
     STATE_PENDING
   end
