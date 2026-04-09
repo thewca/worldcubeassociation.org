@@ -520,10 +520,10 @@ class Round < ApplicationRecord
 
       results_which_changed = histories_to_generate.pluck(:live_result_id)
       LiveResult.where(id: results_which_changed).update_all(last_attempt_entered_at: database_now)
-
-      # Sync up all of the attempts and histories `upsert_all` shenanigans
-      self.live_results.reload
     end
+
+    # Sync up all of the attempts and histories `upsert_all` shenanigans
+    self.live_results.reset
   end
 
   def self.wcif_to_round_attributes(event, round_wcif, all_rounds_wcif)
