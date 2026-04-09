@@ -232,10 +232,10 @@ class Round < ApplicationRecord
   end
 
   def recompute_advancing
-    advancement_determining_results = relevant_results.where.not(global_pos: nil).where(locked_by_id: nil)
+    advancement_determining_results = live_results.where.not(global_pos: nil).where(locked_by_id: nil)
 
     loaded_results = advancement_determining_results.includes(:live_attempts).to_a
-    missing_attempts = total_competitors - loaded_results.count + colinked_results.where.not(global_pos: nil).count
+    missing_attempts = total_competitors - loaded_results.count
 
     potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
 
@@ -247,14 +247,17 @@ class Round < ApplicationRecord
     advancing_ids = advancement_determining_condition.apply(results_with_potential)
     max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
 
+    # For linked Rounds wa want to update the results of both rounds so it doesn't matter if you query one or the other round
+    results_to_update = relevant_results.where.not(global_pos: nil).where(locked_by_id: nil)
+
     # We can't update advancing yet if the other linked rounds aren't done yet
     colinked_done = colinked_rounds.all?(&:score_taking_done?)
     if colinked_done && advancing_ids.any?
-      advancement_determining_results.update_all(
+      results_to_update.update_all(
         ["advancing = (id IN (?)), advancing_questionable = (global_pos <= ?)", advancing_ids, max_advancing],
       )
     else
-      advancement_determining_results.update_all(
+      results_to_update.update_all(
         ["advancing = FALSE, advancing_questionable = (global_pos <= ?)", max_advancing],
       )
     end
