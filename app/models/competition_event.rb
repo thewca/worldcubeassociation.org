@@ -56,13 +56,44 @@ class CompetitionEvent < ApplicationRecord
     competition.allow_registration_without_qualification || qualification.nil? || qualification.can_register?(user, event_id)
   end
 
+  def v2_qualification_wcif
+    return nil if qualification_condition.blank?
+
+    {
+      "earliestResultDate" => nil,
+      "latestResultDate" => qualification_latest_date&.strftime("%Y-%m-%d"),
+      "resultCondition" => qualification_condition,
+    }
+  end
+
   def to_wcif(version: Competition::WCIF_STABLE_VERSION)
+    at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+
     {
       "id" => self.event.id,
       "rounds" => self.rounds.map { it.to_wcif(version: version) },
       "extensions" => wcif_extensions.map(&:to_wcif),
-      "qualification" => qualification&.to_wcif(version: version),
+      "qualification" => at_least_v2 ? v2_qualification_wcif : qualification&.to_wcif,
     }
+  end
+
+  def self.load_wcif_qualification(wcif_event, version: Competition::WCIF_STABLE_VERSION)
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      json_obj = wcif_event['qualification']
+      result_condition = json_obj['resultCondition']
+
+      v2_wcif_type = result_condition['type']
+      v1_wcif_type = result_condition['value'].present? ? v2_wcif_type.gsub('resultAchieved', 'attemptResult') : v2_wcif_type.gsub('resultAchieved', 'anyResult')
+
+      Qualification.new(
+        wcif_type: v1_wcif_type,
+        when_date: Date.iso8601(json_obj['latestResultDate']),
+        result_type: result_condition['scope'],
+        level: result_condition['value'],
+      )
+    else
+      Qualification.load(wcif_event["qualification"])
+    end
   end
 
   def load_wcif!(wcif, version: Competition::WCIF_STABLE_VERSION)
@@ -83,7 +114,7 @@ class CompetitionEvent < ApplicationRecord
       round.update!(**Round.wcif_backlinking(round, model_rounds))
       round
     end
-    wcif_qualification = Qualification.load_wcif(wcif["qualification"], version: version)
+    wcif_qualification = CompetitionEvent.load_wcif_qualification(wcif, version: version)
     self.update!(
       rounds: new_rounds,
       qualification: wcif_qualification,
@@ -95,15 +126,35 @@ class CompetitionEvent < ApplicationRecord
   end
 
   def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
-    {
-      "type" => "object",
-      "properties" => {
-        "id" => { "type" => "string" },
-        "rounds" => { "type" => %w[array null], "items" => Round.wcif_json_schema(version: version) },
-        "competitorLimit" => { "type" => %w[integer null] },
-        "qualification" => Qualification.wcif_json_schema(version: version),
-        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
-      },
-    }
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      {
+        "type" => "object",
+        "properties" => {
+          "id" => { "type" => "string" },
+          "rounds" => { "type" => %w[array null], "items" => Round.wcif_json_schema(version: version) },
+          "competitorLimit" => { "type" => %w[integer null] },
+          "qualification" => {
+            "type" => %w[object null],
+            "properties" => {
+              "earliestResultDate" => { "type" => "string" },
+              "latestResultDate" => { "type" => "string" },
+              "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
+            },
+          },
+          "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
+        },
+      }
+    else
+      {
+        "type" => "object",
+        "properties" => {
+          "id" => { "type" => "string" },
+          "rounds" => { "type" => %w[array null], "items" => Round.wcif_json_schema(version: version) },
+          "competitorLimit" => { "type" => %w[integer null] },
+          "qualification" => Qualification.wcif_json_schema,
+          "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
+        },
+      }
+    end
   end
 end
