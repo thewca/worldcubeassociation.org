@@ -452,7 +452,15 @@ class Round < ApplicationRecord
         live_result = results_by_registration_id[registration_id]
 
         result_already_existed = recorded_registration_ids.include?(person_id_to_registration_id[round_result_wcif["personId"]])
-        action_type = result_already_existed ? :scoretaking : :opened
+        result_has_attempts = !round_result_wcif["attempts"].empty?
+
+        action_type = if result_has_attempts
+                        :scoretaking
+                      elsif result_already_existed
+                        :cleared
+                      else
+                        :opened
+                      end
 
         attempts = round_result_wcif["attempts"].pluck("result") if action_type == :scoretaking
 
