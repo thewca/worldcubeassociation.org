@@ -281,7 +281,7 @@ class Round < ApplicationRecord
     query = <<~SQL.squish
       UPDATE live_results r
       LEFT JOIN
-        (SELECT id,
+        (SELECT registration_id,
                 RANK() OVER (ORDER BY person_best.#{rank_by} <= 0,
                              person_best.#{rank_by} ASC #{", person_best.#{secondary_rank_by} <= 0, person_best.#{secondary_rank_by} ASC" if secondary_rank_by}) AS ranking
          FROM
@@ -294,7 +294,7 @@ class Round < ApplicationRecord
                FROM live_results lr
                WHERE lr.round_id IN (#{round_ids})
                  AND lr.best != 0) x
-            WHERE rownum = 1) AS person_best) ranked ON r.id = ranked.id
+            WHERE rownum = 1) AS person_best) ranked ON r.registration_id = ranked.registration_id
       SET r.global_pos = ranked.ranking
       WHERE r.round_id IN (#{round_ids});
     SQL
