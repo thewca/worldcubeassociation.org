@@ -672,29 +672,117 @@ RSpec.describe "Competition WCIF" do
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
     end
 
-    it "can set round results" do
-      competitors = create_list(:registration, 2, :accepted, competition: competition)
-      wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
-      wcif_333_event["rounds"][0]["results"] = [
-        {
-          "personId" => competitors[0].registrant_id,
-          "ranking" => 10,
-          "attempts" => [{ "result" => 456, "reconstruction" => nil }] * 5,
-          "best" => 456,
-          "average" => 456,
-        },
-        {
+    context "round results" do
+      let(:competitors) { create_list(:registration, 2, :accepted, competition: competition) }
+      let(:wcif_333_event) { wcif["events"].find { |e| e["id"] == "333" } }
+
+      before :each do
+        wcif_333_event["rounds"][0]["results"] = [
+          {
+            "personId" => competitors[0].registrant_id,
+            "ranking" => 10,
+            "attempts" => [{ "result" => 456, "reconstruction" => nil }] * 5,
+            "best" => 456,
+            "average" => 456,
+          },
+          {
+            "personId" => competitors[1].registrant_id,
+            "ranking" => 5,
+            "attempts" => [{ "result" => 784, "reconstruction" => nil }] * 5,
+            "best" => 784,
+            "average" => 784,
+          },
+        ]
+      end
+
+      it "can set round results" do
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(competition.to_wcif["events"]).to eq(wcif["events"])
+      end
+
+      it "records histories when something changes" do
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(LiveResult.count).to eq(2)
+        expect(LiveResultHistoryEntry.count).to eq(2)
+
+        wcif_333_event["rounds"][0]["results"][1] = {
           "personId" => competitors[1].registrant_id,
           "ranking" => 5,
-          "attempts" => [{ "result" => 784, "reconstruction" => nil }] * 5,
+          "attempts" => ([{ "result" => 784, "reconstruction" => nil }] * 4) | [{ "result" => 987, "reconstruction" => nil }],
           "best" => 784,
           "average" => 784,
-        },
-      ]
+        }
 
-      competition.set_wcif_events!(wcif["events"], delegate)
+        competition.set_wcif_events!(wcif["events"], delegate)
 
-      expect(competition.to_wcif["events"]).to eq(wcif["events"])
+        # Still have the same amount of results, but one more history
+        expect(LiveResult.count).to eq(2)
+        expect(LiveResultHistoryEntry.count).to eq(3)
+        expect(LiveResultHistoryEntry.last.action_type).to eq("scoretaking")
+      end
+
+      it "records histories when a new score was added" do
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(LiveResult.count).to eq(2)
+        expect(LiveResultHistoryEntry.count).to eq(2)
+
+        another_competitor = create(:registration, :accepted, competition: competition)
+
+        wcif_333_event["rounds"][0]["results"] << {
+          "personId" => another_competitor.registrant_id,
+          "ranking" => 2,
+          "attempts" => [{ "result" => 123, "reconstruction" => nil }] * 5,
+          "best" => 123,
+          "average" => 123,
+        }
+
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        # A new result was added and this result also needs a history entry
+        expect(LiveResult.count).to eq(3)
+        expect(LiveResultHistoryEntry.count).to eq(3)
+        expect(LiveResultHistoryEntry.last.action_type).to eq("scoretaking")
+      end
+
+      it "does not record redundant histories" do
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(LiveResult.count).to eq(2)
+        expect(LiveResultHistoryEntry.count).to eq(2)
+
+        # Imagine that somebody hits the sync button twice, "just to be sure"
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        # Nothing in the data actually changed, so both the normal results
+        # as well as the history describing changes to the results should remain unchanged
+        expect(LiveResult.count).to eq(2)
+        expect(LiveResultHistoryEntry.count).to eq(2)
+      end
+
+      it "syncing new empty results records 'opened' action" do
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(LiveResult.count).to eq(2)
+        expect(LiveResultHistoryEntry.count).to eq(2)
+
+        wcif_333_event["rounds"][1]["results"] = [{
+          "personId" => competitors[1].registrant_id,
+          "ranking" => 2,
+          "attempts" => [], # This is how WCA Live sends us new opened results
+          "best" => 0,
+          "average" => 0,
+        }]
+
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        # A new result was added and this result also needs a history entry
+        expect(LiveResult.count).to eq(3)
+        expect(LiveResultHistoryEntry.count).to eq(3)
+        expect(LiveResultHistoryEntry.last.action_type).to eq("opened")
+      end
     end
 
     it "can set event and round extensions" do
