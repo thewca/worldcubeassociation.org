@@ -234,8 +234,10 @@ class Round < ApplicationRecord
     recompute_local_pos
     recompute_global_pos
     recompute_advancing unless skip_advancing
+
     # We need to reset because live results are changed directly on SQL level for more optimized queries
     live_results.reset
+    linked_round&.live_results&.reset
   end
 
   def recompute_advancing
