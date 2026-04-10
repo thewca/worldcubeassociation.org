@@ -33,7 +33,6 @@ class LiveResult < ApplicationRecord
 
   has_one :event, through: :round
   has_one :format, through: :round
-  has_one :competition, through: :round
 
   validates :best,
             presence: true,
@@ -53,9 +52,7 @@ class LiveResult < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
-  delegate :id, to: :event, prefix: true
-  delegate :id, to: :format, prefix: true
-  delegate :round_type_id, to: :round
+  delegate :event_id, :format_id, :round_type_id, :competition_id, to: :round
   delegate :registrant_id, to: :registration
 
   def to_solve_time(field)
@@ -123,8 +120,8 @@ class LiveResult < ApplicationRecord
     attempt_values = live_attempts.pluck(:value)
 
     InboxResult.new(
-      competition: self.competition,
       round: self.round,
+      competition_id: self.competition_id,
       person_id: self.registrant_id,
       pos: self.local_pos,
       event_id: self.event_id,
