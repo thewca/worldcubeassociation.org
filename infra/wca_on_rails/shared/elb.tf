@@ -561,7 +561,7 @@ resource "aws_lb_listener_rule" "rails_forward_next_production" {
 
   condition {
     path_pattern {
-      values = ["/competitions/*/live*", "/_next/*", "/api/auth/*"]
+      values = ["/competitions/*/live*", "/_next/*", "/api/auth/*", "/competitors"]
     }
   }
 }
