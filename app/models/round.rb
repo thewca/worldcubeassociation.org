@@ -232,7 +232,8 @@ class Round < ApplicationRecord
   end
 
   def recompute_advancing
-    results_with_potential = (linked_round.present? ? linked_round.merged_live_results : live_results).select { it.locked_by_id.nil? }.sort_by(&:potential_solve_time)
+    results_per_person = linked_round.present? ? linked_round.merged_live_results : live_results
+    results_with_potential = results_per_person.select { it.locked_by_id.nil? }.sort_by(&:potential_solve_time)
 
     advancement_determining_condition = final_round? || linked_round&.final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
 
