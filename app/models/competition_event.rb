@@ -65,7 +65,7 @@ class CompetitionEvent < ApplicationRecord
     }
   end
 
-  def load_wcif!(wcif)
+  def load_wcif!(wcif, current_user)
     if self.rounds.pluck(:old_type).compact.any?
       raise WcaExceptions::BadApiParameter.new(
         "Cannot edit rounds for a competition which has qualification rounds or b-finals. Please contact WRT or WST if you need to make change to this competition.",
@@ -75,6 +75,7 @@ class CompetitionEvent < ApplicationRecord
       round = rounds.find { it.wcif_id == round_wcif["id"] } || rounds.build
       round.update!(**Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"]))
       WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
+      round.load_live_results!(round_wcif["results"], current_user) if round_wcif["results"]
       round
     end
     # Have to do this in a second pass because nested associations (mostly `linked_round` and `participation_source`)
