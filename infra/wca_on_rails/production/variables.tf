@@ -122,6 +122,9 @@ variable "shared" {
     nextjs-production: object({
       arn: string
     })
+    nextjs-production-results: object({
+      arn: string
+    })
     pma_production: object({
       arn: string
     })

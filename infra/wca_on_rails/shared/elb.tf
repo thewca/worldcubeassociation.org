@@ -152,6 +152,30 @@ resource "aws_lb_target_group" "nextjs-production" {
   }
 }
 
+resource "aws_lb_target_group" "nextjs-production-results" {
+  name        = "nextjs-production-results"
+  port        = 3000
+  protocol    = "HTTP"
+  vpc_id      = aws_default_vpc.default.id
+  target_type = "ip"
+
+  deregistration_delay = 10
+  health_check {
+    interval            = 10
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    matcher             = 200
+  }
+  tags = {
+    Name = "${var.name_prefix}-nextjs"
+    Env = "production"
+  }
+}
+
 resource "aws_lb_target_group" "auxiliary" {
   name        = "wca-auxiliary"
   port        = 80
@@ -622,6 +646,10 @@ output "rails-production" {
 
 output "nextjs-production" {
   value = aws_lb_target_group.nextjs-production
+}
+
+output "nextjs-production-results" {
+  value = aws_lb_target_group.nextjs-production-results
 }
 
 output "nextjs_staging" {

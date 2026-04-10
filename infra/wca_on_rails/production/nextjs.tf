@@ -41,10 +41,6 @@ locals {
       value = "mongodb://payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017/payload?retryWrites=false"
     },
     {
-      name  = "LIVE_RESULT_BETA"
-      value = "1"
-    },
-    {
       name  = "WCA_BACKEND_API_URL"
       value = "http://rails.local:3000/api/"
     },
@@ -65,6 +61,22 @@ locals {
       value = aws_iam_role.nextjs_role.name
     }
   ]
+
+  nextjs_live_results_beta_environment = [
+    {
+      name  = "LIVE_RESULT_BETA"
+      value = "1"
+    },
+    {
+      name = "NEXTAUTH_URL"
+      value = "https://worldcubeassociation.org"
+    },
+  ]
+
+  nextjs_merged_environment = values(merge(
+    { for item in local.nextjs_environment : item.name => item },
+    { for item in local.nextjs_live_results_beta_environment : item.name => item }
+  ))
 }
 
 resource "aws_iam_role" "nextjs_role" {
@@ -154,10 +166,114 @@ resource "aws_ecs_task_definition" "nextjs" {
   }
 }
 
+resource "aws_ecs_task_definition" "nextjs_live_results" {
+  family = "nextjs-production-live-results"
+
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["EC2"]
+
+  # We configure the roles to allow `aws ecs execute-command` into a task
+  execution_role_arn = aws_iam_role.task_execution_role.arn
+  task_role_arn      = aws_iam_role.nextjs_role.arn
+
+  cpu = "1024"
+  memory = "3910"
+
+  container_definitions = jsonencode([
+    {
+      name              = "nextjs-production"
+      image             = "${var.shared.next_repository_url}:nextjs-production"
+      cpu    = 1024
+      memory = 3910
+      portMappings = [
+        {
+          # The hostPort is automatically set for awsvpc network mode,
+          # see https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PortMapping.html#ECS-Type-PortMapping-hostPort
+          containerPort = 3000
+          protocol      = "tcp"
+        },
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.this.name
+          awslogs-region        = var.region
+          awslogs-stream-prefix = var.name_prefix
+        }
+      }
+      environment = local.nextjs_merged_environment
+      healthCheck       = {
+        command            = ["CMD-SHELL", "wget --spider -q http://localhost:3000/ || exit 1"]
+        interval           = 30
+        retries            = 3
+        startPeriod        = 5
+        timeout            = 5
+      }
+    }
+  ])
+
+  tags = {
+    Name = "${var.name_prefix}-nextjs-results"
+  }
+}
 
 
 data "aws_ecs_task_definition" "nextjs" {
   task_definition = aws_ecs_task_definition.nextjs.family
+}
+
+data "aws_ecs_task_definition" "nextjs-results" {
+  task_definition = aws_ecs_task_definition.nextjs_live_results.family
+}
+
+resource "aws_ecs_service" "nextjs-results" {
+  name                               = "${var.name_prefix}-nextjs-production-results"
+  cluster                            = var.shared.ecs_cluster.id
+  # During deployment a new task revision is created with modified
+  # container image, so we want use data.aws_ecs_task_definition to
+  # always point to the active task definition
+  task_definition                    = data.aws_ecs_task_definition.nextjs-results.arn
+  desired_count                      = 1
+  scheduling_strategy                = "REPLICA"
+  deployment_maximum_percent         = 200
+  deployment_minimum_healthy_percent = 50
+  health_check_grace_period_seconds  = 30
+
+  capacity_provider_strategy {
+    capacity_provider = var.shared.t3_capacity_provider.name
+    weight            = 1
+  }
+
+  deployment_circuit_breaker {
+    enable   = true
+    rollback = true
+  }
+
+  enable_execute_command = true
+
+  ordered_placement_strategy {
+    type  = "binpack"
+    field = "memory"
+  }
+
+  load_balancer {
+    target_group_arn = var.shared.nextjs-production-results.arn
+    container_name   = "nextjs-production"
+    container_port   = 3000
+  }
+
+  service_connect_configuration {
+    enabled = true
+    namespace = aws_service_discovery_private_dns_namespace.this.name
+  }
+
+  network_configuration {
+    security_groups = [var.shared.cluster_security.id]
+    subnets         = var.shared.private_subnets[*].id
+  }
+  tags = {
+    Name = var.name_prefix
+  }
 }
 
 resource "aws_ecs_service" "nextjs" {
