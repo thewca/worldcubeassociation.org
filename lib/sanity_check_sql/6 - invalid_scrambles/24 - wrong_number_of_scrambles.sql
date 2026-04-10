@@ -27,7 +27,7 @@ scramble_summary AS (
     MIN(scramble_num) AS min_scramble_num,
     MAX(scramble_num) AS max_scramble_num,
     GROUP_CONCAT(
-      CONCAT('(', group_id, ', ', scramble_num, ')') ORDER BY group_id SEPARATOR ', ' 
+      CONCAT('(', group_id, ', ', scramble_num, ')') ORDER BY group_id SEPARATOR ', '
     ) AS group_scramble_nums
   FROM scramble_counts
   GROUP BY competition_id, event_id, round_type_id
