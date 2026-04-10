@@ -231,16 +231,8 @@ class Round < ApplicationRecord
     live_results.reset
   end
 
-  def potential_results
-    if linked_round.present?
-      linked_round.merged_live_results.select { it.locked_by_id.nil? }
-    else
-      live_results.where(locked_by_id: nil)
-    end
-  end
-
   def recompute_advancing
-    results_with_potential = potential_results.to_a.sort_by(&:potential_solve_time)
+    results_with_potential = (linked_round.present? ? linked_round.merged_live_results : live_results).select { it.locked_by_id.nil? }.sort_by(&:potential_solve_time)
 
     advancement_determining_condition = final_round? || linked_round&.final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
 
