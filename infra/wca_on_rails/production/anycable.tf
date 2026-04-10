@@ -22,7 +22,8 @@ locals {
     },
     {
       name = "ANYCABLE_REDIS_URL",
-      value = "redis://master.anycable-production-cache.iebvzt.usw2.cache.amazonaws.com:6379"
+      # This is not a typo. You need the double s because it has encryption in transit enabled
+      value = "rediss://anycable-production-cache-001.anycable-production-cache.iebvzt.usw2.cache.amazonaws.com:6379"
     },
     {
       name = "ANYCABLE_PATH",
