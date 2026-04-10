@@ -52,7 +52,7 @@ resource "aws_ecs_task_definition" "anycable" {
   container_definitions = jsonencode([
 
     {
-      name              = "anycable-staging"
+      name              = "anycable-production"
       image             = "anycable/anycable-go:1.6"
       cpu    = 512
       memory = 1955
