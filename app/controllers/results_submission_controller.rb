@@ -120,7 +120,7 @@ class ResultsSubmissionController < ApplicationController
       }
     end
 
-    results_to_import = competition.rounds.flat_map { it.live_results.map(&:to_inbox_result) }
+    results_to_import = competition.rounds.flat_map { it.live_results.includes(:live_attempts, :registration).map(&:to_inbox_result) }
 
     person_with_results = results_to_import.map(&:person_id).uniq
 

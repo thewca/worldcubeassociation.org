@@ -122,22 +122,22 @@ class LiveResult < ApplicationRecord
   def to_inbox_result
     attempt_values = live_attempts.pluck(:value)
 
-    InboxResult.new({
-                      competition: self.competition,
-                      round: self.round,
-                      person_id: self.registrant_id,
-                      pos: self.local_pos,
-                      event_id: self.event_id,
-                      format_id: self.format_id,
-                      round_type_id: self.round_type_id,
-                      best: self.best,
-                      average: self.average,
-                      value1: attempt_values[0],
-                      value2: attempt_values[1] || 0,
-                      value3: attempt_values[2] || 0,
-                      value4: attempt_values[3] || 0,
-                      value5: attempt_values[4] || 0,
-                    })
+    InboxResult.new(
+      competition: self.competition,
+      round: self.round,
+      person_id: self.registrant_id,
+      pos: self.local_pos,
+      event_id: self.event_id,
+      format_id: self.format_id,
+      round_type_id: self.round_type_id,
+      best: self.best,
+      average: self.average,
+      value1: attempt_values[0],
+      value2: attempt_values[1] || 0,
+      value3: attempt_values[2] || 0,
+      value4: attempt_values[3] || 0,
+      value5: attempt_values[4] || 0,
+    )
   end
 
   LIVE_STATE_SERIALIZE_OPTIONS = {
