@@ -22,7 +22,7 @@ locals {
     },
     {
       name = "ANYCABLE_REDIS_URL",
-      value = "redis://wca-main-sidekiq.iebvzt.ng.0001.usw2.cache.amazonaws.com:6379"
+      value = "redis://anycable-production-cache-0001-001.anycable-production-cache.iebvzt.usw2.cache.amazonaws.com:6379"
     },
     {
       name = "ANYCABLE_PATH",
