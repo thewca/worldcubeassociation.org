@@ -101,6 +101,10 @@ module ResultsValidators
                 end
               end
 
+              # Dual Rounds per https://www.worldcubeassociation.org/regulations/#9v5 do not need checks
+              #   on their advancement criteria, because everyone will advance anyways (and that's fine)
+              is_within_dual_round = round.linked_round.present? && previous_round.linked_round.present?
+
               # Article 9p, since July 20, 2006 until April 13, 2010
               if comp_start_date.between?(Date.new(2006, 7, 20), Date.new(2010, 4, 13))
                 if number_of_people_in_round >= number_of_people_in_previous_round
@@ -108,7 +112,7 @@ module ResultsValidators
                                                  :rounds, competition.id,
                                                  round_id: round.human_id)
                 end
-              else
+              elsif !is_within_dual_round
                 max_advancing = 3 * number_of_people_in_previous_round / 4
                 # Article 9p1, since April 14, 2010
                 # https://www.worldcubeassociation.org/regulations/#9p1: At least 25% of competitors must be eliminated between consecutive rounds of the same event.
