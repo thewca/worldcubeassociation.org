@@ -68,7 +68,7 @@ locals {
     },
     {
       name = "ANYCABLE_REDIS_URL",
-      value = "redis://anycable-production-cache-0001-001.anycable-production-cache.iebvzt.usw2.cache.amazonaws.com:6379"
+      value = "rediss://anycable-production-cache-001.anycable-production-cache.iebvzt.usw2.cache.amazonaws.com:6379"
     },
     {
       name = "STORAGE_AWS_BUCKET"
