@@ -120,7 +120,16 @@ class ResultsSubmissionController < ApplicationController
       }
     end
 
-    results_to_import = competition.rounds.flat_map { it.live_results.map(&:to_inbox_result) }
+    results_to_import = competition.rounds.flat_map do |round|
+      round.live_results
+           .includes(:live_attempts, :registration)
+           .map(&:to_inbox_result)
+    end.map do |ibr|
+      # This is _technically_ useless because the IBR already knows its competition ID,
+      #   but not its actual competition memory object.
+      # Redundantly assigning here saves a ton of "does this competition exist?" validation checks later.
+      ibr.tap { it.competition = competition }
+    end
 
     person_with_results = results_to_import.map(&:person_id).uniq
 
