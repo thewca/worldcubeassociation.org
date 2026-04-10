@@ -33,6 +33,7 @@ class LiveResult < ApplicationRecord
 
   has_one :event, through: :round
   has_one :format, through: :round
+  has_one :competition, through: :round
 
   validates :best,
             presence: true,
@@ -53,6 +54,9 @@ class LiveResult < ApplicationRecord
   end
 
   delegate :id, to: :event, prefix: true
+  delegate :id, to: :format, prefix: true
+  delegate :round_type_id, to: :round
+  delegate :registrant_id, to: :registration
 
   def to_solve_time(field)
     SolveTime.new(event_id, field, send(field))
@@ -116,17 +120,18 @@ class LiveResult < ApplicationRecord
   end
 
   def to_inbox_result
-    attempt_values = result.attempts.map(&:value)
+    attempt_values = live_attempts.pluck(:value)
+
     InboxResult.new({
-                      competition: competition,
-                      person_id: result.person_id,
-                      pos: result.ranking,
-                      event_id: round.event_id,
-                      round_type_id: round.round_type_id,
-                      round_id: round.id,
-                      format_id: round.format_id,
-                      best: result.best,
-                      average: result.average,
+                      competition: self.competition,
+                      round: self.round,
+                      person_id: self.registrant_id,
+                      pos: self.local_pos,
+                      event_id: self.event_id,
+                      format_id: self.format_id,
+                      round_type_id: self.round_type_id,
+                      best: self.best,
+                      average: self.average,
                       value1: attempt_values[0],
                       value2: attempt_values[1] || 0,
                       value3: attempt_values[2] || 0,
