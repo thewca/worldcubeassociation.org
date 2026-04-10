@@ -231,28 +231,16 @@ class Round < ApplicationRecord
     live_results.reset
   end
 
-  def potential_results(loaded_results)
-    missing_count = if linked_round.blank?
-                      total_competitors - loaded_results.count
-                    else
-                      best_results_by_registration_id = linked_round.merged_live_results.index_by(&:registration_id)
-
-                      loaded_results = loaded_results.map do |result|
-                        best_results_by_registration_id[result.registration_id] || result
-                      end
-
-                      [total_competitors, best_results_by_registration_id.length].max - loaded_results.count
-                    end
-    potential_for_missing = Array.new(missing_count) { LiveResult.build(round: self) }
-    (loaded_results + potential_for_missing).sort_by(&:potential_solve_time)
+  def potential_results
+    if linked_round.present?
+      linked_round.merged_live_results.select { it.locked_by_id.nil? }
+    else
+      live_results.where(locked_by_id: nil)
+    end
   end
 
   def recompute_advancing
-    advancement_determining_results = live_results.where.not(global_pos: nil).where(locked_by_id: nil)
-
-    loaded_results = advancement_determining_results.includes(:live_attempts).to_a
-
-    results_with_potential = potential_results(loaded_results)
+    results_with_potential = potential_results.to_a.sort_by(&:potential_solve_time)
 
     advancement_determining_condition = final_round? || linked_round&.final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
 

@@ -31,9 +31,9 @@ class LinkedRound < ApplicationRecord
     results_by_registration_id = round_results.group_by(&:registration_id)
     persons = results_by_registration_id.keys
     best_result_per_person = persons.map do |person|
-      results_by_registration_id[person].min_by(&:values_for_sorting)
+      results_by_registration_id[person].min_by(&:potential_solve_time)
     end
 
-    best_result_per_person.sort_by(&:values_for_sorting)
+    best_result_per_person.sort_by(&:potential_solve_time)
   end
 end
