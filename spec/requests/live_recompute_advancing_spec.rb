@@ -234,6 +234,92 @@ RSpec.describe "WCA Live API" do
       end
     end
 
+    context "with linked rounds (second round partially entered)" do
+      context "with ranking condition" do
+        let!(:linked) { create(:linked_round) }
+        let!(:round1) { create(:round, number: 1, total_number_of_rounds: 3, event_id: "333", competition: competition, advancement_condition: ranking_condition, linked_round: linked) }
+        let!(:round2) { create(:round, number: 2, total_number_of_rounds: 3, event_id: "333", competition: competition, advancement_condition: ranking_condition, linked_round: linked) }
+        let!(:round3) { create(:round, number: 3, total_number_of_rounds: 3, event_id: "333", competition: competition) }
+
+        # Enter round2 for a competitor using uniform attempts (all = target) so Ao5 average == target.
+        def enter_round2(registration, average)
+          result = round2.live_results.find_by!(registration_id: registration.id)
+          attempts = Array.new(5) { |i| { value: average, attempt_number: i + 1 } }
+          UpdateLiveResultJob.perform_now(result, attempts, User.first.id)
+        end
+
+        before do
+          5.times do |i|
+            create(:live_result, registration: registrations[i], round: round1, average: (i + 1) * 100)
+          end
+          round2.open_round!(User.first)
+        end
+
+        it "does not set advancing when missing round2 results could still change the outcome" do
+          # Only 1 of 5 has entered round2 — 4 potential results could rank 1st through 4th,
+          # pushing all real results outside the top 3
+          enter_round2(registrations[0], 50)
+
+          expect(round1.live_results.reload.pluck(:advancing)).to all(be false)
+          expect(round2.live_results.reload.pluck(:advancing)).to all(be false)
+        end
+
+        it "sets advancing for results guaranteed to finish in the top 3 despite one missing round2 attempt" do
+          # 4 of 5 entered round2 with better results than round1; only registrations[4] is still missing
+          4.times { |i| enter_round2(registrations[i], (i + 1) * 50) }
+
+          # With 1 potential result at best-possible rank, the sorted order is:
+          #   [potential(1cs), reg[0](50), reg[1](100), reg[2](150), reg[3](200), reg[4](500 from round1)]
+          # Top 3 = potential + reg[0] + reg[1] → reg[0] and reg[1] are advancing
+          advancing_ids = round2.live_results.reload.where(advancing: true).pluck(:registration_id)
+          expect(advancing_ids).to contain_exactly(registrations[0].id, registrations[1].id)
+        end
+      end
+
+      context "with percent condition" do
+        let!(:linked) { create(:linked_round) }
+        let!(:round1) { create(:round, number: 1, total_number_of_rounds: 3, event_id: "333", competition: competition, advancement_condition: percent_condition, linked_round: linked) }
+        let!(:round2) { create(:round, number: 2, total_number_of_rounds: 3, event_id: "333", competition: competition, advancement_condition: percent_condition, linked_round: linked) }
+        let!(:round3) { create(:round, number: 3, total_number_of_rounds: 3, event_id: "333", competition: competition) }
+
+        # Enter round2 for a competitor using uniform attempts (all = target) so Ao5 average == target.
+        def enter_round2(registration, average)
+          result = round2.live_results.find_by!(registration_id: registration.id)
+          attempts = Array.new(5) { |i| { value: average, attempt_number: i + 1 } }
+          UpdateLiveResultJob.perform_now(result, attempts, User.first.id)
+        end
+
+        before do
+          5.times do |i|
+            create(:live_result, registration: registrations[i], round: round1, average: ((i + 1) * 100) + 1, best: ((i + 1) * 100) + 1)
+          end
+          round2.open_round!(User.first)
+        end
+
+        it "does not set advancing when missing round2 results could still change the outcome" do
+          # Only 3 of 5 has entered round2 — 2 potential results could rank 1st through 2nd,
+          # pushing all real results outside the top 2
+          enter_round2(registrations[0], 50)
+          enter_round2(registrations[1], 50)
+          enter_round2(registrations[2], 50)
+
+          expect(round1.live_results.reload.pluck(:advancing)).to all(be false)
+          expect(round2.live_results.reload.pluck(:advancing)).to all(be false)
+        end
+
+        it "sets advancing for results guaranteed to finish in the top 2 despite one missing round2 attempt" do
+          # 4 of 5 entered round2 with better results than round1; only registrations[4] is still missing
+          4.times { |i| enter_round2(registrations[i], (i + 1) * 50) }
+
+          # With 1 potential result at best-possible rank, the sorted order is:
+          #   [potential(1cs), reg[0](50), reg[1](100), reg[2](150), reg[3](200), reg[4](250)]
+          # Top 2 = potential + reg[0] → reg[0] advances
+          advancing_ids = round2.live_results.reload.where(advancing: true).pluck(:registration_id)
+          expect(advancing_ids).to contain_exactly(registrations[0].id)
+        end
+      end
+    end
+
     context "with quit results" do
       it "quit from first round excludes from competitors" do
         round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)

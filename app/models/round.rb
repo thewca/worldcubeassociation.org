@@ -241,28 +241,25 @@ class Round < ApplicationRecord
   end
 
   def recompute_advancing
-    advancement_determining_results = relevant_results.where.not(global_pos: nil).where(locked_by_id: nil)
-
-    loaded_results = advancement_determining_results.includes(:live_attempts).to_a
-    missing_attempts = total_competitors - loaded_results.count
-
-    potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
-
-    # Determine which results would advance if everyone achieved their best possible attempt.
-    results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
+    results_per_person = linked_round.present? ? linked_round.merged_live_results : live_results
+    results_with_potential = results_per_person.select { it.locked_by_id.nil? }.sort_by(&:potential_solve_time)
 
     advancement_determining_condition = final_round? || linked_round&.final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
 
-    advancing_ids = advancement_determining_condition.apply(results_with_potential)
+    advancing_ids = advancement_determining_condition.apply(results_with_potential).pluck(:registration_id)
     max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
 
-    # We can't update advancing yet if the other linked rounds still have empty results
-    if !colinked_results.exists?(best: 0) && advancing_ids.any?
-      advancement_determining_results.update_all(
-        ["advancing = (id IN (?)), advancing_questionable = (global_pos <= ?)", advancing_ids, max_advancing],
+    # For linked Rounds wa want to update the results of both rounds so it doesn't matter if you query one or the other round
+    results_to_update = relevant_results.where.not(global_pos: nil).where(locked_by_id: nil)
+
+    # We can't update advancing yet if the other linked rounds aren't done yet
+    colinked_done = colinked_rounds.all?(&:score_taking_done?)
+    if colinked_done && advancing_ids.any?
+      results_to_update.update_all(
+        ["advancing = (registration_id IN (?)), advancing_questionable = (global_pos <= ?)", advancing_ids, max_advancing],
       )
     else
-      advancement_determining_results.update_all(
+      results_to_update.update_all(
         ["advancing = FALSE, advancing_questionable = (global_pos <= ?)", max_advancing],
       )
     end
@@ -530,7 +527,7 @@ class Round < ApplicationRecord
     worst_results = Array.new(ignored_ids.length) { LiveResult.build(round: self, best: LiveResult::WORST_POSSIBLE_SCORE, average: LiveResult::WORST_POSSIBLE_SCORE) }
     results_with_worst = (loaded_results + worst_results).sort_by(&:values_for_sorting)
 
-    hypothetically_advancing_ids = advancement_condition.apply(results_with_worst)
+    hypothetically_advancing_ids = advancement_condition.apply(results_with_worst).pluck(:id)
 
     relevant_results.where(id: hypothetically_advancing_ids & candidate_ids)
   end

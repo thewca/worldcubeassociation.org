@@ -31,6 +31,7 @@ RSpec.describe "WCA Live API" do
                                                                                                                        { attempt_number: 3, value: 333 },
                                                                                                                        { attempt_number: 4, value: 444 },
                                                                                                                        { attempt_number: 5, value: 555 })
+      expect(result.live_attempts_count).to eq 5
       expect(result.best).to eq 111
       expect(result.average).to eq 333
     end
