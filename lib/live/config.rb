@@ -2,10 +2,6 @@
 
 module Live
   module Config
-    def self.enabled?
-      true
-    end
-
     def self.sqs_queued?
       Rails.env.production?
     end
