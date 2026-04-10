@@ -13,7 +13,7 @@ SELECT
   GROUP_CONCAT(t1.id ORDER BY t1.id) AS result_ids,
   GROUP_CONCAT(DISTINCT person_id ORDER BY person_id) AS people,
   GROUP_CONCAT(DISTINCT event_id ORDER BY event_id) AS events,
-  GROUP_CONCAT(DISTINCT competition_id ORDER BY competition_id) AS competition
+  GROUP_CONCAT(DISTINCT competition_id ORDER BY competition_id) AS competitions
 FROM results AS t1
 JOIN attempt_sequences AS t2
 ON t2.result_id = t1.id

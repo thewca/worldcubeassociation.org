@@ -46,26 +46,30 @@ re AS (
       WHEN 3 THEN results.round_type_id IN ('3', 'g')
     END)
   GROUP BY competition_id, event_id, round_type_id, number, adv_type, adv_count, advancement_condition, total_number_of_rounds
+),
+actual_adv AS (
+  SELECT
+    re.competition_id,
+    re.event_id,
+    re.round_id,
+    re1.round_type_id,
+    re1.number AS number,
+    re.total_number_of_rounds,
+    re.participants AS participants,
+    re.participants_eligible AS participants_eligible,
+    re1.participants AS participants_passed,
+    IF(re.adv_type = 'percent', FLOOR(re.participants * re.adv_count / 100), re.adv_count) AS adv_real_count,
+    re.adv_type,
+    re.adv_count,
+    re.advancement_condition
+  FROM re
+  INNER JOIN re AS re1
+  ON re.competition_id = re1.competition_id
+    AND re.event_id = re1.event_id
+    AND re.number = re1.number - 1
+  WHERE re.adv_type <> 'attemptResult'
 )
-SELECT
-  re.competition_id,
-  re.event_id,
-  re.round_id,
-  re1.round_type_id,
-  re1.number AS number,
-  re.total_number_of_rounds,
-  re.participants AS participants,
-  re.participants_eligible AS participants_eligible,
-  re1.participants AS participants_passed,
-  IF(re.adv_type = 'percent', FLOOR(re.participants * re.adv_count / 100), re.adv_count) AS adv_real_count,
-  re.adv_type,
-  re.adv_count,
-  re.advancement_condition
-FROM re
-INNER JOIN re AS re1
-ON re.competition_id = re1.competition_id
-  AND re.event_id = re1.event_id
-  AND re.number = re1.number - 1
-WHERE adv_type <> 'attemptResult'
-  AND adv_real_count > 0.75 * participants
+SELECT *
+FROM actual_adv
+WHERE adv_real_count > 0.75 * participants
 ORDER BY RIGHT(competition_id, 4), competition_id, event_id, round_type_id;
