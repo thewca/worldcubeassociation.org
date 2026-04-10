@@ -273,6 +273,10 @@ RSpec.describe "WCA Live API" do
           # Top 3 = potential + reg[0] + reg[1] → reg[0] and reg[1] are advancing
           advancing_ids = round2.live_results.reload.where(advancing: true).pluck(:registration_id)
           expect(advancing_ids).to contain_exactly(registrations[0].id, registrations[1].id)
+
+          # Also correctly sets it for round 1
+          advancing_ids = round1.live_results.reload.where(advancing: true).pluck(:registration_id)
+          expect(advancing_ids).to contain_exactly(registrations[0].id, registrations[1].id)
         end
       end
 
