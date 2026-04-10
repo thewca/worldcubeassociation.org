@@ -660,6 +660,10 @@ output "rails_staging" {
   value = aws_lb_target_group.rails-staging
 }
 
+output "anycable_production" {
+  value = aws_lb_target_group.anycable-production
+}
+
 output "anycable_staging" {
   value = aws_lb_target_group.anycable-staging
 }

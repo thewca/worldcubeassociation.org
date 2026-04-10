@@ -69,7 +69,7 @@ locals {
     },
     {
       name = "NEXTAUTH_URL"
-      value = "https://worldcubeassociation.org"
+      value = "https://www.worldcubeassociation.org"
     },
   ]
 
