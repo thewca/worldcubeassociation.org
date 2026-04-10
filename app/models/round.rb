@@ -41,6 +41,12 @@ class Round < ApplicationRecord
   serialize :round_results, coder: RoundResults
   validates_associated :round_results
 
+  serialize :participation_condition, coder: ResultConditions::ResultCondition
+  validates_associated :participation_condition
+
+  belongs_to :participation_source, polymorphic: true, optional: true
+  has_many :target_rounds, class_name: "Round", as: :participation_source
+
   has_many :schedule_activities, -> { root_activities }, dependent: :destroy, inverse_of: :round
 
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
@@ -191,9 +197,9 @@ class Round < ApplicationRecord
     open_count = open_round!(locking_user)
     return [open_count, 0] if first_round?
 
-    round_to_lock = linked_round.present? ? linked_round.first_round_in_link.previous_round : previous_round
+    rounds_to_lock = previous_round.linked_round.present? ? previous_round.linked_round.rounds : [previous_round]
 
-    [open_count, round_to_lock.lock_results(locking_user)]
+    [open_count, rounds_to_lock.sum { it.lock_results(locking_user) }]
   end
 
   def clear_round!(clearing_user)
@@ -211,6 +217,7 @@ class Round < ApplicationRecord
 
     inserted_ids = self.live_results.where(registration_id: advancing_reg_ids).ids
     self.bulk_insert_history(inserted_ids, opening_user, action_type: :opened)
+    inserted_ids.count
   end
 
   def create_empty_live_result(registration_id)
@@ -227,8 +234,10 @@ class Round < ApplicationRecord
     recompute_local_pos
     recompute_global_pos
     recompute_advancing unless skip_advancing
+
     # We need to reset because live results are changed directly on SQL level for more optimized queries
     live_results.reset
+    linked_round&.live_results&.reset
   end
 
   def recompute_advancing
@@ -339,6 +348,10 @@ class Round < ApplicationRecord
     end
   end
 
+  def score_taking_done_across_rounds?
+    score_taking_done? && colinked_rounds.all?(&:score_taking_done?)
+  end
+
   def score_taking_done?
     open? && competitors_live_results_entered == total_competitors
   end
@@ -387,16 +400,60 @@ class Round < ApplicationRecord
     ScheduleActivity.parse_activity_code(wcif_id)
   end
 
-  def self.wcif_to_round_attributes(event, wcif, round_number, total_rounds)
+  def self.wcif_to_round_attributes(event, round_wcif, all_rounds_wcif)
     {
-      number: round_number,
-      total_number_of_rounds: total_rounds,
-      format_id: wcif["format"],
-      time_limit: event.can_change_time_limit? ? TimeLimit.load(wcif["timeLimit"]) : nil,
-      cutoff: Cutoff.load(wcif["cutoff"]),
-      advancement_condition: AdvancementConditions::AdvancementCondition.load(wcif["advancementCondition"]),
-      scramble_set_count: wcif["scrambleSetCount"],
-      round_results: RoundResults.load(wcif["results"]),
+      number: self.parse_wcif_id(round_wcif["id"])[:round_number],
+      total_number_of_rounds: all_rounds_wcif.size,
+      format_id: round_wcif["format"],
+      time_limit: event.can_change_time_limit? ? TimeLimit.load(round_wcif["timeLimit"]) : nil,
+      cutoff: Cutoff.load(round_wcif["cutoff"]),
+      advancement_condition: AdvancementConditions::AdvancementCondition.load(round_wcif["advancementCondition"]),
+      scramble_set_count: round_wcif["scrambleSetCount"],
+      round_results: RoundResults.load(round_wcif["results"]),
+    }
+  end
+
+  def self.backport_participation_source(round_model, all_rounds_model)
+    return round_model.competition_event if round_model.number == 1
+
+    if round_model.linked_round.present?
+      first_round_in_link = round_model.linked_round.first_round_in_link
+
+      if round_model != first_round_in_link
+        return self.backport_participation_source(
+          first_round_in_link,
+          all_rounds_model,
+        )
+      end
+    end
+
+    # If we reached this point, we implicitly know that round_number > 1
+    #   so looking back in the all_rounds array is fine.
+    # Note that we calculate -1 for "previous round" AND -1 because round numbers are 1-based,
+    #   which gives -2 in total.
+    previous_round = all_rounds_model[round_model.number - 2]
+
+    previous_round.linked_round || previous_round
+  end
+
+  def self.backport_participation_condition(participation_source)
+    case participation_source
+    when CompetitionEvent
+      nil
+    when Round
+      adv_condition = participation_source.advancement_condition
+      ResultConditions::Utils.upcycle_advancement_condition(adv_condition, participation_source)
+    when LinkedRound
+      self.backport_participation_condition(participation_source.last_round_in_link)
+    end
+  end
+
+  def self.wcif_backlinking(round_model, all_rounds_model)
+    participation_source = self.backport_participation_source(round_model, all_rounds_model)
+
+    {
+      participation_source: participation_source,
+      participation_condition: self.backport_participation_condition(participation_source),
     }
   end
 
@@ -405,8 +462,9 @@ class Round < ApplicationRecord
     # separately
     return 0 if relevant_results.first.locked_by.present?
 
-    relevant_results.update_all(locked_by_id: locking_user.id)
+    count = relevant_results.update_all(locked_by_id: locking_user.id)
     self.bulk_insert_history(relevant_results.ids, locking_user, action_type: :locked)
+    count
   end
 
   STATE_LOCKED = "locked"
@@ -417,7 +475,7 @@ class Round < ApplicationRecord
   def lifecycle_state
     return STATE_LOCKED if locked?
     return STATE_OPEN if open?
-    return STATE_READY if number == 1 || previous_round.score_taking_done?
+    return STATE_READY if first_round? || previous_round.score_taking_done_across_rounds?
 
     STATE_PENDING
   end
