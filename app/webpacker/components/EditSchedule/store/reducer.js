@@ -232,7 +232,7 @@ const reducers = {
     },
   }),
 
-  [AddVenue]: (state) => ({
+  [AddVenue]: (state, { payload }) => ({
     ...state,
     wcifSchedule: {
       ...state.wcifSchedule,
@@ -240,8 +240,8 @@ const reducers = {
         ...state.wcifSchedule.venues,
         {
           id: nextVenueId(state.wcifSchedule),
-          latitudeMicrodegrees: 0,
-          longitudeMicrodegrees: 0,
+          latitudeMicrodegrees: payload.coordinates?.latitude ?? 0,
+          longitudeMicrodegrees: payload.coordinates?.longitude ?? 0,
           rooms: [],
           extensions: [],
         },

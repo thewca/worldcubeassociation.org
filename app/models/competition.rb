@@ -1035,6 +1035,10 @@ class Competition < ApplicationRecord
     ["Europe/London"]
   end
 
+  def coordinates
+    { latitude: self.latitude_microdegrees, longitude: self.longitude_microdegrees }
+  end
+
   private def compute_coordinates
     self.latitude_microdegrees = @latitude_degrees * 1e6 unless @latitude_degrees.nil?
     self.longitude_microdegrees = @longitude_degrees * 1e6 unless @longitude_degrees.nil?
