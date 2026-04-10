@@ -138,6 +138,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'bullet'
   gem 'web-console'
+  gem 'active_record_query_trace'
 end
 
 group :test do
