@@ -35,7 +35,7 @@ export function attemptResultsWarning(
       attempt_number: skippedGapIndex + 1,
     });
   }
-  const completeAttempts = attemptResults.filter((a) => a !== SKIPPED_VALUE);
+  const completeAttempts = attemptResults.filter((a) => a > SKIPPED_VALUE);
   if (completeAttempts.length > 0) {
     const bestSingle = Math.min(...completeAttempts);
     if (checkForDnsFollowedByValidResult(attemptResults)) {
