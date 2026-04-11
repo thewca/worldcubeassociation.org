@@ -187,8 +187,12 @@ export function MbldField({
 
     setDraft(patchedResult);
     const encodedResult = encodeMbldResult(patchedResult);
+    const isValidResult =
+      encodedResult >= 0 ||
+      encodedResult === DNF_VALUE ||
+      encodedResult === DNS_VALUE;
 
-    if (encodedResult !== value) {
+    if (isValidResult && encodedResult !== value) {
       onChange(encodedResult);
     }
   };
