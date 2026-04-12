@@ -1549,7 +1549,7 @@ fr:
           Le Comité Financier de la WCA (WFC) gère l'ensemble des finances de la
           WCA, y compris la budgétisation, les rapports, l'analyse, la
           comptabilité et les déclarations d'impôts. Il gère également la plus
-          grande source de revenus de la WCA, le système de cotisations de la
+          grande source de revenus de la WCA, le système de redevances de la
           WCA, ainsi que divers programmes de financement qui apportent un
           soutien aux communautés locales à différents stades de développement,
           y compris le financement des voyages, le financement de l'équipement
@@ -3478,15 +3478,17 @@ fr:
       dues_estimate:
         #original_hash: 6e56455
         calculated: >-
-          Le montant estimé des dues WCA pour %{limit} compétiteurs est de
+          Le montant estimé des redevances WCA pour %{limit} compétiteurs est de
           %{estimate}
         #original_hash: 5e8cffe
-        per_competitor: 'Le montant estimé des dues WCA par compétiteur est de %{estimate}'
+        per_competitor: >-
+          Le montant estimé des redevances WCA par compétiteur est de
+          %{estimate}
         #original_hash: 1b67d84
         ajax_error: >-
-          Une erreur liée à l'estimation des dues a eu lieue, potentiellement
-          due à l'indisponibilité d'un taux de change pour la devise
-          sélectionnée.
+          Une erreur liée à l'estimation des redevances a eu lieue,
+          potentiellement due à l'indisponibilité d'un taux de change pour la
+          devise sélectionnée.
       labels:
         admin:
           #original_hash: 7f3d889
@@ -3819,7 +3821,7 @@ fr:
           #original_hash: 9735ddf
           currency_code: La devise utilisée pour les différents frais.
           #original_hash: 82ea18a
-          base_entry_fee: "Les frais d’inscription de base pour la compétition. Ils seront affichés sur la page d’information de la compétition et sur la page d’inscription, le cas échéant. Si cette valeur est définie à 0, une phrase sera affichée indiquant que les inscriptions seront acceptées gratuitement.<br><br><b>REMARQUE\_: L’estimation suivante des dues WCA est uniquement une approximation basée sur les taux de change actuels et n’est en aucun cas contractuelle dans le cadre du paiement ultérieur des dues. </b>"
+          base_entry_fee: "Les frais d’inscription de base pour la compétition. Ils seront affichés sur la page d’information de la compétition et sur la page d’inscription, le cas échéant. Si cette valeur est définie à 0, une phrase sera affichée indiquant que les inscriptions seront acceptées gratuitement.<br><br><b>REMARQUE\_: L’estimation suivante des redevances WCA est uniquement une approximation basée sur les taux de change actuels et n’est en aucun cas contractuelle dans le cadre du paiement ultérieur des redevances. </b>"
           #original_hash: 8c4fdf8
           on_the_spot_entry_fee: >-
             Si mis à 0, une phrase indiquera que les inscriptions sur place
