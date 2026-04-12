@@ -31,6 +31,11 @@ const TIMELINE_STATUSES = [
     data in InboxResults.`,
   },
   {
+    status: ticketsCompetitionResultStatuses.newcomers_verified,
+    description: `WRT will have to go through the newcomers, verify their
+    details.`,
+  },
+  {
     status: ticketsCompetitionResultStatuses.created_wca_ids,
     description: `WRT will have to go through the newcomers, verify their
     details and generate WCA ID for them.`,
@@ -48,6 +53,7 @@ const STATUS_LABELS = {
   locked_for_posting: 'Locked for Posting',
   warnings_verified: 'Warnings Verified',
   merged_inbox_results: 'Merged Inbox Results',
+  newcomers_verified: 'Newcomers Verified',
   created_wca_ids: 'Created WCA IDs',
   posted: 'Posted',
 };
