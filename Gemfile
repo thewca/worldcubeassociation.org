@@ -80,7 +80,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '9.6.1'
+gem 'shakapacker', '9.7.0'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
@@ -103,6 +103,7 @@ gem 'hash_diff'
 gem 'tsort'
 gem 'html_safe_flash'
 gem 'benchmark'
+gem 'anycable-rails-core'
 
 group :development, :test do
   gem 'spring'
@@ -137,7 +138,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'bullet'
   gem 'web-console'
-  gem 'anycable-rails-core'
+  gem 'active_record_query_trace'
 end
 
 group :test do

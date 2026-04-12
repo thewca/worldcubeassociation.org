@@ -38,7 +38,13 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
   end
 
   def rounds
-    competition = Competition.find(params.require(:competition_id))
+    competition = Competition.includes(
+      rounds: {
+        wcif_extensions: [],
+        live_results: [],
+        sibling_rounds: [:live_results],
+      },
+    ).find(params.require(:competition_id))
 
     render json: { rounds: competition.rounds.map(&:to_live_info_json) }
   end
@@ -96,7 +102,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     delete_count = Live::DiffHelper.broadcast_changes(round) do
       deleted = result.live_attempts.delete_all
-      result.update!(average: 0, best: 0)
+      result.update!(average: 0, best: 0, advancing: false, advancing_questionable: false)
       deleted
     end
 
@@ -142,7 +148,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     to_advance = round.previous_round.next_advancing_without(registration_id) if advancing_ids.present?
 
-    return render json: { status: "The advancing competitor doesn't match who should be advancing.", should_advance: to_advance }, status: :bad_request if advancing_ids&.map(&:to_i) != to_advance&.pluck(:registration_id)
+    return render json: { status: "The advancing competitor doesn't match who should be advancing.", should_advance: to_advance }, status: :bad_request if advancing_ids.present? && advancing_ids.map(&:to_i) != to_advance&.pluck(:registration_id)
 
     quit_count = round.quit_from_round!(registration_id, @current_user, to_advance: to_advance)
 

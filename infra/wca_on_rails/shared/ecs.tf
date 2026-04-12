@@ -119,7 +119,7 @@ resource "aws_launch_configuration" "m6i_launch_config" {
 resource "aws_autoscaling_group" "t3_group" {
   name_prefix               = "${var.name_prefix}-t3-"
   min_size                  = 1
-  max_size                  = 6
+  max_size                  = 10
   desired_capacity          = 1
   vpc_zone_identifier       = [aws_default_subnet.default_az2.id]
   launch_configuration      = aws_launch_configuration.t3_launch_config.name

@@ -118,7 +118,7 @@ export const duringCompetitionTabs = (
     ..._.map(roundsByEventId, (rounds, eventId: EventId) => ({
       i18nKey: `events.${eventId}`,
       menuKey: eventId,
-      icon: `${eventId}Icon` as IconName,
+      icon: `${_.capitalize(eventId)}Icon` as IconName,
       children: rounds.map((round) => {
         const { roundNumber } = parseActivityCode(round.id);
 

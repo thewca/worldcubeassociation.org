@@ -15,7 +15,7 @@ import AutonumericField from './AutonumericField';
 import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
 import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
 import UtcDatePicker from '../../UtcDatePicker';
-import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
+import { IdWcaSearch, useIdQueries } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import {
   readValueRecursive,
@@ -24,6 +24,7 @@ import {
   useSections,
 } from '../provider/FormSectionProvider';
 import { useFormContext, useFormObjectSection, useFormUpdateAction } from '../provider/FormObjectProvider';
+import Loading from '../../../Requests/Loading';
 
 function snakifyId(id, section = []) {
   const idParts = [...section, id];
@@ -275,22 +276,63 @@ export const InputSelect = wrapInput((props) => (
   />
 ), ['options', 'search']);
 
+function RadioPicker({
+  options,
+  htmlName,
+  value,
+  onChange,
+}) {
+  return (
+    <>
+      {options.map((option, idx) => (
+        <React.Fragment key={option.value}>
+          {idx !== 0 && <br />}
+          <Radio
+            name={htmlName}
+            label={option.text}
+            value={option.value.toString()}
+            checked={value === option.value}
+            onChange={() => onChange(null, { value: option.value })}
+          />
+        </React.Fragment>
+      ))}
+    </>
+  );
+}
+
 export const InputRadio = wrapInput((props) => (
-  <>
-    {props.options.map((option, idx) => (
-      <React.Fragment key={option.value}>
-        {idx !== 0 && <br />}
-        <Radio
-          name={props.htmlName}
-          label={option.text}
-          value={option.value.toString()}
-          checked={props.value === option.value}
-          onChange={() => props.onChange(null, { value: option.value })}
-        />
-      </React.Fragment>
-    ))}
-  </>
+  <RadioPicker
+    options={props.options}
+    htmlName={props.htmlName}
+    value={props.value}
+    onChange={props.onChange}
+  />
 ), ['options']);
+
+export const InputRadioUser = wrapInput((props) => {
+  const idsToFetch = props.options.filter(Boolean);
+
+  const { data: fetchedUsers, isPending: anyPending } = useIdQueries({
+    model: SEARCH_MODELS.user,
+    idsToFetch,
+  });
+
+  const radioOptions = useMemo(() => fetchedUsers.map((user) => ({
+    value: user?.id,
+    text: user?.name,
+  })), [fetchedUsers]);
+
+  if (anyPending) return (<Loading />);
+
+  return (
+    <RadioPicker
+      options={radioOptions}
+      htmlName={props.htmlName}
+      value={props.value}
+      onChange={props.onChange}
+    />
+  );
+}, ['options']);
 
 export const InputMarkdown = wrapInput((props) => (
   <MarkdownEditor

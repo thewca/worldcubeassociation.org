@@ -157,20 +157,6 @@ Rails.application.routes.draw do
   get 'competitions/edit/registration-collisions-json' => 'competitions#registration_collisions_json', as: :registration_collisions_json
   get 'competitions/edit/series-eligible-competitions-json' => 'competitions#series_eligible_competitions_json', as: :series_eligible_competitions_json
 
-  if Live::Config.enabled?
-    get 'competitions/:competition_id/live/competitors/:registration_id' => 'live#by_person', as: :live_person_results
-    get 'competitions/:competition_id/live/podiums' => 'live#podiums', as: :live_podiums
-    get 'competitions/:competition_id/live/competitors' => 'live#competitors', as: :live_competitors
-    get 'competitions/:competition_id/live/rounds/:round_id/admin' => 'live#admin', as: :live_admin_round_results
-    get 'competitions/:competition_id/live/rounds/:round_id/admin/check' => 'live#double_check', as: :live_admin_check_round_results
-    get 'competitions/:competition_id/live/admin' => 'live#schedule_admin', as: :live_schedule_admin
-    get 'competitions/:competition_id/live/rounds/:round_id' => 'live#round_results', as: :live_round_results
-
-    get 'api/competitions/:competition_id/rounds/:round_id' => 'live#round_results_api', as: :live_round_results_api
-    post 'api/competitions/:competition_id/rounds/:round_id' => 'live#add_result', as: :add_live_result
-    patch 'api/competitions/:competition_id/rounds/:round_id' => 'live#update_result', as: :update_live_result
-  end
-
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
       to: redirect(status: 302) { |_params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }
@@ -375,21 +361,19 @@ Rails.application.routes.draw do
     # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
       resources :competitions, only: [] do
-        if Live::Config.enabled?
-          namespace :live do
-            get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
-            put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
-            put '/rounds/:round_id/clear' => "live#clear_round", as: :live_round_clear
-            delete '/rounds/:round_id/:registration_id' => 'live#quit_competitor', as: :quit_competitor_from_round
-            put '/rounds/:round_id/:registration_id/clear' => 'live#clear_competitor', as: :clear_competitor_in_round
-            get '/rounds/:round_id/next_if_quit' => 'live#next_if_quit', as: :next_advancing_competitor
-            put '/rounds/:round_id/:registration_id' => 'live#add_competitor_to_round', as: :add_competitor_to_round
-            post '/rounds/:round_id' => 'live#add_or_update_result', as: :add_results
-            patch '/rounds/:round_id' => 'live#add_or_update_result', as: :update_results
-            get '/podiums' => 'live#podiums', as: :live_podiums
-            get '/registrations/:registration_id' => 'live#by_person', as: :get_live_by_person
-            get '/rounds' => 'live#rounds', as: :live_admin
-          end
+        namespace :live do
+          get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
+          put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
+          put '/rounds/:round_id/clear' => "live#clear_round", as: :live_round_clear
+          delete '/rounds/:round_id/:registration_id' => 'live#quit_competitor', as: :quit_competitor_from_round
+          put '/rounds/:round_id/:registration_id/clear' => 'live#clear_competitor', as: :clear_competitor_in_round
+          get '/rounds/:round_id/next_if_quit' => 'live#next_if_quit', as: :next_advancing_competitor
+          put '/rounds/:round_id/:registration_id' => 'live#add_competitor_to_round', as: :add_competitor_to_round
+          post '/rounds/:round_id' => 'live#add_or_update_result', as: :add_results
+          patch '/rounds/:round_id' => 'live#add_or_update_result', as: :update_results
+          get '/podiums' => 'live#podiums', as: :live_podiums
+          get '/registrations/:registration_id' => 'live#by_person', as: :get_live_by_person
+          get '/rounds' => 'live#rounds', as: :live_admin
         end
 
         resources :registrations, only: %i[index show create update], shallow: true do
@@ -469,7 +453,8 @@ Rails.application.routes.draw do
 
       resources :competitions, only: %i[index show] do
         get '/wcif' => 'competitions#show_wcif'
-        get '/wcif/public' => 'competitions#show_wcif_public'
+        get '/wcif/:lifecycle_name' => 'competitions#show_wcif_by_lifecycle', as: :wcif_lifecycle
+        get '/wcif/version/:version_number' => 'competitions#show_wcif_by_version', constraints: { version_number: /(\d\.){0,2}\d/ }, as: :wcif_version
         get '/results' => 'competitions#results', as: :results
         get '/results/:event_id' => 'competitions#event_results', as: :event_results
         get '/competitors' => 'competitions#competitors'

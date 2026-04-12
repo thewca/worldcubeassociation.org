@@ -5,8 +5,10 @@ import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import OpenapiError from "@/components/ui/openapiError";
 import React from "react";
 import { getT } from "@/lib/i18n/get18n";
-import formats from "@/lib/wca/data/formats";
 import { LiveResultProvider } from "@/providers/LiveResultProvider";
+import { getRoundName } from "@/lib/wca/live/getRoundName";
+import { getRounds } from "@/lib/wca/live/getRounds";
+import RoundOpenCheck from "@/components/live/RoundOpenCheck";
 
 export default async function ResultPage({
   params,
@@ -23,25 +25,41 @@ export default async function ResultPage({
 
   if (error) return <OpenapiError response={response} t={t} />;
 
-  const { competitors, format } = data;
+  const { id } = data;
+
+  const {
+    data: roundsData,
+    error: roundsError,
+    response: roundsResponse,
+  } = await getRounds(competitionId);
+
+  if (roundsError) return <OpenapiError response={roundsResponse} t={t} />;
+
+  const roundName = getRoundName(id, t, roundsData.rounds, true);
+
+  const round = roundsData.rounds.find((r) => r.id === id)!;
 
   return (
     <Container bg="bg">
-      <PermissionCheck
-        requiredPermission="canAdministerCompetition"
-        item={competitionId}
-      >
-        <VStack align="left">
-          <LiveResultProvider initialRound={data} competitionId={competitionId}>
-            <AddResults
-              format={formats.byId[format]}
-              roundId={roundId}
+      <RoundOpenCheck state={round.state} t={t}>
+        <PermissionCheck
+          requiredPermission="canAdministerCompetition"
+          item={competitionId}
+        >
+          <VStack align="left">
+            <LiveResultProvider
+              initialRound={data}
               competitionId={competitionId}
-              competitors={competitors!}
-            />
-          </LiveResultProvider>
-        </VStack>
-      </PermissionCheck>
+            >
+              <AddResults
+                competitionId={competitionId}
+                roundName={roundName}
+                round={round}
+              />
+            </LiveResultProvider>
+          </VStack>
+        </PermissionCheck>
+      </RoundOpenCheck>
     </Container>
   );
 }

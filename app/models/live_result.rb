@@ -52,7 +52,8 @@ class LiveResult < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
-  delegate :id, to: :event, prefix: true
+  delegate :event_id, :format_id, :round_type_id, :competition_id, to: :round
+  delegate :registrant_id, to: :registration
 
   def to_solve_time(field)
     SolveTime.new(event_id, field, send(field))
@@ -98,18 +99,42 @@ class LiveResult < ApplicationRecord
   end
 
   def complete?
-    # Use length hear to not fire a COUNT query for every row
-    live_attempts.length == round.format.expected_solve_count
+    live_attempts_count == round.format.expected_solve_count
   end
 
   def empty_result?
     best.zero?
   end
 
+  def not_empty?
+    !empty_result?
+  end
+
   def values_for_sorting
     ranking_columns.map do |column|
       to_solve_time(column)
     end
+  end
+
+  def to_inbox_result
+    attempt_values = live_attempts.pluck(:value)
+
+    InboxResult.new(
+      round: self.round,
+      competition_id: self.competition_id,
+      person_id: self.registrant_id,
+      pos: self.local_pos,
+      event_id: self.event_id,
+      format_id: self.format_id,
+      round_type_id: self.round_type_id,
+      best: self.best,
+      average: self.average,
+      value1: attempt_values[0],
+      value2: attempt_values[1] || 0,
+      value3: attempt_values[2] || 0,
+      value4: attempt_values[3] || 0,
+      value5: attempt_values[4] || 0,
+    )
   end
 
   LIVE_STATE_SERIALIZE_OPTIONS = {
