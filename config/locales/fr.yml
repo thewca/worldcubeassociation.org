@@ -6849,10 +6849,10 @@ fr:
         au WRT expliquant pourquoi plusieurs groupes de FMC ont été utilisés.
       #original_hash: d6830c0
       wrong_number_of_scramble_sets_error: >-
-        [%{round_id}] Ce tour a un nombre de mélanges différent de celui indiqué
-        dans l'onglet Gérer les événements. Veuillez ajuster le nombre de sets
-        de mélanges dans l'onglet Gérer les événements en fonction du nombre de
-        sets utilisés.
+        [%{round_id}] Ce tour a un nombre d'ensembles de mélanges différent de
+        celui indiqué dans l'onglet Gérer les événements. Veuillez ajuster le
+        nombre d'ensembles de mélanges dans l'onglet Gérer les événements en
+        fonction du nombre ayant étés utilisés.
   tickets:
     type:
       #original_hash: e43f273
