@@ -80,7 +80,7 @@ module AdvancementConditions
                             end
 
       # Filter out potential results
-      advancing_with_ties.reject(&:empty_result?).pluck(:id)
+      advancing_with_ties.reject(&:empty_result?)
     end
   end
 end

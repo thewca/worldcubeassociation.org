@@ -7,6 +7,7 @@ import Navbar from "./navbar";
 import Footer from "@/components/Footer";
 import RandomBackground from "@/components/RandomBackground";
 import { Rubik } from "next/font/google";
+import { ThemeProvider } from "@wrksz/themes/next";
 
 export const metadata: Metadata = {
   title: {
@@ -39,16 +40,18 @@ export default async function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body className={appFont.className}>
-        <WCAQueryClientProvider>
-          <AuthProvider>
-            <UiProvider>
-              <Navbar />
-              <RandomBackground numRows={8} numCols={18} />
-              {children}
-              <Footer />
-            </UiProvider>
-          </AuthProvider>
-        </WCAQueryClientProvider>
+        <ThemeProvider attribute="class" disableTransitionOnChange>
+          <WCAQueryClientProvider>
+            <AuthProvider>
+              <UiProvider>
+                <Navbar />
+                <RandomBackground numRows={8} numCols={18} />
+                {children}
+                <Footer />
+              </UiProvider>
+            </AuthProvider>
+          </WCAQueryClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

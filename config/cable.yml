@@ -6,6 +6,5 @@ test:
   adapter: test
 
 production:
-  adapter: redis
+  adapter: anycable
   url: <%= EnvConfig.ANYCABLE_REDIS_URL %>
-  channel_prefix: wca_production

@@ -104,6 +104,30 @@ resource "aws_lb_target_group" "rails-production" {
   }
 }
 
+resource "aws_lb_target_group" "nextjs-staging" {
+  name        = "nextjs-staging"
+  port        = 3000
+  protocol    = "HTTP"
+  vpc_id      = aws_default_vpc.default.id
+  target_type = "ip"
+
+  deregistration_delay = 10
+  health_check {
+    interval            = 10
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    matcher             = 200
+  }
+  tags = {
+    Name = "${var.name_prefix}-nextjs"
+    Env = "staging"
+  }
+}
+
 resource "aws_lb_target_group" "nextjs-production" {
   name        = "nextjs-production"
   port        = 3000
@@ -163,6 +187,30 @@ resource "aws_lb_target_group" "rails-staging" {
   health_check {
     interval            = 5
     path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 2
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    matcher             = 200
+  }
+  tags = {
+    Name = var.name_prefix
+    Env = "staging"
+  }
+}
+
+resource "aws_lb_target_group" "anycable-staging" {
+  name        = "wca-anycable-staging"
+  port        = 8085
+  protocol    = "HTTP"
+  vpc_id      = aws_default_vpc.default.id
+  target_type = "ip"
+
+  deregistration_delay = 10
+  health_check {
+    interval            = 5
+    path                = "/health"
     port                = "traffic-port"
     protocol            = "HTTP"
     timeout             = 2
@@ -312,7 +360,7 @@ resource "aws_lb_listener" "http" {
 
 resource "aws_lb_listener_rule" "pma_forward_prod" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 4
+  priority     = 50
 
   action {
     authenticate_oidc {
@@ -352,7 +400,7 @@ locals {
 
 resource "aws_lb_listener_rule" "next_forward_prod" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 10
+  priority     = 110
 
   action {
     type             = "forward"
@@ -368,7 +416,7 @@ resource "aws_lb_listener_rule" "next_forward_prod" {
 
 resource "aws_lb_listener_rule" "rails_forward_staging" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 5
+  priority     = 60
 
   action {
     type             = "forward"
@@ -382,9 +430,53 @@ resource "aws_lb_listener_rule" "rails_forward_staging" {
   }
 }
 
+resource "aws_lb_listener_rule" "rails_forward_next_staging" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 36
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.nextjs-staging.arn
+  }
+
+  condition {
+    host_header {
+      values = ["staging.worldcubeassociation.org"]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/competitions/*/live*", "/_next/*", "/api/auth/*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "anycable_forward_staging" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 35
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.anycable-staging.arn
+  }
+
+  condition {
+    host_header {
+      values = ["staging.worldcubeassociation.org"]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = [var.anycable_path]
+    }
+  }
+}
+
 resource "aws_lb_listener_rule" "rails_forward_staging_api" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 3
+  priority     = 40
 
   action {
     type             = "forward"
@@ -406,7 +498,7 @@ resource "aws_lb_listener_rule" "rails_forward_staging_api" {
 
 resource "aws_lb_listener_rule" "pma_forward_staging" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 1
+  priority     = 20
 
   action {
     authenticate_oidc {
@@ -464,8 +556,16 @@ output "nextjs-production" {
   value = aws_lb_target_group.nextjs-production
 }
 
-output "rails_staging"{
+output "nextjs_staging" {
+  value = aws_lb_target_group.nextjs-staging
+}
+
+output "rails_staging" {
   value = aws_lb_target_group.rails-staging
+}
+
+output "anycable_staging" {
+  value = aws_lb_target_group.anycable-staging
 }
 
 output "rails_staging-api"{

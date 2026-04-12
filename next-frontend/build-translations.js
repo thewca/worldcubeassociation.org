@@ -4,7 +4,9 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
-const languages = Object.keys(require("./src/lib/i18n/locales/available.json"));
+const languages = Object.keys(
+  require("./src/lib/staticData/available_locales.json"),
+);
 const countries = require("i18n-iso-countries");
 
 // Recursively flatten a nested object using dot notation

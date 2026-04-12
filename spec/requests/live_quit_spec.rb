@@ -6,6 +6,10 @@ def percent_condition
   AdvancementConditions::PercentCondition.new(40)
 end
 
+def ranking_condition
+  AdvancementConditions::RankingCondition.new(3)
+end
+
 RSpec.describe "WCA Live API" do
   describe "DELETE #quit_competitor" do
     let!(:delegate) { create(:delegate) }
@@ -135,6 +139,40 @@ RSpec.describe "WCA Live API" do
                                          "single_record_tag" => nil,
                                          "last_attempt_entered_at" => anything,
                                          "live_attempts" => [] }].map { (Live::DiffHelper.compress_payload it).merge({ "user" => user }) }))
+    end
+  end
+
+  describe "next_advancing_without with linked rounds" do
+    let(:competition) { create(:competition, event_ids: ["333"]) }
+    let(:registrations) { create_list(:registration, 5, :accepted, competition: competition, event_ids: ["333"]) }
+
+    it "excludes all linked-round results for the quitting competitor, not just one" do
+      # Linked rounds 1 + 2 feed into a standalone final (round 3).
+      round1 = create(:round, number: 1, total_number_of_rounds: 3, event_id: "333", competition: competition, advancement_condition: ranking_condition)
+      round2 = create(:round, number: 2, total_number_of_rounds: 3, event_id: "333", competition: competition, advancement_condition: ranking_condition)
+      create(:linked_round, rounds: [round1, round2])
+      final = create(:round, number: 3, total_number_of_rounds: 3, event_id: "333", competition: competition)
+
+      # Each competitor has a result in both linked rounds.
+      # Round2 is the better attempt for every competitor, so global_pos and
+      # advancing=true live on round2 results. Round1 results all have
+      # global_pos=NULL and advancing=false.
+      #
+      # Ranking by best result across both rounds:
+      #   registrations[0]: best = round2(100),  round1(150)  → rank 1 (advancing)
+      #   registrations[1]: best = round2(200),  round1(9000) → rank 2 (advancing)
+      #   registrations[2]: best = round2(300),  round1(9000) → rank 3 (advancing)
+      #   registrations[3]: best = round2(400),  round1(9000) → rank 4 (next up)
+      #   registrations[4]: best = round2(500),  round1(9000) → rank 5
+      5.times do |i|
+        create(:live_result, registration: registrations[i], round: round1, average: i.zero? ? 150 : 9000)
+        create(:live_result, registration: registrations[i], round: round2, average: (i + 1) * 100)
+      end
+
+      final.open_and_lock_previous(User.first)
+
+      next_qualifying = round2.next_advancing_without(registrations.first.id)
+      expect(next_qualifying.map(&:registration_id)).to contain_exactly(registrations[3].id)
     end
   end
 end
