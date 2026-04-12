@@ -2943,7 +2943,7 @@ fr:
         #original_hash: 42faad9
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} saisis'
         #original_hash: adec79f
-        round_locked: verrouillé
+        round_locked: Verrouillé
         warnings:
           #original_hash: 9198c71
           omitted: >-
