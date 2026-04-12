@@ -10,6 +10,8 @@ import '../lib/image-preview';
 import '../lib/polyfills';
 import autosize from 'autosize';
 import Rails from '@rails/ujs';
+import ReactOnRails from 'react-on-rails';
+import Disclaimer from '../components/StaticPages/Disclaimer';
 import {
   getUrlParams,
   setUrlParams,
@@ -37,6 +39,10 @@ $(() => {
 // Export some helpers
 window.wca.getUrlParams = getUrlParams;
 window.wca.setUrlParams = setUrlParams;
+
+ReactOnRails.register({
+  StaticPagesDisclaimer: Disclaimer,
+});
 
 // Support component names relative to this directory:
 const componentRequireContext = require.context('components', true);
