@@ -20,6 +20,66 @@ export function trimTrailingSkipped(attemptResults: number[]) {
 }
 
 /**
+ * Alters the given MBLD decoded value, so that it conforms to the WCA regulations.
+ */
+export function autocompleteMbldDecodedValue({
+  attempted,
+  solved,
+  centiseconds,
+}: {
+  attempted: number;
+  solved: number;
+  centiseconds: number;
+}) {
+  // We expect the values to be entered left-to-right, so we reset to
+  // defaults otherwise
+  if ((!solved && attempted) || (!solved && !attempted && centiseconds > 0)) {
+    return { solved: 0, attempted: 0, centiseconds: 0 };
+  }
+
+  if (!attempted || solved > attempted) {
+    return { solved, attempted: solved, centiseconds };
+  }
+  // See https://www.worldcubeassociation.org/regulations/#9f12c
+  if (solved < attempted / 2 || solved <= 1) {
+    return { solved: 0, attempted: 0, centiseconds: DNF_VALUE };
+  }
+  // See https://www.worldcubeassociation.org/regulations/#H1b
+  // But allow additional two +2s per cube over the limit, just in case.
+  if (
+    centiseconds >
+    10 * 60 * 100 * Math.min(6, attempted) + attempted * 2 * 2 * 100
+  ) {
+    return { solved: 0, attempted: 0, centiseconds: DNF_VALUE };
+  }
+  return { solved, attempted, centiseconds };
+}
+
+/**
+ * Alters the given FM attempt result, so that it conforms to the WCA regulations.
+ */
+export function autocompleteFmAttemptResult(moves: number) {
+  // See https://www.worldcubeassociation.org/regulations/#E2d1
+  if (moves > 80) return DNF_VALUE;
+  return moves;
+}
+
+/**
+ * Alters the given time attempt result, so that it conforms to the WCA regulations.
+ */
+export function autocompleteTimeAttemptResult(time: number) {
+  // See https://www.worldcubeassociation.org/regulations/#9f2
+  return truncateOver10Mins(time);
+}
+
+/* See: https://www.worldcubeassociation.org/regulations/#9f2 */
+function truncateOver10Mins(value: number) {
+  if (value < 0) return value;
+  if (value <= 10 * 6000) return value;
+  return Math.floor(value / 100) * 100;
+}
+
+/**
  * Checks the given attempt results for discrepancies and returns
  * a warning message if some are found.
  */
