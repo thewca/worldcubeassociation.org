@@ -40,7 +40,9 @@ export default async function PersonResults({
           <ByPersonByRoundTable
             eventResults={eventResults}
             competitionId={competitionId}
-            rounds={rounds.filter((r) => parseActivityCode(r.id).eventId)}
+            rounds={rounds.filter(
+              (r) => parseActivityCode(r.id).eventId == key,
+            )}
           />
         </Fragment>
       ))}
