@@ -170,20 +170,8 @@ class Round < ApplicationRecord
     end
   end
 
-  def consider_previous_round_results?
-    # All linked rounds except the first one in a chain of linked rounds
-    linked_round.present? && linked_round.first_round_in_link.id != id
-  end
-
-  def advancing_registrations
-    if number == 1
-      registrations.accepted
-    elsif consider_previous_round_results?
-      linked_round.first_round_in_link.advancing_registrations
-    else
-      advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
-      Registration.where(id: advancing)
-    end
+  def advancing_competitor_ids
+    live_results.where(advancing: true).pluck(:registration_id)
   end
 
   private def bulk_insert_history(live_ids_to_insert, entered_by_user, **attributes)
@@ -208,7 +196,7 @@ class Round < ApplicationRecord
   end
 
   def open_round!(opening_user)
-    advancing_reg_ids = advancing_registrations.ids
+    advancing_reg_ids = participation_source.advancing_competitor_ids
 
     empty_results = advancing_reg_ids.map do |reg_id|
       LiveResult.empty_result_attributes(reg_id, self.id)
