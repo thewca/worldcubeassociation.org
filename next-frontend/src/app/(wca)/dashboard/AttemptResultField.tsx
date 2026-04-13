@@ -26,6 +26,11 @@ import {
 } from "@/lib/wca/wcif/attempts";
 import type { FormEvent } from "react";
 import type { EventId } from "@/lib/wca/data/events";
+import {
+  autocompleteFmAttemptResult,
+  autocompleteMbldDecodedValue,
+  autocompleteTimeAttemptResult,
+} from "@/lib/live/attempt-result";
 
 export const DNF_KEYS = ["d", "D", "/"];
 export const DNS_KEYS = ["s", "S", "*"];
@@ -107,7 +112,7 @@ export function TimeField({
 }: AttemptResultProps) {
   const { isValid, binding } = useInputMask({
     value,
-    onChange,
+    onChange: (value) => onChange(autocompleteTimeAttemptResult(value)),
     defaultValue: SKIPPED_VALUE,
     parse: inputToAttemptResult,
     format: attemptResultToInput,
@@ -134,7 +139,7 @@ export function FmMovesField({
 
   const maskedValue = isAverage ? value / 100 : value;
   const onMaskedChange = (value: number) =>
-    onChange(isAverage ? value * 100 : value);
+    onChange(isAverage ? value * 100 : autocompleteFmAttemptResult(value));
 
   const { isValid, binding } = useInputMask({
     value: maskedValue,
@@ -184,9 +189,10 @@ export function MbldField({
       ...draft,
       ...payload,
     };
+    const updatedDecodedValue = autocompleteMbldDecodedValue(patchedResult);
 
-    setDraft(patchedResult);
-    const encodedResult = encodeMbldResult(patchedResult);
+    setDraft(updatedDecodedValue);
+    const encodedResult = encodeMbldResult(updatedDecodedValue);
 
     if (encodedResult !== value) {
       onChange(encodedResult);

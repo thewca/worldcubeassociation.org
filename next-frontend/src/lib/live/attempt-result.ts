@@ -25,34 +25,37 @@ export function trimTrailingSkipped(attemptResults: number[]) {
 export function autocompleteMbldDecodedValue({
   attempted,
   solved,
-  centiseconds,
+  timeCentiseconds = 0,
 }: {
   attempted: number;
   solved: number;
-  centiseconds: number;
+  timeCentiseconds?: number;
 }) {
   // We expect the values to be entered left-to-right, so we reset to
   // defaults otherwise
-  if ((!solved && attempted) || (!solved && !attempted && centiseconds > 0)) {
-    return { solved: 0, attempted: 0, centiseconds: 0 };
+  if (
+    (!solved && attempted) ||
+    (!solved && !attempted && timeCentiseconds > 0)
+  ) {
+    return { solved: 0, attempted: 0, timeCentiseconds: 0 };
   }
 
   if (!attempted || solved > attempted) {
-    return { solved, attempted: solved, centiseconds };
+    return { solved, attempted: solved, timeCentiseconds: timeCentiseconds };
   }
   // See https://www.worldcubeassociation.org/regulations/#9f12c
   if (solved < attempted / 2 || solved <= 1) {
-    return { solved: 0, attempted: 0, centiseconds: DNF_VALUE };
+    return { solved: 0, attempted: 0, timeCentiseconds: DNF_VALUE };
   }
   // See https://www.worldcubeassociation.org/regulations/#H1b
   // But allow additional two +2s per cube over the limit, just in case.
   if (
-    centiseconds >
+    timeCentiseconds >
     10 * 60 * 100 * Math.min(6, attempted) + attempted * 2 * 2 * 100
   ) {
-    return { solved: 0, attempted: 0, centiseconds: DNF_VALUE };
+    return { solved: 0, attempted: 0, timeCentiseconds: DNF_VALUE };
   }
-  return { solved, attempted, centiseconds };
+  return { solved, attempted, timeCentiseconds };
 }
 
 /**
