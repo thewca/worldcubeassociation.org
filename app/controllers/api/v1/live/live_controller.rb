@@ -164,7 +164,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     round = Round.find_by_wcif_id!(wcif_id, competition.id, includes: [:live_results])
 
-    to_advance = round.first_round? ? [] : round.participation_source.next_advancing_without(registration_id)
+    to_advance =  round.participation_source.next_advancing_without(registration_id)
 
     render json: { status: "ok", next_advancing: to_advance }
   end

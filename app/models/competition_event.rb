@@ -36,6 +36,10 @@ class CompetitionEvent < ApplicationRecord
     registrations.ids
   end
 
+  def next_advancing_without
+    []
+  end
+
   def currency_code
     competition&.currency_code
   end
