@@ -56,6 +56,6 @@ class LinkedRound < ApplicationRecord
   end
 
   def advancing_competitor_ids
-    live_results.where(advancing: true).pluck(:registration_id).uniq
+    live_results.where(advancing: true).pluck(:registration_id).distinct
   end
 end
