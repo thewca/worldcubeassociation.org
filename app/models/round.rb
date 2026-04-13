@@ -160,18 +160,12 @@ class Round < ApplicationRecord
     linked_round.present? ? linked_round.merged_live_results.filter { it.global_pos.in? 1..3 } : live_results.where(global_pos: 1..3)
   end
 
-  def previous_round
-    return nil if number == 1
-
-    if sibling_rounds.loaded?
-      sibling_rounds.find { it.number == self.number - 1 }
-    else
-      sibling_rounds.find_by(number: number - 1)
-    end
-  end
-
   def advancing_competitor_ids
     live_results.where(advancing: true).pluck(:registration_id)
+  end
+
+  def rounds
+    [self]
   end
 
   private def bulk_insert_history(live_ids_to_insert, entered_by_user, **attributes)
@@ -185,7 +179,7 @@ class Round < ApplicationRecord
     open_count = open_round!(locking_user)
     return [open_count, 0] if first_round?
 
-    rounds_to_lock = previous_round.linked_round.present? ? previous_round.linked_round.rounds : [previous_round]
+    rounds_to_lock = participation_source.rounds
 
     [open_count, rounds_to_lock.sum { it.lock_results(locking_user) }]
   end
@@ -336,10 +330,6 @@ class Round < ApplicationRecord
     end
   end
 
-  def score_taking_done_across_rounds?
-    score_taking_done? && colinked_rounds.all?(&:score_taking_done?)
-  end
-
   def score_taking_done?
     open? && competitors_live_results_entered == total_competitors
   end
@@ -463,7 +453,7 @@ class Round < ApplicationRecord
   def lifecycle_state
     return STATE_LOCKED if locked?
     return STATE_OPEN if open?
-    return STATE_READY if first_round? || previous_round.score_taking_done_across_rounds?
+    return STATE_READY if first_round? || participation_source.score_taking_done?
 
     STATE_PENDING
   end
@@ -532,16 +522,13 @@ class Round < ApplicationRecord
 
       return 1 if first_round?
 
-      1 + Live::DiffHelper.broadcast_changes(previous_round) do
-        to_advance&.update!(advancing: true)
-        quit_from_previous_round(registration_id, quitting_user)
+      participation_source.rounds.count do |round|
+        1 + Live::DiffHelper.broadcast_changes(round) do
+          round.live_results.where(id: to_advance&.id).update!(advancing: true)
+          round.live_results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
+        end
       end
     end
-  end
-
-  def quit_from_previous_round(registration_id, quitting_user)
-    results = previous_round.relevant_results
-    results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
   end
 
   def wcif_id

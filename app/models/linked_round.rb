@@ -26,6 +26,10 @@ class LinkedRound < ApplicationRecord
     rounds.map(&:wcif_id)
   end
 
+  def score_taking_done?
+    rounds.all?(&:score_taking_done?)
+  end
+
   delegate :final_round?, to: :last_round_in_link
 
   def self.combine_results(round_results)
