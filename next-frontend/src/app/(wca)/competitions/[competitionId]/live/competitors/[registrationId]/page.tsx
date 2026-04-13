@@ -34,18 +34,21 @@ export default async function PersonResults({
   return (
     <Container>
       <Heading textStyle="h1">{name}</Heading>
-      {_.map(resultsByEvent, (eventResults, key) => (
-        <Fragment key={key}>
-          <Heading textStyle="h2">{events.byId[key].name}</Heading>
-          <ByPersonByRoundTable
-            eventResults={eventResults}
-            competitionId={competitionId}
-            rounds={rounds.filter(
-              (r) => parseActivityCode(r.id).eventId == key,
-            )}
-          />
-        </Fragment>
-      ))}
+      {_.map(resultsByEvent, (eventResults, key) => {
+        const eventRounds = rounds.filter(
+          (r) => parseActivityCode(r.id).eventId == key,
+        );
+        return (
+          <Fragment key={key}>
+            <Heading textStyle="h2">{events.byId[key].name}</Heading>
+            <ByPersonByRoundTable
+              eventResults={eventResults}
+              competitionId={competitionId}
+              rounds={eventRounds}
+            />
+          </Fragment>
+        );
+      })}
     </Container>
   );
 }
