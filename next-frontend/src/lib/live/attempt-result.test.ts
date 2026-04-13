@@ -8,7 +8,6 @@ import {
   autocompleteFmAttemptResult,
 } from "./attempt-result";
 import { DNF_VALUE, DNS_VALUE } from "@/lib/wca/wcif/attempts";
-import { getT } from "@/lib/i18n/get18n";
 import i18next from "@/lib/i18n/i18n";
 import { defaultNamespace } from "@/lib/i18n/settings";
 
