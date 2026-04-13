@@ -36,4 +36,8 @@ class LinkedRound < ApplicationRecord
       #   and then pick out the first (ie fastest) per competitor.
       .uniq(&:registration_id)
   end
+
+  def advancing_competitor_ids
+    live_results.where(advancing: true).pluck(:registration_id).uniq
+  end
 end

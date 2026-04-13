@@ -32,6 +32,10 @@ class CompetitionEvent < ApplicationRecord
     errors.add(:rounds, "#{numbers} is wrong") if numbers != (1..remaining_rounds.length).to_a
   end
 
+  def advancing_competitor_ids
+    registrations.ids
+  end
+
   def currency_code
     competition&.currency_code
   end
