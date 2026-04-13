@@ -37,8 +37,7 @@ export const orderResults = (results: LiveResult[], format: Format) => {
   return sortedResults.reduce<(LiveResult & { global_pos: number })[]>(
     (acc, result, index) => {
       if (index === 0) {
-        acc.push({ ...result, global_pos: 1 });
-        return acc;
+        return [...acc, { ...result, global_pos: 1 }];
       }
 
       const prev = acc[index - 1];
@@ -47,8 +46,10 @@ export const orderResults = (results: LiveResult[], format: Format) => {
         result[rankBy] === prev[rankBy] &&
         (!secondaryRankBy || result[secondaryRankBy] === prev[secondaryRankBy]);
 
-      acc.push({ ...result, global_pos: isTied ? prev.global_pos : index + 1 });
-      return acc;
+      return [
+        ...acc,
+        { ...result, global_pos: isTied ? prev.global_pos : index + 1 },
+      ];
     },
     [],
   );
