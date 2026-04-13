@@ -80,7 +80,7 @@ module AdvancementConditions
                             end
 
       # Filter out potential results
-      advancing_with_ties.select(&:complete?)
+      advancing_with_ties.filter(&:complete?)
     end
   end
 end
