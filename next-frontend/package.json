@@ -41,7 +41,7 @@
     "culori": "^4.0.2",
     "dompurify": "^3.3.3",
     "graphql": "^16.13.2",
-    "i18next": "^26.0.3",
+    "i18next": "^26.0.4",
     "i18next-browser-languagedetector": "^8.2.1",
     "i18next-resources-to-backend": "^1.2.1",
     "js-cookie": "^3.0.5",
