@@ -75,6 +75,7 @@ export default function LiveResultsTable({
           isLinked={showLinkedRoundsView}
           showFull={showFull}
           t={t}
+          isAdmin={isAdmin}
         />
         <Table.Body>
           {competitorsWithOrderedResults.map((competitorAndTheirResults) => {
