@@ -433,7 +433,7 @@ class Round < ApplicationRecord
   def lifecycle_state
     return STATE_LOCKED if locked?
     return STATE_OPEN if open?
-    return STATE_READY if first_round? || participation_source.score_taking_done?
+    return STATE_READY if participation_source.score_taking_done?
 
     STATE_PENDING
   end

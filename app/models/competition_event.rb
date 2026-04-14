@@ -40,6 +40,10 @@ class CompetitionEvent < ApplicationRecord
     []
   end
 
+  def score_taking_done?
+    true
+  end
+
   def currency_code
     competition&.currency_code
   end
