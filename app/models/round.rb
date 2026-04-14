@@ -157,7 +157,7 @@ class Round < ApplicationRecord
   end
 
   def live_podium
-    linked_round.present? ? linked_round.merged_live_results.filter { it.global_pos.in? 1..3 } : live_results.where(global_pos: 1..3)
+    linked_round.present? ? linked_round.merged_live_results.filter { it.global_pos.in?(1..3) && it.advancing } : live_results.where(global_pos: 1..3, advancing: true)
   end
 
   def previous_round
@@ -234,33 +234,32 @@ class Round < ApplicationRecord
     recompute_local_pos
     recompute_global_pos
     recompute_advancing unless skip_advancing
+
     # We need to reset because live results are changed directly on SQL level for more optimized queries
     live_results.reset
+    linked_round&.live_results&.reset
   end
 
   def recompute_advancing
-    advancement_determining_results = relevant_results.where.not(global_pos: nil).where(locked_by_id: nil)
-
-    loaded_results = advancement_determining_results.includes(:live_attempts).to_a
-    missing_attempts = total_competitors - loaded_results.count
-
-    potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
-
-    # Determine which results would advance if everyone achieved their best possible attempt.
-    results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
+    results_per_person = linked_round.present? ? linked_round.merged_live_results : live_results
+    results_with_potential = results_per_person.select { it.locked_by_id.nil? }.sort_by(&:potential_solve_time)
 
     advancement_determining_condition = final_round? || linked_round&.final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
 
-    advancing_ids = advancement_determining_condition.apply(results_with_potential)
+    advancing_ids = advancement_determining_condition.apply(results_with_potential).pluck(:registration_id)
     max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
 
-    # We can't update advancing yet if the other linked rounds still have empty results
-    if !colinked_results.exists?(best: 0) && advancing_ids.any?
-      advancement_determining_results.update_all(
-        ["advancing = (id IN (?)), advancing_questionable = (global_pos <= ?)", advancing_ids, max_advancing],
+    # For linked Rounds wa want to update the results of both rounds so it doesn't matter if you query one or the other round
+    results_to_update = relevant_results.where.not(global_pos: nil).where(locked_by_id: nil)
+
+    # We can't update advancing yet if the other linked rounds aren't done yet
+    colinked_done = colinked_rounds.all?(&:score_taking_done?)
+    if colinked_done && advancing_ids.any?
+      results_to_update.update_all(
+        ["advancing = (registration_id IN (?)), advancing_questionable = (global_pos <= ?)", advancing_ids, max_advancing],
       )
     else
-      advancement_determining_results.update_all(
+      results_to_update.update_all(
         ["advancing = FALSE, advancing_questionable = (global_pos <= ?)", max_advancing],
       )
     end
@@ -282,7 +281,7 @@ class Round < ApplicationRecord
     query = <<~SQL.squish
       UPDATE live_results r
       LEFT JOIN
-        (SELECT id,
+        (SELECT registration_id,
                 RANK() OVER (ORDER BY person_best.#{rank_by} <= 0,
                              person_best.#{rank_by} ASC #{", person_best.#{secondary_rank_by} <= 0, person_best.#{secondary_rank_by} ASC" if secondary_rank_by}) AS ranking
          FROM
@@ -295,7 +294,7 @@ class Round < ApplicationRecord
                FROM live_results lr
                WHERE lr.round_id IN (#{round_ids})
                  AND lr.best != 0) x
-            WHERE rownum = 1) AS person_best) ranked ON r.id = ranked.id
+            WHERE rownum = 1) AS person_best) ranked ON r.registration_id = ranked.registration_id
       SET r.global_pos = ranked.ranking
       WHERE r.round_id IN (#{round_ids});
     SQL
@@ -528,7 +527,7 @@ class Round < ApplicationRecord
     worst_results = Array.new(ignored_ids.length) { LiveResult.build(round: self, best: LiveResult::WORST_POSSIBLE_SCORE, average: LiveResult::WORST_POSSIBLE_SCORE) }
     results_with_worst = (loaded_results + worst_results).sort_by(&:values_for_sorting)
 
-    hypothetically_advancing_ids = advancement_condition.apply(results_with_worst)
+    hypothetically_advancing_ids = advancement_condition.apply(results_with_worst).pluck(:id)
 
     relevant_results.where(id: hypothetically_advancing_ids & candidate_ids)
   end

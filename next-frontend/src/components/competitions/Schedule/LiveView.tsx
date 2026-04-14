@@ -167,7 +167,7 @@ export default function LiveView({
                                     "/competitions/[competitionId]/live/rounds/[roundId]",
                                   query: {
                                     competitionId,
-                                    roundId: activity.activityCode,
+                                    roundId,
                                   },
                                 })}
                               >

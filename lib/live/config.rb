@@ -2,12 +2,8 @@
 
 module Live
   module Config
-    def self.enabled?
-      true
-    end
-
     def self.sqs_queued?
-      Rails.env.production? && self.enabled?
+      Rails.env.production?
     end
 
     def self.broadcast_key(competition_id, round_id)
