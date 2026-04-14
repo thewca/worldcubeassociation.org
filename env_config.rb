@@ -67,6 +67,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
 
     # Local-specific stuff
     optional :DISABLE_BULLET, :bool, false
+    optional :ENABLE_QUERY_TRACES, :bool, false
     optional :MAILCATCHER_SMTP_HOST, :string, ''
     optional :ASSET_HOST, :string, ''
     optional :RUNNING_IN_DOCKER, :bool, false

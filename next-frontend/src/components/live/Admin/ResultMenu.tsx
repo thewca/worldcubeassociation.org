@@ -17,6 +17,7 @@ import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import useAPI from "@/lib/wca/useAPI";
 import Loading from "@/components/ui/loading";
 import { useT } from "@/lib/i18n/useI18n";
+import { useConfirm } from "@/providers/ConfirmProvider";
 
 export default function ResultMenu({
   result,
@@ -31,6 +32,8 @@ export default function ResultMenu({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isQuitting, setIsQuitting] = useState(false);
+  const confirm = useConfirm();
+  const { t } = useT();
 
   const { handleRegistrationIdChange, clearCompetitorsResults, isPending } =
     useResultsAdmin();
@@ -40,7 +43,9 @@ export default function ResultMenu({
     setIsOpen(false);
   }
   function handleClearClick() {
-    clearCompetitorsResults(competitor.id);
+    confirm({ confirmButton: t("competitions.live.admin.clear") }).then(() =>
+      clearCompetitorsResults(competitor.id),
+    );
     setIsOpen(false);
   }
   function setMenuClose() {
@@ -147,22 +152,18 @@ function QuitModal({
 
   const { quitCompetitor, isPending } = useResultsAdmin();
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   if (!toAdvance) {
     return <Text>{t("competitions.live.admin.quit.failed_to_fetch")}</Text>;
   }
 
   const onQuitClick = () => {
-    quitCompetitor(
-      competitor.id,
-      advanceNext,
-      toAdvance.map((r) => r.id),
-    );
+    quitCompetitor(competitor.id, advanceNext, toAdvance);
     setMenuClose();
   };
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <Dialog.Root open onOpenChange={() => setMenuClose()}>

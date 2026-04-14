@@ -4,6 +4,7 @@ import AttemptsForm from "@/components/live/AttemptsForm";
 import formats from "@/lib/wca/data/formats";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
 import { LiveRoundAdminBase } from "@/types/live";
 import ConfirmProvider from "@/providers/ConfirmProvider";
 import { toaster } from "@/components/ui/toaster";
@@ -36,27 +37,29 @@ export default function AddResults({
   }, [isLocked, t]);
 
   return (
-    <SimpleGrid columns={16} gap={6}>
-      <GridItem colSpan={4}>
-        <ConfirmProvider>
-          <AttemptsForm
-            header="Add Result"
-            eventId={eventId}
-            solveCount={format.expected_solve_count}
-          />
-        </ConfirmProvider>
-      </GridItem>
+    <LiveResultAdminProvider round={round} competitionId={competitionId}>
+      <ConfirmProvider>
+        <SimpleGrid columns={16} gap={6}>
+          <GridItem colSpan={4}>
+            <AttemptsForm
+              header="Add Result"
+              eventId={eventId}
+              solveCount={format.expected_solve_count}
+            />
+          </GridItem>
 
-      <GridItem colSpan={12}>
-        <LiveUpdatingResultsTable
-          roundWcifId={round.id}
-          formatId={round.format}
-          competitionId={competitionId}
-          isAdminView
-          canManage
-          title={roundName}
-        />
-      </GridItem>
-    </SimpleGrid>
+          <GridItem colSpan={12}>
+            <LiveUpdatingResultsTable
+              roundWcifId={round.id}
+              formatId={round.format}
+              competitionId={competitionId}
+              isAdminView
+              canManage
+              title={roundName}
+            />
+          </GridItem>
+        </SimpleGrid>
+      </ConfirmProvider>
+    </LiveResultAdminProvider>
   );
 }

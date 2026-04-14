@@ -12,7 +12,7 @@ import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { applyCutoff, applyTimeLimit } from "@/lib/live/attempt-result";
-import { LiveRoundAdminBase } from "@/types/live";
+import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
 
 interface AdminResultsContextValue {
   registrationId: number | undefined;
@@ -25,7 +25,7 @@ interface AdminResultsContextValue {
   quitCompetitor: (
     registrationId: number,
     advanceNext: boolean,
-    toAdvance: number[],
+    toAdvance: LiveCompetitor[],
   ) => void;
   addCompetitorToRound: (registrationId: number) => Promise<void>;
 }
@@ -221,25 +221,28 @@ export function LiveResultAdminProvider({
     });
   };
 
-  const clearCompetitorsResults = (registrationId: number) => {
+  const clearCompetitorsResults = (toClearId: number) => {
     mutateClear({
       params: {
-        path: { competitionId, roundId, registrationId },
+        path: { competitionId, roundId, registrationId: toClearId },
       },
     });
+    if (registrationId === toClearId) {
+      setAttempts(zeroedArrayOfSize(solveCount));
+    }
   };
 
   const quitCompetitor = (
     registrationId: number,
     advanceNext: boolean,
-    toAdvance: number[],
+    toAdvance: LiveCompetitor[],
   ) => {
     mutateQuit({
       params: {
         path: { competitionId, roundId, registrationId },
       },
       body: {
-        advancing_ids: advanceNext ? toAdvance : [],
+        advancing_ids: advanceNext ? toAdvance.map((r) => r.id) : [],
       },
     });
   };

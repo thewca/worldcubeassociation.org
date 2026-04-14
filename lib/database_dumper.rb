@@ -297,6 +297,9 @@ module DatabaseDumper
           time_limit
           cutoff
           advancement_condition
+          participation_condition
+          participation_source_id
+          participation_source_type
           scramble_set_count
           created_at
           updated_at
@@ -383,6 +386,8 @@ module DatabaseDumper
           event_id
           fee_lowest_denomination
           qualification
+          qualification_latest_date
+          qualification_condition
         ],
       ),
     }.freeze,

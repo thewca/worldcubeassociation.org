@@ -213,10 +213,19 @@ fr-CA:
     #original_hash: 7a23d81
     attempt_name: 'Essai %{number}'
   round:
+    #original_hash: cd9e8f3
+    title: Tour
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
     #original_hash: 8b343da
     round_number: 'Tour %{round_number}'
+  scramble_set:
+    #original_hash: 72137a6
+    name: 'Ensemble de mélanges %{letter_code}'
+    #original_hash: a4c5c51
+    group: 'Groupe %{number}'
+    #original_hash: b9410b3
+    attempt: 'Tentative %{number}'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -1535,12 +1544,12 @@ fr-CA:
         weat: >-
           L'équipe des assistants exécutifs de la WCA (WEAT) s'occupe des tâches
           administratives du Conseil d'administration de la WCA.
-        #original_hash: 2688392
+        #original_hash: b900e5b
         wfc: >-
           Le Comité Financier de la WCA (WFC) gère l'ensemble des finances de la
           WCA, y compris la budgétisation, les rapports, l'analyse, la
           comptabilité et les déclarations d'impôts. Il gère également la plus
-          grande source de revenus de la WCA, le système de cotisations de la
+          grande source de revenus de la WCA, le système de redevances de la
           WCA, ainsi que divers programmes de financement qui apportent un
           soutien aux communautés locales à différents stades de développement,
           y compris le financement des voyages, le financement de l'équipement
@@ -2926,6 +2935,60 @@ fr-CA:
         title: Podiums
         #original_hash: d27b628
         undetermined: Podiums à déterminer
+      admin:
+        #original_hash: 42c0774
+        open: Ouvrir
+        #original_hash: fe23de7
+        clear: Effacer
+        #original_hash: 7fd4807
+        competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} saisis'
+        #original_hash: eacca7b
+        round_locked: Verrouillé
+        warnings:
+          #original_hash: 229c10e
+          omitted: >-
+            Vous avez omis la tentative %{attempt_number}. Vérifiez que c'est
+            bien intentionnel.
+          #original_hash: c704724
+          DNS: >-
+            Il y a au moins un DNS suivi d'un résultat valide. Assurez-vous
+            qu'il s'agit bien d'un DNS et non d'un DNF.
+          #original_hash: 654b0dc
+          impossible: >-
+            Le résultat que vous essayez de soumettre semble impossible : la
+            %{attempt_number}e tentative a été effectuée en moins de 30 secondes
+            par cube. Si vous souhaitez saisir un temps en minutes, n'oubliez
+            pas d'ajouter deux zéros à la fin du score pour indiquer les
+            centièmes de secondes.
+          #original_hash: 5174440
+          inconsistent: >-
+            Les résultats que vous essayez de soumettre semblent incohérents. Il
+            y a un écart important entre le meilleur (%{best_single}) et le pire
+            résultat (%{worst_single}). Veuillez vérifier qu'ils sont exacts.
+        quit:
+          #original_hash: 02aed52
+          title: Retirer compétiteur
+          #original_hash: ab59a03
+          next_to_advance:
+            zero: Il n'y a pas de prochain compétiteur pouvant se qualifier
+            one: 'Le prochain compétiteur à se qualifier est %{competitors}'
+            other: 'Les prochains compétiteurs à se qualifier sont %{competitors}'
+          #original_hash: b3b27d2
+          advance: Qualifier le prochain compétiteur
+          #original_hash: 72d311b
+          quit_confirm: Retirer un compétiteur du tour
+          #original_hash: a4546af
+          no_next: Aucun autre compétiteur ne se qualifie
+          #original_hash: 49ba329
+          cancel: Annuler
+          #original_hash: 662e4d6
+          failed_to_fetch: Impossible de récupérer le compétiteur qualifié suivant
+      results:
+        #original_hash: 29c8c1b
+        competitor: Compétiteur
+      errors:
+        #original_hash: fc0c45f
+        round_closed: Le tour n'est pas encore ouvert
     my_competitions:
       #original_hash: 592341e
       title: Mes compétitions
@@ -3413,17 +3476,19 @@ fr-CA:
         #original_hash: d4ec755
         generic: 'Championnat : %{type}'
       dues_estimate:
-        #original_hash: 0391d75
+        #original_hash: f439ef9
         calculated: >-
-          Le montant estimé des dues WCA pour %{limit} compétiteurs est de
+          Le montant estimé des redevances WCA pour %{limit} compétiteurs est de
           %{estimate}
-        #original_hash: 0f956b9
-        per_competitor: 'Le montant estimé des dues WCA par compétiteur est de %{estimate}'
-        #original_hash: 39ea39a
+        #original_hash: 1dcb2e6
+        per_competitor: >-
+          Le montant estimé des redevances WCA par compétiteur est de
+          %{estimate}
+        #original_hash: 1598e47
         ajax_error: >-
-          Une erreur liée à l'estimation des dues a eu lieue, potentiellement
-          due à l'indisponibilité d'un taux de change pour la devise
-          sélectionnée.
+          Une erreur liée à l'estimation des redevances a eu lieue,
+          potentiellement due à l'indisponibilité d'un taux de change pour la
+          devise sélectionnée.
       labels:
         admin:
           #original_hash: ceab5d0
@@ -3492,6 +3557,8 @@ fr-CA:
           organizer_ids: Organisateur·s
           #original_hash: b37456c
           contact: Contact
+          #original_hash: 5576702
+          lead_delegate_id: Délégué principal
         #original_hash: 5f1ded1
         championships: Championnats
         website:
@@ -3729,6 +3796,10 @@ fr-CA:
             champ, les demandes de contact seront envoyées à travers un
             formulaire ne révélant pas les adresses courriel des organisateurs.
             %{md}. Exemple : [Texte à afficher](mailto:un@courriel.com)
+          #original_hash: 9b7113c
+          lead_delegate_id: >-
+            Le délégué principal est chargé des aspects administratifs d'une
+            compétition (résultats, rapport, facturation des redevances WCA)
         website:
           #original_hash: da39a3e
           generate_website: ''
@@ -3750,8 +3821,8 @@ fr-CA:
         entry_fees:
           #original_hash: 83dc650
           currency_code: La devise utilisée pour les différents frais.
-          #original_hash: b1735da
-          base_entry_fee: "Les frais d’inscription de base pour la compétition. Ils seront affichés sur la page d’information de la compétition et sur la page d’inscription, le cas échéant. Si cette valeur est définie à 0, une phrase sera affichée indiquant que les inscriptions seront acceptées gratuitement.<br><br><b>REMARQUE\_: L’estimation suivante des dues WCA est uniquement une approximation basée sur les taux de change actuels et n’est en aucun cas contractuelle dans le cadre du paiement ultérieur des dues. </b>"
+          #original_hash: 11e48b2
+          base_entry_fee: "Les frais d’inscription de base pour la compétition. Ils seront affichés sur la page d’information de la compétition et sur la page d’inscription, le cas échéant. Si cette valeur est définie à 0, une phrase sera affichée indiquant que les inscriptions seront acceptées gratuitement.<br><br><b>REMARQUE\_: L’estimation suivante des redevances WCA est uniquement une approximation basée sur les taux de change actuels et n’est en aucun cas contractuelle dans le cadre du paiement ultérieur des redevances. </b>"
           #original_hash: aa1481b
           on_the_spot_entry_fee: >-
             Si mis à 0, une phrase indiquera que les inscriptions sur place
@@ -6084,8 +6155,8 @@ fr-CA:
     paragraph4:
       #original_hash: 7c650f2
       title: Politique de proximité
-      #original_hash: e0cf0e0
-      content1: "Les compétitions WCA seront acceptées si elles sont à au moins 10 km ou à 5 jours de toute autre compétition. Le WCAT pourra examiner les conditions de tenue pour une compétition proposée à moins de 10 km ou 5 jours d'une autre compétition. Un délégué qui demande l’approbation d’une telle compétitions doit fournir des renseignements supplémentaires sur les raisons pour lesquelles la compétition devrait être acceptée. Parmi les arguments possibles en faveur de l’acceptation d’une telle compétition, citons\_:"
+      #original_hash: ee71482
+      content1: "Les compétitions WCA seront acceptées si elles sont à au moins 30 km ou à 5 jours de toute autre compétition. Le WCAT pourra examiner les conditions de tenue pour une compétition proposée à moins de 30 km ou 5 jours d'une autre compétition. Un délégué qui demande l’approbation d’une telle compétitions doit fournir des renseignements supplémentaires sur les raisons pour lesquelles la compétition devrait être acceptée. Parmi les arguments possibles en faveur de l’acceptation d’une telle compétition, citons\_:"
       olist1:
         #original_hash: cfb1eec
         '1': Les deux compétitions n'ont pas d'épreuves en commun.
@@ -6557,6 +6628,12 @@ fr-CA:
         que des chiffres, des guillemets ou d'autres symboles). Les noms ne
         doivent contenir que des lettres, des espaces, des tirets, des
         apostrophes, des points et des parenthèses normales.
+      #original_hash: 7fcd31a
+      suspicious_last_name_warning: >-
+        « %{name} » a pour nom de famille « %{suffix} », qui n'est peut-être pas
+        un véritable nom de famille (par exemple, un suffixe générationnel écrit
+        en toutes lettres). Veuillez vérifier qu'il s'agit bien de son nom de
+        famille légal, ou le remplacer/le supprimer en conséquence.
       #original_hash: 774854c
       successive_uppercase_name_warning: >-
         Le nom de '%{name}' comporte plusieurs lettres majuscules successives.
@@ -6771,12 +6848,12 @@ fr-CA:
         groupe de FMC a été utilisé, veuillez utiliser Scrambles Matcher pour
         décocher les mélanges inutilisés. Sinon, veuillez inclure un commentaire
         au WRT expliquant pourquoi plusieurs groupes de FMC ont été utilisés.
-      #original_hash: 565b155
+      #original_hash: 708c831
       wrong_number_of_scramble_sets_error: >-
-        [%{round_id}] Ce tour a un nombre de mélanges différent de celui indiqué
-        dans l'onglet Gérer les événements. Veuillez ajuster le nombre de sets
-        de mélanges dans l'onglet Gérer les événements en fonction du nombre de
-        sets utilisés.
+        [%{round_id}] Ce tour a un nombre d'ensembles de mélanges différent de
+        celui indiqué dans l'onglet Gérer les événements. Veuillez ajuster le
+        nombre d'ensembles de mélanges dans l'onglet Gérer les événements en
+        fonction du nombre ayant étés utilisés.
   tickets:
     type:
       #original_hash: 170f350
