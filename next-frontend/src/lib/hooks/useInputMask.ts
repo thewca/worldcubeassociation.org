@@ -98,7 +98,7 @@ export default function useInputMask<T, M extends string = string>({
   parse,
   format,
   applyMask,
-  cleanup = undefined,
+  cleanup = (t) => t,
   shortcuts = [],
 }: InputMaskOptions<T, M>): InputMaskReturn {
   const [dataValue, setDataValue] = useControllableState({
@@ -136,7 +136,7 @@ export default function useInputMask<T, M extends string = string>({
     setIsValid(isDraftValid);
 
     if (isDraftValid) {
-      const cleanedValue = cleanup?.(parsed) ?? parsed;
+      const cleanedValue = cleanup(parsed);
       setDataValue(cleanedValue);
     } else {
       const defaultDraft = format(defaultValue);
