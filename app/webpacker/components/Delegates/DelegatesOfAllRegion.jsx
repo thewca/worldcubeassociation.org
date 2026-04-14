@@ -19,13 +19,14 @@ const otherDelegatesHeaders = [
   { label: 'Last Delegated', key: 'metadata.last_delegated' },
   { label: 'Total Delegated', key: 'metadata.total_delegated' },
   { label: 'Date Since Last Delegated', key: 'date_since_last_delegated' },
+  { label: 'Lead Delegated Competitions', key: 'metadata.lead_delegated_competitions' },
 ];
 
 export default function DelegatesOfAllRegion() {
   const {
-    data: leadDelegates,
-    loading: leadDelegatesLoading,
-    error: leadDelegatesError,
+    data: seniorAndRegionalDelegates,
+    loading: seniorAndRegionalDelegatesLoading,
+    error: seniorAndRegionalDelegatesError,
   } = useLoadedData(apiV0Urls.userRoles.list({
     groupType: groupTypes.delegate_regions,
     isActive: true,
@@ -51,16 +52,16 @@ export default function DelegatesOfAllRegion() {
     date_since_last_delegated: dateSince(delegate.metadata.last_delegated),
   })), [otherDelegates]);
 
-  if (leadDelegatesLoading || otherDelegatesLoading) return <Loading />;
-  if (leadDelegatesError || otherDelegatesError) return <Errored />;
+  if (seniorAndRegionalDelegatesLoading || otherDelegatesLoading) return <Loading />;
+  if (seniorAndRegionalDelegatesError || otherDelegatesError) return <Errored />;
 
   return (
     <>
-      <Header as="h3">Lead Delegates</Header>
+      <Header as="h3">Senior & Regional Delegates</Header>
       <DelegatesTable
-        delegates={leadDelegates}
+        delegates={seniorAndRegionalDelegates}
         isAdminMode
-        isAllLeadDelegates
+        isAllSeniorOrRegionalDelegates
       />
       <Header as="h3">
         Other Delegates
@@ -75,7 +76,7 @@ export default function DelegatesOfAllRegion() {
       <DelegatesTable
         delegates={otherDelegatesWithExtraData}
         isAdminMode
-        isAllNonLeadDelegates
+        isAllSeniorOrRegionalDelegates
       />
     </>
   );

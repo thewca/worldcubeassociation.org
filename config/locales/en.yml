@@ -2597,6 +2597,7 @@ en:
       first_delegated: "First Delegated"
       last_delegated: "Last Delegated"
       total_delegated: "Total Delegated"
+      lead_delegated_competitions: "Lead Delegated Competitions"
       history: "History"
   regional_organizations:
     title: "Regional Organizations"

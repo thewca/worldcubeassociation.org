@@ -775,6 +775,7 @@ class User < ApplicationRecord
         pages: [
           panel_pages[:bannedCompetitors],
           panel_pages[:delegateProbations],
+          panel_pages[:helpfulQueries],
         ],
       },
       wqac: {

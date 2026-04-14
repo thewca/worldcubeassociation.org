@@ -9,7 +9,7 @@ import UserBadge from '../UserBadge';
 const dasherize = (string) => _.kebabCase(string);
 
 export default function DelegatesTable({
-  delegates, isAdminMode, isAllLeadDelegates, isAllNonLeadDelegates,
+  delegates, isAdminMode, isAllSeniorOrRegionalDelegates, isAllNonLeadDelegates,
 }) {
   const tableData = useMemo(() => delegates.filter(
     (delegate) => delegate.metadata.status !== 'trainee_delegate' || isAdminMode,
@@ -27,7 +27,7 @@ export default function DelegatesTable({
             <Table.HeaderCell>
               {I18n.t('delegates_page.table.role')}
             </Table.HeaderCell>
-            {!isAllLeadDelegates && (
+            {!isAllSeniorOrRegionalDelegates && (
               <Table.HeaderCell>
                 {I18n.t('delegates_page.table.region')}
               </Table.HeaderCell>
@@ -46,6 +46,9 @@ export default function DelegatesTable({
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   {I18n.t('delegates_page.table.total_delegated')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {I18n.t('delegates_page.table.lead_delegated_competitions')}
                 </Table.HeaderCell>
                 <Table.HeaderCell />
               </>
@@ -78,13 +81,16 @@ export default function DelegatesTable({
               <Table.Cell>
                 {I18n.t(`enums.user_roles.status.delegate_regions.${delegate.metadata.status}`)}
               </Table.Cell>
-              {!isAllLeadDelegates && (<Table.Cell>{delegate.metadata.location}</Table.Cell>)}
+              {!isAllSeniorOrRegionalDelegates && (
+                <Table.Cell>{delegate.metadata.location}</Table.Cell>
+              )}
               {isAllNonLeadDelegates && (
                 <>
                   <Table.Cell>{delegate.metadata.first_delegated}</Table.Cell>
                   <Table.Cell>{delegate.metadata.last_delegated}</Table.Cell>
                   <Table.Cell>{delegate.date_since_last_delegated}</Table.Cell>
                   <Table.Cell>{delegate.metadata.total_delegated}</Table.Cell>
+                  <Table.Cell>{delegate.metadata.lead_delegated_competitions}</Table.Cell>
                   <Table.Cell href={competitionsUrl({
                     display: 'admin',
                     years: 'all',
