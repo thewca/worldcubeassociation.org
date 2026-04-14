@@ -61,7 +61,7 @@ export default function DelegatesOfAllRegion() {
       <DelegatesTable
         delegates={seniorAndRegionalDelegates}
         isAdminMode
-        isAllSeniorOrRegionalDelegates
+        isAllSeniorAndRegionalDelegates
       />
       <Header as="h3">
         Other Delegates
@@ -76,7 +76,7 @@ export default function DelegatesOfAllRegion() {
       <DelegatesTable
         delegates={otherDelegatesWithExtraData}
         isAdminMode
-        isAllSeniorOrRegionalDelegates
+        isAllSeniorAndRegionalDelegates
       />
     </>
   );

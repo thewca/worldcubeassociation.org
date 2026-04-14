@@ -9,7 +9,7 @@ import UserBadge from '../UserBadge';
 const dasherize = (string) => _.kebabCase(string);
 
 export default function DelegatesTable({
-  delegates, isAdminMode, isAllSeniorOrRegionalDelegates, isAllNonLeadDelegates,
+  delegates, isAdminMode, isAllSeniorAndRegionalDelegates, isAllNonLeadDelegates,
 }) {
   const tableData = useMemo(() => delegates.filter(
     (delegate) => delegate.metadata.status !== 'trainee_delegate' || isAdminMode,
@@ -27,7 +27,7 @@ export default function DelegatesTable({
             <Table.HeaderCell>
               {I18n.t('delegates_page.table.role')}
             </Table.HeaderCell>
-            {!isAllSeniorOrRegionalDelegates && (
+            {!isAllSeniorAndRegionalDelegates && (
               <Table.HeaderCell>
                 {I18n.t('delegates_page.table.region')}
               </Table.HeaderCell>
@@ -81,7 +81,7 @@ export default function DelegatesTable({
               <Table.Cell>
                 {I18n.t(`enums.user_roles.status.delegate_regions.${delegate.metadata.status}`)}
               </Table.Cell>
-              {!isAllSeniorOrRegionalDelegates && (
+              {!isAllSeniorAndRegionalDelegates && (
                 <Table.Cell>{delegate.metadata.location}</Table.Cell>
               )}
               {isAllNonLeadDelegates && (
