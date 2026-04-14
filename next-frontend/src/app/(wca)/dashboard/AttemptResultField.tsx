@@ -112,11 +112,12 @@ export function TimeField({
 }: AttemptResultProps) {
   const { isValid, binding } = useInputMask({
     value,
-    onChange: (value) => onChange(autocompleteTimeAttemptResult(value)),
+    onChange,
     defaultValue: SKIPPED_VALUE,
     parse: inputToAttemptResult,
     format: attemptResultToInput,
     applyMask: reformatTimeInput,
+    cleanup: autocompleteTimeAttemptResult,
     shortcuts: resultShortcuts,
   });
 
@@ -138,8 +139,11 @@ export function FmMovesField({
   const isAverage = resultType === "average";
 
   const maskedValue = isAverage ? value / 100 : value;
+
   const onMaskedChange = (value: number) =>
-    onChange(isAverage ? value * 100 : autocompleteFmAttemptResult(value));
+    onChange(isAverage ? value * 100 : value);
+  const maskedCleanup = (value: number) =>
+    isAverage ? value : autocompleteFmAttemptResult(value);
 
   const { isValid, binding } = useInputMask({
     value: maskedValue,
@@ -148,6 +152,7 @@ export function FmMovesField({
     parse: inputToNumber,
     format: numberToInput,
     applyMask: reformatNumberInput,
+    cleanup: maskedCleanup,
     shortcuts: resultShortcuts,
   });
 
@@ -189,6 +194,7 @@ export function MbldField({
       ...draft,
       ...payload,
     };
+
     const updatedDecodedValue = autocompleteMbldDecodedValue(patchedResult);
 
     setDraft(updatedDecodedValue);
