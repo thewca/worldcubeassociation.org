@@ -915,6 +915,7 @@ module DatabaseDumper
           first_delegated
           last_delegated
           total_delegated
+          lead_delegated_competitions
           created_at
           updated_at
         ],
