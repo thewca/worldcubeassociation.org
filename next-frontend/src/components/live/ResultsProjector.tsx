@@ -9,14 +9,20 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FaPause, FaPlay, FaTimes } from "react-icons/fa";
-import { components } from "@/types/openapi";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import _ from "lodash";
 import Flag from "react-world-flags";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { recordTagBadge } from "@/components/results/TableCells";
 import formats from "@/lib/wca/data/formats";
-import { orderResults } from "@/lib/live/orderResults";
+import { LiveCompetitor } from "@/types/live";
+import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
+import {
+  CompetitorWithResults,
+  mergeAndOrderResults,
+} from "@/lib/live/mergeAndOrderResults";
+import { LiveTableHeader } from "@/components/live/Cells";
+import { useT } from "@/lib/i18n/useI18n";
 
 const padSkipped = (attempts: number[], expectedNumberOfAttempts: number) => {
   return [
@@ -62,8 +68,8 @@ const DURATION = {
 } as const;
 
 interface ResultsProjectorProps {
-  results: components["schemas"]["LiveResult"][];
-  competitors: components["schemas"]["LiveCompetitor"][];
+  results: LiveResultsByRegistrationId;
+  competitors: Map<number, LiveCompetitor>;
   formatId: string;
   eventId: string;
   title: string;
@@ -88,15 +94,17 @@ function ResultsProjector({
   const [status, setStatus] = useState<StatusType>(STATUS.SHOWING);
   const [topResultIndex, setTopResultIndex] = useState<number>(0);
 
+  const { t } = useT();
+
   const format = formats.byId[formatId];
   const stats = statColumnsForFormat(format);
-  const nonemptyResults = orderResults(
-    results.filter((result) => result.attempts.length > 0),
+  const nonemptyResults = mergeAndOrderResults(
+    results,
+    competitors,
     format,
-  );
+  ).filter((a) => a.results.some((r) => r.best !== 0));
 
-  const nonemptyResultsRef =
-    useRef<components["schemas"]["LiveResult"][]>(nonemptyResults);
+  const nonemptyResultsRef = useRef<CompetitorWithResults[]>(nonemptyResults);
   useEffect(() => {
     nonemptyResultsRef.current = nonemptyResults;
   });
@@ -142,8 +150,6 @@ function ResultsProjector({
     }
     throw new Error(`Unrecognized status: ${String(status)}`);
   }, [status, forecastView]);
-
-  const competitorsByRegistrationId = _.keyBy(competitors, "id");
 
   return (
     <Dialog.Root open={true} size="full">
@@ -208,51 +214,24 @@ function ResultsProjector({
 
             <Dialog.Body p={0}>
               <Table.Root size="lg" css={{ tableLayout: "fixed" }}>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeader textAlign="right" w="75px">
-                      #
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader
-                      w="22%"
-                      overflow="hidden"
-                      textOverflow="ellipsis"
-                    >
-                      Name
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader w="50px"></Table.ColumnHeader>
-                    {_.times(format.expected_solve_count, (index) => (
-                      <Table.ColumnHeader textAlign="right">
-                        {index + 1}
-                      </Table.ColumnHeader>
-                    ))}
-                    {stats.map(({ name }) => (
-                      <Table.ColumnHeader key={name} textAlign="right">
-                        {name}
-                      </Table.ColumnHeader>
-                    ))}
-                  </Table.Row>
-                </Table.Header>
+                <LiveTableHeader format={format} t={t} isProjector />
                 <Table.Body>
                   {nonemptyResults
                     .slice(topResultIndex, topResultIndex + getNumberOfRows())
-                    .map((result, index) => {
-                      const competitor =
-                        competitorsByRegistrationId[result.registration_id];
-
+                    .map((competitor, index) => {
                       const isVisible = [
                         STATUS.SHOWING,
                         STATUS.SHOWN,
                         STATUS.PAUSED,
                       ].includes(status);
 
-                      return (
+                      return competitor.results.map((result) => (
                         <Table.Row
                           whiteSpace="nowrap"
                           css={{
                             "&:last-child td": { border: 0 },
                           }}
-                          key={result.registration_id}
+                          key={`${result.registration_id}-${result.round_wcif_id}`}
                           style={fadeStyle({
                             isVisible,
                             transition: {
@@ -277,7 +256,7 @@ function ResultsProjector({
                                   : undefined
                             }
                           >
-                            {result.global_pos}
+                            {competitor.global_pos}
                           </Table.Cell>
                           <Table.Cell overflow="hidden" textOverflow="ellipsis">
                             {competitor.name}
@@ -306,7 +285,7 @@ function ResultsProjector({
                             ),
                           )}
                         </Table.Row>
-                      );
+                      ));
                     })}
                 </Table.Body>
               </Table.Root>

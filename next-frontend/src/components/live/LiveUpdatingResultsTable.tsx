@@ -61,7 +61,7 @@ export default function LiveUpdatingResultsTable({
     return (
       <ResultsProjector
         competitors={competitors}
-        results={liveResults}
+        results={liveResultsByRegistrationId}
         disableProjectorView={disableProjectorView}
         formatId={formatId}
         eventId={eventId}
@@ -77,11 +77,6 @@ export default function LiveUpdatingResultsTable({
         <Heading textStyle={{ sm: "h3", md: "h2", lg: "h1" }}>{title}</Heading>
         <ConnectionPulse connectionState={connectionState} />
         <Spacer flex={1} />
-        {!isAdminView && (
-          <IconButton onClick={enableProjectorView}>
-            <LuGalleryVertical />
-          </IconButton>
-        )}
         {isLinkedRound && (
           <Switch.Root
             checked={showLinkedRoundsView}
@@ -94,6 +89,11 @@ export default function LiveUpdatingResultsTable({
             </Switch.Control>
             <Switch.Label>Show combined Results</Switch.Label>
           </Switch.Root>
+        )}
+        {!isAdminView && (
+          <IconButton variant="ghost" onClick={enableProjectorView}>
+            <LuGalleryVertical />
+          </IconButton>
         )}
         {canManage && (
           <IconButton variant="ghost">
