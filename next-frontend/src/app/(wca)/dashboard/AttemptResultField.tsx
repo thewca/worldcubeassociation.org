@@ -24,7 +24,7 @@ import {
   SKIPPED_VALUE,
   encodeMbldResult,
 } from "@/lib/wca/wcif/attempts";
-import type { FormEvent } from "react";
+import type { ChangeEvent } from "react";
 import type { EventId } from "@/lib/wca/data/events";
 import {
   autocompleteFmAttemptResult,
@@ -207,7 +207,7 @@ export function MbldField({
 
   const shortcutHandler = useKeyShortcutHandler(resultShortcuts);
 
-  const captureShortcuts = (e: FormEvent<HTMLFieldSetElement>) => {
+  const captureShortcuts = (e: ChangeEvent<HTMLFieldSetElement>) => {
     const usedShortcut = shortcutHandler(e.nativeEvent);
 
     if (usedShortcut) {
