@@ -1475,8 +1475,9 @@ RSpec.describe Registration do
     end
 
     it 'returns net amount of multiple payments/refunds' do
-      create_list(:registration_payment, 2, registration: reg)
-      create_list(:registration_payment, 2, :refund, registration: reg)
+      additional_payments = create_list(:registration_payment, 2, registration: reg)
+      create(:registration_payment, :refund, registration: reg, refunded_registration_payment: additional_payments[0])
+      create(:registration_payment, :refund, registration: reg, refunded_registration_payment: additional_payments[1])
       expect(reg.reload.paid_entry_fees.cents).to eq(1000)
     end
 

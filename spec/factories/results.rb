@@ -68,16 +68,39 @@ FactoryBot.define do
       value3 { -1 }
     end
 
+    trait :bo5 do
+      format_id { "5" }
+      average { best }
+      value1 { best }
+      value2 { best }
+      value3 { best }
+      value4 { best }
+      value5 { best }
+    end
+
+    trait :blind_bo5 do
+      bo5
+      event_id { "333bf" }
+    end
+
+    trait :blind_dnf_bo5 do
+      blind_bo5
+      average { -1 }
+      value3 { -1 }
+      value4 { -1 }
+    end
+
     trait :over_cutoff do
       transient do
         cutoff { nil }
+        cutoff_threshold { 100 }
       end
-      value1 { cutoff.attempt_result + 100 }
-      value2 { cutoff.attempt_result + 200 }
+      value1 { cutoff.attempt_result + cutoff_threshold }
+      value2 { cutoff.attempt_result + (2 * cutoff_threshold) }
       value3 { 0 }
       value4 { 0 }
       value5 { 0 }
-      best { cutoff.attempt_result + 100 }
+      best { cutoff.attempt_result + cutoff_threshold }
       average { 0 }
       round_type_id { "c" }
     end

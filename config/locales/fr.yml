@@ -213,10 +213,19 @@ fr:
     #original_hash: 17dae1e
     attempt_name: 'Essai %{number}'
   round:
+    #original_hash: ceeac4a
+    title: Tour
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
     #original_hash: 747df5a
     round_number: 'Tour %{round_number}'
+  scramble_set:
+    #original_hash: ba18ca7
+    name: 'Ensemble de mélanges %{letter_code}'
+    #original_hash: d46fe75
+    group: 'Groupe %{number}'
+    #original_hash: 17dae1e
+    attempt: 'Tentative %{number}'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -679,6 +688,8 @@ fr:
           chair: Président·e de la WCA
           #original_hash: 7d405ff
           executive_director: Directeur·rice Exécutif·ve de la WCA
+          #original_hash: 36a137f
+          chief_operating_officer: Directeur des opérations de la WCA
           #original_hash: 1dd4a07
           secretary: Secrétaire de la WCA
           #original_hash: 0388b19
@@ -1538,7 +1549,7 @@ fr:
           Le Comité Financier de la WCA (WFC) gère l'ensemble des finances de la
           WCA, y compris la budgétisation, les rapports, l'analyse, la
           comptabilité et les déclarations d'impôts. Il gère également la plus
-          grande source de revenus de la WCA, le système de cotisations de la
+          grande source de revenus de la WCA, le système de redevances de la
           WCA, ainsi que divers programmes de financement qui apportent un
           soutien aux communautés locales à différents stades de développement,
           y compris le financement des voyages, le financement de l'équipement
@@ -2052,6 +2063,8 @@ fr:
       profile: Profil
       #original_hash: 7b2c7f1
       approve: Approuver
+      #original_hash: d9455bf
+      approve_confirm: 'Êtes-vous sûr de vouloir approuver l''identifiant WCA %{wca_id} ?'
       #original_hash: 85de4b8
       unconfirmed_email: 'L''adresse e-mail (%{email}) de ce compte n''est pas confirmée.'
       #original_hash: 7069007
@@ -2905,6 +2918,8 @@ fr:
         veuillez préciser une date limite. Si vous n’utilisez pas de liste
         d’attente, n’oubliez pas de le préciser dans les conditions
         d’inscription.
+      #original_hash: 51376ef
+      schedule_locked_after_results_submitted: Le planning ne peut plus être modifié une fois les résultats soumis.
     live:
       #original_hash: 10d1a3c
       title: Résultats en direct
@@ -2920,6 +2935,60 @@ fr:
         title: Podiums
         #original_hash: d7297a7
         undetermined: Podiums à déterminer
+      admin:
+        #original_hash: cf9b770
+        open: Ouvrir
+        #original_hash: 719ea39
+        clear: Effacer
+        #original_hash: 42faad9
+        competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} saisis'
+        #original_hash: adec79f
+        round_locked: Verrouillé
+        warnings:
+          #original_hash: 9198c71
+          omitted: >-
+            Vous avez omis la tentative %{attempt_number}. Vérifiez que c'est
+            bien intentionnel.
+          #original_hash: 82d8e53
+          DNS: >-
+            Il y a au moins un DNS suivi d'un résultat valide. Assurez-vous
+            qu'il s'agit bien d'un DNS et non d'un DNF.
+          #original_hash: 6becd6c
+          impossible: >-
+            Le résultat que vous essayez de soumettre semble impossible : la
+            %{attempt_number}e tentative a été effectuée en moins de 30 secondes
+            par cube. Si vous souhaitez saisir un temps en minutes, n'oubliez
+            pas d'ajouter deux zéros à la fin du score pour indiquer les
+            centièmes de secondes.
+          #original_hash: a03301d
+          inconsistent: >-
+            Les résultats que vous essayez de soumettre semblent incohérents. Il
+            y a un écart important entre le meilleur (%{best_single}) et le pire
+            résultat (%{worst_single}). Veuillez vérifier qu'ils sont exacts.
+        quit:
+          #original_hash: de62de1
+          title: Retirer compétiteur
+          #original_hash: c25b336
+          next_to_advance:
+            zero: Il n'y a pas de prochain compétiteur pouvant se qualifier
+            one: 'Le prochain compétiteur à se qualifier est %{competitors}'
+            other: 'Les prochains compétiteurs à se qualifier sont %{competitors}'
+          #original_hash: c87ca67
+          advance: Qualifier le prochain compétiteur
+          #original_hash: e85b311
+          quit_confirm: Retirer un compétiteur du tour
+          #original_hash: 70835a0
+          no_next: Aucun autre compétiteur ne se qualifie
+          #original_hash: 77dfd21
+          cancel: Annuler
+          #original_hash: 79d6737
+          failed_to_fetch: Impossible de récupérer le compétiteur qualifié suivant
+      results:
+        #original_hash: 4705687
+        competitor: Compétiteur
+      errors:
+        #original_hash: f522c26
+        round_closed: Le tour n'est pas encore ouvert
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mes compétitions
@@ -3386,10 +3455,11 @@ fr:
         Êtes-vous sûr de vouloir confirmer ? Une fois la compétition confirmée,
         vous ne pourrez plus modifier les informations la concernant. Consultez
         ensuite vos e-mails pour vérifier que le WCAT a été informé.
-      #original_hash: 4c7deb7
+      #original_hash: 89fbbca
       submit_delete: >-
-        Êtes-vous sûr de vouloir supprimer cette compétition ? Cette opération
-        est irréversible.
+        Cette action ne peut pas être annulée. Veuillez saisir ci-dessous
+        l'identifiant de la compétition « %{competition_id} » pour confirmer la
+        suppression.
       #original_hash: 8ebebca
       coordinates: Coordonnées GPS
       #original_hash: a672984
@@ -3408,15 +3478,17 @@ fr:
       dues_estimate:
         #original_hash: 6e56455
         calculated: >-
-          Le montant estimé des dues WCA pour %{limit} compétiteurs est de
+          Le montant estimé des redevances WCA pour %{limit} compétiteurs est de
           %{estimate}
         #original_hash: 5e8cffe
-        per_competitor: 'Le montant estimé des dues WCA par compétiteur est de %{estimate}'
+        per_competitor: >-
+          Le montant estimé des redevances WCA par compétiteur est de
+          %{estimate}
         #original_hash: 1b67d84
         ajax_error: >-
-          Une erreur liée à l'estimation des dues a eu lieue, potentiellement
-          due à l'indisponibilité d'un taux de change pour la devise
-          sélectionnée.
+          Une erreur liée à l'estimation des redevances a eu lieue,
+          potentiellement due à l'indisponibilité d'un taux de change pour la
+          devise sélectionnée.
       labels:
         admin:
           #original_hash: 7f3d889
@@ -3485,6 +3557,8 @@ fr:
           organizer_ids: Organisateur·s
           #original_hash: b37456c
           contact: Contact
+          #original_hash: 78ef126
+          lead_delegate_id: Délégué principal
         #original_hash: 991f419
         championships: Championnats
         website:
@@ -3721,6 +3795,10 @@ fr:
             champ, les demandes de contact seront envoyées à travers un
             formulaire ne révélant pas les adresses e-mail des organisateurs.
             %{md}. Exemple : [Texte à afficher](mailto:un@email.com)
+          #original_hash: 7a51d00
+          lead_delegate_id: >-
+            Le délégué principal est chargé des aspects administratifs d'une
+            compétition (résultats, rapport, facturation des redevances WCA)
         website:
           #original_hash: da39a3e
           generate_website: ''
@@ -3743,7 +3821,7 @@ fr:
           #original_hash: 9735ddf
           currency_code: La devise utilisée pour les différents frais.
           #original_hash: 82ea18a
-          base_entry_fee: "Les frais d’inscription de base pour la compétition. Ils seront affichés sur la page d’information de la compétition et sur la page d’inscription, le cas échéant. Si cette valeur est définie à 0, une phrase sera affichée indiquant que les inscriptions seront acceptées gratuitement.<br><br><b>REMARQUE\_: L’estimation suivante des dues WCA est uniquement une approximation basée sur les taux de change actuels et n’est en aucun cas contractuelle dans le cadre du paiement ultérieur des dues. </b>"
+          base_entry_fee: "Les frais d’inscription de base pour la compétition. Ils seront affichés sur la page d’information de la compétition et sur la page d’inscription, le cas échéant. Si cette valeur est définie à 0, une phrase sera affichée indiquant que les inscriptions seront acceptées gratuitement.<br><br><b>REMARQUE\_: L’estimation suivante des redevances WCA est uniquement une approximation basée sur les taux de change actuels et n’est en aucun cas contractuelle dans le cadre du paiement ultérieur des redevances. </b>"
           #original_hash: 8c4fdf8
           on_the_spot_entry_fee: >-
             Si mis à 0, une phrase indiquera que les inscriptions sur place
@@ -6076,8 +6154,8 @@ fr:
     paragraph4:
       #original_hash: b6dca56
       title: Politique de proximité
-      #original_hash: f5eeb95
-      content1: "Les compétitions WCA seront acceptées si elles sont à au moins 10 km ou à 5 jours de toute autre compétition. Le WCAT pourra examiner les conditions de tenue pour une compétition proposée à moins de 10 km ou 5 jours d'une autre compétition. Un délégué qui demande l’approbation d’une telle compétitions doit fournir des renseignements supplémentaires sur les raisons pour lesquelles la compétition devrait être acceptée. Parmi les arguments possibles en faveur de l’acceptation d’une telle compétition, citons\_:"
+      #original_hash: 0574d31
+      content1: "Les compétitions WCA seront acceptées si elles sont à au moins 30 km ou à 5 jours de toute autre compétition. Le WCAT pourra examiner les conditions de tenue pour une compétition proposée à moins de 30 km ou 5 jours d'une autre compétition. Un délégué qui demande l’approbation d’une telle compétitions doit fournir des renseignements supplémentaires sur les raisons pour lesquelles la compétition devrait être acceptée. Parmi les arguments possibles en faveur de l’acceptation d’une telle compétition, citons\_:"
       olist1:
         #original_hash: de00462
         '1': Les deux compétitions n'ont pas d'épreuves en commun.
@@ -6549,6 +6627,12 @@ fr:
         que des chiffres, des guillemets ou d'autres symboles). Les noms ne
         doivent contenir que des lettres, des espaces, des tirets, des
         apostrophes, des points et des parenthèses normales.
+      #original_hash: 031123e
+      suspicious_last_name_warning: >-
+        « %{name} » a pour nom de famille « %{suffix} », qui n'est peut-être pas
+        un véritable nom de famille (par exemple, un suffixe générationnel écrit
+        en toutes lettres). Veuillez vérifier qu'il s'agit bien de son nom de
+        famille légal, ou le remplacer/le supprimer en conséquence.
       #original_hash: 4b90583
       successive_uppercase_name_warning: >-
         Le nom de '%{name}' comporte plusieurs lettres majuscules successives.
@@ -6583,6 +6667,17 @@ fr:
         est supérieur à la limite de compétiteurs (%{competitor_limit}). Les
         résultats des compétiteurs enregistrés après que la limite de
         compétiteurs a été atteinte doivent être supprimés.
+      #original_hash: d8f2f1e
+      registration_details_mismatch_warning: >-
+        La personne dont l'identifiant d'inscription est %{person_id} (%{name})
+        présente des informations qui ne correspondent pas à son inscription :
+        %{mismatches}
+      #original_hash: 1a9da05
+      missing_matching_registration_warning: 'La personne %{name} ne correspond à aucune inscription.'
+      #original_hash: 7d62dd5
+      unaccepted_registration_with_results_warning: >-
+        La personne %{name} a obtenu des résultats lors de la compétition, mais
+        son inscription n'est pas marquée comme « acceptée ».
     results:
       #original_hash: 5685ae8
       automatically_position_fixed_info: >-
@@ -6754,10 +6849,10 @@ fr:
         au WRT expliquant pourquoi plusieurs groupes de FMC ont été utilisés.
       #original_hash: d6830c0
       wrong_number_of_scramble_sets_error: >-
-        [%{round_id}] Ce tour a un nombre de mélanges différent de celui indiqué
-        dans l'onglet Gérer les événements. Veuillez ajuster le nombre de sets
-        de mélanges dans l'onglet Gérer les événements en fonction du nombre de
-        sets utilisés.
+        [%{round_id}] Ce tour a un nombre d'ensembles de mélanges différent de
+        celui indiqué dans l'onglet Gérer les événements. Veuillez ajuster le
+        nombre d'ensembles de mélanges dans l'onglet Gérer les événements en
+        fonction du nombre ayant étés utilisés.
   tickets:
     type:
       #original_hash: e43f273

@@ -127,12 +127,12 @@ RSpec.describe ResultsSubmissionController do
         expect(response).to have_http_status(:ok)
       end
 
-      it "does not allows access for a Delegate of this current competition" do
+      it "allows access for a Delegate of this current competition" do
         sign_in comp_delegate
 
         get competition_newcomer_name_format_check_path(ongoing_comp.id)
 
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:ok)
       end
     end
 

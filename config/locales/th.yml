@@ -215,10 +215,19 @@ th:
     #original_hash: 17dae1e
     attempt_name: 'แก้โจทย์ครั้งที่ %{number}'
   round:
+    #original_hash: ceeac4a
+    title: รอบการแข่งขัน
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
     #original_hash: 747df5a
     round_number: '%{round_number} รอบ'
+  scramble_set:
+    #original_hash: ba18ca7
+    name: 'Scramble Set %{letter_code}'
+    #original_hash: d46fe75
+    group: 'Group %{number}'
+    #original_hash: 17dae1e
+    attempt: 'Attempt %{number}'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -671,6 +680,8 @@ th:
           chair: WCA Chair
           #original_hash: 7d405ff
           executive_director: WCA Executive Director
+          #original_hash: 36a137f
+          chief_operating_officer: ประธานเจ้าหน้าที่ฝ่ายปฏิบัติการของ WCA
           #original_hash: 1dd4a07
           secretary: WCA Secretary
           #original_hash: 0388b19
@@ -849,14 +860,17 @@ th:
           เริ่มจาก 1 เพื่อให้ Delegate คนอื่นสามารถอ้างอิงได้
           แม้ว่าทุกอย่างจะดูปกติ แต่อย่างน้อยให้ระบุกรณีที่น่าจดจำที่สุด
           โปรดทำเครื่องหมายในช่องที่เหมาะสมด้านล่างหากคุณกำลังรับข้อเสนอแนะ
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
           คุณต้องเลือกรูปภาพอย่างน้อย %{image_count} รูป
-          ที่มีแสดงพื้นที่ตั้งโจทย์และพื้นที่แข่งขัน (รูปอื่น ๆ
-          สามารถใส่มาได้ด้วย) คุณสามารถเลือกไฟล์ได้หลายไฟล์พร้อมกัน
+          ที่มีแสดงพื้นที่ตั้งโจทย์และพื้นที่แข่งขันจากการแข่งขันนี้
+          แนะนำว่าเป็นช่วงระหว่างการแข่งขัน (รูปอื่น ๆ สามารถใส่มาได้ด้วย)
+          คุณสามารถเลือกไฟล์ได้หลายไฟล์พร้อมกัน
           คุณสามารถลบรูปภาพได้เฉพาะเมื่ออัปโหลดรูปภาพอื่น ๆ เพียงพอแล้ว
           (หากคุณต้องการเปลี่ยนรูปภาพ คุณต้องอัปโหลดรูปภาพใหม่ก่อน
           จากนั้นจึงลบรูปภาพเก่า)
+          หากคุณไม่มีรูปของพื้นที่แข่งขันและ/หรือพื้นที่ตั้งโจทย์ขณะกำลังใช้งาน
+          กรุณาแจ้งเหตุผล
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -986,6 +1000,8 @@ th:
       contact_wrt:
         #original_hash: 603a218
         wca_id: WCA ID
+    #original_hash: 687d968
+    competition_link_html: 'คลิก <a href=''%{url}''>ที่นี่</a> เพื่อเข้าไปดูหน้าการแข่งขัน'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -1915,6 +1931,8 @@ th:
       profile: ข้อมูลส่วนตัว
       #original_hash: 7b2c7f1
       approve: ยอมรับ
+      #original_hash: d9455bf
+      approve_confirm: 'คุณแน่ใจหรือไม่ว่าต้องการอนุมัติ WCA ID %{wca_id}?'
       #original_hash: 85de4b8
       unconfirmed_email: 'email (%{email}) ของ account นี้ยังไม่ได้รับการยืนยัน'
       #original_hash: 7069007
@@ -2516,6 +2534,8 @@ th:
         wrong_dob_format: >-
           วันเกิดต้องอยู่ในรูปแบบ YYYY-mm-dd (year-month-day เป็นคริสต์ศักราช,
           เช่น 1944-07-13), ดูตัวอย่างของวันที่ไม่ถูกต้อง: %{raw_dobs}.
+        #original_hash: 6d8e34b
+        empty_file: ไฟล์ว่างเปล่า
     add:
       #original_hash: 975275e
       title: 'เพิ่มการสมัครของ %{comp}'
@@ -2660,6 +2680,8 @@ th:
         การแข่งขันนี้ไม่มีกำหนดเวลาในการรับผู้เข้าแข่งขันใน waiting list
         หากคุณกำลังใช้ waiting list โปรดระบุกำหนดเวลา หากคุณไม่ได้ใช้ waiting
         list โปรดอย่าลืมระบุสิ่งนี้ในข้อกำหนดการสมัครการแข่งขัน
+      #original_hash: 51376ef
+      schedule_locked_after_results_submitted: ไม่สามารถแก้ไขตารางการแข่งขันได้หลังจากส่งผลการแข่งขันแล้ว
     live:
       #original_hash: 10d1a3c
       title: ผลการแข่งขัน
@@ -2670,6 +2692,66 @@ th:
         connected: เชื่อมต่อแล้ว กำลังอัปเดตผลการแข่งขัน
         #original_hash: 53abaa2
         disconnected: การเชื่อมต่อขาดหาย ผลการแข่งขันไม่ได้รับการอัปเดต
+      podiums:
+        #original_hash: 02ae2bd
+        title: Podiums
+        #original_hash: d7297a7
+        undetermined: จะกำหนดผู้ได้รับรางวัลในภายหลัง
+      admin:
+        #original_hash: cf9b770
+        open: เปิด
+        #original_hash: 719ea39
+        clear: เคลียร์
+        #original_hash: 42faad9
+        competitors_entered: >-
+          ผลการแข่งขันที่กรอกแล้ว
+          %{competitors_live_results_entered}/%{total_competitors}
+        #original_hash: adec79f
+        round_locked: locked
+        warnings:
+          #original_hash: 9198c71
+          omitted: >-
+            คุณเว้นว่างผลการแข่งขัน %{attempt_number} ครั้ง
+            โปรดตรวจสอบให้แน่ใจว่าเป็นการกระทำโดยตั้งใจ
+          #original_hash: 82d8e53
+          DNS: >-
+            มี DNS อย่างน้อยหนึ่งรายการตามด้วยผลการแข่งขันที่ถูกต้อง
+            โปรดตรวจสอบให้แน่ใจว่าเป็น DNS จริง ๆ ไม่ใช่ DNF
+          #original_hash: 6becd6c
+          impossible: >-
+            ผลการแข่งขันที่คุณพยายามส่งดูเหมือนจะเป็นไปไม่ได้:
+            การแก้โจทย์ครั้งที่ %{attempt_number} เสร็จสิ้นในเวลาน้อยกว่า 30
+            วินาทีต่อลูก หากคุณต้องการป้อนหน่วยเป็นนาที
+            อย่าลืมเพิ่มเลขศูนย์สองตัวสำหรับเซนติวินาทีต่อท้าย
+          #original_hash: a03301d
+          inconsistent: >-
+            ผลลัพธ์ที่คุณพยายามส่งดูเหมือนจะไม่สอดคล้องกัน
+            มีความแตกต่างอย่างมากระหว่างเวลาที่ดีที่สุด (%{best_single})
+            และเวลาที่แย่ที่สุด (%{worst_single})
+            โปรดตรวจสอบให้แน่ใจว่าผลการแข่งขันถูกต้อง
+        quit:
+          #original_hash: de62de1
+          title: ลบผู้เข้าแข่งขัน
+          #original_hash: c25b336
+          next_to_advance:
+            zero: 'ผู้เข้าแข่งขันรายต่อไปที่จะผ่านเข้ารอบคือ %{competitors}'
+            other: 'ผู้เข้าแข่งขันรายต่อไปที่จะผ่านเข้ารอบคือ %{competitors}'
+          #original_hash: c87ca67
+          advance: ให้ผู้เข้าแข่งขันคนถัดไปเข้ารอบ
+          #original_hash: e85b311
+          quit_confirm: ลบผู้เข้าแข่งขันจากรอบ
+          #original_hash: 70835a0
+          no_next: ไม่มีผู้เข้าแข่งขันรายต่อไปที่จะผ่านเข้ารอบ
+          #original_hash: 77dfd21
+          cancel: ยกเลิก
+          #original_hash: 79d6737
+          failed_to_fetch: ไม่สามารถดึงข้อมูลผู้เข้าแข่งขันที่ผ่านเข้ารอบรายถัดไปได้
+      results:
+        #original_hash: 4705687
+        competitor: ผู้เข้าแข่งขัน
+      errors:
+        #original_hash: f522c26
+        round_closed: รอบการแข่งขันยังไม่ได้เปิด
     my_competitions:
       #original_hash: 5c6d3ea
       title: การแข่งขันของฉัน
@@ -2888,14 +2970,22 @@ th:
       no_winner: >-
         ประเภทการแข่งขันหลักคือ %{event_name} ไม่มีการประกาศผู้ชนะ
         เนื่องจากไม่มีผู้แข่งขันคนใดแก้โจทย์ได้สำเร็จในการแข่งขัน
+      #original_hash: 5262865
+      h2h_winner: >-
+        %{winner} ชนะการแข่งขันรอบชิงชนะเลิศแบบ Head-to-Head ในการแข่งขัน
+        %{event_name}
       #original_hash: 6c3b236
       winner: '%{winner} ชนะในการแข่งขัน %{result_sentence} ในประเภท %{event_name}'
       #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} ได้รองชนะเลิศอันดับหนึ่ง (%{first_runner_up_result})'
+      #original_hash: 2926d10
+      h2h_first_runner_up: '%{first_runner_up} ได้อันดับที่สอง'
       #original_hash: cffa50a
       and: และ
       #original_hash: 67d285c
       second_runner_up: '%{second_runner_up} ได้รองชนะเลิศอันดับสอง (%{second_runner_up_result}).'
+      #original_hash: 157b649
+      h2h_second_runner_up: '%{second_runner_up} ได้อันดับที่สาม'
       records:
         #original_hash: 0658e11
         wr: สถิติโลก
@@ -3098,8 +3188,10 @@ th:
         คุณแน่ใจว่าจะยืนยีน? หลังจากยืนยันแล้ว คุณจะไม่สามารถแก้ไขข้อมูลใด ๆ ได้
         ตรวจสอบ email หลังจากนี้เพื่อยืนยันว่า WCA Competition Announcement
         ได้รับแจ้งแล้ว
-      #original_hash: 4c7deb7
-      submit_delete: คุณแน่ใจที่จะลบการแข่งขันนี้? ไม่สามารถกู้คืนได้
+      #original_hash: 89fbbca
+      submit_delete: >-
+        การลบการแข่งขันไม่สามารถกู้คืนได้ กรุณาพิม ID การแข่งขัน
+        "%{competition_id}" ด้านล่างเพื่อนยืนยันการลบ
       #original_hash: 8ebebca
       coordinates: พิกัด
       #original_hash: a672984
@@ -3194,6 +3286,8 @@ th:
           organizer_ids: ผู้จัดการแข่งขัน
           #original_hash: b37456c
           contact: ติดต่อ
+          #original_hash: 78ef126
+          lead_delegate_id: หัวหน้า Delegate
         #original_hash: 991f419
         championships: Championships
         website:
@@ -3397,6 +3491,10 @@ th:
             ทางเลือกการติดต่อ หากคุณไม่ใส่ email
             ของผู้จัดการแข่งขันจะถูกแสดงเป็นสาธารณะ %{md}. เช่น: [Text to
             display](mailto:some@email.com)
+          #original_hash: 7a51d00
+          lead_delegate_id: >-
+            หัวหน้า Delegate รับผิดชอบด้านการบริหารจัดการการแข่งขัน
+            (ผลการแข่งขัน รายงาน ใบแจ้งค่าธรรมเนียม)
         website:
           #original_hash: da39a3e
           generate_website: ''
@@ -4327,6 +4425,12 @@ th:
         #original_hash: c4622c3
         scrambles: โจทย์
     results_table:
+      #original_hash: bdbfcdc
+      h2h_results_disclaimer: >-
+        ผลการแข่งขันตัดสินจากรอบชิงชนะเลิศแบบ  Head-to-Head
+        จะแสดงเฉพาะลำดับผลการแข่งขันที่ดีที่สุดเท่านั้น
+        เนื่องจากการแสดงผลการแข่งขันแบบ Head-to-Head
+        ฉบับเต็มยังอยู่ระหว่างการพัฒนา
       #original_hash: 3e9a6b5
       wca_profile: WCA profile
       #original_hash: ad8919a
@@ -4897,12 +5001,12 @@ th:
   about:
     #original_hash: 9ac918a
     title: เกี่ยวกับ WCA
-    #original_hash: af00571
+    #original_hash: ee35764
     mission_statement: >-
-      ภารกิจของเราคือการแข่งขันที่มากขึ้น ในประเทศที่มากขึ้น ผู้คนที่มากขึ้น
-      ความสนุกที่มากขึ้น ภายใต้เงื่อนไขที่ยุติธรรมและเท่าเทียมกัน
-    #original_hash: e627278
-    mission_footer: พันธกิจของ WCA
+      จุดประสงค์ของเราคือการส่งเสริมชุมชน speedcubing ทั่วโลก
+      และรักษาบรรยากาศการแข่งขันที่สนุกสนานและยุติธรรมสำหรับทุกคน
+    #original_hash: 5bed828
+    mission_footer: คำแถลงวัตถุประสงค์ของ WCA
     #original_hash: cdab446
     who_we_are_title: เราคือใคร
     #original_hash: 303f17a
@@ -5527,12 +5631,12 @@ th:
     paragraph4:
       #original_hash: b6dca56
       title: Proximity policy
-      #original_hash: f5eeb95
+      #original_hash: 0574d31
       content1: >-
-        การแข่งขันของ WCA จะได้รับการยอมรับหากมีระยะห่างจากการแข่งขันอื่น 10
+        การแข่งขันของ WCA จะได้รับการยอมรับหากมีระยะห่างจากการแข่งขันอื่น 30
         กิโลเมตร หรือ ห่างจากการแข่งขันอื่น 5 วัน WCAT
         จะทบทวนการแข่งขันที่เสนอโดยเฉพาะอย่างยิ่งหากมีการแข่งขันอื่นที่อยู่ในระยะ
-        10 กิโลเมตร หรือ ห่างจากการแข่งขันอื่นไม่เกิน 5 วัน Delegate
+        30 กิโลเมตร หรือ ห่างจากการแข่งขันอื่นไม่เกิน 5 วัน Delegate
         ที่ทำการขอการยอมรับการแข่งขันจะต้องให้ข้อมูลที่แสดงให้เห็นว่าทำไมการแข่งขันถึงควรได้รับการอนุมัติ
         ข้อโต้แย้งสำหรับการยอมรับการแข่งขันมีดังนี้
       olist1:
@@ -5900,7 +6004,7 @@ th:
       #original_hash: 809f305
       person_doesnt_have_any_results_error: 'ไม่มีผลลัพธ์สำหรับ %{person_name} ที่มี ID %{person_id}'
       #original_hash: ebc1b15
-      results_not_associated_with_any_person_error: 'มีผลลัพธ์สำหรับบุคคลที่ไม่รู้จักซึ่งมี ID %{person_id}'
+      results_not_associated_with_any_person_error: 'มีผลลัพธ์สำหรับผู้เข้าแข่งขันที่ไม่รู้จัก ซึ่งมี ID %{person_id}'
       #original_hash: c29e35d
       whitespace_in_name_error: '''%{name}'' มี space นำหน้า/ต่อท้ายหรือเว้นวรรคสองครั้ง'
       #original_hash: 9b1ae5f
@@ -5939,7 +6043,7 @@ th:
         ไม่ตรงกับข้อมูลปัจจุบันในฐานข้อมูล WCA ('%{expected_country}')
         หากเป็นข้อผิดพลาด โปรดแก้ไข มิฉะนั้น
         โปรดแสดงความคิดเห็นเกี่ยวกับเรื่องนี้ให้ WRT ทราบ
-      #original_hash: e15e700
+      #original_hash: 6179b35
       multiple_newcomers_with_same_name_warning: >-
         มีผู้เข้าแข่งขันใหม่หลายรายที่มีชื่อเดียวกัน: %{name}
         โปรดตรวจสอบให้แน่ใจว่าผลลัพธ์ทั้งหมดถูกต้องสำหรับผู้เข้าแข่งชันเหล่านี้
@@ -5949,6 +6053,19 @@ th:
         เครื่องหมายวงเล็บที่ใช้ใน '%{name}' เป็นอักขระที่ไม่ปกติ
         โปรดแทนที่ด้วยเครื่องหมายวงเล็บปกติ '(' หรือ ')'
         และเว้นวรรคตามความเหมาะสม
+      #original_hash: fec0347
+      special_characters_in_name_warning: >-
+        ชื่อ '%{name}' มีอักขระพิเศษที่ไม่ถูกต้อง (เช่น ตัวเลข
+        เครื่องหมายอัญประกาศ หรือสัญลักษณ์อื่น ๆ ) ชื่อควรประกอบด้วยตัวอักษร
+        เว้นวรรค เครื่องหมายขีดกลาง เครื่องหมายอัญประกาศเดี่ยว จุด
+        และวงเล็บปกติเท่านั้น
+      #original_hash: 031123e
+      suspicious_last_name_warning: >-
+        '%{name}' มีนามสกุลเป็น '%{suffix}'
+        ซึ่งอาจไม่ใช่นามสกุลที่ถูกต้องตามกฎหมาย (เช่น
+        คำต่อท้ายที่เขียนเต็มตามรุ่นอายุ)
+        โปรดยืนยันว่าเป็นนามสกุลที่ถูกต้องตามกฎหมายหรือไม่
+        หรือแก้ไข/ลบออกตามความเหมาะสม
       #original_hash: 4b90583
       successive_uppercase_name_warning: >-
         '%{name}' มีตัวอักษรพิมพ์ใหญ่เรียงกันในชื่อ
@@ -5978,6 +6095,16 @@ th:
         จำนวนผู้เข้าร่วมแข่งขัน (%{n_competitors}) เกินขีดจำกัดของผู้แข่งขัน
         (%{competitor_limit})
         ต้องลบผลการแข่งขันของผู้เข้าแข่งขันที่สมัครการแข่งขันหลังจากถึงขีดจำกัดของผู้แข่งขันแล้ว
+      #original_hash: d8f2f1e
+      registration_details_mismatch_warning: >-
+        ผู้เข้าแข่งขันที่มี ID %{person_id} (%{name})
+        มีรายละเอียดที่ไม่ตรงกับการสมัครการแข่งขัน: %{mismatches}
+      #original_hash: 1a9da05
+      missing_matching_registration_warning: 'ผู้เข้าแข่งขัน %{name} ไม่มีข้อมูลการสมัครการแข่งขันที่ตรงกัน'
+      #original_hash: 7d62dd5
+      unaccepted_registration_with_results_warning: >-
+        ผู้เข้าแข่งขัน %{name} มีผลการแข่งขัน
+        แต่การลงสมัครการแข่งขันยังไม่ถูกทำเครื่องหมายว่า 'ได้รับการยอมรับ'
     results:
       #original_hash: 5685ae8
       automatically_position_fixed_info: >-
@@ -6145,3 +6272,8 @@ th:
       edit_person: แก้ไขบุคคล
       #original_hash: 5fb2137
       competition_result: ผลการแข่งขัน
+    stakeholder_role:
+      #original_hash: e095187
+      actioner: Actioner
+      #original_hash: bcdf8d3
+      requester: Requester

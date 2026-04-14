@@ -28,4 +28,11 @@ class Scramble < ApplicationRecord
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
+
+  def self.prefix_for_index(index)
+    char = (65 + (index % 26)).chr
+    return char if index < 26
+
+    Scramble.prefix_for_index((index / 26) - 1) + char
+  end
 end

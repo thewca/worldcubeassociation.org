@@ -1,7 +1,12 @@
+import { useQuery } from '@tanstack/react-query';
+import { useCallback, useState } from 'react';
 import _ from 'lodash';
+import { DateTime } from 'luxon';
+import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
+import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
+import { getRoundTypeId, parseActivityCode, shortLabelForActivityCode } from '../../lib/utils/wcif';
+import I18n from '../../lib/i18n';
 import { events, formats } from '../../lib/wca-data.js.erb';
-import { humanizeActivityCode } from '../../lib/utils/wcif';
-import { EventsPickerCompat } from './ButtonGroupPicker';
 
 export const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 
@@ -9,108 +14,73 @@ export const LEGAL_CROSS_MATCHES = [
   ['333', '333oh'],
 ];
 
-export const pickerLocalizationConfig = {
-  events: {
-    computeEntityName: (id) => events.byId[id].name,
-    headerLabel: 'Events',
-    dropdownLabel: 'Event',
-  },
-  rounds: {
-    computeEntityName: (id) => humanizeActivityCode(id),
-    headerLabel: 'Rounds',
-    dropdownLabel: 'Round',
-  },
-  scrambleSets: {
-    computeEntityName: (id, idx) => `Group ${idx + 1}`,
-    headerLabel: 'Scramble Sets',
-    dropdownLabel: 'Scramble Set',
-    pickerLabel: 'Groups',
-  },
-  inbox_scrambles: {
-    computeEntityName: (id, idx) => `Attempt ${idx + 1}`,
-    headerLabel: 'Scrambles',
-    dropdownLabel: 'Scramble',
-  },
+export const DROPPABLE_ID_MATCHED_SCRAMBLES = 'matchedScrambles';
+export const DROPPABLE_ID_STORAGE = 'storage';
+
+export const AUTOMATCH_DEFAULT_SETTINGS = {
+  limitMatches: true,
+  tryBestInsert: false,
+  useAttemptsMatching: ATTEMPT_BASED_EVENTS,
+  fileTimestampPreference: 'uploaded_at',
 };
 
-const prefixForIndex = (index) => {
+export const ATTEMPTS_UNPACKING_MARKER = '_attemptsUnpacking';
+
+export const prefixForIndex = (index) => {
+  if (Number.isNaN(index)) {
+    return 'NaN';
+  }
+
   const char = String.fromCharCode(65 + (index % 26));
   if (index < 26) return char;
 
   return prefixForIndex(Math.floor(index / 26) - 1) + char;
 };
 
-export const scrambleSetToName = (scrambleSet) => `Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
-const scrambleSetToTitle = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} ${scrambleSetToName(scrambleSet)}`;
+export const getAttemptsMultiplier = (round) => formats.byId[round.format].expectedSolveCount;
 
-export const scrambleToName = (scramble) => `Scramble ${scramble.scramble_number}`;
+export const scrambleSetToTitle = (scrambleSet) => {
+  const eventName = I18n.t(`events.${scrambleSet.event_id}`);
+  const roundNumberName = I18n.t('round.round_number', { round_number: scrambleSet.round_number });
 
-export const isForAttemptBasedEvent = (pickerHistory) => {
-  const eventsStep = pickerHistory.find((step) => step.key === 'events');
-  return ATTEMPT_BASED_EVENTS.includes(eventsStep.id);
+  const eventAndRound = I18n.t('round.name', { event_name: eventName, round_name: roundNumberName });
+
+  const letterCode = prefixForIndex(scrambleSet.scramble_set_number - 1);
+  const scrambleSetName = I18n.t('scramble_set.name', { letter_code: letterCode });
+
+  const setTitle = `${eventAndRound} ${scrambleSetName}`;
+
+  if (scrambleSet[ATTEMPTS_UNPACKING_MARKER]) {
+    const attemptName = I18n.t('scramble_set.attempt', { number: scrambleSet.scramble_number });
+
+    return `${setTitle} ${attemptName}`;
+  }
+
+  return setTitle;
 };
 
-const inferExpectedSolveCount = (pickerHistory) => {
-  const roundsStep = pickerHistory.find((step) => step.key === 'rounds');
-  return formats.byId[roundsStep.entity.format].expectedSolveCount;
+export const roundToRoundTypeName = (wcifRound, wcifEvent, suffix = false) => {
+  const { roundNumber } = parseActivityCode(wcifRound.id);
+
+  const roundTypeId = getRoundTypeId(
+    roundNumber,
+    wcifEvent.rounds.length,
+    Boolean(wcifRound.cutoff),
+  );
+
+  const roundTypeName = I18n.t(`rounds.${roundTypeId}.name`);
+
+  if (suffix) {
+    return `${roundTypeName} (${shortLabelForActivityCode(wcifRound.id)})`;
+  }
+
+  return roundTypeName;
 };
 
-export const pickerStepConfig = {
-  events: {
-    pickerComponent: EventsPickerCompat,
-    nestedPicker: 'rounds',
-  },
-  rounds: {
-    matchingConfigKey: 'scrambleSets',
-    nestedPicker: 'scrambleSets',
-    pickFirstDefault: true,
-  },
-  scrambleSets: {
-    enabledCondition: (history) => isForAttemptBasedEvent(history),
-    matchingConfigKey: 'inbox_scrambles',
-    pickFirstDefault: true,
-  },
-};
-
-export const matchingDndConfig = {
-  scrambleSets: {
-    computeCellName: scrambleSetToTitle,
-    computeTableName: scrambleSetToName,
-    computeCellDetails: (scrSet) => scrSet.original_filename,
-    computeExpectedRowCount: (round) => round.scrambleSetCount,
-    tableReferenceKey: 'scrambleSetCount',
-  },
-  inbox_scrambles: {
-    computeCellName: scrambleToName,
-    computeCellDetails: (scr) => scr.scramble_string,
-    cellDetailsAreData: true,
-    computeExpectedRowCount: (scrambleSet, history) => inferExpectedSolveCount(history),
-  },
-};
-
-export function buildHistoryStep(key, entity, index) {
-  return {
-    key,
-    entity,
-    id: entity.id,
-    index,
-  };
-}
-
-export function moveArrayItem(arr, fromIndex, toIndex) {
-  const movedItem = arr[fromIndex];
-
-  const withoutMovedItem = [
-    ...arr.slice(0, fromIndex),
-    // here we want to ignore the moved item itself, so we need the +1
-    ...arr.slice(fromIndex + 1),
-  ];
-
+export function removeItemFromArray(arr, indexToRemove) {
   return [
-    ...withoutMovedItem.slice(0, toIndex),
-    movedItem,
-    // here we do NOT want to ignore the items that were originally there, so no +1
-    ...withoutMovedItem.slice(toIndex),
+    ...arr.slice(0, indexToRemove),
+    ...arr.slice(indexToRemove + 1),
   ];
 }
 
@@ -118,79 +88,220 @@ export function addItemToArray(arr, entity, targetIdx = arr.length) {
   return arr.toSpliced(targetIdx, 0, entity);
 }
 
-export const searchRecursive = (data, targetStep, currentKey = 'events', searchHistory = []) => {
-  const { nestedPicker, matchingConfigKey = nestedPicker } = pickerStepConfig[currentKey] || {};
+export function moveArrayItem(arr, fromIndex, toIndex) {
+  const movedItem = arr[fromIndex];
+
+  const withoutMovedItem = removeItemFromArray(arr, fromIndex);
+  return addItemToArray(withoutMovedItem, movedItem, toIndex);
+}
+
+export const searchRecursive = (data, searchPath, targetId, searchDescriptor = {}) => {
+  const [currentKey, ...remainingPath] = searchPath;
 
   return data[currentKey]?.reduce((foundPath, item, index) => {
     if (foundPath) return foundPath;
 
-    const nextHistory = [
-      ...searchHistory,
-      buildHistoryStep(currentKey, item, index),
-    ];
+    const nextHistory = {
+      ...searchDescriptor,
+      [currentKey]: {
+        id: item.id,
+        item,
+        index,
+      },
+    };
 
-    if (currentKey === targetStep.key && item.id === targetStep.id) {
-      return nextHistory;
-    }
-
-    if (matchingConfigKey) {
-      return searchRecursive(item, targetStep, matchingConfigKey, nextHistory);
+    if (remainingPath.length === 0) {
+      if (item.id === targetId) {
+        return nextHistory;
+      }
+    } else {
+      return searchRecursive(item, remainingPath, targetId, nextHistory);
     }
 
     return null;
   }, null);
 };
 
-export function groupScrambleSetsIntoWcif(scrambleSets) {
-  const groupedMap = _.mapValues(
-    _.groupBy(
-      scrambleSets,
-      'event_id',
-    ),
-    (eventItems) => _.groupBy(
-      eventItems,
-      'round_number',
-    ),
-  );
-
-  const wcifEvents = _.sortBy(
-    _.map(groupedMap, (roundsMap, eventId) => ({
-      id: eventId,
-      rounds: _.sortBy(
-        _.map(roundsMap, (sets, roundNum) => ({
-          id: `${eventId}-r${roundNum}`,
-          roundNum,
-          scrambleSets: sets,
-        })),
-        'roundNum',
-      ),
-    })),
-    (event) => events.byId[event.id].rank,
-  );
-
-  return { events: wcifEvents };
+export function thinWcifEvent(wcifEvent) {
+  return _.pick(wcifEvent, 'id');
 }
 
-export function computeMatchingProgress(wcifEvents) {
-  return wcifEvents.flatMap(
-    (wcifEvent) => wcifEvent.rounds.map(
-      (wcifRound) => {
-        const formatExpectedSolveCount = formats.byId[wcifRound.format]?.expectedSolveCount;
+export function thinWcifRound(wcifRound) {
+  return _.pick(wcifRound, 'id', 'format', 'scrambleSetCount');
+}
 
-        return {
-          id: wcifRound.id,
-          expected: wcifRound.scrambleSetCount,
-          actual: wcifRound.scrambleSets?.length ?? 0,
-          scrambleSets: wcifRound.scrambleSets?.map(
-            (scrSet, idx) => ({
-              id: scrSet.id,
-              index: idx,
-              expected: formatExpectedSolveCount,
-              actual: scrSet.inbox_scrambles?.length ?? 0,
-            }),
-          ),
-        };
-      },
-    ),
+export function thinExtScrambleSet(extScrSet) {
+  return _.pick(extScrSet, 'id', 'event_id', 'scramble_file_upload_id', 'round_number', 'scramble_set_number', 'original_filename', 'generated_at', 'uploaded_at', 'automatch_wcif_id');
+}
+
+export function thinExtScramble(extScr) {
+  return _.pick(extScr, 'id', 'is_extra', 'scramble_number', 'scramble_string');
+}
+
+function unpackExternalScrambleSet(extScrSet, isAttemptMode) {
+  const thinnedScrambleSet = thinExtScrambleSet(extScrSet);
+
+  if (isAttemptMode) {
+    return extScrSet.external_scrambles
+      .map((extScr) => {
+        const thinnedScramble = thinExtScramble(extScr);
+
+        return ({
+          ...thinnedScrambleSet,
+          ...thinnedScramble,
+          [ATTEMPTS_UNPACKING_MARKER]: thinnedScrambleSet.id,
+        });
+      });
+  }
+
+  const repackedScrambleSet = {
+    ...thinnedScrambleSet,
+    external_scrambles: _.sortBy(
+      extScrSet.external_scrambles,
+      ['is_extra', 'scramble_number'],
+    ).map((extScr) => thinExtScramble(extScr)),
+  };
+
+  return [repackedScrambleSet];
+}
+
+export function unpackScrambleSets(extScrambleSets, autoMatchSettings) {
+  return extScrambleSets.flatMap((extScrSet) => {
+    const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(extScrSet.event_id);
+
+    return unpackExternalScrambleSet(extScrSet, isAttemptMode);
+  });
+}
+
+export function unpackScrambleSetsInRound(extScrambleSets, isAttemptMode) {
+  return extScrambleSets.flatMap(
+    (extScrSet) => unpackExternalScrambleSet(extScrSet, isAttemptMode),
   );
+}
+
+export function unpackMatchingState(matchState, autoMatchSettings) {
+  return matchState.events.flatMap(
+    (evt) => {
+      const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(evt.id);
+
+      return evt.rounds.flatMap(
+        (rd) => unpackScrambleSetsInRound(
+          rd.external_scramble_sets,
+          isAttemptMode,
+        ),
+      );
+    },
+  );
+}
+
+export const calculateRoundExpectedCount = (
+  round,
+  isAttemptMode = false,
+) => round.scrambleSetCount * (isAttemptMode ? getAttemptsMultiplier(round) : 1);
+
+export const calculateRoundMatchedCount = (
+  round,
+  isAttemptMode = false,
+) => unpackScrambleSetsInRound(round.external_scramble_sets, isAttemptMode).length;
+
+export function autoMatchSearch(
+  scrSet,
+  wcifEvents,
+  autoMatchSettings = AUTOMATCH_DEFAULT_SETTINGS,
+) {
+  const autoMatchNavigation = searchRecursive(
+    wcifEvents,
+    ['events', 'rounds'],
+    scrSet.automatch_wcif_id,
+  );
+
+  if (autoMatchNavigation) {
+    const targetRound = autoMatchNavigation.rounds.item;
+    const isAttemptMode = autoMatchSettings.useAttemptsMatching
+      .includes(autoMatchNavigation.events.id);
+
+    const matchingProgress = calculateRoundMatchedCount(targetRound, isAttemptMode);
+    const matchingTarget = calculateRoundExpectedCount(targetRound, isAttemptMode);
+
+    if (
+      !autoMatchSettings.limitMatches || matchingProgress < matchingTarget
+    ) {
+      return autoMatchNavigation;
+    }
+  }
+
+  return null;
+}
+
+export function sortSetsForAutoMatch(scrSets, autoMatchSettings) {
+  return _.sortBy(scrSets, [
+    (scrSet) => DateTime.fromISO(
+      scrSet[autoMatchSettings.fileTimestampPreference],
+    ).toUnixInteger(),
+    (scrSet) => events.byId[scrSet.event_id].rank,
+    'round_number',
+    'scramble_set_number',
+    'scramble_number',
+  ]);
+}
+
+export function filterUnusedScrambles(
+  scrFileSets,
+  matchedStateSets,
+  autoMatchSettings,
+) {
+  const unusedScrambleSets = _.differenceWith(
+    scrFileSets,
+    matchedStateSets,
+    (a, b) => {
+      const miniA = _.pick(a, [ATTEMPTS_UNPACKING_MARKER, 'id']);
+      const miniB = _.pick(b, [ATTEMPTS_UNPACKING_MARKER, 'id']);
+
+      return _.isEqual(miniA, miniB);
+    },
+  );
+
+  return sortSetsForAutoMatch(unusedScrambleSets, autoMatchSettings);
+}
+
+export function calculateBestInsertIndex(scrSet, round) {
+  const isAttemptMode = scrSet[ATTEMPTS_UNPACKING_MARKER];
+  const setIndex = scrSet.scramble_set_number - 1;
+
+  if (isAttemptMode) {
+    const attemptCount = getAttemptsMultiplier(round);
+
+    const extraOffset = scrSet.is_extra ? attemptCount : 0;
+    return setIndex * attemptCount + scrSet.scramble_number + extraOffset - 1;
+  }
+
+  return scrSet.scramble_set_number - 1;
+}
+
+export function useConfigState(defaultConfig = {}) {
+  const [internalConfig, setInternalConfig] = useState(defaultConfig);
+
+  const changeConfigItem = useCallback((key, newValue) => {
+    setInternalConfig((currentConfig) => ({
+      ...currentConfig,
+      [key]: newValue,
+    }));
+  }, [setInternalConfig]);
+
+  return [internalConfig, changeConfigItem];
+}
+
+async function listScrambleFiles(competitionId) {
+  const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId));
+
+  return data;
+}
+
+export function useScrambleFilesQuery(competitionId, initialScrambleFiles = undefined) {
+  return useQuery({
+    queryKey: ['scramble-files', competitionId],
+    queryFn: () => listScrambleFiles(competitionId),
+    initialData: initialScrambleFiles,
+    refetchOnMount: false,
+  });
 }

@@ -33,7 +33,11 @@ namespace :h2h_results do
           lr.local_pos = final_pos
         end
 
-        result.update!(best: value) if value.positive? && result.best > value
+        # negative result.best means it is DN*, so we need to consider that the new value either beat the current best in a traditional way OR the current best until now is a DN* penalty
+        is_time_better = value.positive? && (value < result.best || result.best.negative?)
+        # When the result is already a penalty, DNF beats DNS. In terms of numbers, this means `-1` is "better" than `-2`, even though mathematically `-1 > -2`
+        is_penalty_better = value.negative? && result.best.negative? && value > result.best
+        result.update!(best: value) if is_time_better || is_penalty_better
 
         match = H2hMatch.find_or_create_by!(round_id: round_id, match_number: match_number)
         competitor = H2hMatchCompetitor.find_or_create_by!(h2h_match_id: match.id, user_id: Registration.find(registration_id).user_id)
@@ -55,19 +59,10 @@ namespace :h2h_results do
         )
 
         # And finally we can save the attempt's scramble
-        scramble_set = InboxScrambleSet.find_or_create_by!(matched_round_id: round_id, scramble_set_number: scramble_set_number) do |set|
-          set.competition = set.matched_round.competition
-          set.event = set.matched_round.event
-          set.round_number = set.matched_round.number
-          set.ordered_index = scramble_set_number - 1
-        end
+        scramble_set = MatchedScrambleSet.find_or_create_by!(round_id: round_id, ordered_index: scramble_set_number - 1)
 
-        scramble_set.inbox_scrambles.find_or_create_by!(matched_scramble_set: scramble_set, scramble_number: scramble_number) do |inbox_scramble|
-          inbox_scramble.is_extra = is_extra
-          inbox_scramble.matched_scramble_set = scramble_set
-          inbox_scramble.scramble_number = scramble_number
-          inbox_scramble.ordered_index = scramble_number - 1
-          inbox_scramble.scramble_string = scramble
+        scramble_set.matched_scrambles.find_or_create_by!(is_extra: is_extra, ordered_index: scramble_number - 1) do |matched_scramble|
+          matched_scramble.scramble_string = scramble
         end
       end
 
@@ -127,16 +122,16 @@ namespace :h2h_results do
         r.matched_scramble_sets.each do |set|
           puts "> handling scramble set: #{set.inspect}"
 
-          set.inbox_scrambles.each do |is|
+          set.matched_scrambles.each do |ms|
             Scramble.create!(
               competition: competition,
               round: r,
-              round_type_id: r.results.first.round_type_id,
+              round_type_id: r.round_type_id,
               event_id: r.event_id,
               group_id: set.alphabetic_group_index,
-              is_extra: is.is_extra,
-              scramble: is.scramble_string,
-              scramble_num: is.scramble_number,
+              is_extra: ms.is_extra?,
+              scramble: ms.scramble_string,
+              scramble_num: ms.ordered_index + 1,
             )
           end
 

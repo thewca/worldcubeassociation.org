@@ -93,13 +93,6 @@
     <% end %>
   <% end %>
 
-  <%# Technically, 'remarks' is also a Markdown section but it's the only one that doesn't have a template %>
-  <%# and (as of writing this comment) we always want to include it no matter which Report version. %>
-  <div>
-    <h2>Remarks</h2>
-    <%=md delegate_report.remarks %>
-  </div>
-
   <% if delegate_report.posted_by_user %>
     <br>
     <div>

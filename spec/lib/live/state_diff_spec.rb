@@ -11,14 +11,14 @@ RSpec.describe Live::DiffHelper do
 
     it 'correct diff for new results' do
       registration_1 = registrations.first
-      round.open_round!
+      round.open_round!(User.first)
 
       result = round.live_results.find_by!(registration_id: registration_1.id)
 
       before_state = round.to_live_state
 
       attempts = 5.times.map.with_index(1) do |r, i|
-        LiveAttempt.build_with_history_entry((r + 1) * 100, i, User.first)
+        LiveAttempt.build(value: (r + 1) * 100, attempt_number: i)
       end
       average, best = LiveResult.compute_average_and_best(attempts, round)
       result.update!(live_attempts: attempts, best: best, average: average)
@@ -33,9 +33,7 @@ RSpec.describe Live::DiffHelper do
                                                    "advancing_questionable" => true,
                                                    "average" => average,
                                                    "best" => best,
-                                                   "global_pos" => 1,
-                                                   "local_pos" => 1,
-                                                   "live_attempts" => attempts.map { it.serializable_hash({ only: %i[id value attempt_number] }) },
+                                                   "live_attempts" => attempts.map { it.serializable_hash({ only: %i[value attempt_number] }) },
                                                  })
       expect(diff["deleted"]).to be_nil
       expect(diff["created"]).to be_nil
@@ -46,12 +44,12 @@ RSpec.describe Live::DiffHelper do
     it 'correct diff for updated results' do
       registration_1 = registrations.first
       registration_2 = registrations.second
-      round.open_round!
+      round.open_round!(User.first)
 
       result = round.live_results.find_by!(registration_id: registration_1.id)
 
       attempts = 5.times.map.with_index(1) do |r, i|
-        LiveAttempt.build_with_history_entry((r + 1) * 200, i, User.first)
+        LiveAttempt.build(value: (r + 1) * 200, attempt_number: i)
       end
       average, best = LiveResult.compute_average_and_best(attempts, round)
       result.update!(live_attempts: attempts, best: best, average: average)
@@ -60,7 +58,7 @@ RSpec.describe Live::DiffHelper do
       result_2 = round.live_results.find_by!(registration_id: registration_2.id)
 
       attempts_2 = 5.times.map.with_index(1) do |r, i|
-        LiveAttempt.build_with_history_entry((r + 1) * 100, i, User.first)
+        LiveAttempt.build(value: (r + 1) * 100, attempt_number: i)
       end
       average, best = LiveResult.compute_average_and_best(attempts_2, round)
       result_2.update!(live_attempts: attempts_2, best: best, average: average)
@@ -75,14 +73,7 @@ RSpec.describe Live::DiffHelper do
                                                    "advancing_questionable" => true,
                                                    "average" => average,
                                                    "best" => best,
-                                                   "global_pos" => 1,
-                                                   "local_pos" => 1,
-                                                   "live_attempts" => attempts_2.map { it.serializable_hash({ only: %i[id value attempt_number] }) },
-                                                 },
-                                                 {
-                                                   "registration_id" => registration_1.id,
-                                                   "global_pos" => 2,
-                                                   "local_pos" => 2,
+                                                   "live_attempts" => attempts_2.map { it.serializable_hash({ only: %i[value attempt_number] }) },
                                                  })
       expect(diff["deleted"]).to be_nil
       expect(diff["created"]).to be_nil
@@ -92,14 +83,14 @@ RSpec.describe Live::DiffHelper do
 
     it 'sends best and worst possible for incomplete results' do
       registration_1 = registrations.first
-      round.open_round!
+      round.open_round!(User.first)
 
       result = round.live_results.find_by!(registration_id: registration_1.id)
 
       before_state = round.to_live_state
 
       attempts = 4.times.map.with_index(1) do |r, i|
-        LiveAttempt.build_with_history_entry((r + 1) * 100, i, User.first)
+        LiveAttempt.build(value: (r + 1) * 100, attempt_number: i)
       end
       average, best = LiveResult.compute_average_and_best(attempts, round)
       result.update!(live_attempts: attempts, best: best, average: average)
@@ -114,9 +105,7 @@ RSpec.describe Live::DiffHelper do
                                                    "registration_id" => registration_1.id,
                                                    "advancing_questionable" => true,
                                                    "best" => best,
-                                                   "global_pos" => 1,
-                                                   "local_pos" => 1,
-                                                   "live_attempts" => attempts.map { it.serializable_hash({ only: %i[id value attempt_number] }) },
+                                                   "live_attempts" => attempts.map { it.serializable_hash({ only: %i[value attempt_number] }) },
                                                    "best_possible_average" => 200,
                                                    "worst_possible_average" => 300,
                                                  })
@@ -147,6 +136,19 @@ RSpec.describe Live::DiffHelper do
       after_hash = Live::DiffHelper.state_hash(round.to_live_state)
 
       expect(before_hash).not_to eq(after_hash)
+    end
+
+    it "has a compression key defined for each serialization attribute" do
+      r = create(:live_result, round: round)
+      # We need an incomplete result to include all keys
+      attempts = 3.times.map.with_index(1) do |r, i|
+        LiveAttempt.build(value: (r + 1) * 200, attempt_number: i)
+      end
+      r.update!(live_attempts: attempts)
+      keys = %w[]
+      full_live_state = Live::DiffHelper.forecast_for(round.to_live_state.first, round)
+      full_live_state.deep_transform_keys { keys << it }
+      expect(keys.uniq).to match_array(Live::DiffHelper::COMPRESSION_MAP.keys.map(&:to_s))
     end
   end
 end

@@ -1,5 +1,9 @@
-import React, { useCallback, useMemo, useReducer } from 'react';
-import { Button, Divider, Message } from 'semantic-ui-react';
+import React, {
+  useCallback, useMemo, useReducer, useRef,
+} from 'react';
+import {
+  Button, Divider, Message, Ref,
+} from 'semantic-ui-react';
 import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
@@ -8,14 +12,17 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
 import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
-import { computeMatchingProgress } from './util';
-import PickerWithMatching from './PickerWithMatching';
+import { AUTOMATCH_DEFAULT_SETTINGS, useConfigState, useScrambleFilesQuery } from './util';
+import EventAndRoundPicker from './EventAndRoundPicker';
+import { MoveModalProvider } from './MoveScrambleSetModal';
+import AutoMatchPanel from './AutoMatchPanel';
+import Errored from '../Requests/Errored';
 
 export default function Wrapper({
   wcifEvents,
   competitionId,
   initialScrambleFiles,
-  inboxScrambleSets,
+  matchedScrambleSets,
 }) {
   return (
     <WCAQueryClientProvider>
@@ -23,7 +30,7 @@ export default function Wrapper({
         wcifEvents={wcifEvents}
         competitionId={competitionId}
         initialScrambleFiles={initialScrambleFiles}
-        inboxScrambleSets={inboxScrambleSets}
+        matchedScrambleSets={matchedScrambleSets}
       />
     </WCAQueryClientProvider>
   );
@@ -35,13 +42,17 @@ async function submitMatchedScrambles({ competitionId, matchState }) {
     'id',
   );
 
-  const matchStateIdsOnly = _.mapValues(
+  const matchStateSlim = _.mapValues(
     roundsByWcifId,
     (round) => ({
       scramble_set_count: round.scrambleSetCount,
-      scramble_sets: round.scrambleSets.map((set) => ({
+      matched_scramble_sets: round.external_scramble_sets.map((set) => ({
         id: set.id,
-        inbox_scrambles: set.inbox_scrambles.map((scr) => scr.id),
+        matched_scrambles: set.external_scrambles.map((scr) => ({
+          id: scr.id,
+          scramble_string: scr.scramble_string,
+          is_extra: scr.is_extra,
+        })),
       })),
     }),
   );
@@ -51,7 +62,7 @@ async function submitMatchedScrambles({ competitionId, matchState }) {
       'Content-Type': 'application/json',
     },
     method: 'PATCH',
-    body: JSON.stringify(matchStateIdsOnly),
+    body: JSON.stringify(matchStateSlim),
   });
 
   return data;
@@ -61,8 +72,12 @@ function ScrambleMatcher({
   wcifEvents,
   competitionId,
   initialScrambleFiles,
-  inboxScrambleSets,
+  matchedScrambleSets,
 }) {
+  const {
+    data: uploadedScrambleFiles,
+  } = useScrambleFilesQuery(competitionId, initialScrambleFiles);
+
   const [
     {
       initial: persistedMatchState,
@@ -73,7 +88,7 @@ function ScrambleMatcher({
     scrambleMatchReducer,
     {
       wcifEvents,
-      scrambleSets: inboxScrambleSets,
+      matchedScrambleSets,
     },
     initializeState,
   );
@@ -85,26 +100,14 @@ function ScrambleMatcher({
 
   useUnsavedChangesAlert(hasUnsavedChanges);
 
-  const { mutate: submitMatchState, isPending: isSubmitting } = useMutation({
+  const { mutate: submitMatchState, isPending: isSubmitting, error } = useMutation({
     mutationFn: submitMatchedScrambles,
-    onSuccess: (data) => dispatchMatchState({ type: 'resetAfterSave', scrambleSets: data }),
+    onSuccess: (data) => dispatchMatchState({ type: 'resetAfterSave', matchedScrambleSets: data }),
   });
 
   const submitAction = useCallback(
     () => submitMatchState({ competitionId, matchState }),
     [competitionId, matchState, submitMatchState],
-  );
-
-  const roundMatchingProgress = useMemo(
-    () => computeMatchingProgress(matchState.events),
-    [matchState],
-  );
-
-  const hasAnyMissing = roundMatchingProgress.some(
-    (roundProgress) => roundProgress.actual < roundProgress.expected
-      || roundProgress.scrambleSets.some(
-        (setProgress) => setProgress.actual < setProgress.expected,
-      ),
   );
 
   const renderSubmitButton = useCallback((btnText, disabledOverride = false) => (
@@ -114,20 +117,26 @@ function ScrambleMatcher({
       icon="save"
       onClick={submitAction}
       loading={isSubmitting}
-      disabled={isSubmitting || hasAnyMissing || disabledOverride}
+      disabled={isSubmitting || disabledOverride}
     />
-  ), [isSubmitting, submitAction, hasAnyMissing]);
+  ), [isSubmitting, submitAction]);
+
+  const [pickerNavigation, navigatePicker] = useConfigState();
+  const [autoMatchSettings, configureAutoMatch] = useConfigState(AUTOMATCH_DEFAULT_SETTINGS);
+
+  const pickerSectionRef = useRef();
 
   return (
-    <>
+    <MoveModalProvider rootMatchState={matchState}>
       <FileUpload
         competitionId={competitionId}
         initialScrambleFiles={initialScrambleFiles}
+        pickerSectionRef={pickerSectionRef}
+        navigatePicker={navigatePicker}
+        autoMatchSettings={autoMatchSettings}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
-        matchingProgress={roundMatchingProgress}
       />
-      <Divider />
       {hasUnsavedChanges && (
         <Message info>
           You have unsaved changes. Don&apos;t forget to
@@ -136,19 +145,40 @@ function ScrambleMatcher({
           your changes!
         </Message>
       )}
-      <PickerWithMatching
+      <AutoMatchPanel
+        autoMatchSettings={autoMatchSettings}
+        configureAutoMatch={configureAutoMatch}
+        navigatePicker={navigatePicker}
+        uploadedScrambleFiles={uploadedScrambleFiles}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
-        pickerKey="events"
       />
-      {hasUnsavedChanges && (
+      <Ref innerRef={pickerSectionRef}>
+        <Divider />
+      </Ref>
+      <EventAndRoundPicker
+        pickerNavigation={pickerNavigation}
+        navigatePicker={navigatePicker}
+        autoMatchSettings={autoMatchSettings}
+        uploadedScrambleFiles={uploadedScrambleFiles}
+        matchState={matchState}
+        dispatchMatchState={dispatchMatchState}
+      />
+      {hasUnsavedChanges && !error && (
         <Message info content="You have unsaved changes. Don't forget to Save below!" />
       )}
+      {error && <Errored error={error} />}
       <Divider />
-      <Button.Group>
-        {renderSubmitButton('Save Changes', !hasUnsavedChanges)}
-        <Button secondary basic content="Reset" icon="refresh" onClick={() => dispatchMatchState({ type: 'resetToInitial' })} />
-      </Button.Group>
-    </>
+      {renderSubmitButton('Save Changes', !hasUnsavedChanges)}
+      <Button
+        floated="right"
+        secondary
+        basic
+        content="Reset"
+        icon="undo"
+        disabled={!hasUnsavedChanges}
+        onClick={() => dispatchMatchState({ type: 'resetToInitial' })}
+      />
+    </MoveModalProvider>
   );
 }

@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 
 module CompetitionResultsImport
-  def self.import_temporary_results(competition, temporary_results_data, mark_result_submitted: false, store_uploaded_json: false, results_json_str: nil)
+  def self.import_temporary_results(
+    competition,
+    temporary_results_data,
+    result_submission_method,
+    mark_result_submitted: false,
+    store_uploaded_json: false,
+    results_json_str: nil
+  )
     errors = []
+
     results_to_import = temporary_results_data[:results_to_import]
     scrambles_to_import = temporary_results_data[:scrambles_to_import]
     persons_to_import = temporary_results_data[:persons_to_import]
@@ -17,7 +25,7 @@ module CompetitionResultsImport
 
       competition.touch(:results_submitted_at) if mark_result_submitted && !competition.results_submitted?
 
-      competition.uploaded_jsons.create!(json_str: results_json_str) if store_uploaded_json
+      competition.uploaded_jsons.create!(json_str: results_json_str, upload_type: result_submission_method) if store_uploaded_json
     rescue ActiveRecord::RecordNotUnique
       errors << "Duplicate record found while uploading results. Maybe there is a duplicate personId in the JSON?"
     rescue ActiveRecord::RecordInvalid => e
@@ -56,13 +64,6 @@ module CompetitionResultsImport
                                    round_type_id: inbox_res.round_type_id,
                                    round_id: inbox_res.round_id,
                                    format_id: inbox_res.format_id,
-                                   # We keep writing to the valueN columns here as an exception,
-                                   # because the bulk import through `insert_all` below does not trigger model hooks
-                                   value1: inbox_res.value1,
-                                   value2: inbox_res.value2,
-                                   value3: inbox_res.value3,
-                                   value4: inbox_res.value4,
-                                   value5: inbox_res.value5,
                                    best: inbox_res.best,
                                    average: inbox_res.average,
                                    attempt_values: inbox_res.attempts,

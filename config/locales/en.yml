@@ -146,10 +146,16 @@ en:
   attempts:
     attempt_name: "Attempt %{number}"
   round:
+    title: "Rounds"
     #context: e.g. event_name can be "3x3x3 Cube", and round_name can be "Cutoff First round"
     name: "%{event_name} %{round_name}"
     #context: round_number will be a numeral like 1,2,3 and NOT a written word like "First", "Second" or "Third".
     round_number: "Round %{round_number}"
+  scramble_set:
+    #context: The term "scramble set" has the same meaning as in TNoodle. For example, "Scramble Set B"
+    name: "Scramble Set %{letter_code}"
+    group: "Group %{number}"
+    attempt: "Attempt %{number}"
   #context: Words used to describe the requirement to advance to the next round
   advancement_condition:
     short:
@@ -428,6 +434,7 @@ en:
         officers:
           chair: "WCA Chair"
           executive_director: "WCA Executive Director"
+          chief_operating_officer: "WCA Chief Operating Officer"
           secretary: "WCA Secretary"
           vice_chair: "WCA Vice-Chair"
           treasurer: "WCA Treasurer"
@@ -1042,6 +1049,7 @@ en:
       please_fix_profile: "In order to register for competitions, you need to fix the following problems:"
       profile: "Profile"
       approve: "Approve"
+      approve_confirm: "Are you sure you want to approve WCA ID %{wca_id}?"
       unconfirmed_email: "This account's email address (%{email}) is not confirmed."
       confirm_new_email: "Changing your email will require confirming the new email before being effective."
       pending_mail_confirmation: "This account is pending confirmation of the new email address %{email}."
@@ -1395,6 +1403,7 @@ en:
       orga_closed_reg_success: "Successfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
       no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
+      schedule_locked_after_results_submitted: "The schedule cannot be edited after results have been submitted."
     live:
       title: "Live Results"
       connection:
@@ -1404,6 +1413,30 @@ en:
       podiums:
         title: "Podiums"
         undetermined: "Podiums to be determined"
+      admin:
+        open: "Open"
+        clear: "Clear"
+        competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
+        round_locked: "locked"
+        warnings:
+          omitted: "You've omitted attempt %{attempt_number}. Make sure it's intentional."
+          DNS: "There's at least one DNS followed by a valid result. Please ensure it is indeed a DNS and not a DNF."
+          impossible: "The result you're trying to submit seems to be impossible: attempt %{attempt_number} is done in less than 30 seconds per cube tried. If you want to enter minutes, don't forget to add two zeros for centiseconds at the end of the score"
+          inconsistent: "The result you're trying to submit seem to be inconsistent. There's a big difference between the best single (%{best_single}) and the worst single (%{worst_single}). Please check that the results are accurate."
+        quit:
+          title: "Quit Competitor"
+          next_to_advance:
+            one: "The next competitor to advance is %{competitors}"
+            other: "The next competitors to advance are %{competitors}"
+          advance: "Advance next Competitor"
+          quit_confirm: "Quit Competitor from Round"
+          no_next: "No next competitor to advance."
+          cancel: "Cancel"
+          failed_to_fetch: "Failed to fetch next advancing competitor"
+      results:
+        competitor: "Competitor"
+      errors:
+        round_closed: "The Round is not open yet"
     #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"
@@ -1677,6 +1710,7 @@ en:
           trainee_delegate_ids: "WCA Trainee Delegate(s)"
           organizer_ids: "Organizer(s)"
           contact: "Contact"
+          lead_delegate_id: "Lead Delegate"
         championships: "Championships"
         website:
           generate_website: "I would like to use WCA website instead of an external one for additional information."
@@ -1765,6 +1799,7 @@ en:
           trainee_delegate_ids: "WCA Trainee Delegates for the competition."
           organizer_ids: "Competition organizers (they need an account to be listed here)."
           contact_html: "Optional contact information. If you do not fill this in, contact inquiries will be submitted through a form without revealing organizers' emails. %{md}. Example: [Text to display](mailto:some@email.com)"
+          lead_delegate_id: "The Lead Delegate is responsible for the administrative aspects of a competition (Results, Report, Dues Invoice)"
         website:
           generate_website: ""
           external_website: "The website of the competition. Must be a valid http(s) url."
@@ -2762,7 +2797,7 @@ en:
       content_html: "The competition must be announced at least 28 days before the start of the competition (see <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>). However, this is rarely enough time. You should consider everything that will go into organizing your competition, and give yourself enough time to prepare. Also, the WCAT will need time to review your competition before it is announced. Consult with your delegate if you are unsure about how much time will be needed."
     paragraph4:
       title: "Proximity policy"
-      content1: "WCA competitions will be accepted if they are at least 10 km or 5 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 10 km and the time between them is less than 5 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
+      content1: "WCA competitions will be accepted if they are at least 30 km or 5 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 30 km and the time between them is less than 5 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
       olist1:
         '1': "The two competitions don't have events in common."
         '2': "The two competitions take place in different regions."
@@ -2921,6 +2956,7 @@ en:
       multiple_newcomers_with_same_name_warning: "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors and that all results are correctly separated by their corresponding id."
       wrong_parenthesis_type_error: "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
       special_characters_in_name_warning: "The name '%{name}' contains invalid special characters (such as numbers, quotes, or other symbols). Names should only contain letters, spaces, hyphens, apostrophes, periods, and regular parentheses."
+      suspicious_last_name_warning: "'%{name}' has '%{suffix}' as their last name, which may not be an actual last name (e.g. a generational suffix written in full). Please confirm it is their legal last name, or replace/remove it accordingly."
       successive_uppercase_name_warning: "'%{name}' has successive uppercase letters in their name. Please confirm that this is indeed the correct spelling or fix the name."
       lowercase_name_warning: "'%{name}' has a lowercase name. Please confirm that this is indeed the correct spelling or fix the name."
       missing_period_in_single_letter_middle_name_warning: "'%{name}' has a single letter middle name without an abbreviation period. Please confirm that this is indeed the correct spelling or fix the name."
@@ -2928,6 +2964,9 @@ en:
       single_letter_first_or_last_name_warning: "'%{name}' has a single letter as first or last name. Please fix the name or confirm that this is indeed the competitor's correct name according to an official document."
       single_name_warning: "'%{name}' has only one name. Please confirm that this is indeed the competitor's full name according to an official document."
       competitor_limit_exceeded_warning: "The number of persons in the competition (%{n_competitors}) is above the competitor limit (%{competitor_limit}). The results of the competitors registered after the competitor limit was reached must be removed."
+      registration_details_mismatch_warning: "Person with registrant ID %{person_id} (%{name}) has details that do not match their registration: %{mismatches}"
+      missing_matching_registration_warning: "Person %{name} does not have a matching registration."
+      unaccepted_registration_with_results_warning: "Person %{name} has results in the competition, but the registration is not marked as 'accepted'."
     results:
       automatically_position_fixed_info: "[%{round_id}] Automatically fixed the position of %{person_name} from %{pos} to %{expected_pos}."
       mbf_result_over_time_limit_warning: "[%{round_id}] Result '%{result}' for %{person_name} is over the time limit. Please ensure this is due to time penalties before sending the results, or fix the result to DNF."

@@ -1,20 +1,28 @@
 import React from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Message } from 'semantic-ui-react';
+import { Form, Message } from 'semantic-ui-react';
 import Errored from '../../Requests/Errored';
 import importWcaLiveResults from '../api/importWcaLiveResults';
 import Loading from '../../Requests/Loading';
 import { contactRecipientUrl, uploadScramblesUrl } from '../../../lib/requests/routes.js.erb';
+import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 
 export default function ImportWcaLiveResults({
   competitionId,
   uploadedScrambleFilesCount,
+  isAdminView,
   onImportSuccess,
 }) {
+  const [markResultSubmitted, setMarkResultSubmitted] = useCheckboxState(isAdminView);
+
   const {
     mutate: importWcaLiveResultsMutate, error, isPending, isError,
   } = useMutation({
-    mutationFn: () => importWcaLiveResults({ competitionId }),
+    mutationFn: () => importWcaLiveResults({
+      competitionId,
+      markResultSubmitted,
+      storeUploadedJson: !isAdminView, // The JSON will be uploaded to database only for Delegates.
+    }),
     onSuccess: onImportSuccess,
   });
 
@@ -51,13 +59,22 @@ export default function ImportWcaLiveResults({
           </Message.Item>
         </Message.List>
       </Message>
-      <Button
-        primary
-        onClick={importWcaLiveResultsMutate}
-        disabled={uploadedScrambleFilesCount === 0}
-      >
-        Use WCA Live Results
-      </Button>
+      <Form onSubmit={importWcaLiveResultsMutate}>
+        {isAdminView && (
+          <Form.Checkbox
+            checked={markResultSubmitted}
+            onChange={setMarkResultSubmitted}
+            label="If results are not marked as submitted, mark it as submitted (this is only visible to WRT)"
+          />
+        )}
+        <Form.Button
+          primary
+          type="submit"
+          disabled={uploadedScrambleFilesCount === 0}
+        >
+          Use WCA Live Results
+        </Form.Button>
+      </Form>
     </>
   );
 }

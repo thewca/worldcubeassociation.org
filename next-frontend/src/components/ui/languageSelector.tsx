@@ -8,7 +8,7 @@ import {
   fallbackLng,
   storageKey,
 } from "@/lib/i18n/settings";
-import availableLocales from "@/lib/i18n/locales/available.json";
+import { availableLocales } from "@/lib/i18n/settings";
 import Cookies from "js-cookie";
 
 export default function Wrapper() {
