@@ -13,11 +13,13 @@ export function LiveTableHeader({
   format,
   showFull = true,
   byPerson = false,
+  isAdmin = false,
   t,
 }: {
   isLinked?: boolean;
   showFull?: boolean;
   byPerson?: boolean;
+  isAdmin?: boolean;
   format: Format;
   t: TFunction;
 }) {
@@ -34,6 +36,7 @@ export function LiveTableHeader({
             {t("competitions.results_table.round")}
           </Table.ColumnHeader>
         )}
+        {isAdmin && <Table.ColumnHeader />}
         <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
         {!byPerson && (
           <Table.ColumnHeader>

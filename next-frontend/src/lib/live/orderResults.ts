@@ -34,19 +34,23 @@ export const orderResults = (results: LiveResult[], format: Format) => {
     return a.registration_id - b.registration_id;
   });
 
-  return sortedResults.map((result, index, arr) => {
-    if (index === 0) {
-      return { ...result, global_pos: 1 };
-    }
+  return sortedResults.reduce<(LiveResult & { global_pos: number })[]>(
+    (acc, result, index) => {
+      if (index === 0) {
+        return [...acc, { ...result, global_pos: 1 }];
+      }
 
-    const prev = arr[index - 1];
+      const prev = acc[index - 1];
 
-    const isTied =
-      result[rankBy] === prev[rankBy] &&
-      (!secondaryRankBy || result[secondaryRankBy] === prev[secondaryRankBy]);
+      const isTied =
+        result[rankBy] === prev[rankBy] &&
+        (!secondaryRankBy || result[secondaryRankBy] === prev[secondaryRankBy]);
 
-    const global_pos = isTied ? prev.global_pos : index + 1;
-
-    return { ...result, global_pos };
-  });
+      return [
+        ...acc,
+        { ...result, global_pos: isTied ? prev.global_pos : index + 1 },
+      ];
+    },
+    [],
+  );
 };
