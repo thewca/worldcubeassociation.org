@@ -34,9 +34,7 @@ class LinkedRound < ApplicationRecord
     Live::Advancing.next_advancing_without(merged_live_results, competitor_being_quit)
   end
 
-  def next_round
-    last_round_in_link.next_round
-  end
+  delegate :next_round, to: :last_round_in_link
 
   def recompute_advancing(can_update_advancing)
     results_to_update = live_results.where.not(global_pos: nil).where(locked_by_id: nil)
