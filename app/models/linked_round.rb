@@ -34,9 +34,13 @@ class LinkedRound < ApplicationRecord
     Live::Advancing.next_advancing_without(merged_live_results, competitor_being_quit)
   end
 
-  def recompute_advancing(advancement_condition, can_update_advancing)
+  def next_round
+    last_round_in_link.next_round
+  end
+
+  def recompute_advancing(can_update_advancing)
     results_to_update = live_results.where.not(global_pos: nil).where(locked_by_id: nil)
-    advancement_determining_condition = final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
+    advancement_determining_condition = final_round? ? Live::Advancing.podium_condition(rounds.first) : next_round.participation_condition
     Live::Advancing.recompute_advancing(merged_live_results, results_to_update, advancement_determining_condition, can_update_advancing: can_update_advancing)
   end
 

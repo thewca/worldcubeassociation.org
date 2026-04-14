@@ -5,7 +5,7 @@ module Live
     # Port from https://github.com/thewca/wca-live/blob/main/lib/wca_live/scoretaking/advancing.ex#L143
     # Basically this just removes the number one placed competitor and then sees who of the non-advancing
     # competitors would make it if that competitor got dnf
-    def self.next_advancing_without(live_results, competitor_being_quit)
+    def self.next_advancing_without(live_results, competitor_being_quit, round)
       already_quit_ids = live_results.quit.pluck(:id)
 
       first_advancing = live_results.advancing.first
@@ -18,16 +18,16 @@ module Live
       ignored_ids = [first_advancing.id] | quit_result_ids | already_quit_ids
 
       advancement_determining = live_results
-                                .where.not(live_results: ignored_ids)
+                                .where.not(id: ignored_ids)
 
       # Eager load associations to avoid N+1 on potential_solve_time
       loaded_results = advancement_determining.includes(:live_attempts).to_a
 
       # Assume that everyone who quit got dnf
-      worst_results = Array.new(ignored_ids.length) { LiveResult.build(round: self, best: LiveResult::WORST_POSSIBLE_SCORE, average: LiveResult::WORST_POSSIBLE_SCORE) }
+      worst_results = Array.new(ignored_ids.length) { LiveResult.build(round: round, best: LiveResult::WORST_POSSIBLE_SCORE, average: LiveResult::WORST_POSSIBLE_SCORE) }
       results_with_worst = (loaded_results + worst_results).sort_by(&:values_for_sorting)
 
-      hypothetically_advancing_ids = advancement_condition.apply(results_with_worst).pluck(:id)
+      hypothetically_advancing_ids = round.next_round.participation_condition.apply(results_with_worst).pluck(:id)
 
       live_results.where(id: hypothetically_advancing_ids & candidate_ids)
     end
@@ -47,6 +47,10 @@ module Live
           ["advancing = FALSE, advancing_questionable = (global_pos <= ?)", max_advancing],
         )
       end
+    end
+
+    def self.podium_condition(round)
+      ResultConditions::Ranking.new(scope: round.format.sort_by, value: 3)
     end
   end
 end

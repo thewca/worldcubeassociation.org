@@ -216,14 +216,18 @@ class Round < ApplicationRecord
     linked_round&.live_results&.reset
   end
 
+  def next_round
+    sibling_rounds.find_by(number: number + 1)
+  end
+
   def recompute_advancing
     if linked_round.blank?
       results_to_update = live_results.where.not(global_pos: nil).where(locked_by_id: nil)
-      advancement_determining_condition = final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
+      advancement_determining_condition = final_round? ? Live::Advancing.podium_condition(self) : next_round.participation_condition
       Live::Advancing.recompute_advancing(live_results, results_to_update, advancement_determining_condition)
     else
       colinked_done = colinked_rounds.all?(&:score_taking_done?)
-      linked_round.recompute_advancing(advancement_condition, colinked_done)
+      linked_round.recompute_advancing(colinked_done)
     end
   end
 
@@ -457,7 +461,11 @@ class Round < ApplicationRecord
   end
 
   def next_advancing_without(competitor_being_quit)
-    Live::Advancing.next_advancing_without(live_results, competitor_being_quit)
+    Live::Advancing.next_advancing_without(live_results, competitor_being_quit, self)
+  end
+
+  def rounds
+    [self]
   end
 
   def quit_from_round!(registration_id, quitting_user, to_advance: nil)
@@ -474,7 +482,7 @@ class Round < ApplicationRecord
 
       participation_source.rounds.count do |round|
         1 + Live::DiffHelper.broadcast_changes(round) do
-          round.live_results.where(id: to_advance&.id).update!(advancing: true)
+          round.live_results.where(id: to_advance&.pluck(:id)).update!(advancing: true)
           round.live_results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
         end
       end
