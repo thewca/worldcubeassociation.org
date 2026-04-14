@@ -204,6 +204,8 @@ class Round < ApplicationRecord
 
   def clear_round!(clearing_user)
     LiveAttempt.where(live_result_id: live_result_ids).delete_all
+    # We have to use update_all here because live_attempts_count is write protected
+    live_results.update_all(best: 0, average: 0, live_attempts_count: 0, advancing: false, advancing_questionable: false)
     self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
   end
 
