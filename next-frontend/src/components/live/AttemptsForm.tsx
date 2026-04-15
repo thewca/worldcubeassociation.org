@@ -6,7 +6,7 @@ import {
   useListCollection,
   VStack,
 } from "@chakra-ui/react";
-import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
+import AttemptResultField from "@/components/live/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
