@@ -24,7 +24,7 @@ export default function AddResults({
     <LiveResultAdminProvider round={round} competitionId={competitionId}>
       <ConfirmProvider>
         <SimpleGrid columns={16} gap={6}>
-          <GridItem colSpan={4}>
+          <GridItem colSpan={4} position="sticky" top={4} alignSelf="start">
             <AttemptsForm
               header="Add Result"
               eventId={eventId}
