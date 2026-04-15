@@ -26,6 +26,16 @@ import { TFunction } from "i18next";
 import { LuAlignJustify } from "react-icons/lu";
 import { iconMap } from "@/components/icons/iconMap";
 import { route } from "nextjs-routes";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+
+function parseActivityCodeOrNull(path: string) {
+  try {
+    const { eventId } = parseActivityCode(path);
+    return eventId;
+  } catch {
+    return null;
+  }
+}
 
 export default function TabMenu({
   competitionInfo,
@@ -38,14 +48,16 @@ export default function TabMenu({
   tabs: CompetitionNavTab[];
   isLiveMenu?: boolean;
 }) {
-  const [openGroup, setOpenGroup] = useState<string | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
   const pathName = usePathname();
   const { t } = useT();
 
   const path = _.last(pathName.split("/"));
   const currentPath = path === competitionInfo.id ? "general" : path;
+
+  const eventId = parseActivityCodeOrNull(currentPath!);
+
+  const [openGroup, setOpenGroup] = useState<string | null>(eventId);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <Tabs.Root
