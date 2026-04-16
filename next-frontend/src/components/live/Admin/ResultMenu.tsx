@@ -79,7 +79,7 @@ export default function ResultMenu({
                     onClick={handleEditClick}
                     disabled={isPending}
                   >
-                    Edit
+                    {t("competitions.live.admin.edit")}
                   </Menu.Item>
                   <Menu.Item value="results" asChild disabled={isPending}>
                     <Link
@@ -91,8 +91,9 @@ export default function ResultMenu({
                           registrationId: competitor.id.toString(),
                         },
                       })}
+                      fontWeight="normal"
                     >
-                      Results
+                      {t("competitions.live.admin.results")}
                     </Link>
                   </Menu.Item>
                   {result.attempts.length > 0 ? (
@@ -101,7 +102,7 @@ export default function ResultMenu({
                       onClick={handleClearClick}
                       disabled={isPending}
                     >
-                      Clear
+                      {t("competitions.live.admin.clear")}
                     </Menu.Item>
                   ) : (
                     <Menu.Item
@@ -109,7 +110,7 @@ export default function ResultMenu({
                       onClick={() => setIsQuitting(true)}
                       disabled={isPending}
                     >
-                      Quit
+                      {t("competitions.live.admin.quit.quit_menu")}
                     </Menu.Item>
                   )}
                 </Menu.ItemGroup>
