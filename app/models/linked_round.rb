@@ -36,4 +36,12 @@ class LinkedRound < ApplicationRecord
       #   and then pick out the first (ie fastest) per competitor.
       .uniq(&:registration_id)
   end
+
+  def as_wcif_participation_source(target_round)
+    {
+      "type" => "linkedRounds",
+      "roundId" => self.wcif_ids,
+      "resultCondition" => target_round.participation_condition&.to_wcif,
+    }
+  end
 end
