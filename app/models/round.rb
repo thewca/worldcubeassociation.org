@@ -402,6 +402,137 @@ class Round < ApplicationRecord
     ScheduleActivity.parse_activity_code(wcif_id)
   end
 
+  def load_live_results!(round_results_wcif, current_user)
+    person_id_to_registration_id = self.competition.registrations
+                                       .to_h { [it.registrant_id, it.id] }
+
+    results_by_registration_id = self.live_results.index_by(&:registration_id)
+    recorded_registration_ids = results_by_registration_id.keys
+
+    database_now = self.current_time_from_proper_timezone
+
+    self.transaction do
+      incoming_registration_ids = round_results_wcif.map { person_id_to_registration_id[it["personId"]] }
+      recorded_not_incoming = results_by_registration_id.except(*incoming_registration_ids)
+
+      round_already_had_results = !results_by_registration_id.empty?
+
+      result_ids_to_delete = recorded_not_incoming.values.pluck(:id)
+      # Hard-deleting the current round matches our ILR quitting behavior.
+      #   TODO: Think it over whether that's really the best idea.
+      LiveResult.where(id: result_ids_to_delete).delete_all
+
+      unless self.first_round?
+        registrations_who_were_deleted = recorded_not_incoming.values.pluck(:registration_id)
+
+        # Mark everyone from previous rounds as quit
+        previous_round_results = self.previous_round.relevant_results
+                                     .where(registration_id: registrations_who_were_deleted)
+
+        previous_round_results.update_all(quit_by_id: current_user)
+
+        quit_history_items = previous_round_results.ids.map do |result_id|
+          {
+            live_result_id: result_id,
+            entered_by_id: current_user.id,
+            entered_at: database_now,
+            action_type: :quit,
+            action_source: :api_sync,
+          }
+        end
+
+        LiveResultHistoryEntry.insert_all!(quit_history_items)
+      end
+
+      result_data_to_load = round_results_wcif.map do |round_result_wcif|
+        registration_db_id = person_id_to_registration_id[round_result_wcif["personId"]]
+
+        # The REAL `last_attempt_entered_at` is being set below at the very end,
+        #   because only at that point can we compute which results _actually_ changed.
+        # But MySQL upserting needs a "default value" to assume for the INSERT INTO part,
+        #   so we just copy over the one which we already have
+        last_attempt_entered_at = results_by_registration_id[registration_db_id]&.last_attempt_entered_at || database_now
+
+        {
+          registration_id: registration_db_id,
+          round_id: self.id,
+          best: round_result_wcif["best"],
+          average: round_result_wcif["average"],
+          global_pos: round_result_wcif["ranking"],
+          local_pos: round_result_wcif["ranking"],
+          last_attempt_entered_at: last_attempt_entered_at,
+        }
+      end
+
+      LiveResult.upsert_all(result_data_to_load)
+
+      # Reload to get the generated IDs
+      results_by_registration_id = self.live_results.reload
+                                       .includes(:live_attempts)
+                                       .index_by(&:registration_id)
+
+      attempts_to_load = round_results_wcif.flat_map do |round_result_wcif|
+        registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
+        live_result = results_by_registration_id[registration_id]
+
+        round_result_wcif["attempts"].map.with_index(1) do |attempt, attempt_number|
+          {
+            live_result_id: live_result.id,
+            attempt_number: attempt_number,
+            value: attempt["result"],
+          }
+        end
+      end
+
+      LiveAttempt.upsert_all(attempts_to_load) if attempts_to_load.any?
+
+      histories_to_generate = round_results_wcif.filter_map do |round_result_wcif|
+        registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
+        live_result = results_by_registration_id[registration_id]
+
+        recorded_attempts = live_result.live_attempts.pluck(:value)
+        imported_attempts = round_result_wcif["attempts"].pluck("result")
+
+        result_already_existed = recorded_registration_ids.include?(person_id_to_registration_id[round_result_wcif["personId"]])
+
+        result_has_attempts = !imported_attempts.empty?
+        attempts_have_changed = recorded_attempts != imported_attempts
+
+        next if result_has_attempts && !attempts_have_changed
+
+        action_type = if result_has_attempts
+                        :scoretaking
+                      elsif result_already_existed
+                        :cleared
+                      elsif round_already_had_results
+                        :advanced_next
+                      else
+                        :opened
+                      end
+
+        attempts = imported_attempts if action_type == :scoretaking
+
+        {
+          live_result_id: live_result.id,
+          entered_by_id: current_user.id,
+          entered_at: database_now,
+          attempt_details: attempts,
+          action_type: action_type,
+          action_source: :api_sync,
+        }
+      end
+
+      LiveResultHistoryEntry.insert_all!(histories_to_generate) if histories_to_generate.any?
+
+      results_which_changed = histories_to_generate.pluck(:live_result_id)
+      LiveResult.where(id: results_which_changed).update_all(last_attempt_entered_at: database_now)
+    end
+
+    # Sync up all of the attempts and histories `upsert_all` shenanigans
+    self.live_results.reset
+    self.linked_round&.live_results&.reset
+  end
+
   def self.wcif_to_round_attributes(event, round_wcif, all_rounds_wcif)
     {
       number: self.parse_wcif_id(round_wcif["id"])[:round_number],
