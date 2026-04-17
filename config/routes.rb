@@ -274,6 +274,7 @@ Rails.application.routes.draw do
   get 'teams-committees' => 'static_pages#teams_committees'
   get 'tutorial' => redirect('/education', status: 302)
   get 'translators' => 'static_pages#translators'
+  get 'volunteer', to: redirect('https://docs.google.com/spreadsheets/d/13JhGJWDfJR96MYgPpxkSaV2E3bMIdIWjWLuYO83vOls/edit?gid=0#gid=0')
   get 'officers-and-board' => 'static_pages#officers_and_board'
 
   resources :regional_organizations, only: %i[new create update edit destroy], path: '/regional-organizations'
