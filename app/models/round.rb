@@ -529,6 +529,7 @@ class Round < ApplicationRecord
 
     # Sync up all of the attempts and histories `upsert_all` shenanigans
     self.live_results.reset
+    self.linked_round&.live_results&.reset
   end
 
   def self.wcif_to_round_attributes(event, round_wcif, all_rounds_wcif)
