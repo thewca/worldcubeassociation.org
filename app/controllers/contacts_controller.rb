@@ -3,12 +3,12 @@
 class ContactsController < ApplicationController
   CONTACT_DEFAULT_LOCALE = :en
 
-  private def maybe_send_contact_email(contact, force_locale: nil)
+  private def maybe_send_contact_email(contact, force_locale: nil, ticket: nil)
     if !contact.valid?
       error_msg = contact.errors.full_messages.presence&.join(". ") || "Invalid contact object created"
       render status: :bad_request, json: { error: error_msg }
     elsif I18n.with_locale(force_locale) { contact.deliver }
-      render status: :ok, json: { message: "Mail sent successfully" }
+      render status: :ok, json: { message: "Mail sent successfully", ticket_id: ticket&.id }.compact
     else
       render status: :internal_server_error, json: { error: "Mail delivery failed" }
     end
@@ -124,7 +124,11 @@ class ContactsController < ApplicationController
                                 )
                               end
 
-    ticket = TicketsEditPerson.create_ticket(wca_id, changes_requested, current_user)
+    begin
+      ticket = TicketsEditPerson.create_ticket(wca_id, changes_requested, current_user, attachment)
+    rescue WcaExceptions::ApiException => e
+      return render status: e.status, json: { error: e.message }
+    end
 
     maybe_send_contact_email(
       ContactEditProfile.new(
@@ -139,6 +143,7 @@ class ContactsController < ApplicationController
         request: request,
       ),
       force_locale: CONTACT_DEFAULT_LOCALE,
+      ticket: ticket,
     )
   end
 
