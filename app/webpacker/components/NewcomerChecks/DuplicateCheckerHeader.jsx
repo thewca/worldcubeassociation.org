@@ -47,6 +47,7 @@ export default function DuplicateCheckerHeader({
         {NEWCOMER_COUNT_THRESHOLD}
         ), it may be possible that your job actually needs more time to run.
         Please use the button at your own discretion.
+        {' '}
         <Button onClick={run}>Retry</Button>
       </Message>
     );
@@ -58,6 +59,7 @@ export default function DuplicateCheckerHeader({
         The computation has been triggered, but we&apos;re waiting for free server capacity.
         {' '}
         Please check back later.
+        {' '}
         <Button onClick={refetch}>Refresh</Button>
       </Message>
     );
@@ -67,6 +69,7 @@ export default function DuplicateCheckerHeader({
     return (
       <Message info>
         Computing Duplicates right now, please check back later.
+        {' '}
         <Button onClick={refetch}>Refresh</Button>
       </Message>
     );
@@ -77,6 +80,7 @@ export default function DuplicateCheckerHeader({
       <Message positive>
         {`Duplicate Checker ran successfully ${
           DateTime.fromISO(lastDuplicateCheckerJobRun.end_time).toLocal().toRelative()}.`}
+        {' '}
         <Button onClick={run}>Re-run now</Button>
       </Message>
     );
@@ -86,6 +90,7 @@ export default function DuplicateCheckerHeader({
     return (
       <Message negative>
         Something went wrong. Please try running again.
+        {' '}
         <Button onClick={run}>Re-run now</Button>
       </Message>
     );
@@ -94,6 +99,7 @@ export default function DuplicateCheckerHeader({
   return (
     <Message positive>
       Duplicate Checker has not yet ran.
+      {' '}
       <Button onClick={run}>Run now</Button>
     </Message>
   );
