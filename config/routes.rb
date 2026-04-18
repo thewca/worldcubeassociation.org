@@ -119,6 +119,7 @@ Rails.application.routes.draw do
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'upload-scrambles' => 'results_submission#upload_scrambles', as: :upload_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
+    get 'unfinished-persons' => 'results_submission#unfinished_persons', as: :unfinished_persons
     resources :scramble_files, only: %i[index create destroy], shallow: true do
       patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
     end
@@ -221,6 +222,7 @@ Rails.application.routes.draw do
   resources :tickets, only: %i[index show] do
     post 'verify_warnings' => 'tickets#verify_warnings', as: :verify_warnings
     post 'merge_inbox_results' => 'tickets#merge_inbox_results', as: :merge_inbox_results
+    post 'verify_newcomers' => 'tickets#verify_newcomers', as: :verify_newcomers
     post 'post_results' => 'tickets#post_results', as: :post_results
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
     get 'eligible_roles_for_bcc' => 'tickets#eligible_roles_for_bcc', as: :eligible_roles_for_bcc
@@ -229,6 +231,7 @@ Rails.application.routes.draw do
     get 'events_merged_data' => 'tickets#events_merged_data', as: :events_merged_data
     post 'approve_edit_person_request' => 'tickets#approve_edit_person_request', as: :approve_edit_person_request
     post 'reject_edit_person_request' => 'tickets#reject_edit_person_request', as: :reject_edit_person_request
+    post 'create_wca_ids' => 'tickets#create_wca_ids', as: :create_wca_ids
     post 'sync_edit_person_request' => 'tickets#sync_edit_person_request', as: :sync_edit_person_request
     post 'join_as_bcc_stakeholder' => 'tickets#join_as_bcc_stakeholder', as: :join_as_bcc_stakeholder
     resources :ticket_comments, only: %i[index create], as: :comments
