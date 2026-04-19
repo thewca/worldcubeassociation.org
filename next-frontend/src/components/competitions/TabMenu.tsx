@@ -8,6 +8,7 @@ import {
   Collapsible,
   Drawer,
   IconButton,
+  Separator,
   Spacer,
   Tabs,
   Text,
@@ -24,24 +25,39 @@ import { useState } from "react";
 import { TFunction } from "i18next";
 import { LuAlignJustify } from "react-icons/lu";
 import { iconMap } from "@/components/icons/iconMap";
+import { route } from "nextjs-routes";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+
+function parseActivityCodeOrNull(path: string) {
+  try {
+    const { eventId } = parseActivityCode(path);
+    return eventId;
+  } catch {
+    return null;
+  }
+}
 
 export default function TabMenu({
   competitionInfo,
   children,
   tabs,
+  isLiveMenu = false,
 }: {
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
   tabs: CompetitionNavTab[];
+  isLiveMenu?: boolean;
 }) {
-  const [openGroup, setOpenGroup] = useState<string | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
   const pathName = usePathname();
   const { t } = useT();
 
   const path = _.last(pathName.split("/"));
   const currentPath = path === competitionInfo.id ? "general" : path;
+
+  const eventId = parseActivityCodeOrNull(currentPath!);
+
+  const [openGroup, setOpenGroup] = useState<string | null>(eventId);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <Tabs.Root
@@ -56,7 +72,7 @@ export default function TabMenu({
       <Tabs.List
         height="fit-content"
         position="sticky"
-        minWidth="fit-content"
+        width="3xs"
         textAlign="center"
         hideBelow="md"
         gap="3"
@@ -68,6 +84,8 @@ export default function TabMenu({
           onToggle={(tab: CompetitionNavTab) =>
             setOpenGroup((prev) => (prev === tab.menuKey ? null : tab.menuKey))
           }
+          isLiveMenu={isLiveMenu}
+          competitionInfo={competitionInfo}
         />
       </Tabs.List>
       <Box hideFrom="md" mb="4">
@@ -117,6 +135,7 @@ export default function TabMenu({
                         prev === tab.menuKey ? null : tab.menuKey,
                       )
                     }
+                    competitionInfo={competitionInfo}
                   />
                 </Tabs.List>
               </Drawer.Body>
@@ -136,28 +155,68 @@ function TabList({
   t,
   onToggle,
   openGroup,
+  isLiveMenu,
+  competitionInfo,
 }: {
   tabs: CompetitionNavTab[];
   t: TFunction;
   openGroup: string | null;
   onToggle: (tab: CompetitionNavTab) => void;
+  isLiveMenu?: boolean;
+  competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
-  return tabs.map((tab) =>
-    "href" in tab ? (
-      <Tabs.Trigger value={tab.menuKey} asChild key={tab.menuKey}>
-        <Text asChild textStyle="bodyEmphasis" justifyContent="left">
-          <Link href={tab.href}>{t(tab.i18nKey)}</Link>
-        </Text>
-      </Tabs.Trigger>
-    ) : (
-      <CollapsibleTabGroup
-        key={tab.menuKey}
-        tab={tab}
-        t={t}
-        isOpen={openGroup === tab.menuKey}
-        onToggle={() => onToggle(tab)}
-      />
-    ),
+  return (
+    <>
+      {tabs.map((tab) =>
+        "href" in tab ? (
+          <Tabs.Trigger value={tab.menuKey} asChild key={tab.menuKey}>
+            <Text asChild textStyle="bodyEmphasis" justifyContent="left">
+              <Link href={tab.href}>{t(tab.i18nKey)}</Link>
+            </Text>
+          </Tabs.Trigger>
+        ) : (
+          <CollapsibleTabGroup
+            key={tab.menuKey}
+            tab={tab}
+            t={t}
+            isOpen={openGroup === tab.menuKey}
+            onToggle={() => onToggle(tab)}
+          />
+        ),
+      )}
+      {!isLiveMenu && (
+        <>
+          <Separator />
+          {competitionInfo.tab_names.map((tabName) => (
+            <Tabs.Trigger
+              key={tabName}
+              value={tabName}
+              minHeight="fit-content"
+              asChild
+            >
+              <Text
+                textStyle="bodyEmphasis"
+                asChild
+                maxW="44"
+                justifyContent="left"
+              >
+                <Link
+                  href={route({
+                    pathname: "/competitions/[competitionId]/tabs/[tabName]",
+                    query: {
+                      competitionId: competitionInfo.id,
+                      tabName: encodeURIComponent(tabName),
+                    },
+                  })}
+                >
+                  {tabName}
+                </Link>
+              </Text>
+            </Tabs.Trigger>
+          ))}
+        </>
+      )}
+    </>
   );
 }
 
@@ -185,6 +244,7 @@ function CollapsibleTabGroup({
         py="2"
         borderRadius="md"
         _hover={{ bg: "bg.subtle" }}
+        cursor="pointer"
       >
         <Text textStyle="bodyEmphasis">
           <IconComponent /> {t(i18nKey)}
