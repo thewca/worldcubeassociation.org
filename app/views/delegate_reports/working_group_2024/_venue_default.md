@@ -1,4 +1,4 @@
-### Equipment 
+### Equipment
 [Please fill in the counts for all corresponding competition gear below]
 
 * Gen 3 Timers:
