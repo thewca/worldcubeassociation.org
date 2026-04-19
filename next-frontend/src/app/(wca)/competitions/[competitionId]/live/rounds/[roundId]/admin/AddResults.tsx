@@ -1,5 +1,5 @@
 "use client";
-import { SimpleGrid, GridItem } from "@chakra-ui/react";
+import { SimpleGrid, GridItem, Heading } from "@chakra-ui/react";
 import AttemptsForm from "@/components/live/AttemptsForm";
 import formats from "@/lib/wca/data/formats";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
@@ -23,8 +23,9 @@ export default function AddResults({
   return (
     <LiveResultAdminProvider round={round} competitionId={competitionId}>
       <ConfirmProvider>
+        <Heading textStyle="h1">{roundName}</Heading>
         <SimpleGrid columns={16} gap={6}>
-          <GridItem colSpan={4}>
+          <GridItem colSpan={4} position="sticky" top={4} alignSelf="start">
             <AttemptsForm
               header="Add Result"
               eventId={eventId}
@@ -39,7 +40,7 @@ export default function AddResults({
               competitionId={competitionId}
               isAdminView
               canManage
-              title={roundName}
+              title=""
             />
           </GridItem>
         </SimpleGrid>
