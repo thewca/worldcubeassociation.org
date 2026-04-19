@@ -6,7 +6,8 @@ import { useQuery } from '@tanstack/react-query';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import { fetchJsonOrError } from '../../../../lib/requests/fetchWithAuthenticityToken';
-import { viewUrls, competitionUrl } from '../../../../lib/requests/routes.js.erb';
+import { apiV0Urls, viewUrls, competitionUrl } from '../../../../lib/requests/routes.js.erb';
+import { groupTypes } from '../../../../lib/wca-data.js.erb';
 import useInputState from '../../../../lib/hooks/useInputState';
 
 const statusColor = (s) => {
@@ -116,30 +117,65 @@ function DelegatedPane({ userId }) {
     queryFn: () => fetchDelegated(userId),
   });
 
-  if (isFetching) return <Loader active inline />;
+  const { data: rolesData, isFetching: isFetchingRoles } = useQuery({
+    queryKey: ['hq-delegate-roles', userId],
+    queryFn: async () => {
+      const { data: d } = await fetchJsonOrError(
+        apiV0Urls.userRoles.list({ userId, groupType: groupTypes.delegate_regions }),
+      );
+      return d;
+    },
+  });
 
-  return data.length > 0 ? (
-    <Table celled compact striped>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Competition</Table.HeaderCell>
-          <Table.HeaderCell>City</Table.HeaderCell>
-          <Table.HeaderCell>Country</Table.HeaderCell>
-          <Table.HeaderCell>Date</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {data.map((row) => (
-          <Table.Row key={row.id}>
-            <Table.Cell><a href={competitionUrl(row.id)}>{row.name}</a></Table.Cell>
-            <Table.Cell>{row.city_name}</Table.Cell>
-            <Table.Cell>{row.country_id}</Table.Cell>
-            <Table.Cell>{row.start_date}</Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table>
-  ) : <Message content="No delegated competitions found." />;
+  const delegateMetadata = useMemo(() => {
+    if (!rolesData) return null;
+    const role = rolesData.find((r) => r.metadata?.total_delegated != null);
+    return role?.metadata || null;
+  }, [rolesData]);
+
+  if (isFetching || isFetchingRoles) return <Loader active inline />;
+
+  return (
+    <>
+      {delegateMetadata && (
+        <Segment padded>
+          <Header as="h4">Delegate Statistics</Header>
+          <p>
+            <strong>Total delegated competitions:</strong>
+            {' '}
+            {delegateMetadata.total_delegated}
+          </p>
+          <p>
+            <strong>Lead delegated competitions:</strong>
+            {' '}
+            {delegateMetadata.lead_delegated_competitions}
+          </p>
+        </Segment>
+      )}
+      {data.length > 0 ? (
+        <Table celled compact striped>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Competition</Table.HeaderCell>
+              <Table.HeaderCell>City</Table.HeaderCell>
+              <Table.HeaderCell>Country</Table.HeaderCell>
+              <Table.HeaderCell>Date</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {data.map((row) => (
+              <Table.Row key={row.id}>
+                <Table.Cell><a href={competitionUrl(row.id)}>{row.name}</a></Table.Cell>
+                <Table.Cell>{row.city_name}</Table.Cell>
+                <Table.Cell>{row.country_id}</Table.Cell>
+                <Table.Cell>{row.start_date}</Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      ) : <Message content="No delegated competitions found." />}
+    </>
+  );
 }
 
 function PastCompetitionsPane({ userId }) {
