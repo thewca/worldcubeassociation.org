@@ -238,6 +238,7 @@ en:
     best: "Best"
     single: "Single"
     average: "Average"
+    mean: "Mean"
     solves: "Solves"
     #context: Used as an introduction in emails
     hello: "Hello %{name},"

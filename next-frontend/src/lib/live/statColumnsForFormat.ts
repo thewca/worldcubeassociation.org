@@ -6,6 +6,11 @@ const statMap = {
     recordTagField: "average_record_tag",
     field: "average",
   },
+  mean: {
+    name: "mean",
+    recordTagField: "average_record_tag",
+    field: "average",
+  },
   single: {
     name: "single",
     recordTagField: "single_record_tag",
@@ -17,6 +22,11 @@ type StatKey = keyof typeof statMap;
 export type Stat = (typeof statMap)[StatKey];
 
 export const statColumnsForFormat = (format: Format) =>
-  [format.sort_by, format.sort_by_second]
+  // Why do Bo1 and Bo2 even return a format.sort_by_second?
+  [format.sort_by, format.expected_solve_count > 2 && format.sort_by_second]
     .filter(Boolean)
-    .map((s) => statMap[s as StatKey]);
+    .map((s) =>
+      s === "average" && format.id === "m"
+        ? statMap.mean
+        : statMap[s as StatKey],
+    );
