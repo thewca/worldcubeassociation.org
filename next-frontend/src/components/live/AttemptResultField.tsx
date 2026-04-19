@@ -40,9 +40,9 @@ function stringToInt(numeric: string) {
 }
 
 function inputToAttemptResult(input: string) {
-  if (input === "") return SKIPPED_VALUE;
-  if (input === "DNF") return DNF_VALUE;
-  if (input === "DNS") return DNS_VALUE;
+  const specialValue = REVERSE_SPECIAL_VALUES[input];
+
+  if (specialValue) return specialValue;
 
   const num = stringToInt(input);
 
@@ -54,28 +54,27 @@ function inputToAttemptResult(input: string) {
   );
 }
 
-function attemptResultToInput(number: number) {
-  if (number === SKIPPED_VALUE) return "";
-  if (number === DNF_VALUE) return "DNF";
-  if (number === DNS_VALUE) return "DNS";
+const SPECIAL_VALUES: Partial<Record<number, string>> = {
+  [SKIPPED_VALUE]: "",
+  [DNF_VALUE]: "DNF",
+  [DNS_VALUE]: "DNS",
+};
 
-  return centisecondsToClockFormat(number);
+const REVERSE_SPECIAL_VALUES: Partial<Record<string, number>> =
+  Object.fromEntries(
+    Object.entries(SPECIAL_VALUES).map(([k, v]) => [v, Number(k)]),
+  ) as Partial<Record<string, number>>;
+
+function attemptResultToInput(number: number) {
+  return SPECIAL_VALUES[number] ?? centisecondsToClockFormat(number);
 }
 
 function inputToNumber(input: string): number {
-  if (input === "") return SKIPPED_VALUE;
-  if (input === "DNF") return DNF_VALUE;
-  if (input === "DNS") return DNS_VALUE;
-
-  return stringToInt(input);
+  return REVERSE_SPECIAL_VALUES[input] ?? stringToInt(input);
 }
 
 function numberToInput(number: number) {
-  if (number === SKIPPED_VALUE) return "";
-  if (number === DNF_VALUE) return "DNF";
-  if (number === DNS_VALUE) return "DNS";
-
-  return number.toString();
+  return SPECIAL_VALUES[number] ?? number.toString();
 }
 
 function reformatTimeInput(input: string) {
@@ -158,9 +157,7 @@ export function FmMovesField({
 
   return (
     <Field.Root invalid={!isValid}>
-      <Field.Label>PointsField (isAverage: {isAverage.toString()})</Field.Label>
       <Input placeholder={placeholder} spellCheck={false} {...binding} />
-      <Field.HelperText>{value}</Field.HelperText>
     </Field.Root>
   );
 }
