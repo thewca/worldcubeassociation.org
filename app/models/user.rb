@@ -1581,8 +1581,11 @@ class User < ApplicationRecord
       to_user_competition_ids = new_user.registrations.pluck(:competition_id)
       registrations.where.not(competition_id: to_user_competition_ids).update_all(user_id: new_user.id)
 
-      # 2. Handle conflicting registrations (where both users registered for the same competition)
-      registrations.where(competition_id: to_user_competition_ids).each do |registration|
+      # 2. Handle conflicting registrations (where both users registered for the same competition):
+      #  - If both are accepted: Raise error.
+      #  - If only incoming is accepted: Swap them so the master account gets the accepted one.
+      #  - Otherwise (incoming is not accepted): Keep the master's and the other stays in the old account.
+      registrations.where(competition_id: to_user_competition_ids).find_each do |registration|
         other_registration = new_user.registrations.find_by(competition_id: registration.competition_id)
         if registration.accepted? && other_registration.accepted?
           raise "Both users have accepted registrations for #{registration.competition.name} (#{registration.competition_id})"
@@ -1593,9 +1596,6 @@ class User < ApplicationRecord
           other_registration.update_columns(user_id: nil)
           registration.update_columns(user_id: new_user.id)
           other_registration.update_columns(user_id: id)
-        else
-          # Incoming registration is NOT accepted, and master already has one.
-          # In this case, we keep the master's and the other stays in the old account.
         end
       end
 
