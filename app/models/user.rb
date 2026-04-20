@@ -1575,7 +1575,29 @@ class User < ApplicationRecord
       competitions_results_posted.update_all(results_posted_by: new_user.id)
       competitions_announced.update_all(announced_by: new_user.id)
       roles.update_all(user_id: new_user.id)
-      registrations.update_all(user_id: new_user.id)
+
+      # Handle registrations with custom logic to prioritize accepted ones
+      # 1. Transfer non-conflicting registrations
+      to_user_competition_ids = new_user.registrations.pluck(:competition_id)
+      registrations.where.not(competition_id: to_user_competition_ids).update_all(user_id: new_user.id)
+
+      # 2. Handle conflicting registrations (where both users registered for the same competition)
+      registrations.where(competition_id: to_user_competition_ids).each do |registration|
+        other_registration = new_user.registrations.find_by(competition_id: registration.competition_id)
+        if registration.accepted? && other_registration.accepted?
+          raise "Both users have accepted registrations for #{registration.competition.name} (#{registration.competition_id})"
+        elsif registration.accepted?
+          # The master account has a non-accepted registration, but the old account has an accepted one.
+          # We swap them: the master gets the accepted one, and the old account keeps the unaccepted one.
+          # We use update_columns to bypass validations and avoid intermediate unique index violations.
+          other_registration.update_columns(user_id: nil)
+          registration.update_columns(user_id: new_user.id)
+          other_registration.update_columns(user_id: id)
+        else
+          # Incoming registration is NOT accepted, and master already has one.
+          # In this case, we keep the master's and the other stays in the old account.
+        end
+      end
 
       return if wca_id.blank?
 
@@ -1583,7 +1605,7 @@ class User < ApplicationRecord
       self.update!(wca_id: nil) # Must remove WCA ID before adding it as it is unique in the Users table.
       new_user.update!(wca_id: wca_id_to_be_transferred)
 
-      # After this merge, there won't be any registrations for self as all of
+      # After this merge, there won't be any accepted registrations for self as all of
       # them will be transferred to new_user. So any potential duplicates of
       # self is no longer valid. There might be some potential duplicates for
       # new_user, but they need to be refetched. But refetching here may look
