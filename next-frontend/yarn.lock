@@ -9023,15 +9023,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:^3.4.0":
-  version: 3.4.0
-  resolution: "dompurify@npm:3.4.0"
+"dompurify@npm:^3.4.1":
+  version: 3.4.1
+  resolution: "dompurify@npm:3.4.1"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10c0/5593ac44ee20b9aa521c2120884effc98927fb9128c548183c75e79e0a04357c62ee913a049a267c8f396cb8c9d520ecf72562826c5524c46d4fe03c12063638
+  checksum: 10c0/440a4246020cb54b82ef2cb66381e4d310a0c470f9994655e61b6122811f0eaa00a2f9665d2bed30ca3f58932ba7bb0d5e26fdfce61c8daf35d21a3f5a799e48
   languageName: node
   linkType: hard
 
@@ -13278,7 +13278,7 @@ __metadata:
     aws4: "npm:^1.13.2"
     babel-plugin-react-compiler: "npm:^1.0.0"
     culori: "npm:^4.0.2"
-    dompurify: "npm:^3.4.0"
+    dompurify: "npm:^3.4.1"
     eslint: "npm:^9"
     eslint-config-next: "npm:16.2.4"
     eslint-config-prettier: "npm:^10.1.8"
