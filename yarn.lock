@@ -8534,6 +8534,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pack-config-diff@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "pack-config-diff@npm:0.1.0"
+  dependencies:
+    js-yaml: "npm:^4.1.0"
+  peerDependencies:
+    ts-node: ">=10"
+  peerDependenciesMeta:
+    ts-node:
+      optional: true
+  bin:
+    pack-config-diff: bin/pack-config-diff
+  checksum: 10c0/50abe6e660856cc3d430300effbb078a1b1961997afbf74067eb8f931b9ffb9829c6b37242892fe5e7050249d5c4c32a9dda2ffdc54cdde4eec2932d39fde32d
+  languageName: node
+  linkType: hard
+
 "package-json-from-dist@npm:^1.0.0":
   version: 1.0.0
   resolution: "package-json-from-dist@npm:1.0.0"
@@ -10726,7 +10742,7 @@ __metadata:
     sass: "npm:^1.99.0"
     sass-loader: "npm:^16.0.7"
     semantic-ui-react: "npm:^2.1.5"
-    shakapacker: "npm:9.7.0"
+    shakapacker: "npm:10.0.0"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^17.8.0"
     stylelint-config-recommended-scss: "npm:^17.0.1"
@@ -11091,11 +11107,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shakapacker@npm:9.7.0":
-  version: 9.7.0
-  resolution: "shakapacker@npm:9.7.0"
+"shakapacker@npm:10.0.0":
+  version: 10.0.0
+  resolution: "shakapacker@npm:10.0.0"
   dependencies:
     js-yaml: "npm:^4.1.0"
+    pack-config-diff: "npm:^0.1.0"
     path-complete-extname: "npm:^1.0.0"
     webpack-merge: "npm:^5.8.0"
     yargs: "npm:^17.7.2"
@@ -11121,10 +11138,10 @@ __metadata:
     sass-loader: ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     swc-loader: ^0.1.15 || ^0.2.0
     terser-webpack-plugin: ^5.3.1
-    webpack: ^5.76.0
+    webpack: ^5.101.0
     webpack-assets-manifest: ^5.0.6 || ^6.0.0
-    webpack-cli: ^4.9.2 || ^5.0.0 || ^6.0.0
-    webpack-dev-server: ^4.15.2 || ^5.2.2
+    webpack-cli: ^4.9.2 || ^5.0.0 || ^6.0.0 || ^7.0.0
+    webpack-dev-server: ^5.2.2
     webpack-subresource-integrity: ^5.1.0
   peerDependenciesMeta:
     "@babel/core":
@@ -11179,7 +11196,7 @@ __metadata:
       optional: true
     webpack-subresource-integrity:
       optional: true
-  checksum: 10c0/d46e192c88840cc654bc20014422cb2c0978fdd3b2fd76bcb1e37b26603e07e459c20ee1d8f6105a4398390d61cebce2f6811f677c3ad884039a6d2b6f8251fa
+  checksum: 10c0/edde0e73e11a54f8370e36cc122ef941bfdbca570b608582fd04947d09716ccf56317eb7a8c7d05e29ca01d8a015ec05f1f9c80fa005ecb22ab50398ad54bf8c
   languageName: node
   linkType: hard
 
