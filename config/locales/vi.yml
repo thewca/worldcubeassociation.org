@@ -59,7 +59,7 @@ vi:
     #original_hash: 459f987
     XS: Nhiều Quốc gia (Nam Mỹ)
     #original_hash: 9027fe6
-    XW: Nhiều Quốc gia (Toàn thế giới)
+    XW: Nhiều Quốc gia (Toàn cầu)
   continents:
     #original_hash: 0f138c8
     Multiple Continents: Nhiều Châu lục
@@ -84,17 +84,17 @@ vi:
     due_value: '$%{value} trên mỗi thí sinh cho mỗi giải đấu'
   events:
     #original_hash: 3732390
-    '222': Khối lập phương 2x2x2
+    '222': Khối 2x2x2
     #original_hash: 8180137
-    '333': Khối lập phương 3x3x3
+    '333': Khối 3x3x3
     #original_hash: 2ee5b5a
-    '444': Khối lập phương 4x4x4
+    '444': Khối 4x4x4
     #original_hash: b7a99fa
-    '555': Khối lập phương 5x5x5
+    '555': Khối 5x5x5
     #original_hash: 4e3ea57
-    '666': Khối lập phương 6x6x6
+    '666': Khối 6x6x6
     #original_hash: b567fc4
-    '777': Khối lập phương 7x7x7
+    '777': Khối 7x7x7
     #original_hash: 29d5411
     333bf: 3x3x3 Bịt mắt
     #original_hash: 0a5e7bf
@@ -221,11 +221,11 @@ vi:
     round_number: 'Vòng %{round_number}'
   scramble_set:
     #original_hash: ba18ca7
-    name: 'Bộ công thức tráo %{letter_code}'
+    name: 'Bộ Công thức tráo %{letter_code}'
     #original_hash: d46fe75
     group: 'Nhóm %{number}'
     #original_hash: 17dae1e
-    attempt: 'Lượt thi số %{number}'
+    attempt: 'Lượt %{number}'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -240,16 +240,16 @@ vi:
         #original_hash: 076911b
         points: '%{round_format} > %{points}'
     #original_hash: 6e55337
-    ranking: 'Top %{ranking} được vào vòng tiếp theo'
+    ranking: 'Top %{ranking} vào vòng tiếp theo'
     #original_hash: 7ee969c
-    percent: 'Top %{percent}% được vào vòng tiếp theo'
+    percent: 'Top %{percent}% vào vòng tiếp theo'
     attempt_result:
       #original_hash: 6173090
-      time: '%{round_format} < %{time} được vào vòng tiếp theo'
+      time: '%{round_format} < %{time} vào vòng tiếp theo'
       #original_hash: 581709d
-      moves: '%{round_format} < %{moves} bước được vào vòng tiếp theo'
+      moves: '%{round_format} < %{moves} bước vào vòng tiếp theo'
       #original_hash: e9f0c92
-      points: '%{round_format} > %{points} điểm được vào vòng tiếp theo'
+      points: '%{round_format} > %{points} điểm vào vòng tiếp theo'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -326,7 +326,7 @@ vi:
     #original_hash: 40ba6a3
     tutorial: Hướng dẫn thí sinh mới
     #original_hash: ceab6ea
-    multi: Nộp khối hình cho Giải Bịt mắt Nhiều 3x3x3
+    multi: Nộp khối hình thi Bịt mắt Nhiều 3x3x3
     #original_hash: 364653c
     breakfast: Nghỉ ăn sáng
     #original_hash: 585ecb7
@@ -367,7 +367,7 @@ vi:
       #original_hash: 603a218
       wca_id: ID WCA
       #original_hash: fa4c045
-      representing: Đại diện cho
+      representing: Khu vực đại diện
     #original_hash: 3fc0ba1
     all_regions: Mọi khu vực
     errors:
@@ -435,7 +435,7 @@ vi:
         #original_hash: 8ed8874
         login: Email hoặc ID WCA
         #original_hash: fa4c045
-        country_iso2: Đại diện cho
+        country_iso2: Khu vực đại diện
         #original_hash: ab58155
         dob: Ngày sinh
         #original_hash: 7636bbc
@@ -473,16 +473,16 @@ vi:
           Tôi muốn nhận thông báo khi các tài nguyên phần mềm của WCA có cập
           nhật mới
         #original_hash: 730db33
-        receive_delegate_reports: Tôi muốn nhận Báo cáo Delegate từ các Giải đấu WCA qua email
+        receive_delegate_reports: Tôi muốn nhận báo cáo Delegate từ các giải đấu WCA qua email
         #original_hash: 8667157
-        delegate_reports_region: Tôi chỉ muốn nhận Báo cáo Delegate từ các khu vực sau
+        delegate_reports_region: Tôi chỉ muốn nhận báo cáo Delegate từ các khu vực sau
         #original_hash: 57eaf24
         user_preferred_events: Nội dung ưa thích
         #original_hash: e632fbf
         otp_attempt: 'Nhập mã xác thực hai yếu tố của bạn:'
       registration:
         #original_hash: 3c23a67
-        guests: Khách
+        guests: Khách mời
         #original_hash: fce06e2
         comments: Bình luận
         #original_hash: dc9d458
@@ -724,7 +724,7 @@ vi:
       html: ''
     error_notification:
       #original_hash: d70e9cb
-      default_message: 'Vui lòng kiểm tra lại các lỗi sau đây:'
+      default_message: 'Vui lòng kiểm tra các vấn đề sau đây:'
     hints:
       incident:
         #original_hash: c54e268
@@ -739,7 +739,7 @@ vi:
           Vui lòng điền bằng tiếng Anh.
         #original_hash: 3de5729
         public_summary: >-
-          Mô  tả tổng quan về sự cố và quyết định cuối cùng để hiển thị công
+          Mô tả tổng quan về sự cố và quyết định cuối cùng để hiển thị công
           khai. Vui lòng điền bằng tiếng Anh.
         #original_hash: da39a3e
         digest_worthy: ''
@@ -749,7 +749,9 @@ vi:
         competition_id: ''
       user:
         #original_hash: 7588d71
-        dob: Nhập ngày sinh của thí sinh theo định dạng YYYY-MM-DD.
+        dob: >-
+          Nhập ngày sinh của thí sinh theo định dạng YYYY-MM-DD
+          (năm-tháng-ngày).
         #original_hash: ac908c9
         name: >-
           Nhập chính xác họ tên đầy đủ của thí sinh, ví dụ: <strong>Nguyễn Văn
@@ -830,8 +832,8 @@ vi:
         #original_hash: 53c16eb
         body: >-
           Sử dụng thẻ &lt;!-- break --&gt; để hiện bản xem trước trên trang chủ.
-          Trang chủ sẽ hiện nội dung đặt phía trước thẻ này. Trang bài viết sẽ
-          hiển thị đầy đủ nội dung.
+          Trang chủ sẽ hiển thị nội dung đặt phía trước thẻ này. Trang bài viết
+          sẽ hiển thị đầy đủ nội dung.
         #original_hash: 0e3764f
         show_on_homepage: >-
           Lưu ý! Không sử dụng tùy chọn này cho dữ liệu không công khai. Tùy
@@ -867,26 +869,26 @@ vi:
           Liệt kê toàn bộ các sự cố bất thường so với các sự cố thường gặp. Đánh
           số cho các sự cố từ 1. để các Delegate khác có thể sử dụng số thứ tự
           này để nhắc đến các sự cố. Nếu không có sự cố gì bất thường, hãy liệt
-          kê ra các sự cố đáng chú ý nhất. Tích vào các hộp tương ứng dưới đấy
+          kê ra các sự cố đáng chú ý nhất. Tích vào các hộp tương ứng dưới đây
           nếu bạn cần phản hồi từ các Ủy ban.
         #original_hash: 7577db4
         setup_images: >-
-          Bạn PHẢI đính kèm ít nhất %{image_count} ảnh chụp khu vực tráo đề và
-          thi đấu của giải đấu này, nên là ảnh chụp khi giải đấu đang diễn ra
+          Bạn PHẢI đính kèm ít nhất %{image_count} hình chụp khu vực tráo đề và
+          thi đấu của giải đấu này, nên là hình chụp khi giải đấu đang diễn ra
           (tuy nhiên cũng có thể đính kèm các ảnh khác). Bạn có thể chọn nhiều
-          ảnh cùng một lúc. Bạn chỉ có thể xóa ảnh khi đã tải lên đủ số ảnh khác
-          (nếu muốn thay ảnh, bạn phải đăng ảnh mới lên trước khi xóa ảnh cũ).
-          Vui lòng giải thích lý do nếu không có ảnh chụp khu vực thi đấu và
-          hoặc khu vực tráo đề khi giải đấu đang diễn ra.
+          ảnh cùng một lúc. Bạn chỉ có thể xóa hình khi đã tải lên đủ số hình
+          khác (nếu muốn thay thế, bạn phải đăng hình mới lên trước khi xóa hình
+          cũ). Vui lòng giải thích lý do nếu không có hình chụp khu vực thi đấu
+          và/hoặc khu vực tráo đổi khi giải đấu đang diễn ra.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
-        wrc_incidents: Danh sách số thứ tự các sự cố mà bạn muốn có phản hồi từ WRC.
+        wrc_incidents: Số thứ tự của các sự cố cần phản hồi từ WRC.
         #original_hash: da39a3e
         wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: >-
-          Danh sách số thứ tự các sự cố mà bạn muốn có phản hồi từ WIC. <br>
+          Số thứ tự của các sự cố cần phản hồi từ WIC. <br>
           <strong>%{wic_incident_alert}</strong>
         #original_hash: c4fd7a6
         wic_incident_alert: >-
@@ -895,21 +897,20 @@ vi:
           sự cố vào báo cáo và gửi email riêng cho WIC. Đối với các sự cố khác,
           vui lòng chỉ mô tả ngắn gọn về sự cố mà không bao gồm thông tin cá
           nhân, và liên hệ riêng với WIC để cung cấp thông tin chi tiết. WIC vẫn
-          sẽ có phản hồi đối với phiên bản được báo cáo công khai để tạo nhận
-          thức chung. Đối với các sự cố cần WIC xem xét mà có liên quan đến Tình
-          nguyện viên WCA, vui lòng loại bỏ toàn bộ thông tin khỏi báo cáo, và
-          liên hệ riêng với WIC.
+          sẽ có phản hồi đối với phiên bản được báo cáo công khai nhằm tạo nhận
+          thức chung. Đối với các sự cố có liên quan đến Tình nguyện viên WCA
+          cần được WIC xem xét, vui lòng loại bỏ toàn bộ thông tin khỏi báo cáo
+          và liên hệ riêng với WIC.
         #original_hash: f30abdc
         remarks: >-
-          Nói về bất kỳ chi tiết nào khác mà bạn muốn chia sẻ (VD: công đồng
-          phát triển hơn/suy thoái đi, các kế hoạch sắp tới của khu vực). Nếu
-          bạn muốn bổ sung nội dung cho các phần trước, xin mời viết thêm tại
-          đây.
+          Nói về bất kỳ điều gì khác mà bạn muốn chia sẻ (VD: cộng đồng phát
+          triển hơn/suy thoái đi, các kế hoạch sắp tới của khu vực). Nếu bạn
+          muốn bổ sung nội dung cho các phần trước, xin mời viết thêm tại đây.
         #original_hash: da39a3e
         discussion_url: ''
       competition_tab:
         #original_hash: e396d28
-        name: 'Ví dụ: đi lại, thanh toán, giải thưởng, ăn ở'
+        name: 'Ví dụ: Đi lại, Thanh toán lệ phí, Giải thưởng, Nhà tài trợ'
         #original_hash: da39a3e
         content: ''
       person:
@@ -1011,7 +1012,7 @@ vi:
         document: Tài liệu
       contact_wrt:
         #original_hash: 603a218
-        wca_id: WCA ID
+        wca_id: ID WCA
     #original_hash: 687d968
     competition_link_html: 'Nhấn vào <a href=''%{url}''>đây</a> để đến trang của giải đấu'
     errors:
@@ -1090,7 +1091,7 @@ vi:
             disclaimer: >-
               Nếu bạn không yêu cầu gửi mã, xin vui lòng liên hệ WST ngay lập
               tức bằng cách trả lời email này: bạn có thể đang đăng nhập ở nơi
-              nào đó khác hoặc mật khẩu của bạn có thể đã bị rò rỉ.
+              nào đó hoặc mật khẩu của bạn có thể đã bị rò rỉ.
           #original_hash: 8c13694
           name: Xác thực hai yếu tố (2FA)
           #original_hash: d28c3b6
@@ -1134,8 +1135,8 @@ vi:
           #original_hash: a87f79f
           dedicated_app_desc_html: >-
             WST khuyên dùng %{authy} trên các thiết bị cá nhân để tạo mã dùng
-            một lần khi đăng nhập. Các ứng dụng khác cũng có thể được sử dụng
-            bao gồm %{google}, %{apple}, và %{microsoft}.
+            một lần khi đăng nhập. Các ứng dụng khác cũng có thể được sử dụng,
+            bao gồm %{google}, %{apple} và %{microsoft}.
           #original_hash: f1b2ec2
           scan_qrcode_html: >-
             Quét mã QR dưới đây khi được chỉ dẫn trên ứng dụng 2FA của bạn (hoặc
@@ -1188,10 +1189,10 @@ vi:
       not_found_in_database: 'Email, ID WCA, hoặc mật khẩu không hợp lệ.'
       #original_hash: 3f9db99
       unconfirmed: >-
-        Bạn cần xác nhận địa chỉ email trước khi tiếp tục. Không nhận được email
-        xác nhận? Vào trang
+        Bạn cần xác nhận địa chỉ email trước khi tiếp tục. Chưa nhận được email
+        xác nhận? Vui lòng đến trang
         https://www.worldcubeassociation.org/users/confirmation/new để yêu cầu
-        email khác.
+        gửi email mới.
     mailer:
       confirmation_instructions:
         #original_hash: 0ea8196
@@ -1269,9 +1270,9 @@ vi:
       welcome_html: >-
         Chào mừng bạn! Trước khi tham gia giải đấu WCA đầu tiên, chúng tôi cần
         một số thông tin cho việc lưu trữ kết quả. Lưu ý rằng ngày sinh của bạn
-        sẽ không bao giờ được công khai mà không có sự cho phép của bạn.
-        <br/><br/>Nếu bạn đăng ký giúp người khác, xin vui lòng cung cấp thông
-        tin của <strong>thí sinh</strong>.
+        sẽ không bao giờ bị công khai mà không có sự cho phép của bạn.
+        <br/><br/>Nếu bạn thay mặt người khác đăng ký, xin vui lòng cung cấp
+        thông tin của <strong>thí sinh</strong>.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1281,7 +1282,7 @@ vi:
       #original_hash: ed97787
       documents: Tài liệu WCA
       #original_hash: c9bae18
-      officers_and_board: Ủy viên & Ban Quản trị WCA
+      officers_and_board: Cán bộ & Ban Quản trị WCA
       #original_hash: d8fd3e4
       delegates: WCA Delegate
       #original_hash: 37b8fdc
@@ -1398,18 +1399,18 @@ vi:
       title: Phiên dịch viên
     officers_and_board:
       #original_hash: c9bae18
-      title: Ủy viên & Ban Quản trị WCA
+      title: Cán bộ & Ban Quản trị WCA
       #original_hash: 312e799
       officers_description: >-
-        Các ủy viên WCA chịu trách nhiệm thực hiện các nhiệm vụ liên quan đến tư
-        cách phi lợi nhuận của WCA. Các ủy viên này do Ban Quản trị WCA bầu ra.
+        Các cán bộ WCA chịu trách nhiệm thực hiện các nhiệm vụ liên quan đến tư
+        cách phi lợi nhuận của WCA. Các cán bộ này do Ban Quản trị WCA bầu ra.
         Giám đốc Điều hành đóng vai trò CEO của WCA, Chủ tịch là người chủ trì
         toàn bộ các cuộc họp Ban Quản trị, Bí thư chịu trách nhiệm quản lý các
         tài liệu của tổ chức, và Thủ quỹ nắm vai trò quản lý tài chính của WCA.
       #original_hash: 19d4bbb
       board_description: >-
         Ban Quản trị WCA có vai trò lãnh đạo chung đối với tổ chức, và thực hiện
-        các nhiệm vụ không rơi vào phạm vi của các Đội ngũ và Ủy ban khác
+        các nhiệm vụ không thuộc phạm vi của các Đội ngũ và Ủy ban khác
     teams_committees_councils:
       #original_hash: 1d14e2f
       title: Các Đội ngũ và Ủy ban WCA
@@ -1465,19 +1466,18 @@ vi:
           dấu ấn của WCA với bộ môn speedcubing.
         #original_hash: 7803faf
         wct: >-
-          Đội ngũ Truyền thông WCA (WCT) nắm vai trò giám sát, hỗ trợ việc liên
+          Đội ngũ Truyền thông WCA (WCT) có vai trò giám sát, hỗ trợ việc liên
           lạc, truyền thông giữa WCA và cộng đồng và với đại chúng. Việc truyền
           thông của WCA nên đóng góp cho Mục tiêu chung của WCA và tạo nên một
           văn hóa đầy sự thân thiện, cởi mở, chào đón, minh bạch và năng động.
         #original_hash: bd69012
         wcat: >-
           Đội ngũ Công bố Giải đấu WCA (WCAT) chịu trách nhiệm phê duyệt và công
-          bố các Giải đấu WCA được các WCA Delegate đề ra, và đảm bảo việc công
-          bố này hợp với các quy chuẩn chất lượng của WCA. Đội ngũ này cũng đóng
-          vai trò duy trì các quy trình đề xuất giải đấu thông qua các tài liệu
-          như Chính sách Yêu cầu Giải đấu WCA. WCAT KHÔNG chịu trách nhiệm về
-          việc tổ chức hoặc thực hiện các nhiệm vụ của Delegate cho các giải
-          đấu.
+          bố các Giải đấu WCA theo yêu cầu của các WCA Delegate, và đảm bảo việc
+          công bố này hợp với các quy chuẩn chất lượng của WCA. Đội ngũ này cũng
+          đóng vai trò duy trì các quy trình đề xuất giải đấu thông qua các tài
+          liệu như Chính sách Yêu cầu Giải đấu WCA. WCAT KHÔNG chịu trách nhiệm
+          tổ chức hoặc thực hiện các nhiệm vụ của Delegate cho các giải đấu.
         #original_hash: 5007698
         wic: >-
           Ủy ban Liêm chính WCA (WIC) chịu trách nhiệm thực hiện các cuộc điều
@@ -1494,10 +1494,10 @@ vi:
           Ủy ban Tài chính WCA (WFC) có trách nhiệm quản lý tài chính chung của
           WCA, bao gồm đề ra ngân sách, làm báo cáo, phân tích, kế toán, và kê
           khai thuế. Ủy ban này cũng quản lý nguồn thu chính cho ngân quỹ WCA là
-          Hệ thống Hội phí WCA, cùng với các chương trình tài chính khác nhằm hỗ
-          trợ các cộng đồng khu vực với các giai đoạn phát triển khác nhau, bao
-          gồm chính sách Hỗ trợ Đi lại, Hỗ trợ Trang thiết bị và Hỗ trợ Hiệp hội
-          Khu vực.
+          Hệ thống Hội phí WCA, cùng với các chương trình hỗ trợ tài chính khác
+          dành cho các cộng đồng khu vực với các giai đoạn phát triển khác nhau,
+          bao gồm chính sách Hỗ trợ Đi lại, Hỗ trợ Trang thiết bị và Hỗ trợ Hiệp
+          hội Khu vực.
         #original_hash: 88a00fa
         wmt: >-
           Đội ngũ Tiếp thị WCA (WMT) chịu trách nhiệm quản lý Thương hiệu WCA,
@@ -1522,7 +1522,7 @@ vi:
           Ủy ban Quy định WCA (WRC) nắm vai trò xử lý các vấn đề liên quan đến
           việc áp dụng, cải thiện và phát triển bản Quy định WCA. Ủy ban này hỗ
           trợ các WCA Delegate trong các vấn đề về quy trình tại các giải đấu,
-          đồng thời đưa ra quyết định giải quyết các vấn đề còn tồn động hoặc
+          đồng thời đưa ra quyết định giải quyết các vấn đề còn tồn đọng hoặc
           được phát hiện trong tương lai.
         #original_hash: 7ca3e6f
         wrt: >-
@@ -1546,18 +1546,18 @@ vi:
           và chính sách của WCA.
     contacts:
       #original_hash: 4ef2aad
-      title: Đơn Liên lạc WCA
+      title: Đơn Liên hệ WCA
       #original_hash: ab97069
       faq_note_html: >-
-        Trước khi liên hệ chúng tôi, trước hết bạn nên đọc qua các <a
-        href="/faq">Câu hỏi Thường gặp</a>! Nếu bạn muốn liên hệ một đội ngũ
+        Trước khi liên hệ với chúng tôi, trước hết bạn nên đọc qua các <a
+        href="/faq">Câu hỏi Thường gặp</a>! Nếu bạn muốn liên hệ với một đội ngũ
         hoặc ủy ban không được liệt kê tại đây, vui lòng xem thông tin liên hệ
         tại <a href="/teams-committees">trang này</a>.
       #original_hash: ea20be0
       success_message: Đã gửi email - chúng tôi sẽ sớm hồi âm lại đến bạn.
       #original_hash: 8fa6b95
       prefilled: >-
-        Để cập nhật đơn đăng ký, bạn cần liên lạc ban tổ chức của giải đấu.
+        Để cập nhật đơn đăng ký, bạn cần liên hệ với ban tổ chức của giải đấu.
         Chúng tôi đã điền yêu cầu chỉnh sửa của bạn vào đơn liên lạc - xin vui
         lòng nộp đơn.
       form:
@@ -1570,12 +1570,13 @@ vi:
             label: Email
         contact_recipient:
           #original_hash: 54f0036
-          label: Bạn muốn liên hệ đến ai?
+          label: Bạn muốn liên hệ với ai?
           competition:
             #original_hash: 5a280ab
             label: >-
-              Liên hệ ban tổ chức/Delegate của một giải đấu (giải đáp thắc mắc
-              về giải đấu, bao gồm kết quả chưa được công bố trên website WCA)
+              Liên hệ với ban tổ chức/Delegate của một giải đấu (giải đáp thắc
+              mắc về giải đấu, bao gồm kết quả chưa được công bố trên website
+              WCA)
           wct:
             #original_hash: b73e465
             label: >-
@@ -1584,13 +1585,13 @@ vi:
           wrt:
             #original_hash: 4dd66f7
             label: >-
-              Liên hệ Đội ngũ Kết quả (về vấn đề liên quan đến kết quả hoặc
+              Liên hệ với Đội ngũ Kết quả (về vấn đề liên quan đến kết quả hoặc
               thông tin trên hồ sơ trên website WCA)
           wst:
             #original_hash: 2be6d53
             label: >-
-              Liên hệ Đội ngũ Phần mềm (báo cáo vấn đề về website WCA hoặc các
-              thắc mắc về phần mềm)
+              Liên hệ ivới Đội ngũ Phần mềm (báo cáo vấn đề về website WCA hoặc
+              các thắc mắc về phần mềm)
         competition:
           competition:
             #original_hash: 1917f4f
@@ -1669,8 +1670,8 @@ vi:
       title: Đơn chỉnh sửa hồ sơ
       #original_hash: f01c4c7
       not_logged_in_error: >-
-        Có vẻ bạn đang chưa đăng nhập. Xin vui lòng đăng nhập để chỉnh sửa hồ
-        sơ. Nếu có thắc mắc khác, xin vui lòng <a
+        Có vẻ bạn chưa đăng nhập. Xin vui lòng đăng nhập để chỉnh sửa hồ sơ. Nếu
+        có thắc mắc khác, xin vui lòng <a
         href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">liên
         hệ với chúng tôi</a>.
       #original_hash: 0afb595
@@ -1687,10 +1688,10 @@ vi:
           label: Email liên hệ
         wca_id:
           #original_hash: 6344c9e
-          label: Nhập WCA ID
+          label: Nhập ID WCA
         wca_id_search:
           #original_hash: fbba19d
-          label: Tìm WCA ID bạn muốn chỉnh sửa.
+          label: Tìm ID WCA bạn muốn chỉnh sửa.
         edit_reason:
           #original_hash: fdfcccf
           label: Lý do chỉnh sửa
@@ -1843,7 +1844,9 @@ vi:
         #original_hash: 87f1f49
         header: 'WCAT đã công bố %{competition}'
         #original_hash: 0d3d10c
-        announced: WCAT đã xét duyệt giải đấu của bạn và công bố trên trang chủ.
+        announced: >-
+          WCAT đã xét duyệt giải đấu của bạn và công bố giải đấu một cách công
+          khai.
       id_claim_possibility_email:
         #original_hash: 20e9d09
         header: Xin vui lòng liên kết WCA ID với tài khoản của bạn
@@ -1867,9 +1870,9 @@ vi:
           Bạn có thể chỉnh sửa giải đấu tại đây:
       organizer_removal_email:
         #original_hash: a31e8fb
-        header: 'Bạn đã bị xoá khỏi %{competition} với tư cách ban tổ chức'
+        header: 'Bạn đã bị xoá tư cách ban tổ chức khỏi %{competition}'
         #original_hash: 66cb109
-        information: '%{remover} đã xoá bạn khỏi %{competition} với tư cách ban tổ chức.'
+        information: '%{remover} đã xóa tư cách ban tổ chức của bạn khỏi %{competition}'
       registration_reminder_email:
         #original_hash: 7d355cb
         header: '%{competition} sắp mở đơn đăng ký'
@@ -2783,6 +2786,43 @@ vi:
         competitors_entered: 'Đã nhập %{competitors_live_results_entered}/%{total_competitors}'
         #original_hash: adec79f
         round_locked: đã khóa
+        warnings:
+          #original_hash: 9198c71
+          omitted: >-
+            Bạn chưa nhập kết quả của lượt thi số %{attempt_number}. Hãy chắc
+            chắn rằng bạn lược bỏ kết quả này một cách có chủ đích.
+          #original_hash: 82d8e53
+          DNS: >-
+            Có ít nhất một kết quả DNS ngay sau một kết quả hợp lệ. Xin vui lòng
+            xác nhận rằng kết quả này chính xác là DNS chứ không phải DNF.
+          #original_hash: 6becd6c
+          impossible: >-
+            Kết quả bạn đang cố nhập có vẻ là kết quả không thể xảy ra: lượt thi
+            số %{attempt_number} có thời gian trung bình cho mỗi khối hình thấp
+            hơn 30 giây. Nếu bạn muốn nhập số phút, hãy thêm 2 chữ số 0 cho hàng
+            phần chục và phần trăm giây ở cuối kết quả
+          #original_hash: a03301d
+          inconsistent: >-
+            Kết quả bạn đang cố nhập có vẻ không chính xác. Thành tích đơn tốt
+            nhất (%{best_single}) và kém nhất (%{worst_single}) có chênh lệch
+            rất lớn. Xin vui lòng đảm bảo kết quả được nhập chính xác.
+        quit:
+          #original_hash: de62de1
+          title: Lược bỏ thí sinh
+          #original_hash: c25b336
+          next_to_advance:
+            zero: 'Thí sinh tiếp theo vào vòng sau là %{competitors}'
+            other: 'Các thí sinh tiếp theo vào vòng sau là %{competitors}'
+          #original_hash: c87ca67
+          advance: Cho thí sinh tiếp theo vào vòng sau
+          #original_hash: e85b311
+          quit_confirm: Lược bỏ thí sinh khỏi vòng thi
+          #original_hash: 70835a0
+          no_next: Không còn thí sinh nào có thể vào vòng sau.
+          #original_hash: 77dfd21
+          cancel: Hủy
+          #original_hash: 79d6737
+          failed_to_fetch: Tìm tên thí sinh vào vòng sau thất bại
       results:
         #original_hash: 4705687
         competitor: Thí sinh

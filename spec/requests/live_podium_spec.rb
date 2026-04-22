@@ -136,6 +136,13 @@ RSpec.describe "WCA Live API" do
       create(:live_result, registration: registrations[0], round: r1, average: 300, best: 280)
       create(:live_result, registration: registrations[1], round: r1, average: 300, best: 290)
       create(:live_result, registration: registrations[2], round: r1, average: 400, best: 100)
+      create(:live_result, registration: registrations[3], round: r1, average: 500, best: 280)
+      create(:live_result, registration: registrations[4], round: r1, average: 600, best: 290)
+      create(:live_result, registration: registrations[0], round: r2, average: 600, best: 280)
+      create(:live_result, registration: registrations[1], round: r2, average: 700, best: 290)
+      create(:live_result, registration: registrations[2], round: r2, average: 800, best: 100)
+      create(:live_result, registration: registrations[3], round: r2, average: 900, best: 280)
+      create(:live_result, registration: registrations[4], round: r2, average: 1000, best: 290)
 
       get api_v1_competition_live_live_podiums_path(competition.id)
 
@@ -151,6 +158,29 @@ RSpec.describe "WCA Live API" do
                                                                            ])
     end
 
+    it "Doesn't return the podium when there are missing results" do
+      r1 = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+      r2 = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
+      create(:linked_round, rounds: [r1, r2])
+
+      # registrations[0] and [1] tie on average (300), broken by best single
+      # registrations[0]: average 300, best 280  <- 1st (better single)
+      # registrations[1]: average 300, best 290  <- 2nd (worse single)
+      # registrations[2]: average 400, best 100  <- 3rd (best single doesn't overcome average)
+      create(:live_result, registration: registrations[0], round: r1, average: 300, best: 280)
+      create(:live_result, registration: registrations[1], round: r1, average: 300, best: 290)
+      create(:live_result, registration: registrations[2], round: r1, average: 400, best: 100)
+
+      get api_v1_competition_live_live_podiums_path(competition.id)
+
+      expect(response).to be_successful
+
+      response_json = response.parsed_body
+      expect(response_json.length).to eq(1)
+
+      expect(response_json.first["results"].pluck(:registration_id)).to eq([])
+    end
+
     it "Correctly marks a shared podium position when average and best are exactly tied" do
       r1 = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
       r2 = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
@@ -161,6 +191,13 @@ RSpec.describe "WCA Live API" do
       create(:live_result, registration: registrations[0], round: r1, average: 300, best: 280)
       create(:live_result, registration: registrations[1], round: r1, average: 300, best: 280)
       create(:live_result, registration: registrations[2], round: r1, average: 400, best: 350)
+      create(:live_result, registration: registrations[3], round: r1, average: 500, best: 280)
+      create(:live_result, registration: registrations[4], round: r1, average: 600, best: 290)
+      create(:live_result, registration: registrations[0], round: r2, average: 600, best: 280)
+      create(:live_result, registration: registrations[1], round: r2, average: 700, best: 290)
+      create(:live_result, registration: registrations[2], round: r2, average: 800, best: 100)
+      create(:live_result, registration: registrations[3], round: r2, average: 900, best: 280)
+      create(:live_result, registration: registrations[4], round: r2, average: 1000, best: 290)
 
       get api_v1_competition_live_live_podiums_path(competition.id)
 

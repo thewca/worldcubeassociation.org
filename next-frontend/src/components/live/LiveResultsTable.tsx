@@ -75,6 +75,7 @@ export default function LiveResultsTable({
           isLinked={showLinkedRoundsView}
           showFull={showFull}
           t={t}
+          isAdmin={isAdmin}
         />
         <Table.Body>
           {competitorsWithOrderedResults.map((competitorAndTheirResults) => {
@@ -137,16 +138,16 @@ export default function LiveResultsTable({
                       link={showFull}
                     />
                   )}
-                  {showLinkedRoundsView && (
-                    <Table.Cell>
-                      {parseActivityCode(result.round_wcif_id).roundNumber}
-                    </Table.Cell>
-                  )}
                   {showText && showFull && (
                     <CountryCell
                       countryIso2={competitorAndTheirResults.country_iso2}
                       rowSpan={rowSpan}
                     />
+                  )}
+                  {showLinkedRoundsView && (
+                    <Table.Cell>
+                      {parseActivityCode(result.round_wcif_id).roundNumber}
+                    </Table.Cell>
                   )}
                   {showFull && (
                     <LiveAttemptsCells

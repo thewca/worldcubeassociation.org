@@ -24,8 +24,13 @@ import {
   SKIPPED_VALUE,
   encodeMbldResult,
 } from "@/lib/wca/wcif/attempts";
-import type { FormEvent } from "react";
+import type { ChangeEvent } from "react";
 import type { EventId } from "@/lib/wca/data/events";
+import {
+  autocompleteFmAttemptResult,
+  autocompleteMbldDecodedValue,
+  autocompleteTimeAttemptResult,
+} from "@/lib/live/attempt-result";
 
 export const DNF_KEYS = ["d", "D", "/"];
 export const DNS_KEYS = ["s", "S", "*"];
@@ -112,6 +117,7 @@ export function TimeField({
     parse: inputToAttemptResult,
     format: attemptResultToInput,
     applyMask: reformatTimeInput,
+    cleanup: autocompleteTimeAttemptResult,
     shortcuts: resultShortcuts,
   });
 
@@ -133,8 +139,11 @@ export function FmMovesField({
   const isAverage = resultType === "average";
 
   const maskedValue = isAverage ? value / 100 : value;
+
   const onMaskedChange = (value: number) =>
     onChange(isAverage ? value * 100 : value);
+  const maskedCleanup = (value: number) =>
+    isAverage ? value : autocompleteFmAttemptResult(value);
 
   const { isValid, binding } = useInputMask({
     value: maskedValue,
@@ -143,6 +152,7 @@ export function FmMovesField({
     parse: inputToNumber,
     format: numberToInput,
     applyMask: reformatNumberInput,
+    cleanup: maskedCleanup,
     shortcuts: resultShortcuts,
   });
 
@@ -185,8 +195,10 @@ export function MbldField({
       ...payload,
     };
 
-    setDraft(patchedResult);
-    const encodedResult = encodeMbldResult(patchedResult);
+    const updatedDecodedValue = autocompleteMbldDecodedValue(patchedResult);
+
+    setDraft(updatedDecodedValue);
+    const encodedResult = encodeMbldResult(updatedDecodedValue);
 
     if (encodedResult !== value) {
       onChange(encodedResult);
@@ -195,7 +207,7 @@ export function MbldField({
 
   const shortcutHandler = useKeyShortcutHandler(resultShortcuts);
 
-  const captureShortcuts = (e: FormEvent<HTMLFieldSetElement>) => {
+  const captureShortcuts = (e: ChangeEvent<HTMLFieldSetElement>) => {
     const usedShortcut = shortcutHandler(e.nativeEvent);
 
     if (usedShortcut) {

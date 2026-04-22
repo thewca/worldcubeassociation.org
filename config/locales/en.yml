@@ -798,7 +798,7 @@ en:
         weat: "WCA Executive Assistants Team"
         wfc: "WCA Financial Committee"
         wmt: "WCA Marketing Team"
-        wmct: "WCA Major Championships Team"
+        wmct: "WCA Major Championship Team"
         wqac: "WCA Quality Assurance Committee"
         wrc: "WCA Regulations Committee"
         wrt: "WCA Results Team"
@@ -917,26 +917,24 @@ en:
     latest_news: "Latest news"
     announcements: "Announcements"
     see_all_announcements: "See all announcements"
-    #context: "About us" box
     about_us:
       title: "About us"
       text: "The World Cube Association governs competitions for mechanical puzzles that are operated by twisting groups of pieces, commonly known as 'twisty puzzles'."
-    #context: "Competitions" box
     competitions:
       title: "Competitions"
       text_html: "Find out about competitions near you or competition results. At a competition now and want to see the results? Check out %{wca_live_link}!"
-    #context: "Merchandise" box
     merchandise:
       title: "Merchandise"
       #context: Indicate that the feature is new (like an advertisement)
       ad_new: "New"
       text_html: "Check out our newly launched official merchandise which includes a selection of apparels ranging from T-shirts to Hoodies."
       link_title: "Link to shop"
-    #context: "Records" box
     records:
       title: "Records"
       text: "Check out the current and past records of all official WCA events."
-    #context: "FAQ" box
+    volunteer:
+      title: "Volunteer"
+      text: "Get involved! The WCA has volunteer positions open across different teams. You do not have to be a speedcuber to be a volunteer."
     faq:
       title: "FAQ"
       text: "Take a look at our list of Frequently Asked Questions if you need help with anything. Many questions you have might have an answer there."
@@ -1423,6 +1421,7 @@ en:
           DNS: "There's at least one DNS followed by a valid result. Please ensure it is indeed a DNS and not a DNF."
           impossible: "The result you're trying to submit seems to be impossible: attempt %{attempt_number} is done in less than 30 seconds per cube tried. If you want to enter minutes, don't forget to add two zeros for centiseconds at the end of the score"
           inconsistent: "The result you're trying to submit seem to be inconsistent. There's a big difference between the best single (%{best_single}) and the worst single (%{worst_single}). Please check that the results are accurate."
+          round_locked: "The next round has already been open, any changes won't affect it!"
         quit:
           title: "Quit Competitor"
           next_to_advance:

@@ -116,7 +116,13 @@ variable "shared" {
     https_listener: object({
       arn: string
     })
+    anycable_production: object({
+      arn: string
+    })
     nextjs-production: object({
+      arn: string
+    })
+    nextjs-production-results: object({
       arn: string
     })
     pma_production: object({
@@ -138,4 +144,9 @@ variable "shared" {
 variable "WRC_WEBHOOK_URL" {
   description = "The URL to send delegate report webhook notifications for WRC to"
   type = string
+}
+
+variable "anycable_path" {
+  type = string
+  description = "The Path where anycable is mounted"
 }

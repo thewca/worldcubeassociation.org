@@ -13,13 +13,14 @@ import { addVenue } from '../store/actions';
 function EditVenues({
   countryZones,
   referenceTime,
+  competitionCoordinates,
 }) {
   const { wcifSchedule } = useStore();
 
   const dispatch = useDispatch();
 
   const handleAddVenue = () => {
-    dispatch(addVenue());
+    dispatch(addVenue(competitionCoordinates));
   };
 
   return (
