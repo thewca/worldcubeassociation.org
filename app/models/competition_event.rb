@@ -124,13 +124,13 @@ class CompetitionEvent < ApplicationRecord
       round = rounds.find { it.wcif_id == round_wcif["id"] } || rounds.build
       round.update!(**Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"], version: version))
       WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
-      round.load_live_results!(round_wcif["results"], current_user) if round_wcif["results"]
       round
     end
     # Have to do this in a second pass because nested associations (mostly `linked_round` and `participation_source`)
     #   need the record to already exist in the database in order to reference their IDs
-    new_rounds = model_rounds.map do |round|
+    new_rounds = model_rounds.zip(wcif["rounds"]).map do |round, round_wcif|
       round.update!(**Round.wcif_backlinking(round, model_rounds))
+      round.load_live_results!(round_wcif["results"], current_user) if round_wcif["results"]
       round
     end
     wcif_qualification = CompetitionEvent.load_wcif_qualification(wcif, version: version)
