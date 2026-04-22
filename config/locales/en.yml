@@ -1048,6 +1048,8 @@ en:
       profile: "Profile"
       approve: "Approve"
       approve_confirm: "Are you sure you want to approve WCA ID %{wca_id}?"
+      clear_claim: "Clear claim"
+      clear_claim_confirm: "Are you sure you want to clear the claim for WCA ID %{wca_id}?"
       unconfirmed_email: "This account's email address (%{email}) is not confirmed."
       confirm_new_email: "Changing your email will require confirming the new email before being effective."
       pending_mail_confirmation: "This account is pending confirmation of the new email address %{email}."
