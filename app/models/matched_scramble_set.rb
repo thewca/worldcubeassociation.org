@@ -23,7 +23,7 @@ class MatchedScrambleSet < ApplicationRecord
   delegate :wcif_id, to: :round, prefix: true
 
   def alphabetic_group_index
-    Scramble.prefix_for_index(self.ordered_index + 1)
+    Scramble.prefix_for_index(self.ordered_index)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
