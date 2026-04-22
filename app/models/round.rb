@@ -388,7 +388,8 @@ class Round < ApplicationRecord
         registrations_who_were_deleted = recorded_not_incoming.values.pluck(:registration_id)
 
         # Mark everyone from previous rounds as quit
-        previous_round_results = self.previous_round.relevant_results
+        previous_round_results = self.participation_source
+                                     .live_results
                                      .where(registration_id: registrations_who_were_deleted)
 
         previous_round_results.update_all(quit_by_id: current_user)
