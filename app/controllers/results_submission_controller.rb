@@ -230,10 +230,10 @@ class ResultsSubmissionController < ApplicationController
   private def check_newcomers_data_access
     competition = competition_from_params
 
-    # WRTs can always check newcomers data.
-    return if current_user.can_admin_results?
-
     return head :unauthorized unless current_user.can_check_newcomers_data?(competition)
+
+    # WRTs can check newcomers data even after the results are submitted.
+    return if current_user.can_admin_results?
 
     render status: :bad_request, json: { error: "The newcomer check dashboard can only be used before the results are submitted." } if competition.results_submitted?
   end
