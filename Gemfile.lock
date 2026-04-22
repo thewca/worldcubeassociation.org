@@ -269,7 +269,7 @@ GEM
     drb (2.2.3)
     enum_help (0.0.20)
       activesupport (>= 3.0.0)
-    erb (6.0.2)
+    erb (6.0.4)
     erubi (1.13.1)
     et-orbi (1.3.0)
       tzinfo
@@ -491,7 +491,7 @@ GEM
       logger
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (6.0.3)
+    minitest (6.0.5)
       drb (~> 2.0)
       prism (~> 1.5)
     momentjs-rails (2.29.4.1)
@@ -835,7 +835,7 @@ GEM
     seedbank (0.5.0)
       rake (>= 10.0)
     semantic_range (3.1.1)
-    shakapacker (9.7.0)
+    shakapacker (10.0.0)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
@@ -1099,7 +1099,7 @@ DEPENDENCIES
   sdoc
   seedbank
   selectize-rails!
-  shakapacker (= 9.7.0)
+  shakapacker (= 10.0.0)
   shoryuken
   sidekiq
   sidekiq-cron
@@ -1215,7 +1215,7 @@ CHECKSUMS
   dotenv-rails (3.2.0) sha256=657e25554ba622ffc95d8c4f1670286510f47f2edda9f68293c3f661b303beab
   drb (2.2.3) sha256=0b00d6fdb50995fe4a45dea13663493c841112e4068656854646f418fda13373
   enum_help (0.0.20) sha256=c3cdac74971b84af5ecfc2de72d3a5f0ab08216156dae0d6976b9885d706b98a
-  erb (6.0.2) sha256=9fe6264d44f79422c87490a1558479bd0e7dad4dd0e317656e67ea3077b5242b
+  erb (6.0.4) sha256=38e3803694be357fe2bfe312487c74beaf9fb4e5beb3e22498952fe1645b95d9
   erubi (1.13.1) sha256=a082103b0885dbc5ecf1172fede897f9ebdb745a4b97a5e8dc63953db1ee4ad9
   et-orbi (1.3.0) sha256=56716ce1c40f56412d6acb0721ebede6bd23b66525dab008a95d77df00c7d260
   eu_central_bank (1.7.0) sha256=d538ec627025261cf00c554095e60e818b3b7c87717ed4124e87f4fdd47a06f2
@@ -1313,7 +1313,7 @@ CHECKSUMS
   mini_magick (5.3.1) sha256=29395dfd76badcabb6403ee5aff6f681e867074f8f28ce08d78661e9e4a351c4
   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
   mini_portile2 (2.8.9) sha256=0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289
-  minitest (6.0.3) sha256=88ac8a1de36c00692420e7cb3cc11a0773bbcb126aee1c249f320160a7d11411
+  minitest (6.0.5) sha256=f007d7246bf4feea549502842cd7c6aba8851cdc9c90ba06de9c476c0d01155c
   momentjs-rails (2.29.4.1) sha256=c7f9bc583872b628f8723319f4ae12a646c858c1c3ddb352bc75d5a7aa0b9e01
   monetize (1.11.0) sha256=d6c506daf4da0f424caa74cad1283fb82133607e504c631fc08eafd67d15ca32
   money (6.16.0) sha256=cf476f5f19188e247ec20f6509cff64dc35d395ee018bad799b1a9ea8bd4754a
@@ -1448,7 +1448,7 @@ CHECKSUMS
   seedbank (0.5.0) sha256=9840c0bf3427ac9ac0815feceeceeeac76dc89039503d393a7e220184855f437
   selectize-rails (0.12.1)
   semantic_range (3.1.1) sha256=508333196ef0c7ba33e79579d4df7eb0a41080595e6a655c2515b03d634ec4a9
-  shakapacker (9.7.0) sha256=4126bf96529fcf84c770c07c8c7310167172e4a8a1a3f71616ea6d247d8ab24f
+  shakapacker (10.0.0) sha256=9be5f5fe15832c1cd68615ffc033aacc395890930f59dfda2f039269a8b5ad2e
   shellany (0.0.1) sha256=0e127a9132698766d7e752e82cdac8250b6adbd09e6c0a7fbbb6f61964fedee7
   shoryuken (7.0.2) sha256=10bc249f72d0ea67f434cc6a13dabbe12cc806030ec04023f1b2035279ee06bf
   sidekiq (8.1.3) sha256=a42f51aca3705d21cb50f37f5ec07e69de8708e126be4cf94b45cf15b84b3762
