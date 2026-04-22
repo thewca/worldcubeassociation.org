@@ -575,7 +575,8 @@ RSpec.describe "API Competitions" do
           expect(rounds.first.round_results.length).to eq 1
           expect(rounds.first.round_results.first.attempts.map(&:result)).to eq [456, 745, 657, 465, 835]
           expect(rounds.first.live_results.length).to eq 1
-          expect(rounds.first.live_results.first.attempts.pluck(:value)).to eq [456, 745, 657, 465, 835]
+          expect(rounds.first.live_results.first.live_attempts.pluck(:value)).to eq [456, 745, 657, 465, 835]
+          expect(rounds.first.live_results.first.live_attempts.count).to eq 5
         end
       end
 

@@ -416,6 +416,10 @@ class Round < ApplicationRecord
         #   so we just copy over the one which we already have
         last_attempt_entered_at = results_by_registration_id[registration_db_id]&.last_attempt_entered_at || database_now
 
+        # Normally, this column is computed by a Rails `counter_cache`, but because we're using a bulk operation,
+        #   we have to manually assign the value instead.
+        attempts_count = round_result_wcif["attempts"]&.length || 0
+
         {
           registration_id: registration_db_id,
           round_id: self.id,
@@ -424,6 +428,7 @@ class Round < ApplicationRecord
           global_pos: round_result_wcif["ranking"],
           local_pos: round_result_wcif["ranking"],
           last_attempt_entered_at: last_attempt_entered_at,
+          live_attempts_count: attempts_count,
         }
       end
 
