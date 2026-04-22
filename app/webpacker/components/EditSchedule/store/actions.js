@@ -178,9 +178,11 @@ export const removeRoom = (roomId) => ({
  * Action creator for adding a blank venue.
  * @returns {Action}
  */
-export const addVenue = () => ({
+export const addVenue = (compCoordinates) => ({
   type: AddVenue,
-  payload: {},
+  payload: {
+    coordinates: compCoordinates,
+  },
 });
 
 /**
