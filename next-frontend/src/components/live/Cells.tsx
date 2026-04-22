@@ -13,11 +13,13 @@ export function LiveTableHeader({
   format,
   showFull = true,
   byPerson = false,
+  isAdmin = false,
   t,
 }: {
   isLinked?: boolean;
   showFull?: boolean;
   byPerson?: boolean;
+  isAdmin?: boolean;
   format: Format;
   t: TFunction;
 }) {
@@ -34,20 +36,21 @@ export function LiveTableHeader({
             {t("competitions.results_table.round")}
           </Table.ColumnHeader>
         )}
+        {isAdmin && <Table.ColumnHeader />}
         <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
         {!byPerson && (
           <Table.ColumnHeader>
             {t("competitions.live.results.competitor")}
           </Table.ColumnHeader>
         )}
-        {isLinked && (
-          <Table.ColumnHeader>
-            {t("competitions.results_table.round")}
-          </Table.ColumnHeader>
-        )}
         {showFull && !byPerson && (
           <Table.ColumnHeader>
             {t("results.table_elements.region")}
+          </Table.ColumnHeader>
+        )}
+        {isLinked && (
+          <Table.ColumnHeader>
+            {t("competitions.results_table.round")}
           </Table.ColumnHeader>
         )}
         {showFull &&
@@ -70,10 +73,12 @@ export function LivePositionCell({
   position,
   rowSpan,
   advancingParams,
+  showAdvancing = true,
 }: {
   position: number | string;
   rowSpan?: number;
   advancingParams: Pick<LiveResult, "advancing_questionable" | "advancing">;
+  showAdvancing?: boolean;
 }) {
   return (
     <Table.Cell
@@ -81,7 +86,9 @@ export function LivePositionCell({
       layerStyle="fill.deep"
       textAlign="right"
       rowSpan={rowSpan}
-      colorPalette={rankingCellColorPalette(advancingParams)}
+      colorPalette={
+        showAdvancing ? rankingCellColorPalette(advancingParams) : undefined
+      }
     >
       {position}
     </Table.Cell>

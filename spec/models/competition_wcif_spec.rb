@@ -45,9 +45,10 @@ RSpec.describe "Competition WCIF" do
   let(:delegate) { competition.delegates.first }
   let(:organizer) { competition.organizers.first }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
+  let(:top_16_average_condition) { ResultConditions::Ranking.new(value: 16, scope: 'average') }
   let(:top_16_advance) { AdvancementConditions::RankingCondition.new(16) }
   let(:round333_1) { build(:round, number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
-  let(:round333_2) { build(:round, number: 2, total_number_of_rounds: 2) }
+  let(:round333_2) { build(:round, number: 2, total_number_of_rounds: 2, participation_source: round333_1, participation_condition: top_16_average_condition) }
   let(:event_333) { build(:competition_event, event_id: "333", rounds: [round333_1, round333_2]) }
   let(:round444_1) { build(:round, number: 1) }
   let(:event_444) { build(:competition_event, event_id: "444", rounds: [round444_1]) }
@@ -467,9 +468,462 @@ RSpec.describe "Competition WCIF" do
       )
     end
 
+    it "renders a valid v2 WCIF" do
+      expect(competition.to_wcif(version: "2.0.0")).to eq(
+        "formatVersion" => "2.0.0",
+        "id" => "TestComp2014",
+        "name" => "Test Comp 2014",
+        "shortName" => "Test 2014",
+        "series" => {
+          "id" => "SpectacularSeries2014",
+          "name" => "The Spectacular Series 2014",
+          "shortName" => "Spectacular 2014",
+          "competitionIds" => %w[TestComp2014 PartnerComp2014],
+        },
+        "persons" => [organizer.to_wcif(competition, version: "2.0.0"), delegate.to_wcif(competition, version: "2.0.0")],
+        "events" => [
+          {
+            "id" => "333",
+            "extensions" => [],
+            "rounds" => [
+              {
+                "id" => "333-r1",
+                "linkedRounds" => nil,
+                "format" => "a",
+                "timeLimit" => {
+                  "centiseconds" => 10.minutes.in_centiseconds,
+                  "cumulativeRoundIds" => [],
+                },
+                "cutoff" => {
+                  "numberOfAttempts" => 2,
+                  "attemptResult" => 1.minute.in_centiseconds,
+                },
+                "participationRuleset" => {
+                  "participationSource" => {
+                    "type" => "registrations",
+                  },
+                  "reservedPlaces" => nil,
+                },
+                "scrambleSetCount" => 16,
+                "results" => [],
+                "extensions" => [],
+              },
+              {
+                "id" => "333-r2",
+                "linkedRounds" => nil,
+                "format" => "a",
+                "timeLimit" => {
+                  "centiseconds" => 10.minutes.in_centiseconds,
+                  "cumulativeRoundIds" => [],
+                },
+                "cutoff" => nil,
+                "participationRuleset" => {
+                  "participationSource" => {
+                    "type" => "round",
+                    "roundId" => "333-r1",
+                    "resultCondition" => {
+                      "type" => "ranking",
+                      "scope" => "average",
+                      "value" => 16,
+                    },
+                  },
+                  "reservedPlaces" => nil,
+                },
+                "scrambleSetCount" => 1,
+                "results" => [],
+                "extensions" => [],
+              },
+            ],
+            "qualification" => nil,
+          },
+          {
+            "id" => "222",
+            "extensions" => [],
+            "rounds" => [
+              {
+                "id" => "222-r1",
+                "linkedRounds" => nil,
+                "format" => "a",
+                "timeLimit" => {
+                  "centiseconds" => 10.minutes.in_centiseconds,
+                  "cumulativeRoundIds" => [],
+                },
+                "cutoff" => nil,
+                "participationRuleset" => {
+                  "participationSource" => {
+                    "type" => "registrations",
+                  },
+                  "reservedPlaces" => nil,
+                },
+                "scrambleSetCount" => 1,
+                "results" => [],
+                "extensions" => [],
+              },
+            ],
+            "qualification" => nil,
+          },
+          {
+            "id" => "444",
+            "extensions" => [],
+            "rounds" => [
+              {
+                "id" => "444-r1",
+                "linkedRounds" => nil,
+                "format" => "a",
+                "timeLimit" => {
+                  "centiseconds" => 10.minutes.in_centiseconds,
+                  "cumulativeRoundIds" => [],
+                },
+                "cutoff" => nil,
+                "participationRuleset" => {
+                  "participationSource" => {
+                    "type" => "registrations",
+                  },
+                  "reservedPlaces" => nil,
+                },
+                "scrambleSetCount" => 1,
+                "results" => [],
+                "extensions" => [],
+              },
+            ],
+            "qualification" => nil,
+          },
+          {
+            "id" => "333fm",
+            "extensions" => [],
+            "rounds" => [
+              {
+                "id" => "333fm-r1",
+                "linkedRounds" => nil,
+                "format" => "m",
+                "timeLimit" => nil,
+                "cutoff" => nil,
+                "participationRuleset" => {
+                  "participationSource" => {
+                    "type" => "registrations",
+                  },
+                  "reservedPlaces" => nil,
+                },
+                "scrambleSetCount" => 1,
+                "results" => [],
+                "extensions" => [],
+              },
+            ],
+            "qualification" => nil,
+          },
+          {
+            "id" => "333mbf",
+            "extensions" => [],
+            "rounds" => [
+              {
+                "id" => "333mbf-r1",
+                "linkedRounds" => nil,
+                "format" => "3",
+                "timeLimit" => nil,
+                "cutoff" => nil,
+                "participationRuleset" => {
+                  "participationSource" => {
+                    "type" => "registrations",
+                  },
+                  "reservedPlaces" => nil,
+                },
+                "scrambleSetCount" => 1,
+                "results" => [],
+                "extensions" => [
+                  {
+                    "id" => "com.third.party",
+                    "specUrl" => "https://example.com",
+                    "data" => {
+                      "tables" => 5,
+                    },
+                  },
+                ],
+              },
+            ],
+            "qualification" => nil,
+          },
+        ],
+        "schedule" => {
+          "startDate" => "2014-02-03",
+          "numberOfDays" => 3,
+          "venues" => [
+            {
+              "id" => 1,
+              "name" => "Venue 1",
+              "latitudeMicrodegrees" => 123_456,
+              "longitudeMicrodegrees" => 123_456,
+              "countryIso2" => "US",
+              "timezone" => "Europe/Paris",
+              "extensions" => [],
+              "rooms" => [
+                {
+                  "id" => 1,
+                  "name" => "Room 1 for venue 1",
+                  "color" => VenueRoom::DEFAULT_ROOM_COLOR,
+                  "extensions" => [],
+                  "activities" => [
+                    {
+                      "id" => 1,
+                      "name" => "Great round",
+                      "activityCode" => "333-r1",
+                      "startTime" => "2014-02-03T10:00:00Z",
+                      "endTime" => "2014-02-03T14:00:00Z",
+                      "childActivities" => [
+                        {
+                          "id" => 2,
+                          "name" => "Great round, group 1",
+                          "activityCode" => "333-r1-g1",
+                          "startTime" => "2014-02-03T10:00:00Z",
+                          "endTime" => "2014-02-03T10:15:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 3,
+                          "name" => "Great round, group 2",
+                          "activityCode" => "333-r1-g2",
+                          "startTime" => "2014-02-03T10:15:00Z",
+                          "endTime" => "2014-02-03T10:30:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 4,
+                          "name" => "Great round, group 3",
+                          "activityCode" => "333-r1-g3",
+                          "startTime" => "2014-02-03T10:30:00Z",
+                          "endTime" => "2014-02-03T10:45:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 5,
+                          "name" => "Great round, group 4",
+                          "activityCode" => "333-r1-g4",
+                          "startTime" => "2014-02-03T10:45:00Z",
+                          "endTime" => "2014-02-03T11:00:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 6,
+                          "name" => "Great round, group 5",
+                          "activityCode" => "333-r1-g5",
+                          "startTime" => "2014-02-03T11:00:00Z",
+                          "endTime" => "2014-02-03T11:15:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 7,
+                          "name" => "Great round, group 6",
+                          "activityCode" => "333-r1-g6",
+                          "startTime" => "2014-02-03T11:15:00Z",
+                          "endTime" => "2014-02-03T11:30:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 8,
+                          "name" => "Great round, group 7",
+                          "activityCode" => "333-r1-g7",
+                          "startTime" => "2014-02-03T11:30:00Z",
+                          "endTime" => "2014-02-03T11:45:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 9,
+                          "name" => "Great round, group 8",
+                          "activityCode" => "333-r1-g8",
+                          "startTime" => "2014-02-03T11:45:00Z",
+                          "endTime" => "2014-02-03T12:00:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 10,
+                          "name" => "Great round, group 9",
+                          "activityCode" => "333-r1-g9",
+                          "startTime" => "2014-02-03T12:00:00Z",
+                          "endTime" => "2014-02-03T12:15:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 11,
+                          "name" => "Great round, group 10",
+                          "activityCode" => "333-r1-g10",
+                          "startTime" => "2014-02-03T12:15:00Z",
+                          "endTime" => "2014-02-03T12:30:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 12,
+                          "name" => "Great round, group 11",
+                          "activityCode" => "333-r1-g11",
+                          "startTime" => "2014-02-03T12:30:00Z",
+                          "endTime" => "2014-02-03T12:45:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 13,
+                          "name" => "Great round, group 12",
+                          "activityCode" => "333-r1-g12",
+                          "startTime" => "2014-02-03T12:45:00Z",
+                          "endTime" => "2014-02-03T13:00:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 14,
+                          "name" => "Great round, group 13",
+                          "activityCode" => "333-r1-g13",
+                          "startTime" => "2014-02-03T13:00:00Z",
+                          "endTime" => "2014-02-03T13:15:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 15,
+                          "name" => "Great round, group 14",
+                          "activityCode" => "333-r1-g14",
+                          "startTime" => "2014-02-03T13:15:00Z",
+                          "endTime" => "2014-02-03T13:30:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 16,
+                          "name" => "Great round, group 15",
+                          "activityCode" => "333-r1-g15",
+                          "startTime" => "2014-02-03T13:30:00Z",
+                          "endTime" => "2014-02-03T13:45:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                        {
+                          "id" => 17,
+                          "name" => "Great round, group 16",
+                          "activityCode" => "333-r1-g16",
+                          "startTime" => "2014-02-03T13:45:00Z",
+                          "endTime" => "2014-02-03T14:00:00Z",
+                          "childActivities" => [],
+                          "extensions" => [],
+                        },
+                      ],
+                      "extensions" => [],
+                    },
+                    {
+                      "id" => 18,
+                      "name" => "Enjoy your meal!",
+                      "activityCode" => "other-lunch",
+                      "startTime" => "2014-02-03T12:00:00Z",
+                      "endTime" => "2014-02-03T13:00:00Z",
+                      "childActivities" => [],
+                      "extensions" => [],
+                    },
+                    {
+                      "id" => 19,
+                      "name" => "Great round",
+                      "activityCode" => "333-r2",
+                      "startTime" => "2014-02-03T14:00:00Z",
+                      "endTime" => "2014-02-03T18:00:00Z",
+                      "childActivities" => [],
+                      "extensions" => [],
+                    },
+                    {
+                      "id" => 20,
+                      "name" => "Great round",
+                      "activityCode" => "444-r1",
+                      "startTime" => "2014-02-04T10:00:00Z",
+                      "endTime" => "2014-02-04T14:00:00Z",
+                      "childActivities" => [],
+                      "extensions" => [],
+                    },
+                    {
+                      "id" => 21,
+                      "name" => "Enjoy your meal!",
+                      "activityCode" => "other-lunch",
+                      "startTime" => "2014-02-04T12:00:00Z",
+                      "endTime" => "2014-02-04T13:00:00Z",
+                      "childActivities" => [],
+                      "extensions" => [],
+                    },
+                    {
+                      "id" => 22,
+                      "name" => "Great round",
+                      "activityCode" => "333fm-r1",
+                      "startTime" => "2014-02-04T14:00:00Z",
+                      "endTime" => "2014-02-04T18:00:00Z",
+                      "extensions" => [],
+                      "childActivities" => [],
+                    },
+                    {
+                      "id" => 23,
+                      "name" => "Great round",
+                      "activityCode" => "333mbf-r1",
+                      "startTime" => "2014-02-05T10:00:00Z",
+                      "endTime" => "2014-02-05T14:00:00Z",
+                      "extensions" => [],
+                      "childActivities" => [],
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              "id" => 2,
+              "name" => "Venue 2",
+              "latitudeMicrodegrees" => 123_456,
+              "longitudeMicrodegrees" => 123_456,
+              "countryIso2" => "US",
+              "timezone" => "Europe/Paris",
+              "extensions" => [],
+              "rooms" => [
+                {
+                  "id" => 2,
+                  "name" => "Room 1 for venue 2",
+                  "color" => VenueRoom::DEFAULT_ROOM_COLOR,
+                  "activities" => [],
+                  "extensions" => [],
+                },
+                {
+                  "id" => 3,
+                  "name" => "Room 2 for venue 2",
+                  "color" => VenueRoom::DEFAULT_ROOM_COLOR,
+                  "activities" => [],
+                  "extensions" => [],
+                },
+              ],
+            },
+          ],
+        },
+        "competitorLimit" => 50,
+        "extensions" => [],
+        "registrationInfo" => {
+          "openTime" => "2013-12-01T00:00:00Z",
+          "closeTime" => "2013-12-31T00:00:00Z",
+          "baseEntryFee" => 1000,
+          "currencyCode" => "USD",
+          "onTheSpotRegistration" => false,
+          "useWcaRegistration" => false,
+        },
+      )
+    end
+
     it "rendered WCIF matches JSON Schema definition" do
       expect do
         JSON::Validator.validate!(Competition.wcif_json_schema, competition.to_wcif)
+      end.not_to raise_error
+
+      expect do
+        JSON::Validator.validate!(
+          Competition.wcif_json_schema(version: "2.0.0"),
+          competition.to_wcif(version: "2.0.0"),
+        )
       end.not_to raise_error
     end
   end
@@ -614,6 +1068,16 @@ RSpec.describe "Competition WCIF" do
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
 
+      # Checking whether the backporting worked as expected
+      competition_444_event = competition.competition_events.find { it.event_id == '444' }
+      first_round, second_round = competition_444_event.rounds
+
+      expect(first_round.participation_source).to eq(competition_444_event)
+      expect(first_round.participation_condition).to be_nil
+
+      expect(second_round.participation_source).to eq(first_round)
+      expect(second_round.participation_condition).not_to be_nil
+
       # Verify that we can remove the round we just added, so long as we
       # clear the advancementCondition on the first round.
       wcif_444_event["rounds"][0]["advancementCondition"] = nil
@@ -662,28 +1126,117 @@ RSpec.describe "Competition WCIF" do
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
     end
 
-    it "can set round results" do
-      wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
-      wcif_333_event["rounds"][0]["results"] = [
-        {
-          "personId" => 1,
-          "ranking" => 10,
-          "attempts" => [{ "result" => 456, "reconstruction" => nil }] * 5,
-          "best" => 456,
-          "average" => 456,
-        },
-        {
-          "personId" => 2,
+    context "round results" do
+      let(:competitors) { create_list(:registration, 2, :accepted, competition: competition) }
+      let(:wcif_333_event) { wcif["events"].find { |e| e["id"] == "333" } }
+
+      before :each do
+        wcif_333_event["rounds"][0]["results"] = [
+          {
+            "personId" => competitors[0].registrant_id,
+            "ranking" => 10,
+            "attempts" => [{ "result" => 456, "reconstruction" => nil }] * 5,
+            "best" => 456,
+            "average" => 456,
+          },
+          {
+            "personId" => competitors[1].registrant_id,
+            "ranking" => 5,
+            "attempts" => [{ "result" => 784, "reconstruction" => nil }] * 5,
+            "best" => 784,
+            "average" => 784,
+          },
+        ]
+      end
+
+      it "can set round results" do
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(competition.to_wcif["events"]).to eq(wcif["events"])
+      end
+
+      it "records histories when something changes" do
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(LiveResult.count).to eq(2)
+        expect(LiveResultHistoryEntry.count).to eq(2)
+
+        wcif_333_event["rounds"][0]["results"][1] = {
+          "personId" => competitors[1].registrant_id,
           "ranking" => 5,
-          "attempts" => [{ "result" => 784, "reconstruction" => nil }] * 5,
+          "attempts" => ([{ "result" => 784, "reconstruction" => nil }] * 4) | [{ "result" => 987, "reconstruction" => nil }],
           "best" => 784,
           "average" => 784,
-        },
-      ]
+        }
 
-      competition.set_wcif_events!(wcif["events"], delegate)
+        competition.set_wcif_events!(wcif["events"], delegate)
 
-      expect(competition.to_wcif["events"]).to eq(wcif["events"])
+        # Still have the same amount of results, but one more history
+        expect(LiveResult.count).to eq(2)
+        expect(LiveResultHistoryEntry.count).to eq(3)
+        expect(LiveResultHistoryEntry.last.action_type).to eq("scoretaking")
+      end
+
+      it "records histories when a new score was added" do
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(LiveResult.count).to eq(2)
+        expect(LiveResultHistoryEntry.count).to eq(2)
+
+        another_competitor = create(:registration, :accepted, competition: competition)
+
+        wcif_333_event["rounds"][0]["results"] << {
+          "personId" => another_competitor.registrant_id,
+          "ranking" => 2,
+          "attempts" => [{ "result" => 123, "reconstruction" => nil }] * 5,
+          "best" => 123,
+          "average" => 123,
+        }
+
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        # A new result was added and this result also needs a history entry
+        expect(LiveResult.count).to eq(3)
+        expect(LiveResultHistoryEntry.count).to eq(3)
+        expect(LiveResultHistoryEntry.last.action_type).to eq("scoretaking")
+      end
+
+      it "does not record redundant histories" do
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(LiveResult.count).to eq(2)
+        expect(LiveResultHistoryEntry.count).to eq(2)
+
+        # Imagine that somebody hits the sync button twice, "just to be sure"
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        # Nothing in the data actually changed, so both the normal results
+        # as well as the history describing changes to the results should remain unchanged
+        expect(LiveResult.count).to eq(2)
+        expect(LiveResultHistoryEntry.count).to eq(2)
+      end
+
+      it "syncing new empty results records 'opened' action" do
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(LiveResult.count).to eq(2)
+        expect(LiveResultHistoryEntry.count).to eq(2)
+
+        wcif_333_event["rounds"][1]["results"] = [{
+          "personId" => competitors[1].registrant_id,
+          "ranking" => 2,
+          "attempts" => [], # This is how WCA Live sends us new opened results
+          "best" => 0,
+          "average" => 0,
+        }]
+
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        # A new result was added and this result also needs a history entry
+        expect(LiveResult.count).to eq(3)
+        expect(LiveResultHistoryEntry.count).to eq(3)
+        expect(LiveResultHistoryEntry.last.action_type).to eq("opened")
+      end
     end
 
     it "can set event and round extensions" do
@@ -734,6 +1287,12 @@ RSpec.describe "Competition WCIF" do
       competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
+
+      # Checking whether the backporting worked as expected
+      competition_333_event = competition.competition_events.find { it.event_id == '333' }
+
+      expect(competition_333_event.qualification_latest_date).to eq(Date.new(2021, 7, 1))
+      expect(competition_333_event.qualification_condition).not_to be_nil
     end
   end
 

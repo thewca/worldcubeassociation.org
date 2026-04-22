@@ -5,11 +5,11 @@ import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import OpenapiError from "@/components/ui/openapiError";
 import React from "react";
 import { getT } from "@/lib/i18n/get18n";
-import formats from "@/lib/wca/data/formats";
 import { LiveResultProvider } from "@/providers/LiveResultProvider";
 import { getRoundName } from "@/lib/wca/live/getRoundName";
 import { getRounds } from "@/lib/wca/live/getRounds";
 import RoundOpenCheck from "@/components/live/RoundOpenCheck";
+import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
 
 export default async function ResultPage({
   params,
@@ -26,7 +26,7 @@ export default async function ResultPage({
 
   if (error) return <OpenapiError response={response} t={t} />;
 
-  const { competitors, format, id } = data;
+  const { id } = data;
 
   const {
     data: roundsData,
@@ -52,13 +52,16 @@ export default async function ResultPage({
               initialRound={data}
               competitionId={competitionId}
             >
-              <AddResults
-                format={formats.byId[format]}
-                roundId={roundId}
+              <LiveResultAdminProvider
+                round={round}
                 competitionId={competitionId}
-                competitors={competitors!}
-                roundName={roundName}
-              />
+              >
+                <AddResults
+                  competitionId={competitionId}
+                  roundName={roundName}
+                  round={round}
+                />
+              </LiveResultAdminProvider>
             </LiveResultProvider>
           </VStack>
         </PermissionCheck>

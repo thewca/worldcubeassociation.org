@@ -1,32 +1,37 @@
-"use client";
 import { SimpleGrid, GridItem } from "@chakra-ui/react";
+import ClosableAlert from "@/components/ui/ClosableAlert";
 import AttemptsForm from "@/components/live/AttemptsForm";
-import { Format } from "@/lib/wca/data/formats";
+import formats from "@/lib/wca/data/formats";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
-import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
-import { LiveCompetitor } from "@/types/live";
+import { LiveRoundAdminBase } from "@/types/live";
+import ConfirmProvider from "@/providers/ConfirmProvider";
+import { getT } from "@/lib/i18n/get18n";
 
-export default function AddResults({
-  format,
-  roundId,
+export default async function AddResults({
   competitionId,
   roundName,
+  round,
 }: {
-  format: Format;
-  roundId: string;
   competitionId: string;
-  competitors: LiveCompetitor[];
   roundName: string;
+  round: LiveRoundAdminBase;
 }) {
-  const { eventId } = parseActivityCode(roundId);
+  const { eventId } = parseActivityCode(round.id);
+  const format = formats.byId[round.format];
+
+  const { t } = await getT();
+
+  const isLocked = true;
 
   return (
-    <LiveResultAdminProvider
-      format={format}
-      roundId={roundId}
-      competitionId={competitionId}
-    >
+    <ConfirmProvider>
+      {isLocked && (
+        <ClosableAlert
+          status="warning"
+          title={t("competitions.live.admin.warnings.round_locked")}
+        />
+      )}
       <SimpleGrid columns={16} gap={6}>
         <GridItem colSpan={4}>
           <AttemptsForm
@@ -38,8 +43,8 @@ export default function AddResults({
 
         <GridItem colSpan={12}>
           <LiveUpdatingResultsTable
-            roundWcifId={roundId}
-            formatId={format.id}
+            roundWcifId={round.id}
+            formatId={round.format}
             competitionId={competitionId}
             isAdminView
             canManage
@@ -47,6 +52,6 @@ export default function AddResults({
           />
         </GridItem>
       </SimpleGrid>
-    </LiveResultAdminProvider>
+    </ConfirmProvider>
   );
 }
