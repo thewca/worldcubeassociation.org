@@ -40,4 +40,4 @@ const ttNormsPro = localFont({
   ],
 });
 
-export { ttNormsPro };
+export { ttNormsPro as appFont };

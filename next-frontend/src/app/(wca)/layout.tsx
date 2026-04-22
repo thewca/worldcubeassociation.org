@@ -7,7 +7,7 @@ import Navbar from "./navbar";
 import Footer from "@/components/Footer";
 import RandomBackground from "@/components/RandomBackground";
 import { ThemeProvider } from "@wrksz/themes/next";
-import { ttNormsPro } from "@/styles/fonts";
+import { appFont } from "@/styles/fonts";
 
 export const metadata: Metadata = {
   title: {
@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html suppressHydrationWarning>
-      <body className={ttNormsPro.className}>
+      <body className={appFont.className}>
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <WCAQueryClientProvider>
             <AuthProvider>

@@ -1,5 +1,5 @@
 import { Rubik } from "next/font/google";
 
-const ttNormsPro = Rubik({ subsets: ["latin"] });
+const googleFont = Rubik({ subsets: ["latin"] });
 
-export { ttNormsPro };
+export { googleFont as appFont };
