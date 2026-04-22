@@ -11,7 +11,7 @@ const nrExternals = require("newrelic/load-externals");
 const withRoutes = nextRoutes({ outDir: "src/types" });
 const proprietaryFontPath = path.resolve(
   __dirname,
-  "src/styles/fonts/TTNormsPro/TT_Norms_Pro_Light.woff2",
+  "src/styles/fonts/TTNormsPro/TT_Norms_Pro_Regular.woff2",
 );
 const shouldUseProprietaryFont =
   process.env.PROPRIETARY_FONT === "TTNormsPro" &&
