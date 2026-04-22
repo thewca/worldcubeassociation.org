@@ -496,9 +496,9 @@ class Round < ApplicationRecord
       LiveResult.where(id: results_which_changed).update_all(last_attempt_entered_at: database_now)
     end
 
-    # Sync up all of the attempts and histories `upsert_all` shenanigans
-    self.live_results.reset
-    self.linked_round&.live_results&.reset
+    # Sync up all internal results columns not covered by the sync payload
+    #   This also resets the corresponding `live_results` associations
+    self.recompute_live_columns
   end
 
   def self.load_wcif_advancement_condition(wcif_round, all_wcif_rounds, version: Competition::WCIF_STABLE_VERSION)
