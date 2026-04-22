@@ -8,8 +8,8 @@ class RanksSingle < ApplicationRecord
 
   belongs_to :event
 
-  def to_wcif
-    rank_to_wcif("single")
+  def to_wcif(version: Competition::WCIF_STABLE_VERSION)
+    rank_to_wcif("single", version: version)
   end
 
   def to_s

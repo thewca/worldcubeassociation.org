@@ -19,7 +19,56 @@ module ResultConditions
     def self.dump(result_condition)
       return unless result_condition
 
-      result_condition.attributes.reverse_merge(type: result_condition.class.wcif_type)
+      result_condition.to_wcif
+    end
+
+    def to_wcif
+      self.attributes.reverse_merge("type" => self.class.wcif_type)
+    end
+
+    def self.wcif_json_schema
+      {
+        "allOf" => [
+          {
+            "type" => %w[object null],
+            "properties" => {
+              "type" => { "type" => "string", "enum" => Utils::ALL_RESULT_CONDITIONS.map(&:wcif_type) },
+            },
+          },
+          {
+            "oneOf" => [
+              # For (very) historic records, we do not have advancement condition data
+              #   even though (from a schema standpoint) we _technically_ should.
+              # Backfilling is too complicated and sometimes even impossible, so just accept NULL.
+              { "type" => "null" },
+              {
+                "type" => "object",
+                "properties" => {
+                  "type" => { "const" => "resultAchieved" },
+                  "scope" => { "type" => "string", "enum" => %w[single average] },
+                  "value" => { "type" => %w[integer null] },
+                },
+              },
+              {
+                "type" => "object",
+                "properties" => {
+                  "type" => { "const" => "ranking" },
+                  "scope" => { "type" => "string", "enum" => %w[single average] },
+                  "value" => { "type" => "integer" },
+                },
+              },
+              {
+                "type" => "object",
+                "properties" => {
+                  "type" => { "const" => "percent" },
+                  "scope" => { "type" => "string", "enum" => %w[single average] },
+                  "value" => { "type" => "integer" },
+                },
+              },
+            ],
+          },
+        ],
+      }
     end
 
     # Our Regulations allow at most 75% of competitors to proceed

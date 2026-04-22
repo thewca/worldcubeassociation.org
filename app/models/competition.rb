@@ -1827,8 +1827,8 @@ class Competition < ApplicationRecord
       "name" => name,
       "shortName" => cell_name,
       "series" => part_of_competition_series? ? competition_series_wcif(authorized: authorized) : nil,
-      "persons" => persons_wcif(authorized: authorized),
-      "events" => events_wcif,
+      "persons" => persons_wcif(authorized: authorized, version: version),
+      "events" => events_wcif(version: version),
       "schedule" => schedule_wcif,
       "competitorLimit" => competitor_limit_enabled? ? competitor_limit : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
@@ -1883,14 +1883,14 @@ class Competition < ApplicationRecord
       .transform_values(&:to_wcif)
   end
 
-  def persons_wcif(authorized: false)
+  def persons_wcif(authorized: false, version: WCIF_STABLE_VERSION)
     managers = self.managers
     includes_associations = [
       { assignments: [:schedule_activity] },
-      { user: {
-        current_avatar: [],
-        person: %i[ranks_single ranks_average],
-      } },
+      { user: [
+        :current_avatar,
+        { person: %i[ranks_single ranks_average] },
+      ] },
       :wcif_extensions,
       :events,
     ]
@@ -1903,22 +1903,26 @@ class Competition < ApplicationRecord
                        .select { authorized || it.wcif_status == "accepted" }
                        .map do |registration|
                          managers.delete(registration.user)
-                         registration.user.to_wcif(self, registration, authorized: authorized)
+                         registration.user.to_wcif(self, registration, authorized: authorized, version: version)
     end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
     persons_wcif + managers.map { it.to_wcif(self, authorized: authorized) }
   end
 
-  def events_wcif
+  def events_wcif(version: WCIF_STABLE_VERSION)
     includes_associations = [
-      { rounds: %i[competition_event wcif_extensions] },
+      { rounds: [
+        :competition_event,
+        :wcif_extensions,
+        { participation_source: [:competition_event, { rounds: :competition_event }] },
+      ] },
       :wcif_extensions,
     ]
     competition_events
       .includes(includes_associations)
       .sort_by { |ce| ce.event.rank }
-      .map(&:to_wcif)
+      .map { it.to_wcif(version: version) }
   end
 
   def schedule_wcif
@@ -1939,11 +1943,14 @@ class Competition < ApplicationRecord
   end
 
   def set_wcif!(wcif, current_user)
-    JSON::Validator.validate!(Competition.wcif_json_schema, wcif)
+    import_version = wcif["formatVersion"]
+
+    expected_schema = Competition.wcif_json_schema(version: import_version)
+    JSON::Validator.validate!(expected_schema, wcif)
 
     ActiveRecord::Base.transaction do
       set_wcif_series!(wcif["series"], current_user) if wcif["series"]
-      set_wcif_events!(wcif["events"], current_user) if wcif["events"]
+      set_wcif_events!(wcif["events"], current_user, version: import_version) if wcif["events"]
       set_wcif_schedule!(wcif["schedule"]) if wcif["schedule"]
       update_persons_wcif!(wcif["persons"]) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
@@ -1988,7 +1995,7 @@ class Competition < ApplicationRecord
     self.competition_series = competition_series
   end
 
-  def set_wcif_events!(wcif_events, current_user)
+  def set_wcif_events!(wcif_events, current_user, version: WCIF_STABLE_VERSION)
     # Remove extra events.
     competition_events_includes_assotiations = [
       { rounds: %i[competition_event wcif_extensions] },
@@ -2020,7 +2027,7 @@ class Competition < ApplicationRecord
       next unless event_to_be_updated
       raise WcaExceptions::BadApiParameter.new("Cannot update events") unless current_user.can_update_events?(self)
 
-      competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event)
+      competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event, version: version)
     end
 
     reload
@@ -2120,7 +2127,7 @@ class Competition < ApplicationRecord
     reload
   end
 
-  def self.wcif_json_schema
+  def self.wcif_json_schema(version: WCIF_STABLE_VERSION)
     {
       "type" => "object",
       "properties" => {
@@ -2129,8 +2136,8 @@ class Competition < ApplicationRecord
         "name" => { "type" => "string" },
         "shortName" => { "type" => "string" },
         "series" => CompetitionSeries.wcif_json_schema,
-        "persons" => { "type" => "array", "items" => User.wcif_json_schema },
-        "events" => { "type" => "array", "items" => CompetitionEvent.wcif_json_schema },
+        "persons" => { "type" => "array", "items" => User.wcif_json_schema(version: version) },
+        "events" => { "type" => "array", "items" => CompetitionEvent.wcif_json_schema(version: version) },
         "schedule" => {
           "type" => "object",
           "properties" => {

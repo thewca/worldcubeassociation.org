@@ -60,4 +60,12 @@ class LinkedRound < ApplicationRecord
   def advancing_competitor_ids
     live_results.where(advancing: true).unscope(:order).distinct.pluck(:registration_id)
   end
+
+  def as_wcif_participation_source(target_round)
+    {
+      "type" => "linkedRounds",
+      "roundId" => self.wcif_ids,
+      "resultCondition" => target_round.participation_condition&.to_wcif,
+    }
+  end
 end

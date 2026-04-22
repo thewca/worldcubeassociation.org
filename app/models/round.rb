@@ -364,14 +364,45 @@ class Round < ApplicationRecord
     ScheduleActivity.parse_activity_code(wcif_id)
   end
 
-  def self.wcif_to_round_attributes(event, round_wcif, all_rounds_wcif)
+  def self.load_wcif_advancement_condition(wcif_round, all_wcif_rounds, version: Competition::WCIF_STABLE_VERSION)
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      round_number = self.parse_wcif_id(wcif_round["id"])[:round_number]
+
+      return nil if round_number == all_wcif_rounds.size
+
+      if wcif_round["linkedRounds"].present?
+        last_round_id = wcif_round["linkedRounds"].max_by { self.parse_wcif_id(it)[:round_number] }
+
+        if wcif_round["id"] != last_round_id
+          # Basically faking because our current V1 store does not support dual round advancement.
+          # These will be skipped when re-serializing into WCIF v2
+          return AdvancementConditions::PercentCondition.new(100)
+        end
+      end
+
+      # This call is safe because we have an "if this is last round" guard clause above already
+      next_wcif_round = all_wcif_rounds[round_number] # WCIF numbers are 1-based, so no +1 necessary
+      next_participation_condition = next_wcif_round.dig("participationRuleset", "participationSource", "resultCondition")
+
+      backported_wcif_v1 = {
+        "type" => next_participation_condition["type"].gsub('resultAchieved', 'attemptResult'),
+        "level" => next_participation_condition["value"],
+      }
+
+      AdvancementConditions::AdvancementCondition.load(backported_wcif_v1)
+    else
+      AdvancementConditions::AdvancementCondition.load(wcif_round["advancementCondition"])
+    end
+  end
+
+  def self.wcif_to_round_attributes(event, round_wcif, all_rounds_wcif, version: Competition::WCIF_STABLE_VERSION)
     {
       number: self.parse_wcif_id(round_wcif["id"])[:round_number],
       total_number_of_rounds: all_rounds_wcif.size,
       format_id: round_wcif["format"],
       time_limit: event.can_change_time_limit? ? TimeLimit.load(round_wcif["timeLimit"]) : nil,
       cutoff: Cutoff.load(round_wcif["cutoff"]),
-      advancement_condition: AdvancementConditions::AdvancementCondition.load(round_wcif["advancementCondition"]),
+      advancement_condition: self.load_wcif_advancement_condition(round_wcif, all_rounds_wcif, version: version),
       scramble_set_count: round_wcif["scrambleSetCount"],
       round_results: RoundResults.load(round_wcif["results"]),
     }
@@ -512,17 +543,38 @@ class Round < ApplicationRecord
     }
   end
 
-  def to_wcif(include_results: true)
+  def as_wcif_participation_source(target_round)
     {
+      "type" => "round",
+      "roundId" => self.wcif_id,
+      "resultCondition" => target_round.participation_condition&.to_wcif,
+    }
+  end
+
+  def to_wcif(include_results: true, version: Competition::WCIF_STABLE_VERSION)
+    base_wcif = {
       "id" => wcif_id,
       "format" => self.format_id,
       "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
       "cutoff" => cutoff&.to_wcif,
-      "advancementCondition" => advancement_condition&.to_wcif,
       "scrambleSetCount" => self.scramble_set_count,
       "results" => include_results ? round_results.map(&:to_wcif) : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
+
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      base_wcif.merge(
+        "linkedRounds" => linked_round&.wcif_ids,
+        "participationRuleset" => {
+          "participationSource" => participation_source.as_wcif_participation_source(self),
+          "reservedPlaces" => nil,
+        },
+      )
+    else
+      base_wcif.merge(
+        "advancementCondition" => advancement_condition&.to_wcif,
+      )
+    end
   end
 
   def to_live_results_json(only_podiums: false)
@@ -556,21 +608,91 @@ class Round < ApplicationRecord
     json
   end
 
-  def self.wcif_json_schema
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
     {
       "type" => "object",
-      "properties" => {
-        "id" => { "type" => "string" },
-        "format" => { "type" => "string", "enum" => Format.ids },
-        "timeLimit" => TimeLimit.wcif_json_schema,
-        "cutoff" => Cutoff.wcif_json_schema,
-        "advancementCondition" => AdvancementConditions::AdvancementCondition.wcif_json_schema,
-        "results" => { "type" => "array", "items" => RoundResult.wcif_json_schema },
-        "scrambleSets" => { "type" => "array" }, # TODO: expand on this
-        "scrambleSetCount" => { "type" => "integer" },
-        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
-      },
+      "properties" => self.wcif_json_schema_properties(version: version),
     }
+  end
+
+  def self.wcif_json_schema_properties(version: Competition::WCIF_STABLE_VERSION)
+    base_properties = {
+      "id" => { "type" => "string" },
+      "format" => { "type" => "string", "enum" => Format.ids },
+      "timeLimit" => TimeLimit.wcif_json_schema,
+      "cutoff" => Cutoff.wcif_json_schema,
+      "results" => { "type" => "array", "items" => RoundResult.wcif_json_schema },
+      "scrambleSets" => { "type" => "array" }, # TODO: expand on this
+      "scrambleSetCount" => { "type" => "integer" },
+      "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
+    }
+
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      base_properties.merge(
+        "linkedRounds" => {
+          "type" => %w[array null],
+          "items" => { "type" => "string" },
+        },
+        "participationRuleset" => {
+          "type" => "object",
+          "properties" => {
+            "participationSource" => {
+              "allOf" => [
+                {
+                  "type" => "object",
+                  "properties" => {
+                    "type" => { "type" => "string", "enum" => %w[registrations round linkedRounds] },
+                  },
+                },
+                {
+                  "oneOf" => [
+                    {
+                      "type" => "object",
+                      "properties" => {
+                        "type" => { "const" => "registrations" },
+                      },
+                    },
+                    {
+                      "type" => "object",
+                      "properties" => {
+                        "type" => { "const" => "round" },
+                        "roundId" => { "type" => "string" },
+                        "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
+                      },
+                    },
+                    {
+                      "type" => "object",
+                      "properties" => {
+                        "type" => { "const" => "linkedRounds" },
+                        "roundIds" => {
+                          "type" => "array",
+                          "items" => { "type" => "string" },
+                        },
+                        "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+            "reservedPlaces" => {
+              "type" => %w[object null],
+              "properties" => {
+                "nationalities" => {
+                  "type" => "array",
+                  "items" => { "type" => "string" },
+                },
+                "reservations" => { "type" => "integer" },
+              },
+            },
+          },
+        },
+      )
+    else
+      base_properties.merge(
+        "advancementCondition" => AdvancementConditions::AdvancementCondition.wcif_json_schema,
+      )
+    end
   end
 
   def self.name_from_attributes_id(event_id, round_type_id)
