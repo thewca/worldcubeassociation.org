@@ -2051,6 +2051,12 @@ es-ES:
       approve: Aprobar
       #original_hash: d9455bf
       approve_confirm: '¿Seguro que quieres aprobar el ID de la WCA %{wca_id}?'
+      #original_hash: 1ada587
+      clear_claim: Limpiar reclamación
+      #original_hash: dc39741
+      clear_claim_confirm: >-
+        ¿Estás seguro de que quieres limpiar la reclamación del ID de la WCA
+        %{wca_id}?
       #original_hash: 85de4b8
       unconfirmed_email: >-
         La dirección de correo electrónico de esta cuenta (%{email}) no está
