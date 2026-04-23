@@ -2035,6 +2035,10 @@ es-419:
       approve: Aprobar
       #original_hash: d9455bf
       approve_confirm: '¿Estás seguro de querer aprobar el WCA ID %{wca_id}?'
+      #original_hash: 1ada587
+      clear_claim: Anular reclamación
+      #original_hash: dc39741
+      clear_claim_confirm: '¿Confirmas anular la reclamación del WCA ID %{wca_id}?'
       #original_hash: 85de4b8
       unconfirmed_email: 'El correo electrónico de esta cuenta (%{email}) no está confirmado.'
       #original_hash: 7069007
