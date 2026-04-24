@@ -1815,7 +1815,7 @@ class Competition < ApplicationRecord
   WCIF_STABLE_VERSION = '1.1'
 
   WCIF_VERSION_CATALOGUE = {
-    latest: WCIF_STABLE_VERSION,
+    latest: '2.1.1',
     stable: WCIF_STABLE_VERSION,
   }.freeze
 
