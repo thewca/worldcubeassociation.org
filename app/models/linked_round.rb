@@ -64,7 +64,7 @@ class LinkedRound < ApplicationRecord
   def as_wcif_participation_source(target_round)
     {
       "type" => "linkedRounds",
-      "roundId" => self.wcif_ids,
+      "roundIds" => self.wcif_ids,
       "resultCondition" => target_round.participation_condition&.to_wcif,
     }
   end
