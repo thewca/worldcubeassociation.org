@@ -39,11 +39,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
   def rounds
     competition = Competition.includes(
-      rounds: {
-        wcif_extensions: [],
-        live_results: [],
-        sibling_rounds: [:live_results],
-      },
+      rounds: %i[live_results wcif_extensions],
     ).find(params.require(:competition_id))
 
     render json: { rounds: competition.rounds.map(&:to_live_info_json) }

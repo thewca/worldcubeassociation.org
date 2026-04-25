@@ -58,8 +58,6 @@ class Round < ApplicationRecord
   has_many :results
   has_many :scrambles
 
-  has_many :sibling_rounds, through: :competition_event, source: :rounds
-
   MAX_NUMBER = 4
   validates :number,
             numericality: { only_integer: true,
@@ -157,11 +155,11 @@ class Round < ApplicationRecord
   end
 
   def live_podium
-    linked_round.present? ? linked_round.merged_live_results.filter { it.global_pos.in?(1..3) && it.advancing } : live_results.where(global_pos: 1..3, advancing: true)
+    linked_round.present? ? linked_round.merged_live_results.filter { it.advancing && it.global_pos.in?(1..3) } : live_results.advancing.where(global_pos: 1..3)
   end
 
   def advancing_competitor_ids
-    live_results.where(advancing: true).pluck(:registration_id)
+    live_results.advancing.pluck(:registration_id)
   end
 
   private def bulk_insert_history(live_ids_to_insert, entered_by_user, **attributes)
@@ -218,19 +216,21 @@ class Round < ApplicationRecord
     linked_round&.live_results&.reset
   end
 
-  def next_round
-    sibling_rounds.find_by(number: number + 1)
+  def target_participation_condition
+    self.target_rounds.first&.participation_condition
+  end
+
+  def ranking_format
+    self.format
   end
 
   def recompute_advancing
-    if linked_round.blank?
-      results_to_update = live_results.where.not(global_pos: nil).where(locked_by_id: nil)
-      advancement_determining_condition = final_round? ? Live::Advancing.podium_condition(self) : next_round.participation_condition
-      Live::Advancing.recompute_advancing(live_results, results_to_update, advancement_determining_condition)
-    else
+    if linked_round.present?
       colinked_done = colinked_rounds.all?(&:score_taking_done?)
-      linked_round.recompute_advancing(colinked_done)
+      return linked_round.recompute_advancing(colinked_done)
     end
+
+    Live::Advancing.recompute_advancing(self)
   end
 
   def recompute_global_pos

@@ -21,7 +21,12 @@ class LiveResult < ApplicationRecord
   belongs_to :locked_by, class_name: 'User', optional: true
 
   scope :not_empty, -> { where.not(best: 0) }
-  scope :locked, -> { where.not(locked_by: nil) }
+
+  scope :globally_ranked, -> { where.not(global_pos: nil) }
+  scope :locally_ranked, -> { where.not(local_pos: nil) }
+
+  scope :locked, -> { where.not(locked_by_id: nil) }
+  scope :not_locked, -> { where(locked_by_id: nil) }
 
   scope :advancing, -> { where(advancing: true) }
   scope :not_advancing, -> { where(advancing: false) }
