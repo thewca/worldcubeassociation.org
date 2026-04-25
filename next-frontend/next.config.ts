@@ -1,7 +1,7 @@
 import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 import nextRoutes from "nextjs-routes/config";
-import fs from "fs";
+import webpack from "webpack";
 import path from "path";
 
 // New Relic is CommonJS
@@ -9,25 +9,20 @@ import path from "path";
 const nrExternals = require("newrelic/load-externals");
 
 const withRoutes = nextRoutes({ outDir: "src/types" });
-const proprietaryFontPath = path.resolve(
-  __dirname,
-  "src/styles/fonts/TTNormsPro/TT_Norms_Pro_Regular.woff2",
-);
-const shouldUseProprietaryFont =
-  process.env.PROPRIETARY_FONT === "TTNormsPro" &&
-  fs.existsSync(proprietaryFontPath);
+
+const shouldUseProprietaryFont = process.env.PROPRIETARY_FONT === "TTNormsPro";
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["newrelic"],
   webpack: (config, { isServer }) => {
-    if (shouldUseProprietaryFont) {
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        "@/styles/fonts": path.resolve(
-          __dirname,
-          "src/styles/fonts.proprietary.ts",
-        ),
-      };
+    if (!shouldUseProprietaryFont) {
+      config.plugins = [
+        ...config.plugins,
+        new webpack.IgnorePlugin({
+          resourceRegExp: /fonts\.proprietary$/,
+          contextRegExp: /\(wca\)/,
+        }),
+      ];
     }
 
     if (isServer && process.env.NODE_ENV === "production") {

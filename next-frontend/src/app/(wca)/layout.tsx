@@ -16,13 +16,25 @@ export const metadata: Metadata = {
   },
 };
 
+const computeFont = async () => {
+  if (process.env.PROPRIETARY_FONT === "TTNormsPro") {
+    const { appFont } = await import("@/styles/fonts.proprietary");
+
+    return appFont;
+  }
+
+  return appFont;
+};
+
 export const dynamic = "force-dynamic";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const appFont = await computeFont();
+
   return (
     <html suppressHydrationWarning>
       <body className={appFont.className}>
