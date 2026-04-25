@@ -50,7 +50,7 @@ export function LiveTableHeader({
         )}
         {isLinked && (
           <Table.ColumnHeader>
-            {t("competitions.results_table.round")}
+            {showFull && t("competitions.results_table.round")}
           </Table.ColumnHeader>
         )}
         {showFull &&

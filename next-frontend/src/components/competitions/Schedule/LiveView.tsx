@@ -171,7 +171,7 @@ export default function LiveView({
                                   },
                                 })}
                               >
-                                <HStack>
+                                <HStack wrap="wrap">
                                   <EventIcon eventId={eventId} fontSize="2xl" />
                                   {roundName}
                                 </HStack>
