@@ -3,8 +3,8 @@
 # React on Rails defines a global `react_component` helper, but this app still
 # has many legacy react-rails mounts while it migrates incrementally.
 module LegacyReactRailsHelperOverride
-  def react_component(*args, &block)
-    React::Rails::ViewHelper.instance_method(:react_component).bind(self).call(*args, &block)
+  def react_component(*, &)
+    React::Rails::ViewHelper.instance_method(:react_component).bind_call(self, *, &)
   end
 end
 
