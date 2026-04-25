@@ -1,7 +1,6 @@
 import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 import nextRoutes from "nextjs-routes/config";
-import webpack from "webpack";
 import path from "path";
 
 // New Relic is CommonJS
@@ -14,7 +13,7 @@ const shouldUseProprietaryFont = process.env.PROPRIETARY_FONT === "TTNormsPro";
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["newrelic"],
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, webpack }) => {
     if (!shouldUseProprietaryFont) {
       config.plugins = [
         ...config.plugins,
