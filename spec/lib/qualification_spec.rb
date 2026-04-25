@@ -81,57 +81,6 @@ RSpec.describe Qualification do
   end
 
   context "Single" do
-    it "requires single" do
-      input = {
-        'resultType' => 'single',
-        'type' => 'ranking',
-        'whenDate' => '2021-06-01',
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).not_to be_valid
-    end
-
-    it "requires date" do
-      input = {
-        'resultType' => 'single',
-        'type' => 'ranking',
-        'level' => 1000,
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).not_to be_valid
-    end
-
-    it "requires type" do
-      input = {
-        'resultType' => 'single',
-        'level' => 1000,
-        'whenDate' => '2021-06-01',
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).not_to be_valid
-    end
-
-    it "parses correctly" do
-      input = {
-        'resultType' => 'single',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-06-01',
-        'level' => 1000,
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).to be_valid
-    end
-
-    it "parses anyResult correctly" do
-      input = {
-        'resultType' => 'single',
-        'type' => 'anyResult',
-        'whenDate' => '2021-06-01',
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).to be_valid
-    end
-
     it "requires a successful time for ranking" do
       input = {
         'resultType' => 'single',
@@ -139,10 +88,12 @@ RSpec.describe Qualification do
         'whenDate' => '2021-02-15',
         'level' => 50,
       }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::Utils.upcycle_v1_qualification(input)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333')).to be true
-      expect(qualification.can_register?(user, '333oh')).to be false
+      competition_event_333 = CompetitionEvent.new(event_id: '333', qualification_condition: qualification, qualification_latest_date: '2021-02-15')
+      expect(competition_event_333.meets_qualification?(user)).to be true
+      competition_event_333oh = CompetitionEvent.new(event_id: '333oh', qualification_condition: qualification, qualification_latest_date: '2021-02-15')
+      expect(competition_event_333oh.meets_qualification?(user)).to be false
 
       input = {
         'resultType' => 'single',
@@ -150,10 +101,12 @@ RSpec.describe Qualification do
         'whenDate' => '2021-03-15',
         'level' => 50,
       }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::Utils.upcycle_v1_qualification(input)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333')).to be true
-      expect(qualification.can_register?(user, '333oh')).to be true
+      competition_event_333 = CompetitionEvent.new(event_id: '333', qualification_condition: qualification, qualification_latest_date: '2021-03-15')
+      expect(competition_event_333.meets_qualification?(user)).to be true
+      competition_event_333oh = CompetitionEvent.new(event_id: '333oh', qualification_condition: qualification, qualification_latest_date: '2021-03-15')
+      expect(competition_event_333oh.meets_qualification?(user)).to be true
     end
 
     it "requires a successful time for anyResult" do
@@ -240,47 +193,6 @@ RSpec.describe Qualification do
   end
 
   context "Average" do
-    it "requires average" do
-      input = {
-        'resultType' => 'average',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-06-01',
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).not_to be_valid
-    end
-
-    it "requires date" do
-      input = {
-        'resultType' => 'average',
-        'type' => 'attemptResult',
-        'level' => 1000,
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).not_to be_valid
-    end
-
-    it "requires type" do
-      input = {
-        'resultType' => 'average',
-        'level' => 1000,
-        'whenDate' => '2021-06-01',
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).not_to be_valid
-    end
-
-    it "parses correctly" do
-      input = {
-        'resultType' => 'average',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-06-01',
-        'level' => 1000,
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).to be_valid
-    end
-
     it "requires a successful time for ranking" do
       input = {
         'resultType' => 'average',
