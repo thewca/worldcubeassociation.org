@@ -23,6 +23,7 @@ function EditSchedule({
   wcifEvents,
   countryZones,
   referenceTime,
+  competitionCoordinates,
   calendarLocale,
 }) {
   const {
@@ -114,6 +115,7 @@ function EditSchedule({
               <EditVenues
                 countryZones={countryZones}
                 referenceTime={referenceTime}
+                competitionCoordinates={competitionCoordinates}
               />
             )}
           </Accordion.Content>
@@ -148,6 +150,7 @@ export default function Wrapper({
   wcifSchedule,
   countryZones,
   referenceTime,
+  competitionCoordinates,
   calendarLocale,
 }) {
   return (
@@ -165,6 +168,7 @@ export default function Wrapper({
             wcifEvents={wcifEvents}
             countryZones={countryZones}
             referenceTime={referenceTime}
+            competitionCoordinates={competitionCoordinates}
             calendarLocale={calendarLocale}
           />
         </WCAQueryClientProvider>

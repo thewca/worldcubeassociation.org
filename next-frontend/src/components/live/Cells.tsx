@@ -43,14 +43,14 @@ export function LiveTableHeader({
             {t("competitions.live.results.competitor")}
           </Table.ColumnHeader>
         )}
-        {isLinked && (
-          <Table.ColumnHeader>
-            {showFull && t("competitions.results_table.round")}
-          </Table.ColumnHeader>
-        )}
         {showFull && !byPerson && (
           <Table.ColumnHeader>
             {t("results.table_elements.region")}
+          </Table.ColumnHeader>
+        )}
+        {isLinked && (
+          <Table.ColumnHeader>
+            {showFull && t("competitions.results_table.round")}
           </Table.ColumnHeader>
         )}
         {showFull &&

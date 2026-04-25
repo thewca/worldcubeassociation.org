@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
   before_action :redirect_if_cannot_edit_user, only: %i[edit update]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search]
-  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id merge]
+  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id merge clear_claim_wca_id]
   before_action -> { check_edit_access }, only: %i[show_for_edit update_user_data]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
@@ -125,6 +125,15 @@ class UsersController < ApplicationController
     end
 
     redirect_to edit_user_path(user), flash: { success: "Successfully confirmed WCA ID #{wca_id}." }
+  end
+
+  def clear_claim_wca_id
+    user = User.find(params.require(:userId))
+    wca_id = user.unconfirmed_wca_id
+
+    user.update!(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+
+    redirect_to edit_user_path(user), flash: { success: "Successfully cleared claim for WCA ID #{wca_id}." }
   end
 
   def assign_wca_id

@@ -9,6 +9,7 @@ import { LiveResultProvider } from "@/providers/LiveResultProvider";
 import { getRoundName } from "@/lib/wca/live/getRoundName";
 import { getRounds } from "@/lib/wca/live/getRounds";
 import RoundOpenCheck from "@/components/live/RoundOpenCheck";
+import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
 
 export default async function ResultPage({
   params,
@@ -51,11 +52,16 @@ export default async function ResultPage({
               initialRound={data}
               competitionId={competitionId}
             >
-              <AddResults
-                competitionId={competitionId}
-                roundName={roundName}
+              <LiveResultAdminProvider
                 round={round}
-              />
+                competitionId={competitionId}
+              >
+                <AddResults
+                  competitionId={competitionId}
+                  roundName={roundName}
+                  round={round}
+                />
+              </LiveResultAdminProvider>
             </LiveResultProvider>
           </VStack>
         </PermissionCheck>

@@ -26,6 +26,26 @@ class LinkedRound < ApplicationRecord
     rounds.map(&:wcif_id)
   end
 
+  def score_taking_done?
+    rounds.all?(&:score_taking_done?)
+  end
+
+  def next_advancing_without(competitor_being_quit)
+    Live::Advancing.next_advancing_without(merged_live_results, competitor_being_quit)
+  end
+
+  delegate :next_round, to: :last_round_in_link
+
+  def recompute_advancing(can_update_advancing)
+    results_to_update = live_results.where.not(global_pos: nil).where(locked_by_id: nil)
+    advancement_determining_condition = final_round? ? Live::Advancing.podium_condition(rounds.first) : next_round.participation_condition
+    Live::Advancing.recompute_advancing(merged_live_results, results_to_update, advancement_determining_condition, can_update_advancing: can_update_advancing)
+  end
+
+  def lock_results(locking_user)
+    rounds.sum { it.lock_results(locking_user) }
+  end
+
   delegate :final_round?, to: :last_round_in_link
 
   def self.combine_results(round_results)
@@ -35,5 +55,17 @@ class LinkedRound < ApplicationRecord
       #   the *first* appearance of each entry. So we sort first,
       #   and then pick out the first (ie fastest) per competitor.
       .uniq(&:registration_id)
+  end
+
+  def advancing_competitor_ids
+    live_results.where(advancing: true).unscope(:order).distinct.pluck(:registration_id)
+  end
+
+  def as_wcif_participation_source(target_round)
+    {
+      "type" => "linkedRounds",
+      "roundIds" => self.wcif_ids,
+      "resultCondition" => target_round.participation_condition&.to_wcif,
+    }
   end
 end

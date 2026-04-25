@@ -42,7 +42,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     serial_includes = {}
 
     serial_includes["delegates"] = { only: %w[id name], methods: [], include: ["avatar"] } if admin_mode
-    serial_methods |= %w[results_submitted_at results_posted_at report_posted_at report_posted_by_user] if admin_mode
+    serial_methods |= %w[results_submitted_at results_posted_at report_posted_at report_posted_by_user lead_delegate_id] if admin_mode
 
     paginate json: competitions,
              only: %w[id name start_date end_date registration_open registration_close venue competitor_limit main_event_id],
@@ -290,9 +290,17 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition
   end
 
+  private def can_perform_action?(*oauth_scopes)
+    api_user_can_perform = yield(current_api_user) && oauth_scopes.all? { doorkeeper_token.scopes.exists?(it) }
+    api_user_can_perform || yield(current_user)
+  end
+
   private def can_manage?(competition)
-    api_user_can_manage = current_api_user&.can_manage_competition?(competition) && doorkeeper_token.scopes.exists?("manage_competitions")
-    api_user_can_manage || current_user&.can_manage_competition?(competition)
+    can_perform_action?("manage_competitions") { it&.can_manage_competition?(competition) }
+  end
+
+  private def can_admin_competitions?
+    can_perform_action?("manage_competitions") { it&.can_admin_competitions? }
   end
 
   private def require_scope!(scope)
@@ -307,6 +315,6 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def require_can_admin_competitions!
     require_user!
-    raise WcaExceptions::NotPermitted.new("The competition data cannot be edited after results have been submitted.") unless current_user.can_admin_competitions?
+    raise WcaExceptions::NotPermitted.new("The competition data cannot be edited after results have been submitted.") unless can_admin_competitions?
   end
 end
