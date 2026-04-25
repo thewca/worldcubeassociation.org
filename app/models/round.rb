@@ -217,7 +217,7 @@ class Round < ApplicationRecord
   end
 
   def target_participation_condition
-    self.target_rounds.first&.participation_condition
+    self.linked_round&.target_participation_condition || self.target_rounds.first&.participation_condition
   end
 
   def ranking_format
