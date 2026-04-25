@@ -4,6 +4,7 @@ class LinkedRound < ApplicationRecord
   has_many :rounds, -> { ordered }, inverse_of: :linked_round
   has_many :results, through: :rounds
   has_many :live_results, through: :rounds
+  has_many :events, -> { distinct }, through: :rounds
   has_many :formats, -> { distinct }, through: :rounds
   has_many :competition_events, -> { distinct }, through: :rounds
   has_many :target_rounds, class_name: "Round", as: :participation_source
@@ -30,11 +31,9 @@ class LinkedRound < ApplicationRecord
     rounds.all?(&:score_taking_done?)
   end
 
-  def next_advancing_without(competitor_being_quit)
-    Live::Advancing.next_advancing_without(merged_live_results, competitor_being_quit)
-  end
-
   delegate :next_round, to: :last_round_in_link
+
+  alias_method :advancement_results, :merged_live_results
 
   def recompute_advancing(can_update_advancing)
     results_to_update = live_results.where.not(global_pos: nil).where(locked_by_id: nil)

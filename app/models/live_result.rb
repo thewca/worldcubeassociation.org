@@ -75,8 +75,12 @@ class LiveResult < ApplicationRecord
     quit_count
   end
 
+  def quit?
+    self.quit_by_id?
+  end
+
   def locked?
-    locked_by_id.present?
+    self.locked_by_id?
   end
 
   def self.compute_average_and_best(attempts, round)

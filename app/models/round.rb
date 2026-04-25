@@ -626,12 +626,43 @@ class Round < ApplicationRecord
     number == 1 || (linked_round.present? && linked_round.first_round_in_link.number == 1)
   end
 
-  def relevant_results
-    linked_round.present? ? linked_round.live_results : live_results
-  end
+  alias_method :advancement_results, :live_results
 
+  # Port from https://github.com/thewca/wca-live/blob/main/lib/wca_live/scoretaking/advancing.ex#L143
+  # Basically this just removes the number one placed competitor and then sees who of the non-advancing
+  # competitors would make it if that competitor got dnf
   def next_advancing_without(competitor_being_quit)
-    Live::Advancing.next_advancing_without(live_results, competitor_being_quit, self)
+    live_results = self.participation_source.advancement_results.to_a
+
+    already_quit_ids = live_results.select(&:quit?).pluck(:id)
+
+    first_advancing = live_results.find(&:advancing?)
+
+    candidate_ids = live_results.reject(&:advancing?).reject(&:quit?).pluck(:id)
+
+    return [] if candidate_ids.empty?
+
+    quit_result_ids = live_results.select { it.registration_id == competitor_being_quit }.pluck(:id)
+    ignored_ids = [first_advancing&.id].compact | quit_result_ids | already_quit_ids
+
+    advancement_determining = live_results.reject { ignored_ids.include? it.id }
+
+    # Assume that everyone who quit got dnf
+    worst_results = ignored_ids.map do |ignored_id|
+      LiveResult.build(
+        id: ignored_id,
+        round: self.participation_source.rounds.first,
+        best: LiveResult::WORST_POSSIBLE_SCORE,
+        average: LiveResult::WORST_POSSIBLE_SCORE,
+      )
+    end
+
+    results_with_worst = (advancement_determining + worst_results).sort_by(&:values_for_sorting)
+
+    hypothetically_advancing_ids = self.participation_condition.apply(results_with_worst).pluck(:id)
+    next_advancing_ids = hypothetically_advancing_ids & candidate_ids
+
+    live_results.select { next_advancing_ids.include? it.id }
   end
 
   def rounds
