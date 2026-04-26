@@ -41,6 +41,7 @@ const dirname = path.dirname(filename);
 
 function plugins() {
   const isProduction = process.env.NODE_ENV === "production";
+  const isLiveSite = !!process.env.WCA_LIVE_SITE;
 
   return [
     authjsPlugin({
@@ -50,7 +51,7 @@ function plugins() {
       enabled: isProduction,
       collections: {
         media: {
-          prefix: "media",
+          prefix: isLiveSite ? "media" : "media-staging",
           generateFileURL: ({ prefix, filename }) => {
             return `${process.env.MEDIA_BUCKET_CDN!}/${prefix}/${filename}`;
           },

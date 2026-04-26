@@ -42,7 +42,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     serial_includes = {}
 
     serial_includes["delegates"] = { only: %w[id name], methods: [], include: ["avatar"] } if admin_mode
-    serial_methods |= %w[results_submitted_at results_posted_at report_posted_at report_posted_by_user] if admin_mode
+    serial_methods |= %w[results_submitted_at results_posted_at report_posted_at report_posted_by_user lead_delegate_id] if admin_mode
 
     paginate json: competitions,
              only: %w[id name start_date end_date registration_open registration_close venue competitor_limit main_event_id],
@@ -166,23 +166,90 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: data
   end
 
-  def show_wcif
-    competition = competition_from_params
-    require_can_manage!(competition)
+  WCIF_CACHE_MAX_AGE = 5.minutes
 
-    render json: competition.to_wcif(authorized: true)
+  private def render_wcif(competition, version, force_public: false)
+    if can_manage?(competition) && !force_public
+      # authorized access always gets a "fresh" WCIF,
+      #   because it might be relevant for syncing
+      return render json: competition.to_wcif(authorized: true, version: version)
+    end
+
+    # In the context of WCIF, "unauthorized" means "public",
+    #   that is you can still see the WCIF but only without sensitive information like DOB.
+    # As this is the far more common use-case, we cache the public version for up to 5 minutes
+    #   to reduce traffic and counteract scraping.
+    return unless stale?(
+      etag: [competition, version],
+      last_modified: competition.updated_at,
+      public: true,
+      cache_control: { max_age: WCIF_CACHE_MAX_AGE },
+    )
+
+    cache_key = "wcif/#{competition.id}/#{version}"
+    render json: Rails.cache.fetch(cache_key, expires_in: WCIF_CACHE_MAX_AGE) { competition.to_wcif(authorized: false, version: version) }
   end
 
-  def show_wcif_public
-    id = params[:competition_id] || params[:id]
-    cache_key = "wcif/#{id}"
+  def show_wcif
     competition = competition_from_params
-    expires_in 5.minutes, public: true
-    return unless stale?(competition, public: true)
 
-    render json: Rails.cache.fetch(cache_key, expires_in: 5.minutes) {
-      competition.to_wcif
-    }
+    render_wcif(competition, Competition::WCIF_STABLE_VERSION)
+  end
+
+  def show_wcif_by_lifecycle
+    competition = competition_from_params
+
+    lifecycle_raw = params.require(:lifecycle_name)
+    force_public = lifecycle_raw == 'public'
+
+    lifecycle_name = lifecycle_raw
+                     # backwards compatibility with legacy /wcif/public route
+                     .gsub('public', 'stable')
+                     .to_sym
+
+    unless Competition::WCIF_VERSION_CATALOGUE.key?(lifecycle_name)
+      return render json: {
+        message: "invalid lifecycle name '#{lifecycle_name}'",
+        valid_lifecycle_names: Competition::WCIF_VERSION_CATALOGUE.keys,
+      }, status: :bad_request
+    end
+
+    lifecycle_version = Competition::WCIF_VERSION_CATALOGUE.fetch(lifecycle_name)
+
+    render_wcif(competition, lifecycle_version, force_public: force_public)
+  end
+
+  def show_wcif_by_version
+    competition = competition_from_params
+
+    version_number = params.require(:version_number)
+    user_version = Gem::Version.new(version_number)
+
+    available_versions = Competition::WCIF_VERSION_CATALOGUE.values
+                                                            .map { Gem::Version.new(it) }
+
+    # The idea behind this loop is: Find all pre-defined version numbers
+    #   that "match" the user's desired version by prefix:
+    # - If the user passes just "2", then any version like `2.0.0` or `2.1.1` or `2.6` match
+    # - If the user passes "2.1", then any version like `2.1` or `2.1.3` match
+    # - If the user passes "2.1.7", then only that specific version matches
+    matching_versions = available_versions.select do |version|
+      version.segments.take(user_version.segments.size) == user_version.segments
+    end
+
+    if matching_versions.empty?
+      return render json: {
+        message: "invalid version number '#{version_number}'",
+        valid_version_numbers: Competition::WCIF_VERSION_CATALOGUE.values.uniq,
+        highest_version_number: available_versions.max.to_s,
+        stable_version_number: Competition::WCIF_STABLE_VERSION,
+      }, status: :bad_request
+    end
+
+    # Pick the highest version number that satisfies what the user requested
+    best_version = matching_versions.max.to_s
+
+    render_wcif(competition, best_version)
   end
 
   def update_wcif
@@ -223,9 +290,17 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition
   end
 
+  private def can_perform_action?(*oauth_scopes)
+    api_user_can_perform = yield(current_api_user) && oauth_scopes.all? { doorkeeper_token.scopes.exists?(it) }
+    api_user_can_perform || yield(current_user)
+  end
+
   private def can_manage?(competition)
-    api_user_can_manage = current_api_user&.can_manage_competition?(competition) && doorkeeper_token.scopes.exists?("manage_competitions")
-    api_user_can_manage || current_user&.can_manage_competition?(competition)
+    can_perform_action?("manage_competitions") { it&.can_manage_competition?(competition) }
+  end
+
+  private def can_admin_competitions?
+    can_perform_action?("manage_competitions") { it&.can_admin_competitions? }
   end
 
   private def require_scope!(scope)
@@ -240,6 +315,6 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def require_can_admin_competitions!
     require_user!
-    raise WcaExceptions::NotPermitted.new("The competition data cannot be edited after results have been submitted.") unless current_user.can_admin_competitions?
+    raise WcaExceptions::NotPermitted.new("The competition data cannot be edited after results have been submitted.") unless can_admin_competitions?
   end
 end

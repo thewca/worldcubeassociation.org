@@ -16,6 +16,7 @@ class LiveResultHistoryEntry < ApplicationRecord
     advanced_next: 'advanced_next',
     locked: 'locked',
     quit: 'quit',
+    cleared: 'cleared',
   }, prefix: true
 
   validates :entered_at, presence: true

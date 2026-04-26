@@ -1,4 +1,5 @@
 queues:
   - <%= EnvConfig.REGISTRATION_QUEUE %>
+  - <%= EnvConfig.LIVE_QUEUE %>
 delay: 1
 concurrency: 2

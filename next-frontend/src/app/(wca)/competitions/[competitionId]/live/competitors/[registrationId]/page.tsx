@@ -1,11 +1,11 @@
-import { Container, Heading, Link, Table } from "@chakra-ui/react";
+import { Container, Heading } from "@chakra-ui/react";
 import { getResultByPerson } from "@/lib/wca/live/getResultByPerson";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
-import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { Fragment } from "react";
-import { LivePositionCell } from "@/components/live/Cells";
-
+import ByPersonByRoundTable from "@/app/(wca)/competitions/[competitionId]/live/competitors/[registrationId]/ByPersonByRoundTable";
+import { getRounds } from "@/lib/wca/live/getRounds";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 export default async function PersonResults({
   params,
 }: {
@@ -18,71 +18,37 @@ export default async function PersonResults({
     registrationId,
   );
 
-  if (!personResultRequest.data) {
+  // This will always be cached because we need to create the live layout
+  const roundRequest = await getRounds(competitionId);
+
+  if (!personResultRequest.data || !roundRequest.data) {
     return <p>Something went wrong while trying to fetch results</p>;
   }
 
   const { name, results } = personResultRequest.data;
+
+  const { rounds } = roundRequest.data;
 
   const resultsByEvent = _.groupBy(results, "event_id");
 
   return (
     <Container>
       <Heading textStyle="h1">{name}</Heading>
-      {_.map(resultsByEvent, (eventResults, key) => (
-        <Fragment key={key}>
-          <Heading textStyle="h2">{events.byId[key].name}</Heading>
-          <Table.Root mb="10">
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeader>Round</Table.ColumnHeader>
-                <Table.ColumnHeader>Rank</Table.ColumnHeader>
-                {_.times(
-                  events.byId[key].recommendedFormat.expected_solve_count,
-                ).map((num) => (
-                  <Table.ColumnHeader key={num}>{num + 1}</Table.ColumnHeader>
-                ))}
-                <Table.ColumnHeader>Average</Table.ColumnHeader>
-                <Table.ColumnHeader>Best</Table.ColumnHeader>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {eventResults.map((result) => {
-                const {
-                  round_wcif_id: wcifId,
-                  attempts,
-                  global_pos,
-                  average,
-                  best,
-                } = result;
-
-                return (
-                  <Table.Row key={`${wcifId}-${key}`}>
-                    <Table.Cell>
-                      <Link
-                        href={`/competitions/${competitionId}/live/rounds/${wcifId}`}
-                      >
-                        Round {wcifId}
-                      </Link>
-                    </Table.Cell>
-                    <LivePositionCell
-                      position={global_pos}
-                      advancingParams={result}
-                    />
-                    {attempts.map((a) => (
-                      <Table.Cell key={`${wcifId}-${key}-${a.attempt_number}`}>
-                        {formatAttemptResult(a.value, key)}
-                      </Table.Cell>
-                    ))}
-                    <Table.Cell>{formatAttemptResult(average, key)}</Table.Cell>
-                    <Table.Cell>{formatAttemptResult(best, key)}</Table.Cell>
-                  </Table.Row>
-                );
-              })}
-            </Table.Body>
-          </Table.Root>
-        </Fragment>
-      ))}
+      {_.map(resultsByEvent, (eventResults, key) => {
+        const eventRounds = rounds.filter(
+          (r) => parseActivityCode(r.id).eventId == key,
+        );
+        return (
+          <Fragment key={key}>
+            <Heading textStyle="h2">{events.byId[key].name}</Heading>
+            <ByPersonByRoundTable
+              eventResults={eventResults}
+              competitionId={competitionId}
+              rounds={eventRounds}
+            />
+          </Fragment>
+        );
+      })}
     </Container>
   );
 }

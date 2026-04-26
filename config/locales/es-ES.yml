@@ -213,10 +213,19 @@ es-ES:
     #original_hash: 17dae1e
     attempt_name: 'Intento %{number}'
   round:
+    #original_hash: ceeac4a
+    title: Rondas
     #original_hash: 236c41d
     name: '%{round_name} de %{event_name}'
     #original_hash: 747df5a
     round_number: 'Ronda %{round_number}'
+  scramble_set:
+    #original_hash: ba18ca7
+    name: 'Set de mezclas %{letter_code}'
+    #original_hash: d46fe75
+    group: 'Grupo %{number}'
+    #original_hash: 17dae1e
+    attempt: 'Intento %{number}'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -659,25 +668,25 @@ es-ES:
           #original_hash: 621101a
           trainee_delegate: Delegado en prácticas
           #original_hash: 9b97968
-          junior_delegate: Delegado Junior
+          junior_delegate: Delegado Júnior
           #original_hash: 12ab214
           delegate: Delegado
           #original_hash: 45c2317
           regional_delegate: Delegado Regional
           #original_hash: d463c23
-          senior_delegate: Delegado Senior
+          senior_delegate: Delegado Sénior
         teams_committees:
           #original_hash: 6853c98
           member: Miembro
           #original_hash: c366473
-          senior_member: Miembro Senior
+          senior_member: Miembro Sénior
           #original_hash: e26c936
           leader: Líder
         councils:
           #original_hash: 6853c98
           member: Miembro
           #original_hash: c366473
-          senior_member: Miembro Senior
+          senior_member: Miembro Sénior
           #original_hash: e26c936
           leader: Líder
         officers:
@@ -685,6 +694,8 @@ es-ES:
           chair: Presidente de la WCA
           #original_hash: 7d405ff
           executive_director: Director Ejecutivo de la WCA
+          #original_hash: 36a137f
+          chief_operating_officer: Director de Operaciones de la WCA
           #original_hash: 1dd4a07
           secretary: Secretario de la WCA
           #original_hash: 0388b19
@@ -797,7 +808,7 @@ es-ES:
           depende de estas herramientas.
         #original_hash: c564b74
         receive_delegate_reports: >-
-          Si eres Delegado Senior o Miembro del WRC o del WQAC, recibirás los
+          Si eres Delegado Sénior o Miembro del WRC o del WQAC, recibirás los
           Informes de Delegados de forma predeterminada. Nota: el cambio puede
           tardar hasta 12 horas en hacer efecto.
         #original_hash: 0017d38
@@ -1249,7 +1260,7 @@ es-ES:
         comp_not_found: Competición no encontrada
         #original_hash: c0e86d5
         comp_not_found_action: >-
-          No hemos podido encontrar ninguna competición con el ID "%{comp_id}".
+          No hemos podido encontrar ninguna competición con el ID «%{comp_id}».
           Por favor, búscala utilizando la barra de búsqueda.
         #original_hash: 695f7ba
         comp_not_found_action_2: >-
@@ -1265,7 +1276,7 @@ es-ES:
       applications:
         help:
           #original_hash: 95c10ec
-          https_info: Se requiere HTTPS a no ser que el host sea "localhost"
+          https_info: Se requiere HTTPS a no ser que el host sea «localhost»
           #original_hash: 40b9d10
           scopes_html: >-
             Separa los alcances con espacios. Déjalo en blanco para usar los
@@ -1480,8 +1491,8 @@ es-ES:
         wfc: Comité Financiero de la WCA
         #original_hash: 2035811
         wmt: Equipo de Marketing de la WCA
-        #original_hash: c90653c
-        wmct: Equipo de Campeonatos Grandes de la WCA
+        #original_hash: 2517097
+        wmct: Equipo del Campeonato Grande de la WCA
         #original_hash: 8f32116
         wqac: Comité de Control de Calidad de la WCA
         #original_hash: 3da1e85
@@ -1797,6 +1808,13 @@ es-ES:
       text: >-
         Descubre los récords actuales y pasados de todas las categorías
         oficiales de la WCA.
+    volunteer:
+      #original_hash: cbf217d
+      title: Voluntario
+      #original_hash: 949f739
+      text: >-
+        ¡Participa! La WCA tiene vacantes para voluntarios en diferentes
+        equipos. No hace falta ser speedcuber para ser voluntario.
     faq:
       #original_hash: 03688ba
       title: FAQ
@@ -2033,6 +2051,12 @@ es-ES:
       approve: Aprobar
       #original_hash: d9455bf
       approve_confirm: '¿Seguro que quieres aprobar el ID de la WCA %{wca_id}?'
+      #original_hash: 1ada587
+      clear_claim: Limpiar reclamación
+      #original_hash: dc39741
+      clear_claim_confirm: >-
+        ¿Estás seguro de que quieres limpiar la reclamación del ID de la WCA
+        %{wca_id}?
       #original_hash: 85de4b8
       unconfirmed_email: >-
         La dirección de correo electrónico de esta cuenta (%{email}) no está
@@ -2900,6 +2924,66 @@ es-ES:
         title: Podios
         #original_hash: d7297a7
         undetermined: Podios por determinar
+      admin:
+        #original_hash: cf9b770
+        open: Abrir
+        #original_hash: 719ea39
+        clear: Limpiar
+        #original_hash: 42faad9
+        competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} introducidos'
+        #original_hash: adec79f
+        round_locked: bloqueada
+        warnings:
+          #original_hash: 9198c71
+          omitted: >-
+            Has omitido %{attempt_number} intentos. Asegúrate de que es
+            intencional.
+          #original_hash: 82d8e53
+          DNS: >-
+            Hay al menos un DNS seguido por un resultado válido. Por favor,
+            asegúrate de que en efecto es un DNS y no un DNF.
+          #original_hash: 6becd6c
+          impossible: >-
+            El resultado que estás intentando introducir parece imposible: el
+            intento %{attempt_number} se ha completado en menos de 30 segundos
+            por cubo intentado. Si quieres introducir minutos, no olvides añadir
+            los dos ceros de las centésimas al final del tiempo
+          #original_hash: a03301d
+          inconsistent: >-
+            El resultado que estás intentando introducir parece inconsistente.
+            Hay una gran diferencia entre el mejor single (%{best_single}) y el
+            peor single (%{worst_single}). Por favor, comprueba que los
+            resultados sean precisos.
+          #original_hash: 0be6543
+          round_locked: >-
+            ¡La siguiente ronda ya se ha abierto, así que cualquier cambio no la
+            afectará!
+        quit:
+          #original_hash: de62de1
+          title: Eliminar competidor
+          #original_hash: c25b336
+          next_to_advance:
+            zero: 'El próximo competidor en clasificarse es %{competitors}'
+            one: 'El próximo competidor en clasificarse es %{competitors}'
+            other: 'Los próximos competidores en clasificarse son %{competitors}'
+          #original_hash: c87ca67
+          advance: Clasificar al próximo competidor
+          #original_hash: e85b311
+          quit_confirm: Eliminar competidor de la ronda
+          #original_hash: 70835a0
+          no_next: No se pueden clasificar más competidores.
+          #original_hash: 77dfd21
+          cancel: Cancelar
+          #original_hash: 79d6737
+          failed_to_fetch: >-
+            No se ha podido recuperar el siguiente competidor en la
+            clasificación
+      results:
+        #original_hash: 4705687
+        competitor: Competidor
+      errors:
+        #original_hash: f522c26
+        round_closed: La ronda no está abierta aún
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mis competiciones
@@ -3360,7 +3444,7 @@ es-ES:
       #original_hash: 89fbbca
       submit_delete: >-
         Esta acción no se puede deshacer. Por favor, escribe a continuación el
-        ID de la competición "%{competition_id}" para confirmar la eliminación.
+        ID de la competición «%{competition_id}» para confirmar la eliminación.
       #original_hash: 8ebebca
       coordinates: Coordenadas
       #original_hash: a672984
@@ -3453,6 +3537,8 @@ es-ES:
           organizer_ids: Organizador(es)
           #original_hash: b37456c
           contact: Contacto
+          #original_hash: 78ef126
+          lead_delegate_id: Delegado responsable
         #original_hash: 991f419
         championships: Campeonatos
         website:
@@ -3596,8 +3682,8 @@ es-ES:
             [Parque de las Ciencias](http://www.parqueciencias.com/)
           #original_hash: 2651d1a
           details_html: >-
-            Detalles sobre el recinto (por ejemplo, "primera planta" o "sigue
-            los carteles"). %{md}
+            Detalles sobre el recinto (por ejemplo, «En la primera planta, al
+            fondo, sigue los carteles»). %{md}
           #original_hash: da39a3e
           address: ''
           coordinates:
@@ -3658,7 +3744,7 @@ es-ES:
             pueden ser más que la mitad del límite de competidores.
           #original_hash: 79dcafd
           auto_accept_preference: >-
-            Esto activará un botón de "Aceptar automáticamente en bloque" en el
+            Esto activará un botón de «Aceptar automáticamente en bloque» en el
             menú de registro. Esto aceptará todos los registros en lista de
             espera y pendientes hasta llegar al límite de competidores, o al
             límite definido a continuación. Úsalo bajo tu propia
@@ -3685,6 +3771,11 @@ es-ES:
             enviarán a través de un formulario sin revelar los correos
             electrónicos de los organizadores. %{md}. Por ejemplo: [Texto a
             mostrar](mailto:algun@correo.es)
+          #original_hash: 7a51d00
+          lead_delegate_id: >-
+            El Delegado responsable es responsable de los aspectos
+            administrativos de una competición (Resultados, Informe, pago de la
+            Cuota)
         website:
           #original_hash: da39a3e
           generate_website: ''
@@ -3818,7 +3909,7 @@ es-ES:
             per_registration_limit: >-
               Forzar de manera opcional el total de categorías en las que un
               competidor puede registrarse (comúnmente usado para competiciones
-              de tipo "Favorites"). Deberías añadir categorías antes de usar
+              de tipo «Favorites»). Deberías añadir categorías antes de usar
               este campo. Los registros con demasiadas categorías se bloquearán.
               Dejar en blanco si no hay límite.
           #original_hash: 1067798
@@ -3845,10 +3936,10 @@ es-ES:
             'false': NO quiero especificar un límite de competidores
           auto_accept_preference:
             #original_hash: 5996b1f
-            disabled: Desactivar el botón de "Aceptar automáticamente en bloque"
+            disabled: Desactivar el botón de «Aceptar automáticamente en bloque»
             #original_hash: 1c0c289
             bulk: >-
-              Activar el botón de "Aceptar automáticamente en bloque" en el menú
+              Activar el botón de «Aceptar automáticamente en bloque» en el menú
               de registro
             #original_hash: 490ed83
             live: Aceptar automáticamente los registros cuando se realice el pago
@@ -3878,11 +3969,11 @@ es-ES:
             #original_hash: 7e54323
             unclear: >-
               No mostrar nada (y quizás ampliar la información en la sección de
-              "Requisitos adicionales de registro")
+              «Requisitos adicionales de registro»)
             #original_hash: 694bce4
-            free: '"Cualquier espectador puede asistir de manera gratuita"'
+            free: «Cualquier espectador puede asistir de manera gratuita»
             #original_hash: 762c509
-            restricted: '"Solo se permiten espectadores como acompañantes de competidores"'
+            restricted: «Solo se permiten espectadores como acompañantes de competidores»
         event_restrictions:
           qualification_results:
             allow_registration_without:
@@ -3972,7 +4063,7 @@ es-ES:
             más de uno a la vez, los competidores pagados serán añadidos al
             final de la lista en el orden que hayan pagado, seguido por los
             demás en el orden en que se hayan registrado. Puedes ajustar el
-            orden manualmente en "Modo Edición" en caso que sea necesario.
+            orden manualmente en «Modo Edición» en caso que sea necesario.
           #original_hash: dc16b6c
           skipped_warning: >-
             Has omitido %{count} registro(s) en la lista de espera. ¿Estás
@@ -4025,7 +4116,7 @@ es-ES:
         #original_hash: 1255806
         acknowledgement: >-
           He leído y acepto toda la información que hay en la pestaña de
-          "Registro", incluyendo la cuota de entrada, políticas de reembolsos y
+          «Registro», incluyendo la cuota de entrada, políticas de reembolsos y
           cualquier otro requerimiento que se enumerado antes.
         #original_hash: 80d2933
         next_step: Continuar al siguiente paso
@@ -4041,12 +4132,12 @@ es-ES:
         #original_hash: 9b92912
         update_confirm_contact: >-
           Tienes que ponerte en contacto con los organizadores para actualizar
-          tu registro, pincha en "Sí" para ser llevado al formulario de
+          tu registro, pincha en «Sí» para ser llevado al formulario de
           contacto.
         #original_hash: d54056b
         delete_confirm_contact: >-
           Tienes que ponerte en contacto con los organizadores para eliminar tu
-          registro, pincha en "Sí" para ser llevado al formulario de contacto.
+          registro, pincha en «Sí» para ser llevado al formulario de contacto.
         #original_hash: 7fbb20c
         update_contact_message: >-
           Me gustaría actualizar los detalles de mi registro de la siguiente
@@ -4406,7 +4497,7 @@ es-ES:
       #original_hash: c02a415
       note_clone: >-
         Para clonar una competición ve a la página de información de esa
-        competición y pincha en el botón "Clonar" del menú.
+        competición y pincha en el botón «Clonar» del menú.
     update:
       #original_hash: 5fb2f57
       save_success: La competición se ha guardado satisfactoriamente.
@@ -4766,11 +4857,11 @@ es-ES:
       #original_hash: f5fe73c
       title: Rankings
       #original_hash: 65310e5
-      unknown_type: 'Parámetro de tipo desconocido, tiene que ser "single" o "average"'
+      unknown_type: 'Parámetro de tipo desconocido, tiene que ser «single» o «average»'
       #original_hash: 01e188f
       unknown_show: >-
-        Parámetro de mostrar desconocido, tiene que ser "N persons", "N results"
-        o "by region"
+        Parámetro de mostrar desconocido, tiene que ser «N persons», «N results»
+        o «by region»
     records:
       #original_hash: e51c552
       title: Récords
@@ -5323,7 +5414,7 @@ es-ES:
     who_we_are_content_html: >-
       <p>La World Cube Association gobierna competiciones sobre puzzles
       mecánicos que funcionan aplicando giros a grupos de piezas, comúnmente
-      conocidos como "puzzles secuenciales". El más conocido de estos puzzles es
+      conocidos como «puzzles secuenciales». El más conocido de estos puzzles es
       el Cubo de Rubik, inventado por el profesor Rubik de Hungría. Una
       selección de estos puzzles han sido seleccionados como categorías
       oficiales de la WCA.</p><p>Durante la evolución de la WCA en la última
@@ -5347,8 +5438,8 @@ es-ES:
     our_goals_content_html: >-
       <p>La World Cube Association quiere brindar oportunidades para pertenecer
       y liderar comunidades a gente joven alrededor del mundo mediante el
-      aumento de la accesibilidad de nuestras competiciones de "puzzles
-      secuenciales". Creemos que las experiencias en las competiciones y dentro
+      aumento de la accesibilidad de nuestras competiciones de «puzzles
+      secuenciales». Creemos que las experiencias en las competiciones y dentro
       de nuestra comunidad genera oportunidades de crecimiento para gente joven
       involucrada y que introducir estos eventos a nuevos grupos de gente
       permite fortalecerse a nuestra comunidad general. Se puede encontrar <a
@@ -5431,10 +5522,10 @@ es-ES:
         WCA. Un Delegado de la WCA es responsable de garantizar que todas las
         Competiciones de la WCA se desarrollen de acuerdo con la Misión, el
         Espíritu y el Reglamento de la WCA. La WCA diferencia entre
-        <strong>Delegados Senior</strong>, <strong>Delegados
+        <strong>Delegados Sénior</strong>, <strong>Delegados
         Regionales</strong>, <strong>Delegados</strong>, <strong>Delegados
-        Junior</strong> y
-         <strong>Delegados en prácticas</strong> %{see_link}.</p> <p>Además de las responsabilidades de un Delegado de la WCA, un Delegado Senior o un Delegado Regional es responsable de gestionar los Delegados de la WCA de su área y puede ser contactado por cualquier miembro de la comunidad por cuestiones relacionadas con su región.</p> <p>Los nuevos Delegados figuran ostentan inicialmente el cargo título de Delegados Junior; posteriormente, se les pide que demuestren su competencia en la gestión de Competiciones de la WCA antes de ser ascendidos a Delegados de la WCA.</p> <p>Los Delegados en prácticas están siendo entrenados para ser Delegados de la WCA y solo pueden supervisar competiciones en las que un Delegado de la WCA está presente.</p>
+        Júnior</strong> y
+         <strong>Delegados en prácticas</strong> %{see_link}.</p> <p>Además de las responsabilidades de un Delegado de la WCA, un Delegado Sénior o un Delegado Regional es responsable de gestionar los Delegados de la WCA de su área y puede ser contactado por cualquier miembro de la comunidad por cuestiones relacionadas con su región.</p> <p>Los nuevos Delegados figuran ostentan inicialmente el cargo título de Delegados Junior; posteriormente, se les pide que demuestren su competencia en la gestión de Competiciones de la WCA antes de ser ascendidos a Delegados de la WCA.</p> <p>Los Delegados en prácticas están siendo entrenados para ser Delegados de la WCA y solo pueden supervisar competiciones en las que un Delegado de la WCA está presente.</p>
       #original_hash: 27d18ac
       see_link_html: '(ver %{link})'
       #original_hash: 5b01fcc
@@ -5955,7 +6046,7 @@ es-ES:
         locales y te puede ayudar a encontrar una fecha adecuada ya que sabe si
         hay otras competiciones planificadas al mismo tiempo. Si no hay ningún
         Delegado de la WCA cerca de tu área, ponte en contacto con el Delegado
-        Senior de tu región.
+        Sénior de tu región.
     paragraph2:
       #original_hash: f20dd3b
       title: Gastos esperados al organizar una competición
@@ -5985,12 +6076,12 @@ es-ES:
     paragraph4:
       #original_hash: b6dca56
       title: Política de Proximidad
-      #original_hash: f5eeb95
+      #original_hash: 0574d31
       content1: >-
-        Las competiciones de la WCA se aceptarán si están al menos a 10 km o a 5
+        Las competiciones de la WCA se aceptarán si están al menos a 30 km o a 5
         días de otra competición. El WCAT debería revisar particularmente una
         competición propuesta si hay otra competición para la que la distancia
-        entre ellas sea menor que 10 km y el tiempo entre ellas sea menor que 5
+        entre ellas sea menor que 30 km y el tiempo entre ellas sea menor que 5
         días. Un Delegado que pida la aceptación de tal competición tiene que
         aportar más información sobre por qué la competición debería ser
         aceptada de todos modos. Posibles argumentos a favor de que se acepte
@@ -6395,45 +6486,45 @@ es-ES:
       results_not_associated_with_any_person_error: 'Hay resultados para una persona desconocida con el ID %{person_id}'
       #original_hash: c29e35d
       whitespace_in_name_error: >-
-        El nombre "%{name}" tiene espacios al comienzo o al final o espacios
+        El nombre «%{name}» tiene espacios al comienzo o al final o espacios
         dobles.
       #original_hash: 9b1ae5f
       person_with_non_existing_wca_id_error: '%{name} tiene un ID de la WCA que no existe: %{wca_id}.'
       #original_hash: 924d832
       no_space_before_parenthesis_error: >-
-        El paréntesis de apertura en "%{name}" tiene que estar precedido por un
+        El paréntesis de apertura en «%{name}» tiene que estar precedido por un
         espacio.
       #original_hash: 6daf706
       same_person_name_warning: >-
-        Ya hay al menos una persona llamada "%{name}" en la base de datos de la
-        WCA (%{wca_ids}). Por favor, asegúrate de que tu "%{name}" sea una
+        Ya hay al menos una persona llamada «%{name}» en la base de datos de la
+        WCA (%{wca_ids}). Por favor, asegúrate de que tu «%{name}» sea una
         persona diferente. En caso contrario, por favor asigna el ID de la WCA
         correcto al usuario y regenera el archivo de resultados JSON.
       #original_hash: eeb688a
       non_matching_dob_warning: >-
-        La fecha de nacimiento "%{dob}" de %{name} (%{wca_id}) no coincide con
-        la registrada en la base de datos de la WCA ("%{expected_dob}"). Si esto
+        La fecha de nacimiento «%{dob}» de %{name} (%{wca_id}) no coincide con
+        la registrada en la base de datos de la WCA («%{expected_dob}»). Si esto
         es un error, por favor corrígelo. En caso contrario, deja una nota al
         WRT al respecto explicando la situación.
       #original_hash: 6a81cc0
       non_matching_gender_warning: >-
-        El género "%{gender}" de %{name} (%{wca_id}) no coincide con el
-        registrado en la base de datos de la WCA ("%{expected_gender}"). Si esto
+        El género «%{gender}» de %{name} (%{wca_id}) no coincide con el
+        registrado en la base de datos de la WCA («%{expected_gender}»). Si esto
         es un error, por favor corrígelo. En caso contrario, deja una nota al
         WRT al respecto explicando la situación.
       #original_hash: da398a2
       empty_gender_warning: >-
         El género del nuevo %{name} está vacío. Valores válidos para este campo
-        son "Femenino", "Masculino", y "Otro". Por favor, deja una nota al WRT
+        son «Femenino», «Masculino», y «Otro». Por favor, deja una nota al WRT
         al respecto explicando la situación.
       #original_hash: 050c7e2
       non_matching_name_warning: >-
-        El nombre "%{name}" de %{wca_id} no coincide con el registrado en la
-        base de datos de la WCA ("%{expected_name}").
+        El nombre «%{name}» de %{wca_id} no coincide con el registrado en la
+        base de datos de la WCA («%{expected_name}»).
       #original_hash: 333a035
       non_matching_country_warning: >-
-        El país "%{country}" de %{name} (%{wca_id}) no coincide con el
-        registrado en la base de datos de la WCA ("%{expected_country}"). Si
+        El país «%{country}» de %{name} (%{wca_id}) no coincide con el
+        registrado en la base de datos de la WCA («%{expected_country}»). Si
         esto es un error, por favor corrígelo. En caso contrario, deja una nota
         al WRT al respecto explicando la situación.
       #original_hash: 6179b35
@@ -6444,39 +6535,45 @@ es-ES:
         su ID.
       #original_hash: 7732038
       wrong_parenthesis_type_error: >-
-        El paréntesis utilizado en "%{name}" es un carácter irregular, por favor
-        reemplázalo con un paréntesis regular "(" o ")" y con espacios
+        El paréntesis utilizado en «%{name}» es un carácter irregular, por favor
+        reemplázalo con un paréntesis regular «(» o «)» y con espacios
         apropiados.
       #original_hash: fec0347
       special_characters_in_name_warning: >-
-        El nombre '%{name}' contiene caracteres especiales inválidos (como
+        El nombre «%{name}» contiene caracteres especiales inválidos (como
         números, comillas u otros símbolos). Los nombres solo deberían contener
         letras, espacios, guiones, apóstrofos, puntos y paréntesis normales.
+      #original_hash: 031123e
+      suspicious_last_name_warning: >-
+        «%{name}» tiene «%{suffix}» como apellido, lo cual puede no ser un
+        apellido real (por ejemplo, un sufijo generacional escrito
+        completamente). Confirma que se trata de su apellido legal o
+        sustitúyelo/elimínalo según corresponda.
       #original_hash: 4b90583
       successive_uppercase_name_warning: >-
-        "%{name}" tiene mayúsculas consecutivas en su nombre. Por favor,
+        «%{name}» tiene mayúsculas consecutivas en su nombre. Por favor,
         confirma que esta es la ortografía correcta de su nombre o corrígelo.
       #original_hash: 654b60d
       lowercase_name_warning: >-
-        "%{name}" tiene un nombre en todo minúsculas. Por favor, confirma que es
+        «%{name}» tiene un nombre en todo minúsculas. Por favor, confirma que es
         la ortografía correcta del nombre o corrígelo.
       #original_hash: 4ea44b6
       missing_period_in_single_letter_middle_name_warning: >-
-        "%{name}" tiene un nombre de una sola letra sin punto de abreviación.
+        «%{name}» tiene un nombre de una sola letra sin punto de abreviación.
         Por favor, confirma que esta es la ortografía correcta del nombre o
         corrígelo.
       #original_hash: cbd3bd6
       letter_after_period_warning: >-
-        "%{name}" tiene un punto sin un espacio a continuación en su nombre. Por
+        «%{name}» tiene un punto sin un espacio a continuación en su nombre. Por
         favor, confirma que es la ortografía correcta del nombre o corrígelo.
       #original_hash: d7803d4
       single_letter_first_or_last_name_warning: >-
-        "%{name}" tiene un nombre o apellido de una sola letra. Por favor,
+        «%{name}» tiene un nombre o apellido de una sola letra. Por favor,
         corrige el nombre o confirma que este es su nombre legal solicitando un
         documento de identidad oficial.
       #original_hash: 9adb87f
       single_name_warning: >-
-        "%{name}" tiene un solo nombre. Por favor, confirma que este es el
+        «%{name}» tiene un solo nombre. Por favor, confirma que este es el
         nombre completo del competidor con un documento de identidad oficial.
       #original_hash: 39c7f3d
       competitor_limit_exceeded_warning: >-
@@ -6484,6 +6581,16 @@ es-ES:
         límite de competidores (%{competitor_limit}). Los resultados de los
         competidores registrados una vez se alcanzó el límite de competidores
         tienen que ser eliminados.
+      #original_hash: d8f2f1e
+      registration_details_mismatch_warning: >-
+        La persona con el ID de registro %{person_id} (%{name}) tiene detalles
+        que no coinciden con su registro: %{mismatches}
+      #original_hash: 1a9da05
+      missing_matching_registration_warning: 'La persona %{name} no tiene un registro coincidente.'
+      #original_hash: 7d62dd5
+      unaccepted_registration_with_results_warning: >-
+        La persona %{name} tiene resultados en la competición, pero el registro
+        no está marcado como «aceptado».
     results:
       #original_hash: 5685ae8
       automatically_position_fixed_info: >-
@@ -6491,7 +6598,7 @@ es-ES:
         %{expected_pos} automáticamente.
       #original_hash: e895bf5
       mbf_result_over_time_limit_warning: >-
-        [%{round_id}] El resultado "%{result}" de %{person_name} supera el
+        [%{round_id}] El resultado «%{result}» de %{person_name} supera el
         tiempo límite. Por favor, asegúrate de que esto sea por penalizaciones
         antes de enviar los resultados o cambia el resultado a DNF.
       #original_hash: c74c2c6

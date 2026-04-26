@@ -7,6 +7,9 @@ inputs:
   tag:
     description: 'The image tag in the registry'
     required: true
+  base_url:
+    description: 'The Base URL of the Rails APP'
+    required: true
 outputs:
   imageid:
     description: 'The Docker image id build'
@@ -19,8 +22,6 @@ runs:
       run: |
         rm -rf ./next-frontend/src/lib/staticData
         cp -rT ./lib/static_data ./next-frontend/src/lib/staticData
-        rm ./next-frontend/src/lib/i18n/locales/available.json
-        cp ./config/locales/available.json ./next-frontend/src/lib/i18n/locales/available.json
         cp ./config/locales/*.yml ./next-frontend/src/lib/i18n/locales
     - name: Download proprietary assets from protected bucket
       shell: bash
@@ -35,3 +36,5 @@ runs:
           ${{ inputs.registry }}:${{ inputs.tag }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        build-args: |
+          WCA_SITE=${{ inputs.base_url }}

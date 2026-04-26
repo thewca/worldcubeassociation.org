@@ -25,6 +25,7 @@ on:
       - 'docker-compose.yml'
       - 'Dockerfile*'
       - '.github/workflows/ruby-test.yml'
+      - 'lib/sanity_check_sql/**/*.sql'
 
 jobs:
   test:

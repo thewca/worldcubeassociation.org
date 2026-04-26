@@ -1,3 +1,5 @@
+"use client";
+
 import {
   createContext,
   useCallback,
@@ -5,19 +7,27 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { Format } from "@/lib/wca/data/formats";
+import formats from "@/lib/wca/data/formats";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
+import { Toaster, toaster } from "@/components/ui/toaster";
+import { applyCutoff, applyTimeLimit } from "@/lib/live/attempt-result";
+import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
 
 interface AdminResultsContextValue {
   registrationId: number | undefined;
   attempts: number[];
-  error: string;
-  success: string;
-  isPendingUpdate: boolean;
+  isPending: boolean;
   handleRegistrationIdChange: (value: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
   handleSubmit: () => void;
+  clearCompetitorsResults: (registrationId: number) => void;
+  quitCompetitor: (
+    registrationId: number,
+    advanceNext: boolean,
+    toAdvance: LiveCompetitor[],
+  ) => void;
+  addCompetitorToRound: (registrationId: number) => Promise<void>;
 }
 
 function zeroedArrayOfSize(size: number) {
@@ -30,40 +40,61 @@ const AdminResultsContext = createContext<AdminResultsContextValue | null>(
 
 export function LiveResultAdminProvider({
   children,
-  format,
-  roundId,
   competitionId,
+  initialRegistrationId,
+  round,
 }: {
   children: ReactNode;
-  format: Format;
-  roundId: string;
   competitionId: string;
+  initialRegistrationId?: number;
+  round: LiveRoundAdminBase;
 }) {
-  const solveCount = format.expected_solve_count;
-
-  const [registrationId, setRegistrationId] = useState<number>();
-  const [attempts, setAttempts] = useState<number[]>(
-    zeroedArrayOfSize(solveCount),
-  );
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const { id: roundId, cutoff, timeLimit, format: formatId } = round;
+  const format = formats.byId[formatId];
 
   const { liveResultsByRegistrationId, addPendingLiveResult } =
     useLiveResults();
+
+  const solveCount = format.expected_solve_count;
+
+  const [registrationId, setRegistrationId] = useState<number | undefined>(
+    initialRegistrationId,
+  );
+
+  const getAttemptsForCompetitor = useCallback(
+    (registrationId?: number): number[] => {
+      if (registrationId === undefined) {
+        return zeroedArrayOfSize(solveCount);
+      }
+
+      // Even for Dual Rounds we only fetch one round in the admin view
+      const competitorResults = liveResultsByRegistrationId[registrationId][0];
+
+      if (competitorResults.attempts.length > 0) {
+        return competitorResults.attempts
+          .toSorted((a, b) => a.attempt_number - b.attempt_number)
+          .map((a) => a.value);
+      }
+
+      return zeroedArrayOfSize(solveCount);
+    },
+    [liveResultsByRegistrationId, solveCount],
+  );
+
+  const [attempts, setAttempts] = useState<number[]>(() =>
+    getAttemptsForCompetitor(initialRegistrationId),
+  );
+
   const api = useAPI();
 
   const handleRegistrationIdChange = useCallback(
     (value: number) => {
       setRegistrationId(value);
-      // Even for Dual Rounds we only fetch one round in the admin view
-      const alreadyEnteredResults = liveResultsByRegistrationId[value][0];
-      if (alreadyEnteredResults) {
-        setAttempts(alreadyEnteredResults.attempts.map((a) => a.value));
-      } else {
-        setAttempts(zeroedArrayOfSize(solveCount));
-      }
+
+      const competitorAttempts = getAttemptsForCompetitor(value);
+      setAttempts(competitorAttempts);
     },
-    [liveResultsByRegistrationId, solveCount],
+    [getAttemptsForCompetitor],
   );
 
   const { mutate: mutateUpdate, isPending: isPendingUpdate } = api.useMutation(
@@ -72,14 +103,91 @@ export function LiveResultAdminProvider({
     {
       onSuccess: (_data, variables) => {
         addPendingLiveResult(variables.body, roundId);
-        setSuccess("Results updated successfully!");
+        toaster.create({
+          description: "Results updated queued",
+          type: "success",
+        });
         setRegistrationId(undefined);
         setAttempts(zeroedArrayOfSize(solveCount));
-        setError("");
-        setTimeout(() => setSuccess(""), 3000);
       },
       onError: () => {
-        setError("Failed to update results. Please try again.");
+        toaster.create({
+          description: "Failed to enqueue results",
+          type: "error",
+        });
+      },
+    },
+  );
+
+  const { mutateAsync: addCompetitorMutation, isPending: isPendingAdd } =
+    api.useMutation(
+      "put",
+      "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
+      {
+        onSuccess: () => {
+          toaster.create({
+            description: "Successfully added competitor",
+            type: "success",
+          });
+        },
+        onError: () => {
+          toaster.create({
+            description: "Failed to add competitor",
+            type: "error",
+          });
+        },
+      },
+    );
+
+  const addCompetitorToRound = useCallback(
+    async (registrationId: number) => {
+      await addCompetitorMutation({
+        params: {
+          path: {
+            registrationId,
+            competitionId,
+            roundId,
+          },
+        },
+      });
+    },
+    [addCompetitorMutation, competitionId, roundId],
+  );
+
+  const { mutate: mutateQuit, isPending: isPendingQuit } = api.useMutation(
+    "delete",
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}",
+    {
+      onSuccess: () => {
+        toaster.create({
+          description: "Successfully quit competitor",
+          type: "success",
+        });
+      },
+      onError: () => {
+        toaster.create({
+          description: "Failed to quit competitor",
+          type: "error",
+        });
+      },
+    },
+  );
+
+  const { mutate: mutateClear, isPending: isPendingClear } = api.useMutation(
+    "put",
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}/clear",
+    {
+      onSuccess: () => {
+        toaster.create({
+          description: "Successfully cleared competitor",
+          type: "success",
+        });
+      },
+      onError: () => {
+        toaster.create({
+          description: "Failed to clear competitor",
+          type: "error",
+        });
       },
     },
   );
@@ -87,12 +195,15 @@ export function LiveResultAdminProvider({
   const handleAttemptChange = (index: number, value: number) => {
     const newAttempts = [...attempts];
     newAttempts[index] = value;
-    setAttempts(newAttempts);
+    setAttempts(applyCutoff(applyTimeLimit(newAttempts, timeLimit), cutoff));
   };
 
   const handleSubmit = () => {
     if (!registrationId) {
-      setError("Please enter a user ID");
+      toaster.create({
+        description: "Please enter a user id",
+        type: "error",
+      });
       return;
     }
 
@@ -110,20 +221,49 @@ export function LiveResultAdminProvider({
     });
   };
 
+  const clearCompetitorsResults = (toClearId: number) => {
+    mutateClear({
+      params: {
+        path: { competitionId, roundId, registrationId: toClearId },
+      },
+    });
+    if (registrationId === toClearId) {
+      setAttempts(zeroedArrayOfSize(solveCount));
+    }
+  };
+
+  const quitCompetitor = (
+    registrationId: number,
+    advanceNext: boolean,
+    toAdvance: LiveCompetitor[],
+  ) => {
+    mutateQuit({
+      params: {
+        path: { competitionId, roundId, registrationId },
+      },
+      body: {
+        advancing_ids: advanceNext ? toAdvance.map((r) => r.id) : [],
+      },
+    });
+  };
+
   return (
     <AdminResultsContext.Provider
       value={{
         registrationId,
         attempts,
-        error,
-        success,
-        isPendingUpdate,
+        isPending:
+          isPendingUpdate || isPendingClear || isPendingQuit || isPendingAdd,
+        quitCompetitor,
         handleRegistrationIdChange,
         handleAttemptChange,
         handleSubmit,
+        addCompetitorToRound,
+        clearCompetitorsResults,
       }}
     >
       {children}
+      <Toaster />
     </AdminResultsContext.Provider>
   );
 }

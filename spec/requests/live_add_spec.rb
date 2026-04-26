@@ -31,6 +31,7 @@ RSpec.describe "WCA Live API" do
                                                                                                                        { attempt_number: 3, value: 333 },
                                                                                                                        { attempt_number: 4, value: 444 },
                                                                                                                        { attempt_number: 5, value: 555 })
+      expect(result.live_attempts_count).to eq 5
       expect(result.best).to eq 111
       expect(result.average).to eq 333
     end
@@ -51,7 +52,7 @@ RSpec.describe "WCA Live API" do
 
         post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request
         perform_enqueued_jobs
-      end.to have_broadcasted_to(Live::Config.broadcast_key(round.wcif_id))
+      end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, round.wcif_id))
         .from_channel(ApplicationCable::Channel)
     end
 

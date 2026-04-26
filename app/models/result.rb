@@ -3,7 +3,7 @@
 class Result < ApplicationRecord
   include Resultable
 
-  belongs_to :person, -> { current }, primary_key: :wca_id, optional: true
+  belongs_to :person, -> { current }, primary_key: :wca_id, optional: true, inverse_of: :results
   validates :person_name, presence: true
   belongs_to :country
   has_one :continent, through: :country
@@ -11,7 +11,7 @@ class Result < ApplicationRecord
 
   # InboxPerson IDs are only unique per competition. So in addition to querying the ID itself (which is guaranteed by :foreign_key)
   # we also need sure to query the correct competition as well through a composite key.
-  belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
+  belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true, inverse_of: :results
 
   has_many :result_attempts, inverse_of: :result, dependent: :destroy, autosave: true, index_errors: true
   validates_associated :result_attempts

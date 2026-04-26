@@ -46,3 +46,10 @@ variable "pma_auth_secret" {
   type = string
   description = "The client secret for pma you can get it at https://www.worldcubeassociation.org/oauth/applications/1069"
 }
+
+variable "anycable_path" {
+  type = string
+  description = "The Path where anycable is mounted"
+  default = "/api/v1/live/cable"
+}
+

@@ -54,7 +54,12 @@
     (<%= competition.events.count %>)
     <%= competition.events.map(&:name).join(", ") %>
   </div>
-
+  <% if competition.lead_delegate.present? %>
+    <div>
+      <strong>Lead Delegate</strong>
+      <%= competition.lead_delegate.name %>
+    </div>
+  <% end %>
   <div>
     <strong>Delegates</strong>
     <%= competition.staff_delegates.pluck(:name).to_sentence %>
@@ -92,13 +97,6 @@
       </div>
     <% end %>
   <% end %>
-
-  <%# Technically, 'remarks' is also a Markdown section but it's the only one that doesn't have a template %>
-  <%# and (as of writing this comment) we always want to include it no matter which Report version. %>
-  <div>
-    <h2>Remarks</h2>
-    <%=md delegate_report.remarks %>
-  </div>
 
   <% if delegate_report.posted_by_user %>
     <br>

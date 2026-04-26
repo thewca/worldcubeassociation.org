@@ -358,6 +358,7 @@ function AdminCompetitionsTable({
                       <List.Item
                         key={delegate.id}
                         active={!selectedDelegate || delegate.id === selectedDelegate}
+                        style={{ fontWeight: delegate.id === comp.lead_delegate_id ? 'bold' : 'normal' }}
                         disabled
                       >
                         <Image avatar src={delegate.avatar.thumb_url} />

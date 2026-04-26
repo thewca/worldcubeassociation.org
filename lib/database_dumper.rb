@@ -92,6 +92,7 @@ module DatabaseDumper
           results_posted_by
           posting_by
           main_event_id
+          lead_delegate_id
           cancelled_at
           cancelled_by
           waiting_list_deadline_date
@@ -99,7 +100,7 @@ module DatabaseDumper
           force_comment_in_registration
           allow_registration_edits
           competition_series_id
-          use_wca_live_for_scoretaking
+          scoretaking_software
           allow_registration_without_qualification
           forbid_newcomers
           forbid_newcomers_reason
@@ -175,6 +176,10 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
+    "external_scramble_sets" => :skip_all_rows,
+    "external_scrambles" => :skip_all_rows,
+    "matched_scramble_sets" => :skip_all_rows,
+    "matched_scrambles" => :skip_all_rows,
     "formats" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -237,8 +242,6 @@ module DatabaseDumper
     }.freeze,
     "inbox_persons" => :skip_all_rows,
     "inbox_results" => :skip_all_rows,
-    "inbox_scramble_sets" => :skip_all_rows,
-    "inbox_scrambles" => :skip_all_rows,
     "persons" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -294,6 +297,9 @@ module DatabaseDumper
           time_limit
           cutoff
           advancement_condition
+          participation_condition
+          participation_source_id
+          participation_source_type
           scramble_set_count
           created_at
           updated_at
@@ -380,6 +386,8 @@ module DatabaseDumper
           event_id
           fee_lowest_denomination
           qualification
+          qualification_latest_date
+          qualification_condition
         ],
       ),
     }.freeze,

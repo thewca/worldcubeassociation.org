@@ -9,9 +9,21 @@ const nrExternals = require("newrelic/load-externals");
 
 const withRoutes = nextRoutes({ outDir: "src/types" });
 
+const shouldUseProprietaryFont = process.env.PROPRIETARY_FONT === "TTNormsPro";
+
 const nextConfig: NextConfig = {
   serverExternalPackages: ["newrelic"],
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, webpack }) => {
+    if (!shouldUseProprietaryFont) {
+      config.plugins = [
+        ...config.plugins,
+        new webpack.IgnorePlugin({
+          resourceRegExp: /fonts\.proprietary$/,
+          contextRegExp: /\(wca\)/,
+        }),
+      ];
+    }
+
     if (isServer && process.env.NODE_ENV === "production") {
       nrExternals(config);
     }
@@ -19,8 +31,8 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
-    reactCompiler: true,
   },
+  reactCompiler: true,
   logging: {
     fetches: {
       fullUrl: true,

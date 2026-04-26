@@ -63,6 +63,10 @@ FactoryBot.define do
       metadata { FactoryBot.create(:executive_director_role_metadata) }
     end
 
+    trait :officers_chief_operating_officer do
+      metadata { FactoryBot.create(:chief_operating_officer_role_metadata) }
+    end
+
     trait :officers_chair do
       metadata { FactoryBot.create(:chair_role_metadata) }
     end
@@ -207,6 +211,7 @@ FactoryBot.define do
     factory :senior_delegate_role, traits: %i[delegate_regions delegate_regions_senior_delegate active]
 
     factory :executive_director_role, traits: %i[officers officers_executive_director active]
+    factory :chief_operating_officer_role, traits: %i[officers officers_chief_operating_officer active]
     factory :chair_role, traits: %i[officers officers_chair active]
     factory :vice_chair_role, traits: %i[officers officers_vice_chair active]
     factory :secretary_role, traits: %i[officers officers_secretary active]

@@ -6,8 +6,8 @@ class UserAvatar < ApplicationRecord
   has_one :current_user, class_name: "User", foreign_key: :current_avatar_id, inverse_of: :current_avatar, dependent: :nullify
   has_one :pending_user, class_name: "User", foreign_key: :pending_avatar_id, inverse_of: :pending_avatar, dependent: :nullify
 
-  belongs_to :approved_by_user, class_name: "User", foreign_key: :approved_by, optional: true
-  belongs_to :revoked_by_user, class_name: "User", foreign_key: :revoked_by, optional: true
+  belongs_to :approved_by_user, class_name: "User", foreign_key: :approved_by, optional: true, inverse_of: :approved_user_avatars
+  belongs_to :revoked_by_user, class_name: "User", foreign_key: :revoked_by, optional: true, inverse_of: :revoked_user_avatars
 
   has_one_attached :public_image, service: EnvConfig.AVATARS_PUBLIC_STORAGE
   has_one_attached :private_image, service: EnvConfig.AVATARS_PRIVATE_STORAGE
