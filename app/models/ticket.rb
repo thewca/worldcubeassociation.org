@@ -9,7 +9,7 @@ class Ticket < ApplicationRecord
   has_many :ticket_comments, dependent: :destroy
   has_many :ticket_logs, dependent: :destroy
   has_many :ticket_stakeholders, dependent: :destroy
-  belongs_to :metadata, polymorphic: true, dependent: :destroy
+  belongs_to :metadata, polymorphic: true
 
   # user_stakeholders will have the list of stakeholders where the user is part of. For example,
   # if a normal user X requests for a change by creating a ticket, the stakeholders list will be
