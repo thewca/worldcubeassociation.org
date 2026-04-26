@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
   before_action :redirect_if_cannot_edit_user, only: %i[edit update]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search]
-  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id merge clear_claim_wca_id]
+  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id merge clear_claim_wca_id unlink_wca_id]
   before_action -> { check_edit_access }, only: %i[show_for_edit update_user_data]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
@@ -115,25 +115,23 @@ class UsersController < ApplicationController
     wca_id = params.require(:wcaId)
     person = Person.find_by(wca_id: wca_id)
 
-    return redirect_to edit_user_path(user), flash: { danger: "WCA ID #{wca_id} does not exist." } if person.nil?
-    return redirect_to edit_user_path(user), flash: { danger: "User already has a WCA ID: #{user.wca_id}." } if user.wca_id.present?
-    return redirect_to edit_user_path(user), flash: { danger: "WCA ID #{wca_id} is already assigned to another user." } if person.user.present?
+    return render status: :not_found, json: { error: "WCA ID #{wca_id} does not exist." } if person.nil?
+    return render status: :bad_request, json: { error: "User already has a WCA ID: #{user.wca_id}." } if user.wca_id.present?
+    return render status: :bad_request, json: { error: "WCA ID #{wca_id} is already assigned to another user." } if person.user.present?
 
     ActiveRecord::Base.transaction do
       user.assign_wca_id(wca_id)
       user.update!(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
     end
 
-    redirect_to edit_user_path(user), flash: { success: "Successfully confirmed WCA ID #{wca_id}." }
+    render json: { success: true }
   end
 
   def clear_claim_wca_id
     user = User.find(params.require(:userId))
-    wca_id = user.unconfirmed_wca_id
-
     user.update!(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
 
-    redirect_to edit_user_path(user), flash: { success: "Successfully cleared claim for WCA ID #{wca_id}." }
+    render json: { success: true }
   end
 
   def assign_wca_id
@@ -146,6 +144,15 @@ class UsersController < ApplicationController
     return render status: :bad_request, json: { error: "WCA ID #{wca_id} is already assigned to user #{person.user.id}" } if person.user.present?
 
     user.assign_wca_id(wca_id)
+
+    render status: :ok, json: { success: true }
+  end
+
+  def unlink_wca_id
+    user = User.find(params.require(:userId))
+    return render status: :bad_request, json: { error: "User does not have a WCA ID" } if user.wca_id.blank?
+
+    user.update!(wca_id: nil)
 
     render status: :ok, json: { success: true }
   end
