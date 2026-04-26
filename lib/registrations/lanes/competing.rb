@@ -11,8 +11,6 @@ module Registrations
         # Apply all the information passed in by the user
         registration = Registrations::RegistrationChecker.apply_payload(registration, lane_params)
 
-
-
         changes = registration.changes.transform_values { |change| change[1] }
         changes[:event_ids] = registration.changed_event_ids
 
@@ -33,8 +31,6 @@ module Registrations
 
       def self.update!(update_params, registration, acting_entity_id)
         registration = Registrations::RegistrationChecker.apply_payload(registration, update_params, clone: false)
-
-
 
         # Make sure that a waiting list always exists if you need one during the update
         registration.competition.create_waiting_list(entries: []) if registration.waitlistable? && !registration.waiting_list_persisted?
