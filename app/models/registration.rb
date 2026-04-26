@@ -66,12 +66,13 @@ class Registration < ApplicationRecord
 
   # Run the hook twice so that even if you try to skip validations, it still persists a non-null value to the DB
   before_validation :ensure_registrant_id, on: :create
-  before_create :ensure_registrant_id
 
   before_save :mark_accepted_at, if: :trying_to_accept?
   private def mark_accepted_at
     self.accepted_at = Time.now.utc
   end
+
+  before_create :ensure_registrant_id
 
   private def ensure_registrant_id
     max_registrant_id = competition.registrations.maximum(:registrant_id) || 0
