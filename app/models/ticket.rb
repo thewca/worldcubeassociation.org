@@ -6,10 +6,10 @@ class Ticket < ApplicationRecord
     competition_result: "TicketsCompetitionResult",
   }.freeze
 
-  has_many :ticket_comments
-  has_many :ticket_logs
-  has_many :ticket_stakeholders
-  belongs_to :metadata, polymorphic: true
+  has_many :ticket_comments, dependent: :destroy
+  has_many :ticket_logs, dependent: :destroy
+  has_many :ticket_stakeholders, dependent: :destroy
+  belongs_to :metadata, polymorphic: true, dependent: :destroy
 
   # user_stakeholders will have the list of stakeholders where the user is part of. For example,
   # if a normal user X requests for a change by creating a ticket, the stakeholders list will be
