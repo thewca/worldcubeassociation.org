@@ -23,13 +23,13 @@ module FinishUnfinishedPersons
                  .order(:person_name)
   end
 
-  def self.search_persons(competition_ids = nil)
+  def self.search_persons(competition_ids = nil, compute_similar: true)
     unfinished_person_results = self.unfinished_results_scope(competition_ids)
 
     unfinished_persons = []
     available_id_spots = {} # to make sure that all of the newcomer IDs that we're creating in one batch are unique among each other
 
-    persons_cache = Person.select(:id, :wca_id, :name, :dob, :country_id)
+    persons_cache = Person.select(:id, :wca_id, :name, :dob, :country_id) if compute_similar
 
     unfinished_person_results.each do |res|
       next if unfinished_persons.length >= MAX_PER_BATCH
@@ -41,7 +41,7 @@ module FinishUnfinishedPersons
 
       inbox_dob = res.inbox_person&.dob
 
-      similar_persons = compute_similar_persons(res.person_name, res.country_id, persons_cache)
+      similar_persons = compute_similar ? compute_similar_persons(res.person_name, res.country_id, persons_cache) : []
 
       unfinished_persons.push({
                                 person_id: res.person_id,

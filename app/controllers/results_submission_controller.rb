@@ -237,4 +237,12 @@ class ResultsSubmissionController < ApplicationController
 
     render status: :bad_request, json: { error: "The newcomer check dashboard can only be used before the results are submitted." } if competition.results_submitted?
   end
+
+  def unfinished_persons
+    competition = competition_from_params
+
+    persons_to_finish = FinishUnfinishedPersons.search_persons(competition.id, compute_similar: false)
+
+    render status: :ok, json: { persons_to_finish: persons_to_finish }
+  end
 end

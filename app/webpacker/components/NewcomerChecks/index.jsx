@@ -18,7 +18,7 @@ export default function Wrapper({ competitionId }) {
   );
 }
 
-function NewcomerChecks({ competitionId }) {
+export function NewcomerChecks({ competitionId }) {
   const [userIdToEdit, setUserIdToEdit] = useState();
 
   const queryClient = useQueryClient();

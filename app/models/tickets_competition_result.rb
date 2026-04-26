@@ -9,6 +9,7 @@ class TicketsCompetitionResult < ApplicationRecord
     locked_for_posting: "locked_for_posting",
     warnings_verified: "warnings_verified",
     merged_inbox_results: "merged_inbox_results",
+    newcomers_verified: "newcomers_verified",
     created_wca_ids: "created_wca_ids",
     posted: "posted",
   }
@@ -19,6 +20,8 @@ class TicketsCompetitionResult < ApplicationRecord
   ACTION_TYPE = {
     verify_warnings: "verify_warnings",
     merge_inbox_results: "merge_inbox_results",
+    verify_newcomers: "verify_newcomers",
+    create_wca_ids: "create_wca_ids",
   }.freeze
 
   def metadata_actions_allowed_for(ticket_stakeholder)
@@ -26,6 +29,8 @@ class TicketsCompetitionResult < ApplicationRecord
       [
         ACTION_TYPE[:verify_warnings],
         ACTION_TYPE[:merge_inbox_results],
+        ACTION_TYPE[:verify_newcomers],
+        ACTION_TYPE[:create_wca_ids],
       ]
     else
       []
@@ -91,7 +96,7 @@ class TicketsCompetitionResult < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     include: {
-      competition: { only: %i[id name results_posted_at], methods: [], include: %i[posted_user] },
+      competition: { only: %i[id name use_wca_registration results_posted_at], methods: [], include: %i[posted_user] },
     },
   }.freeze
 
