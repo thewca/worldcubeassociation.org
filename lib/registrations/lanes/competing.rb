@@ -13,7 +13,7 @@ module Registrations
 
         if registration.trying_to_accept?
           registration.accepted_at = Time.now.utc
-          # We only set accepted_by if it's a valid user ID (integer). 
+          # We only set accepted_by if it's a valid user ID (integer).
           # System actions use strings like 'auto-accept' which evaluate to 0 with .to_i.
           registration.accepted_by = user_id if user_id.to_i.positive?
         end
