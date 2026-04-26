@@ -199,7 +199,13 @@ class RegistrationsController < ApplicationController
         registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
           reg.registered_at = import_time
         end
-        registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED) unless registration.accepted?
+        unless registration.accepted?
+          registration.assign_attributes(
+            competing_status: Registrations::Helper::STATUS_ACCEPTED,
+            accepted_at: Time.now.utc,
+            accepted_by: current_user.id,
+          )
+        end
         registration.registration_competition_events = []
         registration_row[:event_ids].each do |event_id|
           registration.registration_competition_events.build(competition_event_id: event_id)
@@ -245,7 +251,11 @@ class RegistrationsController < ApplicationController
 
       registration_comment = params.dig(:registration_data, :comments)
       registration.assign_attributes(comments: registration_comment) if registration_comment.present?
-      registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED)
+      registration.assign_attributes(
+        competing_status: Registrations::Helper::STATUS_ACCEPTED,
+        accepted_at: Time.now.utc,
+        accepted_by: current_user.id,
+      )
       params[:registration_data][:event_ids]&.each do |event_id|
         competition_event = @competition.competition_events.find { |ce| ce.event_id == event_id }
         registration.registration_competition_events.build(competition_event_id: competition_event.id)

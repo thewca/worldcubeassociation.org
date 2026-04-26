@@ -11,6 +11,13 @@ module Registrations
         # Apply all the information passed in by the user
         registration = Registrations::RegistrationChecker.apply_payload(registration, lane_params)
 
+        if registration.trying_to_accept?
+          registration.accepted_at = Time.now.utc
+          # We only set accepted_by if it's a valid user ID (integer). 
+          # System actions use strings like 'auto-accept' which evaluate to 0 with .to_i.
+          registration.accepted_by = user_id if user_id.to_i.positive?
+        end
+
         changes = registration.changes.transform_values { |change| change[1] }
         changes[:event_ids] = registration.changed_event_ids
 
@@ -31,6 +38,13 @@ module Registrations
 
       def self.update!(update_params, registration, acting_entity_id)
         registration = Registrations::RegistrationChecker.apply_payload(registration, update_params, clone: false)
+
+        if registration.trying_to_accept?
+          registration.accepted_at = Time.now.utc
+          # We only set accepted_by if it's a valid user ID (integer).
+          # System actions use strings like 'auto-accept' which evaluate to 0 with .to_i.
+          registration.accepted_by = acting_entity_id if acting_entity_id.to_i.positive?
+        end
 
         # Make sure that a waiting list always exists if you need one during the update
         registration.competition.create_waiting_list(entries: []) if registration.waitlistable? && !registration.waiting_list_persisted?
