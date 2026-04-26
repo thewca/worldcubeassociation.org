@@ -22,7 +22,7 @@ export default function ClaimWcaIdActionerView({ ticketDetails, currentStakehold
   }
 
   if (status === ticketStatuses.claim_wca_id.closed) {
-    return "This request is already handled.";
+    return 'This request is already handled.';
   }
 
   return (
