@@ -8,7 +8,6 @@ import {
   Collapsible,
   Drawer,
   IconButton,
-  Separator,
   Spacer,
   Tabs,
   Text,
@@ -25,7 +24,6 @@ import { useState } from "react";
 import { TFunction } from "i18next";
 import { LuAlignJustify } from "react-icons/lu";
 import { iconMap } from "@/components/icons/iconMap";
-import { route } from "nextjs-routes";
 
 function activityCodeFromPath(path: string) {
   // Matches the eventId out of the path
@@ -67,7 +65,8 @@ export default function TabMenu({
       <Tabs.List
         height="fit-content"
         position="sticky"
-        width="3xs"
+        width="fit-content"
+        min-width="3xs"
         textAlign="center"
         hideBelow="md"
         gap="3"
@@ -150,8 +149,6 @@ function TabList({
   t,
   onToggle,
   openGroup,
-  isLiveMenu,
-  competitionInfo,
 }: {
   tabs: CompetitionNavTab[];
   t: TFunction;
