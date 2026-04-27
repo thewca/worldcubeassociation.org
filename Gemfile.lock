@@ -182,7 +182,7 @@ GEM
     bootstrap3-datetimepicker-rails (4.17.47)
       momentjs-rails (>= 2.8.1)
     builder (3.3.0)
-    bullet (8.1.0)
+    bullet (8.1.1)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (13.0.0)
@@ -1174,7 +1174,7 @@ CHECKSUMS
   bootstrap-table-rails (1.11.1.1) sha256=444daf5ba9d8b642e377372beba2924ee2cbfa09559abb0ddf2e8bffb1bafc35
   bootstrap3-datetimepicker-rails (4.17.47) sha256=ee87a9bad74c140729f6a1ea2a7f3f2d9aaefa7e9defbe31b4edd27ff64689a2
   builder (3.3.0) sha256=497918d2f9dca528fdca4b88d84e4ef4387256d984b8154e9d5d3fe5a9c8835f
-  bullet (8.1.0) sha256=604b7e2636ec2137dcab3ba61a56248c39a0004a0c9405d58bad0686d23b98ff
+  bullet (8.1.1) sha256=3ddecdf3787c64a3f1e5b316256840bc034d60c1070b1b16d3fe5b5932d42b87
   byebug (13.0.0) sha256=d2263efe751941ca520fa29744b71972d39cbc41839496706f5d9b22e92ae05d
   camertron-eprun (1.1.1) sha256=9a8e337916445e62648f6a4f35d229302fc44c50549cc881bff1e296ccf9ce4b
   capybara (3.40.0) sha256=42dba720578ea1ca65fd7a41d163dd368502c191804558f6e0f71b391054aeef
