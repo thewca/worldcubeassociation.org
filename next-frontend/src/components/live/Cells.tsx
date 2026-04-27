@@ -14,12 +14,14 @@ export function LiveTableHeader({
   showFull = true,
   byPerson = false,
   isAdmin = false,
+  isProjector = false,
   t,
 }: {
   isLinked?: boolean;
   showFull?: boolean;
   byPerson?: boolean;
   isAdmin?: boolean;
+  isProjector?: boolean;
   format: Format;
   t: TFunction;
 }) {
@@ -37,15 +39,24 @@ export function LiveTableHeader({
           </Table.ColumnHeader>
         )}
         {isAdmin && <Table.ColumnHeader />}
-        <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
+        <Table.ColumnHeader
+          textAlign="right"
+          w={isProjector ? "75px" : undefined}
+        >
+          #
+        </Table.ColumnHeader>
         {!byPerson && (
-          <Table.ColumnHeader>
+          <Table.ColumnHeader
+            w={isProjector ? "22%" : undefined}
+            overflow="hidden"
+            textOverflow="ellipsis"
+          >
             {t("competitions.live.results.competitor")}
           </Table.ColumnHeader>
         )}
         {showFull && !byPerson && (
-          <Table.ColumnHeader>
-            {t("results.table_elements.region")}
+          <Table.ColumnHeader w={isProjector ? "50px" : undefined}>
+            {!isProjector && t("results.table_elements.region")}
           </Table.ColumnHeader>
         )}
         {isLinked && (

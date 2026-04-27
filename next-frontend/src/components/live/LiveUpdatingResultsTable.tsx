@@ -16,8 +16,9 @@ import PendingResultsTable from "@/components/live/PendingResultsTable";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
 import AddPersonModal from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
-import { LuLock, LuLockOpen } from "react-icons/lu";
+import { LuLock, LuLockOpen, LuGalleryVertical } from "react-icons/lu";
 import NextLink from "next/link";
+import ResultsProjector from "@/components/live/ResultsProjector";
 import { route } from "nextjs-routes";
 
 export default function LiveUpdatingResultsTable({
@@ -41,6 +42,7 @@ export default function LiveUpdatingResultsTable({
 }) {
   const [showLinkedRoundsView, setShowLinkedRoundsView] =
     useState(isLinkedRound);
+  const [inProjectorMode, setInProjectorMode] = useState(false);
 
   const {
     connectionState,
@@ -51,6 +53,23 @@ export default function LiveUpdatingResultsTable({
   } = useLiveResults();
 
   const { eventId } = parseActivityCode(roundWcifId);
+
+  const enableProjectorView = () => setInProjectorMode(true);
+  const disableProjectorView = () => setInProjectorMode(false);
+
+  if (inProjectorMode) {
+    return (
+      <ResultsProjector
+        competitors={competitors}
+        results={liveResultsByRegistrationId}
+        disableProjectorView={disableProjectorView}
+        formatId={formatId}
+        eventId={eventId}
+        forecastView={false}
+        title={title}
+      />
+    );
+  }
 
   return (
     <VStack align="left">
@@ -70,6 +89,11 @@ export default function LiveUpdatingResultsTable({
             </Switch.Control>
             <Switch.Label>Show combined Results</Switch.Label>
           </Switch.Root>
+        )}
+        {!isAdminView && (
+          <IconButton variant="ghost" onClick={enableProjectorView}>
+            <LuGalleryVertical />
+          </IconButton>
         )}
         {canManage && (
           <IconButton variant="ghost">
