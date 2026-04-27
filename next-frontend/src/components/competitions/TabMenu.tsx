@@ -26,15 +26,10 @@ import { TFunction } from "i18next";
 import { LuAlignJustify } from "react-icons/lu";
 import { iconMap } from "@/components/icons/iconMap";
 import { route } from "nextjs-routes";
-import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 
-function parseActivityCodeOrNull(path: string) {
-  try {
-    const { eventId } = parseActivityCode(path);
-    return eventId;
-  } catch {
-    return null;
-  }
+function activityCodeFromPath(path: string) {
+  // Matches the eventId out of the path
+  return path.match(/^([a-z0-9_]+)(?:-|$)/)?.[1] ?? null;
 }
 
 export default function TabMenu({
@@ -54,7 +49,7 @@ export default function TabMenu({
   const path = _.last(pathName.split("/"));
   const currentPath = path === competitionInfo.id ? "general" : path;
 
-  const eventId = parseActivityCodeOrNull(currentPath!);
+  const eventId = activityCodeFromPath(currentPath!);
 
   const [openGroup, setOpenGroup] = useState<string | null>(eventId);
   const [drawerOpen, setDrawerOpen] = useState(false);
