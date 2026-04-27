@@ -1,4 +1,4 @@
-import { Container, Heading, Text } from "@chakra-ui/react";
+import { Container, Heading, Text, VStack } from "@chakra-ui/react";
 import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { Fragment } from "react";
 import { getLivePodiums } from "@/lib/wca/live/getLivePodiums";
@@ -76,17 +76,15 @@ export default async function PodiumsPage({
       })}
       {!noPodiums && eventsNotFinished.length > 0 && (
         <>
-          <Heading textStyle="h3" p="2">
+          <Heading textStyle="h3">
             {t("competitions.live.podiums.undetermined")}
           </Heading>
-          {eventsNotFinished.map((finalRound) => {
-            const { eventId } = parseActivityCode(finalRound.id);
-            return (
-              <Text p="2" key={eventId}>
-                {events.byId[eventId].name}
-              </Text>
-            );
-          })}
+          <VStack align="left">
+            {eventsNotFinished.map((finalRound) => {
+              const { eventId } = parseActivityCode(finalRound.id);
+              return events.byId[eventId].name;
+            })}
+          </VStack>
         </>
       )}
     </Container>
