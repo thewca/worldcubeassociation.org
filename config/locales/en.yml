@@ -238,7 +238,6 @@ en:
     best: "Best"
     single: "Single"
     average: "Average"
-    mean: "Mean"
     solves: "Solves"
     #context: Used as an introduction in emails
     hello: "Hello %{name},"
@@ -1436,6 +1435,7 @@ en:
           failed_to_fetch: "Failed to fetch next advancing competitor"
       results:
         competitor: "Competitor"
+        mean: "Mean"
       errors:
         round_closed: "The Round is not open yet"
     #context: on the "My competitions" page

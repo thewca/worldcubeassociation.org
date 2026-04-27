@@ -2,17 +2,17 @@ import { Format } from "@/lib/wca/data/formats";
 
 const statMap = {
   average: {
-    name: "average",
+    i18nKey: "common.average",
     recordTagField: "average_record_tag",
     field: "average",
   },
   mean: {
-    name: "mean",
+    i18nKey: "competitions.live.results.mean",
     recordTagField: "average_record_tag",
     field: "average",
   },
   single: {
-    name: "single",
+    i18nKey: "common.single",
     recordTagField: "single_record_tag",
     field: "best",
   },
