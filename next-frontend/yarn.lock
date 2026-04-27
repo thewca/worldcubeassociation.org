@@ -5102,9 +5102,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/eslint-plugin-query@npm:^5.99.2":
-  version: 5.99.2
-  resolution: "@tanstack/eslint-plugin-query@npm:5.99.2"
+"@tanstack/eslint-plugin-query@npm:^5.100.5":
+  version: 5.100.5
+  resolution: "@tanstack/eslint-plugin-query@npm:5.100.5"
   dependencies:
     "@typescript-eslint/utils": "npm:^8.58.1"
   peerDependencies:
@@ -5113,7 +5113,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/536d8d066f1c6170477539e7956936dacff533e234c12d941f5100c57d51336a494846bbd42fe1892ef5459053440c62c85b22c810b6f174c497005be0b5e364
+  checksum: 10c0/9cdfcb4636c26c1191dee635126d11da09e395a5e3714e69f8ec1eb137fae05ce9636ad900853788e409b95073be2ee366909483b26a335b3fbc21badda3c07f
   languageName: node
   linkType: hard
 
@@ -12569,7 +12569,7 @@ __metadata:
     "@rails/actioncable": "npm:^8.1.300"
     "@redocly/cli": "npm:2.30.0"
     "@stylistic/eslint-plugin": "npm:^5.10.0"
-    "@tanstack/eslint-plugin-query": "npm:^5.99.2"
+    "@tanstack/eslint-plugin-query": "npm:^5.100.5"
     "@tanstack/react-form": "npm:^1.29.1"
     "@tanstack/react-query": "npm:^5.100.5"
     "@testing-library/dom": "npm:^10.4.1"
