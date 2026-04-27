@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "dev:staging": "WCA_BACKEND_API_URL=\"https://staging.worldcubeassociation.org/api/\" NEXT_PUBLIC_WCA_FRONTEND_API_URL=\"https://staging.worldcubeassociation.org/api\" DATABASE_URI=\"\" next dev",
     "dev": "next dev --webpack",
     "check:types": "tsc --noEmit",
     "build": "next build --webpack",
