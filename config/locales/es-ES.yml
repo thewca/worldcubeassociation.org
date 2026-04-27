@@ -668,25 +668,25 @@ es-ES:
           #original_hash: 621101a
           trainee_delegate: Delegado en prácticas
           #original_hash: 9b97968
-          junior_delegate: Delegado Junior
+          junior_delegate: Delegado Júnior
           #original_hash: 12ab214
           delegate: Delegado
           #original_hash: 45c2317
           regional_delegate: Delegado Regional
           #original_hash: d463c23
-          senior_delegate: Delegado Senior
+          senior_delegate: Delegado Sénior
         teams_committees:
           #original_hash: 6853c98
           member: Miembro
           #original_hash: c366473
-          senior_member: Miembro Senior
+          senior_member: Miembro Sénior
           #original_hash: e26c936
           leader: Líder
         councils:
           #original_hash: 6853c98
           member: Miembro
           #original_hash: c366473
-          senior_member: Miembro Senior
+          senior_member: Miembro Sénior
           #original_hash: e26c936
           leader: Líder
         officers:
@@ -808,7 +808,7 @@ es-ES:
           depende de estas herramientas.
         #original_hash: c564b74
         receive_delegate_reports: >-
-          Si eres Delegado Senior o Miembro del WRC o del WQAC, recibirás los
+          Si eres Delegado Sénior o Miembro del WRC o del WQAC, recibirás los
           Informes de Delegados de forma predeterminada. Nota: el cambio puede
           tardar hasta 12 horas en hacer efecto.
         #original_hash: 0017d38
@@ -1491,8 +1491,8 @@ es-ES:
         wfc: Comité Financiero de la WCA
         #original_hash: 2035811
         wmt: Equipo de Marketing de la WCA
-        #original_hash: c90653c
-        wmct: Equipo de Campeonatos Grandes de la WCA
+        #original_hash: 2517097
+        wmct: Equipo del Campeonato Grande de la WCA
         #original_hash: 8f32116
         wqac: Comité de Control de Calidad de la WCA
         #original_hash: 3da1e85
@@ -1808,6 +1808,13 @@ es-ES:
       text: >-
         Descubre los récords actuales y pasados de todas las categorías
         oficiales de la WCA.
+    volunteer:
+      #original_hash: cbf217d
+      title: Voluntario
+      #original_hash: 949f739
+      text: >-
+        ¡Participa! La WCA tiene vacantes para voluntarios en diferentes
+        equipos. No hace falta ser speedcuber para ser voluntario.
     faq:
       #original_hash: 03688ba
       title: FAQ
@@ -2044,6 +2051,12 @@ es-ES:
       approve: Aprobar
       #original_hash: d9455bf
       approve_confirm: '¿Seguro que quieres aprobar el ID de la WCA %{wca_id}?'
+      #original_hash: 1ada587
+      clear_claim: Limpiar reclamación
+      #original_hash: dc39741
+      clear_claim_confirm: >-
+        ¿Estás seguro de que quieres limpiar la reclamación del ID de la WCA
+        %{wca_id}?
       #original_hash: 85de4b8
       unconfirmed_email: >-
         La dirección de correo electrónico de esta cuenta (%{email}) no está
@@ -2941,6 +2954,10 @@ es-ES:
             Hay una gran diferencia entre el mejor single (%{best_single}) y el
             peor single (%{worst_single}). Por favor, comprueba que los
             resultados sean precisos.
+          #original_hash: 0be6543
+          round_locked: >-
+            ¡La siguiente ronda ya se ha abierto, así que cualquier cambio no la
+            afectará!
         quit:
           #original_hash: de62de1
           title: Eliminar competidor
@@ -5505,10 +5522,10 @@ es-ES:
         WCA. Un Delegado de la WCA es responsable de garantizar que todas las
         Competiciones de la WCA se desarrollen de acuerdo con la Misión, el
         Espíritu y el Reglamento de la WCA. La WCA diferencia entre
-        <strong>Delegados Senior</strong>, <strong>Delegados
+        <strong>Delegados Sénior</strong>, <strong>Delegados
         Regionales</strong>, <strong>Delegados</strong>, <strong>Delegados
-        Junior</strong> y
-         <strong>Delegados en prácticas</strong> %{see_link}.</p> <p>Además de las responsabilidades de un Delegado de la WCA, un Delegado Senior o un Delegado Regional es responsable de gestionar los Delegados de la WCA de su área y puede ser contactado por cualquier miembro de la comunidad por cuestiones relacionadas con su región.</p> <p>Los nuevos Delegados figuran ostentan inicialmente el cargo título de Delegados Junior; posteriormente, se les pide que demuestren su competencia en la gestión de Competiciones de la WCA antes de ser ascendidos a Delegados de la WCA.</p> <p>Los Delegados en prácticas están siendo entrenados para ser Delegados de la WCA y solo pueden supervisar competiciones en las que un Delegado de la WCA está presente.</p>
+        Júnior</strong> y
+         <strong>Delegados en prácticas</strong> %{see_link}.</p> <p>Además de las responsabilidades de un Delegado de la WCA, un Delegado Sénior o un Delegado Regional es responsable de gestionar los Delegados de la WCA de su área y puede ser contactado por cualquier miembro de la comunidad por cuestiones relacionadas con su región.</p> <p>Los nuevos Delegados figuran ostentan inicialmente el cargo título de Delegados Junior; posteriormente, se les pide que demuestren su competencia en la gestión de Competiciones de la WCA antes de ser ascendidos a Delegados de la WCA.</p> <p>Los Delegados en prácticas están siendo entrenados para ser Delegados de la WCA y solo pueden supervisar competiciones en las que un Delegado de la WCA está presente.</p>
       #original_hash: 27d18ac
       see_link_html: '(ver %{link})'
       #original_hash: 5b01fcc
@@ -6029,7 +6046,7 @@ es-ES:
         locales y te puede ayudar a encontrar una fecha adecuada ya que sabe si
         hay otras competiciones planificadas al mismo tiempo. Si no hay ningún
         Delegado de la WCA cerca de tu área, ponte en contacto con el Delegado
-        Senior de tu región.
+        Sénior de tu región.
     paragraph2:
       #original_hash: f20dd3b
       title: Gastos esperados al organizar una competición

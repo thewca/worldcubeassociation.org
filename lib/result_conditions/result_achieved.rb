@@ -11,5 +11,13 @@ module ResultConditions
     def self.wcif_type
       "resultAchieved"
     end
+
+    def max_advancing(results)
+      return 0 if results.empty?
+
+      results.count do |r|
+        r.to_solve_time(scope).complete? && r.send(scope) < value
+      end
+    end
   end
 end

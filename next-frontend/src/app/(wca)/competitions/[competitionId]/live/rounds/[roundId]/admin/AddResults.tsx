@@ -1,5 +1,5 @@
-"use client";
 import { SimpleGrid, GridItem, Heading } from "@chakra-ui/react";
+import ClosableAlert from "@/components/ui/ClosableAlert";
 import AttemptsForm from "@/components/live/AttemptsForm";
 import formats from "@/lib/wca/data/formats";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
@@ -7,8 +7,9 @@ import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
 import { LiveRoundAdminBase } from "@/types/live";
 import ConfirmProvider from "@/providers/ConfirmProvider";
+import { getT } from "@/lib/i18n/get18n";
 
-export default function AddResults({
+export default async function AddResults({
   competitionId,
   roundName,
   round,
@@ -20,12 +21,22 @@ export default function AddResults({
   const { eventId } = parseActivityCode(round.id);
   const format = formats.byId[round.format];
 
+  const { t } = await getT();
+
+  const isLocked = true;
+
   return (
     <LiveResultAdminProvider round={round} competitionId={competitionId}>
       <ConfirmProvider>
+        {isLocked && (
+          <ClosableAlert
+            status="warning"
+            title={t("competitions.live.admin.warnings.round_locked")}
+          />
+        )}
         <Heading textStyle="h1">{roundName}</Heading>
         <SimpleGrid columns={16} gap={6}>
-          <GridItem colSpan={4} position="sticky" top={4} alignSelf="start">
+          <GridItem colSpan={4}>
             <AttemptsForm
               header="Add Result"
               eventId={eventId}
