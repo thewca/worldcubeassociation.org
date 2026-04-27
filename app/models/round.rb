@@ -595,23 +595,22 @@ class Round < ApplicationRecord
     count
   end
 
-  STATE_LOCKED = "locked"
-  STATE_OPEN = "open"
-  STATE_READY = "ready"
-  STATE_PENDING = "pending"
+  enum :lifecycle_state, { pending: "pending", ready: "ready", open: "open", locked: "locked", done: "done" }, prefix: true
 
-  def lifecycle_state
-    return STATE_LOCKED if locked?
-    return STATE_OPEN if open?
-    return STATE_READY if participation_source.score_taking_done?
+  def inferred_lifecycle_state
+    return "done" if competition.results_submitted?
+    return "locked" if locked?
+    return "open" if open?
+    return "ready" if participation_source.score_taking_done?
 
-    STATE_PENDING
+    "pending"
   end
 
   def open?
     live_results.any?
   end
 
+  # TODO: Remove after Migration has ran
   def locked?
     return false unless score_taking_done?
 
@@ -726,18 +725,17 @@ class Round < ApplicationRecord
   end
 
   def to_live_info_json
-    state = lifecycle_state
     json = {
       **self.to_wcif(include_results: false).compact_blank,
-      "state" => state,
+      "state" => lifecycle_state,
     }
-    if [STATE_OPEN, STATE_LOCKED].include?(state)
+    if lifecycle_state_open? || lifecycle_state_locked?
       json = json.merge({
                           "total_competitors" => total_competitors,
                         })
     end
 
-    if state == STATE_OPEN
+    if lifecycle_state_open?
       json = json.merge({
                           "competitors_live_results_entered" => competitors_live_results_entered,
                         })
