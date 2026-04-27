@@ -14,6 +14,7 @@ import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { recordTagBadge } from "@/components/results/TableCells";
 import { CompetitorWithResults } from "@/lib/live/mergeAndOrderResults";
 import { Stat } from "@/lib/live/statColumnsForFormat";
+import { TFunction } from "i18next";
 
 export default function LiveResultsMobileModal({
   selectedRow,
@@ -21,12 +22,14 @@ export default function LiveResultsMobileModal({
   competitionId,
   eventId,
   stats,
+  t,
 }: {
   selectedRow: CompetitorWithResults | null;
   setSelectedRow: (selectedRow: CompetitorWithResults | null) => void;
   competitionId: string;
   eventId: string;
   stats: Stat[];
+  t: TFunction;
 }) {
   const onOpenChange = ({ open }: { open: boolean }) => {
     if (!open) setSelectedRow(null);
@@ -87,8 +90,10 @@ export default function LiveResultsMobileModal({
                       </DataList.ItemValue>
                     </DataList.Item>
                     {stats.map((stat) => (
-                      <DataList.Item key={stat.name}>
-                        <DataList.ItemLabel>{stat.name}</DataList.ItemLabel>
+                      <DataList.Item key={stat.i18nKey}>
+                        <DataList.ItemLabel>
+                          {t(stat.i18nKey)}
+                        </DataList.ItemLabel>
                         <DataList.ItemValue>
                           {formatAttemptResult(r[stat.field], eventId)}{" "}
                           {recordTagBadge(r[stat.recordTagField])}
