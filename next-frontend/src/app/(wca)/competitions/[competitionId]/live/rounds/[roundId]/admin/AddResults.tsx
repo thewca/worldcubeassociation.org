@@ -4,7 +4,6 @@ import AttemptsForm from "@/components/live/AttemptsForm";
 import formats from "@/lib/wca/data/formats";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
-import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
 import { LiveRoundAdminBase } from "@/types/live";
 import ConfirmProvider from "@/providers/ConfirmProvider";
 import { getT } from "@/lib/i18n/get18n";
@@ -26,36 +25,34 @@ export default async function AddResults({
   const isLocked = true;
 
   return (
-    <LiveResultAdminProvider round={round} competitionId={competitionId}>
-      <ConfirmProvider>
-        {isLocked && (
-          <ClosableAlert
-            status="warning"
-            title={t("competitions.live.admin.warnings.round_locked")}
+    <ConfirmProvider>
+      {isLocked && (
+        <ClosableAlert
+          status="warning"
+          title={t("competitions.live.admin.warnings.round_locked")}
+        />
+      )}
+      <Heading textStyle="h1">{roundName}</Heading>
+      <SimpleGrid columns={16} gap={6}>
+        <GridItem colSpan={4}>
+          <AttemptsForm
+            header="Add Result"
+            eventId={eventId}
+            solveCount={format.expected_solve_count}
           />
-        )}
-        <Heading textStyle="h1">{roundName}</Heading>
-        <SimpleGrid columns={16} gap={6}>
-          <GridItem colSpan={4}>
-            <AttemptsForm
-              header="Add Result"
-              eventId={eventId}
-              solveCount={format.expected_solve_count}
-            />
-          </GridItem>
+        </GridItem>
 
-          <GridItem colSpan={12}>
-            <LiveUpdatingResultsTable
-              roundWcifId={round.id}
-              formatId={round.format}
-              competitionId={competitionId}
-              isAdminView
-              canManage
-              title=""
-            />
-          </GridItem>
-        </SimpleGrid>
-      </ConfirmProvider>
-    </LiveResultAdminProvider>
+        <GridItem colSpan={12}>
+          <LiveUpdatingResultsTable
+            roundWcifId={round.id}
+            formatId={round.format}
+            competitionId={competitionId}
+            isAdminView
+            canManage
+            title=""
+          />
+        </GridItem>
+      </SimpleGrid>
+    </ConfirmProvider>
   );
 }
