@@ -179,38 +179,6 @@ function TabList({
           />
         ),
       )}
-      {!isLiveMenu && (
-        <>
-          <Separator />
-          {competitionInfo.tab_names.map((tabName) => (
-            <Tabs.Trigger
-              key={tabName}
-              value={tabName}
-              minHeight="fit-content"
-              asChild
-            >
-              <Text
-                textStyle="bodyEmphasis"
-                asChild
-                maxW="44"
-                justifyContent="left"
-              >
-                <Link
-                  href={route({
-                    pathname: "/competitions/[competitionId]/tabs/[tabName]",
-                    query: {
-                      competitionId: competitionInfo.id,
-                      tabName: encodeURIComponent(tabName),
-                    },
-                  })}
-                >
-                  {tabName}
-                </Link>
-              </Text>
-            </Tabs.Trigger>
-          ))}
-        </>
-      )}
     </>
   );
 }
