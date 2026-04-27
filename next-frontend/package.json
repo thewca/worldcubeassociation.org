@@ -35,7 +35,7 @@
     "@rails/actioncable": "^8.1.300",
     "@tanstack/react-form": "^1.29.1",
     "@tanstack/react-query": "^5.100.5",
-    "@wrksz/themes": "^0.8.3",
+    "@wrksz/themes": "^0.9.0",
     "accept-language-parser": "^1.5.0",
     "aws4": "^1.13.2",
     "culori": "^4.0.2",
