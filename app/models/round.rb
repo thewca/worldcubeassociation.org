@@ -60,6 +60,8 @@ class Round < ApplicationRecord
 
   has_many :sibling_rounds, through: :competition_event, source: :rounds
 
+  enum :lifecycle_state, { pending: "pending", open: "open", locked: "locked", done: "done" }, prefix: true
+
   MAX_NUMBER = 4
   validates :number,
             numericality: { only_integer: true,
@@ -192,6 +194,7 @@ class Round < ApplicationRecord
       LiveResult.empty_result_attributes(reg_id, self.id)
     end
     LiveResult.insert_all!(empty_results)
+    update!(:lifecycle_state => :open)
 
     inserted_ids = self.live_results.where(registration_id: advancing_reg_ids).ids
     self.bulk_insert_history(inserted_ids, opening_user, action_type: :opened)
@@ -590,18 +593,15 @@ class Round < ApplicationRecord
   end
 
   def lock_results(locking_user)
-    count = live_results.update_all(locked_by_id: locking_user.id)
+    update!(:lifecycle_state => :locked)
     self.bulk_insert_history(live_results.ids, locking_user, action_type: :locked)
     count
   end
-
-  enum :lifecycle_state, { pending: "pending", ready: "ready", open: "open", locked: "locked", done: "done" }, prefix: true
 
   def inferred_lifecycle_state
     return "done" if competition.results_submitted?
     return "locked" if locked?
     return "open" if open?
-    return "ready" if participation_source.score_taking_done?
 
     "pending"
   end

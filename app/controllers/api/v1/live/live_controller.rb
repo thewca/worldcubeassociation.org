@@ -78,11 +78,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     # TODO: Move these to actual error codes at one point
     require_manage!(competition)
 
-    state = round.lifecycle_state
+    return render json: { status: "round is locked" }, status: :bad_request if round.lifecycle_state_locked?
 
-    return render json: { status: "round is locked" }, status: :bad_request if state == Round::STATE_LOCKED
-
-    return render json: { status: "round is not open" }, status: :bad_request if [Round::STATE_READY, Round::STATE_PENDING].include?(state)
+    return render json: { status: "round is not open" }, status: :bad_request unless round.lifecycle_state_open?
 
     recreated_rows = round.clear_round!(@current_user)
 
@@ -121,11 +119,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     # TODO: Move these to actual error codes at one point
     require_manage!(competition)
 
-    state = round.lifecycle_state
+    return render json: { status: "round already open" }, status: :bad_request if round.lifecycle_state_open? || round.lifecycle_state_locked?
 
-    return render json: { status: "score taking is not finished in the previous round" }, status: :bad_request if state == Round::STATE_PENDING
-
-    return render json: { status: "round already open" }, status: :bad_request if [Round::STATE_OPEN, Round::STATE_LOCKED].include?(state)
+    return render json: { status: "score taking is not finished in the previous round" }, status: :bad_request unless round.participation_source.score_taking_done?
 
     created_rows, locked_rows = round.open_and_lock_previous(@current_user)
 
