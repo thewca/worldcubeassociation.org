@@ -3,6 +3,9 @@ allOf:
   - type: object
     required:
       - state
+      - ready
     properties:
       state:
         type: string
+      ready:
+        type: boolean

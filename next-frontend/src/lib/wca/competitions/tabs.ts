@@ -131,7 +131,7 @@ export const duringCompetitionTabs = (
           i18nKey: `rounds.${roundTypeId}.name`,
           menuKey: round.id,
           badge: round.state === "locked" ? "Done" : "live",
-          disabled: round.state === "pending" || round.state === "ready",
+          disabled: round.state === "pending",
           href: route({
             pathname: "/competitions/[competitionId]/live/rounds/[roundId]",
             query: { competitionId: competitionInfo.id, roundId: round.id },

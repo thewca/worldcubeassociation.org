@@ -9,11 +9,13 @@ import { useT } from "@/lib/i18n/useI18n";
 export default function ActionButtons({
   state,
   setState,
+  ready,
   roundId,
   competitionId,
 }: {
   state: LiveRoundState;
   setState: (state: LiveRoundState) => void;
+  ready: boolean;
   roundId: string;
   competitionId: string;
 }) {
@@ -60,7 +62,7 @@ export default function ActionButtons({
 
   const { t } = useT();
 
-  if (state == "ready") {
+  if (state == "pending" && ready) {
     return (
       <Button
         variant="outline"
