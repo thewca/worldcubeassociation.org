@@ -213,10 +213,19 @@ kk:
     #original_hash: 17dae1e
     attempt_name: '%{number}-ші әрекет'
   round:
+    #original_hash: ceeac4a
+    title: Раундтар
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
     #original_hash: 747df5a
     round_number: '%{round_number} раунд'
+  scramble_set:
+    #original_hash: ba18ca7
+    name: 'Скрамбл жиынтығы %{letter_code}'
+    #original_hash: d46fe75
+    group: 'Топ %{number}'
+    #original_hash: 17dae1e
+    attempt: '%{number} әрекет'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -679,6 +688,8 @@ kk:
           chair: WCA Төрағасы
           #original_hash: 7d405ff
           executive_director: WCA Атқарушы Директор
+          #original_hash: 36a137f
+          chief_operating_officer: WCA бас операциялық директоры
           #original_hash: 1dd4a07
           secretary: WCA Хатшысы
           #original_hash: 0388b19
@@ -1455,8 +1466,8 @@ kk:
         wfc: WCA Қаржы Комитеті
         #original_hash: 2035811
         wmt: WCA Маркетинг Тобы
-        #original_hash: c90653c
-        wmct: WCA Негізгі Чемпионаттар Тобы
+        #original_hash: 2517097
+        wmct: WCA Негізгі Чемпионат Тобы
         #original_hash: 8f32116
         wqac: WCA Сапаны Қамтамасыз ету Комитеті
         #original_hash: 3da1e85
@@ -1766,6 +1777,13 @@ kk:
       title: Рекордтар
       #original_hash: 3681af0
       text: Барлық ресми WCA іс-шараларының қазіргі және өткен рекордтарын қараңыз.
+    volunteer:
+      #original_hash: cbf217d
+      title: Ерікті
+      #original_hash: 949f739
+      text: >-
+        Қатысыңыз! WCA әртүрлі командаларда еріктілердің бос орындары бар.
+        Ерікті болу үшін спидкубер болу міндетті емес.
     faq:
       #original_hash: 03688ba
       title: Жиі Қойылатын Сұрақтар
@@ -1993,6 +2011,14 @@ kk:
       profile: Профиль
       #original_hash: 7b2c7f1
       approve: Мақұлдау
+      #original_hash: d9455bf
+      approve_confirm: 'WCA ID-ді %{wca_id} растағыңыз келетініне сенімдісіз бе?'
+      #original_hash: 1ada587
+      clear_claim: Талап арызды тазарту
+      #original_hash: dc39741
+      clear_claim_confirm: >-
+        Сіз WCA идентификаторы %{wca_id} үшін талапты өшіргіңіз келетініне
+        сенімдісіз бе?
       #original_hash: 85de4b8
       unconfirmed_email: 'Бұл аккаунттың электрондық поштасы (%{email}) расталмаған.'
       #original_hash: 7069007
@@ -2791,6 +2817,8 @@ kk:
         белгіленбеген. Егер сіз күту тізімін пайдалансаңыз, өтінеміз, мерзімді
         белгілеңіз. Егер күту тізімін пайдаланбасаңыз, тіркеу талаптарында оны
         көрсетуіңізді ұмытпаңыз.
+      #original_hash: 51376ef
+      schedule_locked_after_results_submitted: Нәтижелер жіберілгеннен кейін кестені өңдеу мүмкін емес.
     live:
       #original_hash: 10d1a3c
       title: Тікелей Нәтижелер
@@ -2806,6 +2834,69 @@ kk:
         title: Подиумдар
         #original_hash: d7297a7
         undetermined: Подиумдар анықталады
+      admin:
+        #original_hash: cf9b770
+        open: Ашық
+        #original_hash: 719ea39
+        clear: Тазалау
+        #original_hash: 42faad9
+        competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} кірді'
+        #original_hash: adec79f
+        round_locked: жабық
+        #original_hash: 5301648
+        edit: Өңдеу
+        #original_hash: 612e12d
+        results: Нәтижелер
+        warnings:
+          #original_hash: 9198c71
+          omitted: >-
+            Сіз %{attempt_number} әрекетті өткізіп алдыңыз. Оның әдейі
+            жасалғанына көз жеткізіңіз.
+          #original_hash: 82d8e53
+          DNS: >-
+            Ең болмағанда бір DNS жарамды нәтижеге ие. Оның DNF емес, DNS
+            екеніне көз жеткізіңіз.
+          #original_hash: 6becd6c
+          impossible: >-
+            Сіз жіберуге тырысып жатқан нәтиже мүмкін емес сияқты:
+            %{attempt_number} әрекеті әр сыналған куб үшін 30 секундтан аз
+            уақытта орындалады. Егер минуттарды енгізгіңіз келсе, есептің соңына
+            центисекундтар үшін екі нөл қосуды ұмытпаңыз
+          #original_hash: a03301d
+          inconsistent: >-
+            Сіз жіберуге тырысып жатқан нәтиже сәйкес емес сияқты. Ең жақсы
+            сингл (%{best_single}) мен ең нашар сингл (%{worst_single}) арасында
+            үлкен айырмашылық бар. Нәтижелердің дәлдігін тексеріңіз.
+          #original_hash: 0be6543
+          round_locked: 'Келесі раунд ашылды, оған ешқандай өзгеріс әсер етпейді!'
+        quit:
+          #original_hash: de62de1
+          title: Бәсекелестіктен шығу
+          #original_hash: c25b336
+          next_to_advance:
+            zero: 'Келесі өтетін бәсекелестер: %{competitors}'
+            one: 'Келесі өтетін бәсекелестер: %{competitors}'
+            other: 'Келесі өтетін бәсекелестер: %{competitors}'
+          #original_hash: c87ca67
+          advance: Келесі бәсекелестен озу
+          #original_hash: e85b311
+          quit_confirm: Бәсекелесті раундтан шығару
+          #original_hash: 1a2285d
+          quit_menu: Шығу
+          #original_hash: 70835a0
+          no_next: Келесі бәсекелес жоқ.
+          #original_hash: 77dfd21
+          cancel: Тоқтату
+          #original_hash: 79d6737
+          failed_to_fetch: Келесі ілгерілеуші бәсекелесті алу сәтсіз аяқталды
+      results:
+        #original_hash: 4705687
+        competitor: Бәсекелес
+        #original_hash: 51cda54
+        mean: Орташа
+      errors:
+        #original_hash: f522c26
+        round_closed: Раунд әлі ашылған жоқ
     my_competitions:
       #original_hash: 5c6d3ea
       title: Менің жарыстарым
@@ -3343,6 +3434,8 @@ kk:
           organizer_ids: Ұйымдастырушы(лар)
           #original_hash: b37456c
           contact: Байланыс ақпараты
+          #original_hash: 78ef126
+          lead_delegate_id: Бас делегат
         #original_hash: 991f419
         championships: Чемпионаттар
         website:
@@ -3570,6 +3663,10 @@ kk:
             толтырмасаңыз, байланыс сұраулары ұйымдастырушылардың электрондық
             поштасын көрсетпей-ақ арнайы форма арқылы жіберіледі. %{md}. Мысалы:
             [Text to display](mailto:some@email.com)
+          #original_hash: 7a51d00
+          lead_delegate_id: >-
+            Жетекші делегат конкурстың әкімшілік аспектілеріне жауап береді
+            (нәтижелер, есеп беру, алымдар бойынша шот-фактура)
         website:
           #original_hash: da39a3e
           generate_website: ''
@@ -4322,12 +4419,16 @@ kk:
       no_comp_colliding: Тіркеу кезеңінде соқтығысулар жоқ!
       #original_hash: 3e1051e
       no_registration_start_date_yet: Сіз бұл жарысқа тіркелудің басталу күнін әлі тағайындаған жоқсыз.
+      #original_hash: c38824e
+      opens_registration_at: тіркелуді ашады
     #original_hash: 06b01c4
     announcements: Жарияланымдар
     #original_hash: a2b80b0
     post_announcement: Жарысты жариялау
     #original_hash: b462eac
     announced_by_html: 'Жариялаған: %{announcer_name}, күні: %{date_time}'
+    #original_hash: 63ba8b0
+    announce_confirm: Бұл жарысты жариялағыңыз келетініне сенімдісіз бе?
     #original_hash: 375e17f
     cancel: Жарысты болдырмау
     #original_hash: 7628a51
@@ -4342,6 +4443,22 @@ kk:
     cancel_mistake: Қате жібердіңіз бе?
     #original_hash: 0fb43d5
     note_before_cancel: 'Ескерту: тек расталған жарыстар ғана күшін жоя алады.'
+    #original_hash: b38ee61
+    orga_close_reg: Тіркеуді жабу
+    #original_hash: b2bfea9
+    orga_close_reg_confirm: Тіркеуді жапқыңыз келетініне сенімдісіз бе? Мұны кері қайтара алмайсыз.
+    #original_hash: ce5686a
+    note_reg_not_full_orga_close_reg: >-
+      Назар аударыңыз: бәсекелестер лимитіне жеткенде ғана тіркеуді жабуға
+      болады.
+    #original_hash: c66488a
+    user_preferences: Пайдаланушының баптаулары
+    #original_hash: 089cbfd
+    receive_registration_emails: >-
+      Біреу осы байқауға тіркелген кезде маған электрондық пошта арқылы
+      хабарлансын
+    #original_hash: 9d473a2
+    note_reg_closed_orga_close_reg: 'Ескерту: тіркеу жабық.'
     show:
       #original_hash: a1fd58a
       general_info: Жалпы ақпарат
@@ -4380,6 +4497,16 @@ kk:
           анықтау керектігін сипаттайды. Әрбір сайыс түріне рұқсат етілген
           форматтардың тізімі %{link_to_9b} сілтемесінде берілген. Әрбір
           форматтың сипаттамасын %{link_to_9f} сілтемесінен көре аласыз.
+        #original_hash: fa50f5c
+        qualification_html: >-
+          Жарысқа қатысу үшін басқа WCA жарыстарында біліктілік уақыты
+          белгіленуі тиіс.
+        #original_hash: 6ab548b
+        qualification_all_events_html: 'Біліктілік уақыты <b>%{date}</b> немесе одан бұрын орнатылуы керек.'
+        #original_hash: b701c2a
+        qualification_some_events_html: >-
+          %{events} ішіндегі біліктілік уақыттары <b>%{date}</b> күні немесе
+          одан бұрын орнатылуы керек.
       #original_hash: 041a5de
       format: Формат
       #original_hash: 0d1fcc3
@@ -4388,6 +4515,8 @@ kk:
       cutoff: Катофф
       #original_hash: 02ed4a4
       proceed: Жалғастырады
+      #original_hash: 2ffe44e
+      qualification: Біліктілік
     schedule:
       display_as:
         #original_hash: 0424f6e
@@ -4407,12 +4536,65 @@ kk:
       end: 'Аяқталу уақыты:'
       #original_hash: 81c0d91
       activity: Іс-шара
+      #original_hash: 15e58c6
+      no_activities: Таңдалған бөлмелер/оқиғалар үшін іс-шаралар жоқ.
+      #original_hash: 10a56c8
+      all_venues: Барлық орындар
+      #original_hash: a0b3266
+      room_or_stage: Бөлме немесе Сахна
+      #original_hash: f37605b
+      more_details: Раунд туралы мәліметтерді көрсету
+      #original_hash: a30e720
+      time_zone: Уақыт аймағы
+      rooms_panel:
+        #original_hash: 3a28d6f
+        title: Бөлмелер
+        #original_hash: 6a72085
+        all: Бәрі
+        #original_hash: 6eef664
+        none: Ешқандай
+        #original_hash: 9b9a6aa
+        show_buttons: Уақыт белдеуі батырмаларын көрсету
+        #original_hash: d2ac826
+        use_time_zone: Осы уақыт белдеуін қолдану
       #original_hash: 73acb7f
       room_in_venue: '%{venue} %{room}'
+      #original_hash: f7fd979
+      venue_selection_html:
+        zero: >-
+          Сіз осы сайыстың жалғыз орны %{venue_name} өткізу орнының кестесін
+          қарап жатырсыз.
+        one: >-
+          Сіз осы сайыстың жалғыз орны %{venue_name} өткізу орнының кестесін
+          қарап жатырсыз.
+        other: >-
+          Сіз осы сайыс өтетін %{count} орынның бірі %{venue_name} орынның
+          кестесін қарап жатырсыз.
+      #original_hash: 8d175ad
+      venue_selection_all: 'Сіз бір уақытта барлық %{venueCount} орынның кестесін қарап жатырсыз.'
       #original_hash: 97df911
       timezone_message: 'Бұл орынның уақыт белдеуі %{timezone}.'
+      #original_hash: 94b2570
+      timezone_setting: 'Сіз бұл кестені келесі уақыт белдеуі параметрінде қарап жатырсыз:'
+      #original_hash: 75194fd
+      multiple_timezones_available: >-
+        Барлық орындардың бірдей уақыт белдеуінде емес екенін ескеріңіз -- абай
+        болыңыз!
+      #original_hash: d94a371
+      timezone_set_local: Жергілікті етіп орнату
+      #original_hash: 17ab650
+      timezone_set_venue: Өтетін орынға орнату
+      #original_hash: 9974a46
+      timezone_follow_venue: Белсенді орындардың уақыт белдеуін автоматты түрде қолдану
       #original_hash: 37b1adb
       schedule_for_date: '%{day_name} (%{full_date}) күнінің кестесі'
+      #original_hash: d58b281
+      schedule_for_full_date: '%{date} үшін жоспарлау'
+      #original_hash: eb1090e
+      schedule_change_warning: >-
+        Кестелер, әсіресе тіркеу қорытындылары белгілі болған кезде, түзетулерге
+        ұшырайды. Тіркелген бәсекелестер кез келген маңызды өзгерістер туралы
+        электрондық пошта арқылы хабардар етіледі.
     nav:
       menu:
         #original_hash: 612e12d
@@ -4441,8 +4623,12 @@ kk:
         admin_view: Әкімші көрінісі
         #original_hash: a857eb4
         tabs: Таспаларды басқару
+        #original_hash: e42bf99
+        newcomer_checks: Жаңадан келгендерді тексеру
         #original_hash: f3d6278
         submit_results: Нәтижелерді жіберу
+        #original_hash: dd2e98f
+        upload_scrambles: Скрамблдарды жүктеу
         #original_hash: 4c9f914
         delegate_report: Делегат есебі
         #original_hash: b233e77
@@ -4453,7 +4639,14 @@ kk:
         register: Тіркелу
         #original_hash: 855bd26
         competitors: Қатысушылар
+        #original_hash: c4622c3
+        scrambles: Скрамблдар
     results_table:
+      #original_hash: bdbfcdc
+      h2h_results_disclaimer: >-
+        Жекпе-жек финалы арқылы анықталатын нәтижелер. Тек орналасу реті мен ең
+        жақсы шешім көрсетіледі, өйткені Бас-басына нәтижелердің толық
+        көрсетілімі әлі де әзірлену үстінде.
       #original_hash: 3e9a6b5
       wca_profile: WCA профилі
       #original_hash: ad8919a
@@ -4462,6 +4655,23 @@ kk:
       round: Раунд
       #original_hash: 709a232
       name: Аты
+      rank:
+        #original_hash: d4840ff
+        national: Ұлттық дәреже
+        #original_hash: ca3ff98
+        continent: Құрлықтық дәреже
+        #original_hash: f6bcce7
+        world: Әлемдік рейтинг
+    scrambles_table:
+      #original_hash: 171a060
+      group: Топ
+      #original_hash: b7126cd
+      scramble: Скрамбл
+    competition_series_fields:
+      #original_hash: ed8ff7b
+      add_series: Серияға қосу
+      #original_hash: be6edcd
+      remove_series: Сериядан алып тастау
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -4513,6 +4723,11 @@ kk:
       title: Рекордтар
     #original_hash: e02fccb
     last_updated_html: 'Соңғы жаңартылған: %{timestamp}'
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      Кейбір сүзгілер (мысалы, өткен жылдар) уақытша сөндірілгенін ескеріңіз.
+      Бағдарламалық жасақтама командасы бұл сүзгілерді қалпына келтіру үшін
+      жұмыс істеп жатыр - қолайсыздықтар үшін кешірім сұраймыз.
     selector_elements:
       events_selector:
         #original_hash: ad8919a
@@ -4573,16 +4788,140 @@ kk:
     #original_hash: 10bcdbd
     connect_wca_id: WCA ID нөміріңізді аккаунтыңызға қосыңыз!
   payments:
+    #original_hash: cfeba03
+    header: Төлем тарихы
+    messages:
+      #original_hash: 2eac1cb
+      charge_refunded: Төлем қайтарылды
+      #original_hash: 1e1d219
+      charges_refunded: Барлық төлемдер қайтарылды
+      #original_hash: c677bd3
+      no_payments: Бұл тіркеу үшін ешқандай төлем жасалмаған.
+    errors:
+      refund:
+        #original_hash: 66475ae
+        provider_disconnected: >-
+          Енді бұл байқау үшін ақшаны қайтара алмайсыз. Ол үшін төлем
+          провайдерінің бақылау тақтасын пайдаланыңыз.
+        #original_hash: 73e93ee
+        refund_amount_too_high: Сізге бәсекелес төлегеннен артық ақша қайтаруға болмайды.
+        #original_hash: 6368ffc
+        refund_amount_too_low: Қайтарылатын сома нөлден үлкен болуы керек.
+    labels:
+      #original_hash: b6370d7
+      net_payment: Таза төлем
+      #original_hash: ef3cd45
+      original_payment: Бастапқы төлем
     payment_providers:
       #original_hash: 559ef55
       paypal: PayPal
       #original_hash: 4d08ec5
       stripe: Stripe
+      #original_hash: 5cd5075
+      manual: Қолмен/Сыртқы
     payment_setup:
+      #original_hash: 0aa09ee
+      external_dashboard: '%{provider} Басқару панелі'
+      #original_hash: e621d96
+      account_connected: >-
+        Сіз %{provider} тіркелгіңізді сәтті байланыстырдыңыз және енді осы
+        байқауға тіркелу төлемдерін ала аласыз.
+      #original_hash: b83891e
+      account_disconnected_success: '%{provider} тіркелгіңіздің байланысы үзілді.'
+      #original_hash: 6b934e2
+      account_disconnected_failure: '%{provider} тіркелгісін ажырату кезінде қате орын алды.'
+      #original_hash: 340bba4
+      account_not_connected: >-
+        Мәселе туындады және біз сіздің %{provider} тіркелгіңізді байланыстыра
+        алмадық.
+      #original_hash: 4218676
+      disconnect_account: '%{provider} тіркелгісін ажырату'
+      #original_hash: 59c9c9c
+      confirm_account_disconnect: >-
+        %{provider} тіркелгісін ажыратуды шынымен қалайсыз ба? Бұл әрекетті
+        қайтару мүмкін емес.
+      #original_hash: a7bbd29
+      edit_account: Тіркелгіні түзету
+      #original_hash: ddea6cf
+      supported_currency_warning: >-
+        Сіз таңдаған валютаның таңдалған төлем интеграциясында қолдау табатынына
+        көз жеткізіңіз! Қолдауы бар валюталар есептік жазба орналасқан елге
+        байланысты болады, оларды төменде тексере аласыз:
+      #original_hash: 9711365
+      supported_currencies: '%{provider} қолдайтын валюталар'
+      #original_hash: 1e6571f
+      provider_heading: '%{provider} төлемдер'
+      #original_hash: 40a098a
+      accept_payments_header: Тіркеу төлемдерін қабылдау
+      #original_hash: ebf1ae6
+      manual_payments_header: Қолмен төлемдерді баптау
+      #original_hash: 399052b
+      connect_button: '%{provider} орнату'
+      connect_account_info:
+        #original_hash: f3fdb64
+        stripe: >-
+          Осы байқау үшін төлемдерді қабылдау үшін төмендегі батырманы басу
+          арқылы жеке Stripe аккаунтыңызды WCA Stripe аккаунтымен
+          байланыстыруыңыз керек. Егер сізде Stripe аккаунтыңыз болмаса,
+          төмендегі батырманы басыңыз, ол сізге бүкіл процесті көрсетеді.
+        #original_hash: 30afe4e
+        paypal: >-
+          Байқау беті арқылы PayPal төлемдерін қабылдау үшін PayPal Business
+          тіркелгісі қажет. Егер сізде әлі PayPal бизнес-есебі болмаса,
+          төмендегі батырманы басыңыз, ол сізге бүкіл процесті көрсетеді.
+        #original_hash: d32cb06
+        manual: >-
+          Бәсекелестер үшін төлем нұсқаулығын анықтаңыз. Бәсекелестер төлемнің
+          қашан жасалғанын көрсетіп, сіз пайдаланатын сыртқы төлем сервисіндегі
+          жазбаларыңызды тексеру үшін төлем анықтамасын бере алады.
       connect_account_warning:
+        #original_hash: 53adda3
+        stripe: >-
+          Stripe тіркелгіңізді байланыстыру WCA веб-сайтына тікелей Stripe
+          тіркелгіңізде төлемдер жасау және ақшаны қайтару мүмкіндігін береді.
+        #original_hash: 7cedd12
+        paypal: >-
+          PayPal тіркелгісін қосу WCA веб-сайтына төлемдерді сізге бағыттау және
+          төлемдерді тікелей PayPal тіркелгіңізге қайтару мүмкіндігін береді.
         #original_hash: da39a3e
         manual: ''
+      #original_hash: ef7e7f6
+      currently_connected_info: >-
+        Бұл конкурс %{provider} арқылы төлемдерді қабылдау үшін орнатылған.
+        Байқаудың делегаты (делегаттары) қосылған шоттарға кез келген өзгерістер
+        енгізу үшін WCAT-ке хабарласуы керек.
+      #original_hash: bc14f0f
+      before_disconnect_warning: >-
+        Осы бетте ажырату веб-сайтымыздың %{provider} тіркелгіңізбен байланысты
+        ұмытуына әкеледі. Бірақ %{provider} бақылау тақтасы (төмендегі сілтемені
+        қараңыз) бұрын берген рұқсатыңыздың негізінде WCA веб-сайтын көрсетуі
+        мүмкін. %{provider} бақылау тақтасындағы авторизацияны қайтарып алу осы
+        шот арқылы төлемдерді қабылдауға байланысты кез келген басқа бәсекеге де
+        әсер ететінін ескеріңіз!
+      #original_hash: d4a360b
+      before_disconnect_info: >-
+        Шотты ажырату тек айрықша жағдайларда, мысалы, ағымдағы шот төлемдерді
+        қабылдай алмағанда ғана жасалуы керек екенін есте сақтаңыз.
       account_details:
+        stripe:
+          #original_hash: 84add5b
+          email: Эл. пошта
+          #original_hash: d523ebb
+          country: Ел
+          #original_hash: a8e3901
+          business_name: Бизнес атауы
+        paypal:
+          #original_hash: 709a232
+          display_name: Атауы
+          #original_hash: 84add5b
+          primary_email: Эл. пошта
+        manual:
+          #original_hash: e5f0dfd
+          payment_instructions: Төлем нұсқаулары (Жарыс бетінде көрсетіледі)
+          #original_hash: 5e7242c
+          payment_reference_label: >-
+            Пайдаланушы төлемін сәйкестендіру үшін сізге қандай ақпарат беруі
+            керек? (мысалы, төлем сілтеме нөмірі / шот идентификаторы / т.б.)
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:
@@ -4678,6 +5017,15 @@ kk:
       success: Хабыңыз үшін рахмет. Біз сізбен жақын арада хабарласамыз!
       #original_hash: 8e3a9da
       delivery_error: Хабарлама жіберу қатесі.
+  misc:
+    #original_hash: 9a0f1cc
+    forum_age_requirement: WCA форумына кіру үшін сіз 13 жаста болуыңыз керек.
+    #original_hash: d1f3342
+    forum_enter_dob: >-
+      Форумға кірмес бұрын туған күнін көрсету қажет. Туған күніңізді енгізіп,
+      форумға қайта кіріп көріңіз.
+    #original_hash: 56e3bad
+    refresh: Жаңарту
   faq:
     #original_hash: d790b40
     title: Жиі Қойылатын Сұрақтар
@@ -4964,6 +5312,8 @@ kk:
         арқасында біз бүкіл әлемде көп жарыстар өткізе аламыз.
       #original_hash: 24c87db
       donate_credit: Несиелік карта арқылы қайырымдылық жасаңыз
+      #original_hash: 0e5a9c3
+      donate_paypal: Paypal арқылы қайырымдылық жасау
       #original_hash: 96d77f3
       donate_other: Қайырымдылық жасаудың басқа тәсілдері
     structure:
@@ -5005,6 +5355,9 @@ kk:
       members_html: >-
         Барлық қатысушылар бірінші жарыс кезінде автоматты түрде <strong>WCA
         қатысушылары</strong> болады.
+  speedcubing_history:
+    #original_hash: 431e667
+    title: Спидкубинг қауымдастығының және WCA тарихы
   documents:
     #original_hash: 687c828
     title: Құжаттар
@@ -5020,6 +5373,12 @@ kk:
     policies: WCA Саясаты
     #original_hash: 91ac873
     codeofethics: Этика кодексі
+    #original_hash: 2643980
+    codeofconduct: Мінез-құлық кодексі
+    #original_hash: 4f05e8f
+    finances: Қаржы
+    #original_hash: c1e8f94
+    strategic_plan: Стратегиялық жоспар
   education:
     #original_hash: 746e863
     title: WCA Білім Беру Ресурстары
@@ -5029,11 +5388,23 @@ kk:
       төменде жүктей аласыз.
     #original_hash: d0a3812
     competitor_tutorial: Қатысушының басшылығы
+    #original_hash: 9561bfc
+    judge_tutorial: Жаңадан келгендерге арналған әділдік нұсқаулығы
+    #original_hash: 12e47a3
+    competition_templates: Жарыс үлгілері
+    #original_hash: 5ca0558
+    certificates: WCT сертификаттарының үлгілері
+    #original_hash: f580987
+    orga_guidelines: Ұйымдастырушы нұсқаулары
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Делегаттары
     #original_hash: 77b819c
     acknowledges: 'WCA келесі WCA Делегаттарын таниды:'
+    #original_hash: 0397112
+    regions: Аймақтар
+    #original_hash: 0e57333
+    all_regions: Барлық аймақтар
     table:
       #original_hash: 709a232
       name: Аты
@@ -5041,6 +5412,14 @@ kk:
       role: Рөлі
       #original_hash: 0f21717
       region: Аймақ
+      #original_hash: fee4fb7
+      first_delegated: Алғашқы делегат
+      #original_hash: e2232e5
+      last_delegated: Соңғы делегат
+      #original_hash: 5ab4a17
+      total_delegated: Жалпы делегат
+      #original_hash: 90ccd64
+      history: Тарих
   regional_organizations:
     #original_hash: 37b8fdc
     title: Аймақтық ұйымдар
@@ -5107,6 +5486,9 @@ kk:
       create_success: >-
         Өтінім сәтті берілді! Поштаңызды тексеріп, WCA нұсқаулығынан жауап
         күтіңіз
+    delete:
+      #original_hash: 6588652
+      confirm_delete: Бұл аймақтық ұйымдастыру сұранысын өшіруге сенімдісіз бе?
   score_tools:
     #original_hash: 4fc2133
     title: WCA жарыстарына арналған бағдарламалық жасақтама
@@ -5149,8 +5531,9 @@ kk:
       title: Жарыстан кейін
       #original_hash: b898460
       desc: >-
-        Нәтижелерді тексеру WCA веб-сайтында тікелей жүргізілсе де, TNoodle
-        жасаған скрамблдарды оларды жібермес бұрын нәтижелерге бекіту керек.
+        Нәтижелерді тексеру веб-сайттың өзінде жүзеге асырылса да, WCA
+        веб-сайтына жіберілген нақты нәтижелерге TNoodle жасаған скрамблдарды
+        тағайындау үшін қандай да бір құралды қолдануыңызға тура келеді.
     tools:
       age:
         #original_hash: 4aaae5b
@@ -5216,14 +5599,78 @@ kk:
           Скрамблдарды TNoodle жасаған бір немесе бірнеше json файлдарынан
           импорттаңыз. Нәтижелерді WCA дерекқорына жіберу үшін қажетті форматта
           экспорттаңыз.
+      groups:
+        #original_hash: 311a3f6
+        title: Жарыс топтары
+        #original_hash: 74a0926
+        description: Кез келген жүргізіліп жатқан жарыстың жарыс топтарын қарау
   logo:
     #original_hash: c72c969
     title: WCA логотипі
+    #original_hash: 6520873
+    intro: >-
+      WCA логотипін Джастин Истман 2005 жылдың қаңтар айында дизайн байқауында
+      жасаған. Бізге логотип дизайны, түстері және 3x3x3 кубты нақты көрсетпеуі
+      ұнады.
     headings:
       usage_guidelines:
+        #original_hash: d5b47da
+        title: Пайдалану ережелері
+        paragraph:
+          #original_hash: 4f84c70
+          acceptable_usage: >-
+            WCA логотипінің қолайлы қолданылуы <a
+            href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA
+            логотипін пайдалану саясатында</a> сипатталған. Өз жобаларыңызда WCA
+            логотипін пайдаланбас бұрын осы құжатты оқып шығыңыз. WCA логотипіне
+            қатысты қосымша сұрақтар бойынша <a
+            href="mailto:marketing@worldcubeassociation.org">WCA маркетинг
+            командасына</a> хабарласыңыз.
+          #original_hash: ff13c4a
+          see_below: >-
+            Төменде WCA логотипін дұрыс қолдану үшін қосымша стильдік
+            нұсқаулықтар берілген.
         color:
           #original_hash: 1d0c830
           title: Түс
+          #original_hash: 1959555
+          paragraph: >-
+            WCA логотипі төрт түрлі түсте болады. Түстердің дұрыс нұсқасын
+            логотип орналастырылған ортаның фонының түсіне байланысты қолдану
+            керек.
+          primary:
+            #original_hash: a9a96ec
+            title: Негізгі
+            #original_hash: f31882f
+            paragraph: Мүмкіндігінше негізгі нұсқасын қолданыңыз.
+          mono:
+            #original_hash: c5c5533
+            title: Моно
+            #original_hash: 612044c
+            paragraph: >-
+              Негізгі нұсқа сәйкес келмеген жағдайда ғана моно нұсқасын
+              қолданыңыз.
+        logo_only:
+          #original_hash: 9271574
+          title: Тек Логотип
+          #original_hash: 4dfab95
+          paragraph: >-
+            WCA логотипі жоғарыдағы түс ережелерін сақтай отырып, логотипсіз
+            қолданылуы мүмкін.
+      download_logo_assets:
+        #original_hash: ebc85b2
+        title: Логотип активтерін жүктеу
+        #original_hash: 9aa098d
+        paragraph: >-
+          Жүктеу үшін WCA логотипінің жоғары ажыратымдылықтағы PNG және
+          векторлық нұсқалары қолжетімді.
+        #original_hash: 9de7d59
+        accept_terms_and_conditions: >-
+          Мен <a
+          href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA
+          логотипін пайдалану саясатын</a> оқыдым және қабылдадым.
+        #original_hash: ebc85b2
+        download_button_text: Логотип активтерін жүктеу
   search_results:
     index:
       #original_hash: db98a68
@@ -5232,17 +5679,25 @@ kk:
       people: Қатысушылар
       #original_hash: 6db75ea
       advanced_search: Кеңейтілген іздеу
+      #original_hash: 5e326b1
+      incidents: Жағдайлар
       #original_hash: a0ca0c3
       posts: Бекеттер
       #original_hash: 1fa73f3
       regulations_and_guidelines: Ережелер
+      #original_hash: db683b3
+      search_for: '<b>%{search_string}</b> бойынша іздеу'
       not_found:
+        #original_hash: 658e79f
+        generic: Нәтиже табылмады
         #original_hash: b8a7006
         competitions: Жарыс табылмады
         #original_hash: 99d4290
         people: Қатысушылар табылмады
         #original_hash: c6a04aa
         posts: Хабарламалар табылмады
+        #original_hash: 3499e7e
+        incidents: Үшін жағдай табылмады
         #original_hash: 3909204
         regulations_and_guidelines: Ережелер табылмады.
   incidents_log:
@@ -5250,6 +5705,8 @@ kk:
     i18n_disclaimer: >-
       Назар аударыңыз, оқиғалар тек ағылшын тілінде қол жетімді, олардың мазмұны
       басқа тілдерге аударылмайды.
+    #original_hash: 2c23c1a
+    incident: 'Жағдай:'
   about_regulations:
     #original_hash: 6bce1b5
     title: Ережелер Туралы
@@ -5327,9 +5784,66 @@ kk:
       Егер сіз аударманы қосқыңыз немесе жаңартқыңыз келсе, оқыңыз <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">GitHub
       нұсқаулары</a>.
+  full_organizer_guidelines:
+    #original_hash: 5d602df
+    description: >-
+      WQAC-тің Ұйымдастырушы нұсқаулықтары жинағына қош келдіңіз. Ұйымдастырушы
+      болуды ойласаңыз, осы құжаттармен танысуыңызды ұсынамыз. Олар қажетті және
+      өте ұсынылатын құжаттарға бөлінді. Берілген ақпаратпен таныс екеніңізге
+      көз жеткізіңіз, өйткені бұл сізге сапалы және қызықты жарыс өткізуге
+      мүмкіндік береді!
+    #original_hash: e6f7d36
+    disclaimer_html: >-
+      <strong>Міндеттен бас тарту</strong>: WCA жарыстарды ұйымдастырмайды. WCA
+      санкциялаған жарыстың ұйымдастырушысы ретінде сіз WCA атынан ештеңеге
+      <strong>қол қоймауыңыз керек</strong>. Жарыстарды ұйымдастыратын немесе
+      ұйымдастыруға көмектесетін тиісті аймақтық немесе ұлттық кубинг
+      қауымдастығына хабарласып көріңіз.
+    essential:
+      #original_hash: 44bd0ba
+      description: Қажетті құжаттар
+      #original_hash: 1cf87ad
+      finding-venue: Орын іздеу
+      #original_hash: 3ce0d9c
+      orga-team-delegate: Ұйымның командасын құру және Өкілге жүгіну
+      #original_hash: d3c693b
+      budget: Жарысты бюджеттеу
+      #original_hash: b1429a7
+      schedule: Кестелеу
+      #original_hash: beea57d
+      checklist: Жарыс тізімі
+      #original_hash: 9defcf1
+      registration: Тіркеуді өңдеу
+      #original_hash: e298a56
+      venue-setup: Өтетін жерді баптау
+      #original_hash: 2b6a5dd
+      work-during-comp: Жарыс барысындағы ұйымдастырушылық жұмыс
+    recommended:
+      #original_hash: 6b843f3
+      title: Ұсынылатын құжаттар
+      #original_hash: 6e4fb29
+      staff: Еріктілерді тағайындау
+      #original_hash: 4735583
+      emails: Электрондық хаттар
+      #original_hash: 8e7ca09
+      running-systems: Жүгіру және төреші жүйелері
+      #original_hash: 2b31c89
+      new-competitors: Жаңа бәсекелестерге көзқарас
+      #original_hash: 00c4f78
+      enhancing-experience: Бәсекелестер мен еріктілердің тәжірибесін арттыру
+      #original_hash: 2345aaa
+      reflection: Ұйымдастырушы көрінісі
   organizer_guidelines:
     #original_hash: 7486ac4
     title: Жарыс ұйымдастырушыларына ұсыныстар
+    paragraph0:
+      #original_hash: ee36904
+      title: Қысқаша нұсқа
+      #original_hash: 60d9532
+      content: >-
+        Төменде байқауды қалай ұйымдастыру керектігі туралы түсінік алу үшін
+        негізгі пункттердің қысқаша мазмұнын көре аласыз. Егер бұл сіз үшін
+        бірдеңе деп ойласаңыз, жоғарыдағы құжаттарды қарап шығыңыз!
     paragraph1:
       #original_hash: e5f5329
       title: Жарысты қалай ұйымдастыруға болады
@@ -5364,12 +5878,15 @@ kk:
     paragraph4:
       #original_hash: b6dca56
       title: Жақын маңдағы жарыстардың ережелері
-      #original_hash: f5eeb95
+      #original_hash: 0574d31
       content1: >-
-        WCA жарыстары, егер олар басқа жарыстардан кемінде 100 км немесе 19 күн
-        бөлінсе, мақұлданады. Егер 100 км және 19 күн ішінде тағы бір жарыс
-        жарияланса, онда Делегат WCAT-ті негіздеуі керек, неге бұл жарысты да
-        жариялау керек. Мұның пайдасына мүмкін дәлелдер:
+        WCA жарыстары кез келген басқа жарыстан кем дегенде 30 км немесе 5 күн
+        қашықтықта болса қабылданады. WCAT, әсіресе, егер олардың арасындағы
+        қашықтық 30 км-ден аз және олардың арасындағы уақыт 5 күннен аз болатын
+        басқа жарыстар болса, ұсынылған жарысты қайта қарауы керек. Мұндай
+        конкурсты мақұлдауды сұрайтын делегат конкурстың неліктен әлі де
+        қабылданғаны туралы қосымша ақпарат беруі керек. Мұндай конкурстың
+        қабылдануын қолдайтын ықтимал аргументтерге мыналар жатады:
       olist1:
         #original_hash: de00462
         '1': Бұл екі жарыста жалпы пәндер жоқ.
@@ -5641,3 +6158,374 @@ kk:
   footer:
     #original_hash: cf01481
     privacy: Құпиялылық
+    #original_hash: 4c4a2e8
+    disclaimer: Ескертпе
+  api:
+    #original_hash: 4ab4ae5
+    manage_oauth_html: 'OAuth қолданбаларын басқару үшін %{oauth_link} адресіне өтіңіз.'
+    #original_hash: d965ad1
+    token_request_intro: >-
+      Төменде Curl көмегімен Қолданба идентификаторы, Клиент құпиясы, WCA
+      электрондық поштаңыз және пароліңіз арқылы қолжетімділік токенін алу
+      мысалы келтірілген:
+    #original_hash: 59d8cf3
+    user_email_placeholder: YOUR_EMAIL
+    #original_hash: 981eb7e
+    user_password_placeholder: YOUR_PASSWORD
+    #original_hash: 80c5cf5
+    user_info_request_intro: >-
+      OAuth қолжетімділік токенін оның мерзімі аяқталғанға дейін
+      авторизацияланған API сұраныстарын жасау үшін пайдалануға болады. Мысалы,
+      тіркелгіңіз туралы ақпаратқа қол жеткізу үшін:
+    #original_hash: 040b3da
+    legal_tnoodle_api_header: Заңды TNoodle нұсқасы
+    #original_hash: 32295ee
+    login_message: Жүйеге кіріңіз
+  merch:
+    #original_hash: 96a95a1
+    title: WCA тауарлары
+    paragraphs:
+      #original_hash: 8a23af2
+      '1': >-
+        WCA-да сатып алуға болатын эксклюзивті тауарлар бар! Футболкалардан,
+        капюшондардан, стикерлерден, маттардан, рюкзактардан және т.б. Біздің
+        дизайндарымыз үнемі жаңартылып отырады, соның ішінде классикалық WCA
+        логотипі, ресми Әлем чемпионатының тауарлары және Әлемдік рекорд
+        дизайндары бар.
+      #original_hash: 2865e1d
+      '2': >-
+        WCA Merch-ті біздің дүкендеріміз арқылы сатып алу — коммерциялық емес,
+        еріктілер басқаратын WCA ұйымын қолдаудың ең жақсы тәсілдерінің бірі.
+        Біз тауардан түскен барлық пайданы чемпионаттарды, жабдықтарды және
+        WCA-ға қатысты басқа да іс-шараларды одан әрі қаржыландыруға
+        пайдаланамыз.
+      #original_hash: 8e57552
+      '3': >-
+        Сіз біздің тауарларымызды бүкіл әлем бойынша сатып ала аласыз — Еуропа,
+        Америка және Үндістанда тікелей дүкендер бар және жақын арада тағы
+        басқалары болады!
+  database:
+    results_export:
+      #original_hash: 15d00e1
+      heading: WCA нәтижелерін экспорттау
+      #original_hash: 733df42
+      deprecation_warning: >-
+        ЖОЮ ТУРАЛЫ ЕСКЕРТПЕ: Нәтижелерді экспорттаудың %{old_version} нұсқасы
+        тоқтатылды және оны қолдау %{deprecation_date} бастап тоқтатылады. Оған
+        дейін %{new_version} нұсқасын қолдануға ауысыңыз.
+      #original_hash: f9fe9df
+      description: >-
+        Бұл бетте біз WCA нәтижелерін бірнеше форматта жүктеп алуға ұсынамыз,
+        сондықтан сіз оларды жалпы пайдалана аласыз/талдауға болады. Біз әдетте
+        әрбір жарыс демалыс күндері аяқталғаннан кейін нәтижелерді жаңартамыз.
+        Файлдар нөмірленген және даталанған, сондықтан сізде ең жаңа нұсқасы
+        бар-жоғын көре аласыз.
+      #original_hash: 4f59283
+      permalink: тұрақты сілтеме
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        Ескерту: Тұрақты сілтемелер берілген нұсқадағы соңғы нәтижелерді
+        экспорттайды, яғни v2 тұрақты сілтемесі соңғы v2 экспортын қайтарады,
+        бірақ v3 шығарылғанда да v2-де қалады.
+      file_formats:
+        #original_hash: b086d79
+        sql: SQL деректер қорына импорттау үшін SQL операторлары.
+        #original_hash: 5f6fb6e
+        tsv: >-
+          OpenOffice.org, Excel және т.б. кестелер үшін беттермен бөлінген
+          мәндер.
+      #original_hash: 178506e
+      hint_readme_html: >-
+        Қоса берілген %{readme_filename} файлында пайдалану шарттары мен жалпы
+        сипаттамасы бар (ағылшын тілінде, аударылмаған):
+    developer_export:
+      #original_hash: 97d6025
+      heading: WST әзірлеуші экспорты
+      #original_hash: eba769a
+      description_html: >-
+        Бұл бетте біз WST әзірлеушісінің экспортын SQL дампы ретінде жүктеп
+        алуға ұсынамыз. Толығырақ мына жерден табуға болады: %{github_link}.
+      #original_hash: a479c9c
+      download: Жүктеу
+  validators:
+    persons:
+      #original_hash: 847f614
+      dob_is_jan_one_warning: '%{name} туған күні 1 қаңтарда, оның дұрыс екенін тексеріңіз.'
+      #original_hash: b4b736a
+      dob_is_too_young_warning: '%{name} 3 жасқа толмаған сияқты, оның дұрыс екенін тексеріңіз.'
+      #original_hash: b7c88ef
+      dob_is_too_old_warning: '%{name} шамамен 100 жаста сияқты, оның дұрыс екенін тексеріңіз.'
+      #original_hash: 809f305
+      person_doesnt_have_any_results_error: '%{person_name} үшін адам id-і %{person_id} ешқандай нәтиже жоқ'
+      #original_hash: ebc1b15
+      results_not_associated_with_any_person_error: '%{person_id} адам идентификаторы бар белгісіз адам үшін нәтижелер бар'
+      #original_hash: c29e35d
+      whitespace_in_name_error: '"%{name}" адамында алдыңғы/соңғы бос орындар немесе қос бос орындар бар.'
+      #original_hash: 9b1ae5f
+      person_with_non_existing_wca_id_error: '%{name} адамда жоқ WCA ID-і бар: %{wca_id}.'
+      #original_hash: 924d832
+      no_space_before_parenthesis_error: '%{name} ішіндегі ашылатын жақшаның алдында бос орын болуы керек.'
+      #original_hash: 6daf706
+      same_person_name_warning: >-
+        WCA деректер базасында "%{name}" есімі бар кем дегенде бір адам бар
+        (%{wca_ids}). "%{name}" басқа адам екеніне көз жеткізіңіз. Олай болмаса,
+        пайдаланушы тіркелгісіне дұрыс WCA идентификаторын тағайындаңыз және
+        JSON нәтижелерін қайта жасаңыз.
+      #original_hash: eeb688a
+      non_matching_dob_warning: >-
+        %{name} үшін берілген '%{dob}' туған күні (%{wca_id}) WCA деректер
+        базасындағы ағымдағы жазбаға сәйкес келмейді ('%{expected_dob}'). Бұл
+        қате болса, оны түзетіңіз. Әйтпесе, бұл туралы WRT-ге пікір қалдырыңыз.
+      #original_hash: 6a81cc0
+      non_matching_gender_warning: >-
+        %{name} үшін берілген '%{gender}' жынысы (%{wca_id}) WCA деректер
+        базасындағы ағымдағы жазбаға сәйкес келмейді ('%{expected_gender}'). Бұл
+        қате болса, оны түзетіңіз. Әйтпесе, бұл туралы ЖРТ-ға пікір қалдырыңыз.
+      #original_hash: da398a2
+      empty_gender_warning: >-
+        Жаңадан келген %{name} үшін жынысы бос. Жарамды гендерлік мәндер –
+        "әйел," "еркек" және "басқа." Бұл туралы WRT-ға пікір қалдырыңыз.
+      #original_hash: 050c7e2
+      non_matching_name_warning: >-
+        "%{name}" атауы %{wca_id} үшін берілген WCA деректер базасындағы
+        ағымдағы жазбаға сәйкес келмейді ("%{expected_name}").
+      #original_hash: 333a035
+      non_matching_country_warning: >-
+        %{name} үшін берілген '%{country}' елі (%{wca_id}) WCA деректер
+        базасындағы ағымдағы жазбаға ('%{expected_country}') сәйкес келмейді.
+        Бұл қате болса, оны түзетіңіз. Әйтпесе, бұл туралы ЖРТ-ға пікір
+        қалдырыңыз.
+      #original_hash: 6179b35
+      multiple_newcomers_with_same_name_warning: >-
+        Нақты бір атаумен бірнеше жаңа бәсекелестер бар: %{name}. Осы
+        бәсекелестер үшін барлық нәтижелердің дұрыс екеніне және барлық
+        нәтижелердің сәйкес идентификатормен дұрыс бөлінгеніне көз жеткізіңіз.
+      #original_hash: 7732038
+      wrong_parenthesis_type_error: >-
+        '%{name}' ішіндегі жақша таңбасы дұрыс емес таңба, оны дұрыс жақша ' ('
+        немесе ') ' және тиісті бос орынмен ауыстырыңыз.
+      #original_hash: fec0347
+      special_characters_in_name_warning: >-
+        '%{name}' атауында жарамсыз арнайы таңбалар бар (мысалы, сандар,
+        тырнақшалар немесе басқа таңбалар). Атаулар тек әріптерден, бос
+        орындардан, дефистерден, апострофтардан, нүктелерден және тұрақты
+        жақшалардан тұруы тиіс.
+      #original_hash: 031123e
+      suspicious_last_name_warning: >-
+        '%{name}' тегі ретінде '%{suffix}' бар, ол нақты тегі болмауы мүмкін
+        (мысалы, толық жазылған генерациялық жұрнақ). Оның заңды тегі екенін
+        растаңыз немесе оны сәйкесінше ауыстырыңыз/алып тастаңыз.
+      #original_hash: 4b90583
+      successive_uppercase_name_warning: >-
+        '%{name}' атауында бірізді бас әріптер бар. Бұл шынымен дұрыс жазылуын
+        растаңыз немесе атауды түзетіңіз.
+      #original_hash: 654b60d
+      lowercase_name_warning: >-
+        '%{name}' кіші әріппен жазылған атауға ие. Бұл шынымен дұрыс жазылуын
+        растаңыз немесе атауды түзетіңіз.
+      #original_hash: 4ea44b6
+      missing_period_in_single_letter_middle_name_warning: >-
+        '%{name}' қысқарту нүктесі жоқ бір әріпті екінші аты бар. Бұл шынымен
+        дұрыс жазылуын растаңыз немесе атауды түзетіңіз.
+      #original_hash: cbd3bd6
+      letter_after_period_warning: >-
+        '%{name}' атауында нүктеден кейін бос орын жоқ. Бұл шынымен дұрыс
+        жазылуын растаңыз немесе атауды түзетіңіз.
+      #original_hash: d7803d4
+      single_letter_first_or_last_name_warning: >-
+        '%{name}' атауы немесе тегі ретінде бір әріптен тұрады. Атауды түзетіңіз
+        немесе бұл ресми құжатқа сәйкес бәсекелестің дұрыс аты екенін растаңыз.
+      #original_hash: 9adb87f
+      single_name_warning: >-
+        '%{name}' тек бір атауға ие. Ресми құжатқа сәйкес, бұл шынымен де
+        бәсекелестің аты-жөні екенін растаңыз.
+      #original_hash: 39c7f3d
+      competitor_limit_exceeded_warning: >-
+        Жарыстағы адамдар саны (%{n_competitors}) бәсекелестер шегінен
+        (%{competitor_limit}) жоғары. Бәсекелестер лимитіне жеткеннен кейін
+        тіркелген бәсекелестердің нәтижелері алынып тасталуы тиіс.
+      #original_hash: d8f2f1e
+      registration_details_mismatch_warning: >-
+        Тіркелуші ID-і %{person_id} (%{name}) адамда олардың тіркелуіне сәйкес
+        келмейтін мәліметтер бар: %{mismatches}
+      #original_hash: 1a9da05
+      missing_matching_registration_warning: 'Адамның %{name} сәйкес келетін тіркеуі жоқ.'
+      #original_hash: 7d62dd5
+      unaccepted_registration_with_results_warning: >-
+        %{name} адамның байқауда нәтижелері бар, бірақ тіркеу "қабылданды" деп
+        белгіленбеген.
+    results:
+      #original_hash: 5685ae8
+      automatically_position_fixed_info: >-
+        [%{round_id}] %{person_name} позициясы %{pos}-дан %{expected_pos}-ға
+        автоматты түрде түзетілді.
+      #original_hash: e895bf5
+      mbf_result_over_time_limit_warning: >-
+        [%{round_id}] %{person_name} үшін '%{result}' нәтижесі уақыт шегінен
+        асып кетті. Нәтижелерді жібермес бұрын бұл уақыт айыппұлына байланысты
+        екеніне көз жеткізіңіз немесе нәтижені DNF-ға түзетіңіз.
+      #original_hash: c74c2c6
+      result_after_dns_warning: >-
+        [%{round_id}] %{person_name} кем дегенде бір DNS нәтижесі бар, содан
+        кейін жарамды нәтиже бар. DNS екеніне көз жеткізіңіз, егер солай болса,
+        WRT-ға не болғанын түсіндіріңіз.
+      #original_hash: a2032e9
+      similar_results_warning: >-
+        [%{round_id}] %{person_name} бойынша нәтижелер %{similar_person_name}
+        бойынша нәтижелерге ұқсас. Бұл нәтижелердің екі бәсекелес үшін де дұрыс
+        тіркелгеніне көз жеткізіңіз.
+      #original_hash: ebbab6f
+      met_cutoff_but_missing_results_error: >-
+        [%{round_id}] %{person_name} шекті межеге жетті, бірақ раундтың екінші
+        кезеңінің нәтижелері жоқ. Кесім %{cutoff} болды.
+      #original_hash: cc0b47b
+      didnt_meet_cutoff_but_has_results_error: >-
+        [%{round_id}] %{person_name} екінші кезеңнің кем дегенде бір нәтижесі
+        бар, бірақ шектеу шегіне жетпеді. Кесім %{cutoff} болды.
+      #original_hash: 4fc3fd7
+      wrong_attempts_for_cutoff_error: >-
+        [%{round_id}] %{person_name} кесу фазасы үшін кем дегенде бір әрекетті
+        жіберіп алды. Жетіспейтін әрекеттерді қосу үшін нәтижені өңдеңіз немесе
+        жарыстың Оқиғаларды басқару бетінде раунд ақпаратын жаңартыңыз.
+      #original_hash: 32ea6be
+      result_over_time_limit_error: >-
+        [%{round_id}] %{person_name} үшін кем дегенде бір нәтиже раунд үшін
+        уақыт шегінен асып кетті, ол әр әрекет үшін %{time_limit} құрайды. Уақыт
+        шегінен асып кеткен барлық шешімдерді DNF-ке өзгерту керек.
+      #original_hash: 1678105
+      results_over_cumulative_time_limit_error: >-
+        [%{round_ids}] %{person_name} үшін нәтижелердің қосындысы жиынтық уақыт
+        шегінен асып кетті, ол %{time_limit} болды.
+      #original_hash: 76dc4e7
+      undefined_time_limit_warning: >-
+        [%{round_id}] Бұл раунд үшін уақыт лимиті анықталмаған, уақыт лимиті
+        тексерулері өткізіп жіберілді. Бұл тек 2013 жылға дейінгі жарыстар үшін
+        күтілуде .
+      #original_hash: 10ad25f
+      suspicious_dnf_warning: >-
+        [%{round_ids}] Раундтың жиынтық уақыты бар және %{person_name} сәтті
+        шешімдеріне сүйене отырып, олардың кем дегенде бір DNF-іне өте аз уақыт
+        қалған болар еді. Әр DNF және DNS дұрыс екеніне көз жеткізіңіз. Егер
+        бәсекелес әрекетті бастамаса немесе әрекетті бастауға уақыт қалмаса, оны
+        DNS ретінде енгізу керек.
+      #original_hash: 8057a12
+      missing_cumulative_round_id_error: >-
+        [%{original_round_id}] WCIF-те көрсетілген жиынтық уақыт лимиті үшін
+        %{wcif_id} раундын табу мүмкін емес. Жарыстың Оқиғаларды басқару бетіне
+        өтіп, %{original_round_id} үшін жиынтық уақыт шегінен %{wcif_id} алып
+        тастаңыз. WST бұл қате туралы біледі (GitHub нөмірі #3254).
+      #original_hash: ad200c1
+      wrong_position_in_results_error: >-
+        [%{round_id}] %{person_name} қате позицияда: күтілген %{expected_pos},
+        бірақ %{pos} алды.
+    rounds:
+      #original_hash: 517fd54
+      too_many_qualified_warning: >-
+        %{round_id} раунды: алға жылжу шарты жоспарланғаннан көбірек
+        бәсекелестер біліктіліктерін алды (%{expected} орнына %{actual}, шарты:
+        %{condition}). Оқиғаларды басқару бетіндегі раунд ақпаратын жаңартыңыз.
+      #original_hash: 5b5f9ee
+      regulation_9m1_error: >-
+        %{round_id} раундында 99 немесе одан аз бәсекелес бар, бірақ 9m1
+        ережесіне сәйкес рұқсат етілмейтін екіден астам келесі раунд бар.
+      #original_hash: 892e0d5
+      regulation_9m2_error: >-
+        %{round_id} раундында 15 немесе одан аз бәсекелестер бар, бірақ бірден
+        көп келесі раунд бар, бұл 9m2 ережесіне сәйкес рұқсат етілмейді.
+      #original_hash: cb8522e
+      regulation_9m3_error: >-
+        %{round_id} раундында 7 немесе одан аз бәсекелес бар, бірақ кем дегенде
+        бір келесі раунд бар, бұл 9m3 ережесіне сәйкес рұқсат етілмейді.
+      #original_hash: 44fbfde
+      regulation_9p1_error: >-
+        %{round_id} раунды: Бәсекелестердің 25%-дан азы шығарылды, бұл 9p1
+        ережесіне сәйкес рұқсат етілмейді.
+      #original_hash: f5d8ae9
+      no_competitor_eliminated_error: >-
+        %{round_id} раунды: 9p ережесіне сәйкес талап етілетін кем дегенде бір
+        бәсекелестің жеңілуі тиіс (2010 жылдың сәуіріне дейінгі жарыстар).
+      #original_hash: b868019
+      less_than_twenty_five_percent_eliminated_error: >-
+        %{round_id} раунды: ілгерілеу шартына сәйкес (%{condition}),
+        бәсекелестердің 25%-дан азы жойылады, бұл 9p1 ережесіне сәйкес рұқсат
+        етілмейді. Оқиғаларды басқару бетіндегі раунд ақпаратын жаңартыңыз.
+      #original_hash: d6fc805
+      not_enough_qualified_warning: >-
+        %{round_id} раунды: оқиғалар деректеріне сәйкес, ең көбі %{expected}
+        жалғасуы мүмкін еді, бірақ раундта тек %{actual} қатысты. Бұл туралы
+        пікір қалдырыңыз (немесе басқа ілгерілеу шартын қолданған болсаңыз,
+        оқиғалар деректерін түзетіңіз).
+      #original_hash: 7915e13
+      competed_not_qualified_error: >-
+        %{round_id} раунды: %{ids} жарысқа түсті, бірақ әрекет нәтижесінің алға
+        жылжу шартына (%{condition}) сәйкес келмеді. Өсу шартының жарыс кезінде
+        не қолданылғанын көрсететінін тексеріп, қажет болса, нәтижелерді алып
+        тастаңыз.
+      #original_hash: c4a7f11
+      round_not_found_error: >-
+        %{round_id} раунды табылмады. WCA веб-сайтының Оқиғаларды түзету панелі
+        мен WCA Live синхрондалғанын тексеріңіз.
+      #original_hash: 3c739f3
+      missing_round_results_error: >-
+        %{round_id} раунды үшін нәтиже жоқ, бірақ ол оқиғалар бетінде
+        көрсетілген. Егер бұл раунд өткізілмесе, жарыстың іс-шараларды басқару
+        бетіндегі раундты өшіріңіз.
+    events:
+      #original_hash: ef8709f
+      not_333_main_event_warning: >-
+        Таңдалған негізгі оқиға: %{main_event_id}. Бұл жарыс алдында WCAT
+        тарапынан мақұлданғанымен, WRT жарыс аяқталғаннан кейін WCA жарыс
+        талаптары саясатындағы негізгі іс-шараның тиісті нұсқаулықтарының
+        орындалуын қамтамасыз етуге жауапты. %{main_event_id}-ді БӘСЕКЕ АРҚЫЛЫ
+        негізгі іс-шара ретінде қарастыру үшін жасалған бір әрекетті көрсетіңіз
+        (дұрыс мысалдар: жарыстың жеңімпазы деп жарияланды, раундтар саны көп,
+        жүлде үлкенірек).
+      #original_hash: 1d4e297
+      no_main_event_warning: >-
+        Бұл жарыс үшін негізгі іс-шара таңдалған жоқ. Бұл дұрыс екенін WRT-ге
+        хабарлаңыз.
+      #original_hash: fde208d
+      missing_results_warning: >-
+        %{event_id} үшін нәтиже жоқ, бірақ ол ресми оқиға ретінде көрсетілген.
+        Егер іс-шара өткізілсе, JSON файлыңызды нәтижелерімен бірге қайта
+        жүктеңіз. Егер іс-шара өтпеген болса, WRT үшін пікір қалдырыңыз.
+    scrambles:
+      #original_hash: ff7e063
+      missing_scrambles_for_round_error: >-
+        [%{round_id}] Скремблдер жоқ. Раундқа дұрыс скремблдерді қосу үшін
+        Скремблдер сәйкестендіргішін қолданыңыз.
+      #original_hash: 340d2f3
+      missing_scrambles_for_competition_error: >-
+        Жарысқа арналған скрамблдар жетіспейді. Скрамблдарды қосу үшін Scrambles
+        Matcher қолданыңыз.
+      #original_hash: 22706c5
+      missing_scrambles_for_group_error: >-
+        [%{round_id}] %{group_id} тобы: скрамблдар жоқ, %{expected} орнына тек
+        %{actual} анықталды.
+      #original_hash: 665014c
+      missing_scrambles_for_multi_error: >-
+        [%{round_id}] Сізде 3x3x3 Multi-Blind-те бірнеше топ болуы мүмкін болса
+        да, топтардың кем дегенде біреуінде барлық әрекеттер үшін скрамблдар
+        болуы керек.
+      #original_hash: 3d5255d
+      multiple_fmc_groups_warning: >-
+        [%{round_id}] FMC бірнеше топтары қолданылады. Егер FMC бір тобы
+        қолданылған болса, қолданылмаған шифрлерді белгілеуді алып тастау үшін
+        Scrambles Matcher-ді пайдаланыңыз. Әйтпесе, неліктен бірнеше FMC топтары
+        қолданылғанын түсіндіретін WRT-ге түсініктеме беріңіз.
+      #original_hash: d6830c0
+      wrong_number_of_scramble_sets_error: >-
+        [%{round_id}] Бұл раундта Оқиғаларды басқару бетінде көрсетілгеннен
+        басқа скрембл жиынтығы бар. Оқиғаларды басқару бетіндегі шифрлау
+        жиынтықтарының санын қолданылған жиынтықтар санына сәйкестендіріңіз.
+  tickets:
+    type:
+      #original_hash: e43f273
+      edit_person: Адамды өңдеу
+      #original_hash: 5fb2137
+      competition_result: Жарыс Нәтижесі
+    stakeholder_role:
+      #original_hash: e095187
+      actioner: Акционер
+      #original_hash: bcdf8d3
+      requester: Сұраушы
