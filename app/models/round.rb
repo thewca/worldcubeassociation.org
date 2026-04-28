@@ -155,7 +155,7 @@ class Round < ApplicationRecord
   end
 
   def live_podium
-    linked_round.present? ? linked_round.merged_live_results.filter { it.advancing && it.global_pos.in?(1..3) } : live_results.advancing.where(global_pos: 1..3)
+    linked_round&.live_podium || live_results.advancing.where(global_pos: LiveResult::PODIUM_RANGE)
   end
 
   def advancing_competitor_ids

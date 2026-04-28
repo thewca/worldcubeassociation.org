@@ -30,6 +30,10 @@ class LinkedRound < ApplicationRecord
     rounds.all?(&:score_taking_done?)
   end
 
+  def live_podium
+    merged_live_results.filter { it.advancing? && it.global_pos.in?(LiveResult::PODIUM_RANGE) }
+  end
+
   def target_participation_condition
     self.target_rounds.first&.participation_condition
   end

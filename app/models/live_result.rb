@@ -4,6 +4,8 @@ class LiveResult < ApplicationRecord
   BEST_POSSIBLE_SCORE = 1
   WORST_POSSIBLE_SCORE = -1
 
+  PODIUM_RANGE = 1..3
+
   has_many :live_attempts, dependent: :destroy
   alias_method :attempts, :live_attempts
 
