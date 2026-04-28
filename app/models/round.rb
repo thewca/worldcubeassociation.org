@@ -60,7 +60,8 @@ class Round < ApplicationRecord
 
   has_many :sibling_rounds, through: :competition_event, source: :rounds
 
-  enum :lifecycle_state, { pending: "pending", open: "open", locked: "locked", done: "done" }, prefix: true
+  STATE_INTEGERS = { "pending" => 0, "open" => 1, "locked" => 2, "done" => 3 }.freeze
+  enum :lifecycle_state, %i[pending open locked done], prefix: true
 
   MAX_NUMBER = 4
   validates :number,
@@ -599,11 +600,11 @@ class Round < ApplicationRecord
   end
 
   def inferred_lifecycle_state
-    return "done" if competition.results_submitted?
-    return "locked" if locked?
-    return "open" if open?
+    return STATE_INTEGERS["done"] if competition.results_submitted?
+    return STATE_INTEGERS["locked"] if locked?
+    return STATE_INTEGERS["open"] if open?
 
-    "pending"
+    STATE_INTEGERS["pending"]
   end
 
   def open?
@@ -727,7 +728,7 @@ class Round < ApplicationRecord
   def to_live_info_json
     json = {
       **self.to_wcif(include_results: false).compact_blank,
-      "state" => lifecycle_state,
+      "state" => STATE_INTEGERS.key(lifecycle_state),
       "ready" => lifecycle_state_pending? && participation_source.score_taking_done?
     }
     if lifecycle_state_open? || lifecycle_state_locked?

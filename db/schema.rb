@@ -1261,7 +1261,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_120000) do
     t.text "cutoff"
     t.string "format_id", limit: 255, null: false
     t.boolean "is_h2h_mock", default: false, null: false
-    t.string "lifecycle_state", limit: 10, default: "pending", null: false
+    t.integer "lifecycle_state", default: 0, null: false
     t.bigint "linked_round_id"
     t.integer "number", null: false
     t.string "old_type", limit: 1
