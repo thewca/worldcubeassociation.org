@@ -2987,6 +2987,8 @@ es-ES:
       results:
         #original_hash: 4705687
         competitor: Competidor
+        #original_hash: 51cda54
+        mean: Media
       errors:
         #original_hash: f522c26
         round_closed: La ronda no está abierta aún
