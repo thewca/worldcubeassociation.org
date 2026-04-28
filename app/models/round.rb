@@ -60,7 +60,6 @@ class Round < ApplicationRecord
 
   has_many :sibling_rounds, through: :competition_event, source: :rounds
 
-  STATE_INTEGERS = { "pending" => 0, "open" => 1, "locked" => 2, "done" => 3 }.freeze
   enum :lifecycle_state, %i[pending open locked done], prefix: true
 
   MAX_NUMBER = 4
@@ -599,12 +598,20 @@ class Round < ApplicationRecord
     count
   end
 
-  def inferred_lifecycle_state
-    return STATE_INTEGERS["done"] if competition.results_submitted?
-    return STATE_INTEGERS["locked"] if locked?
-    return STATE_INTEGERS["open"] if open?
+  validate :lifecycle_state_matches_inferred, if: :lifecycle_state_changed?
 
-    STATE_INTEGERS["pending"]
+  private def lifecycle_state_matches_inferred
+    return unless Round.lifecycle_state != inferred_lifecycle_state
+
+    errors.add(:lifecycle_state, "does not match inferred state (#{inferred_lifecycle_state})")
+  end
+
+  def inferred_lifecycle_state
+    return "done" if competition.results_submitted?
+    return "locked" if locked?
+    return "open" if open?
+
+    "pending"
   end
 
   def open?
