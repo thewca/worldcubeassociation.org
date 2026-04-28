@@ -18,10 +18,12 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     live_result = round.live_results.find_by(registration_id: registration_id)
 
     if live_result.blank?
-      return render json: { status: "round is not open" }, status: :unprocessable_content unless round.live_results.any?
+      return render json: { status: "round is not open" }, status: :unprocessable_content unless round.lifecycle_state_open?
 
       return render json: { status: "user is not part of this round" }, status: :unprocessable_content
     end
+
+    return render json: { status: "results have already been submitted and cannot be changed" }, status: :unprocessable_content if round.lifecycle_state_done?
 
     UpdateLiveResultJob.perform_later(live_result, results, @current_user.id)
 
@@ -82,6 +84,8 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "round is not open" }, status: :bad_request unless round.lifecycle_state_open?
 
+    return render json: { status: "results have already been submitted and cannot be changed" }, status: :unprocessable_content if round.lifecycle_state_done?
+
     recreated_rows = round.clear_round!(@current_user)
 
     render json: { status: "ok", recreated_rows: recreated_rows }
@@ -95,6 +99,8 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     round = Round.find_by_wcif_id!(wcif_id, competition.id)
 
     require_manage!(competition)
+
+    return render json: { status: "results have already been submitted and cannot be changed" }, status: :unprocessable_content if round.lifecycle_state_done?
 
     result = round.live_results.find_by!(registration_id: registration_id)
 
