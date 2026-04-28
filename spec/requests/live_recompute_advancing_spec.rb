@@ -101,6 +101,80 @@ RSpec.describe "WCA Live API" do
       end
     end
 
+    context 'with a cutoff' do
+      it 'does not mark as advancing competitors who did not meet the cutoff' do
+        cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 5000)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, cutoff: cutoff)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: round)
+
+        registrations # ensure registrations are created before opening the round
+        round.open_round!(User.first)
+        live_results = round.live_results
+
+        # 3 competitors met the cutoff (at least one attempt < 5000 in first 2)
+        3.times do |i|
+          result = live_results.find_by!(registration_id: registrations[i].id)
+          UpdateLiveResultJob.perform_now(result, Array.new(5) { |j| { value: (i + 1) * 1000, attempt_number: j + 1 } }, User.first.id)
+        end
+
+        # 2 competitors did NOT meet the cutoff (both first 2 attempts >= 5000)
+        2.times do |i|
+          result = live_results.find_by!(registration_id: registrations[3 + i].id)
+          UpdateLiveResultJob.perform_now(result, [{ value: 6000, attempt_number: 1 }, { value: 7000, attempt_number: 2 }], User.first.id)
+        end
+
+        no_cutoff_ids = [registrations[3].id, registrations[4].id]
+        expect(round.live_results.reload.where(registration_id: no_cutoff_ids).pluck(:advancing)).to all(be false)
+        expect(round.live_results.reload.where.not(registration_id: no_cutoff_ids).pluck(:advancing)).to all(be true)
+      end
+
+      it 'does not mark as advancing competitors who did not meet the cutoff when they have a dnf' do
+        cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 5000)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, cutoff: cutoff)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: round)
+
+        registrations # ensure registrations are created before opening the round
+        round.open_round!(User.first)
+        live_results = round.live_results
+
+        # 3 competitors met the cutoff (at least one attempt < 5000 in first 2)
+        3.times do |i|
+          result = live_results.find_by!(registration_id: registrations[i].id)
+          UpdateLiveResultJob.perform_now(result, Array.new(5) { |j| { value: (i + 1) * 1000, attempt_number: j + 1 } }, User.first.id)
+        end
+
+        # 2 competitors did NOT meet the cutoff (both first 2 attempts >= 5000)
+        2.times do |i|
+          result = live_results.find_by!(registration_id: registrations[3 + i].id)
+          UpdateLiveResultJob.perform_now(result, [{ value: 6000, attempt_number: 1 }, { value: -1, attempt_number: 2 }], User.first.id)
+        end
+
+        no_cutoff_ids = [registrations[3].id, registrations[4].id]
+        expect(round.live_results.reload.where(registration_id: no_cutoff_ids).pluck(:advancing)).to all(be false)
+        expect(round.live_results.reload.where.not(registration_id: no_cutoff_ids).pluck(:advancing)).to all(be true)
+      end
+
+      it 'with missing results' do
+        cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 5000)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, cutoff: cutoff)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: round)
+
+        registrations # ensure registrations are created before opening the round
+        round.open_round!(User.first)
+        live_results = round.live_results
+
+        # 3 competitors met the cutoff (at least one attempt < 5000 in first 2)
+        3.times do |i|
+          result = live_results.find_by!(registration_id: registrations[i].id)
+          UpdateLiveResultJob.perform_now(result, Array.new(5) { |j| { value: (i + 1) * 1000, attempt_number: j + 1 } }, User.first.id)
+        end
+
+        # We are still missing two results so only the first result should be marked as advancing
+        expect(round.live_results.reload.where(registration_id: [registrations.first]).pluck(:advancing)).to all(be true)
+        expect(round.live_results.reload.where.not(registration_id: [registrations.first]).pluck(:advancing)).to all(be false)
+      end
+    end
+
     context 'with an attempt_result advancement condition' do
       it 'returns results with ranking better or equal to the given level' do
         round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)

@@ -14,6 +14,10 @@ class Cutoff
     self.event = event
   end
 
+  def apply(attempts)
+    attempts[0..(number_of_attempts - 1)].any? { it.value.positive? && it.value < attempt_result }
+  end
+
   def to_wcif
     { "numberOfAttempts" => self.number_of_attempts, "attemptResult" => self.attempt_result }
   end
