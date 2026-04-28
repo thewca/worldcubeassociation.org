@@ -593,7 +593,7 @@ class Round < ApplicationRecord
   end
 
   def lock_results(locking_user)
-    update!(:lifecycle_state => :locked)
+    update!(lifecycle_state: :locked)
     self.bulk_insert_history(live_results.ids, locking_user, action_type: :locked)
     count
   end
