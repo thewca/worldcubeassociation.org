@@ -194,7 +194,7 @@ class Round < ApplicationRecord
       LiveResult.empty_result_attributes(reg_id, self.id)
     end
     LiveResult.insert_all!(empty_results)
-    update!(:lifecycle_state => :open)
+    update!(lifecycle_state: :open)
 
     inserted_ids = self.live_results.where(registration_id: advancing_reg_ids).ids
     self.bulk_insert_history(inserted_ids, opening_user, action_type: :opened)
