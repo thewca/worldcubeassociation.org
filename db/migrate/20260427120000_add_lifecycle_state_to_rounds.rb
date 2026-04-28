@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddLifecycleStateToRounds < ActiveRecord::Migration[8.1]
   def up
     add_column :rounds, :lifecycle_state, :integer, null: false, default: 0
