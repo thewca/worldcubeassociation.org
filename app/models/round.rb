@@ -728,7 +728,7 @@ class Round < ApplicationRecord
   def to_live_info_json
     json = {
       **self.to_wcif(include_results: false).compact_blank,
-      "state" => STATE_INTEGERS.key(lifecycle_state),
+      "state" => lifecycle_state,
       "ready" => lifecycle_state_pending? && participation_source.score_taking_done?
     }
     if lifecycle_state_open? || lifecycle_state_locked?
