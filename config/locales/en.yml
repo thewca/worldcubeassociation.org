@@ -1439,6 +1439,7 @@ en:
           failed_to_fetch: "Failed to fetch next advancing competitor"
       results:
         competitor: "Competitor"
+        mean: "Mean"
       errors:
         round_closed: "The Round is not open yet"
     #context: on the "My competitions" page
