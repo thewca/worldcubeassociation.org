@@ -4,7 +4,7 @@ require 'net/http'
 
 namespace :live_results do
   desc "Import live results from production API for a given round. Usage: rake 'live_results:import_from_prod[MunichOpen2026,sq1-r1]'"
-  task :import_from_prod, [:competition_id, :round_id] => [:environment] do |_, args|
+  task :import_from_prod, %i[competition_id round_id] => [:environment] do |_, args|
     competition_id = args[:competition_id]
     round_id = args[:round_id]
 
