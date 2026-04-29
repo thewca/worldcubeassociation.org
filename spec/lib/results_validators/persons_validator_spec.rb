@@ -416,10 +416,10 @@ RSpec.describe PV do
 
         validator_args.each do |arg|
           pv = PV.new.validate(**arg)
-          expect(pv.warnings).to include(
-            RV::ValidationWarning.new(PV::MISSING_MATCHING_REGISTRATION_WARNING,
-                                      :persons, competition_with_regs.id,
-                                      name: person_without_reg.name),
+          expect(pv.errors).to include(
+            RV::ValidationError.new(PV::MISSING_MATCHING_REGISTRATION_WARNING,
+                                    :persons, competition_with_regs.id,
+                                    name: person_without_reg.name),
           )
         end
       end
@@ -437,10 +437,10 @@ RSpec.describe PV do
 
         validator_args.each do |arg|
           pv = PV.new.validate(**arg)
-          expect(pv.warnings).to include(
-            RV::ValidationWarning.new(PV::UNACCEPTED_REGISTRATION_WITH_RESULTS_WARNING,
-                                      :persons, competition_with_regs.id,
-                                      name: person_with_unaccepted_reg.name),
+          expect(pv.errors).to include(
+            RV::ValidationError.new(PV::UNACCEPTED_REGISTRATION_WITH_RESULTS_WARNING,
+                                    :persons, competition_with_regs.id,
+                                    name: person_with_unaccepted_reg.name),
           )
         end
       end
@@ -460,12 +460,12 @@ RSpec.describe PV do
 
         validator_args.each do |arg|
           pv = PV.new.validate(**arg)
-          expect(pv.warnings).to include(
-            RV::ValidationWarning.new(PV::REGISTRATION_DETAILS_MISMATCH_WARNING,
-                                      :persons, competition_with_regs.id,
-                                      person_id: mismatched_person.ref_id,
-                                      name: mismatched_person.name,
-                                      mismatches: mismatches.join(', ')),
+          expect(pv.errors).to include(
+            RV::ValidationError.new(PV::REGISTRATION_DETAILS_MISMATCH_WARNING,
+                                    :persons, competition_with_regs.id,
+                                    person_id: mismatched_person.ref_id,
+                                    name: mismatched_person.name,
+                                    mismatches: mismatches.join(', ')),
           )
         end
       end
@@ -486,10 +486,10 @@ RSpec.describe PV do
 
         validator_args.each do |arg|
           pv = PV.new.validate(**arg)
-          expect(pv.warnings).not_to include(
-            RV::ValidationWarning.new(PV::MISSING_MATCHING_REGISTRATION_WARNING,
-                                      :persons, competition_no_regs.id,
-                                      name: person.name),
+          expect(pv.errors).not_to include(
+            RV::ValidationError.new(PV::MISSING_MATCHING_REGISTRATION_WARNING,
+                                    :persons, competition_no_regs.id,
+                                    name: person.name),
           )
         end
       end
