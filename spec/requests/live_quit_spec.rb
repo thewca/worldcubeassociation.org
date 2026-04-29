@@ -45,7 +45,7 @@ RSpec.describe "WCA Live API" do
 
       final.open_and_lock_previous(User.first)
 
-      to_advance = round.next_advancing_without(registrations.first.id)
+      to_advance = final.next_participating_without(registrations.first.id)
 
       live_request = {
         advancing_ids: to_advance.pluck(:registration_id),
@@ -90,7 +90,7 @@ RSpec.describe "WCA Live API" do
       final.open_and_lock_previous(User.first)
       before_hash = Live::DiffHelper.state_hash(round.to_live_state)
 
-      to_advance = round.next_advancing_without(registrations.first.id)
+      to_advance = final.next_participating_without(registrations.first.id)
 
       live_request = {
         advancing_ids: to_advance.pluck(:registration_id),
@@ -118,7 +118,7 @@ RSpec.describe "WCA Live API" do
       final.open_and_lock_previous(User.first)
       before_hash = Live::DiffHelper.state_hash(final.to_live_state)
 
-      to_advance = round.next_advancing_without(registrations.first.id)
+      to_advance = final.next_participating_without(registrations.first.id)
 
       live_request = {
         advancing_ids: to_advance.pluck(:registration_id),
@@ -144,7 +144,7 @@ RSpec.describe "WCA Live API" do
     end
   end
 
-  describe "next_advancing_without with linked rounds" do
+  describe "next_participating_without with linked rounds" do
     let(:competition) { create(:competition, event_ids: ["333"]) }
     let(:registrations) { create_list(:registration, 5, :accepted, competition: competition, event_ids: ["333"]) }
 
@@ -173,7 +173,7 @@ RSpec.describe "WCA Live API" do
 
       final.open_and_lock_previous(User.first)
 
-      next_qualifying = round2.next_advancing_without(registrations.first.id)
+      next_qualifying = round2.next_participating_without(registrations.first.id)
       expect(next_qualifying.map(&:registration_id)).to contain_exactly(registrations[3].id)
     end
   end

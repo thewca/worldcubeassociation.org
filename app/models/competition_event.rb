@@ -36,7 +36,7 @@ class CompetitionEvent < ApplicationRecord
     registrations.ids
   end
 
-  def next_advancing_without
+  def advancement_results
     []
   end
 
