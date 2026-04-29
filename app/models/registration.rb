@@ -68,16 +68,16 @@ class Registration < ApplicationRecord
   before_validation :ensure_registrant_id, on: :create
   before_create :ensure_registrant_id
 
+  private def ensure_registrant_id
+    max_registrant_id = competition.registrations.maximum(:registrant_id) || 0
+    self.registrant_id ||= max_registrant_id + 1
+  end
+
   # rubocop:disable Rails/ActiveRecordCallbacksOrder
   before_save :mark_accepted_at, if: :trying_to_accept?
   # rubocop:enable Rails/ActiveRecordCallbacksOrder
   private def mark_accepted_at
     self.accepted_at = Time.now.utc
-  end
-
-  private def ensure_registrant_id
-    max_registrant_id = competition.registrations.maximum(:registrant_id) || 0
-    self.registrant_id ||= max_registrant_id + 1
   end
 
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
