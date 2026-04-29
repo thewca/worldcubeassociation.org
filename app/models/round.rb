@@ -79,7 +79,7 @@ class Round < ApplicationRecord
   delegate :formats, :format_ids, to: :event, prefix: :allowed
   validates :format, inclusion: { in: :allowed_formats, message: ->(round, _args) { "'#{round.format_id}' is not allowed for '#{round.event_id}'" } }
 
-  validates :advancement_condition, presence: { unless: :final_round?, message: "must be set on a non-final round" }, on: :update
+  validates :advancement_condition, presence: { if: :advancement_condition?, unless: :final_round?, message: "cannot be un-set on a non-final round" }, on: :update
   validates :advancement_condition, absence: { if: :final_round?, message: "cannot be set on a final round" }
 
   def initialize(attributes = nil)

@@ -2130,6 +2130,7 @@ class Competition < ApplicationRecord
   def self.wcif_json_schema(version: WCIF_STABLE_VERSION)
     {
       "type" => "object",
+      "required" => %w[formatVersion],
       "properties" => {
         "formatVersion" => { "type" => "string" },
         "id" => { "type" => "string" },

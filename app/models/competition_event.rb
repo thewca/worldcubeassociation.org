@@ -98,6 +98,10 @@ class CompetitionEvent < ApplicationRecord
   def self.load_wcif_qualification(wcif_event, version: Competition::WCIF_STABLE_VERSION)
     if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
       json_obj = wcif_event['qualification']
+
+      # Most events actually don't have a qualification, so return early.
+      return nil if json_obj.nil?
+
       result_condition = json_obj['resultCondition']
 
       v2_wcif_type = result_condition['type']
