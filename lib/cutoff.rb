@@ -14,8 +14,12 @@ class Cutoff
     self.event = event
   end
 
-  def apply(attempts)
+  def meets?(attempts)
     attempts[0..(number_of_attempts - 1)].any? { it.value.positive? && it.value < attempt_result }
+  end
+
+  def exceeds?(attempts)
+    !meets?(attempts)
   end
 
   def to_wcif

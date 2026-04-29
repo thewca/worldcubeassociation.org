@@ -104,7 +104,7 @@ class LiveResult < ApplicationRecord
   end
 
   def didnt_meet_cutoff?
-    best != 0 && round.cutoff.present? && !round.cutoff.apply(live_attempts)
+    live_attempts.any? && round.cutoff.present? && round.cutoff.exceeds?(live_attempts)
   end
 
   def empty_result?
