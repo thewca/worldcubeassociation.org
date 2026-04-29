@@ -601,7 +601,7 @@ class Round < ApplicationRecord
   validate :lifecycle_state_matches_inferred, if: :lifecycle_state_changed?
 
   private def lifecycle_state_matches_inferred
-    return unless Round.lifecycle_state != inferred_lifecycle_state
+    return unless lifecycle_state != inferred_lifecycle_state
 
     errors.add(:lifecycle_state, "does not match inferred state (#{inferred_lifecycle_state})")
   end
