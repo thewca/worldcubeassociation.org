@@ -1687,11 +1687,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_101712) do
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
   add_foreign_key "ticket_comments", "ticket_stakeholders", column: "acting_stakeholder_id"
-  add_foreign_key "ticket_comments", "tickets"
+  add_foreign_key "ticket_comments", "tickets", on_delete: :cascade
   add_foreign_key "ticket_comments", "users", column: "acting_user_id"
+  add_foreign_key "ticket_log_changes", "ticket_logs", on_delete: :cascade
   add_foreign_key "ticket_logs", "ticket_stakeholders", column: "acting_stakeholder_id"
+  add_foreign_key "ticket_logs", "tickets", on_delete: :cascade
   add_foreign_key "ticket_logs", "users", column: "acting_user_id"
-  add_foreign_key "tickets_competition_result", "competitions"
+  add_foreign_key "ticket_stakeholders", "tickets", on_delete: :cascade
+  add_foreign_key "tickets_competition_result", "competitions", on_delete: :cascade
+  add_foreign_key "tickets_edit_person_fields", "tickets_edit_person", on_delete: :cascade
   add_foreign_key "user_avatars", "users"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"
