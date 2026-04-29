@@ -37,3 +37,15 @@ jobs:
         run: yarn run lint
       - name: Run build
         run: yarn run build
+      - name: Verify newrelic loads from standalone output
+        # Simulates the production container startup: NODE_OPTIONS='-r newrelic'.
+        # If any transitive dep is missing from the standalone node_modules
+        # (e.g. meriyah via @apm-js-collab/code-transformer), this step fails
+        # before the image is built or deployed.
+        working-directory: next-frontend/.next/standalone
+        env:
+          NODE_ENV: production
+          NEW_RELIC_LICENSE_KEY: ci-test-not-real
+          NEW_RELIC_APP_NAME: ci-test
+          NEW_RELIC_LOG_LEVEL: error
+        run: node -e "require('./node_modules/newrelic')"
