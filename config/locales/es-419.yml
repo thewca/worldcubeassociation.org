@@ -2887,6 +2887,10 @@ es-419:
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} ingresados'
         #original_hash: adec79f
         round_locked: bloqueado
+        #original_hash: 5301648
+        edit: Editar
+        #original_hash: 612e12d
+        results: Resultados
         warnings:
           #original_hash: 9198c71
           omitted: >-
@@ -2923,6 +2927,8 @@ es-419:
           advance: Siguiente competidor pasa
           #original_hash: e85b311
           quit_confirm: Eliminar competidor de la ronda
+          #original_hash: 1a2285d
+          quit_menu: Quitar
           #original_hash: 70835a0
           no_next: No hay más competidores para pasar de ronda.
           #original_hash: 77dfd21
@@ -2932,6 +2938,8 @@ es-419:
       results:
         #original_hash: 4705687
         competitor: Competidor
+        #original_hash: 51cda54
+        mean: Media
       errors:
         #original_hash: f522c26
         round_closed: La ronda no ha sido abierta aún
