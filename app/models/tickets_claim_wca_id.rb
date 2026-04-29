@@ -8,7 +8,7 @@ class TicketsClaimWcaId < ApplicationRecord
     closed: "closed",
   }
 
-  has_one :ticket, as: :metadata
+  has_one :ticket, as: :metadata, dependent: :destroy
   belongs_to :user
 
   ACTION_TYPE = {

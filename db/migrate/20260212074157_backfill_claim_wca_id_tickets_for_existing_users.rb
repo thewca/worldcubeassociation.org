@@ -8,13 +8,6 @@ class BackfillClaimWcaIdTicketsForExistingUsers < ActiveRecord::Migration[8.1]
   end
 
   def down
-    TicketsClaimWcaId.find_each do |tickets_claim_wca_id|
-      ticket = tickets_claim_wca_id.ticket
-      ticket.ticket_comments.destroy_all
-      ticket.ticket_logs.destroy_all
-      ticket.ticket_stakeholders.destroy_all
-      tickets_claim_wca_id.destroy
-      ticket.destroy
-    end
+    TicketsClaimWcaId.destroy_all
   end
 end

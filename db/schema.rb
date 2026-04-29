@@ -1701,9 +1701,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_101712) do
   add_foreign_key "ticket_logs", "ticket_stakeholders", column: "acting_stakeholder_id"
   add_foreign_key "ticket_logs", "tickets", on_delete: :cascade
   add_foreign_key "ticket_logs", "users", column: "acting_user_id"
-  add_foreign_key "tickets_claim_wca_id", "users"
-  add_foreign_key "tickets_competition_result", "competitions"
   add_foreign_key "ticket_stakeholders", "tickets", on_delete: :cascade
+  add_foreign_key "tickets_claim_wca_id", "users", on_delete: :cascade
   add_foreign_key "tickets_competition_result", "competitions", on_delete: :cascade
   add_foreign_key "tickets_edit_person_fields", "tickets_edit_person", on_delete: :cascade
   add_foreign_key "user_avatars", "users"
