@@ -6,6 +6,8 @@ class CompetitionPaymentIntegration < ApplicationRecord
 
   belongs_to :competition
 
+  after_destroy :attempt_auto_accept_disable
+
   AVAILABLE_INTEGRATIONS = {
     paypal: 'ConnectedPaypalAccount',
     stripe: 'ConnectedStripeAccount',
@@ -38,4 +40,10 @@ class CompetitionPaymentIntegration < ApplicationRecord
     raise ArgumentError.new("Invalid integration name. Allowed values are: #{AVAILABLE_INTEGRATIONS.keys.join(', ')}") unless
       AVAILABLE_INTEGRATIONS.key?(integration_name)
   end
+
+  private
+
+    def attempt_auto_accept_disable
+      competition.update(auto_accept_preference: :disabled) unless competition.competition_payment_integrations.any?
+    end
 end
