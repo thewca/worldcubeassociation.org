@@ -775,41 +775,31 @@ class Round < ApplicationRecord
           "type" => "object",
           "properties" => {
             "participationSource" => {
-              "allOf" => [
+              "oneOf" => [
                 {
                   "type" => "object",
                   "properties" => {
-                    "type" => { "type" => "string", "enum" => %w[registrations round linkedRounds] },
+                    "type" => { "const" => "registrations" },
                   },
                 },
                 {
-                  "oneOf" => [
-                    {
-                      "type" => "object",
-                      "properties" => {
-                        "type" => { "const" => "registrations" },
-                      },
+                  "type" => "object",
+                  "properties" => {
+                    "type" => { "const" => "round" },
+                    "roundId" => { "type" => "string" },
+                    "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
+                  },
+                },
+                {
+                  "type" => "object",
+                  "properties" => {
+                    "type" => { "const" => "linkedRounds" },
+                    "roundIds" => {
+                      "type" => "array",
+                      "items" => { "type" => "string" },
                     },
-                    {
-                      "type" => "object",
-                      "properties" => {
-                        "type" => { "const" => "round" },
-                        "roundId" => { "type" => "string" },
-                        "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
-                      },
-                    },
-                    {
-                      "type" => "object",
-                      "properties" => {
-                        "type" => { "const" => "linkedRounds" },
-                        "roundIds" => {
-                          "type" => "array",
-                          "items" => { "type" => "string" },
-                        },
-                        "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
-                      },
-                    },
-                  ],
+                    "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
+                  },
                 },
               ],
             },
