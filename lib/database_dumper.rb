@@ -345,6 +345,7 @@ module DatabaseDumper
           scramble
           id
           scramble_num
+          external_scramble_id
         ],
       ),
     }.freeze,
