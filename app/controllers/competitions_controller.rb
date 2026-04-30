@@ -286,6 +286,7 @@ class CompetitionsController < ApplicationController
     if competition.save
       flash[:success] = t('payments.payment_setup.account_connected', provider: t("payments.payment_providers.#{payment_integration}"))
     else
+      Rails.logger.error "Failed to save competition #{competition.id}: #{competition.errors.full_messages.join(', ')}"
       flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t("payments.payment_providers.#{payment_integration}"))
     end
 
