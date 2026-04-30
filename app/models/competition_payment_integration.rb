@@ -44,6 +44,6 @@ class CompetitionPaymentIntegration < ApplicationRecord
   private
 
     def attempt_auto_accept_disable
-      competition.update(auto_accept_preference: :disabled) unless competition.competition_payment_integrations.any?
+      competition.update!(auto_accept_preference: :disabled) unless competition.competition_payment_integrations.reload.any?
     end
 end
