@@ -914,17 +914,37 @@ RSpec.describe "Competition WCIF" do
       )
     end
 
-    it "rendered WCIF matches JSON Schema definition" do
-      expect do
-        JSON::Validator.validate!(Competition.wcif_json_schema, competition.to_wcif)
-      end.not_to raise_error
+    context "schema validation" do
+      it "passes on default stable version" do
+        expect do
+          Competition.validate_wcif_schema!(competition.to_wcif)
+        end.not_to raise_error
+      end
 
-      expect do
-        JSON::Validator.validate!(
-          Competition.wcif_json_schema(version: "2.0.0"),
-          competition.to_wcif(version: "2.0.0"),
-        )
-      end.not_to raise_error
+      it "passes on V2" do
+        expect do
+          Competition.validate_wcif_schema!(
+            competition.to_wcif(version: '2.0.0'),
+            version: '2.0.0',
+          )
+        end.not_to raise_error
+      end
+
+      it "does not pass on cross-version schema" do
+        expect do
+          Competition.validate_wcif_schema!(
+            competition.to_wcif(version: '1.0.0'),
+            version: '2.0.0',
+          )
+        end.to raise_error(JSON::Schema::ValidationError)
+
+        expect do
+          Competition.validate_wcif_schema!(
+            competition.to_wcif(version: "2.0.0"),
+            version: '1.0.0',
+          )
+        end.to raise_error(JSON::Schema::ValidationError)
+      end
     end
   end
 
