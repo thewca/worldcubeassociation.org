@@ -677,6 +677,13 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
+    react_on_rails (16.6.0)
+      addressable
+      connection_pool
+      execjs (~> 2.5)
+      rails (>= 5.2)
+      rainbow (~> 3.0)
+      shakapacker (>= 6.0)
     recaptcha (5.21.2)
     redcarpet (3.6.1)
     redis (5.4.1)
@@ -1078,6 +1085,7 @@ DEPENDENCIES
   rails-i18n
   rake
   react-rails
+  react_on_rails (= 16.6.0)
   recaptcha
   redcarpet
   redis
@@ -1386,6 +1394,7 @@ CHECKSUMS
   rb_sys (0.9.124) sha256=513476557b12eaf73764b3da9f8746024558fe8699bda785fb548c9aa3877ae7
   rdoc (7.2.0) sha256=8650f76cd4009c3b54955eb5d7e3a075c60a57276766ebf36f9085e8c9f23192
   react-rails (3.3.0) sha256=5e9de845f00be6729c7a2ee67700ba60be6fcdeac46b54340fdbc0a4d093fd5a
+  react_on_rails (16.6.0) sha256=b0d2ab2b1638c26383484487b4968d62679231e54b719f9770a710214dd82948
   recaptcha (5.21.2) sha256=8f7bb6cc9f04c523fff3f38126b7c5f1314c35fcb3691fc8e70d2b464533c12a
   redcarpet (3.6.1) sha256=d444910e6aa55480c6bcdc0cdb057626e8a32c054c29e793fa642ba2f155f445
   redis (5.4.1) sha256=b5e675b57ad22b15c9bcc765d5ac26f60b675408af916d31527af9bd5a81faae

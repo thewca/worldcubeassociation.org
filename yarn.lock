@@ -10173,6 +10173,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-on-rails@npm:16.6.0":
+  version: 16.6.0
+  resolution: "react-on-rails@npm:16.6.0"
+  peerDependencies:
+    react: ">= 16"
+    react-dom: ">= 16"
+  checksum: 10c0/1df524bc980850381f904f59965042dec2147d2f7eca320def0e7978ab695d45d827d074c535af162946e1c90aa6c86a4a6b02f61dd2ac463e387a5892fcb813
+  languageName: node
+  linkType: hard
+
 "react-popper@npm:^2.3.0":
   version: 2.3.0
   resolution: "react-popper@npm:2.3.0"
@@ -10711,6 +10721,7 @@ __metadata:
     react-image-crop: "npm:^11.0.10"
     react-intersection-observer: "npm:^10.0.3"
     react-leaflet: "npm:^4.2.1"
+    react-on-rails: "npm:16.6.0"
     react-refresh: "npm:^0.18.0"
     react-simplemde-editor: "npm:^5.2.0"
     react-spinners: "npm:^0.17.0"
