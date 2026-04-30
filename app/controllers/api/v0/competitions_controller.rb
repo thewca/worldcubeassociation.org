@@ -259,7 +259,14 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     # Only admins can update WCIF (including schedule) after results are submitted
     require_can_admin_competitions! if competition.results_submitted?
 
-    wcif = params.permit!.to_h
+    # We need to clean out some Rails-y stuff.
+    #   Normally, this isn't a problem because you're never supposed to just use `params.permit!`
+    #   without _explicitly_ sanitizing which parameters you *approve*, but WCIF is too big
+    #   for any one developer's mental sanity to control that.
+    # Note that none of the keys that we're "throwing away" here are currently WCIF-compliant,
+    #   nor are we ever likely to introduce any of them in top-level WCIF.
+    wcif = params.permit!.to_h.except(:controller, :action, :competition_id, :competition)
+
     wcif = wcif["_json"] || wcif
     competition.set_wcif!(wcif, require_user!)
     render json: {
