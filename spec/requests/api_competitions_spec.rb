@@ -665,7 +665,7 @@ end
 
 def create_wcif_with_events(event_ids)
   {
-    formatVersion: Competition::WCIF_STABLE_VERSION,
+    formatVersion: '2.1.1',
     events: event_ids.map do |event_id|
       {
         id: event_id,
