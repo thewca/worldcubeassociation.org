@@ -1946,7 +1946,7 @@ class Competition < ApplicationRecord
     import_version = wcif["formatVersion"]
 
     expected_schema = Competition.wcif_json_schema(version: import_version)
-    JSON::Validator.validate!(expected_schema, wcif)
+    JSON::Validator.validate!(expected_schema, wcif, noAdditionalProperties: true)
 
     ActiveRecord::Base.transaction do
       set_wcif_series!(wcif["series"], current_user) if wcif["series"]
