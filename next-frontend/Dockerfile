@@ -46,7 +46,7 @@ RUN corepack enable
 # ENV Needed to be compiled into the static build
 ENV NEXT_PUBLIC_WCA_FRONTEND_API_URL="https://$WCA_SITE/api/"
 ENV NEXT_PUBLIC_WEBSOCKET_URL="https://$WCA_SITE/api/v1/live/cable"
-
+ENV PROPRIETARY_FONT="TTNormsPro"
 # Create the types and build
 RUN LOCALE_DIR="./src/lib/i18n/locales" yarn run build:translations
 RUN yarn types:openapi
