@@ -306,6 +306,7 @@ module DatabaseDumper
           old_type
           linked_round_id
           is_h2h_mock
+          lifecycle_state
         ],
         db_default: %w[
           round_results

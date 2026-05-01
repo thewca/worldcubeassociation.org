@@ -60,6 +60,8 @@ class Round < ApplicationRecord
 
   has_many :sibling_rounds, through: :competition_event, source: :rounds
 
+  enum :lifecycle_state, %i[pending open locked done], prefix: true
+
   MAX_NUMBER = 4
   validates :number,
             numericality: { only_integer: true,
@@ -193,6 +195,7 @@ class Round < ApplicationRecord
       LiveResult.empty_result_attributes(reg_id, self.id)
     end
     LiveResult.insert_all!(empty_results)
+    update!(lifecycle_state: :open)
 
     inserted_ids = self.live_results.where(registration_id: advancing_reg_ids).ids
     self.bulk_insert_history(inserted_ids, opening_user, action_type: :opened)
@@ -591,28 +594,32 @@ class Round < ApplicationRecord
   end
 
   def lock_results(locking_user)
-    count = live_results.update_all(locked_by_id: locking_user.id)
+    update!(lifecycle_state: :locked)
     self.bulk_insert_history(live_results.ids, locking_user, action_type: :locked)
     count
   end
 
-  STATE_LOCKED = "locked"
-  STATE_OPEN = "open"
-  STATE_READY = "ready"
-  STATE_PENDING = "pending"
+  validate :lifecycle_state_matches_inferred, if: :lifecycle_state_changed?
 
-  def lifecycle_state
-    return STATE_LOCKED if locked?
-    return STATE_OPEN if open?
-    return STATE_READY if participation_source.score_taking_done?
+  private def lifecycle_state_matches_inferred
+    return unless lifecycle_state != inferred_lifecycle_state
 
-    STATE_PENDING
+    errors.add(:lifecycle_state, "does not match inferred state (#{inferred_lifecycle_state})")
+  end
+
+  def inferred_lifecycle_state
+    return "done" if competition.results_submitted?
+    return "locked" if locked?
+    return "open" if open?
+
+    "pending"
   end
 
   def open?
     live_results.any?
   end
 
+  # TODO: Remove after Migration has ran
   def locked?
     return false unless score_taking_done?
 
@@ -727,18 +734,18 @@ class Round < ApplicationRecord
   end
 
   def to_live_info_json
-    state = lifecycle_state
     json = {
       **self.to_wcif(include_results: false).compact_blank,
-      "state" => state,
+      "state" => lifecycle_state,
+      "ready" => lifecycle_state_pending? && participation_source.score_taking_done?,
     }
-    if [STATE_OPEN, STATE_LOCKED].include?(state)
+    if lifecycle_state_open? || lifecycle_state_locked?
       json = json.merge({
                           "total_competitors" => total_competitors,
                         })
     end
 
-    if state == STATE_OPEN
+    if lifecycle_state_open?
       json = json.merge({
                           "competitors_live_results_entered" => competitors_live_results_entered,
                         })

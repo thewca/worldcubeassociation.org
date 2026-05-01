@@ -18,10 +18,12 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     live_result = round.live_results.find_by(registration_id: registration_id)
 
     if live_result.blank?
-      return render json: { status: "round is not open" }, status: :unprocessable_content unless round.live_results.any?
+      return render json: { status: "round is not open" }, status: :unprocessable_content unless round.lifecycle_state_open?
 
       return render json: { status: "user is not part of this round" }, status: :unprocessable_content
     end
+
+    return render json: { status: "results have already been submitted and cannot be changed" }, status: :unprocessable_content if round.lifecycle_state_done?
 
     UpdateLiveResultJob.perform_later(live_result, results, @current_user.id)
 
@@ -78,11 +80,11 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     # TODO: Move these to actual error codes at one point
     require_manage!(competition)
 
-    state = round.lifecycle_state
+    return render json: { status: "round is locked" }, status: :bad_request if round.lifecycle_state_locked?
 
-    return render json: { status: "round is locked" }, status: :bad_request if state == Round::STATE_LOCKED
+    return render json: { status: "round is not open" }, status: :bad_request unless round.lifecycle_state_open?
 
-    return render json: { status: "round is not open" }, status: :bad_request if [Round::STATE_READY, Round::STATE_PENDING].include?(state)
+    return render json: { status: "results have already been submitted and cannot be changed" }, status: :unprocessable_content if round.lifecycle_state_done?
 
     recreated_rows = round.clear_round!(@current_user)
 
@@ -97,6 +99,8 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     round = Round.find_by_wcif_id!(wcif_id, competition.id)
 
     require_manage!(competition)
+
+    return render json: { status: "results have already been submitted and cannot be changed" }, status: :unprocessable_content if round.lifecycle_state_done?
 
     result = round.live_results.find_by!(registration_id: registration_id)
 
@@ -121,11 +125,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     # TODO: Move these to actual error codes at one point
     require_manage!(competition)
 
-    state = round.lifecycle_state
+    return render json: { status: "round already open" }, status: :bad_request if round.lifecycle_state_open? || round.lifecycle_state_locked?
 
-    return render json: { status: "score taking is not finished in the previous round" }, status: :bad_request if state == Round::STATE_PENDING
-
-    return render json: { status: "round already open" }, status: :bad_request if [Round::STATE_OPEN, Round::STATE_LOCKED].include?(state)
+    return render json: { status: "score taking is not finished in the previous round" }, status: :bad_request unless round.participation_source.score_taking_done?
 
     created_rows, locked_rows = round.open_and_lock_previous(@current_user)
 

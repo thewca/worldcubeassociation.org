@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_27_101712) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_27_120000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1261,6 +1261,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_101712) do
     t.text "cutoff"
     t.string "format_id", limit: 255, null: false
     t.boolean "is_h2h_mock", default: false, null: false
+    t.integer "lifecycle_state", default: 0, null: false
     t.bigint "linked_round_id"
     t.integer "number", null: false
     t.string "old_type", limit: 1

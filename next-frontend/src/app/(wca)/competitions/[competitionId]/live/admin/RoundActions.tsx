@@ -35,7 +35,7 @@ export default function RoundActions({
         flex="1"
         justifyContent="flex-start"
         textAlign="left"
-        disabled={["ready", "pending"].includes(state)}
+        disabled={!["open", "locked"].includes(state)}
       >
         {isOpen ? (
           <Link asChild>
@@ -69,6 +69,7 @@ export default function RoundActions({
       <ActionButtons
         state={state}
         setState={setState}
+        ready={round.ready}
         roundId={round.id}
         competitionId={competitionId}
       />
