@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_27_101712) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_01_101433) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -481,6 +481,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_101712) do
     t.bigint "value_and_id"
     t.index ["event_id", "average"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "average"], name: "regional_records_speedup"
+    t.index ["person_id", "country_id", "event_id", "reg_year"], name: "unique_per_competitor_per_event_per_year", unique: true
     t.index ["person_id", "event_id", "continent_id", "country_id", "average"], name: "average_ranks_speedup"
   end
 
@@ -494,6 +495,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_101712) do
     t.bigint "value_and_id"
     t.index ["event_id", "best"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "best"], name: "regional_records_speedup"
+    t.index ["person_id", "country_id", "event_id", "reg_year"], name: "unique_per_competitor_per_event_per_year", unique: true
     t.index ["person_id", "event_id", "continent_id", "country_id", "best"], name: "single_ranks_speedup"
   end
 
