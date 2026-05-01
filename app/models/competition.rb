@@ -1942,15 +1942,15 @@ class Competition < ApplicationRecord
     }
   end
 
-  def self.validate_wcif_schema!(wcif, version: WCIF_STABLE_VERSION)
+  def self.validate_wcif_schema!(wcif, version: WCIF_STABLE_VERSION, is_strict: true)
     expected_schema = Competition.wcif_json_schema(version: version)
-    JSON::Validator.validate!(expected_schema, wcif, noAdditionalProperties: true)
+    JSON::Validator.validate!(expected_schema, wcif, noAdditionalProperties: is_strict)
   end
 
-  def set_wcif!(wcif, current_user)
+  def set_wcif!(wcif, current_user, strict_schema_checks: true)
     import_version = wcif["formatVersion"]
 
-    Competition.validate_wcif_schema!(wcif, version: import_version)
+    Competition.validate_wcif_schema!(wcif, version: import_version, is_strict: strict_schema_checks)
 
     ActiveRecord::Base.transaction do
       set_wcif_series!(wcif["series"], current_user) if wcif["series"]
