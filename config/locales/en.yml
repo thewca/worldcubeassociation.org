@@ -1413,6 +1413,7 @@ en:
       podiums:
         title: "Podiums"
         undetermined: "Podiums to be determined"
+        none: "There are no podiums yet!"
       admin:
         open: "Open"
         clear: "Clear"
