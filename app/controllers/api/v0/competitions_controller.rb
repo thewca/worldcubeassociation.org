@@ -265,10 +265,18 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     #   for any one developer's mental sanity to control that.
     # Note that none of the keys that we're "throwing away" here are currently WCIF-compliant,
     #   nor are we ever likely to introduce any of them in top-level WCIF.
-    wcif = params.permit!.to_h.except(:controller, :action, :competition_id, :competition)
+    wcif = params.permit!.to_h.except(:controller, :action, :competition_id, :competition, :strict)
 
     wcif = wcif["_json"] || wcif
-    competition.set_wcif!(wcif, require_user!)
+
+    # If the user specified a "strictness" param, then use it.
+    # If not, then fall back to a default behavior where:
+    #  - local environments (dev, test) are strict
+    #  - other environments (most notably prod) are NOT strict right now
+    # Strictness will be enforced at some time in May 2026. Signed GB 2026-05-01
+    strict_schema_checks = params.key?(:strict) ? ActiveRecord::Type::Boolean.new.cast(params[:strict]) : Rails.env.local?
+
+    competition.set_wcif!(wcif, require_user!, strict_schema_checks: strict_schema_checks)
     render json: {
       status: "Successfully saved WCIF",
     }
