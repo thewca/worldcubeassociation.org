@@ -88,6 +88,7 @@ export default function AttemptsForm({
             }
           }}
           value={registrationId ? [registrationId.toString()] : []}
+          inputBehavior="autohighlight"
         >
           <Combobox.Label>
             <Heading size="2xl">{header}</Heading>
