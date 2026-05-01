@@ -51,11 +51,6 @@ export default function LiveResultsTable({
   const [selectedRow, setSelectedRow] = useState<CompetitorWithResults | null>(
     null,
   );
-  const [adminMenuState, setAdminMenuState] = useState<{
-    rowKey: string;
-    x: number;
-    y: number;
-  } | null>(null);
 
   const { eventId } = parseActivityCode(roundWcifId);
 
@@ -101,19 +96,11 @@ export default function LiveResultsTable({
                 return null;
               }
 
-              const rowKey = `${competitorAndTheirResults.id}-${result.round_wcif_id}`;
-
               return (
                 <Table.Row
-                  key={rowKey}
-                  onClick={(e) => {
-                    if (isAdmin) {
-                      setAdminMenuState({ rowKey, x: e.clientX, y: e.clientY });
-                    } else if (isMobile) {
-                      setSelectedRow(competitorAndTheirResults);
-                    }
-                  }}
-                  cursor={isMobile || isAdmin ? "pointer" : undefined}
+                  key={`${competitorAndTheirResults.id}-${result.round_wcif_id}`}
+                  onClick={() => setSelectedRow(competitorAndTheirResults)}
+                  cursor={isMobile ? "pointer" : undefined}
                   colorPalette={
                     pendingQuitCompetitors.has(competitorAndTheirResults.id)
                       ? "red"
@@ -139,15 +126,6 @@ export default function LiveResultsTable({
                         competitor={competitorAndTheirResults}
                         competitionId={competitionId}
                         roundId={roundWcifId}
-                        open={adminMenuState?.rowKey === rowKey}
-                        onOpenChange={(open) =>
-                          setAdminMenuState(open ? adminMenuState : null)
-                        }
-                        clickPos={
-                          adminMenuState?.rowKey === rowKey
-                            ? { x: adminMenuState.x, y: adminMenuState.y }
-                            : undefined
-                        }
                       />
                     </Table.Cell>
                   )}
@@ -199,6 +177,7 @@ export default function LiveResultsTable({
           competitionId={competitionId}
           eventId={eventId}
           stats={stats}
+          t={t}
         />
       )}
     </>

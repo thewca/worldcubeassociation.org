@@ -34,7 +34,7 @@ export default async function AddResults({
       )}
       <Heading textStyle="h1">{roundName}</Heading>
       <SimpleGrid columns={16} gap={6}>
-        <GridItem colSpan={4}>
+        <GridItem colSpan={4} position="sticky" top={4} alignSelf="start">
           <AttemptsForm
             header="Add Result"
             eventId={eventId}
