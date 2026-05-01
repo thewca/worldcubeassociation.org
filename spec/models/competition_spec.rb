@@ -1615,6 +1615,20 @@ RSpec.describe Competition do
 
         expect { competition.disconnect_payment_integration(:stripe) }.not_to raise_error
       end
+
+      it 'disables auto accept if it was the only connected payment integration' do
+        competition = create(:competition, :live_auto_accept, :payment_disconnect_delay_elapsed)
+
+        competition.disconnect_payment_integration(:stripe)
+        expect(competition.auto_accept_preference).to eq('disabled')
+      end
+
+      it 'leaves auto accept enabled if there are other connected payment integrations' do
+        competition = create(:competition, :live_auto_accept, :payment_disconnect_delay_elapsed, :paypal_connected)
+
+        competition.disconnect_payment_integration(:stripe)
+        expect(competition.auto_accept_preference).to eq('live')
+      end
     end
 
     describe '#disconnect_all' do
