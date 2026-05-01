@@ -51,7 +51,7 @@ export default function AttemptsForm({
     itemToValue: (competitor) => competitor.id.toString(),
     itemToString: toCompetitorString,
     filter: (itemText, filterText, item) =>
-      itemText.includes(filterText) ||
+      itemText.toLowerCase().includes(filterText.toLowerCase()) ||
       parseInt(filterText, 10) === item.registrant_id,
   });
 
