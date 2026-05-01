@@ -33,6 +33,8 @@ function advanceReqToStrShort(eventId, advancementCondition) {
       return matchResult(advancementCondition.level, eventId, {
         short: true,
       });
+    case -2:
+      return 'Dual Round';
     default:
       throw new Error(
         `Unrecognized advancementCondition type: ${advancementCondition.type}`,
@@ -53,6 +55,8 @@ const advanceReqToExplanationText = (wcifEvent, roundNumber, { type, level }) =>
     case 'attemptResult':
       return `Everyone in round ${roundNumber} with a result ${matchResult(level, wcifEvent.id)
       } will advance to round ${roundNumber + 1}.`;
+    case -2:
+      return `Rounds ${roundNumber} and ${roundNumber + 1} will be run as a dual round.`;
     default:
       return '';
   }
@@ -124,11 +128,23 @@ const defaultValueAdvancementValue = (type) => (type === 'percent' ? 75 : 0);
  * @param {Round} wcifRound
  * @returns {React.ReactElement}
  */
+function v2ConditionToV1(wcifRound, wcifEvent, roundNumber) {
+  if (wcifRound.linkedRounds?.[0] === wcifRound.id) return { type: -2, level: 0 };
+  const nextRound = wcifEvent.rounds[roundNumber]; // roundNumber is 1-based, array is 0-indexed
+  const rc = nextRound?.participationRuleset?.participationSource?.resultCondition;
+  if (!rc) return null;
+  return {
+    type: rc.type === 'resultAchieved' ? 'attemptResult' : rc.type,
+    level: rc.value ?? 0,
+  };
+}
+
 export default function EditAdvancementConditionModal({
   wcifEvent, wcifRound, roundNumber, disabled,
 }) {
-  const { advancementCondition } = wcifRound;
   const dispatch = useDispatch();
+
+  const advancementCondition = v2ConditionToV1(wcifRound, wcifEvent, roundNumber);
 
   const [type, setType] = useInputState(advancementCondition?.type ?? '');
   const [level, setLevel] = useState(advancementCondition?.level
@@ -165,6 +181,7 @@ export default function EditAdvancementConditionModal({
       <AdvancementTypeField
         advancementType={type}
         onChange={setType}
+        roundNumber={roundNumber}
       />
       {!!type && (
         <>

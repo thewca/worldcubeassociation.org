@@ -130,6 +130,24 @@ class CompetitionEvent < ApplicationRecord
       WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
       round
     end
+    # For v2 WCIF, create/update LinkedRound associations from the `linkedRounds` field before backlinking
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      linked_sets = wcif["rounds"]
+                    .filter_map { |r| r["linkedRounds"]&.sort }
+                    .uniq
+
+      linked_sets.each do |linked_ids|
+        rounds_in_set = model_rounds.select { |r| linked_ids.include?(r.wcif_id) }
+        linked = rounds_in_set.filter_map(&:linked_round).first || LinkedRound.create!
+        rounds_in_set.each { |r| r.update!(linked_round: linked) unless r.linked_round == linked }
+      end
+
+      all_linked_ids = wcif["rounds"].flat_map { |r| r["linkedRounds"] || [] }.to_set
+      model_rounds
+        .select { |r| r.linked_round.present? && all_linked_ids.exclude?(r.wcif_id) }
+        .each { |r| r.update!(linked_round: nil) }
+    end
+
     # Have to do this in a second pass because nested associations (mostly `linked_round` and `participation_source`)
     #   need the record to already exist in the database in order to reference their IDs
     new_rounds = model_rounds.map do |round|

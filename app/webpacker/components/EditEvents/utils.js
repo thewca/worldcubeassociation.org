@@ -9,6 +9,9 @@ const DEFAULT_TIME_LIMIT = {
 
 export const generateWcifRound = (eventId, roundNumber) => {
   const event = events.byId[eventId];
+  const participationSource = roundNumber === 1
+    ? { type: 'registrations' }
+    : { type: 'round', roundId: buildActivityCode({ eventId, roundNumber: roundNumber - 1 }), resultCondition: null };
 
   return {
     id: buildActivityCode({
@@ -18,7 +21,8 @@ export const generateWcifRound = (eventId, roundNumber) => {
     format: event.recommendedFormat().id,
     timeLimit: event.canChangeTimeLimit ? DEFAULT_TIME_LIMIT : null,
     cutoff: null,
-    advancementCondition: null,
+    linkedRounds: null,
+    participationRuleset: { participationSource, reservedPlaces: null },
     results: [],
     scrambleSetCount: 1,
   };
