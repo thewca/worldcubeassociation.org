@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_08_132538) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_01_101433) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -481,6 +481,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_08_132538) do
     t.bigint "value_and_id"
     t.index ["event_id", "average"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "average"], name: "regional_records_speedup"
+    t.index ["person_id", "country_id", "event_id", "reg_year"], name: "unique_per_competitor_per_event_per_year", unique: true
     t.index ["person_id", "event_id", "continent_id", "country_id", "average"], name: "average_ranks_speedup"
   end
 
@@ -494,6 +495,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_08_132538) do
     t.bigint "value_and_id"
     t.index ["event_id", "best"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "best"], name: "regional_records_speedup"
+    t.index ["person_id", "country_id", "event_id", "reg_year"], name: "unique_per_competitor_per_event_per_year", unique: true
     t.index ["person_id", "event_id", "continent_id", "country_id", "best"], name: "single_ranks_speedup"
   end
 
@@ -1656,7 +1658,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_08_132538) do
   add_foreign_key "live_attempts", "live_results", on_delete: :cascade
   add_foreign_key "live_result_history_entries", "live_results", on_delete: :cascade
   add_foreign_key "live_result_history_entries", "users", column: "entered_by_id"
-  add_foreign_key "live_results", "rounds"
+  add_foreign_key "live_results", "rounds", on_delete: :cascade
   add_foreign_key "live_results", "users", column: "locked_by_id"
   add_foreign_key "live_results", "users", column: "quit_by_id"
   add_foreign_key "matched_scramble_sets", "external_scramble_sets"
@@ -1687,11 +1689,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_08_132538) do
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
   add_foreign_key "ticket_comments", "ticket_stakeholders", column: "acting_stakeholder_id"
-  add_foreign_key "ticket_comments", "tickets"
+  add_foreign_key "ticket_comments", "tickets", on_delete: :cascade
   add_foreign_key "ticket_comments", "users", column: "acting_user_id"
+  add_foreign_key "ticket_log_changes", "ticket_logs", on_delete: :cascade
   add_foreign_key "ticket_logs", "ticket_stakeholders", column: "acting_stakeholder_id"
+  add_foreign_key "ticket_logs", "tickets", on_delete: :cascade
   add_foreign_key "ticket_logs", "users", column: "acting_user_id"
-  add_foreign_key "tickets_competition_result", "competitions"
+  add_foreign_key "ticket_stakeholders", "tickets", on_delete: :cascade
+  add_foreign_key "tickets_competition_result", "competitions", on_delete: :cascade
+  add_foreign_key "tickets_edit_person_fields", "tickets_edit_person", on_delete: :cascade
   add_foreign_key "user_avatars", "users"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"

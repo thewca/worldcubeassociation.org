@@ -7,7 +7,7 @@ export const padSkipped = (
   return [
     ...attempts,
     ...Array.from(
-      { length: attempts.length - expectedNumberOfAttempts },
+      { length: expectedNumberOfAttempts - attempts.length },
       (_, i) => ({
         value: 0,
         attempt_number: attempts.length + i + 1,

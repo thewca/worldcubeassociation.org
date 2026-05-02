@@ -158,9 +158,7 @@ export function FmMovesField({
 
   return (
     <Field.Root invalid={!isValid}>
-      <Field.Label>PointsField (isAverage: {isAverage.toString()})</Field.Label>
       <Input placeholder={placeholder} spellCheck={false} {...binding} />
-      <Field.HelperText>{value}</Field.HelperText>
     </Field.Root>
   );
 }

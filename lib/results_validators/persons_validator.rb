@@ -232,26 +232,26 @@ module ResultsValidators
 
         inbox_persons.find_each do |p|
           unless competition_registrant_ids.include?(p.ref_id.to_i)
-            @warnings << ValidationWarning.new(MISSING_MATCHING_REGISTRATION_WARNING,
-                                               :persons, competition.id,
-                                               name: p.name)
+            @errors << ValidationError.new(MISSING_MATCHING_REGISTRATION_WARNING,
+                                           :persons, competition.id,
+                                           name: p.name)
             next
           end
 
           unless p.registration.accepted?
-            @warnings << ValidationWarning.new(UNACCEPTED_REGISTRATION_WITH_RESULTS_WARNING,
-                                               :persons, competition.id,
-                                               name: p.name)
+            @errors << ValidationError.new(UNACCEPTED_REGISTRATION_WITH_RESULTS_WARNING,
+                                           :persons, competition.id,
+                                           name: p.name)
           end
 
           mismatches = p.registration_mismatches
           next if mismatches.empty?
 
-          @warnings << ValidationWarning.new(REGISTRATION_DETAILS_MISMATCH_WARNING,
-                                             :persons, competition.id,
-                                             person_id: p.ref_id,
-                                             name: p.name,
-                                             mismatches: mismatches.join(', '))
+          @errors << ValidationError.new(REGISTRATION_DETAILS_MISMATCH_WARNING,
+                                         :persons, competition.id,
+                                         person_id: p.ref_id,
+                                         name: p.name,
+                                         mismatches: mismatches.join(', '))
         end
       end
     end
