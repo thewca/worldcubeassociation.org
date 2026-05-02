@@ -7,8 +7,8 @@ class UsersController < ApplicationController
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
   before_action :redirect_if_cannot_edit_user, only: %i[edit update]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search]
-  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id merge clear_claim_wca_id unlink_wca_id]
-  before_action -> { check_edit_access }, only: %i[show_for_edit update_user_data]
+  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id merge clear_claim_wca_id unlink_wca_id show_for_edit]
+  before_action -> { check_edit_access }, only: %i[update_user_data]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
 
@@ -57,10 +57,12 @@ class UsersController < ApplicationController
   end
 
   def show_for_edit
-    render status: :ok, json: @user.as_json(
-      only: %w[id name gender country_iso2],
+    user = User.find(params.require(:id))
+
+    render status: :ok, json: user.as_json(
+      only: %w[id name gender country_iso2 wca_id unconfirmed_wca_id],
       private_attributes: %w[dob],
-      methods: [],
+      methods: %i[special_account?],
       include: [],
     )
   end

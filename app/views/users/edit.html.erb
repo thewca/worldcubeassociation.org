@@ -67,13 +67,18 @@
         <%= f.input :gender, disabled: !editable_fields.include?(:gender) %>
         <%= f.input :country_iso2, collection: Country.all_sorted_by(I18n.locale, real: true), value_method: lambda { |c| c.iso2 }, label_method: lambda { |c| c.name }, disabled: !editable_fields.include?(:country_iso2) %>
 
-        <% if current_user.can_view_all_users? %>
+        <% if current_user.can_edit_any_user? %>
+          <%#
+            TODO: Check with Gregor if it's fine to not show view-only unconfirmed WCA ID
+            for users who can view all users, but not edit all. Earlier they were able to
+            see unconfirmed WCA ID, but I think there is no use-case for them to know this.
+            These users include board_member, higher_permission_officer, wic_team, weat_team,
+            wrc_team, appeals_committee. Emailing and confirming from all these groups is not
+            trivial, but can send an info-email and ask to revert in 14 days if they actually
+            need them.
+          %>
           <%= react_component('EditUser/EditUserWcaId', {
             userId: @user.id,
-            wcaId: @user.wca_id,
-            unconfirmedWcaId: @user.unconfirmed_wca_id,
-            canEditAnyUser: current_user.can_edit_any_user?,
-            specialAccount: @user.special_account?,
           }) %>
         <% else %>
           <p>
