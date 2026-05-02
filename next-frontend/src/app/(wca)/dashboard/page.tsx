@@ -15,7 +15,7 @@ import Link from "next/link";
 
 import { iconMap } from "@/components/icons/iconMap";
 import { route } from "nextjs-routes";
-import AttemptResultField from "./AttemptResultField";
+import AttemptResultField from "../../../components/live/AttemptResultField";
 import {
   ColorSemanticTokenDoc,
   ColorTokenDoc,
