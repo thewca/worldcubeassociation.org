@@ -1,7 +1,10 @@
 import React from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { Message } from 'semantic-ui-react';
 import MergeUsers from '../Panel/pages/MergeUsersPage/MergeUsers';
 import AssignWcaIdToUser from '../Panel/views/AssignWcaIdToUser';
+import ApproveWcaIdClaim from '../Panel/views/ApproveWcaIdClaim';
+import { editPersonUrl } from '../../lib/requests/routes.js.erb';
 
 export default function MergeModal({
   potentialDuplicatePerson, competitionId, onMergeSuccess,
@@ -11,8 +14,6 @@ export default function MergeModal({
     original_user: originalUser,
     duplicate_person: duplicatePerson,
   } = potentialDuplicatePerson;
-
-  const action = duplicatePerson.user_id ? 'merge' : 'assign_wca_id';
 
   const clearUserIdsFromDuplicates = (ids) => {
     queryClient.setQueryData(
@@ -36,18 +37,7 @@ export default function MergeModal({
     onMergeSuccess();
   };
 
-  if (action === 'assign_wca_id') {
-    return (
-      <AssignWcaIdToUser
-        user={originalUser}
-        prefilledWcaId={duplicatePerson.wca_id}
-        onSuccess={onAssignSuccess}
-        requireConfirmation
-      />
-    );
-  }
-
-  if (action === 'merge') {
+  if (duplicatePerson.user_id) {
     return (
       <MergeUsers
         firstUserId={originalUser.id}
@@ -58,5 +48,42 @@ export default function MergeModal({
     );
   }
 
-  return null;
+  if (originalUser.unconfirmed_wca_id) {
+    if (originalUser.unconfirmed_wca_id !== duplicatePerson.wca_id) {
+      return (
+        <Message error>
+          The user has claimed for a different WCA ID (
+          {originalUser.unconfirmed_wca_id}
+          ), and first cancel that claim request if you want to assign another WCA ID.
+          {' '}
+          You can do this on the
+          {' '}
+          <a
+            href={editPersonUrl(originalUser.id)}
+            target="_blank"
+            rel="noreferrer"
+          >
+            user edit page
+          </a>
+          .
+        </Message>
+      );
+    }
+    return (
+      <ApproveWcaIdClaim
+        user={originalUser}
+        onSuccess={onAssignSuccess}
+        requireConfirmation
+      />
+    );
+  }
+
+  return (
+    <AssignWcaIdToUser
+      user={originalUser}
+      prefilledWcaId={duplicatePerson.wca_id}
+      onSuccess={onAssignSuccess}
+      requireConfirmation
+    />
+  );
 }
