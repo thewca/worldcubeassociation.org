@@ -22,7 +22,7 @@ export default async function AddResults({
 
   const { t } = await getT();
 
-  const isLocked = true;
+  const isLocked = round.state === "locked";
 
   return (
     <ConfirmProvider>
