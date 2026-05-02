@@ -1048,6 +1048,8 @@ en:
       profile: "Profile"
       approve: "Approve"
       approve_confirm: "Are you sure you want to approve WCA ID %{wca_id}?"
+      clear_claim: "Clear claim"
+      clear_claim_confirm: "Are you sure you want to clear the claim for WCA ID %{wca_id}?"
       unconfirmed_email: "This account's email address (%{email}) is not confirmed."
       confirm_new_email: "Changing your email will require confirming the new email before being effective."
       pending_mail_confirmation: "This account is pending confirmation of the new email address %{email}."
@@ -1416,6 +1418,8 @@ en:
         clear: "Clear"
         competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
         round_locked: "locked"
+        edit: "Edit"
+        results: "Results"
         warnings:
           omitted: "You've omitted attempt %{attempt_number}. Make sure it's intentional."
           DNS: "There's at least one DNS followed by a valid result. Please ensure it is indeed a DNS and not a DNF."
@@ -1429,11 +1433,13 @@ en:
             other: "The next competitors to advance are %{competitors}"
           advance: "Advance next Competitor"
           quit_confirm: "Quit Competitor from Round"
+          quit_menu: "Quit"
           no_next: "No next competitor to advance."
           cancel: "Cancel"
           failed_to_fetch: "Failed to fetch next advancing competitor"
       results:
         competitor: "Competitor"
+        mean: "Mean"
       errors:
         round_closed: "The Round is not open yet"
     #context: on the "My competitions" page

@@ -33,10 +33,10 @@ class CompetitionEvent < ApplicationRecord
   end
 
   def advancing_competitor_ids
-    registrations.ids
+    registrations.accepted.ids
   end
 
-  def next_advancing_without
+  def next_advancing_without(_registration_id)
     []
   end
 
@@ -98,6 +98,10 @@ class CompetitionEvent < ApplicationRecord
   def self.load_wcif_qualification(wcif_event, version: Competition::WCIF_STABLE_VERSION)
     if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
       json_obj = wcif_event['qualification']
+
+      # Most events actually don't have a qualification, so return early.
+      return nil if json_obj.nil?
+
       result_condition = json_obj['resultCondition']
 
       v2_wcif_type = result_condition['type']
@@ -114,7 +118,7 @@ class CompetitionEvent < ApplicationRecord
     end
   end
 
-  def load_wcif!(wcif, version: Competition::WCIF_STABLE_VERSION)
+  def load_wcif!(wcif, current_user, version: Competition::WCIF_STABLE_VERSION)
     if self.rounds.pluck(:old_type).compact.any?
       raise WcaExceptions::BadApiParameter.new(
         "Cannot edit rounds for a competition which has qualification rounds or b-finals. Please contact WRT or WST if you need to make change to this competition.",
@@ -131,6 +135,11 @@ class CompetitionEvent < ApplicationRecord
     new_rounds = model_rounds.map do |round|
       round.update!(**Round.wcif_backlinking(round, model_rounds))
       round
+    end
+    # This is not techincally a third pass, because we're not updating the round itself.
+    #   But for the advancement through rounds, the whole CE already needs to be fully linked up
+    new_rounds.zip(wcif["rounds"]).each do |round, round_wcif|
+      round.load_live_results!(round_wcif["results"], current_user) if round_wcif["results"].present?
     end
     wcif_qualification = CompetitionEvent.load_wcif_qualification(wcif, version: version)
     self.update!(

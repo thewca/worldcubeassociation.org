@@ -50,7 +50,7 @@ export function LiveTableHeader({
         )}
         {isLinked && (
           <Table.ColumnHeader>
-            {t("competitions.results_table.round")}
+            {showFull && t("competitions.results_table.round")}
           </Table.ColumnHeader>
         )}
         {showFull &&
@@ -61,7 +61,7 @@ export function LiveTableHeader({
           ))}
         {stats.map((stat) => (
           <Table.ColumnHeader textAlign="right" key={stat.field}>
-            {t(`common.${stat.name}`)}
+            {t(stat.i18nKey)}
           </Table.ColumnHeader>
         ))}
       </Table.Row>
@@ -172,7 +172,7 @@ export function LiveStatCells({
 
   return stats.map((stat, statIndex) => (
     <Table.Cell
-      key={`${competitorId}-${stat.name}`}
+      key={`${competitorId}-${stat.i18nKey}`}
       textAlign="right"
       position="relative"
       fontWeight={shouldHighlight(statIndex) ? "bold" : "normal"}

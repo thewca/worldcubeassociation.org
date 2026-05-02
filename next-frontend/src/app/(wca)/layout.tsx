@@ -6,8 +6,8 @@ import { Provider as UiProvider } from "@/components/ui/provider";
 import Navbar from "./navbar";
 import Footer from "@/components/Footer";
 import RandomBackground from "@/components/RandomBackground";
-import { Rubik } from "next/font/google";
 import { ThemeProvider } from "@wrksz/themes/next";
+import { appFont } from "@/styles/fonts";
 
 export const metadata: Metadata = {
   title: {
@@ -16,16 +16,14 @@ export const metadata: Metadata = {
   },
 };
 
-const devFont = Rubik({ subsets: ["latin"] });
-
 const computeFont = async () => {
   if (process.env.PROPRIETARY_FONT === "TTNormsPro") {
-    const { ttNormsPro } = await import("@/styles/fonts");
+    const { appFont } = await import("@/styles/fonts.proprietary");
 
-    return ttNormsPro;
+    return appFont;
   }
 
-  return devFont;
+  return appFont;
 };
 
 export const dynamic = "force-dynamic";

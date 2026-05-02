@@ -1815,7 +1815,7 @@ class Competition < ApplicationRecord
   WCIF_STABLE_VERSION = '1.1'
 
   WCIF_VERSION_CATALOGUE = {
-    latest: WCIF_STABLE_VERSION,
+    latest: '2.1.1',
     stable: WCIF_STABLE_VERSION,
   }.freeze
 
@@ -1942,11 +1942,15 @@ class Competition < ApplicationRecord
     }
   end
 
-  def set_wcif!(wcif, current_user)
+  def self.validate_wcif_schema!(wcif, version: WCIF_STABLE_VERSION, is_strict: true)
+    expected_schema = Competition.wcif_json_schema(version: version)
+    JSON::Validator.validate!(expected_schema, wcif, noAdditionalProperties: is_strict)
+  end
+
+  def set_wcif!(wcif, current_user, strict_schema_checks: true)
     import_version = wcif["formatVersion"]
 
-    expected_schema = Competition.wcif_json_schema(version: import_version)
-    JSON::Validator.validate!(expected_schema, wcif)
+    Competition.validate_wcif_schema!(wcif, version: import_version, is_strict: strict_schema_checks)
 
     ActiveRecord::Base.transaction do
       set_wcif_series!(wcif["series"], current_user) if wcif["series"]
@@ -2027,7 +2031,7 @@ class Competition < ApplicationRecord
       next unless event_to_be_updated
       raise WcaExceptions::BadApiParameter.new("Cannot update events") unless current_user.can_update_events?(self)
 
-      competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event, version: version)
+      competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event, current_user, version: version)
     end
 
     reload
@@ -2130,6 +2134,9 @@ class Competition < ApplicationRecord
   def self.wcif_json_schema(version: WCIF_STABLE_VERSION)
     {
       "type" => "object",
+      # Normally we want to force tools to tell us which version they're patching,
+      #   but as of writing this comment we need more time to tell that to tools.
+      # "required" => %w[formatVersion],
       "properties" => {
         "formatVersion" => { "type" => "string" },
         "id" => { "type" => "string" },

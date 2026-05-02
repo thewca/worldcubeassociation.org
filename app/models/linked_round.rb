@@ -31,7 +31,7 @@ class LinkedRound < ApplicationRecord
   end
 
   def next_advancing_without(competitor_being_quit)
-    Live::Advancing.next_advancing_without(merged_live_results, competitor_being_quit)
+    Live::Advancing.next_advancing_without(merged_live_results, competitor_being_quit, last_round_in_link)
   end
 
   delegate :next_round, to: :last_round_in_link
@@ -64,7 +64,7 @@ class LinkedRound < ApplicationRecord
   def as_wcif_participation_source(target_round)
     {
       "type" => "linkedRounds",
-      "roundId" => self.wcif_ids,
+      "roundIds" => self.wcif_ids,
       "resultCondition" => target_round.participation_condition&.to_wcif,
     }
   end

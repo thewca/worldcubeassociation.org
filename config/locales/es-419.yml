@@ -1486,7 +1486,7 @@ es-419:
         wfc: Comité Financiero WCA
         #original_hash: 2035811
         wmt: Equipo de Marketing WCA
-        #original_hash: c90653c
+        #original_hash: 2517097
         wmct: Equipo de Grandes Campeonatos WCA
         #original_hash: 8f32116
         wqac: Comité de Control de Calidad WCA
@@ -1795,6 +1795,13 @@ es-419:
       text: >-
         Descubre los récords actuales y anteriores de todos los eventos WCA
         oficiales.
+    volunteer:
+      #original_hash: cbf217d
+      title: Voluntario
+      #original_hash: 949f739
+      text: >-
+        ¡Sé parte! La WCA tiene posiciones voluntarias abiertas en varios
+        equipos diferentes. No hace falta que seas un speeecuber para ofrecerte.
     faq:
       #original_hash: 03688ba
       title: FAQ
@@ -2028,6 +2035,10 @@ es-419:
       approve: Aprobar
       #original_hash: d9455bf
       approve_confirm: '¿Estás seguro de querer aprobar el WCA ID %{wca_id}?'
+      #original_hash: 1ada587
+      clear_claim: Anular reclamación
+      #original_hash: dc39741
+      clear_claim_confirm: '¿Confirmas anular la reclamación del WCA ID %{wca_id}?'
       #original_hash: 85de4b8
       unconfirmed_email: 'El correo electrónico de esta cuenta (%{email}) no está confirmado.'
       #original_hash: 7069007
@@ -2867,6 +2878,71 @@ es-419:
         title: Podios
         #original_hash: d7297a7
         undetermined: Podios a definir
+      admin:
+        #original_hash: cf9b770
+        open: Abierto
+        #original_hash: 719ea39
+        clear: Limpiar
+        #original_hash: 42faad9
+        competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} ingresados'
+        #original_hash: adec79f
+        round_locked: bloqueado
+        #original_hash: 5301648
+        edit: Editar
+        #original_hash: 612e12d
+        results: Resultados
+        warnings:
+          #original_hash: 9198c71
+          omitted: >-
+            Omitiste el intento %{attempt_number}. Asegúrate de que fue
+            intencional.
+          #original_hash: 82d8e53
+          DNS: >-
+            Hay al menos un DNS seguido de un resultado válido. Por favor,
+            asegúrate de que debe ser un DNS y no un DNF.
+          #original_hash: 6becd6c
+          impossible: >-
+            El resultado que estás ingresando parece imposible: el intento
+            %{attempt_number} llevó menos de 30 segundos por cubo. Si quisiste
+            ingresar minutos, no te olvides de agregar los dos ceros para los
+            centisegundos al final del tiempo.
+          #original_hash: a03301d
+          inconsistent: >-
+            El resultado ingresado parece inconsistente. Hay una diferencia muy
+            grande entre el mejor single (%{best_single}) y el peor
+            (%{worst_single}). Por favor, comprueba que esté bien.
+          #original_hash: 0be6543
+          round_locked: >-
+            La siguiente ronda ya ha sido abierta. ¡Cualquier cambio en esta
+            ronda no la afectará!
+        quit:
+          #original_hash: de62de1
+          title: Eliminar competidor
+          #original_hash: c25b336
+          next_to_advance:
+            zero: No hay más competidores que avanzarían de ronda
+            one: 'El siguiente competidor en pasar de ronda es %{competitors}'
+            other: 'Los siguientes competidores en pasar de ronda son %{competitors}'
+          #original_hash: c87ca67
+          advance: Siguiente competidor pasa
+          #original_hash: e85b311
+          quit_confirm: Eliminar competidor de la ronda
+          #original_hash: 1a2285d
+          quit_menu: Quitar
+          #original_hash: 70835a0
+          no_next: No hay más competidores para pasar de ronda.
+          #original_hash: 77dfd21
+          cancel: Cancelar
+          #original_hash: 79d6737
+          failed_to_fetch: Ocurrió un error al buscar el siguiente competidor en pasar de ronda
+      results:
+        #original_hash: 4705687
+        competitor: Competidor
+        #original_hash: 51cda54
+        mean: Media
+      errors:
+        #original_hash: f522c26
+        round_closed: La ronda no ha sido abierta aún
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mis competiciones
@@ -5927,9 +6003,9 @@ es-419:
     paragraph4:
       #original_hash: b6dca56
       title: Política de Proximidad
-      #original_hash: f5eeb95
+      #original_hash: 0574d31
       content1: >-
-        Las Competiciones de la WCA se aceptarán si están al menos a 10 km o a 5
+        Las competiciones de la WCA se aceptarán si están al menos a 10 km o a 5
         días de otra competición. El WCAT debería revisar particularmente una
         competición propuesta si hay otra competición para la que la distancia
         entre ellas sea menor que 10 km y el tiempo entre ellas sea menor que 5
@@ -6386,6 +6462,12 @@ es-419:
         El nombre '%{name}' contiene caracteres especiales inválidos (como
         números, comillas, u otros símbolos). Los nombres solo deberían contener
         letras, espacios, guiones, apóstrofes, puntos, y paréntesis regulares.
+      #original_hash: 031123e
+      suspicious_last_name_warning: >-
+        '%{name}' tiene '%{suffix}' como su apellido, lo cual puede no ser su
+        apellido real (por ejemplo, un sufijo generacional escrito completo).
+        Por favor, confirma que este es su apellido según un documento legal, o
+        corrígelo acordemente.
       #original_hash: 4b90583
       successive_uppercase_name_warning: >-
         "%{name}" tiene mayúsculas consecutivas en su nombre. Por favor,
