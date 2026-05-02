@@ -1447,6 +1447,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_101433) do
     t.index ["metadata_type", "metadata_id"], name: "index_tickets_on_metadata"
   end
 
+  create_table "tickets_claim_wca_id", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "status", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_tickets_claim_wca_id_on_user_id"
+  end
+
   create_table "tickets_competition_result", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", null: false
     t.datetime "created_at", null: false
@@ -1696,6 +1704,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_101433) do
   add_foreign_key "ticket_logs", "tickets", on_delete: :cascade
   add_foreign_key "ticket_logs", "users", column: "acting_user_id"
   add_foreign_key "ticket_stakeholders", "tickets", on_delete: :cascade
+  add_foreign_key "tickets_claim_wca_id", "users", on_delete: :cascade
   add_foreign_key "tickets_competition_result", "competitions", on_delete: :cascade
   add_foreign_key "tickets_edit_person_fields", "tickets_edit_person", on_delete: :cascade
   add_foreign_key "user_avatars", "users"

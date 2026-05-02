@@ -122,6 +122,7 @@ class UsersController < ApplicationController
     ActiveRecord::Base.transaction do
       user.assign_wca_id(wca_id)
       user.update!(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+      user.claim_wca_id_ticket&.update!(status: TicketsClaimWcaId.statuses[:closed])
     end
 
     redirect_to edit_user_path(user), flash: { success: "Successfully confirmed WCA ID #{wca_id}." }
@@ -334,6 +335,8 @@ class UsersController < ApplicationController
                                  wca_id: @user.unconfirmed_wca_id,
                                  user: @user.delegate_to_handle_wca_id_claim.name)
         WcaIdClaimMailer.notify_delegate_of_wca_id_claim(@user).deliver_later
+        TicketsClaimWcaId.create_ticket!(@user)
+
         redirect_to profile_claim_wca_id_path
       else
         redirect_to edit_user_url(@user, params.permit(:section))

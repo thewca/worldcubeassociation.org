@@ -67,6 +67,7 @@ class User < ApplicationRecord
   has_many :revoked_user_avatars, class_name: "UserAvatar", inverse_of: :revoked_by_user
   has_many :potential_duplicate_persons, dependent: :destroy, foreign_key: :original_user_id, class_name: "PotentialDuplicatePerson", inverse_of: :original_user
   has_many :scramble_file_uploads, foreign_key: :uploaded_by, inverse_of: :uploaded_by_user
+  has_one :claim_wca_id_ticket, -> { open }, class_name: "TicketsClaimWcaId", inverse_of: :user
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
   scope :newcomers, -> { where(wca_id: nil) }
