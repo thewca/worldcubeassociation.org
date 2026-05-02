@@ -16,6 +16,7 @@ class PotentialDuplicatePerson < ApplicationRecord
     include: {
       original_user: {
         private_attributes: %w[dob],
+        only: User::DEFAULT_SERIALIZE_OPTIONS[:only] + %w[unconfirmed_wca_id],
       },
       duplicate_person: {
         private_attributes: %w[dob],
