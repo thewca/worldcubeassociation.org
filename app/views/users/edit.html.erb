@@ -80,6 +80,7 @@
           <%= react_component('EditUser/EditUserWcaId', {
             userId: @user.id,
           }) %>
+          <br/>
         <% else %>
           <p>
             <% if @user.wca_id.blank? %>

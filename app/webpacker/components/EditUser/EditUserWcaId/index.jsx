@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Grid, Header, Segment, Message,
+  List, Header, Segment, Message,
 } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
 import I18n from '../../../lib/i18n';
@@ -53,11 +53,10 @@ export function EditUserWcaId({ userId }) {
           : 'activerecord.attributes.user.wca_id')}
       />
 
-      <Grid verticalAlign="middle" stackable>
+      <List verticalAlign="middle" relaxed="very">
         {(!wcaId && !unconfirmedWcaId) ? (
           <AssignWcaIdView
-            userId={userId}
-            specialAccount={specialAccount}
+            user={userDetails}
           />
         ) : (
           <WcaIdPersonView
@@ -67,7 +66,8 @@ export function EditUserWcaId({ userId }) {
             specialAccount={specialAccount}
           />
         )}
-      </Grid>
+      </List>
+
       {specialAccount && (
         <Message
           warning

@@ -1,74 +1,57 @@
 import React, { useState } from 'react';
-import { Button, Grid } from 'semantic-ui-react';
-import { useMutation } from '@tanstack/react-query';
-import WcaSearch from '../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../SearchWidget/SearchModel';
+import {
+  Button, List, Modal, Icon,
+} from 'semantic-ui-react';
+import { useQueryClient } from '@tanstack/react-query';
 import I18n from '../../../lib/i18n';
-import assignWcaIdToUser from '../../NewcomerChecks/api/assignWcaIdToUser';
+import AssignWcaIdToUser from '../../Panel/views/AssignWcaIdToUser';
 
-export default function AssignWcaIdView({
-  userId,
-  specialAccount,
-}) {
-  const [isAssigning, setIsAssigning] = useState(false);
-  const [selectedPerson, setSelectedPerson] = useState(null);
-  const newWcaId = selectedPerson?.id || '';
+export default function AssignWcaIdView({ user }) {
+  const [isModalOpen, setIsModalOpen] = useState();
+  const queryClient = useQueryClient();
+  // TODO: Confirm with WRT that allowing Delegates to assign WCA ID to special account is fine.
 
-  const onSuccess = () => window.location.reload();
-
-  const { mutate: assignWcaIdMutation, isPending: isAssigningPending } = useMutation({
-    mutationFn: () => assignWcaIdToUser({ userId, wcaId: newWcaId }),
-    onSuccess,
-  });
-
-  const handleAssignClick = () => {
-    if (isAssigning) {
-      assignWcaIdMutation();
-    } else {
-      setIsAssigning(true);
-    }
+  const onSuccess = (_unusedData, { wcaId }) => {
+    queryClient.setQueryData(['user-details-for-edit', user.id], (old) => ({
+      ...old,
+      wca_id: wcaId,
+    }));
+    setIsModalOpen(false);
   };
 
   return (
-    <>
-      <Grid.Column width={isAssigning ? 10 : 4}>
-        {isAssigning ? (
-          <WcaSearch
-            model={SEARCH_MODELS.person}
-            value={selectedPerson}
-            onChange={(e, data) => setSelectedPerson(data.value)}
-            multiple={false}
-            disabled={isAssigningPending}
-            label={I18n.t('users.edit.assign_wca_id')}
-          />
-        ) : (
-          <span className="text-muted">None</span>
-        )}
-      </Grid.Column>
-
-      <Grid.Column width={isAssigning ? 6 : 12}>
+    <List.Item>
+      <List.Content floated="right">
         <Button
           type="button"
           size="small"
-          id="assign-wca-id"
-          disabled={specialAccount || isAssigningPending || (isAssigning && !newWcaId)}
-          onClick={handleAssignClick}
-          loading={isAssigningPending}
-          color={isAssigning ? 'green' : undefined}
+          primary
+          onClick={() => setIsModalOpen(true)}
         >
-          {isAssigning ? I18n.t('users.edit.save') : I18n.t('users.edit.assign_wca_id')}
+          {I18n.t('users.edit.assign_wca_id')}
         </Button>
-        {isAssigning && (
-          <Button
-            type="button"
-            size="small"
-            onClick={() => setIsAssigning(false)}
-            disabled={isAssigningPending}
-          >
-            {I18n.t('users.edit.cancel')}
-          </Button>
-        )}
-      </Grid.Column>
-    </>
+      </List.Content>
+
+      <Icon name="user" size="large" verticalAlign="middle" disabled />
+      <List.Content>
+        <List.Header disabled>None</List.Header>
+        <List.Description>No WCA ID assigned</List.Description>
+      </List.Content>
+
+      <Modal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        size="small"
+        closeIcon
+      >
+        <Modal.Content>
+          <AssignWcaIdToUser
+            user={user}
+            onSuccess={onSuccess}
+            requireConfirmation
+          />
+        </Modal.Content>
+      </Modal>
+    </List.Item>
   );
 }

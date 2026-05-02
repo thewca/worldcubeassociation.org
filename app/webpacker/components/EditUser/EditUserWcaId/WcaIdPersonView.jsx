@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Grid } from 'semantic-ui-react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { Button, List } from 'semantic-ui-react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import UserItem from '../../SearchWidget/UserItem';
 import I18n from '../../../lib/i18n';
 import unlinkWcaId from '../api/unlinkWcaId';
@@ -12,9 +12,11 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import Loading from '../../Requests/Loading';
 import Errored from '../../Requests/Errored';
 
+// TODO: Improve this class, rest of the PR is good.
 export default function WcaIdPersonView({
   userId, personId, isConfirmed, specialAccount,
 }) {
+  const queryClient = useQueryClient();
   const {
     data: person,
     isFetching,
@@ -25,7 +27,10 @@ export default function WcaIdPersonView({
     queryFn: () => getPersonDetails(personId),
   });
   const confirm = useConfirm();
-  const onSuccess = () => window.location.reload();
+  const onSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['user-details-for-edit', userId] });
+    queryClient.invalidateQueries({ queryKey: ['person', personId] });
+  };
 
   const { mutate: unlinkWcaIdMutation, isPending: isUnlinkingPending } = useMutation({
     mutationFn: () => unlinkWcaId(userId),
@@ -66,18 +71,13 @@ export default function WcaIdPersonView({
   };
 
   return (
-    <>
-      <Grid.Column width={10}>
-        <UserItem item={person} />
-      </Grid.Column>
-
-      <Grid.Column width={6} textAlign="right">
+    <List.Item>
+      <List.Content floated="right">
         {isConfirmed ? (
           <Button
             type="button"
             size="small"
             color="red"
-            id="unlink-wca-id"
             disabled={specialAccount || isUnlinkingPending}
             onClick={handleUnlinkClick}
             loading={isUnlinkingPending}
@@ -89,7 +89,6 @@ export default function WcaIdPersonView({
             <Button
               size="small"
               color="green"
-              id="approve-wca-id"
               onClick={handleConfirmClick}
               loading={isConfirmingPending}
               disabled={isPending}
@@ -99,7 +98,6 @@ export default function WcaIdPersonView({
             <Button
               size="small"
               color="red"
-              id="clear-claim-wca-id"
               onClick={handleClearClaimClick}
               loading={isClearingPending}
               disabled={isPending}
@@ -108,7 +106,11 @@ export default function WcaIdPersonView({
             </Button>
           </>
         )}
-      </Grid.Column>
-    </>
+      </List.Content>
+
+      <List.Content>
+        <UserItem item={person} />
+      </List.Content>
+    </List.Item>
   );
 }
