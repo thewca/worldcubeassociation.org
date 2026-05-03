@@ -73,6 +73,13 @@ class Registration < ApplicationRecord
     self.registrant_id ||= max_registrant_id + 1
   end
 
+  # rubocop:disable Rails/ActiveRecordCallbacksOrder
+  before_save :mark_accepted_at, if: :trying_to_accept?
+  # rubocop:enable Rails/ActiveRecordCallbacksOrder
+  private def mark_accepted_at
+    self.accepted_at = Time.now.utc
+  end
+
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
   validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
   validates :guests, numericality: { equal_to: 0, unless: :guests_allowed?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
