@@ -6,7 +6,7 @@ class TimeLimit
   # ActiveRecord's serialization uses a "default value" which is stored as
   # 'NULL' in the db. In order to keep the db information readable for humans,
   # we want to keep this 'NULL' value for cases where the time limit is undefined.
-  # This can happens in the following cases:
+  # This can happen in the following cases:
   #   - Until 2013, specifying a time limit beforehand was not mandatory.
   #   Sometimes we could retrieve the information, sometimes not, therefore we
   #   use an undefined time limit when we don't have the data.
@@ -17,7 +17,7 @@ class TimeLimit
   # 0 seconds (see the UNDEF_TL value below).
   # When trying to serialize a time limit, ActiveRecord will compare this value
   # to the value created from TimeLimit.load(nil). If they match then 'NULL' is
-  # stored, otherwise it is serialize to json according to the WCIF spec.
+  # stored, otherwise it is serialized to JSON according to the WCIF spec.
   # You can read more about the motivations behind this here:
   # https://github.com/thewca/worldcubeassociation.org/issues/5460
   include ActiveModel::Validations
@@ -84,6 +84,8 @@ class TimeLimit
     return "" if round.time_limit_undefined?
 
     time_str = SolveTime.new(round.event.id, :best, self.centiseconds).clock_format
+    # Strip unnecessary trailing ".00" for whole-second time limits (e.g. "4:00.00" → "4:00")
+    time_str = time_str.sub(/\.00$/, '')
     case self.cumulative_round_ids.length
     when 0
       if round.can_change_time_limit?
