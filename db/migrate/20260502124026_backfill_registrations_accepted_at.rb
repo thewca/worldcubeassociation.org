@@ -3,10 +3,10 @@
 class BackfillRegistrationsAcceptedAt < ActiveRecord::Migration[8.1]
   def up
     latest_change_ids = RegistrationHistoryChange
-      .joins(:registration_history_entry)
-      .where(key: 'competing_status', value: 'accepted')
-      .group('registration_history_entries.registration_id')
-      .select('MAX(registration_history_changes.id)')
+                        .joins(:registration_history_entry)
+                        .where(key: 'competing_status', value: 'accepted')
+                        .group('registration_history_entries.registration_id')
+                        .select('MAX(registration_history_changes.id)')
 
     RegistrationHistoryChange
       .includes(registration_history_entry: :registration)
