@@ -1048,6 +1048,7 @@ en:
       profile: "Profile"
       approve: "Approve"
       approve_confirm: "Are you sure you want to approve WCA ID %{wca_id}?"
+      handle_claim: "Handle WCA ID Claim"
       clear_claim: "Clear claim"
       clear_claim_confirm: "Are you sure you want to clear the claim for WCA ID %{wca_id}?"
       assign_wca_id: "Assign WCA ID"
