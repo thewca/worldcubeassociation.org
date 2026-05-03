@@ -268,6 +268,54 @@ RSpec.describe User do
     end
   end
 
+  describe "#transfer_data_to" do
+    let(:from_user) { create(:user) }
+    let(:to_user) { create(:user) }
+    let(:competition) { create(:competition) }
+
+    it "transfers non-conflicting registrations" do
+      registration = create(:registration, user: from_user, competition: competition)
+      from_user.transfer_data_to(to_user)
+      expect(registration.reload.user).to eq to_user
+    end
+
+    it "raises an error if both users have accepted registrations for the same competition" do
+      create(:registration, :accepted, user: from_user, competition: competition)
+      create(:registration, :accepted, user: to_user, competition: competition)
+      expect { from_user.transfer_data_to(to_user) }.to raise_error(RuntimeError, /Both users have accepted registrations/)
+    end
+
+    it "swaps registrations if from_user is accepted and to_user is not" do
+      accepted_reg = create(:registration, :accepted, user: from_user, competition: competition)
+      pending_reg = create(:registration, :pending, user: to_user, competition: competition)
+
+      from_user.transfer_data_to(to_user)
+
+      expect(accepted_reg.reload.user).to eq to_user
+      expect(pending_reg.reload.user).to eq from_user
+    end
+
+    it "keeps to_user's registration and leaves from_user's if to_user is accepted and from_user is not" do
+      pending_reg = create(:registration, :pending, user: from_user, competition: competition)
+      accepted_reg = create(:registration, :accepted, user: to_user, competition: competition)
+
+      from_user.transfer_data_to(to_user)
+
+      expect(accepted_reg.reload.user).to eq to_user
+      expect(pending_reg.reload.user).to eq from_user
+    end
+
+    it "keeps to_user's registration and leaves from_user's if both are unaccepted" do
+      pending_reg_from = create(:registration, :pending, user: from_user, competition: competition)
+      pending_reg_to = create(:registration, :pending, user: to_user, competition: competition)
+
+      from_user.transfer_data_to(to_user)
+
+      expect(pending_reg_to.reload.user).to eq to_user
+      expect(pending_reg_from.reload.user).to eq from_user
+    end
+  end
+
   describe "clearing WCA claims via constant" do
     let(:delegate_role) { create(:delegate_role) }
     let(:person) { create(:person) }
