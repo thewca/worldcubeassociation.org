@@ -54,6 +54,7 @@ export default async function PodiumsPage({
             </Heading>
             {finalRound.results.length > 0 ? (
               <LiveResultsTable
+                showLinkedRoundsView={finalRound.linked_round_ids.length > 0}
                 resultsByRegistrationId={resultsByRegistrationId}
                 competitionId={competitionId}
                 competitors={competitors}
