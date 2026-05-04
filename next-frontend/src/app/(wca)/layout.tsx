@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import RandomBackground from "@/components/RandomBackground";
 import { ThemeProvider } from "@wrksz/themes/next";
 import { appFont } from "@/styles/fonts";
+import ConfirmProvider from "@/providers/ConfirmProvider";
 
 export const metadata: Metadata = {
   title: {
@@ -42,10 +43,12 @@ export default async function RootLayout({
           <WCAQueryClientProvider>
             <AuthProvider>
               <UiProvider>
-                <Navbar />
-                <RandomBackground numRows={8} numCols={18} />
-                {children}
-                <Footer />
+                <ConfirmProvider>
+                  <Navbar />
+                  <RandomBackground numRows={8} numCols={18} />
+                  {children}
+                  <Footer />
+                </ConfirmProvider>
               </UiProvider>
             </AuthProvider>
           </WCAQueryClientProvider>
