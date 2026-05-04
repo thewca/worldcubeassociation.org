@@ -24,7 +24,7 @@ import {
   SKIPPED_VALUE,
   encodeMbldResult,
 } from "@/lib/wca/wcif/attempts";
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, KeyboardEventHandler, Ref } from "react";
 import type { EventId } from "@/lib/wca/data/events";
 import {
   autocompleteFmAttemptResult,
@@ -103,12 +103,16 @@ export interface AttemptResultProps {
   value: number;
   onChange: (value: number) => void;
   placeholder?: string;
+  onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
+  attemptRef?: Ref<HTMLInputElement>;
 }
 
 export function TimeField({
   value,
   onChange,
   placeholder,
+  onKeyDown,
+  attemptRef,
 }: AttemptResultProps) {
   const { isValid, binding } = useInputMask({
     value,
@@ -123,7 +127,13 @@ export function TimeField({
 
   return (
     <Field.Root invalid={!isValid}>
-      <Input spellCheck={false} placeholder={placeholder} {...binding} />
+      <Input
+        ref={attemptRef}
+        spellCheck={false}
+        placeholder={placeholder}
+        onKeyDown={onKeyDown}
+        {...binding}
+      />
     </Field.Root>
   );
 }
@@ -133,6 +143,8 @@ export function FmMovesField({
   onChange,
   resultType,
   placeholder,
+  onKeyDown,
+  attemptRef,
 }: {
   resultType: "single" | "average";
 } & AttemptResultProps) {
@@ -158,12 +170,23 @@ export function FmMovesField({
 
   return (
     <Field.Root invalid={!isValid}>
-      <Input placeholder={placeholder} spellCheck={false} {...binding} />
+      <Input
+        ref={attemptRef}
+        placeholder={placeholder}
+        spellCheck={false}
+        onKeyDown={onKeyDown}
+        {...binding}
+      />
     </Field.Root>
   );
 }
 
-export function MbldCubesField({ value, onChange }: AttemptResultProps) {
+export function MbldCubesField({
+  value,
+  onChange,
+  onKeyDown,
+  attemptRef,
+}: AttemptResultProps) {
   const { isValid, binding } = useInputMask({
     value,
     onChange,
@@ -175,7 +198,12 @@ export function MbldCubesField({ value, onChange }: AttemptResultProps) {
 
   return (
     <Field.Root invalid={!isValid}>
-      <Input spellCheck={false} {...binding} />
+      <Input
+        ref={attemptRef}
+        spellCheck={false}
+        onKeyDown={onKeyDown}
+        {...binding}
+      />
     </Field.Root>
   );
 }
@@ -184,6 +212,8 @@ export function MbldField({
   value,
   onChange,
   placeholder,
+  onKeyDown,
+  attemptRef,
 }: AttemptResultProps) {
   const [draft, setDraft] = useDraftState(value, decodeMbldResult);
 
@@ -217,6 +247,22 @@ export function MbldField({
     }
   };
 
+  const makeSubKeyDown =
+    (includeNavigation: boolean): KeyboardEventHandler<HTMLInputElement> =>
+    (e) => {
+      if (e.key === " ") {
+        e.preventDefault();
+        onKeyDown?.(e);
+        return;
+      }
+      if (
+        includeNavigation &&
+        (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp")
+      ) {
+        onKeyDown?.(e);
+      }
+    };
+
   return (
     <Fieldset.Root onChangeCapture={captureShortcuts}>
       <Fieldset.Content>
@@ -224,14 +270,17 @@ export function MbldField({
           <Group attached>
             <GridItem colSpan={3}>
               <MbldCubesField
+                attemptRef={attemptRef}
                 value={draft.solved}
                 onChange={(solved) => handleChange({ solved })}
+                onKeyDown={makeSubKeyDown(false)}
               />
             </GridItem>
             <GridItem colSpan={3}>
               <MbldCubesField
                 value={draft.attempted}
                 onChange={(attempted) => handleChange({ attempted })}
+                onKeyDown={makeSubKeyDown(false)}
               />
             </GridItem>
             <GridItem colSpan={10}>
@@ -241,6 +290,7 @@ export function MbldField({
                   handleChange({ timeCentiseconds })
                 }
                 placeholder={placeholder}
+                onKeyDown={makeSubKeyDown(true)}
               />
             </GridItem>
           </Group>
@@ -261,6 +311,8 @@ function AttemptResultField({
   eventId,
   resultType,
   placeholder,
+  onKeyDown,
+  attemptRef,
 }: AttemptResultFieldProps) {
   const [componentValue, setComponentValue] = useControllableState({
     value,
@@ -271,10 +323,12 @@ function AttemptResultField({
   if (eventId === "333fm") {
     return (
       <FmMovesField
+        attemptRef={attemptRef}
         value={componentValue}
         onChange={setComponentValue}
         resultType={resultType}
         placeholder={placeholder}
+        onKeyDown={onKeyDown}
       />
     );
   }
@@ -282,18 +336,22 @@ function AttemptResultField({
   if (eventId === "333mbf" || eventId === "333mbo") {
     return (
       <MbldField
+        attemptRef={attemptRef}
         value={componentValue}
         onChange={setComponentValue}
         placeholder={placeholder}
+        onKeyDown={onKeyDown}
       />
     );
   }
 
   return (
     <TimeField
+      attemptRef={attemptRef}
       value={componentValue}
       onChange={setComponentValue}
       placeholder={placeholder}
+      onKeyDown={onKeyDown}
     />
   );
 }
