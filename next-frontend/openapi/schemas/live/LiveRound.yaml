@@ -23,4 +23,3 @@ allOf:
       - competitors
       - round_id
       - state_hash
-      - linked_round_ids
