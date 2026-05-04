@@ -33,7 +33,7 @@ function advanceReqToStrShort(eventId, advancementCondition) {
       return matchResult(advancementCondition.level, eventId, {
         short: true,
       });
-    case -2:
+    case 'dual':
       return 'Dual Round';
     default:
       throw new Error(
