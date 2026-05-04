@@ -2165,11 +2165,13 @@ en:
         qualification_html: "Qualification times must be set in other WCA competitions in order to compete."
         qualification_all_events_html: "Qualification times must be set on or before <b>%{date}</b>."
         qualification_some_events_html: "Qualification times in %{events} must be set on or before <b>%{date}</b>."
+        advancement_condition_html: "The number of competitors shown as advancing to the next round is the planned maximum. The actual number may be lower if there are fewer competitors than expected, or if there are ties at the boundary."
       format: "Format"
       time_limit: "Time limit"
       cutoff: "Cutoff"
       proceed: "Proceed"
       qualification: "Qualification"
+      advancement_condition: "Advancement Condition"
     #context: competition's schedule tab
     schedule:
       #context: when selecting the kind of schedule to display
