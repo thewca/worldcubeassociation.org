@@ -8,6 +8,7 @@ import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import RoundActions from "@/app/(wca)/competitions/[competitionId]/live/admin/RoundActions";
 import { getRounds } from "@/lib/wca/live/getRounds";
+import ConfirmProvider from "@/providers/ConfirmProvider";
 
 export default async function RoundAdmin({
   competitionId,
@@ -29,34 +30,36 @@ export default async function RoundAdmin({
   return (
     <Container>
       <SimpleGrid columns={3} gap={2}>
-        {_.map(roundsById, (rounds, eventId) => {
-          return (
-            <Card.Root key={eventId} rounded="md" size="sm">
-              <Card.Body alignItems="baseline">
-                <Card.Title>
-                  <HStack>
-                    <EventIcon eventId={eventId} fontSize="2xl" />
-                    {events.byId[eventId].name}
-                  </HStack>
-                </Card.Title>
-                <Card.Description w="full" asChild>
-                  <VStack gap="0" alignItems="left">
-                    {rounds.map((r) => {
-                      return (
-                        <RoundActions
-                          key={r.id}
-                          round={r}
-                          rounds={rounds}
-                          competitionId={competitionId}
-                        />
-                      );
-                    })}
-                  </VStack>
-                </Card.Description>
-              </Card.Body>
-            </Card.Root>
-          );
-        })}
+        <ConfirmProvider>
+          {_.map(roundsById, (rounds, eventId) => {
+            return (
+              <Card.Root key={eventId} rounded="md" size="sm">
+                <Card.Body alignItems="baseline">
+                  <Card.Title>
+                    <HStack>
+                      <EventIcon eventId={eventId} fontSize="2xl" />
+                      {events.byId[eventId].name}
+                    </HStack>
+                  </Card.Title>
+                  <Card.Description w="full" asChild>
+                    <VStack gap="0" alignItems="left">
+                      {rounds.map((r) => {
+                        return (
+                          <RoundActions
+                            key={r.id}
+                            round={r}
+                            rounds={rounds}
+                            competitionId={competitionId}
+                          />
+                        );
+                      })}
+                    </VStack>
+                  </Card.Description>
+                </Card.Body>
+              </Card.Root>
+            );
+          })}
+        </ConfirmProvider>
       </SimpleGrid>
     </Container>
   );
