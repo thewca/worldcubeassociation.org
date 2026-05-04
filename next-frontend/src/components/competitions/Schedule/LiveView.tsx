@@ -51,12 +51,11 @@ export default function LiveView({
   rounds,
 }: LiveViewProps) {
   const { t } = useT();
-  const scheduledActivities = activities.filter(
+  const eventActivities = activities.filter(
     (a) => !a.activityCode.startsWith("other"),
   );
-  const firstStartTime = scheduledActivities[0].startTime;
-  const lastStartTime =
-    scheduledActivities[scheduledActivities.length - 1].startTime;
+  const firstStartTime = eventActivities[0].startTime;
+  const lastStartTime = eventActivities[eventActivities.length - 1].startTime;
   const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const [timeZone, setTimeZone] = useState(browserTimezone);
 
