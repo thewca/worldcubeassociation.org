@@ -6,7 +6,7 @@ export const orderResults = (results: LiveResult[], format: Format) => {
   const stats = statColumnsForFormat(format);
 
   const rankBy = stats[0].field;
-  const secondaryRankBy = stats[1].field;
+  const secondaryRankBy = stats[1]?.field;
 
   const sortedResults = results.toSorted((a, b) => {
     const aInvalid = a[rankBy] <= 0;

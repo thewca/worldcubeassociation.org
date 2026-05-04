@@ -28,44 +28,34 @@ module ResultConditions
 
     def self.wcif_json_schema
       {
-        "allOf" => [
+        "oneOf" => [
+          # For (very) historic records, we do not have advancement condition data
+          #   even though (from a schema standpoint) we _technically_ should.
+          # Backfilling is too complicated and sometimes even impossible, so just accept NULL.
+          { "type" => "null" },
           {
-            "type" => %w[object null],
+            "type" => "object",
             "properties" => {
-              "type" => { "type" => "string", "enum" => Utils::ALL_RESULT_CONDITIONS.map(&:wcif_type) },
+              "type" => { "const" => "resultAchieved" },
+              "scope" => { "type" => "string", "enum" => %w[single average] },
+              "value" => { "type" => %w[integer null] },
             },
           },
           {
-            "oneOf" => [
-              # For (very) historic records, we do not have advancement condition data
-              #   even though (from a schema standpoint) we _technically_ should.
-              # Backfilling is too complicated and sometimes even impossible, so just accept NULL.
-              { "type" => "null" },
-              {
-                "type" => "object",
-                "properties" => {
-                  "type" => { "const" => "resultAchieved" },
-                  "scope" => { "type" => "string", "enum" => %w[single average] },
-                  "value" => { "type" => %w[integer null] },
-                },
-              },
-              {
-                "type" => "object",
-                "properties" => {
-                  "type" => { "const" => "ranking" },
-                  "scope" => { "type" => "string", "enum" => %w[single average] },
-                  "value" => { "type" => "integer" },
-                },
-              },
-              {
-                "type" => "object",
-                "properties" => {
-                  "type" => { "const" => "percent" },
-                  "scope" => { "type" => "string", "enum" => %w[single average] },
-                  "value" => { "type" => "integer" },
-                },
-              },
-            ],
+            "type" => "object",
+            "properties" => {
+              "type" => { "const" => "ranking" },
+              "scope" => { "type" => "string", "enum" => %w[single average] },
+              "value" => { "type" => "integer" },
+            },
+          },
+          {
+            "type" => "object",
+            "properties" => {
+              "type" => { "const" => "percent" },
+              "scope" => { "type" => "string", "enum" => %w[single average] },
+              "value" => { "type" => "integer" },
+            },
           },
         ],
       }

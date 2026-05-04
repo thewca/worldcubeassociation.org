@@ -1346,7 +1346,7 @@ ko:
         wfc: WCA 재무 위원회
         #original_hash: 2035811
         wmt: WCA 마케팅 팀
-        #original_hash: c90653c
+        #original_hash: 2517097
         wmct: WCA 주요 챔피언십 팀
         #original_hash: 8f32116
         wqac: WCA 품질 보증 위원회
@@ -1591,6 +1591,11 @@ ko:
       title: 기록
       #original_hash: 3681af0
       text: 모든 공식 WCA 종목의 현재 및 과거 기록을 확인하세요.
+    volunteer:
+      #original_hash: cbf217d
+      title: 자원봉사자
+      #original_hash: 949f739
+      text: 참여해 보십시오! WCA는 다양한 팀에서 자원봉사자를 모집하고 있습니다. 자원봉사자가 되기 위해 스피드큐버일 필요는 없습니다.
     faq:
       #original_hash: 03688ba
       title: 자주 묻는 질문들
@@ -1776,6 +1781,10 @@ ko:
       approve: 승인
       #original_hash: d9455bf
       approve_confirm: 'WCA ID %{wca_id}를 승인하시겠습니까?'
+      #original_hash: 1ada587
+      clear_claim: 요청 철회
+      #original_hash: dc39741
+      clear_claim_confirm: 'WCA ID %{wca_id}에 대한 청구를 취소하시겠습니까?'
       #original_hash: 85de4b8
       unconfirmed_email: '이 계정의 이메일 주소 (%{email})는 검증되지 않았습니다.'
       #original_hash: 7069007
@@ -2450,6 +2459,10 @@ ko:
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} 입력됨'
         #original_hash: adec79f
         round_locked: 잠김
+        #original_hash: 5301648
+        edit: 수정
+        #original_hash: 612e12d
+        results: 결과
         warnings:
           #original_hash: 9198c71
           omitted: '%{attempt_number}회차 시도를 누락하였습니다. 의도한 것인지 확인해 주세요.'
@@ -2463,6 +2476,8 @@ ko:
           inconsistent: >-
             제출하신 결과가 일관성이 없어 보입니다. 최고 싱글(%{best_single})과 최저 싱글(%{worst_single})
             사이에 큰 차이가 있습니다. 결과가 정확한지 확인해 주세요.
+          #original_hash: 0be6543
+          round_locked: 다음 라운드는 이미 시작되었으므로 변경 사항은 다음 라운드에 영향을 미치지 않습니다!
         quit:
           #original_hash: de62de1
           title: 선수 내보내기
@@ -2474,6 +2489,8 @@ ko:
           advance: 다음 선수 진출시키기
           #original_hash: e85b311
           quit_confirm: 라운드에서 선수 내보내기
+          #original_hash: 1a2285d
+          quit_menu: 나가기
           #original_hash: 70835a0
           no_next: 다음 라운드로 진출할 선수가 없습니다.
           #original_hash: 77dfd21
@@ -2483,6 +2500,8 @@ ko:
       results:
         #original_hash: 4705687
         competitor: 선수
+        #original_hash: 51cda54
+        mean: 평균
       errors:
         #original_hash: f522c26
         round_closed: 라운드가 아직 개시되지 않았습니다

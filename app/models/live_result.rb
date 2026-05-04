@@ -100,7 +100,11 @@ class LiveResult < ApplicationRecord
   end
 
   def complete?
-    live_attempts_count == round.format.expected_solve_count
+    live_attempts_count == round.format.expected_solve_count || didnt_meet_cutoff?
+  end
+
+  def didnt_meet_cutoff?
+    live_attempts.any? && round.cutoff.present? && round.cutoff.exceeds?(live_attempts)
   end
 
   def empty_result?
