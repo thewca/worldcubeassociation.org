@@ -85,6 +85,8 @@ export default function AttemptsForm({
           onValueChange={(e) => {
             if (e.value.length > 0) {
               handleRegistrationIdChange(parseInt(e.value[0], 10));
+            } else {
+              handleRegistrationIdChange(undefined);
             }
           }}
           value={registrationId ? [registrationId.toString()] : []}
