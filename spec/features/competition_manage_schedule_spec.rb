@@ -66,5 +66,5 @@ end
 def save_schedule_react
   first(:button, "save your changes!", visible: true).click
   # Wait for ajax to complete.
-  expect(page).to have_no_content("You have unsaved changes")
+  expect(page).to have_no_text("You have unsaved changes")
 end
