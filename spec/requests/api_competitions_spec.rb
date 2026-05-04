@@ -369,13 +369,13 @@ RSpec.describe "API Competitions" do
 
         it "can change roles for a person" do
           persons = [{ wcaUserId: registration.user.id, roles: %w[scrambler dataentry] }]
-          patch api_v0_competition_update_wcif_path(competition), params: { persons: persons }.to_json, headers: headers
+          patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, persons: persons }.to_json, headers: headers
           expect(registration.reload.roles).to eq %w[scrambler dataentry]
         end
 
         it "cannot override organizer role" do
           persons = [{ wcaUserId: organizer_registration.user.id, roles: ["scrambler"] }]
-          patch api_v0_competition_update_wcif_path(competition), params: { persons: persons }.to_json, headers: headers
+          patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, persons: persons }.to_json, headers: headers
           expect(organizer_registration.reload.roles).to eq ["scrambler"]
           person_wcif = competition.reload.to_wcif["persons"].find { |person| person["wcaUserId"] == organizer_registration.user.id }
           expect(person_wcif["roles"]).to match_array %w[scrambler organizer]
@@ -390,7 +390,7 @@ RSpec.describe "API Competitions" do
             { "activityId" => 2, "assignmentCode" => "staff-judge", "stationNumber" => 3 },
           ]
           persons = [{ wcaUserId: registration.user.id, assignments: assignments }]
-          patch api_v0_competition_update_wcif_path(competition), params: { persons: persons }.to_json, headers: headers
+          patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, persons: persons }.to_json, headers: headers
           expect(registration.reload.assignments.map(&:to_wcif)).to match_array assignments
         end
 
@@ -415,7 +415,7 @@ RSpec.describe "API Competitions" do
 
     describe "schedule" do
       let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, :with_valid_schedule, schedule_only_one_venue: true, event_ids: ["333"], rounds_per_event: 2, groups_per_round: 2) }
-      let!(:wcif) { competition.to_wcif.slice("schedule") }
+      let!(:wcif) { competition.to_wcif.slice("formatVersion", "schedule") }
 
       context "when signed in as a competition manager" do
         before { sign_in competition.organizers.first }
@@ -536,7 +536,7 @@ RSpec.describe "API Competitions" do
               "logoUrl" => "https://example.com/logo.jpg",
             },
           }]
-          patch api_v0_competition_update_wcif_path(competition), params: { extensions: extensions }.to_json, headers: headers
+          patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, extensions: extensions }.to_json, headers: headers
           expect(competition.wcif_extensions.first.to_wcif).to eq extensions.first
         end
       end
@@ -665,6 +665,7 @@ end
 
 def create_wcif_with_events(event_ids)
   {
+    formatVersion: '2.1.1',
     events: event_ids.map do |event_id|
       {
         id: event_id,
@@ -674,7 +675,10 @@ def create_wcif_with_events(event_ids)
             format: "a",
             timeLimit: nil,
             cutoff: nil,
-            advancementCondition: nil,
+            participationRuleset: {
+              participationSource: { type: "registrations" },
+              reservedPlaces: nil,
+            },
             scrambleSetCount: 1,
           },
         ],

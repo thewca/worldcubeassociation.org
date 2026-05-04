@@ -42,6 +42,7 @@ class Competition < ApplicationRecord
   has_many :scramble_file_uploads, dependent: :delete_all
   has_many :external_scramble_sets, through: :scramble_file_uploads
   has_many :matched_scramble_sets, through: :rounds
+  has_many :matched_scrambles, through: :matched_scramble_sets
   has_many :accepted_registrations, -> { accepted }, class_name: "Registration", foreign_key: "competition_id", inverse_of: :competition
   has_many :accepted_newcomers, -> { where(wca_id: nil) }, through: :accepted_registrations, source: :user
   has_many :duplicate_checker_job_runs, dependent: :delete_all
@@ -694,6 +695,7 @@ class Competition < ApplicationRecord
              'inbox_persons',
              'external_scramble_sets',
              'matched_scramble_sets',
+             'matched_scrambles',
              'announced_by_user',
              'cancelled_by_user',
              'competition_payment_integrations',
@@ -1942,11 +1944,15 @@ class Competition < ApplicationRecord
     }
   end
 
-  def set_wcif!(wcif, current_user)
+  def self.validate_wcif_schema!(wcif, version: WCIF_STABLE_VERSION, is_strict: true)
+    expected_schema = Competition.wcif_json_schema(version: version)
+    JSON::Validator.validate!(expected_schema, wcif, noAdditionalProperties: is_strict)
+  end
+
+  def set_wcif!(wcif, current_user, strict_schema_checks: true)
     import_version = wcif["formatVersion"]
 
-    expected_schema = Competition.wcif_json_schema(version: import_version)
-    JSON::Validator.validate!(expected_schema, wcif)
+    Competition.validate_wcif_schema!(wcif, version: import_version, is_strict: strict_schema_checks)
 
     ActiveRecord::Base.transaction do
       set_wcif_series!(wcif["series"], current_user) if wcif["series"]
@@ -2130,6 +2136,9 @@ class Competition < ApplicationRecord
   def self.wcif_json_schema(version: WCIF_STABLE_VERSION)
     {
       "type" => "object",
+      # Normally we want to force tools to tell us which version they're patching,
+      #   but as of writing this comment we need more time to tell that to tools.
+      # "required" => %w[formatVersion],
       "properties" => {
         "formatVersion" => { "type" => "string" },
         "id" => { "type" => "string" },

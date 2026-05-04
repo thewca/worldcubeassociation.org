@@ -1442,7 +1442,7 @@ vi:
         wfc: Ủy ban Tài chính WCA
         #original_hash: 2035811
         wmt: Đội ngũ Tiếp thị WCA
-        #original_hash: c90653c
+        #original_hash: 2517097
         wmct: Đội ngũ Giải Vô địch Khu vực WCA
         #original_hash: 8f32116
         wqac: Ủy ban Bảo đảm Chất lượng WCA
@@ -1751,6 +1751,14 @@ vi:
       text: >-
         Xem các kỷ lục hiện tại và trong quá khứ của các nội dung thi đấu chính
         thức của WCA.
+    volunteer:
+      #original_hash: cbf217d
+      title: Tình nguyện viên
+      #original_hash: 949f739
+      text: >-
+        Nếu bạn muốn giúp vận hành WCA, các đội ngũ tình nguyện của WCA có thể
+        có vị trí còn trống. Bạn không nhất thiết phải là thí sinh mới có thể
+        làm tình nguyện viên.
     faq:
       #original_hash: 03688ba
       title: Câu hỏi thường gặp
@@ -1976,6 +1984,10 @@ vi:
       approve: Chấp nhận
       #original_hash: d9455bf
       approve_confirm: 'Bạn có chắc chắn muốn chấp thuận WCA ID %{wca_id} không?'
+      #original_hash: 1ada587
+      clear_claim: Xóa yêu cầu
+      #original_hash: dc39741
+      clear_claim_confirm: 'Bạn có chắc chắn muốn xóa yêu cầu xác nhận ID WCA %{wca_id} không?'
       #original_hash: 85de4b8
       unconfirmed_email: 'Địa chỉ email (%{email}) của tài khoản này chưa được xác nhận.'
       #original_hash: 7069007
@@ -2786,6 +2798,10 @@ vi:
         competitors_entered: 'Đã nhập %{competitors_live_results_entered}/%{total_competitors}'
         #original_hash: adec79f
         round_locked: đã khóa
+        #original_hash: 5301648
+        edit: Chỉnh sửa
+        #original_hash: 612e12d
+        results: Kết quả
         warnings:
           #original_hash: 9198c71
           omitted: >-
@@ -2806,6 +2822,10 @@ vi:
             Kết quả bạn đang cố nhập có vẻ không chính xác. Thành tích đơn tốt
             nhất (%{best_single}) và kém nhất (%{worst_single}) có chênh lệch
             rất lớn. Xin vui lòng đảm bảo kết quả được nhập chính xác.
+          #original_hash: 0be6543
+          round_locked: >-
+            Vòng thi tiếp theo đã được mở, việc chỉnh sửa dữ liệu của vòng thi
+            này sẽ không làm ảnh hưởng đến vòng thi tiếp theo!
         quit:
           #original_hash: de62de1
           title: Lược bỏ thí sinh
@@ -2817,6 +2837,8 @@ vi:
           advance: Cho thí sinh tiếp theo vào vòng sau
           #original_hash: e85b311
           quit_confirm: Lược bỏ thí sinh khỏi vòng thi
+          #original_hash: 1a2285d
+          quit_menu: Lược bỏ
           #original_hash: 70835a0
           no_next: Không còn thí sinh nào có thể vào vòng sau.
           #original_hash: 77dfd21
@@ -2826,6 +2848,8 @@ vi:
       results:
         #original_hash: 4705687
         competitor: Thí sinh
+        #original_hash: 51cda54
+        mean: Trung bình
       errors:
         #original_hash: f522c26
         round_closed: Vòng này hiện chưa mở

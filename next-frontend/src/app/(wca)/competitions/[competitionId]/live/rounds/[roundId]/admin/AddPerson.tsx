@@ -114,11 +114,13 @@ function AddPersonCombobox({
   registrations: RegistrationData[];
 }) {
   const { collection, filter } = useListCollection({
-    initialItems: registrations,
+    initialItems: registrations.toSorted(
+      (a, b) => a.registrant_id - b.registrant_id,
+    ),
     itemToValue: (competitor) => competitor.id.toString(),
     itemToString: (competitor) => competitor.user.name,
     filter: (itemText, filterText, item) =>
-      itemText.includes(filterText) ||
+      itemText.toLowerCase().includes(filterText.toLowerCase()) ||
       parseInt(filterText, 10) === item.registrant_id,
   });
 
@@ -126,6 +128,7 @@ function AddPersonCombobox({
     <VStack>
       <Combobox.Root
         collection={collection}
+        inputBehavior="autohighlight"
         onInputValueChange={(e) => filter(e.inputValue)}
         onValueChange={(e) => setSelectedCompetitor(parseInt(e.value[0], 10))}
       >

@@ -199,6 +199,7 @@ export default function LiveResultsTable({
           competitionId={competitionId}
           eventId={eventId}
           stats={stats}
+          t={t}
         />
       )}
     </>
