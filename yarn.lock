@@ -2943,16 +2943,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "@stripe/react-stripe-js@npm:6.2.0"
+"@stripe/react-stripe-js@npm:^6.3.0":
+  version: 6.3.0
+  resolution: "@stripe/react-stripe-js@npm:6.3.0"
   dependencies:
     prop-types: "npm:^15.7.2"
   peerDependencies:
-    "@stripe/stripe-js": ">=9.2.0 <10.0.0"
+    "@stripe/stripe-js": ">=9.3.1 <10.0.0"
     react: ">=16.8.0 <20.0.0"
     react-dom: ">=16.8.0 <20.0.0"
-  checksum: 10c0/2278ad858b2316f2a0f0c353a3a06835bda70adca278eb5bb30e44f9c04889d8278d18a03e12fd41c5bd561741514692a67bf856c63b4bfdf7485954e44c3977
+  checksum: 10c0/a2a81cd5035485e44c2abf00ee8107c9db13e07b02dc3d1fb44869021a58fb47ce4f89eb6e89e3a657a608cf651ad263acf78f1ffef75cafe4b79c90dba6a71f
   languageName: node
   linkType: hard
 
@@ -10680,7 +10680,7 @@ __metadata:
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.2"
     "@rails/actioncable": "npm:^8.1.300"
     "@rails/ujs": "npm:^7.1.600"
-    "@stripe/react-stripe-js": "npm:^6.2.0"
+    "@stripe/react-stripe-js": "npm:^6.3.0"
     "@stripe/stripe-js": "npm:^9.4.0"
     "@tanstack/react-query": "npm:^5.100.9"
     "@tanstack/react-table": "npm:^8.21.3"
