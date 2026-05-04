@@ -5293,16 +5293,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"easymde@npm:^2.20.0":
-  version: 2.20.0
-  resolution: "easymde@npm:2.20.0"
+"easymde@npm:^2.21.0":
+  version: 2.21.0
+  resolution: "easymde@npm:2.21.0"
   dependencies:
     "@types/codemirror": "npm:^5.60.10"
     "@types/marked": "npm:^4.0.7"
     codemirror: "npm:^5.65.15"
     codemirror-spell-checker: "npm:1.1.2"
     marked: "npm:^4.1.0"
-  checksum: 10c0/bbaf2b5e97a7e9ac191a97f844555b60973471ebbdbaa2fc1503facb956f5aba84f9127f03b5501519a16d675095658d160f000f72d0a45601c279db989bd55c
+  checksum: 10c0/ae9363533140b4b8285822604c0df982d09b7e4b5efc1bece4511b9117ef7d46afab1d3cf93dcdc1d16d3550c0d37ddf08024a880d48bc983aea1ab10373870c
   languageName: node
   linkType: hard
 
@@ -10672,7 +10672,7 @@ __metadata:
     date-fns: "npm:^4.1.0"
     dompurify: "npm:^3.4.1"
     dotenv: "npm:^17.4.2"
-    easymde: "npm:^2.20.0"
+    easymde: "npm:^2.21.0"
     eslint: "npm:^8.57.0"
     eslint-config-airbnb: "npm:^19.0.4"
     eslint-plugin-import: "npm:^2.32.0"
