@@ -19,10 +19,9 @@ import AddPersonModal from "@/app/(wca)/competitions/[competitionId]/live/rounds
 import { LuLock, LuLockOpen } from "react-icons/lu";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
+import { useRoundInfo } from "@/providers/RoundInfoProvider";
 
 export default function LiveUpdatingResultsTable({
-  roundWcifId,
-  formatId,
   competitionId,
   title,
   isAdminView = false,
@@ -30,8 +29,6 @@ export default function LiveUpdatingResultsTable({
   isLinkedRound = false,
   canManage = false,
 }: {
-  roundWcifId: string;
-  formatId: string;
   competitionId: string;
   title: string;
   isAdminView?: boolean;
@@ -49,6 +46,8 @@ export default function LiveUpdatingResultsTable({
     competitors,
     pendingQuitCompetitors,
   } = useLiveResults();
+
+  const { id: roundWcifId, format: formatId } = useRoundInfo();
 
   const { eventId } = parseActivityCode(roundWcifId);
 

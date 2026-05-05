@@ -16,22 +16,24 @@ import { useCallback } from "react";
 import { attemptResultsWarning } from "@/lib/live/attempt-result";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
+import { useRoundInfo } from "@/providers/RoundInfoProvider";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import formats from "@/lib/wca/data/formats";
 
 interface AttemptsFormProps {
-  solveCount: number;
   header: string;
-  eventId: string;
 }
 
 const toCompetitorString = (competitor: LiveCompetitor) =>
   `${competitor.name} (${competitor.registrant_id})`;
 
-export default function AttemptsForm({
-  solveCount,
-  header,
-  eventId,
-}: AttemptsFormProps) {
+export default function AttemptsForm({ header }: AttemptsFormProps) {
   const { t } = useT();
+
+  const { id, format: formatId } = useRoundInfo();
+  const { eventId } = parseActivityCode(id);
+  const format = formats.byId[formatId];
+  const solveCount = format.expected_solve_count;
 
   const {
     handleRegistrationIdChange,
