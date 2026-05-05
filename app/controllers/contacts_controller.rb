@@ -124,11 +124,7 @@ class ContactsController < ApplicationController
                                 )
                               end
 
-    begin
-      ticket = TicketsEditPerson.create_ticket(wca_id, changes_requested, current_user, attachment)
-    rescue WcaExceptions::ApiException => e
-      return render status: e.status, json: { error: e.message }
-    end
+    ticket = TicketsEditPerson.create_ticket(wca_id, changes_requested, current_user)
 
     maybe_send_contact_email(
       ContactEditProfile.new(
