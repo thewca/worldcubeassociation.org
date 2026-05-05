@@ -21,6 +21,7 @@ export interface TabWithChildren extends TabBase {
 interface TabWithLink extends TabBase {
   badge?: string;
   href: RouteLiteral;
+  hrefAdmin?: RouteLiteral;
 }
 
 export type CompetitionNavTab = TabWithChildren | TabWithLink;
@@ -94,6 +95,10 @@ export const duringCompetitionTabs = (
         pathname: "/competitions/[competitionId]/live",
         query: { competitionId: competitionInfo.id },
       }),
+      hrefAdmin: route({
+        pathname: "/competitions/[competitionId]/live/admin",
+        query: { competitionId: competitionInfo.id },
+      }),
       menuKey: "live",
       icon: "Information",
     },
@@ -134,6 +139,11 @@ export const duringCompetitionTabs = (
           disabled: round.state === "pending" || round.state === "ready",
           href: route({
             pathname: "/competitions/[competitionId]/live/rounds/[roundId]",
+            query: { competitionId: competitionInfo.id, roundId: round.id },
+          }),
+          hrefAdmin: route({
+            pathname:
+              "/competitions/[competitionId]/live/rounds/[roundId]/admin",
             query: { competitionId: competitionInfo.id, roundId: round.id },
           }),
         };
