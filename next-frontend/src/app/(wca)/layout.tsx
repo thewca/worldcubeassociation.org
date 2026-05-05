@@ -43,10 +43,10 @@ export default async function RootLayout({
           <WCAQueryClientProvider>
             <AuthProvider>
               <UiProvider>
-                <NextTopLoader height={5} showAtBottom />
                 <Navbar />
                 <RandomBackground numRows={8} numCols={18} />
                 {children}
+                <NextTopLoader height={5} showAtBottom />
                 <Footer />
               </UiProvider>
             </AuthProvider>
