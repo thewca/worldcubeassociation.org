@@ -165,6 +165,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/bulk_quit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Quits multiple competitors from the round */
+        delete: operations["bulkQuitCompetitors"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/clear": {
         parameters: {
             query?: never;
@@ -1865,6 +1885,37 @@ export interface operations {
         };
         responses: {
             /** @description Returns number of rounds the competitor was marked as quit in */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        quit: number;
+                    };
+                };
+            };
+        };
+    };
+    bulkQuitCompetitors: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    registration_ids: number[];
+                };
+            };
+        };
+        responses: {
+            /** @description Returns number of competitors quit */
             200: {
                 headers: {
                     [name: string]: unknown;

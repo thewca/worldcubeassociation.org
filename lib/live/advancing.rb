@@ -5,7 +5,7 @@ module Live
     # Port from https://github.com/thewca/wca-live/blob/main/lib/wca_live/scoretaking/advancing.ex#L143
     # Basically this just removes the number one placed competitor and then sees who of the non-advancing
     # competitors would make it if that competitor got dnf
-    def self.next_advancing_without(live_results, competitor_being_quit, round)
+    def self.next_advancing_without(live_results, competitors_being_quit, round)
       already_quit_ids = live_results.quit.pluck(:id)
 
       first_advancing = live_results.advancing.first
@@ -14,7 +14,7 @@ module Live
 
       return [] if candidate_ids.empty?
 
-      quit_result_ids = live_results.where(registration_id: competitor_being_quit).pluck(:id)
+      quit_result_ids = live_results.where(registration_id: Array(competitors_being_quit)).pluck(:id)
       ignored_ids = [first_advancing.id] | quit_result_ids | already_quit_ids
 
       advancement_determining = live_results
