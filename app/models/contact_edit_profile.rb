@@ -37,24 +37,30 @@ class ContactEditProfile < ContactForm
     "#{requestor_user.name} (#{requestor_role})"
   end
 
-  validate :attachment_requirement
+  delegate :any_kind_of_delegate?, to: :requestor_user, prefix: :requestor, allow_nil: true
+
+  # Requests from Delegates do not require proof attachment.
+  validate :attachment_requirement, unless: :requestor_any_kind_of_delegate?
   private def attachment_requirement
-    return if document.present?
+    attachment_requirement_reasons&.each do |reason|
+      errors.add(:base, reason)
+    end
+  end
 
-    # Requests from Delegates do not require proof attachment.
-    return if requestor_user.any_kind_of_delegate?
+  def attachment_requirement_reasons
+    return nil if document.present?
 
-    changes_requested&.each do |change|
+    changes_requested&.filter_map do |change|
       case change.field
       when :name
         old_last_name = FinishUnfinishedPersons.last_name_with_suffix(change.from)
         new_last_name = FinishUnfinishedPersons.last_name_with_suffix(change.to)
 
-        errors.add(:base, "Proof attachment is required if last name is changed.") if old_last_name != new_last_name
+        "Proof attachment is required if last name is changed." if old_last_name != new_last_name
       when :country_iso2
-        errors.add(:base, "Proof attachment is required if country is changed.")
+        "Proof attachment is required if country is changed."
       when :dob
-        errors.add(:base, "Proof attachment is required if date of birth is changed.")
+        "Proof attachment is required if date of birth is changed."
       end
     end
   end

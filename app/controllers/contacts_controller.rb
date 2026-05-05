@@ -135,6 +135,10 @@ class ContactsController < ApplicationController
       request: request,
     )
 
+    if (attachment_reasons = contact_form.attachment_requirement_reasons).present?
+      return render status: :bad_request, json: { error: attachment_reasons.join("\n") }
+    end
+
     ticket = TicketsEditPerson.create_ticket(wca_id, changes_requested, current_user)
     contact_form.ticket = ticket
 
