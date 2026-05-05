@@ -663,7 +663,7 @@ class Round < ApplicationRecord
   def bulk_quit_from_round!(registration_ids, quitting_user, to_advance: nil)
     transaction do
       Live::DiffHelper.broadcast_changes(self) do
-        live_results.where(registration_id: registration_ids).each(&:destroy!)
+        live_results.where(registration_id: registration_ids).find_each(&:destroy!)
         live_results.create(to_advance.map { { **LiveResult.empty_result_attributes(it.registration_id, self.id) } }) if to_advance.present?
         recompute_advancing
         live_results.reset
@@ -674,7 +674,7 @@ class Round < ApplicationRecord
       participation_source.rounds.sum do |round|
         Live::DiffHelper.broadcast_changes(round) do
           round.live_results.where(id: to_advance&.pluck(:id)).update!(advancing: true)
-          round.live_results.where(registration_id: registration_ids).each { |r| r.mark_as_quit!(quitting_user) }
+          round.live_results.where(registration_id: registration_ids).find_each { |r| r.mark_as_quit!(quitting_user) }
         end
         registration_ids.length
       end
