@@ -12555,6 +12555,7 @@ __metadata:
     next: "npm:16.2.4"
     next-auth: "npm:5.0.0-beta.31"
     nextjs-routes: "npm:^2.2.5"
+    nextjs-toploader: "npm:^3.9.17"
     openapi-fetch: "npm:^0.16.0"
     openapi-react-query: "npm:^0.5.4"
     openapi-typescript: "npm:^7.13.0"
@@ -12643,6 +12644,20 @@ __metadata:
   bin:
     nextjs-routes: dist/cli.js
   checksum: 10c0/98a331b6b1ac92fdfa3e93988d01c7fe889ce59a3390e8b39b979365490b599c0923999ea82182345e1124e7be871299f13376553e795b5e51a30fa147a81a1a
+  languageName: node
+  linkType: hard
+
+"nextjs-toploader@npm:^3.9.17":
+  version: 3.9.17
+  resolution: "nextjs-toploader@npm:3.9.17"
+  dependencies:
+    nprogress: "npm:^0.2.0"
+    prop-types: "npm:^15.8.1"
+  peerDependencies:
+    next: ">= 6.0.0"
+    react: ">= 16.0.0"
+    react-dom: ">= 16.0.0"
+  checksum: 10c0/5899c0ad26fcd5241de075c773c320c98b3c59b1132164e5b9350262018225fc1d34af51cb2859ccd3c16f9f2434f46fb25dc6b54a1bd173350f0e56bac2b41d
   languageName: node
   linkType: hard
 
@@ -12778,6 +12793,13 @@ __metadata:
   dependencies:
     path-key: "npm:^3.0.0"
   checksum: 10c0/8399f01239e9a5bf5a10bddbc71ecac97e0b7890e5b78abe9731fc759db48865b0686cc86ec079cd254a98ba119a3fa08f1b23f9de1a5428c19007bbc7b5a728
+  languageName: node
+  linkType: hard
+
+"nprogress@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "nprogress@npm:0.2.0"
+  checksum: 10c0/eab9a923a1ad1eed71a455ecfbc358442dd9bcd71b9fa3fa1c67eddf5159360b182c218f76fca320c97541a1b45e19ced04e6dcb044a662244c5419f8ae9e821
   languageName: node
   linkType: hard
 
