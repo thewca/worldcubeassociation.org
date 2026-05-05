@@ -124,20 +124,22 @@ class ContactsController < ApplicationController
                                 )
                               end
 
+    contact_form = ContactEditProfile.new(
+      your_email: current_user&.email,
+      name: profile_to_edit[:name],
+      wca_id: wca_id,
+      changes_requested: changes_requested,
+      edit_profile_reason: edit_profile_reason,
+      requestor_user: current_user,
+      document: attachment,
+      request: request,
+    )
+
     ticket = TicketsEditPerson.create_ticket(wca_id, changes_requested, current_user)
+    contact_form.ticket = ticket
 
     maybe_send_contact_email(
-      ContactEditProfile.new(
-        your_email: current_user&.email,
-        name: profile_to_edit[:name],
-        wca_id: wca_id,
-        changes_requested: changes_requested,
-        edit_profile_reason: edit_profile_reason,
-        requestor_user: current_user,
-        ticket: ticket,
-        document: attachment,
-        request: request,
-      ),
+      contact_form,
       force_locale: CONTACT_DEFAULT_LOCALE,
       ticket: ticket,
     )
