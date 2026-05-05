@@ -4,6 +4,8 @@ import { Button } from "@chakra-ui/react";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
 import { toaster } from "@/components/ui/toaster";
+import { useConfirm } from "@/providers/ConfirmProvider";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function BulkQuitButton({
   competitionId,
@@ -14,6 +16,9 @@ export default function BulkQuitButton({
 }) {
   const { liveResultsByRegistrationId } = useLiveResults();
   const api = useAPI();
+  const { t } = useT();
+
+  const confirm = useConfirm();
 
   const emptyRegistrationIds = Object.entries(liveResultsByRegistrationId)
     .filter(([, results]) => results.every((r) => r.attempts.length === 0))
@@ -25,13 +30,15 @@ export default function BulkQuitButton({
     {
       onSuccess: (data) => {
         toaster.create({
-          description: `Successfully quit ${data.quit} competitor(s)`,
+          description: t("competitions.live.admin.quit.bulk.success", {
+            count: data.quit,
+          }),
           type: "success",
         });
       },
       onError: () => {
         toaster.create({
-          description: "Failed to bulk quit competitors",
+          description: t("competitions.live.admin.quit.bulk.failure"),
           type: "error",
         });
       },
@@ -40,16 +47,16 @@ export default function BulkQuitButton({
 
   const handleBulkQuit = () => {
     if (emptyRegistrationIds.length === 0) return;
-    if (
-      !confirm(
-        `Quit ${emptyRegistrationIds.length} competitor(s) with no results?`,
-      )
-    )
-      return;
-    bulkQuit({
-      params: { path: { competitionId, roundId } },
-      body: { registration_ids: emptyRegistrationIds },
-    });
+    confirm({
+      confirmButton: t("competitions.live.admin.quit.quit_confirm", {
+        count: emptyRegistrationIds.length,
+      }),
+    }).then(() =>
+      bulkQuit({
+        params: { path: { competitionId, roundId } },
+        body: { registration_ids: emptyRegistrationIds },
+      }),
+    );
   };
 
   return (
@@ -61,7 +68,7 @@ export default function BulkQuitButton({
       loading={isPending}
       onClick={handleBulkQuit}
     >
-      Bulk Quit ({emptyRegistrationIds.length})
+      {t("competitions.live.admin.quit.bulk.menu")}
     </Button>
   );
 }
