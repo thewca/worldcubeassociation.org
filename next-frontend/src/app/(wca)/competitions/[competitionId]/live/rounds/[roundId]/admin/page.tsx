@@ -6,10 +6,9 @@ import OpenapiError from "@/components/ui/openapiError";
 import React from "react";
 import { getT } from "@/lib/i18n/get18n";
 import { LiveResultProvider } from "@/providers/LiveResultProvider";
-import { getRoundName } from "@/lib/wca/live/getRoundName";
-import { getRounds } from "@/lib/wca/live/getRounds";
 import RoundOpenCheck from "@/components/live/RoundOpenCheck";
 import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
+import { RoundInfoProvider } from "@/providers/RoundInfoProvider";
 
 export default async function ResultPage({
   params,
@@ -26,46 +25,27 @@ export default async function ResultPage({
 
   if (error) return <OpenapiError response={response} t={t} />;
 
-  const { id } = data;
-
-  const {
-    data: roundsData,
-    error: roundsError,
-    response: roundsResponse,
-  } = await getRounds(competitionId);
-
-  if (roundsError) return <OpenapiError response={roundsResponse} t={t} />;
-
-  const roundName = getRoundName(id, t, roundsData.rounds, true);
-
-  const round = roundsData.rounds.find((r) => r.id === id)!;
-
   return (
     <Container bg="bg">
-      <RoundOpenCheck state={round.state} t={t}>
-        <PermissionCheck
-          requiredPermission="canAdministerCompetition"
-          item={competitionId}
-        >
-          <VStack align="left">
-            <LiveResultProvider
-              initialRound={data}
-              competitionId={competitionId}
-            >
-              <LiveResultAdminProvider
-                round={round}
+      <RoundInfoProvider roundId={roundId}>
+        <RoundOpenCheck t={t}>
+          <PermissionCheck
+            requiredPermission="canAdministerCompetition"
+            item={competitionId}
+          >
+            <VStack align="left">
+              <LiveResultProvider
+                initialRound={data}
                 competitionId={competitionId}
               >
-                <AddResults
-                  competitionId={competitionId}
-                  roundName={roundName}
-                  round={round}
-                />
-              </LiveResultAdminProvider>
-            </LiveResultProvider>
-          </VStack>
-        </PermissionCheck>
-      </RoundOpenCheck>
+                <LiveResultAdminProvider competitionId={competitionId}>
+                  <AddResults competitionId={competitionId} />
+                </LiveResultAdminProvider>
+              </LiveResultProvider>
+            </VStack>
+          </PermissionCheck>
+        </RoundOpenCheck>
+      </RoundInfoProvider>
     </Container>
   );
 }

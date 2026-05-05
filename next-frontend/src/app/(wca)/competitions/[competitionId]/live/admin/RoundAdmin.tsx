@@ -1,5 +1,5 @@
-import { getT } from "@/lib/i18n/get18n";
-import OpenapiError from "@/components/ui/openapiError";
+"use client";
+
 import { Card, Container, HStack, SimpleGrid, VStack } from "@chakra-ui/react";
 
 import EventIcon from "@/components/EventIcon";
@@ -7,24 +7,16 @@ import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import RoundActions from "@/app/(wca)/competitions/[competitionId]/live/admin/RoundActions";
-import { getRounds } from "@/lib/wca/live/getRounds";
+import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 
-export default async function RoundAdmin({
+export default function RoundAdmin({
   competitionId,
 }: {
   competitionId: string;
 }) {
-  const { t } = await getT();
-  const { error, data, response } = await getRounds(competitionId);
+  const { rounds } = useAllRoundsInfo();
 
-  if (error) {
-    return <OpenapiError t={t} response={response} />;
-  }
-
-  const roundsById = _.groupBy(
-    data.rounds,
-    (d) => parseActivityCode(d.id).eventId,
-  );
+  const roundsById = _.groupBy(rounds, (d) => parseActivityCode(d.id).eventId);
 
   return (
     <Container>
