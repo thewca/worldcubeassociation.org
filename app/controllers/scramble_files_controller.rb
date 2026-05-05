@@ -48,17 +48,16 @@ class ScrambleFilesController < ApplicationController
     )
 
     tnoodle_wcif[:events].each do |wcif_event|
-      competition_event = competition.competition_events.find_by!(event_id: wcif_event[:id])
-
       wcif_event[:rounds].each_with_index do |wcif_round, rd_idx|
-        parsed_round_number = ScheduleActivity.parse_activity_code(wcif_round[:id]).fetch(:round_number, rd_idx + 1)
+        parsed_round_number = ScheduleActivity.parse_activity_code(wcif_round[:id])
+                                              .fetch(:round_number, rd_idx + 1)
 
-        wcif_round[:scrambleSets].each_with_index do |wcif_scramble_set, idx|
+        wcif_round[:scrambleSets].each_with_index do |wcif_scramble_set, set_idx|
           scramble_set = scr_file_upload.external_scramble_sets.build(
             competition_id: competition.id,
-            event_id: competition_event.event_id,
+            event_id: wcif_event[:id],
             round_number: parsed_round_number,
-            scramble_set_number: idx + 1,
+            scramble_set_number: set_idx + 1,
           )
 
           %i[scrambles extraScrambles].each do |scramble_kind|
@@ -113,13 +112,17 @@ class ScrambleFilesController < ApplicationController
             ordered_index: set_idx,
           )
 
-          ext_set[:matched_scrambles].each_with_index do |ext_scr, scr_idx|
-            matched_set.matched_scrambles.build(
-              external_scramble_id: ext_scr[:id],
-              ordered_index: scr_idx,
-              scramble_string: ext_scr[:scramble_string],
-              is_extra: ext_scr[:is_extra],
-            )
+          extra_scrambles, std_scrambles = ext_set[:matched_scrambles].partition { it[:is_extra] }
+
+          [std_scrambles, extra_scrambles].each do |scrambles|
+            scrambles.each_with_index do |ext_scr, scr_idx|
+              matched_set.matched_scrambles.build(
+                external_scramble_id: ext_scr[:id],
+                ordered_index: scr_idx,
+                scramble_string: ext_scr[:scramble_string],
+                is_extra: ext_scr[:is_extra],
+              )
+            end
           end
         end
 

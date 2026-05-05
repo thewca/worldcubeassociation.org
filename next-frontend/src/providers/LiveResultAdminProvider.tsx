@@ -7,20 +7,26 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { Format } from "@/lib/wca/data/formats";
+import formats from "@/lib/wca/data/formats";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
 import { Toaster, toaster } from "@/components/ui/toaster";
+import { applyCutoff, applyTimeLimit } from "@/lib/live/attempt-result";
+import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
 
 interface AdminResultsContextValue {
   registrationId: number | undefined;
   attempts: number[];
   isPending: boolean;
-  handleRegistrationIdChange: (value: number) => void;
+  handleRegistrationIdChange: (value?: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
   handleSubmit: () => void;
   clearCompetitorsResults: (registrationId: number) => void;
-  quitCompetitor: (registrationId: number, toAdvance: number[]) => void;
+  quitCompetitor: (
+    registrationId: number,
+    advanceNext: boolean,
+    toAdvance: LiveCompetitor[],
+  ) => void;
   addCompetitorToRound: (registrationId: number) => Promise<void>;
 }
 
@@ -34,17 +40,18 @@ const AdminResultsContext = createContext<AdminResultsContextValue | null>(
 
 export function LiveResultAdminProvider({
   children,
-  format,
-  roundId,
   competitionId,
   initialRegistrationId,
+  round,
 }: {
   children: ReactNode;
-  format: Format;
-  roundId: string;
   competitionId: string;
   initialRegistrationId?: number;
+  round: LiveRoundAdminBase;
 }) {
+  const { id: roundId, cutoff, timeLimit, format: formatId } = round;
+  const format = formats.byId[formatId];
+
   const { liveResultsByRegistrationId, addPendingLiveResult } =
     useLiveResults();
 
@@ -81,7 +88,7 @@ export function LiveResultAdminProvider({
   const api = useAPI();
 
   const handleRegistrationIdChange = useCallback(
-    (value: number) => {
+    (value?: number) => {
       setRegistrationId(value);
 
       const competitorAttempts = getAttemptsForCompetitor(value);
@@ -188,7 +195,7 @@ export function LiveResultAdminProvider({
   const handleAttemptChange = (index: number, value: number) => {
     const newAttempts = [...attempts];
     newAttempts[index] = value;
-    setAttempts(newAttempts);
+    setAttempts(applyCutoff(applyTimeLimit(newAttempts, timeLimit), cutoff));
   };
 
   const handleSubmit = () => {
@@ -214,21 +221,28 @@ export function LiveResultAdminProvider({
     });
   };
 
-  const clearCompetitorsResults = (registrationId: number) => {
+  const clearCompetitorsResults = (toClearId: number) => {
     mutateClear({
       params: {
-        path: { competitionId, roundId, registrationId },
+        path: { competitionId, roundId, registrationId: toClearId },
       },
     });
+    if (registrationId === toClearId) {
+      setAttempts(zeroedArrayOfSize(solveCount));
+    }
   };
 
-  const quitCompetitor = (registrationId: number, toAdvance: number[]) => {
+  const quitCompetitor = (
+    registrationId: number,
+    advanceNext: boolean,
+    toAdvance: LiveCompetitor[],
+  ) => {
     mutateQuit({
       params: {
         path: { competitionId, roundId, registrationId },
       },
       body: {
-        advancing_ids: toAdvance,
+        advancing_ids: advanceNext ? toAdvance.map((r) => r.id) : [],
       },
     });
   };

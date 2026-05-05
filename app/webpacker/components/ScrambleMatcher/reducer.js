@@ -2,7 +2,8 @@ import _ from 'lodash';
 import {
   addItemToArray,
   ATTEMPTS_UNPACKING_MARKER,
-  autoMatchSearch, calculateBestInsertIndex,
+  autoMatchSearch,
+  calculateBestInsertIndex,
   getAttemptsMultiplier,
   moveArrayItem,
   removeItemFromArray,
@@ -32,7 +33,7 @@ function mergeMatchedSetsIntoWcif(wcifEvents, matchedScrambleSets) {
           ...thinExtScrambleSet(matchedScrSet.external_scramble_set),
           external_scrambles: _.sortBy(
             matchedScrSet.matched_scrambles,
-            'ordered_index',
+            ['is_extra', 'ordered_index'],
           ).map((matchedScramble) => ({
             ...thinExtScramble(matchedScramble.external_scramble),
             scramble_string: matchedScramble.scramble_string,

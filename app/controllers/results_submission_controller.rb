@@ -121,24 +121,14 @@ class ResultsSubmissionController < ApplicationController
     end
 
     results_to_import = competition.rounds.flat_map do |round|
-      round.round_results.map do |result|
-        InboxResult.new({
-                          competition: competition,
-                          person_id: result.person_id,
-                          pos: result.ranking,
-                          event_id: round.event_id,
-                          round_type_id: round.round_type_id,
-                          round_id: round.id,
-                          format_id: round.format_id,
-                          best: result.best,
-                          average: result.average,
-                          value1: result.attempts[0].result,
-                          value2: result.attempts[1]&.result || 0,
-                          value3: result.attempts[2]&.result || 0,
-                          value4: result.attempts[3]&.result || 0,
-                          value5: result.attempts[4]&.result || 0,
-                        })
-      end
+      round.live_results
+           .includes(:live_attempts, :registration)
+           .map(&:to_inbox_result)
+    end.map do |ibr|
+      # This is _technically_ useless because the IBR already knows its competition ID,
+      #   but not its actual competition memory object.
+      # Redundantly assigning here saves a ton of "does this competition exist?" validation checks later.
+      ibr.tap { it.competition = competition }
     end
 
     person_with_results = results_to_import.map(&:person_id).uniq
@@ -157,28 +147,11 @@ class ResultsSubmissionController < ApplicationController
                                                      })
     end
 
-    scrambles_to_import = competition.matched_scramble_sets.flat_map do |scramble_set|
-      extra_scrambles, std_scrambles = scramble_set.matched_scrambles.partition(&:is_extra?)
-
-      [std_scrambles, extra_scrambles].flat_map do |scramble_family|
-        scramble_family.map do |scramble|
-          Scramble.new({
-                         competition_id: competition.id,
-                         event_id: scramble_set.event_id,
-                         round_type_id: scramble_set.round_type_id,
-                         round_id: scramble_set.round_id,
-                         group_id: scramble_set.alphabetic_group_index,
-                         is_extra: scramble.is_extra?,
-                         scramble_num: scramble.ordered_index + 1,
-                         scramble: scramble.scramble_string,
-                       })
-        end
-      end
-    end
+    scramble_sets_to_import = competition.matched_scramble_sets
 
     temporary_results_data = {
       results_to_import: results_to_import,
-      scrambles_to_import: scrambles_to_import,
+      scramble_sets_to_import: scramble_sets_to_import,
       persons_to_import: persons_to_import,
     }
 
@@ -196,6 +169,7 @@ class ResultsSubmissionController < ApplicationController
       # It is intentional and desired that WRT (who have admin power to view DOBs anyway)
       #   can reconstruct personal information from the moment the upload happened.
       results_json_str: competition.to_wcif(authorized: true).to_json,
+      import_matched_scrambles: false,
     )
 
     return render status: :unprocessable_content, json: { error: errors } if errors.any?
@@ -241,6 +215,9 @@ class ResultsSubmissionController < ApplicationController
     competition = competition_from_params
 
     return head :unauthorized unless current_user.can_check_newcomers_data?(competition)
+
+    # WRTs can check newcomers data even after the results are submitted.
+    return if current_user.can_admin_results?
 
     render status: :bad_request, json: { error: "The newcomer check dashboard can only be used before the results are submitted." } if competition.results_submitted?
   end

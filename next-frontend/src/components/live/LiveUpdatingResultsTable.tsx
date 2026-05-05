@@ -118,9 +118,11 @@ export default function LiveUpdatingResultsTable({
         competitionId={competitionId}
         competitors={competitors}
         pendingQuitCompetitors={pendingQuitCompetitors}
+        pendingLiveResults={pendingLiveResults}
         isAdmin={isAdminView}
         showEmpty={showEmpty}
         showLinkedRoundsView={showLinkedRoundsView}
+        isLinkedRound={isLinkedRound}
       />
     </VStack>
   );

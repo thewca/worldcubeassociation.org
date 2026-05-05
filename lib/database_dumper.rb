@@ -297,6 +297,9 @@ module DatabaseDumper
           time_limit
           cutoff
           advancement_condition
+          participation_condition
+          participation_source_id
+          participation_source_type
           scramble_set_count
           created_at
           updated_at
@@ -342,6 +345,7 @@ module DatabaseDumper
           scramble
           id
           scramble_num
+          external_scramble_id
         ],
       ),
     }.freeze,
@@ -383,6 +387,8 @@ module DatabaseDumper
           event_id
           fee_lowest_denomination
           qualification
+          qualification_latest_date
+          qualification_condition
         ],
       ),
     }.freeze,
@@ -1538,7 +1544,7 @@ module DatabaseDumper
 
   def self.mysql_cli_creds
     config = ActiveRecord::Base.connection_db_config.configuration_hash
-    "--user=#{config[:username]} --password=#{config[:password] || "''"} --port=#{config[:port]} --host=#{config[:host]} #{'--ssl-ca=/rails/rds-cert.pem --ssl=1 --ssl-verify-server-cert=0' if Rails.env.production?}"
+    "--user=#{config[:username]} --password=#{config[:password] || "''"} --port=#{config[:port]} --host=#{config[:host]} #{'--ssl-ca=/rails/rds-cert.pem' if Rails.env.production?}"
   end
 
   def self.mysql(command, database = nil)

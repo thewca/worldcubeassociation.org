@@ -17,10 +17,11 @@ import {
   mergeAndOrderResults,
 } from "@/lib/live/mergeAndOrderResults";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
-import { LiveCompetitor } from "@/types/live";
+import { LiveCompetitor, PendingLiveResult } from "@/types/live";
 import React, { useState } from "react";
 import LiveResultsMobileModal from "@/components/live/LiveResultsMobileModal";
 import ResultMenu from "@/components/live/Admin/ResultMenu";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function LiveResultsTable({
   resultsByRegistrationId,
@@ -29,9 +30,11 @@ export default function LiveResultsTable({
   competitionId,
   competitors,
   pendingQuitCompetitors = new Set(),
+  pendingLiveResults = [],
   isAdmin = false,
   showEmpty = true,
   showLinkedRoundsView = false,
+  isLinkedRound = false,
 }: {
   resultsByRegistrationId: LiveResultsByRegistrationId;
   formatId: string;
@@ -39,10 +42,14 @@ export default function LiveResultsTable({
   competitionId: string;
   competitors: Map<number, LiveCompetitor>;
   pendingQuitCompetitors?: Set<number>;
+  pendingLiveResults?: PendingLiveResult[];
   isAdmin?: boolean;
   showEmpty?: boolean;
   showLinkedRoundsView?: boolean;
+  isLinkedRound?: boolean;
 }) {
+  const { t } = useT();
+
   const [selectedRow, setSelectedRow] = useState<CompetitorWithResults | null>(
     null,
   );
@@ -51,11 +58,15 @@ export default function LiveResultsTable({
 
   const format = formats.byId[formatId];
 
+  const pendingRegistrationIds = new Set(
+    pendingLiveResults.map((r) => r.registration_id),
+  );
+
   const competitorsWithOrderedResults = mergeAndOrderResults(
     resultsByRegistrationId,
     competitors,
     format,
-  );
+  ).filter((c) => !pendingRegistrationIds.has(c.id));
 
   const stats = statColumnsForFormat(format);
 
@@ -69,6 +80,8 @@ export default function LiveResultsTable({
           format={format}
           isLinked={showLinkedRoundsView}
           showFull={showFull}
+          t={t}
+          isAdmin={isAdmin}
         />
         <Table.Body>
           {competitorsWithOrderedResults.map((competitorAndTheirResults) => {
@@ -86,7 +99,7 @@ export default function LiveResultsTable({
                 return undefined;
 
               if (!showEmpty && !hasResult) {
-                return null;
+                return undefined;
               }
 
               return (
@@ -109,6 +122,7 @@ export default function LiveResultsTable({
                           : result
                       }
                       rowSpan={rowSpan}
+                      showAdvancing={!isLinkedRound || showLinkedRoundsView}
                     />
                   )}
                   {isAdmin && (
@@ -130,16 +144,16 @@ export default function LiveResultsTable({
                       link={showFull}
                     />
                   )}
-                  {showLinkedRoundsView && (
-                    <Table.Cell>
-                      {parseActivityCode(result.round_wcif_id).roundNumber}
-                    </Table.Cell>
-                  )}
                   {showText && showFull && (
                     <CountryCell
                       countryIso2={competitorAndTheirResults.country_iso2}
                       rowSpan={rowSpan}
                     />
+                  )}
+                  {showLinkedRoundsView && (
+                    <Table.Cell>
+                      {parseActivityCode(result.round_wcif_id).roundNumber}
+                    </Table.Cell>
                   )}
                   {showFull && (
                     <LiveAttemptsCells
@@ -169,6 +183,7 @@ export default function LiveResultsTable({
           competitionId={competitionId}
           eventId={eventId}
           stats={stats}
+          t={t}
         />
       )}
     </>
