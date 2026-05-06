@@ -78,7 +78,6 @@ export default function TabMenu({
           onToggle={(tab: CompetitionNavTab) =>
             setOpenGroup((prev) => (prev === tab.menuKey ? null : tab.menuKey))
           }
-          competitionInfo={competitionInfo}
         />
       </Tabs.List>
       <Box hideFrom="md" mb="4">
@@ -129,7 +128,6 @@ export default function TabMenu({
                         prev === tab.menuKey ? null : tab.menuKey,
                       )
                     }
-                    competitionInfo={competitionInfo}
                   />
                 </Tabs.List>
               </Drawer.Body>
@@ -156,7 +154,6 @@ function TabList({
   isAdminRoute: boolean;
   openGroup: string | null;
   onToggle: (tab: CompetitionNavTab) => void;
-  competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return tabs.map((tab) =>
     "href" in tab ? (
