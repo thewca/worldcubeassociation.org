@@ -54,8 +54,16 @@ module ResultsValidators
 
           rounds_without_deprecated_types.each do |round|
             results = results_by_round_id[round.id]
-            number_of_people_in_round = results.size
-            remaining_number_of_rounds = round.total_number_of_rounds - round.number
+            number_of_people_in_round = if round.linked_round.present?
+                                          round.linked_round.combine_results.count
+                                        else
+                                          results.size
+                                        end
+            remaining_number_of_rounds =  if round.linked_round.present?
+                                            round.total_number_of_rounds - 2
+                                          else
+                                            round.total_number_of_rounds - round.number
+                                          end
 
             if number_of_people_in_round <= 7 && remaining_number_of_rounds.positive?
               # https://www.worldcubeassociation.org/regulations/#9m3: Rounds with 7 or fewer competitors must not have subsequent rounds.
@@ -71,7 +79,7 @@ module ResultsValidators
                                              round_id: round.human_id)
             end
 
-            if number_of_people_in_round <= 99 && remaining_number_of_rounds > 2 && round.linked_round.nil?
+            if number_of_people_in_round <= 99 && remaining_number_of_rounds > 2
               # https://www.worldcubeassociation.org/regulations/#9m1: Rounds with 99 or fewer competitors must have at most two subsequent rounds.
               @errors << ValidationError.new(REGULATION_9M1_ERROR,
                                              :rounds, competition.id,
