@@ -12,7 +12,8 @@ import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { applyCutoff, applyTimeLimit } from "@/lib/live/attempt-result";
-import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
+import { LiveCompetitor } from "@/types/live";
+import { useRoundInfo } from "@/providers/RoundInfoProvider";
 
 interface AdminResultsContextValue {
   registrationId: number | undefined;
@@ -42,14 +43,12 @@ export function LiveResultAdminProvider({
   children,
   competitionId,
   initialRegistrationId,
-  round,
 }: {
   children: ReactNode;
   competitionId: string;
   initialRegistrationId?: number;
-  round: LiveRoundAdminBase;
 }) {
-  const { id: roundId, cutoff, timeLimit, format: formatId } = round;
+  const { id: roundId, cutoff, timeLimit, format: formatId } = useRoundInfo();
   const format = formats.byId[formatId];
 
   const { liveResultsByRegistrationId, addPendingLiveResult } =

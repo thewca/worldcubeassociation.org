@@ -31,16 +31,15 @@ import EventIcon from "@/components/EventIcon";
 import { route } from "nextjs-routes";
 import { useT } from "@/lib/i18n/useI18n";
 import { LuLock } from "react-icons/lu";
-import { LiveRoundAdmin } from "@/types/live";
 import _ from "lodash";
 import { getRoundName } from "@/lib/wca/live/getRoundName";
+import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 
 interface LiveViewProps {
   timeZones: string[];
   competitionId: string;
   activities: components["schemas"]["WcifActivity"][];
   canManage?: boolean;
-  rounds: LiveRoundAdmin[];
 }
 
 export default function LiveView({
@@ -48,9 +47,10 @@ export default function LiveView({
   competitionId,
   activities,
   canManage = false,
-  rounds,
 }: LiveViewProps) {
   const { t } = useT();
+  const { rounds } = useAllRoundsInfo();
+
   const eventActivities = activities.filter(
     (a) => !a.activityCode.startsWith("other"),
   );

@@ -4,24 +4,21 @@ import { Button, HStack, Link, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
 import ActionButtons from "@/app/(wca)/competitions/[competitionId]/live/admin/ActionButtons";
-import { useState } from "react";
-import { LiveRoundAdmin, LiveRoundState } from "@/types/live";
 import { useT } from "@/lib/i18n/useI18n";
 import { components } from "@/types/openapi";
 import { getRoundName } from "@/lib/wca/live/getRoundName";
+import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 
 export default function RoundActions({
   competitionId,
   round,
-  rounds,
 }: {
   competitionId: string;
   round: components["schemas"]["LiveRoundAdmin"];
-  rounds: LiveRoundAdmin[];
 }) {
   const { t } = useT();
-
-  const [state, setState] = useState<LiveRoundState>(round.state);
+  const { rounds } = useAllRoundsInfo();
+  const { state } = round;
 
   const isOpen = ["open", "locked"].includes(state);
 
@@ -68,7 +65,6 @@ export default function RoundActions({
       </Button>
       <ActionButtons
         state={state}
-        setState={setState}
         roundId={round.id}
         competitionId={competitionId}
       />

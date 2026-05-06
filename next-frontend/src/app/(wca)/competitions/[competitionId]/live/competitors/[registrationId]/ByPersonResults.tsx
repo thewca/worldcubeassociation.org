@@ -1,6 +1,6 @@
 "use client";
 
-import { Link, Table, useBreakpointValue } from "@chakra-ui/react";
+import { Heading, Link, Table, useBreakpointValue } from "@chakra-ui/react";
 import {
   LiveAttemptsCells,
   LivePositionCell,
@@ -14,8 +14,38 @@ import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useT } from "@/lib/i18n/useI18n";
 import _ from "lodash";
 import { getRoundName } from "@/lib/wca/live/getRoundName";
+import { Fragment } from "react";
+import events from "@/lib/wca/data/events";
+import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 
-export default function ByPersonByRoundTable({
+export default function ByPersonResults({
+  competitionId,
+  results,
+}: {
+  competitionId: string;
+  results: LiveResult[];
+}) {
+  const { rounds } = useAllRoundsInfo();
+  const resultsByEvent = _.groupBy(results, "event_id");
+
+  return _.map(resultsByEvent, (eventResults, key) => {
+    const eventRounds = rounds.filter(
+      (r) => parseActivityCode(r.id).eventId == key,
+    );
+    return (
+      <Fragment key={key}>
+        <Heading textStyle="h2">{events.byId[key].name}</Heading>
+        <ByPersonByRoundTable
+          eventResults={eventResults}
+          competitionId={competitionId}
+          rounds={eventRounds}
+        />
+      </Fragment>
+    );
+  });
+}
+
+function ByPersonByRoundTable({
   eventResults: eventResults,
   competitionId,
   rounds,
