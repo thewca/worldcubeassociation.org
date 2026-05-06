@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
 import CompetitionMenu from "@/components/competitions/CompetitionMenu";
+import ConfirmProvider from "@/providers/ConfirmProvider";
 
 type TitleProps = {
   params: Promise<{ competitionId: string }>;
@@ -43,9 +44,11 @@ export default async function CompetitionLayout({
 
   return (
     <Container pt="8">
-      <CompetitionMenu competitionInfo={competitionInfo}>
-        {children}
-      </CompetitionMenu>
+      <ConfirmProvider>
+        <CompetitionMenu competitionInfo={competitionInfo}>
+          {children}
+        </CompetitionMenu>
+      </ConfirmProvider>
     </Container>
   );
 }
