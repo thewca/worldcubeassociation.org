@@ -38,7 +38,6 @@ export default function RoundAdmin({
                         <RoundActions
                           key={r.id}
                           round={r}
-                          rounds={rounds}
                           competitionId={competitionId}
                         />
                       );

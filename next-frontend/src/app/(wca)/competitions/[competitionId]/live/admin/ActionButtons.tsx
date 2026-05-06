@@ -6,19 +6,19 @@ import { toaster } from "@/components/ui/toaster";
 import { LiveRoundState } from "@/types/live";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
+import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 
 export default function ActionButtons({
   state,
-  setState,
   roundId,
   competitionId,
 }: {
   state: LiveRoundState;
-  setState: (state: LiveRoundState) => void;
   roundId: string;
   competitionId: string;
 }) {
   const api = useAPI();
+  const { refetch } = useAllRoundsInfo();
 
   const { isPending: isPendingOpen, mutate: openRound } = api.useMutation(
     "put",
@@ -29,7 +29,7 @@ export default function ActionButtons({
           description: "Round Opened",
           type: "success",
         });
-        setState("open");
+        refetch();
       },
       onError: () => {
         toaster.create({
@@ -49,6 +49,7 @@ export default function ActionButtons({
           description: "Round Cleared",
           type: "success",
         });
+        refetch();
       },
       onError: () => {
         toaster.create({
