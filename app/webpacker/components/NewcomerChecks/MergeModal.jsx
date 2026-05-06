@@ -54,7 +54,7 @@ export default function MergeModal({
         <Message error>
           The user has claimed for a different WCA ID (
           {originalUser.unconfirmed_wca_id}
-          ), and first cancel that claim request if you want to assign another WCA ID.
+          ), so please first cancel that claim request if you want to assign another WCA ID.
           {' '}
           You can do this on the
           {' '}
