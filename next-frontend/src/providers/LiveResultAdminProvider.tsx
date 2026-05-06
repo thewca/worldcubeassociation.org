@@ -18,7 +18,7 @@ interface AdminResultsContextValue {
   registrationId: number | undefined;
   attempts: number[];
   isPending: boolean;
-  handleRegistrationIdChange: (value: number) => void;
+  handleRegistrationIdChange: (value?: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
   handleSubmit: () => void;
   clearCompetitorsResults: (registrationId: number) => void;
@@ -88,7 +88,7 @@ export function LiveResultAdminProvider({
   const api = useAPI();
 
   const handleRegistrationIdChange = useCallback(
-    (value: number) => {
+    (value?: number) => {
       setRegistrationId(value);
 
       const competitorAttempts = getAttemptsForCompetitor(value);

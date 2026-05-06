@@ -1126,12 +1126,7 @@ class User < ApplicationRecord
     fields += %i[name dob gender country_iso2] unless cannot_edit_data_reason_html(user)
     fields += CLAIM_WCA_ID_PARAMS if user == self || can_edit_any_user?
     fields << :name if user.wca_id.blank? && organizer_for?(user)
-    if can_edit_any_user?
-      fields += %i[
-        unconfirmed_wca_id
-      ]
-      fields += %i[wca_id] unless user.special_account?
-    end
+    fields << :wca_id if can_edit_any_user? && !user.special_account?
     fields
   end
 
@@ -1311,7 +1306,7 @@ class User < ApplicationRecord
     json
   end
 
-  def to_wcif(competition, registration = nil, authorized: false)
+  def to_wcif(competition, registration = nil, authorized: false, version: Competition::WCIF_STABLE_VERSION)
     roles = registration&.roles || []
     roles << "delegate" if competition.staff_delegates.include?(self)
     roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
@@ -1331,12 +1326,12 @@ class User < ApplicationRecord
       "avatar" => current_avatar&.to_wcif,
       "roles" => roles,
       "assignments" => registration&.assignments&.map(&:to_wcif) || [],
-      "personalBests" => person&.personal_records&.map(&:to_wcif) || [],
+      "personalBests" => person&.personal_records&.map { it.to_wcif(version: version) } || [],
       "extensions" => registration&.wcif_extensions&.map(&:to_wcif) || [],
     }.merge(authorized ? authorized_fields : {})
   end
 
-  def self.wcif_json_schema
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
     {
       "type" => "object",
       "properties" => {
@@ -1352,7 +1347,7 @@ class User < ApplicationRecord
         "roles" => { "type" => "array", "items" => { "type" => "string" } },
         "registration" => Registration.wcif_json_schema,
         "assignments" => { "type" => "array", "items" => Assignment.wcif_json_schema },
-        "personalBests" => { "type" => "array", "items" => PersonalBest.wcif_json_schema },
+        "personalBests" => { "type" => "array", "items" => PersonalBest.wcif_json_schema(version: version) },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }

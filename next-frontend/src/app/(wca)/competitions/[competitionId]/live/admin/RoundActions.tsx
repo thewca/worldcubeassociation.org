@@ -23,7 +23,7 @@ export default function RoundActions({
 
   const [state, setState] = useState<LiveRoundState>(round.state);
 
-  const isOpen = ["open", "locked"].includes(round.state);
+  const isOpen = ["open", "locked"].includes(state);
 
   const roundName = getRoundName(round.id, t, rounds);
 

@@ -294,6 +294,14 @@ FactoryBot.define do
         rounds.each do |round|
           FactoryBot.create(:inbox_result, competition: competition, person_id: person.ref_id, event_id: round.event.id, format_id: round.format.id, round: round)
           FactoryBot.create_list(:scramble, 5, competition: competition, event_id: round.event.id, format_id: round.format.id, round: round)
+
+          matched_scr_set = FactoryBot.create(:matched_scramble_set, round: round)
+
+          5.times do |i|
+            # When using `create_list`, it tries to create everything with `ordered_index` eq 0
+            #   and THEN passes it to the `do` block, but that's too late because at this point the SQL `UNIQUE` constraint already failed.
+            FactoryBot.create(:matched_scramble, matched_scramble_set: matched_scr_set, ordered_index: i)
+          end
         end
       end
     end

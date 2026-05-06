@@ -58,19 +58,23 @@ export default async function PodiumsPage({
           finalRound.competitors.map((r) => [r.id, r]),
         );
 
+        const isDualRound =
+          finalRound.linked_round_ids && finalRound.linked_round_ids.length > 0;
+
         return (
           <Fragment key={finalRound.id}>
             <Heading textStyle="h3" p="2">
               {events.byId[eventId].name}
             </Heading>
-            <LiveResultsTable
-              resultsByRegistrationId={resultsByRegistrationId}
-              competitionId={competitionId}
-              competitors={competitors}
-              roundWcifId={finalRound.id}
-              formatId={finalRound.format}
-              showEmpty={false}
-            />
+              <LiveResultsTable
+                showLinkedRoundsView={isDualRound}
+                resultsByRegistrationId={resultsByRegistrationId}
+                competitionId={competitionId}
+                competitors={competitors}
+                roundWcifId={finalRound.id}
+                formatId={finalRound.format}
+                showEmpty={false}
+              />
           </Fragment>
         );
       })}
