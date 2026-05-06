@@ -3,12 +3,14 @@ import { Button, Modal, Icon } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import I18n from '../../../lib/i18n';
 import UserItem from '../../SearchWidget/UserItem';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import confirmWcaId from '../api/confirmWcaId';
 import clearClaimWcaId from '../api/clearClaimWcaId';
 
 export default function HandleClaimModal({ userId, person, disabled }) {
   const [open, setOpen] = useState();
   const queryClient = useQueryClient();
+  const confirm = useConfirm();
   const onSuccess = () => {
     // We might be able to use setQueryData here to avoid additional fetch, but this
     // component will get removed within a few days (once the tickets are in for WCA ID
@@ -55,7 +57,11 @@ export default function HandleClaimModal({ userId, person, disabled }) {
       <Modal.Actions>
         <Button
           color="green"
-          onClick={() => confirmWcaIdMutation({ userId, wcaId: person.id })}
+          onClick={() => {
+            confirm({
+              content: I18n.t('users.edit.approve_confirm', { wca_id: person.id }),
+            }).then(() => confirmWcaIdMutation({ userId, wcaId: person.id })).catch(() => {});
+          }}
           loading={isConfirmingPending}
         >
           <Icon name="checkmark" />
@@ -64,7 +70,11 @@ export default function HandleClaimModal({ userId, person, disabled }) {
         </Button>
         <Button
           color="red"
-          onClick={() => clearClaimWcaIdMutation({ userId })}
+          onClick={() => {
+            confirm({
+              content: I18n.t('users.edit.clear_claim_confirm', { wca_id: person.id }),
+            }).then(() => clearClaimWcaIdMutation({ userId })).catch(() => {});
+          }}
           loading={isClearingPending}
         >
           <Icon name="remove" />

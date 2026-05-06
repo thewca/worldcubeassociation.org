@@ -82,6 +82,21 @@ RSpec.describe UsersController do
       expect(user.delegate_to_handle_wca_id_claim).to eq delegate
     end
 
+    it "fails if user already has a WCA ID" do
+      user.update!(wca_id: person.wca_id)
+      person2 = create(:person)
+      post :assign_wca_id, params: { userId: user.id, wcaId: person2.wca_id }
+      expect(response).to have_http_status :bad_request
+      expect(response.parsed_body["error"]).to eq "User already has a WCA ID: #{person.wca_id}"
+    end
+
+    it "fails if WCA ID is already assigned to another user" do
+      other_user = create(:user_with_wca_id)
+      post :assign_wca_id, params: { userId: user.id, wcaId: other_user.wca_id }
+      expect(response).to have_http_status :bad_request
+      expect(response.parsed_body["error"]).to eq "WCA ID #{other_user.wca_id} is already assigned to user #{other_user.id}"
+    end
+
     it "can change claimed id" do
       person2 = create(:person)
       patch :update, params: { id: user, user: { unconfirmed_wca_id: person2.wca_id } }
