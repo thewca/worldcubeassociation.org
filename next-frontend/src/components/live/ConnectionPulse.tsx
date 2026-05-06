@@ -6,7 +6,8 @@ import {
   CONNECTION_TRANSLATION_KEYS,
   ConnectionState,
 } from "@/lib/hooks/useResultsSubscription";
-import { Status, useBreakpointValue } from "@chakra-ui/react";
+import { Tooltip } from "@/components/ui/tooltip";
+import { Status } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 
 export default function ConnectionPulse({
@@ -19,23 +20,25 @@ export default function ConnectionPulse({
 
   const connectionColor = CONNECTION_COLORS[connectionState];
 
-  const showFull = useBreakpointValue({ base: false, md: true });
-
   return (
-    <Status.Root colorPalette={connectionColor}>
-      <Status.Indicator
-        animationName={
-          connectionState === CONNECTION_STATE_CONNECTED ? "pulse" : undefined
-        }
-        animationDuration="1.5s"
-        animationTimingFunction="ease-in-out"
-        animationIterationCount="infinite"
-        animationDirection="alternate"
-      />
-      {showFull &&
-        t(
-          `competitions.live.connection.${CONNECTION_TRANSLATION_KEYS[connectionState]}`,
-        )}
-    </Status.Root>
+    <Tooltip
+      content={t(
+        `competitions.live.connection.${CONNECTION_TRANSLATION_KEYS[connectionState]}`,
+      )}
+      showArrow
+      openDelay={200}
+    >
+      <Status.Root colorPalette={connectionColor}>
+        <Status.Indicator
+          animationName={
+            connectionState === CONNECTION_STATE_CONNECTED ? "pulse" : undefined
+          }
+          animationDuration="1.5s"
+          animationTimingFunction="ease-in-out"
+          animationIterationCount="infinite"
+          animationDirection="alternate"
+        />
+      </Status.Root>
+    </Tooltip>
   );
 }
