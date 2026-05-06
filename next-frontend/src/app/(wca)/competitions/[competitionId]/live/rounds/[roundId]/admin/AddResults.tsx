@@ -15,7 +15,7 @@ export default async function AddResults({
   return (
     <>
       <RoundLockedAlert t={t} />
-      <RoundNameHeader t={t} />
+      <RoundNameHeader />
       <SimpleGrid columns={16} gap={6}>
         <GridItem colSpan={4} position="sticky" top={4} alignSelf="start">
           <AttemptsForm header="Add Result" />
