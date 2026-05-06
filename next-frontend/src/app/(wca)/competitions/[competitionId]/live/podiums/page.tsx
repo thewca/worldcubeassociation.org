@@ -66,15 +66,15 @@ export default async function PodiumsPage({
             <Heading textStyle="h3" p="2">
               {events.byId[eventId].name}
             </Heading>
-              <LiveResultsTable
-                showLinkedRoundsView={isDualRound}
-                resultsByRegistrationId={resultsByRegistrationId}
-                competitionId={competitionId}
-                competitors={competitors}
-                roundWcifId={finalRound.id}
-                formatId={finalRound.format}
-                showEmpty={false}
-              />
+            <LiveResultsTable
+              showLinkedRoundsView={isDualRound}
+              resultsByRegistrationId={resultsByRegistrationId}
+              competitionId={competitionId}
+              competitors={competitors}
+              roundWcifId={finalRound.id}
+              formatId={finalRound.format}
+              showEmpty={false}
+            />
           </Fragment>
         );
       })}
