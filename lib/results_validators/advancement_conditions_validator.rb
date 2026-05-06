@@ -71,7 +71,7 @@ module ResultsValidators
                                              round_id: round.human_id)
             end
 
-            if number_of_people_in_round <= 99 && remaining_number_of_rounds > 2
+            if number_of_people_in_round <= 99 && remaining_number_of_rounds > 2 && round.linked_round.nil?
               # https://www.worldcubeassociation.org/regulations/#9m1: Rounds with 99 or fewer competitors must have at most two subsequent rounds.
               @errors << ValidationError.new(REGULATION_9M1_ERROR,
                                              :rounds, competition.id,
