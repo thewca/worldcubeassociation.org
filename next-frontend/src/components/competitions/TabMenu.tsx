@@ -34,12 +34,10 @@ export default function TabMenu({
   competitionInfo,
   children,
   tabs,
-  isLiveMenu = false,
 }: {
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
   tabs: CompetitionNavTab[];
-  isLiveMenu?: boolean;
 }) {
   const pathName = usePathname();
   const { t } = useT();
@@ -80,7 +78,6 @@ export default function TabMenu({
           onToggle={(tab: CompetitionNavTab) =>
             setOpenGroup((prev) => (prev === tab.menuKey ? null : tab.menuKey))
           }
-          isLiveMenu={isLiveMenu}
           competitionInfo={competitionInfo}
         />
       </Tabs.List>
@@ -159,7 +156,6 @@ function TabList({
   isAdminRoute: boolean;
   openGroup: string | null;
   onToggle: (tab: CompetitionNavTab) => void;
-  isLiveMenu?: boolean;
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return tabs.map((tab) =>

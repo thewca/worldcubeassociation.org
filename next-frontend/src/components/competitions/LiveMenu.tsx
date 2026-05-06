@@ -23,7 +23,7 @@ export default async function LiveMenu({
   const tabs = duringCompetitionTabs(competitionInfo, data.rounds);
 
   return (
-    <TabMenu tabs={tabs} competitionInfo={competitionInfo} isLiveMenu>
+    <TabMenu tabs={tabs} competitionInfo={competitionInfo}>
       {children}
     </TabMenu>
   );
