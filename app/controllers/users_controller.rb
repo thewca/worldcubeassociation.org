@@ -129,7 +129,7 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      if error
+      if error.present?
         format.html { redirect_to edit_user_path(user), flash: { danger: error } }
         format.json { render status: status, json: { error: error } }
       else
