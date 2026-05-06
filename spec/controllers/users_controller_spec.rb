@@ -64,16 +64,8 @@ RSpec.describe UsersController do
       sign_in delegate
     end
 
-    it "works when not explicitly clearing unconfirmed_wca_id" do
-      patch :update, params: { id: user, user: { wca_id: user.unconfirmed_wca_id } }
-      user.reload
-      expect(user.wca_id).to eq person.wca_id
-      expect(user.unconfirmed_wca_id).to be_nil
-      expect(user.delegate_to_handle_wca_id_claim).to be_nil
-    end
-
-    it "works when explicitly clearing unconfirmed_wca_id" do
-      patch :update, params: { id: user, user: { wca_id: user.unconfirmed_wca_id, unconfirmed_wca_id: "" } }
+    it "works when confirms WCA ID" do
+      post :confirm_wca_id, params: { userId: user.id, wcaId: user.unconfirmed_wca_id }
       user.reload
       expect(user.wca_id).to eq person.wca_id
       expect(user.unconfirmed_wca_id).to be_nil
@@ -83,7 +75,7 @@ RSpec.describe UsersController do
     it "can set id to something not claimed if the details match" do
       person2 = create(:person, name: user.name, country_id: user.country.id,
                                 dob: user.dob, gender: user.gender)
-      patch :update, params: { id: user, user: { wca_id: person2.wca_id } }
+      post :assign_wca_id, params: { userId: user.id, wcaId: person2.wca_id }
       user.reload
       expect(user.wca_id).to eq person2.wca_id
       expect(user.unconfirmed_wca_id).to eq person.wca_id
