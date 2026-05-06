@@ -62,7 +62,7 @@ export default async function ResultPage({
               formatId={format}
               roundWcifId={roundId}
               competitionId={competitionId}
-              title="Combined Dual Round"
+              title="Combined Dual Rounds"
               isLinkedRound
               canManage={canManage}
             />

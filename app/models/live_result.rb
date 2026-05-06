@@ -70,8 +70,9 @@ class LiveResult < ApplicationRecord
   end
 
   def mark_as_quit!(quit_by_user)
-    self.update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
+    quit_count = self.update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
     self.live_result_history_entries.create!(entered_by_id: quit_by_user.id, action_type: :quit)
+    quit_count
   end
 
   def locked?
@@ -99,7 +100,11 @@ class LiveResult < ApplicationRecord
   end
 
   def complete?
-    live_attempts_count == round.format.expected_solve_count
+    live_attempts_count == round.format.expected_solve_count || didnt_meet_cutoff?
+  end
+
+  def didnt_meet_cutoff?
+    live_attempts.any? && round.cutoff.present? && round.cutoff.exceeds?(live_attempts)
   end
 
   def empty_result?

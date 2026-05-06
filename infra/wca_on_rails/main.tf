@@ -38,6 +38,7 @@ module "production" {
   DATABASE_WRT_SENIOR_USER = var.DATABASE_WRT_SENIOR_USER
   rails_startup_time = local.rails_startup_time
   WRC_WEBHOOK_URL = var.WRC_WEBHOOK_URL
+  anycable_path = var.anycable_path
 }
 
 module "staging" {

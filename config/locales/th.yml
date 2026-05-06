@@ -1417,8 +1417,8 @@ th:
         wfc: WCA Financial Committee
         #original_hash: 2035811
         wmt: WCA Marketing Team
-        #original_hash: c90653c
-        wmct: WCA Major Championships Team
+        #original_hash: 2517097
+        wmct: WCA Major Championship Team
         #original_hash: 8f32116
         wqac: WCA Quality Assurance Committee
         #original_hash: 3da1e85
@@ -1721,6 +1721,13 @@ th:
       title: สถิติ
       #original_hash: 3681af0
       text: ตรวจสอบสถิติอดีตและปัจจุบันของการแข่งขันอย่างเป็นทางการของ WCA
+    volunteer:
+      #original_hash: cbf217d
+      title: อาสาสมัคร
+      #original_hash: 949f739
+      text: >-
+        มาร่วมเป็นส่วนหนึ่งกัน! WCA มีตำแหน่งอาสาสมัครเปิดรับสมัครในทีมต่าง ๆ
+        คุณไม่จำเป็นต้องเป็น speedcuber ก็สามารถเป็นอาสาสมัครได้
     faq:
       #original_hash: 03688ba
       title: FAQ
@@ -1933,6 +1940,10 @@ th:
       approve: ยอมรับ
       #original_hash: d9455bf
       approve_confirm: 'คุณแน่ใจหรือไม่ว่าต้องการอนุมัติ WCA ID %{wca_id}?'
+      #original_hash: 1ada587
+      clear_claim: Clear claim
+      #original_hash: dc39741
+      clear_claim_confirm: 'แน่ใจไหมที่คุณต้องการที่จะเคลียร์การขอรับ WCA ID: %{wca_id}'
       #original_hash: 85de4b8
       unconfirmed_email: 'email (%{email}) ของ account นี้ยังไม่ได้รับการยืนยัน'
       #original_hash: 7069007
@@ -2708,6 +2719,10 @@ th:
           %{competitors_live_results_entered}/%{total_competitors}
         #original_hash: adec79f
         round_locked: locked
+        #original_hash: 5301648
+        edit: Edit
+        #original_hash: 612e12d
+        results: ผลการแข่งขัน
         warnings:
           #original_hash: 9198c71
           omitted: >-
@@ -2729,6 +2744,8 @@ th:
             มีความแตกต่างอย่างมากระหว่างเวลาที่ดีที่สุด (%{best_single})
             และเวลาที่แย่ที่สุด (%{worst_single})
             โปรดตรวจสอบให้แน่ใจว่าผลการแข่งขันถูกต้อง
+          #original_hash: 0be6543
+          round_locked: รอบต่อไปเปิดแล้ว การเปลี่ยนแปลงใด ๆ จะไม่มีผลกระทบต่อรอบนั้น!
         quit:
           #original_hash: de62de1
           title: ลบผู้เข้าแข่งขัน
@@ -2740,6 +2757,8 @@ th:
           advance: ให้ผู้เข้าแข่งขันคนถัดไปเข้ารอบ
           #original_hash: e85b311
           quit_confirm: ลบผู้เข้าแข่งขันจากรอบ
+          #original_hash: 1a2285d
+          quit_menu: Quit
           #original_hash: 70835a0
           no_next: ไม่มีผู้เข้าแข่งขันรายต่อไปที่จะผ่านเข้ารอบ
           #original_hash: 77dfd21
@@ -2749,6 +2768,8 @@ th:
       results:
         #original_hash: 4705687
         competitor: ผู้เข้าแข่งขัน
+        #original_hash: 51cda54
+        mean: Mean
       errors:
         #original_hash: f522c26
         round_closed: รอบการแข่งขันยังไม่ได้เปิด

@@ -11,5 +11,9 @@ module ResultConditions
     def self.wcif_type
       "ranking"
     end
+
+    def max_advancing(_results)
+      value
+    end
   end
 end

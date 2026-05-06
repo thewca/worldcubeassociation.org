@@ -20,7 +20,6 @@ export const generateWcifRound = (eventId, roundNumber) => {
     cutoff: null,
     advancementCondition: null,
     results: [],
-    groups: [],
     scrambleSetCount: 1,
   };
 };

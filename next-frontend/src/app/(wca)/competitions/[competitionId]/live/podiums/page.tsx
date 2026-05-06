@@ -47,6 +47,9 @@ export default async function PodiumsPage({
           finalRound.competitors.map((r) => [r.id, r]),
         );
 
+        const isDualRound =
+          finalRound.linked_round_ids && finalRound.linked_round_ids.length > 0;
+
         return (
           <Fragment key={finalRound.id}>
             <Heading textStyle="h3" p="2">
@@ -54,6 +57,7 @@ export default async function PodiumsPage({
             </Heading>
             {finalRound.results.length > 0 ? (
               <LiveResultsTable
+                showLinkedRoundsView={isDualRound}
                 resultsByRegistrationId={resultsByRegistrationId}
                 competitionId={competitionId}
                 competitors={competitors}
