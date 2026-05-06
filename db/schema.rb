@@ -483,6 +483,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_101433) do
     t.index ["event_id", "country_id", "average"], name: "regional_records_speedup"
     t.index ["person_id", "country_id", "event_id", "reg_year"], name: "unique_per_competitor_per_event_per_year", unique: true
     t.index ["person_id", "event_id", "continent_id", "country_id", "average"], name: "average_ranks_speedup"
+    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
   end
 
   create_table "concise_single_results", primary_key: "result_id", id: :bigint, default: nil, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -497,6 +498,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_101433) do
     t.index ["event_id", "country_id", "best"], name: "regional_records_speedup"
     t.index ["person_id", "country_id", "event_id", "reg_year"], name: "unique_per_competitor_per_event_per_year", unique: true
     t.index ["person_id", "event_id", "continent_id", "country_id", "best"], name: "single_ranks_speedup"
+    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
   end
 
   create_table "connected_paypal_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1049,6 +1051,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_101433) do
     t.string "person_id", limit: 10, default: "", null: false
     t.integer "world_rank", default: 0, null: false
     t.index ["event_id"], name: "fk_events"
+    t.index ["person_id", "event_id"], name: "index_ranks_average_on_person_id_and_event_id", unique: true
     t.index ["person_id"], name: "fk_persons"
   end
 
@@ -1060,6 +1063,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_101433) do
     t.string "person_id", limit: 10, default: "", null: false
     t.integer "world_rank", default: 0, null: false
     t.index ["event_id"], name: "fk_events"
+    t.index ["person_id", "event_id"], name: "index_ranks_single_on_person_id_and_event_id", unique: true
     t.index ["person_id"], name: "fk_persons"
   end
 
