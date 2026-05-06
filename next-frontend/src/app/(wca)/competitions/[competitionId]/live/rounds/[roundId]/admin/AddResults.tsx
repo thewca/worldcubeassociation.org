@@ -1,7 +1,6 @@
 import { SimpleGrid, GridItem } from "@chakra-ui/react";
 import AttemptsForm from "@/components/live/AttemptsForm";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
-import { getT } from "@/lib/i18n/get18n";
 import RoundNameHeader from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/RoundNameHeader";
 import RoundLockedAlert from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/RoundLockedAlert";
 
@@ -10,11 +9,9 @@ export default async function AddResults({
 }: {
   competitionId: string;
 }) {
-  const { t } = await getT();
-
   return (
     <>
-      <RoundLockedAlert t={t} />
+      <RoundLockedAlert />
       <RoundNameHeader />
       <SimpleGrid columns={16} gap={6}>
         <GridItem colSpan={4} position="sticky" top={4} alignSelf="start">

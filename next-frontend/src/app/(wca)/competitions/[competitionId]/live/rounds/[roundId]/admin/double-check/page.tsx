@@ -39,7 +39,7 @@ export default async function DoubleCheckPage({
   return (
     <Container>
       <RoundInfoProvider roundId={id}>
-        <RoundOpenCheck t={t}>
+        <RoundOpenCheck>
           <PermissionCheck
             requiredPermission="canAdministerCompetition"
             item={competitionId}

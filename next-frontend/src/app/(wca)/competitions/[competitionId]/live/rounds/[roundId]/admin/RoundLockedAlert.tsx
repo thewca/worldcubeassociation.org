@@ -2,10 +2,11 @@
 
 import ClosableAlert from "@/components/ui/ClosableAlert";
 import { useRoundInfo } from "@/providers/RoundInfoProvider";
-import { TFunction } from "i18next";
+import { useT } from "@/lib/i18n/useI18n";
 
-export default function RoundLockedAlert({ t }: { t: TFunction }) {
+export default function RoundLockedAlert() {
   const { state } = useRoundInfo();
+  const { t } = useT();
 
   const isLocked = state === "locked";
 

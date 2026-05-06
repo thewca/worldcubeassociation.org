@@ -28,7 +28,7 @@ export default async function ResultPage({
   return (
     <Container bg="bg">
       <RoundInfoProvider roundId={roundId}>
-        <RoundOpenCheck t={t}>
+        <RoundOpenCheck>
           <PermissionCheck
             requiredPermission="canAdministerCompetition"
             item={competitionId}

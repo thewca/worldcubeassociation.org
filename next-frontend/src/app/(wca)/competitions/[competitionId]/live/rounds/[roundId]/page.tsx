@@ -54,17 +54,21 @@ export default async function ResultPage({
     return (
       <Container bg="bg">
         <VStack align="left">
-          <MultiRoundResultProvider
-            initialRounds={[data, ...linkedRounds.map((d) => d.data!)]}
-            competitionId={competitionId}
-          >
-            <LiveUpdatingResultsTable
-              competitionId={competitionId}
-              title="Combined Dual Rounds"
-              isLinkedRound
-              canManage={canManage}
-            />
-          </MultiRoundResultProvider>
+          <RoundInfoProvider roundId={id}>
+            <RoundOpenCheck>
+              <MultiRoundResultProvider
+                initialRounds={[data, ...linkedRounds.map((d) => d.data!)]}
+                competitionId={competitionId}
+              >
+                <LiveUpdatingResultsTable
+                  competitionId={competitionId}
+                  title="Combined Dual Rounds"
+                  isLinkedRound
+                  canManage={canManage}
+                />
+              </MultiRoundResultProvider>
+            </RoundOpenCheck>
+          </RoundInfoProvider>
         </VStack>
       </Container>
     );
@@ -74,7 +78,7 @@ export default async function ResultPage({
     <Container bg="bg">
       <VStack align="left">
         <RoundInfoProvider roundId={id}>
-          <RoundOpenCheck t={t}>
+          <RoundOpenCheck>
             <LiveResultProvider
               initialRound={data}
               competitionId={competitionId}
