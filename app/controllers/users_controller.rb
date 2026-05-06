@@ -115,8 +115,6 @@ class UsersController < ApplicationController
     wca_id = params.require(:wcaId)
     person = Person.find_by(wca_id: wca_id)
 
-    error = nil
-    status = nil
     if person.nil?
       error = "WCA ID #{wca_id} does not exist."
       status = :not_found
