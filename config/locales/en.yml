@@ -1412,7 +1412,7 @@ en:
         done: "done"
       connection:
         initialized: "Connection being initialized"
-        connected: "Connected, results are being updated"
+        connected: "Connected, receiving live results updates"
         disconnected: "Lost connection, results are not being updated"
       podiums:
         title: "Podiums"

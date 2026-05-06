@@ -2743,7 +2743,7 @@ fi:
         #original_hash: f92b311
         initialized: Connection being initialized
         #original_hash: 66d44d4
-        connected: 'Connected, results are being updated'
+        connected: 'Connected, receiving live results updates'
         #original_hash: 53abaa2
         disconnected: 'Lost connection, results are not being updated'
     my_competitions:
