@@ -23,7 +23,7 @@ RSpec.feature "Claim WCA ID" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
@@ -40,7 +40,7 @@ RSpec.feature "Claim WCA ID" do
       # Make sure we inform the user of the incorrect birthdate they just
       # entered.
       expect(person.reload.incorrect_wca_id_claim_count).to eq 1
-      expect(page.find(".alert.alert-danger")).to have_content("Birthdate does not match our database.")
+      expect(page.find(".alert.alert-danger")).to have_text("Birthdate does not match our database.")
       # Now enter the correct birthdate and submit the form!
       fill_in("Birthdate", with: "1988-02-03").send_keys(:enter)
       click_button "Claim WCA ID"
@@ -56,7 +56,7 @@ RSpec.feature "Claim WCA ID" do
 
       fill_in_selectize "WCA ID", with: person_without_dob.wca_id
 
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "WCA ID #{person_without_dob.wca_id} does not have a birthdate assigned. Please contact with WCA Results Team using this dedicated form."
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "WCA ID #{person_without_dob.wca_id} does not have a birthdate assigned. Please contact with WCA Results Team using this dedicated form."
     end
 
     it 'tells you to contact Results team if you WCA ID has been incorrectly claimed too many times', skip: "because it is unstable in GitHub CI" do
@@ -66,7 +66,7 @@ RSpec.feature "Claim WCA ID" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax, then fill it in.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "In order to assign you your WCA ID"
       # Select a delegate.
       delegate = person.competitions.first.delegates.first
       choose("user_delegate_id_to_handle_wca_id_claim_#{delegate.id}")
@@ -79,7 +79,7 @@ RSpec.feature "Claim WCA ID" do
 
         # Make sure we inform the user of the incorrect birthdate they just
         # entered.
-        expect(page.find(".alert.alert-danger")).to have_content("Birthdate does not match our database.")
+        expect(page.find(".alert.alert-danger")).to have_text("Birthdate does not match our database.")
         expect(person.reload.incorrect_wca_id_claim_count).to eq(i + 1)
       end
 
@@ -89,7 +89,7 @@ RSpec.feature "Claim WCA ID" do
 
       # Based on WRT request here: https://github.com/thewca/worldcubeassociation.org/pull/3666#discussion_r253315031,
       # the expected message for this is users.errors.wca_id_no_birthdate_html
-      expect(page.find(".alert.alert-danger")).to have_content("We do not have a birthdate recorded for this WCA ID. Please contact the WCA Results Team")
+      expect(page.find(".alert.alert-danger")).to have_text("We do not have a birthdate recorded for this WCA ID. Please contact the WCA Results Team")
       user.reload
       expect(user.unconfirmed_wca_id).to be_nil
       expect(user.delegate_to_handle_wca_id_claim).to be_nil

@@ -3,15 +3,15 @@
 require "rails_helper"
 
 def ranking_condition
-  AdvancementConditions::RankingCondition.new(3)
+  ResultConditions::Ranking.new(scope: "average", value: 3)
 end
 
 def percent_condition
-  AdvancementConditions::PercentCondition.new(40)
+  ResultConditions::Percent.new(scope: "average", value: 40)
 end
 
 def attempt_result_condition
-  AdvancementConditions::AttemptResultCondition.new(300)
+  ResultConditions::ResultAchieved.new(scope: "average", value: 300)
 end
 
 RSpec.describe "WCA Live API" do
@@ -21,7 +21,8 @@ RSpec.describe "WCA Live API" do
   describe "Advancing Recomputation" do
     context 'with a ranking advancement condition' do
       it 'returns results with ranking better or equal to the given level' do
-        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: round)
 
         5.times do |i|
           create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
@@ -36,7 +37,8 @@ RSpec.describe "WCA Live API" do
 
     context 'with a percent advancement condition' do
       it 'returns results with ranking better or equal to the given level' do
-        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: percent_condition, participation_source: round)
 
         5.times do |i|
           create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
@@ -50,7 +52,8 @@ RSpec.describe "WCA Live API" do
       end
 
       it 'considers average tied but better single' do
-        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: percent_condition, participation_source: round)
 
         5.times do |i|
           create(:live_result, registration: registrations[i], round: round, best: (i + 1) * 100, average: 300)
@@ -64,7 +67,8 @@ RSpec.describe "WCA Live API" do
       end
 
       it 'considers dnfs' do
-        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: percent_condition, participation_source: round)
 
         4.times do |i|
           create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
@@ -80,7 +84,8 @@ RSpec.describe "WCA Live API" do
       end
 
       it 'considers dns' do
-        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: percent_condition, participation_source: round)
 
         4.times do |i|
           create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
@@ -96,9 +101,84 @@ RSpec.describe "WCA Live API" do
       end
     end
 
+    context 'with a cutoff' do
+      it 'does not mark as advancing competitors who did not meet the cutoff' do
+        cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 5000)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, cutoff: cutoff)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: round)
+
+        registrations # ensure registrations are created before opening the round
+        round.open_round!(User.first)
+        live_results = round.live_results
+
+        # 3 competitors met the cutoff (at least one attempt < 5000 in first 2)
+        3.times do |i|
+          result = live_results.find_by!(registration_id: registrations[i].id)
+          UpdateLiveResultJob.perform_now(result, Array.new(5) { |j| { value: (i + 1) * 1000, attempt_number: j + 1 } }, User.first.id)
+        end
+
+        # 2 competitors did NOT meet the cutoff (both first 2 attempts >= 5000)
+        2.times do |i|
+          result = live_results.find_by!(registration_id: registrations[3 + i].id)
+          UpdateLiveResultJob.perform_now(result, [{ value: 6000, attempt_number: 1 }, { value: 7000, attempt_number: 2 }], User.first.id)
+        end
+
+        no_cutoff_ids = [registrations[3].id, registrations[4].id]
+        expect(round.live_results.reload.where(registration_id: no_cutoff_ids).pluck(:advancing)).to all(be false)
+        expect(round.live_results.reload.where.not(registration_id: no_cutoff_ids).pluck(:advancing)).to all(be true)
+      end
+
+      it 'does not mark as advancing competitors who did not meet the cutoff when they have a dnf' do
+        cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 5000)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, cutoff: cutoff)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: round)
+
+        registrations # ensure registrations are created before opening the round
+        round.open_round!(User.first)
+        live_results = round.live_results
+
+        # 3 competitors met the cutoff (at least one attempt < 5000 in first 2)
+        3.times do |i|
+          result = live_results.find_by!(registration_id: registrations[i].id)
+          UpdateLiveResultJob.perform_now(result, Array.new(5) { |j| { value: (i + 1) * 1000, attempt_number: j + 1 } }, User.first.id)
+        end
+
+        # 2 competitors did NOT meet the cutoff (both first 2 attempts >= 5000)
+        2.times do |i|
+          result = live_results.find_by!(registration_id: registrations[3 + i].id)
+          UpdateLiveResultJob.perform_now(result, [{ value: 6000, attempt_number: 1 }, { value: -1, attempt_number: 2 }], User.first.id)
+        end
+
+        no_cutoff_ids = [registrations[3].id, registrations[4].id]
+        expect(round.live_results.reload.where(registration_id: no_cutoff_ids).pluck(:advancing)).to all(be false)
+        expect(round.live_results.reload.where.not(registration_id: no_cutoff_ids).pluck(:advancing)).to all(be true)
+      end
+
+      it 'with missing results' do
+        cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 5000)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, cutoff: cutoff)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: round)
+
+        registrations # ensure registrations are created before opening the round
+        round.open_round!(User.first)
+        live_results = round.live_results
+
+        # 3 competitors met the cutoff (at least one attempt < 5000 in first 2)
+        3.times do |i|
+          result = live_results.find_by!(registration_id: registrations[i].id)
+          UpdateLiveResultJob.perform_now(result, Array.new(5) { |j| { value: (i + 1) * 1000, attempt_number: j + 1 } }, User.first.id)
+        end
+
+        # We are still missing two results so only the first result should be marked as advancing
+        expect(round.live_results.reload.where(registration_id: [registrations.first]).pluck(:advancing)).to all(be true)
+        expect(round.live_results.reload.where.not(registration_id: [registrations.first]).pluck(:advancing)).to all(be false)
+      end
+    end
+
     context 'with an attempt_result advancement condition' do
       it 'returns results with ranking better or equal to the given level' do
-        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: attempt_result_condition, participation_source: round)
 
         5.times do |i|
           create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
@@ -115,7 +195,8 @@ RSpec.describe "WCA Live API" do
     describe "tie handling" do
       context "with a ranking advancement condition" do
         it "excludes all results tied at the qualifying boundary if over the 75% rule" do
-          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition)
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+          create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: round)
 
           create(:live_result, registration: registrations[0], round: round, average: 100)
           create(:live_result, registration: registrations[1], round: round, average: 200)
@@ -129,7 +210,8 @@ RSpec.describe "WCA Live API" do
         end
 
         it "excludes all results tied at the qualifying boundary that are also tied with previous results if over the 75% rule" do
-          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition)
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+          create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: round)
 
           # These are all tied and if all would advance it would break the 75% rule so no one advances
           create(:live_result, registration: registrations[0], round: round, average: 300, best: 150)
@@ -142,7 +224,8 @@ RSpec.describe "WCA Live API" do
         end
 
         it "advances all results tied within the qualifying zone" do
-          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition)
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+          create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: round)
 
           create(:live_result, registration: registrations[0], round: round, average: 100)
           # Tied at rank 2 — both are comfortably within the top 3, so both advance.
@@ -157,7 +240,8 @@ RSpec.describe "WCA Live API" do
 
       context "with a percent advancement condition" do
         it "doesn't exclude results tied at the qualifying boundary when still in the 75% boundary" do
-          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+          create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: percent_condition, participation_source: round)
 
           create(:live_result, registration: registrations[0], round: round, average: 100)
           # 40% of 5 = 2. These two are tied for rank 2 — advancing both would exceed
@@ -171,7 +255,8 @@ RSpec.describe "WCA Live API" do
         end
 
         it "advances all results tied within the qualifying zone" do
-          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+          create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: percent_condition, participation_source: round)
 
           # 40% of 5 = 2. Two are tied at rank 1 — both are inside the qualifying zone.
           create(:live_result, registration: registrations[0], round: round, average: 100, best: 50)
@@ -186,7 +271,8 @@ RSpec.describe "WCA Live API" do
 
       context "with an attempt_result advancement condition" do
         it "excludes all results tied exactly at the cutoff time" do
-          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+          create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: attempt_result_condition, participation_source: round)
 
           create(:live_result, registration: registrations[0], round: round, average: 100)
           create(:live_result, registration: registrations[1], round: round, average: 200)
@@ -200,7 +286,8 @@ RSpec.describe "WCA Live API" do
         end
 
         it "advances all results tied well within the cutoff" do
-          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+          round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+          create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: attempt_result_condition, participation_source: round)
 
           # Both are comfortably under 3 seconds, so both qualify.
           create(:live_result, registration: registrations[0], round: round, average: 100, best: 50)
@@ -216,7 +303,8 @@ RSpec.describe "WCA Live API" do
 
     context "with locked results" do
       it "doesn't change advancing of locked results" do
-        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: attempt_result_condition, participation_source: round)
 
         5.times do |i|
           create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
@@ -237,9 +325,9 @@ RSpec.describe "WCA Live API" do
     context "with linked rounds (second round partially entered)" do
       context "with ranking condition" do
         let!(:linked) { create(:linked_round) }
-        let!(:round1) { create(:round, number: 1, total_number_of_rounds: 3, event_id: "333", competition: competition, advancement_condition: ranking_condition, linked_round: linked) }
-        let!(:round2) { create(:round, number: 2, total_number_of_rounds: 3, event_id: "333", competition: competition, advancement_condition: ranking_condition, linked_round: linked) }
-        let!(:round3) { create(:round, number: 3, total_number_of_rounds: 3, event_id: "333", competition: competition) }
+        let!(:round1) { create(:round, number: 1, total_number_of_rounds: 3, event_id: "333", competition: competition, linked_round: linked) }
+        let!(:round2) { create(:round, number: 2, total_number_of_rounds: 3, event_id: "333", competition: competition, linked_round: linked) }
+        let!(:round3) { create(:round, number: 3, total_number_of_rounds: 3, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: linked) }
 
         # Enter round2 for a competitor using uniform attempts (all = target) so Ao5 average == target.
         def enter_round2(registration, average)
@@ -282,9 +370,9 @@ RSpec.describe "WCA Live API" do
 
       context "with percent condition" do
         let!(:linked) { create(:linked_round) }
-        let!(:round1) { create(:round, number: 1, total_number_of_rounds: 3, event_id: "333", competition: competition, advancement_condition: percent_condition, linked_round: linked) }
-        let!(:round2) { create(:round, number: 2, total_number_of_rounds: 3, event_id: "333", competition: competition, advancement_condition: percent_condition, linked_round: linked) }
-        let!(:round3) { create(:round, number: 3, total_number_of_rounds: 3, event_id: "333", competition: competition) }
+        let!(:round1) { create(:round, number: 1, total_number_of_rounds: 3, event_id: "333", competition: competition, linked_round: linked) }
+        let!(:round2) { create(:round, number: 2, total_number_of_rounds: 3, event_id: "333", competition: competition, linked_round: linked) }
+        let!(:round3) { create(:round, number: 3, total_number_of_rounds: 3, event_id: "333", competition: competition, participation_condition: percent_condition, participation_source: linked) }
 
         # Enter round2 for a competitor using uniform attempts (all = target) so Ao5 average == target.
         def enter_round2(registration, average)
@@ -326,7 +414,8 @@ RSpec.describe "WCA Live API" do
 
     context "with quit results" do
       it "quit from first round excludes from competitors" do
-        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: attempt_result_condition, participation_source: round)
         registration_1 = registrations.first
 
         # Open Round
@@ -341,8 +430,8 @@ RSpec.describe "WCA Live API" do
       end
 
       it "quit from next round marks as no advancing in previous round" do
-        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition)
-        final = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+        final = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: attempt_result_condition, participation_source: round)
 
         5.times do |i|
           create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
@@ -367,8 +456,8 @@ RSpec.describe "WCA Live API" do
       end
 
       it "quit from next round advances next competitor if set" do
-        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition)
-        final = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition)
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+        final = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: percent_condition, participation_source: round)
 
         5.times do |i|
           create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
@@ -394,8 +483,8 @@ RSpec.describe "WCA Live API" do
 
   describe "Advancing Questionable" do
     context 'with Percent Condition' do
-      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: percent_condition) }
-      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: percent_condition, participation_source: round1) }
 
       it 'correctly sets advancing questionable to true if the first result is entered' do
         registration = registrations.first
@@ -414,8 +503,8 @@ RSpec.describe "WCA Live API" do
     end
 
     context 'with RankingCondition (top 3 advance)' do
-      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition) }
-      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: round1) }
 
       it 'correctly sets advancing questionable to true if the first result is entered' do
         registration = registrations.first
@@ -434,8 +523,8 @@ RSpec.describe "WCA Live API" do
     end
 
     context 'with AttemptResultCondition' do
-      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition) }
-      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: attempt_result_condition, participation_source: round1) }
 
       it 'correctly sets advancing questionable to true if the first result entered is under the condition' do
         registration = registrations.first
@@ -477,8 +566,8 @@ RSpec.describe "WCA Live API" do
 
   describe 'Next Advancing to round' do
     context 'with RankingCondition (top 3 advance)' do
-      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: ranking_condition) }
-      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: round1) }
 
       it 'returns the next ranked person after the cutoff' do
         5.times { |i| create(:live_result, registration: registrations[i], round: round1, average: (i + 1) * 100) }
@@ -503,8 +592,8 @@ RSpec.describe "WCA Live API" do
     context 'with AttemptResultCondition where the 75% cap is the binding constraint' do
       # 4 results under 300 (100,200,250,280) but cap = floor(5*0.75) = 3
       # So rank 4 (280) doesn't advance despite being under the threshold
-      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition, advancement_condition: attempt_result_condition) }
-      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+      let!(:round1) { create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition) }
+      let!(:round2) { create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: attempt_result_condition, participation_source: round1) }
 
       it 'returns the person who meets the condition but was capped out' do
         averages = [100, 200, 250, 280, 310]

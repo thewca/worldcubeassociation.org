@@ -13,7 +13,7 @@ class TicketsCompetitionResult < ApplicationRecord
     posted: "posted",
   }
 
-  has_one :ticket, as: :metadata
+  has_one :ticket, as: :metadata, dependent: :destroy
   belongs_to :competition
 
   ACTION_TYPE = {

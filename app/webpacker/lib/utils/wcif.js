@@ -23,8 +23,9 @@ export function useSaveWcifAction() {
       onError = alertWcifError,
     ) => {
       const url = `/api/v0/competitions/${competitionId}/wcif`;
+      const wcifWithFormat = { formatVersion: '1.1', ...wcifData };
 
-      save(url, wcifData, onSuccess, options, onError);
+      save(url, wcifWithFormat, onSuccess, options, onError);
     },
     [save],
   );
