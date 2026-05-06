@@ -66,7 +66,7 @@ class Registration < ApplicationRecord
   before_save :mark_accepted_at, if: :trying_to_accept?
   # rubocop:enable Rails/ActiveRecordCallbacksOrder
   private def mark_accepted_at
-    self.accepted_at = Time.now.utc
+    self.accepted_at = current_time_from_proper_timezone
   end
 
   validates :registrant_id, presence: true, uniqueness: { scope: :competition_id }
