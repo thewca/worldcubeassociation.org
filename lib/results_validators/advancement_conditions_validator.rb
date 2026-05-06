@@ -59,11 +59,11 @@ module ResultsValidators
                                         else
                                           results.size
                                         end
-            remaining_number_of_rounds =  if round.linked_round.present?
-                                            round.total_number_of_rounds - 2
-                                          else
-                                            round.total_number_of_rounds - round.number
-                                          end
+            remaining_number_of_rounds = if round.linked_round.present?
+                                           round.total_number_of_rounds - 2
+                                         else
+                                           round.total_number_of_rounds - round.number
+                                         end
 
             if number_of_people_in_round <= 7 && remaining_number_of_rounds.positive?
               # https://www.worldcubeassociation.org/regulations/#9m3: Rounds with 7 or fewer competitors must not have subsequent rounds.
