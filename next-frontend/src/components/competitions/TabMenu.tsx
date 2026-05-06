@@ -162,31 +162,25 @@ function TabList({
   isLiveMenu?: boolean;
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
-  return (
-    <>
-      {tabs.map((tab) =>
-        "href" in tab ? (
-          <Tabs.Trigger value={tab.menuKey} asChild key={tab.menuKey}>
-            <Text asChild textStyle="bodyEmphasis" justifyContent="left">
-              <Link
-                href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}
-              >
-                {t(tab.i18nKey)}
-              </Link>
-            </Text>
-          </Tabs.Trigger>
-        ) : (
-          <CollapsibleTabGroup
-            key={tab.menuKey}
-            tab={tab}
-            t={t}
-            isAdminRoute={isAdminRoute}
-            isOpen={openGroup === tab.menuKey}
-            onToggle={() => onToggle(tab)}
-          />
-        ),
-      )}
-    </>
+  return tabs.map((tab) =>
+    "href" in tab ? (
+      <Tabs.Trigger value={tab.menuKey} asChild key={tab.menuKey}>
+        <Text asChild textStyle="bodyEmphasis" justifyContent="left">
+          <Link href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}>
+            {t(tab.i18nKey)}
+          </Link>
+        </Text>
+      </Tabs.Trigger>
+    ) : (
+      <CollapsibleTabGroup
+        key={tab.menuKey}
+        tab={tab}
+        t={t}
+        isAdminRoute={isAdminRoute}
+        isOpen={openGroup === tab.menuKey}
+        onToggle={() => onToggle(tab)}
+      />
+    ),
   );
 }
 
