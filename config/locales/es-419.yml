@@ -2878,6 +2878,8 @@ es-419:
         title: Podios
         #original_hash: d7297a7
         undetermined: Podios a definir
+        #original_hash: 61e88df
+        none: ¡No hay podios aún!
       admin:
         #original_hash: cf9b770
         open: Abierto
@@ -4589,6 +4591,11 @@ es-419:
         qualification_some_events_html: >-
           Los tiempos de calificación en %{events} deben realizarse en o antes
           de la fecha <b>%{date}</b>.
+        #original_hash: ce9b21b
+        advancement_condition_html: >-
+          El número de competidores a avanzar de ronda que se muestra es el
+          máximo planificado. El número final puede ser menor si hay menos
+          competidores que lo esperado, o si hay empates justo en el corte.
       #original_hash: 041a5de
       format: Formato
       #original_hash: 0d1fcc3
@@ -4599,6 +4606,8 @@ es-419:
       proceed: Avanzar
       #original_hash: 2ffe44e
       qualification: Calificación
+      #original_hash: 5289f93
+      advancement_condition: Condición de avance
     schedule:
       display_as:
         #original_hash: 0424f6e
