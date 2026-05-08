@@ -24,7 +24,7 @@ import {
   SKIPPED_VALUE,
   encodeMbldResult,
 } from "@/lib/wca/wcif/attempts";
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, KeyboardEvent } from "react";
 import type { EventId } from "@/lib/wca/data/events";
 import {
   autocompleteFmAttemptResult,
@@ -99,6 +99,11 @@ const resultShortcuts: KeyShortcut<string>[] = [
   { keyTriggers: DNS_KEYS, draftValue: "DNS" },
 ];
 
+// Space moves the focus back to the Competitor Combobox
+const SUPPRESS_SPACE = (e: KeyboardEvent<HTMLInputElement>) => {
+  if (e.key === " ") e.preventDefault();
+};
+
 export interface AttemptResultProps {
   value: number;
   onChange: (value: number) => void;
@@ -123,7 +128,12 @@ export function TimeField({
 
   return (
     <Field.Root invalid={!isValid}>
-      <Input spellCheck={false} placeholder={placeholder} {...binding} />
+      <Input
+        spellCheck={false}
+        placeholder={placeholder}
+        onKeyDown={SUPPRESS_SPACE}
+        {...binding}
+      />
     </Field.Root>
   );
 }
@@ -158,7 +168,12 @@ export function FmMovesField({
 
   return (
     <Field.Root invalid={!isValid}>
-      <Input placeholder={placeholder} spellCheck={false} {...binding} />
+      <Input
+        placeholder={placeholder}
+        spellCheck={false}
+        onKeyDown={SUPPRESS_SPACE}
+        {...binding}
+      />
     </Field.Root>
   );
 }
@@ -175,7 +190,7 @@ export function MbldCubesField({ value, onChange }: AttemptResultProps) {
 
   return (
     <Field.Root invalid={!isValid}>
-      <Input spellCheck={false} {...binding} />
+      <Input spellCheck={false} onKeyDown={SUPPRESS_SPACE} {...binding} />
     </Field.Root>
   );
 }
