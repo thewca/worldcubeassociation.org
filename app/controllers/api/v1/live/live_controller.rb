@@ -152,6 +152,29 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     render json: { status: "ok", quit: quit_count }
   end
 
+  def bulk_quit_competitors
+    competition = Competition.find(params.require(:competition_id))
+    wcif_id = params.require(:round_id)
+    registration_ids = params.require(:registration_ids).map(&:to_i)
+    advancing_ids = params[:advancing_ids]
+
+    require_manage!(competition)
+
+    round = Round.find_by_wcif_id!(wcif_id, competition.id, includes: [:live_results])
+    results = round.live_results.where(registration_id: registration_ids).includes(:live_attempts)
+
+    return render json: { status: "Cannot quit competitor with results" }, status: :bad_request if results.any? { |r| r.live_attempts.any? }
+    return render json: { status: "Can't advance next for first rounds" }, status: :bad_request if advancing_ids.present? && round.first_round?
+
+    to_advance = round.next_participating_without(registration_ids) if advancing_ids.present?
+
+    return render json: { status: "The advancing competitors don't match who should be advancing.", should_advance: to_advance }, status: :bad_request if advancing_ids.present? && advancing_ids.map(&:to_i) != to_advance&.pluck(:registration_id)
+
+    quit_count = round.bulk_quit_from_round!(registration_ids, @current_user, to_advance: to_advance)
+
+    render json: { status: "ok", quit: quit_count }
+  end
+
   def next_if_quit
     competition = Competition.find(params.require(:competition_id))
     wcif_id = params.require(:round_id)

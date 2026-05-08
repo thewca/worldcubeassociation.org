@@ -654,7 +654,7 @@ class Round < ApplicationRecord
   # Port from https://github.com/thewca/wca-live/blob/main/lib/wca_live/scoretaking/advancing.ex#L143
   # Basically this just removes the number one placed competitor and then sees who of the non-advancing
   # competitors would make it if that competitor got dnf
-  def next_participating_without(competitor_being_quit)
+  def next_participating_without(competitors_being_quit)
     live_results = self.participation_source.advancement_results.to_a
 
     already_quit_ids = live_results.select(&:quit?).pluck(:id)
@@ -665,7 +665,7 @@ class Round < ApplicationRecord
 
     return [] if candidate_ids.empty?
 
-    quit_result_ids = live_results.select { it.registration_id == competitor_being_quit }.pluck(:id)
+    quit_result_ids = live_results.select { Array(competitors_being_quit).include?(it.registration_id) }.pluck(:id)
     ignored_ids = [first_advancing&.id].compact | quit_result_ids | already_quit_ids
 
     advancement_determining = live_results.reject { ignored_ids.include? it.id }
@@ -709,6 +709,27 @@ class Round < ApplicationRecord
           round.live_results.where(id: to_advance&.pluck(:id)).update!(advancing: true)
           round.live_results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
         end
+      end
+    end
+  end
+
+  def bulk_quit_from_round!(registration_ids, quitting_user, to_advance: nil)
+    transaction do
+      Live::DiffHelper.broadcast_changes(self) do
+        live_results.where(registration_id: registration_ids).find_each(&:destroy!)
+        live_results.create(to_advance.map { { **LiveResult.empty_result_attributes(it.registration_id, self.id) } }) if to_advance.present?
+        recompute_advancing
+        live_results.reset
+      end
+
+      return registration_ids.length if first_round?
+
+      participation_source.rounds.sum do |round|
+        Live::DiffHelper.broadcast_changes(round) do
+          round.live_results.where(id: to_advance&.pluck(:id)).update!(advancing: true)
+          round.live_results.where(registration_id: registration_ids).find_each { |r| r.mark_as_quit!(quitting_user) }
+        end
+        registration_ids.length
       end
     end
   end
