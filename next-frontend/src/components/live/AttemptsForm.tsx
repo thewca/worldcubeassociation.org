@@ -86,8 +86,6 @@ export default function AttemptsForm({
     confirmSubmissionRef.current = confirmSubmission;
   });
 
-  const competitorInputRef = useRef<HTMLInputElement | null>(null);
-
   const handleFormKeyDown = useCallback((e: KeyboardEvent<HTMLFormElement>) => {
     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
@@ -141,7 +139,7 @@ export default function AttemptsForm({
         <FocusScope>
           <AttemptFieldsNav
             onSubmit={() => confirmSubmissionRef.current()}
-            onFocusCompetitor={() => competitorInputRef.current?.focus()}
+            onFocusCompetitor={() => inputRef.current?.focus()}
           >
             {_.times(solveCount).map((index) => (
               <AttemptResultField
