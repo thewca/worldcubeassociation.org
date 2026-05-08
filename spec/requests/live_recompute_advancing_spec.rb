@@ -468,7 +468,7 @@ RSpec.describe "WCA Live API" do
 
         # Open next round and quit first result from it while letting the next one advance
         final.open_and_lock_previous(User.first)
-        to_advance = round.next_advancing_without(registrations.first.id)
+        to_advance = final.next_participating_without(registrations.first.id)
         final.quit_from_round!(registrations.first.id, User.first, to_advance: to_advance)
 
         # Next Competitor is marked as advancing
@@ -573,7 +573,7 @@ RSpec.describe "WCA Live API" do
         5.times { |i| create(:live_result, registration: registrations[i], round: round1, average: (i + 1) * 100) }
 
         # Ranks 1-3 advance; rank 4 is the next qualifying person
-        next_qualifying = round1.next_advancing_without(registrations.first)
+        next_qualifying = round2.next_participating_without(registrations.first)
         expect(next_qualifying.map(&:registration_id)).to contain_exactly(registrations[3].id)
       end
 
@@ -584,7 +584,7 @@ RSpec.describe "WCA Live API" do
         rank4 = round1.live_results.order(global_pos: :asc).offset(3).first
         rank4.update!(quit_by_id: create(:user).id)
 
-        next_qualifying = round1.next_advancing_without(registrations.first)
+        next_qualifying = round2.next_participating_without(registrations.first)
         expect(next_qualifying.map(&:registration_id)).to contain_exactly(registrations[4].id)
       end
     end
@@ -601,7 +601,7 @@ RSpec.describe "WCA Live API" do
 
         # ranks 1,2,3 advance (capped). rank 4 (280) meets condition but was capped out.
         # With rank 1 removed: pool=4, under-300 = 200,250,280 = 3, cap=3 → rank 4 qualifies
-        next_qualifying = round1.next_advancing_without(registrations.first)
+        next_qualifying = round2.next_participating_without(registrations.first)
         expect(next_qualifying.map(&:registration_id)).to contain_exactly(registrations[3].id)
       end
 
@@ -612,7 +612,7 @@ RSpec.describe "WCA Live API" do
         # ranks 1,2,3 advance (all under 300, not capped). rank 4 (310) is over threshold.
         # With rank 1 removed: pool=4, under-300 = 200,250 = 2, cap=3 → only 2 advance
         # Ranks 2 and 3 are already advancing — no new person qualifies
-        expect(round1.next_advancing_without(registrations.first)).to eq([])
+        expect(round2.next_participating_without(registrations.first)).to eq([])
       end
     end
   end

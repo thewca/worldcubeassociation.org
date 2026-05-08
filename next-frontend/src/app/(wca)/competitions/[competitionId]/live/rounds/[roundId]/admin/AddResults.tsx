@@ -5,7 +5,6 @@ import formats from "@/lib/wca/data/formats";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { LiveRoundAdminBase } from "@/types/live";
-import ConfirmProvider from "@/providers/ConfirmProvider";
 import { getT } from "@/lib/i18n/get18n";
 
 export default async function AddResults({
@@ -25,7 +24,7 @@ export default async function AddResults({
   const isLocked = round.state === "locked";
 
   return (
-    <ConfirmProvider>
+    <>
       {isLocked && (
         <ClosableAlert
           status="warning"
@@ -53,6 +52,6 @@ export default async function AddResults({
           />
         </GridItem>
       </SimpleGrid>
-    </ConfirmProvider>
+    </>
   );
 }

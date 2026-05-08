@@ -30,16 +30,20 @@ class LinkedRound < ApplicationRecord
     rounds.all?(&:score_taking_done?)
   end
 
-  def next_advancing_without(competitor_being_quit)
-    Live::Advancing.next_advancing_without(merged_live_results, competitor_being_quit, last_round_in_link)
+  def live_podium
+    merged_live_results.filter { it.advancing? && it.global_pos.in?(LiveResult::PODIUM_RANGE) }
   end
 
-  delegate :next_round, to: :last_round_in_link
+  def target_participation_condition
+    self.target_rounds.first&.participation_condition
+  end
+
+  delegate :format, to: :first_round_in_link, prefix: :ranking
+
+  alias_method :advancement_results, :merged_live_results
 
   def recompute_advancing(can_update_advancing)
-    results_to_update = live_results.where.not(global_pos: nil).where(locked_by_id: nil)
-    advancement_determining_condition = final_round? ? Live::Advancing.podium_condition(rounds.first) : next_round.participation_condition
-    Live::Advancing.recompute_advancing(merged_live_results, results_to_update, advancement_determining_condition, can_update_advancing: can_update_advancing)
+    Live::Advancing.recompute_advancing(self, can_update_advancing: can_update_advancing)
   end
 
   def lock_results(locking_user)

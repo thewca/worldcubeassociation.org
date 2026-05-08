@@ -36,8 +36,10 @@ export function LiveTableHeader({
             {t("competitions.results_table.round")}
           </Table.ColumnHeader>
         )}
-        {isAdmin && <Table.ColumnHeader />}
         <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
+        {isAdmin && (
+          <Table.ColumnHeader textAlign="center">ID</Table.ColumnHeader>
+        )}
         {!byPerson && (
           <Table.ColumnHeader>
             {t("competitions.live.results.competitor")}

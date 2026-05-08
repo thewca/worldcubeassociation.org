@@ -47,6 +47,8 @@ export default function AttemptsForm({
 
   const { competitors } = useLiveResults();
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const { collection, filter } = useListCollection({
     initialItems: Array.from(competitors.values()),
     itemToValue: (competitor) => competitor.id.toString(),
@@ -65,14 +67,15 @@ export default function AttemptsForm({
 
   const confirmSubmission = useCallback(() => {
     const submissionWarning = attemptResultsWarning(attempts, eventId, t);
+    const refocusInput = () => inputRef.current?.focus();
 
     if (submissionWarning) {
       confirm({
         content: submissionWarning,
         confirmButton: "Submit",
-      }).then(() => handleSubmit());
+      }).then(() => handleSubmit(refocusInput));
     } else {
-      handleSubmit();
+      handleSubmit(refocusInput);
     }
   }, [attempts, eventId, t, handleSubmit, confirm]);
 
@@ -104,6 +107,8 @@ export default function AttemptsForm({
           onValueChange={(e) => {
             if (e.value.length > 0) {
               handleRegistrationIdChange(parseInt(e.value[0], 10));
+            } else {
+              handleRegistrationIdChange(undefined);
             }
           }}
           value={registrationId ? [registrationId.toString()] : []}
@@ -113,10 +118,7 @@ export default function AttemptsForm({
             <Heading size="2xl">{header}</Heading>
           </Combobox.Label>
           <Combobox.Control>
-            <Combobox.Input
-              ref={competitorInputRef}
-              placeholder="Type to search"
-            />
+            <Combobox.Input ref={inputRef} placeholder="Type to search" />
             <Combobox.IndicatorGroup>
               <Combobox.ClearTrigger />
               <Combobox.Trigger />

@@ -17,7 +17,7 @@ import {
   mergeAndOrderResults,
 } from "@/lib/live/mergeAndOrderResults";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
-import { LiveCompetitor } from "@/types/live";
+import { LiveCompetitor, PendingLiveResult } from "@/types/live";
 import React, { useState } from "react";
 import LiveResultsMobileModal from "@/components/live/LiveResultsMobileModal";
 import ResultMenu from "@/components/live/Admin/ResultMenu";
@@ -30,6 +30,7 @@ export default function LiveResultsTable({
   competitionId,
   competitors,
   pendingQuitCompetitors = new Set(),
+  pendingLiveResults = [],
   isAdmin = false,
   showEmpty = true,
   showLinkedRoundsView = false,
@@ -41,6 +42,7 @@ export default function LiveResultsTable({
   competitionId: string;
   competitors: Map<number, LiveCompetitor>;
   pendingQuitCompetitors?: Set<number>;
+  pendingLiveResults?: PendingLiveResult[];
   isAdmin?: boolean;
   showEmpty?: boolean;
   showLinkedRoundsView?: boolean;
@@ -56,11 +58,15 @@ export default function LiveResultsTable({
 
   const format = formats.byId[formatId];
 
+  const pendingRegistrationIds = new Set(
+    pendingLiveResults.map((r) => r.registration_id),
+  );
+
   const competitorsWithOrderedResults = mergeAndOrderResults(
     resultsByRegistrationId,
     competitors,
     format,
-  );
+  ).filter((c) => !pendingRegistrationIds.has(c.id));
 
   const stats = statColumnsForFormat(format);
 
@@ -93,7 +99,7 @@ export default function LiveResultsTable({
                 return undefined;
 
               if (!showEmpty && !hasResult) {
-                return null;
+                return undefined;
               }
 
               return (

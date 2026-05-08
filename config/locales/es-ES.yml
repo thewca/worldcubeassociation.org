@@ -6767,12 +6767,12 @@ es-ES:
         un grupo fue utilizado, usa Scrambles Matcher para eliminar las mezclas
         sin usar. En caso contrario, deja un comentario al WRT explicando por
         qué se usaron múltiples grupos en 3x3x3 Menos Movimientos.
-      #original_hash: d6830c0
+      #original_hash: ce201ef
       wrong_number_of_scramble_sets_error: >-
-        [%{round_id}] Esta ronda tiene un número distinto de sets de mezclas a
-        lo especificado en la pestaña Administrar categorías. Por favor, ajusta
-        el número de sets de mezclas en la pestaña Administrar categorías al
-        número de sets que se ha usado.
+        [%{round_id}] Esta ronda tiene un número distinto de sets de mezclas
+        (%{actual}) a lo especificado en la pestaña Administrar categorías
+        (%{expected}). Por favor, ajusta el número de sets de mezclas en la
+        pestaña Administrar categorías al número de sets que se ha usado.
   tickets:
     type:
       #original_hash: e43f273
