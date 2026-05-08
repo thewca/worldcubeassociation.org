@@ -32,7 +32,7 @@ import {
   autocompleteTimeAttemptResult,
 } from "@/lib/live/attempt-result";
 
-export const DNF_KEYS = ["d", "D", "/"];
+export const DNF_KEYS = ["d", "D", "/", "#"];
 export const DNS_KEYS = ["s", "S", "*"];
 
 function stringToInt(numeric: string) {
@@ -158,9 +158,7 @@ export function FmMovesField({
 
   return (
     <Field.Root invalid={!isValid}>
-      <Field.Label>PointsField (isAverage: {isAverage.toString()})</Field.Label>
       <Input placeholder={placeholder} spellCheck={false} {...binding} />
-      <Field.HelperText>{value}</Field.HelperText>
     </Field.Root>
   );
 }
