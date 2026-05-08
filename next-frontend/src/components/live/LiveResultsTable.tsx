@@ -20,7 +20,7 @@ import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { LiveCompetitor } from "@/types/live";
 import React, { useState } from "react";
 import LiveResultsMobileModal from "@/components/live/LiveResultsMobileModal";
-import ResultMenu from "@/components/live/Admin/ResultMenu";
+import ResultMenu, { ClickPosition } from "@/components/live/Admin/ResultMenu";
 import { useT } from "@/lib/i18n/useI18n";
 
 export default function LiveResultsTable({
@@ -48,14 +48,8 @@ export default function LiveResultsTable({
 }) {
   const { t } = useT();
 
-  const [selectedRow, setSelectedRow] = useState<CompetitorWithResults | null>(
-    null,
-  );
-  const [adminMenuState, setAdminMenuState] = useState<{
-    rowKey: string;
-    x: number;
-    y: number;
-  } | null>(null);
+  const [selectedRow, setSelectedRow] = useState<CompetitorWithResults>();
+  const [menuClickPosition, setMenuClickPosition] = useState<ClickPosition>();
 
   const { eventId } = parseActivityCode(roundWcifId);
 
@@ -108,7 +102,8 @@ export default function LiveResultsTable({
                   key={rowKey}
                   onClick={(e) => {
                     if (isAdmin) {
-                      setAdminMenuState({ rowKey, x: e.clientX, y: e.clientY });
+                      setSelectedRow(competitorAndTheirResults);
+                      setMenuClickPosition({ x: e.clientX, y: e.clientY });
                     } else if (isMobile) {
                       setSelectedRow(competitorAndTheirResults);
                     }
@@ -139,13 +134,16 @@ export default function LiveResultsTable({
                         competitor={competitorAndTheirResults}
                         competitionId={competitionId}
                         roundId={roundWcifId}
-                        open={adminMenuState?.rowKey === rowKey}
-                        onOpenChange={(open) =>
-                          setAdminMenuState(open ? adminMenuState : null)
-                        }
+                        open={selectedRow?.id === competitorAndTheirResults.id}
+                        onOpenChange={(open) => {
+                          setMenuClickPosition(
+                            open ? menuClickPosition : undefined,
+                          );
+                          setSelectedRow(undefined);
+                        }}
                         clickPos={
-                          adminMenuState?.rowKey === rowKey
-                            ? { x: adminMenuState.x, y: adminMenuState.y }
+                          selectedRow?.id === competitorAndTheirResults.id
+                            ? menuClickPosition
                             : undefined
                         }
                       />

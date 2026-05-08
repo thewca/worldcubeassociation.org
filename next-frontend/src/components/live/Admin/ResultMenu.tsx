@@ -19,6 +19,11 @@ import Loading from "@/components/ui/loading";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
 
+export type ClickPosition = {
+  x: number;
+  y: number;
+};
+
 export default function ResultMenu({
   result,
   competitor,
@@ -34,7 +39,7 @@ export default function ResultMenu({
   roundId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  clickPos?: { x: number; y: number };
+  clickPos?: ClickPosition;
 }) {
   const [isQuitting, setIsQuitting] = useState(false);
   const confirm = useConfirm();
@@ -71,18 +76,7 @@ export default function ResultMenu({
       <Menu.Root
         open={open}
         onOpenChange={({ open: o }) => onOpenChange?.(o)}
-        positioning={
-          clickPos
-            ? {
-                getAnchorRect: () => ({
-                  x: clickPos.x,
-                  y: clickPos.y,
-                  width: 0,
-                  height: 0,
-                }),
-              }
-            : undefined
-        }
+        positioning={clickPos ? { getAnchorRect: () => clickPos } : undefined}
       >
         <Menu.Trigger>{competitor.registrant_id}</Menu.Trigger>
         <Portal>
