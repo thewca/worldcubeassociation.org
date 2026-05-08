@@ -166,13 +166,13 @@ function AttemptFieldsNav({
       return;
     }
 
-    if (e.key === "Enter" || e.key === "ArrowDown") {
+    if (e.key === "Enter" || e.key === "ArrowDown" || e.code === "NumpadAdd") {
       e.preventDefault();
       focusManager?.focusNext({ wrap: false });
       return;
     }
 
-    if (e.key === "ArrowUp") {
+    if (e.key === "ArrowUp" || e.code === "NumpadSubtract") {
       e.preventDefault();
       focusManager?.focusPrevious({ wrap: false });
     }
