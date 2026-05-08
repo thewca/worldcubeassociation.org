@@ -33,6 +33,9 @@ paths:
       $ref: 'paths/competitions/live/addCompetitorToRound.yaml'
     delete:
       $ref: 'paths/competitions/live/QuitCompetitor.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/bulk_quit:
+    delete:
+      $ref: 'paths/competitions/live/BulkQuitCompetitor.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/clear:
     $ref: 'paths/competitions/live/ClearRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/open:
