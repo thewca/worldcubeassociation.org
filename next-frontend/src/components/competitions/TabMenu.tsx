@@ -213,7 +213,7 @@ function CollapsibleTabGroup({
       <Collapsible.Content>
         <Box pl="3" display="flex" flexDirection="column" gap="1" pt="1">
           {children.map(
-            ({ menuKey, disabled, i18nKey, href, hrefAdmin, badge }) => (
+            ({ menuKey, disabled, i18nKey, href, hrefAdmin, badgeI18nKey }) => (
               <Tabs.Trigger
                 value={menuKey}
                 asChild
@@ -225,7 +225,8 @@ function CollapsibleTabGroup({
                     <Text>{t(i18nKey)}</Text>
                   ) : (
                     <Link href={isAdminRoute && hrefAdmin ? hrefAdmin : href}>
-                      {t(i18nKey)} <Spacer /> <Badge>{badge}</Badge>
+                      {t(i18nKey)} <Spacer />
+                      {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
                     </Link>
                   )}
                 </Text>
