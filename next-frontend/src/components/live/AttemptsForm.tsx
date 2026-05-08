@@ -12,7 +12,7 @@ import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import { LiveCompetitor } from "@/types/live";
-import { useCallback, useLayoutEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import type { KeyboardEvent, ReactNode } from "react";
 import { attemptResultsWarning } from "@/lib/live/attempt-result";
 import { useT } from "@/lib/i18n/useI18n";
@@ -27,6 +27,7 @@ interface AttemptsFormProps {
 
 const toCompetitorString = (competitor: LiveCompetitor) =>
   `${competitor.name} (${competitor.registrant_id})`;
+
 export default function AttemptsForm({
   solveCount,
   header,
@@ -79,24 +80,8 @@ export default function AttemptsForm({
     }
   }, [attempts, eventId, t, handleSubmit, confirm]);
 
-  // Keep a ref to the latest confirmSubmission so deferred callbacks (via
-  // setTimeout) always call the version that captures the most recent state.
-  const confirmSubmissionRef = useRef(confirmSubmission);
-  useLayoutEffect(() => {
-    confirmSubmissionRef.current = confirmSubmission;
-  });
-
-  const handleFormKeyDown = useCallback((e: KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-      e.preventDefault();
-      const focused = document.activeElement as HTMLElement | null;
-      focused?.blur();
-      setTimeout(() => confirmSubmissionRef.current(), 0);
-    }
-  }, []);
-
   return (
-    <form onSubmit={(e) => e.preventDefault()} onKeyDown={handleFormKeyDown}>
+    <form onSubmit={(e) => e.preventDefault()}>
       <VStack align="left">
         <Combobox.Root
           collection={collection}
@@ -137,10 +122,7 @@ export default function AttemptsForm({
           </Portal>
         </Combobox.Root>
         <FocusScope>
-          <AttemptFieldsNav
-            onSubmit={() => confirmSubmissionRef.current()}
-            onFocusCompetitor={() => inputRef.current?.focus()}
-          >
+          <AttemptFieldsNav onFocusCompetitor={() => inputRef.current?.focus()}>
             {_.times(solveCount).map((index) => (
               <AttemptResultField
                 eventId={eventId}
@@ -152,13 +134,13 @@ export default function AttemptsForm({
               />
             ))}
           </AttemptFieldsNav>
+          <Button
+            onClick={confirmSubmission}
+            disabled={isPending || attempts.length === 0}
+          >
+            Submit Results
+          </Button>
         </FocusScope>
-        <Button
-          onClick={confirmSubmission}
-          disabled={isPending || attempts.length === 0}
-        >
-          Submit Results
-        </Button>
       </VStack>
     </form>
   );
@@ -166,13 +148,11 @@ export default function AttemptsForm({
 
 interface AttemptFieldsNavProps {
   children: ReactNode;
-  onSubmit: () => void;
   onFocusCompetitor: () => void;
 }
 
 function AttemptFieldsNav({
   children,
-  onSubmit,
   onFocusCompetitor,
 }: AttemptFieldsNavProps) {
   const focusManager = useFocusManager();
@@ -186,7 +166,7 @@ function AttemptFieldsNav({
       return;
     }
 
-    if (e.key === "ArrowDown") {
+    if (e.key === "Enter" || e.key === "ArrowDown") {
       e.preventDefault();
       focusManager?.focusNext({ wrap: false });
       return;
@@ -195,16 +175,6 @@ function AttemptFieldsNav({
     if (e.key === "ArrowUp") {
       e.preventDefault();
       focusManager?.focusPrevious({ wrap: false });
-      return;
-    }
-
-    if (e.key === "Enter") {
-      e.preventDefault();
-      const next = focusManager?.focusNext({ wrap: false });
-      if (!next) {
-        (e.target as HTMLElement).blur();
-        setTimeout(onSubmit, 0);
-      }
     }
   };
 
