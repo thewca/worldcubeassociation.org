@@ -13,10 +13,11 @@ import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import { LiveCompetitor } from "@/types/live";
 import { useCallback, useLayoutEffect, useRef } from "react";
-import type { KeyboardEvent } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
 import { attemptResultsWarning } from "@/lib/live/attempt-result";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
+import { FocusScope, useFocusManager } from "@react-aria/focus";
 
 interface AttemptsFormProps {
   solveCount: number;
@@ -26,7 +27,6 @@ interface AttemptsFormProps {
 
 const toCompetitorString = (competitor: LiveCompetitor) =>
   `${competitor.name} (${competitor.registrant_id})`;
-
 export default function AttemptsForm({
   solveCount,
   header,
@@ -83,51 +83,7 @@ export default function AttemptsForm({
     confirmSubmissionRef.current = confirmSubmission;
   });
 
-  const attemptRefs = useRef<(HTMLInputElement | null)[]>([]);
   const competitorInputRef = useRef<HTMLInputElement | null>(null);
-
-  const handleAttemptKeyDown = useCallback(
-    (index: number, e: KeyboardEvent<HTMLInputElement>) => {
-      // Let the form-level handler deal with Ctrl/Meta combos.
-      if (e.ctrlKey || e.metaKey) return;
-
-      if (e.key === " ") {
-        e.preventDefault();
-        competitorInputRef.current?.focus();
-        return;
-      }
-
-      if (e.key === "Enter") {
-        e.preventDefault();
-        if (index === solveCount - 1) {
-          // Blur first to commit the current draft value, then submit after
-          // React has flushed the resulting state update.
-          e.currentTarget.blur();
-          setTimeout(() => confirmSubmissionRef.current(), 0);
-        } else {
-          attemptRefs.current[index + 1]?.focus();
-        }
-        return;
-      }
-
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        if (index < solveCount - 1) {
-          attemptRefs.current[index + 1]?.focus();
-        }
-        return;
-      }
-
-      if (e.key === "ArrowUp") {
-        e.preventDefault();
-        if (index > 0) {
-          attemptRefs.current[index - 1]?.focus();
-        }
-        return;
-      }
-    },
-    [solveCount],
-  );
 
   const handleFormKeyDown = useCallback((e: KeyboardEvent<HTMLFormElement>) => {
     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
@@ -180,22 +136,23 @@ export default function AttemptsForm({
             </Combobox.Positioner>
           </Portal>
         </Combobox.Root>
-        {_.times(solveCount).map((index) => (
-          <AttemptResultField
-            attemptRef={(el: HTMLInputElement | null) => {
-              attemptRefs.current[index] = el;
-            }}
-            eventId={eventId}
-            key={index}
-            value={attempts[index]}
-            onChange={(value) => handleAttemptChange(index, value)}
-            resultType="single"
-            placeholder={`Attempt ${index + 1}`}
-            onKeyDown={(e: KeyboardEvent<HTMLInputElement>) =>
-              handleAttemptKeyDown(index, e)
-            }
-          />
-        ))}
+        <FocusScope>
+          <AttemptFieldsNav
+            onSubmit={() => confirmSubmissionRef.current()}
+            onFocusCompetitor={() => competitorInputRef.current?.focus()}
+          >
+            {_.times(solveCount).map((index) => (
+              <AttemptResultField
+                eventId={eventId}
+                key={index}
+                value={attempts[index]}
+                onChange={(value) => handleAttemptChange(index, value)}
+                resultType="single"
+                placeholder={`Attempt ${index + 1}`}
+              />
+            ))}
+          </AttemptFieldsNav>
+        </FocusScope>
         <Button
           onClick={confirmSubmission}
           disabled={isPending || attempts.length === 0}
@@ -204,5 +161,56 @@ export default function AttemptsForm({
         </Button>
       </VStack>
     </form>
+  );
+}
+
+interface AttemptFieldsNavProps {
+  children: ReactNode;
+  onSubmit: () => void;
+  onFocusCompetitor: () => void;
+}
+
+function AttemptFieldsNav({
+  children,
+  onSubmit,
+  onFocusCompetitor,
+}: AttemptFieldsNavProps) {
+  const focusManager = useFocusManager();
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.ctrlKey || e.metaKey) return;
+
+    if (e.key === " ") {
+      e.preventDefault();
+      onFocusCompetitor();
+      return;
+    }
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      focusManager?.focusNext({ wrap: false });
+      return;
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      focusManager?.focusPrevious({ wrap: false });
+      return;
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const next = focusManager?.focusNext({ wrap: false });
+      if (!next) {
+        (e.target as HTMLElement).blur();
+        setTimeout(onSubmit, 0);
+      }
+    }
+  };
+
+  return (
+    <VStack align="left" onKeyDown={handleKeyDown}>
+      {children}
+    </VStack>
   );
 }
