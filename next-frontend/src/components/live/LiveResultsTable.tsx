@@ -68,7 +68,7 @@ export default function LiveResultsTable({
 
   return (
     <>
-      <Table.Root size="sm">
+      <Table.Root size="sm" interactive={isAdmin}>
         <LiveTableHeader
           format={format}
           isLinked={showLinkedRoundsView}
