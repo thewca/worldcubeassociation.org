@@ -19,18 +19,28 @@ import Loading from "@/components/ui/loading";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
 
+export type ClickPosition = {
+  x: number;
+  y: number;
+};
+
 export default function ResultMenu({
   result,
   competitor,
   competitionId,
   roundId,
+  open,
+  onOpenChange,
+  clickPos,
 }: {
   result: LiveResult;
   competitor: LiveCompetitor;
   competitionId: string;
   roundId: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  clickPos?: ClickPosition;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
   const [isQuitting, setIsQuitting] = useState(false);
   const confirm = useConfirm();
   const { t } = useT();
@@ -40,17 +50,17 @@ export default function ResultMenu({
 
   function handleEditClick() {
     handleRegistrationIdChange(competitor.id);
-    setIsOpen(false);
+    onOpenChange(false);
   }
   function handleClearClick() {
     confirm({ confirmButton: t("competitions.live.admin.clear") }).then(() =>
       clearCompetitorsResults(competitor.id),
     );
-    setIsOpen(false);
+    onOpenChange(false);
   }
   function setMenuClose() {
     setIsQuitting(false);
-    setIsOpen(false);
+    onOpenChange(false);
   }
 
   return (
@@ -63,12 +73,12 @@ export default function ResultMenu({
           competitionId={competitionId}
         />
       )}
-      <Menu.Root open={isOpen} onOpenChange={({ open }) => setIsOpen(open)}>
-        <Menu.Trigger asChild>
-          <Button variant="outline" size="sm">
-            {competitor.registrant_id}
-          </Button>
-        </Menu.Trigger>
+      <Menu.Root
+        open={open}
+        onOpenChange={({ open: o }) => onOpenChange?.(o)}
+        positioning={clickPos ? { getAnchorRect: () => clickPos } : undefined}
+      >
+        <Menu.Trigger>{competitor.registrant_id}</Menu.Trigger>
         <Portal>
           <Menu.Positioner>
             <Menu.Content>

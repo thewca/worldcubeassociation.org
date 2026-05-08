@@ -1818,6 +1818,14 @@ fr-CA:
       text: >-
         Retrouvez les records actuels et passés pour toutes les épreuves
         officielles de la WCA.
+    volunteer:
+      #original_hash: b07fccc
+      title: Bénévole
+      #original_hash: 0d32ce8
+      text: >-
+        Impliquez-vous ! La WCA propose des postes de bénévoles au sein de
+        différentes équipes. Il n'est pas nécessaire d'être un speedcubeur pour
+        devenir bénévole.
     faq:
       #original_hash: 03688ba
       title: FAQ
@@ -2065,6 +2073,12 @@ fr-CA:
       approve: Approuver
       #original_hash: dbee2db
       approve_confirm: 'Êtes-vous sûr de vouloir approuver l''identifiant WCA %{wca_id} ?'
+      #original_hash: ef41565
+      clear_claim: Retirer la revendication
+      #original_hash: e07048b
+      clear_claim_confirm: >-
+        Êtes-vous sûr de vouloir supprimer la demande relative à l'identifiant
+        WCA %{wca_id} ?
       #original_hash: aa894aa
       unconfirmed_email: 'L''adresse courriel (%{email}) de ce compte n''est pas confirmée.'
       #original_hash: 9066807
@@ -2944,6 +2958,10 @@ fr-CA:
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} saisis'
         #original_hash: eacca7b
         round_locked: Verrouillé
+        #original_hash: f260e75
+        edit: Modifier
+        #original_hash: 0f766b4
+        results: Résultats
         warnings:
           #original_hash: 229c10e
           omitted: >-
@@ -2965,6 +2983,10 @@ fr-CA:
             Les résultats que vous essayez de soumettre semblent incohérents. Il
             y a un écart important entre le meilleur (%{best_single}) et le pire
             résultat (%{worst_single}). Veuillez vérifier qu'ils sont exacts.
+          #original_hash: 69439ac
+          round_locked: >-
+            Le prochain tour a déjà commencé, les modifications éventuelles
+            n'auront aucune incidence sur celui-ci !
         quit:
           #original_hash: 02aed52
           title: Retirer compétiteur
@@ -2977,6 +2999,8 @@ fr-CA:
           advance: Qualifier le prochain compétiteur
           #original_hash: 72d311b
           quit_confirm: Retirer un compétiteur du tour
+          #original_hash: 1acfc1c
+          quit_menu: Supprimer
           #original_hash: a4546af
           no_next: Aucun autre compétiteur ne se qualifie
           #original_hash: 49ba329
@@ -2986,6 +3010,8 @@ fr-CA:
       results:
         #original_hash: 29c8c1b
         competitor: Compétiteur
+        #original_hash: ef33304
+        mean: Moyenne
       errors:
         #original_hash: fc0c45f
         round_closed: Le tour n'est pas encore ouvert
@@ -6848,12 +6874,12 @@ fr-CA:
         groupe de FMC a été utilisé, veuillez utiliser Scrambles Matcher pour
         décocher les mélanges inutilisés. Sinon, veuillez inclure un commentaire
         au WRT expliquant pourquoi plusieurs groupes de FMC ont été utilisés.
-      #original_hash: 708c831
+      #original_hash: 5412879
       wrong_number_of_scramble_sets_error: >-
-        [%{round_id}] Ce tour a un nombre d'ensembles de mélanges différent de
-        celui indiqué dans l'onglet Gérer les événements. Veuillez ajuster le
-        nombre d'ensembles de mélanges dans l'onglet Gérer les événements en
-        fonction du nombre ayant étés utilisés.
+        [%{round_id}] Ce tour a un nombre d'ensembles de mélanges différent
+        (%{actual}) de celui indiqué dans l'onglet Gérer les événements
+        (%{expected}). Veuillez ajuster le nombre d'ensembles de mélanges dans
+        l'onglet Gérer les événements en fonction du nombre ayant étés utilisés.
   tickets:
     type:
       #original_hash: 170f350

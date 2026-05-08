@@ -1,4 +1,4 @@
-import { Container, Heading } from "@chakra-ui/react";
+import { Container, Heading, Text, VStack } from "@chakra-ui/react";
 import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { Fragment } from "react";
 import { getLivePodiums } from "@/lib/wca/live/getLivePodiums";
@@ -31,12 +31,23 @@ export default async function PodiumsPage({
     (r) => parseActivityCode(r.id).eventId,
   );
 
+  const roundsOfEventsHeld = WCA_EVENT_IDS.map(
+    (e) => roundsByEventId[e],
+  ).filter(Boolean);
+
+  const [eventsFinished, eventsNotFinished] = _.partition(
+    roundsOfEventsHeld,
+    (e) => e.results.length > 0,
+  );
+
+  const noPodiums = eventsFinished.length === 0;
+
   return (
-    <Container>
+    <Container bg="bg">
       <Heading textStyle="h1">{t("competitions.live.podiums.title")}</Heading>
-      {WCA_EVENT_IDS.map((e) => {
-        const finalRound = roundsByEventId[e];
-        if (!finalRound) return;
+      {noPodiums && <Text>{t("competitions.live.podiums.none")}</Text>}
+      {eventsFinished.map((finalRound) => {
+        const { eventId } = parseActivityCode(finalRound.id);
 
         const resultsByRegistrationId = _.groupBy(
           finalRound.results,
@@ -53,24 +64,33 @@ export default async function PodiumsPage({
         return (
           <Fragment key={finalRound.id}>
             <Heading textStyle="h3" p="2">
-              {events.byId[e].name}
+              {events.byId[eventId].name}
             </Heading>
-            {finalRound.results.length > 0 ? (
-              <LiveResultsTable
-                showLinkedRoundsView={isDualRound}
-                resultsByRegistrationId={resultsByRegistrationId}
-                competitionId={competitionId}
-                competitors={competitors}
-                roundWcifId={finalRound.id}
-                formatId={finalRound.format}
-                showEmpty={false}
-              />
-            ) : (
-              t("competitions.live.podiums.undetermined")
-            )}
+            <LiveResultsTable
+              showLinkedRoundsView={isDualRound}
+              resultsByRegistrationId={resultsByRegistrationId}
+              competitionId={competitionId}
+              competitors={competitors}
+              roundWcifId={finalRound.id}
+              formatId={finalRound.format}
+              showEmpty={false}
+            />
           </Fragment>
         );
       })}
+      {!noPodiums && eventsNotFinished.length > 0 && (
+        <>
+          <Heading textStyle="h3">
+            {t("competitions.live.podiums.undetermined")}
+          </Heading>
+          <VStack align="left">
+            {eventsNotFinished.map((finalRound) => {
+              const { eventId } = parseActivityCode(finalRound.id);
+              return events.byId[eventId].name;
+            })}
+          </VStack>
+        </>
+      )}
     </Container>
   );
 }

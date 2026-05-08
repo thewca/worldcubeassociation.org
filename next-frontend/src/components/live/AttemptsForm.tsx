@@ -12,7 +12,7 @@ import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import { LiveCompetitor } from "@/types/live";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { attemptResultsWarning } from "@/lib/live/attempt-result";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
@@ -46,6 +46,8 @@ export default function AttemptsForm({
 
   const { competitors } = useLiveResults();
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const { collection, filter } = useListCollection({
     initialItems: Array.from(competitors.values()),
     itemToValue: (competitor) => competitor.id.toString(),
@@ -64,14 +66,15 @@ export default function AttemptsForm({
 
   const confirmSubmission = useCallback(() => {
     const submissionWarning = attemptResultsWarning(attempts, eventId, t);
+    const refocusInput = () => inputRef.current?.focus();
 
     if (submissionWarning) {
       confirm({
         content: submissionWarning,
         confirmButton: "Submit",
-      }).then(() => handleSubmit());
+      }).then(() => handleSubmit(refocusInput));
     } else {
-      handleSubmit();
+      handleSubmit(refocusInput);
     }
   }, [attempts, eventId, t, handleSubmit, confirm]);
 
@@ -96,7 +99,7 @@ export default function AttemptsForm({
             <Heading size="2xl">{header}</Heading>
           </Combobox.Label>
           <Combobox.Control>
-            <Combobox.Input placeholder="Type to search" />
+            <Combobox.Input ref={inputRef} placeholder="Type to search" />
             <Combobox.IndicatorGroup>
               <Combobox.ClearTrigger />
               <Combobox.Trigger />

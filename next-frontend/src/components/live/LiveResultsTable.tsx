@@ -20,7 +20,7 @@ import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { LiveCompetitor, PendingLiveResult } from "@/types/live";
 import React, { useState } from "react";
 import LiveResultsMobileModal from "@/components/live/LiveResultsMobileModal";
-import ResultMenu from "@/components/live/Admin/ResultMenu";
+import ResultMenu, { ClickPosition } from "@/components/live/Admin/ResultMenu";
 import { useT } from "@/lib/i18n/useI18n";
 
 export default function LiveResultsTable({
@@ -50,9 +50,8 @@ export default function LiveResultsTable({
 }) {
   const { t } = useT();
 
-  const [selectedRow, setSelectedRow] = useState<CompetitorWithResults | null>(
-    null,
-  );
+  const [selectedRow, setSelectedRow] = useState<CompetitorWithResults>();
+  const [menuClickPosition, setMenuClickPosition] = useState<ClickPosition>();
 
   const { eventId } = parseActivityCode(roundWcifId);
 
@@ -75,7 +74,7 @@ export default function LiveResultsTable({
 
   return (
     <>
-      <Table.Root size="sm">
+      <Table.Root size="sm" interactive={isAdmin}>
         <LiveTableHeader
           format={format}
           isLinked={showLinkedRoundsView}
@@ -102,11 +101,20 @@ export default function LiveResultsTable({
                 return undefined;
               }
 
+              const rowKey = `${competitorAndTheirResults.id}-${result.round_wcif_id}`;
+
               return (
                 <Table.Row
-                  key={`${competitorAndTheirResults.id}-${result.round_wcif_id}`}
-                  onClick={() => setSelectedRow(competitorAndTheirResults)}
-                  cursor={isMobile ? "pointer" : undefined}
+                  key={rowKey}
+                  onClick={(e) => {
+                    if (isAdmin) {
+                      setSelectedRow(competitorAndTheirResults);
+                      setMenuClickPosition({ x: e.clientX, y: e.clientY });
+                    } else if (isMobile) {
+                      setSelectedRow(competitorAndTheirResults);
+                    }
+                  }}
+                  cursor={isMobile || isAdmin ? "pointer" : undefined}
                   colorPalette={
                     pendingQuitCompetitors.has(competitorAndTheirResults.id)
                       ? "red"
@@ -132,6 +140,18 @@ export default function LiveResultsTable({
                         competitor={competitorAndTheirResults}
                         competitionId={competitionId}
                         roundId={roundWcifId}
+                        open={selectedRow?.id === competitorAndTheirResults.id}
+                        onOpenChange={(open) => {
+                          setMenuClickPosition(
+                            open ? menuClickPosition : undefined,
+                          );
+                          setSelectedRow(undefined);
+                        }}
+                        clickPos={
+                          selectedRow?.id === competitorAndTheirResults.id
+                            ? menuClickPosition
+                            : undefined
+                        }
                       />
                     </Table.Cell>
                   )}
