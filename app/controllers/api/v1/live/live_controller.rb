@@ -166,7 +166,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     return render json: { status: "Cannot quit competitor with results" }, status: :bad_request if results.any? { |r| r.live_attempts.any? }
     return render json: { status: "Can't advance next for first rounds" }, status: :bad_request if advancing_ids.present? && round.first_round?
 
-    to_advance = round.participation_source.next_advancing_without(registration_ids) if advancing_ids.present?
+    to_advance = round.next_participating_without(registration_ids) if advancing_ids.present?
 
     return render json: { status: "The advancing competitors don't match who should be advancing.", should_advance: to_advance }, status: :bad_request if advancing_ids.present? && advancing_ids.map(&:to_i) != to_advance&.pluck(:registration_id)
 
