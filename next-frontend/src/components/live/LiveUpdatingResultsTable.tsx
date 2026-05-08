@@ -16,7 +16,7 @@ import PendingResultsTable from "@/components/live/PendingResultsTable";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
 import AddPersonModal from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
-import { LuLock, LuLockOpen } from "react-icons/lu";
+import { LuCheck, LuLock, LuLockOpen } from "react-icons/lu";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
 
@@ -99,10 +99,25 @@ export default function LiveUpdatingResultsTable({
           </IconButton>
         )}
         {isAdminView && (
-          <AddPersonModal
-            competitionId={competitionId}
-            competitors={competitors}
-          />
+          <>
+            <AddPersonModal
+              competitionId={competitionId}
+              competitors={competitors}
+            />
+            <IconButton variant="ghost">
+              <Link asChild>
+                <NextLink
+                  href={route({
+                    pathname:
+                      "/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check",
+                    query: { competitionId, roundId: roundWcifId },
+                  })}
+                >
+                  <LuCheck />
+                </NextLink>
+              </Link>
+            </IconButton>
+          </>
         )}
       </HStack>
       <PendingResultsTable
