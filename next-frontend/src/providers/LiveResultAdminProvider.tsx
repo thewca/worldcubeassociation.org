@@ -20,7 +20,7 @@ interface AdminResultsContextValue {
   isPending: boolean;
   handleRegistrationIdChange: (value?: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
-  handleSubmit: () => void;
+  handleSubmit: (onSuccess: () => void) => void;
   clearCompetitorsResults: (registrationId: number) => void;
   quitCompetitor: (
     registrationId: number,
@@ -198,7 +198,7 @@ export function LiveResultAdminProvider({
     setAttempts(applyCutoff(applyTimeLimit(newAttempts, timeLimit), cutoff));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (onSuccess: () => void) => {
     if (!registrationId) {
       toaster.create({
         description: "Please enter a user id",
@@ -207,18 +207,21 @@ export function LiveResultAdminProvider({
       return;
     }
 
-    mutateUpdate({
-      params: {
-        path: { competitionId, roundId },
+    mutateUpdate(
+      {
+        params: {
+          path: { competitionId, roundId },
+        },
+        body: {
+          attempts: attempts.map((attempt, index) => ({
+            value: attempt,
+            attempt_number: index + 1,
+          })),
+          registration_id: registrationId,
+        },
       },
-      body: {
-        attempts: attempts.map((attempt, index) => ({
-          value: attempt,
-          attempt_number: index + 1,
-        })),
-        registration_id: registrationId,
-      },
-    });
+      { onSuccess: () => onSuccess() },
+    );
   };
 
   const clearCompetitorsResults = (toClearId: number) => {
