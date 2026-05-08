@@ -169,10 +169,7 @@ export interface paths {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                competitionId: string;
-                roundId: string;
-            };
+            path?: never;
             cookie?: never;
         };
         get?: never;
@@ -1911,11 +1908,12 @@ export interface operations {
             content: {
                 "application/json": {
                     registration_ids: number[];
+                    advancing_ids?: number[];
                 };
             };
         };
         responses: {
-            /** @description Returns number of competitors quit */
+            /** @description Returns number of competitors that were marked as quit */
             200: {
                 headers: {
                     [name: string]: unknown;
