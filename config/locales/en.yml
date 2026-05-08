@@ -1406,6 +1406,9 @@ en:
       schedule_locked_after_results_submitted: "The schedule cannot be edited after results have been submitted."
     live:
       title: "Live Results"
+      round_state:
+        ongoing: "live"
+        done: "done"
       connection:
         initialized: "Connection being initialized"
         connected: "Connected, results are being updated"
