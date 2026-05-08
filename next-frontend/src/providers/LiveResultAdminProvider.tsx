@@ -220,7 +220,7 @@ export function LiveResultAdminProvider({
           registration_id: registrationId,
         },
       },
-      { onSuccess: () => onSuccess() },
+      { onSuccess },
     );
   };
 
