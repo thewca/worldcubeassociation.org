@@ -55,8 +55,8 @@ const advanceReqToExplanationText = (wcifEvent, roundNumber, { type, level }) =>
     case 'attemptResult':
       return `Everyone in round ${roundNumber} with a result ${matchResult(level, wcifEvent.id)
       } will advance to round ${roundNumber + 1}.`;
-    case -2:
-      return `Rounds ${roundNumber} and ${roundNumber + 1} will be run as a dual round.`;
+    case 'dual':
+      return `Rounds ${roundNumber} and ${roundNumber + 1} will be run as a Dual Round.`;
     default:
       return '';
   }
@@ -185,8 +185,17 @@ export default function EditAdvancementConditionModal({
       />
       {!!type && (
         <>
-          <AdvancementInput eventId={wcifEvent.id} type={type} level={level} onChange={setLevel} />
-          <br />
+          {type !== 'dual' && (
+            <>
+              <AdvancementInput
+                eventId={wcifEvent.id}
+                type={type}
+                level={level}
+                onChange={setLevel}
+              />
+              <br />
+            </>
+          )}
           <p>
             {advanceReqToExplanationText(wcifEvent, roundNumber, { type, level })}
           </p>
