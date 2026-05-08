@@ -1,10 +1,10 @@
 groups:
-  group1:
+  registrations:
     concurrency: 2
     delay: 1
     queues:
       - <%= EnvConfig.REGISTRATION_QUEUE %>
-  group2:
+  live_results:
     concurrency: 1
     queues:
       - <%= EnvConfig.LIVE_QUEUE %>
