@@ -1,14 +1,50 @@
 # frozen_string_literal: true
 
 class LinkedRound < ApplicationRecord
-  has_many :rounds, -> { ordered }, inverse_of: :linked_round
+  has_many :rounds, -> { ordered }, inverse_of: :linked_round, dependent: :nullify, after_remove: :destroy_if_orphaned
   has_many :results, through: :rounds
   has_many :live_results, through: :rounds
-  has_many :formats, -> { distinct }, through: :rounds
-  has_many :competition_events, -> { distinct }, through: :rounds
+  has_many :formats, -> { unscope(:order).distinct }, through: :rounds
+  has_many :competition_events, -> { unscope(:order).distinct }, through: :rounds
   has_many :target_rounds, class_name: "Round", as: :participation_source
 
-  validates :competition_event_ids, length: { maximum: 1, message: "must all belong to the same competition" }
+  validates :competition_event_ids, length: { maximum: 1, message: "must all belong to the same competition event" }
+
+  # see https://www.worldcubeassociation.org/regulations/#9v1
+  validates :first_round_number, comparison: { equal_to: 1, message: "can only include the first two rounds of a competition", allow_nil: true }
+  validates :round_ids, length: { maximum: 2, message: "can only include up to 2 rounds in a Dual Round" }
+
+  # see https://www.worldcubeassociation.org/regulations/#9v2
+  validates :final_round_of_championship?, absence: { message: "cannot include the final round of any championship" }
+
+  # see https://www.worldcubeassociation.org/regulations/#9v3
+  validates :format_ids, length: { maximum: 1, message: "all rounds must have the same format" }
+  validates :round_cutoffs, length: { maximum: 1, message: "all rounds must have the same cutoff" }
+  validates :round_time_limits, length: { maximum: 1, message: "all rounds must have the same time limit" }
+
+  after_touch :reset_round_information
+  def reset_round_information
+    self.rounds.reset
+
+    # Even associations that define `through` have their own cache
+    #   which needs to be reset individually
+    self.formats.reset
+    self.competition_events.reset
+  end
+
+  def round_cutoffs
+    rounds.filter_map(&:cutoff).uniq(&:to_wcif)
+  end
+
+  def round_time_limits
+    rounds.filter_map(&:time_limit).uniq(&:to_wcif)
+  end
+
+  delegate :number, to: :first_round_in_link, prefix: :first_round, allow_nil: true
+
+  def final_round_of_championship?
+    last_round_in_link&.final_round? && last_round_in_link.competition.any_championship?
+  end
 
   def merged_live_results
     LinkedRound.combine_results(self.live_results)
@@ -71,5 +107,13 @@ class LinkedRound < ApplicationRecord
       "roundIds" => self.wcif_ids,
       "resultCondition" => target_round.participation_condition&.to_wcif,
     }
+  end
+
+  # The _removed_round argument is passed by Rails
+  # as part of the `has_many :rounds, after_remove: :destroy_if_orphaned` callback chain
+  def destroy_if_orphaned(_removed_round = nil)
+    return unless persisted? && rounds.size <= 1
+
+    self.destroy # NULL is handled by has_many#dependent set to :nullify above
   end
 end

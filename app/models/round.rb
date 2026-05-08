@@ -2,7 +2,7 @@
 
 class Round < ApplicationRecord
   belongs_to :competition_event
-  belongs_to :linked_round, optional: true
+  belongs_to :linked_round, optional: true, validate: true, touch: true
 
   has_one :competition, through: :competition_event
   delegate :competition_id, to: :competition_event
@@ -79,6 +79,11 @@ class Round < ApplicationRecord
 
   validates :advancement_condition, presence: { if: :advancement_condition_changed?, unless: :final_round?, message: "cannot be un-set on a non-final round" }, on: :update
   validates :advancement_condition, absence: { if: :final_round?, message: "cannot be set on a final round" }
+
+  after_save :reset_linked_round_information, if: :linked_round_previously_changed?
+  private def reset_linked_round_information
+    self.linked_round&.reset_round_information
+  end
 
   def initialize(attributes = nil)
     # Overrides the default constructor to setup the default time limit if not
@@ -522,6 +527,10 @@ class Round < ApplicationRecord
       next_wcif_round = all_wcif_rounds[round_number] # WCIF numbers are 1-based, so no +1 necessary
       next_participation_condition = next_wcif_round.dig("participationRuleset", "participationSource", "resultCondition")
 
+      # We know that `next_wcif_round` definitely exists, but historical records (cf. Worlds 2003)
+      #   may not have any advancement data present in our records.
+      return nil if next_participation_condition.nil?
+
       backported_wcif_v1 = {
         "type" => next_participation_condition["type"].gsub('resultAchieved', 'attemptResult'),
         "level" => next_participation_condition["value"],
@@ -581,7 +590,20 @@ class Round < ApplicationRecord
     end
   end
 
-  def self.wcif_backlinking(round_model, all_rounds_model)
+  def self.compute_linked_round(round_wcif, round_model, all_rounds_model)
+    linked_round_ids = round_wcif["linkedRounds"]&.sort_by { self.parse_wcif_id(it)[:round_number] }
+
+    return nil if linked_round_ids.blank?
+
+    existing_linked_round = all_rounds_model.filter { linked_round_ids.include? it.wcif_id }
+                                            .filter { it.number < round_model.number } # always start building links in-order
+                                            .filter_map(&:linked_round)
+                                            .first
+
+    existing_linked_round || round_model.build_linked_round
+  end
+
+  def self.backport_participation_ruleset(round_model, all_rounds_model)
     participation_source = self.backport_participation_source(round_model, all_rounds_model)
 
     {
