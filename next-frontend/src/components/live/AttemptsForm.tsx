@@ -136,7 +136,11 @@ export default function AttemptsForm({
           </AttemptFieldsNav>
           <Button
             onClick={confirmSubmission}
-            disabled={isPending || attempts.length === 0}
+            disabled={
+              isPending ||
+              attempts.length === 0 ||
+              attempts.some((v) => v === 0)
+            }
           >
             Submit Results
           </Button>

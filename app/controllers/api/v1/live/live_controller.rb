@@ -23,6 +23,8 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
       return render json: { status: "user is not part of this round" }, status: :unprocessable_content
     end
 
+    return render json: { status: "Values cannot be 0, please omit them instead" }, status: :unprocessable_content if results.any? { it[:value].zero? }
+
     UpdateLiveResultJob.perform_later(live_result, results, @current_user.id)
 
     render json: { status: "ok" }
