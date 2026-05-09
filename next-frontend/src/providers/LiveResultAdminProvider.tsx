@@ -218,6 +218,7 @@ export function LiveResultAdminProvider({
               value: attempt,
               attempt_number: index + 1,
             }))
+            // Preserve the original attempt_numbers even when there were gaps in the attempts
             .filter((a) => a.value !== 0),
           registration_id: registrationId,
         },
