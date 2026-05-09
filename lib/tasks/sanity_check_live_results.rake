@@ -6,7 +6,7 @@ namespace :live_results do
     discrepancy_count = 0
     checked_count = 0
 
-    rounds = Round.includes(:competition_event, { live_results: [:live_attempts, :registration] })
+    rounds = Round.includes(:competition_event, { live_results: %i[live_attempts registration] })
                   .reject { it.round_results.empty? || it.live_results.empty? }
 
     puts "Checking #{rounds.size} rounds with both round_results and live_results..."
