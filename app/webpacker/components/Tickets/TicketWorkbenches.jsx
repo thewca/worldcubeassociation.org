@@ -1,4 +1,5 @@
 import { ticketTypes, ticketStakeholderRoles } from '../../lib/wca-data.js.erb';
+import ClaimWcaIdActionerView from './TicketWorkbenches/ClaimWcaIdActionerView';
 import CompetitionResultActionerView from './TicketWorkbenches/CompetitionResultActionerView';
 import CompetitionResultRequesterView from './TicketWorkbenches/CompetitionResultRequesterView';
 import EditPersonActionerView from './TicketWorkbenches/EditPersonActionerView';
@@ -10,5 +11,8 @@ export default {
   [ticketTypes.competition_result]: {
     [ticketStakeholderRoles.actioner]: CompetitionResultActionerView,
     [ticketStakeholderRoles.requester]: CompetitionResultRequesterView,
+  },
+  [ticketTypes.claim_wca_id]: {
+    [ticketStakeholderRoles.actioner]: ClaimWcaIdActionerView,
   },
 };
