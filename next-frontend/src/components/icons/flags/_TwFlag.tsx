@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const _TwFlag = createIcon({
@@ -8,6 +7,7 @@ const _TwFlag = createIcon({
   viewBox: "0 0 640 480",
   path: (
     <>
+      <rect x="0" y="0" width="640" height="480" fill="#ffffff" />
       <g>
         <path
           fill="#fff"
@@ -138,11 +138,6 @@ const _TwFlag = createIcon({
       </g>
     </>
   ),
-  defaultProps: {
-    bg: "white",
-    aspectRatio: "landscape",
-    height: "auto",
-  },
 });
 
 export default _TwFlag;
