@@ -1922,6 +1922,7 @@ class Competition < ApplicationRecord
         :competition_event,
         :wcif_extensions,
         { participation_source: [:competition_event, { rounds: :competition_event }] },
+        { live_results: [:live_attempts, :registration] },
       ] },
       :wcif_extensions,
     ]
