@@ -153,6 +153,16 @@ class LiveResult < ApplicationRecord
     )
   end
 
+  def to_wcif
+    {
+      "personId" => registrant_id,
+      "ranking" => global_pos,
+      "attempts" => live_attempts.map(&:to_wcif),
+      "best" => best,
+      "average" => average,
+    }
+  end
+
   LIVE_STATE_SERIALIZE_OPTIONS = {
     only: %w[advancing advancing_questionable average average_record_tag best registration_id last_attempt_entered_at single_record_tag],
     methods: %w[],

@@ -770,7 +770,7 @@ class Round < ApplicationRecord
       "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
       "cutoff" => cutoff&.to_wcif,
       "scrambleSetCount" => self.scramble_set_count,
-      "results" => include_results ? round_results.map(&:to_wcif) : nil,
+      "results" => include_results ? live_results.map(&:to_wcif) : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
 
