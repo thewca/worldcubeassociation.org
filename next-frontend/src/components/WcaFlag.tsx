@@ -7,7 +7,7 @@ const WcaFlag = ({
   ...rest
 }: ComponentPropsWithoutRef<typeof Flag>) => {
   if (code?.toUpperCase() === "TW") {
-    return <img {...rest} src="/flags/FLAG_TW.svg" />;
+    return <img {...rest} src="/flags/tw.svg" />;
   }
 
   return <Flag code={code} fallback={fallback} {...rest} />;
