@@ -213,10 +213,12 @@ export function LiveResultAdminProvider({
           path: { competitionId, roundId },
         },
         body: {
-          attempts: attempts.map((attempt, index) => ({
-            value: attempt,
-            attempt_number: index + 1,
-          })),
+          attempts: attempts
+            .map((attempt, index) => ({
+              value: attempt,
+              attempt_number: index + 1,
+            }))
+            .filter((a) => a.value !== 0),
           registration_id: registrationId,
         },
       },
