@@ -318,7 +318,15 @@ class Round < ApplicationRecord
     if live_results.loaded?
       live_results.count(&:complete?)
     else
-      live_results.where(live_attempts_count: format.expected_solve_count).count
+      cutoff_done = if cutoff.blank?
+                      0
+                    else
+                      live_results
+                        .where(live_attempts_count: cutoff.number_of_attempts)
+                        .where("best >= ? OR best < 0", cutoff.attempt_result)
+                        .count
+                    end
+      live_results.where(live_attempts_count: format.expected_solve_count).count + cutoff_done
     end
   end
 
