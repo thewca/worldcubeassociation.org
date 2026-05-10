@@ -71,9 +71,13 @@ export function LiveResultAdminProvider({
       const competitorResults = liveResultsByRegistrationId[registrationId][0];
 
       if (competitorResults.attempts.length > 0) {
-        return competitorResults.attempts
-          .toSorted((a, b) => a.attempt_number - b.attempt_number)
-          .map((a) => a.value);
+        const byNumber = new Map(
+          competitorResults.attempts.map((a) => [a.attempt_number, a.value]),
+        );
+        return Array.from(
+          { length: solveCount },
+          (_, i) => byNumber.get(i + 1) ?? 0,
+        );
       }
 
       return zeroedArrayOfSize(solveCount);
