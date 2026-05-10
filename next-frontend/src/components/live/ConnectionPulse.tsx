@@ -25,24 +25,22 @@ export default function ConnectionPulse({
 
   return (
     <Status.Root colorPalette={connectionColor} display="inline-flex">
-      <Tooltip content={t(
+      <Tooltip
+        content={t(
           `competitions.live.connection.${CONNECTION_TRANSLATION_KEYS[connectionState]}`,
         )}
         showArrow
         openDelay={200}
       >
-        <Badge
-          variant="solid"
-          display="inline-flex"
-          gap={2}
-          size="sm"
-        >
+        <Badge variant="solid" display="inline-flex" gap={2} size="sm">
           <Box
             boxSize={{ base: "1.5", sm: "2" }}
             borderRadius="full"
             bg="colorPalette.contrast"
             animationName={
-              connectionState === CONNECTION_STATE_CONNECTED ? "pulse" : undefined
+              connectionState === CONNECTION_STATE_CONNECTED
+                ? "pulse"
+                : undefined
             }
             animationDuration="1.5s"
             animationTimingFunction="ease-in-out"
