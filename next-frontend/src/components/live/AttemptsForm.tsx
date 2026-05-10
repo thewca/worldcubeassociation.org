@@ -12,7 +12,7 @@ import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import { LiveCompetitor } from "@/types/live";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { KeyboardEvent, ReactNode } from "react";
 import { attemptResultsWarning } from "@/lib/live/attempt-result";
 import { useT } from "@/lib/i18n/useI18n";
@@ -49,6 +49,7 @@ export default function AttemptsForm({
   const { competitors } = useLiveResults();
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const [focusTrigger, setFocusTrigger] = useState(0);
 
   const { collection, filter } = useListCollection({
     initialItems: Array.from(competitors.values()),
@@ -90,6 +91,7 @@ export default function AttemptsForm({
           onValueChange={(e) => {
             if (e.value.length > 0) {
               handleRegistrationIdChange(parseInt(e.value[0], 10));
+              setFocusTrigger((t) => t + 1);
             } else {
               handleRegistrationIdChange(undefined);
             }
@@ -122,7 +124,10 @@ export default function AttemptsForm({
           </Portal>
         </Combobox.Root>
         <FocusScope>
-          <AttemptFieldsNav onFocusCompetitor={() => inputRef.current?.focus()}>
+          <AttemptFieldsNav
+            onFocusCompetitor={() => inputRef.current?.focus()}
+            focusTrigger={focusTrigger}
+          >
             {_.times(solveCount).map((index) => (
               <AttemptResultField
                 eventId={eventId}
@@ -149,13 +154,19 @@ export default function AttemptsForm({
 interface AttemptFieldsNavProps {
   children: ReactNode;
   onFocusCompetitor: () => void;
+  focusTrigger: number;
 }
 
 function AttemptFieldsNav({
   children,
   onFocusCompetitor,
+  focusTrigger,
 }: AttemptFieldsNavProps) {
   const focusManager = useFocusManager();
+
+  useEffect(() => {
+    if (focusTrigger > 0) focusManager?.focusFirst();
+  }, [focusManager, focusTrigger]);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.ctrlKey || e.metaKey) return;
