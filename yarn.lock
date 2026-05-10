@@ -10137,6 +10137,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-hotkeys-hook@npm:^5.3.2":
+  version: 5.3.2
+  resolution: "react-hotkeys-hook@npm:5.3.2"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10c0/a1e9edf31dc7c9804153e9ce2b64cdde5e997190b429354d8e561163f692b1cabad911343ef7e192a498160742608c53a7b9c5bb9cfa2ca832c4b482c33d8c83
+  languageName: node
+  linkType: hard
+
 "react-image-crop@npm:^11.0.10":
   version: 11.0.10
   resolution: "react-image-crop@npm:11.0.10"
@@ -10721,6 +10731,7 @@ __metadata:
     react-datepicker: "npm:^9.1.0"
     react-dom: "npm:^18.3.1"
     react-google-recaptcha: "npm:^3.1.0"
+    react-hotkeys-hook: "npm:^5.3.2"
     react-image-crop: "npm:^11.0.10"
     react-intersection-observer: "npm:^10.0.3"
     react-leaflet: "npm:^4.2.1"
