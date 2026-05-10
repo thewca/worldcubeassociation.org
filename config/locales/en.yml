@@ -1414,6 +1414,10 @@ en:
         initialized: "Connection being initialized"
         connected: "Connected, receiving live results updates"
         disconnected: "Lost connection, results are not being updated"
+        status:
+          initialized: "Initializing"
+          connected: "Connected"
+          disconnected: "Disconnected"
       podiums:
         title: "Podiums"
         undetermined: "Podiums to be determined"
