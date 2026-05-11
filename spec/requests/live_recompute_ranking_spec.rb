@@ -134,10 +134,10 @@ RSpec.describe "WCA Live API" do
       registration = create(:registration, :accepted, competition: competition, event_ids: ["333fm"])
       live_result = LiveResult.create!(LiveResult.empty_result_attributes(registration.id, round.id))
       UpdateLiveResultJob.perform_now(live_result, [
-        { attempt_number: 1, value: 40 },
-        { attempt_number: 2, value: 50 },
-        { attempt_number: 3, value: -1 },
-      ], delegate.id)
+                                        { attempt_number: 1, value: 40 },
+                                        { attempt_number: 2, value: 50 },
+                                        { attempt_number: 3, value: -1 },
+                                      ], delegate.id)
 
       # Expected ranking (sorted by best single, all positive in this test):
       # 1-3: the three people with complete means (best singles: 20, 25, 30)
