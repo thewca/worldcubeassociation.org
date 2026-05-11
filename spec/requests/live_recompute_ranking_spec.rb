@@ -113,20 +113,38 @@ RSpec.describe "WCA Live API" do
       expect(round.live_results.sort_by(&:best).pluck(:local_pos)).to eq [4, 1, 2, 3]
     end
 
-    it "Ranks results correctly by single even with incomplete results present" do
-      competition = create(:competition, event_ids: ["333bf"], delegates: [delegate])
-      round = create(:round, competition: competition, event_id: "333bf", format_id: "5")
+    it "Ranks results correctly for FMC with incomplete and DNF mean results present" do
+      competition = create(:competition, event_ids: ["333fm"], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333fm", format_id: "m")
 
-      3.times do |i|
-        registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
-
-        create(:live_result, round: round, registration: registration, best: (i + 1) * 100)
+      # Three complete results with valid means (25, 30, 35 moves)
+      [[20, 25, 30], [25, 30, 35], [30, 35, 40]].each do |moves|
+        registration = create(:registration, :accepted, competition: competition, event_ids: ["333fm"])
+        live_result = LiveResult.create!(LiveResult.empty_result_attributes(registration.id, round.id))
+        attempts = moves.each_with_index.map { |v, i| { attempt_number: i + 1, value: v } }
+        UpdateLiveResultJob.perform_now(live_result, attempts, delegate.id)
       end
 
-      registration = create(:registration, :accepted, competition: competition, event_ids: ["333bf"])
-      create(:live_result, round: round, registration: registration, best: 0)
+      # One result with only the first attempt entered (39 moves) — still competing, no mean yet
+      registration = create(:registration, :accepted, competition: competition, event_ids: ["333fm"])
+      live_result = LiveResult.create!(LiveResult.empty_result_attributes(registration.id, round.id))
+      UpdateLiveResultJob.perform_now(live_result, [{ attempt_number: 1, value: 39 }], delegate.id)
 
-      expect(round.live_results.sort_by(&:best).pluck(:local_pos)).to eq [nil, 1, 2, 3]
+      # One result with two valid attempts (40, 50) and one DNF — mean is DNF, best single is 40
+      registration = create(:registration, :accepted, competition: competition, event_ids: ["333fm"])
+      live_result = LiveResult.create!(LiveResult.empty_result_attributes(registration.id, round.id))
+      UpdateLiveResultJob.perform_now(live_result, [
+        { attempt_number: 1, value: 40 },
+        { attempt_number: 2, value: 50 },
+        { attempt_number: 3, value: -1 },
+      ], delegate.id)
+
+      # Expected ranking (sorted by best single, all positive in this test):
+      # 1-3: the three people with complete means (best singles: 20, 25, 30)
+      # 4: person with only one attempt entered (best=39) — ranks above DNF because 39 < 40
+      # 5: person with DNF mean (best=40)
+      # Both incomplete and DNF results have invalid means so they rank only by best single.
+      expect(round.live_results.reload.sort_by(&:best).map(&:local_pos)).to eq [1, 2, 3, 4, 5]
     end
   end
 

@@ -295,13 +295,24 @@ class Round < ApplicationRecord
     #
     # For non-linked rounds global_pos equals local_pos, so we set both here to avoid
     # a second UPDATE in recompute_global_pos.
+
+    # For average-ranked formats, within the invalid-average group we further separate results
+    # by whether their best single is also invalid (all DNF/DNS), pushing those to the very bottom.
+    # Then sort by best single so e.g. incomplete (average=0, best=39) ranks above DNF mean
+    # (average=-1, best=40), and both rank above all-DNF (average=-1, best=-1).
+    order_clause = if secondary_rank_by
+                     primary_sort = "CASE WHEN #{rank_by} > 0 THEN #{rank_by} ELSE #{secondary_rank_by} END"
+                     "#{rank_by} <= 0, #{secondary_rank_by} <= 0, #{primary_sort} ASC, #{secondary_rank_by} ASC"
+                   else
+                     "#{rank_by} <= 0, #{rank_by} ASC"
+                   end
+
     ActiveRecord::Base.connection.exec_query <<~SQL.squish
       UPDATE live_results r
       LEFT JOIN (
           SELECT id,
                  RANK() OVER (
-                     ORDER BY #{rank_by} <= 0, #{rank_by} ASC
-                       #{", #{secondary_rank_by} <= 0, #{secondary_rank_by} ASC" if secondary_rank_by}
+                     ORDER BY #{order_clause}
                  ) AS `rank`
           FROM live_results
           WHERE round_id = #{id} AND best != 0
