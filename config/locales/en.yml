@@ -1447,6 +1447,7 @@ en:
           no_next: "No next competitor to advance."
           cancel: "Cancel"
           failed_to_fetch: "Failed to fetch next advancing competitor"
+          still_processing: "Cannot quit while some competitors are still processing"
       results:
         competitor: "Competitor"
         mean: "Mean"

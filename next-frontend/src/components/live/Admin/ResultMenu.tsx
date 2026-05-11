@@ -18,6 +18,8 @@ import useAPI from "@/lib/wca/useAPI";
 import Loading from "@/components/ui/loading";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
+import { useLiveResults } from "@/providers/LiveResultProvider";
+import { Tooltip } from "@/components/ui/tooltip";
 
 export type ClickPosition = {
   x: number;
@@ -44,6 +46,7 @@ export default function ResultMenu({
   const [isQuitting, setIsQuitting] = useState(false);
   const confirm = useConfirm();
   const { t } = useT();
+  const { pendingLiveResults } = useLiveResults();
 
   const { handleRegistrationIdChange, clearCompetitorsResults, isPending } =
     useResultsAdmin();
@@ -115,13 +118,20 @@ export default function ResultMenu({
                       {t("competitions.live.admin.clear")}
                     </Menu.Item>
                   ) : (
-                    <Menu.Item
-                      value="quit"
-                      onClick={() => setIsQuitting(true)}
-                      disabled={isPending}
+                    <Tooltip
+                      content={t(
+                        "competitions.live.admin.quit.still_processing",
+                      )}
+                      disabled={pendingLiveResults.length === 0}
                     >
-                      {t("competitions.live.admin.quit.quit_menu")}
-                    </Menu.Item>
+                      <Menu.Item
+                        value="quit"
+                        onClick={() => setIsQuitting(true)}
+                        disabled={isPending || pendingLiveResults.length > 0}
+                      >
+                        {t("competitions.live.admin.quit.quit_menu")}
+                      </Menu.Item>
+                    </Tooltip>
                   )}
                 </Menu.ItemGroup>
               )}
