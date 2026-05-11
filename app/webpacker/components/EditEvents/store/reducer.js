@@ -120,7 +120,7 @@ const reducers = {
     const event = state.wcifEvents.find((e) => e.id === eventId);
     const existingRounds = event.rounds ?? [];
 
-    const newRounds = Array(roundsToAddCount).fill(null).map((_, i) => (
+    const newRounds = Array(roundsToAddCount).fill(null).map((_rd, i) => (
       generateWcifRound(eventId, existingRounds.length + i + 1)
     ));
 
