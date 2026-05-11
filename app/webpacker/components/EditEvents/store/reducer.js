@@ -13,6 +13,7 @@ import {
   UpdateTimeLimit,
 } from './actions';
 import { formats } from '../../../lib/wca-data.js.erb';
+import { buildActivityCode, parseActivityCode } from '../../../lib/utils/wcif';
 
 /**
  * Updates 1 or more rounds
@@ -163,9 +164,50 @@ const reducers = {
 
   [UpdateAdvancementCondition]: (state, { payload }) => {
     const { roundId, advancementCondition } = payload;
+    const { eventId, roundNumber } = parseActivityCode(roundId);
 
-    const updateRoundIds = state.wcifEvents
-      .flatMap((evt) => evt.rounds)
+    const currentEvent = state.wcifEvents.find((evt) => evt.id === eventId);
+
+    if (advancementCondition.type === 'dual') {
+      const currentRound = currentEvent.rounds.find((rd) => rd.id === roundId);
+
+      // By convention of this UI, the condition 'dual' means to merge this round
+      //   and the next round (N + 1) into one common linkedRound
+      const linkedSiblingId = buildActivityCode({ eventId, roundNumber: roundNumber + 1 });
+
+      const alreadyLinked = currentRound.linkedRounds ?? [roundId];
+      const idsInLink = [...alreadyLinked, linkedSiblingId];
+
+      const existingLinkSource = currentRound.participationRuleset.participationSource;
+
+      const eventsWithLinked = updateForRounds(state.wcifEvents, idsInLink, (rd) => ({
+        linkedRounds: idsInLink,
+        participationRuleset: {
+          ...rd.participationRuleset,
+          participationSource: existingLinkSource,
+        },
+      }));
+
+      const pointingToLast = currentEvent.rounds.filter(
+        (rd) => isRoundParticipationTarget(rd, linkedSiblingId),
+      ).map((rd) => rd.id);
+
+      return ({
+        ...state,
+        wcifEvents: updateForRounds(eventsWithLinked, pointingToLast, (rd) => ({
+          participationRuleset: {
+            ...rd.participationRuleset,
+            participationSource: {
+              type: 'linkedRounds',
+              roundIds: idsInLink,
+              resultCondition: rd.participationRuleset.participationSource.resultCondition,
+            },
+          },
+        })),
+      });
+    }
+
+    const updateRoundIds = currentEvent.rounds
       .filter((rd) => isRoundParticipationTarget(rd, roundId))
       .map((rd) => rd.id);
 
