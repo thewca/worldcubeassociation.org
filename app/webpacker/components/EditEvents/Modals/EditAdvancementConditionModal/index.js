@@ -122,23 +122,56 @@ function AdvancementInput({
 
 const defaultValueAdvancementValue = (type) => (type === 'percent' ? 75 : 0);
 
+function v2ConditionToV1(wcifRound, wcifEvent, roundNumber) {
+  if (roundNumber >= wcifEvent.rounds.length) {
+    return null;
+  }
+
+  if (wcifRound.linkedRounds) {
+    const lastRoundInLink = wcifRound.linkedRounds[wcifRound.linkedRounds.length - 1];
+
+    if (wcifRound.id !== lastRoundInLink) {
+      return {
+        type: 'dual',
+        level: defaultValueAdvancementValue('dual'),
+      };
+    }
+  }
+
+  const firstTargetRound = wcifEvent.rounds.find((rd) => {
+    const source = rd?.participationRuleset?.participationSource;
+    const sourceType = source?.type;
+
+    if (sourceType === 'round') {
+      return source.roundId === wcifRound.id;
+    }
+
+    if (sourceType === 'linkedRounds') {
+      return source.roundIds.includes(wcifRound.id);
+    }
+
+    return false;
+  });
+
+  const resultCondition = firstTargetRound
+    ?.participationRuleset
+    ?.participationSource
+    ?.resultCondition;
+
+  if (!resultCondition) return null;
+
+  return {
+    type: resultCondition.type.replace('resultAchieved', 'attemptResult'),
+    level: resultCondition.value ?? 0,
+  };
+}
+
 /**
  * Shows a modal to edit the advancement condition of a round.
  * @param {Event} wcifEvent
  * @param {Round} wcifRound
  * @returns {React.ReactElement}
  */
-function v2ConditionToV1(wcifRound, wcifEvent, roundNumber) {
-  if (wcifRound.linkedRounds?.[0] === wcifRound.id) return { type: -2, level: 0 };
-  const nextRound = wcifEvent.rounds[roundNumber]; // roundNumber is 1-based, array is 0-indexed
-  const rc = nextRound?.participationRuleset?.participationSource?.resultCondition;
-  if (!rc) return null;
-  return {
-    type: rc.type === 'resultAchieved' ? 'attemptResult' : rc.type,
-    level: rc.value ?? 0,
-  };
-}
-
 export default function EditAdvancementConditionModal({
   wcifEvent, wcifRound, roundNumber, disabled,
 }) {
