@@ -128,7 +128,7 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def search(*models)
-    query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
+    query = params.expect(:q)&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
 
     unless query
       render status: :bad_request, json: { error: "No query specified" }

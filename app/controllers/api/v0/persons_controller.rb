@@ -8,7 +8,7 @@ class Api::V0::PersonsController < Api::V0::ApiController
                 Person.current.includes(:user)
               end
     persons = persons.includes(:ranks_single, :ranks_average)
-    persons = persons.where(wca_id: params[:wca_ids].split(',')) if params[:wca_ids].present?
+    persons = persons.where(wca_id: params.expect(:wca_ids).split(',')) if params[:wca_ids].present?
     render json: paginate(persons).map { |person| person_to_json person }
   end
 
@@ -23,7 +23,7 @@ class Api::V0::PersonsController < Api::V0::ApiController
 
   def results
     event = params[:event_id]
-    person = Person.current.find_by!(wca_id: params[:wca_id])
+    person = Person.current.find_by!(wca_id: params.expect(:wca_id))
     results = if event.present?
                 person.results.where(event_id: event)
               else
@@ -36,14 +36,14 @@ class Api::V0::PersonsController < Api::V0::ApiController
   end
 
   def competitions
-    person = Person.current.find_by!(wca_id: params[:wca_id])
+    person = Person.current.find_by!(wca_id: params.expect(:wca_id))
     render json: person.competitions.as_json(include: [], methods: %w[url website short_name short_display_name city
                                                                       venue_address venue_details latitude_degrees longitude_degrees
                                                                       country_iso2 time_until_registration])
   end
 
   def records
-    person = Person.current.find_by!(wca_id: params[:wca_id])
+    person = Person.current.find_by!(wca_id: params.expect(:wca_id))
     results = person.results
     single_records = results.where.not(regional_single_record: nil)
     average_records = results.where.not(regional_average_record: nil)

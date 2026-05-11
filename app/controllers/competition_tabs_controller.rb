@@ -16,7 +16,7 @@ class CompetitionTabsController < ApplicationController
 
   def edit
     @competition = competition_from_params
-    @competition_tab = @competition.tabs.find(params[:id])
+    @competition_tab = @competition.tabs.find(params.expect(:id))
   end
 
   def create
@@ -32,7 +32,7 @@ class CompetitionTabsController < ApplicationController
 
   def update
     @competition = competition_from_params
-    @competition_tab = @competition.tabs.find(params[:id])
+    @competition_tab = @competition.tabs.find(params.expect(:id))
     if @competition_tab.update(competition_tab_params)
       flash[:success] = "Successfully updated #{@competition_tab.name} tab."
       redirect_to edit_competition_tab_path(@competition, @competition_tab)
@@ -43,19 +43,19 @@ class CompetitionTabsController < ApplicationController
 
   def destroy
     @competition = competition_from_params
-    @competition.tabs.find(params[:id]).destroy
+    @competition.tabs.find(params.expect(:id)).destroy
     redirect_to competition_tabs_path(@competition)
   end
 
   def reorder
     competition = competition_from_params
-    competition_tab = competition.tabs.find(params[:id])
+    competition_tab = competition.tabs.find(params.expect(:id))
     competition_tab.reorder(params[:direction])
     render nothing: true
   end
 
   private def competition_from_params
-    Competition.find(params[:competition_id])
+    Competition.find(params.expect(:competition_id))
   end
 
   private def competition_tab_params

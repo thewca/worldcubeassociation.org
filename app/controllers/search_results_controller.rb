@@ -7,7 +7,7 @@ class SearchResultsController < ApplicationController
   MAX_RESULTS = SEARCH_RESULT_LIMIT * MAX_PAGES
 
   def index
-    @omni_query = params[:q]&.slice(0...SEARCH_QUERY_LIMIT)
+    @omni_query = params.expect(:q)&.slice(0...SEARCH_QUERY_LIMIT)
 
     # strict sanitization to prevent injecting any HTML tags at all
     @omni_query = sanitize(@omni_query, tags: [], attributes: [])

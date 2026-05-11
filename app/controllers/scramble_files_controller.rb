@@ -134,6 +134,6 @@ class ScrambleFilesController < ApplicationController
   end
 
   private def competition_from_params(associations: {})
-    Competition.includes(associations).find(params[:competition_id])
+    Competition.includes(associations).find(params.expect(:competition_id))
   end
 end

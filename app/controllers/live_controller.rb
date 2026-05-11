@@ -4,7 +4,7 @@ class LiveController < ApplicationController
   def admin
     @competition_id = params[:competition_id]
     @competition = Competition.find(@competition_id)
-    @round = Round.find(params[:round_id])
+    @round = Round.find(params.expect(:round_id))
     @event_id = @round.event.id
     @competitors = @round.accepted_registrations_with_wcif_id
   end
@@ -12,7 +12,7 @@ class LiveController < ApplicationController
   def round_results
     @competition_id = params[:competition_id]
     @competition = Competition.find(@competition_id)
-    @round = Round.find(params[:round_id])
+    @round = Round.find(params.expect(:round_id))
     @event_id = @round.event.id
     @competitors = @round.registrations
   end
@@ -40,13 +40,13 @@ class LiveController < ApplicationController
   end
 
   def podiums
-    @competition = Competition.find(params[:competition_id])
+    @competition = Competition.find(params.expect(:competition_id))
     @competitors = @competition.registrations.includes(:user).accepted
     @final_rounds = @competition.rounds.select(&:final_round?)
   end
 
   def competitors
-    @competition = Competition.find(params[:competition_id])
+    @competition = Competition.find(params.expect(:competition_id))
     @competitors = @competition.registrations.includes(:user).accepted
   end
 

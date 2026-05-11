@@ -77,7 +77,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def registration_config
-    competition = Competition.find(params[:id])
+    competition = Competition.find(params.expect(:id))
     render json: competition.available_registration_lanes(@current_user)
   end
 
@@ -263,7 +263,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def payment_ticket
-    iso_donation_amount = params[:iso_donation_amount].to_i
+    iso_donation_amount = params.expect(:iso_donation_amount).to_i
     # We could delegate this call to the prepare_intent function given that we're already giving it registration - however,
     # in the long-term we want to decouple registrations from payments, so I'm deliberately not introducing any more tight coupling
     ruby_money = @registration.entry_fee_with_donation(iso_donation_amount)

@@ -14,17 +14,17 @@ class Api::V0::Results::ResultsController < Api::V0::ApiController
   MODE_RECORDS_NEXT = "next-records"
 
   private def support_old_links!
-    params[:event_id]&.tr!("+", " ")
+    params.expect(:event_id)&.tr!("+", " ")
 
-    params[:region]&.tr!("+", " ")
+    params.expect(:region)&.tr!("+", " ")
 
-    params[:years]&.tr!("+", " ")
+    params.expect(:years)&.tr!("+", " ")
     params[:years] = nil if params[:years] == "all"
 
-    params[:show]&.tr!("+", " ")
-    params[:show]&.downcase!
+    params.expect(:show)&.tr!("+", " ")
+    params.expect(:show)&.downcase!
     # We are not supporting the all option anymore!
-    params[:show] = nil if params[:show]&.include?("all")
+    params[:show] = nil if params.expect(:show)&.include?("all")
   end
 
   private def params_for_cache

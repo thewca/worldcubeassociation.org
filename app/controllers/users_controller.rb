@@ -24,7 +24,7 @@ class UsersController < ApplicationController
       format.html
       format.json do
         @users = User.in_region(params[:region])
-        params[:search]&.split&.each do |part|
+        params.expect(:search)&.split&.each do |part|
           like_query = %w[users.name wca_id email].map do |column|
             "#{column} LIKE :part"
           end.join(" OR ")
@@ -543,7 +543,7 @@ class UsersController < ApplicationController
   end
 
   def admin_search
-    query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
+    query = params.expect(:q)&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
 
     return render status: :bad_request, json: { error: "No query specified" } unless query
 

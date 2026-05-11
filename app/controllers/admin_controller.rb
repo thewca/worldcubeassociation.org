@@ -112,7 +112,7 @@ class AdminController < ApplicationController
   end
 
   def person_data
-    @person = Person.current.find_by!(wca_id: params[:person_wca_id])
+    @person = Person.current.find_by!(wca_id: params.expect(:person_wca_id))
 
     render json: {
       name: @person.name,
@@ -138,7 +138,7 @@ class AdminController < ApplicationController
 
   def do_override_regional_records
     ActiveRecord::Base.transaction do
-      params[:regional_record_overrides].each do |id_and_type, marker|
+      params.expect(:regional_record_overrides).each do |id_and_type, marker|
         next if %i[competition_id event_id].include? id_and_type.to_sym
 
         next if marker.blank?
@@ -180,7 +180,7 @@ class AdminController < ApplicationController
   end
 
   private def competition_from_params(associations: {})
-    Competition.includes(associations).find(params[:competition_id])
+    Competition.includes(associations).find(params.expect(:competition_id))
   end
 
   private def competition_list_from_string(competition_ids_string)
@@ -204,7 +204,7 @@ class AdminController < ApplicationController
     wca_id_index = Person.pluck(:wca_id)
 
     ActiveRecord::Base.transaction do
-      params[:person_completions].each do |person_key, procedure|
+      params.expect(:person_completions).each do |person_key, procedure|
         next if %i[competition_ids continue_batch].include? person_key.to_sym
 
         old_name, old_country, pending_person_id, pending_competition_id = person_key.split '|'

@@ -5,7 +5,7 @@ class VotesController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_vote_in_poll?) }
 
   def vote
-    @poll = Poll.find(params[:id])
+    @poll = Poll.find(params.expect(:id))
     @vote = @poll.votes.find_by(user_id: current_user.id) || Vote.new
   end
 
@@ -20,7 +20,7 @@ class VotesController < ApplicationController
   end
 
   def update
-    @vote = Vote.find(params[:id])
+    @vote = Vote.find(params.expect(:id))
     @poll = @vote.poll
     if @vote.update(vote_params)
       flash[:success] = "Vote updated"

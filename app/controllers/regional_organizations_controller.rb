@@ -93,6 +93,6 @@ class RegionalOrganizationsController < ApplicationController
   end
 
   private def regional_organization_from_params
-    RegionalOrganization.find(params[:id])
+    RegionalOrganization.find(params.expect(:id))
   end
 end

@@ -5,9 +5,9 @@ class DelegateReportsController < ApplicationController
 
   private def competition_from_params
     if params[:competition_id]
-      Competition.find(params[:competition_id])
+      Competition.find(params.expect(:competition_id))
     else
-      DelegateReport.find(params[:id]).competition
+      DelegateReport.find(params.expect(:id)).competition
     end
   end
 
@@ -27,7 +27,7 @@ class DelegateReportsController < ApplicationController
 
   def update
     @competition = competition_from_params
-    return if params[:delegate_report]&.dig(:posted) &&
+    return if params.expect(:delegate_report)&.dig(:posted) &&
               redirect_to_root_unless_user(:can_post_delegate_report?, @competition.delegate_report)
 
     return if redirect_to_root_unless_user(:can_edit_delegate_report?, @competition.delegate_report)
@@ -64,7 +64,7 @@ class DelegateReportsController < ApplicationController
   end
 
   def delete_image
-    image = ActiveStorage::Attachment.find(params[:image_id])
+    image = ActiveStorage::Attachment.find(params.expect(:image_id))
     image.purge
 
     flash[:success] = "Image deleted successfully."

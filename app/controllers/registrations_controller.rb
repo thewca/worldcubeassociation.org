@@ -9,9 +9,9 @@ class RegistrationsController < ApplicationController
 
   private def competition_from_params
     competition = if params[:competition_id]
-                    Competition.find(params[:competition_id])
+                    Competition.find(params.expect(:competition_id))
                   else
-                    Registration.find(params[:id]).competition
+                    Registration.find(params.expect(:id)).competition
                   end
     raise ActionController::RoutingError.new('Not Found') unless competition.user_can_view?(current_user)
 
@@ -349,7 +349,7 @@ class RegistrationsController < ApplicationController
     competition_id = params[:competition_id]
     user_id = params[:user_id]
     registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
-    iso_donation_amount = params[:iso_donation_amount].to_i
+    iso_donation_amount = params.expect(:iso_donation_amount).to_i
     ruby_money = registration.entry_fee_with_donation(iso_donation_amount)
     human_amount = helpers.format_money(ruby_money)
 
@@ -506,7 +506,7 @@ class RegistrationsController < ApplicationController
     competition_id = params[:competition_id]
     competition = Competition.find(competition_id)
 
-    payment_integration = params[:payment_integration].to_sym
+    payment_integration = params.expect(:payment_integration).to_sym
     payment_account = competition.payment_account_for(payment_integration)
 
     if payment_account.blank?
@@ -585,11 +585,11 @@ class RegistrationsController < ApplicationController
   end
 
   def load_payment_intent
-    registration = Registration.includes(:competition).find(params[:id])
+    registration = Registration.includes(:competition).find(params.expect(:id))
 
     return render status: :forbidden, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } } unless registration.user_id == current_user.id
 
-    amount = params[:amount].to_i
+    amount = params.expect(:amount).to_i
 
     return render status: :bad_request, json: { error: { message: t("registrations.payment_form.errors.already_paid") } } if registration.outstanding_entry_fees.cents <= 0
 
@@ -610,7 +610,7 @@ class RegistrationsController < ApplicationController
     competition_id = params[:competition_id]
     competition = Competition.find(competition_id)
 
-    payment_integration = params[:payment_integration].to_sym
+    payment_integration = params.expect(:payment_integration).to_sym
     payment_account = competition.payment_account_for(payment_integration)
 
     return render status: :not_found, json: { error: :provider_disconnected } if payment_account.blank?

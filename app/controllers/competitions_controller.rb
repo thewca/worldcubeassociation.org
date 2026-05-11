@@ -435,7 +435,7 @@ class CompetitionsController < ApplicationController
     country_iso2 = Country.find_by(id: params[:countryId])&.iso2
     per_competitor_dues = DuesCalculator.dues_per_competitor(
       country_iso2,
-      params[:baseEntryFee].to_i,
+      params.expect(:baseEntryFee).to_i,
       params[:currencyCode],
     )
     per_competitor_dues_in_lowest_denomination = per_competitor_dues&.cents

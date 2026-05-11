@@ -11,8 +11,8 @@ class UploadController < ApplicationController
     # information.
     blob = ActiveStorage::Blob.create_and_upload!(
       io: params[:image],
-      filename: params[:image].original_filename,
-      content_type: params[:image].content_type,
+      filename: params.expect(:image).original_filename,
+      content_type: params.expect(:image).content_type,
     )
 
     render json: { filePath: url_for(blob) }

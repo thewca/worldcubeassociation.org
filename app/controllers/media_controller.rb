@@ -87,6 +87,6 @@ class MediaController < ApplicationController
   end
 
   private def find_medium
-    CompetitionMedium.find(params[:id])
+    CompetitionMedium.find(params.expect(:id))
   end
 end

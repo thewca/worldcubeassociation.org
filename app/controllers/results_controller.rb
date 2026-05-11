@@ -39,7 +39,7 @@ class ResultsController < ApplicationController
     params[:show] ||= SHOW_100_PERSONS
     params[:gender] ||= GENDER_ALL
 
-    params[:show] = params[:show].gsub(/\d+/, "100") # FIXME: this is disabling anything except show 100 for now
+    params[:show] = params.expect(:show).gsub(/\d+/, "100") # FIXME: this is disabling anything except show 100 for now
 
     shared_constants_and_conditions
 
@@ -54,7 +54,7 @@ class ResultsController < ApplicationController
     type_param = params[:type]
 
     @is_by_region = params[:show] == "by region"
-    splitted_show_param = params[:show].split
+    splitted_show_param = params.expect(:show).split
     @show = splitted_show_param[0].to_i
     @is_persons = splitted_show_param[1] == "persons"
     @is_results = splitted_show_param[1] == "results"
@@ -330,7 +330,7 @@ class ResultsController < ApplicationController
                         end
 
     @is_all_years = params[:years] == YEARS_ALL
-    splitted_years_param = params[:years].split
+    splitted_years_param = params.expect(:years).split
     @is_only = splitted_years_param[0] == "only"
     @is_until = splitted_years_param[0] == "until"
     @year = splitted_years_param[1].to_i
@@ -349,17 +349,17 @@ class ResultsController < ApplicationController
 
   # Normalizes the params so that old links to rankings still work.
   private def support_old_links!
-    params[:event_id]&.tr!("+", " ")
+    params.expect(:event_id)&.tr!("+", " ")
 
-    params[:region]&.tr!("+", " ")
+    params.expect(:region)&.tr!("+", " ")
 
-    params[:years]&.tr!("+", " ")
+    params.expect(:years)&.tr!("+", " ")
     params[:years] = nil if params[:years] == "all"
 
-    params[:show]&.tr!("+", " ")
-    params[:show]&.downcase!
+    params.expect(:show)&.tr!("+", " ")
+    params.expect(:show)&.downcase!
     # We are not supporting the all option anymore!
-    params[:show] = nil if params[:show]&.include?("all")
+    params[:show] = nil if params.expect(:show)&.include?("all")
   end
 
   private def compute_rankings_by_region(rows, continent, country)
