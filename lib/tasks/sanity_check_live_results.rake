@@ -6,14 +6,16 @@ namespace :live_results do
     discrepancy_count = 0
     checked_count = 0
 
-    rounds = Round.includes(:competition_event, { live_results: %i[live_attempts registration] })
-                  .reject { it.round_results.empty? || it.live_results.empty? }
+    rounds = Round.joins(:live_results)
+                  .where("round_results IS NOT NULL AND round_results != '[]'")
+                  .includes(:competition_event)
+                  .distinct
 
-    puts "Checking #{rounds.size} rounds with both round_results and live_results..."
+    puts "Checking #{rounds.count} rounds with both round_results and live_results..."
 
-    rounds.each do |round|
+    rounds.find_each do |round|
       round_wcif = round.round_results.map(&:to_wcif).index_by { it["personId"] }
-      live_wcif = round.live_results.map(&:to_wcif).index_by { it["personId"] }
+      live_wcif = round.live_results.includes(:live_attempts, :registration).map(&:to_wcif).index_by { it["personId"] }
 
       checked_count += 1
       round_ids = round_wcif.keys.to_set
@@ -34,7 +36,7 @@ namespace :live_results do
         next if rr == lr
 
         discrepancy_count += 1
-        puts "MISMATCH #{round.wcif_id} personId=#{person_id}:"
+        puts "MISMATCH #{round.wcif_id} personId=#{person_id} competition_id=#{round.competition_id}:"
         puts "  ranking:  round=#{rr['ranking']}  live=#{lr['ranking']}" if rr["ranking"] != lr["ranking"]
         puts "  best:     round=#{rr['best']}     live=#{lr['best']}" if rr["best"] != lr["best"]
         puts "  average:  round=#{rr['average']}  live=#{lr['average']}" if rr["average"] != lr["average"]
