@@ -12617,6 +12617,7 @@ __metadata:
     prettier: "npm:^3.8.3"
     react: "npm:^19.2.6"
     react-dom: "npm:^19.2.6"
+    react-hotkeys-hook: "npm:^5.3.2"
     react-i18next: "npm:^17.0.7"
     react-icons: "npm:^5.6.0"
     react-intersection-observer: "npm:^10.0.3"
@@ -13855,6 +13856,16 @@ __metadata:
   peerDependencies:
     react: ^18.0.0 || ^19.0.0
   checksum: 10c0/4c72112bd930629e73015515804f95e375f9d83bea07cbc0557eb44752c8e8fc57ce141126b8eed2d9301d3bd1e030ce1f59d0e71f70fc0d10a29b31ec2cf2c5
+  languageName: node
+  linkType: hard
+
+"react-hotkeys-hook@npm:^5.3.2":
+  version: 5.3.2
+  resolution: "react-hotkeys-hook@npm:5.3.2"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10c0/a1e9edf31dc7c9804153e9ce2b64cdde5e997190b429354d8e561163f692b1cabad911343ef7e192a498160742608c53a7b9c5bb9cfa2ca832c4b482c33d8c83
   languageName: node
   linkType: hard
 
