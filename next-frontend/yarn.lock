@@ -272,9 +272,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-cognito-identity@npm:3.1041.0":
-  version: 3.1041.0
-  resolution: "@aws-sdk/client-cognito-identity@npm:3.1041.0"
+"@aws-sdk/client-cognito-identity@npm:3.1045.0":
+  version: 3.1045.0
+  resolution: "@aws-sdk/client-cognito-identity@npm:3.1045.0"
   dependencies:
     "@aws-crypto/sha256-browser": "npm:5.2.0"
     "@aws-crypto/sha256-js": "npm:5.2.0"
@@ -315,7 +315,7 @@ __metadata:
     "@smithy/util-retry": "npm:^4.3.6"
     "@smithy/util-utf8": "npm:^4.2.2"
     tslib: "npm:^2.6.2"
-  checksum: 10c0/74553a9385307e0b1f59a0ca197000b445a432bc18003d2ec1bdfc01c74363292560f9706c48bbdc0543e0b36c0f5632e18f88046c080ef736add529a4b5d75a
+  checksum: 10c0/60c4e6368e93230af72f1eaf22e75ab51a7fc5487aa68bbdb70811f425cb39a6ff7627865c647b838a620592139e8c4e47a3ba0c6ca77136b214c56730c2a920
   languageName: node
   linkType: hard
 
@@ -561,11 +561,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/credential-providers@npm:^3.1041.0":
-  version: 3.1041.0
-  resolution: "@aws-sdk/credential-providers@npm:3.1041.0"
+"@aws-sdk/credential-providers@npm:^3.1045.0":
+  version: 3.1045.0
+  resolution: "@aws-sdk/credential-providers@npm:3.1045.0"
   dependencies:
-    "@aws-sdk/client-cognito-identity": "npm:3.1041.0"
+    "@aws-sdk/client-cognito-identity": "npm:3.1045.0"
     "@aws-sdk/core": "npm:^3.974.8"
     "@aws-sdk/credential-provider-cognito-identity": "npm:^3.972.31"
     "@aws-sdk/credential-provider-env": "npm:^3.972.34"
@@ -585,7 +585,7 @@ __metadata:
     "@smithy/property-provider": "npm:^4.2.14"
     "@smithy/types": "npm:^4.14.1"
     tslib: "npm:^2.6.2"
-  checksum: 10c0/da1bae71757373450d22e3a920b14a901b4846f5f44501246f15764503b3e6332d3b3fb05b6bef64e5150d96886f63aadff1bc6402ef7186096ead9f905b9f38
+  checksum: 10c0/f24c3d39e0eabf911e56519025da5de2c008e91ac8ea4382fb00ef36e8fc99338eb289d2e77ad7a688848d072055091def09fa03687d5bb727d49cf58552c58d
   languageName: node
   linkType: hard
 
@@ -12552,7 +12552,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "next-frontend@workspace:."
   dependencies:
-    "@aws-sdk/credential-providers": "npm:^3.1041.0"
+    "@aws-sdk/credential-providers": "npm:^3.1045.0"
     "@chakra-ui/cli": "npm:^3.35.0"
     "@chakra-ui/react": "npm:^3.35.0"
     "@emotion/react": "npm:^11.14.0"
