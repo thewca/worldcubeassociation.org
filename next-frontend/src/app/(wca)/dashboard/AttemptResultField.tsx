@@ -108,12 +108,14 @@ export interface AttemptResultProps {
   value: number;
   onChange: (value: number) => void;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 export function TimeField({
   value,
   onChange,
   placeholder,
+  disabled,
 }: AttemptResultProps) {
   const { isValid, binding } = useInputMask({
     value,
@@ -131,6 +133,7 @@ export function TimeField({
       <Input
         spellCheck={false}
         placeholder={placeholder}
+        disabled={disabled}
         onKeyDown={SUPPRESS_SPACE}
         {...binding}
       />
@@ -276,6 +279,7 @@ function AttemptResultField({
   eventId,
   resultType,
   placeholder,
+  disabled,
 }: AttemptResultFieldProps) {
   const [componentValue, setComponentValue] = useControllableState({
     value,
@@ -309,6 +313,7 @@ function AttemptResultField({
       value={componentValue}
       onChange={setComponentValue}
       placeholder={placeholder}
+      disabled={disabled}
     />
   );
 }

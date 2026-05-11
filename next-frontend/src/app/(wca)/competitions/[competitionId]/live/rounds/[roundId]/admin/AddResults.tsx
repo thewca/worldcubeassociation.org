@@ -37,6 +37,7 @@ export default async function AddResults({
           <AttemptsForm
             header="Add Result"
             eventId={eventId}
+            cutoff={round.cutoff}
             solveCount={format.expected_solve_count}
           />
         </GridItem>

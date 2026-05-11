@@ -11,10 +11,10 @@ import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
-import { LiveCompetitor } from "@/types/live";
+import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
 import { useCallback, useRef } from "react";
 import type { KeyboardEvent, ReactNode } from "react";
-import { attemptResultsWarning } from "@/lib/live/attempt-result";
+import { attemptResultsWarning, meetsCutoff } from "@/lib/live/attempt-result";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
 import { FocusScope, useFocusManager } from "@react-aria/focus";
@@ -23,6 +23,7 @@ interface AttemptsFormProps {
   solveCount: number;
   header: string;
   eventId: string;
+  cutoff?: LiveRoundAdminBase["cutoff"];
 }
 
 const toCompetitorString = (competitor: LiveCompetitor) =>
@@ -30,6 +31,7 @@ const toCompetitorString = (competitor: LiveCompetitor) =>
 
 export default function AttemptsForm({
   solveCount,
+  cutoff,
   header,
   eventId,
 }: AttemptsFormProps) {
@@ -82,6 +84,8 @@ export default function AttemptsForm({
     }
   }, [attempts, eventId, t, handleSubmit, confirm]);
 
+  const hasMetCutoff = meetsCutoff(attempts, cutoff);
+
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <VStack align="left">
@@ -133,6 +137,7 @@ export default function AttemptsForm({
                 onChange={(value) => handleAttemptChange(index, value)}
                 resultType="single"
                 placeholder={`Attempt ${index + 1}`}
+                disabled={!hasMetCutoff && index > 1}
               />
             ))}
           </AttemptFieldsNav>
