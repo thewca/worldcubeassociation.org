@@ -1614,7 +1614,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/unitless@npm:0.10.0, @emotion/unitless@npm:^0.10.0":
+"@emotion/unitless@npm:^0.10.0":
   version: 0.10.0
   resolution: "@emotion/unitless@npm:0.10.0"
   checksum: 10c0/150943192727b7650eb9a6851a98034ddb58a8b6958b37546080f794696141c3760966ac695ab9af97efe10178690987aee4791f9f0ad1ff76783cdca83c1d49
@@ -4255,17 +4255,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/cli@npm:2.30.3":
-  version: 2.30.3
-  resolution: "@redocly/cli@npm:2.30.3"
+"@redocly/cli@npm:2.30.4":
+  version: 2.30.4
+  resolution: "@redocly/cli@npm:2.30.4"
   dependencies:
     "@opentelemetry/exporter-trace-otlp-http": "npm:0.214.0"
     "@opentelemetry/resources": "npm:2.6.1"
     "@opentelemetry/sdk-trace-node": "npm:2.6.1"
     "@opentelemetry/semantic-conventions": "npm:1.40.0"
     "@redocly/cli-otel": "npm:0.1.2"
-    "@redocly/openapi-core": "npm:2.30.3"
-    "@redocly/respect-core": "npm:2.30.3"
+    "@redocly/openapi-core": "npm:2.30.4"
+    "@redocly/respect-core": "npm:2.30.4"
     ajv: "npm:@redocly/ajv@8.18.1"
     ajv-formats: "npm:^3.0.1"
     colorette: "npm:^1.2.0"
@@ -4283,14 +4283,14 @@ __metadata:
     semver: "npm:^7.5.2"
     set-cookie-parser: "npm:^2.3.5"
     simple-websocket: "npm:^9.0.0"
-    styled-components: "npm:6.3.9"
+    styled-components: "npm:6.4.1"
     ulid: "npm:^3.0.1"
     undici: "npm:6.24.0"
     yargs: "npm:17.0.1"
   bin:
     openapi: bin/cli.js
     redocly: bin/cli.js
-  checksum: 10c0/9c315f31cc7648e4383f6265149ce8a45852764adafe17e235fb6d4067483ff4cbc0abb6666785f00ed4b6e3e4921a22c39d40fb059759da137e30996a4f854a
+  checksum: 10c0/8e4f6ae7d874f4ddda0f3f311537f2eb942032408b4b5dce5057929ee8312216e01c903480c241593aebd9a925e2f28ab289faa82d2c2862af9fc037d201c55e
   languageName: node
   linkType: hard
 
@@ -4310,9 +4310,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/openapi-core@npm:2.30.3":
-  version: 2.30.3
-  resolution: "@redocly/openapi-core@npm:2.30.3"
+"@redocly/openapi-core@npm:2.30.4":
+  version: 2.30.4
+  resolution: "@redocly/openapi-core@npm:2.30.4"
   dependencies:
     "@redocly/ajv": "npm:^8.18.1"
     "@redocly/config": "npm:^0.48.1"
@@ -4324,7 +4324,7 @@ __metadata:
     picomatch: "npm:^4.0.4"
     pluralize: "npm:^8.0.0"
     yaml-ast-parser: "npm:0.0.43"
-  checksum: 10c0/ef905b55cf2351c97512dfeedabbcbc1bef1c0ee3334c22d7cfee2a9bfe21b3713151b4cfb7eea3ef3cc3e15f95de7b15e9d15365c911377291b8fd824891120
+  checksum: 10c0/9fa1313b0256e3c61ade071a686b84707514ee3a581524b79489b5e851eaa490f873206c3487b20c219efc0189fd5f2e8871e690532153cf91564daf78bff3e4
   languageName: node
   linkType: hard
 
@@ -4345,14 +4345,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/respect-core@npm:2.30.3":
-  version: 2.30.3
-  resolution: "@redocly/respect-core@npm:2.30.3"
+"@redocly/respect-core@npm:2.30.4":
+  version: 2.30.4
+  resolution: "@redocly/respect-core@npm:2.30.4"
   dependencies:
     "@faker-js/faker": "npm:^7.6.0"
     "@noble/hashes": "npm:^1.8.0"
     "@redocly/ajv": "npm:^8.18.1"
-    "@redocly/openapi-core": "npm:2.30.3"
+    "@redocly/openapi-core": "npm:2.30.4"
     ajv: "npm:@redocly/ajv@8.18.1"
     better-ajv-errors: "npm:^2.0.3"
     colorette: "npm:^2.0.20"
@@ -4361,7 +4361,7 @@ __metadata:
     openapi-sampler: "npm:^1.7.1"
     outdent: "npm:^0.8.0"
     picomatch: "npm:^4.0.4"
-  checksum: 10c0/81a95df8cdc661450de8a7965b622b0a771c9ac38a82b3b94fe3f11c776d7181d716304866c3ee2929598472ac173694f79494570462a4fa22b8f62dfc1aa896
+  checksum: 10c0/d27f54454b6e4be9367883d476e28ec1df0696f929639b49debdfc4fbdd43c79f37c45fb2fb5f007566051b2b2fa4461ef41d046c9b6e211fe7e33f3f3df1552
   languageName: node
   linkType: hard
 
@@ -5628,13 +5628,6 @@ __metadata:
   version: 2.0.3
   resolution: "@types/stack-utils@npm:2.0.3"
   checksum: 10c0/1f4658385ae936330581bcb8aa3a066df03867d90281cdf89cc356d404bd6579be0f11902304e1f775d92df22c6dd761d4451c804b0a4fba973e06211e9bd77c
-  languageName: node
-  linkType: hard
-
-"@types/stylis@npm:4.2.7":
-  version: 4.2.7
-  resolution: "@types/stylis@npm:4.2.7"
-  checksum: 10c0/01a9679addb3f63951a9c09729564e2205581f2db40875a28b25cc461efc52ba17a711cc50cdb5e7d3a67c5f2cd60580e078c8a69b8df7b67699d89060d2a977
   languageName: node
   linkType: hard
 
@@ -12451,7 +12444,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.3.11, nanoid@npm:^3.3.6, nanoid@npm:^3.3.7":
+"nanoid@npm:^3.3.11, nanoid@npm:^3.3.6":
   version: 3.3.11
   resolution: "nanoid@npm:3.3.11"
   bin:
@@ -12571,7 +12564,7 @@ __metadata:
     "@payloadcms/storage-s3": "npm:3.84.1"
     "@rails/actioncable": "npm:^8.1.300"
     "@react-aria/focus": "npm:^3.22.0"
-    "@redocly/cli": "npm:2.30.3"
+    "@redocly/cli": "npm:2.30.4"
     "@stylistic/eslint-plugin": "npm:^5.10.0"
     "@tanstack/eslint-plugin-query": "npm:^5.100.9"
     "@tanstack/react-form": "npm:^1.29.1"
@@ -13521,17 +13514,6 @@ __metadata:
     picocolors: "npm:^1.0.0"
     source-map-js: "npm:^1.0.2"
   checksum: 10c0/748b82e6e5fc34034dcf2ae88ea3d11fd09f69b6c50ecdd3b4a875cfc7cdca435c958b211e2cb52355422ab6fccb7d8f2f2923161d7a1b281029e4a913d59acf
-  languageName: node
-  linkType: hard
-
-"postcss@npm:8.4.49":
-  version: 8.4.49
-  resolution: "postcss@npm:8.4.49"
-  dependencies:
-    nanoid: "npm:^3.3.7"
-    picocolors: "npm:^1.1.1"
-    source-map-js: "npm:^1.2.1"
-  checksum: 10c0/f1b3f17aaf36d136f59ec373459f18129908235e65dbdc3aee5eef8eba0756106f52de5ec4682e29a2eab53eb25170e7e871b3e4b52a8f1de3d344a514306be3
   languageName: node
   linkType: hard
 
@@ -14609,13 +14591,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shallowequal@npm:1.1.0":
-  version: 1.1.0
-  resolution: "shallowequal@npm:1.1.0"
-  checksum: 10c0/b926efb51cd0f47aa9bc061add788a4a650550bbe50647962113a4579b60af2abe7b62f9b02314acc6f97151d4cf87033a2b15fc20852fae306d1a095215396c
-  languageName: node
-  linkType: hard
-
 "sharp@npm:^0.34.5":
   version: 0.34.5
   resolution: "sharp@npm:0.34.5"
@@ -15305,26 +15280,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:6.3.9":
-  version: 6.3.9
-  resolution: "styled-components@npm:6.3.9"
+"styled-components@npm:6.4.1":
+  version: 6.4.1
+  resolution: "styled-components@npm:6.4.1"
   dependencies:
     "@emotion/is-prop-valid": "npm:1.4.0"
-    "@emotion/unitless": "npm:0.10.0"
-    "@types/stylis": "npm:4.2.7"
     css-to-react-native: "npm:3.2.0"
     csstype: "npm:3.2.3"
-    postcss: "npm:8.4.49"
-    shallowequal: "npm:1.1.0"
     stylis: "npm:4.3.6"
-    tslib: "npm:2.8.1"
   peerDependencies:
+    css-to-react-native: ">= 3.2.0"
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
+    react-native: ">= 0.68.0"
   peerDependenciesMeta:
+    css-to-react-native:
+      optional: true
     react-dom:
       optional: true
-  checksum: 10c0/3c9c71255442e95fdb1feeba40fab615cd810836262b3637ef71aa9c5193d3b5d98d172d20a133a9d58c95512e29a4a6c5543e554835319a539212c28e380656
+    react-native:
+      optional: true
+  checksum: 10c0/33b43f55be02cecc4dd1904f0f4397c8a9f245ee67cd12893c9117651048a442555b527fdd25b4db8a0365701713cb0e91b09df16a4d46e175e3990041b45099
   languageName: node
   linkType: hard
 
@@ -15724,7 +15700,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.8.1, tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.4.0, tslib@npm:^2.5.0, tslib@npm:^2.6.2, tslib@npm:^2.8.0":
+"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.4.0, tslib@npm:^2.5.0, tslib@npm:^2.6.2, tslib@npm:^2.8.0":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10c0/9c4759110a19c53f992d9aae23aac5ced636e99887b51b9e61def52611732872ff7668757d4e4c61f19691e36f4da981cd9485e869b4a7408d689f6bf1f14e62
