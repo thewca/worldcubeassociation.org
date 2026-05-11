@@ -10,6 +10,7 @@ import AttemptResultField from '../../../EditResult/WCALive/AttemptResultField/A
 import { matchResult } from '../../../../lib/utils/edit-events';
 import AdvancementTypeField from './AdvancementTypeInput';
 import MbldPointsField from '../../../EditResult/WCALive/AttemptResultField/MbldPointsField';
+import { isRoundParticipationTarget } from '../../utils';
 
 const MIN_ADVANCE_PERCENT = 1;
 const MAX_ADVANCE_PERCENT = 75;
@@ -138,20 +139,9 @@ function v2ConditionToV1(wcifRound, wcifEvent, roundNumber) {
     }
   }
 
-  const firstTargetRound = wcifEvent.rounds.find((rd) => {
-    const source = rd?.participationRuleset?.participationSource;
-    const sourceType = source?.type;
-
-    if (sourceType === 'round') {
-      return source.roundId === wcifRound.id;
-    }
-
-    if (sourceType === 'linkedRounds') {
-      return source.roundIds.includes(wcifRound.id);
-    }
-
-    return false;
-  });
+  const firstTargetRound = wcifEvent.rounds.find(
+    (rd) => isRoundParticipationTarget(rd, wcifRound.id),
+  );
 
   const resultCondition = firstTargetRound
     ?.participationRuleset

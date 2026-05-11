@@ -74,3 +74,17 @@ export const roundCutoffToString = (wcifRound, { short } = {}) => {
   explanationText += ` If they succeed, they get to do all ${formats.byId[wcifRound.format].expectedSolveCount} solves.`;
   return explanationText;
 };
+
+export const isRoundParticipationTarget = (wcifRound, targetRoundId) => {
+  const source = wcifRound.participationRuleset.participationSource;
+
+  if (source.type === 'round') {
+    return source.roundId === targetRoundId;
+  }
+
+  if (source.type === 'linkedRounds') {
+    return source.roundIds.includes(targetRoundId);
+  }
+
+  return false;
+};

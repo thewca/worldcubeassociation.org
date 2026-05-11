@@ -1,4 +1,4 @@
-import { generateWcifRound, removeSharedTimeLimits } from '../utils';
+import { generateWcifRound, isRoundParticipationTarget, removeSharedTimeLimits } from '../utils';
 import {
   AddEvent,
   AddRounds,
@@ -12,6 +12,7 @@ import {
   UpdateQualification,
   UpdateTimeLimit,
 } from './actions';
+import { formats } from '../../../lib/wca-data.js.erb';
 
 /**
  * Updates 1 or more rounds
@@ -28,6 +29,17 @@ const updateForRounds = (wcifEvents, roundIds, mapper) => wcifEvents.map((event)
       ...mapper(round),
     } : round)) : event.rounds,
 }));
+
+const upcycleAdvancementCondition = (advCondition, round) => {
+  const formatInfo = formats.byId[round.format];
+  const sortingScope = formatInfo.sortBy;
+
+  return {
+    type: advCondition.type.replace('attemptResult', 'resultAchieved'),
+    scope: sortingScope,
+    value: advCondition.level,
+  };
+};
 
 const reducers = {
   [ChangesSaved]: (state) => ({
@@ -149,74 +161,26 @@ const reducers = {
     };
   },
 
-  [UpdateAdvancementCondition]: (state, { payload: { roundId, advancementCondition } }) => {
-    const event = state.wcifEvents.find((e) => e.rounds?.some((r) => r.id === roundId));
-    if (!event?.rounds) return state;
+  [UpdateAdvancementCondition]: (state, { payload }) => {
+    const { roundId, advancementCondition } = payload;
 
-    const roundIndex = event.rounds.findIndex((r) => r.id === roundId);
-    const round = event.rounds[roundIndex];
-    const nextRound = event.rounds[roundIndex + 1];
-    if (!nextRound) return state;
+    const updateRoundIds = state.wcifEvents
+      .flatMap((evt) => evt.rounds)
+      .filter((rd) => isRoundParticipationTarget(rd, roundId))
+      .map((rd) => rd.id);
 
-    const isDualRound = advancementCondition?.type === -2;
-    const nextNextRound = event.rounds[roundIndex + 2];
-
-    const resultCondition = (!isDualRound && advancementCondition) ? {
-      type: advancementCondition.type === 'attemptResult' ? 'resultAchieved' : advancementCondition.type,
-      value: advancementCondition.level,
-    } : null;
-
-    const updatedRounds = event.rounds.map((r, i) => {
-      if (i === roundIndex) {
-        return { ...r, linkedRounds: isDualRound ? [round.id, nextRound.id] : null };
-      }
-      if (i === roundIndex + 1) {
-        return {
-          ...r,
-          linkedRounds: isDualRound ? [round.id, nextRound.id] : null,
-          participationRuleset: {
-            ...r.participationRuleset,
-            participationSource: isDualRound
-              ? { type: 'registrations' }
-              : { type: 'round', roundId: round.id, resultCondition },
-          },
-        };
-      }
-      if (i === roundIndex + 2 && nextNextRound) {
-        if (isDualRound) {
-          return {
-            ...r,
-            participationRuleset: {
-              ...r.participationRuleset,
-              participationSource: {
-                type: 'linkedRounds',
-                roundIds: [round.id, nextRound.id],
-                resultCondition: r.participationRuleset?.participationSource?.resultCondition ?? null,
-              },
-            },
-          };
-        }
-        if (r.participationRuleset?.participationSource?.type === 'linkedRounds') {
-          return {
-            ...r,
-            participationRuleset: {
-              ...r.participationRuleset,
-              participationSource: {
-                type: 'round',
-                roundId: nextRound.id,
-                resultCondition: r.participationRuleset.participationSource.resultCondition ?? null,
-              },
-            },
-          };
-        }
-      }
-      return r;
-    });
-
-    return {
+    return ({
       ...state,
-      wcifEvents: state.wcifEvents.map((e) => (e.id === event.id ? { ...e, rounds: updatedRounds } : e)),
-    };
+      wcifEvents: updateForRounds(state.wcifEvents, updateRoundIds, (rd) => ({
+        participationRuleset: {
+          ...rd.participationRuleset,
+          participationSource: {
+            ...rd.participationRuleset.participationSource,
+            resultCondition: upcycleAdvancementCondition(advancementCondition, rd),
+          },
+        },
+      })),
+    });
   },
 
   [UpdateQualification]: (state, { payload }) => ({
