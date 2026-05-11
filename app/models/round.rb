@@ -213,9 +213,11 @@ class Round < ApplicationRecord
   end
 
   def recompute_live_columns(skip_advancing: false)
-    recompute_local_pos
-    recompute_global_pos
-    recompute_advancing unless skip_advancing
+    with_lock do
+      recompute_local_pos
+      recompute_global_pos
+      recompute_advancing unless skip_advancing
+    end
 
     # We need to reset because live results are changed directly on SQL level for more optimized queries
     live_results.reset
