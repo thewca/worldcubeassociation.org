@@ -223,43 +223,47 @@ export function getMatchingActivities(scheduleWcif, activity) {
   ).filter((act) => doActivitiesMatch(act, activity));
 }
 
-export function eventQualificationToString(wcifEvent, qualification, { short } = {}) {
+export function eventQualificationToString(wcifEvent, qualification, { short, isV2 = false } = {}) {
   if (!qualification) {
     return '-';
   }
   let dateString = '-';
-  if (qualification.whenDate) {
+  const wcifWhenDate = isV2 ? qualification.latestResultDate : qualification.whenDate;
+  if (wcifWhenDate) {
     const whenDate = DateTime
-      .fromISO(qualification.whenDate, { zone: 'UTC' })
+      .fromISO(wcifWhenDate, { zone: 'UTC' })
       .setZone('local'); // We *want* to show this as a local timestamp if you're living west of Greenwich
 
     dateString = whenDate.toString().substring(0, 10);
   }
   const deadlineString = I18n.t('qualification.deadline.by_date', { date: dateString });
   const event = events.byId[wcifEvent.id];
-  switch (qualification.resultType) {
+  const wcifResultType = isV2 ? qualification.resultCondition.scope : qualification.resultType;
+  const wcifQualificationType = isV2 ? qualification.resultCondition.type : qualification.type;
+  const wcifQualificationLevel = isV2 ? qualification.resultCondition.value : qualification.level;
+  switch (wcifResultType) {
     case 'single':
     case 'average':
-      if (qualification.type === 'ranking') {
-        const messageName = `qualification.${qualification.resultType}.ranking`;
-        return `${I18n.t(messageName, { ranking: qualification.level })} ${deadlineString}`;
+      if (wcifQualificationType === 'ranking') {
+        const messageName = `qualification.${wcifResultType}.ranking`;
+        return `${I18n.t(messageName, { ranking: wcifQualificationLevel })} ${deadlineString}`;
       }
-      if (qualification.type === 'anyResult') {
-        const messageName = `qualification.${qualification.resultType}.any_result`;
+      if (wcifQualificationType === 'anyResult' || (wcifQualificationType === 'resultAchieved' && wcifQualificationLevel === null)) {
+        const messageName = `qualification.${wcifResultType}.any_result`;
         return `${I18n.t(messageName)} ${deadlineString}`;
       }
       if (event.isTimedEvent) {
-        const messageName = `qualification.${qualification.resultType}.time`;
-        return `${I18n.t(messageName, { time: attemptResultToString(qualification.level, wcifEvent.id, short) })} ${deadlineString}`;
+        const messageName = `qualification.${wcifResultType}.time`;
+        return `${I18n.t(messageName, { time: attemptResultToString(wcifQualificationLevel, wcifEvent.id, short) })} ${deadlineString}`;
       }
       if (event.isFewestMoves) {
-        const messageName = `qualification.${qualification.resultType}.moves`;
-        const moves = qualification.resultType === 'average' ? qualification.level / 100 : qualification.level;
+        const messageName = `qualification.${wcifResultType}.moves`;
+        const moves = wcifResultType === 'average' ? wcifQualificationLevel / 100 : wcifQualificationLevel;
         return `${I18n.t(messageName, { moves })} ${deadlineString}`;
       }
       if (event.isMultipleBlindfolded) {
-        const messageName = `qualification.${qualification.resultType}.points`;
-        return `${I18n.t(messageName, { points: attemptResultToMbPoints(qualification.level) })} ${deadlineString}`;
+        const messageName = `qualification.${wcifResultType}.points`;
+        return `${I18n.t(messageName, { points: attemptResultToMbPoints(wcifQualificationLevel) })} ${deadlineString}`;
       }
       return '-';
     default:

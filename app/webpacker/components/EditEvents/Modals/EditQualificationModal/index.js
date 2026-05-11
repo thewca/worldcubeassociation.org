@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import _ from 'lodash';
 import { Form, Label } from 'semantic-ui-react';
 import I18n from '../../../../lib/i18n';
@@ -81,35 +81,43 @@ export default function EditQualificationModal({
   const { qualification } = wcifEvent;
   const dispatch = useDispatch();
 
-  const [resultType, setResultType] = useInputState(qualification?.resultType ?? 0);
-  const [type, setType] = useInputState(qualification?.type ?? 'attemptResult');
-  const [whenDate, setWhenDate] = useState(qualification?.whenDate ?? '');
-  const [level, setLevel] = useState(qualification?.level || 0);
+  const [conditionScope, setConditionScope] = useInputState(qualification?.resultCondition?.scope ?? '');
+  const [conditionType, setConditionType] = useInputState(qualification?.resultCondition?.type ?? '');
+  const [latestResultDate, setLatestResultDate] = useState(qualification?.latestResultDate ?? '');
+  const [conditionValue, setConditionValue] = useState(qualification?.resultCondition?.value ?? 0);
 
-  // todo: can convert this to a const (ie not a function)?
-  const hasUnsavedChanges = () => (
-    !_.isEqual(qualification, {
-      resultType, type, whenDate, level,
-    })
-  );
+  const qualificationStateWcif = useMemo(() => ({
+    earliestResultDate: null,
+    latestResultDate,
+    resultCondition: {
+      type: conditionType,
+      scope: conditionScope,
+      value: conditionValue,
+    },
+  }), [conditionScope, conditionType, conditionValue, latestResultDate]);
+
+  const hasUnsavedChanges = useMemo(() => (
+    !_.isEqual(qualification, qualificationStateWcif)
+  ), [qualification, qualificationStateWcif]);
 
   const reset = () => {
-    setResultType(qualification?.resultType ?? '');
-    setType(qualification?.type ?? '');
-    setWhenDate(qualification?.whenDate ?? '');
-    setLevel(qualification?.level ?? 0);
+    setConditionScope(qualification?.resultCondition?.scope ?? '');
+    setConditionType(qualification?.resultCondition?.type ?? 'attemptResult');
+    setLatestResultDate(qualification?.latestResultDate ?? '');
+    setConditionValue(qualification?.resultCondition?.value ?? 0);
   };
 
   const handleOk = () => {
-    if (hasUnsavedChanges()) {
-      dispatch(updateQualification(wcifEvent.id, resultType ? {
-        type, resultType, whenDate, level,
-      } : null));
+    if (hasUnsavedChanges) {
+      dispatch(updateQualification(
+        wcifEvent.id,
+        conditionScope ? qualificationStateWcif : null,
+      ));
     }
   };
 
   const title = I18n.t('qualification.for_event', { event: event.name });
-  const trigger = eventQualificationToString(wcifEvent, qualification, { short: true });
+  const trigger = eventQualificationToString(wcifEvent, qualification, { short: true, isV2: true });
 
   return (
     <ButtonActivatedModal
@@ -117,43 +125,41 @@ export default function EditQualificationModal({
       title={title}
       reset={reset}
       onOk={handleOk}
-      hasUnsavedChanges={hasUnsavedChanges()}
+      hasUnsavedChanges={hasUnsavedChanges}
       disabled={disabled}
       tooltip={disabledReason}
       triggerButtonProps={{ name: 'qualification' }}
     >
       <QualificationResultType
-        qualificationResultType={resultType}
-        onChange={setResultType}
+        qualificationResultType={conditionScope}
+        onChange={setConditionScope}
         eventId={event.id}
       />
-      {resultType ? (
+      {conditionScope ? (
         <QualificationType
-          qualificationType={type}
-          onChange={setType}
+          qualificationType={conditionType}
+          onChange={setConditionType}
         />
       ) : null}
-      {(resultType && type) ? (
+      {(conditionScope && conditionType) ? (
         <>
           <QualificationInput
-            type={type}
-            level={level}
-            resultType={resultType}
-            onChange={setLevel}
+            type={conditionType}
+            level={conditionValue}
+            resultType={conditionScope}
+            onChange={setConditionValue}
             eventId={event.id}
           />
           <Form.Field>
             <Label>{I18n.t('qualification.deadline.description')}</Label>
             <UtcDatePicker
-              onChange={setWhenDate}
-              isoDate={whenDate}
+              onChange={setLatestResultDate}
+              isoDate={latestResultDate}
             />
           </Form.Field>
           <br />
           <p>
-            {eventQualificationToString(wcifEvent, {
-              type, resultType, whenDate, level,
-            })}
+            {eventQualificationToString(wcifEvent, qualificationStateWcif, { isV2: true })}
           </p>
         </>
       ) : null}
