@@ -2866,6 +2866,11 @@ es-419:
     live:
       #original_hash: 10d1a3c
       title: Resultados en vivo
+      round_state:
+        #original_hash: 98aadb3
+        ongoing: en vivo
+        #original_hash: e5fd9cf
+        done: realizado
       connection:
         #original_hash: f92b311
         initialized: Inicializando conexión
@@ -2927,8 +2932,15 @@ es-419:
             other: 'Los siguientes competidores en pasar de ronda son %{competitors}'
           #original_hash: c87ca67
           advance: Siguiente competidor pasa
-          #original_hash: e85b311
+          #original_hash: aa59a26
           quit_confirm: Eliminar competidor de la ronda
+          bulk:
+            #original_hash: e0981de
+            success: '%{count} competidores eliminados exitosamente'
+            #original_hash: 98fe723
+            failure: Falló la eliminación en masa de competidores
+            #original_hash: 774050e
+            menu: Eliminar en masa
           #original_hash: 1a2285d
           quit_menu: Quitar
           #original_hash: 70835a0
