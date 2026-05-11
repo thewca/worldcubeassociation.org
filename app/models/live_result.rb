@@ -118,12 +118,8 @@ class LiveResult < ApplicationRecord
     live_attempts.any? && round.cutoff.present? && round.cutoff.exceeds?(live_attempts)
   end
 
-  def empty_result?
-    best.zero?
-  end
-
-  def not_empty?
-    !empty_result?
+  def missing_attempts?
+    !complete?
   end
 
   def values_for_sorting

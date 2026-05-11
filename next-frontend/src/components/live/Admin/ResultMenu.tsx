@@ -215,7 +215,7 @@ function QuitModal({
             </Dialog.Body>
             <Dialog.Footer>
               <Button disabled={isPending} onClick={onQuitClick}>
-                {t("competitions.live.admin.quit.quit_confirm")}
+                {t("competitions.live.admin.quit.quit_confirm", { count: 1 })}
               </Button>
               <Dialog.ActionTrigger asChild>
                 <Button variant="outline">

@@ -16,6 +16,7 @@ import PendingResultsTable from "@/components/live/PendingResultsTable";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
 import AddPersonModal from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
+import BulkQuitButton from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/BulkQuitButton";
 import { LuCheck, LuLock, LuLockOpen } from "react-icons/lu";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
@@ -103,6 +104,10 @@ export default function LiveUpdatingResultsTable({
             <AddPersonModal
               competitionId={competitionId}
               competitors={competitors}
+            />
+            <BulkQuitButton
+              competitionId={competitionId}
+              roundId={roundWcifId}
             />
             <IconButton variant="ghost">
               <Link asChild>
