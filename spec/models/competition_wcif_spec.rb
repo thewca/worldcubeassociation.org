@@ -1259,14 +1259,14 @@ RSpec.describe "Competition WCIF" do
         wcif_333_event["rounds"][0]["results"] = [
           {
             "personId" => competitors[0].registrant_id,
-            "ranking" => 1,
+            "ranking" => 10,
             "attempts" => [{ "result" => 456, "reconstruction" => nil }] * 5,
             "best" => 456,
             "average" => 456,
           },
           {
             "personId" => competitors[1].registrant_id,
-            "ranking" => 2,
+            "ranking" => 5,
             "attempts" => [{ "result" => 784, "reconstruction" => nil }] * 5,
             "best" => 784,
             "average" => 784,
