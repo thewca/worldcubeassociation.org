@@ -6,6 +6,7 @@ import useAPI from "@/lib/wca/useAPI";
 import { toaster } from "@/components/ui/toaster";
 import { useConfirm } from "@/providers/ConfirmProvider";
 import { useT } from "@/lib/i18n/useI18n";
+import { Tooltip } from "@/components/ui/tooltip";
 
 export default function BulkQuitButton({
   competitionId,
@@ -14,7 +15,7 @@ export default function BulkQuitButton({
   competitionId: string;
   roundId: string;
 }) {
-  const { liveResultsByRegistrationId } = useLiveResults();
+  const { liveResultsByRegistrationId, pendingLiveResults } = useLiveResults();
   const api = useAPI();
   const { t } = useT();
 
@@ -60,15 +61,24 @@ export default function BulkQuitButton({
   };
 
   return (
-    <Button
-      variant="outline"
-      colorPalette="red"
-      size="sm"
-      disabled={emptyRegistrationIds.length === 0 || isPending}
-      loading={isPending}
-      onClick={handleBulkQuit}
+    <Tooltip
+      content={t("competitions.live.admin.quit.still_processing")}
+      disabled={pendingLiveResults.length === 0}
     >
-      {t("competitions.live.admin.quit.bulk.menu")}
-    </Button>
+      <Button
+        variant="outline"
+        colorPalette="red"
+        size="sm"
+        disabled={
+          emptyRegistrationIds.length === 0 ||
+          isPending ||
+          pendingLiveResults.length > 0
+        }
+        loading={isPending}
+        onClick={handleBulkQuit}
+      >
+        {t("competitions.live.admin.quit.bulk.menu")}
+      </Button>
+    </Tooltip>
   );
 }
