@@ -10,7 +10,7 @@ import AttemptResultField from '../../../EditResult/WCALive/AttemptResultField/A
 import { matchResult } from '../../../../lib/utils/edit-events';
 import AdvancementTypeField from './AdvancementTypeInput';
 import MbldPointsField from '../../../EditResult/WCALive/AttemptResultField/MbldPointsField';
-import { isRoundParticipationTarget } from '../../utils';
+import { v2RulesetToV1Condition } from '../../utils';
 
 const MIN_ADVANCE_PERCENT = 1;
 const MAX_ADVANCE_PERCENT = 75;
@@ -123,39 +123,6 @@ function AdvancementInput({
 
 const defaultValueAdvancementValue = (type) => (type === 'percent' ? 75 : 0);
 
-function v2ConditionToV1(wcifRound, wcifEvent, roundNumber) {
-  if (roundNumber >= wcifEvent.rounds.length) {
-    return null;
-  }
-
-  if (wcifRound.linkedRounds) {
-    const lastRoundInLink = wcifRound.linkedRounds[wcifRound.linkedRounds.length - 1];
-
-    if (wcifRound.id !== lastRoundInLink) {
-      return {
-        type: 'dual',
-        level: defaultValueAdvancementValue('dual'),
-      };
-    }
-  }
-
-  const firstTargetRound = wcifEvent.rounds.find(
-    (rd) => isRoundParticipationTarget(rd, wcifRound.id),
-  );
-
-  const resultCondition = firstTargetRound
-    ?.participationRuleset
-    ?.participationSource
-    ?.resultCondition;
-
-  if (!resultCondition) return null;
-
-  return {
-    type: resultCondition.type.replace('resultAchieved', 'attemptResult'),
-    level: resultCondition.value ?? 0,
-  };
-}
-
 /**
  * Shows a modal to edit the advancement condition of a round.
  * @param {Event} wcifEvent
@@ -167,7 +134,7 @@ export default function EditAdvancementConditionModal({
 }) {
   const dispatch = useDispatch();
 
-  const advancementCondition = v2ConditionToV1(wcifRound, wcifEvent, roundNumber);
+  const advancementCondition = v2RulesetToV1Condition(wcifRound, wcifEvent, roundNumber);
 
   const [type, setType] = useInputState(advancementCondition?.type ?? '');
   const [level, setLevel] = useState(advancementCondition?.level

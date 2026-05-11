@@ -1,4 +1,9 @@
-import { generateWcifRound, isRoundParticipationTarget, removeSharedTimeLimits } from '../utils';
+import _ from 'lodash';
+import {
+  generateWcifRound,
+  removeSharedTimeLimits,
+  v2RulesetToV1Condition,
+} from '../utils';
 import {
   AddEvent,
   AddRounds,
@@ -13,7 +18,7 @@ import {
   UpdateTimeLimit,
 } from './actions';
 import { formats } from '../../../lib/wca-data.js.erb';
-import { buildActivityCode, parseActivityCode } from '../../../lib/utils/wcif';
+import { parseActivityCode } from '../../../lib/utils/wcif';
 
 /**
  * Updates 1 or more rounds
@@ -31,14 +36,53 @@ const updateForRounds = (wcifEvents, roundIds, mapper) => wcifEvents.map((event)
     } : round)) : event.rounds,
 }));
 
-const upcycleAdvancementCondition = (advCondition, round) => {
-  const formatInfo = formats.byId[round.format];
+const upcycleAdvancementCondition = (round) => {
+  const { advancementCondition: advCondition, format: formatId } = round;
+
+  const formatInfo = formats.byId[formatId];
   const sortingScope = formatInfo.sortBy;
 
   return {
     type: advCondition.type.replace('attemptResult', 'resultAchieved'),
     scope: sortingScope,
     value: advCondition.level,
+  };
+};
+
+const generateParticipationSource = (round, allRounds) => {
+  const { roundNumber } = parseActivityCode(round.id);
+
+  if (roundNumber === 1) {
+    return { type: 'registrations' };
+  }
+
+  if (round.linkedRounds) {
+    const firstRoundId = round.linkedRounds[0];
+
+    if (firstRoundId !== round.id) {
+      const firstInLink = allRounds.find((rd) => rd.id === firstRoundId);
+
+      return generateParticipationSource(firstInLink, allRounds);
+    }
+  }
+
+  const previousRound = allRounds[roundNumber - 2]; // roundNumber is 1-based, array is 0-indexed
+
+  if (previousRound.linkedRounds) {
+    const lastRoundId = previousRound.linkedRounds[previousRound.linkedRounds.length - 1];
+    const lastInLink = allRounds.find((rd) => rd.id === lastRoundId);
+
+    return {
+      type: 'linkedRounds',
+      roundIds: previousRound.linkedRounds,
+      resultCondition: upcycleAdvancementCondition(lastInLink),
+    };
+  }
+
+  return {
+    type: 'round',
+    roundId: previousRound.id,
+    resultCondition: upcycleAdvancementCondition(previousRound),
   };
 };
 
@@ -164,64 +208,61 @@ const reducers = {
 
   [UpdateAdvancementCondition]: (state, { payload }) => {
     const { roundId, advancementCondition } = payload;
-    const { eventId, roundNumber } = parseActivityCode(roundId);
+    const { eventId } = parseActivityCode(roundId);
 
+    // Stupid but effective approach:
+    // 1. Backport everything into a V1 structure,
+    // 2. apply the advancementCondition changes that the user did in the UI,
+    // 3. finally glue it all together into V2 WCIF again.
     const currentEvent = state.wcifEvents.find((evt) => evt.id === eventId);
 
-    if (advancementCondition.type === 'dual') {
-      const currentRound = currentEvent.rounds.find((rd) => rd.id === roundId);
+    // Re 1: Backport data into V1 shape
+    const backportedRounds = currentEvent.rounds.map((rd, idx) => ({
+      ...rd,
+      advancementCondition: v2RulesetToV1Condition(rd, currentEvent, idx + 1),
+    }));
 
-      // By convention of this UI, the condition 'dual' means to merge this round
-      //   and the next round (N + 1) into one common linkedRound
-      const linkedSiblingId = buildActivityCode({ eventId, roundNumber: roundNumber + 1 });
+    // Re 2: Apply the change that the user made in the UI
+    const patchedRounds = backportedRounds.map((rd) => (rd.id === roundId ? ({
+      ...rd,
+      advancementCondition,
+    }) : rd));
 
-      const alreadyLinked = currentRound.linkedRounds ?? [roundId];
-      const idsInLink = [...alreadyLinked, linkedSiblingId];
+    // Re 3: Glue it all into WCIFv2 again in multiple steps
+    const upcycledRounds = patchedRounds.map((rd, idx, allRds) => {
+      // First compute the link(s)
+      const isDual = (r) => r.advancementCondition?.type === 'dual';
 
-      const existingLinkSource = currentRound.participationRuleset.participationSource;
+      const headOfLink = _.takeRightWhile(allRds.slice(0, idx), isDual);
+      const tailOfLink = _.takeWhile(allRds.slice(idx), isDual);
 
-      const eventsWithLinked = updateForRounds(state.wcifEvents, idsInLink, (rd) => ({
-        linkedRounds: idsInLink,
-        participationRuleset: {
-          ...rd.participationRuleset,
-          participationSource: existingLinkSource,
-        },
-      }));
+      const linkedRoundCandidates = allRds.slice(
+        idx - headOfLink.length,
+        idx + tailOfLink.length + 1,
+      );
 
-      const pointingToLast = currentEvent.rounds.filter(
-        (rd) => isRoundParticipationTarget(rd, linkedSiblingId),
-      ).map((rd) => rd.id);
+      const linkedRounds = linkedRoundCandidates.length > 1
+        ? linkedRoundCandidates.map((candidate) => candidate.id)
+        : null;
 
-      return ({
-        ...state,
-        wcifEvents: updateForRounds(eventsWithLinked, pointingToLast, (rd) => ({
-          participationRuleset: {
-            ...rd.participationRuleset,
-            participationSource: {
-              type: 'linkedRounds',
-              roundIds: idsInLink,
-              resultCondition: rd.participationRuleset.participationSource.resultCondition,
-            },
-          },
-        })),
-      });
-    }
-
-    const updateRoundIds = currentEvent.rounds
-      .filter((rd) => isRoundParticipationTarget(rd, roundId))
-      .map((rd) => rd.id);
+      return ({ ...rd, linkedRounds });
+    }).map((rd, idx, allRds) => _.omit({
+      ...rd,
+      // Then once we know the links we can compute `participationSource`
+      participationRuleset: {
+        ...rd.participationRuleset,
+        participationSource: generateParticipationSource(rd, allRds),
+      },
+      // kick out the backported V1 keys
+      advancementCondition: undefined,
+    }, ['advancementCondition']));
 
     return ({
       ...state,
-      wcifEvents: updateForRounds(state.wcifEvents, updateRoundIds, (rd) => ({
-        participationRuleset: {
-          ...rd.participationRuleset,
-          participationSource: {
-            ...rd.participationRuleset.participationSource,
-            resultCondition: upcycleAdvancementCondition(advancementCondition, rd),
-          },
-        },
-      })),
+      wcifEvents: state.wcifEvents.map((evt) => (evt.id === eventId ? ({
+        ...evt,
+        rounds: upcycledRounds,
+      }) : evt)),
     });
   },
 

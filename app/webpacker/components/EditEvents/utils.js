@@ -75,16 +75,45 @@ export const roundCutoffToString = (wcifRound, { short } = {}) => {
   return explanationText;
 };
 
-export const isRoundParticipationTarget = (wcifRound, targetRoundId) => {
-  const source = wcifRound.participationRuleset.participationSource;
-
-  if (source.type === 'round') {
-    return source.roundId === targetRoundId;
+export function v2RulesetToV1Condition(wcifRound, wcifEvent, roundNumber) {
+  if (roundNumber >= wcifEvent.rounds.length) {
+    return null;
   }
 
-  if (source.type === 'linkedRounds') {
-    return source.roundIds.includes(targetRoundId);
+  if (wcifRound.linkedRounds) {
+    const lastRoundInLink = wcifRound.linkedRounds[wcifRound.linkedRounds.length - 1];
+
+    if (wcifRound.id !== lastRoundInLink) {
+      return {
+        type: 'dual',
+        level: 100,
+      };
+    }
   }
 
-  return false;
-};
+  const firstTargetRound = wcifEvent.rounds.find((rd) => {
+    const source = rd.participationRuleset.participationSource;
+
+    if (source.type === 'round') {
+      return source.roundId === wcifRound.id;
+    }
+
+    if (source.type === 'linkedRounds') {
+      return source.roundIds.includes(wcifRound.id);
+    }
+
+    return false;
+  });
+
+  const resultCondition = firstTargetRound
+    ?.participationRuleset
+    ?.participationSource
+    ?.resultCondition;
+
+  if (!resultCondition) return null;
+
+  return {
+    type: resultCondition.type.replace('resultAchieved', 'attemptResult'),
+    level: resultCondition.value ?? 0,
+  };
+}
