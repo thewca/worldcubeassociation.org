@@ -51,7 +51,9 @@ export default function AttemptsForm({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { collection, filter } = useListCollection({
-    initialItems: Array.from(competitors.values()),
+    initialItems: Array.from(competitors.values()).toSorted(
+      (a, b) => a.registrant_id - b.registrant_id,
+    ),
     itemToValue: (competitor) => competitor.id.toString(),
     itemToString: toCompetitorString,
     filter: (itemText, filterText, item) =>
