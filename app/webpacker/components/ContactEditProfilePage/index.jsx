@@ -7,7 +7,7 @@ import { apiV0Urls, viewUrls } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import Errored from '../Requests/Errored';
-import EditProfileForm from './EditProfileForm';
+import EditProfileFormHolder from './EditProfileFormHolder';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
 import useQueryParams from '../../lib/hooks/useQueryParams';
 import useInputState from '../../lib/hooks/useInputState';
@@ -102,7 +102,7 @@ function ContactEditProfilePage({ loggedInUserId, recaptchaPublicKey }) {
         />
       )}
       {wcaId && (
-        <EditProfileForm
+        <EditProfileFormHolder
           wcaId={wcaId}
           onContactSuccess={(res) => {
             setContactSuccess(true);
