@@ -301,7 +301,7 @@ class Round < ApplicationRecord
     # Then sort by best single so e.g. incomplete (average=0, best=39) ranks above DNF mean
     # (average=-1, best=40), and both rank above all-DNF (average=-1, best=-1).
     order_clause = if secondary_rank_by
-                     primary_sort = "CASE WHEN #{rank_by} > 0 THEN #{rank_by} ELSE #{secondary_rank_by} END"
+                     primary_sort = "IF(#{rank_by} > 0, #{rank_by}, #{secondary_rank_by})"
                      "#{rank_by} <= 0, #{secondary_rank_by} <= 0, #{primary_sort} ASC, #{secondary_rank_by} ASC"
                    else
                      "#{rank_by} <= 0, #{rank_by} ASC"
