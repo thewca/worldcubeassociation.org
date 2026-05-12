@@ -12,6 +12,7 @@ import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { applyCutoff, applyTimeLimit } from "@/lib/live/attempt-result";
+import { padSkipped } from "@/lib/live/padSkipped";
 import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
 
 interface AdminResultsContextValue {
@@ -71,12 +72,8 @@ export function LiveResultAdminProvider({
       const competitorResults = liveResultsByRegistrationId[registrationId][0];
 
       if (competitorResults.attempts.length > 0) {
-        const byNumber = new Map(
-          competitorResults.attempts.map((a) => [a.attempt_number, a.value]),
-        );
-        return Array.from(
-          { length: solveCount },
-          (_, i) => byNumber.get(i + 1) ?? 0,
+        return padSkipped(competitorResults.attempts, solveCount).map(
+          (a) => a.value,
         );
       }
 
