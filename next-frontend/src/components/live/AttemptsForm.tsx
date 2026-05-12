@@ -174,7 +174,12 @@ function AttemptFieldsNav({
       return;
     }
 
-    if (e.key === "Enter" || e.key === "ArrowDown" || e.code === "NumpadAdd") {
+    if (
+      e.key === "Enter" ||
+      e.key === "ArrowDown" ||
+      e.code === "NumpadAdd" ||
+      e.key === "Tab"
+    ) {
       e.preventDefault();
       const from = e.target as HTMLElement;
       flushSync(() => from.blur());
