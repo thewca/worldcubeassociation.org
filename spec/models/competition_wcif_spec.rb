@@ -1280,6 +1280,25 @@ RSpec.describe "Competition WCIF" do
         expect(competition.to_wcif["events"]).to eq(wcif["events"])
       end
 
+      it "cleans up orphaned attempts upon syncing" do
+        # First, establish five attempts as a baseline
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(LiveResult.count).to eq(2)
+        expect(LiveAttempt.count).to eq(10) # 5 attempts per result
+
+        # Whoops! That guy accidentally got his scores entered wrong, he actually only did two attempts
+        wcif_333_event["rounds"][0]["results"][1]["attempts"] = [{ "result" => 456, "reconstruction" => nil }] * 2
+
+        # Sync AGAIN, after the original (erroneous) 5 attempts had already been synced
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(competition.to_wcif["events"]).to eq(wcif["events"])
+
+        expect(LiveResult.count).to eq(2)
+        expect(LiveAttempt.count).to eq(7) # one result now only has 2, so 5+2=7
+      end
+
       it "records histories when something changes" do
         competition.set_wcif_events!(wcif["events"], delegate)
 
