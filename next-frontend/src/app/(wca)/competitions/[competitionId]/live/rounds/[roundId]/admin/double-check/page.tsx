@@ -7,7 +7,6 @@ import { Container } from "@chakra-ui/react";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import { DateTime } from "luxon";
-import ConfirmProvider from "@/providers/ConfirmProvider";
 import { getRoundName } from "@/lib/wca/live/getRoundName";
 import { getRounds } from "@/lib/wca/live/getRounds";
 import RoundOpenCheck from "@/components/live/RoundOpenCheck";
@@ -63,15 +62,13 @@ export default async function DoubleCheckPage({
               initialRegistrationId={sortedResults[0].registration_id}
               round={round}
             >
-              <ConfirmProvider>
-                <DoubleCheck
-                  competitionId={competitionId}
-                  results={sortedResults}
-                  formatId={format}
-                  roundWcifId={id}
-                  roundName={roundName}
-                />
-              </ConfirmProvider>
+              <DoubleCheck
+                competitionId={competitionId}
+                results={sortedResults}
+                formatId={format}
+                roundWcifId={id}
+                roundName={roundName}
+              />
             </LiveResultAdminProvider>
           </LiveResultProvider>
         </PermissionCheck>

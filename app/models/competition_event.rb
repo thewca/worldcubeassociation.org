@@ -36,7 +36,7 @@ class CompetitionEvent < ApplicationRecord
     registrations.accepted.ids
   end
 
-  def next_advancing_without(_registration_id)
+  def advancement_results
     []
   end
 
@@ -124,18 +124,47 @@ class CompetitionEvent < ApplicationRecord
         "Cannot edit rounds for a competition which has qualification rounds or b-finals. Please contact WRT or WST if you need to make change to this competition.",
       )
     end
+    at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+    if at_least_v2
+      wcif["rounds"].each do |wcif_round|
+        next if (linked_rounds = wcif_round["linkedRounds"]).blank?
+
+        raise WcaExceptions::BadApiParameter.new("The linking for round #{wcif_round['id']} must contain itself") unless linked_rounds.include?(wcif_round["id"])
+        raise WcaExceptions::BadApiParameter.new("The linking for round #{wcif_round['id']} must be longer than one entry") if linked_rounds.length <= 1
+
+        defined_round_ids = wcif["rounds"].pluck("id")
+        non_existing_round_ids = linked_rounds.reject { defined_round_ids.include?(it) }
+
+        raise WcaExceptions::BadApiParameter.new("The linking for round #{wcif_round['id']} references non-existing rounds [#{non_existing_round_ids.join(',')}]") unless non_existing_round_ids.empty?
+
+        non_matching_siblings = linked_rounds.filter do |sibling_wcif_id|
+          sibling_matching = wcif["rounds"].find { it["id"] == sibling_wcif_id }&.dig("linkedRounds")
+
+          linked_rounds != sibling_matching
+        end
+
+        raise WcaExceptions::BadApiParameter.new("The linking for round #{wcif_round['id']} does not match the linking of rounds [#{non_matching_siblings.join(',')}]") unless non_matching_siblings.empty?
+      end
+    end
     model_rounds = wcif["rounds"].map do |round_wcif|
       round = rounds.find { it.wcif_id == round_wcif["id"] } || rounds.build
       round.update!(**Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"], version: version))
       WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
       round
     end
+    previously_linked_rounds = model_rounds.filter_map(&:linked_round)
     # Have to do this in a second pass because nested associations (mostly `linked_round` and `participation_source`)
     #   need the record to already exist in the database in order to reference their IDs
-    new_rounds = model_rounds.map do |round|
-      round.update!(**Round.wcif_backlinking(round, model_rounds))
+    new_rounds = wcif["rounds"].zip(model_rounds).map do |round_wcif, round|
+      if at_least_v2
+        # Linked Round already needs to be present for computing the backlinking below
+        round.linked_round = Round.compute_linked_round(round_wcif, round, model_rounds)
+      end
+
+      round.update!(**Round.backport_participation_ruleset(round, model_rounds))
       round
     end
+    previously_linked_rounds.each(&:destroy_if_orphaned)
     # This is not techincally a third pass, because we're not updating the round itself.
     #   But for the advancement through rounds, the whole CE already needs to be fully linked up
     new_rounds.zip(wcif["rounds"]).each do |round, round_wcif|

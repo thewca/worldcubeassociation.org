@@ -2,41 +2,19 @@
 
 module Live
   module Advancing
-    # Port from https://github.com/thewca/wca-live/blob/main/lib/wca_live/scoretaking/advancing.ex#L143
-    # Basically this just removes the number one placed competitor and then sees who of the non-advancing
-    # competitors would make it if that competitor got dnf
-    def self.next_advancing_without(live_results, competitor_being_quit, round)
-      already_quit_ids = live_results.quit.pluck(:id)
+    def self.recompute_advancing(advancement_source, can_update_advancing: true)
+      results_with_potential = advancement_source.advancement_results.reject(&:locked?).sort_by(&:potential_solve_time)
 
-      first_advancing = live_results.advancing.first
-
-      candidate_ids = live_results.not_advancing.not_quit.pluck(:id)
-
-      return [] if candidate_ids.empty?
-
-      quit_result_ids = live_results.where(registration_id: competitor_being_quit).pluck(:id)
-      ignored_ids = [first_advancing.id] | quit_result_ids | already_quit_ids
-
-      advancement_determining = live_results
-                                .where.not(id: ignored_ids)
-
-      # Eager load associations to avoid N+1 on potential_solve_time
-      loaded_results = advancement_determining.includes(:live_attempts).to_a
-
-      # Assume that everyone who quit got dnf
-      worst_results = Array.new(ignored_ids.length) { LiveResult.build(round: round, best: LiveResult::WORST_POSSIBLE_SCORE, average: LiveResult::WORST_POSSIBLE_SCORE) }
-      results_with_worst = (loaded_results + worst_results).sort_by(&:values_for_sorting)
-
-      hypothetically_advancing_ids = round.next_round.participation_condition.apply(results_with_worst).pluck(:id)
-
-      live_results.where(id: hypothetically_advancing_ids & candidate_ids)
-    end
-
-    def self.recompute_advancing(results_per_person, results_to_update, advancement_determining_condition, can_update_advancing: true)
-      results_with_potential = results_per_person.select { it.locked_by_id.nil? }.sort_by(&:potential_solve_time)
+      advancement_determining_condition = if advancement_source.final_round?
+                                            Live::Advancing.podium_condition(advancement_source.ranking_format)
+                                          else
+                                            advancement_source.target_participation_condition
+                                          end
 
       advancing_ids = advancement_determining_condition.apply(results_with_potential).pluck(:registration_id)
       max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
+
+      results_to_update = advancement_source.live_results.globally_ranked.not_locked
 
       if can_update_advancing && advancing_ids.any?
         results_to_update.update_all(
@@ -49,8 +27,8 @@ module Live
       end
     end
 
-    def self.podium_condition(round)
-      ResultConditions::Ranking.new(scope: round.format.sort_by, value: 3)
+    def self.podium_condition(format)
+      ResultConditions::Ranking.new(scope: format.sort_by, value: 3)
     end
   end
 end

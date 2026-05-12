@@ -189,6 +189,7 @@ Rails.application.routes.draw do
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
   get '/persons/results' => 'admin/persons#results', as: :person_results
+  get '/persons/:wca_id/pending_claims' => "persons#pending_claims", as: :person_pending_claims
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
@@ -368,6 +369,7 @@ Rails.application.routes.draw do
           get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
           put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
           put '/rounds/:round_id/clear' => "live#clear_round", as: :live_round_clear
+          delete '/rounds/:round_id/bulk_quit' => 'live#bulk_quit_competitors', as: :bulk_quit_competitors_from_round
           delete '/rounds/:round_id/:registration_id' => 'live#quit_competitor', as: :quit_competitor_from_round
           put '/rounds/:round_id/:registration_id/clear' => 'live#clear_competitor', as: :clear_competitor_in_round
           get '/rounds/:round_id/next_if_quit' => 'live#next_if_quit', as: :next_advancing_competitor

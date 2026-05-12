@@ -287,7 +287,7 @@ def save_events_react(wait_for_completion: true)
   expect(page).to have_no_css(".modal-open")
   first(:button, "save your changes!", visible: true).click
   # Wait for ajax to complete.
-  expect(page).to have_no_content("You have unsaved changes") if wait_for_completion
+  expect(page).to have_no_text("You have unsaved changes") if wait_for_completion
 end
 
 def select_from_ui(parent, name, option)

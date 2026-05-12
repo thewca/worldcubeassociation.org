@@ -1003,7 +1003,8 @@ RSpec.describe "Competition WCIF" do
   end
 
   describe "#set_wcif_events!" do
-    let(:wcif) { competition.to_wcif }
+    let(:wcif_version) { Competition::WCIF_STABLE_VERSION }
+    let(:wcif) { competition.to_wcif(version: wcif_version) }
 
     it "does not remove competition event when wcif rounds are empty" do
       wcif_444_event = wcif["events"].find { |e| e["id"] == "444" }
@@ -1144,6 +1145,110 @@ RSpec.describe "Competition WCIF" do
       competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
+    end
+
+    context "linked rounds" do
+      let(:wcif_version) { '2.1.1' }
+
+      it "links rounds that were previously not linked" do
+        wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
+
+        wcif_333_event["rounds"][0]["linkedRounds"] = %w[333-r1 333-r2]
+        wcif_333_event["rounds"][1]["linkedRounds"] = %w[333-r1 333-r2]
+        wcif_333_event["rounds"][1]["participationRuleset"] = wcif_333_event["rounds"][0]["participationRuleset"]
+
+        competition.set_wcif_events!(wcif["events"], delegate, version: wcif_version)
+
+        expect(competition.to_wcif(version: wcif_version)["events"]).to eq(wcif["events"])
+
+        expect(LinkedRound.count).to be 1
+
+        expect(round333_1.reload.linked_round).not_to be_nil
+        expect(round333_2.reload.linked_round).not_to be_nil
+
+        # already reloaded everything above
+        expect(round333_1.linked_round).to eq(round333_2.linked_round)
+      end
+
+      it "unlinks rounds that had previously been linked" do
+        # Synchronize cutoff to allow linking further down
+        round333_2.update!(cutoff: sixty_second_2_attempt_cutoff)
+
+        # store a copy of the WCIF before making any changes, so the rounds are NOT linked
+        wcif_unlinked = wcif["events"].deep_dup
+
+        linked_round = create(:linked_round)
+
+        round333_1.update!(linked_round: linked_round)
+        round333_2.update!(linked_round: linked_round)
+
+        expect(competition.to_wcif(version: wcif_version)["events"]).not_to eq(wcif_unlinked)
+
+        competition.set_wcif_events!(wcif_unlinked, delegate, version: wcif_version)
+        expect(competition.to_wcif(version: wcif_version)["events"]).to eq(wcif_unlinked)
+
+        # Our cleanup code picks up orphaned rounds, see the model spec for linked_round.rb
+        expect(LinkedRound.count).to be 0
+      end
+
+      context "malformed linked_rounds entries" do
+        let(:round333_3) { build(:round, number: 3, total_number_of_rounds: 3, participation_source: round333_2, participation_condition: top_16_average_condition) }
+
+        before :each do
+          round333_1.update!(total_number_of_rounds: 3)
+          round333_2.update!(total_number_of_rounds: 3)
+
+          event_333.update!(rounds: [round333_1, round333_2, round333_3])
+        end
+
+        it "throws when rounds are giving inconsistent information" do
+          wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
+
+          # Explicitly ONLY setting R1 here, which is inconsistent. R2 _should_ also know about the linking
+          wcif_333_event["rounds"][0]["linkedRounds"] = %w[333-r1 333-r2]
+
+          expect { competition.set_wcif_events!(wcif["events"], delegate, version: wcif_version) }.to raise_error(WcaExceptions::BadApiParameter) do |ex|
+            expect(ex.message).to eq("The linking for round 333-r1 does not match the linking of rounds [333-r2]")
+          end
+        end
+
+        it "throws when rounds are giving individually valid but different linking information" do
+          wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
+
+          # Each linking is theoretically valid, but they do not match with each other
+          wcif_333_event["rounds"][0]["linkedRounds"] = %w[333-r1 333-r2]
+          wcif_333_event["rounds"][1]["linkedRounds"] = %w[333-r2 333-r3]
+
+          expect { competition.set_wcif_events!(wcif["events"], delegate, version: wcif_version) }.to raise_error(WcaExceptions::BadApiParameter) do |ex|
+            expect(ex.message).to eq("The linking for round 333-r1 does not match the linking of rounds [333-r2]")
+          end
+        end
+
+        it "throws when rounds are giving obviously bogus information" do
+          wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
+
+          # The linking is not valid because it is not self-contained
+          wcif_333_event["rounds"][0]["linkedRounds"] = %w[333-r2 333-r3]
+
+          expect { competition.set_wcif_events!(wcif["events"], delegate, version: wcif_version) }.to raise_error(WcaExceptions::BadApiParameter) do |ex|
+            expect(ex.message).to eq("The linking for round 333-r1 must contain itself")
+          end
+
+          # The linking is not valid because it references a round that does not exist
+          wcif_333_event["rounds"][0]["linkedRounds"] = %w[333-r1 333-r4]
+
+          expect { competition.set_wcif_events!(wcif["events"], delegate, version: wcif_version) }.to raise_error(WcaExceptions::BadApiParameter) do |ex|
+            expect(ex.message).to eq("The linking for round 333-r1 references non-existing rounds [333-r4]")
+          end
+
+          # The linking is not valid because it is of length 1
+          wcif_333_event["rounds"][0]["linkedRounds"] = %w[333-r1]
+
+          expect { competition.set_wcif_events!(wcif["events"], delegate, version: wcif_version) }.to raise_error(WcaExceptions::BadApiParameter) do |ex|
+            expect(ex.message).to eq("The linking for round 333-r1 must be longer than one entry")
+          end
+        end
+      end
     end
 
     context "round results" do

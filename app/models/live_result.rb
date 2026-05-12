@@ -4,6 +4,8 @@ class LiveResult < ApplicationRecord
   BEST_POSSIBLE_SCORE = 1
   WORST_POSSIBLE_SCORE = -1
 
+  PODIUM_RANGE = 1..3
+
   has_many :live_attempts, dependent: :destroy
   alias_method :attempts, :live_attempts
 
@@ -21,7 +23,12 @@ class LiveResult < ApplicationRecord
   belongs_to :locked_by, class_name: 'User', optional: true
 
   scope :not_empty, -> { where.not(best: 0) }
-  scope :locked, -> { where.not(locked_by: nil) }
+
+  scope :globally_ranked, -> { where.not(global_pos: nil) }
+  scope :locally_ranked, -> { where.not(local_pos: nil) }
+
+  scope :locked, -> { where.not(locked_by_id: nil) }
+  scope :not_locked, -> { where(locked_by_id: nil) }
 
   scope :advancing, -> { where(advancing: true) }
   scope :not_advancing, -> { where(advancing: false) }
@@ -75,8 +82,12 @@ class LiveResult < ApplicationRecord
     quit_count
   end
 
+  def quit?
+    self.quit_by_id?
+  end
+
   def locked?
-    locked_by_id.present?
+    self.locked_by_id?
   end
 
   def self.compute_average_and_best(attempts, round)
@@ -107,12 +118,8 @@ class LiveResult < ApplicationRecord
     live_attempts.any? && round.cutoff.present? && round.cutoff.exceeds?(live_attempts)
   end
 
-  def empty_result?
-    best.zero?
-  end
-
-  def not_empty?
-    !empty_result?
+  def missing_attempts?
+    !complete?
   end
 
   def values_for_sorting
@@ -140,6 +147,16 @@ class LiveResult < ApplicationRecord
       value4: attempt_values[3] || 0,
       value5: attempt_values[4] || 0,
     )
+  end
+
+  def to_wcif
+    {
+      "personId" => registrant_id,
+      "ranking" => global_pos,
+      "attempts" => live_attempts.map(&:to_wcif),
+      "best" => best,
+      "average" => average,
+    }
   end
 
   LIVE_STATE_SERIALIZE_OPTIONS = {
