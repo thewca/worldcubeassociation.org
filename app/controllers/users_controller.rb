@@ -128,15 +128,15 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if error.present?
-        format.html { redirect_to edit_user_path(user), flash: { danger: error } }
         format.json { render status: status, json: { error: error } }
+        format.html { redirect_to edit_user_path(user), flash: { danger: error } }
       else
         ActiveRecord::Base.transaction do
           user.assign_wca_id(wca_id)
           user.update!(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
         end
-        format.html { redirect_to edit_user_path(user), flash: { success: "Successfully confirmed WCA ID #{wca_id}." } }
         format.json { render status: :ok, json: { success: true } }
+        format.html { redirect_to edit_user_path(user), flash: { success: "Successfully confirmed WCA ID #{wca_id}." } }
       end
     end
   end
