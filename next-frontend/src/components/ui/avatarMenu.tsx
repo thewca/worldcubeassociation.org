@@ -118,7 +118,7 @@ function AvatarMenu({ session }: { session: Session | null }) {
             </Button>
           </Collapsible.Trigger>
           <Collapsible.Content>
-            <VStack align="stretch">
+            <VStack align="stretch" pl={4} gap={1} py={1}>
               <Button
                 asChild
                 variant="ghost"

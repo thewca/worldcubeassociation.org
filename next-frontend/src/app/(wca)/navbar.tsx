@@ -265,7 +265,7 @@ export default async function Navbar() {
                         </Button>
                       </Collapsible.Trigger>
                       <Collapsible.Content>
-                        <VStack align="stretch">
+                        <VStack align="stretch" pl={4} gap={1} py={1}>
                           {navbarEntry.entries.map((subEntry) => (
                             <React.Fragment key={subEntry.id}>
                               {subEntry.blockType === "LinkItem" && (
@@ -313,7 +313,12 @@ export default async function Navbar() {
                                     </Button>
                                   </Collapsible.Trigger>
                                   <Collapsible.Content>
-                                    <VStack align="stretch">
+                                    <VStack
+                                      align="stretch"
+                                      pl={4}
+                                      gap={1}
+                                      py={1}
+                                    >
                                       {subEntry.entries.map((nestedEntry) => (
                                         <React.Fragment key={nestedEntry.id}>
                                           {nestedEntry.blockType ===

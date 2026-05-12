@@ -87,7 +87,7 @@ const LanguageSelector = () => {
             </Button>
           </Collapsible.Trigger>
           <Collapsible.Content>
-            <VStack align="stretch">
+            <VStack align="stretch" pl={4} gap={1} py={1}>
               {localeEntries.map(([lang, cfg]) => (
                 <Button
                   key={lang}
