@@ -56,7 +56,9 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
         <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
       )}
       <Card.Body>
-        <Card.Title textStyle="h2">{block.heading}</Card.Title>
+        <Card.Title textStyle={{ base: "h3", md: "h2" }}>
+          {block.heading}
+        </Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
         <MarkdownProse
           as={Card.Description}
@@ -104,7 +106,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       maxHeight="lg"
       overflow="hidden"
     >
-      <Box position="relative" width="50%">
+      <Box position="relative" width="50%" hideBelow="md">
         <MediaImage
           media={block.mainImage as Media}
           width="full"
@@ -119,13 +121,16 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       </Box>
 
       <Card.Body justifyContent="center">
-        <Card.Title colorPalette={block.headingColor} textStyle="h1">
+        <Card.Title
+          colorPalette={block.headingColor}
+          textStyle={{ base: "h3", md: "h2" }}
+        >
           {block.heading}
         </Card.Title>
         <MarkdownProse
           as={Card.Description}
           content={block.bodyMarkdown!}
-          textStyle="s2"
+          textStyle={{ base: "body", md: "s2" }}
         />
         {block.bgImage && (
           <Float
@@ -243,17 +248,17 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
             <Carousel.Item key={slide.id} index={i} asChild>
               <Card.Root
                 colorVariant="deep"
-                flexDirection="row"
+                flexDirection={{ base: "column", md: "row" }}
                 overflow="hidden"
                 colorPalette={slide.colorPalette}
               >
                 <MediaImage
                   media={testimonial.image as Media}
                   altFallback={testimonial.punchline}
-                  maxW="1/3"
+                  maxW={{ base: "full", md: "1/3" }}
                 />
                 <Card.Body>
-                  <Card.Title textStyle="h1">
+                  <Card.Title textStyle={{ base: "h3", md: "h1" }}>
                     {testimonial.punchline}
                   </Card.Title>
                   <Separator size="md" />
@@ -318,7 +323,12 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
   const RenderAs = isHorizontal ? SimpleGrid : VStack;
 
   return (
-    <RenderAs key={keyPrefix} columns={columnCount} gap={8} width="full">
+    <RenderAs
+      key={keyPrefix}
+      columns={{ base: 1, md: columnCount }}
+      gap={8}
+      width="full"
+    >
       {entry.blocks.map((subEntry, i) => {
         const key = `${keyPrefix}-${i}`;
 
@@ -327,7 +337,7 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
             return (
               <GridItem
                 key={key}
-                colSpan={columns[i] || 1}
+                colSpan={{ base: 1, md: columns[i] || 1 }}
                 display="flex"
                 width="full"
               >
@@ -338,7 +348,7 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
             return (
               <GridItem
                 key={key}
-                colSpan={columns[i] || 1}
+                colSpan={{ base: 1, md: columns[i] || 1 }}
                 display="flex"
                 width="full"
               >
@@ -349,7 +359,7 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
             return (
               <GridItem
                 key={key}
-                colSpan={columns[i] || 1}
+                colSpan={{ base: 1, md: columns[i] || 1 }}
                 display="flex"
                 width="full"
               >
@@ -360,7 +370,7 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
             return (
               <GridItem
                 key={key}
-                colSpan={columns[i] || 1}
+                colSpan={{ base: 1, md: columns[i] || 1 }}
                 display="flex"
                 width="full"
               >
@@ -371,7 +381,7 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
             return (
               <GridItem
                 key={key}
-                colSpan={columns[i] || 1}
+                colSpan={{ base: 1, md: columns[i] || 1 }}
                 display="flex"
                 width="full"
               >
@@ -382,7 +392,7 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
             return (
               <GridItem
                 key={key}
-                colSpan={columns[i] || 1}
+                colSpan={{ base: 1, md: columns[i] || 1 }}
                 display="flex"
                 width="full"
               >
@@ -393,7 +403,7 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
             return (
               <GridItem
                 key={key}
-                colSpan={columns[i] || 1}
+                colSpan={{ base: 1, md: columns[i] || 1 }}
                 display="flex"
                 width="full"
               >
@@ -404,7 +414,7 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
             return (
               <GridItem
                 key={key}
-                colSpan={columns[i] || 1}
+                colSpan={{ base: 1, md: columns[i] || 1 }}
                 display="flex"
                 width="full"
               >
