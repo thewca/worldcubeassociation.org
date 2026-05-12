@@ -138,7 +138,7 @@ export default function AttemptsForm({
                 onChange={(value) => handleAttemptChange(index, value)}
                 resultType="single"
                 placeholder={`Attempt ${index + 1}`}
-                disabled={!hasMetCutoff && index > 1}
+                disabled={!hasMetCutoff && index >= cutoff!.numberOfAttempts}
               />
             ))}
           </AttemptFieldsNav>
