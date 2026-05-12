@@ -5,7 +5,7 @@ import I18n from '../../../../lib/i18n';
 import { events } from '../../../../lib/wca-data.js.erb';
 import { eventQualificationToString } from '../../../../lib/utils/wcif';
 import { useDispatch } from '../../../../lib/providers/StoreProvider';
-import useInputState from '../../../../lib/hooks/useInputState';
+import useInputState, { useInputUpdater } from '../../../../lib/hooks/useInputState';
 import AttemptResultField from '../../../EditResult/WCALive/AttemptResultField/AttemptResultField';
 import MbldPointsField from '../../../EditResult/WCALive/AttemptResultField/MbldPointsField';
 import { updateQualification } from '../../store/actions';
@@ -26,6 +26,8 @@ import UtcDatePicker from '../../../wca/UtcDatePicker';
 function QualificationInput({
   type, resultType, level, onChange, eventId,
 }) {
+  const onInputChange = useInputUpdater(onChange, true);
+
   switch (type) {
     case 'attemptResult':
       return (
@@ -34,7 +36,7 @@ function QualificationInput({
             <MbldPointsField
               eventId={eventId}
               value={level}
-              onChange={(newLevel) => onChange(newLevel)}
+              onChange={onChange}
               label={<Label>{I18n.t(`common.${resultType}`)}</Label>}
             />
           )
@@ -42,7 +44,7 @@ function QualificationInput({
             <AttemptResultField
               eventId={eventId}
               value={level}
-              onChange={(value) => onChange(value)}
+              onChange={onChange}
               label={<Label>{I18n.t(`common.${resultType}`)}</Label>}
               resultType={resultType}
             />
@@ -54,7 +56,7 @@ function QualificationInput({
           type="number"
           min={1}
           value={level}
-          onChange={(e) => onChange(parseInt(e.target.value, 10))}
+          onChange={onInputChange}
           label={(
             <Label>
               {I18n.t('qualification.type.ranking')}
@@ -81,20 +83,42 @@ export default function EditQualificationModal({
   const { qualification } = wcifEvent;
   const dispatch = useDispatch();
 
+  const v1ConditionType = useMemo(() => {
+    const v2Type = qualification?.resultCondition?.type ?? '';
+
+    if (v2Type === 'resultAchieved') {
+      const v2Value = qualification?.resultCondition?.value;
+
+      if (v2Value === null) {
+        return 'anyResult';
+      }
+    }
+
+    return v2Type.replace('resultAchieved', 'attemptResult');
+  }, [qualification?.resultCondition]);
+
   const [conditionScope, setConditionScope] = useInputState(qualification?.resultCondition?.scope ?? '');
-  const [conditionType, setConditionType] = useInputState(qualification?.resultCondition?.type ?? '');
+  const [conditionType, setConditionType] = useInputState(v1ConditionType);
   const [latestResultDate, setLatestResultDate] = useState(qualification?.latestResultDate ?? '');
   const [conditionValue, setConditionValue] = useState(qualification?.resultCondition?.value ?? 0);
 
-  const qualificationStateWcif = useMemo(() => ({
-    earliestResultDate: null,
-    latestResultDate,
-    resultCondition: {
-      type: conditionType,
-      scope: conditionScope,
-      value: conditionValue,
-    },
-  }), [conditionScope, conditionType, conditionValue, latestResultDate]);
+  const qualificationStateWcif = useMemo(() => {
+    const v2ConditionType = conditionType
+      .replace('attemptResult', 'resultAchieved')
+      .replace('anyResult', 'resultAchieved');
+
+    const v2ConditionValue = conditionType === 'anyResult' ? null : conditionValue;
+
+    return ({
+      earliestResultDate: null,
+      latestResultDate,
+      resultCondition: {
+        type: v2ConditionType,
+        scope: conditionScope,
+        value: v2ConditionValue,
+      },
+    });
+  }, [conditionScope, conditionType, conditionValue, latestResultDate]);
 
   const hasUnsavedChanges = useMemo(() => (
     !_.isEqual(qualification, qualificationStateWcif)
@@ -102,7 +126,7 @@ export default function EditQualificationModal({
 
   const reset = () => {
     setConditionScope(qualification?.resultCondition?.scope ?? '');
-    setConditionType(qualification?.resultCondition?.type ?? 'attemptResult');
+    setConditionType(v1ConditionType ?? 'attemptResult');
     setLatestResultDate(qualification?.latestResultDate ?? '');
     setConditionValue(qualification?.resultCondition?.value ?? 0);
   };
