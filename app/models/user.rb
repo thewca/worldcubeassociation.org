@@ -572,7 +572,7 @@ class User < ApplicationRecord
     wic_team? || board_member? || higher_permission_officer? || weat_team? || results_team? || admin?
   end
 
-  private def can_request_to_edit_others_profile?
+  def can_request_to_edit_others_profile?
     any_kind_of_delegate? || results_team?
   end
 

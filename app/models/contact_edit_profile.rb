@@ -48,7 +48,7 @@ class ContactEditProfile < ContactForm
   end
 
   def attachment_requirement_reasons
-    return nil if document.present?
+    return nil if document.present? || requestor_user.can_request_to_edit_others_profile?
 
     changes_requested&.filter_map do |change|
       case change.field
