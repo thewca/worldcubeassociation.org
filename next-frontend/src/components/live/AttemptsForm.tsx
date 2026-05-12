@@ -13,6 +13,7 @@ import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
 import { useCallback, useRef } from "react";
+import { flushSync } from "react-dom";
 import type { KeyboardEvent, ReactNode } from "react";
 import { attemptResultsWarning, meetsCutoff } from "@/lib/live/attempt-result";
 import { useT } from "@/lib/i18n/useI18n";
@@ -175,13 +176,17 @@ function AttemptFieldsNav({
 
     if (e.key === "Enter" || e.key === "ArrowDown" || e.code === "NumpadAdd") {
       e.preventDefault();
-      focusManager?.focusNext({ wrap: false });
+      const from = e.target as HTMLElement;
+      flushSync(() => from.blur());
+      focusManager?.focusNext({ wrap: false, from });
       return;
     }
 
     if (e.key === "ArrowUp" || e.code === "NumpadSubtract") {
       e.preventDefault();
-      focusManager?.focusPrevious({ wrap: false });
+      const from = e.target as HTMLElement;
+      flushSync(() => from.blur());
+      focusManager?.focusPrevious({ wrap: false, from });
     }
   };
 
