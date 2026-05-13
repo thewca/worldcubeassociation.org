@@ -1763,6 +1763,11 @@ es-ES:
           validation_error: 'Por favor, demuestra que no eres un robot.'
       #original_hash: 126541e
       success_message: Solicitud enviada. Nos pondremos en contacto contigo en breve.
+      #original_hash: bb6a0cf
+      success_message_with_ticket_link_html: >-
+        Solicitud enviada, nos pondremos en contacto contigo pronto. Para
+        consultar el estado de esta solicitud, visita <a href="%{link}">este
+        enlace</a>.
   homepage:
     #original_hash: 824d76b
     learn_more: Saber más
@@ -2912,6 +2917,11 @@ es-ES:
     live:
       #original_hash: 10d1a3c
       title: Resultados en directo
+      round_state:
+        #original_hash: 98aadb3
+        ongoing: en directo
+        #original_hash: e5fd9cf
+        done: terminada
       connection:
         #original_hash: f92b311
         initialized: Se está inicializando la conexión
@@ -2924,6 +2934,8 @@ es-ES:
         title: Podios
         #original_hash: d7297a7
         undetermined: Podios por determinar
+        #original_hash: 61e88df
+        none: ¡Aún no hay podios!
       admin:
         #original_hash: cf9b770
         open: Abrir
@@ -2972,8 +2984,18 @@ es-ES:
             other: 'Los próximos competidores en clasificarse son %{competitors}'
           #original_hash: c87ca67
           advance: Clasificar al próximo competidor
-          #original_hash: e85b311
-          quit_confirm: Eliminar competidor de la ronda
+          #original_hash: aa59a26
+          quit_confirm:
+            zero: Eliminar competidores de la ronda
+            one: Eliminar competidor de la ronda
+            other: Eliminar competidores de la ronda
+          bulk:
+            #original_hash: e0981de
+            success: 'Eliminados %{count} competidores satisfactoriamente'
+            #original_hash: 98fe723
+            failure: No se ha podido eliminar a los competidores de forma masiva
+            #original_hash: 774050e
+            menu: Eliminar de forma masiva
           #original_hash: 1a2285d
           quit_menu: Eliminar
           #original_hash: 70835a0
@@ -2984,6 +3006,10 @@ es-ES:
           failed_to_fetch: >-
             No se ha podido recuperar el siguiente competidor en la
             clasificación
+          #original_hash: d4dcd86
+          still_processing: >-
+            No puedes ejecutar «Eliminar competidor» mientras algunos resultados
+            aún se están procesando
       results:
         #original_hash: 4705687
         competitor: Competidor
@@ -4659,6 +4685,12 @@ es-ES:
         qualification_some_events_html: >-
           Los tiempos de clasificación en %{events} tienen que haberse
           conseguido en o antes de <b>%{date}</b>.
+        #original_hash: ce9b21b
+        advancement_condition_html: >-
+          El número de competidores que se indica que avanzan a la siguiente
+          ronda es el máximo previsto. El número real puede ser inferior si hay
+          menos competidores de lo esperado o si se producen empates en el
+          límite.
       #original_hash: 041a5de
       format: Formato
       #original_hash: 0d1fcc3
@@ -4669,6 +4701,8 @@ es-ES:
       proceed: Avanzar
       #original_hash: 2ffe44e
       qualification: Clasificación
+      #original_hash: 5289f93
+      advancement_condition: Condición de avance
     schedule:
       display_as:
         #original_hash: 0424f6e
