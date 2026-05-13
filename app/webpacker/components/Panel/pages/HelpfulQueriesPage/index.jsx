@@ -6,8 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import { fetchJsonOrError } from '../../../../lib/requests/fetchWithAuthenticityToken';
-import { apiV0Urls, viewUrls, competitionUrl } from '../../../../lib/requests/routes.js.erb';
-import { groupTypes } from '../../../../lib/wca-data.js.erb';
+import { viewUrls, competitionUrl } from '../../../../lib/requests/routes.js.erb';
 import useInputState from '../../../../lib/hooks/useInputState';
 
 const statusColor = (s) => {
@@ -117,38 +116,27 @@ function DelegatedPane({ userId }) {
     queryFn: () => fetchDelegated(userId),
   });
 
-  const { data: rolesData, isFetching: isFetchingRoles } = useQuery({
-    queryKey: ['hq-delegate-roles', userId],
-    queryFn: async () => {
-      const { data: d } = await fetchJsonOrError(
-        apiV0Urls.userRoles.list({ userId, groupType: groupTypes.delegate_regions }),
-      );
-      return d;
-    },
-  });
+  const stats = useMemo(() => ({
+    total: data.length,
+    leadDelegated: data.filter((c) => c.lead_delegate_id === userId).length,
+  }), [data, userId]);
 
-  const delegateMetadata = useMemo(() => {
-    if (!rolesData) return null;
-    const role = rolesData.find((r) => r.metadata?.total_delegated != null);
-    return role?.metadata || null;
-  }, [rolesData]);
-
-  if (isFetching || isFetchingRoles) return <Loader active inline />;
+  if (isFetching) return <Loader active inline />;
 
   return (
     <>
-      {delegateMetadata && (
+      {data.length > 0 && (
         <Segment padded>
           <Header as="h4">Delegate Statistics</Header>
           <p>
             <strong>Total delegated competitions:</strong>
             {' '}
-            {delegateMetadata.total_delegated}
+            {stats.total}
           </p>
           <p>
             <strong>Lead delegated competitions:</strong>
             {' '}
-            {delegateMetadata.lead_delegated_competitions}
+            {stats.leadDelegated}
           </p>
         </Segment>
       )}

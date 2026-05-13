@@ -16,7 +16,7 @@ RSpec.describe DelegatesMetadataSyncJob do
       expect(UserRole.find(delegate.id).metadata.first_delegated).to eq(competition1.start_date)
       expect(UserRole.find(delegate.id).metadata.last_delegated).to eq(competition2.start_date)
       expect(UserRole.find(delegate.id).metadata.total_delegated).to eq(2)
-      expect(UserRole.find(delegate.id).metadata.lead_delegated_competitions).to eq(1)
+      expect(UserRole.find(delegate.id).metadata.lead_delegated).to eq(1)
     end
   end
 end

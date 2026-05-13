@@ -19,7 +19,7 @@ const otherDelegatesHeaders = [
   { label: 'Last Delegated', key: 'metadata.last_delegated' },
   { label: 'Total Delegated', key: 'metadata.total_delegated' },
   { label: 'Date Since Last Delegated', key: 'date_since_last_delegated' },
-  { label: 'Lead Delegated Competitions', key: 'metadata.lead_delegated_competitions' },
+  { label: 'Lead Delegated Competitions', key: 'metadata.lead_delegated' },
 ];
 
 export default function DelegatesOfAllRegion() {

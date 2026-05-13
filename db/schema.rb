@@ -1229,7 +1229,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_160910) do
     t.datetime "created_at", null: false
     t.date "first_delegated"
     t.date "last_delegated"
-    t.integer "lead_delegated_competitions"
+    t.integer "lead_delegated"
     t.string "location"
     t.string "status"
     t.integer "total_delegated"

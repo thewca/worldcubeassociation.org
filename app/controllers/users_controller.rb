@@ -457,7 +457,7 @@ class UsersController < ApplicationController
                        .order(start_date: :desc)
 
     render json: competitions.as_json(
-      only: %w[id name city_name country_id start_date],
+      only: %w[id name city_name country_id start_date lead_delegate_id],
     )
   end
 
