@@ -48,6 +48,11 @@ const findOrCreateUser = async (
 };
 
 export async function POST(request: Request) {
+  const authHeader = request.headers.get("Authorization");
+  if (authHeader !== `Bearer ${process.env.PAYLOAD_SYNC_KEY}`) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const body: WCAPost[] = await request.json();
   const c = await config;
   const defaultConfig = await editorConfigFactory.default({

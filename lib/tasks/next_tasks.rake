@@ -10,6 +10,7 @@ namespace :next do
         url: args[:next_url],
         headers: {
           'Content-Type' => 'application/json',
+          'Authorization' => "Bearer #{AppSecrets.PAYLOAD_SYNC_KEY}",
         },
         &FaradayConfig
       )

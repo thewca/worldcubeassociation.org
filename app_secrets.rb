@@ -80,6 +80,7 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     vault :WRC_WEBHOOK_USERNAME
     vault :WRC_WEBHOOK_PASSWORD
     vault :CURRENCY_LAYER_API_KEY
+    value :PAYLOAD_SYNC_KEY
 
     # To allow logging in to staging with your prod account
     unless EnvConfig.WCA_LIVE_SITE?
@@ -103,6 +104,7 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     mandatory :OIDC_SECRET_KEY, :string
     mandatory :STAGING_OAUTH_CLIENT, :string
     mandatory :STAGING_OAUTH_SECRET, :string
+    mandatory :PAYLOAD_SYNC_KEY
 
     optional :AWS_ACCESS_KEY_ID, :string, ''
     optional :AWS_SECRET_ACCESS_KEY, :string, ''
