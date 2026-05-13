@@ -8,8 +8,14 @@ class InboxPerson < ApplicationRecord
   #   These IDs are only unique per competition however, so we use a composite foreign key.
   self.primary_key = %i[id competition_id]
 
-  belongs_to :person, -> { current }, foreign_key: "wca_id", primary_key: "wca_id", optional: true
-  belongs_to :country, foreign_key: "country_iso2", primary_key: "iso2"
+  MISMATCH_CHECKS = %i[name country_iso2 gender dob wca_id].freeze
+
+  belongs_to :person, -> { current }, foreign_key: "wca_id", primary_key: "wca_id", optional: true, inverse_of: :inbox_persons
+  belongs_to :country, foreign_key: "country_iso2", primary_key: "iso2", inverse_of: :inbox_persons
+  belongs_to :registration, foreign_key: %i[competition_id id], primary_key: %i[competition_id registrant_id], optional: true, inverse_of: :inbox_person
+
+  has_many :inbox_results, foreign_key: %i[person_id competition_id], inverse_of: :inbox_person
+  has_many :results, foreign_key: %i[person_id competition_id], inverse_of: :inbox_person
 
   alias_attribute :ref_id, :id
   alias_method :wca_person, :person
@@ -19,15 +25,20 @@ class InboxPerson < ApplicationRecord
   alias_attribute :country_id, :country_iso2
 
   validates :name, presence: true
-  validates :dob, presence: true
+  validates :dob, presence: true, comparison: { less_than: Date.today, message: "must be in the past" }
   validates :country_iso2, presence: true
-
-  validate :dob_must_be_in_the_past
-  private def dob_must_be_in_the_past
-    errors.add(:dob, "must be in the past") if dob && dob >= Date.today
-  end
 
   def country
     Country.c_find_by_iso2(self.country_iso2)
+  end
+
+  def registration_mismatches
+    return [] if registration.blank?
+
+    MISMATCH_CHECKS.filter_map do |field|
+      ibp_data = public_send(field).presence
+      reg_data = registration.public_send(field).presence
+      "#{I18n.t("activerecord.attributes.user.#{field}")} ('#{ibp_data}' VS '#{reg_data}')" if ibp_data != reg_data
+    end
   end
 end

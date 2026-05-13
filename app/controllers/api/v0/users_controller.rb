@@ -58,11 +58,6 @@ class Api::V0::UsersController < Api::V0::ApiController
     render json: bookmarked_competitions
   end
 
-  def token
-    require_user!
-    render json: { status: "ok" }
-  end
-
   private
 
     def show_user(user, show_rankings: false, private_attributes: [])

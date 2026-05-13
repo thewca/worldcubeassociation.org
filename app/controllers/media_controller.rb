@@ -74,15 +74,15 @@ class MediaController < ApplicationController
   end
 
   private def medium_params
-    params.require(:competition_medium).permit(
-      :competition_id,
-      :media_type,
-      :text,
-      :uri,
-      :submitter_name,
-      :submitter_email,
-      :submitter_comment,
-      :status,
+    params.expect(
+      competition_medium: %i[competition_id
+                             media_type
+                             text
+                             uri
+                             submitter_name
+                             submitter_email
+                             submitter_comment
+                             status],
     )
   end
 

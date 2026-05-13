@@ -14,7 +14,9 @@ declare module "nextjs-routes" {
     | StaticRoute<"/">
     | StaticRoute<"/about">
     | DynamicRoute<"/api/auth/[...nextauth]", { "nextauth": string[] }>
+    | DynamicRoute<"/api/auth/payload/[...nextauth]", { "nextauth": string[] }>
     | DynamicRoute<"/api/payload/[...slug]", { "slug": string[] }>
+    | StaticRoute<"/api/payload/draft">
     | StaticRoute<"/api/payload/graphql">
     | StaticRoute<"/api/payload/graphql-playground">
     | StaticRoute<"/api/wca/import-posts">
@@ -23,9 +25,21 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/competitions/[competitionId]/admin", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/competitors", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/events", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/live", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/live/admin", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/live/competitors/[registrationId]", { "competitionId": string; "registrationId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/live/podiums", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/live/rounds/[roundId]", { "competitionId": string; "roundId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/live/rounds/[roundId]/admin", { "competitionId": string; "roundId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check", { "competitionId": string; "roundId": string }>
     | DynamicRoute<"/competitions/[competitionId]/podiums", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/register", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/results/all", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/results/byPerson", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/schedule", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/scrambles", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/tabs/[tabName]", { "competitionId": string; "tabName": string }>
+    | StaticRoute<"/competitions/mine">
     | StaticRoute<"/dashboard">
     | StaticRoute<"/delegates">
     | StaticRoute<"/disclaimer">
@@ -34,6 +48,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/export/results">
     | StaticRoute<"/faq">
     | StaticRoute<"/incidents">
+    | StaticRoute<"/logo">
     | StaticRoute<"/officers-and-board">
     | StaticRoute<"/organizations">
     | DynamicRoute<"/payload/[[...segments]]", { "segments"?: string[] | undefined }>
@@ -44,6 +59,8 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/regulations/history/official/[version]", { "version": string }>
     | StaticRoute<"/regulations/scrambles">
     | StaticRoute<"/regulations/translations">
+    | StaticRoute<"/results/rankings">
+    | StaticRoute<"/results/records">
     | StaticRoute<"/score-tools">
     | StaticRoute<"/speedcubing-history">
     | StaticRoute<"/teams-committees">

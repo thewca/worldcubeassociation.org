@@ -1,12 +1,14 @@
-import '@testing-library/jest-dom';
+import "@testing-library/jest-dom";
 
-global.matchMedia = global.matchMedia || function () {
-  return {
-    matches: false,
-    addListener: () => {},
-    removeListener: () => {},
-    addEventListener: () => {},
-    removeEventListener: () => {},
-    dispatchEvent: () => {},
+global.matchMedia =
+  global.matchMedia ||
+  function () {
+    return {
+      matches: false,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => {},
+    };
   };
-};

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Table,
   TableBody,
@@ -18,6 +18,8 @@ import {
 } from '../../lib/utils/wcif';
 
 export default function EventsTable({ competitionInfo, wcifEvents }) {
+  const determineH2hfinal = useCallback((roundTypeId, roundId) => (competitionInfo.h2h_rounds.includes(roundId) && roundTypeId === 'f'), [competitionInfo.h2h_rounds]);
+
   return (
     <div style={{ overflowX: 'scroll' }}>
       <Table striped selectable compact unstackable singleLine>
@@ -52,49 +54,54 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
         </TableHeader>
 
         <TableBody>
-          {wcifEvents.map((event) => event.rounds.map((round, i) => (
-            <TableRow key={round.id}>
-              {i === 0 && (
-                <TableCell rowSpan={event.rounds.length}>
-                  {events.byId[event.id].name}
-                </TableCell>
-              )}
-              <TableCell>{I18n.t(`rounds.${getRoundTypeId(i + 1, event.rounds.length, Boolean(round.cutoff))}.cell_name`)}</TableCell>
-              <TableCell>
-                {round.cutoff && `${formats.byId[round.cutoff.numberOfAttempts].shortName} / `}
-                {formats.byId[round.format].shortName}
-              </TableCell>
-              <TableCell>
-                {timeLimitToString(round, wcifEvents)}
-                {round.timeLimit !== null && (
-                  <>
-                    {round.timeLimit.cumulativeRoundIds.length === 1 && (
-                      <a href="#cumulative-time-limit">*</a>
-                    )}
-                    {round.timeLimit.cumulativeRoundIds.length > 1 && (
-                      <a href="#cumulative-across-rounds-time-limit">**</a>
-                    )}
-                  </>
+          {wcifEvents.map((event) => event.rounds.map((round, i) => {
+            const roundTypeId = getRoundTypeId(i + 1, event.rounds.length, Boolean(round.cutoff));
+            const isH2hFinal = determineH2hfinal(roundTypeId, round.id);
+
+            return (
+              <TableRow key={round.id}>
+                {i === 0 && (
+                  <TableCell rowSpan={event.rounds.length}>
+                    {events.byId[event.id].name}
+                  </TableCell>
                 )}
-              </TableCell>
-              {competitionInfo['uses_cutoff?'] && (
+                <TableCell>{I18n.t(`rounds.${roundTypeId}.cell_name`)}</TableCell>
                 <TableCell>
-                  {round.cutoff
-                    && cutoffToString(round)}
+                  {round.cutoff && `${formats.byId[round.cutoff.numberOfAttempts].shortName} / `}
+                  {isH2hFinal ? I18n.t('formats.short.h') : formats.byId[round.format].shortName}
                 </TableCell>
-              )}
-              <TableCell>
-                {round.advancementCondition
-                  && advancementConditionToString(round)}
-              </TableCell>
-              {competitionInfo['uses_qualification?'] && (
                 <TableCell>
-                  { i === 0
-                  && eventQualificationToString(event, event.qualification)}
+                  {timeLimitToString(round, wcifEvents)}
+                  {round.timeLimit !== null && (
+                    <>
+                      {round.timeLimit.cumulativeRoundIds.length === 1 && (
+                        <a href="#cumulative-time-limit">*</a>
+                      )}
+                      {round.timeLimit.cumulativeRoundIds.length > 1 && (
+                        <a href="#cumulative-across-rounds-time-limit">**</a>
+                      )}
+                    </>
+                  )}
                 </TableCell>
-              )}
-            </TableRow>
-          )))}
+                {competitionInfo['uses_cutoff?'] && (
+                  <TableCell>
+                    {round.cutoff
+                      && cutoffToString(round)}
+                  </TableCell>
+                )}
+                <TableCell>
+                  {round.advancementCondition
+                    && advancementConditionToString(round)}
+                </TableCell>
+                {competitionInfo['uses_qualification?'] && (
+                  <TableCell>
+                    { i === 0
+                    && eventQualificationToString(event, event.qualification)}
+                  </TableCell>
+                )}
+              </TableRow>
+            );
+          }))}
         </TableBody>
       </Table>
     </div>

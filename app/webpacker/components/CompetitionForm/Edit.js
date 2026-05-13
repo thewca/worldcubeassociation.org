@@ -73,7 +73,11 @@ function EditCompetition({
       id: 'delete',
       mutation: deleteCompMutation,
       enabled: !confirmationData?.cannotDeleteReason && !confirmationData?.isConfirmed,
-      confirmationMessage: I18n.t('competitions.competition_form.submit_delete'),
+      confirmationMessage: I18n.t('competitions.competition_form.submit_delete', { competition_id: originalCompId }),
+      confirmationOptions: {
+        requireInput: originalCompId,
+        confirmButton: 'Delete Competition',
+      },
       buttonText: I18n.t('competitions.competition_form.submit_delete_value'),
       buttonProps: { negative: true },
     },

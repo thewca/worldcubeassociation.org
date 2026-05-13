@@ -10,14 +10,25 @@ import {
   List,
   Code,
 } from "@chakra-ui/react";
+import { Metadata } from "next";
+import { getT } from "@/lib/i18n/get18n";
 
-const LATEST_VERSION = "TNoodle-WCA-1.2.2";
+const LATEST_VERSION = "TNoodle-WCA-1.2.3";
 const LATEST_JARFILE =
-  "https://github.com/thewca/tnoodle/releases/download/v1.2.2/TNoodle-WCA-1.2.2.jar";
+  "https://github.com/thewca/tnoodle/releases/download/v1.2.3/TNoodle-WCA-1.2.3.jar";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+
+  return {
+    // This is currently hardcoded in Rails
+    title: t("WCA Scrambles"),
+  };
+}
 
 export default async function ScramblesPage() {
   return (
-    <Container>
+    <Container bg="bg">
       <VStack align="left" gap="16px">
         <Heading size="5xl">WCA Scrambles</Heading>
         <Text>
@@ -29,7 +40,7 @@ export default async function ScramblesPage() {
           <VStack>
             <Text>Download the official scramble program:</Text>
             <Link href={LATEST_JARFILE}>{LATEST_VERSION}</Link>
-            <Text>Last official change: January 22nd, 2024</Text>
+            <Text>Last official change: January 1st, 2026</Text>
           </VStack>
         </Center>
         <Heading size="2xl">Important Notes for Delegates</Heading>
@@ -338,6 +349,12 @@ export default async function ScramblesPage() {
               TNoodle-WCA-1.2.2
             </Link>{" "}
             (2024-01-22)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v1.2.3/TNoodle-WCA-1.2.3.jar">
+              TNoodle-WCA-1.2.3
+            </Link>{" "}
+            (2025-12-17)
           </List.Item>
         </List.Root>
       </VStack>

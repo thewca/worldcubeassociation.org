@@ -6,8 +6,8 @@ Doorkeeper::OpenidConnect.configure do
     resource_owner.id
   end
   signing_key AppSecrets.OIDC_SECRET_KEY
-  # This is an asymmetric encryption, meaning the clients validating the JWT Token use the Public key instead
-  signing_algorithm :rs256
+  # In production we use asymmetric keys, while in dev we use symmetric ones.
+  signing_algorithm EnvConfig.OIDC_ALGORITHM
 
   resource_owner_from_access_token do |access_token|
     User.find(access_token.resource_owner_id)
@@ -32,6 +32,14 @@ Doorkeeper::OpenidConnect.configure do
 
     claim :name, response: %i[id_token user_info] do |resource_owner|
       resource_owner.name
+    end
+
+    claim :preferred_username, response: %i[id_token user_info] do |resource_owner|
+      resource_owner.wca_id
+    end
+
+    claim :picture, response: %i[id_token user_info] do |resource_owner|
+      resource_owner.current_avatar&.strict_url
     end
 
     claim :roles, response: :user_info, scope: :cms do |resource_owner|

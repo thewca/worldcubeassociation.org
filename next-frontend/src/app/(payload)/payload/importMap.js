@@ -23,8 +23,11 @@ import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { AccountRowLabel as AccountRowLabel_06d0cb594d8f6ba2ac35015f930c882e } from 'payload-authjs/components'
 import { SignInButton as SignInButton_06d0cb594d8f6ba2ac35015f930c882e } from 'payload-authjs/components'
+import { SessionProvider as SessionProvider_eb65d9ad4ff5e9757fd28d232b1c2581 } from 'next-auth/react'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
+import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
+/** @type import('payload').ImportMap */
 export const importMap = {
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -51,5 +54,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "payload-authjs/components#AccountRowLabel": AccountRowLabel_06d0cb594d8f6ba2ac35015f930c882e,
   "payload-authjs/components#SignInButton": SignInButton_06d0cb594d8f6ba2ac35015f930c882e,
-  "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24
+  "next-auth/react#SessionProvider": SessionProvider_eb65d9ad4ff5e9757fd28d232b1c2581,
+  "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
+  "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

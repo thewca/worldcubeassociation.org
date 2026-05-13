@@ -1,0 +1,19 @@
+allOf:
+  - $ref: './BaseRegistrationConfig.yaml'
+  - type: object
+    properties:
+      parameters:
+        type: object
+        properties:
+          auto_accept_enabled?:
+            type: boolean
+          auto_accept_preference:
+            type: string
+            enum:
+              - "disabled"
+              - "bulk"
+              - "live"
+        required:
+          - auto_accept_enabled?
+    required:
+      - parameters

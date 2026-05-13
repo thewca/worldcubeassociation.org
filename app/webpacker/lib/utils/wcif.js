@@ -23,8 +23,9 @@ export function useSaveWcifAction() {
       onError = alertWcifError,
     ) => {
       const url = `/api/v0/competitions/${competitionId}/wcif`;
+      const wcifWithFormat = { formatVersion: '1.1', ...wcifData };
 
-      save(url, wcifData, onSuccess, options, onError);
+      save(url, wcifWithFormat, onSuccess, options, onError);
     },
     [save],
   );
@@ -329,12 +330,17 @@ export function isActivityTimeValid(activity, wcifVenue, wcifSchedule) {
   const { startDate, numberOfDays: days } = wcifSchedule;
   const { startTime, endTime } = activity;
 
-  const luxonStartDate = DateTime.fromISO(startDate).setZone(wcifVenue?.timezone);
-  const luxonEndDate = DateTime.fromISO(startDate).plus({ days }).setZone(wcifVenue?.timezone);
+  const competitionLocalStartTime = DateTime.fromISO(startDate)
+    .setZone(wcifVenue?.timezone, { keepLocalTime: true });
+  const competitionLocalEndTime = DateTime.fromISO(startDate).plus({ days })
+    .setZone(wcifVenue?.timezone, { keepLocalTime: true });
 
-  const hasPositiveDuration = DateTime.fromISO(startTime) < DateTime.fromISO(endTime);
-  const startsOnOrAfterStartDate = luxonStartDate <= DateTime.fromISO(startTime);
-  const endsOnOrBeforeEndDate = DateTime.fromISO(endTime) <= luxonEndDate;
+  const activityStartTime = DateTime.fromISO(startTime);
+  const activityEndTime = DateTime.fromISO(endTime);
+
+  const hasPositiveDuration = activityStartTime < activityEndTime;
+  const startsOnOrAfterStartDate = competitionLocalStartTime <= activityStartTime;
+  const endsOnOrBeforeEndDate = activityEndTime <= competitionLocalEndTime;
 
   return hasPositiveDuration && startsOnOrAfterStartDate && endsOnOrBeforeEndDate;
 }

@@ -2,7 +2,7 @@ import { I18n, useMakePlural } from 'i18n-js';
 
 import * as Locales from 'date-fns/locale';
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
-import * as Pluralizers from 'make-plural';
+import * as Pluralizers from 'make-plural/plurals';
 
 const i18nFileContext = require.context('rails_translations');
 

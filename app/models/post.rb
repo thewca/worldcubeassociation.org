@@ -68,12 +68,12 @@ class Post < ApplicationRecord
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     json[:class] = self.class.to_s.downcase
-    if options[:teaser_only]
+    if options&.try(:teaser_only)
       json[:teaser] = md(body_teaser)
     else
       json[:body] = body
     end
-    json[:edit_url] = Rails.application.routes.url_helpers.edit_post_path(slug) if options[:can_manage]
+    json[:edit_url] = Rails.application.routes.url_helpers.edit_post_path(slug) if options&.try(:can_manage)
 
     json
   end

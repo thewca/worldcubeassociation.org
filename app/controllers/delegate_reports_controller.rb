@@ -73,17 +73,17 @@ class DelegateReportsController < ApplicationController
   end
 
   private def delegate_report_params
-    params.require(:delegate_report).permit(
-      :discussion_url,
-      :schedule_url,
-      :remarks,
-      :posted,
-      :wrc_feedback_requested,
-      :wrc_incidents,
-      :wic_feedback_requested,
-      :wic_incidents,
-      *DelegateReport::AVAILABLE_SECTIONS,
-      setup_images: [],
+    params.expect(
+      delegate_report: [:discussion_url,
+                        :schedule_url,
+                        :remarks,
+                        :posted,
+                        :wrc_feedback_requested,
+                        :wrc_incidents,
+                        :wic_feedback_requested,
+                        :wic_incidents,
+                        *DelegateReport::AVAILABLE_SECTIONS,
+                        { setup_images: [] }],
     )
   end
 

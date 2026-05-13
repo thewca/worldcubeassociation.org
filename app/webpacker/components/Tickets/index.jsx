@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import {
   Button, Container, Message, Modal,
 } from 'semantic-ui-react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 import useInputState from '../../lib/hooks/useInputState';
@@ -10,7 +10,7 @@ import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import TicketContent from './TicketContent';
 import SkateholderSelector from './SkateholderSelector';
 import getTicketDetails from './api/getTicketDetails';
-import updateStatus from './api/updateStatus';
+import SelfRoleAssigner from './SelfRoleAssigner';
 
 export default function Wrapper({ id }) {
   return (
@@ -21,7 +21,6 @@ export default function Wrapper({ id }) {
 }
 
 function Tickets({ id }) {
-  const queryClient = useQueryClient();
   const {
     data: ticketDetails,
     isPending: isPendingTicketDetails,
@@ -33,46 +32,27 @@ function Tickets({ id }) {
   });
 
   const [userSelectedStakeholder, setUserSelectedStakeholder] = useInputState();
+
+  const {
+    requester_stakeholders: stakeholders = [],
+  } = ticketDetails || {};
+
   const currentStakeholder = useMemo(() => {
     if (userSelectedStakeholder) {
       return userSelectedStakeholder;
-    } if (ticketDetails?.requester_stakeholders.length === 1) {
-      return ticketDetails?.requester_stakeholders[0];
+    } if (stakeholders.length === 1) {
+      return stakeholders[0];
     }
     return null;
-  }, [ticketDetails?.requester_stakeholders, userSelectedStakeholder]);
+  }, [stakeholders, userSelectedStakeholder]);
 
-  const {
-    mutate: updateStatusMutate,
-    isPending: isPendingUpdateStatus,
-    isError: isErrorUpdateStatus,
-    error: errorUpdateStatus,
-  } = useMutation({
-    mutationFn: (status) => updateStatus({
-      ticketId: id,
-      status,
-      currentStakeholderId: currentStakeholder.id,
-    }),
-    onSuccess: (status) => {
-      queryClient.setQueryData(
-        ['ticket-details', id],
-        (oldTicketDetails) => ({
-          ...oldTicketDetails,
-          ticket: {
-            ...oldTicketDetails.ticket,
-            metadata: {
-              ...oldTicketDetails.ticket.metadata,
-              status,
-            },
-          },
-        }),
-      );
-    },
-  });
-
-  if (isPendingTicketDetails || isPendingUpdateStatus) return <Loading />;
-  if (isErrorTicketDetails) return <Errored error={errorTicketDetails} />;
-  if (isErrorUpdateStatus) return <Errored error={errorUpdateStatus} />;
+  if (isPendingTicketDetails) return <Loading />;
+  if (isErrorTicketDetails) {
+    if (errorTicketDetails.message.includes('No access to ticket')) {
+      return <SelfRoleAssigner ticketId={id} />;
+    }
+    return <Errored />;
+  }
 
   return (
     <>
@@ -91,7 +71,6 @@ function Tickets({ id }) {
           <TicketContent
             ticketDetails={ticketDetails}
             currentStakeholder={currentStakeholder}
-            updateStatus={updateStatusMutate}
           />
         )}
       </Container>
@@ -103,7 +82,7 @@ function Tickets({ id }) {
         <Modal.Header>Select stakeholder</Modal.Header>
         <Modal.Content>
           <SkateholderSelector
-            stakeholderList={ticketDetails?.requester_stakeholders}
+            stakeholderList={stakeholders}
             setUserSelectedStakeholder={setUserSelectedStakeholder}
           />
         </Modal.Content>

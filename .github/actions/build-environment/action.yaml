@@ -38,7 +38,7 @@ runs:
       run: | # We do this once the first image is build so it will be definitely available
         id=$(docker create ${{ steps.build.outputs.imageid }})
         docker cp $id:/rails/public/ ./assets
-        aws s3 sync ./assets s3://${{ env.ASSET_BUCKET }}/assets/${{ inputs.build_tag }}
+        aws s3 sync ./assets s3://${{ env.ASSET_BUCKET }}/assets/${{ inputs.build_tag }} --cache-control "public, max-age=31536000, immutable"
     - name: Build and push API Image
       uses: ./.github/actions/build-ruby-image
       with:

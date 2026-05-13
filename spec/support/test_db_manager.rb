@@ -17,6 +17,8 @@ class TestDbManager
     groups_metadata_teams_committees
     groups_metadata_translators
     country_band_details
+    sanity_checks
+    sanity_check_categories
   ].freeze
 
   def self.fill_tables

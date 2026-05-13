@@ -1,25 +1,20 @@
 # frozen_string_literal: true
 
-class Api::V1::ApiController < ActionController::API
-  prepend_before_action :validate_jwt_token
+class Api::V1::ApiController < ApplicationController
+  prepend_before_action :require_user!
 
-  # Manually include new Relic because we don't derive from ActionController::Base
-  include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
+  def require_user!
+    @current_user = current_user || api_user
+    raise WcaExceptions::MustLogIn.new if @current_user.nil?
+  end
 
-  def validate_jwt_token
-    auth_header = request.headers['Authorization']
-    return render json: { error: Registrations::ErrorCodes::MISSING_AUTHENTICATION }, status: :unauthorized if auth_header.blank?
+  def require_manage!(competition)
+    require_user!
+    raise WcaExceptions::NotPermitted.new("Organizer privileges required") unless @current_user.can_manage_competition?(competition)
+  end
 
-    token = auth_header.split[1]
-    begin
-      decode_result = JWT.decode token, AppSecrets.JWT_KEY, true, { algorithm: 'HS256' }
-      decoded_token = decode_result[0]
-      @current_user = User.find(decoded_token['user_id'].to_i)
-    rescue JWT::VerificationError, JWT::InvalidJtiError
-      render json: { error: Registrations::ErrorCodes::INVALID_TOKEN }, status: :unauthorized
-    rescue JWT::ExpiredSignature
-      render json: { error: Registrations::ErrorCodes::EXPIRED_TOKEN }, status: :unauthorized
-    end
+  def api_user
+    User.find_by(id: doorkeeper_token&.resource_owner_id) if doorkeeper_token&.accessible?
   end
 
   def render_error(http_status, error, data = nil)
@@ -32,5 +27,14 @@ class Api::V1::ApiController < ActionController::API
 
   rescue_from ActionController::ParameterMissing do |_e|
     render json: { error: Registrations::ErrorCodes::INVALID_REQUEST_DATA }, status: :bad_request
+  end
+
+  # Probably nicer to have some kind of errorcode/string depending on the model
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render json: { error: e.to_s, data: { model: e.model, id: e.id } }, status: :not_found
+  end
+
+  rescue_from WcaExceptions::ApiException do |e|
+    render status: e.status, json: { error: e.to_s }.reverse_merge(e.error_details.compact)
   end
 end

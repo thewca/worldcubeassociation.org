@@ -14,14 +14,13 @@ const RandomBackground = ({
 }) => {
   // Function to determine color based on probability
   const getColor = (probValue: number): string => {
-    if (probValue <= 1 / 6) return "green.solid"; // 0.0 - 0.166
-    if (probValue <= 2 / 6) return "orange.solid"; // 0.167 - 0.333
-    if (probValue <= 3 / 6) return "blue.solid"; // 0.334 - 0.5
-    if (probValue <= 4 / 6) return "yellow.solid"; // 0.501 - 0.666
-    if (probValue <= 5 / 6) return "red.solid"; // 0.667 - 0.833
-    return "transparent"; // 0.834 - 1, mock version of white
+    if (probValue <= 1 / 6) return "green"; // 0.0 - 0.166
+    if (probValue <= 2 / 6) return "orange"; // 0.167 - 0.333
+    if (probValue <= 3 / 6) return "blue"; // 0.334 - 0.5
+    if (probValue <= 4 / 6) return "yellow"; // 0.501 - 0.666
+    if (probValue <= 5 / 6) return "red"; // 0.667 - 0.833
+    return "wcaWhite"; // 0.834 - 1
   };
-  let keyVal = 0;
 
   return (
     <Box
@@ -32,12 +31,13 @@ const RandomBackground = ({
       pointerEvents="none" // Prevents interaction with the grid
     >
       <SimpleGrid columns={numCols}>
-        {[...Array(numRows)].flatMap(() =>
-          [...Array(numCols)].map((_, i) => {
+        {[...Array(numRows)].flatMap((_, row) =>
+          [...Array(numCols)].map((_, col) => {
+            const keyVal = row * numCols + col;
+
             const colorPickThreshold =
-              1 - Math.exp(-density * ((i + 1) / numCols) ** bias);
+              1 - Math.exp(-density * ((col + 1) / numCols) ** bias);
             const randomNumber = Math.random();
-            keyVal++;
 
             if (randomNumber <= colorPickThreshold) {
               const randomColor = getColor(randomNumber / colorPickThreshold);
@@ -46,7 +46,8 @@ const RandomBackground = ({
                 <Box
                   width="2.5vw"
                   height="2.5vw"
-                  bg={randomColor}
+                  colorPalette={randomColor}
+                  bg="colorPalette.1A"
                   key={keyVal}
                 />
               );

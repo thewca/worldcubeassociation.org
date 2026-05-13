@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
   Center,
@@ -7,7 +5,7 @@ import {
   IconButton,
   Link as ChakraLink,
   Image as ChakraImage,
-  VStack,
+  Stack,
 } from "@chakra-ui/react";
 import InstagramIcon from "@/components/icons/InstagramIcon";
 import FacebookIcon from "@/components/icons/FacebookIcon";
@@ -21,12 +19,37 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <Center borderTop="md" padding={3} mt={5} bg="bg">
-      <VStack>
+      <Stack align="center" gap={5} direction={{ base: "column", lg: "row" }}>
+        {/* Footer page links (future CMS) */}
+        <ChakraLink asChild textStyle="headerLink">
+          <Link href="/about">About Us</Link>
+        </ChakraLink>
+        <ChakraLink asChild textStyle="headerLink">
+          <Link href="/faq">FAQs</Link>
+        </ChakraLink>
+        <ChakraLink
+          textStyle="headerLink"
+          href="https://worldcubeassociation.org/contact"
+        >
+          Contact
+        </ChakraLink>
+        <ChakraLink
+          textStyle="headerLink"
+          href="https://github.com/thewca"
+          target="_blank"
+        >
+          GitHub
+        </ChakraLink>
+
+        <ChakraImage asChild>
+          <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
+        </ChakraImage>
+
         {/* Social Media Icons */}
-        <HStack>
+        <HStack wrap="wrap">
           <IconButton variant="ghost" asChild>
             <ChakraLink
-              variant="plainLink"
+              textStyle="headerLink"
               href="https://www.instagram.com/thewcaofficial/"
               target="_blank"
             >
@@ -35,7 +58,7 @@ export default function Footer() {
           </IconButton>
           <IconButton variant="ghost" asChild>
             <ChakraLink
-              variant="plainLink"
+              textStyle="headerLink"
               href="https://www.facebook.com/WorldCubeAssociation/"
               target="_blank"
             >
@@ -44,7 +67,7 @@ export default function Footer() {
           </IconButton>
           <IconButton variant="ghost" asChild>
             <ChakraLink
-              variant="plainLink"
+              textStyle="headerLink"
               href="https://www.twitter.com/theWCAofficial/"
               target="_blank"
             >
@@ -53,7 +76,7 @@ export default function Footer() {
           </IconButton>
           <IconButton variant="ghost" asChild>
             <ChakraLink
-              variant="plainLink"
+              textStyle="headerLink"
               href="https://github.com/thewca/worldcubeassociation.org"
               target="_blank"
             >
@@ -62,7 +85,7 @@ export default function Footer() {
           </IconButton>
           <IconButton variant="ghost" asChild>
             <ChakraLink
-              variant="plainLink"
+              textStyle="headerLink"
               href="https://www.youtube.com/channel/UC5OUMUnS8PvY1RvtB1pQZ0g"
               target="_blank"
             >
@@ -71,38 +94,16 @@ export default function Footer() {
           </IconButton>
         </HStack>
 
-        {/* Footer Links */}
-        <HStack gap={5}>
-          <ChakraImage asChild>
-            <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
-          </ChakraImage>
-          <ChakraLink asChild variant="plainLink">
-            <Link href="/about">About Us</Link>
-          </ChakraLink>
-          <ChakraLink asChild variant="plainLink">
-            <Link href="/faq">FAQs</Link>
-          </ChakraLink>
-          <ChakraLink
-            variant="plainLink"
-            href="https://worldcubeassociation.org/contact"
-          >
-            Contact
-          </ChakraLink>
-          <ChakraLink
-            variant="plainLink"
-            href="https://github.com/thewca"
-            target="_blank"
-          >
-            GitHub
-          </ChakraLink>
-          <ChakraLink asChild variant="plainLink">
+        {/* Footer legal disclaimer and links */}
+        <HStack>
+          <ChakraLink asChild textStyle="headerLink">
             <Link href="/privacy">Privacy</Link>
           </ChakraLink>
-          <ChakraLink asChild variant="plainLink">
+          <ChakraLink asChild textStyle="headerLink">
             <Link href="/disclaimer">Disclaimer</Link>
           </ChakraLink>
         </HStack>
-      </VStack>
+      </Stack>
     </Center>
   );
 }

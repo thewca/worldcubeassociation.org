@@ -71,14 +71,6 @@ else
   Capybara.run_server = EnvConfig.CAPYBARA_APP_HOST.blank?
 end
 
-Capybara::Screenshot.register_driver :playwright do |driver, path|
-  driver.save_screenshot(path)
-end
-
-Capybara::Screenshot.register_driver :playwright_debug do |driver, path|
-  driver.save_screenshot(path)
-end
-
 RSpec.configure do |config|
   # enforce consistent locale behaviour across OSes, especially Linux
   # depending on the test driver, this might not be necessary but we want

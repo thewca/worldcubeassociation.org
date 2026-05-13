@@ -10,7 +10,7 @@
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ColorPaletteSelect".
  */
-export type ColorPaletteSelect = 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey';
+export type ColorPaletteSelect = 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'white';
 /**
  * Icon name
  *
@@ -126,20 +126,25 @@ export type IconName =
  */
 export type StaticTargetLink =
   | '/'
-  | '/faq'
+  | '/about'
   | '/competitions'
   | '/delegates'
   | '/disclaimer'
   | '/documents'
   | '/export/developer'
   | '/export/results'
+  | '/faq'
   | '/incidents'
+  | '/logo'
   | '/officers-and-board'
   | '/organizations'
   | '/privacy'
   | '/regulations/about'
   | '/regulations/history'
   | '/regulations/scrambles'
+  | '/regulations/translations'
+  | '/results/rankings'
+  | '/results/records'
   | '/score-tools'
   | '/speedcubing-history'
   | '/teams-committees'
@@ -214,6 +219,7 @@ export interface Config {
     documents: Document;
     regulationsHistoryItem: RegulationsHistoryItem;
     tools: Tool;
+    'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -233,13 +239,88 @@ export interface Config {
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     regulationsHistoryItem: RegulationsHistoryItemSelect<false> | RegulationsHistoryItemSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
+  fallbackLocale:
+    | ('false' | 'none' | 'null')
+    | false
+    | null
+    | (
+        | 'en'
+        | 'ca'
+        | 'cs'
+        | 'da'
+        | 'de'
+        | 'eo'
+        | 'es-ES'
+        | 'es-419'
+        | 'eu'
+        | 'fi'
+        | 'fr'
+        | 'fr-CA'
+        | 'hr'
+        | 'hu'
+        | 'id'
+        | 'it'
+        | 'ja'
+        | 'kk'
+        | 'ko'
+        | 'nl'
+        | 'pl'
+        | 'pt'
+        | 'pt-BR'
+        | 'ro'
+        | 'ru'
+        | 'sk'
+        | 'sl'
+        | 'sv'
+        | 'th'
+        | 'uk'
+        | 'vi'
+        | 'zh-CN'
+        | 'zh-TW'
+      )
+    | (
+        | 'en'
+        | 'ca'
+        | 'cs'
+        | 'da'
+        | 'de'
+        | 'eo'
+        | 'es-ES'
+        | 'es-419'
+        | 'eu'
+        | 'fi'
+        | 'fr'
+        | 'fr-CA'
+        | 'hr'
+        | 'hu'
+        | 'id'
+        | 'it'
+        | 'ja'
+        | 'kk'
+        | 'ko'
+        | 'nl'
+        | 'pl'
+        | 'pt'
+        | 'pt-BR'
+        | 'ro'
+        | 'ru'
+        | 'sk'
+        | 'sl'
+        | 'sv'
+        | 'th'
+        | 'uk'
+        | 'vi'
+        | 'zh-CN'
+        | 'zh-TW'
+      )[];
   globals: {
     nav: Nav;
     home: Home;
@@ -248,6 +329,9 @@ export interface Config {
     'disclaimer-page': DisclaimerPage;
     'speedcubing-history-page': SpeedcubingHistoryPage;
     'about-regulations-page': AboutRegulationsPage;
+    'documents-page': DocumentsPage;
+    'faq-page': FaqPage;
+    'logo-page': LogoPage;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
@@ -257,6 +341,9 @@ export interface Config {
     'disclaimer-page': DisclaimerPageSelect<false> | DisclaimerPageSelect<true>;
     'speedcubing-history-page': SpeedcubingHistoryPageSelect<false> | SpeedcubingHistoryPageSelect<true>;
     'about-regulations-page': AboutRegulationsPageSelect<false> | AboutRegulationsPageSelect<true>;
+    'documents-page': DocumentsPageSelect<false> | DocumentsPageSelect<true>;
+    'faq-page': FaqPageSelect<false> | FaqPageSelect<true>;
+    'logo-page': LogoPageSelect<false> | LogoPageSelect<true>;
   };
   locale:
     | 'en'
@@ -292,9 +379,10 @@ export interface Config {
     | 'vi'
     | 'zh-CN'
     | 'zh-TW';
-  user: User & {
-    collection: 'users';
+  widgets: {
+    collections: CollectionsWidget;
   };
+  user: User;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -323,8 +411,9 @@ export interface UserAuthOperations {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
+  id: string;
   alt: string;
+  customLink?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -342,14 +431,14 @@ export interface Media {
  * via the `definition` "testimonials".
  */
 export interface Testimonial {
-  id: number;
-  image?: (number | null) | Media;
+  id: string;
+  image?: (string | null) | Media;
   punchline: string;
   fullTestimonial: {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -370,15 +459,14 @@ export interface Testimonial {
  * via the `definition` "announcements".
  */
 export interface Announcement {
-  id: number;
-  slug: string;
-  image?: (number | null) | Media;
+  id: string;
+  image?: (string | null) | Media;
   title: string;
   content: {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -416,23 +504,24 @@ export interface User {
     | {
         provider: string;
         providerAccountId: string;
-        type: string;
+        type: 'oidc' | 'oauth' | 'email' | 'webauthn';
         id?: string | null;
       }[]
     | null;
   updatedAt: string;
   createdAt: string;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faqCategories".
  */
 export interface FaqCategory {
-  id: number;
+  id: string;
   title: string;
   colorPalette: ColorPaletteSelect;
   relatedQuestions?: {
-    docs?: (number | FaqQuestion)[];
+    docs?: (string | FaqQuestion)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -444,10 +533,26 @@ export interface FaqCategory {
  * via the `definition` "faqQuestions".
  */
 export interface FaqQuestion {
-  id: number;
-  category: number | FaqCategory;
+  id: string;
+  category: string | FaqCategory;
   question: string;
   answer: string;
+  answerRichtext?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  answerRichtextMarkdown?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -456,7 +561,7 @@ export interface FaqQuestion {
  * via the `definition` "documents".
  */
 export interface Document {
-  id: number;
+  id: string;
   title: string;
   icon: IconName;
   link: string;
@@ -472,7 +577,7 @@ export interface Document {
  * via the `definition` "regulationsHistoryItem".
  */
 export interface RegulationsHistoryItem {
-  id: number;
+  id: string;
   version: string;
   url: string;
   changesUrl?: string | null;
@@ -485,7 +590,7 @@ export interface RegulationsHistoryItem {
  * via the `definition` "tools".
  */
 export interface Tool {
-  id: number;
+  id: string;
   name: string;
   description: string;
   homepageLink: string;
@@ -499,30 +604,47 @@ export interface Tool {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv".
+ */
+export interface PayloadKv {
+  id: string;
+  key: string;
+  data:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
         relationTo: 'media';
-        value: number | Media;
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'testimonials';
-        value: number | Testimonial;
+        value: string | Testimonial;
       } | null)
     | ({
         relationTo: 'announcements';
-        value: number | Announcement;
+        value: string | Announcement;
       } | null)
     | ({
         relationTo: 'faqCategories';
-        value: number | FaqCategory;
+        value: string | FaqCategory;
       } | null)
     | ({
         relationTo: 'faqQuestions';
-        value: number | FaqQuestion;
+        value: string | FaqQuestion;
       } | null)
     | ({
         relationTo: 'users';
@@ -530,15 +652,15 @@ export interface PayloadLockedDocument {
       } | null)
     | ({
         relationTo: 'documents';
-        value: number | Document;
+        value: string | Document;
       } | null)
     | ({
         relationTo: 'regulationsHistoryItem';
-        value: number | RegulationsHistoryItem;
+        value: string | RegulationsHistoryItem;
       } | null)
     | ({
         relationTo: 'tools';
-        value: number | Tool;
+        value: string | Tool;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -553,7 +675,7 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
     value: string | User;
@@ -576,7 +698,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -588,6 +710,7 @@ export interface PayloadMigration {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  customLink?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -650,6 +773,8 @@ export interface FaqQuestionsSelect<T extends boolean = true> {
   category?: T;
   question?: T;
   answer?: T;
+  answerRichtext?: T;
+  answerRichtextMarkdown?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -717,6 +842,14 @@ export interface ToolsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv_select".
+ */
+export interface PayloadKvSelect<T extends boolean = true> {
+  key?: T;
+  data?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
@@ -752,7 +885,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  * via the `definition` "nav".
  */
 export interface Nav {
-  id: number;
+  id: string;
   entry: (
     | {
         title: string;
@@ -767,16 +900,34 @@ export interface Nav {
               blockType: 'LinkItem';
             }
           | {
+              displayText: string;
+              targetLink: string;
+              displayIcon?: IconName;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'ExternalLinkItem';
+            }
+          | {
               title: string;
               displayIcon?: IconName;
-              entries: {
-                displayText: string;
-                targetLink: StaticTargetLink;
-                displayIcon?: IconName;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: 'LinkItem';
-              }[];
+              entries: (
+                | {
+                    displayText: string;
+                    targetLink: StaticTargetLink;
+                    displayIcon?: IconName;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'LinkItem';
+                  }
+                | {
+                    displayText: string;
+                    targetLink: string;
+                    displayIcon?: IconName;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ExternalLinkItem';
+                  }
+              )[];
               id?: string | null;
               blockName?: string | null;
               blockType: 'NestedDropdown';
@@ -799,6 +950,14 @@ export interface Nav {
         blockName?: string | null;
         blockType: 'LinkItem';
       }
+    | {
+        displayText: string;
+        targetLink: string;
+        displayIcon?: IconName;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ExternalLinkItem';
+      }
   )[];
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -808,8 +967,9 @@ export interface Nav {
  * via the `definition` "home".
  */
 export interface Home {
-  id: number;
+  id: string;
   item: (TwoBlocksBlock | FullWidthBlock)[];
+  _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -843,7 +1003,7 @@ export interface TextCardBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -855,11 +1015,10 @@ export interface TextCardBlock {
     [k: string]: unknown;
   };
   bodyMarkdown?: string | null;
-  variant: 'info' | 'hero';
   separatorAfterHeading: boolean;
   buttonText?: string | null;
   buttonLink?: string | null;
-  headerImage?: (number | null) | Media;
+  headerImage?: (string | null) | Media;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
@@ -870,8 +1029,8 @@ export interface TextCardBlock {
  * via the `definition` "AnnouncementsSectionBlock".
  */
 export interface AnnouncementsSectionBlock {
-  mainAnnouncement: number | Announcement;
-  furtherAnnouncements?: (number | Announcement)[] | null;
+  mainAnnouncement: string | Announcement;
+  furtherAnnouncements?: (string | Announcement)[] | null;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
@@ -887,7 +1046,7 @@ export interface ImageBannerBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -899,14 +1058,14 @@ export interface ImageBannerBlock {
     [k: string]: unknown;
   };
   bodyMarkdown?: string | null;
-  mainImage: number | Media;
+  mainImage: string | Media;
   colorPalette: ColorPaletteSelect;
   /**
    * Use a slightly darker nuance of the color palette
    */
   colorPaletteDarker?: boolean | null;
   headingColor?: ColorPaletteSelect;
-  bgImage?: (number | null) | Media;
+  bgImage?: (string | null) | Media;
   /**
    * The size of the background image in percent (%)
    */
@@ -921,7 +1080,7 @@ export interface ImageBannerBlock {
  * via the `definition` "ImageOnlyCardBlock".
  */
 export interface ImageOnlyCardBlock {
-  mainImage: number | Media;
+  mainImage: string | Media;
   heading?: string | null;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
@@ -934,7 +1093,7 @@ export interface ImageOnlyCardBlock {
  */
 export interface TestimonialsBlock {
   slides: {
-    testimonial: number | Testimonial;
+    testimonial: string | Testimonial;
     colorPalette: ColorPaletteSelect;
     id?: string | null;
   }[];
@@ -1019,14 +1178,14 @@ export interface FullWidthBlock {
  * via the `definition` "about-us-page".
  */
 export interface AboutUsPage {
-  id: number;
+  id: string;
   blocks: (
     | {
         content: {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1049,12 +1208,12 @@ export interface AboutUsPage {
       }
     | {
         title: string;
-        image?: (number | null) | Media;
+        image?: (string | null) | Media;
         content: {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1075,7 +1234,7 @@ export interface AboutUsPage {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1101,12 +1260,12 @@ export interface AboutUsPage {
  * via the `definition` "privacy-page".
  */
 export interface PrivacyPage {
-  id: number;
+  id: string;
   preamble: {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -1124,7 +1283,7 @@ export interface PrivacyPage {
       root: {
         type: string;
         children: {
-          type: string;
+          type: any;
           version: number;
           [k: string]: unknown;
         }[];
@@ -1138,7 +1297,7 @@ export interface PrivacyPage {
     contentMarkdown?: string | null;
     id?: string | null;
     blockName?: string | null;
-    blockType: 'privacyItem';
+    blockType: 'paragraph';
   }[];
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1148,14 +1307,14 @@ export interface PrivacyPage {
  * via the `definition` "disclaimer-page".
  */
 export interface DisclaimerPage {
-  id: number;
+  id: string;
   blocks: {
-    title?: string | null;
+    title: string;
     content: {
       root: {
         type: string;
         children: {
-          type: string;
+          type: any;
           version: number;
           [k: string]: unknown;
         }[];
@@ -1169,7 +1328,7 @@ export interface DisclaimerPage {
     contentMarkdown?: string | null;
     id?: string | null;
     blockName?: string | null;
-    blockType: 'disclaimerItem';
+    blockType: 'paragraph';
   }[];
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1179,14 +1338,15 @@ export interface DisclaimerPage {
  * via the `definition` "speedcubing-history-page".
  */
 export interface SpeedcubingHistoryPage {
-  id: number;
+  id: string;
   blocks: (
     | {
+        title: string;
         content: {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1204,7 +1364,7 @@ export interface SpeedcubingHistoryPage {
       }
     | {
         caption: string;
-        image: number | Media;
+        image: string | Media;
         id?: string | null;
         blockName?: string | null;
         blockType: 'captionedImage';
@@ -1214,7 +1374,7 @@ export interface SpeedcubingHistoryPage {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1240,14 +1400,14 @@ export interface SpeedcubingHistoryPage {
  * via the `definition` "about-regulations-page".
  */
 export interface AboutRegulationsPage {
-  id: number;
+  id: string;
   blocks: {
     title: string;
     content: {
       root: {
         type: string;
         children: {
-          type: string;
+          type: any;
           version: number;
           [k: string]: unknown;
         }[];
@@ -1263,6 +1423,99 @@ export interface AboutRegulationsPage {
     blockName?: string | null;
     blockType: 'paragraph';
   }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents-page".
+ */
+export interface DocumentsPage {
+  id: string;
+  documents: {
+    document: string | Document;
+    id?: string | null;
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq-page".
+ */
+export interface FaqPage {
+  id: string;
+  introText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  introTextMarkdown?: string | null;
+  questions: {
+    faqQuestion: string | FaqQuestion;
+    id?: string | null;
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logo-page".
+ */
+export interface LogoPage {
+  id: string;
+  blocks: (
+    | {
+        title: string;
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        contentMarkdown?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'paragraph';
+      }
+    | {
+        title: string;
+        caption: string;
+        images: {
+          image: string | Media;
+          darkBackground?: boolean | null;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'logoVariant';
+      }
+    | {
+        url: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'logoDownload';
+      }
+  )[];
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1291,6 +1544,15 @@ export interface NavSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    ExternalLinkItem?:
+                      | T
+                      | {
+                          displayText?: T;
+                          targetLink?: T;
+                          displayIcon?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     NestedDropdown?:
                       | T
                       | {
@@ -1300,6 +1562,15 @@ export interface NavSelect<T extends boolean = true> {
                             | T
                             | {
                                 LinkItem?:
+                                  | T
+                                  | {
+                                      displayText?: T;
+                                      targetLink?: T;
+                                      displayIcon?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                ExternalLinkItem?:
                                   | T
                                   | {
                                       displayText?: T;
@@ -1331,6 +1602,15 @@ export interface NavSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        ExternalLinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              displayIcon?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1347,6 +1627,7 @@ export interface HomeSelect<T extends boolean = true> {
         twoBlocks?: T | TwoBlocksBlockSelect<T>;
         fullWidth?: T | FullWidthBlockSelect<T>;
       };
+  _status?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1380,7 +1661,6 @@ export interface TextCardBlockSelect<T extends boolean = true> {
   heading?: T;
   body?: T;
   bodyMarkdown?: T;
-  variant?: T;
   separatorAfterHeading?: T;
   buttonText?: T;
   buttonLink?: T;
@@ -1575,7 +1855,7 @@ export interface PrivacyPageSelect<T extends boolean = true> {
   blocks?:
     | T
     | {
-        privacyItem?:
+        paragraph?:
           | T
           | {
               title?: T;
@@ -1597,7 +1877,7 @@ export interface DisclaimerPageSelect<T extends boolean = true> {
   blocks?:
     | T
     | {
-        disclaimerItem?:
+        paragraph?:
           | T
           | {
               title?: T;
@@ -1622,6 +1902,7 @@ export interface SpeedcubingHistoryPageSelect<T extends boolean = true> {
         paragraph?:
           | T
           | {
+              title?: T;
               content?: T;
               contentMarkdown?: T;
               id?: T;
@@ -1670,6 +1951,92 @@ export interface AboutRegulationsPageSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents-page_select".
+ */
+export interface DocumentsPageSelect<T extends boolean = true> {
+  documents?:
+    | T
+    | {
+        document?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq-page_select".
+ */
+export interface FaqPageSelect<T extends boolean = true> {
+  introText?: T;
+  introTextMarkdown?: T;
+  questions?:
+    | T
+    | {
+        faqQuestion?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logo-page_select".
+ */
+export interface LogoPageSelect<T extends boolean = true> {
+  blocks?:
+    | T
+    | {
+        paragraph?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              contentMarkdown?: T;
+              id?: T;
+              blockName?: T;
+            };
+        logoVariant?:
+          | T
+          | {
+              title?: T;
+              caption?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    darkBackground?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoDownload?:
+          | T
+          | {
+              url?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -111,14 +111,14 @@ class IncidentsController < ApplicationController
     end
 
     def incident_params
-      params.require(:incident).permit(
-        :title,
-        :private_description,
-        :private_wrc_decision,
-        :public_summary,
-        :tags,
-        :digest_worthy,
-        incident_competitions_attributes: %i[id competition_id comments _destroy],
+      params.expect(
+        incident: [:title,
+                   :private_description,
+                   :private_wrc_decision,
+                   :public_summary,
+                   :tags,
+                   :digest_worthy,
+                   { incident_competitions_attributes: [%i[id competition_id comments _destroy]] }],
       )
     end
 end

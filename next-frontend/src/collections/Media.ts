@@ -11,6 +11,11 @@ export const Media: CollectionConfig = {
       type: "text",
       required: true,
     },
+    {
+      name: "customLink",
+      label: "Custom Link",
+      type: "text",
+    },
   ],
   upload: true,
 };

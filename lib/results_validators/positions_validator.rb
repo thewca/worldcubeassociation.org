@@ -18,7 +18,7 @@ module ResultsValidators
         competition = competition_data.competition
         results_for_comp = competition_data.results
 
-        results_for_comp.group_by { |r| "#{r.event_id}-#{r.round_type_id}" }.each do |round_id, results_for_round|
+        results_for_comp.group_by(&:round_human_id).each do |round_id, results_for_round|
           expected_pos = 0
           last_result = nil
           # Number of tied competitors, *without* counting the first one
@@ -29,16 +29,7 @@ module ResultsValidators
             # so we simply need to check that the position stored matched the expected one
 
             # Unless we find two exact same results, we increase the expected position
-            tied = false
-            if last_result
-              tied = if %w[a m].include?(result.format_id)
-                       # If the ranking is based on average, look at both average and best.
-                       result.average == last_result.average && result.best == last_result.best
-                     else
-                       # else we just compare the bests
-                       result.best == last_result.best
-                     end
-            end
+            tied = result.tied_with?(last_result)
             if tied
               number_of_tied += 1
             else

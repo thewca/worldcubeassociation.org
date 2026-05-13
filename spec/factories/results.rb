@@ -4,17 +4,10 @@ FactoryBot.define do
   resultable_instance_members = lambda { |*_args|
     transient do
       competition { FactoryBot.create(:competition, event_ids: ["333oh"]) }
-      skip_round_creation { false }
     end
 
     trait :skip_validation do
       to_create { |res| res.save(validate: false) }
-    end
-
-    after(:build) do |result, options|
-      # In order to be valid, a result must have a round.
-      # Make sure it exists before going through validations.
-      FactoryBot.create(:round, competition: result.competition, event_id: result.event_id, format_id: result.format_id) if !result.round && !options.skip_round_creation
     end
 
     competition_id { competition.id }
@@ -22,13 +15,10 @@ FactoryBot.define do
     event_id { "333oh" }
     round_type_id { "f" }
     format_id { "a" }
-    value1 { best }
-    value2 { average }
-    value3 { average }
-    value4 { average }
-    value5 { average }
+
     best { 3000 }
     average { 5000 }
+    round { association(:round, competition: competition, event_id: event_id, format_id: format_id) }
 
     trait :mbf do
       event_id { "333mbf" }
@@ -78,16 +68,39 @@ FactoryBot.define do
       value3 { -1 }
     end
 
+    trait :bo5 do
+      format_id { "5" }
+      average { best }
+      value1 { best }
+      value2 { best }
+      value3 { best }
+      value4 { best }
+      value5 { best }
+    end
+
+    trait :blind_bo5 do
+      bo5
+      event_id { "333bf" }
+    end
+
+    trait :blind_dnf_bo5 do
+      blind_bo5
+      average { -1 }
+      value3 { -1 }
+      value4 { -1 }
+    end
+
     trait :over_cutoff do
       transient do
         cutoff { nil }
+        cutoff_threshold { 100 }
       end
-      value1 { cutoff.attempt_result + 100 }
-      value2 { cutoff.attempt_result + 200 }
+      value1 { cutoff.attempt_result + cutoff_threshold }
+      value2 { cutoff.attempt_result + (2 * cutoff_threshold) }
       value3 { 0 }
       value4 { 0 }
       value5 { 0 }
-      best { cutoff.attempt_result + 100 }
+      best { cutoff.attempt_result + cutoff_threshold }
       average { 0 }
       round_type_id { "c" }
     end
@@ -95,6 +108,12 @@ FactoryBot.define do
 
   factory :inbox_result do
     instance_eval(&resultable_instance_members)
+
+    value1 { best }
+    value2 { average }
+    value3 { average }
+    value4 { average }
+    value5 { average }
 
     transient do
       person { FactoryBot.create(:inbox_person, competition_id: competition.id) }
@@ -117,6 +136,15 @@ FactoryBot.define do
 
   factory :result do
     instance_eval(&resultable_instance_members)
+
+    transient do
+      value1 { best }
+      value2 { average }
+      value3 { average }
+      value4 { average }
+      value5 { average }
+    end
+
     transient do
       person { FactoryBot.create(:person) }
     end
@@ -126,5 +154,13 @@ FactoryBot.define do
     country_id { person.country_id }
     regional_single_record { nil }
     regional_average_record { nil }
+
+    after(:build) do |result, builder|
+      legacy_attempts = (1..5).map { builder.public_send(:"value#{it}") }
+
+      Result.unpack_attempt_attributes(legacy_attempts).each do |at|
+        result.result_attempts.build(**at)
+      end
+    end
   end
 end

@@ -4,7 +4,28 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+    branches:
+      - '**'
+    paths:
+      - 'app/**/*'
+      - 'config/**/*'
+      - 'db/**/*'
+      - 'public/**/*'
+      - 'vendor/**/*'
+      - '**/*.rb'
+      - '**/*.erb'
+      - '**/*.rake'
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - 'Rakefile'
+      - '.ruby-version'
+      - 'package.json'
+      - 'yarn.lock'
+      - '.env*'
+      - 'docker-compose.yml'
+      - 'Dockerfile*'
+      - '.github/workflows/ruby-test.yml'
+      - 'lib/sanity_check_sql/**/*.sql'
 
 jobs:
   test:
@@ -13,11 +34,12 @@ jobs:
       RACK_ENV: test
       RAILS_ENV: test
       NODE_ENV: test
+      NODE_MAJOR: 24
       DISABLE_SPRING: 1
       PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
       CAPYBARA_APP_HOST: "" # Explicitly set a blank value to override our default Docker container setup
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
       - name: Set up ImageMagick and Libvips # This is not included in GitHub runners by default anymore
         run: |
@@ -31,9 +53,9 @@ jobs:
         run: bin/bundle install
       - name: Set up Corepack/Yarn
         run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_MAJOR }}
           cache: 'yarn'
       - name: Install fresh Yarn packages
         run: bin/yarn install
@@ -49,13 +71,13 @@ jobs:
         run: bin/rake db:reset
       - name: Pre-compile assets for frontend tests
         run: |
-          bin/bundle exec i18n export
+          bin/i18n export
           bin/rake assets:precompile
       - name: Cache Playwright runnables
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}-capybara
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
         run: bin/yarn playwright install --with-deps --no-shell chromium
       - name: Run tests
@@ -66,7 +88,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           fail-on-error: false
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always() && steps.rspec.outcome == 'failure'
         with:
           name: capybara-screenshots

@@ -16,7 +16,7 @@ import useStoredState from "@/lib/hooks/useStoredState";
 import { getDatesBetweenInclusive } from "@/lib/wca/dates";
 import { Alert, Box, VStack } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
-import EventSelector from "@/components/EventSelector";
+import { FormEventSelector } from "@/components/EventSelector";
 
 interface ScheduleProps {
   wcifSchedule: WcifSchedule;
@@ -114,7 +114,7 @@ export default function Schedule({
         </Alert.Root>
       )}
 
-      <Alert.Root status="info" colorPalette="grey">
+      <Alert.Root status="info" colorPalette="gray">
         <Alert.Content>
           <Alert.Title>
             {t("competitions.schedule.schedule_change_warning")}
@@ -136,7 +136,7 @@ export default function Schedule({
       />
 
       <Box border="sm" borderRadius="l3" padding="4">
-        <EventSelector
+        <FormEventSelector
           title={t("competitions.competition_form.events")}
           eventList={availableEventIds}
           selectedEvents={activeEventIds.asArray}

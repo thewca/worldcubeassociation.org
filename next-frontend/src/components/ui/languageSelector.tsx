@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, Button, ClientOnly, Skeleton, Icon } from "@chakra-ui/react";
+import { Menu, Button, ClientOnly, Skeleton } from "@chakra-ui/react";
 import React from "react";
 import { LuChevronDown } from "react-icons/lu";
 import {
@@ -8,9 +8,8 @@ import {
   fallbackLng,
   storageKey,
 } from "@/lib/i18n/settings";
-import availableLocales from "@/lib/i18n/locales/available.json";
+import { availableLocales } from "@/lib/i18n/settings";
 import Cookies from "js-cookie";
-import Flag from "react-world-flags";
 
 export default function Wrapper() {
   return (
@@ -49,9 +48,6 @@ const LanguageSelector = () => {
                 key={lang}
                 onClick={() => handleChangeLocale(lang)}
               >
-                <Icon size="sm">
-                  <Flag code={config.flag_id} />
-                </Icon>
                 {config.name}
               </Menu.Item>
             ))}

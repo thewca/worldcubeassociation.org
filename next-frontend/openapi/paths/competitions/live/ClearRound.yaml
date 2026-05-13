@@ -1,0 +1,31 @@
+put:
+  summary: Clears a round deleting all results
+  tags:
+    - live
+  operationId: clearRound
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: roundId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returns number of results clear
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - status
+              - recreated_rows
+            properties:
+              status:
+                type: string
+              recreated_rows:
+                type: number

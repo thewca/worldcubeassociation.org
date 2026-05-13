@@ -132,6 +132,8 @@ it:
     '2': Best of 2
     #original_hash: 21f623c
     '3': Best of 3
+    #original_hash: cca816d
+    '5': Best of 5
     #original_hash: 2342d2b
     a: Average of 5
     #original_hash: 940c82d
@@ -143,10 +145,14 @@ it:
       '2': Bo2
       #original_hash: b41f36f
       '3': Bo3
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      #original_hash: 60827cb
+      h: H2H
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -457,6 +463,10 @@ it:
         region: Regione
         #original_hash: e3fc6e9
         subRegion: Subregion
+        #original_hash: a1ba702
+        receive_developer_mails: >-
+          Desidero ricevere notifiche relative alle modifiche apportate alle
+          risorse software WCA.
         #original_hash: 730db33
         receive_delegate_reports: >-
           Desidero ricevere per email i Report dei Delegati sulle Competizioni
@@ -777,16 +787,22 @@ it:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: 27c2251
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          Questo è limitato alle notifiche relative a cambiamenti di versione
+          significativi di risorse quali esportazioni di dati, schema WCIF e API
+          pubbliche. Consigliato agli sviluppatori che gestiscono software
+          basati su questi strumenti.
+        #original_hash: c564b74
         receive_delegate_reports: >-
-          Se sei un Delegato Senior, o un membro del WRC o del WQAC, riceverai i
-          Report dei Delegati di default. Nota: la modifica potrebbe richiedere
-          fino a un'ora per avere effetto.
-        #original_hash: 364624c
+          Se sei un Delegato Senior, o un membro del WRC o del WQAC, riceverai
+          di default i Report dei Delegati. Nota: la modifica potrebbe
+          richiedere fino a 12 ore per avere effetto.
+        #original_hash: 0017d38
         delegate_reports_region: >-
           Se desideri ricevere tutti i report, lascia vuoto questo campo
           (l'opzione più in alto nel menù a tendina). Nota: questa modifica può
-          richiedere fino a un'ora per avere effetto.
+          richiedere fino a 12 ore per avere effetto.
         #original_hash: 0627e5c
         otp_attempt: >-
           Controlla la tua applicazione mobile per una password temporanea, o
@@ -854,15 +870,15 @@ it:
           incidenti ti sembrano generici, riporta almeno il caso che ritieni più
           rappresentativo o degno di nota. Assicurati di spuntare le caselle in
           basso se desideri ricevere un feedback.
-        #original_hash: 8af00aa
+        #original_hash: f2309fc
         setup_images: >-
-          Allega almeno %{image_count} immagini che illustrano l'allestimento
-          della competizione (area scrambling, postazioni di gara, ecc.). È
-          possibile selezionare più file contemporaneamente. È possibile
-          eliminare le immagini solo quando sono state caricate un numero
-          sufficiente di altre immagini (se si desidera sostituire un'immagine,
-          è necessario caricare prima quella nuova e poi eliminare quella
-          vecchia).
+          Devi allegare almeno %{image_count} immagini che illustrino
+          l'allestimento delle aree di scrambling e di competizione (ulteriori
+          immagini sono ben accette). È possibile selezionare più file
+          contemporaneamente. È possibile eliminare le immagini solo quando sono
+          state caricate un numero sufficiente di altre immagini (se si desidera
+          sostituire un'immagine, è necessario caricare prima quella nuova e poi
+          eliminare quella vecchia).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1006,6 +1022,15 @@ it:
         #original_hash: 79ccfe2
         dob_invalid: è mal formattato
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: Si è verificato un errore nel caricamento della pagina
+      #original_hash: 22dfe12
+      description: >-
+        Se l'errore persiste, segnalarlo al WST fornendo i dettagli indicati di
+        seguito
+      #original_hash: 20be860
+      details: Dettagli errore
     messages:
       #original_hash: dc2367c
       wrong_size: 'è delle dimensioni sbagliate (dovrebbe essere %{file_size})'
@@ -1213,6 +1238,22 @@ it:
         400_contact_html: >-
           Se ritieni che ci sia un errore, <a href=%{contact_url}>clicca qui</a>
           per segnalarlo.
+        #original_hash: 508c106
+        comp_not_found: Competizione non trovata
+        #original_hash: c0e86d5
+        comp_not_found_action: >-
+          Non siamo riusciti a trovare una competizione con l'ID “%{comp_id}”.
+          Cercala tramite la barra di ricerca.
+        #original_hash: 695f7ba
+        comp_not_found_action_2: >-
+          Se sei arrivato qui tramite un link da un altro sito, ti preghiamo di
+          segnalare loro che il link non è corretto.
+        #original_hash: 7f8f419
+        session_expired: Sessione scaduta
+        #original_hash: f3e688a
+        session_expired_action: >-
+          La tua sessione è scaduta. Aggiorna la pagina, riprova l'operazione o
+          effettua nuovamente l'accesso per continuare.
     doorkeeper:
       applications:
         help:
@@ -1764,12 +1805,13 @@ it:
     support:
       #original_hash: 610edba
       title: Sostieni la WCA
-      #original_hash: 1aaf818
+      #original_hash: c254335
       text: >-
         La World Cube Association è un'organizzazione no-profit gestita al 100%
         da volontari. Per questo accettiamo volentieri le vostre donazioni per
-        espandere i nostri orizzonti e creare competizioni sempre migliori in
-        tutto il mondo.
+        perseguire la nostra missione di rafforzare la community di speedcubing
+        nel mondo e garantire un ambiente divertente, equo e competitivo per
+        tutti.
       #original_hash: 65c84ec
       button: Scopri di più su come sostenere la WCA
   users:
@@ -2019,6 +2061,8 @@ it:
           href='%{delegate_url}'>Delegato</a> se hai bisogno di effettuare
           modifiche.
         reason:
+          #original_hash: 2e22133
+          no_access: non hai i permessi per modificare l'utente
           #original_hash: 370ff12
           assigned: hai un WCA ID assegnato
           #original_hash: 1c4670f
@@ -2743,8 +2787,6 @@ it:
         disponibili a breve.
       #original_hash: e205d73
       results_already_posted: I risultati sono stati già pubblicati.
-      #original_hash: 376f461
-      results_posted: Risultati pubblicati con successo!
       #original_hash: afe3a23
       results_preview_alert: Stai visualizzando risultati che non sono stati ancora pubblicati.
       #original_hash: 16dd227
@@ -2806,6 +2848,16 @@ it:
         partecipanti in lista d'attesa. Se stai utilizzando una lista d'attesa,
         ti preghiamo di indicare una scadenza. Se non è prevista una lista
         d'attesa, ricorda di specificarlo nei requisiti di iscrizione.
+    live:
+      #original_hash: 10d1a3c
+      title: Risultati in diretta
+      connection:
+        #original_hash: f92b311
+        initialized: Connessione in inizializzazione
+        #original_hash: 66d44d4
+        connected: Connesso. I risultati sono in fase di aggiornamento
+        #original_hash: 53abaa2
+        disconnected: Connessione persa. I risultati non saranno aggiornati
     my_competitions:
       #original_hash: 5c6d3ea
       title: Le mie competizioni
@@ -2962,12 +3014,14 @@ it:
         Ti consigliamo di specificare in fase di iscrizione gli eventi a cui
         vuoi partecipare. Potrai comunque modificare i tuoi eventi fino al
         giorno della competizione.
-      #original_hash: cf7be5d
+      #original_hash: 51ef4f3
       on_the_spot_registration_fee_html: >-
-        L'iscrizione in loco sarà disponibile ad un prezzo base di
-        %{on_the_spot_base_entry_fee}.
-      #original_hash: 1637bea
-      on_the_spot_registration_free: Le iscrizioni in loco saranno accettate gratuitamente.
+        Le iscrizioni in loco saranno accettate se ci saranno posti disponibili,
+        ad una quota di iscrizione base di %{on_the_spot_base_entry_fee}.
+      #original_hash: 2b4ea65
+      on_the_spot_registration_free: >-
+        Le iscrizioni in loco saranno accettate gratuitamente se ci saranno
+        posti disponibili.
       #original_hash: f5f687d
       no_on_the_spot_registration: Non saranno accettate iscrizioni in loco.
       #original_hash: 4df139d
@@ -3238,10 +3292,10 @@ it:
       is_visible: >-
         Questa competizione è visibile al pubblico, qualsiasi modifica tu faccia
         sarà visibile da chiunque!
-      #original_hash: 1039850
+      #original_hash: eb98c2c
       pending_confirmation_html: >-
-        Compila tutti i campi e fai cliccare Conferma al tuo Delegato quando sei
-        pronto per far sì che %{contact} approvi questa competizione.
+        Compila tutti i campi e chiedi al tuo Delegato di cliccare Conferma
+        quando sei pronto per far sì che %{contact} approvi questa competizione.
       #original_hash: 8966fd0
       submit_create_value: Crea Competizione
       #original_hash: 40b0dfd
@@ -3531,13 +3585,11 @@ it:
           enabled: >-
             È richiesto un limite di partecipanti. Soltanto le competizioni FMC
             su più sedi possono non avere un limite di partecipanti.
-          #original_hash: b7b599b
+          #original_hash: 6127d47
           count: >-
-            Il numero massimo di partecipanti per questa competizione. Per ora
-            questo numero è solo informativo, e non impedisce ancora ad altre
-            persone di iscriversi. Stiamo lavorando per aggiungere nel flusso di
-            iscrizione un supporto esplicito per questo dato, ma è necessario
-            ancora del lavoro.
+            Il numero massimo di partecipanti consentito per questa
+            competizione. Questo limite è imposto e rispettato dal sistema di
+            registrazioni integrato.
           #original_hash: 4bd7102
           reason: >-
             Quale è la motivazione del limite massimo di partecipanti?
@@ -4384,8 +4436,6 @@ it:
     cancelled_by_html: 'Cancellata da %{name} il %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: Sei sicuro di voler cancellare questa competizione?
-    #original_hash: 01de5ee
-    post_results: Posta i risultati
     #original_hash: b6513f1
     results_posted_by_html: 'Postato da %{poster_name} il %{date_time}'
     #original_hash: a6b5efe
@@ -4429,18 +4479,16 @@ it:
           fermerà e il risultato sarà DNF (vedi %{regulation_link}).
         #original_hash: 83d204f
         regulation_link_text: 'Regola %{number}'
-        #original_hash: bd0e4a9
-        guideline_link_text: 'Linea Guida %{number}'
         #original_hash: b2a983a
         cumulative_time_limit: time limit cumulativo
         #original_hash: d47f11a
         cumulative_one_round_html: >-
           Il %{cumulative_time_limit} potrebbe essere applicato (vedi
           %{regulation_link}).
-        #original_hash: c6190b6
+        #original_hash: 44f85f0
         cumulative_across_rounds_html: >-
           Il %{cumulative_time_limit} può essere applicato suddiviso su più
-          turni (vedi %{guideline_link}).
+          turni (vedi %{regulation_link}).
         #original_hash: e8d17df
         cutoff_html: >-
           Il risultato da battere per procedere alla seconda fase di un turno
@@ -4583,8 +4631,8 @@ it:
         newcomer_checks: Controlli per gli esordienti
         #original_hash: f3d6278
         submit_results: Manda risultati
-        #original_hash: e2d046b
-        match_scrambles: Invia gli scramble
+        #original_hash: dd2e98f
+        upload_scrambles: Carica scramble
         #original_hash: 4c9f914
         delegate_report: Report
         #original_hash: b233e77
@@ -4738,11 +4786,15 @@ it:
     #original_hash: 10bcdbd
     connect_wca_id: Connetti il tuo WCA ID con il tuo account!
   payments:
+    #original_hash: cfeba03
+    header: Storico pagamenti
     messages:
       #original_hash: 2eac1cb
       charge_refunded: Il pagamento è stato rimborsato
       #original_hash: 1e1d219
       charges_refunded: Tutte le spese sono state rimborsate
+      #original_hash: c677bd3
+      no_payments: Non sono stati effettuati pagamenti per questa iscrizione.
     errors:
       refund:
         #original_hash: 66475ae
@@ -4763,6 +4815,8 @@ it:
       paypal: PayPal
       #original_hash: 4d08ec5
       stripe: Stripe
+      #original_hash: 5cd5075
+      manual: Manuale/Esterno
     payment_setup:
       #original_hash: 0aa09ee
       external_dashboard: '%{provider} Dashboard'
@@ -4786,6 +4840,8 @@ it:
       confirm_account_disconnect: >-
         Sei sicuro di voler disconnettere l'account %{provider}? Questa azione
         non può essere annullata.
+      #original_hash: a7bbd29
+      edit_account: Modifica account
       #original_hash: ddea6cf
       supported_currency_warning: >-
         Assicurati che la valuta selezionata sia supportata dal tuo metodo di
@@ -4797,8 +4853,10 @@ it:
       provider_heading: 'Pagamenti %{provider}'
       #original_hash: 40a098a
       accept_payments_header: Accetta pagamenti per le iscrizioni
-      #original_hash: 7ebe178
-      connect_button: 'Connetti con %{provider}'
+      #original_hash: ebf1ae6
+      manual_payments_header: Configura i pagamenti manuali
+      #original_hash: 399052b
+      connect_button: 'Configura %{provider}'
       connect_account_info:
         #original_hash: f3fdb64
         stripe: >-
@@ -4812,6 +4870,12 @@ it:
           necessario un account PayPal Business. Se non possiedi un account
           PayPal Business, clicca il pulsante qui sotto e verrai guidato alla
           creazione dell'account.
+        #original_hash: d32cb06
+        manual: >-
+          Specifica le istruzioni di pagamento per i partecipanti. I
+          partecipanti potranno comunicare quando hanno effettuato il pagamento
+          e fornire una prova di pagamento che potrai verificare attraverso il
+          servizio di pagamento esterno che utilizzi.
       connect_account_warning:
         #original_hash: 53adda3
         stripe: >-
@@ -4821,6 +4885,8 @@ it:
         paypal: >-
           Connettendo il tuo account PayPal, abiliti il sito WCA a inoltrare i
           pagamenti ed emettere i rimborsi direttamente sul tuo conto PayPal.
+        #original_hash: da39a3e
+        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         Per questa competizione si accettano pagamenti tramite %{provider}. I
@@ -4853,6 +4919,16 @@ it:
           display_name: Nome
           #original_hash: 84add5b
           primary_email: Email
+        manual:
+          #original_hash: e5f0dfd
+          payment_instructions: >-
+            Istruzioni di pagamento (verranno mostrate nella pagina della
+            competizione)
+          #original_hash: 5e7242c
+          payment_reference_label: >-
+            Quali informazioni deve fornire l'utente affinché tu possa
+            identificare il suo pagamento? (ad es. numero di riferimento del
+            pagamento, ID conto, ecc.)
         #original_hash: 08d2e98
         fallback_not_applicable: Non disponibile
   persons:
@@ -4954,6 +5030,8 @@ it:
     forum_enter_dob: >-
       Per accedere al forum è necessario inserire la data di nascita. Inserisci
       la tua data di nascita e poi prova ad accedere nuovamente.
+    #original_hash: 56e3bad
+    refresh: Aggiorna
   faq:
     #original_hash: d790b40
     title: Domande Frequenti
@@ -5201,7 +5279,7 @@ it:
     spirit_footer: Spirito WCA
     #original_hash: c1781ee
     our_goals_title: I nostri obiettivi
-    #original_hash: 375db0f
+    #original_hash: c1144d4
     our_goals_content_html: >-
       <p>La World Cube Association intende dare ai giovani di tutto il mondo
       l'opportunità di partecipare e contribuire alla community, attraverso la
@@ -5209,9 +5287,9 @@ it:
       Crediamo che le esperienze alle competizioni e all'interno della nostra
       community siano opportunità di crescita per i giovani coinvolti, e che
       l'offerta dei nostri eventi a nuovi gruppi di persone consenta alla nostra
-      community di rafforzarsi. È possibile trovare un documento con gli
-      obiettivi e le strategie del Board per la WCA <a
-      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">here</a>.</p>
+      community di rafforzarsi. È possibile trovare un documento con il piano
+      strategico del Board per la WCA <a
+      href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">qui</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Prospettive future per la WCA?
     #original_hash: 3312277
@@ -5326,8 +5404,8 @@ it:
     codeofconduct: Codice di Condotta
     #original_hash: 4f05e8f
     finances: Finanze
-    #original_hash: d1b1406
-    vision_and_strategy: Obiettivi e strategie
+    #original_hash: c1e8f94
+    strategic_plan: Piano strategico
   education:
     #original_hash: 746e863
     title: Guide WCA per l'apprendimento
@@ -6190,6 +6268,12 @@ it:
     results_export:
       #original_hash: 15d00e1
       heading: Esportazione Risultati WCA
+      #original_hash: 733df42
+      deprecation_warning: >-
+        AVVISO DI OBSOLESCENZA: La versione %{old_version} dell'esportazione dei
+        risultati è stata dichiarata obsoleta e il supporto verrà interrotto a
+        partire dal %{deprecation_date}. Si prega di passare alla versione
+        %{new_version} prima di tale data.
       #original_hash: f9fe9df
       description: >-
         In questa pagina offriamo il download dei risultati WCA in diversi
@@ -6199,6 +6283,12 @@ it:
         questo modo puoi controllare di possedere la versione più recente.
       #original_hash: 4f59283
       permalink: permalink
+      #original_hash: 6a9f5e6
+      permalink_note: >-
+        Nota: i permalink forniscono l'esportazione dei risultati più recenti
+        all'interno di una determinata versione, ad esempio il permalink v2
+        restituirà l'ultima esportazione v2, ma rimarrà su v2 anche quando verrà
+        rilasciata la v3.
       file_formats:
         #original_hash: b086d79
         sql: Dichiarazioni SQL per l'importazione in un database SQL.
@@ -6417,7 +6507,7 @@ it:
       regulation_9m3_error: >-
         Il turno %{round_id} ha meno di 8 partecipanti ma ha almeno un turno
         successivo, che non è consentito secondo la Regola 9m3.
-      #original_hash: e12138a
+      #original_hash: 44fbfde
       regulation_9p1_error: >-
         Turno %{round_id}: sono stati eliminati meno del 25% dei partecipanti,
         che non è consentito secondo la Regola 9p1.
@@ -6518,3 +6608,9 @@ it:
         [%{round_id}] Questo turno ha un numero di set di scramble diverso da
         quello specificato nella pagina di gestione eventi. Correggi con il
         numero di set che sono stati utilizzati.
+  tickets:
+    type:
+      #original_hash: e43f273
+      edit_person: Modifica persona
+      #original_hash: 5fb2137
+      competition_result: Risultati della competizione

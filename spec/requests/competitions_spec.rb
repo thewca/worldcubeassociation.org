@@ -338,7 +338,7 @@ RSpec.describe "competitions" do
           update_params = build_competition_update(competition, championships: %w[world _Europe])
           patch competition_path(competition), params: update_params, as: :json
 
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
 
           expect(competition.reload.championships.count).to eq 0
         end
@@ -356,7 +356,7 @@ RSpec.describe "competitions" do
           update_params = build_competition_update(competition, registration: { waitingListDeadlineDate: new_deadline_date.iso8601 })
           patch competition_path(competition), params: update_params, as: :json
 
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
 
           expect(competition.reload.waiting_list_deadline_date).to eq original_deadline_date
         end
@@ -386,7 +386,7 @@ RSpec.describe "competitions" do
           update_params = build_competition_update(competition, registration: { waitingListDeadlineDate: new_deadline_date.iso8601 })
           patch competition_path(competition), params: update_params, as: :json
 
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
 
           expect(competition.reload.waiting_list_deadline_date).to eq original_deadline_date
         end
@@ -415,7 +415,7 @@ RSpec.describe "competitions" do
             update_params = build_competition_update(competition, series: { competitionIds: [competition.id, partner_competition.id] })
             patch competition_path(competition), params: update_params, as: :json
 
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
 
             competition.reload
 
@@ -435,7 +435,7 @@ RSpec.describe "competitions" do
                                                      })
 
             patch competition_path(competition), params: update_params, as: :json
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
 
             competition.reload
 
@@ -450,7 +450,7 @@ RSpec.describe "competitions" do
             update_params = build_competition_update(competition, series: nil)
             patch competition_path(competition), params: update_params, as: :json
 
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
 
             competition.reload
             series.reload

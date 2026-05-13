@@ -1,4 +1,5 @@
-import availableLocales from "./locales/available.json";
+import availableLocales from "../staticData/available_locales.json";
+export { default as availableLocales } from "../staticData/available_locales.json";
 
 type AvailableLocale = typeof availableLocales;
 

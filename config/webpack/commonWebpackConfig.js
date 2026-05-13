@@ -49,7 +49,11 @@ const customConfig = {
       },
     },
   },
-  ignoreWarnings: [/Module not found: Error: Can't resolve 'react-dom\/client'/],
+  ignoreWarnings: [
+    /Module not found: Error: Can't resolve 'react-dom\/client'/,
+    // cf. https://github.com/Hacker0x01/react-datepicker/issues/6181
+    /the request of a dependency is an expression/,
+  ],
 };
 
 // Copy the object using merge b/c the baseClientWebpackConfig and commonOptions are mutable globals

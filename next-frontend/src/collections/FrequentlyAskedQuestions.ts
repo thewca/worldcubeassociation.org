@@ -1,4 +1,6 @@
 import { CollectionConfig } from "payload";
+import { markdownConvertedField } from "@/collections/helpers";
+import { colorPaletteSelect } from "@/blocks/utils";
 
 export const FaqCategories: CollectionConfig = {
   slug: "faqCategories",
@@ -8,13 +10,7 @@ export const FaqCategories: CollectionConfig = {
       type: "text",
       required: true,
     },
-    {
-      name: "colorPalette",
-      type: "select",
-      required: true,
-      interfaceName: "ColorPaletteSelect",
-      options: ["blue", "red", "green", "orange", "yellow", "grey"],
-    },
+    colorPaletteSelect,
     {
       name: "relatedQuestions",
       type: "join",
@@ -46,6 +42,11 @@ export const FaqQuestions: CollectionConfig = {
       type: "textarea",
       required: true,
     },
+    {
+      name: "answerRichtext",
+      type: "richText",
+    },
+    markdownConvertedField("answerRichtext"),
   ],
   admin: {
     useAsTitle: "question",

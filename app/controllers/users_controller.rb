@@ -6,7 +6,8 @@ class UsersController < ApplicationController
   before_action :check_recent_auth_dangerous, only: %i[update], if: :dangerous_profile_change?
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
   before_action :redirect_if_cannot_edit_user, only: %i[edit update]
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search merge]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search]
+  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id merge clear_claim_wca_id]
   before_action -> { check_edit_access }, only: %i[show_for_edit update_user_data]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
@@ -109,6 +110,60 @@ class UsersController < ApplicationController
     render status: :ok, json: { success: true }
   end
 
+  def confirm_wca_id
+    user = User.find(params.require(:userId))
+    wca_id = params.require(:wcaId)
+    person = Person.find_by(wca_id: wca_id)
+
+    if person.nil?
+      error = "WCA ID #{wca_id} does not exist."
+      status = :not_found
+    elsif user.wca_id.present?
+      error = "User already has a WCA ID: #{user.wca_id}."
+      status = :bad_request
+    elsif person.user.present?
+      error = "WCA ID #{wca_id} is already assigned to another user."
+      status = :bad_request
+    end
+
+    respond_to do |format|
+      if error.present?
+        format.json { render status: status, json: { error: error } }
+        format.html { redirect_to edit_user_path(user), flash: { danger: error } }
+      else
+        ActiveRecord::Base.transaction do
+          user.assign_wca_id(wca_id)
+          user.update!(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+        end
+        format.json { render status: :ok, json: { success: true } }
+        format.html { redirect_to edit_user_path(user), flash: { success: "Successfully confirmed WCA ID #{wca_id}." } }
+      end
+    end
+  end
+
+  def clear_claim_wca_id
+    user = User.find(params.require(:userId))
+    wca_id = user.unconfirmed_wca_id
+
+    user.update!(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+
+    redirect_to edit_user_path(user), flash: { success: "Successfully cleared claim for WCA ID #{wca_id}." }
+  end
+
+  def assign_wca_id
+    user = User.find(params.require(:userId))
+    wca_id = params.require(:wcaId)
+    person = Person.find_by(wca_id: wca_id)
+
+    return render status: :not_found, json: { error: "WCA ID #{wca_id} does not exist" } if person.nil?
+    return render status: :bad_request, json: { error: "User already has a WCA ID: #{user.wca_id}" } if user.wca_id.present?
+    return render status: :bad_request, json: { error: "WCA ID #{wca_id} is already assigned to user #{person.user.id}" } if person.user.present?
+
+    user.assign_wca_id(wca_id)
+
+    render status: :ok, json: { success: true }
+  end
+
   private def user_to_edit
     User.find_by(id: params[:id] || current_user.id)
   end
@@ -159,7 +214,7 @@ class UsersController < ApplicationController
   end
 
   def authenticate_user_for_sensitive_edit
-    action_params = params.require(:user).permit(:otp_attempt, :password)
+    action_params = params.expect(user: %i[otp_attempt password])
     # This methods store the current time in the "last_authenticated_at" session
     # variable, if password matches, or if 2FA check matches.
     on_success = lambda do
@@ -201,7 +256,7 @@ class UsersController < ApplicationController
 
   def select_nearby_delegate
     @user = current_user || User.new
-    user_params = params.require(:user).permit(:unconfirmed_wca_id, :delegate_id_to_handle_wca_id_claim, :dob_verification)
+    user_params = params.expect(user: %i[unconfirmed_wca_id delegate_id_to_handle_wca_id_claim dob_verification])
     @user.assign_attributes(user_params)
     render partial: 'select_nearby_delegate'
   end
@@ -383,6 +438,69 @@ class UsersController < ApplicationController
     render json: { ok: true }
   end
 
+  def registrations
+    user_id = params.require(:userId)
+
+    user = User.find(user_id)
+    registrations = user.registrations
+                        .joins(:competition)
+                        .merge(Competition.not_over)
+                        .order(start_date: :asc)
+
+    render json: registrations.as_json(
+      only: %w[competing_status],
+      include: {
+        competition: {
+          only: %w[id name city_name country_id start_date],
+          include: [],
+        },
+      },
+    )
+  end
+
+  def organized_competitions
+    user_id = params.require(:userId)
+
+    user = User.find(user_id)
+    competitions = user.organized_competitions
+                       .over.visible.not_cancelled
+                       .order(start_date: :desc)
+
+    render json: competitions.as_json(
+      only: %w[id name city_name country_id start_date],
+    )
+  end
+
+  def delegated_competitions
+    user_id = params.require(:userId)
+
+    user = User.find(user_id)
+    competitions = user.delegated_competitions
+                       .over.visible.not_cancelled
+                       .order(start_date: :desc)
+
+    render json: competitions.as_json(
+      only: %w[id name city_name country_id start_date],
+    )
+  end
+
+  def past_competitions
+    user_id = params.require(:userId)
+
+    user = User.find(user_id)
+
+    return Competition.none unless user.person
+
+    competitions = user.person.competitions
+                       .over.visible.not_cancelled
+                       .where(start_date: ..Date.current)
+                       .order(start_date: :desc)
+
+    render json: competitions.as_json(
+      only: %w[id name city_name country_id start_date],
+    )
+  end
+
   private def redirect_if_cannot_edit_user
     @user = user_to_edit
 
@@ -397,7 +515,7 @@ class UsersController < ApplicationController
   end
 
   private def user_params
-    params.require(:user).permit(current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
+    params.expect(user: current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
       user_params[:wca_id] = user_params[:wca_id].upcase if user_params.key?(:wca_id)
       if user_params.key?(:delegate_reports_region)
         raw_region = user_params.delete(:delegate_reports_region)

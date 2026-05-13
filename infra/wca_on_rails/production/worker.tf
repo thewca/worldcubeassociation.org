@@ -34,7 +34,7 @@ resource "aws_ecs_task_definition" "worker" {
       }
       environment = local.rails_environment
       healthCheck       = {
-        command            = ["CMD-SHELL", "pgrep bundle || exit 1"]
+        command            = ["CMD-SHELL", "pgrep ruby || exit 1"]
         interval           = 30
         retries            = 3
         startPeriod        = 60

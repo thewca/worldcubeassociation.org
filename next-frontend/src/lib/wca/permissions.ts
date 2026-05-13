@@ -41,78 +41,78 @@ export const hydrateUserPermissions = (
   canAdministerCompetition: (competition) =>
     Boolean(
       rawPermissions &&
-        allOrSpecificScope(
-          competition,
-          rawPermissions.can_administer_competitions.scope,
-        ),
+      allOrSpecificScope(
+        competition,
+        rawPermissions.can_administer_competitions.scope,
+      ),
     ),
   canAttendCompetition: (competition) =>
     Boolean(
       rawPermissions &&
-        allOrSpecificScope(
-          competition,
-          rawPermissions.can_attend_competitions.scope,
-        ),
+      allOrSpecificScope(
+        competition,
+        rawPermissions.can_attend_competitions.scope,
+      ),
     ),
   canOrganizeCompetitions: (competition) =>
     Boolean(
       rawPermissions &&
-        allOrSpecificScope(
-          competition,
-          rawPermissions.can_organize_competitions.scope,
-        ),
+      allOrSpecificScope(
+        competition,
+        rawPermissions.can_organize_competitions.scope,
+      ),
     ),
   canEditDelegateReport: (competition) =>
     Boolean(
       rawPermissions &&
-        allOrSpecificScope(
-          competition,
-          rawPermissions.can_edit_delegate_report.scope,
-        ),
+      allOrSpecificScope(
+        competition,
+        rawPermissions.can_edit_delegate_report.scope,
+      ),
     ),
   canViewDelegateReport: (competition) =>
     Boolean(
       rawPermissions &&
-        allOrSpecificScope(
-          competition,
-          rawPermissions.can_view_delegate_report.scope,
-        ),
+      allOrSpecificScope(
+        competition,
+        rawPermissions.can_view_delegate_report.scope,
+      ),
     ),
   canViewDelegateAdminPage: (competition) =>
     Boolean(
       rawPermissions &&
-        allOrSpecificScope(
-          competition,
-          rawPermissions.can_view_delegate_admin_page.scope,
-        ),
+      allOrSpecificScope(
+        competition,
+        rawPermissions.can_view_delegate_admin_page.scope,
+      ),
     ),
   canCreateGroup: (group) =>
     Boolean(
       rawPermissions &&
-        allOrSpecificScope(group, rawPermissions.can_create_groups.scope),
+      allOrSpecificScope(group, rawPermissions.can_create_groups.scope),
     ),
   canEditGroup: (group) =>
     Boolean(
       rawPermissions &&
-        allOrSpecificScope(group, rawPermissions.can_edit_groups.scope),
+      allOrSpecificScope(group, rawPermissions.can_edit_groups.scope),
     ),
   canReadGroupCurrent: (group) =>
     Boolean(
       rawPermissions &&
-        allOrSpecificScope(group, rawPermissions.can_read_groups_current.scope),
+      allOrSpecificScope(group, rawPermissions.can_read_groups_current.scope),
     ),
   canReadGroupPast: (group) =>
     Boolean(
       rawPermissions &&
-        allOrSpecificScope(group, rawPermissions.can_read_groups_past.scope),
+      allOrSpecificScope(group, rawPermissions.can_read_groups_past.scope),
     ),
   canRequestToEditProfile: (profile) =>
     Boolean(
       rawPermissions &&
-        allOrSpecificScope(
-          profile,
-          rawPermissions.can_request_to_edit_others_profile.scope,
-        ),
+      allOrSpecificScope(
+        profile,
+        rawPermissions.can_request_to_edit_others_profile.scope,
+      ),
     ),
 });
 
@@ -129,10 +129,7 @@ export const getPermissions = async () => {
     return null;
   }
 
-  const { data: rawPermissions } = await fetchPermissions(
-    // @ts-expect-error TODO: Fix this
-    session.accessToken,
-  );
+  const { data: rawPermissions } = await fetchPermissions(session.accessToken);
 
   return {
     permissions: rawPermissions,

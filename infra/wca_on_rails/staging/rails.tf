@@ -17,8 +17,12 @@ locals {
       value = var.ROOT_URL
     },
     {
+      name  = "OIDC_ALGORITHM"
+      value = "RS256"
+    },
+    {
       name = "DATABASE_HOST"
-      value = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = "staging-v2-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
     {
       name = "WCA_REGISTRATIONS_POLL_URL"
@@ -38,7 +42,11 @@ locals {
     },
     {
       name = "READ_REPLICA_HOST"
-      value = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = "staging-v2-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+    },
+    {
+      name = "DEV_DUMP_HOST"
+      value = "staging-v2-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
     {
       name = "CACHE_REDIS_URL"
@@ -46,6 +54,10 @@ locals {
     },
     {
       name = "SIDEKIQ_REDIS_URL"
+      value = "redis://wca-staging-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
+    },
+    {
+      name = "ANYCABLE_REDIS_URL",
       value = "redis://wca-staging-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
     },
     {
@@ -105,6 +117,10 @@ locals {
       value = var.DATABASE_WRT_USER
     },
     {
+      name = "DATABASE_WRT_SENIOR_USER"
+      value = var.DATABASE_WRT_SENIOR_USER
+    },
+    {
       name = "WRC_WEBHOOK_URL",
       value = var.WRC_WEBHOOK_URL
     },
@@ -137,10 +153,13 @@ locals {
     { # The PHPMyAdmin Docker file allows us to pass the user config as a base 64 encoded environment variable
       name = "PMA_USER_CONFIG_BASE64"
       value = base64encode(templatefile("../templates/config.user.inc.php.tftpl",
-        { rds_host: "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
-          rds_replica_host: "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com" }))
+        { rds_host: "staging-v2-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
+          # There is no read only or dump replica on staging
+          rds_replica_host: "staging-v2-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
+          dump_replica_host: "staging-v2-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"}))
     }
   ]
+  rails_internal_dns = "rails-staging.local"
 }
 
 data "aws_iam_policy_document" "task_assume_role_policy" {
@@ -207,7 +226,7 @@ data "aws_iam_policy_document" "task_policy" {
     actions = [
       "rds-db:connect",
     ]
-    resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}"]
+    resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}", "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_SENIOR_USER}"]
   }
   statement {
     effect = "Allow"
@@ -239,7 +258,7 @@ resource "aws_ecs_task_definition" "api" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   cpu = "1024"
-  memory = "3930"
+  memory = "2048"
 
   container_definitions = jsonencode([
     {
@@ -249,11 +268,13 @@ resource "aws_ecs_task_definition" "api" {
       memory = 2048
       portMappings = [
         {
-          # The hostPort is automatically set for awsvpc network mode,
-          # see https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PortMapping.html#ECS-Type-PortMapping-hostPort
+          name = "rails-staging-port"
+          # Set hostport for service discovery
+          hostPort = 3000
           containerPort = 3000
           protocol      = "tcp"
-        },
+          appProtocol = "http"
+        }
       ]
       logConfiguration = {
         logDriver = "awslogs"
@@ -279,6 +300,11 @@ resource "aws_ecs_task_definition" "api" {
   }
 }
 
+resource "aws_service_discovery_private_dns_namespace" "this" {
+  name = local.rails_internal_dns
+  vpc  = var.shared.vpc_id
+}
+
 resource "aws_ecs_task_definition" "this" {
   family = var.name_prefix
 
@@ -291,14 +317,14 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   cpu = "1024"
-  memory = "3930"
+  memory = "3900"
 
   container_definitions = jsonencode([
     {
       name              = "rails-staging"
       image             = "${var.shared.ecr_repository.repository_url}:staging"
       cpu    = 1024
-      memory = 3930
+      memory = 3900
 
       portMappings = [
         {
@@ -395,7 +421,6 @@ resource "aws_ecs_service" "rails" {
   tags = {
     Name = var.name_prefix
   }
-
 }
 
 resource "aws_ecs_service" "api" {
@@ -450,6 +475,22 @@ resource "aws_ecs_service" "api" {
 
   tags = {
     Name = var.name_prefix
+  }
+
+  service_connect_configuration {
+    enabled = true
+    namespace = aws_service_discovery_private_dns_namespace.this.name
+    service {
+      port_name = "rails-staging-port"
+      discovery_name = "rails-cluster"
+      timeout {
+        per_request_timeout_seconds = 60
+      }
+      client_alias {
+        port = 3000
+        dns_name = local.rails_internal_dns
+      }
+    }
   }
 
 }

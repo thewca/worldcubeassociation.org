@@ -10,8 +10,6 @@ class AddShowOnHomepageToPosts < ActiveRecord::Migration[5.0]
       dir.up do
         execute "UPDATE posts SET show_on_homepage=FALSE WHERE id='delegate-crash-course'"
       end
-      dir.down do
-      end
     end
   end
 end

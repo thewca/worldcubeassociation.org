@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'boot'
-require_relative 'locales/locales'
+require_relative '../lib/available_locales'
 
 require 'rails/all'
 
@@ -36,7 +36,7 @@ module WcaOnRails
     # to check in credentials to git (no matter whether their encryption is strong or not)
     config.secret_key_base = AppSecrets.SECRET_KEY_BASE
 
-    config.load_defaults 7.2
+    config.load_defaults 8.1
 
     # Force belongs_to validations even on empty/unset keys.
     #   This is potentially a Rails bug (?!?) and has been reported at https://github.com/rails/rails/issues/52614
@@ -69,7 +69,7 @@ module WcaOnRails
                        end
 
     # Setup available locales
-    I18n.available_locales = Locales::AVAILABLE.keys
+    I18n.available_locales = AvailableLocales::ALL.keys
 
     # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
     # the I18n.default_locale when a translation cannot be found).

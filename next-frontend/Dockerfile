@@ -1,10 +1,17 @@
 # syntax=docker.io/docker/dockerfile:1
 
-FROM node:22-alpine AS base
+ARG WCA_SITE
+
+FROM node:24-alpine AS base
 
 FROM base AS deps
+
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
+
+# NewRelic v12 does not bundle Alpine-compatible binaries anymore. So they have to be built from scratch.
+#   See https://github.com/newrelic/node-native-metrics?tab=readme-ov-file#musl-libc-systems for details.
+RUN apk add g++ make py3-pip
 
 RUN apk add --update --virtual .deps --no-cache unzip && \
      wget https://releases.hashicorp.com/vault/1.19.5/vault_1.19.5_linux_amd64.zip && \
@@ -28,15 +35,22 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+ARG WCA_SITE
+
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN corepack enable
+
+# ENV Needed to be compiled into the static build
+ENV NEXT_PUBLIC_WCA_FRONTEND_API_URL="https://$WCA_SITE/api/"
+ENV NEXT_PUBLIC_WEBSOCKET_URL="https://$WCA_SITE/api/v1/live/cable"
+ENV PROPRIETARY_FONT="TTNormsPro"
 # Create the types and build
 RUN LOCALE_DIR="./src/lib/i18n/locales" yarn run build:translations
 RUN yarn types:openapi
-RUN NODE_ENV=production IS_COMPILING_ASSETS=1 NEXT_PUBLIC_WCA_FRONTEND_API_URL='https://www.worldcubeassociation.org/api/v0/' yarn run build
+RUN NODE_ENV=production yarn run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -59,6 +73,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=deps /app/global-bundle.pem /app/global-bundle.pem
 COPY --from=deps /usr/local/bin/vault /usr/local/bin/vault
 COPY --from=builder /app/docker-entrypoint.sh /app/docker-entrypoint.sh
+COPY --from=builder /app/export-dump.sh /app/export-dump.sh
 
 RUN apk add --no-cache jq
 
@@ -67,7 +82,6 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT=3000
-ENV NEW_RELIC_APP_NAME='next-js-production'
 ENV NEW_RELIC_LOG='stdout'
 
 # server.js is created by next build from the standalone output

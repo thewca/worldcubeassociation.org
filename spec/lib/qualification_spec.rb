@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "rails_helper"
+
 RSpec.describe Qualification do
   let(:user) { create(:user_with_wca_id) }
   let(:first_competition) do
@@ -21,7 +23,7 @@ RSpec.describe Qualification do
     create(
       :result,
       person_id: user.wca_id,
-      competition_id: first_competition.id,
+      competition: first_competition,
       event_id: '333',
       best: 1200,
       average: 1500,
@@ -31,7 +33,7 @@ RSpec.describe Qualification do
     create(
       :result,
       person_id: user.wca_id,
-      competition_id: second_competition.id,
+      competition: second_competition,
       event_id: '333',
       best: 1100,
       average: 1200,
@@ -41,7 +43,7 @@ RSpec.describe Qualification do
     create(
       :result,
       person_id: user.wca_id,
-      competition_id: first_competition.id,
+      competition: first_competition,
       event_id: '333oh',
       best: -1,
       average: -1,
@@ -51,7 +53,7 @@ RSpec.describe Qualification do
     create(
       :result,
       person_id: user.wca_id,
-      competition_id: second_competition.id,
+      competition: second_competition,
       event_id: '333oh',
       best: 1700,
       average: 2000,
@@ -61,7 +63,7 @@ RSpec.describe Qualification do
     create(
       :result,
       person_id: user.wca_id,
-      competition_id: first_competition.id,
+      competition: first_competition,
       event_id: '444',
       best: 4500,
       average: -1,
@@ -71,7 +73,7 @@ RSpec.describe Qualification do
     create(
       :result,
       person_id: user.wca_id,
-      competition_id: second_competition.id,
+      competition: second_competition,
       event_id: '444',
       best: 4500,
       average: 4800,
