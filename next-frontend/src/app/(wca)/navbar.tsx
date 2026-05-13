@@ -20,6 +20,7 @@ import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
+import WCALogo from "@/components/WCALogo";
 
 type NavbarEntry<T> = {
   targetLink: T;
@@ -69,15 +70,7 @@ export default async function Navbar() {
     >
       <RefreshRouteOnSave />
       <HStack>
-        {!LIVE_RESULT_BETA && (
-          <IconButton asChild variant="ghost">
-            <Link href="/">
-              <ChakraImage asChild maxW={10}>
-                <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
-              </ChakraImage>
-            </Link>
-          </IconButton>
-        )}
+        {!LIVE_RESULT_BETA && <WCALogo />}
         {navbarEntries.map((navbarEntry) => (
           <React.Fragment key={navbarEntry.id}>
             {navbarEntry.blockType === "LinkItem" && (
