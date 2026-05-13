@@ -115,9 +115,6 @@ class ContactsController < ApplicationController
     }
 
     edited_profile_details = edited_profile_details_from_form.transform_values { |v| v[:newValue] }
-    edit_profile_reason = edited_profile_details_from_form.filter_map do |field, v|
-      "#{I18n.t("activerecord.attributes.user.#{field}")}: #{v[:editReason]}" if profile_to_edit[field].to_s != v[:newValue].to_s
-    end.join("\n")
 
     changes_requested = Person.fields_edit_requestable
                               .reject { |field| profile_to_edit[field].to_s == edited_profile_details[field].to_s }
@@ -126,6 +123,7 @@ class ContactsController < ApplicationController
                                   field: field,
                                   from: profile_to_edit[field],
                                   to: edited_profile_details[field],
+                                  reason: edited_profile_details_from_form[field][:editReason],
                                 )
                               end
 
@@ -134,7 +132,6 @@ class ContactsController < ApplicationController
       name: profile_to_edit[:name],
       wca_id: wca_id,
       changes_requested: changes_requested,
-      edit_profile_reason: edit_profile_reason,
       requestor_user: current_user,
       document: attachment,
       request: request,
