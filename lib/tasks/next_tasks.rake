@@ -3,7 +3,7 @@
 namespace :next do
   namespace :posts do
     desc "Import Posts into nextjs"
-    task :import, [:next_url] => [:environment] do
+    task :import, [:next_url] => [:environment] do |_task, args|
       abort "NextJS Url is required" if args[:next_url].blank?
 
       connection = Faraday.new(
