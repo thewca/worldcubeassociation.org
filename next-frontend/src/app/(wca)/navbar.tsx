@@ -52,13 +52,17 @@ function LinkWrapper<T extends string>({
   );
 }
 
+const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
+
 export default async function Navbar() {
   const payload = await getPayload({ config });
   const navbar = await payload.findGlobal({ slug: "nav" });
 
   const session = await auth();
 
-  const navbarEntries = navbar.entry;
+  // Prevent people part of the Live Results Beta to escape onto the payload pages
+  const navbarEntries = LIVE_RESULT_BETA ? [] : navbar.entry;
+  const showEmptyMessage = !LIVE_RESULT_BETA && navbarEntries.length === 0;
 
   return (
     <Box borderBottom="md" bg="bg" data-testid="header-navbar">
@@ -66,18 +70,20 @@ export default async function Navbar() {
       <Collapsible.Root>
         <HStack padding="3" justifyContent="space-between">
           <HStack>
-            <IconButton asChild variant="ghost">
-              <Link href="/">
-                <ChakraImage asChild maxW={10}>
-                  <Image
-                    src="/logo.png"
-                    alt="WCA Logo"
-                    height={50}
-                    width={50}
-                  />
-                </ChakraImage>
-              </Link>
-            </IconButton>
+            {!LIVE_RESULT_BETA && (
+              <IconButton asChild variant="ghost">
+                <Link href="/">
+                  <ChakraImage asChild maxW={10}>
+                    <Image
+                      src="/logo.png"
+                      alt="WCA Logo"
+                      height={50}
+                      width={50}
+                    />
+                  </ChakraImage>
+                </Link>
+              </IconButton>
+            )}
             <HStack hideBelow="md">
               {navbarEntries.map((navbarEntry) => (
                 <React.Fragment key={navbarEntry.id}>
@@ -192,7 +198,7 @@ export default async function Navbar() {
             </HStack>
           </HStack>
           <HStack>
-            {navbarEntries.length === 0 && (
+            {showEmptyMessage && (
               <Text hideBelow="md">Oh no, there are no navbar items!</Text>
             )}
             <ColorModeButton />
@@ -215,7 +221,7 @@ export default async function Navbar() {
         <Box hideFrom="md">
           <Collapsible.Content>
             <VStack align="stretch" px={3} pb={3} gap={1}>
-              {navbarEntries.length === 0 && (
+              {showEmptyMessage && (
                 <Text>Oh no, there are no navbar items!</Text>
               )}
               {navbarEntries.map((navbarEntry) => (
