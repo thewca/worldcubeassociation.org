@@ -10,12 +10,22 @@ export default function WCALogo() {
       <Link href="/">
         <Box _dark={{ display: "none" }}>
           <ChakraImage asChild maxW={10}>
-            <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
+            <Image
+              src="/logo.png"
+              alt="WCA Logo Light"
+              height={50}
+              width={50}
+            />
           </ChakraImage>
         </Box>
         <Box display="none" _dark={{ display: "block" }}>
           <ChakraImage asChild maxW={10}>
-            <Image src="/logo_dark.png" alt="WCA Logo" height={50} width={50} />
+            <Image
+              src="/logo_dark.png"
+              alt="WCA Logo Dark"
+              height={50}
+              width={50}
+            />
           </ChakraImage>
         </Box>
       </Link>
