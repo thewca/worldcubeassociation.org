@@ -26,6 +26,7 @@ import type {
   FullWidthBlock,
   ImageBannerBlock,
   ImageOnlyCardBlock,
+  LivestreamPanelBlock,
   Media,
   TestimonialsBlock,
   TwoBlocksBlock,
@@ -169,6 +170,50 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
         <Card.Body>
           <Card.Title textStyle="h2">{block.heading}</Card.Title>
         </Card.Body>
+      )}
+    </Card.Root>
+  );
+};
+
+const LivestreamPanel = ({ block }: { block: LivestreamPanelBlock }) => {
+  return (
+    <Card.Root
+      colorPalette={block.colorPalette}
+      colorVariant="deep"
+      width="full"
+    >
+      <Card.Body gap={4}>
+        <Card.Title textStyle={{ base: "h3", md: "h2" }}>
+          {block.heading}
+        </Card.Title>
+        <Box aspectRatio="16/9" overflow="hidden" borderRadius="md">
+          <iframe
+            width="100%"
+            height="100%"
+            style={{ display: "block", borderRadius: "inherit" }}
+            src={`https://www.youtube.com/embed/${block.youtubeVideoId}?autoplay=1&mute=1`}
+            title={block.heading}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        </Box>
+      </Card.Body>
+      {block.buttons && block.buttons.length > 0 && (
+        <Card.Footer>
+          <HStack flexWrap="wrap">
+            {block.buttons.map((btn) => (
+              <Button
+                key={btn.id}
+                asChild
+                variant="outline"
+                color="currentColor"
+              >
+                <ChakraLink href={btn.url}>{btn.label}</ChakraLink>
+              </Button>
+            ))}
+          </HStack>
+        </Card.Footer>
       )}
     </Card.Root>
   );
@@ -421,6 +466,17 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
                 <TestimonialsSpinner block={subEntry} />
               </GridItem>
             );
+          case "LivestreamPanel":
+            return (
+              <GridItem
+                key={key}
+                colSpan={{ base: 1, md: columns[i] || 1 }}
+                display="flex"
+                width="full"
+              >
+                <LivestreamPanel block={subEntry} />
+              </GridItem>
+            );
           default:
             return null;
         }
@@ -448,6 +504,8 @@ const renderFullBlock = (entry: FullWidthBlock, keyPrefix = "") => {
             return <FeaturedCompetitions key={key} block={subEntry} />;
           case "TestimonialsSpinner":
             return <TestimonialsSpinner key={key} block={subEntry} />;
+          case "LivestreamPanel":
+            return <LivestreamPanel key={key} block={subEntry} />;
 
           default:
             return null;
