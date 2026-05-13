@@ -1,16 +1,8 @@
 import React from "react";
-import {
-  Button,
-  HStack,
-  IconButton,
-  Menu,
-  Text,
-  Image as ChakraImage,
-} from "@chakra-ui/react";
+import { Button, HStack, Menu, Text } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
-import Image from "next/image";
 import { auth } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
