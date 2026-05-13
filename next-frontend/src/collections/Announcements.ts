@@ -5,7 +5,9 @@ export const Announcements: CollectionConfig = {
   slug: "announcements",
   admin: {
     useAsTitle: "title",
+    defaultColumns: ["title", "publishAt", "publishedBy"],
   },
+  defaultSort: "-publishAt",
   fields: [
     {
       name: "slug",
