@@ -13,7 +13,7 @@ function AnnouncementItem({ announcement }: { announcement: Announcement }) {
       </Accordion.ItemTrigger>
       <Accordion.ItemContent>
         <Text textStyle="s2">
-          Posted by {publishedByUser.name} · {announcement.publishedAt}
+          Posted by {publishedByUser.name} · {announcement.publishAt}
         </Text>
         <MarkdownProse
           as={Accordion.ItemBody}

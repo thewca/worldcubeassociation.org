@@ -76,7 +76,6 @@ export async function POST(request: Request) {
       data: {
         slug: post.slug,
         title: post.title,
-        // @ts-expect-error might be a payload bug?
         content: convertMarkdownToLexicalJSON(post.body),
         publishAt: post.created_at,
         sticky: post.sticky,
