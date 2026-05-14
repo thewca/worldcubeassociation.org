@@ -13,6 +13,7 @@ export default function TableHeader({
   competitionInfo,
   withCheckbox = true,
   withPosition = false,
+  isReadOnly = false,
 }) {
   const {
     dob: dobIsShown, events: eventsAreExpanded, comments: commentsAreShown,
@@ -21,15 +22,19 @@ export default function TableHeader({
   return (
     <Table.Header>
       <Table.Row>
-        <Table.HeaderCell disabled>
-          {withCheckbox && (
-            <Checkbox checked={isChecked} onChange={onCheckboxChanged} />
-          )}
-        </Table.HeaderCell>
+        {!isReadOnly && (
+          <Table.HeaderCell disabled>
+            {withCheckbox && (
+              <Checkbox checked={isChecked} onChange={onCheckboxChanged} />
+            )}
+          </Table.HeaderCell>
+        )}
         {withPosition && (
           <Table.HeaderCell disabled>#</Table.HeaderCell>
         )}
-        <Table.HeaderCell disabled />
+        {!isReadOnly && (
+          <Table.HeaderCell disabled />
+        )}
         <Table.HeaderCell
           sorted={sortColumn === 'wca_id' ? sortDirection : undefined}
           onClick={() => onColumnClick('wca_id')}

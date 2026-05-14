@@ -18,6 +18,7 @@ export default function RegistrationAdministrationTableFooter({
   registrations,
   competitionInfo,
   withPosition = false,
+  isReadOnly = false,
 }) {
   const {
     dob: dobIsShown, events: eventsAreExpanded, comments: commentsAreShown,
@@ -45,9 +46,15 @@ export default function RegistrationAdministrationTableFooter({
     }),
   );
 
+  const getColSpan = () => {
+    if (isReadOnly) return 2;
+    if (withPosition) return 5;
+    return 4;
+  };
+
   return (
     <Table.Row>
-      <Table.Cell colSpan={withPosition ? 5 : 4}>
+      <Table.Cell colSpan={getColSpan()}>
         {
           `${
             newcomerCount
