@@ -54,13 +54,7 @@ class ResultsSubmissionController < ApplicationController
   end
 
   def compute_potential_duplicates
-    last_job_run = DuplicateCheckerJobRun.find_by(competition_id: params.require(:competition_id))
-    job_run_running_too_long = last_job_run&.run_status_not_started? || last_job_run&.run_status_in_progress?
-
-    last_job_run.update!(run_status: DuplicateCheckerJobRun.run_statuses[:long_running_uncertain]) if job_run_running_too_long
-
-    job_run = DuplicateCheckerJobRun.create!(competition_id: params.require(:competition_id))
-    ComputePotentialDuplicates.perform_later(job_run)
+    job_run = trigger_compute_potential_duplicates(params.require(:competition_id))
 
     render status: :ok, json: job_run
   end
@@ -204,11 +198,24 @@ class ResultsSubmissionController < ApplicationController
       end
     end
 
+    trigger_compute_potential_duplicates(competition.id)
+
     render status: :ok, json: { success: true }
   end
 
   private def competition_from_params
     Competition.find(params[:competition_id])
+  end
+
+  private def trigger_compute_potential_duplicates(competition_id)
+    last_job_run = DuplicateCheckerJobRun.find_by(competition_id: competition_id)
+    job_run_running_too_long = last_job_run&.run_status_not_started? || last_job_run&.run_status_in_progress?
+
+    last_job_run.update!(run_status: DuplicateCheckerJobRun.run_statuses[:long_running_uncertain]) if job_run_running_too_long
+
+    job_run = DuplicateCheckerJobRun.create!(competition_id: competition_id)
+    ComputePotentialDuplicates.perform_later(job_run)
+    job_run
   end
 
   private def check_newcomers_data_access
@@ -220,5 +227,13 @@ class ResultsSubmissionController < ApplicationController
     return if current_user.can_admin_results?
 
     render status: :bad_request, json: { error: "The newcomer check dashboard can only be used before the results are submitted." } if competition.results_submitted?
+  end
+
+  def unfinished_persons
+    competition = competition_from_params
+
+    persons_to_finish = FinishUnfinishedPersons.search_persons(competition.id, compute_similar: false)
+
+    render status: :ok, json: { persons_to_finish: persons_to_finish }
   end
 end
