@@ -93,7 +93,7 @@ module ResultConditions
                             end
 
       # Filter out potential results
-      advancing_with_ties.reject(&:empty_result?)
+      advancing_with_ties.reject(&:missing_attempts?)
     end
   end
 end

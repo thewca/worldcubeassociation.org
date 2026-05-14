@@ -219,6 +219,7 @@ export interface Config {
     documents: Document;
     regulationsHistoryItem: RegulationsHistoryItem;
     tools: Tool;
+    'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -238,6 +239,7 @@ export interface Config {
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     regulationsHistoryItem: RegulationsHistoryItemSelect<false> | RegulationsHistoryItemSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -245,6 +247,80 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
+  fallbackLocale:
+    | ('false' | 'none' | 'null')
+    | false
+    | null
+    | (
+        | 'en'
+        | 'ca'
+        | 'cs'
+        | 'da'
+        | 'de'
+        | 'eo'
+        | 'es-ES'
+        | 'es-419'
+        | 'eu'
+        | 'fi'
+        | 'fr'
+        | 'fr-CA'
+        | 'hr'
+        | 'hu'
+        | 'id'
+        | 'it'
+        | 'ja'
+        | 'kk'
+        | 'ko'
+        | 'nl'
+        | 'pl'
+        | 'pt'
+        | 'pt-BR'
+        | 'ro'
+        | 'ru'
+        | 'sk'
+        | 'sl'
+        | 'sv'
+        | 'th'
+        | 'uk'
+        | 'vi'
+        | 'zh-CN'
+        | 'zh-TW'
+      )
+    | (
+        | 'en'
+        | 'ca'
+        | 'cs'
+        | 'da'
+        | 'de'
+        | 'eo'
+        | 'es-ES'
+        | 'es-419'
+        | 'eu'
+        | 'fi'
+        | 'fr'
+        | 'fr-CA'
+        | 'hr'
+        | 'hu'
+        | 'id'
+        | 'it'
+        | 'ja'
+        | 'kk'
+        | 'ko'
+        | 'nl'
+        | 'pl'
+        | 'pt'
+        | 'pt-BR'
+        | 'ro'
+        | 'ru'
+        | 'sk'
+        | 'sl'
+        | 'sv'
+        | 'th'
+        | 'uk'
+        | 'vi'
+        | 'zh-CN'
+        | 'zh-TW'
+      )[];
   globals: {
     nav: Nav;
     home: Home;
@@ -303,9 +379,10 @@ export interface Config {
     | 'vi'
     | 'zh-CN'
     | 'zh-TW';
-  user: User & {
-    collection: 'users';
+  widgets: {
+    collections: CollectionsWidget;
   };
+  user: User;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -427,6 +504,7 @@ export interface User {
     | null;
   updatedAt: string;
   createdAt: string;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -517,6 +595,23 @@ export interface Tool {
   category: 'before' | 'during' | 'after';
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv".
+ */
+export interface PayloadKv {
+  id: string;
+  key: string;
+  data:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -734,6 +829,14 @@ export interface ToolsSelect<T extends boolean = true> {
   category?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv_select".
+ */
+export interface PayloadKvSelect<T extends boolean = true> {
+  key?: T;
+  data?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1914,6 +2017,16 @@ export interface LogoPageSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

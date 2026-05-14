@@ -24,20 +24,20 @@ export default function LiveResultsMobileModal({
   stats,
   t,
 }: {
-  selectedRow: CompetitorWithResults | null;
-  setSelectedRow: (selectedRow: CompetitorWithResults | null) => void;
+  selectedRow?: CompetitorWithResults;
+  setSelectedRow: (selectedRow?: CompetitorWithResults) => void;
   competitionId: string;
   eventId: string;
   stats: Stat[];
   t: TFunction;
 }) {
   const onOpenChange = ({ open }: { open: boolean }) => {
-    if (!open) setSelectedRow(null);
+    if (!open) setSelectedRow(undefined);
   };
 
   return (
     <Dialog.Root
-      open={selectedRow !== null}
+      open={selectedRow !== undefined}
       onOpenChange={onOpenChange}
       placement="center"
     >

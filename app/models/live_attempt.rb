@@ -30,6 +30,10 @@ class LiveAttempt < ApplicationRecord
     ResultAttempt.new(value: value, attempt_number: attempt_number)
   end
 
+  def to_wcif
+    { "result" => self.value, "reconstruction" => nil }
+  end
+
   def self.attempts_changed?(before_attempts, after_attempts)
     Set.new(before_attempts) != Set.new(after_attempts)
   end
