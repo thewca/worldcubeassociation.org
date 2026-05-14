@@ -66,7 +66,8 @@ RSpec.describe ResultsSubmissionController do
         expect do
           post competition_submit_results_path(comp.id), params: results_submission_params
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
-        assert_enqueued_jobs 0
+        # Newcomer checks will be triggered along with results submission.
+        assert_enqueued_jobs 1
       end
 
       it "throw error if empty message is provided" do
