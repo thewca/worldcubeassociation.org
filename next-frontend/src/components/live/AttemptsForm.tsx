@@ -199,6 +199,9 @@ function AttemptFieldsNav({
     ) {
       e.preventDefault();
       const from = e.target as HTMLElement;
+      // blur() can trigger onBlur handlers that update React state (e.g. saving the attempt).
+      // flushSync ensures those updates are committed to the DOM before focusNext runs,
+      // so the focus manager doesn't traverse a stale element tree.
       flushSync(() => from.blur());
       focusManager?.focusNext({ wrap: false, from });
       return;
