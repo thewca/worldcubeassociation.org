@@ -92,20 +92,17 @@ const LivestreamPanel: Block = {
       required: true,
     },
     {
-      name: "buttons",
-      type: "array",
-      fields: [
-        {
-          name: "label",
-          type: "text",
-          required: true,
-        },
-        {
-          name: "url",
-          type: "text",
-          required: true,
-        },
-      ],
+      name: "titleSponsor",
+      label: "Title Sponsor Image",
+      type: "upload",
+      relationTo: "media",
+      required: false,
+    },
+    {
+      name: "competitionId",
+      label: "Competition ID",
+      type: "text",
+      required: false,
     },
     colorPaletteSelect,
   ],

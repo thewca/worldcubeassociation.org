@@ -1115,13 +1115,8 @@ export interface FeaturedCompetitionsBlock {
 export interface LivestreamPanelBlock {
   heading: string;
   youtubeVideoId: string;
-  buttons?:
-    | {
-        label: string;
-        url: string;
-        id?: string | null;
-      }[]
-    | null;
+  titleSponsor?: (string | null) | Media;
+  competitionId: string;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
@@ -1760,13 +1755,8 @@ export interface FeaturedCompetitionsBlockSelect<T extends boolean = true> {
 export interface LivestreamPanelBlockSelect<T extends boolean = true> {
   heading?: T;
   youtubeVideoId?: T;
-  buttons?:
-    | T
-    | {
-        label?: T;
-        url?: T;
-        id?: T;
-      };
+  titleSponsor?: T;
+  competitionId?: T;
   colorPalette?: T;
   id?: T;
   blockName?: T;
