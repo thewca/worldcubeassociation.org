@@ -9,6 +9,9 @@ const DEFAULT_TIME_LIMIT = {
 
 export const generateWcifRound = (eventId, roundNumber) => {
   const event = events.byId[eventId];
+  const participationSource = roundNumber === 1
+    ? { type: 'registrations' }
+    : { type: 'round', roundId: buildActivityCode({ eventId, roundNumber: roundNumber - 1 }), resultCondition: null };
 
   return {
     id: buildActivityCode({
@@ -18,7 +21,8 @@ export const generateWcifRound = (eventId, roundNumber) => {
     format: event.recommendedFormat().id,
     timeLimit: event.canChangeTimeLimit ? DEFAULT_TIME_LIMIT : null,
     cutoff: null,
-    advancementCondition: null,
+    linkedRounds: null,
+    participationRuleset: { participationSource, reservedPlaces: null },
     results: [],
     scrambleSetCount: 1,
   };
@@ -70,3 +74,46 @@ export const roundCutoffToString = (wcifRound, { short } = {}) => {
   explanationText += ` If they succeed, they get to do all ${formats.byId[wcifRound.format].expectedSolveCount} solves.`;
   return explanationText;
 };
+
+export function v2RulesetToV1Condition(wcifRound, wcifEvent, roundNumber) {
+  if (roundNumber >= wcifEvent.rounds.length) {
+    return null;
+  }
+
+  if (wcifRound.linkedRounds) {
+    const lastRoundInLink = wcifRound.linkedRounds[wcifRound.linkedRounds.length - 1];
+
+    if (wcifRound.id !== lastRoundInLink) {
+      return {
+        type: 'dual',
+        level: 100,
+      };
+    }
+  }
+
+  const firstTargetRound = wcifEvent.rounds.find((rd) => {
+    const source = rd.participationRuleset.participationSource;
+
+    if (source.type === 'round') {
+      return source.roundId === wcifRound.id;
+    }
+
+    if (source.type === 'linkedRounds') {
+      return source.roundIds.includes(wcifRound.id);
+    }
+
+    return false;
+  });
+
+  const resultCondition = firstTargetRound
+    ?.participationRuleset
+    ?.participationSource
+    ?.resultCondition;
+
+  if (!resultCondition) return null;
+
+  return {
+    type: resultCondition.type.replace('resultAchieved', 'attemptResult'),
+    level: resultCondition.value ?? 0,
+  };
+}
