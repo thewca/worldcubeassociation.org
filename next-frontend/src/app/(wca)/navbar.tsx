@@ -9,12 +9,10 @@ import {
   Separator,
   Text,
   VStack,
-  Image as ChakraImage,
 } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
-import Image from "next/image";
 import { auth } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
@@ -24,6 +22,7 @@ import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
+import WCALogo from "@/components/WCALogo";
 
 type NavbarEntry<T> = {
   targetLink: T;
@@ -70,20 +69,7 @@ export default async function Navbar() {
       <Collapsible.Root>
         <HStack padding="3" justifyContent="space-between">
           <HStack>
-            {!LIVE_RESULT_BETA && (
-              <IconButton asChild variant="ghost">
-                <Link href="/">
-                  <ChakraImage asChild maxW={10}>
-                    <Image
-                      src="/logo.png"
-                      alt="WCA Logo"
-                      height={50}
-                      width={50}
-                    />
-                  </ChakraImage>
-                </Link>
-              </IconButton>
-            )}
+            {!LIVE_RESULT_BETA && <WCALogo />}
             <HStack hideBelow="md">
               {navbarEntries.map((navbarEntry) => (
                 <React.Fragment key={navbarEntry.id}>
