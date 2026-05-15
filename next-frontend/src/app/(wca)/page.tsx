@@ -228,7 +228,7 @@ const LivestreamPanel = async ({ block }: { block: LivestreamPanelBlock }) => {
               allowFullScreen
             />
           </Box>
-          <VStack flexWrap="wrap">
+          <VStack flexWrap="wrap" justify="center">
             <MarkdownFirstImage
               content={competition.information}
               alt={competition.name}
