@@ -505,7 +505,7 @@ zh-TW:
         #original_hash: 4f9be05
         content: 內容
         #original_hash: 709a232
-        name: 比賽名稱
+        name: 標籤名稱
       delegate_report:
         #original_hash: 983d541
         discussion_url: Google Group討論串網址
@@ -1712,6 +1712,10 @@ zh-TW:
       approve: 確認
       #original_hash: d9455bf
       approve_confirm: '你確定要核准 WCA ID「%{wca_id}」嗎？'
+      #original_hash: 1ada587
+      clear_claim: 清除認領
+      #original_hash: dc39741
+      clear_claim_confirm: '您確定您要清除 WCA ID%{wca_id}的ID認領嗎?'
       #original_hash: 85de4b8
       unconfirmed_email: '這個帳號的電子郵件(%{email})尚未確認。'
       #original_hash: 7069007
@@ -2342,6 +2346,8 @@ zh-TW:
         clear: 清除
         #original_hash: 42faad9
         competitors_entered: '已輸入%{competitors_live_results_entered}/%{total_competitors}'
+        #original_hash: adec79f
+        round_locked: 鎖定
         #original_hash: 5301648
         edit: 編輯
         #original_hash: 612e12d
@@ -2847,6 +2853,10 @@ zh-TW:
           auto_close_threshold: 自動結束報名的人數
           #original_hash: b1d5af4
           newcomer_month_reserved_spots: 為第一次參賽者預留的名額數
+          #original_hash: 26b48e3
+          auto_accept_preference: 自動核准報名
+          #original_hash: 1b8698d
+          auto_accept_disable_threshold: 自動核准報名的限制
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: WCA代表
@@ -2856,6 +2866,8 @@ zh-TW:
           organizer_ids: 主辦人ID
           #original_hash: b37456c
           contact: 聯絡
+          #original_hash: 78ef126
+          lead_delegate_id: 主代表
         #original_hash: 991f419
         championships: 錦標賽
         website:
@@ -3152,6 +3164,9 @@ zh-TW:
               #original_hash: 6509041
               'false': 參賽者必須要達到資格限制才能報名
     registration_v2:
+      auto_accept:
+        #original_hash: eaf9960
+        bulk_auto_accept: 自動核准參賽者
       pdf:
         #original_hash: 5c7d60f
         link: '如同<0>%{pdfLink}</0>'
@@ -3208,6 +3223,8 @@ zh-TW:
           #original_hash: 3a16c0d
           refunded: '款項已在%{date}退款。'
         psychsheets:
+          #original_hash: ded0a5d
+          show_me: 我的排名
           #original_hash: a23dc2b
           rank: '排名：%{userPosition}'
         #original_hash: 19eabc9

@@ -295,13 +295,24 @@ class Round < ApplicationRecord
     #
     # For non-linked rounds global_pos equals local_pos, so we set both here to avoid
     # a second UPDATE in recompute_global_pos.
+
+    # For average-ranked formats, within the invalid-average group we further separate results
+    # by whether their best single is also invalid (all DNF/DNS), pushing those to the very bottom.
+    # Then sort by best single so e.g. incomplete (average=0, best=39) ranks above DNF mean
+    # (average=-1, best=40), and both rank above all-DNF (average=-1, best=-1).
+    order_clause = if secondary_rank_by
+                     primary_sort = "IF(#{rank_by} > 0, #{rank_by}, #{secondary_rank_by})"
+                     "#{rank_by} <= 0, #{secondary_rank_by} <= 0, #{primary_sort} ASC, #{secondary_rank_by} ASC"
+                   else
+                     "#{rank_by} <= 0, #{rank_by} ASC"
+                   end
+
     ActiveRecord::Base.connection.exec_query <<~SQL.squish
       UPDATE live_results r
       LEFT JOIN (
           SELECT id,
                  RANK() OVER (
-                     ORDER BY #{rank_by} <= 0, #{rank_by} ASC
-                       #{", #{secondary_rank_by} <= 0, #{secondary_rank_by} ASC" if secondary_rank_by}
+                     ORDER BY #{order_clause}
                  ) AS `rank`
           FROM live_results
           WHERE round_id = #{id} AND best != 0
@@ -470,7 +481,25 @@ class Round < ApplicationRecord
         end
       end
 
-      LiveAttempt.upsert_all(attempts_to_load) if attempts_to_load.any?
+      if attempts_to_load.any?
+        LiveAttempt.upsert_all(attempts_to_load)
+
+        # Count how many attempts were loaded per result_id
+        attempt_counts_by_result = attempts_to_load.map { it[:live_result_id] }.tally
+
+        # Regroup: For each count of results (that determines the maximum `attempt_number`),
+        #   we want to efficiently find all live_result_ids with that attempt number
+        results_with_attempt_count = attempt_counts_by_result.group_by(&:last)
+                                                             .transform_values { it.map(&:first) }
+
+        # Now we can clean up "once per number of attempts", so in reality this generates
+        #   only ~3 extra queries because barely any results have only 1 or only 4 attempts.
+        results_with_attempt_count.each do |valid_count, result_ids|
+          LiveAttempt.where(live_result_id: result_ids)
+                     .where.not(attempt_number: ..valid_count)
+                     .delete_all
+        end
+      end
 
       histories_to_generate = round_results_wcif.filter_map do |round_result_wcif|
         registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
@@ -776,17 +805,20 @@ class Round < ApplicationRecord
   end
 
   def to_wcif(include_results: true, version: Competition::WCIF_STABLE_VERSION)
+    at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+    results = at_least_v2 || competition.scoretaking_software_internal? ? live_results : round_results
+
     base_wcif = {
       "id" => wcif_id,
       "format" => self.format_id,
       "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
       "cutoff" => cutoff&.to_wcif,
       "scrambleSetCount" => self.scramble_set_count,
-      "results" => include_results ? round_results.map(&:to_wcif) : nil,
+      "results" => include_results ? results.map(&:to_wcif) : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
 
-    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+    if at_least_v2
       base_wcif.merge(
         "linkedRounds" => linked_round&.wcif_ids,
         "participationRuleset" => {

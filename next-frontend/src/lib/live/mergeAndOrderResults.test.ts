@@ -492,6 +492,32 @@ const testResults = {
 };
 // 333bf-r1 uses Ao5 format (sort by average, then single)
 const ao5Format = formats.byId["a"];
+// FMC uses Mean of 3 (sort by average/mean, then single)
+const mo3Format = formats.byId["m"];
+
+const makeFmcResult = (
+  registrationId: number,
+  best: number,
+  average: number,
+): LiveResultsByRegistrationId => ({
+  [String(registrationId)]: [
+    {
+      global_pos: 0,
+      local_pos: 0,
+      registration_id: registrationId,
+      best,
+      average,
+      single_record_tag: "",
+      average_record_tag: "",
+      advancing: false,
+      last_attempt_entered_at: "2026-05-01T10:00:00.000Z",
+      advancing_questionable: false,
+      event_id: "333fm",
+      attempts: [],
+      round_wcif_id: "333fm-r1",
+    },
+  ],
+});
 
 describe("mergeAndOrderResults", () => {
   it("ranks valid competitors above DNF and empty competitors", () => {
@@ -578,5 +604,61 @@ describe("mergeAndOrderResults", () => {
     for (const id of emptyIds) {
       expect(posById[id], `expected ${id} to have global_pos 5`).toBe(5);
     }
+  });
+});
+
+describe("mergeAndOrderResults for FMC (Mean of 3)", () => {
+  it("ranks incomplete result (best=39) above DNF mean result (best=40)", () => {
+    // Both have invalid means; they should rank only by best single.
+    // incomplete: average=0, best=39 (only one attempt entered)
+    // DNF mean:   average=-1, best=40 (two valid + one DNF)
+    const fmcResults: LiveResultsByRegistrationId = {
+      ...makeFmcResult(1, 20, 2500), // complete mean of 25 moves → rank 1
+      ...makeFmcResult(2, 25, 3000), // complete mean of 30 moves → rank 2
+      ...makeFmcResult(3, 30, 3500), // complete mean of 35 moves → rank 3
+      ...makeFmcResult(4, 39, 0), // incomplete (one attempt only) → rank 4
+      ...makeFmcResult(5, 40, -1), // DNF mean (40, 50, DNF)      → rank 5
+    };
+
+    const result = mergeAndOrderResults(
+      fmcResults,
+      makeCompetitorsMap(fmcResults),
+      mo3Format,
+    );
+    const posById = Object.fromEntries(result.map((r) => [r.id, r.global_pos]));
+
+    expect(posById[1]).toBe(1);
+    expect(posById[2]).toBe(2);
+    expect(posById[3]).toBe(3);
+    expect(posById[4]).toBe(4); // incomplete with best=39 ranks above DNF mean with best=40
+    expect(posById[5]).toBe(5);
+  });
+
+  it("ranks all-DNF result (best=-1) at the very bottom, below incomplete and DNF mean", () => {
+    // Tier 1: valid means
+    // Tier 2: invalid mean but valid single (incomplete or partial DNF) — ranked by best single
+    // Tier 3: invalid mean AND invalid single (all DNF/DNS) — ranked last
+    const fmcResults: LiveResultsByRegistrationId = {
+      ...makeFmcResult(1, 20, 2500), // complete mean of 25 moves → rank 1
+      ...makeFmcResult(2, 25, 3000), // complete mean of 30 moves → rank 2
+      ...makeFmcResult(3, 30, 3500), // complete mean of 35 moves → rank 3
+      ...makeFmcResult(4, 39, 0), // incomplete (one attempt only, best=39)  → rank 4
+      ...makeFmcResult(5, 40, -1), // DNF mean, best single=40               → rank 5
+      ...makeFmcResult(6, -1, -1), // all DNF (best=-1, mean=-1)              → rank 6
+    };
+
+    const result = mergeAndOrderResults(
+      fmcResults,
+      makeCompetitorsMap(fmcResults),
+      mo3Format,
+    );
+    const posById = Object.fromEntries(result.map((r) => [r.id, r.global_pos]));
+
+    expect(posById[1]).toBe(1);
+    expect(posById[2]).toBe(2);
+    expect(posById[3]).toBe(3);
+    expect(posById[4]).toBe(4);
+    expect(posById[5]).toBe(5);
+    expect(posById[6]).toBe(6); // all-DNF ranks below everyone with a valid single
   });
 });

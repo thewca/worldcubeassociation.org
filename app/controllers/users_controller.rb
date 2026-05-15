@@ -115,16 +115,30 @@ class UsersController < ApplicationController
     wca_id = params.require(:wcaId)
     person = Person.find_by(wca_id: wca_id)
 
-    return redirect_to edit_user_path(user), flash: { danger: "WCA ID #{wca_id} does not exist." } if person.nil?
-    return redirect_to edit_user_path(user), flash: { danger: "User already has a WCA ID: #{user.wca_id}." } if user.wca_id.present?
-    return redirect_to edit_user_path(user), flash: { danger: "WCA ID #{wca_id} is already assigned to another user." } if person.user.present?
-
-    ActiveRecord::Base.transaction do
-      user.assign_wca_id(wca_id)
-      user.update!(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+    if person.nil?
+      error = "WCA ID #{wca_id} does not exist."
+      status = :not_found
+    elsif user.wca_id.present?
+      error = "User already has a WCA ID: #{user.wca_id}."
+      status = :bad_request
+    elsif person.user.present?
+      error = "WCA ID #{wca_id} is already assigned to another user."
+      status = :bad_request
     end
 
-    redirect_to edit_user_path(user), flash: { success: "Successfully confirmed WCA ID #{wca_id}." }
+    respond_to do |format|
+      if error.present?
+        format.json { render status: status, json: { error: error } }
+        format.html { redirect_to edit_user_path(user), flash: { danger: error } }
+      else
+        ActiveRecord::Base.transaction do
+          user.assign_wca_id(wca_id)
+          user.update!(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+        end
+        format.json { render status: :ok, json: { success: true } }
+        format.html { redirect_to edit_user_path(user), flash: { success: "Successfully confirmed WCA ID #{wca_id}." } }
+      end
+    end
   end
 
   def clear_claim_wca_id

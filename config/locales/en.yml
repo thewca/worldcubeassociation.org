@@ -909,6 +909,7 @@ en:
         captcha:
           validation_error: "Please verify that you are not a robot."
       success_message: "Request submitted - we'll get back to you soon."
+      success_message_with_ticket_link_html: "Request submitted - we'll get back to you soon. To view the status of this request, please visit <a href=\"%{link}\">this link</a>."
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
