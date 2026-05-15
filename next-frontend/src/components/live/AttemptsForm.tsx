@@ -12,8 +12,8 @@ import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import { LiveCompetitor } from "@/types/live";
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { KeyboardEvent, ReactNode } from "react";
+import { useCallback, useImperativeHandle, useRef } from "react";
+import type { KeyboardEvent, ReactNode, Ref } from "react";
 import { attemptResultsWarning } from "@/lib/live/attempt-result";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
@@ -49,7 +49,7 @@ export default function AttemptsForm({
   const { competitors } = useLiveResults();
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const [focusTrigger, setFocusTrigger] = useState(0);
+  const attemptFieldsRef = useRef<AttemptFieldsNavHandle>(null);
 
   const { collection, filter } = useListCollection({
     initialItems: Array.from(competitors.values()),
@@ -91,7 +91,9 @@ export default function AttemptsForm({
           onValueChange={(e) => {
             if (e.value.length > 0) {
               handleRegistrationIdChange(parseInt(e.value[0], 10));
-              setFocusTrigger((t) => t + 1);
+              requestAnimationFrame(() =>
+                attemptFieldsRef.current?.focusFirst(),
+              );
             } else {
               handleRegistrationIdChange(undefined);
             }
@@ -125,8 +127,8 @@ export default function AttemptsForm({
         </Combobox.Root>
         <FocusScope>
           <AttemptFieldsNav
+            ref={attemptFieldsRef}
             onFocusCompetitor={() => inputRef.current?.focus()}
-            focusTrigger={focusTrigger}
           >
             {_.times(solveCount).map((index) => (
               <AttemptResultField
@@ -151,22 +153,28 @@ export default function AttemptsForm({
   );
 }
 
+interface AttemptFieldsNavHandle {
+  focusFirst: () => void;
+}
+
 interface AttemptFieldsNavProps {
   children: ReactNode;
   onFocusCompetitor: () => void;
-  focusTrigger: number;
+  ref?: Ref<AttemptFieldsNavHandle>;
 }
 
 function AttemptFieldsNav({
   children,
   onFocusCompetitor,
-  focusTrigger,
+  ref,
 }: AttemptFieldsNavProps) {
   const focusManager = useFocusManager();
 
-  useEffect(() => {
-    if (focusTrigger > 0) focusManager?.focusFirst();
-  }, [focusManager, focusTrigger]);
+  useImperativeHandle(
+    ref,
+    () => ({ focusFirst: () => focusManager?.focusFirst() }),
+    [focusManager],
+  );
 
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.ctrlKey || e.metaKey) return;
