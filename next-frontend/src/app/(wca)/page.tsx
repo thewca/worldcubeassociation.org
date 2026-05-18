@@ -18,10 +18,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
-import {
-  MarkdownFirstImage,
-  markDownFirstImageUrl,
-} from "@/components/MarkdownFirstImage";
+import { markDownFirstImageUrl } from "@/components/MarkdownFirstImage";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
