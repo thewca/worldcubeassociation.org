@@ -14,8 +14,10 @@ import {
   AbsoluteCenter,
   Float,
   Carousel,
+  Stack,
 } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
+import { MarkdownFirstImage } from "@/components/MarkdownFirstImage";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -26,6 +28,7 @@ import type {
   FullWidthBlock,
   ImageBannerBlock,
   ImageOnlyCardBlock,
+  LivestreamPanelBlock,
   Media,
   TestimonialsBlock,
   TwoBlocksBlock,
@@ -170,6 +173,91 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
           <Card.Title textStyle="h2">{block.heading}</Card.Title>
         </Card.Body>
       )}
+    </Card.Root>
+  );
+};
+
+const LivestreamPanel = async ({ block }: { block: LivestreamPanelBlock }) => {
+  const { t } = await getT();
+  const {
+    data: competition,
+    error,
+    response,
+  } = await getCompetitionInfo(block.competitionId);
+
+  if (error) return <OpenapiError t={t} response={response} />;
+
+  const titleSponsor = block.titleSponsor as Media | null | undefined;
+
+  return (
+    <Card.Root
+      colorPalette={block.colorPalette}
+      colorVariant="deep"
+      width="full"
+    >
+      <Card.Body gap={4}>
+        <Card.Title hideBelow="md">{competition.name}</Card.Title>
+        <Stack
+          gap={4}
+          direction={{ base: "column", md: "row" }}
+          alignItems="stretch"
+        >
+          {titleSponsor && (
+            <Box
+              flex="1"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <MediaImage
+                media={titleSponsor}
+                altFallback="Title Sponsor"
+                fit="contain"
+                maxH="48"
+              />
+            </Box>
+          )}
+          <Box flex="2" aspectRatio="16/9" overflow="hidden" borderRadius="md">
+            <iframe
+              width="100%"
+              height="100%"
+              style={{ display: "block", borderRadius: "inherit" }}
+              src={`https://www.youtube.com/embed/${block.youtubeVideoId}?autoplay=1&mute=1`}
+              title={block.heading}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          </Box>
+          <VStack flexWrap="wrap" justify="center">
+            <MarkdownFirstImage
+              content={competition.information}
+              alt={competition.name}
+            />
+            <HStack>
+              <Button asChild variant="outline" color="currentColor">
+                <Link
+                  href={route({
+                    pathname: "/competitions/[competitionId]",
+                    query: { competitionId: block.competitionId },
+                  })}
+                >
+                  View Competition
+                </Link>
+              </Button>
+              <Button asChild variant="outline" color="currentColor">
+                <Link
+                  href={route({
+                    pathname: "/competitions/[competitionId]/live",
+                    query: { competitionId: block.competitionId },
+                  })}
+                >
+                  Live Results
+                </Link>
+              </Button>
+            </HStack>
+          </VStack>
+        </Stack>
+      </Card.Body>
     </Card.Root>
   );
 };
@@ -421,6 +509,17 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
                 <TestimonialsSpinner block={subEntry} />
               </GridItem>
             );
+          case "LivestreamPanel":
+            return (
+              <GridItem
+                key={key}
+                colSpan={{ base: 1, md: columns[i] || 1 }}
+                display="flex"
+                width="full"
+              >
+                <LivestreamPanel block={subEntry} />
+              </GridItem>
+            );
           default:
             return null;
         }
@@ -448,6 +547,8 @@ const renderFullBlock = (entry: FullWidthBlock, keyPrefix = "") => {
             return <FeaturedCompetitions key={key} block={subEntry} />;
           case "TestimonialsSpinner":
             return <TestimonialsSpinner key={key} block={subEntry} />;
+          case "LivestreamPanel":
+            return <LivestreamPanel key={key} block={subEntry} />;
 
           default:
             return null;

@@ -72,6 +72,42 @@ const TestimonialsSpinner: Block = {
   ],
 };
 
+const LivestreamPanel: Block = {
+  slug: "LivestreamPanel",
+  interfaceName: "LivestreamPanelBlock",
+  labels: {
+    singular: "Livestream Panel",
+    plural: "Livestream Panels",
+  },
+  fields: [
+    {
+      name: "heading",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "youtubeVideoId",
+      label: "YouTube Video ID",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "titleSponsor",
+      label: "Title Sponsor Image",
+      type: "upload",
+      relationTo: "media",
+      required: false,
+    },
+    {
+      name: "competitionId",
+      label: "Competition ID",
+      type: "text",
+      required: false,
+    },
+    colorPaletteSelect,
+  ],
+};
+
 const coreBlocks = [
   TextCardBlock,
   AnnouncementsSection,
@@ -79,6 +115,7 @@ const coreBlocks = [
   ImageCardBlock,
   TestimonialsSpinner,
   FeaturedCompetitions,
+  LivestreamPanel,
 ];
 
 const twoBlocksLeaf: Block = {

@@ -977,6 +977,7 @@ export interface TwoBlocksBlock {
     | ImageOnlyCardBlock
     | TestimonialsBlock
     | FeaturedCompetitionsBlock
+    | LivestreamPanelBlock
     | TwoBlocksBranchBlock
   )[];
   id?: string | null;
@@ -1109,6 +1110,20 @@ export interface FeaturedCompetitionsBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LivestreamPanelBlock".
+ */
+export interface LivestreamPanelBlock {
+  heading: string;
+  youtubeVideoId: string;
+  titleSponsor?: (string | null) | Media;
+  competitionId: string;
+  colorPalette: ColorPaletteSelect;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'LivestreamPanel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TwoBlocksBranchBlock".
  */
 export interface TwoBlocksBranchBlock {
@@ -1121,6 +1136,7 @@ export interface TwoBlocksBranchBlock {
     | ImageOnlyCardBlock
     | TestimonialsBlock
     | FeaturedCompetitionsBlock
+    | LivestreamPanelBlock
     | TwoBlocksLeafBlock
   )[];
   id?: string | null;
@@ -1141,6 +1157,7 @@ export interface TwoBlocksLeafBlock {
     | ImageOnlyCardBlock
     | TestimonialsBlock
     | FeaturedCompetitionsBlock
+    | LivestreamPanelBlock
   )[];
   id?: string | null;
   blockName?: string | null;
@@ -1158,6 +1175,7 @@ export interface FullWidthBlock {
     | ImageOnlyCardBlock
     | TestimonialsBlock
     | FeaturedCompetitionsBlock
+    | LivestreamPanelBlock
   )[];
   id?: string | null;
   blockName?: string | null;
@@ -1638,6 +1656,7 @@ export interface TwoBlocksBlockSelect<T extends boolean = true> {
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
+        LivestreamPanel?: T | LivestreamPanelBlockSelect<T>;
         twoBlocksBranch?: T | TwoBlocksBranchBlockSelect<T>;
       };
   id?: T;
@@ -1731,6 +1750,19 @@ export interface FeaturedCompetitionsBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LivestreamPanelBlock_select".
+ */
+export interface LivestreamPanelBlockSelect<T extends boolean = true> {
+  heading?: T;
+  youtubeVideoId?: T;
+  titleSponsor?: T;
+  competitionId?: T;
+  colorPalette?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TwoBlocksBranchBlock_select".
  */
 export interface TwoBlocksBranchBlockSelect<T extends boolean = true> {
@@ -1745,6 +1777,7 @@ export interface TwoBlocksBranchBlockSelect<T extends boolean = true> {
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
+        LivestreamPanel?: T | LivestreamPanelBlockSelect<T>;
         twoBlocksLeaf?: T | TwoBlocksLeafBlockSelect<T>;
       };
   id?: T;
@@ -1766,6 +1799,7 @@ export interface TwoBlocksLeafBlockSelect<T extends boolean = true> {
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
+        LivestreamPanel?: T | LivestreamPanelBlockSelect<T>;
       };
   id?: T;
   blockName?: T;
@@ -1784,6 +1818,7 @@ export interface FullWidthBlockSelect<T extends boolean = true> {
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
+        LivestreamPanel?: T | LivestreamPanelBlockSelect<T>;
       };
   id?: T;
   blockName?: T;
