@@ -323,6 +323,8 @@ export interface Config {
       )[];
   globals: {
     nav: Nav;
+    footer: Footer;
+    'social-links': SocialLinks;
     home: Home;
     'about-us-page': AboutUsPage;
     'privacy-page': PrivacyPage;
@@ -335,6 +337,8 @@ export interface Config {
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
+    'social-links': SocialLinksSelect<false> | SocialLinksSelect<true>;
     home: HomeSelect<false> | HomeSelect<true>;
     'about-us-page': AboutUsPageSelect<false> | AboutUsPageSelect<true>;
     'privacy-page': PrivacyPageSelect<false> | PrivacyPageSelect<true>;
@@ -951,6 +955,120 @@ export interface Nav {
   )[];
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: string;
+  navigationLinks?: (
+    | {
+        displayText: string;
+        targetLink: StaticTargetLink;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'FooterLinkItem';
+      }
+    | {
+        displayText: string;
+        targetLink: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'FooterExternalLinkItem';
+      }
+  )[] | null;
+  legalLinks?: {
+    displayText: string;
+    targetLink: StaticTargetLink;
+    id?: string | null;
+    blockName?: string | null;
+    blockType: 'FooterLinkItem';
+  }[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  navigationLinks?:
+    | T
+    | {
+        FooterLinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+        FooterExternalLinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  legalLinks?:
+    | T
+    | {
+        FooterLinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links".
+ */
+export interface SocialLinks {
+  id: string;
+  dropdownLabel?: string | null;
+  links?: {
+    displayText: string;
+    targetLink: string;
+    displayIcon: IconName;
+    id?: string | null;
+    blockName?: string | null;
+    blockType: 'SocialLinkItem';
+  }[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links_select".
+ */
+export interface SocialLinksSelect<T extends boolean = true> {
+  dropdownLabel?: T;
+  links?:
+    | T
+    | {
+        SocialLinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              displayIcon?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
