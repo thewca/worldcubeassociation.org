@@ -1,4 +1,9 @@
+import type { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: { absolute: "World Cube Association" },
+};
 import {
   SimpleGrid,
   GridItem,
