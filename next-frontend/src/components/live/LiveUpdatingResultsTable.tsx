@@ -56,9 +56,14 @@ export default function LiveUpdatingResultsTable({
   return (
     <VStack align="left">
       <HStack>
-        <Heading textStyle={{ sm: "h3", md: "h2", lg: "h1" }}>{title}</Heading>
-        <ConnectionPulse connectionState={connectionState} />
+        <Heading
+          textStyle={{ sm: "h3", md: "h2", lg: "h1" }}
+          textTransform="uppercase"
+        >
+          {title}
+        </Heading>
         <Spacer flex={1} />
+        <ConnectionPulse connectionState={connectionState} />
         {isLinkedRound && (
           <Switch.Root
             checked={showLinkedRoundsView}
