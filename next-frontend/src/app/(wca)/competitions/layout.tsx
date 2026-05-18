@@ -8,5 +8,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function Layout({ children }: { children: ReactNode }) {
+  // Required by Next.js; this layout exists only to attach metadata to this route segment
   return children;
 }
