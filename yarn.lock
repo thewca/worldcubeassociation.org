@@ -1448,17 +1448,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@csstools/css-calc@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "@csstools/css-calc@npm:3.2.0"
-  peerDependencies:
-    "@csstools/css-parser-algorithms": ^4.0.0
-    "@csstools/css-tokenizer": ^4.0.0
-  checksum: 10c0/a4dffeef3cb8ec9e8c1e44fa68c7634033050be52ea0b56ba6ac3815b635b587c6f3a8f8cd7b8f53881c2dd0ab9ec0af77227c532ed81b8e24a05aa997d22337
-  languageName: node
-  linkType: hard
-
-"@csstools/css-calc@npm:^3.2.1":
+"@csstools/css-calc@npm:^3.2.0, @csstools/css-calc@npm:^3.2.1":
   version: 3.2.1
   resolution: "@csstools/css-calc@npm:3.2.1"
   peerDependencies:
@@ -4913,14 +4903,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "date-fns@npm:4.1.0"
-  checksum: 10c0/b79ff32830e6b7faa009590af6ae0fb8c3fd9ffad46d930548fbb5acf473773b4712ae887e156ba91a7b3dc30591ce0f517d69fd83bd9c38650fdc03b4e0bac8
-  languageName: node
-  linkType: hard
-
-"date-fns@npm:^4.2.0":
+"date-fns@npm:^4.1.0, date-fns@npm:^4.2.0":
   version: 4.2.0
   resolution: "date-fns@npm:4.2.0"
   checksum: 10c0/28983b184899b2ab7576382aa4f9f1c6bab5a56e9efb83fe9c34e9a3b1b05447259a23e179e5754c8386dfa705abef2c891318f7f5056cc100744c116081e11f
@@ -11224,28 +11207,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-scss@npm:^7.0.0":
-  version: 7.1.0
-  resolution: "stylelint-scss@npm:7.1.0"
-  dependencies:
-    "@csstools/css-calc": "npm:^3.2.0"
-    "@csstools/css-parser-algorithms": "npm:^4.0.0"
-    "@csstools/css-syntax-patches-for-csstree": "npm:^1.1.3"
-    "@csstools/css-tokenizer": "npm:^4.0.0"
-    css-tree: "npm:^3.2.1"
-    is-plain-object: "npm:^5.0.0"
-    known-css-properties: "npm:^0.37.0"
-    postcss-media-query-parser: "npm:^0.2.3"
-    postcss-resolve-nested-selector: "npm:^0.1.6"
-    postcss-selector-parser: "npm:^7.1.1"
-    postcss-value-parser: "npm:^4.2.0"
-  peerDependencies:
-    stylelint: ^16.8.2 || ^17.0.0
-  checksum: 10c0/12e47ce0093d7d08aa2323fdea2bb632cbc39a1470772ca237a0325285af66eeea29c67b3fff7763bfcfcc437479541238b791ce126cd9928c0b73a5ae29b228
-  languageName: node
-  linkType: hard
-
-"stylelint-scss@npm:^7.1.1":
+"stylelint-scss@npm:^7.0.0, stylelint-scss@npm:^7.1.1":
   version: 7.1.1
   resolution: "stylelint-scss@npm:7.1.1"
   dependencies:
