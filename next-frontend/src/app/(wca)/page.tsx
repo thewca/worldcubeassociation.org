@@ -15,9 +15,13 @@ import {
   Float,
   Carousel,
   Stack,
+  Image,
 } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
-import { MarkdownFirstImage } from "@/components/MarkdownFirstImage";
+import {
+  MarkdownFirstImage,
+  markDownFirstImageUrl,
+} from "@/components/MarkdownFirstImage";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -229,9 +233,11 @@ const LivestreamPanel = async ({ block }: { block: LivestreamPanelBlock }) => {
             />
           </Box>
           <VStack flexWrap="wrap" justify="center">
-            <MarkdownFirstImage
-              content={competition.information}
+            <Image
+              src={markDownFirstImageUrl(competition.information)}
               alt={competition.name}
+              maxW="full"
+              borderRadius="md"
             />
             <HStack>
               <Button asChild variant="outline" color="currentColor">
