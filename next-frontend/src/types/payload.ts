@@ -324,6 +324,7 @@ export interface Config {
   globals: {
     nav: Nav;
     footer: Footer;
+    'social-links': SocialLinks;
     home: Home;
     'about-us-page': AboutUsPage;
     'privacy-page': PrivacyPage;
@@ -337,6 +338,7 @@ export interface Config {
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'social-links': SocialLinksSelect<false> | SocialLinksSelect<true>;
     home: HomeSelect<false> | HomeSelect<true>;
     'about-us-page': AboutUsPageSelect<false> | AboutUsPageSelect<true>;
     'privacy-page': PrivacyPageSelect<false> | PrivacyPageSelect<true>;
@@ -976,14 +978,6 @@ export interface Footer {
         blockType: 'FooterExternalLinkItem';
       }
   )[] | null;
-  socialLinks?: {
-    displayText: string;
-    targetLink: string;
-    displayIcon: IconName;
-    id?: string | null;
-    blockName?: string | null;
-    blockType: 'FooterSocialLinkItem';
-  }[] | null;
   legalLinks?: {
     displayText: string;
     targetLink: StaticTargetLink;
@@ -1019,19 +1013,6 @@ export interface FooterSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
-  socialLinks?:
-    | T
-    | {
-        FooterSocialLinkItem?:
-          | T
-          | {
-              displayText?: T;
-              targetLink?: T;
-              displayIcon?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
   legalLinks?:
     | T
     | {
@@ -1040,6 +1021,45 @@ export interface FooterSelect<T extends boolean = true> {
           | {
               displayText?: T;
               targetLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links".
+ */
+export interface SocialLinks {
+  id: string;
+  links?: {
+    displayText: string;
+    targetLink: string;
+    displayIcon: IconName;
+    id?: string | null;
+    blockName?: string | null;
+    blockType: 'SocialLinkItem';
+  }[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links_select".
+ */
+export interface SocialLinksSelect<T extends boolean = true> {
+  links?:
+    | T
+    | {
+        SocialLinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              displayIcon?: T;
               id?: T;
               blockName?: T;
             };

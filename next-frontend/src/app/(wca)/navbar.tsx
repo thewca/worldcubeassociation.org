@@ -5,6 +5,7 @@ import {
   Collapsible,
   HStack,
   IconButton,
+  Link as ChakraLink,
   Menu,
   Separator,
   Text,
@@ -55,9 +56,13 @@ const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
 export default async function Navbar() {
   const payload = await getPayload({ config });
-  const navbar = await payload.findGlobal({ slug: "nav" });
+  const [navbar, socialLinksGlobal] = await Promise.all([
+    payload.findGlobal({ slug: "nav" }),
+    payload.findGlobal({ slug: "social-links" }),
+  ]);
 
   const session = await auth();
+  const socialLinks = socialLinksGlobal.links ?? [];
 
   // Prevent people part of the Live Results Beta to escape onto the payload pages
   const navbarEntries = LIVE_RESULT_BETA ? [] : navbar.entry;
@@ -188,6 +193,19 @@ export default async function Navbar() {
               <Text hideBelow="md">Oh no, there are no navbar items!</Text>
             )}
             <ColorModeButton />
+            <HStack hideBelow="md" gap={0}>
+              {socialLinks.map((item) => (
+                <IconButton key={item.id} variant="ghost" size="sm" asChild>
+                  <ChakraLink
+                    href={item.targetLink}
+                    target="_blank"
+                    aria-label={item.displayText}
+                  >
+                    <IconDisplay name={item.displayIcon as IconName} />
+                  </ChakraLink>
+                </IconButton>
+              ))}
+            </HStack>
             <Box hideBelow="md">
               <LanguageSelector />
             </Box>
@@ -356,6 +374,19 @@ export default async function Navbar() {
                 </React.Fragment>
               ))}
               <Separator />
+              <HStack wrap="wrap" gap={0}>
+                {socialLinks.map((item) => (
+                  <IconButton key={item.id} variant="ghost" size="sm" asChild>
+                    <ChakraLink
+                      href={item.targetLink}
+                      target="_blank"
+                      aria-label={item.displayText}
+                    >
+                      <IconDisplay name={item.displayIcon as IconName} />
+                    </ChakraLink>
+                  </IconButton>
+                ))}
+              </HStack>
               <VStack align="start">
                 <LanguageSelector />
                 <AvatarMenu session={session} />

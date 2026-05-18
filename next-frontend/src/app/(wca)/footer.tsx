@@ -16,10 +16,13 @@ import type { IconName } from "@/components/icons/iconMap";
 
 export default async function Footer() {
   const payload = await getPayload({ config });
-  const footer = await payload.findGlobal({ slug: "footer" });
+  const [footer, socialLinksGlobal] = await Promise.all([
+    payload.findGlobal({ slug: "footer" }),
+    payload.findGlobal({ slug: "social-links" }),
+  ]);
 
   const navigationLinks = footer.navigationLinks ?? [];
-  const socialLinks = footer.socialLinks ?? [];
+  const socialLinks = socialLinksGlobal.links ?? [];
   const legalLinks = footer.legalLinks ?? [];
 
   return (
