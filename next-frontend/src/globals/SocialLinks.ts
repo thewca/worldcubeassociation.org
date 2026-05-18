@@ -29,6 +29,10 @@ export const SocialLinks: GlobalConfig = {
   slug: "social-links",
   fields: [
     {
+      name: "dropdownLabel",
+      type: "text",
+    },
+    {
       name: "links",
       type: "blocks",
       blocks: [SocialLinkItem],

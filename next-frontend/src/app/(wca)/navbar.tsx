@@ -5,7 +5,6 @@ import {
   Collapsible,
   HStack,
   IconButton,
-  Link as ChakraLink,
   Menu,
   Separator,
   Text,
@@ -63,6 +62,7 @@ export default async function Navbar() {
 
   const session = await auth();
   const socialLinks = socialLinksGlobal.links ?? [];
+  const socialDropdownLabel = socialLinksGlobal.dropdownLabel ?? "Find Us";
 
   // Prevent people part of the Live Results Beta to escape onto the payload pages
   const navbarEntries = LIVE_RESULT_BETA ? [] : navbar.entry;
@@ -186,6 +186,37 @@ export default async function Navbar() {
                   )}
                 </React.Fragment>
               ))}
+              {socialLinks.length > 0 && (
+                <Menu.Root>
+                  <Menu.Trigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <IconDisplay name="External Link" />
+                      {socialDropdownLabel}
+                      <LuChevronDown />
+                    </Button>
+                  </Menu.Trigger>
+                  <Menu.Positioner>
+                    <Menu.Content>
+                      {socialLinks.map((item) => (
+                        <Menu.Item
+                          key={item.id}
+                          value={item.id ?? item.targetLink}
+                          asChild
+                        >
+                          <a
+                            href={item.targetLink}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <IconDisplay name={item.displayIcon as IconName} />
+                            {item.displayText}
+                          </a>
+                        </Menu.Item>
+                      ))}
+                    </Menu.Content>
+                  </Menu.Positioner>
+                </Menu.Root>
+              )}
             </HStack>
           </HStack>
           <HStack>
@@ -193,19 +224,6 @@ export default async function Navbar() {
               <Text hideBelow="md">Oh no, there are no navbar items!</Text>
             )}
             <ColorModeButton />
-            <HStack hideBelow="md" gap={0}>
-              {socialLinks.map((item) => (
-                <IconButton key={item.id} variant="ghost" size="sm" asChild>
-                  <ChakraLink
-                    href={item.targetLink}
-                    target="_blank"
-                    aria-label={item.displayText}
-                  >
-                    <IconDisplay name={item.displayIcon as IconName} />
-                  </ChakraLink>
-                </IconButton>
-              ))}
-            </HStack>
             <Box hideBelow="md">
               <LanguageSelector />
             </Box>
@@ -373,20 +391,47 @@ export default async function Navbar() {
                   )}
                 </React.Fragment>
               ))}
-              <Separator />
-              <HStack wrap="wrap" gap={0}>
-                {socialLinks.map((item) => (
-                  <IconButton key={item.id} variant="ghost" size="sm" asChild>
-                    <ChakraLink
-                      href={item.targetLink}
-                      target="_blank"
-                      aria-label={item.displayText}
+              {socialLinks.length > 0 && (
+                <Collapsible.Root>
+                  <Collapsible.Trigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      justifyContent="flex-start"
+                      width="full"
                     >
-                      <IconDisplay name={item.displayIcon as IconName} />
-                    </ChakraLink>
-                  </IconButton>
-                ))}
-              </HStack>
+                      <IconDisplay name="External Link" />
+                      {socialDropdownLabel}
+                      <Collapsible.Indicator ml="auto">
+                        <LuChevronDown />
+                      </Collapsible.Indicator>
+                    </Button>
+                  </Collapsible.Trigger>
+                  <Collapsible.Content>
+                    <VStack align="stretch" pl={4} gap={1} py={1}>
+                      {socialLinks.map((item) => (
+                        <Button
+                          key={item.id}
+                          asChild
+                          variant="ghost"
+                          size="sm"
+                          justifyContent="flex-start"
+                        >
+                          <a
+                            href={item.targetLink}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <IconDisplay name={item.displayIcon as IconName} />
+                            {item.displayText}
+                          </a>
+                        </Button>
+                      ))}
+                    </VStack>
+                  </Collapsible.Content>
+                </Collapsible.Root>
+              )}
+              <Separator />
               <VStack align="start">
                 <LanguageSelector />
                 <AvatarMenu session={session} />

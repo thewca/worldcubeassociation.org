@@ -1035,6 +1035,7 @@ export interface FooterSelect<T extends boolean = true> {
  */
 export interface SocialLinks {
   id: string;
+  dropdownLabel?: string | null;
   links?: {
     displayText: string;
     targetLink: string;
@@ -1051,6 +1052,7 @@ export interface SocialLinks {
  * via the `definition` "social-links_select".
  */
 export interface SocialLinksSelect<T extends boolean = true> {
+  dropdownLabel?: T;
   links?:
     | T
     | {
