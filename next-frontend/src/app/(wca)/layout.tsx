@@ -13,7 +13,7 @@ import NextTopLoader from "nextjs-toploader";
 export const metadata: Metadata = {
   title: {
     template: "%s | World Cube Association",
-    default: "",
+    default: "World Cube Association",
   },
 };
 
