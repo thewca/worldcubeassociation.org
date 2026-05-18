@@ -236,7 +236,7 @@ const LivestreamPanel = async ({ block }: { block: LivestreamPanelBlock }) => {
             <Image
               src={markDownFirstImageUrl(competition.information)}
               alt={competition.name}
-              maxW="full"
+              w={{ base: "full", md: "2xs", lg: "xs" }}
               borderRadius="md"
             />
             <HStack>
