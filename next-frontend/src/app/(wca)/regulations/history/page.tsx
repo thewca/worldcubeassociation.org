@@ -10,8 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
 
   return {
-    // This is currently hardcoded in Rails
-    title: t("WCA Regulations History"),
+    title: t("layouts.navigation.history"),
   };
 }
 export default async function RegulationsHistory() {
