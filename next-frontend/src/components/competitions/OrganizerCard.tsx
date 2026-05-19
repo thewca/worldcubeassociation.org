@@ -11,7 +11,7 @@ import {
   Stat,
 } from "@chakra-ui/react";
 import { Link as ChakraLink } from "@chakra-ui/react";
-import { MarkdownProse } from "@/components/Markdown";
+import { ChakraMarkdown } from "@/components/Markdown";
 import WcaDocsIcon from "@/components/icons/WcaDocsIcon";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 
@@ -89,10 +89,9 @@ export default function OrganizationTeamCard({
         {competitionInfo.contact && (
           <Stat.Root variant="competition">
             <Stat.Label>Contact</Stat.Label>
-            <MarkdownProse
-              as={Stat.ValueText}
-              content={competitionInfo.contact}
-            />
+            <Stat.ValueText>
+              <ChakraMarkdown>{competitionInfo.contact}</ChakraMarkdown>
+            </Stat.ValueText>
           </Stat.Root>
         )}
 

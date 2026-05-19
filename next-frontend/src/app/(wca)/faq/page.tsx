@@ -7,12 +7,11 @@ import {
   Heading,
   Tabs,
   Accordion,
-  Text,
 } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { FaqCategory, FaqQuestion } from "@/types/payload";
-import { MarkdownProse } from "@/components/Markdown";
+import { ChakraMarkdown } from "@/components/Markdown";
 import { uniqBy } from "lodash";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
@@ -52,12 +51,9 @@ export default async function FAQ() {
           <Card.Body>
             <Card.Title textStyle="h1">Frequently Asked Questions</Card.Title>
             {faqPage.introTextMarkdown ? (
-              <MarkdownProse
-                content={faqPage.introTextMarkdown}
-                textStyle="body"
-              />
+              <ChakraMarkdown>{faqPage.introTextMarkdown}</ChakraMarkdown>
             ) : (
-              <Text>No Intro text, add it!</Text>
+              <Card.Description>No Intro text, add it!</Card.Description>
             )}
           </Card.Body>
         </Card.Root>

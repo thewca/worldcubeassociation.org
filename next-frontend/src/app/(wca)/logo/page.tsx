@@ -9,7 +9,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
-import { MarkdownProse } from "@/components/Markdown";
+import { ChakraMarkdown } from "@/components/Markdown";
 import { Media } from "@/types/payload";
 import LogoDownload from "@/app/(wca)/logo/download";
 import { Fragment } from "react";
@@ -48,11 +48,7 @@ export default async function LogoPage() {
               return (
                 <Fragment key={item.id}>
                   <Heading size="2xl">{item.title}</Heading>
-                  <MarkdownProse
-                    key={item.id}
-                    content={item.contentMarkdown!}
-                    as={Text}
-                  />
+                  <ChakraMarkdown>{item.contentMarkdown!}</ChakraMarkdown>
                 </Fragment>
               );
             }

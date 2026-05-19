@@ -23,7 +23,7 @@ import SpectatorsIcon from "@/components/icons/SpectatorsIcon";
 import OnTheSpotRegistrationIcon from "@/components/icons/OnTheSpotRegistrationIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import EventIcon from "@/components/EventIcon";
-import { MarkdownProse } from "@/components/Markdown";
+import { ChakraMarkdown } from "@/components/Markdown";
 import VenueIcon from "@/components/icons/VenueIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import DetailsIcon from "@/components/icons/DetailsIcon";
@@ -87,10 +87,9 @@ export function VenueDetailsCard({
               <VenueIcon />
               Venue
             </Stat.Label>
-            <MarkdownProse
-              as={Stat.ValueText}
-              content={competitionInfo.venue}
-            />
+            <Stat.ValueText>
+              <ChakraMarkdown>{competitionInfo.venue}</ChakraMarkdown>
+            </Stat.ValueText>
           </Stat.Root>
 
           <Stat.Root variant="competition">
@@ -107,10 +106,9 @@ export function VenueDetailsCard({
                 <DetailsIcon />
                 Details
               </Stat.Label>
-              <MarkdownProse
-                as={Stat.ValueText}
-                content={competitionInfo.venue_details}
-              />
+              <Stat.ValueText>
+                <ChakraMarkdown>{competitionInfo.venue_details}</ChakraMarkdown>
+              </Stat.ValueText>
             </Stat.Root>
           )}
         </SimpleGrid>
@@ -128,12 +126,11 @@ export function AdditionalInformationCard({
     <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Information</Card.Title>
-        <MarkdownProse
-          as={Card.Description}
-          content={competitionInfo.information}
-          imageProps={{ maxW: "sm" }}
-          textStyle="body"
-        />
+        <Card.Description>
+          <ChakraMarkdown imageProps={{ maxW: "sm" }}>
+            {competitionInfo.information}
+          </ChakraMarkdown>
+        </Card.Description>
       </Card.Body>
     </Card.Root>
   );

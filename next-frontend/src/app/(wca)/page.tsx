@@ -20,7 +20,7 @@ import {
   Float,
   Carousel,
 } from "@chakra-ui/react";
-import { MarkdownProse } from "@/components/Markdown";
+import { ChakraMarkdown } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -81,11 +81,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
           {block.heading}
         </Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
-        <MarkdownProse
-          as={Card.Description}
-          content={block.bodyMarkdown!}
-          textStyle="body"
-        />
+        <ChakraMarkdown>{block.bodyMarkdown!}</ChakraMarkdown>
       </Card.Body>
       {block.buttonText?.trim() && (
         <Card.Footer>
@@ -149,11 +145,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
         >
           {block.heading}
         </Card.Title>
-        <MarkdownProse
-          as={Card.Description}
-          content={block.bodyMarkdown!}
-          textStyle={{ base: "body", md: "s2" }}
-        />
+        <ChakraMarkdown>{block.bodyMarkdown!}</ChakraMarkdown>
         {block.bgImage && (
           <Float
             placement="bottom-end"
@@ -284,11 +276,9 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                     {testimonial.punchline}
                   </Card.Title>
                   <Separator size="md" />
-                  <MarkdownProse
-                    as={Card.Description}
-                    content={testimonial.fullTestimonialMarkdown!}
-                    textStyle="quote"
-                  />
+                  <ChakraMarkdown>
+                    {testimonial.fullTestimonialMarkdown!}
+                  </ChakraMarkdown>
                   <Text>{testimonial.whoDunnit}</Text>
                 </Card.Body>
               </Card.Root>

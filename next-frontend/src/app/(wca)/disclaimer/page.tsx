@@ -1,7 +1,7 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { Container, Heading, VStack, Box } from "@chakra-ui/react";
-import { MarkdownProse } from "@/components/Markdown";
+import { ChakraMarkdown } from "@/components/Markdown";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
 
@@ -32,7 +32,7 @@ export default async function Disclaimer() {
         {disclaimerItems.map((item) => (
           <Box key={item.id}>
             {item.title && <Heading size="xl">{item.title}</Heading>}
-            <MarkdownProse content={item.contentMarkdown!} />
+            <ChakraMarkdown>{item.contentMarkdown!}</ChakraMarkdown>
           </Box>
         ))}
       </VStack>
