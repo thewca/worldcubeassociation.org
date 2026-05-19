@@ -38,9 +38,4 @@ export const SocialLinks: GlobalConfig = {
       blocks: [SocialLinkItem],
     },
   ],
-  admin: {
-    livePreview: {
-      url: "/",
-    },
-  },
 };
