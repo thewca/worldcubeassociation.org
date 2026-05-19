@@ -111,6 +111,17 @@ const NestedDropdown: Block = {
   ],
 };
 
+const SocialsMenu: Block = {
+  slug: "SocialsMenu",
+  fields: [
+    {
+      name: "label",
+      type: "text",
+      required: true,
+    },
+  ],
+};
+
 const Dropdown: Block = {
   slug: "NavDropdown",
   fields: [
@@ -140,7 +151,7 @@ export const Nav: GlobalConfig = {
     {
       name: "entry",
       type: "blocks",
-      blocks: [Dropdown, LinkItem, ExternalLinkItem],
+      blocks: [Dropdown, LinkItem, ExternalLinkItem, SocialsMenu],
       required: true,
       maxRows: 8,
     },

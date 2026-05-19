@@ -952,6 +952,12 @@ export interface Nav {
         blockName?: string | null;
         blockType: 'ExternalLinkItem';
       }
+    | {
+        label: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'SocialsMenu';
+      }
   )[];
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1035,7 +1041,6 @@ export interface FooterSelect<T extends boolean = true> {
  */
 export interface SocialLinks {
   id: string;
-  dropdownLabel?: string | null;
   links?: {
     displayText: string;
     targetLink: string;
@@ -1052,7 +1057,6 @@ export interface SocialLinks {
  * via the `definition` "social-links_select".
  */
 export interface SocialLinksSelect<T extends boolean = true> {
-  dropdownLabel?: T;
   links?:
     | T
     | {
@@ -1716,6 +1720,13 @@ export interface NavSelect<T extends boolean = true> {
               displayText?: T;
               targetLink?: T;
               displayIcon?: T;
+              id?: T;
+              blockName?: T;
+            };
+        SocialsMenu?:
+          | T
+          | {
+              label?: T;
               id?: T;
               blockName?: T;
             };
