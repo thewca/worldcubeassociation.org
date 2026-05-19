@@ -1445,8 +1445,32 @@ class Competition < ApplicationRecord
   end
 
   def events_with_podium_results
-    results.includes(:result_attempts).podium.order(:pos).group_by(&:event)
-           .sort_by { |event, _results| event.rank }
+    linked_event_ids = results.joins(round: :linked_round).distinct.pluck(:event_id)
+
+    if linked_event_ids.empty?
+      return results.includes(:result_attempts).podium.order(:pos).group_by(&:event)
+                    .sort_by { |event, _results| event.rank }
+    end
+
+    podium_groups = results.includes(:result_attempts)
+                           .podium
+                           .where.not(event_id: linked_event_ids)
+                           .order(:pos)
+                           .group_by(&:event)
+
+    results.includes(:result_attempts)
+           .succeeded
+           .where(event_id: linked_event_ids)
+           .group_by(&:event)
+           .each do |event, event_results|
+             merged = event_results
+                      .sort_by { |r| [r.average.positive? ? r.average : Float::INFINITY, r.best] }
+                      .uniq(&:person_id)
+                      .first(3)
+             podium_groups[event] = merged unless merged.empty?
+           end
+
+    podium_groups.sort_by { |event, _results| event.rank }
   end
 
   def winning_results
