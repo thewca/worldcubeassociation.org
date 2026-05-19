@@ -13,6 +13,39 @@ import Link from "next/link";
 import Image from "next/image";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/components/icons/iconMap";
+import type { Footer, SocialLinks } from "@/types/payload";
+
+type FooterNavItem = NonNullable<Footer["navigationLinks"]>[number];
+type FooterSocialItem = NonNullable<SocialLinks["links"]>[number];
+
+function FooterLink({ item }: { item: FooterNavItem | FooterSocialItem }) {
+  if (item.blockType === "FooterLinkItem") {
+    return (
+      <ChakraLink asChild textStyle="headerLink">
+        <Link href={item.targetLink}>{item.displayText}</Link>
+      </ChakraLink>
+    );
+  }
+  if (item.blockType === "SocialLinkItem") {
+    return (
+      <IconButton variant="ghost" asChild>
+        <ChakraLink
+          textStyle="headerLink"
+          href={item.targetLink}
+          target="_blank"
+          aria-label={item.displayText}
+        >
+          <IconDisplay name={item.displayIcon as IconName} />
+        </ChakraLink>
+      </IconButton>
+    );
+  }
+  return (
+    <ChakraLink textStyle="headerLink" href={item.targetLink} target="_blank">
+      {item.displayText}
+    </ChakraLink>
+  );
+}
 
 export default async function Footer() {
   const payload = await getPayload({ config });
@@ -28,22 +61,9 @@ export default async function Footer() {
   return (
     <Center borderTop="md" padding={3} mt={5} bg="bg">
       <Stack align="center" gap={5} direction={{ base: "column", lg: "row" }}>
-        {navigationLinks.map((item) =>
-          item.blockType === "FooterLinkItem" ? (
-            <ChakraLink key={item.id} asChild textStyle="headerLink">
-              <Link href={item.targetLink}>{item.displayText}</Link>
-            </ChakraLink>
-          ) : (
-            <ChakraLink
-              key={item.id}
-              textStyle="headerLink"
-              href={item.targetLink}
-              target="_blank"
-            >
-              {item.displayText}
-            </ChakraLink>
-          ),
-        )}
+        {navigationLinks.map((item) => (
+          <FooterLink key={item.id} item={item} />
+        ))}
 
         <ChakraImage asChild>
           <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
@@ -51,28 +71,14 @@ export default async function Footer() {
 
         <HStack wrap="wrap">
           {socialLinks.map((item) => (
-            <IconButton key={item.id} variant="ghost" asChild>
-              <ChakraLink
-                textStyle="headerLink"
-                href={item.targetLink}
-                target="_blank"
-                aria-label={item.displayText}
-              >
-                <IconDisplay name={item.displayIcon as IconName} />
-              </ChakraLink>
-            </IconButton>
+            <FooterLink key={item.id} item={item} />
           ))}
         </HStack>
 
         <HStack>
-          {legalLinks.map(
-            (item) =>
-              item.blockType === "FooterLinkItem" && (
-                <ChakraLink key={item.id} asChild textStyle="headerLink">
-                  <Link href={item.targetLink}>{item.displayText}</Link>
-                </ChakraLink>
-              ),
-          )}
+          {legalLinks.map((item) => (
+            <FooterLink key={item.id} item={item} />
+          ))}
         </HStack>
       </Stack>
     </Center>
