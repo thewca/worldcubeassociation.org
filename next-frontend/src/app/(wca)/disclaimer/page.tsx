@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
 
   return {
-    title: t("delegates_page.title"),
+    title: t("layouts.navigation.disclaimer"),
   };
 }
 export default async function Disclaimer() {

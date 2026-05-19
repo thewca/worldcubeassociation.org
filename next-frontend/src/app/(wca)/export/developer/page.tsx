@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
 
   return {
-    title: t("page.officers_and_board.title"),
+    title: t("database.developer_export.heading"),
   };
 }
 
