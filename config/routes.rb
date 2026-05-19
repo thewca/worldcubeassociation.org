@@ -246,6 +246,7 @@ Rails.application.routes.draw do
   patch 'promote-test-link' => 'posts#promote_test_link'
   get 'wc2025-preview' => 'posts#wc2025_preview'
   get 'rss' => 'posts#rss'
+  get 'try-new-frontend' => 'posts#try_new_frontend'
 
   post 'upload/image', to: 'upload#image'
 
