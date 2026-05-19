@@ -4,7 +4,7 @@ import AuthProvider from "@/providers/SessionProvider";
 import WCAQueryClientProvider from "@/providers/WCAQueryClientProvider";
 import { Provider as UiProvider } from "@/components/ui/provider";
 import Navbar from "./navbar";
-import Footer from "@/components/Footer";
+import Footer from "./footer";
 import RandomBackground from "@/components/RandomBackground";
 import { ThemeProvider } from "@wrksz/themes/next";
 import { appFont } from "@/styles/fonts";
