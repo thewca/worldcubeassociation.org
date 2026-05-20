@@ -90,6 +90,7 @@ function PaymentStep({
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDonationChecked, setDonationChecked] = useCheckboxState(false);
+  const [stripeLoadError, setStripeLoadError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -138,7 +139,17 @@ function PaymentStep({
   return (
     <Segment>
       <Form id="payment-form" onSubmit={handleSubmit}>
-        <PaymentElement id="payment-element" />
+        {stripeLoadError && (
+          <Message negative>
+            {stripeLoadError}
+          </Message>
+        )}
+        {!stripeLoadError && (
+          <PaymentElement
+            id="payment-element"
+            onLoadError={({ error }) => setStripeLoadError(error.message)}
+          />
+        )}
         <Divider />
         { competitionInfo.enable_donations && (
           <FormField>
@@ -177,7 +188,7 @@ function PaymentStep({
                 {displayAmount}
               </Header>
               <Divider hidden />
-              <Button type="submit" primary disabled={isLoading || conversionFetching || !stripe || !elements} id="submit">
+              <Button type="submit" primary disabled={isLoading || conversionFetching || !stripe || !elements || !!stripeLoadError} id="submit">
                 {I18n.t('registrations.payment_form.button_text')}
               </Button>
             </>
