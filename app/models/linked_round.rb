@@ -5,6 +5,7 @@ class LinkedRound < ApplicationRecord
   has_many :results, through: :rounds
   has_many :live_results, through: :rounds
   has_many :formats, -> { unscope(:order).distinct }, through: :rounds
+  has_many :live_competitors, through: :live_results, source: :registration
   has_many :competition_events, -> { unscope(:order).distinct }, through: :rounds
   has_many :target_rounds, class_name: "Round", as: :participation_source
 

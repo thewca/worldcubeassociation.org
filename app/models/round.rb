@@ -295,13 +295,24 @@ class Round < ApplicationRecord
     #
     # For non-linked rounds global_pos equals local_pos, so we set both here to avoid
     # a second UPDATE in recompute_global_pos.
+
+    # For average-ranked formats, within the invalid-average group we further separate results
+    # by whether their best single is also invalid (all DNF/DNS), pushing those to the very bottom.
+    # Then sort by best single so e.g. incomplete (average=0, best=39) ranks above DNF mean
+    # (average=-1, best=40), and both rank above all-DNF (average=-1, best=-1).
+    order_clause = if secondary_rank_by
+                     primary_sort = "IF(#{rank_by} > 0, #{rank_by}, #{secondary_rank_by})"
+                     "#{rank_by} <= 0, #{secondary_rank_by} <= 0, #{primary_sort} ASC, #{secondary_rank_by} ASC"
+                   else
+                     "#{rank_by} <= 0, #{rank_by} ASC"
+                   end
+
     ActiveRecord::Base.connection.exec_query <<~SQL.squish
       UPDATE live_results r
       LEFT JOIN (
           SELECT id,
                  RANK() OVER (
-                     ORDER BY #{rank_by} <= 0, #{rank_by} ASC
-                       #{", #{secondary_rank_by} <= 0, #{secondary_rank_by} ASC" if secondary_rank_by}
+                     ORDER BY #{order_clause}
                  ) AS `rank`
           FROM live_results
           WHERE round_id = #{id} AND best != 0
@@ -794,17 +805,20 @@ class Round < ApplicationRecord
   end
 
   def to_wcif(include_results: true, version: Competition::WCIF_STABLE_VERSION)
+    at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+    results = at_least_v2 || competition.scoretaking_software_internal? ? live_results : round_results
+
     base_wcif = {
       "id" => wcif_id,
       "format" => self.format_id,
       "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
       "cutoff" => cutoff&.to_wcif,
       "scrambleSetCount" => self.scramble_set_count,
-      "results" => include_results ? round_results.map(&:to_wcif) : nil,
+      "results" => include_results ? results.map(&:to_wcif) : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
 
-    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+    if at_least_v2
       base_wcif.merge(
         "linkedRounds" => linked_round&.wcif_ids,
         "participationRuleset" => {
@@ -820,10 +834,11 @@ class Round < ApplicationRecord
   end
 
   def to_live_results_json(only_podiums: false)
+    competitors = linked_round&.live_competitors || live_competitors
     {
       **self.to_wcif(include_results: false).compact_blank,
       "round_id" => id,
-      "competitors" => live_competitors.includes(:user).map(&:to_live_json),
+      "competitors" => competitors.includes(:user).map(&:to_live_json),
       "results" => only_podiums ? live_podium : live_results,
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
       "linked_round_ids" => linked_round&.wcif_ids,

@@ -15,17 +15,21 @@ export default async function LiveOverview({
   const { competitionId } = await params;
   const { t } = await getT();
 
+  const [scheduleResult, permissions, roundsResult] = await Promise.all([
+    getSchedule(competitionId),
+    getPermissions(),
+    getRounds(competitionId),
+  ]);
+
   const {
     error: scheduleError,
     data: wcifSchedule,
     response: scheduleResponse,
-  } = await getSchedule(competitionId);
+  } = scheduleResult;
 
   if (scheduleError) {
     return <OpenapiError t={t} response={scheduleResponse} />;
   }
-
-  const permissions = await getPermissions();
 
   const canManage =
     !!permissions && permissions.canAdministerCompetition(competitionId);
@@ -34,8 +38,7 @@ export default async function LiveOverview({
     error: roundsError,
     data: roundsData,
     response: roundsResponse,
-  } = await getRounds(competitionId);
-
+  } = roundsResult;
   if (roundsError) {
     return <OpenapiError t={t} response={roundsResponse} />;
   }

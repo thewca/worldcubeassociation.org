@@ -11,10 +11,11 @@ import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
-import { LiveCompetitor } from "@/types/live";
-import { useCallback, useRef } from "react";
-import type { KeyboardEvent, ReactNode } from "react";
-import { attemptResultsWarning } from "@/lib/live/attempt-result";
+import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
+import { useCallback, useImperativeHandle, useRef } from "react";
+import { flushSync } from "react-dom";
+import type { KeyboardEvent, ReactNode, Ref } from "react";
+import { attemptResultsWarning, meetsCutoff } from "@/lib/live/attempt-result";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
 import { FocusScope, useFocusManager } from "@react-aria/focus";
@@ -23,6 +24,7 @@ interface AttemptsFormProps {
   solveCount: number;
   header: string;
   eventId: string;
+  cutoff?: LiveRoundAdminBase["cutoff"];
 }
 
 const toCompetitorString = (competitor: LiveCompetitor) =>
@@ -30,6 +32,7 @@ const toCompetitorString = (competitor: LiveCompetitor) =>
 
 export default function AttemptsForm({
   solveCount,
+  cutoff,
   header,
   eventId,
 }: AttemptsFormProps) {
@@ -49,6 +52,7 @@ export default function AttemptsForm({
   const { competitors } = useLiveResults();
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const attemptFieldsRef = useRef<AttemptFieldsNavHandle>(null);
 
   const { collection, filter } = useListCollection({
     initialItems: Array.from(competitors.values()).toSorted(
@@ -82,6 +86,8 @@ export default function AttemptsForm({
     }
   }, [attempts, eventId, t, handleSubmit, confirm]);
 
+  const hasMetCutoff = meetsCutoff(attempts, cutoff);
+
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <VStack align="left">
@@ -92,6 +98,7 @@ export default function AttemptsForm({
           onValueChange={(e) => {
             if (e.value.length > 0) {
               handleRegistrationIdChange(parseInt(e.value[0], 10));
+              setTimeout(() => attemptFieldsRef.current?.focusFirst());
             } else {
               handleRegistrationIdChange(undefined);
             }
@@ -124,7 +131,10 @@ export default function AttemptsForm({
           </Portal>
         </Combobox.Root>
         <FocusScope>
-          <AttemptFieldsNav onFocusCompetitor={() => inputRef.current?.focus()}>
+          <AttemptFieldsNav
+            ref={attemptFieldsRef}
+            onFocusCompetitor={() => inputRef.current?.focus()}
+          >
             {_.times(solveCount).map((index) => (
               <AttemptResultField
                 eventId={eventId}
@@ -133,6 +143,7 @@ export default function AttemptsForm({
                 onChange={(value) => handleAttemptChange(index, value)}
                 resultType="single"
                 placeholder={`Attempt ${index + 1}`}
+                disabled={!hasMetCutoff && index >= cutoff!.numberOfAttempts}
               />
             ))}
           </AttemptFieldsNav>
@@ -148,16 +159,28 @@ export default function AttemptsForm({
   );
 }
 
+interface AttemptFieldsNavHandle {
+  focusFirst: () => void;
+}
+
 interface AttemptFieldsNavProps {
   children: ReactNode;
   onFocusCompetitor: () => void;
+  ref?: Ref<AttemptFieldsNavHandle>;
 }
 
 function AttemptFieldsNav({
   children,
   onFocusCompetitor,
+  ref,
 }: AttemptFieldsNavProps) {
   const focusManager = useFocusManager();
+
+  useImperativeHandle(
+    ref,
+    () => ({ focusFirst: () => focusManager?.focusFirst() }),
+    [focusManager],
+  );
 
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.ctrlKey || e.metaKey) return;
@@ -168,15 +191,27 @@ function AttemptFieldsNav({
       return;
     }
 
-    if (e.key === "Enter" || e.key === "ArrowDown" || e.code === "NumpadAdd") {
+    if (
+      e.key === "Enter" ||
+      e.key === "ArrowDown" ||
+      e.code === "NumpadAdd" ||
+      e.key === "Tab"
+    ) {
       e.preventDefault();
-      focusManager?.focusNext({ wrap: false });
+      const from = e.target as HTMLElement;
+      // blur() can trigger onBlur handlers that update React state (e.g. saving the attempt).
+      // flushSync ensures those updates are committed to the DOM before focusNext runs,
+      // so the focus manager doesn't traverse a stale element tree.
+      flushSync(() => from.blur());
+      focusManager?.focusNext({ wrap: false, from });
       return;
     }
 
     if (e.key === "ArrowUp" || e.code === "NumpadSubtract") {
       e.preventDefault();
-      focusManager?.focusPrevious({ wrap: false });
+      const from = e.target as HTMLElement;
+      flushSync(() => from.blur());
+      focusManager?.focusPrevious({ wrap: false, from });
     }
   };
 

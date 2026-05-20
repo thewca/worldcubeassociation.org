@@ -13,7 +13,7 @@ import Quote from "@/components/Quote";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { Media } from "@/types/payload";
-import { MarkdownProse } from "@/components/Markdown";
+import { ChakraMarkdown } from "@/components/Markdown";
 import { getT } from "@/lib/i18n/get18n";
 import { Metadata } from "next";
 
@@ -57,11 +57,9 @@ export default async function SpeedcubingHistory() {
             }
             case "paragraph": {
               return (
-                <MarkdownProse
-                  key={item.id}
-                  content={item.contentMarkdown!}
-                  as={Text}
-                />
+                <ChakraMarkdown key={item.id}>
+                  {item.contentMarkdown!}
+                </ChakraMarkdown>
               );
             }
             case "captionedImage": {

@@ -23,7 +23,7 @@ import SpectatorsIcon from "@/components/icons/SpectatorsIcon";
 import OnTheSpotRegistrationIcon from "@/components/icons/OnTheSpotRegistrationIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import EventIcon from "@/components/EventIcon";
-import { MarkdownProse } from "@/components/Markdown";
+import { ChakraMarkdown } from "@/components/Markdown";
 import VenueIcon from "@/components/icons/VenueIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import DetailsIcon from "@/components/icons/DetailsIcon";
@@ -87,10 +87,9 @@ export function VenueDetailsCard({
               <VenueIcon />
               Venue
             </Stat.Label>
-            <MarkdownProse
-              as={Stat.ValueText}
-              content={competitionInfo.venue}
-            />
+            <ChakraMarkdown paragraphAs={Stat.ValueText}>
+              {competitionInfo.venue}
+            </ChakraMarkdown>
           </Stat.Root>
 
           <Stat.Root variant="competition">
@@ -107,10 +106,9 @@ export function VenueDetailsCard({
                 <DetailsIcon />
                 Details
               </Stat.Label>
-              <MarkdownProse
-                as={Stat.ValueText}
-                content={competitionInfo.venue_details}
-              />
+              <ChakraMarkdown paragraphAs={Stat.ValueText}>
+                {competitionInfo.venue_details}
+              </ChakraMarkdown>
             </Stat.Root>
           )}
         </SimpleGrid>
@@ -128,12 +126,13 @@ export function AdditionalInformationCard({
     <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Information</Card.Title>
-        <MarkdownProse
-          as={Card.Description}
-          content={competitionInfo.information}
+        <ChakraMarkdown
+          paragraphAs={Card.Description}
           imageProps={{ maxW: "sm" }}
           textStyle="body"
-        />
+        >
+          {competitionInfo.information}
+        </ChakraMarkdown>
       </Card.Body>
     </Card.Root>
   );
