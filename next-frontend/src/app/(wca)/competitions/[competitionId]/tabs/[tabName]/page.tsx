@@ -2,7 +2,7 @@ import { Card, Text } from "@chakra-ui/react";
 
 import { getTabs } from "@/lib/wca/competitions/getTabs";
 import React from "react";
-import { MarkdownProse } from "@/components/Markdown";
+import { ChakraMarkdown } from "@/components/Markdown";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 
@@ -31,7 +31,9 @@ export default async function Tab({
   return (
     <Card.Root>
       <Card.Body>
-        <MarkdownProse content={tab.content} />
+        <ChakraMarkdown headingAs={Card.Title} paragraphAs={Card.Description}>
+          {tab.content}
+        </ChakraMarkdown>
       </Card.Body>
     </Card.Root>
   );
