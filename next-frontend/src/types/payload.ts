@@ -324,7 +324,7 @@ export interface Config {
   globals: {
     nav: Nav;
     footer: Footer;
-    'social-links': SocialLinks;
+    'social-links': SocialLink;
     home: Home;
     'about-us-page': AboutUsPage;
     'privacy-page': PrivacyPage;
@@ -968,111 +968,156 @@ export interface Nav {
  */
 export interface Footer {
   id: string;
-  navigationLinks?: (
+  navigationLinks?:
+    | (
+        | {
+            displayText: string;
+            targetLink: StaticTargetLink;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'FooterLinkItem';
+          }
+        | {
+            displayText: string;
+            targetLink: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'FooterExternalLinkItem';
+          }
+      )[]
+    | null;
+  legalLinks?:
     | {
         displayText: string;
         targetLink: StaticTargetLink;
         id?: string | null;
         blockName?: string | null;
         blockType: 'FooterLinkItem';
-      }
-    | {
-        displayText: string;
-        targetLink: string;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'FooterExternalLinkItem';
-      }
-  )[] | null;
-  legalLinks?: {
-    displayText: string;
-    targetLink: StaticTargetLink;
-    id?: string | null;
-    blockName?: string | null;
-    blockType: 'FooterLinkItem';
-  }[] | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer_select".
- */
-export interface FooterSelect<T extends boolean = true> {
-  navigationLinks?:
-    | T
-    | {
-        FooterLinkItem?:
-          | T
-          | {
-              displayText?: T;
-              targetLink?: T;
-              id?: T;
-              blockName?: T;
-            };
-        FooterExternalLinkItem?:
-          | T
-          | {
-              displayText?: T;
-              targetLink?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
-  legalLinks?:
-    | T
-    | {
-        FooterLinkItem?:
-          | T
-          | {
-              displayText?: T;
-              targetLink?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "social-links".
  */
-export interface SocialLinks {
+export interface SocialLink {
   id: string;
-  links?: {
-    displayText: string;
-    targetLink: string;
-    displayIcon: IconName;
-    id?: string | null;
-    blockName?: string | null;
-    blockType: 'SocialLinkItem';
-  }[] | null;
+  links?:
+    | {
+        displayText: string;
+        targetLink: string;
+        displayIcon:
+          | 'About the Regulations'
+          | 'About the WCA'
+          | 'Admin Results'
+          | 'All Competitions'
+          | 'Bookmark'
+          | 'Clone'
+          | 'Competition Not Started'
+          | 'Registration Closed'
+          | 'Registration Closed (Red)'
+          | 'Registration Full but Open'
+          | 'Registration Full but Open (Orange)'
+          | 'Registration Not Full, Open'
+          | 'Registration Not Full, Open (Green)'
+          | 'Registration Not Open Yet'
+          | 'Registration Not Open Yet (Grey)'
+          | 'Registration Open Date'
+          | 'Registration Close Date'
+          | 'Competitors'
+          | 'Contact'
+          | 'Delegate Report'
+          | 'Details'
+          | 'Developer Export'
+          | 'Disciplinary Log'
+          | 'Disclaimer'
+          | 'Download'
+          | 'Edit'
+          | 'Educational Resources'
+          | 'Error'
+          | 'External Link'
+          | 'Facebook'
+          | 'Filters'
+          | 'GitHub'
+          | 'Guidelines'
+          | 'Help and FAQs'
+          | 'Incidents Log'
+          | 'Information'
+          | 'Instagram'
+          | 'Language'
+          | 'List'
+          | 'Location'
+          | 'Manage Tabs'
+          | 'Map'
+          | 'Media Submission'
+          | 'Menu'
+          | 'Multimedia'
+          | 'My Competitions'
+          | 'My Results'
+          | 'National Championship'
+          | 'New Competition'
+          | 'On-the-Spot Registration'
+          | 'Payment'
+          | 'Privacy'
+          | 'Rankings'
+          | 'Records'
+          | 'Regional Organisations'
+          | 'Register'
+          | 'Registration'
+          | 'Regulations and Guidelines'
+          | 'Regulations History'
+          | 'Regulations'
+          | 'Results Export'
+          | 'Scrambles'
+          | 'Search'
+          | 'Spectators'
+          | 'Speedcubing History'
+          | 'Spots Left'
+          | 'Statistics'
+          | 'Teams, Committees and Councils'
+          | 'Tools'
+          | 'Translators'
+          | 'Twitch'
+          | 'User'
+          | 'Users / Persons'
+          | 'Venue'
+          | 'WCA Delegates'
+          | 'WCA Documents'
+          | 'WCA Live'
+          | 'WCA Officers and Board'
+          | 'Weibo'
+          | 'X (formerly Twitter)'
+          | 'YouTube'
+          | '222Icon'
+          | '333bfIcon'
+          | '333fmIcon'
+          | '333ftIcon'
+          | '333Icon'
+          | '333mbfIcon'
+          | '333ohIcon'
+          | '333mboIcon'
+          | '444bfIcon'
+          | '444Icon'
+          | '555bfIcon'
+          | '555Icon'
+          | '666Icon'
+          | '777Icon'
+          | 'ClockIcon'
+          | 'MagicIcon'
+          | 'MinxIcon'
+          | 'MmagicIcon'
+          | 'PyramIcon'
+          | 'SkewbIcon'
+          | 'Sq1Icon';
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'SocialLinkItem';
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "social-links_select".
- */
-export interface SocialLinksSelect<T extends boolean = true> {
-  links?:
-    | T
-    | {
-        SocialLinkItem?:
-          | T
-          | {
-              displayText?: T;
-              targetLink?: T;
-              displayIcon?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1727,6 +1772,69 @@ export interface NavSelect<T extends boolean = true> {
           | T
           | {
               label?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  navigationLinks?:
+    | T
+    | {
+        FooterLinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+        FooterExternalLinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  legalLinks?:
+    | T
+    | {
+        FooterLinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links_select".
+ */
+export interface SocialLinksSelect<T extends boolean = true> {
+  links?:
+    | T
+    | {
+        SocialLinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              displayIcon?: T;
               id?: T;
               blockName?: T;
             };
