@@ -188,7 +188,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     to_advance = round.next_participating_without(registration_id)
 
-    render json: { status: "ok", next_advancing: to_advance }
+    to_advance_competitor = Registration.find(to_advance.pluck(:registration_id))
+
+    render json: { status: "ok", next_advancing: to_advance_competitor.map(&:to_live_json) }
   end
 
   def add_competitor_to_round
