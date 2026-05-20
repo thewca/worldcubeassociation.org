@@ -140,9 +140,11 @@ function PaymentStep({
     <Segment>
       <Form id="payment-form" onSubmit={handleSubmit}>
         {stripeLoadError && (
-          <Message negative>
-            {stripeLoadError}
-          </Message>
+          <Message
+            negative
+            header='There was an error loading the Stripe panel. Please contact WST with the details below!'
+            content={stripeLoadError}
+          />
         )}
         {!stripeLoadError && (
           <PaymentElement
