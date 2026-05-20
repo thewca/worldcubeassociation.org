@@ -28,18 +28,18 @@ import config from "@payload-config";
 import type {
   TextCardBlock,
   FeaturedCompetitionsBlock,
-  FullWidthBlock,
   ImageBannerBlock,
   ImageOnlyCardBlock,
   Media,
   TestimonialsBlock,
-  TwoBlocksBlock,
-  TwoBlocksBranchBlock,
-  TwoBlocksLeafBlock,
+  TwoBlocksLevel0Block,
+  TwoBlocksLevel1Block,
+  TwoBlocksLevel2Block,
   Testimonial,
   AnnouncementsSectionBlock,
   Announcement,
   ColorPaletteSelect,
+  Home,
 } from "@/types/payload";
 import Link from "next/link";
 import { route } from "nextjs-routes";
@@ -49,6 +49,22 @@ import { MediaImage } from "@/components/MediaImage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
 import OpenapiError from "@/components/ui/openapiError";
+
+type TwoBlocksUnion =
+  | TwoBlocksLevel0Block
+  | TwoBlocksLevel1Block
+  | TwoBlocksLevel2Block;
+
+type TwoBlocksRatio = TwoBlocksUnion["ratio"];
+type TwoBlocksSpanConfig = { left: number; right: number };
+
+const RATIO_GRID_MAP: Record<TwoBlocksRatio, TwoBlocksSpanConfig> = {
+  "1/3 & 2/3": { left: 1, right: 2 },
+  "2/3 & 1/3": { left: 2, right: 1 },
+  "1/2 & 1/2": { left: 1, right: 1 },
+  "1/4 & 3/4": { left: 1, right: 3 },
+  "3/4 & 1/4": { left: 3, right: 1 },
+};
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
@@ -88,9 +104,10 @@ const AnnouncementsSection = ({
   block: AnnouncementsSectionBlock;
 }) => {
   const mainAnnouncement = block.mainAnnouncement as Announcement;
-  const furtherAnnouncements = block.furtherAnnouncements!.map(
-    (announcement) => announcement as Announcement,
-  );
+  const furtherAnnouncements =
+    block.furtherAnnouncements?.map(
+      (announcement) => announcement as Announcement,
+    ) || [];
 
   return (
     <AnnouncementsCard
@@ -288,178 +305,68 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
   );
 };
 
-type TwoBlocksUnion =
-  | TwoBlocksBlock
-  | TwoBlocksBranchBlock
-  | TwoBlocksLeafBlock;
+type VerticalLayout =
+  | Home["layout"]
+  | TwoBlocksUnion["left"]
+  | TwoBlocksUnion["right"];
 
-const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
-  let columnCount = 2;
-  let col1 = 1;
-  let col2 = 1;
-
-  switch (entry.type) {
-    case "1/3 & 2/3":
-      columnCount = 3;
-      col2 = 2;
-      break;
-    case "2/3 & 1/3":
-      columnCount = 3;
-      col1 = 2;
-      break;
-    case "1/2 & 1/2":
-      columnCount = 2;
-      break;
-    case "1/4 & 3/4":
-      columnCount = 4;
-      col2 = 3;
-      break;
-    case "3/4 & 1/4":
-      columnCount = 4;
-      col1 = 3;
-      break;
-    default:
-      columnCount = 2;
-  }
-
-  const columns = [col1, col2];
-
-  const isHorizontal = entry.alignment === "horizontal";
-  const RenderAs = isHorizontal ? SimpleGrid : VStack;
-
+const renderVerticalLayout = (verticalLayout: VerticalLayout) => {
   return (
-    <RenderAs
-      key={keyPrefix}
-      columns={{ base: 1, md: columnCount }}
-      gap={8}
-      width="full"
-    >
-      {entry.blocks.map((subEntry, i) => {
-        const key = `${keyPrefix}-${i}`;
-
-        switch (subEntry.blockType) {
-          case "TextCard":
-            return (
-              <GridItem
-                key={key}
-                colSpan={{ base: 1, md: columns[i] || 1 }}
-                display="flex"
-                width="full"
-              >
-                <TextCard block={subEntry} />
-              </GridItem>
-            );
-          case "AnnouncementsSection":
-            return (
-              <GridItem
-                key={key}
-                colSpan={{ base: 1, md: columns[i] || 1 }}
-                display="flex"
-                width="full"
-              >
-                <AnnouncementsSection block={subEntry} />
-              </GridItem>
-            );
-          case "twoBlocksBranch":
-            return (
-              <GridItem
-                key={key}
-                colSpan={{ base: 1, md: columns[i] || 1 }}
-                display="flex"
-                width="full"
-              >
-                {renderBlockGroup(subEntry, key)}
-              </GridItem>
-            );
-          case "twoBlocksLeaf":
-            return (
-              <GridItem
-                key={key}
-                colSpan={{ base: 1, md: columns[i] || 1 }}
-                display="flex"
-                width="full"
-              >
-                {renderBlockGroup(subEntry, key)}
-              </GridItem>
-            );
-          case "ImageBanner":
-            return (
-              <GridItem
-                key={key}
-                colSpan={{ base: 1, md: columns[i] || 1 }}
-                display="flex"
-                width="full"
-              >
-                <ImageBanner block={subEntry} />
-              </GridItem>
-            );
-          case "ImageOnlyCard":
-            return (
-              <GridItem
-                key={key}
-                colSpan={{ base: 1, md: columns[i] || 1 }}
-                display="flex"
-                width="full"
-              >
-                <ImageOnlyCard block={subEntry} />
-              </GridItem>
-            );
-          case "FeaturedComps":
-            return (
-              <GridItem
-                key={key}
-                colSpan={{ base: 1, md: columns[i] || 1 }}
-                display="flex"
-                width="full"
-              >
-                <FeaturedCompetitions block={subEntry} />
-              </GridItem>
-            );
-          case "TestimonialsSpinner":
-            return (
-              <GridItem
-                key={key}
-                colSpan={{ base: 1, md: columns[i] || 1 }}
-                display="flex"
-                width="full"
-              >
-                <TestimonialsSpinner block={subEntry} />
-              </GridItem>
-            );
+    <VStack gap={8}>
+      {verticalLayout.map((entry, index) => {
+        switch (entry.blockType) {
+          case "twoBlocksLevel0":
+          case "twoBlocksLevel1":
+          case "twoBlocksLevel2":
+            return renderHorizontalSplit(entry, `entry-${index}`);
           default:
-            return null;
+            return renderFullBlock(entry, `entry-${index}`);
         }
       })}
-    </RenderAs>
+    </VStack>
   );
 };
 
-const renderFullBlock = (entry: FullWidthBlock, keyPrefix = "") => {
+const renderHorizontalSplit = (entry: TwoBlocksUnion, keyPrefix = "") => {
+  const { left, right } = RATIO_GRID_MAP[entry.ratio];
+
   return (
-    <Box key={keyPrefix} width="full">
-      {entry.blocks.map((subEntry, i) => {
-        const key = `${keyPrefix}-${i}`;
-
-        switch (subEntry.blockType) {
-          case "TextCard":
-            return <TextCard key={key} block={subEntry} />;
-          case "AnnouncementsSection":
-            return <AnnouncementsSection key={key} block={subEntry} />;
-          case "ImageBanner":
-            return <ImageBanner key={key} block={subEntry} />;
-          case "ImageOnlyCard":
-            return <ImageOnlyCard key={key} block={subEntry} />;
-          case "FeaturedComps":
-            return <FeaturedCompetitions key={key} block={subEntry} />;
-          case "TestimonialsSpinner":
-            return <TestimonialsSpinner key={key} block={subEntry} />;
-
-          default:
-            return null;
-        }
-      })}
-    </Box>
+    <SimpleGrid
+      key={keyPrefix}
+      columns={{ base: 1, md: left + right }}
+      gap={8}
+      width="full"
+    >
+      <GridItem colSpan={{ base: 1, md: left }} asChild>
+        {renderVerticalLayout(entry.left)}
+      </GridItem>
+      <GridItem colSpan={{ base: 1, md: right }} asChild>
+        {renderVerticalLayout(entry.right)}
+      </GridItem>
+    </SimpleGrid>
   );
+};
+
+type LayoutBlock = VerticalLayout[number];
+
+const renderFullBlock = (entry: LayoutBlock, key = "") => {
+  switch (entry.blockType) {
+    case "TextCard":
+      return <TextCard key={key} block={entry} />;
+    case "AnnouncementsSection":
+      return <AnnouncementsSection key={key} block={entry} />;
+    case "ImageBanner":
+      return <ImageBanner key={key} block={entry} />;
+    case "ImageOnlyCard":
+      return <ImageOnlyCard key={key} block={entry} />;
+    case "FeaturedComps":
+      return <FeaturedCompetitions key={key} block={entry} />;
+    case "TestimonialsSpinner":
+      return <TestimonialsSpinner key={key} block={entry} />;
+
+    default:
+      return null;
+  }
 };
 
 export default async function Homepage() {
@@ -470,7 +377,7 @@ export default async function Homepage() {
     draft: isDraftMode,
   });
 
-  const homepageEntries = homepage?.item || [];
+  const homepageEntries = homepage.layout;
 
   if (homepageEntries.length === 0) {
     return (
@@ -490,21 +397,8 @@ export default async function Homepage() {
   }
 
   return (
-    <SimpleGrid columns={1} gap={8} p={8}>
-      {homepageEntries.map((entry, index) => {
-        // Handle `twoBlocks` layout
-        if (entry.blockType === "twoBlocks") {
-          return renderBlockGroup(entry, `entry-${index}`);
-        }
-
-        // Handle `fullWidth` layout
-        if (entry.blockType === "fullWidth") {
-          return renderFullBlock(entry, `entry-${index}`);
-        }
-
-        // Handle unknown blockType
-        return null;
-      })}
-    </SimpleGrid>
+    <Box p={8} asChild>
+      {renderVerticalLayout(homepageEntries)}
+    </Box>
   );
 }
