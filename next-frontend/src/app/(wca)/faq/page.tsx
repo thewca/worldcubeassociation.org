@@ -51,7 +51,13 @@ export default async function FAQ() {
           <Card.Body>
             <Card.Title textStyle="h1">Frequently Asked Questions</Card.Title>
             {faqPage.introTextMarkdown ? (
-              <ChakraMarkdown>{faqPage.introTextMarkdown}</ChakraMarkdown>
+              <ChakraMarkdown
+                headingAs={Card.Title}
+                paragraphAs={Card.Description}
+                textStyle="body"
+              >
+                {faqPage.introTextMarkdown}
+              </ChakraMarkdown>
             ) : (
               <Card.Description>No Intro text, add it!</Card.Description>
             )}

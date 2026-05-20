@@ -48,7 +48,7 @@ export default async function LogoPage() {
               return (
                 <Fragment key={item.id}>
                   <Heading size="2xl">{item.title}</Heading>
-                  <ChakraMarkdown>{item.contentMarkdown!}</ChakraMarkdown>
+                  <ChakraMarkdown>{item.contentMarkdown}</ChakraMarkdown>
                 </Fragment>
               );
             }

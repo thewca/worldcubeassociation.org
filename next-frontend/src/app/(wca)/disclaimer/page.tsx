@@ -32,7 +32,7 @@ export default async function Disclaimer() {
         {disclaimerItems.map((item) => (
           <Box key={item.id}>
             {item.title && <Heading size="xl">{item.title}</Heading>}
-            <ChakraMarkdown>{item.contentMarkdown!}</ChakraMarkdown>
+            <ChakraMarkdown>{item.contentMarkdown}</ChakraMarkdown>
           </Box>
         ))}
       </VStack>

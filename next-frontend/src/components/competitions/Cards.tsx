@@ -87,9 +87,9 @@ export function VenueDetailsCard({
               <VenueIcon />
               Venue
             </Stat.Label>
-            <Stat.ValueText>
-              <ChakraMarkdown>{competitionInfo.venue}</ChakraMarkdown>
-            </Stat.ValueText>
+            <ChakraMarkdown paragraphAs={Stat.ValueText}>
+              {competitionInfo.venue}
+            </ChakraMarkdown>
           </Stat.Root>
 
           <Stat.Root variant="competition">
@@ -106,9 +106,9 @@ export function VenueDetailsCard({
                 <DetailsIcon />
                 Details
               </Stat.Label>
-              <Stat.ValueText>
-                <ChakraMarkdown>{competitionInfo.venue_details}</ChakraMarkdown>
-              </Stat.ValueText>
+              <ChakraMarkdown paragraphAs={Stat.ValueText}>
+                {competitionInfo.venue_details}
+              </ChakraMarkdown>
             </Stat.Root>
           )}
         </SimpleGrid>
@@ -126,11 +126,13 @@ export function AdditionalInformationCard({
     <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Information</Card.Title>
-        <Card.Description>
-          <ChakraMarkdown imageProps={{ maxW: "sm" }}>
-            {competitionInfo.information}
-          </ChakraMarkdown>
-        </Card.Description>
+        <ChakraMarkdown
+          paragraphAs={Card.Description}
+          imageProps={{ maxW: "sm" }}
+          textStyle="body"
+        >
+          {competitionInfo.information}
+        </ChakraMarkdown>
       </Card.Body>
     </Card.Root>
   );

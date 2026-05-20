@@ -38,7 +38,9 @@ export default async function AboutTheRegulations() {
           <Card.Root key={item.id}>
             <Card.Body>
               <Card.Title>{item.title}</Card.Title>
-              <ChakraMarkdown>{item.contentMarkdown!}</ChakraMarkdown>
+              <ChakraMarkdown paragraphAs={Card.Description}>
+                {item.contentMarkdown}
+              </ChakraMarkdown>
             </Card.Body>
           </Card.Root>
         ))}

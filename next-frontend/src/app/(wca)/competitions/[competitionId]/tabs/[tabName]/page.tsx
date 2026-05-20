@@ -31,7 +31,9 @@ export default async function Tab({
   return (
     <Card.Root>
       <Card.Body>
-        <ChakraMarkdown>{tab.content}</ChakraMarkdown>
+        <ChakraMarkdown headingAs={Card.Title} paragraphAs={Card.Description}>
+          {tab.content}
+        </ChakraMarkdown>
       </Card.Body>
     </Card.Root>
   );

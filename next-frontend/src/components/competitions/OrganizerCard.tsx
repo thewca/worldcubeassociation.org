@@ -89,9 +89,9 @@ export default function OrganizationTeamCard({
         {competitionInfo.contact && (
           <Stat.Root variant="competition">
             <Stat.Label>Contact</Stat.Label>
-            <Stat.ValueText>
-              <ChakraMarkdown>{competitionInfo.contact}</ChakraMarkdown>
-            </Stat.ValueText>
+            <ChakraMarkdown paragraphAs={Stat.ValueText}>
+              {competitionInfo.contact}
+            </ChakraMarkdown>
           </Stat.Root>
         )}
 

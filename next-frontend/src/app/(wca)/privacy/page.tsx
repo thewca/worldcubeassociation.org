@@ -30,11 +30,11 @@ export default async function Privacy() {
     <Container bg="bg">
       <VStack gap="8" width="full" pt="8" alignItems="left">
         <Heading size="5xl">WCA Privacy Statement</Heading>
-        <ChakraMarkdown>{privacyPage.preambleMarkdown!}</ChakraMarkdown>
+        <ChakraMarkdown>{privacyPage.preambleMarkdown}</ChakraMarkdown>
         {privacyItems.map((item) => (
           <Box key={item.id}>
             <Heading size="xl">{item.title}</Heading>
-            <ChakraMarkdown>{item.contentMarkdown!}</ChakraMarkdown>
+            <ChakraMarkdown>{item.contentMarkdown}</ChakraMarkdown>
           </Box>
         ))}
       </VStack>

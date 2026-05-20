@@ -81,7 +81,9 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
           {block.heading}
         </Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
-        <ChakraMarkdown>{block.bodyMarkdown!}</ChakraMarkdown>
+        <ChakraMarkdown paragraphAs={Card.Description} textStyle="body">
+          {block.bodyMarkdown}
+        </ChakraMarkdown>
       </Card.Body>
       {block.buttonText?.trim() && (
         <Card.Footer>
@@ -145,7 +147,12 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
         >
           {block.heading}
         </Card.Title>
-        <ChakraMarkdown>{block.bodyMarkdown!}</ChakraMarkdown>
+        <ChakraMarkdown
+          paragraphAs={Card.Description}
+          textStyle={{ base: "body", md: "s2" }}
+        >
+          {block.bodyMarkdown}
+        </ChakraMarkdown>
         {block.bgImage && (
           <Float
             placement="bottom-end"
@@ -276,7 +283,10 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                     {testimonial.punchline}
                   </Card.Title>
                   <Separator size="md" />
-                  <ChakraMarkdown>
+                  <ChakraMarkdown
+                    paragraphAs={Card.Description}
+                    textStyle="quote"
+                  >
                     {testimonial.fullTestimonialMarkdown!}
                   </ChakraMarkdown>
                   <Text>{testimonial.whoDunnit}</Text>

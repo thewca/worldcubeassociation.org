@@ -15,7 +15,9 @@ function AnnouncementItem({ announcement }: { announcement: Announcement }) {
         <Accordion.ItemBody textStyle="s2">
           Posted by {publishedByUser.name} · {announcement.publishedAt}
         </Accordion.ItemBody>
-        <ChakraMarkdown>{announcement.contentMarkdown!}</ChakraMarkdown>
+        <ChakraMarkdown paragraphAs={Accordion.ItemBody} textStyle="body">
+          {announcement.contentMarkdown}
+        </ChakraMarkdown>
       </Accordion.ItemContent>
     </Accordion.Item>
   );

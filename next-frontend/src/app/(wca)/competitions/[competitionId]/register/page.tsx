@@ -58,7 +58,10 @@ export default async function RegisterPage({
       {competitionInfo.extra_registration_requirements && (
         <Card.Root width="full">
           <Card.Body>
-            <ChakraMarkdown>
+            <ChakraMarkdown
+              headingAs={Card.Title}
+              paragraphAs={Card.Description}
+            >
               {competitionInfo.extra_registration_requirements}
             </ChakraMarkdown>
           </Card.Body>
