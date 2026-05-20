@@ -8,16 +8,20 @@ type MarkdownFirstImageProps = {
   alt?: string;
 } & CardRootProps;
 
+export const markDownFirstImageUrl = (content: string) => {
+  const match = content.match(/!\[.*?\]\((.*?)\)/);
+
+  return match?.[1];
+};
+
 export const MarkdownFirstImage = ({
   content,
   alt = "Image",
   ...cardRootProps
 }: MarkdownFirstImageProps) => {
-  const match = content.match(/!\[.*?\]\((.*?)\)/);
+  const imageUrl = markDownFirstImageUrl(content);
 
-  if (!match) return null;
-
-  const imageUrl = match[1];
+  if (!imageUrl) return null;
 
   return (
     <Card.Root maxWidth="md" {...cardRootProps}>

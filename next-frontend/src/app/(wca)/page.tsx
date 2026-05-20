@@ -6,6 +6,7 @@ export const metadata: Metadata = {
 };
 import {
   SimpleGrid,
+  Grid,
   GridItem,
   Button,
   Card,
@@ -19,8 +20,10 @@ import {
   AbsoluteCenter,
   Float,
   Carousel,
+  Image,
 } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
+import { markDownFirstImageUrl } from "@/components/MarkdownFirstImage";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -31,6 +34,7 @@ import type {
   FullWidthBlock,
   ImageBannerBlock,
   ImageOnlyCardBlock,
+  LivestreamPanelBlock,
   Media,
   TestimonialsBlock,
   TwoBlocksBlock,
@@ -175,6 +179,125 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
           <Card.Title textStyle="h2">{block.heading}</Card.Title>
         </Card.Body>
       )}
+    </Card.Root>
+  );
+};
+
+const LivestreamPanel = async ({ block }: { block: LivestreamPanelBlock }) => {
+  const { t } = await getT();
+  const {
+    data: competition,
+    error,
+    response,
+  } = await getCompetitionInfo(block.competitionId);
+
+  if (error) return <OpenapiError t={t} response={response} />;
+
+  const titleSponsor = block.titleSponsor as Media | null | undefined;
+
+  return (
+    <Card.Root
+      colorPalette={block.colorPalette}
+      colorVariant="deep"
+      width="full"
+    >
+      <Card.Body gap={4}>
+        {/*
+          Three responsive layouts via named grid areas:
+          - mobile (base): video → sponsor → info (stacked)
+          - tablet (md):   [sponsor | video] / [info spanning both cols]
+          - desktop (lg):  [sponsor | video | info] all in one row
+        */}
+        <Grid
+          templateAreas={
+            titleSponsor
+              ? {
+                  base: '"video" "sponsor" "info"',
+                  md: '"sponsor video" "info info"',
+                  lg: '"sponsor video info"',
+                }
+              : {
+                  base: '"video" "info"',
+                  lg: '"video info"',
+                }
+          }
+          templateColumns={
+            titleSponsor
+              ? { base: "1fr", md: "1fr 2fr", lg: "1fr 2fr auto" }
+              : { base: "1fr", lg: "1fr auto" }
+          }
+          gap={4}
+          alignItems="center"
+        >
+          {titleSponsor && (
+            <GridItem
+              area="sponsor"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <MediaImage
+                media={titleSponsor}
+                altFallback="Title Sponsor"
+                fit="contain"
+                maxH={{ base: "24", md: "48" }}
+              />
+            </GridItem>
+          )}
+          <GridItem
+            area="video"
+            aspectRatio="16/9"
+            overflow="hidden"
+            borderRadius="md"
+          >
+            <iframe
+              width="100%"
+              height="100%"
+              style={{ display: "block", borderRadius: "inherit" }}
+              src={`https://www.youtube.com/embed/${block.youtubeVideoId}?autoplay=1&mute=1`}
+              title={block.heading}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          </GridItem>
+          <GridItem
+            area="info"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            gap={3}
+          >
+            <Image
+              src={markDownFirstImageUrl(competition.information)}
+              alt={competition.name}
+              w={{ base: "28", md: "2xs", lg: "xs" }}
+              borderRadius="md"
+            />
+            <HStack gap={3}>
+              <Button asChild variant="solid">
+                <Link
+                  href={route({
+                    pathname: "/competitions/[competitionId]",
+                    query: { competitionId: block.competitionId },
+                  })}
+                >
+                  View Competition
+                </Link>
+              </Button>
+              <Button asChild variant="solid">
+                <Link
+                  href={route({
+                    pathname: "/competitions/[competitionId]/live",
+                    query: { competitionId: block.competitionId },
+                  })}
+                >
+                  Live Results
+                </Link>
+              </Button>
+            </HStack>
+          </GridItem>
+        </Grid>
+      </Card.Body>
     </Card.Root>
   );
 };
@@ -426,6 +549,17 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
                 <TestimonialsSpinner block={subEntry} />
               </GridItem>
             );
+          case "LivestreamPanel":
+            return (
+              <GridItem
+                key={key}
+                colSpan={{ base: 1, md: columns[i] || 1 }}
+                display="flex"
+                width="full"
+              >
+                <LivestreamPanel block={subEntry} />
+              </GridItem>
+            );
           default:
             return null;
         }
@@ -453,6 +587,8 @@ const renderFullBlock = (entry: FullWidthBlock, keyPrefix = "") => {
             return <FeaturedCompetitions key={key} block={subEntry} />;
           case "TestimonialsSpinner":
             return <TestimonialsSpinner key={key} block={subEntry} />;
+          case "LivestreamPanel":
+            return <LivestreamPanel key={key} block={subEntry} />;
 
           default:
             return null;
