@@ -13,10 +13,10 @@ import Link from "next/link";
 import Image from "next/image";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/components/icons/iconMap";
-import type { Footer, SocialLinks } from "@/types/payload";
+import type { Footer, SocialLink } from "@/types/payload";
 
 type FooterNavItem = NonNullable<Footer["navigationLinks"]>[number];
-type FooterSocialItem = NonNullable<SocialLinks["links"]>[number];
+type FooterSocialItem = NonNullable<SocialLink["links"]>[number];
 
 function FooterLink({ item }: { item: FooterNavItem | FooterSocialItem }) {
   if (item.blockType === "FooterLinkItem") {
