@@ -142,7 +142,7 @@ function PaymentStep({
         {stripeLoadError && (
           <Message
             negative
-            header='There was an error loading the Stripe panel. Please contact WST with the details below!'
+            header="There was an error loading the Stripe panel. Please contact WST with the details below!"
             content={stripeLoadError}
           />
         )}
