@@ -4,16 +4,15 @@ import {
   HStack,
   IconButton,
   Link as ChakraLink,
-  Image as ChakraImage,
   Stack,
 } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
-import Image from "next/image";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/components/icons/iconMap";
 import type { Footer, SocialLinks } from "@/types/payload";
+import WCALogo from "@/components/WCALogo";
 
 type FooterNavItem = NonNullable<Footer["navigationLinks"]>[number];
 type FooterSocialItem = NonNullable<SocialLinks["links"]>[number];
@@ -65,9 +64,7 @@ export default async function Footer() {
           <FooterLink key={item.id} item={item} />
         ))}
 
-        <ChakraImage asChild>
-          <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
-        </ChakraImage>
+        <WCALogo />
 
         <HStack wrap="wrap">
           {socialLinks.map((item) => (
