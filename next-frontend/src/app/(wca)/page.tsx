@@ -123,7 +123,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       colorPalette={block.colorPalette}
       colorVariant="deep"
       width="full"
-      maxHeight="lg"
+      maxHeight="md" // somewhat arbitrary, if you have a better idea please shout
       overflow="hidden"
     >
       <Box position="relative" width="50%" hideBelow="md">
@@ -143,7 +143,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       <Card.Body justifyContent="center">
         <Card.Title
           colorPalette={block.headingColor}
-          textStyle={{ base: "h3", md: "h2" }}
+          textStyle={{ base: "h3", md: "h2", xl: "h1" }}
         >
           {block.heading}
         </Card.Title>
@@ -185,6 +185,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
         media={block.mainImage as Media}
         altFallback={block.heading}
         aspectRatio="2/1"
+        maxHeight="10rem" // somewhat arbitrary, if you have a better idea please shout!
       />
       {block.heading && (
         <Card.Body>
