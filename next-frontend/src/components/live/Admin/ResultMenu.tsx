@@ -176,7 +176,6 @@ function QuitModal({
   if (isLoading) {
     return <Loading />;
   }
-  console.log(toAdvanceRequest);
 
   if (!toAdvanceRequest) {
     return <Text>{t("competitions.live.admin.quit.failed_to_fetch")}</Text>;
