@@ -11,13 +11,13 @@ RSpec.describe 'Database Endpoints' do
         it 'returns SQL link before 2026-01-16' do
           get sql_permalink_path
           expect(response).to have_http_status(:moved_permanently)
-          expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v1_329_20251125T000000Z.sql.zip")
+          expect(response.location).to eq("https://exports.worldcubeassociation.org/WCA_export_v1_329_20251125T000000Z.sql.zip")
         end
 
         it 'returns TSV link before 2026-01-16' do
           get tsv_permalink_path
           expect(response).to have_http_status(:moved_permanently)
-          expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v1_329_20251125T000000Z.tsv.zip")
+          expect(response.location).to eq("https://exports.worldcubeassociation.org/WCA_export_v1_329_20251125T000000Z.tsv.zip")
         end
       end
 
@@ -55,25 +55,25 @@ RSpec.describe 'Database Endpoints' do
         it 'returns v1 SQL' do
           get results_permalink_path(:v1, "sql")
           expect(response).to have_http_status(:moved_permanently)
-          expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v1_329_20251125T000000Z.sql.zip")
+          expect(response.location).to eq("https://exports.worldcubeassociation.org/WCA_export_v1_329_20251125T000000Z.sql.zip")
         end
 
         it 'returns v1 TSV' do
           get results_permalink_path(:v1, "tsv")
           expect(response).to have_http_status(:moved_permanently)
-          expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v1_329_20251125T000000Z.tsv.zip")
+          expect(response.location).to eq("https://exports.worldcubeassociation.org/WCA_export_v1_329_20251125T000000Z.tsv.zip")
         end
 
         it 'returns v2 SQL' do
           get results_permalink_path(:v2, "sql")
           expect(response).to have_http_status(:moved_permanently)
-          expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v2_329_20251125T000000Z.sql.zip")
+          expect(response.location).to eq("https://exports.worldcubeassociation.org/WCA_export_v2_329_20251125T000000Z.sql.zip")
         end
 
         it 'returns v2 TSV' do
           get results_permalink_path(:v2, "tsv")
           expect(response).to have_http_status(:moved_permanently)
-          expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v2_329_20251125T000000Z.tsv.zip")
+          expect(response.location).to eq("https://exports.worldcubeassociation.org/WCA_export_v2_329_20251125T000000Z.tsv.zip")
         end
       end
 
@@ -95,13 +95,13 @@ RSpec.describe 'Database Endpoints' do
         it 'returns v2 SQL' do
           get results_permalink_path(:v2, "sql")
           expect(response).to have_http_status(:moved_permanently)
-          expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v2_329_20251125T000000Z.sql.zip")
+          expect(response.location).to eq("https://exports.worldcubeassociation.org/WCA_export_v2_329_20251125T000000Z.sql.zip")
         end
 
         it 'returns v2 TSV' do
           get results_permalink_path(:v2, "tsv")
           expect(response).to have_http_status(:moved_permanently)
-          expect(response.location).to eq("https://assets.worldcubeassociation.org/WCA_export_v2_329_20251125T000000Z.tsv.zip")
+          expect(response.location).to eq("https://exports.worldcubeassociation.org/WCA_export_v2_329_20251125T000000Z.tsv.zip")
         end
       end
     end

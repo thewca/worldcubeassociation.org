@@ -34,7 +34,7 @@ locals {
     },
     {
       name  = "DUMP_HOST"
-      value = "https://assets.worldcubeassociation.org"
+      value = "https://exports.worldcubeassociation.org"
     },
     {
       name  = "SHAKAPACKER_ASSET_HOST"
