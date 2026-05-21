@@ -265,6 +265,7 @@ export function MultiRoundResultProvider({
     roundIds,
     competitionId,
     onReceived,
+    refetchRound,
   );
 
   return (

@@ -65,6 +65,7 @@ export default function useResultsSubscriptions(
   roundIds: string[],
   competitionId: string,
   onReceived: (roundId: string, data: DiffProtocolResponse) => void,
+  onReconnect: (roundId: string) => void,
 ) {
   const [connectionStates, setConnectionStates] = useState<
     Record<string, ConnectionState>
@@ -85,20 +86,31 @@ export default function useResultsSubscriptions(
   );
 
   const onReceivedEvent = useEffectEvent(onReceived);
+  const onReconnectEvent = useEffectEvent(onReconnect);
 
   useEffect(() => {
     const cable = createConsumer(process.env.NEXT_PUBLIC_WEBSOCKET_URL);
+    const prevStates: Record<string, ConnectionState> = {};
 
     const subscriptions = roundIds.map((roundId) =>
       cable.subscriptions.create(anycableConnection(competitionId, roundId), {
         received: (data: DiffProtocolResponse) =>
           onReceivedEvent(roundId, data),
-        initialized: () =>
-          changeConnectionState(roundId, CONNECTION_STATE_INITIALIZED),
-        connected: () =>
-          changeConnectionState(roundId, CONNECTION_STATE_CONNECTED),
-        disconnected: () =>
-          changeConnectionState(roundId, CONNECTION_STATE_DISCONNECTED),
+        initialized: () => {
+          prevStates[roundId] = CONNECTION_STATE_INITIALIZED;
+          changeConnectionState(roundId, CONNECTION_STATE_INITIALIZED);
+        },
+        connected: () => {
+          if (prevStates[roundId] === CONNECTION_STATE_DISCONNECTED) {
+            onReconnectEvent(roundId);
+          }
+          prevStates[roundId] = CONNECTION_STATE_CONNECTED;
+          changeConnectionState(roundId, CONNECTION_STATE_CONNECTED);
+        },
+        disconnected: () => {
+          prevStates[roundId] = CONNECTION_STATE_DISCONNECTED;
+          changeConnectionState(roundId, CONNECTION_STATE_DISCONNECTED);
+        },
       }),
     );
 
