@@ -2,7 +2,7 @@ import { Card } from "@chakra-ui/react";
 import _ from "lodash";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { getCompetitionResults } from "@/lib/wca/competitions/getCompetitionResults";
-import FilteredResults from "@/app/(wca)/competitions/[competitionId]/(results)/results/all/FilteredResults";
+import FilteredResults from "@/app/(wca)/(with-background)/competitions/[competitionId]/(results)/results/all/FilteredResults";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 

@@ -19,7 +19,7 @@ import AttemptResultField from "./AttemptResultField";
 import {
   ColorSemanticTokenDoc,
   ColorTokenDoc,
-} from "@/app/(wca)/dashboard/ThemeExplorer";
+} from "@/app/(wca)/(with-background)/dashboard/ThemeExplorer";
 
 export default async function Dashboard() {
   const session = await auth();

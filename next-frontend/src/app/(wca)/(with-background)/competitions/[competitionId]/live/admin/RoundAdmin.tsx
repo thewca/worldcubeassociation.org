@@ -6,7 +6,7 @@ import EventIcon from "@/components/EventIcon";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
-import RoundActions from "@/app/(wca)/competitions/[competitionId]/live/admin/RoundActions";
+import RoundActions from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/admin/RoundActions";
 import { getRounds } from "@/lib/wca/live/getRounds";
 
 export default async function RoundAdmin({

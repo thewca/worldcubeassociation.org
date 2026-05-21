@@ -1,6 +1,6 @@
 import PermissionCheck from "@/components/PermissionCheck";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
-import DoubleCheck from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check/DoubleCheck";
+import DoubleCheck from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check/DoubleCheck";
 import { LiveResultProvider } from "@/providers/LiveResultProvider";
 import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
 import { Container } from "@chakra-ui/react";

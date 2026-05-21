@@ -1,7 +1,7 @@
 import { getRankings } from "@/lib/wca/results/rankings";
 import { Container } from "@chakra-ui/react";
 import React from "react";
-import FilteredRankings from "@/app/(wca)/results/rankings/filteredRankings";
+import FilteredRankings from "@/app/(wca)/(with-background)/results/rankings/filteredRankings";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";

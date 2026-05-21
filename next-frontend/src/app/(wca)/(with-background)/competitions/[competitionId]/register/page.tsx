@@ -2,9 +2,9 @@ import { auth } from "@/auth";
 import { Alert, Box, Card, VStack } from "@chakra-ui/react";
 import { cache } from "react";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
-import StepPanel from "@/app/(wca)/competitions/[competitionId]/register/StepPanel";
+import StepPanel from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/StepPanel";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
-import RegistrationRequirementsCard from "@/app/(wca)/competitions/[competitionId]/register/RegistrationRequirementsCard";
+import RegistrationRequirementsCard from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/RegistrationRequirementsCard";
 import { ChakraMarkdown } from "@/components/Markdown";
 
 const fetchConfig = cache(async (authToken: string, competitionId: string) => {

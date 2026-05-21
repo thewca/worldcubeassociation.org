@@ -3,7 +3,7 @@
 import { Button, HStack, Link, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
-import ActionButtons from "@/app/(wca)/competitions/[competitionId]/live/admin/ActionButtons";
+import ActionButtons from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/admin/ActionButtons";
 import { useState } from "react";
 import { LiveRoundAdmin, LiveRoundState } from "@/types/live";
 import { useT } from "@/lib/i18n/useI18n";
