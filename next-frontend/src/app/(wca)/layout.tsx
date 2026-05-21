@@ -5,7 +5,6 @@ import WCAQueryClientProvider from "@/providers/WCAQueryClientProvider";
 import { Provider as UiProvider } from "@/components/ui/provider";
 import Navbar from "./navbar";
 import Footer from "./footer";
-import RandomBackground from "@/components/RandomBackground";
 import { ThemeProvider } from "@wrksz/themes/next";
 import { appFont } from "@/styles/fonts";
 import NextTopLoader from "nextjs-toploader";
@@ -44,7 +43,6 @@ export default async function RootLayout({
             <AuthProvider>
               <UiProvider>
                 <Navbar />
-                <RandomBackground numRows={8} numCols={18} />
                 {children}
                 <NextTopLoader height={5} showAtBottom />
                 <Footer />
