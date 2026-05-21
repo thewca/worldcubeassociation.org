@@ -2,6 +2,7 @@ import { I18n, useMakePlural } from 'i18n-js';
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import * as Pluralizers from 'make-plural/plurals';
+import dateFnsLocaleLoaders from './dateFnsLocales';
 
 // English is always needed (default + fallback), so bundle it synchronously.
 import enTranslations from 'rails_translations/en.json';
@@ -90,15 +91,14 @@ function loadTranslationPluralizer(i18n, locale) {
   i18n.pluralization.register(locale, i18nPluralizer);
 }
 
-// Maps WCA locale codes that differ from date-fns file names.
-const DATE_FNS_LOCALE_OVERRIDES = { 'es-419': 'es', 'es-ES': 'es' };
-
 async function loadDateTimeLocale(locale) {
   // date-fns has no plain 'en' locale (only en-US, en-GB, etc.) — skip it.
   if (locale === DEFAULT_LOCALE) return;
 
-  const dateFnsName = DATE_FNS_LOCALE_OVERRIDES[locale] ?? locale;
-  const mod = await import(`date-fns/locale/${dateFnsName}`);
+  const loader = dateFnsLocaleLoaders[locale];
+  if (!loader) return;
+
+  const mod = await loader();
   registerLocale(locale, mod.default);
   setDefaultLocale(locale);
 }
