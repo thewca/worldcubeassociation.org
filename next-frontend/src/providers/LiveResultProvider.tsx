@@ -260,12 +260,23 @@ export function MultiRoundResultProvider({
     );
   }, []);
 
+  const refetchAndClearPending = (roundId: string) => {
+    refetchRound(roundId).then((res) => {
+      if (!res.isSuccess) {
+        return;
+      }
+      diffPendingResults(res.data.results, (pr, ir) =>
+        compareAttempts(pr.attempts, ir.attempts),
+      );
+    });
+  };
+
   const roundIds = initialRounds.map((r) => r.id);
   const connectionState = useResultsSubscriptions(
     roundIds,
     competitionId,
     onReceived,
-    refetchRound,
+    refetchAndClearPending,
   );
 
   return (
