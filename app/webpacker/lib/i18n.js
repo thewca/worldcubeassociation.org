@@ -1,10 +1,13 @@
 import { I18n, useMakePlural } from 'i18n-js';
 
-import * as Locales from 'date-fns/locale';
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import * as Pluralizers from 'make-plural/plurals';
 
-const i18nFileContext = require.context('rails_translations');
+// English is always needed (default + fallback), so bundle it synchronously.
+import enTranslations from 'rails_translations/en.json';
+
+// All other locales are loaded lazily — only the user's locale is ever fetched.
+const i18nLocaleContext = require.context('rails_translations', false, /\.json$/, 'lazy');
 
 export const DEFAULT_LOCALE = 'en';
 
@@ -78,11 +81,6 @@ export function withLocale(overrideLocale, fn) {
   }
 }
 
-function loadTranslations(i18n, locale) {
-  const translations = i18nFileContext(`./${locale}.json`);
-  i18n.store(translations);
-}
-
 function loadTranslationPluralizer(i18n, locale) {
   const baseLocale = locale.split('-')[0];
   const isoPluralizer = Pluralizers[baseLocale];
@@ -92,19 +90,31 @@ function loadTranslationPluralizer(i18n, locale) {
   i18n.pluralization.register(locale, i18nPluralizer);
 }
 
-function loadDateTimeLocale(locale) {
-  const dateFnsLocale = Locales[locale];
+// Maps WCA locale codes that differ from date-fns file names.
+const DATE_FNS_LOCALE_OVERRIDES = { 'es-419': 'es', 'es-ES': 'es' };
 
-  registerLocale(locale, dateFnsLocale);
+async function loadDateTimeLocale(locale) {
+  // date-fns has no plain 'en' locale (only en-US, en-GB, etc.) — skip it.
+  if (locale === DEFAULT_LOCALE) return;
+
+  const dateFnsName = DATE_FNS_LOCALE_OVERRIDES[locale] ?? locale;
+  const mod = await import(`date-fns/locale/${dateFnsName}`);
+  registerLocale(locale, mod.default);
   setDefaultLocale(locale);
 }
 
-// prepare the pluralizer rules.
-loadTranslationPluralizer(window.I18n, window.wca.currentLocale);
+const { currentLocale } = window.wca;
 
-// store the actual translations.
-loadTranslations(window.I18n, DEFAULT_LOCALE);
-loadTranslations(window.I18n, window.wca.currentLocale);
+loadTranslationPluralizer(window.I18n, currentLocale);
 
-// load additional locales for third party code.
-loadDateTimeLocale(window.wca.currentLocale);
+// English is always available synchronously.
+window.I18n.store(enTranslations);
+
+// For non-English locales, fetch only the needed translation + date-fns locale chunks.
+const translationsReady = currentLocale === DEFAULT_LOCALE
+  ? Promise.resolve()
+  : i18nLocaleContext(`./${currentLocale}.json`).then((mod) => {
+    window.I18n.store(mod.default ?? mod);
+  });
+
+window.i18nReady = Promise.all([translationsReady, loadDateTimeLocale(currentLocale)]);

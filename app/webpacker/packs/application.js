@@ -45,3 +45,10 @@ const ReactRailsUJS = require('react_ujs');
 // see: https://github.com/reactjs/react-rails#component-name
 // eslint-disable-next-line react-hooks/rules-of-hooks
 ReactRailsUJS.useContext(componentRequireContext);
+
+// Delay component mounting until translations for the user's locale are ready.
+// English is always available synchronously; other locales load as a small separate chunk.
+const originalHandleMount = ReactRailsUJS.handleMount.bind(ReactRailsUJS);
+ReactRailsUJS.handleMount = (e) => {
+  (window.i18nReady || Promise.resolve()).then(() => originalHandleMount(e));
+};
