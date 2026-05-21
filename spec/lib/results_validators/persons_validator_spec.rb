@@ -139,6 +139,7 @@ RSpec.describe PV do
       # LETTER_AFTER_PERIOD_WARNING
       # SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING
       # SINGLE_NAME_WARNING
+      # SUSPICIOUS_LAST_NAME_WARNING
       it "validates person data" do
         round_222 = create(:round, event_id: "222", competition: competition2)
         create(:inbox_result, competition: competition2, event_id: "222", round: round_222)
@@ -226,6 +227,16 @@ RSpec.describe PV do
                                   event_id: "333oh",
                                   round: round_333_oh)
         res_wrong_wca_id.person.update(wca_id: "ERR")
+        res_suspicious_junior = create(:inbox_result,
+                                       competition: competition1,
+                                       event_id: "333oh",
+                                       round: round_333_oh)
+        res_suspicious_junior.person.update(name: "John Junior")
+        res_suspicious_senior = create(:inbox_result,
+                                       competition: competition1,
+                                       event_id: "333oh",
+                                       round: round_333_oh)
+        res_suspicious_senior.person.update(name: "Maria Senior")
 
         expected_errors = [
           RV::ValidationError.new(PV::PERSON_WITHOUT_RESULTS_ERROR,
@@ -298,6 +309,14 @@ RSpec.describe PV do
           RV::ValidationWarning.new(PV::SINGLE_NAME_WARNING,
                                     :persons, competition1.id,
                                     name: res_same_name2.person.name),
+          RV::ValidationWarning.new(PV::SUSPICIOUS_LAST_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_suspicious_junior.person.name,
+                                    suffix: "Junior"),
+          RV::ValidationWarning.new(PV::SUSPICIOUS_LAST_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: res_suspicious_senior.person.name,
+                                    suffix: "Senior"),
         ]
         validator_args = [
           { competition_ids: [competition1.id, competition2.id], model: InboxResult },
@@ -397,10 +416,10 @@ RSpec.describe PV do
 
         validator_args.each do |arg|
           pv = PV.new.validate(**arg)
-          expect(pv.warnings).to include(
-            RV::ValidationWarning.new(PV::MISSING_MATCHING_REGISTRATION_WARNING,
-                                      :persons, competition_with_regs.id,
-                                      name: person_without_reg.name),
+          expect(pv.errors).to include(
+            RV::ValidationError.new(PV::MISSING_MATCHING_REGISTRATION_WARNING,
+                                    :persons, competition_with_regs.id,
+                                    name: person_without_reg.name),
           )
         end
       end
@@ -418,10 +437,10 @@ RSpec.describe PV do
 
         validator_args.each do |arg|
           pv = PV.new.validate(**arg)
-          expect(pv.warnings).to include(
-            RV::ValidationWarning.new(PV::UNACCEPTED_REGISTRATION_WITH_RESULTS_WARNING,
-                                      :persons, competition_with_regs.id,
-                                      name: person_with_unaccepted_reg.name),
+          expect(pv.errors).to include(
+            RV::ValidationError.new(PV::UNACCEPTED_REGISTRATION_WITH_RESULTS_WARNING,
+                                    :persons, competition_with_regs.id,
+                                    name: person_with_unaccepted_reg.name),
           )
         end
       end
@@ -441,12 +460,12 @@ RSpec.describe PV do
 
         validator_args.each do |arg|
           pv = PV.new.validate(**arg)
-          expect(pv.warnings).to include(
-            RV::ValidationWarning.new(PV::REGISTRATION_DETAILS_MISMATCH_WARNING,
-                                      :persons, competition_with_regs.id,
-                                      person_id: mismatched_person.ref_id,
-                                      name: mismatched_person.name,
-                                      mismatches: mismatches.join(', ')),
+          expect(pv.errors).to include(
+            RV::ValidationError.new(PV::REGISTRATION_DETAILS_MISMATCH_WARNING,
+                                    :persons, competition_with_regs.id,
+                                    person_id: mismatched_person.ref_id,
+                                    name: mismatched_person.name,
+                                    mismatches: mismatches.join(', ')),
           )
         end
       end
@@ -467,10 +486,10 @@ RSpec.describe PV do
 
         validator_args.each do |arg|
           pv = PV.new.validate(**arg)
-          expect(pv.warnings).not_to include(
-            RV::ValidationWarning.new(PV::MISSING_MATCHING_REGISTRATION_WARNING,
-                                      :persons, competition_no_regs.id,
-                                      name: person.name),
+          expect(pv.errors).not_to include(
+            RV::ValidationError.new(PV::MISSING_MATCHING_REGISTRATION_WARNING,
+                                    :persons, competition_no_regs.id,
+                                    name: person.name),
           )
         end
       end

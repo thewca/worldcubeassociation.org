@@ -4,6 +4,8 @@ class LiveResult < ApplicationRecord
   BEST_POSSIBLE_SCORE = 1
   WORST_POSSIBLE_SCORE = -1
 
+  PODIUM_RANGE = 1..3
+
   has_many :live_attempts, dependent: :destroy
   alias_method :attempts, :live_attempts
 
@@ -21,7 +23,12 @@ class LiveResult < ApplicationRecord
   belongs_to :locked_by, class_name: 'User', optional: true
 
   scope :not_empty, -> { where.not(best: 0) }
-  scope :locked, -> { where.not(locked_by: nil) }
+
+  scope :globally_ranked, -> { where.not(global_pos: nil) }
+  scope :locally_ranked, -> { where.not(local_pos: nil) }
+
+  scope :locked, -> { where.not(locked_by_id: nil) }
+  scope :not_locked, -> { where(locked_by_id: nil) }
 
   scope :advancing, -> { where(advancing: true) }
   scope :not_advancing, -> { where(advancing: false) }
@@ -52,7 +59,8 @@ class LiveResult < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
-  delegate :id, to: :event, prefix: true
+  delegate :event_id, :format_id, :round_type_id, :competition_id, to: :round
+  delegate :registrant_id, to: :registration
 
   def to_solve_time(field)
     SolveTime.new(event_id, field, send(field))
@@ -69,12 +77,17 @@ class LiveResult < ApplicationRecord
   end
 
   def mark_as_quit!(quit_by_user)
-    self.update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
+    quit_count = self.update!(quit_by_id: quit_by_user.id, advancing: false, advancing_questionable: false)
     self.live_result_history_entries.create!(entered_by_id: quit_by_user.id, action_type: :quit)
+    quit_count
+  end
+
+  def quit?
+    self.quit_by_id?
   end
 
   def locked?
-    locked_by_id.present?
+    self.locked_by_id?
   end
 
   def self.compute_average_and_best(attempts, round)
@@ -98,22 +111,52 @@ class LiveResult < ApplicationRecord
   end
 
   def complete?
-    # Use length hear to not fire a COUNT query for every row
-    live_attempts.length == round.format.expected_solve_count
+    live_attempts_count == round.format.expected_solve_count || didnt_meet_cutoff?
   end
 
-  def empty_result?
-    best.zero?
+  def didnt_meet_cutoff?
+    live_attempts.any? && round.cutoff.present? && round.cutoff.exceeds?(live_attempts)
   end
 
-  def not_empty?
-    !empty_result?
+  def missing_attempts?
+    !complete?
   end
 
   def values_for_sorting
     ranking_columns.map do |column|
       to_solve_time(column)
     end
+  end
+
+  def to_inbox_result
+    attempt_values = live_attempts.pluck(:value)
+
+    InboxResult.new(
+      round: self.round,
+      competition_id: self.competition_id,
+      person_id: self.registrant_id,
+      pos: self.local_pos,
+      event_id: self.event_id,
+      format_id: self.format_id,
+      round_type_id: self.round_type_id,
+      best: self.best,
+      average: self.average,
+      value1: attempt_values[0],
+      value2: attempt_values[1] || 0,
+      value3: attempt_values[2] || 0,
+      value4: attempt_values[3] || 0,
+      value5: attempt_values[4] || 0,
+    )
+  end
+
+  def to_wcif
+    {
+      "personId" => registrant_id,
+      "ranking" => global_pos,
+      "attempts" => live_attempts.map(&:to_wcif),
+      "best" => best,
+      "average" => average,
+    }
   end
 
   LIVE_STATE_SERIALIZE_OPTIONS = {

@@ -1,14 +1,13 @@
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
-import { auth } from "@/auth";
-import { serverClientWithToken } from "@/lib/wca/wcaAPI";
-import { Card, Container, HStack, SimpleGrid } from "@chakra-ui/react";
+import { Card, Container, HStack, SimpleGrid, VStack } from "@chakra-ui/react";
 
 import EventIcon from "@/components/EventIcon";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import RoundActions from "@/app/(wca)/competitions/[competitionId]/live/admin/RoundActions";
+import { getRounds } from "@/lib/wca/live/getRounds";
 
 export default async function RoundAdmin({
   competitionId,
@@ -16,16 +15,7 @@ export default async function RoundAdmin({
   competitionId: string;
 }) {
   const { t } = await getT();
-
-  const session = await auth();
-
-  // We check if you are logged in the parent
-  const client = serverClientWithToken(session!.accessToken);
-
-  const { error, data, response } = await client.GET(
-    "/v1/competitions/{competitionId}/live/rounds",
-    { params: { path: { competitionId } } },
-  );
+  const { error, data, response } = await getRounds(competitionId);
 
   if (error) {
     return <OpenapiError t={t} response={response} />;
@@ -41,7 +31,7 @@ export default async function RoundAdmin({
       <SimpleGrid columns={3} gap={2}>
         {_.map(roundsById, (rounds, eventId) => {
           return (
-            <Card.Root key={eventId} rounded="md">
+            <Card.Root key={eventId} rounded="md" size="sm">
               <Card.Body alignItems="baseline">
                 <Card.Title>
                   <HStack>
@@ -49,17 +39,19 @@ export default async function RoundAdmin({
                     {events.byId[eventId].name}
                   </HStack>
                 </Card.Title>
-                <Card.Description w="full">
-                  {rounds.map((r) => {
-                    return (
-                      <RoundActions
-                        round={r}
-                        totalRounds={rounds.length}
-                        competitionId={competitionId}
-                        key={r.id}
-                      />
-                    );
-                  })}
+                <Card.Description w="full" asChild>
+                  <VStack gap="0" alignItems="left">
+                    {rounds.map((r) => {
+                      return (
+                        <RoundActions
+                          key={r.id}
+                          round={r}
+                          rounds={rounds}
+                          competitionId={competitionId}
+                        />
+                      );
+                    })}
+                  </VStack>
                 </Card.Description>
               </Card.Body>
             </Card.Root>

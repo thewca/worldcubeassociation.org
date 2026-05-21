@@ -1,51 +1,58 @@
-"use client";
-import { SimpleGrid, GridItem } from "@chakra-ui/react";
+import { SimpleGrid, GridItem, Heading } from "@chakra-ui/react";
+import ClosableAlert from "@/components/ui/ClosableAlert";
 import AttemptsForm from "@/components/live/AttemptsForm";
-import { Format } from "@/lib/wca/data/formats";
+import formats from "@/lib/wca/data/formats";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
-import events from "@/lib/wca/data/events";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
-import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
-import { LiveCompetitor } from "@/types/live";
+import { LiveRoundAdminBase } from "@/types/live";
+import { getT } from "@/lib/i18n/get18n";
 
-export default function AddResults({
-  format,
-  roundId,
+export default async function AddResults({
   competitionId,
+  roundName,
+  round,
 }: {
-  format: Format;
-  roundId: string;
   competitionId: string;
-  competitors: LiveCompetitor[];
+  roundName: string;
+  round: LiveRoundAdminBase;
 }) {
-  const { eventId, roundNumber } = parseActivityCode(roundId);
+  const { eventId } = parseActivityCode(round.id);
+  const format = formats.byId[round.format];
+
+  const { t } = await getT();
+
+  const isLocked = round.state === "locked";
 
   return (
-    <LiveResultAdminProvider
-      format={format}
-      roundId={roundId}
-      competitionId={competitionId}
-    >
+    <>
+      {isLocked && (
+        <ClosableAlert
+          status="warning"
+          title={t("competitions.live.admin.warnings.round_locked")}
+        />
+      )}
+      <Heading textStyle="h1">{roundName}</Heading>
       <SimpleGrid columns={16} gap={6}>
-        <GridItem colSpan={4}>
+        <GridItem colSpan={4} position="sticky" top={4} alignSelf="start">
           <AttemptsForm
             header="Add Result"
             eventId={eventId}
+            cutoff={round.cutoff}
             solveCount={format.expected_solve_count}
           />
         </GridItem>
 
         <GridItem colSpan={12}>
           <LiveUpdatingResultsTable
-            roundWcifId={roundId}
-            formatId={format.id}
+            roundWcifId={round.id}
+            formatId={round.format}
             competitionId={competitionId}
             isAdminView
             canManage
-            title={`${events.byId[eventId].name} - ${roundNumber}`}
+            title=""
           />
         </GridItem>
       </SimpleGrid>
-    </LiveResultAdminProvider>
+    </>
   );
 }

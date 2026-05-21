@@ -9,28 +9,30 @@ import {
 } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
 import { useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import formats from "@/lib/wca/data/formats";
 import { LiveResult } from "@/types/live";
 import AttemptsForm from "@/components/live/AttemptsForm";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
-import events from "@/lib/wca/data/events";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 
 export default function DoubleCheck({
   results,
   roundWcifId,
   formatId,
+  roundName,
 }: {
   results: LiveResult[];
   roundWcifId: string;
   competitionId: string;
   formatId: string;
+  roundName: string;
 }) {
   const format = formats.byId[formatId];
   const solveCount = format.expected_solve_count;
 
-  const { eventId, roundNumber } = parseActivityCode(roundWcifId);
+  const { eventId } = parseActivityCode(roundWcifId);
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -41,6 +43,15 @@ export default function DoubleCheck({
     handleRegistrationIdChange(results[newIndex].registration_id);
     setCurrentIndex(newIndex);
   };
+
+  useHotkeys("left", () => {
+    if (currentIndex > 0) onPageChange({ page: currentIndex });
+  });
+
+  useHotkeys("right", () => {
+    if (currentIndex < results.length - 1)
+      onPageChange({ page: currentIndex + 2 });
+  });
 
   return (
     <Pagination.Root
@@ -94,7 +105,7 @@ export default function DoubleCheck({
               <Card.Header textAlign="center">
                 <Pagination.PageText />
                 <br />
-                {events.byId[eventId].name} - {roundNumber}
+                {roundName}
               </Card.Header>
               <Card.Title>Double-check</Card.Title>
               <Card.Description>

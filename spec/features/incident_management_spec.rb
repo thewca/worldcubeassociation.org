@@ -17,31 +17,31 @@ RSpec.feature "Incident Management", :js do
     feature "list of incidents" do
       scenario "shows all" do
         visit "/incidents"
-        expect(page).to have_content("First incident")
-        expect(page).to have_content("Custom title")
-        expect(page).to have_content("Second incident")
+        expect(page).to have_text("First incident")
+        expect(page).to have_text("Custom title")
+        expect(page).to have_text("Second incident")
       end
 
       scenario "filters by tag" do
         visit "/incidents?tags=misscramble"
         page.find_by_id('incidents-log-tags-container', visible: :all).has_content?("misscramble")
-        expect(page).to have_content("First incident")
-        expect(page).to have_no_content("Custom title")
-        expect(page).to have_no_content("Second incident")
+        expect(page).to have_text("First incident")
+        expect(page).to have_no_text("Custom title")
+        expect(page).to have_no_text("Second incident")
       end
 
       scenario "filters by text" do
         visit "/incidents"
         page.fill_in "incidents-log-search-container", with: "Custom"
-        expect(page).to have_content("Custom title")
-        expect(page).to have_no_content("First incident")
+        expect(page).to have_text("Custom title")
+        expect(page).to have_no_text("First incident")
       end
 
       scenario "filters by both" do
         visit "/incidents?tags=4b&search=Custom"
         page.find_by_id('incidents-log-tags-container', visible: :all).has_content?("4b")
-        expect(page).to have_content("Custom title")
-        expect(page).to have_no_content("Second incident")
+        expect(page).to have_text("Custom title")
+        expect(page).to have_no_text("Second incident")
       end
 
       scenario "shows regulation text" do
@@ -51,7 +51,7 @@ RSpec.feature "Incident Management", :js do
         # Unfortunately we don't have access to the Regulations json within travis,
         # so here we check for the most unlikely to change Regulation:
         # that a competition must include a WCA Delegate.
-        expect(page).to have_content("must include a WCA Delegate")
+        expect(page).to have_text("must include a WCA Delegate")
       end
     end
 
@@ -66,12 +66,12 @@ RSpec.feature "Incident Management", :js do
     feature "show an incident" do
       scenario "shows all information" do
         visit incident_path(incident1)
-        expect(page).to have_content("First incident")
-        expect(page).to have_content(incident1.competitions.map(&:id).join(" "))
-        expect(page).to have_content(incident1.tags_array.join(" "))
-        expect(page).to have_content(incident1.public_summary)
-        expect(page).to have_content(incident1.private_description)
-        expect(page).to have_content(incident1.private_wrc_decision)
+        expect(page).to have_text("First incident")
+        expect(page).to have_text(incident1.competitions.map(&:id).join(" "))
+        expect(page).to have_text(incident1.tags_array.join(" "))
+        expect(page).to have_text(incident1.public_summary)
+        expect(page).to have_text(incident1.private_description)
+        expect(page).to have_text(incident1.private_wrc_decision)
       end
     end
   end
@@ -86,28 +86,28 @@ RSpec.feature "Incident Management", :js do
     feature "shows incidents log" do
       scenario "shows only resolved incidents" do
         visit "/incidents"
-        expect(page).to have_content("Custom title")
-        expect(page).to have_content("Second incident")
-        expect(page).to have_no_content("First incident")
+        expect(page).to have_text("Custom title")
+        expect(page).to have_text("Second incident")
+        expect(page).to have_no_text("First incident")
       end
     end
 
     feature "show an incident" do
       scenario "shows all information when resolved" do
         visit incident_path(incident3)
-        expect(page).to have_content(incident3.title)
-        expect(page).to have_content(incident3.tags_array.join(" "))
-        expect(page).to have_content(incident3.public_summary)
-        expect(page).to have_content(incident3.private_description)
-        expect(page).to have_content(incident3.private_wrc_decision)
+        expect(page).to have_text(incident3.title)
+        expect(page).to have_text(incident3.tags_array.join(" "))
+        expect(page).to have_text(incident3.public_summary)
+        expect(page).to have_text(incident3.private_description)
+        expect(page).to have_text(incident3.private_wrc_decision)
       end
 
       scenario "delegates cant see information from pending incidents" do
         visit incident_path(incident1)
         expect(page).to have_current_path "/"
-        expect(page).to have_no_content(incident1.public_summary)
-        expect(page).to have_no_content(incident1.private_description)
-        expect(page).to have_no_content(incident1.private_wrc_decision)
+        expect(page).to have_no_text(incident1.public_summary)
+        expect(page).to have_no_text(incident1.private_description)
+        expect(page).to have_no_text(incident1.private_wrc_decision)
       end
     end
   end
@@ -122,18 +122,18 @@ RSpec.feature "Incident Management", :js do
     feature "shows incidents log" do
       scenario "shows only resolved incidents" do
         visit "/incidents"
-        expect(page).to have_content("Custom title")
-        expect(page).to have_content("Second incident")
-        expect(page).to have_no_content("First incident")
+        expect(page).to have_text("Custom title")
+        expect(page).to have_text("Second incident")
+        expect(page).to have_no_text("First incident")
       end
     end
 
     feature "show an incident" do
       scenario "shows only public information when resolved" do
         visit incident_path(incident3)
-        expect(page).to have_content(incident3.public_summary)
-        expect(page).to have_no_content(incident3.private_description)
-        expect(page).to have_no_content(incident3.private_wrc_decision)
+        expect(page).to have_text(incident3.public_summary)
+        expect(page).to have_no_text(incident3.private_description)
+        expect(page).to have_no_text(incident3.private_wrc_decision)
       end
     end
   end
@@ -142,18 +142,18 @@ RSpec.feature "Incident Management", :js do
     feature "shows incidents log" do
       scenario "shows only resolved incidents" do
         visit "/incidents"
-        expect(page).to have_content("Custom title")
-        expect(page).to have_content("Second incident")
-        expect(page).to have_no_content("First incident")
+        expect(page).to have_text("Custom title")
+        expect(page).to have_text("Second incident")
+        expect(page).to have_no_text("First incident")
       end
     end
 
     feature "show an incident" do
       scenario "shows only public information when resolved" do
         visit incident_path(incident3)
-        expect(page).to have_content(incident3.public_summary)
-        expect(page).to have_no_content(incident3.private_description)
-        expect(page).to have_no_content(incident3.private_wrc_decision)
+        expect(page).to have_text(incident3.public_summary)
+        expect(page).to have_no_text(incident3.private_description)
+        expect(page).to have_no_text(incident3.private_wrc_decision)
       end
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_06_110117) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -313,11 +313,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
     t.index ["delegate_id"], name: "index_competition_delegates_on_delegate_id"
   end
 
-  create_table "competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "competition_events", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", null: false
     t.string "event_id", null: false
     t.integer "fee_lowest_denomination", default: 0, null: false
     t.text "qualification"
+    t.json "qualification_condition"
+    t.date "qualification_latest_date"
     t.index ["competition_id", "event_id"], name: "index_competition_events_on_competition_id_and_event_id", unique: true
     t.index ["event_id"], name: "fk_rails_ba6cfdafb1"
   end
@@ -479,6 +481,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
     t.bigint "value_and_id"
     t.index ["event_id", "average"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "average"], name: "regional_records_speedup"
+    t.index ["person_id", "country_id", "event_id", "reg_year"], name: "unique_per_competitor_per_event_per_year", unique: true
     t.index ["person_id", "event_id", "continent_id", "country_id", "average"], name: "average_ranks_speedup"
   end
 
@@ -492,6 +495,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
     t.bigint "value_and_id"
     t.index ["event_id", "best"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "best"], name: "regional_records_speedup"
+    t.index ["person_id", "country_id", "event_id", "reg_year"], name: "unique_per_competitor_per_event_per_year", unique: true
     t.index ["person_id", "event_id", "continent_id", "country_id", "best"], name: "single_ranks_speedup"
   end
 
@@ -779,7 +783,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
   create_table "linked_rounds", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "wcif_id"
   end
 
   create_table "live_attempts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -815,6 +818,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
     t.datetime "created_at", null: false
     t.integer "global_pos"
     t.datetime "last_attempt_entered_at", null: false
+    t.integer "live_attempts_count", default: 0, null: false
     t.integer "local_pos"
     t.bigint "locked_by_id"
     t.bigint "quit_by_id"
@@ -865,7 +869,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
     t.text "scramble_string", null: false
     t.datetime "updated_at", null: false
     t.index ["external_scramble_id"], name: "index_matched_scrambles_on_external_scramble_id"
-    t.index ["matched_scramble_set_id", "ordered_index"], name: "ordering_sequence", unique: true
+    t.index ["matched_scramble_set_id", "is_extra", "ordered_index"], name: "ordering_sequence", unique: true
     t.index ["matched_scramble_set_id"], name: "index_matched_scrambles_on_matched_scramble_set_id"
   end
 
@@ -1092,9 +1096,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
     t.index ["person_id", "country_id", "event_id", "competition_reg_year", "best", "result_id"], name: "concise_single_speedup"
   end
 
-  create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "competition_event_id"
-    t.integer "registration_id"
+  create_table "registration_competition_events", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "competition_event_id"
+    t.bigint "registration_id"
     t.index ["competition_event_id"], name: "index_registration_competition_events_on_competition_event_id"
     t.index ["registration_id", "competition_event_id"], name: "idx_registration_competition_events_on_reg_id_and_comp_event_id", unique: true
     t.index ["registration_id"], name: "index_registration_competition_events_on_registration_id"
@@ -1128,7 +1132,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
     t.bigint "receipt_id"
     t.string "receipt_type"
     t.integer "refunded_registration_payment_id"
-    t.integer "registration_id"
+    t.bigint "registration_id"
     t.string "stripe_charge_id"
     t.datetime "updated_at", precision: nil, null: false
     t.integer "user_id"
@@ -1138,7 +1142,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
     t.index ["stripe_charge_id"], name: "index_registration_payments_on_stripe_charge_id"
   end
 
-  create_table "registrations", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "registrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "accepted_at", precision: nil
     t.integer "accepted_by"
     t.text "administrative_notes"
@@ -1253,7 +1257,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
 
   create_table "rounds", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.text "advancement_condition"
-    t.integer "competition_event_id", null: false
+    t.bigint "competition_event_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.text "cutoff"
     t.string "format_id", limit: 255, null: false
@@ -1261,6 +1265,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
     t.bigint "linked_round_id"
     t.integer "number", null: false
     t.string "old_type", limit: 1
+    t.json "participation_condition"
+    t.bigint "participation_source_id"
+    t.string "participation_source_type"
     t.text "round_results", size: :medium
     t.integer "scramble_set_count", default: 1, null: false
     t.text "time_limit"
@@ -1337,6 +1344,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
   create_table "scrambles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", limit: 32, null: false
     t.string "event_id", limit: 6, null: false
+    t.bigint "external_scramble_id"
     t.string "group_id", limit: 3, null: false
     t.boolean "is_extra", null: false
     t.bigint "round_id", null: false
@@ -1344,6 +1352,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
     t.text "scramble", null: false
     t.integer "scramble_num", null: false
     t.index ["competition_id", "event_id"], name: "competitionId"
+    t.index ["external_scramble_id"], name: "fk_rails_ec66de8ac5"
     t.index ["round_id"], name: "index_scrambles_on_round_id"
   end
 
@@ -1650,7 +1659,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
   add_foreign_key "live_attempts", "live_results", on_delete: :cascade
   add_foreign_key "live_result_history_entries", "live_results", on_delete: :cascade
   add_foreign_key "live_result_history_entries", "users", column: "entered_by_id"
-  add_foreign_key "live_results", "rounds"
+  add_foreign_key "live_results", "rounds", on_delete: :cascade
   add_foreign_key "live_results", "users", column: "locked_by_id"
   add_foreign_key "live_results", "users", column: "quit_by_id"
   add_foreign_key "matched_scramble_sets", "external_scramble_sets"
@@ -1664,9 +1673,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
   add_foreign_key "potential_duplicate_persons", "persons", column: "duplicate_person_id"
   add_foreign_key "potential_duplicate_persons", "users", column: "original_user_id"
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "registration_competition_events", "competition_events", on_delete: :cascade
+  add_foreign_key "registration_competition_events", "registrations", on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "result_attempts", "results", on_delete: :cascade
   add_foreign_key "results", "rounds"
+  add_foreign_key "rounds", "competition_events", on_delete: :cascade
   add_foreign_key "rounds", "linked_rounds"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
@@ -1675,15 +1687,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_104945) do
   add_foreign_key "schedule_activities", "schedule_activities", column: "parent_activity_id"
   add_foreign_key "schedule_activities", "venue_rooms"
   add_foreign_key "scramble_file_uploads", "users", column: "uploaded_by"
+  add_foreign_key "scrambles", "external_scrambles", on_delete: :nullify
   add_foreign_key "scrambles", "rounds"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
   add_foreign_key "ticket_comments", "ticket_stakeholders", column: "acting_stakeholder_id"
-  add_foreign_key "ticket_comments", "tickets"
+  add_foreign_key "ticket_comments", "tickets", on_delete: :cascade
   add_foreign_key "ticket_comments", "users", column: "acting_user_id"
+  add_foreign_key "ticket_log_changes", "ticket_logs", on_delete: :cascade
   add_foreign_key "ticket_logs", "ticket_stakeholders", column: "acting_stakeholder_id"
+  add_foreign_key "ticket_logs", "tickets", on_delete: :cascade
   add_foreign_key "ticket_logs", "users", column: "acting_user_id"
-  add_foreign_key "tickets_competition_result", "competitions"
+  add_foreign_key "ticket_stakeholders", "tickets", on_delete: :cascade
+  add_foreign_key "tickets_competition_result", "competitions", on_delete: :cascade
+  add_foreign_key "tickets_edit_person_fields", "tickets_edit_person", on_delete: :cascade
   add_foreign_key "user_avatars", "users"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"

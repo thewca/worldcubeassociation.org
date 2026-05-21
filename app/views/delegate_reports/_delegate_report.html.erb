@@ -54,7 +54,12 @@
     (<%= competition.events.count %>)
     <%= competition.events.map(&:name).join(", ") %>
   </div>
-
+  <% if competition.lead_delegate.present? %>
+    <div>
+      <strong>Lead Delegate</strong>
+      <%= competition.lead_delegate.name %>
+    </div>
+  <% end %>
   <div>
     <strong>Delegates</strong>
     <%= competition.staff_delegates.pluck(:name).to_sentence %>

@@ -81,128 +81,62 @@ const coreBlocks = [
   FeaturedCompetitions,
 ];
 
-const twoBlocksLeaf: Block = {
-  slug: "twoBlocksLeaf",
-  interfaceName: "TwoBlocksLeafBlock",
-  fields: [
-    {
-      name: "type",
-      type: "select",
-      required: true,
-      options: [
-        "1/3 & 2/3",
-        "2/3 & 1/3",
-        "1/2 & 1/2",
-        "1/4 & 3/4",
-        "3/4 & 1/4",
-      ],
-    },
-    {
-      name: "alignment",
-      type: "select",
-      required: true,
-      options: ["horizontal", "vertical"],
-    },
-    {
-      name: "blocks",
-      type: "blocks",
-      blocks: coreBlocks,
-      required: true,
-      minRows: 2,
-      maxRows: 2,
-    },
-  ],
-};
+const createTwoBlocks = (depth: number = 1): Block => {
+  const allowedBlocks =
+    depth === 0 ? coreBlocks : [...coreBlocks, createTwoBlocks(depth - 1)];
 
-const twoBlocksBranch: Block = {
-  slug: "twoBlocksBranch",
-  interfaceName: "TwoBlocksBranchBlock",
-  fields: [
-    {
-      name: "type",
-      type: "select",
-      required: true,
-      options: [
-        "1/3 & 2/3",
-        "2/3 & 1/3",
-        "1/2 & 1/2",
-        "1/4 & 3/4",
-        "3/4 & 1/4",
-      ],
+  return {
+    slug: `twoBlocksLevel${depth}`,
+    interfaceName: `TwoBlocksLevel${depth}Block`,
+    labels: {
+      singular: "Two Blocks",
+      plural: "Two Blocks",
     },
-    {
-      name: "alignment",
-      type: "select",
-      required: true,
-      options: ["horizontal", "vertical"],
-    },
-    {
-      name: "blocks",
-      type: "blocks",
-      blocks: [...coreBlocks, twoBlocksLeaf],
-      required: true,
-      minRows: 2,
-      maxRows: 2,
-    },
-  ],
-};
-
-const twoBlocks: Block = {
-  slug: "twoBlocks",
-  interfaceName: "TwoBlocksBlock",
-  fields: [
-    {
-      name: "type",
-      type: "select",
-      required: true,
-      options: [
-        "1/3 & 2/3",
-        "2/3 & 1/3",
-        "1/2 & 1/2",
-        "1/4 & 3/4",
-        "3/4 & 1/4",
-      ],
-    },
-    {
-      name: "alignment",
-      type: "select",
-      required: true,
-      options: ["horizontal", "vertical"],
-    },
-    {
-      name: "blocks",
-      type: "blocks",
-      blocks: [...coreBlocks, twoBlocksBranch],
-      required: true,
-      minRows: 2,
-      maxRows: 2,
-    },
-  ],
-};
-
-const fullWidth: Block = {
-  slug: "fullWidth",
-  interfaceName: "FullWidthBlock",
-  fields: [
-    {
-      name: "blocks",
-      type: "blocks",
-      blocks: coreBlocks,
-      required: true,
-      maxRows: 1,
-    },
-  ],
+    fields: [
+      {
+        name: "ratio",
+        type: "select",
+        required: true,
+        defaultValue: "1/2 & 1/2",
+        options: [
+          "1/3 & 2/3",
+          "2/3 & 1/3",
+          "1/2 & 1/2",
+          "1/4 & 3/4",
+          "3/4 & 1/4",
+        ],
+      },
+      {
+        type: "row",
+        fields: [
+          {
+            name: "left",
+            type: "blocks",
+            blocks: allowedBlocks,
+            required: true,
+            minRows: 1,
+          },
+          {
+            name: "right",
+            type: "blocks",
+            blocks: allowedBlocks,
+            required: true,
+            minRows: 1,
+          },
+        ],
+      },
+    ],
+  };
 };
 
 export const Home: GlobalConfig = {
   slug: "home",
   fields: [
     {
-      name: "item",
+      name: "layout",
       type: "blocks",
-      blocks: [twoBlocks, fullWidth],
+      blocks: [...coreBlocks, createTwoBlocks(2)],
       required: true,
-      minRows: 1,
     },
   ],
   versions: {

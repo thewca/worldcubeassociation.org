@@ -1,4 +1,14 @@
 import { AspectRatio, Container } from "@chakra-ui/react";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ version: string }>;
+}): Promise<Metadata> {
+  const { version } = await params;
+  return { title: `WCA Regulations ${version}` };
+}
 
 export default async function HistoricalRegulation({
   params,

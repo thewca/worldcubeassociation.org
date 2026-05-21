@@ -4,6 +4,8 @@ import { Button } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import { toaster } from "@/components/ui/toaster";
 import { LiveRoundState } from "@/types/live";
+import { useT } from "@/lib/i18n/useI18n";
+import { useConfirm } from "@/providers/ConfirmProvider";
 
 export default function ActionButtons({
   state,
@@ -57,6 +59,10 @@ export default function ActionButtons({
     },
   );
 
+  const { t } = useT();
+
+  const confirm = useConfirm();
+
   if (state == "ready") {
     return (
       <Button
@@ -67,7 +73,7 @@ export default function ActionButtons({
           openRound({ params: { path: { roundId, competitionId } } })
         }
       >
-        Open
+        {t("competitions.live.admin.open")}
       </Button>
     );
   }
@@ -79,10 +85,12 @@ export default function ActionButtons({
         size="sm"
         loading={isPendingClear}
         onClick={() =>
-          clearRound({ params: { path: { roundId, competitionId } } })
+          confirm({ confirmButton: t("competitions.live.admin.clear") }).then(
+            () => clearRound({ params: { path: { roundId, competitionId } } }),
+          )
         }
       >
-        Clear
+        {t("competitions.live.admin.clear")}
       </Button>
     );
   }

@@ -297,6 +297,9 @@ module DatabaseDumper
           time_limit
           cutoff
           advancement_condition
+          participation_condition
+          participation_source_id
+          participation_source_type
           scramble_set_count
           created_at
           updated_at
@@ -313,7 +316,6 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
-          wcif_id
           created_at
           updated_at
         ],
@@ -342,6 +344,7 @@ module DatabaseDumper
           scramble
           id
           scramble_num
+          external_scramble_id
         ],
       ),
     }.freeze,
@@ -383,6 +386,8 @@ module DatabaseDumper
           event_id
           fee_lowest_denomination
           qualification
+          qualification_latest_date
+          qualification_condition
         ],
       ),
     }.freeze,

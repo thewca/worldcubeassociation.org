@@ -5,7 +5,7 @@ class LiveAttempt < ApplicationRecord
 
   default_scope { order(:attempt_number) }
 
-  belongs_to :live_result
+  belongs_to :live_result, counter_cache: true
 
   has_one :h2h_attempt, dependent: :destroy
 
@@ -28,6 +28,10 @@ class LiveAttempt < ApplicationRecord
 
   def to_result_attempt
     ResultAttempt.new(value: value, attempt_number: attempt_number)
+  end
+
+  def to_wcif
+    { "result" => self.value, "reconstruction" => nil }
   end
 
   def self.attempts_changed?(before_attempts, after_attempts)

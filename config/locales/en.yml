@@ -798,7 +798,7 @@ en:
         weat: "WCA Executive Assistants Team"
         wfc: "WCA Financial Committee"
         wmt: "WCA Marketing Team"
-        wmct: "WCA Major Championships Team"
+        wmct: "WCA Major Championship Team"
         wqac: "WCA Quality Assurance Committee"
         wrc: "WCA Regulations Committee"
         wrt: "WCA Results Team"
@@ -909,6 +909,7 @@ en:
         captcha:
           validation_error: "Please verify that you are not a robot."
       success_message: "Request submitted - we'll get back to you soon."
+      success_message_with_ticket_link_html: "Request submitted - we'll get back to you soon. To view the status of this request, please visit <a href=\"%{link}\">this link</a>."
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
@@ -917,26 +918,24 @@ en:
     latest_news: "Latest news"
     announcements: "Announcements"
     see_all_announcements: "See all announcements"
-    #context: "About us" box
     about_us:
       title: "About us"
       text: "The World Cube Association governs competitions for mechanical puzzles that are operated by twisting groups of pieces, commonly known as 'twisty puzzles'."
-    #context: "Competitions" box
     competitions:
       title: "Competitions"
       text_html: "Find out about competitions near you or competition results. At a competition now and want to see the results? Check out %{wca_live_link}!"
-    #context: "Merchandise" box
     merchandise:
       title: "Merchandise"
       #context: Indicate that the feature is new (like an advertisement)
       ad_new: "New"
       text_html: "Check out our newly launched official merchandise which includes a selection of apparels ranging from T-shirts to Hoodies."
       link_title: "Link to shop"
-    #context: "Records" box
     records:
       title: "Records"
       text: "Check out the current and past records of all official WCA events."
-    #context: "FAQ" box
+    volunteer:
+      title: "Volunteer"
+      text: "Get involved! The WCA has volunteer positions open across different teams. You do not have to be a speedcuber to be a volunteer."
     faq:
       title: "FAQ"
       text: "Take a look at our list of Frequently Asked Questions if you need help with anything. Many questions you have might have an answer there."
@@ -1050,6 +1049,8 @@ en:
       profile: "Profile"
       approve: "Approve"
       approve_confirm: "Are you sure you want to approve WCA ID %{wca_id}?"
+      clear_claim: "Clear claim"
+      clear_claim_confirm: "Are you sure you want to clear the claim for WCA ID %{wca_id}?"
       unconfirmed_email: "This account's email address (%{email}) is not confirmed."
       confirm_new_email: "Changing your email will require confirming the new email before being effective."
       pending_mail_confirmation: "This account is pending confirmation of the new email address %{email}."
@@ -1406,6 +1407,9 @@ en:
       schedule_locked_after_results_submitted: "The schedule cannot be edited after results have been submitted."
     live:
       title: "Live Results"
+      round_state:
+        ongoing: "live"
+        done: "done"
       connection:
         initialized: "Connection being initialized"
         connected: "Connected, results are being updated"
@@ -1413,6 +1417,43 @@ en:
       podiums:
         title: "Podiums"
         undetermined: "Podiums to be determined"
+        none: "There are no podiums yet!"
+      admin:
+        open: "Open"
+        clear: "Clear"
+        competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
+        round_locked: "locked"
+        edit: "Edit"
+        results: "Results"
+        warnings:
+          omitted: "You've omitted attempt %{attempt_number}. Make sure it's intentional."
+          DNS: "There's at least one DNS followed by a valid result. Please ensure it is indeed a DNS and not a DNF."
+          impossible: "The result you're trying to submit seems to be impossible: attempt %{attempt_number} is done in less than 30 seconds per cube tried. If you want to enter minutes, don't forget to add two zeros for centiseconds at the end of the score"
+          inconsistent: "The result you're trying to submit seem to be inconsistent. There's a big difference between the best single (%{best_single}) and the worst single (%{worst_single}). Please check that the results are accurate."
+          round_locked: "The next round has already been open, any changes won't affect it!"
+        quit:
+          title: "Quit Competitor"
+          next_to_advance:
+            one: "The next competitor to advance is %{competitors}"
+            other: "The next competitors to advance are %{competitors}"
+          advance: "Advance next Competitor"
+          quit_confirm:
+            one: "Quit Competitor from Round"
+            other: "Quit Competitors from Round"
+          bulk:
+            success: "Successfully quit %{count} competitors"
+            failure: "Failed to bulk quit competitors"
+            menu: "Bulk Quit"
+          quit_menu: "Quit"
+          no_next: "No next competitor to advance."
+          cancel: "Cancel"
+          failed_to_fetch: "Failed to fetch next advancing competitor"
+          still_processing: "Cannot execute 'Quit Competitor' actions while some results are still processing"
+      results:
+        competitor: "Competitor"
+        mean: "Mean"
+      errors:
+        round_closed: "The Round is not open yet"
     #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"
@@ -2137,11 +2178,13 @@ en:
         qualification_html: "Qualification times must be set in other WCA competitions in order to compete."
         qualification_all_events_html: "Qualification times must be set on or before <b>%{date}</b>."
         qualification_some_events_html: "Qualification times in %{events} must be set on or before <b>%{date}</b>."
+        advancement_condition_html: "The number of competitors shown as advancing to the next round is the planned maximum. The actual number may be lower if there are fewer competitors than expected, or if there are ties at the boundary."
       format: "Format"
       time_limit: "Time limit"
       cutoff: "Cutoff"
       proceed: "Proceed"
       qualification: "Qualification"
+      advancement_condition: "Advancement Condition"
     #context: competition's schedule tab
     schedule:
       #context: when selecting the kind of schedule to display
@@ -2773,7 +2816,7 @@ en:
       content_html: "The competition must be announced at least 28 days before the start of the competition (see <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>). However, this is rarely enough time. You should consider everything that will go into organizing your competition, and give yourself enough time to prepare. Also, the WCAT will need time to review your competition before it is announced. Consult with your delegate if you are unsure about how much time will be needed."
     paragraph4:
       title: "Proximity policy"
-      content1: "WCA competitions will be accepted if they are at least 10 km or 5 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 10 km and the time between them is less than 5 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
+      content1: "WCA competitions will be accepted if they are at least 30 km or 5 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 30 km and the time between them is less than 5 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
       olist1:
         '1': "The two competitions don't have events in common."
         '2': "The two competitions take place in different regions."
@@ -2932,6 +2975,7 @@ en:
       multiple_newcomers_with_same_name_warning: "There are multiple new competitors with the exact same name: %{name}. Please ensure that all results are correct for these competitors and that all results are correctly separated by their corresponding id."
       wrong_parenthesis_type_error: "The parenthesis character used in '%{name}' is an irregular character, please replace it with a regular parenthesis '(' or ')' and with appropriate spacing."
       special_characters_in_name_warning: "The name '%{name}' contains invalid special characters (such as numbers, quotes, or other symbols). Names should only contain letters, spaces, hyphens, apostrophes, periods, and regular parentheses."
+      suspicious_last_name_warning: "'%{name}' has '%{suffix}' as their last name, which may not be an actual last name (e.g. a generational suffix written in full). Please confirm it is their legal last name, or replace/remove it accordingly."
       successive_uppercase_name_warning: "'%{name}' has successive uppercase letters in their name. Please confirm that this is indeed the correct spelling or fix the name."
       lowercase_name_warning: "'%{name}' has a lowercase name. Please confirm that this is indeed the correct spelling or fix the name."
       missing_period_in_single_letter_middle_name_warning: "'%{name}' has a single letter middle name without an abbreviation period. Please confirm that this is indeed the correct spelling or fix the name."
@@ -2978,7 +3022,7 @@ en:
       missing_scrambles_for_group_error: "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
       missing_scrambles_for_multi_error: "[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts."
       multiple_fmc_groups_warning: "[%{round_id}] There are multiple groups of FMC used. If one group of FMC was used, please use the Scrambles Matcher to uncheck the unused scrambles. Otherwise, please include a comment to WRT explaining why multiple groups of FMC were used."
-      wrong_number_of_scramble_sets_error: "[%{round_id}] This round has a different number of scramble sets than specified on the Manage Events tab. Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used."
+      wrong_number_of_scramble_sets_error: "[%{round_id}] This round has a different number of scramble sets (%{actual}) than specified on the Manage Events tab (%{expected}). Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used."
   tickets:
     type:
       edit_person: "Edit Person"

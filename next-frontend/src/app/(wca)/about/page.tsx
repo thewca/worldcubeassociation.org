@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
 
   return {
-    title: t("layouts.navigation.disclaimer"),
+    title: t("layouts.navigation.about"),
   };
 }
 export default async function About() {

@@ -21,8 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
 
   return {
-    // This is currently hardcoded in Rails
-    title: t("WCA Scrambles"),
+    title: t("layouts.navigation.scrambles"),
   };
 }
 

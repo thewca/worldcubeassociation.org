@@ -92,23 +92,65 @@ RSpec.describe "API Competitions" do
   describe "GET #show_wcif" do
     let!(:competition) { create(:competition, :visible) }
 
-    context "when not signed in" do
-      it "does not allow access" do
-        patch api_v0_competition_wcif_path(competition)
-        expect(response).to have_http_status(:unauthorized)
+    context "versioned access" do
+      it "returns stable version by default" do
+        get api_v0_competition_wcif_path(competition)
+        expect(response).to have_http_status(:ok)
         response_json = response.parsed_body
-        expect(response_json["error"]).to eq "Please log in"
+        expect(response_json["formatVersion"]).to eq Competition::WCIF_STABLE_VERSION
+      end
+
+      it "resolves lifecycle tags" do
+        get api_v0_competition_wcif_lifecycle_path(competition, "latest")
+        expect(response).to have_http_status(:ok)
+        response_json = response.parsed_body
+        expect(response_json["formatVersion"]).to eq Competition::WCIF_VERSION_CATALOGUE[:latest]
+      end
+
+      it "complains about non-existent lifecycle tag" do
+        get api_v0_competition_wcif_lifecycle_path(competition, "newest")
+        expect(response).to have_http_status(:bad_request)
+      end
+
+      it "gives newest major version" do
+        get api_v0_competition_wcif_version_path(competition, "1")
+        expect(response).to have_http_status(:ok)
+        response_json = response.parsed_body
+        expect(response_json["formatVersion"]).to eq "1.1"
+      end
+
+      it "gives specific SemVer version" do
+        get api_v0_competition_wcif_version_path(competition, "1.1")
+        expect(response).to have_http_status(:ok)
+        response_json = response.parsed_body
+        expect(response_json["formatVersion"]).to eq "1.1"
+      end
+
+      it "complains about non-existent version" do
+        get api_v0_competition_wcif_version_path(competition, "3")
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    context "when not signed in" do
+      it "allows access without confidential information" do
+        get api_v0_competition_wcif_path(competition)
+        expect(response).to have_http_status(:ok)
+        response_json = response.parsed_body
+        expect(response_json["persons"][0].keys).not_to include "email"
+        expect(response_json["persons"][0].keys).not_to include "birthdate"
       end
     end
 
     context "when signed in as not a competition manager" do
       before { sign_in create :user }
 
-      it "does not allow access" do
-        patch api_v0_competition_update_wcif_path(competition)
-        expect(response).to have_http_status(:forbidden)
+      it "allows access without confidential information" do
+        get api_v0_competition_wcif_path(competition)
+        expect(response).to have_http_status(:ok)
         response_json = response.parsed_body
-        expect(response_json["error"]).to eq "Not authorized to manage competition"
+        expect(response_json["persons"][0].keys).not_to include "email"
+        expect(response_json["persons"][0].keys).not_to include "birthdate"
       end
     end
 
@@ -143,7 +185,7 @@ RSpec.describe "API Competitions" do
     end
 
     it "does not return confidential person data" do
-      get api_v0_competition_wcif_public_path(competition)
+      get api_v0_competition_wcif_lifecycle_path(competition, lifecycle_name: "public")
       response_json = response.parsed_body
       expect(response_json["persons"][0].keys).not_to include "email"
       expect(response_json["persons"][0].keys).not_to include "birthdate"
@@ -152,10 +194,30 @@ RSpec.describe "API Competitions" do
     it "returns people with accepted registrations only" do
       create(:registration, :cancelled, competition: competition)
       create(:registration, :pending, competition: competition)
-      get api_v0_competition_wcif_public_path(competition)
+      get api_v0_competition_wcif_lifecycle_path(competition, lifecycle_name: "public")
       response_json = response.parsed_body
       expect(response_json["persons"].length).to eq 2
       expect(response_json["persons"][0]["registration"]["status"]).to eq "accepted"
+    end
+
+    context "even when signed in as a competition manager" do
+      before { sign_in competition.delegates.first }
+
+      it "does not return confidential person data" do
+        get api_v0_competition_wcif_lifecycle_path(competition, lifecycle_name: "public")
+        response_json = response.parsed_body
+        expect(response_json["persons"][0].keys).not_to include "email"
+        expect(response_json["persons"][0].keys).not_to include "birthdate"
+      end
+
+      it "returns people with accepted registrations only" do
+        create(:registration, :cancelled, competition: competition)
+        create(:registration, :pending, competition: competition)
+        get api_v0_competition_wcif_lifecycle_path(competition, lifecycle_name: "public")
+        response_json = response.parsed_body
+        expect(response_json["persons"].length).to eq 2
+        expect(response_json["persons"][0]["registration"]["status"]).to eq "accepted"
+      end
     end
   end
 
@@ -307,13 +369,13 @@ RSpec.describe "API Competitions" do
 
         it "can change roles for a person" do
           persons = [{ wcaUserId: registration.user.id, roles: %w[scrambler dataentry] }]
-          patch api_v0_competition_update_wcif_path(competition), params: { persons: persons }.to_json, headers: headers
+          patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, persons: persons }.to_json, headers: headers
           expect(registration.reload.roles).to eq %w[scrambler dataentry]
         end
 
         it "cannot override organizer role" do
           persons = [{ wcaUserId: organizer_registration.user.id, roles: ["scrambler"] }]
-          patch api_v0_competition_update_wcif_path(competition), params: { persons: persons }.to_json, headers: headers
+          patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, persons: persons }.to_json, headers: headers
           expect(organizer_registration.reload.roles).to eq ["scrambler"]
           person_wcif = competition.reload.to_wcif["persons"].find { |person| person["wcaUserId"] == organizer_registration.user.id }
           expect(person_wcif["roles"]).to match_array %w[scrambler organizer]
@@ -328,7 +390,7 @@ RSpec.describe "API Competitions" do
             { "activityId" => 2, "assignmentCode" => "staff-judge", "stationNumber" => 3 },
           ]
           persons = [{ wcaUserId: registration.user.id, assignments: assignments }]
-          patch api_v0_competition_update_wcif_path(competition), params: { persons: persons }.to_json, headers: headers
+          patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, persons: persons }.to_json, headers: headers
           expect(registration.reload.assignments.map(&:to_wcif)).to match_array assignments
         end
 
@@ -353,7 +415,7 @@ RSpec.describe "API Competitions" do
 
     describe "schedule" do
       let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, :with_valid_schedule, schedule_only_one_venue: true, event_ids: ["333"], rounds_per_event: 2, groups_per_round: 2) }
-      let!(:wcif) { competition.to_wcif.slice("schedule") }
+      let!(:wcif) { competition.to_wcif.slice("formatVersion", "schedule") }
 
       context "when signed in as a competition manager" do
         before { sign_in competition.organizers.first }
@@ -474,7 +536,7 @@ RSpec.describe "API Competitions" do
               "logoUrl" => "https://example.com/logo.jpg",
             },
           }]
-          patch api_v0_competition_update_wcif_path(competition), params: { extensions: extensions }.to_json, headers: headers
+          patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, extensions: extensions }.to_json, headers: headers
           expect(competition.wcif_extensions.first.to_wcif).to eq extensions.first
         end
       end
@@ -492,12 +554,13 @@ RSpec.describe "API Competitions" do
         end
 
         it "can update wcif" do
+          competitor = create(:registration, :accepted, competition: competition)
           wcif = create_wcif_with_events(%w[333])
           round333_first = wcif[:events][0][:rounds][0]
           round333_first[:scrambleSetCount] = 2
           round333_first[:results] = [
             {
-              personId: 1,
+              personId: competitor.registrant_id,
               ranking: 10,
               attempts: [{ result: 456 }, { result: 745 }, { result: 657 }, { result: 465 }, { result: 835 }],
               best: 456,
@@ -511,6 +574,9 @@ RSpec.describe "API Competitions" do
           expect(rounds.first.scramble_set_count).to eq 2
           expect(rounds.first.round_results.length).to eq 1
           expect(rounds.first.round_results.first.attempts.map(&:result)).to eq [456, 745, 657, 465, 835]
+          expect(rounds.first.live_results.length).to eq 1
+          expect(rounds.first.live_results.first.live_attempts.pluck(:value)).to eq [456, 745, 657, 465, 835]
+          expect(rounds.first.live_results.first.live_attempts.count).to eq 5
         end
       end
 
@@ -599,6 +665,7 @@ end
 
 def create_wcif_with_events(event_ids)
   {
+    formatVersion: '2.1.1',
     events: event_ids.map do |event_id|
       {
         id: event_id,
@@ -608,7 +675,10 @@ def create_wcif_with_events(event_ids)
             format: "a",
             timeLimit: nil,
             cutoff: nil,
-            advancementCondition: nil,
+            participationRuleset: {
+              participationSource: { type: "registrations" },
+              reservedPlaces: nil,
+            },
             scrambleSetCount: 1,
           },
         ],

@@ -67,6 +67,10 @@ locals {
       value = "redis://wca-main-sidekiq.iebvzt.ng.0001.usw2.cache.amazonaws.com:6379"
     },
     {
+      name = "ANYCABLE_REDIS_URL",
+      value = "rediss://anycable-production-cache-001.anycable-production-cache.iebvzt.usw2.cache.amazonaws.com:6379"
+    },
+    {
       name = "STORAGE_AWS_BUCKET"
       value = aws_s3_bucket.storage-bucket.id
     },
