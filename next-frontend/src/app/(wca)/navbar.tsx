@@ -79,18 +79,34 @@ export default async function Navbar() {
                 <React.Fragment key={navbarEntry.id}>
                   {navbarEntry.blockType === "LinkItem" && (
                     <Button asChild variant="ghost" size="sm">
-                      <LinkWrapper
-                        navbarEntry={navbarEntry}
-                        linkComponent={Link}
-                      />
+                      <Link href={navbarEntry.targetLink}>
+                        {navbarEntry.displayIcon && (
+                          <IconDisplay name={navbarEntry.displayIcon} />
+                        )}
+                        {navbarEntry.displayIcon ? (
+                          <Box as="span" hideBelow="xl">
+                            {navbarEntry.displayText}
+                          </Box>
+                        ) : (
+                          navbarEntry.displayText
+                        )}
+                      </Link>
                     </Button>
                   )}
                   {navbarEntry.blockType === "ExternalLinkItem" && (
                     <Button asChild variant="ghost" size="sm">
-                      <LinkWrapper
-                        navbarEntry={navbarEntry}
-                        linkComponent="a"
-                      />
+                      <a href={navbarEntry.targetLink}>
+                        {navbarEntry.displayIcon && (
+                          <IconDisplay name={navbarEntry.displayIcon} />
+                        )}
+                        {navbarEntry.displayIcon ? (
+                          <Box as="span" hideBelow="xl">
+                            {navbarEntry.displayText}
+                          </Box>
+                        ) : (
+                          navbarEntry.displayText
+                        )}
+                      </a>
                     </Button>
                   )}
                   {navbarEntry.blockType === "NavDropdown" && (
@@ -100,7 +116,13 @@ export default async function Navbar() {
                           {navbarEntry.displayIcon && (
                             <IconDisplay name={navbarEntry.displayIcon} />
                           )}
-                          {navbarEntry.title}
+                          {navbarEntry.displayIcon ? (
+                            <Box as="span" hideBelow="xl">
+                              {navbarEntry.title}
+                            </Box>
+                          ) : (
+                            navbarEntry.title
+                          )}
                           <LuChevronDown />
                         </Button>
                       </Menu.Trigger>
@@ -189,7 +211,9 @@ export default async function Navbar() {
                         <Menu.Trigger asChild>
                           <Button variant="ghost" size="sm">
                             <IconDisplay name="External Link" />
-                            {navbarEntry.label}
+                            <Box as="span" hideBelow="xl">
+                              {navbarEntry.label}
+                            </Box>
                             <LuChevronDown />
                           </Button>
                         </Menu.Trigger>
