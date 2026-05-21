@@ -2,10 +2,12 @@ import { I18n, useMakePlural } from 'i18n-js';
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import * as Pluralizers from 'make-plural/plurals';
+// This is created dynamically at asset build time
+// eslint-disable-next-line import/no-unresolved
+import enTranslations from 'rails_translations/en.json';
 import dateFnsLocaleLoaders from './dateFnsLocales';
 
 // English is always needed (default + fallback), so bundle it synchronously.
-import enTranslations from 'rails_translations/en.json';
 
 // All other locales are loaded lazily — only the user's locale is ever fetched.
 const i18nLocaleContext = require.context('rails_translations', false, /\.json$/, 'lazy');
