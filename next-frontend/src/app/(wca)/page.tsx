@@ -228,9 +228,9 @@ const FeaturedCompetitions = async ({
 }) => (
   <Card.Root width="full">
     <Card.Body>
-      <Card.Title textStyle="h1" asChild>
+      <Card.Title asChild>
         <HStack justify="space-between">
-          <Text>Upcoming Competitions</Text>
+          <Text textStyle="h1">Upcoming Competitions</Text>
           <Button asChild variant="outline">
             <Link href="/competitions">View all Competitions</Link>
           </Button>
