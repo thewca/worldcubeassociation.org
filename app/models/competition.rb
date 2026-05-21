@@ -500,6 +500,7 @@ class Competition < ApplicationRecord
 
   def spots_left
     return nil unless competitor_limit_enabled?
+
     competitor_limit - registrations.accepted_and_paid_pending_count
   end
 
