@@ -1229,6 +1229,8 @@ export interface components {
             "registration_full?": boolean;
             /** @example true */
             "registration_full_and_accepted?": boolean;
+            /** @example 42 */
+            spots_left?: number | null;
             tab_names: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
