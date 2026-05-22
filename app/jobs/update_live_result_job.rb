@@ -37,13 +37,13 @@ class UpdateLiveResultJob < ApplicationJob
     end
   end
 
+  VALUE_COLUMN = {
+    single: :best,
+    average: :average,
+  }.freeze
+
+
   private
-
-    VALUE_COLUMN = {
-      single: :best,
-      average: :average,
-    }.freeze
-
     def compute_pr(live_result, value, person, type)
       col = VALUE_COLUMN[type]
       return nil if value <= 0
