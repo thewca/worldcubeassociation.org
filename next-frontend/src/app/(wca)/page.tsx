@@ -70,7 +70,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
     <Card.Root
       colorPalette={block.colorPalette}
-      colorVariant="deep"
+      colorVariant="slatePastel"
       width="full"
     >
       {block.headerImage && (
@@ -121,7 +121,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
     <Card.Root
       flexDirection="row"
       colorPalette={block.colorPalette}
-      colorVariant="deep"
+      colorVariant="slatePastel"
       width="full"
       maxHeight="md" // somewhat arbitrary, if you have a better idea please shout
       overflow="hidden"
@@ -131,12 +131,12 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           media={block.mainImage as Media}
           width="full"
           maxHeight="lg"
-          bg="colorPalette.deep"
+          bg="colorPalette.1A"
         />
         <AbsoluteCenter
           width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
           height="full"
-          bg="linear-gradient(to right, transparent, transparent, {colors.colorPalette.deep})"
+          bg="linear-gradient(to right, transparent, transparent, {colors.colorPalette.1A})"
         />
       </Box>
 
@@ -178,7 +178,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
     <Card.Root
       overflow="hidden"
       colorPalette={block.colorPalette}
-      colorVariant="deep"
+      colorVariant="slatePastel"
       width="full"
     >
       <MediaImage
@@ -213,7 +213,7 @@ const FeaturedCompetition = async ({
   if (error) return <OpenapiError t={t} response={response} />;
 
   return (
-    <Card.Root colorPalette={colorPalette} colorVariant="deep">
+    <Card.Root colorPalette={colorPalette} colorVariant="slatePastel">
       <Card.Body>
         <Card.Title textStyle="h2">{competition.name}</Card.Title>
         <CompetitionShortlist comp={competition} t={t} />
@@ -269,7 +269,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
           return (
             <Carousel.Item key={slide.id} index={i} asChild>
               <Card.Root
-                colorVariant="deep"
+                colorVariant="slatePastel"
                 flexDirection={{ base: "column", md: "row" }}
                 overflow="hidden"
                 colorPalette={slide.colorPalette}

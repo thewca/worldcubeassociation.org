@@ -9,7 +9,7 @@ function AnnouncementItem({ announcement }: { announcement: Announcement }) {
     <Accordion.Item
       value={announcement.id}
       layerStyle="fill.subtle"
-      _open={{ layerStyle: "fill.deep" }}
+      _open={{ layerStyle: "card.pastel" }}
     >
       <Accordion.ItemTrigger textStyle="s1" _open={{ textStyle: "h2" }}>
         <Accordion.ItemIndicator _open={{ display: "none" }} />

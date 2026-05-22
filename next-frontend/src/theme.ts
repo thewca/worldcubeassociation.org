@@ -735,7 +735,7 @@ const customConfig = defineConfig({
           colorVariant: {
             solid: {
               root: {
-                colorPalette: "white",
+                colorPalette: "wcaWhite",
                 layerStyle: "fill.solid",
               },
               description: {
@@ -744,7 +744,7 @@ const customConfig = defineConfig({
             },
             muted: {
               root: {
-                colorPalette: "white",
+                colorPalette: "wcaWhite",
                 layerStyle: "fill.muted",
               },
               description: {
@@ -753,7 +753,7 @@ const customConfig = defineConfig({
             },
             subtle: {
               root: {
-                colorPalette: "white",
+                colorPalette: "wcaWhite",
                 layerStyle: "fill.subtle",
               },
               description: {
@@ -762,7 +762,7 @@ const customConfig = defineConfig({
             },
             surface: {
               root: {
-                colorPalette: "white",
+                colorPalette: "wcaWhite",
                 layerStyle: "fill.surface",
               },
               description: {
@@ -772,7 +772,7 @@ const customConfig = defineConfig({
             },
             emphasized: {
               root: {
-                colorPalette: "white",
+                colorPalette: "wcaWhite",
                 layerStyle: "fill.emphasized",
               },
               description: {
@@ -781,11 +781,20 @@ const customConfig = defineConfig({
             },
             deep: {
               root: {
-                colorPalette: "white",
+                colorPalette: "wcaWhite",
                 layerStyle: "fill.deep",
               },
               description: {
                 layerStyle: "fill.deep",
+              },
+            },
+            slatePastel: {
+              root: {
+                colorPalette: "wcaWhite",
+                layerStyle: "card.pastel",
+              },
+              description: {
+                layerStyle: "card.pastel",
               },
             },
           },
