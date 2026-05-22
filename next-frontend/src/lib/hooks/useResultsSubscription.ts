@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useEffectEvent, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
 import _ from "lodash";
 import type { PartialExcept } from "@/lib/types/objects";
@@ -75,47 +75,38 @@ export default function useResultsSubscriptions(
     ),
   );
 
-  const changeConnectionState = useCallback(
-    (roundId: string, connectionState: ConnectionState) => {
-      setConnectionStates((prev) => ({
-        ...prev,
-        [roundId]: connectionState,
-      }));
-    },
-    [],
-  );
-
   const onReceivedEvent = useEffectEvent(onReceived);
-  const onReconnectEvent = useEffectEvent(onReconnect);
+
+  const changeConnectionState = useEffectEvent(
+    (roundId: string, newState: ConnectionState) => {
+      if (
+        connectionStates[roundId] === CONNECTION_STATE_DISCONNECTED &&
+        newState === CONNECTION_STATE_CONNECTED
+      ) {
+        onReconnect(roundId);
+      }
+      setConnectionStates((prev) => ({ ...prev, [roundId]: newState }));
+    },
+  );
 
   useEffect(() => {
     const cable = createConsumer(process.env.NEXT_PUBLIC_WEBSOCKET_URL);
-    const prevStates: Record<string, ConnectionState> = {};
 
     const subscriptions = roundIds.map((roundId) =>
       cable.subscriptions.create(anycableConnection(competitionId, roundId), {
         received: (data: DiffProtocolResponse) =>
           onReceivedEvent(roundId, data),
-        initialized: () => {
-          prevStates[roundId] = CONNECTION_STATE_INITIALIZED;
-          changeConnectionState(roundId, CONNECTION_STATE_INITIALIZED);
-        },
-        connected: () => {
-          if (prevStates[roundId] === CONNECTION_STATE_DISCONNECTED) {
-            onReconnectEvent(roundId);
-          }
-          prevStates[roundId] = CONNECTION_STATE_CONNECTED;
-          changeConnectionState(roundId, CONNECTION_STATE_CONNECTED);
-        },
-        disconnected: () => {
-          prevStates[roundId] = CONNECTION_STATE_DISCONNECTED;
-          changeConnectionState(roundId, CONNECTION_STATE_DISCONNECTED);
-        },
+        initialized: () =>
+          changeConnectionState(roundId, CONNECTION_STATE_INITIALIZED),
+        connected: () =>
+          changeConnectionState(roundId, CONNECTION_STATE_CONNECTED),
+        disconnected: () =>
+          changeConnectionState(roundId, CONNECTION_STATE_DISCONNECTED),
       }),
     );
 
     return () => subscriptions.forEach((s) => s.unsubscribe());
-  }, [changeConnectionState, competitionId, roundIds]);
+  }, [competitionId, roundIds]);
 
   // Aggregate: worst state wins
   const values = Object.values(connectionStates);
