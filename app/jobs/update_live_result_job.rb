@@ -39,23 +39,23 @@ class UpdateLiveResultJob < ApplicationJob
 
   private
 
-  VALUE_COLUMN = {
-    single: :best,
-    average: :average,
-  }
+    VALUE_COLUMN = {
+      single: :best,
+      average: :average,
+    }.freeze
 
-  def compute_pr(live_result, value, person, type)
-    col = VALUE_COLUMN[type]
-    return nil if value <= 0
-    return nil if better_pr_in_previous_round?(live_result, "#{type}_record_tag", col, value)
+    def compute_pr(live_result, value, person, type)
+      col = VALUE_COLUMN[type]
+      return nil if value <= 0
+      return nil if better_pr_in_previous_round?(live_result, "#{type}_record_tag", col, value)
 
-    if person.nil?
-      "PR"
-    else
-      pr = person.public_send(:"ranks_#{type}").find { |r| r.event_id == live_result.event_id }
-      "PR" if pr.nil? || value < pr.public_send(col)
+      if person.nil?
+        "PR"
+      else
+        pr = person.public_send(:"ranks_#{type}").find { |r| r.event_id == live_result.event_id }
+        "PR" if pr.nil? || value < pr.public_send(col)
+      end
     end
-  end
 
     def better_pr_in_previous_round?(live_result, tag_column, value_column, current_value)
       round = live_result.round
