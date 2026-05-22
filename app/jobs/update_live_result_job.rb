@@ -42,8 +42,8 @@ class UpdateLiveResultJob < ApplicationJob
     average: :average,
   }.freeze
 
-
   private
+
     def compute_pr(live_result, value, person, type)
       col = VALUE_COLUMN[type]
       return nil if value <= 0
