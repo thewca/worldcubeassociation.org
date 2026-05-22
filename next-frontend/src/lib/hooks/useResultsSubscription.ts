@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useEffectEvent, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
 import _ from "lodash";
 import type { PartialExcept } from "@/lib/types/objects";
@@ -65,6 +65,7 @@ export default function useResultsSubscriptions(
   roundIds: string[],
   competitionId: string,
   onReceived: (roundId: string, data: DiffProtocolResponse) => void,
+  onReconnect: (roundId: string) => void,
 ) {
   const [connectionStates, setConnectionStates] = useState<
     Record<string, ConnectionState>
@@ -74,17 +75,19 @@ export default function useResultsSubscriptions(
     ),
   );
 
-  const changeConnectionState = useCallback(
-    (roundId: string, connectionState: ConnectionState) => {
-      setConnectionStates((prev) => ({
-        ...prev,
-        [roundId]: connectionState,
-      }));
-    },
-    [],
-  );
-
   const onReceivedEvent = useEffectEvent(onReceived);
+
+  const changeConnectionState = useEffectEvent(
+    (roundId: string, newState: ConnectionState) => {
+      if (
+        connectionStates[roundId] === CONNECTION_STATE_DISCONNECTED &&
+        newState === CONNECTION_STATE_CONNECTED
+      ) {
+        onReconnect(roundId);
+      }
+      setConnectionStates((prev) => ({ ...prev, [roundId]: newState }));
+    },
+  );
 
   useEffect(() => {
     const cable = createConsumer(process.env.NEXT_PUBLIC_WEBSOCKET_URL);
@@ -103,7 +106,7 @@ export default function useResultsSubscriptions(
     );
 
     return () => subscriptions.forEach((s) => s.unsubscribe());
-  }, [changeConnectionState, competitionId, roundIds]);
+  }, [competitionId, roundIds]);
 
   // Aggregate: worst state wins
   const values = Object.values(connectionStates);
