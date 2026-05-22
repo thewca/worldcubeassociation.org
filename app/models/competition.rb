@@ -3104,10 +3104,10 @@ class Competition < ApplicationRecord
 
   private
 
-  def sorted_linked_podium(event_results)
-    event_results
-      .sort_by { |r| [r.average.positive? ? r.average : Float::INFINITY, r.best] }
-      .uniq(&:person_id)
-      .first(3)
-  end
+    def sorted_linked_podium(event_results)
+      event_results
+        .sort_by { |r| [r.average.positive? ? r.average : Float::INFINITY, r.best] }
+        .uniq(&:person_id)
+        .first(3)
+    end
 end
