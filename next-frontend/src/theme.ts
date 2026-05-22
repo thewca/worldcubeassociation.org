@@ -307,6 +307,7 @@ const adjustScale = (
 const deriveLuminanceScale = (
   chakraRefScheme: string,
   colorScheme: WcaPaletteInput,
+  config: AdjustmentConfig = {},
 ): ChakraColorScale => {
   // Chakra is not very friendly about exporting its pre-defined schemes and tokens…
   const modelScheme = defaultConfig.theme?.tokens?.colors?.[
@@ -323,10 +324,16 @@ const deriveLuminanceScale = (
     colorScheme.secondaryLight,
   ]);
 
-  const ambientScale = adjustScale(baseScale, secondaryAnchors, { sigma: 1.5 });
+  const ambientScale = adjustScale(baseScale, secondaryAnchors, {
+    ...config,
+    sigma: 1.5,
+  });
 
   const primaryAnchors = createAnchorMap(baseScale, [colorScheme.primary]);
-  const heroScale = adjustScale(ambientScale, primaryAnchors, { sigma: 2.5 });
+  const heroScale = adjustScale(ambientScale, primaryAnchors, {
+    ...config,
+    sigma: 2.5,
+  });
 
   return _.mapValues(heroScale, (rgbHex) => ({ value: rgbHex }));
 };
@@ -368,7 +375,9 @@ const customConfig = defineConfig({
       colors: {
         wcaWhite: {
           ...defineColorAliases(slateColors.white),
-          ...deriveLuminanceScale("gray", slateColors.white),
+          ...deriveLuminanceScale("gray", slateColors.white, {
+            baseInfluence: 1,
+          }),
         },
         green: {
           ...defineColorAliases(slateColors.green),
@@ -444,7 +453,56 @@ const customConfig = defineConfig({
           world: { value: "{colors.blue.1A}" },
         },
         green: compileColorScheme("green"),
-        white: compileColorScheme("wcaWhite"),
+        wcaWhite: {
+          // values mostly stolen from Chakra's `gray` scale,
+          // with a minor adjustment for the `solid` entry.
+          contrast: {
+            value: { _light: "{colors.white}", _dark: "{colors.black}" },
+          },
+          fg: {
+            value: {
+              _light: "{colors.wcaWhite.800}",
+              _dark: "{colors.wcaWhite.200}",
+            },
+          },
+          subtle: {
+            value: {
+              _light: "{colors.wcaWhite.100}",
+              _dark: "{colors.wcaWhite.900}",
+            },
+          },
+          muted: {
+            value: {
+              _light: "{colors.wcaWhite.200}",
+              _dark: "{colors.wcaWhite.800}",
+            },
+          },
+          emphasized: {
+            value: {
+              _light: "{colors.wcaWhite.300}",
+              _dark: "{colors.wcaWhite.700}",
+            },
+          },
+          solid: {
+            value: {
+              _light: "{colors.wcaWhite.900}",
+              _dark: "{colors.wcaWhite.50}",
+            },
+          },
+          focusRing: {
+            value: {
+              _light: "{colors.wcaWhite.400}",
+              _dark: "{colors.wcaWhite.400}",
+            },
+          },
+          border: {
+            value: {
+              _light: "{colors.wcaWhite.200}",
+              _dark: "{colors.wcaWhite.800}",
+            },
+          },
+          ...compileColorScheme("wcaWhite", 100),
+        },
         red: compileColorScheme("red"),
         yellow: compileColorScheme("yellow", 300),
         blue: compileColorScheme("blue"),
