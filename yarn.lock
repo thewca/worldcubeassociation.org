@@ -9712,13 +9712,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-on-rails@npm:16.6.0":
-  version: 16.6.0
-  resolution: "react-on-rails@npm:16.6.0"
+"react-on-rails@npm:17.0.0-rc.0":
+  version: 17.0.0-rc.0
+  resolution: "react-on-rails@npm:17.0.0-rc.0"
   peerDependencies:
     react: ">= 16"
     react-dom: ">= 16"
-  checksum: 10c0/1df524bc980850381f904f59965042dec2147d2f7eca320def0e7978ab695d45d827d074c535af162946e1c90aa6c86a4a6b02f61dd2ac463e387a5892fcb813
+  checksum: 10c0/6dc49bc9e52cce4ca2be7cc9674ddada5a1d29fe9746767e4f2cd5464a088d0d359bf74e5e66f785b1c54c9072e44b89fbaf85f15306b09fbb0a3371d81bd7b2
   languageName: node
   linkType: hard
 
@@ -10246,7 +10246,7 @@ __metadata:
     react-image-crop: "npm:^11.0.10"
     react-intersection-observer: "npm:^10.0.3"
     react-leaflet: "npm:^4.2.1"
-    react-on-rails: "npm:16.6.0"
+    react-on-rails: "npm:17.0.0-rc.0"
     react-refresh: "npm:^0.18.0"
     react-simplemde-editor: "npm:^5.2.0"
     react-spinners: "npm:^0.17.0"
@@ -10258,6 +10258,7 @@ __metadata:
     sass-loader: "npm:^17.0.0"
     semantic-ui-react: "npm:^2.1.5"
     shakapacker: "npm:10.1.0"
+    shakapacker-webpack: "npm:10.1.0"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^17.12.0"
     stylelint-config-recommended-scss: "npm:^17.0.1"
@@ -10608,7 +10609,61 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shakapacker@npm:10.1.0":
+"shakapacker-webpack@npm:10.1.0":
+  version: 10.1.0
+  resolution: "shakapacker-webpack@npm:10.1.0"
+  dependencies:
+    shakapacker: "npm:~10.1.0"
+    terser-webpack-plugin: "npm:^5.3.1"
+  peerDependencies:
+    "@babel/core": ^7.17.9
+    "@pmmmwh/react-refresh-webpack-plugin": ^0.5.0 || ^0.6.0
+    "@swc/core": ^1.3.0
+    babel-loader: ^8.2.4 || ^9.0.0 || ^10.0.0
+    css-loader: ^6.8.1 || ^7.0.0
+    esbuild: ">=0.14.0 <1.0.0"
+    esbuild-loader: ^2.0.0 || ^3.0.0 || ^4.0.0
+    mini-css-extract-plugin: ^2.0.0
+    sass: ^1.50.0
+    sass-loader: ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    swc-loader: ^0.1.15 || ^0.2.0
+    webpack: ^5.101.0
+    webpack-assets-manifest: ^6.0.0
+    webpack-cli: ^7.0.0
+    webpack-dev-server: ^5.2.2
+    webpack-subresource-integrity: ^5.1.0
+  peerDependenciesMeta:
+    "@babel/core":
+      optional: true
+    "@pmmmwh/react-refresh-webpack-plugin":
+      optional: true
+    "@swc/core":
+      optional: true
+    babel-loader:
+      optional: true
+    css-loader:
+      optional: true
+    esbuild:
+      optional: true
+    esbuild-loader:
+      optional: true
+    mini-css-extract-plugin:
+      optional: true
+    sass:
+      optional: true
+    sass-loader:
+      optional: true
+    swc-loader:
+      optional: true
+    webpack-dev-server:
+      optional: true
+    webpack-subresource-integrity:
+      optional: true
+  checksum: 10c0/746154d54d7290a5a5391ce995e9d0c6b4aa72ac16a858e7642788e6054819a6830d892660c8ccd56d4f2ce52354a2afd5b1fffcce405f0267567c21c3fff8ab
+  languageName: node
+  linkType: hard
+
+"shakapacker@npm:10.1.0, shakapacker@npm:~10.1.0":
   version: 10.1.0
   resolution: "shakapacker@npm:10.1.0"
   dependencies:
@@ -11376,7 +11431,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terser-webpack-plugin@npm:^5.5.0, terser-webpack-plugin@npm:^5.6.1":
+"terser-webpack-plugin@npm:^5.3.1, terser-webpack-plugin@npm:^5.5.0, terser-webpack-plugin@npm:^5.6.1":
   version: 5.6.1
   resolution: "terser-webpack-plugin@npm:5.6.1"
   dependencies:

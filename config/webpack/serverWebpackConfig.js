@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 
-const { merge, config } = require('shakapacker');
+const { merge, config } = require('shakapacker-webpack');
 const commonWebpackConfig = require('./commonWebpackConfig');
 
 const configureServer = () => {
