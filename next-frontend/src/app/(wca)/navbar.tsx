@@ -68,7 +68,12 @@ export default async function Navbar() {
   const showEmptyMessage = !LIVE_RESULT_BETA && navbarEntries.length === 0;
 
   return (
-    <Box borderBottom="md" bg="bg" data-testid="header-navbar">
+    <Box
+      borderBottom="md"
+      borderColor="border"
+      bg="bg"
+      data-testid="header-navbar"
+    >
       <RefreshRouteOnSave />
       <Collapsible.Root>
         <HStack padding="3" justifyContent="space-between">
