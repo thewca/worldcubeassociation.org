@@ -10,7 +10,7 @@
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ColorPaletteSelect".
  */
-export type ColorPaletteSelect = 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'white';
+export type ColorPaletteSelect = 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'wcaWhite';
 /**
  * Icon name
  *
