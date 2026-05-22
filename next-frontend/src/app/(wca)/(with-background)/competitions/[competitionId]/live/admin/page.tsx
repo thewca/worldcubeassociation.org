@@ -1,5 +1,5 @@
 import PermissionCheck from "@/components/PermissionCheck";
-import RoundAdmin from "@/app/(wca)/competitions/[competitionId]/live/admin/RoundAdmin";
+import RoundAdmin from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/admin/RoundAdmin";
 import { Toaster } from "@/components/ui/toaster";
 
 export default async function LiveOverview({

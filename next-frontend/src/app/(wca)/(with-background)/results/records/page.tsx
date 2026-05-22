@@ -1,7 +1,7 @@
 import { getRecords } from "@/lib/wca/results/records";
 import { Alert, Container } from "@chakra-ui/react";
 import React from "react";
-import FilteredRecords from "@/app/(wca)/results/records/filteredRecords";
+import FilteredRecords from "@/app/(wca)/(with-background)/results/records/filteredRecords";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
 

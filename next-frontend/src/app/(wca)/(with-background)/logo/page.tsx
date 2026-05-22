@@ -11,7 +11,7 @@ import {
 import { getT } from "@/lib/i18n/get18n";
 import { ChakraMarkdown } from "@/components/Markdown";
 import { Media } from "@/types/payload";
-import LogoDownload from "@/app/(wca)/logo/download";
+import LogoDownload from "@/app/(wca)/(with-background)/logo/download";
 import { Fragment } from "react";
 import { Metadata } from "next";
 
