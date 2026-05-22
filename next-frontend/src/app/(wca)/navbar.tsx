@@ -83,13 +83,12 @@ export default async function Navbar() {
                         {navbarEntry.displayIcon && (
                           <IconDisplay name={navbarEntry.displayIcon} />
                         )}
-                        {navbarEntry.displayIcon ? (
-                          <Box as="span" hideBelow="xl">
-                            {navbarEntry.displayText}
-                          </Box>
-                        ) : (
-                          navbarEntry.displayText
-                        )}
+                        <Box
+                          as="span"
+                          hideBelow={navbarEntry.displayIcon ? "xl" : undefined}
+                        >
+                          {navbarEntry.displayText}
+                        </Box>
                       </Link>
                     </Button>
                   )}
@@ -99,13 +98,12 @@ export default async function Navbar() {
                         {navbarEntry.displayIcon && (
                           <IconDisplay name={navbarEntry.displayIcon} />
                         )}
-                        {navbarEntry.displayIcon ? (
-                          <Box as="span" hideBelow="xl">
-                            {navbarEntry.displayText}
-                          </Box>
-                        ) : (
-                          navbarEntry.displayText
-                        )}
+                        <Box
+                          as="span"
+                          hideBelow={navbarEntry.displayIcon ? "xl" : undefined}
+                        >
+                          {navbarEntry.displayText}
+                        </Box>
                       </a>
                     </Button>
                   )}
@@ -116,13 +114,14 @@ export default async function Navbar() {
                           {navbarEntry.displayIcon && (
                             <IconDisplay name={navbarEntry.displayIcon} />
                           )}
-                          {navbarEntry.displayIcon ? (
-                            <Box as="span" hideBelow="xl">
-                              {navbarEntry.title}
-                            </Box>
-                          ) : (
-                            navbarEntry.title
-                          )}
+                          <Box
+                            as="span"
+                            hideBelow={
+                              navbarEntry.displayIcon ? "xl" : undefined
+                            }
+                          >
+                            {navbarEntry.title}
+                          </Box>
                           <LuChevronDown />
                         </Button>
                       </Menu.Trigger>
