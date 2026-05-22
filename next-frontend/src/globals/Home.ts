@@ -89,8 +89,8 @@ const createTwoBlocks = (depth: number = 1): Block => {
     slug: `twoBlocksLevel${depth}`,
     interfaceName: `TwoBlocksLevel${depth}Block`,
     labels: {
-      singular: "Two Blocks",
-      plural: "Two Blocks",
+      singular: "Horizontal Splitter",
+      plural: "Horizontal Splitters",
     },
     fields: [
       {
