@@ -1464,7 +1464,7 @@ class Competition < ApplicationRecord
   end
 
   def winning_results
-    events_with_podium_results.filter_map { |_, podium| podium.first }
+    events_with_podium_results.flat_map { |_, podium| podium.select { it.pos == 1 } }
   end
 
   def podium_results_for_event(event)
@@ -3104,9 +3104,13 @@ class Competition < ApplicationRecord
 
   private
 
+    def linked_sort_key(result)
+      [result.average.positive? ? result.average : Float::INFINITY, result.best]
+    end
+
     def sorted_linked_podium(event_results)
       event_results
-        .sort_by { |r| [r.average.positive? ? r.average : Float::INFINITY, r.best] }
+        .sort_by { |r| linked_sort_key(r) }
         .uniq(&:person_id)
         .first(3)
     end
