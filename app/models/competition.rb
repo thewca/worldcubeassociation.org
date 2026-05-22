@@ -1445,13 +1445,6 @@ class Competition < ApplicationRecord
   end
 
   def events_with_podium_results
-    linked_event_ids = results.joins(round: :linked_round).distinct.pluck(:event_id)
-
-    if linked_event_ids.empty?
-      return results.includes(:result_attempts).podium.order(:pos).group_by(&:event)
-                    .sort_by { |event, _results| event.rank }
-    end
-
     podium_groups = results.includes(:result_attempts)
                            .podium
                            .where.not(event_id: linked_event_ids)
@@ -1463,10 +1456,7 @@ class Competition < ApplicationRecord
            .where(event_id: linked_event_ids)
            .group_by(&:event)
            .each do |event, event_results|
-             merged = event_results
-                      .sort_by { |r| [r.average.positive? ? r.average : Float::INFINITY, r.best] }
-                      .uniq(&:person_id)
-                      .first(3)
+             merged = sorted_linked_podium(event_results)
              podium_groups[event] = merged unless merged.empty?
            end
 
@@ -1474,7 +1464,21 @@ class Competition < ApplicationRecord
   end
 
   def winning_results
-    results.includes(:result_attempts).winners
+    events_with_podium_results.filter_map { |_, podium| podium.first }
+  end
+
+  def podium_results_for_event(event)
+    if linked_event_ids.include?(event.id)
+      sorted_linked_podium(
+        results.includes(:result_attempts).succeeded.where(event: event).to_a,
+      )
+    else
+      results.includes(:result_attempts).podium.where(event: event).order(:pos).to_a
+    end
+  end
+
+  def linked_event_ids
+    @linked_event_ids ||= results.joins(round: :linked_round).distinct.pluck(:event_id)
   end
 
   def person_ids_with_results
@@ -3096,5 +3100,14 @@ class Competition < ApplicationRecord
 
   def h2h_rounds
     self.rounds.h2h.map(&:wcif_id)
+  end
+
+  private
+
+  def sorted_linked_podium(event_results)
+    event_results
+      .sort_by { |r| [r.average.positive? ? r.average : Float::INFINITY, r.best] }
+      .uniq(&:person_id)
+      .first(3)
   end
 end
