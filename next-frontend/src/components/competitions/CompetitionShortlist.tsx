@@ -46,7 +46,9 @@ export default function CompetitionShortlist({
               <RegisterIcon />
             </DataList.ItemLabel>
             <DataList.ItemValue>
-              {comp.spots_left} Spots Left
+              {t("competitions.messages.spots_left", {
+                count: comp.spots_left,
+              })}
             </DataList.ItemValue>
           </DataList.Item>
         )}
