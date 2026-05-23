@@ -213,9 +213,7 @@ class ResultsSubmissionController < ApplicationController
 
     last_job_run.update!(run_status: DuplicateCheckerJobRun.run_statuses[:long_running_uncertain]) if job_run_running_too_long
 
-    job_run = DuplicateCheckerJobRun.create!(competition_id: competition_id)
-    ComputePotentialDuplicates.perform_later(job_run)
-    job_run
+    DuplicateCheckerJobRun.create!(competition_id: competition_id).tap { ComputePotentialDuplicates.perform_later(it) }
   end
 
   private def check_newcomers_data_access
