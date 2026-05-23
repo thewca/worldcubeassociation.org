@@ -6,10 +6,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import I18n from '../../../lib/i18n';
 import AssignWcaIdToUser from '../../Panel/views/AssignWcaIdToUser';
 
-export default function AssignWcaIdView({ user }) {
+export default function AssignWcaIdView({ user, specialAccount }) {
   const [isModalOpen, setIsModalOpen] = useState();
   const queryClient = useQueryClient();
-  // TODO: Confirm with WRT that allowing Delegates to assign WCA ID to special account is fine.
 
   const onSuccess = (_unusedData, { wcaId }) => {
     queryClient.setQueryData(['user-details-for-edit', user.id], (old) => ({
@@ -25,6 +24,7 @@ export default function AssignWcaIdView({ user }) {
         <Button
           type="button"
           size="small"
+          disabled={specialAccount}
           primary
           onClick={() => setIsModalOpen(true)}
         >

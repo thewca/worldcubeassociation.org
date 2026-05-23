@@ -57,6 +57,7 @@ export function EditUserWcaId({ userId }) {
         {(!wcaId && !unconfirmedWcaId) ? (
           <AssignWcaIdView
             user={userDetails}
+            specialAccount={specialAccount}
           />
         ) : (
           <WcaIdPersonView
