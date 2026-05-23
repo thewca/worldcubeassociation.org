@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Table, Input, Button } from 'semantic-ui-react';
+import { keyBy, mapValues } from 'lodash';
 import getUnfinishedPersons from '../../api/competitionResult/getUnfinishedPersons';
 import createWcaIds from '../../api/competitionResult/createWcaIds';
 import Loading from '../../../Requests/Loading';
@@ -60,21 +61,21 @@ export default function CreateWcaIds({ ticketDetails, currentStakeholder }) {
 }
 
 function UnfinishedPersonsTable({ persons, onSubmit }) {
-  const [unfinishedPersonsData, setUnfinishedPersonsData] = useState(() => (
-    persons.map((person) => ({
+  const [unfinishedPersonsData, setUnfinishedPersonsData] = useState(() => mapValues(
+    keyBy(persons, 'person_id'),
+    (person) => ({
       personId: person.person_id,
       personName: person.person_name,
       countryId: person.country_id,
       editedSemiId: person.computed_semi_id,
-    }))
+    }),
   ));
 
-  const handleSemiIdChange = (index, value) => {
-    setUnfinishedPersonsData((prev) => {
-      const copy = [...prev];
-      copy[index] = { ...copy[index], editedSemiId: value };
-      return copy;
-    });
+  const handleSemiIdChange = (personId, value) => {
+    setUnfinishedPersonsData((prev) => ({
+      ...prev,
+      [personId]: { ...prev[personId], editedSemiId: value },
+    }));
   };
 
   return (
@@ -93,8 +94,8 @@ function UnfinishedPersonsTable({ persons, onSubmit }) {
               <Table.Cell>{person.person_name}</Table.Cell>
               <Table.Cell>
                 <Input
-                  value={unfinishedPersonsData[index].editedSemiId}
-                  onChange={(e) => handleSemiIdChange(index, e.target.value)}
+                  value={unfinishedPersonsData[person.person_id]?.editedSemiId || ''}
+                  onChange={(e) => handleSemiIdChange(person.person_id, e.target.value)}
                   fluid
                 />
               </Table.Cell>
@@ -104,7 +105,7 @@ function UnfinishedPersonsTable({ persons, onSubmit }) {
       </Table>
       <Button
         primary
-        onClick={() => onSubmit(unfinishedPersonsData)}
+        onClick={() => onSubmit(Object.values(unfinishedPersonsData))}
       >
         Create WCA IDs
       </Button>
