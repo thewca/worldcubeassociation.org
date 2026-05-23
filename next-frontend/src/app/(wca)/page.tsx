@@ -70,7 +70,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
     <Card.Root
       colorPalette={block.colorPalette}
-      colorVariant="slatePastel"
+      colorVariant="deep"
       width="full"
     >
       {block.headerImage && (
@@ -121,9 +121,9 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
     <Card.Root
       flexDirection="row"
       colorPalette={block.colorPalette}
-      colorVariant="slatePastel"
+      colorVariant="deep"
       width="full"
-      maxHeight="md" // somewhat arbitrary, if you have a better idea please shout
+      maxHeight="lg"
       overflow="hidden"
     >
       <Box position="relative" width="50%" hideBelow="md">
@@ -131,19 +131,19 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           media={block.mainImage as Media}
           width="full"
           maxHeight="lg"
-          bg="colorPalette.1A"
+          bg="colorPalette.deep"
         />
         <AbsoluteCenter
           width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
           height="full"
-          bg="linear-gradient(to right, transparent, transparent, {colors.colorPalette.1A})"
+          bg="linear-gradient(to right, transparent, transparent, {colors.colorPalette.deep})"
         />
       </Box>
 
       <Card.Body justifyContent="center">
         <Card.Title
           colorPalette={block.headingColor}
-          textStyle={{ base: "h3", md: "h2", xl: "h1" }}
+          textStyle={{ base: "h3", md: "h2" }}
         >
           {block.heading}
         </Card.Title>
@@ -178,14 +178,13 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
     <Card.Root
       overflow="hidden"
       colorPalette={block.colorPalette}
-      colorVariant="slatePastel"
+      colorVariant="deep"
       width="full"
     >
       <MediaImage
         media={block.mainImage as Media}
         altFallback={block.heading}
         aspectRatio="2/1"
-        maxHeight="10rem" // somewhat arbitrary, if you have a better idea please shout!
       />
       {block.heading && (
         <Card.Body>
@@ -213,7 +212,7 @@ const FeaturedCompetition = async ({
   if (error) return <OpenapiError t={t} response={response} />;
 
   return (
-    <Card.Root colorPalette={colorPalette} colorVariant="slatePastel">
+    <Card.Root colorPalette={colorPalette} colorVariant="deep">
       <Card.Body>
         <Card.Title textStyle="h2">{competition.name}</Card.Title>
         <CompetitionShortlist comp={competition} t={t} />
@@ -269,7 +268,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
           return (
             <Carousel.Item key={slide.id} index={i} asChild>
               <Card.Root
-                colorVariant="slatePastel"
+                colorVariant="deep"
                 flexDirection={{ base: "column", md: "row" }}
                 overflow="hidden"
                 colorPalette={slide.colorPalette}
