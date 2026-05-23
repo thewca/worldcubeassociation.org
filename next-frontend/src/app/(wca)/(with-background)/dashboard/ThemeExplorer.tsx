@@ -40,16 +40,7 @@ const { tokens } = system;
 const colors = tokens.categoryMap.get("colors")!;
 const allColors = Array.from(colors.values());
 
-const keys = [
-  "gray",
-  "red",
-  "blue",
-  "green",
-  "yellow",
-  "orange",
-  "white",
-  "wcaWhite",
-];
+const keys = ["gray", "red", "blue", "green", "yellow", "orange", "white"];
 
 export const ColorTokenDoc = () => {
   return (

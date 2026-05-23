@@ -5,14 +5,7 @@ export const colorPaletteSelect: SelectField = {
   type: "select",
   required: true,
   interfaceName: "ColorPaletteSelect",
-  options: [
-    "blue",
-    "red",
-    "green",
-    "orange",
-    "yellow",
-    { label: "white", value: "wcaWhite" },
-  ],
+  options: ["blue", "red", "green", "orange", "yellow", "white"],
 };
 
 export const colorPaletteToneToggle: CheckboxField = {

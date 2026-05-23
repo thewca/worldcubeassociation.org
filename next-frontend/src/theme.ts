@@ -11,7 +11,6 @@ interface WcaPaletteInput {
   secondaryDark: string; // 2A (Deep)
   cubeLight: string; // Left Face
   cubeDark: string; // Right Face
-  pastelContrast: "white" | "black";
 }
 
 type LuminanceKey =
@@ -41,7 +40,6 @@ const slateColors = {
     secondaryDark: "#1B4D3E",
     cubeLight: "#1AB55C",
     cubeDark: "#04632D",
-    pastelContrast: "white",
   } satisfies WcaPaletteInput,
   white: {
     primary: "#EEEEEE",
@@ -51,7 +49,6 @@ const slateColors = {
     secondaryDark: "#3B3B3B",
     cubeLight: "#FFFFFF",
     cubeDark: "#CCCCCC",
-    pastelContrast: "black",
   } satisfies WcaPaletteInput,
   red: {
     primary: "#C62535",
@@ -61,7 +58,6 @@ const slateColors = {
     secondaryDark: "#7A1220",
     cubeLight: "#E53841",
     cubeDark: "#A3131A",
-    pastelContrast: "white",
   } satisfies WcaPaletteInput,
   yellow: {
     primary: "#FFD313",
@@ -71,7 +67,6 @@ const slateColors = {
     secondaryDark: "#664D00",
     cubeLight: "#FFDE55",
     cubeDark: "#CEA705",
-    pastelContrast: "black",
   } satisfies WcaPaletteInput,
   blue: {
     primary: "#0051BA",
@@ -81,7 +76,6 @@ const slateColors = {
     secondaryDark: "#003366",
     cubeLight: "#066AC4",
     cubeDark: "#03458C",
-    pastelContrast: "white",
   } satisfies WcaPaletteInput,
   orange: {
     primary: "#FF5800",
@@ -91,7 +85,6 @@ const slateColors = {
     secondaryDark: "#7A2B00",
     cubeLight: "#F96E32",
     cubeDark: "#D34405",
-    pastelContrast: "white",
   } satisfies WcaPaletteInput,
 } as const;
 
@@ -307,7 +300,6 @@ const adjustScale = (
 const deriveLuminanceScale = (
   chakraRefScheme: string,
   colorScheme: WcaPaletteInput,
-  config: AdjustmentConfig = {},
 ): ChakraColorScale => {
   // Chakra is not very friendly about exporting its pre-defined schemes and tokens…
   const modelScheme = defaultConfig.theme?.tokens?.colors?.[
@@ -324,16 +316,10 @@ const deriveLuminanceScale = (
     colorScheme.secondaryLight,
   ]);
 
-  const ambientScale = adjustScale(baseScale, secondaryAnchors, {
-    ...config,
-    sigma: 1.5,
-  });
+  const ambientScale = adjustScale(baseScale, secondaryAnchors, { sigma: 1.5 });
 
   const primaryAnchors = createAnchorMap(baseScale, [colorScheme.primary]);
-  const heroScale = adjustScale(ambientScale, primaryAnchors, {
-    ...config,
-    sigma: 2.5,
-  });
+  const heroScale = adjustScale(ambientScale, primaryAnchors, { sigma: 2.5 });
 
   return _.mapValues(heroScale, (rgbHex) => ({ value: rgbHex }));
 };
@@ -362,9 +348,6 @@ const defineColorAliases = (colorPalette: WcaPaletteInput) => ({
   "2A": { value: colorPalette.secondaryDark },
   "2B": { value: colorPalette.secondaryLight },
   "2C": { value: colorPalette.secondaryMedium },
-  pastelContrast: {
-    value: colorPalette.pastelContrast === "white" ? "#FCFCFC" : "#1E1E1E",
-  },
   lighter: { value: colorPalette.cubeLight },
   darker: { value: colorPalette.cubeDark },
 });
@@ -375,9 +358,7 @@ const customConfig = defineConfig({
       colors: {
         wcaWhite: {
           ...defineColorAliases(slateColors.white),
-          ...deriveLuminanceScale("gray", slateColors.white, {
-            baseInfluence: 1,
-          }),
+          ...deriveLuminanceScale("gray", slateColors.white),
         },
         green: {
           ...defineColorAliases(slateColors.green),
@@ -453,56 +434,7 @@ const customConfig = defineConfig({
           world: { value: "{colors.blue.1A}" },
         },
         green: compileColorScheme("green"),
-        wcaWhite: {
-          // values mostly stolen from Chakra's `gray` scale,
-          // with a minor adjustment for the `solid` entry.
-          contrast: {
-            value: { _light: "{colors.white}", _dark: "{colors.black}" },
-          },
-          fg: {
-            value: {
-              _light: "{colors.wcaWhite.800}",
-              _dark: "{colors.wcaWhite.200}",
-            },
-          },
-          subtle: {
-            value: {
-              _light: "{colors.wcaWhite.100}",
-              _dark: "{colors.wcaWhite.900}",
-            },
-          },
-          muted: {
-            value: {
-              _light: "{colors.wcaWhite.200}",
-              _dark: "{colors.wcaWhite.800}",
-            },
-          },
-          emphasized: {
-            value: {
-              _light: "{colors.wcaWhite.300}",
-              _dark: "{colors.wcaWhite.700}",
-            },
-          },
-          solid: {
-            value: {
-              _light: "{colors.wcaWhite.900}",
-              _dark: "{colors.wcaWhite.50}",
-            },
-          },
-          focusRing: {
-            value: {
-              _light: "{colors.wcaWhite.400}",
-              _dark: "{colors.wcaWhite.400}",
-            },
-          },
-          border: {
-            value: {
-              _light: "{colors.wcaWhite.200}",
-              _dark: "{colors.wcaWhite.800}",
-            },
-          },
-          ...compileColorScheme("wcaWhite", 100),
-        },
+        white: compileColorScheme("wcaWhite"),
         red: compileColorScheme("red"),
         yellow: compileColorScheme("yellow", 300),
         blue: compileColorScheme("blue"),
@@ -644,7 +576,7 @@ const customConfig = defineConfig({
       "card.pastel": {
         value: {
           background: "colorPalette.1A",
-          color: "colorPalette.pastelContrast",
+          color: "colorPalette.contrast",
         },
       },
       "card.bright": {
@@ -735,7 +667,7 @@ const customConfig = defineConfig({
           colorVariant: {
             solid: {
               root: {
-                colorPalette: "wcaWhite",
+                colorPalette: "white",
                 layerStyle: "fill.solid",
               },
               description: {
@@ -744,7 +676,7 @@ const customConfig = defineConfig({
             },
             muted: {
               root: {
-                colorPalette: "wcaWhite",
+                colorPalette: "white",
                 layerStyle: "fill.muted",
               },
               description: {
@@ -753,7 +685,7 @@ const customConfig = defineConfig({
             },
             subtle: {
               root: {
-                colorPalette: "wcaWhite",
+                colorPalette: "white",
                 layerStyle: "fill.subtle",
               },
               description: {
@@ -762,7 +694,7 @@ const customConfig = defineConfig({
             },
             surface: {
               root: {
-                colorPalette: "wcaWhite",
+                colorPalette: "white",
                 layerStyle: "fill.surface",
               },
               description: {
@@ -772,7 +704,7 @@ const customConfig = defineConfig({
             },
             emphasized: {
               root: {
-                colorPalette: "wcaWhite",
+                colorPalette: "white",
                 layerStyle: "fill.emphasized",
               },
               description: {
@@ -781,20 +713,11 @@ const customConfig = defineConfig({
             },
             deep: {
               root: {
-                colorPalette: "wcaWhite",
+                colorPalette: "white",
                 layerStyle: "fill.deep",
               },
               description: {
                 layerStyle: "fill.deep",
-              },
-            },
-            slatePastel: {
-              root: {
-                colorPalette: "wcaWhite",
-                layerStyle: "card.pastel",
-              },
-              description: {
-                layerStyle: "card.pastel",
               },
             },
           },
