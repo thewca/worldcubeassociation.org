@@ -1,5 +1,5 @@
-import { Text, Accordion } from "@chakra-ui/react";
-import { MarkdownProse } from "@/components/Markdown";
+import { Accordion } from "@chakra-ui/react";
+import { ChakraMarkdown } from "@/components/Markdown";
 import { Announcement, User } from "@/types/payload";
 
 function AnnouncementItem({ announcement }: { announcement: Announcement }) {
@@ -12,14 +12,12 @@ function AnnouncementItem({ announcement }: { announcement: Announcement }) {
         {announcement.title}
       </Accordion.ItemTrigger>
       <Accordion.ItemContent>
-        <Text textStyle="s2">
+        <Accordion.ItemBody textStyle="s2">
           Posted by {publishedByUser.name} · {announcement.publishedAt}
-        </Text>
-        <MarkdownProse
-          as={Accordion.ItemBody}
-          content={announcement.contentMarkdown!}
-          textStyle="body"
-        />
+        </Accordion.ItemBody>
+        <ChakraMarkdown paragraphAs={Accordion.ItemBody} textStyle="body">
+          {announcement.contentMarkdown}
+        </ChakraMarkdown>
       </Accordion.ItemContent>
     </Accordion.Item>
   );
