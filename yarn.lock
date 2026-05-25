@@ -4903,10 +4903,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^4.1.0, date-fns@npm:^4.2.0":
+"date-fns@npm:^4.1.0":
   version: 4.2.0
   resolution: "date-fns@npm:4.2.0"
   checksum: 10c0/28983b184899b2ab7576382aa4f9f1c6bab5a56e9efb83fe9c34e9a3b1b05447259a23e179e5754c8386dfa705abef2c891318f7f5056cc100744c116081e11f
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "date-fns@npm:4.3.0"
+  checksum: 10c0/f1e8ec36270dd4c9e32d93195fb02a109ff46b397690a68f4a0c3bea0a1882e38a67969004db0a28f890b15bcdd6b323faa2f07cde3b67a2edfacc3fe078f95e
   languageName: node
   linkType: hard
 
@@ -10207,7 +10214,7 @@ __metadata:
     core-js: "npm:^3.49.0"
     css-loader: "npm:^7.1.4"
     css-minimizer-webpack-plugin: "npm:^8.0.0"
-    date-fns: "npm:^4.2.0"
+    date-fns: "npm:^4.3.0"
     dompurify: "npm:^3.4.5"
     dotenv: "npm:^17.4.2"
     easymde: "npm:^2.21.0"
