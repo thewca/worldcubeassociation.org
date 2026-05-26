@@ -28,7 +28,10 @@ export default function ConnectionPulse({
         openDelay={200}
       >
         <Badge variant="solid" gap={2} size="sm">
-          <Status.Indicator animation={isConnected ? "pulse" : undefined} />
+          <Status.Indicator
+            bg="colorPalette.contrast"
+            animation={isConnected ? "pulse" : undefined}
+          />
           <Text>
             {t(`competitions.live.connection.status.${translationKey}`)}
           </Text>
