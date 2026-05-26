@@ -81,6 +81,74 @@ RSpec.describe "WCA Live API - open_round" do
       expect(response.parsed_body["status"]).to eq "score taking is not finished in the previous round"
     end
 
+    it "does not allow opening a non-final round when 7 or fewer competitors advance (9m3)" do
+      sign_in delegate
+
+      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      7.times { create(:registration, :accepted, competition: competition) }
+
+      round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 3)
+      round2 = create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 3, participation_source: round1)
+
+      round1.open_round!(delegate)
+      round1.live_results.update_all(live_attempts_count: round1.format.expected_solve_count, advancing: true)
+
+      put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id)
+
+      expect(response).not_to be_successful
+      expect(response.parsed_body["status"]).to include("9m3")
+    end
+
+    it "does not allow opening a non-final round when 15 or fewer competitors advance and multiple subsequent rounds remain (9m2)" do
+      sign_in delegate
+
+      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      15.times { create(:registration, :accepted, competition: competition) }
+
+      round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 4)
+      round2 = create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 4, participation_source: round1)
+
+      round1.open_round!(delegate)
+      round1.live_results.update_all(live_attempts_count: round1.format.expected_solve_count, advancing: true)
+
+      put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id)
+
+      expect(response).not_to be_successful
+      expect(response.parsed_body["status"]).to include("9m2")
+    end
+
+    it "does not allow opening a round when 99 or fewer competitors would be in it with 3 subsequent rounds remaining (9m1)" do
+      sign_in delegate
+
+      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      20.times { create(:registration, :accepted, competition: competition) }
+
+      round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 4)
+
+      put api_v1_competition_live_live_round_open_path(competition.id, round1.wcif_id)
+
+      expect(response).not_to be_successful
+      expect(response.parsed_body["status"]).to include("9m1")
+    end
+
+    it "allows opening a non-final round at the 9m3 boundary (8 competitors)" do
+      sign_in delegate
+
+      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      8.times { create(:registration, :accepted, competition: competition) }
+
+      round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2)
+      round2 = create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2, participation_source: round1)
+
+      round1.open_round!(delegate)
+      round1.live_results.update_all(live_attempts_count: round1.format.expected_solve_count, advancing: true)
+
+      put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id)
+
+      expect(response).to be_successful
+      expect(response.parsed_body["status"]).to eq "ok"
+    end
+
     it "allows opening the third round after both rounds of a dual round are done" do
       sign_in delegate
 
