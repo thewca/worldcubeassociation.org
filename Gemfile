@@ -66,7 +66,6 @@ gem 'redis'
 # Faster Redis library
 gem 'hiredis'
 gem 'mini_magick'
-gem 'ruby-vips'
 gem 'mysql2'
 gem 'premailer-rails'
 gem 'nokogiri'
@@ -162,4 +161,5 @@ group :production do
   gem 'rack'
   gem 'newrelic_rpm'
   gem 'shoryuken'
+  gem 'ruby-vips'
 end
