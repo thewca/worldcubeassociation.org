@@ -35,7 +35,7 @@
     "@rails/actioncable": "^8.1.300",
     "@react-aria/focus": "^3.22.0",
     "@tanstack/react-form": "^1.32.0",
-    "@tanstack/react-query": "^5.100.10",
+    "@tanstack/react-query": "^5.100.14",
     "@wrksz/themes": "^0.9.3",
     "accept-language-parser": "^1.5.0",
     "aws4": "^1.13.2",
