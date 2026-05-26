@@ -501,7 +501,7 @@ const customConfig = defineConfig({
               _dark: "{colors.wcaWhite.800}",
             },
           },
-          ...compileColorScheme("wcaWhite", 100),
+          ...compileColorScheme("wcaWhite", 600, 400, 300),
         },
         red: compileColorScheme("red"),
         yellow: compileColorScheme("yellow", 300),
