@@ -21,16 +21,13 @@ export default function ConnectionPulse({
   const isConnected = connectionState === CONNECTION_STATE_CONNECTED;
 
   return (
-    <Status.Root
-      colorPalette={CONNECTION_COLORS[connectionState]}
-      display="inline-flex"
-    >
+    <Status.Root colorPalette={CONNECTION_COLORS[connectionState]}>
       <Tooltip
         content={t(`competitions.live.connection.${translationKey}`)}
         showArrow
         openDelay={200}
       >
-        <Badge variant="solid" display="inline-flex" gap={2} size="sm">
+        <Badge variant="solid" gap={2} size="sm">
           <Status.Indicator animation={isConnected ? "pulse" : undefined} />
           <Text>
             {t(`competitions.live.connection.status.${translationKey}`)}
