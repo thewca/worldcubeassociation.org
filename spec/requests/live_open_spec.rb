@@ -85,7 +85,7 @@ RSpec.describe "WCA Live API - open_round" do
       sign_in delegate
 
       competition = create(:competition, event_ids: ["333"], delegates: [delegate])
-      7.times { create(:registration, :accepted, competition: competition) }
+      create_list(:registration, 7, :accepted, competition: competition)
 
       round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 3)
       round2 = create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 3, participation_source: round1)
@@ -103,7 +103,7 @@ RSpec.describe "WCA Live API - open_round" do
       sign_in delegate
 
       competition = create(:competition, event_ids: ["333"], delegates: [delegate])
-      15.times { create(:registration, :accepted, competition: competition) }
+      create_list(:registration, 15, :accepted, competition: competition)
 
       round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 4)
       round2 = create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 4, participation_source: round1)
@@ -121,7 +121,7 @@ RSpec.describe "WCA Live API - open_round" do
       sign_in delegate
 
       competition = create(:competition, event_ids: ["333"], delegates: [delegate])
-      20.times { create(:registration, :accepted, competition: competition) }
+      create_list(:registration, 20, :accepted, competition: competition)
 
       round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 4)
 
@@ -135,7 +135,7 @@ RSpec.describe "WCA Live API - open_round" do
       sign_in delegate
 
       competition = create(:competition, event_ids: ["333"], delegates: [delegate])
-      8.times { create(:registration, :accepted, competition: competition) }
+      create_list(:registration, 8, :accepted, competition: competition)
 
       round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2)
       round2 = create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2, participation_source: round1)
