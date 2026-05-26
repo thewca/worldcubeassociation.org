@@ -160,8 +160,7 @@ export default function LiveResultsTable({
                       competitionId={competitionId}
                       competitor={competitorAndTheirResults}
                       rowSpan={rowSpan}
-                      isAdmin={isAdmin}
-                      link={showFull}
+                      link={showFull && !isAdmin}
                     />
                   )}
                   {showText && showFull && (

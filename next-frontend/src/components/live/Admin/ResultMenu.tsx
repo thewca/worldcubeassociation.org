@@ -94,6 +94,14 @@ export default function ResultMenu({
                   >
                     {t("competitions.live.admin.edit")}
                   </Menu.Item>
+                  <Menu.Item value="registration" asChild disabled={isPending}>
+                    <Link
+                      href={`/registrations/${competitor.id}/edit`}
+                      fontWeight="normal"
+                    >
+                      {t("competitions.live.admin.registration")}
+                    </Link>
+                  </Menu.Item>
                   <Menu.Item value="results" asChild disabled={isPending}>
                     <Link
                       href={route({

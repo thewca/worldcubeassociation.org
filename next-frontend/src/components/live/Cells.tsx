@@ -98,13 +98,11 @@ export function LivePositionCell({
 }
 
 export function LiveCompetitorCell({
-  isAdmin = false,
   link = true,
   rowSpan,
   competitionId,
   competitor,
 }: {
-  isAdmin?: boolean;
   link?: boolean;
   rowSpan?: number;
   competitionId: string;
@@ -114,11 +112,7 @@ export function LiveCompetitorCell({
     <Table.Cell rowSpan={rowSpan}>
       {link ? (
         <Link
-          href={
-            isAdmin
-              ? `/registrations/${competitor.id}/edit`
-              : `/competitions/${competitionId}/live/competitors/${competitor.id}`
-          }
+          href={`/competitions/${competitionId}/live/competitors/${competitor.id}`}
         >
           {competitor.name}
         </Link>
