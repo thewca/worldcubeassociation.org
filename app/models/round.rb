@@ -80,6 +80,22 @@ class Round < ApplicationRecord
   validates :advancement_condition, presence: { if: :advancement_condition_changed?, unless: :final_round?, message: "cannot be un-set on a non-final round" }, on: :update
   validates :advancement_condition, absence: { if: :final_round?, message: "cannot be set on a final round" }
 
+  validate :participation_source_respects_linked_rounds
+  private def participation_source_respects_linked_rounds
+    return if number == 1
+    return if linked_round.present?
+    return if participation_source.blank?
+
+    previous_round = competition_event.rounds.find_by(number: number - 1)
+
+    prev_linked_round = previous_round.linked_round
+    return if prev_linked_round.blank?
+
+    return if participation_source == prev_linked_round
+
+    errors.add(:participation_source, "must be the linked round group when the previous rounds are linked")
+  end
+
   after_save :reset_linked_round_information, if: :linked_round_previously_changed?
   private def reset_linked_round_information
     self.linked_round&.reset_round_information
