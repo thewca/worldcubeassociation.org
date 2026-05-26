@@ -9,7 +9,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import React from "react";
-import { MarkdownProse } from "@/components/Markdown";
+import { ChakraMarkdown } from "@/components/Markdown";
 
 type CallToActionBlockProps = {
   content: string;
@@ -33,7 +33,7 @@ export function CallToActionBlock({
     >
       <Stack direction="column">
         <Box color="gray.700" fontSize="lg">
-          <MarkdownProse content={content} />
+          <ChakraMarkdown>{content}</ChakraMarkdown>
         </Box>
 
         <Stack direction={{ base: "column", sm: "row" }}>

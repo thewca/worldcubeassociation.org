@@ -12,15 +12,16 @@ import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { applyCutoff, applyTimeLimit } from "@/lib/live/attempt-result";
+import { padSkipped } from "@/lib/live/padSkipped";
 import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
 
 interface AdminResultsContextValue {
   registrationId: number | undefined;
   attempts: number[];
   isPending: boolean;
-  handleRegistrationIdChange: (value: number) => void;
+  handleRegistrationIdChange: (value?: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
-  handleSubmit: () => void;
+  handleSubmit: (onSuccess: () => void) => void;
   clearCompetitorsResults: (registrationId: number) => void;
   quitCompetitor: (
     registrationId: number,
@@ -71,9 +72,9 @@ export function LiveResultAdminProvider({
       const competitorResults = liveResultsByRegistrationId[registrationId][0];
 
       if (competitorResults.attempts.length > 0) {
-        return competitorResults.attempts
-          .toSorted((a, b) => a.attempt_number - b.attempt_number)
-          .map((a) => a.value);
+        return padSkipped(competitorResults.attempts, solveCount).map(
+          (a) => a.value,
+        );
       }
 
       return zeroedArrayOfSize(solveCount);
@@ -88,7 +89,7 @@ export function LiveResultAdminProvider({
   const api = useAPI();
 
   const handleRegistrationIdChange = useCallback(
-    (value: number) => {
+    (value?: number) => {
       setRegistrationId(value);
 
       const competitorAttempts = getAttemptsForCompetitor(value);
@@ -198,7 +199,7 @@ export function LiveResultAdminProvider({
     setAttempts(applyCutoff(applyTimeLimit(newAttempts, timeLimit), cutoff));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (onSuccess: () => void) => {
     if (!registrationId) {
       toaster.create({
         description: "Please enter a user id",
@@ -207,18 +208,24 @@ export function LiveResultAdminProvider({
       return;
     }
 
-    mutateUpdate({
-      params: {
-        path: { competitionId, roundId },
+    mutateUpdate(
+      {
+        params: {
+          path: { competitionId, roundId },
+        },
+        body: {
+          attempts: attempts
+            .map((attempt, index) => ({
+              value: attempt,
+              attempt_number: index + 1,
+            }))
+            // Preserve the original attempt_numbers even when there were gaps in the attempts
+            .filter((a) => a.value !== 0),
+          registration_id: registrationId,
+        },
       },
-      body: {
-        attempts: attempts.map((attempt, index) => ({
-          value: attempt,
-          attempt_number: index + 1,
-        })),
-        registration_id: registrationId,
-      },
-    });
+      { onSuccess },
+    );
   };
 
   const clearCompetitorsResults = (toClearId: number) => {

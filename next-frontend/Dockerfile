@@ -46,7 +46,7 @@ RUN corepack enable
 # ENV Needed to be compiled into the static build
 ENV NEXT_PUBLIC_WCA_FRONTEND_API_URL="https://$WCA_SITE/api/"
 ENV NEXT_PUBLIC_WEBSOCKET_URL="https://$WCA_SITE/api/v1/live/cable"
-
+ENV PROPRIETARY_FONT="TTNormsPro"
 # Create the types and build
 RUN LOCALE_DIR="./src/lib/i18n/locales" yarn run build:translations
 RUN yarn types:openapi
@@ -83,10 +83,6 @@ EXPOSE 3000
 
 ENV PORT=3000
 ENV NEW_RELIC_LOG='stdout'
-
-# Even following the official new relic example not all the submodules are copied over
-# See https://github.com/newrelic/newrelic-node-examples/issues/307#issuecomment-3665368688
-COPY --from=builder /app/node_modules/newrelic /app/node_modules/newrelic
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output

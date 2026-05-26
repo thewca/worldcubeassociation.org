@@ -19,8 +19,9 @@ export interface TabWithChildren extends TabBase {
 }
 
 interface TabWithLink extends TabBase {
-  badge?: string;
+  badgeI18nKey?: string;
   href: RouteLiteral;
+  hrefAdmin?: RouteLiteral;
 }
 
 export type CompetitionNavTab = TabWithChildren | TabWithLink;
@@ -94,6 +95,10 @@ export const duringCompetitionTabs = (
         pathname: "/competitions/[competitionId]/live",
         query: { competitionId: competitionInfo.id },
       }),
+      hrefAdmin: route({
+        pathname: "/competitions/[competitionId]/live/admin",
+        query: { competitionId: competitionInfo.id },
+      }),
       menuKey: "live",
       icon: "Information",
     },
@@ -127,13 +132,25 @@ export const duringCompetitionTabs = (
           rounds.length,
           Boolean(round.cutoff),
         );
+
+        const roundDone =
+          round.state === "locked" ||
+          (round.state === "open" &&
+            round.competitors_live_results_entered === round.total_competitors);
         return {
           i18nKey: `rounds.${roundTypeId}.name`,
           menuKey: round.id,
-          badge: round.state === "locked" ? "Done" : "live",
+          badgeI18nKey: roundDone
+            ? "competitions.live.round_state.done"
+            : "competitions.live.round_state.ongoing",
           disabled: round.state === "pending" || round.state === "ready",
           href: route({
             pathname: "/competitions/[competitionId]/live/rounds/[roundId]",
+            query: { competitionId: competitionInfo.id, roundId: round.id },
+          }),
+          hrefAdmin: route({
+            pathname:
+              "/competitions/[competitionId]/live/rounds/[roundId]/admin",
             query: { competitionId: competitionInfo.id, roundId: round.id },
           }),
         };

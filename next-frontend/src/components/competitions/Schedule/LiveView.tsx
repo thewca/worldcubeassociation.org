@@ -51,8 +51,11 @@ export default function LiveView({
   rounds,
 }: LiveViewProps) {
   const { t } = useT();
-  const firstStartTime = activities[0].startTime;
-  const lastStartTime = activities[activities.length - 1].startTime;
+  const eventActivities = activities.filter(
+    (a) => !a.activityCode.startsWith("other"),
+  );
+  const firstStartTime = eventActivities[0].startTime;
+  const lastStartTime = eventActivities[eventActivities.length - 1].startTime;
   const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const [timeZone, setTimeZone] = useState(browserTimezone);
 
@@ -171,7 +174,7 @@ export default function LiveView({
                                   },
                                 })}
                               >
-                                <HStack>
+                                <HStack wrap="wrap">
                                   <EventIcon eventId={eventId} fontSize="2xl" />
                                   {roundName}
                                 </HStack>

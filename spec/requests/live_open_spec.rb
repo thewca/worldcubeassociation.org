@@ -46,7 +46,7 @@ RSpec.describe "WCA Live API - open_round" do
       competition = create(:competition, event_ids: ["333"], delegates: [delegate])
       create(:registration, :accepted, competition: competition)
       round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2)
-      round2 = create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2)
+      round2 = create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2, participation_source: round1)
 
       # Open round 1 but don't enter any results → score_taking not done
       round1.open_round!(delegate)
@@ -66,7 +66,7 @@ RSpec.describe "WCA Live API - open_round" do
       linked_round = create(:linked_round)
       round1_333_1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 3, linked_round: linked_round)
       round1_333_2 = create(:round, competition: competition, event_id: "333", number: 2, linked_round: linked_round)
-      round2_333 = create(:round, competition: competition, event_id: "333", number: 3, total_number_of_rounds: 3)
+      round2_333 = create(:round, competition: competition, event_id: "333", number: 3, total_number_of_rounds: 3, participation_source: linked_round)
 
       # Open both dual rounds and only finish one
       round1_333_1.open_round!(delegate)
@@ -90,7 +90,7 @@ RSpec.describe "WCA Live API - open_round" do
       linked_round = create(:linked_round)
       round1_333_1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 3, linked_round: linked_round)
       round1_333_2 = create(:round, competition: competition, event_id: "333", number: 2, linked_round: linked_round)
-      round2_333 = create(:round, competition: competition, event_id: "333", number: 3, total_number_of_rounds: 3)
+      round2_333 = create(:round, competition: competition, event_id: "333", number: 3, total_number_of_rounds: 3, participation_source: linked_round)
 
       # Open both dual rounds and simulate all results being entered
       round1_333_1.open_round!(delegate)
