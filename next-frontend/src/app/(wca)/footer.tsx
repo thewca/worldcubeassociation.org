@@ -58,7 +58,7 @@ export default async function Footer() {
   const legalLinks = footer.legalLinks ?? [];
 
   return (
-    <Center borderTop="md" padding={3} mt={5} bg="bg">
+    <Center borderTop="md" borderColor="border" padding={3} mt={5} bg="bg">
       <Stack align="center" gap={5} direction={{ base: "column", lg: "row" }}>
         {navigationLinks.map((item) => (
           <FooterLink key={item.id} item={item} />

@@ -188,7 +188,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     to_advance = round.next_participating_without(registration_id)
 
-    render json: { status: "ok", next_advancing: to_advance }
+    to_advance_competitor = Registration.find(to_advance.pluck(:registration_id))
+
+    render json: { status: "ok", next_advancing: to_advance_competitor.map(&:to_live_json) }
   end
 
   def add_competitor_to_round
@@ -198,8 +200,12 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     require_manage!(competition)
 
-    Live::DiffHelper.broadcast_changes(round) do
-      round.create_empty_live_result(registration.id)
+    rounds = round.linked_round.present? ? round.linked_round.rounds : round.rounds
+
+    rounds.each do |r|
+      Live::DiffHelper.broadcast_changes(r) do
+        r.create_empty_live_result(registration.id)
+      end
     end
 
     render json: { status: "ok", competitor: registration.to_live_json }

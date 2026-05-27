@@ -160,7 +160,7 @@ function QuitModal({
 
   const { t } = useT();
 
-  const { isLoading, data: toAdvance } = api.useQuery(
+  const { isLoading, data: toAdvanceRequest } = api.useQuery(
     "get",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit",
     {
@@ -177,9 +177,11 @@ function QuitModal({
     return <Loading />;
   }
 
-  if (!toAdvance) {
+  if (!toAdvanceRequest) {
     return <Text>{t("competitions.live.admin.quit.failed_to_fetch")}</Text>;
   }
+
+  const toAdvance = toAdvanceRequest.next_advancing;
 
   const onQuitClick = () => {
     quitCompetitor(competitor.id, advanceNext, toAdvance);

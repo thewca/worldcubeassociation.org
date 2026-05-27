@@ -161,4 +161,5 @@ group :production do
   gem 'rack'
   gem 'newrelic_rpm'
   gem 'shoryuken'
+  gem 'ruby-vips'
 end

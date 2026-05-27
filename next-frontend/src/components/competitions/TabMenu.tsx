@@ -59,7 +59,6 @@ export default function TabMenu({
       orientation="vertical"
       lazyMount
       unmountOnExit
-      colorPalette="white"
     >
       <Tabs.List
         height="fit-content"
