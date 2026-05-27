@@ -14,11 +14,17 @@ export function fetchWithAuthenticityToken(url, fetchOptions) {
 
 export function fetchJsonOrError(url, fetchOptions = {}) {
   return fetchWithAuthenticityToken(url, fetchOptions)
-    .then((response) => response.json()
-      .then((json) => {
+    .then((response) => {
+      const contentType = response.headers.get('content-type');
+      // The content type might include its charset in the header
+      if (!contentType?.startsWith('application/json')) {
+        throw new FetchJsonError(`${response.status}: ${response.statusText}\nPlease Report this to WST\nRequestId: ${response.headers.get('x-request-id')}`, response, { status: 'An unexpected error occurred.' });
+      }
+      return response.json().then((json) => {
         if (!response.ok) {
           throw new FetchJsonError(`${response.status}: ${response.statusText}\n${json.error}`, response, json);
         }
         return { data: json, headers: response.headers };
-      }));
+      });
+    });
 }
