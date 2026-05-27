@@ -657,7 +657,7 @@ const customConfig = defineConfig({
     recipes: {
       container: {
         base: {
-          px: { base: "3", md: "6", lg: "8" },
+          px: { base: "3.5", md: "6", lg: "8" },
         },
       },
       link: {
