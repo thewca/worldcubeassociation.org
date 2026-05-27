@@ -16,7 +16,8 @@ export function fetchJsonOrError(url, fetchOptions = {}) {
   return fetchWithAuthenticityToken(url, fetchOptions)
     .then((response) => {
       const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
+      // The content type might include its charset in the header
+      if (!contentType?.startsWith('application/json')) {
         throw new FetchJsonError(`${response.status}: ${response.statusText}\nPlease Report this to WST\nRequestId: ${response.headers.get('x-request-id')}`, response, { status: 'An unexpected error occurred.' });
       }
       return response.json().then((json) => {
