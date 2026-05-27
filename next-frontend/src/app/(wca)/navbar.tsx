@@ -33,16 +33,21 @@ type NavbarEntry<K extends string = "displayText"> = {
 function TextWrapper<K extends string>({
   navbarEntry,
   entryKey,
+  hideResponsive = false,
 }: {
   navbarEntry: NavbarEntry<K>;
   entryKey: K;
+  hideResponsive?: boolean;
 }) {
   return (
     <>
       {navbarEntry.displayIcon && (
         <IconDisplay name={navbarEntry.displayIcon} />
       )}
-      <Box as="span" hideBelow={navbarEntry.displayIcon ? "xl" : undefined}>
+      <Box
+        as="span"
+        hideBelow={hideResponsive && navbarEntry.displayIcon ? "xl" : undefined}
+      >
         {navbarEntry[entryKey]}
       </Box>
     </>
@@ -56,14 +61,20 @@ type LinkNavbarEntry<T> = NavbarEntry & {
 function LinkWrapper<T extends string>({
   navbarEntry,
   linkComponent: LinkComponent,
+  hideResponsive = false,
   ...extraProps
 }: {
   navbarEntry: LinkNavbarEntry<T>;
   linkComponent: React.ComponentType<{ href: T }> | "a";
+  hideResponsive?: boolean;
 } & React.ComponentPropsWithoutRef<"a">) {
   return (
     <LinkComponent {...extraProps} href={navbarEntry.targetLink}>
-      <TextWrapper navbarEntry={navbarEntry} entryKey="displayText" />
+      <TextWrapper
+        navbarEntry={navbarEntry}
+        entryKey="displayText"
+        hideResponsive={hideResponsive}
+      />
     </LinkComponent>
   );
 }
@@ -99,6 +110,7 @@ export default async function Navbar() {
                       <LinkWrapper
                         navbarEntry={navbarEntry}
                         linkComponent={Link}
+                        hideResponsive
                       />
                     </Button>
                   )}
@@ -107,6 +119,7 @@ export default async function Navbar() {
                       <LinkWrapper
                         navbarEntry={navbarEntry}
                         linkComponent="a"
+                        hideResponsive
                       />
                     </Button>
                   )}
@@ -117,6 +130,7 @@ export default async function Navbar() {
                           <TextWrapper
                             navbarEntry={navbarEntry}
                             entryKey="title"
+                            hideResponsive
                           />
                           <LuChevronDown />
                         </Button>
@@ -211,6 +225,7 @@ export default async function Navbar() {
                                 displayIcon: "External Link",
                               }}
                               entryKey="label"
+                              hideResponsive
                             />
                             <LuChevronDown />
                           </Button>
