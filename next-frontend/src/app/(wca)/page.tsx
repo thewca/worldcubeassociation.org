@@ -214,7 +214,9 @@ const FeaturedCompetition = async ({
   return (
     <Card.Root colorPalette={colorPalette} colorVariant="deep">
       <Card.Body>
-        <Card.Title textStyle="h2">{competition.name}</Card.Title>
+        <Card.Title textStyle={{ base: "h3", md: "h2" }}>
+          {competition.name}
+        </Card.Title>
         <CompetitionShortlist comp={competition} t={t} />
       </Card.Body>
     </Card.Root>
@@ -229,14 +231,16 @@ const FeaturedCompetitions = async ({
   <Card.Root width="full">
     <Card.Body>
       <Card.Title asChild>
-        <HStack justify="space-between">
-          <Text textStyle="h1">Upcoming Competitions</Text>
+        <HStack justify="space-between" wrap="wrap">
+          <Text textStyle={{ base: "h2", md: "h1" }}>
+            Upcoming Competitions
+          </Text>
           <Button asChild variant="outline">
             <Link href="/competitions">View all Competitions</Link>
           </Button>
         </HStack>
       </Card.Title>
-      <SimpleGrid columns={block.competitions?.length} gap={4}>
+      <SimpleGrid columns={{ base: 1, md: block.competitions?.length }} gap={4}>
         {block.competitions?.map((featuredComp) => (
           <FeaturedCompetition
             key={featuredComp.id}
