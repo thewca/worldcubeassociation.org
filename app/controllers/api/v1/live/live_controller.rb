@@ -125,6 +125,22 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "round already open" }, status: :bad_request if [Round::STATE_OPEN, Round::STATE_LOCKED].include?(state)
 
+    remaining = round.total_number_of_rounds - round.number
+    if remaining.positive?
+      num_competitors = round.participation_source.advancing_competitor_ids.size
+
+      # https://www.worldcubeassociation.org/regulations/#9m3
+      if num_competitors <= 7
+        return render json: { status: "regulation 9m3: a round with 7 or fewer competitors must not have subsequent rounds" }, status: :bad_request
+      # https://www.worldcubeassociation.org/regulations/#9m2
+      elsif num_competitors <= 15 && remaining > 1
+        return render json: { status: "regulation 9m2: a round with 15 or fewer competitors must have at most one subsequent round" }, status: :bad_request
+      # https://www.worldcubeassociation.org/regulations/#9m1
+      elsif num_competitors <= 99 && remaining > 2
+        return render json: { status: "regulation 9m1: a round with 99 or fewer competitors must have at most two subsequent rounds" }, status: :bad_request
+      end
+    end
+
     created_rows, locked_rows = round.open_and_lock_previous(@current_user)
 
     render json: { status: "ok", locked_rows: locked_rows, created_rows: created_rows }
