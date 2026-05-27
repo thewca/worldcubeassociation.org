@@ -212,9 +212,9 @@ const FeaturedCompetition = async ({
   if (error) return <OpenapiError t={t} response={response} />;
 
   return (
-    <Card.Root colorPalette={colorPalette} colorVariant="deep">
+    <Card.Root colorPalette={colorPalette} colorVariant="deep" height="full">
       <Card.Body>
-        <Card.Title textStyle={{ base: "h3", md: "h2" }}>
+        <Card.Title textStyle={{ base: "h3", md: "h2" }} flex="1">
           {competition.name}
         </Card.Title>
         <CompetitionShortlist comp={competition} t={t} />
