@@ -179,7 +179,7 @@ RSpec.describe Round do
 
     it "is invalid when referencing a plain round instead of the linked round group" do
       round3.participation_source = round2
-      expect(round3).to be_invalid_with_errors(participation_source_type: ["must be equal to LinkedRound"])
+      expect(round3).to be_invalid_with_errors(participation_source_type: ["must be the linked round group when the previous rounds are linked"])
     end
 
     it "is valid when the previous rounds are not linked" do
