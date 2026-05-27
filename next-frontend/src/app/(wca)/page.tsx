@@ -123,14 +123,14 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       colorPalette={block.colorPalette}
       colorVariant="slatePastel"
       width="full"
-      maxHeight="md" // somewhat arbitrary, if you have a better idea please shout
+      maxHeight="sm" // somewhat arbitrary, if you have a better idea please shout
       overflow="hidden"
     >
       <Box position="relative" width="50%" hideBelow="md">
         <MediaImage
           media={block.mainImage as Media}
           width="full"
-          maxHeight="lg"
+          maxHeight="sm"
           bg="colorPalette.1A"
         />
         <AbsoluteCenter
