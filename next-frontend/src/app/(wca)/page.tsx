@@ -213,7 +213,11 @@ const FeaturedCompetition = async ({
   if (error) return <OpenapiError t={t} response={response} />;
 
   return (
-    <Card.Root colorPalette={colorPalette} colorVariant="slatePastel" height="full">
+    <Card.Root
+      colorPalette={colorPalette}
+      colorVariant="slatePastel"
+      height="full"
+    >
       <Card.Body>
         <Card.Title textStyle={{ base: "h3", md: "h2" }} flex="1">
           {competition.name}
