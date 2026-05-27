@@ -53,7 +53,7 @@ class UpdateLiveResultJob < ApplicationJob
         "PR"
       else
         pr = person.public_send(:"ranks_#{type}").find { |r| r.event_id == live_result.event_id }
-        "PR" if pr.nil? || value < pr.public_send(col)
+        "PR" if pr.nil? || value < pr.best
       end
     end
 

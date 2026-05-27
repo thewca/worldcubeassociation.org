@@ -59,8 +59,8 @@ RSpec.describe UpdateLiveResultJob do
     end
 
     context "when a previous round has a PR that is better than or equal to the current best" do
-      let(:round) { create(:round, competition: competition, event_id: "333", format_id: "a", number: 2, total_number_of_rounds: 2) }
       let(:previous_round) { create(:round, competition: competition, event_id: "333", format_id: "a", number: 1, total_number_of_rounds: 2) }
+      let!(:round) { create(:round, competition: competition, event_id: "333", format_id: "a", number: 2, total_number_of_rounds: 2, participation_source: previous_round, participation_condition: ResultConditions::Ranking.new(scope: "single", value: 8)) }
 
       before do
         create(:live_result, round: previous_round, registration: registration, single_record_tag: "PR", best: 800, average: 700)
@@ -72,8 +72,8 @@ RSpec.describe UpdateLiveResultJob do
     end
 
     context "when a previous round has a PR but the current best is even better" do
-      let(:round) { create(:round, competition: competition, event_id: "333", format_id: "a", number: 2, total_number_of_rounds: 2) }
       let(:previous_round) { create(:round, competition: competition, event_id: "333", format_id: "a", number: 1, total_number_of_rounds: 2) }
+      let!(:round) { create(:round, competition: competition, event_id: "333", format_id: "a", number: 2, total_number_of_rounds: 2, participation_source: previous_round, participation_condition: ResultConditions::Ranking.new(scope: "single", value: 8)) }
 
       before do
         create(:live_result, round: previous_round, registration: registration, single_record_tag: "PR", best: 1500, average: 700)
@@ -125,8 +125,8 @@ RSpec.describe UpdateLiveResultJob do
     end
 
     context "when a previous round has a PR that is better than or equal to the current average" do
-      let(:round) { create(:round, competition: competition, event_id: "333", format_id: "a", number: 2, total_number_of_rounds: 2) }
       let(:previous_round) { create(:round, competition: competition, event_id: "333", format_id: "a", number: 1, total_number_of_rounds: 2) }
+      let!(:round) { create(:round, competition: competition, event_id: "333", format_id: "a", number: 2, total_number_of_rounds: 2, participation_source: previous_round, participation_condition: ResultConditions::Ranking.new(scope: "average", value: 8)) }
 
       before do
         create(:live_result, round: previous_round, registration: registration, average_record_tag: "PR", best: 600, average: 846)
@@ -138,8 +138,8 @@ RSpec.describe UpdateLiveResultJob do
     end
 
     context "when a previous round has a PR but the current average is even better" do
-      let(:round) { create(:round, competition: competition, event_id: "333", format_id: "a", number: 2, total_number_of_rounds: 2) }
       let(:previous_round) { create(:round, competition: competition, event_id: "333", format_id: "a", number: 1, total_number_of_rounds: 2) }
+      let!(:round) { create(:round, competition: competition, event_id: "333", format_id: "a", number: 2, total_number_of_rounds: 2, participation_source: previous_round, participation_condition: ResultConditions::Ranking.new(scope: "average", value: 8)) }
 
       before do
         create(:live_result, round: previous_round, registration: registration, average_record_tag: "PR", best: 600, average: 2000)
