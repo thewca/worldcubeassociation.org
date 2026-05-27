@@ -19,7 +19,6 @@ import {
   AbsoluteCenter,
   Float,
   Carousel,
-  Container,
 } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
@@ -406,5 +405,9 @@ export default async function Homepage() {
     );
   }
 
-  return <Container asChild>{renderVerticalLayout(homepageEntries)}</Container>;
+  return (
+    <Box p={{ base: "3", md: "8" }} asChild>
+      {renderVerticalLayout(homepageEntries)}
+    </Box>
+  );
 }
