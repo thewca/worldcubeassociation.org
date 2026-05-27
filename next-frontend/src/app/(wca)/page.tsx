@@ -319,38 +319,46 @@ type VerticalLayout =
   | TwoBlocksUnion["left"]
   | TwoBlocksUnion["right"];
 
-const renderVerticalLayout = (verticalLayout: VerticalLayout) => {
+const renderVerticalLayout = (
+  verticalLayout: VerticalLayout,
+  level: number = 0,
+) => {
   return (
     <VStack gap={8}>
-      {verticalLayout.map((entry, index) => {
-        switch (entry.blockType) {
-          case "twoBlocksLevel0":
-          case "twoBlocksLevel1":
-          case "twoBlocksLevel2":
-            return renderHorizontalSplit(entry, `entry-${index}`);
-          default:
-            return renderFullBlock(entry, `entry-${index}`);
-        }
+      {verticalLayout.map((entry) => {
+        return (
+          <React.Fragment key={entry.id}>
+            {renderBlock(entry, level)}
+          </React.Fragment>
+        );
       })}
     </VStack>
   );
 };
 
-const renderHorizontalSplit = (entry: TwoBlocksUnion, keyPrefix = "") => {
-  const { left, right } = RATIO_GRID_MAP[entry.ratio];
+const renderHorizontalSplit = (entry: TwoBlocksUnion, level: number) => {
+  const { left: leftCols, right: rightCols } = RATIO_GRID_MAP[entry.ratio];
+
+  const totalCols = leftCols + rightCols;
+  const foldMd = level <= 1;
 
   return (
     <SimpleGrid
-      key={keyPrefix}
-      columns={{ base: 1, md: left + right }}
+      columns={{ base: 1, md: foldMd ? 1 : totalCols, lg: totalCols }}
       gap={8}
       width="full"
     >
-      <GridItem colSpan={{ base: 1, md: left }} asChild>
-        {renderVerticalLayout(entry.left)}
+      <GridItem
+        colSpan={{ base: 1, md: foldMd ? 1 : leftCols, lg: leftCols }}
+        asChild
+      >
+        {renderVerticalLayout(entry.left, level)}
       </GridItem>
-      <GridItem colSpan={{ base: 1, md: right }} asChild>
-        {renderVerticalLayout(entry.right)}
+      <GridItem
+        colSpan={{ base: 1, md: foldMd ? 1 : rightCols, lg: rightCols }}
+        asChild
+      >
+        {renderVerticalLayout(entry.right, level)}
       </GridItem>
     </SimpleGrid>
   );
@@ -358,20 +366,24 @@ const renderHorizontalSplit = (entry: TwoBlocksUnion, keyPrefix = "") => {
 
 type LayoutBlock = VerticalLayout[number];
 
-const renderFullBlock = (entry: LayoutBlock, key = "") => {
+const renderBlock = (entry: LayoutBlock, level: number) => {
   switch (entry.blockType) {
+    case "twoBlocksLevel0":
+    case "twoBlocksLevel1":
+    case "twoBlocksLevel2":
+      return renderHorizontalSplit(entry, level + 1);
     case "TextCard":
-      return <TextCard key={key} block={entry} />;
+      return <TextCard block={entry} />;
     case "AnnouncementsSection":
-      return <AnnouncementsSection key={key} block={entry} />;
+      return <AnnouncementsSection block={entry} />;
     case "ImageBanner":
-      return <ImageBanner key={key} block={entry} />;
+      return <ImageBanner block={entry} />;
     case "ImageOnlyCard":
-      return <ImageOnlyCard key={key} block={entry} />;
+      return <ImageOnlyCard block={entry} />;
     case "FeaturedComps":
-      return <FeaturedCompetitions key={key} block={entry} />;
+      return <FeaturedCompetitions block={entry} />;
     case "TestimonialsSpinner":
-      return <TestimonialsSpinner key={key} block={entry} />;
+      return <TestimonialsSpinner block={entry} />;
 
     default:
       return null;
