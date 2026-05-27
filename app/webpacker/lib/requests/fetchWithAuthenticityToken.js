@@ -22,6 +22,6 @@ export function fetchJsonOrError(url, fetchOptions = {}) {
         return { data: json, headers: response.headers };
       }).catch((err) => {
         if (err instanceof FetchJsonError) throw err;
-        throw new FetchJsonError(`${response.status}: ${response.statusText}\nPlease Report this to WST\nRequestId: ${response.headers.get("x-request-id")}`, response, { status: "An unexpected error occurred." });
+        throw new FetchJsonError(`${response.status}: ${response.statusText}\nPlease Report this to WST\nRequestId: ${response.headers.get("x-request-id")}`, response, { status: 'An unexpected error occurred.' });
       }));
 }
