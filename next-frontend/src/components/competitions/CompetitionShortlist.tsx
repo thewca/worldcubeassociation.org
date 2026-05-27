@@ -23,7 +23,7 @@ export default function CompetitionShortlist({
       <DataList.Root orientation="horizontal" size="lg" iconLabel>
         <DataList.Item>
           <DataList.ItemLabel>
-            <Icon size="xl" ring="1px" ringColor="blackAlpha.200">
+            <Icon size="xl">
               <WcaFlag code={comp.country_iso2} fallback={comp.country_iso2} />
             </Icon>
           </DataList.ItemLabel>
