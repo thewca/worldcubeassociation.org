@@ -834,10 +834,11 @@ class Round < ApplicationRecord
   end
 
   def to_live_results_json(only_podiums: false)
+    competitors = linked_round&.live_competitors || live_competitors
     {
       **self.to_wcif(include_results: false).compact_blank,
       "round_id" => id,
-      "competitors" => live_competitors.includes(:user).map(&:to_live_json),
+      "competitors" => competitors.includes(:user).map(&:to_live_json),
       "results" => only_podiums ? live_podium : live_results,
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
       "linked_round_ids" => linked_round&.wcif_ids,
