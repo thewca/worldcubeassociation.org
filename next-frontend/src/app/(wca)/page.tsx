@@ -418,7 +418,7 @@ export default async function Homepage() {
   }
 
   return (
-    <Box p={8} asChild>
+    <Box p={{ base: "3.5", md: "6", lg: "8" }} asChild>
       {renderVerticalLayout(homepageEntries)}
     </Box>
   );
