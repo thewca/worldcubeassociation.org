@@ -288,6 +288,38 @@ class Round < ApplicationRecord
     ActiveRecord::Base.connection.exec_query query
   end
 
+  def recompute_results_global_pos
+    return if format_id == "h"
+    return if linked_round.blank?
+
+    rank_by = format.rank_by_column
+    secondary_rank_by = format.secondary_rank_by_column
+    round_ids = linked_round.round_ids.join(",")
+
+    query = <<~SQL.squish
+      UPDATE results r
+      LEFT JOIN
+        (SELECT person_id,
+                RANK() OVER (ORDER BY person_best.#{rank_by} <= 0,
+                             person_best.#{rank_by} ASC #{", person_best.#{secondary_rank_by} <= 0, person_best.#{secondary_rank_by} ASC" if secondary_rank_by}) AS ranking
+         FROM
+           (SELECT *
+            FROM
+              (SELECT r2.*,
+                      ROW_NUMBER() OVER (PARTITION BY r2.person_id
+                                         ORDER BY (r2.#{rank_by} <= 0) ASC,
+                                         r2.#{rank_by} ASC #{", r2.#{secondary_rank_by} <= 0, r2.#{secondary_rank_by} ASC" if secondary_rank_by}) AS rownum
+               FROM results r2
+               WHERE r2.round_id IN (#{round_ids})
+                 AND r2.best != 0) x
+            WHERE rownum = 1) AS person_best) ranked ON r.person_id = ranked.person_id
+      SET r.global_pos = ranked.ranking
+      WHERE r.round_id IN (#{round_ids});
+    SQL
+
+    ActiveRecord::Base.connection.exec_query query
+  end
+
   def recompute_local_pos
     return if format_id == "h"
 
