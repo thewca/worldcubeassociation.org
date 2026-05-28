@@ -80,6 +80,8 @@ class Round < ApplicationRecord
   validates :advancement_condition, presence: { if: :advancement_condition_changed?, unless: :final_round?, message: "cannot be un-set on a non-final round" }, on: :update
   validates :advancement_condition, absence: { if: :final_round?, message: "cannot be set on a final round" }
 
+  validates :participation_source_type, comparison: { equal_to: LinkedRound.model_name, if: :participation_source_linked?, message: "must be the linked round group when the previous rounds are linked" }
+
   after_save :reset_linked_round_information, if: :linked_round_previously_changed?
   private def reset_linked_round_information
     self.linked_round&.reset_round_information
@@ -142,6 +144,14 @@ class Round < ApplicationRecord
 
   def final_round?
     number == total_number_of_rounds
+  end
+
+  def linked_round?
+    self.linked_round.present?
+  end
+
+  def participation_source_linked?
+    self.participation_source&.try(:linked_round?)
   end
 
   def name
@@ -834,10 +844,11 @@ class Round < ApplicationRecord
   end
 
   def to_live_results_json(only_podiums: false)
+    competitors = linked_round&.live_competitors || live_competitors
     {
       **self.to_wcif(include_results: false).compact_blank,
       "round_id" => id,
-      "competitors" => live_competitors.includes(:user).map(&:to_live_json),
+      "competitors" => competitors.includes(:user).map(&:to_live_json),
       "results" => only_podiums ? live_podium : live_results,
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
       "linked_round_ids" => linked_round&.wcif_ids,

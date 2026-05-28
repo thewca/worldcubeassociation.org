@@ -1229,6 +1229,8 @@ export interface components {
             "registration_full?": boolean;
             /** @example true */
             "registration_full_and_accepted?": boolean;
+            /** @example 42 */
+            spots_left?: number | null;
             tab_names: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
@@ -1831,7 +1833,10 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LiveCompetitor"][];
+                    "application/json": {
+                        status: string;
+                        next_advancing: components["schemas"]["LiveCompetitor"][];
+                    };
                 };
             };
         };

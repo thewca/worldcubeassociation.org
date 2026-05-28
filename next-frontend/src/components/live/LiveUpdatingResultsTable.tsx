@@ -4,8 +4,8 @@ import LiveResultsTable from "@/components/live/LiveResultsTable";
 import {
   Heading,
   HStack,
-  IconButton,
   Spacer,
+  IconButton,
   Switch,
   VStack,
   Link,
@@ -15,8 +15,8 @@ import { useLiveResults } from "@/providers/LiveResultProvider";
 import PendingResultsTable from "@/components/live/PendingResultsTable";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
-import AddPersonModal from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
-import BulkQuitButton from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/BulkQuitButton";
+import AddPersonModal from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
+import BulkQuitButton from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/BulkQuitButton";
 import { LuCheck, LuLock, LuLockOpen } from "react-icons/lu";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
@@ -57,8 +57,9 @@ export default function LiveUpdatingResultsTable({
     <VStack align="left">
       <HStack>
         <Heading textStyle={{ sm: "h3", md: "h2", lg: "h1" }}>{title}</Heading>
-        <ConnectionPulse connectionState={connectionState} />
+        {isAdminView && <ConnectionPulse connectionState={connectionState} />}
         <Spacer flex={1} />
+        {!isAdminView && <ConnectionPulse connectionState={connectionState} />}
         {isLinkedRound && (
           <Switch.Root
             checked={showLinkedRoundsView}

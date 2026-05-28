@@ -19,6 +19,8 @@ import { Tools } from "@/collections/Tools";
 import { RegulationsHistoryItem } from "@/collections/RegulationsHistory";
 import { Documents } from "@/collections/Documents";
 import { Nav } from "@/globals/Nav";
+import { Footer } from "@/globals/Footer";
+import { SocialLinks } from "@/globals/SocialLinks";
 import { Home } from "@/globals/Home";
 import { AboutRegulations } from "@/globals/AboutRegulations";
 import { SpeedCubingHistoryPage } from "@/globals/SpeedcubingHistory";
@@ -122,6 +124,8 @@ export default buildConfig({
   ],
   globals: [
     Nav,
+    Footer,
+    SocialLinks,
     Home,
     AboutUsPage,
     Privacy,

@@ -1405,6 +1405,10 @@ en:
       orga_closed_reg_failure: "Cannot close registration."
       no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
       schedule_locked_after_results_submitted: "The schedule cannot be edited after results have been submitted."
+      spots_left:
+        zero: "Competition full"
+        one: "One spot left"
+        other: "%{count} spots left"
     live:
       title: "Live Results"
       round_state:
@@ -1412,8 +1416,12 @@ en:
         done: "done"
       connection:
         initialized: "Connection being initialized"
-        connected: "Connected, results are being updated"
+        connected: "Connected, receiving live results updates"
         disconnected: "Lost connection, results are not being updated"
+        status:
+          initialized: "Initializing"
+          connected: "Connected"
+          disconnected: "Disconnected"
       podiums:
         title: "Podiums"
         undetermined: "Podiums to be determined"

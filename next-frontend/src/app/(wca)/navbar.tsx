@@ -24,30 +24,58 @@ import type { IconName } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
 import WCALogo from "@/components/WCALogo";
 
-type NavbarEntry<T> = {
-  targetLink: T;
-  displayText: string;
+type NavbarEntry<K extends string = "displayText"> = {
+  [P in K]: string;
+} & {
   displayIcon?: IconName;
+};
+
+function TextWrapper<K extends string>({
+  navbarEntry,
+  entryKey,
+  hideResponsive = false,
+}: {
+  navbarEntry: NavbarEntry<K>;
+  entryKey: K;
+  hideResponsive?: boolean;
+}) {
+  return (
+    <>
+      {navbarEntry.displayIcon && (
+        <IconDisplay name={navbarEntry.displayIcon} />
+      )}
+      <Box
+        as="span"
+        hideBelow={hideResponsive && navbarEntry.displayIcon ? "xl" : undefined}
+      >
+        {navbarEntry[entryKey]}
+      </Box>
+    </>
+  );
+}
+
+type LinkNavbarEntry<T> = NavbarEntry & {
+  targetLink: T;
 };
 
 function LinkWrapper<T extends string>({
   navbarEntry,
   linkComponent: LinkComponent,
+  hideResponsive = false,
+  ...extraProps
 }: {
-  navbarEntry: NavbarEntry<T>;
-  linkComponent: React.ElementType<{ href: T }>;
-}) {
-  // Have to trick the JSX type checker because TS cannot verify
-  //   whether "primitive" components like `a` satisfy a generic `href: T`.
-  const RawLinkComponent = LinkComponent as React.ElementType;
-
+  navbarEntry: LinkNavbarEntry<T>;
+  linkComponent: React.ComponentType<{ href: T }> | "a";
+  hideResponsive?: boolean;
+} & React.ComponentPropsWithoutRef<"a">) {
   return (
-    <RawLinkComponent href={navbarEntry.targetLink}>
-      {navbarEntry.displayIcon && (
-        <IconDisplay name={navbarEntry.displayIcon} />
-      )}
-      {navbarEntry.displayText}
-    </RawLinkComponent>
+    <LinkComponent {...extraProps} href={navbarEntry.targetLink}>
+      <TextWrapper
+        navbarEntry={navbarEntry}
+        entryKey="displayText"
+        hideResponsive={hideResponsive}
+      />
+    </LinkComponent>
   );
 }
 
@@ -55,16 +83,25 @@ const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
 export default async function Navbar() {
   const payload = await getPayload({ config });
-  const navbar = await payload.findGlobal({ slug: "nav" });
+  const [navbar, socialLinksGlobal] = await Promise.all([
+    payload.findGlobal({ slug: "nav" }),
+    payload.findGlobal({ slug: "social-links" }),
+  ]);
 
   const session = await auth();
+  const socialLinks = socialLinksGlobal.links ?? [];
 
   // Prevent people part of the Live Results Beta to escape onto the payload pages
   const navbarEntries = LIVE_RESULT_BETA ? [] : navbar.entry;
   const showEmptyMessage = !LIVE_RESULT_BETA && navbarEntries.length === 0;
 
   return (
-    <Box borderBottom="md" bg="bg" data-testid="header-navbar">
+    <Box
+      borderBottom="md"
+      borderColor="border"
+      bg="bg"
+      data-testid="header-navbar"
+    >
       <RefreshRouteOnSave />
       <Collapsible.Root>
         <HStack padding="3" justifyContent="space-between">
@@ -78,6 +115,7 @@ export default async function Navbar() {
                       <LinkWrapper
                         navbarEntry={navbarEntry}
                         linkComponent={Link}
+                        hideResponsive
                       />
                     </Button>
                   )}
@@ -86,6 +124,7 @@ export default async function Navbar() {
                       <LinkWrapper
                         navbarEntry={navbarEntry}
                         linkComponent="a"
+                        hideResponsive
                       />
                     </Button>
                   )}
@@ -93,10 +132,11 @@ export default async function Navbar() {
                     <Menu.Root>
                       <Menu.Trigger asChild>
                         <Button variant="ghost" size="sm">
-                          {navbarEntry.displayIcon && (
-                            <IconDisplay name={navbarEntry.displayIcon} />
-                          )}
-                          {navbarEntry.title}
+                          <TextWrapper
+                            navbarEntry={navbarEntry}
+                            entryKey="title"
+                            hideResponsive
+                          />
                           <LuChevronDown />
                         </Button>
                       </Menu.Trigger>
@@ -179,6 +219,42 @@ export default async function Navbar() {
                       </Menu.Positioner>
                     </Menu.Root>
                   )}
+                  {navbarEntry.blockType === "SocialsMenu" &&
+                    socialLinks.length > 0 && (
+                      <Menu.Root>
+                        <Menu.Trigger asChild>
+                          <Button variant="ghost" size="sm">
+                            <TextWrapper
+                              navbarEntry={{
+                                ...navbarEntry,
+                                displayIcon: "External Link",
+                              }}
+                              entryKey="label"
+                              hideResponsive
+                            />
+                            <LuChevronDown />
+                          </Button>
+                        </Menu.Trigger>
+                        <Menu.Positioner>
+                          <Menu.Content>
+                            {socialLinks.map((item) => (
+                              <Menu.Item
+                                key={item.id}
+                                value={item.id ?? item.targetLink}
+                                asChild
+                              >
+                                <LinkWrapper
+                                  navbarEntry={item}
+                                  linkComponent="a"
+                                  target="_blank"
+                                  rel="noreferrer"
+                                />
+                              </Menu.Item>
+                            ))}
+                          </Menu.Content>
+                        </Menu.Positioner>
+                      </Menu.Root>
+                    )}
                 </React.Fragment>
               ))}
             </HStack>
@@ -247,10 +323,10 @@ export default async function Navbar() {
                           justifyContent="flex-start"
                           width="full"
                         >
-                          {navbarEntry.displayIcon && (
-                            <IconDisplay name={navbarEntry.displayIcon} />
-                          )}
-                          {navbarEntry.title}
+                          <TextWrapper
+                            navbarEntry={navbarEntry}
+                            entryKey="title"
+                          />
                           <Collapsible.Indicator ml="auto">
                             <LuChevronDown />
                           </Collapsible.Indicator>
@@ -353,6 +429,50 @@ export default async function Navbar() {
                       </Collapsible.Content>
                     </Collapsible.Root>
                   )}
+                  {navbarEntry.blockType === "SocialsMenu" &&
+                    socialLinks.length > 0 && (
+                      <Collapsible.Root>
+                        <Collapsible.Trigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            justifyContent="flex-start"
+                            width="full"
+                          >
+                            <TextWrapper
+                              navbarEntry={{
+                                ...navbarEntry,
+                                displayIcon: "External Link",
+                              }}
+                              entryKey="label"
+                            />
+                            <Collapsible.Indicator ml="auto">
+                              <LuChevronDown />
+                            </Collapsible.Indicator>
+                          </Button>
+                        </Collapsible.Trigger>
+                        <Collapsible.Content>
+                          <VStack align="stretch" pl={4} gap={1} py={1}>
+                            {socialLinks.map((item) => (
+                              <Button
+                                key={item.id}
+                                asChild
+                                variant="ghost"
+                                size="sm"
+                                justifyContent="flex-start"
+                              >
+                                <LinkWrapper
+                                  navbarEntry={item}
+                                  linkComponent="a"
+                                  target="_blank"
+                                  rel="noreferrer"
+                                />
+                              </Button>
+                            ))}
+                          </VStack>
+                        </Collapsible.Content>
+                      </Collapsible.Root>
+                    )}
                 </React.Fragment>
               ))}
               <Separator />
