@@ -105,6 +105,7 @@ module CompetitionResultsImport
 
                                  {
                                    pos: inbox_res.pos,
+                                   global_pos: inbox_res.pos,
                                    person_id: person_id,
                                    person_name: inbox_res.person_name,
                                    country_id: person_country.id,
@@ -129,6 +130,9 @@ module CompetitionResultsImport
       #   But the properties round_id and person_id are still the same as before, so we use them as a lookup.
       attempt_rows = competition.reload.results.flat_map { Result.unpack_attempt_attributes(result_attempts_index.fetch([it.round_id, it.person_id]), result_id: it.id) }
       ResultAttempt.insert_all!(attempt_rows)
+
+      # Compute global_pos for linked rounds
+      competition.rounds.includes(:linked_round).where.not(linked_round_id: nil).find_each(&:recompute_results_global_pos)
 
       competition.inbox_results.destroy_all
     end
