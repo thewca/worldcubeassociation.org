@@ -146,6 +146,10 @@ class Round < ApplicationRecord
     number == total_number_of_rounds
   end
 
+  def final_with_linked?
+    final_round? || linked_round&.final_round?
+  end
+
   def linked_round?
     self.linked_round.present?
   end

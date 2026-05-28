@@ -1450,41 +1450,26 @@ class Competition < ApplicationRecord
     [city_name, country&.name].compact.join(', ')
   end
 
-  def events_with_podium_results
-    podium_groups = results.includes(:result_attempts)
-                           .podium
-                           .where.not(event_id: linked_event_ids)
-                           .order(:pos)
-                           .group_by(&:event)
+  def final_rounds
+    rounds.filter(&:final_with_linked?)
+  end
 
-    results.includes(:result_attempts)
-           .succeeded
-           .where(event_id: linked_event_ids)
-           .group_by(&:event)
-           .each do |event, event_results|
-             merged = sorted_linked_podium(event_results)
-             podium_groups[event] = merged unless merged.empty?
-           end
-
-    podium_groups.sort_by { |event, _results| event.rank }
+  def events_with_podium_results(main_event: nil)
+    rounds = final_rounds
+    rounds = rounds.filter { it.event == main_event } if main_event
+    rounds.flat_map { it.results.includes(:result_attempts).succeeded }
+          .group_by(&:event)
+          .sort_by { |event, _results| event.rank }
+          .map do |event, results|
+            # Handle ties
+            sorted = results.sort_by(&:values_for_sorting).uniq(&:person_id)
+            podium = sorted.first(3) + sorted.drop(3).take_while { |r| r.tied_with?(sorted[2]) }
+            [event, podium]
+          end
   end
 
   def winning_results
-    events_with_podium_results.flat_map { |_, podium| podium.select { it.pos == 1 } }
-  end
-
-  def podium_results_for_event(event)
-    if linked_event_ids.include?(event.id)
-      sorted_linked_podium(
-        results.includes(:result_attempts).succeeded.where(event: event).to_a,
-      )
-    else
-      results.includes(:result_attempts).podium.where(event: event).order(:pos).to_a
-    end
-  end
-
-  def linked_event_ids
-    @linked_event_ids ||= results.joins(round: :linked_round).distinct.pluck(:event_id)
+    events_with_podium_results.flat_map { |_event, results| results.first(1) + results.drop(1).take_while { |r| r.tied_with?(results[0]) } }
   end
 
   def person_ids_with_results
@@ -3107,17 +3092,4 @@ class Competition < ApplicationRecord
   def h2h_rounds
     self.rounds.h2h.map(&:wcif_id)
   end
-
-  private
-
-    def linked_sort_key(result)
-      [result.average.positive? ? result.average : Float::INFINITY, result.best]
-    end
-
-    def sorted_linked_podium(event_results)
-      event_results
-        .sort_by { |r| linked_sort_key(r) }
-        .uniq(&:person_id)
-        .first(3)
-    end
 end

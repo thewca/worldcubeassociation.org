@@ -115,6 +115,16 @@ module Resultable
     best_solve ? best_solve.wca_value : 0
   end
 
+  def ranking_columns
+    [format.rank_by_column, format.secondary_rank_by_column].compact
+  end
+
+  def values_for_sorting
+    ranking_columns.map do |column|
+      to_solve_time(column)
+    end
+  end
+
   def compute_correct_average
     if average_is_not_computable_reason || missed_combined_round_cutoff? || !should_compute_average?
       0
