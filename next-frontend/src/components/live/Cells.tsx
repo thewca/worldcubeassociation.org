@@ -50,7 +50,9 @@ export function LiveTableHeader({
         )}
         {isLinked && (
           <Table.ColumnHeader>
-            {t("competitions.results_table.round")}
+            <Box as="span" hideBelow="md">
+              {t("competitions.results_table.round")}
+            </Box>
           </Table.ColumnHeader>
         )}
         {attemptIndexes.map((num) => (
