@@ -12,6 +12,7 @@ FactoryBot.define do
 
     competition_id { competition.id }
     pos { 1 }
+    global_pos { 1 }
     event_id { "333oh" }
     round_type_id { "f" }
     format_id { "a" }
@@ -154,7 +155,6 @@ FactoryBot.define do
     country_id { person.country_id }
     regional_single_record { nil }
     regional_average_record { nil }
-    global_pos { 1 }
 
     after(:build) do |result, builder|
       legacy_attempts = (1..5).map { builder.public_send(:"value#{it}") }
