@@ -80,7 +80,7 @@ class CompetitionEvent < ApplicationRecord
     {
       "earliestResultDate" => nil,
       "latestResultDate" => qualification_latest_date&.strftime("%Y-%m-%d"),
-      "resultCondition" => qualification_condition,
+      "resultCondition" => qualification_condition.to_wcif,
     }
   end
 
@@ -197,7 +197,7 @@ class CompetitionEvent < ApplicationRecord
                            {
                              "type" => %w[object null],
                              "properties" => {
-                               "earliestResultDate" => { "type" => "string" },
+                               "earliestResultDate" => { "type" => %w[string null] },
                                "latestResultDate" => { "type" => "string" },
                                "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
                              },

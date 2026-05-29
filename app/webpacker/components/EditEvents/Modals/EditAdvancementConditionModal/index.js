@@ -10,6 +10,7 @@ import AttemptResultField from '../../../EditResult/WCALive/AttemptResultField/A
 import { matchResult } from '../../../../lib/utils/edit-events';
 import AdvancementTypeField from './AdvancementTypeInput';
 import MbldPointsField from '../../../EditResult/WCALive/AttemptResultField/MbldPointsField';
+import { v2RulesetToV1Condition } from '../../utils';
 
 const MIN_ADVANCE_PERCENT = 1;
 const MAX_ADVANCE_PERCENT = 75;
@@ -33,6 +34,8 @@ function advanceReqToStrShort(eventId, advancementCondition) {
       return matchResult(advancementCondition.level, eventId, {
         short: true,
       });
+    case 'dual':
+      return 'Dual Round';
     default:
       throw new Error(
         `Unrecognized advancementCondition type: ${advancementCondition.type}`,
@@ -53,6 +56,8 @@ const advanceReqToExplanationText = (wcifEvent, roundNumber, { type, level }) =>
     case 'attemptResult':
       return `Everyone in round ${roundNumber} with a result ${matchResult(level, wcifEvent.id)
       } will advance to round ${roundNumber + 1}.`;
+    case 'dual':
+      return `Rounds ${roundNumber} and ${roundNumber + 1} will be run as a Dual Round.`;
     default:
       return '';
   }
@@ -127,8 +132,9 @@ const defaultValueAdvancementValue = (type) => (type === 'percent' ? 75 : 0);
 export default function EditAdvancementConditionModal({
   wcifEvent, wcifRound, roundNumber, disabled,
 }) {
-  const { advancementCondition } = wcifRound;
   const dispatch = useDispatch();
+
+  const advancementCondition = v2RulesetToV1Condition(wcifRound, wcifEvent, roundNumber);
 
   const [type, setType] = useInputState(advancementCondition?.type ?? '');
   const [level, setLevel] = useState(advancementCondition?.level
@@ -165,11 +171,21 @@ export default function EditAdvancementConditionModal({
       <AdvancementTypeField
         advancementType={type}
         onChange={setType}
+        roundNumber={roundNumber}
       />
       {!!type && (
         <>
-          <AdvancementInput eventId={wcifEvent.id} type={type} level={level} onChange={setLevel} />
-          <br />
+          {type !== 'dual' && (
+            <>
+              <AdvancementInput
+                eventId={wcifEvent.id}
+                type={type}
+                level={level}
+                onChange={setLevel}
+              />
+              <br />
+            </>
+          )}
           <p>
             {advanceReqToExplanationText(wcifEvent, roundNumber, { type, level })}
           </p>
