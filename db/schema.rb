@@ -736,6 +736,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_28_000001) do
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "format_id", limit: 1, default: "", null: false
+    t.integer "global_pos", limit: 2, default: 0, null: false
     t.string "person_id", limit: 20, null: false
     t.integer "pos", limit: 2, default: 0, null: false
     t.bigint "round_id", null: false
