@@ -65,7 +65,8 @@ gem 'aws-sdk-cloudfront'
 gem 'redis'
 # Faster Redis library
 gem 'hiredis'
-gem 'mini_magick'
+gem 'mini_magick', require: false
+gem 'ruby-vips', require: false
 gem 'mysql2'
 gem 'premailer-rails'
 gem 'nokogiri'
@@ -80,7 +81,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '10.0.0'
+gem 'shakapacker', '10.1.0'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
@@ -161,5 +162,4 @@ group :production do
   gem 'rack'
   gem 'newrelic_rpm'
   gem 'shoryuken'
-  gem 'ruby-vips'
 end

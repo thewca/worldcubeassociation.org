@@ -1,6 +1,6 @@
 "use client";
 
-import { Link, Table, useBreakpointValue } from "@chakra-ui/react";
+import { Link, Table } from "@chakra-ui/react";
 import {
   LiveAttemptsCells,
   LivePositionCell,
@@ -25,19 +25,11 @@ export default function ByPersonByRoundTable({
   rounds: LiveRoundAdmin[];
 }) {
   const { t } = useT();
-  const isMobile = useBreakpointValue({ base: true, md: false });
-  const showFull = !isMobile;
-
   const roundsByWcifId = _.keyBy(rounds, "id");
 
   return (
     <Table.Root mb="10" size="sm">
-      <LiveTableHeader
-        format={formats.byId[rounds[0].format]}
-        showFull={showFull}
-        byPerson
-        t={t}
-      />
+      <LiveTableHeader format={formats.byId[rounds[0].format]} byPerson t={t} />
       <Table.Body>
         {eventResults.map((result) => {
           const {
@@ -68,14 +60,12 @@ export default function ByPersonByRoundTable({
                 position={global_pos}
                 advancingParams={result}
               />
-              {showFull && (
-                <LiveAttemptsCells
-                  format={format}
-                  attempts={attempts}
-                  eventId={eventId}
-                  competitorId={registration_id}
-                />
-              )}
+              <LiveAttemptsCells
+                format={format}
+                attempts={attempts}
+                eventId={eventId}
+                competitorId={registration_id}
+              />
               <LiveStatCells
                 stats={stats}
                 eventId={eventId}
