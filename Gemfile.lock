@@ -616,7 +616,7 @@ GEM
     rack-cors (3.0.0)
       logger
       rack (>= 3.0.14)
-    rack-proxy (0.7.7)
+    rack-proxy (0.8.2)
       rack
     rack-session (2.1.2)
       base64 (>= 0.1.0)
@@ -838,7 +838,7 @@ GEM
     seedbank (0.5.0)
       rake (>= 10.0)
     semantic_range (3.1.1)
-    shakapacker (10.0.0)
+    shakapacker (10.1.0)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
@@ -1103,7 +1103,7 @@ DEPENDENCIES
   sdoc
   seedbank
   selectize-rails!
-  shakapacker (= 10.0.0)
+  shakapacker (= 10.1.0)
   shoryuken
   sidekiq
   sidekiq-cron
@@ -1375,7 +1375,7 @@ CHECKSUMS
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
   rack (3.2.6) sha256=5ed78e1f73b2e25679bec7d45ee2d4483cc4146eb1be0264fc4d94cb5ef212c2
   rack-cors (3.0.0) sha256=7b95be61db39606906b61b83bd7203fa802b0ceaaad8fcb2fef39e097bf53f68
-  rack-proxy (0.7.7) sha256=446a4b57001022145d5c3ba73b775f66a2260eaf7420c6907483141900395c8a
+  rack-proxy (0.8.2) sha256=d3086e865cbe74e627d41d2c6cd24521206c68d9e0308576760ea06d68e11ab0
   rack-session (2.1.2) sha256=595434f8c0c3473ae7d7ac56ecda6cc6dfd9d37c0b2b5255330aa1576967ffe8
   rack-test (2.2.0) sha256=005a36692c306ac0b4a9350355ee080fd09ddef1148a5f8b2ac636c720f5c463
   rackup (2.3.1) sha256=6c79c26753778e90983761d677a48937ee3192b3ffef6bc963c0950f94688868
@@ -1455,7 +1455,7 @@ CHECKSUMS
   seedbank (0.5.0) sha256=9840c0bf3427ac9ac0815feceeceeeac76dc89039503d393a7e220184855f437
   selectize-rails (0.12.1)
   semantic_range (3.1.1) sha256=508333196ef0c7ba33e79579d4df7eb0a41080595e6a655c2515b03d634ec4a9
-  shakapacker (10.0.0) sha256=9be5f5fe15832c1cd68615ffc033aacc395890930f59dfda2f039269a8b5ad2e
+  shakapacker (10.1.0) sha256=69017102e169ea3baeb26b71b27223ff2689b987770867bf054f48ed71d63da9
   shellany (0.0.1) sha256=0e127a9132698766d7e752e82cdac8250b6adbd09e6c0a7fbbb6f61964fedee7
   shoryuken (7.0.2) sha256=10bc249f72d0ea67f434cc6a13dabbe12cc806030ec04023f1b2035279ee06bf
   sidekiq (8.1.6) sha256=be20cd051124b1a16cf97ea9157137abbd30a515c16a5ae9312d2eadd045e40f
