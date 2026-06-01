@@ -65,7 +65,8 @@ gem 'aws-sdk-cloudfront'
 gem 'redis'
 # Faster Redis library
 gem 'hiredis'
-gem 'mini_magick'
+gem 'mini_magick', require: false
+gem 'ruby-vips', require: false
 gem 'mysql2'
 gem 'premailer-rails'
 gem 'nokogiri'
@@ -161,5 +162,4 @@ group :production do
   gem 'rack'
   gem 'newrelic_rpm'
   gem 'shoryuken'
-  gem 'ruby-vips'
 end
