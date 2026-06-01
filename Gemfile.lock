@@ -256,7 +256,7 @@ GEM
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    doorkeeper (5.9.0)
+    doorkeeper (5.9.1)
       railties (>= 5)
     doorkeeper-i18n (5.2.8)
       doorkeeper (>= 5.2)
@@ -1214,7 +1214,7 @@ CHECKSUMS
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
   docile (1.4.0) sha256=5f1734bde23721245c20c3d723e76c104208e1aa01277a69901ce770f0ebb8d3
   domain_name (0.5.20190701) sha256=000a600454cb4a344769b2f10b531765ea7bd3a304fe47ed12e5ca1eab969851
-  doorkeeper (5.9.0) sha256=edad053b3dcb6bf51e3181fc423333e7fba28863beb2122379643ce6463b6336
+  doorkeeper (5.9.1) sha256=f74a35af9da40e59cac7cfd72c6d927421ef171b6d6d9ca0babf66e3fa8b9c90
   doorkeeper-i18n (5.2.8) sha256=e4054701df464892f3c0fd6c96507188e9b082cb52938da3aab45f4f9fdaf552
   doorkeeper-openid_connect (1.10.0) sha256=fbba8cbab81cc4df72a11463255bcae79fdd6e01323f32a34492080c9bd7fae0
   dotenv (3.2.0) sha256=e375b83121ea7ca4ce20f214740076129ab8514cd81378161f11c03853fe619d
