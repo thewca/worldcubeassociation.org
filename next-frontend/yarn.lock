@@ -272,21 +272,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-cognito-identity@npm:3.1057.0":
-  version: 3.1057.0
-  resolution: "@aws-sdk/client-cognito-identity@npm:3.1057.0"
+"@aws-sdk/client-cognito-identity@npm:3.1058.0":
+  version: 3.1058.0
+  resolution: "@aws-sdk/client-cognito-identity@npm:3.1058.0"
   dependencies:
     "@aws-crypto/sha256-browser": "npm:5.2.0"
     "@aws-crypto/sha256-js": "npm:5.2.0"
     "@aws-sdk/core": "npm:^3.974.15"
-    "@aws-sdk/credential-provider-node": "npm:^3.972.47"
+    "@aws-sdk/credential-provider-node": "npm:^3.972.48"
     "@aws-sdk/types": "npm:^3.973.9"
     "@smithy/core": "npm:^3.24.5"
     "@smithy/fetch-http-handler": "npm:^5.4.5"
     "@smithy/node-http-handler": "npm:^4.7.5"
     "@smithy/types": "npm:^4.14.2"
     tslib: "npm:^2.6.2"
-  checksum: 10c0/fa2129c6134b6f3afaad6906d618c22cae074777ca3591b89cef2ac1ee0ccd4af52e59515f2ac4b13db559c4627980fa528a642e91f3fb8d2a9eae8c2215e34e
+  checksum: 10c0/80efdc9a7ccd9c48a3694821237de4d67eeee1409510dc91b5df21427875a42f9a69d46f6834b404fc7ba3f112498c554b477af173cf120dbbbc5413ffa4ccd9
   languageName: node
   linkType: hard
 
@@ -455,7 +455,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/credential-provider-node@npm:^3.972.24, @aws-sdk/credential-provider-node@npm:^3.972.47":
+"@aws-sdk/credential-provider-node@npm:^3.972.24":
   version: 3.972.47
   resolution: "@aws-sdk/credential-provider-node@npm:3.972.47"
   dependencies:
@@ -471,6 +471,25 @@ __metadata:
     "@smithy/types": "npm:^4.14.2"
     tslib: "npm:^2.6.2"
   checksum: 10c0/1464a1d67723b0551e0ab1b519dc293275392d83ad9fa20db1b3b81446afed1d6beb30f3e755be9911518ed2b57e00b724fe934e029f9bdc3d1c7c1b0aa7287e
+  languageName: node
+  linkType: hard
+
+"@aws-sdk/credential-provider-node@npm:^3.972.48":
+  version: 3.972.48
+  resolution: "@aws-sdk/credential-provider-node@npm:3.972.48"
+  dependencies:
+    "@aws-sdk/credential-provider-env": "npm:^3.972.41"
+    "@aws-sdk/credential-provider-http": "npm:^3.972.43"
+    "@aws-sdk/credential-provider-ini": "npm:^3.972.46"
+    "@aws-sdk/credential-provider-process": "npm:^3.972.41"
+    "@aws-sdk/credential-provider-sso": "npm:^3.972.45"
+    "@aws-sdk/credential-provider-web-identity": "npm:^3.972.45"
+    "@aws-sdk/types": "npm:^3.973.9"
+    "@smithy/core": "npm:^3.24.5"
+    "@smithy/credential-provider-imds": "npm:^4.3.6"
+    "@smithy/types": "npm:^4.14.2"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/d899b2f8040c318f82b3438ef5e166ba211062bcdc662c2553f3496cc3ade86a734ee9b9f3c1548fb9ba1f2b7a260459e5e10f38378aba08925913a00a0f1e2a
   languageName: node
   linkType: hard
 
@@ -516,18 +535,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/credential-providers@npm:^3.1057.0":
-  version: 3.1057.0
-  resolution: "@aws-sdk/credential-providers@npm:3.1057.0"
+"@aws-sdk/credential-providers@npm:^3.1058.0":
+  version: 3.1058.0
+  resolution: "@aws-sdk/credential-providers@npm:3.1058.0"
   dependencies:
-    "@aws-sdk/client-cognito-identity": "npm:3.1057.0"
+    "@aws-sdk/client-cognito-identity": "npm:3.1058.0"
     "@aws-sdk/core": "npm:^3.974.15"
     "@aws-sdk/credential-provider-cognito-identity": "npm:^3.972.38"
     "@aws-sdk/credential-provider-env": "npm:^3.972.41"
     "@aws-sdk/credential-provider-http": "npm:^3.972.43"
     "@aws-sdk/credential-provider-ini": "npm:^3.972.46"
     "@aws-sdk/credential-provider-login": "npm:^3.972.45"
-    "@aws-sdk/credential-provider-node": "npm:^3.972.47"
+    "@aws-sdk/credential-provider-node": "npm:^3.972.48"
     "@aws-sdk/credential-provider-process": "npm:^3.972.41"
     "@aws-sdk/credential-provider-sso": "npm:^3.972.45"
     "@aws-sdk/credential-provider-web-identity": "npm:^3.972.45"
@@ -537,7 +556,7 @@ __metadata:
     "@smithy/credential-provider-imds": "npm:^4.3.6"
     "@smithy/types": "npm:^4.14.2"
     tslib: "npm:^2.6.2"
-  checksum: 10c0/c47fc321655a40b202ac5bd4e5a10a2d64f5ad1b8814d71b96545e1d0dec55e21af1b323f2ec60e64e3f13713301cdc6f4700a681121d12652cc19775acdca5f
+  checksum: 10c0/d6de23142f4cdd245ac0aafa96611177950f56f18cfeaf54c665b21fa8181a533c2039af07bce6e769fb287183ce2ca9b6b57703e53afba70b9704330b2ffd32
   languageName: node
   linkType: hard
 
@@ -12448,7 +12467,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "next-frontend@workspace:."
   dependencies:
-    "@aws-sdk/credential-providers": "npm:^3.1057.0"
+    "@aws-sdk/credential-providers": "npm:^3.1058.0"
     "@chakra-ui/cli": "npm:^3.35.0"
     "@chakra-ui/react": "npm:^3.35.0"
     "@emotion/react": "npm:^11.14.0"
