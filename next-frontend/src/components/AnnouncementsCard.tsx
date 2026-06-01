@@ -31,10 +31,12 @@ export default function AnnouncementsCard({
   hero,
   others = [],
   colorPalette,
+  showSeeAll = true,
 }: {
   hero: Announcement;
   others: Announcement[];
   colorPalette: string;
+  showSeeAll?: boolean;
 }) {
   return (
     <Accordion.Root
@@ -48,11 +50,13 @@ export default function AnnouncementsCard({
         <AnnouncementItem key={announcement.id} announcement={announcement} />
       ))}
 
-      <Accordion.Item value="see-all" layerStyle="fill.subtle">
-        <Accordion.ItemTrigger textStyle="s1" asChild>
-          <ChakraLink href="/posts">See all announcements</ChakraLink>
-        </Accordion.ItemTrigger>
-      </Accordion.Item>
+      {showSeeAll && (
+        <Accordion.Item value="see-all" layerStyle="fill.subtle">
+          <Accordion.ItemTrigger textStyle="s1" asChild>
+            <ChakraLink href="/posts">See all announcements</ChakraLink>
+          </Accordion.ItemTrigger>
+        </Accordion.Item>
+      )}
     </Accordion.Root>
   );
 }

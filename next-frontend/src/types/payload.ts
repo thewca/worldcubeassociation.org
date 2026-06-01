@@ -1176,6 +1176,7 @@ export interface TextCardBlock {
 export interface AnnouncementsSectionBlock {
   mainAnnouncement: string | Announcement;
   furtherAnnouncements?: (string | Announcement)[] | null;
+  showSeeAll: boolean;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
@@ -1901,6 +1902,7 @@ export interface TextCardBlockSelect<T extends boolean = true> {
 export interface AnnouncementsSectionBlockSelect<T extends boolean = true> {
   mainAnnouncement?: T;
   furtherAnnouncements?: T;
+  showSeeAll?: T;
   colorPalette?: T;
   id?: T;
   blockName?: T;

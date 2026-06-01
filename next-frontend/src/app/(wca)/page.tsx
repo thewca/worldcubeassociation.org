@@ -112,6 +112,7 @@ const AnnouncementsSection = ({
       hero={mainAnnouncement}
       others={furtherAnnouncements}
       colorPalette={block.colorPalette}
+      showSeeAll={block.showSeeAll}
     />
   );
 };
