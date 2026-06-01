@@ -34,7 +34,7 @@ RSpec.describe "OAuth refresh_token grace window" do
     response.parsed_body
   end
 
-  it "issues a new token on the first refresh and records previous_refresh_token" do
+  it "issues a new token on the first refresh and records the rotation in the cache" do
     original_refresh = access_token.refresh_token
 
     body = post_refresh(original_refresh)
@@ -44,7 +44,8 @@ RSpec.describe "OAuth refresh_token grace window" do
     expect(body["access_token"]).to be_present
 
     new_token = Doorkeeper::AccessToken.by_token(body["access_token"])
-    expect(new_token.previous_refresh_token).to eq(original_refresh)
+    cached_id = DoorkeeperRefreshTokenGrace.lookup_rotation(original_refresh)
+    expect(cached_id).to eq(new_token.id)
     expect(access_token.reload).to be_revoked
   end
 
@@ -60,9 +61,9 @@ RSpec.describe "OAuth refresh_token grace window" do
     expect(loser["access_token"]).to eq(winner["access_token"])
     expect(loser["refresh_token"]).to eq(winner["refresh_token"])
 
-    # Only one new access_token row should have been created across both calls.
-    rotations = Doorkeeper::AccessToken.where(previous_refresh_token: original_refresh)
-    expect(rotations.count).to eq(1)
+    # Only one new access_token row should have been created across both calls
+    # (plus the original `access_token` fixture, which is now revoked).
+    expect(Doorkeeper::AccessToken.where(application: oauth_app, resource_owner_id: user.id).count).to eq(2)
   end
 
   it "rejects a replay after the grace window has closed" do

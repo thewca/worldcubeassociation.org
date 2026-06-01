@@ -10,60 +10,79 @@
 # rather than `invalid_grant`.
 #
 # Mechanics:
-#   1. Always populate `previous_refresh_token` on the new access_token row,
-#      so we can identify the rotation that consumed a given refresh_token
-#      (Doorkeeper only sets this in `refresh_token_revoked_on_use` mode).
-#   2. In the refresh flow, if the supplied refresh_token is already revoked
-#      but a replacement was issued within GRACE_PERIOD, short-circuit and
-#      return that replacement.
+#   1. After a successful rotation, remember the mapping
+#        SHA256(old refresh_token) => new access_token id
+#      in Rails.cache for GRACE_PERIOD seconds.
+#   2. When a refresh request arrives with an already-revoked refresh_token,
+#      look up that mapping. If present and the replacement is still valid,
+#      short-circuit and return the replacement instead of raising.
 #
-# Reuse detection is preserved: outside the window, or once the replacement
-# has itself been rotated, `invalid_grant` still fires.
+# Reuse detection is preserved: outside the window, or once the cache entry
+# has been replaced by a subsequent rotation, `invalid_grant` still fires.
 Rails.application.config.to_prepare do
   module DoorkeeperRefreshTokenGrace
     GRACE_PERIOD = 30.seconds
+    CACHE_NAMESPACE = "doorkeeper:refresh_grace"
 
-    def validate_token
-      super || grace_replacement.present?
+    def self.cache_key(refresh_token)
+      digest = Digest::SHA256.hexdigest(refresh_token)
+      "#{CACHE_NAMESPACE}:#{digest}"
     end
 
-    def before_successful_response
-      if (replacement = grace_replacement)
-        @access_token = replacement
-        return
+    def self.remember_rotation(old_refresh_token, new_access_token_id)
+      Rails.cache.write(
+        cache_key(old_refresh_token),
+        new_access_token_id,
+        expires_in: GRACE_PERIOD,
+      )
+    end
+
+    def self.lookup_rotation(old_refresh_token)
+      Rails.cache.read(cache_key(old_refresh_token))
+    end
+
+    module RequestPatch
+      def validate_token
+        super || grace_replacement.present?
       end
-      super
-    end
 
-    private
+      def before_successful_response
+        if (replacement = grace_replacement)
+          @access_token = replacement
+          return
+        end
 
-    def create_access_token
-      super
-      return if @access_token.blank?
-      return if @access_token.previous_refresh_token.present?
+        super
 
-      @access_token.update_columns(previous_refresh_token: refresh_token.refresh_token)
-    end
+        DoorkeeperRefreshTokenGrace.remember_rotation(
+          refresh_token.refresh_token,
+          @access_token.id,
+        ) if @access_token.present?
+      end
 
-    def grace_replacement
-      return @grace_replacement if defined?(@grace_replacement)
+      private
 
-      @grace_replacement = lookup_grace_replacement
-    end
+      def grace_replacement
+        return @grace_replacement if defined?(@grace_replacement)
 
-    def lookup_grace_replacement
-      return nil if refresh_token.blank?
-      return nil unless refresh_token.revoked?
+        @grace_replacement = lookup_grace_replacement
+      end
 
-      model = Doorkeeper.config.access_token_model
-      replacement = model.by_previous_refresh_token(refresh_token.refresh_token)
-      return nil if replacement.nil?
-      return nil if replacement.revoked?
-      return nil if replacement.created_at < GRACE_PERIOD.ago
+      def lookup_grace_replacement
+        return nil if refresh_token.blank?
+        return nil unless refresh_token.revoked?
 
-      replacement
+        replacement_id = DoorkeeperRefreshTokenGrace.lookup_rotation(refresh_token.refresh_token)
+        return nil if replacement_id.blank?
+
+        replacement = Doorkeeper.config.access_token_model.find_by(id: replacement_id)
+        return nil if replacement.nil?
+        return nil if replacement.revoked?
+
+        replacement
+      end
     end
   end
 
-  Doorkeeper::OAuth::RefreshTokenRequest.prepend(DoorkeeperRefreshTokenGrace)
+  Doorkeeper::OAuth::RefreshTokenRequest.prepend(DoorkeeperRefreshTokenGrace::RequestPatch)
 end
