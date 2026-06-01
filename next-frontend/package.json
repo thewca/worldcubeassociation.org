@@ -33,7 +33,7 @@
     "@payloadcms/richtext-lexical": "3.84.1",
     "@payloadcms/storage-s3": "3.84.1",
     "@rails/actioncable": "^8.1.300",
-    "@react-aria/focus": "^3.22.0",
+    "@react-aria/focus": "^3.22.1",
     "@tanstack/react-form": "^1.33.0",
     "@tanstack/react-query": "^5.100.14",
     "@wrksz/themes": "^0.9.3",
