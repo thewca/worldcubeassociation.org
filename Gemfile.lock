@@ -850,7 +850,7 @@ GEM
       concurrent-ruby
       thor
       zeitwerk (~> 2.6)
-    sidekiq (8.1.5)
+    sidekiq (8.1.6)
       connection_pool (>= 3.0.0)
       json (>= 2.16.0)
       logger (>= 1.7.0)
@@ -1458,7 +1458,7 @@ CHECKSUMS
   shakapacker (10.0.0) sha256=9be5f5fe15832c1cd68615ffc033aacc395890930f59dfda2f039269a8b5ad2e
   shellany (0.0.1) sha256=0e127a9132698766d7e752e82cdac8250b6adbd09e6c0a7fbbb6f61964fedee7
   shoryuken (7.0.2) sha256=10bc249f72d0ea67f434cc6a13dabbe12cc806030ec04023f1b2035279ee06bf
-  sidekiq (8.1.5) sha256=19821ff6031100c2317f72a5b8ab32304ca84f5acb5a2ef846ed1ec14144ab02
+  sidekiq (8.1.6) sha256=be20cd051124b1a16cf97ea9157137abbd30a515c16a5ae9312d2eadd045e40f
   sidekiq-cron (2.4.0) sha256=25595c5aee0c16d13a89466e5108af047fa4cfbf388199b39e1a600ca39472d4
   signet (0.21.0) sha256=d617e9fbf24928280d39dcfefba9a0372d1c38187ffffd0a9283957a10a8cd5b
   simple_form (5.4.1) sha256=58c3d229034c7e5545035c3271b6f030ef730c340b9d7d8eb730e0a385b20808
