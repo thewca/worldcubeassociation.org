@@ -2,6 +2,7 @@ import { I18n, useMakePlural } from 'i18n-js';
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import * as Pluralizers from 'make-plural/plurals';
+import _ from 'lodash';
 // This is created dynamically at asset build time
 // English is always needed (default + fallback), so bundle it synchronously.
 // eslint-disable-next-line import/no-unresolved
@@ -104,18 +105,20 @@ async function loadDateTimeLocale(locale) {
   setDefaultLocale(locale);
 }
 
-const { currentLocale } = window.wca;
-
-loadTranslationPluralizer(window.I18n, currentLocale);
-
-// English is always available synchronously.
+// Synchronous setup: English translations are bundled, and react-datepicker
+// already ships English natively, so no date-fns registration is needed for it.
 window.I18n.store(enTranslations);
 
-// For non-English locales, fetch only the needed translation + date-fns locale chunks.
-const translationsReady = currentLocale === DEFAULT_LOCALE
-  ? Promise.resolve()
-  : i18nLocaleContext(`./${currentLocale}.json`).then((mod) => {
-    window.I18n.store(mod.default ?? mod);
-  });
+const { currentLocale } = window.wca;
+loadTranslationPluralizer(window.I18n, currentLocale);
 
-export const i18nReady = Promise.all([translationsReady, loadDateTimeLocale(currentLocale)]);
+// Asynchronous setup: for any locale other than the default, fetch the
+// translation and date-fns chunks in parallel.
+const languagesToLoad = _.without([currentLocale], DEFAULT_LOCALE);
+
+export const i18nReady = Promise.all(languagesToLoad.map((iso) => Promise.all([
+  i18nLocaleContext(`./${iso}.json`).then((module) => {
+    window.I18n.store(module.default ?? module);
+  }),
+  loadDateTimeLocale(iso),
+])));
