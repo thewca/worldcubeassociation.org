@@ -2,8 +2,8 @@ import React, { Suspense, useMemo, useReducer } from 'react';
 import {
   Ref, Segment, Table, TableFooter,
 } from 'semantic-ui-react';
-import { DragDropContext, Droppable } from '../../../lib/dndLazy';
 import { noop } from 'lodash';
+import { DragDropContext, Droppable } from '../../../lib/dndLazy';
 import I18n from '../../../lib/i18n';
 import TableHeader from './AdministrationTableHeader';
 import TableRow from './AdministrationTableRow';
