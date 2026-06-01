@@ -1,6 +1,7 @@
 import { I18n, useMakePlural } from 'i18n-js';
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
+// Pluralizers is just a single file so we cannot load it async
 import * as Pluralizers from 'make-plural/plurals';
 // This is created dynamically at asset build time
 // English is always needed (default + fallback), so bundle it synchronously.
@@ -92,6 +93,11 @@ function loadTranslationPluralizer(i18n, locale) {
   i18n.pluralization.register(locale, i18nPluralizer);
 }
 
+async function loadTranslations(i18n, locale) {
+  const module = await i18nLocaleContext(`./${locale}.json`);
+  i18n.store(module.default ?? module);
+}
+
 async function loadDateTimeLocale(locale) {
   // date-fns has no plain 'en' locale (only en-US, en-GB, etc.) — skip it.
   if (locale === DEFAULT_LOCALE) return;
@@ -116,8 +122,6 @@ loadTranslationPluralizer(window.I18n, currentLocale);
 const languagesToLoad = [currentLocale].filter((iso) => iso !== DEFAULT_LOCALE);
 
 export const i18nReady = Promise.all(languagesToLoad.map((iso) => Promise.all([
-  i18nLocaleContext(`./${iso}.json`).then((module) => {
-    window.I18n.store(module.default ?? module);
-  }),
+  loadTranslations(window.I18n, iso),
   loadDateTimeLocale(iso),
 ])));
