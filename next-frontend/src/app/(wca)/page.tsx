@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import React from "react";
+import React, { ComponentProps } from "react";
 
 export const metadata: Metadata = {
   title: { absolute: "World Cube Association" },
@@ -116,6 +116,32 @@ const AnnouncementsSection = ({
   );
 };
 
+const BannerImageWithGradient = ({
+  mainImage,
+  targetColor,
+  gradientDirection,
+}: {
+  mainImage: Media;
+  targetColor: ComponentProps<typeof Box>["bg"];
+  gradientDirection: "left" | "right";
+}) => {
+  return (
+    <Box position="relative" width="50%" hideBelow="md">
+      <MediaImage
+        media={mainImage as Media}
+        width="full"
+        maxHeight="sm"
+        bg={targetColor}
+      />
+      <AbsoluteCenter
+        width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
+        height="full"
+        bg={`linear-gradient(to ${gradientDirection}, transparent, transparent, {colors.${targetColor}})`}
+      />
+    </Box>
+  );
+};
+
 const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
   return (
     <Card.Root
@@ -126,20 +152,13 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       maxHeight="sm" // somewhat arbitrary, if you have a better idea please shout
       overflow="hidden"
     >
-      <Box position="relative" width="50%" hideBelow="md">
-        <MediaImage
-          media={block.mainImage as Media}
-          width="full"
-          maxHeight="sm"
-          bg="colorPalette.1A"
+      {block.imagePosition === "left" && (
+        <BannerImageWithGradient
+          mainImage={block.mainImage as Media}
+          targetColor="colorPalette.1A"
+          gradientDirection="right"
         />
-        <AbsoluteCenter
-          width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
-          height="full"
-          bg="linear-gradient(to right, transparent, transparent, {colors.colorPalette.1A})"
-        />
-      </Box>
-
+      )}
       <Card.Body justifyContent="center">
         <Card.Title
           colorPalette={block.headingColor}
@@ -169,6 +188,13 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           </Float>
         )}
       </Card.Body>
+      {block.imagePosition === "right" && (
+        <BannerImageWithGradient
+          mainImage={block.mainImage as Media}
+          targetColor="colorPalette.1A"
+          gradientDirection="left"
+        />
+      )}
     </Card.Root>
   );
 };

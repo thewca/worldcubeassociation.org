@@ -1204,6 +1204,7 @@ export interface ImageBannerBlock {
   };
   bodyMarkdown?: string | null;
   mainImage: string | Media;
+  imagePosition: 'left' | 'right';
   colorPalette: ColorPaletteSelect;
   /**
    * Use a slightly darker nuance of the color palette
@@ -1914,6 +1915,7 @@ export interface ImageBannerBlockSelect<T extends boolean = true> {
   body?: T;
   bodyMarkdown?: T;
   mainImage?: T;
+  imagePosition?: T;
   colorPalette?: T;
   colorPaletteDarker?: T;
   headingColor?: T;

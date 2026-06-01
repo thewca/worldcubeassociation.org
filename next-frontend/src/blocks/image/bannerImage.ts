@@ -24,6 +24,16 @@ export const BannerImageBlock: Block = {
       relationTo: "media",
       required: true,
     },
+    {
+      name: "imagePosition",
+      type: "radio",
+      options: ["left", "right"],
+      defaultValue: "left",
+      required: true,
+      admin: {
+        layout: "horizontal",
+      },
+    },
     colorPaletteSelect,
     colorPaletteToneToggle,
     {
