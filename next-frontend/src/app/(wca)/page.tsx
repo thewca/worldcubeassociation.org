@@ -120,13 +120,15 @@ const BannerImageWithGradient = ({
   mainImage,
   targetColor,
   gradientDirection,
+  boxWidth = "50%",
 }: {
   mainImage: Media;
   targetColor: ComponentProps<typeof Box>["bg"];
   gradientDirection: "left" | "right";
+  boxWidth?: ComponentProps<typeof Box>["width"];
 }) => {
   return (
-    <Box position="relative" width="50%" hideBelow="md">
+    <Box position="relative" width={boxWidth} hideBelow="md">
       <MediaImage
         media={mainImage as Media}
         width="full"
@@ -157,42 +159,46 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           mainImage={block.mainImage as Media}
           targetColor="colorPalette.1A"
           gradientDirection="right"
+          boxWidth={block.heading ? "50%" : "100%"}
         />
       )}
-      <Card.Body justifyContent="center">
-        <Card.Title
-          colorPalette={block.headingColor}
-          textStyle={{ base: "h3", md: "h2", xl: "h1" }}
-        >
-          {block.heading}
-        </Card.Title>
-        <ChakraMarkdown
-          paragraphAs={Card.Description}
-          textStyle={{ base: "body", md: "s2" }}
-        >
-          {block.bodyMarkdown}
-        </ChakraMarkdown>
-        {block.bgImage && (
-          <Float
-            placement="bottom-end"
-            width={`${block.bgSize}%`}
-            height={`${block.bgSize}%`}
-            offset={28}
+      {block.heading && (
+        <Card.Body justifyContent="center">
+          <Card.Title
+            colorPalette={block.headingColor}
+            textStyle={{ base: "h3", md: "h2", xl: "h1" }}
           >
-            <MediaImage
-              media={block.bgImage as Media}
-              width="auto"
-              height="full"
-              fit="contain"
-            />
-          </Float>
-        )}
-      </Card.Body>
+            {block.heading}
+          </Card.Title>
+          <ChakraMarkdown
+            paragraphAs={Card.Description}
+            textStyle={{ base: "body", md: "s2" }}
+          >
+            {block.bodyMarkdown}
+          </ChakraMarkdown>
+          {block.bgImage && (
+            <Float
+              placement="bottom-end"
+              width={`${block.bgSize}%`}
+              height={`${block.bgSize}%`}
+              offset={28}
+            >
+              <MediaImage
+                media={block.bgImage as Media}
+                width="auto"
+                height="full"
+                fit="contain"
+              />
+            </Float>
+          )}
+        </Card.Body>
+      )}
       {block.imagePosition === "right" && (
         <BannerImageWithGradient
           mainImage={block.mainImage as Media}
           targetColor="colorPalette.1A"
           gradientDirection="left"
+          boxWidth={block.heading ? "50%" : "100%"}
         />
       )}
     </Card.Root>
