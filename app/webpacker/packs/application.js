@@ -16,6 +16,7 @@ import {
   formattedTextForDate,
 } from '../lib/utils/wca';
 import '../lib/acknowledge-cookies';
+import { i18nReady } from '../lib/i18n';
 
 Rails.start();
 require('jquery');
@@ -50,5 +51,5 @@ ReactRailsUJS.useContext(componentRequireContext);
 // English is always available synchronously; other locales load as a small separate chunk.
 const originalHandleMount = ReactRailsUJS.handleMount.bind(ReactRailsUJS);
 ReactRailsUJS.handleMount = (e) => {
-  (window.i18nReady || Promise.resolve()).then(() => originalHandleMount(e));
+  i18nReady.then(() => originalHandleMount(e));
 };
