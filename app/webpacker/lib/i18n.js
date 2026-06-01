@@ -2,7 +2,6 @@ import { I18n, useMakePlural } from 'i18n-js';
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import * as Pluralizers from 'make-plural/plurals';
-import _ from 'lodash';
 // This is created dynamically at asset build time
 // English is always needed (default + fallback), so bundle it synchronously.
 // eslint-disable-next-line import/no-unresolved
@@ -114,7 +113,7 @@ loadTranslationPluralizer(window.I18n, currentLocale);
 
 // Asynchronous setup: for any locale other than the default, fetch the
 // translation and date-fns chunks in parallel.
-const languagesToLoad = _.without([currentLocale], DEFAULT_LOCALE);
+const languagesToLoad = [currentLocale].filter((iso) => iso !== DEFAULT_LOCALE);
 
 export const i18nReady = Promise.all(languagesToLoad.map((iso) => Promise.all([
   i18nLocaleContext(`./${iso}.json`).then((module) => {
