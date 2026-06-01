@@ -99,8 +99,8 @@ async function loadDateTimeLocale(locale) {
   const loader = dateFnsLocaleLoaders[locale];
   if (!loader) return;
 
-  const mod = await loader();
-  registerLocale(locale, mod.default);
+  const module = await loader();
+  registerLocale(locale, module.default);
   setDefaultLocale(locale);
 }
 
