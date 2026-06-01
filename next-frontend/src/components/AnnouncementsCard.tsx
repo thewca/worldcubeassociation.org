@@ -1,4 +1,4 @@
-import { Accordion } from "@chakra-ui/react";
+import { Accordion, Link as ChakraLink } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
 import { Announcement, User } from "@/types/payload";
 
@@ -47,6 +47,12 @@ export default function AnnouncementsCard({
       {others.map((announcement) => (
         <AnnouncementItem key={announcement.id} announcement={announcement} />
       ))}
+
+      <Accordion.Item value="see-all" layerStyle="fill.subtle">
+        <Accordion.ItemTrigger textStyle="s1" asChild>
+          <ChakraLink href="/posts">See all announcements</ChakraLink>
+        </Accordion.ItemTrigger>
+      </Accordion.Item>
     </Accordion.Root>
   );
 }
