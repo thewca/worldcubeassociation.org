@@ -1344,6 +1344,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-transform-regenerator@npm:^7.29.7":
+  version: 7.29.7
+  resolution: "@babel/plugin-transform-regenerator@npm:7.29.7"
+  dependencies:
+    "@babel/helper-plugin-utils": "npm:^7.29.7"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 10c0/b991ab501c1c2c323398054211f8cd992f1db438b5b5d548d63dc74ff9591d52a50385160fdba2b62aae4f9610a321355a8ff911f1c4bd80dc74b555cad61468
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-transform-regexp-modifiers@npm:^7.28.6":
   version: 7.28.6
   resolution: "@babel/plugin-transform-regexp-modifiers@npm:7.28.6"
@@ -10478,7 +10489,7 @@ __metadata:
     "@babel/plugin-syntax-import-meta": "npm:^7.10.4"
     "@babel/plugin-transform-destructuring": "npm:^7.29.7"
     "@babel/plugin-transform-object-rest-spread": "npm:^7.29.7"
-    "@babel/plugin-transform-regenerator": "npm:^7.29.0"
+    "@babel/plugin-transform-regenerator": "npm:^7.29.7"
     "@babel/plugin-transform-runtime": "npm:^7.29.7"
     "@babel/preset-env": "npm:^7.29.5"
     "@babel/preset-react": "npm:^7.29.7"
