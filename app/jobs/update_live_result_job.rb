@@ -23,13 +23,14 @@ class UpdateLiveResultJob < ApplicationJob
       LiveResult.reset_counters(live_result.id, :live_attempts)
 
       person = live_result.registration.person
+      previous_round_ids = round.competition_event.rounds.where(number: ...round.number).ids
 
       live_result.update!(
         best: best,
         average: average,
         last_attempt_entered_at: Time.now.utc,
-        single_record_tag: compute_pr(live_result, best, person, :single),
-        average_record_tag: compute_pr(live_result, average, person, :average),
+        single_record_tag: compute_pr(live_result, best, person, :single, previous_round_ids),
+        average_record_tag: compute_pr(live_result, average, person, :average, previous_round_ids),
       )
 
       history_ordered_results = new_attempts.order(:attempt_number).pluck(:value)
@@ -44,12 +45,12 @@ class UpdateLiveResultJob < ApplicationJob
 
   private
 
-    def compute_pr(live_result, value, person, type)
+    def compute_pr(live_result, value, person, type, previous_round_ids)
       col = VALUE_COLUMN[type]
-      return nil if value <= 0
-      return nil if better_pr_in_previous_round?(live_result, "#{type}_record_tag", col, value)
 
-      if person.nil?
+      if value <= 0 || better_pr_in_previous_round?(live_result, "#{type}_record_tag", col, value, previous_round_ids)
+        nil
+      elsif person.nil?
         "PR"
       else
         pr = person.public_send(:"ranks_#{type}").find { |r| r.event_id == live_result.event_id }
@@ -57,11 +58,7 @@ class UpdateLiveResultJob < ApplicationJob
       end
     end
 
-    def better_pr_in_previous_round?(live_result, tag_column, value_column, current_value)
-      round = live_result.round
-      previous_ids = round.competition_event.rounds
-                          .where(number: ...round.number)
-                          .ids
+    def better_pr_in_previous_round?(live_result, tag_column, value_column, current_value, previous_ids)
       return false if previous_ids.empty?
 
       best_previous_pr = LiveResult.where(registration_id: live_result.registration_id, round_id: previous_ids)
