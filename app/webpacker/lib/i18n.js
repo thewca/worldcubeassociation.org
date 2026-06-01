@@ -1,8 +1,6 @@
 import { I18n, useMakePlural } from 'i18n-js';
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
-// Pluralizers is just a single file so we cannot load it async
-import * as Pluralizers from 'make-plural/plurals';
 // This is created dynamically at asset build time
 // English is always needed (default + fallback), so bundle it synchronously.
 // eslint-disable-next-line import/no-unresolved
@@ -84,8 +82,9 @@ export function withLocale(overrideLocale, fn) {
   }
 }
 
-function loadTranslationPluralizer(i18n, locale) {
+async function loadTranslationPluralizer(i18n, locale) {
   const baseLocale = locale.split('-')[0];
+  const Pluralizers = await import('make-plural/plurals');
   const isoPluralizer = Pluralizers[baseLocale];
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -115,13 +114,15 @@ async function loadDateTimeLocale(locale) {
 window.I18n.store(enTranslations);
 
 const { currentLocale } = window.wca;
-loadTranslationPluralizer(window.I18n, currentLocale);
 
 // Asynchronous setup: for any locale other than the default, fetch the
 // translation and date-fns chunks in parallel.
 const languagesToLoad = [currentLocale].filter((iso) => iso !== DEFAULT_LOCALE);
 
-export const i18nReady = Promise.all(languagesToLoad.map((iso) => Promise.all([
-  loadTranslations(window.I18n, iso),
-  loadDateTimeLocale(iso),
-])));
+export const i18nReady = Promise.all([
+  loadTranslationPluralizer(window.I18n, currentLocale),
+  ...languagesToLoad.map((iso) => Promise.all([
+    loadTranslations(window.I18n, iso),
+    loadDateTimeLocale(iso),
+  ])),
+]);
