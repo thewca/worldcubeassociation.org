@@ -1,5 +1,5 @@
-import React from 'react';
-import { DragDropContext } from '@hello-pangea/dnd';
+import React, { Suspense } from 'react';
+import { DragDropContext } from '../../lib/dndLazy';
 import MatchingTable from './MatchingTable';
 import {
   DROPPABLE_ID_MATCHED_SCRAMBLES,
@@ -86,24 +86,26 @@ export default function DndWorkbench({
   };
 
   return (
-    <DragDropContext onDragEnd={handleOnDragEnd}>
-      <UnusedScramblesPanel
-        selectedEvent={selectedEvent}
-        selectedRound={selectedRound}
-        autoMatchSettings={autoMatchSettings}
-        unusedScrambleSets={unusedScrambleSets}
-        rootMatchState={rootMatchState}
-        dispatchMatchState={dispatchMatchState}
-      />
-      <MatchingTable
-        selectedEvent={selectedEvent}
-        selectedRound={selectedRound}
-        matchableRows={matchingRows}
-        autoMatchSettings={autoMatchSettings}
-        unusedScrambleSets={unusedScrambleSets}
-        isAttemptMode={isAttemptMode}
-        dispatchMatchState={dispatchMatchState}
-      />
-    </DragDropContext>
+    <Suspense fallback={null}>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <UnusedScramblesPanel
+          selectedEvent={selectedEvent}
+          selectedRound={selectedRound}
+          autoMatchSettings={autoMatchSettings}
+          unusedScrambleSets={unusedScrambleSets}
+          rootMatchState={rootMatchState}
+          dispatchMatchState={dispatchMatchState}
+        />
+        <MatchingTable
+          selectedEvent={selectedEvent}
+          selectedRound={selectedRound}
+          matchableRows={matchingRows}
+          autoMatchSettings={autoMatchSettings}
+          unusedScrambleSets={unusedScrambleSets}
+          isAttemptMode={isAttemptMode}
+          dispatchMatchState={dispatchMatchState}
+        />
+      </DragDropContext>
+    </Suspense>
   );
 }
