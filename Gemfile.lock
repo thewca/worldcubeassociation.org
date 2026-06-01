@@ -438,7 +438,7 @@ GEM
     jmespath (1.6.2)
     js_cookie_rails (2.2.0)
       railties (>= 3.1)
-    json (2.19.5)
+    json (2.19.7)
     json-schema (6.2.0)
       addressable (~> 2.8)
       bigdecimal (>= 3.1, < 5)
@@ -850,7 +850,7 @@ GEM
       concurrent-ruby
       thor
       zeitwerk (~> 2.6)
-    sidekiq (8.1.5)
+    sidekiq (8.1.6)
       connection_pool (>= 3.0.0)
       json (>= 2.16.0)
       logger (>= 1.7.0)
@@ -1180,7 +1180,7 @@ CHECKSUMS
   bootstrap3-datetimepicker-rails (4.17.47) sha256=ee87a9bad74c140729f6a1ea2a7f3f2d9aaefa7e9defbe31b4edd27ff64689a2
   builder (3.3.0) sha256=497918d2f9dca528fdca4b88d84e4ef4387256d984b8154e9d5d3fe5a9c8835f
   bullet (8.1.2) sha256=67031a0d71d2b00ef1d6ed17903064d79e56bf2cddb4d4e2c54cd464c6b2b8c9
-  bundler (4.0.11) sha256=5bcec0fb78302e48d02ee46f10ee6e6942be647ba5b44a6d1ddfda9a240ce785
+  bundler (4.0.12) sha256=7f8b757d28dfb636e7b24fba2344ac6dd13b5b24f4b46d62573d483f211825ac
   byebug (13.0.0) sha256=d2263efe751941ca520fa29744b71972d39cbc41839496706f5d9b22e92ae05d
   camertron-eprun (1.1.1) sha256=9a8e337916445e62648f6a4f35d229302fc44c50549cc881bff1e296ccf9ce4b
   capybara (3.40.0) sha256=42dba720578ea1ca65fd7a41d163dd368502c191804558f6e0f71b391054aeef
@@ -1295,7 +1295,7 @@ CHECKSUMS
   jbuilder (2.15.0) sha256=fe36cd45b47dd88cb2cbebc3adc4348f041825f580d503578594e8255817f889
   jmespath (1.6.2) sha256=238d774a58723d6c090494c8879b5e9918c19485f7e840f2c1c7532cf84ebcb1
   js_cookie_rails (2.2.0) sha256=06e6b27ee093945c3acf3982d2dbf9e9117d1130f33bb07e1660ebea68229c62
-  json (2.19.5) sha256=218a18553e4801d579ca7e0f5bc72bafd776d7397238a1fb4e74db5b0a812c59
+  json (2.19.7) sha256=fe432c8639f6efff69f9d73b518a3705d9581ab93156f981ea72806e1e5bcc3e
   json-schema (6.2.0) sha256=e8bff46ed845a22c1ab2bd0d7eccf831c01fe23bb3920caa4c74db4306813666
   jwt (3.2.0) sha256=5419b1fe37b1da0982bd07051f573a8b8789ab724c2aa7e785e4784a3ed217d7
   kaminari (1.2.2) sha256=c4076ff9adccc6109408333f87b5c4abbda5e39dc464bd4c66d06d9f73442a3e
@@ -1458,7 +1458,7 @@ CHECKSUMS
   shakapacker (10.0.0) sha256=9be5f5fe15832c1cd68615ffc033aacc395890930f59dfda2f039269a8b5ad2e
   shellany (0.0.1) sha256=0e127a9132698766d7e752e82cdac8250b6adbd09e6c0a7fbbb6f61964fedee7
   shoryuken (7.0.2) sha256=10bc249f72d0ea67f434cc6a13dabbe12cc806030ec04023f1b2035279ee06bf
-  sidekiq (8.1.5) sha256=19821ff6031100c2317f72a5b8ab32304ca84f5acb5a2ef846ed1ec14144ab02
+  sidekiq (8.1.6) sha256=be20cd051124b1a16cf97ea9157137abbd30a515c16a5ae9312d2eadd045e40f
   sidekiq-cron (2.4.0) sha256=25595c5aee0c16d13a89466e5108af047fa4cfbf388199b39e1a600ca39472d4
   signet (0.21.0) sha256=d617e9fbf24928280d39dcfefba9a0372d1c38187ffffd0a9283957a10a8cd5b
   simple_form (5.4.1) sha256=58c3d229034c7e5545035c3271b6f030ef730c340b9d7d8eb730e0a385b20808
