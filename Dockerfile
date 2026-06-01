@@ -46,7 +46,6 @@ RUN apt-get update -qq && \
       libclang-dev \
       cargo \
       pkg-config \
-      libvips \
       libssl-dev \
       libyaml-dev \
       tzdata
@@ -100,6 +99,7 @@ FROM base AS runtime
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       mariadb-client \
+      libvips \
       zip \
       python-is-python3 \
       fonts-dejavu \
