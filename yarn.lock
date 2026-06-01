@@ -359,6 +359,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/helper-wrap-function@npm:^7.29.7":
+  version: 7.29.7
+  resolution: "@babel/helper-wrap-function@npm:7.29.7"
+  dependencies:
+    "@babel/template": "npm:^7.29.7"
+    "@babel/traverse": "npm:^7.29.7"
+    "@babel/types": "npm:^7.29.7"
+  checksum: 10c0/d765b341863ede049eb6923b9c20fc79fb6c64995a906b60a70c22fbffb21eef5d5a5cf15948c843047d31e8c902a85fa94ccfe5d30d0631a7b1e40e4d667c70
+  languageName: node
+  linkType: hard
+
 "@babel/helpers@npm:^7.29.7":
   version: 7.29.7
   resolution: "@babel/helpers@npm:7.29.7"
@@ -499,15 +510,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-function-sent@npm:^7.27.1":
-  version: 7.27.1
-  resolution: "@babel/plugin-proposal-function-sent@npm:7.27.1"
+"@babel/plugin-proposal-function-sent@npm:^7.29.7":
+  version: 7.29.7
+  resolution: "@babel/plugin-proposal-function-sent@npm:7.29.7"
   dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.27.1"
-    "@babel/helper-wrap-function": "npm:^7.27.1"
+    "@babel/helper-plugin-utils": "npm:^7.29.7"
+    "@babel/helper-wrap-function": "npm:^7.29.7"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10c0/8c577929717233e462c3e13ce2da068059217ddae574c73feb79c207d879c45530a114fad3d5e4722fb637516a58ff065a4286a62cc13375a054ef103532d363
+  checksum: 10c0/0af67dc10f539f02a21dc0466546c47303c605e617fa7be02c570105ffe2cf8f97cc504e44931823ecea8f2dd107e6e4dd582ef8f5bc04e93024cee70389afe7
   languageName: node
   linkType: hard
 
@@ -10351,7 +10362,7 @@ __metadata:
     "@babel/plugin-proposal-class-properties": "npm:^7.17.12"
     "@babel/plugin-proposal-decorators": "npm:^7.29.0"
     "@babel/plugin-proposal-export-namespace-from": "npm:^7.18.9"
-    "@babel/plugin-proposal-function-sent": "npm:^7.27.1"
+    "@babel/plugin-proposal-function-sent": "npm:^7.29.7"
     "@babel/plugin-proposal-json-strings": "npm:^7.14.5"
     "@babel/plugin-proposal-numeric-separator": "npm:^7.14.5"
     "@babel/plugin-proposal-private-methods": "npm:^7.18.6"
