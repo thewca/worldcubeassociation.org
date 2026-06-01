@@ -29,11 +29,7 @@ export default function ByPersonByRoundTable({
 
   return (
     <Table.Root mb="10" size="sm">
-      <LiveTableHeader
-        format={formats.byId[rounds[0].format]}
-        byPerson
-        t={t}
-      />
+      <LiveTableHeader format={formats.byId[rounds[0].format]} byPerson t={t} />
       <Table.Body>
         {eventResults.map((result) => {
           const {
