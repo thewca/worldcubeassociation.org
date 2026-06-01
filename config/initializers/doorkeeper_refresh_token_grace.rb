@@ -19,48 +19,49 @@
 #
 # Reuse detection is preserved: outside the window, or once the cache entry
 # has been replaced by a subsequent rotation, `invalid_grant` still fires.
-Rails.application.config.to_prepare do
-  module DoorkeeperRefreshTokenGrace
-    GRACE_PERIOD = 30.seconds
-    CACHE_NAMESPACE = "doorkeeper:refresh_grace"
+module DoorkeeperRefreshTokenGrace
+  GRACE_PERIOD = 30.seconds
+  CACHE_NAMESPACE = "doorkeeper:refresh_grace"
 
-    def self.cache_key(refresh_token)
-      digest = Digest::SHA256.hexdigest(refresh_token)
-      "#{CACHE_NAMESPACE}:#{digest}"
+  def self.cache_key(refresh_token)
+    digest = Digest::SHA256.hexdigest(refresh_token)
+    "#{CACHE_NAMESPACE}:#{digest}"
+  end
+
+  def self.remember_rotation(old_refresh_token, new_access_token_id)
+    Rails.cache.write(
+      cache_key(old_refresh_token),
+      new_access_token_id,
+      expires_in: GRACE_PERIOD,
+    )
+  end
+
+  def self.lookup_rotation(old_refresh_token)
+    Rails.cache.read(cache_key(old_refresh_token))
+  end
+
+  module RequestPatch
+    def validate_token
+      super || grace_replacement.present?
     end
 
-    def self.remember_rotation(old_refresh_token, new_access_token_id)
-      Rails.cache.write(
-        cache_key(old_refresh_token),
-        new_access_token_id,
-        expires_in: GRACE_PERIOD,
+    def before_successful_response
+      if (replacement = grace_replacement)
+        @access_token = replacement
+        return
+      end
+
+      super
+
+      return if @access_token.blank?
+
+      DoorkeeperRefreshTokenGrace.remember_rotation(
+        refresh_token.refresh_token,
+        @access_token.id,
       )
     end
 
-    def self.lookup_rotation(old_refresh_token)
-      Rails.cache.read(cache_key(old_refresh_token))
-    end
-
-    module RequestPatch
-      def validate_token
-        super || grace_replacement.present?
-      end
-
-      def before_successful_response
-        if (replacement = grace_replacement)
-          @access_token = replacement
-          return
-        end
-
-        super
-
-        DoorkeeperRefreshTokenGrace.remember_rotation(
-          refresh_token.refresh_token,
-          @access_token.id,
-        ) if @access_token.present?
-      end
-
-      private
+    private
 
       def grace_replacement
         return @grace_replacement if defined?(@grace_replacement)
@@ -81,8 +82,9 @@ Rails.application.config.to_prepare do
 
         replacement
       end
-    end
   end
+end
 
+Rails.application.config.to_prepare do
   Doorkeeper::OAuth::RefreshTokenRequest.prepend(DoorkeeperRefreshTokenGrace::RequestPatch)
 end
