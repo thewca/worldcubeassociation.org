@@ -12757,7 +12757,7 @@ __metadata:
     openapi-react-query: "npm:^0.5.4"
     openapi-typescript: "npm:^7.13.0"
     payload: "npm:3.84.1"
-    payload-authjs: "npm:^0.10.1"
+    payload-authjs: "npm:^0.10.2"
     prettier: "npm:^3.8.3"
     react: "npm:^19.2.6"
     react-dom: "npm:^19.2.6"
@@ -13471,15 +13471,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"payload-authjs@npm:^0.10.1":
-  version: 0.10.1
-  resolution: "payload-authjs@npm:0.10.1"
+"payload-authjs@npm:^0.10.2":
+  version: 0.10.2
+  resolution: "payload-authjs@npm:0.10.2"
   peerDependencies:
     "@payloadcms/ui": ^3.16.0
     next: ^15.0.0 || ^16.0.0
     next-auth: ^5.0.0-beta.25
     payload: ^3.16.0
-  checksum: 10c0/088e9541108dc7c854c3f3edf31a1910b048d235c977efa1f41aa4d7aa695285c261e3570ccac6bb7999dc4be60d3d884023c91189d6416708ce20da2a288bcb
+  checksum: 10c0/33e5e7e7408310a766a8ab51f2317e08cf2629a59149ddf0a372a2156e22a91e02afccc1e3acfeaa7842adf2b94c8ef4db40220f3837cd0e63019ce83a500dda
   languageName: node
   linkType: hard
 
