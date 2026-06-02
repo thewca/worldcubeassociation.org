@@ -11,13 +11,13 @@ import '../lib/polyfills';
 import autosize from 'autosize';
 import Rails from '@rails/ujs';
 import ReactOnRails from 'react-on-rails';
-import Disclaimer from '../components/StaticPages/Disclaimer';
-import About from '../components/StaticPages/About';
-import Logo from '../components/StaticPages/Logo';
-import OfficersAndBoard from '../components/OfficersAndBoard';
-import Delegates from '../components/Delegates';
-import TeamsCommitteesCouncils from '../components/TeamsCommitteesCouncils';
-import Translators from '../components/Translators';
+import Disclaimer from '../react_on_rails_components/StaticPages/Disclaimer';
+import About from '../react_on_rails_components/StaticPages/About';
+import Logo from '../react_on_rails_components/StaticPages/Logo';
+import OfficersAndBoard from '../react_on_rails_components/OfficersAndBoard';
+import Delegates from '../react_on_rails_components/Delegates';
+import TeamsCommitteesCouncils from '../react_on_rails_components/TeamsCommitteesCouncils';
+import Translators from '../react_on_rails_components/Translators';
 import {
   getUrlParams,
   setUrlParams,

@@ -4,7 +4,7 @@ import _ from 'lodash';
 import cn from 'classnames';
 import I18n from '../../lib/i18n';
 import { competitionsUrl } from '../../lib/requests/routes.js.erb';
-import UserBadge from '../UserBadge';
+import UserBadge from '../../components/UserBadge';
 
 const dasherize = (string) => _.kebabCase(string);
 

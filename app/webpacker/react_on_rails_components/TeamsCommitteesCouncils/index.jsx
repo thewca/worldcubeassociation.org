@@ -6,8 +6,8 @@ import I18n from '../../lib/i18n';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../lib/wca-data.js.erb';
 import useLoadedData from '../../lib/hooks/useLoadedData';
-import Loading from '../Requests/Loading';
-import Errored from '../Requests/Errored';
+import Loading from '../../components/Requests/Loading';
+import Errored from '../../components/Requests/Errored';
 import useHash from '../../lib/hooks/useHash';
 import GroupPage from './GroupPage';
 
