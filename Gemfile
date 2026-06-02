@@ -2,6 +2,7 @@
 
 source 'https://rubygems.org'
 
+gem 'bundler', '4.0.12'
 gem 'rails'
 gem 'rails-i18n'
 gem 'i18n-js'
