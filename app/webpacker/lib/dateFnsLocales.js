@@ -1,5 +1,9 @@
 // Maps each WCA locale code to a lazy loader for the corresponding date-fns locale.
 // Explicit imports are required so webpack can statically create the right chunks.
+// This is because:
+// 1. date-fns aliases its exports from folders to files and globbing will fail if those are changed
+// 2. We use slightly different locale codes
+// 3. We don't support all locales and don't want to create a chunk for each
 const loaders = {
   ca: () => import('date-fns/locale/ca'),
   cs: () => import('date-fns/locale/cs'),
