@@ -117,11 +117,11 @@ const { currentLocale } = window.wca;
 
 // Asynchronous setup: for any locale other than the default, fetch the
 // translation and date-fns chunks in parallel.
-const languagesToLoad = [currentLocale].filter((iso) => iso !== DEFAULT_LOCALE);
+const languageToLoad = [currentLocale].filter((iso) => iso !== DEFAULT_LOCALE);
 
 export const i18nReady = Promise.all([
   loadTranslationPluralizer(window.I18n, currentLocale),
-  ...languagesToLoad.map((iso) => Promise.all([
+  ...languageToLoad.map((iso) => Promise.all([
     loadTranslations(window.I18n, iso),
     loadDateTimeLocale(iso),
   ])),
