@@ -3,10 +3,10 @@ import {
   Button, ButtonGroup, Form, Header, Segment,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import EventSelector from '../wca/EventSelector';
+import EventSelector from '../../components/wca/EventSelector';
 import { countries } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
-import RegionSelector, { ALL_REGIONS_VALUE } from '../wca/RegionSelector';
+import RegionSelector, { ALL_REGIONS_VALUE } from '../../components/wca/RegionSelector';
 
 function getRegionIdWithFallback(region) {
   if (region === ALL_REGIONS_VALUE) {

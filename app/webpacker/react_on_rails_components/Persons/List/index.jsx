@@ -5,12 +5,12 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import I18n from '../../../lib/i18n';
 import useDebounce from '../../../lib/hooks/useDebounce';
-import { getPersons } from '../api/getPersons';
-import Loading from '../../Requests/Loading';
+import { getPersons } from '../../../components/Persons/api/getPersons';
+import Loading from '../../../components/Requests/Loading';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import { personUrl } from '../../../lib/requests/routes.js.erb';
 import { countries } from '../../../lib/wca-data.js.erb';
-import RegionSelector, { ALL_REGIONS_VALUE } from '../../wca/RegionSelector';
+import RegionSelector, { ALL_REGIONS_VALUE } from '../../../components/wca/RegionSelector';
 import useInputState from '../../../lib/hooks/useInputState';
 
 export default function Wrapper() {

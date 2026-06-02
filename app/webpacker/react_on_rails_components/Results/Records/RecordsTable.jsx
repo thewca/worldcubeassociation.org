@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { getRecords } from '../api/records';
-import Loading from '../../Requests/Loading';
+import Loading from '../../../components/Requests/Loading';
 import GroupedEventsTable from './GroupedEventsTable';
 import GroupedRankingTypesTable from './GroupedRankingTypesTable';
 import {
