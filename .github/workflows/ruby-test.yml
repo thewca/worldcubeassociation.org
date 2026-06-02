@@ -30,6 +30,14 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - suite: js # browser-driven feature specs tagged `:js`
+            rspec-args: "--tag js"
+          - suite: other # everything else
+            rspec-args: "--tag ~js"
     env:
       RACK_ENV: test
       RAILS_ENV: test
@@ -60,6 +68,7 @@ jobs:
       - name: Install fresh Yarn packages
         run: bin/yarn install
       - name: Run Overcommit commit hooks
+        if: matrix.suite == 'other' # lint/hooks only need to run once
         run: |
           gem install overcommit
           overcommit --sign
@@ -70,26 +79,43 @@ jobs:
       - name: Populate database with seeds
         run: bin/rake db:reset
       - name: Pre-compile assets for frontend tests
+        if: matrix.suite == 'js' # only the browser-driven `:js` specs need precompiled assets
         run: |
           bin/i18n export
           bin/rake assets:precompile
       - name: Cache Playwright runnables
+        if: matrix.suite == 'js'
         uses: actions/cache@v5
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}-capybara
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
+        if: matrix.suite == 'js'
         run: bin/yarn playwright install --with-deps --no-shell chromium
       - name: Run tests
         id: rspec
-        run: bin/rspec
+        run: bin/rspec ${{ matrix.rspec-args }}
       - name: Push coverage data to Coveralls
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: ${{ matrix.suite }}
+          parallel: true
           fail-on-error: false
       - uses: actions/upload-artifact@v7
         if: always() && steps.rspec.outcome == 'failure'
         with:
-          name: capybara-screenshots
+          name: capybara-screenshots-${{ matrix.suite }}
           path: tmp/capybara
+
+  finish-coverage:
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tell Coveralls all parallel jobs are done
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
+          fail-on-error: false
