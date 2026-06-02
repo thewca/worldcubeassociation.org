@@ -68,8 +68,6 @@
     "sass": "^1.100.0",
     "sass-loader": "^17.0.0",
     "semantic-ui-react": "^2.1.5",
-    "shakapacker": "10.1.0",
-    "shakapacker-webpack": "10.1.0",
     "style-loader": "^4.0.0",
     "webpack-manifest-plugin": "^6.0.1",
     "webpack-merge": "^6.0.1",
