@@ -1,8 +1,8 @@
 <% provide(:title, t('logo.title')) %>
 
-<%= react_component('StaticPages/Logo', {
+<%= react_on_rails_component("StaticPagesLogo", props: {
   title: yield(:title),
   logoFileUrl: asset_url('/files/WCA Logo Assets.zip')
-}, {
+}, html_options: {
   class: 'container'
 }) %>

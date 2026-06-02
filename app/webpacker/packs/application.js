@@ -12,6 +12,12 @@ import autosize from 'autosize';
 import Rails from '@rails/ujs';
 import ReactOnRails from 'react-on-rails';
 import Disclaimer from '../components/StaticPages/Disclaimer';
+import About from '../components/StaticPages/About';
+import Logo from '../components/StaticPages/Logo';
+import OfficersAndBoard from '../components/OfficersAndBoard';
+import Delegates from '../components/Delegates';
+import TeamsCommitteesCouncils from '../components/TeamsCommitteesCouncils';
+import Translators from '../components/Translators';
 import {
   getUrlParams,
   setUrlParams,
@@ -43,6 +49,12 @@ window.wca.setUrlParams = setUrlParams;
 
 ReactOnRails.register({
   StaticPagesDisclaimer: Disclaimer,
+  StaticPagesAbout: About,
+  StaticPagesLogo: Logo,
+  OfficersAndBoard,
+  Delegates,
+  TeamsCommitteesCouncils,
+  Translators,
 });
 
 // Support component names relative to this directory:
