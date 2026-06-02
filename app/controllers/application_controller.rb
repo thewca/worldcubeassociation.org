@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
 
   def update_locale
     # Validate the requested locale by looking at those available
-    if params[:locale] && I18n.available_locales.include?(params[:locale].to_sym)
+    if params[:locale].present? && I18n.available_locales.include?(params[:locale]&.to_sym)
       session[:locale] = params[:locale]
 
       # Display the success message in the new language!
