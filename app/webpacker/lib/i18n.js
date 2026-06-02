@@ -120,9 +120,11 @@ const { currentLocale } = window.wca;
 const languageToLoad = [currentLocale].filter((iso) => iso !== DEFAULT_LOCALE);
 
 export const i18nReady = Promise.all([
-  loadTranslationPluralizer(window.I18n, currentLocale),
+  // We always need to load english pluralizers
+  loadTranslationPluralizer(window.I18n, DEFAULT_LOCALE),
   ...languageToLoad.map((iso) => Promise.all([
     loadTranslations(window.I18n, iso),
     loadDateTimeLocale(iso),
+    loadTranslationPluralizer(window.I18n, iso),
   ])),
 ]);
