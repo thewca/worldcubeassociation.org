@@ -39,6 +39,9 @@ const updateForRounds = (wcifEvents, roundIds, mapper) => wcifEvents.map((event)
 const upcycleAdvancementCondition = (round) => {
   const { advancementCondition: advCondition, format: formatId } = round;
 
+  // If you have not yet set a condition for this round, do not try to upcycle it
+  if (!advCondition) return null;
+
   const formatInfo = formats.byId[formatId];
   const sortingScope = formatInfo.sortBy;
 

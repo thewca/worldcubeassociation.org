@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import React from "react";
+import React, { ComponentProps } from "react";
 
 export const metadata: Metadata = {
   title: { absolute: "World Cube Association" },
@@ -117,6 +117,34 @@ const AnnouncementsSection = ({
   );
 };
 
+const BannerImageWithGradient = ({
+  mainImage,
+  targetColor,
+  gradientDirection,
+  boxWidth = "50%",
+}: {
+  mainImage: Media;
+  targetColor: ComponentProps<typeof Box>["bg"];
+  gradientDirection: "left" | "right";
+  boxWidth?: ComponentProps<typeof Box>["width"];
+}) => {
+  return (
+    <Box position="relative" width={boxWidth} hideBelow="md">
+      <MediaImage
+        media={mainImage as Media}
+        width="full"
+        maxHeight="sm"
+        bg={targetColor}
+      />
+      <AbsoluteCenter
+        width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
+        height="full"
+        bg={`linear-gradient(to ${gradientDirection}, transparent, transparent, {colors.${targetColor}})`}
+      />
+    </Box>
+  );
+};
+
 const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
   return (
     <Card.Root
@@ -127,49 +155,53 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       maxHeight="sm" // somewhat arbitrary, if you have a better idea please shout
       overflow="hidden"
     >
-      <Box position="relative" width="50%" hideBelow="md">
-        <MediaImage
-          media={block.mainImage as Media}
-          width="full"
-          maxHeight="sm"
-          bg="colorPalette.1A"
+      {block.imagePosition === "left" && (
+        <BannerImageWithGradient
+          mainImage={block.mainImage as Media}
+          targetColor="colorPalette.1A"
+          gradientDirection="right"
+          boxWidth={block.heading ? "50%" : "100%"}
         />
-        <AbsoluteCenter
-          width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
-          height="full"
-          bg="linear-gradient(to right, transparent, transparent, {colors.colorPalette.1A})"
-        />
-      </Box>
-
-      <Card.Body justifyContent="center">
-        <Card.Title
-          colorPalette={block.headingColor}
-          textStyle={{ base: "h3", md: "h2", xl: "h1" }}
-        >
-          {block.heading}
-        </Card.Title>
-        <ChakraMarkdown
-          paragraphAs={Card.Description}
-          textStyle={{ base: "body", md: "s2" }}
-        >
-          {block.bodyMarkdown}
-        </ChakraMarkdown>
-        {block.bgImage && (
-          <Float
-            placement="bottom-end"
-            width={`${block.bgSize}%`}
-            height={`${block.bgSize}%`}
-            offset={28}
+      )}
+      {block.heading && (
+        <Card.Body justifyContent="center">
+          <Card.Title
+            colorPalette={block.headingColor}
+            textStyle={{ base: "h3", md: "h2", xl: "h1" }}
           >
-            <MediaImage
-              media={block.bgImage as Media}
-              width="auto"
-              height="full"
-              fit="contain"
-            />
-          </Float>
-        )}
-      </Card.Body>
+            {block.heading}
+          </Card.Title>
+          <ChakraMarkdown
+            paragraphAs={Card.Description}
+            textStyle={{ base: "body", md: "s2" }}
+          >
+            {block.bodyMarkdown}
+          </ChakraMarkdown>
+          {block.bgImage && (
+            <Float
+              placement="bottom-end"
+              width={`${block.bgSize}%`}
+              height={`${block.bgSize}%`}
+              offset={28}
+            >
+              <MediaImage
+                media={block.bgImage as Media}
+                width="auto"
+                height="full"
+                fit="contain"
+              />
+            </Float>
+          )}
+        </Card.Body>
+      )}
+      {block.imagePosition === "right" && (
+        <BannerImageWithGradient
+          mainImage={block.mainImage as Media}
+          targetColor="colorPalette.1A"
+          gradientDirection="left"
+          boxWidth={block.heading ? "50%" : "100%"}
+        />
+      )}
     </Card.Root>
   );
 };

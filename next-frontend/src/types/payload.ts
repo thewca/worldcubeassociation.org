@@ -1187,8 +1187,8 @@ export interface AnnouncementsSectionBlock {
  * via the `definition` "ImageBannerBlock".
  */
 export interface ImageBannerBlock {
-  heading: string;
-  body: {
+  heading?: string | null;
+  body?: {
     root: {
       type: string;
       children: {
@@ -1202,9 +1202,10 @@ export interface ImageBannerBlock {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
   bodyMarkdown?: string | null;
   mainImage: string | Media;
+  imagePosition: 'left' | 'right';
   colorPalette: ColorPaletteSelect;
   /**
    * Use a slightly darker nuance of the color palette
@@ -1916,6 +1917,7 @@ export interface ImageBannerBlockSelect<T extends boolean = true> {
   body?: T;
   bodyMarkdown?: T;
   mainImage?: T;
+  imagePosition?: T;
   colorPalette?: T;
   colorPaletteDarker?: T;
   headingColor?: T;
