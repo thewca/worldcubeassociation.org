@@ -55,8 +55,10 @@ export default function AnnouncementsCard({
         <Accordion.Item value="see-all" layerStyle="fill.subtle">
           <Accordion.ItemTrigger textStyle="s1" asChild>
             <ChakraLink href="/posts" color="currentColor">
+              <Accordion.ItemIndicator transition={undefined}>
+                <LuChevronsRight />
+              </Accordion.ItemIndicator>
               See all announcements
-              <LuChevronsRight />
             </ChakraLink>
           </Accordion.ItemTrigger>
         </Accordion.Item>
