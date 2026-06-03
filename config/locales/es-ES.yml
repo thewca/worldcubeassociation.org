@@ -2914,6 +2914,11 @@ es-ES:
         favor recuerda especificarlo en los requisitos de registro.
       #original_hash: 51376ef
       schedule_locked_after_results_submitted: El horario no se puede editar tras haber subido los resultados.
+      #original_hash: 1877b69
+      spots_left:
+        zero: Competición llena
+        one: Una plaza libre
+        other: '%{count} plazas libres'
     live:
       #original_hash: 10d1a3c
       title: Resultados en directo
@@ -2925,10 +2930,17 @@ es-ES:
       connection:
         #original_hash: f92b311
         initialized: Se está inicializando la conexión
-        #original_hash: 66d44d4
-        connected: 'Conectado, los resultados se están actualizando'
+        #original_hash: b574812
+        connected: 'Conectado, recibiendo actualizaciones de los resultados en directo'
         #original_hash: 53abaa2
         disconnected: 'Conexión perdida, los resultados no se están actualizando'
+        status:
+          #original_hash: 3ec2f2a
+          initialized: Inicializando
+          #original_hash: c2f9b7b
+          connected: Conectado
+          #original_hash: 771e05f
+          disconnected: Desconectado
       podiums:
         #original_hash: 02ae2bd
         title: Podios

@@ -1,6 +1,7 @@
-import { Accordion } from "@chakra-ui/react";
+import { Accordion, Link as ChakraLink } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
 import { Announcement, User } from "@/types/payload";
+import { LuChevronsRight } from "react-icons/lu";
 
 function AnnouncementItem({ announcement }: { announcement: Announcement }) {
   const publishedByUser = announcement.publishedBy as User;
@@ -31,10 +32,12 @@ export default function AnnouncementsCard({
   hero,
   others = [],
   colorPalette,
+  showSeeAll = true,
 }: {
   hero: Announcement;
   others: Announcement[];
   colorPalette: string;
+  showSeeAll?: boolean;
 }) {
   return (
     <Accordion.Root
@@ -47,6 +50,19 @@ export default function AnnouncementsCard({
       {others.map((announcement) => (
         <AnnouncementItem key={announcement.id} announcement={announcement} />
       ))}
+
+      {showSeeAll && (
+        <Accordion.Item value="see-all" layerStyle="fill.subtle">
+          <Accordion.ItemTrigger textStyle="s1" asChild>
+            <ChakraLink href="/posts" color="currentColor">
+              <Accordion.ItemIndicator transition={undefined}>
+                <LuChevronsRight />
+              </Accordion.ItemIndicator>
+              See all announcements
+            </ChakraLink>
+          </Accordion.ItemTrigger>
+        </Accordion.Item>
+      )}
     </Accordion.Root>
   );
 }
