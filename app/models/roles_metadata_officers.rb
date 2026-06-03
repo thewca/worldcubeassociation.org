@@ -10,5 +10,5 @@ class RolesMetadataOfficers < ApplicationRecord
     treasurer: "treasurer",
   }
 
-  scope :higher_permission, -> { where(status: [:chief_operating_officer]) }
+  scope :higher_permission, -> { where(status: %i[chief_operating_officer executive_director]) }
 end

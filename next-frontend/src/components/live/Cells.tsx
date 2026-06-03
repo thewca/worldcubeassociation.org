@@ -1,5 +1,5 @@
 import { Format } from "@/lib/wca/data/formats";
-import { Link, Table } from "@chakra-ui/react";
+import { Box, Link, Table } from "@chakra-ui/react";
 import { Stat, statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
 import { padSkipped } from "@/lib/live/padSkipped";
@@ -11,13 +11,11 @@ import { TFunction } from "i18next";
 export function LiveTableHeader({
   isLinked = false,
   format,
-  showFull = true,
   byPerson = false,
   isAdmin = false,
   t,
 }: {
   isLinked?: boolean;
-  showFull?: boolean;
   byPerson?: boolean;
   isAdmin?: boolean;
   format: Format;
@@ -45,22 +43,23 @@ export function LiveTableHeader({
             {t("competitions.live.results.competitor")}
           </Table.ColumnHeader>
         )}
-        {showFull && !byPerson && (
-          <Table.ColumnHeader>
+        {!byPerson && (
+          <Table.ColumnHeader hideBelow="md">
             {t("results.table_elements.region")}
           </Table.ColumnHeader>
         )}
         {isLinked && (
           <Table.ColumnHeader>
-            {showFull && t("competitions.results_table.round")}
+            <Box as="span" hideBelow="md">
+              {t("competitions.results_table.round")}
+            </Box>
           </Table.ColumnHeader>
         )}
-        {showFull &&
-          attemptIndexes.map((num) => (
-            <Table.ColumnHeader key={num} textAlign="right">
-              {num + 1}
-            </Table.ColumnHeader>
-          ))}
+        {attemptIndexes.map((num) => (
+          <Table.ColumnHeader key={num} textAlign="right" hideBelow="md">
+            {num + 1}
+          </Table.ColumnHeader>
+        ))}
         {stats.map((stat) => (
           <Table.ColumnHeader textAlign="right" key={stat.field}>
             {t(stat.i18nKey)}
@@ -113,11 +112,14 @@ export function LiveCompetitorCell({
       {link ? (
         <Link
           href={`/competitions/${competitionId}/live/competitors/${competitor.id}`}
+          hideBelow="md"
         >
           {competitor.name}
         </Link>
       ) : (
-        competitor.name
+        <Box as="span" hideFrom="md">
+          {competitor.name}
+        </Box>
       )}
     </Table.Cell>
   );
@@ -138,6 +140,7 @@ export function LiveAttemptsCells({
     <Table.Cell
       textAlign="right"
       key={`attempts-${competitorId}-${attempt.attempt_number}`}
+      hideBelow="md"
     >
       {formatAttemptResult(attempt.value, eventId)}
     </Table.Cell>

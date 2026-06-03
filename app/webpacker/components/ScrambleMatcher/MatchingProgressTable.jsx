@@ -17,7 +17,7 @@ function EventProgressRow({
 }) {
   return (
     <Table.Row>
-      <CellComponent textAlign="right" singleLine>{rowTitle}</CellComponent>
+      <CellComponent textAlign="right" collapsing singleLine>{rowTitle}</CellComponent>
       {matchStateEvents.map((evt) => (
         <CellComponent key={evt.id} textAlign="center" colSpan={evt.rounds.length}>
           {children(evt)}
@@ -37,7 +37,7 @@ function RoundsProgressRow({
 }) {
   return (
     <Table.Row>
-      <CellComponent textAlign="right" singleLine>{rowTitle}</CellComponent>
+      <CellComponent textAlign="right" collapsing singleLine>{rowTitle}</CellComponent>
       {matchStateEvents.flatMap((evt) => evt.rounds.map((rd) => {
         const progressValue = progressValueFn?.(rd, evt);
 

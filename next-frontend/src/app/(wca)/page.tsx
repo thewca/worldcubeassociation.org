@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import React from "react";
+import React, { ComponentProps } from "react";
 
 export const metadata: Metadata = {
   title: { absolute: "World Cube Association" },
@@ -112,7 +112,36 @@ const AnnouncementsSection = ({
       hero={mainAnnouncement}
       others={furtherAnnouncements}
       colorPalette={block.colorPalette}
+      showSeeAll={block.showSeeAll}
     />
+  );
+};
+
+const BannerImageWithGradient = ({
+  mainImage,
+  targetColor,
+  gradientDirection,
+  boxWidth = "50%",
+}: {
+  mainImage: Media;
+  targetColor: ComponentProps<typeof Box>["bg"];
+  gradientDirection: "left" | "right";
+  boxWidth?: ComponentProps<typeof Box>["width"];
+}) => {
+  return (
+    <Box position="relative" width={boxWidth} hideBelow="md">
+      <MediaImage
+        media={mainImage as Media}
+        width="full"
+        maxHeight="sm"
+        bg={targetColor}
+      />
+      <AbsoluteCenter
+        width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
+        height="full"
+        bg={`linear-gradient(to ${gradientDirection}, transparent, transparent, {colors.${targetColor}})`}
+      />
+    </Box>
   );
 };
 
@@ -123,52 +152,56 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       colorPalette={block.colorPalette}
       colorVariant="slatePastel"
       width="full"
-      maxHeight="md" // somewhat arbitrary, if you have a better idea please shout
+      maxHeight="sm" // somewhat arbitrary, if you have a better idea please shout
       overflow="hidden"
     >
-      <Box position="relative" width="50%" hideBelow="md">
-        <MediaImage
-          media={block.mainImage as Media}
-          width="full"
-          maxHeight="lg"
-          bg="colorPalette.1A"
+      {block.imagePosition === "left" && (
+        <BannerImageWithGradient
+          mainImage={block.mainImage as Media}
+          targetColor="colorPalette.1A"
+          gradientDirection="right"
+          boxWidth={block.heading ? "50%" : "100%"}
         />
-        <AbsoluteCenter
-          width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
-          height="full"
-          bg="linear-gradient(to right, transparent, transparent, {colors.colorPalette.1A})"
-        />
-      </Box>
-
-      <Card.Body justifyContent="center">
-        <Card.Title
-          colorPalette={block.headingColor}
-          textStyle={{ base: "h3", md: "h2", xl: "h1" }}
-        >
-          {block.heading}
-        </Card.Title>
-        <ChakraMarkdown
-          paragraphAs={Card.Description}
-          textStyle={{ base: "body", md: "s2" }}
-        >
-          {block.bodyMarkdown}
-        </ChakraMarkdown>
-        {block.bgImage && (
-          <Float
-            placement="bottom-end"
-            width={`${block.bgSize}%`}
-            height={`${block.bgSize}%`}
-            offset={28}
+      )}
+      {block.heading && (
+        <Card.Body justifyContent="center">
+          <Card.Title
+            colorPalette={block.headingColor}
+            textStyle={{ base: "h3", md: "h2", xl: "h1" }}
           >
-            <MediaImage
-              media={block.bgImage as Media}
-              width="auto"
-              height="full"
-              fit="contain"
-            />
-          </Float>
-        )}
-      </Card.Body>
+            {block.heading}
+          </Card.Title>
+          <ChakraMarkdown
+            paragraphAs={Card.Description}
+            textStyle={{ base: "body", md: "s2" }}
+          >
+            {block.bodyMarkdown}
+          </ChakraMarkdown>
+          {block.bgImage && (
+            <Float
+              placement="bottom-end"
+              width={`${block.bgSize}%`}
+              height={`${block.bgSize}%`}
+              offset={28}
+            >
+              <MediaImage
+                media={block.bgImage as Media}
+                width="auto"
+                height="full"
+                fit="contain"
+              />
+            </Float>
+          )}
+        </Card.Body>
+      )}
+      {block.imagePosition === "right" && (
+        <BannerImageWithGradient
+          mainImage={block.mainImage as Media}
+          targetColor="colorPalette.1A"
+          gradientDirection="left"
+          boxWidth={block.heading ? "50%" : "100%"}
+        />
+      )}
     </Card.Root>
   );
 };
@@ -213,9 +246,15 @@ const FeaturedCompetition = async ({
   if (error) return <OpenapiError t={t} response={response} />;
 
   return (
-    <Card.Root colorPalette={colorPalette} colorVariant="slatePastel">
+    <Card.Root
+      colorPalette={colorPalette}
+      colorVariant="slatePastel"
+      height="full"
+    >
       <Card.Body>
-        <Card.Title textStyle="h2">{competition.name}</Card.Title>
+        <Card.Title textStyle={{ base: "h3", md: "h2" }} flex="1">
+          {competition.name}
+        </Card.Title>
         <CompetitionShortlist comp={competition} t={t} />
       </Card.Body>
     </Card.Root>
@@ -229,15 +268,17 @@ const FeaturedCompetitions = async ({
 }) => (
   <Card.Root width="full">
     <Card.Body>
-      <Card.Title textStyle="h2" asChild>
-        <HStack justify="space-between">
-          <Text>Featured Upcoming Competitions</Text>
-          <Button asChild variant="outline" color="currentColor">
+      <Card.Title asChild>
+        <HStack justify="space-between" wrap="wrap">
+          <Text textStyle={{ base: "h2", md: "h1" }}>
+            Upcoming Competitions
+          </Text>
+          <Button asChild variant="outline">
             <Link href="/competitions">View all Competitions</Link>
           </Button>
         </HStack>
       </Card.Title>
-      <SimpleGrid columns={block.competitions?.length} gap={4}>
+      <SimpleGrid columns={{ base: 1, md: block.competitions?.length }} gap={4}>
         {block.competitions?.map((featuredComp) => (
           <FeaturedCompetition
             key={featuredComp.id}
@@ -311,38 +352,46 @@ type VerticalLayout =
   | TwoBlocksUnion["left"]
   | TwoBlocksUnion["right"];
 
-const renderVerticalLayout = (verticalLayout: VerticalLayout) => {
+const renderVerticalLayout = (
+  verticalLayout: VerticalLayout,
+  level: number = 0,
+) => {
   return (
     <VStack gap={8}>
-      {verticalLayout.map((entry, index) => {
-        switch (entry.blockType) {
-          case "twoBlocksLevel0":
-          case "twoBlocksLevel1":
-          case "twoBlocksLevel2":
-            return renderHorizontalSplit(entry, `entry-${index}`);
-          default:
-            return renderFullBlock(entry, `entry-${index}`);
-        }
+      {verticalLayout.map((entry) => {
+        return (
+          <React.Fragment key={entry.id}>
+            {renderBlock(entry, level)}
+          </React.Fragment>
+        );
       })}
     </VStack>
   );
 };
 
-const renderHorizontalSplit = (entry: TwoBlocksUnion, keyPrefix = "") => {
-  const { left, right } = RATIO_GRID_MAP[entry.ratio];
+const renderHorizontalSplit = (entry: TwoBlocksUnion, level: number) => {
+  const { left: leftCols, right: rightCols } = RATIO_GRID_MAP[entry.ratio];
+
+  const totalCols = leftCols + rightCols;
+  const foldMd = level <= 1;
 
   return (
     <SimpleGrid
-      key={keyPrefix}
-      columns={{ base: 1, md: left + right }}
+      columns={{ base: 1, md: foldMd ? 1 : totalCols, lg: totalCols }}
       gap={8}
       width="full"
     >
-      <GridItem colSpan={{ base: 1, md: left }} asChild>
-        {renderVerticalLayout(entry.left)}
+      <GridItem
+        colSpan={{ base: 1, md: foldMd ? 1 : leftCols, lg: leftCols }}
+        asChild
+      >
+        {renderVerticalLayout(entry.left, level)}
       </GridItem>
-      <GridItem colSpan={{ base: 1, md: right }} asChild>
-        {renderVerticalLayout(entry.right)}
+      <GridItem
+        colSpan={{ base: 1, md: foldMd ? 1 : rightCols, lg: rightCols }}
+        asChild
+      >
+        {renderVerticalLayout(entry.right, level)}
       </GridItem>
     </SimpleGrid>
   );
@@ -350,20 +399,24 @@ const renderHorizontalSplit = (entry: TwoBlocksUnion, keyPrefix = "") => {
 
 type LayoutBlock = VerticalLayout[number];
 
-const renderFullBlock = (entry: LayoutBlock, key = "") => {
+const renderBlock = (entry: LayoutBlock, level: number) => {
   switch (entry.blockType) {
+    case "twoBlocksLevel0":
+    case "twoBlocksLevel1":
+    case "twoBlocksLevel2":
+      return renderHorizontalSplit(entry, level + 1);
     case "TextCard":
-      return <TextCard key={key} block={entry} />;
+      return <TextCard block={entry} />;
     case "AnnouncementsSection":
-      return <AnnouncementsSection key={key} block={entry} />;
+      return <AnnouncementsSection block={entry} />;
     case "ImageBanner":
-      return <ImageBanner key={key} block={entry} />;
+      return <ImageBanner block={entry} />;
     case "ImageOnlyCard":
-      return <ImageOnlyCard key={key} block={entry} />;
+      return <ImageOnlyCard block={entry} />;
     case "FeaturedComps":
-      return <FeaturedCompetitions key={key} block={entry} />;
+      return <FeaturedCompetitions block={entry} />;
     case "TestimonialsSpinner":
-      return <TestimonialsSpinner key={key} block={entry} />;
+      return <TestimonialsSpinner block={entry} />;
 
     default:
       return null;
@@ -398,7 +451,7 @@ export default async function Homepage() {
   }
 
   return (
-    <Box p={8} asChild>
+    <Box p={{ base: "3.5", md: "6", lg: "8" }} asChild>
       {renderVerticalLayout(homepageEntries)}
     </Box>
   );

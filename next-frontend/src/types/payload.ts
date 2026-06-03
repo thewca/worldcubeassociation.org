@@ -1176,6 +1176,7 @@ export interface TextCardBlock {
 export interface AnnouncementsSectionBlock {
   mainAnnouncement: string | Announcement;
   furtherAnnouncements?: (string | Announcement)[] | null;
+  showSeeAll: boolean;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
@@ -1186,8 +1187,8 @@ export interface AnnouncementsSectionBlock {
  * via the `definition` "ImageBannerBlock".
  */
 export interface ImageBannerBlock {
-  heading: string;
-  body: {
+  heading?: string | null;
+  body?: {
     root: {
       type: string;
       children: {
@@ -1201,9 +1202,10 @@ export interface ImageBannerBlock {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
   bodyMarkdown?: string | null;
   mainImage: string | Media;
+  imagePosition: 'left' | 'right';
   colorPalette: ColorPaletteSelect;
   /**
    * Use a slightly darker nuance of the color palette
@@ -1901,6 +1903,7 @@ export interface TextCardBlockSelect<T extends boolean = true> {
 export interface AnnouncementsSectionBlockSelect<T extends boolean = true> {
   mainAnnouncement?: T;
   furtherAnnouncements?: T;
+  showSeeAll?: T;
   colorPalette?: T;
   id?: T;
   blockName?: T;
@@ -1914,6 +1917,7 @@ export interface ImageBannerBlockSelect<T extends boolean = true> {
   body?: T;
   bodyMarkdown?: T;
   mainImage?: T;
+  imagePosition?: T;
   colorPalette?: T;
   colorPaletteDarker?: T;
   headingColor?: T;

@@ -2,6 +2,7 @@
 
 source 'https://rubygems.org'
 
+gem 'bundler', '4.0.12'
 gem 'rails'
 gem 'rails-i18n'
 gem 'i18n-js'
@@ -65,7 +66,8 @@ gem 'aws-sdk-cloudfront'
 gem 'redis'
 # Faster Redis library
 gem 'hiredis'
-gem 'mini_magick'
+gem 'mini_magick', require: false
+gem 'ruby-vips', require: false
 gem 'mysql2'
 gem 'premailer-rails'
 gem 'nokogiri'
@@ -80,7 +82,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '10.0.0'
+gem 'shakapacker', '10.1.0'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
@@ -90,6 +92,7 @@ gem 'image_processing'
 gem 'rest-client'
 gem 'icalendar'
 gem 'react-rails'
+gem 'react_on_rails', '17.0.0.rc.0'
 gem 'sprockets-rails'
 gem 'jaro_winkler'
 gem 'sidekiq'
@@ -161,5 +164,4 @@ group :production do
   gem 'rack'
   gem 'newrelic_rpm'
   gem 'shoryuken'
-  gem 'ruby-vips'
 end

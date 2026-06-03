@@ -4,8 +4,8 @@ import LiveResultsTable from "@/components/live/LiveResultsTable";
 import {
   Heading,
   HStack,
-  IconButton,
   Spacer,
+  IconButton,
   Switch,
   VStack,
   Link,
@@ -57,8 +57,9 @@ export default function LiveUpdatingResultsTable({
     <VStack align="left">
       <HStack>
         <Heading textStyle={{ sm: "h3", md: "h2", lg: "h1" }}>{title}</Heading>
-        <ConnectionPulse connectionState={connectionState} />
+        {isAdminView && <ConnectionPulse connectionState={connectionState} />}
         <Spacer flex={1} />
+        {!isAdminView && <ConnectionPulse connectionState={connectionState} />}
         {isLinkedRound && (
           <Switch.Root
             checked={showLinkedRoundsView}

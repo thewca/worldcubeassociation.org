@@ -31,9 +31,10 @@ export default function ActionButtons({
         });
         setState("open");
       },
-      onError: () => {
+      onError: (error) => {
         toaster.create({
-          description: "Round opening failed",
+          description:
+            "status" in error ? error.status : "Round opening failed.",
           type: "error",
         });
       },

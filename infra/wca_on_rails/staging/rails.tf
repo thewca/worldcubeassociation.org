@@ -34,7 +34,7 @@ locals {
     },
     {
       name  = "DUMP_HOST"
-      value = "https://assets.worldcubeassociation.org"
+      value = "https://exports.worldcubeassociation.org"
     },
     {
       name  = "SHAKAPACKER_ASSET_HOST"
@@ -109,8 +109,8 @@ locals {
       value = "ELNTWW0SE1ZJ"
     },
     {
-      name = "CDN_ASSETS_DISTRIBUTION_ID"
-      value = "E3AXWQVI864TGL"
+      name = "CDN_EXPORTS_DISTRIBUTION_ID"
+      value = "E1752JAESQHVEE"
     },
     {
       name = "DATABASE_WRT_USER"

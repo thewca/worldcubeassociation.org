@@ -3,8 +3,8 @@ import { Header } from 'semantic-ui-react';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import DelegatesTable from './DelegatesTable';
-import Loading from '../Requests/Loading';
-import Errored from '../Requests/Errored';
+import Loading from '../../components/Requests/Loading';
+import Errored from '../../components/Requests/Errored';
 
 export default function DelegatesOfSubregion({ subregion, isAdminMode }) {
   const { data: delegates, loading, error } = useLoadedData(

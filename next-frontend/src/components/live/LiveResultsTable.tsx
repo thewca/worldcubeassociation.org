@@ -69,8 +69,10 @@ export default function LiveResultsTable({
 
   const stats = statColumnsForFormat(format);
 
-  const isMobile = useBreakpointValue({ base: true, md: false });
-  const showFull = !isMobile;
+  const isMobile = useBreakpointValue(
+    { base: true, md: false },
+    { fallback: "md" },
+  );
 
   return (
     <>
@@ -78,7 +80,6 @@ export default function LiveResultsTable({
         <LiveTableHeader
           format={format}
           isLinked={showLinkedRoundsView}
-          showFull={showFull}
           t={t}
           isAdmin={isAdmin}
         />
@@ -160,13 +161,14 @@ export default function LiveResultsTable({
                       competitionId={competitionId}
                       competitor={competitorAndTheirResults}
                       rowSpan={rowSpan}
-                      link={showFull && !isAdmin}
+                      link={!isAdmin}
                     />
                   )}
-                  {showText && showFull && (
+                  {showText && (
                     <CountryCell
                       countryIso2={competitorAndTheirResults.country_iso2}
                       rowSpan={rowSpan}
+                      hideBelow="md"
                     />
                   )}
                   {showLinkedRoundsView && (
@@ -174,14 +176,12 @@ export default function LiveResultsTable({
                       {parseActivityCode(result.round_wcif_id).roundNumber}
                     </Table.Cell>
                   )}
-                  {showFull && (
-                    <LiveAttemptsCells
-                      format={format}
-                      attempts={result.attempts}
-                      eventId={eventId}
-                      competitorId={competitorAndTheirResults.id}
-                    />
-                  )}
+                  <LiveAttemptsCells
+                    format={format}
+                    attempts={result.attempts}
+                    eventId={eventId}
+                    competitorId={competitorAndTheirResults.id}
+                  />
                   <LiveStatCells
                     stats={stats}
                     competitorId={competitorAndTheirResults.id}
