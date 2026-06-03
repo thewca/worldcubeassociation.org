@@ -161,7 +161,7 @@ export default function LiveResultsTable({
                       competitionId={competitionId}
                       competitor={competitorAndTheirResults}
                       rowSpan={rowSpan}
-                      isAdmin={isAdmin}
+                      link={!isAdmin}
                     />
                   )}
                   {showText && (

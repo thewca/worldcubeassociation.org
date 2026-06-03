@@ -97,31 +97,30 @@ export function LivePositionCell({
 }
 
 export function LiveCompetitorCell({
-  isAdmin = false,
+  link = true,
   rowSpan,
   competitionId,
   competitor,
 }: {
-  isAdmin?: boolean;
+  link?: boolean;
   rowSpan?: number;
   competitionId: string;
   competitor: Pick<LiveCompetitor, "id" | "name">;
 }) {
   return (
     <Table.Cell rowSpan={rowSpan}>
-      <Link
-        href={
-          isAdmin
-            ? `/registrations/${competitor.id}/edit`
-            : `/competitions/${competitionId}/live/competitors/${competitor.id}`
-        }
-        hideBelow="md"
-      >
-        {competitor.name}
-      </Link>
-      <Box as="span" hideFrom="md">
-        {competitor.name}
-      </Box>
+      {link ? (
+        <Link
+          href={`/competitions/${competitionId}/live/competitors/${competitor.id}`}
+          hideBelow="md"
+        >
+          {competitor.name}
+        </Link>
+      ) : (
+        <Box as="span" hideFrom="md">
+          {competitor.name}
+        </Box>
+      )}
     </Table.Cell>
   );
 }
