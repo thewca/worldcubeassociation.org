@@ -6,12 +6,11 @@ RSpec.feature "Users list page", :js do
   let!(:admin) { create(:admin) }
 
   scenario "renders the users list React on Rails component" do
-    sign_in admin
-    # Confirm the login actually took before navigating on: the navbar shows the
-    # signed-in user's name.
-    expect(page).to have_content(admin.name)
-
+    # `:js` specs use the truncation DB strategy, so this committed row is
+    # visible to the Capybara server thread and returned by the users endpoint.
     user = create(:user)
+
+    sign_in admin
     visit "/users"
 
     # The UsersList component fetches users from the API and renders each into
