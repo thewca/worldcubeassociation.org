@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class DatabaseController < ApplicationController
-  rate_limit to: 5, within: 1.day, only: %i[sql_permalink tsv_permalink results_permalink dev_export_permalink] if Rails.env.production?
+  if Rails.env.production?
+    rate_limit to: 5, within: 1.day, name: "results_export", only: %i[sql_permalink tsv_permalink results_permalink]
+    rate_limit to: 5, within: 1.day, name: "dev_export",     only: %i[dev_export_permalink]
+  end
 
   RESULTS_EXPORT_FILE_TYPES = %w[sql tsv].freeze
 
