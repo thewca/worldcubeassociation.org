@@ -8,8 +8,8 @@ RSpec.feature "Officers and board page" do
     # visible to the Capybara server thread. We need at least one board role
     # because the component dereferences `board[0]` and would otherwise crash
     # (and render nothing) when no board members exist.
-    chair = FactoryBot.create(:chair_role)
-    board_member = FactoryBot.create(:board_role)
+    chair = create(:chair_role)
+    board_member = create(:board_role)
 
     visit "/officers-and-board"
 
