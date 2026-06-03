@@ -152,7 +152,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       colorPalette={block.colorPalette}
       colorVariant="slatePastel"
       width="full"
-      maxHeight="sm" // somewhat arbitrary, if you have a better idea please shout
+      maxHeight="xs" // somewhat arbitrary, if you have a better idea please shout
       overflow="hidden"
     >
       {block.imagePosition === "left" && (
@@ -206,6 +206,17 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
   );
 };
 
+const ImageOnlyCardImage = ({ block }: { block: ImageOnlyCardBlock }) => {
+  return (
+    <MediaImage
+      media={block.mainImage as Media}
+      altFallback={block.heading}
+      aspectRatio="2/1"
+      maxHeight="10rem" // somewhat arbitrary, if you have a better idea please shout!
+    />
+  );
+};
+
 const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
   return (
     <Card.Root
@@ -214,17 +225,13 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
       colorVariant="slatePastel"
       width="full"
     >
-      <MediaImage
-        media={block.mainImage as Media}
-        altFallback={block.heading}
-        aspectRatio="2/1"
-        maxHeight="10rem" // somewhat arbitrary, if you have a better idea please shout!
-      />
+      {block.textPosition === "bottom" && <ImageOnlyCardImage block={block} />}
       {block.heading && (
         <Card.Body>
           <Card.Title textStyle="h2">{block.heading}</Card.Title>
         </Card.Body>
       )}
+      {block.textPosition === "top" && <ImageOnlyCardImage block={block} />}
     </Card.Root>
   );
 };
