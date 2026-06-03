@@ -9,7 +9,7 @@ import { competitionEditRegistrationsUrl, editCompetitionsUrl } from '../../lib/
 import {
   DateTableCell, LocationTableCell, NameTableCell, ReportTableCell,
 } from './TableCells';
-import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import I18nHTMLTranslate from '../../components/I18nHTMLTranslate';
 import { toRelativeOptions } from '../../lib/utils/dates';
 
 const competingStatusIcon = (competingStatus) => {

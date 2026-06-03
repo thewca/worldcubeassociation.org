@@ -6,7 +6,7 @@ import I18n from '../../lib/i18n';
 import {
   DateTableCell, LocationTableCell, NameTableCell, ReportTableCell,
 } from './TableCells';
-import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import I18nHTMLTranslate from '../../components/I18nHTMLTranslate';
 
 export default function PastCompetitionsTable({
   competitions,
