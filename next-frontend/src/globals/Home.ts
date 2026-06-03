@@ -41,6 +41,12 @@ const AnnouncementsSection: Block = {
       relationTo: "announcements",
       hasMany: true,
     },
+    {
+      name: "showSeeAll",
+      type: "checkbox",
+      required: true,
+      defaultValue: true,
+    },
     colorPaletteSelect,
   ],
 };
