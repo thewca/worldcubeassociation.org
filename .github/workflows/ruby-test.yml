@@ -28,7 +28,7 @@ on:
       - 'lib/sanity_check_sql/**/*.sql'
 
 jobs:
-  test:
+  rspec:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -108,8 +108,22 @@ jobs:
           name: capybara-screenshots-${{ matrix.suite }}
           path: tmp/capybara
 
+  # Single aggregating check so branch protection can require one stable name
+  # ("test") regardless of how the rspec matrix above evolves.
+  test:
+    needs: rspec
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify all rspec matrix jobs passed
+        run: |
+          if [ "${{ needs.rspec.result }}" != "success" ]; then
+            echo "One or more rspec matrix jobs failed: ${{ needs.rspec.result }}"
+            exit 1
+          fi
+
   finish-coverage:
-    needs: test
+    needs: rspec
     if: always()
     runs-on: ubuntu-latest
     steps:
