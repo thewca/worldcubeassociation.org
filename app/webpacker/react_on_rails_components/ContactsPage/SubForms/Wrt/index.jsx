@@ -6,7 +6,7 @@ import I18n from '../../../../lib/i18n';
 import { useDispatch, useStore } from '../../../../lib/providers/StoreProvider';
 import { updateSectionData } from '../../store/actions';
 import OtherQuery from './OtherQuery';
-import Loading from '../../../Requests/Loading';
+import Loading from '../../../../components/Requests/Loading';
 import useLoggedInUserPermissions from '../../../../lib/hooks/useLoggedInUserPermissions';
 
 const SECTION = 'wrt';

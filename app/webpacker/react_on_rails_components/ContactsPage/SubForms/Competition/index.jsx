@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormTextArea } from 'semantic-ui-react';
-import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
+import { IdWcaSearch } from '../../../../components/SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../../../components/SearchWidget/SearchModel';
 import I18n from '../../../../lib/i18n';
 import { useDispatch, useStore } from '../../../../lib/providers/StoreProvider';
 import { updateSectionData } from '../../store/actions';

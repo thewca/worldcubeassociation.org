@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { Container, Header, Message } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
 import I18n from '../../lib/i18n';
-import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import I18nHTMLTranslate from '../../components/I18nHTMLTranslate';
 import { apiV0Urls, viewUrls } from '../../lib/requests/routes.js.erb';
-import Loading from '../Requests/Loading';
+import Loading from '../../components/Requests/Loading';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
-import Errored from '../Requests/Errored';
+import Errored from '../../components/Requests/Errored';
 import EditProfileForm from './EditProfileForm';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
 import useQueryParams from '../../lib/hooks/useQueryParams';
 import useInputState from '../../lib/hooks/useInputState';
-import { IdWcaSearch } from '../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../SearchWidget/SearchModel';
+import { IdWcaSearch } from '../../components/SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../components/SearchWidget/SearchModel';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 
 export default function Wrapper({ loggedInUserId, recaptchaPublicKey }) {
