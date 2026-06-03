@@ -409,3 +409,47 @@ resource "aws_ecs_service" "this" {
     Name = var.name_prefix
   }
 }
+
+# Notify on failed blue/green deployments of the Rails service.
+# Native ECS deployments emit "ECS Deployment State Change" events to EventBridge;
+# we forward the failures to the existing deploy-notifications SNS topic (pipeline.tf).
+resource "aws_cloudwatch_event_rule" "rails_deployment_failed" {
+  name        = "${var.name_prefix}-deployment-failed"
+  description = "Capture failed ECS deployments for the Rails production service"
+
+  event_pattern = jsonencode({
+    source        = ["aws.ecs"]
+    "detail-type" = ["ECS Deployment State Change"]
+    resources     = [aws_ecs_service.this.id]
+    detail = {
+      eventName = ["SERVICE_DEPLOYMENT_FAILED"]
+    }
+  })
+}
+
+resource "aws_cloudwatch_event_target" "rails_deployment_failed_sns" {
+  rule      = aws_cloudwatch_event_rule.rails_deployment_failed.name
+  target_id = "deploy-notifications"
+  arn       = aws_sns_topic.deploy_notifications.arn
+}
+
+# Notify when a blue/green deployment of the Rails service starts.
+resource "aws_cloudwatch_event_rule" "rails_deployment_started" {
+  name        = "${var.name_prefix}-deployment-started"
+  description = "Capture started ECS deployments for the Rails production service"
+
+  event_pattern = jsonencode({
+    source        = ["aws.ecs"]
+    "detail-type" = ["ECS Deployment State Change"]
+    resources     = [aws_ecs_service.this.id]
+    detail = {
+      eventName = ["SERVICE_DEPLOYMENT_IN_PROGRESS"]
+    }
+  })
+}
+
+resource "aws_cloudwatch_event_target" "rails_deployment_started_sns" {
+  rule      = aws_cloudwatch_event_rule.rails_deployment_started.name
+  target_id = "deploy-notifications"
+  arn       = aws_sns_topic.deploy_notifications.arn
+}

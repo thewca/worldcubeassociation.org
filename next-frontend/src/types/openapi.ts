@@ -1014,6 +1014,20 @@ export interface components {
             attempts: components["schemas"]["LiveAttempt"][];
             registration_id: number;
         };
+        General404: {
+            error: string;
+            data: {
+                model: string;
+                id: string;
+            };
+        };
+        Competition404: components["schemas"]["General404"] & {
+            data?: {
+                /** @enum {string} */
+                model: "Competition";
+                id: string;
+            };
+        };
         UserAvatar: {
             /**
              * Format: uri
@@ -1229,23 +1243,11 @@ export interface components {
             "registration_full?": boolean;
             /** @example true */
             "registration_full_and_accepted?": boolean;
+            /** @example 42 */
+            spots_left?: number | null;
             tab_names: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
-        };
-        General404: {
-            error: string;
-            data: {
-                model: string;
-                id: string;
-            };
-        };
-        Competition404: components["schemas"]["General404"] & {
-            data?: {
-                /** @enum {string} */
-                model: "Competition";
-                id: string;
-            };
         };
         WcifEvent: {
             /** @example 333 */
@@ -1703,6 +1705,28 @@ export interface components {
         };
     };
     responses: {
+        /** @description Not logged in */
+        NotLoggedIn: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    error: string;
+                };
+            };
+        };
+        /** @description Organizer privileges required */
+        NotPermitted: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    error: string;
+                };
+            };
+        };
         /** @description Competition not found */
         CompetitionNotFound: {
             headers: {
@@ -1831,7 +1855,10 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LiveCompetitor"][];
+                    "application/json": {
+                        status: string;
+                        next_advancing: components["schemas"]["LiveCompetitor"][];
+                    };
                 };
             };
         };
@@ -1977,6 +2004,21 @@ export interface operations {
                     };
                 };
             };
+            /** @description Round cannot be opened */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        status: "score taking is not finished in the previous round" | "round already open" | "regulation 9m3: a round with 7 or fewer competitors must not have subsequent rounds" | "regulation 9m2: a round with 15 or fewer competitors must have at most one subsequent round" | "regulation 9m1: a round with 99 or fewer competitors must have at most two subsequent rounds";
+                    };
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            403: components["responses"]["NotPermitted"];
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     clearCompetitor: {

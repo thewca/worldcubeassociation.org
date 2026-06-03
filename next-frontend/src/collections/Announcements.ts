@@ -3,6 +3,9 @@ import { markdownConvertedField } from "@/collections/helpers";
 
 export const Announcements: CollectionConfig = {
   slug: "announcements",
+  admin: {
+    useAsTitle: "title",
+  },
   fields: [
     {
       name: "image",
