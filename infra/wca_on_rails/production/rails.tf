@@ -453,3 +453,24 @@ resource "aws_cloudwatch_event_target" "rails_deployment_started_sns" {
   target_id = "deploy-notifications"
   arn       = aws_sns_topic.deploy_notifications.arn
 }
+
+# Notify when a blue/green deployment of the Rails service finishes successfully.
+resource "aws_cloudwatch_event_rule" "rails_deployment_completed" {
+  name        = "${var.name_prefix}-deployment-completed"
+  description = "Capture completed ECS deployments for the Rails production service"
+
+  event_pattern = jsonencode({
+    source        = ["aws.ecs"]
+    "detail-type" = ["ECS Deployment State Change"]
+    resources     = [aws_ecs_service.this.id]
+    detail = {
+      eventName = ["SERVICE_DEPLOYMENT_COMPLETED"]
+    }
+  })
+}
+
+resource "aws_cloudwatch_event_target" "rails_deployment_completed_sns" {
+  rule      = aws_cloudwatch_event_rule.rails_deployment_completed.name
+  target_id = "deploy-notifications"
+  arn       = aws_sns_topic.deploy_notifications.arn
+}
