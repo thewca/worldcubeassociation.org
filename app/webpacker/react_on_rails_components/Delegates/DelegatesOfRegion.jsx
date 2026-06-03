@@ -2,10 +2,10 @@ import React, { useCallback, useMemo } from 'react';
 import { Grid, Label, Segment } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
-import Errored from '../Requests/Errored';
-import Loading from '../Requests/Loading';
+import Errored from '../../components/Requests/Errored';
+import Loading from '../../components/Requests/Loading';
 import useLoadedData from '../../lib/hooks/useLoadedData';
-import UserBadge from '../UserBadge';
+import UserBadge from '../../components/UserBadge';
 import DelegatesTable from './DelegatesTable';
 import DelegatesOfSubregion from './DelegatesOfSubregion';
 

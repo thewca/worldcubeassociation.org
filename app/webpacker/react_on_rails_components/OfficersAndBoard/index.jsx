@@ -5,10 +5,10 @@ import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
 import useLoadedData from '../../lib/hooks/useLoadedData';
-import Loading from '../Requests/Loading';
-import Errored from '../Requests/Errored';
-import UserBadge from '../UserBadge';
-import EmailButton from '../EmailButton';
+import Loading from '../../components/Requests/Loading';
+import Errored from '../../components/Requests/Errored';
+import UserBadge from '../../components/UserBadge';
+import EmailButton from '../../components/EmailButton';
 
 export default function OfficersAndBoard() {
   const { data: officers, loading: officersLoading, error: officersError } = useLoadedData(
