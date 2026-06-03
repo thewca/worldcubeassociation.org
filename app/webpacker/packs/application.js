@@ -31,6 +31,7 @@ import PostsWidget from '../react_on_rails_components/Posts/PostsWidget';
 import CreatePost from '../react_on_rails_components/Posts/CreatePost';
 import EditPost from '../react_on_rails_components/Posts/EditPost';
 import LivestreamManager from '../react_on_rails_components/Posts/LivestreamManager';
+import CompetitionsOverview from '../react_on_rails_components/CompetitionsOverview';
 import {
   getUrlParams,
   setUrlParams,
@@ -81,6 +82,7 @@ ReactOnRails.register({
   CreatePost,
   EditPost,
   LivestreamManager,
+  CompetitionsOverview,
 });
 
 // Support component names relative to this directory:
