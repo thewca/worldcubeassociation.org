@@ -20,6 +20,8 @@ adv_cond AS (
   LEFT JOIN competition_events AS cevents
   ON rounds.competition_event_id = cevents.id
   WHERE cevents.competition_id IN (SELECT competition_id FROM competitions_with_advancement)
+    -- Exclude the first of two dual rounds, whose advancement condition is meaningless
+    AND NOT (rounds.number = 1 AND rounds.linked_round_id IS NOT NULL)
 ),
 re AS (
   SELECT
