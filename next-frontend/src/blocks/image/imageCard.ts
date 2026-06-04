@@ -16,6 +16,15 @@ export const ImageCardBlock: Block = {
       name: "heading",
       type: "text",
     },
+    {
+      name: "textPosition",
+      type: "radio",
+      options: ["top", "bottom"],
+      defaultValue: "top",
+      admin: {
+        layout: "horizontal",
+      },
+    },
     colorPaletteSelect,
   ],
 };
