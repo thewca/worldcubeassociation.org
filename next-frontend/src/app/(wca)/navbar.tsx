@@ -23,6 +23,7 @@ import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
 import WCALogo from "@/components/WCALogo";
+import WcaSearch from "@/components/SearchBar/WcaSearch";
 
 type NavbarEntry<K extends string = "displayText"> = {
   [P in K]: string;
@@ -263,6 +264,9 @@ export default async function Navbar() {
             {showEmptyMessage && (
               <Text hideBelow="md">Oh no, there are no navbar items!</Text>
             )}
+            <Box hideBelow="md" minW="xs">
+              <WcaSearch />
+            </Box>
             <ColorModeButton />
             <Box hideBelow="md">
               <LanguageSelector />
@@ -283,6 +287,7 @@ export default async function Navbar() {
         <Box hideFrom="md">
           <Collapsible.Content>
             <VStack align="stretch" px={3} pb={3} gap={1}>
+              <WcaSearch />
               {showEmptyMessage && (
                 <Text>Oh no, there are no navbar items!</Text>
               )}
