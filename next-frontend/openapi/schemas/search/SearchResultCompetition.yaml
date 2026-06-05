@@ -1,0 +1,22 @@
+type: object
+required:
+  - class
+  - id
+  - name
+  - url
+properties:
+  class:
+    type: string
+    enum:
+      - competition
+  id:
+    type: string
+  name:
+    type: string
+  city:
+    type: string
+  country_iso2:
+    type: string
+  url:
+    type: string
+    format: uri
