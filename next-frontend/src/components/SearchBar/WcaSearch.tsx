@@ -18,7 +18,6 @@ import useDebounce from "@/lib/hooks/useDebounce";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import type { components } from "@/types/openapi";
-import { Prose } from "@/components/ui/prose";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 
 const DEBOUNCE_MS = 300;
