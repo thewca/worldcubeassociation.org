@@ -18,6 +18,8 @@ import useDebounce from "@/lib/hooks/useDebounce";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import type { components } from "@/types/openapi";
+import { Prose } from "@/components/ui/prose";
+import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 
 const DEBOUNCE_MS = 300;
 const MIN_QUERY_LENGTH = 3;
@@ -63,7 +65,7 @@ function ResultContent({
       return (
         <VStack align="start" gap={0}>
           <Text>{item.name}</Text>
-          <HStack gap={1} color="fg.muted" fontSize="sm">
+          <HStack gap={1} fontSize="sm">
             {item.country_iso2 && (
               <WcaFlag code={item.country_iso2} width={18} />
             )}
@@ -82,11 +84,7 @@ function ResultContent({
           </Avatar.Root>
           <VStack align="start" gap={0}>
             <Text>{item.name}</Text>
-            {item.wca_id && (
-              <Text color="fg.muted" fontSize="sm">
-                {item.wca_id}
-              </Text>
-            )}
+            {item.wca_id && <Text fontSize="sm">{item.wca_id}</Text>}
           </VStack>
         </HStack>
       );
@@ -105,11 +103,13 @@ function ResultContent({
     case "text":
     default:
       return (
-        <Text>
-          {t("search_results.index.search_for", {
+        <I18nHTMLTranslate
+          i18nKey="search_results.index.search_for"
+          options={{
             search_string: item.search,
-          })}
-        </Text>
+          }}
+          as={Text}
+        />
       );
   }
 }

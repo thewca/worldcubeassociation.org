@@ -264,7 +264,7 @@ export default async function Navbar() {
             {showEmptyMessage && (
               <Text hideBelow="md">Oh no, there are no navbar items!</Text>
             )}
-            <Box hideBelow="md" minW="xs">
+            <Box hideBelow="md" minW="md">
               <WcaSearch />
             </Box>
             <ColorModeButton />
