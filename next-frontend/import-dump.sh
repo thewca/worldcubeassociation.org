@@ -11,11 +11,13 @@ WORK_DIR=""
 MONGO_USER="root"
 MONGO_PASS="root"
 MONGO_AUTH_DB="admin"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Parse flags
 FORCE_CONTAINER=false
 FORCE_LOCAL=false
 CLEAN=false
+WITH_MEDIA=true
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -31,8 +33,12 @@ while [[ $# -gt 0 ]]; do
       CLEAN=true
       shift
       ;;
+    --without-media)
+      WITH_MEDIA=false
+      shift
+      ;;
     -h|--help)
-      echo "Usage: $0 [--force-container|--force-local] [--clean]"
+      echo "Usage: $0 [--force-container|--force-local] [--clean] [--without-media]"
       echo ""
       echo "Import CMS data into the local Payload MongoDB instance."
       echo ""
@@ -40,11 +46,13 @@ while [[ $# -gt 0 ]]; do
       echo "  --force-container Force execution via docker exec inside the container"
       echo "  --force-local     Force direct execution without docker exec (when already inside container)"
       echo "  --clean           Remove downloaded files after import"
+      echo "  --without-media   Skip downloading media files after the import"
       echo "  -h, --help        Show this help message"
       echo ""
       echo "The script auto-detects whether it's running on the host or inside"
       echo "a container. On the host, it uses 'docker exec' to run all operations"
-      echo "inside the '$CONTAINER_NAME' container."
+      echo "inside the '$CONTAINER_NAME' container, then downloads media files"
+      echo "into the local workspace unless --without-media is provided."
       exit 0
       ;;
     *)
@@ -124,7 +132,6 @@ run_import() {
 
   echo ""
   echo "✓ CMS data import complete!"
-  echo "  Restart your Next.js dev server if it's already running to pick up the new content."
 }
 
 # Main execution
@@ -168,12 +175,24 @@ if is_on_host; then
   CONTAINER_ARGS="$CONTAINER_ARGS --force-local"
 
   # Copy this script into container and execute it
-  SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
+  SCRIPT_PATH="$SCRIPT_DIR/$(basename "${BASH_SOURCE[0]}")"
   docker cp "$SCRIPT_PATH" "$CONTAINER_NAME:/tmp/import-dump.sh"
   docker exec "$CONTAINER_NAME" bash /tmp/import-dump.sh $CONTAINER_ARGS
+
+  if [ "$WITH_MEDIA" = true ]; then
+    echo ""
+    echo "==> Downloading media files into the local workspace..."
+    bash "$SCRIPT_DIR/download-media.sh"
+  fi
 
 else
   echo "Detected container environment. Running import directly..."
   echo ""
   run_import
+
+  if [ "$WITH_MEDIA" = true ]; then
+    echo ""
+    echo "Skipping media download because this run is executing inside the container."
+    echo "Run ./download-media.sh on the host to download media into the local workspace."
+  fi
 fi
