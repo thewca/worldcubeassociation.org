@@ -109,18 +109,17 @@ export function LiveCompetitorCell({
 }) {
   return (
     <Table.Cell rowSpan={rowSpan}>
-      {link ? (
+      {link && (
         <Link
           href={`/competitions/${competitionId}/live/competitors/${competitor.id}`}
           hideBelow="md"
         >
           {competitor.name}
         </Link>
-      ) : (
-        <Box as="span" hideFrom="md">
-          {competitor.name}
-        </Box>
       )}
+      <Box as="span" hideFrom={link ? "md" : undefined}>
+        {competitor.name}
+      </Box>
     </Table.Cell>
   );
 }
