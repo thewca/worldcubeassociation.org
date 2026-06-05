@@ -6,6 +6,7 @@ export const metadata: Metadata = {
 };
 import {
   SimpleGrid,
+  Grid,
   GridItem,
   Button,
   Card,
@@ -40,6 +41,7 @@ import type {
   Announcement,
   ColorPaletteSelect,
   Home,
+  GridBlock,
 } from "@/types/payload";
 import Link from "next/link";
 import { route } from "nextjs-routes";
@@ -66,12 +68,19 @@ const RATIO_GRID_MAP: Record<TwoBlocksRatio, TwoBlocksSpanConfig> = {
   "3/4 & 1/4": { left: 3, right: 1 },
 };
 
-const TextCard = ({ block }: { block: TextCardBlock }) => {
+const TextCard = ({
+  block,
+  fill = false,
+}: {
+  block: TextCardBlock;
+  fill?: boolean;
+}) => {
   return (
     <Card.Root
       colorPalette={block.colorPalette}
       colorVariant="slatePastel"
       width="full"
+      height={fill ? "full" : undefined}
     >
       {block.headerImage && (
         <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
@@ -98,8 +107,10 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
 
 const AnnouncementsSection = ({
   block,
+  fill = false,
 }: {
   block: AnnouncementsSectionBlock;
+  fill?: boolean;
 }) => {
   const mainAnnouncement = block.mainAnnouncement as Announcement;
   const furtherAnnouncements =
@@ -113,6 +124,7 @@ const AnnouncementsSection = ({
       others={furtherAnnouncements}
       colorPalette={block.colorPalette}
       showSeeAll={block.showSeeAll}
+      fill={fill}
     />
   );
 };
@@ -206,32 +218,54 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
   );
 };
 
-const ImageOnlyCardImage = ({ block }: { block: ImageOnlyCardBlock }) => {
+const ImageOnlyCardImage = ({
+  block,
+  fill = false,
+}: {
+  block: ImageOnlyCardBlock;
+  fill?: boolean;
+}) => {
+  // When filling a grid cell, the image grows (cover-cropped) to consume the
+  // card's extra height instead of being capped, so the cell looks solid.
+  const fillProps = fill
+    ? ({ flex: "1", minHeight: "0", width: "full", fit: "cover" } as const)
+    : ({ aspectRatio: "2/1", maxHeight: "10rem" } as const);
+
   return (
     <MediaImage
       media={block.mainImage as Media}
       altFallback={block.heading}
-      aspectRatio="2/1"
-      maxHeight="10rem" // somewhat arbitrary, if you have a better idea please shout!
+      {...fillProps}
     />
   );
 };
 
-const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
+const ImageOnlyCard = ({
+  block,
+  fill = false,
+}: {
+  block: ImageOnlyCardBlock;
+  fill?: boolean;
+}) => {
   return (
     <Card.Root
       overflow="hidden"
       colorPalette={block.colorPalette}
       colorVariant="slatePastel"
       width="full"
+      height={fill ? "full" : undefined}
     >
-      {block.textPosition === "bottom" && <ImageOnlyCardImage block={block} />}
+      {block.textPosition === "bottom" && (
+        <ImageOnlyCardImage block={block} fill={fill} />
+      )}
       {block.heading && (
         <Card.Body>
           <Card.Title textStyle="h2">{block.heading}</Card.Title>
         </Card.Body>
       )}
-      {block.textPosition === "top" && <ImageOnlyCardImage block={block} />}
+      {block.textPosition === "top" && (
+        <ImageOnlyCardImage block={block} fill={fill} />
+      )}
     </Card.Root>
   );
 };
@@ -404,22 +438,47 @@ const renderHorizontalSplit = (entry: TwoBlocksUnion, level: number) => {
   );
 };
 
+// Lays its items out as direct children of one CSS grid, so items in the same
+// row are genuinely equal height (which nested Horizontal Splitters cannot
+// guarantee across separate branches). Grid cells fill via `fill`.
+const GridSection = ({ block, level }: { block: GridBlock; level: number }) => {
+  return (
+    <Grid
+      templateColumns={{ base: "1fr", md: `repeat(${block.columns}, 1fr)` }}
+      gap={8}
+      width="full"
+    >
+      {block.items.map((item) => (
+        <GridItem
+          key={item.id}
+          colSpan={{ base: 1, md: item.colSpan }}
+          rowSpan={item.rowSpan}
+        >
+          {renderBlock(item.content[0], level, true)}
+        </GridItem>
+      ))}
+    </Grid>
+  );
+};
+
 type LayoutBlock = VerticalLayout[number];
 
-const renderBlock = (entry: LayoutBlock, level: number) => {
+const renderBlock = (entry: LayoutBlock, level: number, fill = false) => {
   switch (entry.blockType) {
     case "twoBlocksLevel0":
     case "twoBlocksLevel1":
     case "twoBlocksLevel2":
       return renderHorizontalSplit(entry, level + 1);
+    case "Grid":
+      return <GridSection block={entry} level={level} />;
     case "TextCard":
-      return <TextCard block={entry} />;
+      return <TextCard block={entry} fill={fill} />;
     case "AnnouncementsSection":
-      return <AnnouncementsSection block={entry} />;
+      return <AnnouncementsSection block={entry} fill={fill} />;
     case "ImageBanner":
       return <ImageBanner block={entry} />;
     case "ImageOnlyCard":
-      return <ImageOnlyCard block={entry} />;
+      return <ImageOnlyCard block={entry} fill={fill} />;
     case "FeaturedComps":
       return <FeaturedCompetitions block={entry} />;
     case "TestimonialsSpinner":

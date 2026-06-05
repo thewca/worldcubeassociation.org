@@ -87,6 +87,69 @@ const coreBlocks = [
   FeaturedCompetitions,
 ];
 
+// Unlike the nested binary "Horizontal Splitter" blocks (which render as
+// independent grid subtrees), a Grid block lays every item out as a direct child
+// of a single CSS grid. That makes items in the same row genuinely equal height,
+// which the splitters cannot guarantee across separate branches.
+const GridBlock: Block = {
+  slug: "Grid",
+  interfaceName: "GridBlock",
+  labels: {
+    singular: "Grid",
+    plural: "Grids",
+  },
+  fields: [
+    {
+      name: "columns",
+      type: "number",
+      required: true,
+      defaultValue: 4,
+      admin: {
+        description: "Number of columns the grid is divided into.",
+      },
+    },
+    {
+      name: "items",
+      type: "array",
+      required: true,
+      minRows: 1,
+      fields: [
+        {
+          type: "row",
+          fields: [
+            {
+              name: "colSpan",
+              type: "number",
+              required: true,
+              defaultValue: 1,
+              admin: {
+                description: "How many columns this item spans.",
+              },
+            },
+            {
+              name: "rowSpan",
+              type: "number",
+              required: true,
+              defaultValue: 1,
+              admin: {
+                description: "How many rows this item spans.",
+              },
+            },
+          ],
+        },
+        {
+          name: "content",
+          type: "blocks",
+          blocks: coreBlocks,
+          required: true,
+          minRows: 1,
+          maxRows: 1,
+        },
+      ],
+    },
+  ],
+};
+
 const createTwoBlocks = (depth: number = 1): Block => {
   const allowedBlocks =
     depth === 0 ? coreBlocks : [...coreBlocks, createTwoBlocks(depth - 1)];
@@ -141,7 +204,7 @@ export const Home: GlobalConfig = {
     {
       name: "layout",
       type: "blocks",
-      blocks: [...coreBlocks, createTwoBlocks(2)],
+      blocks: [...coreBlocks, createTwoBlocks(2), GridBlock],
       required: true,
     },
   ],

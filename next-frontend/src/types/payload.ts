@@ -1133,10 +1133,34 @@ export interface Home {
     | TestimonialsBlock
     | FeaturedCompetitionsBlock
     | TwoBlocksLevel2Block
+    | GridBlock
   )[];
   _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GridBlock".
+ */
+export interface GridBlock {
+  columns: number;
+  items: {
+    colSpan: number;
+    rowSpan: number;
+    content: (
+      | TextCardBlock
+      | AnnouncementsSectionBlock
+      | ImageBannerBlock
+      | ImageOnlyCardBlock
+      | TestimonialsBlock
+      | FeaturedCompetitionsBlock
+    )[];
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'Grid';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -33,17 +33,20 @@ export default function AnnouncementsCard({
   others = [],
   colorPalette,
   showSeeAll = true,
+  fill = false,
 }: {
   hero: Announcement;
   others: Announcement[];
   colorPalette: string;
   showSeeAll?: boolean;
+  fill?: boolean;
 }) {
   return (
     <Accordion.Root
       variant="card"
       defaultValue={[hero.id]}
       colorPalette={colorPalette}
+      height={fill ? "full" : undefined}
     >
       <AnnouncementItem announcement={hero} />
 
