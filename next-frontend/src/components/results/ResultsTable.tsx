@@ -142,12 +142,16 @@ export function ByPersonTable({
               </Table.Cell>
               <Table.Cell>{competitorResult.pos}</Table.Cell>
               <Table.Cell>
-                <WithRecordTag recordTag={competitorResult.regional_single_record}>
+                <WithRecordTag
+                  recordTag={competitorResult.regional_single_record}
+                >
                   {formatAttemptResult(competitorResult.best, eventId)}
                 </WithRecordTag>
               </Table.Cell>
               <Table.Cell>
-                <WithRecordTag recordTag={competitorResult.regional_average_record}>
+                <WithRecordTag
+                  recordTag={competitorResult.regional_average_record}
+                >
                   {formatAttemptResult(competitorResult.average, eventId)}
                 </WithRecordTag>
               </Table.Cell>
