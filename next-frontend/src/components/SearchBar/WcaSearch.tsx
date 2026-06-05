@@ -12,45 +12,50 @@ import {
   VStack,
   createListCollection,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
 import { LuSearch } from "react-icons/lu";
 import WcaFlag from "@/components/WcaFlag";
 import useDebounce from "@/lib/hooks/useDebounce";
+import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import type { components } from "@/types/openapi";
 
 const DEBOUNCE_MS = 300;
 const MIN_QUERY_LENGTH = 3;
 
-type SearchResultItem = {
+type SearchResult = components["schemas"]["SearchResult"];
+
+// Synthetic option, added client-side, that links to the full search page.
+type SearchTextItem = {
+  class: "text";
   id: string;
-  class: "competition" | "user" | "person" | "regulation" | "incident" | "text";
   url: string;
-  name?: string;
-  // competition
-  city?: string;
-  country_iso2?: string;
-  // user / person
-  wca_id?: string;
-  avatar?: components["schemas"]["UserAvatar"];
-  // regulation
-  content_html?: string;
-  // incident
-  title?: string;
-  // synthetic "search for" item
-  search?: string;
+  search: string;
 };
 
-const itemValue = (item: SearchResultItem) => `${item.class}-${item.id}`;
+type ComboItem = SearchResult | SearchTextItem;
 
-const itemLabel = (item: SearchResultItem) =>
-  item.name ?? item.title ?? item.search ?? item.id;
+const itemValue = (item: ComboItem) => `${item.class}-${item.id}`;
+
+const itemLabel = (item: ComboItem) => {
+  switch (item.class) {
+    case "competition":
+    case "person":
+      return item.name;
+    case "incident":
+      return item.title;
+    case "text":
+      return item.search;
+    case "regulation":
+    default:
+      return item.id;
+  }
+};
 
 function ResultContent({
   item,
   t,
 }: {
-  item: SearchResultItem;
+  item: ComboItem;
   t: ReturnType<typeof useT>["t"];
 }) {
   switch (item.class) {
@@ -66,7 +71,6 @@ function ResultContent({
           </HStack>
         </VStack>
       );
-    case "user":
     case "person":
       return (
         <HStack gap={2}>
@@ -112,43 +116,36 @@ function ResultContent({
 
 export default function WcaSearch() {
   const { t } = useT();
+  const api = useAPI();
 
   const [query, setQuery] = useState("");
 
   const debouncedQuery = useDebounce(query, DEBOUNCE_MS);
   const hasQuery = debouncedQuery.length >= MIN_QUERY_LENGTH;
 
-  const { data: results = [], isFetching: loading } = useQuery({
-    queryKey: ["omni-search", debouncedQuery],
-    queryFn: async ({ signal }): Promise<SearchResultItem[]> => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL}v0/search?q=${encodeURIComponent(
-          debouncedQuery,
-        )}`,
-        { signal },
-      );
-      const data = await response.json();
-      return data.result ?? [];
-    },
-    enabled: hasQuery,
-  });
+  const { data, isFetching: loading } = api.useQuery(
+    "get",
+    "/v0/search",
+    { params: { query: { q: debouncedQuery } } },
+    { enabled: hasQuery },
+  );
 
-  const items: SearchResultItem[] = useMemo(() => {
-    const searchOption: SearchResultItem = {
-      id: "search",
+  const items: ComboItem[] = useMemo(() => {
+    const searchOption: SearchTextItem = {
       class: "text",
+      id: "search",
       search: query,
       url: `/search?q=${encodeURIComponent(query)}`,
     };
 
     // Results from a previous query are hidden until the current query is long
     // enough and its fetch resolves.
-    const visibleResults = hasQuery ? results : [];
+    const visibleResults = hasQuery ? (data?.result ?? []) : [];
 
     return query.length > 0
       ? [searchOption, ...visibleResults]
       : visibleResults;
-  }, [query, results, hasQuery]);
+  }, [query, data, hasQuery]);
 
   const collection = useMemo(
     () =>
