@@ -32,6 +32,7 @@ RSpec.describe SV do
       # MISSING_SCRAMBLES_FOR_ROUND_ERROR
       # MISSING_SCRAMBLES_FOR_COMPETITION_ERROR
       # MISSING_SCRAMBLES_FOR_GROUP_ERROR
+      # MBLD_SCRAMBLES_WARNING
       it "matches Result" do
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
@@ -161,10 +162,42 @@ RSpec.describe SV do
                                   round_id: "333mbf-f"),
         ]
 
+        expected_warnings = [
+          RV::ValidationWarning.new(SV::MBLD_SCRAMBLES_WARNING,
+                                    :scrambles, competition1.id,
+                                    round_id: "333mbf-f"),
+          RV::ValidationWarning.new(SV::MBLD_SCRAMBLES_WARNING,
+                                    :scrambles, competition2.id,
+                                    round_id: "333mbf-f"),
+        ]
+
         validator_args.each do |arg|
           sv = SV.new.validate(**arg)
-          expect(sv.warnings).to be_empty
+          expect(sv.warnings).to match_array(expected_warnings)
           expect(sv.errors).to match_array(expected_errors)
+        end
+      end
+
+      it "warns for every 333mbf round" do
+        round_333mbf = create(:round, competition: competition1, event_id: "333mbf", format_id: "3")
+
+        [Result, InboxResult].each do |model|
+          result_kind = model.model_name.singular.to_sym
+          create(result_kind, :mbf, competition: competition1, round: round_333mbf)
+        end
+
+        create_scramble_set(3, round: round_333mbf)
+
+        expected_warnings = [
+          RV::ValidationWarning.new(SV::MBLD_SCRAMBLES_WARNING,
+                                    :scrambles, competition1.id,
+                                    round_id: "333mbf-f"),
+        ]
+
+        validator_args.each do |arg|
+          sv = SV.new.validate(**arg)
+          expect(sv.warnings).to match_array(expected_warnings)
+          expect(sv.errors).to be_empty
         end
       end
     end
