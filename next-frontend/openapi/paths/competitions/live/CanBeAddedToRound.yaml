@@ -1,0 +1,43 @@
+get:
+  summary: Get competitors that can be added to a round
+  description: >
+    Returns the competitors eligible to be added to the round (the round's
+    participation source) along with the lifecycle state of any colinked rounds.
+  tags:
+    - live
+  operationId: canBeAddedToRound
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: roundId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: The eligible competitors and the states of colinked rounds
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - registrations
+              - colinked_status
+            properties:
+              registrations:
+                type: array
+                items:
+                  $ref: '../../../schemas/registrations/RegistrationDataV2.yaml'
+              colinked_status:
+                type: array
+                items:
+                  type: string
+                  enum:
+                    - locked
+                    - open
+                    - ready
+                    - pending
