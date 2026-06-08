@@ -212,7 +212,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
   def can_be_added_to_round
     competition = Competition.find(params.require(:competition_id))
     round = Round.find_by_wcif_id!(params.require(:round_id), competition.id)
-    colinked_rounds = round.colinked_rounds || []
+    colinked_rounds = round.colinked_rounds
+
+    require_manage!(competition)
 
     registrations = round.participation_source.live_competitors.includes(:events, user: :delegate_role_metadata)
 

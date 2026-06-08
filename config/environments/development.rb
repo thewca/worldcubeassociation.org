@@ -97,6 +97,18 @@ Rails.application.configure do
     # When loading the edit events page for a competition, Bullet erroneously warns that we are
     # not using the rounds association.
     Bullet.add_safelist type: :unused_eager_loading, class_name: "CompetitionEvent", association: :rounds
+
+    # `any_kind_of_delegate?` reads the eager-loaded `delegate_role_metadata` (a `has_many :through
+    # :active_roles`), but never touches `active_roles` directly, so Bullet wrongly flags the
+    # intermediate join as unused. The eager load is required to avoid an N+1 during serialization.
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "User", association: :active_roles
+
+    # `Registration#event_ids` is a `has_many :through` `_ids` reader. It *does* use the eager-loaded
+    # `events` association (avoiding an N+1 pluck per registration), but Bullet doesn't track `_ids`
+    # readers as usage, so it wrongly reports the eager load as unused. Required by `to_v2_json`.
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Registration", association: :events
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Registration", association: :competition_events
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Registration", association: :registration_competition_events
   end
 
   # uncomment this if you want to test error pages in development

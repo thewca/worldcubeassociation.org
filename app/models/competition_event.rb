@@ -33,11 +33,11 @@ class CompetitionEvent < ApplicationRecord
   end
 
   def advancing_competitor_ids
-    registrations.accepted.ids
+    registrations.accepted.competing.ids
   end
 
   def live_competitors
-    registrations
+    registrations.accepted.competing
   end
 
   def advancement_results

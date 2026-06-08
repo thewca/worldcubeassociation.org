@@ -1461,8 +1461,8 @@ en:
         add_competitor:
           single_round: "Add Competitor to Round"
           multiple_rounds:
-            zero: "Add Competitor to Round, as the second Round of the dual round is not open you will need to add them separately."
-            other: "Add Competitor to both Rounds in the Dual Round."
+            one: "Add Competitor to both Rounds in the Dual Round."
+            other: "Add Competitor to Round, as the second Round of the dual round is not open you will need to add them separately."
       results:
         competitor: "Competitor"
         mean: "Mean"

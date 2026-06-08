@@ -140,12 +140,14 @@ function AddPersonCombobox({
 
   return (
     <VStack>
-      {t(
-        `competitions.live.admin.add_competitor.${isDualRound ? "multiple_rounds" : "single_round"}`,
-        {
-          count: coLinkedStatus.filter((s) => s === "open").length,
-        },
-      )}
+      <Text>
+        {t(
+          `competitions.live.admin.add_competitor.${isDualRound ? "multiple_rounds" : "single_round"}`,
+          {
+            count: coLinkedStatus.filter((s) => s === "open").length,
+          },
+        )}
+      </Text>
       <Combobox.Root
         collection={collection}
         inputBehavior="autohighlight"
