@@ -1458,6 +1458,11 @@ en:
           cancel: "Cancel"
           failed_to_fetch: "Failed to fetch next advancing competitor"
           still_processing: "Cannot execute 'Quit Competitor' actions while some results are still processing"
+        add_competitor:
+          single_round: "Add Competitor to Round"
+          multiple_rounds:
+            zero: "Add Competitor to Round, as the second Round of the dual round is not open you will need to add them separately."
+            other: "Add Competitor to both Rounds in the Dual Round."
       results:
         competitor: "Competitor"
         mean: "Mean"
