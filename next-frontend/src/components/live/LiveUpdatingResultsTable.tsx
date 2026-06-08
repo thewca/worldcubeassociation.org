@@ -47,7 +47,8 @@ export default function LiveUpdatingResultsTable({
     connectionState,
     liveResultsByRegistrationId,
     pendingLiveResults,
-    competitors,
+    combinedCompetitors,
+    roundCompetitors,
     pendingQuitCompetitors,
   } = useLiveResults();
 
@@ -104,7 +105,7 @@ export default function LiveUpdatingResultsTable({
           <>
             <AddPersonModal
               competitionId={competitionId}
-              competitors={competitors}
+              competitors={roundCompetitors}
             />
             <BulkQuitButton
               competitionId={competitionId}
@@ -130,14 +131,14 @@ export default function LiveUpdatingResultsTable({
         pendingLiveResults={pendingLiveResults}
         formatId={formatId}
         eventId={eventId}
-        competitors={competitors}
+        competitors={combinedCompetitors}
       />
       <LiveResultsTable
         resultsByRegistrationId={liveResultsByRegistrationId}
         roundWcifId={roundWcifId}
         formatId={formatId}
         competitionId={competitionId}
-        competitors={competitors}
+        competitors={combinedCompetitors}
         pendingQuitCompetitors={pendingQuitCompetitors}
         pendingLiveResults={pendingLiveResults}
         isAdmin={isAdminView}

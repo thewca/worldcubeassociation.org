@@ -39,7 +39,13 @@ interface LiveResultContextType {
   addPendingQuitCompetitor: (registrationId: number) => void;
   pendingQuitCompetitors: Set<number>;
   connectionState: ConnectionState;
-  competitors: Map<number, LiveCompetitor>;
+  // All competitors across the rounds in this provider. For linked/dual rounds
+  //   this includes competitors from every linked round.
+  combinedCompetitors: Map<number, LiveCompetitor>;
+  // Only the competitors who actually take part in the round (ie have a result
+  //   row in it). Use this for the comboboxes so they don't list people who are
+  //   only part of a sibling linked round.
+  roundCompetitors: Map<number, LiveCompetitor>;
 }
 
 const LiveResultContext = createContext<LiveResultContextType | undefined>(
@@ -127,7 +133,8 @@ export function MultiRoundResultProvider({
   const {
     liveResultsByRegistrationId,
     stateHashesByRoundId,
-    competitors,
+    combinedCompetitors,
+    roundCompetitors,
     refetchRound,
   } = useQueries({
     queries,
@@ -139,8 +146,18 @@ export function MultiRoundResultProvider({
       stateHashesByRoundId: Object.fromEntries(
         queryResults.map((r) => [r.data.id, r.data.state_hash]),
       ),
-      competitors: new Map(
+      combinedCompetitors: new Map(
         queryResults.flatMap((r) => r.data.competitors.map((c) => [c.id, c])),
+      ),
+      roundCompetitors: new Map(
+        queryResults.flatMap((r) => {
+          const roundRegistrationIds = new Set(
+            r.data.results.map((result) => result.registration_id),
+          );
+          return r.data.competitors
+            .filter((c) => roundRegistrationIds.has(c.id))
+            .map((c) => [c.id, c] as const);
+        }),
       ),
       refetchRound: async (roundId: string) => {
         return queryResults.find((r) => r.data.id === roundId)!.refetch();
@@ -288,7 +305,8 @@ export function MultiRoundResultProvider({
         pendingQuitCompetitors,
         addPendingQuitCompetitor,
         connectionState,
-        competitors,
+        combinedCompetitors,
+        roundCompetitors,
       }}
     >
       {children}
