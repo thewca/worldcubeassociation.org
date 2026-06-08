@@ -105,6 +105,7 @@ export default function LiveUpdatingResultsTable({
             <AddPersonModal
               competitionId={competitionId}
               competitors={competitors}
+              roundId={roundWcifId}
             />
             <BulkQuitButton
               competitionId={competitionId}
