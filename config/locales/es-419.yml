@@ -1750,6 +1750,11 @@ es-419:
           validation_error: Por favor verifica que no eres un robot.
       #original_hash: 126541e
       success_message: Pedido solicitado. Te responderemos a la brevedad.
+      #original_hash: bb6a0cf
+      success_message_with_ticket_link_html: >-
+        Solicitud enviada, te responderemos a la brevedad. Para consultar el
+        estado de tu solicitud, por favor visita <a href="%{link}">este
+        enlace</a>.
   homepage:
     #original_hash: 824d76b
     learn_more: Saber más
@@ -2863,16 +2868,33 @@ es-419:
         recuerda especificar esto en los requisitos de las inscripciones.
       #original_hash: 51376ef
       schedule_locked_after_results_submitted: El horario no puede ser editado luego de enviar los resultados.
+      #original_hash: 1877b69
+      spots_left:
+        zero: Sin cupos libres
+        one: Queda un solo cupo
+        other: 'Quedan %{count} cupos'
     live:
       #original_hash: 10d1a3c
       title: Resultados en vivo
+      round_state:
+        #original_hash: 98aadb3
+        ongoing: en vivo
+        #original_hash: e5fd9cf
+        done: finalizado
       connection:
         #original_hash: f92b311
         initialized: Inicializando conexión
-        #original_hash: 66d44d4
-        connected: 'Conectado, actualizando resultados'
+        #original_hash: b574812
+        connected: 'Conectado, recibiendo actualizaciones en vivo'
         #original_hash: 53abaa2
         disconnected: 'Conexión perdida, resultados no actualizados'
+        status:
+          #original_hash: 3ec2f2a
+          initialized: Inicializando
+          #original_hash: c2f9b7b
+          connected: Conectado
+          #original_hash: 771e05f
+          disconnected: Desconectado
       podiums:
         #original_hash: 02ae2bd
         title: Podios
@@ -2927,8 +2949,17 @@ es-419:
             other: 'Los siguientes competidores en pasar de ronda son %{competitors}'
           #original_hash: c87ca67
           advance: Siguiente competidor pasa
-          #original_hash: e85b311
-          quit_confirm: Eliminar competidor de la ronda
+          #original_hash: aa59a26
+          quit_confirm:
+            one: "Eliminar competidor de la ronda"
+            other: "Eliminar competidores de la ronda"
+          bulk:
+            #original_hash: e0981de
+            success: 'Se quitaron %{count} competidores exitosamente'
+            #original_hash: 98fe723
+            failure: Ocurrió un error quitando los competidores
+            #original_hash: 774050e
+            menu: Quitar restantes
           #original_hash: 1a2285d
           quit_menu: Quitar
           #original_hash: 70835a0
@@ -2937,6 +2968,10 @@ es-419:
           cancel: Cancelar
           #original_hash: 79d6737
           failed_to_fetch: Ocurrió un error al buscar el siguiente competidor en pasar de ronda
+          #original_hash: d4dcd86
+          still_processing: >-
+            No se pueden eliminar competidores mientras aún se están procesando
+            los resultados
       results:
         #original_hash: 4705687
         competitor: Competidor
