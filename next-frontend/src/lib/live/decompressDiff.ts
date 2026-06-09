@@ -18,6 +18,7 @@ export function decompressFullResult(
     single_record_tag: diff.srt,
     registration_id: diff.r,
     attempts: diff.la.map((l) => ({ attempt_number: l.an, value: l.v })),
+    last_attempt_entered_at: diff.at,
   };
 }
 
@@ -35,6 +36,7 @@ export function decompressPartialResult(
         average_record_tag: diff.art,
         single_record_tag: diff.srt,
         attempts: diff.la?.map((l) => ({ attempt_number: l.an, value: l.v })),
+        last_attempt_entered_at: diff.at,
       },
       _.isUndefined,
     ),

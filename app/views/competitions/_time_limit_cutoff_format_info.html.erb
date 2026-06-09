@@ -3,6 +3,7 @@
   show_cumulative_across_rounds = competition.uses_cumulative_across_rounds?
   show_cutoff = competition.uses_cutoff?
   show_qualifications = competition.uses_qualification?
+  show_advancement_condition = competition.uses_advancement_condition?
 %>
 <div class="time-limit-information">
   <h4 id="time-limit"><%= t("competitions.events.time_limit") %></h4>
@@ -53,6 +54,12 @@
         <%= t("competitions.events.time_limit_information.qualification_all_events_html",
               date: wca_date_range(date_to_events.keys.first, date_to_events.keys.first)) %>
       <% end %>
+    </p>
+  <% end %>
+  <% if show_advancement_condition %>
+    <h4 id="advancement-condition"><%= t("competitions.events.advancement_condition") %></h4>
+    <p>
+      <%= t("competitions.events.time_limit_information.advancement_condition_html") %>
     </p>
   <% end %>
 </div>

@@ -3,6 +3,10 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 locals {
+  primary_db_url = "worldcubeassociation-dot-org-m8.comp2du1hpno.us-west-2.rds.amazonaws.com"
+  read_replica_db_url = "read-replica-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+  dev_dump_db_url = "dev-dump-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+
   sidekiq_environment = [
   ]
   rails_environment = [
@@ -28,7 +32,7 @@ locals {
     },
     {
       name  = "DUMP_HOST"
-      value = "https://assets.worldcubeassociation.org"
+      value = "https://exports.worldcubeassociation.org"
     },
     {
       name  = "SHAKAPACKER_ASSET_HOST"
@@ -44,15 +48,15 @@ locals {
     },
     {
       name = "DATABASE_HOST"
-      value = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = local.primary_db_url
     },
     {
       name = "READ_REPLICA_HOST"
-      value = "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = local.read_replica_db_url
     },
     {
       name = "DEV_DUMP_HOST"
-      value = "dev-dump-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+      value = local.dev_dump_db_url
     },
     {
       name = "CACHE_REDIS_URL"
@@ -61,6 +65,10 @@ locals {
     {
       name = "SIDEKIQ_REDIS_URL"
       value = "redis://wca-main-sidekiq.iebvzt.ng.0001.usw2.cache.amazonaws.com:6379"
+    },
+    {
+      name = "ANYCABLE_REDIS_URL",
+      value = "rediss://anycable-production-cache-001.anycable-production-cache.iebvzt.usw2.cache.amazonaws.com:6379"
     },
     {
       name = "STORAGE_AWS_BUCKET"
@@ -99,8 +107,8 @@ locals {
       value = "ELNTWW0SE1ZJ"
     },
     {
-      name = "CDN_ASSETS_DISTRIBUTION_ID"
-      value = "E27W5ACWLMQE3C"
+      name = "CDN_EXPORTS_DISTRIBUTION_ID"
+      value = "E1752JAESQHVEE"
     },
     {
       name = "WCA_REGISTRATIONS_URL"
@@ -143,9 +151,9 @@ locals {
     { # The PHPMyAdmin Docker file allows us to pass the user config as a base 64 encoded environment variable
       name = "PMA_USER_CONFIG_BASE64"
       value = base64encode(templatefile("../templates/config.user.inc.php.tftpl",
-        { rds_host: "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
-          rds_replica_host: "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
-          dump_replica_host: "dev-dump-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"}))
+        { rds_host: local.primary_db_url,
+          rds_replica_host: local.read_replica_db_url,
+          dump_replica_host: local.dev_dump_db_url}))
     }
   ]
   rails_internal_dns = "rails.local"
@@ -225,8 +233,8 @@ data "aws_iam_policy_document" "task_policy" {
                   "${aws_s3_bucket.documents.arn}/*",
                   aws_s3_bucket.regulations.arn,
                   "${aws_s3_bucket.regulations.arn}/*",
-                  aws_s3_bucket.assets.arn,
-                  "${aws_s3_bucket.assets.arn}/*",
+                  aws_s3_bucket.exports.arn,
+                  "${aws_s3_bucket.exports.arn}/*",
                     aws_s3_bucket.avatars_private.arn,
                   "${aws_s3_bucket.avatars_private.arn}/*",]
     }
@@ -243,6 +251,7 @@ data "aws_iam_policy_document" "task_policy" {
     ]
     resources = [
       "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_dev_dump_identifier}/${var.DATABASE_WRT_USER}",
+      "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_dev_dump_identifier}/${var.DATABASE_WRT_SENIOR_USER}",
       "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_read_replica_identifier}/${var.DATABASE_WRT_SENIOR_USER}",
       "arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_SENIOR_USER}"]
   }
@@ -399,4 +408,69 @@ resource "aws_ecs_service" "this" {
   tags = {
     Name = var.name_prefix
   }
+}
+
+# Notify on failed blue/green deployments of the Rails service.
+# Native ECS deployments emit "ECS Deployment State Change" events to EventBridge;
+# we forward the failures to the existing deploy-notifications SNS topic (pipeline.tf).
+resource "aws_cloudwatch_event_rule" "rails_deployment_failed" {
+  name        = "${var.name_prefix}-deployment-failed"
+  description = "Capture failed ECS deployments for the Rails production service"
+
+  event_pattern = jsonencode({
+    source        = ["aws.ecs"]
+    "detail-type" = ["ECS Deployment State Change"]
+    resources     = [aws_ecs_service.this.id]
+    detail = {
+      eventName = ["SERVICE_DEPLOYMENT_FAILED"]
+    }
+  })
+}
+
+resource "aws_cloudwatch_event_target" "rails_deployment_failed_sns" {
+  rule      = aws_cloudwatch_event_rule.rails_deployment_failed.name
+  target_id = "deploy-notifications"
+  arn       = aws_sns_topic.deploy_notifications.arn
+}
+
+# Notify when a blue/green deployment of the Rails service starts.
+resource "aws_cloudwatch_event_rule" "rails_deployment_started" {
+  name        = "${var.name_prefix}-deployment-started"
+  description = "Capture started ECS deployments for the Rails production service"
+
+  event_pattern = jsonencode({
+    source        = ["aws.ecs"]
+    "detail-type" = ["ECS Deployment State Change"]
+    resources     = [aws_ecs_service.this.id]
+    detail = {
+      eventName = ["SERVICE_DEPLOYMENT_IN_PROGRESS"]
+    }
+  })
+}
+
+resource "aws_cloudwatch_event_target" "rails_deployment_started_sns" {
+  rule      = aws_cloudwatch_event_rule.rails_deployment_started.name
+  target_id = "deploy-notifications"
+  arn       = aws_sns_topic.deploy_notifications.arn
+}
+
+# Notify when a blue/green deployment of the Rails service finishes successfully.
+resource "aws_cloudwatch_event_rule" "rails_deployment_completed" {
+  name        = "${var.name_prefix}-deployment-completed"
+  description = "Capture completed ECS deployments for the Rails production service"
+
+  event_pattern = jsonencode({
+    source        = ["aws.ecs"]
+    "detail-type" = ["ECS Deployment State Change"]
+    resources     = [aws_ecs_service.this.id]
+    detail = {
+      eventName = ["SERVICE_DEPLOYMENT_COMPLETED"]
+    }
+  })
+}
+
+resource "aws_cloudwatch_event_target" "rails_deployment_completed_sns" {
+  rule      = aws_cloudwatch_event_rule.rails_deployment_completed.name
+  target_id = "deploy-notifications"
+  arn       = aws_sns_topic.deploy_notifications.arn
 }

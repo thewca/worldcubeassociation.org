@@ -49,10 +49,13 @@ class UploadJson
       persons_to_import << InboxPerson.new(new_person_attributes)
     end
     results_to_import = []
-    scrambles_to_import = []
+    scramble_sets_to_import = []
     parsed_json["events"].each do |event|
       competition_event = competition.competition_events.find { |ce| ce.event_id == event["eventId"] }
       event["rounds"].each do |round|
+        # H2H results are skipped, as they get imported via a manual import process. See #13200 for more information
+        next if round['formatId'] == "h"
+
         # Find the corresponding competition round and get the actual round_type_id
         # (in case the incoming one doesn't correspond to cutoff presence).
         incoming_round_type_id = round["roundId"]
@@ -71,7 +74,6 @@ class UploadJson
             pos: result["position"],
             event_id: event["eventId"],
             round_type_id: round_type_id,
-            round_id: competition_round&.id,
             format_id: round["formatId"],
             best: result["best"],
             average: result["average"],
@@ -82,36 +84,41 @@ class UploadJson
             value5: individual_results[4],
           }
           new_res = InboxResult.new(new_result_attributes)
-          # Using this way of setting the attribute saves one SELECT per result
-          # to validate the competition presence.
+          # Using this way of setting the attribute saves two SELECTs per result
+          # to validate the competition and round presence.
           # (a lot of time considering all the results to import!)
           new_res.competition = competition
+          new_res.round = competition_round
           results_to_import << new_res
         end
 
         # Import scrambles for round
-        round["groups"].each do |group|
+        # I am too lazy to write actual parsing logic for A->1, B->2, ..., AA->27 etc.
+        #   so this snippet is just "faking" the parse by using length-adjusted lexicographic sorting
+        sorted_groups = round["groups"].sort_by { [it["group"].length, it["group"]] }
+        sorted_groups.each_with_index do |group, group_idx|
+          new_scramble_set_attributes = {
+            ordered_index: group_idx,
+          }
+          new_scr_set = MatchedScrambleSet.new(new_scramble_set_attributes)
+          new_scr_set.round = competition_round
           %w[scrambles extraScrambles].each do |scramble_type|
-            group[scramble_type]&.each_with_index do |scramble, index|
+            group[scramble_type]&.each_with_index do |scramble, scr_index|
               new_scramble_attributes = {
-                competition_id: competition_id,
-                event_id: event["eventId"],
-                round_type_id: round_type_id,
-                round_id: competition_round&.id,
-                group_id: group["group"],
+                scramble_string: scramble,
                 is_extra: scramble_type == "extraScrambles",
-                scramble_num: index + 1,
-                scramble: scramble,
+                ordered_index: scr_index,
               }
-              scrambles_to_import << Scramble.new(new_scramble_attributes)
+              new_scr_set.matched_scrambles.build(new_scramble_attributes)
             end
           end
+          scramble_sets_to_import << new_scr_set
         end
       end
     end
     {
       results_to_import: results_to_import,
-      scrambles_to_import: scrambles_to_import,
+      scramble_sets_to_import: scramble_sets_to_import,
       persons_to_import: persons_to_import,
     }
   end

@@ -1,25 +1,28 @@
-import { Text, Accordion } from "@chakra-ui/react";
-import { MarkdownProse } from "@/components/Markdown";
+import { Accordion, Link as ChakraLink } from "@chakra-ui/react";
+import { ChakraMarkdown } from "@/components/Markdown";
 import { Announcement, User } from "@/types/payload";
+import { LuChevronsRight } from "react-icons/lu";
 
 function AnnouncementItem({ announcement }: { announcement: Announcement }) {
   const publishedByUser = announcement.publishedBy as User;
 
   return (
-    <Accordion.Item value={announcement.id} layerStyle="fill.deep">
+    <Accordion.Item
+      value={announcement.id}
+      layerStyle="fill.subtle"
+      _open={{ layerStyle: "card.pastel" }}
+    >
       <Accordion.ItemTrigger textStyle="s1" _open={{ textStyle: "h2" }}>
         <Accordion.ItemIndicator _open={{ display: "none" }} />
         {announcement.title}
       </Accordion.ItemTrigger>
       <Accordion.ItemContent>
-        <Text textStyle="s2">
+        <Accordion.ItemBody textStyle="s2">
           Posted by {publishedByUser.name} · {announcement.publishedAt}
-        </Text>
-        <MarkdownProse
-          as={Accordion.ItemBody}
-          content={announcement.contentMarkdown!}
-          textStyle="body"
-        />
+        </Accordion.ItemBody>
+        <ChakraMarkdown paragraphAs={Accordion.ItemBody} textStyle="body">
+          {announcement.contentMarkdown}
+        </ChakraMarkdown>
       </Accordion.ItemContent>
     </Accordion.Item>
   );
@@ -29,10 +32,12 @@ export default function AnnouncementsCard({
   hero,
   others = [],
   colorPalette,
+  showSeeAll = true,
 }: {
   hero: Announcement;
   others: Announcement[];
   colorPalette: string;
+  showSeeAll?: boolean;
 }) {
   return (
     <Accordion.Root
@@ -45,6 +50,19 @@ export default function AnnouncementsCard({
       {others.map((announcement) => (
         <AnnouncementItem key={announcement.id} announcement={announcement} />
       ))}
+
+      {showSeeAll && (
+        <Accordion.Item value="see-all" layerStyle="fill.subtle">
+          <Accordion.ItemTrigger textStyle="s1" asChild>
+            <ChakraLink href="/posts" color="currentColor">
+              <Accordion.ItemIndicator transition={undefined}>
+                <LuChevronsRight />
+              </Accordion.ItemIndicator>
+              See all announcements
+            </ChakraLink>
+          </Accordion.ItemTrigger>
+        </Accordion.Item>
+      )}
     </Accordion.Root>
   );
 }

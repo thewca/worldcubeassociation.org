@@ -5,36 +5,66 @@ class UpdateLiveResultJob < ApplicationJob
   queue_as EnvConfig.LIVE_QUEUE if Live::Config.sqs_queued?
 
   def perform(live_result, results, entered_by_id)
-    previous_attempts = live_result.live_attempts.index_by(&:attempt_number)
+    round = live_result.round
+    result_upserts = results.map { it.merge(live_result_id: live_result.id) }
 
-    new_attempts = results.map do |r|
-      previous_attempt = previous_attempts[r[:attempt_number]]
+    Live::DiffHelper.broadcast_changes(round) do
+      LiveAttempt.upsert_all(result_upserts)
 
-      if previous_attempt.present?
-        if previous_attempt.value == r[:value]
-          previous_attempt
-        else
-          previous_attempt.update_with_history_entry(r[:value], entered_by_id)
-        end
+      attempt_numbers = results.pluck(:attempt_number)
+      live_result.live_attempts.where.not(attempt_number: attempt_numbers).delete_all
+
+      new_attempts = live_result.live_attempts.reload # We did some `upsert_all` and `delete_all` shenanigans above, which bypass Rails memory. Hence reloading...
+      average, best = LiveResult.compute_average_and_best(new_attempts, round)
+
+      # `upsert_all` above bypasses Rails callbacks so the counter cache isn't updated automatically.
+      # `live_attempts_count` is attr_readonly on LiveResult (Rails protects counter cache columns),
+      # so we can't set it directly in update!.
+      LiveResult.reset_counters(live_result.id, :live_attempts)
+
+      person = live_result.registration.person
+      previous_round_ids = round.competition_event.rounds.where(number: ...round.number).ids
+
+      live_result.update!(
+        best: best,
+        average: average,
+        last_attempt_entered_at: Time.now.utc,
+        single_record_tag: compute_pr(live_result, best, person, :single, previous_round_ids),
+        average_record_tag: compute_pr(live_result, average, person, :average, previous_round_ids),
+      )
+
+      history_ordered_results = new_attempts.order(:attempt_number).pluck(:value)
+      live_result.live_result_history_entries.create!(entered_by_id: entered_by_id, action_type: :scoretaking, attempt_details: history_ordered_results)
+    end
+  end
+
+  VALUE_COLUMN = {
+    single: :best,
+    average: :average,
+  }.freeze
+
+  private
+
+    def compute_pr(live_result, value, person, type, previous_round_ids)
+      col = VALUE_COLUMN[type]
+
+      if value <= 0 || better_pr_in_previous_round?(live_result, "#{type}_record_tag", col, value, previous_round_ids)
+        nil
+      elsif person.nil?
+        "PR"
       else
-        LiveAttempt.build_with_history_entry(r[:value], r[:attempt_number], entered_by_id)
+        pr = person.public_send(:"ranks_#{type}").find { |r| r.event_id == live_result.event_id }
+        "PR" if pr.nil? || value < pr.best
       end
     end
 
-    round = live_result.round
+    def better_pr_in_previous_round?(live_result, tag_column, value_column, current_value, previous_ids)
+      return false if previous_ids.empty?
 
-    # We need the state before the result is updated
-    before_state = round.to_live_state
+      best_previous_pr = LiveResult.where(registration_id: live_result.registration_id, round_id: previous_ids)
+                                   .where(tag_column => "PR")
+                                   .minimum(value_column)
 
-    average, best = LiveResult.compute_average_and_best(new_attempts, round)
-
-    live_result.update!(live_attempts: new_attempts, best: best, average: average, last_attempt_entered_at: Time.now.utc)
-
-    after_state = round.to_live_state
-    diff = Live::DiffHelper.round_state_diff(before_state, after_state)
-
-    diff = Live::DiffHelper.add_forecast_stats(diff, round)
-
-    ActionCable.server.broadcast(Live::Config.broadcast_key(round.wcif_id), diff)
-  end
+      best_previous_pr.present? && best_previous_pr <= current_value
+    end
 end

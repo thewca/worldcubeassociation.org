@@ -30,7 +30,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     mandatory :TASK_ROLE, :string
     mandatory :WCA_REGISTRATIONS_URL, :string
     mandatory :ASSET_HOST, :string
-    mandatory :CDN_ASSETS_DISTRIBUTION_ID, :string
+    mandatory :CDN_EXPORTS_DISTRIBUTION_ID, :string
     mandatory :REGISTRATION_QUEUE, :string
     mandatory :LIVE_QUEUE, :string
 
@@ -67,6 +67,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
 
     # Local-specific stuff
     optional :DISABLE_BULLET, :bool, false
+    optional :ENABLE_QUERY_TRACES, :bool, false
     optional :MAILCATCHER_SMTP_HOST, :string, ''
     optional :ASSET_HOST, :string, ''
     optional :RUNNING_IN_DOCKER, :bool, false
@@ -115,7 +116,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
   optional :ASSETS_COMPILATION, :bool, false
 
   # For ActionCable, currently optional
-  optional :ACTIONCABLE_REDIS_URL, :string, ''
+  optional :ANYCABLE_REDIS_URL, :string, ''
 
   # For local Playwright instances
   optional :PLAYWRIGHT_SERVER_SOCKET_URL, :string, ''

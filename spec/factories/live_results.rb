@@ -17,7 +17,9 @@ FactoryBot.define do
     end
 
     before(:create) do |live_result, evaluator|
-      live_result.live_attempts = build_list(:live_attempt, evaluator.attempts_count, live_result: live_result)
+      live_result.live_attempts = build_list(:live_attempt, evaluator.attempts_count, live_result: live_result) do |live_attempt, i|
+        live_attempt.attempt_number = i + 1
+      end
     end
 
     trait :mo3 do

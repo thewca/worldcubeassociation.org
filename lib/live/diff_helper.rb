@@ -2,6 +2,42 @@
 
 module Live
   module DiffHelper
+    # This method does not call round.live_results.reset so make sure to
+    # change live_results only directly through the round associations, never through LiveResult.(...)
+    # or reset yourself if you do
+    def self.broadcast_changes(round, &)
+      before_state = round.to_live_state
+
+      result = yield
+
+      after_state = round.to_live_state
+
+      diff = self.compressed_round_state_diff(before_state, after_state, round)
+
+      # Queues the broadcast — fires after outermost transaction commits,
+      # or immediately if not inside a transaction. Never fires on rollback.
+      ActiveRecord.after_all_transactions_commit do
+        ActionCable.server.broadcast(Live::Config.broadcast_key(round.competition_id, round.wcif_id), diff)
+      end
+
+      result
+    end
+
+    def self.compressed_round_state_diff(before_state, after_state, round)
+      diff = self.round_state_diff(before_state, after_state)
+      diff = self.add_forecast_stats(diff, round)
+
+      created_with_user = Array.wrap(diff["created"]).map { compress_payload(it).merge({ user: Registration.find(it["registration_id"]).to_live_json }) }
+
+      {
+        "updated" => Array.wrap(diff["updated"]).map { compress_payload it },
+        "deleted" => diff["deleted"],
+        "created" => created_with_user,
+        'before_hash' => state_hash(before_state),
+        'after_hash' => state_hash(after_state),
+      }.compact_blank
+    end
+
     def self.round_state_diff(before_state, after_state)
       before_hash = before_state.index_by { |r| r["registration_id"] }
       after_hash = after_state.index_by { |r| r["registration_id"] }
@@ -48,6 +84,9 @@ module Live
       "live_attempts" => "la",
       "value" => "v",
       "attempt_number" => "an",
+      "best_possible_average" => "bpa",
+      "worst_possible_average" => "wpa",
+      "last_attempt_entered_at" => "at",
     }.freeze
 
     # To send even less data, we shorten the quite long attribute names

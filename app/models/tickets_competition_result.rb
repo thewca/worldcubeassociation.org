@@ -13,7 +13,7 @@ class TicketsCompetitionResult < ApplicationRecord
     posted: "posted",
   }
 
-  has_one :ticket, as: :metadata
+  has_one :ticket, as: :metadata, dependent: :destroy
   belongs_to :competition
 
   ACTION_TYPE = {
@@ -83,6 +83,10 @@ class TicketsCompetitionResult < ApplicationRecord
 
       self.update!(status: TicketsCompetitionResult.statuses[:merged_inbox_results])
     end
+  end
+
+  def page_title
+    competition.name
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

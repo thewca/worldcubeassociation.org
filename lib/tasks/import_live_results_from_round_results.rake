@@ -12,42 +12,36 @@ namespace :live_results do
 
     abort "Competition #{competition_id} not found" if competition.nil?
 
-    live_results = []
-
     # Sort rounds first so advancing can be correctly calculated
     sorted_rounds = competition.rounds.sort_by { |round| round.round_type.rank }
 
-    sorted_rounds.each do |round|
-      round.round_results.each do |round_result|
-        event = round.event
-        format = round.format
+    live_results = sorted_rounds.flat_map do |round|
+      round.round_results.map do |round_result|
         results = round_result.attempts
 
         attempts = results.map.with_index(1) do |rr, i|
-          LiveAttempt.build_with_history_entry(rr.result, i, 1)
+          LiveAttempt.build(value: rr.result, attempt_number: i)
         end
 
-        r = Result.new(
-          event_id: event.id,
-          round_type_id: round.round_type_id,
-          round_id: round.id,
-          format_id: format.id,
+        history_entry = LiveResultHistoryEntry.build(
+          action_source: :backfilling,
+          attempt_details: attempts.pluck(:value),
         )
 
-        r.result_attempts = results.map.with_index(1) do |rr, i|
-          ResultAttempt.new(value: rr.result, attempt_number: i)
-        end
+        correct_average, correct_best = LiveResult.compute_average_and_best(attempts, round)
 
-        live_results << {
+        {
           registration_id: registrations_by_wcif_id[round_result.person_id].id,
           round: round,
           live_attempts: attempts,
+          live_result_history_entries: [history_entry],
           last_attempt_entered_at: Time.now.utc,
-          best: r.compute_correct_best,
-          average: r.compute_correct_average,
+          best: correct_best,
+          average: correct_average,
         }
       end
     end
+
     LiveResult.create(live_results)
   end
 end

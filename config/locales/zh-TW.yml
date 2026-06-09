@@ -132,6 +132,8 @@ zh-TW:
     '2': 2次取最佳
     #original_hash: 21f623c
     '3': 3次取最佳
+    #original_hash: cca816d
+    '5': 5次取最佳
     #original_hash: 2342d2b
     a: 5次去頭尾平均
     #original_hash: 940c82d
@@ -143,10 +145,14 @@ zh-TW:
       '2': 2次取最佳
       #original_hash: b41f36f
       '3': 3次取最佳
+      #original_hash: 03709b1
+      '5': Bo5
       #original_hash: 4a34175
       a: 5次平均
       #original_hash: 53ba088
       m: 3次平均
+      #original_hash: 60827cb
+      h: H2H
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -207,10 +213,19 @@ zh-TW:
     #original_hash: 17dae1e
     attempt_name: '第%{number}次還原'
   round:
+    #original_hash: ceeac4a
+    title: 輪
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
     #original_hash: 747df5a
     round_number: '第%{round_number}輪'
+  scramble_set:
+    #original_hash: ba18ca7
+    name: '轉亂步驟 %{letter_code}'
+    #original_hash: d46fe75
+    group: '組別%{number}'
+    #original_hash: 17dae1e
+    attempt: '第%{number}還原'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -451,6 +466,8 @@ zh-TW:
         region: 區域
         #original_hash: e3fc6e9
         subRegion: 子區域
+        #original_hash: a1ba702
+        receive_developer_mails: 我希望接收有關WCA軟體資源變更的通知。
         #original_hash: 730db33
         receive_delegate_reports: 我希望透過收到電子郵件收到WCA比賽報告
         #original_hash: 8667157
@@ -488,7 +505,7 @@ zh-TW:
         #original_hash: 4f9be05
         content: 內容
         #original_hash: 709a232
-        name: 比賽名稱
+        name: 標籤名稱
       delegate_report:
         #original_hash: 983d541
         discussion_url: Google Group討論串網址
@@ -659,6 +676,8 @@ zh-TW:
           chair: WCA董事長
           #original_hash: 7d405ff
           executive_director: WCA執行董事
+          #original_hash: 36a137f
+          chief_operating_officer: WCA營運長
           #original_hash: 1dd4a07
           secretary: WCA秘書
           #original_hash: 0388b19
@@ -752,6 +771,10 @@ zh-TW:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
+        #original_hash: 7ea7d12
+        receive_developer_mails: >-
+          此通知僅限於與資料匯出、WCIF 結構（schema）及公開 API
+          等資源的重大版本變更相關。建議提供給維護依賴這些工具之軟體的開發者訂閱。
         #original_hash: c564b74
         receive_delegate_reports: 如果您是高級代表、WRC或WQAC的成員，您會自動收到比賽報告。備註：此變更可能得花12個小時才生效。
         #original_hash: 0017d38
@@ -792,10 +815,10 @@ zh-TW:
         #original_hash: 74affff
         incidents: >-
           請報告所有非一般的事件。請把意外事件按照號碼從1.開始排序，好讓其他代表根據號碼發表回應。就算所有事物看起來都很類似，請列出那些最值得報告的事項。如果您需要意見回饋，請在下面適當的部分選擇做選擇。
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
           您必須選擇 %{image_count}
-          張能夠說明比賽現場打亂區、比賽區的照片等(其他照片也沒問題)。您可以一次選擇多個檔案。只有在上傳足夠數量的其他圖片後，才能刪除現有圖片（如果您想替換某張圖片，請先上傳新的，再刪除舊的）。
+          張能夠說明比賽現場打亂區、比賽區的照片等來自本次比賽的照片，最好是在比賽進行期間拍攝(其他照片也沒問題)。您可以一次選擇多個檔案。只有在上傳足夠數量的其他圖片後，才能刪除現有圖片（如果您想替換某張圖片，請先上傳新的，再刪除舊的）。如果您沒有最新的比賽區域和／或打亂區域的最新照片，請說明原因。
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -912,11 +935,20 @@ zh-TW:
       contact_wrt:
         #original_hash: 603a218
         wca_id: WCA IA
+    #original_hash: 687d968
+    competition_link_html: '按<a href=''%{url}''>這裡</a>前往比賽頁面'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
         dob_invalid: 格式錯誤
   errors:
+    next_frontend:
+      #original_hash: f88d866
+      title: 頁面渲染時發生錯誤。
+      #original_hash: 22dfe12
+      description: 如果此錯誤持續發生，請將以下列出的詳細資訊回報給 WST。
+      #original_hash: 20be860
+      details: 錯誤詳細資訊
     messages:
       #original_hash: dc2367c
       wrong_size: '錯誤尺寸(應該為%{file_size})'
@@ -1064,6 +1096,16 @@ zh-TW:
         400_error: 您要尋找的頁面並不存在
         #original_hash: c9290b6
         400_contact_html: '如果您認為這是一個錯誤，請<a href=%{contact_url}>按這裡</a>來回報。'
+        #original_hash: 508c106
+        comp_not_found: 未找到比賽
+        #original_hash: c0e86d5
+        comp_not_found_action: '我們找不到 ID 為 %{comp_id} 的比賽。請使用搜尋欄進行查詢。'
+        #original_hash: 695f7ba
+        comp_not_found_action_2: 如果您是透過其他網站的連結進入此頁面，請通知該網站其連結不正確。
+        #original_hash: 7f8f419
+        session_expired: 工作階段已過期
+        #original_hash: f3e688a
+        session_expired_action: 您的工作階段已過期。請重新整理頁面、重新執行您的操作，或重新登入以繼續。
     doorkeeper:
       applications:
         help:
@@ -1255,7 +1297,7 @@ zh-TW:
         wfc: WCA財政委員會 (WFC)
         #original_hash: 2035811
         wmt: WCA行銷組 (WMT)
-        #original_hash: c90653c
+        #original_hash: 2517097
         wmct: WCA大型錦標賽團隊 (WMCT)
         #original_hash: 8f32116
         wqac: WCA品質保證委員會 (WQAC)
@@ -1490,6 +1532,11 @@ zh-TW:
       title: 紀錄
       #original_hash: 3681af0
       text: 查看現在以及過去所有WCA認證比賽項目的紀錄。
+    volunteer:
+      #original_hash: cbf217d
+      title: 志工
+      #original_hash: 949f739
+      text: 加入我們！WCA在不同團隊中提供志工職位。你不需要是速解玩家也可以成為志工。
     faq:
       #original_hash: 03688ba
       title: 常見問題
@@ -1663,6 +1710,12 @@ zh-TW:
       profile: 個人頁面
       #original_hash: 7b2c7f1
       approve: 確認
+      #original_hash: d9455bf
+      approve_confirm: '你確定要核准 WCA ID「%{wca_id}」嗎？'
+      #original_hash: 1ada587
+      clear_claim: 清除認領
+      #original_hash: dc39741
+      clear_claim_confirm: '您確定您要清除 WCA ID%{wca_id}的ID認領嗎?'
       #original_hash: 85de4b8
       unconfirmed_email: '這個帳號的電子郵件(%{email})尚未確認。'
       #original_hash: 7069007
@@ -1700,6 +1753,8 @@ zh-TW:
           href='%{wrt_contact_path}' target='_blank'>WCA成績組</a>或是您的<a
           href='%{delegate_url}'>WCA代表</a>。
         reason:
+          #original_hash: 2e22133
+          no_access: 您沒有權限編輯該使用者。
           #original_hash: 370ff12
           assigned: 您已經有WCA ID了
           #original_hash: 1c4670f
@@ -1884,12 +1939,12 @@ zh-TW:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: 人（初次）
-        other: 人（初次）
+        zero: 初參賽
+        other: 初參賽
       #original_hash: bc010e3
       returner:
-        zero: 人（非初次）
-        other: 人（非初次）
+        zero: 非初次參賽
+        other: 非初次參賽
       #original_hash: b7da17a
       person:
         zero: 人
@@ -2160,6 +2215,8 @@ zh-TW:
         wca_id_duplicates: '一個WCA ID必須只能被用一次，以下為重複的WCA ID：%{wca_ids}。'
         #original_hash: a0fd4c5
         wrong_dob_format: '生日必須要依照 YYYY-mm-dd 的格式（年-月-日，例如 1944-07-13），以下日期無法使用：%{raw_dobs}。'
+        #original_hash: 6d8e34b
+        empty_file: 該檔案是空的。
     add:
       #original_hash: 975275e
       title: '新增%{comp}的報名資料'
@@ -2265,6 +2322,77 @@ zh-TW:
       orga_closed_reg_failure: 無法結束報名。
       #original_hash: 74caf1a
       no_waiting_list_specified: 這場比沒有接受候補名單的截止時間。如果您要使用候補名單功能，請指定一個截止日期。如果您沒有要使用候補名單功能，請記得在報名條件中指定。
+      #original_hash: 51376ef
+      schedule_locked_after_results_submitted: 在成績提交後，賽程將無法再進行編輯。
+    live:
+      #original_hash: 10d1a3c
+      title: 即時成績
+      connection:
+        #original_hash: f92b311
+        initialized: 正在初始化連線
+        #original_hash: 66d44d4
+        connected: 連線完成，正在更新成績
+        #original_hash: 53abaa2
+        disconnected: 失去連結，成績沒有被更新
+      podiums:
+        #original_hash: 02ae2bd
+        title: 頒獎台
+        #original_hash: d7297a7
+        undetermined: 頒獎台名次尚未決定
+      admin:
+        #original_hash: cf9b770
+        open: 開啟
+        #original_hash: 719ea39
+        clear: 清除
+        #original_hash: 42faad9
+        competitors_entered: '已輸入%{competitors_live_results_entered}/%{total_competitors}'
+        #original_hash: adec79f
+        round_locked: 鎖定
+        #original_hash: 5301648
+        edit: 編輯
+        #original_hash: 612e12d
+        results: 成績
+        warnings:
+          #original_hash: 9198c71
+          omitted: '您遺漏第 %{attempt_number} 次還原。請確認這是正確的。'
+          #original_hash: 82d8e53
+          DNS: 至少有一個DNS後面接著有效成績。請確認這確實是DNS，而不是DNF。
+          #original_hash: 6becd6c
+          impossible: >-
+            你嘗試提交的成績似乎不合理：第 %{attempt_number} 次還原的時間少於每個方塊 30
+            秒。如果你要輸入「分鐘」，請記得在成績末尾加上兩個 0（代表百分之一秒）。
+          #original_hash: a03301d
+          inconsistent: >-
+            你嘗試提交的成績似乎不一致。最佳單次（%{best_single}）與最差單次（%{worst_single}）之間差異過大。請確認成績是否正確。
+          #original_hash: 0be6543
+          round_locked: 下一輪已經開啟，任何變更將不會影響該輪！
+        quit:
+          #original_hash: de62de1
+          title: 退出參賽者
+          #original_hash: c25b336
+          next_to_advance:
+            zero: '接下來晉級的選手是 %{competitors}'
+            other: '接下來晉級的選手是 %{competitors}'
+          #original_hash: c87ca67
+          advance: 晉級下一位參賽者
+          #original_hash: e85b311
+          quit_confirm: 從這一輪退出參賽者
+          #original_hash: 1a2285d
+          quit_menu: 退出
+          #original_hash: 70835a0
+          no_next: 沒有下一位可晉級的選手。
+          #original_hash: 77dfd21
+          cancel: 取消
+          #original_hash: 79d6737
+          failed_to_fetch: 無法取得下一位晉級的選手
+      results:
+        #original_hash: 4705687
+        competitor: 參賽者
+        #original_hash: 51cda54
+        mean: 平均
+      errors:
+        #original_hash: f522c26
+        round_closed: 該輪還未開啟
     my_competitions:
       #original_hash: 5c6d3ea
       title: 我的比賽
@@ -2443,14 +2571,20 @@ zh-TW:
       result_sentence: '%{a_win_by_word}：%{result}'
       #original_hash: 756603f
       no_winner: '主要比賽項目是%{event_name}。由於無參賽者在這項目中還原成功，所以這場比賽沒有優勝參賽者。'
+      #original_hash: 5262865
+      h2h_winner: '%{winner}贏得了%{event_name}項目的Head-to-Head決賽。'
       #original_hash: 6c3b236
       winner: '%{winner}在 %{event_name} 項目中以%{result_sentence}贏得第一名。'
       #original_hash: ec7f18a
       first_runner_up: '第二名%{first_runner_up}：%{first_runner_up_result}，'
+      #original_hash: 2926d10
+      h2h_first_runner_up: '%{first_runner_up}取得第二名'
       #original_hash: cffa50a
       and: 以及
       #original_hash: 67d285c
       second_runner_up: '第三名%{second_runner_up}：%{second_runner_up_result}。'
+      #original_hash: 157b649
+      h2h_second_runner_up: '%{second_runner_up}取得第三名'
       records:
         #original_hash: 0658e11
         wr: 世界紀錄
@@ -2640,8 +2774,8 @@ zh-TW:
       submit_delete_value: 取消
       #original_hash: 22316f1
       submit_confirm: 您確定要申請比賽了嗎？一旦申請就無法修改任何資訊了，請檢查您的電子郵件以確保WCA比賽公告團隊有收到比賽申請。
-      #original_hash: 4c7deb7
-      submit_delete: 您確定要取消這場比賽嗎？一旦執行了就回不去了。
+      #original_hash: 89fbbca
+      submit_delete: '此操作無法復原。請在下方輸入比賽 ID「%{competition_id}」以確認刪除。'
       #original_hash: 8ebebca
       coordinates: 座標
       #original_hash: a672984
@@ -2719,6 +2853,10 @@ zh-TW:
           auto_close_threshold: 自動結束報名的人數
           #original_hash: b1d5af4
           newcomer_month_reserved_spots: 為第一次參賽者預留的名額數
+          #original_hash: 26b48e3
+          auto_accept_preference: 自動核准報名
+          #original_hash: 1b8698d
+          auto_accept_disable_threshold: 自動核准報名的限制
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: WCA代表
@@ -2728,6 +2866,8 @@ zh-TW:
           organizer_ids: 主辦人ID
           #original_hash: b37456c
           contact: 聯絡
+          #original_hash: 78ef126
+          lead_delegate_id: 主代表
         #original_hash: 991f419
         championships: 錦標賽
         website:
@@ -3024,6 +3164,9 @@ zh-TW:
               #original_hash: 6509041
               'false': 參賽者必須要達到資格限制才能報名
     registration_v2:
+      auto_accept:
+        #original_hash: eaf9960
+        bulk_auto_accept: 自動核准參賽者
       pdf:
         #original_hash: 5c7d60f
         link: '如同<0>%{pdfLink}</0>'
@@ -3080,6 +3223,8 @@ zh-TW:
           #original_hash: 3a16c0d
           refunded: '款項已在%{date}退款。'
         psychsheets:
+          #original_hash: ded0a5d
+          show_me: 我的排名
           #original_hash: a23dc2b
           rank: '排名：%{userPosition}'
         #original_hash: 19eabc9
@@ -3596,6 +3741,8 @@ zh-TW:
         #original_hash: c4622c3
         scrambles: 轉亂步驟內容
     results_table:
+      #original_hash: bdbfcdc
+      h2h_results_disclaimer: 成績由Head-to-Head決賽決定。目前僅顯示名次順序與最佳單次成績，完整的Head-to-Head成績顯示功能仍在開發中。
       #original_hash: 3e9a6b5
       wca_profile: WCA個人頁面
       #original_hash: ad8919a
@@ -3894,6 +4041,8 @@ zh-TW:
     forum_age_requirement: 您必須年滿13歲才能使用WCA討論區。
     #original_hash: d1f3342
     forum_enter_dob: 在進入討論區前，您必須先提供出生日期。請輸入您的出生日期，然後再嘗試進入討論區。
+    #original_hash: 56e3bad
+    refresh: 重新整理
   faq:
     #original_hash: d790b40
     title: 常見問題
@@ -4050,10 +4199,10 @@ zh-TW:
   about:
     #original_hash: 9ac918a
     title: 關於WCA
-    #original_hash: af00571
-    mission_statement: 我們的使命是，在更多的國家舉辦更多的比賽，並在公平且相同的條件下讓更多的人參與並得到更多的快樂。
-    #original_hash: e627278
-    mission_footer: WCA的使命
+    #original_hash: ee35764
+    mission_statement: 我們的宗旨是賦能全球魔術方塊速解社群，並維護一個對所有人而言有趣且公平的競賽環境。
+    #original_hash: 5bed828
+    mission_footer: WCA的宗旨
     #original_hash: cdab446
     who_we_are_title: 我們是誰
     #original_hash: 303f17a
@@ -4147,6 +4296,8 @@ zh-TW:
     codeofconduct: 行為準則
     #original_hash: 4f05e8f
     finances: 財政
+    #original_hash: c1e8f94
+    strategic_plan: 策略規劃
   education:
     #original_hash: 746e863
     title: WCA教育資源
@@ -4527,9 +4678,9 @@ zh-TW:
     paragraph4:
       #original_hash: b6dca56
       title: 鄰近比賽政策
-      #original_hash: f5eeb95
+      #original_hash: 0574d31
       content1: >-
-        WCA比賽必須與其他比賽間隔10公里或5天以上才會通過申請。若申請中的比賽與其他比賽的距離小於10公里且日期小於5天，WCAT應仔細審核。當WCA代表申請這類型的比賽時，必須提供額外的資訊來說明為什麼這場比賽應該通過申請。可能讓比賽申請通過的理由如下：
+        WCA比賽必須與其他比賽間隔30公里或5天以上才會通過申請。若申請中的比賽與其他比賽的距離小於30公里且日期小於5天，WCAT應仔細審核。當WCA代表申請這類型的比賽時，必須提供額外的資訊來說明為什麼這場比賽應該通過申請。可能讓比賽申請通過的理由如下：
       olist1:
         #original_hash: de00462
         '1': 兩場比賽沒有相同的項目。

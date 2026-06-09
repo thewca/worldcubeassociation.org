@@ -1,18 +1,25 @@
 import { Format } from "@/lib/wca/data/formats";
-import { Link, Table } from "@chakra-ui/react";
+import { Box, Link, Table } from "@chakra-ui/react";
 import { Stat, statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
 import { padSkipped } from "@/lib/live/padSkipped";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import { recordTagBadge } from "@/components/results/TableCells";
+import { WithRecordTag } from "@/components/results/TableCells";
 import { LiveAttempt, LiveCompetitor, LiveResult } from "@/types/live";
+import { TFunction } from "i18next";
 
 export function LiveTableHeader({
   isLinked = false,
   format,
+  byPerson = false,
+  isAdmin = false,
+  t,
 }: {
   isLinked?: boolean;
+  byPerson?: boolean;
+  isAdmin?: boolean;
   format: Format;
+  t: TFunction;
 }) {
   const solveCount = format.expected_solve_count;
 
@@ -22,18 +29,40 @@ export function LiveTableHeader({
   return (
     <Table.Header>
       <Table.Row>
+        {byPerson && (
+          <Table.ColumnHeader textAlign="left">
+            {t("competitions.results_table.round")}
+          </Table.ColumnHeader>
+        )}
         <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
-        <Table.ColumnHeader>Competitor</Table.ColumnHeader>
-        {isLinked && <Table.ColumnHeader>Round</Table.ColumnHeader>}
-        <Table.ColumnHeader>Country</Table.ColumnHeader>
+        {isAdmin && (
+          <Table.ColumnHeader textAlign="center">ID</Table.ColumnHeader>
+        )}
+        {!byPerson && (
+          <Table.ColumnHeader>
+            {t("competitions.live.results.competitor")}
+          </Table.ColumnHeader>
+        )}
+        {!byPerson && (
+          <Table.ColumnHeader hideBelow="md">
+            {t("results.table_elements.region")}
+          </Table.ColumnHeader>
+        )}
+        {isLinked && (
+          <Table.ColumnHeader>
+            <Box as="span" hideBelow="md">
+              {t("competitions.results_table.round")}
+            </Box>
+          </Table.ColumnHeader>
+        )}
         {attemptIndexes.map((num) => (
-          <Table.ColumnHeader key={num} textAlign="right">
+          <Table.ColumnHeader key={num} textAlign="right" hideBelow="md">
             {num + 1}
           </Table.ColumnHeader>
         ))}
         {stats.map((stat) => (
           <Table.ColumnHeader textAlign="right" key={stat.field}>
-            {stat.name}
+            {t(stat.i18nKey)}
           </Table.ColumnHeader>
         ))}
       </Table.Row>
@@ -45,18 +74,22 @@ export function LivePositionCell({
   position,
   rowSpan,
   advancingParams,
+  showAdvancing = true,
 }: {
   position: number | string;
   rowSpan?: number;
   advancingParams: Pick<LiveResult, "advancing_questionable" | "advancing">;
+  showAdvancing?: boolean;
 }) {
   return (
     <Table.Cell
       width={1}
-      layerStyle="fill.deep"
+      layerStyle={showAdvancing ? "fill.deep" : undefined}
       textAlign="right"
       rowSpan={rowSpan}
-      colorPalette={rankingCellColorPalette(advancingParams)}
+      colorPalette={
+        showAdvancing ? rankingCellColorPalette(advancingParams) : undefined
+      }
     >
       {position}
     </Table.Cell>
@@ -64,27 +97,29 @@ export function LivePositionCell({
 }
 
 export function LiveCompetitorCell({
-  isAdmin = false,
+  link = true,
   rowSpan,
   competitionId,
   competitor,
 }: {
-  isAdmin?: boolean;
+  link?: boolean;
   rowSpan?: number;
   competitionId: string;
   competitor: Pick<LiveCompetitor, "id" | "name">;
 }) {
   return (
     <Table.Cell rowSpan={rowSpan}>
-      <Link
-        href={
-          isAdmin
-            ? `/registrations/${competitor.id}/edit`
-            : `/competitions/${competitionId}/live/competitors/${competitor.id}`
-        }
-      >
+      {link && (
+        <Link
+          href={`/competitions/${competitionId}/live/competitors/${competitor.id}`}
+          hideBelow="md"
+        >
+          {competitor.name}
+        </Link>
+      )}
+      <Box as="span" hideFrom={link ? "md" : undefined}>
         {competitor.name}
-      </Link>
+      </Box>
     </Table.Cell>
   );
 }
@@ -103,7 +138,8 @@ export function LiveAttemptsCells({
   return padSkipped(attempts, format.expected_solve_count).map((attempt) => (
     <Table.Cell
       textAlign="right"
-      key={`${competitorId}-${attempt.attempt_number}`}
+      key={`attempts-${competitorId}-${attempt.attempt_number}`}
+      hideBelow="md"
     >
       {formatAttemptResult(attempt.value, eventId)}
     </Table.Cell>
@@ -134,13 +170,13 @@ export function LiveStatCells({
 
   return stats.map((stat, statIndex) => (
     <Table.Cell
-      key={`${competitorId}-${stat.name}`}
+      key={`${competitorId}-${stat.i18nKey}`}
       textAlign="right"
-      position="relative"
       fontWeight={shouldHighlight(statIndex) ? "bold" : "normal"}
     >
-      {formatAttemptResult(result[stat.field], eventId)}{" "}
-      {!isAdmin && recordTagBadge(result[stat.recordTagField])}
+      <WithRecordTag recordTag={isAdmin ? null : result[stat.recordTagField]}>
+        {formatAttemptResult(result[stat.field], eventId)}
+      </WithRecordTag>
     </Table.Cell>
   ));
 }

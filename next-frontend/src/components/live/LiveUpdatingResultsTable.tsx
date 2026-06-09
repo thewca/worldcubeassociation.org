@@ -1,47 +1,65 @@
 "use client";
 
 import LiveResultsTable from "@/components/live/LiveResultsTable";
-import { Heading, HStack, Spacer, Switch, VStack } from "@chakra-ui/react";
+import {
+  Heading,
+  HStack,
+  Spacer,
+  IconButton,
+  Switch,
+  VStack,
+  Link,
+} from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import PendingResultsTable from "@/components/live/PendingResultsTable";
-import { LiveCompetitor } from "@/types/live";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
+import AddPersonModal from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
+import BulkQuitButton from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/BulkQuitButton";
+import { LuCheck, LuLock, LuLockOpen } from "react-icons/lu";
+import NextLink from "next/link";
+import { route } from "nextjs-routes";
 
 export default function LiveUpdatingResultsTable({
   roundWcifId,
   formatId,
   competitionId,
-  competitors,
   title,
-  isAdmin = false,
+  isAdminView = false,
   showEmpty = true,
   isLinkedRound = false,
+  canManage = false,
 }: {
   roundWcifId: string;
   formatId: string;
   competitionId: string;
-  competitors: LiveCompetitor[];
   title: string;
-  isAdmin?: boolean;
+  isAdminView?: boolean;
   showEmpty?: boolean;
   isLinkedRound?: boolean;
+  canManage?: boolean;
 }) {
   const [showLinkedRoundsView, setShowLinkedRoundsView] =
     useState(isLinkedRound);
 
-  const { connectionState, liveResultsByRegistrationId, pendingLiveResults } =
-    useLiveResults();
+  const {
+    connectionState,
+    liveResultsByRegistrationId,
+    pendingLiveResults,
+    competitors,
+    pendingQuitCompetitors,
+  } = useLiveResults();
 
   const { eventId } = parseActivityCode(roundWcifId);
 
   return (
     <VStack align="left">
       <HStack>
-        <Heading textStyle="h1">{title}</Heading>
-        <ConnectionPulse connectionState={connectionState} />
+        <Heading textStyle={{ sm: "h3", md: "h2", lg: "h1" }}>{title}</Heading>
+        {isAdminView && <ConnectionPulse connectionState={connectionState} />}
         <Spacer flex={1} />
+        {!isAdminView && <ConnectionPulse connectionState={connectionState} />}
         {isLinkedRound && (
           <Switch.Root
             checked={showLinkedRoundsView}
@@ -54,6 +72,58 @@ export default function LiveUpdatingResultsTable({
             </Switch.Control>
             <Switch.Label>Show combined Results</Switch.Label>
           </Switch.Root>
+        )}
+        {canManage && (
+          <IconButton variant="ghost">
+            <Link asChild>
+              {isAdminView ? (
+                <NextLink
+                  href={route({
+                    pathname:
+                      "/competitions/[competitionId]/live/rounds/[roundId]",
+                    query: { competitionId, roundId: roundWcifId },
+                  })}
+                >
+                  <LuLockOpen />
+                </NextLink>
+              ) : (
+                <NextLink
+                  href={route({
+                    pathname:
+                      "/competitions/[competitionId]/live/rounds/[roundId]/admin",
+                    query: { competitionId, roundId: roundWcifId },
+                  })}
+                >
+                  <LuLock />
+                </NextLink>
+              )}
+            </Link>
+          </IconButton>
+        )}
+        {isAdminView && (
+          <>
+            <AddPersonModal
+              competitionId={competitionId}
+              competitors={competitors}
+            />
+            <BulkQuitButton
+              competitionId={competitionId}
+              roundId={roundWcifId}
+            />
+            <IconButton variant="ghost">
+              <Link asChild>
+                <NextLink
+                  href={route({
+                    pathname:
+                      "/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check",
+                    query: { competitionId, roundId: roundWcifId },
+                  })}
+                >
+                  <LuCheck />
+                </NextLink>
+              </Link>
+            </IconButton>
+          </>
         )}
       </HStack>
       <PendingResultsTable
@@ -68,9 +138,12 @@ export default function LiveUpdatingResultsTable({
         formatId={formatId}
         competitionId={competitionId}
         competitors={competitors}
-        isAdmin={isAdmin}
+        pendingQuitCompetitors={pendingQuitCompetitors}
+        pendingLiveResults={pendingLiveResults}
+        isAdmin={isAdminView}
         showEmpty={showEmpty}
         showLinkedRoundsView={showLinkedRoundsView}
+        isLinkedRound={isLinkedRound}
       />
     </VStack>
   );

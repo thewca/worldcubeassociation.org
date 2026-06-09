@@ -8,9 +8,9 @@ class TicketsEditPerson < ApplicationRecord
     closed: "closed",
   }
 
-  has_one :ticket, as: :metadata
-  has_many :tickets_edit_person_fields
-  belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :wca_id
+  has_one :ticket, as: :metadata, dependent: :destroy
+  has_many :tickets_edit_person_fields, dependent: :destroy
+  belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :wca_id, inverse_of: :tickets_edit_person
 
   ACTION_TYPE = {
     approve_edit_person_request: "approve_edit_person_request",

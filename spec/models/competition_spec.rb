@@ -572,7 +572,7 @@ RSpec.describe Competition do
       expect(competition.in_progress?).to be true
       expect(competition.info_messages[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"
 
-      competition.use_wca_live_for_scoretaking = true
+      competition.scoretaking_software = :wca_live
       expect(competition.info_messages[:in_progress]).to eq "This competition is ongoing. You can check the live results <a href='https://live.worldcubeassociation.org/link/competitions/#{competition.id}'>here</a>!"
 
       competition.results_posted_at = Time.now
@@ -774,7 +774,7 @@ RSpec.describe Competition do
   end
 
   describe "when confirming or making visible" do
-    let(:competition_with_delegate) { build(:competition, :with_delegate, :with_organizer, generate_website: false) }
+    let(:competition_with_delegate) { build(:competition, :with_lead_delegate, :with_organizer, generate_website: false) }
     let(:competition_without_delegate) { build(:competition) }
 
     %i[confirmed show_at_all].each do |action|
@@ -807,7 +807,7 @@ RSpec.describe Competition do
     end
 
     it "sets confirmed_at when setting confirmed true" do
-      competition = create(:competition, :future, :with_delegate, :with_organizer, :with_valid_schedule)
+      competition = create(:competition, :future, :with_lead_delegate, :with_organizer, :with_valid_schedule)
       expect(competition.confirmed_at).to be_nil
 
       now = Time.at(Time.now.to_i)
@@ -927,10 +927,10 @@ RSpec.describe Competition do
       result = competition.events_with_podium_results
       expect(result.size).to eq 2
       expect(result.first.first).to eq three_by_three
-      expect(result.first.last.map(&:value1)).to eq [3000] * 3
+      expect(result.first.last.map { it.attempts.first }).to eq [3000] * 3
 
       expect(result.last.first).to eq two_by_two
-      expect(result.last.last.map(&:value1)).to eq [3000, 3000]
+      expect(result.last.last.map { it.attempts.first }).to eq [3000, 3000]
     end
 
     it "winning_results" do
@@ -957,13 +957,13 @@ RSpec.describe Competition do
       expect(results.size).to eq 2
       expect(results[0].first).to eq three_by_three
       expect(results[0].second.first.first).to eq RoundType.find("f")
-      expect(results[0].second.first.last.map(&:value1)).to eq [3000] * 3
+      expect(results[0].second.first.last.map { it.attempts.first }).to eq [3000] * 3
       expect(results[0].second.first.last.map(&:event_id)).to eq ["333"] * 3
-      expect(results[0].second.second.last.map(&:value1)).to eq [3000] * 4
+      expect(results[0].second.second.last.map { it.attempts.first }).to eq [3000] * 4
 
       expect(results[1].first).to eq two_by_two
       expect(results[1].second.first.first).to eq RoundType.find("c")
-      expect(results[1].second.first.last.map(&:value1)).to eq [3000, 3000]
+      expect(results[1].second.first.last.map { it.attempts.first }).to eq [3000, 3000]
 
       # Orders results which tied by person name.
       expect(results[1].second.first.last.map(&:person_name)).to eq %w[One Two]

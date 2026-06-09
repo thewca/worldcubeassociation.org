@@ -1,11 +1,10 @@
 development:
-  adapter: redis
-  url: <%= EnvConfig.ACTIONCABLE_REDIS_URL %>
+  adapter: anycable
+  url: <%= EnvConfig.ANYCABLE_REDIS_URL %>
 
 test:
   adapter: test
 
 production:
-  adapter: redis
-  url: <%= EnvConfig.ACTIONCABLE_REDIS_URL %>
-  channel_prefix: wca_production
+  adapter: anycable
+  url: <%= EnvConfig.ANYCABLE_REDIS_URL %>

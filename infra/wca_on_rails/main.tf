@@ -38,6 +38,7 @@ module "production" {
   DATABASE_WRT_SENIOR_USER = var.DATABASE_WRT_SENIOR_USER
   rails_startup_time = local.rails_startup_time
   WRC_WEBHOOK_URL = var.WRC_WEBHOOK_URL
+  anycable_path = var.anycable_path
 }
 
 module "staging" {
@@ -50,6 +51,7 @@ module "staging" {
   shared = module.shared
   rails_startup_time = local.rails_startup_time
   WRC_WEBHOOK_URL = var.WRC_WEBHOOK_URL
+  anycable_path = var.anycable_path
 }
 
 module "shared" {
@@ -59,4 +61,5 @@ module "shared" {
   availability_zones = var.availability_zones
   rails_startup_time = local.rails_startup_time
   pma_auth_secret = var.pma_auth_secret
+  anycable_path = var.anycable_path
 }

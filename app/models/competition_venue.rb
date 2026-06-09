@@ -5,7 +5,7 @@ class CompetitionVenue < ApplicationRecord
   has_many :venue_rooms, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
-  belongs_to :country, foreign_key: :country_iso2, primary_key: :iso2
+  belongs_to :country, foreign_key: :country_iso2, primary_key: :iso2, inverse_of: :competition_venues
   has_one :continent, through: :country
 
   delegate :continent, to: :country, allow_nil: true

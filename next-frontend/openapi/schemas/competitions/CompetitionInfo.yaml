@@ -190,6 +190,10 @@ properties:
   registration_full_and_accepted?:
     type: boolean
     example: true
+  spots_left:
+    type: integer
+    nullable: true
+    example: 42
   tab_names:
     type: array
     items:
