@@ -2961,6 +2961,8 @@ es-ES:
         edit: Editar
         #original_hash: 612e12d
         results: Resultados
+        #original_hash: b233e77
+        registration: Registro
         warnings:
           #original_hash: 9198c71
           omitted: >-
@@ -3584,7 +3586,7 @@ es-ES:
           #original_hash: b37456c
           contact: Contacto
           #original_hash: 78ef126
-          lead_delegate_id: Delegado responsable
+          lead_delegate_id: Delegado Responsable
         #original_hash: 991f419
         championships: Campeonatos
         website:
@@ -3819,7 +3821,7 @@ es-ES:
             mostrar](mailto:algun@correo.es)
           #original_hash: 7a51d00
           lead_delegate_id: >-
-            El Delegado responsable es responsable de los aspectos
+            El Delegado Responsable es responsable de los aspectos
             administrativos de una competición (Resultados, Informe, pago de la
             Cuota)
         website:
@@ -3911,7 +3913,7 @@ es-ES:
             bloquearán. Dejar en blanco si no hay límite.
           #original_hash: 3de153b
           extra_requirements: >-
-            Por favor indica aquí cualquier requisito adicional no cubierto
+            Por favor, indica aquí cualquier requisito adicional no cubierto
             anteriormente, como por ejemplo indicaciones sobre cómo efectuar el
             pago.<br/>Por favor, rellénalo <b>en inglés</b> y en cualquier
             idioma adicional que hablen tus competidores; será mostrado en la
@@ -5649,6 +5651,8 @@ es-ES:
       last_delegated: Delegó por última vez el
       #original_hash: 5ab4a17
       total_delegated: Competiciones delegadas en total
+      #original_hash: cec62d6
+      lead_delegated: Competiciones como Delegado Responsable
       #original_hash: 90ccd64
       history: Historial
   regional_organizations:

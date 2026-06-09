@@ -132,6 +132,7 @@ run_import() {
 
   echo ""
   echo "✓ CMS data import complete!"
+  echo "  Restart your Next.js dev server if it's already running to pick up the new content."
 }
 
 # Main execution

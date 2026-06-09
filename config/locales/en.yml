@@ -1743,7 +1743,7 @@ en:
           external_website: "Website"
           external_registration_page: "Registration page"
           uses_wca_registration: "I would like to use the WCA website for registration"
-          uses_wca_live: "I will be using WCA Live for scoretaking"
+          scoretaking_software: "Software used for scoretaking"
         entry_fees:
           currency_code: "Currency code"
           base_entry_fee: "Base registration fee"
@@ -1831,7 +1831,7 @@ en:
           external_website: "The website of the competition. Must be a valid http(s) url."
           external_registration_page: "The page where the competitors have to register for the competition. Must be a valid http(s) url."
           uses_wca_registration: ""
-          uses_wca_live: ""
+          scoretaking_software: "Select '%{choice_ilr}' if you want to use Dual Rounds"
         user_settings:
           receive_registration_emails: ""
         entry_fees:
@@ -1887,6 +1887,11 @@ en:
             "disabled": "Disable 'Bulk Auto Accept' button"
             "bulk": "Enable 'Bulk Auto Accept' button in Registrations menu"
             "live": "Automatically accept registrations when payment is made"
+        website:
+          scoretaking_software:
+            external: "An external tool, not maintained by the WCA"
+            wca_live: "WCA Live, hosted on live.worldcubeassociation.org"
+            internal: "Integrated Live Results"
         registration:
           allow_on_the_spot:
             "true": "On the spot registrations will be accepted"
