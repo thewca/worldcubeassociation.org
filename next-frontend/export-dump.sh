@@ -16,4 +16,4 @@ else
 fi
 
 zip -r dump.zip dump
-aws s3 cp dump.zip s3://assets.worldcubeassociation.org/export/payload/dump.zip
+aws s3 cp dump.zip s3://exports.worldcubeassociation.org/payload/dump.zip

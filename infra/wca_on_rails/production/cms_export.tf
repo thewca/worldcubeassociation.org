@@ -2,7 +2,7 @@
 #
 # Runs next-frontend/export-dump.sh inside the production Next.js image: it
 # mongodumps the `payload` database, sanitizes PII via sanitize-dump.mjs, and
-# uploads the zip to s3://assets.worldcubeassociation.org/export/payload/dump.zip.
+# uploads the zip to s3://exports.worldcubeassociation.org/payload/dump.zip.
 # The result is consumed by next-frontend/import-dump.sh for local development.
 
 resource "aws_ecs_task_definition" "cms_export" {
