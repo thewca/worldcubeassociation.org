@@ -87,8 +87,18 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       </Card.Body>
       {block.buttonText?.trim() && (
         <Card.Footer>
-          <Button asChild variant="outline" color="currentColor">
-            <ChakraLink href={block.buttonLink!}>{block.buttonText}</ChakraLink>
+          <Button
+            asChild
+            variant="outline"
+            _hover={{ bg: "colorPalette.emphasized" }}
+          >
+            <ChakraLink
+              color="colorPalette.pastelContrast"
+              textStyle={undefined}
+              href={block.buttonLink!}
+            >
+              {block.buttonText}
+            </ChakraLink>
           </Button>
         </Card.Footer>
       )}
