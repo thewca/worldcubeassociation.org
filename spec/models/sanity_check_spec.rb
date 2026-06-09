@@ -365,6 +365,7 @@ RSpec.describe SanityCheck do
     context "Wrong names" do
       RSpec.shared_examples 'correct sanity check' do |sanity_check_id, irregular_people, valid_people|
         let(:sanity_check) { SanityCheck.find(sanity_check_id) }
+
         context "Sanity Check #{sanity_check_id}:" do
           it "correctly finds all irregular names" do
             irregular_people = irregular_people.map do |name|
