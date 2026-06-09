@@ -27,11 +27,11 @@ function truncateToWord(text: string, limit: number): string | null {
 export default function AnnouncementContent({
   contentMarkdown,
 }: {
-  contentMarkdown: string;
+  contentMarkdown?: string | null;
 }) {
   const [expanded, setExpanded] = useState(false);
 
-  const truncated = truncateToWord(contentMarkdown, CHARACTER_LIMIT);
+  const truncated = truncateToWord(contentMarkdown ?? "", CHARACTER_LIMIT);
   const showReadMore = truncated !== null;
 
   return (
