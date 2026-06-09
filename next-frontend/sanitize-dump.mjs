@@ -25,6 +25,7 @@ if (!usersPath) {
 // Fields that hold credentials/PII and must never leave the production VPC.
 const SECRET_FIELDS = [
   "accounts",
+  // These are currently not saved in payload, but still listing them if they ever are
   "sessions",
   "verificationTokens",
   // Local-strategy fields, in case auth is ever switched on:
