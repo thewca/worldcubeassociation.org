@@ -87,7 +87,6 @@ module WcaOnRails
     }
 
     config.action_view.preload_links_header = false
-    config.active_storage.variant_processor = :mini_magick
 
     # Move the mailers into a separate queue for us to control
     config.action_mailer.deliver_later_queue_name = :mailers

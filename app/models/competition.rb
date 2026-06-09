@@ -2412,8 +2412,8 @@ class Competition < ApplicationRecord
         "generateWebsite" => generate_website,
         "externalWebsite" => external_website,
         "externalRegistrationPage" => external_registration_page,
-        "usesWcaRegistration" => use_wca_registration,
-        "usesWcaLive" => scoretaking_software_wca_live?,
+        "usesWcaRegistration" => use_wca_registration?,
+        "scoretakingSoftware" => scoretaking_software,
       },
       "entryFees" => {
         "currencyCode" => currency_code,
@@ -2521,7 +2521,7 @@ class Competition < ApplicationRecord
         "externalWebsite" => errors[:external_website],
         "externalRegistrationPage" => errors[:external_registration_page],
         "usesWcaRegistration" => errors[:use_wca_registration],
-        "usesWcaLive" => errors[:scoretaking_software],
+        "scoretakingSoftware" => errors[:scoretaking_software],
       },
       "entryFees" => {
         "currencyCode" => errors[:currency_code],
@@ -2729,7 +2729,7 @@ class Competition < ApplicationRecord
       guest_entry_status: form_data.dig('registration', 'guestEntryStatus'),
       allow_registration_edits: form_data.dig('registration', 'allowSelfEdits'),
       competitor_can_cancel: form_data.dig('registration', 'competitorCanCancel'),
-      scoretaking_software: form_data.dig('website', 'usesWcaLive') ? :wca_live : :external,
+      scoretaking_software: form_data.dig('website', 'scoretakingSoftware'),
       allow_registration_without_qualification: form_data.dig('eventRestrictions', 'qualificationResults', 'allowRegistrationWithout'),
       guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),
       events_per_registration_limit: form_data.dig('eventRestrictions', 'eventLimitation', 'perRegistrationLimit'),
@@ -2888,7 +2888,7 @@ class Competition < ApplicationRecord
             "externalWebsite" => { "type" => %w[string null] },
             "externalRegistrationPage" => { "type" => %w[string null] },
             "usesWcaRegistration" => { "type" => "boolean" },
-            "usesWcaLive" => { "type" => "boolean" },
+            "scoretakingSoftware" => { "type" => "string", "enum" => %w[external wca_live internal] },
           },
         },
         "userSettings" => {
@@ -3018,7 +3018,7 @@ class Competition < ApplicationRecord
           "additionalProperties" => false,
           "properties" => {
             "externalWebsite" => { "type" => %w[string null] },
-            "usesWcaLive" => { "type" => "boolean" },
+            "scoretakingSoftware" => { "type" => "string", "enum" => %w[external wca_live internal] },
           },
         },
         "entryFees" => {

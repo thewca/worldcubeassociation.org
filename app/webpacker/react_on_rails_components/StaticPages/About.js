@@ -1,7 +1,7 @@
 import React from 'react';
 import { List, Button, Icon } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
-import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import I18nHTMLTranslate from '../../components/I18nHTMLTranslate';
 import Worlds2015 from './worlds-2015.jpg';
 import BulgarianOpen2018 from './bulgarian-open-2018.jpg';
 

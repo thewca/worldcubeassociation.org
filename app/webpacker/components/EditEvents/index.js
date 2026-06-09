@@ -89,6 +89,7 @@ export default function Wrapper({
   canAddAndRemoveEvents,
   canUpdateEvents,
   canUpdateQualifications,
+  usesIlr,
   wcifEvents,
 }) {
   const normalizedEvents = normalizeWcifEvents(wcifEvents);
@@ -101,6 +102,7 @@ export default function Wrapper({
         canAddAndRemoveEvents,
         canUpdateEvents,
         canUpdateQualifications,
+        usesIlr,
         wcifEvents: normalizedEvents,
         initialWcifEvents: normalizedEvents,
         unsavedChanges: false,

@@ -1,13 +1,14 @@
 import React from 'react';
 import { Form, Label } from 'semantic-ui-react';
+import { useStore } from '../../../../lib/providers/StoreProvider';
 
-const advancementTypeOptions = (roundNumber) => [
+const advancementTypeOptions = (roundNumber, usesIlr) => [
   { key: 0, value: 0, text: 'To be Announced' },
   {
     key: -1, value: -1, text: '────────', disabled: true,
   },
   {
-    key: -2, value: 'dual', text: 'Dual Round', disabled: roundNumber !== 1,
+    key: -2, value: 'dual', text: 'Dual Round', disabled: roundNumber !== 1 || !usesIlr,
   },
   { key: 1, value: 'ranking', text: 'Ranking' },
   { key: 2, value: 'percent', text: 'Percent' },
@@ -15,9 +16,9 @@ const advancementTypeOptions = (roundNumber) => [
 ];
 
 export function AdvancementTypeInput({
-  advancementType, onChange, roundNumber,
+  advancementType, onChange, roundNumber, usesIlr,
 }) {
-  const options = advancementTypeOptions(roundNumber);
+  const options = advancementTypeOptions(roundNumber, usesIlr);
 
   return (
     <Form.Select
@@ -33,8 +34,10 @@ export function AdvancementTypeInput({
 export default function AdvancementTypeField({
   advancementType, onChange, roundNumber,
 }) {
+  const { usesIlr } = useStore();
+
   return (
-    <Form.Field inline>
+    <Form.Field>
       <Label>
         Type
       </Label>
@@ -43,6 +46,7 @@ export default function AdvancementTypeField({
         advancementType={advancementType}
         onChange={onChange}
         roundNumber={roundNumber}
+        usesIlr={usesIlr}
       />
     </Form.Field>
   );
