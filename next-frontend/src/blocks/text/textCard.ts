@@ -21,6 +21,10 @@ const actionButtonBlock: Block = {
       type: "checkbox",
       required: true,
       defaultValue: false,
+      admin: {
+        description:
+          "Buttons are solid blue by default. If you click this checkbox, their color will follow the original text box instead",
+      },
     },
   ],
 };
