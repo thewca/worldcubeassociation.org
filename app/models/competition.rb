@@ -1450,13 +1450,26 @@ class Competition < ApplicationRecord
     [city_name, country&.name].compact.join(', ')
   end
 
-  def events_with_podium_results
-    results.includes(:result_attempts).podium.order(:pos).group_by(&:event)
-           .sort_by { |event, _results| event.rank }
+  def final_rounds
+    rounds.filter(&:final_with_linked?)
+  end
+
+  def events_with_podium_results(main_event: nil)
+    rounds = final_rounds
+    rounds = rounds.filter { it.event == main_event } if main_event
+    rounds.flat_map { it.results.includes(:result_attempts).succeeded }
+          .group_by(&:event)
+          .sort_by { |event, _results| event.rank }
+          .map do |event, results|
+            # Handle ties
+            sorted = results.sort_by(&:values_for_sorting).uniq(&:person_id)
+            podium = sorted.first(3) + sorted.drop(3).take_while { |r| r.tied_with?(sorted[2]) }
+            [event, podium]
+          end
   end
 
   def winning_results
-    results.includes(:result_attempts).winners
+    events_with_podium_results.flat_map { |_event, results| results.first(1) + results.drop(1).take_while { |r| r.tied_with?(results[0]) } }
   end
 
   def person_ids_with_results

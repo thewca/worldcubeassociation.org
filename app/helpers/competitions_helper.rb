@@ -58,7 +58,7 @@ module CompetitionsHelper
   end
 
   def winners(competition, main_event)
-    top_three = competition.results.where(event: main_event).podium.order(:pos)
+    top_three = competition.events_with_podium_results(main_event: main_event).flat_map { |_event, results| results }
     h2h_finals = top_three.first.format_id == "h"
     results_by_place = top_three.group_by(&:pos)
 
