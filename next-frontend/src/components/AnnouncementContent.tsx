@@ -19,7 +19,7 @@ export default function AnnouncementContent({
   const truncated = _.truncate(contentMarkdown ?? "", {
     length: CHARACTER_LIMIT,
     separator: /\s+/,
-    omission: "...",
+    omission: "…",
   });
 
   const showReadMore = truncated !== contentMarkdown;
@@ -27,18 +27,20 @@ export default function AnnouncementContent({
   return (
     <>
       <ChakraMarkdown paragraphAs={Accordion.ItemBody} textStyle="body">
-        {expanded || !showReadMore ? contentMarkdown : truncated!}
+        {expanded || !showReadMore ? contentMarkdown : truncated}
       </ChakraMarkdown>
 
       {showReadMore && (
-        <Button
-          variant="ghost"
-          size="sm"
-          alignSelf="flex-start"
-          onClick={() => setExpanded((prev) => !prev)}
-        >
-          {expanded ? "Read Less" : "Read More"}
-        </Button>
+        <Accordion.ItemBody>
+          <Button
+            variant="ghost"
+            size="sm"
+            alignSelf="flex-start"
+            onClick={() => setExpanded((prev) => !prev)}
+          >
+            {expanded ? "Read Less" : "Read More"}
+          </Button>
+        </Accordion.ItemBody>
       )}
     </>
   );
