@@ -19,6 +19,7 @@ import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import type { components } from "@/types/openapi";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
+import { TFunction } from "i18next";
 
 const DEBOUNCE_MS = 300;
 const MIN_QUERY_LENGTH = 3;
@@ -52,13 +53,7 @@ const itemLabel = (item: ComboItem) => {
   }
 };
 
-function ResultContent({
-  item,
-  t,
-}: {
-  item: ComboItem;
-  t: ReturnType<typeof useT>["t"];
-}) {
+function ResultContent({ item, t }: { item: ComboItem; t: TFunction }) {
   switch (item.class) {
     case "competition":
       return (
@@ -176,14 +171,14 @@ export default function WcaSearch() {
       onInputValueChange={(e) => setQuery(e.inputValue)}
       onValueChange={(e) => handleSelect(e.value[0])}
       selectionBehavior="clear"
-      width="100%"
+      width="full"
       maxW="xl"
       ms="auto"
       me={{ base: "auto", xl: 0 }}
       placeholder={t("common.search_site")}
     >
       <Combobox.Control>
-        <Combobox.Input placeholder={t("common.search_site")} />
+        <Combobox.Input />
         <Combobox.IndicatorGroup>
           {loading ? <Spinner size="xs" /> : <LuSearch />}
         </Combobox.IndicatorGroup>

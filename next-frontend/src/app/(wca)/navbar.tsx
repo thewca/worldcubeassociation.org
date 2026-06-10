@@ -44,7 +44,9 @@ function TextWrapper<K extends string>({
   return (
     <>
       {navbarEntry.displayIcon && (
-        <IconDisplay name={navbarEntry.displayIcon} />
+        <Icon asChild hideBelow="2xl">
+          <IconDisplay name={navbarEntry.displayIcon} />
+        </Icon>
       )}
       <Box
         as="span"
