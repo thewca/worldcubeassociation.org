@@ -313,16 +313,21 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       },
       content: {
         content: (
-          <RegistrationAdministrationTable
-            columnsExpanded={expandedColumns}
-            registrations={accepted}
-            selected={partitionedSelectedIds.accepted}
-            onSelect={selectedIds.add}
-            onUnselect={selectedIds.remove}
-            onToggle={selectedIds.toggle}
-            competitionInfo={competitionInfo}
-            color={getStatusColor('accepted')}
-          />
+          <>
+            <Header.Subheader>
+              {I18n.t('competitions.registration_v2.list.approved.information')}
+            </Header.Subheader>
+            <RegistrationAdministrationTable
+              columnsExpanded={expandedColumns}
+              registrations={accepted}
+              selected={partitionedSelectedIds.accepted}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
+              competitionInfo={competitionInfo}
+              color={getStatusColor('accepted')}
+            />
+          </>
         ),
       },
     },
