@@ -172,7 +172,6 @@ export default function WcaSearch() {
       onValueChange={(e) => handleSelect(e.value[0])}
       selectionBehavior="clear"
       width="100%"
-      maxW="md"
       placeholder={t("common.search_site")}
     >
       <Combobox.Control>

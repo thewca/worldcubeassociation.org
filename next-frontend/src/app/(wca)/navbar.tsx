@@ -260,13 +260,13 @@ export default async function Navbar() {
               ))}
             </HStack>
           </HStack>
+          <Box hideBelow="md" flex="1" minW="3xs" mx={4}>
+            <WcaSearch />
+          </Box>
           <HStack>
             {showEmptyMessage && (
               <Text hideBelow="md">Oh no, there are no navbar items!</Text>
             )}
-            <Box hideBelow="md" minW="md">
-              <WcaSearch />
-            </Box>
             <ColorModeButton />
             <Box hideBelow="md">
               <LanguageSelector />
