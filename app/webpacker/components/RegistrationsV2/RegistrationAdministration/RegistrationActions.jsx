@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import {
-  Button, Dropdown, Grid, Icon, Popup,
+  Button, Dropdown, Popup,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { noop } from 'lodash';
@@ -280,29 +280,8 @@ export default function RegistrationActions({
     { behavior: 'smooth', block: 'start' },
   );
 
-  const hasCompetitorLimit = Boolean(competitionInfo.competitor_limit);
-
   return (
     <>
-      <Popup
-        flowing
-        position="bottom left"
-        trigger={
-          <Button color="grey" icon="info" />
-        }
-        content={(
-          <SummaryTable
-            partitionedSelectedIds={partitionedSelectedIds}
-            partitionedRegistrations={partitionedRegistrations}
-            partitionedMaximums={{ accepted: competitionInfo.competitor_limit }}
-            selectedCount={selectedCount}
-            registrationCount={registrations.length}
-            withSelectedCounts={anySelected}
-            withMaximums={hasCompetitorLimit}
-          />
-        )}
-      />
-
       <Popup
         flowing
         position="top center"
@@ -417,52 +396,6 @@ export default function RegistrationActions({
         content={I18n.t('competitions.registration_v2.update.move_to', { count: selectedCount })}
       />
     </>
-  );
-}
-
-function SummaryTable({
-  partitionedSelectedIds,
-  partitionedRegistrations,
-  partitionedMaximums,
-  selectedCount,
-  registrationCount,
-  withSelectedCounts,
-  withMaximums,
-}) {
-  const columnCount = (withMaximums ? 1 : 0) + (withSelectedCounts ? 1 : 0) + 2;
-  const width = columnCount * 5;
-
-  return (
-    <Grid celled columns={columnCount} textAlign="right" style={{ width: `${width}em` }}>
-      <Grid.Row>
-        <Grid.Column />
-        {withSelectedCounts && <Grid.Column>Selected</Grid.Column>}
-        <Grid.Column>Size</Grid.Column>
-        {withMaximums && <Grid.Column>Max</Grid.Column>}
-      </Grid.Row>
-
-      {registrationStatusKeys(
-        { includeNonCompeting: partitionedRegistrations.nonCompeting.length > 0 },
-      ).map((status) => (
-        <Grid.Row key={status}>
-          <Grid.Column>
-            <Icon color={getStatusColor(status)} name={getStatusIcon(status)} size="large" />
-          </Grid.Column>
-          {withSelectedCounts && (
-            <Grid.Column>{partitionedSelectedIds[status].length}</Grid.Column>
-          )}
-          <Grid.Column>{partitionedRegistrations[status].length}</Grid.Column>
-          {withMaximums && <Grid.Column>{partitionedMaximums[status] ?? '-'}</Grid.Column>}
-        </Grid.Row>
-      ))}
-
-      <Grid.Row>
-        <Grid.Column>Total</Grid.Column>
-        {withSelectedCounts && <Grid.Column>{selectedCount}</Grid.Column>}
-        <Grid.Column>{registrationCount}</Grid.Column>
-        {withMaximums && <Grid.Column>-</Grid.Column>}
-      </Grid.Row>
-    </Grid>
   );
 }
 
