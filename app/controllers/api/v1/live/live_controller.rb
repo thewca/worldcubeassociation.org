@@ -101,7 +101,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     delete_count = Live::DiffHelper.broadcast_changes(round) do
       deleted = result.live_attempts.delete_all
       LiveResult.reset_counters(result.id, :live_attempts)
-      result.update!(average: 0, best: 0, advancing: false, advancing_questionable: false)
+      result.update!(average: 0, best: 0, advancing: false, advancing_questionable: false, single_record_tag: nil, average_record_tag: nil)
       deleted
     end
 
