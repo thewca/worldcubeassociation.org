@@ -1,25 +1,24 @@
-import { Accordion, Link as ChakraLink } from "@chakra-ui/react";
+import { Accordion, Link as ChakraLink, Stack, Text } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
-import { Announcement, User } from "@/types/payload";
+import { Announcement } from "@/types/payload";
 import { LuChevronsRight } from "react-icons/lu";
+import { getMediumDateString } from "@/lib/wca/dates";
 
 function AnnouncementItem({ announcement }: { announcement: Announcement }) {
-  const publishedByUser = announcement.publishedBy as User;
-
   return (
     <Accordion.Item
       value={announcement.id}
       layerStyle="fill.subtle"
       _open={{ layerStyle: "card.pastel" }}
     >
-      <Accordion.ItemTrigger textStyle="s1" _open={{ textStyle: "h2" }}>
+      <Accordion.ItemTrigger _open={{ textStyle: "h2" }}>
         <Accordion.ItemIndicator _open={{ display: "none" }} />
-        {announcement.title}
+        <Stack gap={1} alignItems="flex-start">
+          <Text textStyle="s1">{announcement.title}</Text>
+          <Text>{getMediumDateString(announcement.publishedAt)}</Text>
+        </Stack>
       </Accordion.ItemTrigger>
       <Accordion.ItemContent>
-        <Accordion.ItemBody textStyle="s2">
-          Posted by {publishedByUser.name} · {announcement.publishedAt}
-        </Accordion.ItemBody>
         <ChakraMarkdown paragraphAs={Accordion.ItemBody} textStyle="body">
           {announcement.contentMarkdown}
         </ChakraMarkdown>
