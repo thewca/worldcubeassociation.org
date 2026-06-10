@@ -481,5 +481,12 @@
     "topic": "Invalid Cumulative Time Limit",
     "comments": null,
     "query_file": "invalid_cumulative_limit.sql"
+  },
+  {
+    "id": "72",
+    "sanity_check_category_id": "8",
+    "topic": "Suspiciously short-lived user role (same or consecutive day start/end)",
+    "comments": null,
+    "query_file": "user_role_short_lived.sql"
   }
 ]
