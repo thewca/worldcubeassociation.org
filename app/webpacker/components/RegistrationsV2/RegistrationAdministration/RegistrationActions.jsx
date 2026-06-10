@@ -334,7 +334,7 @@ export default function RegistrationActions({
             }}
           />
         )}
-        content={I18n.t('registrations.list.export_csv', { count: selectedCount })}
+        content={I18n.t('registrations.list.export_to_csv', { count: selectedCount })}
       />
 
       <Popup
@@ -350,7 +350,7 @@ export default function RegistrationActions({
             disabled={!anySelected}
           />
         )}
-        content={I18n.t('competitions.registration_v2.update.email_send', { count: selectedCount })}
+        content={I18n.t('competitions.registration_v2.update.send_email', { count: selectedCount })}
       />
 
       <Popup
@@ -364,7 +364,7 @@ export default function RegistrationActions({
             disabled={!anySelected}
           />
         )}
-        content={I18n.t('competitions.registration_v2.update.email_copy', { count: selectedCount })}
+        content={I18n.t('competitions.registration_v2.update.copy_emails', { count: selectedCount })}
       />
 
       <Popup

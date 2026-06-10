@@ -1245,7 +1245,7 @@ en:
       country_plural:
         one: "1 region"
         other: "%{count} regions"
-      export_csv:
+      export_to_csv:
         zero: "Export all registrations to CSV"
         one: "Export %{count} registration to CSV"
         other: "Export %{count} registrations to CSV"
@@ -1986,10 +1986,10 @@ en:
         update_contact_message: "I would like to update my registration details as follows: %{update_params}"
         delete_contact_message: "I want to delete my registration"
         no_changes: "There are no changes"
-        email_send:
+        send_email:
           one: "Send email to %{count} email address"
           other: "Send email to %{count} email addresses"
-        email_copy:
+        copy_emails:
           one: "Copy %{count} email address"
           other: "Copy %{count} email addresses"
         email_message: "Copied to clipboard. Remember to use bcc!"

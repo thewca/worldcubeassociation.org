@@ -270,7 +270,7 @@ export default function TableRow({
                 )}
               </a>
               {' '}
-              <Icon link onClick={copyEmail} name="copy" title={I18n.t('competitions.registration_v2.update.email_copy')} />
+              <Icon link onClick={copyEmail} name="copy" title={I18n.t('competitions.registration_v2.update.copy_emails')} />
             </Table.Cell>
           </Table.Row>
         </Ref>
