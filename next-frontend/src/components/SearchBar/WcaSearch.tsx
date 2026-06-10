@@ -63,7 +63,7 @@ function ResultContent({
     case "competition":
       return (
         <VStack align="start" gap={0}>
-          <Text>{item.name}</Text>
+          <Text textStyle="bodyEmphasis">{item.name}</Text>
           <HStack gap={1} fontSize="sm">
             {item.country_iso2 && (
               <WcaFlag code={item.country_iso2} width={18} />
@@ -82,7 +82,7 @@ function ResultContent({
             )}
           </Avatar.Root>
           <VStack align="start" gap={0}>
-            <Text>{item.name}</Text>
+            <Text textStyle="bodyEmphasis">{item.name}</Text>
             {item.wca_id && <Text fontSize="sm">{item.wca_id}</Text>}
           </VStack>
         </HStack>
@@ -90,7 +90,7 @@ function ResultContent({
     case "regulation":
       return (
         <HStack gap={1}>
-          <Text fontWeight="medium">{item.id}:</Text>
+          <Text textStyle="bodyEmphasis">{item.id}:</Text>
           <Box
             // Regulation content is trusted, sanitized WCA content.
             dangerouslySetInnerHTML={{ __html: item.content_html ?? "" }}
@@ -98,7 +98,12 @@ function ResultContent({
         </HStack>
       );
     case "incident":
-      return <Text>{`${t("incidents_log.incident")} ${item.title}`}</Text>;
+      return (
+        <Text>
+          <Text textStyle="bodyEmphasis">{t("incidents_log.incident")}</Text>
+          {`${item.title}`}
+        </Text>
+      );
     case "text":
     default:
       return (
@@ -172,6 +177,9 @@ export default function WcaSearch() {
       onValueChange={(e) => handleSelect(e.value[0])}
       selectionBehavior="clear"
       width="100%"
+      maxW="xl"
+      ms="auto"
+      me={{ base: "auto", xl: 0 }}
       placeholder={t("common.search_site")}
     >
       <Combobox.Control>
