@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { DateTime, Duration } from 'luxon';
-import { toLuxonDateTime } from '@fullcalendar/luxon3';
 import { humanizeActivityCode, parseActivityCode } from './wcif';
 import { DEFAULT_LOCALE, withLocale } from '../i18n';
 
@@ -151,29 +150,5 @@ export const buildPartialActivityFromCode = (
 };
 
 export const FC_ACTIVITY_ATTACHMENT = 'activityAttachment';
-
-export function fcEventToActivityAndDates(fcEvent, calendar) {
-  const eventStartLuxon = toLuxonDateTime(fcEvent.start, calendar);
-  const eventEndLuxon = toLuxonDateTime(fcEvent.end, calendar);
-
-  const utcStartIso = luxonToWcifIso(eventStartLuxon);
-  const utcEndIso = luxonToWcifIso(eventEndLuxon);
-
-  const { [FC_ACTIVITY_ATTACHMENT]: attachedActivity } = fcEvent.extendedProps;
-  const partialActivity = buildPartialActivityFromCode(attachedActivity.activityCode);
-
-  const activity = {
-    ...partialActivity,
-    ...attachedActivity,
-    startTime: utcStartIso,
-    endTime: utcEndIso,
-  };
-
-  return {
-    activity,
-    startLuxon: eventStartLuxon,
-    endLuxon: eventEndLuxon,
-  };
-}
 
 export const activityToFcTitle = (activity) => activity.name;

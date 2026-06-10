@@ -9,7 +9,7 @@ import {
   Table,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import { Draggable, Droppable } from '@hello-pangea/dnd';
+import { Draggable, Droppable } from '../../lib/dndLazy';
 import {
   calculateRoundExpectedCount,
   DROPPABLE_ID_MATCHED_SCRAMBLES,

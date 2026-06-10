@@ -1,7 +1,10 @@
-import React, { useCallback, useMemo } from 'react';
-import SimpleMDE from 'react-simplemde-editor';
+import React, { Suspense, useCallback, useMemo } from 'react';
 import { fetchWithAuthenticityToken } from '../../../../lib/requests/fetchWithAuthenticityToken';
-import 'easymde/dist/easymde.min.css';
+
+const SimpleMDE = React.lazy(() => Promise.all([
+  import(/* webpackChunkName: "markdown-editor" */ 'react-simplemde-editor'),
+  import(/* webpackChunkName: "markdown-editor" */ 'easymde/dist/easymde.min.css'),
+]).then(([mod]) => ({ default: mod.default })));
 
 const UPLOAD_IMAGE_KEY = 'upload-image';
 
@@ -129,11 +132,13 @@ export default function MarkdownEditor({
   const mdChange = useCallback((text) => onChange(null, { value: text }), [onChange]);
 
   return (
-    <SimpleMDE
-      id={id}
-      value={value}
-      onChange={mdChange}
-      options={options}
-    />
+    <Suspense fallback={null}>
+      <SimpleMDE
+        id={id}
+        value={value}
+        onChange={mdChange}
+        options={options}
+      />
+    </Suspense>
   );
 }

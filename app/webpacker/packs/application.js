@@ -8,7 +8,6 @@
 
 import '../lib/image-preview';
 import '../lib/polyfills';
-import autosize from 'autosize';
 import Rails from '@rails/ujs';
 import ReactOnRails from 'react-on-rails';
 import Disclaimer from '../react_on_rails_components/StaticPages/Disclaimer';
@@ -34,7 +33,12 @@ window.wca = window.wca || {};
 
 // Setting up autosize
 $(() => {
-  autosize($('textarea:not(.no-autosize)'));
+  const $textareas = $('textarea:not(.no-autosize)');
+  if ($textareas.length > 0) {
+    import(/* webpackChunkName: "autosize" */ 'autosize').then((m) => {
+      m.default($textareas);
+    });
+  }
   // Setup wca-local-time users
   $('.wca-local-time').each(function init() {
     const data = $(this).data();

@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Message } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
-import StripePaymentStep from './StripePaymentStep';
 import { useRegistration } from '../lib/RegistrationProvider';
 import { useStepNavigation } from '../lib/StepNavigationProvider';
 import PaymentOverview from './PaymentOverview';
@@ -9,6 +8,8 @@ import { hasPassed } from '../../../lib/utils/dates';
 import I18n from '../../../lib/i18n';
 import getRegistrationPayments from '../api/payment/get/getRegistrationPayments';
 import Loading from '../../Requests/Loading';
+
+const StripePaymentStep = React.lazy(() => import(/* webpackChunkName: "stripe-payment-step" */ './StripePaymentStep'));
 
 export default function PaymentStepWrapper({
   competitionInfo,
@@ -53,11 +54,13 @@ export default function PaymentStepWrapper({
 
   // This will distinguish between Manual and Stripe Payments when #11299 is merged
   return (
-    <StripePaymentStep
-      competitionInfo={competitionInfo}
-      connectedAccountId={connectedAccountId}
-      stripePublishableKey={stripePublishableKey}
-      user={user}
-    />
+    <Suspense fallback={<Loading />}>
+      <StripePaymentStep
+        competitionInfo={competitionInfo}
+        connectedAccountId={connectedAccountId}
+        stripePublishableKey={stripePublishableKey}
+        user={user}
+      />
+    </Suspense>
   );
 }

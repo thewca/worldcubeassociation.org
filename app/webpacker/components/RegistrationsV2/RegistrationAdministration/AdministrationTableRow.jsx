@@ -2,7 +2,7 @@ import {
   Checkbox, Icon, Popup, Ref, Table,
 } from 'semantic-ui-react';
 import React from 'react';
-import { Draggable } from '@hello-pangea/dnd';
+import { Draggable } from '../../../lib/dndLazy';
 import { showMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import {

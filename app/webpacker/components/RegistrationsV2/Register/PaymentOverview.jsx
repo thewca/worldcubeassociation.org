@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import {
   Accordion,
   Icon, Message,
@@ -8,8 +8,10 @@ import I18n from '../../../lib/i18n';
 import { useRegistration } from '../lib/RegistrationProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
-import StripePaymentStep from './StripePaymentStep';
+import Loading from '../../Requests/Loading';
 import { hasPassed } from '../../../lib/utils/dates';
+
+const StripePaymentStep = React.lazy(() => import(/* webpackChunkName: "stripe-payment-step" */ './StripePaymentStep'));
 
 function PaymentMessage({
   message, icon, success, warning, negative,
@@ -84,13 +86,15 @@ export default function PaymentOverview({
           {I18n.t('registrations.entry_fees_pay_again')}
         </Accordion.Title>
         <Accordion.Content active={payAgain}>
-          <StripePaymentStep
-            competitionInfo={competitionInfo}
-            connectedAccountId={connectedAccountId}
-            nextStep={nextStep}
-            stripePublishableKey={stripePublishableKey}
-            user={user}
-          />
+          <Suspense fallback={<Loading />}>
+            <StripePaymentStep
+              competitionInfo={competitionInfo}
+              connectedAccountId={connectedAccountId}
+              nextStep={nextStep}
+              stripePublishableKey={stripePublishableKey}
+              user={user}
+            />
+          </Suspense>
         </Accordion.Content>
       </Accordion>
       )}
