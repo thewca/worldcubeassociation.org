@@ -88,19 +88,25 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       {block.buttons && block.buttons.length > 0 && (
         <Card.Footer asChild>
           <HStack>
-            {block.buttons.map((btn) => (
+            {block.buttons.map((button) => (
               <Button
-                key={btn.id}
+                key={button.id}
                 asChild
-                variant="outline"
-                _hover={{ bg: "colorPalette.emphasized" }}
+                colorPalette={button.inheritColorScheme ? undefined : "blue"}
+                variant={button.inheritColorScheme ? "outline" : "solid"}
+                bg={button.inheritColorScheme ? undefined : "colorPalette.1A"}
+                _hover={{
+                  bg: button.inheritColorScheme
+                    ? "colorPalette.emphasized"
+                    : undefined,
+                }}
               >
                 <ChakraLink
                   color="colorPalette.pastelContrast"
                   textStyle={undefined}
-                  href={btn.hyperlink}
+                  href={button.hyperlink}
                 >
-                  {btn.displayText}
+                  {button.displayText}
                 </ChakraLink>
               </Button>
             ))}
