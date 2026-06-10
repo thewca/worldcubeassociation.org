@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_06_110117) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_28_000001) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -740,6 +740,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_110117) do
     t.string "format_id", limit: 1, default: "", null: false
     t.string "person_id", limit: 20, null: false
     t.integer "pos", limit: 2, default: 0, null: false
+    t.integer "global_pos", limit: 2, default: 0, null: false
     t.bigint "round_id", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
     t.integer "value1", default: 0, null: false
@@ -1193,6 +1194,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_110117) do
     t.string "person_id", limit: 10, default: "", null: false
     t.string "person_name", limit: 80, default: "", null: false
     t.integer "pos", limit: 2, default: 0, null: false
+    t.integer "global_pos", limit: 2, default: 0, null: false
     t.string "regional_average_record", limit: 3
     t.string "regional_single_record", limit: 3
     t.bigint "round_id", null: false
