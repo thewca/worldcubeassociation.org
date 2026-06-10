@@ -259,7 +259,9 @@ class Person < ApplicationRecord
   end
 
   def self.search(query, params: {})
-    persons = Person.current.includes(:user)
+    # `serializable_hash` serializes the associated user, so eager load the associations
+    # `User#serializable_hash` touches to avoid an N+1 per person.
+    persons = Person.current.includes(user: User::SERIALIZATION_INCLUDES)
     query.split.each do |part|
       persons = persons.where("name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
     end
