@@ -323,6 +323,11 @@ export default function RegistrationActions({
                       `competitions.registration_v2.update.${getStatusTranslationKey(status)}`,
                     )
                   }
+                  subtext={
+                    anySelected
+                      ? `${partitionedSelectedIds[status].length} of ${partitionedRegistrations[status].length}`
+                      : partitionedRegistrations[status].length
+                  }
                   icon={getStatusIcon(status)}
                   color={getStatusColor(status)}
                   onClick={() => scrollToRef(tableRefs[status])}
@@ -462,11 +467,12 @@ function SummaryTable({
 }
 
 function DropdownAction({
-  text, icon, color, isDisabled, onClick,
+  text, subtext, icon, color, isDisabled, onClick,
 }) {
   return (
     <Dropdown.Item
       content={text}
+      description={subtext}
       icon={{ color, name: icon, size: 'large' }}
       disabled={isDisabled}
       onClick={onClick}
