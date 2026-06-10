@@ -9,6 +9,7 @@ import {
   Separator,
   Text,
   VStack,
+  Icon,
 } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -108,11 +109,20 @@ export default async function Navbar() {
         <HStack padding="3" justifyContent="space-between">
           <HStack>
             {!LIVE_RESULT_BETA && <WCALogo />}
-            <HStack hideBelow="md">
+            <Box hideFrom="xl">
+              <Collapsible.Trigger asChild>
+                <IconButton variant="ghost" aria-label="Toggle navigation">
+                  <Icon size="lg" asChild>
+                    <LuMenu />
+                  </Icon>
+                </IconButton>
+              </Collapsible.Trigger>
+            </Box>
+            <HStack hideBelow="xl" gap={0}>
               {navbarEntries.map((navbarEntry) => (
                 <React.Fragment key={navbarEntry.id}>
                   {navbarEntry.blockType === "LinkItem" && (
-                    <Button asChild variant="ghost" size="sm">
+                    <Button asChild variant="ghost" size="sm" px="2">
                       <LinkWrapper
                         navbarEntry={navbarEntry}
                         linkComponent={Link}
@@ -121,7 +131,7 @@ export default async function Navbar() {
                     </Button>
                   )}
                   {navbarEntry.blockType === "ExternalLinkItem" && (
-                    <Button asChild variant="ghost" size="sm">
+                    <Button asChild variant="ghost" size="sm" px="2">
                       <LinkWrapper
                         navbarEntry={navbarEntry}
                         linkComponent="a"
@@ -132,7 +142,7 @@ export default async function Navbar() {
                   {navbarEntry.blockType === "NavDropdown" && (
                     <Menu.Root>
                       <Menu.Trigger asChild>
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" px="2">
                           <TextWrapper
                             navbarEntry={navbarEntry}
                             entryKey="title"
@@ -260,7 +270,7 @@ export default async function Navbar() {
               ))}
             </HStack>
           </HStack>
-          <Box hideBelow="md" flex="1" minW="3xs" mx={4}>
+          <Box flex="1" mx={4}>
             <WcaSearch />
           </Box>
           <HStack>
@@ -274,20 +284,12 @@ export default async function Navbar() {
             <Box hideBelow="md">
               <AvatarMenu session={session} />
             </Box>
-            <Box hideFrom="md">
-              <Collapsible.Trigger asChild>
-                <IconButton variant="ghost" aria-label="Toggle navigation">
-                  <LuMenu />
-                </IconButton>
-              </Collapsible.Trigger>
-            </Box>
           </HStack>
         </HStack>
 
-        <Box hideFrom="md">
+        <Box hideFrom="xl">
           <Collapsible.Content>
             <VStack align="stretch" px={3} pb={3} gap={1}>
-              <WcaSearch />
               {showEmptyMessage && (
                 <Text>Oh no, there are no navbar items!</Text>
               )}
