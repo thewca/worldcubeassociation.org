@@ -85,21 +85,26 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
           {block.bodyMarkdown}
         </ChakraMarkdown>
       </Card.Body>
-      {block.buttonText?.trim() && (
-        <Card.Footer>
-          <Button
-            asChild
-            variant="outline"
-            _hover={{ bg: "colorPalette.emphasized" }}
-          >
-            <ChakraLink
-              color="colorPalette.pastelContrast"
-              textStyle={undefined}
-              href={block.buttonLink!}
-            >
-              {block.buttonText}
-            </ChakraLink>
-          </Button>
+      {block.buttons && block.buttons.length > 0 && (
+        <Card.Footer asChild>
+          <HStack>
+            {block.buttons.map((btn) => (
+              <Button
+                key={btn.id}
+                asChild
+                variant="outline"
+                _hover={{ bg: "colorPalette.emphasized" }}
+              >
+                <ChakraLink
+                  color="colorPalette.pastelContrast"
+                  textStyle={undefined}
+                  href={btn.hyperlink}
+                >
+                  {btn.displayText}
+                </ChakraLink>
+              </Button>
+            ))}
+          </HStack>
         </Card.Footer>
       )}
     </Card.Root>

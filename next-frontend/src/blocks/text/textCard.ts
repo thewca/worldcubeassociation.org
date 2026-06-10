@@ -2,6 +2,29 @@ import { Block } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
 import { colorPaletteSelect } from "@/blocks/utils";
 
+const actionButtonBlock: Block = {
+  slug: "actionButton",
+  interfaceName: "BentoActionButton",
+  fields: [
+    {
+      name: "displayText",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "hyperlink",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "inheritColorScheme",
+      type: "checkbox",
+      required: true,
+      defaultValue: false,
+    },
+  ],
+};
+
 export const TextCardBlock: Block = {
   slug: "TextCard",
   interfaceName: "TextCardBlock",
@@ -25,14 +48,11 @@ export const TextCardBlock: Block = {
       defaultValue: false,
     },
     {
-      name: "buttonText",
-      type: "text",
-      required: false,
-    },
-    {
-      name: "buttonLink",
-      type: "text",
-      required: false,
+      name: "buttons",
+      type: "blocks",
+      blocks: [actionButtonBlock],
+      minRows: 0,
+      maxRows: 1,
     },
     {
       name: "headerImage",
