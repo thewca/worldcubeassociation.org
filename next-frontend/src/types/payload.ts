@@ -1161,13 +1161,24 @@ export interface TextCardBlock {
   };
   bodyMarkdown?: string | null;
   separatorAfterHeading: boolean;
-  buttonText?: string | null;
-  buttonLink?: string | null;
+  buttons?: BentoActionButton[] | null;
   headerImage?: (string | null) | Media;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
   blockType: 'TextCard';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BentoActionButton".
+ */
+export interface BentoActionButton {
+  displayText: string;
+  hyperlink: string;
+  inheritColorScheme: boolean;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'actionButton';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1890,10 +1901,24 @@ export interface TextCardBlockSelect<T extends boolean = true> {
   body?: T;
   bodyMarkdown?: T;
   separatorAfterHeading?: T;
-  buttonText?: T;
-  buttonLink?: T;
+  buttons?:
+    | T
+    | {
+        actionButton?: T | BentoActionButtonSelect<T>;
+      };
   headerImage?: T;
   colorPalette?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BentoActionButton_select".
+ */
+export interface BentoActionButtonSelect<T extends boolean = true> {
+  displayText?: T;
+  hyperlink?: T;
+  inheritColorScheme?: T;
   id?: T;
   blockName?: T;
 }
