@@ -112,7 +112,7 @@ class AdminController < ApplicationController
   end
 
   def person_data
-    @person = Person.current.find_by!(wca_id: params[:person_wca_id])
+    @person = Person.current.find_by!(wca_id: params.require(:person_wca_id))
 
     render json: {
       name: @person.name,
@@ -180,7 +180,7 @@ class AdminController < ApplicationController
   end
 
   private def competition_from_params(associations: {})
-    Competition.includes(associations).find(params[:competition_id])
+    Competition.includes(associations).find(params.require(:competition_id))
   end
 
   private def competition_list_from_string(competition_ids_string)
