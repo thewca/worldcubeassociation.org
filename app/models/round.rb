@@ -744,7 +744,7 @@ class Round < ApplicationRecord
   end
 
   def quit_from_round!(registration_id, quitting_user, to_advance: nil)
-    transaction do
+    with_lock do
       Live::DiffHelper.broadcast_changes(self) do
         result = live_results.find_by!(registration_id: registration_id)
         result.destroy!
@@ -765,7 +765,7 @@ class Round < ApplicationRecord
   end
 
   def bulk_quit_from_round!(registration_ids, quitting_user, to_advance: nil)
-    transaction do
+    with_lock do
       Live::DiffHelper.broadcast_changes(self) do
         live_results.where(registration_id: registration_ids).find_each(&:destroy!)
         live_results.create(to_advance.map { { **LiveResult.empty_result_attributes(it.registration_id, self.id) } }) if to_advance.present?
