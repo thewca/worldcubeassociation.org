@@ -39,13 +39,7 @@ interface LiveResultContextType {
   addPendingQuitCompetitor: (registrationId: number) => void;
   pendingQuitCompetitors: Set<number>;
   connectionState: ConnectionState;
-  // All competitors across the rounds in this provider. For linked/dual rounds
-  //   this includes competitors from every linked round.
-  combinedCompetitors: Map<number, LiveCompetitor>;
-  // Only the competitors who actually take part in the round (ie have a result
-  //   row in it). Use this for the comboboxes so they don't list people who are
-  //   only part of a sibling linked round.
-  roundCompetitors: Map<number, LiveCompetitor>;
+  competitors: Map<number, LiveCompetitor>;
 }
 
 const LiveResultContext = createContext<LiveResultContextType | undefined>(
@@ -133,40 +127,25 @@ export function MultiRoundResultProvider({
   const {
     liveResultsByRegistrationId,
     stateHashesByRoundId,
-    combinedCompetitors,
-    roundCompetitors,
+    competitors,
     refetchRound,
   } = useQueries({
     queries,
-    combine: (queryResults) => {
-      // The first query is the round we're actually on; linked sibling rounds
-      //   (if any) follow. For linked rounds every round's `competitors` is the
-      //   combined set, so we scope roundCompetitors to this round's own results.
-      const [currentRound] = queryResults;
-      const currentRegistrationIds = new Set(
-        currentRound.data.results.map((result) => result.registration_id),
-      );
-      return {
-        liveResultsByRegistrationId: _.groupBy(
-          queryResults.flatMap((r) => r.data.results),
-          "registration_id",
-        ),
-        stateHashesByRoundId: Object.fromEntries(
-          queryResults.map((r) => [r.data.id, r.data.state_hash]),
-        ),
-        combinedCompetitors: new Map(
-          queryResults.flatMap((r) => r.data.competitors.map((c) => [c.id, c])),
-        ),
-        roundCompetitors: new Map(
-          currentRound.data.competitors
-            .filter((c) => currentRegistrationIds.has(c.id))
-            .map((c) => [c.id, c]),
-        ),
-        refetchRound: async (roundId: string) => {
-          return queryResults.find((r) => r.data.id === roundId)!.refetch();
-        },
-      };
-    },
+    combine: (queryResults) => ({
+      liveResultsByRegistrationId: _.groupBy(
+        queryResults.flatMap((r) => r.data.results),
+        "registration_id",
+      ),
+      stateHashesByRoundId: Object.fromEntries(
+        queryResults.map((r) => [r.data.id, r.data.state_hash]),
+      ),
+      competitors: new Map(
+        queryResults.flatMap((r) => r.data.competitors.map((c) => [c.id, c])),
+      ),
+      refetchRound: async (roundId: string) => {
+        return queryResults.find((r) => r.data.id === roundId)!.refetch();
+      },
+    }),
   });
 
   const diffPendingResults = useCallback(
@@ -309,8 +288,7 @@ export function MultiRoundResultProvider({
         pendingQuitCompetitors,
         addPendingQuitCompetitor,
         connectionState,
-        combinedCompetitors,
-        roundCompetitors,
+        competitors,
       }}
     >
       {children}

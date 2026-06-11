@@ -49,13 +49,13 @@ export default function AttemptsForm({
 
   const confirm = useConfirm();
 
-  const { roundCompetitors } = useLiveResults();
+  const { competitors } = useLiveResults();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const attemptFieldsRef = useRef<AttemptFieldsNavHandle>(null);
 
   const { collection, filter } = useListCollection({
-    initialItems: Array.from(roundCompetitors.values()).toSorted(
+    initialItems: Array.from(competitors.values()).toSorted(
       (a, b) => a.registrant_id - b.registrant_id,
     ),
     itemToValue: (competitor) => competitor.id.toString(),
@@ -66,7 +66,7 @@ export default function AttemptsForm({
   });
 
   const selectedCompetitor = registrationId
-    ? roundCompetitors.get(registrationId)
+    ? competitors.get(registrationId)
     : undefined;
   const inputDisplayValue = selectedCompetitor
     ? toCompetitorString(selectedCompetitor)

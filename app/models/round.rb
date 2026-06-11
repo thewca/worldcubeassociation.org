@@ -844,7 +844,11 @@ class Round < ApplicationRecord
   end
 
   def to_live_results_json(only_podiums: false)
-    competitors = linked_round&.live_competitors || live_competitors
+    # For podiums we need the combined competitor set of the whole linked round
+    #   (live_podium spans every linked round). For regular round views we only
+    #   want this round's own competitors; the frontend merges the linked rounds
+    #   back together when it needs the combined set.
+    competitors = only_podiums ? (linked_round&.live_competitors || live_competitors) : live_competitors
     {
       **self.to_wcif(include_results: false).compact_blank,
       "round_id" => id,
