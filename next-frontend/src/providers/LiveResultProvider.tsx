@@ -138,31 +138,35 @@ export function MultiRoundResultProvider({
     refetchRound,
   } = useQueries({
     queries,
-    combine: (queryResults) => ({
-      liveResultsByRegistrationId: _.groupBy(
-        queryResults.flatMap((r) => r.data.results),
-        "registration_id",
-      ),
-      stateHashesByRoundId: Object.fromEntries(
-        queryResults.map((r) => [r.data.id, r.data.state_hash]),
-      ),
-      combinedCompetitors: new Map(
-        queryResults.flatMap((r) => r.data.competitors.map((c) => [c.id, c])),
-      ),
-      roundCompetitors: new Map(
-        queryResults.flatMap((r) => {
-          const roundRegistrationIds = new Set(
-            r.data.results.map((result) => result.registration_id),
-          );
-          return r.data.competitors
-            .filter((c) => roundRegistrationIds.has(c.id))
-            .map((c) => [c.id, c] as const);
-        }),
-      ),
-      refetchRound: async (roundId: string) => {
-        return queryResults.find((r) => r.data.id === roundId)!.refetch();
-      },
-    }),
+    combine: (queryResults) => {
+      // The first query is the round we're actually on; linked sibling rounds
+      //   (if any) follow. For linked rounds every round's `competitors` is the
+      //   combined set, so we scope roundCompetitors to this round's own results.
+      const [currentRound] = queryResults;
+      const currentRegistrationIds = new Set(
+        currentRound.data.results.map((result) => result.registration_id),
+      );
+      return {
+        liveResultsByRegistrationId: _.groupBy(
+          queryResults.flatMap((r) => r.data.results),
+          "registration_id",
+        ),
+        stateHashesByRoundId: Object.fromEntries(
+          queryResults.map((r) => [r.data.id, r.data.state_hash]),
+        ),
+        combinedCompetitors: new Map(
+          queryResults.flatMap((r) => r.data.competitors.map((c) => [c.id, c])),
+        ),
+        roundCompetitors: new Map(
+          currentRound.data.competitors
+            .filter((c) => currentRegistrationIds.has(c.id))
+            .map((c) => [c.id, c]),
+        ),
+        refetchRound: async (roundId: string) => {
+          return queryResults.find((r) => r.data.id === roundId)!.refetch();
+        },
+      };
+    },
   });
 
   const diffPendingResults = useCallback(
