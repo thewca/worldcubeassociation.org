@@ -230,7 +230,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     rounds = round.linked_round.present? ? round.linked_round.rounds : round.rounds
 
-    rounds.each do |r|
+    open_rounds = rounds.select { |r| r.lifecycle_state == Round::STATE_OPEN }
+
+    open_rounds.each do |r|
       Live::DiffHelper.broadcast_changes(r) do
         r.create_empty_live_result(registration.id)
       end
