@@ -21,8 +21,10 @@ import { RegistrationData } from "@/types/registrations";
 export default function AddPersonModal({
   competitionId,
   competitors,
+  roundId,
 }: {
   competitionId: string;
+  roundId: string;
   competitors: Map<number, LiveCompetitor>;
 }) {
   const [open, setOpen] = useState(false);
@@ -48,6 +50,7 @@ export default function AddPersonModal({
                 competitors={competitors}
                 close={() => setOpen(false)}
                 setSelectedCompetitor={setSelectedCompetitor}
+                roundId={roundId}
               />
             </Dialog.Body>
             <Dialog.Footer>
@@ -78,9 +81,11 @@ export default function AddPersonModal({
 function AddPerson({
   competitionId,
   competitors,
+  roundId,
   setSelectedCompetitor,
 }: {
   competitionId: string;
+  roundId: string;
   competitors: Map<number, LiveCompetitor>;
   close: () => void;
   setSelectedCompetitor: (registrationId: number) => void;
@@ -90,17 +95,20 @@ function AddPerson({
   const api = useAPI();
   const { data: registrationsQuery, isFetching } = api.useQuery(
     "get",
-    "/v1/competitions/{competitionId}/registrations",
-    { params: { path: { competitionId } } },
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/addable_competitors",
+    { params: { path: { competitionId, roundId } } },
   );
 
   if (isFetching) return <Loading />;
   if (!registrationsQuery)
     return <Text>{t("competitions.registration_v2.errors.-1001")}</Text>;
 
+  const { registrations, colinked_status } = registrationsQuery;
+
   return (
     <AddPersonCombobox
-      registrations={registrationsQuery.filter((r) => !competitors.has(r.id))}
+      coLinkedStatus={colinked_status}
+      registrations={registrations.filter((r) => !competitors.has(r.id))}
       setSelectedCompetitor={setSelectedCompetitor}
     />
   );
@@ -109,10 +117,14 @@ function AddPerson({
 function AddPersonCombobox({
   registrations,
   setSelectedCompetitor,
+  coLinkedStatus,
 }: {
   setSelectedCompetitor: (registrationId: number) => void;
   registrations: RegistrationData[];
+  coLinkedStatus: string[];
 }) {
+  const { t } = useT();
+
   const { collection, filter } = useListCollection({
     initialItems: registrations.toSorted(
       (a, b) => a.registrant_id - b.registrant_id,
@@ -124,8 +136,18 @@ function AddPersonCombobox({
       parseInt(filterText, 10) === item.registrant_id,
   });
 
+  const isDualRound = coLinkedStatus.length > 0;
+
   return (
     <VStack>
+      <Text>
+        {t(
+          `competitions.live.admin.add_competitor.${isDualRound ? "multiple_rounds" : "single_round"}`,
+          {
+            count: coLinkedStatus.filter((s) => s === "open").length,
+          },
+        )}
+      </Text>
       <Combobox.Root
         collection={collection}
         inputBehavior="autohighlight"

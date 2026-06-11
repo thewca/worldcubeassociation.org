@@ -28,6 +28,8 @@ paths:
       $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit:
     $ref: 'paths/competitions/live/GetNextCompetitorIfQuit.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/addable_competitors:
+    $ref: 'paths/competitions/live/CanBeAddedToRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}:
     put:
       $ref: 'paths/competitions/live/addCompetitorToRound.yaml'
