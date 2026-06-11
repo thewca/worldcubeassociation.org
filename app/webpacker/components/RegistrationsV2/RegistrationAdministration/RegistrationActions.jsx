@@ -292,7 +292,14 @@ export default function RegistrationActions({
             icon="th list"
             button
           >
-            <Dropdown.Menu>
+            <Dropdown.Menu
+              style={{
+                // there's a semantic ui bug where the two text properties in a
+                // dropdown item inside a menu will not see each other, so we
+                // need to manually add enough space so that they don't overlap
+                minWidth: anySelected ? '225px' : '175px',
+              }}
+            >
               {registrationStatusKeys(
                 { includeNonCompeting: partitionedRegistrations.nonCompeting.length > 0 },
               ).map((status) => (
