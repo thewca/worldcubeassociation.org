@@ -1448,7 +1448,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@csstools/css-calc@npm:^3.2.0, @csstools/css-calc@npm:^3.2.1":
+"@csstools/css-calc@npm:^3.2.1":
   version: 3.2.1
   resolution: "@csstools/css-calc@npm:3.2.1"
   peerDependencies:
@@ -1480,15 +1480,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@csstools/css-syntax-patches-for-csstree@npm:^1.1.3":
-  version: 1.1.3
-  resolution: "@csstools/css-syntax-patches-for-csstree@npm:1.1.3"
+"@csstools/css-syntax-patches-for-csstree@npm:^1.1.4":
+  version: 1.1.5
+  resolution: "@csstools/css-syntax-patches-for-csstree@npm:1.1.5"
   peerDependencies:
     css-tree: ^3.2.1
   peerDependenciesMeta:
     css-tree:
       optional: true
-  checksum: 10c0/3b8a686710a46bb460f9d560d52ce0de315828e6d452002b692013e95fbf53669d7a71e28c9b6b1333fa9f37f058fad93e5db3b8516444907713cb9aad299ce1
+  checksum: 10c0/a31f0cfb74e2b5ce8a283c47969a202fc3b23c3ee05c6b6beab7f5c14d89c50b82533e446df74f7df0bf88bf23810ed59431353db26e00d5b013995c1ebf07a2
   languageName: node
   linkType: hard
 
@@ -2932,16 +2932,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:^6.5.0":
-  version: 6.5.0
-  resolution: "@stripe/react-stripe-js@npm:6.5.0"
+"@stripe/react-stripe-js@npm:^6.6.0":
+  version: 6.6.0
+  resolution: "@stripe/react-stripe-js@npm:6.6.0"
   dependencies:
     prop-types: "npm:^15.7.2"
   peerDependencies:
     "@stripe/stripe-js": ">=9.5.0 <10.0.0"
     react: ">=16.8.0 <20.0.0"
     react-dom: ">=16.8.0 <20.0.0"
-  checksum: 10c0/053551b116b4456f8914bdd160b69c92c870ad4f2b0a3d1dc706b63338a0eb14c89dd4f4c9340b066b29cd65880a15a6665251ace4176a1c19e0a6ac55f46a41
+  checksum: 10c0/fb093073d19efb15c18cd4b4007b886bfff4bbee17b270fabb86c82e1dad0377ebb15d58bab37c41c3ea01599fc0a5117747611226ac232e1350ebbfeecb17a7
   languageName: node
   linkType: hard
 
@@ -2952,21 +2952,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.100.14":
-  version: 5.100.14
-  resolution: "@tanstack/query-core@npm:5.100.14"
-  checksum: 10c0/947942b1499169b279faf4eddd570719db5d6863c89db4ec2d54e1eb3fb66a679cfa87a15c9f2e9d5de523e4bcc1782c020fba913ead461b73ecec4fdd986c59
+"@tanstack/query-core@npm:5.101.0":
+  version: 5.101.0
+  resolution: "@tanstack/query-core@npm:5.101.0"
+  checksum: 10c0/e3aacbb762887214b71d8f959930644594e2321b0cdca8eac098f894cbb75d1e32d45dc34a4b818fb8c68b344398905cf30f17c69cd87283adf73e64457e9320
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.100.14":
-  version: 5.100.14
-  resolution: "@tanstack/react-query@npm:5.100.14"
+"@tanstack/react-query@npm:^5.101.0":
+  version: 5.101.0
+  resolution: "@tanstack/react-query@npm:5.101.0"
   dependencies:
-    "@tanstack/query-core": "npm:5.100.14"
+    "@tanstack/query-core": "npm:5.101.0"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/f124e7671f5731a88241a71a6ce7da54f0bafb960ec4107d1eb24d0fc25136d10cd02ebd68956eb0605a29e60d925e82bfb52386b25cbe2e1cb4c166017cbf2a
+  checksum: 10c0/a86add4402c23e26cf4a8c7dade5b0198a7abfb51720b91e83cfe5db8b5ed89acb027b3d5b67882098d0c83cf50099175f8310a41fd5c4b55f6c343779c3dfb6
   languageName: node
   linkType: hard
 
@@ -5104,15 +5104,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:^3.4.7":
-  version: 3.4.7
-  resolution: "dompurify@npm:3.4.7"
+"dompurify@npm:^3.4.8":
+  version: 3.4.8
+  resolution: "dompurify@npm:3.4.8"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10c0/b39940e95259bfaea658cb2bec819d47f271f9fe47e4e3cfff1fb7876089264d7c21e36ea09dad0d9a0f70add502ce6787ba9e7467f2c7b996382eb1d8daa375
+  checksum: 10c0/8f56a53d0ac80c76068772c9b72721f31fad68cac64a528e2420699ce2bd26b3516e29a5a7bd2205c2732d7114b9859998bf922d20cdb9361c4a05dab8352570
   languageName: node
   linkType: hard
 
@@ -7452,12 +7452,12 @@ __metadata:
   linkType: hard
 
 "launch-editor@npm:^2.6.1":
-  version: 2.6.1
-  resolution: "launch-editor@npm:2.6.1"
+  version: 2.14.1
+  resolution: "launch-editor@npm:2.14.1"
   dependencies:
-    picocolors: "npm:^1.0.0"
-    shell-quote: "npm:^1.8.1"
-  checksum: 10c0/82d0bd9a44e7a972157719e63dac1b8196db6ec7066c1ec57a495f6c3d6e734f3c4da89549e7b33eb3b0356668ad02a9e7782b6733f5ebd7a61b7c5f635a3ee9
+    picocolors: "npm:^1.1.1"
+    shell-quote: "npm:^1.8.4"
+  checksum: 10c0/bb0ab182086afaf1c391abd38d6fc9d5391cb43d0c2da1d96176f79e9995635cdf34dcfd8df3f756bb82d7bbbb7d37014d5eb312f337350889c0cff92db53dab
   languageName: node
   linkType: hard
 
@@ -9428,7 +9428,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.14, postcss@npm:^8.4.40, postcss@npm:^8.5.14, postcss@npm:^8.5.15":
+"postcss@npm:^8.2.14, postcss@npm:^8.4.40, postcss@npm:^8.5.15":
   version: 8.5.15
   resolution: "postcss@npm:8.5.15"
   dependencies:
@@ -9712,13 +9712,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-on-rails@npm:17.0.0-rc.0":
-  version: 17.0.0-rc.0
-  resolution: "react-on-rails@npm:17.0.0-rc.0"
+"react-on-rails@npm:17.0.0-rc.1":
+  version: 17.0.0-rc.1
+  resolution: "react-on-rails@npm:17.0.0-rc.1"
   peerDependencies:
     react: ">= 16"
     react-dom: ">= 16"
-  checksum: 10c0/6dc49bc9e52cce4ca2be7cc9674ddada5a1d29fe9746767e4f2cd5464a088d0d359bf74e5e66f785b1c54c9072e44b89fbaf85f15306b09fbb0a3371d81bd7b2
+  checksum: 10c0/694fe767143d87536a0d03bb64841f96c68a6e7cf7126e4c3a0f3c575c03e1d29a461c581a6e30e1fa27db09a21cc12725628b6d5f2ae4495943fb17ce7d10d8
   languageName: node
   linkType: hard
 
@@ -10184,9 +10184,9 @@ __metadata:
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.2"
     "@rails/actioncable": "npm:^8.1.300"
     "@rails/ujs": "npm:^7.1.600"
-    "@stripe/react-stripe-js": "npm:^6.5.0"
+    "@stripe/react-stripe-js": "npm:^6.6.0"
     "@stripe/stripe-js": "npm:^9.7.0"
-    "@tanstack/react-query": "npm:^5.100.14"
+    "@tanstack/react-query": "npm:^5.101.0"
     "@tanstack/react-table": "npm:^8.21.3"
     "@wca/helpers": "npm:^1.1.7"
     autonumeric: "npm:^4.10.10"
@@ -10205,7 +10205,7 @@ __metadata:
     css-loader: "npm:^7.1.4"
     css-minimizer-webpack-plugin: "npm:^8.0.0"
     date-fns: "npm:^4.4.0"
-    dompurify: "npm:^3.4.7"
+    dompurify: "npm:^3.4.8"
     dotenv: "npm:^17.4.2"
     easymde: "npm:^2.21.0"
     eslint: "npm:^8.57.0"
@@ -10246,7 +10246,7 @@ __metadata:
     react-image-crop: "npm:^11.0.10"
     react-intersection-observer: "npm:^10.0.3"
     react-leaflet: "npm:^4.2.1"
-    react-on-rails: "npm:17.0.0-rc.0"
+    react-on-rails: "npm:17.0.0-rc.1"
     react-refresh: "npm:^0.18.0"
     react-simplemde-editor: "npm:^5.2.0"
     react-spinners: "npm:^0.17.0"
@@ -10260,9 +10260,9 @@ __metadata:
     shakapacker: "npm:10.1.0"
     shakapacker-webpack: "npm:10.1.0"
     style-loader: "npm:^4.0.0"
-    stylelint: "npm:^17.12.0"
+    stylelint: "npm:^17.13.0"
     stylelint-config-recommended-scss: "npm:^17.0.1"
-    stylelint-scss: "npm:^7.1.1"
+    stylelint-scss: "npm:^7.2.0"
     terser-webpack-plugin: "npm:^5.6.1"
     webpack: "npm:^5.107.2"
     webpack-assets-manifest: "npm:^6.5.2"
@@ -10791,10 +10791,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shell-quote@npm:^1.8.1":
-  version: 1.8.1
-  resolution: "shell-quote@npm:1.8.1"
-  checksum: 10c0/8cec6fd827bad74d0a49347057d40dfea1e01f12a6123bf82c4649f3ef152fc2bc6d6176e6376bffcd205d9d0ccb4f1f9acae889384d20baff92186f01ea455a
+"shell-quote@npm:^1.8.4":
+  version: 1.8.4
+  resolution: "shell-quote@npm:1.8.4"
+  checksum: 10c0/86c93678bc394cb81f5ddcdc87df9c95d279ef9652775cd1cd1eed361404169a8d8cbaacaeed232ab09919e36ee1e5363863570390d78571f8c22b7f6312fb40
   languageName: node
   linkType: hard
 
@@ -11258,13 +11258,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-scss@npm:^7.0.0, stylelint-scss@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "stylelint-scss@npm:7.1.1"
+"stylelint-scss@npm:^7.0.0, stylelint-scss@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "stylelint-scss@npm:7.2.0"
   dependencies:
-    "@csstools/css-calc": "npm:^3.2.0"
+    "@csstools/css-calc": "npm:^3.2.1"
     "@csstools/css-parser-algorithms": "npm:^4.0.0"
-    "@csstools/css-syntax-patches-for-csstree": "npm:^1.1.3"
+    "@csstools/css-syntax-patches-for-csstree": "npm:^1.1.4"
     "@csstools/css-tokenizer": "npm:^4.0.0"
     css-tree: "npm:^3.2.1"
     is-plain-object: "npm:^5.0.0"
@@ -11275,17 +11275,17 @@ __metadata:
     postcss-value-parser: "npm:^4.2.0"
   peerDependencies:
     stylelint: ^16.8.2 || ^17.0.0
-  checksum: 10c0/5e3c9084788debdc1d616ba8f7a49431449b7f2e7c80c7b1d311266cc2907fe4c8fc174f725b182422fa0937f168e384de8a9b8eb2c8534b9d7ddc2d08b2c874
+  checksum: 10c0/9f45690560e8a7156dd6aac7cbadf47010444dbf9b7953b75491ee7db08b8c660efdb0a421d09eab019bd73ef606efbc72ad983d37e1997daa397d5442109f47
   languageName: node
   linkType: hard
 
-"stylelint@npm:^17.12.0":
-  version: 17.12.0
-  resolution: "stylelint@npm:17.12.0"
+"stylelint@npm:^17.13.0":
+  version: 17.13.0
+  resolution: "stylelint@npm:17.13.0"
   dependencies:
-    "@csstools/css-calc": "npm:^3.2.0"
+    "@csstools/css-calc": "npm:^3.2.1"
     "@csstools/css-parser-algorithms": "npm:^4.0.0"
-    "@csstools/css-syntax-patches-for-csstree": "npm:^1.1.3"
+    "@csstools/css-syntax-patches-for-csstree": "npm:^1.1.4"
     "@csstools/css-tokenizer": "npm:^4.0.0"
     "@csstools/media-query-list-parser": "npm:^5.0.0"
     "@csstools/selector-resolve-nested": "npm:^4.0.0"
@@ -11309,7 +11309,7 @@ __metadata:
     micromatch: "npm:^4.0.8"
     normalize-path: "npm:^3.0.0"
     picocolors: "npm:^1.1.1"
-    postcss: "npm:^8.5.14"
+    postcss: "npm:^8.5.15"
     postcss-safe-parser: "npm:^7.0.1"
     postcss-selector-parser: "npm:^7.1.1"
     postcss-value-parser: "npm:^4.2.0"
@@ -11320,7 +11320,7 @@ __metadata:
     write-file-atomic: "npm:^7.0.1"
   bin:
     stylelint: bin/stylelint.mjs
-  checksum: 10c0/fdc066ebf923168cfaf2927f3d2b222fd0cf12722610c2d80fbd395714ccfa108e9319f5fccb422fa4dff5d08f39543ed6ad1f1511172de4709364f09b4ea177
+  checksum: 10c0/07b8e640099c042a5ee807303f79d065998304410ec94e18c419a22e5695bebfe9b2ca10a760630eff9d71f108b2404da8ab7eaba2559686ba99f688b747820b
   languageName: node
   linkType: hard
 

@@ -1,0 +1,16 @@
+type: object
+required:
+  - class
+  - id
+  - url
+properties:
+  class:
+    type: string
+    enum:
+      - regulation
+  id:
+    type: string
+  content_html:
+    type: string
+  url:
+    type: string

@@ -1,5 +1,5 @@
 import { Accordion, Link as ChakraLink } from "@chakra-ui/react";
-import { ChakraMarkdown } from "@/components/Markdown";
+import AnnouncementContent from "@/components/AnnouncementContent";
 import { Announcement, User } from "@/types/payload";
 import { LuChevronsRight } from "react-icons/lu";
 
@@ -20,9 +20,7 @@ function AnnouncementItem({ announcement }: { announcement: Announcement }) {
         <Accordion.ItemBody textStyle="s2">
           Posted by {publishedByUser.name} · {announcement.publishedAt}
         </Accordion.ItemBody>
-        <ChakraMarkdown paragraphAs={Accordion.ItemBody} textStyle="body">
-          {announcement.contentMarkdown}
-        </ChakraMarkdown>
+        <AnnouncementContent contentMarkdown={announcement.contentMarkdown} />
       </Accordion.ItemContent>
     </Accordion.Item>
   );

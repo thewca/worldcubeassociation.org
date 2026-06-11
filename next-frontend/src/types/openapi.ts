@@ -507,6 +507,23 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+         options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Omni-search across competitions, persons, regulations and incidents */
+        get: operations["omniSearch"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -1492,6 +1509,55 @@ export interface components {
                 comments?: string;
             }[];
         };
+        SearchResultCompetition: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            class: "competition";
+            id: string;
+            name: string;
+            city?: string;
+            country_iso2?: string;
+            /** Format: uri */
+            url: string;
+        };
+        SearchResultPerson: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            class: "person";
+            id: string;
+            wca_id?: string;
+            name: string;
+            country_iso2?: string;
+            /** Format: uri */
+            url: string;
+            avatar?: components["schemas"]["UserAvatar"];
+        };
+        SearchResultRegulation: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            class: "regulation";
+            id: string;
+            content_html?: string;
+            url: string;
+        };
+        SearchResultIncident: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            class: "incident";
+            id: string;
+            title: string;
+            /** Format: uri */
+            url: string;
+        };
+        SearchResult: components["schemas"]["SearchResultCompetition"] | components["schemas"]["SearchResultPerson"] | components["schemas"]["SearchResultRegulation"] | components["schemas"]["SearchResultIncident"];
         Record: {
             type?: string;
             /** @example 6709306 */
@@ -2386,6 +2452,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Incident"][];
+                };
+            };
+        };
+    };
+    omniSearch: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        result: components["schemas"]["SearchResult"][];
+                    };
                 };
             };
         };

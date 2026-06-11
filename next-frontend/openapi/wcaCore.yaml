@@ -76,6 +76,9 @@ paths:
   /v0/incidents:
     $ref: 'paths/regulations/incidentsList.yaml'
 
+  /v0/search:
+    $ref: 'paths/search/omniSearch.yaml'
+
   /v0/results/records:
     $ref: 'paths/results/getRecords.yaml'
 
