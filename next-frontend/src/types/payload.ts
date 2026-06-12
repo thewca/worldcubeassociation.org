@@ -1300,6 +1300,7 @@ export interface TwoBlocksLevel2Block {
     | FeaturedCompetitionsBlock
     | TwoBlocksLevel1Block
   )[];
+  fillHeight?: boolean | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'twoBlocksLevel2';
@@ -1328,6 +1329,7 @@ export interface TwoBlocksLevel1Block {
     | FeaturedCompetitionsBlock
     | TwoBlocksLevel0Block
   )[];
+  fillHeight?: boolean | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'twoBlocksLevel1';
@@ -1354,6 +1356,7 @@ export interface TwoBlocksLevel0Block {
     | TestimonialsBlock
     | FeaturedCompetitionsBlock
   )[];
+  fillHeight?: boolean | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'twoBlocksLevel0';
@@ -2023,6 +2026,7 @@ export interface TwoBlocksLevel2BlockSelect<T extends boolean = true> {
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
         twoBlocksLevel1?: T | TwoBlocksLevel1BlockSelect<T>;
       };
+  fillHeight?: T;
   id?: T;
   blockName?: T;
 }
@@ -2054,6 +2058,7 @@ export interface TwoBlocksLevel1BlockSelect<T extends boolean = true> {
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
         twoBlocksLevel0?: T | TwoBlocksLevel0BlockSelect<T>;
       };
+  fillHeight?: T;
   id?: T;
   blockName?: T;
 }
@@ -2083,6 +2088,7 @@ export interface TwoBlocksLevel0BlockSelect<T extends boolean = true> {
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
       };
+  fillHeight?: T;
   id?: T;
   blockName?: T;
 }

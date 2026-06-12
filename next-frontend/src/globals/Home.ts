@@ -131,6 +131,11 @@ const createTwoBlocks = (depth: number = 1): Block => {
           },
         ],
       },
+      {
+        type: "checkbox",
+        name: "fillHeight",
+        defaultValue: false,
+      },
     ],
   };
 };
