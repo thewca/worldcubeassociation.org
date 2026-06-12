@@ -152,7 +152,11 @@ class CompetitionEvent < ApplicationRecord
     end
     model_rounds = wcif["rounds"].map do |round_wcif|
       round = rounds.find { it.wcif_id == round_wcif["id"] } || rounds.build
-      round.update!(**Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"], version: version))
+      round.assign_attributes(**Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"], version: version))
+      # `participation_source` is required, but it can only be computed in the second pass below
+      #   (it depends on `linked_round`). Persist without validation here so the record has an ID
+      #   to reference; the second pass runs full validations once everything is wired up.
+      round.save!(validate: false)
       WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
       round
     end
