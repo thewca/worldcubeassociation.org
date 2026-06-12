@@ -423,6 +423,9 @@ const renderHorizontalSplit = (
   const totalCols = leftCols + rightCols;
   const foldMd = level <= 1;
 
+  // If a parent horizontal splitter has a `grow` strategy,
+  //   it will look weird if children in either half of the splitter don't grow.
+  // So make sure that any `grow` splitter passes down "at least" `justify` as a base strategy.
   const fallbackGrowthStrategy =
     growthStrategy === "grow" ? "justify" : undefined;
 
