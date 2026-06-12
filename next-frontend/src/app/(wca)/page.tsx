@@ -126,8 +126,10 @@ const TextCard = ({
 
 const AnnouncementsSection = ({
   block,
+  grow = false,
 }: {
   block: AnnouncementsSectionBlock;
+  grow?: boolean;
 }) => {
   const mainAnnouncement = block.mainAnnouncement as Announcement;
   const furtherAnnouncements =
@@ -141,6 +143,7 @@ const AnnouncementsSection = ({
       others={furtherAnnouncements}
       colorPalette={block.colorPalette}
       showSeeAll={block.showSeeAll}
+      grow={grow}
     />
   );
 };
@@ -453,7 +456,7 @@ const renderBlock = (
     case "TextCard":
       return <TextCard block={entry} grow={grow} />;
     case "AnnouncementsSection":
-      return <AnnouncementsSection block={entry} />;
+      return <AnnouncementsSection block={entry} grow={grow} />;
     case "ImageBanner":
       return <ImageBanner block={entry} />;
     case "ImageOnlyCard":
