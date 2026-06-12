@@ -245,7 +245,22 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
       colorPalette={block.colorPalette}
       colorVariant="slatePastel"
       width="full"
+      asChild={Boolean(block.url)}
     >
+      {block.url ? (
+        <ChakraLink href={block.url} _hover={{ textDecoration: "none" }}>
+          <ImageOnlyCardContent block={block} />
+        </ChakraLink>
+      ) : (
+        <ImageOnlyCardContent block={block} />
+      )}
+    </Card.Root>
+  );
+};
+
+const ImageOnlyCardContent = ({ block }: { block: ImageOnlyCardBlock }) => {
+  return (
+    <>
       {block.textPosition === "bottom" && <ImageOnlyCardImage block={block} />}
       {block.heading && (
         <Card.Body>
@@ -253,7 +268,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
         </Card.Body>
       )}
       {block.textPosition === "top" && <ImageOnlyCardImage block={block} />}
-    </Card.Root>
+    </>
   );
 };
 
