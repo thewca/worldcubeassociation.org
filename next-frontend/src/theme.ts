@@ -434,6 +434,9 @@ const customConfig = defineConfig({
           },
         },
       },
+      cursor: {
+        menuitem: { value: "pointer" },
+      },
     },
     semanticTokens: {
       colors: {
