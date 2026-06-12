@@ -33,7 +33,7 @@ export default function AnnouncementContent({
       {showReadMore && (
         <Accordion.ItemBody>
           <Button
-            variant="ghost"
+            variant="pastelSolid"
             size="sm"
             alignSelf="flex-start"
             onClick={() => setExpanded((prev) => !prev)}

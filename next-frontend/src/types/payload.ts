@@ -1175,6 +1175,9 @@ export interface TextCardBlock {
 export interface BentoActionButton {
   displayText: string;
   hyperlink: string;
+  /**
+   * Buttons are solid blue by default. If you click this checkbox, their color will follow the original text box instead
+   */
   inheritColorScheme: boolean;
   id?: string | null;
   blockName?: string | null;
