@@ -482,6 +482,7 @@ export interface Announcement {
     [k: string]: unknown;
   };
   contentMarkdown?: string | null;
+  url?: string | null;
   publishedAt: string;
   publishedBy: string | User;
   updatedAt: string;
@@ -743,6 +744,7 @@ export interface AnnouncementsSelect<T extends boolean = true> {
   title?: T;
   content?: T;
   contentMarkdown?: T;
+  url?: T;
   publishedAt?: T;
   publishedBy?: T;
   updatedAt?: T;
