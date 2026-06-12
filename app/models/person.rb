@@ -263,7 +263,22 @@ class Person < ApplicationRecord
     # `User#serializable_hash` touches to avoid an N+1 per person.
     persons = Person.current.includes(user: User::SERIALIZATION_INCLUDES)
     query.split.each do |part|
-      persons = persons.where("name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
+      if part.match?(/\d/)
+        # WCA IDs always contain digits and names never do, so a part with a digit
+        # is a WCA ID lookup. A prefix match (no leading wildcard) uses the wca_id index.
+        persons = persons.where("wca_id LIKE :part", part: "#{part}%")
+      else
+        # Match on the FULLTEXT index on `name`. A leading-wildcard `LIKE '%part%'`
+        # can't use any index and forces a full table scan (~500ms on ~290k rows);
+        # boolean-mode fulltext with a prefix wildcard uses the index (~3ms).
+        # Strip boolean-mode operators (e.g. the `-` in "Al-Sayed") so user input
+        # can't be interpreted as query syntax, and require every resulting token.
+        tokens = part.gsub(/[-+~<>()*"@]/, " ").split
+        next if tokens.empty?
+
+        against = tokens.map { |token| "+#{token}*" }.join(" ")
+        persons = persons.where("MATCH(name) AGAINST(:against IN BOOLEAN MODE)", against: against)
+      end
     end
     persons.order(:name)
   end
