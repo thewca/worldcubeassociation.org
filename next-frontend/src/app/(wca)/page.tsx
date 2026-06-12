@@ -66,12 +66,19 @@ const RATIO_GRID_MAP: Record<TwoBlocksRatio, TwoBlocksSpanConfig> = {
   "3/4 & 1/4": { left: 3, right: 1 },
 };
 
-const TextCard = ({ block }: { block: TextCardBlock }) => {
+const TextCard = ({
+  block,
+  grow = false,
+}: {
+  block: TextCardBlock;
+  grow?: boolean;
+}) => {
   return (
     <Card.Root
       colorPalette={block.colorPalette}
       colorVariant="slatePastel"
       width="full"
+      flexGrow={grow ? "1" : undefined}
     >
       {block.headerImage && (
         <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
@@ -444,7 +451,7 @@ const renderBlock = (
     case "twoBlocksLevel2":
       return renderHorizontalSplit(entry, level + 1, grow);
     case "TextCard":
-      return <TextCard block={entry} />;
+      return <TextCard block={entry} grow={grow} />;
     case "AnnouncementsSection":
       return <AnnouncementsSection block={entry} />;
     case "ImageBanner":
