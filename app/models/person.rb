@@ -268,16 +268,17 @@ class Person < ApplicationRecord
         # is a WCA ID lookup. A prefix match (no leading wildcard) uses the wca_id index.
         persons = persons.where("wca_id LIKE :part", part: "#{part}%")
       else
-        # Match on the FULLTEXT index on `name`. A leading-wildcard `LIKE '%part%'`
-        # can't use any index and forces a full table scan (~500ms on ~290k rows);
-        # boolean-mode fulltext with a prefix wildcard uses the index (~3ms).
-        # Strip boolean-mode operators (e.g. the `-` in "Al-Sayed") so user input
-        # can't be interpreted as query syntax, and require every resulting token.
-        tokens = part.gsub(/[-+~<>()*"@]/, " ").split
-        next if tokens.empty?
+        # Match on the ngram FULLTEXT index on `name` (see the
+        # UseNgramFulltextIndexOnPersonsName migration). A leading-wildcard `LIKE
+        # '%part%'` can't use any index and forces a full table scan (~500ms on
+        # ~290k rows); the ngram index does substring matching via the index (~ms),
+        # so e.g. "koy" still finds "Akoy". A double-quoted phrase makes boolean
+        # mode require the part's n-grams in sequence (i.e. a real substring match);
+        # strip embedded quotes so the input can't break out of the phrase.
+        token = part.delete('"')
+        next if token.empty?
 
-        against = tokens.map { |token| "+#{token}*" }.join(" ")
-        persons = persons.where("MATCH(name) AGAINST(:against IN BOOLEAN MODE)", against: against)
+        persons = persons.where("MATCH(name) AGAINST(:phrase IN BOOLEAN MODE)", phrase: %("#{token}"))
       end
     end
     persons.order(:name)

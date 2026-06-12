@@ -16,7 +16,10 @@ class PersonsController < ApplicationController
       format.json do
         persons = Person.in_region(params[:region]).order(:name)
         params[:search]&.split&.each do |part|
-          persons = persons.where("MATCH(persons.name) AGAINST (:name_match IN BOOLEAN MODE) OR wca_id LIKE :wca_id_part", name_match: "#{part}*", wca_id_part: "#{part}%")
+          # Quoted phrase against the ngram FULLTEXT index does substring matching
+          # (see Person.search); strip embedded quotes so input can't break out.
+          name_match = %("#{part.delete('"')}")
+          persons = persons.where("MATCH(persons.name) AGAINST (:name_match IN BOOLEAN MODE) OR wca_id LIKE :wca_id_part", name_match: name_match, wca_id_part: "#{part}%")
         end
 
         render json: {
