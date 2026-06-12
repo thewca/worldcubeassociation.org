@@ -685,6 +685,27 @@ const customConfig = defineConfig({
           },
         },
       },
+      button: {
+        variants: {
+          variant: {
+            // Solid button locked to the blue palette, using the pastel `1A`
+            // background. Used on homepage cards when a button should not
+            // inherit its surrounding card's color scheme.
+            pastelSolid: {
+              colorPalette: "blue",
+              bg: "colorPalette.1A",
+              color: "colorPalette.contrast",
+              borderColor: "transparent",
+              _hover: {
+                bg: "colorPalette.solid/90",
+              },
+              _expanded: {
+                bg: "colorPalette.solid/90",
+              },
+            },
+          },
+        },
+      },
     },
     slotRecipes: {
       dataList: {
