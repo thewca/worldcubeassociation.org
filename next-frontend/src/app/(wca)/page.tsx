@@ -14,6 +14,8 @@ import {
   Text,
   VStack,
   Link as ChakraLink,
+  LinkBox,
+  LinkOverlay,
   Center,
   HStack,
   AbsoluteCenter,
@@ -240,20 +242,25 @@ const ImageOnlyCardImage = ({ block }: { block: ImageOnlyCardBlock }) => {
 
 const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
   return (
-    <Card.Root
-      overflow="hidden"
-      colorPalette={block.colorPalette}
-      colorVariant="slatePastel"
-      width="full"
-    >
-      {block.textPosition === "bottom" && <ImageOnlyCardImage block={block} />}
-      {block.heading && (
-        <Card.Body>
-          <Card.Title textStyle="h2">{block.heading}</Card.Title>
-        </Card.Body>
-      )}
-      {block.textPosition === "top" && <ImageOnlyCardImage block={block} />}
-    </Card.Root>
+    <LinkBox asChild>
+      <Card.Root
+        overflow="hidden"
+        colorPalette={block.colorPalette}
+        colorVariant="slatePastel"
+        width="full"
+      >
+        <LinkOverlay href={block.url ?? undefined} />
+        {block.textPosition === "bottom" && (
+          <ImageOnlyCardImage block={block} />
+        )}
+        {block.heading && (
+          <Card.Body>
+            <Card.Title textStyle="h2">{block.heading}</Card.Title>
+          </Card.Body>
+        )}
+        {block.textPosition === "top" && <ImageOnlyCardImage block={block} />}
+      </Card.Root>
+    </LinkBox>
   );
 };
 
