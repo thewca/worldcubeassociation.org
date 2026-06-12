@@ -248,13 +248,20 @@ const ImageOnlyCardImage = ({ block }: { block: ImageOnlyCardBlock }) => {
   );
 };
 
-const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
+const ImageOnlyCard = ({
+  block,
+  grow = false,
+}: {
+  block: ImageOnlyCardBlock;
+  grow?: boolean;
+}) => {
   return (
     <Card.Root
       overflow="hidden"
       colorPalette={block.colorPalette}
       colorVariant="slatePastel"
       width="full"
+      flexGrow={grow ? "1" : undefined}
     >
       {block.textPosition === "bottom" && <ImageOnlyCardImage block={block} />}
       {block.heading && (
@@ -460,7 +467,7 @@ const renderBlock = (
     case "ImageBanner":
       return <ImageBanner block={entry} />;
     case "ImageOnlyCard":
-      return <ImageOnlyCard block={entry} />;
+      return <ImageOnlyCard block={entry} grow={grow} />;
     case "FeaturedComps":
       return <FeaturedCompetitions block={entry} />;
     case "TestimonialsSpinner":
