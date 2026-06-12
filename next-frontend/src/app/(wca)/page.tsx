@@ -40,6 +40,7 @@ import type {
   Announcement,
   ColorPaletteSelect,
   Home,
+  GrowthStrategy,
 } from "@/types/payload";
 import Link from "next/link";
 import { route } from "nextjs-routes";
@@ -383,14 +384,23 @@ type VerticalLayout =
 const renderVerticalLayout = (
   verticalLayout: VerticalLayout,
   level: number = 0,
-  grow: boolean = false,
+  growthStrategy?: GrowthStrategy,
 ) => {
   return (
-    <VStack gap={8}>
+    <VStack
+      gap={8}
+      justifyContent={
+        growthStrategy === "justify" ? "space-between" : undefined
+      }
+    >
       {verticalLayout.map((entry) => {
         return (
-          <Box key={entry.id} asChild flexGrow={grow ? "1" : undefined}>
-            {renderBlock(entry, level, grow)}
+          <Box
+            key={entry.id}
+            asChild
+            flexGrow={growthStrategy === "grow" ? "1" : undefined}
+          >
+            {renderBlock(entry, level, growthStrategy)}
           </Box>
         );
       })}
@@ -401,12 +411,15 @@ const renderVerticalLayout = (
 const renderHorizontalSplit = (
   entry: TwoBlocksUnion,
   level: number,
-  grow: boolean = false,
+  growthStrategy?: GrowthStrategy,
 ) => {
   const { left: leftCols, right: rightCols } = RATIO_GRID_MAP[entry.ratio];
 
   const totalCols = leftCols + rightCols;
   const foldMd = level <= 1;
+
+  const fallbackGrowthStrategy =
+    growthStrategy === "grow" ? "justify" : undefined;
 
   return (
     <SimpleGrid
@@ -418,13 +431,21 @@ const renderHorizontalSplit = (
         colSpan={{ base: 1, md: foldMd ? 1 : leftCols, lg: leftCols }}
         asChild
       >
-        {renderVerticalLayout(entry.left, level, grow || !!entry.fillHeight)}
+        {renderVerticalLayout(
+          entry.left,
+          level,
+          entry.growthStrategy || fallbackGrowthStrategy,
+        )}
       </GridItem>
       <GridItem
         colSpan={{ base: 1, md: foldMd ? 1 : rightCols, lg: rightCols }}
         asChild
       >
-        {renderVerticalLayout(entry.right, level, grow || !!entry.fillHeight)}
+        {renderVerticalLayout(
+          entry.right,
+          level,
+          entry.growthStrategy || fallbackGrowthStrategy,
+        )}
       </GridItem>
     </SimpleGrid>
   );
@@ -435,13 +456,13 @@ type LayoutBlock = VerticalLayout[number];
 const renderBlock = (
   entry: LayoutBlock,
   level: number,
-  grow: boolean = false,
+  growthStrategy?: GrowthStrategy,
 ) => {
   switch (entry.blockType) {
     case "twoBlocksLevel0":
     case "twoBlocksLevel1":
     case "twoBlocksLevel2":
-      return renderHorizontalSplit(entry, level + 1, grow);
+      return renderHorizontalSplit(entry, level + 1, growthStrategy);
     case "TextCard":
       return <TextCard block={entry} />;
     case "AnnouncementsSection":
