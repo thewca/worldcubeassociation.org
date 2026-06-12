@@ -40,6 +40,7 @@ import type {
   Announcement,
   ColorPaletteSelect,
   Home,
+  GrowthStrategy,
 } from "@/types/payload";
 import Link from "next/link";
 import { route } from "nextjs-routes";
@@ -383,25 +384,50 @@ type VerticalLayout =
 const renderVerticalLayout = (
   verticalLayout: VerticalLayout,
   level: number = 0,
+  growthStrategy?: GrowthStrategy,
 ) => {
   return (
-    <VStack gap={8}>
+    <VStack
+      gap={8}
+      justifyContent={
+        growthStrategy === "justify" ? "space-between" : undefined
+      }
+    >
       {verticalLayout.map((entry) => {
         return (
-          <React.Fragment key={entry.id}>
-            {renderBlock(entry, level)}
-          </React.Fragment>
+          <Box
+            key={entry.id}
+            asChild
+            flexGrow={growthStrategy === "grow" ? "1" : undefined}
+            // In case of justifying the space, a stack with one single child (CSS :only-child)
+            //   cannot push it towards the beginning and end simultaneously. So in that case,
+            //   also grow if the selected strategy is `justify`, to simulate the visual impression
+            //   of "filling" the container like it would be if there was more than one item.
+            _only={{ flexGrow: growthStrategy === "justify" ? "1" : undefined }}
+          >
+            {renderBlock(entry, level, growthStrategy)}
+          </Box>
         );
       })}
     </VStack>
   );
 };
 
-const renderHorizontalSplit = (entry: TwoBlocksUnion, level: number) => {
+const renderHorizontalSplit = (
+  entry: TwoBlocksUnion,
+  level: number,
+  growthStrategy?: GrowthStrategy,
+) => {
   const { left: leftCols, right: rightCols } = RATIO_GRID_MAP[entry.ratio];
 
   const totalCols = leftCols + rightCols;
   const foldMd = level <= 1;
+
+  // If a parent horizontal splitter has a `grow` strategy,
+  //   it will look weird if children in either half of the splitter don't grow.
+  // So make sure that any `grow` splitter passes down "at least" `justify` as a base strategy.
+  const fallbackGrowthStrategy =
+    growthStrategy === "grow" ? "justify" : undefined;
 
   return (
     <SimpleGrid
@@ -413,13 +439,21 @@ const renderHorizontalSplit = (entry: TwoBlocksUnion, level: number) => {
         colSpan={{ base: 1, md: foldMd ? 1 : leftCols, lg: leftCols }}
         asChild
       >
-        {renderVerticalLayout(entry.left, level)}
+        {renderVerticalLayout(
+          entry.left,
+          level,
+          entry.growthStrategy || fallbackGrowthStrategy,
+        )}
       </GridItem>
       <GridItem
         colSpan={{ base: 1, md: foldMd ? 1 : rightCols, lg: rightCols }}
         asChild
       >
-        {renderVerticalLayout(entry.right, level)}
+        {renderVerticalLayout(
+          entry.right,
+          level,
+          entry.growthStrategy || fallbackGrowthStrategy,
+        )}
       </GridItem>
     </SimpleGrid>
   );
@@ -427,12 +461,16 @@ const renderHorizontalSplit = (entry: TwoBlocksUnion, level: number) => {
 
 type LayoutBlock = VerticalLayout[number];
 
-const renderBlock = (entry: LayoutBlock, level: number) => {
+const renderBlock = (
+  entry: LayoutBlock,
+  level: number,
+  growthStrategy?: GrowthStrategy,
+) => {
   switch (entry.blockType) {
     case "twoBlocksLevel0":
     case "twoBlocksLevel1":
     case "twoBlocksLevel2":
-      return renderHorizontalSplit(entry, level + 1);
+      return renderHorizontalSplit(entry, level + 1, growthStrategy);
     case "TextCard":
       return <TextCard block={entry} />;
     case "AnnouncementsSection":
