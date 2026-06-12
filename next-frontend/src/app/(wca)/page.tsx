@@ -299,7 +299,7 @@ const FeaturedCompetitions = async ({
           <Text textStyle={{ base: "h2", md: "h1" }}>
             Upcoming Competitions
           </Text>
-          <Button asChild variant="outline">
+          <Button asChild variant="pastelSolid">
             <Link href="/competitions">View all Competitions</Link>
           </Button>
         </HStack>
