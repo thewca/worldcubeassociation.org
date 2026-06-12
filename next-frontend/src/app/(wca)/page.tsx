@@ -66,19 +66,12 @@ const RATIO_GRID_MAP: Record<TwoBlocksRatio, TwoBlocksSpanConfig> = {
   "3/4 & 1/4": { left: 3, right: 1 },
 };
 
-const TextCard = ({
-  block,
-  grow = false,
-}: {
-  block: TextCardBlock;
-  grow?: boolean;
-}) => {
+const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
     <Card.Root
       colorPalette={block.colorPalette}
       colorVariant="slatePastel"
       width="full"
-      flexGrow={grow ? "1" : undefined}
     >
       {block.headerImage && (
         <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
@@ -126,10 +119,8 @@ const TextCard = ({
 
 const AnnouncementsSection = ({
   block,
-  grow = false,
 }: {
   block: AnnouncementsSectionBlock;
-  grow?: boolean;
 }) => {
   const mainAnnouncement = block.mainAnnouncement as Announcement;
   const furtherAnnouncements =
@@ -143,7 +134,6 @@ const AnnouncementsSection = ({
       others={furtherAnnouncements}
       colorPalette={block.colorPalette}
       showSeeAll={block.showSeeAll}
-      grow={grow}
     />
   );
 };
@@ -248,20 +238,13 @@ const ImageOnlyCardImage = ({ block }: { block: ImageOnlyCardBlock }) => {
   );
 };
 
-const ImageOnlyCard = ({
-  block,
-  grow = false,
-}: {
-  block: ImageOnlyCardBlock;
-  grow?: boolean;
-}) => {
+const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
   return (
     <Card.Root
       overflow="hidden"
       colorPalette={block.colorPalette}
       colorVariant="slatePastel"
       width="full"
-      flexGrow={grow ? "1" : undefined}
     >
       {block.textPosition === "bottom" && <ImageOnlyCardImage block={block} />}
       {block.heading && (
@@ -406,20 +389,16 @@ const renderVerticalLayout = (
     <VStack gap={8}>
       {verticalLayout.map((entry) => {
         return (
-          <React.Fragment key={entry.id}>
-            {renderBlock(entry, level, grow)}
-          </React.Fragment>
+          <Box key={entry.id} asChild flexGrow={grow ? "1" : undefined}>
+            {renderBlock(entry, level)}
+          </Box>
         );
       })}
     </VStack>
   );
 };
 
-const renderHorizontalSplit = (
-  entry: TwoBlocksUnion,
-  level: number,
-  grow: boolean = false,
-) => {
+const renderHorizontalSplit = (entry: TwoBlocksUnion, level: number) => {
   const { left: leftCols, right: rightCols } = RATIO_GRID_MAP[entry.ratio];
 
   const totalCols = leftCols + rightCols;
@@ -430,7 +409,6 @@ const renderHorizontalSplit = (
       columns={{ base: 1, md: foldMd ? 1 : totalCols, lg: totalCols }}
       gap={8}
       width="full"
-      flexGrow={grow ? "1" : undefined}
     >
       <GridItem
         colSpan={{ base: 1, md: foldMd ? 1 : leftCols, lg: leftCols }}
@@ -450,24 +428,20 @@ const renderHorizontalSplit = (
 
 type LayoutBlock = VerticalLayout[number];
 
-const renderBlock = (
-  entry: LayoutBlock,
-  level: number,
-  grow: boolean = false,
-) => {
+const renderBlock = (entry: LayoutBlock, level: number) => {
   switch (entry.blockType) {
     case "twoBlocksLevel0":
     case "twoBlocksLevel1":
     case "twoBlocksLevel2":
-      return renderHorizontalSplit(entry, level + 1, grow);
+      return renderHorizontalSplit(entry, level + 1);
     case "TextCard":
-      return <TextCard block={entry} grow={grow} />;
+      return <TextCard block={entry} />;
     case "AnnouncementsSection":
-      return <AnnouncementsSection block={entry} grow={grow} />;
+      return <AnnouncementsSection block={entry} />;
     case "ImageBanner":
       return <ImageBanner block={entry} />;
     case "ImageOnlyCard":
-      return <ImageOnlyCard block={entry} grow={grow} />;
+      return <ImageOnlyCard block={entry} />;
     case "FeaturedComps":
       return <FeaturedCompetitions block={entry} />;
     case "TestimonialsSpinner":

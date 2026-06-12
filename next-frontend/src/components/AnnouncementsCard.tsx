@@ -31,20 +31,17 @@ export default function AnnouncementsCard({
   others = [],
   colorPalette,
   showSeeAll = true,
-  grow = false,
 }: {
   hero: Announcement;
   others: Announcement[];
   colorPalette: string;
   showSeeAll?: boolean;
-  grow?: boolean;
 }) {
   return (
     <Accordion.Root
       variant="card"
       defaultValue={[hero.id]}
       colorPalette={colorPalette}
-      flexGrow={grow ? "1" : undefined}
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
