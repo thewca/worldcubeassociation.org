@@ -399,6 +399,11 @@ const renderVerticalLayout = (
             key={entry.id}
             asChild
             flexGrow={growthStrategy === "grow" ? "1" : undefined}
+            // In case of justifying the space, a stack with one single child (CSS :only-child)
+            //   cannot push it towards the beginning and end simultaneously. So in that case,
+            //   also grow if the selected strategy is `justify`, to simulate the visual impression
+            //   of "filling" the container like it would be if there was more than one item.
+            _only={{ flexGrow: growthStrategy === "justify" ? "1" : undefined }}
           >
             {renderBlock(entry, level, growthStrategy)}
           </Box>
