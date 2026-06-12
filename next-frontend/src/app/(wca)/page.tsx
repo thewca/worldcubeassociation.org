@@ -383,13 +383,14 @@ type VerticalLayout =
 const renderVerticalLayout = (
   verticalLayout: VerticalLayout,
   level: number = 0,
+  grow: boolean = false,
 ) => {
   return (
     <VStack gap={8}>
       {verticalLayout.map((entry) => {
         return (
           <React.Fragment key={entry.id}>
-            {renderBlock(entry, level)}
+            {renderBlock(entry, level, grow)}
           </React.Fragment>
         );
       })}
@@ -397,7 +398,11 @@ const renderVerticalLayout = (
   );
 };
 
-const renderHorizontalSplit = (entry: TwoBlocksUnion, level: number) => {
+const renderHorizontalSplit = (
+  entry: TwoBlocksUnion,
+  level: number,
+  grow: boolean = false,
+) => {
   const { left: leftCols, right: rightCols } = RATIO_GRID_MAP[entry.ratio];
 
   const totalCols = leftCols + rightCols;
@@ -408,18 +413,19 @@ const renderHorizontalSplit = (entry: TwoBlocksUnion, level: number) => {
       columns={{ base: 1, md: foldMd ? 1 : totalCols, lg: totalCols }}
       gap={8}
       width="full"
+      flexGrow={grow ? "1" : undefined}
     >
       <GridItem
         colSpan={{ base: 1, md: foldMd ? 1 : leftCols, lg: leftCols }}
         asChild
       >
-        {renderVerticalLayout(entry.left, level)}
+        {renderVerticalLayout(entry.left, level, !!entry.fillHeight)}
       </GridItem>
       <GridItem
         colSpan={{ base: 1, md: foldMd ? 1 : rightCols, lg: rightCols }}
         asChild
       >
-        {renderVerticalLayout(entry.right, level)}
+        {renderVerticalLayout(entry.right, level, !!entry.fillHeight)}
       </GridItem>
     </SimpleGrid>
   );
@@ -427,12 +433,16 @@ const renderHorizontalSplit = (entry: TwoBlocksUnion, level: number) => {
 
 type LayoutBlock = VerticalLayout[number];
 
-const renderBlock = (entry: LayoutBlock, level: number) => {
+const renderBlock = (
+  entry: LayoutBlock,
+  level: number,
+  grow: boolean = false,
+) => {
   switch (entry.blockType) {
     case "twoBlocksLevel0":
     case "twoBlocksLevel1":
     case "twoBlocksLevel2":
-      return renderHorizontalSplit(entry, level + 1);
+      return renderHorizontalSplit(entry, level + 1, grow);
     case "TextCard":
       return <TextCard block={entry} />;
     case "AnnouncementsSection":
