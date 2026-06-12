@@ -10,6 +10,7 @@ const actionButtonBlock: Block = {
       name: "displayText",
       type: "text",
       required: true,
+      localized: true,
     },
     {
       name: "hyperlink",
@@ -38,11 +39,13 @@ export const TextCardBlock: Block = {
       name: "heading",
       type: "text",
       required: true,
+      localized: true,
     },
     {
       name: "body",
       type: "richText",
       required: true,
+      localized: true,
     },
     markdownConvertedField("body"),
     {

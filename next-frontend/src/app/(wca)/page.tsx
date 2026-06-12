@@ -454,9 +454,12 @@ const renderBlock = (entry: LayoutBlock, level: number) => {
 export default async function Homepage() {
   const payload = await getPayload({ config });
   const { isEnabled: isDraftMode } = await draftMode();
+  const { lng } = await getT();
   const homepage = await payload.findGlobal({
     slug: "home",
     draft: isDraftMode,
+    locale: lng,
+    fallbackLocale: "en",
   });
 
   const homepageEntries = homepage.layout;
