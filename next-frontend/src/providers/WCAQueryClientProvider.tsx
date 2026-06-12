@@ -21,6 +21,9 @@ function makeQueryClient() {
   });
 }
 
+// Lazily initialized: this module is also evaluated on the server during SSR,
+// and an eager `const` would construct a throwaway client on every server render.
+// The `??=` defers construction until we're actually in the browser.
 let browserQueryClient: QueryClient | undefined;
 
 function getQueryClient() {
