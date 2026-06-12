@@ -21,7 +21,7 @@ class UseNgramFulltextIndexOnPersonsName < ActiveRecord::Migration[8.1]
   end
 
   def down
-    remove_index :persons, name: "index_persons_on_name"
+    remove_index :persons, name: "index_persons_on_name" # rubocop:disable Rails/BulkChangeTable
     add_index :persons, :name, type: :fulltext, name: "index_persons_on_name"
   end
 end

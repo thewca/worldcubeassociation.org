@@ -4,6 +4,11 @@ class Person < ApplicationRecord
   # for some reason, the ActiveRecord plural for "Person" is "people"…
   self.table_name = 'persons'
 
+  # Matches the MySQL `ngram_token_size` used by the ngram FULLTEXT index on `name`
+  # (see the UseNgramFulltextIndexOnPersonsName migration). Search tokens shorter
+  # than this can't be matched by the index.
+  NGRAM_TOKEN_SIZE = 2
+
   has_one :user, primary_key: "wca_id", foreign_key: "wca_id", inverse_of: :person
   has_one :unconfirmed_user, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "User", inverse_of: :unconfirmed_person
   has_many :results, primary_key: "wca_id"
@@ -276,7 +281,10 @@ class Person < ApplicationRecord
         # mode require the part's n-grams in sequence (i.e. a real substring match);
         # strip embedded quotes so the input can't break out of the phrase.
         token = part.delete('"')
-        next if token.empty?
+        # Tokens shorter than the ngram token size can't be matched by the index
+        # (and a 1-char fragment is meaningless as a search term), so skip them
+        # rather than AND-ing in a clause that can never match.
+        next if token.length < NGRAM_TOKEN_SIZE
 
         persons = persons.where("MATCH(name) AGAINST(:phrase IN BOOLEAN MODE)", phrase: %("#{token}"))
       end
