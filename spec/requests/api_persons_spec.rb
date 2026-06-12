@@ -33,7 +33,9 @@ RSpec.describe "API Persons" do
       end
     end
 
-    context "when a query is given" do
+    # A FULLTEXT search can only see committed data, so this cannot run inside the
+    # default transaction. See PersonsController spec for the same handling.
+    context "when a query is given", :clean_db_with_truncation do
       it "renders only people matching the query parameter" do
         get api_v0_persons_path, params: { q: "#{person.wca_id.first(4)} #{person.name[1..]}" }
         expect(response).to be_successful
