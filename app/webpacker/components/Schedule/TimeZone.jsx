@@ -45,6 +45,7 @@ export default function TimeZoneSelector({
       <Dropdown
         search
         selection
+        placeholder={I18n.t('competitions.schedule.select_a_timezone')}
         value={activeTimeZone}
         onChange={(_e, data) => setActiveTimeZone(data.value)}
         options={timeZoneOptions}
