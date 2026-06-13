@@ -19,27 +19,17 @@ export default function Schedule({
   calendarLocale,
   linkedRounds,
 }) {
-  // venues
+  // venues & time zones
 
   const { venues } = wcifSchedule;
-  const mainVenueIndex = 0;
-  const venueCount = venues.length;
-  const [activeVenueIndex, setActiveVenueIndex] = useState(-1);
-  // eslint-disable-next-line no-nested-ternary
-  const activeVenueOrNull = venueCount === 1
-    ? venues[0]
-    : activeVenueIndex !== -1
-      ? venues[activeVenueIndex]
-      : null;
-  const activeVenues = activeVenueOrNull ? [activeVenueOrNull] : venues;
 
-  // time zones
+  const mainVenueIndex = 0;
+  const uniqueTimeZones = [...new Set(venues.map((venue) => venue.timezone))];
+  const timeZoneCount = uniqueTimeZones.length;
 
   const [followVenueSelection, setFollowVenueSelection] = useState(true);
   const [activeTimeZone, setActiveTimeZone] = useState(venues[mainVenueIndex].timezone);
 
-  const uniqueTimeZones = [...new Set(venues.map((venue) => venue.timezone))];
-  const timeZoneCount = uniqueTimeZones.length;
 
   const setActiveVenueIndexAndUpdateTimeZone = (newIndex) => {
     // First tab represents "all" and has index -1
@@ -50,6 +40,16 @@ export default function Schedule({
 
     setActiveVenueIndex(newIndex);
   };
+
+  const venueCount = venues.length;
+  const [activeVenueIndex, setActiveVenueIndex] = useState(-1);
+  // eslint-disable-next-line no-nested-ternary
+  const activeVenueOrNull = venueCount === 1
+    ? venues[0]
+    : activeVenueIndex !== -1
+      ? venues[activeVenueIndex]
+      : null;
+  const activeVenues = activeVenueOrNull ? [activeVenueOrNull] : venues;
 
   // rooms
 
