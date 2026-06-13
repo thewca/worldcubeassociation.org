@@ -2240,7 +2240,7 @@ en:
         other: "You are viewing the schedule for the venue %{venue_name}, one of %{count} venues for this competition."
       venue_selection_all: "You are viewing the schedule for all %{venueCount} venues at once."
       timezone_message: "The time zone for this venue is %{timezone}."
-      timezone_setting: "You are viewing this schedule in the following timezone setting:"
+      timezone_setting: "You are viewing this schedule in the following time zone:"
       multiple_timezones_available: "Note that not all venues are in the same time zone -- please be careful!"
       select_a_timezone: "Select a time zone"
       select_a_timezone_to_view: "To view the schedule, select a venue or a time zone above."
