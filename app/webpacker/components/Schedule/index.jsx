@@ -99,7 +99,7 @@ export default function Schedule({
         anyVenueIsActive={anyVenueIsActive}
         activeVenueOrNull={activeVenueOrNull}
         activeVenueIndex={activeVenueIndex}
-        setActiveVenueIndex={setActiveVenueIndexAndUpdateTimeZone}
+        onVenueClick={setActiveVenueIndexAndUpdateTimeZone}
         timeZoneCount={timeZoneCount}
         rooms={roomsOfActiveVenues}
         activeRoomIds={activeRoomIds.asArray}

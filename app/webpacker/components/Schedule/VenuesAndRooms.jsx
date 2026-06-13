@@ -12,7 +12,7 @@ export default function VenuesAndRooms({
   anyVenueIsActive,
   activeVenueOrNull,
   activeVenueIndex,
-  setActiveVenueIndex,
+  onVenueClick,
   timeZoneCount,
   rooms,
   activeRoomIds,
@@ -22,12 +22,12 @@ export default function VenuesAndRooms({
 }) {
   const venueCount = venues.length;
 
-  const setActiveVenueIndexAndResetRooms = (newVenueIndex) => {
+  const selectVenueAndResetRooms = (newVenueIndex) => {
     const newVenues = newVenueIndex > -1 ? [venues[newVenueIndex]] : venues;
     const ids = newVenues.flatMap((venue) => venue.rooms).map((room) => room.id);
     updateRooms(ids);
 
-    setActiveVenueIndex(newVenueIndex);
+    onVenueClick(newVenueIndex);
   };
 
   const setTimeZoneForRoom = (roomId) => {
@@ -54,14 +54,14 @@ export default function VenuesAndRooms({
           <Menu.Item
             name={I18n.t('competitions.schedule.all_venues')}
             active={activeVenueIndex === -1}
-            onClick={() => setActiveVenueIndexAndResetRooms(-1)}
+            onClick={() => selectVenueAndResetRooms(-1)}
           />
           {venues.map((venue, index) => (
             <Menu.Item
               key={venue.id}
               name={venue.name}
               active={index === activeVenueIndex}
-              onClick={() => setActiveVenueIndexAndResetRooms(index)}
+              onClick={() => selectVenueAndResetRooms(index)}
             />
           ))}
         </Menu>
