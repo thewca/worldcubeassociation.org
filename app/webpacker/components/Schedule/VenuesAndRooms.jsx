@@ -91,7 +91,11 @@ export default function VenuesAndRooms({
             <Button
               toggle
               size="mini"
-              content={I18n.t('competitions.schedule.rooms_panel.show_buttons')}
+              content={
+                I18n.t(
+                  showTimeZoneButton ? 'competitions.schedule.rooms_panel.hide_buttons' : 'competitions.schedule.rooms_panel.show_buttons',
+                )
+              }
               active={showTimeZoneButton}
               onClick={() => setShowTimeZoneButton((buttonState) => !buttonState)}
             />
