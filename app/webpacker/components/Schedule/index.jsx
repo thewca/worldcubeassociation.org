@@ -128,30 +128,43 @@ export default function Schedule({
         setFollowVenueSelection={setFollowVenueSelection}
       />
 
-      <ViewSelector activeView={activeView} setActiveView={setActiveView} />
+      {activeTimeZone ? (
+        <>
+          <ViewSelector activeView={activeView} setActiveView={setActiveView} />
 
-      {activeView === 'calendar' ? (
-        <CalendarView
-          dates={activeDates}
-          timeZone={activeTimeZone}
-          activeVenues={activeVenues}
-          activeRooms={activeRooms}
-          activeEventIds={activeEventIds.asArray}
-          calendarLocale={calendarLocale}
-          wcifEvents={wcifEvents}
-          linkedRounds={linkedRounds}
-        />
+          {activeView === 'calendar' ? (
+            <CalendarView
+              dates={activeDates}
+              timeZone={activeTimeZone}
+              activeVenues={activeVenues}
+              activeRooms={activeRooms}
+              activeEventIds={activeEventIds.asArray}
+              calendarLocale={calendarLocale}
+              wcifEvents={wcifEvents}
+              linkedRounds={linkedRounds}
+            />
+          ) : (
+            <TableView
+              dates={activeDates}
+              timeZone={activeTimeZone}
+              activeRooms={activeRooms}
+              activeEvents={activeEvents}
+              activeVenueOrNull={activeVenueOrNull}
+              competitionName={competitionName}
+              wcifEvents={wcifEvents}
+              linkedRounds={linkedRounds}
+            />
+          )}
+        </>
       ) : (
-        <TableView
-          dates={activeDates}
-          timeZone={activeTimeZone}
-          activeRooms={activeRooms}
-          activeEvents={activeEvents}
-          activeVenueOrNull={activeVenueOrNull}
-          competitionName={competitionName}
-          wcifEvents={wcifEvents}
-          linkedRounds={linkedRounds}
-        />
+        <Message warning size='massive'>
+          <Message.Header>
+            {I18n.t('competitions.schedule.multiple_timezones_available')}
+          </Message.Header>
+          <Message.Content>
+            {I18n.t('competitions.schedule.select_a_timezone_to_view')}
+          </Message.Content>
+        </Message>
       )}
     </>
   );
