@@ -28,7 +28,7 @@ export default function Schedule({
   const timeZoneCount = uniqueTimeZones.length;
 
   const [followVenueSelection, setFollowVenueSelection] = useState(true);
-  const [activeTimeZone, setActiveTimeZone] = useState(venues[mainVenueIndex].timezone);
+  const [activeTimeZone, setActiveTimeZone] = useState(timeZoneCount === 1 ? venues[mainVenueIndex].timezone : null);
 
 
   const setActiveVenueIndexAndUpdateTimeZone = (newIndex) => {
