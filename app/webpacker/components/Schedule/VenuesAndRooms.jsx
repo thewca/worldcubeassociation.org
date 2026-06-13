@@ -39,7 +39,7 @@ export default function VenuesAndRooms({
     }
   };
 
-  const [showTimeZoneButton, setShowTimeZoneButton] = useState(false);
+  const [showTimeZoneButton, setShowTimeZoneButton] = useState(timeZoneCount > 1);
 
   return (
     <>
