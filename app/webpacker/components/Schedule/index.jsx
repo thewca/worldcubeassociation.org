@@ -28,18 +28,9 @@ export default function Schedule({
   const timeZoneCount = uniqueTimeZones.length;
 
   const [followVenueSelection, setFollowVenueSelection] = useState(true);
-  const [activeTimeZone, setActiveTimeZone] = useState(timeZoneCount === 1 ? venues[mainVenueIndex].timezone : null);
-
-
-  const setActiveVenueIndexAndUpdateTimeZone = (newIndex) => {
-    // First tab represents "all" and has index -1
-    if (newIndex >= 0 && followVenueSelection) {
-      const venueTimeZone = venues[newIndex].timezone;
-      setActiveTimeZone(venueTimeZone);
-    }
-
-    setActiveVenueIndex(newIndex);
-  };
+  const [activeTimeZone, setActiveTimeZone] = useState(
+    timeZoneCount === 1 ? venues[mainVenueIndex].timezone : null,
+  );
 
   const venueCount = venues.length;
   const [activeVenueIndex, setActiveVenueIndex] = useState(-1);
@@ -50,6 +41,16 @@ export default function Schedule({
       ? venues[activeVenueIndex]
       : null;
   const activeVenues = activeVenueOrNull ? [activeVenueOrNull] : venues;
+
+  const setActiveVenueIndexAndUpdateTimeZone = (newIndex) => {
+    // First tab represents "all" and has index -1
+    if (newIndex >= 0 && followVenueSelection) {
+      const venueTimeZone = venues[newIndex].timezone;
+      setActiveTimeZone(venueTimeZone);
+    }
+
+    setActiveVenueIndex(newIndex);
+  };
 
   // rooms
 
@@ -149,7 +150,7 @@ export default function Schedule({
           )}
         </>
       ) : (
-        <Message warning size='massive'>
+        <Message warning size="massive">
           <Message.Header>
             {I18n.t('competitions.schedule.multiple_timezones_available')}
           </Message.Header>
