@@ -34,8 +34,8 @@ export default function TimeZoneSelector({
   hasMultipleVenues,
   activeTimeZone,
   setActiveTimeZone,
-  followVenueSelection,
-  setFollowVenueSelection,
+  autoUpdateTimeZoneToMatchSelectedVenue,
+  setAutoUpdateTimeZoneToMatchSelectedVenue,
 }) {
   return (
     <Segment>
@@ -71,8 +71,8 @@ export default function TimeZoneSelector({
       {hasMultipleVenues && (
         <Checkbox
           label={I18n.t('competitions.schedule.timezone_follow_venue')}
-          checked={followVenueSelection}
-          onChange={(_e, data) => setFollowVenueSelection(data.checked)}
+          checked={autoUpdateTimeZoneToMatchSelectedVenue}
+          onChange={(_e, data) => setAutoUpdateTimeZoneToMatchSelectedVenue(data.checked)}
         />
       )}
     </Segment>

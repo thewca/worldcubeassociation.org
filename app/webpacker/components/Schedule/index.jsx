@@ -27,7 +27,10 @@ export default function Schedule({
   const uniqueTimeZones = [...new Set(venues.map((venue) => venue.timezone))];
   const timeZoneCount = uniqueTimeZones.length;
 
-  const [followVenueSelection, setFollowVenueSelection] = useState(true);
+  const [
+    autoUpdateTimeZoneToMatchSelectedVenue,
+    setAutoUpdateTimeZoneToMatchSelectedVenue,
+  ] = useState(true);
   const [activeTimeZone, setActiveTimeZone] = useState(
     timeZoneCount === 1 ? venues[mainVenueIndex].timezone : null,
   );
@@ -44,7 +47,7 @@ export default function Schedule({
 
   const setActiveVenueIndexAndUpdateTimeZone = (newIndex) => {
     // First tab represents "all" and has index -1
-    if (newIndex >= 0 && followVenueSelection) {
+    if (newIndex >= 0 && autoUpdateTimeZoneToMatchSelectedVenue) {
       const venueTimeZone = venues[newIndex].timezone;
       setActiveTimeZone(venueTimeZone);
     }
@@ -117,8 +120,8 @@ export default function Schedule({
         hasMultipleVenues={venueCount > 1}
         activeTimeZone={activeTimeZone}
         setActiveTimeZone={setActiveTimeZone}
-        followVenueSelection={followVenueSelection}
-        setFollowVenueSelection={setFollowVenueSelection}
+        autoUpdateTimeZoneToMatchSelectedVenue={autoUpdateTimeZoneToMatchSelectedVenue}
+        setAutoUpdateTimeZoneToMatchSelectedVenue={setAutoUpdateTimeZoneToMatchSelectedVenue}
       />
 
       {activeTimeZone ? (
