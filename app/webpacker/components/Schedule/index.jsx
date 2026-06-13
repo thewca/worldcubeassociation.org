@@ -108,14 +108,16 @@ export default function Schedule({
         setActiveTimeZone={setActiveTimeZone}
       />
 
-      <TimeZoneSelector
-        activeVenueOrNull={activeVenueOrNull}
-        hasMultipleVenues={venueCount > 1}
-        activeTimeZone={activeTimeZone}
-        setActiveTimeZone={setActiveTimeZone}
-        autoUpdateTimeZoneToMatchSelectedVenue={autoUpdateTimeZoneToMatchSelectedVenue}
-        setAutoUpdateTimeZoneToMatchSelectedVenue={setAutoUpdateTimeZoneToMatchSelectedVenue}
-      />
+      {anyVenueIsActive && (
+        <TimeZoneSelector
+          activeVenueOrNull={activeVenueOrNull}
+          hasMultipleVenues={venueCount > 1}
+          activeTimeZone={activeTimeZone}
+          setActiveTimeZone={setActiveTimeZone}
+          autoUpdateTimeZoneToMatchSelectedVenue={autoUpdateTimeZoneToMatchSelectedVenue}
+          setAutoUpdateTimeZoneToMatchSelectedVenue={setAutoUpdateTimeZoneToMatchSelectedVenue}
+        />
+      )}
 
       {anyVenueIsActive && (
         <Segment>
