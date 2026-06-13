@@ -82,14 +82,6 @@ export default function Schedule({
 
   return (
     <>
-      {timeZoneCount > 1 && (
-        <Message warning>
-          <Message.Content>
-            {I18n.t('competitions.schedule.multiple_timezones_available')}
-          </Message.Content>
-        </Message>
-      )}
-
       <Message>
         <Message.Content>
           {I18n.t('competitions.schedule.schedule_change_warning')}
