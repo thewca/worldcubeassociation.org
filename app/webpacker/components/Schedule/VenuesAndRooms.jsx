@@ -9,6 +9,7 @@ import I18n from '../../lib/i18n';
 
 export default function VenuesAndRooms({
   venues,
+  anyVenueIsActive,
   activeVenueOrNull,
   activeVenueIndex,
   setActiveVenueIndex,
@@ -66,13 +67,15 @@ export default function VenuesAndRooms({
         </Menu>
       )}
 
-      <VenueInfo
-        activeVenueOrNull={activeVenueOrNull}
-        venueCount={venueCount}
-        timeZoneCount={timeZoneCount}
-      />
+      {anyVenueIsActive && (
+        <VenueInfo
+          activeVenueOrNull={activeVenueOrNull}
+          venueCount={venueCount}
+          timeZoneCount={timeZoneCount}
+        />
+      )}
 
-      {rooms.length > 1 && (
+      {anyVenueIsActive && rooms.length > 1 && (
         <Segment>
           <Header size="small">
             {I18n.t('competitions.schedule.rooms_panel.title')}

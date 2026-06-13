@@ -44,6 +44,7 @@ export default function Schedule({
       ? venues[activeVenueIndex]
       : null;
   const activeVenues = activeVenueOrNull ? [activeVenueOrNull] : venues;
+  const anyVenueIsActive = activeVenues.length > 0;
 
   const setActiveVenueIndexAndUpdateTimeZone = (newIndex) => {
     // First tab represents "all" and has index -1
@@ -94,6 +95,7 @@ export default function Schedule({
 
       <VenuesAndRooms
         venues={venues}
+        anyVenueIsActive={anyVenueIsActive}
         activeVenueOrNull={activeVenueOrNull}
         activeVenueIndex={activeVenueIndex}
         setActiveVenueIndex={setActiveVenueIndexAndUpdateTimeZone}
@@ -105,15 +107,17 @@ export default function Schedule({
         setActiveTimeZone={setActiveTimeZone}
       />
 
-      <Segment>
-        <EventSelector
-          eventList={availableEventIds}
-          selectedEvents={activeEventIds.asArray}
-          onEventClick={activeEventIds.toggle}
-          onAllClick={() => activeEventIds.update(availableEventIds)}
-          onClearClick={activeEventIds.clear}
-        />
-      </Segment>
+      {anyVenueIsActive && (
+        <Segment>
+          <EventSelector
+            eventList={availableEventIds}
+            selectedEvents={activeEventIds.asArray}
+            onEventClick={activeEventIds.toggle}
+            onAllClick={() => activeEventIds.update(availableEventIds)}
+            onClearClick={activeEventIds.clear}
+          />
+        </Segment>
+      )}
 
       <TimeZoneSelector
         activeVenueOrNull={activeVenueOrNull}
