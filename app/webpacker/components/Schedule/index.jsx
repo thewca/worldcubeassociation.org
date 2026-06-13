@@ -43,7 +43,8 @@ export default function Schedule({
     : activeVenueIndex !== -1
       ? venues[activeVenueIndex]
       : null;
-  const activeVenues = activeVenueOrNull ? [activeVenueOrNull] : venues;
+  const defaultActiveVenues = activeTimeZone ? venues : [];
+  const activeVenues = activeVenueOrNull ? [activeVenueOrNull] : defaultActiveVenues;
   const anyVenueIsActive = activeVenues.length > 0;
 
   const setActiveVenueIndexAndUpdateTimeZone = (newIndex) => {
