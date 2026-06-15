@@ -113,7 +113,7 @@
     "i18n-iso-countries": "^7.14.0",
     "jsdom": "^29.1.1",
     "openapi-typescript": "^7.13.0",
-    "prettier": "^3.8.3",
+    "prettier": "^3.8.4",
     "typescript": "^6",
     "vitest": "^4.1.9"
   },
