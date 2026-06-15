@@ -1,5 +1,5 @@
 import { Accordion, Link as ChakraLink, Stack, Text } from "@chakra-ui/react";
-import { ChakraMarkdown } from "@/components/Markdown";
+import AnnouncementContent from "@/components/AnnouncementContent";
 import { Announcement } from "@/types/payload";
 import { LuChevronsRight } from "react-icons/lu";
 import { getMediumDateString } from "@/lib/wca/dates";
@@ -19,9 +19,7 @@ function AnnouncementItem({ announcement }: { announcement: Announcement }) {
         </Stack>
       </Accordion.ItemTrigger>
       <Accordion.ItemContent>
-        <ChakraMarkdown paragraphAs={Accordion.ItemBody} textStyle="body">
-          {announcement.contentMarkdown}
-        </ChakraMarkdown>
+        <AnnouncementContent contentMarkdown={announcement.contentMarkdown} />
       </Accordion.ItemContent>
     </Accordion.Item>
   );
@@ -43,6 +41,9 @@ export default function AnnouncementsCard({
       variant="card"
       defaultValue={[hero.id]}
       colorPalette={colorPalette}
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-between"
     >
       <AnnouncementItem announcement={hero} />
 

@@ -195,7 +195,7 @@ class Round < ApplicationRecord
   def clear_round!(clearing_user)
     LiveAttempt.where(live_result_id: live_result_ids).delete_all
     # We have to use update_all here because live_attempts_count is write protected
-    live_results.update_all(best: 0, average: 0, live_attempts_count: 0, advancing: false, advancing_questionable: false)
+    live_results.update_all(best: 0, average: 0, live_attempts_count: 0, advancing: false, advancing_questionable: false, single_record_tag: nil, average_record_tag: nil)
     self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
   end
 
@@ -744,7 +744,7 @@ class Round < ApplicationRecord
   end
 
   def quit_from_round!(registration_id, quitting_user, to_advance: nil)
-    transaction do
+    with_lock do
       Live::DiffHelper.broadcast_changes(self) do
         result = live_results.find_by!(registration_id: registration_id)
         result.destroy!
@@ -765,7 +765,7 @@ class Round < ApplicationRecord
   end
 
   def bulk_quit_from_round!(registration_ids, quitting_user, to_advance: nil)
-    transaction do
+    with_lock do
       Live::DiffHelper.broadcast_changes(self) do
         live_results.where(registration_id: registration_ids).find_each(&:destroy!)
         live_results.create(to_advance.map { { **LiveResult.empty_result_attributes(it.registration_id, self.id) } }) if to_advance.present?

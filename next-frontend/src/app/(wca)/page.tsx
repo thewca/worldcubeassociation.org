@@ -14,6 +14,8 @@ import {
   Text,
   VStack,
   Link as ChakraLink,
+  LinkBox,
+  LinkOverlay,
   Center,
   HStack,
   AbsoluteCenter,
@@ -40,6 +42,7 @@ import type {
   Announcement,
   ColorPaletteSelect,
   Home,
+  GrowthStrategy,
 } from "@/types/payload";
 import Link from "next/link";
 import { route } from "nextjs-routes";
@@ -92,14 +95,9 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
               <Button
                 key={button.id}
                 asChild
-                colorPalette={button.inheritColorScheme ? undefined : "blue"}
-                variant={button.inheritColorScheme ? "outline" : "solid"}
-                bg={button.inheritColorScheme ? undefined : "colorPalette.1A"}
-                _hover={{
-                  bg: button.inheritColorScheme
-                    ? "colorPalette.emphasized"
-                    : undefined,
-                }}
+                variant={
+                  button.inheritColorScheme ? "pastelOutline" : "pastelSolid"
+                }
               >
                 <ChakraLink
                   color="colorPalette.pastelContrast"
@@ -239,21 +237,28 @@ const ImageOnlyCardImage = ({ block }: { block: ImageOnlyCardBlock }) => {
 };
 
 const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
+  // Payload types an optional parameter as undefined or null, but Chakra only wants undefined
+  const href = block.url ?? undefined;
   return (
-    <Card.Root
-      overflow="hidden"
-      colorPalette={block.colorPalette}
-      colorVariant="slatePastel"
-      width="full"
-    >
-      {block.textPosition === "bottom" && <ImageOnlyCardImage block={block} />}
-      {block.heading && (
-        <Card.Body>
-          <Card.Title textStyle="h2">{block.heading}</Card.Title>
-        </Card.Body>
-      )}
-      {block.textPosition === "top" && <ImageOnlyCardImage block={block} />}
-    </Card.Root>
+    <LinkBox asChild>
+      <Card.Root
+        overflow="hidden"
+        colorPalette={block.colorPalette}
+        colorVariant="slatePastel"
+        width="full"
+      >
+        <LinkOverlay href={href} />
+        {block.textPosition === "bottom" && (
+          <ImageOnlyCardImage block={block} />
+        )}
+        {block.heading && (
+          <Card.Body>
+            <Card.Title textStyle="h2">{block.heading}</Card.Title>
+          </Card.Body>
+        )}
+        {block.textPosition === "top" && <ImageOnlyCardImage block={block} />}
+      </Card.Root>
+    </LinkBox>
   );
 };
 
@@ -301,7 +306,7 @@ const FeaturedCompetitions = async ({
           <Text textStyle={{ base: "h2", md: "h1" }}>
             Upcoming Competitions
           </Text>
-          <Button asChild variant="outline">
+          <Button asChild variant="pastelSolid">
             <Link href="/competitions">View all Competitions</Link>
           </Button>
         </HStack>
@@ -383,25 +388,50 @@ type VerticalLayout =
 const renderVerticalLayout = (
   verticalLayout: VerticalLayout,
   level: number = 0,
+  growthStrategy?: GrowthStrategy,
 ) => {
   return (
-    <VStack gap={8}>
+    <VStack
+      gap={8}
+      justifyContent={
+        growthStrategy === "justify" ? "space-between" : undefined
+      }
+    >
       {verticalLayout.map((entry) => {
         return (
-          <React.Fragment key={entry.id}>
-            {renderBlock(entry, level)}
-          </React.Fragment>
+          <Box
+            key={entry.id}
+            asChild
+            flexGrow={growthStrategy === "grow" ? "1" : undefined}
+            // In case of justifying the space, a stack with one single child (CSS :only-child)
+            //   cannot push it towards the beginning and end simultaneously. So in that case,
+            //   also grow if the selected strategy is `justify`, to simulate the visual impression
+            //   of "filling" the container like it would be if there was more than one item.
+            _only={{ flexGrow: growthStrategy === "justify" ? "1" : undefined }}
+          >
+            {renderBlock(entry, level, growthStrategy)}
+          </Box>
         );
       })}
     </VStack>
   );
 };
 
-const renderHorizontalSplit = (entry: TwoBlocksUnion, level: number) => {
+const renderHorizontalSplit = (
+  entry: TwoBlocksUnion,
+  level: number,
+  growthStrategy?: GrowthStrategy,
+) => {
   const { left: leftCols, right: rightCols } = RATIO_GRID_MAP[entry.ratio];
 
   const totalCols = leftCols + rightCols;
   const foldMd = level <= 1;
+
+  // If a parent horizontal splitter has a `grow` strategy,
+  //   it will look weird if children in either half of the splitter don't grow.
+  // So make sure that any `grow` splitter passes down "at least" `justify` as a base strategy.
+  const fallbackGrowthStrategy =
+    growthStrategy === "grow" ? "justify" : undefined;
 
   return (
     <SimpleGrid
@@ -413,13 +443,21 @@ const renderHorizontalSplit = (entry: TwoBlocksUnion, level: number) => {
         colSpan={{ base: 1, md: foldMd ? 1 : leftCols, lg: leftCols }}
         asChild
       >
-        {renderVerticalLayout(entry.left, level)}
+        {renderVerticalLayout(
+          entry.left,
+          level,
+          entry.growthStrategy || fallbackGrowthStrategy,
+        )}
       </GridItem>
       <GridItem
         colSpan={{ base: 1, md: foldMd ? 1 : rightCols, lg: rightCols }}
         asChild
       >
-        {renderVerticalLayout(entry.right, level)}
+        {renderVerticalLayout(
+          entry.right,
+          level,
+          entry.growthStrategy || fallbackGrowthStrategy,
+        )}
       </GridItem>
     </SimpleGrid>
   );
@@ -427,12 +465,16 @@ const renderHorizontalSplit = (entry: TwoBlocksUnion, level: number) => {
 
 type LayoutBlock = VerticalLayout[number];
 
-const renderBlock = (entry: LayoutBlock, level: number) => {
+const renderBlock = (
+  entry: LayoutBlock,
+  level: number,
+  growthStrategy?: GrowthStrategy,
+) => {
   switch (entry.blockType) {
     case "twoBlocksLevel0":
     case "twoBlocksLevel1":
     case "twoBlocksLevel2":
-      return renderHorizontalSplit(entry, level + 1);
+      return renderHorizontalSplit(entry, level + 1, growthStrategy);
     case "TextCard":
       return <TextCard block={entry} />;
     case "AnnouncementsSection":

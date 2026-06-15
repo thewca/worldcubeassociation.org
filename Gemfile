@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'bundler', '4.0.13'
+gem 'bundler', '4.0.14'
 gem 'rails'
 gem 'rails-i18n'
 gem 'i18n-js'

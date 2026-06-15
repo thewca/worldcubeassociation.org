@@ -15,7 +15,7 @@ function LivestreamManager({ testVideoIdProp, liveVideoIdProp }) {
   const [confirmUpdateOpen, setConfirmUpdateOpen] = useInputState(false);
   const [confirmPromoteOpen, setConfirmPromoteOpen] = useInputState(false);
 
-  const defaultVideoId = 'blat80pyeBg';
+  const defaultVideoId = '29wB-ZyfAPo';
 
   const {
     mutate: updateTestVideoIdMutation,
