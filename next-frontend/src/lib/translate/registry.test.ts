@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import type { Field } from "payload";
-import { buildTranslationRegistry, resolveStrings } from "./registry";
+import {
+  buildTranslationRegistry,
+  resolveLeaf,
+  resolveStrings,
+} from "./registry";
 
 // Mirrors the real shapes in the repo: a blocks field whose block has a
 // localized `text` + localized `richText`, a localized field on a collection,
@@ -82,7 +86,10 @@ describe("resolveStrings", () => {
         { id: "a2", blockType: "TextCard", heading: "Goodbye", body: {} },
       ],
     };
-    const strings = resolveStrings(byPath["home.blocks(TextCard)[].heading"], doc);
+    const strings = resolveStrings(
+      byPath["home.blocks(TextCard)[].heading"],
+      doc,
+    );
 
     expect(strings.map((s) => s.dataPath)).toEqual([
       ["blocks", 0, "heading"],
@@ -103,7 +110,10 @@ describe("resolveStrings", () => {
         { id: "y", blockType: "TextCard", heading: "yes", body: {} },
       ],
     };
-    const strings = resolveStrings(byPath["home.blocks(TextCard)[].heading"], doc);
+    const strings = resolveStrings(
+      byPath["home.blocks(TextCard)[].heading"],
+      doc,
+    );
     expect(strings).toHaveLength(1);
     expect(strings[0].value).toBe("yes");
   });
@@ -113,5 +123,63 @@ describe("resolveStrings", () => {
     expect(strings).toEqual([
       expect.objectContaining({ dataPath: ["description"], value: null }),
     ]);
+  });
+});
+
+describe("resolveLeaf (write-side guard)", () => {
+  const registry = buildTranslationRegistry(source);
+  const byPath = Object.fromEntries(registry.map((f) => [f.pathString, f]));
+
+  it("resolves a block leaf to its container + key for mutation", () => {
+    const doc = {
+      blocks: [{ id: "a1", blockType: "TextCard", heading: "Hi", body: {} }],
+    };
+    const leaf = resolveLeaf(doc, byPath["home.blocks(TextCard)[].heading"], [
+      "blocks",
+      0,
+      "heading",
+    ]);
+    expect(leaf?.key).toBe("heading");
+    expect(leaf?.container).toBe(doc.blocks[0]);
+    // The returned container is live, so writing through it mutates the doc.
+    leaf!.container[leaf!.key] = "Hallo";
+    expect(doc.blocks[0].heading).toBe("Hallo");
+  });
+
+  it("rejects a path that lands on the wrong block type", () => {
+    const doc = { blocks: [{ id: "x", blockType: "ImageCard" }] };
+    const leaf = resolveLeaf(doc, byPath["home.blocks(TextCard)[].heading"], [
+      "blocks",
+      0,
+      "heading",
+    ]);
+    expect(leaf).toBeNull();
+  });
+
+  it("rejects a structurally mismatched path", () => {
+    const doc = {
+      blocks: [{ id: "a1", blockType: "TextCard", heading: "Hi" }],
+    };
+    // Missing the array index.
+    expect(
+      resolveLeaf(doc, byPath["home.blocks(TextCard)[].heading"], [
+        "blocks",
+        "heading",
+      ]),
+    ).toBeNull();
+    // Out-of-range row.
+    expect(
+      resolveLeaf(doc, byPath["home.blocks(TextCard)[].heading"], [
+        "blocks",
+        5,
+        "heading",
+      ]),
+    ).toBeNull();
+  });
+
+  it("resolves a plain top-level leaf", () => {
+    const doc = { description: "old" };
+    const leaf = resolveLeaf(doc, byPath["tools.description"], ["description"]);
+    expect(leaf).toEqual({ container: doc, key: "description" });
   });
 });

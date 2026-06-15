@@ -55,8 +55,6 @@ type RegistrySource = {
   globals: { slug: string; fields: Field[] }[];
 };
 
-const TRANSLATABLE_TYPES = new Set(["text", "textarea", "richText"]);
-
 function labelOf(field: Extract<Field, { name: string }>): string {
   const { label } = field;
   if (typeof label === "string") return label;
@@ -255,4 +253,57 @@ export function resolveStrings(
 
   recurse(field.path, doc, [], []);
   return out;
+}
+
+/**
+ * Walk a field's schema path alongside a concrete `dataPath` (verifying block
+ * types) and return the leaf's container object + key, or null if the data path
+ * does not resolve to this field's localized leaf.
+ *
+ * This is the write-side guard: it proves a requested write target is a known
+ * localized field before any mutation happens.
+ */
+export function resolveLeaf(
+  doc: Record<string, unknown>,
+  field: LocalizedField,
+  dataPath: (string | number)[],
+): { container: Record<string, unknown>; key: string } | null {
+  let node: Record<string, unknown> = doc;
+  let i = 0;
+  for (let s = 0; s < field.path.length; s += 1) {
+    const seg = field.path[s];
+    const isLast = s === field.path.length - 1;
+
+    if (seg.kind === "field") {
+      if (dataPath[i] !== seg.name) return null;
+      if (isLast) return { container: node, key: seg.name };
+      const next = node[seg.name];
+      if (next == null || typeof next !== "object") return null;
+      node = next as Record<string, unknown>;
+      i += 1;
+      continue;
+    }
+
+    // array | block: data path must be [name, index, ...]
+    const rows = node[seg.name];
+    const index = dataPath[i + 1];
+    if (
+      dataPath[i] !== seg.name ||
+      !Array.isArray(rows) ||
+      typeof index !== "number"
+    ) {
+      return null;
+    }
+    const row = rows[index];
+    if (!row || typeof row !== "object") return null;
+    if (
+      seg.kind === "block" &&
+      (row as Record<string, unknown>).blockType !== seg.blockSlug
+    ) {
+      return null;
+    }
+    node = row as Record<string, unknown>;
+    i += 2;
+  }
+  return null;
 }

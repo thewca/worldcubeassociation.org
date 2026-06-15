@@ -6,6 +6,7 @@ import { fallbackLng } from "@/lib/i18n/settings";
 import {
   buildTranslationRegistry,
   resolveStrings,
+  resolveLeaf,
   type LocalizedField,
   type Widget,
 } from "@/lib/translate/registry";
@@ -48,6 +49,15 @@ function hasContent(value: unknown, widget: Widget): boolean {
   if (value == null) return false;
   if (widget === "lexical") return lexicalText(value).trim().length > 0;
   return String(value).trim().length > 0;
+}
+
+interface PatchBody {
+  locale?: string;
+  parentType?: "collection" | "global";
+  parentSlug?: string;
+  docId?: string | null;
+  dataPath?: (string | number)[];
+  value?: unknown;
 }
 
 function entriesForDoc(
@@ -197,5 +207,138 @@ export async function GET(req: NextRequest): Promise<Response> {
         : 100,
     },
     items,
+  });
+}
+
+export async function PATCH(req: NextRequest): Promise<Response> {
+  const payload = await getPayload({ config });
+
+  const { user } = await payload.auth({ headers: req.headers });
+  if (!user) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  let body: PatchBody;
+  try {
+    body = (await req.json()) as PatchBody;
+  } catch {
+    return Response.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
+
+  const { locale, parentType, parentSlug, dataPath, value } = body;
+  const docId = body.docId ?? null;
+
+  if (!locale || !isValidLocale(locale) || locale === fallbackLng) {
+    return Response.json(
+      { error: "Unknown or untranslatable locale" },
+      { status: 400 },
+    );
+  }
+  if (
+    (parentType !== "collection" && parentType !== "global") ||
+    typeof parentSlug !== "string" ||
+    !Array.isArray(dataPath) ||
+    dataPath.length === 0 ||
+    typeof dataPath[0] !== "string"
+  ) {
+    return Response.json({ error: "Malformed write target" }, { status: 400 });
+  }
+  if (parentType === "collection" && !docId) {
+    return Response.json(
+      { error: "docId is required for collections" },
+      { status: 400 },
+    );
+  }
+  if (!canTranslateLocale(user.roles as string[] | undefined, locale)) {
+    return Response.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  // Only fields the registry knows to be localized may be written.
+  const fields = buildTranslationRegistry(payload.config).filter(
+    (f) => f.parent.type === parentType && f.parent.slug === parentSlug,
+  );
+  if (fields.length === 0) {
+    return Response.json(
+      { error: "Unknown collection or global" },
+      { status: 404 },
+    );
+  }
+
+  // Read the current target-locale document so we can apply a single leaf write
+  // and send back only the containing top-level field (Payload replaces arrays
+  // wholesale, so a partial nested write is not possible).
+  const targetDoc =
+    parentType === "global"
+      ? await payload.findGlobal({
+          slug: parentSlug as GlobalSlug,
+          locale,
+          depth: 0,
+          fallbackLocale: false,
+        })
+      : await payload.findByID({
+          collection: parentSlug as CollectionSlug,
+          id: docId!,
+          locale,
+          depth: 0,
+          fallbackLocale: false,
+        });
+
+  const clone = structuredClone(targetDoc) as unknown as Record<
+    string,
+    unknown
+  >;
+
+  let matched: LocalizedField | null = null;
+  let leaf: { container: Record<string, unknown>; key: string } | null = null;
+  for (const field of fields) {
+    const resolved = resolveLeaf(clone, field, dataPath);
+    if (resolved) {
+      matched = field;
+      leaf = resolved;
+      break;
+    }
+  }
+  if (!matched || !leaf) {
+    return Response.json(
+      { error: "Not a writable localized field" },
+      { status: 400 },
+    );
+  }
+
+  // Enforce that the value matches how this field is edited (plain text vs
+  // Lexical), allowing null to clear a translation.
+  const validValue =
+    value === null ||
+    (matched.widget === "plain"
+      ? typeof value === "string"
+      : typeof value === "object");
+  if (!validValue) {
+    return Response.json(
+      { error: "Value does not match field type" },
+      { status: 422 },
+    );
+  }
+
+  leaf.container[leaf.key] = value;
+  const data = { [dataPath[0] as string]: clone[dataPath[0] as string] };
+
+  if (parentType === "global") {
+    await payload.updateGlobal({
+      slug: parentSlug as GlobalSlug,
+      locale,
+      data,
+    });
+  } else {
+    await payload.update({
+      collection: parentSlug as CollectionSlug,
+      id: docId!,
+      locale,
+      data,
+    });
+  }
+
+  return Response.json({
+    ok: true,
+    status: hasContent(value, matched.widget) ? "translated" : "untranslated",
   });
 }
