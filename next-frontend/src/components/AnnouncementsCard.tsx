@@ -2,7 +2,7 @@ import { Accordion, Link as ChakraLink, Stack, Text } from "@chakra-ui/react";
 import AnnouncementContent from "@/components/AnnouncementContent";
 import { Announcement } from "@/types/payload";
 import { LuChevronsRight } from "react-icons/lu";
-import { getMediumDateString } from "@/lib/wca/dates";
+import { getFullDateTimeStringNoSeconds } from "@/lib/wca/dates";
 
 function AnnouncementItem({ announcement }: { announcement: Announcement }) {
   return (
@@ -15,7 +15,9 @@ function AnnouncementItem({ announcement }: { announcement: Announcement }) {
         <Accordion.ItemIndicator _open={{ display: "none" }} />
         <Stack gap={1} alignItems="flex-start">
           <Text textStyle="s1">{announcement.title}</Text>
-          <Text>{getMediumDateString(announcement.publishedAt)}</Text>
+          <Text>
+            {getFullDateTimeStringNoSeconds(announcement.publishedAt)}
+          </Text>
         </Stack>
       </Accordion.ItemTrigger>
       <Accordion.ItemContent>
