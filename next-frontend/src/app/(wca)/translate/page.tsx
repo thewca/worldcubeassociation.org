@@ -188,6 +188,7 @@ export default function TranslatePage() {
   const [data, setData] = useState<StringsResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showTranslated, setShowTranslated] = useState(false);
 
   const load = useCallback(async (target: string) => {
     setLoading(true);
@@ -237,7 +238,7 @@ export default function TranslatePage() {
       <VStack align="stretch" gap="4">
         <Heading size="xl">Translations</Heading>
 
-        <HStack>
+        <HStack justify="space-between">
           <NativeSelect.Root width="xs">
             <NativeSelect.Field
               value={locale}
@@ -251,6 +252,13 @@ export default function TranslatePage() {
             </NativeSelect.Field>
             <NativeSelect.Indicator />
           </NativeSelect.Root>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setShowTranslated((s) => !s)}
+          >
+            {showTranslated ? "Hide translated" : "Show translated"}
+          </Button>
         </HStack>
 
         {data && (
@@ -282,21 +290,50 @@ export default function TranslatePage() {
           </Card.Root>
         )}
 
-        {data && !loading && (
-          <VStack align="stretch" gap="3">
-            {data.items.length === 0 && (
-              <Text color="fg.muted">No translatable strings found.</Text>
-            )}
-            {data.items.map((item) => (
-              <StringRow
-                key={item.key}
-                item={item}
-                locale={locale}
-                onSaved={handleSaved}
-              />
-            ))}
-          </VStack>
-        )}
+        {data &&
+          !loading &&
+          (() => {
+            const visible = showTranslated
+              ? data.items
+              : data.items.filter((i) => i.status === "untranslated");
+
+            // Group by parent doc, preserving first-seen order.
+            const groups = new Map<string, StringItem[]>();
+            for (const item of visible) {
+              const key = `${item.parentType}:${item.parentSlug}`;
+              (groups.get(key) ?? groups.set(key, []).get(key)!).push(item);
+            }
+
+            if (visible.length === 0) {
+              return (
+                <Text color="fg.muted">
+                  {data.items.length === 0
+                    ? "No translatable strings found."
+                    : "Everything is translated. 🎉"}
+                </Text>
+              );
+            }
+
+            return (
+              <VStack align="stretch" gap="6">
+                {[...groups].map(([key, items]) => (
+                  <VStack key={key} align="stretch" gap="3">
+                    <Heading size="md" textTransform="capitalize">
+                      {items[0].parentSlug}
+                    </Heading>
+                    {items.map((item) => (
+                      <StringRow
+                        key={item.key}
+                        item={item}
+                        locale={locale}
+                        onSaved={handleSaved}
+                      />
+                    ))}
+                  </VStack>
+                ))}
+              </VStack>
+            );
+          })()}
       </VStack>
     </Container>
   );
