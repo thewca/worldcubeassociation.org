@@ -36,7 +36,12 @@ export default function AnnouncementContent({
       {showReadMore && (
         <Accordion.ItemBody>
           {url ? (
-            <Button variant="pastelSolid" size="sm" alignSelf="flex-start" asChild>
+            <Button
+              variant="pastelSolid"
+              size="sm"
+              alignSelf="flex-start"
+              asChild
+            >
               <ChakraLink href={url} color="currentColor">
                 Read More
               </ChakraLink>
