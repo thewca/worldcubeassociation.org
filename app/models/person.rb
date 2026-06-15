@@ -4,6 +4,11 @@ class Person < ApplicationRecord
   # for some reason, the ActiveRecord plural for "Person" is "people"…
   self.table_name = 'persons'
 
+  # Matches the MySQL `ngram_token_size` used by the ngram FULLTEXT index on `name`
+  # (see the UseNgramFulltextIndexOnPersonsName migration). Search tokens shorter
+  # than this can't be matched by the index.
+  NGRAM_TOKEN_SIZE = 2
+
   has_one :user, primary_key: "wca_id", foreign_key: "wca_id", inverse_of: :person
   has_one :unconfirmed_user, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "User", inverse_of: :unconfirmed_person
   has_many :results, primary_key: "wca_id"
@@ -263,7 +268,26 @@ class Person < ApplicationRecord
     # `User#serializable_hash` touches to avoid an N+1 per person.
     persons = Person.current.includes(user: User::SERIALIZATION_INCLUDES)
     query.split.each do |part|
-      persons = persons.where("name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
+      if part.match?(/\d/)
+        # WCA IDs always contain digits and names never do, so a part with a digit
+        # is a WCA ID lookup. A prefix match (no leading wildcard) uses the wca_id index.
+        persons = persons.where("wca_id LIKE :part", part: "#{part}%")
+      else
+        # Match on the ngram FULLTEXT index on `name` (see the
+        # UseNgramFulltextIndexOnPersonsName migration). A leading-wildcard `LIKE
+        # '%part%'` can't use any index and forces a full table scan (~500ms on
+        # ~290k rows); the ngram index does substring matching via the index (~ms),
+        # so e.g. "koy" still finds "Akoy". A double-quoted phrase makes boolean
+        # mode require the part's n-grams in sequence (i.e. a real substring match);
+        # strip embedded quotes so the input can't break out of the phrase.
+        token = part.delete('"')
+        # Tokens shorter than the ngram token size can't be matched by the index
+        # (and a 1-char fragment is meaningless as a search term), so skip them
+        # rather than AND-ing in a clause that can never match.
+        next if token.length < NGRAM_TOKEN_SIZE
+
+        persons = persons.where("MATCH(name) AGAINST(:phrase IN BOOLEAN MODE)", phrase: %("#{token}"))
+      end
     end
     persons.order(:name)
   end

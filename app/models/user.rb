@@ -1225,18 +1225,18 @@ class User < ApplicationRecord
 
     return User.where(email: query) if admin_search && search_by_email
 
-    if searching_persons_table
-      users = Person.includes(user: SERIALIZATION_INCLUDES).current
-      search_by_email = false # We can't search by email on the 'Person' table
-    else
-      users = User.confirmed_email.not_dummy_account.includes(SERIALIZATION_INCLUDES)
+    # Searching the 'persons' table is identical to Person.search (same includes and
+    # ordering), which uses the FULLTEXT index on persons.name. The 'users' table has
+    # no such index, so it keeps the (slower) LIKE search below.
+    return Person.search(query) if searching_persons_table
 
-      users = users.where(id: self.staff_delegate_ids) if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
+    users = User.confirmed_email.not_dummy_account.includes(SERIALIZATION_INCLUDES)
 
-      users = users.where(id: self.trainee_delegate_ids) if ActiveRecord::Type::Boolean.new.cast(params[:only_trainee_delegates])
+    users = users.where(id: self.staff_delegate_ids) if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
 
-      users = users.where.not(wca_id: nil) if ActiveRecord::Type::Boolean.new.cast(params[:only_with_wca_ids])
-    end
+    users = users.where(id: self.trainee_delegate_ids) if ActiveRecord::Type::Boolean.new.cast(params[:only_trainee_delegates])
+
+    users = users.where.not(wca_id: nil) if ActiveRecord::Type::Boolean.new.cast(params[:only_with_wca_ids])
 
     query.split.each do |part|
       users = users.where("name LIKE :part OR wca_id LIKE :part #{'OR email LIKE :part' if search_by_email}", part: "%#{part}%")
