@@ -1754,7 +1754,15 @@ class Competition < ApplicationRecord
     # Respect other `includes` associations that might have been specified ahead of time
     previous_includes = competitions.includes_values
 
-    competitions.includes(:delegates, :organizers, *previous_includes).order(**order)
+    # The delegates and organizers get run through `User#serializable_hash`, so eager load the
+    # associations it touches to avoid an N+1 explosion (one set of queries per delegate/organizer
+    # per competition). See `User::SERIALIZATION_INCLUDES`.
+    competitions.includes(
+      :events, # serialized via the `event_ids` method, one query per competition otherwise
+      { delegates: User::SERIALIZATION_INCLUDES },
+      { organizers: User::SERIALIZATION_INCLUDES },
+      *previous_includes,
+    ).order(**order)
   end
 
   def competing_step_parameters(current_user)
@@ -1854,6 +1862,17 @@ class Competition < ApplicationRecord
       },
     }
   end
+
+  # Associations that `to_competition_info` touches: delegates and organizers are serialized
+  # via `User#serializable_hash` (see `User::SERIALIZATION_INCLUDES`), `event_ids` reads the
+  # events association, and `uses_cutoff?`/`uses_qualification?` iterate over every round of
+  # every competition event. Eager load them all to avoid an N+1 explosion.
+  INFO_SERIALIZATION_INCLUDES = [
+    :events,
+    { competition_events: :rounds },
+    { delegates: User::SERIALIZATION_INCLUDES },
+    { organizers: User::SERIALIZATION_INCLUDES },
+  ].freeze
 
   def to_competition_info
     options = {

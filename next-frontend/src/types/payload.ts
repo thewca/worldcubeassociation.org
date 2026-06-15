@@ -150,6 +150,11 @@ export type StaticTargetLink =
   | '/teams-committees'
   | '/translators';
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GrowthStrategy".
+ */
+export type GrowthStrategy = ('grow' | 'justify') | null;
+/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -519,6 +524,7 @@ export interface Announcement {
     [k: string]: unknown;
   };
   contentMarkdown?: string | null;
+  url?: string | null;
   publishedAt: string;
   publishedBy: string | User;
   updatedAt: string;
@@ -824,6 +830,7 @@ export interface AnnouncementsSelect<T extends boolean = true> {
   title?: T;
   content?: T;
   contentMarkdown?: T;
+  url?: T;
   publishedAt?: T;
   publishedBy?: T;
   updatedAt?: T;
@@ -1242,13 +1249,27 @@ export interface TextCardBlock {
   };
   bodyMarkdown?: string | null;
   separatorAfterHeading: boolean;
-  buttonText?: string | null;
-  buttonLink?: string | null;
+  buttons?: BentoActionButton[] | null;
   headerImage?: (string | null) | Media;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
   blockType: 'TextCard';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BentoActionButton".
+ */
+export interface BentoActionButton {
+  displayText: string;
+  hyperlink: string;
+  /**
+   * Buttons are solid blue by default. If you click this checkbox, their color will follow the original text box instead
+   */
+  inheritColorScheme: boolean;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'actionButton';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1310,6 +1331,10 @@ export interface ImageBannerBlock {
 export interface ImageOnlyCardBlock {
   mainImage: string | Media;
   heading?: string | null;
+  /**
+   * Optional. If set, the whole card becomes a link to this URL.
+   */
+  url?: string | null;
   textPosition?: ('top' | 'bottom') | null;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
@@ -1370,6 +1395,7 @@ export interface TwoBlocksLevel2Block {
     | FeaturedCompetitionsBlock
     | TwoBlocksLevel1Block
   )[];
+  growthStrategy?: GrowthStrategy;
   id?: string | null;
   blockName?: string | null;
   blockType: 'twoBlocksLevel2';
@@ -1398,6 +1424,7 @@ export interface TwoBlocksLevel1Block {
     | FeaturedCompetitionsBlock
     | TwoBlocksLevel0Block
   )[];
+  growthStrategy?: GrowthStrategy;
   id?: string | null;
   blockName?: string | null;
   blockType: 'twoBlocksLevel1';
@@ -1424,6 +1451,7 @@ export interface TwoBlocksLevel0Block {
     | TestimonialsBlock
     | FeaturedCompetitionsBlock
   )[];
+  growthStrategy?: GrowthStrategy;
   id?: string | null;
   blockName?: string | null;
   blockType: 'twoBlocksLevel0';
@@ -1971,10 +1999,24 @@ export interface TextCardBlockSelect<T extends boolean = true> {
   body?: T;
   bodyMarkdown?: T;
   separatorAfterHeading?: T;
-  buttonText?: T;
-  buttonLink?: T;
+  buttons?:
+    | T
+    | {
+        actionButton?: T | BentoActionButtonSelect<T>;
+      };
   headerImage?: T;
   colorPalette?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BentoActionButton_select".
+ */
+export interface BentoActionButtonSelect<T extends boolean = true> {
+  displayText?: T;
+  hyperlink?: T;
+  inheritColorScheme?: T;
   id?: T;
   blockName?: T;
 }
@@ -2016,6 +2058,7 @@ export interface ImageBannerBlockSelect<T extends boolean = true> {
 export interface ImageOnlyCardBlockSelect<T extends boolean = true> {
   mainImage?: T;
   heading?: T;
+  url?: T;
   textPosition?: T;
   colorPalette?: T;
   id?: T;
@@ -2079,6 +2122,7 @@ export interface TwoBlocksLevel2BlockSelect<T extends boolean = true> {
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
         twoBlocksLevel1?: T | TwoBlocksLevel1BlockSelect<T>;
       };
+  growthStrategy?: T;
   id?: T;
   blockName?: T;
 }
@@ -2110,6 +2154,7 @@ export interface TwoBlocksLevel1BlockSelect<T extends boolean = true> {
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
         twoBlocksLevel0?: T | TwoBlocksLevel0BlockSelect<T>;
       };
+  growthStrategy?: T;
   id?: T;
   blockName?: T;
 }
@@ -2139,6 +2184,7 @@ export interface TwoBlocksLevel0BlockSelect<T extends boolean = true> {
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
       };
+  growthStrategy?: T;
   id?: T;
   blockName?: T;
 }

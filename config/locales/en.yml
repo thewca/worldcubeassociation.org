@@ -1434,6 +1434,9 @@ en:
         edit: "Edit"
         results: "Results"
         registration: "Registration"
+        admin_view: "Admin View"
+        results_view: "Results View"
+        double_check: "Double Check"
         warnings:
           omitted: "You've omitted attempt %{attempt_number}. Make sure it's intentional."
           DNS: "There's at least one DNS followed by a valid result. Please ensure it is indeed a DNS and not a DNF."
@@ -1458,6 +1461,11 @@ en:
           cancel: "Cancel"
           failed_to_fetch: "Failed to fetch next advancing competitor"
           still_processing: "Cannot execute 'Quit Competitor' actions while some results are still processing"
+        add_competitor:
+          single_round: "Add Competitor to Round"
+          multiple_rounds:
+            one: "Add Competitor to both Rounds in the Dual Round."
+            other: "Add Competitor to Round, as the second Round of the dual round is not open you will need to add them separately."
       results:
         competitor: "Competitor"
         mean: "Mean"
