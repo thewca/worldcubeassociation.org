@@ -241,6 +241,8 @@ const ImageOnlyCardImage = ({ block }: { block: ImageOnlyCardBlock }) => {
 };
 
 const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
+  // Payload types an optional parameter as undefined or null, but Chakra only wants undefined
+  const href = block.url ?? undefined;
   return (
     <LinkBox asChild>
       <Card.Root
@@ -249,7 +251,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
         colorVariant="slatePastel"
         width="full"
       >
-        <LinkOverlay href={block.url ?? undefined} />
+        <LinkOverlay href={href} />
         {block.textPosition === "bottom" && (
           <ImageOnlyCardImage block={block} />
         )}
