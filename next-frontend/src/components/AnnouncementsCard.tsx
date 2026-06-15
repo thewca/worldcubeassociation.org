@@ -20,7 +20,10 @@ function AnnouncementItem({ announcement }: { announcement: Announcement }) {
         <Accordion.ItemBody textStyle="s2">
           Posted by {publishedByUser.name} · {announcement.publishedAt}
         </Accordion.ItemBody>
-        <AnnouncementContent contentMarkdown={announcement.contentMarkdown} />
+        <AnnouncementContent
+          contentMarkdown={announcement.contentMarkdown}
+          url={announcement.url}
+        />
       </Accordion.ItemContent>
     </Accordion.Item>
   );

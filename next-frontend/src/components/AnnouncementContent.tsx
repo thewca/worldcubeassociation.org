@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@chakra-ui/react";
+import { Button, Link as ChakraLink } from "@chakra-ui/react";
 import { Accordion } from "@chakra-ui/react";
 import _ from "lodash";
 import { ChakraMarkdown } from "@/components/Markdown";
@@ -11,8 +11,10 @@ const CHARACTER_LIMIT = 400;
 
 export default function AnnouncementContent({
   contentMarkdown,
+  url,
 }: {
   contentMarkdown?: string | null;
+  url?: string | null;
 }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -22,24 +24,38 @@ export default function AnnouncementContent({
     omission: "…",
   });
 
-  const showReadMore = truncated !== contentMarkdown;
+  const isTruncated = truncated !== contentMarkdown;
+  const showReadMore = isTruncated || Boolean(url);
 
   return (
     <>
       <ChakraMarkdown paragraphAs={Accordion.ItemBody} textStyle="body">
-        {expanded || !showReadMore ? contentMarkdown : truncated}
+        {expanded || !isTruncated ? contentMarkdown : truncated}
       </ChakraMarkdown>
 
       {showReadMore && (
         <Accordion.ItemBody>
-          <Button
-            variant="pastelSolid"
-            size="sm"
-            alignSelf="flex-start"
-            onClick={() => setExpanded((prev) => !prev)}
-          >
-            {expanded ? "Read Less" : "Read More"}
-          </Button>
+          {url ? (
+            <Button
+              variant="pastelSolid"
+              size="sm"
+              alignSelf="flex-start"
+              asChild
+            >
+              <ChakraLink href={url} color="currentColor">
+                Read More
+              </ChakraLink>
+            </Button>
+          ) : (
+            <Button
+              variant="pastelSolid"
+              size="sm"
+              alignSelf="flex-start"
+              onClick={() => setExpanded((prev) => !prev)}
+            >
+              {expanded ? "Read Less" : "Read More"}
+            </Button>
+          )}
         </Accordion.ItemBody>
       )}
     </>
