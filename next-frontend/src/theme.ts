@@ -708,9 +708,7 @@ const customConfig = defineConfig({
             // inherit its surrounding card's color scheme.
             pastelOutline: {
               borderWidth: "1px",
-              "--outline-color-legacy": "colors.colorPalette.muted",
-              "--outline-color": "colors.colorPalette.border",
-              borderColor: "var(--outline-color, var(--outline-color-legacy))",
+              borderColor: "colorPalette.border",
               color: "colorPalette.fg",
               _hover: {
                 bg: "colorPalette.emphasized",
