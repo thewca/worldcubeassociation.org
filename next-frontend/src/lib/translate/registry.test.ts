@@ -73,6 +73,29 @@ describe("buildTranslationRegistry", () => {
     expect(paths).not.toContain("tools.name");
     expect(paths).not.toContain("home.links[].url");
   });
+
+  it("throws on an unhandled container type instead of silently dropping it", () => {
+    // Simulates a future/custom Payload container type carrying sub-fields:
+    // it must fail loudly rather than skip the localized field nested beneath.
+    const future = {
+      collections: [
+        {
+          slug: "future",
+          fields: [
+            {
+              name: "section",
+              type: "supergroup",
+              fields: [{ name: "title", type: "text", localized: true }],
+            },
+          ] as unknown as Field[],
+        },
+      ],
+      globals: [],
+    };
+    expect(() => buildTranslationRegistry(future)).toThrow(
+      /unhandled container/,
+    );
+  });
 });
 
 describe("resolveStrings", () => {

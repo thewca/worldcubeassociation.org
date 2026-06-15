@@ -1,4 +1,10 @@
-import type { Field } from "payload";
+import {
+  flattenAllFields,
+  type Field,
+  type FlattenedBlock,
+  type FlattenedField,
+} from "payload";
+import { fieldShouldBeLocalized } from "payload/shared";
 
 /**
  * Config-introspection registry for the community translator tool.
@@ -11,6 +17,12 @@ import type { Field } from "payload";
  * Together these are the Payload equivalent of internationalize walking the YAML
  * tree: the registry gives you the denominator for a progress bar, and the
  * resolver gives you the individual strings to render and write back.
+ *
+ * The schema walk leans on Payload's own utilities so it tracks Payload's
+ * semantics for free: `flattenAllFields` normalizes the field tree (collapsing
+ * `row`/`collapsible`/unnamed `tabs`/unnamed `group`, dropping `ui` fields, and
+ * resolving block references) and `fieldShouldBeLocalized` decides localization
+ * (including the "no localized-within-localized" inheritance rule).
  */
 
 /** A single step in the path from a document root to a localized leaf field. */
@@ -72,78 +84,84 @@ function segmentToString(seg: PathSegment): string {
   }
 }
 
+/**
+ * Recurse over Payload's *flattened* field tree, emitting one `LocalizedField`
+ * per localized free-text leaf. Because the tree is already flattened, the only
+ * containers left are named ones (`group`/`tab`/`array`/`blocks`) — presentational
+ * wrappers and `ui` fields have been stripped by `flattenAllFields`.
+ *
+ * `parentIsLocalized` carries Payload's inheritance: when an ancestor container
+ * is localized, the whole subtree is stored per-locale, so leaves are
+ * translatable even without their own `localized: true`.
+ */
 function walk(
-  fields: Field[],
+  fields: FlattenedField[],
   parent: LocalizedField["parent"],
   basePath: PathSegment[],
-  inherited: boolean,
+  parentIsLocalized: boolean,
   out: LocalizedField[],
 ): void {
   for (const field of fields) {
     switch (field.type) {
-      // Presentational containers: no data path segment, descend in place.
-      case "row":
-      case "collapsible":
-        walk(field.fields, parent, basePath, inherited, out);
-        break;
-
-      case "tabs":
-        for (const tab of field.tabs) {
-          const named = "name" in tab && tab.name;
-          walk(
-            tab.fields,
-            parent,
-            named ? [...basePath, { kind: "field", name: tab.name }] : basePath,
-            inherited,
-            out,
-          );
-        }
-        break;
-
+      // Named object containers (unnamed ones were collapsed by flattening).
       case "group":
-        if (!("name" in field)) {
-          // Unnamed group: behaves like a presentational container.
-          walk(field.fields, parent, basePath, inherited, out);
-          break;
-        }
+      case "tab":
         walk(
-          field.fields,
+          field.flattenedFields,
           parent,
           [...basePath, { kind: "field", name: field.name }],
-          inherited || !!field.localized,
+          parentIsLocalized ||
+            fieldShouldBeLocalized({ field, parentIsLocalized }),
           out,
         );
         break;
 
       case "array":
         walk(
-          field.fields,
+          field.flattenedFields,
           parent,
           [...basePath, { kind: "array", name: field.name }],
-          inherited || !!field.localized,
+          parentIsLocalized ||
+            fieldShouldBeLocalized({ field, parentIsLocalized }),
           out,
         );
         break;
 
-      case "blocks":
-        for (const block of field.blocks) {
+      case "blocks": {
+        const childIsLocalized =
+          parentIsLocalized ||
+          // FlattenedBlocksField narrows `blocks` to FlattenedBlock[], so it
+          // isn't structurally a Field; the helper only reads `.localized`.
+          fieldShouldBeLocalized({ field: field as Field, parentIsLocalized });
+        // flattenAllFields resolves inline blocks and object references to
+        // FlattenedBlock; bare string references (defined in `config.blocks`)
+        // can't be resolved without the config and are skipped.
+        const blocks = (field.blockReferences ?? field.blocks).filter(
+          (block): block is FlattenedBlock => typeof block !== "string",
+        );
+        for (const block of blocks) {
           walk(
-            block.fields,
+            block.flattenedFields,
             parent,
             [
               ...basePath,
               { kind: "block", name: field.name, blockSlug: block.slug },
             ],
-            inherited || !!field.localized,
+            childIsLocalized,
             out,
           );
         }
         break;
+      }
 
       case "text":
       case "textarea":
-      case "richText":
-        if (field.localized || inherited) {
+      case "richText": {
+        const isLocalized = fieldShouldBeLocalized({
+          field,
+          parentIsLocalized,
+        });
+        if (isLocalized || parentIsLocalized) {
           const path: PathSegment[] = [
             ...basePath,
             { kind: "field", name: field.name },
@@ -155,14 +173,31 @@ function walk(
             fieldType: field.type,
             widget: field.type === "richText" ? "lexical" : "plain",
             label: labelOf(field),
-            inheritedLocalization: !field.localized && inherited,
+            inheritedLocalization: !field.localized && parentIsLocalized,
           });
         }
         break;
+      }
 
       // Everything else (number, checkbox, select, upload, relationship, ...)
-      // is not free-text and is intentionally skipped.
+      // is a non-text leaf and is intentionally skipped — even when localized.
       default:
+        // ...unless it carries sub-fields. Then it's a container that
+        // flattenAllFields produced but this walk doesn't descend (a new Payload
+        // field type, or a custom one). Fail loudly instead of silently dropping
+        // every localized string nested beneath it; this trips in tests on a
+        // Payload upgrade, before it reaches users.
+        if (
+          "fields" in field ||
+          "flattenedFields" in field ||
+          "blocks" in field ||
+          "tabs" in field
+        ) {
+          throw new Error(
+            `translate/registry: unhandled container field type "${field.type}"; ` +
+              `nested localized fields would be silently missed. Add a case to walk().`,
+          );
+        }
         break;
     }
   }
@@ -178,7 +213,7 @@ export function buildTranslationRegistry(
   const out: LocalizedField[] = [];
   for (const collection of config.collections) {
     walk(
-      collection.fields,
+      flattenAllFields({ fields: collection.fields }),
       { type: "collection", slug: collection.slug },
       [],
       false,
@@ -186,7 +221,13 @@ export function buildTranslationRegistry(
     );
   }
   for (const global of config.globals) {
-    walk(global.fields, { type: "global", slug: global.slug }, [], false, out);
+    walk(
+      flattenAllFields({ fields: global.fields }),
+      { type: "global", slug: global.slug },
+      [],
+      false,
+      out,
+    );
   }
   return out;
 }
