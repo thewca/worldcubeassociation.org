@@ -92,11 +92,8 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
               <Button
                 key={button.id}
                 asChild
-                variant={button.inheritColorScheme ? "outline" : "pastelSolid"}
-                _hover={
-                  button.inheritColorScheme
-                    ? { bg: "colorPalette.emphasized" }
-                    : undefined
+                variant={
+                  button.inheritColorScheme ? "pastelOutline" : "pastelSolid"
                 }
               >
                 <ChakraLink
