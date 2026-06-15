@@ -439,7 +439,7 @@ GEM
     jmespath (1.6.2)
     js_cookie_rails (2.2.0)
       railties (>= 3.1)
-    json (2.19.8)
+    json (2.19.9)
     json-schema (6.2.0)
       addressable (~> 2.8)
       bigdecimal (>= 3.1, < 5)
@@ -682,7 +682,7 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
-    react_on_rails (17.0.0.rc.1)
+    react_on_rails (17.0.0.rc.3)
       addressable
       connection_pool
       execjs (~> 2.5)
@@ -1091,7 +1091,7 @@ DEPENDENCIES
   rails-i18n
   rake
   react-rails
-  react_on_rails (= 17.0.0.rc.1)
+  react_on_rails (= 17.0.0.rc.3)
   recaptcha
   redcarpet
   redis
@@ -1191,7 +1191,7 @@ CHECKSUMS
   bootstrap3-datetimepicker-rails (4.17.47) sha256=ee87a9bad74c140729f6a1ea2a7f3f2d9aaefa7e9defbe31b4edd27ff64689a2
   builder (3.3.0) sha256=497918d2f9dca528fdca4b88d84e4ef4387256d984b8154e9d5d3fe5a9c8835f
   bullet (8.1.3) sha256=c8163c527324fe1180775be48719875726891622f0a73784658b2992acf3c7cb
-  bundler (4.0.13) sha256=19f08be7f27022cf0b89f27da0b044ae075e8270a9ef44ad248a932614e1ca3b
+  bundler (4.0.14) sha256=d09a0a965cf772266a7e49e83610be7c2f4e49e61134c42a56804bb383cc24b8
   byebug (13.0.0) sha256=d2263efe751941ca520fa29744b71972d39cbc41839496706f5d9b22e92ae05d
   camertron-eprun (1.1.1) sha256=9a8e337916445e62648f6a4f35d229302fc44c50549cc881bff1e296ccf9ce4b
   capybara (3.40.0) sha256=42dba720578ea1ca65fd7a41d163dd368502c191804558f6e0f71b391054aeef
@@ -1306,7 +1306,7 @@ CHECKSUMS
   jbuilder (2.15.1) sha256=2430bec28fb0cebacb5875b1009cf9d8bc3c303ccb810c4c8b062a4b51457637
   jmespath (1.6.2) sha256=238d774a58723d6c090494c8879b5e9918c19485f7e840f2c1c7532cf84ebcb1
   js_cookie_rails (2.2.0) sha256=06e6b27ee093945c3acf3982d2dbf9e9117d1130f33bb07e1660ebea68229c62
-  json (2.19.8) sha256=6354310fd76ef69b87d5bd1f38b40d730613baf90b6803d2d0a48f618d32dfaa
+  json (2.19.9) sha256=9b9025b7cdddafa38d316eca0b2358488e42d417045c1b90d216a9fefe46b79a
   json-schema (6.2.0) sha256=e8bff46ed845a22c1ab2bd0d7eccf831c01fe23bb3920caa4c74db4306813666
   jwt (3.2.0) sha256=5419b1fe37b1da0982bd07051f573a8b8789ab724c2aa7e785e4784a3ed217d7
   kaminari (1.2.2) sha256=c4076ff9adccc6109408333f87b5c4abbda5e39dc464bd4c66d06d9f73442a3e
@@ -1405,7 +1405,7 @@ CHECKSUMS
   rb_sys (0.9.124) sha256=513476557b12eaf73764b3da9f8746024558fe8699bda785fb548c9aa3877ae7
   rdoc (7.2.0) sha256=8650f76cd4009c3b54955eb5d7e3a075c60a57276766ebf36f9085e8c9f23192
   react-rails (3.3.1) sha256=9610889832c2064a17c1474e9fafdcb8d3f72687c67ef722014243f4ec6562f5
-  react_on_rails (17.0.0.rc.1) sha256=91a48c4eb0a950d3d7c63e505f2259ff206aa7a6420f03681c2ac4c8874baee9
+  react_on_rails (17.0.0.rc.3) sha256=c5efcda8c2f66a151be144726fa4aa2b9bf8d06ce489101df7607453f4582ad6
   recaptcha (5.21.2) sha256=8f7bb6cc9f04c523fff3f38126b7c5f1314c35fcb3691fc8e70d2b464533c12a
   redcarpet (3.6.1) sha256=d444910e6aa55480c6bcdc0cdb057626e8a32c054c29e793fa642ba2f155f445
   redis (5.4.1) sha256=b5e675b57ad22b15c9bcc765d5ac26f60b675408af916d31527af9bd5a81faae
