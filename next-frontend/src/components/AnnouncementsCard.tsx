@@ -21,7 +21,10 @@ function AnnouncementItem({ announcement }: { announcement: Announcement }) {
         </Stack>
       </Accordion.ItemTrigger>
       <Accordion.ItemContent>
-        <AnnouncementContent contentMarkdown={announcement.contentMarkdown} />
+        <AnnouncementContent
+          contentMarkdown={announcement.contentMarkdown}
+          url={announcement.url}
+        />
       </Accordion.ItemContent>
     </Accordion.Item>
   );
