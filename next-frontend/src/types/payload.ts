@@ -1245,6 +1245,7 @@ export interface ImageBannerBlock {
 export interface ImageOnlyCardBlock {
   mainImage: string | Media;
   heading?: string | null;
+  url?: string | null;
   textPosition?: ('top' | 'bottom') | null;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
@@ -1968,6 +1969,7 @@ export interface ImageBannerBlockSelect<T extends boolean = true> {
 export interface ImageOnlyCardBlockSelect<T extends boolean = true> {
   mainImage?: T;
   heading?: T;
+  url?: T;
   textPosition?: T;
   colorPalette?: T;
   id?: T;
