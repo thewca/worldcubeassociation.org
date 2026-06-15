@@ -95,14 +95,9 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
               <Button
                 key={button.id}
                 asChild
-                colorPalette={button.inheritColorScheme ? undefined : "blue"}
-                variant={button.inheritColorScheme ? "outline" : "solid"}
-                bg={button.inheritColorScheme ? undefined : "colorPalette.1A"}
-                _hover={{
-                  bg: button.inheritColorScheme
-                    ? "colorPalette.emphasized"
-                    : undefined,
-                }}
+                variant={
+                  button.inheritColorScheme ? "pastelOutline" : "pastelSolid"
+                }
               >
                 <ChakraLink
                   color="colorPalette.pastelContrast"
@@ -311,7 +306,7 @@ const FeaturedCompetitions = async ({
           <Text textStyle={{ base: "h2", md: "h1" }}>
             Upcoming Competitions
           </Text>
-          <Button asChild variant="outline">
+          <Button asChild variant="pastelSolid">
             <Link href="/competitions">View all Competitions</Link>
           </Button>
         </HStack>
