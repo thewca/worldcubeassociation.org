@@ -17,6 +17,14 @@ export const ImageCardBlock: Block = {
       type: "text",
     },
     {
+      name: "url",
+      type: "text",
+      admin: {
+        description:
+          "Optional. If set, the whole card becomes a link to this URL.",
+      },
+    },
+    {
       name: "textPosition",
       type: "radio",
       options: ["top", "bottom"],

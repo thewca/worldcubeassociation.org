@@ -45,6 +45,9 @@ export default function AnnouncementsCard({
       variant="card"
       defaultValue={[hero.id]}
       colorPalette={colorPalette}
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-between"
     >
       <AnnouncementItem announcement={hero} />
 

@@ -2963,6 +2963,12 @@ es-ES:
         results: Resultados
         #original_hash: b233e77
         registration: Registro
+        #original_hash: 1e0d934
+        admin_view: Vista de administrador
+        #original_hash: 530a71b
+        results_view: Vista de resultados
+        #original_hash: 1dadee2
+        double_check: Doble check
         warnings:
           #original_hash: 9198c71
           omitted: >-
@@ -3024,6 +3030,17 @@ es-ES:
           still_processing: >-
             No puedes ejecutar «Eliminar competidor» mientras algunos resultados
             aún se están procesando
+        add_competitor:
+          #original_hash: 9dcb50d
+          single_round: Añadir competidor a la ronda
+          #original_hash: bf3b670
+          multiple_rounds:
+            zero: No añadir al competidor a ninguna ronda.
+            one: Añadir competidor a ambas rondas de las Rondas Duales.
+            other: >-
+              Añadir competidor a la ronda, ya que la segunda ronda de las
+              Rondas Duales no está abierta y necesitarás añadirle de forma
+              separada.
       results:
         #original_hash: 4705687
         competitor: Competidor
@@ -3600,8 +3617,8 @@ es-ES:
           external_registration_page: Página de registro
           #original_hash: 87b7d5f
           uses_wca_registration: Me gustaría usar la página web de la WCA para el registro
-          #original_hash: ebe8c47
-          uses_wca_live: Usaré WCA Live para la introducción de resultados
+          #original_hash: 0611f2d
+          scoretaking_software: Software utilizado para la introducción de resultados
         entry_fees:
           #original_hash: 28a6fbb
           currency_code: Código de divisa
@@ -3837,8 +3854,8 @@ es-ES:
             competición. Tiene que ser una URL http(s) válida.
           #original_hash: da39a3e
           uses_wca_registration: ''
-          #original_hash: da39a3e
-          uses_wca_live: ''
+          #original_hash: cc7d557
+          scoretaking_software: 'Selecciona «%{choice_ilr}» si quieres utilizar Rondas Duales'
         user_settings:
           #original_hash: da39a3e
           receive_registration_emails: ''
@@ -3991,6 +4008,14 @@ es-ES:
               de registro
             #original_hash: 490ed83
             live: Aceptar automáticamente los registros cuando se realice el pago
+        website:
+          scoretaking_software:
+            #original_hash: 1c88388
+            external: 'Una herramienta externa, no mantenida por la WCA'
+            #original_hash: 4b175c3
+            wca_live: 'WCA Live, alojada en live.worldcubeassociation.org'
+            #original_hash: 1ee034d
+            internal: Integrated Live Results
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
