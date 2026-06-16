@@ -1,6 +1,6 @@
 import { Block } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
-import { colorPaletteSelect } from "@/blocks/utils";
+import { colorPaletteSelect, newTabCheckbox } from "@/blocks/utils";
 
 const actionButtonBlock: Block = {
   slug: "actionButton",
@@ -16,6 +16,7 @@ const actionButtonBlock: Block = {
       type: "text",
       required: true,
     },
+    newTabCheckbox,
     {
       name: "inheritColorScheme",
       type: "checkbox",

@@ -1225,6 +1225,10 @@ export interface BentoActionButton {
   displayText: string;
   hyperlink: string;
   /**
+   * Open this link in a new tab
+   */
+  newTab?: boolean | null;
+  /**
    * Buttons are solid blue by default. If you click this checkbox, their color will follow the original text box instead
    */
   inheritColorScheme: boolean;
@@ -1296,6 +1300,10 @@ export interface ImageOnlyCardBlock {
    * Optional. If set, the whole card becomes a link to this URL.
    */
   url?: string | null;
+  /**
+   * Open this link in a new tab
+   */
+  newTab?: boolean | null;
   textPosition?: ('top' | 'bottom') | null;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
@@ -1444,6 +1452,10 @@ export interface AboutUsPage {
         buttons: {
           label: string;
           url: string;
+          /**
+           * Open this link in a new tab
+           */
+          newTab?: boolean | null;
           id?: string | null;
         }[];
         id?: string | null;
@@ -1977,6 +1989,7 @@ export interface TextCardBlockSelect<T extends boolean = true> {
 export interface BentoActionButtonSelect<T extends boolean = true> {
   displayText?: T;
   hyperlink?: T;
+  newTab?: T;
   inheritColorScheme?: T;
   id?: T;
   blockName?: T;
@@ -2020,6 +2033,7 @@ export interface ImageOnlyCardBlockSelect<T extends boolean = true> {
   mainImage?: T;
   heading?: T;
   url?: T;
+  newTab?: T;
   textPosition?: T;
   colorPalette?: T;
   id?: T;
@@ -2167,6 +2181,7 @@ export interface AboutUsPageSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     url?: T;
+                    newTab?: T;
                     id?: T;
                   };
               id?: T;

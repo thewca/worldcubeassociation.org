@@ -103,6 +103,8 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
                   color="colorPalette.pastelContrast"
                   textStyle={undefined}
                   href={button.hyperlink}
+                  target={button.newTab ? "_blank" : undefined}
+                  rel={button.newTab ? "noopener noreferrer" : undefined}
                 >
                   {button.displayText}
                 </ChakraLink>
@@ -247,7 +249,11 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
         colorVariant="slatePastel"
         width="full"
       >
-        <LinkOverlay href={href} />
+        <LinkOverlay
+          href={href}
+          target={block.newTab ? "_blank" : undefined}
+          rel={block.newTab ? "noopener noreferrer" : undefined}
+        />
         {block.textPosition === "bottom" && (
           <ImageOnlyCardImage block={block} />
         )}
