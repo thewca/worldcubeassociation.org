@@ -1,4 +1,4 @@
 <%= react_component("EventsTable", {
-  wcifEvents: @competition.events_wcif,
+  wcifEvents: @competition.events_wcif(version: Competition::WCIF_VERSION_CATALOGUE[:latest]),
   competitionInfo: @competition.to_competition_info
 }) %>
