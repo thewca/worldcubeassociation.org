@@ -30,13 +30,15 @@ interface StringItem {
   status: Status;
 }
 
-/** Flatten a Lexical editor value to plain text so we can judge emptiness. */
+// richText values are raw Lexical JSON (the client edits them with a WYSIWYG
+// editor); plain fields are strings. Flatten Lexical to text only to judge
+// emptiness for the translated/untranslated status.
 function lexicalText(node: unknown): string {
   if (!node || typeof node !== "object") return "";
-  const n = node as unknown as Record<string, unknown>;
+  const n = node as Record<string, unknown>;
   let text = typeof n.text === "string" ? n.text : "";
   const children = (n.children ??
-    (n.root as unknown as Record<string, unknown>)?.children) as
+    (n.root as Record<string, unknown> | undefined)?.children) as
     | unknown[]
     | undefined;
   if (Array.isArray(children)) {
@@ -306,7 +308,8 @@ export async function PATCH(req: NextRequest): Promise<Response> {
   }
 
   // Enforce that the value matches how this field is edited (plain text vs
-  // Lexical), allowing null to clear a translation.
+  // Lexical JSON), allowing null to clear a translation. The WYSIWYG editor
+  // sends raw Lexical state for richText fields.
   const validValue =
     value === null ||
     (matched.widget === "plain"

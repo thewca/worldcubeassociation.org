@@ -15,7 +15,9 @@ import {
   Textarea,
   VStack,
 } from "@chakra-ui/react";
+import type { SerializedEditorState } from "lexical";
 import availableLocales from "@/lib/staticData/available_locales.json";
+import RichTextEditor from "./RichTextEditor";
 
 type Status = "translated" | "untranslated";
 type Widget = "plain" | "lexical";
@@ -44,24 +46,10 @@ const localeOptions = Object.entries(availableLocales)
   .filter(([code]) => code !== "en")
   .map(([code, { name }]) => ({ code, name }));
 
-/** Flatten a Lexical editor value to plain text for read-only display. */
-function lexicalText(node: unknown): string {
-  if (!node || typeof node !== "object") return "";
-  const n = node as Record<string, unknown>;
-  let text = typeof n.text === "string" ? n.text : "";
-  const children = (n.children ??
-    (n.root as Record<string, unknown> | undefined)?.children) as
-    | unknown[]
-    | undefined;
-  if (Array.isArray(children)) {
-    for (const child of children) text += lexicalText(child);
-  }
-  return text;
-}
-
-function asText(value: unknown, widget: Widget): string {
-  if (value == null) return "";
-  return widget === "lexical" ? lexicalText(value) : String(value);
+// Plain fields are strings; richText fields are raw Lexical JSON edited via the
+// WYSIWYG editor.
+function asText(value: unknown): string {
+  return value == null ? "" : String(value);
 }
 
 function ProgressBar({ percent }: { percent: number }) {
@@ -84,14 +72,17 @@ function StringRow({
 }: {
   item: StringItem;
   locale: string;
-  onSaved: (key: string, value: string, status: Status) => void;
+  onSaved: (key: string, value: unknown, status: Status) => void;
 }) {
-  const editable = item.widget === "plain";
-  const [draft, setDraft] = useState(asText(item.target, item.widget));
+  const lexical = item.widget === "lexical";
+  // draft holds a string for plain fields, Lexical JSON for richText.
+  const [draft, setDraft] = useState<unknown>(item.target ?? null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const dirty = editable && draft !== asText(item.target, item.widget);
+  const dirty = lexical
+    ? JSON.stringify(draft) !== JSON.stringify(item.target ?? null)
+    : draft !== asText(item.target);
 
   const save = async () => {
     setSaving(true);
@@ -126,9 +117,14 @@ function StringRow({
           <Text fontSize="xs" color="fg.muted" fontFamily="mono">
             {item.pathString}
           </Text>
-          <Badge colorPalette={item.status === "translated" ? "green" : "gray"}>
-            {item.status}
-          </Badge>
+          <HStack gap="2">
+            {lexical && <Badge colorPalette="purple">Rich text</Badge>}
+            <Badge
+              colorPalette={item.status === "translated" ? "green" : "gray"}
+            >
+              {item.status}
+            </Badge>
+          </HStack>
         </HStack>
 
         <VStack align="stretch" gap="2">
@@ -136,27 +132,28 @@ function StringRow({
             <Text fontSize="xs" color="fg.muted">
               Source (English)
             </Text>
-            <Text whiteSpace="pre-wrap">
-              {asText(item.source, item.widget)}
-            </Text>
+            {lexical ? (
+              <RichTextEditor
+                value={(item.source as SerializedEditorState) ?? null}
+                editable={false}
+              />
+            ) : (
+              <Text whiteSpace="pre-wrap">{asText(item.source)}</Text>
+            )}
           </Box>
 
-          {editable ? (
+          {lexical ? (
+            <RichTextEditor
+              value={(item.target as SerializedEditorState) ?? null}
+              onChange={setDraft}
+            />
+          ) : (
             <Textarea
-              value={draft}
+              value={asText(draft)}
               onChange={(e) => setDraft(e.target.value)}
               placeholder="Translation…"
               autoresize
             />
-          ) : (
-            <Box>
-              <Text fontSize="xs" color="fg.muted">
-                Translation (rich text — not yet editable here)
-              </Text>
-              <Text whiteSpace="pre-wrap" color="fg.muted">
-                {asText(item.target, item.widget) || "—"}
-              </Text>
-            </Box>
           )}
 
           {error && (
@@ -165,18 +162,11 @@ function StringRow({
             </Text>
           )}
 
-          {editable && (
-            <HStack justify="end">
-              <Button
-                size="sm"
-                onClick={save}
-                loading={saving}
-                disabled={!dirty}
-              >
-                Save
-              </Button>
-            </HStack>
-          )}
+          <HStack justify="end">
+            <Button size="sm" onClick={save} loading={saving} disabled={!dirty}>
+              Save
+            </Button>
+          </HStack>
         </VStack>
       </Card.Body>
     </Card.Root>
@@ -212,7 +202,7 @@ export default function TranslatePage() {
     if (locale) load(locale);
   }, [locale, load]);
 
-  const handleSaved = (key: string, value: string, status: Status) => {
+  const handleSaved = (key: string, value: unknown, status: Status) => {
     setData((prev) => {
       if (!prev) return prev;
       const items = prev.items.map((it) =>
