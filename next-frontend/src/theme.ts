@@ -582,7 +582,7 @@ const customConfig = defineConfig({
         value: {
           fontSize: "0.875rem",
           lineHeight: "1.5",
-          fontWeight: "light",
+          fontWeight: "normal",
         },
       },
       bodyEmphasis: {
