@@ -77,7 +77,11 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       width="full"
     >
       {block.headerImage && (
-        <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
+        <MediaImage
+          media={block.headerImage as Media}
+          aspectRatio="3/1"
+          borderTopRadius="l3"
+        />
       )}
       <Card.Body>
         <Card.Title textStyle={{ base: "h3", md: "h2" }}>
