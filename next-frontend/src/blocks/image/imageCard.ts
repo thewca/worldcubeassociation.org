@@ -15,6 +15,7 @@ export const ImageCardBlock: Block = {
     {
       name: "heading",
       type: "text",
+      localized: true,
     },
     {
       name: "url",
