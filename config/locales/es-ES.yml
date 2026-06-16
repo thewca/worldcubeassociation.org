@@ -6836,6 +6836,12 @@ es-ES:
         [%{round_id}] Si bien se permiten múltiples grupos para 3x3x3 Multi
         Ciega, al menos uno de los grupos tiene que contener mezclas para todos
         los intentos.
+      #original_hash: 2757334
+      mbld_scrambles_warning: >-
+        [%{round_id}] Esta ronda incluye resultados de 3x3x3 Multi Ciega. Por
+        favor, especifica en tu comentario cuántas mezclas de cada set usaron
+        realmente los competidores, para que el WRT pueda eliminar las mezclas
+        adicionales no utilizadas.
       #original_hash: 3d5255d
       multiple_fmc_groups_warning: >-
         [%{round_id}] Hay múltiples grupos de 3x3x3 Menos Movimientos. Si solo
