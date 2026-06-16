@@ -9712,13 +9712,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-on-rails@npm:17.0.0-rc.1":
-  version: 17.0.0-rc.1
-  resolution: "react-on-rails@npm:17.0.0-rc.1"
+"react-on-rails@npm:17.0.0-rc.4":
+  version: 17.0.0-rc.4
+  resolution: "react-on-rails@npm:17.0.0-rc.4"
   peerDependencies:
     react: ">= 16"
     react-dom: ">= 16"
-  checksum: 10c0/694fe767143d87536a0d03bb64841f96c68a6e7cf7126e4c3a0f3c575c03e1d29a461c581a6e30e1fa27db09a21cc12725628b6d5f2ae4495943fb17ce7d10d8
+  checksum: 10c0/f286450298c70d66d80901283526ae609ef641b7759a3d581f2c7186c202e13e1a95710c8d508221284086e64288c46627b9dc38d798d9f5b96ae7356224b3d6
   languageName: node
   linkType: hard
 
@@ -10246,7 +10246,7 @@ __metadata:
     react-image-crop: "npm:^11.0.10"
     react-intersection-observer: "npm:^10.0.3"
     react-leaflet: "npm:^4.2.1"
-    react-on-rails: "npm:17.0.0-rc.1"
+    react-on-rails: "npm:17.0.0-rc.4"
     react-refresh: "npm:^0.18.0"
     react-simplemde-editor: "npm:^5.2.0"
     react-spinners: "npm:^0.17.0"
