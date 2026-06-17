@@ -6,7 +6,7 @@ import {
 } from "@/lib/wca/competitions/tabs";
 import TabMenu from "@/components/competitions/TabMenu";
 import LiveMenu from "@/components/competitions/LiveMenu";
-import { Alert } from "@chakra-ui/react";
+import { Alert, Link } from "@chakra-ui/react";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
@@ -26,8 +26,19 @@ export default function CompetitionMenu({
         <Alert.Content>
           <I18nHTMLTranslate
             i18nKey={`competitions.live.incompatible.${scoretaking_software}`}
-            options={{ id: competitionInfo.id }}
           />
+          {scoretaking_software === "wca_live" && (
+            <>
+              {" "}
+              <Link
+                href={`https://live.worldcubeassociation.org/link/competitions/${competitionInfo.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {competitionInfo.id}
+              </Link>
+            </>
+          )}
         </Alert.Content>
       </Alert.Root>
     );
