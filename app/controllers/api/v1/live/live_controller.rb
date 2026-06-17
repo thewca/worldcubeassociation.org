@@ -87,6 +87,27 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     render json: { status: "ok", recreated_rows: recreated_rows }
   end
 
+  def close_round
+    competition = Competition.find(params.require(:competition_id))
+    wcif_id = params.require(:round_id)
+
+    round = Round.find_by_wcif_id!(wcif_id, competition.id)
+
+    require_manage!(competition)
+
+    state = round.lifecycle_state
+
+    return render json: { status: "round is locked" }, status: :bad_request if state == Round::STATE_LOCKED
+
+    return render json: { status: "round is not open" }, status: :bad_request if [Round::STATE_READY, Round::STATE_PENDING].include?(state)
+
+    return render json: { status: "round has results entered" }, status: :bad_request if round.competitors_live_results_entered.positive?
+
+    round.close_round!
+
+    render json: { status: "ok" }
+  end
+
   def clear_competitor
     competition = Competition.find(params.require(:competition_id))
     wcif_id = params.require(:round_id)

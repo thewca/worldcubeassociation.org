@@ -1,0 +1,28 @@
+delete:
+  summary: Closes an empty round, deleting all its (empty) live results
+  tags:
+    - live
+  operationId: closeRound
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: roundId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Round closed
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - status
+            properties:
+              status:
+                type: string
