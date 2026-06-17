@@ -146,6 +146,10 @@ properties:
     example: "not_accepted"
   scoretaking_software:
     type: string
+    enum:
+      - external
+      - internal
+      - wca_live
     example: external
   url:
     type: string

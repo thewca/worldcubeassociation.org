@@ -1237,8 +1237,11 @@ export interface components {
             event_change_deadline_date: string;
             /** @example not_accepted */
             competitor_can_cancel: string;
-            /** @example external */
-            scoretaking_software: string;
+            /**
+             * @example external
+             * @enum {string}
+             */
+            scoretaking_software: "external" | "internal" | "wca_live";
             /**
              * Format: uri
              * @example https://www.worldcubeassociation.org/competitions/WC2003
