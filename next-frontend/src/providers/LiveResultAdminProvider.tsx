@@ -44,11 +44,14 @@ export function LiveResultAdminProvider({
   competitionId,
   initialRegistrationId,
   round,
+  clearOnSubmit = true,
 }: {
   children: ReactNode;
   competitionId: string;
   initialRegistrationId?: number;
   round: LiveRoundAdminBase;
+  // Double-check stays on the current competitor after submitting, so it opts out of clearing.
+  clearOnSubmit?: boolean;
 }) {
   const { id: roundId, cutoff, timeLimit, format: formatId } = round;
   const format = formats.byId[formatId];
@@ -108,8 +111,10 @@ export function LiveResultAdminProvider({
           description: "Results updated queued",
           type: "success",
         });
-        setRegistrationId(undefined);
-        setAttempts(zeroedArrayOfSize(solveCount));
+        if (clearOnSubmit) {
+          setRegistrationId(undefined);
+          setAttempts(zeroedArrayOfSize(solveCount));
+        }
       },
       onError: () => {
         toaster.create({
