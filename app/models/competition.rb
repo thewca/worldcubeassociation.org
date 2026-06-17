@@ -1879,7 +1879,7 @@ class Competition < ApplicationRecord
       only: %w[id name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
                extra_registration_requirements enable_donations refund_policy_limit_date event_change_deadline_date waiting_list_deadline_date
                on_the_spot_registration on_the_spot_entry_fee_lowest_denomination qualification_results event_restrictions
-               base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel
+               base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel scoretaking_software
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled auto_accept_preference auto_accept_disable_threshold],

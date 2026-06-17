@@ -1411,6 +1411,9 @@ en:
         other: "%{count} spots left"
     live:
       title: "Live Results"
+      incompatible:
+        external: "This competition is using external scoretaking software - please consult the competition information to find out where to view live scores."
+        wca_live: "This competition uses WCA Live for scoretaking - please follow this link to see the live results:"
       round_state:
         ongoing: "live"
         done: "done"
