@@ -6,6 +6,7 @@ import {
 } from "@/lib/wca/competitions/tabs";
 import TabMenu from "@/components/competitions/TabMenu";
 import LiveMenu from "@/components/competitions/LiveMenu";
+import { Alert } from "@chakra-ui/react";
 
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
@@ -16,6 +17,18 @@ export default function CompetitionMenu({
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
+  if (competitionInfo.scoretaking_software !== "internal" && LIVE_RESULT_BETA) {
+    return (
+      <Alert.Root status="error">
+        <Alert.Indicator />
+        <Alert.Content>
+          Internal Live Results is only supported when setting Scoretaking
+          Software to internal on the edit Competition Page
+        </Alert.Content>
+      </Alert.Root>
+    );
+  }
+
   if (!hasPassed(competitionInfo.start_date)) {
     const tabs = beforeCompetitionTabs(competitionInfo);
     return (

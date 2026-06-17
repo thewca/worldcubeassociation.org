@@ -527,7 +527,7 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
-         options?: never;
+        options?: never;
         head?: never;
         patch?: never;
         trace?: never;
@@ -1237,6 +1237,8 @@ export interface components {
             event_change_deadline_date: string;
             /** @example not_accepted */
             competitor_can_cancel: string;
+            /** @example external */
+            scoretaking_software: string;
             /**
              * Format: uri
              * @example https://www.worldcubeassociation.org/competitions/WC2003

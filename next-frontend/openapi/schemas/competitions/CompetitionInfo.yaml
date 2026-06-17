@@ -29,6 +29,7 @@ required:
   - allow_registration_edits
   - allow_registration_without_qualification
   - competitor_can_cancel
+  - scoretaking_software
   - url
   - website
   - short_name
@@ -143,6 +144,9 @@ properties:
   competitor_can_cancel:
     type: string
     example: "not_accepted"
+  scoretaking_software:
+    type: string
+    example: external
   url:
     type: string
     format: uri
