@@ -1429,6 +1429,7 @@ en:
       admin:
         open: "Open"
         clear: "Clear"
+        close: "Close"
         competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
         round_locked: "locked"
         edit: "Edit"
