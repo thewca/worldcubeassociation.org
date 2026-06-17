@@ -7,6 +7,7 @@ import {
 import TabMenu from "@/components/competitions/TabMenu";
 import LiveMenu from "@/components/competitions/LiveMenu";
 import { Alert } from "@chakra-ui/react";
+import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
@@ -17,13 +18,16 @@ export default function CompetitionMenu({
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
-  if (competitionInfo.scoretaking_software !== "internal" && LIVE_RESULT_BETA) {
+  const { scoretaking_software } = competitionInfo;
+  if (scoretaking_software !== "internal" && LIVE_RESULT_BETA) {
     return (
       <Alert.Root status="error">
         <Alert.Indicator />
         <Alert.Content>
-          Internal Live Results is only supported when setting Scoretaking
-          Software to internal on the edit Competition Page
+          <I18nHTMLTranslate
+            i18nKey={`competitions.live.incompatible.${scoretaking_software}`}
+            options={{ id: competitionInfo.id }}
+          />
         </Alert.Content>
       </Alert.Root>
     );
