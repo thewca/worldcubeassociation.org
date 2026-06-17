@@ -17,7 +17,7 @@ import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
 import AddPersonModal from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
 import BulkQuitButton from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/BulkQuitButton";
-import { LuCheck, LuEye, LuPencil } from "react-icons/lu";
+import { LuCheckCheck, LuEye, LuPencil } from "react-icons/lu";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -139,7 +139,7 @@ export default function LiveUpdatingResultsTable({
                       query: { competitionId, roundId: roundWcifId },
                     })}
                   >
-                    <LuCheck />
+                    <LuCheckCheck />
                   </NextLink>
                 </Link>
               </IconButton>
