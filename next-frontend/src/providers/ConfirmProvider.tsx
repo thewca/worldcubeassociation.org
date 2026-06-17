@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 
 interface ConfirmOptions {
-  content?: string;
+  content?: ReactNode;
   confirmButton?: string;
   cancelButton?: string;
   requireInput?: string | null;
@@ -114,7 +114,11 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
                 <Dialog.Title>Confirm Action</Dialog.Title>
               </Dialog.Header>
               <Dialog.Body>
-                <Text>{options.content}</Text>
+                {typeof options.content === "string" ? (
+                  <Text>{options.content}</Text>
+                ) : (
+                  options.content
+                )}
                 {options.requireInput && (
                   <Field.Root invalid={inputError} mt={3}>
                     <Text mb={1}>

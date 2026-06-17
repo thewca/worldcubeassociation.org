@@ -1459,6 +1459,8 @@ en:
             success: "Successfully quit %{count} competitors"
             failure: "Failed to bulk quit competitors"
             menu: "Bulk Quit"
+            id: "ID"
+            name: "Name"
           quit_menu: "Quit"
           no_next: "No next competitor to advance."
           cancel: "Cancel"
