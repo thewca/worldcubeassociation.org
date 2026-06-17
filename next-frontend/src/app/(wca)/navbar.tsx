@@ -273,7 +273,7 @@ export default async function Navbar() {
             </HStack>
           </HStack>
           <Box flex="1" mx={4}>
-            <WcaSearch />
+            {!LIVE_RESULT_BETA && <WcaSearch />}
           </Box>
           <HStack>
             {showEmptyMessage && (
