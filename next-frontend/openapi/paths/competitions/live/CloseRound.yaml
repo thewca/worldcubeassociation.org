@@ -23,6 +23,9 @@ delete:
             type: object
             required:
               - status
+              - deleted_count
             properties:
               status:
                 type: string
+              deleted_count:
+                type: integer

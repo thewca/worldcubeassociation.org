@@ -2128,6 +2128,7 @@ export interface operations {
                 content: {
                     "application/json": {
                         status: string;
+                        deleted_count: number;
                     };
                 };
             };

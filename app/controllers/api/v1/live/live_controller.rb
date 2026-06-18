@@ -103,9 +103,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "round has results entered" }, status: :bad_request if round.competitors_live_results_entered.positive?
 
-    round.close_round!
+    deleted_count = round.close_round!
 
-    render json: { status: "ok" }
+    render json: { status: "ok", deleted_count: deleted_count }
   end
 
   def clear_competitor

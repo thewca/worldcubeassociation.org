@@ -200,7 +200,7 @@ class Round < ApplicationRecord
   end
 
   def close_round!
-    live_results.destroy_all
+    live_results.destroy_all.count
   end
 
   def open_round!(opening_user)
