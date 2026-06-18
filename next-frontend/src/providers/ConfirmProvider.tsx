@@ -29,7 +29,7 @@ interface ConfirmOptions {
 }
 
 const DEFAULT_OPTIONS: Required<ConfirmOptions> = {
-  content: "Are you sure? This action cannot be undone.",
+  content: <Text>Are you sure? This action cannot be undone.</Text>,
   confirmButton: "Yes",
   cancelButton: "No",
   requireInput: null,
@@ -114,11 +114,7 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
                 <Dialog.Title>Confirm Action</Dialog.Title>
               </Dialog.Header>
               <Dialog.Body>
-                {typeof options.content === "string" ? (
-                  <Text>{options.content}</Text>
-                ) : (
-                  options.content
-                )}
+                {options.content}
                 {options.requireInput && (
                   <Field.Root invalid={inputError} mt={3}>
                     <Text mb={1}>
