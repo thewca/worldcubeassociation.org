@@ -70,7 +70,7 @@ function ThumbnailEditor({
 
     disableThumbnailCrop();
 
-    if (!thumbnail) {
+    if (!thumbnail && width && height) {
       const aspectCrop = makeAspectCrop(
         {
           unit: '%',
