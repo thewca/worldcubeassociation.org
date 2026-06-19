@@ -483,24 +483,25 @@ class Round < ApplicationRecord
         end
       end
 
-      if attempts_to_load.any?
-        LiveAttempt.upsert_all(attempts_to_load)
+      LiveAttempt.upsert_all(attempts_to_load) if attempts_to_load.any?
 
-        # Count how many attempts were loaded per result_id
-        attempt_counts_by_result = attempts_to_load.map { it[:live_result_id] }.tally
+      # Every synced result needs its stale attempts pruned down to the incoming count.
+      #   This MUST be driven by all incoming results, not just `attempts_to_load`, so that
+      #   results whose attempts were cleared (count 0) also get pruned. Otherwise their
+      #   previously-synced attempts get orphaned and `live_results` diverges from `round_results`.
+      attempt_count_by_result_id = round_results_wcif.to_h do |round_result_wcif|
+        registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
+        live_result = results_by_registration_id[registration_id]
 
-        # Regroup: For each count of results (that determines the maximum `attempt_number`),
-        #   we want to efficiently find all live_result_ids with that attempt number
-        results_with_attempt_count = attempt_counts_by_result.group_by(&:last)
-                                                             .transform_values { it.map(&:first) }
+        [live_result.id, round_result_wcif["attempts"]&.length || 0]
+      end
 
-        # Now we can clean up "once per number of attempts", so in reality this generates
-        #   only ~3 extra queries because barely any results have only 1 or only 4 attempts.
-        results_with_attempt_count.each do |valid_count, result_ids|
-          LiveAttempt.where(live_result_id: result_ids)
-                     .where.not(attempt_number: ..valid_count)
-                     .delete_all
-        end
+      # Group by count so we clean up "once per number of attempts", which in reality is
+      #   only a handful of queries because barely any results have an unusual attempt count.
+      attempt_count_by_result_id.group_by(&:last).each do |valid_count, pairs|
+        LiveAttempt.where(live_result_id: pairs.map(&:first))
+                   .where.not(attempt_number: ..valid_count)
+                   .delete_all
       end
 
       histories_to_generate = round_results_wcif.filter_map do |round_result_wcif|

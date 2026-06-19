@@ -1302,6 +1302,28 @@ RSpec.describe "Competition WCIF" do
         expect(LiveAttempt.count).to eq(7) # one result now only has 2, so 5+2=7
       end
 
+      it "cleans up attempts when a result is cleared back to zero" do
+        # Establish five attempts for both competitors
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(LiveResult.count).to eq(2)
+        expect(LiveAttempt.count).to eq(10)
+
+        # One competitor's attempts are cleared entirely, while the other keeps theirs.
+        #   The non-empty other result keeps `attempts_to_load` non-empty, which used to
+        #   make the cleanup skip the cleared result and orphan its attempts.
+        wcif_333_event["rounds"][0]["results"][0]["attempts"] = []
+        wcif_333_event["rounds"][0]["results"][0]["best"] = 0
+        wcif_333_event["rounds"][0]["results"][0]["average"] = 0
+
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(competition.to_wcif["events"]).to eq(wcif["events"])
+
+        expect(LiveResult.count).to eq(2)
+        expect(LiveAttempt.count).to eq(5) # cleared result drops to 0, other keeps 5
+      end
+
       it "records histories when something changes" do
         competition.set_wcif_events!(wcif["events"], delegate)
 
