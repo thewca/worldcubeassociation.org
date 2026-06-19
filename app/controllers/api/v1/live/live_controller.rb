@@ -232,8 +232,8 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
   private
 
-  def require_score_taking_internal
-    @competition = Competition.find(params.require(:competition_id))
-    raise WcaExceptions::NotPermitted.new("Score Taking Software needs to be set to Internal") unless @competition.scoretaking_software_internal?
-  end
+    def require_score_taking_internal
+      @competition = Competition.find(params.require(:competition_id))
+      raise WcaExceptions::NotPermitted.new("Score Taking Software needs to be set to Internal") unless @competition.scoretaking_software_internal?
+    end
 end
