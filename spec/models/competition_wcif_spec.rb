@@ -1283,7 +1283,7 @@ RSpec.describe "Competition WCIF" do
         expect(competition.to_wcif["events"]).to eq(wcif["events"])
       end
 
-       it "does not persist round_results for internal-scoretaking competitions" do
+      it "does not persist round_results for internal-scoretaking competitions" do
         competition.update!(scoretaking_software: :internal)
 
         competition.set_wcif_events!(wcif["events"], delegate)
