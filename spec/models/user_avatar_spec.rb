@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe UserAvatar do
   describe 'thumbnail crop validation' do
     it 'rejects a zero-sized crop on active_storage avatars' do
-      avatar = FactoryBot.build(
+      avatar = build(
         :user_avatar,
         backend: UserAvatar.backends[:active_storage],
         thumbnail_crop_w: 0,
@@ -17,7 +17,7 @@ RSpec.describe UserAvatar do
     end
 
     it 'does not validate crops on legacy backends' do
-      avatar = FactoryBot.build(
+      avatar = build(
         :user_avatar,
         backend: UserAvatar.backends[:s3_legacy_cdn],
         thumbnail_crop_w: 0,
