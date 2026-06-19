@@ -28,6 +28,38 @@ on:
       - 'lib/sanity_check_sql/**/*.sql'
 
 jobs:
+  overcommit:
+    runs-on: ubuntu-latest
+    env:
+      RACK_ENV: test
+      RAILS_ENV: test
+      NODE_ENV: test
+      NODE_MAJOR: 24
+      DISABLE_SPRING: 1
+    steps:
+      - uses: actions/checkout@v6
+      - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Install fresh Bundler packages
+        run: bin/bundle install
+      - name: Set up Corepack/Yarn
+        run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_MAJOR }}
+          cache: 'yarn'
+      - name: Install fresh Yarn packages
+        run: bin/yarn install
+      - name: Run Overcommit commit hooks
+        run: |
+          gem install overcommit
+          overcommit --sign
+          overcommit --sign pre-commit
+          overcommit --run
+
   rspec:
     runs-on: ubuntu-latest
     strategy:
@@ -67,13 +99,6 @@ jobs:
           cache: 'yarn'
       - name: Install fresh Yarn packages
         run: bin/yarn install
-      - name: Run Overcommit commit hooks
-        if: matrix.suite == 'other' # lint/hooks only need to run once
-        run: |
-          gem install overcommit
-          overcommit --sign
-          overcommit --sign pre-commit
-          overcommit --run
       - name: Activate MySQL # as per https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
         run: sudo systemctl start mysql.service
       - name: Populate database with seeds
@@ -111,14 +136,18 @@ jobs:
   # Single aggregating check so branch protection can require one stable name
   # ("test") regardless of how the rspec matrix above evolves.
   test:
-    needs: rspec
+    needs: [rspec, overcommit]
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Verify all rspec matrix jobs passed
+      - name: Verify all rspec matrix jobs and overcommit passed
         run: |
           if [ "${{ needs.rspec.result }}" != "success" ]; then
             echo "One or more rspec matrix jobs failed: ${{ needs.rspec.result }}"
+            exit 1
+          fi
+          if [ "${{ needs.overcommit.result }}" != "success" ]; then
+            echo "Overcommit hooks failed: ${{ needs.overcommit.result }}"
             exit 1
           fi
 
