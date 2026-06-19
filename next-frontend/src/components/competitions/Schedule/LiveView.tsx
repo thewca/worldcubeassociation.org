@@ -72,10 +72,11 @@ export default function LiveView({
     timeZone,
   );
 
-  // Show the first date that has not passed, if all of them have, show the last date
+  // Show the first day that hasn't ended yet (i.e. today during the competition),
+  // if all of them have passed, show the last day
   const lastDate = dates[dates.length - 1];
   const defaultDate =
-    dates.filter((d) => !hasPassed(d.toISO()!))[0] ?? lastDate;
+    dates.filter((d) => !hasPassed(d.endOf("day").toISO()!))[0] ?? lastDate;
 
   const roundsByWcifId = _.keyBy(rounds, "id");
 

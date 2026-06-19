@@ -19,6 +19,7 @@ config/credentials/*.key
 !/tmp/pids/.keep
 
 node_modules
+.yarn
 
 # Don't add the .git folder
 /.git

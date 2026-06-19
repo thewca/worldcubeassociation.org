@@ -182,12 +182,13 @@ Rails.application.routes.draw do
   get 'export/results/WCA_export.tsv' => 'database#tsv_permalink', as: :tsv_permalink
   get 'export/results/:version/:file_type' => 'database#results_permalink', as: :results_permalink
   get 'export/developer' => 'database#developer_export', as: :db_dev_export
-  get 'export/developer/wca-developer-database-dump', to: redirect(DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK))
+  get 'export/developer/wca-developer-database-dump' => "database#dev_export_permalink"
   # redirect from the old path that used to be linked on GitHub
-  get 'wst/wca-developer-database-dump.zip', to: redirect(DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK))
+  get 'wst/wca-developer-database-dump.zip' => "database#dev_export_permalink"
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
   get '/persons/results' => 'admin/persons#results', as: :person_results
+  get '/persons/:wca_id/pending_claims' => "persons#pending_claims", as: :person_pending_claims
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
@@ -367,9 +368,11 @@ Rails.application.routes.draw do
           get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
           put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
           put '/rounds/:round_id/clear' => "live#clear_round", as: :live_round_clear
+          delete '/rounds/:round_id/bulk_quit' => 'live#bulk_quit_competitors', as: :bulk_quit_competitors_from_round
           delete '/rounds/:round_id/:registration_id' => 'live#quit_competitor', as: :quit_competitor_from_round
           put '/rounds/:round_id/:registration_id/clear' => 'live#clear_competitor', as: :clear_competitor_in_round
           get '/rounds/:round_id/next_if_quit' => 'live#next_if_quit', as: :next_advancing_competitor
+          get '/rounds/:round_id/addable_competitors' => 'live#can_be_added_to_round', as: :addable_competitors_for_round
           put '/rounds/:round_id/:registration_id' => 'live#add_competitor_to_round', as: :add_competitor_to_round
           post '/rounds/:round_id' => 'live#add_or_update_result', as: :add_results
           patch '/rounds/:round_id' => 'live#add_or_update_result', as: :update_results

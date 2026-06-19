@@ -572,6 +572,10 @@ class User < ApplicationRecord
     wic_team? || board_member? || higher_permission_officer? || weat_team? || results_team? || admin?
   end
 
+  def can_request_to_edit_others_profile?
+    any_kind_of_delegate? || results_team?
+  end
+
   private def groups_with_read_access_for_current
     return "*" if can_edit_any_groups?
 
@@ -775,6 +779,7 @@ class User < ApplicationRecord
         pages: [
           panel_pages[:bannedCompetitors],
           panel_pages[:delegateProbations],
+          panel_pages[:helpfulQueries],
         ],
       },
       wqac: {
@@ -826,7 +831,7 @@ class User < ApplicationRecord
         scope: panels_with_access,
       },
       can_request_to_edit_others_profile: {
-        scope: any_kind_of_delegate? ? "*" : [],
+        scope: can_request_to_edit_others_profile? ? "*" : [],
       },
     }
     if banned?
@@ -1221,10 +1226,10 @@ class User < ApplicationRecord
     return User.where(email: query) if admin_search && search_by_email
 
     if searching_persons_table
-      users = Person.includes(:user).current
+      users = Person.includes(user: SERIALIZATION_INCLUDES).current
       search_by_email = false # We can't search by email on the 'Person' table
     else
-      users = User.confirmed_email.not_dummy_account
+      users = User.confirmed_email.not_dummy_account.includes(SERIALIZATION_INCLUDES)
 
       users = users.where(id: self.staff_delegate_ids) if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
 
@@ -1249,8 +1254,12 @@ class User < ApplicationRecord
   end
 
   private def deprecated_team_roles
-    active_roles
-      .includes(:metadata, group: [:metadata])
+    # Reuse the already-loaded association (with its metadata/group preloaded) when the
+    # caller eager loaded it; otherwise build the query with the includes we need. Calling
+    # `.includes` unconditionally would discard any preloaded `active_roles` and re-query.
+    roles = active_roles.loaded? ? active_roles : active_roles.includes(:metadata, group: [:metadata])
+
+    roles
       .select do |role|
         [
           UserGroup.group_types[:teams_committees],
@@ -1268,6 +1277,16 @@ class User < ApplicationRecord
     methods: %w[url country],
     include: %w[avatar],
   }.freeze
+
+  # Associations that `serializable_hash` touches: `staff_delegate?` (delegate role metadata),
+  # `deprecated_team_roles` (active roles + their metadata/group) and `avatar` (current_avatar).
+  # Eager load these whenever many users are serialized to avoid an N+1 explosion.
+  SERIALIZATION_INCLUDES = [
+    :current_avatar,
+    :delegate_role_metadata,
+    :delegate_roles,
+    { active_roles: [:metadata, { group: :metadata }] },
+  ].freeze
 
   def serializable_hash(options = nil)
     # NOTE: doing deep_dup is necessary here to avoid changing the inner values

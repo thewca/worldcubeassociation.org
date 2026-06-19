@@ -40,7 +40,9 @@ class Incident < ApplicationRecord
   end
 
   def self.search(query, params: {})
-    incidents = Incident
+    # `serializable_hash` walks `incident_competitions` (and their `competition`) and the
+    # incident tags, so eager load them to avoid an N+1 per incident during serialization.
+    incidents = Incident.includes(:incident_tags, incident_competitions: :competition)
     query&.split&.each do |part|
       like_query = %w[public_summary title].map { |col| "#{col} LIKE :part" }.join(" OR ")
       incidents = incidents.where(like_query, part: "%#{part}%")

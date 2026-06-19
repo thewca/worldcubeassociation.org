@@ -125,6 +125,14 @@ export const getRegistrationTimestamp = (
   timeZone: string | Zone = "local",
 ) => DateTime.fromISO(dateTime).setZone(timeZone).toFormat("D TT.u ZZZZ");
 
+export const getFullDateTimeStringNoSeconds = (
+  dateTime: string,
+  timeZone: string | Zone = "local",
+) =>
+  DateTime.fromISO(dateTime)
+    .setZone(timeZone)
+    .toLocaleString(DateTime.DATETIME_FULL);
+
 export const getFullDateTimeString = (
   dateTime: string,
   timeZone: string | Zone = "local",

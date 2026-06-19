@@ -1,4 +1,4 @@
-import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanel";
+import { PanelProps } from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/StepPanel";
 import { Link, Text } from "@chakra-ui/react";
 
 export default function StepSummary({ competitionInfo }: PanelProps) {

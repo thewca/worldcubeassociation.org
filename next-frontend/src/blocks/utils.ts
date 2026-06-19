@@ -5,7 +5,22 @@ export const colorPaletteSelect: SelectField = {
   type: "select",
   required: true,
   interfaceName: "ColorPaletteSelect",
-  options: ["blue", "red", "green", "orange", "yellow", "white"],
+  options: [
+    "blue",
+    "red",
+    "green",
+    "orange",
+    "yellow",
+    { label: "white", value: "wcaWhite" },
+  ],
+};
+
+export const newTabCheckbox: CheckboxField = {
+  name: "newTab",
+  type: "checkbox",
+  admin: {
+    description: "Open this link in a new tab",
+  },
 };
 
 export const colorPaletteToneToggle: CheckboxField = {

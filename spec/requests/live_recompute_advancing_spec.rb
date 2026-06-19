@@ -175,6 +175,57 @@ RSpec.describe "WCA Live API" do
       end
     end
 
+    context 'with incomplete Ao5 results (some solves missing)' do
+      it 'does not mark a competitor as advancing when they have only entered some of their solves' do
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: round)
+
+        registrations
+        round.open_round!(User.first)
+        live_results = round.live_results
+
+        # 3 competitors complete all 5 solves
+        3.times do |i|
+          result = live_results.find_by!(registration_id: registrations[i].id)
+          UpdateLiveResultJob.perform_now(result, Array.new(5) { |j| { value: (i + 1) * 1000, attempt_number: j + 1 } }, User.first.id)
+        end
+
+        # 2 competitors enter only 1 of 5 solves — incomplete results should not advance
+        2.times do |i|
+          result = live_results.find_by!(registration_id: registrations[3 + i].id)
+          UpdateLiveResultJob.perform_now(result, [{ value: 500, attempt_number: 1 }], User.first.id)
+        end
+
+        incomplete_ids = [registrations[3].id, registrations[4].id]
+
+        expect(round.live_results.reload.where(registration_id: incomplete_ids).pluck(:advancing)).to all(be false)
+        # Top complete results remain advancing_questionable since incomplete results could still rank above them
+        expect(round.live_results.reload.where.not(registration_id: incomplete_ids).pluck(:advancing_questionable)).to all(be true)
+      end
+
+      it 'marks no one as advancing when enough incomplete results could fill all advancing spots' do
+        round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+        create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: ranking_condition, participation_source: round)
+
+        registrations
+        round.open_round!(User.first)
+        live_results = round.live_results
+
+        # 1 complete result
+        result = live_results.find_by!(registration_id: registrations[0].id)
+        UpdateLiveResultJob.perform_now(result, Array.new(5) { |j| { value: 1000, attempt_number: j + 1 } }, User.first.id)
+
+        # 4 competitors enter only 1 of 5 solves — any of them could still rank in the top 3
+        4.times do |i|
+          result = live_results.find_by!(registration_id: registrations[1 + i].id)
+          UpdateLiveResultJob.perform_now(result, [{ value: 500, attempt_number: 1 }], User.first.id)
+        end
+
+        expect(round.live_results.reload.pluck(:advancing)).to all(be false)
+        expect(round.live_results.reload.find_by(registration_id: registrations[0].id).advancing_questionable).to be true
+      end
+    end
+
     context 'with an attempt_result advancement condition' do
       it 'returns results with ranking better or equal to the given level' do
         round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
@@ -468,7 +519,7 @@ RSpec.describe "WCA Live API" do
 
         # Open next round and quit first result from it while letting the next one advance
         final.open_and_lock_previous(User.first)
-        to_advance = round.next_advancing_without(registrations.first.id)
+        to_advance = final.next_participating_without(registrations.first.id)
         final.quit_from_round!(registrations.first.id, User.first, to_advance: to_advance)
 
         # Next Competitor is marked as advancing
@@ -573,7 +624,7 @@ RSpec.describe "WCA Live API" do
         5.times { |i| create(:live_result, registration: registrations[i], round: round1, average: (i + 1) * 100) }
 
         # Ranks 1-3 advance; rank 4 is the next qualifying person
-        next_qualifying = round1.next_advancing_without(registrations.first)
+        next_qualifying = round2.next_participating_without(registrations.first)
         expect(next_qualifying.map(&:registration_id)).to contain_exactly(registrations[3].id)
       end
 
@@ -584,7 +635,7 @@ RSpec.describe "WCA Live API" do
         rank4 = round1.live_results.order(global_pos: :asc).offset(3).first
         rank4.update!(quit_by_id: create(:user).id)
 
-        next_qualifying = round1.next_advancing_without(registrations.first)
+        next_qualifying = round2.next_participating_without(registrations.first)
         expect(next_qualifying.map(&:registration_id)).to contain_exactly(registrations[4].id)
       end
     end
@@ -601,7 +652,7 @@ RSpec.describe "WCA Live API" do
 
         # ranks 1,2,3 advance (capped). rank 4 (280) meets condition but was capped out.
         # With rank 1 removed: pool=4, under-300 = 200,250,280 = 3, cap=3 → rank 4 qualifies
-        next_qualifying = round1.next_advancing_without(registrations.first)
+        next_qualifying = round2.next_participating_without(registrations.first)
         expect(next_qualifying.map(&:registration_id)).to contain_exactly(registrations[3].id)
       end
 
@@ -612,7 +663,7 @@ RSpec.describe "WCA Live API" do
         # ranks 1,2,3 advance (all under 300, not capped). rank 4 (310) is over threshold.
         # With rank 1 removed: pool=4, under-300 = 200,250 = 2, cap=3 → only 2 advance
         # Ranks 2 and 3 are already advancing — no new person qualifies
-        expect(round1.next_advancing_without(registrations.first)).to eq([])
+        expect(round2.next_participating_without(registrations.first)).to eq([])
       end
     end
   end

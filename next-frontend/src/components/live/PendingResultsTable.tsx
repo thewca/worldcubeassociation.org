@@ -3,6 +3,7 @@ import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import formats from "@/lib/wca/data/formats";
 import { padSkipped } from "@/lib/live/padSkipped";
 import { LiveCompetitor, PendingLiveResult } from "@/types/live";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function PendingResultsTable({
   pendingLiveResults,
@@ -15,6 +16,8 @@ export default function PendingResultsTable({
   eventId: string;
   competitors: Map<number, LiveCompetitor>;
 }) {
+  const { t } = useT();
+
   const format = formats.byId[formatId];
   const solveCount = format.expected_solve_count;
 
@@ -30,8 +33,10 @@ export default function PendingResultsTable({
           <Table.Root>
             <Table.Header>
               <Table.Row>
-                <Table.ColumnHeader>Competitor</Table.ColumnHeader>
-                <Table.ColumnHeader>Country</Table.ColumnHeader>
+                <Table.ColumnHeader>ID</Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {t("competitions.live.results.competitor")}
+                </Table.ColumnHeader>
                 {attemptIndexes.map((num) => (
                   <Table.ColumnHeader key={num} textAlign="right">
                     {num + 1}
