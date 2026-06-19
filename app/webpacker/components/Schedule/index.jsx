@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Message, Segment } from 'semantic-ui-react';
+import _ from 'lodash';
 import CalendarView from './CalendarView';
 import TableView from './TableView';
 import TimeZoneSelector from './TimeZone';
@@ -24,7 +25,7 @@ export default function Schedule({
   const { venues } = wcifSchedule;
 
   const mainVenueIndex = 0;
-  const uniqueTimeZones = [...new Set(venues.map((venue) => venue.timezone))];
+  const uniqueTimeZones = _.uniq(venues.map((venue) => venue.timezone));
   const timeZoneCount = uniqueTimeZones.length;
 
   const [
