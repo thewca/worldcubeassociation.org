@@ -165,7 +165,7 @@ export default function Schedule({
             {I18n.t('competitions.schedule.multiple_timezones_available')}
           </Message.Header>
           <Message.Content>
-            {I18n.t('competitions.schedule.select_a_timezone_to_view')}
+            {I18n.t('competitions.schedule.select_a_venue_to_view')}
           </Message.Content>
         </Message>
       )}
