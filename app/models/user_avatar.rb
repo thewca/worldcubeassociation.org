@@ -115,18 +115,15 @@ class UserAvatar < ApplicationRecord
   end
 
   def thumbnail_image
-    transformations = {}
-
-    # newer libvips raises on extract_area without width/height;
-    # legacy records can have nil/0 crop dims, so only crop when fully set.
-    if [thumbnail_crop_x, thumbnail_crop_y, thumbnail_crop_w, thumbnail_crop_h].all?(&:present?) &&
-       thumbnail_crop_w.positive? && thumbnail_crop_h.positive?
-      transformations[:crop] = [thumbnail_crop_x, thumbnail_crop_y, thumbnail_crop_w, thumbnail_crop_h]
-    end
-
-    transformations[:resize_and_pad] = [100, 100]
-
-    self.image.variant(**transformations)
+    self.image.variant(
+      crop: [
+        self.thumbnail_crop_x,
+        self.thumbnail_crop_y,
+        self.thumbnail_crop_w,
+        self.thumbnail_crop_h,
+      ],
+      resize_and_pad: [100, 100],
+    )
   end
 
   def attach_image(file)
