@@ -491,9 +491,9 @@
   },
   {
     "id": "73",
-    "sanity_check_category_id": "16",
-    "topic": "Irregular schedule activity - checks for activity that falls outside the competition start/end dates",
+    "sanity_check_category_id": "9",
+    "topic": "Irregular schedule activity - checks for any activity that falls outside the competition start/end dates",
     "comments": null,
-    "query_file": "irregular_schedule.sql"
+    "query_file": "consistency_of_schedule_activities_with_competition_days.sql"
   }
 ]
