@@ -488,5 +488,12 @@
     "topic": "Suspiciously short-lived user role (same or consecutive day start/end)",
     "comments": null,
     "query_file": "user_role_short_lived.sql"
+  },
+  {
+    "id": "73",
+    "sanity_check_category_id": "16",
+    "topic": "Irregular schedule activity - checks for activity that falls outside the competition start/end dates",
+    "comments": null,
+    "query_file": "irregular_schedule.sql"
   }
 ]
