@@ -2263,14 +2263,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/react@npm:^6.1.20":
-  version: 6.1.20
-  resolution: "@fullcalendar/react@npm:6.1.20"
+"@fullcalendar/react@npm:^6.1.21":
+  version: 6.1.21
+  resolution: "@fullcalendar/react@npm:6.1.21"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.20
+    "@fullcalendar/core": ~6.1.21
     react: ^16.7.0 || ^17 || ^18 || ^19
     react-dom: ^16.7.0 || ^17 || ^18 || ^19
-  checksum: 10c0/b23fb56d3c4f69d0e6161bc7872f77d5bd3e431f3c265c3b69710bb105a7e72aa4936e93b815602bc249c326d444e994e76139565e7c134dc87ae7fc6c34056a
+  checksum: 10c0/7103e724676ea12a43c5020e2581902394c0e3d30ace0a15319d869efc099b0a4e053aac1ab52576e8086649679f616236399996bebd5b36a131e5cb338d6ec3
   languageName: node
   linkType: hard
 
@@ -10188,7 +10188,7 @@ __metadata:
     "@fullcalendar/core": "npm:^6.1.20"
     "@fullcalendar/interaction": "npm:^6.1.21"
     "@fullcalendar/luxon3": "npm:^6.1.20"
-    "@fullcalendar/react": "npm:^6.1.20"
+    "@fullcalendar/react": "npm:^6.1.21"
     "@fullcalendar/timegrid": "npm:^6.1.21"
     "@hello-pangea/dnd": "npm:^18.0.1"
     "@playwright/test": "npm:^1.60.0"
