@@ -6,6 +6,7 @@ import {
   Portal,
   useListCollection,
   VStack,
+  Text,
 } from "@chakra-ui/react";
 import AttemptResultField from "@/app/(wca)/(with-background)/dashboard/AttemptResultField";
 import _ from "lodash";
@@ -78,7 +79,7 @@ export default function AttemptsForm({
 
     if (submissionWarning) {
       confirm({
-        content: submissionWarning,
+        content: <Text>{submissionWarning}</Text>,
         confirmButton: "Submit",
       }).then(() => handleSubmit(refocusInput));
     } else {
