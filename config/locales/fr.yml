@@ -6961,7 +6961,7 @@ fr:
         [%{round_id}] Ce tour comprend des résultats de 3x3x3 à l'aveugle
         résolution multiple. Veuillez préciser dans le commentaire accompagnant
         votre envoi combien de mélanges de chaque ensemble ont été effectivement
-        utilisés par les compétiteurs, afin que WRT puisse supprimer les
+        utilisés par les compétiteurs, afin que le WRT puisse supprimer les
         mélanges supplémentaires non utilisés.
       #original_hash: 3d5255d
       multiple_fmc_groups_warning: >-
