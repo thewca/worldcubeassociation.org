@@ -8,6 +8,7 @@ import { EventId } from "@/lib/wca/data/events";
 
 interface TabBase {
   i18nKey: string;
+  i18nKeyAdmin?: string;
   menuKey: string;
   icon?: IconName;
   disabled?: boolean;
@@ -91,6 +92,7 @@ export const duringCompetitionTabs = (
   return [
     {
       i18nKey: "competitions.show.schedule",
+      i18nKeyAdmin: "competitions.live.manage_rounds",
       href: route({
         pathname: "/competitions/[competitionId]/live",
         query: { competitionId: competitionInfo.id },
