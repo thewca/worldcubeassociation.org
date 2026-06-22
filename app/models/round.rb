@@ -199,6 +199,10 @@ class Round < ApplicationRecord
     self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
   end
 
+  def close_round!
+    live_results.destroy_all.count
+  end
+
   def open_round!(opening_user)
     advancing_reg_ids = participation_source.advancing_competitor_ids
 
