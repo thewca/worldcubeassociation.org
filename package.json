@@ -3,7 +3,7 @@
     "@babel/runtime": "^7.29.7",
     "@cubing/icons": "^3.0.5",
     "@fullcalendar/core": "^6.1.20",
-    "@fullcalendar/interaction": "^6.1.20",
+    "@fullcalendar/interaction": "^6.1.21",
     "@fullcalendar/luxon3": "^6.1.20",
     "@fullcalendar/react": "^6.1.20",
     "@fullcalendar/timegrid": "^6.1.20",
