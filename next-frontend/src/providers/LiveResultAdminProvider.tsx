@@ -14,11 +14,9 @@ import { Toaster, toaster } from "@/components/ui/toaster";
 import { applyCutoff, applyTimeLimit } from "@/lib/live/attempt-result";
 import { padSkipped } from "@/lib/live/padSkipped";
 import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
+import { components } from "@/types/openapi";
 
-interface BatchEntry {
-  registration_id: number;
-  attempts: { value: number; attempt_number: number }[];
-}
+type BatchEntry = components["schemas"]["SubmitLiveResult"];
 
 interface AdminResultsContextValue {
   registrationId: number | undefined;
