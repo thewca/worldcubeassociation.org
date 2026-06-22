@@ -15,6 +15,7 @@ import { applyCutoff, applyTimeLimit } from "@/lib/live/attempt-result";
 import { padSkipped } from "@/lib/live/padSkipped";
 import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
 import { components } from "@/types/openapi";
+import useStoredState from "@/lib/hooks/useStoredState";
 
 type BatchEntry = components["schemas"]["SubmitLiveResult"];
 
@@ -99,7 +100,12 @@ export function LiveResultAdminProvider({
   const api = useAPI();
 
   const [batchMode, setBatchMode] = useState(false);
-  const [batch, setBatch] = useState<BatchEntry[]>([]);
+  // Persisted to localStorage so staged results survive a refresh/crash — the
+  // whole point of batch mode is unreliable connections. Cleared on submit.
+  const [batch, setBatch] = useStoredState<BatchEntry[]>(
+    [],
+    `live-batch-${roundId}`,
+  );
 
   const handleRegistrationIdChange = useCallback(
     (value?: number) => {
@@ -259,8 +265,8 @@ export function LiveResultAdminProvider({
 
     if (batchMode) {
       // Stage locally; nothing hits the server until "Submit Batch" is clicked.
-      setBatch((prev) => [
-        ...prev.filter((e) => e.registration_id !== registrationId),
+      setBatch([
+        ...batch.filter((e) => e.registration_id !== registrationId),
         body,
       ]);
       setRegistrationId(undefined);
