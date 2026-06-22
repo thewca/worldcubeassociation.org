@@ -1,6 +1,6 @@
 <%= react_component("Schedule", {
   wcifSchedule: @competition.schedule_wcif,
-  wcifEvents: @competition.events_wcif(version: Competition::WCIF_VERSION_CATALOGUE[:latest]),
+  wcifEvents: @competition.events_wcif(version: '2.1.1'),
   competitionName: @competition.name,
   calendarLocale: I18n.locale,
   linkedRounds: @competition.rounds.to_h { [it.wcif_id, it.linked_round&.wcif_ids] }.compact_blank,

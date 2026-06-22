@@ -320,12 +320,12 @@ export function roundAdvancementToString(wcifRound, wcifEvents, { short } = {}) 
     return null;
   }
 
-  // First round of a Dual Round: all competitors advance to the colinked round.
   if (wcifRound.linkedRounds) {
     const lastLinkedRoundId = wcifRound.linkedRounds
       .toSorted((a, b) => parseActivityCode(a).roundNumber - parseActivityCode(b).roundNumber)
       .at(-1);
 
+    // First round of a Dual Round: all competitors advance to the colinked round.
     if (wcifRound.id !== lastLinkedRoundId) {
       return I18n.t(`advancement_condition${short ? '.short' : ''}.all_advance`);
     }
