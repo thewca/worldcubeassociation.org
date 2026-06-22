@@ -9674,12 +9674,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-image-crop@npm:^11.0.10":
-  version: 11.0.10
-  resolution: "react-image-crop@npm:11.0.10"
+"react-image-crop@npm:^11.1.2":
+  version: 11.1.2
+  resolution: "react-image-crop@npm:11.1.2"
   peerDependencies:
     react: ">=16.13.1"
-  checksum: 10c0/2c2c7066c3a51838fc074a4a125ee2063170e01c26e3b1c8fc8b66155cf7ef576b5747089b4f365ce9dd2728794c39f57643b37eb78116e9db3f4b6299d3f682
+  checksum: 10c0/7325afda6ec3f0b7c5bc3d376f3caf29cc57a3518271623a3e3e4edf49178d63ac10749a6ec5bc4271aa34ea2aaa3d80e2248cb05ba7a9b06fca260ff2472028
   languageName: node
   linkType: hard
 
@@ -10254,7 +10254,7 @@ __metadata:
     react-datepicker: "npm:^9.1.0"
     react-dom: "npm:^18.3.1"
     react-google-recaptcha: "npm:^3.1.0"
-    react-image-crop: "npm:^11.0.10"
+    react-image-crop: "npm:^11.1.2"
     react-intersection-observer: "npm:^10.0.3"
     react-leaflet: "npm:^4.2.1"
     react-on-rails: "npm:17.0.0-rc.4"
