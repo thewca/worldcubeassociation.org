@@ -40,7 +40,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "round is not open" }, status: :unprocessable_content unless round.live_results.any?
 
-    jobs = entries.map do |entry|
+    job_entries = entries.map do |entry|
       registration_id = entry[:registration_id]
       results = entry[:attempts]
 
@@ -50,10 +50,10 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
       return render json: { status: "Values cannot be 0, please omit them instead", registration_id: registration_id }, status: :unprocessable_content if results.any? { it[:value].to_i.zero? }
 
-      [live_result, results]
+      { live_result: live_result, results: results }
     end
 
-    jobs.each { |live_result, results| UpdateLiveResultJob.perform_later(live_result, results, @current_user.id) }
+    BatchUpdateLiveResultJob.perform_later(round, job_entries, @current_user.id)
 
     render json: { status: "ok" }
   end
