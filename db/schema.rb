@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_28_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -892,6 +892,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_28_000001) do
     t.integer "application_id"
     t.datetime "created_at", precision: nil, null: false
     t.integer "expires_in"
+    t.string "previous_refresh_token", default: "", null: false
     t.string "refresh_token"
     t.integer "resource_owner_id"
     t.datetime "revoked_at", precision: nil
