@@ -40,6 +40,8 @@ paths:
       $ref: 'paths/competitions/live/BulkQuitCompetitor.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/clear:
     $ref: 'paths/competitions/live/ClearRound.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/close:
+    $ref: 'paths/competitions/live/CloseRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/open:
     $ref: 'paths/competitions/live/OpenRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}/clear:

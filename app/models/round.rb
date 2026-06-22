@@ -199,6 +199,10 @@ class Round < ApplicationRecord
     self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
   end
 
+  def close_round!
+    live_results.destroy_all.count
+  end
+
   def open_round!(opening_user)
     advancing_reg_ids = participation_source.advancing_competitor_ids
 
@@ -470,73 +474,51 @@ class Round < ApplicationRecord
                                        .includes(:live_attempts)
                                        .index_by(&:registration_id)
 
-      attempts_to_load = round_results_wcif.flat_map do |round_result_wcif|
+      result_wcif_by_id = round_results_wcif.index_by do |round_result_wcif|
         registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
-        live_result = results_by_registration_id[registration_id]
+        results_by_registration_id[registration_id].id
+      end
 
+      attempts_to_load = result_wcif_by_id.flat_map do |live_result_id, round_result_wcif|
         round_result_wcif["attempts"].map.with_index(1) do |attempt, attempt_number|
           {
-            live_result_id: live_result.id,
+            live_result_id: live_result_id,
             attempt_number: attempt_number,
             value: attempt["result"],
           }
         end
       end
 
-      if attempts_to_load.any?
-        LiveAttempt.upsert_all(attempts_to_load)
+      LiveAttempt.upsert_all(attempts_to_load) if attempts_to_load.any?
 
-        # Count how many attempts were loaded per result_id
-        attempt_counts_by_result = attempts_to_load.map { it[:live_result_id] }.tally
+      # Every synced result needs its stale attempts pruned down to the incoming count.
+      #   This MUST be driven by all incoming results, not just `attempts_to_load`, so that
+      #   results whose attempts were cleared (count 0) also get pruned. Otherwise their
+      #   previously-synced attempts get orphaned and `live_results` diverges from `round_results`.
+      attempt_count_by_result_id = result_wcif_by_id.transform_values do |round_result_wcif|
+        round_result_wcif["attempts"]&.length || 0
+      end
 
-        # Regroup: For each count of results (that determines the maximum `attempt_number`),
-        #   we want to efficiently find all live_result_ids with that attempt number
-        results_with_attempt_count = attempt_counts_by_result.group_by(&:last)
-                                                             .transform_values { it.map(&:first) }
+      # Group by count so we clean up "once per number of attempts", which in reality is
+      #   only a handful of queries because barely any results have an unusual attempt count.
+      results_grouped_by_attempt_count = attempt_count_by_result_id.group_by { |_result_id, count| count }
 
-        # Now we can clean up "once per number of attempts", so in reality this generates
-        #   only ~3 extra queries because barely any results have only 1 or only 4 attempts.
-        results_with_attempt_count.each do |valid_count, result_ids|
-          LiveAttempt.where(live_result_id: result_ids)
-                     .where.not(attempt_number: ..valid_count)
-                     .delete_all
-        end
+      results_grouped_by_attempt_count.each do |valid_count, results|
+        result_ids = results.map { |result_id, _count| result_id }
+
+        LiveAttempt.where(live_result_id: result_ids)
+                   .where.not(attempt_number: ..valid_count)
+                   .delete_all
       end
 
       histories_to_generate = round_results_wcif.filter_map do |round_result_wcif|
         registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
         live_result = results_by_registration_id[registration_id]
+        result_already_existed = recorded_registration_ids.include?(registration_id)
 
-        recorded_attempts = live_result.live_attempts.pluck(:value)
-        imported_attempts = round_result_wcif["attempts"].pluck("result")
-
-        result_already_existed = recorded_registration_ids.include?(person_id_to_registration_id[round_result_wcif["personId"]])
-
-        result_has_attempts = !imported_attempts.empty?
-        attempts_have_changed = recorded_attempts != imported_attempts
-
-        next if result_has_attempts && !attempts_have_changed
-
-        action_type = if result_has_attempts
-                        :scoretaking
-                      elsif result_already_existed
-                        :cleared
-                      elsif round_already_had_results
-                        :advanced_next
-                      else
-                        :opened
-                      end
-
-        attempts = imported_attempts if action_type == :scoretaking
-
-        {
-          live_result_id: live_result.id,
-          entered_by_id: current_user.id,
-          entered_at: database_now,
-          attempt_details: attempts,
-          action_type: action_type,
-          action_source: :api_sync,
-        }
+        build_history_entry(round_result_wcif, live_result, current_user, database_now,
+                            result_already_existed: result_already_existed,
+                            round_already_had_results: round_already_had_results)
       end
 
       LiveResultHistoryEntry.insert_all!(histories_to_generate) if histories_to_generate.any?
@@ -548,6 +530,38 @@ class Round < ApplicationRecord
     # Sync up all internal results columns not covered by the sync payload
     #   This also resets the corresponding `live_results` associations
     self.recompute_live_columns
+  end
+
+  private def build_history_entry(round_result_wcif, live_result, current_user, database_now,
+                                  result_already_existed:, round_already_had_results:)
+    recorded_attempts = live_result.live_attempts.pluck(:value)
+    imported_attempts = round_result_wcif["attempts"].pluck("result")
+
+    result_has_attempts = !imported_attempts.empty?
+    attempts_have_changed = recorded_attempts != imported_attempts
+
+    return if result_has_attempts && !attempts_have_changed
+
+    action_type = if result_has_attempts
+                    :scoretaking
+                  elsif result_already_existed
+                    :cleared
+                  elsif round_already_had_results
+                    :advanced_next
+                  else
+                    :opened
+                  end
+
+    attempts = imported_attempts if action_type == :scoretaking
+
+    {
+      live_result_id: live_result.id,
+      entered_by_id: current_user.id,
+      entered_at: database_now,
+      attempt_details: attempts,
+      action_type: action_type,
+      action_source: :api_sync,
+    }
   end
 
   def self.load_wcif_advancement_condition(wcif_round, all_wcif_rounds, version: Competition::WCIF_STABLE_VERSION)

@@ -9,7 +9,7 @@ RSpec.describe "WCA Live API - open_round" do
     it "opens a normal first round and creates live results" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333", number: 1)
       create(:registration, :accepted, competition: competition)
 
@@ -24,7 +24,7 @@ RSpec.describe "WCA Live API - open_round" do
     it "allows opening the first and second round of a linked (dual) round after each other" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: %w[333 444], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: %w[333 444], delegates: [delegate])
       create(:registration, :accepted, competition: competition, event_ids: %w[333 444])
 
       linked_round = create(:linked_round)
@@ -43,7 +43,7 @@ RSpec.describe "WCA Live API - open_round" do
     it "does not allow opening a second round if the first round is not done yet" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
       create(:registration, :accepted, competition: competition)
       round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2)
       round2 = create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2, participation_source: round1)
@@ -60,7 +60,7 @@ RSpec.describe "WCA Live API - open_round" do
     it "does not allow opening the third round if one round of a dual round isn't done" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: %w[333 444], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: %w[333 444], delegates: [delegate])
       create(:registration, :accepted, competition: competition, event_ids: %w[333 444])
 
       linked_round = create(:linked_round)
@@ -84,7 +84,7 @@ RSpec.describe "WCA Live API - open_round" do
     it "does not allow opening a non-final round when 7 or fewer competitors advance (9m3)" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
       create_list(:registration, 7, :accepted, competition: competition)
 
       round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 3)
@@ -102,7 +102,7 @@ RSpec.describe "WCA Live API - open_round" do
     it "does not allow opening a non-final round when 15 or fewer competitors advance and multiple subsequent rounds remain (9m2)" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
       create_list(:registration, 15, :accepted, competition: competition) # rubocop:disable FactoryBot/ExcessiveCreateList
 
       round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 4)
@@ -120,7 +120,7 @@ RSpec.describe "WCA Live API - open_round" do
     it "does not allow opening a round when 99 or fewer competitors would be in it with 3 subsequent rounds remaining (9m1)" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
       create_list(:registration, 20, :accepted, competition: competition) # rubocop:disable FactoryBot/ExcessiveCreateList
 
       round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 4)
@@ -134,7 +134,7 @@ RSpec.describe "WCA Live API - open_round" do
     it "allows opening a non-final round at the 9m3 boundary (8 competitors)" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
       create_list(:registration, 8, :accepted, competition: competition)
 
       round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2)
@@ -152,7 +152,7 @@ RSpec.describe "WCA Live API - open_round" do
     it "allows opening the third round after both rounds of a dual round are done" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: %w[333 444], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: %w[333 444], delegates: [delegate])
       create(:registration, :accepted, competition: competition, event_ids: %w[333 444])
 
       linked_round = create(:linked_round)

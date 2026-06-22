@@ -368,6 +368,7 @@ Rails.application.routes.draw do
           get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
           put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
           put '/rounds/:round_id/clear' => "live#clear_round", as: :live_round_clear
+          delete '/rounds/:round_id/close' => "live#close_round", as: :live_round_close
           delete '/rounds/:round_id/bulk_quit' => 'live#bulk_quit_competitors', as: :bulk_quit_competitors_from_round
           delete '/rounds/:round_id/:registration_id' => 'live#quit_competitor', as: :quit_competitor_from_round
           put '/rounds/:round_id/:registration_id/clear' => 'live#clear_competitor', as: :clear_competitor_in_round

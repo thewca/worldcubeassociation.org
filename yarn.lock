@@ -2226,62 +2226,62 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/core@npm:^6.1.20":
-  version: 6.1.20
-  resolution: "@fullcalendar/core@npm:6.1.20"
+"@fullcalendar/core@npm:^6.1.21":
+  version: 6.1.21
+  resolution: "@fullcalendar/core@npm:6.1.21"
   dependencies:
     preact: "npm:~10.12.1"
-  checksum: 10c0/22e820979431acd690ad570b409d7eb9c2c7cbf1d7f9a08a9b5593164901ff375992f0cd437dfb7e8ec905213be79a111e2b7c675c286273419d79fbd7d99efc
+  checksum: 10c0/6856367e4b1aa7941badcd38198efc379aa03c34a1a6c6d97cd4d68fc6f99d26340cbe1007b247cab01af431abbc89ee78a3cb42d67f1e722655e8adca66692e
   languageName: node
   linkType: hard
 
-"@fullcalendar/daygrid@npm:~6.1.20":
-  version: 6.1.20
-  resolution: "@fullcalendar/daygrid@npm:6.1.20"
+"@fullcalendar/daygrid@npm:~6.1.21":
+  version: 6.1.21
+  resolution: "@fullcalendar/daygrid@npm:6.1.21"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.20
-  checksum: 10c0/dc71376bc9a8173d000aaf6d395a2bde0d2b89b78e937b1dabec31ac4111a0364f740ebdc1a4efd8ef967d3a8023acc4fac58c7245b6f92828fee28050fc2f35
+    "@fullcalendar/core": ~6.1.21
+  checksum: 10c0/8e7a9e25b7390ec9c09970a729259a3882ebd4d5551084d532e330c7584d302e492dc1f15ae100c2430ae885485182dcd9fd75697962ffb1d7ac6f8f74e53407
   languageName: node
   linkType: hard
 
-"@fullcalendar/interaction@npm:^6.1.20":
-  version: 6.1.20
-  resolution: "@fullcalendar/interaction@npm:6.1.20"
+"@fullcalendar/interaction@npm:^6.1.21":
+  version: 6.1.21
+  resolution: "@fullcalendar/interaction@npm:6.1.21"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.20
-  checksum: 10c0/2e37f7b233f22582ebbd974dc1d78efe7d8242a46c0ae0ef720cd698ee01fd0f615b836ef320b185bd0192573fe4a7e6bbdbc487e890edee86832c3c011913e8
+    "@fullcalendar/core": ~6.1.21
+  checksum: 10c0/70167d97ce97a20aca2aa2f271e2941c88a21e0b6b825d0fe8b97fb4d6f527476398cce7091c004db6a42fddc985f8806ed75ee62cf9d6683e5080cffd2e12da
   languageName: node
   linkType: hard
 
-"@fullcalendar/luxon3@npm:^6.1.20":
-  version: 6.1.20
-  resolution: "@fullcalendar/luxon3@npm:6.1.20"
+"@fullcalendar/luxon3@npm:^6.1.21":
+  version: 6.1.21
+  resolution: "@fullcalendar/luxon3@npm:6.1.21"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.20
+    "@fullcalendar/core": ~6.1.21
     luxon: ^3.0.0
-  checksum: 10c0/c259e1784ce8103bf1d4ea8c71a2eae0144ce7d0342911b819f4d4c8a85233a83be42703c1181267038b0f49c9542b37ca075c353d483259637a38a4ceb1bbcf
+  checksum: 10c0/04e40071bc12282131444f05e04a2338a699b2ef12c0f92720d944d0405ea2a170a795952c50d4089971a24aeb5d72075168e2e769b5118790ed433a8381085f
   languageName: node
   linkType: hard
 
-"@fullcalendar/react@npm:^6.1.20":
-  version: 6.1.20
-  resolution: "@fullcalendar/react@npm:6.1.20"
+"@fullcalendar/react@npm:^6.1.21":
+  version: 6.1.21
+  resolution: "@fullcalendar/react@npm:6.1.21"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.20
+    "@fullcalendar/core": ~6.1.21
     react: ^16.7.0 || ^17 || ^18 || ^19
     react-dom: ^16.7.0 || ^17 || ^18 || ^19
-  checksum: 10c0/b23fb56d3c4f69d0e6161bc7872f77d5bd3e431f3c265c3b69710bb105a7e72aa4936e93b815602bc249c326d444e994e76139565e7c134dc87ae7fc6c34056a
+  checksum: 10c0/7103e724676ea12a43c5020e2581902394c0e3d30ace0a15319d869efc099b0a4e053aac1ab52576e8086649679f616236399996bebd5b36a131e5cb338d6ec3
   languageName: node
   linkType: hard
 
-"@fullcalendar/timegrid@npm:^6.1.20":
-  version: 6.1.20
-  resolution: "@fullcalendar/timegrid@npm:6.1.20"
+"@fullcalendar/timegrid@npm:^6.1.21":
+  version: 6.1.21
+  resolution: "@fullcalendar/timegrid@npm:6.1.21"
   dependencies:
-    "@fullcalendar/daygrid": "npm:~6.1.20"
+    "@fullcalendar/daygrid": "npm:~6.1.21"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.20
-  checksum: 10c0/072f2b398f1b08cb0878c3081c1cf77883cd3d91aa674f6c7a01935ac19655e18259edb316a3aa081055bc274a66327ed925f7c3d213b64168c05756a8f6dc0a
+    "@fullcalendar/core": ~6.1.21
+  checksum: 10c0/657d3c574c2ba434fee03bfbac70ab1999778476dd8ce1b1506c229aab46f9285188e09cac5a0d036795b3c73476d3e0eaaac05a7d55c742f832668c67e92bf1
   languageName: node
   linkType: hard
 
@@ -5104,15 +5104,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:^3.4.10":
-  version: 3.4.10
-  resolution: "dompurify@npm:3.4.10"
+"dompurify@npm:^3.4.11":
+  version: 3.4.11
+  resolution: "dompurify@npm:3.4.11"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10c0/6ffbc564c09ae11f9e1ab97040d556f8fafb0a5221248fca02539378d442f4fbe737ebb72dd34309c46896f1093714622895cc6815a7a57599c4511e30e234ae
+  checksum: 10c0/31439481c7e8fc3805d40c376936fd66936620fb1b1a31a2ec097f6165412c37f2d868e082c9ceba62bb37661c1ea132a5db4d5213434317e30df68d4aca9cc9
   languageName: node
   linkType: hard
 
@@ -7292,7 +7292,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^4.1.0, js-yaml@npm:^4.2.0":
+"js-yaml@npm:^4.1.0":
   version: 4.2.0
   resolution: "js-yaml@npm:4.2.0"
   dependencies:
@@ -7300,6 +7300,17 @@ __metadata:
   bin:
     js-yaml: bin/js-yaml.js
   checksum: 10c0/1916456c118746603b067d74bbcbb0445d9a1d5e474ad4ae775e7b20525bed902e01d9d97dd0c81fcd8d4f596162309d0eb057f4aa38f3e9647f14075e9dea45
+  languageName: node
+  linkType: hard
+
+"js-yaml@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "js-yaml@npm:5.0.0"
+  dependencies:
+    argparse: "npm:^2.0.1"
+  bin:
+    js-yaml: bin/js-yaml.mjs
+  checksum: 10c0/06899cf94a6715eff69eafea08b066fa6978750231039393fba2902dc631af10dc47705eadfd688cc22bf27ae22dbc2548d936d89cf487b3224c59ffe227c45f
   languageName: node
   linkType: hard
 
@@ -9663,12 +9674,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-image-crop@npm:^11.0.10":
-  version: 11.0.10
-  resolution: "react-image-crop@npm:11.0.10"
+"react-image-crop@npm:^11.1.2":
+  version: 11.1.2
+  resolution: "react-image-crop@npm:11.1.2"
   peerDependencies:
     react: ">=16.13.1"
-  checksum: 10c0/2c2c7066c3a51838fc074a4a125ee2063170e01c26e3b1c8fc8b66155cf7ef576b5747089b4f365ce9dd2728794c39f57643b37eb78116e9db3f4b6299d3f682
+  checksum: 10c0/7325afda6ec3f0b7c5bc3d376f3caf29cc57a3518271623a3e3e4edf49178d63ac10749a6ec5bc4271aa34ea2aaa3d80e2248cb05ba7a9b06fca260ff2472028
   languageName: node
   linkType: hard
 
@@ -10174,11 +10185,11 @@ __metadata:
     "@babel/preset-react": "npm:^7.29.7"
     "@babel/runtime": "npm:^7.29.7"
     "@cubing/icons": "npm:^3.0.5"
-    "@fullcalendar/core": "npm:^6.1.20"
-    "@fullcalendar/interaction": "npm:^6.1.20"
-    "@fullcalendar/luxon3": "npm:^6.1.20"
-    "@fullcalendar/react": "npm:^6.1.20"
-    "@fullcalendar/timegrid": "npm:^6.1.20"
+    "@fullcalendar/core": "npm:^6.1.21"
+    "@fullcalendar/interaction": "npm:^6.1.21"
+    "@fullcalendar/luxon3": "npm:^6.1.21"
+    "@fullcalendar/react": "npm:^6.1.21"
+    "@fullcalendar/timegrid": "npm:^6.1.21"
     "@hello-pangea/dnd": "npm:^18.0.1"
     "@playwright/test": "npm:^1.60.0"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.2"
@@ -10205,7 +10216,7 @@ __metadata:
     css-loader: "npm:^7.1.4"
     css-minimizer-webpack-plugin: "npm:^8.0.0"
     date-fns: "npm:^4.4.0"
-    dompurify: "npm:^3.4.10"
+    dompurify: "npm:^3.4.11"
     dotenv: "npm:^17.4.2"
     easymde: "npm:^2.21.0"
     eslint: "npm:^8.57.0"
@@ -10221,7 +10232,7 @@ __metadata:
     glob: "npm:^13.0.6"
     i18n-js: "npm:^4.5.3"
     jquery: "npm:3.7.1"
-    js-yaml: "npm:^4.2.0"
+    js-yaml: "npm:^5.0.0"
     jshint: "npm:^2.13.6"
     leaflet: "npm:^1.9.4"
     leaflet-geosearch: "npm:^4.4.0"
@@ -10243,7 +10254,7 @@ __metadata:
     react-datepicker: "npm:^9.1.0"
     react-dom: "npm:^18.3.1"
     react-google-recaptcha: "npm:^3.1.0"
-    react-image-crop: "npm:^11.0.10"
+    react-image-crop: "npm:^11.1.2"
     react-intersection-observer: "npm:^10.0.3"
     react-leaflet: "npm:^4.2.1"
     react-on-rails: "npm:17.0.0-rc.4"

@@ -1283,6 +1283,27 @@ RSpec.describe "Competition WCIF" do
         expect(competition.to_wcif["events"]).to eq(wcif["events"])
       end
 
+      it "does not persist round_results for internal-scoretaking competitions" do
+        competition.update!(scoretaking_software: :internal)
+
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        # live_results are still populated from the sync, but round_results stays empty
+        #   since live_results is the source of truth for internal scoretaking.
+        expect(LiveResult.count).to eq(2)
+        expect(competition.rounds.flat_map(&:round_results)).to be_empty
+      end
+
+      it "clears previously-stored round_results once a comp switches to internal scoretaking" do
+        competition.set_wcif_events!(wcif["events"], delegate)
+        expect(competition.rounds.flat_map(&:round_results)).not_to be_empty
+
+        competition.update!(scoretaking_software: :internal)
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(competition.rounds.reload.flat_map(&:round_results)).to be_empty
+      end
+
       it "cleans up orphaned attempts upon syncing" do
         # First, establish five attempts as a baseline
         competition.set_wcif_events!(wcif["events"], delegate)
@@ -1300,6 +1321,28 @@ RSpec.describe "Competition WCIF" do
 
         expect(LiveResult.count).to eq(2)
         expect(LiveAttempt.count).to eq(7) # one result now only has 2, so 5+2=7
+      end
+
+      it "cleans up attempts when a result is cleared back to zero" do
+        # Establish five attempts for both competitors
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(LiveResult.count).to eq(2)
+        expect(LiveAttempt.count).to eq(10)
+
+        # One competitor's attempts are cleared entirely, while the other keeps theirs.
+        #   The non-empty other result keeps `attempts_to_load` non-empty, which used to
+        #   make the cleanup skip the cleared result and orphan its attempts.
+        wcif_333_event["rounds"][0]["results"][0]["attempts"] = []
+        wcif_333_event["rounds"][0]["results"][0]["best"] = 0
+        wcif_333_event["rounds"][0]["results"][0]["average"] = 0
+
+        competition.set_wcif_events!(wcif["events"], delegate)
+
+        expect(competition.to_wcif["events"]).to eq(wcif["events"])
+
+        expect(LiveResult.count).to eq(2)
+        expect(LiveAttempt.count).to eq(5) # cleared result drops to 0, other keeps 5
       end
 
       it "records histories when something changes" do
