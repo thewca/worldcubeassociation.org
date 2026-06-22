@@ -12,7 +12,7 @@ RSpec.describe "WCA Live API batch submit" do
       [{ value: value, attempt_number: 1 }, { value: value, attempt_number: 2 }, { value: value, attempt_number: 3 }, { value: value, attempt_number: 4 }, { value: value, attempt_number: 5 }]
     end
 
-    it "enqueues one job per result and saves them" do
+    it "enqueues a single batch job and saves all results" do
       sign_in delegate
 
       reg_a = create(:registration, :accepted, competition: competition)
@@ -29,7 +29,7 @@ RSpec.describe "WCA Live API batch submit" do
 
       expect do
         post api_v1_competition_live_batch_add_results_path(competition.id, round.wcif_id), params: batch_request
-      end.to have_enqueued_job(UpdateLiveResultJob).twice
+      end.to have_enqueued_job(BatchUpdateLiveResultJob).once
       expect(response).to be_successful
 
       perform_enqueued_jobs
@@ -55,7 +55,7 @@ RSpec.describe "WCA Live API batch submit" do
 
       expect do
         post api_v1_competition_live_batch_add_results_path(competition.id, round.wcif_id), params: batch_request
-      end.not_to have_enqueued_job(UpdateLiveResultJob)
+      end.not_to have_enqueued_job(BatchUpdateLiveResultJob)
       expect(response).to have_http_status(:unprocessable_content)
     end
   end
