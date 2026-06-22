@@ -28,6 +28,12 @@ class Round < ApplicationRecord
 
   scope :ordered, -> { order(:number) }
   scope :h2h, -> { where(is_h2h_mock: true) }
+  # A round is final when it's the last round (mirrors #final_round?), or when it's
+  # co-linked with the final round (a linked round marks both rounds as final).
+  scope :final, lambda {
+    finals = where("number = total_number_of_rounds")
+    finals.or(where(linked_round_id: finals.where.not(linked_round_id: nil).select(:linked_round_id)))
+  }
 
   serialize :time_limit, coder: TimeLimit
   validates_associated :time_limit

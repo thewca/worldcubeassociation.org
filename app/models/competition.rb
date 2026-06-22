@@ -1451,7 +1451,7 @@ class Competition < ApplicationRecord
   end
 
   def events_with_podium_results
-    results.includes(:result_attempts).podium.order(:pos).group_by(&:event)
+    results.includes(:result_attempts).podium.order(:global_pos).group_by(&:event)
            .sort_by { |event, _results| event.rank }
   end
 
