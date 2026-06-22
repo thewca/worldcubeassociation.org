@@ -13,10 +13,10 @@ import I18n from '../../lib/i18n';
 
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import '../../stylesheets/delegates/style.scss';
-import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import I18nHTMLTranslate from '../../components/I18nHTMLTranslate';
 import useLoadedData from '../../lib/hooks/useLoadedData';
-import Errored from '../Requests/Errored';
-import Loading from '../Requests/Loading';
+import Errored from '../../components/Requests/Errored';
+import Loading from '../../components/Requests/Loading';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
 import { groupTypes } from '../../lib/wca-data.js.erb';
 import DelegatesOfRegion, { ALL_REGIONS } from './DelegatesOfRegion';

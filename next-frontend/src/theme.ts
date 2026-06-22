@@ -434,6 +434,9 @@ const customConfig = defineConfig({
           },
         },
       },
+      cursor: {
+        menuitem: { value: "pointer" },
+      },
     },
     semanticTokens: {
       colors: {
@@ -579,7 +582,7 @@ const customConfig = defineConfig({
         value: {
           fontSize: "0.875rem",
           lineHeight: "1.5",
-          fontWeight: "light",
+          fontWeight: "normal",
         },
       },
       bodyEmphasis: {
@@ -680,6 +683,41 @@ const customConfig = defineConfig({
               gap: 3,
               "& svg": {
                 fontSize: "4xl",
+              },
+            },
+          },
+        },
+      },
+      button: {
+        variants: {
+          variant: {
+            // Solid button locked to the blue palette, using the pastel `1A`
+            // background. Used on homepage cards when a button should not
+            // inherit its surrounding card's color scheme.
+            pastelSolid: {
+              colorPalette: "blue",
+              bg: "colorPalette.1A",
+              color: "colorPalette.contrast",
+              borderColor: "transparent",
+              _hover: {
+                bg: "colorPalette.solid/90",
+              },
+              _expanded: {
+                bg: "colorPalette.solid/90",
+              },
+            },
+            // Copy of Chakra's built-in `outline` variant, but with a stronger
+            // `_hover` background. Used on homepage cards when a button should
+            // inherit its surrounding card's color scheme.
+            pastelOutline: {
+              borderWidth: "1px",
+              borderColor: "colorPalette.border",
+              color: "colorPalette.fg",
+              _hover: {
+                bg: "colorPalette.emphasized",
+              },
+              _expanded: {
+                bg: "colorPalette.subtle",
               },
             },
           },
@@ -805,7 +843,6 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
-          // @ts-expect-error TypeScript does not know about the new variant before compiling the theme further down below
           variant: "info",
         },
       },

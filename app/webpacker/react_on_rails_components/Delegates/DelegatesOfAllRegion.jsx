@@ -5,8 +5,8 @@ import DelegatesTable from './DelegatesTable';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../lib/wca-data.js.erb';
-import Loading from '../Requests/Loading';
-import Errored from '../Requests/Errored';
+import Loading from '../../components/Requests/Loading';
+import Errored from '../../components/Requests/Errored';
 import I18n from '../../lib/i18n';
 import dateSince from '../../lib/helpers/date-since';
 
@@ -19,13 +19,14 @@ const otherDelegatesHeaders = [
   { label: 'Last Delegated', key: 'metadata.last_delegated' },
   { label: 'Total Delegated', key: 'metadata.total_delegated' },
   { label: 'Date Since Last Delegated', key: 'date_since_last_delegated' },
+  { label: 'Lead Delegated Competitions', key: 'metadata.lead_delegated' },
 ];
 
 export default function DelegatesOfAllRegion() {
   const {
-    data: leadDelegates,
-    loading: leadDelegatesLoading,
-    error: leadDelegatesError,
+    data: seniorAndRegionalDelegates,
+    loading: seniorAndRegionalDelegatesLoading,
+    error: seniorAndRegionalDelegatesError,
   } = useLoadedData(apiV0Urls.userRoles.list({
     groupType: groupTypes.delegate_regions,
     isActive: true,
@@ -51,16 +52,16 @@ export default function DelegatesOfAllRegion() {
     date_since_last_delegated: dateSince(delegate.metadata.last_delegated),
   })), [otherDelegates]);
 
-  if (leadDelegatesLoading || otherDelegatesLoading) return <Loading />;
-  if (leadDelegatesError || otherDelegatesError) return <Errored />;
+  if (seniorAndRegionalDelegatesLoading || otherDelegatesLoading) return <Loading />;
+  if (seniorAndRegionalDelegatesError || otherDelegatesError) return <Errored />;
 
   return (
     <>
-      <Header as="h3">Lead Delegates</Header>
+      <Header as="h3">Senior & Regional Delegates</Header>
       <DelegatesTable
-        delegates={leadDelegates}
+        delegates={seniorAndRegionalDelegates}
         isAdminMode
-        isAllLeadDelegates
+        isAllSeniorAndRegionalDelegates
       />
       <Header as="h3">
         Other Delegates
@@ -75,7 +76,7 @@ export default function DelegatesOfAllRegion() {
       <DelegatesTable
         delegates={otherDelegatesWithExtraData}
         isAdminMode
-        isAllNonLeadDelegates
+        isAllNonSeniorAndRegionalDelegates
       />
     </>
   );

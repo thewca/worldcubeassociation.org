@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
-import { Label } from 'semantic-ui-react';
+import { Form, Label } from 'semantic-ui-react';
 import useInputState from '../../../../lib/hooks/useInputState';
 import { roundIdToString } from '../../../../lib/utils/wcif';
 import ButtonActivatedModal from '../ButtonActivatedModal';
@@ -173,18 +173,21 @@ export default function EditAdvancementConditionModal({
         onChange={setType}
         roundNumber={roundNumber}
       />
+      <p>
+        If you would like to use Dual Rounds, please make sure that
+        the scoretaking software is configured as &apos;Internal Live Results&apos;
+      </p>
       {!!type && (
         <>
           {type !== 'dual' && (
-            <>
+            <Form.Field>
               <AdvancementInput
                 eventId={wcifEvent.id}
                 type={type}
                 level={level}
                 onChange={setLevel}
               />
-              <br />
-            </>
+            </Form.Field>
           )}
           <p>
             {advanceReqToExplanationText(wcifEvent, roundNumber, { type, level })}

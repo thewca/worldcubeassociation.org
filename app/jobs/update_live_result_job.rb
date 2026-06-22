@@ -22,14 +22,49 @@ class UpdateLiveResultJob < ApplicationJob
       # so we can't set it directly in update!.
       LiveResult.reset_counters(live_result.id, :live_attempts)
 
+      person = live_result.registration.person
+      previous_round_ids = round.competition_event.rounds.where(number: ...round.number).ids
+
       live_result.update!(
         best: best,
         average: average,
         last_attempt_entered_at: Time.now.utc,
+        single_record_tag: compute_pr(live_result, best, person, :single, previous_round_ids),
+        average_record_tag: compute_pr(live_result, average, person, :average, previous_round_ids),
       )
 
       history_ordered_results = new_attempts.order(:attempt_number).pluck(:value)
       live_result.live_result_history_entries.create!(entered_by_id: entered_by_id, action_type: :scoretaking, attempt_details: history_ordered_results)
     end
   end
+
+  VALUE_COLUMN = {
+    single: :best,
+    average: :average,
+  }.freeze
+
+  private
+
+    def compute_pr(live_result, value, person, type, previous_round_ids)
+      col = VALUE_COLUMN[type]
+
+      if value <= 0 || better_pr_in_previous_round?(live_result, "#{type}_record_tag", col, value, previous_round_ids)
+        nil
+      elsif person.nil?
+        "PR"
+      else
+        pr = person.public_send(:"ranks_#{type}").find { |r| r.event_id == live_result.event_id }
+        "PR" if pr.nil? || value < pr.best
+      end
+    end
+
+    def better_pr_in_previous_round?(live_result, tag_column, value_column, current_value, previous_ids)
+      return false if previous_ids.empty?
+
+      best_previous_pr = LiveResult.where(registration_id: live_result.registration_id, round_id: previous_ids)
+                                   .where(tag_column => "PR")
+                                   .minimum(value_column)
+
+      best_previous_pr.present? && best_previous_pr <= current_value
+    end
 end

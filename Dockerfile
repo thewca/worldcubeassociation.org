@@ -46,7 +46,6 @@ RUN apt-get update -qq && \
       libclang-dev \
       cargo \
       pkg-config \
-      libvips \
       libssl-dev \
       libyaml-dev \
       tzdata
@@ -90,16 +89,25 @@ RUN rm -rf node_modules
 FROM base AS runtime
 
 # Install fonts for rendering PDFs (mostly competition summary PDFs)
+#   as well as native runtime dependencies for Ruby:
 # dejavu = Hebrew, Arabic, Greek
 # unfonts-core = Korean
 # wqy-modern = Chinese
 # ipafont = Japanese
 # thai-tlwg = Thai (as the name suggests)
 # lmodern = Random accents and special symbols for Latin script
+# RUNTIME STUFF
+# mariadb-client = talking to our database in production mode
+# imagemagick = image processing for Rails ActiveStorage attachments
+# libvips = image processing for Rails ActiveStorage attachments
+# tzdata = making sure ActiveSupport knows which timezones exist
 
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       mariadb-client \
+      imagemagick \
+      libvips \
+      tzdata \
       zip \
       python-is-python3 \
       fonts-dejavu \

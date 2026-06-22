@@ -6,6 +6,12 @@
   <strong><%= @confirmer.name %> has confirmed <%= link_to @competition.name, competition_url(@competition) %> in <%= @competition.city_name %>, <%= @competition.country.name %>.</strong>
 </p>
 
+<% if @competition.lead_delegate.present? %>
+  <p>
+    The Lead Delegate for this competition is <%= @competition.lead_delegate.name %>.
+  </p>
+<% end %>
+
 <p class="<%= 'alert' if (@competition.days_until).to_i <= 30 %>">
   The competition will take place on <%= wca_date_range(@competition.start_date, @competition.end_date) %> in <%= (@competition.days_until).to_i %> days.
   <% if (@competition.days_until).to_i <= 30 %>

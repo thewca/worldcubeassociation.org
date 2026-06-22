@@ -181,6 +181,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         first_delegated: role.metadata.first_delegated,
         last_delegated: role.metadata.last_delegated,
         total_delegated: role.metadata.total_delegated,
+        lead_delegated: role.metadata.lead_delegated,
       )
 
       if params.key?(:status)

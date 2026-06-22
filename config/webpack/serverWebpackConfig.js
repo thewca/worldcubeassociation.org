@@ -1,13 +1,9 @@
 const webpack = require('webpack');
 
-const { merge, config } = require('shakapacker');
+const { config } = require('shakapacker-webpack');
 const commonWebpackConfig = require('./commonWebpackConfig');
 
 const configureServer = () => {
-  // We need to use "merge" because the clientConfigObject, EVEN after running
-  // toWebpackConfig() is a mutable GLOBAL. Thus any changes, like modifying the
-  // entry value will result in changing the client config!
-  // Using webpack-merge into an empty object avoids this issue.
   const serverWebpackConfig = commonWebpackConfig();
 
   // We just want the single server bundle entry

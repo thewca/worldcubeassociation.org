@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@chakra-ui/react";
+import { Button, Table } from "@chakra-ui/react";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
 import { toaster } from "@/components/ui/toaster";
@@ -15,7 +15,8 @@ export default function BulkQuitButton({
   competitionId: string;
   roundId: string;
 }) {
-  const { liveResultsByRegistrationId, pendingLiveResults } = useLiveResults();
+  const { liveResultsByRegistrationId, pendingLiveResults, competitors } =
+    useLiveResults();
   const api = useAPI();
   const { t } = useT();
 
@@ -52,6 +53,31 @@ export default function BulkQuitButton({
       confirmButton: t("competitions.live.admin.quit.quit_confirm", {
         count: emptyRegistrationIds.length,
       }),
+      content: (
+        <Table.Root size="sm">
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeader>
+                {t("competitions.live.admin.quit.bulk.id")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("competitions.live.admin.quit.bulk.name")}
+              </Table.ColumnHeader>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {emptyRegistrationIds.map((id) => {
+              const competitor = competitors.get(id);
+              return (
+                <Table.Row key={id}>
+                  <Table.Cell>{competitor?.registrant_id}</Table.Cell>
+                  <Table.Cell>{competitor?.name}</Table.Cell>
+                </Table.Row>
+              );
+            })}
+          </Table.Body>
+        </Table.Root>
+      ),
     }).then(() =>
       bulkQuit({
         params: { path: { competitionId, roundId } },
