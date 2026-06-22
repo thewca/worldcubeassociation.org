@@ -80,7 +80,7 @@
     "not dead"
   ],
   "devDependencies": {
-    "@babel/core": "^7.29.7",
+    "@babel/core": "^8.0.1",
     "@babel/plugin-proposal-class-properties": "^7.17.12",
     "@babel/plugin-proposal-decorators": "^7.29.7",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
