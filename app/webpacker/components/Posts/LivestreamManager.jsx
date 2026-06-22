@@ -15,7 +15,7 @@ function LivestreamManager({ testVideoIdProp, liveVideoIdProp }) {
   const [confirmUpdateOpen, setConfirmUpdateOpen] = useInputState(false);
   const [confirmPromoteOpen, setConfirmPromoteOpen] = useInputState(false);
 
-  const defaultVideoId = '29wB-ZyfAPo';
+  const defaultVideoId = 'tSeqWPs_E7w';
 
   const {
     mutate: updateTestVideoIdMutation,
@@ -64,7 +64,7 @@ function LivestreamManager({ testVideoIdProp, liveVideoIdProp }) {
       <List bulleted>
         <List.Item>Update the chosen VideoID by following the steps below</List.Item>
         <List.Item>
-          The WC2025 banner will disappear if the &quot;Live videoId&quot; ever becomes blank
+          The competition banner will disappear if the &quot;Live videoId&quot; ever becomes blank
         </List.Item>
         <List.Item>
           {'The live videoId can\'t be updated directly - you have to set the test videoId first (Step 1),'
@@ -124,7 +124,7 @@ function LivestreamManager({ testVideoIdProp, liveVideoIdProp }) {
           >
             <Icon name="play" />
             {' '}
-            Use WC2025 Promo Video
+            Use default video
           </Button>
 
           <Button
@@ -221,7 +221,7 @@ function LivestreamManager({ testVideoIdProp, liveVideoIdProp }) {
         onConfirm={submitPromote}
         content={
           testVideoId === ''
-            ? 'WARNING! You are submitting a blank videoId - this will hide the WC2025 banner and return the homepage to nornmal. Are you sure?'
+            ? 'WARNING! You are submitting a blank videoId - this will hide the livestream feature banner and return the homepage to normal. Are you sure?'
             : `Are you sure you want to submit this VideoID: ${testVideoId}?`
         }
       />
