@@ -161,10 +161,12 @@ en:
     short:
       ranking: "Top %{ranking}"
       percent: "Top %{percent}%"
+      all_advance: "All advance"
       attempt_result:
         time: "%{round_format} < %{time}"
         moves: "%{round_format} < %{moves}"
         points: "%{round_format} > %{points}"
+    all_advance: "All competitors advance"
     ranking: "Top %{ranking} advance to next round"
     percent: "Top %{percent}% advance to next round"
     attempt_result:

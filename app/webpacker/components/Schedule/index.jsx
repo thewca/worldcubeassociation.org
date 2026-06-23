@@ -150,7 +150,6 @@ export default function Schedule({
           activeVenueOrNull={activeVenueOrNull}
           competitionName={competitionName}
           wcifEvents={wcifEvents}
-          linkedRounds={linkedRounds}
         />
       )}
     </>
