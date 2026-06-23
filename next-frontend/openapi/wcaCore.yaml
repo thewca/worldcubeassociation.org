@@ -26,6 +26,9 @@ paths:
       $ref: 'paths/competitions/live/UpdateLiveResults.yaml'
     get:
       $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/batch:
+    post:
+      $ref: 'paths/competitions/live/BatchSubmitLiveResults.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit:
     $ref: 'paths/competitions/live/GetNextCompetitorIfQuit.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/addable_competitors:

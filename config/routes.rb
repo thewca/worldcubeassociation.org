@@ -377,6 +377,7 @@ Rails.application.routes.draw do
           put '/rounds/:round_id/:registration_id' => 'live#add_competitor_to_round', as: :add_competitor_to_round
           post '/rounds/:round_id' => 'live#add_or_update_result', as: :add_results
           patch '/rounds/:round_id' => 'live#add_or_update_result', as: :update_results
+          post '/rounds/:round_id/batch' => 'live#batch_add_or_update_results', as: :batch_add_results
           get '/podiums' => 'live#podiums', as: :live_podiums
           get '/registrations/:registration_id' => 'live#by_person', as: :get_live_by_person
           get '/rounds' => 'live#rounds', as: :live_admin

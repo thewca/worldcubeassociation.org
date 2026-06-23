@@ -30,6 +30,34 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     render json: { status: "ok" }
   end
 
+  def batch_add_or_update_results
+    entries = params.expect(results: [[:registration_id, { attempts: [%i[value attempt_number]] }]])
+    round_id = params.require(:round_id)
+
+    round = Round.find_by_wcif_id!(round_id, @competition.id, includes: [:live_results])
+
+    require_manage!(@competition)
+
+    return render json: { status: "round is not open" }, status: :unprocessable_content unless round.live_results.any?
+
+    job_entries = entries.map do |entry|
+      registration_id = entry[:registration_id]
+      results = entry[:attempts]
+
+      live_result = round.live_results.find_by(registration_id: registration_id)
+
+      return render json: { status: "user is not part of this round", registration_id: registration_id }, status: :unprocessable_content if live_result.blank?
+
+      return render json: { status: "Values cannot be 0, please omit them instead", registration_id: registration_id }, status: :unprocessable_content if results.any? { it[:value].to_i.zero? }
+
+      { live_result: live_result, results: results }
+    end
+
+    BatchUpdateLiveResultJob.perform_later(round, job_entries, @current_user.id)
+
+    render json: { status: "ok" }
+  end
+
   def round_results
     wcif_id = params.require(:round_id)
 

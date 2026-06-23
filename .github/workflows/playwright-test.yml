@@ -22,7 +22,7 @@ jobs:
       PW_TEST_CONNECT_WS_ENDPOINT: "" # Override Docker orchestra default
       PW_TEST_BASE_URL: http://localhost:3001 # Talk to Next directly on this machine
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
