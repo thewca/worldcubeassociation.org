@@ -136,6 +136,7 @@ class LiveResult < ApplicationRecord
       competition_id: self.competition_id,
       person_id: self.registrant_id,
       pos: self.local_pos,
+      global_pos: self.global_pos,
       event_id: self.event_id,
       format_id: self.format_id,
       round_type_id: self.round_type_id,

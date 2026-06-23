@@ -93,7 +93,9 @@ services:
         condition: service_healthy
 
   wca_payload_db:
-    image: mongo:8
+    build:
+      context: ./next-frontend
+      dockerfile: Dockerfile.payload
     container_name: "payload_db"
     command:
       - --quiet

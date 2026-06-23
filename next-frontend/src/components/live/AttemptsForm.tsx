@@ -6,6 +6,7 @@ import {
   Portal,
   useListCollection,
   VStack,
+  Text,
 } from "@chakra-ui/react";
 import AttemptResultField from "@/app/(wca)/(with-background)/dashboard/AttemptResultField";
 import _ from "lodash";
@@ -78,7 +79,7 @@ export default function AttemptsForm({
 
     if (submissionWarning) {
       confirm({
-        content: submissionWarning,
+        content: <Text>{submissionWarning}</Text>,
         confirmButton: "Submit",
       }).then(() => handleSubmit(refocusInput));
     } else {
@@ -195,7 +196,7 @@ function AttemptFieldsNav({
       e.key === "Enter" ||
       e.key === "ArrowDown" ||
       e.code === "NumpadAdd" ||
-      e.key === "Tab"
+      (e.key === "Tab" && !e.shiftKey)
     ) {
       e.preventDefault();
       const from = e.target as HTMLElement;
@@ -207,7 +208,11 @@ function AttemptFieldsNav({
       return;
     }
 
-    if (e.key === "ArrowUp" || e.code === "NumpadSubtract") {
+    if (
+      e.key === "ArrowUp" ||
+      e.code === "NumpadSubtract" ||
+      (e.key === "Tab" && e.shiftKey)
+    ) {
       e.preventDefault();
       const from = e.target as HTMLElement;
       flushSync(() => from.blur());
