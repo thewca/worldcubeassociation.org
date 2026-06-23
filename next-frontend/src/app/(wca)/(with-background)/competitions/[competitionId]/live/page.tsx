@@ -32,7 +32,7 @@ export default async function LiveOverview({
   }
 
   const canManage =
-    !!permissions && permissions.canAdministerCompetition(competitionId);
+    !!permissions && permissions.canScoretakeCompetition(competitionId);
 
   const {
     error: roundsError,
