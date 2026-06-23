@@ -18,6 +18,10 @@ import OfficersAndBoard from '../react_on_rails_components/OfficersAndBoard';
 import Delegates from '../react_on_rails_components/Delegates';
 import TeamsCommitteesCouncils from '../react_on_rails_components/TeamsCommitteesCouncils';
 import Translators from '../react_on_rails_components/Translators';
+import PersonsList from '../react_on_rails_components/Persons/List';
+import UsersList from '../react_on_rails_components/Users/List';
+import ResultsRankings from '../react_on_rails_components/Results/Rankings';
+import ResultsRecords from '../react_on_rails_components/Results/Records';
 import {
   getUrlParams,
   setUrlParams,
@@ -55,6 +59,10 @@ ReactOnRails.register({
   Delegates,
   TeamsCommitteesCouncils,
   Translators,
+  PersonsList,
+  UsersList,
+  ResultsRankings,
+  ResultsRecords,
 });
 
 // Support component names relative to this directory:
