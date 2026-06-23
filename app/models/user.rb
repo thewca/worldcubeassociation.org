@@ -806,6 +806,9 @@ class User < ApplicationRecord
       can_administer_competitions: {
         scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id),
       },
+      can_scoretake_competitions: {
+        scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id) + scoretaking_competition_ids,
+      },
       can_view_delegate_admin_page: {
         scope: can_view_delegate_matters? ? "*" : [],
       },
@@ -920,6 +923,14 @@ class User < ApplicationRecord
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
       competition.delegates.flat_map(&:regional_delegates).compact.include?(self) ||
       wic_team?
+  end
+
+  def can_scoretake_competition?(competition)
+    can_manage_competition?(competition) || competition.scoretakers.include?(self)
+  end
+
+  def scoretaking_competition_ids
+    CompetitionScoretaker.where(user_id: id).pluck(:competition_id)
   end
 
   def can_manage_any_not_over_competitions?
