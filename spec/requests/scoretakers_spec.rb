@@ -4,34 +4,38 @@ require "rails_helper"
 
 RSpec.describe "Scoretakers API" do
   let!(:delegate) { create(:delegate) }
-  let!(:competition) { create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate]) }
+  let!(:competition) { create(:competition, :with_valid_schedule, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate]) }
   let!(:competitor) { create(:user) }
 
-  describe "managing scoretakers" do
-    it "lets a manager add and remove a scoretaker" do
-      sign_in delegate
+  # Per the WCIF standard, scoretakers are the people with a `staff-dataentry` assignment.
+  def assign_scoretaker(user)
+    registration = create(:registration, :accepted, competition: competition, user: user)
+    Assignment.create!(
+      registration: registration,
+      schedule_activity: competition.all_activities.first,
+      assignment_code: Assignment::SCORETAKER_ASSIGNMENT_CODE,
+    )
+  end
 
-      post api_v1_competition_scoretakers_path(competition.id), params: { user_id: competitor.id }
-      expect(response).to be_successful
-      expect(competition.reload.scoretakers).to include(competitor)
+  describe "determining scoretakers" do
+    it "treats users with a staff-dataentry assignment as scoretakers" do
+      assign_scoretaker(competitor)
 
-      delete api_v1_competition_scoretaker_path(competition.id, competitor.id)
-      expect(response).to be_successful
-      expect(competition.reload.scoretakers).not_to include(competitor)
+      expect(competition.scoretakers).to include(competitor)
+      expect(competitor.can_scoretake_competition?(competition)).to be true
     end
 
-    it "does not let a random user add a scoretaker" do
-      sign_in create(:user)
+    it "does not treat users without that assignment as scoretakers" do
+      create(:registration, :accepted, competition: competition, user: competitor)
 
-      post api_v1_competition_scoretakers_path(competition.id), params: { user_id: competitor.id }
-      expect(response).not_to be_successful
-      expect(competition.reload.scoretakers).to be_empty
+      expect(competition.scoretakers).not_to include(competitor)
+      expect(competitor.can_scoretake_competition?(competition)).to be false
     end
   end
 
   describe "scoretaking permission" do
     it "allows a designated scoretaker to submit results" do
-      competition.competition_scoretakers.create!(user: competitor)
+      assign_scoretaker(competitor)
       sign_in competitor
 
       round = create(:round, competition: competition, event_id: "333")

@@ -930,7 +930,7 @@ class User < ApplicationRecord
   end
 
   def scoretaking_competition_ids
-    CompetitionScoretaker.where(user_id: id).pluck(:competition_id)
+    registrations.joins(:assignments).merge(Assignment.scoretaker).distinct.pluck(:competition_id)
   end
 
   def can_manage_any_not_over_competitions?
