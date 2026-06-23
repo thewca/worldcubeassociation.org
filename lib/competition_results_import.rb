@@ -22,6 +22,8 @@ module CompetitionResultsImport
       Scramble.where(competition_id: competition.id).delete_all
       InboxPerson.import!(persons_to_import)
       InboxResult.import!(results_to_import)
+      # For non-linked rounds global_pos equals pos; linked rounds get recomputed below.
+      InboxResult.where(competition_id: competition.id).update_all("global_pos = pos")
       # Compute global_pos for inbox results with linked_rounds
       competition.rounds.includes(:linked_round).where.not(linked_round_id: nil).find_each(&:recompute_inbox_results_global_pos)
 
