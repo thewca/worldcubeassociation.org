@@ -37,10 +37,13 @@ const fadeStyle = ({
   style?: React.CSSProperties;
 }): React.CSSProperties => ({
   opacity: isVisible ? 0 : 1,
-  animation: isVisible
-    ? `fadeIn ${transition?.enter?.duration ?? 1}s ease-in-out`
-    : `fadeOut ${transition?.exit?.duration ?? 1}s ease-in-out`,
+  // Longhand only — mixing the `animation` shorthand with `animationDelay`
+  // makes React warn when the delay is conditionally added/removed.
+  animationName: isVisible ? "fadeIn" : "fadeOut",
+  animationDuration: `${(isVisible ? transition?.enter?.duration : transition?.exit?.duration) ?? 1}s`,
+  animationTimingFunction: "ease-in-out",
   animationFillMode: "forwards",
+  animationDelay: "0ms",
   ...style,
 });
 
