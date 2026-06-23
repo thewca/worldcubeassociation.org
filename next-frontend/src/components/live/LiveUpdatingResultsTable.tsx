@@ -75,7 +75,6 @@ export default function LiveUpdatingResultsTable({
         disableProjectorView={disableProjectorView}
         formatId={formatId}
         eventId={eventId}
-        forecastView={false}
         title={title}
       />
     );

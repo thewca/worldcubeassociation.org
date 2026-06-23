@@ -21,14 +21,8 @@ import {
   mergeAndOrderResults,
 } from "@/lib/live/mergeAndOrderResults";
 import { LiveTableHeader } from "@/components/live/Cells";
+import { padSkipped } from "@/lib/live/padSkipped";
 import { useT } from "@/lib/i18n/useI18n";
-
-const padSkipped = (attempts: number[], expectedNumberOfAttempts: number) => {
-  return [
-    ...attempts,
-    ...Array(expectedNumberOfAttempts - attempts.length).fill(0),
-  ];
-};
 
 const fadeStyle = ({
   isVisible,
@@ -50,18 +44,10 @@ const fadeStyle = ({
   ...style,
 });
 
-type StatusType = symbol;
-
-const STATUS: Record<string, StatusType> = {
-  SHOWING: Symbol("showing"),
-  SHOWN: Symbol("shown"),
-  HIDING: Symbol("hiding"),
-  PAUSED: Symbol("paused"),
-} as const;
+type Status = "showing" | "shown" | "hiding" | "paused";
 
 const DURATION = {
   SHOWN: 10 * 1000,
-  FORECAST_SHOWN: 20 * 1000,
   SHOWING: 3000,
   HIDING: 1000,
 } as const;
@@ -73,7 +59,6 @@ interface ResultsProjectorProps {
   eventId: string;
   title: string;
   disableProjectorView: () => void;
-  forecastView?: boolean;
 }
 
 /* (window height - app bar - table header) / row height */
@@ -87,10 +72,9 @@ function ResultsProjector({
   eventId,
   title,
   disableProjectorView,
-  forecastView,
   competitors,
 }: ResultsProjectorProps) {
-  const [status, setStatus] = useState<StatusType>(STATUS.SHOWING);
+  const [status, setStatus] = useState<Status>("showing");
   const [topResultIndex, setTopResultIndex] = useState<number>(0);
 
   const { t } = useT();
@@ -110,45 +94,36 @@ function ResultsProjector({
 
   useEffect(() => {
     const nonemptyResults = nonemptyResultsRef.current;
-    if (status === STATUS.PAUSED) {
+    if (status === "paused") {
       return;
     }
-    if (status === STATUS.SHOWN) {
+    if (status === "shown") {
       if (nonemptyResults.length > getNumberOfRows()) {
-        const timeout = setTimeout(
-          () => {
-            setStatus(STATUS.HIDING);
-          },
-          forecastView ? DURATION.FORECAST_SHOWN : DURATION.SHOWN,
-        );
+        const timeout = setTimeout(() => {
+          setStatus("hiding");
+        }, DURATION.SHOWN);
         return () => clearTimeout(timeout);
       } else {
         return;
       }
     }
-    if (status === STATUS.SHOWING) {
+    if (status === "showing") {
       const timeout = setTimeout(() => {
-        setStatus(STATUS.SHOWN);
+        setStatus("shown");
       }, DURATION.SHOWING);
       return () => clearTimeout(timeout);
     }
-    if (status === STATUS.HIDING) {
+    if (status === "hiding") {
       const timeout = setTimeout(() => {
-        setStatus(STATUS.SHOWING);
+        setStatus("showing");
         setTopResultIndex((topResultIndex) => {
           const newIndex = topResultIndex + getNumberOfRows();
-          return newIndex > nonemptyResults.length ||
-            (forecastView &&
-              !nonemptyResults[topResultIndex].advancing &&
-              !nonemptyResults[newIndex].advancing)
-            ? 0
-            : newIndex;
+          return newIndex >= nonemptyResults.length ? 0 : newIndex;
         });
       }, DURATION.HIDING);
       return () => clearTimeout(timeout);
     }
-    throw new Error(`Unrecognized status: ${String(status)}`);
-  }, [status, forecastView]);
+  }, [status]);
 
   return (
     <Dialog.Root open={true} size="full">
@@ -176,11 +151,11 @@ function ResultsProjector({
                   {title}
                 </Text>
                 <Box flex={1} />
-                {status === STATUS.PAUSED ? (
+                {status === "paused" ? (
                   <IconButton
                     colorPalette="whiteAlpha"
                     variant="ghost"
-                    onClick={() => setStatus(STATUS.HIDING)}
+                    onClick={() => setStatus("hiding")}
                     aria-label="Play"
                     size="lg"
                     mr={2}
@@ -191,7 +166,7 @@ function ResultsProjector({
                   <IconButton
                     colorPalette="whiteAlpha"
                     variant="ghost"
-                    onClick={() => setStatus(STATUS.PAUSED)}
+                    onClick={() => setStatus("paused")}
                     aria-label="Pause"
                     size="lg"
                     mr={2}
@@ -218,11 +193,9 @@ function ResultsProjector({
                   {nonemptyResults
                     .slice(topResultIndex, topResultIndex + getNumberOfRows())
                     .map((competitor, index) => {
-                      const isVisible = [
-                        STATUS.SHOWING,
-                        STATUS.SHOWN,
-                        STATUS.PAUSED,
-                      ].includes(status);
+                      const isVisible = (
+                        ["showing", "shown", "paused"] as Status[]
+                      ).includes(status);
 
                       return competitor.results.map((result) => (
                         <Table.Row
@@ -238,7 +211,7 @@ function ResultsProjector({
                               exit: { duration: DURATION.HIDING / 1000 },
                             },
                             style:
-                              status === STATUS.SHOWING
+                              status === "showing"
                                 ? { animationDelay: `${index * 100}ms` }
                                 : {},
                           })}
@@ -264,11 +237,14 @@ function ResultsProjector({
                             <Flag code={competitor.country_iso2} />
                           </Table.Cell>
                           {padSkipped(
-                            result.attempts.map((a) => a.value),
+                            result.attempts,
                             format.expected_solve_count,
-                          ).map((attemptResult, attemptIndex) => (
-                            <Table.Cell key={attemptIndex} textAlign="right">
-                              {formatAttemptResult(attemptResult, eventId)}
+                          ).map((attempt) => (
+                            <Table.Cell
+                              key={attempt.attempt_number}
+                              textAlign="right"
+                            >
+                              {formatAttemptResult(attempt.value, eventId)}
                             </Table.Cell>
                           ))}
                           {stats.map(
