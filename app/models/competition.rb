@@ -26,6 +26,7 @@ class Competition < ApplicationRecord
   has_many :competition_venues, dependent: :destroy
   has_many :venue_countries, -> { distinct }, through: :competition_venues, source: :country
   has_many :venue_continents, -> { distinct }, through: :competition_venues, source: :continent
+  belongs_to :main_venue, class_name: "CompetitionVenue", optional: true
   belongs_to :country
   has_one :continent, through: :country
   has_many :championships, dependent: :delete_all
@@ -199,6 +200,7 @@ class Competition < ApplicationRecord
     results_posted_by
     posting_by
     main_event_id
+    main_venue_id
     lead_delegate_id
     waiting_list_deadline_date
     event_change_deadline_date
@@ -343,6 +345,7 @@ class Competition < ApplicationRecord
   REGISTRATION_OPENING_EARLIEST = 172_800
 
   validates :city_name, city: true
+  validates :main_venue_id, presence: { unless: :is_multi_location? }
 
   # We have stricter validations for confirming a competition
   validates :city_name, :country_id, :venue, :venue_address, :latitude, :longitude, presence: true, if: :confirmed_or_visible?

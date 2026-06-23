@@ -92,6 +92,8 @@ module DatabaseDumper
           results_posted_by
           posting_by
           main_event_id
+          main_venue_id
+          is_multi_location
           lead_delegate_id
           cancelled_at
           cancelled_by
