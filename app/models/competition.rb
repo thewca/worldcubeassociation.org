@@ -16,6 +16,8 @@ class Competition < ApplicationRecord
   belongs_to :lead_delegate, class_name: "User", optional: true
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
+  has_many :competition_scoretakers, dependent: :delete_all
+  has_many :scoretakers, through: :competition_scoretakers, source: :user
   has_many :media, class_name: "CompetitionMedium", dependent: :delete_all
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab", inverse_of: :competition
   has_one :delegate_report, dependent: :destroy
