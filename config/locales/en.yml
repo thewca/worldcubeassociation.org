@@ -1430,7 +1430,7 @@ en:
           disconnected: "Disconnected"
       podiums:
         title: "Podiums"
-        undetermined: "Podiums to be determined"
+        undetermined: "To Be Determined"
         none: "There are no podiums yet!"
       admin:
         open: "Open"

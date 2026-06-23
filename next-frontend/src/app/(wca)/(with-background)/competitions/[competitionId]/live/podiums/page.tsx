@@ -1,4 +1,4 @@
-import { Container, Heading, Text, VStack } from "@chakra-ui/react";
+import { Container, Heading, Separator, Text } from "@chakra-ui/react";
 import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { Fragment } from "react";
 import { getLivePodiums } from "@/lib/wca/live/getLivePodiums";
@@ -46,6 +46,22 @@ export default async function PodiumsPage({
     <Container bg="bg">
       <Heading textStyle="h1">{t("competitions.live.podiums.title")}</Heading>
       {noPodiums && <Text>{t("competitions.live.podiums.none")}</Text>}
+      {!noPodiums && eventsNotFinished.length > 0 && (
+        <>
+          <Heading textStyle="h3">
+            {t("competitions.live.podiums.undetermined")}
+          </Heading>
+          <Text>
+            {eventsNotFinished
+              .map((finalRound) => {
+                const { eventId } = parseActivityCode(finalRound.id);
+                return events.byId[eventId].name;
+              })
+              .join(", ")}
+          </Text>
+          <Separator my="4" />
+        </>
+      )}
       {eventsFinished.map((finalRound) => {
         const { eventId } = parseActivityCode(finalRound.id);
 
@@ -78,19 +94,6 @@ export default async function PodiumsPage({
           </Fragment>
         );
       })}
-      {!noPodiums && eventsNotFinished.length > 0 && (
-        <>
-          <Heading textStyle="h3">
-            {t("competitions.live.podiums.undetermined")}
-          </Heading>
-          <VStack align="left">
-            {eventsNotFinished.map((finalRound) => {
-              const { eventId } = parseActivityCode(finalRound.id);
-              return events.byId[eventId].name;
-            })}
-          </VStack>
-        </>
-      )}
     </Container>
   );
 }
