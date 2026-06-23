@@ -265,8 +265,8 @@ export function LiveResultAdminProvider({
 
     if (batchMode) {
       // Stage locally; nothing hits the server until "Submit Batch" is clicked.
-      setBatch([
-        ...batch.filter((e) => e.registration_id !== registrationId),
+      setBatch((prev) => [
+        ...prev.filter((e) => e.registration_id !== registrationId),
         body,
       ]);
       setRegistrationId(undefined);
