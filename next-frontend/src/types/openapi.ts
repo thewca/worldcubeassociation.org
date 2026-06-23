@@ -38,41 +38,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/competitions/{competitionId}/scoretakers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List the scoretakers of a competition */
-        get: operations["listScoretakers"];
-        put?: never;
-        /** Add a scoretaker to a competition */
-        post: operations["addScoretaker"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/competitions/{competitionId}/scoretakers/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Remove a scoretaker from a competition */
-        delete: operations["removeScoretaker"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/v1/competitions/{competitionId}/live/rounds": {
         parameters: {
             query?: never;
@@ -997,10 +962,6 @@ export interface components {
             key: "approval";
         };
         RegistrationConfig: components["schemas"]["RequirementsStepConfig"] | components["schemas"]["CompetingStepConfig"] | components["schemas"]["PaymentStepConfig"] | components["schemas"]["ApprovalStepConfig"];
-        ScoretakerList: {
-            user_id: number;
-            name: string;
-        }[];
         WcifTimeLimit: {
             /** @example 18000 */
             centiseconds: number;
@@ -1982,80 +1943,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RegistrationConfig"][];
-                };
-            };
-        };
-    };
-    listScoretakers: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                competitionId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The competition's scoretakers */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ScoretakerList"];
-                };
-            };
-        };
-    };
-    addScoretaker: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                competitionId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    user_id: number;
-                };
-            };
-        };
-        responses: {
-            /** @description The competition's scoretakers after adding */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ScoretakerList"];
-                };
-            };
-        };
-    };
-    removeScoretaker: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                competitionId: string;
-                /** @description The user id of the scoretaker to remove */
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The competition's scoretakers after removal */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ScoretakerList"];
                 };
             };
         };
