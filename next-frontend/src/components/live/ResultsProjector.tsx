@@ -272,9 +272,9 @@ function ResultsProjector({
                             </Table.Cell>
                           ))}
                           {stats.map(
-                            ({ name, field, recordTagField }, statIndex) => (
+                            ({ i18nKey, field, recordTagField }, statIndex) => (
                               <Table.Cell
-                                key={name}
+                                key={i18nKey}
                                 textAlign="right"
                                 fontWeight={statIndex === 0 ? 600 : 400}
                               >

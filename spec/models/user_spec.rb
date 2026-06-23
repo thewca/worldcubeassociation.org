@@ -621,6 +621,9 @@ RSpec.describe User do
     end
 
     it "returns true for higher permission officer" do
+      executive_director = create(:executive_director_role).user
+      expect(executive_director.can_view_all_users?).to be true
+
       chief_operating_officer = create(:chief_operating_officer_role).user
       expect(chief_operating_officer.can_view_all_users?).to be true
     end
@@ -640,6 +643,9 @@ RSpec.describe User do
     end
 
     it "returns true for higher permission officer" do
+      executive_director = create(:executive_director_role).user
+      expect(executive_director.can_edit_user?(user)).to be true
+
       chief_operating_officer = create(:chief_operating_officer_role).user
       expect(chief_operating_officer.can_edit_user?(user)).to be true
     end

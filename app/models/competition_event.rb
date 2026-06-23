@@ -32,6 +32,22 @@ class CompetitionEvent < ApplicationRecord
     errors.add(:rounds, "#{numbers} is wrong") if numbers != (1..remaining_rounds.length).to_a
   end
 
+  def advancing_competitor_ids
+    live_competitors.ids
+  end
+
+  def live_competitors
+    registrations.accepted.competing
+  end
+
+  def advancement_results
+    []
+  end
+
+  def score_taking_done?
+    true
+  end
+
   def currency_code
     competition&.currency_code
   end
@@ -56,34 +72,114 @@ class CompetitionEvent < ApplicationRecord
     competition.allow_registration_without_qualification || qualification.nil? || qualification.can_register?(user, event_id)
   end
 
-  def to_wcif
+  def as_wcif_participation_source(_target_round)
     {
-      "id" => self.event.id,
-      "rounds" => self.rounds.map(&:to_wcif),
-      "extensions" => wcif_extensions.map(&:to_wcif),
-      "qualification" => qualification&.to_wcif,
+      "type" => "registrations",
     }
   end
 
-  def load_wcif!(wcif)
+  def v2_qualification_wcif
+    return nil if qualification_condition.blank?
+
+    {
+      "earliestResultDate" => nil,
+      "latestResultDate" => qualification_latest_date&.strftime("%Y-%m-%d"),
+      "resultCondition" => qualification_condition.to_wcif,
+    }
+  end
+
+  def to_wcif(version: Competition::WCIF_STABLE_VERSION)
+    at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+
+    {
+      "id" => self.event.id,
+      "rounds" => self.rounds.map { it.to_wcif(version: version) },
+      "extensions" => wcif_extensions.map(&:to_wcif),
+      "qualification" => at_least_v2 ? v2_qualification_wcif : qualification&.to_wcif,
+    }
+  end
+
+  def self.load_wcif_qualification(wcif_event, version: Competition::WCIF_STABLE_VERSION)
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      json_obj = wcif_event['qualification']
+
+      # Most events actually don't have a qualification, so return early.
+      return nil if json_obj.nil?
+
+      result_condition = json_obj['resultCondition']
+
+      v2_wcif_type = result_condition['type']
+      v1_wcif_type = result_condition['value'].present? ? v2_wcif_type.gsub('resultAchieved', 'attemptResult') : v2_wcif_type.gsub('resultAchieved', 'anyResult')
+
+      Qualification.new(
+        wcif_type: v1_wcif_type,
+        when_date: Date.iso8601(json_obj['latestResultDate']),
+        result_type: result_condition['scope'],
+        level: result_condition['value'],
+      )
+    else
+      Qualification.load(wcif_event["qualification"])
+    end
+  end
+
+  def load_wcif!(wcif, current_user, version: Competition::WCIF_STABLE_VERSION)
     if self.rounds.pluck(:old_type).compact.any?
       raise WcaExceptions::BadApiParameter.new(
         "Cannot edit rounds for a competition which has qualification rounds or b-finals. Please contact WRT or WST if you need to make change to this competition.",
       )
     end
+    at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+    if at_least_v2
+      wcif["rounds"].each do |wcif_round|
+        next if (linked_rounds = wcif_round["linkedRounds"]).blank?
+
+        raise WcaExceptions::BadApiParameter.new("The linking for round #{wcif_round['id']} must contain itself") unless linked_rounds.include?(wcif_round["id"])
+        raise WcaExceptions::BadApiParameter.new("The linking for round #{wcif_round['id']} must be longer than one entry") if linked_rounds.length <= 1
+
+        defined_round_ids = wcif["rounds"].pluck("id")
+        non_existing_round_ids = linked_rounds.reject { defined_round_ids.include?(it) }
+
+        raise WcaExceptions::BadApiParameter.new("The linking for round #{wcif_round['id']} references non-existing rounds [#{non_existing_round_ids.join(',')}]") unless non_existing_round_ids.empty?
+
+        non_matching_siblings = linked_rounds.filter do |sibling_wcif_id|
+          sibling_matching = wcif["rounds"].find { it["id"] == sibling_wcif_id }&.dig("linkedRounds")
+
+          linked_rounds != sibling_matching
+        end
+
+        raise WcaExceptions::BadApiParameter.new("The linking for round #{wcif_round['id']} does not match the linking of rounds [#{non_matching_siblings.join(',')}]") unless non_matching_siblings.empty?
+      end
+    end
     model_rounds = wcif["rounds"].map do |round_wcif|
       round = rounds.find { it.wcif_id == round_wcif["id"] } || rounds.build
-      round.update!(**Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"]))
+      round_attributes = Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"], version: version)
+      # For internal-scoretaking comps `live_results` is the source of truth and `round_results`
+      #   is never read back (see `Round#to_wcif`). Persisting the WCIF snapshot just creates
+      #   stale data that drifts from `live_results`, so we don't store it (and clear any leftovers).
+      round_attributes[:round_results] = [] if self.competition.scoretaking_software_internal?
+      round.update!(**round_attributes)
       WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
       round
     end
+    previously_linked_rounds = model_rounds.filter_map(&:linked_round)
     # Have to do this in a second pass because nested associations (mostly `linked_round` and `participation_source`)
     #   need the record to already exist in the database in order to reference their IDs
-    new_rounds = model_rounds.map do |round|
-      round.update!(**Round.wcif_backlinking(round, model_rounds))
+    new_rounds = wcif["rounds"].zip(model_rounds).map do |round_wcif, round|
+      if at_least_v2
+        # Linked Round already needs to be present for computing the backlinking below
+        round.linked_round = Round.compute_linked_round(round_wcif, round, model_rounds)
+      end
+
+      round.update!(**Round.backport_participation_ruleset(round, model_rounds))
       round
     end
-    wcif_qualification = Qualification.load(wcif["qualification"])
+    previously_linked_rounds.each(&:destroy_if_orphaned)
+    # This is not techincally a third pass, because we're not updating the round itself.
+    #   But for the advancement through rounds, the whole CE already needs to be fully linked up
+    new_rounds.zip(wcif["rounds"]).each do |round, round_wcif|
+      round.load_live_results!(round_wcif["results"], current_user) if round_wcif["results"].present?
+    end
+    wcif_qualification = CompetitionEvent.load_wcif_qualification(wcif, version: version)
     self.update!(
       rounds: new_rounds,
       qualification: wcif_qualification,
@@ -94,16 +190,31 @@ class CompetitionEvent < ApplicationRecord
     self
   end
 
-  def self.wcif_json_schema
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
     {
       "type" => "object",
-      "properties" => {
-        "id" => { "type" => "string" },
-        "rounds" => { "type" => %w[array null], "items" => Round.wcif_json_schema },
-        "competitorLimit" => { "type" => %w[integer null] },
-        "qualification" => Qualification.wcif_json_schema,
-        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
-      },
+      "properties" => self.wcif_json_schema_properties(version: version),
+    }
+  end
+
+  def self.wcif_json_schema_properties(version: Competition::WCIF_STABLE_VERSION)
+    {
+      "id" => { "type" => "string" },
+      "rounds" => { "type" => %w[array null], "items" => Round.wcif_json_schema(version: version) },
+      "competitorLimit" => { "type" => %w[integer null] },
+      "qualification" => if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+                           {
+                             "type" => %w[object null],
+                             "properties" => {
+                               "earliestResultDate" => { "type" => %w[string null] },
+                               "latestResultDate" => { "type" => "string" },
+                               "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
+                             },
+                           }
+                         else
+                           Qualification.wcif_json_schema
+                         end,
+      "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
     }
   end
 end

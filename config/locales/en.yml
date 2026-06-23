@@ -161,10 +161,12 @@ en:
     short:
       ranking: "Top %{ranking}"
       percent: "Top %{percent}%"
+      all_advance: "All advance"
       attempt_result:
         time: "%{round_format} < %{time}"
         moves: "%{round_format} < %{moves}"
         points: "%{round_format} > %{points}"
+    all_advance: "All competitors advance"
     ranking: "Top %{ranking} advance to next round"
     percent: "Top %{percent}% advance to next round"
     attempt_result:
@@ -798,7 +800,7 @@ en:
         weat: "WCA Executive Assistants Team"
         wfc: "WCA Financial Committee"
         wmt: "WCA Marketing Team"
-        wmct: "WCA Major Championships Team"
+        wmct: "WCA Major Championship Team"
         wqac: "WCA Quality Assurance Committee"
         wrc: "WCA Regulations Committee"
         wrt: "WCA Results Team"
@@ -909,6 +911,7 @@ en:
         captcha:
           validation_error: "Please verify that you are not a robot."
       success_message: "Request submitted - we'll get back to you soon."
+      success_message_with_ticket_link_html: "Request submitted - we'll get back to you soon. To view the status of this request, please visit <a href=\"%{link}\">this link</a>."
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
@@ -917,26 +920,24 @@ en:
     latest_news: "Latest news"
     announcements: "Announcements"
     see_all_announcements: "See all announcements"
-    #context: "About us" box
     about_us:
       title: "About us"
       text: "The World Cube Association governs competitions for mechanical puzzles that are operated by twisting groups of pieces, commonly known as 'twisty puzzles'."
-    #context: "Competitions" box
     competitions:
       title: "Competitions"
       text_html: "Find out about competitions near you or competition results. At a competition now and want to see the results? Check out %{wca_live_link}!"
-    #context: "Merchandise" box
     merchandise:
       title: "Merchandise"
       #context: Indicate that the feature is new (like an advertisement)
       ad_new: "New"
       text_html: "Check out our newly launched official merchandise which includes a selection of apparels ranging from T-shirts to Hoodies."
       link_title: "Link to shop"
-    #context: "Records" box
     records:
       title: "Records"
       text: "Check out the current and past records of all official WCA events."
-    #context: "FAQ" box
+    volunteer:
+      title: "Volunteer"
+      text: "Get involved! The WCA has volunteer positions open across different teams. You do not have to be a speedcuber to be a volunteer."
     faq:
       title: "FAQ"
       text: "Take a look at our list of Frequently Asked Questions if you need help with anything. Many questions you have might have an answer there."
@@ -1050,6 +1051,8 @@ en:
       profile: "Profile"
       approve: "Approve"
       approve_confirm: "Are you sure you want to approve WCA ID %{wca_id}?"
+      clear_claim: "Clear claim"
+      clear_claim_confirm: "Are you sure you want to clear the claim for WCA ID %{wca_id}?"
       unconfirmed_email: "This account's email address (%{email}) is not confirmed."
       confirm_new_email: "Changing your email will require confirming the new email before being effective."
       pending_mail_confirmation: "This account is pending confirmation of the new email address %{email}."
@@ -1404,37 +1407,81 @@ en:
       orga_closed_reg_failure: "Cannot close registration."
       no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
       schedule_locked_after_results_submitted: "The schedule cannot be edited after results have been submitted."
+      spots_left:
+        zero: "Competition full"
+        one: "One spot left"
+        other: "%{count} spots left"
     live:
       title: "Live Results"
+      manage_rounds: "Manage Rounds"
+      incompatible:
+        external: "This competition is using external scoretaking software - please consult the competition information to find out where to view live scores."
+        wca_live: "This competition uses WCA Live for scoretaking - please follow this link to see the live results:"
+      round_state:
+        ongoing: "live"
+        done: "done"
       connection:
         initialized: "Connection being initialized"
-        connected: "Connected, results are being updated"
+        connected: "Connected, receiving live results updates"
         disconnected: "Lost connection, results are not being updated"
+        status:
+          initialized: "Initializing"
+          connected: "Connected"
+          disconnected: "Disconnected"
       podiums:
         title: "Podiums"
         undetermined: "Podiums to be determined"
+        none: "There are no podiums yet!"
       admin:
         open: "Open"
         clear: "Clear"
+        close: "Close"
         competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
         round_locked: "locked"
+        edit: "Edit"
+        results: "Results"
+        registration: "Registration"
+        admin_view: "Admin View"
+        results_view: "Results View"
+        double_check: "Double Check"
+        submit_results: "Submit Results"
+        add_to_batch: "Add to Batch"
+        batch_mode: "Batch Mode"
+        submit_batch: "Submit Batch (%{count})"
         warnings:
           omitted: "You've omitted attempt %{attempt_number}. Make sure it's intentional."
           DNS: "There's at least one DNS followed by a valid result. Please ensure it is indeed a DNS and not a DNF."
           impossible: "The result you're trying to submit seems to be impossible: attempt %{attempt_number} is done in less than 30 seconds per cube tried. If you want to enter minutes, don't forget to add two zeros for centiseconds at the end of the score"
           inconsistent: "The result you're trying to submit seem to be inconsistent. There's a big difference between the best single (%{best_single}) and the worst single (%{worst_single}). Please check that the results are accurate."
+          round_locked: "The next round has already been open, any changes won't affect it!"
         quit:
           title: "Quit Competitor"
           next_to_advance:
             one: "The next competitor to advance is %{competitors}"
             other: "The next competitors to advance are %{competitors}"
           advance: "Advance next Competitor"
-          quit_confirm: "Quit Competitor from Round"
+          quit_confirm:
+            one: "Quit Competitor from Round"
+            other: "Quit Competitors from Round"
+          bulk:
+            success: "Successfully quit %{count} competitors"
+            failure: "Failed to bulk quit competitors"
+            menu: "Bulk Quit"
+            id: "ID"
+            name: "Name"
+          quit_menu: "Quit"
           no_next: "No next competitor to advance."
           cancel: "Cancel"
           failed_to_fetch: "Failed to fetch next advancing competitor"
+          still_processing: "Cannot execute 'Quit Competitor' actions while some results are still processing"
+        add_competitor:
+          single_round: "Add Competitor to Round"
+          multiple_rounds:
+            one: "Add Competitor to both Rounds in the Dual Round."
+            other: "Add Competitor to Round, as the second Round of the dual round is not open you will need to add them separately."
       results:
         competitor: "Competitor"
+        mean: "Mean"
       errors:
         round_closed: "The Round is not open yet"
     #context: on the "My competitions" page
@@ -1717,7 +1764,7 @@ en:
           external_website: "Website"
           external_registration_page: "Registration page"
           uses_wca_registration: "I would like to use the WCA website for registration"
-          uses_wca_live: "I will be using WCA Live for scoretaking"
+          scoretaking_software: "Software used for scoretaking"
         entry_fees:
           currency_code: "Currency code"
           base_entry_fee: "Base registration fee"
@@ -1805,7 +1852,7 @@ en:
           external_website: "The website of the competition. Must be a valid http(s) url."
           external_registration_page: "The page where the competitors have to register for the competition. Must be a valid http(s) url."
           uses_wca_registration: ""
-          uses_wca_live: ""
+          scoretaking_software: "Select '%{choice_ilr}' if you want to use Dual Rounds"
         user_settings:
           receive_registration_emails: ""
         entry_fees:
@@ -1861,6 +1908,11 @@ en:
             "disabled": "Disable 'Bulk Auto Accept' button"
             "bulk": "Enable 'Bulk Auto Accept' button in Registrations menu"
             "live": "Automatically accept registrations when payment is made"
+        website:
+          scoretaking_software:
+            external: "An external tool, not maintained by the WCA"
+            wca_live: "WCA Live, hosted on live.worldcubeassociation.org"
+            internal: "Integrated Live Results"
         registration:
           allow_on_the_spot:
             "true": "On the spot registrations will be accepted"
@@ -2161,11 +2213,13 @@ en:
         qualification_html: "Qualification times must be set in other WCA competitions in order to compete."
         qualification_all_events_html: "Qualification times must be set on or before <b>%{date}</b>."
         qualification_some_events_html: "Qualification times in %{events} must be set on or before <b>%{date}</b>."
+        advancement_condition_html: "The number of competitors shown as advancing to the next round is the planned maximum. The actual number may be lower if there are fewer competitors than expected, or if there are ties at the boundary."
       format: "Format"
       time_limit: "Time limit"
       cutoff: "Cutoff"
       proceed: "Proceed"
       qualification: "Qualification"
+      advancement_condition: "Advancement Condition"
     #context: competition's schedule tab
     schedule:
       #context: when selecting the kind of schedule to display
@@ -2597,6 +2651,7 @@ en:
       first_delegated: "First Delegated"
       last_delegated: "Last Delegated"
       total_delegated: "Total Delegated"
+      lead_delegated: "Lead Delegated Competitions"
       history: "History"
   regional_organizations:
     title: "Regional Organizations"
@@ -3002,8 +3057,9 @@ en:
       missing_scrambles_for_competition_error: "Missing scrambles for the competition. Use Scrambles Matcher to add scrambles."
       missing_scrambles_for_group_error: "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
       missing_scrambles_for_multi_error: "[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts."
+      mbld_scrambles_warning: "[%{round_id}] This round includes 3x3x3 Multi-Blind results. Please specify in your submission comment how many scrambles from each scramble set were actually used by competitors, so that WRT can remove the unused extra scrambles."
       multiple_fmc_groups_warning: "[%{round_id}] There are multiple groups of FMC used. If one group of FMC was used, please use the Scrambles Matcher to uncheck the unused scrambles. Otherwise, please include a comment to WRT explaining why multiple groups of FMC were used."
-      wrong_number_of_scramble_sets_error: "[%{round_id}] This round has a different number of scramble sets than specified on the Manage Events tab. Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used."
+      wrong_number_of_scramble_sets_error: "[%{round_id}] This round has a different number of scramble sets (%{actual}) than specified on the Manage Events tab (%{expected}). Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used."
   tickets:
     type:
       edit_person: "Edit Person"

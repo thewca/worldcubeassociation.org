@@ -17,10 +17,10 @@ import {
   mergeAndOrderResults,
 } from "@/lib/live/mergeAndOrderResults";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
-import { LiveCompetitor } from "@/types/live";
+import { LiveCompetitor, PendingLiveResult } from "@/types/live";
 import React, { useState } from "react";
 import LiveResultsMobileModal from "@/components/live/LiveResultsMobileModal";
-import ResultMenu from "@/components/live/Admin/ResultMenu";
+import ResultMenu, { ClickPosition } from "@/components/live/Admin/ResultMenu";
 import { useT } from "@/lib/i18n/useI18n";
 
 export default function LiveResultsTable({
@@ -30,6 +30,7 @@ export default function LiveResultsTable({
   competitionId,
   competitors,
   pendingQuitCompetitors = new Set(),
+  pendingLiveResults = [],
   isAdmin = false,
   showEmpty = true,
   showLinkedRoundsView = false,
@@ -41,6 +42,7 @@ export default function LiveResultsTable({
   competitionId: string;
   competitors: Map<number, LiveCompetitor>;
   pendingQuitCompetitors?: Set<number>;
+  pendingLiveResults?: PendingLiveResult[];
   isAdmin?: boolean;
   showEmpty?: boolean;
   showLinkedRoundsView?: boolean;
@@ -48,32 +50,36 @@ export default function LiveResultsTable({
 }) {
   const { t } = useT();
 
-  const [selectedRow, setSelectedRow] = useState<CompetitorWithResults | null>(
-    null,
-  );
+  const [selectedRow, setSelectedRow] = useState<CompetitorWithResults>();
+  const [menuClickPosition, setMenuClickPosition] = useState<ClickPosition>();
 
   const { eventId } = parseActivityCode(roundWcifId);
 
   const format = formats.byId[formatId];
 
+  const pendingRegistrationIds = new Set(
+    pendingLiveResults.map((r) => r.registration_id),
+  );
+
   const competitorsWithOrderedResults = mergeAndOrderResults(
     resultsByRegistrationId,
     competitors,
     format,
-  );
+  ).filter((c) => !pendingRegistrationIds.has(c.id));
 
   const stats = statColumnsForFormat(format);
 
-  const isMobile = useBreakpointValue({ base: true, md: false });
-  const showFull = !isMobile;
+  const isMobile = useBreakpointValue(
+    { base: true, md: false },
+    { fallback: "md" },
+  );
 
   return (
     <>
-      <Table.Root size="sm">
+      <Table.Root size="sm" interactive={isAdmin}>
         <LiveTableHeader
           format={format}
           isLinked={showLinkedRoundsView}
-          showFull={showFull}
           t={t}
           isAdmin={isAdmin}
         />
@@ -93,14 +99,23 @@ export default function LiveResultsTable({
                 return undefined;
 
               if (!showEmpty && !hasResult) {
-                return null;
+                return undefined;
               }
+
+              const rowKey = `${competitorAndTheirResults.id}-${result.round_wcif_id}`;
 
               return (
                 <Table.Row
-                  key={`${competitorAndTheirResults.id}-${result.round_wcif_id}`}
-                  onClick={() => setSelectedRow(competitorAndTheirResults)}
-                  cursor={isMobile ? "pointer" : undefined}
+                  key={rowKey}
+                  onClick={(e) => {
+                    if (isAdmin) {
+                      setSelectedRow(competitorAndTheirResults);
+                      setMenuClickPosition({ x: e.clientX, y: e.clientY });
+                    } else if (isMobile) {
+                      setSelectedRow(competitorAndTheirResults);
+                    }
+                  }}
+                  cursor={isMobile || isAdmin ? "pointer" : undefined}
                   colorPalette={
                     pendingQuitCompetitors.has(competitorAndTheirResults.id)
                       ? "red"
@@ -126,6 +141,18 @@ export default function LiveResultsTable({
                         competitor={competitorAndTheirResults}
                         competitionId={competitionId}
                         roundId={roundWcifId}
+                        open={selectedRow?.id === competitorAndTheirResults.id}
+                        onOpenChange={(open) => {
+                          setMenuClickPosition(
+                            open ? menuClickPosition : undefined,
+                          );
+                          setSelectedRow(undefined);
+                        }}
+                        clickPos={
+                          selectedRow?.id === competitorAndTheirResults.id
+                            ? menuClickPosition
+                            : undefined
+                        }
                       />
                     </Table.Cell>
                   )}
@@ -134,8 +161,14 @@ export default function LiveResultsTable({
                       competitionId={competitionId}
                       competitor={competitorAndTheirResults}
                       rowSpan={rowSpan}
-                      isAdmin={isAdmin}
-                      link={showFull}
+                      link={!isAdmin}
+                    />
+                  )}
+                  {showText && (
+                    <CountryCell
+                      countryIso2={competitorAndTheirResults.country_iso2}
+                      rowSpan={rowSpan}
+                      hideBelow="md"
                     />
                   )}
                   {showLinkedRoundsView && (
@@ -143,20 +176,12 @@ export default function LiveResultsTable({
                       {parseActivityCode(result.round_wcif_id).roundNumber}
                     </Table.Cell>
                   )}
-                  {showText && showFull && (
-                    <CountryCell
-                      countryIso2={competitorAndTheirResults.country_iso2}
-                      rowSpan={rowSpan}
-                    />
-                  )}
-                  {showFull && (
-                    <LiveAttemptsCells
-                      format={format}
-                      attempts={result.attempts}
-                      eventId={eventId}
-                      competitorId={competitorAndTheirResults.id}
-                    />
-                  )}
+                  <LiveAttemptsCells
+                    format={format}
+                    attempts={result.attempts}
+                    eventId={eventId}
+                    competitorId={competitorAndTheirResults.id}
+                  />
                   <LiveStatCells
                     stats={stats}
                     competitorId={competitorAndTheirResults.id}
@@ -177,6 +202,7 @@ export default function LiveResultsTable({
           competitionId={competitionId}
           eventId={eventId}
           stats={stats}
+          t={t}
         />
       )}
     </>

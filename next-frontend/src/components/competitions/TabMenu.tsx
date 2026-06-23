@@ -25,6 +25,11 @@ import { TFunction } from "i18next";
 import { LuAlignJustify } from "react-icons/lu";
 import { iconMap } from "@/components/icons/iconMap";
 
+function activityCodeFromPath(path: string) {
+  // Matches the eventId out of the path
+  return path.match(/^([a-z0-9_]+)(?:-|$)/)?.[1] ?? null;
+}
+
 export default function TabMenu({
   competitionInfo,
   children,
@@ -34,14 +39,17 @@ export default function TabMenu({
   competitionInfo: components["schemas"]["CompetitionInfo"];
   tabs: CompetitionNavTab[];
 }) {
-  const [openGroup, setOpenGroup] = useState<string | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
   const pathName = usePathname();
   const { t } = useT();
 
+  const isAdminRoute = pathName.includes("/admin");
   const path = _.last(pathName.split("/"));
   const currentPath = path === competitionInfo.id ? "general" : path;
+
+  const eventId = activityCodeFromPath(currentPath!);
+
+  const [openGroup, setOpenGroup] = useState<string | null>(eventId);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <Tabs.Root
@@ -51,12 +59,12 @@ export default function TabMenu({
       orientation="vertical"
       lazyMount
       unmountOnExit
-      colorPalette="white"
     >
       <Tabs.List
         height="fit-content"
         position="sticky"
-        minWidth="fit-content"
+        width="fit-content"
+        min-width="3xs"
         textAlign="center"
         hideBelow="md"
         gap="3"
@@ -64,6 +72,7 @@ export default function TabMenu({
         <TabList
           tabs={tabs}
           t={t}
+          isAdminRoute={isAdminRoute}
           openGroup={openGroup}
           onToggle={(tab: CompetitionNavTab) =>
             setOpenGroup((prev) => (prev === tab.menuKey ? null : tab.menuKey))
@@ -111,6 +120,7 @@ export default function TabMenu({
                   <TabList
                     tabs={tabs}
                     t={t}
+                    isAdminRoute={isAdminRoute}
                     openGroup={openGroup}
                     onToggle={(tab: CompetitionNavTab) =>
                       setOpenGroup((prev) =>
@@ -134,11 +144,13 @@ export default function TabMenu({
 function TabList({
   tabs,
   t,
+  isAdminRoute,
   onToggle,
   openGroup,
 }: {
   tabs: CompetitionNavTab[];
   t: TFunction;
+  isAdminRoute: boolean;
   openGroup: string | null;
   onToggle: (tab: CompetitionNavTab) => void;
 }) {
@@ -146,7 +158,11 @@ function TabList({
     "href" in tab ? (
       <Tabs.Trigger value={tab.menuKey} asChild key={tab.menuKey}>
         <Text asChild textStyle="bodyEmphasis" justifyContent="left">
-          <Link href={tab.href}>{t(tab.i18nKey)}</Link>
+          <Link href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}>
+            {t(
+              isAdminRoute && tab.i18nKeyAdmin ? tab.i18nKeyAdmin : tab.i18nKey,
+            )}
+          </Link>
         </Text>
       </Tabs.Trigger>
     ) : (
@@ -154,6 +170,7 @@ function TabList({
         key={tab.menuKey}
         tab={tab}
         t={t}
+        isAdminRoute={isAdminRoute}
         isOpen={openGroup === tab.menuKey}
         onToggle={() => onToggle(tab)}
       />
@@ -164,11 +181,13 @@ function TabList({
 function CollapsibleTabGroup({
   tab,
   t,
+  isAdminRoute,
   isOpen,
   onToggle,
 }: {
   tab: TabWithChildren;
   t: TFunction;
+  isAdminRoute: boolean;
   isOpen: boolean;
   onToggle: () => void;
 }) {
@@ -185,6 +204,7 @@ function CollapsibleTabGroup({
         py="2"
         borderRadius="md"
         _hover={{ bg: "bg.subtle" }}
+        cursor="pointer"
       >
         <Text textStyle="bodyEmphasis">
           <IconComponent /> {t(i18nKey)}
@@ -193,24 +213,27 @@ function CollapsibleTabGroup({
 
       <Collapsible.Content>
         <Box pl="3" display="flex" flexDirection="column" gap="1" pt="1">
-          {children.map(({ menuKey, disabled, i18nKey, href, badge }) => (
-            <Tabs.Trigger
-              value={menuKey}
-              asChild
-              key={menuKey}
-              disabled={disabled}
-            >
-              <Text asChild justifyContent="left">
-                {disabled ? (
-                  <Text>{t(i18nKey)}</Text>
-                ) : (
-                  <Link href={href}>
-                    {t(i18nKey)} <Spacer /> <Badge>{badge}</Badge>
-                  </Link>
-                )}
-              </Text>
-            </Tabs.Trigger>
-          ))}
+          {children.map(
+            ({ menuKey, disabled, i18nKey, href, hrefAdmin, badgeI18nKey }) => (
+              <Tabs.Trigger
+                value={menuKey}
+                asChild
+                key={menuKey}
+                disabled={disabled}
+              >
+                <Text asChild justifyContent="left">
+                  {disabled ? (
+                    <Text>{t(i18nKey)}</Text>
+                  ) : (
+                    <Link href={isAdminRoute && hrefAdmin ? hrefAdmin : href}>
+                      {t(i18nKey)} <Spacer />
+                      {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
+                    </Link>
+                  )}
+                </Text>
+              </Tabs.Trigger>
+            ),
+          )}
         </Box>
       </Collapsible.Content>
     </Collapsible.Root>

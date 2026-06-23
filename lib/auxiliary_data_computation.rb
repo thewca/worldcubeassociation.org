@@ -34,6 +34,7 @@ module AuxiliaryDataComputation
         FROM concise_agg
           INNER JOIN regional_records_lookup rrl ON rrl.result_id = (concise_agg.value_and_id % 1000000000)
         ON DUPLICATE KEY UPDATE
+          result_id = rrl.result_id,
           #{field} = rrl.#{field},
           value_and_id = concise_agg.value_and_id,
           person_id = rrl.person_id,

@@ -62,6 +62,7 @@ Rails.application.routes.draw do
   post 'users/merge' => 'users#merge'
   post 'users/assign_wca_id' => 'users#assign_wca_id'
   post 'users/confirm_wca_id' => 'users#confirm_wca_id', as: :confirm_wca_id
+  post 'users/clear_claim_wca_id' => 'users#clear_claim_wca_id', as: :clear_claim_wca_id
   get '/users/registrations' => 'users#registrations', as: :helpful_queries_registrations
   get '/users/organized-competitions' => 'users#organized_competitions', as: :helpful_queries_organized_competitions
   get '/users/delegated-competitions' => 'users#delegated_competitions', as: :helpful_queries_delegated_competitions
@@ -181,12 +182,13 @@ Rails.application.routes.draw do
   get 'export/results/WCA_export.tsv' => 'database#tsv_permalink', as: :tsv_permalink
   get 'export/results/:version/:file_type' => 'database#results_permalink', as: :results_permalink
   get 'export/developer' => 'database#developer_export', as: :db_dev_export
-  get 'export/developer/wca-developer-database-dump', to: redirect(DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK))
+  get 'export/developer/wca-developer-database-dump' => "database#dev_export_permalink"
   # redirect from the old path that used to be linked on GitHub
-  get 'wst/wca-developer-database-dump.zip', to: redirect(DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK))
+  get 'wst/wca-developer-database-dump.zip' => "database#dev_export_permalink"
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
   get '/persons/results' => 'admin/persons#results', as: :person_results
+  get '/persons/:wca_id/pending_claims' => "persons#pending_claims", as: :person_pending_claims
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
@@ -274,6 +276,7 @@ Rails.application.routes.draw do
   get 'teams-committees' => 'static_pages#teams_committees'
   get 'tutorial' => redirect('/education', status: 302)
   get 'translators' => 'static_pages#translators'
+  get 'volunteer-positions', to: redirect('https://docs.google.com/spreadsheets/d/13JhGJWDfJR96MYgPpxkSaV2E3bMIdIWjWLuYO83vOls/edit?gid=0#gid=0', status: 302)
   get 'officers-and-board' => 'static_pages#officers_and_board'
 
   resources :regional_organizations, only: %i[new create update edit destroy], path: '/regional-organizations'
@@ -365,12 +368,16 @@ Rails.application.routes.draw do
           get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
           put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
           put '/rounds/:round_id/clear' => "live#clear_round", as: :live_round_clear
+          delete '/rounds/:round_id/close' => "live#close_round", as: :live_round_close
+          delete '/rounds/:round_id/bulk_quit' => 'live#bulk_quit_competitors', as: :bulk_quit_competitors_from_round
           delete '/rounds/:round_id/:registration_id' => 'live#quit_competitor', as: :quit_competitor_from_round
           put '/rounds/:round_id/:registration_id/clear' => 'live#clear_competitor', as: :clear_competitor_in_round
           get '/rounds/:round_id/next_if_quit' => 'live#next_if_quit', as: :next_advancing_competitor
+          get '/rounds/:round_id/addable_competitors' => 'live#can_be_added_to_round', as: :addable_competitors_for_round
           put '/rounds/:round_id/:registration_id' => 'live#add_competitor_to_round', as: :add_competitor_to_round
           post '/rounds/:round_id' => 'live#add_or_update_result', as: :add_results
           patch '/rounds/:round_id' => 'live#add_or_update_result', as: :update_results
+          post '/rounds/:round_id/batch' => 'live#batch_add_or_update_results', as: :batch_add_results
           get '/podiums' => 'live#podiums', as: :live_podiums
           get '/registrations/:registration_id' => 'live#by_person', as: :get_live_by_person
           get '/rounds' => 'live#rounds', as: :live_admin

@@ -10,7 +10,7 @@ namespace :result_conditions do
         all_ce_rounds = competition_event.rounds
 
         all_ce_rounds.each do |round|
-          round.assign_attributes(**Round.wcif_backlinking(round, all_ce_rounds))
+          round.assign_attributes(**Round.backport_participation_ruleset(round, all_ce_rounds))
           # Circumventing validations here on purpose to bypass validations,
           #   because we have a LOT of rounds which were historically valid
           #   but are not valid any longer (think 333ft or switching from 333bf Mo3 to Ao5)

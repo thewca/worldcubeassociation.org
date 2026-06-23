@@ -94,7 +94,10 @@ after "development:users", "development:user_roles" do
             regional_average_record: k.zero? ? "WR" : nil,
           )
           round_format.expected_solve_count.times do |v|
-            result.send(:"value#{v + 1}=", random_wca_value)
+            result.result_attempts.build(
+              attempt_number: v + 1,
+              value: random_wca_value,
+            )
           end
           result.average = result.compute_correct_average
           result.best = result.compute_correct_best

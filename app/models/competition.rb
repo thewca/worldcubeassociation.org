@@ -42,6 +42,7 @@ class Competition < ApplicationRecord
   has_many :scramble_file_uploads, dependent: :delete_all
   has_many :external_scramble_sets, through: :scramble_file_uploads
   has_many :matched_scramble_sets, through: :rounds
+  has_many :matched_scrambles, through: :matched_scramble_sets
   has_many :accepted_registrations, -> { accepted }, class_name: "Registration", foreign_key: "competition_id", inverse_of: :competition
   has_many :accepted_newcomers, -> { where(wca_id: nil) }, through: :accepted_registrations, source: :user
   has_many :duplicate_checker_job_runs, dependent: :delete_all
@@ -497,6 +498,12 @@ class Competition < ApplicationRecord
     competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
+  def spots_left
+    return nil unless competitor_limit_enabled?
+
+    competitor_limit - registrations.accepted_and_paid_pending_count
+  end
+
   def auto_accept_threshold_reached?
     return false if auto_accept_disable_threshold.blank?
 
@@ -504,7 +511,7 @@ class Competition < ApplicationRecord
   end
 
   def number_of_bookmarks
-    bookmarked_users.count
+    bookmarked_competitions.count
   end
 
   def country
@@ -694,6 +701,7 @@ class Competition < ApplicationRecord
              'inbox_persons',
              'external_scramble_sets',
              'matched_scramble_sets',
+             'matched_scrambles',
              'announced_by_user',
              'cancelled_by_user',
              'competition_payment_integrations',
@@ -1033,6 +1041,10 @@ class Competition < ApplicationRecord
     # This can occur for non real country *and* XK!
     # FIXME what to provide for XA, XE, XM, XS?
     ["Europe/London"]
+  end
+
+  def coordinates
+    { latitude: self.latitude_microdegrees, longitude: self.longitude_microdegrees }
   end
 
   private def compute_coordinates
@@ -1393,6 +1405,10 @@ class Competition < ApplicationRecord
     competition_events.any? { |ce| ce.rounds.any?(&:cutoff) }
   end
 
+  def uses_advancement_condition?
+    competition_events.any? { |ce| ce.rounds.any?(&:advancement_condition) }
+  end
+
   def uses_cumulative?
     competition_events.any? { |ce| ce.rounds.any? { |r| r.time_limit.cumulative_round_ids.size == 1 } }
   end
@@ -1435,7 +1451,7 @@ class Competition < ApplicationRecord
   end
 
   def events_with_podium_results
-    results.includes(:result_attempts).podium.order(:pos).group_by(&:event)
+    results.includes(:result_attempts).podium.order(:global_pos).group_by(&:event)
            .sort_by { |event, _results| event.rank }
   end
 
@@ -1738,7 +1754,15 @@ class Competition < ApplicationRecord
     # Respect other `includes` associations that might have been specified ahead of time
     previous_includes = competitions.includes_values
 
-    competitions.includes(:delegates, :organizers, *previous_includes).order(**order)
+    # The delegates and organizers get run through `User#serializable_hash`, so eager load the
+    # associations it touches to avoid an N+1 explosion (one set of queries per delegate/organizer
+    # per competition). See `User::SERIALIZATION_INCLUDES`.
+    competitions.includes(
+      :events, # serialized via the `event_ids` method, one query per competition otherwise
+      { delegates: User::SERIALIZATION_INCLUDES },
+      { organizers: User::SERIALIZATION_INCLUDES },
+      *previous_includes,
+    ).order(**order)
   end
 
   def competing_step_parameters(current_user)
@@ -1811,7 +1835,7 @@ class Competition < ApplicationRecord
   WCIF_STABLE_VERSION = '1.1'
 
   WCIF_VERSION_CATALOGUE = {
-    latest: WCIF_STABLE_VERSION,
+    latest: '2.1.1',
     stable: WCIF_STABLE_VERSION,
   }.freeze
 
@@ -1823,8 +1847,8 @@ class Competition < ApplicationRecord
       "name" => name,
       "shortName" => cell_name,
       "series" => part_of_competition_series? ? competition_series_wcif(authorized: authorized) : nil,
-      "persons" => persons_wcif(authorized: authorized),
-      "events" => events_wcif,
+      "persons" => persons_wcif(authorized: authorized, version: version),
+      "events" => events_wcif(version: version),
       "schedule" => schedule_wcif,
       "competitorLimit" => competitor_limit_enabled? ? competitor_limit : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
@@ -1839,19 +1863,30 @@ class Competition < ApplicationRecord
     }
   end
 
+  # Associations that `to_competition_info` touches: delegates and organizers are serialized
+  # via `User#serializable_hash` (see `User::SERIALIZATION_INCLUDES`), `event_ids` reads the
+  # events association, and `uses_cutoff?`/`uses_qualification?` iterate over every round of
+  # every competition event. Eager load them all to avoid an N+1 explosion.
+  INFO_SERIALIZATION_INCLUDES = [
+    :events,
+    { competition_events: :rounds },
+    { delegates: User::SERIALIZATION_INCLUDES },
+    { organizers: User::SERIALIZATION_INCLUDES },
+  ].freeze
+
   def to_competition_info
     options = {
       only: %w[id name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
                extra_registration_requirements enable_donations refund_policy_limit_date event_change_deadline_date waiting_list_deadline_date
                on_the_spot_registration on_the_spot_entry_fee_lowest_denomination qualification_results event_restrictions
-               base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel
+               base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel scoretaking_software
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled auto_accept_preference auto_accept_disable_threshold],
       # TODO: h2h_rounds is a temporary method, which should be removed when full-fledged H2H backend support is added - expected in Q1 2026
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series? registration_full_and_accepted? h2h_rounds tab_names],
+                  part_of_competition_series? registration_full_and_accepted? spots_left h2h_rounds tab_names],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -1879,14 +1914,14 @@ class Competition < ApplicationRecord
       .transform_values(&:to_wcif)
   end
 
-  def persons_wcif(authorized: false)
+  def persons_wcif(authorized: false, version: WCIF_STABLE_VERSION)
     managers = self.managers
     includes_associations = [
       { assignments: [:schedule_activity] },
-      { user: {
-        current_avatar: [],
-        person: %i[ranks_single ranks_average],
-      } },
+      { user: [
+        :current_avatar,
+        { person: %i[ranks_single ranks_average] },
+      ] },
       :wcif_extensions,
       :events,
     ]
@@ -1899,22 +1934,26 @@ class Competition < ApplicationRecord
                        .select { authorized || it.wcif_status == "accepted" }
                        .map do |registration|
                          managers.delete(registration.user)
-                         registration.user.to_wcif(self, registration, authorized: authorized)
+                         registration.user.to_wcif(self, registration, authorized: authorized, version: version)
     end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
     persons_wcif + managers.map { it.to_wcif(self, authorized: authorized) }
   end
 
-  def events_wcif
+  def events_wcif(version: WCIF_STABLE_VERSION)
     includes_associations = [
-      { rounds: %i[competition_event wcif_extensions] },
+      { rounds: [
+        :competition_event,
+        :wcif_extensions,
+        { participation_source: [:competition_event, { rounds: :competition_event }] },
+      ] },
       :wcif_extensions,
     ]
     competition_events
       .includes(includes_associations)
       .sort_by { |ce| ce.event.rank }
-      .map(&:to_wcif)
+      .map { it.to_wcif(version: version) }
   end
 
   def schedule_wcif
@@ -1934,12 +1973,19 @@ class Competition < ApplicationRecord
     }
   end
 
-  def set_wcif!(wcif, current_user)
-    JSON::Validator.validate!(Competition.wcif_json_schema, wcif)
+  def self.validate_wcif_schema!(wcif, version: WCIF_STABLE_VERSION, is_strict: true)
+    expected_schema = Competition.wcif_json_schema(version: version)
+    JSON::Validator.validate!(expected_schema, wcif, noAdditionalProperties: is_strict)
+  end
+
+  def set_wcif!(wcif, current_user, strict_schema_checks: true)
+    import_version = wcif["formatVersion"]
+
+    Competition.validate_wcif_schema!(wcif, version: import_version, is_strict: strict_schema_checks)
 
     ActiveRecord::Base.transaction do
       set_wcif_series!(wcif["series"], current_user) if wcif["series"]
-      set_wcif_events!(wcif["events"], current_user) if wcif["events"]
+      set_wcif_events!(wcif["events"], current_user, version: import_version) if wcif["events"]
       set_wcif_schedule!(wcif["schedule"]) if wcif["schedule"]
       update_persons_wcif!(wcif["persons"]) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
@@ -1984,7 +2030,7 @@ class Competition < ApplicationRecord
     self.competition_series = competition_series
   end
 
-  def set_wcif_events!(wcif_events, current_user)
+  def set_wcif_events!(wcif_events, current_user, version: WCIF_STABLE_VERSION)
     # Remove extra events.
     competition_events_includes_assotiations = [
       { rounds: %i[competition_event wcif_extensions] },
@@ -2016,7 +2062,7 @@ class Competition < ApplicationRecord
       next unless event_to_be_updated
       raise WcaExceptions::BadApiParameter.new("Cannot update events") unless current_user.can_update_events?(self)
 
-      competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event)
+      competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event, current_user, version: version)
     end
 
     reload
@@ -2116,17 +2162,20 @@ class Competition < ApplicationRecord
     reload
   end
 
-  def self.wcif_json_schema
+  def self.wcif_json_schema(version: WCIF_STABLE_VERSION)
     {
       "type" => "object",
+      # Normally we want to force tools to tell us which version they're patching,
+      #   but as of writing this comment we need more time to tell that to tools.
+      # "required" => %w[formatVersion],
       "properties" => {
         "formatVersion" => { "type" => "string" },
         "id" => { "type" => "string" },
         "name" => { "type" => "string" },
         "shortName" => { "type" => "string" },
         "series" => CompetitionSeries.wcif_json_schema,
-        "persons" => { "type" => "array", "items" => User.wcif_json_schema },
-        "events" => { "type" => "array", "items" => CompetitionEvent.wcif_json_schema },
+        "persons" => { "type" => "array", "items" => User.wcif_json_schema(version: version) },
+        "events" => { "type" => "array", "items" => CompetitionEvent.wcif_json_schema(version: version) },
         "schedule" => {
           "type" => "object",
           "properties" => {
@@ -2382,8 +2431,8 @@ class Competition < ApplicationRecord
         "generateWebsite" => generate_website,
         "externalWebsite" => external_website,
         "externalRegistrationPage" => external_registration_page,
-        "usesWcaRegistration" => use_wca_registration,
-        "usesWcaLive" => scoretaking_software_wca_live?,
+        "usesWcaRegistration" => use_wca_registration?,
+        "scoretakingSoftware" => scoretaking_software,
       },
       "entryFees" => {
         "currencyCode" => currency_code,
@@ -2491,7 +2540,7 @@ class Competition < ApplicationRecord
         "externalWebsite" => errors[:external_website],
         "externalRegistrationPage" => errors[:external_registration_page],
         "usesWcaRegistration" => errors[:use_wca_registration],
-        "usesWcaLive" => errors[:scoretaking_software],
+        "scoretakingSoftware" => errors[:scoretaking_software],
       },
       "entryFees" => {
         "currencyCode" => errors[:currency_code],
@@ -2699,7 +2748,7 @@ class Competition < ApplicationRecord
       guest_entry_status: form_data.dig('registration', 'guestEntryStatus'),
       allow_registration_edits: form_data.dig('registration', 'allowSelfEdits'),
       competitor_can_cancel: form_data.dig('registration', 'competitorCanCancel'),
-      scoretaking_software: form_data.dig('website', 'usesWcaLive') ? :wca_live : :external,
+      scoretaking_software: form_data.dig('website', 'scoretakingSoftware'),
       allow_registration_without_qualification: form_data.dig('eventRestrictions', 'qualificationResults', 'allowRegistrationWithout'),
       guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),
       events_per_registration_limit: form_data.dig('eventRestrictions', 'eventLimitation', 'perRegistrationLimit'),
@@ -2858,7 +2907,7 @@ class Competition < ApplicationRecord
             "externalWebsite" => { "type" => %w[string null] },
             "externalRegistrationPage" => { "type" => %w[string null] },
             "usesWcaRegistration" => { "type" => "boolean" },
-            "usesWcaLive" => { "type" => "boolean" },
+            "scoretakingSoftware" => { "type" => "string", "enum" => %w[external wca_live internal] },
           },
         },
         "userSettings" => {
@@ -2988,7 +3037,7 @@ class Competition < ApplicationRecord
           "additionalProperties" => false,
           "properties" => {
             "externalWebsite" => { "type" => %w[string null] },
-            "usesWcaLive" => { "type" => "boolean" },
+            "scoretakingSoftware" => { "type" => "string", "enum" => %w[external wca_live internal] },
           },
         },
         "entryFees" => {

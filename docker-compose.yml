@@ -93,7 +93,9 @@ services:
         condition: service_healthy
 
   wca_payload_db:
-    image: mongo:8
+    build:
+      context: ./next-frontend
+      dockerfile: Dockerfile.payload
     container_name: "payload_db"
     command:
       - --quiet
@@ -218,7 +220,7 @@ services:
         condition: service_healthy
 
   wca_playwright:
-    image: mcr.microsoft.com/playwright:v1.58.2
+    image: mcr.microsoft.com/playwright:v1.60.0
     container_name: "playwright"
     extra_hosts:
       - "hostmachine:host-gateway"

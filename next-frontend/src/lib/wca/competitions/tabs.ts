@@ -8,6 +8,7 @@ import { EventId } from "@/lib/wca/data/events";
 
 interface TabBase {
   i18nKey: string;
+  i18nKeyAdmin?: string;
   menuKey: string;
   icon?: IconName;
   disabled?: boolean;
@@ -19,8 +20,9 @@ export interface TabWithChildren extends TabBase {
 }
 
 interface TabWithLink extends TabBase {
-  badge?: string;
+  badgeI18nKey?: string;
   href: RouteLiteral;
+  hrefAdmin?: RouteLiteral;
 }
 
 export type CompetitionNavTab = TabWithChildren | TabWithLink;
@@ -90,8 +92,13 @@ export const duringCompetitionTabs = (
   return [
     {
       i18nKey: "competitions.show.schedule",
+      i18nKeyAdmin: "competitions.live.manage_rounds",
       href: route({
         pathname: "/competitions/[competitionId]/live",
+        query: { competitionId: competitionInfo.id },
+      }),
+      hrefAdmin: route({
+        pathname: "/competitions/[competitionId]/live/admin",
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "live",
@@ -127,13 +134,25 @@ export const duringCompetitionTabs = (
           rounds.length,
           Boolean(round.cutoff),
         );
+
+        const roundDone =
+          round.state === "locked" ||
+          (round.state === "open" &&
+            round.competitors_live_results_entered === round.total_competitors);
         return {
           i18nKey: `rounds.${roundTypeId}.name`,
           menuKey: round.id,
-          badge: round.state === "locked" ? "Done" : "live",
+          badgeI18nKey: roundDone
+            ? "competitions.live.round_state.done"
+            : "competitions.live.round_state.ongoing",
           disabled: round.state === "pending" || round.state === "ready",
           href: route({
             pathname: "/competitions/[competitionId]/live/rounds/[roundId]",
+            query: { competitionId: competitionInfo.id, roundId: round.id },
+          }),
+          hrefAdmin: route({
+            pathname:
+              "/competitions/[competitionId]/live/rounds/[roundId]/admin",
             query: { competitionId: competitionInfo.id, roundId: round.id },
           }),
         };

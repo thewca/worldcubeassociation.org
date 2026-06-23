@@ -51,8 +51,11 @@ export default function LiveView({
   rounds,
 }: LiveViewProps) {
   const { t } = useT();
-  const firstStartTime = activities[0].startTime;
-  const lastStartTime = activities[activities.length - 1].startTime;
+  const eventActivities = activities.filter(
+    (a) => !a.activityCode.startsWith("other"),
+  );
+  const firstStartTime = eventActivities[0].startTime;
+  const lastStartTime = eventActivities[eventActivities.length - 1].startTime;
   const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const [timeZone, setTimeZone] = useState(browserTimezone);
 
@@ -69,10 +72,11 @@ export default function LiveView({
     timeZone,
   );
 
-  // Show the first date that has not passed, if all of them have, show the last date
+  // Show the first day that hasn't ended yet (i.e. today during the competition),
+  // if all of them have passed, show the last day
   const lastDate = dates[dates.length - 1];
   const defaultDate =
-    dates.filter((d) => !hasPassed(d.toISO()!))[0] ?? lastDate;
+    dates.filter((d) => !hasPassed(d.endOf("day").toISO()!))[0] ?? lastDate;
 
   const roundsByWcifId = _.keyBy(rounds, "id");
 
@@ -171,7 +175,7 @@ export default function LiveView({
                                   },
                                 })}
                               >
-                                <HStack>
+                                <HStack wrap="wrap">
                                   <EventIcon eventId={eventId} fontSize="2xl" />
                                   {roundName}
                                 </HStack>

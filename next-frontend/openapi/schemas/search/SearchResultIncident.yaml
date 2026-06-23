@@ -1,0 +1,18 @@
+type: object
+required:
+  - class
+  - id
+  - title
+  - url
+properties:
+  class:
+    type: string
+    enum:
+      - incident
+  id:
+    type: string
+  title:
+    type: string
+  url:
+    type: string
+    format: uri

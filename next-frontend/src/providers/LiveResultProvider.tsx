@@ -46,21 +46,24 @@ const LiveResultContext = createContext<LiveResultContextType | undefined>(
   undefined,
 );
 
-const toOrderedAttemptValues = (attempts: LiveAttempt[]) =>
-  attempts
-    .toSorted((a, b) => a.attempt_number - b.attempt_number)
-    .map((att) => att.value);
-
 const compareAttempts = (
   attemptsA: LiveAttempt[],
   attemptsB: LiveAttempt[],
 ) => {
-  const sortedValuesA = toOrderedAttemptValues(attemptsA);
-  const sortedValuesB = toOrderedAttemptValues(attemptsB);
+  const sortedA = attemptsA.toSorted(
+    (a, b) => a.attempt_number - b.attempt_number,
+  );
+  const sortedB = attemptsB.toSorted(
+    (a, b) => a.attempt_number - b.attempt_number,
+  );
 
   return (
-    sortedValuesA.length === sortedValuesB.length &&
-    sortedValuesA.every((value, index) => value === sortedValuesB[index])
+    sortedA.length === sortedB.length &&
+    sortedA.every(
+      (a, i) =>
+        a.value === sortedB[i].value &&
+        a.attempt_number === sortedB[i].attempt_number,
+    )
   );
 };
 
@@ -257,11 +260,23 @@ export function MultiRoundResultProvider({
     );
   }, []);
 
+  const refetchAndClearPending = (roundId: string) => {
+    refetchRound(roundId).then((res) => {
+      if (!res.isSuccess) {
+        return;
+      }
+      diffPendingResults(res.data.results, (pr, ir) =>
+        compareAttempts(pr.attempts, ir.attempts),
+      );
+    });
+  };
+
   const roundIds = initialRounds.map((r) => r.id);
   const connectionState = useResultsSubscriptions(
     roundIds,
     competitionId,
     onReceived,
+    refetchAndClearPending,
   );
 
   return (

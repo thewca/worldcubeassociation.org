@@ -130,6 +130,51 @@ export interface paths {
         };
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Adds multiple live results for a given round in a single request */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                    roundId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BatchSubmitLiveResult"];
+                };
+            };
+            responses: {
+                /** @description Batch Accepted */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            status?: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit": {
         parameters: {
             query?: never;
@@ -139,6 +184,26 @@ export interface paths {
         };
         /** Get the next competitor assuming the registration in the query is quit */
         get: operations["getNextCompetitor"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/addable_competitors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get competitors that can be added to a round
+         * @description Returns the competitors eligible to be added to the round (the round's participation source) along with the lifecycle state of any colinked rounds.
+         */
+        get: operations["canBeAddedToRound"];
         put?: never;
         post?: never;
         delete?: never;
@@ -165,6 +230,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/bulk_quit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Quits multiple competitors from the round */
+        delete: operations["bulkQuitCompetitors"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/clear": {
         parameters: {
             query?: never;
@@ -177,6 +259,23 @@ export interface paths {
         put: operations["clearRound"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Closes an empty round, deleting all its (empty) live results */
+        delete: operations["closeRound"];
         options?: never;
         head?: never;
         patch?: never;
@@ -487,6 +586,23 @@ export interface paths {
         };
         /** Get a list of incidents */
         get: operations["regulationsList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Omni-search across competitions, persons, regulations and incidents */
+        get: operations["omniSearch"];
         put?: never;
         post?: never;
         delete?: never;
@@ -997,6 +1113,23 @@ export interface components {
             attempts: components["schemas"]["LiveAttempt"][];
             registration_id: number;
         };
+        BatchSubmitLiveResult: {
+            results: components["schemas"]["SubmitLiveResult"][];
+        };
+        General404: {
+            error: string;
+            data: {
+                model: string;
+                id: string;
+            };
+        };
+        Competition404: components["schemas"]["General404"] & {
+            data?: {
+                /** @enum {string} */
+                model: "Competition";
+                id: string;
+            };
+        };
         UserAvatar: {
             /**
              * Format: uri
@@ -1170,6 +1303,11 @@ export interface components {
             /** @example not_accepted */
             competitor_can_cancel: string;
             /**
+             * @example external
+             * @enum {string}
+             */
+            scoretaking_software: "external" | "internal" | "wca_live";
+            /**
              * Format: uri
              * @example https://www.worldcubeassociation.org/competitions/WC2003
              */
@@ -1212,23 +1350,11 @@ export interface components {
             "registration_full?": boolean;
             /** @example true */
             "registration_full_and_accepted?": boolean;
+            /** @example 42 */
+            spots_left?: number | null;
             tab_names: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
-        };
-        General404: {
-            error: string;
-            data: {
-                model: string;
-                id: string;
-            };
-        };
-        Competition404: components["schemas"]["General404"] & {
-            data?: {
-                /** @enum {string} */
-                model: "Competition";
-                id: string;
-            };
         };
         WcifEvent: {
             /** @example 333 */
@@ -1473,6 +1599,55 @@ export interface components {
                 comments?: string;
             }[];
         };
+        SearchResultCompetition: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            class: "competition";
+            id: string;
+            name: string;
+            city?: string;
+            country_iso2?: string;
+            /** Format: uri */
+            url: string;
+        };
+        SearchResultPerson: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            class: "person";
+            id: string;
+            wca_id?: string;
+            name: string;
+            country_iso2?: string;
+            /** Format: uri */
+            url: string;
+            avatar?: components["schemas"]["UserAvatar"];
+        };
+        SearchResultRegulation: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            class: "regulation";
+            id: string;
+            content_html?: string;
+            url: string;
+        };
+        SearchResultIncident: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            class: "incident";
+            id: string;
+            title: string;
+            /** Format: uri */
+            url: string;
+        };
+        SearchResult: components["schemas"]["SearchResultCompetition"] | components["schemas"]["SearchResultPerson"] | components["schemas"]["SearchResultRegulation"] | components["schemas"]["SearchResultIncident"];
         Record: {
             type?: string;
             /** @example 6709306 */
@@ -1686,6 +1861,28 @@ export interface components {
         };
     };
     responses: {
+        /** @description Not logged in */
+        NotLoggedIn: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    error: string;
+                };
+            };
+        };
+        /** @description Organizer privileges required */
+        NotPermitted: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    error: string;
+                };
+            };
+        };
         /** @description Competition not found */
         CompetitionNotFound: {
             headers: {
@@ -1814,7 +2011,36 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LiveCompetitor"][];
+                    "application/json": {
+                        status: string;
+                        next_advancing: components["schemas"]["LiveCompetitor"][];
+                    };
+                };
+            };
+        };
+    };
+    canBeAddedToRound: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The eligible competitors and the states of colinked rounds */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        registrations: components["schemas"]["RegistrationDataV2"][];
+                        colinked_status: ("locked" | "open" | "ready" | "pending")[];
+                    };
                 };
             };
         };
@@ -1877,6 +2103,38 @@ export interface operations {
             };
         };
     };
+    bulkQuitCompetitors: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    registration_ids: number[];
+                    advancing_ids?: number[];
+                };
+            };
+        };
+        responses: {
+            /** @description Returns number of competitors that were marked as quit */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        quit: number;
+                    };
+                };
+            };
+        };
+    };
     clearRound: {
         parameters: {
             query?: never;
@@ -1898,6 +2156,32 @@ export interface operations {
                     "application/json": {
                         status: string;
                         recreated_rows: number;
+                    };
+                };
+            };
+        };
+    };
+    closeRound: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Round closed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status: string;
+                        deleted_count: number;
                     };
                 };
             };
@@ -1928,6 +2212,21 @@ export interface operations {
                     };
                 };
             };
+            /** @description Round cannot be opened */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        status: "score taking is not finished in the previous round" | "round already open" | "regulation 9m3: a round with 7 or fewer competitors must not have subsequent rounds" | "regulation 9m2: a round with 15 or fewer competitors must have at most one subsequent round" | "regulation 9m1: a round with 99 or fewer competitors must have at most two subsequent rounds";
+                    };
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            403: components["responses"]["NotPermitted"];
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     clearCompetitor: {
@@ -2295,6 +2594,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Incident"][];
+                };
+            };
+        };
+    };
+    omniSearch: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        result: components["schemas"]["SearchResult"][];
+                    };
                 };
             };
         };

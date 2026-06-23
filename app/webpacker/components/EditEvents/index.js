@@ -24,7 +24,7 @@ function EditEvents() {
 
   useUnsavedChangesAlert(unsavedChanges);
 
-  const { saveWcif, saving } = useSaveWcifAction();
+  const { saveWcif, saving } = useSaveWcifAction('2.1.1');
 
   const save = useCallback(() => {
     saveWcif(
@@ -89,6 +89,7 @@ export default function Wrapper({
   canAddAndRemoveEvents,
   canUpdateEvents,
   canUpdateQualifications,
+  usesIlr,
   wcifEvents,
 }) {
   const normalizedEvents = normalizeWcifEvents(wcifEvents);
@@ -101,6 +102,7 @@ export default function Wrapper({
         canAddAndRemoveEvents,
         canUpdateEvents,
         canUpdateQualifications,
+        usesIlr,
         wcifEvents: normalizedEvents,
         initialWcifEvents: normalizedEvents,
         unsavedChanges: false,

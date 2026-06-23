@@ -139,13 +139,12 @@ RSpec.describe ResultsSubmissionController do
     context "when competition has results submitted" do
       let(:results_submitted_comp) { create(:competition, :announced, :with_valid_submitted_results) }
 
-      it "returns bad_request for WRT user" do
+      it "allows access for WRT user" do
         sign_in wrt_user
 
         get competition_newcomer_name_format_check_path(results_submitted_comp.id)
 
-        expect(response).to have_http_status(:bad_request)
-        expect(response.parsed_body["error"]).to eq("The newcomer check dashboard can only be used before the results are submitted.")
+        expect(response).to have_http_status(:ok)
       end
     end
   end
