@@ -21,6 +21,7 @@ import {
   mergeAndOrderResults,
 } from "@/lib/live/mergeAndOrderResults";
 import { LiveTableHeader } from "@/components/live/Cells";
+import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
 import { padSkipped } from "@/lib/live/padSkipped";
 import { useT } from "@/lib/i18n/useI18n";
 
@@ -223,13 +224,8 @@ function ResultsProjector({
                             fontSize="1.5rem"
                             pr={2}
                             textAlign="right"
-                            bg={
-                              result.advancing
-                                ? "green"
-                                : result.advancing_questionable
-                                  ? "yellow"
-                                  : undefined
-                            }
+                            layerStyle="fill.deep"
+                            colorPalette={rankingCellColorPalette(result)}
                           >
                             {competitor.global_pos}
                           </Table.Cell>
