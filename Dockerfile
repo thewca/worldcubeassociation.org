@@ -28,6 +28,14 @@ ARG NODE_MAJOR=24
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
     apt-get install -y nodejs
 
+# Make sure that both the build container *and* the runtime container know about timezones
+# tzdata = making sure ActiveSupport knows which timezones currently exist
+# tzdata-legacy = making sure ActiveSupport knows which timezones used to exist (argh…) cf. Kiev <-> Kyiv or Katmandu <-> Kathmandu
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+      tzdata \
+      tzdata-legacy
+
 FROM base AS build
 
 # Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
@@ -37,8 +45,6 @@ RUN corepack enable
 # libvips = image processing for Rails ActiveStorage attachments
 # libssl-dev = bindings for the native extensions of Ruby SSL gem
 # libyaml-dev = bindings for the native extensions of Ruby psych gem
-# tzdata = Timezone information for Rails ActiveSupport
-# tzdata-legacy = Older aliases for tomezones that change (argh…) like Kiev <-> Kyiv or Katmandu <-> Kathmandu
 # libclang-dev and cargo = Rust compiler toolchain for Ruby gems that have external Rust bindings
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
@@ -48,9 +54,7 @@ RUN apt-get update -qq && \
       cargo \
       pkg-config \
       libssl-dev \
-      libyaml-dev \
-      tzdata \
-      tzdata-legacy
+      libyaml-dev
 
 COPY bin ./bin
 
@@ -102,14 +106,11 @@ FROM base AS runtime
 # mariadb-client = talking to our database in production mode
 # imagemagick = image processing for Rails ActiveStorage attachments
 # libvips = image processing for Rails ActiveStorage attachments
-# tzdata = making sure ActiveSupport knows which timezones exist
-
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       mariadb-client \
       imagemagick \
       libvips \
-      tzdata \
       zip \
       python-is-python3 \
       fonts-dejavu \
