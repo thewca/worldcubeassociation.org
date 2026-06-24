@@ -388,11 +388,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
 
   create_table "competition_venues", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", null: false
-    t.string "country_iso2", null: false
+    t.string "country_iso2", limit: 2, null: false
     t.datetime "created_at", precision: nil, null: false
     t.integer "latitude_microdegrees", null: false
     t.integer "longitude_microdegrees", null: false
-    t.string "name", null: false
+    t.string "name", limit: 240, null: false
     t.string "timezone_id", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "wcif_id", null: false
