@@ -714,6 +714,7 @@ class Competition < ApplicationRecord
              'accepted_registrations',
              'accepted_newcomers',
              'scoretaking_registrations',
+             'scoretakers',
              'duplicate_checker_job_runs',
              'tickets_competition_result',
              'result_ticket',
