@@ -17,9 +17,11 @@ import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
 import AddPersonModal from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
 import BulkQuitButton from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/BulkQuitButton";
-import { LuCheck, LuLock, LuLockOpen } from "react-icons/lu";
+import { LuCheckCheck, LuEye, LuPencil } from "react-icons/lu";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
+import { Tooltip } from "@/components/ui/tooltip";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function LiveUpdatingResultsTable({
   roundWcifId,
@@ -40,6 +42,8 @@ export default function LiveUpdatingResultsTable({
   isLinkedRound?: boolean;
   canManage?: boolean;
 }) {
+  const { t } = useT();
+
   const [showLinkedRoundsView, setShowLinkedRoundsView] =
     useState(isLinkedRound);
 
@@ -74,55 +78,72 @@ export default function LiveUpdatingResultsTable({
           </Switch.Root>
         )}
         {canManage && (
-          <IconButton variant="ghost">
-            <Link asChild>
-              {isAdminView ? (
-                <NextLink
-                  href={route({
-                    pathname:
-                      "/competitions/[competitionId]/live/rounds/[roundId]",
-                    query: { competitionId, roundId: roundWcifId },
-                  })}
-                >
-                  <LuLockOpen />
-                </NextLink>
-              ) : (
-                <NextLink
-                  href={route({
-                    pathname:
-                      "/competitions/[competitionId]/live/rounds/[roundId]/admin",
-                    query: { competitionId, roundId: roundWcifId },
-                  })}
-                >
-                  <LuLock />
-                </NextLink>
-              )}
-            </Link>
-          </IconButton>
+          <Tooltip
+            content={
+              isAdminView
+                ? t("competitions.live.admin.results_view")
+                : t("competitions.live.admin.admin_view")
+            }
+            showArrow
+            openDelay={200}
+          >
+            <IconButton variant="ghost">
+              <Link asChild>
+                {isAdminView ? (
+                  <NextLink
+                    href={route({
+                      pathname:
+                        "/competitions/[competitionId]/live/rounds/[roundId]",
+                      query: { competitionId, roundId: roundWcifId },
+                    })}
+                  >
+                    <LuEye />
+                  </NextLink>
+                ) : (
+                  <NextLink
+                    href={route({
+                      pathname:
+                        "/competitions/[competitionId]/live/rounds/[roundId]/admin",
+                      query: { competitionId, roundId: roundWcifId },
+                    })}
+                  >
+                    <LuPencil />
+                  </NextLink>
+                )}
+              </Link>
+            </IconButton>
+          </Tooltip>
         )}
         {isAdminView && (
           <>
             <AddPersonModal
               competitionId={competitionId}
               competitors={competitors}
+              roundId={roundWcifId}
             />
             <BulkQuitButton
               competitionId={competitionId}
               roundId={roundWcifId}
             />
-            <IconButton variant="ghost">
-              <Link asChild>
-                <NextLink
-                  href={route({
-                    pathname:
-                      "/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check",
-                    query: { competitionId, roundId: roundWcifId },
-                  })}
-                >
-                  <LuCheck />
-                </NextLink>
-              </Link>
-            </IconButton>
+            <Tooltip
+              content={t("competitions.live.admin.double_check")}
+              showArrow
+              openDelay={200}
+            >
+              <IconButton variant="ghost">
+                <Link asChild>
+                  <NextLink
+                    href={route({
+                      pathname:
+                        "/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check",
+                      query: { competitionId, roundId: roundWcifId },
+                    })}
+                  >
+                    <LuCheckCheck />
+                  </NextLink>
+                </Link>
+              </IconButton>
+            </Tooltip>
           </>
         )}
       </HStack>

@@ -32,7 +32,7 @@ locals {
     },
     {
       name  = "DUMP_HOST"
-      value = "https://assets.worldcubeassociation.org"
+      value = "https://exports.worldcubeassociation.org"
     },
     {
       name  = "SHAKAPACKER_ASSET_HOST"
@@ -107,8 +107,8 @@ locals {
       value = "ELNTWW0SE1ZJ"
     },
     {
-      name = "CDN_ASSETS_DISTRIBUTION_ID"
-      value = "E27W5ACWLMQE3C"
+      name = "CDN_EXPORTS_DISTRIBUTION_ID"
+      value = "E1752JAESQHVEE"
     },
     {
       name = "WCA_REGISTRATIONS_URL"
@@ -233,8 +233,8 @@ data "aws_iam_policy_document" "task_policy" {
                   "${aws_s3_bucket.documents.arn}/*",
                   aws_s3_bucket.regulations.arn,
                   "${aws_s3_bucket.regulations.arn}/*",
-                  aws_s3_bucket.assets.arn,
-                  "${aws_s3_bucket.assets.arn}/*",
+                  aws_s3_bucket.exports.arn,
+                  "${aws_s3_bucket.exports.arn}/*",
                     aws_s3_bucket.avatars_private.arn,
                   "${aws_s3_bucket.avatars_private.arn}/*",]
     }
@@ -450,6 +450,27 @@ resource "aws_cloudwatch_event_rule" "rails_deployment_started" {
 
 resource "aws_cloudwatch_event_target" "rails_deployment_started_sns" {
   rule      = aws_cloudwatch_event_rule.rails_deployment_started.name
+  target_id = "deploy-notifications"
+  arn       = aws_sns_topic.deploy_notifications.arn
+}
+
+# Notify when a blue/green deployment of the Rails service finishes successfully.
+resource "aws_cloudwatch_event_rule" "rails_deployment_completed" {
+  name        = "${var.name_prefix}-deployment-completed"
+  description = "Capture completed ECS deployments for the Rails production service"
+
+  event_pattern = jsonencode({
+    source        = ["aws.ecs"]
+    "detail-type" = ["ECS Deployment State Change"]
+    resources     = [aws_ecs_service.this.id]
+    detail = {
+      eventName = ["SERVICE_DEPLOYMENT_COMPLETED"]
+    }
+  })
+}
+
+resource "aws_cloudwatch_event_target" "rails_deployment_completed_sns" {
+  rule      = aws_cloudwatch_event_rule.rails_deployment_completed.name
   target_id = "deploy-notifications"
   arn       = aws_sns_topic.deploy_notifications.arn
 }

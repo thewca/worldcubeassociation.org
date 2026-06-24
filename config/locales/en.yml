@@ -161,10 +161,12 @@ en:
     short:
       ranking: "Top %{ranking}"
       percent: "Top %{percent}%"
+      all_advance: "All advance"
       attempt_result:
         time: "%{round_format} < %{time}"
         moves: "%{round_format} < %{moves}"
         points: "%{round_format} > %{points}"
+    all_advance: "All competitors advance"
     ranking: "Top %{ranking} advance to next round"
     percent: "Top %{percent}% advance to next round"
     attempt_result:
@@ -1411,6 +1413,10 @@ en:
         other: "%{count} spots left"
     live:
       title: "Live Results"
+      manage_rounds: "Manage Rounds"
+      incompatible:
+        external: "This competition is using external scoretaking software - please consult the competition information to find out where to view live scores."
+        wca_live: "This competition uses WCA Live for scoretaking - please follow this link to see the live results:"
       round_state:
         ongoing: "live"
         done: "done"
@@ -1429,10 +1435,19 @@ en:
       admin:
         open: "Open"
         clear: "Clear"
+        close: "Close"
         competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
         round_locked: "locked"
         edit: "Edit"
         results: "Results"
+        registration: "Registration"
+        admin_view: "Admin View"
+        results_view: "Results View"
+        double_check: "Double Check"
+        submit_results: "Submit Results"
+        add_to_batch: "Add to Batch"
+        batch_mode: "Batch Mode"
+        submit_batch: "Submit Batch (%{count})"
         warnings:
           omitted: "You've omitted attempt %{attempt_number}. Make sure it's intentional."
           DNS: "There's at least one DNS followed by a valid result. Please ensure it is indeed a DNS and not a DNF."
@@ -1452,11 +1467,18 @@ en:
             success: "Successfully quit %{count} competitors"
             failure: "Failed to bulk quit competitors"
             menu: "Bulk Quit"
+            id: "ID"
+            name: "Name"
           quit_menu: "Quit"
           no_next: "No next competitor to advance."
           cancel: "Cancel"
           failed_to_fetch: "Failed to fetch next advancing competitor"
           still_processing: "Cannot execute 'Quit Competitor' actions while some results are still processing"
+        add_competitor:
+          single_round: "Add Competitor to Round"
+          multiple_rounds:
+            one: "Add Competitor to both Rounds in the Dual Round."
+            other: "Add Competitor to Round, as the second Round of the dual round is not open you will need to add them separately."
       results:
         competitor: "Competitor"
         mean: "Mean"
@@ -1742,7 +1764,7 @@ en:
           external_website: "Website"
           external_registration_page: "Registration page"
           uses_wca_registration: "I would like to use the WCA website for registration"
-          uses_wca_live: "I will be using WCA Live for scoretaking"
+          scoretaking_software: "Software used for scoretaking"
         entry_fees:
           currency_code: "Currency code"
           base_entry_fee: "Base registration fee"
@@ -1830,7 +1852,7 @@ en:
           external_website: "The website of the competition. Must be a valid http(s) url."
           external_registration_page: "The page where the competitors have to register for the competition. Must be a valid http(s) url."
           uses_wca_registration: ""
-          uses_wca_live: ""
+          scoretaking_software: "Select '%{choice_ilr}' if you want to use Dual Rounds"
         user_settings:
           receive_registration_emails: ""
         entry_fees:
@@ -1886,6 +1908,11 @@ en:
             "disabled": "Disable 'Bulk Auto Accept' button"
             "bulk": "Enable 'Bulk Auto Accept' button in Registrations menu"
             "live": "Automatically accept registrations when payment is made"
+        website:
+          scoretaking_software:
+            external: "An external tool, not maintained by the WCA"
+            wca_live: "WCA Live, hosted on live.worldcubeassociation.org"
+            internal: "Integrated Live Results"
         registration:
           allow_on_the_spot:
             "true": "On the spot registrations will be accepted"
@@ -3030,6 +3057,7 @@ en:
       missing_scrambles_for_competition_error: "Missing scrambles for the competition. Use Scrambles Matcher to add scrambles."
       missing_scrambles_for_group_error: "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
       missing_scrambles_for_multi_error: "[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts."
+      mbld_scrambles_warning: "[%{round_id}] This round includes 3x3x3 Multi-Blind results. Please specify in your submission comment how many scrambles from each scramble set were actually used by competitors, so that WRT can remove the unused extra scrambles."
       multiple_fmc_groups_warning: "[%{round_id}] There are multiple groups of FMC used. If one group of FMC was used, please use the Scrambles Matcher to uncheck the unused scrambles. Otherwise, please include a comment to WRT explaining why multiple groups of FMC were used."
       wrong_number_of_scramble_sets_error: "[%{round_id}] This round has a different number of scramble sets (%{actual}) than specified on the Manage Events tab (%{expected}). Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used."
   tickets:
