@@ -51,4 +51,19 @@ namespace :competition_main_venue do
         end
     end
   end
+
+  desc "Fill in information from the competition description into the main venue (if present)"
+  task backfill: :environment do
+    Competition
+      .includes(:main_venue)
+      .where.not(main_venue: nil)
+      .find_each do |competition|
+      competition.main_venue.backfill_competition_info!
+
+      if competition.main_venue.changed?
+        puts "Updated information on #{competition.id}"
+        competition.main_venue.save(validate: false)
+      end
+    end
+  end
 end

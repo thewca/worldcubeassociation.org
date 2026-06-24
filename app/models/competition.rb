@@ -2282,9 +2282,7 @@ class Competition < ApplicationRecord
   alias_attribute :short_name, :cell_name
   alias_attribute :city, :city_name
 
-  def country_iso2
-    country&.iso2
-  end
+  delegate :iso2, to: :country, prefix: true, allow_nil: true
 
   def url
     Rails.application.routes.url_helpers.competition_url(self, host: EnvConfig.ROOT_URL)

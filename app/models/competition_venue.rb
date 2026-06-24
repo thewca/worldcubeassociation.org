@@ -31,6 +31,24 @@ class CompetitionVenue < ApplicationRecord
     self
   end
 
+  def backfill_competition_info!
+    inferred_tz = TZF.tz_name(
+      competition.latitude_degrees,
+      competition.longitude_degrees,
+    )
+
+    self.assign_attributes(
+      name: competition.venue,
+      city: competition.city_name,
+      address: competition.venue_address,
+      description: competition.venue_details,
+      latitude_microdegrees: competition.latitude_microdegrees,
+      longitude_microdegrees: competition.longitude_microdegrees,
+      country_iso2: competition.country_iso2,
+      timezone_id: inferred_tz
+    )
+  end
+
   def latitude_degrees
     latitude_microdegrees / 1e6
   end
