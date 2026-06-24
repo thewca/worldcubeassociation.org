@@ -27,11 +27,12 @@ import { useT } from "@/lib/i18n/useI18n";
 
 type Status = "showing" | "shown" | "hiding" | "paused";
 
-const DURATION = {
-  SHOWN: 10 * 1000,
-  SHOWING: 3000,
-  HIDING: 1000,
-} as const;
+const DURATION: Record<Status, number> = {
+  showing: 3000,
+  shown: 10 * 1000,
+  hiding: 1000,
+  paused: 0, // never read — paused has no timeout
+};
 
 interface ResultsProjectorProps {
   results: LiveResultsByRegistrationId;
@@ -82,7 +83,7 @@ function ResultsProjector({
       if (nonemptyResults.length > getNumberOfRows()) {
         const timeout = setTimeout(() => {
           setStatus("hiding");
-        }, DURATION.SHOWN);
+        }, DURATION[status]);
         return () => clearTimeout(timeout);
       } else {
         return;
@@ -91,7 +92,7 @@ function ResultsProjector({
     if (status === "showing") {
       const timeout = setTimeout(() => {
         setStatus("shown");
-      }, DURATION.SHOWING);
+      }, DURATION[status]);
       return () => clearTimeout(timeout);
     }
     if (status === "hiding") {
@@ -101,7 +102,7 @@ function ResultsProjector({
           const newIndex = topResultIndex + getNumberOfRows();
           return newIndex >= nonemptyResults.length ? 0 : newIndex;
         });
-      }, DURATION.HIDING);
+      }, DURATION[status]);
       return () => clearTimeout(timeout);
     }
   }, [status]);
@@ -187,7 +188,7 @@ function ResultsProjector({
                           key={`${result.registration_id}-${result.round_wcif_id}`}
                           opacity={isVisible ? 0 : 1}
                           animationName={isVisible ? "fade-in" : "fade-out"}
-                          animationDuration={`${(isVisible ? DURATION.SHOWING : DURATION.HIDING) / 1000}s`}
+                          animationDuration={`${(isVisible ? DURATION.showing : DURATION.hiding) / 1000}s`}
                           animationTimingFunction="ease-in-out"
                           animationFillMode="forwards"
                           animationDelay={
