@@ -10,9 +10,9 @@ import {
 } from 'semantic-ui-react';
 
 import { MiscTag, CompetitionTag, RegulationTag } from './Tags';
-import PaginationFooter from '../PaginationFooter';
-import Loading from '../Requests/Loading';
-import Errored from '../Requests/Errored';
+import PaginationFooter from '../../components/PaginationFooter';
+import Loading from '../../components/Requests/Loading';
+import Errored from '../../components/Requests/Errored';
 
 import { DelegateMattersContext } from '../../lib/contexts';
 import useLoadedData from '../../lib/hooks/useLoadedData';

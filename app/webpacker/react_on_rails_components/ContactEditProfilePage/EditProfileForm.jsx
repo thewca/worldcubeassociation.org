@@ -5,13 +5,13 @@ import { QueryClient, useQuery } from '@tanstack/react-query';
 import _ from 'lodash';
 import I18n from '../../lib/i18n';
 import { apiV0Urls, contactEditProfileActionUrl } from '../../lib/requests/routes.js.erb';
-import Loading from '../Requests/Loading';
-import Errored from '../Requests/Errored';
+import Loading from '../../components/Requests/Loading';
+import Errored from '../../components/Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
-import UtcDatePicker from '../wca/UtcDatePicker';
-import RegionSelector from '../wca/RegionSelector';
-import GenderSelector from '../wca/GenderSelector';
+import UtcDatePicker from '../../components/wca/UtcDatePicker';
+import RegionSelector from '../../components/wca/RegionSelector';
+import GenderSelector from '../../components/wca/GenderSelector';
 
 const CONTACT_EDIT_PROFILE_FORM_QUERY_CLIENT = new QueryClient();
 
