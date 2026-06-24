@@ -1192,7 +1192,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
     t.string "country_id", limit: 50, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "format_id", limit: 1, default: "", null: false
-    t.integer "global_pos", limit: 2, default: 0, null: false
     t.string "person_id", limit: 10, default: "", null: false
     t.string "person_name", limit: 80, default: "", null: false
     t.integer "pos", limit: 2, default: 0, null: false
