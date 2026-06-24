@@ -1,8 +1,9 @@
-import { Container, Heading, Separator, Text } from "@chakra-ui/react";
+import { Container, Heading, HStack, Separator, Text } from "@chakra-ui/react";
 import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { Fragment } from "react";
 import { getLivePodiums } from "@/lib/wca/live/getLivePodiums";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import EventIcon from "@/components/EventIcon";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
 import _ from "lodash";
 import OpenapiError from "@/components/ui/openapiError";
@@ -48,17 +49,17 @@ export default async function PodiumsPage({
       {noPodiums && <Text>{t("competitions.live.podiums.none")}</Text>}
       {!noPodiums && eventsNotFinished.length > 0 && (
         <>
-          <Heading textStyle="h3">
-            {t("competitions.live.podiums.undetermined")}
-          </Heading>
-          <Text>
-            {eventsNotFinished
-              .map((finalRound) => {
+          <HStack gap="3" wrap="wrap">
+            <Heading textStyle="h3">
+              {t("competitions.live.podiums.undetermined")}:
+            </Heading>
+            <HStack gap="2" wrap="wrap">
+              {eventsNotFinished.map((finalRound) => {
                 const { eventId } = parseActivityCode(finalRound.id);
-                return events.byId[eventId].name;
-              })
-              .join(", ")}
-          </Text>
+                return <EventIcon key={finalRound.id} eventId={eventId} />;
+              })}
+            </HStack>
+          </HStack>
           <Separator my="4" />
         </>
       )}
@@ -80,7 +81,10 @@ export default async function PodiumsPage({
         return (
           <Fragment key={finalRound.id}>
             <Heading textStyle="h3" p="2">
-              {events.byId[eventId].name}
+              <HStack gap="2">
+                <EventIcon eventId={eventId} />
+                {events.byId[eventId].name}
+              </HStack>
             </Heading>
             <LiveResultsTable
               showLinkedRoundsView={isDualRound}
