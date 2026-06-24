@@ -1,9 +1,9 @@
-import React, { useMemo, useReducer } from 'react';
+import React, { Suspense, useMemo, useReducer } from 'react';
 import {
   Ref, Segment, Table, TableFooter,
 } from 'semantic-ui-react';
-import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { noop } from 'lodash';
+import { DragDropContext, Droppable } from '../../../lib/dndLazy';
 import I18n from '../../../lib/i18n';
 import TableHeader from './AdministrationTableHeader';
 import TableRow from './AdministrationTableRow';
@@ -99,32 +99,34 @@ export default function RegistrationAdministrationTable({
           withPosition={withPosition}
         />
 
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          <Droppable droppableId="droppable-table">
-            {(providedDroppable) => (
-              <Ref innerRef={providedDroppable.innerRef}>
-                <Table.Body {...providedDroppable.droppableProps}>
-                  {sortedRegistrations.map((w, i) => (
-                    <TableRow
-                      key={w.user.id}
-                      competitionInfo={competitionInfo}
-                      columnsExpanded={columnsExpanded}
-                      registration={w}
-                      onCheckboxChange={() => onToggle(w.user.id)}
-                      index={i}
-                      draggable={draggable}
-                      isSelected={selected.includes(w.user.id)}
-                      withPosition={withPosition}
-                      color={color}
-                      distinguishPaidUnpaid={distinguishPaidUnpaid}
-                    />
-                  ))}
-                  {providedDroppable.placeholder}
-                </Table.Body>
-              </Ref>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <Suspense fallback={null}>
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="droppable-table">
+              {(providedDroppable) => (
+                <Ref innerRef={providedDroppable.innerRef}>
+                  <Table.Body {...providedDroppable.droppableProps}>
+                    {sortedRegistrations.map((w, i) => (
+                      <TableRow
+                        key={w.user.id}
+                        competitionInfo={competitionInfo}
+                        columnsExpanded={columnsExpanded}
+                        registration={w}
+                        onCheckboxChange={() => onToggle(w.user.id)}
+                        index={i}
+                        draggable={draggable}
+                        isSelected={selected.includes(w.user.id)}
+                        withPosition={withPosition}
+                        color={color}
+                        distinguishPaidUnpaid={distinguishPaidUnpaid}
+                      />
+                    ))}
+                    {providedDroppable.placeholder}
+                  </Table.Body>
+                </Ref>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </Suspense>
         <TableFooter>
           <RegistrationAdministrationTableFooter
             columnsExpanded={columnsExpanded}

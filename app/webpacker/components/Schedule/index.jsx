@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { Message, Segment } from 'semantic-ui-react';
-import CalendarView from './CalendarView';
 import TableView from './TableView';
 import TimeZoneSelector from './TimeZone';
 import VenuesAndRooms from './VenuesAndRooms';
@@ -11,6 +10,8 @@ import { earliestWithLongestTieBreaker } from '../../lib/utils/activities';
 import { getDatesBetweenInclusive } from '../../lib/utils/dates';
 import EventSelector from '../wca/EventSelector';
 import I18n from '../../lib/i18n';
+
+const CalendarView = React.lazy(() => import(/* webpackChunkName: "fullcalendar-schedule" */ './CalendarView'));
 
 export default function Schedule({
   wcifSchedule,
@@ -131,16 +132,18 @@ export default function Schedule({
       <ViewSelector activeView={activeView} setActiveView={setActiveView} />
 
       {activeView === 'calendar' ? (
-        <CalendarView
-          dates={activeDates}
-          timeZone={activeTimeZone}
-          activeVenues={activeVenues}
-          activeRooms={activeRooms}
-          activeEventIds={activeEventIds.asArray}
-          calendarLocale={calendarLocale}
-          wcifEvents={wcifEvents}
-          linkedRounds={linkedRounds}
-        />
+        <Suspense fallback={null}>
+          <CalendarView
+            dates={activeDates}
+            timeZone={activeTimeZone}
+            activeVenues={activeVenues}
+            activeRooms={activeRooms}
+            activeEventIds={activeEventIds.asArray}
+            calendarLocale={calendarLocale}
+            wcifEvents={wcifEvents}
+            linkedRounds={linkedRounds}
+          />
+        </Suspense>
       ) : (
         <TableView
           dates={activeDates}

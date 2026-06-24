@@ -1,4 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  Suspense, useCallback, useMemo, useState,
+} from 'react';
 
 import {
   Accordion,
@@ -15,9 +17,10 @@ import wcifScheduleReducer from './store/reducer';
 import Store, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
 import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 import EditVenues from './EditVenues';
-import EditActivities from './EditActivities';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
+
+const EditActivities = React.lazy(() => import(/* webpackChunkName: "fullcalendar-edit-schedule" */ './EditActivities'));
 
 function EditSchedule({
   wcifEvents,
@@ -130,11 +133,13 @@ function EditSchedule({
             active={openAccordion === 1}
           >
             {openAccordion === 1 && (
-              <EditActivities
-                wcifEvents={wcifEvents}
-                referenceTime={referenceTime}
-                calendarLocale={calendarLocale}
-              />
+              <Suspense fallback={null}>
+                <EditActivities
+                  wcifEvents={wcifEvents}
+                  referenceTime={referenceTime}
+                  calendarLocale={calendarLocale}
+                />
+              </Suspense>
             )}
           </Accordion.Content>
         </Accordion>

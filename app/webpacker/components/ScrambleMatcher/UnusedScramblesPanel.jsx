@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import {
   Accordion, Card, Header, Icon, Message, Ref,
 } from 'semantic-ui-react';
-import { Draggable, Droppable } from '@hello-pangea/dnd';
+import { Draggable, Droppable } from '../../lib/dndLazy';
 import { DROPPABLE_ID_STORAGE, scrambleSetToTitle } from './util';
 import { ExternalSetActionButtons } from './ScrambleFileList';
 

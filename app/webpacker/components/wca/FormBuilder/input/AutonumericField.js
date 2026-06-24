@@ -4,9 +4,10 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import AutoNumeric from 'autonumeric';
 import { Input } from 'semantic-ui-react';
 import { currenciesData } from '../../../../lib/wca-data.js.erb';
+
+const loadAutoNumeric = () => import(/* webpackChunkName: "autonumeric" */ 'autonumeric').then((m) => m.default);
 
 export default function AutonumericField({
   id,
@@ -52,13 +53,15 @@ export default function AutonumericField({
     // Only initialize AutoNumeric once, otherwise some weird glitches can occur
     if (autoNumeric !== null) return;
 
-    const newAutoNumeric = new AutoNumeric(
-      node.inputRef.current,
-      autoNumericValue,
-      autoNumericOptions,
-    );
+    loadAutoNumeric().then((AutoNumeric) => {
+      const newAutoNumeric = new AutoNumeric(
+        node.inputRef.current,
+        autoNumericValue,
+        autoNumericOptions,
+      );
 
-    setAutoNumeric(newAutoNumeric);
+      setAutoNumeric(newAutoNumeric);
+    });
   }, [autoNumeric, autoNumericValue, autoNumericOptions]);
 
   const getCurrentUiValue = useCallback(() => {

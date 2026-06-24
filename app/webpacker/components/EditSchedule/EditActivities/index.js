@@ -49,13 +49,36 @@ import {
   activityToFcTitle,
   buildPartialActivityFromCode,
   defaultDurationFromActivityCode, FC_ACTIVITY_ATTACHMENT,
-  fcEventToActivityAndDates,
   luxonToWcifIso,
 } from '../../../lib/utils/edit-schedule';
 import EditActivityModal from './EditActivityModal';
 import ActionsHeader from './ActionsHeader';
 import { getTimeZoneDropdownLabel } from '../../../lib/utils/timezone';
 import { earliestTimeOfDayWithBuffer, getHour, latestTimeOfDayWithBuffer } from '../../../lib/utils/activities';
+
+function fcEventToActivityAndDates(fcEvent, calendar) {
+  const eventStartLuxon = toLuxonDateTime(fcEvent.start, calendar);
+  const eventEndLuxon = toLuxonDateTime(fcEvent.end, calendar);
+
+  const utcStartIso = luxonToWcifIso(eventStartLuxon);
+  const utcEndIso = luxonToWcifIso(eventEndLuxon);
+
+  const { [FC_ACTIVITY_ATTACHMENT]: attachedActivity } = fcEvent.extendedProps;
+  const partialActivity = buildPartialActivityFromCode(attachedActivity.activityCode);
+
+  const activity = {
+    ...partialActivity,
+    ...attachedActivity,
+    startTime: utcStartIso,
+    endTime: utcEndIso,
+  };
+
+  return {
+    activity,
+    startLuxon: eventStartLuxon,
+    endLuxon: eventEndLuxon,
+  };
+}
 
 function EditActivities({
   wcifEvents,
