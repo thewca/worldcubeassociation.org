@@ -1,20 +1,18 @@
 FROM ruby:3.4.6 AS base
-ARG BUILD_TAG=local
-ARG WCA_LIVE_SITE
-ARG SHAKAPACKER_ASSET_HOST
 WORKDIR /rails
 
 ENV DEBIAN_FRONTEND noninteractive
 
 # Set production environment
+# BUILD_TAG / WCA_LIVE_SITE / SHAKAPACKER_ASSET_HOST are deliberately NOT
+# set here. BUILD_TAG is the git SHA (changes every commit) and the other two differ
+# per environment; putting them in `base` invalidated every layer below (gems, node,
+# playwright, assets) on every build. They're declared later, only where consumed.
 ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test" \
     BUNDLE_DEPLOYMENT="1" \
-    PLAYWRIGHT_BROWSERS_PATH="/rails/pw-browsers" \
-    BUILD_TAG=$BUILD_TAG \
-    WCA_LIVE_SITE=$WCA_LIVE_SITE \
-    SHAKAPACKER_ASSET_HOST=$SHAKAPACKER_ASSET_HOST
+    PLAYWRIGHT_BROWSERS_PATH="/rails/pw-browsers"
 
 # Add dependencies necessary to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
@@ -83,6 +81,15 @@ RUN --mount=type=cache,sharing=private,target=/rails/.cache/pw-browsers \
 
 COPY . .
 
+# Volatile / per-environment args, declared as late as possible so the gem, node and
+# playwright install layers above stay cached across commits and shared across envs.
+ARG BUILD_TAG=local
+ARG WCA_LIVE_SITE
+ARG SHAKAPACKER_ASSET_HOST
+ENV BUILD_TAG=$BUILD_TAG \
+    WCA_LIVE_SITE=$WCA_LIVE_SITE \
+    SHAKAPACKER_ASSET_HOST=$SHAKAPACKER_ASSET_HOST
+
 RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/i18n export
 RUN --mount=type=cache,uid=1000,target=/rails/tmp/cache ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/rake assets:precompile
 
@@ -124,6 +131,13 @@ RUN useradd rails --create-home --shell /bin/bash
 
 # Copy built artifacts: gems, application, PW browsers
 COPY --chown=rails:rails --from=build /rails .
+
+# Runtime needs these baked in (asset_host path, newrelic/routes). Declared here, after
+# the cached apt/font layers — the COPY above already invalidates everything below it.
+ARG BUILD_TAG=local
+ARG WCA_LIVE_SITE
+ENV BUILD_TAG=$BUILD_TAG \
+    WCA_LIVE_SITE=$WCA_LIVE_SITE
 
 # We already need the Playwright CLI which is part of the /rails folder,
 #   but we also still need `sudo` privileges to be able to install runtime dependencies through apt
