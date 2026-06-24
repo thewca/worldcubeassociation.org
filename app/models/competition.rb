@@ -2356,8 +2356,12 @@ class Competition < ApplicationRecord
     championships.pluck(:championship_type)
   end
 
+  def fictive_country?
+    !self.country.real?
+  end
+
   def multi_country_fmc_competition?
-    events.length == 1 && events[0].fewest_moves? && Country::FICTIVE_IDS.include?(country_id)
+    events.length == 1 && events[0].fewest_moves? && self.fictive_country?
   end
 
   def exempt_from_wca_dues?
