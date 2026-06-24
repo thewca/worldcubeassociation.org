@@ -14,11 +14,19 @@ import { Toaster, toaster } from "@/components/ui/toaster";
 import { applyCutoff, applyTimeLimit } from "@/lib/live/attempt-result";
 import { padSkipped } from "@/lib/live/padSkipped";
 import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
+import { components } from "@/types/openapi";
+import useStoredState from "@/lib/hooks/useStoredState";
+
+type BatchEntry = components["schemas"]["SubmitLiveResult"];
 
 interface AdminResultsContextValue {
   registrationId: number | undefined;
   attempts: number[];
   isPending: boolean;
+  batchMode: boolean;
+  setBatchMode: (value: boolean) => void;
+  batchCount: number;
+  submitBatch: () => void;
   handleRegistrationIdChange: (value?: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
   handleSubmit: (onSuccess: () => void) => void;
@@ -44,11 +52,14 @@ export function LiveResultAdminProvider({
   competitionId,
   initialRegistrationId,
   round,
+  clearOnSubmit = true,
 }: {
   children: ReactNode;
   competitionId: string;
   initialRegistrationId?: number;
   round: LiveRoundAdminBase;
+  // Double-check stays on the current competitor after submitting, so it opts out of clearing.
+  clearOnSubmit?: boolean;
 }) {
   const { id: roundId, cutoff, timeLimit, format: formatId } = round;
   const format = formats.byId[formatId];
@@ -88,6 +99,14 @@ export function LiveResultAdminProvider({
 
   const api = useAPI();
 
+  const [batchMode, setBatchMode] = useState(false);
+  // Persisted to localStorage so staged results survive a refresh/crash — the
+  // whole point of batch mode is unreliable connections. Cleared on submit.
+  const [batch, setBatch] = useStoredState<BatchEntry[]>(
+    [],
+    `live-batch-${roundId}`,
+  );
+
   const handleRegistrationIdChange = useCallback(
     (value?: number) => {
       setRegistrationId(value);
@@ -108,12 +127,37 @@ export function LiveResultAdminProvider({
           description: "Results updated queued",
           type: "success",
         });
-        setRegistrationId(undefined);
-        setAttempts(zeroedArrayOfSize(solveCount));
+        if (clearOnSubmit) {
+          setRegistrationId(undefined);
+          setAttempts(zeroedArrayOfSize(solveCount));
+        }
       },
       onError: () => {
         toaster.create({
           description: "Failed to enqueue results",
+          type: "error",
+        });
+      },
+    },
+  );
+
+  const { mutate: mutateBatch, isPending: isPendingBatch } = api.useMutation(
+    "post",
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/batch",
+    {
+      onSuccess: (_data, variables) => {
+        variables.body.results.forEach((entry) =>
+          addPendingLiveResult(entry, roundId),
+        );
+        setBatch([]);
+        toaster.create({
+          description: "Batch queued",
+          type: "success",
+        });
+      },
+      onError: () => {
+        toaster.create({
+          description: "Failed to enqueue batch",
           type: "error",
         });
       },
@@ -208,24 +252,49 @@ export function LiveResultAdminProvider({
       return;
     }
 
+    const body = {
+      attempts: attempts
+        .map((attempt, index) => ({
+          value: attempt,
+          attempt_number: index + 1,
+        }))
+        // Preserve the original attempt_numbers even when there were gaps in the attempts
+        .filter((a) => a.value !== 0),
+      registration_id: registrationId,
+    };
+
+    if (batchMode) {
+      // Stage locally; nothing hits the server until "Submit Batch" is clicked.
+      setBatch((prev) => [
+        ...prev.filter((e) => e.registration_id !== registrationId),
+        body,
+      ]);
+      setRegistrationId(undefined);
+      setAttempts(zeroedArrayOfSize(solveCount));
+      onSuccess();
+      return;
+    }
+
     mutateUpdate(
       {
         params: {
           path: { competitionId, roundId },
         },
-        body: {
-          attempts: attempts
-            .map((attempt, index) => ({
-              value: attempt,
-              attempt_number: index + 1,
-            }))
-            // Preserve the original attempt_numbers even when there were gaps in the attempts
-            .filter((a) => a.value !== 0),
-          registration_id: registrationId,
-        },
+        body,
       },
       { onSuccess },
     );
+  };
+
+  const submitBatch = () => {
+    if (batch.length === 0) return;
+
+    mutateBatch({
+      params: {
+        path: { competitionId, roundId },
+      },
+      body: { results: batch },
+    });
   };
 
   const clearCompetitorsResults = (toClearId: number) => {
@@ -260,7 +329,15 @@ export function LiveResultAdminProvider({
         registrationId,
         attempts,
         isPending:
-          isPendingUpdate || isPendingClear || isPendingQuit || isPendingAdd,
+          isPendingUpdate ||
+          isPendingClear ||
+          isPendingQuit ||
+          isPendingAdd ||
+          isPendingBatch,
+        batchMode,
+        setBatchMode,
+        batchCount: batch.length,
+        submitBatch,
         quitCompetitor,
         handleRegistrationIdChange,
         handleAttemptChange,

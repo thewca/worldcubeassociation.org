@@ -61,6 +61,7 @@ export default async function DoubleCheckPage({
               competitionId={competitionId}
               initialRegistrationId={sortedResults[0].registration_id}
               round={round}
+              clearOnSubmit={false}
             >
               <DoubleCheck
                 competitionId={competitionId}

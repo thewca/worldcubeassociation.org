@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "WCA Live API" do
   describe "PUT #clear_round" do
     let!(:delegate) { create(:delegate) }
-    let!(:competition) { create(:competition, event_ids: ["333"], delegates: [delegate]) }
+    let!(:competition) { create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate]) }
     let!(:registrations) { create_list(:registration, 5, :accepted, competition: competition, event_ids: ["333"]) }
 
     it "Correctly clears the round" do
@@ -29,7 +29,7 @@ RSpec.describe "WCA Live API" do
 
   describe "PUT #clear_competitor" do
     let!(:delegate) { create(:delegate) }
-    let!(:competition) { create(:competition, event_ids: ["333"], delegates: [delegate]) }
+    let!(:competition) { create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate]) }
     let!(:registrations) { create_list(:registration, 5, :accepted, competition: competition, event_ids: ["333"]) }
 
     it "Correctly clears a competitor" do
