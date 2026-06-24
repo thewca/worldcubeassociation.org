@@ -38,6 +38,7 @@ RUN corepack enable
 # libssl-dev = bindings for the native extensions of Ruby SSL gem
 # libyaml-dev = bindings for the native extensions of Ruby psych gem
 # tzdata = Timezone information for Rails ActiveSupport
+# tzdata-legacy = Older aliases for tomezones that change (argh…) like Kiev <-> Kyiv or Katmandu <-> Kathmandu
 # libclang-dev and cargo = Rust compiler toolchain for Ruby gems that have external Rust bindings
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
@@ -48,7 +49,8 @@ RUN apt-get update -qq && \
       pkg-config \
       libssl-dev \
       libyaml-dev \
-      tzdata
+      tzdata \
+      tzdata-legacy
 
 COPY bin ./bin
 
