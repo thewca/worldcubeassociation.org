@@ -38,7 +38,7 @@ RSpec.describe "Scoretakers API" do
       assign_scoretaker(competitor)
       sign_in competitor
 
-      round = create(:round, competition: competition, event_id: "333")
+      round = competition.rounds.first
       registration = create(:registration, :accepted, competition: competition)
       round.open_round!(delegate)
 
@@ -52,7 +52,7 @@ RSpec.describe "Scoretakers API" do
     it "rejects a non-scoretaker submitting results" do
       sign_in competitor
 
-      round = create(:round, competition: competition, event_id: "333")
+      round = competition.rounds.first
       registration = create(:registration, :accepted, competition: competition)
       round.open_round!(delegate)
 
