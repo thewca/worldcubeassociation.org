@@ -6,6 +6,8 @@ class Competition < ApplicationRecord
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
+  has_many :scoretaking_registrations, -> { scoretakers }, class_name: "Registration", inverse_of: :competition
+  has_many :scoretakers, -> { joins(registrations: [:assignments]) }, through: :scoretaking_registrations, source: :user
   has_many :results
   has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }, inverse_of: :competition
   has_many :uploaded_jsons, dependent: :destroy
@@ -928,11 +930,6 @@ class Competition < ApplicationRecord
 
   def managers
     (organizers + delegates).uniq
-  end
-
-  # Scoretakers are defined by the WCIF: anyone with a `staff-dataentry` assignment.
-  def scoretakers
-    User.where(id: registrations.joins(:assignments).merge(Assignment.scoretaker).select(:user_id))
   end
 
   def receiving_registration_emails?(user_id)
