@@ -232,6 +232,8 @@ es-ES:
       ranking: '%{ranking} mejores'
       #original_hash: 0664a83
       percent: '%{percent}% mejor'
+      #original_hash: 023a81e
+      all_advance: Todos avanzan
       attempt_result:
         #original_hash: ac6a282
         time: '%{round_format} < %{time}'
@@ -239,6 +241,8 @@ es-ES:
         moves: '%{round_format} < %{moves}'
         #original_hash: 076911b
         points: '%{round_format} > %{points}'
+    #original_hash: ba6fa8b
+    all_advance: Todos los competidores avanzan
     #original_hash: 6e55337
     ranking: 'Los mejores %{ranking} avanzan a la siguiente ronda'
     #original_hash: 7ee969c
@@ -2922,6 +2926,19 @@ es-ES:
     live:
       #original_hash: 10d1a3c
       title: Resultados en directo
+      #original_hash: ef1c23b
+      manage_rounds: Administrar rondas
+      incompatible:
+        #original_hash: 4e41690
+        external: >-
+          Esta competición está utilizando un software de introducción de
+          resultados externo. Por favor, consulta la información de la
+          competición para descubrir dónde visualizar los resultados en directo.
+        #original_hash: 92b3341
+        wca_live: >-
+          Esta competición está utilizando WCA Live para la introducción de
+          resultados. Por favor, pincha en este enlace para visualizar los
+          resultados en directo.
       round_state:
         #original_hash: 98aadb3
         ongoing: en directo
@@ -2953,6 +2970,8 @@ es-ES:
         open: Abrir
         #original_hash: 719ea39
         clear: Limpiar
+        #original_hash: bbfa773
+        close: Cerrar
         #original_hash: 42faad9
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} introducidos'
         #original_hash: adec79f
@@ -2969,6 +2988,14 @@ es-ES:
         results_view: Vista de resultados
         #original_hash: 1dadee2
         double_check: Doble check
+        #original_hash: a5be381
+        submit_results: Enviar resultados
+        #original_hash: 0ed766a
+        add_to_batch: Añadir al lote
+        #original_hash: 8b6d8cb
+        batch_mode: Modo lote
+        #original_hash: a577fa2
+        submit_batch: 'Enviar lote (%{count})'
         warnings:
           #original_hash: 9198c71
           omitted: >-
@@ -3016,6 +3043,10 @@ es-ES:
             failure: No se ha podido eliminar a los competidores de forma masiva
             #original_hash: 774050e
             menu: Eliminar de forma masiva
+            #original_hash: 89f89c0
+            id: ID
+            #original_hash: 709a232
+            name: Nombre
           #original_hash: 1a2285d
           quit_menu: Eliminar
           #original_hash: 70835a0
