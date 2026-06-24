@@ -25,29 +25,6 @@ import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
 import { padSkipped } from "@/lib/live/padSkipped";
 import { useT } from "@/lib/i18n/useI18n";
 
-const fadeStyle = ({
-  isVisible,
-  transition,
-  style,
-}: {
-  isVisible: boolean;
-  transition?: {
-    enter?: { duration?: number };
-    exit?: { duration?: number };
-  };
-  style?: React.CSSProperties;
-}): React.CSSProperties => ({
-  opacity: isVisible ? 0 : 1,
-  // Longhand only — mixing the `animation` shorthand with `animationDelay`
-  // makes React warn when the delay is conditionally added/removed.
-  animationName: isVisible ? "fadeIn" : "fadeOut",
-  animationDuration: `${(isVisible ? transition?.enter?.duration : transition?.exit?.duration) ?? 1}s`,
-  animationTimingFunction: "ease-in-out",
-  animationFillMode: "forwards",
-  animationDelay: "0ms",
-  ...style,
-});
-
 type Status = "showing" | "shown" | "hiding" | "paused";
 
 const DURATION = {
@@ -208,17 +185,14 @@ function ResultsProjector({
                             "&:last-child td": { border: 0 },
                           }}
                           key={`${result.registration_id}-${result.round_wcif_id}`}
-                          style={fadeStyle({
-                            isVisible,
-                            transition: {
-                              enter: { duration: DURATION.SHOWING / 1000 },
-                              exit: { duration: DURATION.HIDING / 1000 },
-                            },
-                            style:
-                              status === "showing"
-                                ? { animationDelay: `${index * 100}ms` }
-                                : {},
-                          })}
+                          opacity={isVisible ? 0 : 1}
+                          animationName={isVisible ? "fade-in" : "fade-out"}
+                          animationDuration={`${(isVisible ? DURATION.SHOWING : DURATION.HIDING) / 1000}s`}
+                          animationTimingFunction="ease-in-out"
+                          animationFillMode="forwards"
+                          animationDelay={
+                            status === "showing" ? `${index * 100}ms` : "0ms"
+                          }
                         >
                           <Table.Cell
                             fontSize="1.5rem"
