@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+VENUE_ATTRIBUTES = [:venue, :city_name, :venue_address, :venue_details]
+
 namespace :competition_main_venue do
   desc "Attempt to (somewhat) intelligently backlink competitions that don't have a main_venue yet"
   task backlink: :environment do
@@ -17,25 +19,12 @@ namespace :competition_main_venue do
           # There is no venue at all, so this competition must be very old.
           # Let's build one from the legacy information that we have available!
 
-          # assume the worst, if we cannot find the lat/long
-          timezone = 'Etc/UTC'
-
-          comp_latitude = competition.latitude_degrees
-          comp_longitude = competition.longitude_degrees
-
-          if comp_latitude.present? && comp_longitude.present?
-            guessed_timezone = TZF.tz_name(comp_latitude, comp_longitude)
-            timezone = guessed_timezone if guessed_timezone.present?
-          end
-
           main_venue = competition.competition_venues.build(
-            wcif_id: 1, # we know from the `if` above that there are no venues yet
-            name: competition.venue,
-            latitude_microdegrees: competition.latitude_microdegrees,
-            longitude_microdegrees: competition.longitude_microdegrees,
-            country_iso2: competition.country_iso2,
-            timezone_id: timezone,
+            # we know from the `if` above that there are no venues yet
+            wcif_id: 1,
           )
+
+          main_venue.backfill_competition_info!
         else
           is_multi_location = competition.fictive_country?
         end
@@ -63,6 +52,34 @@ namespace :competition_main_venue do
       if competition.main_venue.changed?
         puts "Updated information on #{competition.id}"
         competition.main_venue.save(validate: false)
+      end
+    end
+  end
+
+  task check_distance: :environment do
+    Competition
+      .includes(:main_venue)
+      .find_each do |competition|
+      if competition.main_venue.nil?
+        puts "Should have a main venue but doesn't: #{competition.id}" unless competition.is_multi_location?
+      else
+        puts "Should NOT have a main venue but actually does: #{competition.id}" if competition.is_multi_location?
+
+        if competition.latitude_microdegrees != competition.main_venue.latitude_microdegrees || competition.longitude_microdegrees != competition.main_venue.longitude_microdegrees
+          haversine_distance = competition.main_venue.competition_distance_km
+
+          if haversine_distance < 0.1
+            competition.main_venue.assign_attributes(
+              latitude_microdegrees: competition.latitude_microdegrees,
+              longitude_microdegrees: competition.longitude_microdegrees,
+            )
+
+            competition.main_venue.save(validate: false)
+            puts "Updated #{competition.id}"
+          else
+            puts "#{competition.id}: Distance #{haversine_distance.round(2)} km"
+          end
+        end
       end
     end
   end

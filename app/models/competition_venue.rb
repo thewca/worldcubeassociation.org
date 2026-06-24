@@ -31,7 +31,7 @@ class CompetitionVenue < ApplicationRecord
     self
   end
 
-  def backfill_competition_info!
+  def backfill_competition_info!(maximum_distance_km = nil)
     inferred_tz = TZF.tz_name(
       competition.latitude_degrees,
       competition.longitude_degrees,
@@ -42,11 +42,25 @@ class CompetitionVenue < ApplicationRecord
       city: competition.city_name,
       address: competition.venue_address,
       description: competition.venue_details,
-      latitude_microdegrees: competition.latitude_microdegrees,
-      longitude_microdegrees: competition.longitude_microdegrees,
       country_iso2: competition.country_iso2,
-      timezone_id: inferred_tz
+      timezone_id: self.timezone_id || inferred_tz
     )
+
+    if maximum_distance_km.nil? || self.competition_distance_km < maximum_distance_km
+      self.assign_attributes(
+        latitude_microdegrees: competition.latitude_microdegrees,
+        longitude_microdegrees: competition.longitude_microdegrees,
+      )
+    end
+  end
+
+  def competition_distance_km
+    mock_venue_comp = Competition.new(
+      latitude_microdegrees: self.latitude_microdegrees,
+      longitude_microdegrees: self.longitude_microdegrees,
+    )
+
+    self.competition.kilometers_to(mock_venue_comp)
   end
 
   def latitude_degrees
