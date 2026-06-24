@@ -179,7 +179,12 @@ function ResultsProjector({
                         ["showing", "shown", "paused"] as Status[]
                       ).includes(status);
 
-                      return competitor.results.map((result) => (
+                      // For dual/linked rounds a competitor has one result per
+                      // linked round; the projector shows only their best one
+                      // rather than the combined breakdown.
+                      const result = competitor.results[0];
+
+                      return (
                         <Table.Row
                           whiteSpace="nowrap"
                           css={{
@@ -234,7 +239,7 @@ function ResultsProjector({
                             ),
                           )}
                         </Table.Row>
-                      ));
+                      );
                     })}
                 </Table.Body>
               </Table.Root>
