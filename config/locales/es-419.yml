@@ -886,13 +886,12 @@ es-419:
         #original_hash: 7577db4
         setup_images: >-
           SE DEBEN incluir al menos %{image_count} imágenes que ilustren la zona
-          de mezclas y de competición de esta competencia, preferiblemente
-          durante la competencia (otras imágenes son bienvenidas también).
-          Puedes elegir múltiples archivos a la vez. Puedes eliminar imágenes
-          solo cuando suficientes otras se hayan subido (si quieres reemplazar
-          una imagen, necesitas subir la nueva primero, y luego eliminar la
-          antigua). Si no tienes imágenes de estas zonas en uso, por favor
-          explica la razón.
+          de mezclas y de competición, preferiblemente durante la misma (otras
+          imágenes son bienvenidas también). Puedes elegir múltiples archivos a
+          la vez. Puedes eliminar imágenes solo cuando suficientes otras se
+          hayan subido (si quieres reemplazar una imagen, necesitas subir la
+          nueva primero, y luego eliminar la antigua). Si no tienes imágenes de
+          estas zonas en uso, por favor explica la razón.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1750,6 +1749,11 @@ es-419:
           validation_error: Por favor verifica que no eres un robot.
       #original_hash: 126541e
       success_message: Pedido solicitado. Te responderemos a la brevedad.
+      #original_hash: bb6a0cf
+      success_message_with_ticket_link_html: >-
+        Solicitud enviada, te responderemos a la brevedad. Para consultar el
+        estado de tu solicitud, por favor visita <a href="%{link}">este
+        enlace</a>.
   homepage:
     #original_hash: 824d76b
     learn_more: Saber más
@@ -1832,7 +1836,7 @@ es-419:
         impuestos. Al ser 100% mantenida por voluntarios y sin ánimo de lucro,
         agradecemos sus donaciones para ayudarnos a llevar más lejos nuestro
         Propósito de empoderar a la comunidad cubera global y mantener un
-        ambiente divertido y justo de competencia para todos.
+        ambiente divertido y justo de competición para todos.
       #original_hash: 65c84ec
       button: Saber más sobre como puedes apoyar a la WCA
   users:
@@ -2863,16 +2867,43 @@ es-419:
         recuerda especificar esto en los requisitos de las inscripciones.
       #original_hash: 51376ef
       schedule_locked_after_results_submitted: El horario no puede ser editado luego de enviar los resultados.
+      #original_hash: 1877b69
+      spots_left:
+        zero: Sin cupos libres
+        one: Queda un solo cupo
+        other: 'Quedan %{count} cupos'
     live:
       #original_hash: 10d1a3c
       title: Resultados en vivo
+      incompatible:
+        #original_hash: 4e41690
+        external: >-
+          Esta competición está utilizando software externo para cargar los
+          tiempos. Por favor, consulta la información de la competición para
+          saber dónde ver los resultados en vivo.
+        #original_hash: 92b3341
+        wca_live: >-
+          Esta competición usa WCA Live para la carga de tiempos. Por favor, haz
+          click en este link para ver los resultados en vivo:
+      round_state:
+        #original_hash: 98aadb3
+        ongoing: en vivo
+        #original_hash: e5fd9cf
+        done: finalizado
       connection:
         #original_hash: f92b311
         initialized: Inicializando conexión
-        #original_hash: 66d44d4
-        connected: 'Conectado, actualizando resultados'
+        #original_hash: b574812
+        connected: 'Conectado, recibiendo actualizaciones en vivo'
         #original_hash: 53abaa2
         disconnected: 'Conexión perdida, resultados no actualizados'
+        status:
+          #original_hash: 3ec2f2a
+          initialized: Inicializando
+          #original_hash: c2f9b7b
+          connected: Conectado
+          #original_hash: 771e05f
+          disconnected: Desconectado
       podiums:
         #original_hash: 02ae2bd
         title: Podios
@@ -2893,6 +2924,14 @@ es-419:
         edit: Editar
         #original_hash: 612e12d
         results: Resultados
+        #original_hash: b233e77
+        registration: Registro
+        #original_hash: 1e0d934
+        admin_view: Vista de administrador
+        #original_hash: 530a71b
+        results_view: Vista de resultados
+        #original_hash: 1dadee2
+        double_check: Doble chequeo
         warnings:
           #original_hash: 9198c71
           omitted: >-
@@ -2927,8 +2966,18 @@ es-419:
             other: 'Los siguientes competidores en pasar de ronda son %{competitors}'
           #original_hash: c87ca67
           advance: Siguiente competidor pasa
-          #original_hash: e85b311
-          quit_confirm: Eliminar competidor de la ronda
+          #original_hash: aa59a26
+          quit_confirm:
+            zero: Eliminar competidores de la ronda
+            one: Eliminar competidor de la ronda
+            other: Eliminar competidores de la ronda
+          bulk:
+            #original_hash: e0981de
+            success: 'Se quitaron %{count} competidores exitosamente'
+            #original_hash: 98fe723
+            failure: Ocurrió un error quitando los competidores
+            #original_hash: 774050e
+            menu: Quitar restantes
           #original_hash: 1a2285d
           quit_menu: Quitar
           #original_hash: 70835a0
@@ -2937,6 +2986,20 @@ es-419:
           cancel: Cancelar
           #original_hash: 79d6737
           failed_to_fetch: Ocurrió un error al buscar el siguiente competidor en pasar de ronda
+          #original_hash: d4dcd86
+          still_processing: >-
+            No se pueden eliminar competidores mientras aún se están procesando
+            los resultados
+        add_competitor:
+          #original_hash: 9dcb50d
+          single_round: Agregar competidor a la ronda
+          #original_hash: bf3b670
+          multiple_rounds:
+            zero: Agregar competidor a la ronda.
+            one: Agregar competidor a ambas rondas en la ronda dual.
+            other: >-
+              Agregar competidor a la ronda. La segunda ronda de la ronda dual
+              no está abierta, así que lo tendrás que agregar luego.
       results:
         #original_hash: 4705687
         competitor: Competidor
@@ -3505,8 +3568,8 @@ es-419:
           external_registration_page: Página de registro
           #original_hash: 87b7d5f
           uses_wca_registration: Usaré la web de la WCA para el registro
-          #original_hash: ebe8c47
-          uses_wca_live: Usaré WCA Live para introducir tiempos
+          #original_hash: 0611f2d
+          scoretaking_software: Software para carga de resultados
         entry_fees:
           #original_hash: 28a6fbb
           currency_code: Moneda
@@ -3738,8 +3801,8 @@ es-419:
             competición. Debe ser una URL http o https válida.
           #original_hash: da39a3e
           uses_wca_registration: ''
-          #original_hash: da39a3e
-          uses_wca_live: ''
+          #original_hash: cc7d557
+          scoretaking_software: 'Selecciona "%{choice_ilr}" si deseas usar Rondas Duales'
         user_settings:
           #original_hash: da39a3e
           receive_registration_emails: ''
@@ -3887,6 +3950,14 @@ es-419:
             bulk: Habilitat botón de "auto aceptar en masa"
             #original_hash: 490ed83
             live: Aceptar registros automáticamente cuando se haga el pago
+        website:
+          scoretaking_software:
+            #original_hash: 1c88388
+            external: 'Una herramienta externa, no mantenida por la WCA'
+            #original_hash: 4b175c3
+            wca_live: 'WCA Live, hosteado en live.worldcubeassociation.org'
+            #original_hash: 1ee034d
+            internal: Integrated Live Results
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -5346,7 +5417,7 @@ es-419:
     #original_hash: ee35764
     mission_statement: >-
       Nuestro propósito es empoderar a la comunidad global de speedcubing y
-      mantener un entorno divertido y justo de competencia para todos.
+      mantener un entorno divertido y justo de competición para todos.
     #original_hash: 5bed828
     mission_footer: Propósito de la WCA
     #original_hash: cdab446
@@ -5536,6 +5607,8 @@ es-419:
       last_delegated: Delegó por última vez el
       #original_hash: 5ab4a17
       total_delegated: Competiciones delegadas en total
+      #original_hash: cec62d6
+      lead_delegated: Competiciones como Delegado Principal
       #original_hash: 90ccd64
       history: Histórico
   regional_organizations:
@@ -6682,6 +6755,11 @@ es-419:
         [%{round_id}] Si bien se permiten múltiples grupos para 3x3x3 Múltiple a
         Ciegas, al menos uno de los grupos debe contener mezclas para todos los
         intentos.
+      #original_hash: 2757334
+      mbld_scrambles_warning: >-
+        [%{round_id}] Esta ronda tiene resultados de 3x3x3 Múltiple a Ciegas.
+        Por favor, especifica en tu comentario cuántas mezclas de cada set
+        fueron utilizadas, así el WRT puede remover las que no se utilizaron.
       #original_hash: 3d5255d
       multiple_fmc_groups_warning: >-
         [%{round_id}] Hay múltiples grupos de 3x3x3 Menos Movimientos. Si solo

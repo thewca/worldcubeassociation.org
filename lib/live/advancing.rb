@@ -27,6 +27,39 @@ module Live
       end
     end
 
+    def self.recompute_global_pos_query(format, linked_round, person_key, table)
+      rank_by = format.rank_by_column
+      secondary_rank_by = format.secondary_rank_by_column
+      round_ids = linked_round.round_ids.join(",")
+
+      secondary_rank_sql = secondary_rank_by ? ", person_best.#{secondary_rank_by} <= 0, person_best.#{secondary_rank_by} ASC" : ""
+      secondary_rank_inner_sql = secondary_rank_by ? ", t.#{secondary_rank_by} <= 0, t.#{secondary_rank_by} ASC" : ""
+
+      # Similar to the query that recomputes local_pos, but
+      # at first it computes the best result of a person over all linked rounds
+      # by using the same ORDER BY <=0 trick
+      <<~SQL.squish
+        UPDATE #{table} r
+        LEFT JOIN
+          (SELECT #{person_key},
+                  RANK() OVER (ORDER BY person_best.#{rank_by} <= 0,
+                               person_best.#{rank_by} ASC #{secondary_rank_sql}) AS ranking
+           FROM
+             (SELECT *
+              FROM
+                (SELECT t.*,
+                        ROW_NUMBER() OVER (PARTITION BY t.#{person_key}
+                                           ORDER BY (t.#{rank_by} <= 0) ASC,
+                                           t.#{rank_by} ASC #{secondary_rank_inner_sql}) AS rownum
+                 FROM #{table} t
+                 WHERE t.round_id IN (#{round_ids})
+                   AND t.best != 0) x
+              WHERE rownum = 1) AS person_best) ranked ON r.#{person_key} = ranked.#{person_key}
+        SET r.global_pos = ranked.ranking
+        WHERE r.round_id IN (#{round_ids});
+      SQL
+    end
+
     def self.podium_condition(format)
       ResultConditions::Ranking.new(scope: format.sort_by, value: 3)
     end

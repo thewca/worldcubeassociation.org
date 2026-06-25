@@ -1,11 +1,13 @@
 "use client";
 import {
   Button,
+  Checkbox,
   Combobox,
   Heading,
   Portal,
   useListCollection,
   VStack,
+  Text,
 } from "@chakra-ui/react";
 import AttemptResultField from "@/app/(wca)/(with-background)/dashboard/AttemptResultField";
 import _ from "lodash";
@@ -45,6 +47,10 @@ export default function AttemptsForm({
     handleAttemptChange,
     registrationId,
     isPending,
+    batchMode,
+    setBatchMode,
+    batchCount,
+    submitBatch,
   } = useResultsAdmin();
 
   const confirm = useConfirm();
@@ -78,7 +84,7 @@ export default function AttemptsForm({
 
     if (submissionWarning) {
       confirm({
-        content: submissionWarning,
+        content: <Text>{submissionWarning}</Text>,
         confirmButton: "Submit",
       }).then(() => handleSubmit(refocusInput));
     } else {
@@ -151,9 +157,29 @@ export default function AttemptsForm({
             onClick={confirmSubmission}
             disabled={isPending || attempts.length === 0}
           >
-            Submit Results
+            {batchMode
+              ? t("competitions.live.admin.add_to_batch")
+              : t("competitions.live.admin.submit_results")}
           </Button>
+          {batchMode && (
+            <Button
+              onClick={submitBatch}
+              disabled={isPending || batchCount === 0}
+            >
+              {t("competitions.live.admin.submit_batch", { count: batchCount })}
+            </Button>
+          )}
         </FocusScope>
+        <Checkbox.Root
+          checked={batchMode}
+          onCheckedChange={(e) => setBatchMode(!!e.checked)}
+        >
+          <Checkbox.HiddenInput />
+          <Checkbox.Control />
+          <Checkbox.Label>
+            {t("competitions.live.admin.batch_mode")}
+          </Checkbox.Label>
+        </Checkbox.Root>
       </VStack>
     </form>
   );
@@ -195,7 +221,7 @@ function AttemptFieldsNav({
       e.key === "Enter" ||
       e.key === "ArrowDown" ||
       e.code === "NumpadAdd" ||
-      e.key === "Tab"
+      (e.key === "Tab" && !e.shiftKey)
     ) {
       e.preventDefault();
       const from = e.target as HTMLElement;
@@ -207,7 +233,11 @@ function AttemptFieldsNav({
       return;
     }
 
-    if (e.key === "ArrowUp" || e.code === "NumpadSubtract") {
+    if (
+      e.key === "ArrowUp" ||
+      e.code === "NumpadSubtract" ||
+      (e.key === "Tab" && e.shiftKey)
+    ) {
       e.preventDefault();
       const from = e.target as HTMLElement;
       flushSync(() => from.blur());

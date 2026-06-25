@@ -1,0 +1,12 @@
+oneOf:
+  - $ref: './SearchResultCompetition.yaml'
+  - $ref: './SearchResultPerson.yaml'
+  - $ref: './SearchResultRegulation.yaml'
+  - $ref: './SearchResultIncident.yaml'
+discriminator:
+  propertyName: class
+  mapping:
+    competition: './SearchResultCompetition.yaml'
+    person: './SearchResultPerson.yaml'
+    regulation: './SearchResultRegulation.yaml'
+    incident: './SearchResultIncident.yaml'

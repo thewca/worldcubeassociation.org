@@ -4,6 +4,6 @@
 
 class ForumTopicsController < ApplicationController
   def show
-    @topic = ForumTopic.includes(forum_posts: [:poster]).find(params[:id])
+    @topic = ForumTopic.includes(forum_posts: [:poster]).find(params.require(:id))
   end
 end

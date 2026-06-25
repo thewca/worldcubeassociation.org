@@ -1,9 +1,9 @@
 <%= render layout: "nav" do %>
-  <%= react_component("IncidentsLog", {
+  <%= react_on_rails_component("IncidentsLog", props: {
     canManageIncidents: current_user&.can_manage_incidents?,
     canViewDelegateMatters: current_user&.can_view_delegate_matters?,
     allTags: IncidentTag.select(:tag).distinct.pluck(:tag),
-  }, {
+  }, html_options: {
     id: "incidents_log",
   }) %>
 <% end %>
