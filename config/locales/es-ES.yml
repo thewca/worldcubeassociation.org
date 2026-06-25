@@ -4811,6 +4811,8 @@ es-ES:
         none: Ninguna
         #original_hash: 9b9a6aa
         show_buttons: Mostrar botones de zona horaria
+        #original_hash: dd3c440
+        hide_buttons: Ocultar botones de zona horaria
         #original_hash: d2ac826
         use_time_zone: Usar esta zona horaria
       #original_hash: 73acb7f
@@ -4830,12 +4832,18 @@ es-ES:
       venue_selection_all: 'Estás viendo el horario en todos los %{venueCount} recintos.'
       #original_hash: 97df911
       timezone_message: 'La zona horaria de este recinto es %{timezone}.'
-      #original_hash: 94b2570
+      #original_hash: f948a0e
       timezone_setting: 'Estás viendo este horario en la siguiente zona horaria:'
-      #original_hash: 75194fd
+      #original_hash: ca4f078
       multiple_timezones_available: >-
-        ¡Cuidado! No todos los recintos están en la misma zona horaria. ¡Por
-        favor, ten cuidado!
+        Ten en cuenta que algunos recintos están en zonas horarias distintas.
+        ¡Por favor, ten cuidado!
+      #original_hash: 459e545
+      select_a_timezone: Selecciona una zona horaria
+      #original_hash: 80e8704
+      select_a_venue_to_view: >-
+        Para visualizar el horario, selecciona uno de los recintos que aparecen
+        arriba.
       #original_hash: d94a371
       timezone_set_local: Usar la zona horaria local
       #original_hash: 17ab650
