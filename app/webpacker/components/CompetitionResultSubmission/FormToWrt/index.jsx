@@ -1,11 +1,14 @@
 import React from 'react';
-import { Accordion, Form, Message } from 'semantic-ui-react';
+import {
+  Accordion, Button, Form, Message,
+} from 'semantic-ui-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Errored from '../../Requests/Errored';
 import useInputState from '../../../lib/hooks/useInputState';
 import MarkdownEditor from '../../wca/FormBuilder/input/MarkdownEditor';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import submitToWrt from '../api/submitToWrt';
+import importWcaLiveResults from '../api/importWcaLiveResults';
 import Loading from '../../Requests/Loading';
 import runValidatorsForCompetitionList from '../../Panel/pages/RunValidatorsPage/api/runValidatorsForCompetitionList';
 import { ALL_VALIDATORS } from '../../../lib/wca-data.js.erb';
@@ -14,7 +17,7 @@ import ValidationOutput from '../../Panel/pages/RunValidatorsPage/ValidationOutp
 const DELEGATE_HANDBOOK_COMPETITION_RESULTS_URL = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf#competition-results';
 const ERROR_MESSAGE_UPLOADED_RESULTS = "Please upload a JSON file and make sure the results don't contain any errors.";
 
-export default function FormToWrt({ competitionId, canSubmitResults }) {
+export default function FormToWrt({ competitionId, canSubmitResults, showWcaLiveBeta = false }) {
   const [confirmDetails, setConfirmDetails] = useCheckboxState(false);
   const [message, setMessage] = useInputState();
 
@@ -22,6 +25,8 @@ export default function FormToWrt({ competitionId, canSubmitResults }) {
     data: validationOutput,
     isPending: isValidationPending,
     isError: isErrorInPreviousUpload,
+    isFetching: isValidationFetching,
+    refetch: refetchValidation,
   } = useQuery({
     queryKey: ['competition-validation-output', competitionId],
     queryFn: () => runValidatorsForCompetitionList(
@@ -33,12 +38,29 @@ export default function FormToWrt({ competitionId, canSubmitResults }) {
   });
 
   const {
+    mutate: reimportMutate,
+    isPending: isReimportPending,
+    isError: isReimportError,
+    error: reimportError,
+  } = useMutation({
+    mutationFn: () => importWcaLiveResults({
+      competitionId,
+      markResultSubmitted: false,
+      storeUploadedJson: true,
+    }),
+    onSuccess: () => refetchValidation(),
+  });
+
+  const {
     mutate: submitToWrtMutate,
     isPending: isSubmitPending,
     isSuccess,
     isError: isErrorInCurrentUpload,
     error: errorInSubmission,
   } = useMutation({ mutationFn: submitToWrt });
+
+  const hasValidationErrors = validationOutput?.errors?.length > 0;
+  const isRefreshing = isReimportPending || isValidationFetching;
 
   const formSubmitHandler = () => {
     submitToWrtMutate({ competitionId, message });
@@ -56,6 +78,26 @@ export default function FormToWrt({ competitionId, canSubmitResults }) {
       </Accordion.Title>
       <Accordion.Content active>
         <ValidationOutput validationOutput={validationOutput} />
+        {showWcaLiveBeta && hasValidationErrors && (
+          <Message warning>
+            <p>
+              If you are using WCA Live, hit
+              {' '}
+              <b>&quot;Synchronize&quot;</b>
+              {' '}
+              after fixing these errors, then re-import the times to refresh the validations below.
+            </p>
+            {isReimportError && <Errored error={reimportError} />}
+            <Button
+              primary
+              loading={isRefreshing}
+              disabled={isRefreshing}
+              onClick={() => reimportMutate()}
+            >
+              Re-import & Refresh Validations
+            </Button>
+          </Message>
+        )}
         {canSubmitResults && (
           <>
             <p>Please enter the body of your email to the Results Team.</p>

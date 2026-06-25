@@ -68,7 +68,11 @@ function CompetitionResultSubmission({
         showWcaLiveBeta={showWcaLiveBeta}
       />
       {hasTemporaryResults && (
-        <FormToWrt competitionId={competitionId} canSubmitResults={canSubmitResults} />
+        <FormToWrt
+          competitionId={competitionId}
+          canSubmitResults={canSubmitResults}
+          showWcaLiveBeta={showWcaLiveBeta}
+        />
       )}
     </>
   );
