@@ -60,6 +60,7 @@ export default async function ResultPage({
                   competitionId={competitionId}
                   roundName={roundName}
                   round={round}
+                  rounds={roundsData.rounds}
                 />
               </LiveResultAdminProvider>
             </LiveResultProvider>
