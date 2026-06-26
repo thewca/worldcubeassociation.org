@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 import {
   continents, countries, nonFutureCompetitionYears, WCA_EVENT_IDS,
 } from '../../lib/wca-data.js.erb';
-import { ALL_REGIONS_VALUE } from '../wca/RegionSelector';
+import { ALL_REGIONS_VALUE } from '../../components/wca/RegionSelector';
 
 // note: inconsistencies with previous search params
 // - year value was 'all+years', is now 'all_years'

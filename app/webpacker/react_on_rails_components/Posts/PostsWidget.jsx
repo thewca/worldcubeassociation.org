@@ -5,8 +5,8 @@ import {
 
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { postsUrl } from '../../lib/requests/routes.js.erb';
-import Loading from '../Requests/Loading';
-import Errored from '../Requests/Errored';
+import Loading from '../../components/Requests/Loading';
+import Errored from '../../components/Requests/Errored';
 import { formattedTextForDate } from '../../lib/utils/wca';
 
 function PostTitlesList({

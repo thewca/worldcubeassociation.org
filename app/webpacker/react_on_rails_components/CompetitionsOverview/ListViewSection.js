@@ -23,7 +23,7 @@ import {
 import { countries } from '../../lib/wca-data.js.erb';
 import { adminCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import { dateRange, toRelativeOptions } from '../../lib/utils/dates';
-import RegionFlag from '../wca/RegionFlag';
+import RegionFlag from '../../components/wca/RegionFlag';
 
 function ListViewSection({
   competitions,
