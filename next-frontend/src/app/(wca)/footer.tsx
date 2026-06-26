@@ -47,15 +47,22 @@ function FooterLink({ item }: { item: FooterNavItem | FooterSocialItem }) {
 }
 
 export default async function Footer() {
-  const payload = await getPayload({ config });
-  const [footer, socialLinksGlobal] = await Promise.all([
-    payload.findGlobal({ slug: "footer" }),
-    payload.findGlobal({ slug: "social-links" }),
-  ]);
+  let navigationLinks: any[] = [];
+  let socialLinks: any[] = [];
+  let legalLinks: any[] = [];
 
-  const navigationLinks = footer.navigationLinks ?? [];
-  const socialLinks = socialLinksGlobal.links ?? [];
-  const legalLinks = footer.legalLinks ?? [];
+  try {
+    const payload = await getPayload({ config });
+    const [footer, socialLinksGlobal] = await Promise.all([
+      payload.findGlobal({ slug: "footer" }),
+      payload.findGlobal({ slug: "social-links" }),
+    ]);
+    navigationLinks = footer.navigationLinks ?? [];
+    socialLinks = socialLinksGlobal.links ?? [];
+    legalLinks = footer.legalLinks ?? [];
+  } catch (err) {
+    console.warn("Failed to connect to Payload CMS / Database. Running in UI-only mode.");
+  }
 
   return (
     <Center borderTop="md" borderColor="border" padding={3} mt={5} bg="bg">

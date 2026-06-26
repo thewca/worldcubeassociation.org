@@ -21,7 +21,7 @@ import { LuChevronDown, LuMenu } from "react-icons/lu";
 
 import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
-import type { IconName } from "@/types/payload";
+import type { IconName, Nav, SocialLink } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
 import WCALogo from "@/components/WCALogo";
 import WcaSearch from "@/components/SearchBar/WcaSearch";
@@ -86,18 +86,25 @@ function LinkWrapper<T extends string>({
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
 export default async function Navbar() {
-  const payload = await getPayload({ config });
-  const [navbar, socialLinksGlobal] = await Promise.all([
-    payload.findGlobal({ slug: "nav" }),
-    payload.findGlobal({ slug: "social-links" }),
-  ]);
+  let navbarEntries: NonNullable<Nav["entry"]> = [];
+  let socialLinks: NonNullable<SocialLink["links"]> = [];
+  let showEmptyMessage = false;
+
+  try {
+    const payload = await getPayload({ config });
+    const [navbar, socialLinksGlobal] = await Promise.all([
+      payload.findGlobal({ slug: "nav" }),
+      payload.findGlobal({ slug: "social-links" }),
+    ]);
+    navbarEntries = LIVE_RESULT_BETA ? [] : (navbar.entry ?? []);
+    socialLinks = socialLinksGlobal.links ?? [];
+    showEmptyMessage = !LIVE_RESULT_BETA && navbarEntries.length === 0;
+  } catch (err) {
+    console.warn("Failed to connect to Payload CMS / Database. Running in UI-only mode.");
+    showEmptyMessage = true;
+  }
 
   const session = await auth();
-  const socialLinks = socialLinksGlobal.links ?? [];
-
-  // Prevent people part of the Live Results Beta to escape onto the payload pages
-  const navbarEntries = LIVE_RESULT_BETA ? [] : navbar.entry;
-  const showEmptyMessage = !LIVE_RESULT_BETA && navbarEntries.length === 0;
 
   return (
     <Box
@@ -111,15 +118,6 @@ export default async function Navbar() {
         <HStack padding="3" justifyContent="space-between">
           <HStack>
             {!LIVE_RESULT_BETA && <WCALogo />}
-            <Box hideFrom="xl">
-              <Collapsible.Trigger asChild>
-                <IconButton variant="ghost" aria-label="Toggle navigation">
-                  <Icon size="lg" asChild>
-                    <LuMenu />
-                  </Icon>
-                </IconButton>
-              </Collapsible.Trigger>
-            </Box>
             <HStack hideBelow="xl" gap={0}>
               {navbarEntries.map((navbarEntry) => (
                 <React.Fragment key={navbarEntry.id}>
@@ -285,6 +283,15 @@ export default async function Navbar() {
             </Box>
             <Box hideBelow="md">
               <AvatarMenu session={session} />
+            </Box>
+            <Box hideFrom="xl">
+              <Collapsible.Trigger asChild>
+                <IconButton variant="ghost" aria-label="Toggle navigation">
+                  <Icon size="lg" asChild>
+                    <LuMenu />
+                  </Icon>
+                </IconButton>
+              </Collapsible.Trigger>
             </Box>
           </HStack>
         </HStack>

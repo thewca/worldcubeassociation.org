@@ -504,14 +504,19 @@ const renderBlock = (
 };
 
 export default async function Homepage() {
-  const payload = await getPayload({ config });
-  const { isEnabled: isDraftMode } = await draftMode();
-  const homepage = await payload.findGlobal({
-    slug: "home",
-    draft: isDraftMode,
-  });
+  let homepageEntries: any[] = [];
 
-  const homepageEntries = homepage.layout;
+  try {
+    const payload = await getPayload({ config });
+    const { isEnabled: isDraftMode } = await draftMode();
+    const homepage = await payload.findGlobal({
+      slug: "home",
+      draft: isDraftMode,
+    });
+    homepageEntries = homepage.layout ?? [];
+  } catch (err) {
+    console.warn("Failed to connect to Payload CMS / Database. Running in UI-only mode.");
+  }
 
   if (homepageEntries.length === 0) {
     return (

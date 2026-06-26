@@ -36,6 +36,7 @@ import {
   mongooseAdapter,
   Args,
 } from "@payloadcms/db-mongodb";
+import { sqliteAdapter } from "@payloadcms/db-sqlite";
 import { fromContainerMetadata } from "@aws-sdk/credential-providers";
 
 const filename = fileURLToPath(import.meta.url);
@@ -141,7 +142,13 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, "types/payload.ts"),
   },
-  db: mongooseAdapter(dbOptions()),
+  db: process.env.DATABASE_URI?.startsWith("file:")
+    ? sqliteAdapter({
+        client: {
+          url: process.env.DATABASE_URI,
+        },
+      })
+    : mongooseAdapter(dbOptions()),
   sharp,
   plugins: plugins(),
 });

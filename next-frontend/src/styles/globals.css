@@ -1,0 +1,33 @@
+/* Global theme variables */
+:root {
+  --background: #FCFCFC;
+  --foreground: #181816;
+  --border: #EDEDE9;
+}
+
+[data-theme='dark'],
+.dark {
+  --background: #111111;
+  --foreground: #FCFCFC;
+  --border: #272723;
+}
+
+/* Disable the default cross-fade transitions of View Transitions API */
+::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  display: block;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 99999;
+}

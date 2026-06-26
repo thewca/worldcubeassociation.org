@@ -8,6 +8,7 @@ import Footer from "./footer";
 import { ThemeProvider } from "@wrksz/themes/next";
 import { appFont } from "@/styles/fonts";
 import NextTopLoader from "nextjs-toploader";
+import "@/styles/globals.css";
 
 export const metadata: Metadata = {
   title: {
