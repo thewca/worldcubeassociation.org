@@ -53,12 +53,15 @@ class Cutoff
     cutoff ? JSON.dump(cutoff.to_wcif) : nil
   end
 
-  def self.wcif_json_schema
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
+    at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+    result_key = at_least_v2 ? "resultValue" : "attemptResult"
+
     {
       "type" => %w[object null],
       "properties" => {
         "numberOfAttempts" => { "type" => "integer" },
-        "attemptResult" => { "type" => "integer" },
+        result_key => { "type" => "integer" },
       },
     }
   end
