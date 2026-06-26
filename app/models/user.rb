@@ -1234,14 +1234,14 @@ class User < ApplicationRecord
     base_scope = User.joins(:actually_delegated_competitions).where(id: active_delegate_ids)
 
     before_counts = base_scope
-      .where("competitions.end_date < ?", last_month_start)
-      .group("users.id")
-      .count
+                    .where(competitions: { end_date: ...last_month_start })
+                    .group("users.id")
+                    .count
 
     through_counts = base_scope
-      .where("competitions.end_date <= ?", last_month_end)
-      .group("users.id")
-      .count
+                     .where(competitions: { end_date: ..last_month_end })
+                     .group("users.id")
+                     .count
 
     milestone_achievers = Hash.new { |h, k| h[k] = [] }
 
@@ -1261,9 +1261,8 @@ class User < ApplicationRecord
       next if milestone_achievers[milestone].empty?
 
       result[milestone] = milestone_achievers[milestone]
-        .map { |id| users_by_id[id] }
-        .compact
-        .sort_by(&:name)
+                          .filter_map { |id| users_by_id[id] }
+                          .sort_by(&:name)
     end
   end
 
