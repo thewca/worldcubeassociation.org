@@ -44,7 +44,7 @@ class Cutoff
       self.new.tap do |cutoff|
         json_obj = json.is_a?(Hash) ? json : JSON.parse(json)
         cutoff.number_of_attempts = json_obj['numberOfAttempts']
-        cutoff.attempt_result = json_obj['attemptResult']
+        cutoff.attempt_result = json_obj['attemptResult'] || json_obj['resultValue']
       end
     end
   end
