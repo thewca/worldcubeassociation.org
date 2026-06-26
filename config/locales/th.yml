@@ -234,6 +234,8 @@ th:
       ranking: '%{ranking} อันดับแรก'
       #original_hash: 0664a83
       percent: '%{percent}% แรก'
+      #original_hash: 023a81e
+      all_advance: ผ่านเข้ารอบทั้งหมด
       attempt_result:
         #original_hash: ac6a282
         time: '%{round_format} < %{time}'
@@ -241,6 +243,8 @@ th:
         moves: '%{round_format} < %{moves}'
         #original_hash: 076911b
         points: '%{round_format} > %{points}'
+    #original_hash: ba6fa8b
+    all_advance: ผู้เข้าแข่งขันทุกคนผ่านเข้ารอบ
     #original_hash: 6e55337
     ranking: '%{ranking} อันดับแรก ผ่านเข้าสู่รอบถัดไป'
     #original_hash: 7ee969c
@@ -1679,6 +1683,10 @@ th:
           validation_error: กรุณายืนยันว่าคุณไม่ใช่หุ่นยนต์
       #original_hash: 126541e
       success_message: ส่งคำขอแล้ว - เราจะติดต่อคุณกลับเร็วๆ นี้
+      #original_hash: bb6a0cf
+      success_message_with_ticket_link_html: >-
+        ส่งคำขอแล้ว - เราจะติดต่อกลับโดยเร็วที่สุด หากต้องการตรวจสอบสถานะของคำขอ
+        โปรดไปที่ <a href="%{link}">ลิงก์นี้</a>
   homepage:
     #original_hash: 824d76b
     learn_more: เรียนรู้เพิ่มเติม
@@ -2693,26 +2701,57 @@ th:
         list โปรดอย่าลืมระบุสิ่งนี้ในข้อกำหนดการสมัครการแข่งขัน
       #original_hash: 51376ef
       schedule_locked_after_results_submitted: ไม่สามารถแก้ไขตารางการแข่งขันได้หลังจากส่งผลการแข่งขันแล้ว
+      #original_hash: 1877b69
+      spots_left:
+        zero: ผู้สมัครเต็มแล้ว
+        other: 'เหลืออีก %{count} คน'
     live:
       #original_hash: 10d1a3c
       title: ผลการแข่งขัน
+      #original_hash: ef1c23b
+      manage_rounds: จัดการรอบการแข่งขัน
+      incompatible:
+        #original_hash: 4e41690
+        external: >-
+          การแข่งขันนี้ใช้ซอฟต์แวร์บันทึกคะแนนภายนอก
+          โปรดตรวจสอบข้อมูลการแข่งขันเพื่อดูว่าสามารถดูคะแนนสดได้ที่ไหน
+        #original_hash: 92b3341
+        wca_live: >-
+          การแข่งขันนี้ใช้ระบบ WCA Live ในการบันทึกคะแนน
+          โปรดคลิกที่ลิงก์นี้เพื่อดูผลการแข่งขัน:
+      round_state:
+        #original_hash: 98aadb3
+        ongoing: live
+        #original_hash: e5fd9cf
+        done: สิ้นสุดแล้ว
       connection:
         #original_hash: f92b311
         initialized: กำลังเริ่มต้นการเชื่อมต่อ
-        #original_hash: 66d44d4
-        connected: เชื่อมต่อแล้ว กำลังอัปเดตผลการแข่งขัน
+        #original_hash: b574812
+        connected: เชื่อมต่อแล้ว กำลังรอรับการอัปเดตผลการแข่งขัน
         #original_hash: 53abaa2
         disconnected: การเชื่อมต่อขาดหาย ผลการแข่งขันไม่ได้รับการอัปเดต
+        status:
+          #original_hash: 3ec2f2a
+          initialized: Initializing
+          #original_hash: c2f9b7b
+          connected: เชื่อมต่อแล้ว
+          #original_hash: 771e05f
+          disconnected: Disconnected
       podiums:
         #original_hash: 02ae2bd
         title: Podiums
         #original_hash: d7297a7
         undetermined: จะกำหนดผู้ได้รับรางวัลในภายหลัง
+        #original_hash: 61e88df
+        none: ยังไม่มีการมอบรางวัล!
       admin:
         #original_hash: cf9b770
         open: เปิด
         #original_hash: 719ea39
         clear: เคลียร์
+        #original_hash: bbfa773
+        close: Close
         #original_hash: 42faad9
         competitors_entered: >-
           ผลการแข่งขันที่กรอกแล้ว
@@ -2723,6 +2762,22 @@ th:
         edit: Edit
         #original_hash: 612e12d
         results: ผลการแข่งขัน
+        #original_hash: b233e77
+        registration: Registration
+        #original_hash: 1e0d934
+        admin_view: Admin View
+        #original_hash: 530a71b
+        results_view: Results View
+        #original_hash: 1dadee2
+        double_check: Double Check
+        #original_hash: a5be381
+        submit_results: ส่งผลการแข่งขัน
+        #original_hash: 0ed766a
+        add_to_batch: Add to Batch
+        #original_hash: 8b6d8cb
+        batch_mode: Batch Mode
+        #original_hash: a577fa2
+        submit_batch: 'Submit Batch (%{count})'
         warnings:
           #original_hash: 9198c71
           omitted: >-
@@ -2755,8 +2810,21 @@ th:
             other: 'ผู้เข้าแข่งขันรายต่อไปที่จะผ่านเข้ารอบคือ %{competitors}'
           #original_hash: c87ca67
           advance: ให้ผู้เข้าแข่งขันคนถัดไปเข้ารอบ
-          #original_hash: e85b311
-          quit_confirm: ลบผู้เข้าแข่งขันจากรอบ
+          #original_hash: aa59a26
+          quit_confirm:
+            zero: ถอนผู้เข้าแข่งขันออกจากรอบ
+            other: ถอนผู้เข้าแข่งขันออกจากรอบ
+          bulk:
+            #original_hash: e0981de
+            success: 'ถอนผู้เข้าแข่งขันสำเร็จแล้ว %{count} คน'
+            #original_hash: 98fe723
+            failure: ล้มเหลวในการถอนผู้เข้าแข่งขันจำนวนมาก
+            #original_hash: 774050e
+            menu: ถอนผู้เข้าแข่งขันจำนวนมาก
+            #original_hash: 89f89c0
+            id: ID
+            #original_hash: 709a232
+            name: ชื่อ
           #original_hash: 1a2285d
           quit_menu: Quit
           #original_hash: 70835a0
@@ -2765,6 +2833,20 @@ th:
           cancel: ยกเลิก
           #original_hash: 79d6737
           failed_to_fetch: ไม่สามารถดึงข้อมูลผู้เข้าแข่งขันที่ผ่านเข้ารอบรายถัดไปได้
+          #original_hash: d4dcd86
+          still_processing: >-
+            ไม่สามารถดำเนินการ "ถอนผู้เข้าแข่งขัน"
+            ได้ในขณะที่ผลการแข่งขันบางส่วนยังอยู่ระหว่างการประมวลผล
+        add_competitor:
+          #original_hash: 9dcb50d
+          single_round: เพิ่มผู้เข้าแข่งขันในรอบ
+          #original_hash: bf3b670
+          multiple_rounds:
+            zero: เพิ่มผู้เข้าแข่งขันในทั้งรอบปกติและ Dual Rond
+            other: >-
+              เพิ่มผู้เข้าแข่งขันเข้าสู่รอบ เนื่องจากรอบที่สองของการแข่งขันแบบ
+              Dual Round ยังไม่เปิดให้ใช้งาน
+              คุณจึงต้องเพิ่มผู้เข้าแข่งขันแยกต่างหาก
       results:
         #original_hash: 4705687
         competitor: ผู้เข้าแข่งขัน
@@ -3320,8 +3402,8 @@ th:
           external_registration_page: หน้ารับสมัคร
           #original_hash: 87b7d5f
           uses_wca_registration: ฉันต้องการใช้ WCA website ในการรับสมัคร
-          #original_hash: ebe8c47
-          uses_wca_live: ฉันจะใช้ WCA Live เพื่อกรอกผลการแข่งขัน
+          #original_hash: 0611f2d
+          scoretaking_software: Software used for scoretaking
         entry_fees:
           #original_hash: 28a6fbb
           currency_code: สกุลเงิน
@@ -3525,8 +3607,8 @@ th:
           external_registration_page: หน้าเว็บที่ผู้เข้าแข่งขันต้องสมัครการแข่งขัน ต้องเป็น URL ที่ถูกต้อง
           #original_hash: da39a3e
           uses_wca_registration: ''
-          #original_hash: da39a3e
-          uses_wca_live: ''
+          #original_hash: cc7d557
+          scoretaking_software: 'เลือก ''%{choice_ilr}'' หากคุณต้องการใช้ Dual Rounds'
         user_settings:
           #original_hash: da39a3e
           receive_registration_emails: ''
@@ -3667,6 +3749,14 @@ th:
             bulk: เปิดใช้งานปุ่ม 'ยอมรับอัตโนมัติเป็นกลุ่ม' ในเมนูการสมัครการแข่งขัน
             #original_hash: 490ed83
             live: ยอมรับการสมัครการแข่งขันอัตโนมัติเมื่อชำระเงินแล้ว
+        website:
+          scoretaking_software:
+            #original_hash: 1c88388
+            external: เป็นเครื่องมือภายนอกที่ไม่ได้รับการดูแลรักษาโดย WCA
+            #original_hash: 4b175c3
+            wca_live: WCA Live ถ่ายทอดสดทาง live.worldcubeassociation.org
+            #original_hash: 1ee034d
+            internal: Integrated Live Results
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -4314,6 +4404,11 @@ th:
         qualification_some_events_html: >-
           สำหรับประเภท %{events} ต้องทำเวลาให้ผ่านการคัดเลือกก่อนวันที่
           <b>%{date}</b>.
+        #original_hash: ce9b21b
+        advancement_condition_html: >-
+          จำนวนผู้เข้าแข่งขันที่แสดงว่าผ่านเข้ารอบต่อไปคือจำนวนสูงสุดที่วางแผนไว้
+          จำนวนจริงอาจน้อยกว่านี้หากมีผู้เข้าแข่งขันน้อยกว่าที่คาดไว้
+          หรือหากมีคะแนนเสมอกัน
       #original_hash: 041a5de
       format: รูปแบบ
       #original_hash: 0d1fcc3
@@ -4324,6 +4419,8 @@ th:
       proceed: เข้ารอบ
       #original_hash: 2ffe44e
       qualification: การคัดเลือก
+      #original_hash: 5289f93
+      advancement_condition: เงื่อนไขการผ่านเข้ารอบ
     schedule:
       display_as:
         #original_hash: 0424f6e
@@ -5210,6 +5307,8 @@ th:
       last_delegated: Delegate ครั้งล่าสุด
       #original_hash: 5ab4a17
       total_delegated: จำนวนครั้งที่ Delegate
+      #original_hash: cec62d6
+      lead_delegated: ผู้นำ Delegate ของการแข่งขัน
       #original_hash: 90ccd64
       history: ประวัติ
   regional_organizations:
@@ -6278,15 +6377,21 @@ th:
       missing_scrambles_for_multi_error: >-
         [%{round_id}] แม้ว่าคุณอาจมีหลายกลุ่มใน 3x3x3 Multi-Blind
         อย่างน้อยหนึ่งกลุ่มจะต้องมีโจทย์สำหรับ attempt ทั้งหมด
+      #original_hash: 2757334
+      mbld_scrambles_warning: >-
+        [%{round_id}] รอบนี้ประกอบด้วยผลการแข่งขัน 3x3x3 Multi-Blind
+        โปรดระบุในความคิดเห็นในการส่งผลการแข่งขันของคุณว่าใช้จำวนโจทย์เท่าไหร่ในการแข่งขัน
+        เพื่อให้ WRT สามารถลบโจทย์ส่วนเกินที่ไม่ได้ใช้
       #original_hash: 3d5255d
       multiple_fmc_groups_warning: >-
         [%{round_id}] มีการแบ่ง FMC เป็นหลายกลุ่ม หากใช้ FMC กลุ่มใดกลุ่มหนึ่ง
         โปรดใช้ Scrambles Matcher เพื่อยกเลิกการเลือกโจทย์ที่ไม่ได้ใช้ มิฉะนั้น
         โปรดใส่คำอธิบายถึง WRT เพื่ออธิบายว่าเหตุใดจึงแบ่ง FMC เป็นหลายกลุ่ม
-      #original_hash: d6830c0
+      #original_hash: ce201ef
       wrong_number_of_scramble_sets_error: >-
-        [%{round_id}] รอบนี้มีจำนวนชุดของโจทย์แตกต่างจากที่ระบุไว้ในแท็บ event
-        โปรดปรับจำนวนโจทย์ในแท็บ event ให้ตรงกับจำนวนชุดที่ใช้
+        [%{round_id}] รอบนี้มีจำนวนชุดของโจทย์ (%{actual})
+        แตกต่างจากที่ระบุไว้ในแท็บ event (%{expected}) โปรดปรับจำนวนโจทย์ในแท็บ
+        event ให้ตรงกับจำนวนชุดที่ใช้
   tickets:
     type:
       #original_hash: e43f273
