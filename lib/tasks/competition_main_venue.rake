@@ -42,12 +42,15 @@ namespace :competition_main_venue do
   end
 
   desc "Fill in information from the competition description into the main venue (if present)"
-  task backfill: :environment do
+  task :backfill, [:distance_km] => :environment do |_task, args|
+    distance_km = args[:distance_km]&.to_f
+
     Competition
       .includes(:main_venue)
       .where.not(main_venue: nil)
       .find_each do |competition|
       competition.main_venue.backfill_competition_info!
+      competition.main_venue.backfill_competition_coordinates!(distance_km)
 
       if competition.main_venue.changed?
         puts "Updated information on #{competition.id}"
@@ -56,29 +59,44 @@ namespace :competition_main_venue do
     end
   end
 
-  task check_distance: :environment do
-    Competition
-      .includes(:main_venue)
-      .find_each do |competition|
-      if competition.main_venue.nil?
-        puts "Should have a main venue but doesn't: #{competition.id}" unless competition.is_multi_location?
-      else
-        puts "Should NOT have a main venue but actually does: #{competition.id}" if competition.is_multi_location?
+  namespace :sanity_check do
+    task :presence do
+      Competition
+        .includes(:main_venue)
+        .find_each do |competition|
+        if competition.main_venue.nil?
+          puts "Should have a main venue but doesn't: #{competition.id}" unless competition.is_multi_location?
+        else
+          puts "Should NOT have a main venue but actually does: #{competition.id}" if competition.is_multi_location?
+        end
+      end
+    end
 
-        if competition.latitude_microdegrees != competition.main_venue.latitude_microdegrees || competition.longitude_microdegrees != competition.main_venue.longitude_microdegrees
+    task :location do
+      Competition
+        .includes(:main_venue)
+        .where.not(main_venue: nil)
+        .find_each do |competition|
+        competition.main_venue.backfill_competition_coordinates!
+
+        if competition.main_venue.latitude_microdegrees_changed? || competition.main_venue.longitude_microdegrees_changed?
+          competition.main_venue.restore_attributes
           haversine_distance = competition.main_venue.competition_distance_km
 
-          if haversine_distance < 0.1
-            competition.main_venue.assign_attributes(
-              latitude_microdegrees: competition.latitude_microdegrees,
-              longitude_microdegrees: competition.longitude_microdegrees,
-            )
+          puts "#{competition.id}: Distance #{haversine_distance.round(2)} km"
+        end
+      end
+    end
 
-            competition.main_venue.save(validate: false)
-            puts "Updated #{competition.id}"
-          else
-            puts "#{competition.id}: Distance #{haversine_distance.round(2)} km"
-          end
+    task :information do
+      Competition
+        .includes(:main_venue)
+        .where.not(main_venue: nil)
+        .find_each do |competition|
+        competition.main_venue.backfill_competition_info!
+
+        if competition.main_venue.changed?
+          puts "#{competition.id}: Mismatch for attributes #{competition.main_venue.changes}"
         end
       end
     end
