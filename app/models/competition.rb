@@ -345,7 +345,7 @@ class Competition < ApplicationRecord
   REGISTRATION_OPENING_EARLIEST = 172_800
 
   validates :city_name, city: true
-  validates :main_venue_id, presence: { unless: :is_multi_location? }
+  validates :main_venue_id, presence: { unless: :is_multi_location? }, absence: { if: :is_multi_location? }
 
   # We have stricter validations for confirming a competition
   validates :city_name, :country_id, :venue, :venue_address, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
