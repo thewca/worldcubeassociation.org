@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-VENUE_ATTRIBUTES = [:venue, :city_name, :venue_address, :venue_details]
-
 namespace :competition_main_venue do
   desc "Attempt to (somewhat) intelligently backlink competitions that don't have a main_venue yet"
   task backlink: :environment do
@@ -30,7 +28,7 @@ namespace :competition_main_venue do
         end
 
         # Legacy data sometimes does not match modern WCIF conventions. Save anyways.
-        main_venue.save(validate: false) if main_venue.present?
+        main_venue.presence&.save(validate: false)
 
         competition.assign_attributes(main_venue: main_venue, is_multi_location: is_multi_location)
 
@@ -41,7 +39,7 @@ namespace :competition_main_venue do
     end
   end
 
-  desc "Fill in information from the competition description into the main venue (if present)"
+  desc "Fill in information from the competition description into the main venue"
   task :backfill, [:distance_km] => :environment do |_task, args|
     distance_km = args[:distance_km]&.to_f
 
@@ -49,55 +47,56 @@ namespace :competition_main_venue do
       .includes(:main_venue)
       .where.not(main_venue: nil)
       .find_each do |competition|
-      competition.main_venue.backfill_competition_info!
-      competition.main_venue.backfill_competition_coordinates!(distance_km)
+        competition.main_venue.backfill_competition_info!
+        competition.main_venue.backfill_competition_coordinates!(distance_km)
 
-      if competition.main_venue.changed?
-        puts "Updated information on #{competition.id}"
-        competition.main_venue.save(validate: false)
-      end
+        if competition.main_venue.changed?
+          puts "Updated information on #{competition.id}"
+          competition.main_venue.save(validate: false)
+        end
     end
   end
 
   namespace :sanity_check do
-    task :presence do
+    desc "Check that competitions which should have a main_venue do have a main_venue"
+    task presence: :environment do
       Competition
         .includes(:main_venue)
         .find_each do |competition|
-        if competition.main_venue.nil?
-          puts "Should have a main venue but doesn't: #{competition.id}" unless competition.is_multi_location?
-        else
-          puts "Should NOT have a main venue but actually does: #{competition.id}" if competition.is_multi_location?
-        end
+          if competition.main_venue.nil?
+            puts "Should have a main venue but doesn't: #{competition.id}" unless competition.is_multi_location?
+          elsif competition.is_multi_location?
+            puts "Should NOT have a main venue but actually does: #{competition.id}"
+          end
       end
     end
 
-    task :location do
+    desc "Check whether the coordinates between main_venue and competition match, or if not what is the distance"
+    task location: :environment do
       Competition
         .includes(:main_venue)
         .where.not(main_venue: nil)
         .find_each do |competition|
-        competition.main_venue.backfill_competition_coordinates!
+          competition.main_venue.backfill_competition_coordinates!
 
-        if competition.main_venue.latitude_microdegrees_changed? || competition.main_venue.longitude_microdegrees_changed?
-          competition.main_venue.restore_attributes
-          haversine_distance = competition.main_venue.competition_distance_km
+          if competition.main_venue.latitude_microdegrees_changed? || competition.main_venue.longitude_microdegrees_changed?
+            competition.main_venue.restore_attributes
+            haversine_distance = competition.main_venue.competition_distance_km
 
-          puts "#{competition.id}: Distance #{haversine_distance.round(2)} km"
-        end
+            puts "#{competition.id}: Distance #{haversine_distance.round(2)} km"
+          end
       end
     end
 
-    task :information do
+    desc "Check whether the name and country information between main_venue and competition match"
+    task information: :environment do
       Competition
         .includes(:main_venue)
         .where.not(main_venue: nil)
         .find_each do |competition|
-        competition.main_venue.backfill_competition_info!
+          competition.main_venue.backfill_competition_info!
 
-        if competition.main_venue.changed?
-          puts "#{competition.id}: Mismatch for attributes #{competition.main_venue.changes}"
-        end
+          puts "#{competition.id}: Mismatch for attributes #{competition.main_venue.changes}" if competition.main_venue.changed?
       end
     end
   end
