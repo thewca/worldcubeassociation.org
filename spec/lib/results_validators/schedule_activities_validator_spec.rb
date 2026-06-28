@@ -8,20 +8,19 @@ SAV = RV::ScheduleActivitiesValidator
 RSpec.describe SAV do
   context "on InboxResult and Result" do
     let!(:competition) { create(:competition, :past, :with_valid_schedule, event_ids: %w[333]) }
-
-    before do
-      round = competition.rounds.first
-      [Result, InboxResult].each do |model|
-        create(model.model_name.singular.to_sym, competition: competition, event_id: "333", round: round)
-      end
-    end
-
     let(:validator_args) do
       [InboxResult, Result].flat_map do |model|
         [
           { competition_ids: [competition.id], model: model },
           { results: model.where(competition_id: competition.id), model: model },
         ]
+      end
+    end
+
+    before do
+      round = competition.rounds.first
+      [Result, InboxResult].each do |model|
+        create(model.model_name.singular.to_sym, competition: competition, event_id: "333", round: round)
       end
     end
 
