@@ -56,6 +56,12 @@ updates:
   open-pull-requests-limit: 10
   cooldown:
     default-days: 1
+    exclude:
+      - "react"
+      - "react-dom"
+      - "next"
+      - "payload"
+      - "@payloadcms/*"
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
