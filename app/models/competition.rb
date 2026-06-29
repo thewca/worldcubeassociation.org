@@ -1941,7 +1941,7 @@ class Competition < ApplicationRecord
     persons_wcif + managers.map { it.to_wcif(self, authorized: authorized) }
   end
 
-  def events_wcif(version: WCIF_STABLE_VERSION)
+  def events_wcif(version: WCIF_STABLE_VERSION, include_results: true)
     includes_associations = [
       { rounds: [
         :competition_event,
@@ -1953,7 +1953,7 @@ class Competition < ApplicationRecord
     competition_events
       .includes(includes_associations)
       .sort_by { |ce| ce.event.rank }
-      .map { it.to_wcif(version: version) }
+      .map { it.to_wcif(version: version, include_results: include_results) }
   end
 
   def schedule_wcif
