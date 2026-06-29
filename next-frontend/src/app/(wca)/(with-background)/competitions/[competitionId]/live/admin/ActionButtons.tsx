@@ -75,7 +75,7 @@ export default function ActionButtons({
           description: "Round Closed",
           type: "success",
         });
-        setState("ready");
+        setRoundState(roundId, "ready");
       },
       onError: () => {
         toaster.create({
