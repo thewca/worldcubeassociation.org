@@ -36,7 +36,7 @@ export default async function ResultPage({
   const permissions = await getPermissions();
 
   const canManage =
-    !!permissions && permissions.canAdministerCompetition(competitionId);
+    !!permissions && permissions.canScoretakeCompetition(competitionId);
 
   if (linked_round_ids) {
     const linkedRounds = await Promise.all(

@@ -30,7 +30,7 @@ export default async function ResultPage({
       <RoundInfoProvider roundId={roundId}>
         <RoundOpenCheck>
           <PermissionCheck
-            requiredPermission="canAdministerCompetition"
+            requiredPermission="canScoretakeCompetition"
             item={competitionId}
           >
             <VStack align="left">

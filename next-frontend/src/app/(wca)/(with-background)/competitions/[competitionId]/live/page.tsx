@@ -30,7 +30,7 @@ export default async function LiveOverview({
   }
 
   const canManage =
-    !!permissions && permissions.canAdministerCompetition(competitionId);
+    !!permissions && permissions.canScoretakeCompetition(competitionId);
 
   const allActivitiesSorted = wcifSchedule.venues
     .flatMap((venue) => venue.rooms)

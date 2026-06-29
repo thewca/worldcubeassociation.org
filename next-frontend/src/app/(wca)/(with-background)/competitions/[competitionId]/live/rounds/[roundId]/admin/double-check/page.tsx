@@ -41,7 +41,7 @@ export default async function DoubleCheckPage({
       <RoundInfoProvider roundId={id}>
         <RoundOpenCheck>
           <PermissionCheck
-            requiredPermission="canAdministerCompetition"
+            requiredPermission="canScoretakeCompetition"
             item={competitionId}
           >
             <LiveResultProvider

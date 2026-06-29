@@ -12,7 +12,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     round = Round.find_by_wcif_id!(round_id, @competition.id, includes: [:live_results])
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     # We create empty results when a round is open
     live_result = round.live_results.find_by(registration_id: registration_id)
@@ -36,7 +36,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     round = Round.find_by_wcif_id!(round_id, @competition.id, includes: [:live_results])
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     return render json: { status: "round is not open" }, status: :unprocessable_content unless round.live_results.any?
 
@@ -98,7 +98,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     round = Round.find_by_wcif_id!(wcif_id, @competition.id)
 
     # TODO: Move these to actual error codes at one point
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     state = round.lifecycle_state
 
@@ -117,7 +117,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     round = Round.find_by_wcif_id!(wcif_id, competition.id)
 
-    require_manage!(competition)
+    require_scoretake!(competition)
 
     state = round.lifecycle_state
 
@@ -138,7 +138,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     round = Round.find_by_wcif_id!(wcif_id, @competition.id)
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     result = round.live_results.find_by!(registration_id: registration_id)
 
@@ -160,7 +160,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     round = Round.find_by_wcif_id!(wcif_id, @competition.id, includes: [:live_results])
 
     # TODO: Move these to actual error codes at one point
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     state = round.lifecycle_state
 
@@ -194,7 +194,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     registration_id = params.require(:registration_id)
     advancing_ids = params[:advancing_ids]
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     round = Round.find_by_wcif_id!(wcif_id, @competition.id, includes: [:live_results])
     result = round.live_results.find_by!(registration_id: registration_id)
@@ -217,7 +217,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     registration_ids = params.require(:registration_ids).map(&:to_i)
     advancing_ids = params[:advancing_ids]
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     round = Round.find_by_wcif_id!(wcif_id, @competition.id, includes: [:live_results])
     results = round.live_results.where(registration_id: registration_ids).includes(:live_attempts)
@@ -238,7 +238,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     wcif_id = params.require(:round_id)
     registration_id = params.require(:registration_id)
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     round = Round.find_by_wcif_id!(wcif_id, @competition.id, includes: [:live_results])
 
@@ -253,7 +253,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     round = Round.find_by_wcif_id!(params.require(:round_id), @competition.id)
     colinked_rounds = round.colinked_rounds
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     registrations = round.participation_source.live_competitors.includes(:events, user: :delegate_role_metadata)
 
@@ -264,7 +264,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     registration = Registration.find(params.require(:registration_id))
     round = Round.find_by_wcif_id!(params.require(:round_id), @competition.id)
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     rounds = round.linked_round.present? ? round.linked_round.rounds : round.rounds
 
