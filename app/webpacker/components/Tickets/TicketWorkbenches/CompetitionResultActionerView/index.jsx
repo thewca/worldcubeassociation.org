@@ -60,6 +60,14 @@ function ViewForStatus({
 
     case ticketsCompetitionResultStatuses.merged_inbox_results:
       return (
+        <MergeInboxResults
+          ticketDetails={ticketDetails}
+          currentStakeholder={currentStakeholder}
+        />
+      );
+
+    case ticketsCompetitionResultStatuses.merged_inbox_scrambles:
+      return (
         <CreateWcaIds
           ticketDetails={ticketDetails}
         />

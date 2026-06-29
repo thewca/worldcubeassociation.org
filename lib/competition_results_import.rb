@@ -137,6 +137,31 @@ module CompetitionResultsImport
     end
   end
 
+  def self.merge_inbox_scrambles(competition)
+    ActiveRecord::Base.transaction do
+      scramble_rows = competition.matched_scrambles
+                                 .includes(:matched_scramble_set)
+                                 .map do |matched_scr|
+                                   {
+                                     competition_id: matched_scr.competition_id,
+                                     event_id: matched_scr.event_id,
+                                     external_scramble_id: matched_scr.external_scramble_id,
+                                     group_id: matched_scr.group_id,
+                                     is_extra: matched_scr.is_extra?,
+                                     round_id: matched_scr.round_id,
+                                     round_type_id: matched_scr.round_type_id,
+                                     scramble: matched_scr.scramble_string,
+                                     scramble_num: matched_scr.scramble_num,
+                                   }
+      end
+
+      Scramble.insert_all!(scramble_rows)
+      # Not deleting the MatchedScrambles so that the Delegate can go back
+      #   and upload "more stuff" later and add it to existing matchings.
+      # WRT can action these based on `external_scramble_id` above.
+    end
+  end
+
   def self.post_results_error(comp)
     return I18n.t('competitions.messages.computing_auxiliary_data') if ComputeAuxiliaryData.in_progress?
 
