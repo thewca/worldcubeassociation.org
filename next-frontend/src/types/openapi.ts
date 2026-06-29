@@ -2091,6 +2091,8 @@ export interface operations {
                     "application/json": {
                         status: string;
                         recreated_rows: number;
+                        /** @enum {string} */
+                        state: "open" | "locked" | "pending" | "ready";
                     };
                 };
             };
@@ -2118,6 +2120,8 @@ export interface operations {
                         status: string;
                         created_rows: number;
                         locked_rows: number;
+                        /** @enum {string} */
+                        state: "open" | "locked" | "pending" | "ready";
                     };
                 };
             };

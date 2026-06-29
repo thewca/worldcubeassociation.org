@@ -1,14 +1,19 @@
 "use client";
 
-import { createContext, ReactNode, useContext } from "react";
-import { LiveRoundAdmin } from "@/types/live";
+import { createContext, ReactNode, useCallback, useContext } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { LiveRoundAdmin, LiveRoundState } from "@/types/live";
 import { useT } from "@/lib/i18n/useI18n";
 import useAPI from "@/lib/wca/useAPI";
 import Loading from "@/components/ui/loading";
 
 interface AllRoundInfoProviderType {
   rounds: LiveRoundAdmin[];
-  refetch: () => void;
+  setRoundState: (
+    roundId: string,
+    state: LiveRoundState,
+    patch?: Partial<LiveRoundAdmin>,
+  ) => void;
 }
 
 const AllRoundInfoProvider = createContext<
@@ -52,14 +57,41 @@ export function RoundsInfoProvider({
 }) {
   const { t } = useT();
   const api = useAPI();
+  const queryClient = useQueryClient();
 
-  const { data, isLoading, refetch } = api.useQuery(
+  const { queryKey } = api.queryOptions(
+    "get",
+    "/v1/competitions/{competitionId}/live/rounds",
+    { params: { path: { competitionId } } },
+  );
+
+  const { data, isLoading } = api.useQuery(
     "get",
     "/v1/competitions/{competitionId}/live/rounds",
     { params: { path: { competitionId } } },
     {
       initialData: { rounds: initialRounds },
     },
+  );
+
+  const setRoundState = useCallback(
+    (
+      roundId: string,
+      state: LiveRoundState,
+      patch?: Partial<LiveRoundAdmin>,
+    ) => {
+      queryClient.setQueryData(
+        queryKey,
+        (old: { rounds: LiveRoundAdmin[] }) => ({
+          rounds: old.rounds.map((r) =>
+            r.id === roundId
+              ? ({ ...r, ...patch, state } as LiveRoundAdmin)
+              : r,
+          ),
+        }),
+      );
+    },
+    [queryClient, queryKey],
   );
 
   if (isLoading) {
@@ -71,7 +103,9 @@ export function RoundsInfoProvider({
   }
 
   return (
-    <AllRoundInfoProvider.Provider value={{ rounds: data.rounds, refetch }}>
+    <AllRoundInfoProvider.Provider
+      value={{ rounds: data.rounds, setRoundState }}
+    >
       {children}
     </AllRoundInfoProvider.Provider>
   );

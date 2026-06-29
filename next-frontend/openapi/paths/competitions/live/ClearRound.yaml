@@ -24,8 +24,16 @@ put:
             required:
               - status
               - recreated_rows
+              - state
             properties:
               status:
                 type: string
               recreated_rows:
                 type: number
+              state:
+                type: string
+                enum:
+                  - open
+                  - locked
+                  - pending
+                  - ready

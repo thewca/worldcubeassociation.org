@@ -18,18 +18,21 @@ export default function ActionButtons({
   competitionId: string;
 }) {
   const api = useAPI();
-  const { refetch } = useAllRoundsInfo();
+  const { setRoundState } = useAllRoundsInfo();
 
   const { isPending: isPendingOpen, mutate: openRound } = api.useMutation(
     "put",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/open",
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toaster.create({
           description: "Round Opened",
           type: "success",
         });
-        refetch();
+        setRoundState(roundId, data.state, {
+          total_competitors: data.created_rows,
+          competitors_live_results_entered: 0,
+        });
       },
       onError: (error) => {
         toaster.create({
@@ -45,12 +48,12 @@ export default function ActionButtons({
     "put",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/clear",
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toaster.create({
           description: "Round Cleared",
           type: "success",
         });
-        refetch();
+        setRoundState(roundId, data.state);
       },
       onError: () => {
         toaster.create({
