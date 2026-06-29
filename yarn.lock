@@ -1480,19 +1480,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@csstools/css-syntax-patches-for-csstree@npm:^1.1.4":
-  version: 1.1.5
-  resolution: "@csstools/css-syntax-patches-for-csstree@npm:1.1.5"
-  peerDependencies:
-    css-tree: ^3.2.1
-  peerDependenciesMeta:
-    css-tree:
-      optional: true
-  checksum: 10c0/a31f0cfb74e2b5ce8a283c47969a202fc3b23c3ee05c6b6beab7f5c14d89c50b82533e446df74f7df0bf88bf23810ed59431353db26e00d5b013995c1ebf07a2
-  languageName: node
-  linkType: hard
-
-"@csstools/css-syntax-patches-for-csstree@npm:^1.1.5":
+"@csstools/css-syntax-patches-for-csstree@npm:^1.1.4, @csstools/css-syntax-patches-for-csstree@npm:^1.1.5":
   version: 1.1.6
   resolution: "@csstools/css-syntax-patches-for-csstree@npm:1.1.6"
   peerDependencies:
@@ -3803,24 +3791,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:^10.5.0":
-  version: 10.5.0
-  resolution: "autoprefixer@npm:10.5.0"
-  dependencies:
-    browserslist: "npm:^4.28.2"
-    caniuse-lite: "npm:^1.0.30001787"
-    fraction.js: "npm:^5.3.4"
-    picocolors: "npm:^1.1.1"
-    postcss-value-parser: "npm:^4.2.0"
-  peerDependencies:
-    postcss: ^8.1.0
-  bin:
-    autoprefixer: bin/autoprefixer
-  checksum: 10c0/3e1a7bb65ef3a44925d19fd18cbb96a9a73ef1a8bfaa134bc131743787a8983045d6e756cff0204d37c34a52cfc86d79182f444c221b631401f79d7873ae97a8
-  languageName: node
-  linkType: hard
-
-"autoprefixer@npm:^10.5.2":
+"autoprefixer@npm:^10.5.0, autoprefixer@npm:^10.5.2":
   version: 10.5.2
   resolution: "autoprefixer@npm:10.5.2"
   dependencies:
@@ -4002,15 +3973,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"baseline-browser-mapping@npm:^2.10.12":
-  version: 2.10.20
-  resolution: "baseline-browser-mapping@npm:2.10.20"
-  bin:
-    baseline-browser-mapping: dist/cli.cjs
-  checksum: 10c0/3d60c9656c4c4673593aa8d0ae9aa6b69b4e018c2f585874a0e8a40cb28d0559f57ee1b2e7e44cb1e7f6aac66f658a4a3c1285901b8836d8ae31e189e30aa816
-  languageName: node
-  linkType: hard
-
 "baseline-browser-mapping@npm:^2.10.38":
   version: 2.10.40
   resolution: "baseline-browser-mapping@npm:2.10.40"
@@ -4129,22 +4091,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.0.0, browserslist@npm:^4.23.3, browserslist@npm:^4.24.0, browserslist@npm:^4.28.1, browserslist@npm:^4.28.2":
-  version: 4.28.2
-  resolution: "browserslist@npm:4.28.2"
-  dependencies:
-    baseline-browser-mapping: "npm:^2.10.12"
-    caniuse-lite: "npm:^1.0.30001782"
-    electron-to-chromium: "npm:^1.5.328"
-    node-releases: "npm:^2.0.36"
-    update-browserslist-db: "npm:^1.2.3"
-  bin:
-    browserslist: cli.js
-  checksum: 10c0/c0228b6330f785b7fa59d2d360124ec6d9322f96ed9f3ee1f873e33ecc9503a6f0ffc3b71191a28c4ff6e930b753b30043da1c33844a9548f3018d491f09ce60
-  languageName: node
-  linkType: hard
-
-"browserslist@npm:^4.28.4":
+"browserslist@npm:^4.0.0, browserslist@npm:^4.23.3, browserslist@npm:^4.24.0, browserslist@npm:^4.28.1, browserslist@npm:^4.28.4":
   version: 4.28.4
   resolution: "browserslist@npm:4.28.4"
   dependencies:
@@ -4273,14 +4220,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001782, caniuse-lite@npm:^1.0.30001787":
-  version: 1.0.30001788
-  resolution: "caniuse-lite@npm:1.0.30001788"
-  checksum: 10c0/d3c4695d0e7a1e95194cc5072e26db59cbcd25adfff64253859213c1a04ce9bc17f7b8ec8b11908ac1ecc6c1a0caf95fae0aec064a64b8df03286dffa629ce8a
-  languageName: node
-  linkType: hard
-
-"caniuse-lite@npm:^1.0.30001799":
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001799":
   version: 1.0.30001799
   resolution: "caniuse-lite@npm:1.0.30001799"
   checksum: 10c0/f24f9834edc7b60188f368ce44714695c3901bc4acb7f2a977dd9b7b697e39ddc0f9947fad6224a955b789f36a73432cb888d620aa7280d728f582d3bd8927a7
@@ -4628,24 +4568,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cosmiconfig@npm:^9.0.0":
-  version: 9.0.1
-  resolution: "cosmiconfig@npm:9.0.1"
-  dependencies:
-    env-paths: "npm:^2.2.1"
-    import-fresh: "npm:^3.3.0"
-    js-yaml: "npm:^4.1.0"
-    parse-json: "npm:^5.2.0"
-  peerDependencies:
-    typescript: ">=4.9.5"
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 10c0/a5d4d95599687532ee072bca60170133c24d4e08cd795529e0f22c6ce5fde9409eaf4f26e36e3d671f43270ef858fc68f3c7b0ec28e58fac7ddebda5b7725306
-  languageName: node
-  linkType: hard
-
-"cosmiconfig@npm:^9.0.2":
+"cosmiconfig@npm:^9.0.0, cosmiconfig@npm:^9.0.2":
   version: 9.0.2
   resolution: "cosmiconfig@npm:9.0.2"
   dependencies:
@@ -5256,13 +5179,6 @@ __metadata:
   version: 1.1.1
   resolution: "ee-first@npm:1.1.1"
   checksum: 10c0/b5bb125ee93161bc16bfe6e56c6b04de5ad2aa44234d8f644813cc95d861a6910903132b05093706de2b706599367c4130eb6d170f6b46895686b95f87d017b7
-  languageName: node
-  linkType: hard
-
-"electron-to-chromium@npm:^1.5.328":
-  version: 1.5.341
-  resolution: "electron-to-chromium@npm:1.5.341"
-  checksum: 10c0/8692cd0444399fd432455c7f23c57c6f77656a11919bad0982f9780f84de802451fcc1631f325c337ae8c69f63aae29c80900d9f7c784d70c8e6b3c1eddaca75
   languageName: node
   linkType: hard
 
@@ -8235,13 +8151,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-releases@npm:^2.0.36":
-  version: 2.0.37
-  resolution: "node-releases@npm:2.0.37"
-  checksum: 10c0/306df89190b3225d0cb001260de52f0befd225a782ec85311ce97b0aa3b2e22f5e4e4c00395c6dc9bc9ef440c64723f6205fe1e27d32b8dd1d140891fbadf901
-  languageName: node
-  linkType: hard
-
 "node-releases@npm:^2.0.48":
   version: 2.0.50
   resolution: "node-releases@npm:2.0.50"
@@ -9522,17 +9431,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-selector-parser@npm:^7.0.0, postcss-selector-parser@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "postcss-selector-parser@npm:7.1.1"
-  dependencies:
-    cssesc: "npm:^3.0.0"
-    util-deprecate: "npm:^1.0.2"
-  checksum: 10c0/02d3b1589ddcddceed4b583b098b95a7266dacd5135f041e5d913ebb48e874fd333a36e564cc9a2ec426a464cb18db11cb192ac76247aced5eba8c951bf59507
-  languageName: node
-  linkType: hard
-
-"postcss-selector-parser@npm:^7.1.4":
+"postcss-selector-parser@npm:^7.0.0, postcss-selector-parser@npm:^7.1.1, postcss-selector-parser@npm:^7.1.4":
   version: 7.1.4
   resolution: "postcss-selector-parser@npm:7.1.4"
   dependencies:
@@ -9572,18 +9471,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.14, postcss@npm:^8.4.40, postcss@npm:^8.5.15":
-  version: 8.5.15
-  resolution: "postcss@npm:8.5.15"
-  dependencies:
-    nanoid: "npm:^3.3.12"
-    picocolors: "npm:^1.1.1"
-    source-map-js: "npm:^1.2.1"
-  checksum: 10c0/7f2e63ae22fbe43aace1bf652bd99da4e90737c64194d49e51ddc9cd0f9e51ff2861a7d734379b494deffa03a880a5c65eec70bc29ee9ebaa7136dde3eee8f31
-  languageName: node
-  linkType: hard
-
-"postcss@npm:^8.5.16":
+"postcss@npm:^8.2.14, postcss@npm:^8.4.40, postcss@npm:^8.5.15, postcss@npm:^8.5.16":
   version: 8.5.16
   resolution: "postcss@npm:8.5.16"
   dependencies:
