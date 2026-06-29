@@ -31,9 +31,4 @@ put:
               recreated_rows:
                 type: number
               state:
-                type: string
-                enum:
-                  - open
-                  - locked
-                  - pending
-                  - ready
+                $ref: '../../../schemas/live/AdminRounds/RoundState.yaml'

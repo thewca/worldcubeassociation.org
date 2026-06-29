@@ -1,0 +1,6 @@
+type: string
+enum:
+  - open
+  - locked
+  - pending
+  - ready
