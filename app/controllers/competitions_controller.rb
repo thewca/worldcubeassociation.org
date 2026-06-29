@@ -147,6 +147,10 @@ class CompetitionsController < ApplicationController
         # Used by TimeLimit, but this is a weird includes...
         competition: { rounds: [:competition_event] },
       },
+      # Eager load delegates/organizers + their roles/avatars, otherwise serializing
+      # them (sidebar + EventsTable) fires ~10 queries per user. See INFO_SERIALIZATION_INCLUDES.
+      delegates: User::SERIALIZATION_INCLUDES,
+      organizers: User::SERIALIZATION_INCLUDES,
     }
     @competition = competition_from_params(includes: associations)
     respond_to do |format|

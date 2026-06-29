@@ -88,12 +88,12 @@ class CompetitionEvent < ApplicationRecord
     }
   end
 
-  def to_wcif(version: Competition::WCIF_STABLE_VERSION)
+  def to_wcif(version: Competition::WCIF_STABLE_VERSION, include_results: true)
     at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
 
     {
       "id" => self.event.id,
-      "rounds" => self.rounds.map { it.to_wcif(version: version) },
+      "rounds" => self.rounds.map { it.to_wcif(version: version, include_results: include_results) },
       "extensions" => wcif_extensions.map(&:to_wcif),
       "qualification" => at_least_v2 ? v2_qualification_wcif : qualification&.to_wcif,
     }
