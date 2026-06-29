@@ -238,7 +238,7 @@ function ActivityRow({
                 </>
               )}
             </Grid.Column>
-            <Grid.Column width={2}>{cutoff && cutoffToString(round)}</Grid.Column>
+            <Grid.Column width={2}>{cutoff && cutoffToString(round, { isV2: true })}</Grid.Column>
             <Grid.Column width={2}>
               {advancement}
             </Grid.Column>
