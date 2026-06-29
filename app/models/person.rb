@@ -231,7 +231,7 @@ class Person < ApplicationRecord
   end
 
   def medals
-    positions = results.podium.pluck(:pos)
+    positions = results.podium.pluck(:global_pos)
     {
       gold: positions.count(1),
       silver: positions.count(2),

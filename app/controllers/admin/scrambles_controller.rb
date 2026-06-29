@@ -10,8 +10,8 @@ module Admin
     # NOTE: authentication is performed by admin controller
 
     def new
-      competition = Competition.find(params[:competition_id])
-      round = Round.find(params[:round_id])
+      competition = Competition.find(params.require(:competition_id))
+      round = Round.find(params.require(:round_id))
       # Create some basic attributes for that empty scramble.
       @scramble = {
         competition_id: competition.id,
@@ -22,7 +22,7 @@ module Admin
     end
 
     def edit
-      @scramble = Scramble.includes(:competition).find(params[:id])
+      @scramble = Scramble.includes(:competition).find(params.require(:id))
     end
 
     def create

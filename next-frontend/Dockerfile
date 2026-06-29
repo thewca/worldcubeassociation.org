@@ -1,7 +1,5 @@
 # syntax=docker.io/docker/dockerfile:1
 
-ARG WCA_SITE
-
 FROM node:24-alpine AS base
 
 FROM base AS deps

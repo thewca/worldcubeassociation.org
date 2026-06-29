@@ -12,10 +12,12 @@ export default function ActionButtons({
   state,
   roundId,
   competitionId,
+  hasResultsEntered,
 }: {
   state: LiveRoundState;
   roundId: string;
   competitionId: string;
+  hasResultsEntered: boolean;
 }) {
   const api = useAPI();
   const { setRoundState } = useAllRoundsInfo();
@@ -64,6 +66,26 @@ export default function ActionButtons({
     },
   );
 
+  const { isPending: isPendingClose, mutate: closeRound } = api.useMutation(
+    "delete",
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/close",
+    {
+      onSuccess: () => {
+        toaster.create({
+          description: "Round Closed",
+          type: "success",
+        });
+        setState("ready");
+      },
+      onError: () => {
+        toaster.create({
+          description: "Round closing failed",
+          type: "error",
+        });
+      },
+    },
+  );
+
   const { t } = useT();
 
   const confirm = useConfirm();
@@ -84,6 +106,24 @@ export default function ActionButtons({
   }
 
   if (state == "open") {
+    if (!hasResultsEntered) {
+      return (
+        <Button
+          variant="outline"
+          size="sm"
+          loading={isPendingClose}
+          onClick={() =>
+            confirm({ confirmButton: t("competitions.live.admin.close") }).then(
+              () =>
+                closeRound({ params: { path: { roundId, competitionId } } }),
+            )
+          }
+        >
+          {t("competitions.live.admin.close")}
+        </Button>
+      );
+    }
+
     return (
       <Button
         variant="outline"

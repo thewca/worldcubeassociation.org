@@ -368,6 +368,7 @@ Rails.application.routes.draw do
           get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
           put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
           put '/rounds/:round_id/clear' => "live#clear_round", as: :live_round_clear
+          delete '/rounds/:round_id/close' => "live#close_round", as: :live_round_close
           delete '/rounds/:round_id/bulk_quit' => 'live#bulk_quit_competitors', as: :bulk_quit_competitors_from_round
           delete '/rounds/:round_id/:registration_id' => 'live#quit_competitor', as: :quit_competitor_from_round
           put '/rounds/:round_id/:registration_id/clear' => 'live#clear_competitor', as: :clear_competitor_in_round
@@ -376,6 +377,7 @@ Rails.application.routes.draw do
           put '/rounds/:round_id/:registration_id' => 'live#add_competitor_to_round', as: :add_competitor_to_round
           post '/rounds/:round_id' => 'live#add_or_update_result', as: :add_results
           patch '/rounds/:round_id' => 'live#add_or_update_result', as: :update_results
+          post '/rounds/:round_id/batch' => 'live#batch_add_or_update_results', as: :batch_add_results
           get '/podiums' => 'live#podiums', as: :live_podiums
           get '/registrations/:registration_id' => 'live#by_person', as: :get_live_by_person
           get '/rounds' => 'live#rounds', as: :live_admin

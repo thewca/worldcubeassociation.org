@@ -130,6 +130,51 @@ export interface paths {
         };
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Adds multiple live results for a given round in a single request */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                    roundId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BatchSubmitLiveResult"];
+                };
+            };
+            responses: {
+                /** @description Batch Accepted */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            status?: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit": {
         parameters: {
             query?: never;
@@ -214,6 +259,23 @@ export interface paths {
         put: operations["clearRound"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Closes an empty round, deleting all its (empty) live results */
+        delete: operations["closeRound"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1050,6 +1112,9 @@ export interface components {
         SubmitLiveResult: {
             attempts: components["schemas"]["LiveAttempt"][];
             registration_id: number;
+        };
+        BatchSubmitLiveResult: {
+            results: components["schemas"]["SubmitLiveResult"][];
         };
         General404: {
             error: string;
@@ -2093,6 +2158,32 @@ export interface operations {
                         recreated_rows: number;
                         /** @enum {string} */
                         state: "open" | "locked" | "pending" | "ready";
+                    };
+                };
+            };
+        };
+    };
+    closeRound: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Round closed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status: string;
+                        deleted_count: number;
                     };
                 };
             };

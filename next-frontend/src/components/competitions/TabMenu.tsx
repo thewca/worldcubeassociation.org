@@ -159,7 +159,9 @@ function TabList({
       <Tabs.Trigger value={tab.menuKey} asChild key={tab.menuKey}>
         <Text asChild textStyle="bodyEmphasis" justifyContent="left">
           <Link href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}>
-            {t(tab.i18nKey)}
+            {t(
+              isAdminRoute && tab.i18nKeyAdmin ? tab.i18nKeyAdmin : tab.i18nKey,
+            )}
           </Link>
         </Text>
       </Tabs.Trigger>

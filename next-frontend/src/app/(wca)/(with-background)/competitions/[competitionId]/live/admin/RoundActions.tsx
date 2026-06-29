@@ -67,6 +67,9 @@ export default function RoundActions({
         state={state}
         roundId={round.id}
         competitionId={competitionId}
+        hasResultsEntered={
+          round.state === "open" && round.competitors_live_results_entered > 0
+        }
       />
     </HStack>
   );

@@ -208,6 +208,7 @@ function QuitModal({
               </Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
+              <Text fontWeight="bold">{competitor.name}</Text>
               {toAdvance.length > 0 ? (
                 <>
                   <Text>

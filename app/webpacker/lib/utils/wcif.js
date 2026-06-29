@@ -308,22 +308,62 @@ export function advancementConditionToString(wcifRound, { short } = {}) {
   }
 }
 
-export function cutoffToString(wcifRound, { short } = {}) {
+// WCIF v2 dropped per-round `advancementCondition`: a round's advancement is now
+// derived from the *next* round's participationRuleset. Dual Rounds have no real
+// advancement out of their first round — everyone proceeds to the colinked round.
+export function roundAdvancementToString(wcifRound, wcifEvents, { short } = {}) {
+  const { eventId, roundNumber } = parseActivityCode(wcifRound.id);
+  const allRounds = wcifEvents.find((event) => event.id === eventId).rounds;
+
+  // The final round never advances anywhere.
+  if (roundNumber === allRounds.length) {
+    return null;
+  }
+
+  if (wcifRound.linkedRounds) {
+    const lastLinkedRoundId = wcifRound.linkedRounds
+      .toSorted((a, b) => parseActivityCode(a).roundNumber - parseActivityCode(b).roundNumber)
+      .at(-1);
+
+    // First round of a Dual Round: all competitors advance to the colinked round.
+    if (wcifRound.id !== lastLinkedRoundId) {
+      return I18n.t(`advancement_condition${short ? '.short' : ''}.all_advance`);
+    }
+  }
+
+  // WCIF round numbers are 1-based, so the next round sits at index `roundNumber`.
+  const nextSource = allRounds[roundNumber]?.participationRuleset?.participationSource;
+  const condition = nextSource?.resultCondition;
+  if (!condition) {
+    return null;
+  }
+
+  return advancementConditionToString({
+    ...wcifRound,
+    advancementCondition: {
+      type: condition.type === 'resultAchieved' ? 'attemptResult' : condition.type,
+      level: condition.value,
+    },
+  }, { short });
+}
+
+export function cutoffToString(wcifRound, { short, isV2 } = {}) {
   const { eventId } = parseActivityCode(wcifRound.id);
   const wcaEvent = events.byId[eventId];
+  const value = isV2 ? wcifRound.cutoff.resultValue : wcifRound.cutoff.attemptResult;
 
   if (wcaEvent.isTimedEvent) {
-    const time = centisecondsToClockFormat(wcifRound.cutoff.attemptResult);
+    const time = centisecondsToClockFormat(value);
     return short ? time : I18n.t('cutoff.time', { count: wcifRound.cutoff.numberOfAttempts, time });
   }
 
   if (wcaEvent.isFewestMoves) {
-    const moves = wcifRound.cutoff.attemptResult;
+    const moves = value;
     return short ? moves : I18n.t('cutoff.moves', { count: wcifRound.cutoff.numberOfAttempts, moves });
   }
 
   if (wcaEvent.isMultipleBlindfolded) {
-    const points = attemptResultToMbPoints(wcifRound.cutoff.attemptResult);
+    const points = attemptResultToMbPoints(value);
     return short ? points : I18n.t('cutoff.points', { count: wcifRound.cutoff.numberOfAttempts, points });
   }
 

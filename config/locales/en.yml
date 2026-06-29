@@ -161,10 +161,12 @@ en:
     short:
       ranking: "Top %{ranking}"
       percent: "Top %{percent}%"
+      all_advance: "All advance"
       attempt_result:
         time: "%{round_format} < %{time}"
         moves: "%{round_format} < %{moves}"
         points: "%{round_format} > %{points}"
+    all_advance: "All competitors advance"
     ranking: "Top %{ranking} advance to next round"
     percent: "Top %{percent}% advance to next round"
     attempt_result:
@@ -1411,6 +1413,7 @@ en:
         other: "%{count} spots left"
     live:
       title: "Live Results"
+      manage_rounds: "Manage Rounds"
       incompatible:
         external: "This competition is using external scoretaking software - please consult the competition information to find out where to view live scores."
         wca_live: "This competition uses WCA Live for scoretaking - please follow this link to see the live results:"
@@ -1432,6 +1435,7 @@ en:
       admin:
         open: "Open"
         clear: "Clear"
+        close: "Close"
         competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
         round_locked: "locked"
         edit: "Edit"
@@ -1440,6 +1444,10 @@ en:
         admin_view: "Admin View"
         results_view: "Results View"
         double_check: "Double Check"
+        submit_results: "Submit Results"
+        add_to_batch: "Add to Batch"
+        batch_mode: "Batch Mode"
+        submit_batch: "Submit Batch (%{count})"
         warnings:
           omitted: "You've omitted attempt %{attempt_number}. Make sure it's intentional."
           DNS: "There's at least one DNS followed by a valid result. Please ensure it is indeed a DNS and not a DNF."
@@ -1459,6 +1467,8 @@ en:
             success: "Successfully quit %{count} competitors"
             failure: "Failed to bulk quit competitors"
             menu: "Bulk Quit"
+            id: "ID"
+            name: "Name"
           quit_menu: "Quit"
           no_next: "No next competitor to advance."
           cancel: "Cancel"
@@ -2235,6 +2245,7 @@ en:
         all: "All"
         none: "None"
         show_buttons: "Show time zone buttons"
+        hide_buttons: "Hide time zone buttons"
         use_time_zone: "Use this time zone"
       #context: when displaying the room on the general schedule, we may also display the venue if there are multiple venues
       room_in_venue: "%{room} in %{venue}"
@@ -2243,8 +2254,10 @@ en:
         other: "You are viewing the schedule for the venue %{venue_name}, one of %{count} venues for this competition."
       venue_selection_all: "You are viewing the schedule for all %{venueCount} venues at once."
       timezone_message: "The time zone for this venue is %{timezone}."
-      timezone_setting: "You are viewing this schedule in the following timezone setting:"
-      multiple_timezones_available: "Note that not all venues are in the same time zone -- please be careful!"
+      timezone_setting: "You are viewing this schedule in the following time zone:"
+      multiple_timezones_available: "Note that some venues are in different time zones -- please be careful!"
+      select_a_timezone: "Select a time zone"
+      select_a_venue_to_view: "To view the schedule, select a venue above."
       timezone_set_local: "Set to local"
       timezone_set_venue: "Set to venue"
       timezone_follow_venue: "Automatically use the active venue's time zone"
