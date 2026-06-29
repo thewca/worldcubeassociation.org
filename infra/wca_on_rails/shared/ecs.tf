@@ -57,7 +57,7 @@ data "aws_ami" "ecs" {
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-ecs-hvm-*-x86_64-*"]
+    values = ["al2023-ami-ecs-hvm-*-x86_64"]
   }
 }
 
@@ -94,7 +94,7 @@ locals {
 
 resource "aws_launch_template" "t3" {
   name_prefix   = "${var.name_prefix}-t3-"
-  image_id      = coalesce(var.t3_ami_id, data.aws_ami.ecs.id)
+  image_id      = data.aws_ami.ecs.id
   instance_type = "t3.large"
   user_data     = local.ecs_user_data
 
@@ -111,7 +111,7 @@ resource "aws_launch_template" "t3" {
 
 resource "aws_launch_template" "m6i" {
   name_prefix   = "${var.name_prefix}-m6i-"
-  image_id      = coalesce(var.m6i_ami_id, data.aws_ami.ecs.id)
+  image_id      = data.aws_ami.ecs.id
   instance_type = "m6i.large"
   user_data     = local.ecs_user_data
 

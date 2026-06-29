@@ -28,24 +28,6 @@ provider "aws" {
   }
 }
 
-# Amazon Linux 2023 ECS-optimized AMI. To migrate a pool to AL2023, set the
-# matching *_ami_id below to data.aws_ami.ecs_al2023.id (one pool at a time).
-data "aws_ami" "ecs_al2023" {
-  most_recent = true
-
-  owners = ["amazon"]
-
-  filter {
-    name   = "owner-alias"
-    values = ["amazon"]
-  }
-
-  filter {
-    name   = "name"
-    values = ["al2023-ami-ecs-hvm-*-x86_64"]
-  }
-}
-
 module "production" {
   source                   = "./production"
   name_prefix              = "${var.name_prefix}-prod"
@@ -80,6 +62,4 @@ module "shared" {
   rails_startup_time = local.rails_startup_time
   pma_auth_secret    = var.pma_auth_secret
   anycable_path      = var.anycable_path
-  t3_ami_id          = data.aws_ami.ecs_al2023.id
-  m6i_ami_id         = data.aws_ami.ecs_al2023.id
 }

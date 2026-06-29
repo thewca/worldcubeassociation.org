@@ -27,18 +27,3 @@ variable "anycable_path" {
   type        = string
   description = "The Path where anycable is mounted"
 }
-
-# Override the ECS AMI per ASG for the AL2 -> AL2023 migration.
-# Null falls back to the current Amazon Linux 2 ECS-optimized AMI,
-# so flipping one of these moves only that ASG's instances.
-variable "t3_ami_id" {
-  type        = string
-  description = "AMI for the t3 ASG (staging rails + all workers). Null = current AL2 AMI."
-  default     = null
-}
-
-variable "m6i_ami_id" {
-  type        = string
-  description = "AMI for the m6i ASG (production rails). Null = current AL2 AMI."
-  default     = null
-}

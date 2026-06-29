@@ -53,17 +53,3 @@ variable "anycable_path" {
   default     = "/api/v1/live/cable"
 }
 
-# AL2 -> AL2023 migration. Null = current AL2 AMI; set to
-# data.aws_ami.ecs_al2023.id (via override below) to move one pool at a time.
-variable "t3_ami_id" {
-  type        = string
-  description = "AMI for the t3 ASG (staging rails + all workers). Null = current AL2 AMI."
-  default     = null
-}
-
-variable "m6i_ami_id" {
-  type        = string
-  description = "AMI for the m6i ASG (production rails). Null = current AL2 AMI."
-  default     = null
-}
-
