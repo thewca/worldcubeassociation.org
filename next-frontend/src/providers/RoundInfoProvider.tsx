@@ -81,9 +81,7 @@ export function RoundsInfoProvider({
         queryKey,
         (old: { rounds: LiveRoundAdmin[] }) => ({
           rounds: old.rounds.map((r) =>
-            r.id === roundId
-              ? ({ ...r, ...patch, state } as LiveRoundAdmin)
-              : r,
+            r.id === roundId ? { ...r, ...patch, state } : r,
           ),
         }),
       );
