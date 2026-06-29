@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, ReactNode, useCallback, useContext } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LiveRoundAdmin, LiveRoundState } from "@/types/live";
 import { useT } from "@/lib/i18n/useI18n";
 import useAPI from "@/lib/wca/useAPI";
@@ -59,20 +59,17 @@ export function RoundsInfoProvider({
   const api = useAPI();
   const queryClient = useQueryClient();
 
-  const { queryKey } = api.queryOptions(
+  const roundsQueryOptions = api.queryOptions(
     "get",
     "/v1/competitions/{competitionId}/live/rounds",
     { params: { path: { competitionId } } },
   );
+  const { queryKey } = roundsQueryOptions;
 
-  const { data, isLoading } = api.useQuery(
-    "get",
-    "/v1/competitions/{competitionId}/live/rounds",
-    { params: { path: { competitionId } } },
-    {
-      initialData: { rounds: initialRounds },
-    },
-  );
+  const { data, isLoading } = useQuery({
+    ...roundsQueryOptions,
+    initialData: { rounds: initialRounds },
+  });
 
   const setRoundState = useCallback(
     (
