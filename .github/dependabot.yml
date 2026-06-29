@@ -26,6 +26,8 @@ updates:
       versions:
         - ">= 7"
   open-pull-requests-limit: 10
+  cooldown:
+    default-days: 1
 - package-ecosystem: npm
   directory: "/next-frontend"
   schedule:
@@ -52,6 +54,8 @@ updates:
         - "next"
         - "eslint-config-next"
   open-pull-requests-limit: 10
+  cooldown:
+    default-days: 1
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
