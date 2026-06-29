@@ -20,6 +20,7 @@ class Registration < ApplicationRecord
   scope :with_payments, -> { joins(:registration_payments).distinct }
   scope :wcif_ordered, -> { order(:id) }
   scope :might_attend, -> { where(competing_status: %w[accepted waiting_list]) }
+  scope :scoretakers, -> { accepted.joins(:assignments).merge(Assignment.scoretaker) }
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.

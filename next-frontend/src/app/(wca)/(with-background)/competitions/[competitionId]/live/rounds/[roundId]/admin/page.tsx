@@ -44,7 +44,7 @@ export default async function ResultPage({
     <Container bg="bg">
       <RoundOpenCheck state={round.state} t={t}>
         <PermissionCheck
-          requiredPermission="canAdministerCompetition"
+          requiredPermission="canScoretakeCompetition"
           item={competitionId}
         >
           <VStack align="left">

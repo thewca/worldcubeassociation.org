@@ -15,6 +15,8 @@ class User < ApplicationRecord
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
   has_many :votes
   has_many :registrations
+  has_many :scoretaking_registrations, -> { scoretakers }, class_name: "Registration", inverse_of: :user
+  has_many :scoretaking_competitions, -> { joins(registrations: [:assignments]) }, through: :scoretaking_registrations, source: "competition"
   has_many :competitions_registered_for, through: :registrations, source: "competition"
   belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true, inverse_of: :user
   belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true, inverse_of: :unconfirmed_user
@@ -806,6 +808,9 @@ class User < ApplicationRecord
       can_administer_competitions: {
         scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id),
       },
+      can_scoretake_competitions: {
+        scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id) + scoretaking_competition_ids,
+      },
       can_view_delegate_admin_page: {
         scope: can_view_delegate_matters? ? "*" : [],
       },
@@ -920,6 +925,10 @@ class User < ApplicationRecord
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
       competition.delegates.flat_map(&:regional_delegates).compact.include?(self) ||
       wic_team?
+  end
+
+  def can_scoretake_competition?(competition)
+    can_manage_competition?(competition) || competition.scoretakers.include?(self)
   end
 
   def can_manage_any_not_over_competitions?
