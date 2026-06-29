@@ -54,9 +54,7 @@ import CompetitionShortlist from "@/components/competitions/CompetitionShortlist
 import OpenapiError from "@/components/ui/openapiError";
 
 type TwoBlocksUnion =
-  | TwoBlocksLevel0Block
-  | TwoBlocksLevel1Block
-  | TwoBlocksLevel2Block;
+  TwoBlocksLevel0Block | TwoBlocksLevel1Block | TwoBlocksLevel2Block;
 
 type TwoBlocksRatio = TwoBlocksUnion["ratio"];
 type TwoBlocksSpanConfig = { left: number; right: number };
@@ -391,9 +389,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
 };
 
 type VerticalLayout =
-  | Home["layout"]
-  | TwoBlocksUnion["left"]
-  | TwoBlocksUnion["right"];
+  Home["layout"] | TwoBlocksUnion["left"] | TwoBlocksUnion["right"];
 
 const renderVerticalLayout = (
   verticalLayout: VerticalLayout,
