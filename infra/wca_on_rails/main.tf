@@ -80,6 +80,6 @@ module "shared" {
   rails_startup_time = local.rails_startup_time
   pma_auth_secret    = var.pma_auth_secret
   anycable_path      = var.anycable_path
-  t3_ami_id          = var.t3_ami_id
-  m6i_ami_id         = var.m6i_ami_id
+  t3_ami_id          = data.aws_ami.ecs_al2023.id
+  m6i_ami_id         = data.aws_ami.ecs_al2023.id
 }
