@@ -834,7 +834,7 @@ class Round < ApplicationRecord
       "id" => wcif_id,
       "format" => self.format_id,
       "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
-      "cutoff" => cutoff&.to_wcif,
+      "cutoff" => cutoff&.to_wcif(version: version),
       "scrambleSetCount" => self.scramble_set_count,
       "results" => include_results ? results.map(&:to_wcif) : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
@@ -903,7 +903,7 @@ class Round < ApplicationRecord
       "id" => { "type" => "string" },
       "format" => { "type" => "string", "enum" => Format.ids },
       "timeLimit" => TimeLimit.wcif_json_schema,
-      "cutoff" => Cutoff.wcif_json_schema,
+      "cutoff" => Cutoff.wcif_json_schema(version: version),
       "results" => { "type" => "array", "items" => RoundResult.wcif_json_schema },
       "scrambleSets" => { "type" => "array" }, # TODO: expand on this
       "scrambleSetCount" => { "type" => "integer" },

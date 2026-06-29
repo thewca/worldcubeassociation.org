@@ -496,7 +496,7 @@ RSpec.describe "Competition WCIF" do
                 },
                 "cutoff" => {
                   "numberOfAttempts" => 2,
-                  "attemptResult" => 1.minute.in_centiseconds,
+                  "resultValue" => 1.minute.in_centiseconds,
                 },
                 "participationRuleset" => {
                   "participationSource" => {
