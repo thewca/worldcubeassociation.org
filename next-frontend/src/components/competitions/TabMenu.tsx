@@ -199,14 +199,14 @@ function CollapsibleTabGroup({
       <Collapsible.Trigger
         width="full"
         display="flex"
-        justifyContent="space-between"
+        textAlign="start"
         px="3"
         py="2"
         borderRadius="md"
         _hover={{ bg: "bg.subtle" }}
         cursor="pointer"
       >
-        <Text textStyle="bodyEmphasis" textAlign="start">
+        <Text textStyle="bodyEmphasis">
           <IconComponent /> {t(i18nKey)}
         </Text>
       </Collapsible.Trigger>
