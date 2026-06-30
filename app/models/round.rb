@@ -202,6 +202,8 @@ class Round < ApplicationRecord
     LiveAttempt.where(live_result_id: live_result_ids).delete_all
     # We have to use update_all here because live_attempts_count is write protected
     live_results.update_all(best: 0, average: 0, live_attempts_count: 0, advancing: false, advancing_questionable: false, single_record_tag: nil, average_record_tag: nil)
+    # live_results were changed via raw SQL, refresh the loaded association so lifecycle_state is accurate
+    live_results.reset
     self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
   end
 
@@ -216,6 +218,8 @@ class Round < ApplicationRecord
       LiveResult.empty_result_attributes(reg_id, self.id)
     end
     LiveResult.insert_all!(empty_results)
+    # live_results were inserted via raw SQL, refresh the loaded association so lifecycle_state is accurate
+    live_results.reset
 
     inserted_ids = self.live_results.where(registration_id: advancing_reg_ids).ids
     self.bulk_insert_history(inserted_ids, opening_user, action_type: :opened)

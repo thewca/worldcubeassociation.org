@@ -1033,8 +1033,10 @@ export interface components {
         WcifRound: components["schemas"]["BaseWcifRound"] & {
             results: components["schemas"]["WcifResult"][];
         };
+        /** @enum {string} */
+        RoundState: "open" | "locked" | "pending" | "ready";
         BaseAdminRound: components["schemas"]["WcifRound"] & {
-            state: string;
+            state: components["schemas"]["RoundState"];
         };
         OpenRound: components["schemas"]["BaseAdminRound"] & {
             total_competitors: number;
@@ -2159,6 +2161,7 @@ export interface operations {
                     "application/json": {
                         status: string;
                         recreated_rows: number;
+                        state: components["schemas"]["RoundState"];
                     };
                 };
             };
@@ -2212,6 +2215,7 @@ export interface operations {
                         status: string;
                         created_rows: number;
                         locked_rows: number;
+                        state: components["schemas"]["RoundState"];
                     };
                 };
             };

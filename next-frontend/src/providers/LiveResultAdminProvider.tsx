@@ -13,7 +13,8 @@ import useAPI from "@/lib/wca/useAPI";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { applyCutoff, applyTimeLimit } from "@/lib/live/attempt-result";
 import { padSkipped } from "@/lib/live/padSkipped";
-import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
+import { LiveCompetitor } from "@/types/live";
+import { useRoundInfo } from "@/providers/RoundInfoProvider";
 import { components } from "@/types/openapi";
 import useStoredState from "@/lib/hooks/useStoredState";
 
@@ -51,17 +52,15 @@ export function LiveResultAdminProvider({
   children,
   competitionId,
   initialRegistrationId,
-  round,
   clearOnSubmit = true,
 }: {
   children: ReactNode;
   competitionId: string;
   initialRegistrationId?: number;
-  round: LiveRoundAdminBase;
   // Double-check stays on the current competitor after submitting, so it opts out of clearing.
   clearOnSubmit?: boolean;
 }) {
-  const { id: roundId, cutoff, timeLimit, format: formatId } = round;
+  const { id: roundId, cutoff, timeLimit, format: formatId } = useRoundInfo();
   const format = formats.byId[formatId];
 
   const { liveResultsByRegistrationId, addPendingLiveResult } =

@@ -108,7 +108,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     recreated_rows = round.clear_round!(@current_user)
 
-    render json: { status: "ok", recreated_rows: recreated_rows }
+    render json: { status: "ok", recreated_rows: recreated_rows, state: round.lifecycle_state }
   end
 
   def close_round
@@ -186,7 +186,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     created_rows, locked_rows = round.open_and_lock_previous(@current_user)
 
-    render json: { status: "ok", locked_rows: locked_rows, created_rows: created_rows }
+    render json: { status: "ok", locked_rows: locked_rows, created_rows: created_rows, state: round.lifecycle_state }
   end
 
   def quit_competitor
