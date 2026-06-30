@@ -28,7 +28,6 @@ export default function AddPersonModal({
   competitors: Map<number, LiveCompetitor>;
 }) {
   const [open, setOpen] = useState(false);
-
   const [selectedCompetitor, setSelectedCompetitor] = useState<number>();
   const { addCompetitorToRound, isPending } = useResultsAdmin();
 
@@ -161,21 +160,21 @@ function AddPersonCombobox({
             <Combobox.Trigger />
           </Combobox.IndicatorGroup>
         </Combobox.Control>
-        <Portal>
-          <Combobox.Positioner>
-            <Combobox.Content>
-              <Combobox.Empty>
-                All Competitors are already Part of the Round
-              </Combobox.Empty>
-              {collection.items.map((item) => (
-                <Combobox.Item item={item} key={item.id}>
-                  {`${item.user.name} (${item.registrant_id})`}
-                  <Combobox.ItemIndicator />
-                </Combobox.Item>
-              ))}
-            </Combobox.Content>
-          </Combobox.Positioner>
-        </Portal>
+        {/* No Portal: render inside Dialog.Content so option clicks don't
+            retarget to the table rows behind the modal. */}
+        <Combobox.Positioner>
+          <Combobox.Content>
+            <Combobox.Empty>
+              All Competitors are already Part of the Round
+            </Combobox.Empty>
+            {collection.items.map((item) => (
+              <Combobox.Item item={item} key={item.id}>
+                {`${item.user.name} (${item.registrant_id})`}
+                <Combobox.ItemIndicator />
+              </Combobox.Item>
+            ))}
+          </Combobox.Content>
+        </Combobox.Positioner>
       </Combobox.Root>
     </VStack>
   );
