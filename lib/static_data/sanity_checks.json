@@ -406,20 +406,6 @@
     "query_file": "dummy_delegate_accounts_reassigned.sql"
   },
   {
-    "id": "59",
-    "sanity_check_category_id": "12",
-    "topic": "Ranking-based advancement conditions in violation with <= 75% proceed",
-    "comments": null,
-    "query_file": "ranking_based_advanced_condition_violated.sql"
-  },
-  {
-    "id": "60",
-    "sanity_check_category_id": "12",
-    "topic": "Result-based advancement conditions in violation with the given results",
-    "comments": null,
-    "query_file": "result_based_advancement_condition_violated.sql"
-  },
-  {
     "id": "61",
     "sanity_check_category_id": "1",
     "topic": "Names with abbreviation in first name",
@@ -481,6 +467,13 @@
     "topic": "Invalid Cumulative Time Limit",
     "comments": null,
     "query_file": "invalid_cumulative_limit.sql"
+  },
+  {
+    "id": "71",
+    "sanity_check_category_id": "12",
+    "topic": "Participation condition violations (too permissive or over-advancement)",
+    "comments": null,
+    "query_file": "participation_condition_violated.sql"
   },
   {
     "id": "72",
