@@ -98,12 +98,24 @@ export function LiveResultAdminProvider({
 
   const api = useAPI();
 
-  const [batchMode, setBatchMode] = useState(false);
+  const [batchModeEnabled, setBatchModeEnabled] = useState(false);
   // Persisted to localStorage so staged results survive a refresh/crash — the
   // whole point of batch mode is unreliable connections. Cleared on submit.
   const [batch, setBatch] = useStoredState<BatchEntry[]>(
     [],
     `live-batch-${roundId}`,
+  );
+
+  // Stay in batch mode while staged results exist, so they can't be left behind
+  // and accidentally submitted later. Exiting must clear the batch (see setBatchMode).
+  const batchMode = batchModeEnabled || batch.length > 0;
+
+  const setBatchMode = useCallback(
+    (value: boolean) => {
+      setBatchModeEnabled(value);
+      if (!value) setBatch([]);
+    },
+    [setBatch],
   );
 
   const handleRegistrationIdChange = useCallback(

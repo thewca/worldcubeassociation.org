@@ -92,6 +92,25 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
     }
   }, [attempts, eventId, t, handleSubmit, confirm]);
 
+  const batchConfirmation = useCallback(
+    (e: Checkbox.CheckedChangeDetails) => {
+      if (e.checked) {
+        setBatchMode(true);
+      } else {
+        confirm({
+          content: (
+            <Text>
+              Are you sure you want to exit Batch Mode? All unsubmitted results
+              will be lost.
+            </Text>
+          ),
+          confirmButton: "Confirm",
+        }).then(() => setBatchMode(false));
+      }
+    },
+    [confirm, setBatchMode],
+  );
+
   const hasMetCutoff = meetsCutoff(attempts, cutoff);
 
   return (
@@ -170,10 +189,7 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
             </Button>
           )}
         </FocusScope>
-        <Checkbox.Root
-          checked={batchMode}
-          onCheckedChange={(e) => setBatchMode(!!e.checked)}
-        >
+        <Checkbox.Root checked={batchMode} onCheckedChange={batchConfirmation}>
           <Checkbox.HiddenInput />
           <Checkbox.Control />
           <Checkbox.Label>
