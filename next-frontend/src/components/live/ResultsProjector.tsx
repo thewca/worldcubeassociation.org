@@ -76,34 +76,30 @@ function ResultsProjector({
 
   useEffect(() => {
     const nonemptyResults = nonemptyResultsRef.current;
-    if (status === "paused") {
-      return;
-    }
-    if (status === "shown") {
-      if (nonemptyResults.length > getNumberOfRows()) {
-        const timeout = setTimeout(() => {
-          setStatus("hiding");
-        }, DURATION[status]);
-        return () => clearTimeout(timeout);
-      } else {
+
+    const schedule = (action: () => void) => {
+      const timeout = setTimeout(action, DURATION[status]);
+      return () => clearTimeout(timeout);
+    };
+
+    switch (status) {
+      case "paused":
         return;
-      }
-    }
-    if (status === "showing") {
-      const timeout = setTimeout(() => {
-        setStatus("shown");
-      }, DURATION[status]);
-      return () => clearTimeout(timeout);
-    }
-    if (status === "hiding") {
-      const timeout = setTimeout(() => {
-        setStatus("showing");
-        setTopResultIndex((topResultIndex) => {
-          const newIndex = topResultIndex + getNumberOfRows();
-          return newIndex >= nonemptyResults.length ? 0 : newIndex;
+      case "showing":
+        return schedule(() => setStatus("shown"));
+      case "shown":
+        if (nonemptyResults.length <= getNumberOfRows()) {
+          return;
+        }
+        return schedule(() => setStatus("hiding"));
+      case "hiding":
+        return schedule(() => {
+          setStatus("showing");
+          setTopResultIndex((topResultIndex) => {
+            const newIndex = topResultIndex + getNumberOfRows();
+            return newIndex >= nonemptyResults.length ? 0 : newIndex;
+          });
         });
-      }, DURATION[status]);
-      return () => clearTimeout(timeout);
     }
   }, [status]);
 
