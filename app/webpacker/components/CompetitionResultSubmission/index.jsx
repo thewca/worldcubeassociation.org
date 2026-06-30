@@ -71,6 +71,7 @@ function CompetitionResultSubmission({
         <FormToWrt
           competitionId={competitionId}
           canSubmitResults={canSubmitResults}
+          uploadedScrambleFilesCount={uploadedScrambleFilesCount}
           showWcaLiveBeta={showWcaLiveBeta}
         />
       )}
