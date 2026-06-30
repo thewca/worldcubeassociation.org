@@ -48,18 +48,7 @@ module CompetitionResultsImport
       flat_scrambles_to_import = scramble_sets_to_import
                                  .flat_map do |matched_scr_set|
                                    matched_scr_set.matched_scrambles.map do |matched_scr|
-                                     new_scramble_attributes = {
-                                       competition_id: matched_scr_set.competition_id,
-                                       event_id: matched_scr_set.event_id,
-                                       group_id: matched_scr_set.alphabetic_group_index,
-                                       is_extra: matched_scr.is_extra?,
-                                       round_id: matched_scr_set.round_id,
-                                       round_type_id: matched_scr_set.round_type_id,
-                                       scramble: matched_scr.scramble_string,
-                                       scramble_num: matched_scr.ordered_index + 1,
-                                     }
-
-                                     Scramble.new(new_scramble_attributes).tap do |new_scr|
+                                     Scramble.new(matched_scr.scramble_attrs).tap do |new_scr|
                                        # See upload_json for an explanation on setting these associations
                                        new_scr.competition = competition
                                        new_scr.round = matched_scr_set.round
@@ -82,7 +71,7 @@ module CompetitionResultsImport
                 elsif object.instance_of?(MatchedScrambleSet)
                   "Scramble Set in '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
                 elsif object.instance_of?(MatchedScramble)
-                  "Scramble ##{object.ordered_index + 1} in set '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
+                  "Scramble ##{object.scramble_num} in set '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
                 elsif object.instance_of?(InboxPerson)
                   "Person #{object.name} is invalid (#{e.message}), please fix it!"
                 elsif object.instance_of?(InboxResult)
@@ -140,20 +129,8 @@ module CompetitionResultsImport
   def self.merge_inbox_scrambles(competition)
     ActiveRecord::Base.transaction do
       scramble_rows = competition.matched_scrambles
-                                 .includes(:matched_scramble_set)
-                                 .map do |matched_scr|
-                                   {
-                                     competition_id: matched_scr.competition_id,
-                                     event_id: matched_scr.event_id,
-                                     external_scramble_id: matched_scr.external_scramble_id,
-                                     group_id: matched_scr.group_id,
-                                     is_extra: matched_scr.is_extra?,
-                                     round_id: matched_scr.round_id,
-                                     round_type_id: matched_scr.round_type_id,
-                                     scramble: matched_scr.scramble_string,
-                                     scramble_num: matched_scr.scramble_num,
-                                   }
-      end
+                                 .includes(**MatchedScramble::POSTING_INCLUDES)
+                                 .map(&:scramble_attrs)
 
       Scramble.insert_all!(scramble_rows)
       # Not deleting the MatchedScrambles so that the Delegate can go back

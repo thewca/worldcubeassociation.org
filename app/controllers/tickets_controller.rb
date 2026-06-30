@@ -212,7 +212,9 @@ class TicketsController < ApplicationController
   def imported_temporary_scrambles
     competition = Competition.find(params.require(:competition_id))
 
-    render json: competition.inbox_scrambles
+    render json: competition.matched_scrambles
+                            .includes(**MatchedScramble::POSTING_INCLUDES)
+                            .as_json(MatchedScramble::PREVIEW_SERIALIZE_OPTIONS)
   end
 
   def verify_warnings
