@@ -75,7 +75,7 @@ export default function FilteredResults({
           <Heading textStyle="h3">
             {events.byId[activeEventId].name}{" "}
             {group.isLinked
-              ? t("competitions.results_table.combined_dual_round")
+              ? t("competitions.live.combined_title")
               : t(`rounds.${group.roundTypeId}.name`)}
           </Heading>
           <ResultsTable

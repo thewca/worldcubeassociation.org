@@ -62,7 +62,7 @@ export default async function ResultPage({
               >
                 <LiveUpdatingResultsTable
                   competitionId={competitionId}
-                  title="Combined Dual Rounds"
+                  title={t("competitions.live.combined_title")}
                   isLinkedRound
                   canManage={canManage}
                 />
