@@ -2291,6 +2291,8 @@ en:
         scrambles: "Scrambles"
     results_table:
       h2h_results_disclaimer: "Results determined by a Head-to-Head Finals. Only placement order and best solve are shown, as full Head-to-Head results display is still under development."
+      linked_results_disclaimer: "This round is part of a Dual Round. The results below are shown per round; combined results across both rounds are available on the new results page."
+      combined_dual_round: "Combined Dual Round"
       wca_profile: "WCA profile"
       event: "Event"
       round: "Round"
