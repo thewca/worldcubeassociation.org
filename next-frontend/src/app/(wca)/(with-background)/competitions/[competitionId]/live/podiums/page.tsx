@@ -46,22 +46,25 @@ export default async function PodiumsPage({
   return (
     <Container bg="bg">
       <Heading textStyle="h1">{t("competitions.live.podiums.title")}</Heading>
-      {noPodiums && <Text>{t("competitions.live.podiums.none")}</Text>}
-      {!noPodiums && eventsNotFinished.length > 0 && (
-        <>
-          <HStack gap="3" wrap="wrap">
-            <Heading textStyle="h3">
-              {t("competitions.live.podiums.undetermined")}:
-            </Heading>
-            <HStack gap="2" wrap="wrap">
-              {eventsNotFinished.map((finalRound) => {
-                const { eventId } = parseActivityCode(finalRound.id);
-                return <EventIcon key={finalRound.id} eventId={eventId} />;
-              })}
+      {noPodiums ? (
+        <Text>{t("competitions.live.podiums.none")}</Text>
+      ) : (
+        eventsNotFinished.length > 0 && (
+          <>
+            <HStack gap="3" wrap="wrap">
+              <Heading textStyle="h3">
+                {t("competitions.live.podiums.undetermined")}:
+                <HStack gap="2" wrap="wrap">
+                  {eventsNotFinished.map((finalRound) => {
+                    const { eventId } = parseActivityCode(finalRound.id);
+                    return <EventIcon key={finalRound.id} eventId={eventId} />;
+                  })}
+                </HStack>
+              </Heading>
             </HStack>
-          </HStack>
-          <Separator my="4" />
-        </>
+            <Separator my="4" />
+          </>
+        )
       )}
       {eventsFinished.map((finalRound) => {
         const { eventId } = parseActivityCode(finalRound.id);
@@ -80,7 +83,7 @@ export default async function PodiumsPage({
 
         return (
           <Fragment key={finalRound.id}>
-            <Heading textStyle="h3" p="2">
+            <Heading textStyle="h3" p="2" asChild>
               <HStack gap="2">
                 <EventIcon eventId={eventId} />
                 {events.byId[eventId].name}
