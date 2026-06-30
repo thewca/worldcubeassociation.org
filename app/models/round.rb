@@ -903,7 +903,7 @@ class Round < ApplicationRecord
       "format" => { "type" => "string", "enum" => Format.ids },
       "timeLimit" => TimeLimit.wcif_json_schema,
       "cutoff" => Cutoff.wcif_json_schema(version: version),
-      "results" => { "type" => "array", "items" => RoundResult.wcif_json_schema },
+      "results" => { "type" => "array", "items" => LiveResult.wcif_json_schema },
       "scrambleSets" => { "type" => "array" }, # TODO: expand on this
       "scrambleSetCount" => { "type" => "integer" },
       "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },

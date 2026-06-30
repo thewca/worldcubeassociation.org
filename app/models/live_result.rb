@@ -160,6 +160,19 @@ class LiveResult < ApplicationRecord
     }
   end
 
+  def self.wcif_json_schema
+    {
+      "type" => %w[object null],
+      "properties" => {
+        "personId" => { "type" => "integer" },
+        "ranking" => { "type" => %w[integer null] },
+        "attempts" => { "type" => "array", "items" => LiveAttempt.wcif_json_schema },
+        "best" => { "type" => "integer" },
+        "average" => { "type" => "integer" },
+      },
+    }
+  end
+
   LIVE_STATE_SERIALIZE_OPTIONS = {
     only: %w[advancing advancing_questionable average average_record_tag best registration_id last_attempt_entered_at single_record_tag],
     methods: %w[],
