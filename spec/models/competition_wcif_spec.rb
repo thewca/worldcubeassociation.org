@@ -1283,27 +1283,6 @@ RSpec.describe "Competition WCIF" do
         expect(competition.to_wcif["events"]).to eq(wcif["events"])
       end
 
-      it "does not persist round_results for internal-scoretaking competitions" do
-        competition.update!(scoretaking_software: :internal)
-
-        competition.set_wcif_events!(wcif["events"], delegate)
-
-        # live_results are still populated from the sync, but round_results stays empty
-        #   since live_results is the source of truth for internal scoretaking.
-        expect(LiveResult.count).to eq(2)
-        expect(competition.rounds.flat_map(&:round_results)).to be_empty
-      end
-
-      it "clears previously-stored round_results once a comp switches to internal scoretaking" do
-        competition.set_wcif_events!(wcif["events"], delegate)
-        expect(competition.rounds.flat_map(&:round_results)).not_to be_empty
-
-        competition.update!(scoretaking_software: :internal)
-        competition.set_wcif_events!(wcif["events"], delegate)
-
-        expect(competition.rounds.reload.flat_map(&:round_results)).to be_empty
-      end
-
       it "cleans up orphaned attempts upon syncing" do
         # First, establish five attempts as a baseline
         competition.set_wcif_events!(wcif["events"], delegate)

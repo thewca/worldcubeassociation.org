@@ -1,18 +1,5 @@
 # frozen_string_literal: true
 
-# Serializes/deserializes an Array of RoundResult objects.
-class RoundResults
-  def self.load(json)
-    json_array = json.is_a?(String) ? JSON.parse(json) : json
-    json_array ||= []
-    json_array.map(&RoundResult.method(:load))
-  end
-
-  def self.dump(round_results)
-    JSON.dump(round_results&.map(&:to_wcif) || [])
-  end
-end
-
 class RoundResult
   include ActiveModel::Validations
 

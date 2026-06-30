@@ -76,7 +76,6 @@ after "development:users", "development:user_roles" do
           cutoff: nil,
           advancement_condition: is_final ? nil : AdvancementConditions::RankingCondition.new(16),
           scramble_set_count: rand(1..4),
-          round_results: [],
         )
         users.each_with_index do |competitor, k|
           person = competitor.person

@@ -308,9 +308,6 @@ module DatabaseDumper
           linked_round_id
           is_h2h_mock
         ],
-        db_default: %w[
-          round_results
-        ],
       ),
     }.freeze,
     "linked_rounds" => {

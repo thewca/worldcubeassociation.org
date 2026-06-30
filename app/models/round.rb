@@ -44,9 +44,6 @@ class Round < ApplicationRecord
   serialize :advancement_condition, coder: AdvancementConditions::AdvancementCondition
   validates_associated :advancement_condition
 
-  serialize :round_results, coder: RoundResults
-  validates_associated :round_results
-
   serialize :participation_condition, coder: ResultConditions::ResultCondition
   validates_associated :participation_condition
 
