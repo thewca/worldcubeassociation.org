@@ -1,6 +1,7 @@
 "use client";
 
 import { Stack, Text } from "@chakra-ui/react";
+import _ from "lodash";
 import {
   parseActivityCode,
   timeLimitToString,
@@ -21,18 +22,9 @@ export default function RoundLimits() {
 
   // timeLimitToString needs the surrounding events to render cumulative time
   // limits that span multiple rounds, so reconstruct them from all rounds.
-  const siblingEvents: WcifEvent[] = Object.values(
-    rounds.reduce<Record<string, WcifEvent>>((acc, siblingRound) => {
-      const { eventId: siblingEventId } = parseActivityCode(siblingRound.id);
-      acc[siblingEventId] ??= {
-        id: siblingEventId,
-        rounds: [],
-        extensions: [],
-      };
-      acc[siblingEventId].rounds.push(siblingRound);
-      return acc;
-    }, {}),
-  );
+  const siblingEvents: WcifEvent[] = Object.entries(
+    _.groupBy(rounds, (r) => parseActivityCode(r.id).eventId),
+  ).map(([id, eventRounds]) => ({ id, rounds: eventRounds, extensions: [] }));
 
   return (
     <Stack gap={1}>
