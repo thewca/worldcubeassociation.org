@@ -113,15 +113,13 @@ function ResultsProjector({
         <Dialog.Backdrop />
         <Dialog.Positioner>
           <Dialog.Content
-            maxH="100vh"
             overflow="hidden"
             m={0}
             borderRadius={0}
-            w="100%"
-            h="100%"
+            w="full"
+            h="full"
           >
             <Dialog.Header
-              bg="blue.600"
               color="white"
               py={4}
               position="sticky"
@@ -169,7 +167,7 @@ function ResultsProjector({
             </Dialog.Header>
 
             <Dialog.Body p={0}>
-              <Table.Root size="lg" css={{ tableLayout: "fixed" }}>
+              <Table.Root size="lg">
                 <LiveTableHeader format={format} t={t} isProjector />
                 <Table.Body>
                   {nonemptyResults
@@ -187,9 +185,6 @@ function ResultsProjector({
                       return (
                         <Table.Row
                           whiteSpace="nowrap"
-                          css={{
-                            "&:last-child td": { border: 0 },
-                          }}
                           key={`${result.registration_id}-${result.round_wcif_id}`}
                           opacity={isVisible ? 0 : 1}
                           animationName={isVisible ? "fade-in" : "fade-out"}
