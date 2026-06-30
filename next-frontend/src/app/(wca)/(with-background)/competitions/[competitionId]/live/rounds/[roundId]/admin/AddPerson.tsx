@@ -27,10 +27,13 @@ export default function AddPersonModal({
   roundId: string;
   competitors: Map<number, LiveCompetitor>;
 }) {
-  const [open, setOpen] = useState(false);
-
   const [selectedCompetitor, setSelectedCompetitor] = useState<number>();
-  const { addCompetitorToRound, isPending } = useResultsAdmin();
+  const {
+    addCompetitorToRound,
+    isPending,
+    dialogOpen: open,
+    setDialogOpen: setOpen,
+  } = useResultsAdmin();
 
   return (
     <Dialog.Root lazyMount open={open} onOpenChange={(e) => setOpen(e.open)}>

@@ -22,6 +22,7 @@ import React, { useState } from "react";
 import LiveResultsMobileModal from "@/components/live/LiveResultsMobileModal";
 import ResultMenu, { ClickPosition } from "@/components/live/Admin/ResultMenu";
 import { useT } from "@/lib/i18n/useI18n";
+import { useOptionalResultsAdmin } from "@/providers/LiveResultAdminProvider";
 
 export default function LiveResultsTable({
   resultsByRegistrationId,
@@ -49,6 +50,8 @@ export default function LiveResultsTable({
   isLinkedRound?: boolean;
 }) {
   const { t } = useT();
+
+  const dialogOpen = useOptionalResultsAdmin()?.dialogOpen ?? false;
 
   const [selectedRow, setSelectedRow] = useState<CompetitorWithResults>();
   const [menuClickPosition, setMenuClickPosition] = useState<ClickPosition>();
@@ -108,6 +111,8 @@ export default function LiveResultsTable({
                 <Table.Row
                   key={rowKey}
                   onClick={(e) => {
+                    // Don't open the row menu while a dialog (e.g. Add Competitor) is open.
+                    if (dialogOpen) return;
                     if (isAdmin) {
                       setSelectedRow(competitorAndTheirResults);
                       setMenuClickPosition({ x: e.clientX, y: e.clientY });
