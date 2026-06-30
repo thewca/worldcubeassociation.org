@@ -172,7 +172,21 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
         </FocusScope>
         <Checkbox.Root
           checked={batchMode}
-          onCheckedChange={(e) => setBatchMode(!!e.checked)}
+          onCheckedChange={(e) => {
+            if (e.checked) {
+              setBatchMode(true);
+            } else {
+              confirm({
+                content: (
+                  <Text>
+                    Are you sure you want to exit Batch Mode? All unsubmitted
+                    results will be lost.
+                  </Text>
+                ),
+                confirmButton: "Confirm",
+              }).then(() => setBatchMode(false));
+            }
+          }}
         >
           <Checkbox.HiddenInput />
           <Checkbox.Control />
