@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_30_164923) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1276,7 +1276,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
     t.json "participation_condition"
     t.bigint "participation_source_id"
     t.string "participation_source_type"
-    t.text "round_results", size: :medium
     t.integer "scramble_set_count", default: 1, null: false
     t.text "time_limit"
     t.integer "total_number_of_rounds", null: false
