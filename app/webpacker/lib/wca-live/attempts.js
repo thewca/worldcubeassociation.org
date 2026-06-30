@@ -164,6 +164,20 @@ export function centisecondsToClockFormat(centiseconds) {
     .replace(/^[0:]*(?!\.)/g, '');
 }
 
+/**
+ * Converts a human-friendly string to centiseconds.
+ */
+export function clockFormatToCentiseconds(input) {
+  if (input === '') return SKIPPED_VALUE;
+  const num = _.toInteger(input.replace(/\D/g, '')) || 0;
+  return (
+    Math.floor(num / 1000000) * 360000
+    + Math.floor((num % 1000000) / 10000) * 6000
+    + Math.floor((num % 10000) / 100) * 100
+    + (num % 100)
+  );
+}
+
 function formatMbldAttemptResult(attemptResult) {
   const { solved, attempted, centiseconds } = decodeMbldAttemptResult(
     attemptResult,
@@ -224,4 +238,12 @@ export function attemptTypeById(eventId) {
     return 'points';
   }
   throw Error('Unknown Event Type');
+}
+
+export function reformatInput(input) {
+  const number = _.toInteger(input.replace(/\D/g, '')) || 0;
+  if (number === 0) return '';
+  const str = `00000000${number.toString().slice(0, 8)}`;
+  const [, hh, mm, ss, cc] = str.match(/(\d\d)(\d\d)(\d\d)(\d\d)$/);
+  return `${hh}:${mm}:${ss}.${cc}`.replace(/^[0:]*(?!\.)/g, '');
 }
