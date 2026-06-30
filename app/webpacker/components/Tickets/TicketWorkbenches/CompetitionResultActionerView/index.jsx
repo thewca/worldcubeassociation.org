@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
 import WarningsVerification from './WarningsVerification';
 import TimelineView from './TimelineView';
-import MergeInboxResults from './MergeInboxResults';
+import { MergeInboxResults, MergeInboxScrambles } from './MergeInboxResultsData';
 import CreateWcaIds from './CreateWcaIds';
 import FinalSteps from './FinalSteps';
 import MiscActions from './MiscActions';
@@ -60,7 +60,7 @@ function ViewForStatus({
 
     case ticketsCompetitionResultStatuses.merged_inbox_results:
       return (
-        <MergeInboxResults
+        <MergeInboxScrambles
           ticketDetails={ticketDetails}
           currentStakeholder={currentStakeholder}
         />

@@ -3,10 +3,14 @@ import {
   Accordion, Container, Header, Message, Table,
 } from 'semantic-ui-react';
 import I18n from '../../../../lib/i18n';
-import ScrambleRowHeader from '../../../ResultsData/Scrambles/ScrambleRowHeader';
-import ScrambleRowBody from '../../../ResultsData/Scrambles/ScrambleRowBody';
 
-export default function ScramblesPreviewAccordion({ roundDetails, groupedScrambles }) {
+export default function ResultsDataPreviewAccordion({
+  dataType,
+  roundDetails,
+  groupedResultsData,
+  rowHeaderComponent: RowHeaderComponent,
+  rowComponent: RowComponent,
+}) {
   const [openItems, setOpenItems] = useState(
     roundDetails.map(({ roundId }) => roundId),
   );
@@ -21,7 +25,14 @@ export default function ScramblesPreviewAccordion({ roundDetails, groupedScrambl
   };
 
   if (roundDetails.length === 0) {
-    return <Message warning>No scrambles uploaded to Inbox yet.</Message>;
+    return (
+      <Message warning>
+        No
+        {dataType}
+        {' '}
+        uploaded to Inbox yet.
+      </Message>
+    );
   }
 
   return (
@@ -44,10 +55,10 @@ export default function ScramblesPreviewAccordion({ roundDetails, groupedScrambl
             <Accordion.Content active={openItems.includes(roundId)}>
               <Table striped compact="very" singleLine>
                 <Table.Header>
-                  <ScrambleRowHeader />
+                  <RowHeaderComponent />
                 </Table.Header>
                 <Table.Body>
-                  <ScrambleRowBody round={{ scrambles: groupedScrambles[roundId] }} />
+                  <RowComponent round={{ [dataType]: groupedResultsData[roundId] }} />
                 </Table.Body>
               </Table>
             </Accordion.Content>
