@@ -44,15 +44,18 @@ module ResultsValidators
 
       if validator.include_persons?
         persons_assoc = check_real_results ? :competitors : :inbox_persons
-        assoc_models = check_real_results ? [] : [:person]
+        person_assoc_models = check_real_results ? [] : [:person]
 
-        associations.deep_merge!({ persons_assoc => assoc_models })
+        associations.deep_merge!({ persons_assoc => person_assoc_models })
       end
 
       if validator.include_scrambles?
-        scrambles_assoc = self.inbox_scrambles_assoc(check_real_results: check_real_results)
+        scrambles_assoc = check_real_results ? :scrambles : :matched_scrambles
 
-        associations.deep_merge!({ scrambles_assoc => [:round] })
+        round_assoc_models = { round: [:competition_event] }
+        scrambles_assoc_models = check_real_results ? round_assoc_models : { matched_scramble_set: round_assoc_models }
+
+        associations.deep_merge!({ scrambles_assoc => scrambles_assoc_models })
       end
 
       associations
@@ -94,26 +97,10 @@ module ResultsValidators
       end
 
       if validator.include_scrambles?
-        scrambles_relation = self.inbox_scrambles_assoc(check_real_results: check_real_results)
-        data.scrambles = competition.public_send(scrambles_relation)
+        data.scrambles = check_real_results ? competition.scrambles : competition.matched_scrambles
       end
 
       data
-    end
-
-    def self.inbox_scrambles_assoc(check_real_results: false)
-      if Rails.env.local?
-        # CI tests can already run on the assumption that the split was fully executed
-        return check_real_results ? :scrambles : :matched_scrambles
-      end
-
-      # During the migration of scramble tables, there might be some ongoing postings
-      #   that are still relying on the old table structures.
-      # To enable a smooth migration, we temporarily pretend that all posting procedures
-      #   follow the "old" way of doing things, where the productive `scrambles` table was just hard-wired.
-      #   In around ~3 days from this comment, when all results postings are newer than the deploy(!) date of this comment,
-      #   we can switch safely to running the validators on `matched_scrambles` even in production.
-      :scrambles
     end
   end
 end
