@@ -21,6 +21,7 @@ import { LiveCompetitor, PendingLiveResult } from "@/types/live";
 import React, { useState } from "react";
 import LiveResultsMobileModal from "@/components/live/LiveResultsMobileModal";
 import ResultMenu, { ClickPosition } from "@/components/live/Admin/ResultMenu";
+import { useResultsAdminOptional } from "@/providers/LiveResultAdminProvider";
 import { useT } from "@/lib/i18n/useI18n";
 
 export default function LiveResultsTable({
@@ -60,6 +61,11 @@ export default function LiveResultsTable({
   const pendingRegistrationIds = new Set(
     pendingLiveResults.map((r) => r.registration_id),
   );
+
+  // Competitors staged in the (not-yet-submitted) batch — shown dimmed so
+  // scoretakers can see who's already entered in the current batch.
+  const batchRegistrationIds =
+    useResultsAdminOptional()?.batchRegistrationIds ?? new Set<number>();
 
   const competitorsWithOrderedResults = mergeAndOrderResults(
     resultsByRegistrationId,
@@ -103,6 +109,9 @@ export default function LiveResultsTable({
               }
 
               const rowKey = `${competitorAndTheirResults.id}-${result.round_wcif_id}`;
+              const inBatch = batchRegistrationIds.has(
+                competitorAndTheirResults.id,
+              );
 
               return (
                 <Table.Row
@@ -116,6 +125,7 @@ export default function LiveResultsTable({
                     }
                   }}
                   cursor={isMobile || isAdmin ? "pointer" : undefined}
+                  color={inBatch ? "fg.muted" : undefined}
                   colorPalette={
                     pendingQuitCompetitors.has(competitorAndTheirResults.id)
                       ? "red"

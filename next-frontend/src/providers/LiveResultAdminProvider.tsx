@@ -27,6 +27,7 @@ interface AdminResultsContextValue {
   batchMode: boolean;
   setBatchMode: (value: boolean) => void;
   batchCount: number;
+  batchRegistrationIds: Set<number>;
   submitBatch: () => void;
   handleRegistrationIdChange: (value?: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
@@ -348,6 +349,7 @@ export function LiveResultAdminProvider({
         batchMode,
         setBatchMode,
         batchCount: batch.length,
+        batchRegistrationIds: new Set(batch.map((e) => e.registration_id)),
         submitBatch,
         quitCompetitor,
         handleRegistrationIdChange,
@@ -361,6 +363,11 @@ export function LiveResultAdminProvider({
       <Toaster />
     </AdminResultsContext.Provider>
   );
+}
+
+// Null outside an admin provider (e.g. the public results table reuses LiveResultsTable).
+export function useResultsAdminOptional(): AdminResultsContextValue | null {
+  return useContext(AdminResultsContext);
 }
 
 export function useResultsAdmin(): AdminResultsContextValue {
