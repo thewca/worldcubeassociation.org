@@ -1,16 +1,25 @@
 WITH RECURSIVE group_ancestors AS (
-  SELECT id, parent_group_id, id AS leaf_group_id
+  SELECT
+    id,
+    parent_group_id,
+    id AS leaf_group_id
   FROM user_groups
   WHERE group_type = 'delegate_regions'
 
   UNION ALL
 
-  SELECT ug.id, ug.parent_group_id, ga.leaf_group_id
-  FROM user_groups ug
-  JOIN group_ancestors ga ON ug.id = ga.parent_group_id
+  SELECT
+    ug.id,
+    ug.parent_group_id,
+    ga.leaf_group_id
+  FROM user_groups AS ug
+  JOIN group_ancestors AS ga
+  ON ug.id = ga.parent_group_id
 ),
 root_groups AS (
-  SELECT id AS root_group_id, leaf_group_id
+  SELECT
+    id AS root_group_id,
+    leaf_group_id
   FROM group_ancestors
   WHERE parent_group_id IS NULL
 )
@@ -32,18 +41,18 @@ JOIN roles_metadata_delegate_regions AS dr
 ON ur.metadata_type = 'RolesMetadataDelegateRegions'
   AND ur.metadata_id = dr.id
   AND ug.metadata_type = 'GroupsMetadataDelegateRegions'
-JOIN root_groups rg
+JOIN root_groups AS rg
 ON rg.leaf_group_id = ug.id
-JOIN user_groups root_ug
+JOIN user_groups AS root_ug
 ON root_ug.id = rg.root_group_id
-JOIN user_roles sd_role
+JOIN user_roles AS sd_role
 ON sd_role.group_id = rg.root_group_id
   AND sd_role.end_date IS NULL
-JOIN roles_metadata_delegate_regions sd_dr
+JOIN roles_metadata_delegate_regions AS sd_dr
 ON sd_role.metadata_type = 'RolesMetadataDelegateRegions'
   AND sd_role.metadata_id = sd_dr.id
   AND sd_dr.status = 'senior_delegate'
-JOIN users sd
+JOIN users AS sd
 ON sd_role.user_id = sd.id
 WHERE ur.end_date IS NULL
   AND dr.status <> 'trainee_delegate'
