@@ -3,6 +3,7 @@ import AttemptsForm from "@/components/live/AttemptsForm";
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import RoundNameHeader from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/RoundNameHeader";
 import RoundLockedAlert from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/RoundLockedAlert";
+import RoundLimits from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/RoundLimits";
 
 export default async function AddResults({
   competitionId,
@@ -13,6 +14,7 @@ export default async function AddResults({
     <>
       <RoundLockedAlert />
       <RoundNameHeader />
+      <RoundLimits />
       <SimpleGrid columns={16} gap={6}>
         <GridItem colSpan={4} position="sticky" top={4} alignSelf="start">
           <AttemptsForm header="Add Result" />
