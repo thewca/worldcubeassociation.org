@@ -10,9 +10,9 @@ import {
 } from '../../lib/wca-data.js.erb';
 
 import useDelegatesData from './useDelegatesData';
-import UtcDatePicker from '../wca/UtcDatePicker';
-import EventSelector from '../wca/EventSelector';
-import RegionSelector from '../wca/RegionSelector';
+import UtcDatePicker from '../../components/wca/UtcDatePicker';
+import EventSelector from '../../components/wca/EventSelector';
+import RegionSelector from '../../components/wca/RegionSelector';
 
 function CompetitionsFilters({
   filterState,

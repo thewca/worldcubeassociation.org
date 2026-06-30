@@ -26,6 +26,12 @@ import RegionalOrganizations from '../react_on_rails_components/RegionalOrganiza
 import IncidentsLog from '../react_on_rails_components/IncidentsLog';
 import ContactsPage from '../react_on_rails_components/ContactsPage';
 import ContactEditProfilePage from '../react_on_rails_components/ContactEditProfilePage';
+import MyCompetitions from '../react_on_rails_components/MyCompetitions';
+import PostsWidget from '../react_on_rails_components/Posts/PostsWidget';
+import CreatePost from '../react_on_rails_components/Posts/CreatePost';
+import EditPost from '../react_on_rails_components/Posts/EditPost';
+import LivestreamManager from '../react_on_rails_components/Posts/LivestreamManager';
+import CompetitionsOverview from '../react_on_rails_components/CompetitionsOverview';
 import {
   getUrlParams,
   setUrlParams,
@@ -71,6 +77,12 @@ ReactOnRails.register({
   IncidentsLog,
   ContactsPage,
   ContactEditProfilePage,
+  MyCompetitions,
+  PostsWidget,
+  CreatePost,
+  EditPost,
+  LivestreamManager,
+  CompetitionsOverview,
 });
 
 // Support component names relative to this directory:

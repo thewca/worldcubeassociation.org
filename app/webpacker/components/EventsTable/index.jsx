@@ -86,7 +86,7 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
                 {competitionInfo['uses_cutoff?'] && (
                   <TableCell>
                     {round.cutoff
-                      && cutoffToString(round)}
+                      && cutoffToString(round, { isV2: true })}
                   </TableCell>
                 )}
                 <TableCell>
@@ -95,7 +95,7 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
                 {competitionInfo['uses_qualification?'] && (
                   <TableCell>
                     { i === 0
-                    && eventQualificationToString(event, event.qualification)}
+                    && eventQualificationToString(event, event.qualification, { isV2: true })}
                   </TableCell>
                 )}
               </TableRow>

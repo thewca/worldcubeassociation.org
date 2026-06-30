@@ -1,9 +1,9 @@
 import { components } from "@/types/openapi";
-import { duringCompetitionTabs } from "@/lib/wca/competitions/tabs";
-import TabMenu from "@/components/competitions/TabMenu";
 import { getRounds } from "@/lib/wca/live/getRounds";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
+import { RoundsInfoProvider } from "@/providers/RoundInfoProvider";
+import LiveTabs from "@/components/competitions/LiveTabs";
 
 export default async function LiveMenu({
   competitionInfo,
@@ -20,11 +20,12 @@ export default async function LiveMenu({
     return <OpenapiError response={response} t={t} />;
   }
 
-  const tabs = duringCompetitionTabs(competitionInfo, data.rounds);
-
   return (
-    <TabMenu tabs={tabs} competitionInfo={competitionInfo}>
-      {children}
-    </TabMenu>
+    <RoundsInfoProvider
+      competitionId={competitionInfo.id}
+      initialRounds={data.rounds}
+    >
+      <LiveTabs competitionInfo={competitionInfo}>{children}</LiveTabs>
+    </RoundsInfoProvider>
   );
 }

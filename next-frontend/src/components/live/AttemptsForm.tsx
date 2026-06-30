@@ -13,32 +13,32 @@ import AttemptResultField from "@/app/(wca)/(with-background)/dashboard/AttemptR
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
-import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
+import { LiveCompetitor } from "@/types/live";
 import { useCallback, useImperativeHandle, useRef } from "react";
 import { flushSync } from "react-dom";
 import type { KeyboardEvent, ReactNode, Ref } from "react";
 import { attemptResultsWarning, meetsCutoff } from "@/lib/live/attempt-result";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
+import { useRoundInfo } from "@/providers/RoundInfoProvider";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import formats from "@/lib/wca/data/formats";
 import { FocusScope, useFocusManager } from "@react-aria/focus";
 
 interface AttemptsFormProps {
-  solveCount: number;
   header: string;
-  eventId: string;
-  cutoff?: LiveRoundAdminBase["cutoff"];
 }
 
 const toCompetitorString = (competitor: LiveCompetitor) =>
   `${competitor.name} (${competitor.registrant_id})`;
 
-export default function AttemptsForm({
-  solveCount,
-  cutoff,
-  header,
-  eventId,
-}: AttemptsFormProps) {
+export default function AttemptsForm({ header }: AttemptsFormProps) {
   const { t } = useT();
+
+  const { id, format: formatId, cutoff } = useRoundInfo();
+  const { eventId } = parseActivityCode(id);
+  const format = formats.byId[formatId];
+  const solveCount = format.expected_solve_count;
 
   const {
     handleRegistrationIdChange,

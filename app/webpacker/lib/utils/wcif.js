@@ -347,22 +347,23 @@ export function roundAdvancementToString(wcifRound, wcifEvents, { short } = {}) 
   }, { short });
 }
 
-export function cutoffToString(wcifRound, { short } = {}) {
+export function cutoffToString(wcifRound, { short, isV2 } = {}) {
   const { eventId } = parseActivityCode(wcifRound.id);
   const wcaEvent = events.byId[eventId];
+  const value = isV2 ? wcifRound.cutoff.resultValue : wcifRound.cutoff.attemptResult;
 
   if (wcaEvent.isTimedEvent) {
-    const time = centisecondsToClockFormat(wcifRound.cutoff.attemptResult);
+    const time = centisecondsToClockFormat(value);
     return short ? time : I18n.t('cutoff.time', { count: wcifRound.cutoff.numberOfAttempts, time });
   }
 
   if (wcaEvent.isFewestMoves) {
-    const moves = wcifRound.cutoff.attemptResult;
+    const moves = value;
     return short ? moves : I18n.t('cutoff.moves', { count: wcifRound.cutoff.numberOfAttempts, moves });
   }
 
   if (wcaEvent.isMultipleBlindfolded) {
-    const points = attemptResultToMbPoints(wcifRound.cutoff.attemptResult);
+    const points = attemptResultToMbPoints(value);
     return short ? points : I18n.t('cutoff.points', { count: wcifRound.cutoff.numberOfAttempts, points });
   }
 

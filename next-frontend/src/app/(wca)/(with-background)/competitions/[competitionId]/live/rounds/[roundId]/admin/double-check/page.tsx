@@ -7,9 +7,8 @@ import { Container } from "@chakra-ui/react";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import { DateTime } from "luxon";
-import { getRoundName } from "@/lib/wca/live/getRoundName";
-import { getRounds } from "@/lib/wca/live/getRounds";
 import RoundOpenCheck from "@/components/live/RoundOpenCheck";
+import { RoundInfoProvider } from "@/providers/RoundInfoProvider";
 
 export default async function DoubleCheckPage({
   params,
@@ -29,7 +28,7 @@ export default async function DoubleCheckPage({
     return <OpenapiError response={response} t={t} />;
   }
 
-  const { results, id, format } = data;
+  const { results, id } = data;
 
   const sortedResults = results.toSorted(
     (a, b) =>
@@ -37,43 +36,29 @@ export default async function DoubleCheckPage({
       DateTime.fromISO(a.last_attempt_entered_at).toMillis(),
   );
 
-  const {
-    data: roundsData,
-    error: roundsError,
-    response: roundsResponse,
-  } = await getRounds(competitionId);
-
-  if (roundsError) return <OpenapiError response={roundsResponse} t={t} />;
-
-  const roundName = getRoundName(id, t, roundsData.rounds, true);
-
-  const round = roundsData.rounds.find((r) => r.id === id)!;
-
   return (
     <Container>
-      <RoundOpenCheck state={round.state} t={t}>
-        <PermissionCheck
-          requiredPermission="canAdministerCompetition"
-          item={competitionId}
-        >
-          <LiveResultProvider initialRound={data} competitionId={competitionId}>
-            <LiveResultAdminProvider
+      <RoundInfoProvider roundId={id}>
+        <RoundOpenCheck>
+          <PermissionCheck
+            requiredPermission="canScoretakeCompetition"
+            item={competitionId}
+          >
+            <LiveResultProvider
+              initialRound={data}
               competitionId={competitionId}
-              initialRegistrationId={sortedResults[0].registration_id}
-              round={round}
-              clearOnSubmit={false}
             >
-              <DoubleCheck
+              <LiveResultAdminProvider
                 competitionId={competitionId}
-                results={sortedResults}
-                formatId={format}
-                roundWcifId={id}
-                roundName={roundName}
-              />
-            </LiveResultAdminProvider>
-          </LiveResultProvider>
-        </PermissionCheck>
-      </RoundOpenCheck>
+                initialRegistrationId={sortedResults[0].registration_id}
+                clearOnSubmit={false}
+              >
+                <DoubleCheck results={sortedResults} />
+              </LiveResultAdminProvider>
+            </LiveResultProvider>
+          </PermissionCheck>
+        </RoundOpenCheck>
+      </RoundInfoProvider>
     </Container>
   );
 }

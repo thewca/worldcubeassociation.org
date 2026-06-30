@@ -8,10 +8,10 @@ import { useMutation } from '@tanstack/react-query';
 import I18n from '../../lib/i18n';
 import useInputState from '../../lib/hooks/useInputState';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
-import MarkdownEditor from '../wca/FormBuilder/input/MarkdownEditor';
+import MarkdownEditor from '../../components/wca/FormBuilder/input/MarkdownEditor';
 import { createPost, editPost } from './api/posts';
-import UtcDatePicker from '../wca/UtcDatePicker';
-import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import UtcDatePicker from '../../components/wca/UtcDatePicker';
+import I18nHTMLTranslate from '../../components/I18nHTMLTranslate';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
 
 export default function PostForm({

@@ -6,32 +6,35 @@ import { toaster } from "@/components/ui/toaster";
 import { LiveRoundState } from "@/types/live";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
+import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 
 export default function ActionButtons({
   state,
-  setState,
   roundId,
   competitionId,
   hasResultsEntered,
 }: {
   state: LiveRoundState;
-  setState: (state: LiveRoundState) => void;
   roundId: string;
   competitionId: string;
   hasResultsEntered: boolean;
 }) {
   const api = useAPI();
+  const { setRoundState } = useAllRoundsInfo();
 
   const { isPending: isPendingOpen, mutate: openRound } = api.useMutation(
     "put",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/open",
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toaster.create({
           description: "Round Opened",
           type: "success",
         });
-        setState("open");
+        setRoundState(roundId, data.state, {
+          total_competitors: data.created_rows,
+          competitors_live_results_entered: 0,
+        });
       },
       onError: (error) => {
         toaster.create({
@@ -47,11 +50,12 @@ export default function ActionButtons({
     "put",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/clear",
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toaster.create({
           description: "Round Cleared",
           type: "success",
         });
+        setRoundState(roundId, data.state);
       },
       onError: () => {
         toaster.create({
@@ -71,7 +75,7 @@ export default function ActionButtons({
           description: "Round Closed",
           type: "success",
         });
-        setState("ready");
+        setRoundState(roundId, "ready");
       },
       onError: () => {
         toaster.create({
