@@ -206,6 +206,7 @@ export function MultiRoundResultProvider({
       const decompressedUpdated = updated.map(decompressPartialResult);
       const decompressedCreated = created.map(decompressFullResult);
 
+      const deletedSet = new Set(deleted);
       const roundQuery = roundQueryOptions(roundId);
 
       queryClient.setQueryData(
@@ -220,7 +221,10 @@ export function MultiRoundResultProvider({
             roundWcifId: roundId,
           }),
           state_hash: after_hash,
-          competitors: [...oldData.competitors, ...created.map((c) => c.user)],
+          competitors: [
+            ...oldData.competitors,
+            ...created.map((c) => c.user),
+          ].filter((c) => !deletedSet.has(c.id)),
         }),
       );
 

@@ -35,11 +35,11 @@ export default function ImportWcaLiveResults({
         <Message.Header>Please Note</Message.Header>
         <Message.List>
           <Message.Item>
-            Make sure to hit
+            If you are using WCA Live, make sure to hit
             {' '}
             <b>&quot;Synchronize&quot;</b>
             {' '}
-            in WCA Live first. This button can only use results which have been synchronized!
+            first. This button can only use results which have been synchronized!
           </Message.Item>
           <Message.Item>
             Don&apos;t forget to also

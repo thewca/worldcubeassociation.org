@@ -474,5 +474,19 @@
     "topic": "Participation condition violations (too permissive or over-advancement)",
     "comments": null,
     "query_file": "participation_condition_violated.sql"
+  },
+  {
+    "id": "72",
+    "sanity_check_category_id": "8",
+    "topic": "Suspiciously short-lived user role (same or consecutive day start/end)",
+    "comments": null,
+    "query_file": "user_role_short_lived.sql"
+  },
+  {
+    "id": "73",
+    "sanity_check_category_id": "9",
+    "topic": "Schedule activities outside competition date range",
+    "comments": null,
+    "query_file": "consistency_of_schedule_activities_with_competition_days.sql"
   }
 ]

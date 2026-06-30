@@ -15,7 +15,7 @@ def attempt_result_condition
 end
 
 RSpec.describe "WCA Live API" do
-  let(:competition) { create(:competition, event_ids: ["333"]) }
+  let(:competition) { create(:competition, scoretaking_software: :internal, event_ids: ["333"]) }
   let(:registrations) { create_list(:registration, 5, :accepted, competition: competition, event_ids: ["333"]) }
 
   describe "Advancing Recomputation" do

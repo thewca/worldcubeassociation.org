@@ -10,7 +10,7 @@ import {
 import I18n from '../../lib/i18n';
 import { events, formats } from '../../lib/wca-data.js.erb';
 import {
-  advancementConditionToString,
+  roundAdvancementToString,
   cutoffToString,
   eventQualificationToString,
   getRoundTypeId,
@@ -90,13 +90,12 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
                   </TableCell>
                 )}
                 <TableCell>
-                  {round.advancementCondition
-                    && advancementConditionToString(round)}
+                  {roundAdvancementToString(round, wcifEvents)}
                 </TableCell>
                 {competitionInfo['uses_qualification?'] && (
                   <TableCell>
                     { i === 0
-                    && eventQualificationToString(event, event.qualification)}
+                    && eventQualificationToString(event, event.qualification, { isV2: true })}
                   </TableCell>
                 )}
               </TableRow>

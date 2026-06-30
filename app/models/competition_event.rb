@@ -33,7 +33,11 @@ class CompetitionEvent < ApplicationRecord
   end
 
   def advancing_competitor_ids
-    registrations.accepted.ids
+    live_competitors.ids
+  end
+
+  def live_competitors
+    registrations.accepted.competing
   end
 
   def advancement_results
@@ -148,7 +152,12 @@ class CompetitionEvent < ApplicationRecord
     end
     model_rounds = wcif["rounds"].map do |round_wcif|
       round = rounds.find { it.wcif_id == round_wcif["id"] } || rounds.build
-      round.update!(**Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"], version: version))
+      round_attributes = Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"], version: version)
+      # For internal-scoretaking comps `live_results` is the source of truth and `round_results`
+      #   is never read back (see `Round#to_wcif`). Persisting the WCIF snapshot just creates
+      #   stale data that drifts from `live_results`, so we don't store it (and clear any leftovers).
+      round_attributes[:round_results] = [] if self.competition.scoretaking_software_internal?
+      round.update!(**round_attributes)
       WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
       round
     end

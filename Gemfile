@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'bundler', '4.0.12'
+gem 'bundler', '4.0.14'
 gem 'rails'
 gem 'rails-i18n'
 gem 'i18n-js'
@@ -92,7 +92,7 @@ gem 'image_processing'
 gem 'rest-client'
 gem 'icalendar'
 gem 'react-rails'
-gem 'react_on_rails', '17.0.0.rc.0'
+gem 'react_on_rails', '17.0.0.rc.6'
 gem 'sprockets-rails'
 gem 'jaro_winkler'
 gem 'sidekiq'

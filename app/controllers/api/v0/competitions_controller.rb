@@ -51,7 +51,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   def show
-    competition = competition_from_params
+    competition = competition_from_params(associations: Competition::INFO_SERIALIZATION_INCLUDES)
 
     render json: competition.to_competition_info if stale?(competition)
   end

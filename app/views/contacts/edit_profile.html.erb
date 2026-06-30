@@ -1,5 +1,5 @@
 <% provide(:title, t('page.contact_edit_profile.title')) %>
-<%= react_component("ContactEditProfilePage", {
+<%= react_on_rails_component("ContactEditProfilePage", props: {
   loggedInUserId: current_user&.id,
   recaptchaPublicKey: AppSecrets.RECAPTCHA_PUBLIC_KEY,
 }) %>

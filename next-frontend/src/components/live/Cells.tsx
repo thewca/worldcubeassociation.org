@@ -4,7 +4,7 @@ import { Stat, statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
 import { padSkipped } from "@/lib/live/padSkipped";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import { recordTagBadge } from "@/components/results/TableCells";
+import { WithRecordTag } from "@/components/results/TableCells";
 import { LiveAttempt, LiveCompetitor, LiveResult } from "@/types/live";
 import { TFunction } from "i18next";
 
@@ -109,18 +109,17 @@ export function LiveCompetitorCell({
 }) {
   return (
     <Table.Cell rowSpan={rowSpan}>
-      {link ? (
+      {link && (
         <Link
           href={`/competitions/${competitionId}/live/competitors/${competitor.id}`}
           hideBelow="md"
         >
           {competitor.name}
         </Link>
-      ) : (
-        <Box as="span" hideFrom="md">
-          {competitor.name}
-        </Box>
       )}
+      <Box as="span" hideFrom={link ? "md" : undefined}>
+        {competitor.name}
+      </Box>
     </Table.Cell>
   );
 }
@@ -173,11 +172,11 @@ export function LiveStatCells({
     <Table.Cell
       key={`${competitorId}-${stat.i18nKey}`}
       textAlign="right"
-      position="relative"
       fontWeight={shouldHighlight(statIndex) ? "bold" : "normal"}
     >
-      {formatAttemptResult(result[stat.field], eventId)}{" "}
-      {!isAdmin && recordTagBadge(result[stat.recordTagField])}
+      <WithRecordTag recordTag={isAdmin ? null : result[stat.recordTagField]}>
+        {formatAttemptResult(result[stat.field], eventId)}
+      </WithRecordTag>
     </Table.Cell>
   ));
 }

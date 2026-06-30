@@ -130,6 +130,51 @@ export interface paths {
         };
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Adds multiple live results for a given round in a single request */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                    roundId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BatchSubmitLiveResult"];
+                };
+            };
+            responses: {
+                /** @description Batch Accepted */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            status?: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit": {
         parameters: {
             query?: never;
@@ -139,6 +184,26 @@ export interface paths {
         };
         /** Get the next competitor assuming the registration in the query is quit */
         get: operations["getNextCompetitor"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/addable_competitors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get competitors that can be added to a round
+         * @description Returns the competitors eligible to be added to the round (the round's participation source) along with the lifecycle state of any colinked rounds.
+         */
+        get: operations["canBeAddedToRound"];
         put?: never;
         post?: never;
         delete?: never;
@@ -194,6 +259,23 @@ export interface paths {
         put: operations["clearRound"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Closes an empty round, deleting all its (empty) live results */
+        delete: operations["closeRound"];
         options?: never;
         head?: never;
         patch?: never;
@@ -504,6 +586,23 @@ export interface paths {
         };
         /** Get a list of incidents */
         get: operations["regulationsList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Omni-search across competitions, persons, regulations and incidents */
+        get: operations["omniSearch"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1014,6 +1113,9 @@ export interface components {
             attempts: components["schemas"]["LiveAttempt"][];
             registration_id: number;
         };
+        BatchSubmitLiveResult: {
+            results: components["schemas"]["SubmitLiveResult"][];
+        };
         General404: {
             error: string;
             data: {
@@ -1200,6 +1302,11 @@ export interface components {
             event_change_deadline_date: string;
             /** @example not_accepted */
             competitor_can_cancel: string;
+            /**
+             * @example external
+             * @enum {string}
+             */
+            scoretaking_software: "external" | "internal" | "wca_live";
             /**
              * Format: uri
              * @example https://www.worldcubeassociation.org/competitions/WC2003
@@ -1492,6 +1599,55 @@ export interface components {
                 comments?: string;
             }[];
         };
+        SearchResultCompetition: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            class: "competition";
+            id: string;
+            name: string;
+            city?: string;
+            country_iso2?: string;
+            /** Format: uri */
+            url: string;
+        };
+        SearchResultPerson: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            class: "person";
+            id: string;
+            wca_id?: string;
+            name: string;
+            country_iso2?: string;
+            /** Format: uri */
+            url: string;
+            avatar?: components["schemas"]["UserAvatar"];
+        };
+        SearchResultRegulation: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            class: "regulation";
+            id: string;
+            content_html?: string;
+            url: string;
+        };
+        SearchResultIncident: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            class: "incident";
+            id: string;
+            title: string;
+            /** Format: uri */
+            url: string;
+        };
+        SearchResult: components["schemas"]["SearchResultCompetition"] | components["schemas"]["SearchResultPerson"] | components["schemas"]["SearchResultRegulation"] | components["schemas"]["SearchResultIncident"];
         Record: {
             type?: string;
             /** @example 6709306 */
@@ -1863,6 +2019,32 @@ export interface operations {
             };
         };
     };
+    canBeAddedToRound: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The eligible competitors and the states of colinked rounds */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        registrations: components["schemas"]["RegistrationDataV2"][];
+                        colinked_status: ("locked" | "open" | "ready" | "pending")[];
+                    };
+                };
+            };
+        };
+    };
     addCompetitor: {
         parameters: {
             query?: never;
@@ -1974,6 +2156,32 @@ export interface operations {
                     "application/json": {
                         status: string;
                         recreated_rows: number;
+                    };
+                };
+            };
+        };
+    };
+    closeRound: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Round closed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status: string;
+                        deleted_count: number;
                     };
                 };
             };
@@ -2386,6 +2594,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Incident"][];
+                };
+            };
+        };
+    };
+    omniSearch: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        result: components["schemas"]["SearchResult"][];
+                    };
                 };
             };
         };

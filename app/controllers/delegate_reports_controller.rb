@@ -4,10 +4,10 @@ class DelegateReportsController < ApplicationController
   before_action :authenticate_user!
 
   private def competition_from_params
-    if params[:competition_id]
-      Competition.find(params[:competition_id])
+    if params[:competition_id].present?
+      Competition.find(params.require(:competition_id))
     else
-      DelegateReport.find(params[:id]).competition
+      DelegateReport.find(params.require(:id)).competition
     end
   end
 
@@ -64,7 +64,7 @@ class DelegateReportsController < ApplicationController
   end
 
   def delete_image
-    image = ActiveStorage::Attachment.find(params[:image_id])
+    image = ActiveStorage::Attachment.find(params.require(:image_id))
     image.purge
 
     flash[:success] = "Image deleted successfully."
