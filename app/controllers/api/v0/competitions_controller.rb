@@ -74,7 +74,9 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def results
     competition = competition_from_params
-    render json: competition.results
+    render json: competition.results.includes(:round).as_json(
+      methods: Result::DEFAULT_SERIALIZE_OPTIONS[:methods] + %w[linked_round_id],
+    )
   end
 
   def tabs
@@ -101,6 +103,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
                             id: round.id,
                             roundTypeId: round.round_type_id,
                             isH2hMock: round.is_h2h_mock?,
+                            isLinked: round.linked_round_id.present?,
                             results: round.results.sort_by { |r| [r.pos, r.person_name] },
                           }
     end
