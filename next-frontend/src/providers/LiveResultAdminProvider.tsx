@@ -24,8 +24,6 @@ interface AdminResultsContextValue {
   registrationId: number | undefined;
   attempts: number[];
   isPending: boolean;
-  dialogOpen: boolean;
-  setDialogOpen: (value: boolean) => void;
   batchMode: boolean;
   setBatchMode: (value: boolean) => void;
   batchCount: number;
@@ -101,8 +99,6 @@ export function LiveResultAdminProvider({
   const api = useAPI();
 
   const [batchMode, setBatchMode] = useState(false);
-  // Shared so the results table can suppress its row menu while a dialog is open.
-  const [dialogOpen, setDialogOpen] = useState(false);
   // Persisted to localStorage so staged results survive a refresh/crash — the
   // whole point of batch mode is unreliable connections. Cleared on submit.
   const [batch, setBatch] = useStoredState<BatchEntry[]>(
@@ -339,8 +335,6 @@ export function LiveResultAdminProvider({
           isPendingBatch,
         batchMode,
         setBatchMode,
-        dialogOpen,
-        setDialogOpen,
         batchCount: batch.length,
         submitBatch,
         quitCompetitor,
@@ -365,9 +359,4 @@ export function useResultsAdmin(): AdminResultsContextValue {
     );
   }
   return context;
-}
-
-// Null outside the admin provider (e.g. the public results view).
-export function useOptionalResultsAdmin(): AdminResultsContextValue | null {
-  return useContext(AdminResultsContext);
 }
