@@ -48,8 +48,11 @@ class PanelController < ApplicationController
   end
 
   private def validators_for_competition_ids(competition_ids)
-    validators = params.require(:selectedValidators).split(',').map do |validator_name|
-      ResultsValidators::Utils.validator_class_from_name(validator_name)
+    selected = params[:selectedValidators]
+    validators = if selected.present?
+      selected.split(',').map { |name| ResultsValidators::Utils.validator_class_from_name(name) }.compact
+    else
+      ResultsValidators::Utils::ALL_VALIDATORS
     end
 
     apply_fix_when_possible = ActiveRecord::Type::Boolean.new.cast(params.require(:applyFixWhenPossible))

@@ -8,7 +8,6 @@ import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import submitToWrt from '../api/submitToWrt';
 import Loading from '../../Requests/Loading';
 import runValidatorsForCompetitionList from '../../Panel/pages/RunValidatorsPage/api/runValidatorsForCompetitionList';
-import { ALL_VALIDATORS } from '../../../lib/wca-data.js.erb';
 import ValidationOutput from '../../Panel/pages/RunValidatorsPage/ValidationOutput';
 
 const DELEGATE_HANDBOOK_COMPETITION_RESULTS_URL = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf#competition-results';
@@ -26,7 +25,7 @@ export default function FormToWrt({ competitionId, canSubmitResults }) {
     queryKey: ['competition-validation-output', competitionId],
     queryFn: () => runValidatorsForCompetitionList(
       competitionId,
-      ALL_VALIDATORS,
+      null,
       false,
       false,
     ),
