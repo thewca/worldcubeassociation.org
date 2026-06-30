@@ -13,11 +13,13 @@ export function LiveTableHeader({
   format,
   byPerson = false,
   isAdmin = false,
+  isProjector = false,
   t,
 }: {
   isLinked?: boolean;
   byPerson?: boolean;
   isAdmin?: boolean;
+  isProjector?: boolean;
   format: Format;
   t: TFunction;
 }) {
@@ -27,46 +29,55 @@ export function LiveTableHeader({
   const attemptIndexes = [...Array(solveCount).keys()];
 
   return (
-    <Table.Header>
-      <Table.Row>
-        {byPerson && (
-          <Table.ColumnHeader textAlign="left">
-            {t("competitions.results_table.round")}
-          </Table.ColumnHeader>
-        )}
-        <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
-        {isAdmin && (
-          <Table.ColumnHeader textAlign="center">ID</Table.ColumnHeader>
-        )}
-        {!byPerson && (
-          <Table.ColumnHeader>
-            {t("competitions.live.results.competitor")}
-          </Table.ColumnHeader>
-        )}
-        {!byPerson && (
-          <Table.ColumnHeader hideBelow="md">
-            {t("results.table_elements.region")}
-          </Table.ColumnHeader>
-        )}
-        {isLinked && (
-          <Table.ColumnHeader>
-            <Box as="span" hideBelow="md">
+    <>
+      {isProjector && (
+        <Table.ColumnGroup>
+          <Table.Column htmlWidth="75px" />
+          <Table.Column htmlWidth="22%" />
+          <Table.Column htmlWidth="50px" />
+        </Table.ColumnGroup>
+      )}
+      <Table.Header>
+        <Table.Row>
+          {byPerson && (
+            <Table.ColumnHeader textAlign="left">
               {t("competitions.results_table.round")}
-            </Box>
-          </Table.ColumnHeader>
-        )}
-        {attemptIndexes.map((num) => (
-          <Table.ColumnHeader key={num} textAlign="right" hideBelow="md">
-            {num + 1}
-          </Table.ColumnHeader>
-        ))}
-        {stats.map((stat) => (
-          <Table.ColumnHeader textAlign="right" key={stat.field}>
-            {t(stat.i18nKey)}
-          </Table.ColumnHeader>
-        ))}
-      </Table.Row>
-    </Table.Header>
+            </Table.ColumnHeader>
+          )}
+          <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
+          {isAdmin && (
+            <Table.ColumnHeader textAlign="center">ID</Table.ColumnHeader>
+          )}
+          {!byPerson && (
+            <Table.ColumnHeader overflow="hidden" textOverflow="ellipsis">
+              {t("competitions.live.results.competitor")}
+            </Table.ColumnHeader>
+          )}
+          {!byPerson && (
+            <Table.ColumnHeader hideBelow="md">
+              {!isProjector && t("results.table_elements.region")}
+            </Table.ColumnHeader>
+          )}
+          {isLinked && (
+            <Table.ColumnHeader>
+              <Box as="span" hideBelow="md">
+                {t("competitions.results_table.round")}
+              </Box>
+            </Table.ColumnHeader>
+          )}
+          {attemptIndexes.map((num) => (
+            <Table.ColumnHeader key={num} textAlign="right" hideBelow="md">
+              {num + 1}
+            </Table.ColumnHeader>
+          ))}
+          {stats.map((stat) => (
+            <Table.ColumnHeader textAlign="right" key={stat.field}>
+              {t(stat.i18nKey)}
+            </Table.ColumnHeader>
+          ))}
+        </Table.Row>
+      </Table.Header>
+    </>
   );
 }
 

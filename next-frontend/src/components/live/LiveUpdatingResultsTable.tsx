@@ -17,8 +17,14 @@ import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
 import AddPersonModal from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
 import BulkQuitButton from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/BulkQuitButton";
-import { LuCheckCheck, LuEye, LuPencil } from "react-icons/lu";
+import {
+  LuCheckCheck,
+  LuEye,
+  LuPencil,
+  LuGalleryVertical,
+} from "react-icons/lu";
 import NextLink from "next/link";
+import ResultsProjector from "@/components/live/ResultsProjector";
 import { route } from "nextjs-routes";
 import { useRoundInfo } from "@/providers/RoundInfoProvider";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -43,6 +49,7 @@ export default function LiveUpdatingResultsTable({
 
   const [showLinkedRoundsView, setShowLinkedRoundsView] =
     useState(isLinkedRound);
+  const [inProjectorMode, setInProjectorMode] = useState(false);
 
   const {
     connectionState,
@@ -55,6 +62,22 @@ export default function LiveUpdatingResultsTable({
   const { id: roundWcifId, format: formatId } = useRoundInfo();
 
   const { eventId } = parseActivityCode(roundWcifId);
+
+  const enableProjectorView = () => setInProjectorMode(true);
+  const disableProjectorView = () => setInProjectorMode(false);
+
+  if (inProjectorMode) {
+    return (
+      <ResultsProjector
+        competitors={competitors}
+        results={liveResultsByRegistrationId}
+        disableProjectorView={disableProjectorView}
+        formatId={formatId}
+        eventId={eventId}
+        title={title}
+      />
+    );
+  }
 
   return (
     <VStack align="left">
@@ -75,6 +98,11 @@ export default function LiveUpdatingResultsTable({
             </Switch.Control>
             <Switch.Label>Show combined Results</Switch.Label>
           </Switch.Root>
+        )}
+        {!isAdminView && (
+          <IconButton variant="ghost" onClick={enableProjectorView}>
+            <LuGalleryVertical />
+          </IconButton>
         )}
         {canManage && (
           <Tooltip
