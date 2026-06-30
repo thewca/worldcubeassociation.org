@@ -618,7 +618,6 @@ class Round < ApplicationRecord
       cutoff: Cutoff.load(round_wcif["cutoff"]),
       advancement_condition: self.load_wcif_advancement_condition(round_wcif, all_rounds_wcif, version: version),
       scramble_set_count: round_wcif["scrambleSetCount"],
-      round_results: RoundResults.load(round_wcif["results"]),
     }
   end
 
