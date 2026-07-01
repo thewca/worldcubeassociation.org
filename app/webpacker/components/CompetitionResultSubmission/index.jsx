@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Icon, Message, Step } from 'semantic-ui-react';
 import ImportResultsData from './ImportResultsData';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
@@ -34,7 +34,9 @@ function CompetitionResultSubmission({
   showWcaLiveBeta,
   canSubmitResults,
 }) {
-  if (resultsSubmitted) {
+  const [activeStep, setActiveStep] = useState(0);
+
+  if (!resultsSubmitted) {
     return (
       <Message positive>
         The results have already been submitted. If you have any more questions or
@@ -45,8 +47,12 @@ function CompetitionResultSubmission({
 
   return (
     <>
-      <Step.Group ordered widths={3}>
-        <Step>
+      <Step.Group widths={3}>
+        <Step
+          active={activeStep === 0}
+          completed={activeStep > 0}
+          onClick={() => setActiveStep(0)}
+        >
           <Icon name="cloud upload" />
           <Step.Content>
             <Step.Title>Results Data</Step.Title>
@@ -56,14 +62,22 @@ function CompetitionResultSubmission({
             </Step.Description>
           </Step.Content>
         </Step>
-        <Step>
+        <Step
+          active={activeStep === 1}
+          completed={activeStep > 1}
+          onClick={() => setActiveStep(1)}
+        >
           <Icon name="warning sign" />
           <Step.Content>
             <Step.Title>Validations</Step.Title>
             <Step.Description>Address any warnings or errors</Step.Description>
           </Step.Content>
         </Step>
-        <Step>
+        <Step
+          active={activeStep === 2}
+          completed={activeStep > 2}
+          onClick={() => setActiveStep(2)}
+        >
           <Icon name="cloud upload" />
           <Step.Content>
             <Step.Title>Submit</Step.Title>
@@ -71,13 +85,15 @@ function CompetitionResultSubmission({
           </Step.Content>
         </Step>
       </Step.Group>
-      <ImportResultsData
-        competitionId={competitionId}
-        uploadedScrambleFilesCount={uploadedScrambleFilesCount}
-        hasTemporaryResults={hasTemporaryResults}
-        showWcaLiveBeta={showWcaLiveBeta}
-      />
-      {hasTemporaryResults && (
+      {activeStep === 0 && (
+        <ImportResultsData
+          competitionId={competitionId}
+          uploadedScrambleFilesCount={uploadedScrambleFilesCount}
+          hasTemporaryResults={hasTemporaryResults}
+          showWcaLiveBeta={showWcaLiveBeta}
+        />
+      )}
+      {activeStep === 2 && (
         <FormToWrt competitionId={competitionId} canSubmitResults={canSubmitResults} />
       )}
     </>
