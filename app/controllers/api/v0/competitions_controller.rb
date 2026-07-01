@@ -256,7 +256,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     wcif = params.permit!.to_h.except(:controller, :action, :competition, :format)
 
     format_version = wcif["formatVersion"] || Competition::WCIF_STABLE_VERSION
-    expected_schema = Competition.wcif_json_schema(version: format_version)
+    expected_schema = Competition.wcif_json_schema(version: format_version, required_props: true)
 
     validation_errors = JSON::Validator.fully_validate(expected_schema, wcif, **Competition.json_validation_options)
 

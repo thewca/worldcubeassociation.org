@@ -2172,12 +2172,10 @@ class Competition < ApplicationRecord
     reload
   end
 
-  def self.wcif_json_schema(version: WCIF_STABLE_VERSION)
+  def self.wcif_json_schema(version: WCIF_STABLE_VERSION, required_props: false)
     {
       "type" => "object",
-      # Normally we want to force tools to tell us which version they're patching,
-      #   but as of writing this comment we need more time to tell that to tools.
-      # "required" => %w[formatVersion],
+      "required" => required_props ? %w[id formatVersion] : [],
       "properties" => {
         "formatVersion" => { "type" => "string" },
         "id" => { "type" => "string" },
