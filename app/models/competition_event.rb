@@ -84,7 +84,9 @@ class CompetitionEvent < ApplicationRecord
   def meets_qualification?(user)
     return true if qualification_condition.nil?
 
-    before_deadline_results = user.person.results.in_event(self.event_id).on_or_before(self.qualification_latest_date)
+    before_deadline_results = user.person.results
+                                  .in_event(self.event_id)
+                                  .on_or_before(self.qualification_latest_date)
 
     case qualification_condition
     # Allow any competitor with a result to register when type == "ranking".
