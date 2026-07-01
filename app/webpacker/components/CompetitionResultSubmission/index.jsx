@@ -34,16 +34,9 @@ function CompetitionResultSubmission({
   showWcaLiveBeta,
   canSubmitResults,
 }) {
-  const [activeStep, setActiveStep] = useState(0);
+  const defaultStep = resultsSubmitted ? 3 : 0;
 
-  if (!resultsSubmitted) {
-    return (
-      <Message positive>
-        The results have already been submitted. If you have any more questions or
-        comments please reply to the email sent with the first results submission.
-      </Message>
-    );
-  }
+  const [activeStep, setActiveStep] = useState(defaultStep);
 
   return (
     <>
@@ -52,6 +45,7 @@ function CompetitionResultSubmission({
           active={activeStep === 0}
           completed={activeStep > 0}
           onClick={() => setActiveStep(0)}
+          disabled={resultsSubmitted}
         >
           <Icon name="cloud upload" />
           <Step.Content>
@@ -66,6 +60,7 @@ function CompetitionResultSubmission({
           active={activeStep === 1}
           completed={activeStep > 1}
           onClick={() => setActiveStep(1)}
+          disabled={resultsSubmitted}
         >
           <Icon name="warning sign" />
           <Step.Content>
@@ -77,6 +72,7 @@ function CompetitionResultSubmission({
           active={activeStep === 2}
           completed={activeStep > 2}
           onClick={() => setActiveStep(2)}
+          disabled={resultsSubmitted}
         >
           <Icon name="cloud upload" />
           <Step.Content>
@@ -95,6 +91,12 @@ function CompetitionResultSubmission({
       )}
       {activeStep === 2 && (
         <FormToWrt competitionId={competitionId} canSubmitResults={canSubmitResults} />
+      )}
+      {activeStep === 3 && (
+        <Message positive>
+          The results have already been submitted. If you have any more questions or
+          comments please reply to the email sent with the first results submission.
+        </Message>
       )}
     </>
   );
