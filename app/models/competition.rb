@@ -2174,6 +2174,7 @@ class Competition < ApplicationRecord
 
   def self.wcif_json_schema(version: WCIF_STABLE_VERSION, required_props: false)
     {
+      "$id" => Rails.application.routes.url_helpers.wcif_json_schema_api_v0_competitions_url(version, host: EnvConfig.ROOT_URL),
       "id" => "WCIFv#{version}",
       "type" => "object",
       "required" => required_props ? %w[id formatVersion] : [],

@@ -478,6 +478,7 @@ Rails.application.routes.draw do
 
         collection do
           put '/wcif/check' => 'competitions#check_wcif'
+          get '/wcif/schema/:version' => 'competitions#wcif_json_schema', constraints: { version: /(\d\.){0,2}\d/ }, as: :wcif_json_schema
         end
       end
 

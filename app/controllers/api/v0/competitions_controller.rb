@@ -265,6 +265,13 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     head :ok
   end
 
+  def wcif_json_schema
+    format_version = params.require(:version)
+    expected_schema = Competition.wcif_json_schema(version: format_version, required_props: true)
+
+    render json: expected_schema
+  end
+
   def update_wcif
     competition = competition_from_params
     require_can_manage!(competition)
