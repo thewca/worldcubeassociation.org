@@ -55,7 +55,9 @@ export default function ActionButtons({
           description: "Round Cleared",
           type: "success",
         });
-        setRoundState(roundId, data.state);
+        setRoundState(roundId, data.state, {
+          competitors_live_results_entered: 0,
+        });
       },
       onError: () => {
         toaster.create({
