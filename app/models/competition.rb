@@ -1435,7 +1435,8 @@ class Competition < ApplicationRecord
   end
 
   def qualification_date_to_events
-    competition_events.select(&:qualification_condition?).group_by { it.qualification_latest_date }
+    competition_events.filter(&:qualification_condition?)
+                      .group_by(&:qualification_latest_date)
   end
 
   # The name `is_probably_over` is meant to be surprising.
