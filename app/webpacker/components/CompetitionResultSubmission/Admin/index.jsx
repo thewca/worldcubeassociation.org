@@ -1,7 +1,7 @@
 import React from 'react';
 import { Message } from 'semantic-ui-react';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
-import { ImportResultsData } from '../ImportResultsData';
+import ImportResultsData from '../ImportResultsData';
 import { viewUrls } from '../../../lib/requests/routes.js.erb';
 
 export default function Wrapper({
@@ -22,7 +22,7 @@ export default function Wrapper({
   );
 }
 
-function CompetitionResultSubmissionAdmin({
+export function CompetitionResultSubmissionAdmin({
   competitionId,
   hasTemporaryResults,
   uploadedScrambleFilesCount,
@@ -37,6 +37,7 @@ function CompetitionResultSubmissionAdmin({
       </Message>
     );
   }
+
   return (
     <>
       <p>

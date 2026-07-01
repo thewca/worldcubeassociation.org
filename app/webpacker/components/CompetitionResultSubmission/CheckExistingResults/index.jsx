@@ -12,7 +12,7 @@ export default function Wrapper({ competitionId }) {
   );
 }
 
-function CheckExistingResults({ competitionId }) {
+export function CheckExistingResults({ competitionId }) {
   return (
     <>
       <Header>Check results</Header>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { List, Message } from 'semantic-ui-react';
-import { ImportResultsData } from './ImportResultsData';
+import ImportResultsData from './ImportResultsData';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import FormToWrt from './FormToWrt';
 
