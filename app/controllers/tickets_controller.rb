@@ -281,17 +281,23 @@ class TicketsController < ApplicationController
         registration = competition.registrations.find_by(registrant_id: person_id)
         raise "Registration with registrant ID #{person_id} not found for competition #{competition.id}" if registration.nil?
 
-        Person.create!(
+        FinishUnfinishedPersons.insert_person(
           wca_id: new_wca_id,
-          sub_id: 1,
           name: registration.name,
           country_id: registration.country.id,
           gender: registration.gender,
           dob: registration.dob,
-          comments: '',
         )
 
-        competition.results.where(person_id: person_id).update_all(person_id: new_wca_id)
+        FinishUnfinishedPersons.adapt_results(
+          person_id,
+          registration.name,
+          registration.country.id,
+          new_wca_id,
+          registration.name,
+          registration.country.id,
+          competition.id,
+        )
       end
 
       @ticket.metadata.update!(status: TicketsCompetitionResult.statuses[:created_wca_ids])

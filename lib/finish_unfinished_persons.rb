@@ -185,14 +185,14 @@ module FinishUnfinishedPersons
     raise "Could not compute a WCA ID suffix for #{semi_id}"
   end
 
-  def self.insert_person(inbox_person, new_name, new_country, new_wca_id)
+  def self.insert_person(wca_id:, name:, country_id:, gender:, dob:)
     Person.create!(
-      wca_id: new_wca_id,
+      wca_id: wca_id,
       sub_id: 1,
-      name: new_name,
-      country_id: new_country,
-      gender: inbox_person&.gender || :o,
-      dob: inbox_person&.dob,
+      name: name,
+      country_id: country_id,
+      gender: gender || :o,
+      dob: dob,
       comments: '',
     )
   end
