@@ -253,12 +253,17 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   def check_wcif
-    wcif = params.permit!.to_h.except(:controller, :action, :competition_id, :competition, :strict)
+    wcif = params.permit!.to_h.except(:controller, :action, :competition_id, :competition)
 
-    import_version = wcif["formatVersion"]
-    strict_schema_checks = params.key?(:strict) ? ActiveRecord::Type::Boolean.new.cast(params[:strict]) : Rails.env.local?
+    import_version = wcif["formatVersion"] || Competition::WCIF_STABLE_VERSION
+    Competition.validate_wcif_schema!(wcif, version: import_version)
 
-    Competition.validate_wcif_schema!(wcif, version: import_version, is_strict: strict_schema_checks)
+    render json: { status: "Your WCIF complies with the specified format" }, status: :ok
+  rescue JSON::Schema::ValidationError => e
+    render json: {
+      status: "Your WCIF does not comply with the specified format. Please see the error property for details",
+      error: e.message,
+    }, status: :bad_request
   end
 
   def update_wcif
