@@ -49,9 +49,9 @@
           <div class="column">
             <h2 class="ui header"><%= t('homepage.announcements') %></h2>
             <div class="ui divider"></div>
-            <%= react_component("Posts/PostsWidget", {
+            <%= react_on_rails_component("PostsWidget", props: {
               titleOnly: true,
-            }, {
+            }, html_options: {
               id: "posts_widget",
             }) %>
             <%= link_to(t('homepage.see_all_announcements'), posts_path, class: "ui blue button") %>

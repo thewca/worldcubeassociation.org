@@ -59,14 +59,13 @@ export default function TabMenu({
       orientation="vertical"
       lazyMount
       unmountOnExit
-      colorPalette="white"
     >
       <Tabs.List
         height="fit-content"
         position="sticky"
         width="fit-content"
         min-width="3xs"
-        textAlign="center"
+        textAlign="start"
         hideBelow="md"
         gap="3"
       >
@@ -160,7 +159,9 @@ function TabList({
       <Tabs.Trigger value={tab.menuKey} asChild key={tab.menuKey}>
         <Text asChild textStyle="bodyEmphasis" justifyContent="left">
           <Link href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}>
-            {t(tab.i18nKey)}
+            {t(
+              isAdminRoute && tab.i18nKeyAdmin ? tab.i18nKeyAdmin : tab.i18nKey,
+            )}
           </Link>
         </Text>
       </Tabs.Trigger>
@@ -198,7 +199,7 @@ function CollapsibleTabGroup({
       <Collapsible.Trigger
         width="full"
         display="flex"
-        justifyContent="space-between"
+        textAlign="start"
         px="3"
         py="2"
         borderRadius="md"

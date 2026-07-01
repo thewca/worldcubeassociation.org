@@ -41,6 +41,12 @@ const AnnouncementsSection: Block = {
       relationTo: "announcements",
       hasMany: true,
     },
+    {
+      name: "showSeeAll",
+      type: "checkbox",
+      required: true,
+      defaultValue: true,
+    },
     colorPaletteSelect,
   ],
 };
@@ -89,8 +95,8 @@ const createTwoBlocks = (depth: number = 1): Block => {
     slug: `twoBlocksLevel${depth}`,
     interfaceName: `TwoBlocksLevel${depth}Block`,
     labels: {
-      singular: "Two Blocks",
-      plural: "Two Blocks",
+      singular: "Horizontal Splitter",
+      plural: "Horizontal Splitters",
     },
     fields: [
       {
@@ -122,6 +128,22 @@ const createTwoBlocks = (depth: number = 1): Block => {
             blocks: allowedBlocks,
             required: true,
             minRows: 1,
+          },
+        ],
+      },
+      {
+        type: "select",
+        name: "growthStrategy",
+        interfaceName: "GrowthStrategy",
+        options: [
+          {
+            label: "Grow the height of the bento boxes to fill space",
+            value: "grow",
+          },
+          {
+            label:
+              "Redistribute vertical space between the bento boxes (may introduce gaps)",
+            value: "justify",
           },
         ],
       },

@@ -4,8 +4,8 @@ import LiveResultsTable from "@/components/live/LiveResultsTable";
 import {
   Heading,
   HStack,
-  IconButton,
   Spacer,
+  IconButton,
   Switch,
   VStack,
   Link,
@@ -17,13 +17,20 @@ import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
 import AddPersonModal from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
 import BulkQuitButton from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/BulkQuitButton";
-import { LuCheck, LuLock, LuLockOpen } from "react-icons/lu";
+import {
+  LuCheckCheck,
+  LuEye,
+  LuPencil,
+  LuGalleryVertical,
+} from "react-icons/lu";
 import NextLink from "next/link";
+import ResultsProjector from "@/components/live/ResultsProjector";
 import { route } from "nextjs-routes";
+import { useRoundInfo } from "@/providers/RoundInfoProvider";
+import { Tooltip } from "@/components/ui/tooltip";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function LiveUpdatingResultsTable({
-  roundWcifId,
-  formatId,
   competitionId,
   title,
   isAdminView = false,
@@ -31,8 +38,6 @@ export default function LiveUpdatingResultsTable({
   isLinkedRound = false,
   canManage = false,
 }: {
-  roundWcifId: string;
-  formatId: string;
   competitionId: string;
   title: string;
   isAdminView?: boolean;
@@ -40,8 +45,11 @@ export default function LiveUpdatingResultsTable({
   isLinkedRound?: boolean;
   canManage?: boolean;
 }) {
+  const { t } = useT();
+
   const [showLinkedRoundsView, setShowLinkedRoundsView] =
     useState(isLinkedRound);
+  const [inProjectorMode, setInProjectorMode] = useState(false);
 
   const {
     connectionState,
@@ -51,14 +59,33 @@ export default function LiveUpdatingResultsTable({
     pendingQuitCompetitors,
   } = useLiveResults();
 
+  const { id: roundWcifId, format: formatId } = useRoundInfo();
+
   const { eventId } = parseActivityCode(roundWcifId);
+
+  const enableProjectorView = () => setInProjectorMode(true);
+  const disableProjectorView = () => setInProjectorMode(false);
+
+  if (inProjectorMode) {
+    return (
+      <ResultsProjector
+        competitors={competitors}
+        results={liveResultsByRegistrationId}
+        disableProjectorView={disableProjectorView}
+        formatId={formatId}
+        eventId={eventId}
+        title={title}
+      />
+    );
+  }
 
   return (
     <VStack align="left">
       <HStack>
         <Heading textStyle={{ sm: "h3", md: "h2", lg: "h1" }}>{title}</Heading>
-        <ConnectionPulse connectionState={connectionState} />
+        {isAdminView && <ConnectionPulse connectionState={connectionState} />}
         <Spacer flex={1} />
+        {!isAdminView && <ConnectionPulse connectionState={connectionState} />}
         {isLinkedRound && (
           <Switch.Root
             checked={showLinkedRoundsView}
@@ -72,56 +99,78 @@ export default function LiveUpdatingResultsTable({
             <Switch.Label>Show combined Results</Switch.Label>
           </Switch.Root>
         )}
-        {canManage && (
-          <IconButton variant="ghost">
-            <Link asChild>
-              {isAdminView ? (
-                <NextLink
-                  href={route({
-                    pathname:
-                      "/competitions/[competitionId]/live/rounds/[roundId]",
-                    query: { competitionId, roundId: roundWcifId },
-                  })}
-                >
-                  <LuLockOpen />
-                </NextLink>
-              ) : (
-                <NextLink
-                  href={route({
-                    pathname:
-                      "/competitions/[competitionId]/live/rounds/[roundId]/admin",
-                    query: { competitionId, roundId: roundWcifId },
-                  })}
-                >
-                  <LuLock />
-                </NextLink>
-              )}
-            </Link>
+        {!isAdminView && (
+          <IconButton variant="ghost" onClick={enableProjectorView}>
+            <LuGalleryVertical />
           </IconButton>
+        )}
+        {canManage && (
+          <Tooltip
+            content={
+              isAdminView
+                ? t("competitions.live.admin.results_view")
+                : t("competitions.live.admin.admin_view")
+            }
+            showArrow
+            openDelay={200}
+          >
+            <IconButton variant="ghost">
+              <Link asChild>
+                {isAdminView ? (
+                  <NextLink
+                    href={route({
+                      pathname:
+                        "/competitions/[competitionId]/live/rounds/[roundId]",
+                      query: { competitionId, roundId: roundWcifId },
+                    })}
+                  >
+                    <LuEye />
+                  </NextLink>
+                ) : (
+                  <NextLink
+                    href={route({
+                      pathname:
+                        "/competitions/[competitionId]/live/rounds/[roundId]/admin",
+                      query: { competitionId, roundId: roundWcifId },
+                    })}
+                  >
+                    <LuPencil />
+                  </NextLink>
+                )}
+              </Link>
+            </IconButton>
+          </Tooltip>
         )}
         {isAdminView && (
           <>
             <AddPersonModal
               competitionId={competitionId}
               competitors={competitors}
+              roundId={roundWcifId}
             />
             <BulkQuitButton
               competitionId={competitionId}
               roundId={roundWcifId}
             />
-            <IconButton variant="ghost">
-              <Link asChild>
-                <NextLink
-                  href={route({
-                    pathname:
-                      "/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check",
-                    query: { competitionId, roundId: roundWcifId },
-                  })}
-                >
-                  <LuCheck />
-                </NextLink>
-              </Link>
-            </IconButton>
+            <Tooltip
+              content={t("competitions.live.admin.double_check")}
+              showArrow
+              openDelay={200}
+            >
+              <IconButton variant="ghost">
+                <Link asChild>
+                  <NextLink
+                    href={route({
+                      pathname:
+                        "/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check",
+                      query: { competitionId, roundId: roundWcifId },
+                    })}
+                  >
+                    <LuCheckCheck />
+                  </NextLink>
+                </Link>
+              </IconButton>
+            </Tooltip>
           </>
         )}
       </HStack>

@@ -8,10 +8,10 @@ class RegistrationsController < ApplicationController
   protect_from_forgery except: [:stripe_webhook]
 
   private def competition_from_params
-    competition = if params[:competition_id]
-                    Competition.find(params[:competition_id])
+    competition = if params[:competition_id].present?
+                    Competition.find(params.require(:competition_id))
                   else
-                    Registration.find(params[:id]).competition
+                    Registration.find(params.require(:id)).competition
                   end
     raise ActionController::RoutingError.new('Not Found') unless competition.user_can_view?(current_user)
 
@@ -503,10 +503,10 @@ class RegistrationsController < ApplicationController
 
   def payment_completion
     # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
-    competition_id = params[:competition_id]
+    competition_id = params.require(:competition_id)
     competition = Competition.find(competition_id)
 
-    payment_integration = params[:payment_integration].to_sym
+    payment_integration = params.require(:payment_integration).to_sym
     payment_account = competition.payment_account_for(payment_integration)
 
     if payment_account.blank?
@@ -585,7 +585,7 @@ class RegistrationsController < ApplicationController
   end
 
   def load_payment_intent
-    registration = Registration.includes(:competition).find(params[:id])
+    registration = Registration.includes(:competition).find(params.require(:id))
 
     return render status: :forbidden, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } } unless registration.user_id == current_user.id
 
@@ -607,15 +607,15 @@ class RegistrationsController < ApplicationController
   end
 
   def refund_payment
-    competition_id = params[:competition_id]
+    competition_id = params.require(:competition_id)
     competition = Competition.find(competition_id)
 
-    payment_integration = params[:payment_integration].to_sym
+    payment_integration = params.require(:payment_integration).to_sym
     payment_account = competition.payment_account_for(payment_integration)
 
     return render status: :not_found, json: { error: :provider_disconnected } if payment_account.blank?
 
-    payment_record = payment_account.find_payment(params[:payment_id])
+    payment_record = payment_account.find_payment(params.require(:payment_id))
 
     registration = payment_record.root_record.payment_intent.holder
 

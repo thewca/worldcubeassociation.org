@@ -12,5 +12,5 @@ export function rankingCellColorPalette({
     return "yellow";
   }
 
-  return "";
+  return "wcaWhite";
 }

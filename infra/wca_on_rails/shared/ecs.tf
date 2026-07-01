@@ -57,7 +57,7 @@ data "aws_ami" "ecs" {
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-ecs-hvm-*-x86_64-*"]
+    values = ["al2023-ami-ecs-hvm-*-x86_64"]
   }
 }
 
@@ -88,28 +88,38 @@ resource "aws_iam_instance_profile" "ecs_instance_profile" {
   role = aws_iam_role.ecs_instance_role.name
 }
 
-resource "aws_launch_configuration" "t3_launch_config" {
-  name_prefix          = "${var.name_prefix}-t3-"
-  image_id             = data.aws_ami.ecs.id
-  iam_instance_profile = aws_iam_instance_profile.ecs_instance_profile.name
-  instance_type        = "t3.large"
-  security_groups      = [aws_security_group.cluster.id]
-  user_data            = templatefile("../templates/user_data.sh.tftpl", { ecs_cluster_name = aws_ecs_cluster.this.name })
+locals {
+  ecs_user_data = base64encode(templatefile("../templates/user_data.sh.tftpl", { ecs_cluster_name = aws_ecs_cluster.this.name }))
+}
 
+resource "aws_launch_template" "t3" {
+  name_prefix   = "${var.name_prefix}-t3-"
+  image_id      = data.aws_ami.ecs.id
+  instance_type = "t3.large"
+  user_data     = local.ecs_user_data
+
+  iam_instance_profile {
+    name = aws_iam_instance_profile.ecs_instance_profile.name
+  }
+
+  vpc_security_group_ids = [aws_security_group.cluster.id]
 
   lifecycle {
     create_before_destroy = true
   }
 }
 
-resource "aws_launch_configuration" "m6i_launch_config" {
-  name_prefix          = "${var.name_prefix}-m6i-"
-  image_id             = data.aws_ami.ecs.id
-  iam_instance_profile = aws_iam_instance_profile.ecs_instance_profile.name
-  instance_type        = "m6i.large"
-  security_groups      = [aws_security_group.cluster.id]
-  user_data            = templatefile("../templates/user_data.sh.tftpl", { ecs_cluster_name = aws_ecs_cluster.this.name })
+resource "aws_launch_template" "m6i" {
+  name_prefix   = "${var.name_prefix}-m6i-"
+  image_id      = data.aws_ami.ecs.id
+  instance_type = "m6i.large"
+  user_data     = local.ecs_user_data
 
+  iam_instance_profile {
+    name = aws_iam_instance_profile.ecs_instance_profile.name
+  }
+
+  vpc_security_group_ids = [aws_security_group.cluster.id]
 
   lifecycle {
     create_before_destroy = true
@@ -122,10 +132,14 @@ resource "aws_autoscaling_group" "t3_group" {
   max_size                  = 10
   desired_capacity          = 1
   vpc_zone_identifier       = [aws_default_subnet.default_az2.id]
-  launch_configuration      = aws_launch_configuration.t3_launch_config.name
   health_check_grace_period = var.rails_startup_time
   health_check_type         = "EC2"
   default_cooldown          = 300
+
+  launch_template {
+    id      = aws_launch_template.t3.id
+    version = aws_launch_template.t3.latest_version
+  }
 
   # Necessary when using managed termination provider on capacity provider
   protect_from_scale_in = true
@@ -165,10 +179,14 @@ resource "aws_autoscaling_group" "m6i_group" {
   max_size                  = 10
   desired_capacity          = 0
   vpc_zone_identifier       = [aws_default_subnet.default_az2.id]
-  launch_configuration      = aws_launch_configuration.m6i_launch_config.name
   health_check_grace_period = var.rails_startup_time
   health_check_type         = "EC2"
   default_cooldown          = 300
+
+  launch_template {
+    id      = aws_launch_template.m6i.id
+    version = aws_launch_template.m6i.latest_version
+  }
 
   # Necessary when using managed termination provider on capacity provider
   protect_from_scale_in = true

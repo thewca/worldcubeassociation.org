@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import React from "react";
+import React, { ComponentProps } from "react";
 
 export const metadata: Metadata = {
   title: { absolute: "World Cube Association" },
@@ -14,6 +14,8 @@ import {
   Text,
   VStack,
   Link as ChakraLink,
+  LinkBox,
+  LinkOverlay,
   Center,
   HStack,
   AbsoluteCenter,
@@ -40,6 +42,7 @@ import type {
   Announcement,
   ColorPaletteSelect,
   Home,
+  GrowthStrategy,
 } from "@/types/payload";
 import Link from "next/link";
 import { route } from "nextjs-routes";
@@ -51,9 +54,7 @@ import CompetitionShortlist from "@/components/competitions/CompetitionShortlist
 import OpenapiError from "@/components/ui/openapiError";
 
 type TwoBlocksUnion =
-  | TwoBlocksLevel0Block
-  | TwoBlocksLevel1Block
-  | TwoBlocksLevel2Block;
+  TwoBlocksLevel0Block | TwoBlocksLevel1Block | TwoBlocksLevel2Block;
 
 type TwoBlocksRatio = TwoBlocksUnion["ratio"];
 type TwoBlocksSpanConfig = { left: number; right: number };
@@ -70,11 +71,15 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
     <Card.Root
       colorPalette={block.colorPalette}
-      colorVariant="deep"
+      colorVariant="slatePastel"
       width="full"
     >
       {block.headerImage && (
-        <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
+        <MediaImage
+          media={block.headerImage as Media}
+          aspectRatio="3/1"
+          borderTopRadius="l3"
+        />
       )}
       <Card.Body>
         <Card.Title textStyle={{ base: "h3", md: "h2" }}>
@@ -85,11 +90,29 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
           {block.bodyMarkdown}
         </ChakraMarkdown>
       </Card.Body>
-      {block.buttonText?.trim() && (
-        <Card.Footer>
-          <Button asChild variant="outline" color="currentColor">
-            <ChakraLink href={block.buttonLink!}>{block.buttonText}</ChakraLink>
-          </Button>
+      {block.buttons && block.buttons.length > 0 && (
+        <Card.Footer asChild>
+          <HStack>
+            {block.buttons.map((button) => (
+              <Button
+                key={button.id}
+                asChild
+                variant={
+                  button.inheritColorScheme ? "pastelOutline" : "pastelSolid"
+                }
+              >
+                <ChakraLink
+                  color="colorPalette.pastelContrast"
+                  textStyle={undefined}
+                  href={button.hyperlink}
+                  target={button.newTab ? "_blank" : undefined}
+                  rel={button.newTab ? "noopener noreferrer" : undefined}
+                >
+                  {button.displayText}
+                </ChakraLink>
+              </Button>
+            ))}
+          </HStack>
         </Card.Footer>
       )}
     </Card.Root>
@@ -112,7 +135,36 @@ const AnnouncementsSection = ({
       hero={mainAnnouncement}
       others={furtherAnnouncements}
       colorPalette={block.colorPalette}
+      showSeeAll={block.showSeeAll}
     />
+  );
+};
+
+const BannerImageWithGradient = ({
+  mainImage,
+  targetColor,
+  gradientDirection,
+  boxWidth = "50%",
+}: {
+  mainImage: Media;
+  targetColor: ComponentProps<typeof Box>["bg"];
+  gradientDirection: "left" | "right";
+  boxWidth?: ComponentProps<typeof Box>["width"];
+}) => {
+  return (
+    <Box position="relative" width={boxWidth} hideBelow="md">
+      <MediaImage
+        media={mainImage as Media}
+        width="full"
+        maxHeight="sm"
+        bg={targetColor}
+      />
+      <AbsoluteCenter
+        width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
+        height="full"
+        bg={`linear-gradient(to ${gradientDirection}, transparent, transparent, {colors.${targetColor}})`}
+      />
+    </Box>
   );
 };
 
@@ -121,77 +173,100 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
     <Card.Root
       flexDirection="row"
       colorPalette={block.colorPalette}
-      colorVariant="deep"
+      colorVariant="slatePastel"
       width="full"
-      maxHeight="lg"
+      maxHeight="xs" // somewhat arbitrary, if you have a better idea please shout
       overflow="hidden"
     >
-      <Box position="relative" width="50%" hideBelow="md">
-        <MediaImage
-          media={block.mainImage as Media}
-          width="full"
-          maxHeight="lg"
-          bg="colorPalette.deep"
+      {block.imagePosition === "left" && (
+        <BannerImageWithGradient
+          mainImage={block.mainImage as Media}
+          targetColor="colorPalette.1A"
+          gradientDirection="right"
+          boxWidth={block.heading ? "50%" : "100%"}
         />
-        <AbsoluteCenter
-          width="101%" // weirdly enough, 100% (or "full") creates a tiny gap even though it shouldn't. Shout if you know how to fix this!
-          height="full"
-          bg="linear-gradient(to right, transparent, transparent, {colors.colorPalette.deep})"
-        />
-      </Box>
-
-      <Card.Body justifyContent="center">
-        <Card.Title
-          colorPalette={block.headingColor}
-          textStyle={{ base: "h3", md: "h2" }}
-        >
-          {block.heading}
-        </Card.Title>
-        <ChakraMarkdown
-          paragraphAs={Card.Description}
-          textStyle={{ base: "body", md: "s2" }}
-        >
-          {block.bodyMarkdown}
-        </ChakraMarkdown>
-        {block.bgImage && (
-          <Float
-            placement="bottom-end"
-            width={`${block.bgSize}%`}
-            height={`${block.bgSize}%`}
-            offset={28}
+      )}
+      {block.heading && (
+        <Card.Body justifyContent="center">
+          <Card.Title
+            colorPalette={block.headingColor}
+            textStyle={{ base: "h3", md: "h2", xl: "h1" }}
           >
-            <MediaImage
-              media={block.bgImage as Media}
-              width="auto"
-              height="full"
-              fit="contain"
-            />
-          </Float>
-        )}
-      </Card.Body>
+            {block.heading}
+          </Card.Title>
+          <ChakraMarkdown
+            paragraphAs={Card.Description}
+            textStyle={{ base: "body", md: "s2" }}
+          >
+            {block.bodyMarkdown}
+          </ChakraMarkdown>
+          {block.bgImage && (
+            <Float
+              placement="bottom-end"
+              width={`${block.bgSize}%`}
+              height={`${block.bgSize}%`}
+              offset={28}
+            >
+              <MediaImage
+                media={block.bgImage as Media}
+                width="auto"
+                height="full"
+                fit="contain"
+              />
+            </Float>
+          )}
+        </Card.Body>
+      )}
+      {block.imagePosition === "right" && (
+        <BannerImageWithGradient
+          mainImage={block.mainImage as Media}
+          targetColor="colorPalette.1A"
+          gradientDirection="left"
+          boxWidth={block.heading ? "50%" : "100%"}
+        />
+      )}
     </Card.Root>
   );
 };
 
-const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
+const ImageOnlyCardImage = ({ block }: { block: ImageOnlyCardBlock }) => {
   return (
-    <Card.Root
-      overflow="hidden"
-      colorPalette={block.colorPalette}
-      colorVariant="deep"
-      width="full"
-    >
-      <MediaImage
-        media={block.mainImage as Media}
-        altFallback={block.heading}
-        aspectRatio="2/1"
-      />
-      {block.heading && (
-        <Card.Body>
-          <Card.Title textStyle="h2">{block.heading}</Card.Title>
-        </Card.Body>
-      )}
-    </Card.Root>
+    <MediaImage
+      media={block.mainImage as Media}
+      altFallback={block.heading}
+      aspectRatio="2/1"
+      maxHeight="10rem" // somewhat arbitrary, if you have a better idea please shout!
+    />
+  );
+};
+
+const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
+  // Payload types an optional parameter as undefined or null, but Chakra only wants undefined
+  const href = block.url ?? undefined;
+  return (
+    <LinkBox asChild>
+      <Card.Root
+        overflow="hidden"
+        colorPalette={block.colorPalette}
+        colorVariant="slatePastel"
+        width="full"
+      >
+        <LinkOverlay
+          href={href}
+          target={block.newTab ? "_blank" : undefined}
+          rel={block.newTab ? "noopener noreferrer" : undefined}
+        />
+        {block.textPosition === "bottom" && (
+          <ImageOnlyCardImage block={block} />
+        )}
+        {block.heading && (
+          <Card.Body>
+            <Card.Title textStyle="h2">{block.heading}</Card.Title>
+          </Card.Body>
+        )}
+        {block.textPosition === "top" && <ImageOnlyCardImage block={block} />}
+      </Card.Root>
+    </LinkBox>
   );
 };
 
@@ -212,9 +287,15 @@ const FeaturedCompetition = async ({
   if (error) return <OpenapiError t={t} response={response} />;
 
   return (
-    <Card.Root colorPalette={colorPalette} colorVariant="deep">
+    <Card.Root
+      colorPalette={colorPalette}
+      colorVariant="slatePastel"
+      height="full"
+    >
       <Card.Body>
-        <Card.Title textStyle="h2">{competition.name}</Card.Title>
+        <Card.Title textStyle={{ base: "h3", md: "h2" }} flex="1">
+          {competition.name}
+        </Card.Title>
         <CompetitionShortlist comp={competition} t={t} />
       </Card.Body>
     </Card.Root>
@@ -228,15 +309,17 @@ const FeaturedCompetitions = async ({
 }) => (
   <Card.Root width="full">
     <Card.Body>
-      <Card.Title textStyle="h2" asChild>
-        <HStack justify="space-between">
-          <Text>Featured Upcoming Competitions</Text>
-          <Button asChild variant="outline" color="currentColor">
+      <Card.Title asChild>
+        <HStack justify="space-between" wrap="wrap">
+          <Text textStyle={{ base: "h2", md: "h1" }}>
+            Upcoming Competitions
+          </Text>
+          <Button asChild variant="pastelSolid">
             <Link href="/competitions">View all Competitions</Link>
           </Button>
         </HStack>
       </Card.Title>
-      <SimpleGrid columns={block.competitions?.length} gap={4}>
+      <SimpleGrid columns={{ base: 1, md: block.competitions?.length }} gap={4}>
         {block.competitions?.map((featuredComp) => (
           <FeaturedCompetition
             key={featuredComp.id}
@@ -268,7 +351,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
           return (
             <Carousel.Item key={slide.id} index={i} asChild>
               <Card.Root
-                colorVariant="deep"
+                colorVariant="slatePastel"
                 flexDirection={{ base: "column", md: "row" }}
                 overflow="hidden"
                 colorPalette={slide.colorPalette}
@@ -306,42 +389,81 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
 };
 
 type VerticalLayout =
-  | Home["layout"]
-  | TwoBlocksUnion["left"]
-  | TwoBlocksUnion["right"];
+  Home["layout"] | TwoBlocksUnion["left"] | TwoBlocksUnion["right"];
 
-const renderVerticalLayout = (verticalLayout: VerticalLayout) => {
+const renderVerticalLayout = (
+  verticalLayout: VerticalLayout,
+  level: number = 0,
+  growthStrategy?: GrowthStrategy,
+) => {
   return (
-    <VStack gap={8}>
-      {verticalLayout.map((entry, index) => {
-        switch (entry.blockType) {
-          case "twoBlocksLevel0":
-          case "twoBlocksLevel1":
-          case "twoBlocksLevel2":
-            return renderHorizontalSplit(entry, `entry-${index}`);
-          default:
-            return renderFullBlock(entry, `entry-${index}`);
-        }
+    <VStack
+      gap={8}
+      justifyContent={
+        growthStrategy === "justify" ? "space-between" : undefined
+      }
+    >
+      {verticalLayout.map((entry) => {
+        return (
+          <Box
+            key={entry.id}
+            asChild
+            flexGrow={growthStrategy === "grow" ? "1" : undefined}
+            // In case of justifying the space, a stack with one single child (CSS :only-child)
+            //   cannot push it towards the beginning and end simultaneously. So in that case,
+            //   also grow if the selected strategy is `justify`, to simulate the visual impression
+            //   of "filling" the container like it would be if there was more than one item.
+            _only={{ flexGrow: growthStrategy === "justify" ? "1" : undefined }}
+          >
+            {renderBlock(entry, level, growthStrategy)}
+          </Box>
+        );
       })}
     </VStack>
   );
 };
 
-const renderHorizontalSplit = (entry: TwoBlocksUnion, keyPrefix = "") => {
-  const { left, right } = RATIO_GRID_MAP[entry.ratio];
+const renderHorizontalSplit = (
+  entry: TwoBlocksUnion,
+  level: number,
+  growthStrategy?: GrowthStrategy,
+) => {
+  const { left: leftCols, right: rightCols } = RATIO_GRID_MAP[entry.ratio];
+
+  const totalCols = leftCols + rightCols;
+  const foldMd = level <= 1;
+
+  // If a parent horizontal splitter has a `grow` strategy,
+  //   it will look weird if children in either half of the splitter don't grow.
+  // So make sure that any `grow` splitter passes down "at least" `justify` as a base strategy.
+  const fallbackGrowthStrategy =
+    growthStrategy === "grow" ? "justify" : undefined;
 
   return (
     <SimpleGrid
-      key={keyPrefix}
-      columns={{ base: 1, md: left + right }}
+      columns={{ base: 1, md: foldMd ? 1 : totalCols, lg: totalCols }}
       gap={8}
       width="full"
     >
-      <GridItem colSpan={{ base: 1, md: left }} asChild>
-        {renderVerticalLayout(entry.left)}
+      <GridItem
+        colSpan={{ base: 1, md: foldMd ? 1 : leftCols, lg: leftCols }}
+        asChild
+      >
+        {renderVerticalLayout(
+          entry.left,
+          level,
+          entry.growthStrategy || fallbackGrowthStrategy,
+        )}
       </GridItem>
-      <GridItem colSpan={{ base: 1, md: right }} asChild>
-        {renderVerticalLayout(entry.right)}
+      <GridItem
+        colSpan={{ base: 1, md: foldMd ? 1 : rightCols, lg: rightCols }}
+        asChild
+      >
+        {renderVerticalLayout(
+          entry.right,
+          level,
+          entry.growthStrategy || fallbackGrowthStrategy,
+        )}
       </GridItem>
     </SimpleGrid>
   );
@@ -349,20 +471,28 @@ const renderHorizontalSplit = (entry: TwoBlocksUnion, keyPrefix = "") => {
 
 type LayoutBlock = VerticalLayout[number];
 
-const renderFullBlock = (entry: LayoutBlock, key = "") => {
+const renderBlock = (
+  entry: LayoutBlock,
+  level: number,
+  growthStrategy?: GrowthStrategy,
+) => {
   switch (entry.blockType) {
+    case "twoBlocksLevel0":
+    case "twoBlocksLevel1":
+    case "twoBlocksLevel2":
+      return renderHorizontalSplit(entry, level + 1, growthStrategy);
     case "TextCard":
-      return <TextCard key={key} block={entry} />;
+      return <TextCard block={entry} />;
     case "AnnouncementsSection":
-      return <AnnouncementsSection key={key} block={entry} />;
+      return <AnnouncementsSection block={entry} />;
     case "ImageBanner":
-      return <ImageBanner key={key} block={entry} />;
+      return <ImageBanner block={entry} />;
     case "ImageOnlyCard":
-      return <ImageOnlyCard key={key} block={entry} />;
+      return <ImageOnlyCard block={entry} />;
     case "FeaturedComps":
-      return <FeaturedCompetitions key={key} block={entry} />;
+      return <FeaturedCompetitions block={entry} />;
     case "TestimonialsSpinner":
-      return <TestimonialsSpinner key={key} block={entry} />;
+      return <TestimonialsSpinner block={entry} />;
 
     default:
       return null;
@@ -397,7 +527,7 @@ export default async function Homepage() {
   }
 
   return (
-    <Box p={8} asChild>
+    <Box p={{ base: "3.5", md: "6", lg: "8" }} asChild>
       {renderVerticalLayout(homepageEntries)}
     </Box>
   );

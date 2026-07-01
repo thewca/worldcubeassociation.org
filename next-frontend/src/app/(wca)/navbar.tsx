@@ -9,6 +9,7 @@ import {
   Separator,
   Text,
   VStack,
+  Icon,
 } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -23,31 +24,62 @@ import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
 import WCALogo from "@/components/WCALogo";
+import WcaSearch from "@/components/SearchBar/WcaSearch";
 
-type NavbarEntry<T> = {
-  targetLink: T;
-  displayText: string;
+type NavbarEntry<K extends string = "displayText"> = {
+  [P in K]: string;
+} & {
   displayIcon?: IconName;
+};
+
+function TextWrapper<K extends string>({
+  navbarEntry,
+  entryKey,
+  hideResponsive = false,
+}: {
+  navbarEntry: NavbarEntry<K>;
+  entryKey: K;
+  hideResponsive?: boolean;
+}) {
+  return (
+    <>
+      {navbarEntry.displayIcon && (
+        <Icon asChild hideBelow="2xl">
+          <IconDisplay name={navbarEntry.displayIcon} />
+        </Icon>
+      )}
+      <Box
+        as="span"
+        hideBelow={hideResponsive && navbarEntry.displayIcon ? "xl" : undefined}
+      >
+        {navbarEntry[entryKey]}
+      </Box>
+    </>
+  );
+}
+
+type LinkNavbarEntry<T> = NavbarEntry & {
+  targetLink: T;
 };
 
 function LinkWrapper<T extends string>({
   navbarEntry,
   linkComponent: LinkComponent,
+  hideResponsive = false,
+  ...extraProps
 }: {
-  navbarEntry: NavbarEntry<T>;
-  linkComponent: React.ElementType<{ href: T }>;
-}) {
-  // Have to trick the JSX type checker because TS cannot verify
-  //   whether "primitive" components like `a` satisfy a generic `href: T`.
-  const RawLinkComponent = LinkComponent as React.ElementType;
-
+  navbarEntry: LinkNavbarEntry<T>;
+  linkComponent: React.ComponentType<{ href: T }> | "a";
+  hideResponsive?: boolean;
+} & React.ComponentPropsWithoutRef<"a">) {
   return (
-    <RawLinkComponent href={navbarEntry.targetLink}>
-      {navbarEntry.displayIcon && (
-        <IconDisplay name={navbarEntry.displayIcon} />
-      )}
-      {navbarEntry.displayText}
-    </RawLinkComponent>
+    <LinkComponent {...extraProps} href={navbarEntry.targetLink}>
+      <TextWrapper
+        navbarEntry={navbarEntry}
+        entryKey="displayText"
+        hideResponsive={hideResponsive}
+      />
+    </LinkComponent>
   );
 }
 
@@ -79,33 +111,45 @@ export default async function Navbar() {
         <HStack padding="3" justifyContent="space-between">
           <HStack>
             {!LIVE_RESULT_BETA && <WCALogo />}
-            <HStack hideBelow="md">
+            <Box hideFrom="xl">
+              <Collapsible.Trigger asChild>
+                <IconButton variant="ghost" aria-label="Toggle navigation">
+                  <Icon size="lg" asChild>
+                    <LuMenu />
+                  </Icon>
+                </IconButton>
+              </Collapsible.Trigger>
+            </Box>
+            <HStack hideBelow="xl" gap={0}>
               {navbarEntries.map((navbarEntry) => (
                 <React.Fragment key={navbarEntry.id}>
                   {navbarEntry.blockType === "LinkItem" && (
-                    <Button asChild variant="ghost" size="sm">
+                    <Button asChild variant="ghost" size="sm" px="2">
                       <LinkWrapper
                         navbarEntry={navbarEntry}
                         linkComponent={Link}
+                        hideResponsive
                       />
                     </Button>
                   )}
                   {navbarEntry.blockType === "ExternalLinkItem" && (
-                    <Button asChild variant="ghost" size="sm">
+                    <Button asChild variant="ghost" size="sm" px="2">
                       <LinkWrapper
                         navbarEntry={navbarEntry}
                         linkComponent="a"
+                        hideResponsive
                       />
                     </Button>
                   )}
                   {navbarEntry.blockType === "NavDropdown" && (
                     <Menu.Root>
                       <Menu.Trigger asChild>
-                        <Button variant="ghost" size="sm">
-                          {navbarEntry.displayIcon && (
-                            <IconDisplay name={navbarEntry.displayIcon} />
-                          )}
-                          {navbarEntry.title}
+                        <Button variant="ghost" size="sm" px="2">
+                          <TextWrapper
+                            navbarEntry={navbarEntry}
+                            entryKey="title"
+                            hideResponsive
+                          />
                           <LuChevronDown />
                         </Button>
                       </Menu.Trigger>
@@ -193,8 +237,14 @@ export default async function Navbar() {
                       <Menu.Root>
                         <Menu.Trigger asChild>
                           <Button variant="ghost" size="sm">
-                            <IconDisplay name="External Link" />
-                            {navbarEntry.label}
+                            <TextWrapper
+                              navbarEntry={{
+                                ...navbarEntry,
+                                displayIcon: "External Link",
+                              }}
+                              entryKey="label"
+                              hideResponsive
+                            />
                             <LuChevronDown />
                           </Button>
                         </Menu.Trigger>
@@ -206,16 +256,12 @@ export default async function Navbar() {
                                 value={item.id ?? item.targetLink}
                                 asChild
                               >
-                                <a
-                                  href={item.targetLink}
+                                <LinkWrapper
+                                  navbarEntry={item}
+                                  linkComponent="a"
                                   target="_blank"
                                   rel="noreferrer"
-                                >
-                                  <IconDisplay
-                                    name={item.displayIcon as IconName}
-                                  />
-                                  {item.displayText}
-                                </a>
+                                />
                               </Menu.Item>
                             ))}
                           </Menu.Content>
@@ -226,6 +272,9 @@ export default async function Navbar() {
               ))}
             </HStack>
           </HStack>
+          <Box flex="1" mx={4}>
+            {!LIVE_RESULT_BETA && <WcaSearch />}
+          </Box>
           <HStack>
             {showEmptyMessage && (
               <Text hideBelow="md">Oh no, there are no navbar items!</Text>
@@ -237,17 +286,10 @@ export default async function Navbar() {
             <Box hideBelow="md">
               <AvatarMenu session={session} />
             </Box>
-            <Box hideFrom="md">
-              <Collapsible.Trigger asChild>
-                <IconButton variant="ghost" aria-label="Toggle navigation">
-                  <LuMenu />
-                </IconButton>
-              </Collapsible.Trigger>
-            </Box>
           </HStack>
         </HStack>
 
-        <Box hideFrom="md">
+        <Box hideFrom="xl">
           <Collapsible.Content>
             <VStack align="stretch" px={3} pb={3} gap={1}>
               {showEmptyMessage && (
@@ -290,10 +332,10 @@ export default async function Navbar() {
                           justifyContent="flex-start"
                           width="full"
                         >
-                          {navbarEntry.displayIcon && (
-                            <IconDisplay name={navbarEntry.displayIcon} />
-                          )}
-                          {navbarEntry.title}
+                          <TextWrapper
+                            navbarEntry={navbarEntry}
+                            entryKey="title"
+                          />
                           <Collapsible.Indicator ml="auto">
                             <LuChevronDown />
                           </Collapsible.Indicator>
@@ -406,8 +448,13 @@ export default async function Navbar() {
                             justifyContent="flex-start"
                             width="full"
                           >
-                            <IconDisplay name="External Link" />
-                            {navbarEntry.label}
+                            <TextWrapper
+                              navbarEntry={{
+                                ...navbarEntry,
+                                displayIcon: "External Link",
+                              }}
+                              entryKey="label"
+                            />
                             <Collapsible.Indicator ml="auto">
                               <LuChevronDown />
                             </Collapsible.Indicator>
@@ -423,16 +470,12 @@ export default async function Navbar() {
                                 size="sm"
                                 justifyContent="flex-start"
                               >
-                                <a
-                                  href={item.targetLink}
+                                <LinkWrapper
+                                  navbarEntry={item}
+                                  linkComponent="a"
                                   target="_blank"
                                   rel="noreferrer"
-                                >
-                                  <IconDisplay
-                                    name={item.displayIcon as IconName}
-                                  />
-                                  {item.displayText}
-                                </a>
+                                />
                               </Button>
                             ))}
                           </VStack>

@@ -20,7 +20,7 @@ export interface ButtonVariant {
   /** @default "md" */
   size?: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | undefined
   /** @default "solid" */
-  variant?: "solid" | "subtle" | "surface" | "outline" | "ghost" | "plain" | undefined
+  variant?: "solid" | "subtle" | "surface" | "outline" | "ghost" | "plain" | "pastelSolid" | "pastelOutline" | undefined
 }
 
 export type ButtonVariantProps = {
@@ -433,7 +433,7 @@ export interface CardVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "info" */
   variant?: "elevated" | "outline" | "subtle" | "info" | undefined
-  colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | "deep" | undefined
+  colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | "deep" | "slatePastel" | undefined
 }
 
 export type CardVariantProps = {

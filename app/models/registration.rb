@@ -20,6 +20,7 @@ class Registration < ApplicationRecord
   scope :with_payments, -> { joins(:registration_payments).distinct }
   scope :wcif_ordered, -> { order(:id) }
   scope :might_attend, -> { where(competing_status: %w[accepted waiting_list]) }
+  scope :scoretakers, -> { accepted.joins(:assignments).merge(Assignment.scoretaker) }
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
@@ -62,11 +63,18 @@ class Registration < ApplicationRecord
     self.registered_at = current_time_from_proper_timezone
   end
 
+  # rubocop:disable Rails/ActiveRecordCallbacksOrder
+  before_save :mark_accepted_at, if: :trying_to_accept?
+  private def mark_accepted_at
+    self.accepted_at = current_time_from_proper_timezone
+  end
+
   validates :registrant_id, presence: true, uniqueness: { scope: :competition_id }
 
   # Run the hook twice so that even if you try to skip validations, it still persists a non-null value to the DB
   before_validation :ensure_registrant_id, on: :create
   before_create :ensure_registrant_id
+  # rubocop:enable Rails/ActiveRecordCallbacksOrder
 
   private def ensure_registrant_id
     max_registrant_id = competition.registrations.maximum(:registrant_id) || 0

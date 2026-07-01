@@ -1,0 +1,31 @@
+import React from 'react';
+import { Header } from 'semantic-ui-react';
+import { apiV0Urls } from '../../lib/requests/routes.js.erb';
+import useLoadedData from '../../lib/hooks/useLoadedData';
+import DelegatesTable from './DelegatesTable';
+import Loading from '../../components/Requests/Loading';
+import Errored from '../../components/Requests/Errored';
+
+export default function DelegatesOfSubregion({ subregion, isAdminMode }) {
+  const { data: delegates, loading, error } = useLoadedData(
+    apiV0Urls.userRoles.list({
+      isActive: true,
+      groupId: subregion.id,
+    }, 'location,name'),
+  );
+
+  if (loading) return <Loading />;
+  if (error) return <Errored />;
+
+  return (
+    <>
+      <Header as="h4" key={subregion.id}>
+        {subregion.name}
+      </Header>
+      <DelegatesTable
+        delegates={delegates}
+        isAdminMode={isAdminMode}
+      />
+    </>
+  );
+}

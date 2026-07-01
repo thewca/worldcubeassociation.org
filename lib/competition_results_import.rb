@@ -22,6 +22,8 @@ module CompetitionResultsImport
       Scramble.where(competition_id: competition.id).delete_all
       InboxPerson.import!(persons_to_import)
       InboxResult.import!(results_to_import)
+      # Compute global_pos for inbox results with linked_rounds
+      competition.rounds.includes(:linked_round).where.not(linked_round_id: nil).find_each(&:recompute_inbox_results_global_pos)
 
       if import_matched_scrambles
         # Foreign Key handles transitive deletion of individual scrambles
@@ -105,6 +107,7 @@ module CompetitionResultsImport
 
                                  {
                                    pos: inbox_res.pos,
+                                   global_pos: inbox_res.global_pos,
                                    person_id: person_id,
                                    person_name: inbox_res.person_name,
                                    country_id: person_country.id,

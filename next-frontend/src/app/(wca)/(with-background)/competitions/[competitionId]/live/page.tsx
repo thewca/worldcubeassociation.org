@@ -3,7 +3,6 @@ import { earliestWithLongestTieBreaker } from "@/lib/wca/wcif/activities";
 import LiveView from "@/components/competitions/Schedule/LiveView";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
-import { getRounds } from "@/lib/wca/live/getRounds";
 import getPermissions from "@/lib/wca/permissions";
 import { Container } from "@chakra-ui/react";
 
@@ -15,10 +14,9 @@ export default async function LiveOverview({
   const { competitionId } = await params;
   const { t } = await getT();
 
-  const [scheduleResult, permissions, roundsResult] = await Promise.all([
+  const [scheduleResult, permissions] = await Promise.all([
     getSchedule(competitionId),
     getPermissions(),
-    getRounds(competitionId),
   ]);
 
   const {
@@ -32,16 +30,7 @@ export default async function LiveOverview({
   }
 
   const canManage =
-    !!permissions && permissions.canAdministerCompetition(competitionId);
-
-  const {
-    error: roundsError,
-    data: roundsData,
-    response: roundsResponse,
-  } = roundsResult;
-  if (roundsError) {
-    return <OpenapiError t={t} response={roundsResponse} />;
-  }
+    !!permissions && permissions.canScoretakeCompetition(competitionId);
 
   const allActivitiesSorted = wcifSchedule.venues
     .flatMap((venue) => venue.rooms)
@@ -59,7 +48,6 @@ export default async function LiveOverview({
         activities={allActivitiesSorted}
         timeZones={uniqueTimeZones}
         canManage={canManage}
-        rounds={roundsData.rounds}
       />
     </Container>
   );

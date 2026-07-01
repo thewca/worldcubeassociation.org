@@ -63,7 +63,7 @@ class ResultsSubmissionController < ApplicationController
     @competition = Competition.includes(
       scramble_file_uploads: ScrambleFileUpload::SERIALIZATION_INCLUDES,
       matched_scramble_sets: MatchedScrambleSet::SERIALIZATION_INCLUDES,
-    ).find(params[:competition_id])
+    ).find(params.require(:competition_id))
   end
 
   def upload_json
@@ -204,7 +204,7 @@ class ResultsSubmissionController < ApplicationController
   end
 
   private def competition_from_params
-    Competition.find(params[:competition_id])
+    Competition.find(params.require(:competition_id))
   end
 
   private def trigger_compute_potential_duplicates(competition_id)
