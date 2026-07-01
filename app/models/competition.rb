@@ -2174,7 +2174,10 @@ class Competition < ApplicationRecord
 
   def self.wcif_json_schema(version: WCIF_STABLE_VERSION, required_props: false)
     {
+      # This $id property is the actual JsonSchema URI
       "$id" => Rails.application.routes.url_helpers.wcif_json_schema_api_v0_competitions_url(version, host: EnvConfig.ROOT_URL),
+      # This id property is used by the Ruby Gem that checks JsonSchema when printing error messages.
+      # Without specifying an ID, it will use random UUIDs so we use this field to make error messages clear and predictable.
       "id" => "WCIFv#{version}",
       "type" => "object",
       "required" => required_props ? %w[id formatVersion] : [],
