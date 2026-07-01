@@ -406,5 +406,34 @@ RSpec.describe Api::V0::CompetitionsController do
         expect(parsed_body['series']['competitionIds']).to eq ['TestComp2014']
       end
     end
+
+    context 'schema checks' do
+      it 'validates a compliant schema' do
+        put :check_wcif, params: competition.to_wcif, as: :json
+        expect(response).to have_http_status :ok
+      end
+
+      it 'complains about missing keys' do
+        put :check_wcif, params: competition.to_wcif.except("formatVersion"), as: :json
+        expect(response).to have_http_status :bad_request
+        expect(response.parsed_body["error"]).to eq("The property '#/' did not contain a required property of 'formatVersion'")
+      end
+
+      it 'complains about extraneous keys' do
+        extraneous_wcif = { **competition.to_wcif, "extraProperty" => "yippie" }
+
+        put :check_wcif, params: extraneous_wcif, as: :json
+        expect(response).to have_http_status :bad_request
+        expect(response.parsed_body["error"]).to eq("The property '#/' contained undefined properties: 'extraProperty'")
+      end
+
+      it 'complains about values in the wrong format' do
+        wrong_format_wcif = { **competition.to_wcif, "id" => 123 }
+
+        put :check_wcif, params: wrong_format_wcif, as: :json
+        expect(response).to have_http_status :bad_request
+        expect(response.parsed_body["error"]).to eq("The property '#/id' of type integer did not match the following type: string")
+      end
+    end
   end
 end

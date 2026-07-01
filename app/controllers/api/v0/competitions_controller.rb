@@ -253,7 +253,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   def check_wcif
-    wcif = params.permit!.to_h.except(:controller, :action, :competition_id, :competition)
+    wcif = params.permit!.to_h.except(:controller, :action, :competition, :format)
 
     import_version = wcif["formatVersion"] || Competition::WCIF_STABLE_VERSION
     Competition.validate_wcif_schema!(wcif, version: import_version)
