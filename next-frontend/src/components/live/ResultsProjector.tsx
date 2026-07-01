@@ -178,16 +178,6 @@ function ResultsProjector({
                         ["showing", "shown", "paused"] as Status[]
                       ).includes(status);
 
-                      const animationProps = {
-                        opacity: isVisible ? 0 : 1,
-                        animationName: isVisible ? "fade-in" : "fade-out",
-                        animationDuration: `${(isVisible ? DURATION.showing : DURATION.hiding) / 1000}s`,
-                        animationTimingFunction: "ease-in-out",
-                        animationFillMode: "forwards" as const,
-                        animationDelay:
-                          status === "showing" ? `${index * 100}ms` : "0ms",
-                      };
-
                       // For dual/linked rounds a competitor has one result per
                       // linked round, each shown on its own row with the
                       // combined ranking/name spanning them. Otherwise a single
@@ -206,7 +196,14 @@ function ResultsProjector({
                           <Table.Row
                             whiteSpace="nowrap"
                             key={`${result.registration_id}-${result.round_wcif_id}`}
-                            {...animationProps}
+                            opacity={isVisible ? 0 : 1}
+                            animationName={isVisible ? "fade-in" : "fade-out"}
+                            animationDuration={`${(isVisible ? DURATION.showing : DURATION.hiding) / 1000}s`}
+                            animationTimingFunction="ease-in-out"
+                            animationFillMode="forwards"
+                            animationDelay={
+                              status === "showing" ? `${index * 100}ms` : "0ms"
+                            }
                           >
                             {showText && (
                               <Table.Cell
