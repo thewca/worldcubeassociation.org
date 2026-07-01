@@ -14,6 +14,8 @@ interface AllRoundInfoProviderType {
     state: LiveRoundState,
     patch?: Partial<LiveRoundAdmin>,
   ) => void;
+  setEnteredCount: (roundId: string, count: number) => void;
+  setTotalCompetitors: (roundId: string, count: number) => void;
 }
 
 const AllRoundInfoProvider = createContext<
@@ -89,6 +91,38 @@ export function RoundsInfoProvider({
     [queryClient, queryKey],
   );
 
+  const setEnteredCount = useCallback(
+    (roundId: string, count: number) => {
+      queryClient.setQueryData(
+        queryKey,
+        (old: { rounds: LiveRoundAdmin[] }) => ({
+          rounds: old.rounds.map((r) =>
+            r.id === roundId && r.state === "open"
+              ? { ...r, competitors_live_results_entered: count }
+              : r,
+          ),
+        }),
+      );
+    },
+    [queryClient, queryKey],
+  );
+
+  const setTotalCompetitors = useCallback(
+    (roundId: string, count: number) => {
+      queryClient.setQueryData(
+        queryKey,
+        (old: { rounds: LiveRoundAdmin[] }) => ({
+          rounds: old.rounds.map((r) =>
+            r.id === roundId && (r.state === "open" || r.state === "locked")
+              ? { ...r, total_competitors: count }
+              : r,
+          ),
+        }),
+      );
+    },
+    [queryClient, queryKey],
+  );
+
   if (isLoading) {
     return <Loading />;
   }
@@ -99,7 +133,12 @@ export function RoundsInfoProvider({
 
   return (
     <AllRoundInfoProvider.Provider
-      value={{ rounds: data.rounds, setRoundState }}
+      value={{
+        rounds: data.rounds,
+        setRoundState,
+        setEnteredCount,
+        setTotalCompetitors,
+      }}
     >
       {children}
     </AllRoundInfoProvider.Provider>

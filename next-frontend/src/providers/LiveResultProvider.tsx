@@ -27,6 +27,8 @@ import {
   decompressFullResult,
   decompressPartialResult,
 } from "@/lib/live/decompressDiff";
+import { countEnteredResults } from "@/lib/live/countEnteredResults";
+import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 
 export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
 interface LiveResultContextType {
@@ -104,6 +106,7 @@ export function MultiRoundResultProvider({
 
   const api = useAPI();
   const queryClient = useQueryClient();
+  const { setEnteredCount, setTotalCompetitors } = useAllRoundsInfo();
 
   const roundQueryOptions = useCallback(
     (roundId: string) => {
@@ -186,6 +189,9 @@ export function MultiRoundResultProvider({
         const newResults = newData.results;
         const newCompetitors = newData.competitors;
 
+        setEnteredCount(roundId, countEnteredResults(newData));
+        setTotalCompetitors(roundId, newResults.length);
+
         // We just made a full refetch. Only keep those results as "pending"
         //   which are NOT contained exactly in the refetched round.
         // In other words, if we find a competitor with the updated attempts
@@ -227,6 +233,12 @@ export function MultiRoundResultProvider({
           ].filter((c) => !deletedSet.has(c.id)),
         }),
       );
+
+      const newRound = queryClient.getQueryData<LiveRound>(roundQuery.queryKey);
+      if (newRound) {
+        setEnteredCount(roundId, countEnteredResults(newRound));
+        setTotalCompetitors(roundId, newRound.results.length);
+      }
 
       diffPendingResults(decompressedUpdated, (pr, ir) => {
         // The incoming values are diffs, meaning (type-wise)
