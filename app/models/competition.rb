@@ -1989,7 +1989,7 @@ class Competition < ApplicationRecord
   end
 
   def set_wcif!(wcif, current_user, strict_schema_checks: true)
-    import_version = wcif["formatVersion"]
+    import_version = wcif["formatVersion"] || WCIF_STABLE_VERSION
 
     Competition.validate_wcif_schema!(wcif, version: import_version, is_strict: strict_schema_checks)
 
