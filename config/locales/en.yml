@@ -1446,6 +1446,7 @@ en:
         double_check: "Double Check"
         submit_results: "Submit Results"
         add_to_batch: "Add to Batch"
+        remove_from_batch: "Remove from Batch"
         batch_mode: "Batch Mode"
         submit_batch: "Submit Batch (%{count})"
         warnings:

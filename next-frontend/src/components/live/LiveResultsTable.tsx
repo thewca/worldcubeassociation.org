@@ -62,10 +62,10 @@ export default function LiveResultsTable({
     pendingLiveResults.map((r) => r.registration_id),
   );
 
-  // Competitors staged in the (not-yet-submitted) batch — shown dimmed so
-  // scoretakers can see who's already entered in the current batch.
-  const batchRegistrationIds =
-    useResultsAdminOptional()?.batchRegistrationIds ?? new Set<number>();
+  // Staged (not-yet-submitted) batch attempts — previewed in the competitor's
+  // row (muted) so scoretakers see who's already entered in the current batch.
+  const batchAttemptsByRegistrationId =
+    useResultsAdminOptional()?.batchAttemptsByRegistrationId;
 
   const competitorsWithOrderedResults = mergeAndOrderResults(
     resultsByRegistrationId,
@@ -109,9 +109,10 @@ export default function LiveResultsTable({
               }
 
               const rowKey = `${competitorAndTheirResults.id}-${result.round_wcif_id}`;
-              const inBatch = batchRegistrationIds.has(
+              const batchAttempts = batchAttemptsByRegistrationId?.get(
                 competitorAndTheirResults.id,
               );
+              const inBatch = batchAttempts !== undefined;
 
               return (
                 <Table.Row
@@ -188,7 +189,7 @@ export default function LiveResultsTable({
                   )}
                   <LiveAttemptsCells
                     format={format}
-                    attempts={result.attempts}
+                    attempts={batchAttempts ?? result.attempts}
                     eventId={eventId}
                     competitorId={competitorAndTheirResults.id}
                   />
