@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Message } from 'semantic-ui-react';
+import { Icon, Message, Step } from 'semantic-ui-react';
 import ImportResultsData from './ImportResultsData';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import FormToWrt from './FormToWrt';
@@ -45,22 +45,32 @@ function CompetitionResultSubmission({
 
   return (
     <>
-      The result submission process has two steps:
-      <List ordered>
-        <List.Item>
-          Providing valid results data to the website.
-          This can be done in one of the following ways:
-          <List.List>
-            <List.Item value="a">Uploading a Results JSON file</List.Item>
-            {showWcaLiveBeta && (
-              <List.Item value="b">Importing results directly from WCA Live</List.Item>
-            )}
-          </List.List>
-        </List.Item>
-        <List.Item>
-          Submit these results to the WRT after addressing warnings (if any).
-        </List.Item>
-      </List>
+      <Step.Group ordered widths={3}>
+        <Step>
+          <Icon name="cloud upload" />
+          <Step.Content>
+            <Step.Title>Results Data</Step.Title>
+            <Step.Description>
+              Upload a file
+              {showWcaLiveBeta && ' or WCA Live data'}
+            </Step.Description>
+          </Step.Content>
+        </Step>
+        <Step>
+          <Icon name="warning sign" />
+          <Step.Content>
+            <Step.Title>Validations</Step.Title>
+            <Step.Description>Address any warnings or errors</Step.Description>
+          </Step.Content>
+        </Step>
+        <Step>
+          <Icon name="cloud upload" />
+          <Step.Content>
+            <Step.Title>Submit</Step.Title>
+            <Step.Description>Make the final submission to WRT</Step.Description>
+          </Step.Content>
+        </Step>
+      </Step.Group>
       <ImportResultsData
         competitionId={competitionId}
         uploadedScrambleFilesCount={uploadedScrambleFilesCount}
