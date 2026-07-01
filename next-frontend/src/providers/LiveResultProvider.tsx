@@ -106,7 +106,7 @@ export function MultiRoundResultProvider({
 
   const api = useAPI();
   const queryClient = useQueryClient();
-  const { setEnteredCount, setTotalCompetitors } = useAllRoundsInfo();
+  const { setCompletedCount, setTotalCompetitors } = useAllRoundsInfo();
 
   const roundQueryOptions = useCallback(
     (roundId: string) => {
@@ -189,7 +189,7 @@ export function MultiRoundResultProvider({
         const newResults = newData.results;
         const newCompetitors = newData.competitors;
 
-        setEnteredCount(roundId, countCompletedResults(newData));
+        setCompletedCount(roundId, newData.competitors_live_results_completed);
         setTotalCompetitors(roundId, newCompetitors.length);
 
         // We just made a full refetch. Only keep those results as "pending"
@@ -236,7 +236,7 @@ export function MultiRoundResultProvider({
 
       const newRound = queryClient.getQueryData<LiveRound>(roundQuery.queryKey);
       if (newRound) {
-        setEnteredCount(roundId, countCompletedResults(newRound));
+        setCompletedCount(roundId, countCompletedResults(newRound));
         setTotalCompetitors(roundId, newRound.results.length);
       }
 

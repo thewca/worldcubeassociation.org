@@ -14,7 +14,7 @@ interface AllRoundInfoProviderType {
     state: LiveRoundState,
     patch?: Partial<LiveRoundAdmin>,
   ) => void;
-  setEnteredCount: (roundId: string, count: number) => void;
+  setCompletedCount: (roundId: string, count: number) => void;
   setTotalCompetitors: (roundId: string, count: number) => void;
 }
 
@@ -91,7 +91,7 @@ export function RoundsInfoProvider({
     [queryClient, queryKey],
   );
 
-  const setEnteredCount = useCallback(
+  const setCompletedCount = useCallback(
     (roundId: string, count: number) => {
       queryClient.setQueryData(
         queryKey,
@@ -136,7 +136,7 @@ export function RoundsInfoProvider({
       value={{
         rounds: data.rounds,
         setRoundState,
-        setEnteredCount,
+        setCompletedCount,
         setTotalCompetitors,
       }}
     >
