@@ -255,15 +255,14 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def check_wcif
     wcif = params.permit!.to_h.except(:controller, :action, :competition, :format)
 
-    import_version = wcif["formatVersion"] || Competition::WCIF_STABLE_VERSION
-    Competition.validate_wcif_schema!(wcif, version: import_version)
+    format_version = wcif["formatVersion"] || Competition::WCIF_STABLE_VERSION
+    expected_schema = Competition.wcif_json_schema(version: format_version)
 
-    render json: { status: "Your WCIF complies with the specified format" }, status: :ok
-  rescue JSON::Schema::ValidationError => e
-    render json: {
-      status: "Your WCIF does not comply with the specified format. Please see the error property for details",
-      error: e.message,
-    }, status: :bad_request
+    validation_errors = JSON::Validator.fully_validate(expected_schema, wcif, **Competition.json_validation_options)
+
+    return render json: validation_errors, status: :bad_request if validation_errors.present?
+
+    head :ok
   end
 
   def update_wcif

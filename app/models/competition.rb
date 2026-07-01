@@ -1977,9 +1977,15 @@ class Competition < ApplicationRecord
     }
   end
 
+  def self.json_validation_options(is_strict: true)
+    { noAdditionalProperties: is_strict }
+  end
+
   def self.validate_wcif_schema!(wcif, version: WCIF_STABLE_VERSION, is_strict: true)
-    expected_schema = Competition.wcif_json_schema(version: version)
-    JSON::Validator.validate!(expected_schema, wcif, noAdditionalProperties: is_strict)
+    expected_schema = self.wcif_json_schema(version: version)
+    validation_opts = self.json_validation_options(is_strict: is_strict)
+
+    JSON::Validator.validate!(expected_schema, wcif, **validation_opts)
   end
 
   def set_wcif!(wcif, current_user, strict_schema_checks: true)
