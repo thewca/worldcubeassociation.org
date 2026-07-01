@@ -27,7 +27,7 @@ import {
   decompressFullResult,
   decompressPartialResult,
 } from "@/lib/live/decompressDiff";
-import { countEnteredResults } from "@/lib/live/countEnteredResults";
+import { countCompletedResults } from "@/lib/live/countCompletedResults";
 import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 
 export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
@@ -189,8 +189,8 @@ export function MultiRoundResultProvider({
         const newResults = newData.results;
         const newCompetitors = newData.competitors;
 
-        setEnteredCount(roundId, countEnteredResults(newData));
-        setTotalCompetitors(roundId, newResults.length);
+        setEnteredCount(roundId, countCompletedResults(newData));
+        setTotalCompetitors(roundId, newCompetitors.length);
 
         // We just made a full refetch. Only keep those results as "pending"
         //   which are NOT contained exactly in the refetched round.
@@ -236,7 +236,7 @@ export function MultiRoundResultProvider({
 
       const newRound = queryClient.getQueryData<LiveRound>(roundQuery.queryKey);
       if (newRound) {
-        setEnteredCount(roundId, countEnteredResults(newRound));
+        setEnteredCount(roundId, countCompletedResults(newRound));
         setTotalCompetitors(roundId, newRound.results.length);
       }
 

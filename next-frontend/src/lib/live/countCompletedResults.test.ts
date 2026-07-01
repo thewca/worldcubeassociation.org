@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { countEnteredResults } from "@/lib/live/countEnteredResults";
+import { countCompletedResults } from "@/lib/live/countCompletedResults";
 import { LiveResult, LiveRound } from "@/types/live";
 
 const makeResult = (
@@ -28,14 +28,14 @@ const makeRound = (
   cutoff?: LiveRound["cutoff"],
 ): LiveRound => ({ format, cutoff, results }) as LiveRound;
 
-describe("countEnteredResults", () => {
+describe("countCompletedResults", () => {
   it("counts only results with all expected solves", () => {
     // Ao5 => 5 expected solves
     const round = makeRound("a", [
       makeResult(1, [900, 900, 900, 900, 900], 900), // complete
       makeResult(2, [900, 900, 900], 900), // partial
     ]);
-    expect(countEnteredResults(round)).toBe(1);
+    expect(countCompletedResults(round)).toBe(1);
   });
 
   it("counts a result done at the cutoff that failed to meet it", () => {
@@ -50,6 +50,6 @@ describe("countEnteredResults", () => {
       ],
       cutoff,
     );
-    expect(countEnteredResults(round)).toBe(2);
+    expect(countCompletedResults(round)).toBe(2);
   });
 });

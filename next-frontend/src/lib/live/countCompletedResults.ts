@@ -24,7 +24,7 @@ const isComplete = (
   return false;
 };
 
-export const countEnteredResults = (round: LiveRound) => {
+export const countCompletedResults = (round: LiveRound) => {
   const expectedSolveCount = formats.byId[round.format].expected_solve_count;
 
   return round.results.filter((r) =>
