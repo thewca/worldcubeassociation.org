@@ -1,6 +1,6 @@
 <% provide(:title, 'WC2025 Livestream Management') %>
 
-<%= react_component('Posts/LivestreamManager', {
+<%= react_on_rails_component("LivestreamManager", props: {
   testVideoId: @test_video_id,
   liveVideoId: @live_video_id,
 }) %>

@@ -15,6 +15,11 @@ module DbHelper
     temp_table_name = "#{table_name}_temp"
     old_table_name = "#{table_name}_old"
 
+    # Clean up leftover tables from a previous run that was not cleanly terminated.
+    #   In particular, redeployments can hard-kill Sidekiq in a way that skips the `ensure` block below.
+    ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{temp_table_name}")
+    ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{old_table_name}")
+
     ActiveRecord::Base.connection.execute("CREATE TABLE #{temp_table_name} LIKE #{table_name}")
     ActiveRecord::Base.connection.execute("ALTER TABLE #{temp_table_name} AUTO_INCREMENT = 1")
 

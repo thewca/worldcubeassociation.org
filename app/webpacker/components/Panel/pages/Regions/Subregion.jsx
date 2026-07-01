@@ -42,7 +42,6 @@ const canPromote = (role) => (
 
 const canDemote = (role) => (
   [
-    statusObjectOfGroupType(role.group.group_type).junior_delegate,
     statusObjectOfGroupType(role.group.group_type).delegate,
   ].includes(role.metadata.status)
 );
@@ -173,6 +172,8 @@ export default function Subregion({ group }) {
             <Table.HeaderCell>Name</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
             <Table.HeaderCell>Location</Table.HeaderCell>
+            <Table.HeaderCell>Delegated competitions</Table.HeaderCell>
+            <Table.HeaderCell>Lead delegated competitions</Table.HeaderCell>
             <Table.HeaderCell>Actions</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -182,6 +183,8 @@ export default function Subregion({ group }) {
               <Table.Cell>{delegate.user.name}</Table.Cell>
               <Table.Cell>{I18n.t(`enums.user_roles.status.delegate_regions.${delegate.metadata.status}`)}</Table.Cell>
               <Table.Cell>{delegate.metadata.location}</Table.Cell>
+              <Table.Cell>{delegate.metadata.total_delegated}</Table.Cell>
+              <Table.Cell>{delegate.metadata.lead_delegated}</Table.Cell>
               <Table.Cell>
                 {canPromote(delegate)
                   && <Button onClick={() => promoteDelegateAction(delegate)}>Promote</Button>}

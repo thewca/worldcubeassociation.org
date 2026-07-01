@@ -5,31 +5,20 @@ import React, {
 } from 'react';
 import {
   Button,
-  Form,
   Header,
   Message,
-  Modal,
+  Popup,
 } from 'semantic-ui-react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import ScrambleFileList from './ScrambleFileList';
-import UnusedScramblesPanel from './UnusedScramblesPanel';
-import useCheckboxState from '../../lib/hooks/useCheckboxState';
-import MatchingProgressMessage from './MatchingProgressMessage';
+import { sortSetsForAutoMatch, unpackScrambleSets, useScrambleFilesQuery } from './util';
+import useToggleButtonState from '../../lib/hooks/useToggleButtonState';
 
-async function listScrambleFiles(competitionId) {
-  const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId));
-
-  return data;
-}
-
-async function uploadScrambleFile({ competitionId, file, matchingSettings }) {
+async function uploadScrambleFile({ competitionId, file }) {
   const formData = new FormData();
   formData.append('tnoodle[json]', file);
-
-  formData.append('matching_settings[is_enabled]', matchingSettings.isEnabled);
-  formData.append('matching_settings[is_restricted]', matchingSettings.isRestricted);
 
   const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId), {
     method: 'POST',
@@ -42,24 +31,24 @@ async function uploadScrambleFile({ competitionId, file, matchingSettings }) {
 export default function FileUpload({
   competitionId,
   initialScrambleFiles,
+  pickerSectionRef,
+  navigatePicker,
+  autoMatchSettings,
   matchState,
   dispatchMatchState,
-  matchingProgress,
 }) {
   const inputRef = useRef();
   const queryClient = useQueryClient();
 
   const [error, setError] = useState(null);
 
-  const [matchOnUpload, setMatchOnUpload] = useCheckboxState(true);
-  const [limitMatches, setLimitMatches] = useCheckboxState(true);
+  const [matchOnUpload, toggleMatchOnUpload] = useToggleButtonState(true);
 
-  const { data: uploadedJsonFiles, isFetching, refetch } = useQuery({
-    queryKey: ['scramble-files', competitionId],
-    queryFn: () => listScrambleFiles(competitionId),
-    initialData: initialScrambleFiles,
-    refetchOnMount: false,
-  });
+  const {
+    data: uploadedJsonFiles,
+    isFetching,
+    refetch,
+  } = useScrambleFilesQuery(competitionId, initialScrambleFiles);
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: uploadScrambleFile,
@@ -72,7 +61,12 @@ export default function FileUpload({
         ],
       );
 
-      dispatchMatchState({ type: 'addScrambleFile', scrambleFile: data });
+      if (matchOnUpload) {
+        const unpackedScrSets = unpackScrambleSets(data.external_scramble_sets, autoMatchSettings);
+        const sortedScrSets = sortSetsForAutoMatch(unpackedScrSets, autoMatchSettings);
+
+        dispatchMatchState({ type: 'autoMatchScrambleSets', scrambleSets: sortedScrSets, settings: autoMatchSettings });
+      }
     },
     onError: (responseError) => setError(responseError.message),
   });
@@ -86,67 +80,46 @@ export default function FileUpload({
   const uploadNewScramble = useCallback((ev) => {
     const filesArr = Array.from(ev.target.files);
     const uploadPromises = filesArr.map(
-      (file) => mutateAsync({
-        competitionId,
-        file,
-        matchingSettings: {
-          isEnabled: matchOnUpload,
-          isRestricted: limitMatches,
-        },
-      }),
+      (file) => mutateAsync({ competitionId, file }),
     );
 
     return Promise.all(uploadPromises)
       .finally(resetFileUpload);
-  }, [competitionId, limitMatches, matchOnUpload, mutateAsync, resetFileUpload]);
+  }, [mutateAsync, competitionId, resetFileUpload]);
 
-  const clickOnInput = () => {
-    inputRef.current?.click();
-  };
+  const clickOnInput = () => inputRef.current?.click();
 
   return (
     <>
-      <MatchingProgressMessage
-        roundMatchingProgress={matchingProgress}
-        availableScrambleFiles={uploadedJsonFiles}
-      />
       <Header>
         Uploaded JSON files:
         {' '}
         {uploadedJsonFiles.length}
-        {' '}
         <Button.Group floated="right">
-          <Modal
-            closeIcon
-            trigger={<Button icon="settings" />}
-          >
-            <Modal.Header>File upload settings</Modal.Header>
-            <Modal.Content>
-              <Form>
-                <Form.Checkbox
-                  label="Automatically match scrambles when uploading a file"
-                  checked={matchOnUpload}
-                  onChange={setMatchOnUpload}
-                />
-                <Form.Checkbox
-                  label="Only match scrambles as long as there are still free, unmatched spots available"
-                  disabled={!matchOnUpload}
-                  checked={limitMatches}
-                  onChange={setLimitMatches}
-                />
-              </Form>
-            </Modal.Content>
-          </Modal>
+          <Popup
+            trigger={(
+              <Button
+                icon={matchOnUpload ? 'coffee' : 'hand paper outline'}
+                toggle
+                basic
+                active={matchOnUpload}
+                onClick={toggleMatchOnUpload}
+                disabled={isPending}
+              />
+            )}
+            content={`Auto-Match on upload: ${matchOnUpload ? 'ON' : 'OFF'}`}
+            position="left center"
+          />
           <Button
-            positive
-            icon="plus"
+            primary
+            icon="upload"
             content="Upload from TNoodle"
             onClick={clickOnInput}
             loading={isPending}
             disabled={isPending}
           />
           <Button
-            primary
+            secondary
             icon="refresh"
             content="Refresh files"
             onClick={refetch}
@@ -163,7 +136,7 @@ export default function FileUpload({
           If there is a discrepancy between the number of scramble sets
           in the JSON file and the number of groups in the round,
           {' '}
-          {limitMatches
+          {autoMatchSettings.limitMatches
             ? 'you need to manually assign the surplus scrambles below.'
             : 'you can adjust the automatic assignments below.'}
         </Header.Subheader>
@@ -179,12 +152,10 @@ export default function FileUpload({
       />
       <ScrambleFileList
         scrambleFiles={uploadedJsonFiles}
+        autoMatchSettings={autoMatchSettings}
+        pickerSectionRef={pickerSectionRef}
+        navigatePicker={navigatePicker}
         isFetching={isFetching}
-        matchState={matchState}
-        dispatchMatchState={dispatchMatchState}
-      />
-      <UnusedScramblesPanel
-        scrambleFiles={uploadedJsonFiles}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
       />

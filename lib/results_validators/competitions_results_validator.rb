@@ -34,15 +34,20 @@ module ResultsValidators
       @results.any?
     end
 
-    def competition_associations
-      @validators.map { |v| self.load_validator v }
-                 .map(&:competition_associations)
+    def competition_associations(check_real_results: false)
+      @validators.map { self.load_validator it }
+                 .map { it.competition_associations(check_real_results: check_real_results) }
                  .inject({}, :deep_merge) # default {} value for the rare case that @validators is empty.
     end
 
     def include_persons?
-      @validators.map { |v| self.load_validator v }
+      @validators.map { self.load_validator it }
                  .any?(&:include_persons?)
+    end
+
+    def include_scrambles?
+      @validators.map { self.load_validator it }
+                 .any?(&:include_scrambles?)
     end
 
     protected def validate_competitions(competition_ids, check_real_results)

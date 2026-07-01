@@ -6,6 +6,7 @@ import { auth } from "@/auth";
 export interface PermissionFunctions {
   canAccessPanel: (panel: string) => boolean;
   canAdministerCompetition: (competition: string) => boolean;
+  canScoretakeCompetition: (competition: string) => boolean;
   canAttendCompetition: (competition: string) => boolean;
   canOrganizeCompetitions: (competition: string) => boolean;
   canEditDelegateReport: (competition: string) => boolean;
@@ -44,6 +45,14 @@ export const hydrateUserPermissions = (
       allOrSpecificScope(
         competition,
         rawPermissions.can_administer_competitions.scope,
+      ),
+    ),
+  canScoretakeCompetition: (competition) =>
+    Boolean(
+      rawPermissions &&
+      allOrSpecificScope(
+        competition,
+        rawPermissions.can_scoretake_competitions.scope,
       ),
     ),
   canAttendCompetition: (competition) =>

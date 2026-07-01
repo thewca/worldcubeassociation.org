@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Message, Segment } from 'semantic-ui-react';
+import _ from 'lodash';
 import CalendarView from './CalendarView';
 import TableView from './TableView';
 import TimeZoneSelector from './TimeZone';
@@ -17,11 +18,24 @@ export default function Schedule({
   wcifEvents,
   competitionName,
   calendarLocale,
+  linkedRounds,
 }) {
-  // venues
+  // venues & time zones
 
   const { venues } = wcifSchedule;
+
   const mainVenueIndex = 0;
+  const uniqueTimeZones = _.uniq(venues.map((venue) => venue.timezone));
+  const timeZoneCount = uniqueTimeZones.length;
+
+  const [
+    autoUpdateTimeZoneToMatchSelectedVenue,
+    setAutoUpdateTimeZoneToMatchSelectedVenue,
+  ] = useState(true);
+  const [activeTimeZone, setActiveTimeZone] = useState(
+    timeZoneCount === 1 ? venues[mainVenueIndex].timezone : null,
+  );
+
   const venueCount = venues.length;
   const [activeVenueIndex, setActiveVenueIndex] = useState(-1);
   // eslint-disable-next-line no-nested-ternary
@@ -30,19 +44,13 @@ export default function Schedule({
     : activeVenueIndex !== -1
       ? venues[activeVenueIndex]
       : null;
-  const activeVenues = activeVenueOrNull ? [activeVenueOrNull] : venues;
-
-  // time zones
-
-  const [followVenueSelection, setFollowVenueSelection] = useState(true);
-  const [activeTimeZone, setActiveTimeZone] = useState(venues[mainVenueIndex].timezone);
-
-  const uniqueTimeZones = [...new Set(venues.map((venue) => venue.timezone))];
-  const timeZoneCount = uniqueTimeZones.length;
+  const defaultActiveVenues = activeTimeZone ? venues : [];
+  const activeVenues = activeVenueOrNull ? [activeVenueOrNull] : defaultActiveVenues;
+  const anyVenueIsActive = activeVenues.length > 0;
 
   const setActiveVenueIndexAndUpdateTimeZone = (newIndex) => {
     // First tab represents "all" and has index -1
-    if (newIndex >= 0 && followVenueSelection) {
+    if (newIndex >= 0 && autoUpdateTimeZoneToMatchSelectedVenue) {
       const venueTimeZone = venues[newIndex].timezone;
       setActiveTimeZone(venueTimeZone);
     }
@@ -81,14 +89,6 @@ export default function Schedule({
 
   return (
     <>
-      {timeZoneCount > 1 && (
-        <Message warning>
-          <Message.Content>
-            {I18n.t('competitions.schedule.multiple_timezones_available')}
-          </Message.Content>
-        </Message>
-      )}
-
       <Message>
         <Message.Content>
           {I18n.t('competitions.schedule.schedule_change_warning')}
@@ -97,9 +97,10 @@ export default function Schedule({
 
       <VenuesAndRooms
         venues={venues}
+        anyVenueIsActive={anyVenueIsActive}
         activeVenueOrNull={activeVenueOrNull}
         activeVenueIndex={activeVenueIndex}
-        setActiveVenueIndex={setActiveVenueIndexAndUpdateTimeZone}
+        onVenueClick={setActiveVenueIndexAndUpdateTimeZone}
         timeZoneCount={timeZoneCount}
         rooms={roomsOfActiveVenues}
         activeRoomIds={activeRoomIds.asArray}
@@ -108,47 +109,66 @@ export default function Schedule({
         setActiveTimeZone={setActiveTimeZone}
       />
 
-      <Segment>
-        <EventSelector
-          eventList={availableEventIds}
-          selectedEvents={activeEventIds.asArray}
-          onEventClick={activeEventIds.toggle}
-          onAllClick={() => activeEventIds.update(availableEventIds)}
-          onClearClick={activeEventIds.clear}
-        />
-      </Segment>
-
-      <TimeZoneSelector
-        activeVenueOrNull={activeVenueOrNull}
-        hasMultipleVenues={venueCount > 1}
-        activeTimeZone={activeTimeZone}
-        setActiveTimeZone={setActiveTimeZone}
-        followVenueSelection={followVenueSelection}
-        setFollowVenueSelection={setFollowVenueSelection}
-      />
-
-      <ViewSelector activeView={activeView} setActiveView={setActiveView} />
-
-      {activeView === 'calendar' ? (
-        <CalendarView
-          dates={activeDates}
-          timeZone={activeTimeZone}
-          activeVenues={activeVenues}
-          activeRooms={activeRooms}
-          activeEventIds={activeEventIds.asArray}
-          calendarLocale={calendarLocale}
-          wcifEvents={wcifEvents}
-        />
-      ) : (
-        <TableView
-          dates={activeDates}
-          timeZone={activeTimeZone}
-          activeRooms={activeRooms}
-          activeEvents={activeEvents}
+      {anyVenueIsActive && (
+        <TimeZoneSelector
           activeVenueOrNull={activeVenueOrNull}
-          competitionName={competitionName}
-          wcifEvents={wcifEvents}
+          hasMultipleVenues={venueCount > 1}
+          activeTimeZone={activeTimeZone}
+          setActiveTimeZone={setActiveTimeZone}
+          autoUpdateTimeZoneToMatchSelectedVenue={autoUpdateTimeZoneToMatchSelectedVenue}
+          setAutoUpdateTimeZoneToMatchSelectedVenue={setAutoUpdateTimeZoneToMatchSelectedVenue}
         />
+      )}
+
+      {anyVenueIsActive && (
+        <Segment>
+          <EventSelector
+            eventList={availableEventIds}
+            selectedEvents={activeEventIds.asArray}
+            onEventClick={activeEventIds.toggle}
+            onAllClick={() => activeEventIds.update(availableEventIds)}
+            onClearClick={activeEventIds.clear}
+          />
+        </Segment>
+      )}
+
+      {activeTimeZone ? (
+        <>
+          <ViewSelector activeView={activeView} setActiveView={setActiveView} />
+
+          {activeView === 'calendar' ? (
+            <CalendarView
+              dates={activeDates}
+              timeZone={activeTimeZone}
+              activeVenues={activeVenues}
+              activeRooms={activeRooms}
+              activeEventIds={activeEventIds.asArray}
+              calendarLocale={calendarLocale}
+              wcifEvents={wcifEvents}
+              linkedRounds={linkedRounds}
+            />
+          ) : (
+            <TableView
+              dates={activeDates}
+              timeZone={activeTimeZone}
+              activeRooms={activeRooms}
+              activeEvents={activeEvents}
+              activeVenueOrNull={activeVenueOrNull}
+              competitionName={competitionName}
+              wcifEvents={wcifEvents}
+              linkedRounds={linkedRounds}
+            />
+          )}
+        </>
+      ) : (
+        <Message warning size="massive">
+          <Message.Header>
+            {I18n.t('competitions.schedule.multiple_timezones_available')}
+          </Message.Header>
+          <Message.Content>
+            {I18n.t('competitions.schedule.select_a_venue_to_view')}
+          </Message.Content>
+        </Message>
       )}
     </>
   );

@@ -2,6 +2,7 @@ type: object
 required:
   - can_access_panels
   - can_administer_competitions
+  - can_scoretake_competitions
   - can_attend_competitions
   - can_create_groups
   - can_edit_delegate_report
@@ -32,6 +33,13 @@ properties:
       scope:
         $ref: "./CompetitionPermissions.yaml"
   can_administer_competitions:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+  can_scoretake_competitions:
     type: object
     required:
       - scope

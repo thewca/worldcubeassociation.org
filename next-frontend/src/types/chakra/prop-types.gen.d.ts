@@ -45,7 +45,7 @@ export interface UtilityValues {
     | "yellow.cubeShades"
     | "link"
     | "recordMarkers"
-    | "white.cubeShades"
+    | "wcaWhite.cubeShades"
     | "black.cubeShades"
   background: Tokens["colors"] | "currentBg"
   backgroundColor: Tokens["colors"] | "currentBg"
@@ -324,4 +324,6 @@ export interface UtilityValues {
     | "slide-to-right"
     | "scale-in"
     | "scale-out"
+    | "marqueeX"
+    | "marqueeY"
 }

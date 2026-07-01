@@ -18,6 +18,7 @@ FactoryBot.define do
       starts { 1.year.ago }
       ends { starts }
       event_ids { %w[333 333oh 555 pyram minx 222 444] }
+      h2h_finals_event_ids { nil }
 
       today { Time.now.utc.iso8601 }
       next_month { 1.month.from_now.iso8601 }
@@ -241,6 +242,11 @@ FactoryBot.define do
       delegates { [FactoryBot.create(:delegate)] }
     end
 
+    trait :with_lead_delegate do
+      with_delegate
+      lead_delegate { delegates.first }
+    end
+
     trait :with_trainee_delegate do
       delegates { [FactoryBot.create(:trainee_delegate)] }
     end
@@ -288,6 +294,14 @@ FactoryBot.define do
         rounds.each do |round|
           FactoryBot.create(:inbox_result, competition: competition, person_id: person.ref_id, event_id: round.event.id, format_id: round.format.id, round: round)
           FactoryBot.create_list(:scramble, 5, competition: competition, event_id: round.event.id, format_id: round.format.id, round: round)
+
+          matched_scr_set = FactoryBot.create(:matched_scramble_set, round: round)
+
+          5.times do |i|
+            # When using `create_list`, it tries to create everything with `ordered_index` eq 0
+            #   and THEN passes it to the `do` block, but that's too late because at this point the SQL `UNIQUE` constraint already failed.
+            FactoryBot.create(:matched_scramble, matched_scramble_set: matched_scr_set, ordered_index: i)
+          end
         end
       end
     end
@@ -328,6 +342,7 @@ FactoryBot.define do
 
     trait :confirmed do
       with_delegate
+      with_lead_delegate
       with_organizer
       with_valid_schedule
       confirmed_at { Time.now }
@@ -339,6 +354,7 @@ FactoryBot.define do
 
     trait :visible do
       with_delegate
+      with_lead_delegate
       with_organizer
       show_at_all { true }
     end
@@ -430,12 +446,26 @@ FactoryBot.define do
           next if ce.rounds.any?
 
           evaluator.rounds_per_event.times do |i|
-            ce.rounds.create!(
-              format: ce.event.preferred_formats.first.format,
-              number: i + 1,
-              total_number_of_rounds: evaluator.rounds_per_event,
-              scramble_set_count: evaluator.groups_per_round,
-            )
+            participation_source = i == 0 ? ce : ce.rounds.last
+
+            if evaluator.h2h_finals_event_ids&.include?(ce.event_id)
+              ce.rounds.create!(
+                format: Format.find("h"),
+                number: i + 1,
+                total_number_of_rounds: evaluator.rounds_per_event,
+                scramble_set_count: evaluator.groups_per_round,
+                participation_source: participation_source,
+                is_h2h_mock: true,
+              )
+            else
+              ce.rounds.create!(
+                format: ce.event.preferred_formats.first.format,
+                number: i + 1,
+                total_number_of_rounds: evaluator.rounds_per_event,
+                scramble_set_count: evaluator.groups_per_round,
+                participation_source: participation_source,
+              )
+            end
           end
         end
       end

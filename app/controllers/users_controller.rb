@@ -6,7 +6,8 @@ class UsersController < ApplicationController
   before_action :check_recent_auth_dangerous, only: %i[update], if: :dangerous_profile_change?
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
   before_action :redirect_if_cannot_edit_user, only: %i[edit update]
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search merge]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search]
+  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id merge clear_claim_wca_id]
   before_action -> { check_edit_access }, only: %i[show_for_edit update_user_data]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
@@ -105,6 +106,60 @@ class UsersController < ApplicationController
     return render status: :bad_request, json: { error: "Cannot merge users with both having a WCA ID" } if to_user.wca_id.present? && from_user.wca_id.present?
 
     from_user.transfer_data_to(to_user)
+
+    render status: :ok, json: { success: true }
+  end
+
+  def confirm_wca_id
+    user = User.find(params.require(:userId))
+    wca_id = params.require(:wcaId)
+    person = Person.find_by(wca_id: wca_id)
+
+    if person.nil?
+      error = "WCA ID #{wca_id} does not exist."
+      status = :not_found
+    elsif user.wca_id.present?
+      error = "User already has a WCA ID: #{user.wca_id}."
+      status = :bad_request
+    elsif person.user.present?
+      error = "WCA ID #{wca_id} is already assigned to another user."
+      status = :bad_request
+    end
+
+    respond_to do |format|
+      if error.present?
+        format.json { render status: status, json: { error: error } }
+        format.html { redirect_to edit_user_path(user), flash: { danger: error } }
+      else
+        ActiveRecord::Base.transaction do
+          user.assign_wca_id(wca_id)
+          user.update!(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+        end
+        format.json { render status: :ok, json: { success: true } }
+        format.html { redirect_to edit_user_path(user), flash: { success: "Successfully confirmed WCA ID #{wca_id}." } }
+      end
+    end
+  end
+
+  def clear_claim_wca_id
+    user = User.find(params.require(:userId))
+    wca_id = user.unconfirmed_wca_id
+
+    user.update!(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+
+    redirect_to edit_user_path(user), flash: { success: "Successfully cleared claim for WCA ID #{wca_id}." }
+  end
+
+  def assign_wca_id
+    user = User.find(params.require(:userId))
+    wca_id = params.require(:wcaId)
+    person = Person.find_by(wca_id: wca_id)
+
+    return render status: :not_found, json: { error: "WCA ID #{wca_id} does not exist" } if person.nil?
+    return render status: :bad_request, json: { error: "User already has a WCA ID: #{user.wca_id}" } if user.wca_id.present?
+    return render status: :bad_request, json: { error: "WCA ID #{wca_id} is already assigned to user #{person.user.id}" } if person.user.present?
+
+    user.assign_wca_id(wca_id)
 
     render status: :ok, json: { success: true }
   end
@@ -425,7 +480,7 @@ class UsersController < ApplicationController
                        .order(start_date: :desc)
 
     render json: competitions.as_json(
-      only: %w[id name city_name country_id start_date],
+      only: %w[id name city_name country_id start_date lead_delegate_id],
     )
   end
 

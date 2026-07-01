@@ -8,9 +8,9 @@ class TicketsEditPerson < ApplicationRecord
     closed: "closed",
   }
 
-  has_one :ticket, as: :metadata
-  has_many :tickets_edit_person_fields
-  belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :wca_id
+  has_one :ticket, as: :metadata, dependent: :destroy
+  has_many :tickets_edit_person_fields, dependent: :destroy
+  belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :wca_id, inverse_of: :tickets_edit_person
 
   ACTION_TYPE = {
     approve_edit_person_request: "approve_edit_person_request",
@@ -34,6 +34,15 @@ class TicketsEditPerson < ApplicationRecord
     else
       []
     end
+  end
+
+  def eligible_roles_for_bcc(user)
+    return [] unless user.admin?
+
+    [
+      TicketStakeholder.stakeholder_roles[:actioner],
+      TicketStakeholder.stakeholder_roles[:requester],
+    ]
   end
 
   def self.create_ticket(wca_id, changes_requested, requester)

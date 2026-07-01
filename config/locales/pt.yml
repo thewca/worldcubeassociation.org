@@ -1007,6 +1007,8 @@ pt:
       contact_wrt:
         #original_hash: 603a218
         wca_id: ID da WCA
+    #original_hash: 687d968
+    competition_link_html: 'Clique <a href=''%{url}''>aqui</a> para visitar a página da competição'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -1981,6 +1983,8 @@ pt:
       profile: Perfil
       #original_hash: 7b2c7f1
       approve: Aprovar
+      #original_hash: d9455bf
+      approve_confirm: 'Tem a certeza de que pretende aprovar o ID WCA %{wca_id}?'
       #original_hash: 85de4b8
       unconfirmed_email: 'O endereço de email desta conta (%{email}) não foi confirmado.'
       #original_hash: 7069007
@@ -2797,6 +2801,8 @@ pt:
         de espera. Se estiver a usar uma lista de espera, por favor especifique
         um prazo. Se não estiver a usar uma lista de espera, lembre-se de
         especificar isto nos requisitos de inscrição.
+      #original_hash: 51376ef
+      schedule_locked_after_results_submitted: O cronograma não poderá ser editado após a submissão dos resultados.
     live:
       #original_hash: 10d1a3c
       title: Resultados em direto
@@ -2807,6 +2813,11 @@ pt:
         connected: 'Ligado, os resultados estão a ser atualizados.'
         #original_hash: 53abaa2
         disconnected: 'Ligação perdida, os resultados não estão a ser atualizados'
+      podiums:
+        #original_hash: 02ae2bd
+        title: Pódios
+        #original_hash: d7297a7
+        undetermined: Pódios a determinar
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
@@ -3032,14 +3043,20 @@ pt:
       no_winner: >-
         O evento principal foi %{event_name}. Nenhum vencedor foi declarado, já
         que nenhum competidor obteve resultados positivos no evento.
+      #original_hash: 5262865
+      h2h_winner: '%{winner} venceu a final frente a frente do evento %{event_name}.'
       #original_hash: 6c3b236
       winner: '%{winner} ganhou %{result_sentence} no evento %{event_name}.'
       #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up} acabou em segundo (%{first_runner_up_result})'
+      #original_hash: 2926d10
+      h2h_first_runner_up: '%{first_runner_up} terminou em segundo lugar'
       #original_hash: cffa50a
       and: e
       #original_hash: 67d285c
       second_runner_up: '%{second_runner_up} ficou em terceiro (%{second_runner_up_result}).'
+      #original_hash: 157b649
+      h2h_second_runner_up: '%{second_runner_up} acabou em terceiro lugar.'
       records:
         #original_hash: 0658e11
         wr: Recordes mundiais
@@ -3247,10 +3264,10 @@ pt:
         Tem a certeza que está pronto para confirmar? Depois disto, não poderá
         modificar qualquer informação. Verifique o seu email após confirmar para
         se certificar de que a Equipa de Competições da WCA foi notificada.
-      #original_hash: 4c7deb7
+      #original_hash: 89fbbca
       submit_delete: >-
-        Tem a certeza que quer excluir esta competição? Não será possível
-        reverter isto.
+        Esta ação não pode ser revertida. Por favor preencha o ID da competição
+        "%{competition_id}" para confirmar a sua remoção.
       #original_hash: 8ebebca
       coordinates: Coordenadas
       #original_hash: a672984
@@ -4565,6 +4582,12 @@ pt:
         #original_hash: c4622c3
         scrambles: Embaralhamentos
     results_table:
+      #original_hash: bdbfcdc
+      h2h_results_disclaimer: >-
+        Os resultados foram determinados por uma Final Frente a Frente. Apenas a
+        ordem de classificação e a melhor resolução são apresentadas, uma vez
+        que a exibição completa dos resultados de Finais Frente a Frente ainda
+        está em desenvolvimento.
       #original_hash: 3e9a6b5
       wca_profile: Perfil da WCA
       #original_hash: ad8919a
@@ -5160,12 +5183,12 @@ pt:
   about:
     #original_hash: 9ac918a
     title: Sobre a WCA
-    #original_hash: af00571
+    #original_hash: ee35764
     mission_statement: >-
-      A nossa missão é ter mais competições em mais países com mais pessoas e
-      mais divertimento, sob condições justas e semelhantes.
-    #original_hash: e627278
-    mission_footer: Declaração da Missão da WCA
+      O nosso Propósito é fortalecer a comunidade global de speedcubing e manter
+      um ambiente competitivo, divertido e justo para todos.
+    #original_hash: 5bed828
+    mission_footer: Declaração do Propósito da WCA
     #original_hash: cdab446
     who_we_are_title: Quem somos
     #original_hash: 303f17a
@@ -6272,7 +6295,7 @@ pt:
         ao registo atual na base de dados da WCA ('%{expected_country}'). Se
         isto for um erro, corrija-o. Caso contrário, deixe um comentário para a
         WRT sobre isso.
-      #original_hash: e15e700
+      #original_hash: 6179b35
       multiple_newcomers_with_same_name_warning: >-
         Existem vários novos competidores com exatamente o mesmo nome: %{name}.
         Certifique-se de que todos os resultados estão corretos para estes
@@ -6282,6 +6305,11 @@ pt:
       wrong_parenthesis_type_error: >-
         O parêntesis utilizado em '%{name}' é um caracter irregular. Substitua-o
         por um parêntesis regular '(' ou ')' e com um espaçamento adequado.
+      #original_hash: fec0347
+      special_characters_in_name_warning: >-
+        O nome '%{name}' contém caracteres especiais inválidos (como números,
+        aspas ou outros símbolos). Os nomes devem conter apenas letras, espaços,
+        hífens, apóstrofos, pontos e parêntesis comuns.
       #original_hash: 4b90583
       successive_uppercase_name_warning: >-
         '%{name}' tem letras maiúsculas consecutivas no seu nome. Por favor,
@@ -6498,3 +6526,8 @@ pt:
       edit_person: Editar Pessoa
       #original_hash: 5fb2137
       competition_result: Resultado de Competição
+    stakeholder_role:
+      #original_hash: e095187
+      actioner: Executor
+      #original_hash: bcdf8d3
+      requester: Solicitante

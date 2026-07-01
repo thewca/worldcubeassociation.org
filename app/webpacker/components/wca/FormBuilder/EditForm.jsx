@@ -41,6 +41,7 @@ export function FormActionButton({
   mutation,
   enabled = true,
   confirmationMessage = null,
+  confirmationOptions = {},
   buttonText = null,
   buttonProps,
   onUnload,
@@ -55,9 +56,10 @@ export function FormActionButton({
     if (confirmationMessage) {
       confirm({
         content: confirmationMessage,
+        ...confirmationOptions,
       }).then(safeMutation);
     } else safeMutation();
-  }, [confirm, confirmationMessage, safeMutation]);
+  }, [confirm, confirmationMessage, confirmationOptions, safeMutation]);
 
   if (!enabled) return null;
 

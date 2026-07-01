@@ -13,7 +13,7 @@ class TicketsCompetitionResult < ApplicationRecord
     posted: "posted",
   }
 
-  has_one :ticket, as: :metadata
+  has_one :ticket, as: :metadata, dependent: :destroy
   belongs_to :competition
 
   ACTION_TYPE = {
@@ -30,6 +30,15 @@ class TicketsCompetitionResult < ApplicationRecord
     else
       []
     end
+  end
+
+  def eligible_roles_for_bcc(user)
+    return [] unless user.admin?
+
+    [
+      TicketStakeholder.stakeholder_roles[:actioner],
+      TicketStakeholder.stakeholder_roles[:requester],
+    ]
   end
 
   def self.create_ticket!(competition, delegate_message, submitted_delegate)
@@ -74,6 +83,10 @@ class TicketsCompetitionResult < ApplicationRecord
 
       self.update!(status: TicketsCompetitionResult.statuses[:merged_inbox_results])
     end
+  end
+
+  def page_title
+    competition.name
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

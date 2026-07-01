@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
-import { Label } from 'semantic-ui-react';
+import { Form, Label } from 'semantic-ui-react';
 import useInputState from '../../../../lib/hooks/useInputState';
 import { roundIdToString } from '../../../../lib/utils/wcif';
 import ButtonActivatedModal from '../ButtonActivatedModal';
@@ -10,6 +10,7 @@ import AttemptResultField from '../../../EditResult/WCALive/AttemptResultField/A
 import { matchResult } from '../../../../lib/utils/edit-events';
 import AdvancementTypeField from './AdvancementTypeInput';
 import MbldPointsField from '../../../EditResult/WCALive/AttemptResultField/MbldPointsField';
+import { v2RulesetToV1Condition } from '../../utils';
 
 const MIN_ADVANCE_PERCENT = 1;
 const MAX_ADVANCE_PERCENT = 75;
@@ -33,6 +34,8 @@ function advanceReqToStrShort(eventId, advancementCondition) {
       return matchResult(advancementCondition.level, eventId, {
         short: true,
       });
+    case 'dual':
+      return 'Dual Round';
     default:
       throw new Error(
         `Unrecognized advancementCondition type: ${advancementCondition.type}`,
@@ -53,6 +56,8 @@ const advanceReqToExplanationText = (wcifEvent, roundNumber, { type, level }) =>
     case 'attemptResult':
       return `Everyone in round ${roundNumber} with a result ${matchResult(level, wcifEvent.id)
       } will advance to round ${roundNumber + 1}.`;
+    case 'dual':
+      return `Rounds ${roundNumber} and ${roundNumber + 1} will be run as a Dual Round.`;
     default:
       return '';
   }
@@ -127,8 +132,9 @@ const defaultValueAdvancementValue = (type) => (type === 'percent' ? 75 : 0);
 export default function EditAdvancementConditionModal({
   wcifEvent, wcifRound, roundNumber, disabled,
 }) {
-  const { advancementCondition } = wcifRound;
   const dispatch = useDispatch();
+
+  const advancementCondition = v2RulesetToV1Condition(wcifRound, wcifEvent, roundNumber);
 
   const [type, setType] = useInputState(advancementCondition?.type ?? '');
   const [level, setLevel] = useState(advancementCondition?.level
@@ -165,11 +171,24 @@ export default function EditAdvancementConditionModal({
       <AdvancementTypeField
         advancementType={type}
         onChange={setType}
+        roundNumber={roundNumber}
       />
+      <p>
+        If you would like to use Dual Rounds, please make sure that
+        the scoretaking software is configured as &apos;Internal Live Results&apos;
+      </p>
       {!!type && (
         <>
-          <AdvancementInput eventId={wcifEvent.id} type={type} level={level} onChange={setLevel} />
-          <br />
+          {type !== 'dual' && (
+            <Form.Field>
+              <AdvancementInput
+                eventId={wcifEvent.id}
+                type={type}
+                level={level}
+                onChange={setLevel}
+              />
+            </Form.Field>
+          )}
           <p>
             {advanceReqToExplanationText(wcifEvent, roundNumber, { type, level })}
           </p>

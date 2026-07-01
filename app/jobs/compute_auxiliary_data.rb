@@ -63,8 +63,7 @@ class ComputeAuxiliaryData < WcaCronjob
       FROM (
         SELECT MIN(value_and_id) value_and_id
         FROM concise_#{type}_results results
-        WHERE #{column} > 0
-          AND event_id = '#{event_id}'
+        WHERE event_id = '#{event_id}'
         GROUP BY person_id
         ORDER BY value_and_id
         LIMIT 100

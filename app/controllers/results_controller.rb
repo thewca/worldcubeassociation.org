@@ -39,7 +39,7 @@ class ResultsController < ApplicationController
     params[:show] ||= SHOW_100_PERSONS
     params[:gender] ||= GENDER_ALL
 
-    params[:show] = params[:show].gsub(/\d+/, "100") # FIXME: this is disabling anything except show 100 for now
+    params[:show] = params[:show]&.gsub(/\d+/, "100") # FIXME: this is disabling anything except show 100 for now
 
     shared_constants_and_conditions
 
@@ -54,7 +54,7 @@ class ResultsController < ApplicationController
     type_param = params[:type]
 
     @is_by_region = params[:show] == "by region"
-    splitted_show_param = params[:show].split
+    splitted_show_param = params[:show]&.split
     @show = splitted_show_param[0].to_i
     @is_persons = splitted_show_param[1] == "persons"
     @is_results = splitted_show_param[1] == "results"
@@ -71,7 +71,7 @@ class ResultsController < ApplicationController
           SELECT MIN(value_and_id) value_and_id
           FROM concise_#{type_param}_results results
           #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
-          WHERE #{value} > 0
+          WHERE 1
             #{@event_condition}
             #{@years_condition_result}
             #{@region_condition}
@@ -280,15 +280,15 @@ class ResultsController < ApplicationController
     rows
       .group_by { |row| row["event_id"] }
       .each_value do |event_rows|
-      singles, averages = event_rows.partition { |row| row["type"] == "single" }
-      balance = singles.size - averages.size
-      if balance.negative?
-        singles += Array.new(-balance, nil)
-      elsif balance.positive?
-        averages += Array.new(balance, nil)
-      end
-      single_rows += singles
-      average_rows += averages
+        singles, averages = event_rows.partition { |row| row["type"] == "single" }
+        balance = singles.size - averages.size
+        if balance.negative?
+          singles += Array.new(-balance, nil)
+        elsif balance.positive?
+          averages += Array.new(balance, nil)
+        end
+        single_rows += singles
+        average_rows += averages
     end
 
     slim_rows = single_rows.zip(average_rows)
@@ -330,17 +330,17 @@ class ResultsController < ApplicationController
                         end
 
     @is_all_years = params[:years] == YEARS_ALL
-    splitted_years_param = params[:years].split
+    splitted_years_param = params[:years]&.split
     @is_only = splitted_years_param[0] == "only"
     @is_until = splitted_years_param[0] == "until"
     @year = splitted_years_param[1].to_i
 
     if @is_only
       @years_condition_competition = "AND YEAR(competitions.start_date) = #{@year}"
-      @years_condition_result = "AND results.year = #{@year}"
+      @years_condition_result = "AND results.reg_year = #{@year}"
     elsif @is_until
       @years_condition_competition = "AND YEAR(competitions.start_date) <= #{@year}"
-      @years_condition_result = "AND results.year <= #{@year}"
+      @years_condition_result = "AND results.reg_year <= #{@year}"
     else
       @years_condition_competition = ""
       @years_condition_result = ""
@@ -400,20 +400,25 @@ class ResultsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        cached_data = Rails.cache.fetch [key_prefix, *@cache_params, @record_timestamp] do
+        cached_data = Rails.cache.fetch [key_prefix, "augmented", *@cache_params, @record_timestamp] do
           rows = DbHelper.execute_cached_query(@cache_params, @record_timestamp, @query)
 
           # First, extract unique competitions
-          comp_ids = rows.map { |r| r["competition_id"] }.uniq
+          comp_ids = rows.pluck("competition_id").uniq
           competitions_by_id = Competition.where(id: comp_ids)
                                           .index_by(&:id)
                                           .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cell_name id]) }
+
+          # Then extract result_attempts, because joining them above
+          #   would be too expensive and also too cumbersome with the sorting by `attempt_number`
+          rows = Result.augment_attempts(rows)
 
           # Now that we've remembered all competitions, we can safely transform the rows
           rows = yield rows if block_given?
 
           {
-            rows: rows.as_json, competitionsById: competitions_by_id
+            rows: rows,
+            competitionsById: competitions_by_id,
           }
         end
         render json: cached_data

@@ -3,6 +3,9 @@ import { markdownConvertedField } from "@/collections/helpers";
 
 export const Announcements: CollectionConfig = {
   slug: "announcements",
+  admin: {
+    useAsTitle: "title",
+  },
   fields: [
     {
       name: "image",
@@ -20,6 +23,14 @@ export const Announcements: CollectionConfig = {
       required: true,
     },
     markdownConvertedField("content"),
+    {
+      name: "url",
+      type: "text",
+      admin: {
+        description:
+          "Optional. When set, the 'Read More' button links to this URL instead of expanding the content.",
+      },
+    },
     {
       name: "publishedAt",
       type: "date",

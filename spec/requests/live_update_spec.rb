@@ -3,23 +3,25 @@
 require "rails_helper"
 
 RSpec.describe "WCA Live API" do
-  describe "POST #add_result" do
+  describe "PATCH #add_or_update_result" do
     let!(:delegate) { create(:delegate) }
 
     it "Updates a Live Result Correctly" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
       create(:live_result, round: round, registration: registration)
       live_request = {
-        attempts: [111, 222, 333, 444, 555],
+        attempts: [{ value: 111, attempt_number: 1 }, { value: 222, attempt_number: 2 }, { value: 333, attempt_number: 3 }, { value: 444, attempt_number: 4 }, { value: 555, attempt_number: 5 }],
         registration_id: registration.id,
       }
 
-      patch update_live_result_path(competition.id, round.id), params: live_request
+      patch api_v1_competition_live_update_results_path(competition.id, round.wcif_id), params: live_request
       expect(response).to be_successful
+
+      perform_enqueued_jobs
 
       result = LiveResult.find_by(round_id: round.id, registration_id: registration.id)
       expect(result).to be_present
@@ -33,19 +35,41 @@ RSpec.describe "WCA Live API" do
       expect(result.average).to eq 333
     end
 
+    it "Clears a live result correctly" do
+      sign_in delegate
+
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333")
+      registration = create(:registration, :accepted, competition: competition)
+      create(:live_result, round: round, registration: registration)
+
+      expect do
+        put api_v1_competition_live_clear_competitor_in_round_path(competition.id, round.wcif_id, registration.id)
+      end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, round.wcif_id))
+        .from_channel(ApplicationCable::Channel)
+        .with(hash_including("updated" => [Live::DiffHelper.compress_payload({ "registration_id" => registration.id, "average" => 0, "best" => 0, "live_attempts" => [], "bpa" => 1, wpa: -1 })]))
+
+      result = LiveResult.find_by(round_id: round.id, registration_id: registration.id)
+      expect(result).to be_present
+
+      expect(result.live_attempts).to be_empty
+      expect(result.best).to eq 0
+      expect(result.average).to eq 0
+    end
+
     it "Can't update result if it doesn't exist" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
 
       live_request = {
-        attempts: [111, 222, 333, 444, 555],
+        attempts: [{ value: 111, attempt_number: 1 }, { value: 222, attempt_number: 2 }, { value: 333, attempt_number: 3 }, { value: 444, attempt_number: 4 }, { value: 555, attempt_number: 5 }],
         registration_id: registration.id,
       }
 
-      patch update_live_result_path(competition.id, round.id), params: live_request
+      patch api_v1_competition_live_update_results_path(competition.id, round.wcif_id), params: live_request
       expect(response).not_to be_successful
     end
   end

@@ -43,6 +43,18 @@ data "aws_iam_policy_document" "notification_access" {
 
     resources = [aws_sns_topic.deploy_notifications.arn]
   }
+
+  statement {
+    sid     = "AllowEventBridgePublish"
+    actions = ["sns:Publish"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["events.amazonaws.com"]
+    }
+
+    resources = [aws_sns_topic.deploy_notifications.arn]
+  }
 }
 
 resource "aws_sns_topic_policy" "default" {

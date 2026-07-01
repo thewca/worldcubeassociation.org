@@ -28,10 +28,17 @@ module ResultsValidators
       false
     end
 
-    def competition_associations
+    def competition_associations(check_real_results: false)
       {
         rounds: [:competition_event],
       }
+    end
+
+    # Sort key matching Result.merged_dual_rounds: primary score (average or best per format,
+    # with DNF/<=0 ranked worst), then best, then id. Lower sorts first (better).
+    private def dual_round_sort_key(result)
+      primary = result.format.sort_by == "average" ? result.average : result.best
+      [primary <= 0 ? 1 : 0, primary, result.best <= 0 ? 1 : 0, result.best, result.id]
     end
 
     def run_validation(validator_data)
@@ -43,9 +50,12 @@ module ResultsValidators
         results_by_event_id.each do |event_id, results_for_event|
           results_by_round_id = results_for_event.group_by(&:round_id)
 
+          # We are filtering out H2H finals as their results are loaded via a different process until we transition
+          # all results to be loaded via the live_results/live_attempts pipeline. See #13200 for more information.
           rounds_without_deprecated_types = competition.rounds
                                                        .filter { it.event_id == event_id }
                                                        .reject { IGNORE_ROUND_TYPES.include?(it.round_type_id) }
+                                                       .reject(&:is_h2h_mock?)
 
           previous_round = nil
 
@@ -76,7 +86,14 @@ module ResultsValidators
             end
 
             if previous_round.present?
-              previous_results = results_by_round_id[previous_round.id]
+              # Linked (dual) rounds are run as a single combined round, so the previous results
+              # are the union of the previous round and any of its colinked rounds, keeping only
+              # each competitor's best result (mirrors Result.merged_dual_rounds).
+              previous_round_ids = [previous_round.id, *previous_round.colinked_rounds.ids]
+              previous_results = previous_round_ids
+                                 .flat_map { |id| results_by_round_id[id] || [] }
+                                 .group_by(&:person_id)
+                                 .map { |_, person_results| person_results.min_by { |r| dual_round_sort_key(r) } }
               number_of_people_in_previous_round = previous_results.size
               condition = previous_round.advancement_condition
 
@@ -98,6 +115,10 @@ module ResultsValidators
                 end
               end
 
+              # Dual Rounds per https://www.worldcubeassociation.org/regulations/#9v5 do not need checks
+              #   on their advancement criteria, because everyone will advance anyways (and that's fine)
+              is_within_dual_round = round.linked_round.present? && previous_round.linked_round.present?
+
               # Article 9p, since July 20, 2006 until April 13, 2010
               if comp_start_date.between?(Date.new(2006, 7, 20), Date.new(2010, 4, 13))
                 if number_of_people_in_round >= number_of_people_in_previous_round
@@ -105,7 +126,7 @@ module ResultsValidators
                                                  :rounds, competition.id,
                                                  round_id: round.human_id)
                 end
-              else
+              elsif !is_within_dual_round
                 max_advancing = 3 * number_of_people_in_previous_round / 4
                 # Article 9p1, since April 14, 2010
                 # https://www.worldcubeassociation.org/regulations/#9p1: At least 25% of competitors must be eliminated between consecutive rounds of the same event.

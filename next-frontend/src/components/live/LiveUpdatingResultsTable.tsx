@@ -1,83 +1,197 @@
 "use client";
 
-import { components } from "@/types/openapi";
-import { useCallback, useState } from "react";
-import useResultsSubscription, {
-  DiffedLiveResult,
-  DiffProtocolResponse,
-} from "@/lib/hooks/useResultsSubscription";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
-import { Heading, HStack, VStack } from "@chakra-ui/react";
+import {
+  Heading,
+  HStack,
+  Spacer,
+  IconButton,
+  Switch,
+  VStack,
+  Link,
+} from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
-
-function applyDiff(
-  previousResults: components["schemas"]["LiveResult"][],
-  updated: DiffedLiveResult[],
-  created: components["schemas"]["LiveResult"][],
-  deleted: number[],
-): components["schemas"]["LiveResult"][] {
-  const deletedSet = new Set(deleted);
-  const updatesMap = new Map(updated.map((u) => [u.registration_id, u]));
-
-  const diffedResults = previousResults
-    .filter((res) => !deletedSet.has(res.registration_id))
-    .map((res) => {
-      const update = updatesMap.get(res.registration_id);
-      return update ? { ...res, ...update } : res;
-    });
-
-  return diffedResults.concat(created);
-}
+import { useLiveResults } from "@/providers/LiveResultProvider";
+import PendingResultsTable from "@/components/live/PendingResultsTable";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { useState } from "react";
+import AddPersonModal from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
+import BulkQuitButton from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/BulkQuitButton";
+import {
+  LuCheckCheck,
+  LuEye,
+  LuPencil,
+  LuGalleryVertical,
+} from "react-icons/lu";
+import NextLink from "next/link";
+import ResultsProjector from "@/components/live/ResultsProjector";
+import { route } from "nextjs-routes";
+import { useRoundInfo } from "@/providers/RoundInfoProvider";
+import { Tooltip } from "@/components/ui/tooltip";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function LiveUpdatingResultsTable({
-  roundId,
-  results,
-  eventId,
   competitionId,
-  competitors,
   title,
-  isAdmin = false,
+  isAdminView = false,
   showEmpty = true,
+  isLinkedRound = false,
+  canManage = false,
 }: {
-  roundId: number;
-  results: components["schemas"]["LiveResult"][];
-  eventId: string;
   competitionId: string;
-  competitors: components["schemas"]["LiveCompetitor"][];
   title: string;
-  isAdmin?: boolean;
+  isAdminView?: boolean;
   showEmpty?: boolean;
+  isLinkedRound?: boolean;
+  canManage?: boolean;
 }) {
-  const [liveResults, updateLiveResults] =
-    useState<components["schemas"]["LiveResult"][]>(results);
+  const { t } = useT();
 
-  // Move to onEffectEvent when we are on React 19
-  const onReceived = useCallback(
-    (result: DiffProtocolResponse) => {
-      const { updated, created, deleted } = result;
+  const [showLinkedRoundsView, setShowLinkedRoundsView] =
+    useState(isLinkedRound);
+  const [inProjectorMode, setInProjectorMode] = useState(false);
 
-      updateLiveResults((results) =>
-        applyDiff(results, updated, created, deleted),
-      );
-    },
-    [updateLiveResults],
-  );
+  const {
+    connectionState,
+    liveResultsByRegistrationId,
+    pendingLiveResults,
+    competitors,
+    pendingQuitCompetitors,
+  } = useLiveResults();
 
-  const connectionState = useResultsSubscription(roundId, onReceived);
+  const { id: roundWcifId, format: formatId } = useRoundInfo();
+
+  const { eventId } = parseActivityCode(roundWcifId);
+
+  const enableProjectorView = () => setInProjectorMode(true);
+  const disableProjectorView = () => setInProjectorMode(false);
+
+  if (inProjectorMode) {
+    return (
+      <ResultsProjector
+        competitors={competitors}
+        results={liveResultsByRegistrationId}
+        disableProjectorView={disableProjectorView}
+        formatId={formatId}
+        eventId={eventId}
+        title={title}
+      />
+    );
+  }
 
   return (
     <VStack align="left">
       <HStack>
-        <Heading textStyle="h1">{title}</Heading>
-        <ConnectionPulse connectionState={connectionState} />
+        <Heading textStyle={{ sm: "h3", md: "h2", lg: "h1" }}>{title}</Heading>
+        {isAdminView && <ConnectionPulse connectionState={connectionState} />}
+        <Spacer flex={1} />
+        {!isAdminView && <ConnectionPulse connectionState={connectionState} />}
+        {isLinkedRound && (
+          <Switch.Root
+            checked={showLinkedRoundsView}
+            onCheckedChange={(e) => setShowLinkedRoundsView(e.checked)}
+            colorPalette="green"
+          >
+            <Switch.HiddenInput />
+            <Switch.Control>
+              <Switch.Thumb />
+            </Switch.Control>
+            <Switch.Label>Show combined Results</Switch.Label>
+          </Switch.Root>
+        )}
+        {!isAdminView && (
+          <IconButton variant="ghost" onClick={enableProjectorView}>
+            <LuGalleryVertical />
+          </IconButton>
+        )}
+        {canManage && (
+          <Tooltip
+            content={
+              isAdminView
+                ? t("competitions.live.admin.results_view")
+                : t("competitions.live.admin.admin_view")
+            }
+            showArrow
+            openDelay={200}
+          >
+            <IconButton variant="ghost">
+              <Link asChild>
+                {isAdminView ? (
+                  <NextLink
+                    href={route({
+                      pathname:
+                        "/competitions/[competitionId]/live/rounds/[roundId]",
+                      query: { competitionId, roundId: roundWcifId },
+                    })}
+                  >
+                    <LuEye />
+                  </NextLink>
+                ) : (
+                  <NextLink
+                    href={route({
+                      pathname:
+                        "/competitions/[competitionId]/live/rounds/[roundId]/admin",
+                      query: { competitionId, roundId: roundWcifId },
+                    })}
+                  >
+                    <LuPencil />
+                  </NextLink>
+                )}
+              </Link>
+            </IconButton>
+          </Tooltip>
+        )}
+        {isAdminView && (
+          <>
+            <AddPersonModal
+              competitionId={competitionId}
+              competitors={competitors}
+              roundId={roundWcifId}
+            />
+            <BulkQuitButton
+              competitionId={competitionId}
+              roundId={roundWcifId}
+            />
+            <Tooltip
+              content={t("competitions.live.admin.double_check")}
+              showArrow
+              openDelay={200}
+            >
+              <IconButton variant="ghost">
+                <Link asChild>
+                  <NextLink
+                    href={route({
+                      pathname:
+                        "/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check",
+                      query: { competitionId, roundId: roundWcifId },
+                    })}
+                  >
+                    <LuCheckCheck />
+                  </NextLink>
+                </Link>
+              </IconButton>
+            </Tooltip>
+          </>
+        )}
       </HStack>
-      <LiveResultsTable
-        results={liveResults}
+      <PendingResultsTable
+        pendingLiveResults={pendingLiveResults}
+        formatId={formatId}
         eventId={eventId}
+        competitors={competitors}
+      />
+      <LiveResultsTable
+        resultsByRegistrationId={liveResultsByRegistrationId}
+        roundWcifId={roundWcifId}
+        formatId={formatId}
         competitionId={competitionId}
         competitors={competitors}
-        isAdmin={isAdmin}
+        pendingQuitCompetitors={pendingQuitCompetitors}
+        pendingLiveResults={pendingLiveResults}
+        isAdmin={isAdminView}
         showEmpty={showEmpty}
+        showLinkedRoundsView={showLinkedRoundsView}
+        isLinkedRound={isLinkedRound}
       />
     </VStack>
   );

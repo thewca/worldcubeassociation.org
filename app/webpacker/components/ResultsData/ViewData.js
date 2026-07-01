@@ -10,6 +10,7 @@ import EventNavigation from './EventNavigation';
 import { getUrlParams, setUrlParams } from '../../lib/utils/wca';
 import { competitionApiUrl } from '../../lib/requests/routes.js.erb';
 import { localizeRoundInformation } from '../../lib/utils/wcif';
+import I18n from '../../lib/i18n';
 
 function RoundResultsTable({
   competitionId,
@@ -23,6 +24,7 @@ function RoundResultsTable({
   return (
     <>
       <h2>{localizeRoundInformation(eventId, round.roundTypeId)}</h2>
+      {round.isH2hMock && <p><i>{I18n.t('competitions.results_table.h2h_results_disclaimer')}</i></p>}
       {adminMode && (
         <Button positive as="a" href={newEntryUrlFn(competitionId, round.id)} size="tiny">
           <Icon name="plus" />
@@ -47,6 +49,7 @@ function ResultsView({
   dataUrlFn,
   newEntryUrlFn,
   DataRowHeader,
+  H2hRowHeader,
   DataRowBody,
   adminMode,
 }) {
@@ -66,7 +69,7 @@ function ResultsView({
           eventId={eventId}
           round={round}
           newEntryUrlFn={newEntryUrlFn}
-          DataRowHeader={DataRowHeader}
+          DataRowHeader={round.isH2hMock ? H2hRowHeader : DataRowHeader}
           DataRowBody={DataRowBody}
           adminMode={adminMode}
         />
@@ -81,6 +84,7 @@ function ViewData({
   dataUrlFn,
   newEntryUrlFn,
   DataRowHeader,
+  H2hRowHeader,
   DataRowBody,
 }) {
   const { loading, error, data } = useLoadedData(competitionApiUrl(competitionId));
@@ -131,6 +135,7 @@ function ViewData({
                 dataUrlFn={dataUrlFn}
                 newEntryUrlFn={newEntryUrlFn}
                 DataRowHeader={DataRowHeader}
+                H2hRowHeader={H2hRowHeader}
                 DataRowBody={DataRowBody}
                 adminMode={false}
               />
@@ -144,6 +149,7 @@ function ViewData({
             dataUrlFn={dataUrlFn}
             newEntryUrlFn={newEntryUrlFn}
             DataRowHeader={DataRowHeader}
+            H2hRowHeader={H2hRowHeader}
             DataRowBody={DataRowBody}
             adminMode={adminMode}
           />

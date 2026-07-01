@@ -14,6 +14,10 @@ class RegistrationPayment < ApplicationRecord
   after_create :auto_accept_hook, if: :auto_accept_preference_live?
   after_save :auto_close_hook
 
+  delegate :abs, to: :amount_lowest_denomination, prefix: true
+  delegate :amount_available_for_refund, to: :refunded_registration_payment, prefix: :parent, allow_nil: true
+  validates :amount_lowest_denomination_abs, comparison: { less_than_or_equal_to: :parent_amount_available_for_refund }, on: :create, if: :refunded_registration_payment
+
   scope :completed, -> { where(is_completed: true) }
 
   monetize :amount_lowest_denomination,

@@ -4,7 +4,7 @@ class InboxResult < ApplicationRecord
   include Resultable
 
   # see result.rb for explanation of the scope
-  belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
+  belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true, inverse_of: :inbox_results
 
   delegate :country_iso2, to: :inbox_person
   delegate :wca_id, to: :inbox_person
@@ -18,7 +18,7 @@ class InboxResult < ApplicationRecord
   alias_method :name, :person_name
 
   def attempts
-    self.legacy_attempts
+    [value1, value2, value3, value4, value5]
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

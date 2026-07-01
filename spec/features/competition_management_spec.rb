@@ -89,7 +89,7 @@ RSpec.feature "Competition management", :js do
     end
 
     scenario "User confirms a competition" do
-      competition = create(:competition, :future, :with_delegate, :with_organizer, :with_valid_schedule)
+      competition = create(:competition, :future, :with_lead_delegate, :with_organizer, :with_valid_schedule)
       visit edit_competition_path(competition)
       click_button "Confirm"
 

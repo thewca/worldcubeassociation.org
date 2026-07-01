@@ -165,6 +165,30 @@ RSpec.describe Round do
       end
     end
   end
+
+  context "participation_source with previous rounds linked" do
+    let(:competition) { create(:competition, event_ids: %w[333]) }
+    let!(:linked) { create(:linked_round) }
+    let!(:round1) { create(:round, number: 1, total_number_of_rounds: 3, competition: competition, linked_round: linked) }
+    let!(:round2) { create(:round, number: 2, total_number_of_rounds: 3, competition: competition, linked_round: linked, participation_source: round1.competition_event) }
+    let!(:round3) { create(:round, number: 3, total_number_of_rounds: 3, competition: competition, participation_source: linked) }
+
+    it "is valid when referencing the linked round group" do
+      expect(round3).to be_valid
+    end
+
+    it "is invalid when referencing a plain round instead of the linked round group" do
+      round3.participation_source = round2
+      expect(round3).to be_invalid_with_errors(participation_source_type: ["must be the linked round group when the previous rounds are linked"])
+    end
+
+    it "is valid when the previous rounds are not linked" do
+      round1.update!(linked_round: nil)
+      round2.update!(linked_round: nil)
+      round3.participation_source = round2
+      expect(round3).to be_valid
+    end
+  end
 end
 
 def create_rounds(event_id, count:, format_id: 'a')

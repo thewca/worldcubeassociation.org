@@ -92,6 +92,7 @@ module DatabaseDumper
           results_posted_by
           posting_by
           main_event_id
+          lead_delegate_id
           cancelled_at
           cancelled_by
           waiting_list_deadline_date
@@ -99,7 +100,7 @@ module DatabaseDumper
           force_comment_in_registration
           allow_registration_edits
           competition_series_id
-          use_wca_live_for_scoretaking
+          scoretaking_software
           allow_registration_without_qualification
           forbid_newcomers
           forbid_newcomers_reason
@@ -175,6 +176,10 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
+    "external_scramble_sets" => :skip_all_rows,
+    "external_scrambles" => :skip_all_rows,
+    "matched_scramble_sets" => :skip_all_rows,
+    "matched_scrambles" => :skip_all_rows,
     "formats" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -188,10 +193,55 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
+    "h2h_attempts" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          h2h_match_competitor_id
+          h2h_set_id
+          live_attempt_id
+          result_attempt_id
+          set_attempt_number
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
+    "h2h_match_competitors" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          h2h_match_id
+          user_id
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
+    "h2h_matches" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          round_id
+          match_number
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
+    "h2h_sets" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          h2h_match_id
+          set_number
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
     "inbox_persons" => :skip_all_rows,
     "inbox_results" => :skip_all_rows,
-    "inbox_scramble_sets" => :skip_all_rows,
-    "inbox_scrambles" => :skip_all_rows,
     "persons" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -227,16 +277,12 @@ module DatabaseDumper
           person_id
           person_name
           pos
+          global_pos
           regional_average_record
           regional_single_record
           round_type_id
           round_id
           updated_at
-          value1
-          value2
-          value3
-          value4
-          value5
         ],
       ),
     }.freeze,
@@ -252,6 +298,9 @@ module DatabaseDumper
           time_limit
           cutoff
           advancement_condition
+          participation_condition
+          participation_source_id
+          participation_source_type
           scramble_set_count
           created_at
           updated_at
@@ -268,7 +317,6 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
-          wcif_id
           created_at
           updated_at
         ],
@@ -297,6 +345,7 @@ module DatabaseDumper
           scramble
           id
           scramble_num
+          external_scramble_id
         ],
       ),
     }.freeze,
@@ -338,6 +387,8 @@ module DatabaseDumper
           event_id
           fee_lowest_denomination
           qualification
+          qualification_latest_date
+          qualification_condition
         ],
       ),
     }.freeze,
@@ -412,8 +463,8 @@ module DatabaseDumper
       ),
     }.freeze,
     "live_results" => :skip_all_rows,
+    "live_result_history_entries" => :skip_all_rows,
     "live_attempts" => :skip_all_rows,
-    "live_attempt_history_entries" => :skip_all_rows,
     "schedule_activities" => {
       where_clause: "JOIN venue_rooms ON venue_rooms.id = venue_room_id JOIN competition_venues ON competition_venues.id = venue_rooms.competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}",
       column_sanitizers: actions_to_column_sanitizers(
@@ -800,18 +851,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "wcif_extensions" => :skip_all_rows,
-    "assignments" => {
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w[
-          id
-          registration_id
-          registration_type
-          schedule_activity_id
-          station_number
-          assignment_code
-        ],
-      ),
-    }.freeze,
+    "assignments" => :skip_all_rows,
     "paypal_records" => :skip_all_rows,
     "stripe_records" => :skip_all_rows,
     "payment_intents" => :skip_all_rows,
@@ -876,6 +916,7 @@ module DatabaseDumper
           first_delegated
           last_delegated
           total_delegated
+          lead_delegated
           created_at
           updated_at
         ],
@@ -934,6 +975,8 @@ module DatabaseDumper
           pos
           best
           average
+        ],
+        db_default: %w[
           value1
           value2
           value3

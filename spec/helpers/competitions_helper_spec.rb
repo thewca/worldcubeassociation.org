@@ -106,18 +106,18 @@ RSpec.describe CompetitionsHelper do
                competition_id: competition.id,
                event_id: "333bf",
                round_type_id: "f",
-               format_id: "3",
+               format_id: "5",
                round: round,
                value1: 60.seconds.in_centiseconds,
                value2: 60.seconds.in_centiseconds,
                value3: 60.seconds.in_centiseconds,
-               value4: 0,
-               value5: 0,
+               value4: 60.seconds.in_centiseconds,
+               value5: 60.seconds.in_centiseconds,
                best: 60.seconds.in_centiseconds,
                average: 60.seconds.in_centiseconds)
       end
 
-      let(:final_round) { create(:round, competition: competition, format_id: "3", event_id: "333bf") }
+      let(:final_round) { create(:round, competition: competition, format_id: "5", event_id: "333bf") }
 
       it "announces top 3 in final" do
         add_result(1, "Jeremy", round: final_round)

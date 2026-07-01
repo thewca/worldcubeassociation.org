@@ -17,8 +17,38 @@ paths:
   /v1/competitions/{competitionId}/registration_config:
     $ref: 'paths/registrations/registrationConfigForCompetition.yaml'
 
+  /v1/competitions/{competitionId}/live/rounds:
+    $ref: 'paths/competitions/live/LiveAdmin.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}:
-    $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
+    post:
+      $ref: 'paths/competitions/live/SubmitLiveResults.yaml'
+    patch:
+      $ref: 'paths/competitions/live/UpdateLiveResults.yaml'
+    get:
+      $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/batch:
+    post:
+      $ref: 'paths/competitions/live/BatchSubmitLiveResults.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit:
+    $ref: 'paths/competitions/live/GetNextCompetitorIfQuit.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/addable_competitors:
+    $ref: 'paths/competitions/live/CanBeAddedToRound.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}:
+    put:
+      $ref: 'paths/competitions/live/addCompetitorToRound.yaml'
+    delete:
+      $ref: 'paths/competitions/live/QuitCompetitor.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/bulk_quit:
+    delete:
+      $ref: 'paths/competitions/live/BulkQuitCompetitor.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/clear:
+    $ref: 'paths/competitions/live/ClearRound.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/close:
+    $ref: 'paths/competitions/live/CloseRound.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/open:
+    $ref: 'paths/competitions/live/OpenRound.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}/clear:
+    $ref: 'paths/competitions/live/ClearCompetitor.yaml'
   /v1/competitions/{competitionId}/live/podiums:
     $ref: 'paths/competitions/live/LivePodiums.yaml'
   /v1/competitions/{competitionId}/live/registrations/{registrationId}:
@@ -52,6 +82,9 @@ paths:
 
   /v0/incidents:
     $ref: 'paths/regulations/incidentsList.yaml'
+
+  /v0/search:
+    $ref: 'paths/search/omniSearch.yaml'
 
   /v0/results/records:
     $ref: 'paths/results/getRecords.yaml'

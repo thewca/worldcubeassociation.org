@@ -1,5 +1,8 @@
 get:
   summary: Gets Information about the Podiums of the Live Results
+  tags:
+    - live
+  operationId: livePodiums
   parameters:
     - name: competitionId
       in: path

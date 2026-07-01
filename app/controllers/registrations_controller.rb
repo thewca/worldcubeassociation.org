@@ -8,10 +8,10 @@ class RegistrationsController < ApplicationController
   protect_from_forgery except: [:stripe_webhook]
 
   private def competition_from_params
-    competition = if params[:competition_id]
-                    Competition.find(params[:competition_id])
+    competition = if params[:competition_id].present?
+                    Competition.find(params.require(:competition_id))
                   else
-                    Registration.find(params[:id]).competition
+                    Registration.find(params.require(:id)).competition
                   end
     raise ActionController::RoutingError.new('Not Found') unless competition.user_can_view?(current_user)
 
@@ -377,7 +377,7 @@ class RegistrationsController < ApplicationController
     handling_event = StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
     incoming_event = StripeWebhookEvent::INCOMING_EVENTS.include?(event.type)
 
-    stored_record ||= StripeRecord.create_or_update_from_api(event_data, {}, audit_event.account_id) if incoming_event
+    stored_record ||= StripeRecord.create_or_update_from_api!(event_data, {}, audit_event.account_id) if incoming_event
 
     if stored_record.nil?
       logger.error "Stripe webhook reported event on entity #{event_data.id} but we have no record with a matching `stripe_id`."
@@ -429,10 +429,9 @@ class RegistrationsController < ApplicationController
         logger.error "Stripe webhook reported a refund on charge #{event_data.charge} but we never issued that one"
         return head :not_found
       else
-        stored_record.update!(parent_record: original_charge)
+        stored_record.update_from_api!(event_data, parent_record: original_charge)
       end
 
-      stored_record = StripeRecord.create_or_update_from_api(event_data) if event.type == StripeWebhookEvent::REFUND_UPDATED
       stored_intent = stored_record.root_record.payment_intent
       stored_holder = stored_intent.holder
 
@@ -471,10 +470,10 @@ class RegistrationsController < ApplicationController
 
   def payment_completion
     # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
-    competition_id = params[:competition_id]
+    competition_id = params.require(:competition_id)
     competition = Competition.find(competition_id)
 
-    payment_integration = params[:payment_integration].to_sym
+    payment_integration = params.require(:payment_integration).to_sym
     payment_account = competition.payment_account_for(payment_integration)
 
     if payment_account.blank?
@@ -553,7 +552,7 @@ class RegistrationsController < ApplicationController
   end
 
   def load_payment_intent
-    registration = Registration.includes(:competition).find(params[:id])
+    registration = Registration.includes(:competition).find(params.require(:id))
 
     return render status: :forbidden, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } } unless registration.user_id == current_user.id
 
@@ -575,15 +574,15 @@ class RegistrationsController < ApplicationController
   end
 
   def refund_payment
-    competition_id = params[:competition_id]
+    competition_id = params.require(:competition_id)
     competition = Competition.find(competition_id)
 
-    payment_integration = params[:payment_integration].to_sym
+    payment_integration = params.require(:payment_integration).to_sym
     payment_account = competition.payment_account_for(payment_integration)
 
     return render status: :not_found, json: { error: :provider_disconnected } if payment_account.blank?
 
-    payment_record = payment_account.find_payment(params[:payment_id])
+    payment_record = payment_account.find_payment(params.require(:payment_id))
 
     registration = payment_record.root_record.payment_intent.holder
 
@@ -594,14 +593,19 @@ class RegistrationsController < ApplicationController
     return render status: :bad_request, json: { error: :refund_amount_too_high } if amount_left.negative?
     return render status: :bad_request, json: { error: :refund_amount_too_low } if refund_amount.negative?
 
-    refund_receipt = payment_account.issue_refund(payment_record, refund_amount)
-
-    # Should be the same as `refund_amount`, but by double-converting from the Payment Gateway object
-    # we can also double-check that they're on the same page as we are (to be _really_ sure!)
-    ruby_money = refund_receipt.money_amount
-    original_payment = payment_record.registration_payment
-
     registration.with_lock do
+      # It is crucial that we enter the `with_lock` first, and _then_ start
+      #   triggering stuff in the Stripe API. Otherwise, in some rare cases,
+      #   the async webhooks (another controller route above) can kick in
+      #   *very fast* and obtain the lock between "Stripe API refund issued"
+      #   and "local lock here in this method obtained", leading to duplicates.
+      refund_receipt = payment_account.issue_refund(payment_record, refund_amount)
+
+      # Should be the same as `refund_amount`, but by double-converting from the Payment Gateway object
+      # we can also double-check that they're on the same page as we are (to be _really_ sure!)
+      ruby_money = refund_receipt.money_amount
+      original_payment = payment_record.registration_payment
+
       already_refunded = original_payment.refunding_registration_payments.where(receipt: refund_receipt).any?
 
       unless already_refunded

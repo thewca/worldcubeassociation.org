@@ -13,16 +13,16 @@ resource "aws_ecs_task_definition" "worker" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  cpu = "1024"
-  memory = "3911"
+  cpu = "512"
+  memory = "1955"
 
   container_definitions = jsonencode([
 
     {
       name              = "sqs-worker-staging"
       image             = "${var.shared.ecr_repository.repository_url}:staging-sqs-worker"
-      cpu    = 1024
-      memory = 3911
+      cpu    = 512
+      memory = 1955
       portMappings = []
       logConfiguration = {
         logDriver = "awslogs"
@@ -59,7 +59,7 @@ resource "aws_ecs_service" "worker" {
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.worker.arn
-  desired_count                      = 1
+  desired_count                      = 2
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50

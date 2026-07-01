@@ -20,7 +20,7 @@ export interface ButtonVariant {
   /** @default "md" */
   size?: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | undefined
   /** @default "solid" */
-  variant?: "solid" | "subtle" | "surface" | "outline" | "ghost" | "plain" | undefined
+  variant?: "solid" | "subtle" | "surface" | "outline" | "ghost" | "plain" | "pastelSolid" | "pastelOutline" | undefined
 }
 
 export type ButtonVariantProps = {
@@ -328,7 +328,10 @@ export type AccordionVariantMap = {
 
 export type ActionBarSlot = "positioner" | "content" | "separator" | "selectionTrigger" | "closeTrigger"
 
-export interface ActionBarVariant {}
+export interface ActionBarVariant {
+  /** @default "bottom" */
+  placement?: "bottom" | "bottom-start" | "bottom-end" | undefined
+}
 
 export type ActionBarVariantProps = {
   [K in keyof ActionBarVariant]?: ConditionalValue<ActionBarVariant[K]> | undefined
@@ -430,7 +433,7 @@ export interface CardVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "info" */
   variant?: "elevated" | "outline" | "subtle" | "info" | undefined
-  colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | "deep" | undefined
+  colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | "deep" | "slatePastel" | undefined
 }
 
 export type CardVariantProps = {
@@ -575,6 +578,53 @@ export type DataListVariantProps = {
 
 export type DataListVariantMap = {
   [K in keyof DataListVariant]: Array<DataListVariant[K]>
+}
+
+// DatePicker
+
+export type DatePickerSlot =
+  | "clearTrigger"
+  | "content"
+  | "control"
+  | "input"
+  | "label"
+  | "monthSelect"
+  | "nextTrigger"
+  | "positioner"
+  | "presetTrigger"
+  | "prevTrigger"
+  | "rangeText"
+  | "root"
+  | "table"
+  | "tableBody"
+  | "tableCell"
+  | "tableCellTrigger"
+  | "tableHead"
+  | "tableHeader"
+  | "tableRow"
+  | "trigger"
+  | "view"
+  | "viewControl"
+  | "viewTrigger"
+  | "yearSelect"
+  | "view"
+  | "valueText"
+  | "indicatorGroup"
+
+export interface DatePickerVariant {
+  /** @default "md" */
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | undefined
+  hideOutsideDays?: boolean | undefined
+  /** @default "outline" */
+  variant?: "outline" | "subtle" | "flushed" | undefined
+}
+
+export type DatePickerVariantProps = {
+  [K in keyof DatePickerVariant]?: ConditionalValue<DatePickerVariant[K]> | undefined
+}
+
+export type DatePickerVariantMap = {
+  [K in keyof DatePickerVariant]: Array<DatePickerVariant[K]>
 }
 
 // Dialog
@@ -842,7 +892,7 @@ export type NativeSelectSlot = "root" | "field" | "indicator"
 
 export interface NativeSelectVariant {
   /** @default "outline" */
-  variant?: "outline" | "subtle" | "plain" | undefined
+  variant?: "outline" | "subtle" | "plain" | "ghost" | undefined
   /** @default "md" */
   size?: "xs" | "sm" | "md" | "lg" | "xl" | undefined
 }
@@ -1092,7 +1142,7 @@ export type SelectSlot =
 
 export interface SelectVariant {
   /** @default "outline" */
-  variant?: "outline" | "subtle" | undefined
+  variant?: "outline" | "subtle" | "ghost" | undefined
   /** @default "md" */
   size?: "xs" | "sm" | "md" | "lg" | undefined
 }
@@ -1155,6 +1205,7 @@ export type SliderSlot =
   | "marker"
   | "draggingIndicator"
   | "markerIndicator"
+  | "markerLabel"
 
 export interface SliderVariant {
   /** @default "md" */
@@ -1503,6 +1554,20 @@ export type TreeViewVariantMap = {
   [K in keyof TreeViewVariant]: Array<TreeViewVariant[K]>
 }
 
+// Marquee
+
+export type MarqueeSlot = "root" | "viewport" | "content" | "edge" | "item"
+
+export interface MarqueeVariant {}
+
+export type MarqueeVariantProps = {
+  [K in keyof MarqueeVariant]?: ConditionalValue<MarqueeVariant[K]> | undefined
+}
+
+export type MarqueeVariantMap = {
+  [K in keyof MarqueeVariant]: Array<MarqueeVariant[K]>
+}
+
 export interface ConfigSlotRecipes {
   accordion: SystemSlotRecipeFn<AccordionSlot, AccordionVariantProps, AccordionVariantMap>
   actionBar: SystemSlotRecipeFn<ActionBarSlot, ActionBarVariantProps, ActionBarVariantMap>
@@ -1517,6 +1582,7 @@ export interface ConfigSlotRecipes {
   codeBlock: SystemSlotRecipeFn<CodeBlockSlot, CodeBlockVariantProps, CodeBlockVariantMap>
   collapsible: SystemSlotRecipeFn<CollapsibleSlot, CollapsibleVariantProps, CollapsibleVariantMap>
   dataList: SystemSlotRecipeFn<DataListSlot, DataListVariantProps, DataListVariantMap>
+  datePicker: SystemSlotRecipeFn<DatePickerSlot, DatePickerVariantProps, DatePickerVariantMap>
   dialog: SystemSlotRecipeFn<DialogSlot, DialogVariantProps, DialogVariantMap>
   drawer: SystemSlotRecipeFn<DrawerSlot, DrawerVariantProps, DrawerVariantMap>
   editable: SystemSlotRecipeFn<EditableSlot, EditableVariantProps, EditableVariantMap>
@@ -1557,6 +1623,7 @@ export interface ConfigSlotRecipes {
   colorPicker: SystemSlotRecipeFn<ColorPickerSlot, ColorPickerVariantProps, ColorPickerVariantMap>
   qrCode: SystemSlotRecipeFn<QrCodeSlot, QrCodeVariantProps, QrCodeVariantMap>
   treeView: SystemSlotRecipeFn<TreeViewSlot, TreeViewVariantProps, TreeViewVariantMap>
+  marquee: SystemSlotRecipeFn<MarqueeSlot, MarqueeVariantProps, MarqueeVariantMap>
 }
 
 export interface ConfigRecipeSlots {
@@ -1573,6 +1640,7 @@ export interface ConfigRecipeSlots {
   codeBlock: CodeBlockSlot
   collapsible: CollapsibleSlot
   dataList: DataListSlot
+  datePicker: DatePickerSlot
   dialog: DialogSlot
   drawer: DrawerSlot
   editable: EditableSlot
@@ -1613,6 +1681,7 @@ export interface ConfigRecipeSlots {
   colorPicker: ColorPickerSlot
   qrCode: QrCodeSlot
   treeView: TreeViewSlot
+  marquee: MarqueeSlot
 }
 
 export type SlotRecipeRecord<T, K> = T extends keyof ConfigRecipeSlots ? Record<ConfigRecipeSlots[T], K> : Record<string, K>
