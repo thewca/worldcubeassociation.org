@@ -6,11 +6,9 @@ class LiveResult < ApplicationRecord
 
   DNF_VALUE = -1
   SKIPPED_VALUE = 0
-
-  # Upper bound for the "single needed" search. WCA times cap at 10 minutes for
-  # most events; if the needed single is above this we just report the ceiling.
-  # ponytail: flat 10min ceiling, revisit if FM/MBLD need their own bounds.
-  MAX_SINGLE = 60_000
+  # timeNeededToOvertake sentinels (mirroring the front-end wca-live values).
+  NA_VALUE = -3       # impossible to overtake, even with a perfect solve
+  SUCCESS_VALUE = -4  # any successful solve overtakes an incomplete target
 
   DEFAULT_ADVANCEMENT_LEVEL = 3
 
@@ -200,29 +198,33 @@ class LiveResult < ApplicationRecord
     # use .length on purpose here as otherwise we would use one query per row
     return nil if complete?
 
-    LiveResult.compute_forecast_statistics(live_attempts.as_json, round)
+    stats = LiveResult.compute_forecast_statistics(live_attempts.as_json, round)
+
+    # for_first/for_advance depend on the whole round's standings. They're correct
+    # for this result at broadcast/fetch time, but other rows only refresh on a
+    # full fetch (their targets/ranks may shift). Fewest-moves doesn't get them.
+    if round.event_id == "333fm"
+      stats["for_first"] = SKIPPED_VALUE
+      stats["for_advance"] = SKIPPED_VALUE
+    else
+      advance_level = round.advancement_condition&.level || DEFAULT_ADVANCEMENT_LEVEL
+      stats["for_first"] = time_to_overtake_rank(1)
+      stats["for_advance"] = time_to_overtake_rank(advance_level)
+    end
+
+    stats
   end
 
-  # Projections for an incomplete result. `live_attempts` are the plain hashes
-  # ({ "value" => ..., "attempt_number" => ... }) entered so far.
+  # Self-contained per-result projections (safe to send in diffs). `live_attempts`
+  # are the plain hashes ({ "value" => ..., "attempt_number" => ... }).
   def self.compute_forecast_statistics(live_attempts, round)
     values = live_attempts.pluck("value")
-    expected = round.format.expected_solve_count
 
-    stats = {
+    {
       "best_possible_average" => compute_padded_average(live_attempts, round, BEST_POSSIBLE_SCORE),
       "worst_possible_average" => compute_padded_average(live_attempts, round, WORST_POSSIBLE_SCORE),
       "projected_average" => compute_projected_average(values, round),
     }
-
-    # "single needed" only makes sense with exactly one solve remaining.
-    if live_attempts.length == expected - 1
-      advance_level = round.advancement_condition&.level || DEFAULT_ADVANCEMENT_LEVEL
-      stats["for_first"] = single_needed_for_rank(live_attempts, round, 1, strict: true)
-      stats["for_advance"] = single_needed_for_rank(live_attempts, round, advance_level, strict: false)
-    end
-
-    stats
   end
 
   # Kept for the legacy name; pads the missing solves with `score` (best/worst).
@@ -250,9 +252,13 @@ class LiveResult < ApplicationRecord
     expected = round.format.expected_solve_count
 
     if round.event_id == "333fm"
-      return DNF_VALUE unless values.length == expected && values.all?(&:positive?)
+      return SKIPPED_VALUE if values.empty?
 
-      return round_wca_value((values.sum * 100.0 / values.length).round)
+      completed = values.select(&:positive?)
+      return DNF_VALUE if completed.empty?
+
+      # Move counts are stored as-is but averages are scaled by 100.
+      return (completed.sum * 100.0 / completed.length).round
     end
 
     return SKIPPED_VALUE if values.empty?
@@ -274,39 +280,105 @@ class LiveResult < ApplicationRecord
     end
   end
 
-  # Largest single on the final solve that still reaches `rank`'s current
-  # average (strict: must beat it). Returns DNF_VALUE when even a perfect solve
-  # can't reach it, or nil when there's no complete result at that rank yet.
-  def self.single_needed_for_rank(live_attempts, round, rank, strict:)
-    target = round.live_results.to_a[rank - 1]
-    return nil if target.nil? || !target.complete? || !target.average.positive?
+  # The single needed on the next solve for this result to overtake the result
+  # holding the given rank. Mirrors the wca-live `resultsForView` target choice:
+  # to reach position N you chase whoever is at rank N (or rank N+1 if you're
+  # already there and need to stay ahead).
+  def time_to_overtake_rank(level)
+    values = live_attempts.map(&:value)
+    return SKIPPED_VALUE if values.empty?
 
-    target_average = target.average
-    existing = live_attempts.map { LiveAttempt.new(it.symbolize_keys.slice(:value, :attempt_number)) }
-    next_number = live_attempts.length + 1
+    siblings = round.live_results.to_a
+    index = siblings.index { |r| r.id == id }
+    return SKIPPED_VALUE if index.nil?
 
-    reaches = lambda do |single|
-      attempts = existing + [LiveAttempt.new(value: single, attempt_number: next_number)]
-      average = compute_average_and_best(attempts, round).first
-      average.positive? && (strict ? average < target_average : average <= target_average)
-    end
+    rank = index + 1
+    target = siblings[rank <= level ? level : level - 1]
+    return SKIPPED_VALUE if target.nil?
 
-    # average is non-decreasing in the added single, so a perfect solve is the
-    # best shot: if that can't reach the target, nothing can.
-    return DNF_VALUE unless reaches.call(BEST_POSSIBLE_SCORE)
-
-    lo = BEST_POSSIBLE_SCORE
-    hi = MAX_SINGLE
-    while lo < hi
-      mid = (lo + hi + 1) / 2
-      if reaches.call(mid)
-        lo = mid
-      else
-        hi = mid - 1
-      end
-    end
-    lo
+    LiveResult.time_needed_to_overtake(
+      { attempts: values, best: best, projected_average: LiveResult.compute_projected_average(values, round) },
+      { number_of_attempts: round.format.expected_solve_count },
+      { best: target.best, projected_average: LiveResult.projected_average_for(target, round) },
+    )
   end
+
+  def self.projected_average_for(result, round)
+    return result.average if result.complete?
+
+    compute_projected_average(result.live_attempts.map(&:value), round)
+  end
+
+  # Faithful port of wca-live's `timeNeededToOvertake`. Returns the single value
+  # needed on the next solve to overtake `overtake_result`, or a sentinel:
+  #   DNF_VALUE (-1): already overtaking even in the worst case (or target skipped)
+  #   NA_VALUE (-3): impossible, even a perfect solve can't overtake
+  #   SUCCESS_VALUE (-4): any successful solve overtakes an incomplete target
+  # `result`/`overtake_result` are hashes; `format` is { number_of_attempts: }.
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # Faithful port of the upstream wca-live branch structure; kept 1:1 on purpose.
+  def self.time_needed_to_overtake(result, format, overtake_result)
+    overtake_projected = overtake_result[:projected_average]
+    return DNF_VALUE if overtake_projected.zero?
+
+    attempt_values = result[:attempts]
+    result_best = result[:best]
+    result_projected = result[:projected_average]
+    overtake_best = overtake_result[:best]
+    num_attempts = format[:number_of_attempts]
+
+    result_worst = attempt_values.max { |a, b| compare_attempt_values(a, b) }
+    better_best = compare_attempt_values(result_best, overtake_best).negative?
+
+    # Projection will change from a mean to a median after a time is added.
+    if attempt_values.length == 2 && num_attempts == 5
+      worst_vs_projected = compare_attempt_values(result_worst, overtake_projected)
+      return DNF_VALUE if worst_vs_projected.negative? || (worst_vs_projected.zero? && better_best)
+
+      best_vs_projected = compare_attempt_values(result_best, overtake_projected)
+      if best_vs_projected.negative?
+        return SUCCESS_VALUE unless overtake_projected.positive?
+
+        return overtake_projected - (better_best ? 0 : 1)
+      end
+      return overtake_best.positive? ? overtake_best - 1 : SUCCESS_VALUE if best_vs_projected.zero?
+
+      return NA_VALUE
+    end
+
+    is_mean = num_attempts == 3 || attempt_values.length < 2
+
+    unless overtake_projected.positive?
+      return DNF_VALUE if better_best
+      return overtake_best.positive? ? overtake_best - 1 : SUCCESS_VALUE unless result_projected.positive?
+      return DNF_VALUE if !is_mean && result_worst.positive?
+
+      return SUCCESS_VALUE
+    end
+
+    return NA_VALUE unless result_projected.positive?
+
+    next_counting_solves = attempt_values.length + (is_mean ? 1 : -1)
+    total_needed = overtake_projected * next_counting_solves
+    # For a mean of 3, .01 can be added to achieve the same rounded result.
+    rounding_buffer = next_counting_solves == 3 ? 1 : 0
+    counting_sum = attempt_values.sum
+    counting_sum = counting_sum - result_best - result_worst unless is_mean
+
+    needed = total_needed - counting_sum + rounding_buffer
+
+    new_best = [needed, result_best].min
+    # Averages tie at this `needed`; if best doesn't win, adjust to overtake.
+    needed = [needed - next_counting_solves, overtake_best - 1].max if new_best >= overtake_best
+
+    best_possible_solve = is_mean ? 1 : result_best
+    worst_possible_solve = is_mean || !result_worst.positive? ? Float::INFINITY : result_worst
+    return NA_VALUE if needed < best_possible_solve
+    return DNF_VALUE if needed >= worst_possible_solve
+
+    needed
+  end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def self.mean_of_completed(values)
     completed = values.select(&:positive?)

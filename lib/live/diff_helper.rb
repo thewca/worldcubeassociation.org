@@ -105,7 +105,14 @@ module Live
       live_attempts = updated_result["live_attempts"]
       return updated_result if live_attempts.nil? || live_attempts.length == round.format.expected_solve_count
 
-      updated_result.merge(LiveResult.compute_forecast_statistics(live_attempts, round))
+      # Send exactly what a full fetch would for this result, including
+      # for_first/for_advance. Those are only correct for the updated result;
+      # other rows' standings-dependent values stay stale until the next fetch.
+      live_result = round.live_results.find { it.registration_id == updated_result["registration_id"] }
+      forecast = live_result&.forecast_statistics || LiveResult.compute_forecast_statistics(live_attempts, round)
+      return updated_result if forecast.nil?
+
+      updated_result.merge(forecast)
     end
   end
 end

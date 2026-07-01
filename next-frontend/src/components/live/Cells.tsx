@@ -219,12 +219,12 @@ export function LiveStatCells({
               {formatAttemptResult(forecast.projected_average, eventId)}
             </Box>
           )}
-          {forecast.for_first != null && (
+          {forecast.for_first != null && forecast.for_first > 0 && (
             <Box>
               For 1st: {formatAttemptResult(forecast.for_first, eventId)}
             </Box>
           )}
-          {forecast.for_advance != null && (
+          {forecast.for_advance != null && forecast.for_advance > 0 && (
             <Box>
               For {ordinal(advancementLevel)}:{" "}
               {formatAttemptResult(forecast.for_advance, eventId)}
