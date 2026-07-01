@@ -252,6 +252,15 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render_wcif(competition, best_version)
   end
 
+  def check_wcif
+    wcif = params.permit!.to_h.except(:controller, :action, :competition_id, :competition, :strict)
+
+    import_version = wcif["formatVersion"]
+    strict_schema_checks = params.key?(:strict) ? ActiveRecord::Type::Boolean.new.cast(params[:strict]) : Rails.env.local?
+
+    Competition.validate_wcif_schema!(wcif, version: import_version, is_strict: strict_schema_checks)
+  end
+
   def update_wcif
     competition = competition_from_params
     require_can_manage!(competition)
