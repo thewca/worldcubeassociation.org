@@ -273,16 +273,15 @@ class Registration < ApplicationRecord
   end
 
   def save_registration_data!(registration_data:, creator:, source:)
-    registration_comment = registration_data[:comments]
-    assign_attributes(comments: registration_comment) if registration_comment.present?
+    formatted_payload = {
+      "competing" => {
+        "event_ids" => registration_data.dig(:registration, :eventIds) || [],
+        "comment" => registration_data[:comments].presence,
+        "status" => (Registrations::Helper::STATUS_ACCEPTED unless accepted?),
+      }.compact
+    }
 
-    assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED) unless accepted?
-    self.registration_competition_events = []
-
-    event_ids = registration_data.dig(:registration, :eventIds) || []
-    self.registration_competition_events.build(
-      competition.competition_events.where(event_id: event_ids).ids.map { |id| { competition_event_id: id } },
-    )
+    Registrations::RegistrationChecker.apply_payload(self, formatted_payload, clone: false)
 
     save!
     add_history_entry({ event_ids: self.event_ids }, "user", creator.id, source)
