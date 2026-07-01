@@ -157,6 +157,21 @@ export function LiveAttemptsCells({
   ));
 }
 
+function ordinal(n: number) {
+  const rem100 = n % 100;
+  if (rem100 >= 11 && rem100 <= 13) return `${n}th`;
+  switch (n % 10) {
+    case 1:
+      return `${n}st`;
+    case 2:
+      return `${n}nd`;
+    case 3:
+      return `${n}rd`;
+    default:
+      return `${n}th`;
+  }
+}
+
 export function LiveStatCells({
   stats,
   competitorId,
@@ -164,6 +179,8 @@ export function LiveStatCells({
   result,
   isAdmin = false,
   highlight,
+  forecastView = false,
+  advancementLevel = 3,
 }: {
   stats: Stat[];
   competitorId: number;
@@ -171,6 +188,8 @@ export function LiveStatCells({
   result: LiveResult;
   isAdmin?: boolean;
   highlight?: boolean;
+  forecastView?: boolean;
+  advancementLevel?: number;
 }) {
   const shouldHighlight = (statIndex: number) => {
     if (highlight !== undefined) {
@@ -178,6 +197,10 @@ export function LiveStatCells({
     }
     return statIndex === 0;
   };
+
+  // Only present (and non-null) on incomplete round results.
+  const forecast =
+    "forecast_statistics" in result ? result.forecast_statistics : undefined;
 
   return stats.map((stat, statIndex) => (
     <Table.Cell
@@ -188,6 +211,27 @@ export function LiveStatCells({
       <WithRecordTag recordTag={isAdmin ? null : result[stat.recordTagField]}>
         {formatAttemptResult(result[stat.field], eventId)}
       </WithRecordTag>
+      {forecastView && stat.field === "average" && forecast && (
+        <Box color="fg.muted" fontWeight="normal" fontSize="xs">
+          {forecast.projected_average !== undefined && (
+            <Box>
+              Projected average:{" "}
+              {formatAttemptResult(forecast.projected_average, eventId)}
+            </Box>
+          )}
+          {forecast.for_first != null && (
+            <Box>
+              For 1st: {formatAttemptResult(forecast.for_first, eventId)}
+            </Box>
+          )}
+          {forecast.for_advance != null && (
+            <Box>
+              For {ordinal(advancementLevel)}:{" "}
+              {formatAttemptResult(forecast.for_advance, eventId)}
+            </Box>
+          )}
+        </Box>
+      )}
     </Table.Cell>
   ));
 }

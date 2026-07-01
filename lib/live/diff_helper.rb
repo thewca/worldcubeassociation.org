@@ -86,6 +86,9 @@ module Live
       "attempt_number" => "an",
       "best_possible_average" => "bpa",
       "worst_possible_average" => "wpa",
+      "projected_average" => "pa",
+      "for_first" => "ff",
+      "for_advance" => "fa",
       "last_attempt_entered_at" => "at",
     }.freeze
 
@@ -99,9 +102,10 @@ module Live
     end
 
     def self.forecast_for(updated_result, round)
-      return updated_result if updated_result["live_attempts"].nil? || updated_result["live_attempts"].length == round.format.expected_solve_count
+      live_attempts = updated_result["live_attempts"]
+      return updated_result if live_attempts.nil? || live_attempts.length == round.format.expected_solve_count
 
-      updated_result.merge(LiveResult.compute_best_and_worse_possible_average(updated_result["live_attempts"], round))
+      updated_result.merge(LiveResult.compute_forecast_statistics(live_attempts, round))
     end
   end
 end

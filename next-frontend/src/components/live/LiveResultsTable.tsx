@@ -35,6 +35,8 @@ export default function LiveResultsTable({
   showEmpty = true,
   showLinkedRoundsView = false,
   isLinkedRound = false,
+  forecastView = false,
+  advancementLevel = 3,
 }: {
   resultsByRegistrationId: LiveResultsByRegistrationId;
   formatId: string;
@@ -47,6 +49,8 @@ export default function LiveResultsTable({
   showEmpty?: boolean;
   showLinkedRoundsView?: boolean;
   isLinkedRound?: boolean;
+  forecastView?: boolean;
+  advancementLevel?: number;
 }) {
   const { t } = useT();
 
@@ -188,6 +192,8 @@ export default function LiveResultsTable({
                     eventId={eventId}
                     result={result}
                     highlight={showText}
+                    forecastView={forecastView}
+                    advancementLevel={advancementLevel}
                   />
                 </Table.Row>
               );

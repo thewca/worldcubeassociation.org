@@ -50,6 +50,7 @@ export default function LiveUpdatingResultsTable({
   const [showLinkedRoundsView, setShowLinkedRoundsView] =
     useState(isLinkedRound);
   const [inProjectorMode, setInProjectorMode] = useState(false);
+  const [forecastView, setForecastView] = useState(false);
 
   const {
     connectionState,
@@ -59,7 +60,13 @@ export default function LiveUpdatingResultsTable({
     pendingQuitCompetitors,
   } = useLiveResults();
 
-  const { id: roundWcifId, format: formatId } = useRoundInfo();
+  const {
+    id: roundWcifId,
+    format: formatId,
+    advancementCondition,
+  } = useRoundInfo();
+
+  const advancementLevel = advancementCondition?.level ?? 3;
 
   const { eventId } = parseActivityCode(roundWcifId);
 
@@ -99,6 +106,17 @@ export default function LiveUpdatingResultsTable({
             <Switch.Label>Show combined Results</Switch.Label>
           </Switch.Root>
         )}
+        <Switch.Root
+          checked={forecastView}
+          onCheckedChange={(e) => setForecastView(e.checked)}
+          colorPalette="green"
+        >
+          <Switch.HiddenInput />
+          <Switch.Control>
+            <Switch.Thumb />
+          </Switch.Control>
+          <Switch.Label>Forecast view</Switch.Label>
+        </Switch.Root>
         {!isAdminView && (
           <IconButton variant="ghost" onClick={enableProjectorView}>
             <LuGalleryVertical />
@@ -192,6 +210,8 @@ export default function LiveUpdatingResultsTable({
         showEmpty={showEmpty}
         showLinkedRoundsView={showLinkedRoundsView}
         isLinkedRound={isLinkedRound}
+        forecastView={forecastView}
+        advancementLevel={advancementLevel}
       />
     </VStack>
   );

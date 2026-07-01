@@ -4,6 +4,16 @@ class LiveResult < ApplicationRecord
   BEST_POSSIBLE_SCORE = 1
   WORST_POSSIBLE_SCORE = -1
 
+  DNF_VALUE = -1
+  SKIPPED_VALUE = 0
+
+  # Upper bound for the "single needed" search. WCA times cap at 10 minutes for
+  # most events; if the needed single is above this we just report the ceiling.
+  # ponytail: flat 10min ceiling, revisit if FM/MBLD need their own bounds.
+  MAX_SINGLE = 60_000
+
+  DEFAULT_ADVANCEMENT_LEVEL = 3
+
   PODIUM_RANGE = 1..3
 
   has_many :live_attempts, dependent: :destroy
@@ -188,26 +198,139 @@ class LiveResult < ApplicationRecord
 
   def forecast_statistics
     # use .length on purpose here as otherwise we would use one query per row
-    LiveResult.compute_best_and_worse_possible_average(live_attempts.as_json, round) if live_attempts.length == round.format.expected_solve_count - 1
+    return nil if complete?
+
+    LiveResult.compute_forecast_statistics(live_attempts.as_json, round)
   end
 
+  # Projections for an incomplete result. `live_attempts` are the plain hashes
+  # ({ "value" => ..., "attempt_number" => ... }) entered so far.
+  def self.compute_forecast_statistics(live_attempts, round)
+    values = live_attempts.pluck("value")
+    expected = round.format.expected_solve_count
+
+    stats = {
+      "best_possible_average" => compute_padded_average(live_attempts, round, BEST_POSSIBLE_SCORE),
+      "worst_possible_average" => compute_padded_average(live_attempts, round, WORST_POSSIBLE_SCORE),
+      "projected_average" => compute_projected_average(values, round),
+    }
+
+    # "single needed" only makes sense with exactly one solve remaining.
+    if live_attempts.length == expected - 1
+      advance_level = round.advancement_condition&.level || DEFAULT_ADVANCEMENT_LEVEL
+      stats["for_first"] = single_needed_for_rank(live_attempts, round, 1, strict: true)
+      stats["for_advance"] = single_needed_for_rank(live_attempts, round, advance_level, strict: false)
+    end
+
+    stats
+  end
+
+  # Kept for the legacy name; pads the missing solves with `score` (best/worst).
   def self.compute_best_and_worse_possible_average(live_attempts, round)
+    {
+      "best_possible_average" => compute_padded_average(live_attempts, round, BEST_POSSIBLE_SCORE),
+      "worst_possible_average" => compute_padded_average(live_attempts, round, WORST_POSSIBLE_SCORE),
+    }
+  end
+
+  def self.compute_padded_average(live_attempts, round, score)
     missing_count = round.format.expected_solve_count - live_attempts.length
 
-    {
-      "best_possible_average" => BEST_POSSIBLE_SCORE,
-      "worst_possible_average" => WORST_POSSIBLE_SCORE,
-    }.transform_values do |score|
-      padded = live_attempts + Array.new(missing_count) do |i|
-        {
-          "attempt_number" => live_attempts.length + i + 1,
-          "value" => score,
-        }
-      end
-
-      attempts = padded.map { LiveAttempt.new(it) }
-      LiveResult.compute_average_and_best(attempts, round).first
+    padded = live_attempts + Array.new(missing_count) do |i|
+      { "attempt_number" => live_attempts.length + i + 1, "value" => score }
     end
+
+    attempts = padded.map { LiveAttempt.new(it) }
+    compute_average_and_best(attempts, round).first
+  end
+
+  # See the front-end wca-live `average` helper — this is the incomplete-result
+  # projection (median / middle-two mean) rather than the official average.
+  def self.compute_projected_average(values, round)
+    expected = round.format.expected_solve_count
+
+    if round.event_id == "333fm"
+      return DNF_VALUE unless values.length == expected && values.all?(&:positive?)
+
+      return round_wca_value((values.sum * 100.0 / values.length).round)
+    end
+
+    return SKIPPED_VALUE if values.empty?
+
+    sorted = values.sort { |a, b| compare_attempt_values(a, b) }
+
+    case expected
+    when 3
+      mean_of_completed(values)
+    when 5
+      case values.length
+      when 1, 2 then mean_of_completed(values)
+      when 3 then sorted[1] # median
+      when 4 then mean_of_completed([sorted[1], sorted[2]]) # middle two
+      else round_wca_value(mean_of_completed([sorted[1], sorted[2], sorted[3]]))
+      end
+    else
+      SKIPPED_VALUE
+    end
+  end
+
+  # Largest single on the final solve that still reaches `rank`'s current
+  # average (strict: must beat it). Returns DNF_VALUE when even a perfect solve
+  # can't reach it, or nil when there's no complete result at that rank yet.
+  def self.single_needed_for_rank(live_attempts, round, rank, strict:)
+    target = round.live_results.to_a[rank - 1]
+    return nil if target.nil? || !target.complete? || !target.average.positive?
+
+    target_average = target.average
+    existing = live_attempts.map { LiveAttempt.new(it.symbolize_keys.slice(:value, :attempt_number)) }
+    next_number = live_attempts.length + 1
+
+    reaches = lambda do |single|
+      attempts = existing + [LiveAttempt.new(value: single, attempt_number: next_number)]
+      average = compute_average_and_best(attempts, round).first
+      average.positive? && (strict ? average < target_average : average <= target_average)
+    end
+
+    # average is non-decreasing in the added single, so a perfect solve is the
+    # best shot: if that can't reach the target, nothing can.
+    return DNF_VALUE unless reaches.call(BEST_POSSIBLE_SCORE)
+
+    lo = BEST_POSSIBLE_SCORE
+    hi = MAX_SINGLE
+    while lo < hi
+      mid = (lo + hi + 1) / 2
+      if reaches.call(mid)
+        lo = mid
+      else
+        hi = mid - 1
+      end
+    end
+    lo
+  end
+
+  def self.mean_of_completed(values)
+    completed = values.select(&:positive?)
+    return DNF_VALUE if completed.empty?
+
+    round_wca_value((completed.sum.to_f / completed.length).round)
+  end
+
+  # https://www.worldcubeassociation.org/regulations/#9f2 — averages over 10
+  # minutes are rounded to the nearest second.
+  def self.round_wca_value(value)
+    return value unless value.positive?
+
+    value > 10 * 6000 ? (value / 100.0).round * 100 : value
+  end
+
+  def self.compare_attempt_values(value_a, value_b)
+    a_complete = value_a.positive?
+    b_complete = value_b.positive?
+    return 0 unless a_complete || b_complete
+    return 1 unless a_complete
+    return -1 unless b_complete
+
+    value_a - value_b
   end
 
   def self.empty_result_attributes(registration_id, round_id)

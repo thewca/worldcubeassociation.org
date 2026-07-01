@@ -1095,7 +1095,10 @@ export interface components {
             forecast_statistics?: {
                 best_possible_average?: number;
                 worst_possible_average?: number;
-            };
+                projected_average?: number;
+                for_first?: number | null;
+                for_advance?: number | null;
+            } | null;
         };
         LiveCompetitor: {
             id: number;
