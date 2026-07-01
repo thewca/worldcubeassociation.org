@@ -33,7 +33,7 @@ export default function ActionButtons({
         });
         setRoundState(roundId, data.state, {
           total_competitors: data.created_rows,
-          competitors_live_results_entered: 0,
+          competitors_live_results_completed: 0,
         });
       },
       onError: (error) => {

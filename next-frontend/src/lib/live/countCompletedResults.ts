@@ -4,7 +4,7 @@ import { components } from "@/types/openapi";
 
 type WcifCutoff = components["schemas"]["WcifCutoff"];
 
-// Mirrors Round#competitors_live_results_entered on the backend: a competitor
+// Mirrors Round#competitors_live_results_completed on the backend: a competitor
 // counts as "entered" once their result is complete, i.e. all expected solves
 // are in, or they've done the cutoff attempts without meeting the cutoff.
 const isComplete = (

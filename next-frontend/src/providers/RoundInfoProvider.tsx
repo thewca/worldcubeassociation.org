@@ -98,7 +98,7 @@ export function RoundsInfoProvider({
         (old: { rounds: LiveRoundAdmin[] }) => ({
           rounds: old.rounds.map((r) =>
             r.id === roundId && r.state === "open"
-              ? { ...r, competitors_live_results_entered: count }
+              ? { ...r, competitors_live_results_completed: count }
               : r,
           ),
         }),

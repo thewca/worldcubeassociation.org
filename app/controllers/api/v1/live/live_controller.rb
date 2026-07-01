@@ -125,7 +125,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "round is not open" }, status: :bad_request if [Round::STATE_READY, Round::STATE_PENDING].include?(state)
 
-    return render json: { status: "round has results entered" }, status: :bad_request if round.competitors_live_results_entered.positive?
+    return render json: { status: "round has results entered" }, status: :bad_request if round.competitors_live_results_completed.positive?
 
     deleted_count = round.close_round!
 

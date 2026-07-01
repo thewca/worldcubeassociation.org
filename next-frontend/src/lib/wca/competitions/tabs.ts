@@ -138,7 +138,7 @@ export const duringCompetitionTabs = (
         const roundDone =
           round.state === "locked" ||
           (round.state === "open" &&
-            round.competitors_live_results_entered === round.total_competitors);
+            round.competitors_live_results_completed === round.total_competitors);
         return {
           i18nKey: `rounds.${roundTypeId}.name`,
           menuKey: round.id,
