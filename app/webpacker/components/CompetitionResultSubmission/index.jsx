@@ -120,7 +120,10 @@ function CompetitionResultSubmission({
         />
       )}
       {activeStep === 2 && (
-        <FormToWrt competitionId={competitionId} canSubmitResults={canSubmitResults} />
+        <FormToWrt
+          competitionId={competitionId}
+          canSubmitResults={canSubmitResults}
+        />
       )}
       {activeStep === 3 && (
         <Message positive>

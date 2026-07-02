@@ -16,7 +16,10 @@ export default function ImportWcaLiveResults({
   const [markResultSubmitted, setMarkResultSubmitted] = useCheckboxState(isAdminView);
 
   const {
-    mutate: importWcaLiveResultsMutate, error, isPending, isError,
+    mutate: importWcaLiveResultsMutate,
+    isPending,
+    isError,
+    error,
   } = useMutation({
     mutationFn: () => importWcaLiveResults({
       competitionId,

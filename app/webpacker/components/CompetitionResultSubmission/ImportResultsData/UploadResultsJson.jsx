@@ -11,7 +11,10 @@ export default function UploadResultsJson({ competitionId, isAdminView, onImport
   const [markResultSubmitted, setMarkResultSubmitted] = useCheckboxState(isAdminView);
 
   const {
-    mutate: uploadResultsJsonMutate, isPending, error, isError,
+    mutate: uploadResultsJsonMutate,
+    isPending,
+    isError,
+    error,
   } = useMutation({
     mutationFn: () => uploadResultsJson({
       competitionId,
