@@ -92,7 +92,7 @@ function CompetitionResultSubmission({
       <Step.Group widths={3}>
         <Step
           active={activeStep === 0}
-          completed={activeStep > 0}
+          completed={hasTemporaryResults}
           onClick={() => setActiveStep(0)}
           disabled={areResultsSubmitted}
         >
@@ -107,9 +107,9 @@ function CompetitionResultSubmission({
         </Step>
         <Step
           active={activeStep === 1}
-          completed={activeStep > 1}
+          completed={areValidationsConfirmed}
           onClick={() => setActiveStep(1)}
-          disabled={areResultsSubmitted}
+          disabled={areResultsSubmitted || !hasTemporaryResults}
         >
           <Icon name="warning sign" />
           <Step.Content>
@@ -119,9 +119,9 @@ function CompetitionResultSubmission({
         </Step>
         <Step
           active={activeStep === 2}
-          completed={activeStep > 2}
+          completed={areResultsSubmitted}
           onClick={() => setActiveStep(2)}
-          disabled={areResultsSubmitted}
+          disabled={areResultsSubmitted || !hasTemporaryResults || !areValidationsConfirmed}
         >
           <Icon name="cloud upload" />
           <Step.Content>
