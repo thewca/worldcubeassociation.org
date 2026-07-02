@@ -1,13 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import { Icon, Message, Step } from 'semantic-ui-react';
-import { useQuery } from '@tanstack/react-query';
 import ImportResultsData from './ImportResultsData';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import FormToWrt from './FormToWrt';
 import CheckValidations from './CheckValidations';
-import runValidatorsForCompetitionList
-  from '../Panel/pages/RunValidatorsPage/api/runValidatorsForCompetitionList';
-import { ALL_VALIDATORS } from '../../lib/wca-data.js.erb';
 
 export default function Wrapper({
   competitionId,
@@ -48,34 +44,15 @@ function CompetitionResultSubmission({
   const [areValidationsConfirmed, setAreValidationsConfirmed] = useState(false);
   const [areResultsSubmitted, setAreResultsSubmitted] = useState(areResultsSubmittedInitial);
 
-  const {
-    data: validationOutput,
-    isPending: isValidationPending,
-    isError: isValidationFetchError,
-    error: validationFetchError,
-    refetch: refetchValidationOutput,
-  } = useQuery({
-    queryKey: ['competition-validation-output', competitionId],
-    queryFn: () => runValidatorsForCompetitionList(
-      competitionId,
-      ALL_VALIDATORS,
-      false,
-      false,
-    ),
-    enabled: hasTemporaryResults,
-  });
-
   const advanceStep = useCallback(
     () => setActiveStep((stepWas) => stepWas + 1),
     [setActiveStep],
   );
 
   const onImportComplete = useCallback((response) => {
-    refetchValidationOutput();
-
     setHasTemporaryResults(!!response.success);
     advanceStep();
-  }, [refetchValidationOutput, setHasTemporaryResults, advanceStep]);
+  }, [setHasTemporaryResults, advanceStep]);
 
   const onValidationsConfirmed = useCallback(() => {
     setAreValidationsConfirmed(true);
@@ -141,10 +118,8 @@ function CompetitionResultSubmission({
       )}
       {activeStep === 1 && (
         <CheckValidations
-          validationOutput={validationOutput}
-          isPending={isValidationPending}
-          isError={isValidationFetchError}
-          error={validationFetchError}
+          competitionId={competitionId}
+          hasTemporaryResults={hasTemporaryResults}
           onUserConfirmed={onValidationsConfirmed}
         />
       )}
