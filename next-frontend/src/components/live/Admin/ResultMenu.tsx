@@ -94,6 +94,14 @@ export default function ResultMenu({
                   >
                     {t("competitions.live.admin.edit")}
                   </Menu.Item>
+                  <Menu.Item value="registration" asChild disabled={isPending}>
+                    <Link
+                      href={`/registrations/${competitor.id}/edit`}
+                      fontWeight="normal"
+                    >
+                      {t("competitions.live.admin.registration")}
+                    </Link>
+                  </Menu.Item>
                   <Menu.Item value="results" asChild disabled={isPending}>
                     <Link
                       href={route({
@@ -160,7 +168,7 @@ function QuitModal({
 
   const { t } = useT();
 
-  const { isLoading, data: toAdvance } = api.useQuery(
+  const { isLoading, data: toAdvanceRequest } = api.useQuery(
     "get",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit",
     {
@@ -177,9 +185,11 @@ function QuitModal({
     return <Loading />;
   }
 
-  if (!toAdvance) {
+  if (!toAdvanceRequest) {
     return <Text>{t("competitions.live.admin.quit.failed_to_fetch")}</Text>;
   }
+
+  const toAdvance = toAdvanceRequest.next_advancing;
 
   const onQuitClick = () => {
     quitCompetitor(competitor.id, advanceNext, toAdvance);
@@ -198,6 +208,7 @@ function QuitModal({
               </Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
+              <Text fontWeight="bold">{competitor.name}</Text>
               {toAdvance.length > 0 ? (
                 <>
                   <Text>

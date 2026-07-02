@@ -6,6 +6,8 @@ class Competition < ApplicationRecord
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
+  has_many :scoretaking_registrations, -> { scoretakers }, class_name: "Registration", inverse_of: :competition
+  has_many :scoretakers, -> { joins(registrations: [:assignments]) }, through: :scoretaking_registrations, source: :user
   has_many :results
   has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }, inverse_of: :competition
   has_many :uploaded_jsons, dependent: :destroy
@@ -498,6 +500,12 @@ class Competition < ApplicationRecord
     competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
+  def spots_left
+    return nil unless competitor_limit_enabled?
+
+    competitor_limit - registrations.accepted_and_paid_pending_count
+  end
+
   def auto_accept_threshold_reached?
     return false if auto_accept_disable_threshold.blank?
 
@@ -505,7 +513,7 @@ class Competition < ApplicationRecord
   end
 
   def number_of_bookmarks
-    bookmarked_users.count
+    bookmarked_competitions.count
   end
 
   def country
@@ -705,6 +713,8 @@ class Competition < ApplicationRecord
              'scramble_file_uploads',
              'accepted_registrations',
              'accepted_newcomers',
+             'scoretaking_registrations',
+             'scoretakers',
              'duplicate_checker_job_runs',
              'tickets_competition_result',
              'result_ticket',
@@ -1445,7 +1455,7 @@ class Competition < ApplicationRecord
   end
 
   def events_with_podium_results
-    results.includes(:result_attempts).podium.order(:pos).group_by(&:event)
+    results.includes(:result_attempts).podium.order(:global_pos).group_by(&:event)
            .sort_by { |event, _results| event.rank }
   end
 
@@ -1748,7 +1758,15 @@ class Competition < ApplicationRecord
     # Respect other `includes` associations that might have been specified ahead of time
     previous_includes = competitions.includes_values
 
-    competitions.includes(:delegates, :organizers, *previous_includes).order(**order)
+    # The delegates and organizers get run through `User#serializable_hash`, so eager load the
+    # associations it touches to avoid an N+1 explosion (one set of queries per delegate/organizer
+    # per competition). See `User::SERIALIZATION_INCLUDES`.
+    competitions.includes(
+      :events, # serialized via the `event_ids` method, one query per competition otherwise
+      { delegates: User::SERIALIZATION_INCLUDES },
+      { organizers: User::SERIALIZATION_INCLUDES },
+      *previous_includes,
+    ).order(**order)
   end
 
   def competing_step_parameters(current_user)
@@ -1849,19 +1867,30 @@ class Competition < ApplicationRecord
     }
   end
 
+  # Associations that `to_competition_info` touches: delegates and organizers are serialized
+  # via `User#serializable_hash` (see `User::SERIALIZATION_INCLUDES`), `event_ids` reads the
+  # events association, and `uses_cutoff?`/`uses_qualification?` iterate over every round of
+  # every competition event. Eager load them all to avoid an N+1 explosion.
+  INFO_SERIALIZATION_INCLUDES = [
+    :events,
+    { competition_events: :rounds },
+    { delegates: User::SERIALIZATION_INCLUDES },
+    { organizers: User::SERIALIZATION_INCLUDES },
+  ].freeze
+
   def to_competition_info
     options = {
       only: %w[id name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
                extra_registration_requirements enable_donations refund_policy_limit_date event_change_deadline_date waiting_list_deadline_date
                on_the_spot_registration on_the_spot_entry_fee_lowest_denomination qualification_results event_restrictions
-               base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel
+               base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel scoretaking_software
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled auto_accept_preference auto_accept_disable_threshold],
       # TODO: h2h_rounds is a temporary method, which should be removed when full-fledged H2H backend support is added - expected in Q1 2026
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series? registration_full_and_accepted? h2h_rounds tab_names],
+                  part_of_competition_series? registration_full_and_accepted? spots_left h2h_rounds tab_names],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -1916,7 +1945,7 @@ class Competition < ApplicationRecord
     persons_wcif + managers.map { it.to_wcif(self, authorized: authorized) }
   end
 
-  def events_wcif(version: WCIF_STABLE_VERSION)
+  def events_wcif(version: WCIF_STABLE_VERSION, include_results: true)
     includes_associations = [
       { rounds: [
         :competition_event,
@@ -1928,7 +1957,7 @@ class Competition < ApplicationRecord
     competition_events
       .includes(includes_associations)
       .sort_by { |ce| ce.event.rank }
-      .map { it.to_wcif(version: version) }
+      .map { it.to_wcif(version: version, include_results: include_results) }
   end
 
   def schedule_wcif
@@ -2406,8 +2435,8 @@ class Competition < ApplicationRecord
         "generateWebsite" => generate_website,
         "externalWebsite" => external_website,
         "externalRegistrationPage" => external_registration_page,
-        "usesWcaRegistration" => use_wca_registration,
-        "usesWcaLive" => scoretaking_software_wca_live?,
+        "usesWcaRegistration" => use_wca_registration?,
+        "scoretakingSoftware" => scoretaking_software,
       },
       "entryFees" => {
         "currencyCode" => currency_code,
@@ -2515,7 +2544,7 @@ class Competition < ApplicationRecord
         "externalWebsite" => errors[:external_website],
         "externalRegistrationPage" => errors[:external_registration_page],
         "usesWcaRegistration" => errors[:use_wca_registration],
-        "usesWcaLive" => errors[:scoretaking_software],
+        "scoretakingSoftware" => errors[:scoretaking_software],
       },
       "entryFees" => {
         "currencyCode" => errors[:currency_code],
@@ -2723,7 +2752,7 @@ class Competition < ApplicationRecord
       guest_entry_status: form_data.dig('registration', 'guestEntryStatus'),
       allow_registration_edits: form_data.dig('registration', 'allowSelfEdits'),
       competitor_can_cancel: form_data.dig('registration', 'competitorCanCancel'),
-      scoretaking_software: form_data.dig('website', 'usesWcaLive') ? :wca_live : :external,
+      scoretaking_software: form_data.dig('website', 'scoretakingSoftware'),
       allow_registration_without_qualification: form_data.dig('eventRestrictions', 'qualificationResults', 'allowRegistrationWithout'),
       guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),
       events_per_registration_limit: form_data.dig('eventRestrictions', 'eventLimitation', 'perRegistrationLimit'),
@@ -2882,7 +2911,7 @@ class Competition < ApplicationRecord
             "externalWebsite" => { "type" => %w[string null] },
             "externalRegistrationPage" => { "type" => %w[string null] },
             "usesWcaRegistration" => { "type" => "boolean" },
-            "usesWcaLive" => { "type" => "boolean" },
+            "scoretakingSoftware" => { "type" => "string", "enum" => %w[external wca_live internal] },
           },
         },
         "userSettings" => {
@@ -3012,7 +3041,7 @@ class Competition < ApplicationRecord
           "additionalProperties" => false,
           "properties" => {
             "externalWebsite" => { "type" => %w[string null] },
-            "usesWcaLive" => { "type" => "boolean" },
+            "scoretakingSoftware" => { "type" => "string", "enum" => %w[external wca_live internal] },
           },
         },
         "entryFees" => {

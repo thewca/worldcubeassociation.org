@@ -20,13 +20,13 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id, isLive = false }) => {
   const api = useAPI();
   const { t } = useT();
 
-  const { data: registrationsQuery, isFetching } = api.useQuery(
-    "get",
-    "/v1/competitions/{competitionId}/registrations",
-    {
-      params: { path: { competitionId: id } },
-    },
-  );
+  const {
+    data: registrationsQuery,
+    isFetching,
+    isError,
+  } = api.useQuery("get", "/v1/competitions/{competitionId}/registrations", {
+    params: { path: { competitionId: id } },
+  });
 
   const { data: psychSheetQuery, isFetching: isFetchingPsychsheets } =
     api.useQuery(
@@ -52,12 +52,12 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id, isLive = false }) => {
     return Array.from(eventSet);
   }, [registrationsQuery]);
 
-  if (isFetching || isFetchingPsychsheets) {
-    return <Loading />;
+  if (isError) {
+    return <Text>{t("competitions.registration_v2.errors.-1001")}</Text>;
   }
 
-  if (!registrationsQuery) {
-    return <Text>{t("competitions.registration_v2.errors.-1001")}</Text>;
+  if (isFetching || isFetchingPsychsheets || !registrationsQuery) {
+    return <Loading />;
   }
 
   return (

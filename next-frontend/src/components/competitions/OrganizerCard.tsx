@@ -11,13 +11,12 @@ import {
   Stat,
 } from "@chakra-ui/react";
 import { Link as ChakraLink } from "@chakra-ui/react";
-import { MarkdownProse } from "@/components/Markdown";
+import { ChakraMarkdown } from "@/components/Markdown";
 import WcaDocsIcon from "@/components/icons/WcaDocsIcon";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 
 type OrganizerPerson =
-  | components["schemas"]["Person"]
-  | components["schemas"]["Organizer"];
+  components["schemas"]["Person"] | components["schemas"]["Organizer"];
 
 function OrganizerCarousel({ organizers }: { organizers: OrganizerPerson[] }) {
   return (
@@ -89,10 +88,9 @@ export default function OrganizationTeamCard({
         {competitionInfo.contact && (
           <Stat.Root variant="competition">
             <Stat.Label>Contact</Stat.Label>
-            <MarkdownProse
-              as={Stat.ValueText}
-              content={competitionInfo.contact}
-            />
+            <ChakraMarkdown paragraphAs={Stat.ValueText}>
+              {competitionInfo.contact}
+            </ChakraMarkdown>
           </Stat.Root>
         )}
 

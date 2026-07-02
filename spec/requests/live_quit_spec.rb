@@ -13,7 +13,7 @@ end
 RSpec.describe "WCA Live API" do
   describe "DELETE #quit_competitor" do
     let!(:delegate) { create(:delegate) }
-    let(:competition) { create(:competition, event_ids: ["333"], delegates: [delegate]) }
+    let(:competition) { create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate]) }
     let(:registrations) { create_list(:registration, 5, :accepted, competition: competition, event_ids: ["333"]) }
 
     it "Correctly quits a user from a first round" do
@@ -145,7 +145,7 @@ RSpec.describe "WCA Live API" do
   end
 
   describe "next_participating_without with linked rounds" do
-    let(:competition) { create(:competition, event_ids: ["333"]) }
+    let(:competition) { create(:competition, scoretaking_software: :internal, event_ids: ["333"]) }
     let(:registrations) { create_list(:registration, 5, :accepted, competition: competition, event_ids: ["333"]) }
 
     it "excludes all linked-round results for the quitting competitor, not just one" do

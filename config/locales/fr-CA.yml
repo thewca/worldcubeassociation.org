@@ -1774,6 +1774,11 @@ fr-CA:
           validation_error: Veuillez vérifier que vous n'êtes pas un robot.
       #original_hash: b3ce1ed
       success_message: Demande soumise - nous vous contacterons bientôt.
+      #original_hash: 45300da
+      success_message_with_ticket_link_html: >-
+        Original : Demande envoyée - nous vous répondrons prochainement. Pour
+        consulter le statut de cette demande, veuillez vous rendre sur <a
+        href="%{link}">ce lien</a>.
   homepage:
     #original_hash: 6b59e19
     learn_more: En savoir plus
@@ -2934,21 +2939,50 @@ fr-CA:
         d’inscription.
       #original_hash: 319fd45
       schedule_locked_after_results_submitted: L'horaire ne peut plus être modifié une fois les résultats soumis.
+      #original_hash: 08ae543
+      spots_left:
+        zero: Compétition pleine
+        one: Une place restante
+        other: '%{count} places restantes'
     live:
       #original_hash: 20bdee1
       title: Résultats en direct
+      incompatible:
+        #original_hash: 7fe69dd
+        external: >-
+          Cette compétition utilise un logiciel externe de saisie des scores.
+          Veuillez consulter les informations relatives à la compétition pour
+          savoir où suivre les scores en direct.
+        #original_hash: 2701cf9
+        wca_live: >-
+          Cette compétition utilise WCA Live pour la saisie des scores. Veuillez
+          cliquer sur ce lien pour consulter les résultats en direct :
+      round_state:
+        #original_hash: 3d92d03
+        ongoing: en direct
+        #original_hash: 476d0eb
+        done: terminé
       connection:
         #original_hash: 3c983dc
         initialized: Connexion en cours d'initialisation
-        #original_hash: 1c73306
-        connected: 'Connecté, les résultats sont en cours de mise à jour'
+        #original_hash: 4534037
+        connected: 'Connecté, recevant les résultats en direct'
         #original_hash: ca57820
         disconnected: 'Connexion perdue, les résultats ne sont pas mis à jour'
+        status:
+          #original_hash: f167969
+          initialized: Initialisation
+          #original_hash: ce09957
+          connected: Connecté
+          #original_hash: 3a67fd8
+          disconnected: Déconnecté
       podiums:
         #original_hash: 02ae2bd
         title: Podiums
         #original_hash: d27b628
         undetermined: Podiums à déterminer
+        #original_hash: bdf0487
+        none: Il n'y a pas encore de podiums !
       admin:
         #original_hash: 42c0774
         open: Ouvrir
@@ -2962,6 +2996,14 @@ fr-CA:
         edit: Modifier
         #original_hash: 0f766b4
         results: Résultats
+        #original_hash: 9be51f9
+        registration: Inscription
+        #original_hash: fdf6804
+        admin_view: Vue administrateur
+        #original_hash: 310a51e
+        results_view: Voir les résultats
+        #original_hash: 2a1a4c2
+        double_check: Double vérification
         warnings:
           #original_hash: 229c10e
           omitted: >-
@@ -2997,8 +3039,18 @@ fr-CA:
             other: 'Les prochains compétiteurs à se qualifier sont %{competitors}'
           #original_hash: b3b27d2
           advance: Qualifier le prochain compétiteur
-          #original_hash: 72d311b
-          quit_confirm: Retirer un compétiteur du tour
+          #original_hash: 6309b0a
+          quit_confirm:
+            zero: Il n'y a pas de compétiteur à retirer
+            one: Retrait d'un compétiteur du tour
+            other: Retrait de compétiteurs du tour
+          bulk:
+            #original_hash: 3af42e5
+            success: '%{count} compétiteurs ont été supprimés avec succès'
+            #original_hash: 874fb9a
+            failure: Échec de la suppression groupée des compétiteurs
+            #original_hash: f9fd9a9
+            menu: Suppression groupée
           #original_hash: 1acfc1c
           quit_menu: Supprimer
           #original_hash: a4546af
@@ -3007,6 +3059,23 @@ fr-CA:
           cancel: Annuler
           #original_hash: 662e4d6
           failed_to_fetch: Impossible de récupérer le compétiteur qualifié suivant
+          #original_hash: daf65fc
+          still_processing: >-
+            Il est impossible d'exécuter les actions « Supprimer le compétiteur
+            » tant que certains résultats sont encore en cours de traitement
+        add_competitor:
+          #original_hash: 6c15985
+          single_round: Ajouter un compétiteur au tour
+          #original_hash: ef59790
+          multiple_rounds:
+            zero: Aucune ronde ouverte pour cette double confrontation
+            one: >-
+              Ajouter un compétiteur aux deux manches de la double
+              confrontation.
+            other: >-
+              Ajoutez un compétiteur au tour ; comme le deuxième tour de la
+              double confrontation n'est pas ouvert, vous devrez l'ajouter
+              séparément.
       results:
         #original_hash: 29c8c1b
         competitor: Compétiteur
@@ -3598,8 +3667,8 @@ fr-CA:
           external_registration_page: Page d'inscription
           #original_hash: 9ab2849
           uses_wca_registration: Je souhaite utiliser le site de la WCA pour les inscriptions
-          #original_hash: 4398120
-          uses_wca_live: Je souhaite utiliser WCA Live pour le scoretaking
+          #original_hash: 3e0f2b7
+          scoretaking_software: Logiciel utilisé pour la saisie des scores
         entry_fees:
           #original_hash: eb2e42c
           currency_code: Devise
@@ -3839,8 +3908,10 @@ fr-CA:
             compétition. Doit être une url http(s) valide.
           #original_hash: da39a3e
           uses_wca_registration: ''
-          #original_hash: da39a3e
-          uses_wca_live: ''
+          #original_hash: 89b0eba
+          scoretaking_software: >-
+            Sélectionnez « %{choice_ilr} » si vous souhaitez utiliser le système
+            de double confrontation.
         user_settings:
           #original_hash: da39a3e
           receive_registration_emails: ''
@@ -3995,6 +4066,14 @@ fr-CA:
             live: >-
               Accepter automatiquement les inscriptions lorsque le paiement est
               effectué
+        website:
+          scoretaking_software:
+            #original_hash: 0d5f9cc
+            external: 'Un outil externe, qui n''est pas géré par la WCA'
+            #original_hash: 4cb3be6
+            wca_live: 'WCA Live, hébergé sur live.worldcubeassociation.org'
+            #original_hash: 0ac079b
+            internal: Résultats en direct intégrés
         registration:
           allow_on_the_spot:
             #original_hash: eb483f3
@@ -4731,6 +4810,12 @@ fr-CA:
         qualification_some_events_html: >-
           Les temps de qualification aux %{events} doivent être fixés au plus
           tard le <b>%{date}</b>.
+        #original_hash: 3c65566
+        advancement_condition_html: >-
+          Le nombre de compétiteurs indiqués comme qualifiés pour le tour
+          suivant correspond au nombre maximal prévu. Ce nombre peut être
+          inférieur si le nombre de compétiteurs est inférieur aux prévisions ou
+          s'il y a des ex æquo à la limite de qualification.
       #original_hash: 041a5de
       format: Format
       #original_hash: a081259
@@ -4741,6 +4826,8 @@ fr-CA:
       proceed: Qualifiés
       #original_hash: 2ffe44e
       qualification: Qualification
+      #original_hash: ff3e40e
+      advancement_condition: Condition de passage au tour suivant
     schedule:
       display_as:
         #original_hash: bb6d7e5
@@ -5694,6 +5781,8 @@ fr-CA:
       last_delegated: Dernière compétition déléguée
       #original_hash: 089ea68
       total_delegated: Compétitions déléguées
+      #original_hash: c2f35eb
+      lead_delegated: Compétitions en tant que délégué principal
       #original_hash: 34f3a06
       history: Historique
   regional_organizations:
@@ -6868,6 +6957,13 @@ fr-CA:
         [%{round_id}] Bien que vous puissiez avoir plusieurs groupes dans le
         3x3x3 Multi-Blind, au moins un des groupes doit contenir des mélanges
         pour toutes les tentatives.
+      #original_hash: 54e97ff
+      mbld_scrambles_warning: >-
+        [%{round_id}] Ce tour comprend des résultats de 3x3x3 à l'aveugle
+        résolution multiple. Veuillez préciser dans le commentaire accompagnant
+        votre envoi combien de mélanges de chaque ensemble ont été effectivement
+        utilisés par les compétiteurs, afin que le WRT puisse supprimer les
+        mélanges supplémentaires non utilisés.
       #original_hash: ba3338f
       multiple_fmc_groups_warning: >-
         [%{round_id}] Plusieurs groupes de FMC ont été utilisés. Si un seul

@@ -1,25 +1,25 @@
 import { Format } from "@/lib/wca/data/formats";
-import { Link, Table } from "@chakra-ui/react";
+import { Box, Link, Table } from "@chakra-ui/react";
 import { Stat, statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
 import { padSkipped } from "@/lib/live/padSkipped";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import { recordTagBadge } from "@/components/results/TableCells";
+import { WithRecordTag } from "@/components/results/TableCells";
 import { LiveAttempt, LiveCompetitor, LiveResult } from "@/types/live";
 import { TFunction } from "i18next";
 
 export function LiveTableHeader({
   isLinked = false,
   format,
-  showFull = true,
   byPerson = false,
   isAdmin = false,
+  isProjector = false,
   t,
 }: {
   isLinked?: boolean;
-  showFull?: boolean;
   byPerson?: boolean;
   isAdmin?: boolean;
+  isProjector?: boolean;
   format: Format;
   t: TFunction;
 }) {
@@ -29,45 +29,55 @@ export function LiveTableHeader({
   const attemptIndexes = [...Array(solveCount).keys()];
 
   return (
-    <Table.Header>
-      <Table.Row>
-        {byPerson && (
-          <Table.ColumnHeader textAlign="left">
-            {t("competitions.results_table.round")}
-          </Table.ColumnHeader>
-        )}
-        <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
-        {isAdmin && (
-          <Table.ColumnHeader textAlign="center">ID</Table.ColumnHeader>
-        )}
-        {!byPerson && (
-          <Table.ColumnHeader>
-            {t("competitions.live.results.competitor")}
-          </Table.ColumnHeader>
-        )}
-        {showFull && !byPerson && (
-          <Table.ColumnHeader>
-            {t("results.table_elements.region")}
-          </Table.ColumnHeader>
-        )}
-        {isLinked && (
-          <Table.ColumnHeader>
-            {showFull && t("competitions.results_table.round")}
-          </Table.ColumnHeader>
-        )}
-        {showFull &&
-          attemptIndexes.map((num) => (
-            <Table.ColumnHeader key={num} textAlign="right">
+    <>
+      {isProjector && (
+        <Table.ColumnGroup>
+          <Table.Column htmlWidth="75px" />
+          <Table.Column htmlWidth="22%" />
+          <Table.Column htmlWidth="50px" />
+        </Table.ColumnGroup>
+      )}
+      <Table.Header>
+        <Table.Row>
+          {byPerson && (
+            <Table.ColumnHeader textAlign="left">
+              {t("competitions.results_table.round")}
+            </Table.ColumnHeader>
+          )}
+          <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
+          {isAdmin && (
+            <Table.ColumnHeader textAlign="center">ID</Table.ColumnHeader>
+          )}
+          {!byPerson && (
+            <Table.ColumnHeader overflow="hidden" textOverflow="ellipsis">
+              {t("competitions.live.results.competitor")}
+            </Table.ColumnHeader>
+          )}
+          {!byPerson && (
+            <Table.ColumnHeader hideBelow="md">
+              {!isProjector && t("results.table_elements.region")}
+            </Table.ColumnHeader>
+          )}
+          {isLinked && (
+            <Table.ColumnHeader>
+              <Box as="span" hideBelow="md">
+                {t("competitions.results_table.round")}
+              </Box>
+            </Table.ColumnHeader>
+          )}
+          {attemptIndexes.map((num) => (
+            <Table.ColumnHeader key={num} textAlign="right" hideBelow="md">
               {num + 1}
             </Table.ColumnHeader>
           ))}
-        {stats.map((stat) => (
-          <Table.ColumnHeader textAlign="right" key={stat.field}>
-            {t(stat.i18nKey)}
-          </Table.ColumnHeader>
-        ))}
-      </Table.Row>
-    </Table.Header>
+          {stats.map((stat) => (
+            <Table.ColumnHeader textAlign="right" key={stat.field}>
+              {t(stat.i18nKey)}
+            </Table.ColumnHeader>
+          ))}
+        </Table.Row>
+      </Table.Header>
+    </>
   );
 }
 
@@ -85,7 +95,7 @@ export function LivePositionCell({
   return (
     <Table.Cell
       width={1}
-      layerStyle="fill.deep"
+      layerStyle={showAdvancing ? "fill.deep" : undefined}
       textAlign="right"
       rowSpan={rowSpan}
       colorPalette={
@@ -98,13 +108,11 @@ export function LivePositionCell({
 }
 
 export function LiveCompetitorCell({
-  isAdmin = false,
   link = true,
   rowSpan,
   competitionId,
   competitor,
 }: {
-  isAdmin?: boolean;
   link?: boolean;
   rowSpan?: number;
   competitionId: string;
@@ -112,19 +120,17 @@ export function LiveCompetitorCell({
 }) {
   return (
     <Table.Cell rowSpan={rowSpan}>
-      {link ? (
+      {link && (
         <Link
-          href={
-            isAdmin
-              ? `/registrations/${competitor.id}/edit`
-              : `/competitions/${competitionId}/live/competitors/${competitor.id}`
-          }
+          href={`/competitions/${competitionId}/live/competitors/${competitor.id}`}
+          hideBelow="md"
         >
           {competitor.name}
         </Link>
-      ) : (
-        competitor.name
       )}
+      <Box as="span" hideFrom={link ? "md" : undefined}>
+        {competitor.name}
+      </Box>
     </Table.Cell>
   );
 }
@@ -144,6 +150,7 @@ export function LiveAttemptsCells({
     <Table.Cell
       textAlign="right"
       key={`attempts-${competitorId}-${attempt.attempt_number}`}
+      hideBelow="md"
     >
       {formatAttemptResult(attempt.value, eventId)}
     </Table.Cell>
@@ -176,11 +183,11 @@ export function LiveStatCells({
     <Table.Cell
       key={`${competitorId}-${stat.i18nKey}`}
       textAlign="right"
-      position="relative"
       fontWeight={shouldHighlight(statIndex) ? "bold" : "normal"}
     >
-      {formatAttemptResult(result[stat.field], eventId)}{" "}
-      {!isAdmin && recordTagBadge(result[stat.recordTagField])}
+      <WithRecordTag recordTag={isAdmin ? null : result[stat.recordTagField]}>
+        {formatAttemptResult(result[stat.field], eventId)}
+      </WithRecordTag>
     </Table.Cell>
   ));
 }

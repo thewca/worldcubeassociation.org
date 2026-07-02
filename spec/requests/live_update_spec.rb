@@ -9,7 +9,7 @@ RSpec.describe "WCA Live API" do
     it "Updates a Live Result Correctly" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
       create(:live_result, round: round, registration: registration)
@@ -38,7 +38,7 @@ RSpec.describe "WCA Live API" do
     it "Clears a live result correctly" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
       create(:live_result, round: round, registration: registration)
@@ -60,7 +60,7 @@ RSpec.describe "WCA Live API" do
     it "Can't update result if it doesn't exist" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
 

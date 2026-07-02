@@ -1,6 +1,6 @@
 "use client";
 
-import { PanelProps } from "@/app/(wca)/competitions/[competitionId]/register/StepPanel";
+import { PanelProps } from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/StepPanel";
 import {
   Field,
   Fieldset,

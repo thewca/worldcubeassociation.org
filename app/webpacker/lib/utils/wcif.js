@@ -6,7 +6,7 @@ import { attemptResultToString, attemptResultToMbPoints } from './edit-events';
 import useSaveAction from '../hooks/useSaveAction';
 import { centisecondsToClockFormat } from '../wca-live/attempts';
 
-export function useSaveWcifAction() {
+export function useSaveWcifAction(formatVersion = '1.1') {
   const { save, saving } = useSaveAction();
 
   const alertWcifError = (err) => {
@@ -23,11 +23,11 @@ export function useSaveWcifAction() {
       onError = alertWcifError,
     ) => {
       const url = `/api/v0/competitions/${competitionId}/wcif`;
-      const wcifWithFormat = { formatVersion: '1.1', ...wcifData };
+      const wcifWithFormat = { formatVersion, ...wcifData };
 
       save(url, wcifWithFormat, onSuccess, options, onError);
     },
-    [save],
+    [save, formatVersion],
   );
 
   return {
@@ -223,43 +223,47 @@ export function getMatchingActivities(scheduleWcif, activity) {
   ).filter((act) => doActivitiesMatch(act, activity));
 }
 
-export function eventQualificationToString(wcifEvent, qualification, { short } = {}) {
+export function eventQualificationToString(wcifEvent, qualification, { short, isV2 = false } = {}) {
   if (!qualification) {
     return '-';
   }
   let dateString = '-';
-  if (qualification.whenDate) {
+  const wcifWhenDate = isV2 ? qualification.latestResultDate : qualification.whenDate;
+  if (wcifWhenDate) {
     const whenDate = DateTime
-      .fromISO(qualification.whenDate, { zone: 'UTC' })
+      .fromISO(wcifWhenDate, { zone: 'UTC' })
       .setZone('local'); // We *want* to show this as a local timestamp if you're living west of Greenwich
 
     dateString = whenDate.toString().substring(0, 10);
   }
   const deadlineString = I18n.t('qualification.deadline.by_date', { date: dateString });
   const event = events.byId[wcifEvent.id];
-  switch (qualification.resultType) {
+  const wcifResultType = isV2 ? qualification.resultCondition.scope : qualification.resultType;
+  const wcifQualificationType = isV2 ? qualification.resultCondition.type : qualification.type;
+  const wcifQualificationLevel = isV2 ? qualification.resultCondition.value : qualification.level;
+  switch (wcifResultType) {
     case 'single':
     case 'average':
-      if (qualification.type === 'ranking') {
-        const messageName = `qualification.${qualification.resultType}.ranking`;
-        return `${I18n.t(messageName, { ranking: qualification.level })} ${deadlineString}`;
+      if (wcifQualificationType === 'ranking') {
+        const messageName = `qualification.${wcifResultType}.ranking`;
+        return `${I18n.t(messageName, { ranking: wcifQualificationLevel })} ${deadlineString}`;
       }
-      if (qualification.type === 'anyResult') {
-        const messageName = `qualification.${qualification.resultType}.any_result`;
+      if (wcifQualificationType === 'anyResult' || (wcifQualificationType === 'resultAchieved' && wcifQualificationLevel === null)) {
+        const messageName = `qualification.${wcifResultType}.any_result`;
         return `${I18n.t(messageName)} ${deadlineString}`;
       }
       if (event.isTimedEvent) {
-        const messageName = `qualification.${qualification.resultType}.time`;
-        return `${I18n.t(messageName, { time: attemptResultToString(qualification.level, wcifEvent.id, short) })} ${deadlineString}`;
+        const messageName = `qualification.${wcifResultType}.time`;
+        return `${I18n.t(messageName, { time: attemptResultToString(wcifQualificationLevel, wcifEvent.id, short) })} ${deadlineString}`;
       }
       if (event.isFewestMoves) {
-        const messageName = `qualification.${qualification.resultType}.moves`;
-        const moves = qualification.resultType === 'average' ? qualification.level / 100 : qualification.level;
+        const messageName = `qualification.${wcifResultType}.moves`;
+        const moves = wcifResultType === 'average' ? wcifQualificationLevel / 100 : wcifQualificationLevel;
         return `${I18n.t(messageName, { moves })} ${deadlineString}`;
       }
       if (event.isMultipleBlindfolded) {
-        const messageName = `qualification.${qualification.resultType}.points`;
-        return `${I18n.t(messageName, { points: attemptResultToMbPoints(qualification.level) })} ${deadlineString}`;
+        const messageName = `qualification.${wcifResultType}.points`;
+        return `${I18n.t(messageName, { points: attemptResultToMbPoints(wcifQualificationLevel) })} ${deadlineString}`;
       }
       return '-';
     default:
@@ -304,22 +308,62 @@ export function advancementConditionToString(wcifRound, { short } = {}) {
   }
 }
 
-export function cutoffToString(wcifRound, { short } = {}) {
+// WCIF v2 dropped per-round `advancementCondition`: a round's advancement is now
+// derived from the *next* round's participationRuleset. Dual Rounds have no real
+// advancement out of their first round — everyone proceeds to the colinked round.
+export function roundAdvancementToString(wcifRound, wcifEvents, { short } = {}) {
+  const { eventId, roundNumber } = parseActivityCode(wcifRound.id);
+  const allRounds = wcifEvents.find((event) => event.id === eventId).rounds;
+
+  // The final round never advances anywhere.
+  if (roundNumber === allRounds.length) {
+    return null;
+  }
+
+  if (wcifRound.linkedRounds) {
+    const lastLinkedRoundId = wcifRound.linkedRounds
+      .toSorted((a, b) => parseActivityCode(a).roundNumber - parseActivityCode(b).roundNumber)
+      .at(-1);
+
+    // First round of a Dual Round: all competitors advance to the colinked round.
+    if (wcifRound.id !== lastLinkedRoundId) {
+      return I18n.t(`advancement_condition${short ? '.short' : ''}.all_advance`);
+    }
+  }
+
+  // WCIF round numbers are 1-based, so the next round sits at index `roundNumber`.
+  const nextSource = allRounds[roundNumber]?.participationRuleset?.participationSource;
+  const condition = nextSource?.resultCondition;
+  if (!condition) {
+    return null;
+  }
+
+  return advancementConditionToString({
+    ...wcifRound,
+    advancementCondition: {
+      type: condition.type === 'resultAchieved' ? 'attemptResult' : condition.type,
+      level: condition.value,
+    },
+  }, { short });
+}
+
+export function cutoffToString(wcifRound, { short, isV2 } = {}) {
   const { eventId } = parseActivityCode(wcifRound.id);
   const wcaEvent = events.byId[eventId];
+  const value = isV2 ? wcifRound.cutoff.resultValue : wcifRound.cutoff.attemptResult;
 
   if (wcaEvent.isTimedEvent) {
-    const time = centisecondsToClockFormat(wcifRound.cutoff.attemptResult);
+    const time = centisecondsToClockFormat(value);
     return short ? time : I18n.t('cutoff.time', { count: wcifRound.cutoff.numberOfAttempts, time });
   }
 
   if (wcaEvent.isFewestMoves) {
-    const moves = wcifRound.cutoff.attemptResult;
+    const moves = value;
     return short ? moves : I18n.t('cutoff.moves', { count: wcifRound.cutoff.numberOfAttempts, moves });
   }
 
   if (wcaEvent.isMultipleBlindfolded) {
-    const points = attemptResultToMbPoints(wcifRound.cutoff.attemptResult);
+    const points = attemptResultToMbPoints(value);
     return short ? points : I18n.t('cutoff.points', { count: wcifRound.cutoff.numberOfAttempts, points });
   }
 

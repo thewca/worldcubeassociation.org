@@ -8,12 +8,17 @@ namespace :live_results do
 
     rounds = Round.joins(:live_results)
                   .where("round_results IS NOT NULL AND round_results != '[]'")
-                  .includes(:competition_event)
+                  .includes(:competition_event, :competition)
                   .distinct
 
     puts "Checking #{rounds.count} rounds with both round_results and live_results..."
 
     rounds.find_each do |round|
+      # For internal-scoretaking competitions `round_results` is dead data: `Round#to_wcif`
+      #   always serves `live_results` for them, never `round_results`. The latter is only ever
+      #   a stale WCIF-PATCH snapshot, so comparing the two just produces noise.
+      next if round.competition.scoretaking_software_internal?
+
       round_wcif = round.round_results.map(&:to_wcif).index_by { it["personId"] }
       live_wcif = round.live_results.includes(:live_attempts, :registration).map(&:to_wcif).index_by { it["personId"] }
 
