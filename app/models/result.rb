@@ -27,11 +27,25 @@ class Result < ApplicationRecord
 
   validates :person_id, uniqueness: { scope: :round_id, message: "this WCA ID already has a result for that round" }
 
-  scope :final, -> { where(round_type_id: RoundType.final_rounds.select(:id)) }
+  scope :final, -> { joins(:round).merge(Round.final) }
   scope :succeeded, -> { where("best > 0") }
   scope :average_succeeded, -> { where("average > 0") }
-  scope :podium, -> { final.succeeded.where(pos: [1..3]) }
-  scope :winners, -> { final.succeeded.where(pos: 1).joins(:event).order("events.rank") }
+  # A dual (linked) round stores one result row per round, so a competitor who took part in
+  # both rounds appears twice with the same global_pos. Keep only their better solve so each
+  # competitor shows up once. No-op for normal rounds (already one row per competitor).
+  scope :merged_dual_rounds, lambda {
+    best_per_person = select(:id).joins(:format).select(Arel.sql(<<~SQL.squish))
+      ROW_NUMBER() OVER (
+        PARTITION BY results.competition_id, results.event_id, results.person_id
+        ORDER BY (CASE WHEN formats.sort_by = 'average' THEN results.average ELSE results.best END) <= 0,
+                 (CASE WHEN formats.sort_by = 'average' THEN results.average ELSE results.best END) ASC,
+                 results.best <= 0, results.best ASC, results.id ASC
+      ) AS rn
+    SQL
+    where("results.id IN (SELECT id FROM (#{best_per_person.to_sql}) ranked WHERE rn = 1)")
+  }
+  scope :podium, -> { final.succeeded.where(global_pos: [1..3]).merged_dual_rounds }
+  scope :winners, -> { final.succeeded.where(global_pos: 1).merged_dual_rounds.joins(:event).order("events.rank") }
   scope :before, ->(date) { joins(:competition).where(competition: { end_date: ...date }) }
   scope :on_or_before, ->(date) { joins(:competition).where(competition: { end_date: ..date }) }
   scope :single_better_than, ->(time) { where("best < ? AND best > 0", time) }

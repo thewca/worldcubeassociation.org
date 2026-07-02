@@ -10,7 +10,7 @@
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ColorPaletteSelect".
  */
-export type ColorPaletteSelect = 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'white';
+export type ColorPaletteSelect = 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'wcaWhite';
 /**
  * Icon name
  *
@@ -149,6 +149,11 @@ export type StaticTargetLink =
   | '/speedcubing-history'
   | '/teams-committees'
   | '/translators';
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GrowthStrategy".
+ */
+export type GrowthStrategy = ('grow' | 'justify') | null;
 /**
  * Supported timezones in IANA format.
  *
@@ -323,6 +328,8 @@ export interface Config {
       )[];
   globals: {
     nav: Nav;
+    footer: Footer;
+    'social-links': SocialLink;
     home: Home;
     'about-us-page': AboutUsPage;
     'privacy-page': PrivacyPage;
@@ -335,6 +342,8 @@ export interface Config {
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
+    'social-links': SocialLinksSelect<false> | SocialLinksSelect<true>;
     home: HomeSelect<false> | HomeSelect<true>;
     'about-us-page': AboutUsPageSelect<false> | AboutUsPageSelect<true>;
     'privacy-page': PrivacyPageSelect<false> | PrivacyPageSelect<true>;
@@ -425,6 +434,24 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -478,6 +505,7 @@ export interface Announcement {
     [k: string]: unknown;
   };
   contentMarkdown?: string | null;
+  url?: string | null;
   publishedAt: string;
   publishedBy: string | User;
   updatedAt: string;
@@ -716,6 +744,30 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -739,6 +791,7 @@ export interface AnnouncementsSelect<T extends boolean = true> {
   title?: T;
   content?: T;
   contentMarkdown?: T;
+  url?: T;
   publishedAt?: T;
   publishedBy?: T;
   updatedAt?: T;
@@ -948,7 +1001,170 @@ export interface Nav {
         blockName?: string | null;
         blockType: 'ExternalLinkItem';
       }
+    | {
+        label: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'SocialsMenu';
+      }
   )[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: string;
+  navigationLinks?:
+    | (
+        | {
+            displayText: string;
+            targetLink: StaticTargetLink;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'FooterLinkItem';
+          }
+        | {
+            displayText: string;
+            targetLink: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'FooterExternalLinkItem';
+          }
+      )[]
+    | null;
+  legalLinks?:
+    | {
+        displayText: string;
+        targetLink: StaticTargetLink;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'FooterLinkItem';
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links".
+ */
+export interface SocialLink {
+  id: string;
+  links?:
+    | {
+        displayText: string;
+        targetLink: string;
+        displayIcon:
+          | 'About the Regulations'
+          | 'About the WCA'
+          | 'Admin Results'
+          | 'All Competitions'
+          | 'Bookmark'
+          | 'Clone'
+          | 'Competition Not Started'
+          | 'Registration Closed'
+          | 'Registration Closed (Red)'
+          | 'Registration Full but Open'
+          | 'Registration Full but Open (Orange)'
+          | 'Registration Not Full, Open'
+          | 'Registration Not Full, Open (Green)'
+          | 'Registration Not Open Yet'
+          | 'Registration Not Open Yet (Grey)'
+          | 'Registration Open Date'
+          | 'Registration Close Date'
+          | 'Competitors'
+          | 'Contact'
+          | 'Delegate Report'
+          | 'Details'
+          | 'Developer Export'
+          | 'Disciplinary Log'
+          | 'Disclaimer'
+          | 'Download'
+          | 'Edit'
+          | 'Educational Resources'
+          | 'Error'
+          | 'External Link'
+          | 'Facebook'
+          | 'Filters'
+          | 'GitHub'
+          | 'Guidelines'
+          | 'Help and FAQs'
+          | 'Incidents Log'
+          | 'Information'
+          | 'Instagram'
+          | 'Language'
+          | 'List'
+          | 'Location'
+          | 'Manage Tabs'
+          | 'Map'
+          | 'Media Submission'
+          | 'Menu'
+          | 'Multimedia'
+          | 'My Competitions'
+          | 'My Results'
+          | 'National Championship'
+          | 'New Competition'
+          | 'On-the-Spot Registration'
+          | 'Payment'
+          | 'Privacy'
+          | 'Rankings'
+          | 'Records'
+          | 'Regional Organisations'
+          | 'Register'
+          | 'Registration'
+          | 'Regulations and Guidelines'
+          | 'Regulations History'
+          | 'Regulations'
+          | 'Results Export'
+          | 'Scrambles'
+          | 'Search'
+          | 'Spectators'
+          | 'Speedcubing History'
+          | 'Spots Left'
+          | 'Statistics'
+          | 'Teams, Committees and Councils'
+          | 'Tools'
+          | 'Translators'
+          | 'Twitch'
+          | 'User'
+          | 'Users / Persons'
+          | 'Venue'
+          | 'WCA Delegates'
+          | 'WCA Documents'
+          | 'WCA Live'
+          | 'WCA Officers and Board'
+          | 'Weibo'
+          | 'X (formerly Twitter)'
+          | 'YouTube'
+          | '222Icon'
+          | '333bfIcon'
+          | '333fmIcon'
+          | '333ftIcon'
+          | '333Icon'
+          | '333mbfIcon'
+          | '333ohIcon'
+          | '333mboIcon'
+          | '444bfIcon'
+          | '444Icon'
+          | '555bfIcon'
+          | '555Icon'
+          | '666Icon'
+          | '777Icon'
+          | 'ClockIcon'
+          | 'MagicIcon'
+          | 'MinxIcon'
+          | 'MmagicIcon'
+          | 'PyramIcon'
+          | 'SkewbIcon'
+          | 'Sq1Icon';
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'SocialLinkItem';
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -958,30 +1174,18 @@ export interface Nav {
  */
 export interface Home {
   id: string;
-  item: (TwoBlocksBlock | FullWidthBlock)[];
-  _status?: ('draft' | 'published') | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TwoBlocksBlock".
- */
-export interface TwoBlocksBlock {
-  type: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
-  alignment: 'horizontal' | 'vertical';
-  blocks: (
+  layout: (
     | TextCardBlock
     | AnnouncementsSectionBlock
     | ImageBannerBlock
     | ImageOnlyCardBlock
     | TestimonialsBlock
     | FeaturedCompetitionsBlock
-    | TwoBlocksBranchBlock
+    | TwoBlocksLevel2Block
   )[];
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'twoBlocks';
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1006,8 +1210,7 @@ export interface TextCardBlock {
   };
   bodyMarkdown?: string | null;
   separatorAfterHeading: boolean;
-  buttonText?: string | null;
-  buttonLink?: string | null;
+  buttons?: BentoActionButton[] | null;
   headerImage?: (string | null) | Media;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
@@ -1016,11 +1219,31 @@ export interface TextCardBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BentoActionButton".
+ */
+export interface BentoActionButton {
+  displayText: string;
+  hyperlink: string;
+  /**
+   * Open this link in a new tab
+   */
+  newTab?: boolean | null;
+  /**
+   * Buttons are solid blue by default. If you click this checkbox, their color will follow the original text box instead
+   */
+  inheritColorScheme: boolean;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'actionButton';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "AnnouncementsSectionBlock".
  */
 export interface AnnouncementsSectionBlock {
   mainAnnouncement: string | Announcement;
   furtherAnnouncements?: (string | Announcement)[] | null;
+  showSeeAll: boolean;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
@@ -1031,8 +1254,8 @@ export interface AnnouncementsSectionBlock {
  * via the `definition` "ImageBannerBlock".
  */
 export interface ImageBannerBlock {
-  heading: string;
-  body: {
+  heading?: string | null;
+  body?: {
     root: {
       type: string;
       children: {
@@ -1046,9 +1269,10 @@ export interface ImageBannerBlock {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
   bodyMarkdown?: string | null;
   mainImage: string | Media;
+  imagePosition: 'left' | 'right';
   colorPalette: ColorPaletteSelect;
   /**
    * Use a slightly darker nuance of the color palette
@@ -1072,6 +1296,15 @@ export interface ImageBannerBlock {
 export interface ImageOnlyCardBlock {
   mainImage: string | Media;
   heading?: string | null;
+  /**
+   * Optional. If set, the whole card becomes a link to this URL.
+   */
+  url?: string | null;
+  /**
+   * Open this link in a new tab
+   */
+  newTab?: boolean | null;
+  textPosition?: ('top' | 'bottom') | null;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
@@ -1109,49 +1342,69 @@ export interface FeaturedCompetitionsBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TwoBlocksBranchBlock".
+ * via the `definition` "TwoBlocksLevel2Block".
  */
-export interface TwoBlocksBranchBlock {
-  type: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
-  alignment: 'horizontal' | 'vertical';
-  blocks: (
+export interface TwoBlocksLevel2Block {
+  ratio: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
+  left: (
     | TextCardBlock
     | AnnouncementsSectionBlock
     | ImageBannerBlock
     | ImageOnlyCardBlock
     | TestimonialsBlock
     | FeaturedCompetitionsBlock
-    | TwoBlocksLeafBlock
+    | TwoBlocksLevel1Block
   )[];
+  right: (
+    | TextCardBlock
+    | AnnouncementsSectionBlock
+    | ImageBannerBlock
+    | ImageOnlyCardBlock
+    | TestimonialsBlock
+    | FeaturedCompetitionsBlock
+    | TwoBlocksLevel1Block
+  )[];
+  growthStrategy?: GrowthStrategy;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'twoBlocksBranch';
+  blockType: 'twoBlocksLevel2';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TwoBlocksLeafBlock".
+ * via the `definition` "TwoBlocksLevel1Block".
  */
-export interface TwoBlocksLeafBlock {
-  type: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
-  alignment: 'horizontal' | 'vertical';
-  blocks: (
+export interface TwoBlocksLevel1Block {
+  ratio: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
+  left: (
     | TextCardBlock
     | AnnouncementsSectionBlock
     | ImageBannerBlock
     | ImageOnlyCardBlock
     | TestimonialsBlock
     | FeaturedCompetitionsBlock
+    | TwoBlocksLevel0Block
   )[];
+  right: (
+    | TextCardBlock
+    | AnnouncementsSectionBlock
+    | ImageBannerBlock
+    | ImageOnlyCardBlock
+    | TestimonialsBlock
+    | FeaturedCompetitionsBlock
+    | TwoBlocksLevel0Block
+  )[];
+  growthStrategy?: GrowthStrategy;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'twoBlocksLeaf';
+  blockType: 'twoBlocksLevel1';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FullWidthBlock".
+ * via the `definition` "TwoBlocksLevel0Block".
  */
-export interface FullWidthBlock {
-  blocks: (
+export interface TwoBlocksLevel0Block {
+  ratio: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
+  left: (
     | TextCardBlock
     | AnnouncementsSectionBlock
     | ImageBannerBlock
@@ -1159,9 +1412,18 @@ export interface FullWidthBlock {
     | TestimonialsBlock
     | FeaturedCompetitionsBlock
   )[];
+  right: (
+    | TextCardBlock
+    | AnnouncementsSectionBlock
+    | ImageBannerBlock
+    | ImageOnlyCardBlock
+    | TestimonialsBlock
+    | FeaturedCompetitionsBlock
+  )[];
+  growthStrategy?: GrowthStrategy;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'fullWidth';
+  blockType: 'twoBlocksLevel0';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1190,6 +1452,10 @@ export interface AboutUsPage {
         buttons: {
           label: string;
           url: string;
+          /**
+           * Open this link in a new tab
+           */
+          newTab?: boolean | null;
           id?: string | null;
         }[];
         id?: string | null;
@@ -1601,6 +1867,76 @@ export interface NavSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        SocialsMenu?:
+          | T
+          | {
+              label?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  navigationLinks?:
+    | T
+    | {
+        FooterLinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+        FooterExternalLinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  legalLinks?:
+    | T
+    | {
+        FooterLinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links_select".
+ */
+export interface SocialLinksSelect<T extends boolean = true> {
+  links?:
+    | T
+    | {
+        SocialLinkItem?:
+          | T
+          | {
+              displayText?: T;
+              targetLink?: T;
+              displayIcon?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1611,25 +1947,7 @@ export interface NavSelect<T extends boolean = true> {
  * via the `definition` "home_select".
  */
 export interface HomeSelect<T extends boolean = true> {
-  item?:
-    | T
-    | {
-        twoBlocks?: T | TwoBlocksBlockSelect<T>;
-        fullWidth?: T | FullWidthBlockSelect<T>;
-      };
-  _status?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TwoBlocksBlock_select".
- */
-export interface TwoBlocksBlockSelect<T extends boolean = true> {
-  type?: T;
-  alignment?: T;
-  blocks?:
+  layout?:
     | T
     | {
         TextCard?: T | TextCardBlockSelect<T>;
@@ -1638,10 +1956,12 @@ export interface TwoBlocksBlockSelect<T extends boolean = true> {
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
-        twoBlocksBranch?: T | TwoBlocksBranchBlockSelect<T>;
+        twoBlocksLevel2?: T | TwoBlocksLevel2BlockSelect<T>;
       };
-  id?: T;
-  blockName?: T;
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1652,10 +1972,25 @@ export interface TextCardBlockSelect<T extends boolean = true> {
   body?: T;
   bodyMarkdown?: T;
   separatorAfterHeading?: T;
-  buttonText?: T;
-  buttonLink?: T;
+  buttons?:
+    | T
+    | {
+        actionButton?: T | BentoActionButtonSelect<T>;
+      };
   headerImage?: T;
   colorPalette?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BentoActionButton_select".
+ */
+export interface BentoActionButtonSelect<T extends boolean = true> {
+  displayText?: T;
+  hyperlink?: T;
+  newTab?: T;
+  inheritColorScheme?: T;
   id?: T;
   blockName?: T;
 }
@@ -1666,6 +2001,7 @@ export interface TextCardBlockSelect<T extends boolean = true> {
 export interface AnnouncementsSectionBlockSelect<T extends boolean = true> {
   mainAnnouncement?: T;
   furtherAnnouncements?: T;
+  showSeeAll?: T;
   colorPalette?: T;
   id?: T;
   blockName?: T;
@@ -1679,6 +2015,7 @@ export interface ImageBannerBlockSelect<T extends boolean = true> {
   body?: T;
   bodyMarkdown?: T;
   mainImage?: T;
+  imagePosition?: T;
   colorPalette?: T;
   colorPaletteDarker?: T;
   headingColor?: T;
@@ -1695,6 +2032,9 @@ export interface ImageBannerBlockSelect<T extends boolean = true> {
 export interface ImageOnlyCardBlockSelect<T extends boolean = true> {
   mainImage?: T;
   heading?: T;
+  url?: T;
+  newTab?: T;
+  textPosition?: T;
   colorPalette?: T;
   id?: T;
   blockName?: T;
@@ -1731,12 +2071,11 @@ export interface FeaturedCompetitionsBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TwoBlocksBranchBlock_select".
+ * via the `definition` "TwoBlocksLevel2Block_select".
  */
-export interface TwoBlocksBranchBlockSelect<T extends boolean = true> {
-  type?: T;
-  alignment?: T;
-  blocks?:
+export interface TwoBlocksLevel2BlockSelect<T extends boolean = true> {
+  ratio?: T;
+  left?:
     | T
     | {
         TextCard?: T | TextCardBlockSelect<T>;
@@ -1745,19 +2084,30 @@ export interface TwoBlocksBranchBlockSelect<T extends boolean = true> {
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
-        twoBlocksLeaf?: T | TwoBlocksLeafBlockSelect<T>;
+        twoBlocksLevel1?: T | TwoBlocksLevel1BlockSelect<T>;
       };
+  right?:
+    | T
+    | {
+        TextCard?: T | TextCardBlockSelect<T>;
+        AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
+        ImageBanner?: T | ImageBannerBlockSelect<T>;
+        ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
+        TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
+        FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
+        twoBlocksLevel1?: T | TwoBlocksLevel1BlockSelect<T>;
+      };
+  growthStrategy?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TwoBlocksLeafBlock_select".
+ * via the `definition` "TwoBlocksLevel1Block_select".
  */
-export interface TwoBlocksLeafBlockSelect<T extends boolean = true> {
-  type?: T;
-  alignment?: T;
-  blocks?:
+export interface TwoBlocksLevel1BlockSelect<T extends boolean = true> {
+  ratio?: T;
+  left?:
     | T
     | {
         TextCard?: T | TextCardBlockSelect<T>;
@@ -1766,16 +2116,30 @@ export interface TwoBlocksLeafBlockSelect<T extends boolean = true> {
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
+        twoBlocksLevel0?: T | TwoBlocksLevel0BlockSelect<T>;
       };
+  right?:
+    | T
+    | {
+        TextCard?: T | TextCardBlockSelect<T>;
+        AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
+        ImageBanner?: T | ImageBannerBlockSelect<T>;
+        ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
+        TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
+        FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
+        twoBlocksLevel0?: T | TwoBlocksLevel0BlockSelect<T>;
+      };
+  growthStrategy?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FullWidthBlock_select".
+ * via the `definition` "TwoBlocksLevel0Block_select".
  */
-export interface FullWidthBlockSelect<T extends boolean = true> {
-  blocks?:
+export interface TwoBlocksLevel0BlockSelect<T extends boolean = true> {
+  ratio?: T;
+  left?:
     | T
     | {
         TextCard?: T | TextCardBlockSelect<T>;
@@ -1785,6 +2149,17 @@ export interface FullWidthBlockSelect<T extends boolean = true> {
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
       };
+  right?:
+    | T
+    | {
+        TextCard?: T | TextCardBlockSelect<T>;
+        AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
+        ImageBanner?: T | ImageBannerBlockSelect<T>;
+        ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
+        TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
+        FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
+      };
+  growthStrategy?: T;
   id?: T;
   blockName?: T;
 }
@@ -1806,6 +2181,7 @@ export interface AboutUsPageSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     url?: T;
+                    newTab?: T;
                     id?: T;
                   };
               id?: T;

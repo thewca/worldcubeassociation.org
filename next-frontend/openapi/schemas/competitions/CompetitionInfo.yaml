@@ -29,6 +29,7 @@ required:
   - allow_registration_edits
   - allow_registration_without_qualification
   - competitor_can_cancel
+  - scoretaking_software
   - url
   - website
   - short_name
@@ -143,6 +144,13 @@ properties:
   competitor_can_cancel:
     type: string
     example: "not_accepted"
+  scoretaking_software:
+    type: string
+    enum:
+      - external
+      - internal
+      - wca_live
+    example: external
   url:
     type: string
     format: uri
@@ -190,6 +198,10 @@ properties:
   registration_full_and_accepted?:
     type: boolean
     example: true
+  spots_left:
+    type: integer
+    nullable: true
+    example: 42
   tab_names:
     type: array
     items:

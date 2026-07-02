@@ -31,16 +31,15 @@ import EventIcon from "@/components/EventIcon";
 import { route } from "nextjs-routes";
 import { useT } from "@/lib/i18n/useI18n";
 import { LuLock } from "react-icons/lu";
-import { LiveRoundAdmin } from "@/types/live";
 import _ from "lodash";
 import { getRoundName } from "@/lib/wca/live/getRoundName";
+import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 
 interface LiveViewProps {
   timeZones: string[];
   competitionId: string;
   activities: components["schemas"]["WcifActivity"][];
   canManage?: boolean;
-  rounds: LiveRoundAdmin[];
 }
 
 export default function LiveView({
@@ -48,9 +47,10 @@ export default function LiveView({
   competitionId,
   activities,
   canManage = false,
-  rounds,
 }: LiveViewProps) {
   const { t } = useT();
+  const { rounds } = useAllRoundsInfo();
+
   const eventActivities = activities.filter(
     (a) => !a.activityCode.startsWith("other"),
   );
@@ -72,10 +72,11 @@ export default function LiveView({
     timeZone,
   );
 
-  // Show the first date that has not passed, if all of them have, show the last date
+  // Show the first day that hasn't ended yet (i.e. today during the competition),
+  // if all of them have passed, show the last day
   const lastDate = dates[dates.length - 1];
   const defaultDate =
-    dates.filter((d) => !hasPassed(d.toISO()!))[0] ?? lastDate;
+    dates.filter((d) => !hasPassed(d.endOf("day").toISO()!))[0] ?? lastDate;
 
   const roundsByWcifId = _.keyBy(rounds, "id");
 

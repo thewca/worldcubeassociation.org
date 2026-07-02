@@ -4,8 +4,7 @@ import AuthProvider from "@/providers/SessionProvider";
 import WCAQueryClientProvider from "@/providers/WCAQueryClientProvider";
 import { Provider as UiProvider } from "@/components/ui/provider";
 import Navbar from "./navbar";
-import Footer from "@/components/Footer";
-import RandomBackground from "@/components/RandomBackground";
+import Footer from "./footer";
 import { ThemeProvider } from "@wrksz/themes/next";
 import { appFont } from "@/styles/fonts";
 import NextTopLoader from "nextjs-toploader";
@@ -13,7 +12,7 @@ import NextTopLoader from "nextjs-toploader";
 export const metadata: Metadata = {
   title: {
     template: "%s | World Cube Association",
-    default: "",
+    default: "World Cube Association",
   },
 };
 
@@ -44,9 +43,8 @@ export default async function RootLayout({
             <AuthProvider>
               <UiProvider>
                 <Navbar />
-                <RandomBackground numRows={8} numCols={18} />
+                <NextTopLoader height={5} />
                 {children}
-                <NextTopLoader height={5} showAtBottom />
                 <Footer />
               </UiProvider>
             </AuthProvider>

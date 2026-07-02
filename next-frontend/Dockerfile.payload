@@ -1,0 +1,9 @@
+FROM mongo:8
+
+# Install dependencies needed for CMS data import
+RUN apt-get update && \
+    apt-get install -y jq unzip wget && \
+    rm -rf /var/lib/apt/lists/*
+
+# Preserve upstream entrypoint and command behavior
+# The base image's defaults will be used from docker-compose.yml

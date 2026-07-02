@@ -1,65 +1,523 @@
 kk:
   countries:
-    #original_hash: 530670d
-    AG: Антигуа және Барбуда
-    #original_hash: 62ac59b
+    #original_hash: 05353b3
+    AC: Ғибадат аралы
+    #original_hash: 9d3bd1f
+    AD: Андорра
+    #original_hash: d115b8d
+    AE: Біріккен Араб Эмираттары
+    #original_hash: c691536
+    AF: Ауғанстан
+    #original_hash: 5a98c36
+    AG: Антигуа мен Барбуда
+    #original_hash: 5722849
+    AI: Ангилья
+    #original_hash: 79b9d27
+    AL: Албания
+    #original_hash: 5f4599d
+    AM: Армения
+    #original_hash: 95f85f8
+    AN: Netherlands Antilles
+    #original_hash: a42522a
+    AO: Ангола
+    #original_hash: 00f33fc
+    AQ: Антарктика
+    #original_hash: 354bf98
+    AR: Аргентина
+    #original_hash: ca0b36f
+    AS: Американ Самоасы
+    #original_hash: 593905b
+    AT: Австрия
+    #original_hash: ceafb51
+    AU: Австралия
+    #original_hash: f3a8261
+    AW: Аруба
+    #original_hash: 0651540
+    AX: Аланд аралдары
+    #original_hash: 213598a
+    AZ: Әзербайжан
+    #original_hash: 5b0bebd
     BA: Босния және Герцеговина
-    #original_hash: f39d280
-    CD: Конго Демократиялық Республикасы
-    #original_hash: 77f256b
-    CG: Конго Республикасы
-    #original_hash: b218299
+    #original_hash: 93409af
+    BB: Барбадос
+    #original_hash: fa6c375
+    BD: Бангладеш
+    #original_hash: 5cb4c9d
+    BE: Бельгия
+    #original_hash: e71b56d
+    BF: Буркина-Фасо
+    #original_hash: 5c77726
+    BG: Болгария
+    #original_hash: 3ae11c7
+    BH: Бахрейн
+    #original_hash: 4617585
+    BI: Бурунди
+    #original_hash: 373616e
+    BJ: Бенин
+    #original_hash: 1520422
+    BL: Сен-Бартелеми
+    #original_hash: 027ed37
+    BM: Бермуд аралдары
+    #original_hash: 130e4a3
+    BN: Бруней
+    #original_hash: a001af7
+    BO: Боливия
+    #original_hash: be73d2f
+    BQ: Кариб Нидерландысы
+    #original_hash: 37497aa
+    BR: Бразилия
+    #original_hash: 1f79756
+    BS: Багам аралдары
+    #original_hash: bb2254a
+    BT: Бутан
+    #original_hash: 290125e
+    BV: Буве аралы
+    #original_hash: 180c89b
+    BW: Ботсвана
+    #original_hash: 027a12c
+    BY: Беларусь
+    #original_hash: 42ab0c9
+    BZ: Белиз
+    #original_hash: cd6a7b8
+    CA: Канада
+    #original_hash: d2dd2d4
+    CC: Кокос аралдары
+    #original_hash: b26fe9f
+    CD: Конго
+    #original_hash: dba8678
+    CF: Орталық Африка Республикасы
+    #original_hash: 12d42c7
+    CG: Конго-Браззавиль Республикасы
+    #original_hash: 77dcd84
+    CH: Швейцария
+    #original_hash: 7f3d0b8
     CI: Кот-д’Ивуар
-    #original_hash: 07dee45
+    #original_hash: 4bacfe2
+    CK: Кук аралдары
+    #original_hash: 349507e
+    CL: Чили
+    #original_hash: 73a7ddd
+    CM: Камерун
+    #original_hash: d2eaf2a
+    CN: Қытай
+    #original_hash: 2f73739
+    CO: Колумбия
+    #original_hash: 58bb1c4
+    CP: Клиппертон аралы
+    #original_hash: 1bf429f
+    CR: Коста-Рика
+    #original_hash: c484b13
+    CU: Куба
+    #original_hash: 8e40809
     CV: Кабо-Верде
-    #original_hash: ee10075
-    FM: Микронезия Федеративтік Штаттары
-    #original_hash: db871b0
+    #original_hash: 9461dd9
+    CW: Кюрасао
+    #original_hash: c6dfa97
+    CX: Кристмас аралы
+    #original_hash: 852adda
+    CY: Кипр
+    #original_hash: 1fef429
+    CZ: Чех Республикасы
+    #original_hash: 17d53e0
+    DE: Германия
+    #original_hash: f92182a
+    DG: Диего-Гарсия
+    #original_hash: 60a8b0c
+    DJ: Джибути
+    #original_hash: 89da124
+    DK: Дания
+    #original_hash: bc1cd4f
+    DM: Доминика
+    #original_hash: 8a4bf12
+    DO: Доминикан Республикасы
+    #original_hash: bd6acc8
+    DZ: Алжир
+    #original_hash: ef6cfd5
+    EA: Сеута мен Мелилья
+    #original_hash: 09f199d
+    EC: Эквадор
+    #original_hash: f0a96da
+    EE: Эстония
+    #original_hash: 1c39abf
+    EG: Мысыр
+    #original_hash: fab1a52
+    EH: Батыс Сахара
+    #original_hash: 18740af
+    ER: Эритрея
+    #original_hash: 20a8df9
+    ES: Испания
+    #original_hash: 3d91f76
+    ET: Эфиопия
+    #original_hash: 1e9cb06
+    EU: Еуропалық Одақ
+    #original_hash: c909b13
+    FI: Финляндия
+    #original_hash: bbb7ef7
+    FJ: Фиджи
+    #original_hash: 1149995
+    FK: Фолкленд аралдары
+    #original_hash: 5a7d7bc
+    FM: Микронезия
+    #original_hash: 1082f89
+    FO: Фарер аралдары
+    #original_hash: e3772ac
+    FR: Франция
+    #original_hash: a06dcd7
+    GA: Габон
+    #original_hash: 9769121
+    GB: Ұлыбритания
+    #original_hash: dbf2a2d
+    GD: Гренада
+    #original_hash: 9113c6c
+    GE: Грузия
+    #original_hash: 07090aa
+    GF: Француз Гвианасы
+    #original_hash: 180c97a
+    GG: Гернси
+    #original_hash: 317dbac
+    GH: Гана
+    #original_hash: e513358
+    GI: Гибралтар
+    #original_hash: 1ba0cfa
+    GL: Гренландия
+    #original_hash: 7c39974
+    GM: Гамбия
+    #original_hash: b47b54f
+    GN: Гвинея
+    #original_hash: f0f524f
+    GP: Гваделупа
+    #original_hash: 80eaf30
+    GQ: Экваторлық Гвинея
+    #original_hash: 4902a45
+    GR: Греция
+    #original_hash: a45dab8
+    GS: Оңтүстік Георгия және Оңтүстік Сандвичев аралы
+    #original_hash: 11760e1
+    GT: Гватемала
+    #original_hash: f8aa3a9
+    GU: Гуам
+    #original_hash: b07cb9a
     GW: Гвинея-Бисау
-    #original_hash: e758117
-    HK: 'Гонконг, Қытай'
-    #original_hash: 3ad2dd8
+    #original_hash: bc88a24
+    GY: Гайана
+    #original_hash: 4161f95
+    HK: Қытай Халық Республикасының Гонг-Конг арнайы әкімшілік ауданы
+    #original_hash: a058bcb
+    HM: Херд аралы мен Макдональд аралы
+    #original_hash: 5aa5887
+    HN: Гондурас
+    #original_hash: d7e0453
+    HR: Хорватия
+    #original_hash: a4842f0
+    HT: Гаити
+    #original_hash: f14e46c
+    HU: Мажарстан
+    #original_hash: 651f815
+    IC: Канар аралдары
+    #original_hash: 35536a4
+    ID: Индонезия
+    #original_hash: eb2131e
+    IE: Ирландия
+    #original_hash: 4c197df
+    IL: Израиль
+    #original_hash: 76733f3
+    IM: Мэн аралы
+    #original_hash: 967ce36
+    IN: Үндістан
+    #original_hash: 9bb835f
+    IO: Үнді мұхитындағы Британ аймағы
+    #original_hash: 1aed9ec
+    IQ: Ирак
+    #original_hash: 889224e
+    IR: Иран
+    #original_hash: b3c92ee
+    IS: Исландия
+    #original_hash: ad79ef0
+    IT: Италия
+    #original_hash: ff4636d
+    JE: Джерси
+    #original_hash: 5eedd6a
+    JM: Ямайка
+    #original_hash: 674027e
+    JO: Иордания
+    #original_hash: fcf29f6
+    JP: Жапония
+    #original_hash: a84f56f
+    KE: Кения
+    #original_hash: c78791a
+    KG: Қырғызстан
+    #original_hash: 314ccd9
+    KH: Камбоджа
+    #original_hash: 3f57adf
+    KI: Кирибати
+    #original_hash: e5bb59a
+    KM: Комор
+    #original_hash: f5a44c4
     KN: Сент-Китс және Невис
-    #original_hash: 5c34abb
-    KP: Корей Халықтық Демократиялық Республикасы
-    #original_hash: 4430b22
-    KR: Корея Республикасы
-    #original_hash: 673b1cf
+    #original_hash: 765b46e
+    KP: Оңтүстік Корея
+    #original_hash: 04653e6
+    KR: Солтүстік Корея
+    #original_hash: 93295b0
+    KW: Кувейт
+    #original_hash: e9e21c3
+    KY: Кайман аралдары
+    #original_hash: 2f36b6b
+    KZ: Қазақстан
+    #original_hash: 7998be8
+    LA: Лаос
+    #original_hash: 5caa7f8
+    LB: Ливан
+    #original_hash: b17b657
     LC: Сент-Люсия
-    #original_hash: e2ac50f
-    MK: Солтүстік Македония
-    #original_hash: 928b7c4
-    MM: Мьянма
-    #original_hash: 77e4070
-    MO: 'Макао, Қытай'
-    #original_hash: 05a15c1
-    PS: Палестина
-    #original_hash: 655191a
-    ST: Сан-Томе және Принсипи
-    #original_hash: 16cc7f8
-    SZ: Эсватини
-    #original_hash: 4d206a8
-    TT: Тринидад және Тобаго
-    #original_hash: fefc818
-    TW: Қытай Тайпейі
-    #original_hash: 3fa9b2d
-    VC: Сент-Винсент және Гренадин
-    #original_hash: 9af4622
-    XF: Бірнеше ел (Африка)
-    #original_hash: 374ac0d
-    XM: Бірнеше ел (С/О Америка)
-    #original_hash: 3f8c9de
-    XA: Бірнеше ел (Азия)
-    #original_hash: 090f3ce
-    XE: Бірнеше ел (Еуропа)
-    #original_hash: b50b7a5
-    XN: Бірнеше ел (Солтүстік Америка)
-    #original_hash: 428e7af
-    XO: Бірнеше ел (Океания)
-    #original_hash: 459f987
-    XS: Бірнеше ел (Оңтүстік Америка)
-    #original_hash: 9027fe6
-    XW: Бірнеше ел (Әлем)
+    #original_hash: b0ddce0
+    LI: Лихтенштейн
+    #original_hash: 197042c
+    LK: Шри-Ланка
+    #original_hash: 1ed5dd9
+    LR: Либерия
+    #original_hash: 93b12bf
+    LS: Лесото
+    #original_hash: 74a788c
+    LT: Литва
+    #original_hash: 5076721
+    LU: Люксембург
+    #original_hash: c5f5bb3
+    LV: Латвия
+    #original_hash: 55949d4
+    LY: Либия
+    #original_hash: 32e087f
+    MA: Морокко
+    #original_hash: 35ab1c3
+    MC: Монако
+    #original_hash: 9791bc4
+    MD: Молдова
+    #original_hash: 479fb34
+    ME: Черногория
+    #original_hash: a582911
+    MF: Сен-Мартен
+    #original_hash: f92bcb6
+    MG: Мадагаскар
+    #original_hash: bb13062
+    MH: Маршалл аралдары
+    #original_hash: 41349e9
+    MK: Македония
+    #original_hash: daa6a48
+    ML: Мали
+    #original_hash: 18fc2d7
+    MM: Мьянма (Бирма)
+    #original_hash: f54da38
+    MN: Моңғолия
+    #original_hash: 0265950
+    MO: Қытай Халық Республикасының Макао арнайы әкімшілік ауданы
+    #original_hash: 28a117f
+    MP: Солтүстік Мариан аралдары
+    #original_hash: 66f1a98
+    MQ: Мартиника
+    #original_hash: 85fa355
+    MR: Мавритания
+    #original_hash: 35f0051
+    MS: Монтсеррат
+    #original_hash: 1a591a3
+    MT: Мальта
+    #original_hash: 26160d2
+    MU: Маврикий
+    #original_hash: 213cb20
+    MV: Мальдив Республикасы
+    #original_hash: 0ce65b2
+    MW: Малави
+    #original_hash: 41937b2
+    MX: Мексика
+    #original_hash: ff3ea3b
+    MY: Малайзия
+    #original_hash: a40a9be
+    MZ: Мозамбик
+    #original_hash: bfe79de
+    NA: Намибия
+    #original_hash: b9967e8
+    NC: Жаңа Каледония
+    #original_hash: 6687e18
+    NE: Нигер
+    #original_hash: fedb207
+    NF: Норфолк аралы
+    #original_hash: 9742d00
+    NG: Нигерия
+    #original_hash: 4812648
+    NI: Никарагуа
+    #original_hash: fb61c8a
+    NL: Голландия
+    #original_hash: 988455e
+    'NO': Норвегия
+    #original_hash: 0e1d589
+    NP: Непал
+    #original_hash: f648c72
+    NR: Науру
+    #original_hash: c635e30
+    NU: Ниуэ
+    #original_hash: a2238e9
+    NZ: Жаңа Зеландия
+    #original_hash: c14c36d
+    OM: Оман
+    #original_hash: 1e36b31
+    PA: Панама
+    #original_hash: 36c5724
+    PE: Перу
+    #original_hash: 40f39cd
+    PF: Француз Полинезиясы
+    #original_hash: fbaa3c3
+    PG: Папуа — Жаңа Гвинея
+    #original_hash: 8067364
+    PH: Филиппиндер
+    #original_hash: 82d220d
+    PK: Пәкістан
+    #original_hash: 5ff03b7
+    PL: Польша
+    #original_hash: 5c3aeee
+    PM: Сен-Пьер және Микелон
+    #original_hash: 0311d74
+    PN: Питкэрн аралдары
+    #original_hash: fe23c52
+    PR: Пуэрто-Рико
+    #original_hash: a19a472
+    PS: Палестина аймақтары
+    #original_hash: a495190
+    PT: Португалия
+    #original_hash: e5e0b68
+    PW: Палау
+    #original_hash: 71a4529
+    PY: Парагвай
+    #original_hash: 83ef3e6
+    QA: Катар
+    #original_hash: 9522dbf
+    QO: Алыс Океания
+    #original_hash: 8e7e261
+    RE: Реюньон
+    #original_hash: d6b897f
+    RO: Румыния
+    #original_hash: 6d31bf0
+    RS: Сербия
+    #original_hash: 6754fe3
+    RU: Ресей
+    #original_hash: 7266a1d
+    RW: Руанда
+    #original_hash: 6f49c31
+    SA: Сауд Арабиясы
+    #original_hash: ecae78a
+    SB: Соломон аралдары
+    #original_hash: 3d2d7b1
+    SC: Сейшель аралдары
+    #original_hash: 1193ba3
+    SD: Судан
+    #original_hash: 72ddd2b
+    SE: Швеция
+    #original_hash: 20c0b7b
+    SG: Сингапур
+    #original_hash: 77ffdb5
+    SH: Әулие Елена аралы
+    #original_hash: d1aa050
+    SI: Словения
+    #original_hash: 60b10e2
+    SJ: Шпицберген мен Ян-Майен
+    #original_hash: b6c149c
+    SK: Словакия
+    #original_hash: 50df2d6
+    SL: Сьерра-Леоне
+    #original_hash: 87fd3be
+    SM: Сан-Марино
+    #original_hash: d8973b8
+    SN: Сенегал
+    #original_hash: 4dfdf19
+    SO: Сомали
+    #original_hash: b17fc6f
+    SR: Суринам
+    #original_hash: 6981f40
+    SS: Оңтүстік Судан
+    #original_hash: becfd89
+    ST: Сан-Томе мен Принсипи
+    #original_hash: 259a6e9
+    SV: Сальвадор
+    #original_hash: 854ccc2
+    SX: Синт-Мартен
+    #original_hash: 3ed1043
+    SY: Сирия
+    #original_hash: c985df0
+    SZ: Свазиленд
+    #original_hash: d4dc612
+    TA: Тристан-да-Кунья
+    #original_hash: 0769e3c
+    TC: Туркс пен Кайкос
+    #original_hash: 6c6b1b2
+    TD: Чад
+    #original_hash: ced852b
+    TF: Францияның солтүстік аймағы
+    #original_hash: 30949d5
+    TG: Того
+    #original_hash: a2b7c12
+    TH: Тайланд
+    #original_hash: 279c771
+    TJ: Тәжікстан
+    #original_hash: a08c1ca
+    TK: Токелау
+    #original_hash: 2d79f6d
+    TL: Тимор-Лесте
+    #original_hash: 1f8dc1a
+    TM: Түрікменстан
+    #original_hash: edf404d
+    TN: Тунис
+    #original_hash: e8a1234
+    TO: Тонга
+    #original_hash: d7153e6
+    TR: Түркия
+    #original_hash: a13d014
+    TT: Тринидад пен Тобаго
+    #original_hash: 9a2248f
+    TV: Тувалу
+    #original_hash: 094d515
+    TW: Тайвань
+    #original_hash: 7e380be
+    TZ: Танзания
+    #original_hash: c951ec0
+    UA: Украина
+    #original_hash: e92904b
+    UG: Уганда
+    #original_hash: b7fea62
+    UM: АҚШ-тың ішкі кіші аралдары
+    #original_hash: 768685c
+    US: АҚШ
+    #original_hash: 66b9892
+    UY: Уругвай
+    #original_hash: db800e8
+    UZ: Өзбекстан
+    #original_hash: 136f5db
+    VA: Ватикан
+    #original_hash: 558971f
+    VC: Сент-Винсент және Гренадиндер
+    #original_hash: 9d4ac43
+    VE: Венесуэла
+    #original_hash: 1fc1b5b
+    VG: Британдық Виргин аралдары
+    #original_hash: 3db3076
+    VI: АҚШ-тың Виргин аралдары
+    #original_hash: 681101d
+    VN: Вьетнам
+    #original_hash: d16ad2d
+    VU: Вануату
+    #original_hash: cdb29f0
+    WF: Уоллис пен Футуна
+    #original_hash: f568060
+    WS: Самоа
+    #original_hash: 95cb627
+    XK: Косово
+    #original_hash: ac33d64
+    YE: Йемен
+    #original_hash: dcc6442
+    YT: Майотта
+    #original_hash: 35fda17
+    ZA: Оңтүстік Африка республикасы
+    #original_hash: dcf25ed
+    ZM: Замбия
+    #original_hash: 5922f5c
+    ZW: Зимбабве
   continents:
     #original_hash: 0f138c8
     Multiple Continents: Бірнеше континенттер

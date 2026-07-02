@@ -12,14 +12,14 @@ jobs:
     steps:
       - name: Trigger deployment on comment
         id: trigger-deployment
-        uses: shanegenschaw/pull-request-comment-trigger@v3.0.0
+        uses: shanegenschaw/pull-request-comment-trigger@v3.0.1
         with:
           trigger: '@thewca-bot deploy staging'
           reaction: rocket
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Checkout primary branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Switch to PR branch
         run: gh pr checkout $PR_NUMBER
         env:

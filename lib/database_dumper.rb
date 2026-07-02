@@ -277,6 +277,7 @@ module DatabaseDumper
           person_id
           person_name
           pos
+          global_pos
           regional_average_record
           regional_single_record
           round_type_id
@@ -915,6 +916,7 @@ module DatabaseDumper
           first_delegated
           last_delegated
           total_delegated
+          lead_delegated
           created_at
           updated_at
         ],

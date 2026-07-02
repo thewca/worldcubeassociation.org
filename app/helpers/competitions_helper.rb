@@ -58,9 +58,9 @@ module CompetitionsHelper
   end
 
   def winners(competition, main_event)
-    top_three = competition.results.where(event: main_event).podium.order(:pos)
+    top_three = competition.results.where(event: main_event).podium.order(:global_pos)
     h2h_finals = top_three.first.format_id == "h"
-    results_by_place = top_three.group_by(&:pos)
+    results_by_place = top_three.group_by(&:global_pos)
 
     return t('competitions.competition_info.no_winner', event_name: main_event.name) if results_by_place.blank?
 

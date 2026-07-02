@@ -33,7 +33,11 @@ class CompetitionEvent < ApplicationRecord
   end
 
   def advancing_competitor_ids
-    registrations.accepted.ids
+    live_competitors.ids
+  end
+
+  def live_competitors
+    registrations.accepted.competing
   end
 
   def advancement_results
@@ -80,16 +84,16 @@ class CompetitionEvent < ApplicationRecord
     {
       "earliestResultDate" => nil,
       "latestResultDate" => qualification_latest_date&.strftime("%Y-%m-%d"),
-      "resultCondition" => qualification_condition,
+      "resultCondition" => qualification_condition.to_wcif,
     }
   end
 
-  def to_wcif(version: Competition::WCIF_STABLE_VERSION)
+  def to_wcif(version: Competition::WCIF_STABLE_VERSION, include_results: true)
     at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
 
     {
       "id" => self.event.id,
-      "rounds" => self.rounds.map { it.to_wcif(version: version) },
+      "rounds" => self.rounds.map { it.to_wcif(version: version, include_results: include_results) },
       "extensions" => wcif_extensions.map(&:to_wcif),
       "qualification" => at_least_v2 ? v2_qualification_wcif : qualification&.to_wcif,
     }
@@ -148,7 +152,12 @@ class CompetitionEvent < ApplicationRecord
     end
     model_rounds = wcif["rounds"].map do |round_wcif|
       round = rounds.find { it.wcif_id == round_wcif["id"] } || rounds.build
-      round.update!(**Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"], version: version))
+      round_attributes = Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"], version: version)
+      # For internal-scoretaking comps `live_results` is the source of truth and `round_results`
+      #   is never read back (see `Round#to_wcif`). Persisting the WCIF snapshot just creates
+      #   stale data that drifts from `live_results`, so we don't store it (and clear any leftovers).
+      round_attributes[:round_results] = [] if self.competition.scoretaking_software_internal?
+      round.update!(**round_attributes)
       WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
       round
     end
@@ -197,7 +206,7 @@ class CompetitionEvent < ApplicationRecord
                            {
                              "type" => %w[object null],
                              "properties" => {
-                               "earliestResultDate" => { "type" => "string" },
+                               "earliestResultDate" => { "type" => %w[string null] },
                                "latestResultDate" => { "type" => "string" },
                                "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
                              },
