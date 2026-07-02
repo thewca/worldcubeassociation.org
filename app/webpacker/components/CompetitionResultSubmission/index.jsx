@@ -100,7 +100,7 @@ function CompetitionResultSubmission({
           onClick={() => setActiveStep(2)}
           disabled={areResultsSubmitted || !hasTemporaryResults || !areValidationsConfirmed}
         >
-          <Icon name="cloud upload" />
+          <Icon name="send" />
           <Step.Content>
             <Step.Title>Submit</Step.Title>
             <Step.Description>Make the final submission to WRT</Step.Description>
