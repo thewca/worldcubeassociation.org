@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { Icon, Message, Step } from 'semantic-ui-react';
+import { useQuery } from '@tanstack/react-query';
 import ImportResultsData from './ImportResultsData';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import FormToWrt from './FormToWrt';
+import ValidationOutput from '../Panel/pages/RunValidatorsPage/ValidationOutput';
+import runValidatorsForCompetitionList
+  from '../Panel/pages/RunValidatorsPage/api/runValidatorsForCompetitionList';
+import { ALL_VALIDATORS } from '../../lib/wca-data.js.erb';
 
 export default function Wrapper({
   competitionId,
@@ -34,9 +39,26 @@ function CompetitionResultSubmission({
   showWcaLiveBeta,
   canSubmitResults,
 }) {
-  const defaultStep = resultsSubmitted ? 3 : 0;
+  // eslint-disable-next-line no-nested-ternary
+  const defaultStep = resultsSubmitted ? 3 : (hasTemporaryResults ? 1 : 0);
 
   const [activeStep, setActiveStep] = useState(defaultStep);
+
+  const {
+    data: validationOutput,
+    isPending: isValidationPending,
+    isError: isValidationFetchError,
+    error: validationFetchError,
+  } = useQuery({
+    queryKey: ['competition-validation-output', competitionId],
+    queryFn: () => runValidatorsForCompetitionList(
+      competitionId,
+      ALL_VALIDATORS,
+      false,
+      false,
+    ),
+    enabled: hasTemporaryResults,
+  });
 
   return (
     <>
@@ -87,6 +109,14 @@ function CompetitionResultSubmission({
           uploadedScrambleFilesCount={uploadedScrambleFilesCount}
           hasTemporaryResults={hasTemporaryResults}
           showWcaLiveBeta={showWcaLiveBeta}
+        />
+      )}
+      {activeStep === 1 && (
+        <ValidationOutput
+          validationOutput={validationOutput}
+          isPending={isValidationPending}
+          isError={isValidationFetchError}
+          error={validationFetchError}
         />
       )}
       {activeStep === 2 && (
