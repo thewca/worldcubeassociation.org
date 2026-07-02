@@ -9,6 +9,10 @@ class Registration < ApplicationRecord
   SYSTEM_ENTITY_ID = 'system'
   USER_ENTITY_ID = 'user'
 
+  CSV_IMPORT = "CSV Import"
+  OTS_FORM = "OTS Form"
+  SOURCES = [CSV_IMPORT, OTS_FORM].freeze
+
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
@@ -273,6 +277,8 @@ class Registration < ApplicationRecord
   end
 
   def save_registration_data!(registration_data:, creator:, source:)
+    raise ArgumentError, "Invalid source: #{source}" unless SOURCES.include?(source)
+
     formatted_payload = {
       "competing" => {
         "event_ids" => registration_data.dig(:registration, :eventIds) || [],
@@ -281,10 +287,13 @@ class Registration < ApplicationRecord
       }.compact,
     }
 
-    Registrations::RegistrationChecker.apply_payload(self, formatted_payload, clone: false)
-
-    save!
-    add_history_entry({ event_ids: self.event_ids }, "user", creator.id, source)
+    Registrations::Lanes::Competing.update!(
+      formatted_payload,
+      self,
+      creator.id,
+      send_emails: (source != CSV_IMPORT),
+      history_action: source
+    )
   end
 
   def wcif_status

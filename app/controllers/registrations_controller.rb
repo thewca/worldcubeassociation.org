@@ -245,7 +245,7 @@ class RegistrationsController < ApplicationController
         registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
           reg.registered_at = import_time
         end
-        registration.save_registration_data!(registration_data: registration_data, creator: current_user, source: "CSV Import")
+        registration.save_registration_data!(registration_data: registration_data, creator: current_user, source: Registration::CSV_IMPORT)
       rescue StandardError => e
         raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_data[:name], error: e))
       end
@@ -295,7 +295,7 @@ class RegistrationsController < ApplicationController
       end
       raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
 
-      registration.save_registration_data!(registration_data: registration_data, creator: current_user, source: "OTS Form")
+      registration.save_registration_data!(registration_data: registration_data, creator: current_user, source: Registration::OTS_FORM)
       RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later if locked_account_created
     end
     flash[:success] = I18n.t("registrations.flash.added")

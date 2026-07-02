@@ -29,7 +29,7 @@ module Registrations
                     .tap { self.update!(update_params, it, acting_entity_id) }
       end
 
-      def self.update!(update_params, registration, acting_entity_id)
+      def self.update!(update_params, registration, acting_entity_id, send_emails: true, history_action: nil)
         registration = Registrations::RegistrationChecker.apply_payload(registration, update_params, clone: false)
 
         # Make sure that a waiting list always exists if you need one during the update
@@ -48,7 +48,7 @@ module Registrations
           #   from when we called `event_ids` in the `apply_payload` method above.
           registration.events.reset
 
-          history_action_type = Registrations::Helper.action_type(update_params, registration.user_id, acting_entity_id)
+          history_action_type = history_action || Registrations::Helper.action_type(update_params, registration.user_id, acting_entity_id)
 
           if acting_entity_id == Registration::AUTO_ACCEPT_ENTITY_ID
             registration.add_history_entry(changes, Registration::SYSTEM_ENTITY_ID, acting_entity_id, history_action_type)
@@ -57,7 +57,7 @@ module Registrations
           end
         end
 
-        send_status_change_email(registration, acting_entity_id) if registration.competing_status_previously_changed?
+        send_status_change_email(registration, acting_entity_id) if send_emails && registration.competing_status_previously_changed?
       end
 
       def self.send_status_change_email(registration, acting_entity_id)
