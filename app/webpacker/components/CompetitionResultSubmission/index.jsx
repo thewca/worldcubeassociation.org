@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import ImportResultsData from './ImportResultsData';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import FormToWrt from './FormToWrt';
-import ValidationOutput from '../Panel/pages/RunValidatorsPage/ValidationOutput';
+import CheckValidations from './CheckValidations';
 import runValidatorsForCompetitionList
   from '../Panel/pages/RunValidatorsPage/api/runValidatorsForCompetitionList';
 import { ALL_VALIDATORS } from '../../lib/wca-data.js.erb';
@@ -44,8 +44,9 @@ function CompetitionResultSubmission({
 
   const [activeStep, setActiveStep] = useState(defaultStep);
 
-  const [areResultsSubmitted, setAreResultsSubmitted] = useState(areResultsSubmittedInitial);
   const [hasTemporaryResults, setHasTemporaryResults] = useState(hasTemporaryResultsInitial);
+  const [areValidationsConfirmed, setAreValidationsConfirmed] = useState(false);
+  const [areResultsSubmitted, setAreResultsSubmitted] = useState(areResultsSubmittedInitial);
 
   const {
     data: validationOutput,
@@ -75,6 +76,11 @@ function CompetitionResultSubmission({
     setHasTemporaryResults(!!response.success);
     advanceStep();
   }, [setHasTemporaryResults, refetchValidationOutput, advanceStep]);
+
+  const onValidationsConfirmed = useCallback(() => {
+    setAreValidationsConfirmed(true);
+    advanceStep();
+  }, [advanceStep, setAreValidationsConfirmed]);
 
   return (
     <>
@@ -129,11 +135,12 @@ function CompetitionResultSubmission({
         />
       )}
       {activeStep === 1 && (
-        <ValidationOutput
+        <CheckValidations
           validationOutput={validationOutput}
           isPending={isValidationPending}
           isError={isValidationFetchError}
           error={validationFetchError}
+          onUserConfirmed={onValidationsConfirmed}
         />
       )}
       {activeStep === 2 && (
