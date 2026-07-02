@@ -5,7 +5,7 @@
 
   <%= react_component("CompetitionResultSubmission", {
     competitionId: @competition.id,
-    resultsSubmitted: @competition.results_submitted?,
+    areResultsSubmitted: @competition.results_submitted?,
     hasTemporaryResults: @competition.inbox_results.present?,
     uploadedScrambleFilesCount: @competition.scramble_file_uploads.count,
     showWcaLiveBeta: @show_wca_live_beta,

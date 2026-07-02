@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Icon, Message, Step } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
 import ImportResultsData from './ImportResultsData';
@@ -11,7 +11,7 @@ import { ALL_VALIDATORS } from '../../lib/wca-data.js.erb';
 
 export default function Wrapper({
   competitionId,
-  resultsSubmitted,
+  areResultsSubmitted,
   hasTemporaryResults,
   uploadedScrambleFilesCount,
   showWcaLiveBeta,
@@ -21,7 +21,7 @@ export default function Wrapper({
     <WCAQueryClientProvider>
       <CompetitionResultSubmission
         competitionId={competitionId}
-        resultsSubmitted={resultsSubmitted}
+        areResultsSubmitted={areResultsSubmitted}
         hasTemporaryResults={hasTemporaryResults}
         uploadedScrambleFilesCount={uploadedScrambleFilesCount}
         showWcaLiveBeta={showWcaLiveBeta}
@@ -33,16 +33,19 @@ export default function Wrapper({
 
 function CompetitionResultSubmission({
   competitionId,
-  resultsSubmitted,
-  hasTemporaryResults,
+  areResultsSubmitted: areResultsSubmittedInitial,
+  hasTemporaryResults: hasTemporaryResultsInitial,
   uploadedScrambleFilesCount,
   showWcaLiveBeta,
   canSubmitResults,
 }) {
   // eslint-disable-next-line no-nested-ternary
-  const defaultStep = resultsSubmitted ? 3 : (hasTemporaryResults ? 1 : 0);
+  const defaultStep = areResultsSubmittedInitial ? 3 : (hasTemporaryResultsInitial ? 1 : 0);
 
   const [activeStep, setActiveStep] = useState(defaultStep);
+
+  const [areResultsSubmitted, setAreResultsSubmitted] = useState(areResultsSubmittedInitial);
+  const [hasTemporaryResults, setHasTemporaryResults] = useState(hasTemporaryResultsInitial);
 
   const {
     data: validationOutput,
@@ -61,6 +64,18 @@ function CompetitionResultSubmission({
     enabled: hasTemporaryResults,
   });
 
+  const advanceStep = useCallback(
+    () => setActiveStep((stepWas) => stepWas + 1),
+    [setActiveStep],
+  );
+
+  const onImportComplete = useCallback((response) => {
+    refetchValidationOutput();
+
+    setHasTemporaryResults(!!response.success);
+    advanceStep();
+  }, [setHasTemporaryResults, refetchValidationOutput, advanceStep]);
+
   return (
     <>
       <Step.Group widths={3}>
@@ -68,7 +83,7 @@ function CompetitionResultSubmission({
           active={activeStep === 0}
           completed={activeStep > 0}
           onClick={() => setActiveStep(0)}
-          disabled={resultsSubmitted}
+          disabled={areResultsSubmitted}
         >
           <Icon name="cloud upload" />
           <Step.Content>
@@ -83,7 +98,7 @@ function CompetitionResultSubmission({
           active={activeStep === 1}
           completed={activeStep > 1}
           onClick={() => setActiveStep(1)}
-          disabled={resultsSubmitted}
+          disabled={areResultsSubmitted}
         >
           <Icon name="warning sign" />
           <Step.Content>
@@ -95,7 +110,7 @@ function CompetitionResultSubmission({
           active={activeStep === 2}
           completed={activeStep > 2}
           onClick={() => setActiveStep(2)}
-          disabled={resultsSubmitted}
+          disabled={areResultsSubmitted}
         >
           <Icon name="cloud upload" />
           <Step.Content>
@@ -110,6 +125,7 @@ function CompetitionResultSubmission({
           uploadedScrambleFilesCount={uploadedScrambleFilesCount}
           hasTemporaryResults={hasTemporaryResults}
           showWcaLiveBeta={showWcaLiveBeta}
+          onImportSuccess={onImportComplete}
         />
       )}
       {activeStep === 1 && (
