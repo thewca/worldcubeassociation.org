@@ -32,6 +32,7 @@ export default function UploadResultsJson({ competitionId, isAdminView, onImport
     <Form onSubmit={uploadResultsJsonMutate}>
       <Form.Input
         type="file"
+        accept="application/json"
         onChange={(event) => setResultFile(event.target.files[0])}
       />
       {isAdminView && (
