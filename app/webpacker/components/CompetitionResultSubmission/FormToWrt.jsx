@@ -10,7 +10,7 @@ import Loading from '../Requests/Loading';
 
 const DELEGATE_HANDBOOK_COMPETITION_RESULTS_URL = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf#competition-results';
 
-export default function FormToWrt({ competitionId, canSubmitResults }) {
+export default function FormToWrt({ competitionId, canSubmitResults, onSubmitSuccess }) {
   const [confirmDetails, setConfirmDetails] = useCheckboxState(false);
   const [message, setMessage] = useInputState();
 
@@ -20,7 +20,10 @@ export default function FormToWrt({ competitionId, canSubmitResults }) {
     isSuccess,
     isError: isErrorInCurrentUpload,
     error: errorInSubmission,
-  } = useMutation({ mutationFn: submitToWrt });
+  } = useMutation({
+    mutationFn: submitToWrt,
+    onSuccess: onSubmitSuccess,
+  });
 
   const formSubmitHandler = () => {
     submitToWrtMutate({ competitionId, message });

@@ -75,12 +75,17 @@ function CompetitionResultSubmission({
 
     setHasTemporaryResults(!!response.success);
     advanceStep();
-  }, [setHasTemporaryResults, refetchValidationOutput, advanceStep]);
+  }, [refetchValidationOutput, setHasTemporaryResults, advanceStep]);
 
   const onValidationsConfirmed = useCallback(() => {
     setAreValidationsConfirmed(true);
     advanceStep();
-  }, [advanceStep, setAreValidationsConfirmed]);
+  }, [setAreValidationsConfirmed, advanceStep]);
+
+  const onSubmitSuccess = useCallback(() => {
+    setAreResultsSubmitted(true);
+    advanceStep();
+  }, [setAreResultsSubmitted, advanceStep]);
 
   return (
     <>
@@ -147,6 +152,7 @@ function CompetitionResultSubmission({
         <FormToWrt
           competitionId={competitionId}
           canSubmitResults={canSubmitResults}
+          onSubmitSuccess={onSubmitSuccess}
         />
       )}
       {activeStep === 3 && (
