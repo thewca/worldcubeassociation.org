@@ -277,7 +277,7 @@ class Registration < ApplicationRecord
   end
 
   def save_registration_data!(registration_data:, creator:, source:)
-    raise ArgumentError, "Invalid source: #{source}" unless SOURCES.include?(source)
+    raise ArgumentError.new("Invalid source: #{source}") unless SOURCES.include?(source)
 
     formatted_payload = {
       "competing" => {
@@ -292,7 +292,7 @@ class Registration < ApplicationRecord
       self,
       creator.id,
       send_emails: (source != CSV_IMPORT),
-      history_action: source
+      history_action: source,
     )
   end
 
