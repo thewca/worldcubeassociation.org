@@ -278,7 +278,7 @@ class Registration < ApplicationRecord
         "event_ids" => registration_data.dig(:registration, :eventIds) || [],
         "comment" => registration_data[:comments].presence,
         "status" => (Registrations::Helper::STATUS_ACCEPTED unless accepted?),
-      }.compact
+      }.compact,
     }
 
     Registrations::RegistrationChecker.apply_payload(self, formatted_payload, clone: false)
