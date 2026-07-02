@@ -1,22 +1,16 @@
 import React from 'react';
-import { Container, Message, Tab } from 'semantic-ui-react';
+import { Message, Tab } from 'semantic-ui-react';
 import UploadResultsJson from './UploadResultsJson';
 import ImportWcaLiveResults from './ImportWcaLiveResults';
 
 export default function ImportResultsData({
   competitionId,
   hasTemporaryResults,
+  onImportSuccess,
   isAdminView = false,
   uploadedScrambleFilesCount = 0,
   showWcaLiveBeta = false,
 }) {
-  const onImportSuccess = () => {
-    // Ideally page should not be reloaded, but this is currently required to re-render
-    // the rails HTML portion. Once that rails HTML portion is also migrated to React,
-    // then this reload will be removed.
-    window.location.reload();
-  };
-
   const panes = [
     {
       menuItem: 'Upload Results JSON',
@@ -46,16 +40,14 @@ export default function ImportResultsData({
   ];
 
   return (
-    <Container fluid>
-      <Message
-        warning={hasTemporaryResults}
-        info={!hasTemporaryResults}
-      >
-        {hasTemporaryResults
-          ? 'Some results have already been uploaded before, importing results data again will override all of them!'
-          : 'Please start by selecting a JSON file to import.'}
-      </Message>
+    <>
+      {hasTemporaryResults && (
+        <Message warning>
+          Some results have already been uploaded before,
+          importing results data again will override all of them!
+        </Message>
+      )}
       <Tab panes={panes} />
-    </Container>
+    </>
   );
 }

@@ -49,6 +49,7 @@ function CompetitionResultSubmission({
     isPending: isValidationPending,
     isError: isValidationFetchError,
     error: validationFetchError,
+    refetch: refetchValidationOutput,
   } = useQuery({
     queryKey: ['competition-validation-output', competitionId],
     queryFn: () => runValidatorsForCompetitionList(
