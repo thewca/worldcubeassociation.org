@@ -199,7 +199,7 @@ RSpec.describe TicketsController do
       }
 
       expect(response).to have_http_status :not_found
-      expect(response.parsed_body["error"]).to include("Registration with registrant ID 99_999 not found")
+      expect(response.parsed_body["error"]).to include("Registration with registrant ID 99999 not found")
     end
   end
 
