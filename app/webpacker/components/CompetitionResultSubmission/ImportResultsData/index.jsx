@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
-import {
-  Accordion, Container, Message, Tab,
-} from 'semantic-ui-react';
+import React from 'react';
+import { Message, Tab } from 'semantic-ui-react';
 import UploadResultsJson from './UploadResultsJson';
 import ImportWcaLiveResults from './ImportWcaLiveResults';
 
@@ -13,8 +11,6 @@ export default function ImportResultsData({
   uploadedScrambleFilesCount = 0,
   showWcaLiveBeta = false,
 }) {
-  const [activeAccordion, setActiveAccordion] = useState(!hasTemporaryResults);
-
   const panes = [
     {
       menuItem: 'Upload Results JSON',
@@ -44,26 +40,16 @@ export default function ImportResultsData({
   ];
 
   return (
-    <Container fluid>
-      <Accordion fluid styled>
-        <Accordion.Title
-          active={activeAccordion}
-          onClick={() => setActiveAccordion((prevValue) => !prevValue)}
-        >
-          Import Results Data
-        </Accordion.Title>
-        <Accordion.Content active={activeAccordion}>
-          <Message
-            warning={hasTemporaryResults}
-            info={!hasTemporaryResults}
-          >
-            {hasTemporaryResults
-              ? 'Some results have already been uploaded before, importing results data again will override all of them!'
-              : 'Please start by selecting a JSON file to import.'}
-          </Message>
-          <Tab panes={panes} />
-        </Accordion.Content>
-      </Accordion>
-    </Container>
+    <>
+      <Message
+        warning={hasTemporaryResults}
+        info={!hasTemporaryResults}
+      >
+        {hasTemporaryResults
+          ? 'Some results have already been uploaded before, importing results data again will override all of them!'
+          : 'Please start by selecting a JSON file to import.'}
+      </Message>
+      <Tab panes={panes} />
+    </>
   );
 }

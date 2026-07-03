@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { List, Message } from 'semantic-ui-react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Accordion, List, Message } from 'semantic-ui-react';
 import ImportResultsData from './ImportResultsData';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import FormToWrt from './FormToWrt';
@@ -35,6 +35,51 @@ function CompetitionResultSubmission({
   canSubmitResults,
 }) {
   const [hasTemporaryResults, setHasTemporaryResults] = useState(hasTemporaryResultsInitial);
+  const [accordionIndex, setAccordionIndex] = useState(0);
+
+  const onImportSuccess = useCallback(() => {
+    setHasTemporaryResults(true);
+  }, [setHasTemporaryResults]);
+
+  const accordionPanels = useMemo(() => [
+    {
+      key: 'import-results',
+      title: {
+        icon: 'upload',
+        content: 'Import Results Data',
+      },
+      content: {
+        content: (
+          <ImportResultsData
+            competitionId={competitionId}
+            uploadedScrambleFilesCount={uploadedScrambleFilesCount}
+            onImportSuccess={onImportSuccess}
+            hasTemporaryResults={hasTemporaryResults}
+            showWcaLiveBeta={showWcaLiveBeta}
+          />
+        ),
+      },
+    },
+    {
+      key: 'form-to-wrt',
+      title: {
+        icon: 'mail',
+        content: 'Submit to WRT',
+      },
+      content: {
+        content: (
+          <FormToWrt competitionId={competitionId} canSubmitResults={canSubmitResults} />
+        ),
+      },
+    },
+  ], [
+    competitionId,
+    uploadedScrambleFilesCount,
+    onImportSuccess,
+    hasTemporaryResults,
+    showWcaLiveBeta,
+    canSubmitResults,
+  ]);
 
   if (resultsSubmitted) {
     return (
@@ -63,16 +108,13 @@ function CompetitionResultSubmission({
           Submit these results to the WRT after addressing warnings (if any).
         </List.Item>
       </List>
-      <ImportResultsData
-        competitionId={competitionId}
-        uploadedScrambleFilesCount={uploadedScrambleFilesCount}
-        onImportSuccess={() => setHasTemporaryResults(true)}
-        hasTemporaryResults={hasTemporaryResults}
-        showWcaLiveBeta={showWcaLiveBeta}
+      <Accordion
+        styled
+        fluid
+        panels={accordionPanels}
+        activeIndex={accordionIndex}
+        onTitleClick={(e, props) => setAccordionIndex(props.index)}
       />
-      {hasTemporaryResults && (
-        <FormToWrt competitionId={competitionId} canSubmitResults={canSubmitResults} />
-      )}
     </>
   );
 }

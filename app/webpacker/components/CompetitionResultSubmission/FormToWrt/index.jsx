@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Form, Message } from 'semantic-ui-react';
+import { Form, Message } from 'semantic-ui-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Errored from '../../Requests/Errored';
 import useInputState from '../../../lib/hooks/useInputState';
@@ -50,47 +50,42 @@ export default function FormToWrt({ competitionId, canSubmitResults }) {
   if (isErrorInCurrentUpload) return <Errored error={errorInSubmission} />;
 
   return (
-    <Accordion fluid styled>
-      <Accordion.Title active>
-        Submit to WRT
-      </Accordion.Title>
-      <Accordion.Content active>
-        <ValidationOutput validationOutput={validationOutput} />
-        {canSubmitResults && (
-          <>
-            <p>Please enter the body of your email to the Results Team.</p>
-            <p>
-              Make sure the schedule on the WCA website actually reflects what happened during the
-              competition.
-            </p>
-            <p>
-              Please also make sure to include any other additional details required by the
-              {' '}
-              <a href={DELEGATE_HANDBOOK_COMPETITION_RESULTS_URL}>
-                &apos;Competition Results&apos; section of the Delegate Handbook.
-              </a>
-            </p>
-            <Form onSubmit={formSubmitHandler}>
-              <MarkdownEditor
-                id="message"
-                value={message}
-                onChange={setMessage}
-              />
-              <Form.Checkbox
-                value={confirmDetails}
-                onChange={setConfirmDetails}
-                label="I confirm the information displayed on the WCA website's events page and on the competition's schedule page reflect what happened during the competition."
-              />
-              <Form.Button
-                type="submit"
-                disabled={!confirmDetails || !message}
-              >
-                Submit
-              </Form.Button>
-            </Form>
-          </>
-        )}
-      </Accordion.Content>
-    </Accordion>
+    <>
+      <ValidationOutput validationOutput={validationOutput} />
+      {canSubmitResults && (
+        <>
+          <p>Please enter the body of your email to the Results Team.</p>
+          <p>
+            Make sure the schedule on the WCA website actually reflects what happened during the
+            competition.
+          </p>
+          <p>
+            Please also make sure to include any other additional details required by the
+            {' '}
+            <a href={DELEGATE_HANDBOOK_COMPETITION_RESULTS_URL}>
+              &apos;Competition Results&apos; section of the Delegate Handbook.
+            </a>
+          </p>
+          <Form onSubmit={formSubmitHandler}>
+            <MarkdownEditor
+              id="message"
+              value={message}
+              onChange={setMessage}
+            />
+            <Form.Checkbox
+              value={confirmDetails}
+              onChange={setConfirmDetails}
+              label="I confirm the information displayed on the WCA website's events page and on the competition's schedule page reflect what happened during the competition."
+            />
+            <Form.Button
+              type="submit"
+              disabled={!confirmDetails || !message}
+            >
+              Submit
+            </Form.Button>
+          </Form>
+        </>
+      )}
+    </>
   );
 }
