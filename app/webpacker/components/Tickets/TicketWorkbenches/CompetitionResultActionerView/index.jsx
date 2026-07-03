@@ -59,12 +59,6 @@ function ViewForStatus({
         />
       );
 
-        <MergeInboxScrambles
-          ticketDetails={ticketDetails}
-          currentStakeholder={currentStakeholder}
-        />
-      );
-
     case ticketsCompetitionResultStatuses.merged_inbox_scrambles:
       return (
         <VerifyNewcomers

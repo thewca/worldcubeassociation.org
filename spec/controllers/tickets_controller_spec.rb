@@ -195,11 +195,11 @@ RSpec.describe TicketsController do
       post :create_wca_ids, params: {
         ticket_id: results_ticket.ticket.id,
         acting_stakeholder_id: results_ticket.ticket.user_stakeholders(wrt_member)[0].id,
-        unfinished_persons: [{ "personId" => 99999, "editedSemiId" => "2026TEST01" }]
+        unfinished_persons: [{ "personId" => 99_999, "editedSemiId" => "2026TEST01" }],
       }
 
       expect(response).to have_http_status :not_found
-      expect(response.parsed_body["error"]).to include("Registration with registrant ID 99999 not found")
+      expect(response.parsed_body["error"]).to include("Registration with registrant ID 99_999 not found")
     end
   end
 

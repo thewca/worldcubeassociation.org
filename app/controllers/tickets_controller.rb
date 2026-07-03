@@ -291,13 +291,14 @@ class TicketsController < ApplicationController
     competition = @ticket.metadata.competition
 
     # Validate that all registrations exist before making any database updates
-    person_wca_id_data.each do |data|
-      person_id = data["personId"]
-      registration = competition.registrations.find_by(registrant_id: person_id)
-      if registration.nil?
-        render status: :not_found, json: { error: "Registration with registrant ID #{person_id} not found for competition #{competition.id}" }
-        return
-      end
+    missing_registration_data = person_wca_id_data.find do |data|
+      !competition.registrations.exists?(registrant_id: data["personId"])
+    end
+
+    if missing_registration_data
+      person_id = missing_registration_data["personId"]
+      render status: :not_found, json: { error: "Registration with registrant ID #{person_id} not found for competition #{competition.id}" }
+      return
     end
 
     ActiveRecord::Base.transaction do
