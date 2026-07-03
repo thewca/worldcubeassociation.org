@@ -111,9 +111,16 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
         <Radio
           label="cumulative"
           name="timeLimitType"
-          value="per-solve"
+          value="cross-events"
           checked={cumulativeRoundIds.length > 0}
           onChange={() => setCumulativeRoundIds([wcifRound.id])}
+        />
+        <Radio
+          label="dual"
+          name="timeLimitType"
+          value="linked-round"
+          checked={cumulativeRoundIds.length > 0}
+          onChange={() => setCumulativeRoundIds(wcifRound.linkedRounds)}
         />
       </Form.Field>
       <TimeLimitDescription
