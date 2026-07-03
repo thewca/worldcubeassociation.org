@@ -6,7 +6,7 @@ import { useStore } from '../../../../lib/providers/StoreProvider';
 import { parseActivityCode, roundIdToString } from '../../../../lib/utils/wcif';
 import ButtonActivatedModal from '../ButtonActivatedModal';
 
-export default function SelectRoundsModal({ timeLimit, excludeEventId, onOk }) {
+export default function SelectRoundsModal({ timeLimit, currentRound, onOk }) {
   const { wcifEvents } = useStore();
   const [selectedRoundIds, setSelectedRoundIds] = useState(timeLimit.cumulativeRoundIds);
 
@@ -22,6 +22,9 @@ export default function SelectRoundsModal({ timeLimit, excludeEventId, onOk }) {
     </span>
   ), []);
 
+  const currentRoundEventId = parseActivityCode(currentRound.id).eventId;
+  const currentRoundLinkedIds = currentRound.linkedRounds ?? [];
+
   const handleOk = () => onOk(selectedRoundIds);
 
   const reset = () => {
@@ -32,13 +35,24 @@ export default function SelectRoundsModal({ timeLimit, excludeEventId, onOk }) {
 
   const wcifRounds = _.compact(_.flatMap(wcifEvents, (wcifEvent) => {
     // Cross round cumulative time limits may not include other rounds of
-    // the same event.
-    // See https://github.com/thewca/wca-regulations/issues/457.
+    //   the same event, except for Dual Rounds.
+    // See https://github.com/thewca/wca-regulations/issues/457
+    //  and https://www.worldcubeassociation.org/regulations/#A1a2
     const otherEvent = events.byId[wcifEvent.id];
-    if (!otherEvent.canChangeTimeLimit || excludeEventId === wcifEvent.id) {
+    if (!otherEvent.canChangeTimeLimit) {
       return [];
     }
-    return wcifEvent.rounds;
+    // If we're considering a different event, then all rounds
+    //   of that other event are eligible for sharing the time limit
+    if (wcifEvent.id !== currentRoundEventId) {
+      return wcifEvent.rounds;
+    }
+    // If we reached here, we know this is the same event as the round
+    //   whose time limit is currently being edited. Limit for *sibling* Dual Rounds.
+    return wcifEvent.rounds.filter(
+      (otherRound) => otherRound.id !== currentRound.id
+        && currentRoundLinkedIds.includes(otherRound.id)
+    );
   }));
 
   const handleChecked = (_ev, data) => {

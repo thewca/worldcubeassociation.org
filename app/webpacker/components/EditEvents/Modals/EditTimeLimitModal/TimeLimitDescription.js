@@ -37,7 +37,7 @@ export default function TimeLimitDescription({ wcifRound, timeLimit, onOk }) {
           <br />
           The button below allows you to share this cumulative time limit with other rounds.
         </span>
-        <SelectRoundsModal excludeEventId={wcifRound.id.split('-')[0]} timeLimit={timeLimit} onOk={onOk} />
+        <SelectRoundsModal currentRound={wcifRound} timeLimit={timeLimit} onOk={onOk} />
       </>
     );
   }
@@ -65,7 +65,7 @@ export default function TimeLimitDescription({ wcifRound, timeLimit, onOk }) {
           ))}
         </ul>
       </span>
-      <SelectRoundsModal excludeEventId={wcifRound.id.split('-')[0]} timeLimit={timeLimit} onOk={onOk} />
+      <SelectRoundsModal currentRound={wcifRound} timeLimit={timeLimit} onOk={onOk} />
     </>
   );
 }
