@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Checkbox, Form, Popup } from 'semantic-ui-react';
 import { events } from '../../../../lib/wca-data.js.erb';
 import { useStore } from '../../../../lib/providers/StoreProvider';
@@ -51,7 +51,7 @@ export default function SelectRoundsModal({ timeLimit, currentRound, onOk }) {
     //   whose time limit is currently being edited. Limit for *sibling* Dual Rounds.
     return wcifEvent.rounds.filter(
       (otherRound) => otherRound.id !== currentRound.id
-        && currentRoundLinkedIds.includes(otherRound.id)
+        && currentRoundLinkedIds.includes(otherRound.id),
     );
   }));
 
@@ -67,6 +67,37 @@ export default function SelectRoundsModal({ timeLimit, currentRound, onOk }) {
     }
   };
 
+  const getDisabledReason = useCallback((roundId, isChecked) => {
+    if (isChecked) {
+      return null; // Checked boxes can always be un-checked
+    }
+
+    const { eventId } = parseActivityCode(roundId);
+    const event = events.byId[eventId];
+
+    const eventAlreadySelected = selectedRoundIds.some((selectedRoundId) => (
+      parseActivityCode(selectedRoundId).eventId === eventId
+    ));
+
+    const isLinkedSibling = roundId !== currentRound.id && currentRoundLinkedIds.includes(roundId);
+
+    if (eventAlreadySelected && !isLinkedSibling) {
+      return `Cannot select this round because you've already selected a round with ${event.name}`;
+    }
+
+    const linkedSiblingAlreadySelected = selectedRoundIds.some((selectedRoundId) => (
+      selectedRoundId !== currentRound.id && currentRoundLinkedIds.includes(selectedRoundId)
+    ));
+
+    if (linkedSiblingAlreadySelected && !eventAlreadySelected) {
+      const currentPanelEvent = events.byId[currentRoundEventId];
+
+      return `Cannot select this round because you've already selected a Dual Round shared round with ${currentPanelEvent.name}`;
+    }
+
+    return null;
+  }, [currentRound.id, selectedRoundIds, currentRoundEventId, currentRoundLinkedIds]);
+
   return (
     <ButtonActivatedModal
       title={Title}
@@ -78,16 +109,10 @@ export default function SelectRoundsModal({ timeLimit, currentRound, onOk }) {
     >
       {wcifRounds.map((wcifRound) => {
         const roundId = wcifRound.id;
-        const { eventId } = parseActivityCode(roundId);
-        const event = events.byId[eventId];
-        const checked = selectedRoundIds.indexOf(roundId) > -1;
+        const isChecked = selectedRoundIds.includes(roundId);
 
-        const eventAlreadySelected = !!selectedRoundIds.find((selectedRoundId) => (
-          parseActivityCode(selectedRoundId).eventId === eventId
-        ));
-
-        const disabled = !checked && eventAlreadySelected;
-        const disabledReason = disabled ? `Cannot select this round because you've already selected a round with ${event.name}` : null;
+        const disabledReason = getDisabledReason(roundId, isChecked);
+        const disabled = disabledReason !== null;
 
         return (
           <Form.Field key={roundId}>
@@ -100,7 +125,7 @@ export default function SelectRoundsModal({ timeLimit, currentRound, onOk }) {
                   name="round-id-radio-group"
                   label={roundIdToString(roundId)}
                   value={roundId}
-                  checked={checked}
+                  checked={isChecked}
                   onClick={handleChecked}
                   disabled={disabled}
                 />
