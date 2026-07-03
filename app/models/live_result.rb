@@ -229,35 +229,34 @@ class LiveResult < ApplicationRecord
     return SolveTime::SKIPPED_VALUE if values.empty?
 
     if round.event_id == "333fm"
-      completed = values.select(&:positive?)
-      return SolveTime::DNF_VALUE if completed.empty?
+      return SolveTime::DNF_VALUE unless values.all?(&:positive?)
 
       # Move counts are stored as-is but averages are scaled by 100.
-      return (completed.sum * 100.0 / completed.length).round
+      return (values.sum * 100.0 / values.length).round
     end
 
     sorted = values.sort_by { SolveTime.new(round.event_id, :single, it) }
 
     case expected
     when 3
-      mean_of_completed(values)
+      mean_or_dnf(values)
     when 5
       case values.length
-      when 1, 2 then mean_of_completed(values)
+      when 1, 2 then mean_or_dnf(values)
       when 3 then sorted[1] # median
-      when 4 then mean_of_completed([sorted[1], sorted[2]]) # middle two
-      else mean_of_completed([sorted[1], sorted[2], sorted[3]])
+      when 4 then mean_or_dnf([sorted[1], sorted[2]]) # middle two
+      else mean_or_dnf([sorted[1], sorted[2], sorted[3]])
       end
     else
       SolveTime::SKIPPED_VALUE
     end
   end
 
-  def self.mean_of_completed(values)
-    completed = values.select(&:positive?)
-    return SolveTime::DNF_VALUE if completed.empty?
+  # Like wca-live's meanOfX: any incomplete (DNF/DNS) attempt makes the mean DNF.
+  def self.mean_or_dnf(values)
+    return SolveTime::DNF_VALUE unless values.all?(&:positive?)
 
-    round_wca_value((completed.sum.to_f / completed.length).round)
+    round_wca_value((values.sum.to_f / values.length).round)
   end
 
   # https://www.worldcubeassociation.org/regulations/#9f2 — averages over 10

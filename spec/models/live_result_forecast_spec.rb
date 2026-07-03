@@ -32,6 +32,15 @@ RSpec.describe LiveResult do
       it "returns SKIPPED for no attempts" do
         expect(described_class.compute_projected_average([], round)).to eq SolveTime::SKIPPED_VALUE
       end
+
+      it "sorts a DNF as the worst attempt when taking the median" do
+        expect(described_class.compute_projected_average([900, -1, 800], round)).to eq 900
+      end
+
+      it "is DNF when a DNF lands in the counting attempts" do
+        expect(described_class.compute_projected_average([800, -1], round)).to eq SolveTime::DNF_VALUE
+        expect(described_class.compute_projected_average([800, -1, 900, -1], round)).to eq SolveTime::DNF_VALUE
+      end
     end
 
     context "mean of 3" do
@@ -39,6 +48,10 @@ RSpec.describe LiveResult do
 
       it "means the current complete solves" do
         expect(described_class.compute_projected_average([800, 900], round)).to eq 850
+      end
+
+      it "is DNF when any attempt is DNF" do
+        expect(described_class.compute_projected_average([800, -1], round)).to eq SolveTime::DNF_VALUE
       end
     end
 
@@ -49,6 +62,10 @@ RSpec.describe LiveResult do
         expect(described_class.compute_projected_average([20], round)).to eq 2000
         expect(described_class.compute_projected_average([20, 21], round)).to eq 2050
         expect(described_class.compute_projected_average([20, 20, 21], round)).to eq 2033
+      end
+
+      it "is DNF when any attempt is DNF" do
+        expect(described_class.compute_projected_average([20, -1], round)).to eq SolveTime::DNF_VALUE
       end
     end
   end
