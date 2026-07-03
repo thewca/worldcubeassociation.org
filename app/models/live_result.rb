@@ -253,18 +253,15 @@ class LiveResult < ApplicationRecord
   end
 
   # Like wca-live's meanOfX: any incomplete (DNF/DNS) attempt makes the mean DNF.
+  # Mirrors Resultable#compute_correct_average, which we can't call directly because
+  # projections mean incomplete subsets (e.g. middle two of four) no Format expresses.
   def self.mean_or_dnf(values)
     return SolveTime::DNF_VALUE unless values.all?(&:positive?)
 
-    round_wca_value((values.sum.to_f / values.length).round)
-  end
-
-  # https://www.worldcubeassociation.org/regulations/#9f2 — averages over 10
-  # minutes are rounded to the nearest second.
-  def self.round_wca_value(value)
-    return value unless value.positive?
-
-    value > 10 * 6000 ? (value / 100.0).round * 100 : value
+    raw_average = values.sum.to_f / values.length
+    # Averages over 10 minutes are rounded to the nearest second, see
+    # https://www.worldcubeassociation.org/regulations/#9f2
+    raw_average > 60_000 ? raw_average.round(-2) : raw_average.round
   end
 
   def self.empty_result_attributes(registration_id, round_id)
