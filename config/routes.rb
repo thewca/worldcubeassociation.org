@@ -483,7 +483,7 @@ Rails.application.routes.draw do
         get '/search' => 'user_roles#search', as: :user_roles_search
       end
       resources :user_roles, only: %i[index show create update destroy]
-      resources :user_groups, only: %i[index create update]
+      resources :user_groups, only: %i[index show create update]
       namespace :wrt do
         resources :persons, only: %i[update destroy] do
           put '/reset_claim_count' => 'persons#reset_claim_count', as: :reset_claim_count

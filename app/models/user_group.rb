@@ -38,6 +38,7 @@ class UserGroup < ApplicationRecord
   #   and thus the old memberships.
   # The `touch` makes it so that a small change to the metadata is written, which triggers an `after_commit` hook
   #   in our custom caching mechanism (see also concerns/cachable.rb)
+  before_validation :end_active_lead_roles, if: -> { is_active_changed? && !is_active }
   belongs_to :metadata, polymorphic: true, optional: true, touch: true
   belongs_to :parent_group, class_name: "UserGroup", optional: true
 
@@ -330,11 +331,27 @@ class UserGroup < ApplicationRecord
     metadata&.email
   end
 
+  def readable_by?(user)
+    return true unless is_hidden
+
+    return false if user.nil?
+
+    permission = is_active ? :can_read_groups_current : :can_read_groups_past
+    user.has_permission?(permission, id)
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     include: %w[metadata],
   }.freeze
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
+
+  private def end_active_lead_roles
+    active_roles.each do |role|
+      role.update!(end_date: Date.today) if role.lead?
+    end
+    active_roles.reset
   end
 end
