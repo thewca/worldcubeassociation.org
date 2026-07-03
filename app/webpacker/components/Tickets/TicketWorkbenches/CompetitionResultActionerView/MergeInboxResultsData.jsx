@@ -6,10 +6,14 @@ import ResultsDataPreview from './ResultsDataPreview';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
 import getImportedTemporaryResults from '../../api/competitionResult/getImportedTemporaryResults';
+import getImportedTemporaryScrambles from '../../api/competitionResult/getImportedTemporaryScrambles';
 import mergeInboxResults from '../../api/competitionResult/mergeInboxResults';
+import mergeInboxScrambles from '../../api/competitionResult/mergeInboxScrambles';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
 import { ResultRowHeader } from '../../../ResultsData/Results/ResultRowHeader';
 import ResultRowBody from '../../../ResultsData/Results/ResultRowBody';
+import ScrambleRowHeader from '../../../ResultsData/Scrambles/ScrambleRowHeader';
+import ScrambleRowBody from '../../../ResultsData/Scrambles/ScrambleRowBody';
 
 export function MergeInboxResults({ ticketDetails, currentStakeholder }) {
   return (
@@ -23,6 +27,22 @@ export function MergeInboxResults({ ticketDetails, currentStakeholder }) {
       successTargetStatus={ticketsCompetitionResultStatuses.merged_inbox_results}
       rowHeaderComponent={ResultRowHeader}
       rowComponent={ResultRowBody}
+    />
+  );
+}
+
+export function MergeInboxScrambles({ ticketDetails, currentStakeholder }) {
+  return (
+    <MergeInboxResultsData
+      dataType="scrambles"
+      ticketDetails={ticketDetails}
+      currentStakeholder={currentStakeholder}
+      fetchResultsDataFn={getImportedTemporaryScrambles}
+      mergeResultsDataFn={mergeInboxScrambles}
+      dataSortingKey={['group_id', 'scramble_num']}
+      successTargetStatus={ticketsCompetitionResultStatuses.merged_inbox_scrambles}
+      rowHeaderComponent={ScrambleRowHeader}
+      rowComponent={ScrambleRowBody}
     />
   );
 }
