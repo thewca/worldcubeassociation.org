@@ -111,21 +111,31 @@ export default function EditProfileForm({
           onReasonChange={handleEditReasonChange}
         />
       ))}
+      <Message warning>
+        <Message.Header>IMPORTANT</Message.Header>
+        <Message.List>
+          <Message.Item>
+            Proof is not required when you change your first name or gender.
+          </Message.Item>
+          <Message.Item>
+            If you are changing your last name, region of representation, or birthdate, please
+            upload a
+            {' '}
+            <u>legal document</u>
+            {' '}
+            (e.g., identity card, driver&apos;s licence, passport, marriage certificate, etc.)
+            {' '}
+            that validates the requested field. Feel free to blur-out/obfuscate any other
+            {' '}
+            personal data on the identification.
+          </Message.Item>
+        </Message.List>
+      </Message>
       <Form.Input
         label={I18n.t('page.contact_edit_profile.form.proof_attach.label')}
         type="file"
         onChange={handleProofUpload}
       />
-      <Message warning>
-        <strong>IMPORTANT</strong>
-        : Attach a picture of a
-        {' '}
-        <u>legal document</u>
-        {' '}
-        (identity card, driver license, passport...) that validates the requested fields;
-        {' '}
-        feel free to blur-out/obfuscate any other personal data on the identification.
-      </Message>
       <Form.Field>
         <ReCAPTCHA
           sitekey={recaptchaPublicKey}
