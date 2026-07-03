@@ -75,6 +75,11 @@ function Bracket({ round, t }: { round: H2hRound; t: TFunction }) {
     [round.matches],
   );
 
+  const places = _.uniqBy(
+    round.matches.flatMap((match) => match.competitors),
+    "user_id",
+  ).length;
+
   return (
     <Box overflowX="auto">
       <HStack align="stretch" gap={8} minW="fit-content">
@@ -88,11 +93,7 @@ function Bracket({ round, t }: { round: H2hRound; t: TFunction }) {
           return (
             <VStack key={stageIndex} align="stretch" minW="18rem" gap={4}>
               <Heading textStyle="h5">
-                {isLastStage && stages.length > 1
-                  ? t("competitions.h2h.finals")
-                  : t("competitions.h2h.round_number", {
-                      number: stageIndex + 1,
-                    })}
+                {stageLabel(stageIndex, stages.length, places, t)}
               </Heading>
               <VStack
                 flex="1"
@@ -115,6 +116,23 @@ function Bracket({ round, t }: { round: H2hRound; t: TFunction }) {
       </HStack>
     </Box>
   );
+}
+
+// Stage names as defined by regulation I2a, counted from the final backwards.
+// Anything before the quarterfinals is a "Stage of N" where N is the number
+// of places in the round (e.g. Stage of 12, Stage of 16).
+function stageLabel(
+  stageIndex: number,
+  stageCount: number,
+  places: number,
+  t: TFunction,
+) {
+  const stagesFromFinal = stageCount - 1 - stageIndex;
+
+  if (stagesFromFinal === 0) return t("competitions.h2h.final_stage");
+  if (stagesFromFinal === 1) return t("competitions.h2h.semifinal_stage");
+  if (stagesFromFinal === 2) return t("competitions.h2h.quarterfinal_stage");
+  return t("competitions.h2h.stage_of", { number: places });
 }
 
 function bestFinalPos(match: H2hMatch) {

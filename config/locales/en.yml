@@ -2291,9 +2291,11 @@ en:
         competitors: "Competitors"
         scrambles: "Scrambles"
     h2h:
-      round_number: "Round %{number}"
       set_number: "Set %{number}"
-      finals: "Finals"
+      stage_of: "Stage of %{number}"
+      quarterfinal_stage: "Quarterfinal Stage"
+      semifinal_stage: "Semifinal Stage"
+      final_stage: "Final Stage"
       third_place: "Third Place"
     results_table:
       h2h_results_disclaimer: "Results determined by a Head-to-Head Finals. Only placement order and best solve are shown, as full Head-to-Head results display is still under development."
