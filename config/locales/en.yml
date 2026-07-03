@@ -1482,6 +1482,7 @@ en:
             other: "Add Competitor to Round, as the second Round of the dual round is not open you will need to add them separately."
       results:
         competitor: "Competitor"
+        head_to_head: "Head To Head Bracket"
         mean: "Mean"
       errors:
         round_closed: "The Round is not open yet"

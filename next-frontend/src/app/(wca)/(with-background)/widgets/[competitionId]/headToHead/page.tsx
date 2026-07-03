@@ -1,6 +1,6 @@
 import { Card, Text } from "@chakra-ui/react";
 import { getHeadToHead } from "@/lib/wca/competitions/getHeadToHead";
-import HeadToHeadBrackets from "@/app/(wca)/(with-background)/widgets/headToHead/HeadToHeadBrackets";
+import HeadToHeadBrackets from "@/app/(wca)/(with-background)/widgets/[competitionId]/headToHead/HeadToHeadBrackets";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 
@@ -25,7 +25,7 @@ export default async function HeadToHeadPage({
     <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">
-          {t("competitions.nav.menu.head_to_head")}
+          {t("competitions.live.results.head_to_head")}
         </Card.Title>
         {h2hRounds.length > 0 ? (
           <HeadToHeadBrackets h2hRounds={h2hRounds} />
