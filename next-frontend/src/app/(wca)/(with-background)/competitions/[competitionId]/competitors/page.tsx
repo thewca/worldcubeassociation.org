@@ -14,10 +14,7 @@ export default async function Competitors({
   const { t } = await getT();
 
   const [{ data: competitionInfo, error, response }, permissions] =
-    await Promise.all([
-      getCompetitionInfo(competitionId),
-      getPermissions(),
-    ]);
+    await Promise.all([getCompetitionInfo(competitionId), getPermissions()]);
 
   if (error) {
     return <OpenapiError response={response} t={t} />;
