@@ -37,6 +37,7 @@ function CompetitionResultSubmissionAdmin({
       </Message>
     );
   }
+
   return (
     <>
       <p>
@@ -48,6 +49,7 @@ function CompetitionResultSubmissionAdmin({
       <ImportResultsData
         competitionId={competitionId}
         hasTemporaryResults={hasTemporaryResults}
+        onImportSuccess={() => window.location.reload()}
         uploadedScrambleFilesCount={uploadedScrambleFilesCount}
         isAdminView
       />

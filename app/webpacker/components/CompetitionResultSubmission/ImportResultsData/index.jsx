@@ -8,18 +8,12 @@ import ImportWcaLiveResults from './ImportWcaLiveResults';
 export default function ImportResultsData({
   competitionId,
   hasTemporaryResults,
+  onImportSuccess,
   isAdminView = false,
   uploadedScrambleFilesCount = 0,
   showWcaLiveBeta = false,
 }) {
   const [activeAccordion, setActiveAccordion] = useState(!hasTemporaryResults);
-
-  const onImportSuccess = () => {
-    // Ideally page should not be reloaded, but this is currently required to re-render
-    // the rails HTML portion. Once that rails HTML portion is also migrated to React,
-    // then this reload will be removed.
-    window.location.reload();
-  };
 
   const panes = [
     {

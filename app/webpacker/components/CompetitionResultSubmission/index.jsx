@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { List, Message } from 'semantic-ui-react';
 import ImportResultsData from './ImportResultsData';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
@@ -29,11 +29,13 @@ export default function Wrapper({
 function CompetitionResultSubmission({
   competitionId,
   resultsSubmitted,
-  hasTemporaryResults,
+  hasTemporaryResults: hasTemporaryResultsInitial,
   uploadedScrambleFilesCount,
   showWcaLiveBeta,
   canSubmitResults,
 }) {
+  const [hasTemporaryResults, setHasTemporaryResults] = useState(hasTemporaryResultsInitial);
+
   if (resultsSubmitted) {
     return (
       <Message positive>
@@ -64,6 +66,7 @@ function CompetitionResultSubmission({
       <ImportResultsData
         competitionId={competitionId}
         uploadedScrambleFilesCount={uploadedScrambleFilesCount}
+        onImportSuccess={() => setHasTemporaryResults(true)}
         hasTemporaryResults={hasTemporaryResults}
         showWcaLiveBeta={showWcaLiveBeta}
       />
