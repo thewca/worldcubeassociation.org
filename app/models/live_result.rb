@@ -4,9 +4,6 @@ class LiveResult < ApplicationRecord
   BEST_POSSIBLE_SCORE = 1
   WORST_POSSIBLE_SCORE = -1
 
-  DNF_VALUE = -1
-  SKIPPED_VALUE = 0
-
   PODIUM_RANGE = 1..3
 
   has_many :live_attempts, dependent: :destroy
@@ -232,18 +229,18 @@ class LiveResult < ApplicationRecord
     expected = round.format.expected_solve_count
 
     if round.event_id == "333fm"
-      return SKIPPED_VALUE if values.empty?
+      return SolveTime::SKIPPED_VALUE if values.empty?
 
       completed = values.select(&:positive?)
-      return DNF_VALUE if completed.empty?
+      return SolveTime::DNF_VALUE if completed.empty?
 
       # Move counts are stored as-is but averages are scaled by 100.
       return (completed.sum * 100.0 / completed.length).round
     end
 
-    return SKIPPED_VALUE if values.empty?
+    return SolveTime::SKIPPED_VALUE if values.empty?
 
-    sorted = values.sort { |a, b| compare_attempt_values(a, b) }
+    sorted = values.sort_by { SolveTime.new(round.event_id, :single, it) }
 
     case expected
     when 3
@@ -253,16 +250,16 @@ class LiveResult < ApplicationRecord
       when 1, 2 then mean_of_completed(values)
       when 3 then sorted[1] # median
       when 4 then mean_of_completed([sorted[1], sorted[2]]) # middle two
-      else round_wca_value(mean_of_completed([sorted[1], sorted[2], sorted[3]]))
+      else mean_of_completed([sorted[1], sorted[2], sorted[3]])
       end
     else
-      SKIPPED_VALUE
+      SolveTime::SKIPPED_VALUE
     end
   end
 
   def self.mean_of_completed(values)
     completed = values.select(&:positive?)
-    return DNF_VALUE if completed.empty?
+    return SolveTime::DNF_VALUE if completed.empty?
 
     round_wca_value((completed.sum.to_f / completed.length).round)
   end
@@ -273,16 +270,6 @@ class LiveResult < ApplicationRecord
     return value unless value.positive?
 
     value > 10 * 6000 ? (value / 100.0).round * 100 : value
-  end
-
-  def self.compare_attempt_values(value_a, value_b)
-    a_complete = value_a.positive?
-    b_complete = value_b.positive?
-    return 0 unless a_complete || b_complete
-    return 1 unless a_complete
-    return -1 unless b_complete
-
-    value_a - value_b
   end
 
   def self.empty_result_attributes(registration_id, round_id)

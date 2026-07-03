@@ -30,7 +30,7 @@ RSpec.describe LiveResult do
       end
 
       it "returns SKIPPED for no attempts" do
-        expect(described_class.compute_projected_average([], round)).to eq LiveResult::SKIPPED_VALUE
+        expect(described_class.compute_projected_average([], round)).to eq SolveTime::SKIPPED_VALUE
       end
     end
 
@@ -65,11 +65,11 @@ RSpec.describe LiveResult do
     end
 
     it "is DNF for best-possible when two attempts are already DNF" do
-      expect(described_class.compute_padded_average(attempt_hashes(1000, -1, 1200, -1), round, LiveResult::BEST_POSSIBLE_SCORE)).to eq LiveResult::DNF_VALUE
+      expect(described_class.compute_padded_average(attempt_hashes(1000, -1, 1200, -1), round, LiveResult::BEST_POSSIBLE_SCORE)).to eq SolveTime::DNF_VALUE
     end
 
     it "is DNF for worst-possible when an attempt is already DNF" do
-      expect(described_class.compute_padded_average(attempt_hashes(1000, -1, 1200, 1300), round, LiveResult::WORST_POSSIBLE_SCORE)).to eq LiveResult::DNF_VALUE
+      expect(described_class.compute_padded_average(attempt_hashes(1000, -1, 1200, 1300), round, LiveResult::WORST_POSSIBLE_SCORE)).to eq SolveTime::DNF_VALUE
     end
   end
 
