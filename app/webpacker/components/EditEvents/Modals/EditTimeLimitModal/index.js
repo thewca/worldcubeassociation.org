@@ -2,7 +2,7 @@ import React, {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
 import _ from 'lodash';
-import { Form, Label, Radio } from 'semantic-ui-react';
+import { Form, Label } from 'semantic-ui-react';
 import { events } from '../../../../lib/wca-data.js.erb';
 import { roundIdToString } from '../../../../lib/utils/wcif';
 import { centisecondsToClockFormat } from '../../../../lib/wca-live/attempts';
@@ -106,16 +106,15 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
         onChange={setCentiseconds}
         disabled={disabled}
       />
-      <br />
-      <Form.Field inline>
-        <Radio
+      <Form.Group inline>
+        <Form.Radio
           label="per-solve"
           name="timeLimitType"
           value="per-solve"
           checked={cumulativeRoundIds.length === 0}
           onChange={() => setCumulativeRoundIds([])}
         />
-        <Radio
+        <Form.Radio
           label="cumulative"
           name="timeLimitType"
           value="cross-events"
@@ -123,7 +122,7 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
           onChange={() => setCumulativeRoundIds([wcifRound.id])}
         />
         {linkedRoundIds.length > 0 && (
-          <Radio
+          <Form.Radio
             label="Dual Rounds cumulative"
             name="timeLimitType"
             value="linked-round"
@@ -131,7 +130,7 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
             onChange={() => setCumulativeRoundIds(wcifRound.linkedRounds)}
           />
         )}
-      </Form.Field>
+      </Form.Group>
       <TimeLimitDescription
         wcifRound={wcifRound}
         timeLimit={{ centiseconds, cumulativeRoundIds }}
