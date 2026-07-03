@@ -86,7 +86,7 @@ module Live
       "attempt_number" => "an",
       "best_possible_average" => "bpa",
       "worst_possible_average" => "wpa",
-      "projected_average" => "pa",
+      "projected_average" => "pra",
       "last_attempt_entered_at" => "at",
     }.freeze
 

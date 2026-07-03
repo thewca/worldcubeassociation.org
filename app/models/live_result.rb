@@ -198,14 +198,12 @@ class LiveResult < ApplicationRecord
     values = live_attempts.pluck("value")
 
     {
-      "best_possible_average" => compute_padded_average(live_attempts, round, BEST_POSSIBLE_SCORE),
-      "worst_possible_average" => compute_padded_average(live_attempts, round, WORST_POSSIBLE_SCORE),
+      **self.compute_best_and_worst_possible_average(live_attempts, round),
       "projected_average" => compute_projected_average(values, round),
     }
   end
 
-  # Kept for the legacy name; pads the missing solves with `score` (best/worst).
-  def self.compute_best_and_worse_possible_average(live_attempts, round)
+  def self.compute_best_and_worst_possible_average(live_attempts, round)
     {
       "best_possible_average" => compute_padded_average(live_attempts, round, BEST_POSSIBLE_SCORE),
       "worst_possible_average" => compute_padded_average(live_attempts, round, WORST_POSSIBLE_SCORE),
@@ -228,17 +226,15 @@ class LiveResult < ApplicationRecord
   def self.compute_projected_average(values, round)
     expected = round.format.expected_solve_count
 
-    if round.event_id == "333fm"
-      return SolveTime::SKIPPED_VALUE if values.empty?
+    return SolveTime::SKIPPED_VALUE if values.empty?
 
+    if round.event_id == "333fm"
       completed = values.select(&:positive?)
       return SolveTime::DNF_VALUE if completed.empty?
 
       # Move counts are stored as-is but averages are scaled by 100.
       return (completed.sum * 100.0 / completed.length).round
     end
-
-    return SolveTime::SKIPPED_VALUE if values.empty?
 
     sorted = values.sort_by { SolveTime.new(round.event_id, :single, it) }
 
