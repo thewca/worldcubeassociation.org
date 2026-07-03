@@ -32,7 +32,7 @@ module FinishUnfinishedPersons
     persons_cache = Person.select(:id, :wca_id, :name, :dob, :country_id) if compute_similar
 
     unfinished_person_results.each do |res|
-      next if unfinished_persons.length >= MAX_PER_BATCH
+      next if compute_similar && unfinished_persons.length >= MAX_PER_BATCH
 
       competition_year = res.competition.start_date.year
       person_name = res.person_name
