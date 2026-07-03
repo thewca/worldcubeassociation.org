@@ -477,6 +477,11 @@ Rails.application.routes.draw do
         get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles
         get '/psych-sheet/:event_id' => 'competitions#event_psych_sheet', as: :event_psych_sheet
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
+
+        collection do
+          put '/wcif/check' => 'competitions#check_wcif'
+          get '/wcif/schema/:version' => 'competitions#wcif_json_schema', constraints: { version: /(\d\.){0,2}\d/ }, as: :wcif_json_schema
+        end
       end
 
       post '/registration-data' => 'competitions#registration_data', as: :registration_data
