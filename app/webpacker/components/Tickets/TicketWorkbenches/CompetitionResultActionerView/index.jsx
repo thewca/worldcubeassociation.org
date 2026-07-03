@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
 import WarningsVerification from './WarningsVerification';
 import TimelineView from './TimelineView';
-import { MergeInboxResults, MergeInboxScrambles } from './MergeInboxResultsData';
+import { MergeInboxResults } from './MergeInboxResultsData';
 import VerifyNewcomers from './VerifyNewcomers';
 import CreateWcaIds from './CreateWcaIds';
 import FinalSteps from './FinalSteps';
