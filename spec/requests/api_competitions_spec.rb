@@ -52,6 +52,39 @@ RSpec.describe "API Competitions" do
     end
   end
 
+  describe "GET #head_to_head" do
+    let!(:competition) { create(:competition, :visible, with_rounds: true, h2h_finals_event_ids: ['333']) }
+    let!(:round) { competition.competition_events.find_by(event_id: "333").rounds.first }
+    let!(:registrations) { create_list(:registration, 2, competition: competition) }
+
+    it "renders matches with competitors, sets and attempts" do
+      match = round.h2h_matches.create!(match_number: 1)
+      competitors = registrations.map { match.h2h_match_competitors.create!(user_id: it.user_id) }
+      set = match.h2h_sets.create!(set_number: 1)
+
+      registrations.zip(competitors, [500, 600]).each_with_index do |(registration, competitor, value), index|
+        live_result = LiveResult.create!(registration: registration, round: round, best: value, average: 0,
+                                         last_attempt_entered_at: Time.now.utc, global_pos: index + 1, local_pos: index + 1)
+        live_attempt = LiveAttempt.create!(value: value, attempt_number: 1, live_result: live_result)
+        set.h2h_attempts.create!(h2h_match_competitor: competitor, live_attempt: live_attempt, set_attempt_number: 1)
+      end
+
+      get api_v0_competition_head_to_head_path(competition)
+      expect(response).to be_successful
+
+      json = response.parsed_body
+      expect(json.length).to eq 1
+      expect(json[0]["id"]).to eq round.wcif_id
+      expect(json[0]["event_id"]).to eq "333"
+
+      json_match = json[0]["matches"][0]
+      expect(json_match["match_number"]).to eq 1
+      expect(json_match["competitors"].pluck("user_id")).to match_array registrations.map(&:user_id)
+      expect(json_match["competitors"].pluck("final_pos")).to contain_exactly(1, 2)
+      expect(json_match["sets"][0]["attempts"].pluck("value")).to contain_exactly(500, 600)
+    end
+  end
+
   describe "GET #scrambles" do
     let!(:competition) { create(:competition, :visible) }
     let!(:scramble) { create(:scramble, competition: competition) }

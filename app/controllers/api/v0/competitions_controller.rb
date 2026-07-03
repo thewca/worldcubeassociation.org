@@ -74,7 +74,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def results
     competition = competition_from_params
-    render json: competition.results
+    render json: competition.results.includes(:result_attempts)
   end
 
   def tabs
@@ -86,6 +86,68 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = Competition.find(params.require(:competition_id))
 
     render json: competition.results.podium
+  end
+
+  def head_to_head
+    competition = competition_from_params
+    rounds = competition.rounds
+                        .h2h
+                        .includes(h2h_matches: [
+                                    { h2h_match_competitors: :user },
+                                    { h2h_sets: { h2h_attempts: %i[h2h_match_competitor live_attempt result_attempt] } },
+                                  ])
+
+    render json: rounds.map { |round| h2h_round_json(round) }
+  end
+
+  private def h2h_round_json(round)
+    final_pos_by_user_id = h2h_final_positions_by_user_id(round)
+
+    {
+      id: round.wcif_id,
+      event_id: round.event_id,
+      round_type_id: round.round_type_id,
+      matches: round.h2h_matches.sort_by(&:match_number).map do |match|
+        {
+          match_number: match.match_number,
+          competitors: match.h2h_match_competitors.map do |competitor|
+            {
+              user_id: competitor.user_id,
+              name: competitor.user.name,
+              wca_id: competitor.user.wca_id,
+              country_iso2: competitor.user.country_iso2,
+              final_pos: final_pos_by_user_id[competitor.user_id],
+            }
+          end,
+          sets: match.h2h_sets.sort_by(&:set_number).map do |set|
+            {
+              set_number: set.set_number,
+              attempts: set.h2h_attempts.map do |attempt|
+                {
+                  user_id: attempt.h2h_match_competitor.user_id,
+                  set_attempt_number: attempt.set_attempt_number,
+                  value: attempt.result_attempt&.value || attempt.live_attempt&.value,
+                }
+              end,
+            }
+          end,
+        }
+      end,
+    }
+  end
+
+  # H2H rounds store their final standings either as posted results (keyed by
+  # WCA ID) or, before posting, as live results (keyed by registration).
+  private def h2h_final_positions_by_user_id(round)
+    result_positions = round.results.pluck(:person_id, :pos).to_h
+
+    if result_positions.any?
+      return User.where(wca_id: result_positions.keys)
+                 .pluck(:id, :wca_id)
+                 .to_h { |id, wca_id| [id, result_positions[wca_id]] }
+    end
+
+    round.live_results.joins(:registration).pluck("registrations.user_id", :global_pos).to_h
   end
 
   def event_results

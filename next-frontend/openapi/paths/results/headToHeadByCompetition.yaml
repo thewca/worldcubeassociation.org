@@ -1,0 +1,18 @@
+get:
+  summary: Returns head-to-head matches for all head-to-head rounds
+  operationId: headToHeadByCompetition
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../schemas/results/H2hRound.yaml"
