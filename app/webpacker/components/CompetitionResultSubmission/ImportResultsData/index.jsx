@@ -2,29 +2,10 @@ import React, { useState } from 'react';
 import {
   Accordion, Container, Message, Tab,
 } from 'semantic-ui-react';
-import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import UploadResultsJson from './UploadResultsJson';
 import ImportWcaLiveResults from './ImportWcaLiveResults';
 
-export default function Wrapper({
-  competitionId,
-  alreadyHasSubmittedResult,
-  isAdminView,
-  uploadedScrambleFilesCount,
-}) {
-  return (
-    <WCAQueryClientProvider>
-      <ImportResultsData
-        competitionId={competitionId}
-        hasTemporaryResults={alreadyHasSubmittedResult}
-        isAdminView={isAdminView}
-        uploadedScrambleFilesCount={uploadedScrambleFilesCount}
-      />
-    </WCAQueryClientProvider>
-  );
-}
-
-export function ImportResultsData({
+export default function ImportResultsData({
   competitionId,
   hasTemporaryResults,
   isAdminView = false,
