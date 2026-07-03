@@ -101,7 +101,10 @@ module Live
 
     def self.forecast_for(updated_result, round)
       live_attempts = updated_result["live_attempts"]
-      return updated_result if live_attempts.nil? || live_attempts.length == round.format.expected_solve_count
+      return updated_result if live_attempts.nil?
+
+      live_result = round.live_results.find { it.registration_id == updated_result["registration_id"] }
+      return updated_result if live_result.nil? || live_result.complete?
 
       updated_result.merge(LiveResult.compute_forecast_statistics(live_attempts, round))
     end
