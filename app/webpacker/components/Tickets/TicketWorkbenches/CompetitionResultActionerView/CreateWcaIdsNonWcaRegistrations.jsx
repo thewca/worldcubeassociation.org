@@ -40,6 +40,7 @@ export default function CreateWcaIdsNonWcaRegistrations({ ticketDetails }) {
         ),
       );
       queryClient.setQueryData(['imported-temporary-results', competitionId], []);
+      queryClient.setQueryData(['imported-temporary-scrambles', competitionId], []);
     },
   });
 
