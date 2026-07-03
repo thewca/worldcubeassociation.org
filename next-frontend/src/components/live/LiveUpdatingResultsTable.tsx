@@ -75,6 +75,7 @@ export default function LiveUpdatingResultsTable({
         formatId={formatId}
         eventId={eventId}
         title={title}
+        isLinkedRound={isLinkedRound}
       />
     );
   }
@@ -100,9 +101,11 @@ export default function LiveUpdatingResultsTable({
           </Switch.Root>
         )}
         {!isAdminView && (
-          <IconButton variant="ghost" onClick={enableProjectorView}>
-            <LuGalleryVertical />
-          </IconButton>
+          <Tooltip content="Projector Mode" showArrow openDelay={200}>
+            <IconButton variant="ghost" onClick={enableProjectorView}>
+              <LuGalleryVertical />
+            </IconButton>
+          </Tooltip>
         )}
         {canManage && (
           <Tooltip

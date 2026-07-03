@@ -2914,6 +2914,8 @@ eu:
         submit_results: Emaitzak bidali
         #original_hash: 0ed766a
         add_to_batch: Sortara gehitu
+        #original_hash: 1a2e4ff
+        remove_from_batch: Sortatik atera
         #original_hash: 8b6d8cb
         batch_mode: Sorta modua
         #original_hash: a577fa2

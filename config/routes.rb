@@ -220,10 +220,12 @@ Rails.application.routes.draw do
     get 'details_before_anonymization' => 'tickets#details_before_anonymization', as: :tickets_details_before_anonymization
     post 'anonymize' => 'tickets#anonymize', as: :tickets_anonymize
     get 'imported_temporary_results' => 'tickets#imported_temporary_results', as: :imported_temporary_results
+    get 'imported_temporary_scrambles' => 'tickets#imported_temporary_scrambles', as: :imported_temporary_scrambles
   end
   resources :tickets, only: %i[index show] do
     post 'verify_warnings' => 'tickets#verify_warnings', as: :verify_warnings
     post 'merge_inbox_results' => 'tickets#merge_inbox_results', as: :merge_inbox_results
+    post 'merge_inbox_scrambles' => 'tickets#merge_inbox_scrambles', as: :merge_inbox_scrambles
     post 'post_results' => 'tickets#post_results', as: :post_results
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
     get 'eligible_roles_for_bcc' => 'tickets#eligible_roles_for_bcc', as: :eligible_roles_for_bcc

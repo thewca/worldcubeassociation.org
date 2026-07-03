@@ -74,7 +74,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def results
     competition = competition_from_params
-    render json: competition.results
+    render json: competition.results.includes(:result_attempts)
   end
 
   def tabs

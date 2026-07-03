@@ -44,6 +44,7 @@ export default function CreateWcaIds({ ticketDetails }) {
         }),
       );
       queryClient.setQueryData(['imported-temporary-results', competitionId], []);
+      queryClient.setQueryData(['imported-temporary-scrambles', competitionId], []);
     },
   });
 
