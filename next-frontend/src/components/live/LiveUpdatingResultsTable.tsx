@@ -60,13 +60,7 @@ export default function LiveUpdatingResultsTable({
     pendingQuitCompetitors,
   } = useLiveResults();
 
-  const {
-    id: roundWcifId,
-    format: formatId,
-    advancementCondition,
-  } = useRoundInfo();
-
-  const advancementLevel = advancementCondition?.level ?? 3;
+  const { id: roundWcifId, format: formatId } = useRoundInfo();
 
   const { eventId } = parseActivityCode(roundWcifId);
 
@@ -211,7 +205,6 @@ export default function LiveUpdatingResultsTable({
         showLinkedRoundsView={showLinkedRoundsView}
         isLinkedRound={isLinkedRound}
         forecastView={forecastView}
-        advancementLevel={advancementLevel}
       />
     </VStack>
   );

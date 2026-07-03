@@ -109,9 +109,6 @@ RSpec.describe Live::DiffHelper do
                                                    "best_possible_average" => 200,
                                                    "worst_possible_average" => 300,
                                                    "projected_average" => 250,
-                                                   # Everyone else is empty (skipped projection), so there's nothing to chase.
-                                                   "for_first" => -1,
-                                                   "for_advance" => -1,
                                                  })
       expect(diff["deleted"]).to be_nil
       expect(diff["created"]).to be_nil

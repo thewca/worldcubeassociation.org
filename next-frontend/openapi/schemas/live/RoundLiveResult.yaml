@@ -22,9 +22,3 @@ allOf:
             type: integer
           projected_average:
             type: integer
-          for_first:
-            type: integer
-            nullable: true
-          for_advance:
-            type: integer
-            nullable: true

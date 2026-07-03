@@ -30,8 +30,6 @@ export function decompressPartialResult(
       best_possible_average: diff.bpa,
       worst_possible_average: diff.wpa,
       projected_average: diff.pa,
-      for_first: diff.ff,
-      for_advance: diff.fa,
     },
     _.isUndefined,
   );

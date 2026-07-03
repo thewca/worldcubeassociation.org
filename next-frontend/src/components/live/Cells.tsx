@@ -157,21 +157,6 @@ export function LiveAttemptsCells({
   ));
 }
 
-function ordinal(n: number) {
-  const rem100 = n % 100;
-  if (rem100 >= 11 && rem100 <= 13) return `${n}th`;
-  switch (n % 10) {
-    case 1:
-      return `${n}st`;
-    case 2:
-      return `${n}nd`;
-    case 3:
-      return `${n}rd`;
-    default:
-      return `${n}th`;
-  }
-}
-
 export function LiveStatCells({
   stats,
   competitorId,
@@ -180,7 +165,6 @@ export function LiveStatCells({
   isAdmin = false,
   highlight,
   forecastView = false,
-  advancementLevel = 3,
 }: {
   stats: Stat[];
   competitorId: number;
@@ -189,7 +173,6 @@ export function LiveStatCells({
   isAdmin?: boolean;
   highlight?: boolean;
   forecastView?: boolean;
-  advancementLevel?: number;
 }) {
   const shouldHighlight = (statIndex: number) => {
     if (highlight !== undefined) {
@@ -217,17 +200,6 @@ export function LiveStatCells({
             <Box>
               Projected average:{" "}
               {formatAttemptResult(forecast.projected_average, eventId)}
-            </Box>
-          )}
-          {forecast.for_first != null && forecast.for_first > 0 && (
-            <Box>
-              For 1st: {formatAttemptResult(forecast.for_first, eventId)}
-            </Box>
-          )}
-          {forecast.for_advance != null && forecast.for_advance > 0 && (
-            <Box>
-              For {ordinal(advancementLevel)}:{" "}
-              {formatAttemptResult(forecast.for_advance, eventId)}
             </Box>
           )}
         </Box>

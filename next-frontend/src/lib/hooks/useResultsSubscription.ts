@@ -40,13 +40,10 @@ export type CompressedLiveResult = {
     an: number;
   }[];
   at: string;
-  // Forecast stats (only present on incomplete `updated` results). for_first/
-  // for_advance are correct for the updated result; other rows refresh on fetch.
+  // Forecast stats (only present on incomplete `updated` results).
   bpa?: number;
   wpa?: number;
   pa?: number;
-  ff?: number;
-  fa?: number;
 };
 
 type CompressedLiveResultWithUser = CompressedLiveResult & {

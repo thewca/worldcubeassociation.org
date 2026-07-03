@@ -6,11 +6,6 @@ class LiveResult < ApplicationRecord
 
   DNF_VALUE = -1
   SKIPPED_VALUE = 0
-  # timeNeededToOvertake sentinels (mirroring the front-end wca-live values).
-  NA_VALUE = -3       # impossible to overtake, even with a perfect solve
-  SUCCESS_VALUE = -4  # any successful solve overtakes an incomplete target
-
-  DEFAULT_ADVANCEMENT_LEVEL = 3
 
   PODIUM_RANGE = 1..3
 
@@ -195,24 +190,9 @@ class LiveResult < ApplicationRecord
   end
 
   def forecast_statistics
-    # use .length on purpose here as otherwise we would use one query per row
     return nil if complete?
 
-    stats = LiveResult.compute_forecast_statistics(live_attempts.as_json, round)
-
-    # for_first/for_advance depend on the whole round's standings. They're correct
-    # for this result at broadcast/fetch time, but other rows only refresh on a
-    # full fetch (their targets/ranks may shift). Fewest-moves doesn't get them.
-    if round.event_id == "333fm"
-      stats["for_first"] = SKIPPED_VALUE
-      stats["for_advance"] = SKIPPED_VALUE
-    else
-      advance_level = round.advancement_condition&.level || DEFAULT_ADVANCEMENT_LEVEL
-      stats["for_first"] = time_to_overtake_rank(1)
-      stats["for_advance"] = time_to_overtake_rank(advance_level)
-    end
-
-    stats
+    LiveResult.compute_forecast_statistics(live_attempts.as_json, round)
   end
 
   # Self-contained per-result projections (safe to send in diffs). `live_attempts`
@@ -279,106 +259,6 @@ class LiveResult < ApplicationRecord
       SKIPPED_VALUE
     end
   end
-
-  # The single needed on the next solve for this result to overtake the result
-  # holding the given rank. Mirrors the wca-live `resultsForView` target choice:
-  # to reach position N you chase whoever is at rank N (or rank N+1 if you're
-  # already there and need to stay ahead).
-  def time_to_overtake_rank(level)
-    values = live_attempts.map(&:value)
-    return SKIPPED_VALUE if values.empty?
-
-    siblings = round.live_results.to_a
-    index = siblings.index { |r| r.id == id }
-    return SKIPPED_VALUE if index.nil?
-
-    rank = index + 1
-    target = siblings[rank <= level ? level : level - 1]
-    return SKIPPED_VALUE if target.nil?
-
-    LiveResult.time_needed_to_overtake(
-      { attempts: values, best: best, projected_average: LiveResult.compute_projected_average(values, round) },
-      { number_of_attempts: round.format.expected_solve_count },
-      { best: target.best, projected_average: LiveResult.projected_average_for(target, round) },
-    )
-  end
-
-  def self.projected_average_for(result, round)
-    return result.average if result.complete?
-
-    compute_projected_average(result.live_attempts.map(&:value), round)
-  end
-
-  # Faithful port of wca-live's `timeNeededToOvertake`. Returns the single value
-  # needed on the next solve to overtake `overtake_result`, or a sentinel:
-  #   DNF_VALUE (-1): already overtaking even in the worst case (or target skipped)
-  #   NA_VALUE (-3): impossible, even a perfect solve can't overtake
-  #   SUCCESS_VALUE (-4): any successful solve overtakes an incomplete target
-  # `result`/`overtake_result` are hashes; `format` is { number_of_attempts: }.
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-  # Faithful port of the upstream wca-live branch structure; kept 1:1 on purpose.
-  def self.time_needed_to_overtake(result, format, overtake_result)
-    overtake_projected = overtake_result[:projected_average]
-    return DNF_VALUE if overtake_projected.zero?
-
-    attempt_values = result[:attempts]
-    result_best = result[:best]
-    result_projected = result[:projected_average]
-    overtake_best = overtake_result[:best]
-    num_attempts = format[:number_of_attempts]
-
-    result_worst = attempt_values.max { |a, b| compare_attempt_values(a, b) }
-    better_best = compare_attempt_values(result_best, overtake_best).negative?
-
-    # Projection will change from a mean to a median after a time is added.
-    if attempt_values.length == 2 && num_attempts == 5
-      worst_vs_projected = compare_attempt_values(result_worst, overtake_projected)
-      return DNF_VALUE if worst_vs_projected.negative? || (worst_vs_projected.zero? && better_best)
-
-      best_vs_projected = compare_attempt_values(result_best, overtake_projected)
-      if best_vs_projected.negative?
-        return SUCCESS_VALUE unless overtake_projected.positive?
-
-        return overtake_projected - (better_best ? 0 : 1)
-      end
-      return overtake_best.positive? ? overtake_best - 1 : SUCCESS_VALUE if best_vs_projected.zero?
-
-      return NA_VALUE
-    end
-
-    is_mean = num_attempts == 3 || attempt_values.length < 2
-
-    unless overtake_projected.positive?
-      return DNF_VALUE if better_best
-      return overtake_best.positive? ? overtake_best - 1 : SUCCESS_VALUE unless result_projected.positive?
-      return DNF_VALUE if !is_mean && result_worst.positive?
-
-      return SUCCESS_VALUE
-    end
-
-    return NA_VALUE unless result_projected.positive?
-
-    next_counting_solves = attempt_values.length + (is_mean ? 1 : -1)
-    total_needed = overtake_projected * next_counting_solves
-    # For a mean of 3, .01 can be added to achieve the same rounded result.
-    rounding_buffer = next_counting_solves == 3 ? 1 : 0
-    counting_sum = attempt_values.sum
-    counting_sum = counting_sum - result_best - result_worst unless is_mean
-
-    needed = total_needed - counting_sum + rounding_buffer
-
-    new_best = [needed, result_best].min
-    # Averages tie at this `needed`; if best doesn't win, adjust to overtake.
-    needed = [needed - next_counting_solves, overtake_best - 1].max if new_best >= overtake_best
-
-    best_possible_solve = is_mean ? 1 : result_best
-    worst_possible_solve = is_mean || !result_worst.positive? ? Float::INFINITY : result_worst
-    return NA_VALUE if needed < best_possible_solve
-    return DNF_VALUE if needed >= worst_possible_solve
-
-    needed
-  end
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def self.mean_of_completed(values)
     completed = values.select(&:positive?)
