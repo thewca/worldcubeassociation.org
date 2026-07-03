@@ -4,7 +4,8 @@ import { components } from "@/types/openapi";
 export type H2hRound = components["schemas"]["H2hRound"];
 export type H2hMatch = components["schemas"]["H2hMatch"];
 
-type H2hAttempt = H2hMatch["sets"][number]["attempts"][number];
+export type H2hSet = H2hMatch["sets"][number];
+export type H2hAttempt = H2hSet["attempts"][number];
 
 export interface H2hCompetitorScore {
   userId: number;
@@ -24,7 +25,11 @@ export function compareAttemptValues(a: number, b: number) {
   return b - a;
 }
 
-function raceWinnerUserId(attempts: H2hAttempt[]) {
+/**
+ * The winner of a single race, i.e. one `set_attempt_number` solved by
+ * every competitor in the match. Null when nobody has a result or on a tie.
+ */
+export function raceWinnerUserId(attempts: H2hAttempt[]) {
   const valid = attempts.filter((a) => a.value != null && a.value !== 0);
   if (valid.length === 0) return null;
 
