@@ -34,19 +34,6 @@ export default function VerifyNewcomers({ ticketDetails, currentStakeholder }) {
     onSuccess: () => {
       queryClient.setQueryData(
         ['ticket-details', id],
-        (oldTicketDetails) => ({
-          ...oldTicketDetails,
-          ticket: {
-            ...oldTicketDetails.ticket,
-            metadata: {
-              ...oldTicketDetails.ticket.metadata,
-              status: ticketsCompetitionResultStatuses.merged_inbox_results,
-            },
-          },
-        }),
-      );
-      queryClient.setQueryData(
-        ['ticket-details', id],
         (oldTicketDetails) => updateTicketMetadata(
           oldTicketDetails,
           'status',

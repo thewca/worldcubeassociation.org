@@ -7,6 +7,7 @@ import Errored from '../../../Requests/Errored';
 import { viewUrls } from '../../../../lib/requests/routes.js.erb';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
 import deleteInboxPersons from '../../api/competitionResult/deleteInboxPersons';
+import { updateTicketMetadata } from '../../../../lib/helpers/update-ticket-query-data';
 
 export default function CreateWcaIdsNonWcaRegistrations({ ticketDetails }) {
   const { ticket: { id, metadata: { competition_id: competitionId } } } = ticketDetails;
@@ -32,16 +33,11 @@ export default function CreateWcaIdsNonWcaRegistrations({ ticketDetails }) {
     onSuccess: () => {
       queryClient.setQueryData(
         ['ticket-details', id],
-        (oldTicketDetails) => ({
-          ...oldTicketDetails,
-          ticket: {
-            ...oldTicketDetails.ticket,
-            metadata: {
-              ...oldTicketDetails.ticket.metadata,
-              status: ticketsCompetitionResultStatuses.created_wca_ids,
-            },
-          },
-        }),
+        (oldTicketDetails) => updateTicketMetadata(
+          oldTicketDetails,
+          'status',
+          ticketsCompetitionResultStatuses.created_wca_ids,
+        ),
       );
       queryClient.setQueryData(['imported-temporary-results', competitionId], []);
     },

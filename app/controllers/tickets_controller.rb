@@ -290,6 +290,16 @@ class TicketsController < ApplicationController
     person_wca_id_data = params.require(:unfinished_persons)
     competition = @ticket.metadata.competition
 
+    # Validate that all registrations exist before making any database updates
+    person_wca_id_data.each do |data|
+      person_id = data["personId"]
+      registration = competition.registrations.find_by(registrant_id: person_id)
+      if registration.nil?
+        render status: :not_found, json: { error: "Registration with registrant ID #{person_id} not found for competition #{competition.id}" }
+        return
+      end
+    end
+
     ActiveRecord::Base.transaction do
       # memoize all WCA IDs, especially useful if we have several identical semi-IDs in the same batch
       # (siblings with the same last name competing as newcomers at the same competition etc.)
@@ -302,7 +312,6 @@ class TicketsController < ApplicationController
         new_wca_id, wca_id_index = FinishUnfinishedPersons.complete_wca_id(semi_id, wca_id_index)
 
         registration = competition.registrations.find_by(registrant_id: person_id)
-        raise "Registration with registrant ID #{person_id} not found for competition #{competition.id}" if registration.nil?
 
         FinishUnfinishedPersons.insert_person(
           wca_id: new_wca_id,
