@@ -3,10 +3,7 @@ import { Accordion, List, Message } from 'semantic-ui-react';
 import { useQueryClient } from '@tanstack/react-query';
 import ImportResultsData from './ImportResultsData';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
-import FormToWrt from './FormToWrt';
-
-export const IMPORT_STEP_TITLE = 'Import Results Data';
-export const IMPORT_STEP_ICON = 'upload';
+import FormToWrt, { IMPORT_STEP_ICON, IMPORT_STEP_TITLE } from './FormToWrt';
 
 export default function Wrapper({
   competitionId,

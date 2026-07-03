@@ -12,7 +12,9 @@ import Loading from '../../Requests/Loading';
 import runValidatorsForCompetitionList from '../../Panel/pages/RunValidatorsPage/api/runValidatorsForCompetitionList';
 import { ALL_VALIDATORS } from '../../../lib/wca-data.js.erb';
 import ValidationOutput from '../../Panel/pages/RunValidatorsPage/ValidationOutput';
-import { IMPORT_STEP_ICON, IMPORT_STEP_TITLE } from '../index';
+
+export const IMPORT_STEP_TITLE = 'Import Results Data';
+export const IMPORT_STEP_ICON = 'upload';
 
 const DELEGATE_HANDBOOK_COMPETITION_RESULTS_URL = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf#competition-results';
 const ERROR_MESSAGE_UPLOADED_RESULTS = "Please upload a JSON file and make sure the results don't contain any errors.";
