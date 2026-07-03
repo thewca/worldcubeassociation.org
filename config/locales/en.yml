@@ -2290,6 +2290,11 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
+    h2h:
+      round_number: "Round %{number}"
+      finals: "Finals"
+      final: "Final"
+      third_place: "Third Place"
     results_table:
       h2h_results_disclaimer: "Results determined by a Head-to-Head Finals. Only placement order and best solve are shown, as full Head-to-Head results display is still under development."
       wca_profile: "WCA profile"
