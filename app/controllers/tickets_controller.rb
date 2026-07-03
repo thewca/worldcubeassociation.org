@@ -290,10 +290,10 @@ class TicketsController < ApplicationController
     person_wca_id_data = params.require(:unfinished_persons)
     competition = @ticket.metadata.competition
 
-    # Validate that all registrations exist before making any database updates
-    existing_registrant_ids = competition.registrations.where(registrant_id: person_wca_id_data.map { |d| d["personId"] }).pluck(:registrant_id).map(&:to_i).to_set
+    request_registrant_ids = person_wca_id_data.pluck("personId")
+    existing_registrant_ids = competition.registrations.where(registrant_id: request_registrant_ids).pluck(:registrant_id).to_set
     missing_registration_data = person_wca_id_data.find do |data|
-      !existing_registrant_ids.include?(data["personId"].to_i)
+      existing_registrant_ids.exclude?(data["personId"].to_i)
     end
 
     if missing_registration_data

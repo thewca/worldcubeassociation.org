@@ -190,7 +190,7 @@ module FinishUnfinishedPersons
       gender: gender,
       sub_id: 1,
       comments: '',
-      **attrs
+      **attrs,
     )
   end
 
