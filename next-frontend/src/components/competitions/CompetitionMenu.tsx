@@ -6,7 +6,7 @@ import {
 } from "@/lib/wca/competitions/tabs";
 import TabMenu from "@/components/competitions/TabMenu";
 import LiveMenu from "@/components/competitions/LiveMenu";
-import { Alert, Link } from "@chakra-ui/react";
+import { Alert, ClientOnly, Link } from "@chakra-ui/react";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
@@ -24,9 +24,11 @@ export default function CompetitionMenu({
       <Alert.Root status="error">
         <Alert.Indicator />
         <Alert.Content>
-          <I18nHTMLTranslate
-            i18nKey={`competitions.live.incompatible.${scoretaking_software}`}
-          />
+          <ClientOnly>
+            <I18nHTMLTranslate
+              i18nKey={`competitions.live.incompatible.${scoretaking_software}`}
+            />
+          </ClientOnly>
           {scoretaking_software === "wca_live" && (
             <>
               {" "}
