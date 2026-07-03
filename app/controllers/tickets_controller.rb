@@ -7,6 +7,7 @@ class TicketsController < ApplicationController
   before_action :check_ticket_errors_join_as_bcc_stakeholder, only: [:join_as_bcc_stakeholder]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:verify_warnings]) }, only: [:verify_warnings]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_results]) }, only: [:merge_inbox_results]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_scrambles]) }, only: [:merge_inbox_scrambles]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:approve_edit_person_request]) }, only: [:approve_edit_person_request]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:reject_edit_person_request]) }, only: [:reject_edit_person_request]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:sync_edit_person_request]) }, only: [:sync_edit_person_request]
@@ -208,6 +209,14 @@ class TicketsController < ApplicationController
     render json: competition.inbox_results.includes(:inbox_person)
   end
 
+  def imported_temporary_scrambles
+    competition = Competition.find(params.require(:competition_id))
+
+    render json: competition.matched_scrambles
+                            .includes(**MatchedScramble::POSTING_INCLUDES)
+                            .as_json(MatchedScramble::PREVIEW_SERIALIZE_OPTIONS)
+  end
+
   def verify_warnings
     ActiveRecord::Base.transaction do
       @ticket.metadata.update!(status: TicketsCompetitionResult.statuses[:warnings_verified])
@@ -225,6 +234,20 @@ class TicketsController < ApplicationController
   def merge_inbox_results
     ActiveRecord::Base.transaction do
       @ticket.metadata.merge_inbox_results
+      @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+    end
+
+    render status: :ok, json: { success: true }
+  end
+
+  def merge_inbox_scrambles
+    ActiveRecord::Base.transaction do
+      @ticket.metadata.merge_inbox_scrambles
       @ticket.ticket_logs.create!(
         action_type: @action_type,
         acting_user_id: current_user.id,
