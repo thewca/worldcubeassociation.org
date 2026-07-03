@@ -39,7 +39,7 @@ export function MergeInboxScrambles({ ticketDetails, currentStakeholder }) {
       currentStakeholder={currentStakeholder}
       fetchResultsDataFn={getImportedTemporaryScrambles}
       mergeResultsDataFn={mergeInboxScrambles}
-      dataSortingKey={['group_id', 'scramble_num']}
+      dataSortingKey={['group_id', 'is_extra', 'scramble_num']}
       successTargetStatus={ticketsCompetitionResultStatuses.merged_inbox_scrambles}
       rowHeaderComponent={ScrambleRowHeader}
       rowComponent={ScrambleRowBody}
