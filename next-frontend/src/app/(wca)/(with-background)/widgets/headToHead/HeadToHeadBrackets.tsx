@@ -160,105 +160,103 @@ function MatchCard({
   label?: string;
 }) {
   const { scores, winnerUserId } = computeMatchScores(match);
+  const sets = _.sortBy(match.sets, "set_number");
+
+  const competitorCells = (competitorIndex: number) => {
+    const competitor = match.competitors[competitorIndex];
+    const score = scores[competitorIndex];
+    const fontWeight = competitor.user_id === winnerUserId ? "bold" : "normal";
+
+    return (
+      <Fragment key={competitor.user_id}>
+        {competitor.wca_id ? (
+          <Link asChild fontWeight={fontWeight}>
+            <NextLink
+              href={route({
+                pathname: "/persons/[wcaId]",
+                query: { wcaId: competitor.wca_id },
+              })}
+            >
+              {competitor.name}
+            </NextLink>
+          </Link>
+        ) : (
+          <Text fontWeight={fontWeight}>{competitor.name}</Text>
+        )}
+        {score.raceWinsPerSet.map((raceWins, setIndex) => (
+          <Text key={setIndex} color="fg.muted" textAlign="center">
+            {raceWins}
+          </Text>
+        ))}
+        <Text fontWeight="bold" textAlign="center">
+          {score.setWins}
+        </Text>
+      </Fragment>
+    );
+  };
 
   return (
-    <Box borderWidth="1px" rounded="md">
+    <Box borderWidth="1px" rounded="md" px={3} py={2}>
       {label && (
-        <Text
-          textStyle="xs"
-          color="fg.muted"
-          px={3}
-          pt={2}
-          textTransform="uppercase"
-        >
+        <Text textStyle="xs" color="fg.muted" textTransform="uppercase" mb={1}>
           {label}
         </Text>
       )}
-      <HStack align="stretch" gap={0}>
-        <Box flex="1">
-          {match.competitors.map((competitor, index) => {
-            const score = scores[index];
-            const isWinner = competitor.user_id === winnerUserId;
-            const fontWeight = isWinner ? "bold" : "normal";
-
-            return (
-              <HStack
-                key={competitor.user_id}
-                justify="space-between"
-                px={3}
-                py={2}
-                borderTopWidth={index > 0 ? "1px" : undefined}
-              >
-                {competitor.wca_id ? (
-                  <Link asChild fontWeight={fontWeight}>
-                    <NextLink
-                      href={route({
-                        pathname: "/persons/[wcaId]",
-                        query: { wcaId: competitor.wca_id },
-                      })}
-                    >
-                      {competitor.name}
-                    </NextLink>
-                  </Link>
-                ) : (
-                  <Text fontWeight={fontWeight}>{competitor.name}</Text>
-                )}
-                <HStack gap={3}>
-                  <HStack gap={2}>
-                    {score.raceWinsPerSet.map((raceWins, setIndex) => (
-                      <Text key={setIndex} color="fg.muted">
-                        {raceWins}
-                      </Text>
-                    ))}
-                  </HStack>
-                  <Text fontWeight="bold">{score.setWins}</Text>
-                </HStack>
-              </HStack>
-            );
-          })}
-        </Box>
-        <Flex align="center" pr={1}>
-          <Tooltip
-            showArrow
-            content={<MatchAttemptsTables match={match} eventId={eventId} />}
-          >
-            <IconButton
-              variant="ghost"
-              size="2xs"
-              colorPalette="gray"
-              aria-label="attempt details"
-            >
-              <HiOutlineInformationCircle />
-            </IconButton>
-          </Tooltip>
-        </Flex>
-      </HStack>
+      <Grid
+        templateColumns={`minmax(0, 1fr) repeat(${sets.length}, auto) auto`}
+        columnGap={3}
+        alignItems="center"
+      >
+        {competitorCells(0)}
+        {/* Liquipedia-style row of per-set info icons between the competitors */}
+        <Box />
+        {sets.map((set) => (
+          <Flex key={set.set_number} justify="center">
+            <SetAttemptsInfo set={set} match={match} eventId={eventId} />
+          </Flex>
+        ))}
+        <Box />
+        {_.range(1, match.competitors.length).map(competitorCells)}
+      </Grid>
     </Box>
   );
 }
 
-function MatchAttemptsTables({
+function SetAttemptsInfo({
+  set,
   match,
   eventId,
 }: {
+  set: H2hSet;
   match: H2hMatch;
   eventId: string;
 }) {
   const { t } = useT();
+  const setName = t("competitions.h2h.set_number", { number: set.set_number });
 
   return (
-    <VStack align="stretch" gap={3} p={1}>
-      {_.sortBy(match.sets, "set_number").map((set) => (
-        <Box key={set.set_number}>
+    <Tooltip
+      showArrow
+      content={
+        <Box p={1}>
           {match.sets.length > 1 && (
             <Text fontWeight="bold" mb={1}>
-              {t("competitions.h2h.set_number", { number: set.set_number })}
+              {setName}
             </Text>
           )}
           <SetAttemptsTable set={set} match={match} eventId={eventId} />
         </Box>
-      ))}
-    </VStack>
+      }
+    >
+      <IconButton
+        variant="ghost"
+        size="2xs"
+        colorPalette="gray"
+        aria-label={setName}
+      >
+        <HiOutlineInformationCircle />
+      </IconButton>
+    </Tooltip>
   );
 }
 
