@@ -23,8 +23,15 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
   const dispatch = useDispatch();
   const event = events.byId[wcifEvent.id];
 
+  const linkedRoundIds = useMemo(() => wcifRound.linkedRounds ?? [], [wcifRound.linkedRounds]);
+
   const [centiseconds, setCentiseconds] = useState(timeLimit?.centiseconds ?? 0);
   const [cumulativeRoundIds, setCumulativeRoundIds] = useState(timeLimit?.cumulativeRoundIds ?? []);
+
+  const isLinkedGroupCumulative = useMemo(
+    () => _.isEqual(cumulativeRoundIds, linkedRoundIds),
+    [cumulativeRoundIds, linkedRoundIds],
+  );
 
   const Trigger = useMemo(() => {
     if (!timeLimit) {
@@ -112,16 +119,18 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
           label="cumulative"
           name="timeLimitType"
           value="cross-events"
-          checked={cumulativeRoundIds.length > 0}
+          checked={cumulativeRoundIds.length > 0 && !isLinkedGroupCumulative}
           onChange={() => setCumulativeRoundIds([wcifRound.id])}
         />
-        <Radio
-          label="dual"
-          name="timeLimitType"
-          value="linked-round"
-          checked={cumulativeRoundIds.length > 0}
-          onChange={() => setCumulativeRoundIds(wcifRound.linkedRounds)}
-        />
+        {linkedRoundIds.length > 0 && (
+          <Radio
+            label="Dual Rounds cumulative"
+            name="timeLimitType"
+            value="linked-round"
+            checked={cumulativeRoundIds.length > 0 && isLinkedGroupCumulative}
+            onChange={() => setCumulativeRoundIds(wcifRound.linkedRounds)}
+          />
+        )}
       </Form.Field>
       <TimeLimitDescription
         wcifRound={wcifRound}
