@@ -1,6 +1,6 @@
 "use client";
 import React, { useMemo, useState } from "react";
-import { Card, Text, Table } from "@chakra-ui/react";
+import { Button, Card, Link, Text, Table } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import CompetitorTable from "@/components/competitions/CompetitorTable";
@@ -11,9 +11,14 @@ import Loading from "@/components/ui/loading";
 interface CompetitorData {
   id: string;
   isLive?: boolean;
+  canAddOnTheSpot?: boolean;
 }
 
-const TabCompetitors: React.FC<CompetitorData> = ({ id, isLive = false }) => {
+const TabCompetitors: React.FC<CompetitorData> = ({
+  id,
+  isLive = false,
+  canAddOnTheSpot = false,
+}) => {
   const [psychSheetEvent, setPsychSheetEvent] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<string>("average");
 
@@ -63,6 +68,13 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id, isLive = false }) => {
   return (
     <Card.Root>
       <Card.Body>
+        {canAddOnTheSpot && (
+          <Button asChild alignSelf="flex-end" mb={2}>
+            <Link href={`/competitions/${id}/registrations/add`}>
+              Add on the spot registration
+            </Link>
+          </Button>
+        )}
         <Card.Title>
           <FormEventSelector
             title="Events"
