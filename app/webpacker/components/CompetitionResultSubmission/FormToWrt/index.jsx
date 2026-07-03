@@ -14,13 +14,13 @@ import ValidationOutput from '../../Panel/pages/RunValidatorsPage/ValidationOutp
 const DELEGATE_HANDBOOK_COMPETITION_RESULTS_URL = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf#competition-results';
 const ERROR_MESSAGE_UPLOADED_RESULTS = "Please upload a JSON file and make sure the results don't contain any errors.";
 
-export default function FormToWrt({ competitionId, canSubmitResults }) {
+export default function FormToWrt({ competitionId, hasTemporaryResults, canSubmitResults }) {
   const [confirmDetails, setConfirmDetails] = useCheckboxState(false);
   const [message, setMessage] = useInputState();
 
   const {
     data: validationOutput,
-    isPending: isValidationPending,
+    isFetching: isValidationPending,
     isError: isErrorInPreviousUpload,
   } = useQuery({
     queryKey: ['competition-validation-output', competitionId],
@@ -30,6 +30,7 @@ export default function FormToWrt({ competitionId, canSubmitResults }) {
       false,
       false,
     ),
+    enabled: hasTemporaryResults,
   });
 
   const {

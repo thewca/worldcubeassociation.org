@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Accordion, List, Message } from 'semantic-ui-react';
+import { useQueryClient } from '@tanstack/react-query';
 import ImportResultsData from './ImportResultsData';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import FormToWrt from './FormToWrt';
@@ -35,11 +36,17 @@ function CompetitionResultSubmission({
   canSubmitResults,
 }) {
   const [hasTemporaryResults, setHasTemporaryResults] = useState(hasTemporaryResultsInitial);
-  const [accordionIndex, setAccordionIndex] = useState(0);
+  const [accordionIndex, setAccordionIndex] = useState(hasTemporaryResultsInitial ? 1 : 0);
+
+  const queryClient = useQueryClient();
 
   const onImportSuccess = useCallback(() => {
+    // the string descriptor is enough for invalidation, the query library supports prefix matching
+    queryClient.invalidateQueries({ queryKey: ['competition-validation-output'] });
+
     setHasTemporaryResults(true);
-  }, [setHasTemporaryResults]);
+    setAccordionIndex(1);
+  }, [queryClient, setHasTemporaryResults, setAccordionIndex]);
 
   const accordionPanels = useMemo(() => [
     {
@@ -68,7 +75,11 @@ function CompetitionResultSubmission({
       },
       content: {
         content: (
-          <FormToWrt competitionId={competitionId} canSubmitResults={canSubmitResults} />
+          <FormToWrt
+            competitionId={competitionId}
+            hasTemporaryResults={hasTemporaryResults}
+            canSubmitResults={canSubmitResults}
+          />
         ),
       },
     },
