@@ -9,6 +9,7 @@ class TicketsCompetitionResult < ApplicationRecord
     locked_for_posting: "locked_for_posting",
     warnings_verified: "warnings_verified",
     merged_inbox_results: "merged_inbox_results",
+    merged_inbox_scrambles: "merged_inbox_scrambles",
     newcomers_verified: "newcomers_verified",
     created_wca_ids: "created_wca_ids",
     posted: "posted",
@@ -20,6 +21,7 @@ class TicketsCompetitionResult < ApplicationRecord
   ACTION_TYPE = {
     verify_warnings: "verify_warnings",
     merge_inbox_results: "merge_inbox_results",
+    merge_inbox_scrambles: "merge_inbox_scrambles",
     verify_newcomers: "verify_newcomers",
     create_wca_ids: "create_wca_ids",
   }.freeze
@@ -29,6 +31,7 @@ class TicketsCompetitionResult < ApplicationRecord
       [
         ACTION_TYPE[:verify_warnings],
         ACTION_TYPE[:merge_inbox_results],
+        ACTION_TYPE[:merge_inbox_scrambles],
         ACTION_TYPE[:verify_newcomers],
         ACTION_TYPE[:create_wca_ids],
       ]
@@ -87,6 +90,14 @@ class TicketsCompetitionResult < ApplicationRecord
       CompetitionResultsImport.merge_inbox_results(competition)
 
       self.update!(status: TicketsCompetitionResult.statuses[:merged_inbox_results])
+    end
+  end
+
+  def merge_inbox_scrambles
+    ActiveRecord::Base.transaction do
+      CompetitionResultsImport.merge_inbox_scrambles(competition)
+
+      self.update!(status: TicketsCompetitionResult.statuses[:merged_inbox_scrambles])
     end
   end
 

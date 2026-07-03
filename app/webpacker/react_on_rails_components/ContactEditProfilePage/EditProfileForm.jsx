@@ -1,54 +1,78 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { Form, Message } from 'semantic-ui-react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { QueryClient, useQuery } from '@tanstack/react-query';
 import _ from 'lodash';
 import I18n from '../../lib/i18n';
-import { apiV0Urls, contactEditProfileActionUrl } from '../../lib/requests/routes.js.erb';
+import { contactEditProfileActionUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../../components/Requests/Loading';
-import Errored from '../../components/Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
-import UtcDatePicker from '../../components/wca/UtcDatePicker';
-import RegionSelector from '../../components/wca/RegionSelector';
-import GenderSelector from '../../components/wca/GenderSelector';
+import EditNameField from './fields/EditNameField';
+import EditRegionField from './fields/EditRegionField';
+import EditGenderField from './fields/EditGenderField';
+import EditDobField from './fields/EditDobField';
 
-const CONTACT_EDIT_PROFILE_FORM_QUERY_CLIENT = new QueryClient();
+const EDITABLE_FIELDS = [
+  { name: 'name', Component: EditNameField },
+  { name: 'country_iso2', Component: EditRegionField },
+  { name: 'gender', Component: EditGenderField },
+  { name: 'dob', Component: EditDobField },
+];
 
 export default function EditProfileForm({
   wcaId,
+  profileDetails,
   onContactSuccess,
   recaptchaPublicKey,
 }) {
-  const [editProfileReason, setEditProfileReason] = useState();
-  const [editedProfileDetails, setEditedProfileDetails] = useState();
+  const [editedProfileDetails, setEditedProfileDetails] = useState(() => _.fromPairs(
+    EDITABLE_FIELDS.map(({ name }) => [
+      name,
+      { newValue: profileDetails?.[name] || '', editReason: '' },
+    ]),
+  ));
   const [proofAttachment, setProofAttachment] = useState();
   const [captchaValue, setCaptchaValue] = useState();
   const [captchaError, setCaptchaError] = useState(false);
   const [saveError, setSaveError] = useState();
   const { save, saving } = useSaveAction();
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['profileData'],
-    queryFn: () => fetchJsonOrError(apiV0Urls.persons.show(wcaId)),
-  }, CONTACT_EDIT_PROFILE_FORM_QUERY_CLIENT);
+  const hasFieldBeenChanged = useCallback((field) => !_.isEqual(
+    profileDetails?.[field],
+    editedProfileDetails[field].newValue,
+  ), [profileDetails, editedProfileDetails]);
 
-  const profileDetails = data?.data?.person;
+  const isSubmitDisabled = useMemo(() => {
+    if (!profileDetails || !captchaValue) return true;
 
-  const isSubmitDisabled = useMemo(
-    () => !editedProfileDetails || _.isEqual(editedProfileDetails, profileDetails) || !captchaValue,
-    [captchaValue, editedProfileDetails, profileDetails],
-  );
+    const changedFields = Object.keys(editedProfileDetails).filter(hasFieldBeenChanged);
 
-  useEffect(() => {
-    setEditedProfileDetails(profileDetails);
-  }, [profileDetails]);
+    const noChanges = changedFields.length === 0;
+    const hasMissingReason = changedFields.some(
+      (field) => !editedProfileDetails[field].editReason.trim(),
+    );
+
+    return noChanges || hasMissingReason;
+  }, [captchaValue, editedProfileDetails, hasFieldBeenChanged, profileDetails]);
+
+  const handleValueChange = (_event, { name, value }) => {
+    setEditedProfileDetails((prev) => ({
+      ...prev,
+      [name]: { ...prev[name], newValue: value },
+    }));
+  };
+
+  const handleEditReasonChange = (_event, { name, value }) => {
+    setEditedProfileDetails((prev) => ({
+      ...prev,
+      [name]: { ...prev[name], editReason: value },
+    }));
+  };
 
   const formSubmitHandler = () => {
     const formData = new FormData();
 
     formData.append('formValues', JSON.stringify({
-      editedProfileDetails, editProfileReason, wcaId,
+      editedProfileDetails, wcaId,
     }));
     if (proofAttachment) {
       formData.append('attachment', proofAttachment);
@@ -63,25 +87,11 @@ export default function EditProfileForm({
     );
   };
 
-  const handleEditProfileReasonChange = (e, { value }) => {
-    setEditProfileReason(value);
-  };
-
   const handleProofUpload = (event) => {
     setProofAttachment(event.target.files[0]);
   };
 
-  const handleFormChange = (e, { name: formName, value }) => {
-    setEditedProfileDetails((prev) => ({ ...prev, [formName]: value }));
-  };
-
-  const handleDobChange = (date) => handleFormChange(null, {
-    name: 'dob',
-    value: date,
-  });
-
-  if (saving || isLoading) return <Loading />;
-  if (isError) return <Errored />;
+  if (saving) return <Loading />;
 
   return (
     <Form onSubmit={formSubmitHandler} error={!!saveError} warning>
@@ -91,43 +101,16 @@ export default function EditProfileForm({
           content={saveError.json?.error || 'Something went wrong.'}
         />
       )}
-      <Form.Input
-        label={I18n.t('activerecord.attributes.user.name')}
-        name="name"
-        value={editedProfileDetails?.name}
-        onChange={handleFormChange}
-        required
-      />
-      <RegionSelector
-        label={I18n.t('activerecord.attributes.user.country_iso2')}
-        name="country_iso2"
-        onlyCountries
-        region={editedProfileDetails?.country_iso2}
-        onRegionChange={handleFormChange}
-      />
-      <GenderSelector
-        name="gender"
-        gender={editedProfileDetails?.gender}
-        onChange={handleFormChange}
-      />
-      <Form.Field
-        label={I18n.t('activerecord.attributes.user.dob')}
-        name="dob"
-        control={UtcDatePicker}
-        showYearDropdown
-        dateFormatOverride="yyyy-MM-dd"
-        dropdownMode="select"
-        isoDate={editedProfileDetails?.dob}
-        onChange={handleDobChange}
-        required
-      />
-      <Form.TextArea
-        label={I18n.t('page.contact_edit_profile.form.edit_reason.label')}
-        name="editProfileReason"
-        required
-        value={editProfileReason}
-        onChange={handleEditProfileReasonChange}
-      />
+      {EDITABLE_FIELDS.map(({ name, Component }) => (
+        <Component
+          key={name}
+          value={editedProfileDetails[name].newValue}
+          reason={editedProfileDetails[name].editReason}
+          isChanged={hasFieldBeenChanged(name)}
+          onValueChange={handleValueChange}
+          onReasonChange={handleEditReasonChange}
+        />
+      ))}
       <Form.Input
         label={I18n.t('page.contact_edit_profile.form.proof_attach.label')}
         type="file"

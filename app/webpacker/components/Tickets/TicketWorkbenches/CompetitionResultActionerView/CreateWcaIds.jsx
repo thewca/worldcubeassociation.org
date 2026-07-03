@@ -10,7 +10,7 @@ import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.er
 import { updateTicketMetadata } from '../../../../lib/helpers/update-ticket-query-data';
 
 export default function CreateWcaIds({ ticketDetails, currentStakeholder }) {
-  const { ticket: { id } } = ticketDetails;
+  const { ticket: { id, metadata: { competition: { id: competitionId } } } } = ticketDetails;
   const queryClient = useQueryClient();
 
   const {
@@ -19,9 +19,9 @@ export default function CreateWcaIds({ ticketDetails, currentStakeholder }) {
     isError,
     error,
   } = useQuery({
-    queryKey: ['unfinished-persons', ticketDetails.ticket.metadata.competition.id],
+    queryKey: ['unfinished-persons', competitionId],
     queryFn: () => getUnfinishedPersons({
-      competitionId: ticketDetails.ticket.metadata.competition.id,
+      competitionId,
     }),
   });
 
@@ -41,6 +41,8 @@ export default function CreateWcaIds({ ticketDetails, currentStakeholder }) {
           ticketsCompetitionResultStatuses.created_wca_ids,
         ),
       );
+      queryClient.setQueryData(['imported-temporary-results', competitionId], []);
+      queryClient.setQueryData(['imported-temporary-scrambles', competitionId], []);
     },
   });
 
