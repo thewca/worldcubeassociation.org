@@ -4,6 +4,7 @@ import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.er
 import WarningsVerification from './WarningsVerification';
 import TimelineView from './TimelineView';
 import { MergeInboxResults, MergeInboxScrambles } from './MergeInboxResultsData';
+import VerifyNewcomers from './VerifyNewcomers';
 import CreateWcaIds from './CreateWcaIds';
 import FinalSteps from './FinalSteps';
 import MiscActions from './MiscActions';
@@ -68,8 +69,17 @@ function ViewForStatus({
 
     case ticketsCompetitionResultStatuses.merged_inbox_scrambles:
       return (
+        <VerifyNewcomers
+          ticketDetails={ticketDetails}
+          currentStakeholder={currentStakeholder}
+        />
+      );
+
+    case ticketsCompetitionResultStatuses.newcomers_verified:
+      return (
         <CreateWcaIds
           ticketDetails={ticketDetails}
+          currentStakeholder={currentStakeholder}
         />
       );
     case ticketsCompetitionResultStatuses.created_wca_ids:

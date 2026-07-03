@@ -1,47 +1,45 @@
-import React from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, List } from 'semantic-ui-react';
-import getInboxPersonSummary from '../../api/competitionResult/getInboxPersonSummary';
+import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Table, Input, Button } from 'semantic-ui-react';
+import { keyBy, mapValues } from 'lodash';
+import getUnfinishedPersons from '../../api/competitionResult/getUnfinishedPersons';
+import createWcaIds from '../../api/competitionResult/createWcaIds';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
-import { viewUrls } from '../../../../lib/requests/routes.js.erb';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
-import deleteInboxPersons from '../../api/competitionResult/deleteInboxPersons';
+import { updateTicketMetadata } from '../../../../lib/helpers/update-ticket-query-data';
 
-export default function CreateWcaIds({ ticketDetails }) {
-  const { ticket: { id, metadata: { competition_id: competitionId } } } = ticketDetails;
-
+export default function CreateWcaIds({ ticketDetails, currentStakeholder }) {
+  const { ticket: { id, metadata: { competition: { id: competitionId } } } } = ticketDetails;
   const queryClient = useQueryClient();
+
   const {
-    data: inboxPersonSummary,
+    data: unfinishedPersons,
     isFetching,
     isError,
     error,
-    refetch,
   } = useQuery({
-    queryKey: ['inbox-person-summary', id],
-    queryFn: () => getInboxPersonSummary({ ticketId: id }),
+    queryKey: ['unfinished-persons', competitionId],
+    queryFn: () => getUnfinishedPersons({
+      competitionId,
+    }),
   });
+
   const {
-    mutate: deleteInboxPersonsMutate,
+    mutate: createWcaIdsMutate,
     isPending,
-    isError: isDeleteError,
-    error: deleteError,
+    isError: isMutationError,
+    error: mutationError,
   } = useMutation({
-    mutationFn: deleteInboxPersons,
+    mutationFn: createWcaIds,
     onSuccess: () => {
       queryClient.setQueryData(
         ['ticket-details', id],
-        (oldTicketDetails) => ({
-          ...oldTicketDetails,
-          ticket: {
-            ...oldTicketDetails.ticket,
-            metadata: {
-              ...oldTicketDetails.ticket.metadata,
-              status: ticketsCompetitionResultStatuses.created_wca_ids,
-            },
-          },
-        }),
+        (oldTicketDetails) => updateTicketMetadata(
+          oldTicketDetails,
+          'status',
+          ticketsCompetitionResultStatuses.created_wca_ids,
+        ),
       );
       queryClient.setQueryData(['imported-temporary-results', competitionId], []);
       queryClient.setQueryData(['imported-temporary-scrambles', competitionId], []);
@@ -50,55 +48,69 @@ export default function CreateWcaIds({ ticketDetails }) {
 
   if (isFetching || isPending) return <Loading />;
   if (isError) return <Errored error={error} />;
-  if (isDeleteError) return <Errored error={deleteError} />;
+  if (isMutationError) return <Errored error={mutationError} />;
 
-  const {
-    inbox_person_count: inboxPersonCount,
-    inbox_person_no_wca_id_count: inboxPersonNoWcaIdCount,
-    result_no_wca_id_count: resultNoWcaIdCount,
-  } = inboxPersonSummary;
+  return (
+    <UnfinishedPersonsTable
+      persons={unfinishedPersons?.persons_to_finish || []}
+      onSubmit={(unfinishedPersonsData) => createWcaIdsMutate({
+        ticketId: id,
+        actingStakeholderId: currentStakeholder.id,
+        unfinishedPersons: unfinishedPersonsData,
+      })}
+    />
+  );
+}
+
+function UnfinishedPersonsTable({ persons, onSubmit }) {
+  const [unfinishedPersonsData, setUnfinishedPersonsData] = useState(() => mapValues(
+    keyBy(persons, 'person_id'),
+    (person) => ({
+      personId: person.person_id,
+      personName: person.person_name,
+      countryId: person.country_id,
+      editedSemiId: person.computed_semi_id,
+    }),
+  ));
+
+  const handleSemiIdChange = (personId, value) => {
+    setUnfinishedPersonsData((prev) => ({
+      ...prev,
+      [personId]: { ...prev[personId], editedSemiId: value },
+    }));
+  };
 
   return (
     <>
-      There are a total of
-      {' '}
-      {inboxPersonCount}
-      {' '}
-      entries in InboxPersons pending for this competition.
-      <List bulleted>
-        <List.Item>
-          {inboxPersonNoWcaIdCount}
-          {' '}
-          entries from InboxPersons for this competition are missing a WCA ID.
-        </List.Item>
-        <List.Item>
-          {resultNoWcaIdCount}
-          {' '}
-          competitors in the Results table for this competition still have to be assigned a WCA ID.
-        </List.Item>
-      </List>
-      <List>
-        <List.Item>
-          <Button as="a" primary href={viewUrls.admin.completePersons([competitionId])} target="_blank">
-            Assign WCA IDs to newcomers
-          </Button>
-          Click this button to assign WCA IDs to newcomers.
-        </List.Item>
-        <List.Item>
-          <Button primary onClick={refetch}>
-            Refresh
-          </Button>
-          If you are done with assigning, please click this button.
-        </List.Item>
-        {resultNoWcaIdCount === 0 && (
-          <Button
-            primary
-            onClick={() => deleteInboxPersonsMutate({ ticketId: id })}
-          >
-            Delete the inbox rows
-          </Button>
-        )}
-      </List>
+      <Table celled>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Name</Table.HeaderCell>
+            <Table.HeaderCell>WCA ID Prefix (Semi ID)</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+
+        <Table.Body>
+          {persons.map((person, index) => (
+            <Table.Row key={person.person_id || index}>
+              <Table.Cell>{person.person_name}</Table.Cell>
+              <Table.Cell>
+                <Input
+                  value={unfinishedPersonsData[person.person_id]?.editedSemiId || ''}
+                  onChange={(e) => handleSemiIdChange(person.person_id, e.target.value)}
+                  fluid
+                />
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+      <Button
+        primary
+        onClick={() => onSubmit(Object.values(unfinishedPersonsData))}
+      >
+        Create WCA IDs
+      </Button>
     </>
   );
 }
