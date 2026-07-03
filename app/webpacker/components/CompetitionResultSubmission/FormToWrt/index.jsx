@@ -1,5 +1,7 @@
 import React from 'react';
-import { Form, Message } from 'semantic-ui-react';
+import {
+  Form, Icon, Label, Message,
+} from 'semantic-ui-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Errored from '../../Requests/Errored';
 import useInputState from '../../../lib/hooks/useInputState';
@@ -10,11 +12,17 @@ import Loading from '../../Requests/Loading';
 import runValidatorsForCompetitionList from '../../Panel/pages/RunValidatorsPage/api/runValidatorsForCompetitionList';
 import { ALL_VALIDATORS } from '../../../lib/wca-data.js.erb';
 import ValidationOutput from '../../Panel/pages/RunValidatorsPage/ValidationOutput';
+import { IMPORT_STEP_ICON, IMPORT_STEP_TITLE } from '../index';
 
 const DELEGATE_HANDBOOK_COMPETITION_RESULTS_URL = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf#competition-results';
 const ERROR_MESSAGE_UPLOADED_RESULTS = "Please upload a JSON file and make sure the results don't contain any errors.";
 
-export default function FormToWrt({ competitionId, hasTemporaryResults, canSubmitResults }) {
+export default function FormToWrt({
+  competitionId,
+  hasTemporaryResults,
+  canSubmitResults,
+  onClickImportStep,
+}) {
   const [confirmDetails, setConfirmDetails] = useCheckboxState(false);
   const [message, setMessage] = useInputState();
 
@@ -52,6 +60,22 @@ export default function FormToWrt({ competitionId, hasTemporaryResults, canSubmi
 
   return (
     <>
+      <Message info icon>
+        <Icon name="info circle" />
+        <Message.Content>
+          These validations are based on your
+          {' '}
+          <b>imported</b>
+          {' '}
+          results data.
+          If you have changed or fixed some results,
+          you must go through the
+          {' '}
+          <Label as="a" content={IMPORT_STEP_TITLE} icon={IMPORT_STEP_ICON} onClick={onClickImportStep} />
+          {' '}
+          step above again!
+        </Message.Content>
+      </Message>
       <ValidationOutput validationOutput={validationOutput} />
       {canSubmitResults && (
         <>

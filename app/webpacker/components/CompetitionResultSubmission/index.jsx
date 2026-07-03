@@ -5,6 +5,9 @@ import ImportResultsData from './ImportResultsData';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import FormToWrt from './FormToWrt';
 
+export const IMPORT_STEP_TITLE = 'Import Results Data';
+export const IMPORT_STEP_ICON = 'upload';
+
 export default function Wrapper({
   competitionId,
   resultsSubmitted,
@@ -52,8 +55,8 @@ function CompetitionResultSubmission({
     {
       key: 'import-results',
       title: {
-        icon: 'upload',
-        content: 'Import Results Data',
+        icon: IMPORT_STEP_ICON,
+        content: IMPORT_STEP_TITLE,
       },
       content: {
         content: (
@@ -79,6 +82,7 @@ function CompetitionResultSubmission({
             competitionId={competitionId}
             hasTemporaryResults={hasTemporaryResults}
             canSubmitResults={canSubmitResults}
+            onClickImportStep={() => setAccordionIndex(0)}
           />
         ),
       },
