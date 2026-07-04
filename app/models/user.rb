@@ -1691,11 +1691,6 @@ class User < ApplicationRecord
   end
 
   private def update_newcomer_results
-    user_registrations = Registration.where(user_id: id).pluck(:competition_id, :registrant_id)
-    return if user_registrations.empty?
-
-    newcomer_results = Result.where(user_registrations.map { |comp_id, reg_id| { competition_id: comp_id, person_id: reg_id.to_s } })
-
     newcomer_results.update_all(person_name: name) if saved_change_to_name?
     newcomer_results.update_all(country_id: country&.id) if saved_change_to_country_iso2?
   end
