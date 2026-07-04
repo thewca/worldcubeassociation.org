@@ -367,4 +367,31 @@ RSpec.describe UsersController do
       end
     end
   end
+
+  describe 'POST #update_user_data' do
+    let(:user) { create(:user, wca_id: nil) }
+    let(:admin) { create(:admin) }
+
+    before :each do
+      sign_in admin
+    end
+
+    it 'updates user data and matching newcomer results' do
+      comp = create(:competition, :past)
+      reg = create(:registration, :accepted, user: user, competition: comp)
+      result = create(:result, competition: comp, person_id: reg.registrant_id.to_s, person_name: user.name, country_id: user.country.id)
+
+      post :update_user_data, params: {
+        id: user.id,
+        name: "New Name",
+        country_iso2: "FR",
+      }
+
+      expect(response).to have_http_status :ok
+      expect(user.reload.name).to eq "New Name"
+      expect(user.country_iso2).to eq "FR"
+      expect(result.reload.person_name).to eq "New Name"
+      expect(result.country_id).to eq "France"
+    end
+  end
 end
