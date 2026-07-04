@@ -329,7 +329,7 @@ class User < ApplicationRecord
     errors.add(:wca_id, cannot_be_assigned_reasons.xss_aware_to_sentence) unless cannot_be_assigned_reasons.empty?
   end
 
-  after_update :update_newcomer_results, if: -> { saved_change_to_name? || saved_change_to_country_iso2? }
+
 
   # To handle profile pictures that predate our user account system, we created
   # a bunch of dummy accounts (accounts with no password). When someone finally
@@ -1690,8 +1690,4 @@ class User < ApplicationRecord
     end
   end
 
-  private def update_newcomer_results
-    newcomer_results.update_all(person_name: name) if saved_change_to_name?
-    newcomer_results.update_all(country_id: country&.id) if saved_change_to_country_iso2?
-  end
 end
