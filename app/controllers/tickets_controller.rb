@@ -301,16 +301,26 @@ class TicketsController < ApplicationController
       return render status: :not_found, json: { error: "Registration with registrant ID #{person_id} not found for competition #{competition.id}" }
     end
 
-    ActiveRecord::Base.transaction do
-      # memoize all WCA IDs, especially useful if we have several identical semi-IDs in the same batch
-      # (siblings with the same last name competing as newcomers at the same competition etc.)
-      wca_id_index = Person.pluck(:wca_id)
+    # Compute all WCA IDs beforehand to ensure they are valid.
+    wca_ids_by_person = {}
+    wca_id_index = Person.pluck(:wca_id)
 
+    person_wca_id_data.each do |data|
+      person_id = data["personId"]
+      semi_id = data["editedSemiId"]
+
+      new_wca_id, wca_id_index = FinishUnfinishedPersons.next_available_wca_id(semi_id, wca_id_index)
+      if new_wca_id.blank?
+        return render status: :unprocessable_content, json: { error: "Could not compute a WCA ID suffix for #{semi_id}" }
+      end
+
+      wca_ids_by_person[person_id] = new_wca_id
+    end
+
+    ActiveRecord::Base.transaction do
       person_wca_id_data.each do |data|
         person_id = data["personId"]
-        semi_id = data["editedSemiId"]
-
-        new_wca_id, wca_id_index = FinishUnfinishedPersons.complete_wca_id(semi_id, wca_id_index)
+        new_wca_id = wca_ids_by_person[person_id]
 
         registration = competition.registrations.find_by(registrant_id: person_id)
 
