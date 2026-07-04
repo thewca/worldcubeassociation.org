@@ -302,18 +302,14 @@ class TicketsController < ApplicationController
     end
 
     # Compute all WCA IDs beforehand to ensure they are valid.
-    wca_ids_by_person = {}
     wca_id_index = Person.pluck(:wca_id)
-
-    person_wca_id_data.each do |data|
-      person_id = data["personId"]
-      semi_id = data["editedSemiId"]
-
-      new_wca_id, wca_id_index = FinishUnfinishedPersons.next_available_wca_id(semi_id, wca_id_index)
-      return render status: :unprocessable_content, json: { error: "Could not compute a WCA ID suffix for #{semi_id}" } if new_wca_id.blank?
-
-      wca_ids_by_person[person_id] = new_wca_id
+    wca_ids_by_person = person_wca_id_data.index_by { |d| d["personId"] }.transform_values do |data|
+      new_wca_id, wca_id_index = FinishUnfinishedPersons.next_available_wca_id(data["editedSemiId"], wca_id_index)
+      new_wca_id
     end
+
+    invalid_data = person_wca_id_data.find { |data| wca_ids_by_person[data["personId"]].blank? }
+    return render status: :unprocessable_content, json: { error: "Could not compute a WCA ID suffix for #{invalid_data["editedSemiId"]}" } if invalid_data
 
     ActiveRecord::Base.transaction do
       person_wca_id_data.each do |data|
