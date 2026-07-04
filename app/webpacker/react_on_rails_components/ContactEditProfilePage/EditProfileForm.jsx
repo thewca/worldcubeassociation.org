@@ -7,6 +7,7 @@ import { contactEditProfileActionUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../../components/Requests/Loading';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
+import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
 import EditNameField from './fields/EditNameField';
 import EditRegionField from './fields/EditRegionField';
 import EditGenderField from './fields/EditGenderField';
@@ -38,6 +39,9 @@ export default function EditProfileForm({
   const [saveError, setSaveError] = useState();
   const [verified, setVerified] = useCheckboxState(false);
   const { save, saving } = useSaveAction();
+  const { loggedInUserPermissions } = useLoggedInUserPermissions();
+
+  const isProofOptional = loggedInUserPermissions?.canRequestToEditOthersProfile;
 
   const hasFieldBeenChanged = useCallback((field) => !_.isEqual(
     profileDetails?.[field],
@@ -56,7 +60,14 @@ export default function EditProfileForm({
     );
 
     return noChanges || hasMissingReason;
-  }, [captchaValue, editOthersProfileMode, verified, editedProfileDetails, hasFieldBeenChanged, profileDetails]);
+  }, [
+    captchaValue,
+    editOthersProfileMode,
+    verified,
+    editedProfileDetails,
+    hasFieldBeenChanged,
+    profileDetails,
+  ]);
 
   const handleValueChange = (_event, { name, value }) => {
     setEditedProfileDetails((prev) => ({
@@ -117,6 +128,14 @@ export default function EditProfileForm({
       ))}
       <Message warning>
         <Message.Header>IMPORTANT</Message.Header>
+        {isProofOptional && (
+          <p>
+            <strong>
+              Note: Since you are an authorized user, attaching proof is optional for you. However,
+              the following are the usual requirements that you need to validate:
+            </strong>
+          </p>
+        )}
         <Message.List>
           <Message.Item>
             Proof is not required when you change your first name or gender.
@@ -136,7 +155,7 @@ export default function EditProfileForm({
         </Message.List>
       </Message>
       <Form.Input
-        label={I18n.t('page.contact_edit_profile.form.proof_attach.label')}
+        label={`${I18n.t('page.contact_edit_profile.form.proof_attach.label')}${isProofOptional ? ' (optional for authorized users)' : ''}`}
         type="file"
         onChange={handleProofUpload}
       />
