@@ -1,31 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Table, Input, Button, Label,
 } from 'semantic-ui-react';
 import { keyBy, mapValues } from 'lodash';
-import getUnfinishedPersons from '../../api/competitionResult/getUnfinishedPersons';
 import createWcaIds from '../../api/competitionResult/createWcaIds';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
 import { updateTicketMetadata } from '../../../../lib/helpers/update-ticket-query-data';
 
-export default function CreateWcaIds({ ticketDetails, currentStakeholder }) {
+export default function CreateWcaIds({ ticketDetails, currentStakeholder, unfinishedPersons }) {
   const { ticket: { id, metadata: { competition: { id: competitionId } } } } = ticketDetails;
   const queryClient = useQueryClient();
-
-  const {
-    data: unfinishedPersons,
-    isFetching,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ['unfinished-persons', competitionId],
-    queryFn: () => getUnfinishedPersons({
-      competitionId,
-    }),
-  });
 
   const {
     mutate: createWcaIdsMutate,
@@ -54,8 +41,7 @@ export default function CreateWcaIds({ ticketDetails, currentStakeholder }) {
     }
   }, [isMutationError]);
 
-  if (isFetching || isPending) return <Loading />;
-  if (isError) return <Errored error={error} />;
+  if (isPending) return <Loading />;
 
   return (
     <>
