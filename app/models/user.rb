@@ -329,8 +329,6 @@ class User < ApplicationRecord
     errors.add(:wca_id, cannot_be_assigned_reasons.xss_aware_to_sentence) unless cannot_be_assigned_reasons.empty?
   end
 
-
-
   # To handle profile pictures that predate our user account system, we created
   # a bunch of dummy accounts (accounts with no password). When someone finally
   # claims their WCA ID, we want to delete the dummy account and copy over their
@@ -1689,5 +1687,4 @@ class User < ApplicationRecord
       [grouped_competitions, registered_for_by_competition_id]
     end
   end
-
 end
