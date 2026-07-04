@@ -6,6 +6,7 @@ import I18n from '../../lib/i18n';
 import { contactEditProfileActionUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../../components/Requests/Loading';
 import useSaveAction from '../../lib/hooks/useSaveAction';
+import useCheckboxState from '../../lib/hooks/useCheckboxState';
 import EditNameField from './fields/EditNameField';
 import EditRegionField from './fields/EditRegionField';
 import EditGenderField from './fields/EditGenderField';
@@ -20,6 +21,7 @@ const EDITABLE_FIELDS = [
 
 export default function EditProfileForm({
   wcaId,
+  editOthersProfileMode,
   profileDetails,
   onContactSuccess,
   recaptchaPublicKey,
@@ -34,6 +36,7 @@ export default function EditProfileForm({
   const [captchaValue, setCaptchaValue] = useState();
   const [captchaError, setCaptchaError] = useState(false);
   const [saveError, setSaveError] = useState();
+  const [verified, setVerified] = useCheckboxState(false);
   const { save, saving } = useSaveAction();
 
   const hasFieldBeenChanged = useCallback((field) => !_.isEqual(
@@ -43,6 +46,7 @@ export default function EditProfileForm({
 
   const isSubmitDisabled = useMemo(() => {
     if (!profileDetails || !captchaValue) return true;
+    if (editOthersProfileMode && !verified) return true;
 
     const changedFields = Object.keys(editedProfileDetails).filter(hasFieldBeenChanged);
 
@@ -52,7 +56,7 @@ export default function EditProfileForm({
     );
 
     return noChanges || hasMissingReason;
-  }, [captchaValue, editedProfileDetails, hasFieldBeenChanged, profileDetails]);
+  }, [captchaValue, editOthersProfileMode, verified, editedProfileDetails, hasFieldBeenChanged, profileDetails]);
 
   const handleValueChange = (_event, { name, value }) => {
     setEditedProfileDetails((prev) => ({
@@ -152,6 +156,13 @@ export default function EditProfileForm({
           />
         )}
       </Form.Field>
+      {editOthersProfileMode && (
+        <Form.Checkbox
+          label={I18n.t('page.contact_edit_profile.form.verified_checkbox.label')}
+          checked={verified}
+          onChange={setVerified}
+        />
+      )}
       <Form.Button
         type="submit"
         disabled={isSubmitDisabled}
