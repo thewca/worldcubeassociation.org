@@ -317,10 +317,13 @@ export const InputRadioUser = wrapInput((props) => {
     idsToFetch,
   });
 
-  const radioOptions = useMemo(() => fetchedUsers.map((user) => ({
-    value: user?.id,
-    text: user?.name,
-  })), [fetchedUsers]);
+  const radioOptions = useMemo(() => {
+    const options = fetchedUsers.map((user) => ({
+      value: user?.id,
+      text: user?.name,
+    }));
+    return options.sort((a, b) => (a.text || '').localeCompare(b.text || ''));
+  }, [fetchedUsers]);
 
   if (anyPending) return (<Loading />);
 
