@@ -1638,8 +1638,6 @@ class User < ApplicationRecord
     stale_claims_before_update.each { |user| WcaIdClaimMailer.notify_user_of_claim_cancelled(user, wca_id).deliver_later }
   end
 
-
-
   MY_COMPETITIONS_SERIALIZATION_HASH = {
     only: %w[id name website start_date end_date registration_open],
     methods: %w[url city country_iso2 results_posted? visible? confirmed? cancelled? report_posted? short_display_name registration_status],

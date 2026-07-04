@@ -12,7 +12,7 @@ class Result < ApplicationRecord
   # InboxPerson IDs are only unique per competition. So in addition to querying the ID itself (which is guaranteed by :foreign_key)
   # we also need sure to query the correct competition as well through a composite key.
   belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true, inverse_of: :results
-  belongs_to :newcomer_registration, class_name: "Registration", foreign_key: %i[competition_id person_id], primary_key: %i[competition_id registrant_id], optional: true, inverse_of: :results
+  belongs_to :newcomer_registration, class_name: "Registration", foreign_key: %i[competition_id person_id], primary_key: %i[competition_id registrant_id], optional: true, inverse_of: :newcomer_results
 
   has_many :result_attempts, inverse_of: :result, dependent: :destroy, autosave: true, index_errors: true
   validates_associated :result_attempts
