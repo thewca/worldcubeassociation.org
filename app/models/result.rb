@@ -52,6 +52,7 @@ class Result < ApplicationRecord
   scope :single_better_than, ->(time) { where("best < ? AND best > 0", time) }
   scope :average_better_than, ->(time) { where("average < ? AND average > 0", time) }
   scope :in_event, ->(event_id) { where(event_id: event_id) }
+  scope :unmerged_newcomers, -> { where("person_id REGEXP '^[0-9]+$'") }
 
   alias_attribute :name, :person_name
   alias_attribute :wca_id, :person_id
