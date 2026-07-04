@@ -349,9 +349,8 @@ class UserGroup < ApplicationRecord
   end
 
   private def end_active_lead_roles
-    active_roles.each do |role|
-      role.update!(end_date: Date.today) if role.lead?
-    end
+    active_roles.select(&:lead?).each { |role| role.update!(end_date: Date.today) }
+    # Clear the association cache to prevent the absence validation from failing on stale data.
     active_roles.reset
   end
 end
