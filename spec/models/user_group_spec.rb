@@ -203,8 +203,8 @@ RSpec.describe UserGroup do
   describe "deactivation" do
     it "ends all active lead roles when deactivated" do
       group = UserGroup.create!(group_type: :officers, name: "Officers Group Test", is_active: true, is_hidden: false)
-      role1 = FactoryBot.create(:user_role, :active, :officers, group: group, end_date: nil)
-      role2 = FactoryBot.create(:user_role, :active, :officers, group: group, end_date: Date.today + 5.days)
+      role1 = create(:user_role, :active, :officers, group: group, end_date: nil)
+      role2 = create(:user_role, :active, :officers, group: group, end_date: Date.today + 5.days)
 
       group.update!(is_active: false)
 
@@ -216,11 +216,11 @@ RSpec.describe UserGroup do
 
     it "fails validation if there are active non-lead roles when deactivating" do
       group = UserGroup.create!(group_type: :translators, name: "Catalan Test", is_active: true, is_hidden: false)
-      FactoryBot.create(:translator_role, group: group, end_date: nil)
+      create(:translator_role, group: group, end_date: nil)
 
-      expect {
+      expect do
         group.update!(is_active: false)
-      }.to raise_error(ActiveRecord::RecordInvalid, /Active roles must be blank/)
+      end.to raise_error(ActiveRecord::RecordInvalid, /Active roles must be blank/)
     end
   end
 end

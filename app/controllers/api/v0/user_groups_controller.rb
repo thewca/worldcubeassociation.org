@@ -43,6 +43,15 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     render json: groups, methods: %w[lead_user]
   end
 
+  def show
+    user_group_id = params.require(:id)
+    user_group = UserGroup.find(user_group_id)
+
+    return head :unauthorized unless user_group.readable_by?(current_user)
+
+    render json: user_group
+  end
+
   def create
     group_type = params.require(:group_type)
     name = params.require(:name)
@@ -83,16 +92,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
         success: true,
       }
     else
-      render json: { error: user_group.errors.full_messages.join(", ") }, status: :unprocessable_entity
+      render json: { error: user_group.errors.full_messages.join(", ") }, status: :unprocessable_content
     end
-  end
-
-  def show
-    user_group_id = params.require(:id)
-    user_group = UserGroup.find(user_group_id)
-
-    return head :unauthorized unless user_group.readable_by?(current_user)
-
-    render json: user_group
   end
 end

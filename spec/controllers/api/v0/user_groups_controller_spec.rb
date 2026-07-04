@@ -86,7 +86,7 @@ RSpec.describe Api::V0::UserGroupsController do
 
   describe 'GET #show' do
     let(:user_group) { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'africa').user_group }
-    let(:hidden_user_group) { UserGroup.find_by!(name: 'North America').tap { |g| g.update!(is_hidden: true) } }
+    let(:hidden_user_group) { UserGroup.find_by!(name: 'North America').tap { |g| g.update!(is_hidden: true) }.reload }
 
     context 'when group is not hidden' do
       it 'returns the user group for guests' do
@@ -96,7 +96,7 @@ RSpec.describe Api::V0::UserGroupsController do
       end
 
       it 'returns the user group for normal users' do
-        allow(controller).to receive(:current_user) { create(:user) }
+        allow(controller).to receive(:current_user).and_return(create(:user))
         get :show, params: { id: user_group.id }
         expect(response).to have_http_status(:success)
         expect(response.body).to eq(user_group.to_json)
@@ -110,13 +110,13 @@ RSpec.describe Api::V0::UserGroupsController do
       end
 
       it 'returns unauthorized for normal users' do
-        allow(controller).to receive(:current_user) { create(:user) }
+        allow(controller).to receive(:current_user).and_return(create(:user))
         get :show, params: { id: hidden_user_group.id }
         expect(response).to have_http_status(:unauthorized)
       end
 
       it 'returns the user group for admins' do
-        allow(controller).to receive(:current_user) { create(:admin) }
+        allow(controller).to receive(:current_user).and_return(create(:admin))
         get :show, params: { id: hidden_user_group.id }
         expect(response).to have_http_status(:success)
         expect(response.body).to eq(hidden_user_group.to_json)
@@ -129,12 +129,12 @@ RSpec.describe Api::V0::UserGroupsController do
     let(:admin) { create(:admin) }
 
     before do
-      allow(controller).to receive(:current_user) { admin }
+      allow(controller).to receive(:current_user).and_return(admin)
     end
 
     context 'when deactivating the group' do
       it 'ends active lead roles and sends email notifications' do
-        role = FactoryBot.create(:user_role, :active, :delegate_regions, :delegate_regions_senior_delegate, group: user_group, end_date: nil)
+        role = create(:user_role, :active, :delegate_regions, :delegate_regions_senior_delegate, group: user_group, end_date: nil)
 
         expect(RoleChangeMailer).to receive(:notify_role_end).with(role, admin).and_call_original
 
@@ -145,7 +145,7 @@ RSpec.describe Api::V0::UserGroupsController do
       end
 
       it 'returns unprocessable entity if there are active non-lead roles' do
-        FactoryBot.create(:user_role, :active, :delegate_regions, :delegate_regions_delegate, group: user_group, end_date: nil)
+        create(:user_role, :active, :delegate_regions, :delegate_regions_delegate, group: user_group, end_date: nil)
       end
     end
   end
