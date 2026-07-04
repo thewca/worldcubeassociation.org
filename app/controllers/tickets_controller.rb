@@ -310,9 +310,7 @@ class TicketsController < ApplicationController
       semi_id = data["editedSemiId"]
 
       new_wca_id, wca_id_index = FinishUnfinishedPersons.next_available_wca_id(semi_id, wca_id_index)
-      if new_wca_id.blank?
-        return render status: :unprocessable_content, json: { error: "Could not compute a WCA ID suffix for #{semi_id}" }
-      end
+      return render status: :unprocessable_content, json: { error: "Could not compute a WCA ID suffix for #{semi_id}" } if new_wca_id.blank?
 
       wca_ids_by_person[person_id] = new_wca_id
     end
