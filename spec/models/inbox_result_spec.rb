@@ -11,5 +11,4 @@ RSpec.describe InboxResult do
     result = create(:inbox_result, person: p2, competition: c2)
     expect(result.person_name).to eq p2.name
   end
-
 end
