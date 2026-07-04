@@ -309,7 +309,7 @@ class TicketsController < ApplicationController
     end
 
     invalid_data = person_wca_id_data.find { |data| wca_ids_by_person[data["personId"]].nil? }
-    return render status: :unprocessable_content, json: { error: "Could not compute a WCA ID suffix for #{invalid_data["editedSemiId"]}" } if invalid_data
+    return render status: :unprocessable_content, json: { error: "Could not compute a WCA ID suffix for #{invalid_data['editedSemiId']}" } if invalid_data
 
     ActiveRecord::Base.transaction do
       person_wca_id_data.each do |data|
