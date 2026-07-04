@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Table, Input, Button, Label,
@@ -21,6 +21,9 @@ export default function CreateWcaIds({ ticketDetails, currentStakeholder, unfini
     error: mutationError,
   } = useMutation({
     mutationFn: createWcaIds,
+    onError: () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
     onSuccess: () => {
       queryClient.setQueryData(
         ['ticket-details', id],
@@ -34,12 +37,6 @@ export default function CreateWcaIds({ ticketDetails, currentStakeholder, unfini
       queryClient.setQueryData(['imported-temporary-scrambles', competitionId], []);
     },
   });
-
-  useEffect(() => {
-    if (isMutationError) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [isMutationError]);
 
   if (isPending) return <Loading />;
 
