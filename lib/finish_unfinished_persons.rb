@@ -170,7 +170,7 @@ module FinishUnfinishedPersons
     [semi_id, available_per_semi]
   end
 
-  def self.complete_wca_id(semi_id, used_ids = nil)
+  def self.next_available_wca_id(semi_id, used_ids = nil)
     used_ids ||= Person.where("wca_id LIKE ?", "#{semi_id}%").pluck(:wca_id)
 
     (1..99).each do |i|
@@ -182,7 +182,14 @@ module FinishUnfinishedPersons
       end
     end
 
-    raise "Could not compute a WCA ID suffix for #{semi_id}"
+    [nil, used_ids]
+  end
+
+  def self.complete_wca_id(semi_id, used_ids = nil)
+    new_id, used_ids = next_available_wca_id(semi_id, used_ids)
+    raise "Could not compute a WCA ID suffix for #{semi_id}" if new_id.nil?
+
+    [new_id, used_ids]
   end
 
   def self.insert_person(gender: :o, **attrs)
