@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
   has_many :votes
   has_many :registrations
+  has_many :newcomer_results, through: :registrations, source: :newcomer_results
   has_many :scoretaking_registrations, -> { scoretakers }, class_name: "Registration", inverse_of: :user
   has_many :scoretaking_competitions, -> { joins(registrations: [:assignments]) }, through: :scoretaking_registrations, source: "competition"
   has_many :competitions_registered_for, through: :registrations, source: "competition"
@@ -1601,7 +1602,7 @@ class User < ApplicationRecord
       registrations.update_all(user_id: new_user.id)
 
       final_wca_id = new_user.wca_id.presence || self.wca_id.presence
-      new_user.update_inbox_persons_wca_id(final_wca_id)
+      new_user.newcomer_results.update_all(person_id: final_wca_id) if final_wca_id.present?
 
       return if wca_id.blank?
 
@@ -1631,17 +1632,13 @@ class User < ApplicationRecord
       stale_claims.update_all(**CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
       potential_duplicate_persons.delete_all
 
-      update_inbox_persons_wca_id(wca_id)
+      newcomer_results.update_all(person_id: wca_id)
     end
 
     stale_claims_before_update.each { |user| WcaIdClaimMailer.notify_user_of_claim_cancelled(user, wca_id).deliver_later }
   end
 
-  def update_inbox_persons_wca_id(wca_id)
-    return if wca_id.blank?
 
-    InboxPerson.joins(:registration).where(registrations: { user_id: id }).update_all(wca_id: wca_id)
-  end
 
   MY_COMPETITIONS_SERIALIZATION_HASH = {
     only: %w[id name website start_date end_date registration_open],

@@ -343,17 +343,17 @@ RSpec.describe UsersController do
         expect(user2.competitions_results_posted.count).to eq 0
       end
 
-      it 'updates corresponding inbox_person records during merge' do
+      it 'updates corresponding result records during merge' do
         user1.update!(wca_id: nil)
         user2_wca_id = user2.wca_id
 
         comp1 = create(:competition, :past)
         reg1 = create(:registration, :accepted, user: user1, competition: comp1)
-        inbox_person1 = create(:inbox_person, competition_id: comp1.id, ref_id: reg1.registrant_id.to_s, wca_id: "")
+        result1 = create(:result, competition: comp1, person_id: reg1.registrant_id.to_s)
 
         comp2 = create(:competition, :past)
         reg2 = create(:registration, :accepted, user: user2, competition: comp2)
-        inbox_person2 = create(:inbox_person, competition_id: comp2.id, ref_id: reg2.registrant_id.to_s, wca_id: user2_wca_id)
+        result2 = create(:result, competition: comp2, person_id: reg2.registrant_id.to_s)
 
         post :merge, params: {
           toUserId: user1.id,
@@ -362,8 +362,8 @@ RSpec.describe UsersController do
 
         expect(response).to have_http_status :ok
         expect(user1.reload.wca_id).to eq user2_wca_id
-        expect(inbox_person1.reload.wca_id).to eq user2_wca_id
-        expect(inbox_person2.reload.wca_id).to eq user2_wca_id
+        expect(result1.reload.person_id).to eq user2_wca_id
+        expect(result2.reload.person_id).to eq user2_wca_id
       end
     end
   end
