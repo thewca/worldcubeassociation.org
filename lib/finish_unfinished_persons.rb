@@ -18,7 +18,7 @@ module FinishUnfinishedPersons
 
     results_scope = results_scope.where(competition_id: competition_ids) if competition_ids.present?
 
-    results_scope.where("(person_id = '' OR person_id REGEXP '^[0-9]+$')")
+    results_scope.merge(Result.where(person_id: '').or(Result.unmerged_newcomers))
                  .group(:person_id, :person_name, :competition_id, :country_id)
                  .order(:person_name)
   end
