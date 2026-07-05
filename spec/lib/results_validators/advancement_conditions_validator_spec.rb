@@ -195,8 +195,9 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
         second_round.update(participation_condition: ResultConditions::ResultAchieved.new(scope: "average", value: 99))
 
         acv = ACV.new.validate(competition_ids: [competition3.id], model: InboxResult)
-        expect(acv.errors.length).to be(1)
-        expect(acv.errors.first.instance_variable_get(:@id)).to eq(:competed_not_qualified_error)
+        # Since nobody satisfies the condition, the round as a whole is also over-advanced
+        error_ids = acv.errors.map { it.instance_variable_get(:@id) }
+        expect(error_ids).to contain_exactly(:competed_not_qualified_error, :too_many_qualified_error)
       end
 
       it 'returns name, and WCA ID when available' do
@@ -213,8 +214,8 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
         )
 
         acv = ACV.new.validate(competition_ids: [competition3.id], model: InboxResult)
-        expect(acv.errors.length).to be(1)
-        expect(acv.errors.first.instance_variable_get(:@args)[:ids]).to eq("#{@finalist.name},#{person.name} (#{person.wca_id})")
+        competed_error = acv.errors.find { it.instance_variable_get(:@id) == :competed_not_qualified_error }
+        expect(competed_error.instance_variable_get(:@args)[:ids]).to eq("#{@finalist.name},#{person.name} (#{person.wca_id})")
       end
     end
 
@@ -315,7 +316,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       round_333_2 = create(:round, competition: competition3, event_id: "333", linked_round: linked_round, total_number_of_rounds: 3, number: 2)
       round_333_3 = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 3, number: 3, participation_source: linked_round)
 
-      people = create_list(:person, 100)
+      people = people_pool(Result, competition3, 100)
       results = []
       results += people.first(60).map { build(:result, competition: competition3, event_id: "333", round_type_id: "1", person: it, round: round_333_1) }
       results += people.last(40).map { build(:result, competition: competition3, event_id: "333", round_type_id: "2", person: it, round: round_333_2) }
