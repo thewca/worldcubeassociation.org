@@ -1742,6 +1742,9 @@ es-419:
         edit_reason:
           #original_hash: fdfcccf
           label: Razón del cambio
+        edit_reason_for:
+          #original_hash: df3a70f
+          label: 'Razón para el cambio de %{attribute}'
         proof_attach:
           #original_hash: a9645b1
           label: Documentación
