@@ -3043,7 +3043,8 @@ en:
       missing_cumulative_round_id_error: "[%{original_round_id}] Unable to find the round %{wcif_id} for the cumulative time limit specified in the WCIF. Please go to the competition's Manage Events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
       wrong_position_in_results_error: "[%{round_id}] %{person_name} is in the wrong position: expected %{expected_pos}, but got %{pos}."
     rounds:
-      too_many_qualified_warning: "Round %{round_id}: more competitors qualified than what the advancement condition planned (%{actual} instead of %{expected}, the condition was: %{condition}). Please update the round information in the manage events page."
+      too_many_qualified_error: "Round %{round_id}: more competitors qualified than what the advancement condition planned (%{actual} instead of %{expected}, the condition was: %{condition}). Please update the round information in the manage events page."
+      advanced_without_valid_result_error: "Round %{round_id}: the following competitors advanced without a successful result in the round they advanced from: %{ids}. Competitors must not advance without a valid result; please make sure the results are attributed to the correct competitors and remove them if needed."
       regulation_9m1_error: "Round %{round_id} has 99 or fewer competitors but has more than two subsequent rounds, which is not permitted as per Regulation 9m1."
       regulation_9m2_error: "Round %{round_id} has 15 or fewer competitors but has more than one subsequent round, which is not permitted as per Regulation 9m2."
       regulation_9m3_error: "Round %{round_id} has 7 or fewer competitors but has at least one subsequent round, which is not permitted as per Regulation 9m3."
