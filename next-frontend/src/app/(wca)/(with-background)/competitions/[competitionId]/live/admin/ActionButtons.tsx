@@ -56,7 +56,7 @@ export default function ActionButtons({
           type: "success",
         });
         setRoundState(roundId, data.state, {
-          competitors_live_results_entered: 0,
+          competitors_live_results_completed: 0,
         });
       },
       onError: () => {
