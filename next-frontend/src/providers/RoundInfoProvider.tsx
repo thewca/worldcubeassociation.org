@@ -94,9 +94,7 @@ export function RoundsInfoProvider({
   const setCompletedCount = useCallback(
     (roundId: string, count: number) =>
       patchRound(roundId, (r) =>
-        r.state === "open"
-          ? { ...r, completed_competitors: count }
-          : r,
+        r.state === "open" ? { ...r, completed_competitors: count } : r,
       ),
     [patchRound],
   );

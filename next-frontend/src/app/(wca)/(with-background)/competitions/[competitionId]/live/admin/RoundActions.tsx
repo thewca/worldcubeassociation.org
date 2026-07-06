@@ -49,8 +49,7 @@ export default function RoundActions({
               {roundName}{" "}
               {round.state == "open" &&
                 `(${t("competitions.live.admin.competitors_entered", {
-                  competitors_live_results_entered:
-                    round.completed_competitors,
+                  competitors_live_results_entered: round.completed_competitors,
                   total_competitors: round.total_competitors,
                 })})`}
               {round.state == "locked" &&
