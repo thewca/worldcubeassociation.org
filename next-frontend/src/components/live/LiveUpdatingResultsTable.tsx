@@ -30,8 +30,6 @@ import { useRoundInfo } from "@/providers/RoundInfoProvider";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useT } from "@/lib/i18n/useI18n";
 import { forecastViewSupported } from "@/lib/live/forecastviewSupported";
-import formats from "@/lib/wca/data/formats";
-import { meetsCutoff } from "@/lib/live/attempt-result";
 
 export default function LiveUpdatingResultsTable({
   competitionId,
