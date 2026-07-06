@@ -6,14 +6,14 @@ import {
   Button,
   CloseButton,
   Combobox,
+  createListCollection,
   Dialog,
   Portal,
   Text,
-  useListCollection,
   VStack,
 } from "@chakra-ui/react";
 import { LiveCompetitor } from "@/types/live";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useT } from "@/lib/i18n/useI18n";
 import Loading from "@/components/ui/loading";
 import { RegistrationData } from "@/types/registrations";
@@ -124,16 +124,29 @@ function AddPersonCombobox({
 }) {
   const { t } = useT();
 
-  const { collection, filter } = useListCollection({
-    initialItems: registrations.toSorted(
-      (a, b) => a.registrant_id - b.registrant_id,
-    ),
-    itemToValue: (competitor) => competitor.id.toString(),
-    itemToString: (competitor) => competitor.user.name,
-    filter: (itemText, filterText, item) =>
-      itemText.toLowerCase().includes(filterText.toLowerCase()) ||
-      parseInt(filterText, 10) === item.registrant_id,
-  });
+  const [filterText, setFilterText] = useState("");
+
+  // Derived from `registrations` (instead of useListCollection's mount-time
+  // snapshot) so the list stays correct when the dialog is reopened after
+  // competitors were added or quit (the dialog stays mounted via lazyMount).
+  const collection = useMemo(() => {
+    const items = registrations
+      .toSorted((a, b) => a.registrant_id - b.registrant_id)
+      .filter(
+        (competitor) =>
+          !filterText ||
+          competitor.user.name
+            .toLowerCase()
+            .includes(filterText.toLowerCase()) ||
+          parseInt(filterText, 10) === competitor.registrant_id,
+      );
+
+    return createListCollection({
+      items,
+      itemToValue: (competitor) => competitor.id.toString(),
+      itemToString: (competitor) => competitor.user.name,
+    });
+  }, [registrations, filterText]);
 
   const isDualRound = coLinkedStatus.length > 0;
 
@@ -150,7 +163,7 @@ function AddPersonCombobox({
       <Combobox.Root
         collection={collection}
         inputBehavior="autohighlight"
-        onInputValueChange={(e) => filter(e.inputValue)}
+        onInputValueChange={(e) => setFilterText(e.inputValue)}
         onValueChange={(e) => setSelectedCompetitor(parseInt(e.value[0], 10))}
       >
         <Combobox.Control>

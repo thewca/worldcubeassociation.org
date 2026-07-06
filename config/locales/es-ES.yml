@@ -2961,8 +2961,8 @@ es-ES:
       podiums:
         #original_hash: 02ae2bd
         title: Podios
-        #original_hash: d7297a7
-        undetermined: Podios por determinar
+        #original_hash: 69c4270
+        undetermined: Por determinar
         #original_hash: 61e88df
         none: ¡Aún no hay podios!
       admin:
@@ -6893,6 +6893,13 @@ es-ES:
         (%{actual}) a lo especificado en la pestaña Administrar categorías
         (%{expected}). Por favor, ajusta el número de sets de mezclas en la
         pestaña Administrar categorías al número de sets que se ha usado.
+    schedule:
+      #original_hash: 7a12424
+      activity_outside_competition_dates_warning: >-
+        La actividad «%{activity_name}» (código: %{activity_code}) está
+        programada fuera de la fecha de la competición según la zona horaria del
+        recinto. Por favor, actualiza el horario de la competición para reflejar
+        las fechas reales de la misma.
   tickets:
     type:
       #original_hash: e43f273

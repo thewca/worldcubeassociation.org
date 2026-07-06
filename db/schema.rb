@@ -481,9 +481,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
     t.bigint "value_and_id"
     t.index ["event_id", "average"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "average"], name: "regional_records_speedup"
+    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
     t.index ["person_id", "country_id", "event_id", "reg_year"], name: "unique_per_competitor_per_event_per_year", unique: true
     t.index ["person_id", "event_id", "continent_id", "country_id", "average"], name: "average_ranks_speedup"
-    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
   end
 
   create_table "concise_single_results", primary_key: "result_id", id: :bigint, default: nil, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -496,9 +496,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
     t.bigint "value_and_id"
     t.index ["event_id", "best"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "best"], name: "regional_records_speedup"
+    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
     t.index ["person_id", "country_id", "event_id", "reg_year"], name: "unique_per_competitor_per_event_per_year", unique: true
     t.index ["person_id", "event_id", "continent_id", "country_id", "best"], name: "single_ranks_speedup"
-    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
   end
 
   create_table "connected_paypal_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -738,9 +738,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "format_id", limit: 1, default: "", null: false
+    t.integer "global_pos", limit: 2, default: 0, null: false
     t.string "person_id", limit: 20, null: false
     t.integer "pos", limit: 2, default: 0, null: false
-    t.integer "global_pos", limit: 2, default: 0, null: false
     t.bigint "round_id", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
     t.integer "value1", default: 0, null: false
@@ -1192,10 +1192,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
     t.string "country_id", limit: 50, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "format_id", limit: 1, default: "", null: false
+    t.integer "global_pos", limit: 2, default: 0, null: false
     t.string "person_id", limit: 10, default: "", null: false
     t.string "person_name", limit: 80, default: "", null: false
     t.integer "pos", limit: 2, default: 0, null: false
-    t.integer "global_pos", limit: 2, default: 0, null: false
     t.string "regional_average_record", limit: 3
     t.string "regional_single_record", limit: 3
     t.bigint "round_id", null: false

@@ -1742,6 +1742,9 @@ es-419:
         edit_reason:
           #original_hash: fdfcccf
           label: Razón del cambio
+        edit_reason_for:
+          #original_hash: df3a70f
+          label: 'Razón para el cambio de %{attribute}'
         proof_attach:
           #original_hash: a9645b1
           label: Documentación
@@ -2470,7 +2473,7 @@ es-419:
       total: Total
     new_registration:
       #original_hash: 8b9f726
-      title: 'Registrado para %{comp}'
+      title: 'Registro para %{comp}'
     #original_hash: ada2e9e
     sign_in: Identificarse
     #original_hash: 5d45a00
@@ -2913,8 +2916,8 @@ es-419:
       podiums:
         #original_hash: 02ae2bd
         title: Podios
-        #original_hash: d7297a7
-        undetermined: Podios a definir
+        #original_hash: 69c4270
+        undetermined: A definir
         #original_hash: 61e88df
         none: ¡No hay podios aún!
       admin:
@@ -2944,6 +2947,8 @@ es-419:
         submit_results: Enviar resultados
         #original_hash: 0ed766a
         add_to_batch: Agregar al lote
+        #original_hash: 1a2e4ff
+        remove_from_batch: Eliminar del lote
         #original_hash: 8b6d8cb
         batch_mode: Modo lote
         #original_hash: a577fa2
@@ -4737,6 +4742,8 @@ es-419:
         none: Ninguna
         #original_hash: 9b9a6aa
         show_buttons: Mostrar botones de zona horaria
+        #original_hash: dd3c440
+        hide_buttons: Ocultar botones de zona horaria
         #original_hash: d2ac826
         use_time_zone: Usar esta zona horaria
       #original_hash: 73acb7f
@@ -4758,12 +4765,16 @@ es-419:
         competición.
       #original_hash: 97df911
       timezone_message: 'El horario se muestra en la zona horaria %{timezone}.'
-      #original_hash: 94b2570
+      #original_hash: f948a0e
       timezone_setting: 'Estás viendo el horario en la siguiente zona horaria:'
-      #original_hash: 75194fd
+      #original_hash: ca4f078
       multiple_timezones_available: >-
-        ¡Cuidado! No todas las localidades están en la misma zona horaria. ¡No
-        te confundas!
+        ¡Cuidado! Algunas localidades están en distinta zona horaria. ¡No te
+        confundas!
+      #original_hash: 459e545
+      select_a_timezone: Elegir zona horaria
+      #original_hash: 80e8704
+      select_a_venue_to_view: 'Para ver el horario, elige una localidad.'
       #original_hash: d94a371
       timezone_set_local: Usar zona horaria local
       #original_hash: 17ab650
@@ -6792,6 +6803,13 @@ es-419:
         (%{actual}) a lo especificado (%{expected}) en la pestaña de
         "Administrar eventos" (Manage Events). Por favor, ajusta el número a lo
         correcto.
+    schedule:
+      #original_hash: 7a12424
+      activity_outside_competition_dates_warning: >-
+        La actividad "%{activity_name}" (código: %{activity_code}) sucedería
+        fuera del rango de fechas de la competición según la zona horaria local.
+        Por favor, actualiza el horario de la competición para reflejar las
+        fechas correctas.
   tickets:
     type:
       #original_hash: e43f273

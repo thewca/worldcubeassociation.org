@@ -1977,13 +1977,19 @@ class Competition < ApplicationRecord
     }
   end
 
+  def self.json_validation_options(is_strict: true)
+    { noAdditionalProperties: is_strict }
+  end
+
   def self.validate_wcif_schema!(wcif, version: WCIF_STABLE_VERSION, is_strict: true)
-    expected_schema = Competition.wcif_json_schema(version: version)
-    JSON::Validator.validate!(expected_schema, wcif, noAdditionalProperties: is_strict)
+    expected_schema = self.wcif_json_schema(version: version)
+    validation_opts = self.json_validation_options(is_strict: is_strict)
+
+    JSON::Validator.validate!(expected_schema, wcif, **validation_opts)
   end
 
   def set_wcif!(wcif, current_user, strict_schema_checks: true)
-    import_version = wcif["formatVersion"]
+    import_version = wcif["formatVersion"] || WCIF_STABLE_VERSION
 
     Competition.validate_wcif_schema!(wcif, version: import_version, is_strict: strict_schema_checks)
 
@@ -2166,12 +2172,15 @@ class Competition < ApplicationRecord
     reload
   end
 
-  def self.wcif_json_schema(version: WCIF_STABLE_VERSION)
+  def self.wcif_json_schema(version: WCIF_STABLE_VERSION, required_props: false)
     {
+      # This $id property is the actual JsonSchema URI
+      "$id" => Rails.application.routes.url_helpers.wcif_json_schema_api_v0_competitions_url(version, host: EnvConfig.ROOT_URL),
+      # This id property is used by the Ruby Gem that checks JsonSchema when printing error messages.
+      # Without specifying an ID, it will use random UUIDs so we use this field to make error messages clear and predictable.
+      "id" => "WCIFv#{version}",
       "type" => "object",
-      # Normally we want to force tools to tell us which version they're patching,
-      #   but as of writing this comment we need more time to tell that to tools.
-      # "required" => %w[formatVersion],
+      "required" => required_props ? %w[id formatVersion] : [],
       "properties" => {
         "formatVersion" => { "type" => "string" },
         "id" => { "type" => "string" },
