@@ -253,6 +253,7 @@ class LiveResult < ApplicationRecord
   end
 
   # Like wca-live's meanOfX: any incomplete (DNF/DNS) attempt makes the mean DNF.
+  # https://github.com/thewca/wca-live/blob/ad90b09f88667b94ddde1293301898171fe38e05/client/src/lib/attempt-result.js#L128-L131
   # Mirrors Resultable#compute_correct_average, which we can't call directly because
   # projections mean incomplete subsets (e.g. middle two of four) no Format expresses.
   def self.mean_or_dnf(values)
