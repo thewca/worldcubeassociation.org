@@ -67,6 +67,7 @@ export default function LiveResultsTable({
     resultsByRegistrationId,
     competitors,
     format,
+    forecastView,
   ).filter((c) => !pendingRegistrationIds.has(c.id));
 
   const stats = statColumnsForFormat(format);
@@ -84,6 +85,7 @@ export default function LiveResultsTable({
           isLinked={showLinkedRoundsView}
           t={t}
           isAdmin={isAdmin}
+          forecastView={forecastView}
         />
         <Table.Body>
           {competitorsWithOrderedResults.map((competitorAndTheirResults) => {
@@ -191,6 +193,7 @@ export default function LiveResultsTable({
                     result={result}
                     highlight={showText}
                     forecastView={forecastView}
+                    format={format}
                   />
                 </Table.Row>
               );

@@ -107,18 +107,20 @@ export default function LiveUpdatingResultsTable({
             <Switch.Label>Show combined Results</Switch.Label>
           </Switch.Root>
         )}
-        <Switch.Root
-          checked={forecastView}
-          onCheckedChange={(e) => setForecastView(e.checked)}
-          colorPalette="green"
-          disabled={!forecastViewSupported(round, roundFinished)}
-        >
-          <Switch.HiddenInput />
-          <Switch.Control>
-            <Switch.Thumb />
-          </Switch.Control>
-          <Switch.Label>Forecast view</Switch.Label>
-        </Switch.Root>
+        {!isAdminView && (
+          <Switch.Root
+            checked={forecastView}
+            onCheckedChange={(e) => setForecastView(e.checked)}
+            colorPalette="green"
+            disabled={!forecastViewSupported(round, roundFinished)}
+          >
+            <Switch.HiddenInput />
+            <Switch.Control>
+              <Switch.Thumb />
+            </Switch.Control>
+            <Switch.Label>Forecast view</Switch.Label>
+          </Switch.Root>
+        )}
         {!isAdminView && (
           <IconButton variant="ghost" onClick={enableProjectorView}>
             <LuGalleryVertical />
