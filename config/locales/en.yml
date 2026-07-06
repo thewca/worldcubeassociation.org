@@ -904,6 +904,8 @@ en:
           label: "Search for the WCA ID that you want to edit."
         edit_reason:
           label: "Reason for the change"
+        edit_reason_for:
+          label: "Reason for %{attribute} change"
         proof_attach:
           label: "Attach proof"
         submit_edit_request_button:
@@ -1446,6 +1448,7 @@ en:
         double_check: "Double Check"
         submit_results: "Submit Results"
         add_to_batch: "Add to Batch"
+        remove_from_batch: "Remove from Batch"
         batch_mode: "Batch Mode"
         submit_batch: "Submit Batch (%{count})"
         warnings:
