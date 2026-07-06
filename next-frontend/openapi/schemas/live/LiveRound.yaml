@@ -18,11 +18,11 @@ allOf:
         type: array
         items:
           type: string
-      competitors_live_results_completed:
+      completed_competitors:
         type: number
     required:
       - results
       - competitors
       - round_id
       - state_hash
-      - competitors_live_results_completed
+      - completed_competitors

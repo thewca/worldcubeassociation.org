@@ -33,7 +33,7 @@ export default function ActionButtons({
         });
         setRoundState(roundId, data.state, {
           total_competitors: data.created_rows,
-          competitors_live_results_completed: 0,
+          completed_competitors: 0,
         });
       },
       onError: (error) => {
@@ -56,7 +56,7 @@ export default function ActionButtons({
           type: "success",
         });
         setRoundState(roundId, data.state, {
-          competitors_live_results_completed: 0,
+          completed_competitors: 0,
         });
       },
       onError: () => {

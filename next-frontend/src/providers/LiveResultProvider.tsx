@@ -189,7 +189,7 @@ export function MultiRoundResultProvider({
         const newResults = newData.results;
         const newCompetitors = newData.competitors;
 
-        setCompletedCount(roundId, newData.competitors_live_results_completed);
+        setCompletedCount(roundId, newData.completed_competitors);
         setTotalCompetitors(roundId, newCompetitors.length);
 
         // We just made a full refetch. Only keep those results as "pending"

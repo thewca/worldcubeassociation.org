@@ -23,7 +23,7 @@ RSpec.describe "WCA Live API" do
 
       expect(round.live_results.length).to eq(5)
       expect(round.live_results.count(&:complete?)).to eq(0)
-      expect(round.competitors_live_results_completed).to eq(0)
+      expect(round.completed_competitors).to eq(0)
     end
   end
 

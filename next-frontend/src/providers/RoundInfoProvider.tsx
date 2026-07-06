@@ -95,7 +95,7 @@ export function RoundsInfoProvider({
     (roundId: string, count: number) =>
       patchRound(roundId, (r) =>
         r.state === "open"
-          ? { ...r, competitors_live_results_completed: count }
+          ? { ...r, completed_competitors: count }
           : r,
       ),
     [patchRound],

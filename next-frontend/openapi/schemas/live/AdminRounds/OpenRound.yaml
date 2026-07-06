@@ -3,9 +3,9 @@ allOf:
   - type: object
     required:
       - total_competitors
-      - competitors_live_results_completed
+      - completed_competitors
     properties:
       total_competitors:
         type: number
-      competitors_live_results_completed:
+      completed_competitors:
         type: number
