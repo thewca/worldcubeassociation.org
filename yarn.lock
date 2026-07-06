@@ -10300,8 +10300,8 @@ __metadata:
     sass: "npm:^1.101.0"
     sass-loader: "npm:^17.0.0"
     semantic-ui-react: "npm:^2.1.5"
-    shakapacker: "npm:10.1.0"
-    shakapacker-webpack: "npm:10.1.0"
+    shakapacker: "npm:10.3.0"
+    shakapacker-webpack: "npm:10.3.0"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^17.14.0"
     stylelint-config-recommended-scss: "npm:^17.0.1"
@@ -10652,14 +10652,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shakapacker-webpack@npm:10.1.0":
-  version: 10.1.0
-  resolution: "shakapacker-webpack@npm:10.1.0"
+"shakapacker-webpack@npm:10.3.0":
+  version: 10.3.0
+  resolution: "shakapacker-webpack@npm:10.3.0"
   dependencies:
-    shakapacker: "npm:~10.1.0"
+    shakapacker: "npm:~10.3.0"
     terser-webpack-plugin: "npm:^5.3.1"
   peerDependencies:
-    "@babel/core": ^7.17.9
+    "@babel/core": ^7.17.9 || ^8.0.0
     "@pmmmwh/react-refresh-webpack-plugin": ^0.5.0 || ^0.6.0
     "@swc/core": ^1.3.0
     babel-loader: ^8.2.4 || ^9.0.0 || ^10.0.0
@@ -10668,12 +10668,12 @@ __metadata:
     esbuild-loader: ^2.0.0 || ^3.0.0 || ^4.0.0
     mini-css-extract-plugin: ^2.0.0
     sass: ^1.50.0
-    sass-loader: ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    sass-loader: ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     swc-loader: ^0.1.15 || ^0.2.0
     webpack: ^5.101.0
     webpack-assets-manifest: ^6.0.0
     webpack-cli: ^7.0.0
-    webpack-dev-server: ^5.2.2
+    webpack-dev-server: ^5.2.2 || ^6.0.0
     webpack-subresource-integrity: ^5.1.0
   peerDependenciesMeta:
     "@babel/core":
@@ -10702,13 +10702,13 @@ __metadata:
       optional: true
     webpack-subresource-integrity:
       optional: true
-  checksum: 10c0/746154d54d7290a5a5391ce995e9d0c6b4aa72ac16a858e7642788e6054819a6830d892660c8ccd56d4f2ce52354a2afd5b1fffcce405f0267567c21c3fff8ab
+  checksum: 10c0/d413bc514449589b9ca228efa6aed3f77cf4d455b5992b778e2385bdcb6117f6f1b767cf3bb0eca6118705e23214a761420fdacb7fa980aed66c5cb0038f7f5e
   languageName: node
   linkType: hard
 
-"shakapacker@npm:10.1.0, shakapacker@npm:~10.1.0":
-  version: 10.1.0
-  resolution: "shakapacker@npm:10.1.0"
+"shakapacker@npm:10.3.0, shakapacker@npm:~10.3.0":
+  version: 10.3.0
+  resolution: "shakapacker@npm:10.3.0"
   dependencies:
     js-yaml: "npm:^4.1.0"
     pack-config-diff: "npm:^0.1.0"
@@ -10716,13 +10716,14 @@ __metadata:
     webpack-merge: "npm:^5.8.0"
     yargs: "npm:^17.7.2"
   peerDependencies:
-    "@babel/core": ^7.17.9
-    "@babel/plugin-transform-runtime": ^7.17.0
-    "@babel/preset-env": ^7.16.11
-    "@babel/runtime": ^7.17.9
-    "@rspack/cli": ^1.0.0 || ^2.0.0-0
-    "@rspack/core": ^1.0.0 || ^2.0.0-0
-    "@rspack/plugin-react-refresh": ^1.0.0 || ^2.0.0
+    "@babel/core": ^7.17.9 || ^8.0.0
+    "@babel/plugin-transform-runtime": ^7.17.0 || ^8.0.0
+    "@babel/preset-env": ^7.16.11 || ^8.0.0
+    "@babel/runtime": ^7.17.9 || ^8.0.0
+    "@rspack/cli": ^2.0.0
+    "@rspack/core": ^2.0.0
+    "@rspack/dev-server": ^2.0.0
+    "@rspack/plugin-react-refresh": ^2.0.0
     "@swc/core": ^1.3.0
     "@types/babel__core": ^7.0.0
     "@types/webpack": ^5.0.0
@@ -10732,15 +10733,15 @@ __metadata:
     esbuild: ">=0.14.0 <1.0.0"
     esbuild-loader: ^2.0.0 || ^3.0.0 || ^4.0.0
     mini-css-extract-plugin: ^2.0.0
-    rspack-manifest-plugin: ^5.0.0
+    rspack-manifest-plugin: ^5.2.2
     sass: ^1.50.0
-    sass-loader: ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    sass-loader: ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     swc-loader: ^0.1.15 || ^0.2.0
     terser-webpack-plugin: ^5.3.1
     webpack: ^5.101.0
     webpack-assets-manifest: ^5.0.6 || ^6.0.0
     webpack-cli: ^4.9.2 || ^5.0.0 || ^6.0.0 || ^7.0.0
-    webpack-dev-server: ^5.2.2
+    webpack-dev-server: ^5.2.2 || ^6.0.0
     webpack-subresource-integrity: ^5.1.0
   peerDependenciesMeta:
     "@babel/core":
@@ -10754,6 +10755,8 @@ __metadata:
     "@rspack/cli":
       optional: true
     "@rspack/core":
+      optional: true
+    "@rspack/dev-server":
       optional: true
     "@rspack/plugin-react-refresh":
       optional: true
@@ -10798,7 +10801,7 @@ __metadata:
   bin:
     diff-bundler-config: package/bin/diff-bundler-config.cjs
     shakapacker-config: package/bin/shakapacker-config.cjs
-  checksum: 10c0/b9d6fc09defc5212d39766d8038528286be7fe48df87cc1a24cf8c3b87116e9701498386982910e8501ad322ef59f9cafebc3861fb340a0d867129d20c37e5df
+  checksum: 10c0/3d600229bebc91e4fe80235ec4ebc9083b117a047f886b3cafbee7c2f7f52c121ad73cd69b2aaca47901fbbc0b86ca06f337cada21b4ffcfe5a7dfb8cf3096d4
   languageName: node
   linkType: hard
 
