@@ -9,12 +9,13 @@ export function forecastViewSupported(
 
   return (
     // Only relevant for rounds sorted by average
-    format.sort_by != "best" &&
+    format.sort_by === "average" &&
     // Only relevant for incomplete rounds
     !finished &&
     // Only final rounds or rounds with a ranking based
     // advancement condition are supported
-    (round.advancementCondition === null ||
-      round.advancementCondition?.type === "ranking")
+    // (the API omits advancementCondition entirely when there is none)
+    (round.advancementCondition === undefined ||
+      round.advancementCondition.type === "ranking")
   );
 }
