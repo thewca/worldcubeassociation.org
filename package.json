@@ -116,7 +116,7 @@
     "jshint": "^2.13.6",
     "react-refresh": "^0.18.0",
     "shakapacker": "10.3.0",
-    "shakapacker-webpack": "10.1.0",
+    "shakapacker-webpack": "10.3.0",
     "stylelint": "^17.14.0",
     "stylelint-config-recommended-scss": "^17.0.1",
     "stylelint-scss": "^7.2.0",
