@@ -73,54 +73,42 @@ export function RoundsInfoProvider({
     initialData: { rounds: initialRounds },
   });
 
-  const setRoundState = useCallback(
-    (
-      roundId: string,
-      state: LiveRoundState,
-      patch?: Partial<LiveRoundAdmin>,
-    ) => {
+  const patchRound = useCallback(
+    (roundId: string, patch: (round: LiveRoundAdmin) => LiveRoundAdmin) => {
       queryClient.setQueryData(
         queryKey,
         (old: { rounds: LiveRoundAdmin[] }) => ({
-          rounds: old.rounds.map((r) =>
-            r.id === roundId ? { ...r, ...patch, state } : r,
-          ),
+          rounds: old.rounds.map((r) => (r.id === roundId ? patch(r) : r)),
         }),
       );
     },
     [queryClient, queryKey],
+  );
+
+  const setRoundState = useCallback(
+    (roundId: string, state: LiveRoundState, patch?: Partial<LiveRoundAdmin>) =>
+      patchRound(roundId, (r) => ({ ...r, ...patch, state }) as LiveRoundAdmin),
+    [patchRound],
   );
 
   const setCompletedCount = useCallback(
-    (roundId: string, count: number) => {
-      queryClient.setQueryData(
-        queryKey,
-        (old: { rounds: LiveRoundAdmin[] }) => ({
-          rounds: old.rounds.map((r) =>
-            r.id === roundId && r.state === "open"
-              ? { ...r, competitors_live_results_completed: count }
-              : r,
-          ),
-        }),
-      );
-    },
-    [queryClient, queryKey],
+    (roundId: string, count: number) =>
+      patchRound(roundId, (r) =>
+        r.state === "open"
+          ? { ...r, competitors_live_results_completed: count }
+          : r,
+      ),
+    [patchRound],
   );
 
   const setTotalCompetitors = useCallback(
-    (roundId: string, count: number) => {
-      queryClient.setQueryData(
-        queryKey,
-        (old: { rounds: LiveRoundAdmin[] }) => ({
-          rounds: old.rounds.map((r) =>
-            r.id === roundId && (r.state === "open" || r.state === "locked")
-              ? { ...r, total_competitors: count }
-              : r,
-          ),
-        }),
-      );
-    },
-    [queryClient, queryKey],
+    (roundId: string, count: number) =>
+      patchRound(roundId, (r) =>
+        r.state === "open" || r.state === "locked"
+          ? { ...r, total_competitors: count }
+          : r,
+      ),
+    [patchRound],
   );
 
   if (isLoading) {
