@@ -169,7 +169,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     return render json: { status: "round already open" }, status: :bad_request if [Round::STATE_OPEN, Round::STATE_LOCKED].include?(state)
 
     remaining = round.total_number_of_rounds - round.number
-    if remaining.positive?
+
+    # We allow opening all linked rounds even if that would break 9m for a better user experience
+    if remaining.positive? && round.linked_round.blank?
       num_competitors = round.participation_source.advancing_competitor_ids.size
 
       # https://www.worldcubeassociation.org/regulations/#9m3
