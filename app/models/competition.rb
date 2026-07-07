@@ -1431,11 +1431,12 @@ class Competition < ApplicationRecord
     # We want to trigger the checks for qualification details even when
     # the actual qualification requirements have not been filled out yet for a newly created competition.
     # In other words, checking the `qualification_results` checkbox should be enough to trigger validations.
-    self.qualification_results? || competition_events.any?(&:qualification)
+    self.qualification_results? || competition_events.any?(&:qualification_condition?)
   end
 
   def qualification_date_to_events
-    competition_events.select(&:qualification).group_by { |e| e.qualification.when_date }
+    competition_events.filter(&:qualification_condition?)
+                      .group_by(&:qualification_latest_date)
   end
 
   # The name `is_probably_over` is meant to be surprising.
@@ -1912,10 +1913,9 @@ class Competition < ApplicationRecord
     return {} unless uses_qualification?
 
     competition_events
-      .where.not(qualification: nil)
+      .where.not(qualification_condition: nil)
       .index_by(&:event_id)
-      .transform_values(&:qualification)
-      .transform_values(&:to_wcif)
+      .transform_values(&:v1_qualification_wcif)
   end
 
   def persons_wcif(authorized: false, version: WCIF_STABLE_VERSION)

@@ -48,6 +48,7 @@ class Api::V0::ApiController < ApplicationController
 
   def user_qualification_data
     date = cutoff_date
+
     return render json: { error: 'Invalid date format. Please provide an iso8601 date string.' }, status: :bad_request if date.blank?
     return render json: { error: 'You cannot request qualification data for a future date.' }, status: :bad_request if date > Date.current
 
