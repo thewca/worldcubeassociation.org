@@ -1262,14 +1262,14 @@ RSpec.describe "Competition WCIF" do
         wcif_333_event["rounds"][0]["results"] = [
           {
             "personId" => competitors[0].registrant_id,
-            "ranking" => 10,
+            "ranking" => 1,
             "attempts" => [{ "result" => 456, "reconstruction" => nil }] * 5,
             "best" => 456,
             "average" => 456,
           },
           {
             "personId" => competitors[1].registrant_id,
-            "ranking" => 5,
+            "ranking" => 2,
             "attempts" => [{ "result" => 784, "reconstruction" => nil }] * 5,
             "best" => 784,
             "average" => 784,
@@ -1315,6 +1315,9 @@ RSpec.describe "Competition WCIF" do
         wcif_333_event["rounds"][0]["results"][0]["attempts"] = []
         wcif_333_event["rounds"][0]["results"][0]["best"] = 0
         wcif_333_event["rounds"][0]["results"][0]["average"] = 0
+        # Rankings are recomputed from live_results: the cleared result loses its rank
+        wcif_333_event["rounds"][0]["results"][0]["ranking"] = nil
+        wcif_333_event["rounds"][0]["results"][1]["ranking"] = 1
 
         competition.set_wcif_events!(wcif["events"], delegate)
 
