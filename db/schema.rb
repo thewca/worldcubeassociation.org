@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_05_050115) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -748,6 +748,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
     t.integer "value3", default: 0, null: false
     t.integer "value4", default: 0, null: false
     t.integer "value5", default: 0, null: false
+    t.index ["competition_id", "person_id"], name: "index_inbox_results_on_competition_id_and_person_id"
     t.index ["competition_id"], name: "InboxResults_fk_tournament"
     t.index ["event_id"], name: "InboxResults_fk_event"
     t.index ["format_id"], name: "InboxResults_fk_format"
@@ -1203,6 +1204,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
     t.index ["average", "person_name", "competition_id", "round_type_id"], name: "results_n_results_average_speedup"
     t.index ["best", "person_name", "competition_id", "round_type_id"], name: "results_n_results_single_speedup"
+    t.index ["competition_id", "person_id"], name: "index_results_on_competition_id_and_person_id"
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competition_id"], name: "Results_fk_tournament"
     t.index ["country_id"], name: "_tmp_index_Results_on_countryId"
