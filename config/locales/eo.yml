@@ -1505,7 +1505,7 @@ eo:
       #original_hash: ea20be0
       success_message: Retpoŝto sendita - ni respondos al vi baldaŭ.
       #original_hash: 8fa6b95
-      prefilled: >-
+      to_update_registration_prefilled: >-
         Por ĝisdatigi vian registriĝon, vi devas kontakti la organizantojn de la
         konkurso. Ni antaŭ-plenigis la kontaktformularon per viaj petitaj ŝanĝoj
         - bonvolu sendi la formularon.

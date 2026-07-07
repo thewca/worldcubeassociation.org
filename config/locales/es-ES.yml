@@ -1616,7 +1616,7 @@ es-ES:
       #original_hash: ea20be0
       success_message: Correo electrónico enviado. Nos pondremos en contacto contigo en breve.
       #original_hash: 8fa6b95
-      prefilled: >-
+      to_update_registration_prefilled: >-
         Para actualizar tu registro, tienes que ponerte en contacto con los
         organizadores de la competición. Hemos rellenado el formulario de
         contacto con tus cambios solicitados. Por favor, envíalo.
