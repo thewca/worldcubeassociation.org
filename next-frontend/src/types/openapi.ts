@@ -130,6 +130,51 @@ export interface paths {
         };
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Adds multiple live results for a given round in a single request */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                    roundId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BatchSubmitLiveResult"];
+                };
+            };
+            responses: {
+                /** @description Batch Accepted */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            status?: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit": {
         parameters: {
             query?: never;
@@ -214,6 +259,23 @@ export interface paths {
         put: operations["clearRound"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/live/rounds/{roundId}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Closes an empty round, deleting all its (empty) live results */
+        delete: operations["closeRound"];
         options?: never;
         head?: never;
         patch?: never;
@@ -527,7 +589,7 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
-         options?: never;
+        options?: never;
         head?: never;
         patch?: never;
         trace?: never;
@@ -971,12 +1033,14 @@ export interface components {
         WcifRound: components["schemas"]["BaseWcifRound"] & {
             results: components["schemas"]["WcifResult"][];
         };
+        /** @enum {string} */
+        RoundState: "open" | "locked" | "pending" | "ready";
         BaseAdminRound: components["schemas"]["WcifRound"] & {
-            state: string;
+            state: components["schemas"]["RoundState"];
         };
         OpenRound: components["schemas"]["BaseAdminRound"] & {
             total_competitors: number;
-            competitors_live_results_entered: number;
+            completed_competitors: number;
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -1031,7 +1095,8 @@ export interface components {
             forecast_statistics?: {
                 best_possible_average?: number;
                 worst_possible_average?: number;
-            };
+                projected_average?: number;
+            } | null;
         };
         LiveCompetitor: {
             id: number;
@@ -1046,10 +1111,14 @@ export interface components {
             round_id: number;
             state_hash: string;
             linked_round_ids?: string[];
+            completed_competitors: number;
         };
         SubmitLiveResult: {
             attempts: components["schemas"]["LiveAttempt"][];
             registration_id: number;
+        };
+        BatchSubmitLiveResult: {
+            results: components["schemas"]["SubmitLiveResult"][];
         };
         General404: {
             error: string;
@@ -1237,6 +1306,11 @@ export interface components {
             event_change_deadline_date: string;
             /** @example not_accepted */
             competitor_can_cancel: string;
+            /**
+             * @example external
+             * @enum {string}
+             */
+            scoretaking_software: "external" | "internal" | "wca_live";
             /**
              * Format: uri
              * @example https://www.worldcubeassociation.org/competitions/WC2003
@@ -1731,6 +1805,9 @@ export interface components {
             can_administer_competitions: {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
+            can_scoretake_competitions: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
             can_view_delegate_admin_page: {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
@@ -2086,6 +2163,33 @@ export interface operations {
                     "application/json": {
                         status: string;
                         recreated_rows: number;
+                        state: components["schemas"]["RoundState"];
+                    };
+                };
+            };
+        };
+    };
+    closeRound: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                roundId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Round closed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status: string;
+                        deleted_count: number;
                     };
                 };
             };
@@ -2113,6 +2217,7 @@ export interface operations {
                         status: string;
                         created_rows: number;
                         locked_rows: number;
+                        state: components["schemas"]["RoundState"];
                     };
                 };
             };

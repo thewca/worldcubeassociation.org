@@ -16,6 +16,8 @@ export default function CompetitionMenu({
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
+  const { scoretaking_software } = competitionInfo;
+
   if (!hasPassed(competitionInfo.start_date)) {
     const tabs = beforeCompetitionTabs(competitionInfo);
     return (
@@ -26,7 +28,14 @@ export default function CompetitionMenu({
   }
 
   if (!hasPassed(competitionInfo.end_date) || LIVE_RESULT_BETA) {
-    return <LiveMenu competitionInfo={competitionInfo}>{children}</LiveMenu>;
+    return (
+      <LiveMenu
+        competitionInfo={competitionInfo}
+        scoretakingSoftware={scoretaking_software}
+      >
+        {children}
+      </LiveMenu>
+    );
   }
   // TODO: Differentiate if the results have been posted
   const tabs = afterCompetitionTabs(competitionInfo);

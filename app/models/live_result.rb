@@ -136,6 +136,7 @@ class LiveResult < ApplicationRecord
       competition_id: self.competition_id,
       person_id: self.registrant_id,
       pos: self.local_pos,
+      global_pos: self.global_pos,
       event_id: self.event_id,
       format_id: self.format_id,
       round_type_id: self.round_type_id,
@@ -186,27 +187,82 @@ class LiveResult < ApplicationRecord
   end
 
   def forecast_statistics
-    # use .length on purpose here as otherwise we would use one query per row
-    LiveResult.compute_best_and_worse_possible_average(live_attempts.as_json, round) if live_attempts.length == round.format.expected_solve_count - 1
+    return nil if complete?
+
+    LiveResult.compute_forecast_statistics(live_attempts.as_json, round)
   end
 
-  def self.compute_best_and_worse_possible_average(live_attempts, round)
-    missing_count = round.format.expected_solve_count - live_attempts.length
+  # Self-contained per-result projections (safe to send in diffs). `live_attempts`
+  # are the plain hashes ({ "value" => ..., "attempt_number" => ... }).
+  def self.compute_forecast_statistics(live_attempts, round)
+    values = live_attempts.pluck("value")
 
     {
-      "best_possible_average" => BEST_POSSIBLE_SCORE,
-      "worst_possible_average" => WORST_POSSIBLE_SCORE,
-    }.transform_values do |score|
-      padded = live_attempts + Array.new(missing_count) do |i|
-        {
-          "attempt_number" => live_attempts.length + i + 1,
-          "value" => score,
-        }
-      end
+      **self.compute_best_and_worst_possible_average(live_attempts, round),
+      "projected_average" => compute_projected_average(values, round),
+    }
+  end
 
-      attempts = padded.map { LiveAttempt.new(it) }
-      LiveResult.compute_average_and_best(attempts, round).first
+  def self.compute_best_and_worst_possible_average(live_attempts, round)
+    {
+      "best_possible_average" => compute_padded_average(live_attempts, round, BEST_POSSIBLE_SCORE),
+      "worst_possible_average" => compute_padded_average(live_attempts, round, WORST_POSSIBLE_SCORE),
+    }
+  end
+
+  def self.compute_padded_average(live_attempts, round, score)
+    missing_count = round.format.expected_solve_count - live_attempts.length
+
+    padded = live_attempts + Array.new(missing_count) do |i|
+      { "attempt_number" => live_attempts.length + i + 1, "value" => score }
     end
+
+    attempts = padded.map { LiveAttempt.new(it) }
+    compute_average_and_best(attempts, round).first
+  end
+
+  # See the front-end wca-live `average` helper — this is the incomplete-result
+  # projection (median / middle-two mean) rather than the official average.
+  def self.compute_projected_average(values, round)
+    expected = round.format.expected_solve_count
+
+    return SolveTime::SKIPPED_VALUE if values.empty?
+
+    if round.event_id == "333fm"
+      return SolveTime::DNF_VALUE unless values.all?(&:positive?)
+
+      # Move counts are stored as-is but averages are scaled by 100.
+      return (values.sum * 100.0 / values.length).round
+    end
+
+    sorted = values.sort_by { SolveTime.new(round.event_id, :single, it) }
+
+    case expected
+    when 3
+      mean_or_dnf(values)
+    when 5
+      case values.length
+      when 1, 2 then mean_or_dnf(values)
+      when 3 then sorted[1] # median
+      when 4 then mean_or_dnf([sorted[1], sorted[2]]) # middle two
+      else mean_or_dnf([sorted[1], sorted[2], sorted[3]])
+      end
+    else
+      SolveTime::SKIPPED_VALUE
+    end
+  end
+
+  # Like wca-live's meanOfX: any incomplete (DNF/DNS) attempt makes the mean DNF.
+  # https://github.com/thewca/wca-live/blob/ad90b09f88667b94ddde1293301898171fe38e05/client/src/lib/attempt-result.js#L128-L131
+  # Mirrors Resultable#compute_correct_average, which we can't call directly because
+  # projections mean incomplete subsets (e.g. middle two of four) no Format expresses.
+  def self.mean_or_dnf(values)
+    return SolveTime::DNF_VALUE unless values.all?(&:positive?)
+
+    raw_average = values.sum.to_f / values.length
+    # Averages over 10 minutes are rounded to the nearest second, see
+    # https://www.worldcubeassociation.org/regulations/#9f2
+    raw_average > 60_000 ? raw_average.round(-2) : raw_average.round
   end
 
   def self.empty_result_attributes(registration_id, round_id)

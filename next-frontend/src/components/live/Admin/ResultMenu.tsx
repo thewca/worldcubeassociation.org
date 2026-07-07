@@ -48,11 +48,22 @@ export default function ResultMenu({
   const { t } = useT();
   const { pendingLiveResults } = useLiveResults();
 
-  const { handleRegistrationIdChange, clearCompetitorsResults, isPending } =
-    useResultsAdmin();
+  const {
+    handleRegistrationIdChange,
+    clearCompetitorsResults,
+    batchAttemptsByRegistrationId,
+    removeFromBatch,
+    isPending,
+  } = useResultsAdmin();
+
+  const inBatch = batchAttemptsByRegistrationId.has(competitor.id);
 
   function handleEditClick() {
     handleRegistrationIdChange(competitor.id);
+    onOpenChange(false);
+  }
+  function handleRemoveFromBatchClick() {
+    removeFromBatch(competitor.id);
     onOpenChange(false);
   }
   function handleClearClick() {
@@ -117,6 +128,15 @@ export default function ResultMenu({
                       {t("competitions.live.admin.results")}
                     </Link>
                   </Menu.Item>
+                  {inBatch && (
+                    <Menu.Item
+                      value="remove-from-batch"
+                      onClick={handleRemoveFromBatchClick}
+                      disabled={isPending}
+                    >
+                      {t("competitions.live.admin.remove_from_batch")}
+                    </Menu.Item>
+                  )}
                   {result.attempts.length > 0 ? (
                     <Menu.Item
                       value="clear"
@@ -208,6 +228,7 @@ function QuitModal({
               </Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
+              <Text fontWeight="bold">{competitor.name}</Text>
               {toAdvance.length > 0 ? (
                 <>
                   <Text>

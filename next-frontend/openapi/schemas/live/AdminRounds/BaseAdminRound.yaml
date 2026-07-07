@@ -5,4 +5,4 @@ allOf:
       - state
     properties:
       state:
-        type: string
+        $ref: './RoundState.yaml'

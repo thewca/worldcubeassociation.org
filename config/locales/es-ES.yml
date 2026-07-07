@@ -232,6 +232,8 @@ es-ES:
       ranking: '%{ranking} mejores'
       #original_hash: 0664a83
       percent: '%{percent}% mejor'
+      #original_hash: 023a81e
+      all_advance: Todos avanzan
       attempt_result:
         #original_hash: ac6a282
         time: '%{round_format} < %{time}'
@@ -239,6 +241,8 @@ es-ES:
         moves: '%{round_format} < %{moves}'
         #original_hash: 076911b
         points: '%{round_format} > %{points}'
+    #original_hash: ba6fa8b
+    all_advance: Todos los competidores avanzan
     #original_hash: 6e55337
     ranking: 'Los mejores %{ranking} avanzan a la siguiente ronda'
     #original_hash: 7ee969c
@@ -1492,7 +1496,7 @@ es-ES:
         #original_hash: 2035811
         wmt: Equipo de Marketing de la WCA
         #original_hash: 2517097
-        wmct: Equipo del Campeonato Grande de la WCA
+        wmct: Equipo de Campeonatos Grandes de la WCA
         #original_hash: 8f32116
         wqac: Comité de Control de Calidad de la WCA
         #original_hash: 3da1e85
@@ -1752,6 +1756,9 @@ es-ES:
         edit_reason:
           #original_hash: fdfcccf
           label: Motivo del cambio
+        edit_reason_for:
+          #original_hash: df3a70f
+          label: 'Razón para el cambio de %{attribute}'
         proof_attach:
           #original_hash: a9645b1
           label: Adjuntar documentación
@@ -2922,6 +2929,19 @@ es-ES:
     live:
       #original_hash: 10d1a3c
       title: Resultados en directo
+      #original_hash: ef1c23b
+      manage_rounds: Administrar rondas
+      incompatible:
+        #original_hash: 4e41690
+        external: >-
+          Esta competición está utilizando un software de introducción de
+          resultados externo. Por favor, consulta la información de la
+          competición para descubrir dónde visualizar los resultados en directo.
+        #original_hash: 92b3341
+        wca_live: >-
+          Esta competición está utilizando WCA Live para la introducción de
+          resultados. Por favor, pincha en este enlace para visualizar los
+          resultados en directo.
       round_state:
         #original_hash: 98aadb3
         ongoing: en directo
@@ -2944,8 +2964,8 @@ es-ES:
       podiums:
         #original_hash: 02ae2bd
         title: Podios
-        #original_hash: d7297a7
-        undetermined: Podios por determinar
+        #original_hash: 69c4270
+        undetermined: Por determinar
         #original_hash: 61e88df
         none: ¡Aún no hay podios!
       admin:
@@ -2953,6 +2973,8 @@ es-ES:
         open: Abrir
         #original_hash: 719ea39
         clear: Limpiar
+        #original_hash: bbfa773
+        close: Cerrar
         #original_hash: 42faad9
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} introducidos'
         #original_hash: adec79f
@@ -2963,6 +2985,22 @@ es-ES:
         results: Resultados
         #original_hash: b233e77
         registration: Registro
+        #original_hash: 1e0d934
+        admin_view: Vista de administrador
+        #original_hash: 530a71b
+        results_view: Vista de resultados
+        #original_hash: 1dadee2
+        double_check: Doble check
+        #original_hash: a5be381
+        submit_results: Enviar resultados
+        #original_hash: 0ed766a
+        add_to_batch: Añadir al lote
+        #original_hash: 1a2e4ff
+        remove_from_batch: Eliminar del lote
+        #original_hash: 8b6d8cb
+        batch_mode: Modo lote
+        #original_hash: a577fa2
+        submit_batch: 'Enviar lote (%{count})'
         warnings:
           #original_hash: 9198c71
           omitted: >-
@@ -3010,6 +3048,10 @@ es-ES:
             failure: No se ha podido eliminar a los competidores de forma masiva
             #original_hash: 774050e
             menu: Eliminar de forma masiva
+            #original_hash: 89f89c0
+            id: ID
+            #original_hash: 709a232
+            name: Nombre
           #original_hash: 1a2285d
           quit_menu: Eliminar
           #original_hash: 70835a0
@@ -3024,6 +3066,17 @@ es-ES:
           still_processing: >-
             No puedes ejecutar «Eliminar competidor» mientras algunos resultados
             aún se están procesando
+        add_competitor:
+          #original_hash: 9dcb50d
+          single_round: Añadir competidor a la ronda
+          #original_hash: bf3b670
+          multiple_rounds:
+            zero: No añadir al competidor a ninguna ronda.
+            one: Añadir competidor a ambas rondas de las Rondas Duales.
+            other: >-
+              Añadir competidor a la ronda, ya que la segunda ronda de las
+              Rondas Duales no está abierta y necesitarás añadirle de forma
+              separada.
       results:
         #original_hash: 4705687
         competitor: Competidor
@@ -3600,8 +3653,8 @@ es-ES:
           external_registration_page: Página de registro
           #original_hash: 87b7d5f
           uses_wca_registration: Me gustaría usar la página web de la WCA para el registro
-          #original_hash: ebe8c47
-          uses_wca_live: Usaré WCA Live para la introducción de resultados
+          #original_hash: 0611f2d
+          scoretaking_software: Software utilizado para la introducción de resultados
         entry_fees:
           #original_hash: 28a6fbb
           currency_code: Código de divisa
@@ -3837,8 +3890,8 @@ es-ES:
             competición. Tiene que ser una URL http(s) válida.
           #original_hash: da39a3e
           uses_wca_registration: ''
-          #original_hash: da39a3e
-          uses_wca_live: ''
+          #original_hash: cc7d557
+          scoretaking_software: 'Selecciona «%{choice_ilr}» si quieres utilizar Rondas Duales'
         user_settings:
           #original_hash: da39a3e
           receive_registration_emails: ''
@@ -3991,6 +4044,14 @@ es-ES:
               de registro
             #original_hash: 490ed83
             live: Aceptar automáticamente los registros cuando se realice el pago
+        website:
+          scoretaking_software:
+            #original_hash: 1c88388
+            external: 'Una herramienta externa, no mantenida por la WCA'
+            #original_hash: 4b175c3
+            wca_live: 'WCA Live, alojada en live.worldcubeassociation.org'
+            #original_hash: 1ee034d
+            internal: Integrated Live Results
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -4755,6 +4816,8 @@ es-ES:
         none: Ninguna
         #original_hash: 9b9a6aa
         show_buttons: Mostrar botones de zona horaria
+        #original_hash: dd3c440
+        hide_buttons: Ocultar botones de zona horaria
         #original_hash: d2ac826
         use_time_zone: Usar esta zona horaria
       #original_hash: 73acb7f
@@ -4774,12 +4837,18 @@ es-ES:
       venue_selection_all: 'Estás viendo el horario en todos los %{venueCount} recintos.'
       #original_hash: 97df911
       timezone_message: 'La zona horaria de este recinto es %{timezone}.'
-      #original_hash: 94b2570
+      #original_hash: f948a0e
       timezone_setting: 'Estás viendo este horario en la siguiente zona horaria:'
-      #original_hash: 75194fd
+      #original_hash: ca4f078
       multiple_timezones_available: >-
-        ¡Cuidado! No todos los recintos están en la misma zona horaria. ¡Por
-        favor, ten cuidado!
+        Ten en cuenta que algunos recintos están en zonas horarias distintas.
+        ¡Por favor, ten cuidado!
+      #original_hash: 459e545
+      select_a_timezone: Selecciona una zona horaria
+      #original_hash: 80e8704
+      select_a_venue_to_view: >-
+        Para visualizar el horario, selecciona uno de los recintos que aparecen
+        arriba.
       #original_hash: d94a371
       timezone_set_local: Usar la zona horaria local
       #original_hash: 17ab650
@@ -6811,6 +6880,12 @@ es-ES:
         [%{round_id}] Si bien se permiten múltiples grupos para 3x3x3 Multi
         Ciega, al menos uno de los grupos tiene que contener mezclas para todos
         los intentos.
+      #original_hash: 2757334
+      mbld_scrambles_warning: >-
+        [%{round_id}] Esta ronda incluye resultados de 3x3x3 Multi Ciega. Por
+        favor, especifica en tu comentario cuántas mezclas de cada set usaron
+        realmente los competidores, para que el WRT pueda eliminar las mezclas
+        adicionales no utilizadas.
       #original_hash: 3d5255d
       multiple_fmc_groups_warning: >-
         [%{round_id}] Hay múltiples grupos de 3x3x3 Menos Movimientos. Si solo
@@ -6823,6 +6898,13 @@ es-ES:
         (%{actual}) a lo especificado en la pestaña Administrar categorías
         (%{expected}). Por favor, ajusta el número de sets de mezclas en la
         pestaña Administrar categorías al número de sets que se ha usado.
+    schedule:
+      #original_hash: 7a12424
+      activity_outside_competition_dates_warning: >-
+        La actividad «%{activity_name}» (código: %{activity_code}) está
+        programada fuera de la fecha de la competición según la zona horaria del
+        recinto. Por favor, actualiza el horario de la competición para reflejar
+        las fechas reales de la misma.
   tickets:
     type:
       #original_hash: e43f273

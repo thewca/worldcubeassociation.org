@@ -6,6 +6,8 @@ class Competition < ApplicationRecord
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
+  has_many :scoretaking_registrations, -> { scoretakers }, class_name: "Registration", inverse_of: :competition
+  has_many :scoretakers, -> { joins(registrations: [:assignments]) }, through: :scoretaking_registrations, source: :user
   has_many :results
   has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }, inverse_of: :competition
   has_many :uploaded_jsons, dependent: :destroy
@@ -511,7 +513,7 @@ class Competition < ApplicationRecord
   end
 
   def number_of_bookmarks
-    bookmarked_users.count
+    bookmarked_competitions.count
   end
 
   def country
@@ -711,6 +713,8 @@ class Competition < ApplicationRecord
              'scramble_file_uploads',
              'accepted_registrations',
              'accepted_newcomers',
+             'scoretaking_registrations',
+             'scoretakers',
              'duplicate_checker_job_runs',
              'tickets_competition_result',
              'result_ticket',
@@ -1451,7 +1455,7 @@ class Competition < ApplicationRecord
   end
 
   def events_with_podium_results
-    results.includes(:result_attempts).podium.order(:pos).group_by(&:event)
+    results.includes(:result_attempts).podium.order(:global_pos).group_by(&:event)
            .sort_by { |event, _results| event.rank }
   end
 
@@ -1863,12 +1867,23 @@ class Competition < ApplicationRecord
     }
   end
 
+  # Associations that `to_competition_info` touches: delegates and organizers are serialized
+  # via `User#serializable_hash` (see `User::SERIALIZATION_INCLUDES`), `event_ids` reads the
+  # events association, and `uses_cutoff?`/`uses_qualification?` iterate over every round of
+  # every competition event. Eager load them all to avoid an N+1 explosion.
+  INFO_SERIALIZATION_INCLUDES = [
+    :events,
+    { competition_events: :rounds },
+    { delegates: User::SERIALIZATION_INCLUDES },
+    { organizers: User::SERIALIZATION_INCLUDES },
+  ].freeze
+
   def to_competition_info
     options = {
       only: %w[id name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
                extra_registration_requirements enable_donations refund_policy_limit_date event_change_deadline_date waiting_list_deadline_date
                on_the_spot_registration on_the_spot_entry_fee_lowest_denomination qualification_results event_restrictions
-               base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel
+               base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel scoretaking_software
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled auto_accept_preference auto_accept_disable_threshold],
@@ -1930,7 +1945,7 @@ class Competition < ApplicationRecord
     persons_wcif + managers.map { it.to_wcif(self, authorized: authorized) }
   end
 
-  def events_wcif(version: WCIF_STABLE_VERSION)
+  def events_wcif(version: WCIF_STABLE_VERSION, include_results: true)
     includes_associations = [
       { rounds: [
         :competition_event,
@@ -1942,7 +1957,7 @@ class Competition < ApplicationRecord
     competition_events
       .includes(includes_associations)
       .sort_by { |ce| ce.event.rank }
-      .map { it.to_wcif(version: version) }
+      .map { it.to_wcif(version: version, include_results: include_results) }
   end
 
   def schedule_wcif
@@ -1962,13 +1977,19 @@ class Competition < ApplicationRecord
     }
   end
 
+  def self.json_validation_options(is_strict: true)
+    { noAdditionalProperties: is_strict }
+  end
+
   def self.validate_wcif_schema!(wcif, version: WCIF_STABLE_VERSION, is_strict: true)
-    expected_schema = Competition.wcif_json_schema(version: version)
-    JSON::Validator.validate!(expected_schema, wcif, noAdditionalProperties: is_strict)
+    expected_schema = self.wcif_json_schema(version: version)
+    validation_opts = self.json_validation_options(is_strict: is_strict)
+
+    JSON::Validator.validate!(expected_schema, wcif, **validation_opts)
   end
 
   def set_wcif!(wcif, current_user, strict_schema_checks: true)
-    import_version = wcif["formatVersion"]
+    import_version = wcif["formatVersion"] || WCIF_STABLE_VERSION
 
     Competition.validate_wcif_schema!(wcif, version: import_version, is_strict: strict_schema_checks)
 
@@ -2151,12 +2172,15 @@ class Competition < ApplicationRecord
     reload
   end
 
-  def self.wcif_json_schema(version: WCIF_STABLE_VERSION)
+  def self.wcif_json_schema(version: WCIF_STABLE_VERSION, required_props: false)
     {
+      # This $id property is the actual JsonSchema URI
+      "$id" => Rails.application.routes.url_helpers.wcif_json_schema_api_v0_competitions_url(version, host: EnvConfig.ROOT_URL),
+      # This id property is used by the Ruby Gem that checks JsonSchema when printing error messages.
+      # Without specifying an ID, it will use random UUIDs so we use this field to make error messages clear and predictable.
+      "id" => "WCIFv#{version}",
       "type" => "object",
-      # Normally we want to force tools to tell us which version they're patching,
-      #   but as of writing this comment we need more time to tell that to tools.
-      # "required" => %w[formatVersion],
+      "required" => required_props ? %w[id formatVersion] : [],
       "properties" => {
         "formatVersion" => { "type" => "string" },
         "id" => { "type" => "string" },

@@ -54,7 +54,17 @@ module StaticData
     end
 
     def self.load_json_data!
-      self.upsert_all(self.all_raw_sanitized)
+      # Upsert everything we know about. New stuff gets inserted, updated stuff gets updated.
+      insertion_data = self.all_raw_sanitized
+      self.upsert_all(insertion_data)
+
+      # Deleted stuff will stick around in the database when doing `upsert_all`.
+      # If possible, try to delete it. If the table doesn't even have a primary key, then ¯\_(ツ)_/¯
+      return if self.primary_key.blank?
+
+      # Clean up by removing any old IDs that shouldn't be there
+      ids_to_retain = insertion_data.pluck(self.primary_key.to_sym)
+      self.where.not(self.primary_key => ids_to_retain).delete_all
     end
 
     def self.write_json_data!

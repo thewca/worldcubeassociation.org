@@ -15,6 +15,9 @@ class User < ApplicationRecord
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
   has_many :votes
   has_many :registrations
+  has_many :newcomer_results, through: :registrations, source: :newcomer_results
+  has_many :scoretaking_registrations, -> { scoretakers }, class_name: "Registration", inverse_of: :user
+  has_many :scoretaking_competitions, -> { joins(registrations: [:assignments]) }, through: :scoretaking_registrations, source: "competition"
   has_many :competitions_registered_for, through: :registrations, source: "competition"
   belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true, inverse_of: :user
   belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true, inverse_of: :unconfirmed_user
@@ -806,6 +809,9 @@ class User < ApplicationRecord
       can_administer_competitions: {
         scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id),
       },
+      can_scoretake_competitions: {
+        scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id) + scoretaking_competition_ids,
+      },
       can_view_delegate_admin_page: {
         scope: can_view_delegate_matters? ? "*" : [],
       },
@@ -920,6 +926,10 @@ class User < ApplicationRecord
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
       competition.delegates.flat_map(&:regional_delegates).compact.include?(self) ||
       wic_team?
+  end
+
+  def can_scoretake_competition?(competition)
+    can_manage_competition?(competition) || competition.scoretakers.include?(self)
   end
 
   def can_manage_any_not_over_competitions?
@@ -1591,6 +1601,9 @@ class User < ApplicationRecord
       roles.update_all(user_id: new_user.id)
       registrations.update_all(user_id: new_user.id)
 
+      final_wca_id = new_user.wca_id.presence || self.wca_id.presence
+      new_user.newcomer_results.update_all(person_id: final_wca_id) if final_wca_id.present?
+
       return if wca_id.blank?
 
       wca_id_to_be_transferred = self.wca_id
@@ -1618,6 +1631,8 @@ class User < ApplicationRecord
       update!(wca_id: wca_id)
       stale_claims.update_all(**CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
       potential_duplicate_persons.delete_all
+
+      newcomer_results.update_all(person_id: wca_id)
     end
 
     stale_claims_before_update.each { |user| WcaIdClaimMailer.notify_user_of_claim_cancelled(user, wca_id).deliver_later }

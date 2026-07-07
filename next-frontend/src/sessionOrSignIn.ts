@@ -1,9 +1,11 @@
-import { auth, signIn } from "@/auth";
+import { auth, signOut } from "@/auth";
 
 export async function sessionOrSignIn() {
   const session = await auth();
   if (session?.error === "RefreshTokenError") {
-    await signIn(); // Force sign in to get a new set of access and refresh tokens
+    // Refresh failed Drop the session so the user is forced through a fresh login
+    // rather than continuing with a stale access_token.
+    await signOut();
   }
   return session;
 }

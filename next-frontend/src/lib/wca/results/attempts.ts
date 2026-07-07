@@ -30,8 +30,7 @@ export function resultAttempts(result: components["schemas"]["Result"]) {
 
 export function recordAttempts(
   record:
-    | components["schemas"]["Record"]
-    | components["schemas"]["ExtendedResult"],
+    components["schemas"]["Record"] | components["schemas"]["ExtendedResult"],
 ) {
   return cleanAttempts(record.attempts);
 }

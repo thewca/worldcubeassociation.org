@@ -11,7 +11,7 @@ export default async function LiveOverview({
 
   return (
     <PermissionCheck
-      requiredPermission="canAdministerCompetition"
+      requiredPermission="canScoretakeCompetition"
       item={competitionId}
     >
       <RoundAdmin competitionId={competitionId} />

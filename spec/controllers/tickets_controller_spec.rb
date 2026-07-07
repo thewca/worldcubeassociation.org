@@ -183,6 +183,26 @@ RSpec.describe TicketsController do
     end
   end
 
+  describe 'POST #create_wca_ids' do
+    let(:results_ticket) { create(:competition_result_ticket) }
+    let(:wrt_member) { create(:user, :wrt_member) }
+
+    before :each do
+      sign_in wrt_member
+    end
+
+    it 'returns not_found status if a registration is not found' do
+      post :create_wca_ids, params: {
+        ticket_id: results_ticket.ticket.id,
+        acting_stakeholder_id: results_ticket.ticket.user_stakeholders(wrt_member)[0].id,
+        unfinished_persons: [{ "personId" => 99_999, "editedSemiId" => "2026TEST01" }],
+      }
+
+      expect(response).to have_http_status :not_found
+      expect(response.parsed_body["error"]).to include("Registration with registrant ID 99999 not found")
+    end
+  end
+
   describe "POST #approve_edit_person_request" do
     let(:wrt_member) { create(:user, :wrt_member) }
 

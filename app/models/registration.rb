@@ -20,6 +20,7 @@ class Registration < ApplicationRecord
   scope :with_payments, -> { joins(:registration_payments).distinct }
   scope :wcif_ordered, -> { order(:id) }
   scope :might_attend, -> { where(competing_status: %w[accepted waiting_list]) }
+  scope :scoretakers, -> { accepted.joins(:assignments).merge(Assignment.scoretaker) }
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
@@ -35,6 +36,7 @@ class Registration < ApplicationRecord
   has_many :payment_intents, as: :holder, dependent: :delete_all
 
   has_one :inbox_person, foreign_key: %i[competition_id id], primary_key: %i[competition_id registrant_id], inverse_of: :registration
+  has_many :newcomer_results, -> { unmerged_newcomers }, class_name: "Result", foreign_key: %i[competition_id person_id], primary_key: %i[competition_id registrant_id], inverse_of: :newcomer_registration
 
   enum :competing_status, {
     pending: Registrations::Helper::STATUS_PENDING,

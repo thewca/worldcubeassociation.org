@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_06_110117) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_05_050115) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -481,9 +481,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_110117) do
     t.bigint "value_and_id"
     t.index ["event_id", "average"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "average"], name: "regional_records_speedup"
+    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
     t.index ["person_id", "country_id", "event_id", "reg_year"], name: "unique_per_competitor_per_event_per_year", unique: true
     t.index ["person_id", "event_id", "continent_id", "country_id", "average"], name: "average_ranks_speedup"
-    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
   end
 
   create_table "concise_single_results", primary_key: "result_id", id: :bigint, default: nil, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -496,9 +496,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_110117) do
     t.bigint "value_and_id"
     t.index ["event_id", "best"], name: "mixed_records_speedup"
     t.index ["event_id", "country_id", "best"], name: "regional_records_speedup"
+    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
     t.index ["person_id", "country_id", "event_id", "reg_year"], name: "unique_per_competitor_per_event_per_year", unique: true
     t.index ["person_id", "event_id", "continent_id", "country_id", "best"], name: "single_ranks_speedup"
-    t.index ["event_id", "person_id", "value_and_id"], name: "event_rankings_speedup"
   end
 
   create_table "connected_paypal_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -738,6 +738,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_110117) do
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "format_id", limit: 1, default: "", null: false
+    t.integer "global_pos", limit: 2, default: 0, null: false
     t.string "person_id", limit: 20, null: false
     t.integer "pos", limit: 2, default: 0, null: false
     t.bigint "round_id", null: false
@@ -747,6 +748,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_110117) do
     t.integer "value3", default: 0, null: false
     t.integer "value4", default: 0, null: false
     t.integer "value5", default: 0, null: false
+    t.index ["competition_id", "person_id"], name: "index_inbox_results_on_competition_id_and_person_id"
     t.index ["competition_id"], name: "InboxResults_fk_tournament"
     t.index ["event_id"], name: "InboxResults_fk_event"
     t.index ["format_id"], name: "InboxResults_fk_format"
@@ -891,6 +893,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_110117) do
     t.integer "application_id"
     t.datetime "created_at", precision: nil, null: false
     t.integer "expires_in"
+    t.string "previous_refresh_token", default: "", null: false
     t.string "refresh_token"
     t.integer "resource_owner_id"
     t.datetime "revoked_at", precision: nil
@@ -1190,6 +1193,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_110117) do
     t.string "country_id", limit: 50, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "format_id", limit: 1, default: "", null: false
+    t.integer "global_pos", limit: 2, default: 0, null: false
     t.string "person_id", limit: 10, default: "", null: false
     t.string "person_name", limit: 80, default: "", null: false
     t.integer "pos", limit: 2, default: 0, null: false
@@ -1200,6 +1204,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_110117) do
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
     t.index ["average", "person_name", "competition_id", "round_type_id"], name: "results_n_results_average_speedup"
     t.index ["best", "person_name", "competition_id", "round_type_id"], name: "results_n_results_single_speedup"
+    t.index ["competition_id", "person_id"], name: "index_results_on_competition_id_and_person_id"
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competition_id"], name: "Results_fk_tournament"
     t.index ["country_id"], name: "_tmp_index_Results_on_countryId"

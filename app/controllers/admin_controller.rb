@@ -112,7 +112,7 @@ class AdminController < ApplicationController
   end
 
   def person_data
-    @person = Person.current.find_by!(wca_id: params[:person_wca_id])
+    @person = Person.current.find_by!(wca_id: params.require(:person_wca_id))
 
     render json: {
       name: @person.name,
@@ -180,7 +180,7 @@ class AdminController < ApplicationController
   end
 
   private def competition_from_params(associations: {})
-    Competition.includes(associations).find(params[:competition_id])
+    Competition.includes(associations).find(params.require(:competition_id))
   end
 
   private def competition_list_from_string(competition_ids_string)
@@ -229,7 +229,13 @@ class AdminController < ApplicationController
             old_country = inbox_person.country_id
           end
 
-          FinishUnfinishedPersons.insert_person(inbox_person, new_name, new_country, new_id)
+          FinishUnfinishedPersons.insert_person(
+            wca_id: new_id,
+            name: new_name,
+            country_id: new_country,
+            gender: inbox_person&.gender,
+            dob: inbox_person&.dob,
+          )
           FinishUnfinishedPersons.adapt_results(pending_person_id.presence, old_name, old_country, new_id, new_name, new_country, pending_competition_id)
         else
           action, merge_id = procedure[:action].split '-'

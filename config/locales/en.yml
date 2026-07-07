@@ -161,10 +161,12 @@ en:
     short:
       ranking: "Top %{ranking}"
       percent: "Top %{percent}%"
+      all_advance: "All advance"
       attempt_result:
         time: "%{round_format} < %{time}"
         moves: "%{round_format} < %{moves}"
         points: "%{round_format} > %{points}"
+    all_advance: "All competitors advance"
     ranking: "Top %{ranking} advance to next round"
     percent: "Top %{percent}% advance to next round"
     attempt_result:
@@ -902,12 +904,16 @@ en:
           label: "Search for the WCA ID that you want to edit."
         edit_reason:
           label: "Reason for the change"
+        edit_reason_for:
+          label: "Reason for %{attribute} change"
         proof_attach:
           label: "Attach proof"
         submit_edit_request_button:
           label: "Submit Edit Request"
         captcha:
           validation_error: "Please verify that you are not a robot."
+        verified_checkbox:
+          label: "By submitting this form, you confirm that you have already reviewed their legal document and verified the information provided."
       success_message: "Request submitted - we'll get back to you soon."
       success_message_with_ticket_link_html: "Request submitted - we'll get back to you soon. To view the status of this request, please visit <a href=\"%{link}\">this link</a>."
   #context: Key used on the website homepage
@@ -1411,6 +1417,10 @@ en:
         other: "%{count} spots left"
     live:
       title: "Live Results"
+      manage_rounds: "Manage Rounds"
+      incompatible:
+        external: "This competition is using external scoretaking software - please consult the competition information to find out where to view live scores."
+        wca_live: "This competition uses WCA Live for scoretaking - please follow this link to see the live results:"
       round_state:
         ongoing: "live"
         done: "done"
@@ -1424,11 +1434,12 @@ en:
           disconnected: "Disconnected"
       podiums:
         title: "Podiums"
-        undetermined: "Podiums to be determined"
+        undetermined: "To Be Determined"
         none: "There are no podiums yet!"
       admin:
         open: "Open"
         clear: "Clear"
+        close: "Close"
         competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
         round_locked: "locked"
         edit: "Edit"
@@ -1437,6 +1448,11 @@ en:
         admin_view: "Admin View"
         results_view: "Results View"
         double_check: "Double Check"
+        submit_results: "Submit Results"
+        add_to_batch: "Add to Batch"
+        remove_from_batch: "Remove from Batch"
+        batch_mode: "Batch Mode"
+        submit_batch: "Submit Batch (%{count})"
         warnings:
           omitted: "You've omitted attempt %{attempt_number}. Make sure it's intentional."
           DNS: "There's at least one DNS followed by a valid result. Please ensure it is indeed a DNS and not a DNF."
@@ -1456,6 +1472,8 @@ en:
             success: "Successfully quit %{count} competitors"
             failure: "Failed to bulk quit competitors"
             menu: "Bulk Quit"
+            id: "ID"
+            name: "Name"
           quit_menu: "Quit"
           no_next: "No next competitor to advance."
           cancel: "Cancel"
@@ -2232,6 +2250,7 @@ en:
         all: "All"
         none: "None"
         show_buttons: "Show time zone buttons"
+        hide_buttons: "Hide time zone buttons"
         use_time_zone: "Use this time zone"
       #context: when displaying the room on the general schedule, we may also display the venue if there are multiple venues
       room_in_venue: "%{room} in %{venue}"
@@ -2240,8 +2259,10 @@ en:
         other: "You are viewing the schedule for the venue %{venue_name}, one of %{count} venues for this competition."
       venue_selection_all: "You are viewing the schedule for all %{venueCount} venues at once."
       timezone_message: "The time zone for this venue is %{timezone}."
-      timezone_setting: "You are viewing this schedule in the following timezone setting:"
-      multiple_timezones_available: "Note that not all venues are in the same time zone -- please be careful!"
+      timezone_setting: "You are viewing this schedule in the following time zone:"
+      multiple_timezones_available: "Note that some venues are in different time zones -- please be careful!"
+      select_a_timezone: "Select a time zone"
+      select_a_venue_to_view: "To view the schedule, select a venue above."
       timezone_set_local: "Set to local"
       timezone_set_venue: "Set to venue"
       timezone_follow_venue: "Automatically use the active venue's time zone"
@@ -3044,8 +3065,11 @@ en:
       missing_scrambles_for_competition_error: "Missing scrambles for the competition. Use Scrambles Matcher to add scrambles."
       missing_scrambles_for_group_error: "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
       missing_scrambles_for_multi_error: "[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts."
+      mbld_scrambles_warning: "[%{round_id}] This round includes 3x3x3 Multi-Blind results. Please specify in your submission comment how many scrambles from each scramble set were actually used by competitors, so that WRT can remove the unused extra scrambles."
       multiple_fmc_groups_warning: "[%{round_id}] There are multiple groups of FMC used. If one group of FMC was used, please use the Scrambles Matcher to uncheck the unused scrambles. Otherwise, please include a comment to WRT explaining why multiple groups of FMC were used."
       wrong_number_of_scramble_sets_error: "[%{round_id}] This round has a different number of scramble sets (%{actual}) than specified on the Manage Events tab (%{expected}). Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used."
+    schedule:
+      activity_outside_competition_dates_warning: "The activity '%{activity_name}' (code: %{activity_code}) is scheduled outside the competition's date range in the venue's local timezone. Please update the competition schedule to reflect the actual competition dates."
   tickets:
     type:
       edit_person: "Edit Person"

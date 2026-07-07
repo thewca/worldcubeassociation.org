@@ -88,12 +88,12 @@ class CompetitionEvent < ApplicationRecord
     }
   end
 
-  def to_wcif(version: Competition::WCIF_STABLE_VERSION)
+  def to_wcif(version: Competition::WCIF_STABLE_VERSION, include_results: true)
     at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
 
     {
       "id" => self.event.id,
-      "rounds" => self.rounds.map { it.to_wcif(version: version) },
+      "rounds" => self.rounds.map { it.to_wcif(version: version, include_results: include_results) },
       "extensions" => wcif_extensions.map(&:to_wcif),
       "qualification" => at_least_v2 ? v2_qualification_wcif : qualification&.to_wcif,
     }
@@ -152,7 +152,12 @@ class CompetitionEvent < ApplicationRecord
     end
     model_rounds = wcif["rounds"].map do |round_wcif|
       round = rounds.find { it.wcif_id == round_wcif["id"] } || rounds.build
-      round.assign_attributes(**Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"], version: version))
+      round_attributes = Round.wcif_to_round_attributes(self.event, round_wcif, wcif["rounds"], version: version)
+      # For internal-scoretaking comps `live_results` is the source of truth and `round_results`
+      #   is never read back (see `Round#to_wcif`). Persisting the WCIF snapshot just creates
+      #   stale data that drifts from `live_results`, so we don't store it (and clear any leftovers).
+      round_attributes[:round_results] = [] if self.competition.scoretaking_software_internal?
+      round.assign_attributes(**round_attributes)
       # `participation_source` is required, but it can only be computed in the second pass below
       #   (it depends on `linked_round`). Persist without validation here so the record has an ID
       #   to reference; the second pass runs full validations once everything is wired up.

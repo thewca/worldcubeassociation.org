@@ -31,6 +31,20 @@ const TIMELINE_STATUSES = [
     data in InboxResults.`,
   },
   {
+    status: ticketsCompetitionResultStatuses.merged_inbox_scrambles,
+    description: `WRT will have a rough look at the scrambles to make sure that
+    there is no major flaw that requires aborting the posting process. For
+    example, check if every scramble looks like it uses notation for that event.
+    Once done with the rough look, proceed to click the “Merge Inbox Scrambles”
+    button which will copy data from InboxScrambles to Scrambles, then clear the
+    data in InboxScrambles.`,
+  },
+  {
+    status: ticketsCompetitionResultStatuses.newcomers_verified,
+    description: `WRT will have to go through the newcomers, verify their
+    details.`,
+  },
+  {
     status: ticketsCompetitionResultStatuses.created_wca_ids,
     description: `WRT will have to go through the newcomers, verify their
     details and generate WCA ID for them.`,
@@ -48,6 +62,8 @@ const STATUS_LABELS = {
   locked_for_posting: 'Locked for Posting',
   warnings_verified: 'Warnings Verified',
   merged_inbox_results: 'Merged Inbox Results',
+  merged_inbox_scrambles: 'Merged Inbox Scrambles',
+  newcomers_verified: 'Newcomers Verified',
   created_wca_ids: 'Created WCA IDs',
   posted: 'Posted',
 };

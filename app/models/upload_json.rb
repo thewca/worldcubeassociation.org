@@ -37,7 +37,7 @@ class UploadJson
     persons_to_import = []
     parsed_json["persons"].each do |p|
       new_person_attributes = {
-        id: [p["id"], competition_id],
+        id: [competition_id, p["id"]],
         wca_id: p["wcaId"],
         name: p["name"],
         country_iso2: p["countryId"],
@@ -72,6 +72,8 @@ class UploadJson
           new_result_attributes = {
             person_id: result["personId"],
             pos: result["position"],
+            # For non-linked rounds global_pos equals pos; linked rounds get recomputed during import.
+            global_pos: result["position"],
             event_id: event["eventId"],
             round_type_id: round_type_id,
             format_id: round["formatId"],
