@@ -201,7 +201,7 @@ export interface paths {
         };
         /**
          * Get competitors that can be added to a round
-         * @description Returns the competitors eligible to be added to the round (the round's participation source) along with the lifecycle state of any colinked rounds.
+         * @description Returns the competitors eligible to be added to the round (the round's participation source; for first rounds, anyone registered for the competition) along with the lifecycle state of any colinked rounds and whether the competition currently permits event edits on registrations.
          */
         get: operations["canBeAddedToRound"];
         put?: never;
@@ -2045,6 +2045,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
+                        event_edits_allowed: boolean;
                         registrations: components["schemas"]["RegistrationDataV2"][];
                         colinked_status: ("locked" | "open" | "ready" | "pending")[];
                     };

@@ -3,6 +3,7 @@
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import useAPI from "@/lib/wca/useAPI";
 import {
+  Alert,
   Button,
   CloseButton,
   Combobox,
@@ -102,13 +103,16 @@ function AddPerson({
   if (!registrationsQuery)
     return <Text>{t("competitions.registration_v2.errors.-1001")}</Text>;
 
-  const { registrations, colinked_status } = registrationsQuery;
+  const { registrations, colinked_status, event_edits_allowed } =
+    registrationsQuery;
 
   return (
     <AddPersonCombobox
       coLinkedStatus={colinked_status}
       registrations={registrations.filter((r) => !competitors.has(r.id))}
       setSelectedCompetitor={setSelectedCompetitor}
+      eventEditsAllowed={event_edits_allowed}
+      eventId={roundId.split("-r")[0]}
     />
   );
 }
@@ -117,14 +121,19 @@ function AddPersonCombobox({
   registrations,
   setSelectedCompetitor,
   coLinkedStatus,
+  eventEditsAllowed,
+  eventId,
 }: {
   setSelectedCompetitor: (registrationId: number) => void;
   registrations: RegistrationData[];
   coLinkedStatus: string[];
+  eventEditsAllowed: boolean;
+  eventId: string;
 }) {
   const { t } = useT();
 
   const [filterText, setFilterText] = useState("");
+  const [selected, setSelected] = useState<RegistrationData>();
 
   // Derived from `registrations` (instead of useListCollection's mount-time
   // snapshot) so the list stays correct when the dialog is reopened after
@@ -164,7 +173,11 @@ function AddPersonCombobox({
         collection={collection}
         inputBehavior="autohighlight"
         onInputValueChange={(e) => setFilterText(e.inputValue)}
-        onValueChange={(e) => setSelectedCompetitor(parseInt(e.value[0], 10))}
+        onValueChange={(e) => {
+          const registrationId = parseInt(e.value[0], 10);
+          setSelectedCompetitor(registrationId);
+          setSelected(registrations.find((r) => r.id === registrationId));
+        }}
       >
         <Combobox.Control>
           <Combobox.Input placeholder="Type to search" />
@@ -189,6 +202,16 @@ function AddPersonCombobox({
           </Combobox.Content>
         </Combobox.Positioner>
       </Combobox.Root>
+      {!eventEditsAllowed &&
+        selected &&
+        !selected.competing.event_ids.includes(eventId) && (
+          <Alert.Root status="warning">
+            <Alert.Indicator />
+            <Alert.Content>
+              {t("competitions.live.admin.add_competitor.event_edit_warning")}
+            </Alert.Content>
+          </Alert.Root>
+        )}
     </VStack>
   );
 }

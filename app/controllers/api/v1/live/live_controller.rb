@@ -255,9 +255,16 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     require_scoretake!(@competition)
 
-    registrations = round.participation_source.live_competitors.includes(:events, user: :delegate_role_metadata)
+    # For a first round (incl. linked first rounds), anyone registered for the
+    #   competition can be added on-site, even if they didn't register for the event
+    registrations = round.first_round? ? @competition.registrations.accepted.competing : round.participation_source.live_competitors
+    registrations = registrations.includes(:events, user: :delegate_role_metadata)
 
-    render json: { registrations: registrations.map(&:to_v2_json), colinked_status: colinked_rounds.map(&:lifecycle_state) }
+    render json: {
+      registrations: registrations.map(&:to_v2_json),
+      colinked_status: colinked_rounds.map(&:lifecycle_state),
+      event_edits_allowed: @competition.event_edits_currently_permitted?,
+    }
   end
 
   def add_competitor_to_round
