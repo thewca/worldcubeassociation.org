@@ -697,6 +697,13 @@ class Round < ApplicationRecord
     "9m3" => "a round with 7 or fewer competitors must not have subsequent rounds",
   }.freeze
 
+  # Minimum number of advancing competitors needed to satisfy the violated regulation
+  NINE_M_THRESHOLDS = {
+    "9m1" => 100,
+    "9m2" => 16,
+    "9m3" => 8,
+  }.freeze
+
   def lifecycle_state
     return STATE_LOCKED if locked?
     return STATE_OPEN if open?
@@ -917,6 +924,12 @@ class Round < ApplicationRecord
     if state == STATE_OPEN
       json = json.merge({
                           "completed_competitors" => completed_competitors,
+                        })
+    end
+
+    if state == STATE_BLOCKED
+      json = json.merge({
+                          "competitor_count_needed" => NINE_M_THRESHOLDS[nine_m_violation],
                         })
     end
     json

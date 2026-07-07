@@ -32,7 +32,7 @@ export default function RoundActions({
         flex="1"
         justifyContent="flex-start"
         textAlign="left"
-        disabled={["ready", "pending"].includes(state)}
+        disabled={["ready", "pending", "blocked"].includes(state)}
       >
         {isOpen ? (
           <Link asChild>
@@ -68,6 +68,9 @@ export default function RoundActions({
         competitionId={competitionId}
         hasResultsEntered={
           round.state === "open" && round.completed_competitors > 0
+        }
+        blockedCompetitorCount={
+          round.state === "blocked" ? round.competitor_count_needed : undefined
         }
       />
     </HStack>

@@ -14,7 +14,9 @@ export default function Round9mAlert() {
     return (
       <ClosableAlert
         status="warning"
-        title={t("competitions.live.admin.warnings.9m_violated")}
+        title={t("competitions.live.admin.warnings.9m_violated", {
+          competitor_count_needed: 8,
+        })}
       />
     );
   }

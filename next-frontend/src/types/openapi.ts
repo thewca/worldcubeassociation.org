@@ -1072,6 +1072,8 @@ export interface components {
             state: "ready";
         };
         BlockedRound: components["schemas"]["BaseAdminRound"] & {
+            competitor_count_needed: number;
+        } & {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
