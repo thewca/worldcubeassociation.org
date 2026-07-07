@@ -29,7 +29,7 @@ export function ImportResultsData({
   hasTemporaryResults,
   isAdminView = false,
   uploadedScrambleFilesCount = 0,
-  showWcaLiveBeta = false,
+  usesInternalScoretaking = false,
 }) {
   const [activeAccordion, setActiveAccordion] = useState(!hasTemporaryResults);
 
@@ -41,7 +41,9 @@ export function ImportResultsData({
   };
 
   const panes = [
-    {
+    // JSON exports carry the merged (global) ranking for Dual Rounds, so competitions
+    //   scored with the internal scoretaking must import directly from Live instead.
+    ...((isAdminView || !usesInternalScoretaking) ? [{
       menuItem: 'Upload Results JSON',
       render: () => (
         <Tab.Pane>
@@ -52,9 +54,9 @@ export function ImportResultsData({
           />
         </Tab.Pane>
       ),
-    },
-    ...((isAdminView || showWcaLiveBeta) ? [{
-      menuItem: '[BETA] Use WCA Live Results',
+    }] : []),
+    ...((isAdminView || usesInternalScoretaking) ? [{
+      menuItem: 'Use ILR Results',
       render: () => (
         <Tab.Pane>
           <ImportWcaLiveResults

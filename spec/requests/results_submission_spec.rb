@@ -53,6 +53,17 @@ RSpec.describe ResultsSubmissionController do
       end
     end
 
+    describe "Uploading a Results JSON" do
+      it "is refused when the competition uses internal scoretaking" do
+        internal_comp = create(:competition, :announced, delegates: [user], scoretaking_software: :internal)
+
+        post competition_upload_results_json_path(internal_comp.id)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body["error"]).to include("internal scoretaking")
+      end
+    end
+
     describe "Posting results" do
       let(:results_submission_params) do
         { message: submission_message, competition_id: comp.id }
