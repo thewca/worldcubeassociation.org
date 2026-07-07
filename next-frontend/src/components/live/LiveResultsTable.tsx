@@ -21,6 +21,7 @@ import { LiveCompetitor, PendingLiveResult } from "@/types/live";
 import React, { useState } from "react";
 import LiveResultsMobileModal from "@/components/live/LiveResultsMobileModal";
 import ResultMenu, { ClickPosition } from "@/components/live/Admin/ResultMenu";
+import { useResultsAdminOptional } from "@/providers/LiveResultAdminProvider";
 import { useT } from "@/lib/i18n/useI18n";
 
 export default function LiveResultsTable({
@@ -35,6 +36,7 @@ export default function LiveResultsTable({
   showEmpty = true,
   showLinkedRoundsView = false,
   isLinkedRound = false,
+  forecastView = false,
 }: {
   resultsByRegistrationId: LiveResultsByRegistrationId;
   formatId: string;
@@ -47,6 +49,7 @@ export default function LiveResultsTable({
   showEmpty?: boolean;
   showLinkedRoundsView?: boolean;
   isLinkedRound?: boolean;
+  forecastView?: boolean;
 }) {
   const { t } = useT();
 
@@ -61,10 +64,16 @@ export default function LiveResultsTable({
     pendingLiveResults.map((r) => r.registration_id),
   );
 
+  // Staged (not-yet-submitted) batch attempts — previewed in the competitor's
+  // row (muted) so scoretakers see who's already entered in the current batch.
+  const batchAttemptsByRegistrationId =
+    useResultsAdminOptional()?.batchAttemptsByRegistrationId;
+
   const competitorsWithOrderedResults = mergeAndOrderResults(
     resultsByRegistrationId,
     competitors,
     format,
+    forecastView,
   ).filter((c) => !pendingRegistrationIds.has(c.id));
 
   const stats = statColumnsForFormat(format);
@@ -82,6 +91,7 @@ export default function LiveResultsTable({
           isLinked={showLinkedRoundsView}
           t={t}
           isAdmin={isAdmin}
+          forecastView={forecastView}
         />
         <Table.Body>
           {competitorsWithOrderedResults.map((competitorAndTheirResults) => {
@@ -103,6 +113,10 @@ export default function LiveResultsTable({
               }
 
               const rowKey = `${competitorAndTheirResults.id}-${result.round_wcif_id}`;
+              const batchAttempts = batchAttemptsByRegistrationId?.get(
+                competitorAndTheirResults.id,
+              );
+              const inBatch = batchAttempts !== undefined;
 
               return (
                 <Table.Row
@@ -116,6 +130,7 @@ export default function LiveResultsTable({
                     }
                   }}
                   cursor={isMobile || isAdmin ? "pointer" : undefined}
+                  color={inBatch ? "fg.muted" : undefined}
                   colorPalette={
                     pendingQuitCompetitors.has(competitorAndTheirResults.id)
                       ? "red"
@@ -178,7 +193,7 @@ export default function LiveResultsTable({
                   )}
                   <LiveAttemptsCells
                     format={format}
-                    attempts={result.attempts}
+                    attempts={batchAttempts ?? result.attempts}
                     eventId={eventId}
                     competitorId={competitorAndTheirResults.id}
                   />
@@ -188,6 +203,8 @@ export default function LiveResultsTable({
                     eventId={eventId}
                     result={result}
                     highlight={showText}
+                    forecastView={forecastView}
+                    format={format}
                   />
                 </Table.Row>
               );

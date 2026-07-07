@@ -29,6 +29,7 @@ import { route } from "nextjs-routes";
 import { useRoundInfo } from "@/providers/RoundInfoProvider";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useT } from "@/lib/i18n/useI18n";
+import { forecastViewSupported } from "@/lib/live/forecastviewSupported";
 
 export default function LiveUpdatingResultsTable({
   competitionId,
@@ -50,6 +51,7 @@ export default function LiveUpdatingResultsTable({
   const [showLinkedRoundsView, setShowLinkedRoundsView] =
     useState(isLinkedRound);
   const [inProjectorMode, setInProjectorMode] = useState(false);
+  const [forecastView, setForecastView] = useState(false);
 
   const {
     connectionState,
@@ -59,9 +61,13 @@ export default function LiveUpdatingResultsTable({
     pendingQuitCompetitors,
   } = useLiveResults();
 
-  const { id: roundWcifId, format: formatId } = useRoundInfo();
+  const round = useRoundInfo();
+
+  const { id: roundWcifId, format: formatId, state } = round;
 
   const { eventId } = parseActivityCode(roundWcifId);
+
+  const roundFinished = state === "locked";
 
   const enableProjectorView = () => setInProjectorMode(true);
   const disableProjectorView = () => setInProjectorMode(false);
@@ -75,6 +81,7 @@ export default function LiveUpdatingResultsTable({
         formatId={formatId}
         eventId={eventId}
         title={title}
+        isLinkedRound={isLinkedRound}
       />
     );
   }
@@ -100,9 +107,25 @@ export default function LiveUpdatingResultsTable({
           </Switch.Root>
         )}
         {!isAdminView && (
-          <IconButton variant="ghost" onClick={enableProjectorView}>
-            <LuGalleryVertical />
-          </IconButton>
+          <Switch.Root
+            checked={forecastView}
+            onCheckedChange={(e) => setForecastView(e.checked)}
+            colorPalette="green"
+            disabled={!forecastViewSupported(round, roundFinished)}
+          >
+            <Switch.HiddenInput />
+            <Switch.Control>
+              <Switch.Thumb />
+            </Switch.Control>
+            <Switch.Label>Forecast view</Switch.Label>
+          </Switch.Root>
+        )}
+        {!isAdminView && (
+          <Tooltip content="Projector Mode" showArrow openDelay={200}>
+            <IconButton variant="ghost" onClick={enableProjectorView}>
+              <LuGalleryVertical />
+            </IconButton>
+          </Tooltip>
         )}
         {canManage && (
           <Tooltip
@@ -192,6 +215,7 @@ export default function LiveUpdatingResultsTable({
         showEmpty={showEmpty}
         showLinkedRoundsView={showLinkedRoundsView}
         isLinkedRound={isLinkedRound}
+        forecastView={forecastView}
       />
     </VStack>
   );

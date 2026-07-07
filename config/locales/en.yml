@@ -904,12 +904,16 @@ en:
           label: "Search for the WCA ID that you want to edit."
         edit_reason:
           label: "Reason for the change"
+        edit_reason_for:
+          label: "Reason for %{attribute} change"
         proof_attach:
           label: "Attach proof"
         submit_edit_request_button:
           label: "Submit Edit Request"
         captcha:
           validation_error: "Please verify that you are not a robot."
+        verified_checkbox:
+          label: "By submitting this form, you confirm that you have already reviewed their legal document and verified the information provided."
       success_message: "Request submitted - we'll get back to you soon."
       success_message_with_ticket_link_html: "Request submitted - we'll get back to you soon. To view the status of this request, please visit <a href=\"%{link}\">this link</a>."
   #context: Key used on the website homepage
@@ -1446,6 +1450,7 @@ en:
         double_check: "Double Check"
         submit_results: "Submit Results"
         add_to_batch: "Add to Batch"
+        remove_from_batch: "Remove from Batch"
         batch_mode: "Batch Mode"
         submit_batch: "Submit Batch (%{count})"
         warnings:

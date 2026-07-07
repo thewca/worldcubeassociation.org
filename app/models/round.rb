@@ -340,7 +340,7 @@ class Round < ApplicationRecord
     live_results.includes(:live_attempts).map(&:to_live_state)
   end
 
-  def competitors_live_results_entered
+  def completed_competitors
     if live_results.loaded?
       live_results.count(&:complete?)
     else
@@ -359,7 +359,7 @@ class Round < ApplicationRecord
   end
 
   def score_taking_done?
-    open? && competitors_live_results_entered == total_competitors
+    open? && completed_competitors == total_competitors
   end
 
   def time_limit_undefined?
@@ -867,6 +867,7 @@ class Round < ApplicationRecord
       "results" => only_podiums ? live_podium : live_results,
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
       "linked_round_ids" => linked_round&.wcif_ids,
+      "completed_competitors" => completed_competitors,
     }
   end
 
@@ -884,7 +885,7 @@ class Round < ApplicationRecord
 
     if state == STATE_OPEN
       json = json.merge({
-                          "competitors_live_results_entered" => competitors_live_results_entered,
+                          "completed_competitors" => completed_competitors,
                         })
     end
     json

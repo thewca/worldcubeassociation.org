@@ -407,7 +407,7 @@ RSpec.describe "API Competitions" do
             personalBests: [],
           }]
           expect do
-            patch api_v0_competition_update_wcif_path(competition), params: { persons: persons }.to_json, headers: headers
+            patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, persons: persons }.to_json, headers: headers
           end.not_to(change { competition.reload.to_wcif["persons"] })
         end
       end

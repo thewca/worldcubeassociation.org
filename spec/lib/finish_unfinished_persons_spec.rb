@@ -141,4 +141,20 @@ RSpec.describe FinishUnfinishedPersons, type: :module do
       end
     end
   end
+
+  describe '.insert_person' do
+    it 'creates a person with default gender :o' do
+      person = described_class.insert_person(wca_id: '2000PERS01', name: 'Test Person', country_id: 'USA', dob: Date.new(2000, 1, 1))
+      expect(person.gender).to eq('o')
+      expect(person.sub_id).to eq(1)
+      expect(person.name).to eq('Test Person')
+    end
+
+    it 'creates a person with custom gender' do
+      person = described_class.insert_person(wca_id: '2000PERS02', gender: 'm', name: 'Test Person', country_id: 'USA', dob: Date.new(2000, 1, 1))
+      expect(person.gender).to eq('m')
+      expect(person.sub_id).to eq(1)
+      expect(person.name).to eq('Test Person')
+    end
+  end
 end

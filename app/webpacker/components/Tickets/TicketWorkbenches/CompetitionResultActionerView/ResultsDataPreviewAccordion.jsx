@@ -3,10 +3,14 @@ import {
   Accordion, Container, Header, Message, Table,
 } from 'semantic-ui-react';
 import I18n from '../../../../lib/i18n';
-import { ResultRowHeader } from '../../../ResultsData/Results/ResultRowHeader';
-import ResultRowBody from '../../../ResultsData/Results/ResultRowBody';
 
-export default function ResultsPreviewAccordion({ roundDetails, groupedResults }) {
+export default function ResultsDataPreviewAccordion({
+  dataType,
+  roundDetails,
+  groupedResultsData,
+  rowHeaderComponent: RowHeaderComponent,
+  rowComponent: RowComponent,
+}) {
   const [openItems, setOpenItems] = useState(
     roundDetails.map(({ roundId }) => roundId),
   );
@@ -21,7 +25,14 @@ export default function ResultsPreviewAccordion({ roundDetails, groupedResults }
   };
 
   if (roundDetails.length === 0) {
-    return <Message warning>No results uploaded to Inbox yet.</Message>;
+    return (
+      <Message warning>
+        No
+        {dataType}
+        {' '}
+        uploaded to Inbox yet.
+      </Message>
+    );
   }
 
   return (
@@ -44,10 +55,10 @@ export default function ResultsPreviewAccordion({ roundDetails, groupedResults }
             <Accordion.Content active={openItems.includes(roundId)}>
               <Table striped compact="very" singleLine>
                 <Table.Header>
-                  <ResultRowHeader />
+                  <RowHeaderComponent />
                 </Table.Header>
                 <Table.Body>
-                  <ResultRowBody round={{ results: groupedResults[roundId] }} />
+                  <RowComponent round={{ [dataType]: groupedResultsData[roundId] }} />
                 </Table.Body>
               </Table>
             </Accordion.Content>

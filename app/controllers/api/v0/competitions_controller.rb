@@ -74,7 +74,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def results
     competition = competition_from_params
-    render json: competition.results
+    render json: competition.results.includes(:result_attempts)
   end
 
   def tabs
@@ -250,6 +250,26 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     best_version = matching_versions.max.to_s
 
     render_wcif(competition, best_version)
+  end
+
+  def check_wcif
+    wcif = params.permit!.to_h.except(:controller, :action, :competition, :format)
+
+    format_version = wcif["formatVersion"] || Competition::WCIF_STABLE_VERSION
+    expected_schema = Competition.wcif_json_schema(version: format_version, required_props: true)
+
+    validation_errors = JSON::Validator.fully_validate(expected_schema, wcif, **Competition.json_validation_options)
+
+    return render json: validation_errors, status: :bad_request if validation_errors.present?
+
+    head :ok
+  end
+
+  def wcif_json_schema
+    format_version = params.require(:version)
+    expected_schema = Competition.wcif_json_schema(version: format_version, required_props: true)
+
+    render json: expected_schema
   end
 
   def update_wcif

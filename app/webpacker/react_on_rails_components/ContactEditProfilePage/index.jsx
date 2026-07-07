@@ -5,9 +5,9 @@ import I18n from '../../lib/i18n';
 import I18nHTMLTranslate from '../../components/I18nHTMLTranslate';
 import { apiV0Urls, viewUrls } from '../../lib/requests/routes.js.erb';
 import Loading from '../../components/Requests/Loading';
-import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import Errored from '../../components/Requests/Errored';
-import EditProfileForm from './EditProfileForm';
+import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
+import EditProfileFormHolder from './EditProfileFormHolder';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
 import useQueryParams from '../../lib/hooks/useQueryParams';
 import useInputState from '../../lib/hooks/useInputState';
@@ -102,8 +102,9 @@ function ContactEditProfilePage({ loggedInUserId, recaptchaPublicKey }) {
         />
       )}
       {wcaId && (
-        <EditProfileForm
+        <EditProfileFormHolder
           wcaId={wcaId}
+          editOthersProfileMode={editOthersProfileMode}
           onContactSuccess={(res) => {
             setContactSuccess(true);
             setTicketId(res?.ticket_id);
