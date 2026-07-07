@@ -1365,7 +1365,7 @@ zh-TW:
       #original_hash: ea20be0
       success_message: 已送出電子郵件 - 我們會盡快回覆您。
       #original_hash: 8fa6b95
-      prefilled: 如要更新您的報名，您需要聯絡比賽的主辦團隊。我們已經預先填入您的變更要求到聯絡表單 - 請選擇送出表單。
+      to_update_registration_prefilled: 如要更新您的報名，您需要聯絡比賽的主辦團隊。我們已經預先填入您的變更要求到聯絡表單 - 請選擇送出表單。
       form:
         user_data:
           name:
