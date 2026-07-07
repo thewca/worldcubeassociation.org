@@ -689,13 +689,39 @@ class Round < ApplicationRecord
   STATE_OPEN = "open"
   STATE_READY = "ready"
   STATE_PENDING = "pending"
+  STATE_BLOCKED = "blocked"
+
+  NINE_M_MESSAGES = {
+    "9m1" => "a round with 99 or fewer competitors must have at most two subsequent rounds",
+    "9m2" => "a round with 15 or fewer competitors must have at most one subsequent round",
+    "9m3" => "a round with 7 or fewer competitors must not have subsequent rounds",
+  }.freeze
 
   def lifecycle_state
     return STATE_LOCKED if locked?
     return STATE_OPEN if open?
-    return STATE_READY if participation_source.score_taking_done?
+    return STATE_PENDING unless participation_source.score_taking_done?
+    return STATE_BLOCKED if nine_m_violation.present?
 
-    STATE_PENDING
+    STATE_READY
+  end
+
+  # Returns the violated regulation ("9m1"/"9m2"/"9m3") if opening this round
+  # would violate https://www.worldcubeassociation.org/regulations/#9m
+  def nine_m_violation
+    # We allow opening all linked rounds even if that would break 9m for a better user experience
+    return nil if linked_round.present?
+
+    remaining = total_number_of_rounds - number
+    return nil unless remaining.positive?
+
+    num_competitors = participation_source.advancing_competitor_ids.size
+
+    return "9m3" if num_competitors <= 7
+    return "9m2" if num_competitors <= 15 && remaining > 1
+    return "9m1" if num_competitors <= 99 && remaining > 2
+
+    nil
   end
 
   def open?
