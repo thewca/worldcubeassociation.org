@@ -1323,15 +1323,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/pprof@npm:^5.13.3":
-  version: 5.14.0
-  resolution: "@datadog/pprof@npm:5.14.0"
+"@datadog/pprof@npm:^5.14.2":
+  version: 5.16.0
+  resolution: "@datadog/pprof@npm:5.16.0"
   dependencies:
     node-gyp: "npm:latest"
-    node-gyp-build: "npm:<4.0"
+    node-gyp-build: "npm:^4.8.4"
     pprof-format: "npm:^2.2.1"
     source-map: "npm:^0.7.4"
-  checksum: 10c0/cdf267fa7a80bddf2edf17dfe3dc64b090dd8e9c668c3561473610ba34eb99c59047461eeee8823815ade91dff65bbca6e3f612d27ee4666cc953b10b2c88ed4
+  checksum: 10c0/37bc6acd0ec068331ee8391499e23735ab30688e6293ab1077ba04edecf76064d6799604fa2b53619b15ddb46c50ea8c5e59c19ed13f46fad12f132f356a6336
   languageName: node
   linkType: hard
 
@@ -3416,27 +3416,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@newrelic/fn-inspect@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "@newrelic/fn-inspect@npm:5.0.0"
+"@newrelic/fn-inspect@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "@newrelic/fn-inspect@npm:5.1.0"
   dependencies:
     nan: "npm:^2.22.2"
     node-gyp: "npm:latest"
     node-gyp-build: "npm:^4.8.1"
     prebuildify: "npm:^6.0.1"
-  checksum: 10c0/f6f9054b3f64f6f6ff00678e58b8c053fbf910bb5a45ed9006c5c7e0f9de8e0049317a637997814b092eed3d8831b726a2194ed2585085966fb658d84ea39c80
+  checksum: 10c0/14b1a1bd1b81a16690945094b3041ec70f51d7a5dcfd3f4eb9759d42efa9f10fe1826b0755597667e8fee5a1a56b3483162c6c0665718a1d020d97b1188c9093
   languageName: node
   linkType: hard
 
-"@newrelic/native-metrics@npm:^13.0.0":
-  version: 13.0.0
-  resolution: "@newrelic/native-metrics@npm:13.0.0"
+"@newrelic/native-metrics@npm:^13.1.0":
+  version: 13.1.0
+  resolution: "@newrelic/native-metrics@npm:13.1.0"
   dependencies:
     nan: "npm:^2.22.2"
     node-gyp: "npm:latest"
     node-gyp-build: "npm:^4.8.1"
     prebuildify: "npm:^6.0.1"
-  checksum: 10c0/26d18f7df32b9c16192b1373e7392f897f45aa10c5c001e9966c5012abe540bab3bc80e52e40caf85eccc9ed4ce209f3369c3f13623db319b85ed7d8966974b8
+  checksum: 10c0/f1688bdabee686ce8dd57bc74d4a28254f8b5e2cae28e06a9d22d1d84ec8c234168ce4a38875d322800ccd32ba6c7baa674bd26416a201c12d7d09fb8c5a59a2
   languageName: node
   linkType: hard
 
@@ -12044,16 +12044,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"newrelic@npm:^14.1.2":
-  version: 14.1.2
-  resolution: "newrelic@npm:14.1.2"
+"newrelic@npm:^14.2.0":
+  version: 14.2.0
+  resolution: "newrelic@npm:14.2.0"
   dependencies:
     "@apm-js-collab/tracing-hooks": "npm:^0.9.1"
-    "@datadog/pprof": "npm:^5.13.3"
+    "@datadog/pprof": "npm:^5.14.2"
     "@grpc/grpc-js": "npm:^1.13.2"
     "@grpc/proto-loader": "npm:^0.8.1"
-    "@newrelic/fn-inspect": "npm:^5.0.0"
-    "@newrelic/native-metrics": "npm:^13.0.0"
+    "@newrelic/fn-inspect": "npm:^5.1.0"
+    "@newrelic/native-metrics": "npm:^13.1.0"
     "@newrelic/security-agent": "npm:^3.0.0"
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/api-logs": "npm:^0.219.0"
@@ -12087,7 +12087,7 @@ __metadata:
       optional: true
   bin:
     newrelic-naming-rules: bin/test-naming-rules.js
-  checksum: 10c0/f1125f31e9735a4ca7feaebe282cdbc143d71115b39bdc0d4d530bf8d115f1a48f802ec626e09204be497d4cc72d5c20e286d2e127a439def0cfdcd2bc75d8a6
+  checksum: 10c0/39077ba2ce92182c35337076a187779813e3df4a4b7b57c42aa6575b556c522adf9bccc66a693e83b7250b6c52ff69871b0b82ed95fe373a2e3e349e6afba5fc
   languageName: node
   linkType: hard
 
@@ -12175,7 +12175,7 @@ __metadata:
     jsdom: "npm:^29.1.1"
     lodash: "npm:^4.18.1"
     luxon: "npm:^3.7.2"
-    newrelic: "npm:^14.1.2"
+    newrelic: "npm:^14.2.0"
     next: "npm:16.2.10"
     next-auth: "npm:5.0.0-beta.31"
     nextjs-routes: "npm:^2.2.5"
@@ -12324,18 +12324,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp-build@npm:<4.0":
-  version: 3.9.0
-  resolution: "node-gyp-build@npm:3.9.0"
-  bin:
-    node-gyp-build: ./bin.js
-    node-gyp-build-optional: ./optional.js
-    node-gyp-build-test: ./build-test.js
-  checksum: 10c0/0e7e39e5746728e6adf58803d9c3c732b6107f1af3df5128c4c2a6c9c0fb99a6c981ad0a7514d707adccbcfe303b4a92da7949408f1d3ec281f70d37bec29f60
-  languageName: node
-  linkType: hard
-
-"node-gyp-build@npm:^4.8.1":
+"node-gyp-build@npm:^4.8.1, node-gyp-build@npm:^4.8.4":
   version: 4.8.4
   resolution: "node-gyp-build@npm:4.8.4"
   bin:
