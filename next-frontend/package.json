@@ -36,7 +36,7 @@
     "@react-aria/focus": "^3.22.1",
     "@tanstack/react-form": "^1.33.0",
     "@tanstack/react-query": "^5.101.2",
-    "@wrksz/themes": "^0.9.7",
+    "@wrksz/themes": "^1.0.0",
     "accept-language-parser": "^1.5.0",
     "aws4": "^1.13.2",
     "culori": "^4.0.2",
