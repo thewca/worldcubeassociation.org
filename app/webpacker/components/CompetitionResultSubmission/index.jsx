@@ -10,7 +10,7 @@ export default function Wrapper({
   hasTemporaryResults,
   uploadedScrambleFilesCount,
   canSubmitResults,
-  usesInternalScoretaking,
+  scoretakingSoftware,
 }) {
   return (
     <WCAQueryClientProvider>
@@ -20,7 +20,7 @@ export default function Wrapper({
         hasTemporaryResults={hasTemporaryResults}
         uploadedScrambleFilesCount={uploadedScrambleFilesCount}
         canSubmitResults={canSubmitResults}
-        usesInternalScoretaking={usesInternalScoretaking}
+        scoretakingSoftware={scoretakingSoftware}
       />
     </WCAQueryClientProvider>
   );
@@ -32,7 +32,7 @@ function CompetitionResultSubmission({
   hasTemporaryResults,
   uploadedScrambleFilesCount,
   canSubmitResults,
-  usesInternalScoretaking,
+  scoretakingSoftware,
 }) {
   if (resultsSubmitted) {
     return (
@@ -51,9 +51,10 @@ function CompetitionResultSubmission({
           Providing valid results data to the website.
           This can be done in one of the following ways:
           <List.List>
-            {usesInternalScoretaking ? (
-              <List.Item value="a">Importing results directly from ILR</List.Item>
-            ) : (
+            {scoretakingSoftware !== 'external' && (
+              <List.Item value="a">Importing results directly from Live Results</List.Item>
+            )}
+            {scoretakingSoftware !== 'internal' && (
               <List.Item value="a">Uploading a Results JSON file</List.Item>
             )}
           </List.List>
@@ -66,7 +67,7 @@ function CompetitionResultSubmission({
         competitionId={competitionId}
         uploadedScrambleFilesCount={uploadedScrambleFilesCount}
         hasTemporaryResults={hasTemporaryResults}
-        usesInternalScoretaking={usesInternalScoretaking}
+        scoretakingSoftware={scoretakingSoftware}
       />
       {hasTemporaryResults && (
         <FormToWrt competitionId={competitionId} canSubmitResults={canSubmitResults} />

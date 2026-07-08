@@ -11,6 +11,7 @@ export default function Wrapper({
   alreadyHasSubmittedResult,
   isAdminView,
   uploadedScrambleFilesCount,
+  scoretakingSoftware,
 }) {
   return (
     <WCAQueryClientProvider>
@@ -19,6 +20,7 @@ export default function Wrapper({
         hasTemporaryResults={alreadyHasSubmittedResult}
         isAdminView={isAdminView}
         uploadedScrambleFilesCount={uploadedScrambleFilesCount}
+        scoretakingSoftware={scoretakingSoftware}
       />
     </WCAQueryClientProvider>
   );
@@ -27,9 +29,9 @@ export default function Wrapper({
 export function ImportResultsData({
   competitionId,
   hasTemporaryResults,
+  scoretakingSoftware,
   isAdminView = false,
   uploadedScrambleFilesCount = 0,
-  usesInternalScoretaking = false,
 }) {
   const [activeAccordion, setActiveAccordion] = useState(!hasTemporaryResults);
 
@@ -43,7 +45,7 @@ export function ImportResultsData({
   const panes = [
     // JSON exports carry the merged (global) ranking for Dual Rounds, so competitions
     //   scored with the internal scoretaking must import directly from Live instead.
-    ...((isAdminView || !usesInternalScoretaking) ? [{
+    ...((isAdminView || scoretakingSoftware !== 'internal') ? [{
       menuItem: 'Upload Results JSON',
       render: () => (
         <Tab.Pane>
@@ -55,8 +57,8 @@ export function ImportResultsData({
         </Tab.Pane>
       ),
     }] : []),
-    ...((isAdminView || usesInternalScoretaking) ? [{
-      menuItem: 'Use ILR Results',
+    ...((isAdminView || scoretakingSoftware !== 'external') ? [{
+      menuItem: 'Use Live Results',
       render: () => (
         <Tab.Pane>
           <ImportWcaLiveResults
