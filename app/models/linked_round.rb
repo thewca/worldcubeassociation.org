@@ -76,9 +76,7 @@ class LinkedRound < ApplicationRecord
 
   # A LinkedRound can only span the first rounds of an event,
   #   so this is always the CompetitionEvent
-  def participation_source
-    first_round_in_link.participation_source
-  end
+  delegate :participation_source, to: :first_round_in_link
 
   def live_podium
     merged_live_results.filter { it.advancing? && it.global_pos.in?(LiveResult::PODIUM_RANGE) }
