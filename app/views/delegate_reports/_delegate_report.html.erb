@@ -35,7 +35,7 @@
       <%= competition.competitors.count %>
     <% elsif competition.results_submitted? %>
       <% inbox_count = competition.inbox_persons.count %>
-      <% wca_live_count = LiveResult.where(round: competition.rounds).distinct.count(:registration_id) %>
+      <% wca_live_count = competition.live_results.distinct.count(:registration_id) %>
 
       <% if inbox_count > 0 %>
         <%= inbox_count %> (tentative)

@@ -9,6 +9,7 @@ class Competition < ApplicationRecord
   has_many :scoretaking_registrations, -> { scoretakers }, class_name: "Registration", inverse_of: :competition
   has_many :scoretakers, -> { joins(registrations: [:assignments]) }, through: :scoretaking_registrations, source: :user
   has_many :results
+  has_many :live_results, through: :registrations
   has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }, inverse_of: :competition
   has_many :uploaded_jsons, dependent: :destroy
   has_many :competitors, -> { distinct }, through: :results, source: :person
@@ -677,6 +678,7 @@ class Competition < ApplicationRecord
         case association_name
         when 'registrations',
              'results',
+             'live_results',
              'competitors',
              'competitor_users',
              'delegate_report',
