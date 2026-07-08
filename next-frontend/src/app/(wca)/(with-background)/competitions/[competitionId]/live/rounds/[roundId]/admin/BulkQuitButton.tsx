@@ -1,14 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Button,
-  Checkbox,
-  CloseButton,
-  Dialog,
-  Portal,
-  Table,
-} from "@chakra-ui/react";
+import { Button, Checkbox, Table } from "@chakra-ui/react";
+import { ConfirmDialog } from "@/providers/ConfirmProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
 import { toaster } from "@/components/ui/toaster";
@@ -80,12 +74,7 @@ export default function BulkQuitButton({
   };
 
   return (
-    <Dialog.Root
-      lazyMount
-      open={open}
-      onOpenChange={(e) => setOpen(e.open)}
-      size="md"
-    >
+    <>
       <Tooltip
         content={t("competitions.live.admin.quit.still_processing")}
         disabled={pendingLiveResults.length === 0}
@@ -105,72 +94,53 @@ export default function BulkQuitButton({
           {t("competitions.live.admin.quit.bulk.menu")}
         </Button>
       </Tooltip>
-      <Portal>
-        <Dialog.Backdrop />
-        <Dialog.Positioner>
-          <Dialog.Content>
-            <Dialog.Header>
-              <Dialog.Title>
-                {t("competitions.live.admin.quit.bulk.menu")}
-              </Dialog.Title>
-            </Dialog.Header>
-            <Dialog.Body>
-              <Table.Root size="sm">
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeader />
-                    <Table.ColumnHeader>
-                      {t("competitions.live.admin.quit.bulk.id")}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader>
-                      {t("competitions.live.admin.quit.bulk.name")}
-                    </Table.ColumnHeader>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {emptyRegistrationIds.map((id) => {
-                    const competitor = competitors.get(id);
-                    return (
-                      <Table.Row key={id}>
-                        <Table.Cell>
-                          <Checkbox.Root
-                            checked={selected.has(id)}
-                            onCheckedChange={() => toggle(id)}
-                          >
-                            <Checkbox.HiddenInput />
-                            <Checkbox.Control />
-                          </Checkbox.Root>
-                        </Table.Cell>
-                        <Table.Cell>{competitor?.registrant_id}</Table.Cell>
-                        <Table.Cell>{competitor?.name}</Table.Cell>
-                      </Table.Row>
-                    );
-                  })}
-                </Table.Body>
-              </Table.Root>
-            </Dialog.Body>
-            <Dialog.Footer>
-              <Dialog.ActionTrigger asChild>
-                <Button variant="outline">
-                  {t("competitions.live.admin.quit.cancel")}
-                </Button>
-              </Dialog.ActionTrigger>
-              <Button
-                colorPalette="red"
-                disabled={selected.size === 0}
-                onClick={handleConfirm}
-              >
-                {t("competitions.live.admin.quit.quit_confirm", {
-                  count: selected.size,
-                })}
-              </Button>
-            </Dialog.Footer>
-            <Dialog.CloseTrigger asChild>
-              <CloseButton size="sm" />
-            </Dialog.CloseTrigger>
-          </Dialog.Content>
-        </Dialog.Positioner>
-      </Portal>
-    </Dialog.Root>
+      <ConfirmDialog
+        lazyMount
+        size="md"
+        open={open}
+        title={t("competitions.live.admin.quit.bulk.menu")}
+        onCancel={() => setOpen(false)}
+        onConfirm={handleConfirm}
+        cancelButton={t("competitions.live.admin.quit.cancel")}
+        confirmButton={t("competitions.live.admin.quit.quit_confirm", {
+          count: selected.size,
+        })}
+        confirmDisabled={selected.size === 0}
+      >
+        <Table.Root size="sm">
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeader />
+              <Table.ColumnHeader>
+                {t("competitions.live.admin.quit.bulk.id")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("competitions.live.admin.quit.bulk.name")}
+              </Table.ColumnHeader>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {emptyRegistrationIds.map((id) => {
+              const competitor = competitors.get(id);
+              return (
+                <Table.Row key={id}>
+                  <Table.Cell>
+                    <Checkbox.Root
+                      checked={selected.has(id)}
+                      onCheckedChange={() => toggle(id)}
+                    >
+                      <Checkbox.HiddenInput />
+                      <Checkbox.Control />
+                    </Checkbox.Root>
+                  </Table.Cell>
+                  <Table.Cell>{competitor?.registrant_id}</Table.Cell>
+                  <Table.Cell>{competitor?.name}</Table.Cell>
+                </Table.Row>
+              );
+            })}
+          </Table.Body>
+        </Table.Root>
+      </ConfirmDialog>
+    </>
   );
 }
