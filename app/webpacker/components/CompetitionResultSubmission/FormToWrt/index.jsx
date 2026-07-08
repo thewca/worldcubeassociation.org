@@ -55,6 +55,7 @@ export default function FormToWrt({
     submitToWrtMutate({ competitionId, message });
   };
 
+  if (!hasTemporaryResults) return <Message info>Please import some results first!</Message>;
   if (isValidationPending || isSubmitPending) return <Loading />;
   if (isSuccess) return <Message success>Thank you for submitting the results!</Message>;
   if (isErrorInPreviousUpload) return <Errored error={ERROR_MESSAGE_UPLOADED_RESULTS} />;
