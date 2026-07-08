@@ -67,6 +67,19 @@ class LinkedRound < ApplicationRecord
     rounds.all?(&:score_taking_done?)
   end
 
+  def total_competitors
+    live_results.distinct.count(:registration_id)
+  end
+
+  # For 9m purposes, a Dual Round sits at the position of its last round
+  delegate :number, to: :last_round_in_link
+
+  # A LinkedRound can only span the first rounds of an event,
+  #   so this is always the CompetitionEvent
+  def participation_source
+    first_round_in_link.participation_source
+  end
+
   def live_podium
     merged_live_results.filter { it.advancing? && it.global_pos.in?(LiveResult::PODIUM_RANGE) }
   end

@@ -697,7 +697,7 @@ class Round < ApplicationRecord
     "9m3" => "a round with 7 or fewer competitors must not have subsequent rounds",
   }.freeze
 
-  # Minimum number of advancing competitors needed to satisfy the violated regulation
+  # Minimum number of competitors a previous round needs to satisfy the violated regulation
   NINE_M_THRESHOLDS = {
     "9m1" => 100,
     "9m2" => 16,
@@ -719,16 +719,27 @@ class Round < ApplicationRecord
     # We allow opening all linked rounds even if that would break 9m for a better user experience
     return nil if linked_round.present?
 
-    remaining = total_number_of_rounds - number
-    return nil unless remaining.positive?
+    violation = nil
+    enforced_max_round = 4 # 9m: events may have at most four rounds
 
-    num_competitors = participation_source.advancing_competitor_ids.size
+    # Walk back through the previous rounds: each one caps the number of the
+    #   last round that may be held, based on how many competitors it had
+    previous = participation_source
 
-    return "9m3" if num_competitors <= 7
-    return "9m2" if num_competitors <= 15 && remaining > 1
-    return "9m1" if num_competitors <= 99 && remaining > 2
+    while previous.is_a?(Round) || previous.is_a?(LinkedRound)
+      competitor_count = previous.total_competitors
+      subsequent_rounds_allowed = NINE_M_THRESHOLDS.values.count { competitor_count >= it }
+      max_round_number = previous.number + subsequent_rounds_allowed
 
-    nil
+      if max_round_number < enforced_max_round
+        enforced_max_round = max_round_number
+        violation = %w[9m3 9m2 9m1][subsequent_rounds_allowed]
+      end
+
+      previous = previous.participation_source
+    end
+
+    enforced_max_round >= number ? nil : violation
   end
 
   def open?
